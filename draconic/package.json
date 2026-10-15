@@ -3,10 +3,14 @@
   "private": true,
   "type": "module",
   "license": "MIT",
+  "bin": {
+    "draconic": "./bin/draconic.mjs"
+  },
   "engines": {
     "node": ">=22"
   },
   "scripts": {
+    "draconic": "node bin/draconic.mjs",
     "test": "vitest run --config vitest.config.ts",
     "typecheck": "tsc -p tsconfig.json --pretty false"
   },

@@ -11,7 +11,7 @@ a line to `CHANGES.txt`. Git operations belong to the external harness.
 - [x] M4 Cover absent coordinates, unknown birth time, requested versus computed house systems and polar fallback with synthetic integration tests.
 - [x] M5 Implement structured natal tropical versus draconic comparisons with explicit circular delta units and boundary conventions, without interpretation.
 - [x] M6 Attach engine natal receipts and separate draconic convention metadata, preserving time basis and provenance without claiming the engine issued a draconic receipt.
-- [ ] M7 Add the `draconic chart` CLI with strict arguments, synthetic JSON input, explicit mean-node selection, JSON output and useful errors.
+- [x] M7 Add the `draconic chart` CLI with strict arguments, synthetic JSON input, explicit mean-node selection, JSON output and useful errors.
 - [ ] M8 Add `draconic compare`, plain text rendering for both commands and CLI subprocess tests covering exit codes and output streams.
 - [ ] M9 Add small synthetic examples and usage documentation for the library and CLI, citing the arithmetic tests for every numerical example and describing scope and limits.
 - [ ] M10 Audit validation, mutation isolation, receipts and package exclusion; run the complete standalone checks and record the final supported behavior and remaining limits.
@@ -166,3 +166,32 @@ missing `dist/calc.d.ts`; the engine build is absent and was not generated.
 Project source, test and documentation files remain below the requested file
 size limit, and the documentation has no em dash characters. All session
 changes are inside `draconic/`. M7 is next.
+
+## M7 session verification
+
+Added the `draconic chart` CLI with explicit file or standard input, default
+true or explicit mean north-node selection, and JSON output from the existing
+receipt-bearing library wrapper. Input requires a caller declaration of
+synthetic origin, accepts only known JSON birth fields and delegates their
+values to the engine for validation. Original string instant spelling is
+captured in the natal receipt; no local resolution or provenance is inferred.
+Arguments reject duplicates, unknown options, missing values and extra tokens.
+Input reads are bounded and UTF-8 is validated. Errors have defined exit
+codes and use standard error without partial JSON output.
+
+The private executable and npm script use a local source loader to transpile
+TypeScript in memory and resolve the pinned ephemeris without a root install
+or engine build. Tests in `test/cli.test.ts` cover parsing, validation, node
+selection, receipt preservation, settings, bounds and diagnostics. Subprocess
+checks in `test/cli-runner.test.ts` cover execution from outside the checkout,
+local files with spaces, missing files, directories and oversized streams.
+These checks establish command wiring and preservation, not astronomical
+accuracy. Usage and the synthetic input declaration are documented locally.
+
+TypeScript checking and the complete standalone Vitest suite passed on the
+local Node 22.22.2 runtime. The engine npm dry run with scripts disabled
+excludes `draconic/` and wrote no archive. `npm run package:contents` stops at
+missing `dist/calc.d.ts`; the engine build remains absent and was not generated.
+Project files remain below the requested file size limit, and documentation
+has no em dash characters. All session changes are inside `draconic/`.
+M8 is next.

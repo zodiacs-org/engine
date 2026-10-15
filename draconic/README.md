@@ -4,8 +4,9 @@ This private project adds a draconic chart library and CLI on top of the engine
 in this checkout. See [PLAN.md](PLAN.md) for completed and pending work.
 The current API provides pure rotation and comparison primitives, an engine
 natal adapter, a pure chart transformation, structured natal versus draconic
-comparisons and result wrappers with engine natal receipts. CLI commands are
-pending milestones.
+comparisons and result wrappers with engine natal receipts. The CLI supports
+`draconic chart` with JSON output. Comparison commands and plain text output
+are pending milestones.
 
 Use Node 22 with the standalone tooling:
 
@@ -15,6 +16,50 @@ npm ci --ignore-scripts
 npm run typecheck
 npm test
 ```
+
+Run the CLI from this folder after installing the standalone tooling:
+
+```sh
+npm run --silent draconic -- --help
+npm run --silent draconic -- chart --input synthetic.json
+npm run --silent draconic -- chart --input synthetic.json --node mean --format json
+```
+
+`synthetic.json` must contain only a `synthetic` field equal to `true` and a
+`birth` object with the engine's JSON-compatible `BirthInput` fields. Use
+invented inputs only. The declaration is a caller assertion, not verification
+of the input's origin. Accepted birth fields are `utc`, `latitude`, `longitude`,
+`houseSystem`, `timeKnown`, `timeScale`, `deltaT` and `flags`. Misspelled or
+additional fields are refused; the engine validates their values. Resolve
+local wall times before supplying the instant. The CLI does not load URLs,
+resolve place names or accept imported positions or receipt context.
+
+For an invented unknown-time input, read from standard input instead:
+
+```sh
+printf '%s\n' '{"synthetic":true,"birth":{"utc":"2000-04-05T06:07:00Z","timeKnown":false}}' |
+  npm run --silent draconic -- chart --input - --node mean
+```
+
+This invented instant and unknown-time input are exercised by
+[test/cli-runner.test.ts](test/cli-runner.test.ts). JSON is the default and
+currently the only format. True north node is the default; `--node mean`
+explicitly selects mean north node. The JSON shape is the `draconicChart`
+result described below: the unchanged tropical natal envelope, separate
+conventions and rotated positions. The CLI retains the original instant
+spelling in `natal.receipt.sourceInstant` for string inputs; numerical epoch
+inputs carry no original spelling. It infers no local resolution or provenance.
+
+Successful JSON and help go to standard output. Errors go to standard error
+without partial JSON. Exit codes are `0` for success or help, `2` for invalid
+arguments or input, and `1` for I/O or internal failures. Input is one UTF-8
+JSON object limited to 64 KiB, read from a file or standard input. Supply
+`--input` explicitly. Options take separate values and may appear only once;
+unknown options, extra positional arguments and mixed help requests fail.
+Use `./` before a filename that starts with `--`. These contracts and the
+input limit are checked in [test/cli.test.ts](test/cli.test.ts), with file and
+stream integration checks in [test/cli-runner.test.ts](test/cli-runner.test.ts).
+They check command wiring and validation, not astronomical accuracy.
 
 ```ts
 import { rotateLongitude } from "./src/index.js";
@@ -180,9 +225,12 @@ rotation and delta references remain the hand-derived cases in
 The adapter imports the engine's source entry via a relative path. The local
 Vitest alias and TypeScript path mapping resolve its ephemeris dependency from
 this project's installation, pinned to the engine's version. The standalone
-checks need no root dependency installation or engine build. Direct execution
-outside this tooling requires equivalent source and dependency resolution;
-the planned CLI will provide its own runner.
+checks need no root dependency installation or engine build. Direct library
+execution outside this tooling requires equivalent source and dependency
+resolution. The CLI's local runner transpiles TypeScript in memory using the
+installed tooling, and resolves the engine's ephemeris from this folder. It
+runs without a root install or engine build, including from another working
+directory via `node /path/to/draconic/bin/draconic.mjs chart ...`.
 
 The chart convention uses the engine's true north node by default and
 its mean north node only when explicitly selected. Existing natal angles and
