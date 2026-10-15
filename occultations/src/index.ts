@@ -6,3 +6,8 @@ export { starCatalogue } from "./catalogue.js";
 export type { CatalogueStar, CatalogueReceipt, StarCatalogue } from "./catalogue.js";
 export { starPositionAt } from "./star-position.js";
 export type { StarPositionRequest, StarPositionReceipt, StarPositionResult } from "./star-position.js";
+export { CONJUNCTION_LIMITS, searchConjunctions } from "./conjunctions.js";
+export type {
+  ConjunctionCoordinate, ConjunctionTarget, ConjunctionRequest, ConjunctionSearchReceipt,
+  ConjunctionEvent, ConjunctionRefusalReason, ConjunctionResult
+} from "./conjunctions.js";

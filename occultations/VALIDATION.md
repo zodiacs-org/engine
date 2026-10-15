@@ -208,3 +208,68 @@ private-package status, exclusion from root npm file selection and changes
 only under `occultations/`. Full root package, archive rebuild and conformance
 gates are not claimed as passed. No git metadata, release archive or root npm
 package file was changed.
+
+# M5 validation record
+
+Checked on 2026-10-15 using Node 22.22.2. The geocentric conjunction API
+searches equal right ascension or ecliptic longitude through the engine's
+crossing solver and existing planet/star adapters. It returns immutable
+receipts on events, empty searches and refusals. No appulse, occultation
+contact or visibility calculation is claimed by this milestone.
+
+The complete local check passed:
+
+```sh
+npm --prefix occultations run check
+```
+
+This ran TypeScript validation, all ordinary Vitest tests, the offline
+catalogue check, local bundle build and scope check. The new
+`test/conjunction-geometry.test.ts` and `test/conjunction-edge-review.test.ts`
+use independent analytic trajectories to check angular wrap, antipodes,
+relative stations, exact touches, budget exhaustion, clipped windows and
+integer-millisecond ownership before and after the Unix epoch. A false root
+introduced by the inherited solver's circular rounding is explicitly refused.
+`test/time-seams.test.ts` checks every declared leap change, the delta-T
+handover and both IERS boundaries, including ownership at the inclusive
+table endpoint. These are geometry and clock integration checks, not
+independent physical timing evidence.
+
+`test/conjunctions.test.ts` checks actual engine and SAO delegation,
+right-ascension versus ecliptic event identity, reversed pairs, adjacent
+window replay, JSON serialization, immutability, source provenance on empty
+stellar searches, malformed requests and complete-list refusals. All
+position evaluations, root verification and output samples share one finite
+budget; exhaustion never returns earlier events as a complete list.
+
+`test/conjunction-references.test.ts` passes all four frozen NAOJ development
+conjunction cases: right ascension and ecliptic longitude for Jupiter/Saturn
+on 2020-12-21 and Moon/Mars on 2024-01-10. Each requested window must yield
+exactly one event. Source TT windows are converted through the engine clock,
+and returned instants are converted back to nominal TT seconds for the
+comparison. The unchanged preregistered maximum absolute errors are 3600 s
+for the planetary pair and 180 s for the lunar pair, enforced individually
+through `assertReferenceChecks`. These are acceptance limits, not measured
+maximum residuals or general accuracy bounds. The hour-rounded planetary
+reference establishes coarse agreement only. Source conventions and locators
+remain in [the frozen contract](test/fixtures/events/EVENTS.md).
+
+No held-out event was evaluated, and no frozen source, partition or threshold
+was changed. Stellar conjunction integration does not establish catalogue
+timing accuracy. The finite development corpus does not validate minima,
+contact times, global outlines, search completeness or arbitrary tangencies.
+The receipt explicitly describes sampled completion and inherited limitations.
+
+A fresh Node process imported the generated bundle and successfully returned
+a lunar conjunction, a Moon/Spica conjunction with catalogue provenance, and
+a zero-position-sample clock-seam refusal. The lunar result round-tripped
+through JSON. Generated bundle and catalogue files remain ignored.
+
+The root `npm run package:contents` was attempted with its cache inside this
+folder and stopped at `packed package is missing dist/calc.d.ts`. Creating
+root build output is forbidden for this task, so no root build was run.
+Full root package, archive rebuild and conformance gates are not claimed as
+passed. The local scope check confirms source sizes, prose rules, dependency
+pin, private-package status, exclusion from root npm file selection and
+changes only under `occultations/`. Git metadata, release archives and root
+package files were not changed.

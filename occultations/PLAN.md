@@ -22,7 +22,7 @@ package, source, build output, archive or release changes are part of this plan.
   criteria before event fitting or tuning. Separate development cases from
   held-out lunar contacts, planetary appulses and global visibility cases;
   record reference time scales, stations, limb conventions and precision.
-- [ ] M5 Search geocentric conjunctions in right ascension and ecliptic
+- [x] M5 Search geocentric conjunctions in right ascension and ecliptic
   longitude through `src/crossings.ts`. Implement explicit window ownership,
   wrap handling, budget refusals, seam handling and receipts; test boundaries
   and independent conjunction references.

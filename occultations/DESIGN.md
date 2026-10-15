@@ -1,8 +1,8 @@
 # Geometry and verification design
 
 This is the implementation contract for the remaining milestones. The
-position adapter, input/receipt foundation, source catalogue and apparent
-stellar reduction are implemented. An unchecked
+position adapter, input/receipt foundation, source catalogue, apparent
+stellar reduction and geocentric coordinate conjunction searches are implemented. An unchecked
 part of PLAN.md is not a supported calculation or an established error bound.
 
 ## Engine boundary and clock
@@ -11,8 +11,9 @@ part of PLAN.md is not a supported calculation or an established error bound.
 true equator or true ecliptic of date, Cartesian output and no speed samples.
 It preserves the engine receipt and bounds. `src/input.ts` reuses the engine's
 date parser. Frame precession, nutation, delta-T, TT, UT1 and observer rotation
-remain the engine's responsibility. Future searches must call
-`src/crossings.ts`; rise/set facts must reuse `src/sky.ts`.
+remain the engine's responsibility. The conjunction search calls the engine's
+`src/crossings.ts`; subsequent searches must reuse it too, and rise/set facts
+must reuse `src/sky.ts`.
 
 The source interfaces and their qualifications are in `../docs/calc.md`,
 `../docs/sky.md`, `../src/calc-reduce.ts` and `../src/time-scale.ts`. Their
@@ -146,6 +147,63 @@ checks the complete parent response, its completion footer and the query
 digest, and refuses changed upstream data. Tests of extraction and units are
 source-transcription checks, not independent evidence of sky accuracy.
 
+## Coordinate conjunctions implemented in M5
+
+`searchConjunctions` passes the first-minus-second apparent coordinate to
+`searchLongitudeCrossingsWith`, with a target of zero. Right ascension and
+ecliptic longitude select the corresponding true-of-date frame. The first
+target is a physical solar-system body; the second is another body or a
+catalogue star. Each sample calls the existing position adapters without a
+second aberration, light-time or frame correction. The engine solver handles
+angular wrap, sign changes and relative stations. An antipodal sign jump is
+not a conjunction. At the returned time the spherical separation is
+`atan2(norm(cross(a,b)), dot(a,b))` for unit directions.
+
+The window owns `(from, to]`. The engine refines floating timestamps while
+its Date callbacks evaluate whole milliseconds. A bounded adjacent-millisecond
+check canonicalizes each candidate to the first represented instant at or
+past the crossing, using no samples outside the window. This also handles
+Date truncation before the Unix epoch. An unconfirmed candidate refuses the
+whole search with `unresolved-root`; it is not silently omitted. Exact
+sampled contacts with the coordinate are retained under the solver's original
+touch convention: a coarse sample uses the preceding side, while an extremum
+touch found by the station probe is marked direct. This direction flag is not
+evidence of a transit through a stellar or lunar disk.
+
+The coarse step is capped by `CONJUNCTION_LIMITS`, can be reduced by the
+caller and is rounded down to whole milliseconds. The paired-position budget
+counts every callback, including repeated instants, root verification and the
+samples retained in event records. Preflight tests can refuse the coarse scan
+before evaluating positions. Exhaustion during any later operation discards
+all events. The receipt states the requested step, actual step, budget and
+work consumed. No unbounded-budget option is accepted.
+
+`time-seams.ts` derives candidate boundaries from the engine's delta-T model,
+leap list and IERS table, then confirms each adjacent-millisecond clock change
+using the engine's `elapsedDays` and `timeBasis`. IERS fallback starts after
+the inclusive table endpoint. A seam in `(from, to]` produces a receipted
+`time-discontinuity` refusal before position sampling. This conservative
+policy avoids treating a skipped leap second or model jump as a continuous
+root. Caller-split subwindows cannot resolve the missing clock interval.
+Both boundary clocks must also lie inside the engine calculation span.
+
+The algorithm inherits the solver's smooth-motion and relative-station
+assumptions, its merging of very close roots, and its inability to guarantee
+unsampled tangencies. The capped step is a sampling policy, not a proof of
+completeness. `complete` means the calculation finished within its budget.
+`test/conjunction-geometry.test.ts` uses independent analytic trajectories
+for wrap, stations, endpoint ownership and budgets; `test/conjunctions.test.ts`
+checks actual engine integration; `test/time-seams.test.ts` checks all declared
+clock boundaries. These establish numerical behavior, not physical timing.
+
+The separate NAOJ comparison in `test/conjunction-references.test.ts` uses
+the frozen development coordinate events only. It converts source TT windows
+through the engine clock and converts returned instants back to nominal TT
+seconds before applying each original gate. No reference value or tolerance
+has been fitted to these results. The measured scope is in VALIDATION.md;
+neither that comparison nor numerical root precision supplies a general
+physical timing bound or validates an appulse or occultation contact.
+
 ## Sphere contacts and sky facts
 
 The lunar limb will be a sphere using the radius already exported by the
@@ -247,9 +305,13 @@ between tested astrometric reduction and unmeasured catalogue/contact accuracy.
 Out-of-range refusals carry no time basis. Missing-motion refusals retain
 the resolved time basis without claiming that a direction was calculated.
 
-Event receipts will add catalogue identity and digest, window ownership,
-search resolution/budget, contact and outline model, reference-validation
-status and limitations. Exhausting a search budget must produce an explicit
+Conjunction receipts now add catalogue identity and digest when relevant,
+window ownership, both boundary clocks, seam records, search resolution/budget
+and limitations. Each event retains both position receipts and its time basis.
+Refusals retain the same normalized request and available provenance, with
+the originating position refusal when one occurs. Contact and outline
+receipts must later add their respective models and validation scope.
+Exhausting a search budget must produce an explicit
 refusal or unresolved interval, never a silently complete partial list.
 No network request is part of a calculation. Bulk downloads and generated
 outputs stay in ignored folders, and no authored file may reach the root build.
