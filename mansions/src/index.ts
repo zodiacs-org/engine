@@ -1,5 +1,7 @@
 export { mansionAt } from "./at.js";
 export type { MansionAtRequest, MansionAtResult } from "./at.js";
+export { INGRESS_SEARCH_LIMITS, mansionIngresses } from "./ingresses.js";
+export type { MansionIngress, MansionIngressRequest, MansionIngressResult } from "./ingresses.js";
 export { classifyLongitude } from "./classify.js";
 export type { LongitudeClassification } from "./classify.js";
 export { EQUAL28_ARIES_V1, getBoundaryTable } from "./tables.js";

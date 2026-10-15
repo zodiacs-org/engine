@@ -3,9 +3,9 @@
 This checkout-local project is being developed as a library and CLI for
 Arabic lunar mansions (manazil al-qamar) on top of `@zodiacs/engine`.
 [PLAN.md](PLAN.md) records the implementation milestones. The first boundary
-table, pure longitude classifier and tropical mansion-at API are available.
-Ingress searches, range intervals, sidereal selection and CLI commands are
-planned in later milestones.
+table, pure longitude classifier, tropical mansion-at API and tropical
+ingress searches are available. Range occupancy intervals, sidereal
+selection and CLI commands are planned in later milestones.
 
 [src/tables.ts](src/tables.ts) exports the immutable `EQUAL28_ARIES_V1`
 table and `getBoundaryTable("equal28-aries-v1")`. Table selection requires
@@ -84,6 +84,75 @@ No fallback to the root engine's broader computation span is attempted.
 selection, receipt preservation and replay, time scales, pinned delta-T,
 coverage edges and caller-input preservation. These integration tests make
 no new claim about physical accuracy.
+
+`mansionIngresses({ from, to, table, maxSamples? })` searches tropical
+mansion changes using the engine's shared solver in
+[src/crossings.ts](../src/crossings.ts):
+
+```ts
+import { mansionIngresses } from "./src/index.js";
+
+const result = mansionIngresses({
+  from: "2001-02-03", // Synthetic example window, UTC midnight endpoints.
+  to: "2001-02-06",
+  table: "equal28-aries-v1"
+});
+if (result.status === "ok") {
+  for (const ingress of result.ingresses) {
+    console.log(ingress.at, ingress.mansion.index,
+      ingress.mansion.arabicName, ingress.mansion.latinLabel,
+      ingress.longitude, ingress.receipt);
+  }
+}
+```
+
+Search endpoints accept strict ISO strings or valid Dates on the engine's
+UTC basis. The engine's parser validates both before calculation; calendar
+dates mean UTC midnight and offset-bearing times normalize to UTC. Julian
+dates, time-scale objects and pinned delta-T are not accepted by this search
+API. These are distinct from the broader `mansionAt` inputs above. The
+requested window must have `from <= to` and span no more than
+`INGRESS_SEARCH_LIMITS.maxDays` elapsed days. Supplied Dates are copied.
+
+The endpoint convention is `(from,to]`: an ingress at `from` is excluded,
+and one at `to` is included. Empty windows return no ingresses but still
+validate coverage and carry an endpoint receipt. Results give normalized
+`from` and `to`, the explicit table, tropical zodiac, endpoint receipts,
+and `ingresses` in chronological order. Every ingress includes the same
+fields as a successful `mansionAt`, plus `direction`, the exact rational
+`boundary`, and `previous`, the classification, longitude, bounds and
+engine receipt at the preceding millisecond. The primary `mansion` is the
+one entered at `at`; `previous.mansion` is the one left. Reverse changes,
+if encountered, retain the same half-open boundary arithmetic.
+
+The search uses a fixed quarter-day scan step for each table boundary.
+The solver takes the rounded numerical target; local refinement then uses
+the exact rational classifier to verify membership at adjacent milliseconds.
+The reported `resolution: "first-changed-millisecond"` describes the engine's
+computed classification, not physical ingress accuracy. The retained engine
+`bounds` describe longitude, not a new timing bound. The scan is tested,
+not proven complete; interior discontinuities of the engine's time basis
+remain part of the planned hardening work.
+
+`INGRESS_SEARCH_LIMITS` defines the quarter-day step, maximum range of
+366 elapsed days, default shared budget of 20,000 engine evaluations and
+maximum permitted budget of 100,000. `maxSamples` must be a positive finite
+integer within that cap. Cached samples are shared across boundaries;
+endpoint checks, refinement and output receipts count when they require
+an engine evaluation. Successful results report actual `samples`, the
+effective `maxSamples` and `stepDays`. Budget exhaustion returns a typed
+`{ status: "refused", reason: "sample-budget", samples, maxSamples, detail }`.
+Engine coverage refusals pass through unchanged. Refusals contain no partial
+ingresses, and unexpected calculation errors propagate.
+
+[test/ingresses.test.ts](test/ingresses.test.ts) enforces those limits and
+checks a complete synthetic circle and wrap against hand-derived rational
+ingress times, exact and rounded window endpoints, reverse membership,
+empty windows, shared budget exhaustion, clipping without external samples,
+engine refusal propagation and receipt replay. Its real-engine comparisons
+use a synthetic window beginning 2001-02-03 and ending 2001-03-05, plus
+shorter windows derived from it. These are numerical regression checks,
+not independent astronomical accuracy evidence or published ingress samples.
 
 The current internal adapter in [src/engine.ts](src/engine.ts) reads the
 engine's tropical geocentric Moon position on the true ecliptic of date and
