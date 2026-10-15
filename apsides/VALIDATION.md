@@ -64,3 +64,13 @@ coverage does not establish continuous completeness, all-date accuracy,
 or physical-center event timing for the system-barycenter targets. The
 failed budget remains open for that validation review; any future change
 to the acceptance registration requires its documented revision process.
+
+M6 adds the combined window API. Its tests check that merged records match
+the individual searches, that partition ownership is preserved, and that
+one global budget and any body's refusal apply to the entire request.
+Coverage failures retain the engine's TT and UT1 span restrictions and
+each body's required padding. These are integration and failure-contract
+checks in `test/window.vitest.ts` and `test/window-failures.vitest.ts`, not
+new independent accuracy measurements. The same development reference
+assertions remain active, including the failing Pluto distances. No
+held-out references were collected or evaluated in M6.

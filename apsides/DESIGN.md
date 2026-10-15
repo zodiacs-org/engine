@@ -6,8 +6,9 @@ M3 implements a pure scalar distance solver with synthetic mathematical
 tests. M4 adds the lunar window search and compares it with the development
 Moon fixture. M5 adds heliocentric planetary searches and compares all
 development planetary fixtures. Pluto fails the unchanged distance budget;
-see [VALIDATION.md](VALIDATION.md). Combined windows, syzygy annotations and
-the CLI remain planned in [PLAN.md](PLAN.md).
+see [VALIDATION.md](VALIDATION.md). M6 combines selected lunar and planetary
+searches under a shared budget. Syzygy annotations and the CLI remain
+planned in [PLAN.md](PLAN.md).
 
 The intended result is a chronological list of local distance extrema in a
 requested window. A lunar minimum is a perigee and a lunar maximum an
@@ -273,6 +274,71 @@ The separate `test/planetary-reference.vitest.ts` checks all registered
 development planetary cases, including long outer-planet windows.
 Its Pluto distance assertions remain failing, as recorded in
 [VALIDATION.md](VALIDATION.md); no budget or frozen reference was changed.
+
+## Combined window search implemented in M6
+
+`searchApsidesWindow({ from, to, bodies?, maxEvaluations? })` calls the
+existing lunar and planetary searches and merges their complete event
+records. Omitting `bodies` selects `APSIS_BODIES`: Moon, then Mercury
+through Pluto including Earth. An explicit selection must be nonempty,
+unique and supported. The selection is copied and processed in that same
+canonical order, regardless of caller order. Events sort by `instant.jdTt`,
+then canonical body order for equal TT coordinates. Different bodies'
+events are retained even when their instants or refinement intervals
+overlap. No event is ranked, recomputed or deduplicated across bodies.
+
+The top-level `window` contains the common resolved `from`, `to` and
+`boundary: "(from,to]"`. `diagnostics.bodies` contains every selected
+body, its target convention and its `complete`, `refused` or `not-started`
+status. Each started body retains its own search diagnostics and its
+resolved window, including that body's endpoint receipts when available.
+The top-level window is taken from the first body that resolved both
+endpoints; it is null if work stopped before that happened. Endpoint
+delta-T pins and the TT ownership convention are unchanged. Later bodies
+use the first body's canonical endpoint requests from its engine receipts,
+so they do not re-read caller-owned nested time objects.
+
+`WINDOW_DEFAULT_MAX_EVALUATIONS` is 100,000 calls for the combined request,
+enforced by `test/window.vitest.ts`. It is not a separate allowance for
+each body. Each search receives the remaining budget, and its endpoint
+resolution, padded grid and refinement calls all count. There is no
+cross-body sample cache. The top-level evaluation count is the sum of the
+per-body counts; each per-body `maxEvaluations` records the allowance it
+received. If the budget reaches zero between bodies, the next body stays
+`not-started` and the result refuses without another engine call. Equal
+endpoints still resolve each selected body's endpoints, but need no grids.
+
+Any body's refusal discards the entire combined event list. The result
+identifies `failedBody`, preserves the underlying `reason`, `detail` and
+`engineRefusal`, and leaves later bodies `not-started`. Diagnostics retain
+metadata only, without earlier bodies' partial event arrays. Unexpected
+dependency exceptions propagate. `status: "complete"` means all selected
+searches completed; `completeness: "sampled-not-proven"` remains explicit.
+It neither proves physical completeness nor overrides Pluto's failing
+independent distance budget.
+
+Option shapes, body selections and the budget are checked before sampling.
+Unknown properties, accessor or hidden option properties, duplicate body
+names, sparse arrays and accessor or inherited array slots are rejected
+with `RangeError`. Time parsing and TT ordering remain delegated to the
+single-body search and engine as endpoints are evaluated. An earlier
+refusal or exhausted budget can prevent validation of a later endpoint;
+this API does not offer a separate exhaustive input-validation pass.
+
+Engine coverage is preserved without clipping or extrapolation. The
+engine's `CALC_SPAN` applies to both resolved TT and UT1, so a TT value
+alone cannot establish coverage. A valid endpoint can still require
+unavailable padded samples, especially for a planet with a wider grid;
+the whole request then refuses as `edge-coverage`. The engine's reference
+span is not an independent apsis accuracy claim. The executable coverage
+and refusal checks are in `test/window-failures.vitest.ts`.
+
+`test/window.vitest.ts` checks merged records, receipts, global budgets and
+partition equivalence over the shared Moon, Mercury and Earth development
+window, 2000-01-01 to 2000-02-01 TT, and its subwindows. Cuts include event
+estimates, adjacent representable TT coordinates and a grid node. These
+are integration checks against the individual search APIs, not new
+astronomical accuracy evidence. No held-out reference was used in M6.
 
 ## Shared astronomical search method
 

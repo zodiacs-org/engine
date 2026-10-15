@@ -3,3 +3,4 @@ apsides: preregister independent apsis budgets and held-out cases, freeze Horizo
 apsides: implement the bounded scalar extrema solver with golden-section refinement, explicit ambiguity refusals, and passing analytic numerical and package-isolation checks
 apsides: implement lunar TT window searches with padded canonical sampling, half-open ownership, bounded refusals, engine receipts, and passing independent lunar and package-isolation checks
 apsides: implement heliocentric planetary searches with analytic-rate and scalar-distance refinement, canonical windows, independent development tests, and explicit unresolved Pluto distance validation failures
+apsides: implement combined lunar and planetary windows with canonical TT merging, a shared evaluation budget, coverage and refusal diagnostics, and passing M6 tests while preserving known Pluto validation failures

@@ -2,9 +2,9 @@
 
 Private work-in-progress library for geometric orbital distance extrema,
 built on `@zodiacs/engine`. The current milestone provides the distance
-sampler, bounded lunar and heliocentric planetary searches, and frozen
-independent development references. Pluto fails its preregistered distance
-budget, so independent validation is not fully passing. The remaining work,
+sampler, bounded lunar and heliocentric planetary searches, a combined
+window API, and frozen independent development references. Pluto fails its
+preregistered distance budget, so independent validation is not fully passing. The remaining work,
 including the CLI, is in [PLAN.md](PLAN.md).
 
 Use Node 22.22.2 for the local checks, matching this project's initial test
@@ -112,6 +112,36 @@ which interval contract applies. Mars through Pluto use the engine's
 system-barycenter reference convention, not validated physical-center
 event times. Search completion does not certify the independent accuracy
 budgets, which Pluto currently fails. No dates are ranked.
+
+```ts
+import { searchApsidesWindow } from "./src/index.js";
+
+const result = searchApsidesWindow({
+  from: "2000-01-01", to: "2000-02-01",
+  bodies: ["Moon", "Mercury", "Earth"]
+});
+if (result.status === "complete") {
+  for (const event of result.events) {
+    console.log(event.body, event.kind, event.instant, event.distanceKm);
+  }
+} else {
+  console.error(result.failedBody, result.reason, result.detail);
+}
+console.log(result.diagnostics);
+```
+
+The combined search defaults to the Moon and every supported planet when
+`bodies` is omitted. Explicit selections must be nonempty and unique.
+It orders events by TT and uses canonical body order to break equal-time
+ties. It preserves each event and the individual searches' `(from,to]`
+ownership. `maxEvaluations` is one budget shared across all selected bodies,
+including their separate endpoint calls. A refusal from any body discards
+all events. `diagnostics.bodies` shows completed, refused and unstarted
+work, retaining each started body's search diagnostics and endpoint
+receipts. Valid endpoints can still refuse if required padding falls
+outside engine coverage. `test/window.vitest.ts` and
+`test/window-failures.vitest.ts` check these contracts; they do not extend
+the independent accuracy coverage.
 
 The Vitest files use `.vitest.ts` and a local configuration so the root
 test command does not discover a separate project's tests before its local

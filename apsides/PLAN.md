@@ -10,7 +10,7 @@ remain unchanged.
 - [x] M3 Implement a pure bounded distance-extremum solver with bracketing, golden-section refinement, evaluation accounting, and analytic synthetic tests for minima, maxima, flat curves, and failures.
 - [x] M4 Implement lunar window searches with edge padding, deterministic half-open boundaries, deduplication, explicit refusal on incomplete work, and lunar reference tests.
 - [x] M5 Implement heliocentric searches for Mercury through Pluto, including Earth, with body-specific sampling policy, center disclosure, slow-orbit cases, and independent planetary tests.
-- [ ] M6 Add the combined window API, chronological merging, input validation, reference-span handling, completeness diagnostics, and partition-equivalence tests.
+- [x] M6 Add the combined window API, chronological merging, input validation, reference-span handling, completeness diagnostics, and partition-equivalence tests.
 - [ ] M7 Finalize event records with distance, total speed, signed radial speed before/at/after each extremum, replayable engine receipts, and JSON serialization tests.
 - [ ] M8 Add optional lunar syzygy annotations using an explicit angular orb, measured Moon-Sun elongation, candidate-only labels, receipts, and boundary tests.
 - [ ] M9 Implement `apsides lunar`, `apsides planetary`, and `apsides window` with strict arguments, JSON output, help, exit statuses, and subprocess tests.

@@ -18,3 +18,8 @@ export type {
   PlanetarySearchOptions, PlanetaryApsis, PlanetarySearchWindow,
   PlanetarySearchDiagnostics, PlanetarySearchRefusalReason, PlanetarySearchResult
 } from "./planetary.js";
+export { searchApsidesWindow, APSIS_BODIES, WINDOW_DEFAULT_MAX_EVALUATIONS } from "./window.js";
+export type {
+  ApsidesWindowOptions, ApsidesWindowEvent, ApsidesWindow,
+  ApsidesBodyDiagnostics, ApsidesWindowDiagnostics, ApsidesWindowResult
+} from "./window.js";
