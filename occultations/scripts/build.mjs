@@ -21,7 +21,7 @@ await writeFile(new URL("../.generated/metafile.json", import.meta.url), JSON.st
 for (const name of ["LICENSE", "LICENSING.md", "NOTICE"]) {
   await copyFile(new URL(`../../${name}`, import.meta.url), new URL(`../.generated/${name}`, import.meta.url));
 }
-for (const name of ["SAO-NOTICE.txt", "sao-documentation.txt", "sao-rights.json", "sao-aliases.json"]) {
+for (const name of ["SAO-NOTICE.txt", "sao-documentation.txt", "sao-rights.json", "sao-aliases.json", "radii-source.json"]) {
   await copyFile(new URL(`../data/${name}`, import.meta.url), new URL(`../.generated/${name}`, import.meta.url));
 }
 console.log("Built occultations/.generated/index.mjs using adjacent engine source.");

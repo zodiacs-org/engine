@@ -340,3 +340,76 @@ as passed. The local scope check passed source sizes, prose rules, dependency
 pin, private-package status, exclusion from root npm file selection and
 changes only under `occultations/`. Git metadata, release archives and root
 package files were not changed.
+
+# M7 validation record
+
+Checked on 2026-10-15 using Node 22.22.2. `searchLunarOccultations` screens
+one planet or catalogue target for lunar occultation candidates. It searches
+the changing observer-envelope clearance and geocentric disk clearance
+through the engine crossing solver, retains clipped interval pieces, and
+groups consecutive sampled relative-RA revolutions into window-local series.
+Every search, candidate and series has an immutable receipt with model,
+source, clock, budget and completeness qualifications.
+
+The complete local check passed:
+
+```sh
+npm --prefix occultations run check
+```
+
+This runs no-emit TypeScript, all ordinary Vitest tests, catalogue validation,
+the local bundle and scope checks. The geometry suite checks independent
+parallel-shadow and finite-point-source constructions and Cartesian observer
+translations against the conservative envelope. It also checks the
+geocentric-overlap distinction, finite disk limb inclusion, range ordering,
+height envelope, invalid geometry and point-source assumptions. These are
+analytic geometry checks, not physical ephemeris accuracy measurements.
+
+`test/clearance-intervals.test.ts` checks changing radii, between-sample
+entry/exit pairs, numerical angular-rounding zeros, observed collapsed-root
+topology, clipping, pre-Unix instants, budgets, tangencies and plateaus. A
+review found that an exact entry at the owned upper endpoint could otherwise
+be silently omitted. It now refuses that unresolved boundary, without
+evaluating beyond the requested window. `test/occultation-series.test.ts`
+checks independently defined synthetic revolutions, accepted sequences,
+rejected intervening passages, local index origins, near misses, disk overlap,
+clipping and late-budget refusal. No global series identifier is asserted.
+
+`test/occultations.test.ts` checks the real adapters in the development
+windows, source radius transcriptions, stellar provenance, JSON replay,
+deep immutability, allowed targets, malformed inputs, zero-sample clock/range
+refusals and budget accounting through the last output samples. No partial
+candidate or series list is returned after a refusal. The JPL radius receipt
+was fetched and read before use; a separate fetch matched its bytes and
+digest. Planet radii are nominal screening spheres, not fitted contact limbs.
+
+`test/occultation-references.test.ts` passes the preregistered containment
+rule in `test/fixtures/events/CANDIDATES.md`. It retains the USNO Boston
+Aldebaran event in the nominal-UT1 window 1923-01-27 to 1923-01-29 and the
+NAOJ Saturn event in the nominal-UT1 window 2024-05-31 to 2024-06-01, including
+the group shared by the NAOJ outline reference. Every published local
+contact or closest-approach instant in those development records lies in a
+single candidate interval for its target. The tests convert nominal UT1
+through the engine clock and allow no extra containment margin.
+
+This establishes retention of those registered positive events. It does not
+establish absence of extra candidates, all-catalogue completeness, local
+contact timing, planetary shape accuracy, horizon visibility or global
+outlines. No frozen source, partition or numerical acceptance criterion was
+changed and no held-out event was evaluated. The original contact, angle,
+altitude and outline gates remain for their designated milestones. The
+geocentric and topocentric correction-model difference remains unbounded.
+
+A fresh Node process imported the generated bundle, returned both development
+candidates, replayed their JSON receipts and confirmed a zero-position-sample
+clock-seam refusal. Generated bundle and catalogue files remain ignored; the
+bundle carries the additional radius source receipt with existing notices.
+
+The root `npm run package:contents` was attempted with its cache inside this
+folder and stopped at `packed package is missing dist/calc.d.ts`. Creating
+root build output is forbidden for this task. No root build was run; full
+root package, archive rebuild and conformance gates are not claimed as
+passed. The local scope check passed source sizes, prose rules, dependency
+pin, private-package status, exclusion from root npm file selection and
+changes only under `occultations/`. Git metadata, release archives and root
+package files were not changed.
