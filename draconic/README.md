@@ -5,8 +5,7 @@ in this checkout. See [PLAN.md](PLAN.md) for completed and pending work.
 The current API provides pure rotation and comparison primitives, an engine
 natal adapter, a pure chart transformation, structured natal versus draconic
 comparisons and result wrappers with engine natal receipts. The CLI supports
-`draconic chart` with JSON output. Comparison commands and plain text output
-are pending milestones.
+`draconic chart` and `draconic compare`, each with JSON or plain text output.
 
 Use Node 22 with the standalone tooling:
 
@@ -23,6 +22,9 @@ Run the CLI from this folder after installing the standalone tooling:
 npm run --silent draconic -- --help
 npm run --silent draconic -- chart --input synthetic.json
 npm run --silent draconic -- chart --input synthetic.json --node mean --format json
+npm run --silent draconic -- chart --input synthetic.json --format text
+npm run --silent draconic -- compare --input synthetic.json
+npm run --silent draconic -- compare --input synthetic.json --node mean --format text
 ```
 
 `synthetic.json` must contain only a `synthetic` field equal to `true` and a
@@ -42,17 +44,41 @@ printf '%s\n' '{"synthetic":true,"birth":{"utc":"2000-04-05T06:07:00Z","timeKnow
 ```
 
 This invented instant and unknown-time input are exercised by
-[test/cli-runner.test.ts](test/cli-runner.test.ts). JSON is the default and
-currently the only format. True north node is the default; `--node mean`
-explicitly selects mean north node. The JSON shape is the `draconicChart`
-result described below: the unchanged tropical natal envelope, separate
-conventions and rotated positions. The CLI retains the original instant
-spelling in `natal.receipt.sourceInstant` for string inputs; numerical epoch
+[test/cli-runner.test.ts](test/cli-runner.test.ts). JSON is the default;
+`--format text` selects plain text for either command. True north node is the
+default; `--node mean` explicitly selects mean north node. The chart JSON shape
+is the `draconicChart` result described below: the unchanged tropical natal
+envelope, separate conventions and rotated positions. The comparison JSON
+shape is the `draconicCompare` result, containing the same natal envelope and
+conventions with structured paired longitudes and signed deltas. The CLI
+retains the original instant spelling in `natal.receipt.sourceInstant` for
+string inputs; numerical epoch
 inputs carry no original spelling. It infers no local resolution or provenance.
 
-Successful JSON and help go to standard output. Errors go to standard error
-without partial JSON. Exit codes are `0` for success or help, `2` for invalid
-arguments or input, and `1` for I/O or internal failures. Input is one UTF-8
+Plain text uses tab-separated body, angle and cusp rows in source order.
+Chart rows include longitude, unchanged latitude, sign, degree within sign
+and house. Comparison rows contain natal tropical longitude, draconic
+longitude and signed delta, with the direction and boundary convention
+printed above them. Text preserves JavaScript's number spelling without
+decimal rounding; displayed digits do not establish astronomical accuracy.
+Absent geometry and house assignments are labelled `unavailable`.
+
+Both text commands state the selected north node and its natal longitude,
+the rotation to the Aries origin, and the preservation of natal cusps without
+recasting. They show natal receipt details: engine and ephemeris identifiers,
+instant, time scale, time basis, deltaT, flags, requested and computed houses
+and any absence reason. These are a readable selection of receipt fields;
+use JSON for the full unchanged engine natal envelope. The engine receipt
+covers the natal chart only. Rendering is checked against the hand-derived
+synthetic positions and deltas in [test/ARITHMETIC.md](test/ARITHMETIC.md) by
+[test/cli-text.test.ts](test/cli-text.test.ts). Subprocess tests in
+[test/cli-runner.test.ts](test/cli-runner.test.ts) check both commands and
+formats, fallback context, stream separation and exit codes. These are
+presentation and wiring checks, without an astronomical accuracy claim.
+
+Successful JSON, text and help go to standard output. Errors go to standard
+error without a partial result. Exit codes are `0` for success or help, `2`
+for invalid arguments or input, and `1` for I/O or internal failures. Input is one UTF-8
 JSON object limited to 64 KiB, read from a file or standard input. Supply
 `--input` explicitly. Options take separate values and may appear only once;
 unknown options, extra positional arguments and mixed help requests fail.

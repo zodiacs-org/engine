@@ -12,7 +12,7 @@ a line to `CHANGES.txt`. Git operations belong to the external harness.
 - [x] M5 Implement structured natal tropical versus draconic comparisons with explicit circular delta units and boundary conventions, without interpretation.
 - [x] M6 Attach engine natal receipts and separate draconic convention metadata, preserving time basis and provenance without claiming the engine issued a draconic receipt.
 - [x] M7 Add the `draconic chart` CLI with strict arguments, synthetic JSON input, explicit mean-node selection, JSON output and useful errors.
-- [ ] M8 Add `draconic compare`, plain text rendering for both commands and CLI subprocess tests covering exit codes and output streams.
+- [x] M8 Add `draconic compare`, plain text rendering for both commands and CLI subprocess tests covering exit codes and output streams.
 - [ ] M9 Add small synthetic examples and usage documentation for the library and CLI, citing the arithmetic tests for every numerical example and describing scope and limits.
 - [ ] M10 Audit validation, mutation isolation, receipts and package exclusion; run the complete standalone checks and record the final supported behavior and remaining limits.
 
@@ -195,3 +195,31 @@ missing `dist/calc.d.ts`; the engine build remains absent and was not generated.
 Project files remain below the requested file size limit, and documentation
 has no em dash characters. All session changes are inside `draconic/`.
 M8 is next.
+
+## M8 session verification
+
+Added `draconic compare` using the existing receipt-bearing comparison wrapper
+and `--format text` for both commands, with JSON still the default. Text
+reports body, angle and ordered cusp coordinates or paired longitudes and
+signed deltas, the selected node and rotation, house preservation, requested
+and computed systems, availability, natal flags and time and engine receipt
+details. It preserves JavaScript number spelling without decimal rounding.
+The full natal envelope remains available in JSON; text states its natal-only
+scope separately from this library's derived coordinates.
+
+Expanded argument and input checks across both commands. Hand-derived text
+expectations in `test/cli-text.test.ts` use the existing invented chart and
+boundary arithmetic documented in `test/ARITHMETIC.md`. Subprocess checks
+exercise JSON and text, local paths, standard input, help, invalid arguments,
+synthetic declaration and malformed input, oversized streams and file errors.
+Successful output and diagnostics stay on their respective streams with
+defined exit codes. Integration comparisons test wiring and preservation
+only, without claiming independent astronomical accuracy. The local README
+documents the added command and presentation contracts.
+
+TypeScript checking and the complete standalone Vitest suite passed on the
+local Node 22.22.2 runtime. The engine npm dry run with scripts disabled
+excludes `draconic/` and wrote no archive. `npm run package:contents` stops at
+missing `dist/calc.d.ts`; the engine build remains absent and was not generated.
+Project files meet the requested size limit, and documentation contains no
+em dash characters. All session changes are inside `draconic/`. M9 is next.

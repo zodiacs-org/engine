@@ -160,3 +160,22 @@ node offset. All listed arithmetic expectations are exact binary fractions
 and use exact equality. Separate integration checks compare API wiring to
 the engine and transformation on synthetic births; they are not independent
 astronomical references.
+
+## CLI text reference
+
+`cli-text.test.ts` presents the same invented Sun, Moon, true north and south
+nodes, angles and cusp sequence from the chart and comparison sections above.
+It asserts their hand-derived numbers in tab-separated text rows, including
+Sun 25.25, Moon 299.75, the selected node at 0 and delta -75.25. These are
+presentation checks on the listed exact arithmetic cases, not independent
+astronomical accuracy checks. The test retains latitude 1.25 and the manually
+assigned body houses from the chart section.
+
+With zero rotation, the boundary case 30 - 2^-48 retains the longitude and
+degree 29.999999999999996, and its comparison delta is 0. A body at the
+smallest positive binary64 value with zero rotation retains that same value,
+displayed by JavaScript as `5e-324`, also with delta 0. These checks prevent
+display rounding from changing a coordinate at a sign boundary or erasing
+a tiny positive coordinate. No display precision is claimed as physical
+accuracy. Receipt context in these presentation tests comes from an invented
+engine chart; its astronomical output supplies no arithmetic expectation.
