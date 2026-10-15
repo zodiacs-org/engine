@@ -13,8 +13,9 @@
     "mansions": "node scripts/mansions.mjs",
     "test": "vitest run --config vitest.config.ts",
     "typecheck": "tsc -p tsconfig.json --pretty false",
+    "check:examples": "node scripts/check-examples.mjs",
     "check:isolation": "node scripts/check-isolation.mjs",
-    "check": "npm run typecheck && npm test && npm run check:isolation"
+    "check": "npm run typecheck && npm test && npm run check:examples && npm run check:isolation"
   },
   "dependencies": {
     "astronomy-engine": "2.1.19"

@@ -15,7 +15,7 @@ here, and appends a single session summary to `CHANGES.txt`.
 - [x] M8 Add the mansions at and mansions range CLI commands with mandatory table choice, JSON and neutral plain text, help and argument-error tests.
 - [x] M9 Seek independently published mansion ingress samples, audit their conventions and redistribution terms, and test any usable cited samples in-tree. Record an evidence gap if none qualifies; never substitute engine output for independent evidence.
 - [x] M10 Harden budgets, refusal propagation, time-basis seams and CLI failure behavior with focused adversarial and integration tests.
-- [ ] M11 Document API/CLI examples using synthetic inputs, provenance, numerical resolution versus astronomical accuracy, licensing and local setup; run the full mansions checks and verify package isolation and repository constraints.
+- [x] M11 Document API/CLI examples using synthetic inputs, provenance, numerical resolution versus astronomical accuracy, licensing and local setup; run the full mansions checks and verify package isolation and repository constraints.
 
 The equal-segment table will be an explicit computational convention from a
 documented zero point. It will not imply that traditional star asterisms have
