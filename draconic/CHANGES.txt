@@ -1,0 +1,1 @@
+Complete M1: scaffold the private draconic TypeScript project with validated pure longitude rotation and hand-derived Vitest arithmetic checks.
