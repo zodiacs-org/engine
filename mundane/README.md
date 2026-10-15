@@ -7,14 +7,25 @@ classical planet angularity and angle-ruler dignities, produces descriptive
 factor lists, and searches cardinal solar ingresses and New and Full Moons.
 It also combines these events into chronological year or range reports.
 An optional adapter casts supplied eclipse instants and can delegate to the
-events workbench's eclipse minimum searches. CLI commands are planned.
+events workbench's eclipse minimum searches. The CLI provides `ingresses`,
+`lunations`, and `year` commands with text summaries and complete JSON results.
 
 From the repository root, using Node.js as required by [package.json](package.json):
 
 ```sh
 npm ci --prefix mundane
 npm run check --prefix mundane
+npm run build --prefix mundane
+./mundane/bin/mundane.mjs year --latitude 12.5 --longitude -31.25 --year 2024
 ```
+
+The executable uses the ignored local `mundane/build/` bundle; rebuild it after
+source changes. It does not build the engine's `dist/`. Use `--format json` for
+the complete library result, or `--help` for argument and exit-status details.
+The `year` command also accepts `--from` and `--to`. All coordinates in these
+examples describe invented places. CLI setup, range examples, budgets, optional
+eclipse settings, and validation evidence are in [docs/cli.md](docs/cli.md),
+with process checks in [test/cli.test.ts](test/cli.test.ts).
 
 The project has its own lockfile, TypeScript configuration, and Vitest
 configuration. Dependencies and caches remain inside its ignored folders.
