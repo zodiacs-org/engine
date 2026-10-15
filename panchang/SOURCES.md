@@ -212,6 +212,73 @@ are integration checks. Constructed boundary, multiple-rise and missing
 following-rise cases test refusal/ownership policy, with invented events;
 they supply no physical astronomical accuracy evidence.
 
+## M5: independent analytical transition instants
+
+[test/transitions.test.ts](test/transitions.test.ts) supplies independently
+prescribed linear trajectories, with no astronomical reference output.
+Let t be elapsed integer milliseconds from the invented epoch
+2024-03-20T00:00:00Z and U = 2^26 milliseconds. Prescribe tropical and
+sidereal Sun longitude t/U and Moon longitude 13t/U degrees, each reduced
+modulo a turn. These artificial sidereal coordinates are declared to the
+engine classifier; they do not model an actual ayanamsa conversion.
+The coordinates are dyadic over the tested span, avoiding ambiguous
+rounding at their rational reference roots.
+
+Solving the sector equations independently gives these elapsed times,
+where k is any signed integer:
+
+| Change | Unrounded elapsed milliseconds |
+| --- | --- |
+| Tithi | k U |
+| Karana | k U / 2 |
+| Nakshatra | 40 k U / 39 |
+| Pada | 10 k U / 39 |
+| Yoga | 20 k U / 21 |
+
+The independent test oracle evaluates these ratios with BigInt arithmetic
+and takes their ceilings to obtain the first whole millisecond owned by
+the new sector. It checks exact equality, without a physical error
+tolerance. Windows run from -86,400,000 to 172,800,000 milliseconds around
+the epoch across the cases, including negative roots, a complete common
+boundary at t = 0, fractional roots, very short windows and roots exactly
+at an endpoint. Expected transition instants come only from these equations,
+never from the engine or a previous adapter run. Receipt-shaped fields in
+these mocked snapshots come from an engine seed solely to satisfy the
+integration types; they are not astronomical reference positions or
+authentic receipts of the artificial trajectories. No mock output is
+stored as a fixture.
+
+The implementation sends the karana, pada and yoga sector phases through
+the existing engine longitude-crossing solver. A full sector maps to a
+phase turn; a search for phase zero finds all sector boundaries. Shared
+karana/tithi and pada/nakshatra boundaries are derived from the same roots.
+The exact classifiers and the existing engine `firstMillisecond` helper
+then settle the instant, checked against its preceding millisecond.
+The fixed scan step is 1/96 day, with three elapsed days of padding on
+either side of a positive window no longer than two elapsed days. These
+are operational settings, not independently measured speed or accuracy
+bounds. They are enforced by the tests; no claim extends to arbitrary
+trajectories or unobserved rapid changes between samples. Unsupported
+backwards or unconfirmed roots and missing bounding changes refuse the
+whole result.
+
+The engine's `elapsedDays(timeBasis(a), timeBasis(b), NaN)` continuity check,
+also used by its window implementation, detects time-basis discontinuities
+without duplicating a leap-second list or model handover dates here.
+The prototype conservatively refuses a padded span containing one.
+Tests exercise the model seam near 1941, the 1972 time-basis handover,
+the leap-second boundary at 2017-01-01 and the IERS table handover in 2027.
+These are engine-policy integration checks, not new independent UTC data.
+
+Real-engine tests use the synthetic observer (12.5, 75.25) degrees and the
+Asia/Kolkata clock for 2024-03-20, with Lahiri and Raman. They check receipt
+retention and equality with the instantaneous classifier on both sides of
+every returned interval boundary, and that full intervals overlap the
+sunrise window. Those checks validate wiring and local boundary ownership;
+they establish neither physical transition-time accuracy nor exhaustive
+astronomical reference coverage. Published transition comparisons remain
+the work of M11.
+
 ## Later milestones
 
 Before adding month naming, document the independent definitions and

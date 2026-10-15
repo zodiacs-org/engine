@@ -23,3 +23,7 @@ export { SUNRISE_CONVENTIONS, VARA_NAMES, prepareSunriseDay, resolveSunriseDay, 
 export type {
   SunriseBoundary, SunriseDayRefusal, SunriseDayResult, SunriseDayWindow, SunriseOptions, Vara
 } from "./sunrise.js";
+export { LIMB_KINDS, TRANSITION_CONVENTIONS, searchLimbTransitions } from "./transitions.js";
+export type {
+  LimbInterval, LimbKind, LimbTransition, LimbTransitions, TransitionOptions, TransitionRefusal, TransitionResult
+} from "./transitions.js";

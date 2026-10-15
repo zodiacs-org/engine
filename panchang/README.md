@@ -3,7 +3,8 @@
 This private source-checkout project will provide astronomical and calendar
 facts for sunrise-to-sunrise days. Implementation follows [PLAN.md](PLAN.md).
 It currently exposes the luminary snapshot adapter, instantaneous limbs,
-civil-date search windows and sunrise-to-sunrise windows with vara. Complete
+civil-date and sunrise-to-sunrise windows with vara, and limb transition
+searches with complete surrounding intervals. Complete
 panchang day/range calculations and the CLI are planned milestones.
 
 Use Node 22.7.0 or later. From this directory:
@@ -203,5 +204,80 @@ refused civil date, missing or multiple sunrises, exhausted search budget
 and an engine calculation refusal. `endpoint` identifies the affected
 local date; original civil/search diagnostics and any engine refusal are
 retained. A skipped following calendar date is refused. Polar dates do
-not borrow a sunrise from another season. This API resolves boundaries;
-limb transitions and lunar months remain later milestones.
+not borrow a sunrise from another season. This API resolves sunrise
+boundaries; the separate transition search below resolves limb intervals.
+Lunar months remain a later milestone.
+
+```ts
+import { resolveSunriseDay, searchLimbTransitions } from "./src/index.js";
+
+const day = resolveSunriseDay({
+  date: "2024-03-20",
+  timeZone: "Asia/Kolkata",
+  observer: { latitude: 12.5, longitude: 75.25 } // Invented coordinates.
+}, { ayanamsa: "lahiri" });
+if (day.status === "ok") {
+  const limbs = searchLimbTransitions(day.start.utc, day.end.utc, { ayanamsa: day.ayanamsa });
+  if (limbs.status === "ok") {
+    for (const event of limbs.transitions) console.log(event.at, event.kind);
+    for (const interval of limbs.intervals) {
+      console.log(interval.kind, interval.index, interval.start.at, interval.end.at);
+    }
+  }
+}
+```
+
+`searchLimbTransitions(from, to, options)` accepts resolved instant inputs
+through the engine date parser: ISO strings, Dates or epoch milliseconds.
+Date-only strings mean UTC midnight. Use the sunrise resolver's endpoints
+for a sunrise day. The transition API takes no observer or timezone because
+its limbs use geocentric longitudes. Select the same ayanamsa explicitly
+when connecting these APIs; both default to Lahiri.
+
+The search returns changes in the half-open requested window. A change at
+the starting instant is included; one at the ending instant belongs to
+the following window. Simultaneous changes sort in `LIMB_KINDS` order.
+`startState` is the classified snapshot at the starting instant.
+Vara comes from the sunrise window. A pada change is reported separately
+from a nakshatra change, including when both occur together.
+
+Each `LimbTransition` holds the full classified snapshots `before` and
+`after`, at the preceding millisecond and the change instant, with the
+original calc receipts, bounds and instantaneous ayanamsa values.
+`intervals` lists every limb interval overlapping the window, ordered by
+its actual start. Each interval retains its complete start and end
+transition, including boundaries outside the requested window. Its index
+is within the full angular cycle; the pada index includes its nakshatra.
+Read traditional names and paksha from the start transition's `after`
+snapshot. Interval endpoints are computed first milliseconds of changes,
+not a physical accuracy claim.
+
+`TRANSITION_CONVENTIONS` records the fixed search settings. The engine
+crossing solver scans sector phases at a quarter-hour step. The search
+pads each endpoint by three elapsed days and accepts windows of at most
+two elapsed days. It confirms candidate instants with the exact existing
+classifiers and the engine's first-millisecond helper. It assumes forward
+sector motion resolved by the sampling step; it is not a proof of
+completeness. The analytical trajectory tests in
+[test/transitions.test.ts](test/transitions.test.ts) enforce these settings,
+boundary ownership and rational reference instants. They establish no
+astronomical transition-time accuracy, as [SOURCES.md](SOURCES.md) explains.
+
+All streams, endpoint checks and millisecond checks share `maxSamples`,
+defaulting to 10,000 unique instantaneous snapshots. A positive integer
+or `Infinity` is accepted. Cached timestamps count once in `samples`;
+`longitudeSamples` separately counts solver callbacks, including cache
+hits. The fixed window and padding also bound the scan when the sample
+budget is unlimited. These rules are enforced by
+[test/transitions.test.ts](test/transitions.test.ts).
+
+A refusal contains diagnostics without `startState`, `transitions` or
+`intervals`. Reasons distinguish budget exhaustion, original engine
+refusals, an unconfirmed crossing, an unbracketed limb, and a discontinuity
+in the engine's time basis. Coverage checks apply to the entire padded
+span, so windows close to a reference-span edge can refuse. Searches whose
+padded spans cross a time-basis discontinuity also refuse, including a
+leap-second boundary or the model/table handovers. This conservative
+restriction applies even if the discontinuity lies outside the requested
+window. Invalid windows/options throw `RangeError`; unexpected engine
+errors propagate.

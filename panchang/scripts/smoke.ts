@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {
   instantaneousPanchang, luminarySnapshot, prepareCivilDay, prepareSunriseDay,
-  resolveCivilDay, resolveSunriseDay
+  resolveCivilDay, resolveSunriseDay, searchLimbTransitions
 } from "../src/index.js";
 
 // Exercise the actual source runtime, independently of Vite's test alias.
@@ -41,3 +41,16 @@ assert.equal(sunrise.start.snapshot.ayanamsa.name, "lahiri");
 assert.equal(sunrise.end.snapshot.sun.sidereal.receipt.engine.ephemeris.version, "2.1.19");
 assert(Date.parse(sunrise.end.utc) > Date.parse(sunrise.start.utc));
 console.log("Source runtime resolves a historical sunrise day with vara, horizon conventions and engine receipts.");
+
+const transitions = searchLimbTransitions(sunrise.start.utc, sunrise.end.utc, { ayanamsa: sunrise.ayanamsa });
+if (transitions.status !== "ok") throw new Error(transitions.reason);
+assert(transitions.transitions.length > 0);
+assert.deepEqual(transitions.startState.sun, sunrise.start.snapshot.sun);
+assert.deepEqual(transitions.startState.moon, sunrise.start.snapshot.moon);
+for (const interval of transitions.intervals) {
+  assert(Date.parse(interval.start.at) < Date.parse(transitions.to));
+  assert(Date.parse(interval.end.at) > Date.parse(transitions.from));
+  assert.equal(interval.start.after.ayanamsa.name, sunrise.ayanamsa);
+  assert.equal(interval.end.after.moon.sidereal.receipt.engine.ephemeris.version, "2.1.19");
+}
+console.log("Source runtime finds limb transitions with full intervals and original engine receipts.");
