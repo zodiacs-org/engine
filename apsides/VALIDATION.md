@@ -94,3 +94,12 @@ window and its subwindows. They do not establish independent angular
 accuracy or extend the existing apsis validation coverage. No held-out
 reference was collected or evaluated; the original Pluto distance failures
 remain active.
+
+M9 adds the local CLI. `test/cli.vitest.ts` builds and invokes its
+launcher in subprocesses, checking strict arguments, JSON stream content,
+exit statuses, receipt preservation, selections and TT boundary replay
+against the library over the January 2000 development window and its
+subwindows. It also exercises malformed-input, budget and coverage
+failures. These tests establish command behavior, not independent accuracy.
+No held-out reference was collected or evaluated; the original Pluto
+distance failures and acceptance limits remain unchanged.
