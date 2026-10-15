@@ -564,6 +564,40 @@ They establish integration and retention of the engine's results and
 receipts, without establishing astronomical accuracy or new error bounds.
 M11 remains responsible for wider independent physical transition checks.
 
+## M10: CLI parsing, formatting and integration evidence
+
+[test/cli.test.ts](test/cli.test.ts) checks the command interface without
+adding any external astronomical fixtures or comparison tolerances. Parsing
+checks enforce explicit observer, zone and month convention inputs, the
+Lahiri default, supported engine ayanamsas, finite decimal coordinates,
+positive finite safe-integer budgets and strict date/range validation.
+They also verify that invalid requests perform no history loading or
+astronomical calculation. Exit statuses and stdout/stderr routing are
+interface contracts, tested both through the runner and the actual launcher.
+
+Constructed output tests reuse the independent linear trajectories from
+M5/M7 and artificial rises from M9, with no new ephemeris expectations. The
+first artificial rise on March 20, 2024 is local midnight plus six elapsed
+hours at the synthetic site in Asia/Kolkata, or 00:30 UTC. This instant is
+below the first positive rational sector root of each stream: tithi,
+karana, nakshatra, pada and yoga therefore start at their initial labels.
+The weekday is Wednesday by Gregorian calendar arithmetic. These are
+calendar, partition and label-formatting checks, not physical sunrise or
+transition-time references. Text interval and segment ordering are checked
+separately because the full intervals can begin before the requested day.
+
+Real-engine checks compare JSON to the complete library result, retain
+original receipts, timescale facts, bounds and ayanamsa values in the text
+ledger, and launch from an unrelated working directory. Historical range
+loading on June 1-2, 1880 reuses M2/M9's independent mean-time expectation
+at synthetic longitude -73.25 degrees: local midnight is 04:53 UTC.
+Other checks cover selected Raman, missing polar sunrise, search budgets,
+whole-result refusals and neutral error output. These are integration
+checks. Artificial anomaly labels used to exercise formatting make no
+additional astronomical claim. The CLI introduces no network requests,
+source copies or third-party data, and preserves the library's existing
+timescale, ayanamsa, horizon and coverage conventions.
+
 ## Later milestones
 
 Before adding further physical transition instants, record the primary

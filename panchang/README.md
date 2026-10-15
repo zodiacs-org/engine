@@ -6,7 +6,7 @@ It currently exposes the luminary snapshot adapter, instantaneous limbs,
 civil-date and sunrise-to-sunrise windows with vara, limb transition
 searches with complete surrounding intervals, amanta/purnimanta month
 naming with adhika/kshaya detection, sunrise tithi anomaly comparisons,
-and pure day and date-range assembly APIs. The CLI is a planned milestone.
+pure day and date-range assembly APIs, and a source-checkout CLI.
 
 Use Node 22.7.0 or later. From this directory:
 
@@ -571,3 +571,94 @@ logical samples including cache hits. Those counters cannot be added to
 measure actual range work; use the range counters instead. No calculation
 cache persists between range calls. Reuse and standalone-day equivalence
 checks are integration evidence, without a physical accuracy claim.
+
+## Command line
+
+After `npm ci` in this directory, run the source-checkout command directly:
+
+```sh
+./bin/panchang.mjs day --date 2024-03-20 \
+  --latitude 12.5 --longitude 75.25 --time-zone Asia/Kolkata \
+  --month-convention amanta --format text
+
+./bin/panchang.mjs range --from 2024-03-20 --to 2024-03-21 \
+  --latitude 12.5 --longitude 75.25 --time-zone Asia/Kolkata \
+  --month-convention purnimanta --ayanamsa lahiri --format json
+
+./bin/panchang.mjs --help
+```
+
+These coordinates are invented. They identify an observer independently of
+the supplied zone. The examples share the synthetic site and dates tested in
+[test/cli.test.ts](test/cli.test.ts). The launcher resolves this project's
+TypeScript configuration and local dependencies from its own location, so it
+also works by absolute path from another directory. The private package's
+`panchang` bin points to this launcher. `npm run --silent panchang -- day ...`
+is an equivalent invocation; `--silent` suppresses npm's banner for JSON
+consumers. Keep the source checkout and its development dependencies present;
+this command is not a standalone distributed executable.
+
+Both commands require explicit latitude, longitude, IANA timezone and month
+convention. Coordinates are geodetic degrees, north/east positive; optional
+`--height` is WGS84 metres and defaults to zero. `--ayanamsa` accepts the
+engine names shown by `--help` and defaults to Lahiri. `--format` is `text`
+by default or `json`. Range endpoints are both included, with the library's
+existing range and search limits. Historical timezone data is prepared
+locally before calculation. No network lookup or place database is used.
+
+Options take separate values, as shown above. Unknown options, extra
+positionals, repeated options, empty or missing values and control characters
+are rejected. Coordinates and height require finite plain decimal notation;
+exponential and hexadecimal forms are refused. Dates use the strict civil
+date validation described above. `--help` works alone or immediately after
+the command, without other options.
+
+`--sunrise-max-samples`, `--transition-max-samples` and `--month-max-samples`
+set the corresponding per-day library budgets. `--max-samples` is accepted
+only by `range` and limits its total actual work. CLI budgets must be positive
+finite safe integers; omitted budgets retain the library defaults. The
+parser validates the entire request before history loading or calculation.
+Library calls retain their existing budget domains.
+
+JSON output is the complete original day or range result, including nested
+diagnostics, conventions, full boundaries, engine receipts, time-basis facts,
+bounds and instantaneous ayanamsa values. Dates inside engine objects use
+their standard ISO serialization. JSON output is compact and can be large
+because the library repeats complete endpoint evidence in several places.
+Stream it to a consumer when appropriate and keep any generated files in
+ignored directories, with each file below the project size limit.
+
+Plain text shows each civil day in order, with vara and lunar month at
+sunrise, forward kshaya/vriddhi tithi comparisons, and chronological segments
+with all limb labels. Separate chronological sections list full limb/month
+intervals, including boundaries outside the sunrise day, and phase/ingress
+events inside it. Intervals include their start and exclude their end.
+The final provenance ledger contains original civil resolutions and
+snapshots ordered by instant, each serialized as a JSON line with original
+positions, bounds, calc receipts and ayanamsa values. Equal serialized
+snapshots are included once across the whole output. Text labels do not
+round or replace the receipt values. Use JSON for the full library structure
+and search accounting.
+
+All instants retain the engine's UTC labels and time basis, including its
+historical UT1 assumptions. The horizon convention remains upper limb,
+standard refraction and a level plane without horizon dip. The output states
+the existing millisecond calculation resolution without claiming physical
+accuracy at that scale. Independent reference coverage remains as recorded
+in [SOURCES.md](SOURCES.md); the CLI adds no astronomical accuracy evidence.
+
+Exit statuses, enforced in [test/cli.test.ts](test/cli.test.ts), are:
+
+| Status | Meaning | Output |
+| --- | --- | --- |
+| `0` | Complete result or help | stdout |
+| `1` | Unexpected calculation/runtime failure | stderr, no partial result |
+| `2` | Invalid command or input | stderr, no partial result |
+| `3` | Calculation refused by the library | stdout with original diagnostics, no partial days or segments |
+
+An explicit `--format json` also selects a JSON error object on stderr for
+parsing/input errors. An invalid format choice uses the default text error.
+Refused plain text includes the reason and the full original refusal as
+JSON. A refusal in either format remains a refusal of the whole requested
+day or range. Unexpected failures receive a neutral error message without
+raw exception details.
