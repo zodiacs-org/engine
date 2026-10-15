@@ -39,6 +39,71 @@ the adapter. It exercises selectable engine ayanamsas and refusal/input
 handling. All expectations obtained from engine calls are explicitly
 integration checks, never independent evidence.
 
+## M2: civil-date and timezone references
+
+[test/civil.test.ts](test/civil.test.ts) derives expected UTC boundaries by
+subtracting published clock offsets from the written midnight. At a
+missing midnight it uses the transition instant. Comparisons are exact at
+JavaScript millisecond resolution, with no accuracy tolerance; these are
+clock/calendar checks, not physical astronomical accuracy evidence.
+All coordinates are invented. Zones identify clock rules only, without
+asserting that the synthetic site lies in that jurisdiction.
+
+The following primary database records were fetched and read on 2026-10-15.
+They are IANA tzdb 2025c public-domain data. No proprietary atlas was used,
+and this work makes no correction to the historical time atlas.
+
+- [northamerica](https://data.iana.org/time-zones/tzdb-2025c/northamerica),
+  `Rule US 2007 max` March/November rows and `America/New_York`:
+  the spring and autumn dates tested are 2024-03-10 and 2024-11-03.
+  Standard/daylight offsets are -05:00/-04:00. The resulting intervals
+  have 23 and 25 elapsed hours respectively.
+- The same `northamerica` file, `Rule Cuba 2012 max` November row,
+  `Rule Cuba 2013 max` March row, and `Zone America/Havana`:
+  -05:00 standard offset, one hour daylight saving, midnight standard-time
+  transitions. Tests use 2024-03-10's missing midnight and 2024-11-03's
+  repeated midnight, choosing the earlier occurrence.
+- The same file, `Rule StJohns 1988 only` April row and
+  `Rule StJohns 1987 2006` October row, with `Zone America/St_Johns`:
+  the 1988 daylight saving amount is two hours and the October rollback
+  occurs at 00:01 on the last Sunday. The tested 1988-10-29/30 dates
+  have disjoint pieces and are refused by the prototype's stated policy.
+- [asia](https://data.iana.org/time-zones/tzdb-2025c/asia),
+  `Zone Asia/Kathmandu` and its continuation rows: +05:30 until 1986,
+  then +05:45. The test on 1986-01-01 starts at the midnight transition,
+  1985-12-31T18:30:00Z, when the new local reading is 00:15.
+- [australasia](https://data.iana.org/time-zones/tzdb-2025c/australasia),
+  `Zone Pacific/Apia`, its continuation rows, and `Rule WS 2011`:
+  the date-line change skips 2011-12-30 at 2011-12-30T10:00:00Z.
+  Tests refuse that date and preserve the boundaries of its neighbours.
+  The same zone's 1892 July change repeats a date; that constructed
+  observer case is conservatively refused as a date-boundary fold.
+
+For historical preparation the tests reuse independent vector `L3-TZ-0003`
+in [L3-time-calendars.json](../conformance/vectors/L3-time-calendars.json),
+whose arbiter is independently compiled zic 2025c with backzone, as described
+in [the L3 arbiter record](../conformance/arbiters/l3/README.md).
+It records Africa/Banjul's offset as -3996 seconds for 1880-12-31, within
+its 1850-01-01 to 1912-01-01 constant segment. The test subtracts that
+offset at the date's bounding midnights. Its synthetic longitude is outside
+the engine's local mean time substitution range, so the zone clock applies.
+The fixture remains in its original file, under the conformance suite's
+licensing terms; it is read without modification or duplication.
+
+Separate hand-derived arithmetic covers Gregorian month ends and the
+divisibility rules for leap years, including years below 0100. The
+synthetic historical observer at longitude -73.25 degrees uses
+240 seconds per degree, giving a -04:53 mean-time offset on 1880-06-01.
+A constructed clock jumps from 23:50 to 00:20 across midnight, proving
+that the civil boundary precedes the engine's shifted missing-midnight
+answer. That test supplies invented engine-resolution inputs; it does
+not claim that this clock belongs to a real timezone.
+
+Checks comparing retained resolutions with direct engine calls are
+integration checks only. Observer validation uses the existing sky
+`Observer` contract in [riseset.ts](../src/sky/riseset.ts); its domain
+tests enforce input compatibility, not astronomical accuracy.
+
 ## Later milestones
 
 Before adding limb arithmetic or month naming, document the independent
