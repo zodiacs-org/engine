@@ -1,0 +1,1 @@
+Complete M1: add isolated occultations tooling, validated receipted engine position adapter, geometry and provenance design, and passing Node 22 integration and scope checks.
