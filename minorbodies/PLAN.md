@@ -13,7 +13,7 @@ human-written evidence notes stay with their capture scripts and provenance.
 - [x] M5 Generate and validate the required Chiron, Ceres, Pallas, Juno and Vesta datasets over the target range. Freeze request manifests and digest receipts; measure shard sizes and boundary continuity. Keep generated bulk data ignored.
 - [x] M6 Add the body adapter: delegate ordinary bodies to engine calc, expose minor-body calculation with explicit conventions and refusals, and provide generic crossings callbacks and configured-aspect rows. Verify actual results and mixed-body use.
 - [x] M7 Implement station searches through the engine crossings solver, with sample budgets, boundary handling and receipts. Check direct-to-retrograde and retrograde-to-direct events against independent Horizons samples.
-- [ ] M8 Build retrograde windows from stations and endpoint states, carrying clipped-window and refusal information. Test adjacent windows, incomplete searches and supported-range edges.
+- [x] M8 Build retrograde windows from stations and endpoint states, carrying clipped-window and refusal information. Test adjacent windows, incomplete searches and supported-range edges.
 - [ ] M9 Add sign ingress search through the engine crossings solver with directions, sign labels, receipts and shared budgets. Check wraparound, repeated ingresses and station-adjacent cases independently.
 - [ ] M10 Add a local CLI for positions, stations, retrograde windows and ingresses, with JSON output, explicit time conventions and useful failures. Test commands against the library and invalid input.
 - [ ] M11 Run the preregistered full-span held-out accuracy suite with explicit arcsecond limits, speed and distance checks, event brackets and seam checks. Commit the generator and evidence notes linked to enforcing tests; document actual coverage and failures.
@@ -112,3 +112,20 @@ history; no coefficient or accuracy budget changed. Root package contents
 still fails on the initially missing `dist/calc.d.ts`; the scope check passes
 and no root build or packed-file change was made. All changes remain inside
 `minorbodies/`. M8 is the next unchecked milestone.
+
+M8 verification: `npm run check` passed on Node 22.22.2, including the new
+synthetic window and independent Chiron pilot tests, reference checks and package
+exclusion. The full-data retrograde tests passed for every required body; the
+unchanged full-accuracy, adapter and station suites also passed. The full-data
+configuration was exercised in separate filtered runs covering all its test
+files. Native offline source-checkout execution and serializable receipts passed.
+Windows reuse the existing station search, share its budget with endpoint and
+inward-probe calls, retain clipping and provenance, and refuse incomplete or
+inconsistent searches without partial output. Tests cover adjacent intervals,
+touches, endpoint zeros, fractional epochs, rounded boundary events and installed
+coverage edges. Independent expectations come from the retained held-out
+Horizons/ERFA corpus with unchanged timing and arcsecond gates. No coefficient,
+generator, source capture or acceptance limit changed. Root package contents
+still fails on the initially missing `dist/calc.d.ts`; no root build or packed-file
+change was made. All changes remain inside `minorbodies/`. M9 is the next
+unchecked milestone.

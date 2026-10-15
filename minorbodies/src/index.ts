@@ -25,3 +25,6 @@ export type { AdapterTimeRequest, AdapterTimeReceipt } from "./adapter-input.ts"
 export { createStationSearcher, STATION_SEARCH_CONVENTIONS } from "./stations.ts";
 export type { StationSearchRequest, StationDirection, StationSearchReceipt, StationSample,
   StationEvent, StationSearchResult, StationSearcher } from "./stations.ts";
+export { createRetrogradeWindowSearcher, RETROGRADE_WINDOW_CONVENTIONS } from "./retrogrades.ts";
+export type { RetrogradeWindowRequest, RetrogradeWindowSearchReceipt, RetrogradeWindow,
+  RetrogradeWindowSearchResult, RetrogradeWindowSearcher } from "./retrogrades.ts";

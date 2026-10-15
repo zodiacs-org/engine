@@ -27,6 +27,11 @@ export async function readStationSourceIdentity(): Promise<EngineSourceIdentity>
   return readLocalSourceIdentity(["./stations.ts"]);
 }
 
+/** Retrograde assembly, station search and its engine solver dependency. */
+export async function readRetrogradeSourceIdentity(): Promise<EngineSourceIdentity> {
+  return readLocalSourceIdentity(["./retrogrades.ts"]);
+}
+
 async function readLocalSourceIdentity(entries: readonly string[]): Promise<EngineSourceIdentity> {
   const repository = new URL("../../", import.meta.url);
   const seen = new Map<string, string>();

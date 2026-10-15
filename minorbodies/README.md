@@ -4,8 +4,8 @@ This source-checkout package is under development. It computes geocentric
 ecliptic longitude, latitude, distance, speeds and retrograde state for Chiron,
 Ceres, Pallas, Juno and Vesta from explicitly loaded local tables, with
 provenance receipts. Its Chiron pilot is also retained. The implementation
-sequence is in [PLAN.md](PLAN.md). The body adapter and station search are
-available; retrograde windows, sign ingresses and the CLI remain later milestones.
+sequence is in [PLAN.md](PLAN.md). The body adapter, station search and
+retrograde windows are available; sign ingresses and the CLI remain later milestones.
 
 The design uses JPL Horizons samples to build local Chebyshev tables. See
 [DESIGN.md](DESIGN.md) for conventions, coverage, validation and engine
@@ -327,7 +327,8 @@ receipt. A provider refusal from `longitudeAt` throws
 receipt. It never returns a fabricated longitude. The solver propagates that
 error. Its own sample-budget refusal remains unchanged. Keep the callback
 receipt with direct solver results. The dedicated station wrapper below adds
-per-event receipts; retrograde-window and ingress wrappers remain later milestones.
+per-event receipts; retrograde windows are described below, and ingresses remain
+a later milestone.
 
 The adapter's tests establish integration and preserve the pilot's existing
 held-out accuracy checks, not additional astronomical coverage. See
@@ -394,3 +395,60 @@ in `STATION_REFERENCE_RECIPE`, with timing and arcsecond gates enforced by
 `tests/station-accuracy.test.ts` and `tests/full-stations.test.ts`. Those finite
 checks do not establish full-range event completeness or physical orbit
 uncertainty. See [M7 evidence](docs/evidence/M7.md).
+
+## Retrograde windows
+
+```ts
+import { createBodyAdapter, createRetrogradeWindowSearcher, loadChironPilot } from "./src/index.ts";
+
+const adapter = await createBodyAdapter([await loadChironPilot()]);
+const searcher = await createRetrogradeWindowSearcher(adapter);
+const result = searcher.searchRetrogradeWindows({
+  body: "Chiron",
+  from: "2000-01-02T00:00:00Z",
+  to: "2000-12-30T00:00:00Z"
+});
+console.log(result);
+```
+
+Inputs, setup, TT clock, coverage and station-search settings follow the station
+API above. A completed result contains `windows` and the underlying `stations`.
+Each window gives `body`, `startJdTt`, `endJdTt`, `clippedStart`, `clippedEnd`
+and a receipt linking its station boundaries and the complete search record.
+An empty query returns no windows and makes no position calls.
+
+A window describes a negative-longitude-speed episode between reversals, cut
+to the requested interval. An isolated zero-speed touch without reversal does
+not split an episode. The position API's instantaneous `retrograde` is still
+false at an exact zero. Station endpoints are numerical estimates with the
+station solver's refinement limits, so these extents are not an exact membership
+test for every instant. Zero-duration windows are omitted.
+
+A clipped boundary is a query edge without a classified station. The receipt
+stores `null` for that boundary's station; it does not assert how far the
+episode continues outside the query. Adjacent queries split within a retrograde
+episode each report their own clipped piece. At an exact starting zero, a
+nonzero inward probe determines the initial motion, without inferring the
+motion before the query. Failure to resolve that state returns
+`retrograde-state-unresolved`. An exact ending station retains the station
+search's refusal because its following direction cannot be sampled. Requests
+outside installed coverage refuse; they are not clipped to the dataset.
+
+One `maxSamples` budget covers the station search, endpoint calculations and
+any initial probe. The total is `samples`; `receipt.stationSearch.samples`
+records the station-search portion. The receipt also carries endpoint and
+probe samples, source identities, dataset provenance and evaluated shard digests.
+Successful endpoint states must agree with the station direction sequence;
+otherwise the result refuses as `retrograde-state-inconsistent`. This check
+can reveal some missed reversals, but does not prove completeness.
+
+Every refusal returns empty `windows` and `stations`, even if the station
+search had finished before an endpoint check failed. It carries the reason,
+work count and any underlying provider refusal. All returned data are immutable
+and JSON-serializable. Searches run offline after explicit setup.
+
+`tests/retrogrades.test.ts` enforces these assembly and failure rules with
+synthetic motion. `tests/retrograde-accuracy.test.ts` and the explicit full-data
+`tests/full-retrogrades.test.ts` check windows against the retained independent
+Horizons/ERFA station corpus, with unchanged timing and angular gates. Their
+finite reference scope and reproduction commands are in [M8 evidence](docs/evidence/M8.md).

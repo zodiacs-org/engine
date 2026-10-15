@@ -9,6 +9,7 @@ with a separate full-data validation command. Its finite coverage samples
 do not replace the final M11 accuracy and event corpus. M6 adds body dispatch,
 generic longitude callbacks and configured-aspect rows with explicit receipts.
 M7 adds station searches using the engine solver and independent event references.
+M8 assembles retrograde windows from those stations and endpoint states.
 
 The required targets are Chiron, Ceres, Pallas, Juno and Vesta. Pholus and
 Eris can follow only after the same checks. The target interval is
@@ -673,3 +674,66 @@ The tests enforce the preregistered timing margins and the unchanged longitude
 and speed arcsecond limits at held-out station-neighborhood epochs. No fitted
 coefficient, polynomial degree, source training epoch or position acceptance
 budget changes for M7. Full-range event validation remains M11.
+
+## M8 retrograde-window contract
+
+`createRetrogradeWindowSearcher(adapter)` captures its local source identity
+and creates the existing station searcher. `searchRetrogradeWindows` accepts
+the same request shape as `searchStations`. The station API validates and
+snapshots the input and resolves its clock. Assembly reads only that immutable
+record, including the TT endpoints, body and settings. It neither copies the
+root solver nor changes the station implementation.
+
+The station scan runs first. A refused scan returns an empty window and station
+list with its original reason, provider refusal and candidate epoch. A completed
+nonempty scan is followed by endpoint calculations on explicit TT. These calls
+share the original budget; repeated evaluations count again. Thus completion of
+the scan alone does not ensure enough budget remains for a window result. An
+empty request requires no endpoint evaluation. Provider refusals and nonfinite
+speeds discard all pending output.
+
+Negative speed at the initial endpoint opens an episode at the query edge.
+Each direct-to-retrograde station opens an episode, and each retrograde-to-direct
+station closes it. An open episode at the final endpoint is clipped there.
+Initial motion must agree with the first station's incoming motion, subsequent
+directions must alternate, and the resulting motion must agree with the final
+endpoint speed. Contradictions refuse as `retrograde-state-inconsistent`.
+These checks expose some missed or unresolved transitions; equal endpoint
+states cannot rule out a missed pair, and the original scan assumptions remain.
+
+A zero at the excluded starting station cannot tell its outgoing direction by
+itself. The wrapper probes inward, at most the station direction-probe distance
+and no further than halfway to the first returned station or query end. If that
+TT epoch rounds to either limit, or its speed is zero, the request refuses as
+`retrograde-state-unresolved`. The query boundary remains clipped because the
+wrapper has no classification on both sides of it. An unresolved ending zero
+refuses too; exact terminal station candidates retain the existing
+`station-direction-unresolved` refusal. No probe leaves the query or installed
+coverage. The dataset's exclusive end remains inadmissible.
+
+Windows are episode extents, not an exact strict-negative-speed set. Isolated
+zero-speed touches that do not reverse direction stay within their surrounding
+episode; their instantaneous position still reports `retrograde: false`.
+Numerically located station boundaries also inherit finite time refinement and
+deduplication. A boundary rounded onto the query end must not create a
+zero-duration window. A clipped flag means a query boundary without a classified
+station, not knowledge that the episode continues outside it. Adjacent queries
+split within an episode give clipped pieces; callers must not infer a station
+from those artificial split points.
+
+Each window receipt links its classified boundary stations, using null at clipped
+boundaries, and the aggregate search receipt. The aggregate retains the station
+search receipt, endpoint and optional inward-probe records, total provider calls,
+evaluated shard digests and implementation hashes. The station-search work count
+remains its own subtotal. All results, including refusals, are immutable snapshots
+and JSON-serializable. Invalid request syntax still throws before any calculation.
+
+`tests/retrogrades.test.ts` covers synthetic assembly, adjacent queries, touches,
+endpoint zeros, supported-range edges, shared budgets and refusal propagation.
+The independent pilot and required-body checks use the retained M7 Horizons
+corpus and ERFA, selecting query and split epochs from that reference alone.
+`tests/retrograde-accuracy-helper.ts` reconstructs expected episodes and enforces
+the existing timing margin and longitude/speed arcsecond limits. No new fit,
+source response or acceptance budget is introduced. [M8 evidence](docs/evidence/M8.md)
+records the distinction between independent event checks and boundary integration
+tests; the full-range event corpus remains M11.
