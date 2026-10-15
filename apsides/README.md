@@ -4,10 +4,10 @@ Private work-in-progress library for geometric orbital distance extrema,
 built on `@zodiacs/engine`. The current milestone provides the distance
 sampler, bounded lunar and heliocentric planetary searches, a combined
 window API, motion probes with replayable receipts, optional lunar syzygy
-annotations, and frozen independent
+annotations, a JSON command line, and frozen independent
 development references. Pluto fails its preregistered distance budget, so
-independent validation is not fully passing. The remaining work, including
-the CLI, is in [PLAN.md](PLAN.md).
+independent validation is not fully passing. The remaining work is in
+[PLAN.md](PLAN.md).
 
 Use Node 22.22.2 for the local checks, matching this project's initial test
 environment. From this repository:
@@ -27,6 +27,68 @@ The dependency is a relative file reference to the immutable carried engine
 archive. Installation stays inside `apsides/node_modules`; it needs no root
 install or root build. The package is private. Its source entry is
 `src/index.ts`, usable from a TypeScript runner or bundler.
+
+## Command line
+
+Build the local CLI after installing its dependencies, then run it from
+`apsides/`:
+
+```sh
+npm run build
+node bin/apsides.mjs --help
+node bin/apsides.mjs lunar --from 2000-01-01 --to 2000-02-01
+node bin/apsides.mjs planetary --body Earth --from-jd-tt 2451544.5 --to-jd-tt 2451575.5
+node bin/apsides.mjs window --bodies Earth,Moon,Mercury --from-jd-tt 2451544.5 --to-jd-tt 2451575.5 --syzygy-orb-degrees 5 --max-evaluations 10000
+```
+
+The executable is named `apsides` in this private project's `bin` mapping.
+It can also be invoked as `npm run --silent apsides -- lunar ...`. Use the
+direct Node command or npm's silent mode when capturing JSON, so npm's
+script banner does not enter stdout. No global installation is needed.
+The build writes only to ignored `.generated/cli/`. Rebuild after changing
+source; neither installation nor the launcher builds automatically.
+
+Every search writes the full library result as one JSON document on stdout,
+including distances, motion samples, TT instants, bounds and receipts.
+The command performs no reference downloads. `planetary` requires one
+`--body`; `window` optionally accepts `--bodies` as comma-separated unique
+names, otherwise selecting every supported body. Names are case-sensitive.
+`--syzygy-orb-degrees` enables the lunar annotation described below and
+requires Moon in a window selection. `--max-evaluations` is one positive
+safe-integer engine-call budget for the entire request.
+
+Use `--from` and `--to` for ISO dates or date-times with an explicit offset.
+Date-only inputs mean UTC midnight on the engine's time basis. For a TT
+Julian date, use `--from-jd-tt` or `--to-jd-tt` instead of the corresponding
+ISO flag. The endpoint forms may be mixed. Copy an event's `instant.jdTt`
+into a TT flag to partition at its returned boundary without converting
+through a civil label. The engine parses ISO inputs unchanged; it rejects
+invalid dates and unresolved local date-times. Its sequential endpoint
+validation still applies: an earlier refusal can prevent a later endpoint
+from being evaluated.
+
+Each flag accepts either a separate value or `--flag=value`. Unknown,
+repeated, missing, conflicting and command-inapplicable options are errors.
+Numeric flags require plain decimal notation without spaces, exponents or
+hexadecimal notation. Help is `--help` or `-h` alone, or immediately after
+a command with no other arguments.
+
+| Exit status | Meaning | Output |
+| --- | --- | --- |
+| 0 | Completed computation, including an empty result; or help | Result JSON or help text on stdout |
+| 1 | Unexpected runtime, load or output error | Error JSON on stderr for runtime/load errors; output errors can be silent |
+| 2 | Invalid arguments or library input validation error | Error JSON on stderr; no stdout |
+| 3 | Search refused, including exhausted budget or missing coverage | Full refusal JSON on stdout; no partial events |
+
+Completion does not certify physical completeness or independent accuracy;
+Pluto's distance acceptance failure remains open. Error JSON has `status`,
+`code` and `message` fields. Refusals preserve the library's `reason`,
+`detail` and diagnostics. `test/cli.vitest.ts` checks these statuses,
+streams, arguments and exact JSON equality with library calls over the
+January 2000 TT development window and its subwindows. These are interface
+checks, not new astronomical accuracy evidence.
+
+## Library
 
 ```ts
 import { sampleDistance } from "./src/index.js";

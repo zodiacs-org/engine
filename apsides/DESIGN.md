@@ -9,7 +9,7 @@ development planetary fixtures. Pluto fails the unchanged distance budget;
 see [VALIDATION.md](VALIDATION.md). M6 combines selected lunar and planetary
 searches under a shared budget. M7 adds before/at/after motion records and
 replayable probe receipts. M8 adds optional lunar longitude-phase
-annotations. The CLI remains planned in [PLAN.md](PLAN.md).
+annotations. M9 exposes the searches through a local JSON CLI.
 
 The intended result is a chronological list of local distance extrema in a
 requested window. A lunar minimum is a perigee and a lunar maximum an
@@ -576,9 +576,56 @@ distance records, and identical annotations across window partitions.
 These are definition and integration checks, not independent measurements
 of angular accuracy. No held-out fixture or acceptance budget changes.
 
-## Planned command line
+## Command line implemented in M9
 
-The planned CLI commands are `apsides lunar`, `apsides planetary` and
-`apsides window`. They will call the pure library, validate arguments,
-serialize results and refusals as JSON, and distinguish failure through
-exit status. They will not fetch reference data during ordinary use.
+`apsides lunar`, `apsides planetary` and `apsides window` dispatch to the
+corresponding library search. The private project's `bin/apsides.mjs`
+loads a local TypeScript build under ignored `.generated/cli/`; the
+build uses the existing TypeScript dependency and changes no engine file.
+The source library entry does not import the CLI. `runCli` in `src/cli.ts`
+returns stdout, stderr and an exit code without writing streams or exiting.
+The launcher owns process I/O and allows output to drain naturally.
+
+The CLI retains the library result without projecting, rounding or
+relabeling its fields. It serializes the entire result before writing
+stdout, so computation and encoding errors cannot produce a partial
+successful document. A closed or failed output stream sets a failing
+process status. JSON serialization retains the normal binary64 round-trip
+representation, including the returned TT coordinates and all receipts.
+
+`--from` and `--to` pass ISO strings unchanged to the engine. Alternative
+`--from-jd-tt` and `--to-jd-tt` flags construct explicit TT Julian-date
+requests. Exactly one form is required for each endpoint, and the forms
+may be mixed. There is no implicit scale for numeric input and no use of
+JavaScript Date normalization before the engine can validate a date.
+The existing library's sequential time validation remains in effect;
+an early refusal can prevent validation of a later endpoint.
+
+`planetary` requires `--body`; `window` optionally accepts a unique
+comma-separated `--bodies` list and otherwise uses the library default.
+The commands retain the library's budget defaults. `--max-evaluations`
+overrides the one request budget. `--syzygy-orb-degrees` is accepted only
+by lunar and window, and a window must select Moon. Omission does not
+enable annotations. Unknown and duplicate flags, positional extras,
+conflicting endpoint forms and command-inapplicable flags are rejected.
+Numbers use finite plain decimal notation, and the budget must be a
+positive safe integer. Body spelling and case are exact. No shell command
+is constructed from CLI input, and the launcher neither installs packages
+nor downloads references.
+
+Exit status 0 means a completed computation, including no events, or
+help. A library refusal retains its entire JSON result on stdout and
+uses status 3. Argument errors and library RangeErrors use status 2;
+unexpected errors use status 1. Those errors produce JSON on stderr and
+no result on stdout. Load errors also use status 1 and give local setup
+instructions; output-stream errors use status 1 but cannot promise a
+writable diagnostic stream. Help is text, requested alone or directly
+after a command without other arguments. These are interface semantics,
+not statements of independent accuracy or complete physical detection.
+
+`test/cli.vitest.ts` builds the launcher dependency and runs subprocesses
+on the test runtime. It checks exact output equality with library calls,
+argument rejection, exit statuses, help, receipts, orb and body selections,
+budget and coverage refusals, and partitions at a returned TT event.
+Its calculation cases use the registered January 2000 development window
+and its subwindows. No held-out reference or acceptance budget changes.
