@@ -2,9 +2,10 @@
 
 ## Status and scope
 
-This is the design adopted in M1, extended by the M2 ingestion contract below.
-The catalogue, acceptance policy, synthetic engine-contract checks and
-Horizons ingestion tools are implemented. No position accuracy, installed
+This is the design adopted in M1, extended by the M2 ingestion and M3 numerical
+contracts below. The catalogue, acceptance policy, synthetic engine-contract
+checks, Horizons ingestion tools, Chebyshev core and shard codec are implemented.
+No astronomical position accuracy, installed
 coefficient dataset or operational supported range is claimed yet.
 
 The required targets are Chiron, Ceres, Pallas, Juno and Vesta. Pholus and
@@ -257,3 +258,101 @@ using the cache or network. Its replay mode requires cached bytes matching the
 committed digests. Its capture mode writes proposed fixtures into an ignored
 directory. This is the intake foundation for the later fitting generator;
 it is not a full-span coefficient generator or an accuracy test.
+
+## M3 numerical contract
+
+`src/chebyshev.ts` fits each Cartesian axis as
+`p(x) = sum(c[k] * T[k](x))`, with
+`x = 2 * ((jdTt - startJdTt) / (endJdTt - startJdTt)) - 1`.
+The constant coefficient has its full weight. The Chebyshev recurrence is
+described in [NIST DLMF, table 18.9.1](https://dlmf.nist.gov/18.9.T1);
+[DLMF's Clenshaw algorithm](https://dlmf.nist.gov/3.11.ii) uses a different
+constant-coefficient convention, so its coefficients must not be copied into
+this format without conversion.
+
+`fitChebyshevSegment` takes an explicit degree and ordered samples with
+`jdTt` and `positionAu`. It solves unweighted least squares by Householder QR,
+sharing the factorization across Cartesian axes. It uses the supplied epochs
+in its matrix, including Horizons' printed rounding. It does not replace them
+with ideal cosine nodes. Square and overdetermined systems are supported;
+duplicate, unordered and out-of-interval epochs are rejected. Source velocity
+columns may be present on a Horizons row but are not fitted or used as
+derivative expectations.
+
+`evaluateChebyshevSegment` evaluates the series with Clenshaw recurrence and
+differentiates that recurrence analytically. The derivative is multiplied by
+`2 / (endJdTt - startJdTt)` to obtain au per TT day. Both segment endpoints
+are evaluable for seam comparisons. Extrapolation is rejected. The input
+validator copies and deeply freezes coefficients; repeated evaluation of its
+own validated snapshot avoids copying again. Invalid data throws `RangeError`.
+
+`CHEBYSHEV_LIMITS` caps degree at 64 and training samples at 4096. Positive TT
+Julian dates up to 10,000,000 are admitted; each supplied Cartesian value and
+coefficient must have magnitude at most 1,000,000 au. The computed triangular
+QR factor must have infinity-norm condition number at most 100,000,000.
+Numerical rank loss and potential derivative overflow also refuse the fit or
+segment. These are operational guards, not physical coverage or error bounds;
+`tests/chebyshev.test.ts` fixes their values and tests the refusals. Passing the
+condition check does not establish interpolation accuracy.
+
+The same ordered inputs produce the same coefficients within the same
+JavaScript runtime. Cross-runtime bitwise agreement is not promised. Negative
+zero coefficients normalize to zero. The fitter does not choose a degree,
+select training data or approve a source solution. Those decisions belong to
+the frozen generator recipe and independent checks in later milestones.
+
+`tests/chebyshev.test.ts` compares fits with monomials evaluated separately,
+trigonometric functions and their analytic derivatives, including segment
+edges, rounded Julian dates, irregular sampling and the maximum degree. It
+also checks an overdetermined fit with a separately derived least-squares
+solution. These are numerical-algorithm tests, not ephemeris accuracy evidence.
+`tests/coefficient-shard.test.ts` adds a fit/encode/decode/evaluate check against
+analytic positions and rates across a segment join.
+
+## M3 coefficient shard contract
+
+`src/coefficient-shard.ts` defines `minorbodies-chebyshev-shard-v1`:
+body, conventions, provenance, validation status and contiguous segments.
+Each segment names its TT Julian endpoints and the Cartesian coefficient
+arrays. Axes within a segment share a degree; successive segments may differ
+in degree or duration. Gaps, overlaps, reversed order, extra object fields,
+accessor fields, sparse arrays, nonfinite coefficients and unsupported
+conventions are rejected. Validated records are immutable snapshots.
+
+`SHARD_CONVENTIONS` fixes the coordinate, correction, time, unit and series
+conventions above. `provenance` records the source kind, a source-manifest
+SHA-256, a generator identifier and a generator-recipe SHA-256. Synthetic
+tests use `source: "analytic-test"`; future real datasets must use
+`"jpl-horizons"`. A digest field alone does not verify that a source manifest
+exists or agrees with those claims. The future dataset loader must read and
+verify that manifest, reject synthetic sources for astronomical calculations,
+and enforce source identity across shards. This codec performs no file or
+network I/O and always retains `validation: "unvalidated"`. It cannot confer
+an accuracy status or supported astronomical range.
+
+`encodeCoefficientShard` returns canonical JSON text and a separate descriptor.
+The text has a fixed field order, full binary64 JSON number serialization and
+a trailing line feed. The descriptor records SHA-256, UTF-8 byte length,
+body, coverage, segment count and source-manifest digest. Decoding requires
+that external descriptor, checks its digest and every metadata field, validates
+the schema, and requires exactly the canonical encoding. A changed byte,
+duplicate JSON field or inconsistent descriptor fails. Hashes detect changed
+bytes relative to the supplied pin; they do not authenticate the source.
+
+Each encoded shard must be below 2,000,000 UTF-8 bytes and contain at most
+1024 segments, as enforced by `SHARD_LIMITS` and
+`tests/coefficient-shard.test.ts`. Split a dataset before reaching either cap.
+The byte limit also applies to in-memory shard validation and to multibyte
+JSON inputs. Generated shards belong under ignored `generated/`.
+
+`evaluateCoefficientShard` selects a segment by binary search. Coverage is
+start-inclusive and end-exclusive, and an exact internal seam belongs to the
+right segment. The last endpoint can still be examined by the segment-level
+evaluator. `measureShardSeams` compares both endpoint positions and analytic
+velocities in Euclidean au and au per TT day. `measureSegmentJoin` does the same
+for neighboring segments across a shard boundary. `assertShardContinuity`
+requires explicit finite nonnegative limits and rejects a jump in either
+quantity, including equal positions with unequal velocities. Loading a
+structurally valid shard does not itself call that gate. Numerical seam limits
+for real datasets and their independent astronomical validation remain M4/M5
+work. These primitives do not yet produce astronomical result receipts.

@@ -6,6 +6,20 @@ coefficients or external source-code copies. The code and original
 documentation in this directory use the repository's [MIT licence](../LICENSE);
 that declaration does not relicense the retained JPL material.
 
+M3 adds original numerical code and in-memory synthetic analytic tests. It
+does not add fitted astronomical data or fetch new Horizons samples.
+
+## Numerical definitions
+
+Read on 2026-10-15: [NIST Digital Library of Mathematical Functions, table
+18.9.1](https://dlmf.nist.gov/18.9.T1) for the Chebyshev recurrence, and
+[section 3.11(ii)](https://dlmf.nist.gov/3.11.ii) for Clenshaw summation.
+`src/chebyshev.ts` is an original implementation, with a full-weight constant
+coefficient and an analytically differentiated recurrence. No source code,
+coefficient table or website text is copied. These mathematical references
+and the independent analytic tests establish numerical definitions, not
+astronomical accuracy. The project's MIT licence covers the new code.
+
 ## JPL Horizons numerical data
 
 The selected source is NASA/JPL Solar System Dynamics, Horizons public

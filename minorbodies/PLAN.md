@@ -8,7 +8,7 @@ human-written evidence notes stay with their capture scripts and provenance.
 
 - [x] M1 Establish the isolated TypeScript package, body catalogue, acceptance policy, DESIGN.md and SOURCES.md. Verify the existing engine integration boundaries with synthetic tests. No position accuracy claim yet.
 - [x] M2 Implement a serialized, cached JPL Horizons client and strict response parser with request manifests, source digests, target/center/frame/time checks, fixture capture and offline parser tests.
-- [ ] M3 Implement deterministic Chebyshev fitting, evaluation and derivatives, shard format and integrity checks. Test against independently evaluated analytic functions, including segment edges and malformed data.
+- [x] M3 Implement deterministic Chebyshev fitting, evaluation and derivatives, shard format and integrity checks. Test against independently evaluated analytic functions, including segment edges and malformed data.
 - [ ] M4 Generate a Chiron pilot dataset and implement the geocentric evaluator, time conversion, ecliptic reduction, speed, retrograde state and result receipts. Compare it with held-out Horizons samples before extending the span.
 - [ ] M5 Generate and validate the required Chiron, Ceres, Pallas, Juno and Vesta datasets over the target range. Freeze request manifests and digest receipts; measure shard sizes and boundary continuity. Keep generated bulk data ignored.
 - [ ] M6 Add the body adapter: delegate ordinary bodies to engine calc, expose minor-body calculation with explicit conventions and refusals, and provide generic crossings callbacks and configured-aspect rows. Verify actual results and mixed-body use.
@@ -39,3 +39,15 @@ documentation/file rules. These are ingestion checks, not position accuracy
 evidence. The root `npm run package:contents` still fails because the
 initial checkout has no `dist/calc.d.ts`; no root build was run. Changes
 are confined to `minorbodies/`. M3 is the next unchecked milestone.
+
+M3 verification: `npm run check` passed on Node 22.22.2, covering TypeScript,
+analytic numerical tests, intake regressions, frozen source verification and
+package exclusion. A native Node import of `src/index.ts` also evaluated a
+synthetic linear fit successfully. Tests check rounded epochs, analytic rates,
+conditioning refusals, deterministic encoding, immutable snapshots, malformed
+data, external digest pins, half-open lookup and position/velocity joins.
+Independent review found an accessor-validation issue; the fix is covered by
+regression tests. These are numerical and integrity checks, not astronomical
+accuracy evidence. The root `npm run package:contents`, with its npm cache
+under this folder, still fails on absent `dist/calc.d.ts`; no root build was
+run. Only `minorbodies/` changed. M4 is the next unchecked milestone.
