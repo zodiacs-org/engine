@@ -1,0 +1,9 @@
+{
+  "synthetic": true,
+  "birth": {
+    "utc": "2000-04-05T08:07:00+02:00",
+    "latitude": 12.5,
+    "longitude": 45.25,
+    "houseSystem": "whole"
+  }
+}

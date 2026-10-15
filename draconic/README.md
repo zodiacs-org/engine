@@ -7,6 +7,8 @@ natal adapter, a pure chart transformation, structured natal versus draconic
 comparisons and result wrappers with engine natal receipts. The CLI supports
 `draconic chart` and `draconic compare`, each with JSON or plain text output.
 
+## Run from this checkout
+
 Use Node 22 with the standalone tooling:
 
 ```sh
@@ -16,18 +18,45 @@ npm run typecheck
 npm test
 ```
 
-Run the CLI from this folder after installing the standalone tooling:
+This is a private source project, excluded from the engine npm package. The
+commands below run from `draconic/` and need no root installation or engine
+build. The executable is `bin/draconic.mjs`; the npm script exposes the same
+`draconic` command without a global installation.
+
+Run the CLI against the committed invented inputs:
 
 ```sh
 npm run --silent draconic -- --help
-npm run --silent draconic -- chart --input synthetic.json
-npm run --silent draconic -- chart --input synthetic.json --node mean --format json
-npm run --silent draconic -- chart --input synthetic.json --format text
-npm run --silent draconic -- compare --input synthetic.json
-npm run --silent draconic -- compare --input synthetic.json --node mean --format text
+npm run --silent draconic -- chart --input examples/synthetic.json
+npm run --silent draconic -- chart --input examples/synthetic.json --node mean --format json
+npm run --silent draconic -- chart --input examples/synthetic.json --format text
+npm run --silent draconic -- compare --input examples/synthetic.json
+npm run --silent draconic -- compare --input examples/synthetic.json --node mean --format text
+node bin/draconic.mjs chart --input examples/polar-fallback.json --format text
+node bin/draconic.mjs compare --input - --node mean < examples/unknown-time.json
 ```
 
-`synthetic.json` must contain only a `synthetic` field equal to `true` and a
+| Input | Intended behavior |
+| --- | --- |
+| [examples/synthetic.json](examples/synthetic.json) | A resolved instant with an explicit offset and invented site, with ordinary whole-sign natal houses. |
+| [examples/unknown-time.json](examples/unknown-time.json) | A caller-supplied reference instant with unknown birth time and no site; angles, houses and body house assignments stay absent. |
+| [examples/polar-fallback.json](examples/polar-fallback.json) | An invented polar site requests Placidus; the engine returns whole-sign houses and a fallback flag, preserved under rotation. |
+
+[test/examples.test.ts](test/examples.test.ts) runs every input through both
+commands with both node choices and checks availability and natal receipts.
+These fixtures contain inputs only. Their engine-computed positions are not
+committed as expected values or presented as an accuracy reference.
+
+To save output, use the ignored `generated/` folder:
+
+```sh
+mkdir -p generated
+node bin/draconic.mjs chart --input examples/synthetic.json > generated/chart.json
+```
+
+## CLI input and output
+
+An input file must contain only a `synthetic` field equal to `true` and a
 `birth` object with the engine's JSON-compatible `BirthInput` fields. Use
 invented inputs only. The declaration is a caller assertion, not verification
 of the input's origin. Accepted birth fields are `utc`, `latitude`, `longitude`,
@@ -87,6 +116,83 @@ input limit are checked in [test/cli.test.ts](test/cli.test.ts), with file and
 stream integration checks in [test/cli-runner.test.ts](test/cli-runner.test.ts).
 They check command wiring and validation, not astronomical accuracy.
 
+## Library usage
+
+Run [examples/library.mjs](examples/library.mjs) after installing the local
+tooling:
+
+```sh
+node examples/library.mjs
+```
+
+It registers the same local source loader as the CLI, reads the committed
+invented input relative to the example file, and prints a true-node chart,
+an explicit mean-node comparison and a separate hand-arithmetic example.
+It works from another current directory when invoked by its absolute path.
+The file read and output belong to the example; the library functions perform
+no I/O. The executable example and its arithmetic results are checked in
+[test/examples.test.ts](test/examples.test.ts).
+
+In TypeScript code with the project's source resolution, the receipt-bearing
+API can be called directly. From a file in `draconic/`:
+
+```ts
+import type { BirthInput } from "../src/index.js";
+import { draconicChart, draconicCompare } from "./src/index.js";
+
+// Invented input, matching examples/synthetic.json.
+const syntheticBirth = {
+  utc: "2000-04-05T08:07:00+02:00",
+  latitude: 12.5,
+  longitude: 45.25,
+  houseSystem: "whole"
+} satisfies BirthInput;
+const context = { sourceInstant: syntheticBirth.utc };
+const chartResult = draconicChart(syntheticBirth, {}, context);
+const compareResult = draconicCompare(syntheticBirth, { node: "mean" }, context);
+
+// Read results without interpreting the coordinates.
+console.log(chartResult.draconic.bodies, chartResult.draconic.angles);
+console.log(chartResult.draconic.houses, chartResult.conventions);
+console.log(compareResult.comparison.bodies, chartResult.natal.receipt);
+```
+
+The library accepts engine `BirthInput` directly, without the CLI's
+`{ synthetic, birth }` envelope. Use invented data in either interface.
+The relative source import depends on this repository layout; this project
+does not provide a published package or a built JavaScript entry point.
+
+| Function | Input and result |
+| --- | --- |
+| `draconicChart(birth, options?, context?)` | Cast and return `{ natal, conventions, draconic }`. |
+| `draconicCompare(birth, options?, context?)` | Cast and return `{ natal, conventions, comparison }`. |
+| `castNatal(birth, options?)` | Cast and return `{ natal, node }` for reuse by pure functions. |
+| `transformNatal(source)` | Rotate an existing source's bodies, angles and cusps. |
+| `compareNatal(source)` | Pair that source's natal and rotated longitudes with signed deltas. |
+| `rotateLongitude(longitude, northNodeLongitude)` | Rotate a canonical longitude by the selected natal node. |
+| `signedLongitudeDelta(natalLongitude, draconicLongitude)` | Return the shortest signed circular difference. |
+
+## Hand-derived rotation example
+
+This arithmetic example uses invented positions, independent of the cast
+above. The selected natal node is at 75.25 degrees. For each longitude,
+subtract 75.25, then add 360 if the difference is negative:
+
+| Row | Natal degrees | Draconic degrees | Signed delta degrees |
+| --- | ---: | ---: | ---: |
+| Selected north node | 75.25 | 0 | -75.25 |
+| Sun | 100.5 | 25.25 | -75.25 |
+| Moon | 15 | 299.75 | -75.25 |
+
+For the Sun, `100.5 - 75.25 = 25.25`. For the Moon,
+`15 - 75.25 + 360 = 299.75`; its shortest signed difference is
+`299.75 - 15 - 360 = -75.25`. These are exact binary fractions.
+The reference is the listed synthetic cases in
+[test/ARITHMETIC.md](test/ARITHMETIC.md), enforced by
+[test/rotation.test.ts](test/rotation.test.ts) and
+[test/compare.test.ts](test/compare.test.ts). No astronomical agreement or
+coverage figure is inferred from this arithmetic.
+
 ```ts
 import { rotateLongitude } from "./src/index.js";
 
@@ -100,6 +206,8 @@ results use degrees in `[0, 360)`; invalid inputs throw `RangeError` without
 coercion. The primitive subtracts the supplied north-node longitude and wraps
 a negative difference around the circle using JavaScript binary64 arithmetic.
 The endpoint and rounding policy is documented with the arithmetic reference.
+
+## Casting and pure transformations
 
 `castNatal(birth, options?)` accepts the engine's `BirthInput` and returns
 `{ natal, node }`. `natal` is the engine's tropical chart. `node` names the
@@ -163,6 +271,8 @@ engine's computed whole-sign cusps, rotated without recasting. That test also
 checks missing coordinates, unknown time, default houses and a site with zero
 coordinates for both node choices. These are integration preservation checks.
 
+## Structured comparisons
+
 `compareNatal(source)` takes the same source as `transformNatal` and derives
 the rotated chart internally. It returns `node`, `conventions`, `bodies`,
 `angles` and `houses`. Each body row has its body identifier and each cusp
@@ -196,6 +306,8 @@ It returns coordinate differences without aspects, interpretation or
 predictions. Mean-node selection retains the natal true-node body labels.
 This low-level comparison does not include receipts. Use `draconicCompare`
 below to attach the engine's natal envelope.
+
+## Receipts and provenance
 
 `draconicChart(birth, options?, context?)` casts the natal chart and returns
 `{ natal, conventions, draconic }`. `draconicCompare` takes the same arguments
@@ -248,6 +360,8 @@ outputs. These checks establish wiring and preservation only. The independent
 rotation and delta references remain the hand-derived cases in
 [test/ARITHMETIC.md](test/ARITHMETIC.md).
 
+## Source tooling and limits
+
 The adapter imports the engine's source entry via a relative path. The local
 Vitest alias and TypeScript path mapping resolve its ephemeris dependency from
 this project's installation, pinned to the engine's version. The standalone
@@ -264,6 +378,32 @@ cusps rotate with the bodies, including whole-sign cusps, rather than being
 calculated again in the rotated zodiac. A fixed chart rotation supplies no
 new ephemeris speeds. Results will describe positions and structured deltas
 only, without interpretation or predictions.
+
+This is a fixed longitude rotation of a natal tropical chart. It uses no
+ayanamsa or new ephemeris calculation for the derived positions. The node
+choice is a convention: mean-node selection changes the rotation origin and
+keeps the natal true-node body rows. The engine's natal corrections, time
+basis, coverage and flags remain available in the natal envelope; rotation
+does not extend their accuracy or validate a supplied instant. Refer to the
+engine's [README](../README.md) for its astronomical limits. Integration tests
+here check engine reuse and receipt preservation, not independent physical
+accuracy. Printed precision does not establish accuracy.
+
+Pure transforms trust the supplied node selection, body identity, house
+construction and chart provenance. Their consumed-coordinate validation does
+not authenticate a caller-created chart. Use `castNatal` or the result
+wrappers to select nodes on the engine's chart clock. The wrapper formats and
+separate draconic conventions are local drafts; no draconic receipt import or
+replay codec is provided. The engine codec applies to `result.natal` only.
+
+The project reports positions and coordinate differences only. It adds no
+interpretation, predictions, aspects, derived motion, progressions,
+directions, harmonics, relocation, returns or HTTP chart service. It performs
+no place lookup or local-time resolution. Unknown time requires an explicit
+reference instant, without an inferred noon or a claim about positions across
+the rest of that date.
+
+## Licensing and data
 
 Code and documentation here are MIT under the repository's [LICENSE](../LICENSE).
 The engine as distributed is `MIT AND CC-BY-4.0`; see its

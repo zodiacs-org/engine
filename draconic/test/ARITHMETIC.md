@@ -27,6 +27,14 @@ origin: for example, 0.25 - 359.75 = -359.5, then adding 360 gives 0.5 degrees.
 The synthetic opposite node is placed half a circle from the chosen node by
 construction; this is not a claim about an independently measured node.
 
+The README's worked table uses the selected node, Sun and Moon from this
+table and the signed differences derived in the comparison section below.
+`examples/library.mjs` evaluates those Sun and Moon rotations and the Moon's
+signed difference separately from its engine-cast birth example.
+`examples.test.ts` checks its printed arithmetic against these hand-derived
+values. The JSON files in `examples/` contain invented birth inputs only;
+they are CLI and receipt integration cases, not ephemeris references.
+
 The implementation uses JavaScript binary64 subtraction and addition. General
 decimal inputs can round. The test for zero minus `Number.MIN_VALUE` checks
 the endpoint policy: adding a full circle rounds to 360, which is represented

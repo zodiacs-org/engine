@@ -6,3 +6,4 @@ Complete M5: add pure structured natal versus draconic comparisons with signed c
 Complete M6: add chart and comparison result wrappers with unchanged engine natal receipts, separate draconic conventions, explicit provenance context and synthetic preservation tests.
 Complete M7: add the JSON chart CLI with strict synthetic input and arguments, true or mean node selection, preserved natal receipts, a local source runner and validation and subprocess tests.
 Complete M8: add the comparison CLI and plain text for both commands with natal receipt details, hand-derived rendering checks and subprocess coverage of output streams and exit codes.
+Complete M9: add runnable synthetic library and CLI examples, usage and convention documentation with hand-derived arithmetic references, and example integration tests.

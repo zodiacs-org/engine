@@ -13,7 +13,7 @@ a line to `CHANGES.txt`. Git operations belong to the external harness.
 - [x] M6 Attach engine natal receipts and separate draconic convention metadata, preserving time basis and provenance without claiming the engine issued a draconic receipt.
 - [x] M7 Add the `draconic chart` CLI with strict arguments, synthetic JSON input, explicit mean-node selection, JSON output and useful errors.
 - [x] M8 Add `draconic compare`, plain text rendering for both commands and CLI subprocess tests covering exit codes and output streams.
-- [ ] M9 Add small synthetic examples and usage documentation for the library and CLI, citing the arithmetic tests for every numerical example and describing scope and limits.
+- [x] M9 Add small synthetic examples and usage documentation for the library and CLI, citing the arithmetic tests for every numerical example and describing scope and limits.
 - [ ] M10 Audit validation, mutation isolation, receipts and package exclusion; run the complete standalone checks and record the final supported behavior and remaining limits.
 
 ## Conventions and implementation constraints
@@ -223,3 +223,29 @@ excludes `draconic/` and wrote no archive. `npm run package:contents` stops at
 missing `dist/calc.d.ts`; the engine build remains absent and was not generated.
 Project files meet the requested size limit, and documentation contains no
 em dash characters. All session changes are inside `draconic/`. M9 is next.
+
+## M9 session verification
+
+Added small invented JSON inputs for ordinary whole-sign natal houses, unknown
+time without a site, and a polar Placidus request with whole-sign fallback.
+Added a runnable library example using the existing source loader, with
+receipt-bearing default true-node and explicit mean-node calls and separate
+hand-derived Sun and Moon arithmetic. Generated output stays in ignored
+folders. No engine-computed position fixture was added.
+
+Organized the local README into a usage guide with executable CLI commands,
+an API table, a complete synthetic library example, a worked arithmetic table,
+natal receipt scope, house and node conventions, tooling requirements and
+remaining limits. The arithmetic reference links the worked examples to the
+existing independent hand calculations. Tests in `test/examples.test.ts`
+exercise the committed inputs through both commands and node choices and run
+the library example from outside the checkout, checking its hand-derived
+arithmetic and natal envelope validity. Engine integration remains wiring and
+preservation evidence only, without independent astronomical accuracy claims.
+
+TypeScript checking and the complete standalone Vitest suite passed on the
+local Node 22.22.2 runtime. The engine npm dry run with scripts disabled
+excludes `draconic/` and wrote no archive. `npm run package:contents` stops at
+missing `dist/calc.d.ts`; the engine build remains absent and was not generated.
+Project files meet the requested size limit, and documentation contains no
+em dash characters. All session changes are inside `draconic/`. M10 is next.
