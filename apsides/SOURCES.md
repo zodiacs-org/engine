@@ -3,7 +3,8 @@
 M1 cites definitions and existing engine contracts. M2 registers reference
 queries, acceptance budgets and held-out cases, and freezes independent
 development samples before engine/reference comparisons. M3 tests the
-scalar solver with analytic synthetic functions. No astronomical test
+scalar solver with analytic synthetic functions. M4 compares the lunar
+window search with the frozen development Moon fixture. No astronomical test
 expectation comes from this package's prior output or Swiss Ephemeris.
 
 ## Primary sources read for M1
@@ -90,6 +91,16 @@ midpoints. Wider distance probes verify each turn. `test/references.vitest.ts`
 checks the frozen evidence; `test/horizons-io.vitest.ts` checks rejection of
 wrong centers, scales, units, corrections, incomplete tables and corrupt
 caches. These are integrity checks, not engine accuracy results.
+
+`test/lunar-reference.vitest.ts`, added in M4, compares `searchLunarApsides`
+with `references/fixtures/dev-moon-2000.json`: geocentric Moon, Horizons
+DE441, 2000-01-01 to 2000-02-01 TT. It checks all fixture events against
+the preregistered timing and distance limits, with no missing or extra
+events. Separate same-TT checks use the fixture's before/at/after samples
+for distance, signed radial speed and total speed. The source is the
+frozen numerical fixture and its recorded requests, not the engine's
+event output. This is development coverage; no held-out case is evaluated
+in M4 and no broader completeness claim follows from these tests.
 
 Additional primary pages fetched and read on 2026-10-15:
 

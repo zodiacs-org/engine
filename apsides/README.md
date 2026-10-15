@@ -2,8 +2,8 @@
 
 Private work-in-progress library for geometric orbital distance extrema,
 built on `@zodiacs/engine`. The current milestone provides the distance
-sampler, a bounded scalar extremum solver, and frozen independent development
-references. Astronomical window searches and the CLI are planned in
+sampler, a bounded scalar extremum solver, a lunar window search, and frozen
+independent development references. Planetary searches and the CLI are planned in
 [PLAN.md](PLAN.md).
 
 Use Node 22.22.2 for the local checks, matching this project's initial test
@@ -50,12 +50,44 @@ algorithm finished on that grid; it does not prove that every physical
 extremum was found. Callers still need time conversion, edge padding and
 window filtering, as described in [DESIGN.md](DESIGN.md).
 
+```ts
+import { searchLunarApsides } from "./src/index.js";
+
+const result = searchLunarApsides({ from: "2000-01-01", to: "2000-02-01" });
+if (result.status === "complete") {
+  for (const event of result.events) {
+    console.log(event.kind, event.instant, event.distanceKm);
+    console.log(event.orbitalSpeedKmPerSecond, event.radialSpeedKmPerSecond);
+    console.log(event.receipt);
+  }
+} else {
+  console.error(result.reason, result.detail);
+}
+```
+
+The lunar search uses a fixed padded TT grid and golden-section distance
+refinement. Returned `instant.jdTt` estimates belong to `(from, to]` on TT;
+an event at the start belongs to the preceding window. Resolving adjacent
+windows preserves event records, including when splitting at an event's
+returned TT coordinate. `refinement` supplies strict distance witnesses
+around each estimate. The caller can set `maxEvaluations`; exhausted work,
+unavailable padding and ambiguous numerical results return a refusal with
+an empty event list. `diagnostics` records the work, grid and
+`completeness: "sampled-not-proven"`. Finite sampling does not prove that
+every physical extremum was found. Endpoint delta-T pins resolve the
+endpoints only; internal samples and event civil labels use the engine's
+normal time basis. See [DESIGN.md](DESIGN.md) for the full contract.
+
 The Vitest files use `.vitest.ts` and a local configuration so the root
 test command does not discover a separate project's tests before its local
 dependencies are installed. They check integration, units, reference
 provenance, source integrity and numerical behavior against analytic
-synthetic curves. Engine accuracy has not yet been measured against the
-references. [DESIGN.md](DESIGN.md) describes the solver and planned searches;
+synthetic curves. `test/lunar-reference.vitest.ts` also checks lunar events
+against the frozen `dev-moon-2000` Horizons DE441 fixture, over
+2000-01-01 to 2000-02-01 TT: event counts and kinds, timing and distance,
+and distance and speeds at the reference's own TT samples. The registered
+Moon limits pass for this development case; held-out lunar and all planetary
+comparisons remain future milestones. [DESIGN.md](DESIGN.md) describes the searches;
 [references/PREREGISTRATION.md](references/PREREGISTRATION.md) records the
 acceptance budgets, reserved cases and collection commands.
 [SOURCES.md](SOURCES.md) records definitions and attribution. Ordinary tests
