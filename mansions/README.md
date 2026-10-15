@@ -3,8 +3,9 @@
 This checkout-local project is being developed as a library and CLI for
 Arabic lunar mansions (manazil al-qamar) on top of `@zodiacs/engine`.
 [PLAN.md](PLAN.md) records the implementation milestones. The first boundary
-table and pure longitude classifier are available. Time-based mansion APIs
-and CLI commands are not implemented yet.
+table, pure longitude classifier and tropical mansion-at API are available.
+Ingress searches, range intervals, sidereal selection and CLI commands are
+planned in later milestones.
 
 [src/tables.ts](src/tables.ts) exports the immutable `EQUAL28_ARIES_V1`
 table and `getBoundaryTable("equal28-aries-v1")`. Table selection requires
@@ -32,7 +33,57 @@ of a nonrepresentable rational boundary may fall on either side; the
 classifier does not snap it to that boundary. Negative values arbitrarily
 close to Aries remain in the final segment. The classifier selects no
 zodiac, evaluates no ephemeris and makes no engine receipt claim. It is a
-mathematical helper for the planned receipt-bearing astronomical APIs.
+mathematical helper used by the receipt-bearing astronomical API.
+
+[src/index.ts](src/index.ts) is the library entry. Its synchronous
+`mansionAt({ time, table })` calculates the tropical mansion at a resolved
+instant, with no I/O:
+
+```ts
+import { mansionAt } from "./src/index.js";
+
+const result = mansionAt({
+  time: "2001-02-03T04:05:06Z", // Synthetic example instant.
+  table: "equal28-aries-v1"
+});
+if (result.status === "ok") {
+  console.log(result.at, result.mansion.index, result.mansion.arabicName,
+    result.mansion.latinLabel, result.longitude, result.receipt);
+}
+```
+
+Successful results contain `at`, the engine's normalized UTC label;
+`zodiac: "tropical"`; `longitude`, the geocentric Moon longitude in degrees
+on the true ecliptic of date; the full immutable `table` and selected
+`mansion`; and the engine's unmodified `bounds` and `receipt`. The receipt
+records the actual time basis, engine version, ephemeris version and
+calculation conventions. Its request can be passed back to the engine's
+`calc` for regression replay. Receipt version labels alone do not
+authenticate an artifact or guarantee identical calculations on another
+runtime. This API returns an instantaneous classification; it does not yet
+find the beginning or end of an occupancy interval.
+
+`time` accepts the engine's `CalcTime`: a valid `Date`, a strict ISO calendar
+date or offset-bearing date-time, `{ iso, deltaT? }`, or
+`{ jd, scale: "utc" | "ut1" | "tt", deltaT? }`. Calendar dates mean UTC
+midnight. Julian dates require an explicit scale; `deltaT`, when present,
+pins TT minus UT1 in seconds. The engine retains that choice in the receipt.
+Unresolved local times, invalid calendar dates, numeric epoch timestamps,
+leap seconds and unsupported object fields throw `RangeError`. Missing or
+unsupported table identifiers and extra request options also throw
+`RangeError`. This version accepts only `time` and `table`; it always
+computes the tropical zodiac.
+
+Coverage follows the engine's `CALC_SPAN` and its checks on both UT1 and TT.
+Even a UTC label inside that span may be refused if its TT is outside.
+Unsupported coverage returns the engine's original
+`{ status: "refused", reason: "out-of-range", detail, span }`, without a
+mansion, longitude or fabricated receipt. Calculation errors propagate.
+No fallback to the root engine's broader computation span is attempted.
+[test/at.test.ts](test/at.test.ts) checks input validation, named table
+selection, receipt preservation and replay, time scales, pinned delta-T,
+coverage edges and caller-input preservation. These integration tests make
+no new claim about physical accuracy.
 
 The current internal adapter in [src/engine.ts](src/engine.ts) reads the
 engine's tropical geocentric Moon position on the true ecliptic of date and
@@ -82,6 +133,6 @@ relicense the engine or redistribute its source as a new package. Table
 provenance and third-party source terms are recorded in
 [SOURCES.md](SOURCES.md).
 
-The planned output contains astronomical facts only, in time order, with
+Output contains astronomical facts only, in time order, with
 explicit table selection and engine receipts. It contains no auspicious or
 inauspicious labels, date ranking, predictions, weather or travel advice.
