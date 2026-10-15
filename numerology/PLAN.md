@@ -19,7 +19,7 @@ commits and draft pull requests. Stop after the session's milestone is complete.
 - [x] M8 Implement pinnacles and challenges with documented age intervals, single-digit challenge arithmetic, zero challenges, and complete component receipts.
 - [x] M9 Assemble deterministic profiles and name-change comparisons using the same birth date and conventions, with auditable before/after deltas and no inferred identity data.
 - [x] M10 Add a JSON CLI for profiles, cycles, and comparisons with strict options/input validation, stdin support, stable output, structured errors, and subprocess tests.
-- [ ] M11 Expand handwritten synthetic golden fixtures across both systems, scripts, and date boundaries; add seeded properties for conservation, normalization equivalence, receipt replay, and library/CLI parity.
+- [x] M11 Expand handwritten synthetic golden fixtures across both systems, scripts, and date boundaries; add seeded properties for conservation, normalization equivalence, receipt replay, and library/CLI parity.
 - [ ] M12 Complete API and CLI documentation, conventions/provenance and licensing records, local consumer smoke checks, and isolation/evidence checks; verify that no project file enters the engine package.
 
 ## Conventions to carry through the milestones
@@ -398,3 +398,40 @@ The root `npm run package:contents` was attempted with the local runtime and
 cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm dry-run
 exclusion passed; the complete engine contents and size gate remains
 unverified. No root build was generated. M11 is the next session's work.
+
+## M11 validation
+
+Added shared handwritten synthetic controls in `test/fixtures/cross-layer.json`
+for letter contributions under both systems, Unicode spellings and explicit
+caller mappings, Gregorian date-domain edges, ordinary and leap centuries,
+year transitions, targets before birth, and leap-day anniversaries. The
+cross-layer tests exercise both systems, master policies, life-path methods,
+and every Y policy. The independent test reference uses positional bigint
+arithmetic, separately written letter groups, and the handwritten ASCII
+spellings rather than library output to construct expected results.
+
+Seeded mixed-script compositions verify raw vowel/consonant conservation,
+letter-count and weighted-sum conservation, whole-token permutation invariance,
+canonical and ASCII equivalence, name-extension comparison deltas, and
+unchanged date calculations. Complete subprocess results agree with the
+library through flags, inline JSON, and stdin for profiles, comparisons,
+and cycles. Every nested reduction and visited debt stage, sum, difference,
+timing subtraction, and boundary addition replays, including repeated
+serialized source receipts. Deliberately corrupted receipts must fail the
+replay checks. The README names the controls and explains their finite
+arithmetic scope without claiming predictive accuracy.
+
+Project `npm run typecheck`, focused cross-layer tests, and `npm test` passed
+on Node 22.22.2. Existing arithmetic, validation, ownership, clock/network,
+timezone, CLI transport, package-exclusion, authored-file-size, and punctuation
+checks pass. Builds, runtime, caches, and validation logs remain locally ignored.
+
+Rechecked locally available main and infra refs, including origin refs, for
+numerology, Pythagorean, soul urge, and hidden passion outside this project;
+no overlapping implementation was found. No remote fetch was performed.
+Only `numerology/` changed.
+
+The root `npm run package:contents` was attempted with the local runtime and
+cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm dry-run
+exclusion passed; the complete engine contents and size gate remains
+unverified. No root build was generated. M12 is the next session's work.

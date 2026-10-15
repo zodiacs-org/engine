@@ -1220,3 +1220,42 @@ with clock and network entry points disabled. Stream controls cover split
 UTF-8 scalars, terminal refusal, read/write failures, and unavailable stderr.
 Library parity establishes transport behavior, not independent numerical
 accuracy; the handwritten arithmetic fixtures remain the calculation controls.
+
+## Cross-layer validation
+
+[cross-layer.json](test/fixtures/cross-layer.json) supplies handwritten
+synthetic spelling and calendar controls shared by library and CLI tests.
+Its explicit ASCII spellings and letter contributions cover Latin expansions,
+Greek and Cyrillic, silent letters, canonical Cyrillic context, and caller
+mappings for Han, Devanagari, Hebrew, and an astral script letter. Caller
+mappings declare spelling choices rather than pronunciation or language rules.
+Calendar controls cover the accepted date-domain edges, ordinary and leap
+centuries, year transitions, a target before birth, and a leap-day anniversary.
+
+[cross-layer.test.mjs](test/cross-layer.test.mjs) crosses the spelling controls
+with both letter systems, master policies, life-path methods, and every Y
+policy. A test-only reference uses independent positional bigint arithmetic
+and separately written letter groups; it does not call library calculations,
+tables, or normalization to construct expected values. Handwritten calendar
+paths anchor the date formulas, and handwritten letter contributions anchor
+the spelling formulas. Canonical decompositions and the declared ASCII
+equivalents must preserve arithmetic, selected frequencies, and debt paths.
+
+Seeded compositions exercise mixed-script names, whole-token permutations,
+name extensions, raw vowel/consonant conservation, count and weighted-sum
+conservation, signed comparison deltas, and unchanged date calculations.
+Subprocess checks compare complete library and CLI results through flags,
+inline JSON, and stdin for profiles, comparisons, and cycles. Receipt replay
+checks every nested digit reduction, visited debt stage, sum, difference,
+timing subtraction, and age-boundary addition, including repeated source
+receipts in serialized output. Deliberately altered intermediate receipts
+must fail replay. These finite controls establish arithmetic and transport
+behavior under the documented conventions; they are not predictive evidence.
+
+Run the focused checks after building, or use `npm test` for the whole suite:
+
+```sh
+# From numerology/; no engine build is required.
+npm run build
+node --test test/cross-layer.test.mjs
+```
