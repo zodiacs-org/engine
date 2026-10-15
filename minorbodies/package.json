@@ -5,6 +5,8 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
+    "offline:check": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/check-offline.ts",
+    "check:offline-install": "node scripts/check-offline-install.mjs",
     "cli": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/cli.ts",
     "test": "vitest run --config vitest.config.ts",
     "typecheck": "tsc --project tsconfig.json --noEmit",

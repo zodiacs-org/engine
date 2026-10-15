@@ -3,8 +3,11 @@
 Read on 2026-10-15. M2 adds original JPL Horizons numerical API responses and
 request manifests under `tests/fixtures/horizons/`. There are no committed fitted
 coefficients or external source-code copies. The code and original
-documentation in this directory use the repository's [MIT licence](../LICENSE);
+documentation in this directory use the repository's [MIT licence](LICENSE);
 that declaration does not relicense the retained JPL material.
+The final dependency and inherited-data record is in [LICENSING.md](LICENSING.md),
+with attribution in [NOTICE](NOTICE). Keep these records together when moving
+the source checkout and its offline data.
 
 M3 adds original numerical code and in-memory synthetic analytic tests. It
 does not add fitted astronomical data or fetch new Horizons samples.
@@ -127,6 +130,10 @@ The companion installs the same pinned `astronomy-engine@2.1.19` for type
 resolution; the pilot's frame and time evaluation does not call its planetary
 functions. Explicit dataset loading hashes the evaluator and bridge's local
 source imports, including the parent engine files, into each receipt.
+The later body adapter also needs that installed dependency at runtime when
+it delegates ordinary-body calculations to engine calc. Its location under
+`devDependencies` describes this private development package, not a promise
+that delegated calculations run without it.
 
 The engine's [LICENSING.md](../LICENSING.md) and [NOTICE](../NOTICE) remain
 authoritative for its dependencies and data. In particular, reusing or

@@ -17,7 +17,7 @@ human-written evidence notes stay with their capture scripts and provenance.
 - [x] M9 Add sign ingress search through the engine crossings solver with directions, sign labels, receipts and shared budgets. Check wraparound, repeated ingresses and station-adjacent cases independently.
 - [x] M10 Add a local CLI for positions, stations, retrograde windows and ingresses, with JSON output, explicit time conventions and useful failures. Test commands against the library and invalid input.
 - [x] M11 Run the preregistered full-span held-out accuracy suite with explicit arcsecond limits, speed and distance checks, event brackets and seam checks. Commit the generator and evidence notes linked to enforcing tests; document actual coverage and failures.
-- [ ] M12 Finish reproducible offline setup, data regeneration instructions, dependency/licence notices, examples and package isolation checks. Review every supported-range and accuracy statement against committed evidence. Add Pholus or Eris only through the same data and validation gates if practical.
+- [x] M12 Finish reproducible offline setup, data regeneration instructions, dependency/licence notices, examples and package isolation checks. Review every supported-range and accuracy statement against committed evidence. Add Pholus or Eris only through the same data and validation gates if practical.
 
 The target range and error limits are acceptance criteria, not measured
 capabilities. No milestone is complete if its stated checks fail. Changes
@@ -129,6 +129,24 @@ generator, source capture or acceptance limit changed. Root package contents
 still fails on the initially missing `dist/calc.d.ts`; no root build or packed-file
 change was made. All changes remain inside `minorbodies/`. M9 is the next
 unchecked milestone.
+
+M12 verification: `npm run check`, `npm run full:check`,
+`npm run offline:check -- --full`, `npm run check:offline-install`, the final
+focused setup tests, native example, TypeScript and scope checks passed on
+Node 22.22.2. The isolated installation used only the existing npm cache,
+reproduced pilot coefficient and descriptor bytes exactly, and ran the
+example and CLI with fetch disabled and module resolution confined to its
+temporary tree. Full-data readiness verified the frozen originals, reference
+inputs, coefficient receipts and joins. The setup guide distinguishes frozen
+replay from new capture and records the complete transfer inventory. Licence
+notices, examples and the supported-range/accuracy statement audit are complete.
+No runtime algorithm, dataset, generator or acceptance limit changed; the
+full astronomical suites retain M5/M11's recorded results rather than claiming
+a new numerical run. Root package contents still fails on the initially absent
+`dist/calc.d.ts`; package exclusion passes and no root build was made. The
+M12 evidence note records that limitation and the initial cache-environment
+failure. All changes remain inside `minorbodies/`. All planned milestones are
+complete for the required bodies; optional Pholus and Eris remain unsupported.
 
 M9 verification: `npm run check` passed on Node 22.22.2, including synthetic
 ingress cases, independent Horizons/ERFA references, TypeScript, existing

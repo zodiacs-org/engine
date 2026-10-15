@@ -1,16 +1,27 @@
 # Minor bodies companion
 
-This source-checkout package is under development. It computes geocentric
+This private source-checkout package computes geocentric
 ecliptic longitude, latitude, distance, speeds and retrograde state for Chiron,
 Ceres, Pallas, Juno and Vesta from explicitly loaded local tables, with
 provenance receipts. Its Chiron pilot is also retained. The implementation
 sequence is in [PLAN.md](PLAN.md). The body adapter, station search,
 retrograde windows, sign ingress search and local CLI are available.
 
+Run it inside this engine checkout. Its relative source imports and receipts
+depend on the parent `src/` files; copying this directory alone is not an
+installation. It has no standalone build or published package. The root
+engine package and its accepted body names remain unchanged.
+
 The design uses JPL Horizons samples to build local Chebyshev tables. See
 [DESIGN.md](DESIGN.md) for conventions, coverage, validation and engine
 integration, and [SOURCES.md](SOURCES.md) for provenance. Agreement with a
 finite reference corpus is separate from the JPL orbit's physical uncertainty.
+
+[SETUP.md](SETUP.md) gives the dependency setup, offline transfer inventory,
+rebuild and validation commands, and the distinction between frozen replay
+and new live capture. The code uses the [MIT licence](LICENSE); retained
+source data and reused engine material keep the terms and attribution in
+[LICENSING.md](LICENSING.md), [NOTICE](NOTICE) and [SOURCES.md](SOURCES.md).
 
 From this directory, using Node 22.22.2, the frozen pilot generator runtime:
 
@@ -21,6 +32,7 @@ python3 -m venv .cache/reference-venv
 npm run check
 npm run pilot:build
 npm run pilot:validate
+npm run offline:check
 ```
 
 The Python environment is needed only for independent validation. Calculations
@@ -105,10 +117,11 @@ Bulk source responses and coefficient files are intentionally not committed.
 The repository contains the generator, exact request recipes, frozen source
 manifests and coefficient receipts. A working full-data installation needs
 the matching ignored `.cache/horizons-full/` and `generated/full/` directories.
-Validation additionally needs `.cache/horizons-speed-reference/` and the
-reference Python environment. Preserve those caches when transferring an
-installation. A clean clone can run the default checks and the retained
-pilot; it does not contain the full ephemeris.
+Full validation additionally needs the retained speed and final-reference
+sources and the reference Python environment. [SETUP.md](SETUP.md) lists
+the complete transfer inventory. After dependency setup, a clean clone can
+run the default checks and rebuild the retained pilot; it does not contain
+the full ephemeris.
 
 With the frozen original caches installed, run these commands from this
 directory on the recorded Node runtime:
@@ -116,6 +129,7 @@ directory on the recorded Node runtime:
 ```sh
 npm run full:check
 npm run full:build
+npm run offline:check -- --full
 npm run full:test
 ```
 

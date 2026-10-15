@@ -6,7 +6,8 @@ This is the design adopted in M1, extended by the ingestion, numerical and
 Chiron pilot and full-range contracts below. The pilot adds an astronomical
 evaluator and receipts. M5 adds the required bodies over the target interval,
 with a separate full-data validation command. Its finite coverage samples
-do not replace the final M11 accuracy and event corpus. M6 adds body dispatch,
+remain mandatory alongside the final M11 accuracy and event corpus.
+M6 adds body dispatch,
 generic longitude callbacks and configured-aspect rows with explicit receipts.
 M7 adds station searches using the engine solver and independent event references.
 M8 assembles retrograde windows from those stations and endpoint states.
@@ -15,6 +16,9 @@ M10 exposes those existing calculations through a local offline JSON CLI.
 M11 adds a separately registered final holdout corpus over every segment and
 join, and independent event windows across the installed interval. Its gates
 and finite coverage are recorded in [M11 evidence](docs/evidence/M11.md).
+M12 documents source-checkout installation and frozen offline replay in
+[SETUP.md](SETUP.md), with an explicit prerequisite check and retained licence
+notices. It changes no fitted dataset, numerical algorithm or acceptance limit.
 
 The required targets are Chiron, Ceres, Pallas, Juno and Vesta. Pholus and
 Eris can follow only after the same checks. The target interval is
@@ -111,7 +115,7 @@ Dependency and output preparation must write only under this directory.
 
 ## Accuracy acceptance
 
-The following are proposed pass limits, not measurements or physical
+The following are preregistered pass limits, not measured maxima or physical
 uncertainty bounds. Their executable definition is `ACCEPTANCE_POLICY` in
 `src/acceptance.ts`; its configuration test does not establish accuracy.
 
@@ -156,8 +160,9 @@ epochs must also be absent from the training set. Horizons observer
 ecliptic output can be a secondary check, with its frame and deflection
 differences reported rather than silently folded into the tolerance.
 
-Vitest must eventually assert these maxima on independent source fixtures.
-Reports must state the tested epochs and solution identities. Finite sample
+The pilot, full and final Vitest accuracy suites assert these limits on
+independent source fixtures, as their milestone sections describe.
+Reports state the tested epochs and solution identities. Finite sample
 maxima are not proofs for all times. Missing full datasets cannot result in
 a passing full-span suite through skipped tests. Ordinary offline unit
 tests and the explicit full-data validation command must have distinct scope.
@@ -178,7 +183,7 @@ refusal. Aspects use `findConfiguredAspects` with `{ body, lon, speed }`
 rows and an explicit `policy.bodies` selection. Mixed rows must share a
 frame, correction convention and speed clock; preserve each input receipt.
 
-Stations will use that same crossing solver on the monotone mapping
+Stations use that same crossing solver on the monotone mapping
 `180 + atan(speed / speedScale) * 180 / PI`, targeting 180 degrees with a
 positive speed scale. Classify a reversal from one-sided speed signs;
 the solver's direction flag on this mapping describes speed increasing or
@@ -853,3 +858,29 @@ offline loading. The explicit `tests/full-cli.test.ts` checks every required
 full dataset and nonempty Vesta ingresses; a missing dataset fails the suite.
 These are integration checks, with no new astronomical accuracy claim. Existing
 Horizons/ERFA checks, source data and acceptance budgets remain unchanged.
+
+## M12 installation and evidence boundaries
+
+This companion runs from the matching engine source checkout. Its native
+resolver maps the parent's TypeScript imports and pinned ephemeris dependency;
+it does not build or modify the engine's npm distribution. The companion has
+its own locked dependencies. [SETUP.md](SETUP.md) separates dependency
+preparation, pilot rebuild, transfer of original full-data sources, numerical
+validation and proposed live capture. Licence and attribution records are in
+[LICENSING.md](LICENSING.md), [NOTICE](NOTICE) and [SOURCES.md](SOURCES.md).
+
+`offline:check` verifies installed prerequisites and pilot integrity.
+`offline:check -- --full` additionally verifies full-data sources, coefficients
+and reference inputs against their committed pins. Neither command fetches,
+fits coefficients nor performs the independent numerical comparisons. A
+passing installation check cannot substitute for `check` and `full:test`,
+and it does not change the loader's `accuracy-not-certified-by-loader` record.
+
+Supported coverage is an installed dataset's TT interval, with the upper
+endpoint excluded after input time conversion. Numerical agreement is the
+finite comparison scope enforced by the pilot, M5 and M11 tests. Event
+completeness remains subject to the existing crossing solver's sampling
+assumptions and the registered reference windows. None of these scopes
+establishes source-orbit uncertainty, civil-time accuracy or a continuous
+maximum error. No optional body is admitted without the same generation,
+source-integrity and independent acceptance gates.
