@@ -13,7 +13,7 @@ ticks it here, and appends a commit summary to `CHANGES.txt` for the harness.
 - [x] M7 Find New and Full Moon instants using engine Sun and Moon positions and the engine crossing solver, with a pure lunation API and explicit range semantics.
 - [x] M8 Commit small independently published lunation references with source and derivation records, then test lunation timing and chart integration against them.
 - [x] M9 Produce short structured factor lists labelled as traditional conventions, not predictions, with tests for wording and traceability to chart factors.
-- [ ] M10 Combine ingress and lunation charts into a chronological year or range report, with deterministic ordering and tests for empty ranges and adjacent windows.
+- [x] M10 Combine ingress and lunation charts into a chronological year or range report, with deterministic ordering and tests for empty ranges and adjacent windows.
 - [ ] M11 Add an optional events eclipse adapter through relative imports when available, preserving supplied contact kinds, search completeness, and provenance. Test supplied synthetic contacts and unavailable adapters; never implement an eclipse solver.
 - [ ] M12 Implement the `mundane ingresses`, `mundane lunations`, and `mundane year` CLI with strict arguments, JSON and plain-text output, help, and process-level tests.
 - [ ] M13 Finish usage examples and convention/source documentation, run the complete mundane checks, audit size and package isolation, and record remaining limitations.

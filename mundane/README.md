@@ -5,8 +5,8 @@ the engine in this checkout. Development follows [PLAN.md](PLAN.md). The
 current API normalizes inputs, casts charts at supplied instants, analyzes
 classical planet angularity and angle-ruler dignities, produces descriptive
 factor lists, and searches cardinal solar ingresses and New and Full Moons.
-Eclipse searches, combined reports, and CLI commands are planned and are not
-implemented yet.
+It also combines these events into chronological year or range reports.
+Eclipse searches and CLI commands are planned and are not implemented yet.
 
 From the repository root, using Node.js as required by [package.json](package.json):
 
@@ -281,7 +281,37 @@ of wording tests are in [docs/factors.md](docs/factors.md), enforced by
 [test/factors.test.ts](test/factors.test.ts). The session check record is in
 [docs/evidence/m9/checks.txt](docs/evidence/m9/checks.txt).
 
-Factor lists are labelled `traditional conventions, not predictions`.
+To combine ingress and lunation charts into a chronological report:
+
+```ts
+import { searchMundaneReport } from "./src/index.js";
+
+const report = searchMundaneReport({
+  year: 2000,
+  place: { name: "Synthetic Meridian", latitude: 12.5, longitude: -31.25 }
+});
+if (report.status === "complete") {
+  for (const event of report.events) {
+    console.log(event.kind, event.at, event.factors.items);
+  }
+}
+console.log(report.searches);
+```
+
+The API also accepts `from` and `to` in place of `year`, with the existing
+window semantics. Coincident events remain separate entries, with ingress
+charts before lunation charts at a time tie. Search budgets and sample counts
+remain separate under `searches.ingresses` and `searches.lunations`; optional
+`ingressMaxSamples` and `lunationMaxSamples` settings replace their respective
+budgets. If either search refuses, the report contains no events and records
+the component outcomes. Each event retains its chart, analyses, flags,
+provenance, and factor source pointers. Output is deeply frozen and
+JSON-compatible. Definitions, synthetic derivations, and limitations are in
+[docs/reports.md](docs/reports.md), enforced by
+[test/report.test.ts](test/report.test.ts), with the session record in
+[docs/evidence/m10/checks.txt](docs/evidence/m10/checks.txt).
+
+Factor lists and reports are labelled `traditional conventions, not predictions`.
 This project adds no electional scoring, calendar export, relocation grids,
 horary, or HTTP service. Code and documentation follow the repository's MIT
 licence; engine data retains the terms and attribution in

@@ -24,3 +24,5 @@ export { CARDINAL_INGRESSES, searchIngresses } from "./ingresses.js";
 export type { IngressSearchOptions, SolarIngress, IngressSearchResult } from "./ingresses.js";
 export { LUNATION_PHASES, searchLunations } from "./lunations.js";
 export type { LunationSearchOptions, Lunation, LunationSearchResult } from "./lunations.js";
+export { searchMundaneReport } from "./report.js";
+export type { MundaneReportOptions, MundaneEvent, MundaneReportResult } from "./report.js";

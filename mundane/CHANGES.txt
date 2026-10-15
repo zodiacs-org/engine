@@ -7,3 +7,4 @@ Implement M6 independent USNO ingress fixtures with source digests, time-scale a
 Implement M7 New and Full Moon searches using engine longitudes and crossing solver with shared budgets, chart analyses, synthetic derivations, range tests, and convention documentation
 Implement M8 independent USNO lunation fixtures with source digests, clock and derivation records, offline annual and range timing checks, chart integration tests, and Node 22 evidence
 Implement M9 descriptive traditional factor lists with source pointers, ingress and lunation integration, wording and traceability tests, convention documentation, and Node 22 evidence
+Implement M10 chronological year and range reports with deterministic event ordering, separate search budgets and metadata, atomic refusals, synthetic boundary tests, documentation, and Node 22 evidence
