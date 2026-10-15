@@ -6,6 +6,8 @@ import { CONJUNCTION_LIMITS, searchConjunctions } from "./conjunctions.js";
 import type { ConjunctionRequest, ConjunctionResult } from "./conjunctions.js";
 import { CONTACT_LIMITS, searchLunarContacts } from "./contacts.js";
 import type { LunarContactRequest, LunarContactResult } from "./contacts.js";
+import { LOCAL_CLOSEST_APPROACH_LIMITS, searchLocalClosestApproaches } from "./closest-approach.js";
+import type { LocalClosestApproachRequest, LocalClosestApproachResult } from "./closest-approach.js";
 import { SOLAR_SYSTEM_BODIES } from "./engine.js";
 import type { PositionReceipt } from "./engine.js";
 import { fields, normalizeObserver, normalizeWindow } from "./input.js";
@@ -21,6 +23,7 @@ export type WindowQuery =
   | ({ readonly kind: "appulse" } & Omit<AppulseRequest, "window">)
   | ({ readonly kind: "lunar-occultations" } & Omit<LunarOccultationRequest, "window">)
   | ({ readonly kind: "lunar-contacts" } & Omit<LunarContactRequest, "window">)
+  | ({ readonly kind: "local-closest-approach" } & Omit<LocalClosestApproachRequest, "window">)
   | ({ readonly kind: "visibility-outline" } & Omit<LunarOutlineRequest, "window">);
 
 export interface WindowRequest {
@@ -37,13 +40,14 @@ export const WINDOW_LIMITS = Object.freeze({
   defaultMaxIntersections: 2_000_000, maximumMaxIntersections: 2_000_000
 });
 
-type ChildResult = ConjunctionResult | AppulseResult | LunarOccultationResult | LunarContactResult | LunarOutlineResult;
+type ChildResult = ConjunctionResult | AppulseResult | LunarOccultationResult | LunarContactResult | LocalClosestApproachResult | LunarOutlineResult;
 type ChildReceipt = ChildResult["receipt"];
 export type WindowEntry =
   | { readonly queryIndex: number; readonly kind: "conjunction"; readonly result: Extract<ConjunctionResult, { status: "complete" }> }
   | { readonly queryIndex: number; readonly kind: "appulse"; readonly result: Extract<AppulseResult, { status: "complete" }> }
   | { readonly queryIndex: number; readonly kind: "lunar-occultations"; readonly result: Extract<LunarOccultationResult, { status: "complete" }> }
   | { readonly queryIndex: number; readonly kind: "lunar-contacts"; readonly result: Extract<LunarContactResult, { status: "complete" }> }
+  | { readonly queryIndex: number; readonly kind: "local-closest-approach"; readonly result: Extract<LocalClosestApproachResult, { status: "complete" }> }
   | { readonly queryIndex: number; readonly kind: "visibility-outline"; readonly result: Extract<LunarOutlineResult, { status: "complete" }> };
 
 export interface WindowReceipt {
@@ -136,6 +140,8 @@ function normalizeQuery(value: WindowQuery): WindowQuery & { readonly maxSamples
       keys = [...common, "target", "stepDays"]; limits = OCCULTATION_LIMITS; break;
     case "lunar-contacts":
       keys = [...common, "target", "observer", "stepDays"]; limits = CONTACT_LIMITS; break;
+    case "local-closest-approach":
+      keys = [...common, "target", "observer", "stepDays"]; limits = LOCAL_CLOSEST_APPROACH_LIMITS; break;
     case "visibility-outline":
       keys = [...common, "target", "stepSeconds", "longitudes", "maxIntersections"]; limits = OUTLINE_LIMITS; break;
     default: throw new RangeError("Unknown window query kind.");
@@ -155,7 +161,7 @@ function normalizeQuery(value: WindowQuery): WindowQuery & { readonly maxSamples
     if (!contains(OCCULTATION_PLANETS, q.target) && !isStar(q.target)) {
       throw new RangeError("target must name an occultation planet or exact catalogue id.");
     }
-    if (q.kind === "lunar-contacts") q.observer = normalizeObserver(q.observer as Observer);
+    if (q.kind === "lunar-contacts" || q.kind === "local-closest-approach") q.observer = normalizeObserver(q.observer as Observer);
   }
   if (q.kind === "visibility-outline") {
     q.stepSeconds = number(q.stepSeconds === undefined ? OUTLINE_LIMITS.defaultStepSeconds : q.stepSeconds,
@@ -172,7 +178,7 @@ function normalizeQuery(value: WindowQuery): WindowQuery & { readonly maxSamples
     q.longitudes = longitudes;
   } else {
     const stepLimits = q.kind === "conjunction" ? CONJUNCTION_LIMITS : q.kind === "appulse" ? APPULSE_LIMITS :
-      q.kind === "lunar-occultations" ? OCCULTATION_LIMITS : CONTACT_LIMITS;
+      q.kind === "lunar-occultations" ? OCCULTATION_LIMITS : q.kind === "local-closest-approach" ? LOCAL_CLOSEST_APPROACH_LIMITS : CONTACT_LIMITS;
     q.stepDays = number(q.stepDays === undefined ? stepLimits.defaultStepDays : q.stepDays,
       1 / 86_400_000, stepLimits.maximumStepDays, "stepDays");
   }
@@ -199,7 +205,7 @@ export function searchWindow(request: WindowRequest): WindowResult {
       unresolvedMeridians, sampleUnit: "sum-of-child-sample-units;not-uniform-cost-or-wall-time" }, searches,
     conventions: ["queries:explicit;caller-order;duplicates-retained", "budgets:actual-child-work-debited;per-query-ceilings-retained",
       "results:all-or-nothing-on-refusal;prior-search-receipts-retained", "window-ownership:each-child-convention-preserved",
-      "observer:only-explicit-contact-queries;outlines-remain-zero-height-global", "facts-only;no-ranking-or-date-selection"],
+      "observer:explicit-contact-and-local-minimum-queries;outlines-remain-zero-height-global", "facts-only;no-ranking-or-date-selection"],
     limitations: ["complete-means-finished;not-completeness-or-physical-accuracy",
       "outline-meridians-may-remain-unresolved;inspect-each-status", "sample-units-have-different-costs;no-wall-time-guarantee",
       "no-added-accuracy-or-model-correction;all-child-limitations-apply", "receipts-are-provenance-not-attestations"]
@@ -222,6 +228,7 @@ export function searchWindow(request: WindowRequest): WindowResult {
       case "appulse": child = searchAppulses({ ...options, window, maxSamples: allowedSamples } as AppulseRequest); break;
       case "lunar-occultations": child = searchLunarOccultations({ ...options, window, maxSamples: allowedSamples } as LunarOccultationRequest); break;
       case "lunar-contacts": child = searchLunarContacts({ ...options, window, maxSamples: allowedSamples } as LunarContactRequest); break;
+      case "local-closest-approach": child = searchLocalClosestApproaches({ ...options, window, maxSamples: allowedSamples } as LocalClosestApproachRequest); break;
       case "visibility-outline": child = lunarVisibilityOutline({ ...options, window, maxSamples: allowedSamples,
         maxIntersections: Math.min(query.maxIntersections!, maxIntersections - intersections) } as LunarOutlineRequest); break;
     }

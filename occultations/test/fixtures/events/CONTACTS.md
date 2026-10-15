@@ -47,11 +47,12 @@ The altitude comparison uses the explicitly refracted field; NAOJ's refraction
 implementation is undocumented, so this does not establish agreement of
 atmospheric models.
 
-The suites explicitly account for every check in these source cases. Only the
-local closest-approach time remains deferred to M12, when it needs its own
-calculation and comparison. Closest approach is not a contact and cannot be
-replaced by an average of ingress and egress. M12 must run all held-out checks
-after implementation choices are fixed. Passing these development checks is
+At M9, these suites accounted for every check except the local closest-approach
+time, which was deferred to M12 for its own calculation and comparison.
+Closest approach is not a contact and cannot be replaced by an average of
+ingress and egress. M12 now evaluates that separately solved minimum and every
+held-out check after fixing the implementation choices; the complete results
+are in [RESULTS.md](../../../RESULTS.md). Passing these development checks is
 not a general contact accuracy bound or full coverage of the planetary source
 case. These references do not validate Sun altitude, Moon phase or the
 bright/dark limb classification. The additional preregistered USNO references

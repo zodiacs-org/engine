@@ -1,9 +1,10 @@
 # Sources and provenance
 
-This register distinguishes the adopted stellar catalogue from reference
-leads that remain unapproved. Sources were retrieved or inspected on
-2026-10-15. Catalogue provenance does not establish occultation accuracy;
-published event references still require the review described below.
+This register distinguishes adopted source material from unapproved leads.
+Sources were retrieved or inspected on 2026-10-15. Catalogue provenance does
+not establish occultation accuracy. [VALIDATION.md](VALIDATION.md) records
+the comparisons actually performed, and [AUDIT.md](AUDIT.md) records the
+retained notices, distribution scope and unresolved inherited rights issues.
 
 ## Local engine
 
@@ -21,6 +22,16 @@ functions establish wiring and conventions, not independent astronomical
 accuracy. Existing star values in the engine do not provide a shortcut to a
 new catalogue: the root licensing audit explicitly leaves questions about
 their redistribution terms unresolved.
+
+The local bundles include the engine's shared ayanamsa implementation through
+the calc import graph even though occultation requests use tropical frames.
+Consequently the root audit's unresolved CDS star-value commercial terms and
+Reid and Brunthaler proper-motion terms remain relevant to these bundles.
+Its unresolved EOP C04 terms and condition on the operator's authority to
+license the adapted engine code also remain. The workbench does not settle
+those questions or give the generated bundle an unconditional MIT-only
+licence. The build copies the engine's LICENSE, LICENSING.md and NOTICE;
+the retained source material below keeps its own stated terms.
 
 ## Adopted catalogue: SAO, NASA ADC J2000 edition
 
@@ -200,8 +211,11 @@ The outreach times establish only coarse occurrence. They cannot validate
 precise geocentric minimum-separation times. Historical catalogue differences,
 sparse outline sampling and undocumented model details also limit claims.
 The frozen thresholds and source-integrity tests establish an acceptance
-contract, not measured occultation accuracy. Additional independent evidence
-is required for the gaps listed in the event contract.
+contract, not measured occultation accuracy. The finite comparisons and any
+unresolved checks are reported separately in [VALIDATION.md](VALIDATION.md).
+Additional independent evidence is required for the gaps listed in the event
+contract; passing a timing gate does not document the provider's omitted
+model details or establish observed-contact accuracy.
 
 ## Fundamental-plane geometry references for M10
 

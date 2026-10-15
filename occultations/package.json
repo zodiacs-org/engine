@@ -17,7 +17,8 @@
     "catalogue:verify-source": "node scripts/catalogue.mjs --download",
     "check:scope": "node scripts/check-scope.mjs",
     "check": "npm run typecheck && npm test && npm run catalogue:check && npm run build && npm run check:scope",
-    "references:verify-source": "node scripts/verify-event-sources.mjs"
+    "references:verify-source": "node scripts/verify-event-sources.mjs",
+    "validate:events": "node scripts/event-validation.mjs all"
   },
   "dependencies": {
     "astronomy-engine": "2.1.19"

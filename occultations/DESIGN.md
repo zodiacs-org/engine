@@ -1,11 +1,12 @@
 # Geometry and verification design
 
-This is the implementation contract for the remaining milestones. The
+This is the implemented geometry and verification contract. The
 position adapter, input/receipt foundation, source catalogue, apparent
 stellar reduction, geocentric coordinate conjunctions, appulse searches and
 lunar candidate screening, local spherical-limb contacts, contact sky facts and
-coarse global outlines, shared window searches and an offline CLI are implemented. An unchecked
-part of PLAN.md is not a supported calculation or an established error bound.
+coarse global outlines, local closest approach, shared window searches and an
+offline CLI are implemented. [RESULTS.md](RESULTS.md) records finite-reference
+agreement and its limits; successful execution is not an established error bound.
 
 ## Engine boundary and clock
 
@@ -14,8 +15,8 @@ true equator or true ecliptic of date, Cartesian output and no speed samples.
 It preserves the engine receipt and bounds. `src/input.ts` reuses the engine's
 date parser. Frame precession, nutation, delta-T, TT, UT1 and observer rotation
 remain the engine's responsibility. The conjunction search calls the engine's
-`src/crossings.ts`; subsequent searches must reuse it too, and rise/set facts
-must reuse `src/sky.ts`.
+`src/crossings.ts`; the other event searches reuse it too. Sky facts reuse
+`src/sky.ts` constants and the engine phase and rotation machinery below.
 
 The source interfaces and their qualifications are in `../docs/calc.md`,
 `../docs/sky.md`, `../src/calc-reduce.ts` and `../src/time-scale.ts`. Their
@@ -140,8 +141,8 @@ values with observed zeros. Source duplicity and variability flags are
 retained; a blank warning or zero code means unknown status. Proper names
 are labels on a catalogue entry, not a choice of a resolved component in a
 binary. Neither orbital motion nor a photocentre correction is supplied.
-M4 must assess whether this historical astrometry is adequate for each
-reference case before assigning a stellar timing budget.
+The historical USNO contact comparisons qualify agreement for their Aldebaran
+cases only. They supply no catalogue-wide stellar error or timing budget.
 
 The data flow is a digest-pinned NASA TAP query, exact selected source lines,
 then normalized output in the ignored `.generated/` folder. Only source
@@ -280,8 +281,43 @@ receipts retain these limitations, the stencil, actual evaluation support,
 budget and both position receipts. The independent NAOJ development appulse
 test checks only the frozen approximate Jupiter/Saturn occurrence time.
 The reference's center is unspecified; there is no precision geocentric
-Moon/planet minimum validation or general timing bound. Held-out checks
-remain reserved for M12. VALIDATION.md records this milestone's scope.
+Moon/planet minimum validation or general timing bound. The held-out checks
+and measured residuals are in RESULTS.md. They retain the same coarse
+occurrence scope. VALIDATION.md records the executed checks.
+
+## Local closest approach implemented in M12
+
+`searchLocalClosestApproaches` applies the appulse squared-chord derivative
+construction to the existing topocentric Moon and target adapters. The target
+is an occultation planet or an exact catalogue star. The observer, frame,
+aberration, light-time and missing stellar distance retain the same conventions
+as the contact calculation. Angular minima have no disk-radius, horizon or
+proximity condition, and are evaluated independently of all contact times.
+
+`LOCAL_CLOSEST_APPROACH_LIMITS` fixes a five-minute default/maximum sampling
+step and a sixty-second derivative half-width. These policies were fixed and
+tested against analytic trajectories and the development Saturn minimum
+before the held-out run. Raw-rate checks bracket the numerical zero on
+adjacent milliseconds and require a negative-to-positive change. An isolated
+exact zero is allowed, a maximum or stationary touch is excluded, and a
+detected nonisolated zero refuses the search. Constant separation supplies no
+isolated event. The event owns `(from,to]`, including before the Unix epoch.
+
+All positions, including stencil support, adjacent verification and output,
+consume the same finite budget. The expanded evaluation interval extends
+one stencil half-width and one millisecond beyond each requested endpoint;
+clock seams or range violations anywhere in it refuse before sampling.
+Any later failure discards earlier events and retains the search receipt.
+The window API and CLI debit this search's work from the shared budget.
+
+`test/closest-approach-geometry.test.ts` checks spherical wrap, coincidences,
+nonconjunction minima, stationary touches, constant separation, exact and
+fractional roots, pre-Unix ownership, finite-difference bias, transformed-zero
+refusal and sample budgets. These are model semantics. The complete event
+suite compares the separately found Saturn and Mars minima with the frozen
+NAOJ local-minimum rows; RESULTS.md records their residuals. The centered
+stencil and shallow-curvature sensitivities derived for appulses above apply
+here too. Its numerical bracket is not a physical minimum-time enclosure.
 
 ## Lunar candidates and window-local series implemented in M7
 
@@ -442,8 +478,10 @@ integration, clipped windows, ownership, clock halos, source receipts and
 bounded work. These are distinct from the published prediction comparison in
 `test/contact-references.test.ts`: it applies the original development time
 and disk-duration gates, including clock conversion. No radius, station or
-time offset was fitted to those predictions. The checked subset and deferred
-source quantities are listed in `test/fixtures/events/CONTACTS.md`.
+time offset was fitted to those predictions. The development subset is listed
+in `test/fixtures/events/CONTACTS.md`. M12 completes the separate local minima
+and all held-out check quantities in `test/event-validation.test.ts`;
+RESULTS.md records the measured scope.
 
 ## Contact sky facts implemented in M9
 
@@ -546,7 +584,8 @@ primary-phase, rise/set and polar samples were preregistered in
 `test/fixtures/sky/PREREGISTRATION.md` before comparison and run in
 `test/sky-evidence.test.ts`. These do not establish observed atmospheric
 visibility, all-phase illuminated-fraction accuracy or a general limb bound.
-VALIDATION.md records the checked scope; held-out events remain for M12.
+VALIDATION.md and RESULTS.md record the final checked scope, including held-out
+contact angles and refracted altitudes.
 
 ## Coarse global outline implemented in M10
 
@@ -651,14 +690,15 @@ preserves distinct inner/outer curves, and checks local contact existence
 on either side. The unchanged acceptance maximum is 1 degree latitude for
 the May 31, 2024 Saturn map. This is a finite development gate, not a measured
 general uncertainty bound; the source's exact shape and correction models
-remain qualified as in EVENTS.md. Held-out comparisons belong to M12.
+remain qualified as in EVENTS.md. The held-out map comparison and measured
+residuals are recorded in RESULTS.md.
 
 ## Accuracy budget in seconds of time
 
-Development contact timing gates now pass over the cases recorded in
-VALIDATION.md. They do not fill the physical uncertainty budget. The budget
-will be evaluated per contact, using independently checked uncertainties and
-the contact's normal angular speed. Define:
+Finite published-prediction comparisons are recorded in RESULTS.md. They do
+not fill the physical uncertainty budget. The final evaluator reports a local
+sensitivity for every reference contact, while unknown physical uncertainties
+remain unknown. Define:
 
 - `Eposition`, `Estar`, `Eframe`, `Ecorrection`, `Eradius` in arcseconds;
 - `vnormal`, the absolute time derivative of angular limb clearance, in
@@ -692,14 +732,46 @@ predictions before event implementation. It records source clocks, precision,
 limb and station qualifications, and documented ephemeris lineage. Unknown
 source conventions remain explicit. Development and held-out whole events
 are separate. These thresholds are acceptance criteria, not a measured error
-budget. M8 records passing the unchanged gates over its development span;
-it does not turn their acceptance limits into measured residual maxima.
-M12 must record the held-out comparisons with failures retained.
+budget. M8 records the original development comparisons. M12 checks every
+original check quantity in both partitions, with measured residuals and any failures
+recorded in RESULTS.md. Acceptance limits remain separate from measured residuals.
 M3's angular reduction comparison cannot fill the
 unknown stellar catalogue term or produce a physical seconds guarantee.
 Its allowed reduction error would contribute that angular allowance divided
 by `abs(vnormal)` to the sensitivity budget; it does not replace `Estar`,
 and must not be counted again inside a later end-to-end contact comparison.
+
+The final evidence evaluator uses the complete local clearance, including
+the changing lunar and target semidiameters, at one second before and after
+each computed contact. The centered rate is
+`vnormal = abs(clearanceAfter - clearanceBefore) * 3600 / 2` in arcseconds
+per second. The angular conversion is `1/vnormal` seconds per arcsecond.
+For lunar distance `d` in kilometres, the small-angle transverse conversion
+is `(180*3600/pi)/(d*vnormal)` seconds per kilometre. This is a transverse
+displacement sensitivity, not the derivative of the adopted sphere radius.
+Tests independently check the units and leave zero, nonfinite or overflowing
+sensitivities null. The observed sensitivity ranges for the finite reference
+contacts are in RESULTS.md; they are not evidence of physical uncertainty.
+
+The final budget has the following status. An unknown row prevents a finite
+total, even when the published-prediction comparison passes:
+
+| Contribution | Seconds-of-time treatment | Evidence or missing information |
+| --- | --- | --- |
+| Represented contact instant | Numerical bracket width at most 0.001 s | Adjacent-sign ownership tests in `contact-intervals.test.ts`; this does not bound the physical root. |
+| Clock and source time convention | `Eclock` remains unknown as a complete absolute error | Engine time-basis receipt, rounded source clocks, historical nominal UT1 and fixed source delta-T remain distinct. |
+| Moon and planet position | Angular error divided by `vnormal` | Engine bounds retain their own sample span and qualifications; they do not give a uniform occultation error. |
+| Stellar position and motion | `Estar/vnormal`, unknown | ERFA verifies reduction of shared SAO inputs, not catalogue covariance, stellar parallax or component motion. |
+| Frame and apparent correction differences | `(Eframe + Ecorrection)/vnormal`, unknown jointly | Independent frame/reduction checks are finite; the inherited lunar and apparent-range conventions still differ from a full retarded silhouette. |
+| Adopted radius and actual limb | `Eradius/vnormal` or `Elimb/vshadow`, without double counting | Nominal spheres are specified, but relief, rings, oblateness and atmospheres are absent. |
+| Observer position and datum | `Esite/vshadow`, unknown | Synthetic modern inputs are explicit; historical astronomical coordinates and height datums have no established transformation. |
+| Minima and outline sampling | No finite general time bound | Centered-difference bias, shallow curvature and between-sample topology are not covered by contact quantization. |
+
+The report's `physicalTimingErrorSeconds` therefore remains null, including
+for contacts with small reference residuals. The source prediction and this
+model can share approximations, and an empirical difference is not a certified
+absolute error. No post-validation offset, radius, motion or clock correction
+was introduced to improve the held-out comparison.
 
 ## Receipts and bounded work
 
@@ -763,7 +835,7 @@ and limitations. Each event retains both position receipts and its time basis.
 Refusals retain the same normalized request and available provenance, with
 the originating position refusal when one occurs. Contact receipts now add
 the observer, spherical disk models, classification halo, raw numerical bracket
-and development-only validation scope. Outline receipts add the shadow and
+and finite-reference validation scope without a general timing bound. Outline receipts add the shadow and
 ellipsoid models, sampled meridians, work budgets, unresolved bands and
 locally checked boundaries, with physical sampling uncertainty left unknown.
 Exhausting a search budget must produce an explicit

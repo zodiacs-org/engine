@@ -4,7 +4,7 @@ An isolated package over the adjacent `@zodiacs/engine` TypeScript source.
 It describes sky geometry only. It does not select or recommend dates, attach
 interpretations, or make predictions about people or events.
 
-The current milestones provide validated position samples, a receipted SAO
+The workbench provides a tested position adapter, a receipted SAO
 stellar catalogue, reproducible source extraction, apparent star directions,
 geocentric conjunction searches in right ascension or ecliptic longitude,
 geocentric Moon/planet and planet/planet appulse searches, and lunar
@@ -12,13 +12,14 @@ occultation candidate intervals with window-local series, and topocentric
 spherical-limb contact times for stars and planetary disks with contact angles,
 illumination, altitude, phase and horizon facts, plus coarse global visibility
 outlines at exact longitude meridians. A shared window API and offline JSON CLI
-compose those calculations with bounded work and retained receipts.
+compose those calculations with bounded work and retained receipts. A separate
+topocentric angular-minimum search describes local closest approach.
 Independent event references and maximum-error criteria were frozen before
 event implementation in [the reference contract](test/fixtures/events/EVENTS.md).
-Held-out validation remains unchecked in
-[PLAN.md](PLAN.md). Contact validation covers the development references
-described below, with no general timing bound. [DESIGN.md](DESIGN.md) records the geometry and error
-budget to validate; [SOURCES.md](SOURCES.md) separates provenance from leads.
+The final comparison scope and measured residuals are in [RESULTS.md](RESULTS.md),
+with no general physical timing bound. [DESIGN.md](DESIGN.md) records the geometry
+and seconds-of-time sensitivity budget; [SOURCES.md](SOURCES.md) and
+[AUDIT.md](AUDIT.md) record provenance and unresolved inherited licence questions.
 
 Use Node matching this folder's `package.json` engines range. From the
 repository root:
@@ -82,6 +83,7 @@ and without its own `window`:
 | `appulse` | `searchAppulses` | `first`, `second`, `maximumSeparationDegrees` |
 | `lunar-occultations` | `searchLunarOccultations` | `target` |
 | `lunar-contacts` | `searchLunarContacts` | `target`, `observer` |
+| `local-closest-approach` | `searchLocalClosestApproaches` | `target`, `observer` |
 | `visibility-outline` | `lunarVisibilityOutline` | `target` |
 
 Sampling options remain those of the individual API. Contacts need geodetic
@@ -237,7 +239,7 @@ with distinct inner/outer limits and local contact checks on both sides
 reference gate, not a general boundary or timing error bound. Polar, horizon,
 dateline and disconnected-region checks establish analytic model behavior;
 they do not establish physical accuracy there. Source-model qualifications
-and remaining held-out work are in [DESIGN.md](DESIGN.md) and
+and final held-out scope are in [DESIGN.md](DESIGN.md) and
 [VALIDATION.md](VALIDATION.md).
 
 `starCatalogue()` returns an immutable source catalogue and its receipt. The
@@ -374,8 +376,8 @@ NAOJ, with clock, observer, model and source-rights qualifications. Ordinary
 tests enforce their frozen bytes, transcription arithmetic and error-checking
 contract. [The conjunction reference test](test/conjunction-references.test.ts)
 also compares the development NAOJ Jupiter/Saturn and Moon/Mars coordinate
-events with their original maximum-error gates. Held-out event comparisons
-remain deferred to M12. An optional online
+events with their original maximum-error gates. The complete development and
+held-out comparisons are in [the final results](RESULTS.md). An optional online
 audit verifies the retained source receipts without writing source data:
 
 ```sh
@@ -433,7 +435,8 @@ check the example, angular caps, conjunction distinctions, receipts and budgets.
 unchanged frozen maximum error to the NAOJ Jupiter/Saturn development case
 on 2020-12-21. Its approximate outreach time establishes coarse occurrence
 only; it does not validate precision geocentric timing or lunar minima.
-No held-out appulse has been evaluated. [DESIGN.md](DESIGN.md) explains the
+The held-out outreach checks have the same coarse scope, as recorded in
+[RESULTS.md](RESULTS.md). [DESIGN.md](DESIGN.md) explains the
 numerical and physical timing limitations.
 
 `check:scope` checks npm file selection without running lifecycle scripts or
@@ -441,7 +444,7 @@ writing an archive. It also enforces the task's source-file size and prose
 rules and detects changed paths outside this folder. It does not replace the
 repository's release archive or full built-package checks.
 
-[VALIDATION.md](VALIDATION.md) records this milestone's checks and the
+[VALIDATION.md](VALIDATION.md) records all milestone checks and the
 unavailable root build prerequisite.
 
 `searchLunarOccultations()` screens a single target for possible lunar
@@ -509,7 +512,8 @@ passages, gaps, clipping and near misses. The [development reference check](test
 retains the published USNO Aldebaran and NAOJ Saturn events and their local
 instants under [a preregistered containment rule](test/fixtures/events/CANDIDATES.md).
 It does not compare contact times, validate all catalogue targets or show
-that every event in those windows was found. Held-out checks remain in M12.
+that every event in those windows was found. The final evaluator applies
+the same containment rule to the held-out references; see [RESULTS.md](RESULTS.md).
 
 `searchLunarContacts()` searches vacuum contacts at a specified observer:
 
@@ -587,10 +591,10 @@ details remain in the [source contract](test/fixtures/events/EVENTS.md).
 The [sky reference tests](test/contact-sky-references.test.ts) also apply the
 original limits of 2 degrees for position angle and 0.5 degrees for refracted
 Moon altitude over those same events. These are acceptance gates, not measured
-maximum errors. The separately solved local closest-approach check remains
-deferred as listed in CONTACTS.md. No held-out contact has been evaluated. [VALIDATION.md](VALIDATION.md)
-records the checks, and [DESIGN.md](DESIGN.md) explains the incomplete physical
-timing budget and grazing sensitivity.
+maximum errors. The final suite adds every held-out contact and the independently
+solved local closest-approach checks. [RESULTS.md](RESULTS.md) reports the measured
+residuals and scope; [VALIDATION.md](VALIDATION.md) records the checks.
+[DESIGN.md](DESIGN.md) explains unknown physical timing terms and grazing sensitivity.
 
 Each contact's `sky` record contains:
 
@@ -628,3 +632,46 @@ Moon phases, rise/set brackets and polar samples under its
 checks and the limb construction do not establish terrain visibility or
 detectability. Sun altitude and horizon facts remain factual output with no
 date ranking or observing recommendation.
+
+## Local closest approach
+
+`searchLocalClosestApproaches()` finds local minima of the topocentric
+Moon/target angular separation for the supplied station:
+
+```js
+import { searchLocalClosestApproaches } from "./occultations/.generated/index.mjs";
+
+const result = searchLocalClosestApproaches({
+  target: "Saturn",
+  observer: { latitude: -20, longitude: 0, elevationMeters: 0 },
+  window: { from: "2024-05-31", to: "2024-06-01" }
+});
+console.log(JSON.stringify(result));
+```
+
+The target accepts the same planet or exact catalogue id as the contact API.
+An event has `kind: "local-closest-approach"`, `at`, `separationDegrees`, a
+numerical `bracket`, and a receipt with observer, positions and clock. A minimum
+can occur without an occultation and below the horizon. There is no angular
+cutoff or visibility filter. Geocentric appulses remain a separate API.
+
+The engine crossing search finds a negative-to-positive zero of a centered
+squared-chord derivative. The local search does not read or average contact
+times. Its default and maximum step is five minutes and derivative half-width
+is sixty seconds, enforced in `LOCAL_CLOSEST_APPROACH_LIMITS` and
+[tested analytically](test/closest-approach-geometry.test.ts). The corresponding
+halo and adjacent-millisecond checks must stay within the calculation span and
+on a continuous clock. The result owns `(from,to]`; an endpoint on a monotone
+path is not a minimum. A numerical bracket does not bound the true minimum's
+error. Finite-difference bias and shallow curvature can shift the time.
+
+`stepDays` may reduce the grid step and `maxSamples` sets a bounded paired-position
+budget. Exhaustion or an unresolved rate zero returns a receipted refusal with
+no events. Constant separation supplies no isolated event. Completion describes
+the sampled calculation and cannot prove that every minimum was found.
+
+The same calculation is available to the window API and CLI using
+`kind: "local-closest-approach"`, with `target` and `observer`. It consumes the
+shared sample budget, and its failure discards earlier wrapper results just
+like other searches. [Composition tests](test/window-closest-approach.test.ts)
+exercise the example, JSON transport and budget exhaustion.

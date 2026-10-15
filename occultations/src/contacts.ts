@@ -82,7 +82,7 @@ export interface LunarContact {
     readonly timeBasis: TimeBasis;
     readonly moon: PositionReceipt;
     readonly target: SampleReceipt;
-    readonly validation: "finite-development-reference-gates;no-general-physical-timing-bound";
+    readonly validation: "finite-published-reference-gates;no-general-physical-timing-bound";
   };
 }
 export interface LocalOccultationInterval {
@@ -266,7 +266,7 @@ export function searchLunarContacts(request: LunarContactRequest): LunarContactR
         sky,
         receipt: { schema: "zodiacs.occultations.contact-receipt.v2", search: searchReceipt,
           timeBasis: timeBasis(root.at), moon: value.moon.receipt, target: value.other.receipt,
-          validation: "finite-development-reference-gates;no-general-physical-timing-bound" } };
+          validation: "finite-published-reference-gates;no-general-physical-timing-bound" } };
     });
     const intervals = (values: typeof overlap.intervals, coverage: "overlap" | "full"): LocalOccultationInterval[] =>
       values.map((interval) => ({ from: iso(interval.from), to: iso(interval.to), coverage,

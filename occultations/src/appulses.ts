@@ -77,7 +77,7 @@ export interface AppulseEvent {
     readonly timeBasis: TimeBasis;
     readonly first: PositionReceipt;
     readonly second: PositionReceipt;
-    readonly validation: "coarse-development-occurrence-only;no-general-timing-bound";
+    readonly validation: "coarse-published-occurrence-only;no-general-timing-bound";
   };
 }
 
@@ -239,7 +239,7 @@ export function searchAppulses(request: AppulseRequest): AppulseResult {
       kind: "appulse", at: new Date(ms).toISOString(), first, second, separationDegrees: separation,
       receipt: { schema: "zodiacs.occultations.appulse-event-receipt.v1", search: searchReceipt,
         timeBasis: timeBasis(ms), first: position.a.receipt, second: position.b.receipt,
-        validation: "coarse-development-occurrence-only;no-general-timing-bound" }
+        validation: "coarse-published-occurrence-only;no-general-timing-bound" }
     }));
     return freeze({ status: "complete", events, receipt: searchReceipt });
   } catch (error) {

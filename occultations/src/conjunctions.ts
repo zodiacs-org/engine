@@ -81,7 +81,7 @@ export interface ConjunctionEvent {
     readonly timeBasis: TimeBasis;
     readonly first: PositionReceipt;
     readonly second: PositionReceipt | StarPositionReceipt;
-    readonly validation: "development-coordinate-references;no-general-timing-bound";
+    readonly validation: "finite-published-coordinate-references;no-general-timing-bound";
   };
 }
 
@@ -252,7 +252,7 @@ export function searchConjunctions(request: ConjunctionRequest): ConjunctionResu
         separationDegrees: Math.atan2(Math.hypot(...cross(av, bv)), dot(av, bv)) * 180 / Math.PI,
         receipt: { schema: "zodiacs.occultations.conjunction-event-receipt.v1", search: searchReceipt,
           timeBasis: timeBasis(ms), first: a.receipt, second: b.receipt,
-          validation: "development-coordinate-references;no-general-timing-bound" }
+          validation: "finite-published-coordinate-references;no-general-timing-bound" }
       };
     });
     return freeze({ status: "complete", events, receipt: searchReceipt });

@@ -83,7 +83,7 @@ export interface LunarOccultationCandidate {
     readonly timeBasis: TimeBasis;
     readonly moon: PositionReceipt;
     readonly target: SampleReceipt;
-    readonly validation: "development-event-retention-only;contacts-and-global-completeness-unvalidated";
+    readonly validation: "finite-reference-event-retention;not-contact-timing-or-global-completeness-evidence";
   };
 }
 export interface LunarOccultationSeries {
@@ -264,7 +264,7 @@ export function searchLunarOccultations(request: LunarOccultationRequest): Lunar
       sample: { at: iso(ms), separationDegrees: value.separation, ...value.geometry },
       receipt: { schema: "zodiacs.occultations.lunar-candidate-receipt.v1", search: searchReceipt,
         timeBasis: timeBasis(ms), moon: value.moon.receipt, target: value.other.receipt,
-        validation: "development-event-retention-only;contacts-and-global-completeness-unvalidated" }
+        validation: "finite-reference-event-retention;not-contact-timing-or-global-completeness-evidence" }
     }));
     const series: LunarOccultationSeries[] = groups.map((group, seriesIndex) => ({
       kind: "window-local-candidate-series", target, seriesIndex, candidateIndices: [...group],

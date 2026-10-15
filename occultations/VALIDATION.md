@@ -706,3 +706,79 @@ The local scope check confirms exclusion from root npm file selection,
 unchanged dependency pinning, documentation and source-size rules, and changed
 paths confined to `occultations/`. The root package, source, release artifacts
 and git metadata were not modified.
+
+## M12 final validation and measured scope
+
+Checked on 2026-10-15 with Node 22.22.2. M12 completes the independently solved
+topocentric local angular minimum, runs every frozen development and held-out
+check, and records the measured scope in [RESULTS.md](RESULTS.md). The source
+and licence review is [AUDIT.md](AUDIT.md), with inherited unresolved terms
+kept explicit. No published radius, time, station, source partition or
+acceptance threshold was changed.
+
+Before the first held-out evaluation, the local-minimum algorithm was fixed
+and passed analytic trajectories, integration tests and the development
+NAOJ Saturn timing gate. A separate review found no outstanding numerical or
+budget defect. The written [M12 protocol](test/fixtures/events/M12-VALIDATION.md)
+records complete-check coverage, failure retention and the diagnostic
+sensitivity convention. The local API uses the existing topocentric adapters
+and engine crossing search; it does not derive a minimum from contact times.
+Window and CLI requests expose the new calculation with the same shared
+budget and atomic-refusal behavior as the existing searches.
+
+The first held-out run passed 39 frozen checks across 12 cases. The complete
+development run passed 32 checks across 8 cases. Every registered contact,
+local minimum, disk-crossing duration, position angle, refracted Moon altitude,
+coordinate conjunction, coarse appulse occurrence and outline latitude check
+was evaluated. Both historical Washington station variants were retained.
+These counts and unchanged maximum-error assertions are enforced by
+`test/event-validation.test.ts`. There was no numerical implementation change
+after the first held-out run. Later changes clarified receipt scope and report
+field names; all held-out numerical values and sensitivities were unchanged
+when compared with the first report.
+
+The complete local check and separate ERFA reduction comparison passed:
+
+```sh
+npm --prefix occultations run check
+npm --prefix occultations run test:astrometry
+node occultations/scripts/event-validation.mjs all > occultations/.generated/event-validation.json
+```
+
+The local check includes no-emit type checking, every ordinary Vitest test,
+catalogue normalization, local library/CLI bundles and source/npm isolation.
+The ERFA command used the already specified pyerfa and NumPy versions installed
+in the ignored local cache and passed the unchanged astrometry criteria.
+The final JSON report passed every registered check. It and the first
+held-out output stay ignored; the committed evaluator and tests reproduce
+the measured claims. Post-evaluation presentation assertions enforce the
+outward-rounded residual and sensitivity values in RESULTS.md and are
+explicitly separate from the frozen acceptance thresholds.
+
+New analytic tests check coincident and nonconjunction minima, spherical
+wrap, maxima and stationary touches, constant separation, exact and
+fractional root ownership including before the Unix epoch, stencil bias,
+raw-rate confirmation, observer validation, seam/range halos and exhausted
+budgets. The window/CLI tests require the same independently calculated
+minimum, distinguish it from contact records, retain receipts and discard
+earlier query results on later refusal. These are implementation/model
+checks, not independent physical accuracy evidence.
+
+The final evaluator also retains published event times in their candidate
+envelope, checks every outline node at its exact longitude, preserves
+inner/outer ordering and verifies local coverage on either side. Each
+reference contact has a numerical clearance-rate sensitivity and a null
+total physical timing error. The seconds-of-time budget in DESIGN.md leaves
+unmeasured catalogue, limb, station and correction errors unknown. No
+general timing, grazing, atmospheric or global completeness bound follows
+from the finite published-prediction comparisons. Transcribed source fields
+outside the preregistered checks are not claimed as validated.
+
+The root `npm run package:contents` check was attempted with its cache inside
+this folder and failed at the existing missing `dist/calc.d.ts`. The task
+forbids producing root build output. Full root built-package, archive-rebuild
+and conformance gates are therefore not claimed as passed. The local scope
+check passed npm exclusion, dependency pinning, private status, source size
+and punctuation rules, and changed-path isolation. All authored changes stay
+inside `occultations/`; no root package/source/archive, git metadata, release
+workflow or publication was changed.

@@ -48,7 +48,7 @@ package, source, build output, archive or release changes are part of this plan.
 - [x] M11 Finish the window API and small offline JSON CLI with receipts on
   every event, search refusal and visibility result. Test parsing, reproducible
   serialization, bounded resource use and factual output.
-- [ ] M12 Run the held-out validation suite with explicit maximum errors in
+- [x] M12 Run the held-out validation suite with explicit maximum errors in
   seconds, document measured scope and unresolved cases, and finish the
   accuracy budget, source/licence audit, usage examples and isolation checks.
   Complete deferred reference quantities, including separately calculated
