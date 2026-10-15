@@ -15,7 +15,7 @@ human-written evidence notes stay with their capture scripts and provenance.
 - [x] M7 Implement station searches through the engine crossings solver, with sample budgets, boundary handling and receipts. Check direct-to-retrograde and retrograde-to-direct events against independent Horizons samples.
 - [x] M8 Build retrograde windows from stations and endpoint states, carrying clipped-window and refusal information. Test adjacent windows, incomplete searches and supported-range edges.
 - [x] M9 Add sign ingress search through the engine crossings solver with directions, sign labels, receipts and shared budgets. Check wraparound, repeated ingresses and station-adjacent cases independently.
-- [ ] M10 Add a local CLI for positions, stations, retrograde windows and ingresses, with JSON output, explicit time conventions and useful failures. Test commands against the library and invalid input.
+- [x] M10 Add a local CLI for positions, stations, retrograde windows and ingresses, with JSON output, explicit time conventions and useful failures. Test commands against the library and invalid input.
 - [ ] M11 Run the preregistered full-span held-out accuracy suite with explicit arcsecond limits, speed and distance checks, event brackets and seam checks. Commit the generator and evidence notes linked to enforcing tests; document actual coverage and failures.
 - [ ] M12 Finish reproducible offline setup, data regeneration instructions, dependency/licence notices, examples and package isolation checks. Review every supported-range and accuracy statement against committed evidence. Add Pholus or Eris only through the same data and validation gates if practical.
 
@@ -147,4 +147,21 @@ erase a real tiny offset, with regressions in both directions. No coefficient,
 training source or original accuracy limit changed. Root package contents still
 fails on the initially absent `dist/calc.d.ts`; no root build or packed-file
 change was made. All changes remain inside `minorbodies/`. M10 is the next
+unchecked milestone.
+
+M10 verification: `npm run check` and `npm run full:test -- tests/full-cli.test.ts`
+passed on Node 22.22.2. The CLI delegates positions, stations, retrograde windows
+and ingresses to the existing offline APIs, with explicit UTC or Julian-date
+clock input, preserved receipts, shared search settings and distinct failure
+statuses. Parser and dispatch tests exercise invalid input before loading,
+coverage and budget refusals, missing/corrupt data diagnostics and unexpected
+provider failures. Native process tests check the documented command, another
+working directory, timezone independence and fetch-disabled execution. Full-data
+CLI checks cover every required body and nonempty Vesta ingresses. The existing
+default Horizons/ERFA checks passed; CLI equality is integration evidence only.
+Review corrected internal RangeError classification, with a regression test.
+No coefficient, generator, source capture or accuracy budget changed. The root
+package contents check still fails on the initially absent `dist/calc.d.ts`;
+the separate package-exclusion check passes, and no root build or packed-file
+change was made. All changes remain inside `minorbodies/`. M11 is the next
 unchecked milestone.

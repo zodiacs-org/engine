@@ -11,6 +11,7 @@ generic longitude callbacks and configured-aspect rows with explicit receipts.
 M7 adds station searches using the engine solver and independent event references.
 M8 assembles retrograde windows from those stations and endpoint states.
 M9 adds tropical sign ingresses with sign labels and independent direction evidence.
+M10 exposes those existing calculations through a local offline JSON CLI.
 
 The required targets are Chiron, Ceres, Pallas, Juno and Vesta. Pholus and
 Eris can follow only after the same checks. The target interval is
@@ -799,3 +800,46 @@ and integration checks, not astronomical reference data. Held-out original
 Horizons positions, reduced separately through ERFA, supply the astronomical
 expectations described in [M9 evidence](docs/evidence/M9.md). No fitted data,
 training epochs, coefficient recipe or original accuracy budget changes.
+
+## M10 CLI contract
+
+`src/cli.ts` parses local command arguments and dispatches to the body adapter,
+station search, retrograde-window search or ingress search. `scripts/cli.ts`
+connects that boundary to process arguments and output streams. The companion
+package script installs its existing source resolver before importing the CLI.
+It requires no root build and adds no calculation algorithm or network path.
+
+Commands select one required minor body and an explicit pilot or default full
+dataset. Pilot selection is limited to Chiron. Loading uses `loadChironPilot`
+or `loadFullBody` unchanged, including their source verification and coverage
+rules. There is no fetch, regeneration, dataset fallback or implicit download.
+Help does not load an ephemeris.
+
+The parser accepts separate option/value arguments and rejects duplicate,
+unknown and inapplicable fields before loading files. Decimal/scientific
+numbers must be finite; event step and budget constraints reuse the search
+conventions. `unlimited` alone requests an infinite budget, which the existing
+receipt serializes as null. Calendar strings use the engine UTC input grammar;
+Julian dates require an explicit UTC, UT1 or TT scale. Both event endpoints use
+the same representation and scale. The optional Delta T pin applies to each
+input; explicit TT remains unchanged. The adapter's existing parser and time
+conversion validate inputs and endpoint order, while the loaded provider still
+decides astronomical coverage. No new civil-time conversion is implemented.
+
+Successful calculations and all structured library refusals print their entire
+library result as JSON, preserving numerical precision and receipts. Event
+times remain TT Julian dates. The process exit statuses, error schema, options
+and command examples are documented in the README and enforced by
+`tests/cli.test.ts` and `tests/cli-process.test.ts`. Parser failures, local data
+errors and unexpected calculation/setup failures are distinct from library
+refusals. They print bounded diagnostic messages without raw exceptions or
+invented result receipts. Post-parse numerical exceptions are calculation
+failures even when their JavaScript type is RangeError.
+
+CLI checks compare dispatch with the real library, not with a saved snapshot of
+its earlier output. Native subprocess tests exercise the source resolver,
+working-directory independence, offset/timezone behavior, exit statuses and
+offline loading. The explicit `tests/full-cli.test.ts` checks every required
+full dataset and nonempty Vesta ingresses; a missing dataset fails the suite.
+These are integration checks, with no new astronomical accuracy claim. Existing
+Horizons/ERFA checks, source data and acceptance budgets remain unchanged.

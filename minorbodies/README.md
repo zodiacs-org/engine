@@ -5,8 +5,7 @@ ecliptic longitude, latitude, distance, speeds and retrograde state for Chiron,
 Ceres, Pallas, Juno and Vesta from explicitly loaded local tables, with
 provenance receipts. Its Chiron pilot is also retained. The implementation
 sequence is in [PLAN.md](PLAN.md). The body adapter, station search,
-retrograde windows and sign ingress search are available; the CLI remains
-a later milestone.
+retrograde windows, sign ingress search and local CLI are available.
 
 The design uses JPL Horizons samples to build local Chebyshev tables. See
 [DESIGN.md](DESIGN.md) for conventions, coverage, validation and engine
@@ -217,6 +216,94 @@ folder. Calculations are offline once data is prepared; fetching data
 belongs to explicit generator commands only.
 
 No astrology interpretation or predictive claims are part of this package.
+
+## Local CLI
+
+From `minorbodies/`, after the dependency setup above, run:
+
+```sh
+npm run --silent cli -- --help
+npm run pilot:build
+npm run --silent cli -- position --body Chiron --dataset pilot --iso 2000-06-01T00:00:00Z
+npm run --silent cli -- stations --body Chiron --dataset pilot \
+  --from-jd 2451545.5 --to-jd 2451908.5 --scale tt
+npm run --silent cli -- retrogrades --body Chiron --dataset pilot \
+  --from-jd 2451545.5 --to-jd 2451908.5 --scale tt
+npm run --silent cli -- ingresses --body Chiron --dataset pilot \
+  --from-jd 2451545.5 --to-jd 2451908.5 --scale tt
+```
+
+These are synthetic integration examples exercised by
+`tests/cli-process.test.ts`. `--silent` suppresses npm's command banner so
+stdout contains only the result JSON, or help text for `--help`.
+The command selects one exact minor-body name. It defaults to `--dataset full`;
+the explicit `pilot` choice admits only Chiron. Data preparation is separate:
+commands load checked local files and never fetch, fit, or fall back to another
+dataset. Full-data prerequisites and their absence from a clean clone are
+described above.
+
+With full data installed, this example exercises Vesta's sign ingresses:
+
+```sh
+npm run --silent cli -- ingresses --body Vesta --dataset full \
+  --from-jd 2451545.5 --to-jd 2451908.5 --scale tt
+```
+
+`tests/full-cli.test.ts` checks this command against the library, including
+nonempty events, direction labels and complete receipts. These CLI comparisons
+are integration checks; the independent Horizons/ERFA accuracy checks remain
+separate.
+
+For a position, supply either `--iso` or `--jd` with `--scale utc|ut1|tt`.
+For events, supply either `--from-iso` with `--to-iso`, or `--from-jd` with
+`--to-jd` and one explicit `--scale` for both. ISO input follows the engine's
+UTC input convention: date-only means midnight UTC, and a date-time needs
+`Z` or an explicit offset. It cannot be relabeled TT or UT1 with `--scale`.
+Unresolved local times and mixed endpoint representations are refused.
+Historical and future UTC inputs retain the engine's modeled time basis.
+The optional `--delta-t` pins TT minus UT1 in seconds for the supplied instant
+or both endpoints; an explicit TT Julian date remains unchanged.
+
+Event commands accept `--step-days` and `--max-samples`, retaining their
+library defaults and admissible limits. The step is in TT days, and the
+budget covers all provider calls in the search. Use the literal `unlimited`
+only when deliberately disabling the budget. A long interval can refuse
+under the default budget. Numbers use finite decimal or scientific notation;
+budgets must be positive safe integers. Supply options and values as separate
+arguments. Unknown, repeated or inapplicable flags fail before loading data.
+
+The position command prints the body adapter result with the minor position
+in `result`. Event commands print their respective library result directly.
+All calculation and search receipts remain intact, including refusals and
+clipped-window information. Angles, units and corrections are those documented
+for the library above. Event times are TT Julian dates (`jdTt`, or window
+`startJdTt` and `endJdTt`), with no fabricated UTC label. A completed scan
+does not establish physical event completeness.
+
+| Exit status | Output |
+| --- | --- |
+| `0` | Successful calculation or completed search JSON on stdout; help is text. |
+| `1` | Data loading, verification, setup or calculation error JSON on stderr. |
+| `2` | Invalid argument JSON on stderr. |
+| `3` | Library refusal JSON on stdout, including its receipt and no partial events. |
+
+Errors on stderr have schema `minorbodies-cli-error-v1`, `status: "error"`,
+`code` and `message`. Codes distinguish `invalid-arguments`, `data-missing`,
+`data-invalid` and `calculation-failed`. Errors before a calculation have no
+fabricated astronomical receipt. Diagnostics omit raw loader exceptions and
+stack traces. Exit behavior and input rules are enforced by `tests/cli.test.ts`
+and the native process tests. See [M10 evidence](docs/evidence/M10.md).
+
+For direct Node invocation, the package script is equivalent to:
+
+```sh
+node --import ./scripts/register-source.mjs --experimental-strip-types \
+  scripts/cli.ts --help
+```
+
+The source resolver is required for the parent engine's imports. Native process
+tests also invoke these files by absolute paths from a different working
+directory, with fetch disabled. The CLI needs no root build output.
 
 ## Body adapter
 
