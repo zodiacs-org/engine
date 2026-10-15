@@ -14,6 +14,15 @@ const hash = (bytes: string | Uint8Array) => createHash("sha256").update(bytes).
 
 /** Hash the evaluator and bridge local import graphs, including type-only imports. */
 export async function readEngineSourceIdentity(): Promise<EngineSourceIdentity> {
+  return readLocalSourceIdentity(["./engine-bridge.ts", "./ephemeris.ts"]);
+}
+
+/** The adapter also includes engine calc and the configured-aspect row boundary. */
+export async function readAdapterSourceIdentity(): Promise<EngineSourceIdentity> {
+  return readLocalSourceIdentity(["./body-adapter.ts"]);
+}
+
+async function readLocalSourceIdentity(entries: readonly string[]): Promise<EngineSourceIdentity> {
   const repository = new URL("../../", import.meta.url);
   const seen = new Map<string, string>();
   async function visit(url: URL): Promise<void> {
@@ -25,8 +34,7 @@ export async function readEngineSourceIdentity(): Promise<EngineSourceIdentity> 
     const imports = [...source.matchAll(/(?:from\s*|import\s*)["'](\.[^"']+)["']/g)];
     for (const match of imports) await visit(new URL(match[1]!.replace(/\.js$/, ".ts"), url));
   }
-  await visit(new URL("./engine-bridge.ts", import.meta.url));
-  await visit(new URL("./ephemeris.ts", import.meta.url));
+  for (const entry of entries) await visit(new URL(entry, import.meta.url));
   const packageText = await readFile(new URL("package.json", repository), "utf8");
   seen.set("package.json", hash(packageText));
   const files = Object.freeze([...seen.entries()].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)

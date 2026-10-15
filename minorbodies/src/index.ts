@@ -16,3 +16,9 @@ export type { MinorBodyEphemeris, MinorBodyPosition, MinorBodyRefusal, MinorBody
   PositionReceipt, DatasetReceipt, EphemerisInput } from "./ephemeris.ts";
 export { loadChironPilot } from "./pilot.ts";
 export { loadFullBody } from "./full.ts";
+export { createBodyAdapter, BodyAdapterRefusalError, ASPECT_ROW_CONVENTIONS } from "./body-adapter.ts";
+export type { AdapterBody, BodyAdapterRequest, BodyAdapterProvider, BodyAdapterReceipt,
+  BodyAdapterPosition, BodyAdapterRefusal, BodyAdapterResult, BodyAdapter,
+  AspectRowsReceipt, AspectRowsResult, LongitudeCallbackOptions, LongitudeCallbackReceipt,
+  LongitudeCallback } from "./body-adapter.ts";
+export type { AdapterTimeRequest, AdapterTimeReceipt } from "./adapter-input.ts";

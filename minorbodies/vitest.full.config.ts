@@ -4,8 +4,9 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   root: fileURLToPath(new URL(".", import.meta.url)),
   cacheDir: ".cache/vite-full",
+  resolve: { alias: { "astronomy-engine": fileURLToPath(new URL("./node_modules/astronomy-engine/esm/astronomy.js", import.meta.url)) } },
   test: {
-    include: ["tests/full-accuracy.test.ts"],
+    include: ["tests/full-accuracy.test.ts", "tests/full-adapter.test.ts"],
     pool: "forks",
     poolOptions: { forks: { singleFork: true } }
   }

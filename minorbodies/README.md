@@ -4,8 +4,8 @@ This source-checkout package is under development. It computes geocentric
 ecliptic longitude, latitude, distance, speeds and retrograde state for Chiron,
 Ceres, Pallas, Juno and Vesta from explicitly loaded local tables, with
 provenance receipts. Its Chiron pilot is also retained. The implementation
-sequence is in [PLAN.md](PLAN.md); the adapter, event searches and CLI remain
-later milestones.
+sequence is in [PLAN.md](PLAN.md). The body adapter is available; event
+searches and the CLI remain later milestones.
 
 The design uses JPL Horizons samples to build local Chebyshev tables. See
 [DESIGN.md](DESIGN.md) for conventions, coverage, validation and engine
@@ -216,3 +216,119 @@ folder. Calculations are offline once data is prepared; fetching data
 belongs to explicit generator commands only.
 
 No astrology interpretation or predictive claims are part of this package.
+
+## Body adapter
+
+`createBodyAdapter` binds explicitly loaded datasets and captures the local
+implementation identity. Calculations are synchronous after that setup. It
+does not register new names inside the engine. Its `calcWithMinorBodies`
+method takes the engine's calc request shape with a wider body label:
+
+```ts
+import { createBodyAdapter, loadChironPilot } from "./src/index.ts";
+
+const adapter = await createBodyAdapter([await loadChironPilot()]);
+const time = { jd: 2451600.25, scale: "tt" } as const;
+const chiron = adapter.calcWithMinorBodies({ body: "Chiron", time });
+const mars = adapter.calcWithMinorBodies({ body: "Mars", time });
+```
+
+Use `loadFullBody` in place of the pilot to install full-range datasets.
+Only one provider for a given minor body may be installed. An empty adapter
+can delegate ordinary bodies. Neither creation nor calculation fetches data.
+These examples and the behavior below are checked in
+`tests/body-adapter.test.ts`; `tests/full-adapter.test.ts` checks dispatch
+and mixed rows against the installed full datasets under `npm run full:test`.
+
+Success has `status: "ok"`, `provider: "engine" | "minorbodies"`, the
+provider's `result`, and an adapter `receipt`. Engine options and results
+retain engine calc semantics, including its narrower coverage and its
+refusals. Minor-body results keep the fields described under the pilot.
+They are a distinct type, with no invented engine accuracy bounds.
+
+Minor requests support only the geocentric center, true ecliptic and equinox
+of date, tropical zodiac, apparent corrections without deflection, degrees,
+all speeds, and no Cartesian output. A different requested convention or
+output produces a structured refusal; nothing is silently downgraded.
+Unknown names and missing datasets also refuse. Body labels are exact and
+case-sensitive. Malformed request fields and times throw `RangeError`.
+
+Time accepts ISO strings, valid Dates, `{ iso, deltaT? }`, or
+`{ jd, scale: "utc" | "ut1" | "tt", deltaT? }`. Non-TT input is resolved
+with the existing engine time basis before checking installed coverage.
+An explicit TT epoch is preserved; a Delta T pin does not move that epoch.
+The adapter receipt records the supplied time and resolved TT, and the minor
+result records the explicit TT evaluation. Ordinary engine results retain
+their original input-clock semantics. Receipts copy input data, identify the
+adapter's source graph and retain each provider's conventions and provenance.
+An engine refusal gains an adapter receipt while keeping its original reason,
+detail and range. These records are neither authentication nor accuracy
+certification.
+
+### Configured-aspect rows
+
+```ts
+import { createAspectPolicy, findConfiguredAspects } from "../src/configured-aspects.js";
+
+const selected = ["Chiron", "Mars"] as const;
+const rows = adapter.aspectRows(selected, time);
+if (rows.status === "ok") {
+  const policy = createAspectPolicy({ bodies: selected });
+  const aspects = findConfiguredAspects(rows.rows, policy);
+  console.log({ aspects, receipt: rows.receipt });
+}
+```
+
+`aspectRows` computes all requested rows at one resolved TT Julian date,
+with speeds per TT day and longitudes in tropical true-of-date ecliptic
+degrees. Select minor labels explicitly in the engine aspect policy. Retain
+the rows receipt beside the engine's aspect result; the engine aspect API
+does not carry provider receipts itself. Empty selections, duplicate labels
+and malformed arrays throw. A provider refusal returns no partial rows.
+
+The admitted physical corrections are receive light time and stellar
+aberration without gravitational deflection. The receipt explicitly names
+the different implementations: Horizons LT+S for minor bodies, and engine
+calc's Newtonian light time and backdated-observer aberration approximation
+for ordinary planets and the Sun. No claim of identical approximations or
+shared accuracy follows from combining these rows. The Moon's instantaneous
+geometric series and lunar nodes/apogee do not have this correction convention,
+so `aspectRows` refuses those labels. Ordinary `calcWithMinorBodies` requests
+and individual longitude callbacks can still compute them through the engine.
+Earth retains the engine's refusal at the geocentric origin.
+
+### Generic longitude callback
+
+```ts
+import { searchLongitudeCrossingsWith } from "../src/crossings.js";
+
+const callback = adapter.createLongitudeCallback({ dateScale: "tt" });
+const search = searchLongitudeCrossingsWith(
+  callback.longitudeAt, "Chiron", 250,
+  new Date("2000-01-01T00:00:00Z"), new Date("2000-12-31T00:00:00Z"),
+  { stepDays: 1, maxSamples: 2000 }
+);
+console.log({ search, callback: callback.receipt });
+```
+
+The callback's default `dateScale` is `"tt"`. In this mode each Date's
+calendar reading denotes TT, including the search's returned Dates; the
+displayed `Z` is not a UTC claim. Explicit `"utc"` or `"ut1"` selects that
+clock instead, with an optional `deltaT` pin. UTC/model clock steps can break
+the solver's smooth-motion assumption. The example's interval, target and
+sampling choices are caller settings, not validated event-search defaults or
+event accuracy claims. The adapter integration test exercises the solver on
+the real pilot with an engine-derived target as an integration check only.
+
+`longitudeAt(body, date)` is directly assignable to the existing generic
+crossing API. `calculateAt(body, date)` returns the same sample with its full
+receipt. A provider refusal from `longitudeAt` throws
+`BodyAdapterRefusalError`, whose `refusal` holds the structured result and
+receipt. It never returns a fabricated longitude. The solver propagates that
+error. Its own sample-budget refusal remains unchanged. Keep the callback
+receipt with direct solver results; per-event receipts and dedicated station,
+retrograde-window and ingress searches remain later milestones.
+
+The adapter's tests establish integration and preserve the pilot's existing
+held-out accuracy checks, not additional astronomical coverage. See
+[M6 evidence](docs/evidence/M6.md).

@@ -6,7 +6,8 @@ This is the design adopted in M1, extended by the ingestion, numerical and
 Chiron pilot and full-range contracts below. The pilot adds an astronomical
 evaluator and receipts. M5 adds the required bodies over the target interval,
 with a separate full-data validation command. Its finite coverage samples
-do not replace the final M11 accuracy and event corpus.
+do not replace the final M11 accuracy and event corpus. M6 adds body dispatch,
+generic longitude callbacks and configured-aspect rows with explicit receipts.
 
 The required targets are Chiron, Ceres, Pallas, Juno and Vesta. Pholus and
 Eris can follow only after the same checks. The target interval is
@@ -151,10 +152,10 @@ tests and the explicit full-data validation command must have distinct scope.
 ## Adapter and searches
 
 Engine `calc()` and `events()` use closed body lists and have no provider
-hook. A companion `calcWithMinorBodies` will delegate ordinary requests to
-engine calc and handle minor bodies locally. Its result and receipt types
-must remain distinct. Unsupported centers, zodiac choices, frames or
-corrections must be refused explicitly. No cast can make an engine
+hook. The companion `calcWithMinorBodies` method delegates ordinary requests
+to engine calc and handles minor bodies locally. Its result and receipt types
+remain distinct. Unsupported centers, zodiac choices, frames and
+corrections are refused explicitly. No cast can make an engine
 `CalcPosition` genuinely support a new body.
 
 The existing `BodyLongitudeAt<MinorBody>` callback plugs directly into
@@ -519,3 +520,90 @@ The full suite still enforces every original speed limit and reference
 convergence limit. Longer differences are accepted only if those checks
 pass. Reports identify both reference corpora and hash the comparison
 implementation as well as the independent ERFA reducer.
+
+## M6 body adapter
+
+`src/body-adapter.ts` provides an explicit asynchronous setup function,
+`createBodyAdapter`, over already loaded datasets. Its calculations remain
+synchronous. It snapshots the provider list, rejects duplicate bodies, and
+records its local source graph through `readAdapterSourceIdentity`. This
+graph includes the engine calc, crossings and configured-aspect interfaces
+and the companion evaluator. Type-only interface dependencies are included
+in the hash record. Hashes establish local file identity, not authentication
+of an injected provider. A provider is trusted executable code, and the
+intended inputs are the checked offline loaders' immutable return objects.
+
+The adapter's `calcWithMinorBodies` method takes calc's request vocabulary
+and widens only the body label. It delegates ordinary bodies with their
+options and input clock intact, including heliocentric, sidereal and other
+combinations the engine supports. It snapshots and freezes the resulting
+values without changing engine refusal reasons, details or spans. Native
+engine refusals lack a receipt, so the companion wraps them with the request
+and implementation record. The original engine receipt remains attached to
+each successful result. Minor-body results keep their distinct position and
+receipt types; no engine `CalcPosition` or measured bound is fabricated.
+
+Minor requests accept only the convention actually stored and evaluated:
+geocentric apparent true-of-date tropical ecliptic coordinates, degrees,
+full speeds, no Cartesian output, and no gravitational deflection. Other
+requested centers, frames, zodiac choices, corrections or outputs produce
+explicit refusals. Missing datasets and unknown labels also refuse with an
+adapter receipt. Malformed fields or time syntax throw `RangeError` before
+evaluation. Snapshotting preserves unknown keys even if their value is
+undefined, rejects accessor fields, and copies Dates only in valid time
+positions. This is an ordinary data boundary, not a sandbox against proxies
+or other code running in the caller's process.
+
+`src/adapter-input.ts` translates calc's ISO/Date, ISO-with-pin and Julian
+date vocabulary using the engine's `dateFrom` and `timeBasis`. UTC and UT1
+Julian dates retain fractional milliseconds through the conversion; no Date
+round trip truncates them. Explicit TT Julian dates retain their exact input
+value. A Delta T pin affects inferred UT1, not an explicit TT epoch. The
+minor-body evaluator receives the resolved TT, and the adapter's outer
+receipt retains the original time input and conversion. This preserves the
+original bridge's narrower input contract without changing its evaluator.
+
+`aspectRows` calculates an explicit, unique body selection at a common TT
+epoch, using the TT clock for ordinary-body speeds too. It carries an explicit
+Delta T pin into every TT request, preserving the engine's provenance and
+UT1 coverage refusal. Its success is immutable `{ body, lon, speed }` rows
+and the per-calculation receipts. Every refusal returns an empty row list;
+receipts may describe attempted calculations but no partial table is offered.
+The caller supplies these rows to the existing `findConfiguredAspects` and
+explicitly selects minor-body labels in the policy. No aspect algorithm is
+copied or replaced.
+
+The common physical convention for these rows is receive light time and
+stellar aberration without gravitational deflection. The computational
+approximations differ: engine calc uses Newtonian light time and
+backdated-observer aberration; the minor-body fit follows Horizons LT+S.
+`ASPECT_ROW_CONVENTIONS` and every original receipt retain this distinction.
+The package does not equate their numerical accuracy or uncertainty. The
+Moon's instantaneous geometric series, the lunar nodes and mean apogee do
+not have that correction convention and are refused by this row helper.
+They remain available through ordinary calc dispatch and individual
+longitude callbacks. Earth retains its engine refusal at the geocentric
+origin. `tests/body-adapter.test.ts` checks both admitted and refused mixes.
+
+`createLongitudeCallback` returns `longitudeAt`, directly compatible with
+the engine generic crossing solver, plus `calculateAt` for a sample with
+its full receipt. Its Dates denote calendar readings on the explicit
+`dateScale`, default TT; a printed Z in TT mode must not be interpreted as
+UTC. The callback receipt identifies that clock, the optional pin, installed
+datasets and source graph. UTC or UT1 mode uses the engine time basis, with
+its possible clock steps. A numerical provider refusal throws
+`BodyAdapterRefusalError` carrying the complete refusal and receipt.
+Malformed Date input throws `RangeError`. Sample-budget behavior, interval
+ownership and root refinement remain the existing solver's. Direct solver
+output has no new event receipt or completeness claim; the dedicated event
+wrappers are still subsequent milestones.
+
+`tests/body-adapter.test.ts` compares delegated values with direct engine
+calc, checks time conversions, refusals and immutable receipts, and repeats
+the unchanged pilot held-out Horizons/ERFA acceptance gates through adapter
+dispatch. Its real-trajectory crossing target is derived from the pilot for
+integration testing, not independent event timing evidence.
+`tests/full-adapter.test.ts` checks installed required-body dispatch and mixed
+rows over finite full-data samples, including the final calendar year and
+coverage edges. Existing full accuracy checks remain separate and mandatory
+under `full:test`. No fit, source corpus or acceptance limit changes in M6.

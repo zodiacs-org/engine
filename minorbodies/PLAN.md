@@ -11,7 +11,7 @@ human-written evidence notes stay with their capture scripts and provenance.
 - [x] M3 Implement deterministic Chebyshev fitting, evaluation and derivatives, shard format and integrity checks. Test against independently evaluated analytic functions, including segment edges and malformed data.
 - [x] M4 Generate a Chiron pilot dataset and implement the geocentric evaluator, time conversion, ecliptic reduction, speed, retrograde state and result receipts. Compare it with held-out Horizons samples before extending the span.
 - [x] M5 Generate and validate the required Chiron, Ceres, Pallas, Juno and Vesta datasets over the target range. Freeze request manifests and digest receipts; measure shard sizes and boundary continuity. Keep generated bulk data ignored.
-- [ ] M6 Add the body adapter: delegate ordinary bodies to engine calc, expose minor-body calculation with explicit conventions and refusals, and provide generic crossings callbacks and configured-aspect rows. Verify actual results and mixed-body use.
+- [x] M6 Add the body adapter: delegate ordinary bodies to engine calc, expose minor-body calculation with explicit conventions and refusals, and provide generic crossings callbacks and configured-aspect rows. Verify actual results and mixed-body use.
 - [ ] M7 Implement station searches through the engine crossings solver, with sample budgets, boundary handling and receipts. Check direct-to-retrograde and retrograde-to-direct events against independent Horizons samples.
 - [ ] M8 Build retrograde windows from stations and endpoint states, carrying clipped-window and refusal information. Test adjacent windows, incomplete searches and supported-range edges.
 - [ ] M9 Add sign ingress search through the engine crossings solver with directions, sign labels, receipts and shared budgets. Check wraparound, repeated ingresses and station-adjacent cases independently.
@@ -80,3 +80,19 @@ Chiron reference replay reproduced its original numerical failures, and native
 offline loading also passed. Bulk data remain ignored. The root package contents
 check still fails on absent `dist/calc.d.ts`; no root build or packed-file change
 was made. Only `minorbodies/` changed. M6 is the next unchecked milestone.
+
+M6 verification: `npm run check` and `npm run full:test` passed on Node
+22.22.2, including adapter integration, original pilot and full-range
+Horizons/ERFA accuracy gates, independent reference tests and package exclusion.
+Native source-checkout imports, mixed calculations, configured aspects and
+longitude callbacks also passed. Ordinary requests retain engine calc behavior;
+minor requests have explicit convention refusals and provenance receipts.
+Mixed aspect rows preserve their common TT clock, explicit Delta T pins and
+provider corrections, with no partial rows on refusal. Review fixes for pins,
+undefined option keys, nested Date coercion and Date method overrides have
+regression tests. Full-data checks exercise every required body, coverage
+edges and the final calendar year while preserving the engine's narrower
+range refusal. No coefficient, generator or accuracy limit changed. The
+root package contents check still fails on the initial missing `dist/calc.d.ts`;
+no root build or packed-file change was made. All work remains inside
+`minorbodies/`. M7 is the next unchecked milestone.

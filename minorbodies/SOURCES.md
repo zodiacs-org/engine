@@ -210,3 +210,25 @@ The preserved original short-stencil failure and supplemental reference
 method are described in [DESIGN.md](DESIGN.md#m5-reference-speed-correction).
 Both use original Horizons positions and the same separately installed ERFA
 reference, never this companion's prior numerical output as truth.
+
+## M6 adapter reuse
+
+M6 introduces original adapter code and integration tests only. It fetches
+no new ephemeris data and vendors no additional implementation. Ordinary
+bodies call this checkout's `src/calc.ts`; longitude callbacks use the
+`src/crossings.ts` contract; aspect rows feed `src/configured-aspects.ts`.
+The input translation reuses `src/date-input.ts` and `src/time-scale.ts`.
+The engine notices and licensing obligations described above still apply.
+
+The pinned companion dependency supplies the engine's existing
+`astronomy-engine` import during native execution and Vitest. Engine calc
+keeps its own ephemeris receipt and approximation descriptions. The
+companion records both provider implementations when combining aspect rows;
+it does not claim Horizons LT+S and engine calc are the same algorithm.
+
+The adapter tests reuse the retained pilot's independent Horizons/ERFA
+corpus. Comparisons with direct engine calc or the loaded minor-body evaluator
+are integration checks, not new independent accuracy evidence. The real
+pilot crossing test derives its target from computed positions and likewise
+establishes only callback integration. Independent event references remain
+part of the later search and final-validation milestones.
