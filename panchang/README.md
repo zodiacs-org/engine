@@ -2,9 +2,9 @@
 
 This private source-checkout project will provide astronomical and calendar
 facts for sunrise-to-sunrise days. Implementation follows [PLAN.md](PLAN.md).
-It currently exposes the luminary snapshot adapter, instantaneous limbs and
-civil-date search windows. Sunrise day/range calculations and the CLI are
-planned milestones.
+It currently exposes the luminary snapshot adapter, instantaneous limbs,
+civil-date search windows and sunrise-to-sunrise windows with vara. Complete
+panchang day/range calculations and the CLI are planned milestones.
 
 Use Node 22.7.0 or later. From this directory:
 
@@ -150,3 +150,58 @@ both midnight resolutions and supply no `start` or `end` window. These
 policies avoid representing disjoint or repeated dates as an ordinary
 sunrise search interval. They are tested against the independent clock
 rules and constructed cases recorded in [SOURCES.md](SOURCES.md).
+
+```ts
+import { prepareSunriseDay, resolveSunriseDay } from "./src/index.js";
+
+const input = {
+  date: "2024-03-20",
+  timeZone: "Asia/Kolkata",
+  observer: { latitude: 12.5, longitude: 75.25 } // Invented coordinates.
+};
+await prepareSunriseDay(input);
+const day = resolveSunriseDay(input, { ayanamsa: "lahiri" });
+if (day.status === "ok") {
+  console.log(day.start.utc, day.end.utc, day.vara.name);
+  console.log(day.conventions, day.start.snapshot.sun.tropical.receipt);
+}
+```
+
+`resolveSunriseDay` is synchronous and performs no filesystem or network
+I/O. For historical clocks, first call `prepareSunriseDay`, which prepares
+the boundaries of both local civil dates. Input validation and history
+load errors propagate from the existing civil resolver.
+
+The window includes its starting sunrise and excludes the following local
+date's sunrise. Each civil date must contain a unique sunrise. Vara is the
+Gregorian weekday of the local date containing the starting sunrise,
+retained through the window's end even after local midnight. Its index is
+Sunday-based; traditional ASCII names are in `VARA_NAMES`.
+
+Both boundaries retain the original engine rise event, including altitude
+and azimuth, and a complete luminary snapshot with calc receipts and the
+ayanamsa value at that boundary. Lahiri is the default. Changing ayanamsa
+affects these sidereal snapshots, while the horizon search uses the Sun's
+topocentric place. Original civil windows and sky searches are retained.
+
+`SUNRISE_CONVENTIONS` records the upper solar limb, standard refraction,
+distance-dependent solar radius and level horizon on WGS84. Height moves
+the observer without horizon dip. Terrain and weather are not modelled.
+The engine returns the first whole millisecond of its computed crossing;
+this numerical resolution does not establish physical accuracy. The
+independent reference protocol and its limited coverage are in
+[SOURCES.md](SOURCES.md#m4-sunrise-reference-protocol).
+
+The sky searches share `maxSamples`, defaulting to 20,000 evaluations; this
+budget excludes the separately calculated luminary snapshots. The input
+accepts a positive integer or `Infinity`, following the engine. Returned
+`samples` sums the original search counts. These budget rules and the
+default are enforced by [test/sunrise.test.ts](test/sunrise.test.ts).
+
+Refusals contain no `start`, `end` or `vara`. The reason distinguishes a
+refused civil date, missing or multiple sunrises, exhausted search budget
+and an engine calculation refusal. `endpoint` identifies the affected
+local date; original civil/search diagnostics and any engine refusal are
+retained. A skipped following calendar date is refused. Polar dates do
+not borrow a sunrise from another season. This API resolves boundaries;
+limb transitions and lunar months remain later milestones.

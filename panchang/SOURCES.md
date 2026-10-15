@@ -157,6 +157,61 @@ The instantaneous API retains the entire successful engine snapshot,
 including ayanamsa, receipts and bounds. Its integration tests establish
 that wiring and preserve engine refusals; they are not accuracy evidence.
 
+## M4: sunrise reference protocol
+
+Before running the sunrise adapter, the comparison threshold is fixed at
+60 seconds from each USNO minute label. The tests will use invented sites
+at (12.5, 75.25) degrees on 2024-03-20/21 and (-22.25, -60.75) degrees on
+2024-06-21/22, height zero. The threshold allows the source's minute
+rounding and the difference between its fixed solar radius and the engine's
+distance-dependent radius. It is an acceptance threshold for these cases,
+not a physical accuracy bound or a measured maximum.
+
+Primary references read on 2026-10-15:
+
+- US Naval Observatory, [Rise, Set, and Twilight Definitions](https://aa.usno.navy.mil/faq/RST_defs),
+  "Technical Definitions and Computational Details", sunrise/sunset:
+  its horizon depression is 50 arcminutes, comprising 34 arcminutes of
+  refraction and 16 arcminutes of solar radius. The engine instead evaluates
+  the radius from distance. The horizon is level and perpendicular to the
+  local vertical. Observer height moves the engine observer on WGS84 but
+  does not apply horizon dip, terrain or weather corrections.
+- USNO, [API documentation](https://aa.usno.navy.mil/data/api.html),
+  "Complete Sun and Moon Data for One Day": requests with `tz=0` return
+  Universal Time clock labels. Comparison treats these as UTC labels;
+  no subsecond UT1 agreement is asserted.
+- IMD Positional Astronomy Centre, [Rashtriya Panchang explanation](https://packolkata.imd.gov.in/panchang/en/explanation),
+  "Details of the Panchang", retrieved through search after a direct
+  request timed out: sunrise uses the upper limb; vaar is the day of the
+  week. The sunrise-to-following-local-date-sunrise assignment is this
+  project's explicit requested convention.
+
+[test/fixtures/usno-sunrise-reference.json](test/fixtures/usno-sunrise-reference.json)
+contains the reviewed numerical extracts retrieved on 2026-10-15, with
+each request URL, API version, raw response SHA-256 and UT sunrise minute.
+USNO supplies the numerical facts as a US Government work, under the same
+licensing basis recorded for the engine's USNO fixtures in
+[LICENSING.md](../LICENSING.md#swiss-ephemeris-exclusion). No source prose,
+images or daily panchang tables are copied.
+
+Run `node scripts/fetch-sunrise-references.mjs` from this project to fetch
+the independent responses again. It writes raw responses and the proposed
+extract into ignored `generated/` for review, without overwriting the
+committed fixture or evaluating the engine. New responses need not have
+the same digest if the provider changes its output.
+
+[test/sunrise.test.ts](test/sunrise.test.ts) compares the starting and ending
+sunrise of each reference pair with the fixed threshold above. The
+corresponding synthetic clocks are Asia/Kolkata and Etc/GMT+4; their
+sunrises have the same written UTC and local dates in these cases. The
+weekday tests independently advance from the Gregorian Thursday anchor
+1970-01-01, and check 0099-12-31 by Gregorian congruence. Additional tests
+check local-date ownership across the date line and engine-clock DST
+windows. Retained-search/snapshot equality and historical history loading
+are integration checks. Constructed boundary, multiple-rise and missing
+following-rise cases test refusal/ownership policy, with invented events;
+they supply no physical astronomical accuracy evidence.
+
 ## Later milestones
 
 Before adding month naming, document the independent definitions and

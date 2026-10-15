@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
-import { instantaneousPanchang, luminarySnapshot, prepareCivilDay, resolveCivilDay } from "../src/index.js";
+import {
+  instantaneousPanchang, luminarySnapshot, prepareCivilDay, prepareSunriseDay,
+  resolveCivilDay, resolveSunriseDay
+} from "../src/index.js";
 
 // Exercise the actual source runtime, independently of Vite's test alias.
 const snapshot = luminarySnapshot("2020-01-01T00:00:00Z");
@@ -28,3 +31,13 @@ assert.equal(civil.start.utc, "1880-06-01T04:53:00.000Z");
 assert.equal(civil.end.utc, "1880-06-02T04:53:00.000Z");
 assert.equal(civil.start.resolution.zone.source, "tzdb");
 console.log("Source runtime prepares engine timezone history and resolves the synthetic observer's mean-time civil day.");
+
+await prepareSunriseDay(input);
+const sunrise = resolveSunriseDay(input);
+if (sunrise.status !== "ok") throw new Error(sunrise.reason);
+assert.equal(sunrise.start.civilDate, input.date);
+assert.equal(sunrise.vara.weekday, "Tuesday");
+assert.equal(sunrise.start.snapshot.ayanamsa.name, "lahiri");
+assert.equal(sunrise.end.snapshot.sun.sidereal.receipt.engine.ephemeris.version, "2.1.19");
+assert(Date.parse(sunrise.end.utc) > Date.parse(sunrise.start.utc));
+console.log("Source runtime resolves a historical sunrise day with vara, horizon conventions and engine receipts.");

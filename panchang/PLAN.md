@@ -7,7 +7,7 @@ The harness owns commits, pushes and the draft pull request.
 - [x] M1 Establish an isolated private TypeScript project, Vitest and typechecking; add a receipt-preserving Sun/Moon engine adapter with selectable Lahiri-default ayanamsa, source ledger and independent reference smoke tests.
 - [x] M2 Validate civil dates, synthetic observer inputs and IANA zones; reuse engine timezone resolution for civil-day boundaries, including gaps, folds, skipped dates and historical preparation.
 - [x] M3 Define instantaneous tithi/paksha, yoga and karana classification; reuse engine nakshatra/pada; test rational boundaries, wrapping and the complete fixed/moving karana sequence against hand-derived arithmetic.
-- [ ] M4 Resolve sunrise-to-next-sunrise windows and vara through engine sky searches; record horizon conventions and explicit missing-sunrise refusals; test synthetic sites and independent rise references.
+- [x] M4 Resolve sunrise-to-next-sunrise windows and vara through engine sky searches; record horizon conventions and explicit missing-sunrise refusals; test synthetic sites and independent rise references.
 - [ ] M5 Find and order limb and pada transitions through engine longitude crossings; record true start/end instants beyond day clipping, boundary ownership, search budgets and resolution; verify analytical crossing instants.
 - [ ] M6 Assemble the pure panchang day API with chronological segments, sunrise state, convention metadata, ayanamsa and engine receipts; test clipping, simultaneous events and whole-result refusals.
 - [ ] M7 Determine adjacent new/full moons and sidereal solar ingresses; implement explicit amanta and purnimanta lunar-month naming with independently documented conventions and arithmetic fixtures.

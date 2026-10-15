@@ -19,3 +19,7 @@ export type {
   InstantaneousPanchang, InstantaneousResult, KaranaPosition, Paksha,
   TithiPosition, YogaPosition
 } from "./limbs.js";
+export { SUNRISE_CONVENTIONS, VARA_NAMES, prepareSunriseDay, resolveSunriseDay, varaOfCivilDate } from "./sunrise.js";
+export type {
+  SunriseBoundary, SunriseDayRefusal, SunriseDayResult, SunriseDayWindow, SunriseOptions, Vara
+} from "./sunrise.js";
