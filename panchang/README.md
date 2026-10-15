@@ -2,8 +2,9 @@
 
 This private source-checkout project will provide astronomical and calendar
 facts for sunrise-to-sunrise days. Implementation follows [PLAN.md](PLAN.md).
-It currently exposes the luminary snapshot adapter and civil-date search
-windows; sunrise day/range calculations and the CLI are planned milestones.
+It currently exposes the luminary snapshot adapter, instantaneous limbs and
+civil-date search windows. Sunrise day/range calculations and the CLI are
+planned milestones.
 
 Use Node 22.7.0 or later. From this directory:
 
@@ -55,6 +56,50 @@ Receipts report computation conventions; they do not certify accuracy.
 See [SOURCES.md](SOURCES.md) for the independent smoke reference and its
 limited coverage. No transition-time or complete panchang accuracy claim
 has been established yet.
+
+```ts
+import { instantaneousPanchang } from "./src/index.js";
+
+const instant = instantaneousPanchang("2020-01-01T00:00:00Z");
+if (instant.status === "ok") {
+  console.log(instant.tithi.name, instant.tithi.paksha, instant.tithi.pakshaNumber);
+  console.log(instant.nakshatra.name, instant.nakshatra.pada);
+  console.log(instant.yoga.name, instant.karana.name);
+  console.log(instant.ayanamsa, instant.sun.tropical.receipt);
+}
+```
+
+`instantaneousPanchang` accepts the same instant and ayanamsa options as
+`luminarySnapshot`. It retains the complete snapshot and adds tithi,
+paksha, yoga and karana. It preserves an engine refusal without partial
+limbs. Vara requires the later sunrise-day assignment. This API does not
+yet assign a sunrise day, lunar month or transition instants.
+
+The arithmetic helpers `tithiOf(sunTropical, moonTropical)` and
+`karanaOf(sunTropical, moonTropical)` accept canonical geocentric degrees;
+`yogaOf(sunSidereal, moonSidereal)` accepts engine-created sidereal values
+with matching ayanamsa labels and instants. Declared inputs may omit both
+instants for arithmetic work. The helpers classify supplied coordinates;
+the caller is responsible for their physical conventions and provenance.
+The instant API obtains its coordinates and provenance from the engine.
+
+Indices are zero-based within each full angular cycle. Tithi also has a
+one-based `pakshaNumber`, with Purnima ending shukla and Amavasya ending
+krishna. Karana reports `kind` (`fixed` or `moving`) and `half` (first or
+second half of the tithi). The fixed-karana order follows the later order
+in the Calendar Reform Committee's footnote, documented in
+[SOURCES.md](SOURCES.md#m3-instantaneous-limb-definitions-and-arithmetic).
+Names are plain traditional labels and carry no quality classification.
+
+Boundaries belong to the interval starting there. Sum and difference
+classification uses exact arithmetic on the supplied binary floating-point
+coordinates, with no epsilon. Yoga uses its rational angular width;
+nakshatra and pada use the engine's existing classifier. Invalid tropical
+coordinates and unbranded or mismatched yoga inputs throw `RangeError`.
+The complete-cycle and adjacent-boundary arithmetic checks are in
+[test/limbs.test.ts](test/limbs.test.ts), with their independent integer
+oracle described in [SOURCES.md](SOURCES.md). They establish classification
+of supplied values, without establishing astronomical accuracy.
 
 Civil-date helpers accept strict Gregorian `YYYY-MM-DD` strings.
 `nextCivilDate` advances the calendar date independently of elapsed UTC

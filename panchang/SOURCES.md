@@ -104,10 +104,63 @@ integration checks only. Observer validation uses the existing sky
 `Observer` contract in [riseset.ts](../src/sky/riseset.ts); its domain
 tests enforce input compatibility, not astronomical accuracy.
 
+## M3: instantaneous limb definitions and arithmetic
+
+Primary references read on 2026-10-15:
+
+- India Meteorological Department, Positional Astronomy Centre,
+  [Rashtriya Panchang, Explanation, "Details of the Panchang"](https://packolkata.imd.gov.in/panchang/en/explanation).
+  The search service retrieved the explanation; direct page requests timed
+  out. It defines tithi by Moon minus Sun longitude, karana by half that
+  span, nakshatra by the Moon's nirayana longitude, and yoga by the sum of
+  the nirayana Sun and Moon longitudes. No daily table values are copied.
+- Government of India, Council of Scientific and Industrial Research,
+  [Report of the Calendar Reform Committee (1955)](https://dspace.gipe.ac.in/xmlui/bitstream/handle/10973/39692/GIPE-043972.pdf),
+  printed pp. 109-110 (PDF pages 124-125), tables "Tithis" and
+  "Yogas and Karanas", and the fixed-karana footnote. The PDF was fetched
+  and read as extracted text; the karana/yoga page was also rendered for
+  inspection. It supplies the traditional names and moving-karana order.
+  Its main table puts Naga before Chatushpada; the footnote distinguishes
+  the later order Shakuni, Chatushpada, Naga, Kimstughna. This project
+  explicitly uses that later order. Only factual traditional names and
+  mathematical definitions are transcribed, with ASCII transliterations;
+  no prose, images, deities, ritual rules or daily tables are redistributed.
+
+The following exact mathematical conventions are enforced by
+[test/limbs.test.ts](test/limbs.test.ts), over a complete angular cycle:
+
+- Normalize Moon minus Sun into [0, 360) degrees. The tithi index is its
+  floor quotient by 12; indices 0 through 14 are shukla, 15 through 29
+  krishna. Fortnight numbers run from 1 through 15. Purnima is index 14
+  and Amavasya index 29. A boundary belongs to the interval starting there.
+- The karana index is the elongation's floor quotient by 6. Index 0 is
+  Kimstughna. Indices 1 through 56 repeat Bava, Balava, Kaulava, Taitila,
+  Gara, Vanija, Vishti. Indices 57, 58, 59 are Shakuni, Chatushpada, Naga.
+  Thus the cycle ends with Naga, then begins with Kimstughna.
+- Reduce the sum of sidereal longitudes modulo 360. Yoga index is the
+  floor quotient by the rational width 40/3 degrees. Nakshatra and pada
+  remain the engine's calculation, with the same boundary ownership.
+
+Tests derive expectations by integer arithmetic in artificial angular
+units and, separately, by decoding binary64 inputs into integer ratios.
+They inspect each rational sector boundary and its adjacent representable
+numbers, including cancellation and addition that would round across a
+boundary. They use no engine-produced astronomical reference instants.
+The implementation reuses the engine's exact-sum arithmetic for sum and
+difference decisions; the independent oracle uses BigInt ratios instead.
+Reported classification has no epsilon or physical accuracy tolerance.
+Inputs must be canonical degrees in [0, 360); results of sum/difference
+wrap internally. Exact arithmetic means exact for the supplied doubles,
+not exact sky positions. This milestone establishes no transition times.
+
+The instantaneous API retains the entire successful engine snapshot,
+including ayanamsa, receipts and bounds. Its integration tests establish
+that wiring and preserve engine refusals; they are not accuracy evidence.
+
 ## Later milestones
 
-Before adding limb arithmetic or month naming, document the independent
-definitions and boundary conventions used. Before testing physical
+Before adding month naming, document the independent definitions and
+boundary conventions used. Before testing physical
 transition instants, record the primary source URL, locator, retrieval
 date, source timescale, observer/horizon details, ayanamsa, permitted
 redistribution and the comparison tolerance fixed before measuring the

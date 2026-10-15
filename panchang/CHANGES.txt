@@ -1,2 +1,3 @@
 Complete panchang M1: add milestone plan, isolated TypeScript/Vitest setup, receipt-preserving luminary adapter, source ledger, JPL smoke reference and passing Node 22 runtime/isolation checks.
 Complete panchang M2: validate civil dates, observers and IANA zones; preserve engine timezone resolutions in civil-day windows with gap/fold/skipped-date policies, historical preparation, independent clock references and passing Node 22 checks.
+Complete panchang M3: add receipt-preserving instantaneous tithi/paksha, yoga and karana classification, reuse engine nakshatra/pada and exact sums, document primary definitions and the later fixed-karana order, and pass independent rational-boundary tests and Node 22 project checks; root package-contents check lacks existing dist output.

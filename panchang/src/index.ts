@@ -11,3 +11,11 @@ export type {
   CivilBoundary, CivilDayInput, CivilDayRefusal, CivilDayResult, CivilDayWindow,
   PanchangObserver
 } from "./civil.js";
+export {
+  FIXED_KARANAS, MOVING_KARANAS, TITHI_NAMES, YOGA_NAMES,
+  instantaneousPanchang, karanaOf, tithiOf, yogaOf
+} from "./limbs.js";
+export type {
+  InstantaneousPanchang, InstantaneousResult, KaranaPosition, Paksha,
+  TithiPosition, YogaPosition
+} from "./limbs.js";
