@@ -18,7 +18,7 @@ commits and draft pull requests. Stop after the session's milestone is complete.
 - [x] M7 Implement personal year/month/day cycles with explicit calendar-year boundaries, caller-supplied target dates, and no implicit current clock.
 - [x] M8 Implement pinnacles and challenges with documented age intervals, single-digit challenge arithmetic, zero challenges, and complete component receipts.
 - [x] M9 Assemble deterministic profiles and name-change comparisons using the same birth date and conventions, with auditable before/after deltas and no inferred identity data.
-- [ ] M10 Add a JSON CLI for profiles, cycles, and comparisons with strict options/input validation, stdin support, stable output, structured errors, and subprocess tests.
+- [x] M10 Add a JSON CLI for profiles, cycles, and comparisons with strict options/input validation, stdin support, stable output, structured errors, and subprocess tests.
 - [ ] M11 Expand handwritten synthetic golden fixtures across both systems, scripts, and date boundaries; add seeded properties for conservation, normalization equivalence, receipt replay, and library/CLI parity.
 - [ ] M12 Complete API and CLI documentation, conventions/provenance and licensing records, local consumer smoke checks, and isolation/evidence checks; verify that no project file enters the engine package.
 
@@ -363,3 +363,38 @@ and cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm
 dry-run exclusion passed; the complete engine contents and size gate remains
 unverified. No root build was generated. Only `numerology/` changed.
 M10 is the next session's work.
+
+## M10 validation
+
+Added a local JSON CLI for profiles, all personal cycles, and name-change
+comparisons. Calculation flags or a JSON request select the same library
+APIs, with explicit target dates, complete source receipts, original meanings,
+and custom-table provenance. JSON requests support inline arguments or bounded
+UTF-8 stdin. Strict command, field, option, encoding, duplicate-key, and
+transport validation rejects ambiguous inputs without coercion. Stable
+envelopes, JSON help, optional indentation, fixed error diagnostics, and
+documented exit statuses support shell consumers. Help works without a build;
+calculations explain when the local library is unavailable. The README
+documents command syntax, request shapes, output, bounds, and IO behavior.
+
+Project `npm run typecheck` and `npm test` passed on Node 22.22.2.
+`test/cli.test.mjs` compares complete CLI results with the existing library
+for default profiles, configured comparisons, both cycle master policies,
+Unicode names, and caller mappings. Subprocess controls cover flags and JSON
+parity, stdin, stable bytes, indentation, working-directory independence,
+strict rejection, decoded duplicate keys, byte/depth/token bounds, malformed
+UTF-8, overflow before EOF, unavailable builds, and a closed downstream pipe.
+Stream controls cover split UTF-8 scalars, terminal refusal, read/write
+failures, and unavailable stderr. Clock and network entry points are disabled
+in timezone controls. Existing handwritten arithmetic fixtures, seeded
+properties, package-exclusion, authored-file-size, and documentation punctuation
+checks pass. Generated builds, runtime, npm cache, and logs remain ignored.
+
+Rechecked all locally available main and infra refs, including origin refs,
+for numerology and related name arithmetic outside this project; no overlap
+was found. No remote fetch was performed. Only `numerology/` changed.
+
+The root `npm run package:contents` was attempted with the local runtime and
+cache and remains blocked by missing `dist/calc.d.ts`. Script-free npm dry-run
+exclusion passed; the complete engine contents and size gate remains
+unverified. No root build was generated. M11 is the next session's work.

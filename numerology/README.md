@@ -1,6 +1,6 @@
 # Numerology development project
 
-A private TypeScript library and planned JSON CLI, adjacent to
+A private TypeScript library and JSON CLI, adjacent to
 `@zodiacs/engine` and isolated from its npm package. Code and documentation
 here use the repository's [MIT license](../LICENSE). This project currently
 implements integer reduction, civil-date validation, life path, birthday,
@@ -11,8 +11,9 @@ Maturity, karmic lessons, and hidden passion use those same date and name
 conventions. Personal year, month, and day cycles use explicit target civil
 dates. Pinnacles and challenges return complete schedules in attained ages.
 Profiles assemble these results, and name-change comparisons retain both
-profiles with arithmetic differences. [PLAN.md](PLAN.md) tracks the remaining
-CLI and documentation work.
+profiles with arithmetic differences. The CLI exposes profiles, cycles, and
+comparisons. [PLAN.md](PLAN.md) tracks the remaining fixture and documentation
+work.
 
 Numerology results describe symbolic conventions and provide reflection
 prompts. The tests check arithmetic and declared behavior. They do not test
@@ -1103,3 +1104,119 @@ rejection, ownership, sorted table snapshots, allocation bounds, freezing,
 deterministic serialization, and operation with Date and network entry points
 disabled across the declared host timezones. These are arithmetic and
 behavior checks, not evidence of predictive accuracy.
+
+## JSON CLI
+
+Build locally with `npm run build` inside `numerology/`, then invoke
+`node numerology/cli.mjs` from the repository root. The CLI resolves its own
+library relative to its file, so the caller's working directory does not change
+the calculation. From this directory, `npm run cli --silent -- <arguments>`
+also invokes it. Use the silent form when piping npm's stdout to a JSON reader.
+The CLI adds no engine imports, runtime dependencies, or root configuration.
+
+```sh
+# Invented names and civil dates, enforced by test/cli.test.mjs.
+node numerology/cli.mjs profile --birth-date 2009-11-29 --name 'Ael Vorn'
+node numerology/cli.mjs cycles --birth-date 2009-11-29 --target-date 2000-10-22 --master-numbers reduce
+node numerology/cli.mjs compare --birth-date 2009-11-29 --before-name Mi --after-name Mi
+node numerology/cli.mjs --help
+```
+
+`profile` requires `--birth-date` and `--name`. `compare` requires
+`--birth-date`, `--before-name`, and `--after-name`. Both accept
+`--target-date`, `--system`, `--master-numbers`, `--method`, `--y-as-vowel`,
+and `--transliteration`. The defaults and accepted option values are exactly
+the profile library's, documented above. A transliteration flag contains the
+JSON object with `id` and `mappings`, including the same complete table
+provenance as the library. `cycles` requires `--birth-date` and `--target-date`
+and accepts only `--master-numbers` as a calculation option. Name-table,
+life-path, and Y settings are inapplicable to that command and reject.
+
+Flags accept either `--name VALUE` or `--name=VALUE`. Use the equals form
+when a value starts with `--`. Flags and commands are case sensitive. Empty
+values, missing values, repeated flags, unknown or inapplicable flags, short
+aliases, and extra positional arguments reject. The CLI does not trim names,
+coerce date types, infer a target date, or consult the current clock.
+
+As an alternative to calculation flags, `--input JSON` accepts an inline
+request. `--input -` reads one UTF-8 JSON request from piped stdin through
+EOF. Close stdin after writing the request; terminal input is refused. The
+command remains an argument. Do not combine either input form with any
+calculation flag. `--pretty` is permitted in either mode.
+
+Requests use camelCase library field names:
+
+```json
+{
+  "birthDate": "2009-11-29",
+  "name": "Ael Vorn",
+  "options": { "system": "chaldean", "targetDate": "2000-10-22" }
+}
+```
+
+For `profile`, the only top-level keys are `birthDate`, `name`, and optional
+`options`. For `compare`, replace `name` with `beforeName` and `afterName`.
+Both use the profile options object, including `targetDate` when requested.
+For `cycles`, top-level keys are `birthDate`, `targetDate`, and optional
+`options`; that options object accepts only `masterNumbers`. Explicit null
+options reject. Do not send a `command`, imported receipt, or output envelope
+as a request. Unknown fields and unsupported values reject at every option
+boundary, including custom table fields.
+
+The transport accepts one standard JSON value, which must then validate as a
+request object. Comments, trailing commas, BOMs, multiple values, and malformed
+UTF-8 on stdin reject. Duplicate object keys reject, including keys with equal
+decoded spellings such as an ordinary letter versus its JSON Unicode escape.
+This applies throughout the request, including custom mapping tables. Keys
+never select an executable file, module, expression, URL, or shell command.
+The CLI reads stdin only when `--input -` is selected and writes no files.
+
+Each inline JSON argument and each stdin request is limited to 65,536 UTF-8
+bytes, including whitespace. JSON container nesting is limited to 16 and
+structural scanning to 10,000 tokens. Here tokens are strings, primitive
+values, braces, brackets, commas, and colons; whitespace is excluded. These
+transport limits are enforced by `cli/json.mjs`, with exact byte boundaries,
+depth controls, and token rejection tested in `test/cli.test.mjs`. The
+library's separate name and custom-table limits still apply. Streaming input
+over the byte bound fails before EOF, without accumulating further chunks.
+
+Successful calculation output is a JSON object with `schema:
+"numerology-cli/1"`, `ok: true`, `command`, and `result`, in that order.
+Profile and comparison results are the complete library results, including
+all meanings and reduction receipts. Cycle results contain `personalYear`,
+`personalMonth`, and `personalDay`, each with its own complete receipt.
+Supplied names and civil dates remain visible in successful receipts. The
+CLI does not shorten, round, or reinterpret results. Output is compact JSON
+followed by a newline; `--pretty` changes indentation only. Equal requests
+produce equal output bytes for the same local implementation and runtime.
+
+Success writes only stdout. Failure writes only stderr, using `schema:
+"numerology-cli/1"`, `ok: false`, and `error: { code, message }`. Fixed error
+messages omit request values, raw parser errors, stack traces, and stream
+error details. Failed output writes may already have delivered a partial
+stdout response: a nonzero status must invalidate it. If stderr itself fails,
+no structured diagnostic can be guaranteed.
+
+| Exit status | Meaning |
+| --- | --- |
+| `0` | Calculation or help succeeded. |
+| `2` | Invalid arguments, request shape, JSON, encoding, transport bound, or library input. |
+| `1` | Input/output failure, unavailable local build, or unexpected internal failure. |
+
+Input error codes are `invalid-arguments`, `invalid-input`, `invalid-json`,
+`invalid-encoding`, `duplicate-key`, and `input-limit`. Runtime error codes
+are `input-io`, `output-io`, `library-unavailable`, and `internal-error`.
+`--help` or `<command> --help` alone prints a JSON help response with the
+same schema and `ok: true`, and a `help` object. Help works before building.
+Mixing help with other arguments rejects.
+
+[cli.test.mjs](test/cli.test.mjs) enforces the documented statuses and output
+format, default profiles, configured comparisons with explicit caller tables,
+both cycle master policies, flag/JSON/stdin equivalence, working-directory
+independence, and whitespace-only pretty printing. Subprocess controls check
+strict rejection, duplicate decoded keys, UTF-8 and byte bounds, streaming
+overflow, missing builds, deterministic output, and host timezone independence
+with clock and network entry points disabled. Stream controls cover split
+UTF-8 scalars, terminal refusal, read/write failures, and unavailable stderr.
+Library parity establishes transport behavior, not independent numerical
+accuracy; the handwritten arithmetic fixtures remain the calculation controls.

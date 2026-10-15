@@ -15,6 +15,7 @@
     }
   },
   "scripts": {
+    "cli": "node cli.mjs",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test test/*.test.mjs"
