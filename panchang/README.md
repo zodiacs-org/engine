@@ -55,9 +55,9 @@ engine performs sidereal conversion. The adapter does not calculate speeds.
 The adapter is synchronous and performs no network or filesystem I/O.
 It shares the engine's astronomy dependency state and runtime assumptions.
 Receipts report computation conventions; they do not certify accuracy.
-See [SOURCES.md](SOURCES.md) for the independent smoke reference and its
-limited coverage. No transition-time or complete panchang accuracy claim
-has been established yet.
+See [SOURCES.md](SOURCES.md) for the independent smoke, sunrise and
+transition references and their limited coverage. These finite checks
+establish no general accuracy bound for a complete panchang.
 
 ```ts
 import { instantaneousPanchang } from "./src/index.js";
@@ -262,7 +262,13 @@ sector motion resolved by the sampling step; it is not a proof of
 completeness. The analytical trajectory tests in
 [test/transitions.test.ts](test/transitions.test.ts) enforce these settings,
 boundary ownership and rational reference instants. They establish no
-astronomical transition-time accuracy, as [SOURCES.md](SOURCES.md) explains.
+astronomical transition-time accuracy. Separately,
+[test/references.test.ts](test/references.test.ts) compares every change
+against independently derived JPL/ERFA references in the Lahiri windows
+listed in [SOURCES.md](SOURCES.md#m11-transition-reference-protocol-registered-before-comparison),
+and compares primary phase changes with published USNO instants. That
+finite coverage establishes no general transition-time error bound or
+verification of other ayanamsas.
 
 All streams, endpoint checks and millisecond checks share `maxSamples`,
 defaulting to 10,000 unique instantaneous snapshots. A positive integer
@@ -504,8 +510,9 @@ USNO phases, JPL DE441 Sun longitudes and an independent ERFA Lahiri
 reduction. Their instants, acceptance limits, retrieval tool, licensing
 basis and precise scope are recorded in [SOURCES.md](SOURCES.md#m8-anomaly-definitions-and-reference-cases).
 They do not validate every tithi boundary, every anomalous year or other
-regional calendar conventions. Wider physical transition comparisons
-remain M11's work.
+regional calendar conventions. The separate JPL/ERFA and USNO limb
+transition checks are recorded in
+[SOURCES.md](SOURCES.md#m11-transition-reference-protocol-registered-before-comparison).
 
 ```ts
 import { panchangRange, preparePanchangRange } from "./src/index.js";

@@ -28,7 +28,7 @@ export const TRANSITION_CONVENTIONS = Object.freeze({
   resolution: "first-whole-millisecond-of-classification-change",
   stepDays: 1 / 96, paddingDays: 3, maxWindowDays: 2,
   search: "engine-longitude-crossings;scaled-sector-phase;sampled-not-proven-complete",
-  reference: "analytical-trajectories-only;physical-transition-validation-pending"
+  reference: "analytical-trajectories;2024-JPL-ERFA-Lahiri-windows;2024-USNO-primary-phases;no-general-error-bound"
 } as const);
 
 export interface LimbTransition {

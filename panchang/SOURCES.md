@@ -276,8 +276,8 @@ retention and equality with the instantaneous classifier on both sides of
 every returned interval boundary, and that full intervals overlap the
 sunrise window. Those checks validate wiring and local boundary ownership;
 they establish neither physical transition-time accuracy nor exhaustive
-astronomical reference coverage. Published transition comparisons remain
-the work of M11.
+astronomical reference coverage. The independent physical transition
+comparisons are documented in M11 below.
 
 ## M6: day assembly arithmetic and integration
 
@@ -310,10 +310,10 @@ Asia/Kolkata clock on 2024-03-20, with Lahiri and Raman. Comparisons to
 instantaneous engine calls establish wiring and receipt preservation
 only. Operational checks cover refused civil dates, missing sunrise,
 separate sunrise/transition budgets, padded coverage refusals and an
-engine time-basis discontinuity. The day API introduces no new physical
+engine time-basis discontinuity. The M6 tests introduce no new physical
 accuracy evidence; M4's sunrise comparisons and M5's transition limitations
 retain their original scope. Published physical transition references
-remain the work of M11.
+and day-segment comparisons are documented in M11 below.
 
 ## M7: lunar-month conventions and independent arithmetic
 
@@ -406,7 +406,7 @@ with Raman, retaining original phase/ingress snapshots and receipts and
 checking the classifiers on either side. The source runtime also checks
 month wiring on the existing invented historical observer. These are
 integration checks only, with no physical month/phase-time accuracy claim.
-Published transition comparisons remain M11's work.
+M11's limb-transition references do not validate month ingress times.
 
 ## M8: anomaly definitions and reference cases
 
@@ -562,7 +562,7 @@ wiring for Lahiri and Raman at the invented site on March 20-21, 2024,
 and historical history preparation is exercised for June 1-2, 1880.
 They establish integration and retention of the engine's results and
 receipts, without establishing astronomical accuracy or new error bounds.
-M11 remains responsible for wider independent physical transition checks.
+The independent physical transition checks are documented in M11 below.
 
 ## M10: CLI parsing, formatting and integration evidence
 
@@ -597,6 +597,137 @@ checks. Artificial anomaly labels used to exercise formatting make no
 additional astronomical claim. The CLI introduces no network requests,
 source copies or third-party data, and preserves the library's existing
 timescale, ayanamsa, horizon and coverage conventions.
+
+## M11: transition reference protocol (registered before comparison)
+
+The reference windows are the UTC days 2024-03-20, 2024-04-08 and
+2024-09-17, chosen for an equinox season, a new moon and a full-moon
+season. Retrieve geocentric Sun and Moon apparent ecliptic longitudes
+from NASA/JPL Horizons quantity 31, DE441, at every UTC minute, independently
+of the engine. Derive each tithi, karana, nakshatra, pada and yoga boundary
+by linear interpolation within its bracketing minute. Sidereal references
+use true Lahiri from the existing independent ERFA epoch construction
+named in M8. Record both endpoint coordinates and reductions, so the
+expected boundary and indices can be reconstructed without this project.
+Keep full responses in ignored generated/ and only boundary extracts in
+the committed fixture. No observer, refraction or horizon is involved.
+
+Before any engine comparison in M11, fix the acceptance threshold at
+60 seconds from each interpolated reference instant. This deliberately
+allows the different frames/corrections described in M1 and minute
+interpolation; it is a case-specific acceptance threshold, not a measured
+maximum or a physical accuracy bound. Do not widen it after comparison.
+The generator must verify forward motion, complete minute grids and one
+sector at most per step. Compare all reference changes and counts in each
+window, including independent start/end indices, rather than selecting
+only matching events. Only Lahiri is covered by these sidereal comparisons.
+
+Also retrieve the first four primary phases from USNO starting 2024-04-01.
+New/full moons supply tithi and karana changes; quarter phases supply
+karana changes. Fix acceptance at 60 seconds from each UT minute label
+before comparison, allowing rounding and subsecond UT1/UTC differences.
+These phase references are independent of any ayanamsa and horizon.
+
+### M11 sources, reductions, reproduction and coverage
+
+Primary documentation and numerical responses were fetched and read on
+2026-10-15. The fixture is
+[transition-references.json](test/fixtures/transition-references.json);
+each response's full request URL, SHA-256 and API version is retained.
+The retrieval tool is
+[fetch-transition-references.py](scripts/fetch-transition-references.py).
+It imports no engine implementation and runs no engine process.
+
+- NASA/JPL [Horizons manual](https://ssd.jpl.nasa.gov/horizons/manual.html),
+  "Definition of Observer Table Quantities", quantity 31, and
+  "Specification of Time": apparent observer-centered IAU76/80
+  ecliptic-of-date longitude, with light time, deflection and stellar
+  aberration. The requests use Sun 10 and Moon 301, Earth geocentre
+  `500@399`, airless apparent places and `TIME_TYPE='UT'`. Response
+  headers identify DE441 and no refraction. The manual defines its UT
+  as UTC after 1962; all the new cases are in 2024. The geocentre has
+  no local sunrise, observer height or horizon.
+- USNO [API documentation](https://aa.usno.navy.mil/data/api.html),
+  "Phases of the Moon", `phasedata.time`, and the
+  [requested phase list](https://aa.usno.navy.mil/api/moon/phases/date?date=2024-04-01&nump=4):
+  UT minute labels for last quarter, new moon, first quarter and full
+  moon. The fixture treats them as UTC for comparison, without inferring
+  subsecond accuracy or an ayanamsa convention from the phase labels.
+- ERFA through pyerfa 2.0.1.5 and the independent epoch tool cited in M8:
+  the Lahiri epoch is JD 2435553.5 TT, with its published true value
+  reduced by IAU 1980 nutation at the epoch, carried by IAU 1976 to
+  J2000 and IAU 2006 to date, then made true with `nut00b`. The script
+  uses ERFA UTC to TAI to TT conversion at every sample. The fixture
+  records the tool path and SHA-256; tests check the digest. This
+  construction follows the same definition as the selectable engine
+  Lahiri, using separately implemented ERFA matrices. It is not a new
+  sidereal converter in the library.
+
+For each pair of consecutive reference minutes, reduce Moon minus Sun
+for tithi/karana, Moon minus true Lahiri for nakshatra/pada, and
+Sun plus Moon minus twice true Lahiri for yoga. Sector indices use
+the defining widths from M3. Unwrap a forward crossing and linearly
+interpolate its target angle between the two minute coordinates. The
+saved `at` is that estimate serialized to milliseconds, not a published
+millisecond observation. The fixture retains both coordinates and true
+Lahiri values on each side, plus each window's endpoint samples. The
+test independently reconstructs each index and interpolation; its
+one-millisecond serialization allowance is solely a numerical check,
+not an additional astronomical accuracy statement.
+
+[test/references.test.ts](test/references.test.ts) compares every limb's
+change count, before/after sector indices and time in each registered
+UTC window. The window endpoints also agree in sector index. The USNO
+checks compare the quarter-phase karana changes and both tithi and
+karana changes at new/full moons, including paksha and the Naga to
+Kimstughna wrap. All pass the originally registered acceptance limits.
+The same tests check reference changes in the shared interior of each UTC
+window and the synthetic observer's sunrise day at (12.5, 75.25) degrees,
+Asia/Kolkata. They require both segment labels and retained full interval
+boundaries to carry each independently sourced change.
+These comparisons cover only those UTC windows and phase instants;
+they establish no bound between them, for another epoch/ayanamsa,
+or for lunar-month ingress times. Event-adjacent engine snapshots
+continue to check computed millisecond ownership, not physical
+accuracy at a millisecond. No maximum-error claim is made.
+
+The engine uses its receipt-recorded IAU2006/2000B frame and apparent
+Sun conventions, with neither light-time nor aberration correction on
+the Moon series and no deflection. Horizons uses the different
+conventions above. The ERFA ayanamsa does not change Horizons's frame
+into the engine's frame. This deliberate comparison of near but
+distinct reductions is covered by the preregistered acceptance test;
+it is not evidence that the reductions are identical. Original receipts
+retain the engine UTC/TT/UT1 facts; snapshots retain actual ayanamsa values.
+
+Sunrise reference coverage remains M4's synthetic sites and dates with
+the documented upper solar limb, standard refraction and level horizon.
+Those observer-dependent events are separate from the geocentric limb
+definitions. No terrain, weather or alternative sunrise convention
+is validated by the new longitude references.
+
+From panchang/ with pyerfa 2.0.1.5 and numpy installed:
+
+```sh
+python3 scripts/fetch-transition-references.py
+python3 scripts/fetch-transition-references.py --offline
+npm test -- test/references.test.ts
+```
+
+The first command retrieves fresh proposals into ignored generated/;
+the second replays the cached raw responses and verifies their request
+URLs. Neither overwrites the committed fixture. Offline replay on the
+retrieval date reproduced the fixture byte for byte. Later runs can
+differ in retrieval date, and fresh provider responses can have different
+headers/digests or revised values; review rather than replacing fixtures
+automatically. Ordinary Vitest checks use the committed extract and
+require no network or Python installation.
+
+The extract redistributes only small US Government numerical facts and
+ERFA numerical results, on the same licensing basis recorded in M8 and
+the repository licensing audit. Original analysis and retrieval code is
+MIT. No source prose, provider tables in full, ERFA source, ephemeris
+kernel, proprietary atlas or Swiss Ephemeris material is copied.
 
 ## Later milestones
 
