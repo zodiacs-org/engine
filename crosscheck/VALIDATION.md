@@ -816,3 +816,51 @@ requireNode22; build and verify refused the same unsupported executable.
 This is not a passing full Node 22 validation. No reference campaign or live
 Swiss execution occurred. Changes stay inside crosscheck/; root package
 inputs, other workflows, archives and historical measurements are unchanged.
+
+## Phase 2 S2 scanner review follow-up
+
+Strengthened the strict scanner and its negative fixtures without adding an
+import exemption or dependency allowance. Python checks now scan executable
+formatted-string expressions, including nested format fields, while leaving
+literal format text alone. Literal loader arguments support prefixes,
+parentheses, keyword arguments and octal escapes; raw strings retain their
+escape spelling. JavaScript fixtures distinguish regexes after blocks from
+division after object, function and class expressions. Dependency checks
+join continued physical lines and include the legacy shrinkwrap lockfile.
+The inventory reads bounded shebang prefixes before rejecting unknown source
+suffixes and recognizes Python windowed scripts. It never executes scanned
+source or imports Swiss. These are lexical checks, not a complete parser or
+a proof about arbitrary computed loaders.
+
+The strict repository scan still fails on the historical imports listed in
+the previous S2 record. Those files remain outside the allowed edit scope.
+The requested frozen path-and-hash baseline has not been authorized. No
+baseline was added, the CI workflow remains unchanged, and S2 stays unchecked.
+Its negative fixture tests continue to run through the existing dedicated
+Node test glob. No campaign or live Swiss execution occurred.
+
+Executed from the repository root with the available Node v20.19.2:
+
+```sh
+node --version
+npm ci --prefix crosscheck --ignore-scripts --no-audit --no-fund --cache "$PWD/crosscheck/runtime/npm-cache"
+npm --prefix crosscheck run check:syntax
+node --test crosscheck/tests/swiss-guard.node-test.mjs
+npm --prefix crosscheck test
+npm --prefix crosscheck run build
+npm --prefix crosscheck run verify
+node crosscheck/tools/check-swiss.mjs
+node crosscheck/tools/render-jpl.mjs --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+npm --prefix crosscheck run check
+node crosscheck/tools/check.mjs --all-sizes
+git diff --check
+```
+
+Syntax, negative fixtures, runtime independent tests, historical aggregate
+rendering, npm exclusion and file/storage safeguards passed. Only the existing
+Node runtime acceptance and isolated-build tests failed, at requireNode22.
+Build and verify refused the same unsupported executable. The strict Swiss
+scan failed with the same historical-import findings; this session does not
+establish a green repository guard or a passing full Node 22 suite.

@@ -1,17 +1,17 @@
 import { execFileSync } from 'node:child_process';
-import { lstat, readFile } from 'node:fs/promises';
+import { lstat, open, readFile } from 'node:fs/promises';
 import { basename, join } from 'node:path';
 import { MAX_FILE_BYTES } from '../tools/check.mjs';
 
 const swissName = /(?:^|[^a-z0-9])(?:py)?swisseph(?:$|[^a-z0-9])/i;
-const codeName = /\.(?:[cm]?[jt]sx?|pyi?|vue|svelte|html)$/i;
+const codeName = /\.(?:[cm]?[jt]sx?|py[iw]?|vue|svelte|html)$/i;
 const dependencyKeys = new Set(['dependencies', 'devDependencies', 'optionalDependencies',
   'peerDependencies', 'bundledDependencies', 'bundleDependencies', 'overrides', 'resolutions', 'scripts']);
 
 function dependencyKind(path) {
   const name = basename(path).toLowerCase();
   if (['package.json', 'package-lock.json', 'npm-shrinkwrap.json', 'pipfile.lock'].includes(name)) return 'json';
-  if (/\.lock(?:b)?$/.test(name) || /(?:^|[.-])lock\.(?:json|ya?ml)$/.test(name)
+  if (/\.lock(?:b)?$/.test(name) || /(?:^|[.-])lock\.(?:json|ya?ml)$/.test(name) || name === 'shrinkwrap.yaml'
       || /^(?:requirements|constraints)(?:[._-].*)?$/.test(name)
       || /(?:^|\/)requirements\/.*\.(?:txt|in)$/.test(path)
       || ['pyproject.toml', 'pipfile', 'setup.py', 'setup.cfg'].includes(name)
@@ -20,16 +20,31 @@ function dependencyKind(path) {
 }
 
 // A lexical guard for literal module specifiers, not a sandbox for executing
-// arbitrary programs. Comments and string contents are never parsed as code.
+// arbitrary programs. Scan interpolation expressions while excluding comments
+// and literal string text.
 function tokens(source, python) {
   const result = [];
   let at = 0, line = 1;
   const add = (kind, value, startLine = line) => result.push({ kind, value, line: startLine });
-  function scan(stopAtBrace = false) {
-    let depth = 0;
+  function scanFormat() {
+    while (at < source.length) {
+      const char = source[at++];
+      if (char === '}') return;
+      if (char === '{') scan(true, true);
+      else if (char === '\n') line++;
+    }
+  }
+  function scan(stopAtBrace = false, formattedField = false) {
+    let depth = 0, parentheses = 0, brackets = 0;
+    const blocks = [];
     while (at < source.length) {
       const char = source[at];
       if (char === '}' && stopAtBrace && depth === 0) { at++; return; }
+      if (formattedField && char === ':' && depth === 0 && parentheses === 0 && brackets === 0) {
+        at++;
+        scanFormat();
+        return;
+      }
       if (char === '\n') { add('newline', '\n'); line++; at++; continue; }
       if (/\s/.test(char)) { at++; continue; }
       if ((python && char === '#') || (!python && source.startsWith('//', at))) {
@@ -57,31 +72,48 @@ function tokens(source, python) {
             }
           }
         }
-        const regexStart = !previous || controlCondition
+        const regexStart = !previous || controlCondition || previous.blockEnd
           || (previous.kind === 'punctuation' && /^[({[=,:;!?|&+*%~<>^/-]$/.test(previous.value))
           || (previous.kind === 'word' && ['return', 'throw', 'case', 'yield', 'await', 'typeof', 'void', 'delete'].includes(previous.value));
         if (regexStart) {
           const startLine = line;
-          at++;
-          let inClass = false;
-          while (at < source.length && source[at] !== '\n') {
-            const current = source[at++];
-            if (current === '\\') { at++; continue; }
+          let cursor = at + 1, inClass = false, closed = false;
+          while (cursor < source.length && source[cursor] !== '\n') {
+            const current = source[cursor++];
+            if (current === '\\') { cursor++; continue; }
             if (current === '[') inClass = true;
             else if (current === ']') inClass = false;
-            else if (current === '/' && !inClass) break;
+            else if (current === '/' && !inClass) { closed = true; break; }
           }
-          while (at < source.length && /[a-z]/i.test(source[at])) at++;
-          add('regex', '/', startLine);
-          continue;
+          if (closed) {
+            at = cursor;
+            while (at < source.length && /[a-z]/i.test(source[at])) at++;
+            add('regex', '/', startLine);
+            continue;
+          }
         }
       }
-      if (char === '"' || char === "'" || (!python && char === '`')) {
+      const stringPrefix = python ? /^(?:[rubf]|br|rb|fr|rf)(?=['"])/i.exec(source.slice(at))?.[0] : null;
+      const formatPrefix = stringPrefix && /f/i.test(stringPrefix);
+      if (char === '"' || char === "'" || (!python && char === '`') || stringPrefix) {
         const startLine = line;
-        const quote = python && source.startsWith(char.repeat(3), at) ? char.repeat(3) : char;
+        if (stringPrefix) at += stringPrefix.length;
+        const delimiter = source[at];
+        const quote = python && source.startsWith(delimiter.repeat(3), at) ? delimiter.repeat(3) : delimiter;
         at += quote.length;
         let value = '', interpolated = false;
         while (at < source.length && !source.startsWith(quote, at)) {
+          if (formatPrefix && (source.startsWith('{{', at) || source.startsWith('}}', at))) {
+            value += source[at]; at += 2; continue;
+          }
+          if (formatPrefix && source[at] === '{') {
+            add('template', value, startLine);
+            interpolated = true;
+            at++;
+            scan(true, true);
+            value = '';
+            continue;
+          }
           if (quote === '`' && source.startsWith('${', at)) {
             add('template', value, startLine);
             interpolated = true;
@@ -91,9 +123,25 @@ function tokens(source, python) {
             continue;
           }
           if (source[at] === '\\') {
+            if (python && /r/i.test(stringPrefix ?? '')) {
+              value += source[at++];
+              if (formatPrefix && (source[at] === '{' || source[at] === '}')) continue;
+              if (source[at] === '\n') line++;
+              value += source[at++] ?? '';
+              continue;
+            }
             at++;
             const escaped = source[at++];
             if (escaped === '\n') { line++; continue; }
+            // A Python backslash does not escape an f-string replacement
+            // brace. Leave it for the interpolation scanner on the next pass.
+            if (formatPrefix && (escaped === '{' || escaped === '}')) {
+              value += '\\'; at--; continue;
+            }
+            if (python && /^[0-7]$/.test(escaped)) {
+              const tail = /^[0-7]{0,2}/.exec(source.slice(at))[0];
+              value += String.fromCharCode(parseInt(escaped + tail, 8)); at += tail.length; continue;
+            }
             if ((escaped === 'x' || escaped === 'u') && source[at] !== '{') {
               const digits = escaped === 'x' ? 2 : 4;
               const hex = source.slice(at, at + digits);
@@ -107,7 +155,9 @@ function tokens(source, python) {
                 value += String.fromCodePoint(parseInt(match[1], 16)); at += match[0].length; continue;
               }
             }
-            value += escaped ?? '';
+            const pythonEscapes = { a: '\x07', b: '\b', f: '\f', n: '\n', r: '\r', t: '\t', v: '\v' };
+            value += python && escaped && !['\\', '"', "'"].includes(escaped)
+              ? pythonEscapes[escaped] ?? `\\${escaped}` : escaped ?? '';
           } else {
             if (source[at] === '\n') line++;
             value += source[at++];
@@ -120,9 +170,45 @@ function tokens(source, python) {
       const word = /^[a-z_$][\w$]*/i.exec(source.slice(at));
       if (word) { add('word', word[0]); at += word[0].length; }
       else {
+        let blockEnd = false;
+        if (!python && char === '{') {
+          const preceding = result.filter(token => token.kind !== 'newline');
+          const previous = preceding.at(-1);
+          let block = !previous || [')', ';', '{', '}'].includes(previous.value)
+            || ['else', 'try', 'finally', 'do'].includes(previous.value)
+            || previous.value === 'class' || preceding.at(-2)?.value === 'class';
+          // A function or class expression ends an operand; a following slash
+          // is division. Declarations and control blocks can precede regexes.
+          let declaration = previous?.value === 'class' ? preceding.length - 1
+            : preceding.at(-2)?.value === 'class' ? preceding.length - 2 : -1;
+          if (previous?.value === ')') {
+            let nesting = 1;
+            for (let i = preceding.length - 2; i >= 0; i--) {
+              if (preceding[i].value === ')') nesting++;
+              if (preceding[i].value === '(' && --nesting === 0) {
+                if (preceding[i - 1]?.value === 'function') declaration = i - 1;
+                else if (preceding[i - 2]?.value === 'function') declaration = i - 2;
+                break;
+              }
+            }
+          }
+          if (declaration >= 0) {
+            if (preceding[declaration - 1]?.value === 'async') declaration--;
+            const before = preceding[declaration - 1];
+            block = !before || [';', '{', '}', 'export', 'default'].includes(before.value)
+              || before.line < preceding[declaration].line && before.value !== '=';
+          }
+          blocks.push(block);
+        } else if (!python && char === '}') blockEnd = blocks.pop() ?? false;
         if (char === '{') depth++;
         else if (char === '}') depth--;
-        add('punctuation', char); at++;
+        else if (char === '(') parentheses++;
+        else if (char === ')') parentheses--;
+        else if (char === '[') brackets++;
+        else if (char === ']') brackets--;
+        add('punctuation', char);
+        if (blockEnd) result.at(-1).blockEnd = true;
+        at++;
       }
     }
   }
@@ -141,6 +227,10 @@ function importLines(source, python) {
     if (previous?.kind === 'word' && ['from', 'import'].includes(previous.value)) lines.add(token.line);
     let callerIndex = i - 1;
     while (significant[callerIndex]?.value === '(') callerIndex--;
+    if (python && significant[callerIndex]?.value === '=' && significant[callerIndex - 1]?.value === 'name') {
+      callerIndex -= 2;
+      while (significant[callerIndex]?.value === '(') callerIndex--;
+    }
     if (significant[callerIndex]?.value === '.' && significant[callerIndex - 1]?.value === '?') callerIndex -= 2;
     const caller = significant[callerIndex];
     if (callerIndex < i - 1 && caller?.kind === 'word'
@@ -189,14 +279,21 @@ export function inspectTrackedFile(path, source) {
   } else if (kind === 'text') {
     // Keep inline URL fragments such as #egg=...; only full-line comments
     // are ignored. Installation metadata is checked conservatively.
-    for (const [i, line] of source.split('\n').entries()) {
-      if (!/^\s*#/.test(line) && swissName.test(line)) {
-        errors.push({ path, rule: 'dependency', line: i + 1, reason: 'Swiss dependency forbidden' });
+    const physicalLines = source.split('\n');
+    for (let i = 0; i < physicalLines.length; i++) {
+      const startLine = i + 1;
+      let line = physicalLines[i];
+      if (/^\s*#/.test(line)) continue;
+      while (/\\\r?$/.test(line) && i + 1 < physicalLines.length) {
+        line = line.replace(/\\\r?$/, '') + physicalLines[++i];
+      }
+      if (swissName.test(line)) {
+        errors.push({ path, rule: 'dependency', line: startLine, reason: 'Swiss dependency forbidden' });
       }
     }
   }
   const exempt = path.startsWith('crosscheck/') || path === 'conformance/adapters/pyswisseph.py';
-  const python = /\.pyi?$/i.test(path) || /^#![^\n]*\bpython[\d.]*\b/.test(source);
+  const python = /\.py[iw]?$/i.test(path) || /^#![^\n]*\bpython[\d.]*\b/.test(source);
   if (!exempt && (codeName.test(path) || python || /^#![^\n]*\bnode\b/.test(source))) {
     for (const line of importLines(source, python)) errors.push({ path, rule: 'import', line, reason: 'Swiss import forbidden' });
   }
@@ -216,7 +313,6 @@ export async function checkSwissBoundary(root, paths = trackedPaths(root)) {
     if (!path || path.startsWith('/') || path.includes('\\') || path.split('/').some(part => !part || part === '..' || part === '.')) {
       throw Error('Invalid tracked path in Swiss guard.');
     }
-    if (!codeName.test(path) && !dependencyKind(path) && basename(path).includes('.')) continue;
     // Inspect working bytes, including local edits, with no traversal of ignored
     // caches or dependencies. Reject symlinks in every selected path component.
     const parts = path.split('/');
@@ -224,7 +320,20 @@ export async function checkSwissBoundary(root, paths = trackedPaths(root)) {
       if (!(await lstat(join(root, ...parts.slice(0, i)))).isDirectory()) throw Error(`Unsafe tracked directory: ${path}`);
     }
     const full = join(root, path), info = await lstat(full);
-    if (!info.isFile() || info.size >= MAX_FILE_BYTES) throw Error(`Unsafe tracked file: ${path}`);
+    if (!info.isFile()) throw Error(`Unsafe tracked file: ${path}`);
+    // Read the shebang even for unrecognized suffixes. Unrelated binary and
+    // documentation files need no complete content read or size restriction.
+    if (!codeName.test(path) && !dependencyKind(path)) {
+      const handle = await open(full, 'r');
+      let shebang;
+      try {
+        const prefix = Buffer.alloc(256);
+        const { bytesRead } = await handle.read(prefix, 0, prefix.length, 0);
+        shebang = prefix.subarray(0, bytesRead).toString('utf8').split('\n')[0];
+      } finally { await handle.close(); }
+      if (!/^#![^\n]*\b(?:python[\d.]*|node)\b/.test(shebang)) continue;
+    }
+    if (info.size >= MAX_FILE_BYTES) throw Error(`Unsafe tracked file: ${path}`);
     errors.push(...inspectTrackedFile(path, await readFile(full, 'utf8')));
   }
   return errors;

@@ -84,3 +84,14 @@ decision is pending. S2 is not ticked and campaign expansion has not started.
 Syntax, runtime independent tests, retained aggregate reproduction and
 file/storage safeguards passed locally. The build checks still refuse the
 available Node 20 executable and require Node 22.
+
+S2 review follow-up strengthens the strict scanner without changing its
+import exemptions. Negative fixtures now cover executable Python formatted
+strings, literal format text, prefixed and escaped loader arguments,
+JavaScript regex and division contexts, continued dependency names, legacy
+lockfiles and scripts with unusual filename suffixes. The repository scan
+still rejects the existing historical imports recorded in VALIDATION.md.
+The requested scope decision remains pending, so S2 stays unchecked and no
+failing repository gate or historical baseline has been added. Syntax,
+runtime independent tests, report reproduction and safeguards pass locally;
+build and full-suite runtime checks still require Node 22.

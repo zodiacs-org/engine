@@ -88,6 +88,10 @@ scope decision recorded in [PHASE2.md](PHASE2.md) is pending. No additional
 import exemptions have been added. The scanner checks literal module syntax,
 not arbitrary computed imports or executed programs; installation metadata
 other than JSON is checked conservatively for package-name mentions.
+The fixture suite also exercises Python formatted-string expressions and
+literal loader arguments, JavaScript regexes beside imports, continued
+dependency names, legacy lockfiles and shebang scripts with unusual suffixes.
+This remains a lexical policy check rather than a complete language parser.
 
 The file checker inspects publishable project files, rejects symbolic links,
 known kernel/binary file names, oversized files and em dashes in documents.

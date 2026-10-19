@@ -20,6 +20,14 @@ test('negative source fixtures reject literal Swiss imports and requires', () =>
     ['src/example.js', 'const quote = /"/;\nimport swe from \'swisseph\';'],
     ['src/example.js', 'if (enabled) /"/.test(value);\nimport swe from \'swisseph\';'],
     ['src/example.js', 'const value = 1 + /"/.test(text);\nimport swe from \'swisseph\';'],
+    ['src/example.js', 'if (enabled) {} /"/.test(value); import("swisseph");'],
+    ['src/example.js', 'function example() {} /"/.test(value); require("swisseph");'],
+    ['src/example.js', 'class Example {} /"/.test(value); import("swisseph");'],
+    ['src/example.js', 'const value = { key: 1 } / 2; import("swisseph");'],
+    ['src/example.js', 'const value = {} / "/"; import("swisseph");'],
+    ['src/example.js', 'const value = function example() {} / 2; require("swisseph");'],
+    ['src/example.js', 'const value = function example() {} / "/"; require("swisseph");'],
+    ['src/example.js', 'const value = class Example {} / "/"; import("swisseph");'],
     ['src/example.js', 'const text = `value: ${require("swisseph")}`;'],
     ['src/example.js', 'const text = `value: ${`nested: ${require("swisseph")}`}`;'],
     ['src/example.js', 'require(("swisseph"));'],
@@ -34,6 +42,25 @@ test('negative source fixtures reject literal Swiss imports and requires', () =>
     ['src/example.py', 'import os, \\\n swisseph as swe'],
     ['src/example.py', '__import__("swisseph")'],
     ['src/example.py', 'importlib.import_module("swisseph")'],
+    ['src/example.py', 'importlib.import_module(name="swisseph")'],
+    ['src/example.py', 'importlib.import_module(name=("swisseph"))'],
+    ['src/example.py', '__import__(name="swisseph")'],
+    ['src/example.py', '__import__(r"swisseph")'],
+    ['src/example.py', '__import__(u"swisseph")'],
+    ['src/example.py', String.raw`__import__("swiss\145ph")`],
+    ['src/example.pyw', 'import swisseph as swe'],
+    ['src/example.py', 'message = f"{__import__(\'swisseph\')}"'],
+    ['src/example.py', 'message = rf"{importlib.import_module(\'swisseph\')}"'],
+    ['src/example.py', 'message = Fr"{__import__(\'swisseph\')}"'],
+    ['src/example.py', 'message = f"{f\'{__import__(\"swisseph\")}\'}"'],
+    ['src/example.py', 'message = f"{value:{__import__(\'swisseph\')}}"'],
+    ['src/example.py', 'message = f"{value:foo\'bar}"\nimport swisseph'],
+    ['src/example.py', 'message = f"{value:\'{__import__(\'swisseph\')}\'}"'],
+    ['src/example.py', 'message = f"{value:#{__import__(\'swisseph\')}}"'],
+    ['src/example.py', 'message = f"{values[__import__(\'swisseph\'):]}"'],
+    ['src/example.py', 'message = f"{(lambda: __import__(\'swisseph\'))()}"'],
+    ['src/example.py', 'message = f"""line one\n{__import__(\'swisseph\')}\n"""'],
+    ['src/example.py', String.raw`message = f"\{__import__('swisseph')}"`],
     ['tools/example', '#!/usr/bin/env python3\nimport swisseph as swe'],
     ['tools/example', '#!/usr/bin/env node\nrequire("swisseph")'],
     ['src/example.js', 'import swe from "@scope/swisseph";'],
@@ -51,8 +78,17 @@ test('source comments, docstrings, other imports and documentation are allowed',
     ['src/example.ts', '// import swe from "swisseph";\n/* require("swisseph") */\nimport { x } from "other";'],
     ['src/example.js', 'const example = \'import swe from "swisseph";\';'],
     ['src/example.js', 'const pattern = /import swe from "swisseph"/;'],
+    ['src/example.js', 'if (enabled) {} /require("swisseph")/.test(value);'],
+    ['src/example.js', 'function example() {} /import("swisseph")/.test(value);'],
     ['src/example.js', 'const text = `require("swisseph")`;'],
     ['src/example.py', '# import swisseph\n"""import swisseph as swe"""\nimport os as swisseph'],
+    ['src/example.py', 'message = f"import swisseph; __import__(\'swisseph\')"'],
+    ['src/example.py', 'message = f"{{__import__(\'swisseph\')}}"'],
+    ['src/example.py', 'message = rf"{{importlib.import_module(\'swisseph\')}}"'],
+    ['src/example.py', 'message = f"{\'__import__(\"swisseph\")\'}"'],
+    ['src/example.py', 'message = f"{value:__import__(\'swisseph\')}"'],
+    ['src/example.py', String.raw`__import__(r"swiss\x65ph")`],
+    ['src/example.py', String.raw`__import__("swiss\eph")`],
     ['src/example.js', 'import example from "swissephology";'],
     ['docs/example.md', '```python\nimport swisseph\n```'],
     ['data/example.json', '{"instrument":"pyswisseph"}']
@@ -82,12 +118,15 @@ test('negative dependency fixtures apply everywhere including import exemptions'
     ['nested/npm-shrinkwrap.json', '{"dependencies":{"alias":{"resolved":"https://example.invalid/pyswisseph.tar.gz"}}}'],
     ['nested/Pipfile.lock', '{"default":{"pyswisseph":{"version":"==1"}}}'],
     ['nested/pnpm-lock.yaml', 'packages:\n  swisseph@1: {}'],
+    ['nested/shrinkwrap.yaml', 'dependencies:\n  swisseph: 1'],
     ['nested/yarn.lock', '"swisseph@*":\n  version "1"'],
     ['nested/uv.lock', '[[package]]\nname = "pyswisseph"'],
     ['nested/poetry.lock', 'name = "pyswisseph"'],
     ['nested/bun.lock', '{ "packages": { "swisseph": "1" } }'],
     ['nested/requirements.txt', 'pyswisseph[extra]==1; python_version >= "3"'],
     ['nested/requirements-dev.in', '-e git+https://example.invalid/project#egg=pyswisseph'],
+    ['nested/requirements.txt', 'pyswiss\\\neph==1'],
+    ['nested/requirements.txt', 'pyswiss\\\r\neph==1'],
     ['nested/requirements/base.in', 'pyswisseph'],
     ['nested/constraints.txt', 'pyswisseph==1'],
     ['nested/pyproject.toml', '[project.optional-dependencies]\ntest = ["pyswisseph"]'],
@@ -96,6 +135,7 @@ test('negative dependency fixtures apply everywhere including import exemptions'
     ['nested/setup.cfg', '[options]\ninstall_requires =\n  pyswisseph'],
     ['nested/Dockerfile', 'RUN pip install pyswisseph'],
     ['nested/Dockerfile.test', 'RUN npm install swisseph'],
+    ['nested/Dockerfile', 'RUN pip install pyswiss\\\neph'],
     ['nested/test.Dockerfile', 'RUN pip install \\\n  pyswisseph']
   );
   for (const [path, source] of fixtures) {
@@ -125,6 +165,15 @@ test('inventory uses tracked working files and refuses unsafe or missing inputs'
     assert.deepEqual(await checkSwissBoundary(root, paths), [
       { path: 'src/example.ts', rule: 'import', line: 1, reason: 'Swiss import forbidden' }
     ]);
+    for (const [path, source] of [
+      ['tools/example.script', '#!/usr/bin/env python3\nimport swisseph'],
+      ['tools/example.custom', '#!/usr/bin/env node\nrequire("swisseph")']
+    ]) {
+      await put(path, source);
+      assert.deepEqual(await checkSwissBoundary(root, [path]), [
+        { path, rule: 'import', line: 2, reason: 'Swiss import forbidden' }
+      ]);
+    }
     await assert.rejects(checkSwissBoundary(root, ['src/missing.py']), /ENOENT/);
     await assert.rejects(checkSwissBoundary(root, ['../outside.py']), /Invalid tracked path/);
     await symlink('example.ts', join(root, 'src/link.ts'));
