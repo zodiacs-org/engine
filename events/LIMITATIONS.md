@@ -4,6 +4,11 @@ The workbench searches the parent engine's apparent geocentric tropical
 true-of-date coordinates. A mathematically narrow root bracket describes a
 root of that model. It cannot establish a physically exact event time.
 Choose the clock, search horizon, step, budget and any event policy explicitly.
+Station-aware bracketing is available through the opt-in `stationStepMs`
+policy. It improves discovery under additional speed-sampling assumptions;
+it does not certify a complete inventory or repair the parent model's timing.
+Omitting it preserves the original scan. [README.md](README.md) describes the
+search APIs and [QUERY.md](QUERY.md) describes query and HTTP options.
 
 | Feature | Independent evidence | Limits |
 | --- | --- | --- |
@@ -27,9 +32,11 @@ The broader catalog-date sample and its retained class disagreement are in
 [references/NASA-SAMPLE.md](references/NASA-SAMPLE.md). Offline checks reproduce
 numerical row hashes, date arithmetic and selection without a live network;
 stored full-page digests cannot authenticate the original downloaded bytes.
-The whole-year API tests widen discovery windows but compare only the selected
-reference dates. Those API tests establish neither an exhaustive NASA inventory
-nor a new physical error bound. No reference fixture was derived from engine output.
+The whole-year tests in
+[reference-api.node-test.ts](test/reference-api.node-test.ts) widen discovery
+windows but compare only the original selected dates. Those tests establish
+neither an exhaustive NASA inventory nor a new physical error bound. No
+reference fixture was derived from engine output.
 
 The fixed-query report in [COMPLETENESS.md](COMPLETENESS.md) now compares whole
 selected-year eclipse inventories with NASA, and whole-year station, ingress
@@ -40,7 +47,30 @@ year. Horizons outputs outside the independently covered windows remain
 unreferenced. Retrograde interval and void-of-course inventories are outside
 that report's independent coverage.
 
-# Sampling and boundaries
+The report and its tests deliberately retain failed comparisons. A green test
+run means that the evidence reproduces, including these discrepancies:
+
+- Original single-cell searches miss the paired Venus passes in the declared
+  source windows. Station-aware searches recover their directions, while the
+  default-engine dates still fail the unchanged timing threshold. See
+  [station-loops.json](evidence/station-loops.json) and
+  [turning-reference.node-test.ts](test/turning-reference.node-test.ts).
+- The selected Saturn ingress in 2050 is discovered under both policies but
+  fails the original timing threshold. See
+  [horizons-sample-timing.json](evidence/horizons-sample-timing.json) and
+  [horizons-sample.node-test.ts](test/horizons-sample.node-test.ts).
+- NASA's noncentral solar eclipse on 1950-03-18 is returned as central by the
+  spherical model. Discovery and timing pass for this reference; the class
+  disagreement remains. See
+  [nasa-sample-timing.json](evidence/nasa-sample-timing.json) and
+  [nasa-sample.node-test.ts](test/nasa-sample.node-test.ts).
+
+Thresholds are acceptance criteria fixed for those references, rather than
+physical error bounds. Near slow motion, a small coordinate difference can
+produce a large timing difference. The comparisons do not isolate a single
+cause or justify widening the thresholds.
+
+## Sampling and boundaries
 
 Bisection refines discovered sign-changing brackets. A fixed scan step can miss
 paired crossings around a station, isolated tangencies, or several extrema in
@@ -61,7 +91,7 @@ Missing custom-provider speeds reject this policy explicitly. Omitting it
 retains the phase 1 scan. Retrograde searches use the finer grid for station
 discovery and the station-aware policy for sign partitions. Void-of-course
 searches use it for Moon ingresses and relative contacts. All subsearches
-share the context budget, with no extra lookahead beyond the window. Eclipse
+share the context budget, with no provider requests beyond the window. Eclipse
 queries reject this option; their minimum-search policy remains separate.
 
 Searches own instants after the start through the end. Retrograde intervals
@@ -72,6 +102,18 @@ pad and filter a lower-level search if those edges need coverage. DSL execution
 retains these guards. Void-of-course Moon tails without a sign exit remain in
 `unresolved`; extend the horizon rather than treating such a tail as empty.
 
+Boundary rules also depend on the event definition. A longitude contact exactly
+at the window end uses incoming motion because there is no outgoing sample;
+it can be returned even though an interior stationary touch is suppressed.
+A sampled zero-speed station at the window end is unconfirmed and omitted,
+leaving a retrograde interval clipped. Station and retrograde scans reject
+consecutive sampled speed zeros as an unresolved plateau; station-aware
+longitude and aspect scans instead retain zero-speed knots. These behaviors are checked by
+[longitude.node-test.ts](test/longitude.node-test.ts),
+[turning.node-test.ts](test/turning.node-test.ts) and
+[stations.node-test.ts](test/stations.node-test.ts). They supply no event
+evidence outside the requested window.
+
 Integer root ordering can misassign nearly simultaneous aspects and sign
 boundaries whose brackets overlap. UTC and UT1 time-model transitions can break
 continuity; TT is used for independent date comparisons and the long-span
@@ -80,12 +122,28 @@ epoch encoding. This project supplies no conversion or wall-time resolution.
 The adapter can refuse outside the parent calculation API's reference coverage;
 calendar parsing alone does not establish ephemeris support.
 
-# Work, transport and isolation
+The numerical enclosure belongs to a sampled longitude, speed or geometry-slope
+root, rather than a confidence interval for a physical event. The parent's
+finite-difference speed samples can extend beyond the context window even
+though adapter requests cannot. The central calculation checks both UT1 and TT
+against the parent's reference coverage, so clock conversion can cause refusal
+near an edge. The guarded long-range benchmark and its separate coverage-edge
+refusal are recorded in
+[PERFORMANCE.md](PERFORMANCE.md), with the query windows fixed in
+[performance-plan.json](scripts/performance-plan.json).
+
+## Work, transport and isolation
 
 Budgets count adapter requests, including requests for finite-difference speeds,
-rather than internal ephemeris operations. Budget exhaustion, cancellation and
-parent calculation refusals discard all events. An empty completed list is
-separate from refusal. Unexpected computation failures throw. Both `next` and
+rather than internal ephemeris operations. Budget exhaustion and cancellation
+discard all events. Lower-level searches propagate `EngineRefused`; query
+execution and HTTP convert it to `reason: 'engine-refused'` with no partial
+events. Other unexpected computation failures throw at the programmatic API;
+HTTP returns a structured error. An empty completed list is separate from
+refusal, and void-of-course results also require inspecting `unresolved`.
+These distinctions are checked in [context.node-test.ts](test/context.node-test.ts),
+[search.node-test.ts](test/search.node-test.ts) and
+[http.node-test.ts](test/http.node-test.ts). Both `next` and
 `all` scan the entire explicit horizon, so a long-horizon next query costs the
 full scan. There is no automatic horizon expansion or caching across queries.
 

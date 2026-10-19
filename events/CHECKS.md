@@ -1,5 +1,57 @@
 # Session validation
 
+## Current validation
+
+From the repository root, use Node 22 and the events lockfile. Python's
+standard library is required for the offline reference checks. The historical
+adapter named in [performance-plan.json](scripts/performance-plan.json) must
+be available in local git history; the dedicated
+[Events workflow](../.github/workflows/events.yml) fetches full history.
+
+```sh
+export PATH=/home/box/.local/node22/bin:$PATH
+node -v
+npm ci --prefix events --cache "$PWD/events/.cache/npm"
+npm run typecheck --prefix events
+npm run build --prefix events
+npm test --prefix events
+git diff --check
+```
+
+The explicit build matches the workflow; `npm test` also builds before running
+the suites. Its test concurrency is fixed in [package.json](package.json).
+The full suite includes the phase 1 contracts, station-aware searches, offline
+Python reference verification and reducer tests, independent date comparisons,
+all aggregate evidence checks, long-span consistency, HTTP integration,
+executable examples and the parent npm dry-run exclusion assertion.
+
+Evidence reproduction covers `loop-report.mjs --check`,
+`sample-timing.mjs --check`, `nasa-sample-timing.mjs --check`,
+`completeness.mjs --check` and `performance.mjs --check` under `scripts/`.
+These run inside the suite. Reproduction intentionally retains known failed
+astronomical comparisons; successful validation does not mean every reference
+meets its timing or classification threshold. See
+[LIMITATIONS.md](LIMITATIONS.md) and [COMPLETENESS.md](COMPLETENESS.md).
+
+No live acquisition, evidence rewrite or performance remeasurement is needed
+for documentation changes. Performance validation rebuilds both variants and
+compares their complete results on the current runtime, without enforcing
+historical timings or cross-runtime numerical hashes. Bundles and caches stay
+in ignored folders. Check disk use before a run and observe the file, worker
+and disk limits in [PHASE2.md](PHASE2.md); stop and record a disk-cap refusal
+there before running work that would exceed it.
+
+Also inspect changed paths, authored file sizes, Markdown links and documentation
+characters. Changes belong only in `events/` and its dedicated workflow. The
+parent package-content and archive gates remain separate: do not build parent
+`dist/` or pack an archive for this project. The local isolation test checks
+the parent file list without doing either operation.
+
+Entries below record the state at each milestone. References to pending work
+describe that session, rather than the current implementation. Station-aware
+bracketing, broader references, the completeness report and performance evidence
+are implemented with the limits recorded in their current guides.
+
 ## M1
 
 Runtime: Node.js 22.22.2, selected through `npm exec --package node@22.22.2`.
@@ -681,3 +733,37 @@ source check, retains the events lockfile install and adds no publishing steps.
 Generated bundles and logs remain ignored, and disk use stayed below the brief's
 cap. No parent build, archive packing, release operation or git metadata mutation
 was performed. The remaining limits and guide reconciliation remain P7.
+
+## Phase 2 P7
+
+Runtime: Node.js 22.23.3 from `/home/box/.local/node22/bin`. Dependencies were
+installed from the events lockfile with the npm cache under `events/.cache/`.
+
+Passed:
+
+- The current lockfile install, typecheck, build and full event test commands
+  listed above, including all phase 1 suites and aggregate evidence checks.
+- Offline independent reference reproduction, long-span consistency, complete
+  before/after performance result comparisons, HTTP integration, executable
+  examples and parent npm dry-run file-list isolation within the full suite.
+- `git diff --check`, authored-file size, local Markdown link, documentation
+  character, disk-use and events-only change checks.
+
+The guides now distinguish finished scans from physical completeness, sparse
+Horizons references from selected-year NASA inventories, and discovery from
+timing or class acceptance. The existing paired-pass and Saturn timing failures
+and noncentral solar class disagreement remain visible under their unchanged
+thresholds. No numerical result, reference, evidence file or search policy changed.
+
+Boundary guidance distinguishes provider requests from internal speed side
+evaluations, station plateaus from zero-speed longitude knots, and low-level
+`EngineRefused` exceptions from structured query refusals. Coverage guidance
+links to the measured guarded query and separate edge refusal. Historical
+validation entries are explicitly identified as records of their own sessions.
+
+The dedicated workflow was reviewed and remains unchanged: Node 22, its own
+lockfile install, typecheck, build, full tests and read-only checkout credentials,
+with full history for the benchmark source check and no publication steps.
+Generated test logs and bundles remain ignored, and disk use stayed below the
+brief's cap. Only `events/` documentation and milestone logs changed. No parent
+build, archive packing, release operation or git metadata mutation was performed.

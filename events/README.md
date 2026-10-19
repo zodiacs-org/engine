@@ -26,6 +26,12 @@ experiments belong in the gitignored `.cache/` or `generated/` folders.
 Node suites use `.node-test.ts` sources and `.node-test.js` bundles so the
 parent Vitest runner ignores both.
 
+The dedicated [Events workflow](../.github/workflows/events.yml) installs this
+project's own lockfile and runs its typecheck, build and full tests on Node 22.
+[CHECKS.md](CHECKS.md) gives the current offline validation commands and the
+historical milestone log. [LIMITATIONS.md](LIMITATIONS.md) records the retained
+discrepancies and the assumptions behind a `complete` result.
+
 ## Root refinement
 
 ```ts
@@ -186,7 +192,8 @@ scans longitude on both sides. It retains both integer endpoints of a
 fractional speed-zero bracket. Sampled zero-speed knots already split the
 cells. Interior boundary touches remain suppressed; a contact at the window
 end still uses its incoming direction. No samples are requested outside the
-window. All speed requests and both refinements charge the same context.
+window. Internal finite-difference speed evaluations can extend past it, as
+described above. All speed requests and both refinements charge the same context.
 
 This policy requires continuous speed with at most one sign-changing zero in
 each speed cell, mutually consistent longitude and speed, and short-arc

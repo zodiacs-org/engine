@@ -99,7 +99,9 @@ does not isolate the cause of this disagreement.
 
 These date searches do not establish full-year or full-span discovery,
 accuracy on other dates, surface visibility, contact times or exact grazing
-classification. The broader fixed-query completeness report remains a separate
-milestone. Parser tests in [nasa_sample_test.py](../scripts/nasa_sample_test.py)
+classification. [COMPLETENESS.md](../COMPLETENESS.md) separately records
+whole-year inventory comparisons for these selected years, including the
+retained class disagreement; it establishes no coverage for intervening years.
+Parser tests in [nasa_sample_test.py](../scripts/nasa_sample_test.py)
 use independent calendar arithmetic and synthetic rows for numerical behavior
 and tampering checks; they are not extra astronomical accuracy evidence.

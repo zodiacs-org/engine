@@ -120,6 +120,12 @@ because longitude speed zeros do not govern their geometry search. The HTTP
 request accepts and validates the same option; incompatible eclipse requests
 receive the structured `invalid-request` error.
 
+Provider requests stay inside the horizon; the default adapter's internal
+finite-difference speed evaluations can extend past it. Guarded reference-span
+endpoints and the retained discovery, timing and class discrepancies are
+documented in [LIMITATIONS.md](LIMITATIONS.md). A completed query retains those
+limits under either scan policy.
+
 Natal queries require `natalLongitudes` to supply the target body's fixed
 tropical longitude in degrees. Eclipse queries require `eclipse.model` with
 explicit spherical `sunRadiusAu`, `moonRadiusAu` and `earthRadiusAu`, and
