@@ -31,3 +31,29 @@ setup, `npm --prefix skydb test`, the workflow's module syntax checks and
 the new resource accounting, interruption and report checks. Test suites run
 sequentially to avoid races between whole-generated/ walks and temporary data
 cleanup. No engine source, archive, root configuration or workflow changed.
+
+P2 is in progress across bounded sessions. The default full span was selected
+from the validated trial arithmetic and actual generated/ usage. The first
+session report is [benchmarks/full-sessions/session-0001.json](benchmarks/full-sessions/session-0001.json).
+It records 8,320 checkpointed tiles out of 146,099 planned, and 245,534,720 bytes
+of allocated storage across all generated/ contents, below its recorded cap.
+The session paused at its wall-time budget with `complete: false`; no disk
+guard stopped it. These figures come from that report with its pinned engine
+and default configuration, and are checked by [test/full.node-test.mjs](test/full.node-test.mjs).
+
+The runner, safety policy, measured scope and report counters are documented
+in [benchmarks/FULL.md](benchmarks/FULL.md). Resume in the same worktree with
+the project Node runtime on PATH, without other generated/ writers:
+
+```sh
+node skydb/benchmarks/full.mjs
+```
+
+Each invocation retains the existing checkpoint and writes a new aggregate
+session report. Prefix verification is included in the cooperative session
+budget. Leave P2 unchecked until generation completes; do not begin P3 on a
+partial database. This session adds the runner, short synthetic-time regression
+tests and the first retained portion of the full database. Validation includes
+locked setup, the full project suite, workflow syntax checks and the project
+isolation and package-exclusion checker. No phase 1 source, engine package,
+archive, root configuration or workflow changed.
