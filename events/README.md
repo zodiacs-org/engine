@@ -344,6 +344,12 @@ reference reduction offline before comparing searches with those dates. Python
 is required for these checks. Live acquisition uses only the independent JPL
 service and writes into the ignored `generated/` folder.
 
+The separate [broader Horizons sample](references/HORIZONS-SAMPLE.md) selects
+station and ingress windows from independent daily body-year surveys, then
+reduces hourly source rows. Its source excerpts, requests, digests and selection
+reproduce offline. Search comparisons retain a Saturn ingress timing failure
+under the unchanged threshold, separately from successful event discovery.
+
 ## Eclipse searches
 
 `searchEclipses(context, kind, model, options)` accepts `solar` or `lunar`,

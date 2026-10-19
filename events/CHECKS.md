@@ -495,3 +495,46 @@ are unchanged. No new physical accuracy or full-span completeness claim is made.
 Generated logs and bundles remain ignored. No parent build, archive packing
 or release operation was run. Broader references, aggregate completeness and
 performance measurements remain the unchecked milestones in `PHASE2.md`.
+
+## Phase 2 P3
+
+Runtime: Node.js 22.23.3 from `/home/box/.local/node22/bin`. Dependencies were
+reinstalled from the events lockfile with the npm cache under `events/.cache/`.
+
+Passed:
+
+- `npm ci --prefix events --cache "$PWD/events/.cache/npm"`
+- `npm run typecheck --prefix events`
+- `npm run build --prefix events` and the focused broader-reference tests.
+- `npm test --prefix events`, including the phase 1 suites, the broader
+  Horizons sample, original reference reproduction, paired-pass evidence,
+  long-span reconciliation, HTTP integration and parent npm file-list isolation.
+- Offline sample selection, response-excerpt digest, request, identity, clock,
+  cadence, coverage and date reproduction, plus analytic zero-run, boundary
+  and provenance-tampering checks.
+- `git diff --check`, authored-file size, documentation character, disk-use
+  and events-only change checks.
+
+The predeclared body-year plan selects station and ingress windows using
+independent daily Horizons rows, then reduces hourly responses. Acquisition
+ran successfully and the reviewed source excerpts are in
+`references/horizons-sample.json`. Per-response URLs, parameters, retrieval
+timestamps, source digests and excerpt digests are retained. Complete raw
+responses are not saved; offline checks reproduce excerpts and reductions,
+and cannot recompute the original full-response digest. The reference guide
+records actual target and center ephemeris identifiers rather than assuming
+every body center uses DE441. Original phase 1 fixtures remain unchanged.
+
+Both scan policies find the selected identities. The Saturn ingress in the
+broader sample fails the unchanged timing threshold under both policies;
+`evidence/horizons-sample-timing.json` preserves that verdict separately from
+discovery. Tests reproduce the evidence with `scripts/sample-timing.mjs --check`
+and require the other selected dates to pass their declared thresholds.
+No acceptance threshold was increased. The sample is sparse and establishes
+no full-span inventory, physical timing bound or whole-interval completeness.
+
+The independent zero-run tests cover the rounded-zero secants encountered in
+the Neptune response. Absent directions remain explicit daily-selection
+outcomes rather than astronomical absence claims. Acquisition outputs, logs
+and bundles stay ignored, and the disk cap was not approached. No parent
+build, archive packing, release operation or git metadata change was made.

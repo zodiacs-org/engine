@@ -115,3 +115,10 @@ Use `--write` on the report script only to regenerate its committed aggregate
 evidence. The test suite reproduces it with `--check`, preserves timing
 failures and enforces discovery counts and directions. Existing acquisition
 fixtures, original cases and their acceptance checks remain unchanged.
+
+## Broader station and ingress sample
+
+[HORIZONS-SAMPLE.md](HORIZONS-SAMPLE.md) documents the separate phase 2
+body-year selection, daily source surveys, hourly reductions, source excerpts
+and offline checks. Its plan and thresholds were declared before engine
+comparisons. The original fixtures and linked paired-pass digests are retained.
