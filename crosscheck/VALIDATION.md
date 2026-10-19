@@ -1002,3 +1002,103 @@ isolated build and identity verification. Retained aggregate reports
 reproduce unchanged. The local size and combined storage safeguards pass.
 Only crosscheck/ and its dedicated workflow changed; S2 is complete. No live
 Swiss execution, new accuracy measurement or large campaign was performed.
+
+## Phase 2 P4 grouped bounded campaign
+
+The phase 2 profile uses the verified full-DE440 plan's half-open TT
+sampling interval. Per-body longitude and latitude use arcseconds; range
+residuals use km. Both DE440 and DE441 groups are present. Full DE440
+covers the requested interval, so DE441 has no requested interval or
+measurements. Mars through Pluto remain unavailable because this planetary
+kernel lacks their exact centers; system barycenters are never substituted.
+Missing centers and inactive groups retain unsupported verdicts without
+residual observations.
+
+Primary JPL directions use relativistic aberration without deflection for
+the Sun, Mercury and Venus, and geometric NONE for the Moon. Separate
+Convention channels measure relativistic minus Newtonian CN+S directions
+using the same independent states and frame; the lunar delta is zero.
+This isolates an aberration model sensitivity, not total model error or a
+correction to aggregate maxima. Engine backdated-observer aberration,
+light-time, frame and periodic TT/TDB differences remain named limitations.
+Distances compare light paths, with geometric lunar range. calc receives a
+binary64 TT Julian date; natalChart keeps the original millisecond instant.
+Their possible time-rounding difference is explicit.
+
+The frame and apparent pipeline accept the expanded TT domain. The separate
+[frame receipt](reports/frame-validation-phase2.json),
+[markdown](reports/frame-validation-phase2.md) and
+[CSV](reports/frame-validation-phase2.csv) record its compiled ERFA
+implementation comparison. This checks the specified composition, not its
+physical accuracy. Historical frame reports are unchanged.
+
+The [pilot receipt](reports/phase2-pilot.json),
+[markdown](reports/phase2-pilot.md) and [CSV](reports/phase2-pilot.csv)
+record 64 completed synthetic charts over the configured TT interval from
+1800-01-01 up to 2200-01-01, excluding the endpoint. They retain the exact
+command, seed, shard coverage, verified source/build, kernel and nutation
+identities, and percentile approximation method. The configured interval
+is a sampling distribution, not continuous coverage or observed extrema.
+tests/grouped-campaign.node-test.mjs enforces those facts and checks group
+switching, empty groups, unit conversion, explicit TT requests and checkpoint
+continuation with invented states. Report tests check grouped CSV mappings,
+separated convention tables, unavailable groups and historical rendering
+bytes. No Swiss installation was selected; its identity is unavailable.
+Live comparisons belong to S3.
+
+Recreate crosscheck/runtime/p4-pilot.json with these contents:
+
+```json
+{"name":"phase2-pilot","profile":"phase2","kernel":"de440","seed":"synthetic-phase2-pilot-v1","total":64,"shards":2}
+```
+
+Executed from the repository root with Node v22.23.3 on PATH and verified
+cached public inputs:
+
+```sh
+npm --prefix crosscheck run check:syntax
+npm --prefix crosscheck run build
+npm --prefix crosscheck run verify
+node crosscheck/tools/validate-frames.mjs --phase2
+node crosscheck/tools/validate-frames.mjs --phase2 --check
+node crosscheck/tools/campaign.mjs crosscheck/runtime/p4-pilot.json all 1
+node crosscheck/tools/campaign.mjs crosscheck/runtime/p4-pilot.json all
+node crosscheck/tools/campaign.mjs crosscheck/runtime/p4-pilot.json report
+node crosscheck/tools/campaign.mjs crosscheck/runtime/p4-pilot.json check
+```
+
+The first invocation stopped at its per-shard budget; resume completed the
+pilot. For fresh numerical reproduction, the completed campaign directory
+was moved aside within ignored runtime/, then these commands passed without
+replacing any committed report:
+
+```sh
+mv crosscheck/runtime/campaigns/phase2-pilot crosscheck/runtime/campaigns/phase2-pilot-first
+node crosscheck/tools/campaign.mjs crosscheck/runtime/p4-pilot.json all
+node crosscheck/tools/campaign.mjs crosscheck/runtime/p4-pilot.json check
+```
+
+Final checks passed:
+
+```sh
+npm --prefix crosscheck run check:syntax
+node crosscheck/tools/check-swiss.mjs
+npm --prefix crosscheck run verify
+npm --prefix crosscheck test
+node crosscheck/tools/validate-frames.mjs --phase2 --check
+node crosscheck/tools/reference-plan.mjs --check
+node crosscheck/tools/render-jpl.mjs --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+node crosscheck/tools/campaign.mjs crosscheck/runtime/p4-pilot.json check
+npm --prefix crosscheck run check
+node crosscheck/tools/check.mjs --all-sizes
+git diff --check
+```
+
+The full dedicated suite, build identity, import boundary, retained report
+reproduction, npm exclusion and storage safeguards pass. The phase 2
+profile reserves bounded checkpoint and report space before execution and
+caps shards for its larger grouped bundles. No large campaign or live Swiss
+measurement was performed. Only aggregate evidence is retained; kernel bytes
+and generated states remain ignored.

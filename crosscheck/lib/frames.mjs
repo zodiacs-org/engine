@@ -1,10 +1,11 @@
 // Formulae and constants adapted from ERFA v2.0.1, derived from SOFA.
 // See ../ERFA-NOTICE.txt. No engine or Swiss imports.
 export const FRAME_MODEL = 'IAU2006-bias-precession/IAU2000B-unadjusted-nutation';
+export const MAX_FRAME_TT_DAYS = 73050;
 const AS2R = Math.PI / (180 * 3600);
 const polynomial = (coefficients, t) => coefficients.reduceRight((v, c) => v * t + c, 0);
 function centuries(ttDays) {
-  if (!Number.isFinite(ttDays) || Math.abs(ttDays) > 36525) throw Error('Frame model requires TT days since J2000 within one Julian century');
+  if (!Number.isFinite(ttDays) || Math.abs(ttDays) > MAX_FRAME_TT_DAYS) throw Error('Frame model requires TT days since J2000 within two Julian centuries');
   return ttDays / 36525;
 }
 

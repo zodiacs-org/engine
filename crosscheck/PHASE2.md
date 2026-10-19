@@ -10,7 +10,7 @@ external harness handles git writes and CI.
 - [x] P3 Add bounded, mergeable absolute-error quantiles and distance residual channels with independent arithmetic tests; report median, p99, p99.9 and maximum with explicit units and quantile approximation limits.
 - [x] S1 Document the approved optional external Swiss dev/test-only instrument, its AGPL or professional licensing, runtime and distribution exclusions, environment selectors and aggregate-only retention in README.md, a new AGENTS.md and VALIDATION.md; preserve historical unavailable measurements.
 - [x] S2 Add a dedicated Node import and dependency guard over tracked repository files, exempting crosscheck/ and the brief's frozen exact paths for pre-existing test-only tooling; reject Swiss dependencies everywhere, prove rejection with negative fixtures, document each allowed path and run the strict repository scan in the dedicated crosscheck CI job.
-- [ ] P4 Extend the campaign and aggregate reports to group each body's longitude, latitude and distance errors by DE440 and DE441 span, separate convention differences, and pass a real bounded pilot with exact commands, seed and verified build/kernel identities.
+- [x] P4 Extend the campaign and aggregate reports to group each body's longitude, latitude and distance errors by DE440 and DE441 span, separate convention differences, and pass a real bounded pilot with exact commands, seed and verified build/kernel identities.
 - [ ] S3 Extend the campaign for the same synthetic charts with separate engine-versus-JPL, engine-versus-Swiss and Swiss-versus-JPL per-body angular aggregates, including max, p99.9, p99 and median; bind Swiss version, returned flags, fallback counts and ephemeris SHA-256 identities, test unavailable operation and include the comparison in the large run below.
 - [ ] P5 Start the larger campaign toward at least 1,000,000 synthetic charts with at most three active worker processes; validate a budget stop and checkpoint resume and commit only completed aggregate progress with actual counts and resource evidence.
 - [ ] P6 Continue that checkpointed campaign in a later session; finish the requested count if practical or retain the largest completed campaign with a plain explanation of the measured time or disk limit, and publish aggregate markdown and CSV with a short arcsecond summary and its measured span.
@@ -32,10 +32,10 @@ execution is folded into P5 and P6. S4 summarizes the completed measurement.
 The completed P1 to P3 records and their historical Swiss absence remain
 unchanged. Environment selectors are documented without local paths.
 
-Current status: S2 is complete under the brief's authorized exact path
-allowlist, with Node 22 validation passing. P4 is the next unchecked
-milestone. The notes below preserve earlier session history; the final S2
-completion record supersedes their pending scope and runtime blockers.
+Current status: P4 is complete with the bounded grouped pilot and Node 22
+validation passing. S3 is the next unchecked milestone. The notes below
+preserve earlier session history; the S2 completion record supersedes its
+earlier pending scope and runtime blockers.
 
 P1 local validation: syntax, aggregate rendering, safeguards and the runtime
 independent tests passed. The available Node 20 runtime was rejected by the
@@ -130,3 +130,19 @@ build and identity verification passed on Node v22.23.3. Historical aggregate
 reports reproduce unchanged, and npm exclusion and file/storage safeguards
 pass. VALIDATION.md records the commands. No campaign or live Swiss run was
 performed in this milestone; campaign expansion follows in P4 and S3.
+
+P4 connects the full TT sampling interval to grouped angular and distance
+histograms and separate aberration-convention sensitivity channels. The
+phase 2 profile verifies the reference plan, records exact-center exclusions,
+reserves storage and limits shards to keep grouped bundles bounded. Full
+DE440 covers the requested interval; DE441 is explicitly empty. Missing
+exact centers remain unavailable without barycenter substitution. The
+frame domain was extended and independently checked against compiled ERFA;
+the separate frame-validation-phase2 report retains that evidence without
+replacing historical measurements. reports/phase2-pilot records the real
+bounded campaign, its command, seed and verified build/kernel identities.
+Budget stop, resume, aggregate reproduction and a fresh numerical rerun
+passed. Swiss was unavailable in this pilot; S3 adds its wider comparison.
+The full Node 22 suite, syntax, build verification, historical report
+reproduction, import boundary and file/storage checks passed. No large
+campaign was started. Commands and limits are recorded in VALIDATION.md.

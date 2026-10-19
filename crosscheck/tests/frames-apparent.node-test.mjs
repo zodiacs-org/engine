@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { precession2006, fukushimaWilliamsMatrix, trueOfDate, rotate, parseNutationTerms, nutation2000B } from '../lib/frames.mjs';
+import { precession2006, fukushimaWilliamsMatrix, trueOfDate, rotate, parseNutationTerms, nutation2000B, MAX_FRAME_TT_DAYS } from '../lib/frames.mjs';
 import { relativisticAberration, solarDeflection, apparentJpl } from '../lib/apparent.mjs';
 import { unit, C_KM_S, AU_KM } from '../lib/reduction.mjs';
 
@@ -34,7 +34,8 @@ test('Independent zero-series offsets, orthogonality and ecliptic pole construct
   const terms=zeroTerms();
   const n=nutation2000B(0,terms);
   close([n.dpsi,n.deps],[-0.000135,0.000388].map(x => x*Math.PI/(180*3600)),1e-24);
-  for(const days of [-36525,0,36525]) {
+  assert.equal(MAX_FRAME_TT_DAYS,2*36525);
+  for(const days of [-73050,-36525,0,36525,73050]) {
     const eq=trueOfDate(days,terms,'true-equator-equinox-date');
     const ec=trueOfDate(days,terms,'true-ecliptic-equinox-date');
     const transpose=eq.matrix[0].map((_,i) => eq.matrix.map(row => row[i]));
@@ -58,7 +59,11 @@ test('Analytic Lorentz transverse case, limiter and input refusal', () => {
   close(relativisticAberration([1,0,0],[0,0,0],1),[1,0,0],0);
   close(solarDeflection([-1,0,0],[-1,0,0],[1,0,0],1),[-1,0,0],0);
   assert(solarDeflection(unit([-1,1e-9,0]),unit([-1,1e-9,0]),[1,0,0],1).every(Number.isFinite));
-  for(const days of [NaN,Infinity,36525.01,-36525.01]) assert.throws(() => precession2006(days));
+  for(const days of [NaN,Infinity,-Infinity,73050.01,-73050.01]) {
+    assert.throws(() => precession2006(days));
+    assert.throws(() => nutation2000B(days,zeroTerms()));
+    assert.throws(() => trueOfDate(days,zeroTerms(),'true-equator-equinox-date'));
+  }
   assert.throws(() => trueOfDate(0,zeroTerms(),'mean-ecliptic'));
   assert.throws(() => nutation2000B(0,[]));
   assert.throws(() => rotate([[1,2,3]], [1,2,3]));
@@ -90,4 +95,16 @@ test('Apparent pipeline orders deflection, aberration, then frame rotation', asy
   await assert.rejects(apparentJpl(async args => ({...await read(args),velocity:[0,NaN,0]}),options));
   const noSun=await apparentJpl(read,{...options,frame:'ICRF',correction:'CN+REL'});
   close(noSun.direction,relativisticAberration(p,velocity,1),1e-15);
+  for(const ttDays of [-73050,73050]) {
+    for(const frame of ['ICRF','true-equator-equinox-date','true-ecliptic-equinox-date']) {
+      const atBoundary=await apparentJpl(read,{...options,ttDays,frame,correction:'CN+REL'});
+      const aberrated=relativisticAberration(p,velocity,1);
+      const expected=frame==='ICRF'?aberrated:unit(rotate(trueOfDate(ttDays,options.terms,frame).matrix,aberrated));
+      close(atBoundary.direction,expected,1e-15);
+      assert.equal(atBoundary.ttDaysSinceJ2000,ttDays);
+      const previousReads=calls.length;
+      await assert.rejects(apparentJpl(read,{...options,ttDays:ttDays+Math.sign(ttDays)*0.01,frame}));
+      assert.equal(calls.length,previousReads);
+    }
+  }
 });

@@ -8,7 +8,9 @@ validated true-of-date frame and relativistic correction implementations are
 implemented, along with aggregate-only Swiss position integration, a
 checkpointed sharded runner and deterministic aggregate report tooling.
 A bounded engine campaign and its measured aggregate error report are now
-[available](reports/bounded-sample.md). Million-chart execution remains
+[available](reports/bounded-sample.md). The wider
+[phase 2 pilot](reports/phase2-pilot.md) adds grouped angular and distance
+statistics over the configured TT sampling span. Million-chart execution remains
 unmeasured.
 
 The JPL comparison uses public DE440/DE441 kernels downloaded from
@@ -17,7 +19,8 @@ chunks, never committed. The independent reduction must name its time scale,
 reference frame, origin, light-time, aberration and deflection conventions.
 Planetary centers and system barycenters must not be silently interchanged.
 Reports name convention differences alongside the measured residuals.
-The phase 2 checklist includes separating their contributions from numerical error.
+The phase 2 pilot reports the selected aberration convention difference
+separately from engine residuals; other named model differences remain in them.
 JPL does not provide an arbiter for house-system definitions or lunar nodes;
 unsupported comparisons must be explicit.
 
@@ -402,7 +405,9 @@ the specified composite model, not IAU 2000A, observed pole offsets or a
 nutation series with the IAU 2006 secular adjustment. The model's accepted
 TT domain is enforced by tests/frames-apparent.node-test.mjs; implementation
 comparison over that domain is recorded in
-[the frame report](reports/frame-validation.md). No model accuracy outside
+[the phase 2 frame report](reports/frame-validation-phase2.md). The earlier
+[frame report](reports/frame-validation.md) retains its historical domain.
+No model accuracy outside
 the measured span is claimed.
 
 The nutation coefficients are read from digest-pinned ERFA source acquired
@@ -412,9 +417,14 @@ verifies them before use. Acquisition and validation require network access
 on first use and a C compiler named cc. No download occurs at import time.
 
 ```sh
-node crosscheck/tools/validate-frames.mjs
-node crosscheck/tools/validate-frames.mjs --check
+node crosscheck/tools/validate-frames.mjs --phase2
+node crosscheck/tools/validate-frames.mjs --phase2 --check
 ```
+
+The wider campaign's separate validation checks the
+same specified frame composition against independent compiled ERFA over the
+expanded TT domain; existing measurement files are never overwritten.
+The no-flag historical validation requires its original source and runtime.
 
 The validator compiles the runtime ERFA reference with the committed C
 protocol driver, then compares synthetic frame matrices, aberration and
@@ -656,22 +666,24 @@ limitations. tests/campaign.node-test.mjs checks unit conversion, sign,
 screening equality, explicit calculation requests and refusals using invented
 Cartesian states and exact decimal arithmetic. These helpers do not add
 distances or percentiles to the historical measurements. The wider campaign
-and reference-span grouping are the next phase 2 milestone.
+connects these quantities to reference groups as described below.
 
 ## Campaign operations
 
 `tools/campaign.mjs` supplies a production driver over the tested shard runner.
-Its specification contains only a public synthetic seed, requested count,
-shard count, campaign name and cached kernel name. It fixes the TT sampling
+Its specification contains a public synthetic seed, requested count,
+shard count, campaign name, cached kernel name and an optional profile. It fixes the TT sampling
 interval and correction conventions in its source; the report records them.
 The accepted kernels are DE440s, DE440 and the positive-date DE441 part.
 Acquire the chosen kernel with `tools/kernels.mjs` first. Missing exact centers
 or coverage fail execution; planet barycenters never replace exact centers.
-Full DE440 acquisition and padded center-chain coverage have now been verified
+Full DE440 acquisition and padded center-chain coverage have been verified
 in the [phase 2 reference plan](reports/reference-plan.md). DE441 acquisition
-and full-span campaign measurements have not been run here. The driver still
-compares the same exact centers and historical interval as the bounded sample;
-later phase 2 milestones connect the wider plan to campaign statistics.
+has not been run here. Without a profile the driver retains its historical
+interval and channels. With `"profile":"phase2"` it requires full DE440,
+uses the reference plan's TT interval and records per-body longitude, latitude
+and distance channels for both reference groups. It reserves bounded storage
+before running and limits this profile's shard count to the worker limit.
 
 The requested synthetic TT interval lies entirely inside full DE440 coverage,
 so the plan has an empty DE441 outside-span group. DE440s does not define that
@@ -687,12 +699,34 @@ accuracy measurement is made by the planner. Reproduce its artifacts with:
 node crosscheck/tools/reference-plan.mjs --check
 ```
 
+The [phase 2 pilot](reports/phase2-pilot.md), [CSV](reports/phase2-pilot.csv)
+and [receipt](reports/phase2-pilot.json) record a completed bounded campaign.
+tests/grouped-campaign.node-test.mjs enforces its count, seed, span, grouped
+units, exact-center availability and aggregate identities. JPL channels use
+relativistic aberration without deflection for the Sun, Mercury and Venus,
+and geometric NONE for the Moon. Convention channels compare that reference
+direction with the Newtonian CN+S direction on the same states and frame;
+the lunar convention difference is zero. This measures one model sensitivity,
+not a complete correction for the engine's backdated-observer aberration,
+frame, light-time or truncated TT/TDB differences.
+
+Reports separate engine/JPL and convention tables, including absolute
+percentile intervals, and map comparison kind, reference group, body,
+coordinate and availability in CSV and JSON. Distances use apparent light
+paths in km and the geometric lunar range. The calc TT Julian date can round
+relative to natalChart's original millisecond input. Missing exact centers
+have no observations; inactive reference-group verdicts are unsupported and
+never contribute zero residuals. Empty DE441 rows have unavailable maxima
+and percentiles. The pilot ran without Swiss and retained no per-case values.
+Its budget-stop/resume and fresh numerical reproduction commands are in
+[VALIDATION.md](VALIDATION.md). Historical aggregate report bytes are preserved.
+
 After the isolated build and runtime ERFA acquisition described above, an
 example requesting a million-scale campaign is:
 
 ```sh
 cat > crosscheck/runtime/million.json <<'JSON'
-{"name":"million-tt","kernel":"de440s","seed":"synthetic-million-v1","total":2000000,"shards":4}
+{"name":"million-tt","profile":"phase2","kernel":"de440","seed":"synthetic-million-v1","total":1000000,"shards":3}
 JSON
 node crosscheck/tools/campaign.mjs crosscheck/runtime/million.json all 0
 node crosscheck/tools/campaign.mjs crosscheck/runtime/million.json all
@@ -701,7 +735,7 @@ node crosscheck/tools/campaign.mjs crosscheck/runtime/million.json check
 ```
 
 This is a requested workload, not a completed measurement. The lazy budget
-check in `tests/operations.node-test.mjs` exercises this requested count while
+check in `tests/operations.node-test.mjs` exercises a large requested campaign while
 processing only a bounded prefix with invented arithmetic. No million-chart
 throughput or memory benchmark has been performed. Kernel reads rehash chunks
 and may dominate execution time; estimate resource use from a small campaign
@@ -709,12 +743,13 @@ before allocating a long run. Charts are generated one at a time and discarded.
 
 `all` processes shards serially. Instead, assign each shard index to a separate
 process with the same specification and external installation selectors. For
-example, replace `all` with `0`, `1`, `2` and `3` for the specification above.
+example, replace `all` with `0`, `1` and `2` for the specification above.
 Run at most three worker processes at once; queue any remaining shard until
 a worker exits. Each process owns only its shard lock and checkpoint. Stop all workers before
 rendering a report. Never run two workers for the same shard. Shard count is
-capped in `validateSpec` to keep collected checkpoint bundles below the file
-limit; aggregate output size is also checked before writing.
+capped in `validateSpec`; the phase 2 profile permits fewer shards because
+its grouped histograms increase checkpoint size. Aggregate output size is
+also checked before writing.
 
 The optional trailing case budget applies per selected shard per invocation.
 SIGINT or SIGTERM stops after the in-flight comparison, saves aggregates and

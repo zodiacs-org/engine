@@ -1,24 +1,26 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { mkdir, mkdtemp, rm, writeFile, readFile, symlink } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { runShard } from '../lib/runner.mjs';
+import { campaignIdentity, runShard } from '../lib/runner.mjs';
 import { emptyStats, addResidual } from '../lib/statistics.mjs';
 import { renderReport } from '../lib/report.mjs';
 import { reportFile } from '../tools/report.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
-async function fixture(t, partial = false) {
+async function fixture(t, partial = false, quantiles = false) {
   await mkdir(root + 'runtime', { recursive: true });
   const directory = await mkdtemp(root + 'runtime/report-test-');
   t.after(() => rm(directory, { recursive: true, force: true }));
   const config = { seed: 'invented-report', startMs: 0, endMs: 1000, total: 6, shards: 2,
-    channels: { arithmetic: 1, missing: 1 }, conventions: { reference: 'invented arithmetic only' } };
+    channels: { arithmetic: 1, missing: 1 }, conventions: { reference: 'invented arithmetic only' },
+    ...(quantiles ? { quantiles: ['arithmetic', 'missing'] } : {}) };
   const identities = { build: 'a'.repeat(64), tooling: 'b'.repeat(64), references: { invented: 'not an astronomical instrument' } };
   const states = []; let campaign;
   for (let shard = 0; shard < 2; shard++) {
     const result = await runShard({ config, identities, directory, shard, maxCases: partial ? 1 : 100,
       evaluate: async c => ({ arithmetic: c.index === 4 ? { verdict: 'fallback', retflags: 4 } :
-        { verdict: c.index % 2 ? 'pass' : 'fail', stats: addResidual(emptyStats(1), c.index % 2 ? 1 : -2), retflags: 2 },
+        { verdict: c.index % 2 ? 'pass' : 'fail', stats: addResidual(emptyStats(1, { quantiles }), c.index % 2 ? 1 : -2), retflags: 2 },
       missing: { verdict: c.index === 5 ? 'error' : 'unsupported' } }) });
     states.push(result.state); campaign = result.campaign;
   }
@@ -40,6 +42,119 @@ test('reports independently counted verdicts and arithmetic, sorting, quoting an
   assert.ok(output.csv.includes('"test,unit"')); assert.ok(output.csv.includes('"{""2"":5,""4"":1}"'));
   assert.ok(output.markdown.includes('unavailable'));
   assert.deepEqual(report.metadata.command, bundle.metadata.command);
+});
+test('historical report schemas retain their exact JSON, markdown and CSV bytes', async t => {
+  const expected = [
+    { json: '8fc35d2c4d15c328c563150d48b24de189fcbc1d336aea18814dc965a6ab8ac7',
+      markdown: '3be57839e63cd7e8e5c99fb97f803ec2ab5f2956347af9ca6a8eaff42f861c78',
+      csv: '032c60d38c782c8334caeb03283a0046d5e087e960eabaa94c2099007a20b605' },
+    { json: 'bf27b90e2b5e393f616bded961ebbb344b09e4a51eb0a596d7cb6551e42bcf6f',
+      markdown: '1c923e0e1c114c55b59c4caf512b647e362e1d8e562a60d8ab830df4eaec92bf',
+      csv: '7605549c238668da81490eb48fa113742f405d32359b6e6d8d4eff9b061df080' }
+  ];
+  for (const quantiles of [false, true]) {
+    const { bundle } = await fixture(t, false, quantiles);
+    bundle.metadata.runtime = { node: 'v22-invented', platform: 'invented', arch: 'invented' };
+    const hashes = Object.fromEntries(Object.entries(renderReport(bundle)).map(([name, bytes]) =>
+      [name, createHash('sha256').update(bytes).digest('hex')]));
+    assert.deepEqual(hashes, expected[Number(quantiles)]);
+  }
+});
+async function groupedFixture(t) {
+  await mkdir(root + 'runtime', { recursive: true });
+  const directory = await mkdtemp(root + 'runtime/grouped-report-test-');
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const channels = Object.fromEntries(['DE440', 'DE441'].flatMap(group => ['Sun', 'Mars'].flatMap(body => [
+    ...['lon', 'lat', 'distance'].map(axis => [`JPL.${group}.${body}.${axis}`, 1]),
+    ...['lon', 'lat'].map(axis => [`Convention.${group}.${body}.${axis}`, 1])
+  ])));
+  const config = { seed: 'invented-grouped-report', startMs: 0, endMs: 1000, total: 4, shards: 2,
+    channels, quantiles: Object.keys(channels).sort(), conventions: {
+      reference: 'Invented arithmetic only; no physical reference values',
+      unavailableBodies: { Mars: 'Invented absent exact-center fixture' },
+      referenceGroups: {
+        DE440: { status: 'available', intervals: [{ startMs: 0, endMs: 1000 }], reason: 'Invented selected group' },
+        DE441: { status: 'empty', intervals: [], reason: 'No requested interval in this invented fixture' }
+      } } };
+  const identities = { build: 'a'.repeat(64), tooling: 'b'.repeat(64), references: { invented: 'arithmetic only' } };
+  const states = []; let campaign;
+  for (let shard = 0; shard < config.shards; shard++) {
+    const result = await runShard({ config, identities, directory, shard, evaluate: async sample =>
+      Object.fromEntries(Object.keys(channels).map(name => {
+        if (name.includes('.DE441.') || name.includes('.Mars.')) return [name, { verdict: 'unsupported' }];
+        const residual = name.startsWith('Convention.') ? 0.125 :
+          name.endsWith('.distance') ? (sample.index % 2 ? -0.25 : 0.25) :
+          (sample.index % 2 ? 1 : -2) * (name.endsWith('.lat') ? 2 : 1);
+        const stats = addResidual(emptyStats(1, { quantiles: true }), residual);
+        return [name, { verdict: stats.passed ? 'pass' : 'fail', stats }];
+      })) });
+    states.push(result.state); campaign = result.campaign;
+  }
+  return { campaign, states, metadata: { title: 'Invented grouped arithmetic report',
+    command: ['node', 'invented-grouped-report'], runtime: { node: process.version, platform: process.platform, arch: process.arch },
+    units: Object.fromEntries(Object.keys(channels).map(name => [name, name.endsWith('.distance') ? 'km' : 'arcseconds'])),
+    exclusions: ['No physical measurement performed; invented arithmetic only'] } };
+}
+test('grouped reports distinguish coverage, exact-center absence, units and convention differences', async t => {
+  const bundle = await groupedFixture(t), outputs = renderReport(bundle), report = JSON.parse(outputs.json);
+  assert.equal(report.schema, 'crosscheck-report/3');
+  assert.equal(report.referenceGroups.DE440.numericalResiduals, 12);
+  assert.equal(report.referenceGroups.DE440.conventionResiduals, 8);
+  assert.equal(report.referenceGroups.DE441.numericalResiduals, 0);
+  assert.equal(report.referenceGroups.DE441.status, 'empty');
+  const numerical = report.channels['JPL.DE440.Sun.lon'];
+  assert.equal(numerical.statistics.n, 4); assert.equal(numerical.statistics.maxAbs, 2);
+  assert.equal(numerical.statistics.absoluteQuantiles.median.rank, 2);
+  assert.deepEqual([numerical.comparisonKind, numerical.referenceGroup, numerical.body, numerical.coordinate, numerical.status],
+    ['engine-minus-JPL', 'DE440', 'Sun', 'lon', 'measured']);
+  const convention = report.channels['Convention.DE440.Sun.lon'];
+  assert.equal(convention.statistics.maxAbs, 0.125);
+  assert.equal(convention.comparisonKind, 'JPL-convention-difference');
+  assert.equal(report.channels['JPL.DE440.Sun.distance'].unit, 'km');
+  assert.equal(report.channels['JPL.DE440.Sun.distance'].statistics.maxAbs, 0.25);
+  for (const name of ['JPL.DE441.Sun.lon', 'JPL.DE440.Mars.lon']) {
+    const channel = report.channels[name];
+    assert.equal(channel.statistics.n, 0); assert.equal(channel.statistics.maxAbs, null);
+    assert.equal(channel.statistics.absoluteQuantiles.median, null);
+    assert.equal(channel.verdicts.unsupported, 4);
+    assert.equal(channel.status, name.includes('DE441') ? 'empty' : 'unavailable');
+  }
+  const primary = outputs.markdown.split('Engine minus JPL residuals:')[1].split('Separate JPL convention differences:')[0];
+  assert(primary.includes('| JPL.DE440.Sun.lon |'));
+  assert(!primary.includes('| Convention.DE440.Sun.lon |'));
+  assert(outputs.markdown.includes('never subtracted from aggregate engine errors'));
+  const percentiles = outputs.markdown.split('Engine minus JPL absolute-error percentiles:')[1]
+    .split('Separate convention-difference absolute percentiles:')[0];
+  assert(!percentiles.includes('| Convention.'));
+  assert(outputs.csv.includes('comparison_kind,reference_group,body,coordinate,status'));
+  assert(outputs.csv.includes('"JPL-convention-difference","DE440","Sun","lon","measured"'));
+  assert(outputs.csv.includes('"engine-minus-JPL","DE441","Sun","lon","empty"'));
+  assert.deepEqual(outputs, renderReport({ ...bundle, states: [...bundle.states].reverse() }));
+});
+test('grouped reports reject missing coverage metadata or measurements labelled empty or unavailable', async t => {
+  const bundle = await groupedFixture(t);
+  for (const change of [
+    b => { delete b.campaign.config.conventions.referenceGroups; },
+    b => { b.campaign.config.conventions.referenceGroups.DE440.status = 'empty'; b.campaign.config.conventions.referenceGroups.DE440.intervals = []; },
+    b => { b.campaign.config.conventions.referenceGroups.DE440.status = 'unavailable'; },
+    b => { b.campaign.config.conventions.referenceGroups.DE441.intervals = [{ startMs: 0, endMs: 10 }]; },
+    b => { b.campaign.config.conventions.referenceGroups.DE440.intervals[0].endMs = 1001; },
+    b => { b.campaign.config.conventions.referenceGroups.DE440.positions = [123]; }
+  ]) {
+    const changed = structuredClone(bundle); change(changed);
+    changed.campaign = campaignIdentity(changed.campaign.config, changed.campaign.identities);
+    for (const state of changed.states) state.campaign = changed.campaign.sha256;
+    assert.throws(() => renderReport(changed), /reference group/);
+  }
+  const unavailable = structuredClone(bundle);
+  Object.assign(unavailable.campaign.config.conventions.referenceGroups.DE441,
+    { status: 'unavailable', intervals: [{ startMs: 0, endMs: 1000 }], reason: 'Invented unavailable reference' });
+  unavailable.campaign = campaignIdentity(unavailable.campaign.config, unavailable.campaign.identities);
+  for (const state of unavailable.states) state.campaign = unavailable.campaign.sha256;
+  const report = JSON.parse(renderReport(unavailable).json);
+  assert.equal(report.referenceGroups.DE441.status, 'unavailable');
+  assert.equal(report.channels['JPL.DE441.Sun.lon'].status, 'unavailable');
+  assert.equal(report.channels['JPL.DE441.Sun.lon'].statistics.maxAbs, null);
 });
 test('partial reports require explicit opt-in and do not claim requested coverage', async t => {
   const { bundle } = await fixture(t, true);

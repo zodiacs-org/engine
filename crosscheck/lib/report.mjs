@@ -15,6 +15,30 @@ function sorted(value) {
 const csvCell = value => value === null ? '' : '"' + String(value).replaceAll('"', '""') + '"';
 const md = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
   .replaceAll('|', '&#124;').replaceAll('`', '&#96;');
+const groupedChannel = name => /^(JPL|Convention)\.(DE440|DE441)\.([A-Z][a-z]+)\.(lon|lat|distance)$/.exec(name);
+function referenceGroups(config, channels) {
+  const groups = config.conventions?.referenceGroups;
+  if (!groups && !Object.keys(channels).some(groupedChannel)) return null;
+  if (!keys(groups, ['DE440', 'DE441'])) throw Error('Invalid report reference groups.');
+  return Object.fromEntries(Object.entries(groups).map(([name, group]) => {
+    if (!keys(group, ['status', 'reason', 'intervals']) ||
+        !['available', 'empty', 'unavailable'].includes(group.status) || !text(group.reason) ||
+        !Array.isArray(group.intervals) || group.intervals.length > 256 ||
+        (group.status === 'empty' ? group.intervals.length !== 0 : !group.intervals.length) ||
+        group.intervals.some((interval, index) => !keys(interval, ['startMs', 'endMs']) ||
+          ![interval.startMs, interval.endMs].every(Number.isSafeInteger) ||
+          interval.startMs < config.startMs || interval.endMs > config.endMs || interval.startMs >= interval.endMs ||
+          (index > 0 && group.intervals[index - 1].endMs > interval.startMs))) throw Error('Invalid report reference group coverage.');
+    const selected = Object.entries(channels).filter(([channel]) => groupedChannel(channel)?.[2] === name);
+    if (!selected.length || (group.status !== 'available' && selected.some(([, c]) => c.statistics.n)))
+      throw Error('Empty or unavailable reference group contains measurements.');
+    const numericalResiduals = selected.filter(([channel]) => groupedChannel(channel)[1] === 'JPL')
+      .reduce((total, [, c]) => total + c.statistics.n, 0);
+    const conventionResiduals = selected.filter(([channel]) => groupedChannel(channel)[1] === 'Convention')
+      .reduce((total, [, c]) => total + c.statistics.n, 0);
+    return [name, { ...group, numericalResiduals, conventionResiduals }];
+  }));
+}
 
 export function renderReport({ campaign, states, metadata }, { allowPartial = false } = {}) {
   const verified = campaignIdentity(campaign.config, campaign.identities);
@@ -36,9 +60,17 @@ export function renderReport({ campaign, states, metadata }, { allowPartial = fa
     return [name, { unit: metadata.units[name], tolerance: campaign.config.channels[name],
       statistics: summarize(channel.stats), verdicts: channel.verdicts, flags: channel.flags }];
   }));
+  const groups = referenceGroups(campaign.config, channels);
+  if (groups) for (const [name, channel] of Object.entries(channels)) {
+    const parsed = groupedChannel(name);
+    if (parsed) Object.assign(channel, { comparisonKind: parsed[1] === 'JPL' ? 'engine-minus-JPL' : 'JPL-convention-difference',
+      referenceGroup: parsed[2], body: parsed[3], coordinate: parsed[4],
+      status: groups[parsed[2]].status === 'empty' ? 'empty' : channel.statistics.n ? 'measured' : 'unavailable' });
+  }
   const hasQuantiles = Boolean(campaign.config.quantiles?.length);
-  const report = sorted({ schema: hasQuantiles ? 'crosscheck-report/2' : 'crosscheck-report/1', metadata, campaign: verified,
+  const report = sorted({ schema: groups ? 'crosscheck-report/3' : hasQuantiles ? 'crosscheck-report/2' : 'crosscheck-report/1', metadata, campaign: verified,
     complete: merged.completed === campaign.config.total, completed: merged.completed, coverage, channels,
+    ...(groups ? { referenceGroups: groups } : {}),
     span: { startMsInclusive: campaign.config.startMs, endMsExclusive: campaign.config.endMs,
       meaning: 'Configured synthetic sampling interval, not continuous coverage or observed extrema' } });
   const json = JSON.stringify(report, null, 2) + '\n';
@@ -54,27 +86,46 @@ export function renderReport({ campaign, states, metadata }, { allowPartial = fa
       '). This is the configured distribution, not continuous coverage or observed extrema.',
     'The JSON receipt contains the seed, exact shard index coverage, reference identities and correction conventions.',
     'Residual statistics include pass and fail observations only. Error, unsupported and fallback verdicts are excluded from residual statistics.',
-    'Tolerances are campaign acceptance criteria. Sample maxima are not proven accuracy bounds.', '',
+    'Tolerances are campaign acceptance criteria. Sample maxima are not proven accuracy bounds.', ''];
+  if (groups) lines.push('Reference groups:', '',
+    '| Reference group | Configured status | TT intervals in epoch milliseconds | Engine/JPL residuals | Convention residuals | Reason |',
+    '| --- | --- | --- | ---: | ---: | --- |',
+    ...Object.entries(groups).map(([name, group]) => '| ' + [name, group.status,
+      group.intervals.length ? group.intervals.map(i => `[${i.startMs}, ${i.endMs})`).join('; ') : 'none',
+      group.numericalResiduals, group.conventionResiduals, group.reason].map(md).join(' | ') + ' |'), '',
+    'Residual counts sum coordinate comparisons, not charts. Empty groups have no requested interval or measured coverage. Unavailable exact centers have no numerical errors or maxima.', '',
+    'Engine minus JPL residuals:', '');
+  const tableHeader = [
     '| Channel | Unit | Compared | Pass | Fail | Error | Unsupported | Fallback | Tolerance | Mean | Mean absolute | RMS | Population std dev | Maximum absolute |',
     '| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |'];
+  lines.push(...tableHeader);
   const header = ['channel','unit','compared','pass','fail','error','unsupported','fallback','tolerance','mean','mean_abs','rms','population_std_dev','max_abs','returned_flags'];
   if (hasQuantiles) header.push('median_rank','median_lower','median_upper','p99_rank','p99_lower','p99_upper',
     'p999_rank','p999_lower','p999_upper','quantile_method');
+  if (groups) header.push('comparison_kind','reference_group','body','coordinate','status');
   const csv = [header.join(',')];
+  const conventionRows = [];
   for (const [name, c] of Object.entries(channels)) {
     const s = c.statistics, v = c.verdicts;
     const row = [name,c.unit,s.n,v.pass,v.fail,v.error,v.unsupported,v.fallback,c.tolerance,s.mean,s.meanAbs,s.rms,s.populationStdDev,s.maxAbs];
-    lines.push('| ' + row.map(x => x === null ? 'unavailable' : md(x)).join(' | ') + ' |');
+    const renderedRow = '| ' + row.map(x => x === null ? 'unavailable' : md(x)).join(' | ') + ' |';
+    if (groups && c.comparisonKind === 'JPL-convention-difference') conventionRows.push(renderedRow);
+    else lines.push(renderedRow);
     const quantileCells = hasQuantiles ? [
       ...['median', 'p99', 'p999'].flatMap(key => {
         const q = s.absoluteQuantiles?.[key];
         return [q?.rank ?? null, q?.lower ?? null, q?.upper ?? null];
       }), s.absoluteQuantiles ? JSON.stringify(sorted(s.absoluteQuantiles.method)) : null
     ] : [];
-    csv.push([...row, JSON.stringify(sorted(c.flags)), ...quantileCells].map(csvCell).join(','));
+    const groupingCells = groups ? [c.comparisonKind ?? 'other', c.referenceGroup ?? null, c.body ?? null,
+      c.coordinate ?? null, c.status ?? (s.n ? 'measured' : 'unavailable')] : [];
+    csv.push([...row, JSON.stringify(sorted(c.flags)), ...quantileCells, ...groupingCells].map(csvCell).join(','));
   }
+  if (conventionRows.length) lines.push('', 'Separate JPL convention differences:', '',
+    'These residuals compare the relativistic aberration direction with the Newtonian CN+S direction for the same reference states and frame. They are not engine errors, a complete model correction or an independent truth comparison. They are never subtracted from aggregate engine errors.', '',
+    ...tableHeader, ...conventionRows);
   if (hasQuantiles) {
-    lines.push('', 'Absolute-error percentiles:', '',
+    lines.push('', groups ? 'Engine minus JPL absolute-error percentiles:' : 'Absolute-error percentiles:', '',
       'Median, p99 and p99.9 select exact nearest ranks ceil(n*p) among absolute residuals. The histogram locates each rank exactly; only its value is approximated.',
       'Each inclusive [lower, upper] interval encloses that order statistic in the channel unit. No midpoint or interpolated value is claimed. Maximum absolute residuals above are exact sample maxima.',
       'The fixed histogram has an exact zero bucket, an underflow bucket below 2^-40, 16 equal subdivisions per power-of-two interval from 2^-40 to 2^40, and an overflow bucket starting at 2^40.',
@@ -82,11 +133,17 @@ export function renderReport({ campaign, states, metadata }, { allowPartial = fa
       'Channels without a histogram, including historical statistics, have unavailable percentiles. Empty groups have unavailable percentiles and maxima.', '',
       '| Channel | Unit | Median absolute interval | p99 absolute interval | p99.9 absolute interval |',
       '| --- | --- | --- | --- | --- |');
+    const conventionQuantiles = [];
     for (const [name, c] of Object.entries(channels)) {
       const q = c.statistics.absoluteQuantiles;
       const interval = key => q?.[key] ? `[${q[key].lower}, ${q[key].upper}]` : 'unavailable';
-      lines.push('| ' + [name, c.unit, ...['median', 'p99', 'p999'].map(interval)].map(md).join(' | ') + ' |');
+      const row = '| ' + [name, c.unit, ...['median', 'p99', 'p999'].map(interval)].map(md).join(' | ') + ' |';
+      if (groups && c.comparisonKind === 'JPL-convention-difference') conventionQuantiles.push(row);
+      else lines.push(row);
     }
+    if (conventionQuantiles.length) lines.push('', 'Separate convention-difference absolute percentiles:', '',
+      '| Channel | Unit | Median absolute interval | p99 absolute interval | p99.9 absolute interval |',
+      '| --- | --- | --- | --- | --- |', ...conventionQuantiles);
   }
   lines.push('', 'Exclusions:', '', ...metadata.exclusions.map(e => '- ' + md(e)), '',
     'Reference identities: `' + md(JSON.stringify(sorted(campaign.identities.references))) + '`.',

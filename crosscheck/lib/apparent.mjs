@@ -1,7 +1,7 @@
 // Relativistic and single-Sun corrections adapted from ERFA v2.0.1.
 // Derived from SOFA; ../ERFA-NOTICE.txt retains the licence.
 import { C_KM_S, AU_KM, unit, reduceJpl } from './reduction.mjs';
-import { trueOfDate, rotate } from './frames.mjs';
+import { trueOfDate, rotate, MAX_FRAME_TT_DAYS } from './frames.mjs';
 export const SOLAR_SCHWARZSCHILD_AU = 1.97412574336e-8;
 const dot = (a,b) => a.reduce((s,v,i) => s+v*b[i],0);
 const cross = (a,b) => [a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
@@ -38,7 +38,7 @@ export function solarDeflection(p,q,e,sunDistanceAu) {
 // Keep the existing SPICE modes separate. Geocentric only, explicit TT and
 // TDB supplied by the caller. A frame timestamp is never inferred from TDB.
 export async function apparentJpl(readState, {target,center,tdbSeconds,ttDays,correction,frame,terms}) {
-  if (center!==399 || !['CN+REL','CN+REL+SUN'].includes(correction) || !['ICRF','true-equator-equinox-date','true-ecliptic-equinox-date'].includes(frame) || !Number.isFinite(ttDays) || Math.abs(ttDays)>36525) throw Error('Explicit geocentric apparent conventions required');
+  if (center!==399 || !['CN+REL','CN+REL+SUN'].includes(correction) || !['ICRF','true-equator-equinox-date','true-ecliptic-equinox-date'].includes(frame) || !Number.isFinite(ttDays) || Math.abs(ttDays)>MAX_FRAME_TT_DAYS) throw Error('Explicit geocentric apparent conventions required');
   if (correction==='CN+REL+SUN' && target===10) throw Error('Solar self-deflection is undefined; choose CN+REL');
   const geometric = await reduceJpl(readState,{target,center,tdbSeconds,correction:'CN'});
   async function state(id,time) {

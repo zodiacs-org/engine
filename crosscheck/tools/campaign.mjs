@@ -12,6 +12,9 @@ import { CHANNELS, TARGETS, createEvaluator } from '../lib/campaign.mjs';
 import { campaignIdentity, runShard, validateCheckpoint } from '../lib/runner.mjs';
 import { runnerToolingIdentity } from '../lib/runner.mjs';
 import { openSwiss } from '../lib/swiss.mjs';
+import { SAMPLE_SPAN, createReferencePlan, selectReference } from '../lib/reference-plan.mjs';
+import { groupedChannels, createGroupedEvaluator, DISTANCE_SCREEN_KM } from '../lib/wide-campaign.mjs';
+import { assertDiskBudget } from '../lib/disk-budget.mjs';
 
 const project = fileURLToPath(new URL('../', import.meta.url));
 const runtime = resolve(project, 'runtime');
@@ -31,13 +34,35 @@ export async function readRuntimeJson(path) {
 }
 
 export function validateSpec(spec) {
-  if (!spec || Object.keys(spec).sort().join(',') !== 'kernel,name,seed,shards,total' ||
+  if (!spec || Object.keys(spec).sort().join(',') !== (Object.hasOwn(spec, 'profile') ? 'kernel,name,profile,seed,shards,total' : 'kernel,name,seed,shards,total') ||
       typeof spec.name !== 'string' || !/^[a-z][a-z0-9-]{0,79}$/.test(spec.name) ||
       !['de440s', 'de440', 'de441_part-2'].includes(spec.kernel) ||
       !Number.isSafeInteger(spec.total) || spec.total < 1 ||
       !Number.isSafeInteger(spec.shards) || spec.shards < 1 || spec.shards > 64 ||
-      typeof spec.seed !== 'string' || !/^[A-Za-z0-9_.-]{1,100}$/.test(spec.seed)) throw Error('Invalid campaign specification.');
+      typeof spec.seed !== 'string' || !/^[A-Za-z0-9_.-]{1,100}$/.test(spec.seed) ||
+      (Object.hasOwn(spec, 'profile') && (spec.profile !== 'phase2' || spec.kernel !== 'de440' || spec.shards > 3))) throw Error('Invalid campaign specification.');
   return { ...spec };
+}
+
+export function phase2Config(spec, plan) {
+  if (spec.profile !== 'phase2' || plan.groups.DE440.status !== 'available' ||
+      plan.groups.DE441.status !== 'empty') throw Error('Verified full-span reference plan required.');
+  const channels = groupedChannels();
+  return { seed: spec.seed, total: spec.total, shards: spec.shards,
+    startMs: SAMPLE_SPAN.startMs, endMs: SAMPLE_SPAN.endMs, channels,
+    quantiles: Object.keys(channels).filter(name => /^(JPL|Convention)\.DE44[01]\./.test(name)).sort(),
+    conventions: { input: 'Synthetic TT; uniform sphere; random house systems; half-open 1800-01-01 to 2200-01-01',
+      frame: 'IAU2006 bias/precession and unadjusted IAU2000B true ecliptic/equinox of date',
+      correction: 'JPL Moon NONE; Sun Mercury Venus CN+REL with no deflection; Earth center 399; NAIF periodic TT/TDB',
+      residual: 'JPL channels: engine minus relativistic JPL direction in arcseconds; distance in km',
+      conventionDifference: 'Convention channels: CN+REL minus CN+S direction using the same JPL kernel, TT/TDB and frame; Moon zero. Separate model sensitivity, not engine error or a correction to aggregate maxima.',
+      distance: 'Engine calc apparent geocentric light path in au converted to km minus JPL converged light path; geometric Moon. calc uses binary64 JD = TT days since J2000 + 2451545; chart uses original millisecond instant.',
+      limitations: 'Engine backdated-observer aberration, light-time, frame and truncated TT/TDB differences remain in residuals. No solar deflection or moving-body ray integration; convention delta isolates only the selected aberration models.',
+      tolerance: `60 arcseconds and ${DISTANCE_SCREEN_KM} km screening only; fixed before pilot, not accuracy bounds`,
+      referenceGroups: Object.fromEntries(Object.entries(plan.groups).map(([group, item]) => [group,
+        { status: item.status, intervals: item.intervals, reason: item.reason }])),
+      unavailableBodies: Object.fromEntries(Object.entries(plan.bodies).filter(([, item]) => item.status === 'unavailable')
+        .map(([body, item]) => [body, item.reason])), Swiss: 'unavailable' } };
 }
 
 export function swissChannels() {
@@ -87,15 +112,20 @@ export async function main(args) {
   if (!reporting && ((action !== 'all' && (!/^(0|[1-9][0-9]*)$/.test(action) || shard >= spec.shards)) ||
       !Number.isSafeInteger(maxCases) || maxCases < 0)) throw Error('Invalid shard or budget.');
   const build = await verifyBuild();
+  // Reserve bounded shard checkpoints, temporary writes and report artifacts.
+  await assertDiskBudget((spec.shards + 4) * MAX_FILE_BYTES * 2);
   const kernel = await openKernel(resolve(runtime, 'cache', spec.kernel));
   const terms = await loadNutationTerms();
   const { natalChart } = await import('../runtime/build/index.js');
+  const wide = spec.profile === 'phase2';
+  const plan = wide ? createReferencePlan([kernel]) : null;
+  const { calc } = wide ? await import('../runtime/build/calc.js') : {};
   // Swiss is enabled explicitly via external environment selectors, never auto-installed.
   let swiss;
   try {
     if (process.env.SE_EPHE_PATH) swiss = await openSwiss({ ephemerisPath: process.env.SE_EPHE_PATH,
       python: process.env.CROSSCHECK_PYTHON || 'python3' });
-    const config = { seed: spec.seed, total: spec.total, shards: spec.shards,
+    const config = wide ? phase2Config(spec, plan) : { seed: spec.seed, total: spec.total, shards: spec.shards,
       startMs: Date.UTC(1950, 0, 1), endMs: Date.UTC(2050, 0, 1),
       channels: { ...CHANNELS, ...(swiss ? swissChannels() : {}) },
       conventions: { input: 'synthetic TT; uniform sphere; random house systems',
@@ -103,11 +133,17 @@ export async function main(args) {
         correction: 'JPL Moon NONE; other exact centers CN+S; no deflection; NAIF periodic TT/TDB',
         Swiss: swiss ? 'external adapter apparent geocentric true-of-date; SWIEPH only' : 'unavailable',
         tolerance: '60 arcseconds screening only; engine minus reference; no accuracy bound' } };
+    if (wide && swiss) {
+      Object.assign(config.channels, swissChannels());
+      config.conventions.Swiss = 'external adapter apparent geocentric true-of-date; SWIEPH only; separate instrument comparison';
+    }
     const identities = { build: build.sha256, tooling: await runnerToolingIdentity(), references: {
       EngineBuild: { sourceSha256: build.inputs.source.sha256, outputSha256: build.output.sha256,
         dependencySha256: build.inputs.dependency.sha256, nodeExecutableSha256: build.inputs.runtime.executableSha256 },
       JPL: { name: kernel.receipt.name, source: kernel.receipt.source, sha256: kernel.receipt.sha256 },
       ERFA: { nutationSha256: erfaCatalog.files['nut00b.c'] },
+      ...(wide ? { ReferencePlan: { selection: plan.selection, paddingSeconds: plan.paddingSeconds,
+        sampling: plan.sampling, bodies: plan.bodies, groups: plan.groups, kernelCoverage: kernel.receipt.coverage } } : {}),
       Swiss: swiss ? swiss.identity : { status: 'unavailable' } } };
     const directory = resolve(runtime, 'campaigns', spec.name);
     if (!reporting) {
@@ -115,7 +151,10 @@ export async function main(args) {
       const stop = () => controller.abort();
       process.on('SIGINT', stop); process.on('SIGTERM', stop);
       try {
-        let evaluate = createEvaluator({ natalChart, readState: createSpkReader([kernel]), terms });
+        const readState = createSpkReader([kernel]);
+        let evaluate = wide ? createGroupedEvaluator({ natalChart, calc, terms,
+          referenceAt: tdbSeconds => ({ ...selectReference([kernel], tdbSeconds), readState }) }) :
+          createEvaluator({ natalChart, readState, terms });
         if (swiss) evaluate = withSwiss(evaluate, natalChart, swiss);
         const result = await executeCampaign({ spec, config, identities, evaluate, directory, shard, maxCases, signal: controller.signal });
         await verifyBuild();
@@ -130,11 +169,15 @@ export async function main(args) {
     const bundle = { campaign, states, metadata: { title: 'Synthetic TT chart campaign',
       command: ['node', 'crosscheck/tools/campaign.mjs', input, 'report'],
       runtime: { node: process.version, platform: process.platform, arch: process.arch },
-      units: Object.fromEntries(Object.keys(config.channels).map(name => [name, 'arcseconds'])),
+      units: Object.fromEntries(Object.keys(config.channels).map(name => [name, name.endsWith('.distance') ? 'km' : 'arcseconds'])),
       exclusions: [
         `Reproduction: node crosscheck/tools/campaign.mjs ${input} all, then report. Specification: ${JSON.stringify(spec)}. Preserve external Swiss environment selectors if enabled.`,
         'Only exact Sun/Moon/Mercury/Venus centers compared; no other planets, houses, nodes, angles, speeds or topocentric checks. No UTC/UT1 validation.',
-        'JPL residuals include model differences: CN+S Newtonian aberration, no deflection, periodic TT/TDB and unadjusted IAU2000B frames. Sampling interval is TT despite ISO Z labels.',
+        ...(wide ? [
+          'Full DE440 covers the entire requested TT span; DE441 has no selected interval or measurements. Inactive group and missing exact-center verdicts are unsupported, never zero-error observations.',
+          'JPL residuals use Moon NONE and other exact centers CN+REL without deflection. They retain backdated-observer aberration, light-time, frame and periodic TT/TDB model differences. Convention channels isolate CN+REL minus CN+S on the same independent states, not total model error.',
+          'Distances use binary64 TT Julian dates in calc, which can round relative to natalChart millisecond inputs; JPL uses TT seconds converted to TDB. Distance maxima are in km and angular maxima in arcseconds.'
+        ] : ['JPL residuals include model differences: CN+S Newtonian aberration, no deflection, periodic TT/TDB and unadjusted IAU2000B frames. Sampling interval is TT despite ISO Z labels.']),
         'Swiss.positions is the legacy unavailable channel; optional per-body Swiss channels carry actual measurements. Fallback/error/unsupported verdicts contain no residuals.',
         'Sample maxima are not unsampled bounds; no throughput guarantee. Command records report invocation; reproduction command above runs all shards from scratch with identical inputs.'
       ] } };
