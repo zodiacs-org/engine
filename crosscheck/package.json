@@ -7,7 +7,7 @@
     "check:syntax": "node tools/check-syntax.mjs",
     "build": "node tools/build.mjs",
     "verify": "node tools/build.mjs --verify",
-    "test": "node --test tests/*.node-test.mjs",
+    "test": "node --test --test-concurrency=1 tests/*.node-test.mjs",
     "check": "node tools/check.mjs"
   },
   "dependencies": { "astronomy-engine": "2.1.19" }

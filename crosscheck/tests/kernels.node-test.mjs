@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, readdir, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
-import { inspectSpk, requireCoverage, acquireKernel, CHUNK_BYTES } from '../lib/kernels.mjs';
+import { inspectSpk, requireCoverage, acquireKernel, CHUNK_BYTES, KERNEL_BYTES } from '../lib/kernels.mjs';
 
 function fixture(big = false) {
   const b = Buffer.alloc(4096);
@@ -104,5 +104,44 @@ test('Existing invalid caches are refused without redownload or replacement', as
     const linked = join(root, 'linked');
     await symlink(directory, linked);
     await assert.rejects(openKernel(linked), /Cache directory required/);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('Catalog reservations and streamed byte caps cannot follow a larger response', async () => {
+  const { writeChunks } = await import('../lib/kernels.mjs');
+  const runtime = fileURLToPath(new URL('../runtime/', import.meta.url));
+  const root = await mkdtemp(join(runtime, 'stream-budget-test-'));
+  let written = 0, consumed = false;
+  try {
+    assert.equal(KERNEL_BYTES['de440.bsp'], 119799808);
+    assert.equal(KERNEL_BYTES['de441_part-1.bsp'], 1651119104);
+    assert.equal(KERNEL_BYTES['de441_part-2.bsp'], 1656830976);
+    async function* body() { yield Buffer.alloc(12); }
+    await assert.rejects(writeChunks(body(), root, { maxBytes: 11, beforeFlush: () => { written++; } }), /download cap/);
+    assert.equal(written, 0);
+    assert.deepEqual(await readdir(root), []);
+    await assert.rejects(writeChunks(body(), root, { maxBytes: 12, beforeFlush: () => { throw Error('budget refused'); } }), /budget refused/);
+    assert.deepEqual(await readdir(root), []);
+    const stream = new ReadableStream({ pull(controller) { consumed = true; controller.close(); } }, { highWaterMark: 0 });
+    await assert.rejects(acquireKernel('de440.bsp', { root, fetchImpl: async () => new Response(stream,
+      { headers: { 'content-length': String(KERNEL_BYTES['de440.bsp'] + 1) } }) }), /catalogued kernel size/);
+    assert.equal(consumed, false);
+    assert.deepEqual(await readdir(root), []);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('Kernel and ERFA acquisition share the budget lock before fetching', async () => {
+  const { withAcquisitionBudget } = await import('../lib/disk-budget.mjs');
+  const { acquireErfa } = await import('../lib/erfa.mjs');
+  const runtime = fileURLToPath(new URL('../runtime/', import.meta.url));
+  const root = await mkdtemp(join(runtime, 'shared-lock-test-'));
+  let calls = 0;
+  try {
+    await withAcquisitionBudget(0, async () => {
+      await assert.rejects(acquireKernel('de440.bsp', { root, fetchImpl: async () => { calls++; } }), /acquisition is locked/);
+      await assert.rejects(acquireErfa(), /acquisition is locked/);
+    });
+    assert.equal(calls, 0);
+    assert.deepEqual(await readdir(root), []);
   } finally { await rm(root, { recursive: true, force: true }); }
 });

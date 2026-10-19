@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { mkdir, mkdtemp, writeFile, readFile, lstat, realpath, rename, rm } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { assertDiskBudget, withAcquisitionBudget, MAX_FILE_BYTES } from './disk-budget.mjs';
 
 export const CHUNK_BYTES = 1_048_576;
 export const SOURCE = 'https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/';
@@ -12,6 +13,15 @@ export const KERNELS = Object.freeze({
   'de440s.bsp': '3917ee56769db332790c751e2168843d',
   'de441_part-1.bsp': '7e5fcf9ecb5d08e1ab70c049baa60cd3',
   'de441_part-2.bsp': 'ad8dfa4e505ef0e3a5d587a5b4705632',
+});
+// Full response Content-Length values read from the same public URLs on
+// 2026-10-19. These are storage reservations, not trusted content identities.
+// The catalogued MD5 and optional SHA-256 still verify the complete stream.
+export const KERNEL_BYTES = Object.freeze({
+  'de440.bsp': 119_799_808,
+  'de440s.bsp': 32_726_016,
+  'de441_part-1.bsp': 1_651_119_104,
+  'de441_part-2.bsp': 1_656_830_976,
 });
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const chunkName = i => `${String(i).padStart(6, '0')}.chunk`;
@@ -114,13 +124,14 @@ export async function openKernel(directory, expectedSha256) {
 }
 
 // Internal transport helper; acquisition always enforces the pinned catalog.
-export async function writeChunks(body, temporary) {
+export async function writeChunks(body, temporary, { maxBytes = 4_000_000_000, beforeFlush = async () => {} } = {}) {
+    if (!Number.isSafeInteger(maxBytes) || maxBytes < 0 || maxBytes > 4_000_000_000 || typeof beforeFlush !== 'function') throw Error('Invalid stream budget');
     const md5 = createHash('md5'), hash = createHash('sha256'), chunks = [];
     let bytes = 0, used = 0, buffer = Buffer.alloc(CHUNK_BYTES);
-    async function flush() { const b = buffer.subarray(0, used); chunks.push(sha(b)); await writeFile(join(temporary, chunkName(chunks.length - 1)), b, { flag: 'wx' }); used = 0; }
+    async function flush() { const b = buffer.subarray(0, used); await beforeFlush(b.length); chunks.push(sha(b)); await writeFile(join(temporary, chunkName(chunks.length - 1)), b, { flag: 'wx' }); used = 0; }
     for await (const value of body) {
       const b = Buffer.from(value); bytes += b.length;
-      if (bytes > 4_000_000_000) throw Error('Kernel exceeds download cap');
+      if (bytes > maxBytes) throw Error('Kernel exceeds download cap');
       md5.update(b); hash.update(b);
       let offset = 0;
       while (offset < b.length) { const n = Math.min(CHUNK_BYTES - used, b.length - offset); b.copy(buffer, used, offset, offset + n); used += n; offset += n; if (used === CHUNK_BYTES) await flush(); }
@@ -132,19 +143,27 @@ export async function writeChunks(body, temporary) {
 export async function acquireKernel(name, { root = join(runtime, 'cache'), fetchImpl = fetch, expectedSha256, signal = AbortSignal.timeout(600_000) } = {}) {
   if (!Object.hasOwn(KERNELS, name)) throw Error('Unknown public kernel');
   root = await cacheRoot(root);
+  // One download at a time across all runtime cache destinations. Reuse only
+  // needs its existing bytes; a new download reserves payload plus a receipt.
+  return withAcquisitionBudget(0, async () => {
   const destination = join(root, name.replace('.bsp', ''));
   let exists = false;
   try { await lstat(destination); exists = true; }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
   if (exists) return await openKernel(destination, expectedSha256);
+  await assertDiskBudget(KERNEL_BYTES[name] + MAX_FILE_BYTES);
   const temporary = await mkdtemp(join(root, '.download-'));
+  let response;
   try {
-    const response = await fetchImpl(SOURCE + name, { redirect: 'error', signal });
+    response = await fetchImpl(SOURCE + name, { redirect: 'error', signal });
     if (response.status !== 200 || !response.body || response.headers.get('content-encoding')) throw Error('Expected unencoded full kernel response');
-    const stored = await writeChunks(response.body, temporary);
+    const declared = response.headers.get('content-length');
+    if (declared !== null && (!/^[0-9]+$/.test(declared) || Number(declared) !== KERNEL_BYTES[name])) throw Error('Unexpected catalogued kernel size');
+    const stored = await writeChunks(response.body, temporary, { maxBytes: KERNEL_BYTES[name],
+      beforeFlush: bytes => assertDiskBudget(bytes + MAX_FILE_BYTES) });
     const { bytes, chunks, sha256: digest } = stored;
     if (stored.md5 !== KERNELS[name] || (expectedSha256 && digest !== expectedSha256)) throw Error('Downloaded kernel digest mismatch');
-    const declared = response.headers.get('content-length');
+    if (bytes !== KERNEL_BYTES[name]) throw Error('Unexpected catalogued kernel size');
     if (declared !== null && Number(declared) !== bytes) throw Error('Content length mismatch');
     const read = async (offset, length) => {
       const a = await readFile(join(temporary, chunkName(Math.floor(offset / CHUNK_BYTES))));
@@ -154,8 +173,13 @@ export async function acquireKernel(name, { root = join(runtime, 'cache'), fetch
     const receipt = { schema: 1, name, source: SOURCE + name, checksumSource: SOURCE + 'aa_checksums.txt', fetchedAt: new Date().toISOString(), bytes, chunkBytes: CHUNK_BYTES, md5: KERNELS[name], sha256: digest, chunks, coverage: await inspectSpk(read, bytes) };
     const serialized = JSON.stringify(receipt, null, 2) + '\n';
     if (Buffer.byteLength(serialized) >= 2_000_000) throw Error('Receipt exceeds file limit');
+    await assertDiskBudget(Buffer.byteLength(serialized));
     await writeFile(join(temporary, 'receipt.json'), serialized, { flag: 'wx' });
     await rename(temporary, destination);
     return await openKernel(destination, expectedSha256);
-  } finally { await rm(temporary, { recursive: true, force: true }); }
+  } finally {
+    await response?.body?.cancel().catch(() => {});
+    await rm(temporary, { recursive: true, force: true });
+  }
+  });
 }

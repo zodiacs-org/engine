@@ -1,6 +1,7 @@
 import { lstat, readdir, readFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { assertDiskBudget } from '../lib/disk-budget.mjs';
 
 export const MAX_FILE_BYTES = 2_000_000;
 const ignored = new Set(['runtime', 'node_modules', '__pycache__']);
@@ -54,6 +55,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const root = fileURLToPath(new URL('../', import.meta.url));
   const errors = await checkFiles(root);
   if (args.length) errors.push(...await checkLocalSizes(root));
+  if (args.length && !errors.length) await assertDiskBudget(0);
   if (errors.length) {
     console.error(errors.join('\n'));
     process.exitCode = 1;

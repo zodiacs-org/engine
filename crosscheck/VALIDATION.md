@@ -568,3 +568,58 @@ runtime with the existing Node requirement diagnostic. These local checks
 therefore do not establish a passing Node 22 build or full suite. The
 dedicated workflow retains its pinned Node 22 job; its result is left to
 the external harness. No root build or packed files changed.
+
+## Phase 2 P2 reference availability and disk budget
+
+Added fixed combined runtime/cache byte budgeting, local file checks and a
+shared acquisition lock. Kernel acquisition reserves catalog payload bytes
+and receipt space before fetching and rechecks before writes. Stream caps
+also apply without Content-Length; larger declared lengths are refused before
+body consumption. ERFA source acquisition uses the same lock and checks space
+before fetching and writing. Tests use independent byte arithmetic, small
+synthetic streams and refusal fixtures. They test storage behavior, not
+astronomical accuracy. The project test script runs its suites serially.
+
+Read the public NAIF checksum and coverage summaries, then acquired full
+DE440 through the budgeted downloader. The planning receipt under
+reports/reference-plan.json records its URL, verified hashes and descriptors,
+the executable tooling and Node identity, catalog spans and storage snapshot.
+Its markdown and CSV are reproduced by tools/reference-plan.mjs and tested by
+tests/reference-report.node-test.mjs. No engine chart values were evaluated
+for this planning evidence. The kernel and acquisition stdout remain ignored.
+
+The requested TT interval lies wholly inside full DE440 coverage. DE441 has
+no outside-span partition under the brief's selection policy. Its public
+catalog spans were checked, but no DE441 kernel was acquired or evaluated.
+The planner checks exact center chains across descriptor boundaries, including
+priority, frame/type refusals and padded emission coverage. Missing exact
+Mars-through-Pluto centers are unavailable with this selected kernel; system
+barycenters are not substituted. These assertions are enforced by
+tests/reference-plan.node-test.mjs. Swiss remains absent and was neither
+installed nor invoked; existing invented transport and absence tests passed.
+
+Executed from the repository root with the available Node v20.19.2:
+
+```sh
+node crosscheck/tools/kernels.mjs de440.bsp
+node crosscheck/tools/reference-plan.mjs
+node crosscheck/tools/reference-plan.mjs --check
+npm --prefix crosscheck run check:syntax
+npm --prefix crosscheck test
+npm --prefix crosscheck run build
+npm --prefix crosscheck run verify
+node crosscheck/tools/render-jpl.mjs --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+npm --prefix crosscheck run check
+node crosscheck/tools/check.mjs --all-sizes
+git diff --check
+```
+
+Syntax, new budgeting/planning tests, runtime independent existing tests,
+retained aggregate rendering, npm exclusion and file/storage safeguards
+passed. The existing runtime acceptance and isolated build tests failed only
+at requireNode22; build and verify refused the same unsupported runtime.
+This session does not establish a passing full Node 22 suite. The dedicated
+workflow still pins Node 22 and installs only this project's lockfile. No
+root build, packed input, release archive or git metadata was changed.

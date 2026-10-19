@@ -174,6 +174,17 @@ the error; a killed process may leave an ignored .download directory, which
 can be removed before retrying. Download continuation is not implemented.
 Acquire DE441 parts separately and check the actual required coverage.
 
+Acquisition now enforces the phase 2 combined storage cap before fetching.
+It counts logical file bytes under runtime/ and any project cache/ directory,
+including staging and abandoned downloads, with runtime/cache/ counted once.
+The cap and file boundary are enforced in lib/disk-budget.mjs and its tests.
+Each kernel reserves its catalogued payload plus a bounded receipt, refuses
+larger declared or streamed responses, and rechecks space before chunk writes.
+ERFA acquisition shares the same exclusive runtime/.acquisition.lock and
+checks its own bounded source reservation. Confirm a stopped writer before
+removing an abandoned acquisition lock. Concurrent downloads are refused;
+run acquisition separately from tests, whose refusal fixtures are temporary.
+
 Every chunk is capped by CHUNK_BYTES in lib/kernels.mjs, below the file limit;
 tests/kernels.node-test.mjs enforces stream reconstruction and the chunk boundary.
 The receipt records source URL, retrieval time, whole-file MD5 and SHA-256,
@@ -547,8 +558,25 @@ interval and correction conventions in its source; the report records them.
 The accepted kernels are DE440s, DE440 and the positive-date DE441 part.
 Acquire the chosen kernel with `tools/kernels.mjs` first. Missing exact centers
 or coverage fail execution; planet barycenters never replace exact centers.
-Full DE440 or DE441 acquisition and campaign measurements have not been run
-here. The driver compares the same exact centers as the bounded sample.
+Full DE440 acquisition and padded center-chain coverage have now been verified
+in the [phase 2 reference plan](reports/reference-plan.md). DE441 acquisition
+and full-span campaign measurements have not been run here. The driver still
+compares the same exact centers and historical interval as the bounded sample;
+later phase 2 milestones connect the wider plan to campaign statistics.
+
+The requested synthetic TT interval lies entirely inside full DE440 coverage,
+so the plan has an empty DE441 outside-span group. DE440s does not define that
+boundary. The selected planetary kernel lacks exact Mars-through-Pluto centers;
+those comparisons are unavailable without separate satellite-kernel planning.
+System barycenter coordinates must not be relabeled as exact planet centers.
+The [JSON planning receipt](reports/reference-plan.json) records verified
+descriptors, identities, the command, public catalog spans and a storage snapshot;
+the [CSV](reports/reference-plan.csv) records exact-center availability. No chart
+accuracy measurement is made by the planner. Reproduce its artifacts with:
+
+```sh
+node crosscheck/tools/reference-plan.mjs --check
+```
 
 After the isolated build and runtime ERFA acquisition described above, an
 example requesting a million-scale campaign is:
@@ -625,6 +653,9 @@ ignored cache, build and dependency files and rejects local symlinks or files
 at the size boundary, as tested in `tests/safeguards.node-test.mjs`. It does not
 identify secrets or prove provenance. The npm exclusion dry-run in that test
 uses lifecycle scripts disabled and produces no archive.
+
+The same `--all-sizes` command also enforces the combined runtime/cache disk
+cap. Tests run serially to keep refusal fixtures separate and CPU use bounded.
 
 Historical reports retain the executable tooling identities that actually
 produced them. Later executable edits intentionally invalidate their checkpoint

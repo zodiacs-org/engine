@@ -6,7 +6,7 @@ checks, tick it, append a plain summary to CHANGES.txt, then stop. The
 external harness handles git writes and CI.
 
 - [x] P1 Reconcile the README, plan, validation history and JPL report with the implemented frames, Swiss transport, runner and bounded chart campaign; preserve historical measurement identities and check aggregate report rendering.
-- [ ] P2 Establish a disk-budgeted reference plan for synthetic TT charts across 1800 to 2200: verify DE440 and DE441 coverage, exact centers and span selection, enforce the combined runtime/cache cap before acquisition, and record any unavailable comparisons without downloading Swiss.
+- [x] P2 Establish a disk-budgeted reference plan for synthetic TT charts across 1800 to 2200: verify DE440 and DE441 coverage, exact centers and span selection, enforce the combined runtime/cache cap before acquisition, and record any unavailable comparisons without downloading Swiss.
 - [ ] P3 Add bounded, mergeable absolute-error quantiles and distance residual channels with independent arithmetic tests; report median, p99, p99.9 and maximum with explicit units and quantile approximation limits.
 - [ ] P4 Extend the campaign and aggregate reports to group each body's longitude, latitude and distance errors by DE440 and DE441 span, separate convention differences, and pass a real bounded pilot with exact commands, seed and verified build/kernel identities.
 - [ ] P5 Start the larger campaign toward at least 1,000,000 synthetic charts with at most three active worker processes; validate a budget stop and checkpoint resume and commit only completed aggregate progress with actual counts and resource evidence.
@@ -25,3 +25,12 @@ P1 local validation: syntax, aggregate rendering, safeguards and the runtime
 independent tests passed. The available Node 20 runtime was rejected by the
 existing Node 22 build checks. VALIDATION.md records the commands and this
 limitation; the external harness runs the dedicated Node 22 CI job.
+
+P2 completed with the aggregate reference plan in reports/reference-plan.md,
+.csv and .json. Full DE440 covers the requested TT interval, leaving the
+DE441 outside-span group empty. Public DE441 catalog coverage was checked;
+those parts were not acquired. Exact unavailable centers remain explicit.
+Kernel and ERFA acquisition share a fixed disk cap and exclusive lock. The
+download fit the cap. Syntax, new tests, artifact reproduction and safeguards
+passed locally; existing runtime/build checks still require the unavailable
+Node 22 executable. Commands and limits are recorded in VALIDATION.md.

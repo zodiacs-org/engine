@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { parseNutationTerms } from './frames.mjs';
+import { assertDiskBudget, withAcquisitionBudget, MAX_FILE_BYTES } from './disk-budget.mjs';
 
 export const erfaDirectory = fileURLToPath(new URL('../runtime/erfa-source/',import.meta.url));
 export const sha256 = data => createHash('sha256').update(data).digest('hex');
@@ -10,6 +11,7 @@ export const erfaCatalog = JSON.parse(await readFile(new URL('./erfa-catalog.jso
 
 // Fetch explicit public inputs only when called; no import-time network.
 export async function acquireErfa() {
+  return withAcquisitionBudget(0, async () => {
   await mkdir(erfaDirectory,{recursive:true});
   if (!(await lstat(erfaDirectory)).isDirectory()) throw Error('Regular ERFA runtime directory required');
   for (const [name,expected] of Object.entries(erfaCatalog.files)) {
@@ -21,6 +23,7 @@ export async function acquireErfa() {
       bytes=await readFile(path);
     } catch (error) { if (error.code!=='ENOENT') throw error; }
     if (!bytes) {
+      await assertDiskBudget(MAX_FILE_BYTES - 1);
       const response=await fetch(erfaCatalog.baseUrl+name,{redirect:'error',signal:AbortSignal.timeout(30000)});
       if (response.status!==200) throw Error('ERFA source download failed');
       const chunks=[]; let size=0;
@@ -31,11 +34,13 @@ export async function acquireErfa() {
       }
       bytes=Buffer.concat(chunks);
       if (sha256(bytes)!==expected) throw Error(`ERFA digest mismatch: ${name}`);
+      await assertDiskBudget(bytes.length);
       await writeFile(path,bytes,{flag:'wx'});
     }
     if (sha256(bytes)!==expected) throw Error(`ERFA digest mismatch: ${name}`);
   }
   return erfaCatalog;
+  });
 }
 
 export async function loadNutationTerms() {
