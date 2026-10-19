@@ -22,3 +22,4 @@ Complete full-span sky database generation and retain bounded-session checkpoint
 Verify the completed full-span sky database and record its manifest identity, storage totals and aggregate checks with regression coverage.
 Measure full-span sky database interpolation against direct engine calls with reproducible stratified sampling, boundary probes and per-body error summaries.
 Measure full-span sky database query performance and memory with reproducible cold and warm lookups, streamed event ranges and aggregate evidence checked against the completed store.
+Document sky database time, event and boundary differences from the public events workbench with pinned source receipts and passing project checks.

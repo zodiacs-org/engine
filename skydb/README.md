@@ -7,6 +7,9 @@ and lazy position and event generation are implemented. Resumable persistence
 and position and event queries are implemented. Benchmarks and validation are
 recorded in [PLAN.md](PLAN.md); recovery and run guidance are in
 [OPERATIONS.md](OPERATIONS.md).
+Time scales, event definitions and boundary ownership beside the public events
+workbench are compared in [CONVENTIONS.md](CONVENTIONS.md), with a pinned source
+receipt and explicit limits on interchanging results.
 
 Use a Node runtime in the series required by [package.json](package.json), with
 its matching npm on PATH. From the repository root:

@@ -1,0 +1,289 @@
+{
+  "version": 1,
+  "command": "node skydb/scripts/events-conventions.mjs > skydb/docs/evidence/events-conventions.json",
+  "retrievedAt": "2026-10-19T17:57:01.578Z",
+  "node": "22.23.3",
+  "method": "Unauthenticated public source reads at a fixed commit, with byte hashes and inclusive line locators; selected declarations checked; no events project execution or cross-project numerical agreement measurement",
+  "events": {
+    "pullRequest": "https://github.com/zodiacs-org/engine/pull/43",
+    "commit": "bb59f2c23b4c1bf44cdff3e03cd2a6c0539641c7",
+    "clocks": [
+      "utc",
+      "ut1",
+      "tt"
+    ],
+    "bodies": [
+      "Sun",
+      "Moon",
+      "Mercury",
+      "Venus",
+      "Mars",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune",
+      "Pluto"
+    ],
+    "ownsExpression": "atMs > this.window.startMs && atMs <= this.window.endMs",
+    "rootToleranceMs": 1,
+    "sources": [
+      {
+        "path": "events/README.md",
+        "url": "https://raw.githubusercontent.com/zodiacs-org/engine/bb59f2c23b4c1bf44cdff3e03cd2a6c0539641c7/events/README.md",
+        "sha256": "86a5c36ab9f8b8c14d9e202baf94560b9638fd6839f5f4abde6016f2585f8407",
+        "bytes": 31017,
+        "inspectedLines": [
+          [
+            59,
+            64
+          ],
+          [
+            96,
+            118
+          ],
+          [
+            140,
+            219
+          ],
+          [
+            231,
+            278
+          ],
+          [
+            295,
+            306
+          ],
+          [
+            365,
+            420
+          ]
+        ]
+      },
+      {
+        "path": "events/LIMITATIONS.md",
+        "url": "https://raw.githubusercontent.com/zodiacs-org/engine/bb59f2c23b4c1bf44cdff3e03cd2a6c0539641c7/events/LIMITATIONS.md",
+        "sha256": "56c2802f8cf8084d5106a3bdec24067bcd342fd2532fd95cf032d5d00dc90452",
+        "bytes": 5797,
+        "inspectedLines": [
+          [
+            25,
+            49
+          ],
+          [
+            53,
+            70
+          ]
+        ]
+      },
+      {
+        "path": "events/src/types.ts",
+        "url": "https://raw.githubusercontent.com/zodiacs-org/engine/bb59f2c23b4c1bf44cdff3e03cd2a6c0539641c7/events/src/types.ts",
+        "sha256": "e568af57b36d414c7c95234783edda06680ebed6be2ee6139fc109e533eb33ae",
+        "bytes": 858,
+        "inspectedLines": [
+          [
+            1,
+            21
+          ]
+        ]
+      },
+      {
+        "path": "events/src/context.ts",
+        "url": "https://raw.githubusercontent.com/zodiacs-org/engine/bb59f2c23b4c1bf44cdff3e03cd2a6c0539641c7/events/src/context.ts",
+        "sha256": "2a7c6f34776f8b8655100e71b3d929dc7881ea459cc7bca2d061efb4ee382471",
+        "bytes": 3160,
+        "inspectedLines": [
+          [
+            9,
+            19
+          ],
+          [
+            51,
+            79
+          ]
+        ]
+      },
+      {
+        "path": "events/src/engine.ts",
+        "url": "https://raw.githubusercontent.com/zodiacs-org/engine/bb59f2c23b4c1bf44cdff3e03cd2a6c0539641c7/events/src/engine.ts",
+        "sha256": "a58325ad96e67b3d4b30ce7bef4916fb13dc9a182de858785921b45a7736bd02",
+        "bytes": 2398,
+        "inspectedLines": [
+          [
+            1,
+            12
+          ],
+          [
+            28,
+            53
+          ]
+        ]
+      },
+      {
+        "path": "events/src/root.ts",
+        "url": "https://raw.githubusercontent.com/zodiacs-org/engine/bb59f2c23b4c1bf44cdff3e03cd2a6c0539641c7/events/src/root.ts",
+        "sha256": "4b9ab104568a44601ada9a34f374162a6c9a04a323dde6691335f0f59dfd4256",
+        "bytes": 2995,
+        "inspectedLines": [
+          [
+            19,
+            36
+          ],
+          [
+            50,
+            77
+          ]
+        ]
+      },
+      {
+        "path": "events/src/longitude.ts",
+        "url": "https://raw.githubusercontent.com/zodiacs-org/engine/bb59f2c23b4c1bf44cdff3e03cd2a6c0539641c7/events/src/longitude.ts",
+        "sha256": "e8d2b8129f45c4676f3d61a76fc0a7b56a9f50acaa992e359b61231f0ee13fe4",
+        "bytes": 5990,
+        "inspectedLines": [
+          [
+            63,
+            103
+          ],
+          [
+            111,
+            122
+          ]
+        ]
+      },
+      {
+        "path": "events/src/aspects.ts",
+        "url": "https://raw.githubusercontent.com/zodiacs-org/engine/bb59f2c23b4c1bf44cdff3e03cd2a6c0539641c7/events/src/aspects.ts",
+        "sha256": "ebdcb755264e47e6a47676f4e7b1e846085ddb64895acd71ee41c74652881424",
+        "bytes": 5407,
+        "inspectedLines": [
+          [
+            29,
+            46
+          ],
+          [
+            76,
+            103
+          ]
+        ]
+      },
+      {
+        "path": "events/src/stations.ts",
+        "url": "https://raw.githubusercontent.com/zodiacs-org/engine/bb59f2c23b4c1bf44cdff3e03cd2a6c0539641c7/events/src/stations.ts",
+        "sha256": "887dfa33aa2bd5d6e9127aeb689256a28b3c97d00f6daab8d48bb8ba8fb49a0b",
+        "bytes": 6851,
+        "inspectedLines": [
+          [
+            46,
+            83
+          ],
+          [
+            85,
+            124
+          ]
+        ]
+      }
+    ]
+  },
+  "skydb": {
+    "engine": {
+      "name": "@zodiacs/engine",
+      "version": "1.0.0",
+      "archive": "zodiacs-engine-1.0.0.tgz",
+      "sha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
+      "bytes": 288063,
+      "ephemeris": "2.1.19"
+    },
+    "config": {
+      "startMs": -5364662400000,
+      "endMs": 7258118400000,
+      "stepMs": 3600000,
+      "tileMs": 86400000,
+      "timeScale": "utc",
+      "bodies": [
+        "Sun",
+        "Moon",
+        "Mercury",
+        "Venus",
+        "Mars",
+        "Jupiter",
+        "Saturn",
+        "Uranus",
+        "Neptune",
+        "Pluto"
+      ]
+    },
+    "majorAspectsDegrees": [
+      0,
+      60,
+      90,
+      120,
+      180
+    ],
+    "eventScanMaxMs": 3600000,
+    "timeBoundariesMs": [
+      -915170400000,
+      63072000000,
+      78796800000,
+      94694400000,
+      126230400000,
+      157766400000,
+      189302400000,
+      220924800000,
+      252460800000,
+      283996800000,
+      315532800000,
+      362793600000,
+      394329600000,
+      425865600000,
+      489024000000,
+      567993600000,
+      631152000000,
+      662688000000,
+      709948800000,
+      741484800000,
+      773020800000,
+      820454400000,
+      867715200000,
+      915148800000,
+      1136073600000,
+      1230768000000,
+      1341100800000,
+      1435708800000,
+      1483228800000,
+      1822435200001
+    ],
+    "sources": [
+      {
+        "path": "skydb/src/config.mjs",
+        "sha256": "9ff2808609ea9f65fee514041f9849e0ba9a0862dbb085ad4c40146bd4312165",
+        "bytes": 1894
+      },
+      {
+        "path": "skydb/src/identity.mjs",
+        "sha256": "c0f276c5f79e460827a62e4fc07f0bef99065fa51e22f0adf9c6c676873a23ed",
+        "bytes": 1478
+      },
+      {
+        "path": "skydb/src/engine.mjs",
+        "sha256": "2eecf30178f87396bea69da77fecf3a44d72eb1d3929a1df11cd95d8b6221625",
+        "bytes": 1767
+      },
+      {
+        "path": "skydb/src/generate.mjs",
+        "sha256": "bb87db2282f261b7efcb8b3953130445d21a2caa56d0876a19af5d1bc97785c7",
+        "bytes": 2824
+      },
+      {
+        "path": "skydb/src/events.mjs",
+        "sha256": "40b94ad906486735586bd7ac72a3b1f695a90961fddf24a0872884ce17cff53b",
+        "bytes": 5725
+      },
+      {
+        "path": "skydb/src/query.mjs",
+        "sha256": "ea474d2e2bee0db92730fd5e488d2227c557050e5240704ca3de437be685ef81",
+        "bytes": 6823
+      }
+    ]
+  }
+}

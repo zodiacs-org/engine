@@ -9,7 +9,7 @@ Resource estimates describe computing cost, not astronomical outcomes.
 - [x] P3 Run the verification CLI over the completed database and commit its aggregate result and manifest summary, including tile count, bytes, manifest SHA-256, engine pin and configuration.
 - [x] P4 Compare a deterministic stratified random sample of at least 2,000 instants across the completed span with direct engine calls; commit per-body maximum, p99 and median interpolation errors and tests of the measurement method.
 - [x] P5 Benchmark cold and warm position lookups, event range queries and memory on the completed database; commit aggregate results with exact commands and machine details.
-- [ ] P6 Compare time, event definitions and boundary ownership with the events project in PR #43 using available public evidence; document where results cannot be interchanged.
+- [x] P6 Compare time, event definitions and boundary ownership with the events project in PR #43 using available public evidence; document where results cannot be interchanged.
 - [ ] P7 Update the project README, OPERATIONS and benchmark guide with measured scope and linked evidence, run the project tests and checks, and record remaining limits.
 
 The disk policy is 12 GB in decimal bytes across all generated/ contents.
@@ -442,3 +442,30 @@ for both prohibited dash characters. Changes stay in skydb/; phase 1 source,
 engine files, archives, root configuration, workflows and the package version
 remain unchanged. P6 and P7 remain pending. The session summary is appended to
 CHANGES.txt for the harness.
+
+P6 is complete. [CONVENTIONS.md](CONVENTIONS.md) compares skydb with the public
+events workbench at its reviewed immutable commit. It documents input clocks,
+engine provenance, coordinate definitions, opposite window ownership, clock
+seams, root endpoint selection, sampled touches, aspect orientation, station
+direction and search refusal behavior. It explains where record mapping needs
+additional checks and where the projects provide different event definitions.
+The project README links the comparison.
+
+[scripts/events-conventions.mjs](scripts/events-conventions.mjs) retrieves only
+the reviewed public sources and records their URLs, byte hashes and inspected
+line ranges alongside selected declarations and local source identities in
+[docs/evidence/events-conventions.json](docs/evidence/events-conventions.json).
+The receipt reproduces the source scope without copying public source files
+into the project. This is source inspection, with no execution of the events
+workbench or measured agreement between the projects. Existing skydb boundary
+and event tests enforce the documented local rules; shared definitions do not
+establish independent astronomical accuracy or event completeness.
+
+Validation passed on the Node runtime recorded in the receipt: locked project
+setup, `npm --prefix skydb test`, workflow module syntax checks and the project
+isolation and package-exclusion checker. Receipt hashes match the inspected
+local source bytes, and changed documentation passed checks for both prohibited
+dash characters. All changes stay in skydb/; phase 1 behavior, engine files,
+archives, root configuration, workflows and the package version are unchanged.
+P7 remains pending. The session summary is appended to CHANGES.txt for the
+harness.
