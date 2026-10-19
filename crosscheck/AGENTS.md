@@ -35,8 +35,27 @@ execution is not a licence exemption.
   values, per-case positions, tables or Swiss-derived test expectations.
 - JPL is the positional accuracy reference. Keep Swiss instrument
   comparisons and convention differences separate from JPL numerical error.
-  Preserve version and returned-flag counts, including fallback, and record
-  ephemeris file identities by SHA-256 only.
+  Use the same synthetic charts and exact bodies for the grouped
+  engine-minus-JPL, engine-minus-Swiss and Swiss-minus-JPL channels, split
+  by DE440 and DE441. Request each compared body once through
+  comparePositionPair; both Swiss comparisons must leave the transport as
+  aggregate states only. Preserve the legacy single-comparison wrapper.
+- Preserve version and binding labels, adapter and binding SHA-256 digests,
+  and external ephemeris file identities by SHA-256 only. Keep installation
+  paths out of identities. Record returned flags and fallback verdicts per
+  request; paired comparison and coordinate rows describe the same request,
+  so do not sum them as independent instrument calls.
+- Keep grouped Swiss channels present when the instrument is unavailable,
+  with explicit unavailable identity and no numerical measurements.
+  Fallback, error and unsupported responses contribute no residual values.
+  Use fixed absolute histograms for median, p99 and p99.9 intervals and
+  preserve exact sample maxima. Never turn an unavailable channel or empty
+  reference group into zero residuals.
+- State the remaining conventions with Swiss comparisons: its apparent
+  deflection, its lunar corrections versus the JPL campaign's geometric
+  Moon, and the frame and TT Julian-date rounding differences. Swiss is a
+  second instrument, not a second positional truth. Do not claim a live
+  measurement until its aggregate report is committed.
 - Keep Swiss optional. Runs without configuration report unavailable.
   A configured but invalid instrument must fail explicitly. CI runs without
   Swiss, using invented protocol peers and absence tests.

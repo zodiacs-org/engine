@@ -15,7 +15,10 @@ function sorted(value) {
 const csvCell = value => value === null ? '' : '"' + String(value).replaceAll('"', '""') + '"';
 const md = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
   .replaceAll('|', '&#124;').replaceAll('`', '&#96;');
-const groupedChannel = name => /^(JPL|Convention)\.(DE440|DE441)\.([A-Z][a-z]+)\.(lon|lat|distance)$/.exec(name);
+const groupedChannel = name => /^(JPL|Convention|Swiss|SwissJPL)\.(DE440|DE441)\.([A-Z][a-z]+)\.(lon|lat|distance)$/.exec(name);
+const swissChannel = name => /^(Swiss|SwissJPL)\.(DE440|DE441)\.[A-Z][a-z]+\.(lon|lat)$/.test(name);
+const comparisonKinds = { JPL: 'engine-minus-JPL', Convention: 'JPL-convention-difference',
+  Swiss: 'engine-minus-Swiss', SwissJPL: 'Swiss-minus-JPL' };
 function referenceGroups(config, channels) {
   const groups = config.conventions?.referenceGroups;
   if (!groups && !Object.keys(channels).some(groupedChannel)) return null;
@@ -36,8 +39,46 @@ function referenceGroups(config, channels) {
       .reduce((total, [, c]) => total + c.statistics.n, 0);
     const conventionResiduals = selected.filter(([channel]) => groupedChannel(channel)[1] === 'Convention')
       .reduce((total, [, c]) => total + c.statistics.n, 0);
-    return [name, { ...group, numericalResiduals, conventionResiduals }];
+    const swissResiduals = Object.keys(channels).some(swissChannel) ? {
+      engineSwissResiduals: selected.filter(([channel]) => groupedChannel(channel)[1] === 'Swiss')
+        .reduce((total, [, c]) => total + c.statistics.n, 0),
+      swissJplResiduals: selected.filter(([channel]) => groupedChannel(channel)[1] === 'SwissJPL')
+        .reduce((total, [, c]) => total + c.statistics.n, 0)
+    } : {};
+    return [name, { ...group, numericalResiduals, conventionResiduals, ...swissResiduals }];
   }));
+}
+function swissSummary(campaign, channels) {
+  const verdicts = { pass: 0, fail: 0, error: 0, unsupported: 0, fallback: 0 }, returnedFlags = {};
+  for (const [name, channel] of Object.entries(channels)) {
+    if (!/^Swiss\.(DE440|DE441)\.[A-Z][a-z]+\.lon$/.test(name)) continue;
+    for (const [key, count] of Object.entries(channel.verdicts)) verdicts[key] += count;
+    for (const [flag, count] of Object.entries(channel.flags)) returnedFlags[flag] = (returnedFlags[flag] ?? 0) + count;
+  }
+  const countFlags = select => Object.entries(returnedFlags).reduce((sum, [flag, count]) => sum + (select(Number(flag) & 7) ? count : 0), 0);
+  const identity = campaign.identities.references.Swiss;
+  if (!identity || typeof identity !== 'object' || Array.isArray(identity)) throw Error('Missing Swiss instrument identity.');
+  const status = identity.status === 'unavailable' ? 'unavailable' : 'available';
+  const digest = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
+  if (status === 'unavailable' ? !keys(identity, ['status']) :
+    !keys(identity, ['adapterSha256', 'bindingSha256', 'engineVersion', 'binding', 'ephemerisFiles']) ||
+    !digest(identity.adapterSha256) || !digest(identity.bindingSha256) ||
+    typeof identity.engineVersion !== 'string' || !/^[0-9.]+$/.test(identity.engineVersion) ||
+    typeof identity.binding !== 'string' || !/^pyswisseph [0-9.]+$/.test(identity.binding) ||
+    !identity.ephemerisFiles || typeof identity.ephemerisFiles !== 'object' || Array.isArray(identity.ephemerisFiles) ||
+    Object.keys(identity.ephemerisFiles).length > 10000 ||
+    Object.entries(identity.ephemerisFiles).some(([name, hash]) => !/^[A-Za-z0-9_.-]+\.se1$/.test(name) || !digest(hash)))
+    throw Error('Invalid Swiss instrument identity.');
+  if (status === 'unavailable' && Object.entries(channels).some(([name, channel]) => swissChannel(name) &&
+      (channel.statistics.n || Object.keys(channel.flags).length ||
+       Object.entries(channel.verdicts).some(([verdict, count]) => verdict !== 'unsupported' && count))))
+    throw Error('Unavailable Swiss instrument contains returned responses or measurements.');
+  return { status, identity,
+    countBasis: 'Engine-minus-Swiss longitude channels only; inactive-group and unsupported-center outcomes included; not instrument request counts',
+    longitudeChannelOutcomes: Object.values(verdicts).reduce((sum, count) => sum + count, 0), verdicts, returnedFlags,
+    swiephResponses: countFlags(backend => backend === 2),
+    moshierFallbackResponses: countFlags(backend => backend === 4),
+    otherBackendFallbackResponses: countFlags(backend => backend !== 2 && backend !== 4) };
 }
 
 export function renderReport({ campaign, states, metadata }, { allowPartial = false } = {}) {
@@ -61,16 +102,19 @@ export function renderReport({ campaign, states, metadata }, { allowPartial = fa
       statistics: summarize(channel.stats), verdicts: channel.verdicts, flags: channel.flags }];
   }));
   const groups = referenceGroups(campaign.config, channels);
+  const hasSwiss = Object.keys(channels).some(swissChannel);
+  const swissInstrument = hasSwiss ? swissSummary(campaign, channels) : null;
   if (groups) for (const [name, channel] of Object.entries(channels)) {
     const parsed = groupedChannel(name);
-    if (parsed) Object.assign(channel, { comparisonKind: parsed[1] === 'JPL' ? 'engine-minus-JPL' : 'JPL-convention-difference',
+    if (parsed) Object.assign(channel, { comparisonKind: comparisonKinds[parsed[1]],
       referenceGroup: parsed[2], body: parsed[3], coordinate: parsed[4],
       status: groups[parsed[2]].status === 'empty' ? 'empty' : channel.statistics.n ? 'measured' : 'unavailable' });
   }
   const hasQuantiles = Boolean(campaign.config.quantiles?.length);
-  const report = sorted({ schema: groups ? 'crosscheck-report/3' : hasQuantiles ? 'crosscheck-report/2' : 'crosscheck-report/1', metadata, campaign: verified,
+  const report = sorted({ schema: hasSwiss ? 'crosscheck-report/4' : groups ? 'crosscheck-report/3' : hasQuantiles ? 'crosscheck-report/2' : 'crosscheck-report/1', metadata, campaign: verified,
     complete: merged.completed === campaign.config.total, completed: merged.completed, coverage, channels,
     ...(groups ? { referenceGroups: groups } : {}),
+    ...(hasSwiss ? { swissInstrument } : {}),
     span: { startMsInclusive: campaign.config.startMs, endMsExclusive: campaign.config.endMs,
       meaning: 'Configured synthetic sampling interval, not continuous coverage or observed extrema' } });
   const json = JSON.stringify(report, null, 2) + '\n';
@@ -87,12 +131,21 @@ export function renderReport({ campaign, states, metadata }, { allowPartial = fa
     'The JSON receipt contains the seed, exact shard index coverage, reference identities and correction conventions.',
     'Residual statistics include pass and fail observations only. Error, unsupported and fallback verdicts are excluded from residual statistics.',
     'Tolerances are campaign acceptance criteria. Sample maxima are not proven accuracy bounds.', ''];
+  if (hasSwiss) lines.push('Swiss instrument: ' + swissInstrument.status + '. ' +
+    (swissInstrument.status === 'unavailable' ? 'No engine-versus-Swiss or Swiss-versus-JPL residuals were recorded.' :
+      'External optional test instrument; JPL remains the positional accuracy reference.'),
+    'Swiss returned-flag responses: SWIEPH ' + swissInstrument.swiephResponses + '; Moshier fallback ' +
+      swissInstrument.moshierFallbackResponses + '; other backend fallback ' + swissInstrument.otherBackendFallbackResponses + '.',
+    'Flag-response counts use engine-minus-Swiss longitude channels only, so latitude channels and Swiss-minus-JPL comparisons do not duplicate them. ' +
+      'Longitude verdict totals include inactive-group and unsupported-center outcomes and are not instrument request counts. Per-channel flags and fallback/error/unsupported verdicts remain in the tables and receipt.', '');
   if (groups) lines.push('Reference groups:', '',
-    '| Reference group | Configured status | TT intervals in epoch milliseconds | Engine/JPL residuals | Convention residuals | Reason |',
-    '| --- | --- | --- | ---: | ---: | --- |',
+    hasSwiss ? '| Reference group | Configured status | TT intervals in epoch milliseconds | Engine/JPL residuals | Convention residuals | Engine/Swiss residuals | Swiss/JPL residuals | Reason |' :
+      '| Reference group | Configured status | TT intervals in epoch milliseconds | Engine/JPL residuals | Convention residuals | Reason |',
+    hasSwiss ? '| --- | --- | --- | ---: | ---: | ---: | ---: | --- |' : '| --- | --- | --- | ---: | ---: | --- |',
     ...Object.entries(groups).map(([name, group]) => '| ' + [name, group.status,
       group.intervals.length ? group.intervals.map(i => `[${i.startMs}, ${i.endMs})`).join('; ') : 'none',
-      group.numericalResiduals, group.conventionResiduals, group.reason].map(md).join(' | ') + ' |'), '',
+      group.numericalResiduals, group.conventionResiduals,
+      ...(hasSwiss ? [group.engineSwissResiduals, group.swissJplResiduals] : []), group.reason].map(md).join(' | ') + ' |'), '',
     'Residual counts sum coordinate comparisons, not charts. Empty groups have no requested interval or measured coverage. Unavailable exact centers have no numerical errors or maxima.', '',
     'Engine minus JPL residuals:', '');
   const tableHeader = [
@@ -104,12 +157,15 @@ export function renderReport({ campaign, states, metadata }, { allowPartial = fa
     'p999_rank','p999_lower','p999_upper','quantile_method');
   if (groups) header.push('comparison_kind','reference_group','body','coordinate','status');
   const csv = [header.join(',')];
-  const conventionRows = [];
+  const conventionRows = [], engineSwissRows = [], swissJplRows = [], otherRows = [];
   for (const [name, c] of Object.entries(channels)) {
     const s = c.statistics, v = c.verdicts;
     const row = [name,c.unit,s.n,v.pass,v.fail,v.error,v.unsupported,v.fallback,c.tolerance,s.mean,s.meanAbs,s.rms,s.populationStdDev,s.maxAbs];
     const renderedRow = '| ' + row.map(x => x === null ? 'unavailable' : md(x)).join(' | ') + ' |';
     if (groups && c.comparisonKind === 'JPL-convention-difference') conventionRows.push(renderedRow);
+    else if (hasSwiss && c.comparisonKind === 'engine-minus-Swiss') engineSwissRows.push(renderedRow);
+    else if (hasSwiss && c.comparisonKind === 'Swiss-minus-JPL') swissJplRows.push(renderedRow);
+    else if (hasSwiss && c.comparisonKind !== 'engine-minus-JPL') otherRows.push(renderedRow);
     else lines.push(renderedRow);
     const quantileCells = hasQuantiles ? [
       ...['median', 'p99', 'p999'].flatMap(key => {
@@ -124,6 +180,14 @@ export function renderReport({ campaign, states, metadata }, { allowPartial = fa
   if (conventionRows.length) lines.push('', 'Separate JPL convention differences:', '',
     'These residuals compare the relativistic aberration direction with the Newtonian CN+S direction for the same reference states and frame. They are not engine errors, a complete model correction or an independent truth comparison. They are never subtracted from aggregate engine errors.', '',
     ...tableHeader, ...conventionRows);
+  if (hasSwiss) {
+    lines.push('', 'Engine minus Swiss instrument residuals:', '',
+      'These are comparisons with a second instrument, separate from engine accuracy versus JPL. Only SWIEPH returned flags contribute numerical residuals.', '',
+      ...tableHeader, ...engineSwissRows, '', 'Swiss instrument minus JPL residuals:', '',
+      'These compare the same Swiss positions with the selected JPL reference and frame. Model and convention differences can contribute; no Swiss difference is subtracted from engine errors.', '',
+      ...tableHeader, ...swissJplRows);
+    if (otherRows.length) lines.push('', 'Other comparison channels:', '', ...tableHeader, ...otherRows);
+  }
   if (hasQuantiles) {
     lines.push('', groups ? 'Engine minus JPL absolute-error percentiles:' : 'Absolute-error percentiles:', '',
       'Median, p99 and p99.9 select exact nearest ranks ceil(n*p) among absolute residuals. The histogram locates each rank exactly; only its value is approximated.',
@@ -131,19 +195,32 @@ export function renderReport({ campaign, states, metadata }, { allowPartial = fa
       'The fixed histogram has an exact zero bucket, an underflow bucket below 2^-40, 16 equal subdivisions per power-of-two interval from 2^-40 to 2^40, and an overflow bucket starting at 2^40.',
       'Regular bucket width is at most lower/16. Underflow and overflow have no relative-width guarantee; overflow is bounded by the exact observed maximum. Histogram storage is bounded independently of chart count.',
       'Channels without a histogram, including historical statistics, have unavailable percentiles. Empty groups have unavailable percentiles and maxima.', '',
-      '| Channel | Unit | Median absolute interval | p99 absolute interval | p99.9 absolute interval |',
-      '| --- | --- | --- | --- | --- |');
-    const conventionQuantiles = [];
+      ...(hasSwiss ? ['| Channel | Unit | Maximum absolute | p99.9 absolute interval | p99 absolute interval | Median absolute interval |',
+        '| --- | --- | ---: | --- | --- | --- |'] : ['| Channel | Unit | Median absolute interval | p99 absolute interval | p99.9 absolute interval |',
+        '| --- | --- | --- | --- | --- |']));
+    const conventionQuantiles = [], engineSwissQuantiles = [], swissJplQuantiles = [], otherQuantiles = [];
     for (const [name, c] of Object.entries(channels)) {
       const q = c.statistics.absoluteQuantiles;
       const interval = key => q?.[key] ? `[${q[key].lower}, ${q[key].upper}]` : 'unavailable';
-      const row = '| ' + [name, c.unit, ...['median', 'p99', 'p999'].map(interval)].map(md).join(' | ') + ' |';
+      const row = '| ' + [name, c.unit, ...(hasSwiss ? [c.statistics.maxAbs ?? 'unavailable', ...['p999', 'p99', 'median'].map(interval)] :
+        ['median', 'p99', 'p999'].map(interval))].map(md).join(' | ') + ' |';
       if (groups && c.comparisonKind === 'JPL-convention-difference') conventionQuantiles.push(row);
+      else if (hasSwiss && c.comparisonKind === 'engine-minus-Swiss') engineSwissQuantiles.push(row);
+      else if (hasSwiss && c.comparisonKind === 'Swiss-minus-JPL') swissJplQuantiles.push(row);
+      else if (hasSwiss && c.comparisonKind !== 'engine-minus-JPL') otherQuantiles.push(row);
       else lines.push(row);
     }
     if (conventionQuantiles.length) lines.push('', 'Separate convention-difference absolute percentiles:', '',
-      '| Channel | Unit | Median absolute interval | p99 absolute interval | p99.9 absolute interval |',
-      '| --- | --- | --- | --- | --- |', ...conventionQuantiles);
+      ...(hasSwiss ? ['| Channel | Unit | Maximum absolute | p99.9 absolute interval | p99 absolute interval | Median absolute interval |',
+        '| --- | --- | ---: | --- | --- | --- |'] : ['| Channel | Unit | Median absolute interval | p99 absolute interval | p99.9 absolute interval |',
+        '| --- | --- | --- | --- | --- |']), ...conventionQuantiles);
+    if (hasSwiss) {
+      const swissHeader = ['| Channel | Unit | Maximum absolute | p99.9 absolute interval | p99 absolute interval | Median absolute interval |',
+        '| --- | --- | ---: | --- | --- | --- |'];
+      lines.push('', 'Engine minus Swiss instrument absolute-error percentiles:', '', ...swissHeader, ...engineSwissQuantiles,
+        '', 'Swiss instrument minus JPL absolute-error percentiles:', '', ...swissHeader, ...swissJplQuantiles);
+      if (otherQuantiles.length) lines.push('', 'Other comparison channel absolute percentiles:', '', ...swissHeader, ...otherQuantiles);
+    }
   }
   lines.push('', 'Exclusions:', '', ...metadata.exclusions.map(e => '- ' + md(e)), '',
     'Reference identities: `' + md(JSON.stringify(sorted(campaign.identities.references))) + '`.',

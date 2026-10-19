@@ -44,13 +44,13 @@ export function validateSpec(spec) {
   return { ...spec };
 }
 
-export function phase2Config(spec, plan) {
+export function phase2Config(spec, plan, { swiss = false } = {}) {
   if (spec.profile !== 'phase2' || plan.groups.DE440.status !== 'available' ||
       plan.groups.DE441.status !== 'empty') throw Error('Verified full-span reference plan required.');
   const channels = groupedChannels();
   return { seed: spec.seed, total: spec.total, shards: spec.shards,
     startMs: SAMPLE_SPAN.startMs, endMs: SAMPLE_SPAN.endMs, channels,
-    quantiles: Object.keys(channels).filter(name => /^(JPL|Convention)\.DE44[01]\./.test(name)).sort(),
+    quantiles: Object.keys(channels).filter(name => /^(JPL|Convention|Swiss|SwissJPL)\.DE44[01]\./.test(name)).sort(),
     conventions: { input: 'Synthetic TT; uniform sphere; random house systems; half-open 1800-01-01 to 2200-01-01',
       frame: 'IAU2006 bias/precession and unadjusted IAU2000B true ecliptic/equinox of date',
       correction: 'JPL Moon NONE; Sun Mercury Venus CN+REL with no deflection; Earth center 399; NAIF periodic TT/TDB',
@@ -62,7 +62,16 @@ export function phase2Config(spec, plan) {
       referenceGroups: Object.fromEntries(Object.entries(plan.groups).map(([group, item]) => [group,
         { status: item.status, intervals: item.intervals, reason: item.reason }])),
       unavailableBodies: Object.fromEntries(Object.entries(plan.bodies).filter(([, item]) => item.status === 'unavailable')
-        .map(([body, item]) => [body, item.reason])), Swiss: 'unavailable' } };
+        .map(([body, item]) => [body, item.reason])),
+      Swiss: swiss ? 'Optional external apparent geocentric true-of-date instrument; SWIEPH responses only. Swiss channels: engine minus Swiss; SwissJPL channels: Swiss minus JPL, in arcseconds. Same chart and a single adapter response per exact body.' : 'unavailable',
+      SwissConventionDifference: 'Swiss apparent places include its deflection model and lunar apparent corrections; JPL has no deflection and uses geometric Moon. Frame, ephemeris and TT Julian-date rounding differences remain. Instrument comparisons are separate from JPL accuracy and convention channels; never subtract aggregate maxima.' } };
+}
+
+export function swissSelection(env) {
+  const python = env.CROSSCHECK_PYTHON, ephemerisPath = env.SE_EPHE_PATH;
+  if ((python !== undefined && !python) || (ephemerisPath !== undefined && !ephemerisPath) || (python && !ephemerisPath))
+    throw Error('Configured Swiss instrument requires a nonempty external SE_EPHE_PATH; CROSSCHECK_PYTHON must be nonempty when supplied.');
+  return ephemerisPath ? { ephemerisPath, python: python || 'python3' } : null;
 }
 
 export function swissChannels() {
@@ -123,9 +132,9 @@ export async function main(args) {
   // Swiss is enabled explicitly via external environment selectors, never auto-installed.
   let swiss;
   try {
-    if (process.env.SE_EPHE_PATH) swiss = await openSwiss({ ephemerisPath: process.env.SE_EPHE_PATH,
-      python: process.env.CROSSCHECK_PYTHON || 'python3' });
-    const config = wide ? phase2Config(spec, plan) : { seed: spec.seed, total: spec.total, shards: spec.shards,
+    const selection = swissSelection(process.env);
+    if (selection) swiss = await openSwiss(selection);
+    const config = wide ? phase2Config(spec, plan, { swiss: Boolean(swiss) }) : { seed: spec.seed, total: spec.total, shards: spec.shards,
       startMs: Date.UTC(1950, 0, 1), endMs: Date.UTC(2050, 0, 1),
       channels: { ...CHANNELS, ...(swiss ? swissChannels() : {}) },
       conventions: { input: 'synthetic TT; uniform sphere; random house systems',
@@ -133,10 +142,6 @@ export async function main(args) {
         correction: 'JPL Moon NONE; other exact centers CN+S; no deflection; NAIF periodic TT/TDB',
         Swiss: swiss ? 'external adapter apparent geocentric true-of-date; SWIEPH only' : 'unavailable',
         tolerance: '60 arcseconds screening only; engine minus reference; no accuracy bound' } };
-    if (wide && swiss) {
-      Object.assign(config.channels, swissChannels());
-      config.conventions.Swiss = 'external adapter apparent geocentric true-of-date; SWIEPH only; separate instrument comparison';
-    }
     const identities = { build: build.sha256, tooling: await runnerToolingIdentity(), references: {
       EngineBuild: { sourceSha256: build.inputs.source.sha256, outputSha256: build.output.sha256,
         dependencySha256: build.inputs.dependency.sha256, nodeExecutableSha256: build.inputs.runtime.executableSha256 },
@@ -152,10 +157,10 @@ export async function main(args) {
       process.on('SIGINT', stop); process.on('SIGTERM', stop);
       try {
         const readState = createSpkReader([kernel]);
-        let evaluate = wide ? createGroupedEvaluator({ natalChart, calc, terms,
+        let evaluate = wide ? createGroupedEvaluator({ natalChart, calc, terms, swiss,
           referenceAt: tdbSeconds => ({ ...selectReference([kernel], tdbSeconds), readState }) }) :
           createEvaluator({ natalChart, readState, terms });
-        if (swiss) evaluate = withSwiss(evaluate, natalChart, swiss);
+        if (swiss && !wide) evaluate = withSwiss(evaluate, natalChart, swiss);
         const result = await executeCampaign({ spec, config, identities, evaluate, directory, shard, maxCases, signal: controller.signal });
         await verifyBuild();
         console.log(result.complete ? 'Selected shards complete.' : 'Budget or signal stop; resume with the same specification.');
@@ -178,7 +183,11 @@ export async function main(args) {
           'JPL residuals use Moon NONE and other exact centers CN+REL without deflection. They retain backdated-observer aberration, light-time, frame and periodic TT/TDB model differences. Convention channels isolate CN+REL minus CN+S on the same independent states, not total model error.',
           'Distances use binary64 TT Julian dates in calc, which can round relative to natalChart millisecond inputs; JPL uses TT seconds converted to TDB. Distance maxima are in km and angular maxima in arcseconds.'
         ] : ['JPL residuals include model differences: CN+S Newtonian aberration, no deflection, periodic TT/TDB and unadjusted IAU2000B frames. Sampling interval is TT despite ISO Z labels.']),
-        'Swiss.positions is the legacy unavailable channel; optional per-body Swiss channels carry actual measurements. Fallback/error/unsupported verdicts contain no residuals.',
+        ...(wide ? [
+          swiss ? 'Swiss and SwissJPL channels use the same synthetic chart, TT Julian date and one adapter response per compared body. Swiss is a second instrument, not the accuracy arbiter. The receipt records version, adapter/binding hashes, ephemeris SHA-256 identities and returned-flag counts.' : 'Swiss is unavailable: no external instrument was configured. Swiss and SwissJPL channels retain unsupported verdicts without numerical observations.',
+          'Swiss apparent places include its deflection model and lunar apparent corrections, unlike JPL without deflection and geometric Moon. Frame and TT Julian-date rounding differences also remain in these separate instrument comparisons.'
+        ] : []),
+        'Swiss.positions is the legacy unavailable channel; per-body Swiss channels carry measurements only when configured. Non-SWIEPH responses, including Moshier fallback, error and unsupported verdicts contain no residuals.',
         'Sample maxima are not unsampled bounds; no throughput guarantee. Command records report invocation; reproduction command above runs all shards from scratch with identical inputs.'
       ] } };
     const bytes = JSON.stringify(bundle) + '\n';

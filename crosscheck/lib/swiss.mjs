@@ -46,7 +46,8 @@ export async function openSwiss({ python = 'python3', ephemerisPath, timeoutMs =
     const identity = { adapterSha256: createHash('sha256').update(await readFile(adapter)).digest('hex'),
       bindingSha256: createHash('sha256').update(await readFile(origin)).digest('hex'),
       engineVersion: a.engineVersion, binding: a.configuration.binding, ephemerisFiles: { ...files } };
-    return { identity, comparePosition: args => channel.comparePosition(args), close: () => channel.close() };
+    return { identity, comparePosition: args => channel.comparePosition(args),
+      comparePositionPair: args => channel.comparePositionPair(args), close: () => channel.close() };
   } catch { child.kill(); throw safeError(); }
 }
 
@@ -79,11 +80,15 @@ export class SwissChannel {
       this.pending = { resolve: v => { clearTimeout(timer); resolve(v); }, reject: e => { clearTimeout(timer); reject(e); } };
     });
   }
-  async comparePosition({ body, jdTT, actual, toleranceArcsec }) {
-    if (!bodies.has(body) || !Number.isFinite(jdTT) || !actual ||
-        !Number.isFinite(actual.lon) || actual.lon < 0 || actual.lon >= 360 ||
-        !Number.isFinite(actual.lat) || Math.abs(actual.lat) > 90) throw new RangeError('Invalid position comparison');
-    const stats = { lon: emptyStats(toleranceArcsec), lat: emptyStats(toleranceArcsec) };
+  comparePosition(args) { return this.#comparePosition(args, false); }
+  comparePositionPair(args) { return this.#comparePosition(args, true); }
+  async #comparePosition({ body, jdTT, actual, reference, toleranceArcsec, quantiles = false }, paired) {
+    const validPosition = value => value && Number.isFinite(value.lon) && value.lon >= 0 && value.lon < 360 &&
+      Number.isFinite(value.lat) && Math.abs(value.lat) <= 90;
+    if (!bodies.has(body) || !Number.isFinite(jdTT) || !validPosition(actual) ||
+        (paired && !validPosition(reference))) throw new RangeError('Invalid position comparison');
+    const coordinates = () => ({ lon: emptyStats(toleranceArcsec, { quantiles }), lat: emptyStats(toleranceArcsec, { quantiles }) });
+    const stats = paired ? { engineSwiss: coordinates(), swissJpl: coordinates() } : coordinates();
     if (this.busy) throw new Error('Swiss instrument accepts one request at a time.');
     this.busy = true;
     try {
@@ -99,9 +104,17 @@ export class SwissChannel {
           !Number.isFinite(r.output?.lat) || Math.abs(r.output.lat) > 90) { this.fail(); throw safeError(); }
       // SWIEPH is bit 2. Refuse numerical aggregation when another backend answered.
       if ((flags & 7) !== 2) return { verdict: 'fallback', retflags: flags };
-      stats.lon = addResidual(stats.lon, angularResidual(actual.lon, r.output.lon) * 3600);
-      stats.lat = addResidual(stats.lat, (actual.lat - r.output.lat) * 3600);
-      return { verdict: stats.lon.passed && stats.lat.passed ? 'pass' : 'fail', retflags: flags, stats };
+      const measure = (target, left, right) => {
+        target.lon = addResidual(target.lon, angularResidual(left.lon, right.lon) * 3600);
+        target.lat = addResidual(target.lat, (left.lat - right.lat) * 3600);
+      };
+      if (paired) {
+        // The one response is reduced here; neither position escapes the transport.
+        measure(stats.engineSwiss, actual, r.output);
+        measure(stats.swissJpl, r.output, reference);
+      } else measure(stats, actual, r.output);
+      const measured = paired ? Object.values(stats) : [stats];
+      return { verdict: measured.every(value => value.lon.passed && value.lat.passed) ? 'pass' : 'fail', retflags: flags, stats };
     } finally { this.busy = false; }
   }
   close() { this.fail(); }

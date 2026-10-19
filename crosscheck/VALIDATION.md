@@ -1102,3 +1102,107 @@ profile reserves bounded checkpoint and report space before execution and
 caps shards for its larger grouped bundles. No large campaign or live Swiss
 measurement was performed. Only aggregate evidence is retained; kernel bytes
 and generated states remain ignored.
+
+## Phase 2 S3 paired Swiss comparison
+
+The grouped profile now computes engine-minus-Swiss and Swiss-minus-JPL
+longitude and latitude aggregates alongside engine-minus-JPL for the same
+synthetic charts. The evaluator reuses its chart and independent JPL
+direction and requests each compared body once. comparePositionPair reduces
+the response inside the transport to signed coordinate statistics with
+absolute histograms. Swiss coordinates and diagnostics never leave it.
+The legacy comparePosition API and historical report bytes are preserved.
+
+The new report schema separates all comparison tables, with exact sample
+maxima and nearest-rank p99.9, p99 and median intervals in arcseconds.
+Returned flags remain attached to each coordinate channel. A separate
+instrument summary counts returned-flag responses using engine-minus-Swiss
+longitude only, avoiding duplicates across coordinates and comparisons;
+unsupported channel outcomes are explicitly not instrument request counts.
+Moshier and other backend fallback responses have counts without numerical
+residuals. Identity fields retain the reported version and binding label,
+adapter and binding hashes, and ephemeris file SHA-256 identities, without
+installation paths. Identity changes refuse checkpoint resume.
+
+Unconfigured runs retain grouped Swiss channels with an unavailable
+identity and unsupported outcomes without statistics. Supplying only a
+Python selector, an empty selector, or an invalid configured instrument
+fails explicitly. CI requires no Swiss installation. Invented-peer tests
+in tests/swiss.node-test.mjs check signs, longitude wrap, single-request
+pairing, histogram versions, concurrency and sanitized excluded responses.
+tests/grouped-campaign.node-test.mjs checks evaluator reuse, selected groups,
+exclusions, unavailable selection, continuation and identity mismatches.
+tests/report.node-test.mjs checks separate tables, flags, fallback counts,
+unavailable contradictions, identity shape and historical rendering.
+These tests provide no Swiss-derived numerical expectations.
+
+The bounded [paired pilot](reports/phase2-swiss-pilot.md),
+[CSV](reports/phase2-swiss-pilot.csv) and
+[receipt](reports/phase2-swiss-pilot.json) record 32 completed synthetic
+charts sampled from the configured half-open TT interval 1800-01-01 to
+2200-01-01. The retained-receipt test in
+tests/grouped-campaign.node-test.mjs enforces the count, seed, span, command,
+reference/build identities, grouped observation counts and aggregate-only
+retention. It checks the receipt, not numerical position expectations.
+All 128 returned responses used SWIEPH; none used Moshier or another backend.
+The same receipt test enforces these returned-flag counts. DE441 has no
+selected interval because full DE440 covers the requested span. Missing
+exact centers remain unavailable, without barycenter substitution.
+
+Swiss is the second instrument, and JPL remains the positional reference.
+Swiss apparent deflection and lunar corrections differ from the JPL
+campaign's no-deflection directions and geometric Moon; frame, ephemeris
+and TT Julian-date rounding differences also remain. The report records
+these conventions separately and never subtracts aggregate maxima. This
+bounded run does not complete or establish coverage for the large campaign.
+
+Recreate crosscheck/runtime/s3-pilot.json with these contents:
+
+```json
+{"name":"phase2-swiss-pilot","profile":"phase2","kernel":"de440","seed":"synthetic-phase2-swiss-pilot-v1","total":32,"shards":2}
+```
+
+With Node v22.23.3 on PATH, the isolated build and verified cached public
+inputs, and CROSSCHECK_PYTHON and SE_EPHE_PATH selecting the approved external
+installation, these commands passed from the repository root:
+
+```sh
+node crosscheck/tools/campaign.mjs crosscheck/runtime/s3-pilot.json all 1
+node crosscheck/tools/campaign.mjs crosscheck/runtime/s3-pilot.json all
+node crosscheck/tools/campaign.mjs crosscheck/runtime/s3-pilot.json report
+node crosscheck/tools/campaign.mjs crosscheck/runtime/s3-pilot.json check
+mv crosscheck/runtime/campaigns/phase2-swiss-pilot crosscheck/runtime/campaigns/phase2-swiss-pilot-first
+node crosscheck/tools/campaign.mjs crosscheck/runtime/s3-pilot.json all
+node crosscheck/tools/campaign.mjs crosscheck/runtime/s3-pilot.json check
+```
+
+The budget stop resumed to completion. Fresh execution reproduced all report
+bytes without replacing the retained reports. Only aggregate evidence was
+written; Swiss installation and data remained external. The session ran
+one campaign process and its single adapter, below the worker limit, and
+the shared disk and file safeguards passed.
+
+Final project validation used Node v22.23.3. The Swiss selectors were absent
+for the ordinary project checks:
+
+```sh
+npm --prefix crosscheck run check:syntax
+node crosscheck/tools/check-swiss.mjs
+npm --prefix crosscheck run build
+npm --prefix crosscheck run verify
+npm --prefix crosscheck test
+node crosscheck/tools/validate-frames.mjs --phase2 --check
+node crosscheck/tools/reference-plan.mjs --check
+node crosscheck/tools/render-jpl.mjs --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/phase2-pilot/report-bundle.json phase2-pilot --check
+npm --prefix crosscheck run check
+node crosscheck/tools/check.mjs --all-sizes
+git diff --check
+```
+
+The full dedicated suite, isolated build identity, import/dependency boundary,
+historical aggregate reproduction, npm exclusion and file/storage checks
+passed. S3 prepares the paired comparisons for P5 and P6; the large campaign
+has not started in this milestone.

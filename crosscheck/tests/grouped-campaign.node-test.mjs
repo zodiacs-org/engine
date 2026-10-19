@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { readFile, mkdir, mkdtemp, rm } from 'node:fs/promises';
 import { groupedChannels, createGroupedEvaluator, DISTANCE_SCREEN_KM } from '../lib/wide-campaign.mjs';
 import { EXACT_TARGETS, createReferencePlan } from '../lib/reference-plan.mjs';
-import { validateSpec, phase2Config, executeCampaign } from '../tools/campaign.mjs';
+import { validateSpec, phase2Config, executeCampaign, swissSelection } from '../tools/campaign.mjs';
+import { observation } from '../lib/campaign.mjs';
 import { renderReport } from '../lib/report.mjs';
 import { campaignIdentity } from '../lib/runner.mjs';
 const terms = Array.from({ length: 77 }, () => Array(11).fill(0));
@@ -29,10 +30,14 @@ test('phase2 configuration binds the full TT span, grouped units, percentile cha
   const config = phase2Config(spec, await plan());
   assert.equal(new Date(config.startMs).toISOString(), '1800-01-01T00:00:00.000Z');
   assert.equal(new Date(config.endMs).toISOString(), '2200-01-01T00:00:00.000Z');
-  assert.equal(Object.keys(config.channels).length, 102);
-  assert.equal(config.quantiles.length, 100);
+  assert.equal(Object.keys(config.channels).length, 182);
+  assert.equal(config.quantiles.length, 180);
   assert.equal(config.channels['JPL.DE440.Sun.distance'], DISTANCE_SCREEN_KM);
   assert.equal(config.channels['Convention.DE441.Mars.lon'], 60);
+  assert.equal(config.channels['Swiss.DE440.Sun.lon'], 60);
+  assert.equal(config.channels['SwissJPL.DE441.Mars.lat'], 60);
+  assert.equal(config.conventions.Swiss, 'unavailable');
+  assert.match(phase2Config(spec, await plan(), { swiss: true }).conventions.Swiss, /engine minus Swiss/);
   assert.equal(config.conventions.referenceGroups.DE441.status, 'empty');
   assert.deepEqual(config.conventions.referenceGroups.DE441.intervals, []);
   assert.deepEqual(Object.keys(config.conventions.unavailableBodies), Object.keys(EXACT_TARGETS).slice(4));
@@ -44,7 +49,7 @@ test('invented charts measure only selected group and exact centers; convention 
     const result = await createGroupedEvaluator(options(group))(sample);
     assert.deepEqual(Object.keys(result), Object.keys(groupedChannels()));
     for (const [name, outcome] of Object.entries(result)) {
-      const measured = name.includes(`.${group}.`) && bodies.includes(name.split('.')[2]);
+      const measured = /^(JPL|Convention)\./.test(name) && name.includes(`.${group}.`) && bodies.includes(name.split('.')[2]);
       assert.deepEqual(Object.keys(outcome).sort(), measured ? ['stats', 'verdict'] : ['verdict']);
       if (measured) {
         assert.equal(outcome.stats.n, 1); assert.equal(outcome.stats.version, 2);
@@ -87,7 +92,7 @@ test('grouped histograms survive budget stop and resume without filling empty sp
   const directory = await mkdtemp(new URL('grouped-test-', root));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const config = phase2Config(spec, await plan());
-  const identities = { build: 'a'.repeat(64), tooling: 'b'.repeat(64), references: { arithmetic: 'invented states only' } };
+  const identities = { build: 'a'.repeat(64), tooling: 'b'.repeat(64), references: { arithmetic: 'invented states only', Swiss: { status: 'unavailable' } } };
   const args = { spec, config, identities, directory, evaluate: createGroupedEvaluator(options()) };
   assert.equal((await executeCampaign({ ...args, maxCases: 1 })).complete, false);
   const resumed = await executeCampaign(args);
@@ -108,6 +113,102 @@ test('grouped histograms survive budget stop and resume without filling empty sp
       assert.equal(row.statistics.absoluteQuantiles.median, null);
     }
   }
+});
+
+test('Swiss selection keeps absence explicit and rejects incomplete configuration', () => {
+  assert.equal(swissSelection({}), null);
+  assert.deepEqual(swissSelection({ SE_EPHE_PATH: '/external/test-data' }),
+    { ephemerisPath: '/external/test-data', python: 'python3' });
+  assert.deepEqual(swissSelection({ SE_EPHE_PATH: '/external/test-data', CROSSCHECK_PYTHON: '/external/python' }),
+    { ephemerisPath: '/external/test-data', python: '/external/python' });
+  for (const env of [{ CROSSCHECK_PYTHON: '/external/python' }, { SE_EPHE_PATH: '' },
+    { CROSSCHECK_PYTHON: '' }, { SE_EPHE_PATH: '/external/test-data', CROSSCHECK_PYTHON: '' }]) {
+    assert.throws(() => swissSelection(env), /Configured Swiss/);
+  }
+});
+
+test('paired grouped comparison reuses one chart and reference and excludes every non-SWIEPH outcome', async () => {
+  for (const group of ['DE440', 'DE441']) {
+    let charts = 0;
+    const requested = [], base = options(group);
+    const swiss = { comparePositionPair: async request => {
+      requested.push(request);
+      assert.equal(request.jdTT, 2451545);
+      assert.deepEqual(request.actual, { lon: 359, lat: 1 });
+      assert.deepEqual(Object.keys(request.reference).sort(), ['lat', 'lon']);
+      assert.equal(request.quantiles, true); assert.equal(request.toleranceArcsec, 60);
+      // Cartesian x points along the independent test's J2000 mean ecliptic.
+      assert.ok(request.reference.lon < 0.01 || request.reference.lon > 359.99);
+      assert.ok(Math.abs(request.reference.lat) < 0.01);
+      if (request.body === 'Moon') return { verdict: 'fallback', retflags: 4 };
+      if (request.body === 'Mercury') return { verdict: 'error' };
+      if (request.body === 'Venus') return { verdict: 'unsupported' };
+      return { verdict: 'fail', retflags: 2, stats: {
+        engineSwiss: { lon: observation(-61, 60, { quantiles: true }).stats,
+          lat: observation(2, 60, { quantiles: true }).stats },
+        swissJpl: { lon: observation(3, 60, { quantiles: true }).stats,
+          lat: observation(-4, 60, { quantiles: true }).stats }
+      } };
+    } };
+    const result = await createGroupedEvaluator({ ...base, swiss,
+      natalChart: input => { charts++; return base.natalChart(input); } })(sample);
+    assert.equal(charts, 1); assert.deepEqual(requested.map(r => r.body), bodies);
+    for (const [kind, longitude, latitude] of [['Swiss', -61, 2], ['SwissJPL', 3, -4]]) {
+      const lon = result[`${kind}.${group}.Sun.lon`], lat = result[`${kind}.${group}.Sun.lat`];
+      assert.equal(lon.stats.mean, longitude); assert.equal(lat.stats.mean, latitude);
+      assert.equal(lon.verdict, kind === 'Swiss' ? 'fail' : 'pass'); assert.equal(lat.verdict, 'pass');
+      assert.equal(lon.stats.version, 2); assert.equal(lon.retflags, 2);
+      for (const axis of ['lon', 'lat']) {
+        assert.deepEqual(result[`${kind}.${group}.Moon.${axis}`], { verdict: 'fallback', retflags: 4 });
+        assert.deepEqual(result[`${kind}.${group}.Mercury.${axis}`], { verdict: 'error' });
+        assert.deepEqual(result[`${kind}.${group}.Venus.${axis}`], { verdict: 'unsupported' });
+        assert.deepEqual(result[`${kind}.${group}.Mars.${axis}`], { verdict: 'unsupported' });
+        assert.deepEqual(result[`${kind}.${group === 'DE440' ? 'DE441' : 'DE440'}.Sun.${axis}`], { verdict: 'unsupported' });
+      }
+    }
+    assert(!JSON.stringify(result).includes('reference'));
+  }
+  assert.throws(() => createGroupedEvaluator({ ...options(), swiss: {} }), /instrument/);
+});
+
+test('paired aggregates resume with bound Swiss identity and deterministic report counts', async t => {
+  const root = new URL('../runtime/', import.meta.url);
+  await mkdir(root, { recursive: true });
+  const directory = await mkdtemp(new URL('paired-campaign-test-', root));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const config = phase2Config(spec, await plan(), { swiss: true });
+  const identity = { engineVersion: '0.0.1', binding: 'pyswisseph 0.0.1', adapterSha256: 'c'.repeat(64),
+    bindingSha256: 'd'.repeat(64), ephemerisFiles: { 'invented.se1': 'e'.repeat(64) } };
+  const identities = { build: 'a'.repeat(64), tooling: 'b'.repeat(64), references: { Swiss: identity } };
+  const swiss = { comparePositionPair: async () => ({ verdict: 'pass', retflags: 2, stats:
+    Object.fromEntries(['engineSwiss', 'swissJpl'].map(kind => [kind, Object.fromEntries(['lon', 'lat'].map(axis =>
+      [axis, observation(axis === 'lon' ? 1 : -2, 60, { quantiles: true }).stats]))])) }) };
+  const args = { spec, config, identities, directory, evaluate: createGroupedEvaluator({ ...options(), swiss }) };
+  assert.equal((await executeCampaign({ ...args, maxCases: 1 })).complete, false);
+  const resumed = await executeCampaign(args);
+  const fresh = await executeCampaign({ ...args, directory: directory + '/fresh' });
+  const states = dir => Promise.all([0, 1].map(shard => readFile(`${dir}/shard-${shard}.json`, 'utf8').then(JSON.parse)));
+  assert.deepEqual(await states(directory), await states(directory + '/fresh'));
+  const metadata = { title: 'Invented paired arithmetic', command: ['node', 'invented'],
+    runtime: { node: process.version, platform: process.platform, arch: process.arch },
+    units: Object.fromEntries(Object.keys(config.channels).map(name => [name, name.endsWith('.distance') ? 'km' : 'arcseconds'])),
+    exclusions: ['Invented protocol arithmetic only; no instrument accuracy expectation.'] };
+  const rendered = renderReport({ campaign: resumed.campaign, states: await states(directory), metadata });
+  assert.deepEqual(rendered, renderReport({ campaign: fresh.campaign, states: await states(directory + '/fresh'), metadata }));
+  const report = JSON.parse(rendered.json);
+  for (const kind of ['Swiss', 'SwissJPL']) for (const body of bodies) for (const axis of ['lon', 'lat']) {
+    const row = report.channels[`${kind}.DE440.${body}.${axis}`];
+    assert.equal(row.statistics.n, spec.total); assert.equal(row.unit, 'arcseconds');
+    assert.deepEqual(row.flags, { 2: spec.total });
+    assert.equal(row.statistics.absoluteQuantiles.median.rank, 4);
+  }
+  for (const change of [{ engineVersion: '0.0.2' }, { ephemerisFiles: { 'invented.se1': 'f'.repeat(64) } },
+    { bindingSha256: 'f'.repeat(64) }, { adapterSha256: 'f'.repeat(64) }]) {
+    await assert.rejects(executeCampaign({ ...args, identities: { ...identities,
+      references: { Swiss: { ...identity, ...change } } } }), /mismatch/);
+  }
+  await assert.rejects(executeCampaign({ ...args, identities: { ...identities,
+    references: { Swiss: { status: 'unavailable' } } } }), /mismatch/);
 });
 
 test('committed bounded phase2 pilot records completed charts, grouped measurements and unavailable centers', async () => {
@@ -145,4 +246,56 @@ test('committed bounded phase2 pilot records completed charts, grouped measureme
   }
   assert.equal(report.referenceGroups.DE440.numericalResiduals, 64 * 12);
   assert.equal(report.referenceGroups.DE440.conventionResiduals, 64 * 8);
+});
+
+test('retained Swiss pilot binds completed paired aggregates without per-case values or installation paths', async () => {
+  const report = JSON.parse(await readFile(new URL('../reports/phase2-swiss-pilot.json', import.meta.url), 'utf8'));
+  assert.deepEqual(report.campaign, campaignIdentity(report.campaign.config, report.campaign.identities));
+  assert.equal(report.schema, 'crosscheck-report/4');
+  assert.equal(report.complete, true); assert.equal(report.completed, 32);
+  assert.equal(report.campaign.config.total, report.completed);
+  assert.equal(report.campaign.config.seed, 'synthetic-phase2-swiss-pilot-v1');
+  assert.equal(report.span.startMsInclusive, Date.UTC(1800, 0, 1));
+  assert.equal(report.span.endMsExclusive, Date.UTC(2200, 0, 1));
+  assert.deepEqual(report.metadata.command, ['node', 'crosscheck/tools/campaign.mjs', 'crosscheck/runtime/s3-pilot.json', 'report']);
+  assert.equal(report.campaign.identities.references.JPL.name, 'de440.bsp');
+  assert.match(report.campaign.identities.references.JPL.sha256, /^[a-f0-9]{64}$/);
+  const swiss = report.swissInstrument;
+  assert.equal(swiss.status, 'available'); assert.equal(swiss.identity.engineVersion, '2.10.03');
+  assert.deepEqual(swiss.identity, report.campaign.identities.references.Swiss);
+  assert.deepEqual(Object.keys(swiss.identity).sort(), ['adapterSha256', 'binding', 'bindingSha256', 'engineVersion', 'ephemerisFiles']);
+  assert.match(swiss.identity.binding, /^pyswisseph [0-9.]+$/);
+  for (const digest of [swiss.identity.adapterSha256, swiss.identity.bindingSha256, ...Object.values(swiss.identity.ephemerisFiles)])
+    assert.match(digest, /^[a-f0-9]{64}$/);
+  assert.deepEqual(Object.keys(swiss.identity.ephemerisFiles).sort(), ['seas_18.se1', 'semo_18.se1', 'sepl_18.se1']);
+  assert.equal(swiss.swiephResponses, report.completed * bodies.length);
+  assert.equal(swiss.moshierFallbackResponses, 0); assert.equal(swiss.otherBackendFallbackResponses, 0);
+  assert.deepEqual(swiss.returnedFlags, { 2: report.completed * bodies.length });
+  assert.equal(report.referenceGroups.DE440.engineSwissResiduals, report.completed * bodies.length * 2);
+  assert.equal(report.referenceGroups.DE440.swissJplResiduals, report.completed * bodies.length * 2);
+  assert.equal(report.referenceGroups.DE440.numericalResiduals, report.completed * bodies.length * 3);
+  assert.equal(report.referenceGroups.DE441.status, 'empty');
+  assert.equal(report.referenceGroups.DE441.engineSwissResiduals, 0);
+  assert.equal(report.referenceGroups.DE441.swissJplResiduals, 0);
+  for (const [name, row] of Object.entries(report.channels)) {
+    if (/^(Swiss|SwissJPL)\./.test(name) && name !== 'Swiss.positions') {
+      assert.equal(row.unit, 'arcseconds');
+      const measured = row.referenceGroup === 'DE440' && bodies.includes(row.body);
+      assert.equal(row.statistics.n, measured ? report.completed : 0);
+      assert.deepEqual(row.flags, measured ? { 2: report.completed } : {});
+      assert.equal(row.status, row.referenceGroup === 'DE441' ? 'empty' : measured ? 'measured' : 'unavailable');
+      if (measured) for (const [key, probability] of [['median', 0.5], ['p99', 0.99], ['p999', 0.999]]) {
+        const q = row.statistics.absoluteQuantiles[key];
+        assert.equal(q.rank, Math.ceil(report.completed * probability));
+        assert(q.lower <= q.upper && q.upper <= row.statistics.maxAbs);
+      }
+      else assert.equal(row.statistics.maxAbs, null);
+    }
+  }
+  // This is a retention/count receipt check, never a Swiss numerical expectation.
+  for (const output of ['json', 'csv', 'md']) {
+    const bytes = await readFile(new URL(`../reports/phase2-swiss-pilot.${output}`, import.meta.url), 'utf8');
+    assert(!bytes.includes('/workspace/')); assert(!bytes.includes('/home/'));
+    assert(!/"(?:actual|output|perCase|positions)"\s*:/.test(bytes));
+  }
 });

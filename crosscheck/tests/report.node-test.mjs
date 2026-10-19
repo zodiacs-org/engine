@@ -156,6 +156,135 @@ test('grouped reports reject missing coverage metadata or measurements labelled 
   assert.equal(report.channels['JPL.DE441.Sun.lon'].status, 'unavailable');
   assert.equal(report.channels['JPL.DE441.Sun.lon'].statistics.maxAbs, null);
 });
+async function swissGroupedFixture(t, available = true) {
+  await mkdir(root + 'runtime', { recursive: true });
+  const directory = await mkdtemp(root + 'runtime/swiss-grouped-report-test-');
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const channels = Object.fromEntries(['DE440', 'DE441'].flatMap(group => ['Sun', 'Mars'].flatMap(body =>
+    ['JPL', 'Convention', 'Swiss', 'SwissJPL'].flatMap(kind => ['lon', 'lat'].map(axis => [`${kind}.${group}.${body}.${axis}`, 1])))));
+  const config = { seed: 'invented-swiss-grouped-report', startMs: 0, endMs: 1000, total: 4, shards: 2,
+    channels, quantiles: Object.keys(channels).sort(), conventions: {
+      reference: 'Invented arithmetic only; no physical reference values',
+      referenceGroups: {
+        DE440: { status: 'available', intervals: [{ startMs: 0, endMs: 1000 }], reason: 'Invented selected group' },
+        DE441: { status: 'empty', intervals: [], reason: 'No requested interval in this invented fixture' }
+      } } };
+  const identity = available ? { engineVersion: '0.0', binding: 'pyswisseph 0.0',
+    adapterSha256: 'c'.repeat(64), bindingSha256: 'd'.repeat(64), ephemerisFiles: { 'invented.se1': 'e'.repeat(64) } } :
+    { status: 'unavailable' };
+  const identities = { build: 'a'.repeat(64), tooling: 'b'.repeat(64), references: { Swiss: identity, invented: 'arithmetic only' } };
+  const states = []; let campaign;
+  for (let shard = 0; shard < config.shards; shard++) {
+    const result = await runShard({ config, identities, directory, shard, evaluate: async sample =>
+      Object.fromEntries(Object.keys(channels).map(name => {
+        if (name.includes('.DE441.') || name.includes('.Mars.') || (!available && name.startsWith('Swiss')))
+          return [name, { verdict: 'unsupported' }];
+        if (name.startsWith('Swiss') && sample.index > 0) return [name, sample.index < 3 ?
+          { verdict: 'fallback', retflags: sample.index === 1 ? 260 : 257 } : { verdict: 'error' }];
+        const residual = name.startsWith('SwissJPL.') ? 0.25 : name.startsWith('Swiss.') ? -0.5 :
+          name.startsWith('Convention.') ? 0.125 : 2;
+        const stats = addResidual(emptyStats(1, { quantiles: true }), residual);
+        return [name, { verdict: stats.passed ? 'pass' : 'fail', stats,
+          ...(name.startsWith('Swiss') ? { retflags: 258 } : {}) }];
+      })) });
+    states.push(result.state); campaign = result.campaign;
+  }
+  return { campaign, states, metadata: { title: 'Invented grouped instrument arithmetic report',
+    command: ['node', 'invented-grouped-instrument-report'], runtime: { node: process.version, platform: process.platform, arch: process.arch },
+    units: Object.fromEntries(Object.keys(channels).map(name => [name, 'arcseconds'])),
+    exclusions: ['No physical measurement performed; invented arithmetic only'] } };
+}
+test('grouped instrument reports separate comparisons, percentiles and unique returned-flag response totals', async t => {
+  const bundle = await swissGroupedFixture(t), outputs = renderReport(bundle), report = JSON.parse(outputs.json);
+  assert.equal(report.schema, 'crosscheck-report/4');
+  assert.deepEqual([report.referenceGroups.DE440.numericalResiduals, report.referenceGroups.DE440.conventionResiduals,
+    report.referenceGroups.DE440.engineSwissResiduals, report.referenceGroups.DE440.swissJplResiduals], [8, 8, 2, 2]);
+  assert.equal(report.referenceGroups.DE441.engineSwissResiduals, 0);
+  assert.equal(report.referenceGroups.DE441.swissJplResiduals, 0);
+  for (const [prefix, kind, maximum] of [['Swiss', 'engine-minus-Swiss', 0.5], ['SwissJPL', 'Swiss-minus-JPL', 0.25]]) {
+    const channel = report.channels[`${prefix}.DE440.Sun.lon`];
+    assert.equal(channel.comparisonKind, kind); assert.equal(channel.statistics.n, 1);
+    assert.equal(channel.statistics.maxAbs, maximum);
+    for (const key of ['median', 'p99', 'p999']) {
+      assert.equal(channel.statistics.absoluteQuantiles[key].rank, 1);
+      assert(channel.statistics.absoluteQuantiles[key].lower <= maximum);
+      assert(channel.statistics.absoluteQuantiles[key].upper >= maximum);
+    }
+    assert.deepEqual(channel.verdicts, { pass: 1, fail: 0, error: 1, unsupported: 0, fallback: 2 });
+    assert.deepEqual(channel.flags, { 257: 1, 258: 1, 260: 1 });
+    assert.equal(report.channels[`${prefix}.DE441.Sun.lon`].status, 'empty');
+    assert.equal(report.channels[`${prefix}.DE440.Mars.lon`].status, 'unavailable');
+  }
+  const instrument = report.swissInstrument;
+  assert.equal(instrument.status, 'available');
+  assert.deepEqual(instrument.identity, bundle.campaign.identities.references.Swiss);
+  assert.equal(instrument.longitudeChannelOutcomes, 16);
+  assert.deepEqual(instrument.verdicts, { pass: 1, fail: 0, error: 1, unsupported: 12, fallback: 2 });
+  assert.deepEqual(instrument.returnedFlags, { 257: 1, 258: 1, 260: 1 });
+  assert.equal(instrument.swiephResponses, 1);
+  assert.equal(instrument.moshierFallbackResponses, 1);
+  assert.equal(instrument.otherBackendFallbackResponses, 1);
+  assert.match(instrument.countBasis, /not instrument request counts/);
+  assert(outputs.markdown.includes('Swiss instrument: available.'));
+  assert(outputs.markdown.includes('Moshier fallback 1; other backend fallback 1.'));
+  const primary = outputs.markdown.split('Engine minus JPL residuals:')[1].split('Separate JPL convention differences:')[0];
+  assert(primary.includes('| JPL.DE440.Sun.lon |')); assert(!primary.includes('| Swiss'));
+  const swiss = outputs.markdown.split('Engine minus Swiss instrument residuals:')[1].split('Swiss instrument minus JPL residuals:')[0];
+  assert(swiss.includes('| Swiss.DE440.Sun.lon |')); assert(!swiss.includes('| SwissJPL.'));
+  const swissQuantiles = outputs.markdown.split('Engine minus Swiss instrument absolute-error percentiles:')[1]
+    .split('Swiss instrument minus JPL absolute-error percentiles:')[0];
+  assert(swissQuantiles.includes('| Channel | Unit | Maximum absolute | p99.9 absolute interval | p99 absolute interval | Median absolute interval |'));
+  assert(swissQuantiles.includes('| Swiss.DE440.Sun.lon | arcseconds | 0.5 |'));
+  assert(!swissQuantiles.includes('| SwissJPL.'));
+  assert(outputs.csv.includes('"engine-minus-Swiss","DE440","Sun","lon","measured"'));
+  assert(outputs.csv.includes('"Swiss-minus-JPL","DE440","Sun","lon","measured"'));
+  assert.deepEqual(outputs, renderReport({ ...bundle, states: [...bundle.states].reverse() }));
+});
+test('grouped reports explicitly retain unavailable Swiss without numerical claims', async t => {
+  const bundle = await swissGroupedFixture(t, false), outputs = renderReport(bundle), report = JSON.parse(outputs.json);
+  assert.equal(report.schema, 'crosscheck-report/4');
+  assert.equal(report.swissInstrument.status, 'unavailable');
+  assert.deepEqual(report.swissInstrument.identity, { status: 'unavailable' });
+  assert.equal(report.swissInstrument.swiephResponses, 0);
+  assert.equal(report.swissInstrument.moshierFallbackResponses, 0);
+  assert.equal(report.swissInstrument.otherBackendFallbackResponses, 0);
+  assert.deepEqual(report.swissInstrument.returnedFlags, {});
+  assert.equal(report.swissInstrument.verdicts.unsupported, 16);
+  assert(outputs.markdown.includes('Swiss instrument: unavailable. No engine-versus-Swiss or Swiss-versus-JPL residuals were recorded.'));
+  for (const [name, channel] of Object.entries(report.channels).filter(([name]) => name.startsWith('Swiss'))) {
+    assert.equal(channel.statistics.n, 0); assert.equal(channel.statistics.maxAbs, null);
+    assert.equal(channel.statistics.absoluteQuantiles.median, null);
+    assert.equal(channel.status, name.includes('DE441') ? 'empty' : 'unavailable');
+  }
+  const invalid = await swissGroupedFixture(t);
+  invalid.campaign = campaignIdentity(invalid.campaign.config,
+    { ...invalid.campaign.identities, references: { Swiss: { status: 'unavailable' } } });
+  for (const state of invalid.states) state.campaign = invalid.campaign.sha256;
+  assert.throws(() => renderReport(invalid), /Unavailable Swiss instrument/);
+  for (const name of ['Swiss.DE440.Sun.lat', 'SwissJPL.DE440.Sun.lon', 'SwissJPL.DE440.Sun.lat']) {
+    for (const kind of ['measurement', 'flag', 'error']) {
+      const changed = structuredClone(bundle), channel = changed.states[0].channels[name];
+      if (kind === 'measurement') {
+        channel.stats = addResidual(emptyStats(1, { quantiles: true }), 0.125);
+        channel.verdicts.unsupported--; channel.verdicts.pass++;
+      } else if (kind === 'flag') channel.flags = { 2: 1 };
+      else { channel.verdicts.unsupported--; channel.verdicts.error++; }
+      assert.throws(() => renderReport(changed), /Unavailable Swiss instrument/);
+    }
+  }
+});
+test('grouped instrument reports reject incomplete identities, raw identity fields and non-hash ephemeris identities', async t => {
+  const bundle = await swissGroupedFixture(t);
+  for (const change of [identity => { delete identity.bindingSha256; },
+    identity => { identity.positions = [123]; }, identity => { identity.binding = 'unknown'; },
+    identity => { identity.engineVersion = 'unknown'; }, identity => { identity.ephemerisFiles['invented.se1'] = 'not a hash'; },
+    identity => { identity.ephemerisFiles = []; }]) {
+    const changed = structuredClone(bundle); change(changed.campaign.identities.references.Swiss);
+    changed.campaign = campaignIdentity(changed.campaign.config, changed.campaign.identities);
+    for (const state of changed.states) state.campaign = changed.campaign.sha256;
+    assert.throws(() => renderReport(changed), /Invalid Swiss instrument identity/);
+  }
+});
 test('partial reports require explicit opt-in and do not claim requested coverage', async t => {
   const { bundle } = await fixture(t, true);
   assert.throws(() => renderReport(bundle), /Incomplete/);

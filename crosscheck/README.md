@@ -21,6 +21,10 @@ Planetary centers and system barycenters must not be silently interchanged.
 Reports name convention differences alongside the measured residuals.
 The phase 2 pilot reports the selected aberration convention difference
 separately from engine residuals; other named model differences remain in them.
+The phase 2 campaign also provides separate engine-versus-Swiss and
+Swiss-versus-JPL angular aggregates on the same synthetic charts. These are
+instrument comparisons, with their correction and frame differences retained;
+they do not establish a second positional truth.
 JPL does not provide an arbiter for house-system definitions or lunar nodes;
 unsupported comparisons must be explicit.
 
@@ -468,14 +472,29 @@ before the adapter imports Swiss. It does not install software or download
 Swiss files. Missing Python, a missing binding or an invalid handshake fails
 with a fixed diagnostic; raw stderr and adapter errors are discarded.
 
-The returned instrument exposes identity, comparePosition and close.
+The returned instrument exposes identity, comparePosition,
+comparePositionPair and close.
 comparePosition accepts body, jdTT, actual: { lon, lat } and toleranceArcsec.
 TT must already be resolved by the caller. Actual coordinates are degrees
 in the apparent geocentric true ecliptic and equinox of date. The adapter's
-Swiss apparent convention includes its own deflection model; agreement with
-an engine without deflection is a convention comparison, not an independent
+Swiss apparent convention includes its own deflection model. Its apparent
+lunar corrections also differ from the geometric Moon direction used by the
+JPL campaign. The engine and JPL reductions use their own frame and time
+conventions, and converting the chart instant to a binary64 TT Julian date
+can round the time supplied to Swiss. Residuals retain these differences;
+agreement with Swiss is an instrument comparison rather than an independent
 accuracy verdict. Positions are currently the only integrated request kind;
 houses, angles, nodes and time comparisons remain unsupported here.
+
+comparePositionPair additionally accepts reference: { lon, lat } for the
+JPL direction on that chart. It sends a single adapter request for the
+body and returns separate engine-minus-Swiss and Swiss-minus-JPL
+longitude/latitude aggregate states. The transient Swiss coordinates stay
+inside the transport. The phase 2 campaign requests absolute histograms for
+these states, giving exact sample maxima and nearest-rank median, p99 and
+p99.9 intervals with the approximation limits described above.
+The existing comparePosition wrapper retains its original single-comparison
+behavior for callers outside the grouped profile.
 
 The instrument accepts one request at a time. Each response becomes only a
 pass/fail verdict, returned flags and mergeable longitude/latitude residual
@@ -485,7 +504,11 @@ unsupported results retain only their verdict. Raw values and free-form
 messages never leave the transport. No per-case output is written to disk.
 Malformed, oversized or stalled responses terminate the instrument. The
 identity records adapter and binding digests, version labels and the
-adapter's external ephemeris file digests for later resume checks.
+adapter's external ephemeris file digests for later resume checks. Installation
+paths are not identity fields; ephemeris file identities retain SHA-256
+digests only. Returned-flag and fallback counts describe adapter requests;
+paired comparison and coordinate rows reflect the same requests and must
+not be summed as independent instrument calls.
 
 Tests in tests/swiss.node-test.mjs use invented protocol peers, independent
 arithmetic and refusal cases. They never run Swiss and establish transport
@@ -685,6 +708,25 @@ uses the reference plan's TT interval and records per-body longitude, latitude
 and distance channels for both reference groups. It reserves bounded storage
 before running and limits this profile's shard count to the worker limit.
 
+The phase 2 angular channels identify each comparison explicitly:
+
+| Channel pattern | Signed residual in arcseconds |
+| --- | --- |
+| `JPL.<group>.<body>.lon` and `.lat` | engine minus JPL |
+| `Swiss.<group>.<body>.lon` and `.lat` | engine minus Swiss |
+| `SwissJPL.<group>.<body>.lon` and `.lat` | Swiss minus JPL |
+
+`<group>` is DE440 or DE441. For each chart and compared exact body,
+comparePositionPair computes both Swiss comparisons from the same adapter
+response and the JPL direction already computed for that chart. Longitude
+uses the shortest signed angular difference; latitude uses direct
+subtraction. Each channel retains a fixed absolute histogram, exact sample
+maximum and median, p99 and p99.9 intervals. The grouped profile declares
+the Swiss channels even without a configured instrument; its reference
+identity then says unavailable and those channels have no measurements.
+Inactive groups and unavailable exact centers remain explicit and do not
+cause extra Swiss requests or zero-valued observations.
+
 The requested synthetic TT interval lies entirely inside full DE440 coverage,
 so the plan has an empty DE441 outside-span group. DE440s does not define that
 boundary. The selected planetary kernel lacks exact Mars-through-Pluto centers;
@@ -710,7 +752,7 @@ the lunar convention difference is zero. This measures one model sensitivity,
 not a complete correction for the engine's backdated-observer aberration,
 frame, light-time or truncated TT/TDB differences.
 
-Reports separate engine/JPL and convention tables, including absolute
+Reports separate engine/JPL, engine/Swiss, Swiss/JPL and convention tables, including absolute
 percentile intervals, and map comparison kind, reference group, body,
 coordinate and availability in CSV and JSON. Distances use apparent light
 paths in km and the geometric lunar range. The calc TT Julian date can round
@@ -770,16 +812,22 @@ that installation's Python executable and `SE_EPHE_PATH` to its external
 data directory for every run and report invocation. The harness installs nothing. An explicitly
 configured but unavailable instrument fails rather than silently turning off
 Swiss. Without these selectors, reports identify Swiss as unavailable.
-Per-body `Swiss.*.lon` and `.lat` channels compare the exact centers used in
-the JPL campaign via the unchanged permitted adapter. Only SWIEPH returned
-flags contribute residuals; fallback, error and unsupported verdicts have no
-numerical statistics. The legacy `Swiss.positions` channel stays unsupported
-and must not be counted as an additional measurement. Binding, adapter and
-ephemeris hashes and reported versions bind resume to the installation.
+Only SWIEPH returned flags contribute residuals; fallback, error and
+unsupported verdicts have no numerical statistics in either Swiss comparison.
+The legacy non-profile driver retains its per-body `Swiss.*.lon` and `.lat`
+channels and single-comparison wrapper. The legacy `Swiss.positions` channel
+stays unsupported and must not be counted as an additional measurement.
+Binding and adapter SHA-256 digests, reported versions and external ephemeris
+SHA-256 identities bind resume to the installation. Per-request returned flags
+and fallback verdicts are counted across the paired rows as described above.
 Only aggregates leave the transport; no raw stdout or instrument errors are
-saved. Swiss expectations in the operational tests are invented arithmetic,
-not Swiss reference values. The historical reports below were completed
-without a live Swiss installation and remain records of those runs.
+saved. Swiss expectations in the tests use invented arithmetic. The bounded
+[paired Swiss pilot](reports/phase2-swiss-pilot.md), its
+[CSV](reports/phase2-swiss-pilot.csv) and
+[receipt](reports/phase2-swiss-pilot.json) record a real comparison using the
+approved external installation. Its stop/resume, fresh numerical rerun and
+aggregate reproduction checks are documented in [VALIDATION.md](VALIDATION.md).
+The earlier reports retain the Swiss absence recorded in their receipts.
 
 [The driver smoke report](reports/driver-smoke.md), its
 [CSV](reports/driver-smoke.csv) and [receipt](reports/driver-smoke.json) record

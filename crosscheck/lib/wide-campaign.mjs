@@ -11,7 +11,7 @@ export function groupedChannels() {
   return Object.fromEntries([
     ...REFERENCE_GROUPS.flatMap(group => Object.keys(EXACT_TARGETS).flatMap(body => [
       ...['lon', 'lat', 'distance'].map(axis => [`JPL.${group}.${body}.${axis}`, axis === 'distance' ? DISTANCE_SCREEN_KM : 60]),
-      ...['lon', 'lat'].map(axis => [`Convention.${group}.${body}.${axis}`, 60])
+      ...['Convention', 'Swiss', 'SwissJPL'].flatMap(kind => ['lon', 'lat'].map(axis => [`${kind}.${group}.${body}.${axis}`, 60]))
     ])), ['Swiss.positions', 60], ['JPL.housesNodesAngles', 60]
   ]);
 }
@@ -21,8 +21,9 @@ function spherical([x, y, z]) {
 }
 const angular = (a, b) => ((a - b + 540) % 360) - 180;
 
-export function createGroupedEvaluator({ natalChart, calc, terms, referenceAt }) {
+export function createGroupedEvaluator({ natalChart, calc, terms, referenceAt, swiss }) {
   if (![natalChart, calc, referenceAt].every(fn => typeof fn === 'function')) throw Error('Explicit chart, calculation and reference functions required.');
+  if (swiss !== undefined && typeof swiss?.comparePositionPair !== 'function') throw Error('Invalid Swiss comparison instrument.');
   const channels = groupedChannels();
   return async sample => {
     const chart = natalChart({ utc: sample.utc, timeScale: 'tt', latitude: sample.latitude,
@@ -66,6 +67,21 @@ export function createGroupedEvaluator({ natalChart, calc, terms, referenceAt })
         flags: { correction: 'apparent', speeds: false, deflection: false } });
       if (measured?.status !== 'ok') throw Error('Engine distance calculation refused.');
       record(`JPL.${group}.${body}.distance`, distanceResidualKm(measured.dist, range));
+      if (swiss) {
+        // One response supplies both comparisons. Only aggregate states leave the transport.
+        const result = await swiss.comparePositionPair({ body, jdTT: ttDays + 2451545,
+          actual: { lon: actual.lon, lat: actual.lat }, reference, toleranceArcsec: 60, quantiles: true });
+        for (const [kind, key] of [['Swiss', 'engineSwiss'], ['SwissJPL', 'swissJpl']]) {
+          for (const axis of ['lon', 'lat']) {
+            const stats = result.stats?.[key]?.[axis];
+            outcomes[`${kind}.${group}.${body}.${axis}`] = {
+              verdict: stats ? (stats.passed ? 'pass' : 'fail') : result.verdict,
+              ...(stats ? { stats } : {}),
+              ...(result.retflags === undefined ? {} : { retflags: result.retflags })
+            };
+          }
+        }
+      }
     }
     return outcomes;
   };
