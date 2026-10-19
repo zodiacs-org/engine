@@ -14,3 +14,4 @@ Continue full-span sky database generation from its verified checkpoint and reta
 Resume full-span sky database generation within its session and disk budgets, retaining the checkpoint and aggregate resource evidence.
 Continue full-span sky database generation from the retained checkpoint and record verified progress, storage use and session resource measurements.
 Resume full-span sky database generation, preserve the next verified checkpoint and record bounded-session resource measurements.
+Continue full-span sky database generation from its verified checkpoint and retain the next progress and storage report within session resource limits.
