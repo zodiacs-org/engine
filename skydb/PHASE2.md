@@ -1,8 +1,12 @@
 # Sky database phase 2
 
-Keep phase 1 behavior and its green checks intact. Complete one milestone per
-session. Generated tiles stay ignored; committed reports contain aggregates.
+Keep phase 1 behavior and its checks intact. Generated tiles stay ignored;
+committed reports contain aggregates.
 Resource estimates describe computing cost, not astronomical outcomes.
+Project changes are limited to skydb/ and the dedicated
+`.github/workflows/skydb.yml` workflow. The validation notes below record each
+milestone's changes; statements that workflows were unchanged describe that
+milestone, after the dedicated workflow was added as recorded in [FIX.md](FIX.md).
 
 - [x] P1 Generate a fresh default-cadence trial slice, measure wall time, CPU, tiles and storage, and commit a reproducible report with full-span cost arithmetic and disk checks.
 - [x] P2 Use the trial evidence to select full coverage or a documented smaller span, then generate into generated/full/ with disk guards, bounded session work and checkpoint resume until complete.
@@ -153,8 +157,7 @@ project test suite, workflow module syntax checks and the project isolation and
 package-exclusion checker. Only this continuation note, the new aggregate
 report and CHANGES.txt changed; phase 1 code remains unchanged.
 
-P2 continues with back-to-back bounded invocations under the supervisor note in
-the brief. New aggregate reports begin at
+P2 continues with sequential bounded invocations. New aggregate reports begin at
 [session-0008.json](benchmarks/full-sessions/session-0008.json). Their checkpoints
 continue the preceding session with the same configuration and engine pin.
 Generation then exposed a filesystem directory-link limit in the original
@@ -216,10 +219,9 @@ project setup, the full project test suite, workflow module syntax checks and
 the project isolation and package-exclusion checker. The generated dataset,
 dependencies and test logs remain ignored. Changes stay in skydb/; no engine
 source, archive, root configuration, workflow or package version changed.
-The one-line session summary is appended to CHANGES.txt for the harness.
 
-P2 continued with sequential back-to-back bounded invocations under the
-supervisor note in the brief. The new aggregate reports record this progress:
+P2 continued with sequential bounded invocations. The new aggregate reports
+record this progress:
 
 | evidence | starting checkpoint | retained checkpoint |
 | --- | ---: | ---: |
@@ -255,8 +257,8 @@ reports, this continuation note and CHANGES.txt changed. Generated data,
 dependencies and test logs remain ignored; phase 1 code, engine files,
 archives, root configuration, workflows and the package version are unchanged.
 
-P2 continued with sequential back-to-back bounded invocations under the
-supervisor note in the brief. The new aggregate reports record this progress:
+P2 continued with sequential bounded invocations. The new aggregate reports
+record this progress:
 
 | evidence | starting checkpoint | retained checkpoint |
 | --- | ---: | ---: |
@@ -293,9 +295,8 @@ reports, this continuation note and CHANGES.txt changed. Generated data,
 dependencies and test logs remain ignored; phase 1 code, engine files,
 archives, root configuration, workflows and the package version are unchanged.
 
-P2 is complete. Sequential back-to-back bounded invocations under the
-supervisor note in the brief finished the default full-span database. The new
-aggregate reports record this progress:
+P2 is complete. Sequential bounded invocations finished the default full-span
+database. The new aggregate reports record this progress:
 
 | evidence | starting checkpoint | retained checkpoint |
 | --- | ---: | ---: |
@@ -366,8 +367,7 @@ locked project setup, `npm --prefix skydb test`, the workflow's module syntax
 checks and the project isolation and package-exclusion checker. Changed
 documentation passed checks for both prohibited dash characters. All changes
 stay in skydb/; phase 1 source, engine files, archives, root configuration,
-workflows and the package version remain unchanged. The one-line session
-summary is appended to CHANGES.txt for the harness.
+workflows and the package version remain unchanged.
 
 P4 is complete. [benchmarks/interpolate-full.mjs](benchmarks/interpolate-full.mjs)
 compared the retained completed database with direct calls to its pinned
@@ -402,8 +402,7 @@ locked project setup, `npm --prefix skydb test`, workflow module syntax checks
 and the project isolation and package-exclusion checker. Changed documentation
 passed checks for both prohibited dash characters. Changes stay in skydb/;
 phase 1 source, engine files, archives, root configuration, workflows and the
-package version remain unchanged. The session summary is appended to
-CHANGES.txt for the harness.
+package version remain unchanged.
 
 P5 is complete. [benchmarks/query-full.mjs](benchmarks/query-full.mjs) measured
 queries on the retained completed database over the default half-open span
@@ -440,8 +439,7 @@ Validation passed on the report's Node runtime: locked project setup,
 isolation and package-exclusion checker. Changed documentation passed checks
 for both prohibited dash characters. Changes stay in skydb/; phase 1 source,
 engine files, archives, root configuration, workflows and the package version
-remain unchanged. P6 and P7 remain pending. The session summary is appended to
-CHANGES.txt for the harness.
+remain unchanged. P6 and P7 remain pending.
 
 P6 is complete. [CONVENTIONS.md](CONVENTIONS.md) compares skydb with the public
 events workbench at its reviewed immutable commit. It documents input clocks,
@@ -467,8 +465,7 @@ isolation and package-exclusion checker. Receipt hashes match the inspected
 local source bytes, and changed documentation passed checks for both prohibited
 dash characters. All changes stay in skydb/; phase 1 behavior, engine files,
 archives, root configuration, workflows and the package version are unchanged.
-P7 remains pending. The session summary is appended to CHANGES.txt for the
-harness.
+P7 remains pending.
 
 P7 is complete. The project [README](README.md), [OPERATIONS](OPERATIONS.md)
 and [benchmark guide](benchmarks/README.md) describe the completed local
@@ -501,5 +498,22 @@ passed for both prohibited dash characters in changed documentation, local
 links and the interpolation table's rounding arithmetic against its report.
 All changes stay in skydb/ documentation and the session summary. Phase 1
 code, engine files, archives, root configuration, workflows and package version
-are unchanged. All phase 2 milestones are checked. The one-line session
-summary is appended to CHANGES.txt for the harness.
+are unchanged. All phase 2 milestones are checked.
+
+Review hardening is complete. The project checker compares committed changes
+against the merge base as well as working changes and untracked paths. The
+dedicated workflow supplies the event base and full history, and runs only for
+project or dedicated-workflow paths. Setup requires the committed lockfile and
+uses npm ci. Authored documentation is checked for both prohibited dash
+characters and missing local Markdown file targets; verbatim upstream notices
+retain their original text. The events convention receipt is checked offline
+against its local source hashes, byte lengths and current declarations.
+
+The complete project suite passed on the runtime recorded in
+[docs/evidence/m10-tests.txt](docs/evidence/m10-tests.txt). That refreshed
+transcript records the current command, machine, scope and wall time. Its
+recorded suite wall time is below the dedicated workflow's job timeout and
+includes disk-accounting walks of the retained local database. This is a local
+measurement. Locked setup, workflow module syntax checks and the project
+isolation, size, documentation, local-link, whitespace and package-exclusion
+checks also passed. Required milestone and change records remain present.

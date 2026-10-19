@@ -1,260 +1,622 @@
+Command: npm --prefix skydb test
+Runtime: Node 22.23.3
+Machine: Linux 6.12.94+ x64, Intel(R) Xeon(R) Processor
+Scope: complete current project suite, run sequentially without regenerating the full database
+
 
 > test
-> node --test test/*.test.mjs
+> node --test --test-concurrency=1 test/*.node-test.mjs
 
 TAP version 13
 # Subtest: measurement maxima retain the actual worst instant and reject invalid errors
 ok 1 - measurement maxima retain the actual worst instant and reject invalid errors
   ---
-  duration_ms: 1.372062
+  duration_ms: 1.053904
   type: 'test'
   ...
 # Subtest: committed benchmark evidence pins runtime, scope, finite measurements and engine identity
 ok 2 - committed benchmark evidence pins runtime, scope, finite measurements and engine identity
   ---
-  duration_ms: 7.753139
+  duration_ms: 10.571103
   type: 'test'
   ...
 # Subtest: archive pin matches carried bytes and rejects corruption
 ok 3 - archive pin matches carried bytes and rejects corruption
   ---
-  duration_ms: 12.883528
+  duration_ms: 7.576153
   type: 'test'
   ...
 # Subtest: Node runtime gate excludes unsupported series and early Node 22
 ok 4 - Node runtime gate excludes unsupported series and early Node 22
   ---
-  duration_ms: 0.400525
+  duration_ms: 0.271201
   type: 'test'
   ...
 # Subtest: defaults and custom configuration have immutable copied body lists
 ok 5 - defaults and custom configuration have immutable copied body lists
   ---
-  duration_ms: 0.81857
+  duration_ms: 0.633795
   type: 'test'
   ...
 # Subtest: configuration rejects malformed values and unsupported conventions
 ok 6 - configuration rejects malformed values and unsupported conventions
   ---
-  duration_ms: 0.568281
+  duration_ms: 0.385918
   type: 'test'
   ...
 # Subtest: isolated consumer samples agree exactly with direct engine calls
 ok 7 - isolated consumer samples agree exactly with direct engine calls
   ---
-  duration_ms: 141.022804
+  duration_ms: 77.777463
   type: 'test'
   ...
 # Subtest: strict arguments reject guessing, unknown options and missing values
 ok 8 - strict arguments reject guessing, unknown options and missing values
   ---
-  duration_ms: 1.186297
+  duration_ms: 0.832486
   type: 'test'
   ...
 # Subtest: sample exactly reproduces persisted bytes and agrees with direct engine samples
 ok 9 - sample exactly reproduces persisted bytes and agrees with direct engine samples
   ---
-  duration_ms: 454.654704
+  duration_ms: 313.221222
   type: 'test'
   ...
 # Subtest: CLI end-to-end generation, resume, verification, queries and corrupt tile failure
 ok 10 - CLI end-to-end generation, resume, verification, queries and corrupt tile failure
   ---
-  duration_ms: 233.528537
+  duration_ms: 171.728302
   type: 'test'
   ...
 # Subtest: executable reports errors with nonzero exit and JSON verification output
 ok 11 - executable reports errors with nonzero exit and JSON verification output
   ---
-  duration_ms: 128.760847
+  duration_ms: 93.015442
+  type: 'test'
+  ...
+# Subtest: events convention evidence matches the reviewed local sources and current declarations offline
+ok 12 - events convention evidence matches the reviewed local sources and current declarations offline
+  ---
+  duration_ms: 4.341309
+  type: 'test'
+  ...
+# Subtest: events convention evidence rejects stale source hashes and byte lengths
+ok 13 - events convention evidence rejects stale source hashes and byte lengths
+  ---
+  duration_ms: 11.942529
+  type: 'test'
+  ...
+# Subtest: events convention evidence rejects missing, duplicated and unexpected local source receipts
+ok 14 - events convention evidence rejects missing, duplicated and unexpected local source receipts
+  ---
+  duration_ms: 1.216101
+  type: 'test'
+  ...
+# Subtest: events convention evidence rejects stale local convention summaries
+ok 15 - events convention evidence rejects stale local convention summaries
+  ---
+  duration_ms: 9.734267
   type: 'test'
   ...
 # Subtest: root refinement bounds, endpoint roots and bad inputs
-ok 12 - root refinement bounds, endpoint roots and bad inputs
+ok 16 - root refinement bounds, endpoint roots and bad inputs
   ---
-  duration_ms: 1.501103
+  duration_ms: 1.347606
   type: 'test'
   ...
 # Subtest: synthetic wraparound, all major aspects, stations and lunations
-ok 13 - synthetic wraparound, all major aspects, stations and lunations
+ok 17 - synthetic wraparound, all major aspects, stations and lunations
   ---
-  duration_ms: 12.028655
+  duration_ms: 7.150781
   type: 'test'
   ...
 # Subtest: half-open ownership, branch cut and input validation
-ok 14 - half-open ownership, branch cut and input validation
+ok 18 - half-open ownership, branch cut and input validation
   ---
-  duration_ms: 0.505889
+  duration_ms: 0.360918
   type: 'test'
   ...
 # Subtest: direct engine residuals for a synthetic calendar window include every event kind
-ok 15 - direct engine residuals for a synthetic calendar window include every event kind
+ok 19 - direct engine residuals for a synthetic calendar window include every event kind
   ---
-  duration_ms: 1416.420704
+  duration_ms: 1056.212181
   type: 'test'
   ...
 # Subtest: clock jumps are never root brackets
-ok 16 - clock jumps are never root brackets
+ok 20 - clock jumps are never root brackets
   ---
-  duration_ms: 181.202211
+  duration_ms: 122.856517
   type: 'test'
   ...
 # Subtest: retrograde repeats, sampled touches and exact tile-start roots
-ok 17 - retrograde repeats, sampled touches and exact tile-start roots
+ok 21 - retrograde repeats, sampled touches and exact tile-start roots
   ---
-  duration_ms: 0.624064
+  duration_ms: 0.493637
+  type: 'test'
+  ...
+# Subtest: full coverage selection uses the pinned trial arithmetic and actual generated usage
+ok 22 - full coverage selection uses the pinned trial arithmetic and actual generated usage
+  ---
+  duration_ms: 667.044571
+  type: 'test'
+  ...
+# Subtest: bounded interruption and resume preserve uninterrupted database bytes
+ok 23 - bounded interruption and resume preserve uninterrupted database bytes
+  ---
+  duration_ms: 96866.414306
+  type: 'test'
+  ...
+# Subtest: zero free space refuses generation before creating the database directory
+ok 24 - zero free space refuses generation before creating the database directory
+  ---
+  duration_ms: 31414.360598
+  type: 'test'
+  ...
+# Subtest: published tiles beyond the checkpoint recover without being counted as new allocation
+ok 25 - published tiles beyond the checkpoint recover without being counted as new allocation
+  ---
+  duration_ms: 31229.505829
+  type: 'test'
+  ...
+# Subtest: a disk stop after publication leaves a recoverable database and allocates no next tile
+ok 26 - a disk stop after publication leaves a recoverable database and allocates no next tile
+  ---
+  duration_ms: 61446.335494
+  type: 'test'
+  ...
+# Subtest: configuration, corruption, lock and unexpected callback failures stay fatal
+ok 27 - configuration, corruption, lock and unexpected callback failures stay fatal
+  ---
+  duration_ms: 61504.533086
+  type: 'test'
+  ...
+# Subtest: session limits and output containment are validated before writing data
+ok 28 - session limits and output containment are validated before writing data
+  ---
+  duration_ms: 3.314513
+  type: 'test'
+  ...
+# Subtest: a deadline before observable resume progress does not invent a verified count
+ok 29 - a deadline before observable resume progress does not invent a verified count
+  ---
+  duration_ms: 30629.275513
+  type: 'test'
+  ...
+# Subtest: committed full-session aggregates bind the workload, trial, counters and measured resources
+ok 30 - committed full-session aggregates bind the workload, trial, counters and measured resources
+  ---
+  duration_ms: 11535.814374
   type: 'test'
   ...
 # Subtest: planner is lazy, contiguous, clips partial tiles and rejects oversized sampling
-ok 18 - planner is lazy, contiguous, clips partial tiles and rejects oversized sampling
+ok 31 - planner is lazy, contiguous, clips partial tiles and rejects oversized sampling
   ---
-  duration_ms: 2.454297
+  duration_ms: 1.473585
   type: 'test'
   ...
 # Subtest: boundary list matches clock regime changes in the pinned engine
-ok 19 - boundary list matches clock regime changes in the pinned engine
+ok 32 - boundary list matches clock regime changes in the pinned engine
   ---
-  duration_ms: 156.098631
+  duration_ms: 83.532815
   type: 'test'
   ...
 # Subtest: all generated and decoded rows agree exactly with direct positions
-ok 20 - all generated and decoded rows agree exactly with direct positions
+ok 33 - all generated and decoded rows agree exactly with direct positions
   ---
-  duration_ms: 565.434931
+  duration_ms: 409.345837
   type: 'test'
   ...
 # Subtest: seams at tile edges and one-millisecond tiles keep the correct side
-ok 21 - seams at tile edges and one-millisecond tiles keep the correct side
+ok 34 - seams at tile edges and one-millisecond tiles keep the correct side
   ---
-  duration_ms: 14.453641
+  duration_ms: 12.911
   type: 'test'
   ...
 # Subtest: default body set and cadence produce shared smooth endpoints and a clipped final sample
-ok 22 - default body set and cadence produce shared smooth endpoints and a clipped final sample
+ok 35 - default body set and cadence produce shared smooth endpoints and a clipped final sample
   ---
-  duration_ms: 33.022765
+  duration_ms: 26.069826
   type: 'test'
   ...
 # Subtest: persisted event schema rejects invalid roots, definitions and duplicates
-ok 23 - persisted event schema rejects invalid roots, definitions and duplicates
+ok 36 - persisted event schema rejects invalid roots, definitions and duplicates
   ---
-  duration_ms: 1.701385
+  duration_ms: 1.261686
   type: 'test'
   ...
 # Subtest: resume, queries and verification reject malformed content even with matching checksums
-ok 24 - resume, queries and verification reject malformed content even with matching checksums
+ok 37 - resume, queries and verification reject malformed content even with matching checksums
   ---
-  duration_ms: 304.931082
+  duration_ms: 165.954344
   type: 'test'
   ...
 # Subtest: oversized store files fail before JSON or tile decoding
-ok 25 - oversized store files fail before JSON or tile decoding
+ok 38 - oversized store files fail before JSON or tile decoding
   ---
-  duration_ms: 38.335579
+  duration_ms: 19.221869
+  type: 'test'
+  ...
+# Subtest: stratified sampling is reproducible, covers every stratum and excludes support samples
+ok 39 - stratified sampling is reproducible, covers every stratum and excludes support samples
+  ---
+  duration_ms: 81.737149
+  type: 'test'
+  ...
+# Subtest: separate boundary probes respect half-open coverage, tile seams and clock splits
+ok 40 - separate boundary probes respect half-open coverage, tile seams and clock splits
+  ---
+  duration_ms: 0.993023
+  type: 'test'
+  ...
+# Subtest: error reduction uses circular longitude, aligned finite rows and explicit numeric quantiles
+ok 41 - error reduction uses circular longitude, aligned finite rows and explicit numeric quantiles
+  ---
+  duration_ms: 1.84509
+  type: 'test'
+  ...
+# Subtest: full measurement matches independent error reduction on a short store and leaves files unchanged
+ok 42 - full measurement matches independent error reduction on a short store and leaves files unchanged
+  ---
+  duration_ms: 218.076927
+  type: 'test'
+  ...
+# Subtest: interpolation measurement rejects incomplete, locked and corrupt stores
+ok 43 - interpolation measurement rejects incomplete, locked and corrupt stores
+  ---
+  duration_ms: 49.00089
+  type: 'test'
+  ...
+# Subtest: committed full interpolation report binds sampling, configuration and completed verification evidence
+ok 44 - committed full interpolation report binds sampling, configuration and completed verification evidence
+  ---
+  duration_ms: 39.63968
+  type: 'test'
+  ...
+# Subtest: directory-limit evidence records a stopped flat store below the disk cap
+ok 45 - directory-limit evidence records a stopped flat store below the disk cap
+  ---
+  duration_ms: 5.240477
+  type: 'test'
+  ...
+# Subtest: migration evidence preserves the retained checkpoint and binds the sharded manifest
+ok 46 - migration evidence preserves the retained checkpoint and binds the sharded manifest
+  ---
+  duration_ms: 3.261375
+  type: 'test'
+  ...
+# Subtest: session checkpoints remain continuous through the recorded failure and migration
+ok 47 - session checkpoints remain continuous through the recorded failure and migration
+  ---
+  duration_ms: 9.070122
+  type: 'test'
+  ...
+# Subtest: layout paths are bounded by shard size and reject unsafe indices or unknown layouts
+ok 48 - layout paths are bounded by shard size and reject unsafe indices or unknown layouts
+  ---
+  duration_ms: 1.512138
+  type: 'test'
+  ...
+# Subtest: automatic layout counts split descriptors and preserves the version-one small manifest
+ok 49 - automatic layout counts split descriptors and preserves the version-one small manifest
+  ---
+  duration_ms: 6.979178
+  type: 'test'
+  ...
+# Subtest: automatic sharding crosses its first boundary, resumes unchanged and serves both shards
+ok 50 - automatic sharding crosses its first boundary, resumes unchanged and serves both shards
+  ---
+  duration_ms: 9420.939368
+  type: 'test'
+  ...
+# Subtest: explicit small sharded stores recover both publication phases and stale shard staging
+ok 51 - explicit small sharded stores recover both publication phases and stale shard staging
+  ---
+  duration_ms: 102.033914
+  type: 'test'
+  ...
+# Subtest: sharded corruption and checkpoint-owned missing tiles fail without replacing data
+ok 52 - sharded corruption and checkpoint-owned missing tiles fail without replacing data
+  ---
+  duration_ms: 62.77202
+  type: 'test'
+  ...
+# Subtest: manifest layout and version mismatches reject reads and resume without rewriting files
+ok 53 - manifest layout and version mismatches reject reads and resume without rewriting files
+  ---
+  duration_ms: 35.538264
+  type: 'test'
+  ...
+# Subtest: invalid requested layouts fail before creating the database directory
+ok 54 - invalid requested layouts fail before creating the database directory
+  ---
+  duration_ms: 1.656487
+  type: 'test'
+  ...
+# Subtest: migration preserves tile bytes, timestamps, complete checkpoints and query results
+ok 55 - migration preserves tile bytes, timestamps, complete checkpoints and query results
+  ---
+  duration_ms: 129.143516
+  type: 'test'
+  ...
+# Subtest: every migration cut resumes while marker blocks generation, queries and default tile reads
+ok 56 - every migration cut resumes while marker blocks generation, queries and default tile reads
+  ---
+  duration_ms: 482.468553
+  type: 'test'
+  ...
+# Subtest: published but uncheckpointed tiles survive migration and resume generation unchanged
+ok 57 - published but uncheckpointed tiles survive migration and resume generation unchanged
+  ---
+  duration_ms: 66.168686
+  type: 'test'
+  ...
+# Subtest: migration crosses a shard boundary and stages its first tile before adding a root child
+ok 58 - migration crosses a shard boundary and stages its first tile before adding a root child
+  ---
+  duration_ms: 10388.669642
+  type: 'test'
+  ...
+# Subtest: a first uncheckpointed tile and cancellation retain resumable migration state
+ok 59 - a first uncheckpointed tile and cancellation retain resumable migration state
+  ---
+  duration_ms: 53.600796
+  type: 'test'
+  ...
+# Subtest: migration refuses locks, unowned staging, missing, corrupt and conflicting tile locations
+ok 60 - migration refuses locks, unowned staging, missing, corrupt and conflicting tile locations
+  ---
+  duration_ms: 154.787719
+  type: 'test'
+  ...
+# Subtest: invalid journals and metadata conflicts leave the migration blocked without replacing metadata
+ok 61 - invalid journals and metadata conflicts leave the migration blocked without replacing metadata
+  ---
+  duration_ms: 70.298694
+  type: 'test'
+  ...
+# Subtest: manifest encoding and invalid checkpoints fail before creating a migration journal
+ok 62 - manifest encoding and invalid checkpoints fail before creating a migration journal
+  ---
+  duration_ms: 41.651014
+  type: 'test'
+  ...
+# Subtest: CLI rejects missing, duplicate, unknown and outside-generated arguments before filesystem writes
+ok 63 - CLI rejects missing, duplicate, unknown and outside-generated arguments before filesystem writes
+  ---
+  duration_ms: 213.932808
+  type: 'test'
+  ...
+# Subtest: clean PR checkout rejects committed paths outside the allowed scope
+ok 64 - clean PR checkout rejects committed paths outside the allowed scope
+  ---
+  duration_ms: 2.9178
+  type: 'test'
+  ...
+# Subtest: comparison uses merge base and includes staged, unstaged and untracked paths
+ok 65 - comparison uses merge base and includes staged, unstaged and untracked paths
+  ---
+  duration_ms: 0.747794
+  type: 'test'
+  ...
+# Subtest: missing history and unexpectedly empty committed lists fail closed
+ok 66 - missing history and unexpectedly empty committed lists fail closed
+  ---
+  duration_ms: 0.421234
+  type: 'test'
+  ...
+# Subtest: both prohibited dash characters reject authored docs with exact upstream notice exceptions
+ok 67 - both prohibited dash characters reject authored docs with exact upstream notice exceptions
+  ---
+  duration_ms: 0.426419
+  type: 'test'
+  ...
+# Subtest: local documentation links resolve relative to their file and missing targets fail
+ok 68 - local documentation links resolve relative to their file and missing targets fail
+  ---
+  duration_ms: 4.490557
+  type: 'test'
+  ...
+# Subtest: dedicated workflow supplies history and event base and filters unrelated paths
+ok 69 - dedicated workflow supplies history and event base and filters unrelated paths
+  ---
+  duration_ms: 22.321482
+  type: 'test'
+  ...
+# Subtest: query workloads reproduce stratified interpolation positions and bounded event ranges across coverage
+ok 70 - query workloads reproduce stratified interpolation positions and bounded event ranges across coverage
+  ---
+  duration_ms: 17.267216
+  type: 'test'
+  ...
+# Subtest: short-store plans clip durations, honor clock splits and omit unavailable body filters
+ok 71 - short-store plans clip durations, honor clock splits and omit unavailable body filters
+  ---
+  duration_ms: 0.975282
+  type: 'test'
+  ...
+# Subtest: latency summaries independently enforce total, middle-pair median and nearest-rank quantiles
+ok 72 - latency summaries independently enforce total, middle-pair median and nearest-rank quantiles
+  ---
+  duration_ms: 0.286987
+  type: 'test'
+  ...
+# Subtest: query measurement fully consumes stored events, binds results and leaves short sharded stores unchanged
+ok 73 - query measurement fully consumes stored events, binds results and leaves short sharded stores unchanged
+  ---
+  duration_ms: 295.041384
+  type: 'test'
+  ...
+# Subtest: query measurement rejects invalid options and incomplete, locked or corrupt accessed stores
+ok 74 - query measurement rejects invalid options and incomplete, locked or corrupt accessed stores
+  ---
+  duration_ms: 38.846626
+  type: 'test'
+  ...
+# Subtest: committed query benchmark binds full coverage, workload and event totals to verification evidence
+ok 75 - committed query benchmark binds full coverage, workload and event totals to verification evidence
+  ---
+  duration_ms: 5.705212
   type: 'test'
   ...
 # Subtest: constant-space descriptor lookup agrees with lazy planner across full coverage and seams
-ok 26 - constant-space descriptor lookup agrees with lazy planner across full coverage and seams
+ok 76 - constant-space descriptor lookup agrees with lazy planner across full coverage and seams
   ---
-  duration_ms: 1561.720555
+  duration_ms: 1292.295471
   type: 'test'
   ...
 # Subtest: circular interpolation forward, retrograde, exact samples, single sample and ambiguity
-ok 27 - circular interpolation forward, retrograde, exact samples, single sample and ambiguity
+ok 77 - circular interpolation forward, retrograde, exact samples, single sample and ambiguity
   ---
-  duration_ms: 0.777355
+  duration_ms: 0.777574
   type: 'test'
   ...
 # Subtest: stored exact and interpolated positions, half-open boundaries and concurrent LRU bound
-ok 28 - stored exact and interpolated positions, half-open boundaries and concurrent LRU bound
+ok 78 - stored exact and interpolated positions, half-open boundaries and concurrent LRU bound
   ---
-  duration_ms: 143.1242
+  duration_ms: 99.951811
   type: 'test'
   ...
 # Subtest: clock seams and global coverage endpoints return separate direct samples
-ok 29 - clock seams and global coverage endpoints return separate direct samples
+ok 79 - clock seams and global coverage endpoints return separate direct samples
   ---
-  duration_ms: 223.357739
+  duration_ms: 193.736418
   type: 'test'
   ...
 # Subtest: event queries stream sorted records with range, kind and body filters, independent results
-ok 30 - event queries stream sorted records with range, kind and body filters, independent results
+ok 80 - event queries stream sorted records with range, kind and body filters, independent results
   ---
-  duration_ms: 287.848637
+  duration_ms: 195.986578
   type: 'test'
   ...
 # Subtest: invalid manifests, incomplete checkpoints, bad options and missing or corrupt tiles reject
-ok 31 - invalid manifests, incomplete checkpoints, bad options and missing or corrupt tiles reject
+ok 81 - invalid manifests, incomplete checkpoints, bad options and missing or corrupt tiles reject
   ---
-  duration_ms: 29.307654
+  duration_ms: 18.111099
+  type: 'test'
+  ...
+# Subtest: setup requires the project lockfile before invoking npm
+ok 82 - setup requires the project lockfile before invoking npm
+  ---
+  duration_ms: 6.11095
   type: 'test'
   ...
 # Subtest: published tile recovery and checkpoint recovery equal uninterrupted generation
-ok 32 - published tile recovery and checkpoint recovery equal uninterrupted generation
+ok 83 - published tile recovery and checkpoint recovery equal uninterrupted generation
   ---
-  duration_ms: 386.630227
+  duration_ms: 280.460934
   type: 'test'
   ...
 # Subtest: exclusive lock, abort, stale staging and configuration mismatch
-ok 33 - exclusive lock, abort, stale staging and configuration mismatch
+ok 84 - exclusive lock, abort, stale staging and configuration mismatch
   ---
-  duration_ms: 61.30542
+  duration_ms: 28.8569
   type: 'test'
   ...
 # Subtest: rejects corrupt, missing and invalid checkpoint data without overwriting tiles
-ok 34 - rejects corrupt, missing and invalid checkpoint data without overwriting tiles
+ok 85 - rejects corrupt, missing and invalid checkpoint data without overwriting tiles
   ---
-  duration_ms: 166.152195
+  duration_ms: 74.554326
   type: 'test'
   ...
 # Subtest: concurrent generation is rejected while progress callback holds the lock
-ok 35 - concurrent generation is rejected while progress callback holds the lock
+ok 86 - concurrent generation is rejected while progress callback holds the lock
   ---
-  duration_ms: 58.040272
+  duration_ms: 23.035768
   type: 'test'
   ...
 # Subtest: binary envelope layout and lossless round trip with wrap, retrograde and signed zero
-ok 36 - binary envelope layout and lossless round trip with wrap, retrograde and signed zero
+ok 87 - binary envelope layout and lossless round trip with wrap, retrograde and signed zero
   ---
-  duration_ms: 10.455621
+  duration_ms: 4.570459
   type: 'test'
   ...
 # Subtest: round trips coverage edges and every supported body
-ok 37 - round trips coverage edges and every supported body
+ok 88 - round trips coverage edges and every supported body
   ---
-  duration_ms: 2.078794
+  duration_ms: 1.00508
   type: 'test'
   ...
 # Subtest: rejects malformed encoder inputs before serialization
-ok 38 - rejects malformed encoder inputs before serialization
+ok 89 - rejects malformed encoder inputs before serialization
   ---
-  duration_ms: 8.615806
+  duration_ms: 4.529282
   type: 'test'
   ...
 # Subtest: rejects header corruption, truncation, trailing bytes and unsupported versions
-ok 39 - rejects header corruption, truncation, trailing bytes and unsupported versions
+ok 90 - rejects header corruption, truncation, trailing bytes and unsupported versions
   ---
-  duration_ms: 7.087998
+  duration_ms: 4.281266
   type: 'test'
   ...
 # Subtest: rejects structurally invalid payloads even with matching SHA-256
-ok 40 - rejects structurally invalid payloads even with matching SHA-256
+ok 91 - rejects structurally invalid payloads even with matching SHA-256
   ---
-  duration_ms: 3.141489
+  duration_ms: 1.598771
   type: 'test'
   ...
 # Subtest: decompression output is bounded independently of compressed size
-ok 41 - decompression output is bounded independently of compressed size
+ok 92 - decompression output is bounded independently of compressed size
   ---
-  duration_ms: 5.13703
+  duration_ms: 2.536827
   type: 'test'
   ...
-1..41
-# tests 41
+# Subtest: full cost arithmetic uses planner tiles, CPU milliseconds and retained trial storage
+ok 93 - full cost arithmetic uses planner tiles, CPU milliseconds and retained trial storage
+  ---
+  duration_ms: 482.069799
+  type: 'test'
+  ...
+# Subtest: disk budget includes allocated storage, exact cap equality and free filesystem reserve
+ok 94 - disk budget includes allocated storage, exact cap equality and free filesystem reserve
+  ---
+  duration_ms: 0.426054
+  type: 'test'
+  ...
+# Subtest: storage walk counts other datasets and staging without following symbolic links
+ok 95 - storage walk counts other datasets and staging without following symbolic links
+  ---
+  duration_ms: 7.727382
+  type: 'test'
+  ...
+# Subtest: small trial persists a fresh completed database and interruption cannot yield a report
+ok 96 - small trial persists a fresh completed database and interruption cannot yield a report
+  ---
+  duration_ms: 47106.022712
+  type: 'test'
+  ...
+# Subtest: committed decade trial report agrees with reproducible cost arithmetic and workload scope
+ok 97 - committed decade trial report agrees with reproducible cost arithmetic and workload scope
+  ---
+  duration_ms: 162.588911
+  type: 'test'
+  ...
+# Subtest: verification measurement runs the CLI and records exact metadata without changing the database
+ok 98 - verification measurement runs the CLI and records exact metadata without changing the database
+  ---
+  duration_ms: 298.431244
+  type: 'test'
+  ...
+# Subtest: verification rejects incomplete, corrupt and locked databases before measuring their storage
+ok 99 - verification rejects incomplete, corrupt and locked databases before measuring their storage
+  ---
+  duration_ms: 131.526965
+  type: 'test'
+  ...
+# Subtest: committed full verification evidence binds the completed generation, manifest, scope and engine pin
+ok 100 - committed full verification evidence binds the completed generation, manifest, scope and engine pin
+  ---
+  duration_ms: 161.207121
+  type: 'test'
+  ...
+1..100
+# tests 100
 # suites 0
-# pass 41
+# pass 100
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 2333.781966
+# duration_ms 401526.28093
+
+Command wall seconds: 401.650706
+Exit status: 0

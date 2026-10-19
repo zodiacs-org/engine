@@ -24,3 +24,5 @@ Measure full-span sky database interpolation against direct engine calls with re
 Measure full-span sky database query performance and memory with reproducible cold and warm lookups, streamed event ranges and aggregate evidence checked against the completed store.
 Document sky database time, event and boundary differences from the public events workbench with pinned source receipts and passing project checks.
 Update sky database guides with completed full-span generation, verification, interpolation and query evidence, operating commands and measured limits.
+Retain PLAN.md, FIX.md, FIX-CHANGES.txt, PHASE2.md and CHANGES.txt as required milestone and session records; their removal conflicts with the instructed process.
+Fix committed-path isolation, require locked setup, enforce authored dash and local-link rules, check convention evidence offline, refresh test evidence and clarify operating docs.

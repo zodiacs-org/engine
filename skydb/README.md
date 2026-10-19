@@ -62,7 +62,7 @@ discovery ignores. Run them with the project's own test command above.
 
 Setup verifies the archive against the fixed identity in
 [src/identity.mjs](src/identity.mjs) and the carried archive manifest before
-installing. Subsequent setup uses the committed lockfile with npm ci. Install
+installing. Setup requires the committed lockfile and uses npm ci. Install
 scripts are disabled. Dependencies and the npm cache stay inside ignored
 project folders. The archive hash authenticates the local input against the
 committed pin; it is not a signature. Installed dependencies are trusted local

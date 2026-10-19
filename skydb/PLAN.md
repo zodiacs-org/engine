@@ -1,7 +1,8 @@
 # Sky database plan
 
-Status: implementation complete. All project changes stay in skydb/. The engine package,
-carried archives and release settings stay unchanged. The pull request stays draft.
+Status: implementation complete. Project changes stay in skydb/ and the dedicated
+`.github/workflows/skydb.yml` workflow. The engine package, carried archives,
+other workflows and release settings stay unchanged.
 
 The generator targets the half-open interval from 1800-01-01T00:00:00Z to
 2200-01-01T00:00:00Z. Only small synthetic-time examples are committed.
@@ -11,7 +12,7 @@ engine data attribution accompanies the generated sample.
 
 ## Milestones
 
-- [x] M1 Record scope, constraints, validation and ordered milestones. Validate the plan and commit it.
+- [x] M1 Record scope, constraints, validation and ordered milestones. Validate the plan.
 - [x] M2 Bootstrap an isolated Node 22 engine consumer with verified archive identity and configuration tests.
 - [x] M3 Implement and document a versioned compressed binary tile codec with corruption tests.
 - [x] M4 Generate position tiles with longitude, latitude, speed and time-basis boundaries. Test direct-call agreement.
@@ -20,26 +21,27 @@ engine data attribution accompanies the generated sample.
 - [x] M7 Add a bounded-cache query library, interpolation, event queries and integrity validation. Test wraparound, seams and tile boundaries.
 - [x] M8 Add strict command-line tools, verification and reproducible small sample tiles with attribution. Test end-to-end use.
 - [x] M9 Add benchmark and agreement scripts with committed outputs and measured scope. Run them on Node 22.
-- [x] M10 Harden failure cases, document operations and limitations, run project and applicable repository checks, complete the plan and draft PR checklist.
+- [x] M10 Harden failure cases, document operations and limitations, run project and applicable repository checks, complete the plan and project checklist.
 
 ## Validation
 
-Each implementation milestone runs its relevant Node tests before the harness
-commits and pushes. The project suite checks binary round trips, invalid input, engine
+Each implementation milestone runs its relevant Node tests before review.
+The project suite checks binary round trips, invalid input, engine
 agreement, circular interpolation, event residuals, checksum rejection and
 resume consistency. Benchmarks record runtime, platform, engine archive hash,
 workload and elapsed timings. They make no full-dataset performance claim.
-Final checks enforce folder isolation, small committed files, no em dash in
-project documentation and exclusion from the engine npm package. Repository
-checks that require rebuilding or packing the engine are subject to the explicit
-instruction to leave dist/ and the npm package untouched; record that limit.
+Final checks enforce the allowed paths, small committed files, absence of em and
+en dashes in authored project documentation and exclusion from the engine npm
+package. Verbatim upstream notices retain their original text. Repository
+checks that require rebuilding or packing the engine need a separately prepared
+engine checkout; this project uses the carried archive without rebuilding it.
 
 ## Bootstrap validation
 
 The isolated consumer tests pass on Node 22.23.3. Setup verifies the carried
 archive and a second setup exercises the lockfile reinstall. The repository
 package contents check cannot complete because this checkout has no dist/;
-the engine build is excluded by the task constraints. A separate npm dry-run
+the project uses the carried archive without rebuilding it. A separate npm dry-run
 file-list check verifies that skydb/ is not packed.
 
 ## Tile codec validation
@@ -61,7 +63,7 @@ smooth endpoints and separate support samples on each side of time-basis jumps.
 The project suite passes on Node 22.23.3, including direct-call agreement in
 [test/generate.node-test.mjs](test/generate.node-test.mjs). The npm dry-run file list
 excludes skydb/. The repository package contents check remains blocked by
-missing dist/calc.d.ts; the task prohibits rebuilding dist/. Folder isolation,
+missing dist/calc.d.ts. The project does not rebuild dist/. Folder isolation,
 file-size, documentation-character and whitespace checks pass. Persistence,
 checkpointing and manifests remain M6 work. This session completes M4 only.
 
@@ -75,7 +77,7 @@ repeats, wraparound, sampled touches, ownership and time-basis splits in
 residuals over its synthetic calendar window. Sampling limitations are documented;
 this is not a full-coverage completeness or astronomical accuracy claim.
 The npm dry-run file list excludes skydb/. The repository package contents
-check remains blocked by missing dist/calc.d.ts, and the task prohibits rebuilding
+check remains blocked by missing dist/calc.d.ts. The project does not rebuild
 dist/. Folder isolation, file-size, documentation-character and whitespace
 checks pass. Event persistence remains M6 work. This session completes M5 only.
 
@@ -90,7 +92,7 @@ Resume verifies completed tiles before skipping computation. Process interruptio
 recovery is supported; power-loss durability and hostile filesystem mutation
 are outside the documented contract. This session completes M6 only.
 The npm dry-run file list excludes skydb/. Repository checks needing dist/
-remain excluded by the task's explicit engine-build prohibition.
+remain unavailable without a separately prepared engine checkout.
 
 
 ## Query validation
@@ -104,7 +106,7 @@ consumer agreement at a synthetic midpoint, and incomplete/corrupt data rejectio
 in [test/query.node-test.mjs](test/query.node-test.mjs). No full-span interpolation error
 bound is claimed. This session completes M7 only.
 The npm dry-run file list excludes skydb/. The repository package contents
-check fails on missing dist/calc.d.ts; rebuilding dist/ is forbidden by the task.
+check fails on missing dist/calc.d.ts. The project does not rebuild dist/.
 Folder isolation, file-size, documentation-character and whitespace checks pass.
 
 
@@ -122,8 +124,8 @@ Sample data carries attribution and upstream notices. CLI generation is limited
 to a child of ignored generated/; the fixed sample script is the explicit
 small-data exception. This session completes M8 only.
 The npm dry-run file list excludes skydb/. The repository package contents
-check fails on missing dist/calc.d.ts; rebuilding dist/ remains forbidden by
-the task. Folder isolation, file-size, documentation-character and whitespace
+check fails on missing dist/calc.d.ts. The project does not rebuild dist/.
+Folder isolation, file-size, documentation-character and whitespace
 checks pass. Benchmark work remains M9.
 
 
@@ -140,7 +142,7 @@ independent astronomical accuracy, event completeness or full-dataset estimates.
 The full project suite passes, including evidence shape and maximum selection
 checks in [test/benchmarks.node-test.mjs](test/benchmarks.node-test.mjs).
 The npm dry-run file list excludes skydb/. The repository package contents
-check fails on missing dist/calc.d.ts; the task prohibits rebuilding dist/.
+check fails on missing dist/calc.d.ts. The project does not rebuild dist/.
 Folder isolation, file-size, documentation-character and whitespace checks pass.
 This session completes M9 only; operations and final hardening remain M10.
 
@@ -165,17 +167,16 @@ The project checker passes folder isolation, candidate file-size limits, absence
 of em dash in documentation, whitespace and exclusion from npm's dry-run file
 list. The repository package contents check fails because dist/calc.d.ts is
 absent. Engine typecheck and unit checks lack installed root development tools;
-root installation and checks that rebuild, pack or require dist/ were excluded
-under the task's explicit folder and engine-build constraints. The full archive
-binding/rebuild and packed-consumer gates remain harness/CI work. No engine,
-archive, release or root configuration changed. This session completes M10.
+root installation and checks that rebuild, pack or require dist/ were not run.
+The full archive binding/rebuild and packed-consumer gates belong to repository
+CI. No engine, archive, release or root configuration changed. This session
+completes M10.
 
-## Draft pull request checklist
+## Project completion checklist
 
 - [x] Generator, query library, format, tests, attributed small sample and scoped benchmark outputs are present.
 - [x] Full dataset, dependencies, caches and temporary databases stay ignored.
 - [x] Direct-engine agreement is distinguished from independent accuracy; sampled event completeness and interpolation limits are documented.
 - [x] All local project and applicable read-only repository checks are recorded above, including unavailable gates.
-- [x] Changes stay inside skydb/ and the engine npm file list excludes them.
-- [x] Session summary appended to CHANGES.txt for the harness.
-- [x] Git commits, pushes and draft PR updates are left to the harness; merging and release actions remain excluded.
+- [x] Changes stay inside skydb/ and its dedicated workflow; the engine npm file list excludes skydb/.
+- [x] Engine package files, carried archives and release settings remain unchanged.

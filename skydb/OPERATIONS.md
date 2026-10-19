@@ -142,9 +142,13 @@ it unchanged. Sharded readers do not use it, and storage walks still count it.
 
 For review, run `node skydb/scripts/check-project.mjs`, the project suite and
 the repository checks that need no engine rebuild. The project checker checks
-candidate file sizes, documentation characters, folder isolation and npm's dry
-run file list. It does not generate an archive. Checks requiring dist/ cannot
-pass in a checkout without it; this task expressly prohibits building it.
-The harness handles commits, pushes and the draft pull request. It must keep
-the pull request draft; no merge, publishing or release action is part of this
-project session.
+candidate file sizes, authored documentation for em and en dashes, local Markdown
+file links, allowed paths and npm's dry run file list. The dash check exempts only
+the verbatim upstream [licensing](samples/ENGINE-LICENSING.txt) and
+[notices](samples/NOTICE.txt). The allowed paths are skydb/ and the
+dedicated `.github/workflows/skydb.yml` workflow. The path check compares HEAD
+with the merge base of `SKYDB_BASE_REF` (default `origin/main`) and also checks
+working changes and untracked paths. CI checks out full history and supplies
+the event's base commit. The checker does not generate an archive. Checks
+requiring dist/ need a separately prepared engine checkout; this project uses
+the carried archive without rebuilding the engine.
