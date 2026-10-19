@@ -7,3 +7,4 @@ skydb: Implement bounded-cache integrity-checked queries, circular position inte
 Implement strict SkyDB CLI commands, whole-database verification and reproducible attributed sample tiles with end-to-end and direct engine agreement tests.
 Add scoped reproducible SkyDB performance and direct-engine interpolation agreement benchmarks with committed Node 22 outputs and evidence tests.
 Harden SkyDB persisted event and cadence validation, bound store reads, document operations, refresh benchmarks and complete final project checks and plan.
+Measure a decade of sky database generation and record resource costs for full coverage with disk guards and regression checks.

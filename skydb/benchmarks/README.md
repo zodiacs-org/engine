@@ -9,9 +9,10 @@ node skydb/benchmarks/performance.mjs > skydb/benchmarks/performance-output.json
 npm --prefix skydb test
 ```
 
-Scripts accept no arguments. They create fresh databases below ignored
-`skydb/generated/`, and remove their temporary directories even when a
-measurement fails. They do not modify the sample or generate the full database.
+The agreement and performance scripts accept no arguments. They create fresh
+databases below ignored `skydb/generated/`, and remove their temporary
+directories even when a measurement fails. They do not modify the sample or
+generate the full database.
 The JSON outputs record the runtime, CPU, platform, engine archive identity,
 configuration and measurement method. Output is small enough to commit.
 
@@ -40,3 +41,8 @@ actual measurements; comparisons apply only to that run.
 identity and finite values, plus maximum selection. The agreement script itself
 enforces decoded sample equality when measurements are regenerated. Report tests
 do not assert stable timings or turn sampled errors into accuracy guarantees.
+
+The phase 2 generation trial has a separate retained workload and report in
+[TRIAL.md](TRIAL.md). It measures the default position and event generation
+pipeline over a longer slice and includes resource cost arithmetic for full
+coverage. Its cost estimates are separate from the scoped query timings above.
