@@ -10,7 +10,7 @@ Choose the clock, search horizon, step, budget and any event policy explicitly.
 | Ingresses and aspects | JPL Horizons selected dates in `references/cases.json`, enforced by `test/horizons.node-test.ts` and `test/reference-api.node-test.ts`; broader ingress sample in `references/horizons-sample.json` and `test/horizons-sample.node-test.ts` | Horizons and the parent differ in frame and corrections. Sparse date agreement does not establish a full search inventory. The broader sample retains a Saturn ingress timing failure under its unchanged threshold. Natal targets are invented fixed longitudes. |
 | Repeated passes near stations | Independent hourly Horizons Venus rows reduced in `references/loop-cases.json`, checked by `test/turning-reference.node-test.ts`; discovery and timing evidence in `evidence/station-loops.json` | The opt-in scanner recovers the paired directions in the declared source windows. Default-engine timing fails the unchanged reference threshold for these slow passes. Numerical interpolation checks do not repair physical-model timing differences. |
 | Stations and retrogrades | Independently reduced JPL Venus station dates in the original fixture, also checked inside the long-span search; broader body-year station sample in `references/horizons-sample.json` and `test/horizons-sample.node-test.ts` | Horizons stations are interpolated extrema of sampled longitude, not instantaneous derivative catalog entries. The sparse body-year sample does not establish whole-interval or full-span completeness. |
-| Eclipses | Selected NASA TT greatest-eclipse dates and coarse classes in `references/nasa-cases.json`, enforced by `test/nasa.node-test.ts` and `test/reference-api.node-test.ts` | Spherical shadow geometry omits oblateness and atmospheric enlargement. Solar types are central or partial; paths, local visibility, contact times, magnitudes and total/annular/hybrid distinctions are unavailable. |
+| Eclipses | Selected NASA TT greatest-eclipse dates and coarse classes in `references/nasa-cases.json`, enforced by `test/nasa.node-test.ts` and `test/reference-api.node-test.ts`; broader fixed-year sample in `references/nasa-sample.json` and `test/nasa-sample.node-test.ts` | Spherical shadow geometry omits oblateness and atmospheric enlargement. The broader sample retains a noncentral solar class disagreement. Solar types are central or partial; paths, local visibility, contact times, magnitudes and total/annular/hybrid distinctions are unavailable. |
 | Void-of-course Moon | Analytic boundary and policy tests in `test/void.node-test.ts` | No independent astronomical void-period date evidence. The chosen sign-based last-exact-contact convention is explicit, rather than a claim to cover every historical definition. |
 | Long-span Venus search | Partition, step and filter consistency in `test/long-span.node-test.ts`, plus the existing selected JPL dates | Agreement between computations from the same engine is not independent evidence of completeness or accuracy over the entire span. |
 
@@ -23,7 +23,10 @@ reproduce offline; the full-response digests recorded during acquisition
 cannot be recomputed from those excerpts.
 NASA attribution, selected catalog rows, radii, clock interpretation and
 unchanged thresholds are documented in [references/NASA.md](references/NASA.md).
-Offline provenance checks reproduce those fixtures without a live network.
+The broader catalog-date sample and its retained class disagreement are in
+[references/NASA-SAMPLE.md](references/NASA-SAMPLE.md). Offline checks reproduce
+numerical row hashes, date arithmetic and selection without a live network;
+stored full-page digests cannot authenticate the original downloaded bytes.
 The whole-year API tests widen discovery windows but compare only the selected
 reference dates. No exhaustive NASA inventory or new physical error bound is
 claimed. No reference fixture was derived from engine output.

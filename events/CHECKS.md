@@ -538,3 +538,49 @@ the Neptune response. Absent directions remain explicit daily-selection
 outcomes rather than astronomical absence claims. Acquisition outputs, logs
 and bundles stay ignored, and the disk cap was not approached. No parent
 build, archive packing, release operation or git metadata change was made.
+
+## Phase 2 P4
+
+Runtime: Node.js 22.23.3 from `/home/box/.local/node22/bin`. Dependencies were
+reinstalled from the events lockfile with the npm cache under `events/.cache/`.
+Reference acquisition and offline reproduction use Python's standard library.
+
+Passed:
+
+- `npm ci --prefix events --cache "$PWD/events/.cache/npm"`
+- `npm run typecheck --prefix events`
+- `npm run build --prefix events` and the focused broader NASA tests.
+- `npm test --prefix events`, including all phase 1 suites, the broader NASA
+  comparisons, independent reference reproduction, long-span reconciliation,
+  HTTP integration and parent npm file-list isolation.
+- Offline full numerical table hashes, fixed-year selection, source century
+  routing, catalog ordering, type suffixes, TT calendar arithmetic and
+  provenance-tampering checks in `scripts/nasa_sample_test.py`.
+- `node events/scripts/loop-report.mjs --check`
+- `node events/scripts/sample-timing.mjs --check`
+- `node events/scripts/nasa-sample-timing.mjs --check`
+- `git diff --check`, authored-file size, documentation character, disk-use
+  and events-only change checks.
+
+The NASA catalog pages, keys and time explanation were fetched and read.
+The fixed-year selection was recorded before any engine comparison and keeps
+every solar and lunar catalog entry in those years. The new fixture retains
+complete normalized numerical tables, original download hashes, excerpt
+hashes, source URLs and UTC retrieval timestamps. No HTML or contact details
+were saved. Offline verification reproduces selection and numerical data;
+it cannot authenticate the original page or key bytes from a stored digest.
+The original phase 1 NASA fixture, configuration, scripts and tests are unchanged.
+
+The expanded full-date TT comparisons meet the existing timing threshold.
+Solar catalog 09398 on 1950-03-18 disagrees in coarse class: NASA A- is
+noncentral, while the spherical model returns central. The independent class
+and failed class verdict remain in `evidence/nasa-sample-timing.json`, with
+the model radii and threshold unchanged. The exact selection, rounded timing
+measurements and remaining physical-model limits are documented in
+`references/NASA-SAMPLE.md` and enforced by `test/nasa-sample.node-test.ts`.
+No full-year search completeness or physical error bound is inferred.
+
+Generated candidates, bundles and logs remain ignored, and the disk cap was
+not approached. Only `events/` was changed. No parent build, archive packing,
+release operation or git metadata mutation was performed. The fixed-query
+completeness report remains P5.

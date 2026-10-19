@@ -417,6 +417,9 @@ for the numerical method, and same-parent comparisons for adapter delegation.
 Independent NASA catalog date and coarse-class comparisons are now enforced
 by [nasa.node-test.ts](test/nasa.node-test.ts), with acquisition, attribution, clocks and
 comparison limits documented in [references/NASA.md](references/NASA.md).
+The [broader NASA sample](references/NASA-SAMPLE.md) adds full catalog-date
+checks in fixed years across the requested reference span. Its independent
+noncentral solar class disagreement remains explicit in the evidence.
 The analytic and adapter tests themselves establish no astronomical accuracy.
 
 

@@ -54,6 +54,10 @@ selected rows from those pages. Live pages may change, so a later acquisition
 need not have identical full-page digests. Normal tests require Python and
 use the committed rows without network access.
 
+The separate [broader NASA sample](NASA-SAMPLE.md) retains the original
+selection above and adds fixed-year selection from complete numerical catalog
+tables, with its own provenance, date tests and recorded class disagreement.
+
 ## Event definitions, clocks and comparison limits
 
 The solar key defines greatest eclipse by the Moon's shadow axis approaching
