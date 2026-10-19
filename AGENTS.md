@@ -153,3 +153,33 @@ below no `package.json` or `node_modules`. The package supports Node
   a candidate, and say why in `CHANGELOG.md`.
 - Write documentation plainly: what the code does, with units, and what was
   measured against what.
+
+## House rules for every coding agent
+
+Both coding agents that work on this repository (Claude Code and the Codex
+CLI) follow these rules alongside the ones above. A coordinator hands out the
+jobs and keeps the shared task board. `CLAUDE.md` imports this file, so the
+rules live here once.
+
+- Commit as `admin@zodiacs.org` (name "Zodiacs Admin"). Never put a model
+  name or a personal email address in a commit, a pull request, or a file.
+- Open draft pull requests only. Never merge (the merge-commit rule above is
+  for the owner, who decides every merge), never mark a pull request ready
+  for review, and never push to `main`.
+- Post nothing publicly: no npm publish, no release, no comments on other
+  projects, no messages to people.
+- Never read, print or commit credentials, tokens or `.env` values.
+- No predictions in documentation or examples: the engine computes facts.
+  No token, market or crypto language.
+- No em dashes or en dashes in prose you write. Use commas, colons, full
+  stops or parentheses.
+- One git worktree per job, branched from `origin/main`. Never edit another
+  job's worktree.
+- Before editing, read the shared task board at `/workspace/orchestra/BOARD.md`
+  (`/workspace/orchestra/board.sh overlaps` lists files that other open
+  branches already change). If your files overlap another job's, say so in
+  your `STATUS.md` and keep your change to the smallest hook you can.
+- Keep your own row on the board current
+  (`/workspace/orchestra/board.sh set <job-id> <field> <value>`), and append a
+  timestamped line (ICT) to your worktree's `STATUS.md` at each step.
+- "Done" means CI is green on the pull request, not an agent saying so.
