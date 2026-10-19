@@ -1,4 +1,26 @@
-# M1 validation
+# Validation record
+
+Phase 1 and its review fixes are complete. The independently validated
+true-of-date frames and relativistic modes are recorded in
+[frame-validation.md](reports/frame-validation.md). Swiss transport and
+the checkpointed runner are implemented. Actual bounded engine measurements
+are in [bounded-sample.md](reports/bounded-sample.md) and
+[driver-smoke.md](reports/driver-smoke.md), with fresh checks recorded under
+F3 and F4 below. Swiss is unavailable in this environment and has not been
+run. The larger campaign and expanded statistics are tracked in
+[PHASE2.md](PHASE2.md).
+
+The sections below record what each historical session ran and knew at that
+time. Their commands and measurements are not claims about the current
+runtime or a later build. The inertial JPL report's markdown now includes
+current project context; its aggregate measurement receipt and CSV remain
+historical. `node crosscheck/tools/render-jpl.mjs --check` checks that
+markdown against the retained receipt without invoking a reference or
+changing the recorded measurement identities. Fresh inertial validation
+with changed tooling needs a new measurement; historical numerical
+reproduction requires the recorded source and runtime.
+
+## M1 validation
 
 Executed in the source checkout on Node v20.19.2:
 
@@ -19,11 +41,12 @@ is restricted to crosscheck/. The initial attempt also encountered the
 read-only default npm cache; the retry used the ignored project cache.
 The standalone npm exclusion check succeeds without a build or archive.
 
-No astronomical sample has been run. Node 22 setup, isolated build identity,
-reference adapters and measured reports belong to subsequent milestones.
-Git status shows only the new crosscheck/ folder; git metadata was not written.
+No astronomical sample was run in M1. Node 22 setup, isolated build identity,
+reference adapters and measured reports were subsequently completed in the
+milestones below. Git status then showed only the new crosscheck/ folder;
+git metadata was not written.
 
-# M2 validation
+## M2 validation
 
 Executed on Node v22.23.3 using the existing external executable
 /tmp/node-v22.23.3-linux-x64/bin/node. Every npm command below had
@@ -69,10 +92,10 @@ dependencies and the ignored runtime. No reference instrument was invoked.
 The full package-content gate still fails because dist/calc.d.ts is absent.
 The npm dry-run exclusion test passes without a root build. The root build,
 release gates and astronomy comparisons were not run: this milestone changes
-only crosscheck tooling and must not write root dist/. There is no measured
-JPL or Swiss comparison report yet.
+only crosscheck tooling and must not write root dist/. No measured JPL or
+Swiss comparison report existed at M2; later JPL measurements are linked above.
 
-# M3 validation
+## M3 validation
 
 Executed on Node v22.23.3 with the same external executable as M2:
 
@@ -97,10 +120,10 @@ sampler arithmetic tests, not charts evaluated over ephemeris coverage.
 
 Statistics retain only aggregates. Arithmetic tests use invented residuals,
 not engine or Swiss expected values. No reference instrument was invoked and
-no astronomical sample was run. This milestone establishes reproducible
-inputs and aggregate arithmetic; kernel acquisition is the next milestone.
+no astronomical sample was run. This milestone established reproducible
+inputs and aggregate arithmetic; M4 then implemented kernel acquisition.
 
-# M4 validation
+## M4 validation
 
 Executed on Node v22.23.3 using the external executable from M2:
 
@@ -124,10 +147,11 @@ The real DE440s acquisition failed with UND_ERR_CONNECT_TIMEOUT connecting
 to naif.jpl.nasa.gov. A separate curl HEAD request also failed during TLS
 setup. The checksum list and format documents were fetched and read through
 the browsing tool. No kernel bytes or coefficients were committed or used
-in comparisons. Successful public acquisition and real-cache reopen remain
-unverified in this environment; the implemented acquisition is covered by
-transport and structural unit tests, not a live-network success claim.
-The bounded chart comparison and aggregate error report remain M9 work.
+in comparisons. Successful public acquisition and real-cache reopen were
+unverified at M4; M5b subsequently verified both. At M4, the implemented
+acquisition had transport and structural unit tests, without a live-network
+success claim. M9 subsequently completed the bounded chart comparison and
+aggregate error report.
 No Swiss instrument was run. Only crosscheck files changed.
 
 The full package-content check was also rerun with the M3 command and still
@@ -135,11 +159,11 @@ fails because dist/calc.d.ts is absent. No root build was performed under the
 folder-only constraint. git diff --check passes; status shows only crosscheck
 changes. Existing invalid cache and symbolic-link refusal tests also pass.
 
-# M5a validation
+## M5a validation
 
-The original M5 has been split into geometric coefficient evaluation (M5a)
+The original M5 was split into geometric coefficient evaluation (M5a)
 and physical reduction with public reference validation (M5b). This session
-completes M5a only. Executed with the external Node v22.23.3 executable:
+completed M5a only. Executed with the external Node v22.23.3 executable:
 
 ```sh
 PATH=/tmp/node-v22.23.3-linux-x64/bin:$PATH npm --prefix crosscheck test
@@ -163,18 +187,19 @@ accuracy tolerance. No coefficients, fixtures or expectations come from Swiss.
 The NAIF public SPK specification's type 2 and type 3 sections were retrieved
 through search after a direct page request timed out. Implementation is
 independently authored from the documented layout. No kernel acquisition or
-astronomical comparison was performed in this session. TT/TDB conversion,
-physical corrections, frame reduction and independent public JPL numerical
-validation remain unchecked in M5b; no chart error report exists yet.
+astronomical comparison was performed in this session. M5b and M5c later
+completed TT/TDB conversion, physical corrections, frame reduction and
+independent reference validation. The bounded chart error report followed
+in M9.
 
 
-# M5b validation
+## M5b validation
 
-The original physical reduction milestone is split again: M5b completes
-inertial ICRF position reduction with SPICE correction semantics; M5c remains
-unchecked for independently validated true-of-date frames and relativistic
-modes required before a natal-chart campaign. This is an explicit scope split,
-not acceptance of missing frame or correction validation.
+The original physical reduction milestone was split again: M5b completed
+inertial ICRF position reduction with SPICE correction semantics. M5c then
+completed independently validated true-of-date frames and relativistic
+modes before the natal-chart campaign. M5b's inertial validation alone did
+not establish frame or relativistic correction agreement.
 
 Executed on Node v22.23.3 using the external executable from M2:
 
@@ -218,9 +243,10 @@ file below MAX_FILE_BYTES. The full package-content gate still fails because
 root dist/calc.d.ts is absent; the folder-only constraint prohibits a root
 build. Root engine tests and release gates were not run. No Swiss dependency
 was installed or invoked. Only crosscheck files changed, and git metadata was
-not written. M5c, the runner and the actual chart error report remain pending.
+not written. M5c, the runner and the actual chart error report were completed
+in subsequent milestones.
 
-# M5c validation
+## M5c validation
 
 Executed on Node v22.23.3 with the same external executable as M2:
 
@@ -251,8 +277,9 @@ validate implementation agreement, not the physical model's accuracy.
 The frame is explicitly IAU 2006 bias/precession with unadjusted IAU 2000B
 nutation. The solar mode uses static reception-Sun geometry and ERFA's
 limiter; end-to-end JPL apparent-coordinate validation remains absent. The
-historical inertial JPL report still reproduces without changes. The Swiss
-integration, sharded runner and bounded engine chart campaign remain pending.
+historical inertial JPL report reproduced without changes at M5c. The Swiss
+integration, sharded runner and bounded engine chart campaign were completed
+in M6 through M10; no live Swiss measurement was made.
 
 File safeguards and the suite's npm exclusion check pass. All local files,
 including ignored runtime data, are below MAX_FILE_BYTES. The full package
@@ -307,7 +334,7 @@ it does not authenticate caller-supplied metadata or rerun instruments.
 Sampling intervals are labelled as configured distributions rather than
 observed extrema. No JPL or Swiss measurement was made in this session and
 no engine accuracy claim or measured chart error report is added. The bounded
-physical campaign remains M9.
+physical campaign was subsequently completed in M9.
 
 The full package-content gate still fails because root dist/calc.d.ts is
 absent. The folder-only constraint prohibits a root build; no packed file,
@@ -445,7 +472,7 @@ safeguards pass. Root Vitest's default discovery lists no crosscheck suites.
 Its dependencies come from an external installation matching the root
 lockfile. Root load errors for missing dependencies and the archive-check
 environment limitation remain outside this fix. No root files or git metadata
-were changed. F4 operational review remains unchecked.
+were changed. F4 operational review was subsequently completed below.
 
 ## F4 operational review
 
@@ -503,3 +530,41 @@ root run. The full package-content gate still fails on missing dist/calc.d.ts.
 No root build was run under the folder-only restriction. No packed inputs,
 archives, workflows or git metadata changed. All review checklist items are
 now complete.
+
+## Phase 2 P1 documentation and historical report rendering
+
+Reconciled current documentation with the completed phase 1 implementations
+and made earlier session statements explicitly historical. The inertial
+JPL report now links the subsequent frame validation and bounded chart
+measurements. Its measurement JSON and CSV are unchanged. The numerical
+validator and the editorial CLI share lib/jpl-report.mjs; the latter renders
+only the retained aggregate receipt. The artifact consistency test checks
+the recorded command, runtime, kernel identity and numerical table cells
+without treating those checks as accuracy evidence.
+
+The available runtime was Node v20.19.2. The external Node executables
+recorded in earlier sessions were absent. No runtime binary was installed
+and no Swiss dependency was installed or invoked. Executed from the
+repository root:
+
+```sh
+npm ci --prefix crosscheck --ignore-scripts --no-audit --no-fund --cache "$PWD/crosscheck/runtime/npm-cache"
+npm --prefix crosscheck run check:syntax
+node --test --test-concurrency=1 crosscheck/tests/*.node-test.mjs
+node crosscheck/tools/build.mjs
+node crosscheck/tools/build.mjs --verify
+node crosscheck/tools/render-jpl.mjs --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+node crosscheck/tools/check.mjs --all-sizes
+git diff --check
+```
+
+Syntax, historical aggregate rendering, file safeguards and the tests
+independent of the runtime-specific build passed, including npm exclusion
+and invented Swiss transport checks. The runtime acceptance test, isolated
+build test, build command and build verification refused the available
+runtime with the existing Node requirement diagnostic. These local checks
+therefore do not establish a passing Node 22 build or full suite. The
+dedicated workflow retains its pinned Node 22 job; its result is left to
+the external harness. No root build or packed files changed.

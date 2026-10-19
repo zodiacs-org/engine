@@ -3,8 +3,31 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { parseHorizons, selectRows, HORIZONS_LIMITS } from '../lib/horizons.mjs';
 import { ttToTdb } from '../lib/reduction.mjs';
+import { renderJplMarkdown } from '../lib/jpl-report.mjs';
 
 const reference = new URL('../../docs/evidence/calc-api/horizons/geo-NONE-10.txt',import.meta.url);
+// Artifact consistency, not an independent physical accuracy check.
+test('historical JPL markdown preserves aggregate measurements and their recorded identity', async () => {
+  const bytes = await readFile(new URL('../reports/jpl-reduction.json', import.meta.url), 'utf8');
+  const report = JSON.parse(bytes);
+  const before = JSON.stringify(report);
+  const rendered = renderJplMarkdown(report);
+  assert.equal(rendered, await readFile(new URL('../reports/jpl-reduction.md', import.meta.url), 'utf8'));
+  assert.equal(JSON.stringify(report), before);
+  assert.ok(rendered.includes('`' + report.command + '` on ' + report.software.node));
+  assert.ok(rendered.includes(report.kernel.sha256));
+  const rows = rendered.split('\n').filter(line => /^\| (CN|NONE)/.test(line));
+  assert.equal(rows.length, Object.keys(report.groups).length);
+  for (const line of rows) {
+    const [key, n, angle, range, failed] = line.split('|').slice(1, -1).map(cell => cell.trim());
+    const group = report.groups[key];
+    assert.equal(Number(n), group.angleArcseconds.n);
+    assert.equal(Number(angle), group.angleArcseconds.maxAbs);
+    assert.equal(Number(range), group.rangeKm.maxAbs);
+    assert.equal(failed, `${group.angleArcseconds.failed} / ${group.rangeKm.failed}`);
+  }
+  assert.match(rendered, /Swiss transport is implemented, but no live Swiss comparison was run/);
+});
 test('Public Horizons parser requires frame, time, center, exact target and corrections', async () => {
   const text = await readFile(reference,'utf8');
   const rows = parseHorizons(text,10,'NONE');

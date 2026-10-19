@@ -31,4 +31,6 @@ and relativistic modes for chart conventions; M5c validates those specified
 implementations against ERFA. Passing these checks establishes implementation
 agreement for the named model, not an end-to-end apparent-coordinate accuracy
 bound. The static single-Sun approximation must be reported separately in
-later campaigns. Natal frame matching and chart comparisons remain runner work.
+later campaigns. Natal frame matching and bounded chart comparisons were
+implemented in M9 and M10, with review verification recorded in VALIDATION.md.
+Phase 1 is complete; PHASE2.md tracks the larger measured campaign.

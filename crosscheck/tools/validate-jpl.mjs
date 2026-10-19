@@ -7,6 +7,7 @@ import { createSpkReader } from '../lib/spk.mjs';
 import { ttToTdb, reduceJpl, separationArcseconds, AU_KM, TIME_MODEL } from '../lib/reduction.mjs';
 import { parseHorizons, selectRows, HORIZONS_LIMITS } from '../lib/horizons.mjs';
 import { emptyStats, addResidual, summarize } from '../lib/statistics.mjs';
+import { renderJplMarkdown } from '../lib/jpl-report.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const repository = fileURLToPath(new URL('../../', import.meta.url));
@@ -47,7 +48,7 @@ for (const name of files) {
 }
 if (!tested || Object.keys(aggregate).length !== targets.size*3) throw Error('Incomplete public reference coverage');
 const tooling = {};
-for (const name of ['lib/kernels.mjs','lib/spk.mjs','lib/reduction.mjs','lib/horizons.mjs','lib/statistics.mjs','tools/validate-jpl.mjs']) tooling[name] = digest(await readFile(join(root,name)));
+for (const name of ['lib/kernels.mjs','lib/spk.mjs','lib/reduction.mjs','lib/horizons.mjs','lib/statistics.mjs','lib/jpl-report.mjs','tools/validate-jpl.mjs']) tooling[name] = digest(await readFile(join(root,name)));
 const groups = Object.fromEntries(Object.entries(aggregate).sort().map(([key,s]) => [key,{angleArcseconds:summarize(s.angle), rangeKm:summarize(s.range)}]));
 const report = { schema:1, what:'Reference reduction validation, not an engine error report or random chart campaign',
   command:'node crosscheck/tools/validate-jpl.mjs', software:{node:process.version}, tooling,
@@ -60,16 +61,7 @@ const report = { schema:1, what:'Reference reduction validation, not an engine e
   limits:HORIZONS_LIMITS,span:{minJdTt:minJd,maxJdTt:maxJd},tested,eligible,outsideCoverage,references,groups,
   exclusions:['No engine positions evaluated','No Swiss instrument invoked','No true-of-date frames','No solar deflection or relativistic aberration','DE440 versus DE441 model differences included','No accuracy bound outside selected epochs'] };
 const json = JSON.stringify(report,null,2)+'\n';
-const lines = ['# JPL inertial reduction validation','',report.what+'.','',
-  'Command: `'+report.command+'` on '+process.version+'.',
-  'Kernel SHA-256: `'+report.kernel.sha256+'`.',
-  'Exact tooling and public input hashes, selection rules, tolerances and TT span are in [jpl-reduction.json](jpl-reduction.json).','',
-  'This compares the independently authored SPK reduction with committed JPL Horizons DE441 responses. Differences include DE440 versus DE441, the truncated NAIF TT/TDB model, and CN versus Horizons LT semantics. Limits are acceptance checks fixed in lib/horizons.mjs before the comparison, not an engine accuracy claim.','',
-  'True-of-date rotation and relativistic corrections are still pending. No random chart campaign or Swiss comparison has been run.','',
-  '| Correction / NAIF target | Compared | Angular max (arcsec) | Range max (km) | Failed angle / range |',
-  '| --- | ---: | ---: | ---: | ---: |'];
-for (const [key,g] of Object.entries(groups)) lines.push(`| ${key} | ${g.angleArcseconds.n} | ${g.angleArcseconds.maxAbs} | ${g.rangeKm.maxAbs} | ${g.angleArcseconds.failed} / ${g.rangeKm.failed} |`);
-const markdown = lines.join('\n')+'\n';
+const markdown = renderJplMarkdown(report);
 const csv = ['correction,target,metric,unit,n,passed,failed,mean,mean_abs,rms,population_std_dev,max_abs'];
 for (const [key,g] of Object.entries(groups)) {
   const [correction,target] = key.split('/');

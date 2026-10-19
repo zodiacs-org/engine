@@ -1,7 +1,8 @@
 # Crosscheck
 
-An isolated comparison harness for @zodiacs/engine. Development follows
-[PLAN.md](PLAN.md). The scope, safeguards, isolated build, synthetic sampler,
+An isolated comparison harness for @zodiacs/engine. Phase 1 is complete in
+[PLAN.md](PLAN.md); current work follows [PHASE2.md](PHASE2.md). The scope,
+safeguards, isolated build, synthetic sampler,
 streaming statistics, kernel acquisition, inertial JPL reduction and
 validated true-of-date frame and relativistic correction implementations are
 implemented, along with aggregate-only Swiss position integration, a
@@ -15,26 +16,29 @@ NAIF/JPL at runtime into runtime/cache/. Kernels are stored in bounded
 chunks, never committed. The independent reduction must name its time scale,
 reference frame, origin, light-time, aberration and deflection conventions.
 Planetary centers and system barycenters must not be silently interchanged.
-Different conventions will be reported separately from numerical error.
+Reports name convention differences alongside the measured residuals.
+The phase 2 checklist includes separating their contributions from numerical error.
 JPL does not provide an arbiter for house-system definitions or lunar nodes;
 unsupported comparisons must be explicit.
 
 Inputs are random synthetic instants and coordinates, with deterministic
 case indices and a recorded seed. No personal birth records are accepted.
-The runner will shard by case index and checkpoint aggregate state without
+The runner shards by case index and checkpoints aggregate state without
 raw positions. Resume must refuse changes in configuration, source, build,
 kernel identity or reference versions. Campaigns may request millions of
 charts; reports must state only the cases actually processed.
 
 Swiss Ephemeris is an optional external comparison instrument, installed by
 the user outside this checkout. It is never an engine dependency or an
-accuracy arbiter. Integration must use the repository's permitted
+accuracy arbiter. Integration uses the repository's permitted
 conformance/adapters/pyswisseph.py route and aggregate-only retention,
 following the conformance harness's --values none policy. Missing libraries,
 missing ephemerides and fallback flags must be reported explicitly. Never
 save raw adapter stdout, exceptions containing values, per-case positions,
 fixtures, tables, Swiss code, binaries or ephemeris files in this repository.
 Only verdicts, returned flags and summary statistics may be retained.
+No Swiss binding is installed in this environment. Phase 2 does not install
+or run it; a separate owner decision is required for a live comparison.
 
 Astrodienst offers Swiss Ephemeris under the AGPL or a professional licence.
 Its [official licensing page](https://www.astro.com/swisseph/swephinfo_e.htm),
@@ -68,8 +72,8 @@ retention policy. No secrets or tokens belong in any project file.
 
 All work and dependency installation belongs in crosscheck/. Builds must
 write into runtime/, never the root dist/. Do not change packed inputs,
-release archives, engine source or root dependency manifests. Reports will
-be committed in reports/ as markdown plus aggregate CSV, with the exact
+release archives, engine source or root dependency manifests. Committed
+reports in reports/ contain markdown plus aggregate CSV, with the exact
 command, source/build digest, dependency versions, kernel digest and coverage,
 sampled span, counts, units, correction conventions, failures and exclusions.
 A sample maximum is not a proven bound. Reports must be reproducible from
@@ -144,7 +148,7 @@ half-turn. No physical accuracy tolerance is established by these helpers.
 
 Aggregate state can be JSON serialized and merged only with the same
 tolerance and the expected fields. Merge order can change floating-point
-rounding; deterministic report reproduction will require a fixed merge order.
+rounding; the runner merges in fixed shard order for deterministic reproduction.
 The tests in tests/sampling-statistics.node-test.mjs check arithmetic independently
 of engine outputs and exercise shard recombination and JSON continuation.
 They establish tooling behavior, not ephemeris accuracy or campaign throughput.
@@ -251,14 +255,27 @@ civil UTC conversion. Correction semantics follow
 Solar deflection, relativistic aberration and true-of-date rotations are
 implemented separately below. Topocentric observations remain unsupported.
 
-Run the bounded independent reference validation after kernel acquisition:
+The historical bounded independent reference validation used these commands
+after kernel acquisition, with its recorded source and Node runtime:
 
 ```sh
 node crosscheck/tools/validate-jpl.mjs
 node crosscheck/tools/validate-jpl.mjs --check
 ```
 
-It reads public Horizons responses already committed under
+The retained report records those historical executable identities.
+Current tooling has changed, so fresh reproduction of that measurement
+requires its historical source as well as its recorded runtime. Do not run
+the no-flag validator over the retained report with changed tooling: it
+replaces measurement files. Check the current markdown rendering from the
+committed aggregate receipt, without rerunning instruments or replacing
+those identities, with:
+
+```sh
+node crosscheck/tools/render-jpl.mjs --check
+```
+
+The numerical validator, tools/validate-jpl.mjs, reads public Horizons responses already committed under
 ../docs/evidence/calc-api/horizons/, checks their conventions, and evaluates
 a deterministic bounded selection within DE440s coverage. The exact selection,
 TT span, acceptance limits, compared counts, exclusions, source hashes and
@@ -556,7 +573,8 @@ before allocating a long run. Charts are generated one at a time and discarded.
 `all` processes shards serially. Instead, assign each shard index to a separate
 process with the same specification and external installation selectors. For
 example, replace `all` with `0`, `1`, `2` and `3` for the specification above.
-Each process owns only its shard lock and checkpoint. Stop all workers before
+Run at most three worker processes at once; queue any remaining shard until
+a worker exits. Each process owns only its shard lock and checkpoint. Stop all workers before
 rendering a report. Never run two workers for the same shard. Shard count is
 capped in `validateSpec` to keep collected checkpoint bundles below the file
 limit; aggregate output size is also checked before writing.
