@@ -8,7 +8,7 @@ Resource estimates describe computing cost, not astronomical outcomes.
 - [x] P2 Use the trial evidence to select full coverage or a documented smaller span, then generate into generated/full/ with disk guards, bounded session work and checkpoint resume until complete.
 - [x] P3 Run the verification CLI over the completed database and commit its aggregate result and manifest summary, including tile count, bytes, manifest SHA-256, engine pin and configuration.
 - [x] P4 Compare a deterministic stratified random sample of at least 2,000 instants across the completed span with direct engine calls; commit per-body maximum, p99 and median interpolation errors and tests of the measurement method.
-- [ ] P5 Benchmark cold and warm position lookups, event range queries and memory on the completed database; commit aggregate results with exact commands and machine details.
+- [x] P5 Benchmark cold and warm position lookups, event range queries and memory on the completed database; commit aggregate results with exact commands and machine details.
 - [ ] P6 Compare time, event definitions and boundary ownership with the events project in PR #43 using available public evidence; document where results cannot be interchanged.
 - [ ] P7 Update the project README, OPERATIONS and benchmark guide with measured scope and linked evidence, run the project tests and checks, and record remaining limits.
 
@@ -403,4 +403,42 @@ and the project isolation and package-exclusion checker. Changed documentation
 passed checks for both prohibited dash characters. Changes stay in skydb/;
 phase 1 source, engine files, archives, root configuration, workflows and the
 package version remain unchanged. The session summary is appended to
+CHANGES.txt for the harness.
+
+P5 is complete. [benchmarks/query-full.mjs](benchmarks/query-full.mjs) measured
+queries on the retained completed database over the default half-open span
+from 1800-01-01T00:00:00Z to 2200-01-01T00:00:00Z.
+[benchmarks/query-full-output.json](benchmarks/query-full-output.json) records
+512 position lookups with fresh empty application caches and 4,096 immediate
+warm lookups of those same instants. Cold and warm results match exactly.
+Opening and query latency distributions are separate; filesystem caches,
+host load and garbage collection remain uncontrolled.
+
+The report includes unfiltered nominal day, month and year event ranges,
+Moon ingress month ranges and Mercury station year ranges, with each range
+cohort distributed across coverage. A separate complete event stream returned
+549,078 records from all 146,099 tiles, matching P3's verification evidence.
+Event iteration is fully consumed with streaming counts and digests. The
+configured cache retains at most 4 decoded tiles. Process memory observations
+and the native process-lifetime RSS high-water mark are recorded with their
+sampling and scope limits. [benchmarks/QUERY.md](benchmarks/QUERY.md) documents
+the exact command, machine description, workload, timing method and measured
+results. These are local performance measurements, without an astronomical
+accuracy, event completeness or performance guarantee.
+
+[test/query-full.node-test.mjs](test/query-full.node-test.mjs) checks reproducible
+workloads, clipped ranges, clock splits, quantile arithmetic, cache behavior,
+independently reduced saved event counts and digests, matching position-result
+digests and unchanged database bytes on short synthetic-time stores. It also
+checks incomplete, locked and corrupt failures, and binds the committed report
+to the completed full verification evidence. The runner checks metadata before
+and after measurement, and reads every tile during its full-span stream.
+Generated data remains ignored; no generation or checkpoint changes were made.
+
+Validation passed on the report's Node runtime: locked project setup,
+`npm --prefix skydb test`, workflow module syntax checks and the project
+isolation and package-exclusion checker. Changed documentation passed checks
+for both prohibited dash characters. Changes stay in skydb/; phase 1 source,
+engine files, archives, root configuration, workflows and the package version
+remain unchanged. P6 and P7 remain pending. The session summary is appended to
 CHANGES.txt for the harness.

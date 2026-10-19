@@ -49,4 +49,10 @@ coverage. Its cost estimates are separate from the scoped query timings above.
 
 Completed full-database verification and its manifest and storage summary are
 recorded in [VERIFY.md](VERIFY.md). That report measures structural integrity;
-full-span interpolation and query benchmarks remain separate milestones.
+full-span interpolation and query timings are separate measurements.
+
+Completed database query measurements are recorded in [QUERY.md](QUERY.md).
+They cover fresh-cache and immediate warm position lookups, filtered and
+unfiltered event ranges, a complete event stream and observed process memory.
+The report states the cache conditions and exact workloads, and binds its
+database identity and full event count to the completed verification evidence.
