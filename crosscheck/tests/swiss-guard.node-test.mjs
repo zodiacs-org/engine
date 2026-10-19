@@ -104,6 +104,24 @@ test('source comments, docstrings, other imports and documentation are allowed',
   for (const [path, source] of fixtures) assert.deepEqual(inspectTrackedFile(path, source), [], path);
 });
 
+test('Python eight-digit Unicode escapes decode in literal loader arguments only', () => {
+  for (const source of [
+    String.raw`__import__("\U00000073wisseph")`,
+    String.raw`importlib.import_module(u"\U00000070yswisseph")`,
+    String.raw`__import__("swiss" "\U00000065ph")`
+  ]) {
+    assert.deepEqual(inspectTrackedFile('src/example.py', source), [
+      { path: 'src/example.py', rule: 'import', line: 1, reason: 'Swiss import forbidden' }
+    ], source);
+  }
+  for (const [path, source] of [
+    ['src/example.py', String.raw`__import__(r"\U00000073wisseph")`],
+    ['src/example.py', String.raw`__import__("\U0001f31fwisseph")`],
+    ['src/example.py', String.raw`message = "\U00000073wisseph"`],
+    ['src/example.js', String.raw`require("\U00000073wisseph")`]
+  ]) assert.deepEqual(inspectTrackedFile(path, source), [], source);
+});
+
 test('comment boundaries use the source language line terminators', () => {
   for (const terminator of ['\r', '\r\n', '\u2028', '\u2029']) {
     assert.deepEqual(inspectTrackedFile('src/example.js', `// comment${terminator}require("swisseph");`), [

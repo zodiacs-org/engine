@@ -909,3 +909,45 @@ executable. The strict Swiss scan still fails on the same historical imports.
 This does not establish a passing full Node 22 suite or full repository import
 gate. No baseline, historical import exemption, campaign or live Swiss run
 was added. All changed files stay inside crosscheck/.
+
+## Phase 2 S2 Python Unicode literal correction
+
+The strict scanner missed forbidden literal loader arguments spelled with
+Python's eight-digit Unicode escape. Added a regression that failed before
+the correction and passes afterward. The tokenizer now decodes those escapes
+as Unicode code points, preserving raw-string spelling and JavaScript's
+different escape rules. Fixtures exercise direct and adjacent literals,
+prefixed strings, non-BMP characters and unrelated text. They use invented
+source only and never load Swiss or retain astronomical values.
+
+An independent audit confirmed that the historical import findings recorded
+above are genuine, rather than scanner false positives. They remain outside
+the allowed edit scope. No baseline or additional import exemption was added;
+the strict gate cannot pass under the current scope. S2 remains unchecked
+while the requested scope decision is pending.
+
+Executed from the repository root with the available Node v20.19.2:
+
+```sh
+npm ci --prefix crosscheck --ignore-scripts --no-audit --no-fund --cache "$PWD/crosscheck/runtime/npm-cache"
+npm --prefix crosscheck run check:syntax
+node --test crosscheck/tests/swiss-guard.node-test.mjs
+npm --prefix crosscheck test
+npm --prefix crosscheck run build
+npm --prefix crosscheck run verify
+node crosscheck/tools/check-swiss.mjs
+node crosscheck/tools/render-jpl.mjs --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+npm --prefix crosscheck run check
+node crosscheck/tools/check.mjs --all-sizes
+git diff --check
+```
+
+Syntax, guard fixtures, dependency and engine import boundary assertions,
+runtime independent tests, retained aggregate reproduction, npm exclusion
+and file/storage safeguards passed. The full suite fails only its runtime
+acceptance and isolated-build tests at requireNode22; build and verification
+refuse the same unsupported executable. The strict scan fails on the same
+historical imports listed above. This is not a passing full Node 22 run or
+a completed S2 milestone. No campaign or live Swiss execution occurred.

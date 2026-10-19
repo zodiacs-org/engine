@@ -17,3 +17,4 @@ Complete S1: document the approved external Swiss test-only instrument, licensin
 Prepare S2: add a strict tracked-file Swiss import and dependency scanner with negative fixtures; record the existing out-of-scope imports blocking enforcement and the local Node 22 check limitation.
 Harden S2: catch literal Swiss loaders in formatted strings, continued dependency names and scripts with unusual suffixes; expand negative fixtures, preserve strict exemptions and record the pending historical-import decision and Node 22 check limitation.
 Strengthen S2: enforce tracked dependency and engine import boundaries through dedicated Node tests, fix adjacent Python literals and source line endings, and retain the strict historical-import blocker and local Node 22 check limitation.
+Fix S2 literal loader detection for Python Unicode escapes with regression fixtures; retain the historical import scope blocker and record the local Node 22 validation limit.

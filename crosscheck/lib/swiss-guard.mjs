@@ -146,11 +146,11 @@ function tokens(source, python) {
               const tail = /^[0-7]{0,2}/.exec(source.slice(at))[0];
               value += String.fromCharCode(parseInt(escaped + tail, 8)); at += tail.length; continue;
             }
-            if ((escaped === 'x' || escaped === 'u') && source[at] !== '{') {
-              const digits = escaped === 'x' ? 2 : 4;
+            if ((escaped === 'x' || escaped === 'u' || python && escaped === 'U') && source[at] !== '{') {
+              const digits = escaped === 'x' ? 2 : escaped === 'u' ? 4 : 8;
               const hex = source.slice(at, at + digits);
-              if (new RegExp(`^[0-9a-f]{${digits}}$`, 'i').test(hex)) {
-                value += String.fromCharCode(parseInt(hex, 16)); at += digits; continue;
+              if (new RegExp(`^[0-9a-f]{${digits}}$`, 'i').test(hex) && parseInt(hex, 16) <= 0x10ffff) {
+                value += String.fromCodePoint(parseInt(hex, 16)); at += digits; continue;
               }
             }
             if (escaped === 'u' && source[at] === '{') {

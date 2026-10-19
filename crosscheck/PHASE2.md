@@ -103,3 +103,13 @@ languages' line terminators, with negative and allowed-source fixtures.
 The strict full-repository import scan still rejects the historical scripts
 listed in VALIDATION.md. No historical baseline is authorized or added;
 S2 remains unchecked and campaign expansion has not started.
+
+S2's latest audit confirms the existing historical imports are genuine and
+remain outside the allowed edit scope. A small literal-scanning correction
+now decodes Python's eight-digit Unicode escapes without decoding raw strings
+or applying Python syntax to JavaScript. Its regression fixtures and runtime
+independent checks pass; the retained reports reproduce unchanged. Full
+tests, build and verification still require the unavailable Node 22 runtime.
+The strict repository gate still fails on the same historical scripts. The
+requested scope decision remains pending; no baseline or import exemption
+has been added, S2 stays unchecked and campaign expansion has not started.
