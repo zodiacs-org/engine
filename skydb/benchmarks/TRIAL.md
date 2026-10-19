@@ -35,8 +35,10 @@ from the trial, not measurements of a generated full database.
 | Allocation with retained trial, previous contents and reserve | 3,078,685,429 bytes |
 
 The coexistence estimate fits the configured disk cap. Its wall time calls for
-generation across bounded sessions with the existing checkpoints. Full
-generation has not started in this milestone.
+generation across bounded sessions with the existing checkpoints. At the end
+of P1, full generation had not started. It is now complete as recorded in
+[FULL.md](FULL.md); the measured completed database storage in
+[VERIFY.md](VERIFY.md) is separate from this trial's arithmetic.
 
 With the project Node runtime on PATH and the locked dependencies installed,
 run from the repository root:

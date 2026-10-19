@@ -8,8 +8,9 @@ tiles retained. It records 3,072,811,008 allocated bytes across all generated/
 contents, below its 12,000,000,000-byte cap. These counters and resource
 measurements are checked by [test/full.node-test.mjs](../test/full.node-test.mjs).
 Whole-database verification passed as recorded in [VERIFY.md](VERIFY.md).
-Full-span interpolation measurements remain pending. Generated tiles remain
-under ignored `generated/full/`. The session reports in [full-sessions/](full-sessions/)
+Completed interpolation and query measurements are recorded separately in
+[INTERPOLATION.md](INTERPOLATION.md) and [QUERY.md](QUERY.md). Generated tiles
+remain under ignored `generated/full/`. The session reports in [full-sessions/](full-sessions/)
 contain aggregate resource measurements and checkpoint metadata, without
 position samples or event records.
 
@@ -83,7 +84,8 @@ current invocation. A paused verification of an already complete database
 therefore retains a complete checkpoint. These checks establish storage
 integrity and resume behavior, not independent astronomical accuracy or event
 completeness. Whole-database verification is recorded separately in
-[VERIFY.md](VERIFY.md); interpolation measurement remains pending.
+[VERIFY.md](VERIFY.md). Direct-engine interpolation agreement is recorded in
+[INTERPOLATION.md](INTERPOLATION.md), with its sampled scope and limits.
 
 The original flat store reached a filesystem directory-link limit before its
 disk cap. [LAYOUT.md](LAYOUT.md) records the stopped-store diagnostic and the

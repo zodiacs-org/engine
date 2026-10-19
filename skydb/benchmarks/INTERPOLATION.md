@@ -16,6 +16,32 @@ manifest identity are checked by
 [test/interpolate-full.node-test.mjs](../test/interpolate-full.node-test.mjs).
 The full database stays ignored and is not needed by CI.
 
+For that main cohort, the per-body absolute circular longitude differences
+from direct engine calls are below, in degrees. Every displayed value is
+rounded upward to four significant digits from
+`results.random.errors[body].lon` in the report. These are observed sample
+statistics over the configured span, not tolerances for other instants.
+
+| body | maximum degrees | p99 degrees | median degrees |
+| --- | ---: | ---: | ---: |
+| Sun | 1.405e-7 | 1.320e-7 | 4.805e-8 |
+| Moon | 1.065e-4 | 9.524e-5 | 2.631e-5 |
+| Mercury | 4.296e-5 | 3.557e-5 | 4.520e-6 |
+| Venus | 9.105e-6 | 8.024e-6 | 1.307e-7 |
+| Mars | 3.060e-6 | 2.680e-6 | 1.408e-7 |
+| Jupiter | 7.525e-7 | 6.971e-7 | 2.143e-7 |
+| Saturn | 4.101e-7 | 3.834e-7 | 1.374e-7 |
+| Uranus | 2.057e-7 | 1.900e-7 | 7.288e-8 |
+| Neptune | 1.291e-7 | 1.213e-7 | 4.590e-8 |
+| Pluto | 1.264e-7 | 1.079e-7 | 3.400e-8 |
+
+The report also records maximum, p99 and median differences for latitude in
+degrees and reported longitude speed in degrees/day for every body, plus
+maximum-error instants. Boundary-cohort results stay separate.
+[interpolate-full.mjs](interpolate-full.mjs) produces these statistics;
+[test/interpolate-full.node-test.mjs](../test/interpolate-full.node-test.mjs)
+checks the reduction method and report binding to the verified full store.
+
 With the project Node runtime on PATH and locked dependencies installed, run
 from the repository root:
 
@@ -87,4 +113,5 @@ The measured sample does not cover every longitude wrap, station, extreme
 curvature or instant in the span. It establishes no worst-case interpolation
 bound, independent ephemeris accuracy or event completeness. Boundary probes
 are local consumer checks at the recorded instants. Elapsed time describes
-this comparison run; full query performance remains a separate milestone.
+this comparison run; completed query measurements are recorded separately in
+[QUERY.md](QUERY.md).

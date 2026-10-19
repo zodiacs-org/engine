@@ -2,14 +2,52 @@
 
 This private Node project consumes the repository's carried engine archive by
 relative file dependency. It does not build or alter the engine package.
-Configuration, direct position sampling and a compressed position tile codec
-and lazy position and event generation are implemented. Resumable persistence
-and position and event queries are implemented. Benchmarks and validation are
-recorded in [PLAN.md](PLAN.md); recovery and run guidance are in
+It generates compressed position and event tiles with resumable persistence,
+integrity verification and a bounded-cache query library. Phase 1 implementation
+is recorded in [PLAN.md](PLAN.md), and completed full-database measurements in
+[PHASE2.md](PHASE2.md). Recovery and run guidance are in
 [OPERATIONS.md](OPERATIONS.md).
 Time scales, event definitions and boundary ownership beside the public events
 workbench are compared in [CONVENTIONS.md](CONVENTIONS.md), with a pinned source
 receipt and explicit limits on interchanging results.
+
+The full database has been generated locally under ignored `generated/full/`
+and verified over the half-open span from 1800-01-01T00:00:00Z to
+2200-01-01T00:00:00Z. Its default configuration uses hourly position samples
+and nominal daily tiles, split at pinned clock changes, for the Sun, Moon,
+Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune and Pluto. The
+[verification report](benchmarks/VERIFY.md), produced by
+[verify-full.mjs](benchmarks/verify-full.mjs), records:
+
+| measured scope | result |
+| --- | ---: |
+| verified tiles | 146,099 |
+| stored support instants, including shared endpoints in each tile | 3,652,427 |
+| stored event records | 549,078 |
+| file bytes under full/, including metadata and receipts | 968,174,614 |
+| allocated bytes under full/, including directories | 2,997,882,880 |
+
+These counts describe the pinned engine and configuration in
+[verify-full-output.json](benchmarks/verify-full-output.json). The same database
+was compared with direct engine calls at 4,000 deterministic stratified random
+interpolation instants across that span, with separate boundary probes. Per-body
+maximum, p99 and median differences for longitude, latitude and reported speed
+are in the [interpolation evidence](benchmarks/INTERPOLATION.md). This measures
+agreement with the consumed engine; it supplies no independent astronomical
+accuracy, worst-case interpolation bound or proof of event completeness.
+
+The [query measurements](benchmarks/QUERY.md) record median position lookup
+times of 0.886 ms with a fresh application cache and 0.008 ms for immediate
+warm repeats, rounded upward to the next thousandth of a millisecond. These
+come from 512 cold and 4,096 warm lookups in
+[query-full-output.json](benchmarks/query-full-output.json), produced by
+[query-full.mjs](benchmarks/query-full.mjs) on its recorded Linux machine and
+Node runtime. Opening is timed separately; filesystem caches and host load
+are uncontrolled. Event range timings and process memory are recorded there
+too. These local measurements establish no performance guarantee. The
+[benchmark guide](benchmarks/README.md) links all workloads and reproduction
+commands. Generated tiles are local run output, excluded from this repository
+and the engine npm package; a fresh checkout must generate its own database.
 
 Use a Node runtime in the series required by [package.json](package.json), with
 its matching npm on PATH. From the repository root:
@@ -197,9 +235,10 @@ against the planner over target coverage, synthetic circular arithmetic, direct
 sample agreement at seams and boundaries, and interpolation agreement at the
 midpoint of its synthetic window beginning 2001-01-01. Its test thresholds apply
 only to that midpoint and measure consumer agreement, not astronomical accuracy.
-Scoped benchmark evidence and interpolation measurements are described in
-[benchmarks/README.md](benchmarks/README.md). Their recorded windows do not
-establish a full-span bound.
+Small-window regression measurements and completed full-database evidence are
+described in [benchmarks/README.md](benchmarks/README.md). The full-span
+stratified sample measures agreement only at its selected instants and does
+not establish a full-span bound.
 
 The command-line entry is `node skydb/scripts/skydb.mjs`. Each command emits
 JSON lines to stdout; errors go to stderr with a failing exit status. Arguments

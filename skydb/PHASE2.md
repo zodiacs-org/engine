@@ -10,7 +10,7 @@ Resource estimates describe computing cost, not astronomical outcomes.
 - [x] P4 Compare a deterministic stratified random sample of at least 2,000 instants across the completed span with direct engine calls; commit per-body maximum, p99 and median interpolation errors and tests of the measurement method.
 - [x] P5 Benchmark cold and warm position lookups, event range queries and memory on the completed database; commit aggregate results with exact commands and machine details.
 - [x] P6 Compare time, event definitions and boundary ownership with the events project in PR #43 using available public evidence; document where results cannot be interchanged.
-- [ ] P7 Update the project README, OPERATIONS and benchmark guide with measured scope and linked evidence, run the project tests and checks, and record remaining limits.
+- [x] P7 Update the project README, OPERATIONS and benchmark guide with measured scope and linked evidence, run the project tests and checks, and record remaining limits.
 
 The disk policy is 12 GB in decimal bytes across all generated/ contents.
 Generation uses one process unless a later milestone documents a bounded worker
@@ -469,3 +469,37 @@ dash characters. All changes stay in skydb/; phase 1 behavior, engine files,
 archives, root configuration, workflows and the package version are unchanged.
 P7 remains pending. The session summary is appended to CHANGES.txt for the
 harness.
+
+P7 is complete. The project [README](README.md), [OPERATIONS](OPERATIONS.md)
+and [benchmark guide](benchmarks/README.md) describe the completed local
+database and link its generation, structural verification, interpolation and
+query evidence. Storage scope distinguishes full/ file lengths and allocation
+from whole-generated/ allocation. The interpolation guide includes a per-body
+longitude table rounded upward from its committed aggregate report; latitude
+and reported-speed statistics remain available alongside it in that report.
+The full-generation and trial guides now link the completed measurements.
+
+Operations documents guarded default generation, resume and disk stops,
+sequential measurement commands, fresh-checkout requirements and comparison
+of report identities. The existing time and event comparison remains linked.
+Historical session notes above retain their original milestone context; the
+checklist and current guides record completion. No full database generation
+or measurement was repeated in this documentation milestone. Generated tiles
+remain ignored, and the existing aggregate evidence is unchanged.
+
+Remaining limits are explicit: structural verification does not establish
+independent astronomical accuracy or event completeness; sampled interpolation
+differences do not bound unmeasured instants; query timings and memory describe
+the recorded local machine, workload and cache conditions. Session resource
+reports include resume verification and do not establish a single uninterrupted
+generation duration. Stores still require an immutable trusted local filesystem.
+
+Validation passed with the project Node runtime: locked setup, the complete
+project test suite, workflow module syntax checks and the project isolation,
+candidate-size, whitespace and package-exclusion checker. Additional checks
+passed for both prohibited dash characters in changed documentation, local
+links and the interpolation table's rounding arithmetic against its report.
+All changes stay in skydb/ documentation and the session summary. Phase 1
+code, engine files, archives, root configuration, workflows and package version
+are unchanged. All phase 2 milestones are checked. The one-line session
+summary is appended to CHANGES.txt for the harness.
