@@ -12,5 +12,5 @@ expectations; analytic motion checks numerical behavior only.
 - [x] P3 Acquire and verify a broader small Horizons station and ingress reference sample spanning 1900 to 2100, with source requests, retrieval dates, digests and thresholds declared before engine comparisons.
 - [x] P4 Expand the independently verified NASA solar and lunar eclipse sample across 1900 to 2100, preserving catalog provenance, clocks and supported classification limits.
 - [x] P5 Add a reproducible completeness report for fixed queries over 1900 to 2100, matching against the independent references and committing aggregate misses, unmatched results and timing errors with their measured scope.
-- [ ] P6 Measure long-range query cost including Mercury stations from 1800 to 2200, improve the slowest measured path and commit before and after evidence with unchanged-result checks.
+- [x] P6 Measure long-range query cost including Mercury stations from 1800 to 2200, improve the slowest measured path and commit before and after evidence with unchanged-result checks.
 - [ ] P7 Reconcile remaining sampling, reference, numerical and operating limits in LIMITATIONS.md and the project guides; run all events checks and preserve the isolated Events Node 22 CI job.

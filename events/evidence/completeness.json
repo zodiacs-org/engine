@@ -18,10 +18,10 @@
     "scripts/nasa_sample.py": "ecbdd09f53e88d1f66e10e3279833159f5ffcf6eb09259096066a4f10abdf657",
     "scripts/nasa.py": "47ea1a22fb093b1a2814b97cf0a049daed00b6d04190db853c12d50605573ca3",
     "scripts/loops.py": "410effd5a44cd897fd0039a21f40e27b64a0a60d05a69bb64cebb25632dbc927",
-    "scripts/build.mjs": "2c7932e5309fa998e743846a1a5b3cfff4cb6e37f2124c5b0dc0136969ca7c8c",
+    "scripts/build.mjs": "b6b74c877212544932d7161ed4f1ccbba358a0ce58c84941908a8d4363c40b02",
     "package-lock.json": "cbe649353629af1a551b060f8dc2d04f764b782918f531d311e0f90133ca1a0b"
   },
-  "sourceSha256": "72b3e681b95c74cb4d763087e0e659b7a0baec77e289b472e21e30f5524fe754",
+  "sourceSha256": "3b4f2663fb3f62d156b95b6a6ff855bc15e0662299185291cd746b28d9ccf0e3",
   "parentVersion": "1.0.0",
   "ephemerisVersion": "2.1.19",
   "matching": "Unique identity inside the independent source window for Horizons, or kind and full TT catalog date for NASA, before comparing timing or classification. Ambiguous candidates are not assigned.",

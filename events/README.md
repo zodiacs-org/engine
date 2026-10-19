@@ -115,13 +115,16 @@ instants, nonpositive durations and unexpected fields. The context snapshots
 the window. Sampling includes both endpoints so scanning can establish its
 initial residual; `context.owns()` assigns events to the open-start,
 closed-end search window. Samples outside the window reject before charging.
-Speed samples internal to the parent may extend past that window.
+Internal speed samples may extend past that window.
 
-A budget unit is one adapter `calc` request for one body at one instant,
-including a request that fails. Requests with speed include the parent's
-internal difference samples in that unit. This is an API request budget, not
-a count of internal ephemeris operations or a wall-clock deadline. Calls are
-not cached. Scanning and refinement must share one context; the root refiner's
+A budget unit is one adapter sample request for one body at one instant,
+including a request that fails. Requests with speed
+include the central-difference samples in that unit. This is an API request
+budget, not a count of internal ephemeris operations or a wall-clock deadline.
+Calls are not cached. Speed-only subcalculations omit unused distance and
+Cartesian work; [PERFORMANCE.md](PERFORMANCE.md) records their exact regression
+comparisons and measured cost. Scanning and refinement must share one context;
+the root refiner's
 own callback budget is a separate limit. Invalid adapter arguments do not
 consume budget. Cancellation is checked before and after each request and
 when completing a search, but cannot interrupt a synchronous engine call.

@@ -636,3 +636,48 @@ Generated logs and bundles remain ignored, and disk use stayed below the
 brief's cap. Only `events/` was changed. No parent build, archive packing,
 release operation or git metadata mutation was performed. Performance work
 remains P6.
+
+## Phase 2 P6
+
+Runtime: Node.js 22.23.3 from `/home/box/.local/node22/bin`. Dependencies were
+installed from the events lockfile with the npm cache under `events/.cache/`.
+
+Passed:
+
+- `npm ci --prefix events --cache "$PWD/events/.cache/npm"`
+- `npm run typecheck --prefix events`
+- `npm run build --prefix events`
+- `node events/scripts/performance.mjs --measure`, with sequential fresh
+  processes and exact before/after serialized result and evaluation counts.
+- `node events/scripts/completeness.mjs --write`, then its offline reproduction
+  check in the full suite. Only the source and build-script digests changed;
+  query results, work counts, independent comparisons and discrepancies did not.
+- `npm test --prefix events`, including all phase 1 suites, the independent
+  source reductions and date checks, long-span reconciliation, HTTP integration,
+  parent npm file-list isolation and `performance.mjs --check`. That check
+  rebuilds both variants and compares complete results on the current runtime,
+  without pinning historical floating-point hashes across processors or patches.
+- `git diff --check`, authored-file size, documentation character, disk-use
+  and events-only change checks, with the dedicated workflow also permitted.
+
+The adapter retains the parent calculation for its central position, validation,
+coverage refusal and provenance. Its speed side samples compute longitude only,
+using the same vectors, rotation, clock conversion, finite-difference width,
+wrap arithmetic and elapsed-day divisor. Exact integration checks cover all
+supported bodies and clocks, nearby milliseconds and time-basis seams. Budgets,
+cancellation, errors and uncached request behavior are preserved. Bundled vector
+calls and parent clock helpers share the ephemeris copy in the events lockfile.
+
+`evidence/performance.json` records the fixed queries, source and tool inputs,
+historical adapter digest, runtime and machine, raw timings, peak RSS and result
+signatures. `PERFORMANCE.md` names the measured spans, median rounding and limits.
+The Mercury long-span query uses guarded endpoints inside parent coverage; a
+separate boundary query preserves its engine refusal. These are cost and
+regression measurements, not independent astronomical accuracy evidence. The
+helper must be checked again when the parent's calculation path changes.
+
+The dedicated Node 22 workflow fetches full history for its read-only baseline
+source check, retains the events lockfile install and adds no publishing steps.
+Generated bundles and logs remain ignored, and disk use stayed below the brief's
+cap. No parent build, archive packing, release operation or git metadata mutation
+was performed. The remaining limits and guide reconciliation remain P7.

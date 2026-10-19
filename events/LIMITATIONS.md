@@ -89,6 +89,13 @@ separate from refusal. Unexpected computation failures throw. Both `next` and
 `all` scan the entire explicit horizon, so a long-horizon next query costs the
 full scan. There is no automatic horizon expansion or caching across queries.
 
+The engine adapter computes only longitude in its finite-difference speed
+subcalculations, omitting unused distance and Cartesian work. Scan grids, root
+definitions, sampling assumptions and evaluation counts remain unchanged.
+[PERFORMANCE.md](PERFORMANCE.md) records the measured scope and before/after
+result checks. Local timings do not establish service deadlines or portable
+performance guarantees.
+
 Local execution is synchronous and cancellation is cooperative between samples.
 The HTTP server isolates searches in workers, caps admission, upload/output
 sizes and evaluation work, and terminates a worker on deadline or disconnect.

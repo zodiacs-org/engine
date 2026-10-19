@@ -1,0 +1,346 @@
+{
+  "schema": 1,
+  "measuredAt": "2026-10-19T20:01:55.016Z",
+  "scope": "Local sequential queries on TT. The Mercury span uses guarded endpoints inside parent coverage. Full returned payloads, including numerical brackets, residuals, clipping, unresolved tails and evaluation counts, must agree exactly. These are consistency and cost measurements, not independent astronomical accuracy evidence.",
+  "inputs": {
+    "scripts/performance-plan.json": "5c4321aa0977df7e2f7a5c3ec3d23512eba017a99ead145dfab15c7173d7d985",
+    "scripts/performance.mjs": "1e718ac1decc3f3b859b0f353b2c0d77e9f186360bd01d1b7187a7a4588addf7",
+    "scripts/performance-runner.mjs": "aaa63e6ead65d4229b104a900315c92955303b4960f846c1c81c836997876578",
+    "scripts/build.mjs": "b6b74c877212544932d7161ed4f1ccbba358a0ce58c84941908a8d4363c40b02",
+    "tsconfig.json": "7887aabe628307bda51604044a509b305904e832dedbd138d06586e0061ba182",
+    "package-lock.json": "cbe649353629af1a551b060f8dc2d04f764b782918f531d311e0f90133ca1a0b"
+  },
+  "sourceSha256": "3b4f2663fb3f62d156b95b6a6ff855bc15e0662299185291cd746b28d9ccf0e3",
+  "resultEncoding": "JSON with negative zero represented as {number:\"-0\"}; all numeric values must be finite. Hash includes every returned field and evaluation count.",
+  "baseline": {
+    "commit": "baadfcc94f70879381ca130376d09b087ebdd0d6",
+    "file": "src/engine.ts",
+    "sha256": "a58325ad96e67b3d4b30ce7bef4916fb13dc9a182de858785921b45a7736bd02",
+    "method": "Rebuild the current runtime with only the adapter replaced by this committed pre-optimization source. All other code and dependencies are shared."
+  },
+  "environment": {
+    "node": "v22.23.3",
+    "platform": "linux",
+    "arch": "x64",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "workers": 1,
+    "timing": "Monotonic query wall time in fresh processes; imports excluded. Alternating variant order, no parallel benchmarks. Peak RSS includes imports and runtime. No timing acceptance gate."
+  },
+  "cases": [
+    {
+      "id": "mercury-stations",
+      "result": {
+        "status": "complete",
+        "events": 2521,
+        "evaluations": 220150,
+        "sha256": "5c749e9ce95797cd8576be5eeebe5c10ccc2e4933f0898c982151f0edfa91df7"
+      },
+      "before": [
+        {
+          "elapsedMs": 21955.693381999998,
+          "maxRssKiB": 100692,
+          "result": {
+            "status": "complete",
+            "events": 2521,
+            "evaluations": 220150,
+            "sha256": "5c749e9ce95797cd8576be5eeebe5c10ccc2e4933f0898c982151f0edfa91df7"
+          }
+        },
+        {
+          "elapsedMs": 21731.052907999998,
+          "maxRssKiB": 100272,
+          "result": {
+            "status": "complete",
+            "events": 2521,
+            "evaluations": 220150,
+            "sha256": "5c749e9ce95797cd8576be5eeebe5c10ccc2e4933f0898c982151f0edfa91df7"
+          }
+        },
+        {
+          "elapsedMs": 22216.321507,
+          "maxRssKiB": 100416,
+          "result": {
+            "status": "complete",
+            "events": 2521,
+            "evaluations": 220150,
+            "sha256": "5c749e9ce95797cd8576be5eeebe5c10ccc2e4933f0898c982151f0edfa91df7"
+          }
+        }
+      ],
+      "after": [
+        {
+          "elapsedMs": 11716.154183999999,
+          "maxRssKiB": 100572,
+          "result": {
+            "status": "complete",
+            "events": 2521,
+            "evaluations": 220150,
+            "sha256": "5c749e9ce95797cd8576be5eeebe5c10ccc2e4933f0898c982151f0edfa91df7"
+          }
+        },
+        {
+          "elapsedMs": 11841.791901,
+          "maxRssKiB": 100416,
+          "result": {
+            "status": "complete",
+            "events": 2521,
+            "evaluations": 220150,
+            "sha256": "5c749e9ce95797cd8576be5eeebe5c10ccc2e4933f0898c982151f0edfa91df7"
+          }
+        },
+        {
+          "elapsedMs": 12003.191641000001,
+          "maxRssKiB": 100532,
+          "result": {
+            "status": "complete",
+            "events": 2521,
+            "evaluations": 220150,
+            "sha256": "5c749e9ce95797cd8576be5eeebe5c10ccc2e4933f0898c982151f0edfa91df7"
+          }
+        }
+      ],
+      "summary": {
+        "medianBeforeMs": 21955.693381999998,
+        "medianAfterMs": 11841.791901
+      }
+    },
+    {
+      "id": "venus-leo-retrogrades",
+      "result": {
+        "status": "complete",
+        "events": 18,
+        "evaluations": 226873,
+        "sha256": "0474e0f56be8e056d76e3e9c9025fc518080443b00dd79ca5094f34e937f9555"
+      },
+      "before": [
+        {
+          "elapsedMs": 12982.897576,
+          "maxRssKiB": 100544,
+          "result": {
+            "status": "complete",
+            "events": 18,
+            "evaluations": 226873,
+            "sha256": "0474e0f56be8e056d76e3e9c9025fc518080443b00dd79ca5094f34e937f9555"
+          }
+        },
+        {
+          "elapsedMs": 12931.954618,
+          "maxRssKiB": 100212,
+          "result": {
+            "status": "complete",
+            "events": 18,
+            "evaluations": 226873,
+            "sha256": "0474e0f56be8e056d76e3e9c9025fc518080443b00dd79ca5094f34e937f9555"
+          }
+        },
+        {
+          "elapsedMs": 13181.886694,
+          "maxRssKiB": 99564,
+          "result": {
+            "status": "complete",
+            "events": 18,
+            "evaluations": 226873,
+            "sha256": "0474e0f56be8e056d76e3e9c9025fc518080443b00dd79ca5094f34e937f9555"
+          }
+        }
+      ],
+      "after": [
+        {
+          "elapsedMs": 9851.465081999999,
+          "maxRssKiB": 100544,
+          "result": {
+            "status": "complete",
+            "events": 18,
+            "evaluations": 226873,
+            "sha256": "0474e0f56be8e056d76e3e9c9025fc518080443b00dd79ca5094f34e937f9555"
+          }
+        },
+        {
+          "elapsedMs": 9571.190514,
+          "maxRssKiB": 100636,
+          "result": {
+            "status": "complete",
+            "events": 18,
+            "evaluations": 226873,
+            "sha256": "0474e0f56be8e056d76e3e9c9025fc518080443b00dd79ca5094f34e937f9555"
+          }
+        },
+        {
+          "elapsedMs": 9399.194898,
+          "maxRssKiB": 99744,
+          "result": {
+            "status": "complete",
+            "events": 18,
+            "evaluations": 226873,
+            "sha256": "0474e0f56be8e056d76e3e9c9025fc518080443b00dd79ca5094f34e937f9555"
+          }
+        }
+      ],
+      "summary": {
+        "medianBeforeMs": 12982.897576,
+        "medianAfterMs": 9571.190514
+      }
+    },
+    {
+      "id": "moon-void-periods",
+      "result": {
+        "status": "complete",
+        "events": 160,
+        "evaluations": 178562,
+        "sha256": "0cde3414ad938c7b04a58d81a1cda9b6153019cd015e8792da65c647afe1b761"
+      },
+      "before": [
+        {
+          "elapsedMs": 11264.07498,
+          "maxRssKiB": 100032,
+          "result": {
+            "status": "complete",
+            "events": 160,
+            "evaluations": 178562,
+            "sha256": "0cde3414ad938c7b04a58d81a1cda9b6153019cd015e8792da65c647afe1b761"
+          }
+        },
+        {
+          "elapsedMs": 10912.037448,
+          "maxRssKiB": 102904,
+          "result": {
+            "status": "complete",
+            "events": 160,
+            "evaluations": 178562,
+            "sha256": "0cde3414ad938c7b04a58d81a1cda9b6153019cd015e8792da65c647afe1b761"
+          }
+        },
+        {
+          "elapsedMs": 10677.262112,
+          "maxRssKiB": 100556,
+          "result": {
+            "status": "complete",
+            "events": 160,
+            "evaluations": 178562,
+            "sha256": "0cde3414ad938c7b04a58d81a1cda9b6153019cd015e8792da65c647afe1b761"
+          }
+        }
+      ],
+      "after": [
+        {
+          "elapsedMs": 7617.785935999999,
+          "maxRssKiB": 101104,
+          "result": {
+            "status": "complete",
+            "events": 160,
+            "evaluations": 178562,
+            "sha256": "0cde3414ad938c7b04a58d81a1cda9b6153019cd015e8792da65c647afe1b761"
+          }
+        },
+        {
+          "elapsedMs": 7759.024769,
+          "maxRssKiB": 102636,
+          "result": {
+            "status": "complete",
+            "events": 160,
+            "evaluations": 178562,
+            "sha256": "0cde3414ad938c7b04a58d81a1cda9b6153019cd015e8792da65c647afe1b761"
+          }
+        },
+        {
+          "elapsedMs": 7587.513207999999,
+          "maxRssKiB": 104240,
+          "result": {
+            "status": "complete",
+            "events": 160,
+            "evaluations": 178562,
+            "sha256": "0cde3414ad938c7b04a58d81a1cda9b6153019cd015e8792da65c647afe1b761"
+          }
+        }
+      ],
+      "summary": {
+        "medianBeforeMs": 10912.037448,
+        "medianAfterMs": 7617.785935999999
+      }
+    },
+    {
+      "id": "mercury-coverage-edge",
+      "result": {
+        "status": "refused",
+        "reason": "engine-refused",
+        "events": 0,
+        "evaluations": 2,
+        "sha256": "d5b7c6c4d0d5c7d4f913c4a4f9002b0f77f3b62c41b34ca74c804dcc61374bd1"
+      },
+      "before": [
+        {
+          "elapsedMs": 7.004878999999995,
+          "maxRssKiB": 60168,
+          "result": {
+            "status": "refused",
+            "reason": "engine-refused",
+            "events": 0,
+            "evaluations": 2,
+            "sha256": "d5b7c6c4d0d5c7d4f913c4a4f9002b0f77f3b62c41b34ca74c804dcc61374bd1"
+          }
+        },
+        {
+          "elapsedMs": 8.001275,
+          "maxRssKiB": 60044,
+          "result": {
+            "status": "refused",
+            "reason": "engine-refused",
+            "events": 0,
+            "evaluations": 2,
+            "sha256": "d5b7c6c4d0d5c7d4f913c4a4f9002b0f77f3b62c41b34ca74c804dcc61374bd1"
+          }
+        },
+        {
+          "elapsedMs": 6.685097999999996,
+          "maxRssKiB": 60168,
+          "result": {
+            "status": "refused",
+            "reason": "engine-refused",
+            "events": 0,
+            "evaluations": 2,
+            "sha256": "d5b7c6c4d0d5c7d4f913c4a4f9002b0f77f3b62c41b34ca74c804dcc61374bd1"
+          }
+        }
+      ],
+      "after": [
+        {
+          "elapsedMs": 6.2288640000000015,
+          "maxRssKiB": 59224,
+          "result": {
+            "status": "refused",
+            "reason": "engine-refused",
+            "events": 0,
+            "evaluations": 2,
+            "sha256": "d5b7c6c4d0d5c7d4f913c4a4f9002b0f77f3b62c41b34ca74c804dcc61374bd1"
+          }
+        },
+        {
+          "elapsedMs": 6.1344470000000015,
+          "maxRssKiB": 59236,
+          "result": {
+            "status": "refused",
+            "reason": "engine-refused",
+            "events": 0,
+            "evaluations": 2,
+            "sha256": "d5b7c6c4d0d5c7d4f913c4a4f9002b0f77f3b62c41b34ca74c804dcc61374bd1"
+          }
+        },
+        {
+          "elapsedMs": 5.708151999999998,
+          "maxRssKiB": 59336,
+          "result": {
+            "status": "refused",
+            "reason": "engine-refused",
+            "events": 0,
+            "evaluations": 2,
+            "sha256": "d5b7c6c4d0d5c7d4f913c4a4f9002b0f77f3b62c41b34ca74c804dcc61374bd1"
+          }
+        }
+      ],
+      "summary": {
+        "medianBeforeMs": 7.004878999999995,
+        "medianAfterMs": 6.1344470000000015
+      }
+    }
+  ]
+}
