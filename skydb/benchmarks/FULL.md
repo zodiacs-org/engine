@@ -7,10 +7,11 @@ from 1800-01-01T00:00:00Z to 2200-01-01T00:00:00Z, with all 146,099 planned
 tiles retained. It records 3,072,811,008 allocated bytes across all generated/
 contents, below its 12,000,000,000-byte cap. These counters and resource
 measurements are checked by [test/full.node-test.mjs](../test/full.node-test.mjs).
-Whole-database verification and full-span interpolation measurements remain
-pending. Generated tiles remain under ignored `generated/full/`. The session
-reports in [full-sessions/](full-sessions/) contain aggregate resource measurements and
-checkpoint metadata, without position samples or event records.
+Whole-database verification passed as recorded in [VERIFY.md](VERIFY.md).
+Full-span interpolation measurements remain pending. Generated tiles remain
+under ignored `generated/full/`. The session reports in [full-sessions/](full-sessions/)
+contain aggregate resource measurements and checkpoint metadata, without
+position samples or event records.
 
 With the project Node runtime on PATH and the locked dependencies installed,
 run from the repository root:
@@ -81,8 +82,8 @@ describes stored generation state, while the report status describes the
 current invocation. A paused verification of an already complete database
 therefore retains a complete checkpoint. These checks establish storage
 integrity and resume behavior, not independent astronomical accuracy or event
-completeness. Whole-database verification and interpolation measurement remain
-separate milestones.
+completeness. Whole-database verification is recorded separately in
+[VERIFY.md](VERIFY.md); interpolation measurement remains pending.
 
 The original flat store reached a filesystem directory-link limit before its
 disk cap. [LAYOUT.md](LAYOUT.md) records the stopped-store diagnostic and the

@@ -46,3 +46,7 @@ The phase 2 generation trial has a separate retained workload and report in
 [TRIAL.md](TRIAL.md). It measures the default position and event generation
 pipeline over a longer slice and includes resource cost arithmetic for full
 coverage. Its cost estimates are separate from the scoped query timings above.
+
+Completed full-database verification and its manifest and storage summary are
+recorded in [VERIFY.md](VERIFY.md). That report measures structural integrity;
+full-span interpolation and query benchmarks remain separate milestones.

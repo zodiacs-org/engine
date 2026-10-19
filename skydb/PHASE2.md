@@ -6,7 +6,7 @@ Resource estimates describe computing cost, not astronomical outcomes.
 
 - [x] P1 Generate a fresh default-cadence trial slice, measure wall time, CPU, tiles and storage, and commit a reproducible report with full-span cost arithmetic and disk checks.
 - [x] P2 Use the trial evidence to select full coverage or a documented smaller span, then generate into generated/full/ with disk guards, bounded session work and checkpoint resume until complete.
-- [ ] P3 Run the verification CLI over the completed database and commit its aggregate result and manifest summary, including tile count, bytes, manifest SHA-256, engine pin and configuration.
+- [x] P3 Run the verification CLI over the completed database and commit its aggregate result and manifest summary, including tile count, bytes, manifest SHA-256, engine pin and configuration.
 - [ ] P4 Compare a deterministic stratified random sample of at least 2,000 instants across the completed span with direct engine calls; commit per-body maximum, p99 and median interpolation errors and tests of the measurement method.
 - [ ] P5 Benchmark cold and warm position lookups, event range queries and memory on the completed database; commit aggregate results with exact commands and machine details.
 - [ ] P6 Compare time, event definitions and boundary ownership with the events project in PR #43 using available public evidence; document where results cannot be interchanged.
@@ -335,3 +335,36 @@ reports, this completion note, the bounded-generation guide and CHANGES.txt
 changed. Generated data, dependencies and test logs remain ignored; phase 1
 code, engine files, archives, root configuration, workflows and the package
 version are unchanged.
+
+P3 is complete. [benchmarks/verify-full.mjs](benchmarks/verify-full.mjs) ran
+the existing verification CLI over the retained completed full/ database.
+[benchmarks/verify-full-output.json](benchmarks/verify-full-output.json)
+records a successful traversal of all 146,099 planned tiles, 3,652,427 stored
+support instants and 549,078 event records over the default half-open span
+from 1800-01-01T00:00:00Z to 2200-01-01T00:00:00Z. Shared support endpoints
+are counted in each tile. These are structural integrity and consumer checks,
+not independent astronomical accuracy or proof of event completeness.
+
+The report binds the actual manifest bytes and their SHA-256 to the completed
+checkpoint, full configuration and pinned engine archive. The measured
+968,174,614 file bytes and 2,997,882,880 allocated bytes under full/ exactly
+match the completed generation report. [benchmarks/VERIFY.md](benchmarks/VERIFY.md)
+records the commands, method and scope. The runner creates no tiles, refuses
+writer locks and failed verification, and rejects metadata changes during the
+measurement. The database remains subject to the existing immutable, trusted
+local filesystem contract.
+
+[test/verify-full.node-test.mjs](test/verify-full.node-test.mjs) checks the
+real CLI on short synthetic-time stores, manifest digest and storage arithmetic,
+unchanged database files, incomplete/corrupt/locked failures and the committed
+full report's binding to the planner and completed generation evidence. Full
+generated data remains ignored. P4 interpolation measurements and subsequent
+milestones remain pending.
+
+Validation passed on the Node runtime recorded in the verification report:
+locked project setup, `npm --prefix skydb test`, the workflow's module syntax
+checks and the project isolation and package-exclusion checker. Changed
+documentation passed checks for both prohibited dash characters. All changes
+stay in skydb/; phase 1 source, engine files, archives, root configuration,
+workflows and the package version remain unchanged. The one-line session
+summary is appended to CHANGES.txt for the harness.

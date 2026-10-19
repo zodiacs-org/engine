@@ -19,3 +19,4 @@ Continue full-span generation, fix the directory link limit with compatible shar
 Continue full-span sky database generation through eight bounded passes and retain verified checkpoint progress and resource reports for resume.
 Resume full-span sky database generation through bounded passes and retain verified checkpoints, resource measurements and progress for the next continuation.
 Complete full-span sky database generation and retain bounded-session checkpoint and resource evidence below the disk cap.
+Verify the completed full-span sky database and record its manifest identity, storage totals and aggregate checks with regression coverage.
