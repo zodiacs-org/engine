@@ -12,3 +12,4 @@ Start full-span sky database generation with bounded resumable sessions, disk gu
 Resume full-span sky database generation, verify the retained tiles and record the next checkpoint and resource report.
 Continue full-span sky database generation from its verified checkpoint and retain the next resource and progress report.
 Resume full-span sky database generation within its session and disk budgets, retaining the checkpoint and aggregate resource evidence.
+Continue full-span sky database generation from the retained checkpoint and record verified progress, storage use and session resource measurements.
