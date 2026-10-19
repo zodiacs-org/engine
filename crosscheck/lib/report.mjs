@@ -36,7 +36,8 @@ export function renderReport({ campaign, states, metadata }, { allowPartial = fa
     return [name, { unit: metadata.units[name], tolerance: campaign.config.channels[name],
       statistics: summarize(channel.stats), verdicts: channel.verdicts, flags: channel.flags }];
   }));
-  const report = sorted({ schema: 'crosscheck-report/1', metadata, campaign: verified,
+  const hasQuantiles = Boolean(campaign.config.quantiles?.length);
+  const report = sorted({ schema: hasQuantiles ? 'crosscheck-report/2' : 'crosscheck-report/1', metadata, campaign: verified,
     complete: merged.completed === campaign.config.total, completed: merged.completed, coverage, channels,
     span: { startMsInclusive: campaign.config.startMs, endMsExclusive: campaign.config.endMs,
       meaning: 'Configured synthetic sampling interval, not continuous coverage or observed extrema' } });
@@ -57,12 +58,35 @@ export function renderReport({ campaign, states, metadata }, { allowPartial = fa
     '| Channel | Unit | Compared | Pass | Fail | Error | Unsupported | Fallback | Tolerance | Mean | Mean absolute | RMS | Population std dev | Maximum absolute |',
     '| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |'];
   const header = ['channel','unit','compared','pass','fail','error','unsupported','fallback','tolerance','mean','mean_abs','rms','population_std_dev','max_abs','returned_flags'];
+  if (hasQuantiles) header.push('median_rank','median_lower','median_upper','p99_rank','p99_lower','p99_upper',
+    'p999_rank','p999_lower','p999_upper','quantile_method');
   const csv = [header.join(',')];
   for (const [name, c] of Object.entries(channels)) {
     const s = c.statistics, v = c.verdicts;
     const row = [name,c.unit,s.n,v.pass,v.fail,v.error,v.unsupported,v.fallback,c.tolerance,s.mean,s.meanAbs,s.rms,s.populationStdDev,s.maxAbs];
     lines.push('| ' + row.map(x => x === null ? 'unavailable' : md(x)).join(' | ') + ' |');
-    csv.push([...row, JSON.stringify(sorted(c.flags))].map(csvCell).join(','));
+    const quantileCells = hasQuantiles ? [
+      ...['median', 'p99', 'p999'].flatMap(key => {
+        const q = s.absoluteQuantiles?.[key];
+        return [q?.rank ?? null, q?.lower ?? null, q?.upper ?? null];
+      }), s.absoluteQuantiles ? JSON.stringify(sorted(s.absoluteQuantiles.method)) : null
+    ] : [];
+    csv.push([...row, JSON.stringify(sorted(c.flags)), ...quantileCells].map(csvCell).join(','));
+  }
+  if (hasQuantiles) {
+    lines.push('', 'Absolute-error percentiles:', '',
+      'Median, p99 and p99.9 select exact nearest ranks ceil(n*p) among absolute residuals. The histogram locates each rank exactly; only its value is approximated.',
+      'Each inclusive [lower, upper] interval encloses that order statistic in the channel unit. No midpoint or interpolated value is claimed. Maximum absolute residuals above are exact sample maxima.',
+      'The fixed histogram has an exact zero bucket, an underflow bucket below 2^-40, 16 equal subdivisions per power-of-two interval from 2^-40 to 2^40, and an overflow bucket starting at 2^40.',
+      'Regular bucket width is at most lower/16. Underflow and overflow have no relative-width guarantee; overflow is bounded by the exact observed maximum. Histogram storage is bounded independently of chart count.',
+      'Channels without a histogram, including historical statistics, have unavailable percentiles. Empty groups have unavailable percentiles and maxima.', '',
+      '| Channel | Unit | Median absolute interval | p99 absolute interval | p99.9 absolute interval |',
+      '| --- | --- | --- | --- | --- |');
+    for (const [name, c] of Object.entries(channels)) {
+      const q = c.statistics.absoluteQuantiles;
+      const interval = key => q?.[key] ? `[${q[key].lower}, ${q[key].upper}]` : 'unavailable';
+      lines.push('| ' + [name, c.unit, ...['median', 'p99', 'p999'].map(interval)].map(md).join(' | ') + ' |');
+    }
   }
   lines.push('', 'Exclusions:', '', ...metadata.exclusions.map(e => '- ' + md(e)), '',
     'Reference identities: `' + md(JSON.stringify(sorted(campaign.identities.references))) + '`.',

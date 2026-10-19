@@ -153,6 +153,39 @@ The tests in tests/sampling-statistics.node-test.mjs check arithmetic independen
 of engine outputs and exercise shard recombination and JSON continuation.
 They establish tooling behavior, not ephemeris accuracy or campaign throughput.
 
+New statistics may opt into absolute-error percentiles with
+emptyStats(tolerance, { quantiles: true }). This creates a versioned aggregate
+with a fixed sparse histogram of counts, alongside the existing signed
+moments and exact sample maximum. Campaign configuration selects these
+channels through a nonempty, sorted, unique quantiles array. That selection
+is part of the campaign identity; checkpoints reject a different statistics
+version. Historical aggregates retain their original fields and report bytes.
+Their percentiles cannot be recovered from moments or maxima and are
+unavailable rather than reconstructed.
+
+The median, p99 and p99.9 select the absolute residual at nearest rank
+ceil(n*p), without interpolation. Histogram counts locate each rank exactly;
+its value is reported only as an inclusive interval. The zero bucket is exact.
+Regular buckets have sixteen equal subdivisions per octave over
+[2^-40, 2^40), in the channel's unit; each interval is at most its lower edge
+divided by sixteen wide. Smaller positive values share an underflow bucket,
+and larger values share an overflow bucket capped by the exact observed
+maximum. Those tail intervals have no relative-width guarantee. Empty groups
+have no percentile or maximum. tests/quantiles.node-test.mjs checks these
+claims across every bucket boundary and adjacent binary64 values, subnormal
+values, and the accepted finite residual domain up to 1e100, using sorted
+order statistics and independent rank arithmetic. It also enforces bounded
+histogram cardinality and serialized size. No observation arrays are retained.
+
+For opted-in campaigns, the report renders median, p99 and p99.9 intervals
+in markdown and writes their lower/upper limits and exact ranks in CSV and
+JSON, alongside the channel unit and exact maximum. The receipt records the
+histogram method and its approximation limits. tests/measurement-statistics.node-test.mjs
+checks signed moments, shard merging, checkpoint continuation, version
+refusal, excluded observations, explicit distance units and report rendering.
+Large channel/shard collections can still exceed the existing file limit;
+the checkpoint, bundle and report size refusals remain in force.
+
 ## Public kernel cache
 
 Acquire a catalogued kernel with Node 22:
@@ -548,6 +581,26 @@ unsupported here, as the report states. DE441 was not run in this sample;
 its acquisition and inertial reduction remain available through the kernel
 and reduction libraries. Later campaign configuration must keep each
 reference and convention separate.
+
+The evaluator also provides opt-in distance channels through
+distanceChannels(toleranceKm) and createEvaluator's calc and
+distanceToleranceKm options. Callers choose the screening tolerance in km;
+it is not an accuracy claim. Angles remain in arcseconds. Natal chart body
+rows have no range, so distance uses the isolated engine's calc entry with
+explicit apparent, geocentric, true-ecliptic-of-date settings and no speeds
+or deflection. Its TT input is a binary64 Julian date derived from the
+sampler instant; this can introduce time rounding relative to natalChart's
+millisecond input and must be recorded by the campaign integration.
+
+Distance residuals are engine au converted to km minus JPL range in km.
+For the Moon both paths use geometric geocentric range. For other compared
+bodies calc reports an apparent light-path range and JPL uses the converged
+reception light path; differences in the algorithms remain convention
+limitations. tests/campaign.node-test.mjs checks unit conversion, sign,
+screening equality, explicit calculation requests and refusals using invented
+Cartesian states and exact decimal arithmetic. These helpers do not add
+distances or percentiles to the historical measurements. The wider campaign
+and reference-span grouping are the next phase 2 milestone.
 
 ## Campaign operations
 

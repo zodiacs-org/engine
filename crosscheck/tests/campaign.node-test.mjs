@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createEvaluator, CHANNELS, observation } from '../lib/campaign.mjs';
+import { createEvaluator, CHANNELS, observation, distanceChannels, distanceResidualKm } from '../lib/campaign.mjs';
 import { campaignIdentity } from '../lib/runner.mjs';
 
 // Artifact consistency checks, not independent astronomical accuracy evidence.
@@ -64,5 +64,54 @@ test('invented-state campaign interprets TT and retains only aggregate outcomes'
   assert.equal(lunar.length, 1); // Moon NONE does not iterate emission.
   for (const value of Object.values(outcome)) {
     assert.deepEqual(Object.keys(value).sort(), value.stats ? ['stats', 'verdict'] : ['verdict']);
+  }
+});
+
+test('distance residuals use explicit km, sign and inclusive screening without engine expectations', () => {
+  // Independent decimal decimetre arithmetic for the defined astronomical unit.
+  const expectedKm = Number(1495978707n - 1495970007n) / 10;
+  assert.equal(distanceResidualKm(1, 149597000.7), expectedKm);
+  assert.equal(distanceResidualKm(1, 149598740.7), -expectedKm);
+  assert.equal(observation(-expectedKm, expectedKm, { quantiles: true }).verdict, 'pass');
+  assert.equal(observation(expectedKm, expectedKm - 1, { quantiles: true }).verdict, 'fail');
+  assert.equal(observation(-expectedKm, expectedKm, { quantiles: true }).stats.maxAbs, expectedKm);
+  assert.deepEqual(Object.keys(distanceChannels(10)), ['JPL.Sun.distance', 'JPL.Moon.distance', 'JPL.Mercury.distance', 'JPL.Venus.distance']);
+  for (const invalid of [null, 0, -1, NaN, Infinity]) {
+    assert.throws(() => distanceResidualKm(invalid, 1));
+    assert.throws(() => distanceResidualKm(1, invalid));
+  }
+  assert.throws(() => distanceResidualKm(Number.MAX_VALUE, 1));
+  for (const invalid of [undefined, null, -1, NaN, Infinity]) assert.throws(() => distanceChannels(invalid));
+  assert.throws(() => createEvaluator({ distanceToleranceKm: 1 }), /calculation entry/);
+});
+
+test('optional distance channels request explicit TT apparent geocentric calc ranges and retain aggregates only', async () => {
+  const calculated = [];
+  const options = { quantiles: true, distanceToleranceKm: 870,
+    terms: Array.from({ length: 77 }, () => Array(11).fill(0)),
+    natalChart: () => ({ bodies: ['Sun', 'Moon', 'Mercury', 'Venus'].map(body => ({ body, lon: 0, lat: 0 })) }),
+    calc: request => { calculated.push(request); return { status: 'ok', dist: 1 }; },
+    readState: async request => ({ frame: 'J2000', timeScale: 'TDB', positionUnit: 'km', velocityUnit: 'km/s', corrections: 'geometric',
+      position: request.target === 399 ? [0, 0, 0] : [149597000.7, 0, 0], velocity: [0, 0, 0] }) };
+  const sample = { utc: '2000-01-01T12:00:00Z', latitude: 0, longitude: 0, houseSystem: 'whole' };
+  const result = await createEvaluator(options)(sample);
+  assert.equal(calculated.length, 4);
+  assert.deepEqual(Object.keys(result).sort(), [...Object.keys(CHANNELS), ...Object.keys(distanceChannels(870))].sort());
+  for (const request of calculated) {
+    assert.deepEqual(request.time, { jd: 2451545, scale: 'tt' });
+    assert.equal(request.frame, 'ecliptic-true-of-date');
+    assert.equal(request.center, 'geocentric');
+    assert.deepEqual(request.flags, { correction: 'apparent', speeds: false, deflection: false });
+    const channel = result[`JPL.${request.body}.distance`];
+    assert.deepEqual(Object.keys(channel).sort(), ['stats', 'verdict']);
+    assert.equal(channel.verdict, 'pass');
+    assert.equal(channel.stats.version, 2);
+    assert.equal(channel.stats.mean, 870);
+    assert.equal(channel.stats.maxAbs, 870);
+    assert.equal(channel.stats.n, 1);
+    assert(!Object.hasOwn(channel, 'dist'));
+  }
+  for (const invalid of [{ status: 'refused', raw: 'discard' }, { status: 'ok', dist: null }, { status: 'ok', dist: Infinity }]) {
+    await assert.rejects(createEvaluator({ ...options, calc: () => invalid })(sample), /distance/);
   }
 });

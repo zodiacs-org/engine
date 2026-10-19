@@ -623,3 +623,60 @@ at requireNode22; build and verify refused the same unsupported runtime.
 This session does not establish a passing full Node 22 suite. The dedicated
 workflow still pins Node 22 and installs only this project's lockfile. No
 root build, packed input, release archive or git metadata was changed.
+
+## Phase 2 P3 absolute quantiles and distance residuals
+
+Added opt-in versioned statistics with a fixed sparse absolute-residual
+histogram. Counts merge without rank approximation; named nearest ranks
+use exact integer arithmetic. Reported percentile values are conservative
+inclusive intervals, with explicit regular-bucket width limits and wider
+tail intervals. Existing moments and sample maxima remain available.
+Historical aggregates cannot acquire missing percentile information;
+mixed statistics versions are refused, and historical report rendering is
+unchanged. Checkpoint configuration binds the histogram channel selection.
+
+tests/quantiles.node-test.mjs checks independently sorted order statistics,
+all bucket edges and their adjacent binary64 values, zero, subnormal and
+tail values, count overflow, bounded storage and several merge trees.
+tests/measurement-statistics.node-test.mjs checks moments against the existing
+arithmetic path, JSON continuation, shard resume, version refusals, excluded
+verdicts, empty groups and deterministic markdown/CSV/JSON interval reports
+with channel units. These are tooling checks, not astronomical accuracy
+evidence.
+
+Optional distance channels compare the calculation entry's apparent
+geocentric range in au, converted to km, against the JPL reduction's range
+in km. The Moon is geometric; other compared bodies use their respective
+light-path algorithms. tests/campaign.node-test.mjs checks conversion and
+sign with independent decimal integer arithmetic, inclusive screening,
+explicit TT requests, retained aggregate fields and invalid/refused ranges.
+The calculation entry receives a binary64 TT Julian date, whereas chart
+angles use the sampler's millisecond input. P4 must record that rounding
+and the range conventions in its campaign receipt. No physical positions,
+kernels or per-case values were added to committed evidence.
+
+Executed from the repository root with the available Node v20.19.2:
+
+```sh
+npm ci --prefix crosscheck --ignore-scripts --no-audit --no-fund --cache "$PWD/crosscheck/runtime/npm-cache"
+npm --prefix crosscheck run check:syntax
+npm --prefix crosscheck test
+npm --prefix crosscheck run build
+npm --prefix crosscheck run verify
+node crosscheck/tools/render-jpl.mjs --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+npm --prefix crosscheck run check
+node crosscheck/tools/check.mjs --all-sizes
+git diff --check
+```
+
+Syntax, all new tests, existing tests independent of the build runtime,
+historical aggregate reproduction, npm exclusion and file/storage safeguards
+passed. The existing runtime acceptance and isolated build tests failed
+at requireNode22; build and verify refused the same unsupported executable.
+This does not establish a passing full Node 22 suite. The dedicated
+workflow retains its pinned Node 22 job and isolated lockfile installation.
+Swiss absence and invented transport tests passed; no Swiss installation
+or live comparison was attempted. Root package inputs, release archives,
+other workflows and git metadata are unchanged.

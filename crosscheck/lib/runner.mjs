@@ -21,7 +21,8 @@ function canonical(value) {
   throw new Error('Invalid campaign identity.');
 }
 export function campaignIdentity(config, identities) {
-  if (!keys(config, ['seed', 'startMs', 'endMs', 'total', 'shards', 'channels', 'conventions']) ||
+  if (!keys(config, ['seed', 'startMs', 'endMs', 'total', 'shards', 'channels', 'conventions',
+    ...(Object.hasOwn(config ?? {}, 'quantiles') ? ['quantiles'] : [])]) ||
       !integer(config.total) || !integer(config.shards) || !config.shards || config.shards > 1000000 ||
       !config.channels || !Object.keys(config.channels).length || Object.keys(config.channels).length > 256 ||
       Object.keys(config.channels).some(k => !/^[A-Za-z][A-Za-z0-9_.-]{0,79}$/.test(k)) ||
@@ -30,6 +31,10 @@ export function campaignIdentity(config, identities) {
       !identities.references || !Object.keys(identities.references).length) throw new Error('Invalid campaign configuration.');
   sampleCase(config, 0);
   for (const tolerance of Object.values(config.channels)) emptyStats(tolerance);
+  if (Object.hasOwn(config, 'quantiles') && (!Array.isArray(config.quantiles) || !config.quantiles.length ||
+      config.quantiles.length > Object.keys(config.channels).length ||
+      config.quantiles.some((name, i) => typeof name !== 'string' || !Object.hasOwn(config.channels, name) ||
+        (i > 0 && config.quantiles[i - 1] >= name)))) throw new Error('Invalid quantile channels; use unique sorted channel names.');
   const payload = { schema: 'crosscheck-campaign/1', sampler: SAMPLER_VERSION, config, identities };
   const bytes = canonical(payload);
   if (Buffer.byteLength(bytes) > 100000) throw new Error('Campaign identity too large.');
@@ -43,7 +48,8 @@ function initial(campaign, shard) {
   capacity(campaign, shard);
   return { schema: 'crosscheck-checkpoint/1', campaign: campaign.sha256, shard, completed: 0,
     channels: Object.fromEntries(Object.entries(campaign.config.channels).map(([name, tolerance]) => [name,
-      { stats: emptyStats(tolerance), verdicts: Object.fromEntries(verdicts.map(v => [v, 0])), flags: {} }])) };
+      { stats: emptyStats(tolerance, { quantiles: campaign.config.quantiles?.includes(name) ?? false }),
+        verdicts: Object.fromEntries(verdicts.map(v => [v, 0])), flags: {} }])) };
 }
 export function validateCheckpoint(state, campaign, shard) {
   const count = capacity(campaign, shard);
@@ -54,6 +60,7 @@ export function validateCheckpoint(state, campaign, shard) {
     if (!keys(channel, ['stats', 'verdicts', 'flags']) || !keys(channel.verdicts, verdicts)) throw new Error('Invalid checkpoint fields.');
     validateStats(channel.stats);
     if (channel.stats.tolerance !== campaign.config.channels[name] ||
+        channel.stats.version !== (campaign.config.quantiles?.includes(name) ? 2 : 1) ||
         Object.values(channel.verdicts).some(n => !integer(n)) ||
         Object.values(channel.verdicts).reduce((a, b) => a + b, 0) !== state.completed ||
         channel.stats.n !== channel.verdicts.pass + channel.verdicts.fail ||
