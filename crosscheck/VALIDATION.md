@@ -737,3 +737,80 @@ This session does not establish a passing full Node 22 suite. The dedicated
 workflow still pins Node 22 and installs only this project's lockfile.
 Only crosscheck documentation changed; engine inputs, aggregate measurement
 files, workflow steps and git metadata were left unchanged.
+
+## Phase 2 S2 strict scanner, enforcement pending
+
+Added lib/swiss-guard.mjs, tools/check-swiss.mjs and negative fixture tests.
+The scanner reads the tracked file inventory with read-only git ls-files,
+then checks current working bytes. It never imports Swiss, executes scanned
+code or visits ignored runtime/dependency directories. Selected unreadable,
+oversized or nonregular files, including symlinked path components, fail.
+The source check recognizes literal JavaScript/TypeScript module imports,
+exports, require calls and Python imports, including comma-separated and
+multiline imports and literal dynamic loader calls. Comments and unrelated
+string contents are excluded. This is a lexical policy check, not a proof
+about arbitrary computed imports or program execution.
+
+Only crosscheck/ and the exact sanctioned conformance adapter are exempt
+from import checks. Dependency checks apply everywhere, including those
+locations. They cover package manifests, dependency/lock entries and aliases,
+requirements and constraints, Python project metadata and Dockerfile variants.
+JSON metadata is inspected structurally; other installation metadata is
+checked conservatively for non-comment package-name mentions. Negative
+fixtures prove rejection, exact exemption boundaries, working-file edits
+and refusal of missing or unsafe inputs. Invented fixture source contains
+no Swiss implementation, expected astronomical values or instrument output.
+
+The strict scan has a scope conflict with the current repository. Executed:
+
+```sh
+node crosscheck/tools/check-swiss.mjs
+```
+
+It exited unsuccessfully with these findings:
+
+```text
+conformance/arbiters/l2/check_swiss.py:44: Swiss import forbidden
+conformance/arbiters/l3/check_swiss.py:18: Swiss import forbidden
+docs/evidence/houses-extra-2026-09-29/tools/compare-swiss.py:12: Swiss import forbidden
+docs/evidence/houses-extra-2026-09-29/tools/diagnose-swiss.py:23: Swiss import forbidden
+docs/evidence/houses-extra-2026-09-29/tools/speed-flags.py:16: Swiss import forbidden
+docs/evidence/houses-extra-2026-09-29/tools/swiss-self-difference.py:13: Swiss import forbidden
+docs/evidence/nutation-2026-09-29/tools/ladder-compare.py:23: Swiss import forbidden
+docs/evidence/nutation-2026-09-29/tools/swiss-compare.py:31: Swiss import forbidden
+docs/evidence/sky-chinese-2026-09-29/tools/sky_swiss.py:18: Swiss import forbidden
+docs/evidence/vedic-2026-09-28/tools/swiss_ayanamsa.py:75: Swiss import forbidden
+```
+
+Those existing scripts are outside the allowed edit scope. No extra import
+exemption, historical baseline or weakening of the strict rule has been
+added. A decision on a frozen path-and-hash baseline was requested. Without
+that authorization or a resolution of the existing imports, the strict
+repository check cannot become a passing CI gate. The dedicated workflow's
+Node test glob runs the new fixture tests already; its existing passing
+steps are unchanged. S2 remains unchecked in PHASE2.md.
+
+Executed from the repository root using the available Node v20.19.2:
+
+```sh
+npm ci --prefix crosscheck --ignore-scripts --no-audit --no-fund --cache "$PWD/crosscheck/runtime/npm-cache"
+npm --prefix crosscheck run check:syntax
+node --test crosscheck/tests/swiss-guard.node-test.mjs
+npm --prefix crosscheck test
+npm --prefix crosscheck run build
+npm --prefix crosscheck run verify
+node crosscheck/tools/render-jpl.mjs --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+npm --prefix crosscheck run check
+node crosscheck/tools/check.mjs --all-sizes
+git diff --check
+```
+
+Syntax, the new fixture tests, runtime independent existing tests, retained
+aggregate reproduction, npm exclusion and file/storage safeguards passed.
+The existing runtime acceptance and isolated build tests failed only at
+requireNode22; build and verify refused the same unsupported executable.
+This is not a passing full Node 22 validation. No reference campaign or live
+Swiss execution occurred. Changes stay inside crosscheck/; root package
+inputs, other workflows, archives and historical measurements are unchanged.

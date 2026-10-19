@@ -72,6 +72,23 @@ node crosscheck/tools/check.mjs
 Crosscheck's Node test suites use `*.node-test.mjs` names so the root
 Vitest runner ignores them. `npm --prefix crosscheck test` runs these suites.
 
+The S2 scanner checks tracked working files for literal Swiss imports and
+dependency declarations without loading Swiss or traversing ignored data:
+
+```sh
+node crosscheck/tools/check-swiss.mjs
+```
+
+It allows imports only inside crosscheck/ and the exact sanctioned conformance
+adapter; dependency declarations are forbidden everywhere. Its negative
+fixture tests run with the dedicated Node suite. This strict repository check
+currently fails on existing historical reference scripts outside those paths.
+S2 remains incomplete and the failing check is not added to CI while the
+scope decision recorded in [PHASE2.md](PHASE2.md) is pending. No additional
+import exemptions have been added. The scanner checks literal module syntax,
+not arbitrary computed imports or executed programs; installation metadata
+other than JSON is checked conservatively for package-name mentions.
+
 The file checker inspects publishable project files, rejects symbolic links,
 known kernel/binary file names, oversized files and em dashes in documents.
 It skips the explicitly ignored runtime and dependency directories. It is
