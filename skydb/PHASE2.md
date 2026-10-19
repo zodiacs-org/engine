@@ -254,3 +254,41 @@ the project isolation and package-exclusion checker. Only the new aggregate
 reports, this continuation note and CHANGES.txt changed. Generated data,
 dependencies and test logs remain ignored; phase 1 code, engine files,
 archives, root configuration, workflows and the package version are unchanged.
+
+P2 continued with sequential back-to-back bounded invocations under the
+supervisor note in the brief. The new aggregate reports record this progress:
+
+| evidence | starting checkpoint | retained checkpoint |
+| --- | ---: | ---: |
+| [session-0022](benchmarks/full-sessions/session-0022.json) | 103,242 | 106,376 |
+| [session-0023](benchmarks/full-sessions/session-0023.json) | 106,376 | 109,715 |
+| [session-0024](benchmarks/full-sessions/session-0024.json) | 109,715 | 112,914 |
+| [session-0025](benchmarks/full-sessions/session-0025.json) | 112,914 | 115,730 |
+| [session-0026](benchmarks/full-sessions/session-0026.json) | 115,730 | 118,674 |
+| [session-0027](benchmarks/full-sessions/session-0027.json) | 118,674 | 121,571 |
+| [session-0028](benchmarks/full-sessions/session-0028.json) | 121,571 | 124,643 |
+| [session-0029](benchmarks/full-sessions/session-0029.json) | 124,643 | 127,660 |
+
+Each report starts at the preceding report's final checkpoint, with the same
+sharded manifest digest, engine archive pin and default configuration. The
+unchanged runner verified the retained prefix before generating more tiles in
+each invocation. Each pass paused at its cooperative session deadline and
+released its writer lock. Generation used one process at a time. No disk guard
+stopped these runs.
+
+The final report records 127,660 of 146,099 planned tiles and 2,694,672,384
+allocated bytes across all generated/ contents, below its recorded
+12,000,000,000-byte cap. Generated tiles remain ignored. The retained checkpoint
+is incomplete and available for resume with the same full-generation command
+and directory. P2 stays unchecked, and P3 remains pending until generation
+completes. [test/full.node-test.mjs](test/full.node-test.mjs) checks the report
+counters, resource measurements and trial arithmetic;
+[test/layout-evidence.node-test.mjs](test/layout-evidence.node-test.mjs) checks
+the checkpoint chain through the existing layout migration.
+
+Validation passed on the Node runtime recorded in the new reports: locked
+project setup, the full project test suite, workflow module syntax checks and
+the project isolation and package-exclusion checker. Only the new aggregate
+reports, this continuation note and CHANGES.txt changed. Generated data,
+dependencies and test logs remain ignored; phase 1 code, engine files,
+archives, root configuration, workflows and the package version are unchanged.

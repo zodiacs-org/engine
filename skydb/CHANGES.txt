@@ -17,3 +17,4 @@ Resume full-span sky database generation, preserve the next verified checkpoint 
 Continue full-span sky database generation from its verified checkpoint and retain the next progress and storage report within session resource limits.
 Continue full-span generation, fix the directory link limit with compatible sharding and resumable migration, and record checkpoint and resource evidence.
 Continue full-span sky database generation through eight bounded passes and retain verified checkpoint progress and resource reports for resume.
+Resume full-span sky database generation through bounded passes and retain verified checkpoints, resource measurements and progress for the next continuation.
