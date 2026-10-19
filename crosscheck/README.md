@@ -28,23 +28,31 @@ raw positions. Resume must refuse changes in configuration, source, build,
 kernel identity or reference versions. Campaigns may request millions of
 charts; reports must state only the cases actually processed.
 
-Swiss Ephemeris is an optional external comparison instrument, installed by
-the user outside this checkout. It is never an engine dependency or an
-accuracy arbiter. Integration uses the repository's permitted
+Swiss Ephemeris and its Python binding, pyswisseph, are optional dev/test-only
+dependencies used only by this harness as an external comparison instrument.
+The owner has approved an installation outside this checkout for phase 2.
+They are never engine runtime dependencies, never imported by engine or
+application runtime code, and never shipped in any package, server or
+container. Swiss is not an accuracy arbiter. Integration uses the permitted
 conformance/adapters/pyswisseph.py route and aggregate-only retention,
 following the conformance harness's --values none policy. Missing libraries,
 missing ephemerides and fallback flags must be reported explicitly. Never
 save raw adapter stdout, exceptions containing values, per-case positions,
 fixtures, tables, Swiss code, binaries or ephemeris files in this repository.
 Only verdicts, returned flags and summary statistics may be retained.
-No Swiss binding is installed in this environment. Phase 2 does not install
-or run it; a separate owner decision is required for a live comparison.
+The approved external installation is selected through CROSSCHECK_PYTHON
+and SE_EPHE_PATH, as described under Campaign operations. Earlier campaigns
+recorded Swiss as unavailable; those historical results remain unchanged.
+The dedicated CI job exercises absence and invented transport peers without
+installing Swiss. See [AGENTS.md](AGENTS.md) for the contributor rules.
 
-Astrodienst offers Swiss Ephemeris under the AGPL or a professional licence.
+The [pyswisseph package metadata](https://pypi.org/project/pyswisseph/)
+declares the GNU Affero General Public License v3 (AGPL). Astrodienst offers
+Swiss Ephemeris under the AGPL or its professional licence.
 Its [official licensing page](https://www.astro.com/swisseph/swephinfo_e.htm),
-section "How to license the Swiss Ephemeris" (read 2026-10-13), describes
-obligations when distributing software containing Swiss or activating a
-public service using it. This is why Swiss is excluded from this MIT engine
+section "How to license the Swiss Ephemeris" (both sources read 2026-10-19),
+describes obligations when distributing software containing Swiss or
+activating a public service using it. This is why Swiss is excluded from this MIT engine
 and remains a separately installed, test-time instrument. This separation
 is a repository retention policy, not a claim that external use waives Swiss
 licence obligations. Users must comply with the licence applicable to their
@@ -424,9 +432,10 @@ adapter's external ephemeris file digests for later resume checks.
 
 Tests in tests/swiss.node-test.mjs use invented protocol peers, independent
 arithmetic and refusal cases. They never run Swiss and establish transport
-and retention behavior only. A live Swiss measurement requires the user's
-external installation. Swiss is explicitly unavailable in the completed
-bounded campaign.
+and retention behavior only. A live Swiss measurement uses the owner's
+approved external installation, selected through CROSSCHECK_PYTHON and
+SE_EPHE_PATH. Swiss was explicitly unavailable in the completed bounded
+campaign; that report does not measure the newly approved installation.
 
 ## Shards and checkpoints
 
@@ -673,10 +682,10 @@ requires every shard to exist and be complete and refuses existing output.
 To check fresh numerical reproduction, preserve the old runtime campaign
 folder elsewhere under runtime/, run all shards again, and use `check`.
 
-To enable Swiss, the user must separately install pyswisseph and its ephemeris
-files outside this checkout. Set `CROSSCHECK_PYTHON` to that installation's
-Python executable and `SE_EPHE_PATH` to its external data directory for every
-run and report invocation. The harness installs nothing. An explicitly
+To enable the approved optional dev/test instrument, use pyswisseph and
+ephemeris files installed outside this checkout. Set `CROSSCHECK_PYTHON` to
+that installation's Python executable and `SE_EPHE_PATH` to its external
+data directory for every run and report invocation. The harness installs nothing. An explicitly
 configured but unavailable instrument fails rather than silently turning off
 Swiss. Without these selectors, reports identify Swiss as unavailable.
 Per-body `Swiss.*.lon` and `.lat` channels compare the exact centers used in
@@ -687,7 +696,8 @@ and must not be counted as an additional measurement. Binding, adapter and
 ephemeris hashes and reported versions bind resume to the installation.
 Only aggregates leave the transport; no raw stdout or instrument errors are
 saved. Swiss expectations in the operational tests are invented arithmetic,
-not Swiss reference values. No live Swiss installation was available here.
+not Swiss reference values. The historical reports below were completed
+without a live Swiss installation and remain records of those runs.
 
 [The driver smoke report](reports/driver-smoke.md), its
 [CSV](reports/driver-smoke.csv) and [receipt](reports/driver-smoke.json) record

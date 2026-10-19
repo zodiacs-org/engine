@@ -6,9 +6,22 @@ true-of-date frames and relativistic modes are recorded in
 the checkpointed runner are implemented. Actual bounded engine measurements
 are in [bounded-sample.md](reports/bounded-sample.md) and
 [driver-smoke.md](reports/driver-smoke.md), with fresh checks recorded under
-F3 and F4 below. Swiss is unavailable in this environment and has not been
-run. The larger campaign and expanded statistics are tracked in
-[PHASE2.md](PHASE2.md).
+F3 and F4 below. Those measurements recorded Swiss as unavailable. The
+phase 2 brief now approves an owner-provided external installation as an
+optional dev/test-only instrument for this harness. No live Swiss accuracy
+campaign is recorded here yet. The larger campaign and expanded statistics
+are tracked in [PHASE2.md](PHASE2.md).
+
+Swiss Ephemeris and pyswisseph must stay outside the checkout. They are never
+engine runtime dependencies or imports and never shipped in any package,
+server or container. The binding declares AGPL v3; Swiss Ephemeris offers
+AGPL or an Astrodienst professional licence. The
+[licensing sources](README.md), [setup](README.md#campaign-operations)
+and [contributor rules](AGENTS.md) apply. Select the external Python and
+ephemeris directory through CROSSCHECK_PYTHON and SE_EPHE_PATH. Only verdicts,
+returned flags, aggregate statistics and identity hashes may be retained;
+raw adapter output and per-case values are forbidden. The dedicated CI job
+uses absence and invented transport tests without installing Swiss.
 
 The sections below record what each historical session ran and knew at that
 time. Their commands and measurements are not claims about the current
@@ -680,3 +693,47 @@ workflow retains its pinned Node 22 job and isolated lockfile installation.
 Swiss absence and invented transport tests passed; no Swiss installation
 or live comparison was attempted. Root package inputs, release archives,
 other workflows and git metadata are unchanged.
+
+## Phase 2 S1 external Swiss test-only documentation
+
+Updated the current README and this record to reflect the brief's approval
+of an owner-provided external Swiss installation. Added AGENTS.md with the
+test-only licensing, runtime and distribution boundaries, supported
+environment selectors and aggregate-only retention rules. Read the
+pyswisseph package metadata's Licence section and Astrodienst's "How to
+license the Swiss Ephemeris" section, linked in README.md. The binding's
+AGPL declaration and Swiss Ephemeris's licensing options are stated
+separately. No machine-specific installation path was added.
+
+Inserted the brief's Swiss milestones into PHASE2.md without changing
+completed ticks. The import/dependency guard is S2; the paired comparisons
+are prepared in S3 and executed with the large campaign. Earlier measurement
+receipts and their unavailable Swiss status remain unchanged. No live
+instrument or astronomical accuracy campaign was run in S1.
+
+Executed from the repository root using the available Node v20.19.2:
+
+```sh
+node --version
+npm ci --prefix crosscheck --ignore-scripts --no-audit --no-fund --cache "$PWD/crosscheck/runtime/npm-cache"
+npm --prefix crosscheck run check:syntax
+npm --prefix crosscheck test
+npm --prefix crosscheck run build
+npm --prefix crosscheck run verify
+node crosscheck/tools/render-jpl.mjs --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+npm --prefix crosscheck run check
+node crosscheck/tools/check.mjs --all-sizes
+git diff --check
+```
+
+Syntax, runtime independent tests, historical aggregate reproduction, npm
+exclusion and file/storage safeguards passed. Swiss absence, invented peers,
+returned flags, fallback handling and retention checks passed without loading
+Swiss. The existing runtime acceptance and isolated build tests failed at
+requireNode22, and build and verify refused the same unsupported runtime.
+This session does not establish a passing full Node 22 suite. The dedicated
+workflow still pins Node 22 and installs only this project's lockfile.
+Only crosscheck documentation changed; engine inputs, aggregate measurement
+files, workflow steps and git metadata were left unchanged.
