@@ -15,7 +15,7 @@ external harness handles git writes and CI.
 - [x] P5 Start the larger campaign toward at least 1,000,000 synthetic charts with at most three active worker processes; validate a budget stop and checkpoint resume and commit only completed aggregate progress with actual counts and resource evidence.
 - [x] P6 Continue that checkpointed campaign in a later session; finish the requested count if practical or retain the largest completed campaign with a plain explanation of the measured time or disk limit, and publish aggregate markdown and CSV with a short arcsecond summary and its measured span.
 - [x] S4 Add a short plain-language headline to the final report stating measured engine accuracy versus JPL and versus Swiss in arcseconds, the sampled span and actual chart count; keep unavailable comparisons explicit.
-- [ ] P7 Audit final counts, per-body and per-span statistics, command/build/kernel/seed receipts and report reproduction; keep Swiss absence explicit and tested, update current documentation, and pass the dedicated Node 22 project checks.
+- [x] P7 Audit final counts, per-body and per-span statistics, command/build/kernel/seed receipts and report reproduction; keep Swiss absence explicit and tested, update current documentation, and pass the dedicated Node 22 project checks.
 
 Runtime and cache data, including kernels, must fit within the brief's
 combined 6 GB disk cap. Stop before a run would exceed it and record the
@@ -32,10 +32,10 @@ execution is folded into P5 and P6. S4 summarizes the completed measurement.
 The completed P1 to P3 records and their historical Swiss absence remain
 unchanged. Environment selectors are documented without local paths.
 
-Current status: P6 and S4 retain the largest completed campaign prefix and
-its measured JPL and Swiss summary. The requested million charts remain
-incomplete. P7 is the next unchecked milestone and audits the final evidence
-and documentation.
+Current status: all phase 2 milestones are complete. P7 audits the retained
+campaign evidence and documentation, with Node 22 tests and project checks
+passing. P6 and S4 retain the largest completed campaign prefix and its
+measured JPL and Swiss summary. The requested million charts remain incomplete.
 The notes below
 preserve earlier session history; the S2 completion record supersedes its
 earlier pending scope and runtime blockers.
@@ -216,3 +216,24 @@ npm exclusion and file/storage safeguards pass. VALIDATION.md records the
 commands, measured session limit and remaining coverage limits. P7 remains
 unchecked for the final evidence audit; no further campaign is started in
 this session.
+
+P7 audits the retained counts, span, units, paired comparisons, percentile
+ranks, command and identity receipts, resource continuity and exclusions.
+The new tests/phase2-artifacts.node-test.mjs checks all final CSV fields and
+markdown numerical and percentile tables against the committed aggregate
+receipt, including column headings and reference-group totals. Negative
+fixtures reject changed values, missing or duplicate rows, misplaced
+comparisons and swapped percentile labels. Kernel, planning, coefficient
+and presentation-source identities are bound to their committed evidence.
+These checks run in the existing dedicated Node suite without instruments
+or ignored checkpoints. The existing retained-measurement and absence tests
+continue to pass.
+
+README.md and VALIDATION.md record the completed audit and clarify historical
+Swiss absence. All report bytes and frozen measurement sources are preserved.
+The full Node 22 suite, syntax checks, isolated build and identity verification,
+import/dependency guard, frame/reference checks, retained report reproduction,
+npm exclusion and file/storage safeguards pass. The retained campaign remains
+partial at the measured session budget documented in P6; this audit runs no
+additional charts and makes no broader accuracy claim. VALIDATION.md records
+the commands and the distinction between artifact checks and fresh execution.

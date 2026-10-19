@@ -1,7 +1,8 @@
 # Crosscheck
 
 An isolated comparison harness for @zodiacs/engine. Phase 1 is complete in
-[PLAN.md](PLAN.md); current work follows [PHASE2.md](PHASE2.md). The scope,
+[PLAN.md](PLAN.md); phase 2's completed work and retained campaign limits are
+recorded in [PHASE2.md](PHASE2.md). The scope,
 safeguards, isolated build, synthetic sampler,
 streaming statistics, kernel acquisition, inertial JPL reduction and
 validated true-of-date frame and relativistic correction implementations are
@@ -400,6 +401,12 @@ runtime. A missing or invalid kernel is an error, never a passing skip.
 
 [The reference report](reports/jpl-reduction.md) validates this reduction's
 inertial modes against public JPL output. It evaluates no engine charts.
+Its statement that no live Swiss comparison was run describes that historical
+validation and the earlier bounded campaigns. The later
+[paired pilot](reports/phase2-swiss-pilot.md) and
+[retained phase 2 measurement](reports/phase2-measured-tt.md) record the
+approved live instrument comparisons. The historical report and its renderer
+retain their recorded bytes.
 The separate [bounded campaign report](reports/bounded-sample.md) measures
 engine charts. Swiss was unavailable in that historical bounded campaign;
 later paired measurements are linked under Campaign operations. No public
@@ -854,6 +861,23 @@ The bundle preparation, continuation and validation commands are recorded
 in [VALIDATION.md](VALIDATION.md). Final partial artifacts preserve the
 original requested count and campaign identity; ordinary campaign
 report/check actions still require every requested chart to be complete.
+
+The final evidence audit in
+[phase2-artifacts.node-test.mjs](tests/phase2-artifacts.node-test.mjs) checks
+the committed CSV and markdown tables against the aggregate JSON receipt.
+It checks every channel, coordinate, unit, verdict, returned flag, table heading,
+percentile interval and
+comparison section, including empty and unavailable rows. Negative fixtures
+prove that changed values, swapped percentile headings, missing or duplicate
+rows and misplaced comparisons fail. These checks need no kernels, local
+checkpoints or Swiss installation;
+run them through `npm --prefix crosscheck test`. Alongside
+[phase2-measured.node-test.mjs](tests/phase2-measured.node-test.mjs), the tests
+check the campaign and reference identities, resource continuity and headline.
+These are artifact consistency checks, not a fresh numerical
+measurement. The export command above reproduces the complete report bytes
+from the preserved local aggregate bundle and ledger. A fresh numerical run
+additionally needs the recorded execution environment and reference inputs.
 
 For a separate campaign, after the isolated build and runtime ERFA acquisition
 described above, an example requesting a million-scale campaign is:
