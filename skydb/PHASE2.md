@@ -57,3 +57,18 @@ tests and the first retained portion of the full database. Validation includes
 locked setup, the full project suite, workflow syntax checks and the project
 isolation and package-exclusion checker. No phase 1 source, engine package,
 archive, root configuration or workflow changed.
+
+P2 continuation is recorded in
+[benchmarks/full-sessions/session-0002.json](benchmarks/full-sessions/session-0002.json).
+The unchanged runner verified the previous 8,320 tiles and checkpointed another
+6,992, reaching 15,312 of 146,099 planned tiles with the same manifest and
+configuration. It paused at its cooperative session deadline, released the
+writer lock and retained an incomplete checkpoint for the next invocation.
+All generated/ contents allocated 388,923,392 bytes at the final measurement,
+below the report's 12,000,000,000-byte cap; no disk guard stopped the run.
+These measurements are validated by [test/full.node-test.mjs](test/full.node-test.mjs).
+Generated tiles remain ignored. P2 stays unchecked, and P3 remains pending.
+Validation passed on the report's Node runtime: locked project setup,
+`npm --prefix skydb test`, the workflow's module syntax checks and
+`node skydb/scripts/check-project.mjs`. Only this continuation note, the new
+aggregate report and CHANGES.txt changed; phase 1 code remains unchanged.

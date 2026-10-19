@@ -9,3 +9,4 @@ Add scoped reproducible SkyDB performance and direct-engine interpolation agreem
 Harden SkyDB persisted event and cadence validation, bound store reads, document operations, refresh benchmarks and complete final project checks and plan.
 Measure a decade of sky database generation and record resource costs for full coverage with disk guards and regression checks.
 Start full-span sky database generation with bounded resumable sessions, disk guards and retained resource reports.
+Resume full-span sky database generation, verify the retained tiles and record the next checkpoint and resource report.
