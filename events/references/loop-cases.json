@@ -1,0 +1,37 @@
+{
+  "source": "NASA JPL Horizons DE441",
+  "sourceFixture": "references/horizons.json",
+  "sourceFixtureSha256": "83f035c78c077202a55946cb8ba09d4f73e006e06262e92c7451e21b83d89979",
+  "sourceRetrievedAt": "2026-10-12T20:43:10.885021+00:00",
+  "clock": "tt",
+  "reduction": "Sign-changing longitude crossings from linear interpolation of the committed hourly Horizons rows; invented fixed target longitudes.",
+  "toleranceMs": 600000,
+  "cases": [
+    {
+      "id": "venus-retrograde-turn-2023",
+      "sourceCase": "venus-retrograde-2023",
+      "sourceResponseSha256": "2bc2b620ff16174d04b099ee3d5692dfea60a47d569928882ac58b7e22ee78c7",
+      "body": "Venus",
+      "start": "2023-07-22",
+      "end": "2023-07-24",
+      "targetDegrees": 148.59,
+      "events": [
+        { "atMs": 1690004345275, "direction": "direct" },
+        { "atMs": 1690147408301, "direction": "retrograde" }
+      ]
+    },
+    {
+      "id": "venus-direct-turn-2023",
+      "sourceCase": "venus-direct-2023",
+      "sourceResponseSha256": "20853039cdff7b2e813068cd01917bf48e79dad3d4be87c5cfc92ab87a4d53cc",
+      "body": "Venus",
+      "start": "2023-09-03",
+      "end": "2023-09-05",
+      "targetDegrees": 132.21,
+      "events": [
+        { "atMs": 1693741862082, "direction": "retrograde" },
+        { "atMs": 1693839229140, "direction": "direct" }
+      ]
+    }
+  ]
+}

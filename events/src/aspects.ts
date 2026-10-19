@@ -1,7 +1,7 @@
 import { EvaluationContext, SearchInterrupted } from './context.js';
 import { EngineAdapter, EVENT_BODIES } from './engine.js';
 import type { EventBody } from './engine.js';
-import { searchLongitudeCrossings } from './longitude.js';
+import { searchLongitudeCrossings, snapshotLongitudeOptions } from './longitude.js';
 import type { LongitudeProvider, LongitudeScanOptions, LongitudeCrossing } from './longitude.js';
 import type { SearchResult } from './types.js';
 
@@ -68,18 +68,19 @@ export function searchExactAspects(context: EvaluationContext, body: EventBody,
   const rules = snapshotAspectRules(policy);
   if (provider.context !== context) throw new TypeError('Provider must share the search context.');
   // Validate scan options even before a cancelled search, with no sampling.
-  if (!options || Object.keys(options).some(key => !['stepMs', 'direction'].includes(key)) ||
-      !Number.isSafeInteger(options.stepMs) || options.stepMs < 1 ||
-      !['both', 'direct', 'retrograde'].includes(options.direction ?? 'both')) {
-    throw new RangeError('Invalid aspect scan options.');
-  }
-  const relative: LongitudeProvider = { context, sample: (_body, atMs) => {
-    const moving = provider.sample(body, atMs).longitude;
-    validLongitude(moving);
-    const reference = frozenTarget.kind === 'fixed' ? frozenTarget.longitude
-      : provider.sample(frozenTarget.body, atMs).longitude;
-    validLongitude(reference);
-    return { longitude: wrap(moving - reference) };
+  const scanOptions = snapshotLongitudeOptions(options);
+  const relative: LongitudeProvider = { context, sample: (_body, atMs, withSpeed = false) => {
+    const moving = provider.sample(body, atMs, withSpeed);
+    validLongitude(moving.longitude);
+    const reference = frozenTarget.kind === 'fixed' ? { longitude: frozenTarget.longitude, speedDegreesPerDay: 0 }
+      : provider.sample(frozenTarget.body, atMs, withSpeed);
+    validLongitude(reference.longitude);
+    if (withSpeed && (typeof moving.speedDegreesPerDay !== 'number' || !Number.isFinite(moving.speedDegreesPerDay) ||
+        typeof reference.speedDegreesPerDay !== 'number' || !Number.isFinite(reference.speedDegreesPerDay))) {
+      throw new RangeError('Station-aware aspects require finite speeds for both bodies.');
+    }
+    return { longitude: wrap(moving.longitude - reference.longitude),
+      ...(withSpeed ? { speedDegreesPerDay: moving.speedDegreesPerDay! - reference.speedDegreesPerDay! } : {}) };
   } };
   return context.search(() => {
     const found: ExactAspect[] = [];
@@ -87,7 +88,7 @@ export function searchExactAspects(context: EvaluationContext, body: EventBody,
       const branches = rule.angleDegrees === 0 || rule.angleDegrees === 180
         ? [rule.angleDegrees] : [rule.angleDegrees, 360 - rule.angleDegrees];
       for (const branch of branches) {
-        const result = searchLongitudeCrossings(context, body, branch, options, relative);
+        const result = searchLongitudeCrossings(context, body, branch, scanOptions, relative);
         if (result.status === 'refused') {
           // Preserve the outer search's all-or-nothing behavior and cumulative budget.
           throw new SearchInterrupted(result.reason);

@@ -422,3 +422,40 @@ The full root run still fails the archive-binding suite because this host
 has `/node_modules` above temporary directories and its supplied npm wrapper
 forces a read-only cache. The events tests pass using the bundled npm CLI
 directly with a writable cache. Full engine CI success is not claimed.
+
+## Phase 2 P1
+
+Runtime: Node.js 22.23.3 from `/home/box/.local/node22/bin`. Dependencies were
+installed from the events lockfile with the npm cache under `events/.cache/`.
+
+Passed:
+
+- `npm run typecheck --prefix events`
+- `npm test --prefix events`, including its local build, all phase 1 suites,
+  long-span reconciliation, HTTP integration and parent npm file-list isolation.
+- Offline paired Horizons reduction, provenance and tampering checks; analytic
+  speed-zero splitting, relative turning points, grid and window boundaries,
+  fractional brackets, direction filters, cancellation and late budget refusal.
+- `node events/scripts/loop-report.mjs --check`, reproducing the committed
+  discovery and timing measurements over the exact windows and synthetic
+  longitude targets in `references/loop-cases.json`.
+- `git diff --check`, authored-file size, documentation character, disk-use
+  and events-only change checks.
+
+The test command caps test-file workers to respect the session CPU constraint.
+Generated bundles and logs remain ignored. The original longitude-only policy
+and its evaluation behavior remain covered by the phase 1 suites; the new
+policy is explicit through `stationStepMs` on lower-level searches.
+
+The default engine recovers the independently established paired directions,
+but its slow-pass dates fail the original timing threshold. That threshold
+was retained. `evidence/station-loops.json` records failed timing verdicts,
+with maxima rounded up, separately from successful discovery. Numerical
+checks against continuous interpolation of independent hourly rows pass;
+they do not establish physical timing accuracy of the parent model. Existing
+Horizons and NASA fixtures and their passing date checks are unchanged.
+
+The milestone adds no parent build or archive operation. Its package isolation
+check passes without generating `dist/`. Query, HTTP and interval-policy
+integration remains P2; full-span completeness and performance remain later
+milestones in `PHASE2.md`.

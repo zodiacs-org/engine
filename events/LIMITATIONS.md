@@ -8,6 +8,7 @@ Choose the clock, search horizon, step, budget and any event policy explicitly.
 | Feature | Independent evidence | Limits |
 | --- | --- | --- |
 | Ingresses and aspects | JPL Horizons selected dates in `references/cases.json`, enforced by `test/horizons.node-test.ts` and `test/reference-api.node-test.ts` | Horizons and the parent differ in frame and corrections. Sparse date agreement does not establish a full search inventory. Natal targets are invented fixed longitudes. |
+| Repeated passes near stations | Independent hourly Horizons Venus rows reduced in `references/loop-cases.json`, checked by `test/turning-reference.node-test.ts`; discovery and timing evidence in `evidence/station-loops.json` | The opt-in scanner recovers the paired directions in the declared source windows. Default-engine timing fails the unchanged reference threshold for these slow passes. Numerical interpolation checks do not repair physical-model timing differences. |
 | Stations and retrogrades | Independently reduced JPL Venus station dates in the same fixture, also checked inside the long-span search | Horizons stations are interpolated extrema of sampled longitude, not instantaneous derivative catalog entries. Other interval dates have no independent comparison here. |
 | Eclipses | Selected NASA TT greatest-eclipse dates and coarse classes in `references/nasa-cases.json`, enforced by `test/nasa.node-test.ts` and `test/reference-api.node-test.ts` | Spherical shadow geometry omits oblateness and atmospheric enlargement. Solar types are central or partial; paths, local visibility, contact times, magnitudes and total/annular/hybrid distinctions are unavailable. |
 | Void-of-course Moon | Analytic boundary and policy tests in `test/void.node-test.ts` | No independent astronomical void-period date evidence. The chosen sign-based last-exact-contact convention is explicit, rather than a claim to cover every historical definition. |
@@ -31,6 +32,17 @@ assumptions detailed in [README.md](README.md). Finer-step agreement can reveal
 some misses, but cannot prove none remain. The API's `complete` status means
 that the prescribed scan finished under these assumptions, not that every
 physical event was found. There is no automatic certified step selection.
+
+Lower-level longitude, ingress and aspect searches can opt in through
+`stationStepMs`. Speed sign changes split cells at refined speed zeros, with
+relative speed used for moving aspects. This requires at most one
+sign-changing speed zero per speed cell and consistent continuous motion;
+multiple hidden stations can still be missed. Finite-difference speed zeros
+do not certify longitude extrema. Excursions wholly within an integer
+millisecond remain unresolved. No tangential-contact detector is added.
+Missing custom-provider speeds reject this policy explicitly. Omitting it
+retains the phase 1 scan. Query execution, HTTP, retrograde sign partitions
+and void-of-course scans retain that original policy until P2 integration.
 
 Searches own instants after the start through the end. Retrograde intervals
 intersecting a boundary can be clipped. Joining partitioned intervals requires

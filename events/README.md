@@ -2,7 +2,7 @@
 
 An isolated, private TypeScript project for event searches built on the parent
 `@zodiacs/engine`. It is excluded from the engine's npm package. Progress and
-remaining features are tracked in [PLAN.md](PLAN.md).
+remaining features are tracked in [PLAN.md](PLAN.md) and [PHASE2.md](PHASE2.md).
 
 The current implementation exposes a bracketed scalar root refiner, shared
 search contracts, an evaluation context, a longitude adapter, longitude
@@ -163,8 +163,46 @@ an entire turn can alias to no motion. An exactly half-turn endpoint separation
 throws because its direction is ambiguous. Other violations cannot generally
 be detected from endpoints. `complete` means the requested scan finished,
 conditional on these assumptions; it does not prove astronomical completeness.
-Reducing the step helps resolve motion but supplies no proof. Station-aware
-search policy is still needed before the long-span public query API is wired.
+Reducing the step helps resolve motion but supplies no proof. This is the
+original scan, retained when `stationStepMs` is omitted.
+
+For station-aware bracketing, supply `stationStepMs` as a positive integer no
+larger than `stepMs`:
+
+```ts
+const result = searchSignIngresses(context, 'Mercury', {
+  stepMs: 86400000,
+  stationStepMs: 21600000
+});
+```
+
+These step sizes are caller choices, not accuracy guarantees. The scanner
+subdivides each longitude step into speed cells no wider than `stationStepMs`.
+It requests speed at their endpoints, refines sign-changing speed zeros and
+scans longitude on both sides. It retains both integer endpoints of a
+fractional speed-zero bracket. Sampled zero-speed knots already split the
+cells. Interior boundary touches remain suppressed; a contact at the window
+end still uses its incoming direction. No samples are requested outside the
+window. All speed requests and both refinements charge the same context.
+
+This policy requires continuous speed with at most one sign-changing zero in
+each speed cell, mutually consistent longitude and speed, and short-arc
+monotonic longitude between the resulting knots. Hidden pairs of stations
+can still alias to equal endpoint speed signs. A finite-difference speed zero
+need not locate the true longitude extremum; near such an extremum close
+passes can still be missed or have large timing errors. Turning excursions
+wholly between adjacent integer milliseconds are unresolved. Zero-speed
+plateaus, unobserved discontinuities and arbitrary custom-provider motion are
+not certified. `complete` continues to mean the requested scan finished under
+its assumptions.
+
+The default adapter supplies finite-difference speeds. A custom
+`LongitudeProvider` must honor `sample(body, atMs, true)` and return finite
+`speedDegreesPerDay` when this option is enabled. Missing or invalid speeds
+throw; there is no silent fallback. Longitude-only custom providers continue
+to work with the original scan. The lower-level longitude, ingress and aspect
+functions accept this option; DSL execution, HTTP and composite interval
+searches retain their original policy pending P2.
 
 Each detected bracket is refined to integer milliseconds using the shared
 refiner. The bracket width is at most one millisecond, enforced by the analytic
@@ -217,6 +255,15 @@ shorter than a half turn. Individually monotonic bodies can still have a
 relative station. Hidden paired roots and unsampled stationary touches remain
 possible; sampled touches are suppressed as in the crossing scanner. These
 are crossing searches, not a general detector of tangential exact contacts.
+
+With `stationStepMs`, the aspect scanner requests each moving body's speed
+and uses moving-minus-target speed to locate relative turning points. A fixed
+target has zero speed. The same station-cell assumptions apply to relative
+speed even when both bodies individually move direct. Options are snapshotted
+before any provider callback or aspect branch. Analytic coverage is in
+[turning.node-test.ts](test/turning.node-test.ts); the independent paired-pass
+checks and their timing discrepancies are described in
+[references/README.md](references/README.md#paired-passes-near-stations).
 
 Each branch scans separately, without caching. Fixed-target samples charge
 one provider request; moving pairs charge a request for each body, including

@@ -9,6 +9,8 @@ export interface LongitudeScanOptions {
   /** Sampling interval; completeness requires the documented cell assumptions. */
   readonly stepMs: number;
   readonly direction?: CrossingDirection | 'both';
+  /** Opt in to speed-zero splitting, with at most one station per speed cell. */
+  readonly stationStepMs?: number;
 }
 export interface LongitudeCrossing {
   readonly kind: 'longitude-crossing';
@@ -33,7 +35,9 @@ export interface SignIngress extends Omit<LongitudeCrossing, 'kind'> {
 /** Providers must charge each request to the same context. */
 export interface LongitudeProvider {
   readonly context: EvaluationContext;
-  sample(body: EventBody, atMs: number): { readonly longitude: number };
+  sample(body: EventBody, atMs: number, withSpeed?: boolean): {
+    readonly longitude: number; readonly speedDegreesPerDay?: number | null;
+  };
 }
 const delta = (a: number, b: number): number => {
   const difference = b - a;
@@ -44,17 +48,23 @@ function longitude(value: number): void {
     throw new RangeError('Longitude must be finite degrees in [0, 360).');
   }
 }
+/** Validate and snapshot before any provider callbacks can change the options. */
+export function snapshotLongitudeOptions(options: LongitudeScanOptions): LongitudeScanOptions {
+  if (!options || Object.keys(options).some(key => !['stepMs', 'direction', 'stationStepMs'].includes(key)) ||
+      !Number.isSafeInteger(options.stepMs) || options.stepMs < 1 ||
+      !['both', 'direct', 'retrograde'].includes(options.direction ?? 'both') ||
+      (options.stationStepMs !== undefined && (!Number.isSafeInteger(options.stationStepMs) ||
+        options.stationStepMs < 1 || options.stationStepMs > options.stepMs))) {
+    throw new RangeError('Positive integer steps, stationStepMs <= stepMs and valid direction are required.');
+  }
+  return Object.freeze({ stepMs: options.stepMs, direction: options.direction ?? 'both',
+    ...(options.stationStepMs === undefined ? {} : { stationStepMs: options.stationStepMs }) });
+}
 function scan(context: EvaluationContext, body: EventBody, targets: readonly number[],
   options: LongitudeScanOptions, provider: LongitudeProvider): SearchResult<LongitudeCrossing> {
   if (!EVENT_BODIES.includes(body)) throw new RangeError('Unsupported event body.');
-  if (!options || Object.keys(options).some(key => !['stepMs', 'direction'].includes(key)) ||
-      !Number.isSafeInteger(options.stepMs) || options.stepMs < 1 ||
-      !['both', 'direct', 'retrograde'].includes(options.direction ?? 'both')) {
-    throw new RangeError('A positive integer stepMs and valid direction are required.');
-  }
+  const { stepMs: step, direction: filter, stationStepMs } = snapshotLongitudeOptions(options);
   if (provider.context !== context) throw new TypeError('Provider must share the search context.');
-  const step = options.stepMs;
-  const filter = options.direction ?? 'both';
   const read = (atMs: number): number => {
     const value = provider.sample(body, atMs).longitude;
     longitude(value);
@@ -62,12 +72,7 @@ function scan(context: EvaluationContext, body: EventBody, targets: readonly num
   };
   return context.search(() => {
     const events: LongitudeCrossing[] = [];
-    let leftMs = context.window.startMs;
-    let left = read(leftMs);
-    while (leftMs < context.window.endMs) {
-      context.checkpoint();
-      const rightMs = leftMs + Math.min(step, context.window.endMs - leftMs);
-      const right = read(rightMs);
+    const cell = (leftMs: number, left: number, rightMs: number, right: number) => {
       const motion = delta(left, right);
       if (Math.abs(motion) === 180) throw new RangeError('Ambiguous half-turn scan cell; reduce stepMs.');
       const liftedRight = left + motion;
@@ -96,8 +101,44 @@ function scan(context: EvaluationContext, body: EventBody, targets: readonly num
             residualDegrees: atMs === root.atMs ? root.value : left + delta(left, read(atMs)) - lift });
         }
       }
-      leftMs = rightMs;
-      left = right;
+    };
+    const readMotion = (atMs: number) => {
+      const sample = provider.sample(body, atMs, true);
+      longitude(sample.longitude);
+      if (typeof sample.speedDegreesPerDay !== 'number' || !Number.isFinite(sample.speedDegreesPerDay)) {
+        throw new RangeError('Station-aware scanning requires a finite provider speed.');
+      }
+      return { longitude: sample.longitude, speed: sample.speedDegreesPerDay };
+    };
+    let leftMs = context.window.startMs;
+    let leftSample = stationStepMs === undefined ? { longitude: read(leftMs), speed: 0 } : readMotion(leftMs);
+    while (leftMs < context.window.endMs) {
+      context.checkpoint();
+      const coarseEnd = leftMs + Math.min(step, context.window.endMs - leftMs);
+      while (leftMs < coarseEnd) {
+        context.checkpoint();
+        const rightMs = leftMs + Math.min(stationStepMs ?? step, coarseEnd - leftMs);
+        const rightSample = stationStepMs === undefined ? { longitude: read(rightMs), speed: 0 } : readMotion(rightMs);
+        let segmentMs = leftMs;
+        let segmentLongitude = leftSample.longitude;
+        if (stationStepMs !== undefined && leftSample.speed !== 0 && rightSample.speed !== 0 &&
+            Math.sign(leftSample.speed) !== Math.sign(rightSample.speed)) {
+          const station = refineRoot(t => readMotion(t).speed, leftMs, rightMs);
+          if (station.status !== 'converged') throw new Error('Unexpected local station budget exhaustion.');
+          // Sample both sides of a fractional speed zero. A finite-difference
+          // speed's zero need not coincide with the longitude's true extremum.
+          for (const knot of station.bracket) {
+            if (knot <= segmentMs || knot >= rightMs) continue;
+            const knotLongitude = read(knot);
+            cell(segmentMs, segmentLongitude, knot, knotLongitude);
+            segmentMs = knot;
+            segmentLongitude = knotLongitude;
+          }
+        }
+        cell(segmentMs, segmentLongitude, rightMs, rightSample.longitude);
+        leftMs = rightMs;
+        leftSample = rightSample;
+      }
     }
     return events.sort((a, b) => a.atMs - b.atMs || a.longitude - b.longitude);
   });
