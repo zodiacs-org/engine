@@ -200,9 +200,10 @@ The default adapter supplies finite-difference speeds. A custom
 `LongitudeProvider` must honor `sample(body, atMs, true)` and return finite
 `speedDegreesPerDay` when this option is enabled. Missing or invalid speeds
 throw; there is no silent fallback. Longitude-only custom providers continue
-to work with the original scan. The lower-level longitude, ingress and aspect
-functions accept this option; DSL execution, HTTP and composite interval
-searches retain their original policy pending P2.
+to work with the original scan. Query execution and HTTP accept the same
+option for ingresses, aspects, stations, retrograde intervals and
+void-of-course searches. Eclipse queries reject it because they use a
+different minimum-search policy.
 
 Each detected bracket is refined to integer milliseconds using the shared
 refiner. The bracket width is at most one millisecond, enforced by the analytic
@@ -277,8 +278,8 @@ the independent date checks and their limited coverage are recorded in
 
 ## Stations and retrograde intervals
 
-`searchStations(context, body, { stepMs })` finds sign-changing zeros of
-apparent geocentric tropical longitude speed. A station's `direction` is its
+`searchStations(context, body, { stepMs, stationStepMs? })` finds sign-changing
+zeros of apparent geocentric tropical longitude speed. A station's `direction` is its
 outgoing motion, `retrograde` or `direct`. It carries its longitude, clock,
 numerical bracket and speed residual in degrees per day. With the default
 adapter this is a root of the parent's finite-difference speed, not an analytic
@@ -294,8 +295,8 @@ brackets are refined with the shared root refiner. The fractional analytic root
 in [stations.node-test.ts](test/stations.node-test.ts) enforces the millisecond enclosure
 and checks that the speed residual belongs to the returned estimate.
 
-`searchRetrogradeIntervals(context, body, { stepMs, sign? })` returns spans of
-negative speed intersecting the window, including intervals already underway
+`searchRetrogradeIntervals(context, body, { stepMs, stationStepMs?, sign? })`
+returns spans of negative speed intersecting the window, including intervals already underway
 at its start or still underway at its end. `clippedStart` and `clippedEnd`
 mean the corresponding station was not confirmed inside the window; a zero
 at the window end remains clipped. At a start-window zero, the next nonzero
@@ -308,7 +309,7 @@ Each interval retains its full window-clipped extent and a chronological
 `signSpans` partition from tropical ingresses. The optional sign filter selects
 an interval if any positive-duration span overlaps that sign. It does not
 require the retrograde station to occur in the sign or trim the interval to the
-sign. Thus a future query for Venus retrogrades in Leo means intervals
+sign. Thus a query for Venus retrogrades in Leo means intervals
 intersecting Leo. A boundary touch alone does not match. At an exact sign
 boundary, the following retrograde segment owns the lower sign, including the
 wrap from Aries to Pisces. Analytic overlap and wrap tests in
@@ -316,10 +317,14 @@ wrap from Aries to Pisces. Analytic overlap and wrap tests in
 
 Station scanning requires continuous speed with at most one sign-changing
 zero in each cell, and isolated sampled zeros whose neighboring samples resolve
-their motion. Sign partitioning separately inherits the longitude scanner's
-continuous, monotonic, short-arc cell assumptions. A station cell can violate
-that longitude assumption, so sign spans can miss paired ingresses near a
-station. No completeness proof or automatic adaptive subdivision is supplied.
+their motion. With `stationStepMs`, station discovery and the initial-motion
+probe use that finer interval, and sign partitioning uses the station-aware
+longitude scanner. Options are snapshotted before provider callbacks. Omission
+retains the original station and ingress grids. Sign partitioning inherits
+the chosen longitude policy's continuity, monotonicity and short-arc
+assumptions. With the original grid a station cell can hide paired ingresses.
+With the station-aware grid hidden multiple speed zeros can still hide them.
+No completeness proof or automatic choice of step is supplied.
 The paired-station test demonstrates a coarse scan missing both stations and
 a finer scan recovering them. `complete` remains conditional on these sampling
 assumptions. Reducing `stepMs` helps resolve motion but does not certify it.
@@ -411,8 +416,8 @@ The analytic and adapter tests themselves establish no astronomical accuracy.
 
 ## Void-of-course Moon
 
-`searchVoidOfCourseMoon(context, policy, { stepMs }, provider?)` searches under
-an explicit `{ bodies, aspects }` policy. Bodies must be unique supported
+`searchVoidOfCourseMoon(context, policy, { stepMs, stationStepMs? }, provider?)`
+searches under an explicit `{ bodies, aspects }` policy. Bodies must be unique supported
 non-Moon bodies; aspect rules have the same validation as exact aspects.
 There is no default classical or modern body selection, orb, or sign filter.
 Coordinates and clocks are those of the engine adapter.
@@ -452,12 +457,19 @@ at the window end resolves that sign and leaves no trailing unresolved span.
 All ingress scans, selected-body aspect scans, refinements and initial-sign
 samples share the evaluation budget and cancellation context. Refusals discard
 both interval and unresolved output. Invalid inputs and provider failures
-propagate. The policy is snapshotted before sampling.
+propagate. The policy and scan options are snapshotted before sampling.
+`stationStepMs` applies to both the Moon ingress scan and every selected
+moving-body aspect scan, including relative turning points when both bodies
+individually move direct. Omitting it retains longitude-only custom providers
+and the original scan. The analytic composite checks in
+[turning-composite.node-test.ts](test/turning-composite.node-test.ts) cover
+repeated contacts, retrograde sign partitions, clipping and shared refusals.
 
 The search assumes continuous direct Moon motion and inherits the ingress
 scanner's monotonic short-arc cell assumptions and the aspect scanner's
 relative-motion assumptions. Observed retrograde Moon ingresses reject the
-search; hidden reversals and contacts remain undetectable from coarse samples.
+search; hidden reversals and contacts can remain unresolved under either
+policy when its sampling assumptions fail.
 A `complete` result does not certify physical or astronomical completeness.
 [void.node-test.ts](test/void.node-test.ts) checks analytic last-contact selection,
 multiple bodies, signed aspect branches, wrap, clipping, entry/exit ownership,
@@ -501,8 +513,8 @@ charset), an uncompressed UTF-8 JSON body, and exactly `query` and `options`:
 ```
 
 The natal longitude is invented. The step and budget are caller choices, not
-accuracy guarantees. Options follow `executeQuery`, including explicit clocks,
-next horizons and eclipse models; HTTP accepts DSL strings only and rejects
+accuracy guarantees. Options follow `executeQuery`, including `stationStepMs`,
+explicit clocks, next horizons and eclipse models; HTTP accepts DSL strings only and rejects
 signals, providers and unknown options. Horizon coordinates are integer epoch
 milliseconds on their declared clock. Search results retain the programmatic
 window, evaluations, refusal reasons, interval clipping and unresolved tails.

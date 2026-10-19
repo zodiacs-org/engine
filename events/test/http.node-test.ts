@@ -40,6 +40,41 @@ test('HTTP dates use the independent JPL synthetic natal reference', async t => 
   assert.equal(r.status, 200); assert.equal(r.body.status, 'complete');
   assert.ok(Math.abs(r.body.events[0].atMs-reference.atMs) <= c.toleranceMs);
 });
+test('HTTP station policy preserves the independently referenced paired-pass directions', async t => {
+  const fixture = JSON.parse(readFileSync(new URL('../../references/loop-cases.json', import.meta.url), 'utf8')) as {
+    cases: { body: string; start: string; end: string; targetDegrees: number;
+      events: { direction: string }[] }[];
+  };
+  const { server, url } = await service(); t.after(() => server.close());
+  for (const c of fixture.cases) {
+    const query = `all ${c.body} conjunction natal Sun from ${c.start} to ${c.end} clock tt`;
+    const options = { stepMs: 2*86400000, stationStepMs: 2*86400000,
+      maxEvaluations: 10000, natalLongitudes: { Sun: c.targetDegrees } };
+    const all = await post(url, { query, options });
+    assert.equal(all.status, 200); assert.equal(all.body.status, 'complete');
+    assert.deepEqual(all.body.events.map((e: { direction: string }) => e.direction), c.events.map(e => e.direction));
+    // Discovery is checked here; the retained timing discrepancies are reported separately.
+    const next = await post(url, { query: query.replace('all ', 'next '), options });
+    assert.equal(next.status, 200); assert.deepEqual(next.body.events, all.body.events.slice(0, 1));
+    const { stationStepMs: _stationStepMs, ...legacy } = options;
+    const omitted = await post(url, { query, options: legacy });
+    assert.equal(omitted.status, 200); assert.deepEqual(omitted.body.events, []);
+    const budget = await post(url, { query, options: { ...options, maxEvaluations: 1 } });
+    assert.equal(budget.status, 200); assert.equal(budget.body.reason, 'evaluation-budget');
+    assert.deepEqual(budget.body.events, []);
+  }
+});
+test('HTTP validates station steps and rejects that policy for eclipses', async t => {
+  const { server, url } = await service(); t.after(() => server.close());
+  for (const stationStepMs of [null, 0, -1, 0.5, payload.options.stepMs+1, Number.MAX_SAFE_INTEGER+1, '1000']) {
+    const r = await post(url, { ...payload, options: { ...payload.options, stationStepMs } });
+    assert.equal(r.status, 400); assert.deepEqual(r.body, { error: { code: 'invalid-request' } });
+  }
+  const eclipse = await post(url, { query: 'next lunar eclipses from 2000-01-01 to 2000-01-02 clock tt',
+    options: { ...payload.options, stationStepMs: 1000,
+      eclipse: { model: { sunRadiusAu: 2, moonRadiusAu: 0.2, earthRadiusAu: 1 }, derivativeStepMs: 1 } } });
+  assert.equal(eclipse.status, 400); assert.deepEqual(eclipse.body, { error: { code: 'invalid-request' } });
+});
 test('HTTP rejects invalid transport, shapes and DSL without reflecting input', async t => {
   const { server, url } = await service(); t.after(() => server.close());
   assert.equal((await fetch(url)).status, 405);

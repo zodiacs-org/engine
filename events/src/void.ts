@@ -3,14 +3,14 @@ import { EngineAdapter, EVENT_BODIES } from './engine.js';
 import type { EventBody } from './engine.js';
 import { searchExactAspects, snapshotAspectRules } from './aspects.js';
 import type { ExactAspect, ExactAspectPolicy } from './aspects.js';
-import { searchSignIngresses, SIGNS } from './longitude.js';
-import type { LongitudeProvider, Sign } from './longitude.js';
+import { searchSignIngresses, snapshotLongitudeOptions, SIGNS } from './longitude.js';
+import type { LongitudeProvider, LongitudeScanOptions, Sign } from './longitude.js';
 import type { Clock, SearchResult } from './types.js';
 
 export interface VoidOfCoursePolicy extends ExactAspectPolicy {
   readonly bodies: readonly EventBody[];
 }
-export interface VoidOfCourseOptions { readonly stepMs: number }
+export interface VoidOfCourseOptions extends Pick<LongitudeScanOptions, 'stepMs' | 'stationStepMs'> {}
 export interface VoidOfCourseInterval {
   readonly kind: 'void-of-course';
   readonly startMs: number;
@@ -42,16 +42,16 @@ export function searchVoidOfCourseMoon(context: EvaluationContext, policy: VoidO
       new Set(policy.bodies).size !== policy.bodies.length) {
     throw new RangeError('An explicit nonempty unique policy of non-Moon bodies is required.');
   }
-  if (!options || Object.keys(options).some(k => k !== 'stepMs') ||
-      !Number.isSafeInteger(options.stepMs) || options.stepMs < 1) {
-    throw new RangeError('A positive integer stepMs is required.');
+  if (!options || Object.keys(options).some(k => !['stepMs', 'stationStepMs'].includes(k))) {
+    throw new RangeError('Invalid void-of-course scan options.');
   }
+  const scanOptions = snapshotLongitudeOptions(options);
   if (provider.context !== context) throw new TypeError('Provider must share the search context.');
   const bodies = [...policy.bodies];
   const aspects = snapshotAspectRules({ aspects: policy.aspects });
   const unresolved: UnresolvedMoonSegment[] = [];
   const result = context.search(() => {
-    const ingresses = searchSignIngresses(context, 'Moon', options, provider);
+    const ingresses = searchSignIngresses(context, 'Moon', scanOptions, provider);
     if (ingresses.status === 'refused') throw new SearchInterrupted(ingresses.reason);
     if (ingresses.events.some(e => e.direction !== 'direct')) {
       throw new RangeError('Void-of-course policy requires direct Moon sign motion.');
@@ -59,7 +59,7 @@ export function searchVoidOfCourseMoon(context: EvaluationContext, policy: VoidO
     const contacts: ExactAspect[] = [];
     for (const body of bodies) {
       const found = searchExactAspects(context, 'Moon', { kind: 'moving', body },
-        { aspects }, options, provider);
+        { aspects }, scanOptions, provider);
       if (found.status === 'refused') throw new SearchInterrupted(found.reason);
       contacts.push(...found.events);
     }

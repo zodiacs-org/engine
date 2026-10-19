@@ -33,16 +33,19 @@ some misses, but cannot prove none remain. The API's `complete` status means
 that the prescribed scan finished under these assumptions, not that every
 physical event was found. There is no automatic certified step selection.
 
-Lower-level longitude, ingress and aspect searches can opt in through
-`stationStepMs`. Speed sign changes split cells at refined speed zeros, with
-relative speed used for moving aspects. This requires at most one
+Longitude, ingress and aspect searches can opt in through `stationStepMs`,
+including query execution and HTTP. Speed sign changes split cells at refined
+speed zeros, with relative speed used for moving aspects. This requires at most one
 sign-changing speed zero per speed cell and consistent continuous motion;
 multiple hidden stations can still be missed. Finite-difference speed zeros
 do not certify longitude extrema. Excursions wholly within an integer
 millisecond remain unresolved. No tangential-contact detector is added.
 Missing custom-provider speeds reject this policy explicitly. Omitting it
-retains the phase 1 scan. Query execution, HTTP, retrograde sign partitions
-and void-of-course scans retain that original policy until P2 integration.
+retains the phase 1 scan. Retrograde searches use the finer grid for station
+discovery and the station-aware policy for sign partitions. Void-of-course
+searches use it for Moon ingresses and relative contacts. All subsearches
+share the context budget, with no extra lookahead beyond the window. Eclipse
+queries reject this option; their minimum-search policy remains separate.
 
 Searches own instants after the start through the end. Retrograde intervals
 intersecting a boundary can be clipped. Joining partitioned intervals requires
@@ -66,7 +69,7 @@ Budgets count adapter requests, including requests for finite-difference speeds,
 rather than internal ephemeris operations. Budget exhaustion, cancellation and
 parent calculation refusals discard all events. An empty completed list is
 separate from refusal. Unexpected computation failures throw. Both `next` and
-`all` scan the entire explicit horizon, so a far-future next query costs the
+`all` scan the entire explicit horizon, so a long-horizon next query costs the
 full scan. There is no automatic horizon expansion or caching across queries.
 
 Local execution is synchronous and cancellation is cooperative between samples.

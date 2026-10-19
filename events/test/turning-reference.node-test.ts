@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { test } from 'node:test';
-import { EvaluationContext, searchExactAspects, searchLongitudeCrossings } from '../src/index.js';
-import type { CrossingDirection, EventBody, LongitudeCrossing, LongitudeProvider, SearchResult } from '../src/index.js';
+import { EvaluationContext, executeQuery, searchExactAspects, searchLongitudeCrossings } from '../src/index.js';
+import type { CrossingDirection, EventBody, LongitudeCrossing, MotionProvider, QuerySearchEvent, SearchResult } from '../src/index.js';
 
 const project = new URL('../../', import.meta.url);
 interface LoopCase {
@@ -50,7 +50,7 @@ function compare(result: SearchResult<Pick<LongitudeCrossing, 'atMs' | 'directio
 // C1 cubic Hermite interpolation of independent hourly longitudes. Nodal
 // derivatives are centered secants, one-sided at the edges. No engine samples
 // enter this provider. It checks discovery on reference rows, not a new sky model.
-function interpolated(c: LoopCase, ctx: EvaluationContext): LongitudeProvider {
+function interpolated(c: LoopCase, ctx: EvaluationContext): MotionProvider {
   const rows = c.rows;
   const slopes = rows.map((_r, i) => {
     const a = rows[Math.max(0, i - 1)]!, b = rows[Math.min(rows.length - 1, i + 1)]!;
@@ -65,7 +65,7 @@ function interpolated(c: LoopCase, ctx: EvaluationContext): LongitudeProvider {
       + (-2*u**3 + 3*u**2)*b[1] + (u**3 - u**2)*h*m1;
     const speed = ((6*u**2 - 6*u)*a[1] + (3*u**2 - 4*u + 1)*h*m0
       + (-6*u**2 + 6*u)*b[1] + (3*u**2 - 2*u)*h*m1) / h;
-    return { longitude, ...(withSpeed ? { speedDegreesPerDay: speed * 86400000 } : {}) };
+    return { longitude, speedDegreesPerDay: withSpeed ? speed * 86400000 : null };
   }) };
 }
 
@@ -85,6 +85,30 @@ for (const c of fixture.cases) {
         { aspects: [{ id: 'conjunction', angleDegrees: 0 }] }, options, source)
         : searchLongitudeCrossings(ctx, c.body, c.targetDegrees, options, source), c, true);
     }
+  });
+  test(`query execution retains independent paired-pass discovery: ${c.id}`, () => {
+    const query = `all ${c.body} conjunction natal Sun from ${c.start} to ${c.end} clock tt`;
+    const scan = { ...options, maxEvaluations: 10000, natalLongitudes: { Sun: c.targetDegrees } };
+    const result = executeQuery(query, scan);
+    assert.equal(result.status, 'complete');
+    // Discovery only: the default-model timing discrepancies remain recorded
+    // separately under the unchanged threshold in evidence/station-loops.json.
+    assert.deepEqual(result.events.map(e => e.kind === 'exact-aspect' ? e.direction : null),
+      c.events.map(e => e.direction));
+    const referenceResult = executeQuery(query, scan, { motion: ctx => interpolated(c, ctx) });
+    assert.equal(referenceResult.status, 'complete');
+    assert.equal(referenceResult.events.length, c.events.length);
+    for (const [index, expected] of c.events.entries()) {
+      const actual: QuerySearchEvent = referenceResult.events[index]!;
+      assert.equal(actual.kind, 'exact-aspect');
+      if (actual.kind !== 'exact-aspect') continue;
+      assert.equal(actual.direction, expected.direction);
+      assert.ok(Math.abs(actual.atMs - expected.atMs) <= fixture.toleranceMs, c.id);
+    }
+    const next = executeQuery(query.replace(/^all /, 'next '), scan,
+      { motion: ctx => interpolated(c, ctx) });
+    assert.equal(next.status, 'complete');
+    assert.deepEqual(next.events, referenceResult.events.slice(0, 1));
   });
 }
 

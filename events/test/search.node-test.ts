@@ -113,3 +113,125 @@ for (const { case: c, atMs } of fixture.events.filter(x => x.case.kind === 'fixe
     assert.ok('atMs' in e && Math.abs(e.atMs-atMs) <= c.toleranceMs);
   });
 }
+
+const dayMs = 86400000;
+const startMs = Date.parse('2000-01-01T00:00:00Z');
+const turnOptions: ExecuteOptions = { stepMs: dayMs, stationStepMs: dayMs, maxEvaluations: 10000 };
+const range = 'from 2000-01-01 to 2000-01-02 clock tt';
+const turn: QueryProviders = { motion: context => ({ context, sample: (_body, t) => context.evaluate(() => {
+  const u = (t-startMs)/dayMs;
+  return { longitude: 91-16*(u-0.5)**2, speedDegreesPerDay: 16-32*u };
+}) }) };
+const eventTimes = (result: ReturnType<typeof executeQuery>) => {
+  assert.equal(result.status, 'complete');
+  return result.events.map(e => { assert.ok('atMs' in e); return e.atMs; });
+};
+test('query station policy finds paired fixed aspects and sign ingresses in next and all modes', () => {
+  const expected = [startMs+dayMs/4, startMs+3*dayMs/4];
+  const opts = { ...turnOptions, natalLongitudes: { Sun: 0 } };
+  const query = `all Mars square natal Sun ${range}`;
+  assert.deepEqual(eventTimes(executeQuery(query, opts, turn)), expected);
+  assert.deepEqual(eventTimes(executeQuery(query.replace('all ', 'next '), opts, turn)), expected.slice(0, 1));
+  assert.deepEqual(executeQuery(query, { stepMs: dayMs, maxEvaluations: 10000,
+    natalLongitudes: { Sun: 0 } }, turn).events, []);
+  const ingress: QueryProviders = { motion: context => ({ context, sample: (_body, t) => context.evaluate(() => {
+    const u = (t-startMs)/dayMs;
+    return { longitude: 31-16*(u-0.5)**2, speedDegreesPerDay: 16-32*u };
+  }) }) };
+  assert.deepEqual(eventTimes(executeQuery(`all Mars ingresses ${range}`, turnOptions, ingress)), expected);
+  assert.deepEqual(eventTimes(executeQuery(`next Mars ingresses into Aries ${range}`, turnOptions, ingress)), expected.slice(1));
+});
+test('query station policy splits a relative turning point while both bodies remain direct', () => {
+  const moving: QueryProviders = { motion: context => ({ context, sample: (body, t) => context.evaluate(() => {
+    const u = (t-startMs)/dayMs, base = 20+40*u;
+    const speed = body === 'Sun' ? 40 : 56-32*u;
+    assert.ok(speed > 0);
+    return { longitude: body === 'Sun' ? base : base+91-16*(u-0.5)**2, speedDegreesPerDay: speed };
+  }) }) };
+  const result = executeQuery(`all Mars square Sun ${range}`, turnOptions, moving);
+  assert.deepEqual(eventTimes(result), [startMs+dayMs/4, startMs+3*dayMs/4]);
+  assert.deepEqual(result.events.map(e => 'direction' in e ? e.direction : null), ['direct', 'retrograde']);
+  assert.deepEqual(executeQuery(`all Mars square Sun ${range}`,
+    { stepMs: dayMs, maxEvaluations: 10000 }, moving).events, []);
+});
+test('station queries use the explicit speed scan step and preserve omitted-step sampling', () => {
+  const paired: QueryProviders = { motion: context => ({ context, sample: (_body, t) => context.evaluate(() => {
+    const u = (t-startMs)/dayMs;
+    return { longitude: 100+32*(u**3/3-u**2/2+3*u/16), speedDegreesPerDay: 32*(u-0.25)*(u-0.75) };
+  }) }) };
+  const query = `all Venus stations ${range}`;
+  assert.deepEqual(executeQuery(query, { stepMs: dayMs, maxEvaluations: 10000 }, paired).events, []);
+  assert.deepEqual(eventTimes(executeQuery(query, { ...turnOptions, stationStepMs: dayMs/2 }, paired)),
+    [startMs+dayMs/4, startMs+3*dayMs/4]);
+});
+test('query composite dispatch retains station-aware sign partitions and last contacts', () => {
+  const opts: ExecuteOptions = { clock: 'tt', horizon: { startMs: 0, endMs: 100, clock: 'tt' },
+    stepMs: 100, stationStepMs: 25, maxEvaluations: 10000 };
+  const cubic: QueryProviders = { motion: context => ({ context, sample: (_body, t) => context.evaluate(() => ({
+    longitude: 30 + (t-20)*(t-50)*(t-80)/10000,
+    speedDegreesPerDay: (3*t*t-300*t+6600)/10000*dayMs
+  })) }) };
+  const r = executeQuery('next Venus retrogrades in Aries', opts, cubic);
+  const interval = first(r);
+  assert.equal(interval.kind, 'retrograde');
+  if (interval.kind === 'retrograde') {
+    assert.ok(Math.abs(interval.startMs - (50-10*Math.sqrt(3))) <= 1);
+    assert.ok(Math.abs(interval.endMs - (50+10*Math.sqrt(3))) <= 1);
+    assert.deepEqual(interval.signSpans.map(e => e.sign), ['Taurus', 'Aries']);
+    assert.equal(interval.signSpans[0]!.endMs, 50);
+  }
+  const moon: QueryProviders = { motion: context => ({ context, sample: (body, t) => context.evaluate(() => ({
+    longitude: wrap(t/4 - (body === 'Moon' ? 0 : (t-25)*(t-75)/1000)),
+    speedDegreesPerDay: (1/4 - (body === 'Moon' ? 0 : (2*t-100)/1000))*dayMs
+  })) }) };
+  const v = executeQuery('next void-of-course Moon with Sun aspects conjunction',
+    { ...opts, horizon: { startMs: 0, endMs: 120, clock: 'tt' }, stepMs: 120, stationStepMs: 120 }, moon);
+  const tail = first(v);
+  assert.equal(tail.kind, 'void-of-course');
+  if (tail.kind === 'void-of-course') {
+    assert.deepEqual([tail.startMs, tail.endMs, tail.clippedStart], [75, 120, false]);
+    assert.equal(tail.lastContact!.atMs, 75);
+  }
+  if (v.status === 'complete') assert.deepEqual(v.unresolved, []);
+});
+test('query steps are snapshotted before provider factories and station scans share refusal controls', () => {
+  const query = `next Mars square natal Sun ${range}`;
+  const mutable = { ...turnOptions, natalLongitudes: { Sun: 0 } };
+  const expected = executeQuery(query, mutable, turn);
+  assert.deepEqual(executeQuery(query, mutable, { motion: context => {
+    mutable.stepMs = 1; mutable.stationStepMs = 1;
+    return turn.motion!(context);
+  } }), expected);
+  const budget = executeQuery(query, { ...turnOptions, natalLongitudes: { Sun: 0 }, maxEvaluations: 12 }, turn);
+  assert.equal(budget.status, 'refused');
+  if (budget.status === 'refused') assert.equal(budget.reason, 'evaluation-budget');
+  assert.deepEqual(budget.events, []);
+  const controller = new AbortController();
+  const cancelled = executeQuery(query, { ...turnOptions, natalLongitudes: { Sun: 0 }, signal: controller.signal },
+    { motion: context => {
+      const provider = turn.motion!(context);
+      return { context, sample: (body, t, withSpeed) => {
+        // The first pass has already been refined before the second half is read.
+        if (t > startMs+dayMs/2 && context.evaluations > 8) controller.abort();
+        return provider.sample(body, t, withSpeed);
+      } };
+    } });
+  assert.equal(cancelled.status, 'refused');
+  if (cancelled.status === 'refused') assert.equal(cancelled.reason, 'cancelled');
+  assert.deepEqual(cancelled.events, []);
+  const pre = executeQuery(query, { ...turnOptions, natalLongitudes: { Sun: 0 }, signal: controller.signal }, turn);
+  assert.equal(pre.evaluations, 0);
+});
+test('invalid and inapplicable station policy fails before provider creation', () => {
+  const unused: QueryProviders = { motion: () => { throw new Error('must not create a motion provider'); },
+    eclipse: () => { throw new Error('must not create an eclipse provider'); } };
+  for (const value of [null, 0, -1, 0.5, NaN, Infinity, Number.MAX_SAFE_INTEGER+1, dayMs+1, '10']) {
+    assert.throws(() => executeQuery(`next Mars ingresses ${range}`,
+      { ...turnOptions, stationStepMs: value as number }, unused), RangeError);
+  }
+  for (const kind of ['solar', 'lunar']) {
+    assert.throws(() => executeQuery(`next ${kind} eclipses ${range}`, { ...turnOptions,
+      eclipse: { model: { sunRadiusAu: 2, moonRadiusAu: 0.2, earthRadiusAu: 1 }, derivativeStepMs: 1 } }, unused),
+    /stationStepMs does not apply/);
+  }
+});

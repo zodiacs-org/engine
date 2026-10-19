@@ -17,8 +17,10 @@ const keys = (x: Record<string, unknown>, allowed: readonly string[]) => Object.
 function validRequest(x: unknown): x is { query: string; options: Record<string, unknown> } {
   if (!object(x) || !keys(x, ['query', 'options']) || typeof x.query !== 'string' || !object(x.options)) return false;
   const o = x.options;
-  if (!keys(o, ['stepMs', 'maxEvaluations', 'clock', 'horizon', 'natalLongitudes', 'eclipse']) ||
+  if (!keys(o, ['stepMs', 'stationStepMs', 'maxEvaluations', 'clock', 'horizon', 'natalLongitudes', 'eclipse']) ||
       !Number.isSafeInteger(o.stepMs) || (o.stepMs as number) < 1 ||
+      (o.stationStepMs !== undefined && (!Number.isSafeInteger(o.stationStepMs) ||
+        (o.stationStepMs as number) < 1 || (o.stationStepMs as number) > (o.stepMs as number))) ||
       !Number.isSafeInteger(o.maxEvaluations) || (o.maxEvaluations as number) < 1 ||
       (o.maxEvaluations as number) > HTTP_LIMITS.maxEvaluations) return false;
   if (o.natalLongitudes !== undefined && (!object(o.natalLongitudes) ||

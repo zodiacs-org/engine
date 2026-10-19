@@ -459,3 +459,39 @@ The milestone adds no parent build or archive operation. Its package isolation
 check passes without generating `dist/`. Query, HTTP and interval-policy
 integration remains P2; full-span completeness and performance remain later
 milestones in `PHASE2.md`.
+
+## Phase 2 P2
+
+Runtime: Node.js 22.23.3 from `/home/box/.local/node22/bin`. Dependencies were
+reinstalled from the events lockfile with the npm cache under `events/.cache/`.
+
+Passed:
+
+- `npm ci --prefix events --cache "$PWD/events/.cache/npm"`
+- `npm run typecheck --prefix events`
+- `npm run build --prefix events`
+- `npm test --prefix events`, including the phase 1 suites, new station-aware
+  composite, query and HTTP checks, independent reference reproduction,
+  long-span reconciliation and parent npm file-list isolation.
+- After adding a final composite query-dispatch test, typecheck and build
+  again, then `node --test --test-concurrency=1 events/build/test/search.node-test.js`.
+- `node events/scripts/loop-report.mjs --check`
+- `git diff --check`, authored-file size, documentation character, disk-use
+  and events-only change checks.
+
+Station-aware options now reach query and HTTP execution, station discovery,
+retrograde sign partitioning and void-of-course Moon ingresses and relative
+contacts. Analytic tests check hidden station pairs, direct-body relative
+turning points, clipping, sign overlap, option snapshots and all-or-nothing
+refusal or cancellation. Omitting the option retains the original policy;
+eclipse queries reject the inapplicable option before sampling.
+
+The independent paired Horizons rows also exercise query discovery and
+interpolated dates. HTTP checks the paired directions over those same source
+windows. These discovery checks do not assert default-engine date agreement:
+the original timing threshold and discrepancies in `evidence/station-loops.json`
+are unchanged. No new physical accuracy or full-span completeness claim is made.
+
+Generated logs and bundles remain ignored. No parent build, archive packing
+or release operation was run. Broader references, aggregate completeness and
+performance measurements remain the unchecked milestones in `PHASE2.md`.

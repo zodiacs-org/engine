@@ -18,6 +18,8 @@ import type { Clock, SearchOptions, SearchWindow, SearchResult } from './types.j
 export type QuerySearchEvent = SignIngress | ExactAspect | Station | RetrogradeInterval | EclipseEvent | VoidOfCourseInterval;
 export interface ExecuteOptions extends SearchOptions {
   readonly stepMs: number;
+  /** Optional speed-zero scan step for longitude-based searches and stations. */
+  readonly stationStepMs?: number;
   /** Required when the query omits a clock. Conflicting clocks are rejected. */
   readonly clock?: Clock;
   /** Required only for next queries without a range; no implicit current time. */
@@ -69,8 +71,18 @@ function snapshot(query: EventQuery): EventQuery {
 export function executeQuery(input: string | EventQuery, options: ExecuteOptions,
   providers: QueryProviders = {}): QueryExecutionResult {
   const query = typeof input === 'string' ? parseQuery(input) : snapshot(input);
-  if (!options || Object.keys(options).some(k => !['maxEvaluations', 'signal', 'stepMs', 'clock', 'horizon', 'natalLongitudes', 'eclipse'].includes(k)) ||
+  if (!options || Object.keys(options).some(k => !['maxEvaluations', 'signal', 'stepMs', 'stationStepMs', 'clock', 'horizon', 'natalLongitudes', 'eclipse'].includes(k)) ||
       !Number.isSafeInteger(options.stepMs) || options.stepMs < 1) throw new RangeError('Explicit positive integer stepMs is required.');
+  const stepMs = options.stepMs;
+  const stationStepMs = options.stationStepMs;
+  if (stationStepMs !== undefined && (!Number.isSafeInteger(stationStepMs) || stationStepMs < 1 || stationStepMs > stepMs)) {
+    throw new RangeError('stationStepMs must be a positive safe integer no greater than stepMs.');
+  }
+  if (query.event.kind === 'eclipse' && stationStepMs !== undefined) {
+    throw new RangeError('stationStepMs does not apply to eclipse queries.');
+  }
+  // Factories and sample callbacks may mutate their caller's options object.
+  const scan = Object.freeze({ stepMs, ...(stationStepMs === undefined ? {} : { stationStepMs }) });
   if (options.clock !== undefined && !['utc', 'ut1', 'tt'].includes(options.clock)) throw new RangeError('Unknown execution clock.');
   if (query.clock !== null && options.clock !== undefined && query.clock !== options.clock) throw new RangeError('Conflicting clocks.');
   const clock = query.clock ?? options.clock;
@@ -80,7 +92,6 @@ export function executeQuery(input: string | EventQuery, options: ExecuteOptions
   if (window.clock !== clock) throw new RangeError('Horizon clock differs from query clock.');
   const context = new EvaluationContext(window, { maxEvaluations: options.maxEvaluations,
     ...(options.signal === undefined ? {} : { signal: options.signal }) });
-  const scan = { stepMs: options.stepMs };
   const e = query.event;
   let unresolved: readonly UnresolvedMoonSegment[] = [];
   let result: SearchResult<QuerySearchEvent>;

@@ -8,7 +8,7 @@ cap from `../BRIEF.md`. Independent references supply astronomical
 expectations; analytic motion checks numerical behavior only.
 
 - [x] P1 Add opt-in station-aware bracketing for longitude crossings, ingresses and fixed or moving aspects, with shared budgets, boundary tests and independent repeated-pass dates reduced from the existing Horizons responses.
-- [ ] P2 Carry the station-aware policy through query execution, HTTP, retrograde sign partitions and void-of-course searches; test relative turning points, clipping, refusal and phase 1 compatibility.
+- [x] P2 Carry the station-aware policy through query execution, HTTP, retrograde sign partitions and void-of-course searches; test relative turning points, clipping, refusal and phase 1 compatibility.
 - [ ] P3 Acquire and verify a broader small Horizons station and ingress reference sample spanning 1900 to 2100, with source requests, retrieval dates, digests and thresholds declared before engine comparisons.
 - [ ] P4 Expand the independently verified NASA solar and lunar eclipse sample across 1900 to 2100, preserving catalog provenance, clocks and supported classification limits.
 - [ ] P5 Add a reproducible completeness report for fixed queries over 1900 to 2100, matching against the independent references and committing aggregate misses, unmatched results and timing errors with their measured scope.

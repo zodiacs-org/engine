@@ -1,8 +1,8 @@
 import { EvaluationContext, SearchInterrupted } from './context.js';
 import { EngineAdapter, EVENT_BODIES } from './engine.js';
 import type { EventBody } from './engine.js';
-import { searchSignIngresses, SIGNS } from './longitude.js';
-import type { LongitudeProvider, Sign } from './longitude.js';
+import { searchSignIngresses, snapshotLongitudeOptions, SIGNS } from './longitude.js';
+import type { LongitudeProvider, LongitudeScanOptions, Sign } from './longitude.js';
 import { refineRoot } from './root.js';
 import type { Clock, SearchResult } from './types.js';
 
@@ -11,7 +11,7 @@ export interface MotionProvider extends LongitudeProvider {
     readonly longitude: number; readonly speedDegreesPerDay: number | null;
   };
 }
-export interface StationOptions { readonly stepMs: number }
+export interface StationOptions extends Pick<LongitudeScanOptions, 'stepMs' | 'stationStepMs'> {}
 export interface RetrogradeOptions extends StationOptions { readonly sign?: Sign }
 export interface Station {
   readonly kind: 'station'; readonly body: EventBody; readonly atMs: number;
@@ -26,14 +26,17 @@ export interface RetrogradeInterval {
   readonly signSpans: readonly { readonly sign: Sign; readonly startMs: number; readonly endMs: number }[];
 }
 function validate(context: EvaluationContext, body: EventBody, options: RetrogradeOptions,
-  provider: MotionProvider, allowSign: boolean): void {
+  provider: MotionProvider, allowSign: boolean): RetrogradeOptions {
   if (!EVENT_BODIES.includes(body) || !options ||
-      Object.keys(options).some(k => !['stepMs', ...(allowSign ? ['sign'] : [])].includes(k)) ||
-      !Number.isSafeInteger(options.stepMs) || options.stepMs < 1 ||
+      Object.keys(options).some(k => !['stepMs', 'stationStepMs', ...(allowSign ? ['sign'] : [])].includes(k)) ||
       (options.sign !== undefined && !SIGNS.includes(options.sign))) {
     throw new RangeError('Invalid body, sampling step or sign.');
   }
+  const { stepMs, stationStepMs } = snapshotLongitudeOptions({ stepMs: options.stepMs,
+    ...(options.stationStepMs === undefined ? {} : { stationStepMs: options.stationStepMs }) });
   if (provider.context !== context) throw new TypeError('Provider must share the search context.');
+  return Object.freeze({ stepMs, ...(stationStepMs === undefined ? {} : { stationStepMs }),
+    ...(options.sign === undefined ? {} : { sign: options.sign }) });
 }
 function read(provider: MotionProvider, body: EventBody, t: number) {
   const sample = provider.sample(body, t, true);
@@ -78,22 +81,23 @@ function scan(context: EvaluationContext, body: EventBody, step: number, provide
 }
 export function searchStations(context: EvaluationContext, body: EventBody, options: StationOptions,
   provider: MotionProvider = new EngineAdapter(context)): SearchResult<Station> {
-  validate(context, body, options, provider, false);
-  const step = options.stepMs;
+  const { stepMs, stationStepMs } = validate(context, body, options, provider, false);
+  const step = stationStepMs ?? stepMs;
   return context.search(() => scan(context, body, step, provider));
 }
 export function searchRetrogradeIntervals(context: EvaluationContext, body: EventBody, options: RetrogradeOptions,
   provider: MotionProvider = new EngineAdapter(context)): SearchResult<RetrogradeInterval> {
-  validate(context, body, options, provider, true);
-  const { stepMs, sign } = options;
+  const { stepMs, stationStepMs, sign } = validate(context, body, options, provider, true);
+  const stationStep = stationStepMs ?? stepMs;
+  const ingressOptions = { stepMs, ...(stationStepMs === undefined ? {} : { stationStepMs }) };
   return context.search(() => {
-    const stations = scan(context, body, stepMs, provider);
-    const ingressResult = searchSignIngresses(context, body, { stepMs }, provider);
+    const stations = scan(context, body, stationStep, provider);
+    const ingressResult = searchSignIngresses(context, body, ingressOptions, provider);
     if (ingressResult.status === 'refused') throw new SearchInterrupted(ingressResult.reason);
     const { startMs, endMs, clock } = context.window;
     const initial = read(provider, body, startMs);
     const initialSpeed = initial.speed === 0
-      ? read(provider, body, startMs + Math.min(stepMs, endMs - startMs)).speed : initial.speed;
+      ? read(provider, body, startMs + Math.min(stationStep, endMs - startMs)).speed : initial.speed;
     let start: number | undefined = initialSpeed < 0 ? startMs : undefined;
     let clippedStart = start !== undefined;
     const intervals: RetrogradeInterval[] = [];

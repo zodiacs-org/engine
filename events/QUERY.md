@@ -102,6 +102,24 @@ clocks fail. A range-free `next` requires `horizon` with matching clock. An
 explicit query range cannot be overridden by a horizon. No current time,
 time-zone resolution, clock conversion or automatic horizon expansion occurs.
 
+Optional `stationStepMs` selects station-aware scanning. It must be a positive
+safe integer no greater than `stepMs`, in milliseconds. Longitude and ingress
+searches split cells at resolved speed zeros; moving aspects use the difference
+of the bodies' speeds, so a relative turning point can occur while both bodies
+move direct. Station searches use `stationStepMs` as their speed scan interval.
+Retrograde sign partitions and void-of-course searches carry the same explicit
+policy through their component scans. Omitting it retains the original scan
+policy and its evaluation behavior. Both steps are copied before custom
+provider callbacks run.
+
+This policy still assumes continuous motion, resolved isolated speed zeros
+and monotone short arcs between the discovered knots. Unresolved reversals
+inside a speed cell can hide contacts. It is a caller-selected sampling policy,
+not a proof of physical completeness. Eclipse queries reject `stationStepMs`
+because longitude speed zeros do not govern their geometry search. The HTTP
+request accepts and validates the same option; incompatible eclipse requests
+receive the structured `invalid-request` error.
+
 Natal queries require `natalLongitudes` to supply the target body's fixed
 tropical longitude in degrees. Eclipse queries require `eclipse.model` with
 explicit spherical `sunRadiusAu`, `moonRadiusAu` and `earthRadiusAu`, and
@@ -142,8 +160,14 @@ boundary, not untrusted input to the DSL or HTTP endpoint.
 [test/search.node-test.ts](test/search.node-test.ts) checks dispatch, filtered earliest
 selection, explicit horizons, clock conflicts, symbolic targets, clipped
 intervals, unresolved tails, malformed AST rejection and all-or-nothing
-refusals with analytic providers. Its synthetic natal square also uses the
+refusals with analytic providers. Station-policy checks cover paired passes,
+relative turning points with both bodies direct, step snapshots, validation
+and shared refusal controls. Its synthetic natal square also uses the
 independent JPL date and predeclared tolerance from
 [references/horizons.json](references/horizons.json) over that fixture's window.
+The HTTP integration checks paired-pass discovery against the independent
+directions in [references/loop-cases.json](references/loop-cases.json); its
+timing discrepancies remain separately recorded in
+[evidence/station-loops.json](evidence/station-loops.json).
 The remaining Horizons and NASA date tests still exercise the underlying
 searches over their documented reference selections.
