@@ -299,3 +299,55 @@ test('retained Swiss pilot binds completed paired aggregates without per-case va
     assert(!/"(?:actual|output|perCase|positions)"\s*:/.test(bytes));
   }
 });
+
+test('retained million-target progress binds measured prefixes, paired counts and resource evidence', async () => {
+  const base = new URL('../reports/phase2-million-tt-progress', import.meta.url);
+  const report = JSON.parse(await readFile(new URL(base.href + '.json'), 'utf8'));
+  const resourceBytes = await readFile(new URL(base.href + '-resources.json'), 'utf8');
+  const resources = JSON.parse(resourceBytes);
+  assert.deepEqual(report.campaign, campaignIdentity(report.campaign.config, report.campaign.identities));
+  assert.equal(report.complete, false); assert.equal(report.completed, 3072);
+  assert.equal(report.campaign.config.total, 1000000);
+  assert.equal(report.campaign.config.seed, 'synthetic-phase2-million-v1');
+  assert.equal(report.span.startMsInclusive, Date.UTC(1800, 0, 1));
+  assert.equal(report.span.endMsExclusive, Date.UTC(2200, 0, 1));
+  assert.deepEqual(report.coverage.map(item => [item.completed, item.firstIndex, item.lastIndex, item.stride]),
+    [[1024, 0, 3069, 3], [1024, 1, 3070, 3], [1024, 2, 3071, 3]]);
+  assert.deepEqual(report.metadata.command, ['node', 'crosscheck/tools/campaign.mjs', 'crosscheck/runtime/p5-million.json', 'snapshot']);
+  assert.equal(report.referenceGroups.DE441.status, 'empty');
+  assert.equal(report.referenceGroups.DE441.numericalResiduals, 0);
+  assert.equal(report.swissInstrument.status, 'available');
+  assert.equal(report.swissInstrument.swiephResponses, report.completed * bodies.length);
+  assert.equal(report.swissInstrument.moshierFallbackResponses, 0);
+  assert.equal(report.swissInstrument.otherBackendFallbackResponses, 0);
+  assert.deepEqual(report.swissInstrument.returnedFlags, { 2: report.completed * bodies.length });
+  for (const [name, channel] of Object.entries(report.channels)) {
+    if (!/^(JPL|Convention|Swiss|SwissJPL)\.DE44[01]\./.test(name)) continue;
+    const measured = channel.referenceGroup === 'DE440' && bodies.includes(channel.body);
+    assert.equal(channel.statistics.n, measured ? report.completed : 0);
+    if (!measured) assert.equal(channel.statistics.maxAbs, null);
+    else for (const [key, probability] of [['median', 0.5], ['p99', 0.99], ['p999', 0.999]])
+      assert.equal(channel.statistics.absoluteQuantiles[key].rank, Math.ceil(report.completed * probability));
+  }
+  assert.equal(resources.campaignSha256, report.campaign.sha256);
+  assert.equal(resources.completed, report.completed); assert.equal(resources.complete, false);
+  assert.equal(resources.requested, report.campaign.config.total);
+  assert.equal(resources.invocations.length, 3);
+  assert.deepEqual(resources.invocations.map(entry => entry.processed), [0, 3, 3069]);
+  assert.deepEqual(resources.checkpointPrefixes, [1024, 1024, 1024]);
+  assert(resources.invocations.every(entry => entry.elapsedNanoseconds > 0 &&
+    entry.diskBefore.usedBytes < entry.diskBefore.limitBytes && entry.diskAfter.usedBytes < entry.diskAfter.limitBytes));
+  const { renderResources } = await import('../tools/progress.mjs');
+  const ledger = Object.fromEntries(['schema', 'spec', 'specSha256', 'campaignSha256', 'invocations'].map(key => [key, resources[key]]));
+  const rendered = renderResources(ledger, resources.spec, {
+    campaignSha256: report.campaign.sha256, completed: report.coverage.map(item => item.completed) });
+  assert.equal(rendered.json, resourceBytes);
+  assert.equal(rendered.markdown, await readFile(new URL(base.href + '-resources.md'), 'utf8'));
+  // Retention and count evidence only; no instrument-derived numerical expectation.
+  for (const suffix of ['.json', '.csv', '.md', '-resources.json', '-resources.md']) {
+    const bytes = await readFile(new URL(base.href + suffix), 'utf8');
+    assert(!bytes.includes('/workspace/')); assert(!bytes.includes('/home/'));
+    assert(!/[\u2013\u2014]/.test(bytes));
+    assert(!/"(?:actual|output|perCase|positions|stdout|stderr)"\s*:/.test(bytes));
+  }
+});

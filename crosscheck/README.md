@@ -10,8 +10,10 @@ checkpointed sharded runner and deterministic aggregate report tooling.
 A bounded engine campaign and its measured aggregate error report are now
 [available](reports/bounded-sample.md). The wider
 [phase 2 pilot](reports/phase2-pilot.md) adds grouped angular and distance
-statistics over the configured TT sampling span. Million-chart execution remains
-unmeasured.
+statistics over the configured TT sampling span. The checkpointed
+[million-target progress report](reports/phase2-million-tt-progress.md) records
+the completed prefix of the larger paired campaign. The requested million
+charts are not complete.
 
 The JPL comparison uses public DE440/DE441 kernels downloaded from
 NAIF/JPL at runtime into runtime/cache/. Kernels are stored in bounded
@@ -763,8 +765,62 @@ and percentiles. The pilot ran without Swiss and retained no per-case values.
 Its budget-stop/resume and fresh numerical reproduction commands are in
 [VALIDATION.md](VALIDATION.md). Historical aggregate report bytes are preserved.
 
-After the isolated build and runtime ERFA acquisition described above, an
-example requesting a million-scale campaign is:
+P5 started the larger paired campaign. Its
+[aggregate markdown](reports/phase2-million-tt-progress.md),
+[CSV](reports/phase2-million-tt-progress.csv) and
+[receipt](reports/phase2-million-tt-progress.json) record 3,072 completed
+synthetic charts from a target of 1,000,000, with per-shard prefix coverage,
+seed, build and reference identities. The configured half-open sampling
+interval is 1800-01-01 to 2200-01-01 TT; it is not continuous coverage.
+The [resource receipt](reports/phase2-million-tt-progress-resources.md)
+records the actual budget-stop and resume commands, elapsed durations,
+Node-only CPU and maximum RSS, and combined runtime/cache byte snapshots.
+tests/grouped-campaign.node-test.mjs enforces these completed counts and
+bindings and reproduces the resource artifacts without running instruments.
+
+With the approved external instrument selected through CROSSCHECK_PYTHON
+and SE_EPHE_PATH, these commands were run from the repository root:
+
+```sh
+node crosscheck/tools/progress.mjs crosscheck/runtime/p5-million.json all 0
+node crosscheck/tools/progress.mjs crosscheck/runtime/p5-million.json all 1
+node crosscheck/tools/progress.mjs crosscheck/runtime/p5-million.json all 1023
+node crosscheck/tools/campaign.mjs crosscheck/runtime/p5-million.json snapshot
+node crosscheck/tools/campaign.mjs crosscheck/runtime/p5-million.json snapshot-check
+node crosscheck/tools/progress.mjs crosscheck/runtime/p5-million.json report
+node crosscheck/tools/progress.mjs crosscheck/runtime/p5-million.json check
+```
+
+The specification is recorded in both receipts. Progress snapshots use the
+separate `-progress` report name and allow incomplete shards explicitly;
+ordinary report/check still require completion. A partial report includes
+only the completed checkpoint prefixes. It never divides statistics by the
+requested target. The resource wrapper calls the driver in the same Node
+process and records no instrument output. Shards run serially, with one
+external adapter. Elapsed time includes that adapter; CPU and maximum RSS
+exclude its resource use. Disk snapshots count kernels and all other logical
+file bytes under runtime/ and cache/.
+
+Continue this campaign in P6 with the same specification, source, runtime,
+verified references and external selectors. Use the progress wrapper for
+every bounded continuation so its ledger remains continuous. Stop workers
+before snapshot or resource export. Preserve the P5 progress artifacts;
+the completed campaign uses its original name for its final report. Current
+snapshot checks require the original saved prefix, so after further work
+use the retained progress bundle to reproduce the P5 artifacts:
+
+```sh
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/phase2-million-tt/progress-bundle.json phase2-million-tt-progress --allow-partial --check
+```
+
+Do not overwrite that saved bundle with a later snapshot. The runtime
+resource ledger continues separately; the P5 resource receipt remains
+reproducible from its committed aggregate fields through renderResources.
+An executable harness change requires a new campaign identity and cannot
+resume these checkpoints.
+
+For a separate campaign, after the isolated build and runtime ERFA acquisition
+described above, an example requesting a million-scale campaign is:
 
 ```sh
 cat > crosscheck/runtime/million.json <<'JSON'

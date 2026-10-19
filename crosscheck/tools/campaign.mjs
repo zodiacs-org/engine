@@ -110,11 +110,33 @@ export async function executeCampaign({ spec, config, identities, evaluate, dire
   return { campaign, complete: results.every(result => result.complete) };
 }
 
+// Progress artifacts have a separate name and never relax final-report checks.
+export async function saveCampaignReport({ bundle, directory, name, action }) {
+  if (!['report', 'check', 'snapshot', 'snapshot-check'].includes(action)) throw Error('Invalid report action.');
+  const allowPartial = action.startsWith('snapshot');
+  const bytes = JSON.stringify(bundle) + '\n';
+  if (Buffer.byteLength(bytes) >= MAX_FILE_BYTES) throw Error('Bundle exceeds file limit.');
+  const bundlePath = resolve(directory, allowPartial ? 'progress-bundle.json' : 'report-bundle.json');
+  // Validate the runtime path before any write, including its parent directories.
+  const rel = relative(runtime, bundlePath);
+  if (!rel || rel.startsWith('..') || isAbsolute(rel)) throw Error('Bundle must be below crosscheck/runtime.');
+  let current = runtime;
+  for (const part of ['', ...rel.split('/')]) {
+    current = resolve(current, part);
+    try { if ((await lstat(current)).isSymbolicLink()) throw Error('Bundle symlink forbidden.'); }
+    catch (error) { if (error.code !== 'ENOENT') throw error; }
+  }
+  await writeFile(bundlePath, bytes);
+  await reportFile(bundlePath, name + (allowPartial ? '-progress' : ''), {
+    check: ['check', 'snapshot-check'].includes(action), allowPartial });
+}
+
 export async function main(args) {
   const [input, action, ...options] = args;
-  if (!input || !action || options.length > 1) throw Error('Usage: campaign.mjs SPEC all|SHARD|report|check [MAX_CASES]');
+  if (!input || !action || options.length > 1) throw Error('Usage: campaign.mjs SPEC all|SHARD|report|check|snapshot|snapshot-check [MAX_CASES]');
   const spec = validateSpec(await readRuntimeJson(input));
-  const reporting = ['report', 'check'].includes(action);
+  const reporting = ['report', 'check', 'snapshot', 'snapshot-check'].includes(action);
+  const allowPartial = ['snapshot', 'snapshot-check'].includes(action);
   if (reporting && options.length) throw Error('Report takes no budget.');
   const shard = action === 'all' ? 'all' : Number(action);
   const maxCases = options.length ? Number(options[0]) : Number.MAX_SAFE_INTEGER;
@@ -172,11 +194,12 @@ export async function main(args) {
     for (let index = 0; index < spec.shards; index++) states.push(validateCheckpoint(
       await readRuntimeJson(resolve(directory, `shard-${index}.json`)), campaign, index));
     const bundle = { campaign, states, metadata: { title: 'Synthetic TT chart campaign',
-      command: ['node', 'crosscheck/tools/campaign.mjs', input, 'report'],
+      command: ['node', 'crosscheck/tools/campaign.mjs', input, allowPartial ? 'snapshot' : 'report'],
       runtime: { node: process.version, platform: process.platform, arch: process.arch },
       units: Object.fromEntries(Object.keys(config.channels).map(name => [name, name.endsWith('.distance') ? 'km' : 'arcseconds'])),
       exclusions: [
-        `Reproduction: node crosscheck/tools/campaign.mjs ${input} all, then report. Specification: ${JSON.stringify(spec)}. Preserve external Swiss environment selectors if enabled.`,
+        allowPartial ? `Partial reproduction from empty checkpoints: node crosscheck/tools/campaign.mjs ${input} all 0, then run each shard with MAX_CASES equal to its completed count in this receipt, then snapshot. Specification: ${JSON.stringify(spec)}. Preserve external Swiss environment selectors if enabled.` :
+          `Reproduction: node crosscheck/tools/campaign.mjs ${input} all, then report. Specification: ${JSON.stringify(spec)}. Preserve external Swiss environment selectors if enabled.`,
         'Only exact Sun/Moon/Mercury/Venus centers compared; no other planets, houses, nodes, angles, speeds or topocentric checks. No UTC/UT1 validation.',
         ...(wide ? [
           'Full DE440 covers the entire requested TT span; DE441 has no selected interval or measurements. Inactive group and missing exact-center verdicts are unsupported, never zero-error observations.',
@@ -190,13 +213,7 @@ export async function main(args) {
         'Swiss.positions is the legacy unavailable channel; per-body Swiss channels carry measurements only when configured. Non-SWIEPH responses, including Moshier fallback, error and unsupported verdicts contain no residuals.',
         'Sample maxima are not unsampled bounds; no throughput guarantee. Command records report invocation; reproduction command above runs all shards from scratch with identical inputs.'
       ] } };
-    const bytes = JSON.stringify(bundle) + '\n';
-    if (Buffer.byteLength(bytes) >= MAX_FILE_BYTES) throw Error('Bundle exceeds file limit.');
-    const bundlePath = resolve(directory, 'report-bundle.json');
-    try { if ((await lstat(bundlePath)).isSymbolicLink()) throw Error('Bundle symlink forbidden.'); }
-    catch (error) { if (error.code !== 'ENOENT') throw error; }
-    await writeFile(bundlePath, bytes);
-    await reportFile(bundlePath, spec.name, { check: action === 'check' });
+    await saveCampaignReport({ bundle, directory, name: spec.name, action });
     console.log('Campaign aggregate report verified.');
   } finally { swiss?.close(); }
 }

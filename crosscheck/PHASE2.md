@@ -12,7 +12,7 @@ external harness handles git writes and CI.
 - [x] S2 Add a dedicated Node import and dependency guard over tracked repository files, exempting crosscheck/ and the brief's frozen exact paths for pre-existing test-only tooling; reject Swiss dependencies everywhere, prove rejection with negative fixtures, document each allowed path and run the strict repository scan in the dedicated crosscheck CI job.
 - [x] P4 Extend the campaign and aggregate reports to group each body's longitude, latitude and distance errors by DE440 and DE441 span, separate convention differences, and pass a real bounded pilot with exact commands, seed and verified build/kernel identities.
 - [x] S3 Extend the campaign for the same synthetic charts with separate engine-versus-JPL, engine-versus-Swiss and Swiss-versus-JPL per-body angular aggregates, including max, p99.9, p99 and median; bind Swiss version, returned flags, fallback counts and ephemeris SHA-256 identities, test unavailable operation and include the comparison in the large run below.
-- [ ] P5 Start the larger campaign toward at least 1,000,000 synthetic charts with at most three active worker processes; validate a budget stop and checkpoint resume and commit only completed aggregate progress with actual counts and resource evidence.
+- [x] P5 Start the larger campaign toward at least 1,000,000 synthetic charts with at most three active worker processes; validate a budget stop and checkpoint resume and commit only completed aggregate progress with actual counts and resource evidence.
 - [ ] P6 Continue that checkpointed campaign in a later session; finish the requested count if practical or retain the largest completed campaign with a plain explanation of the measured time or disk limit, and publish aggregate markdown and CSV with a short arcsecond summary and its measured span.
 - [ ] S4 Add a short plain-language headline to the final report stating measured engine accuracy versus JPL and versus Swiss in arcseconds, the sampled span and actual chart count; keep unavailable comparisons explicit.
 - [ ] P7 Audit final counts, per-body and per-span statistics, command/build/kernel/seed receipts and report reproduction; keep Swiss absence explicit and tested, update current documentation, and pass the dedicated Node 22 project checks.
@@ -32,9 +32,10 @@ execution is folded into P5 and P6. S4 summarizes the completed measurement.
 The completed P1 to P3 records and their historical Swiss absence remain
 unchanged. Environment selectors are documented without local paths.
 
-Current status: S3 is complete with paired Swiss aggregates, a bounded live
-pilot and Node 22 validation passing. P5 is the next unchecked milestone.
-The large run will use the paired integration prepared in S3. The notes below
+Current status: P5 is complete with a checkpointed million-chart target,
+paired aggregate progress and measured resource receipts. P6 is the next
+unchecked milestone and continues the same campaign in a later session.
+The notes below
 preserve earlier session history; the S2 completion record supersedes its
 earlier pending scope and runtime blockers.
 
@@ -164,3 +165,21 @@ suite, syntax, isolated build identity, import/dependency guard, npm exclusion
 and file/storage checks passed. VALIDATION.md records commands and limits.
 S3's large-run execution remains folded into P5 and P6; no large campaign was
 started here.
+
+P5 starts the million-chart target and retains 3,072 completed synthetic
+charts, split into completed prefixes of 1,024 per shard. The live
+initialization, budget stop and continuation use one Node process with
+serial shards and one external Swiss adapter. Separate partial snapshots
+preserve actual counts without relaxing final-report completion checks.
+reports/phase2-million-tt-progress records paired JPL and Swiss aggregates;
+its resource receipt records exact commands and execution directories,
+checkpoint continuity, measured elapsed time, Node-only CPU/RSS and combined
+runtime/cache snapshots. Storage stays within the brief's cap and every
+file stays below its limit. No time extrapolation is claimed. Full DE440
+covers the configured TT interval; DE441 and unavailable exact centers have
+no measurements. The executable identity was frozen before the retained
+live run after a working-directory validation correction. The full Node 22
+suite, build identity, report reproduction, import boundary, npm exclusion
+and file/storage checks pass. VALIDATION.md records the commands and limits.
+P6 must preserve the P5 progress artifacts and executable identity while
+continuing the resource ledger; the requested million charts are incomplete.

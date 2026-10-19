@@ -1206,3 +1206,107 @@ The full dedicated suite, isolated build identity, import/dependency boundary,
 historical aggregate reproduction, npm exclusion and file/storage checks
 passed. S3 prepares the paired comparisons for P5 and P6; the large campaign
 has not started in this milestone.
+
+## Phase 2 P5 checkpointed campaign progress
+
+P5 starts a campaign with a requested target of 1,000,000 synthetic TT
+charts. The committed [progress receipt](reports/phase2-million-tt-progress.json),
+[markdown](reports/phase2-million-tt-progress.md) and
+[CSV](reports/phase2-million-tt-progress.csv) record only 3,072 completed
+charts, with completed prefixes of 1,024 in each shard. The configured
+half-open TT sampling interval is 1800-01-01 to 2200-01-01. This is a partial
+campaign, not a completed million-chart measurement or continuous coverage.
+P6 continues the same checkpoints in a later session.
+
+The [resource receipt](reports/phase2-million-tt-progress-resources.json)
+and [rendered evidence](reports/phase2-million-tt-progress-resources.md)
+record each actual invocation, its before/after checkpoint counts, measured
+elapsed duration, Node CPU deltas, Node maximum RSS and combined
+runtime/cache usage. The wrapper runs the driver in the same Node process;
+the driver processes shards serially with one external Swiss adapter.
+Elapsed durations include driver startup, reference/build verification and
+adapter comparisons. CPU and maximum RSS cover only Node and exclude the
+adapter. Disk snapshots include kernels; the after snapshot precedes that
+invocation's ledger write. Final file/storage safeguards check the later
+runtime state too. No execution-time extrapolation is made.
+
+The first invocation initializes all shard checkpoints without evaluating a
+chart. The next stops after a single chart per shard. The final bounded
+invocation resumes those exact identities and adds the remaining completed
+prefix. Each invocation stops at its explicit case budget, saves aggregates
+and releases its locks. The resource ledger refuses discontinuous counts,
+changed identities and unrecorded work. The ordinary report and check
+actions still refuse incomplete campaigns; snapshot actions opt into
+partial reporting under a separate progress name.
+
+The same charts supply separate engine-minus-JPL, engine-minus-Swiss and
+Swiss-minus-JPL angular statistics, with the JPL distance and convention
+channels retained. Returned responses use SWIEPH; the progress receipt
+records flags and fallback counts. The full DE440 span contains the
+configured interval, leaving DE441 empty. Missing exact planet centers
+remain unavailable without barycenter substitution. The earlier reports
+and their instrument availability are unchanged.
+
+Recreate crosscheck/runtime/p5-million.json with this specification:
+
+```json
+{"name":"phase2-million-tt","profile":"phase2","kernel":"de440","seed":"synthetic-phase2-million-v1","total":1000000,"shards":3}
+```
+
+With Node v22.23.3 on PATH, verified cached references, the isolated build,
+and CROSSCHECK_PYTHON and SE_EPHE_PATH selecting the approved external
+installation, these commands ran from the repository root:
+
+```sh
+node crosscheck/tools/progress.mjs crosscheck/runtime/p5-million.json all 0
+node crosscheck/tools/progress.mjs crosscheck/runtime/p5-million.json all 1
+node crosscheck/tools/progress.mjs crosscheck/runtime/p5-million.json all 1023
+node crosscheck/tools/campaign.mjs crosscheck/runtime/p5-million.json snapshot
+node crosscheck/tools/campaign.mjs crosscheck/runtime/p5-million.json snapshot-check
+node crosscheck/tools/progress.mjs crosscheck/runtime/p5-million.json report
+node crosscheck/tools/progress.mjs crosscheck/runtime/p5-million.json check
+```
+
+tests/operations.node-test.mjs checks snapshot reproduction and strict final
+completion with invented arithmetic. tests/progress.node-test.mjs checks
+duration/counter arithmetic, budget and prefix continuity, disk refusal,
+identity binding, aggregate-only fields and deterministic rendering. Stored
+commands include their repository-relative working directory; rendering
+validates those paths independently of its own current directory. This
+check passed both from the repository root and through the project's npm
+test command. The live prefix was rerun after this executable correction
+so its receipt binds the final tooling identity.
+tests/grouped-campaign.node-test.mjs enforces the retained target, completed
+count, seed, span, stride coverage, per-body paired counts and response flags.
+It also reproduces the committed resource artifacts. These tests assert
+receipt and retention behavior, with no Swiss-derived position expectation.
+
+Final validation used Node v22.23.3 without Swiss selectors for ordinary
+checks:
+
+```sh
+npm --prefix crosscheck run check:syntax
+node crosscheck/tools/check-swiss.mjs
+npm --prefix crosscheck run build
+npm --prefix crosscheck run verify
+npm --prefix crosscheck test
+node crosscheck/tools/validate-frames.mjs --phase2 --check
+node crosscheck/tools/reference-plan.mjs --check
+node crosscheck/tools/render-jpl.mjs --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/phase2-pilot/report-bundle.json phase2-pilot --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/phase2-swiss-pilot/report-bundle.json phase2-swiss-pilot --check
+npm --prefix crosscheck run check
+node crosscheck/tools/check.mjs --all-sizes
+git diff --check
+```
+
+The full dedicated suite, build identity, import boundary, historical
+aggregate reproduction, npm exclusion and file/storage safeguards pass.
+Only aggregate reports and reproducibility evidence are retained. Runtime
+checkpoints and public kernels stay ignored; Swiss software and data stay
+external. Further execution must keep the executable harness unchanged to
+resume this campaign identity and use the progress wrapper to maintain its
+resource ledger. Preserve the P5 progress bundle before writing a later
+snapshot; completed aggregate artifacts are not overwritten.

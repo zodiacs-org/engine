@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, rm, readFile, writeFile, symlink, readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { executeCampaign, validateSpec, readRuntimeJson, withSwiss, swissChannels } from '../tools/campaign.mjs';
+import { executeCampaign, validateSpec, readRuntimeJson, withSwiss, swissChannels, saveCampaignReport } from '../tools/campaign.mjs';
 import { observation, TARGETS } from '../lib/campaign.mjs';
 import { renderReport } from '../lib/report.mjs';
 import { MAX_FILE_BYTES } from '../tools/check.mjs';
@@ -49,6 +49,29 @@ test('million-case driver stops at per-shard budget without enumerating campaign
     } });
   assert.equal(result.complete, false); assert.deepEqual(seen, [3, 7]);
   assert.ok((await readFile(directory + '/shard-3.json')).length < MAX_FILE_BYTES);
+});
+test('progress snapshots retain actual prefixes, reproduce and leave final-report completion checks strict', async t => {
+  const directory = await fixture(t), name = 'invented-snapshot-test-' + process.pid;
+  const paths = ['json', 'csv', 'md'].map(ext => project + `reports/${name}-progress.${ext}`);
+  t.after(() => Promise.all(paths.map(path => rm(path, { force: true }))));
+  const args = { spec, config, identities, directory,
+    evaluate: async sample => ({ arithmetic: observation(sample.index % 5 - 2, 2) }) };
+  const run = await executeCampaign({ ...args, maxCases: 1 });
+  const states = await Promise.all(Array.from({ length: spec.shards }, (_, shard) => readRuntimeJson(`${directory}/shard-${shard}.json`)));
+  const bundle = { campaign: run.campaign, states, metadata: { title: 'Invented progress snapshot',
+    command: ['node', 'invented', 'snapshot'], runtime: { node: process.version, platform: process.platform, arch: process.arch },
+    units: { arithmetic: 'invented units' }, exclusions: ['No physical accuracy measurement'] } };
+  const report = action => saveCampaignReport({ bundle, directory, name, action });
+  await assert.rejects(report('report'), /Incomplete/);
+  await report('snapshot'); await report('snapshot-check');
+  const receipt = JSON.parse(await readFile(paths[0], 'utf8'));
+  assert.equal(receipt.completed, spec.shards); assert.equal(receipt.complete, false);
+  assert.deepEqual(receipt.coverage.map(item => item.lastIndex), [0, 1, 2, 3]);
+  await assert.rejects(report('snapshot'), { code: 'EEXIST' });
+  for (const ext of ['json', 'csv', 'md']) await assert.rejects(readFile(project + `reports/${name}.${ext}`), { code: 'ENOENT' });
+  bundle.states[0].completed++;
+  await assert.rejects(report('snapshot-check'), /aggregates/);
+  await assert.rejects(saveCampaignReport({ bundle, directory: project, name, action: 'snapshot' }), /below/);
 });
 test('in-flight interruption saves its case, releases the lock and resumes without duplicates', async t => {
   const directory = await fixture(t), controller = new AbortController(), seen = [];
