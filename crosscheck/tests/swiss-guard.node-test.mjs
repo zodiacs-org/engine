@@ -45,6 +45,10 @@ test('negative source fixtures reject literal Swiss imports and requires', () =>
     ['src/example.py', 'importlib.import_module(name="swisseph")'],
     ['src/example.py', 'importlib.import_module(name=("swisseph"))'],
     ['src/example.py', '__import__(name="swisseph")'],
+    ['src/example.py', '__import__("swiss" "eph")'],
+    ['src/example.py', 'importlib.import_module("py" "swisseph")'],
+    ['src/example.py', 'importlib.import_module(name=("py" # adjacent literal\n "swiss"\n "eph"))'],
+    ['src/example.py', '__import__("swiss" \\\n "eph")'],
     ['src/example.py', '__import__(r"swisseph")'],
     ['src/example.py', '__import__(u"swisseph")'],
     ['src/example.py', String.raw`__import__("swiss\145ph")`],
@@ -89,11 +93,39 @@ test('source comments, docstrings, other imports and documentation are allowed',
     ['src/example.py', 'message = f"{value:__import__(\'swisseph\')}"'],
     ['src/example.py', String.raw`__import__(r"swiss\x65ph")`],
     ['src/example.py', String.raw`__import__("swiss\eph")`],
+    ['src/example.py', '__import__("swiss"); "eph"'],
+    ['src/example.py', '__import__("swiss")\n"eph"'],
+    ['src/example.py', 'importlib.import_module("other", "swisseph")'],
+    ['src/example.py', 'message = "swiss" "eph"'],
     ['src/example.js', 'import example from "swissephology";'],
     ['docs/example.md', '```python\nimport swisseph\n```'],
     ['data/example.json', '{"instrument":"pyswisseph"}']
   ];
   for (const [path, source] of fixtures) assert.deepEqual(inspectTrackedFile(path, source), [], path);
+});
+
+test('comment boundaries use the source language line terminators', () => {
+  for (const terminator of ['\r', '\r\n', '\u2028', '\u2029']) {
+    assert.deepEqual(inspectTrackedFile('src/example.js', `// comment${terminator}require("swisseph");`), [
+      { path: 'src/example.js', rule: 'import', line: 2, reason: 'Swiss import forbidden' }
+    ]);
+  }
+  for (const terminator of ['\r', '\r\n']) {
+    assert.deepEqual(inspectTrackedFile('src/example.py', `# comment${terminator}import swisseph`), [
+      { path: 'src/example.py', rule: 'import', line: 2, reason: 'Swiss import forbidden' }
+    ]);
+  }
+  for (const separator of ['\u2028', '\u2029']) {
+    assert.deepEqual(inspectTrackedFile('src/example.py', `# comment${separator}import swisseph`), []);
+  }
+});
+
+test('tracked repository manifests reject Swiss dependencies and src imports stay absent', async () => {
+  const repository = fileURLToPath(new URL('../../', import.meta.url));
+  const errors = await checkSwissBoundary(repository);
+  assert.deepEqual(errors.filter(error => error.rule !== 'import'), [], 'all tracked dependency files must pass');
+  assert.deepEqual(errors.filter(error => error.rule === 'import' && error.path.startsWith('src/')), [],
+    'tracked engine source must have no Swiss imports');
 });
 
 test('only exact crosscheck and sanctioned adapter paths exempt imports', () => {

@@ -92,6 +92,10 @@ The fixture suite also exercises Python formatted-string expressions and
 literal loader arguments, JavaScript regexes beside imports, continued
 dependency names, legacy lockfiles and shebang scripts with unusual suffixes.
 This remains a lexical policy check rather than a complete language parser.
+Repository integration tests also reject Swiss dependency declarations in
+tracked manifests and Swiss imports under src/. These assertions run through
+the existing dedicated Node test step without exempting historical scripts
+from the strict scanner. They do not complete the full repository import gate.
 
 The file checker inspects publishable project files, rejects symbolic links,
 known kernel/binary file names, oversized files and em dashes in documents.

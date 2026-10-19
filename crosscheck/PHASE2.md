@@ -95,3 +95,11 @@ The requested scope decision remains pending, so S2 stays unchecked and no
 failing repository gate or historical baseline has been added. Syntax,
 runtime independent tests, report reproduction and safeguards pass locally;
 build and full-suite runtime checks still require Node 22.
+
+S2 now also enforces the repository-wide dependency boundary and the engine
+source import boundary through the dedicated Node test glob. The scanner
+recognizes adjacent Python literal loader arguments and the source
+languages' line terminators, with negative and allowed-source fixtures.
+The strict full-repository import scan still rejects the historical scripts
+listed in VALIDATION.md. No historical baseline is authorized or added;
+S2 remains unchecked and campaign expansion has not started.

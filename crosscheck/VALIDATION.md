@@ -864,3 +864,48 @@ Node runtime acceptance and isolated-build tests failed, at requireNode22.
 Build and verify refused the same unsupported executable. The strict Swiss
 scan failed with the same historical-import findings; this session does not
 establish a green repository guard or a passing full Node 22 suite.
+
+## Phase 2 S2 repository boundary tests and literal scanning
+
+Added repository integration assertions to tests/swiss-guard.node-test.mjs:
+every tracked dependency file must pass, and tracked src/ files must have no
+Swiss import findings. The dedicated workflow's existing npm test step runs
+these assertions through its Node test glob. They enforce these boundaries
+now without accepting a baseline of historical imports. The full strict
+command retains its original exemptions and still rejects the historical
+scripts listed above, so S2 remains incomplete.
+
+Fixed literal-scanning gaps for adjacent Python string arguments, including
+comments, grouped physical lines and explicit line continuation. Separate
+statements and separate arguments remain separate. Comment boundaries and
+line numbers now use CR and CRLF for Python, with JavaScript's Unicode line
+separators additionally recognized for JavaScript. Negative and allowed-source
+fixtures exercise both languages without importing Swiss or using instrument
+values. These remain lexical checks, not arbitrary program analysis.
+
+Executed from the repository root with the available Node v20.19.2:
+
+```sh
+npm ci --prefix crosscheck --ignore-scripts --no-audit --no-fund --cache "$PWD/crosscheck/runtime/npm-cache"
+npm --prefix crosscheck run check:syntax
+node --test crosscheck/tests/swiss-guard.node-test.mjs
+npm --prefix crosscheck test
+npm --prefix crosscheck run build
+npm --prefix crosscheck run verify
+node crosscheck/tools/check-swiss.mjs
+node crosscheck/tools/render-jpl.mjs --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+npm --prefix crosscheck run check
+node crosscheck/tools/check.mjs --all-sizes
+git diff --check
+```
+
+The guard fixtures and repository integration assertions pass. Syntax,
+runtime independent tests, retained aggregate rendering, npm exclusion and
+file/storage safeguards pass. The existing runtime acceptance and isolated
+build tests fail at requireNode22; build and verify refuse this unsupported
+executable. The strict Swiss scan still fails on the same historical imports.
+This does not establish a passing full Node 22 suite or full repository import
+gate. No baseline, historical import exemption, campaign or live Swiss run
+was added. All changed files stay inside crosscheck/.

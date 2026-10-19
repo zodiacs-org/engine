@@ -23,6 +23,10 @@ function dependencyKind(path) {
 // arbitrary programs. Scan interpolation expressions while excluding comments
 // and literal string text.
 function tokens(source, python) {
+  // Python normalizes CR and CRLF, while JavaScript also treats its Unicode
+  // line separators as terminators. Keep comment boundaries and line numbers
+  // consistent with the language being scanned.
+  source = source.replace(python ? /\r\n?/g : /\r\n?|\u2028|\u2029/g, '\n');
   const result = [];
   let at = 0, line = 1;
   const add = (kind, value, startLine = line) => result.push({ kind, value, line: startLine });
@@ -218,7 +222,28 @@ function tokens(source, python) {
 
 function importLines(source, python) {
   const lexemes = tokens(source, python);
-  const significant = lexemes.filter(token => token.kind !== 'newline');
+  const significant = [];
+  let depth = 0, statementBreak = false;
+  for (let i = 0; i < lexemes.length; i++) {
+    const token = lexemes[i];
+    if (python && token.value === '\\' && lexemes[i + 1]?.kind === 'newline') {
+      i++;
+      continue;
+    }
+    if (token.kind === 'newline') {
+      if (python && depth === 0) statementBreak = true;
+      continue;
+    }
+    // Adjacent Python string literals form one value. A physical newline
+    // joins them only inside grouping or after explicit line continuation.
+    const previous = significant.at(-1);
+    if (python && token.kind === 'string' && previous?.kind === 'string' && !statementBreak) {
+      previous.value += token.value;
+    } else significant.push({ ...token });
+    if (token.kind === 'punctuation' && ['(', '[', '{'].includes(token.value)) depth++;
+    else if (token.kind === 'punctuation' && [')', ']', '}'].includes(token.value)) depth--;
+    statementBreak = false;
+  }
   const lines = new Set();
   for (let i = 0; i < significant.length; i++) {
     const token = significant[i];
