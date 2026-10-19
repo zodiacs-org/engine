@@ -1,9 +1,15 @@
 # Bounded full-span generation
 
-Full-span generation is in progress. P2 stays unchecked in
-[PHASE2.md](../PHASE2.md) until the store's checkpoint is complete. Generated
-tiles remain under ignored `generated/full/`. The session reports in
-[full-sessions/](full-sessions/) contain aggregate resource measurements and
+Full-span generation is complete, as recorded by the final checkpoint in
+[session-0036.json](full-sessions/session-0036.json). P2 is checked in
+[PHASE2.md](../PHASE2.md). The final report covers the default half-open span
+from 1800-01-01T00:00:00Z to 2200-01-01T00:00:00Z, with all 146,099 planned
+tiles retained. It records 3,072,811,008 allocated bytes across all generated/
+contents, below its 12,000,000,000-byte cap. These counters and resource
+measurements are checked by [test/full.node-test.mjs](../test/full.node-test.mjs).
+Whole-database verification and full-span interpolation measurements remain
+pending. Generated tiles remain under ignored `generated/full/`. The session
+reports in [full-sessions/](full-sessions/) contain aggregate resource measurements and
 checkpoint metadata, without position samples or event records.
 
 With the project Node runtime on PATH and the locked dependencies installed,

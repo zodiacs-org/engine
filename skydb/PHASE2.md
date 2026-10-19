@@ -5,7 +5,7 @@ session. Generated tiles stay ignored; committed reports contain aggregates.
 Resource estimates describe computing cost, not astronomical outcomes.
 
 - [x] P1 Generate a fresh default-cadence trial slice, measure wall time, CPU, tiles and storage, and commit a reproducible report with full-span cost arithmetic and disk checks.
-- [ ] P2 Use the trial evidence to select full coverage or a documented smaller span, then generate into generated/full/ with disk guards, bounded session work and checkpoint resume until complete.
+- [x] P2 Use the trial evidence to select full coverage or a documented smaller span, then generate into generated/full/ with disk guards, bounded session work and checkpoint resume until complete.
 - [ ] P3 Run the verification CLI over the completed database and commit its aggregate result and manifest summary, including tile count, bytes, manifest SHA-256, engine pin and configuration.
 - [ ] P4 Compare a deterministic stratified random sample of at least 2,000 instants across the completed span with direct engine calls; commit per-body maximum, p99 and median interpolation errors and tests of the measurement method.
 - [ ] P5 Benchmark cold and warm position lookups, event range queries and memory on the completed database; commit aggregate results with exact commands and machine details.
@@ -292,3 +292,46 @@ the project isolation and package-exclusion checker. Only the new aggregate
 reports, this continuation note and CHANGES.txt changed. Generated data,
 dependencies and test logs remain ignored; phase 1 code, engine files,
 archives, root configuration, workflows and the package version are unchanged.
+
+P2 is complete. Sequential back-to-back bounded invocations under the
+supervisor note in the brief finished the default full-span database. The new
+aggregate reports record this progress:
+
+| evidence | starting checkpoint | retained checkpoint |
+| --- | ---: | ---: |
+| [session-0030](benchmarks/full-sessions/session-0030.json) | 127,660 | 129,895 |
+| [session-0031](benchmarks/full-sessions/session-0031.json) | 129,895 | 132,711 |
+| [session-0032](benchmarks/full-sessions/session-0032.json) | 132,711 | 135,655 |
+| [session-0033](benchmarks/full-sessions/session-0033.json) | 135,655 | 138,599 |
+| [session-0034](benchmarks/full-sessions/session-0034.json) | 138,599 | 141,159 |
+| [session-0035](benchmarks/full-sessions/session-0035.json) | 141,159 | 143,935 |
+| [session-0036](benchmarks/full-sessions/session-0036.json) | 143,935 | 146,099 |
+
+Each report starts at the preceding report's final checkpoint with the same
+sharded manifest digest, engine archive pin and default configuration. The
+unchanged runner verified the retained prefix before generating more tiles in
+each invocation. Generation used one process at a time. The earlier passes
+paused at their cooperative deadlines; the final pass returned
+`status: "complete"` with `complete: true` in the checkpoint and released its
+writer lock. No disk guard stopped these runs.
+
+The final report records all 146,099 planned tiles over the default half-open
+coverage from 1800-01-01T00:00:00Z to 2200-01-01T00:00:00Z, and 3,072,811,008
+allocated bytes across all generated/ contents, below its recorded
+12,000,000,000-byte cap. Generated data remains ignored. These measurements and
+completion counters are checked by [test/full.node-test.mjs](test/full.node-test.mjs);
+[test/layout-evidence.node-test.mjs](test/layout-evidence.node-test.mjs) checks
+the checkpoint chain through the existing layout migration. Completed generation
+does not establish independent astronomical accuracy or event completeness.
+P3's verification CLI run and manifest summary remain pending, as do the later
+full-span interpolation and query measurements. Do not restart generation for
+the next milestone; use the retained completed database.
+
+Validation passed on the Node runtime recorded in the new reports: locked
+project setup, the full project test suite, workflow module syntax checks and
+the project isolation and package-exclusion checker. Documentation also passed
+the separate check for both prohibited dash characters. Only the new aggregate
+reports, this completion note, the bounded-generation guide and CHANGES.txt
+changed. Generated data, dependencies and test logs remain ignored; phase 1
+code, engine files, archives, root configuration, workflows and the package
+version are unchanged.
