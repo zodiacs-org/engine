@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
-import { mkdir, mkdtemp, writeFile, rm, symlink } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, writeFile, rm, symlink } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
-import { checkSwissBoundary, inspectTrackedFile, trackedPaths } from '../lib/swiss-guard.mjs';
+import { checkSwissBoundary, inspectTrackedFile, SWISS_TEST_IMPORT_PATHS, trackedPaths } from '../lib/swiss-guard.mjs';
 
 test('negative source fixtures reject literal Swiss imports and requires', () => {
   const fixtures = [
@@ -138,20 +138,55 @@ test('comment boundaries use the source language line terminators', () => {
   }
 });
 
-test('tracked repository manifests reject Swiss dependencies and src imports stay absent', async () => {
+test('all tracked repository files respect the Swiss import and dependency boundary', async () => {
   const repository = fileURLToPath(new URL('../../', import.meta.url));
-  const errors = await checkSwissBoundary(repository);
-  assert.deepEqual(errors.filter(error => error.rule !== 'import'), [], 'all tracked dependency files must pass');
-  assert.deepEqual(errors.filter(error => error.rule === 'import' && error.path.startsWith('src/')), [],
-    'tracked engine source must have no Swiss imports');
+  assert.deepEqual(await checkSwissBoundary(repository), []);
 });
 
-test('only exact crosscheck and sanctioned adapter paths exempt imports', () => {
-  for (const path of ['crosscheck/lib/example.py', 'conformance/adapters/pyswisseph.py']) {
-    assert.deepEqual(inspectTrackedFile(path, 'import swisseph as swe'), []);
+test('historical import exemptions are a frozen exact path list', async () => {
+  const expected = [
+    'conformance/adapters/pyswisseph.py',
+    'conformance/arbiters/l2/check_swiss.py',
+    'conformance/arbiters/l3/check_swiss.py',
+    'conformance/harness/lib.mjs',
+    'conformance/harness/report.mjs',
+    'docs/evidence/houses-extra-2026-09-29/tools/compare-swiss.py',
+    'docs/evidence/houses-extra-2026-09-29/tools/diagnose-swiss.py',
+    'docs/evidence/houses-extra-2026-09-29/tools/speed-flags.py',
+    'docs/evidence/houses-extra-2026-09-29/tools/swiss-self-difference.py',
+    'docs/evidence/nutation-2026-09-29/tools/ladder-compare.py',
+    'docs/evidence/nutation-2026-09-29/tools/swiss-compare.py',
+    'docs/evidence/sky-chinese-2026-09-29/tools/sky_swiss.py',
+    'docs/evidence/vedic-2026-09-28/tools/swiss_ayanamsa.py'
+  ];
+  assert(Object.isFrozen(SWISS_TEST_IMPORT_PATHS));
+  assert.deepEqual(SWISS_TEST_IMPORT_PATHS, expected);
+  const repository = fileURLToPath(new URL('../../', import.meta.url));
+  const tracked = new Set(trackedPaths(repository));
+  for (const path of expected) {
+    assert(tracked.has(path), path);
+    const source = path.endsWith('.py') ? 'import swisseph as swe' : 'const swe = require("swisseph");';
+    assert.deepEqual(inspectTrackedFile(path, source), [], path);
+    // Exemptions depend on paths, so ordinary edits need no new hashes.
+    const comment = path.endsWith('.py') ? '# edited' : '// edited';
+    assert.deepEqual(inspectTrackedFile(path, `${comment}\n${source}\n${source}`), [], path);
+    for (const copy of [path.replace(/(\.[^.]+)$/, '-copy$1'), `${dirname(path)}/new${path.slice(path.lastIndexOf('.'))}`,
+      `src/${path}`, path.toUpperCase()]) {
+      assert(inspectTrackedFile(copy, source).some(error => error.rule === 'import'), copy);
+    }
   }
+  for (const document of ['README.md', 'AGENTS.md']) {
+    const source = await readFile(new URL(`../${document}`, import.meta.url), 'utf8');
+    for (const path of expected) assert(source.includes(`\`${path}\``), `${document}: ${path}`);
+  }
+});
+
+test('new imports outside crosscheck and the frozen paths fail in every runtime and research area', () => {
+  assert.deepEqual(inspectTrackedFile('crosscheck/lib/example.py', 'import swisseph as swe'), []);
   for (const path of ['crosscheck-copy/example.py', 'src/crosscheck/example.py',
-    'conformance/adapters/pyswisseph-copy.py', 'conformance/adapters/sub/pyswisseph.py']) {
+    'conformance/adapters/pyswisseph-copy.py', 'conformance/adapters/sub/pyswisseph.py',
+    'conformance/arbiters/l2/new.py', 'conformance/arbiters/l3/new.py',
+    'docs/evidence/new/tools/swiss.py', 'server/swiss.py', 'mcp/swiss.py', 'batch/swiss.py', 'edge/swiss.py']) {
     assert(inspectTrackedFile(path, 'import swisseph as swe').some(error => error.rule === 'import'), path);
   }
 });
@@ -164,6 +199,9 @@ test('negative dependency fixtures apply everywhere including import exemptions'
   fixtures.push(
     ['crosscheck/package.json', '{"dependencies":{"alias":"npm:pyswisseph@1"}}'],
     ['conformance/adapters/package.json', '{"bundledDependencies":["swisseph"]}'],
+    ['conformance/arbiters/l2/requirements.txt', 'pyswisseph'],
+    ['docs/evidence/houses-extra-2026-09-29/tools/pyproject.toml', '[project]\ndependencies = ["pyswisseph"]'],
+    ['crosscheck/Dockerfile', 'RUN pip install pyswisseph'],
     ['nested/package-lock.json', '{"packages":{"node_modules/swisseph":{"version":"1"}}}'],
     ['nested/npm-shrinkwrap.json', '{"dependencies":{"alias":{"resolved":"https://example.invalid/pyswisseph.tar.gz"}}}'],
     ['nested/Pipfile.lock', '{"default":{"pyswisseph":{"version":"==1"}}}'],

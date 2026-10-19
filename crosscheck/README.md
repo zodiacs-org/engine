@@ -79,23 +79,44 @@ dependency declarations without loading Swiss or traversing ignored data:
 node crosscheck/tools/check-swiss.mjs
 ```
 
-It allows imports only inside crosscheck/ and the exact sanctioned conformance
-adapter; dependency declarations are forbidden everywhere. Its negative
-fixture tests run with the dedicated Node suite. This strict repository check
-currently fails on existing historical reference scripts outside those paths.
-S2 remains incomplete and the failing check is not added to CI while the
-scope decision recorded in [PHASE2.md](PHASE2.md) is pending. No additional
-import exemptions have been added. The scanner checks literal module syntax,
-not arbitrary computed imports or executed programs; installation metadata
+It allows imports inside crosscheck/ and at the following frozen exact paths,
+authorized by the phase 2 brief for pre-existing test and research tooling:
+
+- `conformance/adapters/pyswisseph.py`
+- `conformance/arbiters/l2/check_swiss.py`
+- `conformance/arbiters/l3/check_swiss.py`
+- `conformance/harness/lib.mjs`
+- `conformance/harness/report.mjs`
+- `docs/evidence/houses-extra-2026-09-29/tools/compare-swiss.py`
+- `docs/evidence/houses-extra-2026-09-29/tools/diagnose-swiss.py`
+- `docs/evidence/houses-extra-2026-09-29/tools/speed-flags.py`
+- `docs/evidence/houses-extra-2026-09-29/tools/swiss-self-difference.py`
+- `docs/evidence/nutation-2026-09-29/tools/ladder-compare.py`
+- `docs/evidence/nutation-2026-09-29/tools/swiss-compare.py`
+- `docs/evidence/sky-chinese-2026-09-29/tools/sky_swiss.py`
+- `docs/evidence/vedic-2026-09-28/tools/swiss_ayanamsa.py`
+
+These existing tools are test-only and never shipped. The allowlist is fixed
+in lib/swiss-guard.mjs and pinned by tests/swiss-guard.node-test.mjs. It uses
+paths rather than content hashes, so ordinary edits do not require a new
+baseline. It grants no directory exemption: new siblings and other files in
+these folders fail. All engine, server, MCP, batch, edge and other runtime
+imports outside crosscheck/ remain forbidden. Swiss dependency declarations
+are forbidden everywhere, including crosscheck/ and the listed folders.
+The dedicated Node 22 workflow runs the repository scan as a failing gate
+and runs the negative fixtures and repository integration assertion through
+its Node test suite. S2 is complete under the brief's scope decision.
+
+The scanner checks literal module syntax, not arbitrary computed imports or
+executed programs; installation metadata
 other than JSON is checked conservatively for package-name mentions.
 The fixture suite also exercises Python formatted-string expressions and
 literal loader arguments, JavaScript regexes beside imports, continued
 dependency names, legacy lockfiles and shebang scripts with unusual suffixes.
 This remains a lexical policy check rather than a complete language parser.
-Repository integration tests also reject Swiss dependency declarations in
-tracked manifests and Swiss imports under src/. These assertions run through
-the existing dedicated Node test step without exempting historical scripts
-from the strict scanner. They do not complete the full repository import gate.
+The repository integration test requires the entire tracked-file scan to
+pass. Exact-path fixtures reject renamed, nested and case-changed copies and
+keep dependencies forbidden within the exempted tooling areas.
 
 The file checker inspects publishable project files, rejects symbolic links,
 known kernel/binary file names, oversized files and em dashes in documents.
@@ -121,6 +142,7 @@ only the locked crosscheck dependency, with lifecycle scripts disabled:
 ```sh
 npm ci --prefix crosscheck --ignore-scripts --no-audit --no-fund --cache "$PWD/crosscheck/runtime/npm-cache"
 npm --prefix crosscheck run check:syntax
+node crosscheck/tools/check-swiss.mjs
 npm --prefix crosscheck run build
 npm --prefix crosscheck run verify
 npm --prefix crosscheck test

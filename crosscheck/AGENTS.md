@@ -41,6 +41,35 @@ execution is not a licence exemption.
   A configured but invalid instrument must fail explicitly. CI runs without
   Swiss, using invented protocol peers and absence tests.
 
+The phase 2 brief authorizes a frozen exact path allowlist for pre-existing
+test and research tooling. These tools are test-only and never shipped:
+
+- `conformance/adapters/pyswisseph.py`
+- `conformance/arbiters/l2/check_swiss.py`
+- `conformance/arbiters/l3/check_swiss.py`
+- `conformance/harness/lib.mjs`
+- `conformance/harness/report.mjs`
+- `docs/evidence/houses-extra-2026-09-29/tools/compare-swiss.py`
+- `docs/evidence/houses-extra-2026-09-29/tools/diagnose-swiss.py`
+- `docs/evidence/houses-extra-2026-09-29/tools/speed-flags.py`
+- `docs/evidence/houses-extra-2026-09-29/tools/swiss-self-difference.py`
+- `docs/evidence/nutation-2026-09-29/tools/ladder-compare.py`
+- `docs/evidence/nutation-2026-09-29/tools/swiss-compare.py`
+- `docs/evidence/sky-chinese-2026-09-29/tools/sky_swiss.py`
+- `docs/evidence/vedic-2026-09-28/tools/swiss_ayanamsa.py`
+
+lib/swiss-guard.mjs and its negative fixture tests pin this list by path,
+without content hashes, so ordinary edits remain possible. Do not broaden it
+to folders, globs or new files. Every other tracked source file outside
+crosscheck/ fails on a Swiss import or require, including new scripts within
+the listed folders and any engine, server, MCP, batch, edge or shipped code.
+Dependency declarations remain forbidden throughout the repository,
+including crosscheck/ and these tooling folders. Run
+`node crosscheck/tools/check-swiss.mjs`; the dedicated Node 22 workflow runs
+this scan as a failing gate and exercises the negative fixtures in its own
+Node suite. The scanner checks literal module syntax and dependency metadata;
+it does not execute scanned programs or prove absence of computed imports.
+
 Use synthetic inputs only. Retain aggregate reports with the exact command,
 actual completed count, seed, span, units, conventions and verified build and
 reference identities. Every accuracy claim needs committed evidence. No

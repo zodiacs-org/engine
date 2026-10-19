@@ -8,6 +8,26 @@ const codeName = /\.(?:[cm]?[jt]sx?|py[iw]?|vue|svelte|html)$/i;
 const dependencyKeys = new Set(['dependencies', 'devDependencies', 'optionalDependencies',
   'peerDependencies', 'bundledDependencies', 'bundleDependencies', 'overrides', 'resolutions', 'scripts']);
 
+// Frozen exact paths authorized by the phase 2 brief for pre-existing,
+// test-only tooling. No directory globs or content hashes: ordinary edits to
+// these files are allowed, but new siblings and all dependencies still fail.
+export const SWISS_TEST_IMPORT_PATHS = Object.freeze([
+  'conformance/adapters/pyswisseph.py',
+  'conformance/arbiters/l2/check_swiss.py',
+  'conformance/arbiters/l3/check_swiss.py',
+  'conformance/harness/lib.mjs',
+  'conformance/harness/report.mjs',
+  'docs/evidence/houses-extra-2026-09-29/tools/compare-swiss.py',
+  'docs/evidence/houses-extra-2026-09-29/tools/diagnose-swiss.py',
+  'docs/evidence/houses-extra-2026-09-29/tools/speed-flags.py',
+  'docs/evidence/houses-extra-2026-09-29/tools/swiss-self-difference.py',
+  'docs/evidence/nutation-2026-09-29/tools/ladder-compare.py',
+  'docs/evidence/nutation-2026-09-29/tools/swiss-compare.py',
+  'docs/evidence/sky-chinese-2026-09-29/tools/sky_swiss.py',
+  'docs/evidence/vedic-2026-09-28/tools/swiss_ayanamsa.py'
+]);
+const testImportPaths = new Set(SWISS_TEST_IMPORT_PATHS);
+
 function dependencyKind(path) {
   const name = basename(path).toLowerCase();
   if (['package.json', 'package-lock.json', 'npm-shrinkwrap.json', 'pipfile.lock'].includes(name)) return 'json';
@@ -317,7 +337,7 @@ export function inspectTrackedFile(path, source) {
       }
     }
   }
-  const exempt = path.startsWith('crosscheck/') || path === 'conformance/adapters/pyswisseph.py';
+  const exempt = path.startsWith('crosscheck/') || testImportPaths.has(path);
   const python = /\.py[iw]?$/i.test(path) || /^#![^\n]*\bpython[\d.]*\b/.test(source);
   if (!exempt && (codeName.test(path) || python || /^#![^\n]*\bnode\b/.test(source))) {
     for (const line of importLines(source, python)) errors.push({ path, rule: 'import', line, reason: 'Swiss import forbidden' });

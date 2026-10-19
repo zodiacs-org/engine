@@ -9,7 +9,7 @@ external harness handles git writes and CI.
 - [x] P2 Establish a disk-budgeted reference plan for synthetic TT charts across 1800 to 2200: verify DE440 and DE441 coverage, exact centers and span selection, enforce the combined runtime/cache cap before acquisition, and record any unavailable comparisons without downloading Swiss.
 - [x] P3 Add bounded, mergeable absolute-error quantiles and distance residual channels with independent arithmetic tests; report median, p99, p99.9 and maximum with explicit units and quantile approximation limits.
 - [x] S1 Document the approved optional external Swiss dev/test-only instrument, its AGPL or professional licensing, runtime and distribution exclusions, environment selectors and aggregate-only retention in README.md, a new AGENTS.md and VALIDATION.md; preserve historical unavailable measurements.
-- [ ] S2 Add a dedicated Node import and dependency guard over tracked repository files, exempting only crosscheck/ and the sanctioned conformance adapter for imports; reject Swiss dependencies in manifests, lockfiles, requirements, pyproject and Dockerfiles, prove rejection with negative fixtures and run it in the dedicated crosscheck CI job.
+- [x] S2 Add a dedicated Node import and dependency guard over tracked repository files, exempting crosscheck/ and the brief's frozen exact paths for pre-existing test-only tooling; reject Swiss dependencies everywhere, prove rejection with negative fixtures, document each allowed path and run the strict repository scan in the dedicated crosscheck CI job.
 - [ ] P4 Extend the campaign and aggregate reports to group each body's longitude, latitude and distance errors by DE440 and DE441 span, separate convention differences, and pass a real bounded pilot with exact commands, seed and verified build/kernel identities.
 - [ ] S3 Extend the campaign for the same synthetic charts with separate engine-versus-JPL, engine-versus-Swiss and Swiss-versus-JPL per-body angular aggregates, including max, p99.9, p99 and median; bind Swiss version, returned flags, fallback counts and ephemeris SHA-256 identities, test unavailable operation and include the comparison in the large run below.
 - [ ] P5 Start the larger campaign toward at least 1,000,000 synthetic charts with at most three active worker processes; validate a budget stop and checkpoint resume and commit only completed aggregate progress with actual counts and resource evidence.
@@ -31,6 +31,11 @@ campaign expansion; S3 prepares comparisons for the large campaign and its
 execution is folded into P5 and P6. S4 summarizes the completed measurement.
 The completed P1 to P3 records and their historical Swiss absence remain
 unchanged. Environment selectors are documented without local paths.
+
+Current status: S2 is complete under the brief's authorized exact path
+allowlist, with Node 22 validation passing. P4 is the next unchecked
+milestone. The notes below preserve earlier session history; the final S2
+completion record supersedes their pending scope and runtime blockers.
 
 P1 local validation: syntax, aggregate rendering, safeguards and the runtime
 independent tests passed. The available Node 20 runtime was rejected by the
@@ -113,3 +118,15 @@ tests, build and verification still require the unavailable Node 22 runtime.
 The strict repository gate still fails on the same historical scripts. The
 requested scope decision remains pending; no baseline or import exemption
 has been added, S2 stays unchecked and campaign expansion has not started.
+
+S2 completion applies the brief's frozen exact path decision to the existing
+scanner. README.md and AGENTS.md enumerate every allowed test-only path;
+there are no directory globs or content-hash baselines. Tests pin the list,
+accept ordinary edits at those paths, reject new siblings and runtime
+imports, and keep dependency declarations forbidden everywhere. The full
+tracked-file scan is now a failing gate in the dedicated Node 22 workflow
+and an assertion in its Node test suite. Syntax, the full suite, isolated
+build and identity verification passed on Node v22.23.3. Historical aggregate
+reports reproduce unchanged, and npm exclusion and file/storage safeguards
+pass. VALIDATION.md records the commands. No campaign or live Swiss run was
+performed in this milestone; campaign expansion follows in P4 and S3.

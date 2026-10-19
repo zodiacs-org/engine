@@ -23,6 +23,12 @@ returned flags, aggregate statistics and identity hashes may be retained;
 raw adapter output and per-case values are forbidden. The dedicated CI job
 uses absence and invented transport tests without installing Swiss.
 
+The phase 2 S2 boundary is now enforced by the dedicated Node 22 workflow.
+The brief authorizes the frozen exact test-only paths listed in README.md
+and AGENTS.md; all other imports outside crosscheck/ and all dependency
+declarations remain forbidden. The final S2 completion record below uses
+Node v22.23.3 and supersedes earlier pending scope and runtime blockers.
+
 The sections below record what each historical session ran and knew at that
 time. Their commands and measurements are not claims about the current
 runtime or a later build. The inertial JPL report's markdown now includes
@@ -951,3 +957,48 @@ acceptance and isolated-build tests at requireNode22; build and verification
 refuse the same unsupported executable. The strict scan fails on the same
 historical imports listed above. This is not a passing full Node 22 run or
 a completed S2 milestone. No campaign or live Swiss execution occurred.
+
+## Phase 2 S2 completed repository guard
+
+Applied the brief's exact path allowlist for pre-existing, test-only tooling,
+including the sanctioned adapter, historical conformance tools and each
+named evidence script. README.md and AGENTS.md enumerate the same paths.
+The list is frozen and pinned by tests/swiss-guard.node-test.mjs; membership
+uses exact paths without content hashes or directory patterns. Ordinary
+edits to listed files remain possible. New siblings, renamed, nested and
+case-changed copies and imports in engine, server, MCP, batch and edge code
+fail. Dependency checks still precede import exemptions and reject Swiss
+throughout the repository, including crosscheck/ and legacy tool folders.
+
+The repository integration assertion now requires the complete tracked-file
+scan to pass. The dedicated workflow also runs tools/check-swiss.mjs as an
+explicit failing gate before its isolated engine build. The existing Node
+test glob runs the negative fixtures. No Swiss installation is needed for
+these checks, and no scanned program is executed. These remain lexical
+module and dependency checks, with the computed-import limitations documented
+in README.md.
+
+Executed from the repository root with the supplied Node v22.23.3 on PATH:
+
+```sh
+node -v
+npm ci --prefix crosscheck --ignore-scripts --no-audit --no-fund --cache "$PWD/crosscheck/runtime/npm-cache"
+npm --prefix crosscheck run check:syntax
+node crosscheck/tools/check-swiss.mjs
+node --test crosscheck/tests/swiss-guard.node-test.mjs
+npm --prefix crosscheck run build
+npm --prefix crosscheck run verify
+npm --prefix crosscheck test
+node crosscheck/tools/render-jpl.mjs --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+npm --prefix crosscheck run check
+node crosscheck/tools/check.mjs --all-sizes
+git diff --check
+```
+
+All listed checks passed, including the full Node suite, npm exclusion,
+isolated build and identity verification. Retained aggregate reports
+reproduce unchanged. The local size and combined storage safeguards pass.
+Only crosscheck/ and its dedicated workflow changed; S2 is complete. No live
+Swiss execution, new accuracy measurement or large campaign was performed.

@@ -36,6 +36,9 @@ jobs:
       - name: JavaScript syntax check
         run: npm run check:syntax
 
+      - name: Swiss import and dependency boundary
+        run: node tools/check-swiss.mjs
+
       - name: Isolated engine build
         run: npm run build
 
