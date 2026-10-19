@@ -7,7 +7,7 @@ Resource estimates describe computing cost, not astronomical outcomes.
 - [x] P1 Generate a fresh default-cadence trial slice, measure wall time, CPU, tiles and storage, and commit a reproducible report with full-span cost arithmetic and disk checks.
 - [x] P2 Use the trial evidence to select full coverage or a documented smaller span, then generate into generated/full/ with disk guards, bounded session work and checkpoint resume until complete.
 - [x] P3 Run the verification CLI over the completed database and commit its aggregate result and manifest summary, including tile count, bytes, manifest SHA-256, engine pin and configuration.
-- [ ] P4 Compare a deterministic stratified random sample of at least 2,000 instants across the completed span with direct engine calls; commit per-body maximum, p99 and median interpolation errors and tests of the measurement method.
+- [x] P4 Compare a deterministic stratified random sample of at least 2,000 instants across the completed span with direct engine calls; commit per-body maximum, p99 and median interpolation errors and tests of the measurement method.
 - [ ] P5 Benchmark cold and warm position lookups, event range queries and memory on the completed database; commit aggregate results with exact commands and machine details.
 - [ ] P6 Compare time, event definitions and boundary ownership with the events project in PR #43 using available public evidence; document where results cannot be interchanged.
 - [ ] P7 Update the project README, OPERATIONS and benchmark guide with measured scope and linked evidence, run the project tests and checks, and record remaining limits.
@@ -368,3 +368,39 @@ documentation passed checks for both prohibited dash characters. All changes
 stay in skydb/; phase 1 source, engine files, archives, root configuration,
 workflows and the package version remain unchanged. The one-line session
 summary is appended to CHANGES.txt for the harness.
+
+P4 is complete. [benchmarks/interpolate-full.mjs](benchmarks/interpolate-full.mjs)
+compared the retained completed database with direct calls to its pinned
+engine at 4,000 deterministic stratified random interpolation instants over
+the full default half-open span from 1800-01-01T00:00:00Z to
+2200-01-01T00:00:00Z. [benchmarks/interpolate-full-output.json](benchmarks/interpolate-full-output.json)
+records per-body maximum, p99 and median absolute errors for circular
+longitude, latitude and reported longitude speed. Its separate boundary group
+contains 95 probes, including 63 stored support instants whose rows matched
+direct calls exactly. Boundary statistics do not enter the random cohort.
+
+The report binds actual manifest bytes, SHA-256, configuration and completed
+checkpoint to the prior full verification evidence. It records the sampling
+seed, algorithm, stratum arithmetic and sample-plan digests, and contains no
+individual position rows. [benchmarks/INTERPOLATION.md](benchmarks/INTERPOLATION.md)
+documents the command, quantiles, units and measured scope. The runner reads
+the existing store sequentially, verifies accessed tiles and rejects locked,
+incomplete or corrupt accessed data and changing metadata. It creates no tiles
+or checkpoints. Generated data remains ignored; no disk guard stopped this
+measurement. These are sampled consumer-agreement measurements, without an
+independent astronomical accuracy or worst-case interpolation claim.
+
+[test/interpolate-full.node-test.mjs](test/interpolate-full.node-test.mjs)
+checks plan reproduction and coverage, support-sample exclusion, circular
+arithmetic, quantiles and maximum selection, as well as failure cases and
+the committed report's identity. A short synthetic-time store spanning a clock
+split exercises the complete measurement and an independent error reduction,
+with all database files unchanged. Full-span query timings remain P5.
+
+Validation passed on the Node runtime recorded in the interpolation report:
+locked project setup, `npm --prefix skydb test`, workflow module syntax checks
+and the project isolation and package-exclusion checker. Changed documentation
+passed checks for both prohibited dash characters. Changes stay in skydb/;
+phase 1 source, engine files, archives, root configuration, workflows and the
+package version remain unchanged. The session summary is appended to
+CHANGES.txt for the harness.

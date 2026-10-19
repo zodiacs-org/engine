@@ -1,0 +1,678 @@
+{
+  "version": 1,
+  "command": "node skydb/benchmarks/interpolate-full.mjs",
+  "directory": "skydb/generated/full",
+  "startedAt": "2026-10-19T17:26:36.424Z",
+  "finishedAt": "2026-10-19T17:26:42.978Z",
+  "runtime": {
+    "node": "v22.23.3",
+    "platform": "linux",
+    "arch": "x64",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "engine": {
+      "name": "@zodiacs/engine",
+      "version": "1.0.0",
+      "archive": "zodiacs-engine-1.0.0.tgz",
+      "sha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
+      "bytes": 288063,
+      "ephemeris": "2.1.19"
+    },
+    "osRelease": "6.12.94+",
+    "memoryBytes": 16779640832
+  },
+  "elapsedMs": 6551.905277,
+  "measurement": "Direct engine consumer agreement at sampled instants; no independent astronomical accuracy or full-span bound",
+  "method": "One process, sequential position queries with one cached tile; sampled tiles verified on load; no database writes; elapsedMs covers both comparisons, excludes engine loading, planning and metadata checks",
+  "manifest": {
+    "sha256": "7f9b034c1d80915329d9b20d3ec09bb00519adece2a2b467d850300c8f3126b1",
+    "bytes": 389,
+    "value": {
+      "version": 2,
+      "engineSha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
+      "config": {
+        "startMs": -5364662400000,
+        "endMs": 7258118400000,
+        "stepMs": 3600000,
+        "tileMs": 86400000,
+        "timeScale": "utc",
+        "bodies": [
+          "Sun",
+          "Moon",
+          "Mercury",
+          "Venus",
+          "Mars",
+          "Jupiter",
+          "Saturn",
+          "Uranus",
+          "Neptune",
+          "Pluto"
+        ]
+      },
+      "tiles": "shard-NNNNNNNN/tile-NNNNNNNN/receipt.json",
+      "positionFormat": 1,
+      "eventFormat": 1
+    }
+  },
+  "checkpoint": {
+    "version": 1,
+    "manifestSha256": "7f9b034c1d80915329d9b20d3ec09bb00519adece2a2b467d850300c8f3126b1",
+    "nextIndex": 146099,
+    "complete": true
+  },
+  "units": {
+    "lon": "degrees, shortest circular difference",
+    "lat": "degrees",
+    "speed": "degrees/day"
+  },
+  "sampling": {
+    "version": 1,
+    "count": 4000,
+    "seed": 1370341103,
+    "algorithm": "xorshift32 shifts 13,17,5; upper 27 and 26 bits of successive draws form 53 bits; rejection before modulo by stratum width",
+    "strata": "Integer half-open endpoints start + floor(span * index / count), calculated with exact integer arithmetic",
+    "selection": "One draw per stratum, retrying stored support instants up to 128 times; refuse if no interpolation instant was selected",
+    "randomSha256": "aaf60b7149eb4457eb9dd50ece7b346844f1eb57c1279af5bd88d15c1740dc56",
+    "firstRandomAtMs": -5362338714794,
+    "lastRandomAtMs": 7257576251292,
+    "boundaries": "Coverage start and end minus one millisecond; first regular tile seam and every in-range pinned clock split, at offsets -1,0,1 milliseconds; deduplicated",
+    "boundaryCount": 95,
+    "boundarySha256": "ae3a10a7daf421ddb0be471143c36e8555335eb352dd1a1a8d964d1e20ecd198",
+    "statistics": "Absolute errors; median averages middle pair for even counts; p99 is sorted[ceil(0.99 * count) - 1]; maximum retains first occurrence in chronological order; cohorts kept separate"
+  },
+  "results": {
+    "random": {
+      "instants": 4000,
+      "exactSamples": 0,
+      "interpolatedInstants": 4000,
+      "errors": {
+        "Sun": {
+          "lon": {
+            "count": 4000,
+            "maximum": {
+              "error": 1.4046730711925193e-7,
+              "atMs": 922512632916
+            },
+            "p99": 1.3194340908739832e-7,
+            "median": 4.804891773346753e-8
+          },
+          "lat": {
+            "count": 4000,
+            "maximum": {
+              "error": 2.3210389664928e-11,
+              "atMs": 6979628145192
+            },
+            "p99": 1.4449307798435757e-11,
+            "median": 1.1444163759005699e-12
+          },
+          "speed": {
+            "count": 4000,
+            "maximum": {
+              "error": 2.8473634561265726e-8,
+              "atMs": -4824947279189
+            },
+            "p99": 1.5882562709457204e-8,
+            "median": 2.958029710065091e-9
+          }
+        },
+        "Moon": {
+          "lon": {
+            "count": 4000,
+            "maximum": {
+              "error": 0.00010649568571352575,
+              "atMs": 3114188860542
+            },
+            "p99": 0.00009523456662918761,
+            "median": 0.00002630524710411919
+          },
+          "lat": {
+            "count": 4000,
+            "maximum": {
+              "error": 0.00007872564513089486,
+              "atMs": -692058600023
+            },
+            "p99": 0.00006777351996412051,
+            "median": 0.000022659987921835878
+          },
+          "speed": {
+            "count": 4000,
+            "maximum": {
+              "error": 0.000043269300920911746,
+              "atMs": -692058600023
+            },
+            "p99": 0.00003326967473427089,
+            "median": 0.000006062234677806089
+          }
+        },
+        "Mercury": {
+          "lon": {
+            "count": 4000,
+            "maximum": {
+              "error": 0.000042957111077157606,
+              "atMs": 6027647459716
+            },
+            "p99": 0.000035565019061323255,
+            "median": 0.000004519751684028961
+          },
+          "lat": {
+            "count": 4000,
+            "maximum": {
+              "error": 0.000009032360204219714,
+              "atMs": 1042464887271
+            },
+            "p99": 0.000006803280259148892,
+            "median": 0.000001030204870522411
+          },
+          "speed": {
+            "count": 4000,
+            "maximum": {
+              "error": 0.000009910528884438108,
+              "atMs": 5678061947901
+            },
+            "p99": 0.000006109276082577608,
+            "median": 2.470670016352372e-7
+          }
+        },
+        "Venus": {
+          "lon": {
+            "count": 4000,
+            "maximum": {
+              "error": 0.000009104280366045714,
+              "atMs": -1134394179542
+            },
+            "p99": 0.00000802351098627696,
+            "median": 1.3065388770883146e-7
+          },
+          "lat": {
+            "count": 4000,
+            "maximum": {
+              "error": 0.000003466272536556403,
+              "atMs": -4160212447826
+            },
+            "p99": 0.000002031893275855623,
+            "median": 1.492647220824317e-7
+          },
+          "speed": {
+            "count": 4000,
+            "maximum": {
+              "error": 9.530643680921713e-7,
+              "atMs": -5169022038964
+            },
+            "p99": 6.250875331792471e-7,
+            "median": 6.643892880298097e-9
+          }
+        },
+        "Mars": {
+          "lon": {
+            "count": 4000,
+            "maximum": {
+              "error": 0.0000030597113322983205,
+              "atMs": 1666992750376
+            },
+            "p99": 0.0000026795739245244476,
+            "median": 1.4079111565479252e-7
+          },
+          "lat": {
+            "count": 4000,
+            "maximum": {
+              "error": 6.686196707406111e-7,
+              "atMs": -4935443555637
+            },
+            "p99": 3.29423976097587e-7,
+            "median": 1.1733532201407826e-8
+          },
+          "speed": {
+            "count": 4000,
+            "maximum": {
+              "error": 1.8710364352303444e-7,
+              "atMs": -2844753910471
+            },
+            "p99": 1.324825532056373e-7,
+            "median": 3.692326777660071e-9
+          }
+        },
+        "Jupiter": {
+          "lon": {
+            "count": 4000,
+            "maximum": {
+              "error": 7.524282636950375e-7,
+              "atMs": -4292360940810
+            },
+            "p99": 6.970507797632308e-7,
+            "median": 2.1428860463856836e-7
+          },
+          "lat": {
+            "count": 4000,
+            "maximum": {
+              "error": 2.8127236317843085e-8,
+              "atMs": -5056028920375
+            },
+            "p99": 2.1044141096382418e-8,
+            "median": 2.894930989372213e-9
+          },
+          "speed": {
+            "count": 4000,
+            "maximum": {
+              "error": 2.7179996975323917e-8,
+              "atMs": -3160971112472
+            },
+            "p99": 2.0359998215147e-8,
+            "median": 3.736533344886328e-9
+          }
+        },
+        "Saturn": {
+          "lon": {
+            "count": 4000,
+            "maximum": {
+              "error": 4.100546675545047e-7,
+              "atMs": 1132723704691
+            },
+            "p99": 3.8332473195623606e-7,
+            "median": 1.3731343528888829e-7
+          },
+          "lat": {
+            "count": 4000,
+            "maximum": {
+              "error": 2.214955108215122e-8,
+              "atMs": 876490067832
+            },
+            "p99": 1.794884196826274e-8,
+            "median": 3.2022865470437978e-9
+          },
+          "speed": {
+            "count": 4000,
+            "maximum": {
+              "error": 1.2426255718844814e-8,
+              "atMs": 3947959520082
+            },
+            "p99": 9.407808157502195e-9,
+            "median": 2.3122549777654378e-9
+          }
+        },
+        "Uranus": {
+          "lon": {
+            "count": 4000,
+            "maximum": {
+              "error": 2.0564553437907307e-7,
+              "atMs": 5333412659032
+            },
+            "p99": 1.8998366613232065e-7,
+            "median": 7.287269454536727e-8
+          },
+          "lat": {
+            "count": 4000,
+            "maximum": {
+              "error": 3.118792779588375e-9,
+              "atMs": 2562546455852
+            },
+            "p99": 2.507081542368894e-9,
+            "median": 4.930000296887727e-10
+          },
+          "speed": {
+            "count": 4000,
+            "maximum": {
+              "error": 2.5616217057267132e-8,
+              "atMs": -4869356078151
+            },
+            "p99": 5.129289812333404e-9,
+            "median": 1.229890946030654e-9
+          }
+        },
+        "Neptune": {
+          "lon": {
+            "count": 4000,
+            "maximum": {
+              "error": 1.2904627055831952e-7,
+              "atMs": -2520801041103
+            },
+            "p99": 1.212646907333692e-7,
+            "median": 4.5896996425653924e-8
+          },
+          "lat": {
+            "count": 4000,
+            "maximum": {
+              "error": 4.156269106658783e-9,
+              "atMs": -2844753910471
+            },
+            "p99": 3.517168112310287e-9,
+            "median": 7.062898044196686e-10
+          },
+          "speed": {
+            "count": 4000,
+            "maximum": {
+              "error": 1.6491947543717522e-8,
+              "atMs": 6373809794708
+            },
+            "p99": 3.6319742491297546e-9,
+            "median": 7.834373488488366e-10
+          }
+        },
+        "Pluto": {
+          "lon": {
+            "count": 4000,
+            "maximum": {
+              "error": 1.263498177195288e-7,
+              "atMs": 634382601533
+            },
+            "p99": 1.0786212101265846e-7,
+            "median": 3.399449610697047e-8
+          },
+          "lat": {
+            "count": 4000,
+            "maximum": {
+              "error": 3.828966654850774e-8,
+              "atMs": 419661221726
+            },
+            "p99": 2.6708416811516145e-8,
+            "median": 5.210383235976224e-9
+          },
+          "speed": {
+            "count": 4000,
+            "maximum": {
+              "error": 5.183641826542185e-9,
+              "atMs": 5492112557117
+            },
+            "p99": 2.9845799581762478e-9,
+            "median": 6.15238538934082e-10
+          }
+        }
+      }
+    },
+    "boundaries": {
+      "instants": 95,
+      "exactSamples": 63,
+      "interpolatedInstants": 32,
+      "errors": {
+        "Sun": {
+          "lon": {
+            "count": 95,
+            "maximum": {
+              "error": 1.0686562745831907e-11,
+              "atMs": -5364576000001
+            },
+            "p99": 1.0686562745831907e-11,
+            "median": 0
+          },
+          "lat": {
+            "count": 95,
+            "maximum": {
+              "error": 8.34282052079513e-15,
+              "atMs": 741484800001
+            },
+            "p99": 8.34282052079513e-15,
+            "median": 0
+          },
+          "speed": {
+            "count": 95,
+            "maximum": {
+              "error": 1.3499164452923651e-8,
+              "atMs": -5364575999999
+            },
+            "p99": 1.3499164452923651e-8,
+            "median": 0
+          }
+        },
+        "Moon": {
+          "lon": {
+            "count": 95,
+            "maximum": {
+              "error": 1.2775558388966601e-10,
+              "atMs": 1822435200002
+            },
+            "p99": 1.2775558388966601e-10,
+            "median": 0
+          },
+          "lat": {
+            "count": 95,
+            "maximum": {
+              "error": 8.066258772032597e-11,
+              "atMs": 157766400001
+            },
+            "p99": 8.066258772032597e-11,
+            "median": 0
+          },
+          "speed": {
+            "count": 95,
+            "maximum": {
+              "error": 2.4158028644194474e-7,
+              "atMs": -5364576000001
+            },
+            "p99": 2.4158028644194474e-7,
+            "median": 0
+          }
+        },
+        "Mercury": {
+          "lon": {
+            "count": 95,
+            "maximum": {
+              "error": 4.7123194235609844e-11,
+              "atMs": 631152000001
+            },
+            "p99": 4.7123194235609844e-11,
+            "median": 0
+          },
+          "lat": {
+            "count": 95,
+            "maximum": {
+              "error": 1.0166090191887633e-11,
+              "atMs": 1483228800001
+            },
+            "p99": 1.0166090191887633e-11,
+            "median": 0
+          },
+          "speed": {
+            "count": 95,
+            "maximum": {
+              "error": 2.1887217149796356e-8,
+              "atMs": -5364576000001
+            },
+            "p99": 2.1887217149796356e-8,
+            "median": 0
+          }
+        },
+        "Venus": {
+          "lon": {
+            "count": 95,
+            "maximum": {
+              "error": 1.3415046851150692e-11,
+              "atMs": 78796800001
+            },
+            "p99": 1.3415046851150692e-11,
+            "median": 0
+          },
+          "lat": {
+            "count": 95,
+            "maximum": {
+              "error": 1.9522161665008753e-12,
+              "atMs": 78796800001
+            },
+            "p99": 1.9522161665008753e-12,
+            "median": 0
+          },
+          "speed": {
+            "count": 95,
+            "maximum": {
+              "error": 2.2862509663212904e-9,
+              "atMs": 94694400001
+            },
+            "p99": 2.2862509663212904e-9,
+            "median": 0
+          }
+        },
+        "Mars": {
+          "lon": {
+            "count": 95,
+            "maximum": {
+              "error": 6.366462912410498e-12,
+              "atMs": -5364576000001
+            },
+            "p99": 6.366462912410498e-12,
+            "median": 0
+          },
+          "lat": {
+            "count": 95,
+            "maximum": {
+              "error": 4.1033842990145786e-13,
+              "atMs": 189302400001
+            },
+            "p99": 4.1033842990145786e-13,
+            "median": 0
+          },
+          "speed": {
+            "count": 95,
+            "maximum": {
+              "error": 6.741522451392257e-9,
+              "atMs": -5364575999999
+            },
+            "p99": 6.741522451392257e-9,
+            "median": 0
+          }
+        },
+        "Jupiter": {
+          "lon": {
+            "count": 95,
+            "maximum": {
+              "error": 2.8421709430404007e-12,
+              "atMs": -5364575999999
+            },
+            "p99": 2.8421709430404007e-12,
+            "median": 0
+          },
+          "lat": {
+            "count": 95,
+            "maximum": {
+              "error": 3.425038030968608e-14,
+              "atMs": -5364575999999
+            },
+            "p99": 3.425038030968608e-14,
+            "median": 0
+          },
+          "speed": {
+            "count": 95,
+            "maximum": {
+              "error": 2.9095900827558197e-9,
+              "atMs": -5364575999999
+            },
+            "p99": 2.9095900827558197e-9,
+            "median": 0
+          }
+        },
+        "Saturn": {
+          "lon": {
+            "count": 95,
+            "maximum": {
+              "error": 5.684341886080801e-13,
+              "atMs": -5364575999999
+            },
+            "p99": 5.684341886080801e-13,
+            "median": 0
+          },
+          "lat": {
+            "count": 95,
+            "maximum": {
+              "error": 3.4083846855992306e-14,
+              "atMs": -5364576000001
+            },
+            "p99": 3.4083846855992306e-14,
+            "median": 0
+          },
+          "speed": {
+            "count": 95,
+            "maximum": {
+              "error": 5.526735319394405e-10,
+              "atMs": -5364575999999
+            },
+            "p99": 5.526735319394405e-10,
+            "median": 0
+          }
+        },
+        "Uranus": {
+          "lon": {
+            "count": 95,
+            "maximum": {
+              "error": 5.968558980384842e-13,
+              "atMs": 94694400001
+            },
+            "p99": 5.968558980384842e-13,
+            "median": 0
+          },
+          "lat": {
+            "count": 95,
+            "maximum": {
+              "error": 9.381384558082573e-15,
+              "atMs": 662688000001
+            },
+            "p99": 9.381384558082573e-15,
+            "median": 0
+          },
+          "speed": {
+            "count": 95,
+            "maximum": {
+              "error": 1.4823312022294033e-10,
+              "atMs": 394329600001
+            },
+            "p99": 1.4823312022294033e-10,
+            "median": 0
+          }
+        },
+        "Neptune": {
+          "lon": {
+            "count": 95,
+            "maximum": {
+              "error": 5.115907697472721e-13,
+              "atMs": -5364576000001
+            },
+            "p99": 5.115907697472721e-13,
+            "median": 0
+          },
+          "lat": {
+            "count": 95,
+            "maximum": {
+              "error": 1.1546319456101628e-14,
+              "atMs": -5364576000001
+            },
+            "p99": 1.1546319456101628e-14,
+            "median": 0
+          },
+          "speed": {
+            "count": 95,
+            "maximum": {
+              "error": 5.775104908178896e-10,
+              "atMs": -5364575999999
+            },
+            "p99": 5.775104908178896e-10,
+            "median": 0
+          }
+        },
+        "Pluto": {
+          "lon": {
+            "count": 95,
+            "maximum": {
+              "error": 1.9895196601282805e-13,
+              "atMs": 63072000001
+            },
+            "p99": 1.9895196601282805e-13,
+            "median": 0
+          },
+          "lat": {
+            "count": 95,
+            "maximum": {
+              "error": 3.552713678800501e-14,
+              "atMs": 315532800001
+            },
+            "p99": 3.552713678800501e-14,
+            "median": 0
+          },
+          "speed": {
+            "count": 95,
+            "maximum": {
+              "error": 6.117893518176043e-11,
+              "atMs": 78796800001
+            },
+            "p99": 6.117893518176043e-11,
+            "median": 0
+          }
+        }
+      }
+    }
+  }
+}
