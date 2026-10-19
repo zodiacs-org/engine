@@ -102,7 +102,7 @@ export async function runGenerationSession(input = createConfig(), {
         prefixVerified = true;
         if (progress.phase === 'published') {
           publishedTiles++;
-          const tile = await storageUsage(join(directory, `tile-${String(progress.descriptor.index).padStart(8, '0')}`));
+          const tile = await storageUsage(progress.tileDirectory);
           for (const field of Object.keys(usage)) usage[field] += tile[field];
         } else if (progress.phase === 'checkpoint') {
           checkpointedTiles++;

@@ -92,8 +92,9 @@ in the ignored `generated/` folder; no full dataset is committed.
 
 [src/store.mjs](src/store.mjs) stores a distributed checksum manifest.
 `manifest.json` records the normalized configuration, pinned archive digest and
-format versions. Each sequential `tile-NNNNNNNN/receipt.json` records its planner
-descriptor and the byte length and SHA-256 of `positions.sky` and `events.json.gz`.
+format versions. In the original flat layout, each `tile-NNNNNNNN/receipt.json`
+records its planner descriptor and the byte length and SHA-256 of `positions.sky`
+and `events.json.gz`.
 This avoids a single manifest growing with the entire dataset. Tile receipts
 and the root manifest together describe the dataset. Checksums detect corruption;
 they do not authenticate the producer. Completion is recorded separately.
@@ -112,3 +113,23 @@ before skipping their computation. A tile published before its checkpoint is
 recovered by verification. Missing checkpointed tiles and mismatched configuration
 are errors, rather than silently regenerated data. Unpublished staging data is
 removed before generating the next missing tile.
+
+The sharded layout uses root manifest `version: 2` and
+`tiles: "shard-NNNNNNNN/tile-NNNNNNNN/receipt.json"`. A shard index is the
+integer tile index divided by `SHARD_SIZE`, rounded down. The tile name retains
+its global index. Each shard holds at most 1,024 tile directories, as enforced
+across a shard boundary by [test/layout.node-test.mjs](test/layout.node-test.mjs).
+New datasets exceeding that tile count use sharding; smaller datasets retain
+the original manifest and bytes. Existing flat stores remain readable and
+resumable. Position, event and receipt bytes and their versions are unchanged.
+Staging for a sharded tile is `.tile.tmp` inside its shard, so publication still
+uses a same-filesystem directory rename.
+
+An explicit layout migration verifies and moves existing tiles, then rebinds
+the checkpoint to the new manifest digest. A `.layout-migration.json` journal
+blocks ordinary generation and queries until that operation finishes. The
+migration can resume after process interruption, including between manifest
+and checkpoint replacement. It uses a sibling staging directory to free a
+child-directory slot before creating the first shard when the flat parent has
+already hit its filesystem link limit. The migration tests cover interruptions,
+locking, byte preservation and rejection of corrupt or ambiguous tile locations.

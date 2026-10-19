@@ -54,7 +54,26 @@ unsampled tangencies. Smaller sampling steps can help but do not prove
 completeness. Known engine clock jumps split tiles; future leap seconds are not
 predicted. Engine upgrades require a deliberate new pin and regenerated data,
 not mixing tiles between runs. The current format has no remote serving,
-distributed worker coordination or migration facility.
+distributed worker coordination or engine-version migration facility.
+
+Large datasets use the sharded layout described in [FORMAT.md](FORMAT.md).
+An existing flat database can reach a filesystem directory-link limit before
+its storage budget is spent. Stop its writer, keep its checkpoint and run the
+layout migration from the repository root:
+
+```sh
+node skydb/scripts/migrate-layout.mjs --directory skydb/generated/full
+```
+
+The command verifies and moves existing tiles without recomputing them. Keep
+the same directory, configuration and engine pin for subsequent generation.
+If migration is interrupted, rerun that command; retain its journal and sibling
+staging directory. Ordinary generation and queries refuse an incomplete
+migration. Stale-lock diagnosis follows the same rules as generation. This
+operation supports process interruption on a trusted local filesystem, with
+the same power-loss limitations as the store.
+If the old flat root contains unpublished `.tile.tmp` data, migration retains
+it unchanged. Sharded readers do not use it, and storage walks still count it.
 
 For review, run `node skydb/scripts/check-project.mjs`, the project suite and
 the repository checks that need no engine rebuild. The project checker checks

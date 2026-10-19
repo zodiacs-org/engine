@@ -78,6 +78,16 @@ integrity and resume behavior, not independent astronomical accuracy or event
 completeness. Whole-database verification and interpolation measurement remain
 separate milestones.
 
+The original flat store reached a filesystem directory-link limit before its
+disk cap. [LAYOUT.md](LAYOUT.md) records the stopped-store diagnostic and the
+sharded-layout recovery. New large stores use sharding; retained flat stores
+require the explicit migration command before resuming beyond that limit.
+Migration changes the root manifest digest while retaining the configuration,
+engine pin and tile contents. The aggregate migration evidence binds that
+change between session reports. The original trial estimate describes its flat
+layout and remains a resource assumption; current whole-root measurements and
+disk guards account for the sharded layout's actual allocation.
+
 [test/full.node-test.mjs](../test/full.node-test.mjs) checks trial-based
 selection, bounded interruption, byte-identical resume, completed reruns,
 disk stops, deadline behavior, failure propagation and report evidence. CI

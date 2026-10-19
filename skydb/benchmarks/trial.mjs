@@ -32,7 +32,7 @@ export async function runTrial(config = TRIAL_CONFIG, { onProgress = async () =>
   const start = performance.now(), cpuStart = process.cpuUsage();
   const generation = await generateDatabase(directory, config, { onProgress: async progress => {
     if (progress.phase === 'published') {
-      const tile = await storageUsage(join(directory, `tile-${String(progress.descriptor.index).padStart(8, '0')}`));
+      const tile = await storageUsage(progress.tileDirectory);
       for (const field of Object.keys(usage)) usage[field] += tile[field];
     }
     if (progress.phase === 'checkpoint') {

@@ -152,3 +152,68 @@ Validation passed on the report's Node runtime: locked project setup, the full
 project test suite, workflow module syntax checks and the project isolation and
 package-exclusion checker. Only this continuation note, the new aggregate
 report and CHANGES.txt changed; phase 1 code remains unchanged.
+
+P2 continues with back-to-back bounded invocations under the supervisor note in
+the brief. New aggregate reports begin at
+[session-0008.json](benchmarks/full-sessions/session-0008.json). Their checkpoints
+continue the preceding session with the same configuration and engine pin.
+Generation then exposed a filesystem directory-link limit in the original
+flat layout. [layout-limit-output.json](benchmarks/layout-limit-output.json)
+records a fresh `EMLINK` probe at 64,998 retained tiles and 65,000 parent links,
+with all generated/ contents allocating 1,407,664,128 bytes. This was a
+directory-layout failure below the disk cap. The failed invocation emitted no
+full-session report; its wall and CPU timings were not captured.
+
+Large new stores now use the sharded layout in [FORMAT.md](FORMAT.md). Existing
+flat stores remain supported, and the committed sample still reproduces byte
+for byte. The explicit resumable migration verifies and moves tiles, preserving
+their bytes while rebinding the checkpoint to the new root manifest. Its
+journal blocks ordinary generation and queries until both metadata files have
+been published. Sibling staging frees a child-directory slot before the first
+shard is published, allowing recovery from the saturated flat root.
+
+[layout-migration-output.json](benchmarks/layout-migration-output.json) records
+verification and movement of all 64,998 retained tiles into 64 shards, with the
+same configuration, engine archive pin, checkpoint index and incomplete flag.
+The root manifest digest changes from the flat layout to the sharded layout;
+the migration report binds both digests. Whole-generated allocation after
+migration was 1,409,507,328 bytes. [LAYOUT.md](benchmarks/LAYOUT.md) gives the
+commands, measured scope and evidence links. The first subsequent generation
+report, [session-0011.json](benchmarks/full-sessions/session-0011.json), starts
+at the migrated checkpoint and records verification of that retained prefix.
+
+The new session reports and the stopped-store diagnostic record this progress:
+
+| evidence | starting checkpoint | retained checkpoint |
+| --- | ---: | ---: |
+| [session-0008](benchmarks/full-sessions/session-0008.json) | 45,370 | 50,618 |
+| [session-0009](benchmarks/full-sessions/session-0009.json) | 50,618 | 55,610 |
+| [session-0010](benchmarks/full-sessions/session-0010.json) | 55,610 | 60,533 |
+| [directory-limit diagnostic](benchmarks/layout-limit-output.json), following session-0010 | 60,533 | 64,998 |
+| [session-0011](benchmarks/full-sessions/session-0011.json), following migration | 64,998 | 68,847 |
+| [session-0012](benchmarks/full-sessions/session-0012.json) | 68,847 | 73,071 |
+| [session-0013](benchmarks/full-sessions/session-0013.json) | 73,071 | 76,783 |
+
+The final report records 76,783 of 146,099 planned tiles and 1,651,204,096
+allocated bytes across all generated/ contents, below its recorded
+12,000,000,000-byte cap. It paused at the cooperative session deadline, released
+the writer lock and retained an incomplete checkpoint. No disk guard stopped
+these runs. Generated tiles remain ignored. P2 stays unchecked; P3 remains
+pending until generation completes. Resume with the existing full-generation
+command and the same directory; the layout migration is already complete.
+
+[test/layout.node-test.mjs](test/layout.node-test.mjs) checks sharded generation,
+resume, queries and corruption failures. [test/migrate-layout.node-test.mjs](test/migrate-layout.node-test.mjs)
+checks migration interruption cuts, byte preservation, locking and invalid
+state rejection. [test/layout-evidence.node-test.mjs](test/layout-evidence.node-test.mjs)
+binds the diagnostic, migration and cross-session checkpoint history, while
+[test/full.node-test.mjs](test/full.node-test.mjs) validates the session counters,
+resource measurements and trial arithmetic. Existing sample reproduction and
+phase 1 suites continue to apply.
+
+Validation passed on the Node runtime recorded in the new reports: locked
+project setup, the full project test suite, workflow module syntax checks and
+the project isolation and package-exclusion checker. The generated dataset,
+dependencies and test logs remain ignored. Changes stay in skydb/; no engine
+source, archive, root configuration, workflow or package version changed.
+The one-line session summary is appended to CHANGES.txt for the harness.

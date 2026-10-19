@@ -15,3 +15,4 @@ Resume full-span sky database generation within its session and disk budgets, re
 Continue full-span sky database generation from the retained checkpoint and record verified progress, storage use and session resource measurements.
 Resume full-span sky database generation, preserve the next verified checkpoint and record bounded-session resource measurements.
 Continue full-span sky database generation from its verified checkpoint and retain the next progress and storage report within session resource limits.
+Continue full-span generation, fix the directory link limit with compatible sharding and resumable migration, and record checkpoint and resource evidence.

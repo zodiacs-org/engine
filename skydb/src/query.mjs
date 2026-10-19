@@ -2,10 +2,10 @@ import { open } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { createConfig, COVERAGE } from './config.mjs';
-import { ENGINE_IDENTITY } from './identity.mjs';
+import { databaseManifest, manifestLayout } from './layout.mjs';
 import { TIME_BOUNDARIES, planPositionTiles } from './generate.mjs';
 import { signedAngle } from './events.mjs';
-import { STORE_LIMIT, verifyStoredTile } from './store.mjs';
+import { STORE_LIMIT, assertNoLayoutMigration, verifyStoredTile } from './store.mjs';
 
 async function readJson(path) {
   const handle = await open(path, 'r');
@@ -76,10 +76,11 @@ export async function openDatabase(directory, options = {}) {
   const cacheTiles = options.cacheTiles ?? 4;
   if (!Number.isSafeInteger(cacheTiles) || cacheTiles < 1 || cacheTiles > 64) throw new RangeError('Invalid cacheTiles');
   directory = resolve(directory);
+  await assertNoLayoutMigration(directory);
   const manifest = await readJson(join(directory, 'manifest.json'));
   const config = createConfig(manifest.value.config);
-  const expected = { version: 1, engineSha256: ENGINE_IDENTITY.sha256, config,
-    tiles: 'tile-NNNNNNNN/receipt.json', positionFormat: 1, eventFormat: 1 };
+  const layout = manifestLayout(manifest.value);
+  const expected = databaseManifest(config, layout);
   if (JSON.stringify(manifest.value) !== JSON.stringify(expected)) throw new Error('Invalid database manifest');
   planPositionTiles(config).next(); // Validate tile capacity.
   const checkpoint = (await readJson(join(directory, 'checkpoint.json'))).value;
@@ -95,7 +96,7 @@ export async function openDatabase(directory, options = {}) {
     const result = queue.then(async () => {
       let tile = cache.get(descriptor.index);
       if (!tile) {
-        tile = await verifyStoredTile(directory, descriptor, config);
+        tile = await verifyStoredTile(directory, descriptor, config, layout);
       }
       cache.delete(descriptor.index);
       cache.set(descriptor.index, tile);
