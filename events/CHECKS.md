@@ -584,3 +584,55 @@ Generated candidates, bundles and logs remain ignored, and the disk cap was
 not approached. Only `events/` was changed. No parent build, archive packing,
 release operation or git metadata mutation was performed. The fixed-query
 completeness report remains P5.
+
+## Phase 2 P5
+
+Runtime: Node.js 22.23.3 from `/home/box/.local/node22/bin`. Dependencies were
+reinstalled from the events lockfile with the npm cache under `events/.cache/`.
+
+Passed:
+
+- `npm ci --prefix events --cache "$PWD/events/.cache/npm"`
+- `npm run typecheck --prefix events`
+- `npm run build --prefix events`
+- `npm test --prefix events`, including all phase 1 suites, offline independent
+  reference reductions, the fixed-query report, analytic matching checks,
+  long-span reconciliation, HTTP integration and parent npm file-list isolation.
+- `node events/scripts/completeness.mjs --check`, exercised by the report test.
+- `node events/scripts/loop-report.mjs --check`
+- `node events/scripts/sample-timing.mjs --check`
+- `node events/scripts/nasa-sample-timing.mjs --check`
+- `git diff --check`, authored-file size, documentation character, disk-use
+  and events-only change checks.
+
+The report plan fixes whole-year station, ingress and aspect queries and the
+independent paired-pass windows under both longitude scan policies. NASA
+queries cover the complete selected calendar years, with derivative padding
+filtered back to the requested year. Calendar windows include their midnight
+and exclude the next midnight. The matcher checks identity and independent
+window ownership before assessing timing or classification, rejects ambiguous
+assignments and never reuses a returned result. Refused searches leave
+references unassessed. Analytic tests cover these rules, aggregation and signed
+zero serialization; they do not supply astronomical expectations.
+
+`evidence/completeness.json` preserves query and source/policy aggregates,
+unmatched outputs, misses, timing errors and class disagreements. It binds
+the plans, references, reduction and build scripts, lockfile and TypeScript
+sources. The original coarse loop scans still miss the independently reduced
+passes. Station-aware scans recover their directions without resolving their
+known timing discrepancies. The Saturn ingress timing and noncentral solar
+class disagreements remain under unchanged reference thresholds and model
+radii. No engine behavior or original reference fixture was changed.
+
+`COMPLETENESS.md` names the measured scope, counts and rounding. Horizons
+coverage remains sparse, so its unmatched outputs are unreferenced rather
+than false positives. NASA inventory agreement applies only to the selected
+catalog years, rather than every year between the endpoints. Totals count
+comparisons across queries and policies, not distinct astronomical events.
+Physical error bounds, retrograde inventories and independent void-of-course
+dates remain outside this evidence.
+
+Generated logs and bundles remain ignored, and disk use stayed below the
+brief's cap. Only `events/` was changed. No parent build, archive packing,
+release operation or git metadata mutation was performed. Performance work
+remains P6.

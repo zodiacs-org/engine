@@ -28,8 +28,17 @@ The broader catalog-date sample and its retained class disagreement are in
 numerical row hashes, date arithmetic and selection without a live network;
 stored full-page digests cannot authenticate the original downloaded bytes.
 The whole-year API tests widen discovery windows but compare only the selected
-reference dates. No exhaustive NASA inventory or new physical error bound is
-claimed. No reference fixture was derived from engine output.
+reference dates. Those API tests establish neither an exhaustive NASA inventory
+nor a new physical error bound. No reference fixture was derived from engine output.
+
+The fixed-query report in [COMPLETENESS.md](COMPLETENESS.md) now compares whole
+selected-year eclipse inventories with NASA, and whole-year station, ingress
+and aspect searches with the sparse Horizons references. It retains unmatched
+results, misses, timing failures and class disagreements separately. Its
+selected years span the requested period without covering every intervening
+year. Horizons outputs outside the independently covered windows remain
+unreferenced. Retrograde interval and void-of-course inventories are outside
+that report's independent coverage.
 
 # Sampling and boundaries
 

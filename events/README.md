@@ -601,3 +601,7 @@ See [LIMITATIONS.md](LIMITATIONS.md) for the evidence boundaries and operating
 limits. Full-year DSL comparisons against selected independent dates are in
 [reference-api.node-test.ts](test/reference-api.node-test.ts); they reuse the unchanged
 JPL and NASA references rather than generating expectations from this engine.
+
+[COMPLETENESS.md](COMPLETENESS.md) documents the reproducible fixed-query report,
+including whole-year NASA inventory comparisons, sparse Horizons reference
+coverage, unmatched results and retained discovery, timing and class discrepancies.
