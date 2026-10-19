@@ -235,10 +235,46 @@ creating a calculation server. `test/transports.mcp-test.ts` checks requests at
 that boundary and just above it. This is a resource policy, not a chart-size
 or accuracy claim. HTTP responses use `Cache-Control: no-store`. The official
 localhost guards validate Host and any supplied Origin before routing. There
-is no CORS support or built-in authentication. Remote access requires an
-authenticated HTTPS gateway that checks the public Host and Origin before
-forwarding with a permitted local host. Gateway configuration and client
-setup are described below.
+is no CORS support. Optional bearer authentication is described below. Remote
+access requires an authenticated HTTPS gateway that checks the public Host and
+Origin before forwarding with a permitted local host. Gateway configuration
+and client setup are described below.
+
+HTTP bearer authentication is off by default. Select an environment variable
+name or a file path whose contents hold the credential:
+
+```sh
+node build/cli.js http --port 3000 --auth-token-env ENV_NAME
+node build/cli.js http --auth-token-file /absolute/operator/path --port 3000
+```
+
+Choose one source. The source options and `--port` may appear in any order.
+There is no option for passing the credential itself on the command line.
+Embedded callers use `startHttp({ auth: { tokenEnv: "ENV_NAME" } })` or
+`startHttp({ auth: { tokenFile: "/absolute/operator/path" } })`.
+Stdio rejects authentication options and does not read credentials. Setting
+an environment variable alone does not enable HTTP authentication.
+
+The source is read once before the listener starts. Missing, empty or invalid
+credentials prevent startup; file sources must be readable regular files and
+are read with a size bound. A credential must match the ASCII pattern
+`[A-Za-z0-9._~+/-]+=*` and contain at most 4096 bytes. A file may end with one
+LF or CRLF; other whitespace is rejected. Environment values are used without
+trimming. Restart the process after changing the source to rotate the
+credential. Keep credential files outside the checkout and provision
+environment values through the operator's secret storage. Diagnostics do not
+include credentials or source paths.
+
+When configured, the backend checks the `Authorization` bearer credential on
+every `/mcp` request before parsing the body or creating a calculation server.
+It compares SHA-256 digests with `timingSafeEqual` and rejects duplicate
+authorization headers. Missing, malformed and wrong credentials receive the
+same HTTP 401 response with `WWW-Authenticate: Bearer realm="zodiacs-astro"`
+and `Cache-Control: no-store`. Credentials in URLs or request bodies do not
+authenticate a request. [test/auth.mcp-test.ts](test/auth.mcp-test.ts) enforces
+the credential syntax, size policy, source loading, request rejection and
+CLI behavior. This shared credential does not provide OAuth or account
+authorization.
 
 The entry points follow the SDK's [Node adapter API](https://ts.sdk.modelcontextprotocol.io/v2/api/%40modelcontextprotocol/node/).
 `test/transports.mcp-test.ts` uses real child processes and loopback HTTP with
@@ -361,7 +397,8 @@ It also documents Secure MCP Tunnel for private connections; this project
 does not configure or test that service.
 
 The loopback URL cannot serve as a public ChatGPT endpoint. This server supplies
-no OAuth discovery, token validation or account integration. The gateway must
+no OAuth discovery or account integration. Its optional shared bearer credential
+is separate from the gateway's client authentication. The gateway must
 implement the authentication flow supported by the chosen connection, including
 discovery when required. Choosing authentication in the form does not add it to
 the backend. Vitest exercises official SDK clients, not live client GUIs,
@@ -387,9 +424,12 @@ are synchronous; the search sample budget is not a wall-clock timeout. A gateway
 timeout does not cancel a running calculation. Hard deadlines require external
 process supervision. Disable caching and avoid logging request bodies, result
 bodies or authorization headers: natal inputs and receipts contain birth details.
-TLS, authentication, OAuth, CORS, quotas, persistence and public routing belong
-to the deployment. An authorization header forwarded to the backend is not
-checked there.
+TLS, client authentication and authorization, OAuth, CORS, quotas, persistence
+and public routing belong to the deployment. If backend bearer authentication
+is configured, the gateway must supply that credential on upstream requests
+after authenticating the client. Keep it out of gateway logs and client-visible
+responses. When backend authentication is disabled, forwarded authorization
+headers are not checked there.
 
 Tools calculate locally without fetching places or resolving civil wall times.
 Resolve local-time gaps, folds and historical rules before sending a birth

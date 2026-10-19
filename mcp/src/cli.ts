@@ -1,14 +1,28 @@
 import { pathToFileURL } from "node:url";
 import { startHttp, startStdio } from "./transports.js";
+import type { BearerAuthSource } from "./auth.js";
 
-export function parseArguments(args: string[]): { transport: "stdio" | "http"; port?: number } {
+const usage = "Usage: node build/cli.js [stdio | http [--port PORT] [--auth-token-env NAME | --auth-token-file PATH]]";
+
+export function parseArguments(args: string[]): { transport: "stdio" | "http"; port?: number; auth?: BearerAuthSource } {
   if (args.length === 0 || (args.length === 1 && args[0] === "stdio")) return { transport: "stdio" };
-  if (args[0] === "http" && args.length === 1) return { transport: "http" };
-  if (args[0] === "http" && args.length === 3 && args[1] === "--port" && /^\d+$/.test(args[2]!)) {
-    const port = Number(args[2]);
-    if (Number.isSafeInteger(port) && port >= 0 && port <= 65535) return { transport: "http", port };
+  if (args[0] !== "http") throw new Error(usage);
+  const config: ReturnType<typeof parseArguments> = { transport: "http" };
+  for (let index = 1; index < args.length; index += 2) {
+    const option = args[index];
+    const value = args[index + 1];
+    if (!value) throw new Error(usage);
+    if (option === "--port" && config.port === undefined && value.trim() === value && /^\d+$/.test(value)) {
+      const port = Number(value);
+      if (!Number.isSafeInteger(port) || port < 0 || port > 65535) throw new Error(usage);
+      config.port = port;
+    } else if (option === "--auth-token-env" && !config.auth && value.trim() === value && /^[A-Za-z_][A-Za-z0-9_]*$/.test(value)) {
+      config.auth = { tokenEnv: value };
+    } else if (option === "--auth-token-file" && !config.auth && !value.startsWith("--")) {
+      config.auth = { tokenFile: value };
+    } else throw new Error(usage);
   }
-  throw new Error("Usage: node build/cli.js [stdio | http [--port PORT]]");
+  return config;
 }
 
 export async function main(args = process.argv.slice(2)) {
@@ -28,7 +42,7 @@ export async function main(args = process.argv.slice(2)) {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   void main().catch(() => {
-    process.stderr.write("zodiacs-astro: startup failed; usage: node build/cli.js [stdio | http [--port PORT]]\n");
+    process.stderr.write(`zodiacs-astro: startup failed; ${usage}\n`);
     process.exitCode = 1;
   });
 }
