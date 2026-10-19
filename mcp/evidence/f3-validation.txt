@@ -1,0 +1,24 @@
+F3 validation on Node 22.22.2
+
+mcp/: npm run check passed: typecheck, 200 tests in 10 files, and build.
+mcp/: node scripts/validate.mjs passed, including the existing scope,
+parent file/dist snapshot, package exclusion, file size and Markdown checks.
+
+Repeated command from mcp/:
+npm test -- test/transports.mcp-test.ts -t "immediately when HTTP readiness is received" --reporter=dot
+Ran 10 times; both SIGINT and SIGTERM tests passed in every run.
+Each test signals the child directly in the stderr data callback as soon
+as the complete HTTP readiness message arrives, then checks exit [0, null]
+and empty protocol stdout. No request, timer or extra await precedes signaling.
+This records 20 successful immediate shutdowns across the repeated runs.
+
+Root: npx --no-install vitest run --reporter=dot (Vitest 2.1.9) listed no
+mcp/ tests. Ran in a temporary copy of the current tracked worktree files,
+using the prior F2 root lockfile dependency install, without mcp dependencies.
+Root result: 85 files passed, 1 failed; 3829 tests passed, 23 failed, 1 skipped.
+All failures are in unchanged scripts/verify-archive-binding.test.mjs.
+The sandbox has /node_modules above /tmp, which the archive check refuses.
+Root exit code: 1. This confirms discovery isolation, not a full root pass.
+
+Actual worktree: root Vitest list --filesOnly listed 86 files and no mcp/
+tests, with mcp dependencies present. Root dependencies and dist were untouched.
