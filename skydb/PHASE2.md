@@ -88,3 +88,19 @@ Validation passed on the report's Node runtime: locked project setup, the full
 project test suite, workflow module syntax checks and the project isolation and
 package-exclusion checker. Only this continuation note, the new aggregate
 report and CHANGES.txt changed; phase 1 code remains unchanged.
+
+P2 continuation is recorded in
+[benchmarks/full-sessions/session-0004.json](benchmarks/full-sessions/session-0004.json).
+The unchanged runner verified the previous 21,713 tiles and checkpointed another
+6,197, reaching 27,910 of 146,099 planned tiles. The report starts at the prior
+session's final checkpoint with the same manifest digest, engine pin and
+configuration. It paused at the cooperative session deadline and released the
+writer lock. All generated/ contents allocated 647,233,536 bytes at the final
+measurement, below the report's 12,000,000,000-byte cap; no disk guard stopped
+the run. These measurements are validated by
+[test/full.node-test.mjs](test/full.node-test.mjs). Generated tiles remain ignored.
+P2 stays unchecked because its checkpoint is incomplete; P3 remains pending.
+Validation passed on the report's Node runtime: locked project setup, the full
+project test suite, workflow module syntax checks and the project isolation and
+package-exclusion checker. Only this continuation note, the new aggregate
+report and CHANGES.txt changed; phase 1 code remains unchanged.
