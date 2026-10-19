@@ -12,7 +12,9 @@ A bounded engine campaign and its measured aggregate error report are now
 [phase 2 pilot](reports/phase2-pilot.md) adds grouped angular and distance
 statistics over the configured TT sampling span. The checkpointed
 [million-target progress report](reports/phase2-million-tt-progress.md) records
-the completed prefix of the larger paired campaign. The requested million
+the initial completed prefix of the larger paired campaign. Its
+[retained measurement](reports/phase2-measured-tt.md) extends those checkpoints
+and summarizes the actual JPL and Swiss comparisons. The requested million
 charts are not complete.
 
 The JPL comparison uses public DE440/DE441 kernels downloaded from
@@ -151,6 +153,7 @@ only the locked crosscheck dependency, with lifecycle scripts disabled:
 ```sh
 npm ci --prefix crosscheck --ignore-scripts --no-audit --no-fund --cache "$PWD/crosscheck/runtime/npm-cache"
 npm --prefix crosscheck run check:syntax
+node --check crosscheck/reporting/final-campaign.mjs
 node crosscheck/tools/check-swiss.mjs
 npm --prefix crosscheck run build
 npm --prefix crosscheck run verify
@@ -398,8 +401,9 @@ runtime. A missing or invalid kernel is an error, never a passing skip.
 [The reference report](reports/jpl-reduction.md) validates this reduction's
 inertial modes against public JPL output. It evaluates no engine charts.
 The separate [bounded campaign report](reports/bounded-sample.md) measures
-engine charts. Swiss transport is implemented, but no live Swiss measurement
-was made. No public kernel bytes or per-case positions are committed.
+engine charts. Swiss was unavailable in that historical bounded campaign;
+later paired measurements are linked under Campaign operations. No public
+kernel bytes or per-case positions are committed.
 
 ## True-of-date frames and relativistic modes
 
@@ -801,12 +805,11 @@ external adapter. Elapsed time includes that adapter; CPU and maximum RSS
 exclude its resource use. Disk snapshots count kernels and all other logical
 file bytes under runtime/ and cache/.
 
-Continue this campaign in P6 with the same specification, source, runtime,
+Further continuations must use the same specification, source, runtime,
 verified references and external selectors. Use the progress wrapper for
 every bounded continuation so its ledger remains continuous. Stop workers
-before snapshot or resource export. Preserve the P5 progress artifacts;
-the completed campaign uses its original name for its final report. Current
-snapshot checks require the original saved prefix, so after further work
+before snapshot or resource export. Preserve the P5 progress artifacts.
+Snapshot checks require the original saved prefix, so after further work
 use the retained progress bundle to reproduce the P5 artifacts:
 
 ```sh
@@ -818,6 +821,39 @@ resource ledger continues separately; the P5 resource receipt remains
 reproducible from its committed aggregate fields through renderResources.
 An executable harness change requires a new campaign identity and cannot
 resume these checkpoints.
+
+The [retained phase 2 report](reports/phase2-measured-tt.md),
+[CSV](reports/phase2-measured-tt.csv) and
+[receipt](reports/phase2-measured-tt.json) contain the largest completed
+prefixes retained after the later bounded continuation. The requested
+million-chart campaign remains incomplete. Its
+[resource evidence](reports/phase2-measured-tt-resources.md) records the
+actual elapsed time and the explicit case budgets at which execution
+stopped. The stop is a bounded-session choice; no completion-time estimate
+is claimed. Storage remains subject to the same cap.
+
+The headline is computed from the report's measured angular channels and
+resource totals. It describes the sampled TT interval and compared exact
+bodies, keeps JPL accuracy and Swiss instrument differences separate, and
+leaves empty groups and unavailable centers explicit. Detailed tables retain
+per-body longitude, latitude and distance statistics and percentile
+intervals. Sample maxima do not bound unsampled dates.
+
+The aggregate-only renderer lives in reporting/ so it does not change the
+frozen lib/ and tools/ identity used by the measurement. It consumes the
+validated final bundle and continuous resource ledger, writes separately
+named artifacts without overwriting earlier reports, and reproduces them
+without opening either instrument:
+
+```sh
+node crosscheck/reporting/final-campaign.mjs crosscheck/runtime/campaigns/phase2-million-tt/final-bundle.json crosscheck/runtime/campaigns/phase2-million-tt/resource-progress.json phase2-measured-tt
+node crosscheck/reporting/final-campaign.mjs crosscheck/runtime/campaigns/phase2-million-tt/final-bundle.json crosscheck/runtime/campaigns/phase2-million-tt/resource-progress.json phase2-measured-tt --check
+```
+
+The bundle preparation, continuation and validation commands are recorded
+in [VALIDATION.md](VALIDATION.md). Final partial artifacts preserve the
+original requested count and campaign identity; ordinary campaign
+report/check actions still require every requested chart to be complete.
 
 For a separate campaign, after the isolated build and runtime ERFA acquisition
 described above, an example requesting a million-scale campaign is:

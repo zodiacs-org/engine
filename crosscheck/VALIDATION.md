@@ -7,10 +7,15 @@ the checkpointed runner are implemented. Actual bounded engine measurements
 are in [bounded-sample.md](reports/bounded-sample.md) and
 [driver-smoke.md](reports/driver-smoke.md), with fresh checks recorded under
 F3 and F4 below. Those measurements recorded Swiss as unavailable. The
-phase 2 brief now approves an owner-provided external installation as an
-optional dev/test-only instrument for this harness. No live Swiss accuracy
-campaign is recorded here yet. The larger campaign and expanded statistics
-are tracked in [PHASE2.md](PHASE2.md).
+phase 2 brief approves an owner-provided external installation as an
+optional dev/test-only instrument for this harness. The
+[paired pilot](reports/phase2-swiss-pilot.md) and
+[checkpointed progress](reports/phase2-million-tt-progress.md) record live
+Swiss instrument comparisons, separately from the JPL accuracy reference.
+The [retained measurement](reports/phase2-measured-tt.md) extends that
+campaign and summarizes its measured angular errors and resource use.
+The larger campaign and expanded statistics are tracked in
+[PHASE2.md](PHASE2.md).
 
 Swiss Ephemeris and pyswisseph must stay outside the checkout. They are never
 engine runtime dependencies or imports and never shipped in any package,
@@ -1310,3 +1315,154 @@ external. Further execution must keep the executable harness unchanged to
 resume this campaign identity and use the progress wrapper to maintain its
 resource ledger. Preserve the P5 progress bundle before writing a later
 snapshot; completed aggregate artifacts are not overwritten.
+
+## Phase 2 P6 retained measurement and S4 headline
+
+The [retained report](reports/phase2-measured-tt.md),
+[CSV](reports/phase2-measured-tt.csv) and
+[receipt](reports/phase2-measured-tt.json) extend the original campaign to
+15,360 completed synthetic charts. The completed residue-class prefixes are
+5,120 per shard. The million-chart target remains incomplete; this is the
+largest completed prefix retained for this phase. The sampling interval is
+1800-01-01 inclusive to 2200-01-01 exclusive on TT, not continuous coverage
+or observed extrema. Exact Sun, Moon, Mercury and Venus centers are compared.
+Full DE440 contains that interval; DE441 has no selected interval and the
+other exact planet centers remain unavailable.
+
+The practical time limit was this bounded continuation session. The
+invocation added 12,288 charts and stopped after its explicit budget of
+4,096 additional charts per shard. Its measured driver duration was
+587.034002356 seconds. The [continuous resource receipt](reports/phase2-measured-tt-resources.json)
+and [rendered evidence](reports/phase2-measured-tt-resources.md) retain
+721.986780018 seconds across the earlier and current invocations, alongside
+the actual commands, per-shard continuity, Node-only CPU/RSS and combined
+runtime/cache snapshots. The requested million charts were not completed
+within these bounded sessions. No completion-time extrapolation is used.
+The stop was the chosen case budget; storage did not reach its cap.
+
+Before continuation, the original P5 aggregate bundle was copied to
+runtime/campaigns/phase2-million-tt/p5-progress-bundle.json with an exclusive
+write. The original progress-bundle.json and all P5 reports remain unchanged.
+Current build and executable hashes were verified against that bundle.
+No lib/, tools/, manifest, engine source, reference or external instrument
+installation changed during execution. The new presentation module lives
+under reporting/ and its separate source SHA-256 is recorded in the final
+metadata. The original measurement tooling digest remains unchanged.
+
+With Node v22.23.3 on PATH and CROSSCHECK_PYTHON and SE_EPHE_PATH selecting
+the approved external installation, the continuation ran from the repository
+root:
+
+```sh
+node crosscheck/tools/progress.mjs crosscheck/runtime/p5-million.json all 4096
+```
+
+It used the P5 specification recorded above, serial shards in one Node
+process and one external adapter. The resource ledger retains the earlier
+invocations without alteration and binds the new invocation to their final
+prefixes. Both Swiss comparisons use the same adapter response per exact
+body; returned flags and fallback totals are counted once per request.
+Only aggregate statistics, flags and identities are retained.
+
+After workers stopped, the final aggregate bundle was assembled from the
+preserved campaign identity, current shard states and final presentation
+metadata. The JSON receipt records the exact export argument vector,
+measurement identities and source digest. For artifact reproduction, the
+following restores a missing final bundle from those committed declarations
+and preserved aggregate checkpoints. It refuses a changed local build or
+tooling and validates existing bundle reproduction before writing:
+
+```sh
+node --input-type=module <<'JS'
+import { readFile, writeFile } from 'node:fs/promises';
+import { verifyBuild } from './crosscheck/tools/build.mjs';
+import { runnerToolingIdentity } from './crosscheck/lib/runner.mjs';
+import { readRuntimeJson } from './crosscheck/tools/campaign.mjs';
+import { assertDiskBudget, checkFileBytes } from './crosscheck/lib/disk-budget.mjs';
+import { renderFinalCampaign } from './crosscheck/reporting/final-campaign.mjs';
+const directory = 'crosscheck/runtime/campaigns/phase2-million-tt';
+const report = JSON.parse(await readFile('crosscheck/reports/phase2-measured-tt.json', 'utf8'));
+if ((await verifyBuild()).sha256 !== report.campaign.identities.build ||
+    await runnerToolingIdentity() !== report.campaign.identities.tooling)
+  throw Error('Campaign identity changed');
+const bundle = { campaign: report.campaign, metadata: report.metadata,
+  states: await Promise.all([0, 1, 2].map(shard =>
+    readRuntimeJson(directory + `/shard-${shard}.json`))) };
+const ledger = await readRuntimeJson(directory + '/resource-progress.json');
+const outputs = renderFinalCampaign(bundle, ledger);
+const bytes = JSON.stringify(bundle) + '\n';
+checkFileBytes(Buffer.byteLength(bytes));
+await assertDiskBudget(Buffer.byteLength(bytes));
+const path = directory + '/final-bundle.json';
+try { await writeFile(path, bytes, { flag: 'wx' }); }
+catch (error) {
+  if (error.code !== 'EEXIST') throw error;
+  const existing = await readRuntimeJson(path);
+  if (JSON.stringify(renderFinalCampaign(existing, ledger)) !== JSON.stringify(outputs))
+    throw Error('Existing final bundle differs');
+}
+JS
+```
+
+Fresh numerical reproduction also requires the recorded runtime, unchanged
+measurement source/build, verified public inputs and matching external
+Swiss installation. From empty checkpoints, execute the wrapper argument
+vectors in the resource receipt in their recorded order with the same
+specification. Preserve the existing runtime campaign directory before any
+fresh run. No second large numerical campaign was performed in this session.
+The existing invented-arithmetic continuation tests and earlier fresh pilot
+reruns remain the runner checks.
+
+The new exports and exact reproduction ran without opening either instrument:
+
+```sh
+node crosscheck/reporting/final-campaign.mjs crosscheck/runtime/campaigns/phase2-million-tt/final-bundle.json crosscheck/runtime/campaigns/phase2-million-tt/resource-progress.json phase2-measured-tt
+node crosscheck/reporting/final-campaign.mjs crosscheck/runtime/campaigns/phase2-million-tt/final-bundle.json crosscheck/runtime/campaigns/phase2-million-tt/resource-progress.json phase2-measured-tt --check
+```
+
+S4's headline derives the chart count, sampled interval, compared bodies,
+exact angular sample maxima and elapsed time from the same aggregate
+receipts. It states engine-versus-JPL and engine-versus-Swiss results
+separately; Swiss-minus-JPL and convention differences remain in their own
+tables. Longitude and latitude maxima stay in arcseconds, distance statistics
+stay in km and percentile intervals retain their approximation limits.
+Unavailable instruments and groups never become zero errors.
+
+tests/phase2-final.node-test.mjs uses invented aggregate arithmetic to check
+summary selection, units, absence, unchanged JSON/CSV, ledger and identity
+refusal, case-budget exhaustion, exclusive writes, path/symlink refusal and
+reproduction. tests/phase2-measured.node-test.mjs checks the committed count,
+stride coverage, unchanged earlier identities and resource entries, paired
+counts and flags, percentile ranks, headline derivation and file retention.
+No test expects a Swiss-derived position or establishes a physical bound.
+
+The dedicated workflow adds an explicit syntax check for the new renderer.
+Final validation used Node v22.23.3, with Swiss selectors unset for all
+ordinary tests and checks:
+
+```sh
+npm --prefix crosscheck run check:syntax
+node --check crosscheck/reporting/final-campaign.mjs
+node crosscheck/tools/check-swiss.mjs
+npm --prefix crosscheck run build
+npm --prefix crosscheck run verify
+npm --prefix crosscheck test
+node crosscheck/tools/validate-frames.mjs --phase2 --check
+node crosscheck/tools/reference-plan.mjs --check
+node crosscheck/tools/render-jpl.mjs --check
+node crosscheck/tools/report.mjs crosscheck/runtime/m9-sample/report-bundle.json bounded-sample --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/driver-smoke-validated-first/report-bundle.json driver-smoke --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/phase2-pilot/report-bundle.json phase2-pilot --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/phase2-swiss-pilot/report-bundle.json phase2-swiss-pilot --check
+node crosscheck/tools/report.mjs crosscheck/runtime/campaigns/phase2-million-tt/progress-bundle.json phase2-million-tt-progress --allow-partial --check
+node crosscheck/reporting/final-campaign.mjs crosscheck/runtime/campaigns/phase2-million-tt/final-bundle.json crosscheck/runtime/campaigns/phase2-million-tt/resource-progress.json phase2-measured-tt --check
+npm --prefix crosscheck run check
+node crosscheck/tools/check.mjs --all-sizes
+git diff --check
+```
+
+All checks pass, including the npm exclusion test and historical aggregate
+reproduction. Build and measurement identities match P5. Earlier measured
+reports are unchanged, runtime checkpoints and kernels remain ignored, and
+Swiss software/data remain external. P6 and S4 are complete with the partial
+measurement explicitly retained; P7 remains for the final evidence audit.

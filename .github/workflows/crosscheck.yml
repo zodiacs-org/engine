@@ -34,7 +34,9 @@ jobs:
 
       # The harness is JavaScript and has no TypeScript typecheck script.
       - name: JavaScript syntax check
-        run: npm run check:syntax
+        run: |
+          npm run check:syntax
+          node --check reporting/final-campaign.mjs
 
       - name: Swiss import and dependency boundary
         run: node tools/check-swiss.mjs

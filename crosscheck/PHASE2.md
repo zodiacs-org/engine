@@ -13,8 +13,8 @@ external harness handles git writes and CI.
 - [x] P4 Extend the campaign and aggregate reports to group each body's longitude, latitude and distance errors by DE440 and DE441 span, separate convention differences, and pass a real bounded pilot with exact commands, seed and verified build/kernel identities.
 - [x] S3 Extend the campaign for the same synthetic charts with separate engine-versus-JPL, engine-versus-Swiss and Swiss-versus-JPL per-body angular aggregates, including max, p99.9, p99 and median; bind Swiss version, returned flags, fallback counts and ephemeris SHA-256 identities, test unavailable operation and include the comparison in the large run below.
 - [x] P5 Start the larger campaign toward at least 1,000,000 synthetic charts with at most three active worker processes; validate a budget stop and checkpoint resume and commit only completed aggregate progress with actual counts and resource evidence.
-- [ ] P6 Continue that checkpointed campaign in a later session; finish the requested count if practical or retain the largest completed campaign with a plain explanation of the measured time or disk limit, and publish aggregate markdown and CSV with a short arcsecond summary and its measured span.
-- [ ] S4 Add a short plain-language headline to the final report stating measured engine accuracy versus JPL and versus Swiss in arcseconds, the sampled span and actual chart count; keep unavailable comparisons explicit.
+- [x] P6 Continue that checkpointed campaign in a later session; finish the requested count if practical or retain the largest completed campaign with a plain explanation of the measured time or disk limit, and publish aggregate markdown and CSV with a short arcsecond summary and its measured span.
+- [x] S4 Add a short plain-language headline to the final report stating measured engine accuracy versus JPL and versus Swiss in arcseconds, the sampled span and actual chart count; keep unavailable comparisons explicit.
 - [ ] P7 Audit final counts, per-body and per-span statistics, command/build/kernel/seed receipts and report reproduction; keep Swiss absence explicit and tested, update current documentation, and pass the dedicated Node 22 project checks.
 
 Runtime and cache data, including kernels, must fit within the brief's
@@ -32,9 +32,10 @@ execution is folded into P5 and P6. S4 summarizes the completed measurement.
 The completed P1 to P3 records and their historical Swiss absence remain
 unchanged. Environment selectors are documented without local paths.
 
-Current status: P5 is complete with a checkpointed million-chart target,
-paired aggregate progress and measured resource receipts. P6 is the next
-unchecked milestone and continues the same campaign in a later session.
+Current status: P6 and S4 retain the largest completed campaign prefix and
+its measured JPL and Swiss summary. The requested million charts remain
+incomplete. P7 is the next unchecked milestone and audits the final evidence
+and documentation.
 The notes below
 preserve earlier session history; the S2 completion record supersedes its
 earlier pending scope and runtime blockers.
@@ -183,3 +184,35 @@ suite, build identity, report reproduction, import boundary, npm exclusion
 and file/storage checks pass. VALIDATION.md records the commands and limits.
 P6 must preserve the P5 progress artifacts and executable identity while
 continuing the resource ledger; the requested million charts are incomplete.
+
+P6 continues the original campaign to 15,360 completed synthetic charts,
+with prefixes of 5,120 per shard and unchanged seed, build, executable and
+reference identities. The added bounded invocation processes 4,096 charts
+per shard, or 12,288 additional charts, using one Node process with serial
+shards and one external adapter. It takes 587.034002356 seconds of measured
+driver time; the continuous resource ledger records 721.986780018 seconds
+across both sessions. reports/phase2-measured-tt-resources retains those
+durations, exact commands, prefix continuity, Node-only CPU/RSS and disk
+snapshots. The session stops at this explicit case budget and retains its
+largest completed prefix. The million-chart target remains incomplete;
+no completion-time extrapolation or disk-exhaustion claim is made.
+
+reports/phase2-measured-tt contains aggregate markdown, CSV and a receipt
+with per-body and per-span angular and distance statistics. S4's headline
+derives the actual chart count, sampled TT interval and engine-versus-JPL
+and engine-versus-Swiss angular maxima from those aggregate fields. Swiss
+minus JPL and convention differences remain separate; DE441 is empty and
+missing exact planet centers remain unavailable. The earlier P5 artifacts
+are unchanged. reporting/final-campaign.mjs validates the continuous ledger
+and checkpoint bundle, retains the original campaign identity, refuses
+overwrites and reproduces the new artifacts without opening instruments.
+Its source digest is recorded separately from the frozen measurement
+tooling digest. Independent invented-arithmetic tests and committed-receipt
+checks enforce the summary, counts, units, quantile ranks and retention.
+
+The full Node 22 suite, syntax checks, isolated build verification,
+import/dependency guard, retained report reproduction, reference checks,
+npm exclusion and file/storage safeguards pass. VALIDATION.md records the
+commands, measured session limit and remaining coverage limits. P7 remains
+unchecked for the final evidence audit; no further campaign is started in
+this session.
