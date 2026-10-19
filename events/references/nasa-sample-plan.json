@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "clock": "tt",
+  "years": [1900, 1925, 1950, 1975, 2000, 2025, 2050, 2075, 2100],
+  "selection": "Every solar and lunar catalog row in each named year; no exclusions based on engine results.",
+  "toleranceMs": 180000,
+  "options": { "stepMs": 3600000, "derivativeStepMs": 60000 },
+  "radiusKm": { "sun": 696000, "moon": 1737.4, "earth": 6378.137 },
+  "auKm": 149597870.7
+}
