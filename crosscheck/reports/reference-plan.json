@@ -1,0 +1,335 @@
+{
+  "schema": "crosscheck-reference-plan/1",
+  "command": [
+    "node",
+    "crosscheck/tools/reference-plan.mjs"
+  ],
+  "runtime": {
+    "node": "v20.19.2",
+    "platform": "linux",
+    "arch": "x64",
+    "executableSha256": "ca0728526aa1cc4e3056decec848ecc6d2c5391cecdd4e21a0ebd221d665c84e"
+  },
+  "tooling": {
+    "lib/kernels.mjs": "a038624a979640e25c93779546bf489c7b4f95781c49a77b1167925cfdfd85f5",
+    "lib/disk-budget.mjs": "55a838a3ec79461ca760e4ae0883bf1a56d36bf7af4443f986afd958378855db",
+    "lib/reference-plan.mjs": "4ebfdae0c6f019ad0ebcf4d25c8f589819a177402658e93b0b202c9e1200efcb",
+    "lib/reduction.mjs": "d806fb70b8c2580edcc98a1a3053673afe4d11f45c6a11b2aaea7347d854e108",
+    "tools/reference-plan.mjs": "acf1484eeb595ac647c6898f193b8d8b1342af06d68f2790bf87d9a5edcd1300"
+  },
+  "plan": {
+    "schema": 1,
+    "purpose": "Reference availability plan; no chart comparisons evaluated",
+    "catalog": {
+      "source": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/aa_summaries.txt",
+      "readDate": "2026-10-19"
+    },
+    "sampling": {
+      "startMs": -5364662400000,
+      "endMs": 7258118400000,
+      "timeScale": "TT",
+      "bounds": "half-open",
+      "start": "1800-01-01T00:00:00.000Z",
+      "endExclusive": "2200-01-01T00:00:00.000Z",
+      "startTdbSeconds": -6311390399.999973,
+      "endTdbSeconds": 6311390399.999828
+    },
+    "paddingSeconds": 86400,
+    "selection": "Full DE440 inside its padded supported interval; DE441 outside, part 2 before part 1",
+    "references": [
+      {
+        "name": "de440.bsp",
+        "sha256": "a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5"
+      }
+    ],
+    "groups": {
+      "DE440": {
+        "status": "available",
+        "kernel": "de440.bsp",
+        "intervals": [
+          {
+            "startMs": -5364662400000,
+            "endMs": 7258118400000
+          }
+        ],
+        "reason": "Verified exact Sun, Moon, Mercury, Venus and Earth center chains cover the padded TT sampling interval."
+      },
+      "DE441": {
+        "status": "empty",
+        "intervals": [],
+        "reason": "The requested TT sampling span lies within full DE440 coverage; no DE441 sampling interval is requested."
+      }
+    },
+    "bodies": {
+      "Sun": {
+        "target": 10,
+        "center": 399,
+        "status": "available"
+      },
+      "Moon": {
+        "target": 301,
+        "center": 399,
+        "status": "available"
+      },
+      "Mercury": {
+        "target": 199,
+        "center": 399,
+        "status": "available"
+      },
+      "Venus": {
+        "target": 299,
+        "center": 399,
+        "status": "available"
+      },
+      "Mars": {
+        "target": 499,
+        "center": 399,
+        "status": "unavailable",
+        "reason": "Exact-center comparison unavailable with the selected kernel: No covered segment for exact NAIF target 499. No system-barycenter substitution."
+      },
+      "Jupiter": {
+        "target": 599,
+        "center": 399,
+        "status": "unavailable",
+        "reason": "Exact-center comparison unavailable with the selected kernel: No covered segment for exact NAIF target 599. No system-barycenter substitution."
+      },
+      "Saturn": {
+        "target": 699,
+        "center": 399,
+        "status": "unavailable",
+        "reason": "Exact-center comparison unavailable with the selected kernel: No covered segment for exact NAIF target 699. No system-barycenter substitution."
+      },
+      "Uranus": {
+        "target": 799,
+        "center": 399,
+        "status": "unavailable",
+        "reason": "Exact-center comparison unavailable with the selected kernel: No covered segment for exact NAIF target 799. No system-barycenter substitution."
+      },
+      "Neptune": {
+        "target": 899,
+        "center": 399,
+        "status": "unavailable",
+        "reason": "Exact-center comparison unavailable with the selected kernel: No covered segment for exact NAIF target 899. No system-barycenter substitution."
+      },
+      "Pluto": {
+        "target": 999,
+        "center": 399,
+        "status": "unavailable",
+        "reason": "Exact-center comparison unavailable with the selected kernel: No covered segment for exact NAIF target 999. No system-barycenter substitution."
+      }
+    },
+    "unavailableComparisons": [
+      "Swiss Ephemeris is not installed; no installation or live comparison is part of this plan.",
+      "Houses, lunar nodes, angles, speeds and topocentric positions are outside this reference plan.",
+      "Available system barycenters do not establish unavailable exact-center errors."
+    ]
+  },
+  "kernel": {
+    "name": "de440.bsp",
+    "source": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440.bsp",
+    "bytes": 119799808,
+    "md5": "c9d581bfd84209dbeee8b1583939b148",
+    "sha256": "a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5",
+    "coverage": {
+      "format": "LTL-IEEE",
+      "segments": [
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 1,
+          "center": 0,
+          "frame": 1,
+          "type": 2,
+          "startWord": 8065,
+          "endWord": 2217924
+        },
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 2,
+          "center": 0,
+          "frame": 1,
+          "type": 2,
+          "startWord": 2217925,
+          "endWord": 3021512
+        },
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 3,
+          "center": 0,
+          "frame": 1,
+          "type": 2,
+          "startWord": 3021513,
+          "endWord": 4051108
+        },
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 4,
+          "center": 0,
+          "frame": 1,
+          "type": 2,
+          "startWord": 4051109,
+          "endWord": 4490572
+        },
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 5,
+          "center": 0,
+          "frame": 1,
+          "type": 2,
+          "startWord": 4490573,
+          "endWord": 4817032
+        },
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 6,
+          "center": 0,
+          "frame": 1,
+          "type": 2,
+          "startWord": 4817033,
+          "endWord": 5105824
+        },
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 7,
+          "center": 0,
+          "frame": 1,
+          "type": 2,
+          "startWord": 5105825,
+          "endWord": 5356948
+        },
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 8,
+          "center": 0,
+          "frame": 1,
+          "type": 2,
+          "startWord": 5356949,
+          "endWord": 5608072
+        },
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 9,
+          "center": 0,
+          "frame": 1,
+          "type": 2,
+          "startWord": 5608073,
+          "endWord": 5859196
+        },
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 10,
+          "center": 0,
+          "frame": 1,
+          "type": 2,
+          "startWord": 5859197,
+          "endWord": 6738120
+        },
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 301,
+          "center": 3,
+          "frame": 1,
+          "type": 2,
+          "startWord": 6738121,
+          "endWord": 10856492
+        },
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 399,
+          "center": 3,
+          "frame": 1,
+          "type": 2,
+          "startWord": 10856493,
+          "endWord": 14974864
+        },
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 199,
+          "center": 1,
+          "frame": 1,
+          "type": 2,
+          "startWord": 14974865,
+          "endWord": 14974876
+        },
+        {
+          "startTdbSeconds": -14200747200,
+          "endTdbSeconds": 20514081600,
+          "target": 299,
+          "center": 2,
+          "frame": 1,
+          "type": 2,
+          "startWord": 14974877,
+          "endWord": 14974888
+        }
+      ]
+    }
+  },
+  "catalog": {
+    "de440.bsp": {
+      "source": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/aa_summaries.txt",
+      "readDate": "2026-10-19",
+      "timeScale": "TDB",
+      "bounds": "inclusive",
+      "start": "1549-12-31T00:00:00Z",
+      "end": "2650-01-25T00:00:00Z",
+      "startTdbSeconds": -14200747200,
+      "endTdbSeconds": 20514081600
+    },
+    "de440s.bsp": {
+      "source": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/aa_summaries.txt",
+      "readDate": "2026-10-19",
+      "timeScale": "TDB",
+      "bounds": "inclusive",
+      "start": "1849-12-26T00:00:00Z",
+      "end": "2150-01-22T00:00:00Z",
+      "startTdbSeconds": -4734072000,
+      "endTdbSeconds": 4735368000
+    },
+    "de441_part-1.bsp": {
+      "source": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/aa_summaries.txt",
+      "readDate": "2026-10-19",
+      "timeScale": "TDB",
+      "bounds": "inclusive",
+      "start": "-013200-05-06T00:00:00Z",
+      "end": "1969-07-30T00:00:00Z",
+      "startTdbSeconds": -479654827200,
+      "endTdbSeconds": -960120000
+    },
+    "de441_part-2.bsp": {
+      "source": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/aa_summaries.txt",
+      "readDate": "2026-10-19",
+      "timeScale": "TDB",
+      "bounds": "inclusive",
+      "start": "1969-06-28T00:00:00Z",
+      "end": "+017191-03-15T00:00:00Z",
+      "startTdbSeconds": -962884800,
+      "endTdbSeconds": 479387937600
+    }
+  },
+  "catalogBytes": {
+    "de440.bsp": 119799808,
+    "de440s.bsp": 32726016,
+    "de441_part-1.bsp": 1651119104,
+    "de441_part-2.bsp": 1656830976
+  },
+  "disk": {
+    "usedBytes": 154016945,
+    "fileCount": 215,
+    "limitBytes": 6000000000,
+    "additionalBytes": 0,
+    "totalBytes": 154016945,
+    "remainingBytes": 5845983055
+  }
+}
