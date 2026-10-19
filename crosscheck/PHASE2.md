@@ -66,3 +66,21 @@ Syntax, runtime independent tests, absence and invented transport checks,
 aggregate reproduction and safeguards passed. Existing build checks still
 reject the available Node 20 runtime; full Node 22 validation remains with
 the dedicated CI job. S2 is the next unchecked milestone.
+
+S2 is partially implemented, with a strict tracked-working-file scanner and
+negative fixture tests in tests/swiss-guard.node-test.mjs. The strict scan
+finds existing Swiss imports in historical conformance arbiter and evidence
+scripts outside the permitted import paths. Those files are outside this
+session's edit scope. VALIDATION.md records the command and exact findings.
+No legacy exemption or baseline is authorized by the brief, and none has
+been added. A scope decision has been requested: either permit a frozen
+path-and-SHA-256 baseline for these existing scripts, rejecting every new or
+changed violation and every manifest dependency, or retain the strict rule
+and leave S2 incomplete until the existing imports can be resolved.
+
+The fixture tests run with the existing dedicated Node test glob. The strict
+repository check is deliberately not wired as a failing CI gate while that
+decision is pending. S2 is not ticked and campaign expansion has not started.
+Syntax, runtime independent tests, retained aggregate reproduction and
+file/storage safeguards passed locally. The build checks still refuse the
+available Node 20 executable and require Node 22.
