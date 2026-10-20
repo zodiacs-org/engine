@@ -1,227 +1,98 @@
 # MCP validation
 
-P7 final phase 2 validation: a clean `npm ci --ignore-scripts` and
-`node scripts/validate.mjs` passed on Node 22.23.3. The install summary and
-validation stdout are committed in
-[evidence/p7-validation.txt](evidence/p7-validation.txt). Reproduce the run from
-`mcp/` with the committed lockfile and Node 22:
+The review follow-up passed `node scripts/validate.mjs` on Node 22.23.3.
+Its stdout is recorded in
+[evidence/review-validation.txt](evidence/review-validation.txt). Reproduce the
+checks from `mcp/` with the committed lockfile and Node 22:
 
 ```sh
 npm ci --ignore-scripts --cache .cache/npm
 node scripts/validate.mjs
 ```
 
-The report identifies the source baseline, engine archive, lockfile and exact
-validation inputs by SHA-256. Validation inputs are the maintained TypeScript,
-JavaScript module and JSON files under `mcp/`, plus the MCP workflow; paths and
-contents are hashed in sorted order with NUL separators. Documentation and
-evidence files are excluded from that digest so a report can be committed
-without changing the executable inputs it identifies. Raw logs and the Vitest
-JSON report stay in gitignored `.generated/`.
+The report identifies the source baseline, carried engine archive, lockfile and
+validation inputs by SHA-256. Inputs are the maintained TypeScript, JavaScript
+module and JSON files under `mcp/`, plus the MCP workflow. Paths and contents
+are hashed in sorted order with NUL separators. Documentation and evidence are
+excluded from that digest so committing the report does not change the
+executable inputs it identifies. Raw logs and the Vitest JSON report stay in
+gitignored `.generated/`.
 
 The checked span is the synthetic cases in the complete `test/*.mcp-test.ts`
-suite. Phase 2 coverage includes credential sources and HTTP authorization
-(`auth.mcp-test.ts`), real worker termination, deadlines and cancellation
-(`search-worker.mcp-test.ts` and `cancellation.mcp-test.ts`), request rate and
-UTF-8 body limits (`http-limits.mcp-test.ts`), every tool's advertised output
-schema over stdio and HTTP (`transports.mcp-test.ts`), and factual wording
-(`transports.mcp-test.ts` and `factual-language.mcp-test.ts`). Earlier tool,
-receipt, SDK and isolation cases remain part of the same run. These establish
-wrapper, resource-policy and protocol integration, not independent accuracy.
+suite. These establish wrapper, resource-policy and protocol integration,
+not independent astronomical accuracy.
 
-The Node 22 MCP workflow installs from its own lockfile and invokes the same
-validation command. That command checks the carried archive digest and locked
-source, parent pack exclusion, parent file/dist snapshots, allowed change paths,
-whitespace, documentation dashes and JSON examples. It also enforces the file
-and project disk policies recorded in [PHASE2.md](PHASE2.md), counting dependencies,
-caches and generated reports toward project disk use before and after each
-validation stage, with reserved room for build and report growth before launch.
-Authored files, build output and raw reports are checked for
-file size; upstream dependencies and package-cache files retain their own sizes.
+| Checked behavior | Committed tests |
+| --- | --- |
+| Strict inputs, JSON serialization and native receipt validation | `contracts.mcp-test.ts`, `scaffold.mcp-test.ts` |
+| Natal chart preservation and receipt replay | `natal.mcp-test.ts` |
+| Dated and current transits, captured clock and separate natal/sky receipts | `transits.mcp-test.ts` |
+| Native synastry summaries without an added score | `synastry.mcp-test.ts` |
+| Solar and lunar return selection, relocation and refusals | `returns.mcp-test.ts` |
+| Moon phase, sampled crossings and whole sample-budget refusals | `events.mcp-test.ts` |
+| Credential sources, HTTP authorization and private diagnostics | `auth.mcp-test.ts` |
+| Worker termination, deadlines, cancellation, busy refusals and recovery | `search-worker.mcp-test.ts`, `cancellation.mcp-test.ts` |
+| Shared rate policy, UTF-8 body caps and exact-path rejection | `http-limits.mcp-test.ts`, `auth.mcp-test.ts` |
+| Discovery, every tool's advertised output schema, errors and lifecycle over stdio and HTTP | `server.mcp-test.ts`, `transports.mcp-test.ts` |
+| Factual descriptions and synthetic successful, refused and error outputs | `factual-language.mcp-test.ts`, `transports.mcp-test.ts` |
+| Shared npm cache configuration for workflow setup and installation | `ci.mcp-test.ts` |
+| Parent pack exclusion | `isolation.mcp-test.ts` |
 
-No parent build was run. Parent build-dependent gates retain the scaffold
-limitation below and remain the repository CI's responsibility. Client GUIs,
-public gateways and live authentication services were not exercised. The
-operator checklist in [README.md](README.md) describes those deployment checks;
-[HANDOFF.md](HANDOFF.md) describes the final draft PR scope.
+## Transits and authentication evidence
 
-P6 session: `node scripts/validate.mjs` passed on Node 22.23.3; its output is
-committed in [evidence/p6-validation.txt](evidence/p6-validation.txt).
-Typecheck, the complete Vitest suite, the isolated build, parent pack exclusion,
-source file sizes, documentation checks and the parent file/dist snapshot passed.
-The initial complete run timed out in the existing modern HTTP cancellation
-case. That case passed in a focused rerun, followed by a passing complete
-validation run; no runtime or test files changed in this session. The initial
-failure and reruns are recorded in the same evidence file.
+M5 transit checks remain in `test/transits.mcp-test.ts` and the complete current
+run. They compare native results and receipt replay, cover time settings and
+coverage flags, and check that an injected clock is captured once. The natal
+receipt and transit-sky receipt record separate calculations; neither attests
+the derived inter-chart aspects.
 
-README client configuration was checked against its linked official guides.
-The combined HTTP startup command was parsed with `parseArguments`, JSON
-snippets were parsed, and authenticated client entries were checked for literal
-environment references without credential values. The gateway checklist ties
-backend behavior to existing authentication, limits, cancellation and transport
-tests. Live client applications and deployed gateways were not exercised.
-Parent build-dependent gates retain the limitation below; parent files, engine
-archives and existing parent dist remained unchanged.
+P1 authentication validation is recorded in
+[evidence/p1-validation.txt](evidence/p1-validation.txt). The current run also
+includes its accepted, missing, malformed and wrong bearer credentials, bounded
+environment/file sources, constant-time comparison and private diagnostics.
+Relative file source resolution is covered by the review follow-up tests.
 
-P5 session: `node scripts/validate.mjs` passed on Node 22.23.3; the full output
-is committed in [evidence/p5-validation.txt](evidence/p5-validation.txt).
-Typecheck, the complete Vitest suite, the isolated build, parent pack exclusion,
-source file sizes, documentation checks and the parent file/dist snapshot passed.
-[test/transports.mcp-test.ts](test/transports.mcp-test.ts) scans actual discovery
-descriptions and schema titles/descriptions, structured results, their JSON text
-copies and error text in its synthetic transport cases.
-[test/factual-language.mcp-test.ts](test/factual-language.mcp-test.ts) tests
-rejected vocabulary, property names, extra text blocks, normalization and
-narrow native time-source exceptions. These are wording regression and protocol
-integration checks; they do not prove semantic absence of interpretive claims or
-independent astronomical accuracy. Parent build-dependent gates retain the
-limitation below; parent files, engine archives and existing parent dist remained
-unchanged.
+## Isolation and CI scope
 
-P3 session: `node scripts/validate.mjs` passed on Node 22.23.3; the full output
-is committed in [evidence/p3-validation.txt](evidence/p3-validation.txt).
-Typecheck, the complete Vitest suite, the isolated build, parent pack exclusion,
-source file sizes, documentation checks and the parent file/dist snapshot passed.
-[test/http-limits.mcp-test.ts](test/http-limits.mcp-test.ts) checks configuration,
-fixed-window admission and recovery, authentication interaction, guard ordering,
-independent listeners, forwarding-header isolation and private refusals. It also
-checks exact UTF-8 byte boundaries and oversized declared and chunked bodies,
-including unfinished uploads and successful requests after rejection. Legacy SSE
-responses retain the no-store policy alongside the SDK's streaming directives.
-These are protocol and resource-policy checks, not astronomical accuracy evidence.
-Parent build-dependent gates retain the limitation below; parent files, engine
-archives and existing parent dist remained unchanged.
+The Node 22 MCP workflow installs from this project's own lockfile and invokes
+the same validation command. Its cache location is shared by setup and install.
+Validation checks the carried archive digest and locked source, parent pack
+exclusion, parent file/dist snapshots, allowed change paths, whitespace,
+Markdown dashes and JSON examples. It enforces the file and project disk
+policies in [PHASE2.md](PHASE2.md), counting dependencies, caches and generated
+reports before and after each validation stage, with reserved room for build
+and report growth. Authored files, build output and raw reports are checked
+for file size; upstream dependencies and cache files retain their own sizes.
 
-P2 session: `node scripts/validate.mjs` passed on Node 22.23.3; the full output
-is committed in [evidence/p2-validation.txt](evidence/p2-validation.txt).
-Typecheck, the complete Vitest suite, the isolated build, parent pack exclusion,
-source file sizes, documentation checks and the parent file/dist snapshot passed.
-The validation script and `npm test` build the worker before running tests.
-[test/search-worker.mcp-test.ts](test/search-worker.mcp-test.ts) verifies native
-JSON preservation, real worker exit after cancellation and deadline expiry,
-bounded concurrency, close ownership, private failures and recovery.
-[test/cancellation.mcp-test.ts](test/cancellation.mcp-test.ts) uses official SDK
-clients over real stdio and HTTP, explicitly selecting current and older
-protocols. It checks live cancellation, shutdown, deadline errors without
-receipts, concurrent clients, legacy disconnects and request-ID isolation.
-Older stateless HTTP cancellation notifications cannot identify another POST;
-connection close and the server deadline remain its stopping mechanisms.
-These are integration and resource-policy checks, not astronomical accuracy
-evidence. Parent build-dependent gates were not run; parent files, engine
-archives and existing parent dist remained unchanged.
+No parent build was run. Earlier `npm run package:contents` attempts failed
+because the checkout lacked `dist/calc.d.ts`; this task prohibits writing parent
+`dist/`. The dry-run pack exclusion test and unchanged-file snapshots do not
+substitute for the engine's build-dependent gates. Repository CI remains
+authoritative for those gates and merge readiness.
 
-Session checks used Node 22.22.2 through a local npm exec runtime.
+Client GUIs, public gateways and live authentication services were not
+exercised. The [README operator checklist](README.md#gateway-operator-checklist)
+describes those deployment checks. Event searches have a worker deadline;
+other tools remain synchronous without a worker deadline and require gateway
+concurrency controls.
 
-- `npm ci`: passed using the committed lockfile.
-- `npm run check`: typecheck, Vitest and build passed.
-- `test/scaffold.mcp-test.ts`: SDK handshake and synthetic natal receipt round-trip passed.
-- `test/isolation.mcp-test.ts`: parent engine dry-run pack manifest excludes `mcp/`.
-- Dependency audit from `npm ci`: no reported vulnerabilities.
-- `git status --short`: changes confined to `mcp/`.
+## Historical reports
 
-The parent `npm run package:contents` command was attempted and failed because
-this checkout lacks `dist/calc.d.ts`. No parent build was run: the task requires
-leaving `dist/` untouched. The dry-run pack isolation test passed independently;
-it does not substitute for the engine's build-dependent size/content gates.
+[evidence/p7-validation.txt](evidence/p7-validation.txt) records the completed
+phase 2 locked install and complete validation before this review follow-up.
+Earlier reports remain records of their original source baselines:
+[P2](evidence/p2-validation.txt), [P3](evidence/p3-validation.txt),
+[P4](evidence/p4-validation.txt), [P5](evidence/p5-validation.txt) and
+[P6](evidence/p6-validation.txt). P6 includes an initial current-HTTP cancellation
+timeout, a passing focused rerun and a passing complete rerun; those outcomes
+are preserved in its report.
 
-M3 session: typecheck, Vitest and isolated TypeScript build passed on Node
-22.22.2. Contract tests cover input rejection, JSON Schema export, resource
-policy boundaries, native receipt preservation and rejection of lossy output.
-The existing engine pack isolation test passed. Engine sources, packed files,
-archives and parent dist were not changed. Parent build-dependent gates retain
-the scaffold limitation described above.
-
-M4 session: `npm run check` passed on Node 22.22.2, including typecheck,
-Vitest and the isolated build. `test/natal.mcp-test.ts` checks native chart and
-receipt preservation, replay, unknown time, absent coordinates, polar fallback,
-time scales, pinned delta-T, coverage flags, invalid requests, engine range
-errors and concrete output JSON Schema. The parent pack isolation test passed.
-Replay supplies an empty input assertion list; tests allow that native metadata
-normalization while comparing all calculation results. These are integration
-checks, not independent accuracy evidence. Parent build-dependent gates retain
-the scaffold limitation above.
-
-M6 session: `npm run check` passed on Node 22.23.3, including typecheck,
-Vitest and the isolated build. `test/synastry.mcp-test.ts` covers native pair
-summary and receipt preservation, replay, chart ordering, independent time
-settings and coverage flags, unknown time, missing coordinates, polar fallback,
-identical charts, invalid inputs, engine range failures and concrete JSON Schema.
-The parent pack isolation test passed. Comparisons establish wrapper integration,
-not independent accuracy or predictive validity. Parent build-dependent gates
-retain the scaffold limitation above.
-
-M10 session: `npm run check` passed on Node 22.22.2, including typecheck,
-Vitest and the isolated build. `test/transports.mcp-test.ts` exercises every tool
-through official SDK clients over a real stdio child, current Streamable HTTP
-and older stateless HTTP. Checks cover native receipt validation, discovery,
-invalid-call recovery, concurrent clients, Host and Origin guards, routing,
-body limits, malformed requests, invalid ports, occupied listeners, idempotent
-close, unfinished request sockets, stdin EOF and SIGINT/SIGTERM shutdown.
-The CLI writes protocol messages only to stdout and diagnostics to stderr.
-The parent pack isolation test passed. Checks establish transport integration,
-not independent astronomical accuracy. Parent build-dependent gates retain
-the scaffold limitation above; no parent build was run. Session changes are
-confined to mcp/.
-
-M7 session: `npm run check` passed on Node 22.23.3, including typecheck,
-Vitest and the isolated build. `test/returns.mcp-test.ts` covers solar and lunar
-native result preservation, receipt replay, solar selections, strictly subsequent
-lunar selection, location defaults and relocation, omitted coordinates, null
-location, house overrides, polar fallback, independent natal time settings,
-unknown time, coverage flags, concrete JSON Schema, invalid requests and engine
-range refusals. The parent pack isolation test passed. Comparisons establish
-wrapper integration, not independent accuracy or search completeness. Parent
-build-dependent gates retain the scaffold limitation above.
-
-M8 session: `npm run check` passed on Node 22.23.3, including typecheck,
-Vitest and the isolated build. `test/events.mcp-test.ts` covers Moon phase and
-search preservation, receipt replay, all supported bodies, direct and retrograde
-events, empty and maximum windows, default policy, coarse and refinement budget
-refusals, coverage flags, strict inputs, endpoint range failures and concrete
-JSON Schema. The parent pack isolation test passed. Comparisons establish
-wrapper integration, not independent accuracy or search completeness.
-`npm run package:contents`, retried with a cache inside mcp/, failed because the
-checkout lacks `dist/calc.d.ts`, as in the scaffold session. No parent build was
-run; build-dependent engine gates retain the limitation described above.
-`git diff --check` passed and session changes are confined to mcp/.
-
-M9 session: `npm run check` passed on Node 22.23.3, including typecheck,
-Vitest and the isolated build. `test/server.mcp-test.ts` checks SDK discovery,
-published input/output schemas, registered tool output and receipt preservation,
-clock injection, strict inputs and refinements, calculation errors, unknown
-tools, structured budget refusals and recovery after errors. The parent pack
-isolation test passed. Checks establish protocol integration, not independent
-accuracy. Parent build-dependent gates retain the scaffold limitation above.
-
-
-M11 session: `npm run check` passed on Node 22.23.3, including typecheck,
-Vitest and the isolated build. Existing tool, server, transport and parent pack
-isolation checks passed. README JSON snippets were parsed locally; whitespace,
-em-dash exclusion and document size checks passed. Client configuration was
-checked against the linked official Claude Desktop, Claude Code, Cursor and
-OpenAI documentation. The guide covers absolute executable paths, local HTTP,
-ChatGPT custom connection form values, gateway authentication and Host/Origin
-handling, privacy, receipt roles and citation limits. These checks establish
-local SDK protocol integration, not live GUI compatibility, hosted gateway
-operation, independent accuracy or predictive validity. Parent build-dependent
-gates retain the scaffold limitation above; no parent build was run. Session
-changes are confined to mcp/.
-
-M12 session: a clean `npm ci --ignore-scripts` using the committed lockfile
-passed on Node 22.23.3. `node scripts/validate.mjs`, run from mcp/ with that
-runtime, passed typecheck, the complete Vitest suite and the isolated build.
-The reproducible script verifies the carried engine archive digest and lockfile
-source, the parent pack exclusion test, project file sizes, Markdown em-dash
-exclusion, README JSON snippets, whitespace and working tree scope. It hashes
-tracked parent files and existing parent dist files before and after the checks
-and requires the snapshots to match. Raw logs and Vitest JSON are written under
-the gitignored `.generated/` directory. The script's concise stdout is recorded
-in [evidence/m12-validation.txt](evidence/m12-validation.txt).
-
-The tested span is the synthetic fixture cases in `test/*.mcp-test.ts`, including
-every tool over stdio, current HTTP and older stateless HTTP, with discovery,
-native receipts, refusals, error recovery and lifecycle. These checks establish
-wrapper and protocol integration only. No live client GUI, public gateway or
-independent accuracy claim is made. Parent build-dependent gates retain the
-scaffold limitation above; no parent build was run. See
-[HANDOFF.md](HANDOFF.md) for the draft PR description and deployment limits.
+[evidence/m12-validation.txt](evidence/m12-validation.txt) predates the F1 test
+rename. Its `test/isolation.test.ts` path is the historical name of today's
+`test/isolation.mcp-test.ts`; the captured stdout is preserved rather than
+rewritten. [evidence/f1-validation.txt](evidence/f1-validation.txt) records the
+rename and parent test-discovery isolation.
+[evidence/f3-validation.txt](evidence/f3-validation.txt) records signal cleanup
+checks. Those historical parent test runs failed in the unchanged archive
+binding tests under sandbox restrictions; they demonstrate discovery isolation,
+not a passing root suite.

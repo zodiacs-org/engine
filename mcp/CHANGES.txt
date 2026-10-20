@@ -16,3 +16,5 @@ P4: Verify every tool against discovered JSON schemas over stdio and HTTP, cover
 P5: Clarify chart receipt scope and scan discovered descriptions and synthetic protocol outputs for predictive and price wording; all MCP checks passed on Node 22.23.3.
 P6: Update authenticated client setup and the gateway checklist for credentials, headers, limits, cancellation and private logs; record passing MCP checks on Node 22.23.3.
 P7: Align CI with complete Node 22 checks, record phase 2 evidence and parent isolation, enforce disk and file policies and update the handoff; all MCP checks passed on Node 22.23.3.
+Review findings: Keep PLAN.md, PHASE2.md, FIX.md and CHANGES.txt as required by the session instructions; completed checklists, backend authentication, worker deadlines, query rejection tests and validation in CI already exist, and historical evidence retains its original path names.
+Fix review documentation, remove redundant handoff logs, align CI paths and npm cache, use the platform PATH separator and test relative credential files; clean install and complete MCP validation passed on Node 22.23.3.

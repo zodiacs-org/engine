@@ -1,3 +1,0 @@
-F1: Isolate MCP tests from root Vitest discovery with *.mcp-test.ts names and explicit local config; MCP checks pass and root discovery excludes them.
-F2: Add dedicated Node 22 MCP CI using its lockfile; install, typecheck, build and 198 tests pass, and root discovery still excludes MCP tests.
-F3: Register signal cleanup before HTTP readiness; add immediate shutdown tests, pass 10 repeated runs per signal and all 200 MCP tests, and confirm root discovery excludes MCP tests.

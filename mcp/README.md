@@ -42,8 +42,6 @@ The scaffold test checks SDK initialization and imports the engine and receipt
 entry point from the carried archive. It checks integration, not astronomical
 accuracy or predictive validity. All example birth inputs are synthetic.
 
-The harness handles commits, pushes and draft PR updates after each session.
-
 ## Tool contracts
 
 `src/contracts.ts` defines strict inputs for the implemented tools. Inputs take
@@ -348,6 +346,9 @@ Embedded callers use `startHttp({ auth: { tokenEnv: "ENV_NAME" } })` or
 `startHttp({ auth: { tokenFile: "/absolute/operator/path" } })`.
 Stdio rejects authentication options and does not read credentials. Setting
 an environment variable alone does not enable HTTP authentication.
+Relative credential file paths resolve from the server process's working
+directory. Use an absolute path when a service manager or client controls that
+directory.
 
 The source is read once before the listener starts. Missing, empty or invalid
 credentials prevent startup; file sources must be readable regular files and
@@ -695,6 +696,6 @@ retains the supplied reference instant; do not infer noon or describe it as
 verified birth time. Avoid reproducing private birth details publicly.
 
 Client guidance and credential interpolation were checked against the linked
-official pages during P6. Local protocol checks do not run those client applications.
+official pages. Local protocol checks do not run those client applications.
 [VALIDATION.md](VALIDATION.md) records local protocol evidence; live client
 setup and gateway verification remain deployment checks for the operator.

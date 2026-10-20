@@ -3,7 +3,7 @@ import { randomBytes } from "node:crypto";
 import { once } from "node:events";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { request as httpRequest } from "node:http";
-import { join } from "node:path";
+import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
@@ -59,8 +59,8 @@ async function checkSdk(url: URL, token: string) {
   } finally { await client.close(); }
 }
 
-function startChild(args: string[], env: NodeJS.ProcessEnv = process.env) {
-  const child = spawn(process.execPath, [cli, ...args], { stdio: "pipe", env });
+function startChild(args: string[], env: NodeJS.ProcessEnv = process.env, cwd = process.cwd()) {
+  const child = spawn(process.execPath, [cli, ...args], { stdio: "pipe", env, cwd });
   children.push(child);
   let stdout = "";
   let stderr = "";
@@ -86,6 +86,13 @@ describe("optional HTTP bearer authentication", () => {
     endpoint = await startHttp({ port: 0, auth: { tokenFile: path } });
     await checkSdk(endpoint.url, token);
     writeFileSync(path, credential());
+    await checkSdk(endpoint.url, token);
+  });
+
+  it("resolves an embedded relative file source from the process working directory", async () => {
+    const token = credential();
+    const path = relative(process.cwd(), tokenFile(token));
+    endpoint = await startHttp({ port: 0, auth: { tokenFile: path } });
     await checkSdk(endpoint.url, token);
   });
 
@@ -206,6 +213,7 @@ describe("authentication CLI", () => {
   it("accepts either source with a port in any order and rejects ambiguous or inline credentials", () => {
     expect(parseArguments(["http", "--auth-token-env", envName, "--port", "0"])).toEqual({ transport: "http", port: 0, auth: { tokenEnv: envName } });
     expect(parseArguments(["http", "--port", "0", "--auth-token-file", "/operator/token"])).toEqual({ transport: "http", port: 0, auth: { tokenFile: "/operator/token" } });
+    expect(parseArguments(["http", "--auth-token-file", "operator-token"])).toEqual({ transport: "http", auth: { tokenFile: "operator-token" } });
     for (const args of [
       ["stdio", "--auth-token-env", envName], ["stdio", "--auth-token-file", "/operator/token"],
       ["http", "--auth-token-env"], ["http", "--auth-token-file", ""], ["http", "--auth-token-env", "INVALID NAME"],
@@ -216,10 +224,12 @@ describe("authentication CLI", () => {
     ]) expect(() => parseArguments(args)).toThrow("Usage");
   });
 
-  it.each(["env", "file"] as const)("authenticates CLI HTTP using %s without credential or source logging", async (source) => {
+  it.each(["env", "file", "relative-file"] as const)("authenticates CLI HTTP using %s without credential or source logging", async (source) => {
     const token = credential();
     const path = tokenFile(token + "\n");
-    const running = startChild(["http", "--port", "0", ...(source === "env" ? ["--auth-token-env", envName] : ["--auth-token-file", path])], { ...process.env, [envName]: token });
+    const fileArgument = source === "relative-file" ? basename(path) : path;
+    const running = startChild(["http", "--port", "0", ...(source === "env" ? ["--auth-token-env", envName] : ["--auth-token-file", fileArgument])],
+      { ...process.env, [envName]: token }, source === "relative-file" ? dirname(path) : project);
     const url = await new Promise<URL>((resolve, reject) => {
       running.child.once("exit", () => reject(new Error("Listener exited before readiness.")));
       running.child.stderr!.on("data", () => {

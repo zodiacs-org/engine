@@ -4,9 +4,23 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'mcp/**'
+      - '.github/workflows/mcp.yml'
+      - 'artifacts/**'
+      - 'package.json'
+      - '.npmrc'
+      - '.npmignore'
   pull_request:
     branches:
       - main
+    paths:
+      - 'mcp/**'
+      - '.github/workflows/mcp.yml'
+      - 'artifacts/**'
+      - 'package.json'
+      - '.npmrc'
+      - '.npmignore'
 
 permissions:
   contents: read
@@ -15,6 +29,8 @@ jobs:
   mcp:
     name: MCP checks
     runs-on: ubuntu-latest
+    env:
+      npm_config_cache: ${{ github.workspace }}/mcp/.cache/npm
     defaults:
       run:
         working-directory: mcp

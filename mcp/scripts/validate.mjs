@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { lstatSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
-import { dirname, join, relative } from "node:path";
+import { delimiter, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 // Run from any directory. Only build output and raw reports under mcp/ are written.
@@ -29,7 +29,7 @@ function assertDisk(reserve = 0) {
 }
 const initialDiskBytes = assertDisk(diskReserve);
 mkdirSync(generated, { recursive: true });
-const env = { ...process.env, PATH: `${dirname(process.execPath)}:${process.env.PATH ?? ""}`,
+const env = { ...process.env, PATH: `${dirname(process.execPath)}${delimiter}${process.env.PATH ?? ""}`,
   npm_config_cache: join(project, ".cache/npm") };
 const git = (...args) => execFileSync("git", args, { cwd: root, encoding: "utf8", env });
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
