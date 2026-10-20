@@ -5,7 +5,7 @@ eval suite and seed validation before marking a milestone complete. The harness
 handles commits, pushes and CI. A root CI failure file takes priority.
 
 - [x] P1 Add a dedicated Node 22 workflow that installs from the eval lockfile, runs the complete eval suite and seed validation, and keeps test workers bounded and separate from the root runner.
-- [ ] P2 Refresh the eval validator and bundler dependencies without changing the engine's ephemeris pin, verify a clean dependency audit, and rerun the full suite from the refreshed lockfile.
+- [x] P2 Refresh the eval validator and bundler dependencies without changing the engine's ephemeris pin, verify a clean dependency audit, and rerun the full suite from the refreshed lockfile.
 - [ ] P3 Define a versioned reflective-language rubric and deterministic text checker with original passing and failing test cases, explicit penalties, evidence spans and documented detection limits.
 - [ ] P4 Include the reflective-language assessment in evaluation reports and CLI summaries, preserving factual scoring and testing supplied readings, extraction and the offline mock end to end.
 - [ ] P5 Expand the individually authored MIT seed to cover Sun through Pluto in every sign and each supported major aspect, with complete provenance and tests enforcing coverage, originality metadata and reflective wording.
@@ -32,4 +32,17 @@ project isolation, loader child-process cleanup and fresh-process repeatability.
 The workflow runs these same commands without installing or building the root
 package. The root `package:contents` check was attempted with an eval-local cache
 and failed on the existing missing `dist/calc.d.ts`; no root build was run.
-CI execution remains with the harness. P2 is next.
+CI execution remains with the harness.
+
+P2 validation: refreshed the exact AJV and esbuild pins and their lockfile,
+retaining the ephemeris pin. A clean offline lockfile install with lifecycle
+scripts disabled passed, followed by `npm --prefix evals test` and
+`npm --prefix evals run validate:seed` on Node 22. The suite includes strict
+schema contracts, bundler child cleanup, fresh-process repeatability, package
+exclusion and project isolation. The separate live registry check,
+`npm --prefix evals audit --audit-level=low --cache evals/.cache/npm`,
+reported no advisories for the refreshed dependency tree. CI now runs this
+audit explicitly after installation, and the project guide records its network
+requirement. The root `package:contents` check was attempted with the eval-local
+cache and still failed on the existing missing `dist/calc.d.ts`; no root build
+was run. Worktree disk use remains below the brief's cap. P3 is next.

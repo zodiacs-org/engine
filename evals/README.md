@@ -24,21 +24,24 @@ Use Node.js 22. From the repository root:
 
 ```sh
 npm ci --prefix evals --ignore-scripts --no-audit --no-fund --cache evals/.cache/npm
+npm --prefix evals audit --audit-level=low --cache evals/.cache/npm
 npm --prefix evals test
 npm --prefix evals run validate:seed
 node evals/bin/validate-entry.mjs --help
 ```
 
 Installation resolves the locked validator, bundler and ephemeris dependencies.
+The separate dependency audit queries the npm registry and fails on reported
+advisories of low severity or higher. It covers this project's lockfile only.
 Tests and validation then run offline; they require no LLM backend, API key or
 root engine build. Tests use
 Node's built-in runner and filenames ending in `.checks.mjs`, so the root Vitest
 suite does not collect them.
 
 The dedicated [eval workflow](../.github/workflows/evals.yml) runs the same
-installation, tests and seed validation on Node.js 22 for pull requests and
-pushes to `main`. It installs only this project's lockfile dependencies and
-uses the offline mock without credentials. The test command limits file workers
+installation, dependency audit, tests and seed validation on Node.js 22 for pull
+requests and pushes to `main`. It installs only this project's lockfile
+dependencies and uses the offline mock without credentials. The test command limits file workers
 to one, leaving room for the subprocess checks within the worker cap in
 [the phase 2 plan](PHASE2.md).
 

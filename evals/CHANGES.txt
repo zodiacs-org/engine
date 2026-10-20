@@ -11,3 +11,4 @@ M10: add conservative offline prose claim extraction, negation and context guard
 M11: add adversarial generation and offline end-to-end evaluation tests for late malformed output, metadata containment, invented factors, unavailable time, convention conflicts, contradictions and output limits, with documented scope.
 M12: document reproducible local workflows, complete supplied-reading and report-inspection examples, valid custom backend output and seed review; verify examples, the full offline suite and package isolation, recording the missing-dist package gate limitation.
 P1: add the phase two checklist and isolated Node 22 eval workflow, bound test workers, release the loader's bundler process, and verify the full suite, seed and package isolation.
+P2: refresh the eval validator and bundler pins and lockfile, retain the ephemeris pin, add explicit CI dependency auditing, and verify a clean audit, full suite, seed validation and package isolation.
