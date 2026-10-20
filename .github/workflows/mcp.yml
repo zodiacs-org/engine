@@ -32,11 +32,5 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Build
-        run: npm run build
-
-      - name: Tests
-        run: npm test
+      - name: Validate MCP and isolation
+        run: node scripts/validate.mjs

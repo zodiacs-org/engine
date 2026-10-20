@@ -15,3 +15,4 @@ P3: Add shared HTTP rate limits and configurable body caps, handle streamed refu
 P4: Verify every tool against discovered JSON schemas over stdio and HTTP, cover input and calculation errors, search refusals and recovery, and record passing MCP checks on Node 22.23.3.
 P5: Clarify chart receipt scope and scan discovered descriptions and synthetic protocol outputs for predictive and price wording; all MCP checks passed on Node 22.23.3.
 P6: Update authenticated client setup and the gateway checklist for credentials, headers, limits, cancellation and private logs; record passing MCP checks on Node 22.23.3.
+P7: Align CI with complete Node 22 checks, record phase 2 evidence and parent isolation, enforce disk and file policies and update the handoff; all MCP checks passed on Node 22.23.3.

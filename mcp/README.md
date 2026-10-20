@@ -14,6 +14,14 @@ npm ci
 npm run check
 ```
 
+For the complete CI gate and a reproducible local report, run
+`node scripts/validate.mjs` on Node 22 after installation. It runs typecheck,
+build and the complete test suite, checks the carried engine archive and parent
+package isolation, and verifies documentation, file sizes and project disk use.
+The same command runs in [.github/workflows/mcp.yml](../.github/workflows/mcp.yml)
+after installation from this project's lockfile. See [VALIDATION.md](VALIDATION.md)
+for the checked scope and committed evidence. Raw reports stay in `.generated/`.
+
 Dependencies are pinned in `package-lock.json`. The engine dependency is the
 carried archive at `../artifacts/zodiacs-engine-1.0.0.tgz`, read as a local
 relative dependency. Installation does not rebuild the parent engine or write

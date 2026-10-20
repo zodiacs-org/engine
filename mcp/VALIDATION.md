@@ -1,4 +1,49 @@
-# Scaffold validation
+# MCP validation
+
+P7 final phase 2 validation: a clean `npm ci --ignore-scripts` and
+`node scripts/validate.mjs` passed on Node 22.23.3. The install summary and
+validation stdout are committed in
+[evidence/p7-validation.txt](evidence/p7-validation.txt). Reproduce the run from
+`mcp/` with the committed lockfile and Node 22:
+
+```sh
+npm ci --ignore-scripts --cache .cache/npm
+node scripts/validate.mjs
+```
+
+The report identifies the source baseline, engine archive, lockfile and exact
+validation inputs by SHA-256. Validation inputs are the maintained TypeScript,
+JavaScript module and JSON files under `mcp/`, plus the MCP workflow; paths and
+contents are hashed in sorted order with NUL separators. Documentation and
+evidence files are excluded from that digest so a report can be committed
+without changing the executable inputs it identifies. Raw logs and the Vitest
+JSON report stay in gitignored `.generated/`.
+
+The checked span is the synthetic cases in the complete `test/*.mcp-test.ts`
+suite. Phase 2 coverage includes credential sources and HTTP authorization
+(`auth.mcp-test.ts`), real worker termination, deadlines and cancellation
+(`search-worker.mcp-test.ts` and `cancellation.mcp-test.ts`), request rate and
+UTF-8 body limits (`http-limits.mcp-test.ts`), every tool's advertised output
+schema over stdio and HTTP (`transports.mcp-test.ts`), and factual wording
+(`transports.mcp-test.ts` and `factual-language.mcp-test.ts`). Earlier tool,
+receipt, SDK and isolation cases remain part of the same run. These establish
+wrapper, resource-policy and protocol integration, not independent accuracy.
+
+The Node 22 MCP workflow installs from its own lockfile and invokes the same
+validation command. That command checks the carried archive digest and locked
+source, parent pack exclusion, parent file/dist snapshots, allowed change paths,
+whitespace, documentation dashes and JSON examples. It also enforces the file
+and project disk policies recorded in [PHASE2.md](PHASE2.md), counting dependencies,
+caches and generated reports toward project disk use before and after each
+validation stage, with reserved room for build and report growth before launch.
+Authored files, build output and raw reports are checked for
+file size; upstream dependencies and package-cache files retain their own sizes.
+
+No parent build was run. Parent build-dependent gates retain the scaffold
+limitation below and remain the repository CI's responsibility. Client GUIs,
+public gateways and live authentication services were not exercised. The
+operator checklist in [README.md](README.md) describes those deployment checks;
+[HANDOFF.md](HANDOFF.md) describes the final draft PR scope.
 
 P6 session: `node scripts/validate.mjs` passed on Node 22.23.3; its output is
 committed in [evidence/p6-validation.txt](evidence/p6-validation.txt).
