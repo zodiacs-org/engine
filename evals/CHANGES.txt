@@ -12,3 +12,4 @@ M11: add adversarial generation and offline end-to-end evaluation tests for late
 M12: document reproducible local workflows, complete supplied-reading and report-inspection examples, valid custom backend output and seed review; verify examples, the full offline suite and package isolation, recording the missing-dist package gate limitation.
 P1: add the phase two checklist and isolated Node 22 eval workflow, bound test workers, release the loader's bundler process, and verify the full suite, seed and package isolation.
 P2: refresh the eval validator and bundler pins and lockfile, retain the ephemeris pin, add explicit CI dependency auditing, and verify a clean audit, full suite, seed validation and package isolation.
+P3: add a versioned reflective-language policy and offline checker with explicit penalties, exact evidence, bounded immutable assessments, original tests and documented limits; verify the full suite, seed validation, audit and package isolation.

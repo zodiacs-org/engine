@@ -6,7 +6,7 @@ handles commits, pushes and CI. A root CI failure file takes priority.
 
 - [x] P1 Add a dedicated Node 22 workflow that installs from the eval lockfile, runs the complete eval suite and seed validation, and keeps test workers bounded and separate from the root runner.
 - [x] P2 Refresh the eval validator and bundler dependencies without changing the engine's ephemeris pin, verify a clean dependency audit, and rerun the full suite from the refreshed lockfile.
-- [ ] P3 Define a versioned reflective-language rubric and deterministic text checker with original passing and failing test cases, explicit penalties, evidence spans and documented detection limits.
+- [x] P3 Define a versioned reflective-language rubric and deterministic text checker with original passing and failing test cases, explicit penalties, evidence spans and documented detection limits.
 - [ ] P4 Include the reflective-language assessment in evaluation reports and CLI summaries, preserving factual scoring and testing supplied readings, extraction and the offline mock end to end.
 - [ ] P5 Expand the individually authored MIT seed to cover Sun through Pluto in every sign and each supported major aspect, with complete provenance and tests enforcing coverage, originality metadata and reflective wording.
 - [ ] P6 Add original synthetic adversarial readings for invented placements, houses, aspects and dignities, verify each rejection with the scorer, and commit a reproducible aggregate report with a check command used by CI.
@@ -45,4 +45,17 @@ reported no advisories for the refreshed dependency tree. CI now runs this
 audit explicitly after installation, and the project guide records its network
 requirement. The root `package:contents` check was attempted with the eval-local
 cache and still failed on the existing missing `dist/calc.d.ts`; no root build
-was run. Worktree disk use remains below the brief's cap. P3 is next.
+was run. Worktree disk use remains below the brief's cap.
+
+P3 validation: added an original MIT reflective-language policy and independent
+offline text checker with exact UTF-16 evidence, explicit capped penalties,
+overlap handling, input and match limits, immutable output and raw-byte identity.
+Original reflective and rejected-input tests cover the policy, empty-input
+uncertainty, Unicode, fixed refusals and repeatability across fresh processes.
+Detection limits and conservative context handling are documented in
+REFLECTIVE.md. On Node 22, the full eval suite, seed validation and dependency
+audit passed, including package exclusion and project isolation. The root
+package inventory check was attempted with the eval-local cache and still
+failed on the existing missing dist/calc.d.ts; no root build was run. Worktree
+disk use remains below the brief's cap. Evaluation-report and CLI integration
+remain P4; factual scoring contracts are unchanged. P4 is next.

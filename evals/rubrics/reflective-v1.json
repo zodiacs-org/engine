@@ -1,0 +1,81 @@
+{
+  "id": "chart-reading-reflective",
+  "version": "1.0.0",
+  "dimension": "reflective-not-predictive",
+  "license": {
+    "spdxId": "MIT",
+    "attribution": "Zodiacs evals contributors; original language policy."
+  },
+  "input": {
+    "language": "en",
+    "source": "entire-unchanged-reading-text",
+    "normalization": "none",
+    "offsetUnit": "utf16-code-unit",
+    "claimsRequired": false
+  },
+  "limits": {
+    "textCodePoints": 32768,
+    "matches": 512,
+    "reportBytes": 1048576
+  },
+  "matching": {
+    "flags": "giu",
+    "order": "start-then-end-then-rule-order",
+    "overlaps": "merge-transitive-strict-overlap",
+    "adjacent": "separate-findings",
+    "penaltyPerFinding": "maximum-matching-rule-penalty",
+    "repeatedWording": "count-each-location",
+    "quotationAndNegation": "no-context-exemption",
+    "excessMatches": "refuse-without-partial-assessment"
+  },
+  "scoring": {
+    "maximum": 100,
+    "rawPenaltyPoints": "sum-finding-penalties",
+    "appliedPenaltyPoints": "minimum-of-maximum-and-raw-penalty",
+    "points": "maximum-minus-applied-penalty",
+    "emptyOrWhitespace": "unassessed-with-null-points",
+    "rounding": "none",
+    "calibrated": false,
+    "compositeWithFactualScore": false
+  },
+  "rules": [
+    {
+      "id": "future-assertion",
+      "description": "A personal or named sky subject with an explicit future auxiliary, contraction or going-to construction.",
+      "penaltyPoints": 25,
+      "pattern": "(?<![\\p{L}\\p{N}_])(?:(?:you|we|they|he|she|it|i|(?:the\\s+)?(?:sun|moon)|mercury|venus|mars|jupiter|saturn|uranus|neptune|pluto)\\s+(?:will|shall|won['’]t|shan['’]t)|(?:you|we|they|he|she|it|i)['’]ll|(?:you|we|they)(?:\\s+are|['’]re)\\s+going\\s+to|(?:he|she|it)(?:\\s+is|['’]s)\\s+going\\s+to|i(?:\\s+am|['’]m)\\s+going\\s+to|your(?:\\s+[\\p{L}]+){1,4}\\s+(?:will|shall|won['’]t|is\\s+going\\s+to|are\\s+going\\s+to))(?![\\p{L}\\p{N}_])"
+    },
+    {
+      "id": "hedged-outcome",
+      "description": "A personal subject with a possibility modal and a listed outcome verb; reflection verbs receive no match.",
+      "penaltyPoints": 25,
+      "pattern": "(?<![\\p{L}\\p{N}_])(?:you|we|they|he|she|i|your(?:\\s+[\\p{L}]+){1,4})\\s+(?:may|might|could)\\s+(?:(?:not|soon|eventually|possibly|probably)\\s+){0,2}(?:meet|find|receive|gain|lose|become|succeed|fail|marry|win|experience|face|earn|get|recover|attract|achieve|encounter|land|obtain)(?![\\p{L}\\p{N}_])"
+    },
+    {
+      "id": "future-period-outcome",
+      "description": "A listed future period directly described as delivering or promising an outcome.",
+      "penaltyPoints": 25,
+      "pattern": "(?<![\\p{L}\\p{N}_])(?:next\\s+(?:week|month|year|season)|tomorrow|tonight|soon|(?:in\\s+)?the\\s+coming\\s+(?:days|weeks|months|year))\\s+(?:(?:will|shall)\\s+)?(?:brings?|holds?|promises?|delivers?|offers?|marks?|opens?|ushers?\\s+in)(?![\\p{L}\\p{N}_])"
+    },
+    {
+      "id": "promised-outcome",
+      "description": "Destiny, certainty, guarantees or explicit divination used to assert an outcome.",
+      "penaltyPoints": 25,
+      "pattern": "(?<![\\p{L}\\p{N}_])(?:(?:destined|fated)\\s+to|(?:certain|guaranteed)\\s+to\\s+(?:meet|find|receive|gain|lose|become|succeed|fail|marry|win|recover|earn|get)|(?:guarantees?|ensures?|promises?|predicts?|forecasts?|foretells?)\\s+(?:you|your|success|failure|romance|marriage|an?\\s+(?:outcome|event|encounter|promotion|relationship)))(?![\\p{L}\\p{N}_])"
+    },
+    {
+      "id": "financial-language",
+      "description": "Listed financial terms or currency symbols, including non-future and quoted occurrences.",
+      "penaltyPoints": 25,
+      "pattern": "(?<![\\p{L}\\p{N}_])(?:money|prices?|profits?|stocks?|invest(?:s|ed|ing|ments?|ors?)?|cryptocurrency|crypto|bitcoin|salary|income|cash|wealth|wealthy|debt|paychecks?|financial|finances?|dollars?|euros?|pounds?\\s+sterling|usd|eur|gbp)(?![\\p{L}\\p{N}_])|[$€£¥₹]"
+    }
+  ],
+  "limitations": [
+    "Fixed English patterns check wording, not symbolic quality, intent, truth or complete absence of prohibited content.",
+    "No detected violations is a bounded rule result, not certification that a reading is reflective.",
+    "Paraphrases, unlisted subjects and verbs, implication, other languages, obfuscation and Unicode lookalikes can be missed.",
+    "Quoted, negated, historical or procedural wording can be flagged; no semantic context exemption is applied.",
+    "Financial terms are flagged even in reflective discussion; ordinary values, worth and computed returns are not financial triggers.",
+    "Penalties are authored policy points, not calibrated probabilities or a measure of factual correctness."
+  ]
+}

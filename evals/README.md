@@ -13,6 +13,11 @@ and saves a complete report under ignored `reports/`. An opt-in
 [conservative prose extractor](EXTRACTION.md) recognizes explicit factual
 sentences while retaining unsupported wording and extraction limits.
 
+The separate [reflective-language assessment](REFLECTIVE.md) checks the entire
+text for bounded English outcome and financial wording, with versioned penalties,
+exact evidence spans and explicit detection limits. Its library is available
+independently; evaluation-report and CLI integration remain the next milestone.
+
 Interpretation text is symbolic prose. The factual score compares a
 reading's assertions with computations from the local `@zodiacs/engine` under
 recorded conventions. It does not measure independent astronomical accuracy,
