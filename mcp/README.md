@@ -353,10 +353,16 @@ authorization.
 The entry points follow the SDK's [Node adapter API](https://ts.sdk.modelcontextprotocol.io/v2/api/%40modelcontextprotocol/node/).
 `test/transports.mcp-test.ts` uses real child processes and loopback HTTP with
 official SDK clients. It exercises every tool with synthetic inputs over
-stdio, current HTTP and older stateless HTTP, validates returned receipt
-envelopes, and checks errors, recovery, body limits, independent clients,
-listener failures, EOF and signal shutdown. These tests establish transport
-integration, not independent astronomical accuracy.
+stdio and HTTP in current and older protocol modes. Each structured result is
+validated against the JSON schema returned by `tools/list`, with damaged copies
+checked for rejection. Native receipt envelopes are parsed separately because
+their codec checks go beyond the advertised JSON schema. Cases cover unknown
+time, polar fallback, return relocation, populated and empty scans, and structured
+sample-budget refusals. Input and calculation errors are checked for every tool,
+along with unknown tools, recovery, body limits, independent clients, listener
+failures, EOF and signal shutdown. `test/cancellation.mcp-test.ts` also checks
+deadline and busy refusals without partial results over stdio and HTTP. These
+tests establish transport integration, not independent astronomical accuracy.
 
 ## Client configuration
 

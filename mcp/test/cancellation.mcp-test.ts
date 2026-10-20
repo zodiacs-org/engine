@@ -202,10 +202,11 @@ describe("HTTP search cancellation and resource lifecycle", () => {
 });
 
 // Worker lifecycle is observed on stderr; protocol messages continue over the real stdio pipes.
-const stdioProgram = `
+function stdioProgram(budgetMs?: number) {
+  return `
 import { startStdio } from ${JSON.stringify(new URL("../build/transports.js", import.meta.url).href)};
 import { EventSearchRunner } from ${JSON.stringify(new URL("../build/event-search-runner.js", import.meta.url).href)};
-const runner = new EventSearchRunner({ onWorker(worker) {
+const runner = new EventSearchRunner({ ${budgetMs === undefined ? "" : `budgetMs: ${budgetMs}, `}onWorker(worker) {
   worker.on("message", (message) => {
     if (message?.type === "started") process.stderr.write("search-started\\n");
     if (message?.type === "result") process.stderr.write("search-result\\n");
@@ -216,6 +217,7 @@ const running = startStdio({ eventSearchRunner: runner });
 process.once("SIGINT", () => { void running.close(); });
 process.once("SIGTERM", () => { void running.close(); });
 `;
+}
 
 function diagnostic(transport: StdioClientTransport, marker: string) {
   return new Promise<void>((resolve, reject) => {
@@ -239,7 +241,7 @@ describe.each(versions)("%s SDK stdio search cancellation", (version) => {
       version === "legacy" ? { supportedProtocolVersions: ["2025-11-25"] }
         : { versionNegotiation: { mode: { pin: "2026-07-28" } } });
     const transport = new StdioClientTransport({
-      command: process.execPath, args: ["--input-type=module", "--eval", stdioProgram],
+      command: process.execPath, args: ["--input-type=module", "--eval", stdioProgram()],
       cwd: fileURLToPath(new URL("../", import.meta.url)), stderr: "pipe"
     });
     await client.connect(transport);
@@ -251,6 +253,58 @@ describe.each(versions)("%s SDK stdio search cancellation", (version) => {
     const cancellation = new AbortController();
     const pending = outcome(client.callTool(longSearch, { signal: cancellation.signal }));
     await started;
+    cancellation.abort();
+    expect(await pending).toHaveProperty("error");
+    await stopped;
+    expect(diagnostics).not.toContain("search-result");
+    expectSearch(await client.callTool(shortSearch));
+  }, 20_000);
+});
+
+describe("SDK stdio search resource refusals", () => {
+  let client: Client | undefined;
+  afterEach(async () => { await client?.close(); });
+
+  async function connect(budgetMs?: number) {
+    client = new Client({ name: "synthetic-stdio-resource-test", version: "0.0.0" },
+      { versionNegotiation: { mode: { pin: "2026-07-28" } } });
+    const transport = new StdioClientTransport({
+      command: process.execPath, args: ["--input-type=module", "--eval", stdioProgram(budgetMs)],
+      cwd: fileURLToPath(new URL("../", import.meta.url)), stderr: "pipe"
+    });
+    await client.connect(transport);
+    expect(client.getProtocolEra()).toBe("modern");
+    return { client, transport };
+  }
+
+  it("reports a deadline without partial results and keeps other tools usable", async () => {
+    const { client, transport } = await connect(1);
+    let diagnostics = "";
+    transport.stderr?.on("data", (chunk: unknown) => { diagnostics += String(chunk); });
+    const stopped = diagnostic(transport, "search-stopped");
+    const result = await client.callTool(longSearch);
+    await stopped;
+    expect(result.isError).toBe(true);
+    expect(result.structuredContent).toBeUndefined();
+    expect(result.content).toEqual([{ type: "text", text: expect.stringContaining("deadline exceeded") }]);
+    expect(diagnostics).not.toContain("search-result");
+    expect((await client.callTool(snapshot)).isError).not.toBe(true);
+  });
+
+  it("refuses a concurrent search and recovers after the active worker stops", async () => {
+    const { client, transport } = await connect();
+    let diagnostics = "";
+    transport.stderr?.on("data", (chunk: unknown) => { diagnostics += String(chunk); });
+    const started = diagnostic(transport, "search-started");
+    const stopped = diagnostic(transport, "search-stopped");
+    const cancellation = new AbortController();
+    const pending = outcome(client.callTool(longSearch, { signal: cancellation.signal }));
+    await started;
+    const refused = await client.callTool(shortSearch);
+    expect(refused.isError).toBe(true);
+    expect(refused.structuredContent).toBeUndefined();
+    expect(refused.content).toEqual([{ type: "text", text: expect.stringContaining("busy") }]);
+    expect((await client.callTool(snapshot)).isError).not.toBe(true);
     cancellation.abort();
     expect(await pending).toHaveProperty("error");
     await stopped;
