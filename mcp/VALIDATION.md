@@ -1,5 +1,23 @@
 # Scaffold validation
 
+P6 session: `node scripts/validate.mjs` passed on Node 22.23.3; its output is
+committed in [evidence/p6-validation.txt](evidence/p6-validation.txt).
+Typecheck, the complete Vitest suite, the isolated build, parent pack exclusion,
+source file sizes, documentation checks and the parent file/dist snapshot passed.
+The initial complete run timed out in the existing modern HTTP cancellation
+case. That case passed in a focused rerun, followed by a passing complete
+validation run; no runtime or test files changed in this session. The initial
+failure and reruns are recorded in the same evidence file.
+
+README client configuration was checked against its linked official guides.
+The combined HTTP startup command was parsed with `parseArguments`, JSON
+snippets were parsed, and authenticated client entries were checked for literal
+environment references without credential values. The gateway checklist ties
+backend behavior to existing authentication, limits, cancellation and transport
+tests. Live client applications and deployed gateways were not exercised.
+Parent build-dependent gates retain the limitation below; parent files, engine
+archives and existing parent dist remained unchanged.
+
 P5 session: `node scripts/validate.mjs` passed on Node 22.23.3; the full output
 is committed in [evidence/p5-validation.txt](evidence/p5-validation.txt).
 Typecheck, the complete Vitest suite, the isolated build, parent pack exclusion,

@@ -14,3 +14,4 @@ P2: Run event searches in stoppable workers with execution deadlines, bounded co
 P3: Add shared HTTP rate limits and configurable body caps, handle streamed refusals and preserve private cache headers; document policies and pass all MCP checks on Node 22.23.3.
 P4: Verify every tool against discovered JSON schemas over stdio and HTTP, cover input and calculation errors, search refusals and recovery, and record passing MCP checks on Node 22.23.3.
 P5: Clarify chart receipt scope and scan discovered descriptions and synthetic protocol outputs for predictive and price wording; all MCP checks passed on Node 22.23.3.
+P6: Update authenticated client setup and the gateway checklist for credentials, headers, limits, cancellation and private logs; record passing MCP checks on Node 22.23.3.

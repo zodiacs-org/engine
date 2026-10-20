@@ -393,6 +393,33 @@ executable and `/absolute/path/to/engine` with your checkout. Absolute paths
 avoid dependence on a GUI application's PATH or working directory. Windows
 paths need escaped backslashes in JSON. There is no published MCP package or
 required API key. The client launches the stdio process itself.
+Stdio needs no bearer credential and rejects HTTP authentication and limit flags.
+
+For authenticated local HTTP, provision `ZODIACS_MCP_TOKEN` through your secret
+storage in the listener's environment, then start it separately from `mcp/`:
+
+```sh
+node build/cli.js http --port 3000 --auth-token-env ZODIACS_MCP_TOKEN --max-requests 120 --rate-window-ms 60000 --max-request-bytes 65536
+```
+
+The command contains only the variable name. To load the same credential from
+an operator-managed file, replace `--auth-token-env ZODIACS_MCP_TOKEN` with
+`--auth-token-file /absolute/operator/path`. Keep that file outside the checkout
+and readable only by the operator and service account. Restart the listener to
+rotate its credential, then reconnect clients with the new value.
+
+The HTTP templates below reference an environment variable; they contain no
+credential value. Provision the matching value in the client's launch
+environment too. A client cannot read the listener's environment or token file
+automatically. Keep the interpolation syntax literal in JSON and let the client
+expand it; do not substitute a credential into a shell command or committed
+configuration. Restart a GUI client after changing its launch environment.
+The combined command uses the policies enforced by
+[test/http-limits.mcp-test.ts](test/http-limits.mcp-test.ts); source loading and
+header authentication are covered by [test/auth.mcp-test.ts](test/auth.mcp-test.ts).
+For remote access, configure the HTTPS gateway described below and use its
+client authentication flow. Keep the backend credential between the gateway
+and listener.
 
 ### Claude Desktop
 
@@ -423,16 +450,36 @@ Register stdio, then inspect it in `/mcp` inside Claude Code:
 claude mcp add --transport stdio --scope local zodiacs-astro -- /absolute/path/to/node /absolute/path/to/engine/mcp/build/cli.js stdio
 ```
 
-Alternatively, start the HTTP executable separately and register its URL:
+For a trusted local HTTP listener with backend authentication disabled, register
+its URL instead:
 
 ```sh
 claude mcp add --transport http --scope local zodiacs-astro http://127.0.0.1:3000/mcp
 ```
 
+For the authenticated local HTTP command above, use this entry in a private
+client configuration file supplied through `--mcp-config /absolute/operator/client.json`:
+
+```json
+{
+  "mcpServers": {
+    "zodiacs-astro": {
+      "type": "http",
+      "url": "http://127.0.0.1:3000/mcp",
+      "headers": {
+        "Authorization": "Bearer ${ZODIACS_MCP_TOKEN}"
+      }
+    }
+  }
+}
+```
+
 Choose one registration for this name. The HTTP entry connects to an existing
 listener; it does not launch this server. The official
 [Claude Code MCP guide](https://code.claude.com/docs/en/mcp) explains scopes,
-registration and removal.
+registration, environment expansion and removal. Do not pass an expanded
+credential through the CLI's header option: command history and process
+arguments can expose it.
 
 ### Cursor
 
@@ -451,22 +498,27 @@ Merge this into `.cursor/mcp.json` in the engine checkout, or into
 }
 ```
 
-For an already running local HTTP listener, use this instead:
+For the authenticated local HTTP command above, use this instead:
 
 ```json
 {
   "mcpServers": {
     "zodiacs-astro": {
-      "url": "http://127.0.0.1:3000/mcp"
+      "url": "http://127.0.0.1:3000/mcp",
+      "headers": {
+        "Authorization": "Bearer ${env:ZODIACS_MCP_TOKEN}"
+      }
     }
   }
 }
 ```
 
+Cursor uses `${env:NAME}` for header interpolation. Omit `headers` only when
+connecting to a trusted local listener with backend authentication disabled.
 Check discovery in Cursor's MCP settings. See the official
 [Cursor MCP documentation](https://prod.cursor.com/docs/mcp) for configuration
-locations and tool controls. These are templates for your client; this project
-does not write configuration outside `mcp/`.
+locations, interpolation and tool controls. These are templates for your client;
+this project does not write configuration outside `mcp/`.
 
 ### ChatGPT connectors and custom MCP servers
 
@@ -482,7 +534,7 @@ For the public URL route, enter these values in the custom MCP connection form:
 
 This is a form-value template, not a ChatGPT config file or live endpoint.
 Supply your own authenticated HTTPS gateway as described below. The current
-[official OpenAI connection guide](https://developers.openai.com/plugins/deploy/connect-chatgpt)
+[official connection guide](https://developers.openai.com/api/docs/guides/custom-mcp-server)
 directs users to ChatGPT Plugins, Add custom MCP server, then name, URL and
 authentication settings. Review discovery and install the resulting plugin.
 Account and workspace policies govern access; connector and app labels can
@@ -492,10 +544,11 @@ does not configure or test that service.
 
 The loopback URL cannot serve as a public ChatGPT endpoint. This server supplies
 no OAuth discovery or account integration. Its optional shared bearer credential
-is separate from the gateway's client authentication. The gateway must
-implement the authentication flow supported by the chosen connection, including
-discovery when required. Choosing authentication in the form does not add it to
-the backend. Vitest exercises official SDK clients, not live client GUIs,
+is separate from the gateway's client authentication; it is not a custom bearer
+field in this connection form. The gateway must implement the authentication
+flow supported by the chosen connection, including discovery when required.
+Choosing authentication in the form does not add it to the backend.
+Vitest exercises official SDK clients, not live client GUIs,
 ChatGPT connections or gateways.
 
 ## Deployment boundary
@@ -510,7 +563,10 @@ and any supplied Origin against a gateway allowlist, then set upstream Host to
 the permitted loopback authority. Backend localhost guards reject public Origin
 values too. If the gateway removes or maps Origin upstream, do so only after
 validating the original value. Forward MCP protocol and content negotiation
-headers and allow JSON or SSE responses without buffering away the stream.
+headers unchanged, including `Accept`, `Content-Type`, `MCP-Protocol-Version`,
+`Mcp-Method` and `Mcp-Name` when sent by the client. Preserve additional MCP
+headers used by the negotiated protocol; do not invent a protocol version or
+rewrite request IDs. Allow JSON or SSE responses without buffering away the stream.
 The stateless backend does not require sticky sessions.
 
 Apply gateway request limits, rate limits and bounded concurrency. The search
@@ -521,11 +577,50 @@ synchronous and do not have a worker deadline. Disable caching and avoid logging
 request bodies, result bodies or authorization headers: natal inputs and receipts
 contain birth details.
 TLS, client authentication and authorization, OAuth, CORS, per-client quotas,
-persistence and public routing belong to the deployment. If backend bearer authentication
-is configured, the gateway must supply that credential on upstream requests
-after authenticating the client. Keep it out of gateway logs and client-visible
-responses. When backend authentication is disabled, forwarded authorization
+persistence and public routing belong to the deployment. If backend bearer
+authentication is configured, the gateway must replace the client's
+`Authorization` header with the backend credential on upstream requests after
+authenticating and authorizing the client. Supply a single header and keep it
+out of gateway logs and client-visible responses. When backend authentication
+is disabled, forwarded authorization
 headers are not checked there.
+
+### Gateway operator checklist
+
+- [ ] Keep the listener private on loopback, terminate HTTPS at the gateway,
+  and route to the exact `/mcp` path without a trailing slash or query string.
+  Verify public Host and supplied Origin allowlists before mapping upstream
+  Host or Origin to permitted local values.
+- [ ] Authenticate and authorize clients at the gateway. Enable backend bearer
+  authentication using a protected environment variable or file; inject its
+  credential only after gateway authorization. Test missing and wrong client
+  credentials, valid access, and backend credential rotation without logging values.
+- [ ] Set gateway body, per-client rate and concurrency limits. Keep the backend
+  policies enabled and account for its shared listener quota, including
+  initialization, notifications and failed authentication. Preserve HTTP 413,
+  HTTP 429 and `Retry-After`; avoid automatic retry loops.
+- [ ] Preserve MCP headers and JSON/SSE content types and stream responses
+  without caching or buffering. Verify discovery and a synthetic tool call
+  through the gateway with the actual client and its negotiated protocol.
+- [ ] Verify client cancellation and gateway timeouts close the original
+  upstream request stream and release the search worker. Older stateless
+  cancellation POSTs cannot stop another request. The worker deadline bounds
+  event searches; other tools calculate synchronously. Treat interrupted or
+  refused work as incomplete, and check that a later request succeeds.
+- [ ] Disable request/result body and authorization-header logging in the
+  gateway, service, tracing and error capture. Keep operational logs private,
+  limit retention, and review client history settings for birth details and receipts.
+- [ ] Use a synthetic SDK initialization and tool call for a deployment check;
+  `/mcp` has no health route. Older stateless GET/DELETE responses are
+  method-not-allowed, and probes consume the shared quota. Verify signal
+  shutdown closes active search workers and connections.
+
+Backend behavior in this checklist is exercised locally by
+[test/auth.mcp-test.ts](test/auth.mcp-test.ts),
+[test/http-limits.mcp-test.ts](test/http-limits.mcp-test.ts),
+[test/cancellation.mcp-test.ts](test/cancellation.mcp-test.ts) and
+[test/transports.mcp-test.ts](test/transports.mcp-test.ts). A deployed gateway
+needs its own checks; these tests do not exercise a public route or client GUI.
 
 Tools calculate locally without fetching places or resolving civil wall times.
 Resolve local-time gaps, folds and historical rules before sending a birth
@@ -591,6 +686,7 @@ percentage or call a completed sampled scan exhaustive. Unknown birth time
 retains the supplied reference instant; do not infer noon or describe it as
 verified birth time. Avoid reproducing private birth details publicly.
 
-Client guidance was checked against the linked official pages during M11.
+Client guidance and credential interpolation were checked against the linked
+official pages during P6. Local protocol checks do not run those client applications.
 [VALIDATION.md](VALIDATION.md) records local protocol evidence; live client
 setup and gateway verification remain deployment checks for the operator.
