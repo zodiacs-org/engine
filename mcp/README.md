@@ -267,15 +267,50 @@ POST. Close the original connection, use the current protocol, or let the
 server execution budget stop the work. Cancellation tests cover both the
 supported mechanisms and isolation between clients.
 
-The Node adapter and SDK handler limit POST bodies to 65,536 bytes before
-creating a calculation server. `test/transports.mcp-test.ts` checks requests at
-that boundary and just above it. This is a resource policy, not a chart-size
-or accuracy claim. HTTP responses use `Cache-Control: no-store`. The official
-localhost guards validate Host and any supplied Origin before routing. There
+The Node adapter and SDK handler limit POST bodies to 65,536 bytes by default,
+before creating a calculation server. Both use the same configured cap and count
+UTF-8 bytes, including for chunked bodies without Content-Length. Oversized bodies
+receive HTTP 413 and a closed connection. The cap applies to request bodies, not
+response sizes. [test/http-limits.mcp-test.ts](test/http-limits.mcp-test.ts) checks
+byte boundaries, streamed bodies, refusals and recovery. These are resource
+policies, not chart-size or accuracy claims. HTTP responses use
+`Cache-Control: no-store`. The official localhost guards validate Host and any
+supplied Origin before routing. There
 is no CORS support. Optional bearer authentication is described below. Remote
 access requires an authenticated HTTPS gateway that checks the public Host and
 Origin before forwarding with a permitted local host. Gateway configuration
 and client setup are described below.
+
+HTTP also admits at most 120 requests per 60,000-millisecond fixed window by
+default. A window starts with the first request after startup or the previous
+window's expiry. The limit is shared by every client of one listener. Every
+`/mcp` request counts, including initialization, notifications, unsupported
+methods, malformed or oversized bodies and failed authentication. Host, Origin
+and exact-path guards run first; the rate check runs before authentication or
+body reading. Exhaustion returns HTTP 429 with `Retry-After` as a positive number
+of whole seconds, rounded up, `Cache-Control: no-store` and `Connection: close`.
+The rejected body is not read and no calculation server is created. Refusals do
+not extend the window. Existing response streams and calculations continue.
+
+Rate tracking retains one window start and request count per listener, without
+client maps or cleanup timers. It uses a monotonic clock. New connections,
+credentials and Forwarded or X-Forwarded-For headers do not create another quota.
+Separate listeners have independent quotas, and restarting a listener clears its
+count. Apply per-client quotas at the authenticated gateway when needed.
+
+Operators can configure the policies without disabling them:
+
+```sh
+node build/cli.js http --max-requests 120 --rate-window-ms 60000 --max-request-bytes 65536
+```
+
+Embedded callers supply `startHttp({ limits: { maxRequests, windowMs,
+maxRequestBytes } })`, omitting fields to keep defaults. Each value must be a
+positive safe integer; `maxRequestBytes` may only reduce the existing body cap.
+Invalid configuration prevents startup. Stdio rejects these CLI options and
+keeps its existing transport behavior. The defaults, configuration validation,
+rate boundaries, recovery, guard ordering and authentication interaction are
+enforced by [test/http-limits.mcp-test.ts](test/http-limits.mcp-test.ts).
 
 HTTP bearer authentication is off by default. Select an environment variable
 name or a file path whose contents hold the credential:
@@ -303,12 +338,14 @@ environment values through the operator's secret storage. Diagnostics do not
 include credentials or source paths.
 
 When configured, the backend checks the `Authorization` bearer credential on
-every `/mcp` request before parsing the body or creating a calculation server.
+every `/mcp` request admitted by the rate policy, before parsing the body or
+creating a calculation server.
 It compares SHA-256 digests with `timingSafeEqual` and rejects duplicate
 authorization headers. Missing, malformed and wrong credentials receive the
 same HTTP 401 response with `WWW-Authenticate: Bearer realm="zodiacs-astro"`
-and `Cache-Control: no-store`. Credentials in URLs or request bodies do not
-authenticate a request. [test/auth.mcp-test.ts](test/auth.mcp-test.ts) enforces
+and `Cache-Control: no-store`, closing the connection without reading the body.
+Credentials in URLs or request bodies do not authenticate a request.
+[test/auth.mcp-test.ts](test/auth.mcp-test.ts) enforces
 the credential syntax, size policy, source loading, request rejection and
 CLI behavior. This shared credential does not provide OAuth or account
 authorization.
@@ -463,8 +500,8 @@ that behavior with the deployed gateway. Other calculation tools remain
 synchronous and do not have a worker deadline. Disable caching and avoid logging
 request bodies, result bodies or authorization headers: natal inputs and receipts
 contain birth details.
-TLS, client authentication and authorization, OAuth, CORS, quotas, persistence
-and public routing belong to the deployment. If backend bearer authentication
+TLS, client authentication and authorization, OAuth, CORS, per-client quotas,
+persistence and public routing belong to the deployment. If backend bearer authentication
 is configured, the gateway must supply that credential on upstream requests
 after authenticating the client. Keep it out of gateway logs and client-visible
 responses. When backend authentication is disabled, forwarded authorization

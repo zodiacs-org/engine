@@ -1,5 +1,19 @@
 # Scaffold validation
 
+P3 session: `node scripts/validate.mjs` passed on Node 22.23.3; the full output
+is committed in [evidence/p3-validation.txt](evidence/p3-validation.txt).
+Typecheck, the complete Vitest suite, the isolated build, parent pack exclusion,
+source file sizes, documentation checks and the parent file/dist snapshot passed.
+[test/http-limits.mcp-test.ts](test/http-limits.mcp-test.ts) checks configuration,
+fixed-window admission and recovery, authentication interaction, guard ordering,
+independent listeners, forwarding-header isolation and private refusals. It also
+checks exact UTF-8 byte boundaries and oversized declared and chunked bodies,
+including unfinished uploads and successful requests after rejection. Legacy SSE
+responses retain the no-store policy alongside the SDK's streaming directives.
+These are protocol and resource-policy checks, not astronomical accuracy evidence.
+Parent build-dependent gates retain the limitation below; parent files, engine
+archives and existing parent dist remained unchanged.
+
 P2 session: `node scripts/validate.mjs` passed on Node 22.23.3; the full output
 is committed in [evidence/p2-validation.txt](evidence/p2-validation.txt).
 Typecheck, the complete Vitest suite, the isolated build, parent pack exclusion,

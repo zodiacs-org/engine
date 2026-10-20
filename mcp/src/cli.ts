@@ -1,10 +1,11 @@
 import { pathToFileURL } from "node:url";
 import { startHttp, startStdio } from "./transports.js";
 import type { BearerAuthSource } from "./auth.js";
+import { resolveHttpLimits, type HttpLimits } from "./http-limits.js";
 
-const usage = "Usage: node build/cli.js [stdio | http [--port PORT] [--auth-token-env NAME | --auth-token-file PATH]]";
+const usage = "Usage: node build/cli.js [stdio | http [--port PORT] [--auth-token-env NAME | --auth-token-file PATH] [--max-requests COUNT] [--rate-window-ms MS] [--max-request-bytes BYTES]]";
 
-export function parseArguments(args: string[]): { transport: "stdio" | "http"; port?: number; auth?: BearerAuthSource } {
+export function parseArguments(args: string[]): { transport: "stdio" | "http"; port?: number; auth?: BearerAuthSource; limits?: Partial<HttpLimits> } {
   if (args.length === 0 || (args.length === 1 && args[0] === "stdio")) return { transport: "stdio" };
   if (args[0] !== "http") throw new Error(usage);
   const config: ReturnType<typeof parseArguments> = { transport: "http" };
@@ -20,6 +21,12 @@ export function parseArguments(args: string[]): { transport: "stdio" | "http"; p
       config.auth = { tokenEnv: value };
     } else if (option === "--auth-token-file" && !config.auth && !value.startsWith("--")) {
       config.auth = { tokenFile: value };
+    } else if (option === "--max-requests" || option === "--rate-window-ms" || option === "--max-request-bytes") {
+      const key = option === "--max-requests" ? "maxRequests" : option === "--rate-window-ms" ? "windowMs" : "maxRequestBytes";
+      if (value.trim() !== value || !/^[1-9]\d*$/.test(value) || config.limits?.[key] !== undefined) throw new Error(usage);
+      const limits = { ...config.limits, [key]: Number(value) };
+      try { resolveHttpLimits(limits); } catch { throw new Error(usage); }
+      config.limits = limits;
     } else throw new Error(usage);
   }
   return config;
