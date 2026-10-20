@@ -25,8 +25,9 @@ server and Node HTTP packages. The SDK client is a development dependency for
 protocol tests. Generated build output, dependencies, caches and future generated
 data stay in gitignored directories inside `mcp/`.
 
-`npm run typecheck` checks source and tests. `npm test` runs only this project's
-Vitest tests, named `test/*.mcp-test.ts` so the parent runner ignores them.
+`npm run typecheck` checks source and tests. `npm test` builds the search worker
+and runs only this project's Vitest tests, named `test/*.mcp-test.ts` so the
+parent runner ignores them.
 `npm run build` emits JavaScript and declarations into `mcp/build/`.
 The isolation test checks that the parent engine pack manifest excludes `mcp/`.
 The scaffold test checks SDK initialization and imports the engine and receipt
@@ -173,6 +174,31 @@ resource policy, refusal, validation and concrete output schemas with synthetic
 inputs. These are wrapper integration checks, not independent astronomical
 accuracy evidence.
 
+Registered `event_search` calls run in a separate worker thread. The server's
+default execution budget is 10,000 milliseconds, including worker startup,
+endpoint charts, the solver and receipt creation. The process permits one
+active search worker across its server instances and immediately refuses an
+additional search with a tool error. There is no waiting queue. Other tools
+remain available during a search. These execution policies are enforced by
+[test/search-worker.mcp-test.ts](test/search-worker.mcp-test.ts) and
+[test/cancellation.mcp-test.ts](test/cancellation.mcp-test.ts).
+
+Cancellation, deadline expiry, a busy worker or a worker failure produces no
+partial events or receipts. Deadline and busy refusals use `isError: true`
+without structured content; they are separate from the native structured
+`sample-budget` refusal. The runner waits for worker exit before releasing the
+slot. A deadline stops the worker through Node's termination mechanism;
+cleanup and response delivery can take additional time. Stopping a search does
+not establish that its window contained no events.
+
+Embedded callers may supply `eventSearchRunner: new EventSearchRunner({ budgetMs })`
+to `createServer`, `startStdio` or `startHttp`; import the class from
+`build/event-search-runner.js`. The budget must be an integer from 1 through
+30,000 milliseconds, as enforced by the worker tests. Transport shutdown closes
+the runner and waits for its worker to exit. The exported synchronous
+`eventSearchTool` calculation helper retains its native integration contract;
+the registered MCP tool always uses the worker runner.
+
 ## MCP registration
 
 `src/server.ts` registers `natal_chart`, `transits_at`, `transits_now`,
@@ -219,9 +245,9 @@ The example port is checked by `test/transports.mcp-test.ts`. The endpoint is
 `/mcp`, bound to IPv4 loopback. `startHttp({ port: 0 })` selects an available
 port for embedded use and returns `{ url, close }`. Closing is idempotent,
 stops new connections and closes active sockets, including unfinished bodies.
-Signals use the same close path. A calculation runs synchronously on the Node
-thread, so shutdown waits for that calculation to yield; this is not a hard
-execution deadline.
+Signals use the same close path and stop active search workers. Other tools
+calculate synchronously on the Node thread, so shutdown waits for those
+calculations to yield.
 
 The official SDK's `createMcpHandler` and Node adapter serve a fresh instance
 per HTTP request. Current protocol requests and older stateless Streamable HTTP
@@ -229,6 +255,17 @@ requests are supported. No session identifier is issued or retained. Older
 session GET and DELETE operations return method-not-allowed responses. The
 endpoint accepts the SDK's JSON and SSE response forms; it does not implement
 the separate legacy HTTP+SSE transport.
+
+Stdio honours MCP request cancellation notifications on its connection.
+Current Streamable HTTP clients cancel by closing the individual request's
+response stream; that disconnect stops its search worker. A disconnected
+older HTTP request also stops its worker. Older stateless HTTP clients that
+send a separate `notifications/cancelled` POST cannot identify another request
+securely: request IDs can overlap between independent clients, and this server
+does not retain client sessions. Such a notification does not cancel another
+POST. Close the original connection, use the current protocol, or let the
+server execution budget stop the work. Cancellation tests cover both the
+supported mechanisms and isolation between clients.
 
 The Node adapter and SDK handler limit POST bodies to 65,536 bytes before
 creating a calculation server. `test/transports.mcp-test.ts` checks requests at
@@ -419,11 +456,13 @@ validating the original value. Forward MCP protocol and content negotiation
 headers and allow JSON or SSE responses without buffering away the stream.
 The stateless backend does not require sticky sessions.
 
-Apply gateway request limits, rate limits and bounded concurrency. Calculations
-are synchronous; the search sample budget is not a wall-clock timeout. A gateway
-timeout does not cancel a running calculation. Hard deadlines require external
-process supervision. Disable caching and avoid logging request bodies, result
-bodies or authorization headers: natal inputs and receipts contain birth details.
+Apply gateway request limits, rate limits and bounded concurrency. The search
+sample budget and worker execution deadline apply independently. A gateway
+timeout stops a search only when it closes the upstream request stream; verify
+that behavior with the deployed gateway. Other calculation tools remain
+synchronous and do not have a worker deadline. Disable caching and avoid logging
+request bodies, result bodies or authorization headers: natal inputs and receipts
+contain birth details.
 TLS, client authentication and authorization, OAuth, CORS, quotas, persistence
 and public routing belong to the deployment. If backend bearer authentication
 is configured, the gateway must supply that credential on upstream requests

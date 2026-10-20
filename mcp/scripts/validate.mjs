@@ -62,13 +62,14 @@ console.log(`Node ${process.versions.node}`);
 console.log(`Source baseline: ${git("rev-parse", "HEAD").trim()}`);
 console.log(`Engine archive SHA-256: ${archive.sha256}`);
 run("typecheck", ["node_modules/typescript/bin/tsc", "--noEmit"]);
+// The search runner loads its compiled worker, including when Vitest imports source files.
+run("build", ["node_modules/typescript/bin/tsc", "-p", "tsconfig.build.json"]);
 run("vitest", ["node_modules/vitest/vitest.mjs", "run", "--config=vitest.config.ts", "--reporter=json", "--outputFile=.generated/vitest.json"]);
 const tests = JSON.parse(readFileSync(join(generated, "vitest.json"), "utf8"));
 assert.equal(tests.success, true);
 assert.equal(tests.numFailedTests, 0);
 assert.equal(tests.numPendingTests, 0);
 console.log(`Vitest tests: ${tests.numPassedTests} passed; ${tests.numFailedTests} failed; ${tests.numPendingTests} pending`);
-run("build", ["node_modules/typescript/bin/tsc", "-p", "tsconfig.build.json"]);
 for (const path of files(project)) {
   assert(statSync(path).size < 2_000_000, `Oversized project file: ${path}`);
   if (path.endsWith(".md")) {

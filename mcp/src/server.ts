@@ -4,11 +4,20 @@ import { natalChartTool, natalOutputSchema } from "./tools/natal.js";
 import { transitsAtTool, transitsNowTool, transitOutputSchema, type Clock } from "./tools/transits.js";
 import { synastryTool, synastryOutputSchema } from "./tools/synastry.js";
 import { solarReturnTool, lunarReturnTool, solarReturnOutputSchema, lunarReturnOutputSchema } from "./tools/returns.js";
-import { moonPhaseTool, eventSearchTool, moonPhaseOutputSchema, eventSearchOutputSchema } from "./tools/events.js";
+import { moonPhaseTool, moonPhaseOutputSchema, eventSearchOutputSchema } from "./tools/events.js";
+import { EventSearchRunner } from "./event-search-runner.js";
+
+export interface ServerOptions {
+  clock?: Clock;
+  eventSearchRunner?: EventSearchRunner;
+  requestSignal?: AbortSignal;
+}
 
 /** Creates an unconnected server with validated tools and native calculation receipts. */
-export function createServer(options: { clock?: Clock } = {}): McpServer {
+export function createServer(options: ServerOptions = {}): McpServer {
   const server = new McpServer({ name: "zodiacs-astro", version: "0.0.0" });
+  const searches = options.eventSearchRunner ?? new EventSearchRunner();
+  if (!options.eventSearchRunner) server.server.onclose = () => { void searches.close(); };
   const annotations = { readOnlyHint: true, destructiveHint: false, openWorldHint: false };
   server.registerTool("natal_chart", {
     description: "Calculate a tropical natal chart from a resolved instant. Returns a native natal receipt; unknown time suppresses houses and angles.",
@@ -41,6 +50,10 @@ export function createServer(options: { clock?: Clock } = {}): McpServer {
   server.registerTool("event_search", {
     description: "Search bounded tropical longitude crossings in (from,to]. Budget refusal returns no partial events. Completeness is not proven; receipts cover endpoint and event charts only.",
     inputSchema: inputSchemas.event_search, outputSchema: eventSearchOutputSchema, annotations
-  }, eventSearchTool);
+  }, (input, context) => searches.run(input, {
+    signal: options.requestSignal
+      ? AbortSignal.any([context.mcpReq.signal, options.requestSignal])
+      : context.mcpReq.signal
+  }));
   return server;
 }

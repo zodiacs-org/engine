@@ -4,22 +4,33 @@ import { serveStdio } from "@modelcontextprotocol/server/stdio";
 import { localhostHostValidation, localhostOriginValidation, toNodeHandler } from "@modelcontextprotocol/node";
 import { createServer } from "./server.js";
 import { createBearerAuthenticator, type BearerAuthSource } from "./auth.js";
+import { EventSearchRunner } from "./event-search-runner.js";
 import type { Clock } from "./tools/transits.js";
 
 export const MAX_REQUEST_BYTES = 65_536;
 
-export function startStdio(options: { clock?: Clock; onerror?: (error: Error) => void } = {}) {
-  return serveStdio(() => createServer(options), {
+export function startStdio(options: { clock?: Clock; eventSearchRunner?: EventSearchRunner; onerror?: (error: Error) => void } = {}) {
+  const searches = options.eventSearchRunner ?? new EventSearchRunner();
+  const running = serveStdio(() => createServer({ ...options, eventSearchRunner: searches }), {
     ...(options.onerror ? { onerror: options.onerror } : {})
   });
+  let closed: Promise<void> | undefined;
+  return { close: () => closed ??= (async () => {
+    try { await running.close(); }
+    finally { await searches.close(); }
+  })() };
 }
 
 /** Local HTTP endpoint with optional operator-configured bearer authentication. */
-export async function startHttp(options: { port?: number; auth?: BearerAuthSource; clock?: Clock; onerror?: (error: Error) => void } = {}) {
+export async function startHttp(options: { port?: number; auth?: BearerAuthSource; clock?: Clock; eventSearchRunner?: EventSearchRunner; onerror?: (error: Error) => void } = {}) {
   const port = options.port ?? 3000;
   if (!Number.isInteger(port) || port < 0 || port > 65535) throw new RangeError("Invalid HTTP port.");
   const authorized = options.auth === undefined ? undefined : await createBearerAuthenticator(options.auth);
-  const handler = createMcpHandler(() => createServer(options), {
+  const searches = options.eventSearchRunner ?? new EventSearchRunner();
+  const handler = createMcpHandler((context) => createServer({
+    ...options, eventSearchRunner: searches,
+    ...(context.requestInfo ? { requestSignal: context.requestInfo.signal } : {})
+  }), {
     legacy: "stateless", maxRequestBodySize: MAX_REQUEST_BYTES,
     ...(options.onerror ? { onerror: options.onerror } : {})
   });
@@ -57,7 +68,7 @@ export async function startHttp(options: { port?: number; auth?: BearerAuthSourc
       server.once("error", reject);
       server.listen(port, "127.0.0.1", () => { server.removeListener("error", reject); resolve(); });
     });
-  } catch (error) { await handler.close(); throw error; }
+  } catch (error) { await handler.close(); await searches.close(); throw error; }
   const address = server.address();
   if (!address || typeof address === "string") throw new Error("HTTP listener has no address.");
   let closed: Promise<void> | undefined;
@@ -67,7 +78,7 @@ export async function startHttp(options: { port?: number; auth?: BearerAuthSourc
       return closed ??= (async () => {
         closing = true;
         const stopped = new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
-        try { await handler.close(); }
+        try { await Promise.all([searches.close(), handler.close()]); }
         finally { server.closeAllConnections(); await stopped; }
       })();
     }

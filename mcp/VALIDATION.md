@@ -1,5 +1,23 @@
 # Scaffold validation
 
+P2 session: `node scripts/validate.mjs` passed on Node 22.23.3; the full output
+is committed in [evidence/p2-validation.txt](evidence/p2-validation.txt).
+Typecheck, the complete Vitest suite, the isolated build, parent pack exclusion,
+source file sizes, documentation checks and the parent file/dist snapshot passed.
+The validation script and `npm test` build the worker before running tests.
+[test/search-worker.mcp-test.ts](test/search-worker.mcp-test.ts) verifies native
+JSON preservation, real worker exit after cancellation and deadline expiry,
+bounded concurrency, close ownership, private failures and recovery.
+[test/cancellation.mcp-test.ts](test/cancellation.mcp-test.ts) uses official SDK
+clients over real stdio and HTTP, explicitly selecting current and older
+protocols. It checks live cancellation, shutdown, deadline errors without
+receipts, concurrent clients, legacy disconnects and request-ID isolation.
+Older stateless HTTP cancellation notifications cannot identify another POST;
+connection close and the server deadline remain its stopping mechanisms.
+These are integration and resource-policy checks, not astronomical accuracy
+evidence. Parent build-dependent gates were not run; parent files, engine
+archives and existing parent dist remained unchanged.
+
 Session checks used Node 22.22.2 through a local npm exec runtime.
 
 - `npm ci`: passed using the committed lockfile.

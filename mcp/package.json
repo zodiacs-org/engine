@@ -10,7 +10,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
-    "test": "vitest run --config vitest.config.ts",
+    "test": "npm run build && vitest run --config vitest.config.ts",
     "check": "npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
