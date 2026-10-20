@@ -10,7 +10,7 @@ blocked run here before exceeding that cap.
 - [x] P2 Run event searches in stoppable workers with a per-request time budget, honour MCP cancellation, and test that interrupted work stops and later requests still succeed.
 - [x] P3 Add HTTP rate and request size policies with bounded bookkeeping and tests for limits, recovery and authentication interaction.
 - [x] P4 Exercise every tool through the official SDK client over stdio and HTTP, validate each structured result against its advertised JSON schema, and cover input errors, calculation errors and resource refusals.
-- [ ] P5 Review tool descriptions and outputs for computed facts and receipts, and add a regression scan of descriptions and synthetic example outputs for predictive wording.
+- [x] P5 Review tool descriptions and outputs for computed facts and receipts, and add a regression scan of descriptions and synthetic example outputs for predictive wording.
 - [ ] P6 Update client configuration snippets and add a short gateway operator checklist covering authentication, limits, cancellation, HTTPS, headers and private logs.
 - [ ] P7 Run the complete MCP checks on Node 22, record reproducible phase 2 evidence and isolation checks, and keep the MCP workflow aligned with the project's own lockfile and checks.
 

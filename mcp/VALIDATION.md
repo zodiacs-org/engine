@@ -1,5 +1,20 @@
 # Scaffold validation
 
+P5 session: `node scripts/validate.mjs` passed on Node 22.23.3; the full output
+is committed in [evidence/p5-validation.txt](evidence/p5-validation.txt).
+Typecheck, the complete Vitest suite, the isolated build, parent pack exclusion,
+source file sizes, documentation checks and the parent file/dist snapshot passed.
+[test/transports.mcp-test.ts](test/transports.mcp-test.ts) scans actual discovery
+descriptions and schema titles/descriptions, structured results, their JSON text
+copies and error text in its synthetic transport cases.
+[test/factual-language.mcp-test.ts](test/factual-language.mcp-test.ts) tests
+rejected vocabulary, property names, extra text blocks, normalization and
+narrow native time-source exceptions. These are wording regression and protocol
+integration checks; they do not prove semantic absence of interpretive claims or
+independent astronomical accuracy. Parent build-dependent gates retain the
+limitation below; parent files, engine archives and existing parent dist remained
+unchanged.
+
 P3 session: `node scripts/validate.mjs` passed on Node 22.23.3; the full output
 is committed in [evidence/p3-validation.txt](evidence/p3-validation.txt).
 Typecheck, the complete Vitest suite, the isolated build, parent pack exclusion,

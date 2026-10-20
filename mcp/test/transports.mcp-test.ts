@@ -11,6 +11,7 @@ import { inputSchemas, type ToolName } from "../src/contracts.js";
 import { parseArguments } from "../src/cli.js";
 import { MAX_REQUEST_BYTES, startHttp } from "../src/transports.js";
 import { natalChartTool } from "../src/tools/natal.js";
+import { descriptionIssues, wordingIssues } from "./factual-language.js";
 
 const cwd = fileURLToPath(new URL("../", import.meta.url));
 const cli = fileURLToPath(new URL("../build/cli.js", import.meta.url));
@@ -32,6 +33,7 @@ type StructuredOutput = { data: Record<string, unknown>; receipts: { role: strin
 type ToolResult = Awaited<ReturnType<Client["callTool"]>>;
 
 function expectStructured(name: string, result: ToolResult, validators: Map<string, JsonSchemaValidator<unknown>>) {
+  expect(wordingIssues(result), `${name} factual wording`).toEqual([]);
   expect(result.isError, name).not.toBe(true);
   const validate = validators.get(name);
   expect(validate, `${name} advertised output schema`).toBeDefined();
@@ -46,6 +48,7 @@ function expectStructured(name: string, result: ToolResult, validators: Map<stri
 }
 
 function expectToolError(result: ToolResult) {
+  expect(wordingIssues(result), "tool error factual wording").toEqual([]);
   expect(result.isError).toBe(true);
   expect(result.structuredContent).toBeUndefined();
   expect(result.content).toEqual([{ type: "text", text: expect.any(String) }]);
@@ -82,6 +85,7 @@ describe.each(["stdio", "stdio-legacy", "http", "http-legacy"] as const)("%s SDK
     expect(requests.map((request) => request.name).sort()).toEqual(names);
     const provider = new AjvJsonSchemaValidator();
     validators = new Map(tools.map((tool) => {
+      expect(descriptionIssues(tool), `${tool.name} factual descriptions`).toEqual([]);
       expect(tool.outputSchema, tool.name).toBeDefined();
       return [tool.name, provider.getValidator(tool.outputSchema! as JsonSchemaType)];
     }));

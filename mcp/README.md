@@ -219,6 +219,20 @@ transports to check discovery, schemas, every registered handler, receipt
 preservation, validation refinements and failure recovery. These checks
 establish protocol integration, not astronomical accuracy.
 
+Tool descriptions state the computed geometry and the scope of native receipts.
+Inter-chart aspects and pair summaries are derived tool results; their receipts
+record the individual charts. Synastry aspect-type counts remain counts.
+`test/transports.mcp-test.ts` scans discovered descriptions, nested schema
+descriptions and titles, and synthetic successful, refused and error outputs for
+predictive wording across its transport cases. The scan inspects property names,
+string values and each text content block, including the JSON copy of a result.
+`test/factual-language.mcp-test.ts` checks the scanner with rejected fragments
+and altered outputs. It preserves the exact native `predicted` time-source label
+only in chart and receipt `deltaT.segment` and
+`timeScale.ut1MinusUtc.source` fields. These labels record Earth-rotation data
+provenance. The vocabulary scan guards against wording regressions and supports
+manual review; it does not establish semantic or astronomical correctness.
+
 ## Running transports
 
 Build from `mcp/`, then launch the compiled executable directly:

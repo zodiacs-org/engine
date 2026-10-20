@@ -24,15 +24,15 @@ export function createServer(options: ServerOptions = {}): McpServer {
     inputSchema: inputSchemas.natal_chart, outputSchema: natalOutputSchema, annotations
   }, natalChartTool);
   server.registerTool("transits_at", {
-    description: "Calculate moving-to-natal aspects at a resolved instant, with separate natal and transit sky receipts.",
+    description: "Calculate moving-to-natal aspects at a resolved instant, with separate natal and transit sky receipts. Receipts record the charts; inter-chart aspects are derived tool results.",
     inputSchema: inputSchemas.transits_at, outputSchema: transitOutputSchema, annotations
   }, transitsAtTool);
   server.registerTool("transits_now", {
-    description: "Capture the current instant once and calculate moving-to-natal aspects, with natal and transit sky receipts.",
+    description: "Capture the current instant once and calculate moving-to-natal aspects, with natal and transit sky receipts. Receipts record the charts; inter-chart aspects are derived tool results.",
     inputSchema: inputSchemas.transits_now, outputSchema: transitOutputSchema, annotations
   }, (input) => transitsNowTool(input, options.clock));
   server.registerTool("synastry", {
-    description: "Compare two natal charts with native aspects and element/modality counts. Returns separate natal receipts; no compatibility score or relationship prediction.",
+    description: "Calculate inter-chart aspects and element/modality counts for two natal charts. Separate receipts record each natal chart; pair summaries are derived tool results. Aspect-type counts are not compatibility scores.",
     inputSchema: inputSchemas.synastry, outputSchema: synastryOutputSchema, annotations
   }, synastryTool);
   server.registerTool("solar_return", {
