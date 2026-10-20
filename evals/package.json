@@ -8,7 +8,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "test": "node --test tests/*.checks.mjs",
+    "test": "node --test --test-concurrency=1 tests/*.checks.mjs",
     "validate:entry": "node bin/validate-entry.mjs",
     "validate:dataset": "node bin/validate-dataset.mjs",
     "validate:seed": "node bin/validate-dataset.mjs --seed data/seed.json",

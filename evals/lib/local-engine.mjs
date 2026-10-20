@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { build, version as esbuildVersion } from "esbuild";
+import { build, stop, version as esbuildVersion } from "esbuild";
 
 const project = fileURLToPath(new URL("..", import.meta.url));
 export const digest = (value) => `sha256:${createHash("sha256").update(value).digest("hex")}`;
@@ -26,20 +26,26 @@ async function load() {
       metadata.dependencies[dependency.name] !== dependency.version) {
     throw new Error("The eval ephemeris must match the local engine's exact dependency pin.");
   }
-  const result = await build({
-    absWorkingDir: project,
-    entryPoints: ["engine/entry.ts"],
-    bundle: true,
-    write: false,
-    platform: "node",
-    target: "node22",
-    format: "esm",
-    treeShaking: true,
-    tsconfigRaw: {},
-    logLevel: "silent",
-    // An explicit local dependency prevents a different root installation winning resolution.
-    alias: { "astronomy-engine": join(project, "node_modules/astronomy-engine/esm/astronomy.js") }
-  });
+  let result;
+  try {
+    result = await build({
+      absWorkingDir: project,
+      entryPoints: ["engine/entry.ts"],
+      bundle: true,
+      write: false,
+      platform: "node",
+      target: "node22",
+      format: "esm",
+      treeShaking: true,
+      tsconfigRaw: {},
+      logLevel: "silent",
+      // An explicit local dependency prevents a different root installation winning resolution.
+      alias: { "astronomy-engine": join(project, "node_modules/astronomy-engine/esm/astronomy.js") }
+    });
+  } finally {
+    // The cached engine needs no bundler service during subprocess checks.
+    stop();
+  }
   if (result.outputFiles.length !== 1 || result.outputFiles[0].contents.length >= 2_000_000) {
     throw new Error("The local engine bundle must be one file below the project size limit.");
   }

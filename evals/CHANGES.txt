@@ -10,3 +10,4 @@ M9: add an offline reading evaluation CLI with supplied or labeled mock readings
 M10: add conservative offline prose claim extraction, negation and context guards, opt-in evaluation and CLI integration, explicit extraction diagnostics and limits, documentation and adversarial contract tests.
 M11: add adversarial generation and offline end-to-end evaluation tests for late malformed output, metadata containment, invented factors, unavailable time, convention conflicts, contradictions and output limits, with documented scope.
 M12: document reproducible local workflows, complete supplied-reading and report-inspection examples, valid custom backend output and seed review; verify examples, the full offline suite and package isolation, recording the missing-dist package gate limitation.
+P1: add the phase two checklist and isolated Node 22 eval workflow, bound test workers, release the loader's bundler process, and verify the full suite, seed and package isolation.

@@ -35,6 +35,13 @@ root engine build. Tests use
 Node's built-in runner and filenames ending in `.checks.mjs`, so the root Vitest
 suite does not collect them.
 
+The dedicated [eval workflow](../.github/workflows/evals.yml) runs the same
+installation, tests and seed validation on Node.js 22 for pull requests and
+pushes to `main`. It installs only this project's lockfile dependencies and
+uses the offline mock without credentials. The test command limits file workers
+to one, leaving room for the subprocess checks within the worker cap in
+[the phase 2 plan](PHASE2.md).
+
 The isolation tests inspect npm's actual dry-run inventory with lifecycle scripts
 disabled and offline mode enabled. They verify that `evals/` is excluded even in
 a checkout without `dist/`. This is a package-exclusion check; the repository's

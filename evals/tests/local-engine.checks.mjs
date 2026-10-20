@@ -26,6 +26,39 @@ test("concurrent loads share one local engine with the repository's pinned depen
   assert.ok(first.provenance.bundle.bytes > 0 && first.provenance.bundle.bytes < 2_000_000);
 });
 
+test("loading the cached engine releases its bundler child before subprocess checks", () => {
+  const source = `
+    import assert from "node:assert/strict";
+    import childProcess from "node:child_process";
+    const original = childProcess.spawn;
+    const exits = [];
+    childProcess.spawn = (...args) => {
+      const child = original(...args);
+      exits.push(new Promise((resolve) => child.once("exit", resolve)));
+      return child;
+    };
+    const { loadLocalEngine } = await import(${JSON.stringify(new URL("../lib/local-engine.mjs", import.meta.url).href)});
+    let timer;
+    try {
+      const first = await loadLocalEngine();
+      assert.equal(await loadLocalEngine(), first);
+      assert.equal(exits.length, 1);
+      await Promise.race([
+        Promise.all(exits),
+        new Promise((_, reject) => {
+          timer = setTimeout(() => reject(new Error("Bundler child was not released")), 2000);
+        })
+      ]);
+    } finally {
+      clearTimeout(timer);
+      childProcess.spawn = original;
+    }
+  `;
+  execFileSync(process.execPath, ["--input-type=module", "--eval", source], {
+    cwd: project, encoding: "utf8", timeout: 10000, maxBuffer: 10000
+  });
+});
+
 test("fresh processes and working directories produce the same facts and provenance without a root build", async () => {
   const expected = await computeChartFacts(example);
   const scratch = join(project, "scratch");

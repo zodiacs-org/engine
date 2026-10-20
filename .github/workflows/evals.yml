@@ -1,0 +1,40 @@
+name: Evals
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  evals:
+    name: Interpretation evals (Node 22)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: evals
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Install eval dependencies from the local lockfile
+        run: npm ci --ignore-scripts --no-audit --no-fund --cache .cache/npm
+
+      - name: Test evals and project isolation
+        run: npm test
+
+      - name: Validate original seed
+        run: npm run validate:seed
