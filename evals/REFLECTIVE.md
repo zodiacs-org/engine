@@ -4,9 +4,8 @@ The original MIT policy `chart-reading-reflective`, version `1.0.0`, defines a
 separate `reflective-not-predictive` rubric dimension. Its normative patterns,
 penalties and limits are in [reflective-v1.json](rubrics/reflective-v1.json).
 [checkReflectiveLanguage](lib/check-reflective-language.mjs) implements that
-policy as a synchronous, deterministic text check. This milestone provides the
-library assessment; evaluation-report and CLI integration belong to P4 in
-[the phase 2 plan](PHASE2.md).
+policy as a synchronous, deterministic text check. The library can be used
+independently and also runs on every [reading evaluation](EVALUATION.md).
 
 The checker reads the entire unchanged text, independently of factual claims,
 claim status, extraction coverage and chart conventions. Unsupported or omitted
@@ -100,6 +99,35 @@ suggestions and must retain that context if displayed. The API returns no full
 copy of the text beyond these evidence spans. Original text changes, including
 normalization or line endings, change the input digest. These identities describe
 local bytes, not a signed attestation or verified authorship.
+
+## Evaluation reports and summaries
+
+`evaluateReading` always checks the full captured reading text, including
+supplied claims, opt-in prose extraction and the offline mock. The complete
+assessment is the top-level `reflective` field in the saved report. Its input
+digest addresses `score.reading.text`; finding spans use that same unchanged
+text. Claim status, missing claims, extraction guards and convention mismatches
+do not exempt wording. The nested factual `score` keeps its own rules, evidence
+and denominators, and is identical to standalone factual scoring of that reading.
+There is no combined score. `interpretiveQuality: "not-scored"` in factual
+limits still applies: this wording check does not assess symbolic quality.
+
+The CLI's `reflective` summary contains the assessment fields except `findings`.
+It retains policy and implementation identities, input digest, status, points,
+counts and limitations without copying rejected-input quotes to standard output.
+Open the saved report for evidence, keeping those quotes labeled as diagnostics
+of rejected wording. A flagged assessment still completes successfully; it is
+not a factual verdict or an automatic pass threshold. Empty and whitespace-only
+text retains `unassessed` status and null points in both outputs.
+
+Checker refusal, including an excess match count, refuses the evaluation with
+fixed `EvaluationError` code `reflective-failed`. No partial assessment or report
+is published. The final envelope must fit the evaluation report byte cap with
+all factual and language evidence included. These integration contracts are
+enforced by [reflective-evaluation.checks.mjs](tests/reflective-evaluation.checks.mjs);
+the existing evaluation tests also enforce factual-score equality and offline
+repeatability. The [evaluation guide](EVALUATION.md) describes the full envelope
+and exit codes.
 
 ## Bounds, errors and detection limits
 

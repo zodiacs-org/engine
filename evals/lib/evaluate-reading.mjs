@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { computeChartFacts, validateSyntheticChart } from "./chart-facts.mjs";
+import { checkReflectiveLanguage } from "./check-reflective-language.mjs";
 import { extractReadingClaims } from "./extract-reading-claims.mjs";
 import { canonicalJson, freezeData, sha256 } from "./generator-data.mjs";
 import { SCORING_REPORT_BYTES, ScoringError, scoreReading } from "./score-reading.mjs";
@@ -8,9 +9,10 @@ import { validateReading } from "./validate-reading.mjs";
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 const rubric = JSON.parse(read("../rubrics/factual-v1.json"));
 const implementation = freezeData({
-  id: "offline-reading-evaluation", version: "1.0.0",
+  id: "offline-reading-evaluation", version: "1.1.0",
   digest: sha256(JSON.stringify([
-    "./evaluate-reading.mjs", "./extract-reading-claims.mjs", "./generator-data.mjs", "./validate-reading.mjs",
+    "./evaluate-reading.mjs", "./extract-reading-claims.mjs", "./check-reflective-language.mjs",
+    "../rubrics/reflective-v1.json", "./generator-data.mjs", "./validate-reading.mjs",
     "../schema/reading.schema.json", "../schema/factual-claim.schema.json",
     "../schema/meaning-entry.schema.json"
   ].map((path) => [path, read(path)])))
@@ -27,6 +29,7 @@ const messages = {
   "reference-contract": "Local engine reference does not satisfy the evaluation contract.",
   "mock-failed": "Offline mock reading construction failed.",
   "extraction-failed": "Supplied reading claim extraction failed.",
+  "reflective-failed": "Reading language assessment failed.",
   "scoring-failed": "Reading scoring failed.",
   "output-limit": "Evaluation report exceeds its output limits."
 };
@@ -117,6 +120,7 @@ function mockFor(syntheticCase, reference) {
 
 /** Evaluate one invented chart with a supplied reading or an offline fixture.
  * Supplied unannotated prose can opt into conservative claim extraction.
+ * The whole unchanged text receives a separate reflective-language assessment.
  * This API writes nothing and selects no model/provider from the environment.
  */
 export async function evaluateReading(caseValue, options = {}) {
@@ -139,6 +143,8 @@ export async function evaluateReading(caseValue, options = {}) {
       ({ reading, metadata: mock } = mockFor(syntheticCase, reference));
     } catch { refuse("mock-failed"); }
   }
+  let reflective;
+  try { reflective = checkReflectiveLanguage(reading.text); } catch { refuse("reflective-failed"); }
   let score;
   try { score = await scoreReading(syntheticCase, reading, selection.scoring); } catch (error) {
     refuse(error instanceof ScoringError ? error.code : "scoring-failed");
@@ -146,7 +152,8 @@ export async function evaluateReading(caseValue, options = {}) {
   if (mock && mock.referenceDigest !== score.identity.referenceDigest) refuse("reference-contract");
   const result = {
     schemaVersion: "1.0.0", status: "completed",
-    workflow: { ...implementation, mode: selection.supplied ? "supplied" : "mock", mock, extraction }, score
+    workflow: { ...implementation, mode: selection.supplied ? "supplied" : "mock", mock, extraction },
+    score, reflective
   };
   // The final envelope, not just the nested score, must fit a canonical report
   // file with its trailing newline. Do not silently drop evidence to make it fit.

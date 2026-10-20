@@ -15,8 +15,9 @@ sentences while retaining unsupported wording and extraction limits.
 
 The separate [reflective-language assessment](REFLECTIVE.md) checks the entire
 text for bounded English outcome and financial wording, with versioned penalties,
-exact evidence spans and explicit detection limits. Its library is available
-independently; evaluation-report and CLI integration remain the next milestone.
+exact evidence spans and explicit detection limits. Every evaluation includes
+this assessment separately from factual scores. The CLI summary includes its
+points, counts, identities and limits; evidence quotes stay in the saved report.
 
 Interpretation text is symbolic prose. The factual score compares a
 reading's assertions with computations from the local `@zodiacs/engine` under

@@ -7,7 +7,7 @@ handles commits, pushes and CI. A root CI failure file takes priority.
 - [x] P1 Add a dedicated Node 22 workflow that installs from the eval lockfile, runs the complete eval suite and seed validation, and keeps test workers bounded and separate from the root runner.
 - [x] P2 Refresh the eval validator and bundler dependencies without changing the engine's ephemeris pin, verify a clean dependency audit, and rerun the full suite from the refreshed lockfile.
 - [x] P3 Define a versioned reflective-language rubric and deterministic text checker with original passing and failing test cases, explicit penalties, evidence spans and documented detection limits.
-- [ ] P4 Include the reflective-language assessment in evaluation reports and CLI summaries, preserving factual scoring and testing supplied readings, extraction and the offline mock end to end.
+- [x] P4 Include the reflective-language assessment in evaluation reports and CLI summaries, preserving factual scoring and testing supplied readings, extraction and the offline mock end to end.
 - [ ] P5 Expand the individually authored MIT seed to cover Sun through Pluto in every sign and each supported major aspect, with complete provenance and tests enforcing coverage, originality metadata and reflective wording.
 - [ ] P6 Add original synthetic adversarial readings for invented placements, houses, aspects and dignities, verify each rejection with the scorer, and commit a reproducible aggregate report with a check command used by CI.
 
@@ -59,3 +59,19 @@ package inventory check was attempted with the eval-local cache and still
 failed on the existing missing dist/calc.d.ts; no root build was run. Worktree
 disk use remains below the brief's cap. Evaluation-report and CLI integration
 remain P4; factual scoring contracts are unchanged. P4 is next.
+
+P4 validation: evaluations now retain a separate full-text reflective assessment
+with exact evidence, policy and implementation identity, counts, points and
+limits. CLI summaries retain the assessment fields except evidence findings,
+keeping rejected-input quotes in saved reports. Standalone factual scoring,
+its denominators and extraction limits remain unchanged. Original integration
+tests cover supplied claims and omitted or unresolved prose, convention
+mismatches, guarded extraction, empty text, Unicode snapshots, immutable
+reports, offline mock execution, saved evidence and report reuse. Checker
+overflow refuses the whole evaluation with a fixed diagnostic, and the final
+report cap includes both factual and language evidence. On Node 22, a clean
+offline lockfile install, the full eval suite, seed validation and dependency
+audit passed, including package exclusion and project isolation. The root
+package inventory check was attempted with the eval-local cache and still
+failed on the existing missing dist/calc.d.ts; no root build was run. Worktree
+disk use remains below the brief's cap. P5 is next.

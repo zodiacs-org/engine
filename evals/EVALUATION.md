@@ -7,7 +7,11 @@ synthetic case per run and saves a machine-readable report under ignored
 `reports/`. The [factual rubric](RUBRIC.md) and
 [scorer](SCORING.md) define the judgments and their denominators.
 
-The scores measure agreement with the local engine under recorded conventions.
+Every mode also checks the entire unchanged reading text with the versioned
+[reflective-language policy](REFLECTIVE.md). This assessment has its own points,
+evidence and detection limits; it is separate from factual scoring.
+
+Factual scores measure agreement with the local engine under recorded conventions.
 They do not establish independent astronomical accuracy, faithful or complete
 claim extraction, interpretation quality, personality truth or predictive
 validity. A mock reading renders the reference factors themselves; its scores
@@ -194,11 +198,12 @@ each original quote and its eligibility, verdict and evidence:
 node --input-type=module <<'JS'
 import { readFile } from "node:fs/promises";
 const summary = JSON.parse(await readFile("evals/scratch/evaluation-summary.json", "utf8"));
-const { workflow, score } = JSON.parse(await readFile(summary.report, "utf8"));
+const { workflow, score, reflective } = JSON.parse(await readFile(summary.report, "utf8"));
 const units = new Map(score.units.map((unit) => [unit.id, unit]));
 console.log(JSON.stringify({
   mode: workflow.mode,
   extraction: workflow.extraction,
+  reflective,
   overall: score.overall,
   categories: score.categories,
   diagnostics: score.diagnostics,
@@ -229,6 +234,14 @@ withholds its coverage credit. Unresolved prose has no scoring unit and earns no
 factual credit. Neither an undefined metric (`null`) nor a successful CLI exit
 means that the reading is correct.
 
+The separate `reflective` assessment checks all text, including unresolved or
+unquoted passages. Its finding spans address `score.reading.text`, and its
+`input.textDigest` identifies those exact UTF-8 text bytes. Treat finding quotes
+as rejected-input diagnostics. No detected violations means only that the policy
+patterns found none; it does not certify reflective or interpretive quality.
+Read the policy limitations alongside its points. Those points never change
+factual verdicts, counts, denominators or `interpretiveQuality: "not-scored"`.
+
 When comparing model readings, keep the synthetic cases, rubric, conventions
 and extraction procedure fixed and record all attempted runs, including failures.
 Review extraction against the original text independently of chart membership.
@@ -250,21 +263,27 @@ On success, standard output contains a compact JSON summary:
 | `mode` | `mock` or `supplied`. |
 | `extraction` | Full parser identity, diagnostic counts and limits when `--extract` ran; otherwise `null`. |
 | `overall`, `diagnostics`, `limits` | The scorer's totals, occurrence diagnostics and limits. |
+| `reflective` | Language assessment with policy, implementation and input identities, status, points, counts and limits. Contains every assessment field except `findings`; rejected-input quotes stay in the saved report. |
 
 The report is a complete envelope with `schemaVersion`, `status`, `workflow`
-and `score`. `status` is `completed`. The `score` field retains the full scorer
-result: the captured case and reading, freshly computed reference, original
-occurrences, deduplicated scoring units, evidence links, contradictions, category
+and separate `score` and `reflective` fields. `status` is `completed`. The `score`
+field retains the full scorer result: the captured case and reading, freshly
+computed reference, original occurrences, deduplicated scoring units, evidence
+links, contradictions, category
 totals, overall metrics and provenance. See [SCORING.md](SCORING.md) for the
 meaning of those fields. Evidence pointers remain relative to `score.reference`.
+The `reflective` field retains the complete unchanged
+[language assessment](REFLECTIVE.md), including evidence findings and limitations.
 
-`workflow` records id `offline-reading-evaluation`, its version and implementation
+`workflow` records id `offline-reading-evaluation`, version `1.1.0` and implementation
 digest, the selected `mode`, mock metadata when applicable, and the parser report
 in `extraction` when requested. Supplied mode has `mock: null`; evaluations
 without extraction have `extraction: null`. The workflow digest includes the
-extractor and its local schema dependencies. These identities describe local
-implementation bytes and input values; they do not authenticate an imported
-report or identify a signed release.
+extractor, reflective checker, language policy and local schema dependencies.
+The workflow version and report fields are enforced by
+[evaluation-cli.checks.mjs](tests/evaluation-cli.checks.mjs).
+These identities describe local implementation bytes and input values; they do
+not authenticate an imported report or identify a signed release.
 Results include no wall-clock timestamp or temporary path. Repeatability checks
 cover fresh processes and working directories on the same runtime, not
 bitwise agreement across runtimes or architectures.
@@ -278,11 +297,14 @@ assessment because facts are unavailable or conventions differ.
 | Exit status | Meaning |
 | --- | --- |
 | `0` | Evaluation completed and its report was saved or reused; also successful help. Incorrect claims can appear in a completed evaluation. |
-| `1` | Input validation, extraction, engine computation or scoring failed, or the complete report exceeded its output limit. |
+| `1` | Input validation, extraction, language assessment, engine computation or scoring failed, or the complete report exceeded its output limit. |
 | `2` | Usage, input-file reading or report persistence failed. |
 
 Failures print fixed diagnostic text without echoing supplied paths, reading
 text or raw exceptions. No partial score is reported as a successful result.
+Detected language findings still produce a completed evaluation and exit zero.
+The CLI has no combined score or pass threshold. Empty or whitespace-only text
+has null language points, retaining the checker's `unassessed` status.
 [evaluation-cli.checks.mjs](tests/evaluation-cli.checks.mjs) exercises command
 selection, summaries, exit behavior and input preservation.
 
@@ -324,7 +346,11 @@ is invalid. `extract` must be a boolean when supplied; `true` requires a supplie
 unannotated reading, and `false` is the default behavior. Extraction contract or
 budget failures produce the fixed `EvaluationError` code `extraction-failed`,
 without echoing text or raw parser errors. Rubric selection follows the scorer's
-supported id and version.
+supported factual id and version. The reflective policy is always the default
+version documented in [REFLECTIVE.md](REFLECTIVE.md); it cannot be disabled or
+overridden through these factual rubric options. Language checker failures,
+including excess raw matches, produce fixed `EvaluationError` code
+`reflective-failed` without raw exceptions or partial output.
 The library captures and validates inputs and returns an immutable envelope. It
 does not save a report by itself. A caller cannot provide reference facts or
 override scoring policy.
@@ -354,3 +380,8 @@ consistency tests, not independent accuracy or interpretation-quality evidence.
 [extraction-evaluation.checks.mjs](tests/extraction-evaluation.checks.mjs) checks
 the opt-in parser integration, metadata preservation, unresolved and omitted
 assertions, convention and availability limits, and CLI reports.
+
+[reflective-evaluation.checks.mjs](tests/reflective-evaluation.checks.mjs) checks
+language assessments across supplied, extracted and mock readings, exact text
+identity and evidence, preserved factual scores, empty text, bounded refusals
+and saved reports with summaries that omit rejected-input quotes.

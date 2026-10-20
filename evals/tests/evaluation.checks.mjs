@@ -26,7 +26,7 @@ test("default evaluation renders local facts as a labeled mock and retains the f
   assert.equal(result.status, "completed");
   const { workflow, score } = result;
   assert.equal(workflow.id, "offline-reading-evaluation");
-  assert.equal(workflow.version, "1.0.0");
+  assert.equal(workflow.version, "1.1.0");
   assert.match(workflow.digest, /^sha256:[0-9a-f]{64}$/);
   assert.equal(workflow.mode, "mock");
   assert.deepEqual(score.reference, await computeChartFacts(input));
@@ -231,4 +231,31 @@ test("evaluation refuses expanded report overflow without truncating an otherwis
   const result = await evaluateReading(input, { reading: smaller });
   assert.ok(Buffer.byteLength(canonicalJson(result) + "\n") <= EVALUATION_REPORT_BYTES);
   assert.deepEqual(result.score.reading, smaller);
+});
+
+test("evaluation counts language evidence toward the final byte cap when factual scoring alone fits", async () => {
+  const input = syntheticCase();
+  const reading = readingFor(input);
+  // Rejected input only: repeated financial wording exercises bounded evidence.
+  reading.text = "money ".repeat(512).padEnd(4096, "x");
+  reading.claims = Array.from({ length: 222 }, (_, index) => ({
+    schemaVersion: "1.0.0", id: `large-${index}`, status: "unsupported",
+    reason: "Original rejected wording retained for bounds checking.",
+    span: { start: 0, end: reading.text.length, quote: reading.text }
+  }));
+  assert.equal(validateReading(reading).valid, true);
+  const score = await scoreReading(input, reading);
+  assert.ok(Buffer.byteLength(canonicalJson(score)) + 1 <= EVALUATION_REPORT_BYTES);
+  await rejects(evaluateReading(input, { reading }), "output-limit");
+
+  const smaller = { ...reading, claims: reading.claims.slice(0, 220) };
+  const result = await evaluateReading(input, { reading: smaller });
+  assert.equal(result.reflective.counts.findings, 512);
+  assert.equal(result.reflective.score.points, 0);
+  assert.equal(result.score.reading.claims.length, smaller.claims.length);
+  assert.ok(Buffer.byteLength(canonicalJson(result)) + 1 <= EVALUATION_REPORT_BYTES);
+  const { reflective, ...withoutLanguage } = result;
+  assert.ok(Buffer.byteLength(canonicalJson({ ...withoutLanguage, score })) + 1 <= EVALUATION_REPORT_BYTES);
+  assert.ok(Buffer.byteLength(JSON.stringify({ ...result, score })) + 1 > EVALUATION_REPORT_BYTES);
+  assert.equal(reflective.findings.length, 512);
 });

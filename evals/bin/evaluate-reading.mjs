@@ -40,9 +40,13 @@ async function main(args) {
   }
   try {
     const summary = await writeEvaluationReport(result);
+    // Rejected-input quotes stay in the saved report. Summaries expose policy
+    // identity and limits alongside points without repeating that wording.
+    const reflective = { ...result.reflective };
+    delete reflective.findings;
     process.stdout.write(`${JSON.stringify({ ...summary, mode: result.workflow.mode,
       extraction: result.workflow.extraction, overall: result.score.overall,
-      diagnostics: result.score.diagnostics, limits: result.score.limits })}\n`);
+      diagnostics: result.score.diagnostics, limits: result.score.limits, reflective })}\n`);
   } catch {
     process.stderr.write("Cannot write evaluation report: output is unavailable, unsafe or conflicts with an existing file.\n");
     process.exitCode = 2;

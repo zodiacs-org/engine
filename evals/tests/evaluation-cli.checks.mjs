@@ -6,6 +6,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { after, before, test } from "node:test";
 import { computeChartFacts } from "../lib/chart-facts.mjs";
+import { checkReflectiveLanguage } from "../lib/check-reflective-language.mjs";
 import { canonicalJson } from "../lib/generator-data.mjs";
 import { scoreReading } from "../lib/score-reading.mjs";
 import { readingFor, resolved, syntheticCase } from "./scoring-helpers.mjs";
@@ -68,7 +69,7 @@ async function success(result, mode) {
   assert.equal(result.stderr, "");
   const summary = JSON.parse(result.stdout);
   assert.deepEqual(Object.keys(summary).sort(), [
-    "diagnostics", "digest", "extraction", "limits", "mode", "overall", "report", "reused"
+    "diagnostics", "digest", "extraction", "limits", "mode", "overall", "reflective", "report", "reused"
   ]);
   assert.match(summary.report, /^evals\/reports\/[a-f0-9]{64}\.json$/);
   const path = join(repository, summary.report);
@@ -82,11 +83,11 @@ async function success(result, mode) {
   assert.ok(bytes.length <= FILE_BYTES);
   const report = JSON.parse(bytes.toString("utf8"));
   assert.equal(bytes.toString("utf8"), `${canonicalJson(report)}\n`);
-  assert.deepEqual(Object.keys(report).sort(), ["schemaVersion", "score", "status", "workflow"]);
+  assert.deepEqual(Object.keys(report).sort(), ["reflective", "schemaVersion", "score", "status", "workflow"]);
   assert.equal(report.schemaVersion, "1.0.0");
   assert.equal(report.status, "completed");
   assert.equal(report.workflow.id, "offline-reading-evaluation");
-  assert.equal(report.workflow.version, "1.0.0");
+  assert.equal(report.workflow.version, "1.1.0");
   assert.match(report.workflow.digest, /^sha256:[a-f0-9]{64}$/);
   assert.equal(report.workflow.mode, mode);
   if (mode === "mock") assert.ok(report.workflow.mock && typeof report.workflow.mock === "object");
@@ -95,6 +96,10 @@ async function success(result, mode) {
   assert.deepEqual(summary.overall, report.score.overall);
   assert.deepEqual(summary.diagnostics, report.score.diagnostics);
   assert.deepEqual(summary.limits, report.score.limits);
+  assert.deepEqual(report.reflective, checkReflectiveLanguage(report.score.reading.text));
+  const reflectiveSummary = { ...report.reflective };
+  delete reflectiveSummary.findings;
+  assert.deepEqual(summary.reflective, reflectiveSummary);
   assert.equal(summary.extraction, null);
   assert.equal(report.workflow.extraction, null);
   return { summary, report, bytes, path };
