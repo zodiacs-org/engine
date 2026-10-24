@@ -1,0 +1,34 @@
+{
+  "name": "@zodiacs/chinese-zodiac",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "license": "MIT",
+  "description": "Private preparation: Chinese zodiac year (Li Chun boundary) and traditional branch groupings, as a library and a stdio MCP server, with no dependencies",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": {
+      "types": "./index.d.mts",
+      "import": "./index.mjs"
+    },
+    "./mcp-tools": "./mcp-tools.mjs"
+  },
+  "bin": {
+    "zodiacs-chinese-zodiac-mcp": "./mcp-server.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "index.d.mts",
+    "li-chun.mjs",
+    "mcp-tools.mjs",
+    "mcp-server.mjs",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test selftest.mjs"
+  }
+}
