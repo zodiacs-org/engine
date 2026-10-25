@@ -1,0 +1,12 @@
+Node 22.23.3
+Source baseline: dcdb202a760dc7522d3fd1164da6bb5adce9813c
+Engine archive SHA-256: c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6
+typecheck: passed
+vitest: passed
+Vitest tests: 218 passed; 0 failed; 0 pending
+build: passed
+Project file size, Markdown em-dash exclusion and JSON snippets: passed
+Working tree scope, parent file/dist snapshot and whitespace: passed
+Parent pack exclusion: passed in test/isolation.mcp-test.ts
+Raw reports: mcp/.generated/ (gitignored)
+Parent build-dependent gates: not run; parent dist must remain untouched
