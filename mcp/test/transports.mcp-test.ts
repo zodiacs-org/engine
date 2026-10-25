@@ -10,6 +10,7 @@ import { inputSchemas } from "../src/contracts.js";
 import { parseArguments } from "../src/cli.js";
 import { MAX_REQUEST_BYTES, startHttp } from "../src/transports.js";
 import { natalChartTool } from "../src/tools/natal.js";
+import { civilTimeOutputSchema } from "../src/tools/civil-time.js";
 
 const cwd = fileURLToPath(new URL("../", import.meta.url));
 const cli = fileURLToPath(new URL("../build/cli.js", import.meta.url));
@@ -63,6 +64,37 @@ describe.each(["stdio", "http", "http-legacy"] as const)("%s SDK transport", (mo
     expect(refused.isError).toBe(true);
     expect(refused.structuredContent).toBeUndefined();
     expect((await client.callTool(requests[0]!)).isError).not.toBe(true);
+  });
+});
+
+describe("stdio and HTTP parity", () => {
+  it("lists the same tools and returns identical civil time results valid against the advertised schema", async () => {
+    const stdio = new Client({ name: "synthetic-parity-test", version: "0.0.0" });
+    const http = new Client({ name: "synthetic-parity-test", version: "0.0.0" });
+    const endpoint = await startHttp({ port: 0 });
+    try {
+      await stdio.connect(new StdioClientTransport({ command: process.execPath, args: [cli], stderr: "pipe" }));
+      await http.connect(new StreamableHTTPClientTransport(endpoint.url));
+      // Listing caches each advertised output schema; the SDK client validates results against it.
+      const [stdioTools, httpTools] = await Promise.all([stdio.listTools(), http.listTools()]);
+      expect(stdioTools).toEqual(httpTools);
+      for (const args of [
+        { date: "2026-03-08", time: "02:30", timeZone: "America/New_York" },
+        { date: "2026-11-01", time: "01:30", timeZone: "America/New_York" },
+        { date: "1870-06-15", time: "12:00", timeZone: "America/New_York", longitude: -78.88 },
+        { date: "1800-01-01", time: "12:00:00", timeZone: "Europe/London", calendar: "julian", country: "GB" },
+        { date: "2026-02-30", time: "12:00", timeZone: "UTC" }
+      ]) {
+        const request = { name: "resolve_civil_time", arguments: args };
+        const [fromStdio, fromHttp] = [await stdio.callTool(request), await http.callTool(request)];
+        expect(fromStdio).toEqual(fromHttp);
+        if (args.date !== "2026-02-30") civilTimeOutputSchema.parse(fromStdio.structuredContent);
+        else {
+          expect(fromStdio.isError).toBe(true);
+          expect(fromStdio.structuredContent).toBeUndefined();
+        }
+      }
+    } finally { await stdio.close(); await http.close(); await endpoint.close(); }
   });
 });
 

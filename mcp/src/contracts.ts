@@ -27,6 +27,28 @@ export const birthSchema = z.strictObject({
 }).refine((b) => (b.latitude === undefined) === (b.longitude === undefined), {
   message: "Supply latitude and longitude together.", path: ["longitude"]
 });
+/** Days in a month of a proleptic Gregorian or Julian year. */
+function monthDays(year: number, month: number, calendar: "gregorian" | "julian") {
+  const leap = calendar === "julian" ? year % 4 === 0 : (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+  return [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1]!;
+}
+/** A written local wall time; the engine resolves it to the minute, with no place lookup. */
+export const civilTimeSchema = z.strictObject({
+  date: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, "Use a date YYYY-MM-DD.")
+    .describe("Local date as written, YYYY-MM-DD, in the calendar named by calendar."),
+  time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d(:00)?$/, "Use a time HH:MM or HH:MM:00.")
+    .describe("Local wall time HH:MM, or HH:MM:00; the engine resolves to the minute."),
+  timeZone: z.string().min(1).max(64).regex(/^[A-Za-z][A-Za-z0-9_+\-]*(\/[A-Za-z0-9_+\-]+)*$/, "Use an IANA time zone name.")
+    .describe("IANA time zone name, such as America/New_York."),
+  longitude: z.number().min(-180).max(180).optional()
+    .describe("Birthplace longitude, degrees east; used only inside a zone's local mean time era."),
+  calendar: z.enum(["gregorian", "julian"]).optional().describe("Calendar of date; gregorian by default."),
+  country: z.string().min(1).max(64).optional()
+    .describe("ISO 3166-1 alpha-2 code or tzdata country name; adds a calendar note and never changes the instant.")
+}).refine(({ date, calendar = "gregorian" }) => {
+  const [year, month, day] = date.split("-").map(Number) as [number, number, number];
+  return day <= monthDays(year, month, calendar);
+}, { message: "The day does not exist in that month and calendar.", path: ["date"] });
 export const inputSchemas = {
   natal_chart: z.strictObject({ birth: birthSchema }),
   transits_at: z.strictObject({ birth: birthSchema, at: instantSchema }),
@@ -48,7 +70,8 @@ export const inputSchemas = {
   }).refine(({ from, to }) => {
     const span = Date.parse(to) - Date.parse(from);
     return span >= 0 && span <= 366 * 86_400_000;
-  }, "Search window must be ordered and no longer than 366 days.")
+  }, "Search window must be ordered and no longer than 366 days."),
+  resolve_civil_time: civilTimeSchema
 };
 export type ToolName = keyof typeof inputSchemas;
 export type ToolInput<T extends ToolName> = z.infer<(typeof inputSchemas)[T]>;

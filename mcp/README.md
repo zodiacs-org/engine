@@ -4,6 +4,8 @@ An MCP server for the Zodiacs astrology engine.
 `createServer()` creates an unconnected server with the implemented tools
 registered. The executable entry point supports stdio and local Streamable HTTP.
 Client configuration and receipt citation are documented below.
+[docs/agents/MCP-TOOLS.md](../docs/agents/MCP-TOOLS.md) describes every tool
+for agents, with one synthetic example each.
 
 ## Development
 
@@ -37,8 +39,9 @@ The harness handles commits, pushes and draft PR updates after each session.
 
 ## Tool contracts
 
-`src/contracts.ts` defines strict inputs for the implemented tools. Inputs take
-resolved ISO instants with an explicit UTC designator or offset. Birth inputs
+`src/contracts.ts` defines strict inputs for the implemented tools. Chart inputs
+take resolved ISO instants with an explicit UTC designator or offset; only
+`resolve_civil_time` reads a local wall time. Birth inputs
 accept coordinates together, house settings, a known-time flag and the engine's
 time-scale and fixed delta-T options. They do not infer local time or substitute
 noon. Engine calculation still checks its supported ephemeris span.
@@ -47,7 +50,7 @@ Event-search windows and sample budgets have server policy limits enforced by
 `test/contracts.mcp-test.ts`. These are resource limits, not completeness or accuracy
 claims. The event-search sampling policy is described below.
 
-Structured responses carry a schema version, tool-specific data and named native
+Chart tool responses carry a schema version, tool-specific data and named native
 natal receipt envelopes. The engine codec validates each envelope. ISO dates and
 full numerical precision survive JSON serialization; unsupported values fail
 instead of disappearing. Text content contains the same JSON as structured
@@ -172,11 +175,32 @@ time basis.
 resource policy, refusal, validation and concrete output schemas with synthetic
 inputs. These are wrapper integration checks, not independent astronomical
 accuracy evidence.
+The civil time handler in `src/tools/civil-time.ts` accepts `{ date, time,
+timeZone }` with optional `longitude`, `calendar` and `country`, and calls
+`prepareLocalTime` and `resolveLocalToUtc` from `@zodiacs/engine/geo`. `time`
+is `HH:MM` or `HH:MM:00`, because the engine resolves to the minute. There is
+no place lookup and no network access. `data.resolution` preserves the native
+result, with dates as ISO text, and `data.status` is `resolved`, `gap` or
+`fold` from the native `jump`. A gap moves the wall time forward by the jump;
+a fold gives the earlier instant. The tool description asks agents to check
+with the person unless the status is `resolved`. Before 1970 the engine reads
+its shipped tzdb history; from 1970 the host's `Intl` data answers, so those
+results depend on the host.
+
+Instead of chart receipts the response carries `record` with role
+`time-resolution`: the engine name and version, the shipped tzdb version,
+archive SHA-256 and form, and which zone data answered. It is not a chart
+receipt and carries no chart values. `test/civil-time.mcp-test.ts` checks
+synthetic gap, fold, local mean time, Julian calendar and error cases, the
+advertised schemas, no use of `fetch`, and the 45 `time.zone-offset` vectors
+of `conformance/vectors/L3-time-calendars.json`, whose arbiter is tzdb 2025c
+with backzone. The other vectors in that file take inputs this tool does not.
 
 ## MCP registration
 
 `src/server.ts` registers `natal_chart`, `transits_at`, `transits_now`,
-`synastry`, `solar_return`, `lunar_return`, `moon_phase` and `event_search`.
+`synastry`, `solar_return`, `lunar_return`, `moon_phase`, `event_search` and
+`resolve_civil_time`.
 Each advertises its strict input schema and concrete output schema through
 `tools/list`. Tool annotations describe local read-only calculations.
 `createServer({ clock })` can inject the current-time clock for testing.
@@ -192,6 +216,9 @@ whose search status is `refused`; agents must inspect that status.
 transports to check discovery, schemas, every registered handler, receipt
 preservation, validation refinements and failure recovery. These checks
 establish protocol integration, not astronomical accuracy.
+`test/agent-docs.mcp-test.ts` fails if the tools named in
+`docs/agents/MCP-TOOLS.md` differ from `tools/list`, or if an example excerpt
+there differs from the tool's actual output.
 
 ## Running transports
 
@@ -278,10 +305,12 @@ authorization.
 
 The entry points follow the SDK's [Node adapter API](https://ts.sdk.modelcontextprotocol.io/v2/api/%40modelcontextprotocol/node/).
 `test/transports.mcp-test.ts` uses real child processes and loopback HTTP with
-official SDK clients. It exercises every tool with synthetic inputs over
+official SDK clients. It exercises every chart tool with synthetic inputs over
 stdio, current HTTP and older stateless HTTP, validates returned receipt
 envelopes, and checks errors, recovery, body limits, independent clients,
-listener failures, EOF and signal shutdown. These tests establish transport
+listener failures, EOF and signal shutdown. A parity test requires identical
+tool lists and identical `resolve_civil_time` results and errors over stdio
+and current HTTP, each validated against the advertised output schema. These tests establish transport
 integration, not independent astronomical accuracy.
 
 ## Client configuration
@@ -431,9 +460,11 @@ after authenticating the client. Keep it out of gateway logs and client-visible
 responses. When backend authentication is disabled, forwarded authorization
 headers are not checked there.
 
-Tools calculate locally without fetching places or resolving civil wall times.
-Resolve local-time gaps, folds and historical rules before sending a birth
-instant. The server adds no database or profile store. Clients and gateways may
+Tools calculate locally without fetching places. `resolve_civil_time` turns a
+written wall time in a caller-supplied IANA zone into an instant and reports
+gaps, folds, local mean time and calendar notes; settle a gap or fold with the
+person before sending the birth instant to a chart tool. The server adds no
+database or profile store. Clients and gateways may
 retain messages independently. Review their settings before using private
 inputs. Repository examples and tests use synthetic data only.
 
@@ -444,7 +475,9 @@ contains the same JSON. Inspect errors and search status first: `isError: true`
 has no successful structured result or receipt. Search `status: "refused"`
 is a resource refusal, not evidence that no event exists.
 
-Select `receipts` entries by `role`, rather than array order. Each entry contains
+Select `receipts` entries by `role`, rather than array order.
+`resolve_civil_time` returns a `time-resolution` `record` instead, which is
+not a chart receipt; cite its engine and tzdb fields with the resolved instant. Each entry contains
 `{ role, envelope }`. The envelope separates `receipt` (request and conventions)
 from `result` (recorded chart values).
 
@@ -457,6 +490,7 @@ from `result` (recorded chart values).
 | `lunar_return` | `natal`, `lunar-return` | Natal and selected return charts |
 | `moon_phase` | `phase-sky` | Sky positions used for the phase |
 | `event_search` | `search-start`, `search-end`, `event-N` | Endpoint and found event charts |
+| `resolve_civil_time` | `time-resolution` record, not a receipt | Engine and zone data used for the wall time |
 
 Identify the tool call in the conversation and receipt role, then cite the
 returned `envelope.receipt.engine.name`, `.engine.version`, `.engine.ephemeris`,

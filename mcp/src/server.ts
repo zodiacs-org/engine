@@ -5,6 +5,7 @@ import { transitsAtTool, transitsNowTool, transitOutputSchema, type Clock } from
 import { synastryTool, synastryOutputSchema } from "./tools/synastry.js";
 import { solarReturnTool, lunarReturnTool, solarReturnOutputSchema, lunarReturnOutputSchema } from "./tools/returns.js";
 import { moonPhaseTool, eventSearchTool, moonPhaseOutputSchema, eventSearchOutputSchema } from "./tools/events.js";
+import { resolveCivilTimeTool, civilTimeOutputSchema } from "./tools/civil-time.js";
 
 /** Creates an unconnected server with validated tools and native calculation receipts. */
 export function createServer(options: { clock?: Clock } = {}): McpServer {
@@ -42,5 +43,9 @@ export function createServer(options: { clock?: Clock } = {}): McpServer {
     description: "Search bounded tropical longitude crossings in (from,to]. Budget refusal returns no partial events. Completeness is not proven; receipts cover endpoint and event charts only.",
     inputSchema: inputSchemas.event_search, outputSchema: eventSearchOutputSchema, annotations
   }, eventSearchTool);
+  server.registerTool("resolve_civil_time", {
+    description: "Resolve a written local date and wall time in an IANA zone to a UTC instant, with gap, fold, local mean time and calendar flags. No place lookup. Unless status is resolved, ask the person which time they mean before using the instant. The time-resolution record is not a chart receipt.",
+    inputSchema: inputSchemas.resolve_civil_time, outputSchema: civilTimeOutputSchema, annotations
+  }, resolveCivilTimeTool);
   return server;
 }
