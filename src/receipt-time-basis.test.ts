@@ -197,13 +197,13 @@ describe("a receipt of the current conventions set", () => {
     expect(verdict(envelopeOf(), (copy) => (foreign(copy), (copy.result.timeScale.ut1MinusUtc.source = "tabled")))).toBe("invalid_value");
   });
 
-  it("is refused under an engine version before the set, which 1.1.0-rc.1 released", () => {
-    // 0.1.1-rc.15 wrote the time-basis set without the nutation (src/receipt-nutation.test.ts),
-    // and 0.1.1-rc.16 to 1.0.0 the set without the ids (src/receipt-ids.test.ts).
-    for (const version of ["0.1.1-rc.12", "0.1.1-rc.13", "0.1.1-rc.14", "0.1.1-rc.14+build.1", "0.1.1-rc.15", "0.1.0", "0.1.1-rc.16", "1.0.0"]) {
+  it("is refused under an engine version before the computation it describes, which 0.1.1-rc.16 released", () => {
+    // 0.1.1-rc.15 wrote the time-basis set without the nutation (src/receipt-nutation.test.ts);
+    // the current set adds the record's ids to rc.16's (src/receipt-ids.test.ts).
+    for (const version of ["0.1.1-rc.12", "0.1.1-rc.13", "0.1.1-rc.14", "0.1.1-rc.14+build.1", "0.1.1-rc.15", "0.1.0"]) {
       expect(verdict(envelopeOf(), (copy) => (copy.receipt.engine.version = version))).toBe("inconsistent_result");
     }
-    for (const version of ["1.1.0-rc.1", "1.1.0", "1.2.0", "2.0.0"]) {
+    for (const version of ["0.1.1-rc.16", "0.1.1-rc.17", "0.1.1", "0.2.0", "1.0.0", "1.1.0-rc.1"]) {
       expect(verdict(envelopeOf(), (copy) => (copy.receipt.engine.version = version))).toBe("ok");
     }
   });

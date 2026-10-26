@@ -85,11 +85,11 @@ describe("the nutation set, which 0.1.1-rc.16 to 1.0.0 wrote", () => {
     );
   });
 
-  it("is accepted from 0.1.1-rc.16 and before 1.1.0-rc.1, in SemVer order", () => {
-    for (const version of ["0.1.1-rc.16", "0.1.1-rc.16+build.7", "0.1.1-rc.16.1", "0.1.1-rc.17", "0.1.1", "1.0.0"]) {
+  it("is accepted from 0.1.1-rc.16 on, in SemVer order, and refused before", () => {
+    for (const version of ["0.1.1-rc.16", "0.1.1-rc.16+build.7", "0.1.1-rc.16.1", "0.1.1-rc.17", "0.1.1", "1.0.0", "1.1.0-rc.1", "2.0.0"]) {
       expect(verdict(ONE_ZERO, (copy) => (copy.receipt.engine.version = version)), version).toBe("ok");
     }
-    for (const version of ["0.1.1-rc.15", "0.1.1-rc.15.1", "0.1.1-rc.15+build.1", "0.1.1-rc.14", "0.1.1-beta", "0.1.1-rc", "1.1.0-rc.1", "1.1.0"]) {
+    for (const version of ["0.1.1-rc.15", "0.1.1-rc.15.1", "0.1.1-rc.15+build.1", "0.1.1-rc.14", "0.1.1-beta", "0.1.1-rc"]) {
       expect(verdict(ONE_ZERO, (copy) => (copy.receipt.engine.version = version)), version).toBe("inconsistent_result");
     }
   });

@@ -1,11 +1,12 @@
 /*
  * The receipt codec orders engine versions by SemVer 2.0.0 precedence
- * (src/semver.ts, src/semver.test.ts). A receipt of the current set, which
- * 1.1.0-rc.1 released, is refused under any engine version that comes before
- * 1.1.0-rc.1, however it is spelled; the set that 0.1.1-rc.16 to 1.0.0 wrote
- * (src/fixtures/receipt-1.0.0.json) is accepted from 0.1.1-rc.16 and before
- * 1.1.0-rc.1; rc.15's time-basis set is accepted under 0.1.1-rc.15 alone, as
- * each earlier set under the versions that wrote it; and a version that is not
+ * (src/semver.ts, src/semver.test.ts). A receipt names the engine that
+ * computed its chart, so a receipt of the current set, which 1.1.0-rc.1
+ * released, and one of the set 0.1.1-rc.16 to 1.0.0 wrote
+ * (src/fixtures/receipt-1.0.0.json) are each refused under any engine version
+ * that comes before 0.1.1-rc.16, however it is spelled, and accepted from it
+ * on; rc.15's time-basis set is accepted under 0.1.1-rc.15 alone, as each
+ * earlier set under the versions that wrote it; and a version that is not
  * SemVer 2.0.0 is refused as malformed. The charts are synthetic.
  */
 import { readFileSync } from "node:fs";
@@ -31,16 +32,10 @@ function underVersion(json: string, version: string): "ok" | NatalEnvelopeErrorC
 
 describe("the engine version of a receipt, in SemVer 2.0.0 order", () => {
   it.each(["0.1.1-rc.15.1", "0.1.1-rc.15", "0.1.1-rc.14.1", "0.1.1-beta", "0.1.1-alpha.7", "0.1.1-rc"])(
-    "refuses the nutation set under %s, which comes before 0.1.1-rc.16",
-    (version) => {
-      expect(underVersion(ONE_ZERO, version)).toBe("inconsistent_result");
-    }
-  );
-
-  it.each(["1.1.0-rc.0", "1.1.0-beta", "1.1.0-alpha.7", "1.1.0-rc", "1.0.1", "1.0.0", "0.1.1-rc.16"])(
-    "refuses the current set under %s, which comes before 1.1.0-rc.1",
+    "refuses the current set and 1.0.0's under %s, which comes before 0.1.1-rc.16",
     (version) => {
       expect(underVersion(CURRENT, version)).toBe("inconsistent_result");
+      expect(underVersion(ONE_ZERO, version)).toBe("inconsistent_result");
     }
   );
 
@@ -58,7 +53,7 @@ describe("the engine version of a receipt, in SemVer 2.0.0 order", () => {
     for (let n = 0; n <= 40; n += 1) {
       for (const build of ["", "+build.1"]) {
         const version = `0.1.1-rc.${n}${build}`;
-        expect(underVersion(CURRENT, version), version).toBe("inconsistent_result");
+        expect(underVersion(CURRENT, version), version).toBe(n < 16 ? "inconsistent_result" : "ok");
         expect(underVersion(ONE_ZERO, version), version).toBe(n < 16 ? "inconsistent_result" : "ok");
         expect(underVersion(RC15, version), version).toBe(n === 15 ? "ok" : "inconsistent_result");
         expect(underVersion(RC14, version), version).toBe(n >= 8 && n <= 14 ? "ok" : "inconsistent_result");
@@ -66,18 +61,10 @@ describe("the engine version of a receipt, in SemVer 2.0.0 order", () => {
     }
   });
 
-  it("accepts the nutation set from 0.1.1-rc.16 and before 1.1.0-rc.1", () => {
-    for (const version of ["0.1.1-rc.16", "0.1.1-rc.16+build.7", "0.1.1-rc.16.1", "0.1.1-rc.16-hotfix", "0.1.1", "0.1.2-alpha", "1.0.0", "1.0.1", "1.1.0-rc.0"]) {
-      expect(underVersion(ONE_ZERO, version), version).toBe("ok");
-    }
-    for (const version of ["1.1.0-rc.1", "1.1.0-rc.1+build.7", "1.1.0", "2.0.0"]) {
-      expect(underVersion(ONE_ZERO, version), version).toBe("inconsistent_result");
-    }
-  });
-
-  it("accepts the current set under versions at or after 1.1.0-rc.1", () => {
-    for (const version of ["1.1.0-rc.1", "1.1.0-rc.1+build.7", "1.1.0-rc.1.1", "1.1.0-rc.2", "1.1.0", "1.2.0-alpha", "2.0.0"]) {
+  it("accepts the current set and 1.0.0's under versions at or after 0.1.1-rc.16, with no upper bound", () => {
+    for (const version of ["0.1.1-rc.16", "0.1.1-rc.16+build.7", "0.1.1-rc.16.1", "0.1.1-rc.16-hotfix", "0.1.1", "0.1.2-alpha", "1.0.0", "1.0.1", "1.1.0-rc.0", "1.1.0-rc.1", "1.1.0-rc.1+build.7", "1.1.0", "2.0.0"]) {
       expect(underVersion(CURRENT, version), version).toBe("ok");
+      expect(underVersion(ONE_ZERO, version), version).toBe("ok");
     }
   });
 

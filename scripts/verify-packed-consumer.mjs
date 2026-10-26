@@ -182,9 +182,9 @@ if (hoursOfDay.status === "complete") { const first: PlanetaryHour | undefined =
 const hourNow: PlanetaryHour | null = planetaryHourAt(observer, "2024-06-21T12:00:00Z").hour;
 const refraction: number = STANDARD_REFRACTION_ARCMIN;
 void hourNow; void refraction;
-const idsReceipt = createNatalEnvelope(natalChart({ utc: "2000-01-01T12:00:00Z" })).receipt;
-const carriedIds: string[] | undefined = idsReceipt.conventionIds;
-const derivedIds: string[] = natalConventionIds(idsReceipt);
+const idsEnvelope = createNatalEnvelope(natalChart({ utc: "2000-01-01T12:00:00Z" }));
+const carriedIds: string[] | undefined = idsEnvelope.receipt.conventionIds;
+const derivedIds: string[] = natalConventionIds(idsEnvelope);
 const splitId: ConventionId = parseConventionId(conventionId("zodiac", "tropical"));
 const idAddress: string = conventionAddress(splitId.namespace + ":" + splitId.value) + CONVENTIONS_REGISTRY;
 void carriedIds; void derivedIds; void idAddress;
@@ -570,10 +570,12 @@ assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-
 }
 {
   const conventionsEntry = await import("@zodiacs/engine/conventions");
-  const natal = createNatalEnvelope(natalChart({utc: "2000-01-01T12:00:00Z", latitude: 51.5, longitude: -0.1, houseSystem: "placidus"})).receipt;
-  assert.deepEqual(natal.conventionIds, conventionsEntry.natalConventionIds(natal));
-  assert(natal.conventionIds.includes("conventionIds:zodiacs-conventions-registry;sorted-unique;in-receipt"));
-  assert(natal.conventionIds.includes("ephemeris:astronomy-engine@2.1.19"));
+  const envelope = createNatalEnvelope(natalChart({utc: "2000-01-01T12:00:00Z", latitude: 51.5, longitude: -0.1, houseSystem: "placidus"}));
+  const natal = envelope.receipt;
+  assert.deepEqual(natal.conventionIds, conventionsEntry.natalConventionIds(envelope));
+  assert(natal.conventionIds.includes("conventionIds:zodiacs-conventions-registry;receipt-and-result;sorted-unique;in-receipt"));
+  assert(natal.conventionIds.includes("ephemeris:astronomy-engine@2.1.19") && natal.conventionIds.includes("time-basis:iers"));
+  assert.deepEqual(envelope.requiredFeatures, ["convention-ids"]);
   assert.equal(conventionsEntry.conventionAddress("zodiac:tropical"), "https://zodiacs.org/developers/conventions/#zodiac:tropical");
   assert.deepEqual(conventionsEntry.parseConventionId("frame:a:b"), {namespace: "frame", value: "a:b"});
   assert.equal(parseNatalEnvelope(serializeNatalEnvelope(createNatalEnvelope(natalChart({utc: "2000-01-01T12:00:00Z"})))).ok, true);

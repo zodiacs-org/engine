@@ -1,0 +1,5 @@
+# node tools/extension-room.mjs; Node v22.22.2, darwin-arm64, 2026-10-26
+limits: {"bytes":65536,"depth":12,"nodes":4096} (1.0.0: {"bytes":65536,"depth":12,"nodes":4096})
+1.0.0, artifacts/zodiacs-engine-1.0.0.tgz (SHA-256 c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6): envelope 5585 bytes; longest extensions.pad string 59927 characters; longest array of zeros 3816 entries
+1.1.0-rc.1, this build: envelope 6976 bytes; longest extensions.pad string 58536 characters; longest array of zeros 3787 entries
+difference: envelope +1391 bytes; string -1391; array -29

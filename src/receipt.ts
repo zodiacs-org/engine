@@ -6,7 +6,8 @@ import { DELTA_T_MODEL, DELTA_T_TABLE, deltaTAt } from "./deltat.js";
 import { julianToGregorian, parseCalendarDate } from "./civil-calendar.js";
 import { outsideReferenceSpan } from "./reference-span.js";
 import { compareVersions, isVersion } from "./semver.js";
-import { natalConventionIds } from "./conventions.js";
+import { natalConventionIds } from "./convention-ids.js";
+import type { NatalConventionFields } from "./convention-ids.js";
 import { DELTA_T_IERS_MODEL, TIME_SCALE_NAMES, UT1_DATA, timeBasis } from "./time-scale.js";
 import type { TimeScaleName } from "./time-scale.js";
 import { EPHEMERIS } from "./types.js";
@@ -184,12 +185,13 @@ const CONVENTIONS_RC16 = /*#__PURE__*/ (() => Object.freeze({
 } as const))();
 /**
  * The conventions this engine records: the rc.16 set, with the receipt naming
- * its conventions as ids of the Zodiacs conventions registry, sorted, each
- * once, in `receipt.conventionIds` (natalConventionIds, ./conventions).
+ * the conventions it and its result use as ids of the Zodiacs conventions
+ * registry, sorted, each once, in `receipt.conventionIds`
+ * (natalConventionIds, ./conventions).
  */
 const CONVENTIONS = /*#__PURE__*/ (() => Object.freeze({
   ...CONVENTIONS_RC16,
-  conventionIds: "zodiacs-conventions-registry;sorted-unique;in-receipt"
+  conventionIds: "zodiacs-conventions-registry;receipt-and-result;sorted-unique;in-receipt"
 } as const))();
 /**
  * A conventions set: what a receipt's numbers mean, as named ids, one for each
@@ -224,11 +226,14 @@ const RC15 = /^0\.1\.1-rc\.15(?:\+[A-Za-z0-9.-]+)?$/;
  * 0.1.1-rc.16, and build metadata changes nothing.
  */
 const before = (version: string, release: string): boolean => compareVersions(version, release) < 0;
-/** 0.1.1-rc.16 released the set that names the nutation. */
+/**
+ * 0.1.1-rc.16 released the set that names the nutation. A receipt names the
+ * engine that computed its chart, which may be earlier or later than the one
+ * that wrote the record, so the set from 1.1.0-rc.1, which describes the same
+ * computation with the record's ids, is accepted from this release too.
+ */
 const NUTATION_RELEASE = "0.1.1-rc.16";
-/** 1.1.0-rc.1 released the set whose receipts carry their conventions' ids. */
-const IDS_RELEASE = "1.1.0-rc.1";
-/** The feature an envelope of that set requires. */
+/** The feature an envelope of the set from 1.1.0-rc.1 requires. */
 const IDS_FEATURE = "convention-ids";
 /** Engines before 0.1.1-rc.9 offered only three house systems. */
 const RC9_RELEASE = "0.1.1-rc.9";
@@ -273,8 +278,9 @@ export interface NatalReceipt {
   conventions: NatalConventionSet;
   coverage: NatalCoverage;
   /**
-   * From 1.1.0-rc.1's set on: the ids of the Zodiacs conventions registry
-   * that this receipt names, as natalConventionIds (./conventions) gives them.
+   * From 1.1.0-rc.1's set on: the ids, in the Zodiacs conventions registry's
+   * syntax, that this receipt and its result name, as natalConventionIds
+   * (./conventions) gives them.
    */
   conventionIds?: string[];
 }
@@ -1224,9 +1230,8 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     (conventions === CONVENTIONS_RC7 && !RC7.test(engineVersion)) ||
     (conventions === CONVENTIONS_RC8 && !RC8_TO_RC14.test(engineVersion)) ||
     (conventions === CONVENTIONS_RC15 && !RC15.test(engineVersion)) ||
-    (conventions === CONVENTIONS_RC16 &&
-      (before(engineVersion, NUTATION_RELEASE) || !before(engineVersion, IDS_RELEASE))) ||
-    (conventions === CONVENTIONS && before(engineVersion, IDS_RELEASE)) ||
+    ((conventions === CONVENTIONS || conventions === CONVENTIONS_RC16) &&
+      before(engineVersion, NUTATION_RELEASE)) ||
     (!HOUSE_SYSTEMS_BEFORE_RC9.includes(requested) && before(engineVersion, RC9_RELEASE)) ||
     (!HOUSE_SYSTEMS_BEFORE_RC10.includes(requested) && before(engineVersion, RC10_RELEASE))
   )
@@ -1235,7 +1240,7 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   if (conventions === CONVENTIONS) {
     const ids = list(receipt.conventionIds);
     if (ids.some((id) => typeof id !== "string")) fail("invalid_value");
-    const named = natalConventionIds(receipt as unknown as NatalReceipt);
+    const named = natalConventionIds({ receipt: receipt as unknown as NatalReceipt, result });
     if (ids.length !== named.length || ids.some((id, index) => id !== named[index]))
       fail("inconsistent_result");
   }
@@ -1336,24 +1341,25 @@ export function createNatalEnvelope(
       conventions: { ...CONVENTIONS },
       coverage: { ...COVERAGE }
     };
+    // The fields the record's conventions set names, and only those.
+    const result = {
+      bodies: list(source.bodies).map((body) => kept(body, BODY_RECORD)),
+      angles: source.angles === null ? null : kept(source.angles, ANGLES_RECORD),
+      houses: houses === null ? null : kept(houses, HOUSES_RECORD),
+      aspects: list(source.aspects).map((aspect) => kept(aspect, ASPECT_RECORD)),
+      deltaT: kept(source.deltaT, DELTA_T_RECORD),
+      timeScale: timeScaleKept(source.timeScale)
+    };
     // A malformed field leaves the ids empty, and the reader refuses that field first.
     let conventionIds: string[] = [];
     try {
-      conventionIds = natalConventionIds(receipt as unknown as NatalReceipt);
+      conventionIds = natalConventionIds({ receipt, result } as unknown as NatalConventionFields);
     } catch {}
     const envelope = {
       schema: NATAL_ENVELOPE_SCHEMA,
       requiredFeatures: [IDS_FEATURE],
       receipt: { ...receipt, conventionIds },
-      // The fields the record's conventions set names, and only those.
-      result: {
-        bodies: list(source.bodies).map((body) => kept(body, BODY_RECORD)),
-        angles: source.angles === null ? null : kept(source.angles, ANGLES_RECORD),
-        houses: houses === null ? null : kept(houses, HOUSES_RECORD),
-        aspects: list(source.aspects).map((aspect) => kept(aspect, ASPECT_RECORD)),
-        deltaT: kept(source.deltaT, DELTA_T_RECORD),
-        timeScale: timeScaleKept(source.timeScale)
-      },
+      result,
       ...(supplied.extensions === undefined ? {} : { extensions: supplied.extensions })
     };
     return checked(envelope);

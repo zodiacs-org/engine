@@ -8,7 +8,7 @@ major version these declarations change only as `docs/versioning.md` allows.
 ## Exported (7)
 
 ```ts
-declare const CONVENTIONS_REGISTRY = "https://zodiacs.org/developers/conventions/";
+declare const CONVENTIONS_REGISTRY: string;
 
 interface ConventionId {
     namespace: string;
@@ -16,21 +16,36 @@ interface ConventionId {
 }
 
 interface NatalConventionFields {
-    conventions: Readonly<Record<string, string>>;
-    coverage: Readonly<Record<string, string>>;
-    houses: {
-        requested: string;
-        actual: string | null;
-        absenceReason: string | null;
+    receipt: {
+        conventions: Readonly<Record<string, string>>;
+        coverage: Readonly<Record<string, string>>;
+        houses: {
+            requested: string;
+            actual: string | null;
+            absenceReason: string | null;
+        };
+        inputFlags: readonly string[];
+        resultFlags: readonly string[];
+        reference: string;
+        timeScale?: string;
+        engine: {
+            ephemeris?: {
+                name: string;
+                version: string;
+            };
+        };
     };
-    inputFlags: readonly string[];
-    resultFlags: readonly string[];
-    reference: string;
-    timeScale?: string;
-    engine: {
-        ephemeris?: {
-            name: string;
-            version: string;
+    result: {
+        deltaT?: {
+            model: string;
+            segment: string;
+        };
+        timeScale?: {
+            input: string;
+            basis: string;
+            ut1MinusUtc: {
+                source: string;
+            } | null;
         };
     };
 }
@@ -39,7 +54,7 @@ declare function conventionAddress(id: string): string;
 
 declare function conventionId(namespace: string, value: string): string;
 
-declare function natalConventionIds(receipt: NatalConventionFields): string[];
+declare function natalConventionIds(envelope: NatalConventionFields): string[];
 
 declare function parseConventionId(id: string): ConventionId;
 ```

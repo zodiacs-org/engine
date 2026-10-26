@@ -6,7 +6,7 @@ exit 0
 ## npm test
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
  Test Files  2 failed | 85 passed (87)
-      Tests  4 failed | 3877 passed (3881)
+      Tests  4 failed | 3871 passed (3875)
 exit 1
 ## npm run build
 > @zodiacs/engine@1.1.0-rc.1 build
@@ -25,7 +25,7 @@ exit 0
 ## npm run package:contents
 > @zodiacs/engine@1.1.0-rc.1 package:contents
 > node scripts/verify-package-contents.mjs
-@zodiacs/engine package contents passed (77 files, 1003274 bytes unpacked of 1020000; import graphs: . 105980 of 108500, ./calc 145261 of 145500 (65122 beyond the core's), ./conventions 2330 of 2500 (2330 beyond the core's), ./crossings 9942 of 10000 (173 beyond the core's), ./deltat 5232 of 5500 (161 beyond the core's), ./geo 35439 of 35500 (32510 beyond the core's), ./houses 13678 of 15000 (13678 beyond the core's), ./internal 66287 of 68000 (305 beyond the core's), ./internal/math 19175 of 20000 (1325 beyond the core's), ./receipt 72688 of 76500 (46729 beyond the core's), ./sky 94149 of 97000 (16939 beyond the core's), ./techniques 155805 of 160000 (63781 beyond the core's), ./timing 125356 of 129000 (32660 beyond the core's), ./vedic 127751 of 128000 (35727 beyond the core's), ./window 104242 of 105000 (33872 beyond the core's); zone histories 189144 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
+@zodiacs/engine package contents passed (77 files, 1005570 bytes unpacked of 1020000; import graphs: . 105980 of 108500, ./calc 145261 of 145500 (65122 beyond the core's), ./conventions 2754 of 2900 (2754 beyond the core's), ./crossings 9942 of 10000 (173 beyond the core's), ./deltat 5232 of 5500 (161 beyond the core's), ./geo 35439 of 35500 (32510 beyond the core's), ./houses 13678 of 15000 (13678 beyond the core's), ./internal 66287 of 68000 (305 beyond the core's), ./internal/math 19175 of 20000 (1325 beyond the core's), ./receipt 72500 of 76500 (46541 beyond the core's), ./sky 94149 of 97000 (16939 beyond the core's), ./techniques 155805 of 160000 (63781 beyond the core's), ./timing 125356 of 129000 (32660 beyond the core's), ./vedic 127751 of 128000 (35727 beyond the core's), ./window 104242 of 105000 (33872 beyond the core's); zone histories 189144 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
 exit 0
 ## npm run pack:dry-run
 > @zodiacs/engine@1.1.0-rc.1 pack:dry-run
@@ -37,11 +37,11 @@ exit 0
 npm notice
 npm notice package: @zodiacs/engine@1.1.0-rc.1
 npm notice Tarball Contents
-npm notice 117.9kB CHANGELOG.md
+npm notice 119.0kB CHANGELOG.md
 npm notice 1.1kB LICENSE
 npm notice 26.2kB LICENSING.md
 npm notice 10.1kB NOTICE
-npm notice 63.1kB README.md
+npm notice 63.4kB README.md
 npm notice 11.0kB dist/api-WbxJ4Wj-.d.ts
 npm notice 6.4kB dist/ayanamsa--YQ46fET.d.ts
 npm notice 18.2kB dist/calc.d.ts
@@ -51,20 +51,20 @@ npm notice 508B dist/chunk-A3U2ZS2W.js
 npm notice 13.2kB dist/chunk-B5LKF437.js
 npm notice 5.1kB dist/chunk-BHJXUY67.js
 npm notice 24.1kB dist/chunk-CIVYAHTP.js
-npm notice 2.1kB dist/chunk-CJCM56UH.js
 npm notice 1.5kB dist/chunk-CPALRSPC.js
 npm notice 1.3kB dist/chunk-DGR3SZ7M.js
 npm notice 11.9kB dist/chunk-FRYARIYL.js
 npm notice 672B dist/chunk-HMCD2FYT.js
 npm notice 2.4kB dist/chunk-KFTJMMG7.js
 npm notice 18.1kB dist/chunk-NM4G5VM5.js
+npm notice 2.0kB dist/chunk-OVXQQEXL.js
 npm notice 2.9kB dist/chunk-PFGUCNOK.js
 npm notice 9.8kB dist/chunk-TSS2SZWQ.js
 npm notice 11.6kB dist/chunk-VDVUUMY2.js
 npm notice 29.8kB dist/chunk-W2TMLFJ3.js
 npm notice 6.2kB dist/chunk-YJ7WZ7NS.js
-npm notice 2.3kB dist/conventions.d.ts
-npm notice 257B dist/conventions.js
+npm notice 2.9kB dist/conventions.d.ts
+npm notice 736B dist/conventions.js
 npm notice 4.6kB dist/crossings.d.ts
 npm notice 173B dist/crossings.js
 npm notice 5.1kB dist/deltat.d.ts
@@ -82,7 +82,7 @@ npm notice 1.3kB dist/internal-math.js
 npm notice 522B dist/internal.d.ts
 npm notice 305B dist/internal.js
 npm notice 909B dist/receipt.d.ts
-npm notice 42.3kB dist/receipt.js
+npm notice 42.1kB dist/receipt.js
 npm notice 2.0kB dist/reference-span-CILpclrz.d.ts
 npm notice 835B dist/rulers-Dla6h_Sm.d.ts
 npm notice 8.0kB dist/sky.d.ts
@@ -112,16 +112,16 @@ npm notice 14.9kB dist/vedic.d.ts
 npm notice 16.6kB dist/vedic.js
 npm notice 8.0kB dist/window.d.ts
 npm notice 33.9kB dist/window.js
-npm notice 11.4kB dist/zone-history-8Pb1OvS3.d.ts
+npm notice 11.4kB dist/zone-history-Ce7i6Y1N.d.ts
 npm notice 4.0kB package.json
 npm notice Tarball Details
 npm notice name: @zodiacs/engine
 npm notice version: 1.1.0-rc.1
 npm notice filename: zodiacs-engine-1.1.0-rc.1.tgz
-npm notice package size: 291.6 kB
+npm notice package size: 292.4 kB
 npm notice unpacked size: 1.0 MB
-npm notice shasum: 4948d690d0dd431ce42a26cdd1cc827de49d8c1d
-npm notice integrity: sha512-UYjavE+DXyVek[...]2mWNqdOPOIDFg==
+npm notice shasum: 6aecee2a765bf7d5cadef16034c4bb137b501233
+npm notice integrity: sha512-tRKkwAzPlroou[...]p7NwBV8Nt39hQ==
 npm notice total files: 77
 npm notice
 zodiacs-engine-1.1.0-rc.1.tgz
@@ -135,7 +135,7 @@ exit 0
 ## npm test
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
  Test Files  2 failed | 85 passed (87)
-      Tests  4 failed | 3876 passed | 1 skipped (3881)
+      Tests  4 failed | 3870 passed | 1 skipped (3875)
 exit 1
 ## npm run build
 > @zodiacs/engine@1.1.0-rc.1 build
@@ -154,7 +154,7 @@ exit 0
 ## npm run package:contents
 > @zodiacs/engine@1.1.0-rc.1 package:contents
 > node scripts/verify-package-contents.mjs
-@zodiacs/engine package contents passed (77 files, 1003274 bytes unpacked of 1020000; import graphs: . 105980 of 108500, ./calc 145261 of 145500 (65122 beyond the core's), ./conventions 2330 of 2500 (2330 beyond the core's), ./crossings 9942 of 10000 (173 beyond the core's), ./deltat 5232 of 5500 (161 beyond the core's), ./geo 35439 of 35500 (32510 beyond the core's), ./houses 13678 of 15000 (13678 beyond the core's), ./internal 66287 of 68000 (305 beyond the core's), ./internal/math 19175 of 20000 (1325 beyond the core's), ./receipt 72688 of 76500 (46729 beyond the core's), ./sky 94149 of 97000 (16939 beyond the core's), ./techniques 155805 of 160000 (63781 beyond the core's), ./timing 125356 of 129000 (32660 beyond the core's), ./vedic 127751 of 128000 (35727 beyond the core's), ./window 104242 of 105000 (33872 beyond the core's); zone histories 189144 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
+@zodiacs/engine package contents passed (77 files, 1005570 bytes unpacked of 1020000; import graphs: . 105980 of 108500, ./calc 145261 of 145500 (65122 beyond the core's), ./conventions 2754 of 2900 (2754 beyond the core's), ./crossings 9942 of 10000 (173 beyond the core's), ./deltat 5232 of 5500 (161 beyond the core's), ./geo 35439 of 35500 (32510 beyond the core's), ./houses 13678 of 15000 (13678 beyond the core's), ./internal 66287 of 68000 (305 beyond the core's), ./internal/math 19175 of 20000 (1325 beyond the core's), ./receipt 72500 of 76500 (46541 beyond the core's), ./sky 94149 of 97000 (16939 beyond the core's), ./techniques 155805 of 160000 (63781 beyond the core's), ./timing 125356 of 129000 (32660 beyond the core's), ./vedic 127751 of 128000 (35727 beyond the core's), ./window 104242 of 105000 (33872 beyond the core's); zone histories 189144 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
 exit 0
 ## npm run pack:dry-run
 > @zodiacs/engine@1.1.0-rc.1 pack:dry-run
@@ -166,11 +166,11 @@ exit 0
 npm notice
 npm notice package: @zodiacs/engine@1.1.0-rc.1
 npm notice Tarball Contents
-npm notice 117.9kB CHANGELOG.md
+npm notice 119.0kB CHANGELOG.md
 npm notice 1.1kB LICENSE
 npm notice 26.2kB LICENSING.md
 npm notice 10.1kB NOTICE
-npm notice 63.1kB README.md
+npm notice 63.4kB README.md
 npm notice 11.0kB dist/api-WbxJ4Wj-.d.ts
 npm notice 6.4kB dist/ayanamsa--YQ46fET.d.ts
 npm notice 18.2kB dist/calc.d.ts
@@ -180,20 +180,20 @@ npm notice 508B dist/chunk-A3U2ZS2W.js
 npm notice 13.2kB dist/chunk-B5LKF437.js
 npm notice 5.1kB dist/chunk-BHJXUY67.js
 npm notice 24.1kB dist/chunk-CIVYAHTP.js
-npm notice 2.1kB dist/chunk-CJCM56UH.js
 npm notice 1.5kB dist/chunk-CPALRSPC.js
 npm notice 1.3kB dist/chunk-DGR3SZ7M.js
 npm notice 11.9kB dist/chunk-FRYARIYL.js
 npm notice 672B dist/chunk-HMCD2FYT.js
 npm notice 2.4kB dist/chunk-KFTJMMG7.js
 npm notice 18.1kB dist/chunk-NM4G5VM5.js
+npm notice 2.0kB dist/chunk-OVXQQEXL.js
 npm notice 2.9kB dist/chunk-PFGUCNOK.js
 npm notice 9.8kB dist/chunk-TSS2SZWQ.js
 npm notice 11.6kB dist/chunk-VDVUUMY2.js
 npm notice 29.8kB dist/chunk-W2TMLFJ3.js
 npm notice 6.2kB dist/chunk-YJ7WZ7NS.js
-npm notice 2.3kB dist/conventions.d.ts
-npm notice 257B dist/conventions.js
+npm notice 2.9kB dist/conventions.d.ts
+npm notice 736B dist/conventions.js
 npm notice 4.6kB dist/crossings.d.ts
 npm notice 173B dist/crossings.js
 npm notice 5.1kB dist/deltat.d.ts
@@ -211,7 +211,7 @@ npm notice 1.3kB dist/internal-math.js
 npm notice 522B dist/internal.d.ts
 npm notice 305B dist/internal.js
 npm notice 909B dist/receipt.d.ts
-npm notice 42.3kB dist/receipt.js
+npm notice 42.1kB dist/receipt.js
 npm notice 2.0kB dist/reference-span-CILpclrz.d.ts
 npm notice 835B dist/rulers-Dla6h_Sm.d.ts
 npm notice 8.0kB dist/sky.d.ts
@@ -241,16 +241,16 @@ npm notice 14.9kB dist/vedic.d.ts
 npm notice 16.6kB dist/vedic.js
 npm notice 8.0kB dist/window.d.ts
 npm notice 33.9kB dist/window.js
-npm notice 11.4kB dist/zone-history-8Pb1OvS3.d.ts
+npm notice 11.4kB dist/zone-history-Ce7i6Y1N.d.ts
 npm notice 4.0kB package.json
 npm notice Tarball Details
 npm notice name: @zodiacs/engine
 npm notice version: 1.1.0-rc.1
 npm notice filename: zodiacs-engine-1.1.0-rc.1.tgz
-npm notice package size: 291.6 kB
+npm notice package size: 292.4 kB
 npm notice unpacked size: 1.0 MB
-npm notice shasum: 4948d690d0dd431ce42a26cdd1cc827de49d8c1d
-npm notice integrity: sha512-UYjavE+DXyVek[...]2mWNqdOPOIDFg==
+npm notice shasum: 6aecee2a765bf7d5cadef16034c4bb137b501233
+npm notice integrity: sha512-tRKkwAzPlroou[...]p7NwBV8Nt39hQ==
 npm notice total files: 77
 npm notice
 zodiacs-engine-1.1.0-rc.1.tgz
@@ -264,7 +264,7 @@ exit 0
 ## npm test
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
  Test Files  2 failed | 85 passed (87)
-      Tests  4 failed | 3876 passed | 1 skipped (3881)
+      Tests  4 failed | 3870 passed | 1 skipped (3875)
 exit 1
 ## npm run build
 > @zodiacs/engine@1.1.0-rc.1 build
@@ -283,7 +283,7 @@ exit 0
 ## npm run package:contents
 > @zodiacs/engine@1.1.0-rc.1 package:contents
 > node scripts/verify-package-contents.mjs
-@zodiacs/engine package contents passed (77 files, 1003274 bytes unpacked of 1020000; import graphs: . 105980 of 108500, ./calc 145261 of 145500 (65122 beyond the core's), ./conventions 2330 of 2500 (2330 beyond the core's), ./crossings 9942 of 10000 (173 beyond the core's), ./deltat 5232 of 5500 (161 beyond the core's), ./geo 35439 of 35500 (32510 beyond the core's), ./houses 13678 of 15000 (13678 beyond the core's), ./internal 66287 of 68000 (305 beyond the core's), ./internal/math 19175 of 20000 (1325 beyond the core's), ./receipt 72688 of 76500 (46729 beyond the core's), ./sky 94149 of 97000 (16939 beyond the core's), ./techniques 155805 of 160000 (63781 beyond the core's), ./timing 125356 of 129000 (32660 beyond the core's), ./vedic 127751 of 128000 (35727 beyond the core's), ./window 104242 of 105000 (33872 beyond the core's); zone histories 189144 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
+@zodiacs/engine package contents passed (77 files, 1005570 bytes unpacked of 1020000; import graphs: . 105980 of 108500, ./calc 145261 of 145500 (65122 beyond the core's), ./conventions 2754 of 2900 (2754 beyond the core's), ./crossings 9942 of 10000 (173 beyond the core's), ./deltat 5232 of 5500 (161 beyond the core's), ./geo 35439 of 35500 (32510 beyond the core's), ./houses 13678 of 15000 (13678 beyond the core's), ./internal 66287 of 68000 (305 beyond the core's), ./internal/math 19175 of 20000 (1325 beyond the core's), ./receipt 72500 of 76500 (46541 beyond the core's), ./sky 94149 of 97000 (16939 beyond the core's), ./techniques 155805 of 160000 (63781 beyond the core's), ./timing 125356 of 129000 (32660 beyond the core's), ./vedic 127751 of 128000 (35727 beyond the core's), ./window 104242 of 105000 (33872 beyond the core's); zone histories 189144 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
 exit 0
 ## npm run pack:dry-run
 > @zodiacs/engine@1.1.0-rc.1 pack:dry-run
@@ -295,11 +295,11 @@ exit 0
 npm notice
 npm notice package: @zodiacs/engine@1.1.0-rc.1
 npm notice Tarball Contents
-npm notice 117.9kB CHANGELOG.md
+npm notice 119.0kB CHANGELOG.md
 npm notice 1.1kB LICENSE
 npm notice 26.2kB LICENSING.md
 npm notice 10.1kB NOTICE
-npm notice 63.1kB README.md
+npm notice 63.4kB README.md
 npm notice 11.0kB dist/api-WbxJ4Wj-.d.ts
 npm notice 6.4kB dist/ayanamsa--YQ46fET.d.ts
 npm notice 18.2kB dist/calc.d.ts
@@ -309,20 +309,20 @@ npm notice 508B dist/chunk-A3U2ZS2W.js
 npm notice 13.2kB dist/chunk-B5LKF437.js
 npm notice 5.1kB dist/chunk-BHJXUY67.js
 npm notice 24.1kB dist/chunk-CIVYAHTP.js
-npm notice 2.1kB dist/chunk-CJCM56UH.js
 npm notice 1.5kB dist/chunk-CPALRSPC.js
 npm notice 1.3kB dist/chunk-DGR3SZ7M.js
 npm notice 11.9kB dist/chunk-FRYARIYL.js
 npm notice 672B dist/chunk-HMCD2FYT.js
 npm notice 2.4kB dist/chunk-KFTJMMG7.js
 npm notice 18.1kB dist/chunk-NM4G5VM5.js
+npm notice 2.0kB dist/chunk-OVXQQEXL.js
 npm notice 2.9kB dist/chunk-PFGUCNOK.js
 npm notice 9.8kB dist/chunk-TSS2SZWQ.js
 npm notice 11.6kB dist/chunk-VDVUUMY2.js
 npm notice 29.8kB dist/chunk-W2TMLFJ3.js
 npm notice 6.2kB dist/chunk-YJ7WZ7NS.js
-npm notice 2.3kB dist/conventions.d.ts
-npm notice 257B dist/conventions.js
+npm notice 2.9kB dist/conventions.d.ts
+npm notice 736B dist/conventions.js
 npm notice 4.6kB dist/crossings.d.ts
 npm notice 173B dist/crossings.js
 npm notice 5.1kB dist/deltat.d.ts
@@ -340,7 +340,7 @@ npm notice 1.3kB dist/internal-math.js
 npm notice 522B dist/internal.d.ts
 npm notice 305B dist/internal.js
 npm notice 909B dist/receipt.d.ts
-npm notice 42.3kB dist/receipt.js
+npm notice 42.1kB dist/receipt.js
 npm notice 2.0kB dist/reference-span-CILpclrz.d.ts
 npm notice 835B dist/rulers-Dla6h_Sm.d.ts
 npm notice 8.0kB dist/sky.d.ts
@@ -370,16 +370,16 @@ npm notice 14.9kB dist/vedic.d.ts
 npm notice 16.6kB dist/vedic.js
 npm notice 8.0kB dist/window.d.ts
 npm notice 33.9kB dist/window.js
-npm notice 11.4kB dist/zone-history-8Pb1OvS3.d.ts
+npm notice 11.4kB dist/zone-history-Ce7i6Y1N.d.ts
 npm notice 4.0kB package.json
 npm notice Tarball Details
 npm notice name: @zodiacs/engine
 npm notice version: 1.1.0-rc.1
 npm notice filename: zodiacs-engine-1.1.0-rc.1.tgz
-npm notice package size: 291.6 kB
+npm notice package size: 292.4 kB
 npm notice unpacked size: 1.0 MB
-npm notice shasum: 4948d690d0dd431ce42a26cdd1cc827de49d8c1d
-npm notice integrity: sha512-UYjavE+DXyVek[...]2mWNqdOPOIDFg==
+npm notice shasum: 6aecee2a765bf7d5cadef16034c4bb137b501233
+npm notice integrity: sha512-tRKkwAzPlroou[...]p7NwBV8Nt39hQ==
 npm notice total files: 77
 npm notice
 zodiacs-engine-1.1.0-rc.1.tgz
