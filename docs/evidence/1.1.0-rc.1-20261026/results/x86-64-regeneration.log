@@ -1,0 +1,17 @@
+# sh x86-64-regeneration.sh; Linux x86_64, Node v22.22.2, 2026-10-26
+node v22.22.2 linux-x64
+## node scripts/build-calc-roundtrip.mjs
+rebuilt 38 cases in src/fixtures/calc-roundtrip.json
+exit 0
+## node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs" --out conformance/results/zodiacs-engine.json
+zodiacs-engine 1.1.0-rc.1: 267 pass, 192 fail, 41 unsupported, 0 error (of 500)
+  L1: 48 pass, 192 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 69 pass, 0 fail, 41 unsupported, 0 error (of 110)
+conformance: wrote conformance/results/zodiacs-engine.json
+exit 0
+## node conformance/harness/report.mjs
+conformance: wrote RESULTS.md and results/summary.json
+exit 0
+## git status --porcelain -- src/fixtures conformance
+(end of status)

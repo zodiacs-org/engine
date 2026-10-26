@@ -36,11 +36,13 @@ npm until the owner approves it. Checks: `docs/evidence/1.1.0-rc.1-20261026/`.
   earlier or later than the one that wrote it, so the new set is accepted
   from 0.1.1-rc.16, as 1.0.0's is, with no upper bound. A receipt written by
   the carried 1.0.0 archive (`src/fixtures/receipt-1.0.0.json`) parses,
-  serializes to its own bytes and replays.
+  serializes to its own bytes, and replays to positions, angles and cusps
+  within 1e-9° of its own (`src/receipt-ids.test.ts`).
 - **`@zodiacs/engine/conventions`**, a new entry point that imports no
   module of another entry: `natalConventionIds(envelope)`, which names a
   1.0.0 envelope's ids too; `conventionId(namespace, value)`;
-  `parseConventionId(id)`, the value being everything after the first colon;
+  `parseConventionId(id)`, which gives a `ConventionIdParts`, the value being
+  everything after the first colon;
   `conventionAddress(id)`, the registry's page with the id through
   `encodeURI` as its fragment; and `CONVENTIONS_REGISTRY`. The three that
   take an id throw a `RangeError` for a malformed one. The root does not
@@ -49,27 +51,33 @@ npm until the owner approves it. Checks: `docs/evidence/1.1.0-rc.1-20261026/`.
 - **Migration.** Reading records needs nothing. Code that builds an envelope
   by hand may keep writing 1.0.0's set; code that writes the new set writes
   its ids and its feature too. On 1.0.x a 1.1 record is
-  `unsupported_feature`: read it with 1.1. The ids take room under
+  `unsupported_feature`: read it with 1.1. `NATAL_RECEIPT_CONVENTION_SETS`
+  gains the new set at index 0, so each earlier set moves one place: take a
+  set by its content, as its doc comment asks. The ids take room under
   `NATAL_ENVELOPE_LIMITS`: for the tests' chart the envelope grows from 5,585
   to 6,976 bytes, the longest string `createNatalEnvelope` accepts in
   `extensions` falls from 59,927 to 58,536 characters, and the longest array
   of numbers from 3,816 to 3,787 entries (`results/extension-room.txt`). An
   envelope near those limits that 1.0.0 accepted can now be refused
   (`size_limit`, `complexity_limit`).
-- **No value changes.** 1.0.0-rc.1's battery of 6,417 calls over the entry
-  points prints the same bytes on the carried 1.0.0 archive and on this
-  build, run on one machine, but in the 129 lines that hold a natal envelope
-  or the list of sets, which differ only by what this candidate adds to them.
-  Of the build's 48 JavaScript files, three are new code: the receipt entry,
-  the new entry and the chunk of ids the two share; ten hold 1.0.0's lines in
-  another order, their chunks renamed, and the other 35 are 1.0.0's.
+- **No value changes.** 1.0.0-rc.1's battery of 6,417 calls over 1.0.0's
+  twelve entry points (the new `./conventions` is not in it) prints the same
+  bytes on the carried 1.0.0 archive and on this build, run on one machine
+  (darwin-arm64), but in the 129 lines that hold a natal envelope or the list
+  of sets, which differ only by what this candidate adds to them. Of the
+  build's 48 JavaScript files, three are new code: the receipt entry, the new
+  entry and the chunk of ids the two share; ten hold 1.0.0's lines in another
+  order, their chunks renamed; and the other 35 are 1.0.0's once chunk-name
+  hashes and the version are set aside.
 - **Sizes.** The new entry's graph is 2,754 bytes, under a budget of 2,900.
   `./receipt` loads its ids: 72,500 bytes, 3,009 more than 1.0.0's 69,491,
   over its budget of 70,000, which this candidate raises to 76,500 with the
-  owner's approval of 2026-10-26. The package is 1,005,570 bytes unpacked in
-  77 files, 13,655 more than 1.0.0's 991,915, over the cap of 1,000,000,
-  which it raises to 1,020,000 with the same approval, for the new entry, its
-  declarations and this entry.
+  owner's approval of 2026-10-26. The package is 1,006,494 bytes unpacked in
+  77 files, 14,579 more than 1.0.0's 991,915, over the cap of 1,000,000, which
+  it raises to 1,020,000 with the same approval: 3,740 bytes of JavaScript and
+  3,370 of declarations for the new entry and the receipt's ids, 7,328 of
+  README and CHANGELOG, 136 of manifest and the 5 of the version in the root's
+  graph (`sizes.json`).
 
 ## 1.0.0 — 2026-10-11
 

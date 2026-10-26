@@ -17,14 +17,18 @@ below).
 **1.1.0-rc.1**, a candidate for 1.1.0, not published: natal receipts name
 their conventions as ids of the Zodiacs conventions registry, which a new
 entry, `@zodiacs/engine/conventions`, gives (see *Draft natal receipts*;
-CHANGELOG.md). npm carries 1.0.0, the first stable release. The package
-follows Semantic Versioning: [docs/versioning.md](docs/versioning.md) says
-what is public, how a number may change, which records stay readable and how
-something public is deprecated, and `api/` holds each public entry point's
-declarations.
+CHANGELOG.md). The package follows Semantic Versioning:
+[docs/versioning.md](docs/versioning.md) says what is public, how a number
+may change, which records stay readable and how something public is
+deprecated, and `api/` holds each public entry point's declarations. npm
+carries 1.0.0, the first stable release, under `latest`: `npm install
+@zodiacs/engine` installs it, without `./conventions` and writing no ids.
+This candidate is not published there. Install the exact candidate tarball,
+`artifacts/zodiacs-engine-1.1.0-rc.1.tgz` in the repository, retaining its
+SHA-256 receipt:
 
 ```sh
-npm install @zodiacs/engine
+npm install ./zodiacs-engine-1.1.0-rc.1.tgz
 ```
 
 The Release workflow publishes the archive carried in `artifacts/` as it is,
@@ -221,9 +225,9 @@ for (const aspect of today.aspects) {
 - `@zodiacs/engine/window` partitions a birth-time window into cells within
   which the chart's signs, houses and aspects are constant (see *Birth-time
   windows*).
-- `@zodiacs/engine/conventions` gives the ids of the conventions registry a
-  natal receipt names, and each id's address (see *Draft natal receipts*).
-  It imports no module of another entry point.
+- `@zodiacs/engine/conventions`, new in 1.1.0-rc.1, gives the ids of the
+  conventions registry a natal receipt names, and each id's address (see
+  *Draft natal receipts*). It imports no module of another entry point.
 
 ### Uniform calculation API
 

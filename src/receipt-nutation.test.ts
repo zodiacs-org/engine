@@ -77,12 +77,14 @@ describe("the nutation set, which 0.1.1-rc.16 to 1.0.0 wrote", () => {
   });
 
   it("is refused without the nutation, with another nutation, or with rc.15's Moon", () => {
-    const envelope = current();
-    expect(verdict(envelope, (copy) => delete copy.receipt.conventions.nutation)).toBe("unsupported_feature");
-    expect(verdict(envelope, (copy) => (copy.receipt.conventions.nutation = "iau2000b-five-terms"))).toBe("unsupported_feature");
-    expect(verdict(envelope, (copy) => (copy.receipt.conventions.moonPosition = NATAL_RECEIPT_CONVENTION_SETS[2]!.moonPosition))).toBe(
-      "unsupported_feature"
-    );
+    // 1.0.0's receipt carries the set itself; this engine's carries it with the ids.
+    for (const envelope of [ONE_ZERO, current()]) {
+      expect(verdict(envelope, (copy) => delete copy.receipt.conventions.nutation)).toBe("unsupported_feature");
+      expect(verdict(envelope, (copy) => (copy.receipt.conventions.nutation = "iau2000b-five-terms"))).toBe("unsupported_feature");
+      expect(verdict(envelope, (copy) => (copy.receipt.conventions.moonPosition = NATAL_RECEIPT_CONVENTION_SETS[2]!.moonPosition))).toBe(
+        "unsupported_feature"
+      );
+    }
   });
 
   it("is accepted from 0.1.1-rc.16 on, in SemVer order, and refused before", () => {

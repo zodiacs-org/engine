@@ -399,6 +399,13 @@ for (const reading of [root.sources, root.held, root.marked]) {
   // The conventions entry and the ids the receipt codec shares with it are not the root's.
   assert(!reading.some((source) => /^src\/convention(?:s|-ids)\.ts$/u.test(source)), "the root reaches the conventions entry");
 }
+// The conventions entry loads its own two modules and nothing else.
+{
+  const graph = staticGraph({ metafile, read: readBuilt, entryOutput: "dist/conventions.js", entrySource: "src/conventions.ts" });
+  for (const reading of [graph.sources, graph.held, graph.marked]) {
+    assert.deepEqual([...new Set(reading)].sort(), ["src/convention-ids.ts", "src/conventions.ts"], "the conventions entry reaches another module");
+  }
+}
 
 // The build keeps what lets a bundler leave out a table nothing reads
 // (scripts/pure-tables.mjs), module by module as the markers above attribute

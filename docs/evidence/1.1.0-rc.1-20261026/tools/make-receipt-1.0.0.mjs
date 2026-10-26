@@ -3,7 +3,10 @@
 // (1990-06-15 08:30 in New York, Placidus), resolved as 1.0.0 resolves a local
 // birth. It is a receipt of the set that 0.1.1-rc.16 to 1.0.0 wrote, which
 // 1.1.0-rc.1 reads but no longer writes. src/fixtures/receipt-1.0.0.json is
-// this script's output with one newline appended.
+// this script's output with one newline appended, written on 2026-10-26 with
+// Node 22.22.2 on darwin-arm64, whose ICU 78.2 carries tz 2025c: the local
+// resolution reads the host's Intl, so another runtime can write other bytes.
+// src/receipt-ids.test.ts pins the file's SHA-256.
 //
 // The archive, artifacts/zodiacs-engine-1.0.0.tgz, is checked against its
 // receipt and unpacked under TMPDIR, outside the checkout, with the
