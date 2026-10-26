@@ -6,6 +6,7 @@ import { DELTA_T_MODEL, DELTA_T_TABLE, deltaTAt } from "./deltat.js";
 import { julianToGregorian, parseCalendarDate } from "./civil-calendar.js";
 import { outsideReferenceSpan } from "./reference-span.js";
 import { compareVersions, isVersion } from "./semver.js";
+import { natalConventionIds } from "./conventions.js";
 import { DELTA_T_IERS_MODEL, TIME_SCALE_NAMES, UT1_DATA, timeBasis } from "./time-scale.js";
 import type { TimeScaleName } from "./time-scale.js";
 import { EPHEMERIS } from "./types.js";
@@ -169,16 +170,26 @@ const CONVENTIONS_RC15 = /*#__PURE__*/ (() => Object.freeze({
   localTime: "tzdb-shards-before-1970;host-intl-from-1970;flags-from-transition-record"
 } as const))();
 /**
- * The conventions this engine records: the rc.15 set, naming the nutation,
- * the engine's own IAU 2000B series (all 77 luni-solar terms and the planetary
- * offsets, src/nutation.ts) with the two largest complementary terms of the
- * equation of the equinoxes, and the Moon as astronomy-engine's geocentric
- * series (GeoMoon) turned to the ecliptic of date by it.
+ * The conventions engine versions 0.1.1-rc.16 to 1.0.0 recorded: the rc.15
+ * set, naming the nutation, the engine's own IAU 2000B series (all 77
+ * luni-solar terms and the planetary offsets, src/nutation.ts) with the two
+ * largest complementary terms of the equation of the equinoxes, and the Moon
+ * as astronomy-engine's geocentric series (GeoMoon) turned to the ecliptic of
+ * date by it. Its receipts stay readable.
  */
-const CONVENTIONS = /*#__PURE__*/ (() => Object.freeze({
+const CONVENTIONS_RC16 = /*#__PURE__*/ (() => Object.freeze({
   ...CONVENTIONS_RC15,
   moonPosition: "astronomy-engine-geo-moon;no-light-time;no-aberration",
   nutation: "iau2000b;equation-of-equinoxes-with-two-complementary-terms"
+} as const))();
+/**
+ * The conventions this engine records: the rc.16 set, with the receipt naming
+ * its conventions as ids of the Zodiacs conventions registry, sorted, each
+ * once, in `receipt.conventionIds` (natalConventionIds, ./conventions).
+ */
+const CONVENTIONS = /*#__PURE__*/ (() => Object.freeze({
+  ...CONVENTIONS_RC16,
+  conventionIds: "zodiacs-conventions-registry;sorted-unique;in-receipt"
 } as const))();
 /**
  * A conventions set: what a receipt's numbers mean, as named ids, one for each
@@ -195,6 +206,7 @@ export type NatalConventionSet = Readonly<Record<string, string>>;
  */
 export const NATAL_RECEIPT_CONVENTION_SETS: readonly NatalConventionSet[] = /*#__PURE__*/ Object.freeze([
   CONVENTIONS,
+  CONVENTIONS_RC16,
   CONVENTIONS_RC15,
   CONVENTIONS_RC8,
   CONVENTIONS_RC7,
@@ -214,6 +226,10 @@ const RC15 = /^0\.1\.1-rc\.15(?:\+[A-Za-z0-9.-]+)?$/;
 const before = (version: string, release: string): boolean => compareVersions(version, release) < 0;
 /** 0.1.1-rc.16 released the set that names the nutation. */
 const NUTATION_RELEASE = "0.1.1-rc.16";
+/** 1.1.0-rc.1 released the set whose receipts carry their conventions' ids. */
+const IDS_RELEASE = "1.1.0-rc.1";
+/** The feature an envelope of that set requires. */
+const IDS_FEATURE = "convention-ids";
 /** Engines before 0.1.1-rc.9 offered only three house systems. */
 const RC9_RELEASE = "0.1.1-rc.9";
 /** Engines before 0.1.1-rc.10 did not offer Equal houses from the midheaven. */
@@ -256,6 +272,11 @@ export interface NatalReceipt {
   provenance: (NatalProvenanceClaims & { status: "claimed" }) | null;
   conventions: NatalConventionSet;
   coverage: NatalCoverage;
+  /**
+   * From 1.1.0-rc.1's set on: the ids of the Zodiacs conventions registry
+   * that this receipt names, as natalConventionIds (./conventions) gives them.
+   */
+  conventionIds?: string[];
 }
 
 /** A body as a natal record holds it. Its shape changes only with a new conventions set. */
@@ -329,7 +350,11 @@ export interface NatalRecordedResult {
 
 export interface NatalEnvelope {
   schema: typeof NATAL_ENVELOPE_SCHEMA;
-  /** This draft implements no optional required features; unknown ones fail closed. */
+  /**
+   * `convention-ids` with the conventions set from 1.1.0-rc.1 on, so that an
+   * earlier engine refuses the record as `unsupported_feature`, and none with
+   * an earlier set. Unknown features fail closed.
+   */
   requiredFeatures: string[];
   receipt: NatalReceipt;
   /** `deltaT` from the rc.8 set on, `timeScale` from the time-basis set on. */
@@ -1078,8 +1103,8 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   const envelope = record(input);
   if (envelope.schema !== NATAL_ENVELOPE_SCHEMA) fail("unsupported_version");
   fields(envelope, ["schema", "requiredFeatures", "receipt", "result"], ["extensions"]);
-  if (!Array.isArray(envelope.requiredFeatures)) fail("invalid_shape");
-  if (envelope.requiredFeatures.length !== 0) fail("unsupported_feature");
+  const features = list(envelope.requiredFeatures);
+  if (features.some((feature) => feature !== IDS_FEATURE)) fail("unsupported_feature");
   const receipt = record(envelope.receipt);
   if (receipt.schema !== NATAL_RECEIPT_SCHEMA) fail("unsupported_version");
   fields(receipt, [
@@ -1097,7 +1122,7 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     "provenance",
     "conventions",
     "coverage"
-  ], ["timeScale"]);
+  ], ["timeScale", "conventionIds"]);
   canonicalInstant(receipt.instant);
   if (receipt.sourceInstant !== null) {
     if (typeof receipt.sourceInstant !== "string" || receipt.sourceInstant.length > 40)
@@ -1123,9 +1148,12 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   }
   const conventions = conventionSet(receipt.conventions);
   // The rc.8 set on records ΔT; the time-basis sets (rc.15 on) also the instant's scale and basis.
-  const timeBasis = conventions === CONVENTIONS || conventions === CONVENTIONS_RC15;
+  const timeBasis =
+    conventions === CONVENTIONS || conventions === CONVENTIONS_RC16 || conventions === CONVENTIONS_RC15;
   const current = timeBasis || conventions === CONVENTIONS_RC8;
   if (timeBasis !== Object.hasOwn(receipt, "timeScale")) fail("invalid_shape");
+  if ((conventions === CONVENTIONS) !== Object.hasOwn(receipt, "conventionIds")) fail("invalid_shape");
+  if (features.length !== (conventions === CONVENTIONS ? 1 : 0)) fail("inconsistent_result");
   const scale = timeBasis ? choice(receipt.timeScale, TIME_SCALE_NAMES) : null;
   const result = validateResult(
     envelope.result,
@@ -1196,12 +1224,21 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     (conventions === CONVENTIONS_RC7 && !RC7.test(engineVersion)) ||
     (conventions === CONVENTIONS_RC8 && !RC8_TO_RC14.test(engineVersion)) ||
     (conventions === CONVENTIONS_RC15 && !RC15.test(engineVersion)) ||
-    (conventions === CONVENTIONS && before(engineVersion, NUTATION_RELEASE)) ||
+    (conventions === CONVENTIONS_RC16 &&
+      (before(engineVersion, NUTATION_RELEASE) || !before(engineVersion, IDS_RELEASE))) ||
+    (conventions === CONVENTIONS && before(engineVersion, IDS_RELEASE)) ||
     (!HOUSE_SYSTEMS_BEFORE_RC9.includes(requested) && before(engineVersion, RC9_RELEASE)) ||
     (!HOUSE_SYSTEMS_BEFORE_RC10.includes(requested) && before(engineVersion, RC10_RELEASE))
   )
     fail("inconsistent_result");
   fixedFields(receipt.coverage, COVERAGE);
+  if (conventions === CONVENTIONS) {
+    const ids = list(receipt.conventionIds);
+    if (ids.some((id) => typeof id !== "string")) fail("invalid_value");
+    const named = natalConventionIds(receipt as unknown as NatalReceipt);
+    if (ids.length !== named.length || ids.some((id, index) => id !== named[index]))
+      fail("inconsistent_result");
+  }
   if (envelope.extensions !== undefined) record(envelope.extensions);
   return envelope as unknown as NatalEnvelope;
 }
@@ -1264,44 +1301,50 @@ export function createNatalEnvelope(
       fields(record(supplied.provenance), [], ["source", "artifact", "runtime", "ephemeris"]);
     if ((input.latitude === undefined) !== (input.longitude === undefined)) fail("invalid_value");
     const houses = source.houses === null ? null : record(source.houses);
+    const receipt = {
+      schema: NATAL_RECEIPT_SCHEMA,
+      instant: Date.prototype.toISOString.call(input.utc),
+      timeScale: input.timeScale ?? "utc",
+      sourceInstant: supplied.sourceInstant === undefined ? null : supplied.sourceInstant,
+      timeKnown: input.timeKnown,
+      reference: supplied.reference === undefined ? "supplied-instant" : supplied.reference,
+      localResolution: supplied.localResolution ?? null,
+      coordinates:
+        input.latitude === undefined
+          ? null
+          : { latitude: input.latitude, longitude: input.longitude },
+      houses: {
+        requested: input.houseSystem,
+        actual: houses?.system ?? null,
+        absenceReason: !input.timeKnown
+          ? "unknown-time"
+          : input.latitude === undefined
+            ? "missing-location"
+            : null
+      },
+      inputFlags: input.flags ?? [],
+      resultFlags: source.flags,
+      engine: {
+        name: "@zodiacs/engine",
+        version: source.engineVersion,
+        ephemeris: { ...EPHEMERIS }
+      },
+      provenance:
+        supplied.provenance === undefined
+          ? null
+          : { ...record(supplied.provenance), status: "claimed" },
+      conventions: { ...CONVENTIONS },
+      coverage: { ...COVERAGE }
+    };
+    // A malformed field leaves the ids empty, and the reader refuses that field first.
+    let conventionIds: string[] = [];
+    try {
+      conventionIds = natalConventionIds(receipt as unknown as NatalReceipt);
+    } catch {}
     const envelope = {
       schema: NATAL_ENVELOPE_SCHEMA,
-      requiredFeatures: [],
-      receipt: {
-        schema: NATAL_RECEIPT_SCHEMA,
-        instant: Date.prototype.toISOString.call(input.utc),
-        timeScale: input.timeScale ?? "utc",
-        sourceInstant: supplied.sourceInstant === undefined ? null : supplied.sourceInstant,
-        timeKnown: input.timeKnown,
-        reference: supplied.reference === undefined ? "supplied-instant" : supplied.reference,
-        localResolution: supplied.localResolution ?? null,
-        coordinates:
-          input.latitude === undefined
-            ? null
-            : { latitude: input.latitude, longitude: input.longitude },
-        houses: {
-          requested: input.houseSystem,
-          actual: houses?.system ?? null,
-          absenceReason: !input.timeKnown
-            ? "unknown-time"
-            : input.latitude === undefined
-              ? "missing-location"
-              : null
-        },
-        inputFlags: input.flags ?? [],
-        resultFlags: source.flags,
-        engine: {
-          name: "@zodiacs/engine",
-          version: source.engineVersion,
-          ephemeris: { ...EPHEMERIS }
-        },
-        provenance:
-          supplied.provenance === undefined
-            ? null
-            : { ...record(supplied.provenance), status: "claimed" },
-        conventions: { ...CONVENTIONS },
-        coverage: { ...COVERAGE }
-      },
+      requiredFeatures: [IDS_FEATURE],
+      receipt: { ...receipt, conventionIds },
       // The fields the record's conventions set names, and only those.
       result: {
         bodies: list(source.bodies).map((body) => kept(body, BODY_RECORD)),

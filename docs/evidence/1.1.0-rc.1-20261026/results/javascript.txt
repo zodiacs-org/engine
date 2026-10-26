@@ -1,0 +1,4 @@
+# each dist/*.js of this tree's build against the files of artifacts/zodiacs-engine-1.0.0.tgz, unpacked, with chunk-XXXXXXXX.js names and the version string ("1.0.0", "1.1.0-rc.1") set aside; 2026-10-26
+48 files built, 46 carried; 35 built files equal a carried one
+10 hold a carried one's lines in another order: calc.js, chunk-FRYARIYL.js, chunk-HMCD2FYT.js, chunk-NM4G5VM5.js, index.js, sky.js, techniques.js, timing.js, vedic.js, window.js
+the other 3: chunk-CJCM56UH.js, conventions.js, receipt.js

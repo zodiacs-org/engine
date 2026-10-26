@@ -150,8 +150,10 @@ describe("Porphyry receipts", () => {
 
   it("refuses Porphyry in a receipt from rc.3 to rc.6, which never offered it", () => {
     const old = edit((e) => {
-      e.receipt.conventions = { ...NATAL_RECEIPT_CONVENTION_SETS[4] };
+      e.receipt.conventions = { ...NATAL_RECEIPT_CONVENTION_SETS[5] };
       e.receipt.engine = { name: "@zodiacs/engine", version: "0.1.1-rc.6" };
+      delete e.receipt.conventionIds;
+      e.requiredFeatures = [];
       delete e.receipt.timeScale;
       delete e.result.deltaT;
       delete e.result.timeScale;

@@ -1,9 +1,13 @@
 /*
- * From 0.1.1-rc.16 receipts name the nutation. The current conventions set,
- * NATAL_RECEIPT_CONVENTION_SETS[0], is rc.15's time-basis set with `nutation`
- * (the engine's IAU 2000B series, src/nutation.ts) and the Moon's source,
- * astronomy-engine's GeoMoon turned by the engine's frame in place of its
- * EclipticGeoMoon. rc.15's set, [1], stays readable, from rc.15 alone.
+ * From 0.1.1-rc.16 receipts name the nutation. The set 0.1.1-rc.16 to 1.0.0
+ * wrote, NATAL_RECEIPT_CONVENTION_SETS[1], is rc.15's time-basis set with
+ * `nutation` (the engine's IAU 2000B series, src/nutation.ts) and the Moon's
+ * source, astronomy-engine's GeoMoon turned by the engine's frame in place of
+ * its EclipticGeoMoon; the current set, [0], is that set with the receipt's
+ * ids (src/receipt-ids.test.ts). rc.15's set, [2], stays readable, from rc.15
+ * alone. src/fixtures/receipt-1.0.0.json was serialized by the carried 1.0.0
+ * archive for the same chart
+ * (docs/evidence/1.1.0-rc.1-20261026/tools/make-receipt-1.0.0.mjs).
  * src/fixtures/receipt-rc15.json was serialized by the carried 0.1.1-rc.15
  * archive (artifacts/zodiacs-engine-0.1.1-rc.15.tgz, sha256
  * 24eeb597b0157598c0faa26bb615c0cb5dfaaeac0393d62c73fbd37c5da4d348) for the
@@ -25,6 +29,7 @@ import {
 import type { NatalEnvelope, NatalEnvelopeErrorCode } from "./receipt.js";
 
 const RC15 = readFileSync(new URL("./fixtures/receipt-rc15.json", import.meta.url), "utf8");
+const ONE_ZERO = readFileSync(new URL("./fixtures/receipt-1.0.0.json", import.meta.url), "utf8");
 const NUTATION = "iau2000b;equation-of-equinoxes-with-two-complementary-terms";
 
 /** Parse after `change` edits a JSON copy; the codec's verdict. */
@@ -48,10 +53,10 @@ function current(): NatalEnvelope {
   return createNatalEnvelope(natalChart(birth), { reference, localResolution: resolution.localResolution });
 }
 
-describe("the conventions set of this engine", () => {
+describe("the nutation set, which 0.1.1-rc.16 to 1.0.0 wrote", () => {
   it("is rc.15's with the nutation named and the Moon's source", () => {
-    const set = NATAL_RECEIPT_CONVENTION_SETS[0]!;
-    const rc15 = NATAL_RECEIPT_CONVENTION_SETS[1]!;
+    const set = NATAL_RECEIPT_CONVENTION_SETS[1]!;
+    const rc15 = NATAL_RECEIPT_CONVENTION_SETS[2]!;
     expect(set).toEqual({
       ...rc15,
       moonPosition: "astronomy-engine-geo-moon;no-light-time;no-aberration",
@@ -59,9 +64,15 @@ describe("the conventions set of this engine", () => {
     });
     expect(rc15).not.toHaveProperty("nutation");
     expect(rc15.moonPosition).toBe("astronomy-engine-ecliptic-geo-moon;no-light-time;no-aberration");
+    const parsed = parseNatalEnvelope(ONE_ZERO);
+    if (!parsed.ok) throw new Error(parsed.code);
+    expect(parsed.envelope.receipt.conventions).toEqual(set);
+    expect(parsed.envelope.receipt.engine.version).toBe("1.0.0");
+    // This engine writes it with the receipt's ids.
     const envelope = current();
-    expect(envelope.receipt.conventions).toEqual(set);
-    expect(envelope.receipt.engine.version).toBe("1.0.0");
+    expect(envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[0]);
+    expect(NATAL_RECEIPT_CONVENTION_SETS[0]).toMatchObject(set);
+    expect(envelope.receipt.engine.version).toBe("1.1.0-rc.1");
     expect(verdict(envelope)).toBe("ok");
   });
 
@@ -69,18 +80,17 @@ describe("the conventions set of this engine", () => {
     const envelope = current();
     expect(verdict(envelope, (copy) => delete copy.receipt.conventions.nutation)).toBe("unsupported_feature");
     expect(verdict(envelope, (copy) => (copy.receipt.conventions.nutation = "iau2000b-five-terms"))).toBe("unsupported_feature");
-    expect(verdict(envelope, (copy) => (copy.receipt.conventions.moonPosition = NATAL_RECEIPT_CONVENTION_SETS[1]!.moonPosition))).toBe(
+    expect(verdict(envelope, (copy) => (copy.receipt.conventions.moonPosition = NATAL_RECEIPT_CONVENTION_SETS[2]!.moonPosition))).toBe(
       "unsupported_feature"
     );
   });
 
-  it("is accepted from 0.1.1-rc.16 on, in SemVer order, and refused before", () => {
-    const envelope = current();
+  it("is accepted from 0.1.1-rc.16 and before 1.1.0-rc.1, in SemVer order", () => {
     for (const version of ["0.1.1-rc.16", "0.1.1-rc.16+build.7", "0.1.1-rc.16.1", "0.1.1-rc.17", "0.1.1", "1.0.0"]) {
-      expect(verdict(envelope, (copy) => (copy.receipt.engine.version = version)), version).toBe("ok");
+      expect(verdict(ONE_ZERO, (copy) => (copy.receipt.engine.version = version)), version).toBe("ok");
     }
-    for (const version of ["0.1.1-rc.15", "0.1.1-rc.15.1", "0.1.1-rc.15+build.1", "0.1.1-rc.14", "0.1.1-beta", "0.1.1-rc"]) {
-      expect(verdict(envelope, (copy) => (copy.receipt.engine.version = version)), version).toBe("inconsistent_result");
+    for (const version of ["0.1.1-rc.15", "0.1.1-rc.15.1", "0.1.1-rc.15+build.1", "0.1.1-rc.14", "0.1.1-beta", "0.1.1-rc", "1.1.0-rc.1", "1.1.0"]) {
+      expect(verdict(ONE_ZERO, (copy) => (copy.receipt.engine.version = version)), version).toBe("inconsistent_result");
     }
   });
 });
@@ -90,7 +100,7 @@ describe("a receipt written by 0.1.1-rc.15 (the time-basis set)", () => {
     const parsed = parseNatalEnvelope(RC15);
     if (!parsed.ok) throw new Error(parsed.code);
     const { receipt, result } = parsed.envelope;
-    expect(receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[1]);
+    expect(receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[2]);
     expect(receipt.engine).toEqual({ name: "@zodiacs/engine", version: "0.1.1-rc.15", ephemeris: { name: "astronomy-engine", version: "2.1.19" } });
     expect(receipt.timeScale).toBe("utc");
     expect(result.timeScale?.basis).toBe("iers");

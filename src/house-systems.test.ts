@@ -326,7 +326,9 @@ describe("house-system receipts", () => {
    * rc.13 wrote: the instant read as UT1, ΔT from the model, no time basis.
    */
   const asEngine = (e: any, version: string) => {
-    e.receipt.conventions = { ...NATAL_RECEIPT_CONVENTION_SETS[2] };
+    e.receipt.conventions = { ...NATAL_RECEIPT_CONVENTION_SETS[3] };
+    delete e.receipt.conventionIds;
+    e.requiredFeatures = [];
     delete e.receipt.timeScale;
     delete e.result.timeScale;
     e.result.deltaT = deltaTAt((Date.parse(e.receipt.instant) - Date.UTC(2000, 0, 1, 12)) / 86_400_000);

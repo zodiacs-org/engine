@@ -11,6 +11,7 @@ const deltat = await import("@zodiacs/engine/deltat");
 const geo = await import("@zodiacs/engine/geo");
 const houses = await import("@zodiacs/engine/houses");
 const receipt = await import("@zodiacs/engine/receipt");
+const conventions = await import("@zodiacs/engine/conventions");
 const techniques = await import("@zodiacs/engine/techniques");
 const timing = await import("@zodiacs/engine/timing");
 const vedic = await import("@zodiacs/engine/vedic");
@@ -236,6 +237,20 @@ for (const name of [
   assert.equal(name in engine, false, `receipt leaked into root: ${name}`);
 }
 
+// The conventions entry names the registry's ids, which a natal receipt carries.
+for (const name of ["conventionId", "parseConventionId", "conventionAddress", "natalConventionIds"]) {
+  assert.equal(typeof conventions[name], "function", `missing conventions export: ${name}`);
+  assert.equal(name in engine, false, `conventions leaked into root: ${name}`);
+}
+assert.equal(conventions.CONVENTIONS_REGISTRY, "https://zodiacs.org/developers/conventions/");
+{
+  const natal = receipt.createNatalEnvelope(
+    engine.natalChart({ utc: "2000-01-01T12:00:00Z", latitude: 51.5, longitude: -0.1, houseSystem: "placidus" })
+  ).receipt;
+  assert.deepEqual(natal.conventionIds, conventions.natalConventionIds(natal));
+  assert(natal.conventionIds.includes("zodiac:tropical") && natal.conventionIds.includes("house:placidus"));
+}
+
 // One crossing solver: the root entry re-exports the crossings entry's
 // functions, and the ephemeris-bound wrappers stay in the root.
 for (const name of ["findLongitudeCrossingsWith", "searchLongitudeCrossingsWith"]) {
@@ -356,6 +371,7 @@ function checkSelfContained(entry, allowed = []) {
   visit(new URL(`../dist/${entry}.js`, import.meta.url));
 }
 checkSelfContained("receipt");
+checkSelfContained("conventions");
 // The houses entry is one file: it imports nothing, the root's modules included.
 checkSelfContained("houses-extra");
 assert(!/^(?:import|export)\s[^;]*?\bfrom\s*["']/mu.test(readFileSync(new URL("../dist/houses-extra.js", import.meta.url), "utf8")),
@@ -427,7 +443,7 @@ for (const entry of ["geo", "techniques"]) {
   for (const file of outputsOf(entry)) assert(!/(?:^|\/)tzdb-[^/]*$/u.test(file), `zone-history shard in the static ${entry} graph`);
 }
 console.log(
-  "@zodiacs/engine export smoke test passed; receipt, crossings and deltat graphs have no external imports, " +
+  "@zodiacs/engine export smoke test passed; receipt, conventions, crossings and deltat graphs have no external imports, " +
     `the core graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
     `${root.outputs.length} files) reaches no module of an opt-in entry and no zone history, ` +
     "the geo entry loads its 16 shards lazily, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic"

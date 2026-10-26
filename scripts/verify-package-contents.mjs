@@ -18,6 +18,8 @@ const required = [
   "README.md",
   "dist/calc.d.ts",
   "dist/calc.js",
+  "dist/conventions.d.ts",
+  "dist/conventions.js",
   "dist/crossings.d.ts",
   "dist/crossings.js",
   "dist/deltat.d.ts",
@@ -103,6 +105,12 @@ for (const file of files) {
 // 1.0.0 raises none. Its graphs are 1.0.0-rc.2's, less the five bytes of
 // "-rc.2" in each that loads the engine's version
 // (docs/evidence/1.0.0-20261011/sizes.json).
+//
+// 1.1.0-rc.1 adds ./conventions, with a budget of its own, and raises
+// ./receipt's, which loads it, for the receipt's convention ids, after
+// measuring the graph it fits (docs/evidence/1.1.0-rc.1-20261026/sizes.json).
+// The candidate asks the owner to approve the raise. Each graph that loads
+// the engine's version grows by the five bytes of "1.1.0-rc.1" over "1.0.0".
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -132,6 +140,10 @@ const ENTRY_BUDGETS = {
   // (docs/evidence/1.0.0-rc.1-20261006/sizes.json). 1.0.0-rc.2: 145,261, with
   // the core's marks; 0.16 per cent, not raised.
   "./calc": 145_500,
+  // New in 1.1.0-rc.1: the ids of the conventions registry. 2,330 bytes, its
+  // own file and the chunk it shares with ./receipt; 7.29 per cent of
+  // headroom.
+  "./conventions": 2_500,
   // rc.15: 9,410. 1.0.0-rc.1: 9,942, its options read as the shared reader
   // reads them; 0.58 per cent, not raised.
   "./crossings": 10_000,
@@ -151,7 +163,11 @@ const ENTRY_BUDGETS = {
   // the nutation in the ephemeris chunk; 4.88 per cent of headroom.
   "./internal": 68_000,
   "./internal/math": 20_000, // rc.15: 18,165
-  "./receipt": 70_000, // rc.15: 62,880
+  // rc.15: 62,880. 1.0.0: 69,491. 1.1.0-rc.1: 72,688, 3,197 more, raised
+  // from 70,000 for the receipt's convention ids: the chunk it shares with
+  // ./conventions (2,073 bytes) and the codec's new set, its version gate,
+  // its feature and its check of the ids; 5.24 per cent of headroom.
+  "./receipt": 76_500,
   // Returns, composite and Davison charts, the void-of-course Moon, aspect
   // patterns, dignities and Moon-sign candidates, moved from Zodiacs.org:
   // 141,745 as first built, with the core's graph and the local-time chunk
@@ -279,7 +295,14 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // 1.0.0: 991,915 bytes in 74 files, 2,387 more than 1.0.0-rc.2's 989,528, for
 // its changelog entry and the README's release lines. The cap, not raised,
 // leaves 8,085 bytes (docs/evidence/1.0.0-20261011/sizes.json).
-const TOTAL_CAP = 1_000_000;
+//
+// 1.1.0-rc.1: 1,003,274 bytes in 77 files, 11,359 more than 1.0.0, for the
+// conventions entry (its file, its declarations and the chunk it shares with
+// ./receipt), the receipt's ids and their documentation, and the candidate's
+// changelog entry (docs/evidence/1.1.0-rc.1-20261026/sizes.json). Raised from
+// 1,000,000 to 1,020,000, which leaves 16,726 bytes; the candidate asks the
+// owner to approve it.
+const TOTAL_CAP = 1_020_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 
 // The licence expression covers the code (MIT) and the ΔT values (CC BY 4.0),

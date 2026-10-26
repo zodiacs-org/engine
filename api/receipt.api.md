@@ -188,6 +188,7 @@ interface NatalReceipt {
     }) | null;
     conventions: NatalConventionSet;
     coverage: NatalCoverage;
+    conventionIds?: string[];
 }
 
 interface NatalRecordedResult {

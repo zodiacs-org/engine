@@ -123,6 +123,15 @@ new record, as it refuses any it does not know (`unsupported_feature`,
 `unsupported_version`). No 1.x release stops reading a set or a version that
 an earlier 1.x release wrote.
 
+A set that adds a field to a record also makes its envelopes require a
+feature (`requiredFeatures`). Every release reads an envelope's features
+before its receipt's fields, so an earlier one refuses such a record as
+`unsupported_feature`, where the field alone would make it `invalid_shape`.
+1.1.0-rc.1's set adds `receipt.conventionIds` and requires `convention-ids`:
+the carried archives from 0.1.1-rc.7 to 1.0.0 refuse its records as
+`unsupported_feature`, and as `invalid_shape` with the feature taken out
+(`docs/evidence/1.1.0-rc.1-20261026/results/earlier-readers.json`).
+
 A schema id is a permanent, opaque name. `NATAL_ENVELOPE_SCHEMA`,
 `NATAL_RECEIPT_SCHEMA` and `NATAL_DIAGNOSTIC_SCHEMA` keep the `draft-v1` they
 have carried since 0.1.1-rc.3, byte for byte, because stored records carry
