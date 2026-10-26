@@ -8,55 +8,68 @@ entry point gives those ids. No value changes. It is not to be published on
 npm until the owner approves it. Checks: `docs/evidence/1.1.0-rc.1-20261026/`.
 
 - **Receipts carry their ids.** `createNatalEnvelope` writes a new
-  conventions set, 1.0.0's with
-  `conventionIds: "zodiacs-conventions-registry;sorted-unique;in-receipt"`,
-  and `receipt.conventionIds`: the ids of the registry at
-  zodiacs.org/developers/conventions that the receipt names, sorted, each
-  once. They are each conventions and coverage field's key and value
-  (`zodiac:tropical`), the requested and actual house systems
-  (`house:placidus`), why there are no houses, each flag, the reference, the
-  instant's scale (`time-scale:utc`) and the ephemeris
-  (`ephemeris:astronomy-engine@2.1.19`), the registry's rule for a receipt's
-  ids. A timed chart with Placidus houses names 22. The codec requires them
-  under the new set, exactly as the receipt's fields give them, and refuses
-  them under any other.
+  conventions set, 1.0.0's with `conventionIds:
+  "zodiacs-conventions-registry;receipt-and-result;sorted-unique;in-receipt"`,
+  and `receipt.conventionIds`: every id, in the registry's syntax (a
+  namespace, a colon and a value), that the receipt and its result name, in
+  code-unit order, each once. From the receipt, each conventions and coverage
+  field's key and value (`zodiac:tropical`), the requested and actual house
+  systems (`house:placidus`), why there are no houses, each flag, the
+  reference, the instant's scale (`time-scale:utc`) and the ephemeris
+  (`ephemeris:astronomy-engine@2.1.19`); from the result, the ΔT model and
+  segment, the time basis and the source of UT1 − UTC (`time-basis:iers`).
+  That is the rule of zodiacs.org's registry tests, and the registry it
+  publishes (version 2026-10-18) holds every id these receipts name but the
+  new set's own, which the site adds when it adopts this release
+  (`results/site-rule.txt`). The tests' timed chart in New York with
+  Placidus houses names 26; a flag or a polar fallback adds its own. The
+  codec requires the ids under the new set, exactly as the envelope's fields
+  give them, and refuses them under any other.
 - **Records.** An envelope of the new set requires the feature
   `convention-ids`. Each carried archive from 0.1.1-rc.7 to 1.0.0 refuses
   such a record as `unsupported_feature`, as docs/versioning.md says an
   earlier release refuses a set it does not know; without the feature they
   would refuse it as `invalid_shape`, because they read a receipt's fields
-  before its set. This release reads every record 1.0.0 reads. Each set is
-  accepted only from the versions that can have written it, in SemVer order:
-  1.0.0's from 0.1.1-rc.16 and before 1.1.0-rc.1, the new one from
-  1.1.0-rc.1. A receipt written by the carried 1.0.0 archive
-  (`src/fixtures/receipt-1.0.0.json`) parses, serializes to the same bytes and
-  replays.
-- **`@zodiacs/engine/conventions`**, a new entry point that imports no other
-  module: `natalConventionIds(receipt)`, which names a 1.0.0 receipt's ids
-  too; `conventionId(namespace, value)`; `parseConventionId(id)`, the value
-  being everything after the first colon; `conventionAddress(id)`, the
-  registry's page with the id through `encodeURI` as its fragment; and
-  `CONVENTIONS_REGISTRY`. The root does not import it. `NatalReceipt` gains
-  the optional `conventionIds`; `api/` records both.
-- **Migration.** Reading records needs nothing. Code that builds or edits an
-  envelope by hand writes the new set with its ids and feature, or this
-  release refuses it. On 1.0.x a 1.1 record is `unsupported_feature`: read it
-  with 1.1.
+  before its set (`results/earlier-readers.json`). docs/versioning.md now
+  asks a feature of every new set. This release reads every record 1.0.0
+  reads. A receipt names the engine that computed its chart, which may be
+  earlier or later than the one that wrote it, so the new set is accepted
+  from 0.1.1-rc.16, as 1.0.0's is, with no upper bound. A receipt written by
+  the carried 1.0.0 archive (`src/fixtures/receipt-1.0.0.json`) parses,
+  serializes to its own bytes and replays.
+- **`@zodiacs/engine/conventions`**, a new entry point that imports no
+  module of another entry: `natalConventionIds(envelope)`, which names a
+  1.0.0 envelope's ids too; `conventionId(namespace, value)`;
+  `parseConventionId(id)`, the value being everything after the first colon;
+  `conventionAddress(id)`, the registry's page with the id through
+  `encodeURI` as its fragment; and `CONVENTIONS_REGISTRY`. The three that
+  take an id throw a `RangeError` for a malformed one. The root does not
+  import the entry. `NatalReceipt` gains the optional `conventionIds`; `api/`
+  records both.
+- **Migration.** Reading records needs nothing. Code that builds an envelope
+  by hand may keep writing 1.0.0's set; code that writes the new set writes
+  its ids and its feature too. On 1.0.x a 1.1 record is
+  `unsupported_feature`: read it with 1.1. The ids take room under
+  `NATAL_ENVELOPE_LIMITS`: for the tests' chart the envelope grows from 5,585
+  to 6,976 bytes, the longest string `createNatalEnvelope` accepts in
+  `extensions` falls from 59,927 to 58,536 characters, and the longest array
+  of numbers from 3,816 to 3,787 entries (`results/extension-room.txt`). An
+  envelope near those limits that 1.0.0 accepted can now be refused
+  (`size_limit`, `complexity_limit`).
 - **No value changes.** 1.0.0-rc.1's battery of 6,417 calls over the entry
   points prints the same bytes on the carried 1.0.0 archive and on this
   build, run on one machine, but in the 129 lines that hold a natal envelope
-  or the list of sets, which differ only by what this candidate adds to
-  them. Of the build's JavaScript, the receipt entry and the new entry's two
-  files are new code; ten files hold 1.0.0's lines in another order, their
-  chunks renamed, and the other 35 are 1.0.0's.
-- **Sizes.** The new entry's graph is 2,330 bytes, under a budget of 2,500.
-  `./receipt` loads it: 72,688 bytes, 3,197 more than 1.0.0's 69,491, over
-  its budget of 70,000, which this candidate raises to 76,500. The package is
-  1,003,274 bytes unpacked in 77 files, 11,359 more than 1.0.0's 991,915, over
-  the cap of 1,000,000, which it raises to 1,020,000, for the new entry, its
+  or the list of sets, which differ only by what this candidate adds to them.
+  Of the build's 48 JavaScript files, three are new code: the receipt entry,
+  the new entry and the chunk of ids the two share; ten hold 1.0.0's lines in
+  another order, their chunks renamed, and the other 35 are 1.0.0's.
+- **Sizes.** The new entry's graph is 2,754 bytes, under a budget of 2,900.
+  `./receipt` loads its ids: 72,500 bytes, 3,009 more than 1.0.0's 69,491,
+  over its budget of 70,000, which this candidate raises to 76,500 with the
+  owner's approval of 2026-10-26. The package is 1,005,570 bytes unpacked in
+  77 files, 13,655 more than 1.0.0's 991,915, over the cap of 1,000,000,
+  which it raises to 1,020,000 with the same approval, for the new entry, its
   declarations and this entry.
-  A budget or the cap is raised only with the owner's approval, which this
-  candidate asks for.
 
 ## 1.0.0 — 2026-10-11
 

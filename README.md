@@ -223,7 +223,7 @@ for (const aspect of today.aspects) {
   windows*).
 - `@zodiacs/engine/conventions` gives the ids of the conventions registry a
   natal receipt names, and each id's address (see *Draft natal receipts*).
-  It imports no other module.
+  It imports no module of another entry point.
 
 ### Uniform calculation API
 
@@ -1044,27 +1044,29 @@ readable. Receipts under the rc.8 set (rc.8 to rc.14), which read the instant
 as UT1, stay readable and replay as UTC requests (see docs/time.md). A
 receipt's engine, ephemeris and package versions must be SemVer 2.0.0
 versions. The codec accepts an earlier set only under the versions that wrote
-it, rc.15's under 0.1.1-rc.15 alone and rc.16's from 0.1.1-rc.16 and before
-1.1.0-rc.1, and compares the engine's version in SemVer order with the
-release that brought each set and each house system: a receipt of the current
-set that names a version before 1.1.0-rc.1, such as 1.0.0 or 1.1.0-beta, is
-refused.
+it, rc.15's under 0.1.1-rc.15 alone, and compares the engine's version in
+SemVer order with the release that brought each set and each house system: a
+receipt names the engine that computed its chart, so rc.16's set and the
+current one are accepted from 0.1.1-rc.16 on, and one that names a version
+before it, such as 0.1.1-rc.15.1 or 0.1.1-beta, is refused.
 
 The current set, written from 1.1.0-rc.1 on, is rc.16's with
-`conventionIds`, and its receipts list the ids of the Zodiacs conventions
-registry ([zodiacs.org/developers/conventions](https://zodiacs.org/developers/conventions/))
-that they name, sorted, each once, as `receipt.conventionIds`: each
+`conventionIds`, and its receipts list, as `receipt.conventionIds`, every id in
+the syntax of the Zodiacs conventions registry
+([zodiacs.org/developers/conventions](https://zodiacs.org/developers/conventions/))
+that the receipt and its result name, in code-unit order, each once: each
 conventions and coverage field's key and value (`zodiac:tropical`), the
 requested and actual house systems (`house:placidus`), why there are no
-houses, each flag, the reference, the instant's scale (`time-scale:utc`) and
-the ephemeris (`ephemeris:astronomy-engine@2.1.19`). The codec refuses ids
-that differ from those the receipt's fields name. Its envelopes require the
-feature `convention-ids`, so an earlier engine refuses them as
+houses, each flag, the reference, the instant's scale (`time-scale:utc`), the
+ephemeris (`ephemeris:astronomy-engine@2.1.19`), and the result's ΔT model and
+segment, time basis and source of UT1 − UTC (`time-basis:iers`). The codec
+refuses ids that differ from those the envelope's fields name. Its envelopes
+require the feature `convention-ids`, so an earlier engine refuses them as
 `unsupported_feature` (docs/versioning.md). `@zodiacs/engine/conventions`
-exports the rule as `natalConventionIds(receipt)`, which also names a 1.0.0
-receipt's ids, with `conventionId`, `parseConventionId` (the value is
+exports the rule as `natalConventionIds(envelope)`, which also names a 1.0.0
+envelope's ids, with `conventionId`, `parseConventionId` (the value is
 everything after the first colon) and `conventionAddress`, an id's address on
-the registry's page.
+the registry's page; each throws a `RangeError` for a malformed id.
 
 `natalReplayInput` recovers the recorded request. It does not select or install
 the original engine. Recalculation with another engine, ephemeris dependency or

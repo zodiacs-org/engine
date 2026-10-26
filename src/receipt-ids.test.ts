@@ -1,13 +1,15 @@
 /*
- * From 1.1.0-rc.1 a natal receipt names its conventions as ids of the Zodiacs
- * conventions registry (zodiacs.org/developers/conventions), in
- * `receipt.conventionIds`, under a new conventions set: the set 0.1.1-rc.16
+ * From 1.1.0-rc.1 a natal receipt names the conventions it and its result use
+ * as ids of the Zodiacs conventions registry (zodiacs.org/developers/conventions),
+ * in `receipt.conventionIds`, under a new conventions set: the set 0.1.1-rc.16
  * to 1.0.0 wrote, with `conventionIds` added. The codec requires the ids under
  * that set, exactly as natalConventionIds (./conventions) derives them from
- * the receipt's own fields, and refuses them under any earlier set. An
+ * the envelope's own fields, and refuses them under any earlier set. An
  * envelope of the set requires the feature `convention-ids`, which every
  * earlier engine refuses as `unsupported_feature`
- * (docs/evidence/1.1.0-rc.1-20261026/tools/earlier-readers.mjs).
+ * (docs/evidence/1.1.0-rc.1-20261026/tools/earlier-readers.mjs). A receipt
+ * names the engine that computed its chart, so both sets are accepted from
+ * 0.1.1-rc.16, with no upper bound.
  * src/fixtures/receipt-1.0.0.json was serialized by the carried 1.0.0 archive
  * (docs/evidence/1.1.0-rc.1-20261026/tools/make-receipt-1.0.0.mjs). The charts
  * are synthetic.
@@ -59,11 +61,16 @@ describe("convention ids", () => {
     });
   });
 
-  it("refuse a malformed namespace, value or id", () => {
-    for (const [namespace, value] of [["", "x"], ["a:b", "x"], ["1zodiac", "x"], ["zo diac", "x"], ["zodiac", ""], ["zodiac", "a b"], ["zodiac", "a\u0000"], ["zodiac", "a​"]]) {
+  it("refuse a malformed namespace, value or id, with a RangeError", () => {
+    const zeroWidth = String.fromCharCode(0x200b);
+    const lone = [String.fromCharCode(0xdc00), String.fromCharCode(0xd800)];
+    for (const [namespace, value] of [["", "x"], ["a:b", "x"], ["1zodiac", "x"], ["zo diac", "x"], ["zodiac", ""], ["zodiac", "a b"], ["zodiac", "a\u0000"], ["zodiac", `a${zeroWidth}`], ["zodiac", `${lone[0]}x`], ["zodiac", `x${lone[1]}`]]) {
       expect(() => conventionId(namespace!, value!), `${namespace} ${value}`).toThrow(RangeError);
     }
-    for (const id of ["zodiac", ":tropical", "zodiac:", "zodiac: tropical"]) expect(() => parseConventionId(id), id).toThrow(RangeError);
+    for (const id of ["zodiac", ":tropical", "zodiac:", "zodiac: tropical", `zodiac:${lone[1]}`]) {
+      expect(() => parseConventionId(id), id).toThrow(RangeError);
+      expect(() => conventionAddress(id), id).toThrow(RangeError);
+    }
   });
 
   it("have an address on the registry's page, the id through encodeURI as its fragment", () => {
@@ -78,7 +85,7 @@ describe("convention ids", () => {
 });
 
 describe("the ids of a natal receipt", () => {
-  it("are each field's namespace and value, sorted, each once", () => {
+  it("are each field's namespace and value, from the receipt and its result, sorted, each once", () => {
     const envelope = envelopeOf();
     expect(envelope.receipt.conventionIds).toEqual([
       "angleExclusions:exact-geographic-poles-and-ecliptic-horizon-coincidence",
@@ -87,8 +94,10 @@ describe("the ids of a natal receipt", () => {
       "assessment:finite-reference-cases-only",
       "broadDateRange:not-certified",
       "calendar:proleptic-gregorian",
-      "conventionIds:zodiacs-conventions-registry;sorted-unique;in-receipt",
+      "conventionIds:zodiacs-conventions-registry;receipt-and-result;sorted-unique;in-receipt",
       "deltaT:tt-minus-ut1;value-in-result",
+      "deltat-model:iers-utc/1",
+      "deltat-segment:observed",
       "ephemeris:astronomy-engine@2.1.19",
       "house:placidus",
       "inputSyntax:not-an-astronomical-accuracy-guarantee",
@@ -100,11 +109,13 @@ describe("the ids of a natal receipt", () => {
       "planetPositions:aberrated-geocentric-ecliptic-of-date;no-deflection",
       "reference:supplied-instant",
       "speed:degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day",
+      "time-basis:iers",
       "time-scale:utc",
       "timeScale:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise;in-result",
+      "ut1-source:observed",
       "zodiac:tropical"
     ]);
-    expect(natalConventionIds(envelope.receipt)).toEqual(envelope.receipt.conventionIds);
+    expect(natalConventionIds(envelope)).toEqual(envelope.receipt.conventionIds);
   });
 
   it.each([
@@ -114,23 +125,24 @@ describe("the ids of a natal receipt", () => {
     ["local mean time", { flags: ["lmt"] }, {}, ["flag:lmt"]],
     ["Koch", { houseSystem: "koch" }, {}, ["house:koch"]],
     ["UTC noon for an unknown time", { utc: "2000-01-01T12:00:00Z", timeKnown: false }, { reference: "utc-noon" }, ["reference:utc-noon"]],
-    ["TT", { utc: "2001-12-21T09:01:04.184Z", timeScale: "tt" }, {}, ["time-scale:tt"]],
+    ["TT", { utc: "2001-12-21T09:01:04.184Z", timeScale: "tt" }, {}, ["time-scale:tt", "time-basis:iers"]],
     ["UT1", { timeScale: "ut1" }, {}, ["time-scale:ut1"]],
-    ["outside the reference span", { utc: "1700-06-15T12:30:00Z" }, {}, ["flag:outside-reference-span"]]
+    ["outside the reference span", { utc: "1700-06-15T12:30:00Z" }, {}, ["flag:outside-reference-span", "time-basis:delta-t", "deltat-model:zodiacs-deltat/1"]],
+    ["a pinned ΔT", { deltaT: 69.2 }, {}, ["deltat-model:pinned", "deltat-segment:pinned", "time-basis:pinned"]]
   ] as const)("name %s", (_, birth, context, named) => {
     const input = { ...NEW_YORK, ...birth } as BirthInput;
     for (const key of ["latitude", "longitude"] as const) if (input[key] === undefined) delete input[key];
     const envelope = createNatalEnvelope(natalChart(input), context);
     const ids = envelope.receipt.conventionIds!;
     for (const id of named) expect(ids).toContain(id);
-    expect(ids).toEqual(natalConventionIds(envelope.receipt));
+    expect(ids).toEqual(natalConventionIds(envelope));
     expect(ids).toEqual([...new Set(ids)].sort());
     expect(verdict(envelope)).toBe("ok");
   });
 
   it("come with the set that names them, and the rc.16 set otherwise", () => {
     const [current, rc16] = NATAL_RECEIPT_CONVENTION_SETS;
-    expect(current).toEqual({ ...rc16, conventionIds: "zodiacs-conventions-registry;sorted-unique;in-receipt" });
+    expect(current).toEqual({ ...rc16, conventionIds: "zodiacs-conventions-registry;receipt-and-result;sorted-unique;in-receipt" });
     expect(envelopeOf().receipt.conventions).toEqual(current);
   });
 });
@@ -165,7 +177,7 @@ describe("the codec and the ids", () => {
     expect(
       verdict(envelope, (copy) => {
         koch(copy);
-        copy.receipt.conventionIds = natalConventionIds(copy.receipt);
+        copy.receipt.conventionIds = natalConventionIds(copy);
       })
     ).toBe("ok");
   });
@@ -192,16 +204,16 @@ describe("the codec and the ids", () => {
         delete copy.receipt.conventionIds;
       })
     ).toBe("inconsistent_result");
-    // As 1.0.0 wrote it, under this engine's version.
+    // As 1.0.0 writes it for a chart this engine computed: read, as 1.0.0 reads it.
     expect(
       verdict(envelope, (copy) => {
         delete copy.receipt.conventions.conventionIds;
         delete copy.receipt.conventionIds;
         copy.requiredFeatures = [];
       })
-    ).toBe("inconsistent_result");
+    ).toBe("ok");
     expect(
-      verdict(ONE_ZERO, (copy) => (copy.receipt.conventionIds = natalConventionIds(copy.receipt)))
+      verdict(ONE_ZERO, (copy) => (copy.receipt.conventionIds = natalConventionIds(copy)))
     ).toBe("invalid_shape");
   });
 
@@ -211,15 +223,31 @@ describe("the codec and the ids", () => {
     expect(parsed.envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[1]);
     expect(parsed.envelope.requiredFeatures).toEqual([]);
     expect("conventionIds" in parsed.envelope.receipt).toBe(false);
-    expect(serializeNatalEnvelope(parsed.envelope)).toBe(serializeNatalEnvelope(JSON.parse(ONE_ZERO)));
+    expect(serializeNatalEnvelope(parsed.envelope)).toBe(ONE_ZERO.trimEnd());
     // Its fields name the same ids as this engine's receipt of the same chart, less the set's own.
     const today = envelopeOf({}, {
       reference: parsed.envelope.receipt.reference,
       localResolution: parsed.envelope.receipt.localResolution
     });
-    expect(natalConventionIds(parsed.envelope.receipt)).toEqual(
+    expect(natalConventionIds(parsed.envelope)).toEqual(
       today.receipt.conventionIds!.filter((id) => !id.startsWith("conventionIds:"))
     );
+  });
+
+  it("reads a record whatever engine computed its chart, as 1.0.0 does", () => {
+    // 1.0.0's set under a later engine's version: 1.0.0 writes that for a
+    // chart a later engine computed, and reads it back.
+    for (const version of ["1.1.0-rc.1", "1.1.0", "2.0.0"]) {
+      expect(verdict(ONE_ZERO, (copy) => (copy.receipt.engine.version = version)), version).toBe("ok");
+    }
+    // This engine's set for a chart 1.0.0 computed: the same conventions, with the record's ids.
+    const chart = { ...natalChart(NEW_YORK), engineVersion: "1.0.0" };
+    const envelope = createNatalEnvelope(chart);
+    expect(envelope.receipt.engine.version).toBe("1.0.0");
+    expect(envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[0]);
+    expect(verdict(envelope)).toBe("ok");
+    // A chart from before 0.1.1-rc.16 is refused, as 1.0.0 refuses it.
+    expect(() => createNatalEnvelope({ ...chart, engineVersion: "0.1.1-rc.15" })).toThrow(/inconsistent_result/u);
   });
 
   it("leaves the ids out of the redacted diagnostic", () => {

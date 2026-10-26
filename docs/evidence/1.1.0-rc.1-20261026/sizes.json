@@ -200,12 +200,12 @@
    },
    "./conventions": {
     "files": 2,
-    "bytes": 2330,
-    "gzip": 974,
-    "beyondCore": 2330,
-    "beyondCoreGzip": 974,
-    "budget": 2500,
-    "headroomPercent": 7.29
+    "bytes": 2754,
+    "gzip": 1162,
+    "beyondCore": 2754,
+    "beyondCoreGzip": 1162,
+    "budget": 2900,
+    "headroomPercent": 5.3
    },
    "./crossings": {
     "files": 2,
@@ -263,12 +263,12 @@
    },
    "./receipt": {
     "files": 7,
-    "bytes": 72688,
-    "gzip": 24040,
-    "beyondCore": 46729,
-    "beyondCoreGzip": 13323,
+    "bytes": 72500,
+    "gzip": 23938,
+    "beyondCore": 46541,
+    "beyondCoreGzip": 13221,
     "budget": 76500,
-    "headroomPercent": 5.24
+    "headroomPercent": 5.51
    },
    "./sky": {
     "files": 10,
@@ -345,16 +345,16 @@
   },
   "package": {
    "files": 77,
-   "total": 1003274,
+   "total": 1005570,
    "cap": 1020000,
-   "headroomPercent": 1.66,
+   "headroomPercent": 1.43,
    "split": {
     "rootJs": 105980,
-    "optInJs": 291476,
+    "optInJs": 291767,
     "zoneHistories": 189144,
     "rootDeclarations": 61782,
-    "otherDeclarations": 132584,
-    "documents": 218332,
+    "otherDeclarations": 133230,
+    "documents": 219691,
     "manifest": 3976
    },
    "zoneHistories": {
@@ -364,15 +364,15 @@
    },
    "growthFrom": {
     "label": "1.0.0",
-    "bytes": 11359,
+    "bytes": 13655,
     "split": {
      "rootJs": {
       "bytes": 5,
       "percentOfGrowth": 0.04
      },
      "optInJs": {
-      "bytes": 3449,
-      "percentOfGrowth": 30.36
+      "bytes": 3740,
+      "percentOfGrowth": 27.39
      },
      "zoneHistories": {
       "bytes": 0,
@@ -383,16 +383,16 @@
       "percentOfGrowth": 0
      },
      "otherDeclarations": {
-      "bytes": 2661,
-      "percentOfGrowth": 23.43
+      "bytes": 3307,
+      "percentOfGrowth": 24.22
      },
      "documents": {
-      "bytes": 5108,
-      "percentOfGrowth": 44.97
+      "bytes": 6467,
+      "percentOfGrowth": 47.36
      },
      "manifest": {
       "bytes": 136,
-      "percentOfGrowth": 1.2
+      "percentOfGrowth": 1
      }
     }
    }

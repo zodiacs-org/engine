@@ -244,11 +244,12 @@ for (const name of ["conventionId", "parseConventionId", "conventionAddress", "n
 }
 assert.equal(conventions.CONVENTIONS_REGISTRY, "https://zodiacs.org/developers/conventions/");
 {
-  const natal = receipt.createNatalEnvelope(
+  const envelope = receipt.createNatalEnvelope(
     engine.natalChart({ utc: "2000-01-01T12:00:00Z", latitude: 51.5, longitude: -0.1, houseSystem: "placidus" })
-  ).receipt;
-  assert.deepEqual(natal.conventionIds, conventions.natalConventionIds(natal));
-  assert(natal.conventionIds.includes("zodiac:tropical") && natal.conventionIds.includes("house:placidus"));
+  );
+  assert.deepEqual(envelope.receipt.conventionIds, conventions.natalConventionIds(envelope));
+  for (const id of ["zodiac:tropical", "house:placidus", "time-basis:iers"]) assert(envelope.receipt.conventionIds.includes(id), id);
+  assert.deepEqual(envelope.requiredFeatures, ["convention-ids"]);
 }
 
 // One crossing solver: the root entry re-exports the crossings entry's
@@ -395,6 +396,8 @@ const builtFiles = readdirSync(distUrl).filter((name) => name.endsWith(".js")).m
 const root = checkRootIsolation({ metafile, files: builtFiles, read: readBuilt });
 for (const reading of [root.sources, root.held, root.marked]) {
   assert(reading.includes("src/api.ts") && reading.includes("src/ephemeris.ts"), "the build no longer lists or marks its modules' sources");
+  // The conventions entry and the ids the receipt codec shares with it are not the root's.
+  assert(!reading.some((source) => /^src\/convention(?:s|-ids)\.ts$/u.test(source)), "the root reaches the conventions entry");
 }
 
 // The build keeps what lets a bundler leave out a table nothing reads
