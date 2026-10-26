@@ -28,6 +28,7 @@ import {
   parseNatalEnvelope,
   serializeNatalEnvelope
 } from "./receipt.js";
+import { natalConventionIds } from "./conventions.js";
 import { normalizeLongitude } from "./signs.js";
 import type { HouseSystem } from "./types.js";
 
@@ -98,6 +99,16 @@ const POLAR_GRID = [-80, -72, 70, 78, 85].flatMap((latitude) =>
 function inOrder(cusps: readonly number[]): boolean {
   const gaps = cusps.map((cusp, index) => normalizeLongitude(cusps[(index + 1) % 12]! - cusp));
   return gaps.every((gap) => gap > 0) && Math.abs(gaps.reduce((a, b) => a + b, 0) - 360) < 1e-9;
+}
+
+/** The ids the edited fields name, so that only the rule under test can refuse the record. */
+function withOwnIds(envelope: any): void {
+  if (!Array.isArray(envelope?.receipt?.conventionIds)) return;
+  try {
+    envelope.receipt.conventionIds = natalConventionIds(envelope);
+  } catch {
+    // A malformed field: the codec refuses the field itself.
+  }
 }
 
 describe("house systems by their definitions", () => {
@@ -319,6 +330,7 @@ describe("house-system receipts", () => {
   const edit = (json: string, change: (envelope: any) => void) => {
     const parsed = JSON.parse(json);
     change(parsed);
+    withOwnIds(parsed);
     return JSON.stringify(parsed);
   };
   /**

@@ -10,7 +10,7 @@ major version these declarations change only as `docs/versioning.md` allows.
 ```ts
 declare const CONVENTIONS_REGISTRY: string;
 
-interface ConventionId {
+interface ConventionIdParts {
     namespace: string;
     value: string;
 }
@@ -56,5 +56,5 @@ declare function conventionId(namespace: string, value: string): string;
 
 declare function natalConventionIds(envelope: NatalConventionFields): string[];
 
-declare function parseConventionId(id: string): ConventionId;
+declare function parseConventionId(id: string): ConventionIdParts;
 ```

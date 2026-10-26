@@ -23,6 +23,7 @@ import {
 } from "./receipt.js";
 import type { NatalEnvelope, NatalEnvelopeErrorCode } from "./receipt.js";
 import type { BirthInput } from "./types.js";
+import { natalConventionIds } from "./conventions.js";
 
 const RC13 = readFileSync(new URL("./fixtures/receipt-rc13.json", import.meta.url), "utf8");
 const RC14 = readFileSync(new URL("./fixtures/receipt-rc14.json", import.meta.url), "utf8");
@@ -33,10 +34,21 @@ function envelopeOf(birth: Partial<BirthInput> = {}): NatalEnvelope {
   );
 }
 
+/** The ids the edited fields name, so that only the rule under test can refuse the record. */
+function withOwnIds(envelope: any): void {
+  if (!Array.isArray(envelope?.receipt?.conventionIds)) return;
+  try {
+    envelope.receipt.conventionIds = natalConventionIds(envelope);
+  } catch {
+    // A malformed field: the codec refuses the field itself.
+  }
+}
+
 /** Parse after `change` edits a JSON copy; the codec's verdict. */
 function verdict(envelope: NatalEnvelope | string, change: (copy: any) => void = () => {}): "ok" | NatalEnvelopeErrorCode {
   const copy = JSON.parse(typeof envelope === "string" ? envelope : serializeNatalEnvelope(envelope));
   change(copy);
+  withOwnIds(copy);
   const parsed = parseNatalEnvelope(JSON.stringify(copy));
   return parsed.ok ? "ok" : parsed.code;
 }

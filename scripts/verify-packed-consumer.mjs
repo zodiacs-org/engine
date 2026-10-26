@@ -67,7 +67,7 @@ import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticT
 import { EPHEMERIS_SPAN, SUN_BOUND_LATITUDE, type DeclinationRow } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
-import { CONVENTIONS_REGISTRY, conventionAddress, conventionId, natalConventionIds, parseConventionId, type ConventionId } from "@zodiacs/engine/conventions";
+import { CONVENTIONS_REGISTRY, conventionAddress, conventionId, natalConventionIds, parseConventionId, type ConventionIdParts } from "@zodiacs/engine/conventions";
 import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith, type CrossingSearchResult, type LongitudeCrossing } from "@zodiacs/engine/crossings";
 import { annualProfection, firdaria, profectionAt, solarArc, zodiacalReleasingAt, type ProfectionAt, type TimingFlag, type TimingOrigin } from "@zodiacs/engine/timing";
 import { siderealChart, nakshatraOf, type SiderealChart, type NakshatraPosition } from "@zodiacs/engine/vedic";
@@ -185,7 +185,7 @@ void hourNow; void refraction;
 const idsEnvelope = createNatalEnvelope(natalChart({ utc: "2000-01-01T12:00:00Z" }));
 const carriedIds: string[] | undefined = idsEnvelope.receipt.conventionIds;
 const derivedIds: string[] = natalConventionIds(idsEnvelope);
-const splitId: ConventionId = parseConventionId(conventionId("zodiac", "tropical"));
+const splitId: ConventionIdParts = parseConventionId(conventionId("zodiac", "tropical"));
 const idAddress: string = conventionAddress(splitId.namespace + ":" + splitId.value) + CONVENTIONS_REGISTRY;
 void carriedIds; void derivedIds; void idAddress;
 `

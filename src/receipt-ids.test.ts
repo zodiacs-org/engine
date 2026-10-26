@@ -14,6 +14,7 @@
  * (docs/evidence/1.1.0-rc.1-20261026/tools/make-receipt-1.0.0.mjs). The charts
  * are synthetic.
  */
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { natalChart } from "./api.js";
@@ -36,6 +37,33 @@ import type { NatalEnvelope, NatalEnvelopeContext, NatalEnvelopeErrorCode } from
 import type { BirthInput } from "./types.js";
 
 const ONE_ZERO = readFileSync(new URL("./fixtures/receipt-1.0.0.json", import.meta.url), "utf8");
+const RC7 = readFileSync(new URL("./fixtures/receipt-rc7.json", import.meta.url), "utf8");
+
+/**
+ * The ids by the rule zodiacs.org's registry tests state, written apart from
+ * natalConventionIds: each field's namespace and value, from the receipt
+ * (natalReceiptIds in the site's tests/conventions-registry.test.ts) and from
+ * the result's time records (as its calcReceiptIds reads an instant's).
+ */
+function bySiteRule(envelope: any): string[] {
+  const { receipt, result } = envelope;
+  const out: string[] = [];
+  for (const [key, value] of Object.entries(receipt.conventions ?? {})) out.push(`${key}:${value}`);
+  for (const [key, value] of Object.entries(receipt.coverage ?? {})) out.push(`${key}:${value}`);
+  for (const system of [receipt.houses?.requested, receipt.houses?.actual]) if (system) out.push(`house:${system}`);
+  if (receipt.houses?.absenceReason) out.push(`house-absence:${receipt.houses.absenceReason}`);
+  for (const flag of [...(receipt.inputFlags ?? []), ...(receipt.resultFlags ?? [])]) out.push(`flag:${flag}`);
+  if (receipt.reference) out.push(`reference:${receipt.reference}`);
+  if (receipt.timeScale) out.push(`time-scale:${receipt.timeScale}`);
+  const ephemeris = receipt.engine?.ephemeris;
+  if (ephemeris) out.push(`ephemeris:${ephemeris.name}@${ephemeris.version}`);
+  if (result.deltaT) out.push(`deltat-model:${result.deltaT.model}`, `deltat-segment:${result.deltaT.segment}`);
+  if (result.timeScale) {
+    out.push(`time-scale:${result.timeScale.input}`, `time-basis:${result.timeScale.basis}`);
+    if (result.timeScale.ut1MinusUtc) out.push(`ut1-source:${result.timeScale.ut1MinusUtc.source}`);
+  }
+  return [...new Set(out)].sort();
+}
 const NEW_YORK = { utc: "1990-06-15T12:30:00Z", latitude: 40.7128, longitude: -74.006, houseSystem: "placidus" } as const;
 
 function envelopeOf(birth: Partial<BirthInput> = {}, context: NatalEnvelopeContext = {}): NatalEnvelope {
@@ -135,6 +163,7 @@ describe("the ids of a natal receipt", () => {
     const envelope = createNatalEnvelope(natalChart(input), context);
     const ids = envelope.receipt.conventionIds!;
     for (const id of named) expect(ids).toContain(id);
+    expect(ids).toEqual(bySiteRule(envelope));
     expect(ids).toEqual(natalConventionIds(envelope));
     expect(ids).toEqual([...new Set(ids)].sort());
     expect(verdict(envelope)).toBe("ok");
@@ -217,7 +246,9 @@ describe("the codec and the ids", () => {
     ).toBe("invalid_shape");
   });
 
-  it("still reads a receipt that 1.0.0 wrote, without ids", () => {
+  it("still reads a receipt that 1.0.0 wrote, without ids, and replays it", () => {
+    // Serialized by the carried 1.0.0 archive on Node 22.22.2 (ICU 78.2, tz 2025c), darwin-arm64.
+    expect(createHash("sha256").update(ONE_ZERO).digest("hex")).toBe("fba1026ab4df6e816a8ad470ca9b96ff640b482c2fe14824f9d1626ba21817c4");
     const parsed = parseNatalEnvelope(ONE_ZERO);
     if (!parsed.ok) throw new Error(parsed.code);
     expect(parsed.envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[1]);
@@ -231,6 +262,52 @@ describe("the codec and the ids", () => {
     });
     expect(natalConventionIds(parsed.envelope)).toEqual(
       today.receipt.conventionIds!.filter((id) => !id.startsWith("conventionIds:"))
+    );
+    expect(natalConventionIds(parsed.envelope)).toEqual(bySiteRule(parsed.envelope));
+    // Replayed by this engine, it gives its own positions, angles and cusps.
+    const stored = parsed.envelope.result;
+    const replay = natalChart(natalReplayInput(parsed.envelope));
+    const degrees = (a: number, b: number) => Math.abs(((a - b + 540) % 360) - 180);
+    for (const body of stored.bodies) {
+      const now = replay.bodies.find((row) => row.body === body.body)!;
+      expect(degrees(now.lon, body.lon), body.body).toBeLessThan(1e-9);
+      expect(Math.abs(now.lat - body.lat), body.body).toBeLessThan(1e-9);
+    }
+    for (const key of ["asc", "mc", "dsc", "ic"] as const) expect(degrees(replay.angles![key], stored.angles![key])).toBeLessThan(1e-9);
+    stored.houses!.cusps.forEach((cusp, index) => expect(degrees(replay.houses!.cusps[index]!, cusp)).toBeLessThan(1e-9));
+    expect(replay.deltaT).toMatchObject({ model: stored.deltaT!.model, segment: stored.deltaT!.segment });
+  });
+
+  it("names an older record's ids from the fields it has", () => {
+    const parsed = parseNatalEnvelope(RC7);
+    if (!parsed.ok) throw new Error(parsed.code);
+    const ids = natalConventionIds(parsed.envelope);
+    expect(ids).toEqual(bySiteRule(parsed.envelope));
+    expect(ids.some((id) => /^(?:deltat-|time-basis:|ut1-source:|time-scale:|ephemeris:)/u.test(id))).toBe(false);
+  });
+
+  it("reads an envelope's features before its receipt, so a later set is unsupported", () => {
+    const envelope = envelopeOf();
+    expect(verdict(envelope, (copy) => {
+      copy.requiredFeatures.push("next-feature");
+      copy.receipt.nextField = [];
+    })).toBe("unsupported_feature");
+    expect(verdict(envelope, (copy) => {
+      copy.requiredFeatures.push("next-feature");
+      copy.receipt.conventions.next = "x";
+    })).toBe("unsupported_feature");
+    expect(verdict(envelope, (copy) => {
+      copy.requiredFeatures = ["next-feature"];
+      copy.receipt = { schema: copy.receipt.schema };
+    })).toBe("unsupported_feature");
+  });
+
+  it("refuses a malformed field by its own rule, not by the ids", () => {
+    // The writer leaves the ids empty when a field cannot name one; the field's own check refuses it.
+    const chart = natalChart(NEW_YORK);
+    expect(() => createNatalEnvelope({ ...chart, flags: ["not a flag" as never] })).toThrow(/invalid_value/u);
+    expect(() => createNatalEnvelope({ ...chart, input: { ...chart.input, houseSystem: "no system" as never } })).toThrow(
+      /invalid_value/u
     );
   });
 

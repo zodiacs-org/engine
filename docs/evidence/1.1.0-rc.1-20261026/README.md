@@ -51,12 +51,14 @@ npm until the owner approves it. Times are Asia/Bangkok.
   `ENGINE_VERSION` and `typedoc.json`; the calc round-trip fixture and the
   conformance results name it (below).
 
-## The independent review
+## Reviews
 
-An independent review of the first source commit, `848e659`, rebuilt the
-tree in its own clone and ran CI's jobs, the comparisons and probes of its
-own. It found no blocker, two major findings and eight minor ones; this
-commit acts on them.
+Two reviews read the first source commit, `848e659`, and the suite branch on
+it; neither changed anything in the repository.
+
+**An independent review** rebuilt the tree in its own clone and ran CI's
+jobs, the comparisons and probes of its own. It found no blocker, two major
+findings and eight minor ones. The commit after `848e659` acts on them:
 
 - **Major: the version gates.** `848e659` accepted 1.0.0's set only before
   1.1.0-rc.1 and the new set only from it. But a receipt names the engine
@@ -65,10 +67,10 @@ commit acts on them.
   `createNatalEnvelope` refused a chart 1.0.0 computed. Both sets are now
   accepted from 0.1.1-rc.16 with no upper bound, and
   `src/receipt-ids.test.ts` checks both directions.
-- **Major: the set's own id.** Every receipt names
-  `conventionIds:...`, which the registry does not hold until the site adopts
-  this release. The CHANGELOG and README now say so, and the site's adoption
-  comes before any publication of 1.1.
+- **Major: the set's own id.** Every receipt names `conventionIds:...`,
+  which the registry does not hold until the site adopts this release. The
+  CHANGELOG and README now say so, and the site's adoption comes before any
+  publication of 1.1.
 - **Minor, acted on:**
   - `docs/versioning.md` named twelve entry points; it names thirteen.
   - `conventionAddress` threw `URIError` for a value with a lone surrogate;
@@ -83,16 +85,53 @@ commit acts on them.
   - `./receipt` loaded `parseConventionId` and `conventionAddress`, which it
     never calls; the module split takes them out of its graph (72,500 bytes
     where `848e659` had 72,688).
-  - A test compared a re-serialized fixture with a re-serialized parse; it now
-    compares with the fixture's bytes. The root's isolation from the new
-    entry is now checked.
   - `CONVENTIONS_REGISTRY` was declared with its URL as a literal type; it is
     a `string`, as `ENGINE_VERSION` is.
+  - In the suite, `validate.mjs` did not pin the released files; the suite
+    branch now pins each file's SHA-256.
+
+**A second review** split the work among six readers (the codec, the new
+entry's API, the documentation's claims, the release mechanics, the tests and
+the suite), each finding then put to three readers who tried to refute it.
+Most of its findings were the first review's. The commit after them acts on
+the rest:
+
+- **Tests that a wrong id could pass.** The codec checks the ids last, so a
+  test that edits a field the ids are built from, and expects a refusal,
+  would pass on the ids alone if the rule it is named for broke. The edit
+  helpers of `src/receipt.test.ts`, `src/receipt-time-basis.test.ts`,
+  `src/reference-span.test.ts`, `src/deltat-chart.test.ts`,
+  `src/porphyry.test.ts` and `src/house-systems.test.ts` now rebuild the ids
+  after an edit, so only the named rule can refuse; all still pass.
+- **Controls and orders.** The hand-made rc.6 receipt that Porphyry is
+  refused in now has a passing control, a Placidus chart edited the same way,
+  and takes rc.3's set by its content. A test checks that features are read
+  before anything in a receipt. The per-case id tests compare with a copy of
+  the site's rule written apart from `natalConventionIds`. The nutation
+  set's refusals run on 1.0.0's receipt too.
+- **The 1.0.0 fixture.** Its SHA-256 is pinned, the runtime that wrote it is
+  recorded, and a test replays it: this engine's positions, angles and cusps
+  are within 1e-9° of the stored ones. An older record's ids, and the
+  writer's path for a malformed field, have tests.
+- **The API and the README.** The type `parseConventionId` returns is
+  `ConventionIdParts`, so the name `ConventionId` is free for the id itself.
+  The README's install instruction names this candidate's archive: `npm
+  install @zodiacs/engine` installs 1.0.0, which has no `./conventions`. The
+  export smoke test checks that the new entry's graph holds only its own two
+  modules.
+- **The CHANGELOG** gives the cap's reason for all the growth, the
+  battery's limits (1.0.0's twelve entry points, one machine, chunk names and
+  the version set aside), and that `NATAL_RECEIPT_CONVENTION_SETS` moves
+  each earlier set one place.
+- **The suite:** the L3 generator writes 0.2.0's file beside its `--out`;
+  `readSuite` takes an earlier release's own levels; the offline CLI bundles
+  `arbiters/release.py`, which the bundled generators import.
 - **Recorded, not changed:** an envelope of an earlier set that requires
   `convention-ids` is now `inconsistent_result` where 1.0.0 said
-  `unsupported_feature`; both refuse it, and no engine writes it.
-  `natalConventionIds` is the new set's rule, so a different rule needs a
-  new set; its doc comment says so.
+  `unsupported_feature`; both refuse it, and no engine writes it. The id
+  syntax accepts more than the registry holds, and an id's address follows
+  the registry's page as zodiacs.org publishes it; `natalConventionIds` is
+  the new set's rule, so a different rule needs a new set.
 
 ## Checks on the tree before the source commit
 
@@ -104,16 +143,16 @@ Each script names its command; each log shortens local paths.
   `full-tests-*.log`). Every step passed but the suite, which failed the 4
   tests that fail on arm64 in 1.0.0's record too, and only those: the calc
   round trip's case that two tests replay, and the two site-parity checks of
-  returns and void-of-course windows. 3,871 of 3,875 tests passed on Node
-  22.22.2, and 3,870 with 1 skipped on Node 20.19.0 and 24.21.0. CI runs the
+  returns and void-of-course windows. 3,874 of 3,878 tests passed on Node
+  22.22.2, and 3,873 with 1 skipped on Node 20.19.0 and 24.21.0. CI runs the
   suite on x86-64, where the pins were taken.
 - `tree-jobs.sh`, CI's other jobs (`tree-jobs.log`): the build and the pack
   on Node 22.22.2, the packed-consumer check on that pack with Node 20.19.0,
   22.7.0, 22.22.2 and 24.21.0, which also checks the new entry and an
   envelope's ids and feature (`conventionIds: "passed"`); the conformance
   self-test, the 500 vectors, the verdicts and RESULTS.md; and the atlas check
-  and self-test. All passed. The pack was 292,409 bytes, SHA-256
-  `98114ba2ce7ec42eb3827f882125697e8c83d315b466c00e6d686ffe8e8e2dcb`; the
+  and self-test. All passed. The pack was 292,721 bytes, SHA-256
+  `52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6`; the
   archive will be packed from the source commit (`carrier/pack-source.sh`).
 - **Regenerated on Linux x86-64**, as for 1.0.0, with the official Node
   22.22.2 linux-x64 build in an x86-64 virtual machine on this Mac under
@@ -123,8 +162,9 @@ Each script names its command; each log shortens local paths.
   (`run.mjs --out`), where it changes in one, with the 500 verdicts 1.0.0's:
   267 pass, 192 fail, 41 unsupported, none in error. `report.mjs` then
   rewrote `RESULTS.md` and `results/summary.json`, and the notes name
-  1.1.0-rc.1. The fixes after the review change no value, so neither was
-  regenerated again.
+  1.1.0-rc.1. Run again on this tree's build after the reviews
+  (`tools/x86-64-regeneration.sh`, `results/x86-64-regeneration.log`), every
+  step exits 0 and the committed files come back byte for byte.
 
 ## No value changes
 
@@ -164,9 +204,11 @@ share (`results/javascript.txt`).
   numbers from 3,816 to 3,787 entries.
 - `src/fixtures/receipt-1.0.0.json`, written by the carried 1.0.0 archive
   for the synthetic chart of the rc.13 to rc.15 fixtures
-  (`tools/make-receipt-1.0.0.mjs`): this build parses it, serializes it to
-  its own bytes and replays it (`src/receipt-ids.test.ts`,
-  `src/receipt-nutation.test.ts`, `src/receipt-versions.test.ts`).
+  (`tools/make-receipt-1.0.0.mjs`): this build parses it and serializes it to
+  its own bytes (`src/receipt-ids.test.ts`, `src/receipt-nutation.test.ts`,
+  `src/receipt-versions.test.ts`), and replays it to positions, angles and
+  cusps within 1e-9° of its own (`src/receipt-ids.test.ts`, which pins the
+  file's SHA-256).
 
 ## Sizes
 
@@ -178,12 +220,12 @@ archive and this build.
 | `./conventions` | | 2,754 | 2,900 (new) |
 | `./receipt` | 69,491 | 72,500 | 76,500, from 70,000 |
 | `.` | 105,975 | 105,980 | 108,500 |
-| package, unpacked | 991,915 in 74 files | 1,005,570 in 77 files | 1,020,000, from 1,000,000 |
+| package, unpacked | 991,915 in 74 files | 1,006,494 in 77 files | 1,020,000, from 1,000,000 |
 
 `./receipt` loads the chunk of ids it shares with the new entry and the
 codec's new set, its feature and its check of the ids. The package grows by
-13,655 bytes: 3,740 of JavaScript only the opt-in entries load, 3,307 of
-declarations, 6,467 of README and CHANGELOG, 136 of manifest and the 5 of the
+14,579 bytes: 3,740 of JavaScript only the opt-in entries load, 3,370 of
+declarations, 7,328 of README and CHANGELOG, 136 of manifest and the 5 of the
 version in the root's graph. Each other graph that loads the version grows
 by 5 bytes. The owner approved both raises on 2026-10-26.
 
