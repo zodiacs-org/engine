@@ -12,7 +12,7 @@ const guard = resolve(process.argv[3]);
 const baseline = JSON.parse(readFileSync(process.argv[4], 'utf8'));
 const sourceAdapter = resolve(process.argv[5]);
 const npmCli = resolve(process.argv[7]);
-const { readSuite, judge } = await import(pathToFileURL(resolve(process.argv[6])));
+const { LEVEL_FILES, readSuite, judge } = await import(pathToFileURL(resolve(process.argv[6])));
 const vectors = readSuite().flatMap((level) => level.file.vectors);
 const { calc, chart, events } = await import(pathToFileURL(resolve(cwd, 'node_modules/@zodiacs/engine/dist/calc.js')));
 const normalized = (value) => JSON.parse(JSON.stringify(value));
@@ -182,7 +182,7 @@ check('conformance computes every original vector offline', () => {
   assert.ok(conformance.summary.total.unsupported > 0);
 });
 check('tampered installed suite fails without a value leak', () => {
-  const path = resolve(packageRoot, 'conformance/vectors/L1-positions.json');
+  const path = resolve(packageRoot, 'conformance', LEVEL_FILES.L1);
   const original = readFileSync(path);
   try {
     writeFileSync(path, Buffer.concat([original, Buffer.from(' ')]));
