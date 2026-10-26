@@ -229,10 +229,35 @@ declarations, 7,328 of README and CHANGELOG, 136 of manifest and the 5 of the
 version in the root's graph. Each other graph that loads the version grows
 by 5 bytes. The owner approved both raises on 2026-10-26.
 
+## On the carrier
+
+The carrier commit `6ec3464` adds the archive packed from the source commit
+`c417062` by `carrier/pack-source.sh`: clean clones, each installed with
+`npm ci`, packed the same bytes on Node 22.22.2, 20.19.0 and 24.21.0
+(SHA-256 `52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6`,
+292,721 bytes, 77 files); the carried file is the Node 22.22.2 one. It was
+carried after the gate workflows had passed on `c417062`: CI run
+40349378234, Conformance 40349378157 and Atlas 40349378175.
+`carrier/carrier-gates.sh` then ran CI's jobs on the carrier, each in a clean
+full-history clone (`carrier/*-6ec3464-*.log`):
+
+- **engine**, on Node 22.22.2, 20.19.0 and 24.21.0: every step passed but the
+  suite, which failed only the 4 arm64-known tests. The archive check found
+  the carried archive byte-identical to a rebuild of the carrier.
+- **archives**: `--rebuild-all` rebuilt all 16 recorded archives from their
+  source commits byte for byte, this one included.
+- **pack**: the archive packed from the carrier equals the carried one.
+- **consumer**: the packed-consumer check passed on the carried archive with
+  Node 20.19.0, 22.7.0, 22.22.2 and 24.21.0, the new entry and an
+  envelope's ids among its checks.
+- **conformance** and **atlas**: passed.
+- **generators**, with Python 3.11.16, pyerfa 2.0.1.5 and numpy 2.4.6: L1 and
+  L3 rebuilt their vectors byte for byte; L2's file differs in 17 lines,
+  the rounding in the tenth decimal that arm64 gives (16 values and one
+  figure of the arbiter's text), and CI's x86-64 job is the check.
+
 ## Not covered here
 
-- The archive, its carrier commit and the gates on the carrier follow, once
-  the source commit is settled (`carrier/`).
 - The site does not use this candidate. Adopting it is the site's step, and
   it comes before any publication of 1.1: its registry gains the namespace
   `conventionIds` with the new set's id, its tests take the new set, and its
