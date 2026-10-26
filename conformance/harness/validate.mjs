@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 /*
- * Check the vector files against SPEC.md and print what the suite holds.
+ * Check the vector files against SPEC.md and print what the suite holds:
+ * this version's files, which the harness runs, and each earlier release's,
+ * which never change, with each file this version releases again checked
+ * against the one released before it.
  *
  *   node conformance/harness/validate.mjs [--expect-total 500]
  */
-import { KINDS, LEVEL_FILES, readSuite, validateLevel } from './lib.mjs';
+import { KINDS, LEVEL_FILES, RELEASES, SUITE_VERSION, compareRelease, readSuite, validateLevel } from './lib.mjs';
 
 const suite = readSuite();
 const problems = [];
@@ -12,6 +15,21 @@ for (const level of Object.keys(LEVEL_FILES)) {
   if (!suite.some((entry) => entry.level === level)) problems.push(`${LEVEL_FILES[level]} is missing`);
 }
 for (const level of suite) problems.push(...validateLevel(level));
+for (const version of Object.keys(RELEASES).filter((name) => name !== SUITE_VERSION)) {
+  const released = readSuite(undefined, undefined, version);
+  const before = problems.length;
+  for (const level of Object.keys(RELEASES[version])) {
+    const then = released.find((entry) => entry.level === level);
+    if (!then) {
+      problems.push(`${RELEASES[version][level]}, released in ${version}, is missing`);
+      continue;
+    }
+    problems.push(...validateLevel(then));
+    const now = suite.find((entry) => entry.level === level);
+    if (now) problems.push(...compareRelease(now, then));
+  }
+  if (problems.length === before) console.log(`${version}: ${released.reduce((sum, level) => sum + level.file.vectors.length, 0)} vectors as released; ${SUITE_VERSION} holds each of them, with its convention ids`);
+}
 
 const ids = new Set();
 let total = 0;

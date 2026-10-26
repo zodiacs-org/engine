@@ -73,4 +73,6 @@ jobs:
         run: python conformance/arbiters/l3/build.py
 
       - name: The rebuilt files are byte-identical to the committed ones
-        run: git diff --exit-code -- conformance/vectors
+        run: |
+          git diff --exit-code -- conformance/vectors
+          test -z "$(git status --porcelain -- conformance/vectors)"

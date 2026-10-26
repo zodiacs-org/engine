@@ -11,14 +11,30 @@ import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
 
 export const SUITE = 'zodiacs-conformance';
-export const SUITE_VERSION = '0.1.0';
+export const SUITE_VERSION = '0.2.0';
 export const SUITE_DIR = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
-export const LEVEL_FILES = Object.freeze({
-  L1: 'vectors/L1-positions.json',
-  L2: 'vectors/L2-houses-angles.json',
-  L3: 'vectors/L3-time-calendars.json',
+/**
+ * Each release's vector files. A released file never changes. 0.2.0 releases
+ * 0.1.0's vectors again, each naming its kind and its arbiter as ids of the
+ * Zodiacs conventions registry (`conventionIds`, SPEC.md).
+ */
+export const RELEASES = Object.freeze({
+  '0.1.0': Object.freeze({
+    L1: 'vectors/L1-positions.json',
+    L2: 'vectors/L2-houses-angles.json',
+    L3: 'vectors/L3-time-calendars.json',
+  }),
+  '0.2.0': Object.freeze({
+    L1: 'vectors/0.2.0/L1-positions.json',
+    L2: 'vectors/0.2.0/L2-houses-angles.json',
+    L3: 'vectors/0.2.0/L3-time-calendars.json',
+  }),
 });
+/** This version's files, which the harness runs. */
+export const LEVEL_FILES = RELEASES[SUITE_VERSION];
+/** The page of the registry whose ids a vector names. */
+export const CONVENTIONS_REGISTRY = 'https://zodiacs.org/developers/conventions/';
 
 /** The v0 kinds: the level each belongs to, its input keys, and the allowed shapes of `expected`. */
 export const KINDS = Object.freeze({
@@ -65,18 +81,21 @@ const SWISS = /swiss|swisseph|sweph|pyswisseph/iu;
 
 export const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
-export function readLevel(level, root = SUITE_DIR) {
-  const path = resolve(root, LEVEL_FILES[level]);
+export function readLevel(level, root = SUITE_DIR, version = SUITE_VERSION) {
+  const path = resolve(root, RELEASES[version][level]);
   const bytes = readFileSync(path);
-  return { level, path, digest: sha256(bytes), file: JSON.parse(bytes.toString('utf8')) };
+  return { level, version, path, digest: sha256(bytes), file: JSON.parse(bytes.toString('utf8')) };
 }
 
-/** Every level file that exists, in level order. */
-export function readSuite(root = SUITE_DIR, levels = Object.keys(LEVEL_FILES)) {
+/** Every level file of a release that exists, in level order. */
+export function readSuite(root = SUITE_DIR, levels = Object.keys(LEVEL_FILES), version = SUITE_VERSION) {
   return levels
-    .filter((level) => existsSync(resolve(root, LEVEL_FILES[level])))
-    .map((level) => readLevel(level, root));
+    .filter((level) => existsSync(resolve(root, RELEASES[version][level])))
+    .map((level) => readLevel(level, root, version));
 }
+
+/** The registry ids a vector names from 0.2.0: its kind and its arbiter, sorted. */
+export const conventionIds = (vector) => [`arbiter:${vector.arbiter}`, `kind:${vector.kind}`].sort();
 
 const sameKeys = (keys, shape) => keys.length === shape.length && shape.every((key) => keys.includes(key));
 
@@ -102,12 +121,13 @@ function validateRule(rule, where, problems) {
   }
 }
 
-/** Problems with one level file, per SPEC.md; an empty list means it conforms. */
-export function validateLevel({ level, file }, root = SUITE_DIR) {
+/** Problems with one level file of a release, per SPEC.md; an empty list means it conforms. */
+export function validateLevel({ level, file, version = SUITE_VERSION }, root = SUITE_DIR) {
   const problems = [];
-  const where = LEVEL_FILES[level];
+  const where = RELEASES[version][level];
+  const named = version !== '0.1.0';
   if (file.suite !== SUITE) problems.push(`${where}: suite must be ${SUITE}`);
-  if (file.suiteVersion !== SUITE_VERSION) problems.push(`${where}: suiteVersion must be ${SUITE_VERSION}`);
+  if (file.suiteVersion !== version) problems.push(`${where}: suiteVersion must be ${version}`);
   if (file.level !== level) problems.push(`${where}: level must be ${level}`);
   if (typeof file.title !== 'string' || !file.title.trim()) problems.push(`${where}: title is required`);
   const arbiters = file.arbiters ?? {};
@@ -160,8 +180,9 @@ export function validateLevel({ level, file }, root = SUITE_DIR) {
     }
     if (vector.tags !== undefined && !(Array.isArray(vector.tags) && vector.tags.length && vector.tags.every((tag) => typeof tag === 'string' && /^[a-z0-9]+(-[a-z0-9]+)*$/u.test(tag)))) problems.push(`${at}: tags must be a non-empty array of lowercase-hyphenated strings`);
     for (const key of Object.keys(vector)) {
-      if (!['id', 'kind', 'input', 'expected', 'tolerance', 'arbiter', 'note', 'tags'].includes(key)) problems.push(`${at}: unknown key ${key}`);
+      if (!['id', 'kind', 'input', 'expected', 'tolerance', 'arbiter', 'note', 'tags', ...(named ? ['conventionIds'] : [])].includes(key)) problems.push(`${at}: unknown key ${key}`);
     }
+    if (named && JSON.stringify(vector.conventionIds) !== JSON.stringify(conventionIds(vector))) problems.push(`${at}: conventionIds must be ${JSON.stringify(conventionIds(vector))}`);
     if (typeof vector.arbiter !== 'string' || !arbiters[vector.arbiter]) problems.push(`${at}: arbiter ${vector.arbiter} is not listed`);
     else used.add(vector.arbiter);
     if (vector.kind === 'position.apparent.ecliptic-true-of-date' && !BODIES.includes(vector.input?.body)) problems.push(`${at}: unknown body ${vector.input?.body}`);
@@ -169,6 +190,24 @@ export function validateLevel({ level, file }, root = SUITE_DIR) {
     if (Array.isArray(vector.expected?.cusps) && vector.expected.cusps.length !== 12) problems.push(`${at}: cusps must have 12 entries`);
   }
   for (const id of Object.keys(arbiters)) if (!used.has(id)) problems.push(`${where}: arbiter ${id} is not used by any vector`);
+  return problems;
+}
+
+/**
+ * Problems with a level file that releases an earlier one's vectors again:
+ * the same file, but for its suite version and each vector's conventionIds.
+ */
+export function compareRelease(current, released) {
+  const at = `${RELEASES[current.version][current.level]} against ${RELEASES[released.version][released.level]}`;
+  const strip = (file) => ({ ...file, suiteVersion: undefined, vectors: file.vectors.map(({ conventionIds: _ids, ...vector }) => vector) });
+  const now = strip(current.file);
+  const then = strip(released.file);
+  const problems = [];
+  if (JSON.stringify({ ...now, vectors: undefined }) !== JSON.stringify({ ...then, vectors: undefined })) problems.push(`${at}: the file differs beyond its suite version`);
+  if (now.vectors.length !== then.vectors.length) problems.push(`${at}: ${now.vectors.length} vectors where ${then.vectors.length} were released`);
+  now.vectors.forEach((vector, index) => {
+    if (JSON.stringify(vector) !== JSON.stringify(then.vectors[index])) problems.push(`${at}: ${vector.id} differs from released ${then.vectors[index]?.id ?? 'nothing'}`);
+  });
   return problems;
 }
 

@@ -2,7 +2,7 @@
 
 Test vectors for the numbers an astrology program computes, each with an
 independent arbiter and a stated tolerance, and a harness that runs any
-engine against them through a small adapter. Version 0.1.0 covers three
+engine against them through a small adapter. Version 0.2.0 covers three
 levels:
 
 | level | what it checks | vectors |
@@ -13,6 +13,18 @@ levels:
 
 Later levels are planned for events and completeness (L4), sidereal and
 Vedic techniques (L5), and Hellenistic and timing techniques (L6).
+
+## Versions
+
+- **0.1.0**, the first release: 500 vectors in `vectors/`.
+- **0.2.0**: the same 500 vectors, each naming its kind and its arbiter as
+  ids of the Zodiacs conventions registry
+  ([zodiacs.org/developers/conventions](https://zodiacs.org/developers/conventions/)),
+  such as `kind:houses.cusps` and `arbiter:l2-houses-semi-arc`, in
+  `vectors/0.2.0/`. No vector's input, expected value, tolerance or arbiter
+  changes, and the harness checks that. 0.1.0's files stay as released.
+
+The harness runs the latest version.
 
 Results for this repository's engine and for Swiss Ephemeris are in
 [RESULTS.md](RESULTS.md).
@@ -84,8 +96,9 @@ node conformance/harness/report.mjs   # rewrites RESULTS.md
 summary statistics, but no per-vector values. Swiss Ephemeris output is not
 redistributed here.
 
-`node conformance/harness/validate.mjs` checks the vector files against
-SPEC.md and the arbiters' input digests. In continuous integration the suite
+`node conformance/harness/validate.mjs` checks the vector files of every
+release against SPEC.md and the arbiters' input digests, and that 0.2.0 holds
+0.1.0's vectors. In continuous integration the suite
 runs against this engine on every change, and the build fails if any vector's
 verdict differs from the committed results.
 

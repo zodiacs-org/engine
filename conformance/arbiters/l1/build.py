@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Build vectors/L1-positions.json: the L1 (positions) vectors of the conformance suite.
+Suite 0.2.0's vectors/0.2.0/L1-positions.json, the same vectors with their convention
+ids, is written from the same document (../release.py).
 
 The arbiter is NASA JPL Horizons (DE441): apparent geocentric ecliptic longitude
 and latitude of date (QUANTITIES=31, airless, TT) for ten bodies at 24 instants,
@@ -26,12 +28,15 @@ import json
 import math
 import os
 import re
+import sys
 
 import erfa
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, '..', '..'))  # conformance/
+sys.path.insert(0, os.path.dirname(HERE))
+import release  # noqa: E402  conformance/arbiters/release.py
 SOURCES = os.path.join(ROOT, 'sources', 'horizons-24')
 OUT = os.path.join(ROOT, 'vectors', 'L1-positions.json')
 
@@ -399,6 +404,7 @@ def main():
         f.write(text)
     print(f"wrote {os.path.relpath(OUT, ROOT)}: {len(doc['vectors'])} vectors, "
           f"sha256 {hashlib.sha256(text.encode('ascii')).hexdigest()}")
+    print('wrote %s, with the convention ids: sha256 %s' % release.write_with_ids(doc, os.path.basename(OUT), ensure_ascii=True))
     print(f'printed TT against the TLIST value: at most {worst_time * 1000:.3f} ms')
     print(f"frame-term self-check: largest disagreement {self_check['disagreementArcsec']:.6f} arcsec "
           f"at {self_check['worstId']}")

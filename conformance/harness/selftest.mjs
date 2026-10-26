@@ -4,7 +4,7 @@
  */
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { compareField, judge, readSuite, runAdapter, summarize, validateLevel } from './lib.mjs';
+import { RELEASES, SUITE_VERSION, compareField, compareRelease, conventionIds, judge, readSuite, runAdapter, summarize, validateLevel } from './lib.mjs';
 
 const arcsec = { abs: 1, unit: 'arcsec', wrap: 360 };
 
@@ -45,6 +45,7 @@ test('exact fields, missing fields and non-numbers fail', () => {
 function fixture(changes = {}) {
   return {
     level: 'L3',
+    version: '0.1.0',
     file: {
       suite: 'zodiacs-conformance',
       suiteVersion: '0.1.0',
@@ -79,8 +80,57 @@ test('validation accepts a conforming file and names each problem in a bad one',
   assert.ok(validateLevel(digest).some((problem) => problem.includes('does not match its sha256')));
 });
 
-test('the committed vector files conform to SPEC.md', () => {
-  for (const level of readSuite()) assert.deepEqual(validateLevel(level), [], level.level);
+/** The fixture as 0.2.0 releases it: each vector with its convention ids. */
+function named() {
+  const entry = fixture();
+  entry.version = '0.2.0';
+  entry.file.suiteVersion = '0.2.0';
+  entry.file.vectors = entry.file.vectors.map((vector) => ({ ...vector, conventionIds: conventionIds(vector) }));
+  return entry;
+}
+
+test('from 0.2.0 each vector names its kind and arbiter as registry ids, and 0.1.0 is as released', () => {
+  assert.deepEqual(conventionIds({ kind: 'calendar.to-jdn', arbiter: 'jdn' }), ['arbiter:jdn', 'kind:calendar.to-jdn']);
+  assert.deepEqual(validateLevel(named()), []);
+  const missing = named();
+  delete missing.file.vectors[0].conventionIds;
+  assert.ok(validateLevel(missing).some((problem) => problem.includes('conventionIds must be')));
+  const reordered = named();
+  reordered.file.vectors[0].conventionIds.reverse();
+  assert.ok(validateLevel(reordered).some((problem) => problem.includes('conventionIds must be')));
+  const other = named();
+  other.file.vectors[0].conventionIds = ['arbiter:jdn', 'kind:calendar.from-jdn'];
+  assert.ok(validateLevel(other).some((problem) => problem.includes('conventionIds must be')));
+  const early = fixture();
+  early.file.vectors[0].conventionIds = conventionIds(early.file.vectors[0]);
+  assert.ok(validateLevel(early).some((problem) => problem.includes('unknown key conventionIds')));
+  const unversioned = named();
+  unversioned.file.suiteVersion = '0.1.0';
+  assert.ok(validateLevel(unversioned).some((problem) => problem.includes('suiteVersion must be 0.2.0')));
+});
+
+test('a release holds the vectors released before it, and nothing else differs', () => {
+  assert.deepEqual(compareRelease(named(), fixture()), []);
+  const moved = named();
+  moved.file.vectors[0].expected.jdn = 1;
+  assert.ok(compareRelease(moved, fixture()).some((problem) => problem.includes('L3-JDN-0001 differs')));
+  const retitled = named();
+  retitled.file.title = 'Other';
+  assert.ok(compareRelease(retitled, fixture()).some((problem) => problem.includes('differs beyond its suite version')));
+  const grown = named();
+  grown.file.vectors.push({ ...grown.file.vectors[0], id: 'L3-JDN-0002' });
+  assert.ok(compareRelease(grown, fixture()).some((problem) => problem.includes('2 vectors where 1 were released')));
+});
+
+test('the committed vector files conform to SPEC.md, and this version holds 0.1.0\'s vectors', () => {
+  assert.equal(SUITE_VERSION, '0.2.0');
+  const current = readSuite();
+  const released = readSuite(undefined, undefined, '0.1.0');
+  assert.equal(current.length, 3);
+  assert.equal(released.length, 3);
+  for (const level of [...current, ...released]) assert.deepEqual(validateLevel(level), [], `${level.version} ${level.level}`);
+  current.forEach((level, index) => assert.deepEqual(compareRelease(level, released[index]), [], level.level));
+  assert.deepEqual(Object.keys(RELEASES), ['0.1.0', '0.2.0']);
 });
 
 const vectors = [

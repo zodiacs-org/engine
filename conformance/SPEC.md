@@ -18,16 +18,27 @@ adapter speaks. `README.md` says what the suite is for and how to run it.
    stated design. No vector describes a real person's birth.
 5. A vector never changes once released under a suite version. A correction
    gets a new id and the old one is withdrawn in `DISCREPANCIES.md`.
+6. From 0.2.0 it names its kind and its arbiter as ids of the conventions
+   registry (`conventionIds`, below).
 
 ## Files
 
-`vectors/L1-positions.json`, `vectors/L2-houses-angles.json` and
-`vectors/L3-time-calendars.json`, each:
+Each release has one file per level, and a released file never changes:
+
+| release | files |
+| --- | --- |
+| 0.1.0 | `vectors/L1-positions.json`, `vectors/L2-houses-angles.json`, `vectors/L3-time-calendars.json` |
+| 0.2.0 | the same names under `vectors/0.2.0/` |
+
+0.2.0 holds 0.1.0's vectors unchanged, each with its `conventionIds`; nothing
+else in a file differs but `suiteVersion`. The generators write both from one
+document (`arbiters/release.py`), `harness/validate.mjs` checks both and the
+identity, and the harness runs the latest. Each file:
 
 ```json
 {
   "suite": "zodiacs-conformance",
-  "suiteVersion": "0.1.0",
+  "suiteVersion": "0.2.0",
   "level": "L1",
   "title": "Positions",
   "arbiters": {
@@ -62,6 +73,7 @@ Each vector:
     "lat": { "abs": 1, "unit": "arcsec" }
   },
   "arbiter": "<arbiter-id>",
+  "conventionIds": ["arbiter:<arbiter-id>", "kind:position.apparent.ecliptic-true-of-date"],
   "note": "optional, one sentence",
   "tags": ["optional-tag"]
 }
@@ -78,6 +90,13 @@ Each vector:
   example `backzone-history` for time zone cases where tzdb's `backzone`
   history differs from its default build. Results are counted per tag as
   well as per kind.
+- `conventionIds`, from 0.2.0: the vector's arbiter and kind as ids of the
+  Zodiacs conventions registry (zodiacs.org/developers/conventions, CC0
+  1.0), `arbiter:<arbiter-id>` and `kind:<kind>`, sorted. An id is a
+  namespace, a colon and a value, the value being everything after the
+  first colon; its address is
+  `https://zodiacs.org/developers/conventions/#` followed by the id through
+  `encodeURI`. The adapter is not sent them.
 
 ### Tolerance
 

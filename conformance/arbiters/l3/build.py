@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Generate vectors/L3-time-calendars.json: level L3 (time and calendars) of the
-zodiacs-conformance suite, v0.  The format is fixed by conformance/SPEC.md.
+zodiacs-conformance suite, v0.  The format is fixed by conformance/SPEC.md.  Suite
+0.2.0's vectors/0.2.0/L3-time-calendars.json, the same vectors with their convention
+ids, is written from the same text (../release.py); --check compares both.
 
 Every expected value comes from an arbiter outside any astrology engine:
 
@@ -51,6 +53,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent                      # conformance/
+sys.path.insert(0, str(HERE.parent))
+import release  # noqa: E402                   conformance/arbiters/release.py
 SRC = ROOT / "sources" / "l3"
 OUT_DEFAULT = ROOT / "vectors" / "L3-time-calendars.json"
 GENERATOR = "arbiters/l3/build.py"
@@ -1601,12 +1605,20 @@ def main():
         die("pass both --zic and --zdump, or neither")
     text = build(args)
     out = Path(args.out)
+    # 0.2.0's file: the same vectors with their convention ids, in vectors/0.2.0/.
+    ids_text = release.dumps(release.with_ids(json.loads(text)), ensure_ascii=False)
+    ids_out = Path(release.path_with_ids(out.name))
     if args.check:
         same = out.is_file() and out.read_text(encoding="utf-8") == text
+        same_ids = ids_out.is_file() and ids_out.read_text(encoding="utf-8") == ids_text
         log("check: %s is %s" % (out, "up to date" if same else "DIFFERENT"))
-        sys.exit(0 if same else 1)
+        log("check: %s is %s" % (ids_out, "up to date" if same_ids else "DIFFERENT"))
+        sys.exit(0 if same and same_ids else 1)
     out.write_text(text, encoding="utf-8")
     log("wrote %s (sha256 %s)" % (out, sha256_bytes(text.encode())))
+    ids_out.parent.mkdir(parents=True, exist_ok=True)
+    ids_out.write_text(ids_text, encoding="utf-8")
+    log("wrote %s, with the convention ids (sha256 %s)" % (ids_out, sha256_bytes(ids_text.encode())))
 
 
 if __name__ == "__main__":
