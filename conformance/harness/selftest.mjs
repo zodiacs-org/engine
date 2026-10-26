@@ -4,7 +4,7 @@
  */
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { RELEASES, SUITE_VERSION, compareField, compareRelease, conventionIds, judge, readSuite, runAdapter, summarize, validateLevel } from './lib.mjs';
+import { RELEASES, RELEASE_DIGESTS, SUITE_VERSION, compareField, compareRelease, conventionIds, judge, readSuite, runAdapter, summarize, validateLevel } from './lib.mjs';
 
 const arcsec = { abs: 1, unit: 'arcsec', wrap: 360 };
 
@@ -131,6 +131,8 @@ test('the committed vector files conform to SPEC.md, and this version holds 0.1.
   for (const level of [...current, ...released]) assert.deepEqual(validateLevel(level), [], `${level.version} ${level.level}`);
   current.forEach((level, index) => assert.deepEqual(compareRelease(level, released[index]), [], level.level));
   assert.deepEqual(Object.keys(RELEASES), ['0.1.0', '0.2.0']);
+  assert.deepEqual(Object.keys(RELEASE_DIGESTS), Object.keys(RELEASES));
+  for (const level of [...current, ...released]) assert.equal(level.digest, RELEASE_DIGESTS[level.version][level.level], `${level.version} ${level.level}`);
 });
 
 const vectors = [

@@ -7,7 +7,7 @@
  *
  *   node conformance/harness/validate.mjs [--expect-total 500]
  */
-import { KINDS, LEVEL_FILES, RELEASES, SUITE_VERSION, compareRelease, readSuite, validateLevel } from './lib.mjs';
+import { KINDS, LEVEL_FILES, RELEASES, RELEASE_DIGESTS, SUITE_VERSION, compareRelease, readSuite, validateLevel } from './lib.mjs';
 
 const suite = readSuite();
 const problems = [];
@@ -15,6 +15,12 @@ for (const level of Object.keys(LEVEL_FILES)) {
   if (!suite.some((entry) => entry.level === level)) problems.push(`${LEVEL_FILES[level]} is missing`);
 }
 for (const level of suite) problems.push(...validateLevel(level));
+// A released file never changes: each holds the bytes it was released with.
+for (const version of Object.keys(RELEASES)) {
+  for (const level of readSuite(undefined, undefined, version)) {
+    if (level.digest !== RELEASE_DIGESTS[version]?.[level.level]) problems.push(`${RELEASES[version][level.level]} is not the file ${version} released (SHA-256 ${level.digest})`);
+  }
+}
 for (const version of Object.keys(RELEASES).filter((name) => name !== SUITE_VERSION)) {
   const released = readSuite(undefined, undefined, version);
   const before = problems.length;

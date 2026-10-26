@@ -32,8 +32,10 @@ Each release has one file per level, and a released file never changes:
 
 0.2.0 holds 0.1.0's vectors unchanged, each with its `conventionIds`; nothing
 else in a file differs but `suiteVersion`. The generators write both from one
-document (`arbiters/release.py`), `harness/validate.mjs` checks both and the
-identity, and the harness runs the latest. Each file:
+document (`arbiters/release.py`); `harness/validate.mjs` checks both, the
+identity, and each file's SHA-256 against the one it was released with
+(`RELEASE_DIGESTS` in `harness/lib.mjs`); and the harness runs the latest.
+Each file:
 
 ```json
 {
@@ -92,7 +94,8 @@ Each vector:
   well as per kind.
 - `conventionIds`, from 0.2.0: the vector's arbiter and kind as ids of the
   Zodiacs conventions registry (zodiacs.org/developers/conventions, CC0
-  1.0), `arbiter:<arbiter-id>` and `kind:<kind>`, sorted. An id is a
+  1.0), `arbiter:<arbiter-id>` and `kind:<kind>`, sorted by UTF-16 code unit
+  (for these ASCII ids the same as by code point). An id is a
   namespace, a colon and a value, the value being everything after the
   first colon; its address is
   `https://zodiacs.org/developers/conventions/#` followed by the id through

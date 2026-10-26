@@ -33,8 +33,19 @@ export const RELEASES = Object.freeze({
 });
 /** This version's files, which the harness runs. */
 export const LEVEL_FILES = RELEASES[SUITE_VERSION];
-/** The page of the registry whose ids a vector names. */
-export const CONVENTIONS_REGISTRY = 'https://zodiacs.org/developers/conventions/';
+/** Each released file's SHA-256, fixed when it was released; validate.mjs checks them. */
+export const RELEASE_DIGESTS = Object.freeze({
+  '0.1.0': Object.freeze({
+    L1: '853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c',
+    L2: '5718690f184f8bb9c1f38056c1bd11ec71a4aebf3f945a4dd519501ef33f50d0',
+    L3: '434365354095524646f68423634f0b07a05333c702fc02227fd7fd1bccb0e4c8',
+  }),
+  '0.2.0': Object.freeze({
+    L1: '4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8',
+    L2: 'fc5321b9061b9860bfb9af5254e5813be1c4bc3c858df6f623ea1617b76b88e5',
+    L3: '51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66',
+  }),
+});
 
 /** The v0 kinds: the level each belongs to, its input keys, and the allowed shapes of `expected`. */
 export const KINDS = Object.freeze({
