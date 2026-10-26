@@ -4,7 +4,7 @@
 0.2.0 releases the same vectors again, in vectors/0.2.0/, each naming its kind
 and its arbiter as ids of the Zodiacs conventions registry
 (https://zodiacs.org/developers/conventions/): `conventionIds`, sorted, after
-`arbiter` (SPEC.md, "Convention ids"). Nothing else in a vector or a file
+`arbiter` (SPEC.md, "Files"). Nothing else in a vector or a file
 changes, but the suite version. A generator builds its level's document once
 and writes 0.2.0's file from it with write_with_ids, in the same JSON form as
 0.1.0's.

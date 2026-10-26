@@ -1605,9 +1605,10 @@ def main():
         die("pass both --zic and --zdump, or neither")
     text = build(args)
     out = Path(args.out)
-    # 0.2.0's file: the same vectors with their convention ids, in vectors/0.2.0/.
+    # 0.2.0's file: the same vectors with their convention ids, in 0.2.0/ beside --out
+    # (vectors/0.2.0/ for the default --out).
     ids_text = release.dumps(release.with_ids(json.loads(text)), ensure_ascii=False)
-    ids_out = Path(release.path_with_ids(out.name))
+    ids_out = out.parent / release.VERSION / out.name
     if args.check:
         same = out.is_file() and out.read_text(encoding="utf-8") == text
         same_ids = ids_out.is_file() and ids_out.read_text(encoding="utf-8") == ids_text

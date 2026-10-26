@@ -98,9 +98,9 @@ export function readLevel(level, root = SUITE_DIR, version = SUITE_VERSION) {
   return { level, version, path, digest: sha256(bytes), file: JSON.parse(bytes.toString('utf8')) };
 }
 
-/** Every level file of a release that exists, in level order. */
-export function readSuite(root = SUITE_DIR, levels = Object.keys(LEVEL_FILES), version = SUITE_VERSION) {
-  return levels
+/** Every level file of a release that exists, in level order; by default each level that release has. */
+export function readSuite(root = SUITE_DIR, levels = undefined, version = SUITE_VERSION) {
+  return (levels ?? Object.keys(RELEASES[version]))
     .filter((level) => existsSync(resolve(root, RELEASES[version][level])))
     .map((level) => readLevel(level, root, version));
 }

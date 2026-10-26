@@ -10,6 +10,8 @@ const targetRoot = resolve(packageRoot, 'conformance');
 const paths = new Set([
   'LICENSE', 'README.md', 'SPEC.md', 'DISCREPANCIES.md',
   'harness/lib.mjs', 'adapters/zodiacs-engine.mjs',
+  // The generators, kept for provenance, write the 0.2.0 files through it.
+  'arbiters/release.py',
 ]);
 // The suite version the harness runs, and its files (conformance/harness/lib.mjs).
 const { LEVEL_FILES } = await import(pathToFileURL(resolve(sourceRoot, 'harness/lib.mjs')).href);
