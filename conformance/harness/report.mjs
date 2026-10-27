@@ -8,7 +8,7 @@
  */
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { KINDS, LEVEL_FILES, SUITE, SUITE_DIR, SUITE_VERSION, readSuite } from './lib.mjs';
+import { KINDS, LEVEL_FILES, RELEASES, SUITE, SUITE_DIR, SUITE_VERSION, readSuite } from './lib.mjs';
 
 const RESULTS_DIR = resolve(SUITE_DIR, 'results');
 const RUN_ORDER = ['zodiacs-engine.json', 'pyswisseph.json'];
@@ -51,7 +51,7 @@ function runs() {
     const document = JSON.parse(readFileSync(resolve(RESULTS_DIR, name), 'utf8'));
     const notesPath = resolve(RESULTS_DIR, name.replace(/\.json$/u, '.notes.md'));
     const notes = existsSync(notesPath) ? readFileSync(notesPath, 'utf8').trim() : null;
-    return { file: `results/${name}`, adapter: document.adapter, values: document.values, vectors: document.vectors, summary: document.summary, notes };
+    return { file: `results/${name}`, adapter: document.adapter, suiteVersion: document.suiteVersion, values: document.values, vectors: document.vectors, summary: document.summary, notes };
   });
 }
 
@@ -89,7 +89,15 @@ function markdown(summary) {
     out.push('');
     out.push(`Adapter \`${adapter.name}\` ${adapter.version}; results in [\`${run.file}\`](${run.file})${run.values === 'none' ? ' (verdicts and statistics only)' : ''}.`);
     const stale = Object.entries(run.vectors).filter(([file, digest]) => summary.levels.find((level) => level.file === file)?.sha256 !== digest);
-    if (stale.length) out.push(`**These results were computed on an earlier version of ${stale.map(([file]) => file).join(', ')}.**`);
+    // Results of an earlier release's files, which this version releases again
+    // with each vector's convention ids (validate.mjs checks that), and nothing else.
+    const released = run.suiteVersion !== SUITE_VERSION && RELEASES[run.suiteVersion]
+      ? new Map(readSuite(undefined, undefined, run.suiteVersion).map((level) => [RELEASES[run.suiteVersion][level.level], level.digest]))
+      : new Map();
+    const files = stale.map(([file]) => `\`${file}\``).join(', ');
+    if (stale.length && stale.every(([file, digest]) => released.get(file) === digest)) {
+      out.push(`**These results were computed on suite ${run.suiteVersion}'s files, ${files}, which hold this version's vectors without their convention ids.**`);
+    } else if (stale.length) out.push(`**These results were computed on an earlier version of ${stale.map(([file]) => file).join(', ')}.**`);
     out.push('');
     out.push('| configuration | |');
     out.push('| --- | --- |');

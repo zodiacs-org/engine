@@ -1,12 +1,12 @@
 {
   "suite": "zodiacs-conformance",
-  "suiteVersion": "0.1.0",
+  "suiteVersion": "0.2.0",
   "levels": [
     {
       "level": "L1",
       "title": "Positions",
-      "file": "vectors/L1-positions.json",
-      "sha256": "853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c",
+      "file": "vectors/0.2.0/L1-positions.json",
+      "sha256": "4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8",
       "count": 240,
       "kinds": [
         {
@@ -27,8 +27,8 @@
     {
       "level": "L2",
       "title": "Houses and angles",
-      "file": "vectors/L2-houses-angles.json",
-      "sha256": "5718690f184f8bb9c1f38056c1bd11ec71a4aebf3f945a4dd519501ef33f50d0",
+      "file": "vectors/0.2.0/L2-houses-angles.json",
+      "sha256": "fc5321b9061b9860bfb9af5254e5813be1c4bc3c858df6f623ea1617b76b88e5",
       "count": 150,
       "kinds": [
         {
@@ -83,8 +83,8 @@
     {
       "level": "L3",
       "title": "Time and calendars",
-      "file": "vectors/L3-time-calendars.json",
-      "sha256": "434365354095524646f68423634f0b07a05333c702fc02227fd7fd1bccb0e4c8",
+      "file": "vectors/0.2.0/L3-time-calendars.json",
+      "sha256": "51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66",
       "count": 110,
       "kinds": [
         {
@@ -169,11 +169,12 @@
           "angles": "natalChart with timeScale \"ut1\": the requested instant is read as UT1"
         }
       },
+      "suiteVersion": "0.2.0",
       "values": "residuals",
       "vectors": {
-        "vectors/L1-positions.json": "853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c",
-        "vectors/L2-houses-angles.json": "5718690f184f8bb9c1f38056c1bd11ec71a4aebf3f945a4dd519501ef33f50d0",
-        "vectors/L3-time-calendars.json": "434365354095524646f68423634f0b07a05333c702fc02227fd7fd1bccb0e4c8"
+        "vectors/0.2.0/L1-positions.json": "4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8",
+        "vectors/0.2.0/L2-houses-angles.json": "fc5321b9061b9860bfb9af5254e5813be1c4bc3c858df6f623ea1617b76b88e5",
+        "vectors/0.2.0/L3-time-calendars.json": "51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66"
       },
       "summary": {
         "total": {
@@ -382,6 +383,7 @@
           "houses": "houses_ex2 at the UT1 Julian date; a polar-circle error is reported as status undefined"
         }
       },
+      "suiteVersion": "0.1.0",
       "values": "none",
       "vectors": {
         "vectors/L1-positions.json": "853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c",

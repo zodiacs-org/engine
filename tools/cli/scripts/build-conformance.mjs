@@ -1,7 +1,7 @@
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve, relative, isAbsolute } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const packageRoot = fileURLToPath(new URL('../', import.meta.url));
 const repo = resolve(packageRoot, '../..');
@@ -10,8 +10,12 @@ const targetRoot = resolve(packageRoot, 'conformance');
 const paths = new Set([
   'LICENSE', 'README.md', 'SPEC.md', 'DISCREPANCIES.md',
   'harness/lib.mjs', 'adapters/zodiacs-engine.mjs',
+  // The generators, kept for provenance, write the 0.2.0 files through it.
+  'arbiters/release.py',
 ]);
-const vectorFiles = ['vectors/L1-positions.json', 'vectors/L2-houses-angles.json', 'vectors/L3-time-calendars.json'];
+// The suite version the harness runs, and its files (conformance/harness/lib.mjs).
+const { LEVEL_FILES } = await import(pathToFileURL(resolve(sourceRoot, 'harness/lib.mjs')).href);
+const vectorFiles = Object.values(LEVEL_FILES);
 let vectorCount = 0;
 for (const path of vectorFiles) {
   paths.add(path);
