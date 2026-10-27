@@ -36,7 +36,7 @@ def sheet(c):
     if 'lmt' in c['tags']: L.append("Zone note: place used local mean time (lmt) at this date.")
     L.append(natal(e,z))
   if e['status'] in('resolved',):
-    L.append(f"Transits 2026-11-01 to 2027-01-30 (90 days), exact times in person's zone ({z}):")
+    L.append(f"Transits 2026-11-01 to 2027-01-29 inclusive (90 days), exact times in person's zone ({z}):")
     for t in e.get('transits',[]): L.append(f"- transiting {t['body']} {t['aspect']} natal {t['natal']}: exact {loc(t['exactUtc'],z)}")
     if not e.get('transits'): L.append("- no hard transits (conj/square/opp) to Sun, Moon, ASC, MC by Sun..Pluto in window")
     L.append("Sky stations in window: "+'; '.join(f"{s['body']} stations {s['kind']} {loc(s['utc'],z)} at {fmt(s['lon'])}" for s in D['skyStations']))
