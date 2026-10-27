@@ -138,6 +138,15 @@
       "files": 74,
       "sourceCommit": "ca2c8cefbaa1a9d6f5f78ee86713e813633942ca",
       "status": "carried"
+    },
+    {
+      "version": "1.1.0-rc.1",
+      "file": "zodiacs-engine-1.1.0-rc.1.tgz",
+      "sha256": "52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6",
+      "bytes": 292721,
+      "files": 77,
+      "sourceCommit": "c41706266caf4dde7e03aaa18c08acd569d19a7e",
+      "status": "carried"
     }
   ]
 }
