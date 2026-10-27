@@ -1,0 +1,65 @@
+chart,tags,C1,C2,C3,C4,C5,C6,C7,C8,mean,critical_errors
+E1,dst-edge,4,5,3,4,2,3,2,5,3.5,0
+E2,dst-edge,5,5,3,3,4,3,3,5,3.88,0
+F1,dst-fold,5,5,2,1,4,1,2,5,3.12,0
+F2,dst-fold,4,4,1,1,4,1,2,5,2.75,0
+F3,dst-fold,4,4,2,1,3,1,2,5,2.75,0
+F4,dst-fold midnight,5,5,2,1,4,1,2,5,3.12,0
+F5,dst-fold,4,5,2,1,5,1,3,5,3.25,0
+F6,dst-fold,4,5,1,1,3,1,2,5,2.75,0
+G1,dst-gap,5,5,3,3,5,3,5,5,4.25,0
+G2,dst-gap,3,5,2,4,4,3,3,5,3.62,0
+G3,dst-gap,5,5,3,3,5,3,4,5,4.12,0
+G4,dst-gap midnight,3,5,2,2,4,3,3,5,3.38,0
+G5,dst-gap,5,5,3,3,5,3,4,5,4.12,0
+G6,dst-gap skipped-day,4,5,2,2,3,3,3,5,3.38,0
+G7,dst-gap,4,5,3,4,5,4,4,5,4.25,0
+H1,high-latitude polar transit,5,5,3,4,3,3,3,5,3.88,0
+H2,high-latitude polar,5,4,3,3,3,3,3,5,3.62,0
+H3,high-latitude polar transit,4,5,3,4,4,3,3,5,3.88,0
+H4,high-latitude polar,4,4,2,3,4,2,3,5,3.38,0
+H5,high-latitude,4,4,3,3,4,3,3,5,3.62,0
+H6,high-latitude,5,5,3,3,3,3,3,5,3.75,0
+H7,high-latitude south,4,4,3,3,4,3,3,5,3.62,0
+H8,high-latitude polar-edge,3,4,3,3,3,3,4,5,3.5,1
+H9,high-latitude polar,5,5,3,4,4,3,4,5,4.12,0
+M1,midnight,4,4,3,4,4,3,3,4,3.62,0
+M2,midnight,4,4,3,3,3,2,3,5,3.38,0
+M3,midnight,5,5,3,4,4,2,3,5,3.88,0
+M4,midnight,5,5,3,3,4,3,3,5,3.88,0
+M5,midnight,3,4,3,4,4,3,4,5,3.75,1
+M6,midnight pre1970,5,4,2,3,3,3,4,5,3.62,0
+O1,half-hour-zone transit,4,4,3,3,4,3,3,5,3.62,0
+O10,ordinary transit,4,4,3,3,4,3,4,5,3.75,1
+O11,ordinary,4,4,3,4,3,2,3,5,3.5,0
+O12,equator,4,5,3,4,3,3,4,5,3.88,0
+O13,ordinary,5,5,3,3,4,3,4,5,4.0,0
+O14,leap-day transit,4,5,3,3,5,3,3,5,3.88,0
+O15,ordinary,5,4,3,4,4,3,4,5,4.0,0
+O16,ordinary,4,4,2,3,4,3,3,5,3.5,0
+O17,ordinary,4,5,3,4,3,3,3,5,3.75,0
+O18,south transit,5,4,3,4,4,3,3,5,3.88,0
+O2,quarter-hour-zone,5,5,3,4,4,3,4,5,4.12,0
+O3,half-hour-zone,4,5,3,4,4,3,4,5,4.0,0
+O4,ordinary,4,4,3,3,4,3,3,5,3.62,0
+O5,ordinary transit,4,4,3,4,2,3,4,5,3.62,0
+O6,ordinary,4,4,3,3,4,2,3,5,3.5,0
+O7,south transit,4,4,3,4,4,3,3,5,3.75,0
+O8,ordinary,5,5,3,3,4,3,4,5,4.0,0
+O9,half-hour-zone,5,5,3,4,4,3,4,5,4.12,0
+P1,pre1970 double-summer-time transit,5,5,3,4,5,3,4,5,4.25,0
+P10,pre1970,4,4,3,2,4,3,3,4,3.38,0
+P11,pre1970 double-summer-time,4,4,3,4,4,3,3,5,3.75,0
+P12,pre1970,5,5,3,4,4,3,3,5,4.0,0
+P13,pre1970 war-time,4,5,3,3,4,2,3,5,3.62,0
+P14,pre1970 lmt,4,5,3,4,4,3,4,5,4.0,0
+P2,pre1970 war-time,5,4,3,4,4,3,4,5,4.0,0
+P3,pre1970 war-time,3,4,3,4,4,3,3,5,3.62,1
+P4,pre1970,4,4,3,3,3,3,3,5,3.5,0
+P5,pre1970 war-time,4,4,3,4,2,3,3,5,3.5,0
+P6,pre1970,5,5,3,4,4,3,3,5,4.0,0
+P7,pre1970 transit,4,4,4,4,3,4,4,5,4.0,0
+P8,pre1970 lmt,5,4,3,3,3,3,4,5,3.75,0
+P9,pre1970,4,4,3,4,3,3,3,5,3.62,1
+U1,unknown-time,4,5,3,1,5,3,3,5,3.62,0
+U2,unknown-time moon-sign-change,4,5,3,1,3,2,3,5,3.25,0
