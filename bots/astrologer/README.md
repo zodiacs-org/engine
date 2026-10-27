@@ -10,5 +10,7 @@ Planning and template files for an Astrologer bot on the Grok Bot template marke
 | `testset/tolerance.md` | What is compared, against what, within what tolerance |
 | `RUBRIC.md` | Blind rating rubric for three astrologers |
 | `template/` | The bot: system instructions, interview, profile schema, 90-day coaching cadence, interpretation sources, marketplace listing |
+| `facts/` | The reading facts builder: every number a reading states (placements, sect, aspects ranked by orb, points near a sign edge, transits, stations and their natal contacts), computed by the engine's own code; see `facts/README.md` |
+| `grading/` | Model grading harness and results; sheets come from `facts/` |
 
 The test set's expected values come from Swiss Ephemeris and are kept outside this repository, as `AGENTS.md` requires. All birth data here is synthetic.
