@@ -1,0 +1,5 @@
+# node tools/site-rule.mjs <site checkout> <site commit>; Node v22.22.2, darwin-arm64, 2026-10-26
+site: zodiacs-org/site at 400c261218c19deac82bd0353074d110a923f051; tests/conventions-registry.test.ts (SHA-256 4799a8316e14c6fefd66b955b0e467cf2ad3c5075baf09e38580953c53ba5359); src/data/conventions/registry.json version 2026-10-18 (SHA-256 611b2ec5f4b0bdd2c1c9866f69767cbe9f02e3fd99de9a1677b3b532e3610791), 154 ids
+engine: this build, 1.1.0-rc.1
+57 of 57 envelopes: the site's rule, sorted and each once, equals natalConventionIds and the receipt's conventionIds
+51 distinct ids named across them; the registry holds 50; not held: conventionIds:zodiacs-conventions-registry;receipt-and-result;sorted-unique;in-receipt

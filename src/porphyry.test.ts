@@ -9,6 +9,7 @@ import {
   parseNatalEnvelope,
   serializeNatalEnvelope
 } from "./receipt.js";
+import { natalConventionIds } from "./conventions.js";
 import { normalizeLongitude } from "./signs.js";
 
 /** Signed a − b in arcseconds, across the 0/360 seam. */
@@ -46,6 +47,16 @@ const POLAR: ReadonlyArray<readonly [utc: string, latitude: number, longitude: n
   ["2025-06-21T03:00:00Z", -77.8463, 166.6682],
   ["2025-03-21T18:00:00Z", -80, 0]
 ];
+
+/** The ids the edited fields name, so that only the rule under test can refuse the record. */
+function withOwnIds(envelope: any): void {
+  if (!Array.isArray(envelope?.receipt?.conventionIds)) return;
+  try {
+    envelope.receipt.conventionIds = natalConventionIds(envelope);
+  } catch {
+    // A malformed field: the codec refuses the field itself.
+  }
+}
 
 describe("Porphyry houses (brief v1 rule 1h)", () => {
   it.each(ERFA)("trisects ERFA's angles, %s at %s°", (utc, latitude, asc, mc) => {
@@ -115,6 +126,7 @@ describe("Porphyry receipts", () => {
   const edit = (change: (envelope: any) => void) => {
     const envelope = JSON.parse(json);
     change(envelope);
+    withOwnIds(envelope);
     return JSON.stringify(envelope);
   };
 
@@ -149,13 +161,23 @@ describe("Porphyry receipts", () => {
   });
 
   it("refuses Porphyry in a receipt from rc.3 to rc.6, which never offered it", () => {
-    const old = edit((e) => {
-      e.receipt.conventions = { ...NATAL_RECEIPT_CONVENTION_SETS[4] };
+    // rc.3's set, taken by its content: the only one on the mean obliquity.
+    const rc3 = NATAL_RECEIPT_CONVENTION_SETS.find((set) => set.angles === "gast-and-mean-obliquity")!;
+    const asRc6 = (e: any) => {
+      e.receipt.conventions = { ...rc3 };
       e.receipt.engine = { name: "@zodiacs/engine", version: "0.1.1-rc.6" };
+      delete e.receipt.conventionIds;
+      e.requiredFeatures = [];
       delete e.receipt.timeScale;
       delete e.result.deltaT;
       delete e.result.timeScale;
-    });
-    expect(parseNatalEnvelope(old)).toMatchObject({ ok: false, code: "inconsistent_result" });
+    };
+    expect(parseNatalEnvelope(edit(asRc6))).toMatchObject({ ok: false, code: "inconsistent_result" });
+    // The same edit of the chart in a system rc.6 offered reads: only Porphyry refuses it.
+    const placidus = JSON.parse(
+      serializeNatalEnvelope(createNatalEnvelope(natalChart({ ...chart.input, houseSystem: "placidus" })))
+    );
+    asRc6(placidus);
+    expect(parseNatalEnvelope(JSON.stringify(placidus))).toMatchObject({ ok: true });
   });
 });

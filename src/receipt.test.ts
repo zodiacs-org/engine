@@ -14,6 +14,7 @@ import {
   NATAL_ENVELOPE_LIMITS
 } from "./receipt.js";
 import type { NatalEnvelope, NatalEnvelopeContext, NatalEnvelopeErrorCode } from "./receipt.js";
+import { natalConventionIds } from "./conventions.js";
 
 const INSTANT = "2001-12-21T09:00:00.000Z";
 const SECRET = "SYNTHETIC-SECRET-DO-NOT-EMIT";
@@ -46,6 +47,16 @@ function errorFrom(action: () => unknown, code?: NatalEnvelopeErrorCode): NatalE
   expect(failure.message).not.toContain(SECRET);
   return failure;
 }
+/** The ids the edited fields name, so that only the rule under test can refuse the record. */
+function withOwnIds(envelope: any): void {
+  if (!Array.isArray(envelope?.receipt?.conventionIds)) return;
+  try {
+    envelope.receipt.conventionIds = natalConventionIds(envelope);
+  } catch {
+    // A malformed field: the codec refuses the field itself.
+  }
+}
+
 function imported(value: unknown) {
   return parseNatalEnvelope(JSON.stringify(value));
 }
@@ -303,6 +314,7 @@ describe("Zodiacs draft natal receipt", () => {
     const lmt = local("1908-02-11", "02:47", "America/Mexico_City");
     lmt.receipt.inputFlags = [];
     lmt.receipt.resultFlags = [];
+    withOwnIds(lmt);
     expect(imported(lmt)).toEqual({ ok: false, code: "invalid_context" });
   });
 
@@ -512,6 +524,7 @@ describe("hostile or inconsistent natal envelopes", () => {
     for (const alter of alterations) {
       const value = envelope();
       alter(value);
+      withOwnIds(value);
       expect(imported(value).ok).toBe(false);
       errorFrom(() => serializeNatalEnvelope(value));
     }

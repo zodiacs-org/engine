@@ -1,0 +1,3 @@
+# each dist/*.d.ts of this tree's build against the same file of artifacts/zodiacs-engine-1.0.0.tgz, unpacked; 2026-10-26
+19 of 23 declaration files are 1.0.0's byte for byte; differing or new: conventions.d.ts, geo.d.ts, receipt.d.ts, zone-history-Ce7i6Y1N.d.ts
+1.0.0's not in the build: zone-history-ghdyO0Sc.d.ts

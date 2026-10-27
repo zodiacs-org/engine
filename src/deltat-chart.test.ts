@@ -12,6 +12,7 @@ import {
   parseNatalEnvelope,
   serializeNatalEnvelope
 } from "./receipt.js";
+import { natalConventionIds } from "./conventions.js";
 
 const J2000 = Date.UTC(2000, 0, 1, 12);
 const utOf = (date: Date) => (date.getTime() - J2000) / 86_400_000;
@@ -22,6 +23,16 @@ const birth = {
   houseSystem: "placidus" as const,
   timeKnown: true
 };
+
+/** The ids the edited fields name, so that only the rule under test can refuse the record. */
+function withOwnIds(envelope: any): void {
+  if (!Array.isArray(envelope?.receipt?.conventionIds)) return;
+  try {
+    envelope.receipt.conventionIds = natalConventionIds(envelope);
+  } catch {
+    // A malformed field: the codec refuses the field itself.
+  }
+}
 
 describe("the engine's clock", () => {
   it("computes a chart in the leap-second era from the leap seconds and IERS UT1 − UTC, and says so", () => {
@@ -108,6 +119,7 @@ describe("ΔT in receipts", () => {
   const edit = (change: (envelope: any) => void) => {
     const envelope = JSON.parse(json);
     change(envelope);
+    withOwnIds(envelope);
     return JSON.stringify(envelope);
   };
 

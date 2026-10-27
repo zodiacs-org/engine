@@ -67,6 +67,7 @@ import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticT
 import { EPHEMERIS_SPAN, SUN_BOUND_LATITUDE, type DeclinationRow } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope, natalReplayInput, redactNatalEnvelope } from "@zodiacs/engine/receipt";
+import { CONVENTIONS_REGISTRY, conventionAddress, conventionId, natalConventionIds, parseConventionId, type ConventionIdParts } from "@zodiacs/engine/conventions";
 import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith, type CrossingSearchResult, type LongitudeCrossing } from "@zodiacs/engine/crossings";
 import { annualProfection, firdaria, profectionAt, solarArc, zodiacalReleasingAt, type ProfectionAt, type TimingFlag, type TimingOrigin } from "@zodiacs/engine/timing";
 import { siderealChart, nakshatraOf, type SiderealChart, type NakshatraPosition } from "@zodiacs/engine/vedic";
@@ -181,6 +182,12 @@ if (hoursOfDay.status === "complete") { const first: PlanetaryHour | undefined =
 const hourNow: PlanetaryHour | null = planetaryHourAt(observer, "2024-06-21T12:00:00Z").hour;
 const refraction: number = STANDARD_REFRACTION_ARCMIN;
 void hourNow; void refraction;
+const idsEnvelope = createNatalEnvelope(natalChart({ utc: "2000-01-01T12:00:00Z" }));
+const carriedIds: string[] | undefined = idsEnvelope.receipt.conventionIds;
+const derivedIds: string[] = natalConventionIds(idsEnvelope);
+const splitId: ConventionIdParts = parseConventionId(conventionId("zodiac", "tropical"));
+const idAddress: string = conventionAddress(splitId.namespace + ":" + splitId.value) + CONVENTIONS_REGISTRY;
+void carriedIds; void derivedIds; void idAddress;
 `
 );
 // An explicit project: "types": [] keeps @types packages in parent directories
@@ -561,7 +568,19 @@ assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-
   assert.equal(typeof housesEntry.SIDEREAL_TIME_RATE, "number");
   assert.equal(housesEntry.SIDEREAL_RATE, housesEntry.SIDEREAL_TIME_RATE);
 }
-console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed"}));
+{
+  const conventionsEntry = await import("@zodiacs/engine/conventions");
+  const envelope = createNatalEnvelope(natalChart({utc: "2000-01-01T12:00:00Z", latitude: 51.5, longitude: -0.1, houseSystem: "placidus"}));
+  const natal = envelope.receipt;
+  assert.deepEqual(natal.conventionIds, conventionsEntry.natalConventionIds(envelope));
+  assert(natal.conventionIds.includes("conventionIds:zodiacs-conventions-registry;receipt-and-result;sorted-unique;in-receipt"));
+  assert(natal.conventionIds.includes("ephemeris:astronomy-engine@2.1.19") && natal.conventionIds.includes("time-basis:iers"));
+  assert.deepEqual(envelope.requiredFeatures, ["convention-ids"]);
+  assert.equal(conventionsEntry.conventionAddress("zodiac:tropical"), "https://zodiacs.org/developers/conventions/#zodiac:tropical");
+  assert.deepEqual(conventionsEntry.parseConventionId("frame:a:b"), {namespace: "frame", value: "a:b"});
+  assert.equal(parseNatalEnvelope(serializeNatalEnvelope(createNatalEnvelope(natalChart({utc: "2000-01-01T12:00:00Z"})))).ok, true);
+}
+console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

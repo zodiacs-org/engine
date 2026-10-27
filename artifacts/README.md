@@ -97,6 +97,7 @@ runs, so CI starts the check with node directly.
 | 1.0.0-rc.1 | `cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284` | 284,750 | 74 | `77a16c26889220f5481f41d16c4ca4e70a09250b` | `bb1736a` | Candidate, merged |
 | 1.0.0-rc.2 | `4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002` | 287,011 | 74 | `7fa964d2a77d09dbb819b5733b36e303fc7fc513` | `e790362` | Candidate, merged |
 | 1.0.0 | `c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6` | 288,063 | 74 | `ca2c8cefbaa1a9d6f5f78ee86713e813633942ca` | `38d3185` | Release, merged; on npm as `latest` |
+| 1.1.0-rc.1 | `52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6` | 292,721 | 77 | `c41706266caf4dde7e03aaa18c08acd569d19a7e` | "Carry the packed 1.1.0-rc.1 tarball" | Candidate under review |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -260,3 +261,19 @@ been acted on. The owner approved publishing it to
 npm's `latest` once its gates passed (2026-10-11); the Release workflow
 published it from main at `f8992a4` (run 38144970198), and npm's tarball is
 this file. The record is in `docs/evidence/1.0.0-20261011/`.
+
+1.1.0-rc.1 is the first candidate for 1.1.0: natal receipts name their
+conventions as ids of the Zodiacs conventions registry, under a new
+conventions set whose envelopes require the feature `convention-ids`, and
+the new entry point `@zodiacs/engine/conventions` gives those ids. It changes
+no value of 1.0.0, and it reads every record 1.0.0 reads. The archive is
+292,721 bytes, 1,006,494 unpacked in 77 files, under the package cap of
+1,020,000, which it raises from 1,000,000 with the owner's approval of
+2026-10-26, as it raises `./receipt`'s budget. It was packed once, from clean
+clones of its source commit, each installed with `npm ci`, which packed the
+same bytes on Node 22.22.2, 20.19.0 and 24.21.0; the carried file is the Node
+22.22.2 one. It was carried after the gate workflows had passed on the
+source commit (CI run 40349378234, Conformance 40349378157 and Atlas
+40349378175) and two reviews of the first source commit had been acted on.
+It is not to be published on npm until the owner approves it. The record is
+in `docs/evidence/1.1.0-rc.1-20261026/`.

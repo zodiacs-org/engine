@@ -9,10 +9,10 @@ the release it leads to.
 
 ## What is public
 
-- **The entry points.** The twelve that `package.json` exports and the README
-  documents: the root, `./calc`, `./crossings`, `./deltat`, `./geo`,
-  `./houses`, `./receipt`, `./sky`, `./techniques`, `./timing`, `./vedic` and
-  `./window`. `./internal` and `./internal/math` are private to Zodiacs.org
+- **The entry points.** The thirteen that `package.json` exports and the
+  README documents: the root, `./calc`, `./conventions` (from 1.1.0-rc.1),
+  `./crossings`, `./deltat`, `./geo`, `./houses`, `./receipt`, `./sky`,
+  `./techniques`, `./timing`, `./vedic` and `./window`. `./internal` and `./internal/math` are private to Zodiacs.org
   and carry no promise (README, *Internal site entry points*).
 - **Their declarations.** Every name each entry point exports, its type, a
   function's parameters and result, the shape of each result, the members of
@@ -122,6 +122,22 @@ version; every later 1.x release reads both, and an earlier one refuses the
 new record, as it refuses any it does not know (`unsupported_feature`,
 `unsupported_version`). No 1.x release stops reading a set or a version that
 an earlier 1.x release wrote.
+
+From 1.1.0-rc.1 every new set also makes its envelopes require a feature
+(`requiredFeatures`) named for it. Every release reads an envelope's features
+before anything in its receipt, so an earlier one refuses the record as
+`unsupported_feature`, whatever else the set changes; a new field alone would
+make it `invalid_shape`. 1.1.0-rc.1's set adds `receipt.conventionIds` and
+requires `convention-ids`: the carried archives from 0.1.1-rc.7 to 1.0.0
+refuse its records as `unsupported_feature`, and as `invalid_shape` with the
+feature taken out
+(`docs/evidence/1.1.0-rc.1-20261026/results/earlier-readers.json`).
+
+A receipt names the engine that computed its chart, which may be earlier or
+later than the release that wrote the record. A set is therefore accepted
+from the release whose computation it describes, with no upper bound:
+1.1.0-rc.1's set, which describes rc.16's computation with the record's ids,
+is accepted from 0.1.1-rc.16, as rc.16's set is.
 
 A schema id is a permanent, opaque name. `NATAL_ENVELOPE_SCHEMA`,
 `NATAL_RECEIPT_SCHEMA` and `NATAL_DIAGNOSTIC_SCHEMA` keep the `draft-v1` they

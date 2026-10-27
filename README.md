@@ -14,14 +14,21 @@ side effects, and performs no network request from its core entry point. Its
 one runtime side effect is the ΔT it installs in astronomy-engine (see Time
 below).
 
-**1.0.0**, the first stable release: 1.0.0-rc.2 with the version changed,
-the same API and the same values (CHANGELOG.md). The package follows Semantic
-Versioning: [docs/versioning.md](docs/versioning.md) says what is public, how
-a number may change, which records stay readable and how something public is
-deprecated, and `api/` holds each public entry point's declarations.
+**1.1.0-rc.1**, a candidate for 1.1.0, not published: natal receipts name
+their conventions as ids of the Zodiacs conventions registry, which a new
+entry, `@zodiacs/engine/conventions`, gives (see *Draft natal receipts*;
+CHANGELOG.md). The package follows Semantic Versioning:
+[docs/versioning.md](docs/versioning.md) says what is public, how a number
+may change, which records stay readable and how something public is
+deprecated, and `api/` holds each public entry point's declarations. npm
+carries 1.0.0, the first stable release, under `latest`: `npm install
+@zodiacs/engine` installs it, without `./conventions` and writing no ids.
+This candidate is not published there. Install the exact candidate tarball,
+`artifacts/zodiacs-engine-1.1.0-rc.1.tgz` in the repository, retaining its
+SHA-256 receipt:
 
 ```sh
-npm install @zodiacs/engine
+npm install ./zodiacs-engine-1.1.0-rc.1.tgz
 ```
 
 The Release workflow publishes the archive carried in `artifacts/` as it is,
@@ -45,7 +52,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.0.0.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.1.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -105,7 +112,8 @@ to 2027-10-02 as UTC, with TT from the leap seconds and UT1 from IERS
 UT1 − UTC, and otherwise as UT1 with the ΔT model, or on UT1 or TT when
 `timeScale` says so (see Time). The ephemeris is still astronomy-engine
 2.1.19. See CHANGELOG.md for the release history and
-`docs/evidence/1.0.0-20261011/` for this release's checks (1.0.0-rc.2's are in
+`docs/evidence/1.1.0-rc.1-20261026/` for this candidate's checks (1.0.0's are
+in `docs/evidence/1.0.0-20261011/`, 1.0.0-rc.2's in
 `docs/evidence/1.0.0-rc.2-20261006/`, 1.0.0-rc.1's in
 `docs/evidence/1.0.0-rc.1-20261006/`, rc.17's in
 `docs/evidence/rc17-20261005/`). Site adoption is reviewed separately.
@@ -217,6 +225,9 @@ for (const aspect of today.aspects) {
 - `@zodiacs/engine/window` partitions a birth-time window into cells within
   which the chart's signs, houses and aspects are constant (see *Birth-time
   windows*).
+- `@zodiacs/engine/conventions`, new in 1.1.0-rc.1, gives the ids of the
+  conventions registry a natal receipt names, and each id's address (see
+  *Draft natal receipts*). It imports no module of another entry point.
 
 ### Uniform calculation API
 
@@ -939,7 +950,7 @@ package implementation while keeping its scanner-oriented functions and lazy
 bundle boundary intact. They are not covered by semantic-versioning guarantees;
 third-party code must use the documented entry points: the root, `/calc`,
 `/geo`, `/houses`, `/sky`, `/techniques`, `/timing`, `/vedic`, `/window`,
-`/receipt`, `/crossings` and `/deltat`.
+`/receipt`, `/conventions`, `/crossings` and `/deltat`.
 
 ## GeoNames request recovery
 
@@ -1029,7 +1040,7 @@ The time-basis sets, written from 0.1.1-rc.15 on, also record the instant's
 scale (`receipt.timeScale`) and its time basis (`result.timeScale`), and a
 local resolution records the calendar, the tzdb version and form, the clock,
 the transition behind the offset and any birthplace mean time, each checked
-against the offsets and flags. The current set, written from 0.1.1-rc.16 on,
+against the offsets and flags. The set written from 0.1.1-rc.16 to 1.0.0
 also names the nutation, the engine's IAU 2000B (`nutation`), and takes the
 Moon from astronomy-engine's geocentric series turned by the engine's frame
 (`moonPosition`); rc.15's set, which does not name the nutation, stays
@@ -1038,10 +1049,28 @@ as UT1, stay readable and replay as UTC requests (see docs/time.md). A
 receipt's engine, ephemeris and package versions must be SemVer 2.0.0
 versions. The codec accepts an earlier set only under the versions that wrote
 it, rc.15's under 0.1.1-rc.15 alone, and compares the engine's version in
-SemVer order with 0.1.1-rc.16, which brought the current set, and with the
-releases that brought each house system: a receipt of the current set that
-names a version before 0.1.1-rc.16, such as 0.1.1-rc.15.1 or 0.1.1-beta, is
-refused.
+SemVer order with the release that brought each set and each house system: a
+receipt names the engine that computed its chart, so rc.16's set and the
+current one are accepted from 0.1.1-rc.16 on, and one that names a version
+before it, such as 0.1.1-rc.15.1 or 0.1.1-beta, is refused.
+
+The current set, written from 1.1.0-rc.1 on, is rc.16's with
+`conventionIds`, and its receipts list, as `receipt.conventionIds`, every id in
+the syntax of the Zodiacs conventions registry
+([zodiacs.org/developers/conventions](https://zodiacs.org/developers/conventions/))
+that the receipt and its result name, in code-unit order, each once: each
+conventions and coverage field's key and value (`zodiac:tropical`), the
+requested and actual house systems (`house:placidus`), why there are no
+houses, each flag, the reference, the instant's scale (`time-scale:utc`), the
+ephemeris (`ephemeris:astronomy-engine@2.1.19`), and the result's ΔT model and
+segment, time basis and source of UT1 − UTC (`time-basis:iers`). The codec
+refuses ids that differ from those the envelope's fields name. Its envelopes
+require the feature `convention-ids`, so an earlier engine refuses them as
+`unsupported_feature` (docs/versioning.md). `@zodiacs/engine/conventions`
+exports the rule as `natalConventionIds(envelope)`, which also names a 1.0.0
+envelope's ids, with `conventionId`, `parseConventionId` (the value is
+everything after the first colon) and `conventionAddress`, an id's address on
+the registry's page; each throws a `RangeError` for a malformed id.
 
 `natalReplayInput` recovers the recorded request. It does not select or install
 the original engine. Recalculation with another engine, ephemeris dependency or

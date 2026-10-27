@@ -5,11 +5,22 @@ import { natalChart, transits } from "./api.js";
 import { computeChart } from "./ephemeris.js";
 import { REFERENCE_SPAN, outsideReferenceSpan } from "./reference-span.js";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from "./receipt.js";
+import { natalConventionIds } from "./conventions.js";
 import { EPHEMERIS } from "./types.js";
 
 const FLAG = "outside-reference-span";
 const chartAt = (utc: string) =>
   natalChart({ utc, latitude: 51.5, longitude: -0.12, houseSystem: "whole", timeKnown: true });
+
+/** The ids the edited fields name, so that only the rule under test can refuse the record. */
+function withOwnIds(envelope: any): void {
+  if (!Array.isArray(envelope?.receipt?.conventionIds)) return;
+  try {
+    envelope.receipt.conventionIds = natalConventionIds(envelope);
+  } catch {
+    // A malformed field: the codec refuses the field itself.
+  }
+}
 
 describe("reference span (rule 1e)", () => {
   it("runs from 1800-01-01T00:00Z up to, not including, 2200-01-01T00:00Z", () => {
@@ -58,6 +69,7 @@ describe("reference span (rule 1e)", () => {
     expect(parsed.envelope.receipt.resultFlags).toEqual([FLAG]);
     const dropped = JSON.parse(json);
     dropped.receipt.resultFlags = [];
+    withOwnIds(dropped);
     expect(parseNatalEnvelope(JSON.stringify(dropped))).toMatchObject({
       ok: false,
       code: "inconsistent_result"
@@ -66,6 +78,7 @@ describe("reference span (rule 1e)", () => {
       serializeNatalEnvelope(createNatalEnvelope(chartAt("2026-06-01T12:00:00Z")))
     );
     inside.receipt.resultFlags = [FLAG];
+    withOwnIds(inside);
     expect(parseNatalEnvelope(JSON.stringify(inside))).toMatchObject({
       ok: false,
       code: "inconsistent_result"
@@ -104,18 +117,21 @@ describe("ephemeris identity (rule 1j)", () => {
     const json = serializeNatalEnvelope(envelope);
     const without = JSON.parse(json);
     delete without.receipt.engine.ephemeris;
+    withOwnIds(without);
     expect(parseNatalEnvelope(JSON.stringify(without))).toMatchObject({
       ok: false,
       code: "invalid_shape"
     });
     const other = JSON.parse(json);
     other.receipt.engine.ephemeris.name = "other-ephemeris";
+    withOwnIds(other);
     expect(parseNatalEnvelope(JSON.stringify(other))).toMatchObject({
       ok: false,
       code: "unsupported_feature"
     });
     const badVersion = JSON.parse(json);
     badVersion.receipt.engine.ephemeris.version = "latest";
+    withOwnIds(badVersion);
     expect(parseNatalEnvelope(JSON.stringify(badVersion))).toMatchObject({
       ok: false,
       code: "invalid_value"
