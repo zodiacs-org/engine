@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildReadingFacts, formatReadingFacts, degreeText, orbText, STATION_ORB, SLOW } from "./reading-facts.js";
+import { ageAt, buildReadingFacts, formatReadingFacts, degreeText, orbText, STATION_ORB, SLOW } from "./reading-facts.js";
 import type { ReadingFacts, ReadingInput } from "./reading-facts.js";
 import { bodyLongitude, longitudeSpeed } from "../../../src/ephemeris.js";
 
@@ -136,5 +136,83 @@ describe("window facts", () => {
     // Somewhere on that local date (Istanbul is UTC+3 all year) the Sun is within 1 degree of exact.
     const noon = Date.parse(`${t.exact[0]}T09:00:00Z`);
     expect(Math.abs(sep(bodyLongitude("Sun", new Date(noon)), natal.lon) - angle)).toBeLessThan(1);
+  }, 60_000);
+});
+
+describe("age, sect team and dignities", () => {
+  it("gives the calendar age at the window start", () => {
+    expect(ageAt("1990-06-15", "2026-11-01")).toMatchObject({ years: 36, months: 4, stage: "adult", bornAfterStart: false });
+    expect(ageAt("2026-03-08", "2026-11-01")).toMatchObject({ years: 0, months: 7, stage: "infant" });
+    expect(ageAt("2016-02-29", "2026-11-01")).toMatchObject({ years: 10, months: 8, stage: "child" });
+    expect(ageAt("2010-11-01", "2026-11-01")).toMatchObject({ years: 16, months: 0, stage: "adolescent" });
+    expect(ageAt("2026-11-01", "2026-11-01")).toMatchObject({ years: 0, months: 0, stage: "infant", bornAfterStart: false });
+    expect(ageAt("2026-11-05", "2026-11-01")).toMatchObject({ bornAfterStart: true, daysAfterStart: 4 });
+  });
+
+  it("states the sect team of the chart's sect (Ptolemy, Tetrabiblos I.7)", async () => {
+    const day = (await facts(RESOLVED)).versions[0]!;
+    expect(day.sectTeam).toEqual({ sect: "day", light: "Sun", beneficOfSect: "Jupiter", maleficOfSect: "Saturn", beneficContrary: "Venus", maleficContrary: "Mars" });
+    const night = (await facts(FOLD)).versions[0]!;
+    expect(night.sect).toBe("night");
+    expect(night.sectTeam).toMatchObject({ light: "Moon", beneficOfSect: "Venus", maleficOfSect: "Mars", maleficContrary: "Saturn" });
+    expect(formatReadingFacts(await facts(FOLD))).toContain("night chart: sect light Moon; benefic of sect Venus; malefic of sect Mars; benefic contrary to sect Jupiter; malefic contrary to sect (the out-of-sect malefic) Saturn");
+    const unknown = (await facts(UNKNOWN)).versions[0]!;
+    expect(unknown.sectTeam).toBeNull();
+    expect(formatReadingFacts(await facts(UNKNOWN))).toContain("for reference only because sect is unavailable");
+  }, 60_000);
+
+  it("calls Mercury a morning star when it is west of the Sun", async () => {
+    for (const input of [RESOLVED, GAP, FOLD, UNKNOWN]) {
+      for (const v of (await facts(input)).versions) {
+        const lon = (p: string) => v.placements.find((x) => x.point === p)!.lon;
+        const west = (((lon("Sun") - lon("Mercury")) % 360) + 360) % 360 < 180;
+        expect(v.mercuryPhase).toBe(west ? "morning" : "evening");
+      }
+    }
+  }, 120_000);
+
+  // Written out here from the published tables, not taken from the engine:
+  // domiciles Tetrabiblos I.17, exaltations I.19, Dorothean triplicities (Dorotheus I.1.3).
+  const DOMICILES: Record<string, string[]> = { Sun: ["Leo"], Moon: ["Cancer"], Mercury: ["Gemini", "Virgo"], Venus: ["Taurus", "Libra"], Mars: ["Aries", "Scorpio"], Jupiter: ["Sagittarius", "Pisces"], Saturn: ["Capricorn", "Aquarius"] };
+  const EXALTED: Record<string, string> = { Sun: "Aries", Moon: "Taurus", Mercury: "Virgo", Venus: "Pisces", Mars: "Capricorn", Jupiter: "Cancer", Saturn: "Libra" };
+  const OPPOSITE: Record<string, string> = { Aries: "Libra", Taurus: "Scorpio", Gemini: "Sagittarius", Cancer: "Capricorn", Leo: "Aquarius", Virgo: "Pisces", Libra: "Aries", Scorpio: "Taurus", Sagittarius: "Gemini", Capricorn: "Cancer", Aquarius: "Leo", Pisces: "Virgo" };
+  const ELEMENT: Record<string, string> = { Aries: "fire", Leo: "fire", Sagittarius: "fire", Taurus: "earth", Virgo: "earth", Capricorn: "earth", Gemini: "air", Libra: "air", Aquarius: "air", Cancer: "water", Scorpio: "water", Pisces: "water" };
+  const TRIPLICITY: Record<string, { day: string; night: string }> = { fire: { day: "Sun", night: "Jupiter" }, earth: { day: "Venus", night: "Moon" }, air: { day: "Saturn", night: "Mercury" }, water: { day: "Venus", night: "Mars" } };
+
+  it("gives domicile, exaltation, detriment, fall and triplicity by sect for each classical planet", async () => {
+    for (const input of [RESOLVED, GAP, FOLD, UNKNOWN]) {
+      for (const v of (await facts(input)).versions) {
+        expect(v.dignities.map((d) => d.planet)).toEqual(v.timeKnown ? ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"] : ["Sun", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"]);
+        for (const d of v.dignities) {
+          expect(d.dignities.includes("domicile")).toBe(DOMICILES[d.planet]!.includes(d.sign));
+          expect(d.dignities.includes("exaltation")).toBe(EXALTED[d.planet] === d.sign);
+          expect(d.debilities.includes("detriment")).toBe(DOMICILES[d.planet]!.some((s) => OPPOSITE[s] === d.sign));
+          expect(d.debilities.includes("fall")).toBe(OPPOSITE[EXALTED[d.planet]!] === d.sign);
+          const lords = TRIPLICITY[ELEMENT[d.sign]!]!;
+          if (v.sect) {
+            expect(d.dignities.includes("triplicity")).toBe(lords[v.sect] === d.planet);
+          } else {
+            expect(d.dignities).not.toContain("triplicity");
+            expect(d.triplicityIf).toEqual((["day", "night"] as const).filter((s) => lords[s] === d.planet));
+          }
+        }
+      }
+    }
+  }, 120_000);
+});
+
+describe("line IDs", () => {
+  it("gives every fact line one ID, unique except the repeated tightest aspect", async () => {
+    for (const input of [RESOLVED, GAP, FOLD, UNKNOWN]) {
+      const lines = formatReadingFacts(await facts(input)).split("\n");
+      const tagged = lines.filter((l) => !l.startsWith("Tightest aspect:")).map((l) => /\[([A-Z]\d+[a-z]?)\]/.exec(l)?.[1]).filter(Boolean);
+      expect(new Set(tagged).size).toBe(tagged.length);
+      for (const l of lines.filter((x) => /transiting \w+ \w+ natal|stationing \w+ \w+ natal|^\[A\d+\] \d+\./.test(x.trim()))) expect(l).toMatch(/\[[A-Z]\d+[a-z]?\]/);
+      expect(lines.find((l) => l.startsWith("[N1] Age at the window start"))).toBeDefined();
+    }
+  }, 120_000);
+
+  it("gives the same IDs for the same input", async () => {
+    expect(formatReadingFacts(await buildReadingFacts(RESOLVED))).toBe(formatReadingFacts(await facts(RESOLVED)));
   }, 60_000);
 });

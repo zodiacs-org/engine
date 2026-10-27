@@ -15,6 +15,8 @@ import { sectOf } from "../../../src/points.js";
 import { searchLongitudeCrossings } from "../../../src/returns.js";
 import { degreeInSign, normalizeLongitude, signForLongitude, signIndexForLongitude, SIGNS } from "../../../src/signs.js";
 import { moonSignCandidates } from "../../../src/techniques/moon-sign.js";
+import { CLASSICAL_PLANETS, dignityRulersAt, essentialDignities } from "../../../src/techniques/dignities.js";
+import type { ClassicalPlanet } from "../../../src/techniques/dignities.js";
 import { separation } from "../../../src/aspects.js";
 import type { BodyName, Chart } from "../../../src/types.js";
 
@@ -126,6 +128,59 @@ export interface StationContact {
   checked: string[];
 }
 
+/** Calendar age of the native on the first day of the window, from the local birth date. */
+export interface Age {
+  /** The local date the age is taken on (the window start). */
+  at: string;
+  years: number;
+  months: number;
+  /** True when the birth date is after the window start; years and months are then 0. */
+  bornAfterStart: boolean;
+  /** Days from the window start to the birth date when born after it, else 0. */
+  daysAfterStart: number;
+  stage: "infant" | "child" | "adolescent" | "adult";
+}
+
+/** The planets of each sect, after Ptolemy, Tetrabiblos I.7. */
+export interface SectTeam {
+  sect: "day" | "night";
+  light: ClassicalPlanet;
+  beneficOfSect: ClassicalPlanet;
+  maleficOfSect: ClassicalPlanet;
+  beneficContrary: ClassicalPlanet;
+  /** The out-of-sect malefic. */
+  maleficContrary: ClassicalPlanet;
+}
+
+export const SECT_TEAMS: Readonly<Record<"day" | "night", SectTeam>> = Object.freeze({
+  day: { sect: "day", light: "Sun", beneficOfSect: "Jupiter", maleficOfSect: "Saturn", beneficContrary: "Venus", maleficContrary: "Mars" },
+  night: { sect: "night", light: "Moon", beneficOfSect: "Venus", maleficOfSect: "Mars", beneficContrary: "Jupiter", maleficContrary: "Saturn" }
+});
+
+export interface PlanetDignity {
+  planet: ClassicalPlanet;
+  sign: string;
+  degree: string;
+  /** Held by this planet here, in the order domicile, exaltation, triplicity, term, face. Without sect, triplicity is left out (see triplicityIf). */
+  dignities: string[];
+  debilities: string[];
+  /** No essential dignity (Lilly); null when it turns on the unknown sect. */
+  peregrine: boolean | null;
+  /** Unknown sect only: the sects in which this planet would hold triplicity here. */
+  triplicityIf: ("day" | "night")[];
+  /** Who holds each dignity at this degree. */
+  lords: {
+    domicile: ClassicalPlanet;
+    exaltation: ClassicalPlanet | null;
+    element: string;
+    triplicity: { day: ClassicalPlanet; night: ClassicalPlanet; participating: ClassicalPlanet };
+    term: { planet: ClassicalPlanet; from: number; to: number };
+    face: { planet: ClassicalPlanet; from: number; to: number };
+    detriment: ClassicalPlanet;
+    fall: ClassicalPlanet | null;
+  };
+}
+
 export interface ChartVersion {
   label: string;
   utc: string;
@@ -135,6 +190,11 @@ export interface ChartVersion {
   ascendant: Placement | null;
   midheaven: Placement | null;
   sect: "day" | "night" | null;
+  /** The sect team of this chart; null without a birth time. */
+  sectTeam: SectTeam | null;
+  /** Mercury's phase: morning star when it is west of the Sun in longitude (rises before it), evening star when east. */
+  mercuryPhase: "morning" | "evening";
+  dignities: PlanetDignity[];
   placidusUndefined: boolean;
   aspects: NatalAspect[];
   edges: EdgePoint[];
@@ -154,6 +214,7 @@ export interface ReadingFacts {
   /** Gap and fold: the zone's offsets either side of the change, minutes east. */
   offsets: { before: number; after: number } | null;
   window: { from: string; toInclusive: string; days: number; zone: string };
+  age: Age;
   stations: Station[];
   versions: ChartVersion[];
 }
@@ -215,6 +276,55 @@ function placement(point: string, lon: number, ascendant: number | null, retrogr
 /** |offset| of `lon` from `target`, degrees in [0, 180]. */
 function offsetFrom(lon: number, target: number): number {
   return separation(lon, target);
+}
+
+// ------------------------------------------------------------------ age
+
+/** Calendar age on local date `at` of someone born on local date `birth` (both YYYY-MM-DD). */
+export function ageAt(birth: string, at: string): Age {
+  const [by, bm, bd] = birth.split("-").map(Number) as [number, number, number];
+  const [ay, am, ad] = at.split("-").map(Number) as [number, number, number];
+  if (birth > at) {
+    const days = Math.round((Date.parse(`${birth}T00:00:00Z`) - Date.parse(`${at}T00:00:00Z`)) / DAY);
+    return { at, years: 0, months: 0, bornAfterStart: true, daysAfterStart: days, stage: "infant" };
+  }
+  let months = (ay - by) * 12 + (am - bm);
+  if (ad < bd) months -= 1;
+  const years = Math.floor(months / 12);
+  const stage = years < 2 ? "infant" : years < 13 ? "child" : years < 18 ? "adolescent" : "adult";
+  return { at, years, months: months % 12, bornAfterStart: false, daysAfterStart: 0, stage };
+}
+
+// ------------------------------------------------------------------ dignities
+
+function planetDignity(planet: ClassicalPlanet, lon: number, sect: "day" | "night" | null): PlanetDignity {
+  const r = dignityRulersAt(lon);
+  const lords: PlanetDignity["lords"] = {
+    domicile: r.domicile,
+    exaltation: r.exaltation,
+    element: r.triplicity.element,
+    triplicity: { day: r.triplicity.day, night: r.triplicity.night, participating: r.triplicity.participating },
+    term: { ...r.term },
+    face: { ...r.face },
+    detriment: r.detriment,
+    fall: r.fall
+  };
+  const base = { planet, sign: signName(lon), degree: degreeText(lon), lords };
+  if (sect) {
+    const d = essentialDignities(planet, lon, sect);
+    return { ...base, dignities: [...d.dignities], debilities: [...d.debilities], peregrine: d.peregrine, triplicityIf: [] };
+  }
+  const day = essentialDignities(planet, lon, "day");
+  const night = essentialDignities(planet, lon, "night");
+  const triplicityIf = (["day", "night"] as const).filter((s) => (s === "day" ? day : night).dignities.includes("triplicity"));
+  const dignities = day.dignities.filter((x) => x !== "triplicity");
+  return {
+    ...base,
+    dignities: [...dignities],
+    debilities: [...day.debilities],
+    peregrine: dignities.length > 0 ? false : triplicityIf.length === 0 ? true : triplicityIf.length === 2 ? false : null,
+    triplicityIf: [...triplicityIf]
+  };
 }
 
 // ------------------------------------------------------------------ civil time
@@ -507,6 +617,12 @@ function chartVersion(input: ReadingInput, instant: Instant, timeKnown: boolean,
   if (asc !== null && mc !== null) transitPoints.push({ name: "Ascendant", lon: asc }, { name: "Midheaven", lon: mc });
   const transits = findTransits(transitPoints, window.fromMs, window.toMs, input.zone);
 
+  const sect = asc === null ? null : sectOf(asc, chart.bodies.find((b) => b.body === "Sun")!.lon);
+  const lonOf = (body: BodyName) => chart.bodies.find((b) => b.body === body)!.lon;
+  // Mercury west of the Sun (the Sun ahead of it by under 180 degrees) rises before the Sun: a morning star.
+  const mercuryPhase = normalizeLongitude(lonOf("Sun") - lonOf("Mercury")) < 180 ? "morning" : "evening";
+  const dignities = CLASSICAL_PLANETS.filter((p) => timeKnown || p !== "Moon").map((p) => planetDignity(p, lonOf(p), sect));
+
   const local = localParts(input.zone, instant.ms);
   let moonSigns: string[] | null = null;
   const daySignChanges: ChartVersion["daySignChanges"] = [];
@@ -528,7 +644,10 @@ function chartVersion(input: ReadingInput, instant: Instant, timeKnown: boolean,
     placements,
     ascendant: asc === null ? null : placement("Ascendant", asc, asc, false),
     midheaven: mc === null ? null : placement("Midheaven", mc, asc, false),
-    sect: asc === null ? null : sectOf(asc, chart.bodies.find((b) => b.body === "Sun")!.lon),
+    sect,
+    sectTeam: sect === null ? null : SECT_TEAMS[sect],
+    mercuryPhase,
+    dignities,
     placidusUndefined,
     aspects,
     edges,
@@ -557,12 +676,29 @@ export async function buildReadingFacts(input: ReadingInput, options: ReadingOpt
     lmt: civil.lmt,
     offsets: civil.offsets,
     window: { from: windowStart, toInclusive: addDays(windowStart, days - 1), days, zone: input.zone },
+    age: ageAt(input.date, windowStart),
     stations,
     versions: civil.instants.map((instant) => chartVersion(input, instant, timeKnown, { fromMs, toMs }, stations))
   };
 }
 
 // ------------------------------------------------------------------ text sheet
+
+/**
+ * Every fact line of the sheet starts with a stable short ID in square
+ * brackets, unique within the sheet and numbered in sheet order: N age, P
+ * placements, K sect, D dignities, A natal aspects, E sign edges, T transits,
+ * S stations, and S1a, S1b, ... each contact of station S1. The same input and
+ * options give the same IDs. `check-reading.ts` parses these lines.
+ */
+class Ids {
+  private readonly counts = new Map<string, number>();
+  next(prefix: string): string {
+    const n = (this.counts.get(prefix) ?? 0) + 1;
+    this.counts.set(prefix, n);
+    return `[${prefix}${n}]`;
+  }
+}
 
 function placementLine(p: Placement): string {
   const house = p.house === null ? "" : `, whole sign house ${p.house}`;
@@ -581,11 +717,37 @@ function transitLine(t: Transit): string {
   return `${head}: exact ${t.exact.join(", ")}`;
 }
 
+function ageLine(a: Age): string {
+  if (a.bornAfterStart) return `Age at the window start (${a.at}): not yet born; the birth date is ${a.daysAfterStart} days into the window. Stage: infant.`;
+  const unit = (n: number, one: string) => `${n} ${one}${n === 1 ? "" : "s"}`;
+  return `Age at the window start (${a.at}): ${unit(a.years, "year")} ${unit(a.months, "month")} (calendar age from the local birth date). Stage: ${a.stage}${a.stage === "adult" ? "" : " (under 18)"}.`;
+}
+
+function teamLine(t: SectTeam): string {
+  return `${t.sect} chart: sect light ${t.light}; benefic of sect ${t.beneficOfSect}; malefic of sect ${t.maleficOfSect}; benefic contrary to sect ${t.beneficContrary}; malefic contrary to sect (the out-of-sect malefic) ${t.maleficContrary}`;
+}
+
+function spanText(s: { planet: string; from: number; to: number }): string {
+  return `${s.planet} (${s.from}° to ${s.to}°)`;
+}
+
+function dignityLine(d: PlanetDignity, sect: "day" | "night" | null): string {
+  const held = d.dignities.length ? d.dignities.join(", ") : "none";
+  const ifSect = d.triplicityIf.length ? `; triplicity only if a ${d.triplicityIf.join(" or ")} chart` : "";
+  const peregrine = d.peregrine === null ? "peregrine unless it holds triplicity (depends on sect)" : d.peregrine ? "peregrine (no essential dignity)" : "not peregrine";
+  const l = d.lords;
+  const counted = sect ? `, counted for this ${sect} chart: ${l.triplicity[sect]}` : ", sect unknown so none is counted";
+  return `${d.planet} ${d.degree} ${d.sign}: dignities ${held}${ifSect}; debilities ${d.debilities.length ? d.debilities.join(", ") : "none"}; ${peregrine}. Lords here: domicile ${l.domicile}; exaltation ${l.exaltation ?? "none"}; triplicity (${l.element}) day ${l.triplicity.day}, night ${l.triplicity.night}, participating ${l.triplicity.participating}${counted}; term ${spanText(l.term)}; face ${spanText(l.face)}; detriment ${l.detriment}; fall ${l.fall ?? "none"}.`;
+}
+
 export function formatReadingFacts(f: ReadingFacts): string {
   const L: string[] = [];
+  const ids = new Ids();
   const z = f.input.zone;
   L.push("ENGINE FACTS (computed by @zodiacs/engine; every number below is final. Quote them; never recompute, compare, re-rank or round them.)");
+  L.push("Each fact line starts with an ID in square brackets: a letter and a number, such as T3. Name an aspect, transit, station or contact only by quoting its line with that ID, exactly as written: the same planets, the same aspect word, the same order.");
   L.push(`resolve_civil_time status: ${f.status}`);
+  L.push(`${ids.next("N")} ${ageLine(f.age)}`);
   if (f.lmt) L.push("Zone note: the birthplace kept local mean time on this date; the engine used the birthplace's local mean time.");
   if (f.status === "fold") {
     L.push(`The local time ${f.input.time} happened twice in ${z} (clock went from ${offsetText(f.offsets!.before)} to ${offsetText(f.offsets!.after)}). Both charts follow. Ask the person which occurrence, or read only what both share.`);
@@ -599,50 +761,65 @@ export function formatReadingFacts(f: ReadingFacts): string {
     L.push(`=== Chart: ${v.label} ===`);
     L.push(`Instant: ${v.utc} (local ${v.localTime}, ${z}). Tropical zodiac, ${v.timeKnown ? "whole sign houses, " : "no houses, "}true node.`);
     if (v.ascendant && v.midheaven) {
-      L.push(`Ascendant ${v.ascendant.degree} ${v.ascendant.sign}; Midheaven ${v.midheaven.degree} ${v.midheaven.sign} (whole sign house ${v.midheaven.house})`);
+      L.push(`${ids.next("P")} Ascendant ${v.ascendant.degree} ${v.ascendant.sign}; Midheaven ${v.midheaven.degree} ${v.midheaven.sign} (whole sign house ${v.midheaven.house})`);
     }
-    for (const p of v.placements) L.push(placementLine(p));
+    for (const p of v.placements) L.push(`${ids.next("P")} ${placementLine(p)}`);
     if (v.moonSigns) {
-      L.push(v.moonSigns.length === 1
+      L.push(`${ids.next("P")} ${v.moonSigns.length === 1
         ? `Moon: in ${v.moonSigns[0]} for the whole local date (degree unknown without a birth time).`
-        : `Moon: changes sign during the local date: ${v.moonSigns.join(" then ")}. Its sign depends on the unknown birth time.`);
+        : `Moon: changes sign during the local date: ${v.moonSigns.join(" then ")}. Its sign depends on the unknown birth time.`}`);
     }
     for (const c of v.daySignChanges) {
-      L.push(`${c.point}: changes sign during the local date (${c.signs.join(" then ")}); its sign depends on the unknown birth time. The degree above is at the noon reference only.`);
+      L.push(`${ids.next("P")} ${c.point}: changes sign during the local date (${c.signs.join(" then ")}); its sign depends on the unknown birth time. The degree above is at the noon reference only.`);
     }
     if (!v.timeKnown) L.push("Degrees and orbs below are at the noon reference instant; with no birth time they are approximate for the day.");
-    L.push(v.sect === null
+
+    L.push(`${ids.next("K")} ${v.sect === null
       ? "Sect: unavailable (needs a birth time)."
-      : `Sect (engine): ${v.sect} chart (${v.sect === "day" ? "Sun above the horizon" : "Sun below the horizon"}).`);
+      : `Sect (engine): ${v.sect} chart (${v.sect === "day" ? "Sun above the horizon" : "Sun below the horizon"}).`}`);
+    if (v.sectTeam) {
+      L.push(`${ids.next("K")} Sect team (Ptolemy, Tetrabiblos I.7), ${teamLine(v.sectTeam)}. Use this team; do not apply the other sect's.`);
+    } else {
+      L.push(`${ids.next("K")} Sect teams (Ptolemy, Tetrabiblos I.7), for reference only because sect is unavailable: if a ${teamLine(SECT_TEAMS.day)}. If a ${teamLine(SECT_TEAMS.night)}. Do not name a sect light, a benefic or malefic of sect, or an out-of-sect malefic for this chart.`);
+    }
+    L.push(`${ids.next("K")} Mercury: ${v.mercuryPhase} star (${v.mercuryPhase === "morning" ? "west of the Sun, rises before it" : "east of the Sun, sets after it"}), so it joins the ${v.mercuryPhase === "morning" ? "day" : "night"} sect (Tetrabiblos I.7).`);
     if (v.placidusUndefined) L.push("Placidus houses: undefined at this latitude (polar); the whole sign houses above are unaffected.");
+
+    L.push("Essential dignities (engine, @zodiacs/engine/techniques): domiciles Tetrabiblos I.17; exaltations and falls Tetrabiblos I.19; detriments the signs opposite the domiciles; Dorothean triplicities (Dorotheus I.1.3), the lord of the chart's sect counted, not the participating lord; Egyptian terms (Tetrabiblos I.20); Chaldean faces; peregrine means no essential dignity (Lilly, Christian Astrology, p. 112). Seven classical planets only; Uranus, Neptune, Pluto and the node have none in this scheme. Quote these; never decide a dignity yourself:");
+    for (const d of v.dignities) L.push(`${ids.next("D")} ${dignityLine(d, v.sect)}`);
 
     L.push(`Natal aspects, ENGINE RANKING by orb, tightest first (orbs to the arcminute; ${v.aspects.length} aspects; quote this order, do not re-rank):`);
     if (v.aspects.length) {
-      L.push(`Tightest aspect: ${v.aspects[0]!.a} ${v.aspects[0]!.type} ${v.aspects[0]!.b}, orb ${orbText(v.aspects[0]!.orb)}`);
-      for (const a of v.aspects) L.push(`${a.rank}. ${a.a} ${a.type} ${a.b}, orb ${orbText(a.orb)}`);
+      const aspectIds = v.aspects.map(() => ids.next("A"));
+      L.push(`Tightest aspect: ${aspectIds[0]} ${v.aspects[0]!.a} ${v.aspects[0]!.type} ${v.aspects[0]!.b}, orb ${orbText(v.aspects[0]!.orb)}`);
+      v.aspects.forEach((a, i) => L.push(`${aspectIds[i]} ${a.rank}. ${a.a} ${a.type} ${a.b}, orb ${orbText(a.orb)}`));
     } else L.push("none within the engine's default orbs");
 
     L.push(`Points within ${EDGE_DEGREES}° of a sign edge (engine check over every point listed above):`);
-    if (v.edges.length === 0) L.push(`none: no listed point is within ${EDGE_DEGREES}° of a sign edge.`);
+    if (v.edges.length === 0) L.push(`${ids.next("E")} none: no listed point is within ${EDGE_DEGREES}° of a sign edge.`);
     for (const e of v.edges) {
       const where = e.edge === "start" ? `${orbText(e.distance)} after the start of ${e.sign} (${e.neighbour} before it)` : `${orbText(e.distance)} before the end of ${e.sign} (${e.neighbour} next)`;
       const shift = e.shiftMinutes === null
         ? ""
         : `; it would be in ${e.neighbour} if the birth time were ${e.shiftMinutes} minutes ${e.edge === "start" ? "earlier" : "later"} or more`;
-      L.push(`- ${e.point} ${e.degree} ${e.sign}: ${where}${shift}`);
+      L.push(`- ${ids.next("E")} ${e.point} ${e.degree} ${e.sign}: ${where}${shift}`);
     }
 
     L.push(`Transits ${f.window.from} to ${f.window.toInclusive} inclusive (${f.window.days} days), dates in the person's zone (${z}). Bodies: ${TRANSITING.join(", ")}. Aspects: ${TRANSIT_ASPECTS.join(", ")}. Natal points: ${v.transitPoints.join(", ")}. Uranus, Neptune and Pluto are given as in-orb date ranges, never as a single day:`);
     if (v.transits.length === 0) L.push("- none in the window for these bodies, aspects and points.");
-    for (const t of v.transits) L.push(`- ${transitLine(t)}`);
+    for (const t of v.transits) L.push(`- ${ids.next("T")} ${transitLine(t)}`);
 
     L.push(`Stations in the window and their contacts with natal points (major aspects within ${STATION_ORB}°; checked against ${v.stationContacts[0]?.checked.join(", ") ?? "the natal points"}):`);
     if (v.stationContacts.length === 0) L.push("- no station in the window.");
     for (const s of v.stationContacts) {
+      const sid = ids.next("S");
       const head = `${s.station.body} stations ${s.station.kind} ${s.station.localDate} (plus or minus 1 day) at ${degreeText(s.station.lon)} ${signName(s.station.lon)}`;
-      L.push(s.contacts.length === 0
-        ? `- ${head}: no natal point within ${STATION_ORB}° of a major aspect (computed).`
-        : `- ${head}: ${s.contacts.map((c) => `${c.type} natal ${c.natal}, orb ${orbText(c.orb)}`).join("; ")}`);
+      if (s.contacts.length === 0) {
+        L.push(`- ${sid} ${head}: no natal point within ${STATION_ORB}° of a major aspect (computed).`);
+        continue;
+      }
+      L.push(`- ${sid} ${head}. Contacts:`);
+      s.contacts.forEach((c, i) => L.push(`  - ${sid.slice(0, -1)}${String.fromCharCode(97 + i)}] stationing ${s.station.body} ${c.type} natal ${c.natal}, orb ${orbText(c.orb)}`));
     }
   }
   return L.join("\n");
