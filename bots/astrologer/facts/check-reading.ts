@@ -539,6 +539,10 @@ export function findMentions(reading: string): Mention[] {
         }
         if (on) {
           if (!lefts.length || !rights.length) continue;
+          // "leans on Jupiter, and through Jupiter on Saturn": the point after "through" or "via" is the way, not the subject of "on" (v9 P10).
+          let before = lefts[lefts.length - 1]!.k - 1;
+          while (before >= 0 && (tokens[before]!.word === "the" || NATAL_WORDS.has(tokens[before]!.word))) before -= 1;
+          if (before >= 0 && /^(through|via)$/.test(tokens[before]!.word)) continue;
           // "on your North Node axis", "on your Saturn-Mars cluster", "on your Sun trine": not a conjunction.
           const r = rights[0]!.k;
           let k = r + 1;
@@ -2027,10 +2031,10 @@ export function checkReading(sheetText: string, reading: string): CheckResult {
     if (reversed.length) {
       violations.push({ kind: "reversed", mention: m.text, sentence: m.sentence, named, sheet: lines, message: `names ${named} with the direction reversed; the sheet has: ${reversed.map((r) => r.line).join(" | ")}` });
     } else if (otherType.length) {
-      violations.push({ kind: "wrong-aspect", mention: m.text, sentence: m.sentence, named, sheet: lines, message: `names ${named}, but the sheet gives a different aspect for these points: ${otherType.map((r) => r.line).join(" | ")}${angleHint ? `.${angleHint}` : ""}` });
+      violations.push({ kind: "wrong-aspect", mention: m.text, sentence: m.sentence, named, sheet: lines, message: `names ${named} (in the words "${m.text}"), but the sheet gives a different aspect for these points: ${otherType.map((r) => r.line).join(" | ")}${angleHint ? `.${angleHint}` : ""}` });
     } else {
       const what = m.context === "any" ? "an aspect, transit or station contact" : m.context === "station" ? "a station contact or transit" : "a transit or station contact";
-      violations.push({ kind: "not-on-sheet", mention: m.text, sentence: m.sentence, named, sheet: lines, message: `names ${named}, which is not ${what} on the sheet${lines.length ? `; the sheet has for these points: ${lines.join(" | ")}` : ""}${angleHint ? `.${angleHint}` : ""}` });
+      violations.push({ kind: "not-on-sheet", mention: m.text, sentence: m.sentence, named, sheet: lines, message: `names ${named} (in the words "${m.text}"), which is not ${what} on the sheet${lines.length ? `; the sheet has for these points: ${lines.join(" | ")}` : ""}${angleHint ? `.${angleHint}` : ""}` });
     }
   }
   violations.push(...birthdayViolations(sheet, reading));

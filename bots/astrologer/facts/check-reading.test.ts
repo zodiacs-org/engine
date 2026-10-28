@@ -76,6 +76,15 @@ describe("checkReading", () => {
     expect(kinds("The Sun opposes your natal Mercury on 20 November.")).toEqual([]);
   });
 
+  it("reads 'through Jupiter on Saturn' as a chain of lords, not a conjunction (v9 P10)", () => {
+    expect(kinds("Its purpose leans on Jupiter, and through Jupiter on Saturn, in daily work.")).toEqual([]);
+    expect(kinds("Its purpose leans on Jupiter, its domicile lord, and through Jupiter on Saturn, Jupiter's own domicile lord.")).toEqual([]);
+    expect(kinds("The ruler leans via the Moon on Saturn.")).toEqual([]);
+    expect(kinds("Jupiter on Saturn makes duty heavy.")).toEqual(["not-on-sheet: Jupiter conjunction Saturn"]);
+    // The message quotes the words read as the relation, so the writer can find them.
+    expect(check("Jupiter on Saturn makes duty heavy.").violations[0]!.message).toContain('in the words "Jupiter on Saturn"');
+  });
+
   it("flags a station contact given the wrong aspect", () => {
     expect(kinds("With Mars stationing retrograde on your natal Sun around 10 January, slow down.")).toEqual(["wrong-aspect: Mars conjunction Sun"]);
   });
