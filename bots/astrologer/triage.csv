@@ -1,0 +1,234 @@
+id,level,kind,input,verdict,class,blocks_launch,lon_resid_arcsec,lat_resid_arcsec,speed_deg_per_day,exact_time_shift_min,root_cause
+L1-POS-0002,L1,position.apparent.ecliptic-true-of-date,Moon 1851-03-14 TT,fail,TOLERANCE,no,3.741,-0.095,14.64662,0.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0003,L1,position.apparent.ecliptic-true-of-date,Mercury 1851-03-14 TT,fail,TOLERANCE,no,-2.053,-0.968,1.66825,0.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0004,L1,position.apparent.ecliptic-true-of-date,Venus 1851-03-14 TT,fail,TOLERANCE,no,0.971,1.566,1.08183,0.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0005,L1,position.apparent.ecliptic-true-of-date,Mars 1851-03-14 TT,fail,TOLERANCE,no,1.927,0.490,0.78196,1.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0006,L1,position.apparent.ecliptic-true-of-date,Jupiter 1851-03-14 TT,fail,TOLERANCE,no,4.018,0.318,-0.09999,16.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0007,L1,position.apparent.ecliptic-true-of-date,Saturn 1851-03-14 TT,fail,TOLERANCE,no,-2.195,-10.182,0.11786,7.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0008,L1,position.apparent.ecliptic-true-of-date,Uranus 1851-03-14 TT,fail,TOLERANCE,no,3.713,3.878,0.04924,30.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0009,L1,position.apparent.ecliptic-true-of-date,Neptune 1851-03-14 TT,fail,TOLERANCE,conditional C1,15.435,7.580,0.03687,167.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0010,L1,position.apparent.ecliptic-true-of-date,Pluto 1851-03-14 TT,fail,TOLERANCE,conditional C1,9.464,0.581,0.01932,196.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0012,L1,position.apparent.ecliptic-true-of-date,Moon 1866-11-02 TT,fail,TOLERANCE,no,3.561,-0.063,12.55261,0.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0013,L1,position.apparent.ecliptic-true-of-date,Mercury 1866-11-02 TT,fail,TOLERANCE,no,-0.769,-4.122,1.42283,0.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0014,L1,position.apparent.ecliptic-true-of-date,Venus 1866-11-02 TT,fail,TOLERANCE,no,-5.420,-3.078,0.57940,3.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0015,L1,position.apparent.ecliptic-true-of-date,Mars 1866-11-02 TT,fail,TOLERANCE,no,-3.311,-0.189,0.31515,4.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0016,L1,position.apparent.ecliptic-true-of-date,Jupiter 1866-11-02 TT,fail,TOLERANCE,no,-2.209,-4.790,0.13201,6.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0017,L1,position.apparent.ecliptic-true-of-date,Saturn 1866-11-02 TT,fail,TOLERANCE,no,-3.109,10.601,0.11973,10.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0018,L1,position.apparent.ecliptic-true-of-date,Uranus 1866-11-02 TT,fail,TOLERANCE,no,0.220,15.092,-0.01679,5.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0019,L1,position.apparent.ecliptic-true-of-date,Neptune 1866-11-02 TT,fail,TOLERANCE,conditional C1,5.810,4.414,-0.02340,99.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0020,L1,position.apparent.ecliptic-true-of-date,Pluto 1866-11-02 TT,fail,TOLERANCE,conditional C1,7.240,1.135,-0.01873,154.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0022,L1,position.apparent.ecliptic-true-of-date,Moon 1882-07-21 TT,fail,TOLERANCE,no,3.065,0.023,11.87616,0.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0023,L1,position.apparent.ecliptic-true-of-date,Mercury 1882-07-21 TT,fail,TOLERANCE,no,-2.975,4.094,1.05625,1.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0024,L1,position.apparent.ecliptic-true-of-date,Venus 1882-07-21 TT,fail,TOLERANCE,no,0.425,1.432,1.17122,0.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0025,L1,position.apparent.ecliptic-true-of-date,Mars 1882-07-21 TT,fail,TOLERANCE,no,2.156,0.668,0.61214,1.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0026,L1,position.apparent.ecliptic-true-of-date,Jupiter 1882-07-21 TT,fail,TOLERANCE,no,-2.494,-0.476,0.20570,4.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0027,L1,position.apparent.ecliptic-true-of-date,Saturn 1882-07-21 TT,fail,TOLERANCE,no,2.545,-3.299,0.07843,13.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0028,L1,position.apparent.ecliptic-true-of-date,Uranus 1882-07-21 TT,fail,TOLERANCE,no,0.032,-4.430,0.04721,0.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0029,L1,position.apparent.ecliptic-true-of-date,Neptune 1882-07-21 TT,fail,TOLERANCE,conditional C1,-3.196,-1.196,0.01703,75.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0030,L1,position.apparent.ecliptic-true-of-date,Pluto 1882-07-21 TT,fail,TOLERANCE,conditional C1,4.828,1.190,0.01311,147.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0031,L1,position.apparent.ecliptic-true-of-date,Sun 1897-01-09 TT,fail,TOLERANCE,no,0.678,-1.038,1.01905,0.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0032,L1,position.apparent.ecliptic-true-of-date,Moon 1897-01-09 TT,fail,TOLERANCE,no,2.288,0.298,11.98072,0.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0033,L1,position.apparent.ecliptic-true-of-date,Mercury 1897-01-09 TT,fail,TOLERANCE,no,3.469,-2.434,0.63603,2.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0034,L1,position.apparent.ecliptic-true-of-date,Venus 1897-01-09 TT,fail,TOLERANCE,no,2.692,-2.928,1.16524,0.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0035,L1,position.apparent.ecliptic-true-of-date,Mars 1897-01-09 TT,fail,TOLERANCE,no,2.562,-5.273,-0.08570,12.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0037,L1,position.apparent.ecliptic-true-of-date,Saturn 1897-01-09 TT,fail,TOLERANCE,no,-0.732,-2.435,0.08791,3.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0038,L1,position.apparent.ecliptic-true-of-date,Uranus 1897-01-09 TT,fail,TOLERANCE,no,-3.106,8.480,0.04373,28.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0039,L1,position.apparent.ecliptic-true-of-date,Neptune 1897-01-09 TT,fail,TOLERANCE,no,1.453,-4.872,-0.02315,25.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0040,L1,position.apparent.ecliptic-true-of-date,Pluto 1897-01-09 TT,fail,TOLERANCE,conditional C1,3.693,1.109,-0.01465,100.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0042,L1,position.apparent.ecliptic-true-of-date,Moon 1908-05-30 TT,fail,TOLERANCE,no,2.340,-0.250,12.67862,0.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0044,L1,position.apparent.ecliptic-true-of-date,Venus 1908-05-30 TT,fail,TOLERANCE,no,-3.686,1.513,0.48621,3.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0046,L1,position.apparent.ecliptic-true-of-date,Jupiter 1908-05-30 TT,fail,TOLERANCE,no,-0.985,1.949,0.15515,2.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0047,L1,position.apparent.ecliptic-true-of-date,Saturn 1908-05-30 TT,fail,TOLERANCE,no,-5.162,-7.493,0.08074,25.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0048,L1,position.apparent.ecliptic-true-of-date,Uranus 1908-05-30 TT,fail,TOLERANCE,conditional C1,-5.105,-7.019,-0.02902,70.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0049,L1,position.apparent.ecliptic-true-of-date,Neptune 1908-05-30 TT,fail,TOLERANCE,conditional C1,9.014,-1.497,0.03177,113.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0050,L1,position.apparent.ecliptic-true-of-date,Pluto 1908-05-30 TT,fail,TOLERANCE,no,2.584,0.864,0.02300,44.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0051,L1,position.apparent.ecliptic-true-of-date,Sun 1919-12-04 TT,fail,TOLERANCE,no,-0.455,-1.067,1.01437,0.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0052,L1,position.apparent.ecliptic-true-of-date,Moon 1919-12-04 TT,fail,TOLERANCE,no,1.760,-0.400,14.53791,0.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0053,L1,position.apparent.ecliptic-true-of-date,Mercury 1919-12-04 TT,fail,TOLERANCE,no,-2.998,-5.982,-1.34682,0.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0054,L1,position.apparent.ecliptic-true-of-date,Venus 1919-12-04 TT,fail,TOLERANCE,no,-2.274,0.444,1.07469,0.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0056,L1,position.apparent.ecliptic-true-of-date,Jupiter 1919-12-04 TT,fail,TOLERANCE,no,-0.044,-1.285,0.00418,4.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0057,L1,position.apparent.ecliptic-true-of-date,Saturn 1919-12-04 TT,fail,TOLERANCE,no,-2.636,1.818,0.03509,30.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0059,L1,position.apparent.ecliptic-true-of-date,Neptune 1919-12-04 TT,fail,TOLERANCE,conditional C1,13.022,2.422,-0.01067,488.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0060,L1,position.apparent.ecliptic-true-of-date,Pluto 1919-12-04 TT,fail,TOLERANCE,no,1.807,0.534,-0.01794,40.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0061,L1,position.apparent.ecliptic-true-of-date,Sun 1933-08-17 TT,fail,TOLERANCE,no,0.221,-1.269,0.96216,0.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0062,L1,position.apparent.ecliptic-true-of-date,Moon 1933-08-17 TT,fail,TOLERANCE,no,1.844,-0.186,11.98856,0.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0063,L1,position.apparent.ecliptic-true-of-date,Mercury 1933-08-17 TT,fail,TOLERANCE,no,-0.193,-2.441,0.89830,0.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0064,L1,position.apparent.ecliptic-true-of-date,Venus 1933-08-17 TT,fail,TOLERANCE,no,1.448,0.315,1.20514,0.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0065,L1,position.apparent.ecliptic-true-of-date,Mars 1933-08-17 TT,fail,TOLERANCE,no,1.419,0.437,0.62899,0.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0066,L1,position.apparent.ecliptic-true-of-date,Jupiter 1933-08-17 TT,fail,TOLERANCE,no,-1.181,-0.763,0.19904,2.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0067,L1,position.apparent.ecliptic-true-of-date,Saturn 1933-08-17 TT,fail,TOLERANCE,no,-2.321,0.532,-0.07227,12.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0068,L1,position.apparent.ecliptic-true-of-date,Uranus 1933-08-17 TT,fail,TOLERANCE,conditional C1,4.515,2.583,-0.01179,153.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0069,L1,position.apparent.ecliptic-true-of-date,Neptune 1933-08-17 TT,fail,TOLERANCE,conditional C1,7.604,6.511,0.03605,84.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0070,L1,position.apparent.ecliptic-true-of-date,Pluto 1933-08-17 TT,fail,TOLERANCE,no,1.176,0.099,0.02377,19.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0073,L1,position.apparent.ecliptic-true-of-date,Mercury 1946-02-23 TT,fail,TOLERANCE,no,-1.009,-1.433,1.85323,0.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0075,L1,position.apparent.ecliptic-true-of-date,Mars 1946-02-23 TT,fail,TOLERANCE,no,-0.891,-1.648,0.02391,14.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0076,L1,position.apparent.ecliptic-true-of-date,Jupiter 1946-02-23 TT,fail,TOLERANCE,no,-5.304,0.810,-0.03906,54.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0077,L1,position.apparent.ecliptic-true-of-date,Saturn 1946-02-23 TT,fail,TOLERANCE,no,-5.493,-12.068,-0.04374,50.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0078,L1,position.apparent.ecliptic-true-of-date,Uranus 1946-02-23 TT,fail,TOLERANCE,conditional C1,3.653,11.449,0.00300,487.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0079,L1,position.apparent.ecliptic-true-of-date,Neptune 1946-02-23 TT,fail,TOLERANCE,no,-1.464,5.429,-0.02179,26.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0080,L1,position.apparent.ecliptic-true-of-date,Pluto 1946-02-23 TT,fail,TOLERANCE,no,1.119,-0.001,-0.02092,21.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0083,L1,position.apparent.ecliptic-true-of-date,Mercury 1957-10-04 TT,fail,TOLERANCE,no,2.941,0.454,1.66270,0.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0084,L1,position.apparent.ecliptic-true-of-date,Venus 1957-10-04 TT,fail,TOLERANCE,no,1.416,-1.113,1.15341,0.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0086,L1,position.apparent.ecliptic-true-of-date,Jupiter 1957-10-04 TT,fail,TOLERANCE,no,4.683,0.422,0.21645,8.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0087,L1,position.apparent.ecliptic-true-of-date,Saturn 1957-10-04 TT,fail,TOLERANCE,no,-0.500,4.423,0.07884,2.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0088,L1,position.apparent.ecliptic-true-of-date,Uranus 1957-10-04 TT,fail,TOLERANCE,no,3.174,7.146,0.03722,34.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0089,L1,position.apparent.ecliptic-true-of-date,Neptune 1957-10-04 TT,fail,TOLERANCE,conditional C1,-10.360,0.895,0.03546,116.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0090,L1,position.apparent.ecliptic-true-of-date,Pluto 1957-10-04 TT,fail,TOLERANCE,no,1.526,0.112,0.02668,22.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0093,L1,position.apparent.ecliptic-true-of-date,Mercury 1969-07-20 TT,fail,TOLERANCE,no,-2.808,-0.677,2.13468,0.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0094,L1,position.apparent.ecliptic-true-of-date,Venus 1969-07-20 TT,fail,TOLERANCE,no,2.387,0.896,1.10089,0.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0095,L1,position.apparent.ecliptic-true-of-date,Mars 1969-07-20 TT,fail,TOLERANCE,no,3.591,1.155,0.16738,8.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0096,L1,position.apparent.ecliptic-true-of-date,Jupiter 1969-07-20 TT,fail,TOLERANCE,no,2.114,0.839,0.14610,5.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0097,L1,position.apparent.ecliptic-true-of-date,Saturn 1969-07-20 TT,fail,TOLERANCE,no,-1.783,3.830,0.05287,13.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0098,L1,position.apparent.ecliptic-true-of-date,Uranus 1969-07-20 TT,fail,TOLERANCE,no,-5.227,-2.212,0.03641,57.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0099,L1,position.apparent.ecliptic-true-of-date,Neptune 1969-07-20 TT,fail,TOLERANCE,conditional C1,-17.362,-1.348,-0.00926,749.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0100,L1,position.apparent.ecliptic-true-of-date,Pluto 1969-07-20 TT,fail,TOLERANCE,no,2.203,0.304,0.02387,36.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0103,L1,position.apparent.ecliptic-true-of-date,Mercury 1977-03-08 TT,fail,TOLERANCE,no,-1.386,-0.808,1.81817,0.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0104,L1,position.apparent.ecliptic-true-of-date,Venus 1977-03-08 TT,fail,TOLERANCE,no,-1.171,-2.340,0.29247,1.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0106,L1,position.apparent.ecliptic-true-of-date,Jupiter 1977-03-08 TT,fail,TOLERANCE,no,0.522,-3.197,0.15029,1.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0107,L1,position.apparent.ecliptic-true-of-date,Saturn 1977-03-08 TT,fail,TOLERANCE,no,-3.729,2.705,-0.05685,26.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0108,L1,position.apparent.ecliptic-true-of-date,Uranus 1977-03-08 TT,fail,TOLERANCE,no,-1.773,8.316,-0.01880,37.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0109,L1,position.apparent.ecliptic-true-of-date,Neptune 1977-03-08 TT,fail,TOLERANCE,conditional C1,-13.478,-1.747,0.00566,951.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0110,L1,position.apparent.ecliptic-true-of-date,Pluto 1977-03-08 TT,fail,TOLERANCE,no,3.042,0.257,-0.02431,50.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0111,L1,position.apparent.ecliptic-true-of-date,Sun 1986-11-13 TT,fail,TOLERANCE,no,1.180,-0.378,1.00618,0.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0113,L1,position.apparent.ecliptic-true-of-date,Mercury 1986-11-13 TT,fail,TOLERANCE,no,7.973,0.571,-1.33098,2.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0114,L1,position.apparent.ecliptic-true-of-date,Venus 1986-11-13 TT,fail,TOLERANCE,no,1.510,-4.682,-0.48504,1.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0115,L1,position.apparent.ecliptic-true-of-date,Mars 1986-11-13 TT,fail,TOLERANCE,no,-0.512,-4.463,0.65603,0.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0116,L1,position.apparent.ecliptic-true-of-date,Jupiter 1986-11-13 TT,fail,TOLERANCE,no,4.959,-2.602,0.01771,112.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0117,L1,position.apparent.ecliptic-true-of-date,Saturn 1986-11-13 TT,fail,TOLERANCE,no,4.781,17.599,0.11428,16.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0118,L1,position.apparent.ecliptic-true-of-date,Uranus 1986-11-13 TT,fail,TOLERANCE,no,-6.379,1.043,0.05467,46.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0119,L1,position.apparent.ecliptic-true-of-date,Neptune 1986-11-13 TT,fail,TOLERANCE,conditional C1,-7.642,2.484,0.02951,103.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0120,L1,position.apparent.ecliptic-true-of-date,Pluto 1986-11-13 TT,fail,TOLERANCE,no,2.809,-0.101,0.03969,28.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0121,L1,position.apparent.ecliptic-true-of-date,Sun 1999-08-11 TT,fail,TOLERANCE,no,-1.246,-0.414,0.95971,0.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0123,L1,position.apparent.ecliptic-true-of-date,Mercury 1999-08-11 TT,fail,TOLERANCE,no,-2.456,-1.620,0.59741,1.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0124,L1,position.apparent.ecliptic-true-of-date,Venus 1999-08-11 TT,fail,TOLERANCE,no,-9.159,-2.030,-0.46477,7.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0125,L1,position.apparent.ecliptic-true-of-date,Mars 1999-08-11 TT,fail,TOLERANCE,no,4.333,3.153,0.54758,3.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0126,L1,position.apparent.ecliptic-true-of-date,Jupiter 1999-08-11 TT,fail,TOLERANCE,no,4.614,4.885,0.04456,41.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0128,L1,position.apparent.ecliptic-true-of-date,Uranus 1999-08-11 TT,fail,TOLERANCE,conditional C1,-12.043,-5.716,-0.03982,121.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0129,L1,position.apparent.ecliptic-true-of-date,Neptune 1999-08-11 TT,fail,TOLERANCE,conditional C1,8.969,8.266,-0.02585,138.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0133,L1,position.apparent.ecliptic-true-of-date,Mercury 2003-08-27 TT,fail,TOLERANCE,no,4.116,0.547,0.10885,15.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0134,L1,position.apparent.ecliptic-true-of-date,Venus 2003-08-27 TT,fail,TOLERANCE,no,1.175,-1.138,1.23943,0.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0135,L1,position.apparent.ecliptic-true-of-date,Mars 2003-08-27 TT,fail,TOLERANCE,no,3.793,-1.375,-0.26709,5.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0136,L1,position.apparent.ecliptic-true-of-date,Jupiter 2003-08-27 TT,fail,TOLERANCE,no,6.018,0.674,0.21796,11.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0137,L1,position.apparent.ecliptic-true-of-date,Saturn 2003-08-27 TT,fail,TOLERANCE,no,0.322,-5.701,0.09445,1.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0138,L1,position.apparent.ecliptic-true-of-date,Uranus 2003-08-27 TT,fail,TOLERANCE,no,-5.173,-1.750,-0.03988,51.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0139,L1,position.apparent.ecliptic-true-of-date,Neptune 2003-08-27 TT,fail,TOLERANCE,conditional C1,14.630,7.621,-0.02462,237.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0143,L1,position.apparent.ecliptic-true-of-date,Mercury 2012-05-21 TT,fail,TOLERANCE,no,1.434,-0.392,2.09584,0.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0144,L1,position.apparent.ecliptic-true-of-date,Venus 2012-05-21 TT,fail,TOLERANCE,no,-1.438,5.205,-0.21654,2.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0145,L1,position.apparent.ecliptic-true-of-date,Mars 2012-05-21 TT,fail,TOLERANCE,no,-0.006,1.318,0.33955,0.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0146,L1,position.apparent.ecliptic-true-of-date,Jupiter 2012-05-21 TT,fail,TOLERANCE,no,1.767,-1.340,0.23639,3.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0147,L1,position.apparent.ecliptic-true-of-date,Saturn 2012-05-21 TT,fail,TOLERANCE,no,-0.979,-16.229,-0.05353,7.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0148,L1,position.apparent.ecliptic-true-of-date,Uranus 2012-05-21 TT,fail,TOLERANCE,no,-2.523,1.862,0.03939,25.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0149,L1,position.apparent.ecliptic-true-of-date,Neptune 2012-05-21 TT,fail,TOLERANCE,conditional C1,16.251,9.274,0.00806,806.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0153,L1,position.apparent.ecliptic-true-of-date,Mercury 2020-12-21 TT,fail,TOLERANCE,no,-1.206,1.131,1.58670,0.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0154,L1,position.apparent.ecliptic-true-of-date,Venus 2020-12-21 TT,fail,TOLERANCE,no,-0.326,1.688,1.25045,0.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0156,L1,position.apparent.ecliptic-true-of-date,Jupiter 2020-12-21 TT,fail,TOLERANCE,no,-0.967,1.591,0.22021,1.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0157,L1,position.apparent.ecliptic-true-of-date,Saturn 2020-12-21 TT,fail,TOLERANCE,no,0.621,-9.136,0.10827,2.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0158,L1,position.apparent.ecliptic-true-of-date,Uranus 2020-12-21 TT,fail,TOLERANCE,conditional C1,3.760,-0.054,-0.01969,76.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0159,L1,position.apparent.ecliptic-true-of-date,Neptune 2020-12-21 TT,fail,TOLERANCE,conditional C1,14.899,9.423,0.01301,458.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0161,L1,position.apparent.ecliptic-true-of-date,Sun 2026-09-22 TT,fail,TOLERANCE,no,-1.306,0.191,0.97801,0.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0163,L1,position.apparent.ecliptic-true-of-date,Mercury 2026-09-22 TT,fail,TOLERANCE,no,-2.655,-0.806,1.47811,0.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0164,L1,position.apparent.ecliptic-true-of-date,Venus 2026-09-22 TT,fail,TOLERANCE,no,-12.595,3.549,0.36557,13.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0165,L1,position.apparent.ecliptic-true-of-date,Mars 2026-09-22 TT,fail,TOLERANCE,no,-0.373,-2.080,0.59844,0.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0166,L1,position.apparent.ecliptic-true-of-date,Jupiter 2026-09-22 TT,fail,TOLERANCE,no,-2.023,-1.508,0.18978,4.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0167,L1,position.apparent.ecliptic-true-of-date,Saturn 2026-09-22 TT,fail,TOLERANCE,no,-10.217,2.825,-0.07565,54.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0168,L1,position.apparent.ecliptic-true-of-date,Uranus 2026-09-22 TT,fail,TOLERANCE,no,-0.652,5.577,-0.01003,26.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0169,L1,position.apparent.ecliptic-true-of-date,Neptune 2026-09-22 TT,fail,TOLERANCE,conditional C1,12.161,9.713,-0.02768,175.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0170,L1,position.apparent.ecliptic-true-of-date,Pluto 2026-09-22 TT,fail,TOLERANCE,no,-1.410,0.597,-0.01053,53.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0173,L1,position.apparent.ecliptic-true-of-date,Mercury 2038-01-19 TT,fail,TOLERANCE,no,-2.334,-0.273,1.50486,0.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0174,L1,position.apparent.ecliptic-true-of-date,Venus 2038-01-19 TT,fail,TOLERANCE,no,6.247,2.306,-0.21977,11.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0175,L1,position.apparent.ecliptic-true-of-date,Mars 2038-01-19 TT,fail,TOLERANCE,no,-3.227,-1.866,0.28323,4.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0176,L1,position.apparent.ecliptic-true-of-date,Jupiter 2038-01-19 TT,fail,TOLERANCE,no,-2.864,-2.360,-0.13358,8.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0177,L1,position.apparent.ecliptic-true-of-date,Saturn 2038-01-19 TT,fail,TOLERANCE,no,8.509,8.186,-0.04169,81.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0178,L1,position.apparent.ecliptic-true-of-date,Uranus 2038-01-19 TT,fail,TOLERANCE,conditional C1,-7.114,16.416,-0.04295,66.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0179,L1,position.apparent.ecliptic-true-of-date,Neptune 2038-01-19 TT,fail,TOLERANCE,conditional C1,2.131,4.816,0.00753,113.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0180,L1,position.apparent.ecliptic-true-of-date,Pluto 2038-01-19 TT,fail,TOLERANCE,no,-2.945,1.096,0.02762,42.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0183,L1,position.apparent.ecliptic-true-of-date,Mercury 2055-06-06 TT,fail,TOLERANCE,no,4.034,-0.308,0.38343,4.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0184,L1,position.apparent.ecliptic-true-of-date,Venus 2055-06-06 TT,fail,TOLERANCE,no,-0.643,1.100,0.85813,0.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0185,L1,position.apparent.ecliptic-true-of-date,Mars 2055-06-06 TT,fail,TOLERANCE,no,1.336,-0.104,0.57602,0.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0186,L1,position.apparent.ecliptic-true-of-date,Jupiter 2055-06-06 TT,fail,TOLERANCE,no,7.822,5.280,-0.11266,27.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0187,L1,position.apparent.ecliptic-true-of-date,Saturn 2055-06-06 TT,fail,TOLERANCE,no,-4.188,2.824,0.07058,23.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0188,L1,position.apparent.ecliptic-true-of-date,Uranus 2055-06-06 TT,fail,TOLERANCE,conditional C1,2.844,3.556,-0.01005,113.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0189,L1,position.apparent.ecliptic-true-of-date,Neptune 2055-06-06 TT,fail,TOLERANCE,no,-2.294,-1.371,0.03712,24.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0190,L1,position.apparent.ecliptic-true-of-date,Pluto 2055-06-06 TT,fail,TOLERANCE,conditional C1,-5.646,1.347,0.00413,547.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0192,L1,position.apparent.ecliptic-true-of-date,Moon 2071-10-29 TT,fail,TOLERANCE,no,-1.293,-0.124,11.89876,0.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0194,L1,position.apparent.ecliptic-true-of-date,Venus 2071-10-29 TT,fail,TOLERANCE,no,-1.124,1.195,1.10088,0.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0195,L1,position.apparent.ecliptic-true-of-date,Mars 2071-10-29 TT,fail,TOLERANCE,no,-4.440,-1.552,0.34852,5.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0196,L1,position.apparent.ecliptic-true-of-date,Jupiter 2071-10-29 TT,fail,TOLERANCE,no,3.725,-0.025,-0.10753,13.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0197,L1,position.apparent.ecliptic-true-of-date,Saturn 2071-10-29 TT,fail,TOLERANCE,no,3.838,-10.659,0.12085,12.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0198,L1,position.apparent.ecliptic-true-of-date,Uranus 2071-10-29 TT,fail,TOLERANCE,no,-0.641,1.713,0.04483,5.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0199,L1,position.apparent.ecliptic-true-of-date,Neptune 2071-10-29 TT,fail,TOLERANCE,conditional C1,8.692,-5.187,-0.00636,546.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0200,L1,position.apparent.ecliptic-true-of-date,Pluto 2071-10-29 TT,fail,TOLERANCE,conditional C1,-6.263,0.886,-0.01617,154.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0201,L1,position.apparent.ecliptic-true-of-date,Sun 2088-04-02 TT,fail,TOLERANCE,no,-0.571,1.633,0.98631,0.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0202,L1,position.apparent.ecliptic-true-of-date,Moon 2088-04-02 TT,fail,TOLERANCE,no,-1.281,-0.060,13.41892,0.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0203,L1,position.apparent.ecliptic-true-of-date,Mercury 2088-04-02 TT,fail,TOLERANCE,no,-5.961,-0.187,2.06066,1.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0204,L1,position.apparent.ecliptic-true-of-date,Venus 2088-04-02 TT,fail,TOLERANCE,no,-0.111,1.853,1.23883,0.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0205,L1,position.apparent.ecliptic-true-of-date,Mars 2088-04-02 TT,fail,TOLERANCE,no,0.683,1.255,0.78172,0.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0207,L1,position.apparent.ecliptic-true-of-date,Saturn 2088-04-02 TT,fail,TOLERANCE,no,-5.058,14.609,0.11799,17.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0209,L1,position.apparent.ecliptic-true-of-date,Neptune 2088-04-02 TT,fail,TOLERANCE,conditional C1,18.774,1.043,-0.01352,555.5,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0210,L1,position.apparent.ecliptic-true-of-date,Pluto 2088-04-02 TT,fail,TOLERANCE,conditional C1,-6.453,0.064,0.02342,110.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0211,L1,position.apparent.ecliptic-true-of-date,Sun 2104-09-15 TT,fail,TOLERANCE,no,-1.051,0.750,0.97410,0.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0213,L1,position.apparent.ecliptic-true-of-date,Mercury 2104-09-15 TT,fail,TOLERANCE,no,-1.745,0.588,1.83740,0.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0215,L1,position.apparent.ecliptic-true-of-date,Mars 2104-09-15 TT,fail,TOLERANCE,no,-0.116,1.710,0.66326,0.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0216,L1,position.apparent.ecliptic-true-of-date,Jupiter 2104-09-15 TT,fail,TOLERANCE,no,-3.875,-6.634,-0.09830,15.8,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0217,L1,position.apparent.ecliptic-true-of-date,Saturn 2104-09-15 TT,fail,TOLERANCE,no,4.539,12.010,0.05519,32.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0218,L1,position.apparent.ecliptic-true-of-date,Uranus 2104-09-15 TT,fail,TOLERANCE,conditional C1,4.256,-3.146,-0.02295,74.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0219,L1,position.apparent.ecliptic-true-of-date,Neptune 2104-09-15 TT,fail,TOLERANCE,conditional C1,9.171,2.894,0.03709,98.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0220,L1,position.apparent.ecliptic-true-of-date,Pluto 2104-09-15 TT,fail,TOLERANCE,conditional C1,-8.930,-0.707,-0.01217,293.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0221,L1,position.apparent.ecliptic-true-of-date,Sun 2125-02-11 TT,fail,TOLERANCE,no,-0.165,1.184,1.01189,0.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0222,L1,position.apparent.ecliptic-true-of-date,Moon 2125-02-11 TT,fail,TOLERANCE,no,0.488,-1.167,13.31776,0.0,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0223,L1,position.apparent.ecliptic-true-of-date,Mercury 2125-02-11 TT,fail,TOLERANCE,no,-2.141,6.148,1.30282,0.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0225,L1,position.apparent.ecliptic-true-of-date,Mars 2125-02-11 TT,fail,TOLERANCE,no,-0.310,2.978,0.29250,0.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0226,L1,position.apparent.ecliptic-true-of-date,Jupiter 2125-02-11 TT,fail,TOLERANCE,no,-0.840,2.660,0.09950,3.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0227,L1,position.apparent.ecliptic-true-of-date,Saturn 2125-02-11 TT,fail,TOLERANCE,no,-2.964,-14.961,-0.08096,14.6,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0228,L1,position.apparent.ecliptic-true-of-date,Uranus 2125-02-11 TT,fail,TOLERANCE,no,3.747,6.164,-0.04130,36.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0229,L1,position.apparent.ecliptic-true-of-date,Neptune 2125-02-11 TT,fail,TOLERANCE,conditional C1,-5.631,-1.974,-0.00015,14580.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0230,L1,position.apparent.ecliptic-true-of-date,Pluto 2125-02-11 TT,fail,TOLERANCE,conditional C1,-10.940,-1.748,0.00121,3603.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0232,L1,position.apparent.ecliptic-true-of-date,Moon 2148-12-30 TT,fail,TOLERANCE,no,3.251,1.719,12.35763,0.1,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0233,L1,position.apparent.ecliptic-true-of-date,Mercury 2148-12-30 TT,fail,TOLERANCE,no,-3.530,1.479,-0.44052,3.2,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0235,L1,position.apparent.ecliptic-true-of-date,Mars 2148-12-30 TT,fail,TOLERANCE,no,1.385,-3.227,-0.11736,4.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0236,L1,position.apparent.ecliptic-true-of-date,Jupiter 2148-12-30 TT,fail,TOLERANCE,no,-4.244,5.233,0.19618,8.7,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0237,L1,position.apparent.ecliptic-true-of-date,Saturn 2148-12-30 TT,fail,TOLERANCE,no,0.627,19.028,-0.06390,3.9,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0238,L1,position.apparent.ecliptic-true-of-date,Uranus 2148-12-30 TT,fail,TOLERANCE,no,7.702,14.808,0.05195,59.3,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0239,L1,position.apparent.ecliptic-true-of-date,Neptune 2148-12-30 TT,fail,TOLERANCE,conditional C1,-14.890,-0.538,0.03760,158.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L1-POS-0240,L1,position.apparent.ecliptic-true-of-date,Pluto 2148-12-30 TT,fail,TOLERANCE,conditional C1,-14.268,-3.516,-0.01815,314.4,R1 astronomy-engine 2.1.19 series vs DE441; within 30 arcsec bot tolerance
+L3-LMT-0001,L3,time.local-mean-time,lon:-0.125,unsupported,SCOPE,no,,,,,R3 no public LMT-from-longitude function (birthplace LMT is applied inside tzdb LMT eras)
+L3-LMT-0002,L3,time.local-mean-time,lon:2.3125,unsupported,SCOPE,no,,,,,R3 no public LMT-from-longitude function (birthplace LMT is applied inside tzdb LMT eras)
+L3-LMT-0003,L3,time.local-mean-time,lon:-77.0625,unsupported,SCOPE,no,,,,,R3 no public LMT-from-longitude function (birthplace LMT is applied inside tzdb LMT eras)
+L3-LMT-0004,L3,time.local-mean-time,lon:139.75,unsupported,SCOPE,no,,,,,R3 no public LMT-from-longitude function (birthplace LMT is applied inside tzdb LMT eras)
+L3-LMT-0005,L3,time.local-mean-time,lon:179.9375,unsupported,SCOPE,no,,,,,R3 no public LMT-from-longitude function (birthplace LMT is applied inside tzdb LMT eras)
+L3-TTU-0008,L3,time.tt-minus-utc,utc:2016-12-31T23:59:60Z,unsupported,SCOPE,no,,,,,R4 leap second 23:59:60 not representable as a JavaScript Date
+L3-JDN-0001,L3,calendar.to-jdn,calendar:julian year:-4712 month:1 day:1,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0002,L3,calendar.to-jdn,calendar:gregorian year:-4713 month:11 day:24,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0003,L3,calendar.to-jdn,calendar:julian year:-4712 month:2 day:29,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0004,L3,calendar.to-jdn,calendar:gregorian year:-4000 month:2 day:29,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0005,L3,calendar.to-jdn,calendar:julian year:-1000 month:2 day:29,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0006,L3,calendar.to-jdn,calendar:gregorian year:-1000 month:3 day:1,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0007,L3,calendar.to-jdn,calendar:julian year:-1 month:12 day:31,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0008,L3,calendar.to-jdn,calendar:julian year:0 month:1 day:1,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0009,L3,calendar.to-jdn,calendar:gregorian year:0 month:2 day:29,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0010,L3,calendar.to-jdn,calendar:julian year:1 month:1 day:1,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0011,L3,calendar.to-jdn,calendar:gregorian year:1 month:1 day:1,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0012,L3,calendar.to-jdn,calendar:julian year:1582 month:10 day:4,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0013,L3,calendar.to-jdn,calendar:gregorian year:1582 month:10 day:15,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0014,L3,calendar.to-jdn,calendar:julian year:1582 month:10 day:15,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0015,L3,calendar.to-jdn,calendar:gregorian year:1582 month:10 day:4,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0016,L3,calendar.to-jdn,calendar:julian year:1700 month:2 day:29,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0017,L3,calendar.to-jdn,calendar:gregorian year:1700 month:3 day:1,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0018,L3,calendar.to-jdn,calendar:julian year:1752 month:9 day:2,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0019,L3,calendar.to-jdn,calendar:gregorian year:1752 month:9 day:14,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0020,L3,calendar.to-jdn,calendar:julian year:1900 month:2 day:29,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0021,L3,calendar.to-jdn,calendar:gregorian year:1900 month:3 day:1,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0022,L3,calendar.to-jdn,calendar:gregorian year:2000 month:1 day:1,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0023,L3,calendar.to-jdn,calendar:gregorian year:2000 month:2 day:29,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0024,L3,calendar.to-jdn,calendar:julian year:4000 month:2 day:29,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-JDN-0025,L3,calendar.to-jdn,calendar:gregorian year:9999 month:12 day:31,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-CAL-0001,L3,calendar.from-jdn,calendar:julian jdn:0,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-CAL-0002,L3,calendar.from-jdn,calendar:gregorian jdn:0,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-CAL-0003,L3,calendar.from-jdn,calendar:julian jdn:1721423,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-CAL-0004,L3,calendar.from-jdn,calendar:gregorian jdn:1721119,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-CAL-0005,L3,calendar.from-jdn,calendar:julian jdn:2299160,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-CAL-0006,L3,calendar.from-jdn,calendar:gregorian jdn:2299161,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-CAL-0007,L3,calendar.from-jdn,calendar:julian jdn:2415092,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-CAL-0008,L3,calendar.from-jdn,calendar:gregorian jdn:2451604,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-CAL-0009,L3,calendar.from-jdn,calendar:julian jdn:2451545,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
+L3-CAL-0010,L3,calendar.from-jdn,calendar:gregorian jdn:5373484,unsupported,SCOPE,no,,,,,R2 no public Julian Day Number function
