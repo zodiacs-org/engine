@@ -27,7 +27,8 @@ open(WSYS,'w').write(open(TPL+'/INSTRUCTIONS.md').read()+'\n\n'+open(TPL+'/SOURC
 # aspect, transit, station or angle contact it names must be a sheet line with the same aspect and
 # direction; birthday dates and ages, every date, date range and orb must match the line it is tied to;
 # a house or sign given for a planet must be its natal one or, for a transiting or stationing planet, the
-# one its line gives; and angle placements in any wording need a [C] line. On a violation the writer is given only
+# one its line gives (a planet named with no ID is read as the moving one in a dated or 90-day sentence); house,
+# sign and chart rulers must be the whole sign houses' traditional rulers; and angle placements in any wording need a [C] line. On a violation the writer is given only
 # the flagged sentences and asked for replacements, which are spliced into the reading in place; the rest
 # of the reading is kept as written. Only when no flagged sentence can be located, or the reply cannot be
 # read, is the whole reading rewritten. At most MAX_REVISIONS rounds before grading. Each chart's checks

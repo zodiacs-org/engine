@@ -276,6 +276,65 @@ describe("dates, ranges, orbs, houses and signs of transiting bodies", () => {
     expect(flags("The Moon is 3°47' into Pisces.")).toEqual([]);
     expect(flags("The ruler of your tenth house is the Moon.")).toEqual([]);
   });
+
+  it("resolves a planet with no ID as natal or moving from its context", () => {
+    // Natal Saturn is in Aquarius, house 5; transiting Saturn ([T3]) in Aries, house 7.
+    expect(flags("**November.** Saturn is in Aries, in your seventh house.")).toEqual([]);
+    expect(flags("Saturn, now in Aries in house 7, leads the window.")).toEqual([]);
+    expect(flags("Saturn is in Aries, in your seventh house.")).toEqual(["sign-mismatch: Saturn in Aries", "house-mismatch: Saturn in house 7"]);
+    expect(flags("**November.** Saturn is in Taurus, in your eighth house.")).toEqual(["sign-mismatch: Saturn in Taurus", "house-mismatch: Saturn in house 8"]);
+    // An appositive, a parenthesis and a clause's only planet still carry the claim.
+    expect(flags("Venus, the benefic of sect, is in Sagittarius in the fourth house.")).toEqual(["house-mismatch: Venus in house 4"]);
+    expect(flags("Jupiter rules the chart and sits in Scorpio in the fifth house.")).toEqual(["house-mismatch: Jupiter in house 5"]);
+    expect(flags("The Midheaven would be in Leo if the birth time were later.")).toEqual([]);
+  });
+
+  it("flags 'runs the whole window' said of the transit before it (v6 M5)", () => {
+    expect(flags("[T2] transiting Pluto square natal Sun is in orb from 2026-07-19 to 2027-01-05. It runs the whole window and sits in your sixth house.")).toEqual(["range-mismatch: runs the whole window"]);
+    expect(flags("[T1] transiting Neptune conjunction natal Venus is in orb from 2026-12-01 to 2027-03-03. Set one goal for the window.")).toEqual([]);
+  });
+});
+
+describe("house, sign and chart rulers", () => {
+  // Libra rising: house 1 Libra (Venus), 2 Scorpio (Mars), 3 Sagittarius (Jupiter), 5 Aquarius (Saturn), 9 Gemini (Mercury), 10 Cancer (Moon).
+  const RULED = [
+    "[P1] Ascendant 6°56' Libra; Midheaven 8°10' Cancer (whole sign house 10)",
+    "[P2] Sun 14°02' Gemini, whole sign house 9",
+    "[P3] Moon 3°47' Pisces, whole sign house 6",
+    "[P4] Mercury 2°11' Leo, whole sign house 11",
+    "[R1] Chart ruler: Venus (Libra rising). Venus 22°04' Sagittarius, whole sign house 3. Condition ([D4]): dignities none; debilities none; peregrine. Sect role: benefic of sect."
+  ].join("\n");
+  const flags = (reading: string) => checkReading(RULED, reading).violations.map((v) => `${v.kind}: ${v.named}`);
+
+  it("passes the whole sign ruler of a house, in any wording", () => {
+    expect(flags("Mars rules your second house.")).toEqual([]);
+    expect(flags("The second house, ruled by Mars, holds your resources.")).toEqual([]);
+    expect(flags("Saturn, your fifth-house ruler, asks for patience.")).toEqual([]);
+    expect(flags("The ruler of the Cancer tenth, the Moon, is in Pisces.")).toEqual([]);
+    expect(flags("Mercury rules the ninth and twelfth houses.")).toEqual([]);
+  });
+
+  it("flags a planet made ruler of a house its sign does not rule (v6 H6)", () => {
+    expect(flags("Mercury is peregrine and rules your eleventh house, where it sits.")).toEqual(["ruler-mismatch: Mercury rules house 11"]);
+    expect(flags("Your second-house ruler, Venus, is generous.")).toEqual(["ruler-mismatch: Venus rules house 2"]);
+    expect(flags("The ruler of the Leo second, the Sun, shines.")).toEqual(["ruler-mismatch: house 2 in Leo"]);
+    expect(checkReading(RULED, "Mercury is peregrine and rules your eleventh house.").violations[0]!.message).toContain("house 11 is Leo, ruled by Sun");
+  });
+
+  it("checks sign rulers, the chart ruler and a planet's ruler", () => {
+    expect(flags("Mercury rules Gemini and Virgo.")).toEqual([]);
+    expect(flags("Mercury rules Leo.")).toEqual(["ruler-mismatch: Mercury rules Leo"]);
+    expect(flags("Pluto rules Scorpio.")).toEqual(["ruler-mismatch: Pluto rules Scorpio"]);
+    expect(flags("Pluto, the modern ruler of Scorpio, adds depth.")).toEqual([]);
+    expect(flags("Venus rules the chart.")).toEqual([]);
+    expect(flags("**Mars, the ruler.** Your chart ruler is generous.")).toEqual([]);
+    expect(flags("Mars rules your chart.")).toEqual(["ruler-mismatch: Mars rules the chart"]);
+    expect(flags("Gemini rising would make Mercury the chart ruler.")).toEqual([]);
+    expect(flags("The Moon is peregrine, so it takes its colour from its ruler, Jupiter.")).toEqual([]);
+    expect(flags("The Moon is peregrine, so it takes its colour from its ruler, Saturn.")).toEqual(["ruler-mismatch: Saturn rules Moon"]);
+    expect(flags("Scorpio's lord is Mars.")).toEqual([]);
+    expect(flags("Venus does not rule your second house.")).toEqual([]);
+  });
 });
 
 describe("angle paraphrases", () => {
