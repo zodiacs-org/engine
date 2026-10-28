@@ -1,4 +1,4 @@
-import json,subprocess,sys,os,concurrent.futures as cf
+import json,subprocess,sys,os,re,threading,concurrent.futures as cf
 B='/workspace/astrologer-bot'; G=B+'/grading'
 D=json.load(open(B+'/testset/charts.json'))
 # Every computed number in a sheet comes from the engine's reading facts builder
@@ -14,10 +14,21 @@ def sheet(c):
   born=f"{i['date']} {i['time']} local" if i['timeKnown'] else f"{i['date']}, birth time unknown"
   src="Birth time source: birth certificate." if i['timeKnown'] else "Birth time source: none."
   return '\n'.join([f"Person: born {born}, zone {i['zone']}, lat {i['lat']}, lon {i['lon']}. {src}","Chart link: https://zodiacs.org/chart/?id=TEST",FACTS[c['id']]])
+# The writer (first reading and revisions) and the grader; both opus, the grader with its own prompt.
+WRITER='opus'; GRADER='opus'
+class UsageLimit(Exception):
+  """A usage or rate limit in claude's output: the whole run stops, with no retry and no fallback."""
+STOP=threading.Event()
+LIMIT=re.compile(r'(usage|rate)[ _-]?limit|limit (reached|exceeded)|too many requests',re.I)
 def claude(model,sysf,prompt,reading=True):
+  if STOP.is_set(): raise UsageLimit('run stopped: usage or rate limit reached earlier')
   r=subprocess.run(['claude','-p','--model',model,'--system-prompt',open(sysf).read(),'--tools',''],input=prompt,capture_output=True,text=True,timeout=900,cwd='/tmp')
+  m=LIMIT.search(r.stdout+'\n'+r.stderr)
+  if m:
+    STOP.set()
+    raise UsageLimit(f'claude ({model}) hit a usage or rate limit ("{m.group(0)}"); stopping the run: '+(r.stdout+r.stderr).strip()[-300:])
   if r.returncode: raise RuntimeError(r.stderr[-300:])
-  if reading and len(r.stdout.strip())<200 and model=='sonnet': raise RuntimeError('empty reading')
+  if reading and len(r.stdout.strip())<200 and sysf==WSYS: raise RuntimeError('empty reading')
   return r.stdout
 WSYS=G+'/writer_system.md'; GSYS=G+'/grader_system.md'
 # The writer's system prompt is the bot template itself: INSTRUCTIONS.md, then SOURCES.md, then the harness note.
@@ -68,10 +79,10 @@ def revise(s,reading,res):
   items=flagged(reading,res)
   if items:
     try:
-      new,done=splice(reading,items,claude('sonnet',WSYS,fix_prompt(s,reading,items),reading=False))
+      new,done=splice(reading,items,claude(WRITER,WSYS,fix_prompt(s,reading,items),reading=False))
       if done: return new,'splice'
     except (ValueError,RuntimeError): pass
-  return claude('sonnet',WSYS,revise_prompt(s,reading,res)),'rewrite'
+  return claude(WRITER,WSYS,revise_prompt(s,reading,res)),'rewrite'
 def revise_prompt(s,reading,res):
   return (write_prompt(s)+"\n\nYou already wrote the reading below. An automatic check against the tool results found aspects, transits, station or angle contacts, birthday dates, dates, date ranges, orbs, houses or signs that are not on the sheet as named:\n\n"
     +violations_text(res)+"\n\nRewrite the whole reading. Name each aspect, transit, station or contact only by quoting its sheet line with its ID, exactly as written (same planets, same aspect word, same order), and copy dates, ranges and orbs from that line. Remove any claim the sheet does not support. Keep everything else. Max 900 words.\n\nYOUR PREVIOUS READING:\n"+reading)
@@ -79,7 +90,7 @@ def do(c):
   cid=c['id']; sp=f"{G}/sheets/{cid}.txt"; rp=f"{G}/readings/{cid}.md"; gp=f"{G}/grades/{cid}.json"; kp=f"{G}/checks/{cid}.json"
   s=sheet(c); open(sp,'w').write(s)
   if not os.path.exists(rp):
-    open(rp,'w').write(claude('sonnet',WSYS,write_prompt(s)))
+    open(rp,'w').write(claude(WRITER,WSYS,write_prompt(s)))
   if not os.path.exists(kp):
     attempts=[]
     res=check(sp,rp); attempts.append({'attempt':0,'ok':res['ok'],'mentions':res['mentions'],'violations':res['violations'],'cited':res['cited']})
@@ -90,14 +101,19 @@ def do(c):
       res=check(sp,rp); attempts.append({'attempt':n,'mode':mode,'ok':res['ok'],'mentions':res['mentions'],'violations':res['violations'],'cited':res['cited']})
     json.dump({'chart':cid,'final_ok':res['ok'],'revisions':len(attempts)-1,'attempts':attempts},open(kp,'w'),indent=1)
   if not os.path.exists(gp):
-    out=claude('opus',GSYS,"CHART SHEET:\n"+s+"\n\nREADING (author unknown):\n"+open(rp).read())
+    out=claude(GRADER,GSYS,"CHART SHEET:\n"+s+"\n\nREADING (author unknown):\n"+open(rp).read())
     j=out[out.find('{'):out.rfind('}')+1]; json.loads(j); open(gp,'w').write(j)
   return cid
 for d in ('sheets','readings','grades','checks'): os.makedirs(f'{G}/{d}',exist_ok=True)
 ids=sys.argv[1:]
 cs=[c for c in D['charts'] if not ids or c['id'] in ids]
 FACTS.update(build_sheets(cs))
+limited=None
 with cf.ThreadPoolExecutor(3) as ex:
   for f in cf.as_completed([ex.submit(do,c) for c in cs]):
+    if f.cancelled(): continue
     try: print('done',f.result(),flush=True)
+    except UsageLimit as x:
+      if not limited: limited=x; print('STOP',x,flush=True); ex.shutdown(wait=False,cancel_futures=True)
     except Exception as x: print('ERR',x,flush=True)
+if limited: sys.exit('run stopped: '+str(limited))
