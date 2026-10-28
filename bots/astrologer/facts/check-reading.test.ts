@@ -356,3 +356,89 @@ describe("angle paraphrases", () => {
     expect(flags("The angular houses are empty.")).toEqual([]);
   });
 });
+
+describe("two charts (fold or gap)", () => {
+  // A hand-written fold sheet in the builder's format (synthetic chart, no real person): Libra rising in both charts.
+  const TWO = [
+    "[N1] Age at the window start (2026-11-01): 30 years 0 months (calendar age from the local birth date). Stage: adult.",
+    "[G1] Chart A is the earlier occurrence of 01:30: 01:30 on a clock still on UTC-04:00, before the change. Instant 1996-10-27T05:30Z; the zone's clocks showed 1996-10-27 01:30.",
+    "[G2] Chart B is the later occurrence of 01:30: 01:30 on a clock already on UTC-05:00, after the change. Instant 1996-10-27T06:30Z; the zone's clocks showed 1996-10-27 01:30.",
+    "=== Chart A: earlier occurrence (clock on UTC-04:00) ===",
+    "[A-P1] Ascendant 6°56' Libra; Midheaven 8°10' Cancer (whole sign house 10)",
+    "[A-P2] Moon 29°40' Pisces, whole sign house 6",
+    "[A-P3] Saturn 13°40' Aquarius, whole sign house 5",
+    "[A-A1] 1. Sun trine Saturn, orb 0°33'",
+    "Transits 2026-11-01 to 2027-01-29 inclusive (90 days), dates in the person's zone (America/New_York).",
+    "- [A-T1] transiting Sun square natal Ascendant: exact 2026-11-05; transiting Sun in Scorpio, whole sign house 2",
+    "- [A-T2] transiting Pluto square natal Midheaven: in orb (within 1°) from 2026-10-01 to 2026-12-20 (each end plus or minus 1 day); exact 2026-11-10 (each plus or minus 1 day); transiting Pluto in Aquarius, whole sign house 5",
+    "- [A-T3] transiting Jupiter trine natal Moon: exact 2026-11-23, 2027-01-01; transiting Jupiter in Cancer, whole sign house 10",
+    "- [A-S1] Jupiter stations retrograde 2026-12-12 (plus or minus 1 day) at 27°01' Cancer, whole sign house 10. Contacts:",
+    "  - [A-S1a] stationing Jupiter trine natal Moon, orb 0°37'",
+    "",
+    "=== Chart B: later occurrence (clock on UTC-05:00) ===",
+    "[B-P1] Ascendant 19°10' Libra; Midheaven 20°02' Cancer (whole sign house 10)",
+    "[B-P2] Moon 0°10' Aries, whole sign house 7",
+    "[B-P3] Saturn 13°41' Aquarius, whole sign house 5",
+    "[B-A1] 1. Sun trine Saturn, orb 0°31'",
+    "Transits 2026-11-01 to 2027-01-29 inclusive (90 days), dates in the person's zone (America/New_York).",
+    "- [B-T1] transiting Sun square natal Ascendant: exact 2026-11-18; transiting Sun in Scorpio, whole sign house 2",
+    "- [B-T2] transiting Jupiter trine natal Moon: exact 2026-11-24, 2027-01-01; transiting Jupiter in Cancer, whole sign house 10",
+    "- [B-S1] Jupiter stations retrograde 2026-12-12 (plus or minus 1 day) at 27°01' Cancer, whole sign house 10. Contacts:",
+    "  - [B-S1a] stationing Jupiter trine natal Moon, orb 0°34'",
+    "",
+    "=== Both charts compared (engine comparison of chart A and chart B, line by line; quote it, never compare the charts yourself) ===",
+    "[X1] Rising sign and chart ruler: the same in both charts: Libra rising, chart ruler Venus, so the whole sign houses are the same."
+  ].join("\n");
+  /** The same sheet with v6's IDs: numbered through both charts, no chart letter. */
+  const V6 = TWO.replace(/\[A-([A-Z])(\d+)/g, "[$1$2").replace(/\[B-([A-Z])(\d+)/g, (_, l: string, n: string) => `[${l}${Number(n) + 20}`).replace(/=== Chart [AB]: /g, "=== Chart: ");
+  const flags = (reading: string, sheet = TWO) => checkReading(sheet, reading).violations.map((v) => `${v.kind}: ${v.named}`);
+
+  it("reads each line's chart from its ID or its heading", () => {
+    for (const sheet of [TWO, V6]) {
+      const s = parseSheet(sheet);
+      expect(s.charts).toEqual(["A", "B"]);
+      expect(s.chartSides.get("A")).toEqual({ side: "before", offset: "UTC-04:00" });
+      expect(s.chartNatal.get("B")!.get("Moon")!.houses).toEqual(new Set([7]));
+    }
+    expect(parseSheet(TWO).chartOf.get("B-T2")).toBe("B");
+    expect(parseSheet(V6).chartOf.get("T22")).toBe("B");
+  });
+
+  it("flags a contact said to be only in one chart when the other has it too (v6 F6, F3)", () => {
+    expect(flags("[A-T2] transiting Pluto square natal Midheaven appears only in chart A.")).toEqual([]);
+    expect(flags("[A-T1] transiting Sun square natal Ascendant appears only in the earlier chart.")).toEqual(["chart-mismatch: Sun square Ascendant"]);
+    expect(flags("[T1] transiting Sun square natal Ascendant appears only in the earlier chart.", V6)).toEqual(["chart-mismatch: Sun square Ascendant"]);
+    expect(flags("The Sun contacts to the Ascendant appear only in the later chart.")).toEqual(["chart-mismatch: Sun contacts to Ascendant"]);
+  });
+
+  it("flags a contact said to be shared, or put in the other chart, or named with no chart", () => {
+    expect(flags("Both charts have transiting Pluto square natal Midheaven.")).toEqual(["chart-mismatch: Pluto square Midheaven"]);
+    expect(flags("In chart B, transiting Pluto square natal Midheaven presses on your standing.")).toEqual(["chart-mismatch: Pluto square Midheaven"]);
+    expect(flags("Transiting Pluto square natal Midheaven presses on your standing.")).toEqual(["chart-mismatch: Pluto square Midheaven"]);
+    expect(flags("In chart A, transiting Pluto square natal Midheaven presses on your standing.")).toEqual([]);
+    expect(flags("**If chart A is right.** Transiting Pluto square natal Midheaven presses on your standing.")).toEqual([]);
+    expect(flags("The tightest aspect is [A-A1] Sun trine Saturn in chart A and [B-A1] Sun trine Saturn in chart B.")).toEqual([]);
+  });
+
+  it("flags one chart's date or orb given with no chart when the other chart's differs (v6 F6)", () => {
+    expect(flags("[T3] transiting Jupiter trine natal Moon is exact on 2026-11-23.", V6)).toEqual(["chart-mismatch: [T3] 2026-11-23"]);
+    expect(flags("[T3] transiting Jupiter trine natal Moon is exact on 2027-01-01.", V6)).toEqual([]);
+    expect(flags("[T3]/[T22] transiting Jupiter trine natal Moon is exact on 2026-11-23 in chart A and 2026-11-24 in chart B.", V6)).toEqual([]);
+    expect(flags("[S1a] stationing Jupiter trine natal Moon has an orb of 0°37'.", V6)).toEqual(["chart-mismatch: [S1a] orb 0°37'"]);
+    expect(flags("[A-T3] transiting Jupiter trine natal Moon is exact on 2026-11-23.")).toEqual([]);
+  });
+
+  it("checks a natal house or sign against the chart it is said of", () => {
+    expect(flags("Saturn is in your fifth house.")).toEqual([]);
+    expect(flags("The Moon is in your sixth house.")).toEqual(["chart-mismatch: Moon in house 6"]);
+    expect(flags("In chart A the Moon is in your sixth house.")).toEqual([]);
+    expect(flags("In chart B the Moon is in your sixth house.")).toEqual(["chart-mismatch: Moon in house 6"]);
+  });
+
+  it("checks which clock reading gives which chart (v6 G2, G3)", () => {
+    expect(flags("If the time came from a clock that had not yet changed, it is chart A; from a clock that had already changed, chart B.")).toEqual([]);
+    expect(flags("Did it come from a clock that had not yet changed (so chart B), or one that had changed (so chart A)?")).toEqual(["chart-mismatch: chart B from a clock before the change", "chart-mismatch: chart A from a clock after the change"]);
+    expect(flags("Was the birth before the clocks moved (chart A) or after (chart B)?")).toEqual([]);
+    expect(flags("Was the birth before the clocks moved (chart B) or after (chart A)?")).toEqual(["chart-mismatch: chart B born before the change", "chart-mismatch: chart A born after the change"]);
+  });
+});

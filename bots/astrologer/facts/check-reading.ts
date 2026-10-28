@@ -167,6 +167,8 @@ export interface Sheet {
   rising: Map<string, string>;
   /** The chart ruler of each chart that has one (the [R1] line). */
   chartRulers: Map<string, Point>;
+  /** Fold or gap: the offset each chart reads the clock time on, and which side of the change it is. */
+  chartSides: Map<string, { side: "before" | "after"; offset: string }>;
 }
 
 /** Reads the relations and IDs from a sheet written by `formatReadingFacts`. */
@@ -191,6 +193,7 @@ export function parseSheet(text: string): Sheet {
   const chartNatal: Sheet["chartNatal"] = new Map();
   const rising = new Map<string, string>();
   const chartRulers = new Map<string, Point>();
+  const chartSides: Sheet["chartSides"] = new Map();
   let chart: string | null = null;
   const natalOf = (p: Point) => {
     if (!natal.has(p)) natal.set(p, { signs: new Set(), houses: new Set() });
@@ -209,8 +212,12 @@ export function parseSheet(text: string): Sheet {
       chart = heading[1] ?? (charts.length === 0 ? "A" : "B");
       charts.push(chart);
       chartLabels.set(chart, heading[2]!.replace(/^[AB]: /, ""));
+      const side = /offset (before|after) the change \((UTC[^)]*)\)|(earlier|later) occurrence \(clock on (UTC[^)]*)\)/.exec(heading[2]!);
+      if (side) chartSides.set(chart, { side: (side[1] ?? (side[3] === "earlier" ? "before" : "after")) as "before" | "after", offset: side[2] ?? side[4]! });
       continue;
     }
+    // "=== Both charts compared ... ===": lines of both charts.
+    if (/^=== /.test(line)) { chart = null; continue; }
     const tag = new RegExp(`\\[(${ANY_ID})\\]`).exec(line);
     if (tag && !ids.has(tag[1]!)) ids.set(tag[1]!, line.slice(tag.index));
     const isoDates = [...line.matchAll(ISO_DATE)].map((m) => m[0]);
@@ -275,7 +282,7 @@ export function parseSheet(text: string): Sheet {
   // "Born on 29 February: in a common year this sheet gives 1 March; some keep 28 February."
   if (birthday && /Born on 29 February/.test(text)) for (const md of ["02-28", "02-29"]) baseDates.add(`${birthday.date.slice(0, 4)}-${md}`);
   if (charts.length === 0) charts.push("A");
-  return { relations, ids, birthday, solarReturns, angleLines, natal, angular, moving, lineDates, lineOrbs, ranges, window, baseDates, allDates, charts, chartOf, chartLabels, chartNatal, rising, chartRulers };
+  return { relations, ids, birthday, solarReturns, angleLines, natal, angular, moving, lineDates, lineOrbs, ranges, window, baseDates, allDates, charts, chartOf, chartLabels, chartNatal, rising, chartRulers, chartSides };
 }
 
 // ------------------------------------------------------------------ the reading
@@ -397,7 +404,7 @@ function marks(tokens: Token[], index: number): { natal: boolean; transiting: bo
 /** Every ID quoted in a text. */
 const ID_G = /\[((?:[AB]-)?[A-Z]\d+[a-z]?)\]/g;
 
-const SENTENCE_SPLIT = /(?<=[.!?])\s+|\n+/;
+const SENTENCE_SPLIT = /(?<=[.!?])(?<!\] \d{1,2}\.)\s+|\n+/;
 const CLAUSE_SPLIT = /[;:()]/;
 
 const hasDate = (tokens: Token[]) => tokens.some((t, i) =>
@@ -556,7 +563,7 @@ export function findMentions(reading: string): Mention[] {
 
 export interface Violation {
   kind: "not-on-sheet" | "wrong-aspect" | "reversed" | "unknown-id" | "id-mismatch" | "date-mismatch" | "age-mismatch"
-    | "range-mismatch" | "orb-mismatch" | "house-mismatch" | "sign-mismatch" | "ruler-mismatch";
+    | "range-mismatch" | "orb-mismatch" | "house-mismatch" | "sign-mismatch" | "ruler-mismatch" | "chart-mismatch";
   mention: string;
   /** The sentence of the reading it is in. */
   sentence: string;
@@ -969,6 +976,7 @@ function placementViolations(sheet: Sheet, reading: string): Violation[] {
   let quoted = new Set<string>();
   // The part of the reading a sentence is in: the 90 days (or a month of it) or the natal themes, by the last heading or bold lead.
   let transitSection = false;
+  const headingCharts = chartHeadings(reading);
   for (const sentence of sentences) {
     if (!sentence) continue;
     const heading = /^#+\s*(.*)$/.exec(sentence)?.[1] ?? /^\*\*([^*]+)\*\*/.exec(sentence)?.[1];
@@ -999,7 +1007,17 @@ function placementViolations(sheet: Sheet, reading: string): Violation[] {
           const body = c.of;
           const isMoving = c.explicitlyMoving || ctx.moving.has(body);
           if (!isMoving) {
-            if (natalValues(body).has(c.value)) continue;
+            if (natalValues(body).has(c.value)) {
+              // Fold or gap: a house or sign that holds in one chart only must name it.
+              const holds = sheet.charts.filter((x) => { const n = sheet.chartNatal.get(x)?.get(body); return c.kind === "house" ? n?.houses.has(Number(c.value)) : n?.signs.has(c.value); });
+              if (sheet.charts.length < 2 || holds.length === sheet.charts.length) continue;
+              const scope = chartScope(sheet, sentence);
+              const named = scope.named.size ? [...scope.named] : headingCharts.get(sentence) ? [headingCharts.get(sentence)!] : [];
+              if (named.length === 2 || (named.length === 1 && holds.includes(named[0]!) && !scope.shared)) continue;
+              const where = sheet.charts.map((x) => { const n = sheet.chartNatal.get(x)?.get(body); return `chart ${x} ${c.kind === "house" ? `house ${[...(n?.houses ?? [])].join(" or ")}` : [...(n?.signs ?? [])].join(" or ")}`; }).join(", ");
+              out.push({ kind: "chart-mismatch", mention: c.text, sentence, named: `${body} ${c.kind === "house" ? `in house ${c.value}` : `in ${c.value}`}`, sheet: [], message: `puts ${body} in ${c.kind === "house" ? `house ${c.value}` : c.value}${named.length === 1 ? ` in chart ${named[0]}` : scope.shared ? " in both charts" : " without naming the chart"}, but natal ${body} is in ${where}. Name the chart.` });
+              continue;
+            }
             const mv = movingValues(body, ids, c.kind);
             if (transitContext && mv.size) {
               if (mv.has(c.value)) continue;
@@ -1223,9 +1241,235 @@ function houseList(sheet: Sheet, charts: string[], p: Point): string {
   return hs.length ? `house ${hs.join(" and ")} (${hs.map((n) => houseSign(rising, n)).join(" and ")})` : "no sign";
 }
 
-/** The charts a sentence is about: those it names ("chart B", "the earlier occurrence") or whose IDs it quotes; every chart when it names none. */
+/** The charts a sentence is about: those it names ("chart B", "the earlier occurrence"); every chart when it names none. */
 function sentenceCharts(sheet: Sheet, sentence: string): string[] {
-  return sheet.charts;
+  const named = chartScope(sheet, sentence).named;
+  return named.size === 1 ? [...named] : sheet.charts;
+}
+
+// ------------------------------------------------------------------ two charts (fold or gap)
+
+/** "chart B", "the earlier occurrence", "the first 01:45": a chart named in words, with its place in the text. */
+const CHART_NAME = /\b(?:chart|candidate|version|option) ([AB])\b|\b(earlier|first|later|second) (?:occurrence|chart|version|time|candidate|birth time|reading|one|\d{1,2}:\d{2})\b/gi;
+const SHARED = /\b(?:both charts|both versions|both occurrences|both candidates|both times|both readings|in both|on both|either chart|either version|either occurrence|either candidate|either time|either way|whichever (?:chart|time|occurrence|version|one)|shared by both|common to both|the two charts share|both share|same in both)\b/i;
+const EXCLUSIVE = /\bonly (?:in|for|on|with) (?:the )?(?:chart ([AB])|candidate ([AB])|(earlier|later|first|second) (?:chart|occurrence|version|time|candidate))\b/i;
+
+interface ChartScope {
+  /** Charts the sentence names in words. */
+  named: Set<string>;
+  /** The sentence says a fact holds in both charts. */
+  shared: boolean;
+  /** The sentence says a fact holds only in this chart. */
+  exclusive: string | null;
+}
+
+const chartLetter = (m: RegExpExecArray | RegExpMatchArray) => (m[1] ? m[1].toUpperCase() : /^(earlier|first)$/i.test(m[2]!) ? "A" : "B");
+/** "the later", "Earlier:", "in B", "A has": shorter names of a chart (capital letters only). */
+const CHART_SHORT = /\b[Tt]he (earlier|later)\b(?! (?:than|part|half|weeks?|days?|months?|dates?|transits?|contacts?|stations?))|^\W*(Earlier|Later)\b(?=:)|\b(?:[Ii]n|[Ff]or|[Oo]n|[Uu]nder|[Ww]ith|[Ff]rom) ([AB])\b(?![-'\u2019])|\b([AB]) (?:has|have|gives|puts|alone|only|lists|adds)\b/g;
+
+/** The charts a text names, with their places. */
+function chartNames(text: string): { at: number; end: number; chart: string; text: string }[] {
+  const out = [...text.matchAll(CHART_NAME)].map((m) => ({ at: m.index!, end: m.index! + m[0].length, chart: chartLetter(m), text: m[0] }));
+  for (const m of text.matchAll(CHART_SHORT)) {
+    if (out.some((x) => m.index! < x.end && m.index! + m[0].length > x.at)) continue;
+    const word = m[1] ?? m[2];
+    out.push({ at: m.index!, end: m.index! + m[0].length, chart: word ? (/^earlier$/i.test(word) ? "A" : "B") : (m[3] ?? m[4])!, text: m[0] });
+  }
+  return out.sort((a, b) => a.at - b.at);
+}
+
+function chartScope(sheet: Sheet, sentence: string): ChartScope {
+  if (sheet.charts.length < 2) return { named: new Set(), shared: false, exclusive: null };
+  // A chart's own ID ("[B-T3]") names its chart.
+  const named = new Set([...chartNames(sentence).map((x) => x.chart), ...[...sentence.matchAll(/\[([AB])-[A-Z]\d+[a-z]?\]/g)].map((m) => m[1]!)]);
+  const ex = EXCLUSIVE.exec(sentence);
+  const exclusive = ex ? (ex[1] ?? ex[2])?.toUpperCase() ?? (/^(earlier|first)$/i.test(ex[3]!) ? "A" : "B") : null;
+  return { named, shared: SHARED.test(sentence) && !exclusive, exclusive };
+}
+
+/**
+ * The chart each sentence is under, by sentence: the one a heading or bold
+ * lead names, until the next heading, or else the one an earlier sentence of
+ * the same paragraph names ("In chart A, ... It sits in the eighth house.").
+ */
+function chartHeadings(reading: string): Map<string, string> {
+  const out = new Map<string, string>();
+  let carried: string | null = null;
+  for (const paragraph of reading.split(/\n+/)) {
+    let inParagraph: string | null = null;
+    for (const raw of paragraph.split(SENTENCE_SPLIT)) {
+      const sentence = raw.trim();
+      if (!sentence) continue;
+      const heading = /^#+\s*(.*)$/.exec(sentence)?.[1] ?? /^\*\*([^*]+)\*\*/.exec(sentence)?.[1];
+      if (heading !== undefined) {
+        const named = new Set(chartNames(heading).map((x) => x.chart));
+        carried = named.size === 1 && !SHARED.test(heading) ? [...named][0]! : null;
+      }
+      const own = new Set([...chartNames(sentence).map((x) => x.chart), ...[...sentence.matchAll(/\[([AB])-[A-Z]\d+[a-z]?\]/g)].map((m) => m[1]!)]);
+      if (own.size === 2 || SHARED.test(sentence)) inParagraph = null;
+      else if (own.size === 1) inParagraph = [...own][0]!;
+      const c = carried ?? inParagraph;
+      if (c && own.size === 0) out.set(sentence, c);
+    }
+  }
+  return out;
+}
+
+const MOVING_NOUNS = new Set(["contact", "contacts", "transit", "transits", "aspects", "aspect", "hits"]);
+
+/**
+ * Fold and gap sheets: each claim is checked against the chart it is
+ * attributed to (a chart named in the sentence or the heading above it, or
+ * the chart of a quoted ID). A contact said to hold in both charts must be on
+ * both; one said to hold only in one chart must be missing from the other; a
+ * contact only one chart has, named with no chart, is flagged; and a date or
+ * orb quoted from one chart's line in a sentence that names no chart must be
+ * the other chart's too.
+ */
+function chartViolations(sheet: Sheet, reading: string, mentions: Mention[]): Violation[] {
+  const out: Violation[] = [];
+  if (sheet.charts.length < 2) return out;
+  const other = (c: string) => (c === "A" ? "B" : "A");
+  const relIn = (c: string, a: Point, b: Point, type: AspectType | null, kinds: RelationKind[]) => sheet.relations.filter((r) => sheet.chartOf.get(r.id) === c && kinds.includes(r.kind)
+    && (type === null || r.type === type) && (r.kind === "natal" ? (r.a === a && r.b === b) || (r.a === b && r.b === a) : r.a === a && r.b === b));
+  const headingChart = chartHeadings(reading);
+  const bySentence = new Map<string, Mention[]>();
+  for (const m of mentions) if (!m.axis) bySentence.set(m.sentence, [...(bySentence.get(m.sentence) ?? []), m]);
+  for (const [sentence, ms] of bySentence) {
+    const scope = chartScope(sheet, sentence);
+    const named = scope.named.size ? scope.named : headingChart.has(sentence) ? new Set([headingChart.get(sentence)!]) : new Set<string>();
+    const quotedCharts = new Set([...sentence.matchAll(ID_G)].map((x) => sheet.chartOf.get(x[1]!)).filter((x): x is string => !!x));
+    // A sentence that names both charts, or quotes both charts' lines, sets them side by side: only "only in" claims are checked.
+    const sideBySide = scope.named.size === 2 || quotedCharts.size === 2;
+    for (const m of ms) {
+      const named0 = `${m.a} ${m.type} ${m.b}`;
+      const moving: RelationKind[] = m.context === "station" ? ["station", "transit"] : ["transit", "station"];
+      const kinds: RelationKind[] = m.context === "any" ? ["natal", ...moving] : moving;
+      const present = sheet.charts.filter((c) => relIn(c, m.a, m.b, m.type, kinds).length);
+      if (present.length === 0) continue;
+      const lineOf = (c: string) => relIn(c, m.a, m.b, m.type, kinds).map((r) => r.line).join(" | ");
+      const push = (message: string) => out.push({ kind: "chart-mismatch", mention: m.text, sentence, named: named0, sheet: present.map(lineOf), message });
+      const citedChart = m.cited ? sheet.chartOf.get(m.cited) ?? null : null;
+      if (scope.exclusive) {
+        const x = scope.exclusive;
+        if (present.includes(other(x))) push(`says only chart ${x} has ${named0}, but chart ${other(x)} has it too: ${lineOf(other(x))}. Check each chart's lines (the comparison lines give what differs).`);
+        else if (!present.includes(x)) push(`says chart ${x} has ${named0}, but only chart ${other(x)} does: ${lineOf(other(x))}.`);
+        continue;
+      }
+      if (sideBySide) continue;
+      if (scope.shared && present.length === 1) { push(`says both charts have ${named0}, but only chart ${present[0]} does: ${lineOf(present[0]!)}.`); continue; }
+      if (named.size === 1) {
+        const x = [...named][0]!;
+        if (!present.includes(x)) { push(`puts ${named0} in chart ${x}, but only chart ${other(x)} has it: ${lineOf(other(x))}.`); continue; }
+        if (citedChart && citedChart !== x && scope.named.size === 1) { push(`quotes chart ${citedChart}'s [${m.cited}] in a sentence about chart ${x}; chart ${x}'s line is: ${lineOf(x)}.`); continue; }
+        continue;
+      }
+      if (named.size === 0 && !scope.shared && present.length === 1 && !(citedChart && /^[AB]-/.test(m.cited!) && citedChart === present[0])) {
+        push(`names ${named0}, which only chart ${present[0]} has (${lineOf(present[0]!)}), without saying which chart. Name the chart ("in chart ${present[0]}").`);
+      }
+    }
+  }
+  // "the Jupiter, Mars and Sun contacts to the Ascendant ... appear only in the later chart" (v6 F3).
+  for (const raw of reading.split(SENTENCE_SPLIT)) {
+    const sentence = raw.trim();
+    const scope = chartScope(sheet, sentence);
+    if (!scope.exclusive) continue;
+    const x = scope.exclusive;
+    for (const clause of sentence.split(CLAUSE_SPLIT)) {
+      const tokens = tokenize(clause);
+      tokens.forEach((t, i) => {
+        if (!MOVING_NOUNS.has(t.word)) return;
+        let j = i + 1;
+        if (!/^(to|with|on)$/.test(tokens[j]?.word ?? "")) return;
+        const lefts = pointsNear(tokens, i, -1, 1, REACH_FREE).indices.map((k) => tokens[k]!.point!.point);
+        const rights = pointsNear(tokens, j, 1, 1, REACH_FREE).indices.map((k) => tokens[k]!.point!.point);
+        for (const a of lefts) for (const b of rights) {
+          const there = relIn(other(x), a, b, null, ["transit", "station"]);
+          if (there.length) out.push({ kind: "chart-mismatch", mention: `${a} ${t.word} to ${b}`, sentence, named: `${a} ${t.word} to ${b}`, sheet: there.map((r) => r.line), message: `says the ${a} ${t.word} to the ${b} are only in chart ${x}, but chart ${other(x)} has ${there.map((r) => r.line).join(" | ")}. Check each chart's lines (the comparison lines give what differs).` });
+        }
+      });
+    }
+  }
+  // A date or orb quoted from one chart's line in a sentence that names no chart, or says both, must be on the other chart's matching line too.
+  for (const raw of reading.split(SENTENCE_SPLIT)) {
+    const sentence = raw.trim();
+    if (!sentence) continue;
+    const scope = chartScope(sheet, sentence);
+    if (scope.named.size || scope.exclusive || headingChart.has(sentence)) continue;
+    const quoted = [...sentence.matchAll(ID_G)].map((x) => x[1]!);
+    const dates = datesIn(sentence);
+    const orbs = [...sentence.matchAll(/\borbs? (?:of )?(\d+°\d{2}')/g)].map((x) => x[1]!);
+    for (const id of quoted) {
+      const c = sheet.chartOf.get(id);
+      const r = sheet.relations.find((x) => x.id === id);
+      if (!c || !r) continue;
+      const twin = relIn(other(c), r.a, r.b, r.type, [r.kind]);
+      if (!twin.length || twin.some((t) => quoted.includes(t.id))) continue;
+      const own = sheet.lineDates.get(id) ?? [];
+      const theirs = twin.flatMap((t) => sheet.lineDates.get(t.id) ?? []);
+      const badDate = dates.find((d) => own.some((iso) => sameDate(d, iso)) && !theirs.some((iso) => sameDate(d, iso)));
+      const theirOrbs = twin.flatMap((t) => sheet.lineOrbs.get(t.id) ?? []);
+      const badOrb = orbs.find((o) => (sheet.lineOrbs.get(id) ?? []).includes(o) && !theirOrbs.includes(o));
+      if (!badDate && !badOrb) continue;
+      out.push({
+        kind: "chart-mismatch", mention: badDate?.text ?? `orb ${badOrb}`, sentence, named: `[${id}] ${badDate ? badDate.text : `orb ${badOrb}`}`, sheet: [r.line, ...twin.map((t) => t.line)],
+        message: `gives chart ${c}'s ${badDate ? `date ${badDate.text}` : `orb ${badOrb}`} for [${id}] without naming the chart, but chart ${other(c)}'s matching line differs: ${twin.map((t) => t.line).join(" | ")}. Say which chart, or give both charts' lines.`
+      });
+    }
+  }
+  out.push(...clockViolations(sheet, reading));
+  return out;
+}
+
+/** "born before the clocks moved": the birth instant before the change (chart A, the earlier instant, on every fold or gap sheet). */
+const BORN_BEFORE = /\bborn before the (?:change|clocks?|switch|jump)\b|\bbefore the clocks? (?:moved|changed|went|jumped|sprang)\b/gi;
+const BORN_AFTER = /\bborn after the (?:change|clocks?|switch|jump)\b|\bafter the clocks? (?:moved|changed|went|jumped|sprang)\b|\bor after\b/gi;
+/** "a clock that had not yet changed", "one still on the old offset": the clock the time was read from. */
+const CLOCK_BEFORE = /\b(?:clocks?|one|watch) (?:that |which )?(?:had not (?:yet )?|hadn't (?:yet )?|has not (?:yet )?|hasn't (?:yet )?|was not (?:yet )?|wasn't (?:yet )?|not yet )(?:been )?(?:changed|moved|gone (?:forward|back)|sprung forward|switched|set forward|put forward|set back|put back)\b|\b(?:clocks?|one|watch) (?:that |which )?(?:was |were )?still (?:on|showing|reading)\b|\bthe old offset\b/gi;
+const CLOCK_AFTER = /\b(?:clocks?|one|watch) (?:that |which )?(?:had|has|was|were) (?:already )?(?:been )?(?:changed|moved|gone (?:forward|back)|sprung forward|switched|set forward|put forward|set back|put back)\b|\b(?:clocks?|one|watch) (?:that |which )?(?:was |were )?already (?:on|showing|set|changed)\b|\bthe new offset\b/gi;
+
+/** "a clock that had not yet changed (so chart A)": the clock state each chart is said to come from, against the sheet's chart headings (v6 G2). */
+function clockViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  if (sheet.chartSides.size < 2) return out;
+  for (const raw of reading.split(SENTENCE_SPLIT)) {
+    const sentence = raw.trim();
+    const states: { at: number; end: number; side: "before" | "after"; born: boolean }[] = [];
+    const add = (re: RegExp, side: "before" | "after", born: boolean) => {
+      for (const m of sentence.matchAll(re)) if (!states.some((x) => m.index! < x.end && m.index! + m[0].length > x.at)) states.push({ at: m.index!, end: m.index! + m[0].length, side, born });
+    };
+    add(CLOCK_BEFORE, "before", false);
+    add(CLOCK_AFTER, "after", false);
+    add(BORN_BEFORE, "before", true);
+    add(BORN_AFTER, "after", true);
+    states.sort((a, b) => a.at - b.at);
+    if (!states.some((x) => !x.born) && !states.some((x) => x.born && !/^or after$/i.test(sentence.slice(x.at, x.end)))) continue;
+    const names = chartNames(sentence).filter((x) => !/^(the |earlier|later)/i.test(x.text) || /occurrence|chart|version|candidate/i.test(x.text));
+    for (const n of names) {
+      // The state just before the chart's name, with no other chart named between; else the one just after it.
+      const before = states.filter((x) => x.end <= n.at && n.at - x.end <= 100 && !names.some((o) => o !== n && o.at > x.end && o.at < n.at)).at(-1);
+      const after = states.find((x) => x.at >= n.end && x.at - n.end <= 60 && !names.some((o) => o !== n && o.at > n.end && o.at < x.at));
+      const state = before ?? after;
+      const truth = sheet.chartSides.get(n.chart);
+      if (!state || !truth) continue;
+      // Born before the change: the earlier instant, chart A; a clock reading: the offset the chart reads the time on.
+      if (state.born) {
+        const side = n.chart === "A" ? "before" : "after";
+        if (state.side === side) continue;
+        out.push({
+          kind: "chart-mismatch", mention: n.text, sentence, named: `${n.text} born ${state.side} the change`, sheet: [...sheet.chartLabels].map(([c, l]) => `Chart ${c}: ${l}`),
+          message: `ties ${n.text} to a birth ${state.side} the clock change, but chart A is the earlier instant (before the change) and chart B the later (after it). Quote the [G] lines or the chart headings.`
+        });
+        continue;
+      }
+      if (state.side === truth.side) continue;
+      out.push({
+        kind: "chart-mismatch", mention: n.text, sentence, named: `${n.text} from a clock ${state.side} the change`, sheet: [...sheet.chartLabels].map(([c, l]) => `Chart ${c}: ${l}`),
+        message: `ties ${n.text} to a clock ${state.side === "before" ? "not yet changed" : "already changed"}, but on the sheet chart ${n.chart} reads the time on ${truth.offset}, the offset ${truth.side} the change${sheet.charts.map((c) => c === n.chart ? "" : `; chart ${c} reads it on ${sheet.chartSides.get(c)?.offset}, ${sheet.chartSides.get(c)?.side} the change`).join("")}. Quote the [G] lines or the chart headings.`
+      });
+    }
+  }
+  return out;
 }
 
 const same = (r: Relation, a: Point, b: Point, type: AspectType, kinds: RelationKind[], ordered: boolean) =>
@@ -1280,7 +1524,7 @@ export function checkReading(sheetText: string, reading: string): CheckResult {
   // A date the birthday check already flagged is not flagged twice.
   const flagged = new Set(violations.filter((v) => v.kind === "date-mismatch").map((v) => `${v.sentence}|${v.mention}`));
   violations.push(...dateViolations(sheet, reading).filter((v) => !flagged.has(`${v.sentence}|${v.mention}`)));
-  violations.push(...placementViolations(sheet, reading), ...angularViolations(sheet, reading), ...rulerViolations(sheet, reading));
+  violations.push(...placementViolations(sheet, reading), ...angularViolations(sheet, reading), ...rulerViolations(sheet, reading), ...chartViolations(sheet, reading, mentions));
   return { ok: violations.length === 0, mentions: mentions.length, violations, cited };
 }
 

@@ -250,7 +250,7 @@ describe("chart ruler, angles and birthday", () => {
           expect(Math.abs(sep(lon, angleLon) - (c.type === "conjunction" ? 0 : 180))).toBeCloseTo(c.orb, 6);
         }
         const text = formatReadingFacts(await facts(input));
-        if (v.angleContacts!.length === 0) expect(text).toMatch(/\[C\d+\] none: no planet or node is on the Ascendant/);
+        if (v.angleContacts!.length === 0) expect(text).toMatch(/\[(?:[AB]-)?C\d+\] none: no planet or node is on the Ascendant/);
       }
     }
   }, 120_000);
@@ -361,14 +361,46 @@ describe("line IDs", () => {
   it("gives every fact line one ID, unique except the repeated tightest aspect", async () => {
     for (const input of [RESOLVED, GAP, FOLD, UNKNOWN]) {
       const lines = formatReadingFacts(await facts(input)).split("\n");
-      const tagged = lines.filter((l) => !l.startsWith("Tightest aspect:")).map((l) => /\[([A-Z]\d+[a-z]?)\]/.exec(l)?.[1]).filter(Boolean);
+      const tagged = lines.filter((l) => !l.startsWith("Tightest aspect:")).map((l) => /\[((?:[AB]-)?[A-Z]\d+[a-z]?)\]/.exec(l)?.[1]).filter(Boolean);
       expect(new Set(tagged).size).toBe(tagged.length);
-      for (const l of lines.filter((x) => /transiting \w+ \w+ natal|stationing \w+ \w+ natal|^\[A\d+\] \d+\./.test(x.trim()))) expect(l).toMatch(/\[[A-Z]\d+[a-z]?\]/);
+      for (const l of lines.filter((x) => /transiting \w+ \w+ natal|stationing \w+ \w+ natal|^\[(?:[AB]-)?A\d+\] \d+\./.test(x.trim()))) expect(l).toMatch(/\[(?:[AB]-)?[A-Z]\d+[a-z]?\]/);
       expect(lines.find((l) => l.startsWith("[N1] Age at the window start"))).toBeDefined();
     }
   }, 120_000);
 
   it("gives the same IDs for the same input", async () => {
     expect(formatReadingFacts(await buildReadingFacts(RESOLVED))).toBe(formatReadingFacts(await facts(RESOLVED)));
+  }, 60_000);
+});
+
+describe("two-chart sheets", () => {
+  it("labels every fact line of a fold with its chart, says which clock reading gives which, and compares the charts", async () => {
+    const text = formatReadingFacts(await facts(FOLD));
+    expect(text).toContain("=== Chart A: earlier occurrence (clock on UTC-04:00) ===");
+    expect(text).toContain("=== Chart B: later occurrence (clock on UTC-05:00) ===");
+    expect(text).toMatch(/^\[G1\] Chart A is the earlier occurrence of 01:30: 01:30 on a clock still on UTC-04:00, before the change\. Instant 2026-11-01T05:30Z/m);
+    expect(text).toMatch(/^\[G2\] Chart B is the later occurrence of 01:30: 01:30 on a clock already on UTC-05:00, after the change\. Instant 2026-11-01T06:30Z/m);
+    const [, a, b] = text.split(/^=== Chart [AB]: .*$/m).map((x) => x.split("=== Both charts compared")[0]!);
+    for (const [part, letter] of [[a!, "A"], [b!, "B"]] as const) {
+      const ids = [...part.matchAll(/^(?:- |  - )?\[([^\]]+)\]/gm)].map((m) => m[1]!);
+      expect(ids.length).toBeGreaterThan(20);
+      expect(ids.every((id) => id.startsWith(`${letter}-`))).toBe(true);
+    }
+    expect(text).toMatch(/^\[X1\] Rising sign and chart ruler: /m);
+    expect(text).toMatch(/^\[X\d+\] Transits only in chart A: .*\. Only in chart B: /m);
+    expect(text).toMatch(/^\[X\d+\] Station contacts in both charts with the same orb: /m);
+  }, 60_000);
+
+  it("puts each gap chart on the clock it reads the time on (IANA: New York sprang from UTC-5 to UTC-4)", async () => {
+    const text = formatReadingFacts(await facts(GAP));
+    expect(text).toMatch(/^\[G1\] Chart A is 02:30 read on UTC-04:00: 02:30 on a clock already on UTC-04:00, after the change\. Instant 2026-03-08T06:30Z; the zone's clocks showed 2026-03-08 01:30\./m);
+    expect(text).toMatch(/^\[G2\] Chart B is 02:30 read on UTC-05:00: 02:30 on a clock still on UTC-05:00, before the change\. Instant 2026-03-08T07:30Z; the zone's clocks showed 2026-03-08 03:30\./m);
+    expect(text).toContain("=== Chart A: candidate read on the offset after the change (UTC-04:00) ===");
+  }, 60_000);
+
+  it("keeps one-chart sheets' IDs without a chart letter", async () => {
+    const text = formatReadingFacts(await facts(RESOLVED));
+    expect(text).not.toMatch(/\[[AB]-/);
+    expect(text).not.toMatch(/^\[[GX]\d/m);
   }, 60_000);
 });

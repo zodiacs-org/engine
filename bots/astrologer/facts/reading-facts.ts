@@ -239,6 +239,8 @@ export interface Birthday {
 
 export interface ChartVersion {
   label: string;
+  /** Gap and fold: the offset the clock reading was read on, minutes east, and which side of the change it is. */
+  readOn: { offset: number; side: "before" | "after" } | null;
   utc: string;
   localTime: string;
   timeKnown: boolean;
@@ -451,6 +453,8 @@ export function angleContactsFrom(aspects: NatalAspect[]): AngleContact[] {
 interface Instant {
   label: string;
   ms: number;
+  /** Gap and fold: the offset the clock reading was read on, minutes east, and which side of the change it is. */
+  readOn?: { offset: number; side: "before" | "after" };
 }
 
 function resolveCivil(input: ReadingInput): { status: ReadingFacts["status"]; lmt: boolean; offsets: ReadingFacts["offsets"]; instants: Instant[] } {
@@ -478,17 +482,17 @@ function resolveCivil(input: ReadingInput): { status: ReadingFacts["status"]; lm
       lmt,
       offsets,
       instants: [
-        { label: `earlier occurrence (clock on ${offsetText(t.offsetBeforeMinutes)})`, ms: onBefore },
-        { label: `later occurrence (clock on ${offsetText(t.offsetAfterMinutes)})`, ms: onAfter }
+        { label: `earlier occurrence (clock on ${offsetText(t.offsetBeforeMinutes)})`, ms: onBefore, readOn: { offset: t.offsetBeforeMinutes, side: "before" } },
+        { label: `later occurrence (clock on ${offsetText(t.offsetAfterMinutes)})`, ms: onAfter, readOn: { offset: t.offsetAfterMinutes, side: "after" } }
       ]
     };
   }
   // A gap: the wall time read on either offset; listed in time order.
   const readings = [
-    { label: `candidate read on the offset before the change (${offsetText(t.offsetBeforeMinutes)})`, ms: onBefore },
-    { label: `candidate read on the offset after the change (${offsetText(t.offsetAfterMinutes)})`, ms: onAfter }
+    { label: `candidate read on the offset before the change (${offsetText(t.offsetBeforeMinutes)})`, ms: onBefore, readOn: { offset: t.offsetBeforeMinutes, side: "before" as const } },
+    { label: `candidate read on the offset after the change (${offsetText(t.offsetAfterMinutes)})`, ms: onAfter, readOn: { offset: t.offsetAfterMinutes, side: "after" as const } }
   ].sort((a, b) => a.ms - b.ms);
-  return { status: "gap", lmt, offsets, instants: readings.map((x, i) => ({ ...x, label: `${i === 0 ? "A" : "B"}: ${x.label}` })) };
+  return { status: "gap", lmt, offsets, instants: readings };
 }
 
 // ------------------------------------------------------------------ stations
@@ -839,6 +843,7 @@ function chartVersion(input: ReadingInput, instant: Instant, timeKnown: boolean,
   }
   return {
     label: instant.label,
+    readOn: instant.readOn ?? null,
     utc: utc.toISOString().slice(0, 16) + "Z",
     localTime: `${local.date} ${local.time}`,
     timeKnown,
@@ -899,14 +904,93 @@ export async function buildReadingFacts(input: ReadingInput, options: ReadingOpt
  * return, T transits,
  * S stations, and S1a, S1b, ... each contact of station S1. The same input and
  * options give the same IDs. `check-reading.ts` parses these lines.
+ *
+ * A fold or gap sheet has two charts, A and B. Each chart's lines carry its
+ * letter (`[A-T3]`, `[B-T3]`, numbered within the chart); the lines before
+ * the charts (N), the clock reading of each chart (G) and the comparison of
+ * the two (X) belong to both.
  */
 class Ids {
   private readonly counts = new Map<string, number>();
+  constructor(private readonly chart = "") {}
   next(prefix: string): string {
     const n = (this.counts.get(prefix) ?? 0) + 1;
     this.counts.set(prefix, n);
-    return `[${prefix}${n}]`;
+    return `[${this.chart}${prefix}${n}]`;
   }
+}
+
+/** The IDs given to one chart's lines, for the comparison of two charts. */
+interface ChartRefs {
+  placements: Map<string, string>;
+  aspects: string[];
+  angles: string[];
+  transits: string[];
+  /** Per station, the ID of each contact. */
+  stations: string[][];
+}
+
+const transitKey = (t: Transit) => `transiting ${t.body} ${t.aspect} natal ${t.natal}`;
+const transitWhen = (t: Transit) => (t.range ? `in orb ${t.range.openStart ? "before " : ""}${t.range.from} to ${t.range.openEnd ? "after " : ""}${t.range.to}, ` : "") + (t.exact.length ? `exact ${t.exact.join(", ")}` : "no exact hit");
+const aspectKey = (a: NatalAspect) => `${a.a} ${a.type} ${a.b}`;
+
+/**
+ * The engine's comparison of the two charts of a fold or gap: what they share
+ * and where they differ, line by line, with both charts' IDs.
+ */
+function comparisonLines(vs: ChartVersion[], refs: ChartRefs[], ids: Ids): string[] {
+  const [a, b] = vs as [ChartVersion, ChartVersion];
+  const [ra, rb] = refs as [ChartRefs, ChartRefs];
+  const L: string[] = [];
+  const list = (xs: string[]) => (xs.length ? xs.join("; ") : "none");
+  L.push("=== Both charts compared (engine comparison of chart A and chart B, line by line; quote it, never compare the charts yourself) ===");
+  if (a.chartRuler && b.chartRuler) {
+    L.push(`${ids.next("X")} Rising sign and chart ruler: ${a.chartRuler.risingSign === b.chartRuler.risingSign
+      ? `the same in both charts: ${a.chartRuler.risingSign} rising, chart ruler ${a.chartRuler.planet}, so the whole sign houses are the same`
+      : `differ: chart A ${a.chartRuler.risingSign} rising, chart ruler ${a.chartRuler.planet}; chart B ${b.chartRuler.risingSign} rising, chart ruler ${b.chartRuler.planet}`}.`);
+  }
+  if (a.sect && b.sect) L.push(`${ids.next("X")} Sect: ${a.sect === b.sect ? `the same in both charts: ${a.sect} chart` : `differs: chart A ${a.sect} chart; chart B ${b.sect} chart`}.`);
+  const placeDiff: string[] = [];
+  for (const p of a.placements) {
+    const q = b.placements.find((x) => x.point === p.point);
+    if (!q) continue;
+    if (p.sign !== q.sign || p.house !== q.house) placeDiff.push(`${p.point} (chart A ${p.sign}${p.house === null ? "" : `, house ${p.house}`} ${ra.placements.get(p.point)}; chart B ${q.sign}${q.house === null ? "" : `, house ${q.house}`} ${rb.placements.get(q.point)})`);
+  }
+  L.push(`${ids.next("X")} Signs and whole sign houses of the planets and node: ${placeDiff.length ? `differ for ${placeDiff.join("; ")}; every other point is in the same sign and house in both charts` : "the same in both charts (degrees differ)"}.`);
+  if (a.angleContacts && b.angleContacts) {
+    const ka = (c: AngleContact) => `${c.point} on the ${c.on}`;
+    const both = a.angleContacts.filter((c) => b.angleContacts!.some((d) => ka(d) === ka(c))).map((c) => `${ka(c)} (${ra.angles[a.angleContacts!.indexOf(c)]}/${rb.angles[b.angleContacts!.findIndex((d) => ka(d) === ka(c))]})`);
+    const onlyA = a.angleContacts.filter((c) => !b.angleContacts!.some((d) => ka(d) === ka(c))).map((c) => `${ka(c)} ${ra.angles[a.angleContacts!.indexOf(c)]}`);
+    const onlyB = b.angleContacts.filter((c) => !a.angleContacts!.some((d) => ka(d) === ka(c))).map((c) => `${ka(c)} ${rb.angles[b.angleContacts!.indexOf(c)]}`);
+    L.push(`${ids.next("X")} Planets on an angle: in both charts: ${list(both)}. Only in chart A: ${list(onlyA)}. Only in chart B: ${list(onlyB)}.`);
+  }
+  const aspectsIn = (x: ChartVersion, y: ChartVersion, rx: ChartRefs) => x.aspects.filter((p) => !y.aspects.some((q) => aspectKey(q) === aspectKey(p))).map((p) => `${aspectKey(p)} ${rx.aspects[p.rank - 1]}`);
+  const tight = (x: ChartVersion, rx: ChartRefs) => (x.aspects[0] ? `${aspectKey(x.aspects[0])} ${rx.aspects[0]}` : "none");
+  L.push(`${ids.next("X")} Tightest aspect: ${a.aspects[0] && b.aspects[0] && aspectKey(a.aspects[0]) === aspectKey(b.aspects[0]) ? `the same in both charts: ${aspectKey(a.aspects[0])} (${ra.aspects[0]}/${rb.aspects[0]})` : `differs: chart A ${tight(a, ra)}; chart B ${tight(b, rb)}`}.`);
+  L.push(`${ids.next("X")} Natal aspects only in chart A: ${list(aspectsIn(a, b, ra))}. Only in chart B: ${list(aspectsIn(b, a, rb))}. Every other aspect is in both charts (orbs may differ: quote each chart's own line).`);
+  const sameT: string[] = [];
+  const diffT: string[] = [];
+  const onlyTA: string[] = [];
+  a.transits.forEach((t, i) => {
+    const j = b.transits.findIndex((u) => transitKey(u) === transitKey(t));
+    if (j < 0) { onlyTA.push(`${transitKey(t)} ${ra.transits[i]}`); return; }
+    const u = b.transits[j]!;
+    if (transitWhen(t) === transitWhen(u)) sameT.push(`${ra.transits[i]}/${rb.transits[j]}`);
+    else diffT.push(`${transitKey(t)} (chart A ${ra.transits[i]} ${transitWhen(t)}; chart B ${rb.transits[j]} ${transitWhen(u)})`);
+  });
+  const onlyTB = b.transits.map((u, j) => (a.transits.some((t) => transitKey(t) === transitKey(u)) ? null : `${transitKey(u)} ${rb.transits[j]}`)).filter((x): x is string => !!x);
+  L.push(`${ids.next("X")} Transits in both charts with the same dates: ${list(sameT)}.`);
+  L.push(`${ids.next("X")} Transits in both charts with different dates: ${list(diffT)}.`);
+  L.push(`${ids.next("X")} Transits only in chart A: ${list(onlyTA)}. Only in chart B: ${list(onlyTB)}.`);
+  const contacts = (v: ChartVersion, rv: ChartRefs) => v.stationContacts.flatMap((s, i) => s.contacts.map((c, k) => ({ key: `stationing ${s.station.body} ${c.type} natal ${c.natal}`, orb: orbText(c.orb), id: rv.stations[i]![k]! })));
+  const ca = contacts(a, ra);
+  const cb = contacts(b, rb);
+  const sameS = ca.filter((c) => cb.some((d) => d.key === c.key && d.orb === c.orb)).map((c) => `${c.id}/${cb.find((d) => d.key === c.key)!.id}`);
+  const diffS = ca.filter((c) => cb.some((d) => d.key === c.key && d.orb !== c.orb)).map((c) => { const d = cb.find((x) => x.key === c.key)!; return `${c.key} (chart A ${c.id} orb ${c.orb}; chart B ${d.id} orb ${d.orb})`; });
+  const onlySA = ca.filter((c) => !cb.some((d) => d.key === c.key)).map((c) => `${c.key} ${c.id}`);
+  const onlySB = cb.filter((d) => !ca.some((c) => c.key === d.key)).map((d) => `${d.key} ${d.id}`);
+  L.push(`${ids.next("X")} Station contacts in both charts with the same orb: ${list(sameS)}. In both with different orbs: ${list(diffS)}. Only in chart A: ${list(onlySA)}. Only in chart B: ${list(onlySB)}.`);
+  return L;
 }
 
 function placementLine(p: Placement): string {
@@ -977,6 +1061,7 @@ function dignityLine(d: PlanetDignity, sect: "day" | "night" | null): string {
 export function formatReadingFacts(f: ReadingFacts): string {
   const L: string[] = [];
   const ids = new Ids();
+  const outer = ids;
   const z = f.input.zone;
   L.push("ENGINE FACTS (computed by @zodiacs/engine; every number below is final. Quote them; never recompute, compare, re-rank or round them.)");
   L.push("Each fact line starts with an ID in square brackets: a letter and a number, such as T3. Name an aspect, transit, station or contact only by quoting its line with that ID, exactly as written: the same planets, the same aspect word, the same order.");
@@ -991,14 +1076,36 @@ export function formatReadingFacts(f: ReadingFacts): string {
   } else if (f.status === "time-unknown") {
     L.push("Birth time unknown: the chart below is a reference at local noon with planets only. No houses, no Ascendant, no Midheaven, no sect, no Moon degree. Moon: sign range for the day only.");
   }
-  for (const v of f.versions) {
+  const two = f.versions.length === 2;
+  const refs: ChartRefs[] = [];
+  if (two) {
+    // Which clock reading gives which chart, so the person can be asked in their own terms.
+    f.versions.forEach((v, i) => {
+      const letter = i === 0 ? "A" : "B";
+      const on = offsetText(v.readOn!.offset);
+      const clock = v.readOn!.side === "before" ? `a clock still on ${on}, before the change` : `a clock already on ${on}, after the change`;
+      const what = f.status === "fold" ? `the ${i === 0 ? "earlier" : "later"} occurrence of ${f.input.time}` : `${f.input.time} read on ${on}`;
+      L.push(`${ids.next("G")} Chart ${letter} is ${what}: ${f.input.time} on ${clock}. Instant ${v.utc}; the zone's clocks showed ${v.localTime}.`);
+    });
+    L.push("Every line below carries its chart's letter: [A-...] lines are chart A, [B-...] lines chart B. Name the chart of every chart-specific fact, and quote a fact the two charts share with both IDs (as the comparison at the end gives them).");
+  }
+  for (const [vi, v] of f.versions.entries()) {
+    const letter = vi === 0 ? "A" : "B";
+    const ids = two ? new Ids(`${letter}-`) : outer;
+    const ref: ChartRefs = { placements: new Map(), aspects: [], angles: [], transits: [], stations: [] };
+    refs.push(ref);
     L.push("");
-    L.push(`=== Chart: ${v.label} ===`);
+    L.push(two ? `=== Chart ${letter}: ${v.label} ===` : `=== Chart: ${v.label} ===`);
     L.push(`Instant: ${v.utc} (local ${v.localTime}, ${z}). Tropical zodiac, ${v.timeKnown ? "whole sign houses, " : "no houses, "}true node.`);
     if (v.ascendant && v.midheaven) {
-      L.push(`${ids.next("P")} Ascendant ${v.ascendant.degree} ${v.ascendant.sign}; Midheaven ${v.midheaven.degree} ${v.midheaven.sign} (whole sign house ${v.midheaven.house})`);
+      ref.placements.set("Ascendant", ids.next("P"));
+      L.push(`${ref.placements.get("Ascendant")} Ascendant ${v.ascendant.degree} ${v.ascendant.sign}; Midheaven ${v.midheaven.degree} ${v.midheaven.sign} (whole sign house ${v.midheaven.house})`);
     }
-    for (const p of v.placements) L.push(`${ids.next("P")} ${placementLine(p)}`);
+    for (const p of v.placements) {
+      const id = ids.next("P");
+      ref.placements.set(p.point, id);
+      L.push(`${id} ${placementLine(p)}`);
+    }
     if (v.moonSigns) {
       L.push(`${ids.next("P")} ${v.moonSigns.length === 1
         ? `Moon: in ${v.moonSigns[0]} for the whole local date (degree unknown without a birth time).`
@@ -1030,6 +1137,7 @@ export function formatReadingFacts(f: ReadingFacts): string {
 
     L.push(`Natal aspects, ENGINE RANKING by orb, tightest first (orbs to the arcminute; ${v.aspects.length} aspects; quote this order, do not re-rank):`);
     const aspectIds = v.aspects.map(() => ids.next("A"));
+    ref.aspects = aspectIds;
     const aspectRef = (a: NatalAspect) => `${aspectIds[a.rank - 1]} ${a.a} ${a.type} ${a.b}, orb ${orbText(a.orb)}`;
     if (v.aspects.length) {
       L.push(`Tightest aspect: ${aspectRef(v.aspects[0]!)}`);
@@ -1064,7 +1172,11 @@ export function formatReadingFacts(f: ReadingFacts): string {
     if (v.angleContacts) {
       L.push("Planets on an angle (a conjunction or opposition with the Ascendant or Midheaven in the ranking above, the engine's default orbs). How to read them: a conjunction with the Ascendant puts the planet on the Ascendant (the rising degree), an opposition with the Ascendant puts it on the Descendant, a conjunction with the Midheaven puts it on the Midheaven (MC), and an opposition with the Midheaven puts it on the IC. A planet not listed here is on no angle, whatever its house:");
       if (v.angleContacts.length === 0) L.push(`${ids.next("C")} none: no planet or node is on the Ascendant, Descendant, Midheaven or IC within the engine's default orbs.`);
-      for (const c of v.angleContacts) L.push(`- ${ids.next("C")} ${c.point} ${c.type} ${c.angle}, orb ${orbText(c.orb)}: on the ${c.on}, same as ${aspectIds[c.rank - 1]}`);
+      for (const c of v.angleContacts) {
+        const id = ids.next("C");
+        ref.angles.push(id);
+        L.push(`- ${id} ${c.point} ${c.type} ${c.angle}, orb ${orbText(c.orb)}: on the ${c.on}, same as ${aspectIds[c.rank - 1]}`);
+      }
     }
     if (v.angularHouses) {
       const held = v.angularHouses.filter((h) => h.points.length).map((h) => `house ${h.house} ${h.points.join(", ")}`);
@@ -1088,12 +1200,17 @@ export function formatReadingFacts(f: ReadingFacts): string {
     }
     L.push(`Transits ${f.window.from} to ${f.window.toInclusive} inclusive (${f.window.days} days), dates in the person's zone (${z}). Bodies: ${TRANSITING.join(", ")}. Aspects: ${TRANSIT_ASPECTS.join(", ")}. Natal points: ${v.transitPoints.join(", ")}. Uranus, Neptune and Pluto are given as in-orb date ranges, never as a single day:`);
     if (v.transits.length === 0) L.push("- none in the window for these bodies, aspects and points.");
-    for (const t of v.transits) L.push(`- ${ids.next("T")} ${transitLine(t)}`);
+    for (const t of v.transits) {
+      const id = ids.next("T");
+      ref.transits.push(id);
+      L.push(`- ${id} ${transitLine(t)}`);
+    }
 
     L.push(`Stations in the window and their contacts with natal points (major aspects within ${STATION_ORB}°; checked against ${v.stationContacts[0]?.checked.join(", ") ?? "the natal points"}):`);
     if (v.stationContacts.length === 0) L.push("- no station in the window.");
     for (const s of v.stationContacts) {
       const sid = ids.next("S");
+      ref.stations.push(s.contacts.map((_, i) => `${sid.slice(0, -1)}${String.fromCharCode(97 + i)}]`));
       const stationHouse = v.ascendant ? `, whole sign house ${placement(s.station.body, s.station.lon, v.ascendant.lon, false).house}` : "";
       const head = `${s.station.body} stations ${s.station.kind} ${s.station.localDate} (plus or minus 1 day) at ${degreeText(s.station.lon)} ${signName(s.station.lon)}${stationHouse}`;
       if (s.contacts.length === 0) {
@@ -1103,6 +1220,10 @@ export function formatReadingFacts(f: ReadingFacts): string {
       L.push(`- ${sid} ${head}. Contacts:`);
       s.contacts.forEach((c, i) => L.push(`  - ${sid.slice(0, -1)}${String.fromCharCode(97 + i)}] stationing ${s.station.body} ${c.type} natal ${c.natal}, orb ${orbText(c.orb)}`));
     }
+  }
+  if (two) {
+    L.push("");
+    L.push(...comparisonLines(f.versions, refs, outer));
   }
   return L.join("\n");
 }
