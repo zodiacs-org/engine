@@ -1,23 +1,23 @@
-# Model grading v4 (exact-wording checker, engine sect/dignities/age), 64 test charts
-Run 2026-10-28 (ICT). Same method as v3 (Sonnet writer, Opus blind strict grader, Claude Max via `claude -p`, no API credit), plus the reading checker with up to 2 revisions.
+# Model grading v5 (free prose synthesis, ranked themes, sentence level fixes), 64 test charts
+Run 2026-10-28 (ICT). Same rubric, charts and method as v4 (Sonnet writer, Opus blind strict grader, Claude Max via `claude -p`, no API credit). New: chart ruler, angle contacts, birthday and solar return on the sheet; checker covers angle and birthday claims; flagged sentences are replaced in place.
 
-## Overall: 3.88 / 5 (v3 4.02, v2 3.99). Still not at the launch bar.
-| Criterion | v3 | v4 | Bar | Pass? |
+## Overall: 4.01 / 5 (v4 3.88, v3 4.02). Not yet at the launch bar.
+| Criterion | v4 | v5 | Bar | Pass? |
 |---|---|---|---|---|
-| C1 Fidelity | 4.19 | 4.64 | 4.5 | yes |
-| C2 Fact vs reading | 4.70 | 4.59 | 4.5 | yes |
-| C3 Technique | 3.48 | 3.02 | 3.5 | no |
-| C4 Timing | 4.23 | 4.08 | 3.5 | yes |
-| C5 Uncertainty | 3.69 | 3.55 | 3.5 | yes |
-| C6 Synthesis | 3.30 | 3.03 | 3.5 | no |
-| C7 Usefulness | 3.61 | 3.25 | 3.5 | no |
-| C8 Boundaries | 4.92 | 4.84 | 4.5 | yes |
+| C1 Fidelity | 4.64 | 4.41 | 4.5 | no |
+| C2 Fact vs reading | 4.59 | 4.08 | 4.5 | no |
+| C3 Technique | 3.02 | 3.75 | 3.5 | yes |
+| C4 Timing | 4.08 | 4.16 | 3.5 | yes |
+| C5 Uncertainty | 3.55 | 3.91 | 3.5 | yes |
+| C6 Synthesis | 3.03 | 3.34 | 3.5 | no |
+| C7 Usefulness | 3.25 | 3.83 | 3.5 | yes |
+| C8 Boundaries | 4.84 | 4.58 | 4.5 | yes |
 
-Critical errors: 3 charts (v3: 11): H7 (birthday date), O12 (Saturn "on the Ascendant axis"), P12 ("Venus on the rising degree"). All three are prose claims the checker does not parse (angle contacts, dates).
+Critical errors: 8 charts (v4: 3): E2 and O1 (dates or ranges restated wrong), M3, P8, P11 (houses or signs for transiting bodies not on the sheet), H5 (date span), O12 (Venus "on the rising edge"), P3 (Saturn on the IC).
 
-Trade-off: facts are now right, but the strict rules make readings list-like and timid. The writer often says a fact is "unavailable" when the sheet has it (E2, M5), skips chart ruler and sect synthesis, and over-hedges on uncertainty.
+Trade-off: freer prose fixed technique and usefulness, but the writer now restates dates, houses and angle placements in its own words, which the checker does not yet catch.
 
 ## Next fixes
-1. Loosen the tone rules: keep exact wording for contacts but require a woven synthesis around the chart ruler, sect and dignity (the sheet gives these as facts).
-2. Have the engine emit the chart ruler and its condition explicitly, and the solar return date.
-3. Extend the checker to contacts with angles and to dates.
+1. Checker: verify every date and in-orb range restated in prose against its sheet line, and any house or sign given for a transiting body.
+2. Catch "rising edge", "on the IC" and similar angle synonyms.
+3. Synthesis: build around dispositor chains and the chart ruler; demote Sun transits to background.
