@@ -55,6 +55,11 @@ def check(sp,rp):
   r=subprocess.run([ENGINE+'/node_modules/.bin/vite-node','bots/astrologer/facts/check-cli.ts','--','--sheet',sp,'--reading',rp,'--json'],capture_output=True,text=True,timeout=300,cwd=ENGINE)
   if r.returncode not in (0,1): raise RuntimeError('checker: '+r.stderr[-300:])
   return json.loads(r.stdout)
+# Before each check the reading's en and em dashes are removed in place (bots/astrologer/facts/dedash-cli.ts,
+# deterministic, no model call): after the first writing and after each revision.
+def dedash(rp):
+  r=subprocess.run([ENGINE+'/node_modules/.bin/vite-node','bots/astrologer/facts/dedash-cli.ts','--','--write',rp],capture_output=True,text=True,timeout=300,cwd=ENGINE)
+  if r.returncode!=0 or json.loads(r.stdout)['after']!=0: raise RuntimeError('dedash: '+(r.stderr or r.stdout)[-300:])
 def violations_text(res):
   return '\n'.join(f"{i+1}. "+(f'In "{v["sentence"]}": ' if v['sentence'] else '')+v['message'] for i,v in enumerate(res['violations']))
 def write_prompt(s):
@@ -97,12 +102,12 @@ def do(c):
     open(rp,'w').write(claude(WRITER,WSYS,write_prompt(s)))
   if not os.path.exists(kp):
     attempts=[]
-    res=check(sp,rp); attempts.append({'attempt':0,'ok':res['ok'],'mentions':res['mentions'],'violations':res['violations'],'cited':res['cited']})
+    dedash(rp); res=check(sp,rp); attempts.append({'attempt':0,'ok':res['ok'],'mentions':res['mentions'],'violations':res['violations'],'cited':res['cited']})
     while not res['ok'] and len(attempts)<=MAX_REVISIONS:
       n=len(attempts); prev=open(rp).read()
       open(f"{G}/readings/{cid}.draft{n}.md",'w').write(prev)
       new,mode=revise(s,prev,res); open(rp,'w').write(new)
-      res=check(sp,rp); attempts.append({'attempt':n,'mode':mode,'ok':res['ok'],'mentions':res['mentions'],'violations':res['violations'],'cited':res['cited']})
+      dedash(rp); res=check(sp,rp); attempts.append({'attempt':n,'mode':mode,'ok':res['ok'],'mentions':res['mentions'],'violations':res['violations'],'cited':res['cited']})
     json.dump({'chart':cid,'final_ok':res['ok'],'revisions':len(attempts)-1,'attempts':attempts},open(kp,'w'),indent=1)
   if not os.path.exists(gp):
     out=claude(GRADER,GSYS,"CHART SHEET:\n"+s+"\n\nREADING (author unknown):\n"+open(rp).read())

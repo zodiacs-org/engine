@@ -74,4 +74,10 @@ node_modules/.bin/vite-node bots/astrologer/facts/check-cli.ts -- --sheet sheet.
 
 The grading harness (`grading/run.py`) runs it after the writer. When it fails, the writer gets the flagged sentences with their problems and returns a replacement for each, which is spliced into the reading in place; the whole reading is rewritten only when no flagged sentence can be located or the reply cannot be read. At most 2 revisions; each chart's checks, with the revision mode, are recorded in `checks/<id>.json`.
 
+Dashes: `dedash.ts` removes en and em dashes from a reading without a model call (a dash between two point names becomes a hyphen, a range becomes "to", clause dashes become commas, a colon or a full stop; URLs and code are left alone). The grading harness runs it in place before every check. See `../grading/dedash-report.md`.
+
+```sh
+node_modules/.bin/vite-node bots/astrologer/facts/dedash-cli.ts -- --write reading.md [more.md ...]
+```
+
 Tests: `npx vitest run bots/astrologer/facts`. Typecheck: `npx tsc -p bots/astrologer/facts/tsconfig.json`. The tests pin structure and the engine's own consistency (ranking order, station speed sign, contacts against a separately written separation); they are regression tests, not accuracy evidence.
