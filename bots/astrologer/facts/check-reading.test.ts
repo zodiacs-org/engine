@@ -164,6 +164,13 @@ describe("birthday and age claims", () => {
     expect(childKinds("The solar return (November 12) starts a new cycle.")).toEqual(["date-mismatch: solar return November 12"]);
   });
 
+  it("does not tie a date across ', and' to the birthday (v8 G4)", () => {
+    const dates = (reading: string) => childKinds(reading).filter((k) => /^date-mismatch: (birthday|solar return)/.test(k));
+    expect(dates("The window runs 2026-11-01 to 2027-01-29, and the next birthday is 2026-11-11, when your child turns 11.")).toEqual([]);
+    expect(dates("The birthday is 2026-11-11, and the window ends 2027-01-29.")).toEqual([]);
+    expect(dates("The birthday is 2026-11-12, and the window ends 2027-01-29.")).toEqual(["date-mismatch: birthday 2026-11-12"]);
+  });
+
   it("flags an age at the birthday that differs from the sheet", () => {
     expect(childKinds("Your child turns 11 on 2026-11-11.")).toEqual([]);
     expect(childKinds("Your child turns 12 this month.")).toEqual(["age-mismatch: turns 12"]);
@@ -336,6 +343,10 @@ describe("house, sign and chart rulers", () => {
     expect(flags("Venus does not rule your second house.")).toEqual([]);
   });
 
+  it("reads 'the ruler is' with no planet after it as no claim (v8 M2)", () => {
+    expect(flags("Its aspects are Venus square Saturn, so the ruler is stretched between direction and restriction.").filter((k) => k.startsWith("ruler"))).toEqual([]);
+    expect(flags("Your ruler is Mars.")).toEqual(["ruler-mismatch: Mars rules the chart"]);
+  });
 
   it("flags a planet said to rule the house it occupies when its sign is another planet's (v8 P2)", () => {
     // Mercury in Leo (house 11, the Sun's), the Moon in Pisces (house 6, Jupiter's).
@@ -517,6 +528,10 @@ describe("angle paraphrases", () => {
   it("reads the rising edge, the top or bottom of the chart and the horizon as angles (v5 O12)", () => {
     expect(flags("Moon and Venus on the rising edge give you warmth.")).toEqual(["not-on-sheet: Venus conjunction Ascendant", "not-on-sheet: Moon conjunction Ascendant"]);
     expect(flags("Saturn on the setting edge asks for serious partnerships.")).toEqual([]);
+    // A bare comma before the point next to "on" starts another item (v8 M2); "and" joins a list.
+    expect(flags("The themes follow: Venus with Mars and Moon, Saturn on the setting edge, and more.")).toEqual([]);
+    expect(flags("The themes follow: Moon, Saturn on the setting edge.")).toEqual([]);
+    expect(flags("Moon, Venus and Saturn on the setting edge.")).toEqual(["not-on-sheet: Venus opposition Ascendant", "not-on-sheet: Moon opposition Ascendant"]);
     expect(flags("Jupiter at the top of the chart gives public reach.")).toEqual(["not-on-sheet: Jupiter conjunction Midheaven"]);
     expect(flags("Mars at the bottom of the chart works at home.")).toEqual(["not-on-sheet: Mars opposition Midheaven"]);
     expect(flags("Saturn on the horizon weighs on partnership.")).toEqual([]);

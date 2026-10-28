@@ -407,6 +407,8 @@ function pointsNear(tokens: Token[], start: number, step: 1 | -1, reach: number,
     }
     if (joiners.length === 0 || j < 0 || j >= tokens.length || !tokens[j]!.point) break;
     if (joiners.includes(",") && joiners.includes("and")) break;
+    // "Saturn, the Sun on the IC": a bare comma before the point next to the word starts another item, not the same list (v8 M2).
+    if (step === -1 && indices.length === 1 && joiners.every((w) => w === ",")) break;
     // "Venus and Neptune's station", "Mercury and the Mars-North Node conjunction": a new subject.
     if (step === 1 && joiners.includes("and") && (/['\u2019]s$/.test(tokens[j]!.text) || (tokens[j + 1]?.word === "-" && tokens[j + 2]?.point))) break;
     let beyond = j + step;
@@ -654,8 +656,8 @@ const COUNT_WORDS: Record<string, number> = { a: 1, the: 1, one: 1, two: 2, thre
 /** "the day after the birthday", "two days before your child's birthday", "the day after the solar return". */
 const RELATIVE_BIRTHDAY = /\b(?:(the|a|one|two|three|four|five|six|seven|\d+) )?days? (after|before) (?:the |your |their |his |her )?(?:child's |baby's |son's |daughter's )?(birthday|solar return)/gi;
 const BIRTHDAY_WORD = /\b(birthday|solar return)\b/gi;
-/** Text between a birthday word and a date that still ties the two together. */
-const TIED_GAP = /^[^;\[\]]{0,25}$/;
+/** Text between a birthday word and a date that still ties the two together: short, and not across ", and" or a like clause break (v8 G4: "runs 2026-11-01 to 2027-01-29, and the next birthday is 2026-11-04"). */
+const TIED_GAP = /^(?![^]*,\s*(?:and|but|while|so|then|whereas)\b)[^;\[\]]{0,25}$/;
 
 function birthdayViolations(sheet: Sheet, reading: string): Violation[] {
   const out: Violation[] = [];
@@ -1203,7 +1205,9 @@ function rulerClaims(sentence: string): RulerClaim[] {
         const after = Math.max(i, right.end) + 1;
         let k = after;
         while (k < tokens.length && /^(is|was|,|the|planet|here|now)$/.test(tokens[k]!.word)) k += 1;
-        ruler = tokens[k]?.point && !ANGLES.has(tokens[k]!.point!.point) ? tokens[k]!.point!.point : pointAt(i - 1 - (left === target ? i - 1 - left.end + 1 : 0), -1, 4);
+        // "so the ruler is stretched": a predicate, not a name; the planet before it is not the ruler (v8 M2).
+        const predicate = /^(is|was)$/.test(tokens[after]?.word ?? "") && !tokens[k]?.point;
+        ruler = predicate ? null : tokens[k]?.point && !ANGLES.has(tokens[k]!.point!.point) ? tokens[k]!.point!.point : pointAt(i - 1 - (left === target ? i - 1 - left.end + 1 : 0), -1, 4);
         if (ruler && ruler === of) ruler = null;
       }
       if (!ruler || (!target.houses.length && !target.signs.length && !target.chart && !of)) return;
