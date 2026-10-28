@@ -169,6 +169,10 @@ export interface Sheet {
   chartRulers: Map<string, Point>;
   /** Fold or gap: the offset each chart reads the clock time on, and which side of the change it is. */
   chartSides: Map<string, { side: "before" | "after"; offset: string }>;
+  /** Each chart's dispositor chains (the [L] chain lines): the body, the planets its chain ends at (one in its own sign, or a loop), and the line. */
+  chains: Map<string, { body: Point; end: Point[]; line: string }[]>;
+  /** Each chart's final dispositor line: the planet, or null for "none", and the line. */
+  finalDispositor: Map<string, { planet: Point | null; line: string }>;
 }
 
 /** Reads the relations and IDs from a sheet written by `formatReadingFacts`. */
@@ -194,6 +198,8 @@ export function parseSheet(text: string): Sheet {
   const rising = new Map<string, string>();
   const chartRulers = new Map<string, Point>();
   const chartSides: Sheet["chartSides"] = new Map();
+  const chains: Sheet["chains"] = new Map();
+  const finalDispositor: Sheet["finalDispositor"] = new Map();
   let chart: string | null = null;
   const natalOf = (p: Point) => {
     if (!natal.has(p)) natal.set(p, { signs: new Set(), houses: new Set() });
@@ -230,6 +236,16 @@ export function parseSheet(text: string): Sheet {
       if (chart) chartOf.set(id, chart);
       const ruler = new RegExp(`^${ID("R")} Chart ruler: (${POINT_RE}) \\((${SIGN_RE}) rising\\)`).exec(line.slice(tag.index));
       if (ruler) { chartRulers.set(chart ?? "A", ruler[1] as Point); rising.set(chart ?? "A", ruler[2]!); }
+      // "[L2] Moon in Scorpio: domicile lord Mars. Chain: Moon → Mars → Jupiter → Moon (ends in a loop: Moon, Mars, Jupiter dispose one another)."
+      const chain = new RegExp(`^${ID("L")} (${POINT_RE}) in (?:${SIGN_RE})?[^.]*\\. Chain: .*\\((ends at (${POINT_RE}), in its own sign|ends in a loop: ([^)]*) dispose one another|stops at the Moon)`).exec(line.slice(tag.index));
+      if (chain) {
+        const end = chain[3] ? [chain[3] as Point] : chain[4] ? chain[4].split(", ") as Point[] : ["Moon" as Point];
+        const c = chart ?? "A";
+        if (!chains.has(c)) chains.set(c, []);
+        chains.get(c)!.push({ body: chain[1] as Point, end, line: line.slice(tag.index) });
+      }
+      const final = new RegExp(`^${ID("L")} Final dispositor: (none|${POINT_RE})`).exec(line.slice(tag.index));
+      if (final) finalDispositor.set(chart ?? "A", { planet: final[1] === "none" ? null : final[1] as Point, line: line.slice(tag.index) });
       const parent = /^(?:[AB]-)?S\d+[a-z]$/.test(id) ? id.slice(0, -1) : null;
       lineDates.set(id, [...(parent ? lineDates.get(parent) ?? [] : []), ...isoDates]);
       lineOrbs.set(id, [...line.matchAll(/\borb (\d+°\d{2}')/g)].map((m) => m[1]!));
@@ -282,7 +298,7 @@ export function parseSheet(text: string): Sheet {
   // "Born on 29 February: in a common year this sheet gives 1 March; some keep 28 February."
   if (birthday && /Born on 29 February/.test(text)) for (const md of ["02-28", "02-29"]) baseDates.add(`${birthday.date.slice(0, 4)}-${md}`);
   if (charts.length === 0) charts.push("A");
-  return { relations, ids, birthday, solarReturns, angleLines, natal, angular, moving, lineDates, lineOrbs, ranges, window, baseDates, allDates, charts, chartOf, chartLabels, chartNatal, rising, chartRulers, chartSides };
+  return { relations, ids, birthday, solarReturns, angleLines, natal, angular, moving, lineDates, lineOrbs, ranges, window, baseDates, allDates, charts, chartOf, chartLabels, chartNatal, rising, chartRulers, chartSides, chains, finalDispositor };
 }
 
 // ------------------------------------------------------------------ the reading
@@ -1499,6 +1515,229 @@ function angleCountViolations(sheet: Sheet, reading: string): Violation[] {
   return out;
 }
 
+// ------------------------------------------------------------------ angle contacts and houses
+
+/** "the tenth house", "your 10th-house", "house 10": whole sign house numbers written in a sentence. */
+const HOUSE_NUMBER = /\b(first|fourth|seventh|tenth|1st|4th|7th|10th)[- ]house\b|\bhouse (1|4|7|10)\b(?![-\d])/gi;
+
+/**
+ * An aspect to an angle read as a house: "[A11] Jupiter square Midheaven touches the parent side of the chart (the tenth
+ * house)" when the Midheaven is in whole sign house 11 (v7 E1). A sentence that names the Midheaven or the IC and the house
+ * of that angle by number (10 or 4) is flagged when the angle is in another whole sign house, unless another point the
+ * sentence names, or a line it quotes, is in that house, or the sentence says it is not.
+ */
+function angleHouseViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  for (const raw of reading.split(SENTENCE_SPLIT)) {
+    const sentence = raw.trim();
+    if (!sentence) continue;
+    const tokens = tokenize(sentence);
+    const named = tokens.filter((t) => t.point).map((t) => t.point!);
+    const angles = new Set(named.filter((p) => p.point === "Midheaven").map((p) => (p.flip ? "IC" : "Midheaven")));
+    if (!angles.size) continue;
+    const charts = sentenceCharts(sheet, sentence);
+    const quoted = [...sentence.matchAll(ID_G)].map((x) => sheet.ids.get(x[1]!) ?? "");
+    for (const m of sentence.matchAll(HOUSE_NUMBER)) {
+      const n = ORDINALS[(m[1] ?? "").toLowerCase()] ?? Number(m[2]);
+      const angle = n === 10 ? "Midheaven" : n === 4 ? "IC" : null;
+      if (!angle || !angles.has(angle)) continue;
+      if (/\b(?:not|never|rather than|instead of|nor)\s+(?:in\s+)?(?:the|your)?\s*$/i.test(sentence.slice(0, m.index))) continue;
+      const mcHouses = charts.flatMap((c) => [...(sheet.chartNatal.get(c)?.get("Midheaven")?.houses ?? [])]);
+      if (!mcHouses.length) continue;
+      const houses = angle === "Midheaven" ? mcHouses : mcHouses.map((h) => ((h + 5) % 12) + 1);
+      if (houses.includes(n)) continue;
+      // "Saturn in the tenth house squares the Midheaven": the house is another point's.
+      const others = named.filter((p) => p.point !== "Midheaven").map((p) => p.point);
+      if (others.some((p) => charts.some((c) => sheet.chartNatal.get(c)?.get(p)?.houses.has(n)))) continue;
+      if (quoted.some((l) => new RegExp(`whole sign house ${n}\\b`).test(l))) continue;
+      out.push({
+        kind: "house-mismatch", mention: m[0], sentence, named: `${angle} as house ${n}`, sheet: [],
+        message: `reads the ${angle} as "${m[0]}", but in whole sign houses the ${angle} degree is in house ${[...new Set(houses)].join(" or ")}, not house ${n}. A contact with the ${angle} is a contact with that degree, not a placement in house ${n}: name the angle, or the house it is in, and keep the two apart.`
+      });
+    }
+  }
+  return out;
+}
+
+// ------------------------------------------------------------------ dispositor chains
+
+const CHAIN_WORDS = new Set(["chain", "chains", "dispositor", "dispositors", "rulers", "lords", "roads"]);
+const CHAIN_VERBS = new Set(["lead", "leads", "leading", "led", "run", "runs", "running", "end", "ends", "ending", "ended", "go", "goes", "return", "returns", "trace", "traces", "converge", "converges", "point", "points", "come", "comes", "flow", "flows", "terminate", "terminates", "finish", "finishes"]);
+const TARGET_FILLER = new Set(["the", "a", "both", "either", "loop", "loops", "of", "and", ",", "-", "its", "own", "sign", "pair", "planet", "planets", "single", "with", "domicile", "mutual"]);
+const PRONOUNS = new Set(["it", "itself", "them", "their", "these", "this", "that", "those", "they"]);
+
+type ChainQuant = "all" | "most" | "plain";
+
+/**
+ * Summary claims about where the dispositor chains end, against the [L] lines: "most chains lead to Venus" (v7 O4),
+ * "every chain ends at Jupiter", "everything runs back to Saturn", "Saturn at the end of every chain", "the chains
+ * end at Mars and Mercury", "Mercury's chain ends at Venus", "the Sun, Moon and Venus all lead back to it", and "X is
+ * the final dispositor". "Most" passes when more than half the chains, or more than end at any other place, end there.
+ */
+function dispositorViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  if (!sheet.chains.size) return out;
+  let previous: Point[] = [];
+  for (const raw of reading.split(SENTENCE_SPLIT).flatMap((x) => x.split(/(?<=[.!?:]\*\*)\s+/))) {
+    const sentence = raw.trim();
+    if (!sentence) continue;
+    const tokens = tokenize(sentence);
+    const planets = (from: number, to: number) => tokens.slice(from, to).filter((t) => t.point && !ANGLES.has(t.point.point)).map((t) => t.point!.point);
+    const own = planets(0, tokens.length);
+    const hypothetical = /\b(would|if|were|could)\b/i.test(sentence);
+    const charts = sentenceCharts(sheet, sentence).filter((c) => sheet.chains.has(c));
+    const before = (i: number, skip: Point[] = []) => {
+      const here = planets(0, i).filter((p) => !skip.includes(p));
+      return here.length ? here : previous;
+    };
+    // The planets named after a preposition: "to Venus", "in the loop of Sun and Mars", "to it", "in their loop", "at itself".
+    const targetsAt = (j: number, owner: Point | null, skip: Point[]): Point[] => {
+      const got: Point[] = [];
+      for (let k = j; k < tokens.length && k < j + 10; k += 1) {
+        const t = tokens[k]!;
+        if (t.point && !ANGLES.has(t.point.point)) { got.push(t.point.point); continue; }
+        if (PRONOUNS.has(t.word) && !got.length) {
+          if (t.word === "itself" && owner) return [owner];
+          const ante = before(j, skip);
+          if (/^(it|itself|this|that)$/.test(t.word) && !/^(pair|loop|planets)$/.test(tokens[k + 1]?.word ?? "")) return ante.slice(0, 1);
+          return ante;
+        }
+        if (t.id && got.length) break;
+        if (TARGET_FILLER.has(t.word) || t.id) continue;
+        break;
+      }
+      return got;
+    };
+    const push = (named: string, lines: string[], message: string) => out.push({ kind: "ruler-mismatch", mention: named, sentence, named, sheet: lines, message });
+    const endsOf = (c: string) => sheet.chains.get(c)!;
+    const describe = (c: string) => {
+      const groups = new Map<string, Point[]>();
+      for (const x of endsOf(c)) groups.set(x.end.join(", "), [...(groups.get(x.end.join(", ")) ?? []), x.body]);
+      return [...groups].map(([end, bodies]) => `${bodies.length} at ${end.includes(",") ? `the loop ${end}` : end} (${bodies.join(", ")})`).join("; ");
+    };
+    const finalLine = (c: string) => sheet.finalDispositor.get(c)?.line ?? "";
+    const check = (quant: ChainQuant, bodies: Point[] | null, targets: Point[], phrase: Token[]) => {
+      if (!targets.length || hypothetical) return;
+      const text = phrase.map((x) => x.text).join(" ").replace(/ ([,'’])/g, "$1").replace(/^[,\s]+/, "");
+      const what = `"${text}"${targets.every((p) => text.includes(p)) ? "" : ` (read as ${targets.join(" and ")})`}`;
+      if (out.some((v) => v.sentence === sentence && v.named === what)) return;
+      for (const c of charts) {
+        const list = endsOf(c).filter((x) => !bodies || bodies.includes(x.body));
+        if (!list.length) continue;
+        const hits = list.filter((x) => x.end.some((p) => targets.includes(p)));
+        const label = charts.length > 1 || sheet.charts.length > 1 ? ` in chart ${c}` : "";
+        if (bodies) {
+          const wrong = list.filter((x) => !x.end.some((p) => targets.includes(p)));
+          if (wrong.length) { push(what, wrong.map((x) => x.line), `says ${what}, but${label} ${wrong.map((x) => `${x.body}'s chain ends at ${x.end.join(", ")}`).join("; ")}. Quote the [L] line.`); return; }
+          continue;
+        }
+        if (quant === "plain") {
+          const all = new Set(list.flatMap((x) => x.end));
+          const missing = targets.filter((p) => !all.has(p));
+          if (missing.length) { push(what, [finalLine(c)], `says ${what}, but${label} no chain ends at ${missing.join(" or ")}: ${finalLine(c)} Quote [L11] as written.`); return; }
+          continue;
+        }
+        const others = new Map<string, number>();
+        for (const x of list) if (!x.end.some((p) => targets.includes(p))) others.set(x.end.join(","), (others.get(x.end.join(",")) ?? 0) + 1);
+        const best = Math.max(0, ...others.values());
+        const ok = quant === "all" ? hits.length === list.length : hits.length * 2 > list.length || hits.length > best;
+        if (!ok) { push(what, [finalLine(c)], `says ${what}, but${label} the [L] chains end: ${describe(c)}. ${finalLine(c)} Quote [L11] and the chains as written; never count or rank them yourself.`); return; }
+      }
+    };
+    // "X is the final dispositor", "[L11] makes Saturn the final dispositor", "Final dispositor: Mars".
+    const negatedFinal = /\b(?:no|not|none|nor|without|never|isn't|is not)\b(?:\s+\S+){0,3}\s+final dispositor|final dispositor[:,]?\s+none|\bnone as (?:a |the )?final dispositor/i.test(sentence);
+    tokens.forEach((t, i) => {
+      if (t.word !== "final" || tokens[i + 1]?.word !== "dispositor" || negatedFinal || hypothetical) return;
+      let claimed: Point | null = null;
+      for (let k = i - 1, n = 0; k >= 0 && n < 4; k -= 1, n += 1) {
+        const x = tokens[k]!;
+        if (x.point) { claimed = ANGLES.has(x.point.point) ? null : x.point.point; break; }
+        if (!/^(is|the|as|,|was|make|makes|made|be|its|chart's|sole|only|single)$/.test(x.word)) break;
+      }
+      if (!claimed) for (let k = i + 2, n = 0; k < tokens.length && n < 3; k += 1, n += 1) {
+        const x = tokens[k]!;
+        if (x.point) { claimed = ANGLES.has(x.point.point) ? null : x.point.point; break; }
+        if (!/^(is|the|,|planet|here)$/.test(x.word)) break;
+      }
+      if (!claimed) return;
+      for (const c of charts) {
+        const f = sheet.finalDispositor.get(c);
+        if (!f || f.planet === claimed) continue;
+        push(`${claimed} final dispositor`, [f.line], `makes ${claimed} the final dispositor, but the sheet says: ${f.line} Quote [L11] as written.`);
+      }
+    });
+    tokens.forEach((t, i) => {
+      // "Saturn at the end of every chain", "Mercury at the end of the chains".
+      if (t.word === "end" && tokens[i - 1]?.word === "the" && tokens[i - 2]?.word === "at" && tokens[i + 1]?.word === "of") {
+        const rest = tokens.slice(i + 2, i + 6).map((x) => x.word);
+        const chainAt = rest.findIndex((w) => w === "chain" || w === "chains");
+        if (chainAt < 0 || tokens[i + 2 + chainAt + 1]?.text.endsWith("s") && /^(chain)$/.test(tokens[i + 2 + chainAt + 1]?.word ?? "")) return;
+        if (tokens.slice(i + 2, i + 2 + chainAt).some((x) => x.point || x.id || /^(its|their|his|her)$/.test(x.word))) return;
+        const quant: ChainQuant = rest.some((w) => /^(every|all|each)$/.test(w)) ? "all" : rest.includes("most") ? "most" : "plain";
+        const subject = planets(Math.max(0, i - 4), i - 2);
+        if (subject.length) check(quant, null, subject, tokens.slice(Math.max(0, i - 4), i + 3 + chainAt));
+        return;
+      }
+      if (!CHAIN_VERBS.has(t.word)) return;
+      let j = i + 1;
+      if (tokens[j]?.word === "back") j += 1;
+      if (!/^(to|at|in|on|into|with)$/.test(tokens[j]?.word ?? "")) return;
+      const back = j > i + 1;
+      // Up to 6 tokens before the verb: the subject.
+      const from = Math.max(0, i - 6);
+      const left = tokens.slice(from, i);
+      // "Venus rules the chart, and most chains lead to it": the subject starts after the last "and" when the quantifier or the chain word is after it.
+      const lastAnd = left.map((x) => x.word).lastIndexOf("and");
+      const cut = lastAnd > -1 && left.slice(lastAnd + 1).some((x) => CHAIN_WORDS.has(x.word) || /^(most|all|every|each|everything|majority)$/.test(x.word)) ? lastAnd + 1 : 0;
+      const subj = left.slice(cut).filter((x) => !(STOP_WORDS.has(x.word) && x.word !== "and" && !CHAIN_WORDS.has(x.word)));
+      const words = subj.map((x) => x.word);
+      const chainy = words.some((w) => CHAIN_WORDS.has(w));
+      const quantWord = words.find((w) => /^(most|majority|all|every|each|everything)$/.test(w));
+      // "nearly every planet", "almost all": most.
+      const nearly = words.some((w, k) => /^(nearly|almost|virtually|practically)$/.test(w) && /^(all|every|each|everything)$/.test(words[k + 1] ?? ""));
+      const quant: ChainQuant | null = quantWord === "most" || quantWord === "majority" || nearly ? "most" : quantWord ? "all" : chainy ? "plain" : null;
+      if (!quant) return;
+      if (quantWord === "everything" && !back && !tokens.some((x) => CHAIN_WORDS.has(x.word))) return;
+      if (quantWord && !chainy && quantWord !== "everything" && !back) return;
+      if (/^(many|some|several|few|one|two|three|four|other)$/.test(words.find((w) => /^(many|some|several|few|one|two|three|four|other)$/.test(w)) ?? "")) return;
+      // The chain's owner: "Mercury's chain", "the chain of Mars", "[L3]", "Its chain", or a list "the Sun, Moon and Venus all lead back".
+      const ci = subj.findIndex((x) => x.word === "chain" || x.word === "chains");
+      let bodies: Point[] | null = null;
+      if (ci >= 0) {
+        const pre = subj[ci - 1];
+        const post = subj[ci + 1]?.word === "of" ? subj[ci + 2] : undefined;
+        if (pre?.point && /['’]s$/.test(pre.text)) bodies = [pre.point.point];
+        else if (pre?.word === "its" && subj[ci]!.word === "chain") bodies = before(from + cut).slice(0, 1);
+        else if (post?.point) bodies = [post.point.point];
+        else if (pre?.point && subj[ci]!.word === "chains") {
+          // "Your Sun and Moon chains both lead to Mars".
+          let k = from + cut + ci - 1;
+          while (k > 0 && (tokens[k - 1]!.point || tokens[k - 1]!.joiner)) k -= 1;
+          bodies = planets(k, from + cut + ci);
+        }
+        else {
+          const lid = subj.find((x) => x.id && /^(?:[AB]-)?L\d+$/.test(x.id) && !/^(?:[AB]-)?L1[12]$/.test(x.id));
+          const line = lid ? sheet.ids.get(lid.id!) : undefined;
+          const body = line ? new RegExp(`^${ID("L")} (${POINT_RE}) in`).exec(line)?.[1] : undefined;
+          if (body) bodies = [body as Point];
+        }
+        if (bodies && !bodies.length) return;
+        if (!bodies && subj[ci]!.word === "chain" && quant === "plain") return;
+      } else if (quantWord === "all" && back) {
+        // "Your Sun, Venus, Mars, Jupiter and Pluto all trace back to it": the whole list before "all".
+        let k = i - 1;
+        while (k > 0 && (tokens[k - 1]!.point || tokens[k - 1]!.joiner || /^(the|your|all)$/.test(tokens[k - 1]!.word))) k -= 1;
+        const listed = planets(k, i);
+        if (listed.length) bodies = listed;
+      }
+      const targets = targetsAt(j + 1, bodies?.[0] ?? null, bodies ?? []);
+      check(quant, bodies, targets, tokens.slice(from + cut, Math.min(tokens.length, j + 4)));
+    });
+    if (own.length) previous = own;
+  }
+  return out;
+}
+
 const same = (r: Relation, a: Point, b: Point, type: AspectType, kinds: RelationKind[], ordered: boolean) =>
   kinds.includes(r.kind) && r.type === type && (r.a === a && r.b === b || (!ordered && r.a === b && r.b === a));
 
@@ -1551,7 +1790,7 @@ export function checkReading(sheetText: string, reading: string): CheckResult {
   // A date the birthday check already flagged is not flagged twice.
   const flagged = new Set(violations.filter((v) => v.kind === "date-mismatch").map((v) => `${v.sentence}|${v.mention}`));
   violations.push(...dateViolations(sheet, reading).filter((v) => !flagged.has(`${v.sentence}|${v.mention}`)));
-  violations.push(...placementViolations(sheet, reading), ...angularViolations(sheet, reading), ...rulerViolations(sheet, reading), ...angleCountViolations(sheet, reading), ...chartViolations(sheet, reading, mentions));
+  violations.push(...placementViolations(sheet, reading), ...angularViolations(sheet, reading), ...rulerViolations(sheet, reading), ...angleCountViolations(sheet, reading), ...angleHouseViolations(sheet, reading), ...dispositorViolations(sheet, reading), ...chartViolations(sheet, reading, mentions));
   return { ok: violations.length === 0, mentions: mentions.length, violations, cited };
 }
 

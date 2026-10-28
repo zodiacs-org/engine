@@ -337,6 +337,90 @@ describe("house, sign and chart rulers", () => {
   });
 });
 
+describe("angle contacts read as houses (v7 E1)", () => {
+  // Sagittarius rising, Midheaven in Libra in whole sign house 11 (so the IC is in house 5); Saturn in house 10.
+  const SHEET_MC = [
+    "[P1] Ascendant 25°34' Sagittarius; Midheaven 18°25' Libra (whole sign house 11)",
+    "[P2] Jupiter 15°05' Cancer, whole sign house 8, retrograde",
+    "[P3] Saturn 2°10' Virgo, whole sign house 10",
+    "[A11] 11. Jupiter square Midheaven, orb 3°20'",
+    "[A12] 12. Saturn sextile Midheaven, orb 3°45'"
+  ].join("\n");
+  const flags = (reading: string, sheet = SHEET_MC) => checkReading(sheet, reading).violations.map((v) => `${v.kind}: ${v.named}`);
+
+  it("flags a Midheaven or IC contact glossed as the tenth or fourth house when the angle is in another house", () => {
+    expect(flags("[A11] Jupiter square Midheaven touches the parent and carer side of the chart (the tenth house).")).toEqual(["house-mismatch: Midheaven as house 10"]);
+    expect(flags("Jupiter square the Midheaven colours your 10th-house matters.")).toEqual(["house-mismatch: Midheaven as house 10"]);
+    expect(flags("Jupiter square the IC stirs the fourth house of home.")).toEqual(["house-mismatch: IC as house 4"]);
+  });
+
+  it("passes the angle's own house, a house another named point holds, and a negated house", () => {
+    expect(flags("[A11] Jupiter square Midheaven touches the Midheaven degree, which sits in your eleventh house.")).toEqual([]);
+    expect(flags("Saturn in the tenth house sextiles the Midheaven ([A12]).")).toEqual([]);
+    expect(flags("The Midheaven is in the eleventh house, not the tenth house, in whole sign houses.")).toEqual([]);
+    expect(flags("[A11] Jupiter square Midheaven touches the tenth house.", SHEET_MC.replace("(whole sign house 11)", "(whole sign house 10)"))).toEqual([]);
+  });
+});
+
+describe("dispositor chain summaries (v7 O4)", () => {
+  // Five chains end at Mercury, four at Venus, one at the Moon; no final dispositor.
+  const SHEET_L = [
+    "[R1] Chart ruler: Venus (Taurus rising). Venus 2°00' Taurus, whole sign house 1. Condition ([D4]): dignities domicile; debilities none; not peregrine. Sect role: benefic contrary to sect.",
+    "[L1] Sun in Gemini: domicile lord Mercury. Chain: Sun → Mercury (ends at Mercury, in its own sign).",
+    "[L2] Moon in Cancer: domicile lord Moon. Chain: Moon (ends at Moon, in its own sign).",
+    "[L3] Mercury in Gemini: domicile lord Mercury. Chain: Mercury (ends at Mercury, in its own sign).",
+    "[L4] Venus in Taurus: domicile lord Venus. Chain: Venus (ends at Venus, in its own sign).",
+    "[L5] Mars in Libra: domicile lord Venus. Chain: Mars → Venus (ends at Venus, in its own sign).",
+    "[L6] Jupiter in Virgo: domicile lord Mercury. Chain: Jupiter → Mercury (ends at Mercury, in its own sign).",
+    "[L7] Saturn in Gemini: domicile lord Mercury. Chain: Saturn → Mercury (ends at Mercury, in its own sign).",
+    "[L8] Uranus in Taurus: domicile lord Venus. Chain: Uranus → Venus (ends at Venus, in its own sign).",
+    "[L9] Neptune in Gemini: domicile lord Mercury. Chain: Neptune → Mercury (ends at Mercury, in its own sign).",
+    "[L10] Pluto in Libra: domicile lord Venus. Chain: Pluto → Venus (ends at Venus, in its own sign).",
+    "[L11] Final dispositor: none; the chains end at Mercury (in its own sign) and Moon (in its own sign) and Venus (in its own sign).",
+    "[L12] Mutual receptions by domicile (each planet in the other's sign): none."
+  ].join("\n");
+  // A loop of Sun and Mars collects every chain but Venus's.
+  const SHEET_LOOP = [
+    "[L1] Sun in Scorpio: domicile lord Mars. Chain: Sun → Mars → Sun (ends in a loop: Sun, Mars dispose one another).",
+    "[L2] Moon in Leo: domicile lord Sun. Chain: Moon → Sun → Mars → Sun (ends in a loop: Sun, Mars dispose one another).",
+    "[L4] Venus in Libra: domicile lord Venus. Chain: Venus (ends at Venus, in its own sign).",
+    "[L5] Mars in Leo: domicile lord Sun. Chain: Mars → Sun → Mars (ends in a loop: Sun, Mars dispose one another).",
+    "[L11] Final dispositor: none; the chains end at the loop Sun, Mars and Venus (in its own sign)."
+  ].join("\n");
+  const flags = (reading: string, sheet = SHEET_L) => checkReading(sheet, reading).violations.map((v) => `${v.kind}: ${v.named}`);
+
+  it("flags a quantified claim the chains do not bear out", () => {
+    expect(flags("**Venus rules the chart, and most chains lead to it.**")).toEqual(['ruler-mismatch: "most chains lead to it" (read as Venus)']);
+    expect(flags("Venus rules the chart, and most chains lead to it.").length).toBe(1);
+    expect(flags("Most of the chains end at Mercury [L11].")).toEqual([]);
+    expect(flags("Every chain ends at Mercury.")).toEqual(["ruler-mismatch: \"Every chain ends at Mercury\""]);
+    expect(flags("**Mercury at the end of every chain.**")).toEqual(["ruler-mismatch: \"Mercury at the end of every chain\""]);
+    expect(flags("In the end, everything runs back to Venus.")).toEqual(["ruler-mismatch: \"In the end, everything runs back to Venus\""]);
+    expect(flags("Every chain of rulers ends in that loop ([L11]).", SHEET_LOOP)).toEqual([]);
+    expect(flags("Sun and Mars dispose one another, and every chain of rulers ends in their loop ([L11]).", SHEET_LOOP)).toEqual(["ruler-mismatch: \"every chain of rulers ends in their loop [L11]\" (read as Sun and Mars)"]);
+    expect(flags("Sun and Mars dispose one another, and nearly every chain ends in their loop.", SHEET_LOOP)).toEqual([]);
+  });
+
+  it("checks named chains, listed bodies and the places the chains end", () => {
+    expect(flags("The chains end at Mercury, the Moon and Venus [L11].")).toEqual([]);
+    expect(flags("The chains end at Mercury and Jupiter.")).toEqual(["ruler-mismatch: \"The chains end at Mercury and Jupiter\""]);
+    expect(flags("Mars's chain ends at Venus [L5].")).toEqual([]);
+    expect(flags("Saturn's chain ends at Venus.")).toEqual(["ruler-mismatch: \"Saturn's chain ends at Venus\""]);
+    expect(flags("Mercury is in its own sign. The Sun, Jupiter and Saturn all lead back to it [L1, L6, L7].")).toEqual([]);
+    expect(flags("Mercury is in its own sign. The Sun, Jupiter and Mars all lead back to it.")).toEqual(['ruler-mismatch: "Mars all lead back to it" (read as Mercury)']);
+    expect(flags("Your Sun and Jupiter chains both lead to Mercury ([L1], [L6]), and Venus rules the chart.")).toEqual([]);
+  });
+
+  it("checks the final dispositor named against [L11]", () => {
+    expect(flags("There is no single final dispositor ([L11]).")).toEqual([]);
+    expect(flags("[L11] gives no final dispositor; the chains end at Mercury, the Moon and Venus.")).toEqual([]);
+    expect(flags("Mercury is the final dispositor.")).toEqual(["ruler-mismatch: Mercury final dispositor"]);
+    expect(flags("Its chain ends at Mars: [L11] Final dispositor: Mars.", "[L11] Final dispositor: Mars; every classical planet's chain ends there.\n[L1] Sun in Aries: domicile lord Mars. Chain: Sun → Mars (ends at Mars, in its own sign).")).toEqual([]);
+    expect(flags("Venus is the final dispositor.", "[L11] Final dispositor: Mars; every classical planet's chain ends there.\n[L1] Sun in Aries: domicile lord Mars. Chain: Sun → Mars (ends at Mars, in its own sign).")).toEqual(["ruler-mismatch: Venus final dispositor"]);
+    expect(flags("If Venus were in Taurus, it would be the final dispositor.")).toEqual([]);
+  });
+});
+
 describe("counts of planets on an angle", () => {
   const SHEET4 = [
     "[P1] Ascendant 20°10' Libra; Midheaven 23°36' Cancer (whole sign house 10)",
