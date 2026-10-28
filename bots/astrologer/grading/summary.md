@@ -10,7 +10,7 @@ Run 2026-10-28 (ICT). Same rubric, charts and method as v7 (Sonnet writer, Opus 
 | C4 Timing | 4.20 | 4.31 | 3.5 | yes |
 | C5 Uncertainty | 3.78 | 4.05 | 3.5 | yes |
 | C6 Synthesis | 3.44 | 3.47 | 3.5 | no |
-| C7 Usefulness | 3.84 | 3.70 | 3.5 | yes |
+| C7 Usefulness | 3.88 | 3.70 | 3.5 | yes |
 | C8 Boundaries | 4.95 | 4.94 | 4.5 | yes |
 
 Critical errors: 1 chart (v7: 5): P2 ("Saturn also rules the house where it sits ... the second house", a rulership claim phrased without a house number next to the planet).
