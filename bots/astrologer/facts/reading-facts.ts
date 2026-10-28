@@ -15,7 +15,7 @@ import { sectOf } from "../../../src/points.js";
 import { searchLongitudeCrossings } from "../../../src/returns.js";
 import { degreeInSign, normalizeLongitude, signForLongitude, signIndexForLongitude, SIGNS } from "../../../src/signs.js";
 import { moonSignCandidates } from "../../../src/techniques/moon-sign.js";
-import { CLASSICAL_PLANETS, dignityRulersAt, essentialDignities } from "../../../src/techniques/dignities.js";
+import { CLASSICAL_PLANETS, dignityRulersAt, essentialDignities, mutualReceptions } from "../../../src/techniques/dignities.js";
 import type { ClassicalPlanet } from "../../../src/techniques/dignities.js";
 import { separation } from "../../../src/aspects.js";
 import type { BodyName, Chart } from "../../../src/types.js";
@@ -110,6 +110,8 @@ export interface Transit {
   nearStation: boolean;
   /** Sort key: first relevant instant, ms. */
   sortMs: number;
+  /** The moving body's sign and whole sign house (null without a birth time) at each exact hit and at the ends of the range, local dates. */
+  positions: { date: string; sign: string; house: number | null }[];
 }
 
 export interface Station {
@@ -193,6 +195,25 @@ export interface ChartRuler {
   aspects: NatalAspect[];
 }
 
+/** One body's domicile lord and the chain of domicile lords from it (traditional rulers). */
+export interface DispositorChain {
+  point: string;
+  sign: string;
+  /** The domicile lord of its sign. */
+  lord: ClassicalPlanet;
+  /** The body, then each lord in turn, until a planet in its own domicile, a repeat (a loop) or the Moon with an unknown sign. */
+  chain: string[];
+  end: { kind: "domicile"; planet: ClassicalPlanet } | { kind: "loop"; planets: ClassicalPlanet[] } | { kind: "unknown"; planet: "Moon" };
+}
+
+export interface Dispositors {
+  chains: DispositorChain[];
+  /** The one planet in its own domicile where every classical planet's chain ends, or null. */
+  final: ClassicalPlanet | null;
+  /** Mutual receptions by domicile (the engine's `mutualReceptions`). */
+  mutual: [ClassicalPlanet, ClassicalPlanet][];
+}
+
 /** A planet or the node on an angle: a natal conjunction or opposition with the Ascendant or Midheaven from the aspect ranking. */
 export interface AngleContact {
   point: string;
@@ -244,6 +265,8 @@ export interface ChartVersion {
   transits: Transit[];
   transitPoints: string[];
   stationContacts: StationContact[];
+  /** Dispositor chains of the bodies Sun to Pluto shown in the chart. */
+  dispositors: Dispositors;
   /** Unknown time only: the Moon's possible signs over the local date. */
   moonSigns: string[] | null;
   /** Unknown time only: other bodies whose sign changes during the local date, with the signs in order. */
@@ -562,8 +585,12 @@ function runAround(body: BodyName, target: number, samples: Samples, at: number)
   return { from: Math.min(from, at), to: Math.max(to, at), openStart, openEnd };
 }
 
-function findTransits(points: { name: string; lon: number }[], fromMs: number, toMs: number, zone: string): Transit[] {
+function findTransits(points: { name: string; lon: number }[], fromMs: number, toMs: number, zone: string, ascendant: number | null): Transit[] {
   const out: Transit[] = [];
+  const positionsAt = (body: BodyName, instants: number[]) => instants.map((ms) => {
+    const p = placement(body, bodyLongitude(body, new Date(ms)), ascendant, false);
+    return { date: localDate(zone, ms), sign: p.sign, house: p.house };
+  });
   for (const body of TRANSITING) {
     const slow = SLOW.includes(body);
     const samples = body === "Sun" ? null : sampleBody(body, fromMs, toMs);
@@ -579,11 +606,13 @@ function findTransits(points: { name: string; lon: number }[], fromMs: number, t
             if (hits.length === 0) continue;
             const nearStation = hits.some((h) => Math.abs(longitudeSpeed(body, new Date(h))) < STATIONARY_SPEED);
             let range: Transit["range"] = null;
+            let instants = hits;
             if (nearStation && samples) {
               const r = runAround(body, target, samples, hits[0]!);
               range = { from: localDate(zone, r.from), to: localDate(zone, r.to), openStart: r.openStart, openEnd: r.openEnd };
+              instants = [r.from, ...hits, r.to];
             }
-            out.push({ body, aspect, natal: point.name, exact: hits.map((h) => localDate(zone, h)), range, nearStation, sortMs: hits[0]! });
+            out.push({ body, aspect, natal: point.name, exact: hits.map((h) => localDate(zone, h)), range, nearStation, sortMs: hits[0]!, positions: positionsAt(body, instants) });
             continue;
           }
           // Slow bodies: every in-orb run that overlaps the window, with its exact hits (searched over the whole run).
@@ -614,7 +643,8 @@ function findTransits(points: { name: string; lon: number }[], fromMs: number, t
               exact: exact.map((h) => localDate(zone, h)),
               range: { from: localDate(zone, r.from), to: localDate(zone, r.to), openStart: r.openStart, openEnd: r.openEnd },
               nearStation: exact.some((h) => Math.abs(longitudeSpeed(body, new Date(h))) < STATIONARY_SPEED),
-              sortMs: Math.max(r.from, fromMs)
+              sortMs: Math.max(r.from, fromMs),
+              positions: positionsAt(body, [r.from, ...exact, r.to])
             });
           }
         }
@@ -685,6 +715,53 @@ function natalAspectPolicy(): AspectPolicy {
   return natalPolicy;
 }
 
+// ------------------------------------------------------------------ dispositors
+
+/**
+ * Each body's domicile lord (`dignityRulersAt`, traditional rulers) and the
+ * chain of lords from it. A chain ends at a planet in its own domicile, at a
+ * loop of planets that dispose one another, or at the Moon when its sign is
+ * unknown. The final dispositor is the single planet in its own domicile
+ * where every classical planet's chain ends.
+ */
+export function dispositorChains(placements: { point: string; lon: number; sign: string }[], moonKnown: boolean): Dispositors {
+  const lonOf = new Map(placements.map((p) => [p.point, p.lon]));
+  const lordOf = (planet: string): ClassicalPlanet | null => {
+    const lon = lonOf.get(planet);
+    return lon === undefined ? null : dignityRulersAt(lon).domicile;
+  };
+  const chains: DispositorChain[] = [];
+  for (const p of placements) {
+    const lord = dignityRulersAt(p.lon).domicile;
+    const chain: string[] = [p.point];
+    let end: DispositorChain["end"] | null = null;
+    let at: string = p.point;
+    while (!end) {
+      const next = lordOf(at);
+      if (next === null) { end = { kind: "unknown", planet: "Moon" }; break; }
+      if (next === at) { end = { kind: "domicile", planet: next }; break; }
+      const seen = chain.indexOf(next);
+      chain.push(next);
+      if (seen >= 0) {
+        // The same loop reached from anywhere: start it at the planet first in the classical order.
+        const loop = chain.slice(seen, -1) as ClassicalPlanet[];
+        const first = loop.reduce((k, x, i) => (CLASSICAL_PLANETS.indexOf(x) < CLASSICAL_PLANETS.indexOf(loop[k]!) ? i : k), 0);
+        end = { kind: "loop", planets: [...loop.slice(first), ...loop.slice(0, first)] };
+        break;
+      }
+      if (next === "Moon" && !moonKnown) { end = { kind: "unknown", planet: "Moon" }; break; }
+      at = next;
+    }
+    chains.push({ point: p.point, sign: p.sign, lord, chain, end });
+  }
+  const classical = chains.filter((c) => (CLASSICAL_PLANETS as readonly string[]).includes(c.point));
+  const ends = new Set(classical.map((c) => c.end.kind === "domicile" ? c.end.planet : "-"));
+  const final = ends.size === 1 && !ends.has("-") && classical.length > 0 ? ([...ends][0] as ClassicalPlanet) : null;
+  const mutual = mutualReceptions(placements.filter((p) => moonKnown || p.point !== "Moon").map((p) => ({ body: p.point as BodyName, lon: p.lon })), { dignities: ["domicile"] })
+    .map((m) => [m.a, m.b] as [ClassicalPlanet, ClassicalPlanet]);
+  return { chains, final, mutual };
+}
+
 function chartVersion(input: ReadingInput, instant: Instant, timeKnown: boolean, window: { fromMs: number; toMs: number; from: string; days: number }, stations: Station[]): ChartVersion {
   const utc = new Date(instant.ms);
   const chart: Chart = natalChart({ utc, latitude: input.lat, longitude: input.lon, houseSystem: "whole", timeKnown });
@@ -711,7 +788,7 @@ function chartVersion(input: ReadingInput, instant: Instant, timeKnown: boolean,
   const transitNames = timeKnown ? ["Sun", "Moon", "Mercury", "Venus", "Mars"] : ["Sun", "Mercury", "Venus", "Mars"];
   const transitPoints = shown.filter((b) => transitNames.includes(b.body)).map((b) => ({ name: b.body as string, lon: b.lon }));
   if (asc !== null && mc !== null) transitPoints.push({ name: "Ascendant", lon: asc }, { name: "Midheaven", lon: mc });
-  const transits = findTransits(transitPoints, window.fromMs, window.toMs, input.zone);
+  const transits = findTransits(transitPoints, window.fromMs, window.toMs, input.zone, asc);
 
   const sect = asc === null ? null : sectOf(asc, chart.bodies.find((b) => b.body === "Sun")!.lon);
   const lonOf = (body: BodyName) => chart.bodies.find((b) => b.body === body)!.lon;
@@ -782,6 +859,7 @@ function chartVersion(input: ReadingInput, instant: Instant, timeKnown: boolean,
     transits,
     transitPoints: transitPoints.map((p) => p.name),
     stationContacts: stationContacts(stations, positions),
+    dispositors: dispositorChains(placements.filter((p) => p.point !== "North Node"), timeKnown),
     moonSigns,
     daySignChanges
   };
@@ -836,7 +914,25 @@ function placementLine(p: Placement): string {
   return `${p.point} ${p.degree} ${p.sign}${house}${p.retrograde ? ", retrograde" : ""}`;
 }
 
+/** "; transiting Saturn in Aries, whole sign house 7", with the dates when the sign or house differs between them. */
+function positionText(t: Transit): string {
+  const where = (p: Transit["positions"][number]) => `${p.sign}${p.house === null ? "" : `, whole sign house ${p.house}`}`;
+  const groups: { where: string; dates: string[] }[] = [];
+  for (const p of t.positions) {
+    const w = where(p);
+    const g = groups.find((x) => x.where === w);
+    if (g) { if (!g.dates.includes(p.date)) g.dates.push(p.date); } else groups.push({ where: w, dates: [p.date] });
+  }
+  if (groups.length === 0) return "";
+  if (groups.length === 1) return `; transiting ${t.body} in ${groups[0]!.where}`;
+  return `; transiting ${t.body} ${groups.map((g, i) => `${i ? "; " : ""}in ${g.where} on ${g.dates.join(", ")}`).join("")}`;
+}
+
 function transitLine(t: Transit): string {
+  return transitHead(t) + positionText(t);
+}
+
+function transitHead(t: Transit): string {
   const head = `transiting ${t.body} ${t.aspect} natal ${t.natal}`;
   if (t.range) {
     const from = t.range.openStart ? `before ${t.range.from}` : t.range.from;
@@ -951,6 +1047,20 @@ export function formatReadingFacts(f: ReadingFacts): string {
       L.push(`${ids.next("R")} Chart ruler's aspects, in the ranking's order: ${r.aspects.length ? r.aspects.map(aspectRef).join("; ") : `none: ${r.planet} has no aspect in the ranking`}.`);
     }
 
+    L.push("Dispositors (each body's domicile lord by the traditional rulers, followed lord to lord; engine facts, quote them):");
+    for (const c of v.dispositors.chains) {
+      const end = c.end.kind === "domicile"
+        ? `ends at ${c.end.planet}, in its own sign`
+        : c.end.kind === "loop"
+          ? `ends in a loop: ${c.end.planets.join(", ")} dispose one another`
+          : "stops at the Moon, whose sign is unknown without a birth time";
+      L.push(`${ids.next("L")} ${c.point} in ${c.sign}: domicile lord ${c.lord}. Chain: ${c.chain.join(" → ")} (${end}).`);
+    }
+    const d = v.dispositors;
+    const endings = [...new Set(d.chains.filter((c) => (CLASSICAL_PLANETS as readonly string[]).includes(c.point)).map((c) => c.end.kind === "domicile" ? `${c.end.planet} (in its own sign)` : c.end.kind === "loop" ? `the loop ${c.end.planets.join(", ")}` : "the Moon (sign unknown)"))];
+    L.push(`${ids.next("L")} Final dispositor: ${d.final ? `${d.final}; every classical planet's chain ends there` : `none; the chains end at ${endings.join(" and ")}`}.`);
+    L.push(`${ids.next("L")} Mutual receptions by domicile (each planet in the other's sign): ${d.mutual.length ? d.mutual.map(([a, b]) => `${a} and ${b}`).join("; ") : "none"}.`);
+
     if (v.angleContacts) {
       L.push("Planets on an angle (a conjunction or opposition with the Ascendant or Midheaven in the ranking above, the engine's default orbs). How to read them: a conjunction with the Ascendant puts the planet on the Ascendant (the rising degree), an opposition with the Ascendant puts it on the Descendant, a conjunction with the Midheaven puts it on the Midheaven (MC), and an opposition with the Midheaven puts it on the IC. A planet not listed here is on no angle, whatever its house:");
       if (v.angleContacts.length === 0) L.push(`${ids.next("C")} none: no planet or node is on the Ascendant, Descendant, Midheaven or IC within the engine's default orbs.`);
@@ -984,7 +1094,8 @@ export function formatReadingFacts(f: ReadingFacts): string {
     if (v.stationContacts.length === 0) L.push("- no station in the window.");
     for (const s of v.stationContacts) {
       const sid = ids.next("S");
-      const head = `${s.station.body} stations ${s.station.kind} ${s.station.localDate} (plus or minus 1 day) at ${degreeText(s.station.lon)} ${signName(s.station.lon)}`;
+      const stationHouse = v.ascendant ? `, whole sign house ${placement(s.station.body, s.station.lon, v.ascendant.lon, false).house}` : "";
+      const head = `${s.station.body} stations ${s.station.kind} ${s.station.localDate} (plus or minus 1 day) at ${degreeText(s.station.lon)} ${signName(s.station.lon)}${stationHouse}`;
       if (s.contacts.length === 0) {
         L.push(`- ${sid} ${head}: no natal point within ${STATION_ORB}° of a major aspect (computed).`);
         continue;

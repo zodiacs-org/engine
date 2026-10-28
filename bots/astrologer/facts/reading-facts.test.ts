@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ageAt, angleContactsFrom, buildReadingFacts, formatReadingFacts, degreeText, nextBirthday, orbText, sectRole, SECT_TEAMS, STATION_ORB, SLOW } from "./reading-facts.js";
+import { ageAt, angleContactsFrom, buildReadingFacts, dispositorChains, formatReadingFacts, degreeText, nextBirthday, orbText, sectRole, SECT_TEAMS, STATION_ORB, SLOW } from "./reading-facts.js";
 import type { ReadingFacts, ReadingInput } from "./reading-facts.js";
 import { bodyLongitude, longitudeSpeed } from "../../../src/ephemeris.js";
 
@@ -292,6 +292,69 @@ describe("chart ruler, angles and birthday", () => {
       }
     }
   }, 120_000);
+});
+
+describe("dispositors and transiting positions", () => {
+  // The traditional domicile rulers (Tetrabiblos I.17), written out here rather than taken from the engine.
+  const RULER = ["Mars", "Venus", "Mercury", "Moon", "Sun", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Saturn", "Jupiter"];
+  const SIGN_NAMES = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+  const at = (point: string, signIndex: number, deg = 10) => ({ point, lon: signIndex * 30 + deg, sign: SIGN_NAMES[signIndex]! });
+
+  it("follows domicile lords to a final dispositor in its own sign", () => {
+    // Synthetic: Venus in Taurus disposes everything.
+    const d = dispositorChains([at("Sun", 6), at("Moon", 1), at("Mercury", 6), at("Venus", 1), at("Mars", 2), at("Jupiter", 1), at("Saturn", 5), at("Neptune", 2)], true);
+    expect(d.final).toBe("Venus");
+    expect(d.chains.find((c) => c.point === "Mars")).toMatchObject({ lord: "Mercury", chain: ["Mars", "Mercury", "Venus"], end: { kind: "domicile", planet: "Venus" } });
+    expect(d.chains.find((c) => c.point === "Neptune")!.chain).toEqual(["Neptune", "Mercury", "Venus"]);
+    expect(d.mutual).toEqual([]);
+  });
+
+  it("reports a loop and a mutual reception, and no final dispositor", () => {
+    // Synthetic: Mars in Gemini and Mercury in Aries receive each other.
+    const d = dispositorChains([at("Sun", 0), at("Moon", 3), at("Mercury", 0), at("Venus", 2), at("Mars", 2), at("Jupiter", 0), at("Saturn", 0)], true);
+    expect(d.final).toBeNull();
+    expect(d.mutual).toEqual([["Mercury", "Mars"]]);
+    expect(d.chains.find((c) => c.point === "Sun")!.end).toEqual({ kind: "loop", planets: ["Mercury", "Mars"] });
+    expect(d.chains.find((c) => c.point === "Moon")!.end).toEqual({ kind: "domicile", planet: "Moon" });
+  });
+
+  it("gives every planet's lord from the rulers' table and stops at the Moon without a birth time", async () => {
+    for (const input of [RESOLVED, UNKNOWN]) {
+      const v = (await facts(input)).versions[0]!;
+      for (const c of v.dispositors.chains) expect(c.lord).toBe(RULER[SIGN_NAMES.indexOf(c.sign)]);
+      if (!v.timeKnown) {
+        expect(v.dispositors.chains.some((c) => c.point === "Moon")).toBe(false);
+        for (const c of v.dispositors.chains.filter((x) => x.chain.includes("Moon"))) expect(c.end).toEqual({ kind: "unknown", planet: "Moon" });
+      }
+    }
+  }, 60_000);
+
+  it("gives each transiting body's sign at its dates, and its whole sign house counted from the rising sign", async () => {
+    for (const input of [RESOLVED, UNKNOWN]) {
+      const v = (await facts(input)).versions[0]!;
+      for (const t of v.transits) {
+        expect(t.positions.length).toBeGreaterThan(0);
+        for (const p of t.positions) {
+          if (v.ascendant) expect(p.house).toBe(((SIGN_NAMES.indexOf(p.sign) - SIGN_NAMES.indexOf(v.ascendant.sign) + 12) % 12) + 1);
+          else expect(p.house).toBeNull();
+        }
+        // At an exact hit the body sits on the aspect point: the natal longitude plus or minus the aspect angle.
+        const natal = t.natal === "Ascendant" ? v.ascendant! : t.natal === "Midheaven" ? v.midheaven! : v.placements.find((x) => x.point === t.natal)!;
+        const angle = { conjunction: 0, square: 90, trine: 120, opposition: 180 }[t.aspect]!;
+        const targets = [natal.lon + angle, natal.lon - angle].map((x) => SIGN_NAMES[Math.floor((((x % 360) + 360) % 360) / 30)]);
+        const hits = t.range ? t.positions.slice(1, 1 + t.exact.length) : t.positions;
+        expect(hits.length).toBe(t.exact.length);
+        for (const p of hits) expect(targets).toContain(p.sign);
+      }
+      const sheet = formatReadingFacts(await facts(input));
+      for (const line of sheet.split("\n").filter((l) => /\[T\d+\] transiting/.test(l))) {
+        expect(line).toMatch(v.ascendant ? /; transiting \w+ (?:on .*)?in \w+, whole sign house \d+/ : /; transiting \w+ in \w+$/);
+      }
+      for (const line of sheet.split("\n").filter((l) => /\[S\d+\] \w+ stations/.test(l))) {
+        if (v.ascendant) expect(line).toMatch(/at \d+°\d+' \w+, whole sign house \d+/);
+      }
+    }
+  }, 60_000);
 });
 
 describe("line IDs", () => {

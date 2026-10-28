@@ -9,9 +9,13 @@
  *
  * It also checks angle claims ("on the Ascendant", "the rising degree",
  * "Saturn rising", "on the MC-IC axis") against the sheet's natal
- * conjunctions and oppositions with the angles, and dates and ages said of the
- * birthday or the solar return against the sheet's next birthday and solar
- * return lines.
+ * conjunctions and oppositions with the angles (also in other words: "the
+ * rising edge", "the top of the chart", "on the horizon", "angular"), dates and
+ * ages said of the birthday or the solar return against the sheet's next
+ * birthday and solar return lines, every date, span and orb against the line
+ * it is tied to, and each house or sign given for a planet against its natal
+ * placement or, for a transiting or stationing planet, its transit or station
+ * line.
  *
  * The parser is a heuristic over plain English, written for the readings the
  * bot produces. It finds a point name, an aspect word and a point name close
@@ -100,6 +104,9 @@ export interface Relation {
 }
 
 const POINT_RE = POINTS.join("|");
+const SIGNS = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+const SIGN_RE = SIGNS.join("|");
+const ISO_DATE = /\b\d{4}-\d{2}-\d{2}\b/g;
 const TYPE_RE = "conjunction|sextile|square|trine|opposition|semisextile|semisquare|quintile|sesquiquadrate|biquintile|quincunx";
 const SHEET_PATTERNS: [RelationKind, RegExp][] = [
   ["natal", new RegExp(`\\[(A\\d+)\\] \\d+\\. (${POINT_RE}) (${TYPE_RE}) (${POINT_RE}), orb`)],
@@ -119,6 +126,24 @@ export interface Sheet {
   solarReturns: { id: string; date: string; line: string }[];
   /** The lines of planets on an angle, and the "none" line. */
   angleLines: string[];
+  /** Natal signs and whole sign houses of each point, from the placement lines (a set: a fold or gap has two charts). */
+  natal: Map<Point, { signs: Set<string>; houses: Set<number> }>;
+  /** Points on an angle by a [C] line, or in an angular house by the [H] line. */
+  angular: Set<Point>;
+  /** Transit, station and solar return lines: the moving body, and the signs and houses the line gives it (none on older sheets). */
+  moving: Map<string, { body: Point; signs: Set<string>; houses: Set<number> }>;
+  /** ISO dates written on each ID's line; a station contact also carries its station's. */
+  lineDates: Map<string, string[]>;
+  /** Orbs written on each ID's line, as D°MM'. */
+  lineOrbs: Map<string, string[]>;
+  /** In-orb ranges of the transit lines. */
+  ranges: { id: string; from: string; to: string; openStart: boolean; openEnd: boolean }[];
+  /** The transit window, inclusive. */
+  window: { from: string; to: string } | null;
+  /** The birth date and other dates of the header lines, which any sentence may give. */
+  baseDates: Set<string>;
+  /** Every ISO date on the sheet. */
+  allDates: Set<string>;
 }
 
 /** Reads the relations and IDs from a sheet written by `formatReadingFacts`. */
@@ -128,10 +153,68 @@ export function parseSheet(text: string): Sheet {
   let birthday: Sheet["birthday"] = null;
   const solarReturns: Sheet["solarReturns"] = [];
   const angleLines: string[] = [];
+  const natal: Sheet["natal"] = new Map();
+  const angular = new Set<Point>();
+  const moving: Sheet["moving"] = new Map();
+  const lineDates: Sheet["lineDates"] = new Map();
+  const lineOrbs: Sheet["lineOrbs"] = new Map();
+  const ranges: Sheet["ranges"] = [];
+  let window: Sheet["window"] = null;
+  const baseDates = new Set<string>();
+  const allDates = new Set<string>();
+  const natalOf = (p: Point) => {
+    if (!natal.has(p)) natal.set(p, { signs: new Set(), houses: new Set() });
+    return natal.get(p)!;
+  };
   for (const raw of text.split("\n")) {
     const line = raw.trim();
     const tag = /\[([A-Z]\d+[a-z]?)\]/.exec(line);
     if (tag && !ids.has(tag[1]!)) ids.set(tag[1]!, line.slice(tag.index));
+    const isoDates = [...line.matchAll(ISO_DATE)].map((m) => m[0]);
+    for (const d of isoDates) allDates.add(d);
+    if (!tag || /^(Person|Instant):/.test(line) || /^\[N\d+\]/.test(line)) for (const d of isoDates) baseDates.add(d);
+    const win = /^Transits (\d{4}-\d{2}-\d{2}) to (\d{4}-\d{2}-\d{2}) inclusive/.exec(line);
+    if (win) window = { from: win[1]!, to: win[2]! };
+    if (tag) {
+      const id = tag[1]!;
+      const parent = /^S\d+[a-z]$/.test(id) ? id.slice(0, -1) : null;
+      lineDates.set(id, [...(parent ? lineDates.get(parent) ?? [] : []), ...isoDates]);
+      lineOrbs.set(id, [...line.matchAll(/\borb (\d+°\d{2}')/g)].map((m) => m[1]!));
+      const place = new RegExp(`^\\[P\\d+\\] (${POINT_RE}) \\d+°\\d+' (${SIGN_RE})(?:, whole sign house (\\d+))?`).exec(line.slice(tag.index));
+      if (place) {
+        natalOf(place[1] as Point).signs.add(place[2]!);
+        if (place[3]) natalOf(place[1] as Point).houses.add(Number(place[3]));
+      }
+      const angles = new RegExp(`^\\[P\\d+\\] Ascendant \\S+ (${SIGN_RE}); Midheaven \\S+ (${SIGN_RE}) \\(whole sign house (\\d+)\\)`).exec(line.slice(tag.index));
+      if (angles) {
+        natalOf("Ascendant").signs.add(angles[1]!);
+        natalOf("Ascendant").houses.add(1);
+        natalOf("Midheaven").signs.add(angles[2]!);
+        natalOf("Midheaven").houses.add(Number(angles[3]));
+      }
+      const moonDay = new RegExp(`^\\[P\\d+\\] Moon: in (${SIGN_RE}) for the whole local date`).exec(line.slice(tag.index));
+      if (moonDay) natalOf("Moon").signs.add(moonDay[1]!);
+      // "Moon: changes sign during the local date: Aries then Taurus", "Mercury: changes sign ... (Aries then Taurus)".
+      const daySigns = new RegExp(`^\\[P\\d+\\] (${POINT_RE}): changes sign during the local date`).exec(line.slice(tag.index));
+      if (daySigns) for (const m of line.matchAll(new RegExp(`\\b(${SIGN_RE})\\b`, "g"))) natalOf(daySigns[1] as Point).signs.add(m[1]!);
+      const onAngle = new RegExp(`^\\[C\\d+\\] (${POINT_RE}) (?:conjunction|opposition) (?:Ascendant|Midheaven)`).exec(line.slice(tag.index));
+      if (onAngle) angular.add(onAngle[1] as Point);
+      if (/^\[H\d+\] Points in the angular houses/.test(line.slice(tag.index))) {
+        for (const m of line.matchAll(new RegExp(`\\b(${POINT_RE})\\b`, "g"))) if (m.index! > line.indexOf("):")) angular.add(m[1] as Point);
+      }
+      const body = new RegExp(`^\\[(?:T\\d+)\\] transiting (${POINT_RE}) |^\\[(?:S\\d+)\\] (${POINT_RE}) stations |^\\[(?:B\\d+)\\] Solar return`).exec(line.slice(tag.index));
+      if (body) {
+        const entry = { body: (body[1] ?? body[2] ?? "Sun") as Point, signs: new Set<string>(), houses: new Set<number>() };
+        // "transiting Saturn in Aries, whole sign house 7", "at 5°02' Scorpio, whole sign house 4".
+        for (const m of line.matchAll(new RegExp(`\\b(?:in|at \\d+°\\d+') (${SIGN_RE})(?:, whole sign house (\\d+))?`, "g"))) {
+          entry.signs.add(m[1]!);
+          if (m[2]) entry.houses.add(Number(m[2]));
+        }
+        moving.set(id, entry);
+        const range = /from (before )?(\d{4}-\d{2}-\d{2}) to (after )?(\d{4}-\d{2}-\d{2})/.exec(line);
+        if (range && id.startsWith("T")) ranges.push({ id, from: range[2]!, to: range[4]!, openStart: !!range[1], openEnd: !!range[3] });
+      } else if (parent && moving.has(parent)) moving.set(id, moving.get(parent)!);
+    }
     const bday = /\[(N\d+)\] Next birthday [^:]*: (\d{4}-\d{2}-\d{2}), when the person turns (\d+)/.exec(line);
     if (bday) birthday = { id: bday[1]!, date: bday[2]!, turns: Number(bday[3]), line: line.slice(bday.index) };
     const sr = /\[(B\d+)\] Solar return .*: exact (\d{4}-\d{2}-\d{2})/.exec(line);
@@ -142,7 +225,9 @@ export function parseSheet(text: string): Sheet {
       if (m) relations.push({ id: m[1]!, kind, a: m[2] as Point, type: m[3] as AspectType, b: m[4] as Point, line: line.slice(m.index) });
     }
   }
-  return { relations, ids, birthday, solarReturns, angleLines };
+  // "Born on 29 February: in a common year this sheet gives 1 March; some keep 28 February."
+  if (birthday && /Born on 29 February/.test(text)) for (const md of ["02-28", "02-29"]) baseDates.add(`${birthday.date.slice(0, 4)}-${md}`);
+  return { relations, ids, birthday, solarReturns, angleLines, natal, angular, moving, lineDates, lineOrbs, ranges, window, baseDates, allDates };
 }
 
 // ------------------------------------------------------------------ the reading
@@ -166,7 +251,17 @@ function tokenize(clause: string): Token[] {
     .replace(/\b(?:rising|ascending) (?:degree|point)\b|\bdegree rising\b/gi, "Ascendant")
     .replace(/\b(?:descending|setting) (?:degree|point)\b/gi, "Descendant")
     .replace(/\bculminating (?:degree|point)\b|\bMedium Coeli\b/gi, "Midheaven")
-    .replace(/\bImum Coeli\b/gi, "IC");
+    .replace(/\bImum Coeli\b/gi, "IC")
+    // Paraphrases of the angles: "on the rising edge" is on the Ascendant, "at the top of the chart" on the Midheaven.
+    .replace(/\b(?:rising|eastern) (?:edge|horizon|angle)\b/gi, "Ascendant")
+    .replace(/\b(?:setting|western) (?:edge|horizon|angle)\b/gi, "Descendant")
+    .replace(/\b(?:at|on|near) (?:the )?(?:very )?(?:top|highest point|peak|summit) of (?:the |your )?(?:chart|sky|wheel)\b/gi, "on the Midheaven")
+    .replace(/\b(?:at|on|near) (?:the )?(?:very )?(?:bottom|lowest point|base|foot) of (?:the |your )?(?:chart|sky|wheel)\b/gi, "on the IC")
+    .replace(/\b(?:at|on|near) (?:the |your )?chart's (?:top|highest point|peak)\b/gi, "on the Midheaven")
+    .replace(/\b(?:at|on|near) (?:the |your )?chart's (?:bottom|lowest point|base)\b/gi, "on the IC")
+    .replace(/\bon the horizon\b/gi, "on the Ascendant axis")
+    .replace(/\bon the meridian\b/gi, "on the Midheaven axis")
+    .replace(/\bat (the|your) (Ascendant|Descendant|Midheaven|MC|IC|DSC|ASC)\b/g, "on $1 $2");
   const raw = joined.match(/\[[A-Z]\d+[a-z]?\]|[A-Za-z]+(?:['’]s)?|\d+(?:[°'.:\-/]\d*)*'?|[,&/\-]/g) ?? [];
   return raw.map((text) => {
     const id = /^\[([A-Z]\d+[a-z]?)\]$/.exec(text)?.[1];
@@ -330,6 +425,12 @@ export function findMentions(reading: string): Mention[] {
           i += 1;
           continue;
         }
+        // "Venus setting": on the Descendant (not "setting the pace", "setting limits", "setting out").
+        if (t.point && !ANGLES.has(t.point.point) && next?.word === "setting" && !/^(the|a|an|your|his|her|their|its|our|my|up|out|off|down|aside|about|limits|boundaries|goals|standards|priorities|rules|terms|tone|pace|expectations|sign)$/.test(tokens[i + 2]?.word ?? "")) {
+          emit(i, t.point.point, i + 1, "Ascendant", "opposition", i + 1, "any");
+          i += 1;
+          continue;
+        }
         // "X returns (to its natal place)": X conjunct natal X.
         if (/^(return|returns|returning|returned)$/.test(t.word)) {
           const left = pointsNear(tokens, i, -1, 0, new Set(["s"]));
@@ -370,7 +471,8 @@ export function findMentions(reading: string): Mention[] {
           if (tokens[k]?.word === "-") continue;
           while (k < tokens.length && REACH_FREE.has(tokens[k]!.word)) k += 1;
           if (tokens[k] && (GROUP_WORDS.has(tokens[k]!.word) || tokens[k]!.aspect)) continue;
-          lefts = lefts.slice(0, 1);
+          // "Moon and Venus on the Ascendant": every planet of the list is put on the angle.
+          if (!ANGLES.has(rights[0]!.p.point)) lefts = lefts.slice(0, 1);
           rights = rights.slice(0, 1);
         }
         // "the Jupiter-Neptune opposition", "Venus and Saturn are in trine": the pair before the noun.
@@ -402,7 +504,8 @@ export function findMentions(reading: string): Mention[] {
 // ------------------------------------------------------------------ the check
 
 export interface Violation {
-  kind: "not-on-sheet" | "wrong-aspect" | "reversed" | "unknown-id" | "id-mismatch" | "date-mismatch" | "age-mismatch";
+  kind: "not-on-sheet" | "wrong-aspect" | "reversed" | "unknown-id" | "id-mismatch" | "date-mismatch" | "age-mismatch"
+    | "range-mismatch" | "orb-mismatch" | "house-mismatch" | "sign-mismatch";
   mention: string;
   /** The sentence of the reading it is in. */
   sentence: string;
@@ -426,34 +529,39 @@ export interface CheckResult {
 const MONTH_NUMBER: Record<string, number> = {
   jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12
 };
-const MONTH_RE = "(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept|Sep|Oct|Nov|Dec)\\.?";
-const DATE_PATTERNS: [RegExp, (m: RegExpExecArray) => { month: number; day: number }][] = [
-  [/\b\d{4}-(\d{2})-(\d{2})\b/g, (m) => ({ month: Number(m[1]), day: Number(m[2]) })],
-  [new RegExp(`\\b(\\d{1,2})(?:st|nd|rd|th)? (?:of )?${MONTH_RE}`, "g"), (m) => ({ month: MONTH_NUMBER[m[2]!.slice(0, 3).toLowerCase()]!, day: Number(m[1]) })],
-  [new RegExp(`\\b${MONTH_RE} (\\d{1,2})(?:st|nd|rd|th)?\\b`, "g"), (m) => ({ month: MONTH_NUMBER[m[1]!.slice(0, 3).toLowerCase()]!, day: Number(m[2]) })]
+const MONTH_RE = "(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept|Sep|Oct|Nov|Dec)(?![A-Za-z])";
+const DATE_PATTERNS: [RegExp, (m: RegExpExecArray) => { month: number; day: number; year?: number }][] = [
+  [/\b(\d{4})-(\d{2})-(\d{2})\b/g, (m) => ({ month: Number(m[2]), day: Number(m[3]), year: Number(m[1]) })],
+  [new RegExp(`\\b(\\d{1,2})(?:st|nd|rd|th)? (?:of )?${MONTH_RE}(?:,? (\\d{4})\\b)?`, "g"), (m) => ({ month: MONTH_NUMBER[m[2]!.slice(0, 3).toLowerCase()]!, day: Number(m[1]), ...(m[3] ? { year: Number(m[3]) } : {}) })],
+  [new RegExp(`\\b${MONTH_RE}\\.? (\\d{1,2})(?:st|nd|rd|th)?\\b(?:,? (\\d{4})\\b)?`, "g"), (m) => ({ month: MONTH_NUMBER[m[1]!.slice(0, 3).toLowerCase()]!, day: Number(m[2]), ...(m[3] ? { year: Number(m[3]) } : {}) })]
 ];
 
 interface DateAt {
   /** MM-DD. */
   md: string;
+  /** The year, when the text gives one. */
+  year?: number;
   text: string;
   index: number;
   end: number;
 }
 
-/** Calendar dates written in `text`, as ISO dates, "11 November" or "November 11", in order. */
+/** Calendar dates written in `text`, as ISO dates, "11 November (2026)" or "November 11(, 2026)", in order. */
 function datesIn(text: string): DateAt[] {
   const out: DateAt[] = [];
   for (const [re, read] of DATE_PATTERNS) {
     for (const m of text.matchAll(re)) {
-      const { month, day } = read(m as RegExpExecArray);
+      const { month, day, year } = read(m as RegExpExecArray);
       if (!(month >= 1 && month <= 12 && day >= 1 && day <= 31)) continue;
       if (out.some((d) => m.index! < d.end && m.index! + m[0].length > d.index)) continue;
-      out.push({ md: `${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`, text: m[0], index: m.index!, end: m.index! + m[0].length });
+      out.push({ md: `${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`, ...(year ? { year } : {}), text: m[0], index: m.index!, end: m.index! + m[0].length });
     }
   }
   return out.sort((a, b) => a.index - b.index);
 }
+
+/** True when a date written in the reading is the ISO date `iso` (the month and day only, when the reading gives no year). */
+const sameDate = (d: DateAt, iso: string) => d.md === iso.slice(5) && (d.year === undefined || d.year === Number(iso.slice(0, 4)));
 
 const mdShift = (iso: string, days: number) => {
   const d = new Date(`${iso}T00:00:00Z`);
@@ -516,6 +624,347 @@ function birthdayViolations(sheet: Sheet, reading: string): Violation[] {
   return out;
 }
 
+// ------------------------------------------------------------------ dates, ranges and orbs tied to sheet lines
+
+/** What a sentence is about: the IDs it quotes or whose relation it names, the points it names, and the bodies it has moving. */
+interface SentenceContext {
+  ids: Set<string>;
+  points: Set<Point>;
+  moving: Set<Point>;
+}
+
+const MOVING_VERBS = new Set(["moves", "moving", "passes", "passing", "travels", "travelling", "traveling", "enters", "entering", "crosses", "crossing", "transits", "transiting", "stationing", "ingress"]);
+
+function sentenceContext(sheet: Sheet, sentence: string): SentenceContext {
+  const ids = new Set<string>();
+  for (const m of sentence.matchAll(/\[([A-Z]\d+[a-z]?)\]/g)) if (sheet.ids.has(m[1]!)) ids.add(m[1]!);
+  for (const m of findMentions(sentence)) {
+    for (const r of sheet.relations) if (r.type === m.type && ((r.a === m.a && r.b === m.b) || (r.a === m.b && r.b === m.a))) ids.add(r.id);
+  }
+  const tokens = tokenize(sentence);
+  const points = new Set<Point>(tokens.filter((t) => t.point).map((t) => t.point!.point));
+  const moving = new Set<Point>();
+  for (const id of ids) {
+    const mv = sheet.moving.get(id);
+    if (mv) moving.add(mv.body);
+    if (mv) points.add(mv.body);
+    const r = sheet.relations.find((x) => x.id === id);
+    if (r) { points.add(r.a); points.add(r.b); }
+  }
+  tokens.forEach((t, i) => {
+    if (!t.point) return;
+    if (tokens.slice(Math.max(0, i - 2), i).some((x) => x.word === "transiting" || x.word === "stationing")) moving.add(t.point.point);
+    // "Mars stations retrograde", "Mercury turns direct".
+    const after = tokens.slice(i + 1, i + 3).map((x) => x.word);
+    if (after.some((w) => STATION_WORDS.has(w)) || (TURN_WORDS.has(after[0] ?? "") && MOTION_WORDS.has(after[1] ?? ""))) moving.add(t.point.point);
+  });
+  return { ids, points, moving };
+}
+
+/**
+ * The sheet lines a sentence's dates must come from: the IDs it quotes or whose
+ * relation it names, the station lines of planets it says station, and every
+ * transit or station line of a point it names that none of those lines has.
+ * Empty when the sentence names no point: any sheet date may stand there.
+ */
+function tiedLines(sheet: Sheet, ctx: SentenceContext): string[] {
+  const out = new Set(ctx.ids);
+  // A station named in words ("Mars stations retrograde") ties its station line.
+  for (const [id, mv] of sheet.moving) if (/^S\d+$/.test(id) && ctx.moving.has(mv.body)) out.add(id);
+  const covered = new Set<Point>();
+  for (const id of out) {
+    const mv = sheet.moving.get(id);
+    if (mv) covered.add(mv.body);
+    const r = sheet.relations.find((x) => x.id === id);
+    if (r) { covered.add(r.a); covered.add(r.b); }
+  }
+  const loose = [...ctx.points].filter((p) => !covered.has(p));
+  for (const [id, mv] of sheet.moving) if (loose.includes(mv.body)) out.add(id);
+  for (const r of sheet.relations) if (r.kind !== "natal" && (loose.includes(r.a) || loose.includes(r.b))) out.add(r.id);
+  return [...out];
+}
+
+const RANGE_TIGHT = /^\s*(?:to|until|till|through|thru|-|\u2013)\s*$/i;
+const THROUGH_WINDOW = /\b(?:through|throughout|across|for|during) (?:all of )?(?:the )?(?:whole |entire |full )?(?:window|reading period|90 days|three months)\b|\ball (?:through )?(?:the )?window\b/gi;
+const TO_WINDOW_END = /\b(?:until|till|to|through|into) the (?:end|close) of the window\b/gi;
+const FROM_WINDOW_START = /\bfrom the (?:start|beginning|opening) of the window\b/gi;
+
+function dateViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  const sentences = reading.split(SENTENCE_SPLIT).map((x) => x.trim());
+  for (const sentence of sentences) {
+    if (!sentence) continue;
+    const ctx = sentenceContext(sheet, sentence);
+    const lines = tiedLines(sheet, ctx);
+    const lineText = (ids: string[]) => ids.map((id) => sheet.ids.get(id)!).filter(Boolean);
+    const dates = datesIn(sentence);
+    const birthdayWords = /\b(birthday|solar return)\b/i.test(sentence);
+    const allowed = new Set<string>([...sheet.baseDates, ...(sheet.window ? [sheet.window.from, sheet.window.to] : [])]);
+    if (birthdayWords) {
+      if (sheet.birthday) allowed.add(sheet.birthday.date);
+      for (const r of sheet.solarReturns) allowed.add(r.date);
+      // "the day after the birthday": the birthday check verifies the shift, so the shifted date may stand.
+      for (const m of sentence.matchAll(RELATIVE_BIRTHDAY)) {
+        const n = m[1] ? (COUNT_WORDS[m[1].toLowerCase()] ?? Number(m[1])) : 1;
+        const sign = m[2]!.toLowerCase() === "after" ? 1 : -1;
+        const anchors = m[3]!.toLowerCase() === "birthday" ? (sheet.birthday ? [sheet.birthday.date] : []) : sheet.solarReturns.map((r) => r.date);
+        for (const a of anchors) allowed.add(`${a.slice(0, 4)}-${mdShift(a, sign * n)}`);
+      }
+    }
+    for (const id of lines) for (const d of sheet.lineDates.get(id) ?? []) allowed.add(d);
+    const pool = lines.length ? allowed : new Set([...allowed, ...sheet.allDates]);
+    for (const d of dates) {
+      if ([...pool].some((iso) => sameDate(d, iso))) continue;
+      const elsewhere = [...sheet.allDates].filter((iso) => sameDate(d, iso));
+      const tied = lines.length ? `the lines it is tied to (${lines.map((x) => `[${x}]`).join(", ")}) give ${[...new Set(lines.flatMap((id) => sheet.lineDates.get(id) ?? []))].join(", ") || "no date"}` : "no sheet line gives it";
+      out.push({
+        kind: "date-mismatch", mention: d.text, sentence, named: d.text, sheet: lineText(lines),
+        message: `gives the date ${d.text}, but ${tied}${elsewhere.length ? `; that date belongs to another line` : lines.length ? "; the date is not on the sheet" : ""}. Copy dates exactly as the sheet line writes them.`
+      });
+    }
+    // Ranges: "from D1 to D2", "D1 to D2", "between D1 and D2", "20 to 22 November", must be one line's in-orb range or the window.
+    const known = [...sheet.ranges, ...(sheet.window ? [{ id: "window", from: sheet.window.from, to: sheet.window.to }] : [])];
+    for (const m of sentence.matchAll(new RegExp(`\\b(\\d{1,2}) (?:to|-|\\u2013|until|through) (\\d{1,2}) ${MONTH_RE}|\\b${MONTH_RE} (\\d{1,2}) (?:to|-|\\u2013|until|through) (\\d{1,2})\\b`, "g"))) {
+      const month = String(MONTH_NUMBER[(m[3] ?? m[4])!.slice(0, 3).toLowerCase()]!).padStart(2, "0");
+      const [d1, d2] = (m[3] ? [m[1], m[2]] : [m[5], m[6]]).map((x) => `${month}-${x!.padStart(2, "0")}`);
+      if (known.some((r) => r.from.slice(5) === d1 && r.to.slice(5) === d2)) continue;
+      out.push({ kind: "range-mismatch", mention: m[0], sentence, named: m[0], sheet: [], message: `gives the span ${m[0]}, which is not a range on the sheet. To group several contacts, give each sheet date; give a span only as a line's own in-orb range.` });
+    }
+    for (let i = 0; i + 1 < dates.length; i += 1) {
+      const a = dates[i]!;
+      const b = dates[i + 1]!;
+      const between = sentence.slice(a.end, b.index);
+      const before = sentence.slice(i > 0 ? dates[i - 1]!.end : 0, a.index);
+      const isRange = RANGE_TIGHT.test(between)
+        || (/^\s*and\s*$/i.test(between) && /\bbetween\s+$/i.test(before))
+        || (/\bfrom\b/i.test(before) && /\b(?:to|until|till|through)\b/i.test(between) && between.length <= 120 && !/[;:]/.test(between));
+      if (!isRange) continue;
+      if (known.some((r) => sameDate(a, r.from) && sameDate(b, r.to))) continue;
+      const tiedRanges = sheet.ranges.filter((r) => lines.includes(r.id));
+      out.push({
+        kind: "range-mismatch", mention: sentence.slice(a.index, b.end), sentence, named: `${a.text} to ${b.text}`, sheet: lineText(tiedRanges.map((r) => r.id)),
+        message: `gives the span ${a.text} to ${b.text}, which is not a range on the sheet${tiedRanges.length ? `; the tied lines give ${tiedRanges.map((r) => `[${r.id}] from ${r.from} to ${r.to}`).join(", ")}` : "; two dates of different lines do not make a span, and the sheet gives no ingress or egress dates"}. To group several contacts, give each sheet date.`
+      });
+    }
+    // "in orb through the window", "until the end of the window": the tied range must cover it.
+    const tiedRanges = sheet.ranges.filter((r) => lines.includes(r.id));
+    if (sheet.window && tiedRanges.length) {
+      const w = sheet.window;
+      const claims: [RegExp, (r: Sheet["ranges"][number]) => boolean][] = [
+        [THROUGH_WINDOW, (r) => (r.openStart || r.from <= w.from) && (r.openEnd || r.to >= w.to)],
+        [TO_WINDOW_END, (r) => r.openEnd || r.to >= w.to],
+        [FROM_WINDOW_START, (r) => r.openStart || r.from <= w.from]
+      ];
+      for (const [re, covers] of claims) {
+        for (const m of sentence.matchAll(re)) {
+          const short = tiedRanges.filter((r) => !covers(r));
+          if (!short.length) continue;
+          out.push({
+            kind: "range-mismatch", mention: m[0], sentence, named: m[0], sheet: lineText(short.map((r) => r.id)),
+            message: `says "${m[0]}", but ${short.map((r) => `[${r.id}] is in orb only from ${r.from} to ${r.to}`).join("; ")}, and the window is ${w.from} to ${w.to}. Give the line's own range.`
+          });
+        }
+      }
+    }
+    // Orbs: an orb written in the sentence must be one of its tied lines' orbs, as written.
+    const orbIds = [...ctx.ids];
+    const orbPool = orbIds.length ? new Set(orbIds.flatMap((id) => sheet.lineOrbs.get(id) ?? [])) : new Set([...sheet.lineOrbs.values()].flat());
+    if (orbPool.size) {
+      for (const m of sentence.matchAll(/\borbs? (?:of )?(\d+)°(?:\s?(\d{1,2})['′])?(\.\.\.|…)?/g)) {
+        const text = m[2] !== undefined ? `${m[1]}°${m[2].padStart(2, "0")}'` : `${m[1]}°`;
+        if (orbPool.has(text) && !m[3]) continue;
+        out.push({
+          kind: "orb-mismatch", mention: m[0], sentence, named: m[0], sheet: lineText(orbIds),
+          message: `gives "${m[0]}", but ${orbIds.length ? `the lines it quotes give orb ${[...orbPool].join(", ")}` : "no sheet line gives that orb"}. Copy the orb exactly as written, or leave it out.`
+        });
+      }
+    }
+  }
+  return out;
+}
+
+// ------------------------------------------------------------------ houses and signs
+
+const ORDINALS: Record<string, number> = {
+  first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, eleventh: 11, twelfth: 12,
+  "1st": 1, "2nd": 2, "3rd": 3, "4th": 4, "5th": 5, "6th": 6, "7th": 7, "8th": 8, "9th": 9, "10th": 10, "11th": 11, "12th": 12
+};
+/** Words that may sit between a planet and "in (your) Nth house" or "in Aries" when the house or sign is said of that planet. */
+const ATTACH_FILLER = new Set([
+  "is", "are", "was", "sits", "sit", "sitting", "lies", "lie", "falls", "fall", "placed", "located", "now", "still", "also", "here", "natal", "your", "the", "its", "own",
+  "transiting", "stationing", "stations", "station", "turning", "turns", "retrograde", "direct", "peregrine", "exalted", "dignified", "debilitated", "angular", "itself",
+  "moves", "moving", "passes", "passing", "travels", "travelling", "traveling", "which", "that", "and", "both", "whole", "sign", ","
+]);
+const PLACE_WORDS = new Set(["in", "into", "through", "across", "crossing", "enters", "entering", "to"]);
+const RULER_WORDS = new Set(["ruler", "rulers", "rules", "ruling", "rule", "ruled", "lord", "lords", "cusp", "dispositor"]);
+
+interface PlaceClaim {
+  kind: "house" | "sign";
+  value: string;
+  text: string;
+  /** The planet it is said of, if any. */
+  of: Point | null;
+  /** The planet is marked as moving ("transiting Saturn", "Saturn moves into"). */
+  explicitlyMoving: boolean;
+}
+
+/** House and sign placements in a clause: "Saturn sits in your tenth house", "your tenth-house Sun", "house 7", "transiting Mars in Leo". */
+function placeClaims(tokens: Token[]): PlaceClaim[] {
+  const out: PlaceClaim[] = [];
+  const attachLeft = (from: number): { of: Point | null; moving: boolean } => {
+    let moving = false;
+    for (let k = from, n = 0; k >= 0 && n < 6; k -= 1) {
+      const t = tokens[k]!;
+      if (t.point) return { of: t.point.point, moving: moving || tokens.slice(Math.max(0, k - 2), k).some((x) => x.word === "transiting" || x.word === "stationing") };
+      if (MOVING_VERBS.has(t.word)) moving = true;
+      if (!(ATTACH_FILLER.has(t.word) || SIGN_WORDS.has(t.word) || /^\d/.test(t.text))) return { of: null, moving: false };
+      if (!/^\d/.test(t.text) && t.word !== ",") n += 1;
+    }
+    return { of: null, moving: false };
+  };
+  for (let i = 0; i < tokens.length; i += 1) {
+    const t = tokens[i]!;
+    let house: number | null = null;
+    let start = i;
+    let end = i;
+    if (ORDINALS[t.word] && (tokens[i + 1]?.word === "house" || (tokens[i + 1]?.word === "-" && tokens[i + 2]?.word === "house"))) {
+      house = ORDINALS[t.word]!;
+      end = tokens[i + 1]!.word === "house" ? i + 1 : i + 2;
+    } else if (t.word === "house" && /^(1[0-2]|[1-9])$/.test(tokens[i + 1]?.text ?? "")) {
+      house = Number(tokens[i + 1]!.text);
+      end = i + 1;
+    }
+    if (house !== null) {
+      // "ruler of the tenth house", "tenth-house ruler": a rulership, not a placement.
+      const near = tokens.slice(Math.max(0, start - 3), start).map((x) => x.word);
+      if (near.some((w) => RULER_WORDS.has(w)) || RULER_WORDS.has(tokens[end + 1]?.word ?? "")) { i = end; continue; }
+      let of: Point | null = null;
+      let moving = false;
+      // "your tenth-house Sun", "house 1 Uranus".
+      let r = end + 1;
+      while (r < tokens.length && (tokens[r]!.word === "natal" || tokens[r]!.word === "transiting")) r += 1;
+      if (tokens[r]?.point && tokens[r - 1]?.word !== ",") {
+        of = tokens[r]!.point!.point;
+        moving = tokens[r - 1]?.word === "transiting";
+      } else {
+        let k = start - 1;
+        while (k >= 0 && /^(the|your|its|their|own|a)$/.test(tokens[k]!.word)) k -= 1;
+        if (k >= 0 && (PLACE_WORDS.has(tokens[k]!.word) || t.word === "house")) {
+          const a = attachLeft(PLACE_WORDS.has(tokens[k]!.word) ? k - 1 : k);
+          of = a.of;
+          moving = a.moving || MOVING_VERBS.has(tokens[k]!.word) || tokens[k]!.word === "into" || tokens[k]!.word === "through";
+        }
+      }
+      out.push({ kind: "house", value: String(house), text: tokens.slice(start, end + 1).map((x) => x.text).join(" "), of, explicitlyMoving: moving });
+      i = end;
+      continue;
+    }
+    if (SIGN_WORDS.has(t.word) && t.text[0] !== t.word[0] && PLACE_WORDS.has(tokens[i - 1]?.word ?? "")) {
+      // "in Aries" after a planet: the planet's sign. A sign with no planet is not read.
+      if (tokens[i + 1]?.word === "rising" || tokens[i + 1]?.word === "house") continue;
+      const a = attachLeft(i - 2);
+      const verb = tokens[i - 1]!.word;
+      // "0°32' into Pisces" is a degree within the sign, not a body moving into it.
+      const degree = /^\d/.test(tokens[i - 2]?.text ?? "");
+      out.push({ kind: "sign", value: t.text, text: `${tokens[i - 1]!.text} ${t.text}`, of: a.of, explicitlyMoving: a.moving || (!degree && (verb === "into" || verb === "enters" || verb === "entering" || verb === "through")) });
+    }
+  }
+  return out;
+}
+
+function placementViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  const natalText = (p: Point, kind: "house" | "sign") => {
+    const n = sheet.natal.get(p);
+    const v = kind === "house" ? [...(n?.houses ?? [])].map(String) : [...(n?.signs ?? [])];
+    return v.length ? `natal ${p} is in ${kind === "house" ? `house ${v.join(" or ")}` : v.join(" or ")}` : `the sheet gives no natal ${kind} for ${p}`;
+  };
+  const movingValues = (body: Point, ids: string[], kind: "house" | "sign") => {
+    const lines = [...sheet.moving].filter(([id, mv]) => mv.body === body && ids.includes(id));
+    const use = lines.length ? lines : [...sheet.moving].filter(([, mv]) => mv.body === body);
+    return new Set(use.flatMap(([, mv]) => kind === "house" ? [...mv.houses].map(String) : [...mv.signs]));
+  };
+  const sentences = reading.split(SENTENCE_SPLIT).map((x) => x.trim());
+  let previous: SentenceContext | null = null;
+  for (const sentence of sentences) {
+    if (!sentence) continue;
+    let ctx = sentenceContext(sheet, sentence);
+    const before = previous;
+    // "It tests ...", "That day ...": a sentence with no point and no ID is about the one before.
+    if (ctx.ids.size === 0 && ctx.points.size === 0 && previous) ctx = previous;
+    else previous = ctx;
+    // "[T4] transiting Saturn conjunction natal Moon ... Saturn is in your second house": still the moving Saturn.
+    if (ctx.ids.size === 0 && before) for (const p of ctx.points) if (before.moving.has(p)) ctx.moving.add(p);
+    const ids = tiedLines(sheet, ctx.ids.size === 0 && before ? { ...ctx, ids: new Set([...before.ids].filter((id) => ctx.moving.has(sheet.moving.get(id)?.body as Point))) } : ctx);
+    for (const clause of sentence.split(CLAUSE_SPLIT)) {
+      for (const c of placeClaims(tokenize(clause))) {
+        const natalValues = (p: Point) => {
+          const n = sheet.natal.get(p);
+          return new Set(c.kind === "house" ? [...(n?.houses ?? [])].map(String) : [...(n?.signs ?? [])]);
+        };
+        if (c.of) {
+          const body = c.of;
+          const isMoving = c.explicitlyMoving || ctx.moving.has(body);
+          if (!isMoving) {
+            if (natalValues(body).has(c.value)) continue;
+            // A natal point with no house on the sheet (no birth time): any house is unsupported.
+            out.push({ kind: c.kind === "house" ? "house-mismatch" : "sign-mismatch", mention: c.text, sentence, named: `${body} ${c.kind === "house" ? `in house ${c.value}` : `in ${c.value}`}`, sheet: [], message: `puts ${body} in ${c.kind === "house" ? `house ${c.value}` : c.value}, but ${natalText(body, c.kind)}.` });
+            continue;
+          }
+          const mv = movingValues(body, ids, c.kind);
+          const allowed = c.explicitlyMoving ? mv : new Set([...mv, ...natalValues(body)]);
+          if (allowed.has(c.value)) continue;
+          out.push({
+            kind: c.kind === "house" ? "house-mismatch" : "sign-mismatch", mention: c.text, sentence, named: `transiting ${body} ${c.kind === "house" ? `in house ${c.value}` : `in ${c.value}`}`, sheet: [],
+            message: `puts the moving ${body} in ${c.kind === "house" ? `house ${c.value}` : c.value}, but ${mv.size ? `the sheet gives the moving ${body} ${c.kind === "house" ? `house ${[...mv].join(" or ")}` : [...mv].join(" or ")}` : `no sheet line gives a ${c.kind} for the moving ${body}`}; ${natalText(body, c.kind)}. Give a transiting body's ${c.kind} only as its line gives it.`
+          });
+          continue;
+        }
+        // A house or sign with no planet of its own, in a sentence about a transit or station.
+        if (ctx.moving.size === 0) continue;
+        const allowed = new Set<string>();
+        // The natal points of the sentence and of the lines it is tied to ("so leave room in the third house" after a transit to the third-house Venus).
+        const natalPoints = new Set(ctx.points);
+        for (const id of ids) {
+          const r = sheet.relations.find((x) => x.id === id);
+          if (r) { natalPoints.add(r.b); if (r.kind === "natal") natalPoints.add(r.a); }
+        }
+        for (const p of natalPoints) for (const v of natalValues(p)) allowed.add(v);
+        for (const b of ctx.moving) for (const v of movingValues(b, ids, c.kind)) allowed.add(v);
+        if (allowed.has(c.value)) continue;
+        const movingNames = [...ctx.moving].join(", ");
+        out.push({
+          kind: c.kind === "house" ? "house-mismatch" : "sign-mismatch", mention: c.text, sentence, named: c.kind === "house" ? `house ${c.value}` : c.value, sheet: [],
+          message: `ties ${c.kind === "house" ? `house ${c.value}` : c.value} to a transit or station of ${movingNames}, but no sheet line puts ${movingNames} there, and no natal point it names is ${c.kind === "house" ? "in that house" : "in that sign"}. Give a transiting body's ${c.kind} only as its line gives it.`
+        });
+      }
+    }
+  }
+  return out;
+}
+
+/** "Venus is angular", "angular Mars": the planet must be on an angle ([C]) or in an angular house ([H]). */
+function angularViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  for (const raw of reading.split(SENTENCE_SPLIT)) {
+    const sentence = raw.trim();
+    for (const clause of sentence.split(CLAUSE_SPLIT)) {
+      const tokens = tokenize(clause);
+      tokens.forEach((t, i) => {
+        if (t.word !== "angular" || /^(house|houses)$/.test(tokens[i + 1]?.word ?? "")) return;
+        let p: Point | null = tokens[i + 1]?.point?.point ?? null;
+        for (let k = i - 1; !p && k >= Math.max(0, i - 4); k -= 1) {
+          if (tokens[k]!.point) p = tokens[k]!.point!.point;
+          else if (!/^(is|are|sits|stays|both|and|also|very|strongly|,)$/.test(tokens[k]!.word)) break;
+        }
+        if (!p || ANGLES.has(p) || sheet.angular.has(p)) return;
+        out.push({ kind: "not-on-sheet", mention: `${p} angular`, sentence, named: `${p} angular`, sheet: sheet.angleLines, message: `calls ${p} angular, but no [C] line puts it on an angle and the [H] line puts it in no angular house.${sheet.angleLines.length ? ` Planets on an angle, per the sheet: ${sheet.angleLines.join(" | ")}` : ""}` });
+      });
+    }
+  }
+  return out;
+}
+
 const same = (r: Relation, a: Point, b: Point, type: AspectType, kinds: RelationKind[], ordered: boolean) =>
   kinds.includes(r.kind) && r.type === type && (r.a === a && r.b === b || (!ordered && r.a === b && r.b === a));
 
@@ -565,6 +1014,10 @@ export function checkReading(sheetText: string, reading: string): CheckResult {
     }
   }
   violations.push(...birthdayViolations(sheet, reading));
+  // A date the birthday check already flagged is not flagged twice.
+  const flagged = new Set(violations.filter((v) => v.kind === "date-mismatch").map((v) => `${v.sentence}|${v.mention}`));
+  violations.push(...dateViolations(sheet, reading).filter((v) => !flagged.has(`${v.sentence}|${v.mention}`)));
+  violations.push(...placementViolations(sheet, reading), ...angularViolations(sheet, reading));
   return { ok: violations.length === 0, mentions: mentions.length, violations, cited };
 }
 

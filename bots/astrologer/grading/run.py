@@ -25,7 +25,9 @@ TPL=ENGINE+'/bots/astrologer/template'
 open(WSYS,'w').write(open(TPL+'/INSTRUCTIONS.md').read()+'\n\n'+open(TPL+'/SOURCES.md').read()+'\n\n\nTest note: links in tool results are placeholders; use them as given.')
 # After writing, the reading is checked against its sheet (bots/astrologer/facts/check-cli.ts): every
 # aspect, transit, station or angle contact it names must be a sheet line with the same aspect and
-# direction, and birthday dates and ages must match the sheet. On a violation the writer is given only
+# direction; birthday dates and ages, every date, date range and orb must match the line it is tied to;
+# a house or sign given for a planet must be its natal one or, for a transiting or stationing planet, the
+# one its line gives; and angle placements in any wording need a [C] line. On a violation the writer is given only
 # the flagged sentences and asked for replacements, which are spliced into the reading in place; the rest
 # of the reading is kept as written. Only when no flagged sentence can be located, or the reply cannot be
 # read, is the whole reading rewritten. At most MAX_REVISIONS rounds before grading. Each chart's checks
@@ -48,7 +50,7 @@ def flagged(reading,res):
 def fix_prompt(s,reading,items):
   numbered='\n\n'.join(f'{i+1}. SENTENCE: {k}\n   PROBLEM: '+' / '.join(v) for i,(k,v) in enumerate(items))
   return (write_prompt(s)+"\n\nYou already wrote the reading below. An automatic check against the tool results flagged these sentences:\n\n"+numbered
-    +"\n\nRewrite only these sentences; the rest of the reading stays as it is. Each replacement keeps the sentence's place and purpose in its paragraph and any leading markdown (such as '- ' or bold), names an aspect, transit, station, angle contact, birthday or age only as its sheet line gives it (with the ID), and drops any claim the sheet does not support. A replacement may be one or two sentences, or an empty string to delete the sentence. Reply with JSON only: an object from sentence number to replacement, such as {\"1\": \"...\", \"2\": \"...\"}.\n\nYOUR READING:\n"+reading)
+    +"\n\nRewrite only these sentences; the rest of the reading stays as it is. Each replacement keeps the sentence's place and purpose in its paragraph and any leading markdown (such as '- ' or bold), names an aspect, transit, station, angle contact, birthday, age, date, date range, orb, house or sign only as its sheet line gives it (with the ID), and drops any claim the sheet does not support. A replacement may be one or two sentences, or an empty string to delete the sentence. Reply with JSON only: an object from sentence number to replacement, such as {\"1\": \"...\", \"2\": \"...\"}.\n\nYOUR READING:\n"+reading)
 def splice(reading,items,out):
   j=json.loads(out[out.find('{'):out.rfind('}')+1])
   new=reading; done=0
@@ -68,8 +70,8 @@ def revise(s,reading,res):
     except (ValueError,RuntimeError): pass
   return claude('sonnet',WSYS,revise_prompt(s,reading,res)),'rewrite'
 def revise_prompt(s,reading,res):
-  return (write_prompt(s)+"\n\nYou already wrote the reading below. An automatic check against the tool results found aspects, transits, station or angle contacts, or birthday dates that are not on the sheet as named:\n\n"
-    +violations_text(res)+"\n\nRewrite the whole reading. Name each aspect, transit, station or contact only by quoting its sheet line with its ID, exactly as written (same planets, same aspect word, same order). Remove any claim the sheet does not support. Keep everything else. Max 900 words.\n\nYOUR PREVIOUS READING:\n"+reading)
+  return (write_prompt(s)+"\n\nYou already wrote the reading below. An automatic check against the tool results found aspects, transits, station or angle contacts, birthday dates, dates, date ranges, orbs, houses or signs that are not on the sheet as named:\n\n"
+    +violations_text(res)+"\n\nRewrite the whole reading. Name each aspect, transit, station or contact only by quoting its sheet line with its ID, exactly as written (same planets, same aspect word, same order), and copy dates, ranges and orbs from that line. Remove any claim the sheet does not support. Keep everything else. Max 900 words.\n\nYOUR PREVIOUS READING:\n"+reading)
 def do(c):
   cid=c['id']; sp=f"{G}/sheets/{cid}.txt"; rp=f"{G}/readings/{cid}.md"; gp=f"{G}/grades/{cid}.json"; kp=f"{G}/checks/{cid}.json"
   s=sheet(c); open(sp,'w').write(s)
