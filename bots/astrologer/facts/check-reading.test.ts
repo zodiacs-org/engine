@@ -335,6 +335,24 @@ describe("house, sign and chart rulers", () => {
     expect(flags("Scorpio's lord is Mars.")).toEqual([]);
     expect(flags("Venus does not rule your second house.")).toEqual([]);
   });
+
+
+  it("flags a planet said to rule the house it occupies when its sign is another planet's (v8 P2)", () => {
+    // Mercury in Leo (house 11, the Sun's), the Moon in Pisces (house 6, Jupiter's).
+    expect(flags("Mercury also rules the house where it sits with the Sun, the eleventh house, so friends matter.")).toEqual(["ruler-mismatch: Mercury rules its own house"]);
+    expect(flags("Mercury rules its own house.")).toEqual(["ruler-mismatch: Mercury rules its own house"]);
+    expect(flags("It is peregrine. The Moon is the ruler of the house it occupies.")).toEqual(["ruler-mismatch: Moon rules its own house"]);
+    expect(flags("The Moon rules the house it is in.")).toEqual(["ruler-mismatch: Moon rules its own house"]);
+    expect(checkReading(RULED, "Mercury rules its own house.").violations[0]!.message).toContain("Mercury is in Leo (whole sign house 11), ruled by Sun");
+    expect(flags("Mercury does not rule the house it occupies.")).toEqual([]);
+    expect(flags("Mercury would rule the house it sits in with Virgo rising.")).toEqual([]);
+  });
+
+  it("passes a planet that rules the house it occupies", () => {
+    const own = RULED + "\n[P5] Mars 10°00' Scorpio, whole sign house 2";
+    expect(checkReading(own, "Mars rules the house where it sits, the second house.").violations).toEqual([]);
+    expect(checkReading(own, "Mars, squared by the Moon, also rules its own house.").violations).toEqual([]);
+  });
 });
 
 describe("angle contacts read as houses (v7 E1)", () => {

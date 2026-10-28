@@ -1256,6 +1256,55 @@ function rulerViolations(sheet: Sheet, reading: string): Violation[] {
   return out;
 }
 
+/** "rules the house where it sits", "rules its own house", "ruler of the house it occupies": rulership of the planet's own house, in words. */
+const OCCUPIED_RULE = /\b(?:rules?|ruling|ruler of|lord of)\s+(?:both\s+)?(?:its own (?:house|sign)|the (?:very )?(?:house|sign) (?:(?:where|in which|that|which) )?it\b|the (?:house|sign) (?:that|which) (?:holds|contains) it\b)/gi;
+
+/**
+ * A planet said to rule the house it occupies must be in a sign it rules, since a whole sign house is its sign (v8 P2:
+ * "Saturn also rules the house where it sits with Mars and Uranus, the second house", with Saturn in Gemini, ruled by Mercury).
+ */
+function occupiedRulerViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  for (const raw of reading.split(SENTENCE_SPLIT).flatMap((x) => x.split(/(?<=[.!?:]\*\*)\s+/))) {
+    const sentence = raw.trim();
+    if (!sentence || /\b(would|if|were|could|might|otherwise)\b/i.test(sentence)) continue;
+    const modern = /\bmodern\b/i.test(sentence);
+    const subject = tokenize(sentence).find((t) => t.point && !ANGLES.has(t.point.point))?.point?.point ?? null;
+    const charts = sentenceCharts(sheet, sentence);
+    for (const m of sentence.matchAll(OCCUPIED_RULE)) {
+      const prefix = sentence.slice(0, m.index!).split(CLAUSE_SPLIT).at(-1)!;
+      const before = tokenize(prefix);
+      if (before.slice(-5).some((t) => /^(not|no|never|nor)$/.test(t.word))) continue;
+      // The nearest planet before the verb, unless it follows an aspect word or "by", or an aspect, "by" or an ID lies between (then it is another relation's); else the sentence's subject.
+      let planet: Point | null = null;
+      for (let k = before.length - 1; k >= 0; k -= 1) {
+        const t = before[k]!;
+        if (t.word === "it" || t.word === "itself" || t.aspect || t.id || t.word === "by") break;
+        if (!t.point) continue;
+        // "squared by the Moon": the object of another relation.
+        let j = k - 1;
+        while (j >= 0 && /^(the|your|natal|transiting)$/.test(before[j]!.word)) j -= 1;
+        if (!(before[j]?.aspect || before[j]?.word === "by")) planet = ANGLES.has(t.point.point) ? null : t.point.point;
+        break;
+      }
+      planet ??= subject;
+      if (!planet) continue;
+      const p = planet;
+      const places = charts.map((x) => ({ chart: x, natal: sheet.chartNatal.get(x)?.get(p) })).filter((x) => x.natal && x.natal.signs.size);
+      if (!places.length) continue;
+      const rules = (sign: string) => SIGN_RULERS[sign] === p || (modern && MODERN_RULERS[sign] === p);
+      if (places.some((x) => [...x.natal!.signs].some(rules))) continue;
+      const where = places.map((x) => `${[...x.natal!.signs].join(" or ")}${x.natal!.houses.size ? ` (whole sign house ${[...x.natal!.houses].join(" or ")})` : ""}${charts.length > 1 ? ` in chart ${x.chart}` : ""}`);
+      const lords = [...new Set(places.flatMap((x) => [...x.natal!.signs].map((g) => SIGN_RULERS[g]!)))];
+      out.push({
+        kind: "ruler-mismatch", mention: m[0], sentence, named: `${p} rules its own house`, sheet: [],
+        message: `says ${p} rules the house it occupies, but ${p} is in ${where.join(", ")}, ruled by ${lords.join(" or ")} (whole sign houses, traditional rulers). ${p} rules ${houseList(sheet, charts, p)}.`
+      });
+    }
+  }
+  return out;
+}
+
 /** "houses 12 and 3 (Gemini and Virgo)": the houses a planet rules. */
 function houseList(sheet: Sheet, charts: string[], p: Point): string {
   const rising = sheet.rising.get(charts[0]!);
@@ -1984,7 +2033,7 @@ export function checkReading(sheetText: string, reading: string): CheckResult {
   // A date the birthday check already flagged is not flagged twice.
   const flagged = new Set(violations.filter((v) => v.kind === "date-mismatch").map((v) => `${v.sentence}|${v.mention}`));
   violations.push(...dateViolations(sheet, reading).filter((v) => !flagged.has(`${v.sentence}|${v.mention}`)));
-  violations.push(...placementViolations(sheet, reading), ...angularViolations(sheet, reading), ...rulerViolations(sheet, reading), ...angleCountViolations(sheet, reading), ...angleHouseViolations(sheet, reading), ...dispositorViolations(sheet, reading), ...groupPlaceViolations(sheet, reading),
+  violations.push(...placementViolations(sheet, reading), ...angularViolations(sheet, reading), ...rulerViolations(sheet, reading), ...occupiedRulerViolations(sheet, reading), ...angleCountViolations(sheet, reading), ...angleHouseViolations(sheet, reading), ...dispositorViolations(sheet, reading), ...groupPlaceViolations(sheet, reading),
     ...windowPhaseViolations(sheet, reading), ...sameDayViolations(sheet, reading), ...onlyAngleViolations(sheet, reading), ...risingKeptViolations(sheet, reading), ...chartViolations(sheet, reading, mentions));
   return { ok: violations.length === 0, mentions: mentions.length, violations, cited };
 }
