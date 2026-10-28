@@ -671,3 +671,53 @@ describe("interpretation in the voice of fact (v9 C2)", () => {
     expect(voice("Mars squares Saturn. A traditional reading is that effort meets delay.")).toEqual([]);
   });
 });
+
+describe("relative dates between lines (v10 P14)", () => {
+  const SHEET_R = [
+    "Transits 2026-11-01 to 2027-01-29 inclusive (90 days), dates in the person's zone (UTC).",
+    "- [T2] transiting Mars conjunction natal Moon: exact 2026-11-16",
+    "- [T3] transiting Jupiter conjunction natal Moon: exact 2026-11-17 and 2027-01-07",
+    "- [T4] transiting Sun trine natal Moon: exact 2026-11-21",
+    "- [T5] transiting Mars square natal Mars: exact 2026-11-24",
+    "- [T6] transiting Sun square natal Mercury: exact 2026-12-01"
+  ].join("\n");
+  const flags = (reading: string) => checkReading(SHEET_R, reading).violations.map((v) => `${v.kind}: ${v.named}`);
+  const messages = (reading: string) => checkReading(SHEET_R, reading).violations.map((v) => v.message);
+
+  it("flags a stated day offset that is not the day difference of the lines (v10 P14)", () => {
+    const p14 = "[T3] transiting Jupiter conjunction natal Moon, exact 2026-11-17 and again 2027-01-07. This touches the Moon theme. Two days earlier in that week, [T2] transiting Mars conjunction natal Moon is exact 2026-11-16.";
+    expect(flags(p14)).toEqual(['date-mismatch: [T2] "Two days earlier" [T3]']);
+    expect(messages(p14)[0]).toContain('"Two days earlier"');
+    expect(messages(p14)[0]).toContain("1 day before");
+    expect(flags(p14.replace("Two days", "A day"))).toEqual([]);
+    expect(flags(p14.replace("Two days earlier", "The day before"))).toEqual([]);
+    expect(flags(p14.replace("Two days earlier", "The previous day"))).toEqual([]);
+    expect(flags(p14.replace("Two days earlier", "The next day"))).toEqual(['date-mismatch: [T2] "The next day" [T3]']);
+  });
+
+  it("reads digits, number words and the object of before or after", () => {
+    expect(flags("[T2] transiting Mars conjunction natal Moon is exact 2026-11-16, and 5 days later [T4] transiting Sun trine natal Moon is exact 2026-11-21.")).toEqual([]);
+    expect(flags("[T2] transiting Mars conjunction natal Moon is exact 2026-11-16, and three days later [T4] transiting Sun trine natal Moon is exact 2026-11-21.")).toEqual(['date-mismatch: [T4] "three days later" [T2]']);
+    expect(flags("[T4] transiting Sun trine natal Moon is exact 2026-11-21, three days after [T5] transiting Mars square natal Mars.")).toEqual(['date-mismatch: [T4] "three days after" [T5]']);
+    expect(flags("[T5] transiting Mars square natal Mars is exact 2026-11-24, three days after [T4] transiting Sun trine natal Moon.")).toEqual([]);
+    expect(flags("[T4] transiting Sun trine natal Moon falls 2026-11-21. [T6] transiting Sun square natal Mercury comes ten days after it.")).toEqual([]);
+    expect(flags("[T4] transiting Sun trine natal Moon falls 2026-11-21. [T5] transiting Mars square natal Mars comes a day after it.")).toEqual(['date-mismatch: [T5] "a day after" [T4]']);
+  });
+
+  it("checks weeks, the same week and the weekend", () => {
+    expect(flags("[T5] transiting Mars square natal Mars is exact 2026-11-24. A week later, [T6] transiting Sun square natal Mercury is exact 2026-12-01.")).toEqual([]);
+    expect(flags("[T2] transiting Mars conjunction natal Moon is exact 2026-11-16. A week later, [T6] transiting Sun square natal Mercury is exact 2026-12-01.")).toEqual(['date-mismatch: [T6] "A week later" [T2]']);
+    expect(flags("[T2] transiting Mars conjunction natal Moon is exact 2026-11-16, and the same week [T4] transiting Sun trine natal Moon is exact 2026-11-21.")).toEqual([]);
+    expect(flags("[T2] transiting Mars conjunction natal Moon is exact 2026-11-16, and the same week [T6] transiting Sun square natal Mercury is exact 2026-12-01.")).toEqual(['date-mismatch: [T6] "the same week" [T2]']);
+    // 2026-11-21 is a Saturday; 2026-11-24 a Tuesday.
+    expect(flags("[T3] transiting Jupiter conjunction natal Moon is exact 2026-11-17; that weekend, [T4] transiting Sun trine natal Moon is exact 2026-11-21.")).toEqual([]);
+    expect(flags("[T3] transiting Jupiter conjunction natal Moon is exact 2026-11-17; that weekend, [T5] transiting Mars square natal Mars is exact 2026-11-24.")).toEqual(['date-mismatch: [T5] "that weekend" [T3]']);
+  });
+
+  it("leaves advice and phrases with no dated line alone (v10 O7, H8, O1, F1)", () => {
+    expect(flags("Around [T4] transiting Sun trine natal Moon on 2026-11-21, wait a day before answering anything heated.")).toEqual([]);
+    expect(flags("[T4] transiting Sun trine natal Moon is exact 2026-11-21, so give heated exchanges a day before you answer.")).toEqual([]);
+    expect(flags("[T4] transiting Sun trine natal Moon is exact 2026-11-21. Use the following week to revisit old work.")).toEqual([]);
+    expect(flags("Jupiter stations the same week.")).toEqual([]);
+  });
+});

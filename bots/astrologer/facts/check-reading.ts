@@ -20,7 +20,8 @@
  * planet rulers ("Mercury rules your second house", "the ruler of the Leo
  * second", "your tenth-house ruler", "its ruler, Jupiter") are checked
  * against the whole sign houses of the rising sign, the [R1] line and the
- * traditional rulers.
+ * traditional rulers. Relative date phrases ("two days earlier", "the next day", "a week
+ * later", "the same week") are checked against the day difference of the dated lines they relate.
  *
  * The parser is a heuristic over plain English, written for the readings the
  * bot produces. It finds a point name, an aspect word and a point name close
@@ -1740,6 +1741,162 @@ function sameDayViolations(sheet: Sheet, reading: string): Violation[] {
   return out;
 }
 
+// ------------------------------------------------------------------ relative dates (v10 P14)
+
+const OFFSET_NUMBER: Record<string, number> = {
+  a: 1, an: 1, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14
+};
+/** "two days earlier", "3 days after", "a week later", "the day before", "the next day", "the same week", "that weekend". */
+const RELATIVE_DATE = new RegExp(
+  `\\b(?:(${Object.keys(OFFSET_NUMBER).join("|")}|\\d{1,2}) (days?|weeks?) (earlier|later|before|after|afterwards?|beforehand|prior|apart|on)\\b`
+    + `|the (day|night|morning|evening|week) (before|after)\\b`
+    + `|the (next|following|previous|prior|preceding) (day|night|morning|evening|week)\\b`
+    + `|(?:the|that) same week\\b|that (?:same )?weekend\\b)`,
+  "gi"
+);
+/** After "before", "after" or "prior": a gerund or a subject begins an action, not a dated line ("wait a day before answering"). */
+const ACTION_AFTER = /^\s+(?:to\s+)?(?:\w+ing\b|you\b|I\b|we\b|they\b|he\b|she\b|one\b)/i;
+/** After "before" or "after": "it", "that" or "this" is the line said before. */
+const BACK_REFERENCE = /^\s+(?:it|that|this|then)\b/i;
+
+interface DatedItem {
+  /** "[T2]", or the date as written when no ID holds it. */
+  label: string;
+  start: number;
+  /** ISO dates. */
+  dates: string[];
+}
+
+type Offset =
+  | { kind: "days"; n: number; sign: 1 | -1 | 0 }
+  | { kind: "weeks"; n: number; sign: 1 | -1 | 0 }
+  | { kind: "next-week"; sign: 1 | -1 }
+  | { kind: "same-week" }
+  | { kind: "weekend" };
+
+function readOffset(m: RegExpMatchArray): Offset {
+  const signOf = (w: string): 1 | -1 | 0 => (/^(?:earlier|before|beforehand|prior|previous|preceding)$/i.test(w) ? -1 : /^apart$/i.test(w) ? 0 : 1);
+  if (m[1]) {
+    const n = OFFSET_NUMBER[m[1].toLowerCase()] ?? Number(m[1]);
+    return { kind: /^week/i.test(m[2]!) ? "weeks" : "days", n, sign: signOf(m[3]!) };
+  }
+  const unit = m[4] ?? m[7];
+  if (unit) {
+    const sign = signOf((m[5] ?? m[6])!) === -1 ? -1 : 1;
+    return /^week$/i.test(unit) ? { kind: "next-week", sign } : { kind: "days", n: 1, sign };
+  }
+  return /weekend/i.test(m[0]) ? { kind: "weekend" } : { kind: "same-week" };
+}
+
+/** Whether `diff` (the subject's date minus the reference's, in days) is the offset the phrase states. */
+function offsetHolds(o: Offset, diff: number, subject: string): boolean {
+  const day = (iso: string) => Date.parse(`${iso}T00:00:00Z`) / 86_400_000;
+  // Days since a Monday; weeks run Monday to Sunday.
+  const week = (iso: string) => Math.floor((day(iso) + 3) / 7);
+  const weekday = new Date(`${subject}T00:00:00Z`).getUTCDay();
+  switch (o.kind) {
+    case "days": return o.sign === 0 ? Math.abs(diff) === o.n : diff === o.sign * o.n;
+    // A week either way of seven days: one day of slack.
+    case "weeks": return Math.abs((o.sign === 0 ? Math.abs(diff) : diff) - (o.sign || 1) * 7 * o.n) <= 1;
+    case "next-week": {
+      const d = o.sign * diff;
+      const weeks = o.sign * (week(subject) - week(isoShift(subject, -diff)));
+      return d >= 1 && (weeks === 1 || (d >= 5 && d <= 9));
+    }
+    case "same-week": return Math.abs(diff) <= 6;
+    case "weekend": return Math.abs(diff) <= 6 && (weekday === 0 || weekday === 6);
+  }
+}
+
+const isoShift = (iso: string, days: number) => {
+  const d = new Date(`${iso}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+};
+
+/**
+ * "[T3] ... exact 2026-11-17 ... Two days earlier in that week, [T2] ... is exact 2026-11-16" (v10 P14): a relative date
+ * phrase must match the day difference between the line it is said of and the line it is measured from. The line it is
+ * said of is the dated line (an ID with dates, or a written date) in the same sentence, after the phrase or else before
+ * it; the line it is measured from is the object of "before" or "after" when that is a dated line, and otherwise the
+ * nearest dated line before, in the same sentence or an earlier one of the paragraph. A written date counts for the ID
+ * before it; an ID with no written date counts with its sheet dates. When either side has several dates, one pair that
+ * matches is enough.
+ */
+function relativeDateViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  const day = (iso: string) => Date.parse(`${iso}T00:00:00Z`) / 86_400_000;
+  const year = sheet.window ? Number(sheet.window.from.slice(0, 4)) : undefined;
+  const isoOf = (d: DateAt): string | undefined => {
+    if (d.year) return `${d.year}-${d.md}`;
+    const onSheet = [...sheet.allDates].find((iso) => iso.slice(5) === d.md);
+    if (onSheet) return onSheet;
+    if (!sheet.window || year === undefined) return undefined;
+    return `${sheet.window.from.slice(5) <= d.md ? year : year + 1}-${d.md}`;
+  };
+  const itemsOf = (sentence: string): DatedItem[] => {
+    const ids = [...sentence.matchAll(ID_G)]
+      .filter((x) => (sheet.lineDates.get(x[1]!) ?? []).length && !/^(?:[AB]-)?[NB]\d+$/.test(x[1]!))
+      .map((x) => ({ label: x[0], start: x.index!, dates: [] as string[], sheetDates: sheet.lineDates.get(x[1]!)! }));
+    const loose: DatedItem[] = [];
+    for (const d of datesIn(sentence)) {
+      const iso = isoOf(d);
+      if (!iso) continue;
+      // The ID the date belongs to: the last one before it, with no other ID or clause break between.
+      const owner = ids.filter((x) => x.start < d.index && !/[;\[]/.test(sentence.slice(x.start + x.label.length, d.index))).at(-1);
+      if (owner) owner.dates.push(iso);
+      else loose.push({ label: d.text, start: d.index, dates: [iso] });
+    }
+    return [...ids.map((x) => ({ label: x.label, start: x.start, dates: x.dates.length ? x.dates : x.sheetDates })), ...loose].sort((a, b) => a.start - b.start);
+  };
+  for (const paragraph of reading.split(/\n+/)) {
+    const sentences = paragraph.split(SENTENCE_SPLIT).map((x) => x.trim()).filter(Boolean);
+    const items = sentences.map(itemsOf);
+    sentences.forEach((sentence, si) => {
+      const here = items[si]!;
+      // The nearest dated line before position `at` of this sentence, else in an earlier sentence of the paragraph.
+      const lastBefore = (at: number): DatedItem | undefined => {
+        const own = here.filter((x) => x.start < at).at(-1);
+        if (own) return own;
+        for (let k = si - 1; k >= 0; k--) if (items[k]!.length) return items[k]!.at(-1);
+        return undefined;
+      };
+      for (const m of sentence.matchAll(RELATIVE_DATE)) {
+        const start = m.index!;
+        const end = start + m[0].length;
+        const rest = sentence.slice(end);
+        const objectForm = /(?:before|after|prior)$/i.test(m[0]);
+        let subject: DatedItem | undefined;
+        let ref: DatedItem | undefined;
+        if (objectForm && !/^\s*(?:[,.;:!?)]|$)/.test(rest) && !BACK_REFERENCE.test(rest)) {
+          if (ACTION_AFTER.test(rest)) continue;
+          // "the day after [T3]": the object must be a dated line close by, with nothing but filler words between.
+          ref = here.find((x) => x.start >= end);
+          if (!ref || !/^[^,;\[\]]{0,40}$/.test(sentence.slice(end, ref.start)) || datesIn(sentence.slice(end, ref.start)).length) continue;
+          subject = lastBefore(start);
+        } else {
+          subject = here.find((x) => x.start >= end) ?? here.filter((x) => x.start < start).at(-1);
+          if (!subject) continue;
+          ref = lastBefore(Math.min(subject.start, start));
+        }
+        if (!subject || !ref || subject === ref) continue;
+        const offset = readOffset(m);
+        const pairs = subject.dates.flatMap((s) => ref!.dates.map((r) => ({ s, r, diff: day(s) - day(r) })));
+        if (!pairs.length || pairs.some((p) => offsetHolds(offset, p.diff, p.s))) continue;
+        const near = pairs.reduce((a, b) => (Math.abs(b.diff) < Math.abs(a.diff) ? b : a));
+        const n = Math.abs(near.diff);
+        const actual = n === 0 ? "on the same day as" : `${n} day${n === 1 ? "" : "s"} ${near.diff > 0 ? "after" : "before"}`;
+        out.push({
+          kind: "date-mismatch", mention: m[0], sentence, named: `${subject.label} "${m[0]}" ${ref.label}`,
+          sheet: [subject.label, ref.label].map((l) => sheet.ids.get(l.slice(1, -1)) ?? "").filter(Boolean),
+          message: `says "${m[0]}" for ${subject.label} (${subject.dates.join(", ")}) against ${ref.label} (${ref.dates.join(", ")}), but ${subject.label} falls ${actual} ${ref.label} (${near.s} and ${near.r}). Give each line's own date, and correct or drop the words "${m[0]}".`
+        });
+      }
+    });
+  }
+  return out;
+}
+
 /** "These are the only angle placements", "no other planet is on an angle": a list of the planets on an angle said to be complete. */
 const ONLY_ANGLES = /\b(?:the|are) only (?:angle placements|angle contacts|angular planets|planets? (?:on|at) (?:an |the )?angles?|points? (?:on|at) (?:an |the )?angles?|planets? on (?:an |the )?angle)\b|\bno other (?:planet|point|body)s? (?:is |are |sits? |lies? )?(?:on|at) (?:an |the )?angles?\b|\bnothing else (?:is |sits? )?(?:on|at) (?:an |the )?angles?\b/i;
 
@@ -2042,7 +2199,7 @@ export function checkReading(sheetText: string, reading: string): CheckResult {
   const flagged = new Set(violations.filter((v) => v.kind === "date-mismatch").map((v) => `${v.sentence}|${v.mention}`));
   violations.push(...dateViolations(sheet, reading).filter((v) => !flagged.has(`${v.sentence}|${v.mention}`)));
   violations.push(...placementViolations(sheet, reading), ...angularViolations(sheet, reading), ...rulerViolations(sheet, reading), ...occupiedRulerViolations(sheet, reading), ...angleCountViolations(sheet, reading), ...angleHouseViolations(sheet, reading), ...dispositorViolations(sheet, reading), ...groupPlaceViolations(sheet, reading),
-    ...windowPhaseViolations(sheet, reading), ...sameDayViolations(sheet, reading), ...onlyAngleViolations(sheet, reading), ...risingKeptViolations(sheet, reading), ...chartViolations(sheet, reading, mentions), ...voiceViolations(reading));
+    ...windowPhaseViolations(sheet, reading), ...sameDayViolations(sheet, reading), ...relativeDateViolations(sheet, reading), ...onlyAngleViolations(sheet, reading), ...risingKeptViolations(sheet, reading), ...chartViolations(sheet, reading, mentions), ...voiceViolations(reading));
   return { ok: violations.length === 0, mentions: mentions.length, violations, cited };
 }
 

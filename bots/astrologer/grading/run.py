@@ -43,7 +43,9 @@ open(WSYS,'w').write(open(TPL+'/INSTRUCTIONS.md').read()+'\n\n'+open(TPL+'/SOURC
 # two-chart sheet (fold or gap) each claim must hold in the chart it is attributed to, shared and 'only in' claims must match the
 # sheet, chart-specific facts must name their chart, and a clock state tied to a chart must match the sheet. Interpretation in the voice of
 # fact is flagged too (v9 C2): rankings the sheet does not make (hardest, heaviest, most reliable), a planet's sign said to hold
-# under a change of birth time, and an outer planet's meaning called traditional. On a violation the writer is given only
+# under a change of birth time, and an outer planet's meaning called traditional. A relative date phrase ("two days earlier", "the next day",
+# "a week later", "the same week", "that weekend") must match the day difference of the dated lines it relates (v10 P14);
+# its violation quotes the phrase, and both revision prompts pass that quote on. On a violation the writer is given only
 # the flagged sentences and asked for replacements, which are spliced into the reading in place; the rest
 # of the reading is kept as written. Only when no flagged sentence can be located, or the reply cannot be
 # read, is the whole reading rewritten. At most MAX_REVISIONS rounds before grading. Each chart's checks
@@ -66,7 +68,7 @@ def flagged(reading,res):
 def fix_prompt(s,reading,items):
   numbered='\n\n'.join(f'{i+1}. SENTENCE: {k}\n   PROBLEM: '+' / '.join(v) for i,(k,v) in enumerate(items))
   return (write_prompt(s)+"\n\nYou already wrote the reading below. An automatic check against the tool results flagged these sentences:\n\n"+numbered
-    +"\n\nRewrite only these sentences; the rest of the reading stays as it is. Each replacement keeps the sentence's place and purpose in its paragraph and any leading markdown (such as '- ' or bold), names an aspect, transit, station, angle contact, birthday, age, date, date range, orb, house, sign or ruler only as its sheet line gives it (with the ID, and on a two-chart sheet with its chart), drops any claim the sheet does not support, and gives interpretation as a reading, marked as such, never as a calculated fact: no ranking of planets, contacts or periods, no conclusion about a change of birth time that the sheet does not give, and no outer-planet meaning called traditional. A replacement may be one or two sentences, or an empty string to delete the sentence. Reply with JSON only: an object from sentence number to replacement, such as {\"1\": \"...\", \"2\": \"...\"}.\n\nYOUR READING:\n"+reading)
+    +"\n\nRewrite only these sentences; the rest of the reading stays as it is. Each replacement keeps the sentence's place and purpose in its paragraph and any leading markdown (such as '- ' or bold), names an aspect, transit, station, angle contact, birthday, age, date, date range, orb, house, sign or ruler only as its sheet line gives it (with the ID, and on a two-chart sheet with its chart), drops any claim the sheet does not support, and gives interpretation as a reading, marked as such, never as a calculated fact: no ranking of planets, contacts or periods, no conclusion about a change of birth time that the sheet does not give, and no outer-planet meaning called traditional. Where a problem quotes relative date words (such as \"two days earlier\" or \"the next day\"), the replacement gives each line's own date from the sheet and corrects or drops those quoted words. A replacement may be one or two sentences, or an empty string to delete the sentence. Reply with JSON only: an object from sentence number to replacement, such as {\"1\": \"...\", \"2\": \"...\"}.\n\nYOUR READING:\n"+reading)
 def splice(reading,items,out):
   j=json.loads(out[out.find('{'):out.rfind('}')+1])
   new=reading; done=0
@@ -87,7 +89,7 @@ def revise(s,reading,res):
   return claude(WRITER,WSYS,revise_prompt(s,reading,res)),'rewrite'
 def revise_prompt(s,reading,res):
   return (write_prompt(s)+"\n\nYou already wrote the reading below. An automatic check against the tool results found aspects, transits, station or angle contacts, birthday dates, dates, date ranges, orbs, houses or signs that are not on the sheet as named, or interpretation written as a calculated fact:\n\n"
-    +violations_text(res)+"\n\nRewrite the whole reading. Name each aspect, transit, station or contact only by quoting its sheet line with its ID, exactly as written (same planets, same aspect word, same order), and copy dates, ranges and orbs from that line. Remove any claim the sheet does not support, and mark interpretation as a reading rather than ranking or stating it as fact. Keep everything else. Max 900 words.\n\nYOUR PREVIOUS READING:\n"+reading)
+    +violations_text(res)+"\n\nRewrite the whole reading. Name each aspect, transit, station or contact only by quoting its sheet line with its ID, exactly as written (same planets, same aspect word, same order), and copy dates, ranges and orbs from that line. Where a problem quotes relative date words (such as \"two days earlier\" or \"the next day\"), give each line's own date from the sheet and correct or drop those words. Remove any claim the sheet does not support, and mark interpretation as a reading rather than ranking or stating it as fact. Keep everything else. Max 900 words.\n\nYOUR PREVIOUS READING:\n"+reading)
 def do(c):
   cid=c['id']; sp=f"{G}/sheets/{cid}.txt"; rp=f"{G}/readings/{cid}.md"; gp=f"{G}/grades/{cid}.json"; kp=f"{G}/checks/{cid}.json"
   s=sheet(c); open(sp,'w').write(s)
