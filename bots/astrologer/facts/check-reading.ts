@@ -592,7 +592,7 @@ export function findMentions(reading: string): Mention[] {
 
 export interface Violation {
   kind: "not-on-sheet" | "wrong-aspect" | "reversed" | "unknown-id" | "id-mismatch" | "date-mismatch" | "age-mismatch"
-    | "range-mismatch" | "orb-mismatch" | "house-mismatch" | "sign-mismatch" | "ruler-mismatch" | "chart-mismatch";
+    | "range-mismatch" | "orb-mismatch" | "house-mismatch" | "sign-mismatch" | "ruler-mismatch" | "chart-mismatch" | "voice";
   mention: string;
   /** The sentence of the reading it is in. */
   sentence: string;
@@ -2042,8 +2042,56 @@ export function checkReading(sheetText: string, reading: string): CheckResult {
   const flagged = new Set(violations.filter((v) => v.kind === "date-mismatch").map((v) => `${v.sentence}|${v.mention}`));
   violations.push(...dateViolations(sheet, reading).filter((v) => !flagged.has(`${v.sentence}|${v.mention}`)));
   violations.push(...placementViolations(sheet, reading), ...angularViolations(sheet, reading), ...rulerViolations(sheet, reading), ...occupiedRulerViolations(sheet, reading), ...angleCountViolations(sheet, reading), ...angleHouseViolations(sheet, reading), ...dispositorViolations(sheet, reading), ...groupPlaceViolations(sheet, reading),
-    ...windowPhaseViolations(sheet, reading), ...sameDayViolations(sheet, reading), ...onlyAngleViolations(sheet, reading), ...risingKeptViolations(sheet, reading), ...chartViolations(sheet, reading, mentions));
+    ...windowPhaseViolations(sheet, reading), ...sameDayViolations(sheet, reading), ...onlyAngleViolations(sheet, reading), ...risingKeptViolations(sheet, reading), ...chartViolations(sheet, reading, mentions), ...voiceViolations(reading));
   return { ok: violations.length === 0, mentions: mentions.length, violations, cited };
+}
+
+// ------------------------------------------------------------------ interpretation in the voice of fact (v9 C2)
+
+/** A ranking the sheet does not make: "the hardest planet", "the heaviest month", "its most reliable help". */
+const RANKING = /\b(?:hardest|heaviest|weightiest|strongest|weakest|most (?:reliabl[a-z]*|dependabl[a-z]*|difficult|strained|important|supported|helpful|powerful|significant)|least (?:reliabl[a-z]*|dependabl[a-z]*|difficult|supported))\b/gi;
+/** A planet's sign said to hold under a change of birth time, which the sheet's edge lines never compute. */
+const KEPT_CHANGE = /\b(?:not|never|neither|nor|cannot)\b[^.;:]{0,40}\b(?:change|changes|changing|move|moves|moving|shift|shifts|alter|alters|leave|leaves)\b|\bn['\u2019]t (?:change|move|shift|alter|leave)\b|\b(?:unchanged|stays in|remains in|stay in|remain in)\b/i;
+const TIME_WORDS = /\b(?:birth[- ]time|time of birth|birth time|small (?:change|shift)|slight (?:change|shift)|few minutes)\b/i;
+const NON_MOON = /\b(?:Sun|Mercury|Venus|Mars|Jupiter|Saturn|Uranus|Neptune|Pluto|North Node|node)\b/;
+const ANGLE_OR_MOON = /\b(?:Moon|rising|Ascendant|Midheaven|MC|IC|houses?|chart ruler)\b/i;
+const OUTER = /\b(?:Uranus|Neptune|Pluto)\b/;
+const PLANET_G = /\b(?:Sun|Moon|Mercury|Venus|Mars|Jupiter|Saturn|Uranus|Neptune|Pluto)\b/g;
+/** "A traditional reading is", "in traditional terms": a meaning attributed to the tradition (not "traditionally its point of roots", said of a house or angle). */
+const TRADITIONAL = /\b(?:a|in a|the|in) traditional (?:reading|view|meaning|terms|delineation)\b|\btradition(?:ally)? (?:reads|gives|says|holds)\b/i;
+
+/**
+ * Interpretation written as if it were calculated (the C2 deductions of v9):
+ * a ranking of planets, contacts or periods ("the hardest planet", "the
+ * heaviest month"), which the sheet never makes; a planet's sign said to hold
+ * under a small change of birth time, which the edge lines do not compute;
+ * and a meaning of Uranus, Neptune or Pluto called traditional.
+ */
+function voiceViolations(reading: string): Violation[] {
+  const out: Violation[] = [];
+  const sentences = reading.split(SENTENCE_SPLIT).map((x) => x.trim()).filter(Boolean);
+  sentences.forEach((sentence, si) => {
+    for (const m of sentence.matchAll(RANKING)) {
+      out.push({ kind: "voice", mention: m[0], sentence, named: m[0], sheet: [],
+        message: `ranks a planet, contact or period ("${m[0]}"), a comparison the sheet does not make, in the voice of a calculated fact. Say what the factor is (with its ID) and what it suggests, marked as a reading, without ranking it against the others; the sheet's "Tightest aspect" line is the only ranking to quote.` });
+    }
+    // "Mercury sits 1°43' before the end of Sagittarius [E3]. A small change in birth time does not move it.": the planet may be named in the sentence before.
+    const planetNear = NON_MOON.test(sentence) || (![...sentence.matchAll(PLANET_G)].length && si > 0 && NON_MOON.test(sentences[si - 1]!));
+    if (TIME_WORDS.test(sentence) && KEPT_CHANGE.test(sentence) && planetNear && !ANGLE_OR_MOON.test(sentence)) {
+      out.push({ kind: "voice", mention: sentence, sentence, named: "sign kept under a change of birth time", sheet: [],
+        message: "says a planet's sign would not change with a change of birth time. The sheet's edge lines give only the distance to the sign edge, not a birth-time shift, so this is a calculation of your own. Quote the [E] line and, if you interpret the planet's sign, say what the neighbouring sign would change; never say that it would or would not move." });
+    }
+    // "A traditional reading is ..." on an outer planet named in the sentence, or last named in the sentence before when this one names no planet.
+    const before = si > 0 ? [...sentences[si - 1]!.matchAll(PLANET_G)].map((x) => x[0]) : [];
+    const outerHere = OUTER.test(sentence);
+    const outerBefore = !outerHere && ![...sentence.matchAll(PLANET_G)].length && before.length > 0 && OUTER.test(before[before.length - 1]!);
+    const trad = TRADITIONAL.exec(sentence);
+    if (trad && (outerHere || outerBefore) && !/\bmodern\b/i.test(sentence) && !/\b(?:no|not|outside|without)\b[^.;]{0,30}\btradition/i.test(sentence)) {
+      out.push({ kind: "voice", mention: trad[0], sentence, named: "traditional reading of an outer planet", sheet: [],
+        message: "calls a meaning of Uranus, Neptune or Pluto traditional. The traditional (Hellenistic and medieval) method reads only the seven classical planets; give an outer-planet meaning as \"a modern reading\" or \"in modern astrology\", or leave it out." });
+    }
+  });
+  return out;
 }
 
 /** The violations as a numbered list, for a revision prompt. */

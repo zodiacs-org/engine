@@ -99,3 +99,17 @@ They use the same facts and the same markers, but the comparisons carry their re
 - P3: "traditional" only for the seven classical planets and the doctrines on the sheet (sect, dignity, rulership, houses); meanings of Uranus, Neptune, Pluto and of the nodes are "a modern reading". Replace "a traditional reading is" in the list of markers.
 - P5: a dispositor chain links planets; it is not a cause of behaviour. Mark the step ("one reading of this chain is ...") instead of "which is why".
 - P6: tie a transit or station only to the natal points of its own contact lines (already in the prompt for houses; extend it to themes), and a station with no contact line is the station's own planet and house only.
+
+## What was changed (round 8) and how the checker behaves on v9
+
+`INSTRUCTIONS.md`: the prompt's own superlatives are gone (the sect and dignity rule now describes tendencies to weigh, "in traditional terms", with exaltation no longer given domicile's "own resources"); a **No rankings** rule; a **"Traditional" only for the tradition** rule; "one reading is" replaces "a traditional reading is" among the markers; "so" and "which is why" join a fact to its astrological condition, not to a behaviour, and a dispositor chain is not a cause; transits and stations tie to a theme only through their own contact lines, and a station with no contact is not read as a meaning; the uncertainty note never says whether a birth-time change would move a planet; "exact" only for a transit's exact date. Every other rule is unchanged.
+
+Checker (`bots/astrologer/facts/check-reading.ts`, kind `voice`), rerun on the 64 final v9 readings and their 29 drafts:
+
+| Rule | Final readings flagged | Uses | Of them C2=4 / C2=5 | Against the grades |
+| --- | --- | --- | --- | --- |
+| Ranking word (hardest, heaviest, weightiest, strongest, weakest, most reliable or dependable or difficult ...) | 59 | 140 | 41 / 18 | every match read is a ranking of a planet, contact or period; none quotes the sheet's tightest aspect |
+| Sign kept under a change of birth time | 15 | 15 | 14 / 1 | all 11 readings the grader flagged for it (G6 H2 H4 H6 M5 O6 O11 O12 O13 P4 P10) are caught; the other 4 (E2 F3 H1 O8) make the same claim |
+| Outer-planet meaning called traditional | 5 | 7 | 4 / 1 | 5 sentences the grader flagged (G2 twice, P10, U1 twice); 2 not flagged by the grader (M5, P12), where "a traditional reading" follows a sentence ending on Uranus or Pluto |
+
+The 44 violations the checker recorded on these readings before the change are unchanged, so the new rules add flags without moving any old one. The modern glosses on classical factors (a gentle twelfth house, retrograde as reflection, a nodal "calling"; G3 G7 H2 O1 O5) and the dispositor and transit-theme leaps (P5, P6) are left to the prompt: no word-level rule separates them from sound readings.

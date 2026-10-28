@@ -641,3 +641,33 @@ describe("two charts (fold or gap)", () => {
     expect(flags("Was the birth before the clocks moved (chart B) or after (chart A)?")).toEqual(["chart-mismatch: chart B born before the change", "chart-mismatch: chart A born after the change"]);
   });
 });
+
+describe("interpretation in the voice of fact (v9 C2)", () => {
+  const voice = (reading: string) => check(reading).violations.filter((v) => v.kind === "voice").map((v) => v.named);
+  it("flags rankings the sheet does not make", () => {
+    expect(voice("Mars is the malefic contrary to sect, the hardest planet in the chart.")).toEqual(["hardest"]);
+    expect(voice("December. This is the heaviest phase.")).toEqual(["heaviest"]);
+    expect(voice("Venus, the benefic of sect, gives its help most reliably.")).toEqual(["most reliably"]);
+    expect(voice("Its strongest aspect is [A2] Moon square Mercury.")).toEqual(["strongest"]);
+    // The sheet's own ranking and plain comparatives pass.
+    expect(voice("[A1] Jupiter trine Pluto, orb 0°17', is the tightest aspect.")).toEqual([]);
+    expect(voice("The station carries more weight than the Sun transits, because it is a station contact.")).toEqual([]);
+  });
+
+  it("flags a planet's sign said to hold under a change of birth time (v9 M5, O13)", () => {
+    expect(voice("Mercury sits 1°43' before the end of Sagittarius [E3], but a small change in birth time does not move it.")).toEqual(["sign kept under a change of birth time"]);
+    expect(voice("[E2] puts Venus at 28°11' Aquarius. Neither changes sign with a small change of birth time.")).toEqual(["sign kept under a change of birth time"]);
+    // The Moon and the angles have a shift on the sheet; the rising sign line is checked elsewhere.
+    expect(voice("A small change of birth time does not change the rising sign, by [E1].")).toEqual([]);
+    expect(voice("Jupiter sits 1°54' before the end of Pisces ([E3]); in Aries it would be peregrine.")).toEqual([]);
+  });
+
+  it("flags an outer-planet meaning called traditional (v9 G2, U1, P10)", () => {
+    expect(voice("The trines to Uranus and Neptune add, in a traditional reading, intuition.")).toEqual(["traditional reading of an outer planet"]);
+    expect(voice("[A1] Jupiter trine Pluto ties the two. A traditional reading is that good things are built slowly.")).toEqual(["traditional reading of an outer planet"]);
+    expect(voice("[A1] Jupiter trine Pluto ties the two. A modern reading is that good things are built slowly.")).toEqual([]);
+    expect(voice("Pluto has no place in traditional terms, so a modern reading is given.")).toEqual([]);
+    expect(voice("The Moon sits at the IC, traditionally the point of roots, with Uranus.")).toEqual([]);
+    expect(voice("Mars squares Saturn. A traditional reading is that effort meets delay.")).toEqual([]);
+  });
+});
