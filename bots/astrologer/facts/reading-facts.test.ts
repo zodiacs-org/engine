@@ -404,3 +404,22 @@ describe("two-chart sheets", () => {
     expect(text).not.toMatch(/^\[[GX]\d/m);
   }, 60_000);
 });
+
+describe("out of sign and angle counts", () => {
+  it("marks out-of-sign aspects and angle contacts, and gives the number of planets on an angle", async () => {
+    const f = await facts(RESOLVED);
+    const text = formatReadingFacts(f);
+    const v = f.versions[0]!;
+    const signs = new Map<string, string>([...v.placements.map((p) => [p.point, p.sign] as [string, string]), ["Ascendant", v.ascendant!.sign], ["Midheaven", v.midheaven!.sign]]);
+    const apart: Record<string, number> = { conjunction: 0, sextile: 2, square: 3, trine: 4, opposition: 6 };
+    v.aspects.forEach((a, i) => {
+      const line = text.split("\n").find((l) => l.startsWith(`[A${i + 1}] ${a.rank}. `))!;
+      if (apart[a.type] === undefined) return;
+      const names = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+      const d = Math.abs(names.indexOf(signs.get(a.a)!) - names.indexOf(signs.get(a.b)!));
+      expect(line.includes(", out of sign (")).toBe(Math.min(d, 12 - d) !== apart[a.type]);
+    });
+    const n = v.angleContacts!.length;
+    expect(text).toContain(n === 0 ? "the engine's default orbs): none." : `the engine's default orbs): ${n} in all (`);
+  }, 60_000);
+});

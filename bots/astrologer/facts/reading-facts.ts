@@ -934,6 +934,20 @@ const transitKey = (t: Transit) => `transiting ${t.body} ${t.aspect} natal ${t.n
 const transitWhen = (t: Transit) => (t.range ? `in orb ${t.range.openStart ? "before " : ""}${t.range.from} to ${t.range.openEnd ? "after " : ""}${t.range.to}, ` : "") + (t.exact.length ? `exact ${t.exact.join(", ")}` : "no exact hit");
 const aspectKey = (a: NatalAspect) => `${a.a} ${a.type} ${a.b}`;
 
+/** Signs apart for each aspect that has a whole-sign form: a conjunction in one sign, a sextile two signs apart, and so on. */
+const SIGNS_APART: Readonly<Record<string, number>> = { conjunction: 0, semisextile: 1, sextile: 2, square: 3, trine: 4, quincunx: 5, opposition: 6 };
+
+/** ", out of sign (Venus in Leo, Uranus in Cancer)" when an aspect's two points are not the aspect's number of signs apart. */
+function outOfSign(a: { a: string; b: string; type: string }, signs: Map<string, string>): string {
+  const apart = SIGNS_APART[a.type];
+  const sa = signs.get(a.a);
+  const sb = signs.get(a.b);
+  if (apart === undefined || !sa || !sb) return "";
+  const names = SIGNS.map((x) => x.name as string);
+  const d = Math.abs(names.indexOf(sa) - names.indexOf(sb));
+  return Math.min(d, 12 - d) === apart ? "" : `, out of sign (${a.a} in ${sa}, ${a.b} in ${sb})`;
+}
+
 /**
  * The engine's comparison of the two charts of a fold or gap: what they share
  * and where they differ, line by line, with both charts' IDs.
@@ -1135,13 +1149,16 @@ export function formatReadingFacts(f: ReadingFacts): string {
       L.push(`${id} ${dignityLine(d, v.sect)}`);
     }
 
-    L.push(`Natal aspects, ENGINE RANKING by orb, tightest first (orbs to the arcminute; ${v.aspects.length} aspects; quote this order, do not re-rank):`);
+    L.push(`Natal aspects, ENGINE RANKING by orb, tightest first (orbs to the arcminute; ${v.aspects.length} aspects; quote this order, do not re-rank; "out of sign" marks an aspect whose two points are not in the signs that aspect joins, which is weaker by sign):`);
     const aspectIds = v.aspects.map(() => ids.next("A"));
     ref.aspects = aspectIds;
+    const signOf = new Map<string, string>(v.placements.map((p) => [p.point, p.sign]));
+    if (v.ascendant) signOf.set("Ascendant", v.ascendant.sign);
+    if (v.midheaven) signOf.set("Midheaven", v.midheaven.sign);
     const aspectRef = (a: NatalAspect) => `${aspectIds[a.rank - 1]} ${a.a} ${a.type} ${a.b}, orb ${orbText(a.orb)}`;
     if (v.aspects.length) {
-      L.push(`Tightest aspect: ${aspectRef(v.aspects[0]!)}`);
-      v.aspects.forEach((a, i) => L.push(`${aspectIds[i]} ${a.rank}. ${a.a} ${a.type} ${a.b}, orb ${orbText(a.orb)}`));
+      L.push(`Tightest aspect: ${aspectRef(v.aspects[0]!)}${outOfSign(v.aspects[0]!, signOf)}`);
+      v.aspects.forEach((a, i) => L.push(`${aspectIds[i]} ${a.rank}. ${a.a} ${a.type} ${a.b}, orb ${orbText(a.orb)}${outOfSign(a, signOf)}`));
     } else L.push("none within the engine's default orbs");
 
     L.push("Chart ruler (the domicile lord of the rising sign, traditional rulers; engine facts, quote them):");
@@ -1170,12 +1187,14 @@ export function formatReadingFacts(f: ReadingFacts): string {
     L.push(`${ids.next("L")} Mutual receptions by domicile (each planet in the other's sign): ${d.mutual.length ? d.mutual.map(([a, b]) => `${a} and ${b}`).join("; ") : "none"}.`);
 
     if (v.angleContacts) {
-      L.push("Planets on an angle (a conjunction or opposition with the Ascendant or Midheaven in the ranking above, the engine's default orbs). How to read them: a conjunction with the Ascendant puts the planet on the Ascendant (the rising degree), an opposition with the Ascendant puts it on the Descendant, a conjunction with the Midheaven puts it on the Midheaven (MC), and an opposition with the Midheaven puts it on the IC. A planet not listed here is on no angle, whatever its house:");
+      const n = v.angleContacts.length;
+      L.push(`Planets on an angle (a conjunction or opposition with the Ascendant or Midheaven in the ranking above, the engine's default orbs): ${n === 0 ? "none" : `${n} in all (${v.angleContacts.map((c) => c.point).join(", ")}); this is the count, do not count them yourself, and name every one if you list them`}.`);
+      L.push("How to read them: a conjunction with the Ascendant puts the planet on the Ascendant (the rising degree), an opposition with the Ascendant puts it on the Descendant, a conjunction with the Midheaven puts it on the Midheaven (MC), and an opposition with the Midheaven puts it on the IC. A planet not listed here is on no angle, whatever its house:");
       if (v.angleContacts.length === 0) L.push(`${ids.next("C")} none: no planet or node is on the Ascendant, Descendant, Midheaven or IC within the engine's default orbs.`);
       for (const c of v.angleContacts) {
         const id = ids.next("C");
         ref.angles.push(id);
-        L.push(`- ${id} ${c.point} ${c.type} ${c.angle}, orb ${orbText(c.orb)}: on the ${c.on}, same as ${aspectIds[c.rank - 1]}`);
+        L.push(`- ${id} ${c.point} ${c.type} ${c.angle}, orb ${orbText(c.orb)}${outOfSign({ a: c.point, b: c.angle, type: c.type }, signOf)}: on the ${c.on}, same as ${aspectIds[c.rank - 1]}`);
       }
     }
     if (v.angularHouses) {

@@ -1472,6 +1472,33 @@ function clockViolations(sheet: Sheet, reading: string): Violation[] {
   return out;
 }
 
+const COUNT_NUMBER: Record<string, number> = { no: 0, none: 0, one: 1, single: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+/** "Three planets sit on angles", "no planet is on an angle", "two of your planets are on the angles". */
+const ANGLE_COUNT = /\b(no|none|one|a single|single|two|three|four|five|six|seven|eight|nine|ten|\d{1,2}) (?:of (?:the|your) )?(?:planets?|points?|bodies)(?: and (?:the )?(?:North )?Node)?(?: (?:sit|sits|are|is|lie|lies|fall|falls|stand|stands|placed|found|that sit|that are))? (?:on|at) (?:an |the |your )?angles?\b/gi;
+
+/** A count of the planets on an angle must be the number of [C] lines (with or without the node), in the chart it is said of (v6 P7). */
+function angleCountViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  const onAngle = (c: string) => sheet.relations.filter((x) => /(?:^|-)C\d+$/.test(x.id) && (sheet.charts.length < 2 || sheet.chartOf.get(x.id) === c));
+  if (!sheet.angleLines.length) return out;
+  for (const raw of reading.split(SENTENCE_SPLIT)) {
+    const sentence = raw.trim();
+    for (const m of sentence.matchAll(ANGLE_COUNT)) {
+      const word = m[1]!.toLowerCase().replace(/^a /, "");
+      const n = COUNT_NUMBER[word] ?? Number(word);
+      const charts = sentenceCharts(sheet, sentence);
+      const counts = charts.map((c) => onAngle(c));
+      if (counts.some((list) => list.length === n || list.filter((x) => x.a !== "North Node").length === n)) continue;
+      const list = counts[0]!;
+      out.push({
+        kind: "not-on-sheet", mention: m[0], sentence, named: m[0], sheet: sheet.angleLines,
+        message: `says "${m[0]}", but the sheet's [C] lines put ${list.length} ${list.length === 1 ? "point" : "points"} on an angle${list.length ? ` (${list.map((x) => `[${x.id}] ${x.a}`).join(", ")})` : ""}${charts.length > 1 ? " in chart A, and " + counts[1]!.length + " in chart B" : ""}. Give the sheet's count, or name every [C] line; never count them yourself.`
+      });
+    }
+  }
+  return out;
+}
+
 const same = (r: Relation, a: Point, b: Point, type: AspectType, kinds: RelationKind[], ordered: boolean) =>
   kinds.includes(r.kind) && r.type === type && (r.a === a && r.b === b || (!ordered && r.a === b && r.b === a));
 
@@ -1524,7 +1551,7 @@ export function checkReading(sheetText: string, reading: string): CheckResult {
   // A date the birthday check already flagged is not flagged twice.
   const flagged = new Set(violations.filter((v) => v.kind === "date-mismatch").map((v) => `${v.sentence}|${v.mention}`));
   violations.push(...dateViolations(sheet, reading).filter((v) => !flagged.has(`${v.sentence}|${v.mention}`)));
-  violations.push(...placementViolations(sheet, reading), ...angularViolations(sheet, reading), ...rulerViolations(sheet, reading), ...chartViolations(sheet, reading, mentions));
+  violations.push(...placementViolations(sheet, reading), ...angularViolations(sheet, reading), ...rulerViolations(sheet, reading), ...angleCountViolations(sheet, reading), ...chartViolations(sheet, reading, mentions));
   return { ok: violations.length === 0, mentions: mentions.length, violations, cited };
 }
 

@@ -337,6 +337,24 @@ describe("house, sign and chart rulers", () => {
   });
 });
 
+describe("counts of planets on an angle", () => {
+  const SHEET4 = [
+    "[P1] Ascendant 20°10' Libra; Midheaven 23°36' Cancer (whole sign house 10)",
+    "- [C1] Uranus conjunction Midheaven, orb 5°02': on the Midheaven, same as [A16]",
+    "- [C2] Neptune conjunction Ascendant, orb 5°27': on the Ascendant, same as [A18]",
+    "- [C3] Venus conjunction Midheaven, orb 6°36', out of sign (Venus in Leo, Midheaven in Cancer): on the Midheaven, same as [A22]",
+    "- [C4] Moon opposition Midheaven, orb 9°18': on the IC, same as [A24]"
+  ].join("\n");
+  const flags = (reading: string, sheet = SHEET4) => checkReading(sheet, reading).violations.map((v) => `${v.kind}: ${v.named}`);
+  it("flags a count that is not the number of [C] lines (v6 P7)", () => {
+    expect(flags("Three planets sit on angles: [C1] Uranus conjunction Midheaven, [C2] Neptune conjunction Ascendant and [C3] Venus conjunction Midheaven.")).toEqual(["not-on-sheet: Three planets sit on angles"]);
+    expect(flags("Four planets sit on angles.")).toEqual([]);
+    expect(flags("No planet is on an angle.")).toEqual(["not-on-sheet: No planet is on an angle"]);
+    expect(flags("No planet is on an angle.", "- [C1] none: no planet or node is on the Ascendant, Descendant, Midheaven or IC within the engine's default orbs.")).toEqual([]);
+    expect(checkReading(SHEET4, "Three planets sit on angles.").violations[0]!.message).toContain("[C4] Moon");
+  });
+});
+
 describe("angle paraphrases", () => {
   const flags = (reading: string) => kinds(reading);
   it("reads the rising edge, the top or bottom of the chart and the horizon as angles (v5 O12)", () => {
