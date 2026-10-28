@@ -181,6 +181,41 @@ export interface PlanetDignity {
   };
 }
 
+/** The chart ruler: the domicile lord of the rising sign, with its condition. */
+export interface ChartRuler {
+  risingSign: string;
+  planet: ClassicalPlanet;
+  placement: Placement;
+  dignity: PlanetDignity;
+  /** Its place in the sect team, in words. */
+  sectRole: string;
+  /** Natal aspects that involve the ruler, in the ranking's order. */
+  aspects: NatalAspect[];
+}
+
+/** A planet or the node on an angle: a natal conjunction or opposition with the Ascendant or Midheaven from the aspect ranking. */
+export interface AngleContact {
+  point: string;
+  type: "conjunction" | "opposition";
+  /** The aspect's partner in the ranking. */
+  angle: "Ascendant" | "Midheaven";
+  /** The angle it is on: conjunction Ascendant is on the Ascendant, opposition Ascendant on the Descendant, and so on. */
+  on: "Ascendant" | "Descendant" | "Midheaven" | "IC";
+  orb: number;
+  /** Rank of the same aspect in the natal ranking. */
+  rank: number;
+}
+
+/** The next calendar anniversary of the local birth date on or after the window start. */
+export interface Birthday {
+  date: string;
+  /** Age reached on that date. */
+  turns: number;
+  inWindow: boolean;
+  /** Born on 29 February: in a common year the date given is 1 March. */
+  leapDay: boolean;
+}
+
 export interface ChartVersion {
   label: string;
   utc: string;
@@ -197,6 +232,14 @@ export interface ChartVersion {
   dignities: PlanetDignity[];
   placidusUndefined: boolean;
   aspects: NatalAspect[];
+  /** Null without a birth time. */
+  chartRuler: ChartRuler | null;
+  /** Empty when no planet is on an angle; null without a birth time. */
+  angleContacts: AngleContact[] | null;
+  /** Points in whole sign houses 1, 4, 7 and 10; null without a birth time. */
+  angularHouses: { house: 1 | 4 | 7 | 10; points: string[] }[] | null;
+  /** The solar return for the next birthday: the local date the Sun is back at its natal longitude. Null when born on or after the window start. */
+  solarReturn: { date: string; inWindow: boolean } | null;
   edges: EdgePoint[];
   transits: Transit[];
   transitPoints: string[];
@@ -215,6 +258,8 @@ export interface ReadingFacts {
   offsets: { before: number; after: number } | null;
   window: { from: string; toInclusive: string; days: number; zone: string };
   age: Age;
+  /** Null when born on or after the window start. */
+  birthday: Birthday | null;
   stations: Station[];
   versions: ChartVersion[];
 }
@@ -295,6 +340,21 @@ export function ageAt(birth: string, at: string): Age {
   return { at, years, months: months % 12, bornAfterStart: false, daysAfterStart: 0, stage };
 }
 
+const isLeapYear = (y: number) => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+
+/** The next calendar anniversary of local birth date `birth` on or after local date `from`, and the age reached then; null when born on or after `from`. */
+export function nextBirthday(birth: string, from: string, days: number): Birthday | null {
+  // Born on or after the window start: no anniversary yet.
+  if (birth >= from) return null;
+  const [by, bm, bd] = birth.split("-").map(Number) as [number, number, number];
+  const leapDay = bm === 2 && bd === 29;
+  const on = (y: number) => (leapDay && !isLeapYear(y) ? `${y}-03-01` : `${y}-${String(bm).padStart(2, "0")}-${String(bd).padStart(2, "0")}`);
+  let year = Number(from.slice(0, 4));
+  if (on(year) < from) year += 1;
+  const date = on(year);
+  return { date, turns: year - by, inWindow: date <= addDays(from, days - 1), leapDay };
+}
+
 // ------------------------------------------------------------------ dignities
 
 function planetDignity(planet: ClassicalPlanet, lon: number, sect: "day" | "night" | null): PlanetDignity {
@@ -325,6 +385,42 @@ function planetDignity(planet: ClassicalPlanet, lon: number, sect: "day" | "nigh
     peregrine: dignities.length > 0 ? false : triplicityIf.length === 0 ? true : triplicityIf.length === 2 ? false : null,
     triplicityIf: [...triplicityIf]
   };
+}
+
+// ------------------------------------------------------------------ chart ruler and angles
+
+/** A classical planet's place in the sect team, in words. */
+export function sectRole(planet: ClassicalPlanet, team: SectTeam | null, mercuryPhase: "morning" | "evening"): string {
+  if (!team) return "unavailable (sect needs a birth time)";
+  if (planet === "Mercury") {
+    const joins = mercuryPhase === "morning" ? "day" : "night";
+    return `a ${mercuryPhase} star, so it joins the ${joins} sect: ${joins === team.sect ? "in sect" : "contrary to sect"} in this ${team.sect} chart`;
+  }
+  if (planet === team.light) return `sect light of this ${team.sect} chart`;
+  if (planet === "Sun" || planet === "Moon") return `the ${planet === "Sun" ? "day" : "night"} light, contrary to sect in this ${team.sect} chart`;
+  if (planet === team.beneficOfSect) return "benefic of sect";
+  if (planet === team.maleficOfSect) return "malefic of sect";
+  if (planet === team.beneficContrary) return "benefic contrary to sect";
+  return "malefic contrary to sect (the out-of-sect malefic)";
+}
+
+const ANGLE_ON = {
+  Ascendant: { conjunction: "Ascendant", opposition: "Descendant" },
+  Midheaven: { conjunction: "Midheaven", opposition: "IC" }
+} as const;
+
+/** Planets on an angle: the natal conjunctions and oppositions with the Ascendant or Midheaven in the ranking. */
+export function angleContactsFrom(aspects: NatalAspect[]): AngleContact[] {
+  const out: AngleContact[] = [];
+  for (const a of aspects) {
+    if (a.type !== "conjunction" && a.type !== "opposition") continue;
+    const angle = a.b === "Ascendant" || a.b === "Midheaven" ? a.b : a.a === "Ascendant" || a.a === "Midheaven" ? a.a : null;
+    if (!angle) continue;
+    const point = angle === a.b ? a.a : a.b;
+    if (point === "Ascendant" || point === "Midheaven") continue;
+    out.push({ point, type: a.type, angle, on: ANGLE_ON[angle][a.type], orb: a.orb, rank: a.rank });
+  }
+  return out;
 }
 
 // ------------------------------------------------------------------ civil time
@@ -589,7 +685,7 @@ function natalAspectPolicy(): AspectPolicy {
   return natalPolicy;
 }
 
-function chartVersion(input: ReadingInput, instant: Instant, timeKnown: boolean, window: { fromMs: number; toMs: number }, stations: Station[]): ChartVersion {
+function chartVersion(input: ReadingInput, instant: Instant, timeKnown: boolean, window: { fromMs: number; toMs: number; from: string; days: number }, stations: Station[]): ChartVersion {
   const utc = new Date(instant.ms);
   const chart: Chart = natalChart({ utc, latitude: input.lat, longitude: input.lon, houseSystem: "whole", timeKnown });
   const asc = chart.angles?.asc ?? null;
@@ -623,6 +719,34 @@ function chartVersion(input: ReadingInput, instant: Instant, timeKnown: boolean,
   const mercuryPhase = normalizeLongitude(lonOf("Sun") - lonOf("Mercury")) < 180 ? "morning" : "evening";
   const dignities = CLASSICAL_PLANETS.filter((p) => timeKnown || p !== "Moon").map((p) => planetDignity(p, lonOf(p), sect));
 
+  let chartRuler: ChartRuler | null = null;
+  if (asc !== null) {
+    const planet = dignityRulersAt(asc).domicile;
+    chartRuler = {
+      risingSign: signName(asc),
+      planet,
+      placement: placements.find((p) => p.point === planet)!,
+      dignity: dignities.find((d) => d.planet === planet)!,
+      sectRole: sectRole(planet, sect === null ? null : SECT_TEAMS[sect], mercuryPhase),
+      aspects: aspects.filter((a) => a.a === planet || a.b === planet)
+    };
+  }
+  const angularHouses = asc === null
+    ? null
+    : ([1, 4, 7, 10] as const).map((house) => ({ house, points: placements.filter((p) => p.house === house).map((p) => p.point) }));
+
+  const sunLon = lonOf("Sun");
+  let solarReturn: ChartVersion["solarReturn"] = null;
+  const bday = nextBirthday(input.date, window.from, window.days);
+  if (bday) {
+    // The Sun returns to its natal longitude within about two days of the calendar anniversary.
+    const around = resolveLocalToUtc(bday.date, "12:00", input.zone).utc.getTime();
+    const found = searchLongitudeCrossings("Sun", sunLon, new Date(around - 4 * DAY), new Date(around + 4 * DAY), { stepDays: 1 });
+    if (found.status !== "complete" || found.crossings.length !== 1) throw new Error("solar return search failed");
+    const at = found.crossings[0]!.at.getTime();
+    solarReturn = { date: localDate(input.zone, at), inWindow: at >= window.fromMs && at < window.toMs };
+  }
+
   const local = localParts(input.zone, instant.ms);
   let moonSigns: string[] | null = null;
   const daySignChanges: ChartVersion["daySignChanges"] = [];
@@ -650,6 +774,10 @@ function chartVersion(input: ReadingInput, instant: Instant, timeKnown: boolean,
     dignities,
     placidusUndefined,
     aspects,
+    chartRuler,
+    angleContacts: asc === null ? null : angleContactsFrom(aspects),
+    angularHouses,
+    solarReturn,
     edges,
     transits,
     transitPoints: transitPoints.map((p) => p.name),
@@ -677,8 +805,9 @@ export async function buildReadingFacts(input: ReadingInput, options: ReadingOpt
     offsets: civil.offsets,
     window: { from: windowStart, toInclusive: addDays(windowStart, days - 1), days, zone: input.zone },
     age: ageAt(input.date, windowStart),
+    birthday: nextBirthday(input.date, windowStart, days),
     stations,
-    versions: civil.instants.map((instant) => chartVersion(input, instant, timeKnown, { fromMs, toMs }, stations))
+    versions: civil.instants.map((instant) => chartVersion(input, instant, timeKnown, { fromMs, toMs, from: windowStart, days }, stations))
   };
 }
 
@@ -686,8 +815,10 @@ export async function buildReadingFacts(input: ReadingInput, options: ReadingOpt
 
 /**
  * Every fact line of the sheet starts with a stable short ID in square
- * brackets, unique within the sheet and numbered in sheet order: N age, P
- * placements, K sect, D dignities, A natal aspects, E sign edges, T transits,
+ * brackets, unique within the sheet and numbered in sheet order: N age and
+ * next birthday, P placements, K sect, D dignities, A natal aspects, R chart
+ * ruler, C planets on an angle, H angular houses, E sign edges, B solar
+ * return, T transits,
  * S stations, and S1a, S1b, ... each contact of station S1. The same input and
  * options give the same IDs. `check-reading.ts` parses these lines.
  */
@@ -723,6 +854,13 @@ function ageLine(a: Age): string {
   return `Age at the window start (${a.at}): ${unit(a.years, "year")} ${unit(a.months, "month")} (calendar age from the local birth date). Stage: ${a.stage}${a.stage === "adult" ? "" : " (under 18)"}.`;
 }
 
+function birthdayLine(b: Birthday | null, birth: string, window: ReadingFacts["window"]): string {
+  if (!b) return `Next birthday: none to give; the birth date ${birth} is on or after the window start.`;
+  const where = b.date === window.from ? "the first day of the window" : b.inWindow ? "inside the window" : "after the window";
+  const leap = b.leapDay ? " Born on 29 February: in a common year this sheet gives 1 March; some keep 28 February." : "";
+  return `Next birthday (calendar anniversary of the local birth date ${birth}): ${b.date}, when the person turns ${b.turns}; ${where}.${leap}`;
+}
+
 function teamLine(t: SectTeam): string {
   return `${t.sect} chart: sect light ${t.light}; benefic of sect ${t.beneficOfSect}; malefic of sect ${t.maleficOfSect}; benefic contrary to sect ${t.beneficContrary}; malefic contrary to sect (the out-of-sect malefic) ${t.maleficContrary}`;
 }
@@ -748,6 +886,7 @@ export function formatReadingFacts(f: ReadingFacts): string {
   L.push("Each fact line starts with an ID in square brackets: a letter and a number, such as T3. Name an aspect, transit, station or contact only by quoting its line with that ID, exactly as written: the same planets, the same aspect word, the same order.");
   L.push(`resolve_civil_time status: ${f.status}`);
   L.push(`${ids.next("N")} ${ageLine(f.age)}`);
+  L.push(`${ids.next("N")} ${birthdayLine(f.birthday, f.input.date, f.window)}`);
   if (f.lmt) L.push("Zone note: the birthplace kept local mean time on this date; the engine used the birthplace's local mean time.");
   if (f.status === "fold") {
     L.push(`The local time ${f.input.time} happened twice in ${z} (clock went from ${offsetText(f.offsets!.before)} to ${offsetText(f.offsets!.after)}). Both charts follow. Ask the person which occurrence, or read only what both share.`);
@@ -786,14 +925,41 @@ export function formatReadingFacts(f: ReadingFacts): string {
     if (v.placidusUndefined) L.push("Placidus houses: undefined at this latitude (polar); the whole sign houses above are unaffected.");
 
     L.push("Essential dignities (engine, @zodiacs/engine/techniques): domiciles Tetrabiblos I.17; exaltations and falls Tetrabiblos I.19; detriments the signs opposite the domiciles; Dorothean triplicities (Dorotheus I.1.3), the lord of the chart's sect counted, not the participating lord; Egyptian terms (Tetrabiblos I.20); Chaldean faces; peregrine means no essential dignity (Lilly, Christian Astrology, p. 112). Seven classical planets only; Uranus, Neptune, Pluto and the node have none in this scheme. Quote these; never decide a dignity yourself:");
-    for (const d of v.dignities) L.push(`${ids.next("D")} ${dignityLine(d, v.sect)}`);
+    const dignityIds = new Map<string, string>();
+    for (const d of v.dignities) {
+      const id = ids.next("D");
+      dignityIds.set(d.planet, id);
+      L.push(`${id} ${dignityLine(d, v.sect)}`);
+    }
 
     L.push(`Natal aspects, ENGINE RANKING by orb, tightest first (orbs to the arcminute; ${v.aspects.length} aspects; quote this order, do not re-rank):`);
+    const aspectIds = v.aspects.map(() => ids.next("A"));
+    const aspectRef = (a: NatalAspect) => `${aspectIds[a.rank - 1]} ${a.a} ${a.type} ${a.b}, orb ${orbText(a.orb)}`;
     if (v.aspects.length) {
-      const aspectIds = v.aspects.map(() => ids.next("A"));
-      L.push(`Tightest aspect: ${aspectIds[0]} ${v.aspects[0]!.a} ${v.aspects[0]!.type} ${v.aspects[0]!.b}, orb ${orbText(v.aspects[0]!.orb)}`);
+      L.push(`Tightest aspect: ${aspectRef(v.aspects[0]!)}`);
       v.aspects.forEach((a, i) => L.push(`${aspectIds[i]} ${a.rank}. ${a.a} ${a.type} ${a.b}, orb ${orbText(a.orb)}`));
     } else L.push("none within the engine's default orbs");
+
+    L.push("Chart ruler (the domicile lord of the rising sign, traditional rulers; engine facts, quote them):");
+    const r = v.chartRuler;
+    if (!r) {
+      L.push(`${ids.next("R")} Chart ruler: unavailable (the rising sign needs a birth time).`);
+    } else {
+      const d = r.dignity;
+      const condition = `dignities ${d.dignities.length ? d.dignities.join(", ") : "none"}; debilities ${d.debilities.length ? d.debilities.join(", ") : "none"}; ${d.peregrine === null ? "peregrine unless it holds triplicity" : d.peregrine ? "peregrine" : "not peregrine"}`;
+      L.push(`${ids.next("R")} Chart ruler: ${r.planet} (${r.risingSign} rising). ${placementLine(r.placement)}. Condition (${dignityIds.get(r.planet)}): ${condition}. Sect role: ${r.sectRole}.`);
+      L.push(`${ids.next("R")} Chart ruler's aspects, in the ranking's order: ${r.aspects.length ? r.aspects.map(aspectRef).join("; ") : `none: ${r.planet} has no aspect in the ranking`}.`);
+    }
+
+    if (v.angleContacts) {
+      L.push("Planets on an angle (a conjunction or opposition with the Ascendant or Midheaven in the ranking above, the engine's default orbs). How to read them: a conjunction with the Ascendant puts the planet on the Ascendant (the rising degree), an opposition with the Ascendant puts it on the Descendant, a conjunction with the Midheaven puts it on the Midheaven (MC), and an opposition with the Midheaven puts it on the IC. A planet not listed here is on no angle, whatever its house:");
+      if (v.angleContacts.length === 0) L.push(`${ids.next("C")} none: no planet or node is on the Ascendant, Descendant, Midheaven or IC within the engine's default orbs.`);
+      for (const c of v.angleContacts) L.push(`- ${ids.next("C")} ${c.point} ${c.type} ${c.angle}, orb ${orbText(c.orb)}: on the ${c.on}, same as ${aspectIds[c.rank - 1]}`);
+    }
+    if (v.angularHouses) {
+      const held = v.angularHouses.filter((h) => h.points.length).map((h) => `house ${h.house} ${h.points.join(", ")}`);
+      L.push(`${ids.next("H")} Points in the angular houses (whole sign houses 1, 4, 7 and 10; a house placement, not a contact with the angle's degree): ${held.length ? held.join("; ") : "none"}.`);
+    }
 
     L.push(`Points within ${EDGE_DEGREES}° of a sign edge (engine check over every point listed above):`);
     if (v.edges.length === 0) L.push(`${ids.next("E")} none: no listed point is within ${EDGE_DEGREES}° of a sign edge.`);
@@ -805,6 +971,11 @@ export function formatReadingFacts(f: ReadingFacts): string {
       L.push(`- ${ids.next("E")} ${e.point} ${e.degree} ${e.sign}: ${where}${shift}`);
     }
 
+    if (v.solarReturn) {
+      const where = v.solarReturn.inWindow ? "inside the window" : "after the window";
+      const approx = v.timeKnown ? "" : " (from the noon reference: plus or minus 1 day)";
+      L.push(`${ids.next("B")} Solar return (transiting Sun conjunction natal Sun, the Sun back at its birth longitude) for the birthday of ${f.birthday!.date}: exact ${v.solarReturn.date}${approx}, ${where}, date in ${z}.`);
+    }
     L.push(`Transits ${f.window.from} to ${f.window.toInclusive} inclusive (${f.window.days} days), dates in the person's zone (${z}). Bodies: ${TRANSITING.join(", ")}. Aspects: ${TRANSIT_ASPECTS.join(", ")}. Natal points: ${v.transitPoints.join(", ")}. Uranus, Neptune and Pluto are given as in-orb date ranges, never as a single day:`);
     if (v.transits.length === 0) L.push("- none in the window for these bodies, aspects and points.");
     for (const t of v.transits) L.push(`- ${ids.next("T")} ${transitLine(t)}`);

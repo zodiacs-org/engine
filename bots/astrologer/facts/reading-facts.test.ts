@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ageAt, buildReadingFacts, formatReadingFacts, degreeText, orbText, STATION_ORB, SLOW } from "./reading-facts.js";
+import { ageAt, angleContactsFrom, buildReadingFacts, formatReadingFacts, degreeText, nextBirthday, orbText, sectRole, SECT_TEAMS, STATION_ORB, SLOW } from "./reading-facts.js";
 import type { ReadingFacts, ReadingInput } from "./reading-facts.js";
 import { bodyLongitude, longitudeSpeed } from "../../../src/ephemeris.js";
 
@@ -196,6 +196,99 @@ describe("age, sect team and dignities", () => {
             expect(d.triplicityIf).toEqual((["day", "night"] as const).filter((s) => lords[s] === d.planet));
           }
         }
+      }
+    }
+  }, 120_000);
+});
+
+describe("chart ruler, angles and birthday", () => {
+  // Traditional domicile lords, Aries to Pisces (Tetrabiblos I.17), written out here.
+  const LORDS = ["Mars", "Venus", "Mercury", "Moon", "Sun", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Saturn", "Jupiter"];
+  const SIGN_NAMES = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+
+  it("names the domicile lord of the rising sign as chart ruler, with its placement, dignity and aspects", async () => {
+    for (const input of [RESOLVED, GAP, FOLD]) {
+      for (const v of (await facts(input)).versions) {
+        const r = v.chartRuler!;
+        expect(r.risingSign).toBe(v.ascendant!.sign);
+        expect(r.planet).toBe(LORDS[SIGN_NAMES.indexOf(v.ascendant!.sign)]);
+        expect(r.placement).toEqual(v.placements.find((p) => p.point === r.planet));
+        expect(r.dignity).toEqual(v.dignities.find((d) => d.planet === r.planet));
+        expect(r.aspects).toEqual(v.aspects.filter((a) => a.a === r.planet || a.b === r.planet));
+      }
+    }
+    const text = formatReadingFacts(await facts(RESOLVED));
+    expect(text).toMatch(/^\[R1\] Chart ruler: \w+ \(\w+ rising\)\. .* Condition \(\[D\d\]\): .* Sect role: /m);
+    expect(text).toMatch(/^\[R2\] Chart ruler's aspects, in the ranking's order: /m);
+  }, 120_000);
+
+  it("gives no chart ruler, angle contacts or angular houses without a birth time", async () => {
+    const f = await facts(UNKNOWN);
+    expect(f.versions[0]!.chartRuler).toBeNull();
+    expect(f.versions[0]!.angleContacts).toBeNull();
+    const text = formatReadingFacts(f);
+    expect(text).toContain("[R1] Chart ruler: unavailable");
+    expect(text).not.toMatch(/^\[C\d+\]|^- \[C\d+\]|^\[H\d+\]/m);
+  }, 60_000);
+
+  it("places a planet on an angle only from a conjunction or opposition with the Ascendant or Midheaven", () => {
+    const aspects = [
+      { rank: 1, a: "Saturn", b: "Midheaven", type: "conjunction", orb: 0.5 },
+      { rank: 2, a: "Moon", b: "Ascendant", type: "opposition", orb: 1 },
+      { rank: 3, a: "Venus", b: "Ascendant", type: "square", orb: 1.5 },
+      { rank: 4, a: "Sun", b: "Moon", type: "conjunction", orb: 2 }
+    ];
+    expect(angleContactsFrom(aspects).map((c) => `${c.point} on the ${c.on}`)).toEqual(["Saturn on the Midheaven", "Moon on the Descendant"]);
+  });
+
+  it("lists angle contacts consistent with the separation to each angle, or says none", async () => {
+    for (const input of [RESOLVED, GAP, FOLD]) {
+      for (const v of (await facts(input)).versions) {
+        for (const c of v.angleContacts!) {
+          const angleLon = c.angle === "Ascendant" ? v.ascendant!.lon : v.midheaven!.lon;
+          const lon = v.placements.find((p) => p.point === c.point)!.lon;
+          expect(Math.abs(sep(lon, angleLon) - (c.type === "conjunction" ? 0 : 180))).toBeCloseTo(c.orb, 6);
+        }
+        const text = formatReadingFacts(await facts(input));
+        if (v.angleContacts!.length === 0) expect(text).toMatch(/\[C\d+\] none: no planet or node is on the Ascendant/);
+      }
+    }
+  }, 120_000);
+
+  it("gives the sect role of each classical planet from the team", () => {
+    expect(sectRole("Saturn", SECT_TEAMS.day, "morning")).toBe("malefic of sect");
+    expect(sectRole("Saturn", SECT_TEAMS.night, "morning")).toBe("malefic contrary to sect (the out-of-sect malefic)");
+    expect(sectRole("Moon", SECT_TEAMS.night, "morning")).toBe("sect light of this night chart");
+    expect(sectRole("Moon", SECT_TEAMS.day, "morning")).toBe("the night light, contrary to sect in this day chart");
+    expect(sectRole("Mercury", SECT_TEAMS.night, "morning")).toMatch(/joins the day sect: contrary to sect/);
+    expect(sectRole("Jupiter", null, "morning")).toMatch(/^unavailable/);
+  });
+
+  it("gives the next birthday on or after the window start, and the age reached", () => {
+    expect(nextBirthday("2015-11-11", "2026-11-01", 90)).toEqual({ date: "2026-11-11", turns: 11, inWindow: true, leapDay: false });
+    expect(nextBirthday("1968-11-01", "2026-11-01", 90)).toMatchObject({ date: "2026-11-01", turns: 58, inWindow: true });
+    expect(nextBirthday("1990-06-15", "2026-11-01", 90)).toMatchObject({ date: "2027-06-15", turns: 37, inWindow: false });
+    expect(nextBirthday("2000-02-29", "2026-11-01", 90)).toMatchObject({ date: "2027-03-01", turns: 27, leapDay: true });
+    expect(nextBirthday("2027-01-05", "2026-11-01", 90)).toBeNull();
+    expect(nextBirthday("2026-11-01", "2026-11-01", 90)).toBeNull();
+  });
+
+  it("dates the solar return on the day the Sun is back at its natal longitude, matching the transit line", async () => {
+    for (const input of [RESOLVED, GAP, FOLD, UNKNOWN]) {
+      const f = await facts(input);
+      for (const v of f.versions) {
+        const sr = v.solarReturn;
+        if (!f.birthday) {
+          expect(sr).toBeNull();
+          continue;
+        }
+        const natalSun = v.placements.find((p) => p.point === "Sun")!.lon;
+        // Within a day of the local date the Sun is within about 1 degree of its natal longitude.
+        const noon = Date.parse(`${sr!.date}T12:00:00Z`);
+        expect(sep(bodyLongitude("Sun", new Date(noon)), natalSun)).toBeLessThan(1.1);
+        const inWindow = v.transits.find((t) => t.body === "Sun" && t.natal === "Sun" && t.aspect === "conjunction");
+        if (sr!.inWindow) expect(inWindow?.exact).toEqual([sr!.date]);
+        else expect(inWindow).toBeUndefined();
       }
     }
   }, 120_000);
