@@ -173,6 +173,8 @@ export interface Sheet {
   chains: Map<string, { body: Point; end: Point[]; line: string }[]>;
   /** Each chart's final dispositor line: the planet, or null for "none", and the line. */
   finalDispositor: Map<string, { planet: Point | null; line: string }>;
+  /** Each chart's rising sign line: the minutes earlier and later that change the rising sign (null when none in the search), and the line. */
+  risingShift: Map<string, { earlier: number | null; later: number | null; line: string }>;
 }
 
 /** Reads the relations and IDs from a sheet written by `formatReadingFacts`. */
@@ -200,6 +202,7 @@ export function parseSheet(text: string): Sheet {
   const chartSides: Sheet["chartSides"] = new Map();
   const chains: Sheet["chains"] = new Map();
   const finalDispositor: Sheet["finalDispositor"] = new Map();
+  const risingShift: Sheet["risingShift"] = new Map();
   let chart: string | null = null;
   const natalOf = (p: Point) => {
     if (!natal.has(p)) natal.set(p, { signs: new Set(), houses: new Set() });
@@ -246,6 +249,10 @@ export function parseSheet(text: string): Sheet {
       }
       const final = new RegExp(`^${ID("L")} Final dispositor: (none|${POINT_RE})`).exec(line.slice(tag.index));
       if (final) finalDispositor.set(chart ?? "A", { planet: final[1] === "none" ? null : final[1] as Point, line: line.slice(tag.index) });
+      if (new RegExp(`^${ID("E")} Rising sign `).test(line.slice(tag.index))) {
+        const by = (dir: string) => { const x = new RegExp(`(\\d+) minutes? ${dir} or more`).exec(line); return x ? Number(x[1]) : null; };
+        risingShift.set(chart ?? "A", { earlier: by("earlier"), later: by("later"), line: line.slice(tag.index) });
+      }
       const parent = /^(?:[AB]-)?S\d+[a-z]$/.test(id) ? id.slice(0, -1) : null;
       lineDates.set(id, [...(parent ? lineDates.get(parent) ?? [] : []), ...isoDates]);
       lineOrbs.set(id, [...line.matchAll(/\borb (\d+°\d{2}')/g)].map((m) => m[1]!));
@@ -298,7 +305,7 @@ export function parseSheet(text: string): Sheet {
   // "Born on 29 February: in a common year this sheet gives 1 March; some keep 28 February."
   if (birthday && /Born on 29 February/.test(text)) for (const md of ["02-28", "02-29"]) baseDates.add(`${birthday.date.slice(0, 4)}-${md}`);
   if (charts.length === 0) charts.push("A");
-  return { relations, ids, birthday, solarReturns, angleLines, natal, angular, moving, lineDates, lineOrbs, ranges, window, baseDates, allDates, charts, chartOf, chartLabels, chartNatal, rising, chartRulers, chartSides, chains, finalDispositor };
+  return { relations, ids, birthday, solarReturns, angleLines, natal, angular, moving, lineDates, lineOrbs, ranges, window, baseDates, allDates, charts, chartOf, chartLabels, chartNatal, rising, chartRulers, chartSides, chains, finalDispositor, risingShift };
 }
 
 // ------------------------------------------------------------------ the reading
@@ -1559,6 +1566,193 @@ function angleHouseViolations(sheet: Sheet, reading: string): Violation[] {
   return out;
 }
 
+// ------------------------------------------------------------------ group placements, window phases and "the same day"
+
+/** "both in the eighth house", "are all in Scorpio": a house or sign said of every point before it. */
+const GROUP_PLACE = new RegExp(`\\b(?:both|all|each|all three|all four|all of them|together)\\b,? (?:(?:are|sit|fall|lie|placed|found|now) )?in (?:the |your )?(?:(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|\\d{1,2}(?:st|nd|rd|th))[- ]house|house (\\d{1,2})\\b|(${SIGN_RE})\\b)`, "g");
+
+/**
+ * "[A1] Moon trine Mercury and [A13] Sun conjunction Mercury, both in the eighth house" when the Moon is in the fourth
+ * (v7 O2): a house or sign said of a group must be the natal house or sign of every planet named before it in the clause.
+ * Sentences about transits or stations are not read.
+ */
+function groupPlaceViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  for (const raw of reading.split(SENTENCE_SPLIT)) {
+    const sentence = raw.trim();
+    if (!sentence || /\b(transiting|stationing|stations?|transits?)\b/i.test(sentence) || /\[(?:[AB]-)?[TSB]\d+[a-z]?\]/.test(sentence)) continue;
+    if (/\b(would|if|were)\b/i.test(sentence)) continue;
+    const charts = sentenceCharts(sheet, sentence);
+    for (const m of sentence.matchAll(GROUP_PLACE)) {
+      const head = sentence.slice(0, m.index).split(CLAUSE_SPLIT).at(-1)?.split("**").at(-1) ?? "";
+      const points = [...new Set(tokenize(head).filter((t) => t.point && !ANGLES.has(t.point.point)).map((t) => t.point!.point))];
+      if (points.length < 2) continue;
+      const house = m[1] ? ORDINALS[m[1].toLowerCase()] ?? null : m[2] ? Number(m[2]) : null;
+      const sign = m[3] ?? null;
+      const wrong = points.filter((p) => {
+        const at = charts.map((c) => sheet.chartNatal.get(c)?.get(p)).filter((x) => !!x);
+        if (!at.length) return false;
+        return house !== null ? at.every((x) => x!.houses.size > 0 && !x!.houses.has(house)) : at.every((x) => x!.signs.size > 0 && !x!.signs.has(sign!));
+      });
+      if (!wrong.length) continue;
+      const where = (p: Point) => charts.flatMap((c) => [...((house !== null ? sheet.chartNatal.get(c)?.get(p)?.houses : sheet.chartNatal.get(c)?.get(p)?.signs) ?? [])]).join(" or ");
+      out.push({
+        kind: house !== null ? "house-mismatch" : "sign-mismatch", mention: m[0], sentence, named: `${points.join(", ")} ${m[0]}`, sheet: [],
+        message: `puts ${points.join(", ")} "${m[0]}", but ${wrong.map((p) => `${p} is in ${house !== null ? "house " : ""}${where(p)}`).join(", ")} (the placement lines). An aspect has no house of its own: give each planet's own house.`
+      });
+    }
+  }
+  return out;
+}
+
+const WINDOW_END = /\b(?:near|toward|towards|at|by|close to|around) the (?:window's (?:end|close)|end of the window|close of the window)\b|\b(?:late|later) in the window\b|\bin the window's (?:last|final|closing) (?:weeks?|days|month)\b/i;
+const WINDOW_START = /\b(?:near|at|around|close to) the (?:window's (?:start|opening|beginning)|start of the window|beginning of the window|opening of the window)\b|\bearly in the window\b|\bin the window's (?:first|opening) (?:weeks?|days|month)\b/i;
+
+/** "Near the window's end, [S1a] ... falls in mid-November" in a window that starts 1 November (v7 O2): the dates must be in the last (or first) third, or half for "late (early) in the window". */
+function windowPhaseViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  if (!sheet.window) return out;
+  const day = (iso: string) => Date.parse(`${iso}T00:00:00Z`) / 86_400_000;
+  const from = day(sheet.window.from);
+  const span = day(sheet.window.to) - from;
+  const year = Number(sheet.window.from.slice(0, 4));
+  const isoOf = (d: DateAt) => {
+    // A date written with no year: the year that puts it in the window.
+    const y = d.year ?? (`${sheet.window!.from.slice(5)}` <= d.md ? year : year + 1);
+    return `${y}-${d.md}`;
+  };
+  for (const raw of reading.split(SENTENCE_SPLIT)) {
+    const sentence = raw.trim();
+    const end = WINDOW_END.exec(sentence);
+    const start = WINDOW_START.exec(sentence);
+    const phrase = end ?? start;
+    if (!phrase) continue;
+    // "Near the window's end": the last third; "late in the window": the second half (and the same for the start).
+    const loose = /\b(?:late|later|early) in\b/i.test(phrase[0]);
+    const part = loose ? 1 / 2 : 1 / 3;
+    const inPart = (iso: string) => (end ? day(iso) >= from + (1 - part) * span : day(iso) <= from + part * span);
+    // A date not on the sheet is the date check's to flag.
+    const written = datesIn(sentence).map(isoOf).filter((d) => sheet.allDates.has(d));
+    const quoted = [...sentence.matchAll(ID_G)].map((x) => x[1]!).filter((id) => (sheet.lineDates.get(id) ?? []).length);
+    const bad = written.length ? written.filter((d) => !inPart(d)) : quoted.filter((id) => !(sheet.lineDates.get(id) ?? []).some(inPart)).flatMap((id) => sheet.lineDates.get(id)!.slice(0, 1).map((d) => `${d} ([${id}])`));
+    if (!bad.length || (written.length === 0 && quoted.length === 0)) continue;
+    out.push({
+      kind: "date-mismatch", mention: phrase[0], sentence, named: `"${phrase[0]}" for ${bad.join(", ")}`, sheet: quoted.map((id) => sheet.ids.get(id) ?? ""),
+      message: `says "${phrase[0]}", but ${bad.join(", ")} is not in the ${end ? "last" : "first"} ${loose ? "half" : "third"} of the window (${sheet.window.from} to ${sheet.window.to}). Give the date instead.`
+    });
+  }
+  return out;
+}
+
+const SAME_DAY = /\b(?:the|that) same (?:day|date)\b|\bthat day\b/gi;
+
+/**
+ * "[T5] ..., exact 2026-11-22 ... [T4] transiting Sun trine natal Moon falls the same day" when [T4] is exact 2026-11-21
+ * (v7 O15): the lines quoted in the part of the sentence that says "the same day" must share a date with what it refers
+ * to, the dates and lines written before it in the sentence, or else in the sentence before.
+ */
+function sameDayViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  const sentences = reading.split(SENTENCE_SPLIT).map((x) => x.trim());
+  const datesOfText = (text: string): string[] => {
+    const written = datesIn(text);
+    if (written.length) return written.map((d) => `${d.year ?? "*"}-${d.md}`);
+    return [...text.matchAll(ID_G)].flatMap((x) => sheet.lineDates.get(x[1]!) ?? []);
+  };
+  const agrees = (iso: string, ref: string[]) => ref.some((r) => r.slice(-5) === iso.slice(5) && (r.startsWith("*") || r.slice(0, 4) === iso.slice(0, 4)));
+  sentences.forEach((sentence, si) => {
+    for (const m of sentence.matchAll(SAME_DAY)) {
+      // The segment that says it: from the last comma, "with" or "and" before the phrase to the next comma after it.
+      const left = sentence.slice(0, m.index);
+      const cut = Math.max(left.lastIndexOf(","), left.lastIndexOf(";"), left.search(/\b(?:with|and)\s+\[[^\]]*\][^\[]*$/));
+      const nextComma = sentence.indexOf(",", m.index! + m[0].length);
+      const segment = sentence.slice(cut + 1, nextComma < 0 ? sentence.length : nextComma);
+      const ids = [...segment.matchAll(ID_G)].map((x) => x[1]!).filter((id) => (sheet.lineDates.get(id) ?? []).length && !/^(?:[AB]-)?[NB]\d+$/.test(id));
+      if (!ids.length || datesIn(segment).length) continue;
+      const before = sentence.slice(0, cut + 1);
+      const ref = datesOfText(before).length ? datesOfText(before) : si > 0 ? datesOfText(sentences[si - 1]!) : [];
+      if (!ref.length) continue;
+      const wrong = ids.filter((id) => !(sheet.lineDates.get(id) ?? []).some((iso) => agrees(iso, ref)));
+      if (!wrong.length) continue;
+      out.push({
+        kind: "date-mismatch", mention: m[0], sentence, named: `${wrong.map((id) => `[${id}]`).join(", ")} "${m[0]}"`, sheet: wrong.map((id) => sheet.ids.get(id) ?? ""),
+        message: `says ${wrong.map((id) => `[${id}]`).join(", ")} falls "${m[0]}" as ${[...new Set(ref.map((r) => r.replace(/^\*-/, "")))].join(" or ")}, but ${wrong.map((id) => `[${id}] is dated ${(sheet.lineDates.get(id) ?? []).join(", ")}`).join("; ")}. Give each line's own date.`
+      });
+    }
+  });
+  return out;
+}
+
+/** "These are the only angle placements", "no other planet is on an angle": a list of the planets on an angle said to be complete. */
+const ONLY_ANGLES = /\b(?:the|are) only (?:angle placements|angle contacts|angular planets|planets? (?:on|at) (?:an |the )?angles?|points? (?:on|at) (?:an |the )?angles?|planets? on (?:an |the )?angle)\b|\bno other (?:planet|point|body)s? (?:is |are |sits? |lies? )?(?:on|at) (?:an |the )?angles?\b|\bnothing else (?:is |sits? )?(?:on|at) (?:an |the )?angles?\b/i;
+
+/**
+ * A list of the planets on an angle said to be complete must name every [C] line of each chart it covers (v7 F1: chart A's
+ * Jupiter and North Node called "the only angle placements", leaving out [A-C3] Mercury on the IC). The planets named in
+ * the paragraph up to the claim count as listed.
+ */
+function onlyAngleViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  for (const paragraph of reading.split(/\n+/)) {
+    const m = ONLY_ANGLES.exec(paragraph);
+    if (!m) continue;
+    const upto = paragraph.slice(0, m.index + m[0].length);
+    const sentence = paragraph.split(SENTENCE_SPLIT).find((x) => x.includes(m[0])) ?? m[0];
+    const listed = new Set(tokenize(upto).filter((t) => t.point && !ANGLES.has(t.point.point)).map((t) => t.point!.point));
+    for (const x of upto.matchAll(ID_G)) {
+      const r = sheet.relations.find((y) => y.id === x[1]);
+      if (r && /(?:^|-)C\d+$/.test(r.id)) listed.add(r.a);
+    }
+    const named = chartScope(sheet, upto).named;
+    const charts = named.size ? [...named] : sheet.charts;
+    for (const c of charts) {
+      const lines = sheet.relations.filter((x) => /(?:^|-)C\d+$/.test(x.id) && (sheet.charts.length < 2 || sheet.chartOf.get(x.id) === c));
+      const missing = lines.filter((x) => !listed.has(x.a));
+      if (!missing.length) continue;
+      const label = sheet.charts.length > 1 ? ` chart ${c}'s` : " the sheet's";
+      out.push({
+        kind: "not-on-sheet", mention: m[0], sentence: sentence.trim(), named: `"${m[0]}" without ${missing.map((x) => `[${x.id}]`).join(", ")}`, sheet: missing.map((x) => x.line),
+        message: `says "${m[0]}", but the list leaves out${label} ${missing.map((x) => `[${x.id}] ${x.a}`).join(", ")}: ${missing.map((x) => x.line).join(" | ")}. Name every [C] line of each chart, or drop "only".`
+      });
+    }
+  }
+  return out;
+}
+
+/** "... but not the rising sign", "the rising sign would stay": a birth-time shift said to leave the rising sign alone. */
+const RISING_KEPT = /\b(?:but )?not (?:change )?(?:the|your) rising sign\b|\b(?:the |your )?rising sign (?:would |will )?(?:stay|stays|remain|remains|hold|holds|keep|keeps|survive|survives)\b|\b(?:keep|keeps|leave|leaves) (?:the|your) (?:same )?rising sign\b/i;
+
+/**
+ * A shift of the birth time said not to change the rising sign must be shorter than the [E] rising sign line's margin
+ * that way (v7 O15: "141 minutes later ... but not the rising sign" when 75 minutes later gives Libra). The shift is the
+ * last "N minutes earlier (later)" in the sentence or the one before.
+ */
+function risingKeptViolations(sheet: Sheet, reading: string): Violation[] {
+  const out: Violation[] = [];
+  if (!sheet.risingShift.size) return out;
+  const sentences = reading.split(SENTENCE_SPLIT).map((x) => x.trim());
+  sentences.forEach((sentence, si) => {
+    const m = RISING_KEPT.exec(sentence);
+    if (!m) return;
+    const shifts = [...`${si > 0 ? sentences[si - 1] : ""} ${sentence}`.matchAll(/\b(\d+) minutes? (earlier|later)\b/g)];
+    const last = shifts.at(-1);
+    if (!last) return;
+    const minutes = Number(last[1]);
+    const dir = last[2] as "earlier" | "later";
+    for (const c of sentenceCharts(sheet, sentence)) {
+      const r = sheet.risingShift.get(c);
+      const margin = r?.[dir];
+      if (!r || margin === null || margin === undefined || minutes < margin) continue;
+      out.push({
+        kind: "sign-mismatch", mention: m[0], sentence, named: `rising sign kept at ${minutes} minutes ${dir}`, sheet: [r.line],
+        message: `says a birth time ${minutes} minutes ${dir} keeps the rising sign, but the sheet says: ${r.line} Quote that line; the houses, chart ruler and angle contacts change with it.`
+      });
+      return;
+    }
+  });
+  return out;
+}
+
 // ------------------------------------------------------------------ dispositor chains
 
 const CHAIN_WORDS = new Set(["chain", "chains", "dispositor", "dispositors", "rulers", "lords", "roads"]);
@@ -1619,7 +1813,7 @@ function dispositorViolations(sheet: Sheet, reading: string): Violation[] {
     const check = (quant: ChainQuant, bodies: Point[] | null, targets: Point[], phrase: Token[]) => {
       if (!targets.length || hypothetical) return;
       const text = phrase.map((x) => x.text).join(" ").replace(/ ([,'’])/g, "$1").replace(/^[,\s]+/, "");
-      const what = `"${text}"${targets.every((p) => text.includes(p)) ? "" : ` (read as ${targets.join(" and ")})`}`;
+      const what = `"${text}"${targets.every((p) => text.includes(p)) ? "" : ` (read as ${[...new Set(targets)].join(" and ")})`}`;
       if (out.some((v) => v.sentence === sentence && v.named === what)) return;
       for (const c of charts) {
         const list = endsOf(c).filter((x) => !bodies || bodies.includes(x.body));
@@ -1723,7 +1917,7 @@ function dispositorViolations(sheet: Sheet, reading: string): Violation[] {
         }
         if (bodies && !bodies.length) return;
         if (!bodies && subj[ci]!.word === "chain" && quant === "plain") return;
-      } else if (quantWord === "all" && back) {
+      } else if (quantWord === "all" && (back || tokens[i - 1]?.word === "all")) {
         // "Your Sun, Venus, Mars, Jupiter and Pluto all trace back to it": the whole list before "all".
         let k = i - 1;
         while (k > 0 && (tokens[k - 1]!.point || tokens[k - 1]!.joiner || /^(the|your|all)$/.test(tokens[k - 1]!.word))) k -= 1;
@@ -1790,7 +1984,8 @@ export function checkReading(sheetText: string, reading: string): CheckResult {
   // A date the birthday check already flagged is not flagged twice.
   const flagged = new Set(violations.filter((v) => v.kind === "date-mismatch").map((v) => `${v.sentence}|${v.mention}`));
   violations.push(...dateViolations(sheet, reading).filter((v) => !flagged.has(`${v.sentence}|${v.mention}`)));
-  violations.push(...placementViolations(sheet, reading), ...angularViolations(sheet, reading), ...rulerViolations(sheet, reading), ...angleCountViolations(sheet, reading), ...angleHouseViolations(sheet, reading), ...dispositorViolations(sheet, reading), ...chartViolations(sheet, reading, mentions));
+  violations.push(...placementViolations(sheet, reading), ...angularViolations(sheet, reading), ...rulerViolations(sheet, reading), ...angleCountViolations(sheet, reading), ...angleHouseViolations(sheet, reading), ...dispositorViolations(sheet, reading), ...groupPlaceViolations(sheet, reading),
+    ...windowPhaseViolations(sheet, reading), ...sameDayViolations(sheet, reading), ...onlyAngleViolations(sheet, reading), ...risingKeptViolations(sheet, reading), ...chartViolations(sheet, reading, mentions));
   return { ok: violations.length === 0, mentions: mentions.length, violations, cited };
 }
 

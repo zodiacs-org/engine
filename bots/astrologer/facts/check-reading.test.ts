@@ -421,6 +421,61 @@ describe("dispositor chain summaries (v7 O4)", () => {
   });
 });
 
+describe("group placements, window phases, the same day and complete angle lists (v7 O2, O15, F1)", () => {
+  const SHEET_O = [
+    "[P1] Ascendant 1°00' Virgo; Midheaven 24°39' Gemini (whole sign house 10)",
+    "[P2] Sun 10°00' Pisces, whole sign house 7",
+    "[P3] Moon 5°00' Sagittarius, whole sign house 4",
+    "[P4] Mercury 12°28' Pisces, whole sign house 7",
+    "[A1] 1. Moon square Mercury, orb 0°30'",
+    "[A13] 13. Sun conjunction Mercury, orb 2°28'",
+    "Transits 2026-11-01 to 2027-01-29 inclusive (90 days), dates in the person's zone (UTC).",
+    "- [T4] transiting Sun trine natal Moon: exact 2026-11-21; transiting Sun in Scorpio, whole sign house 3",
+    "- [T5] transiting Mars square natal Mars: exact 2026-11-22; transiting Mars in Leo, whole sign house 12",
+    "- [T6] transiting Sun square natal Mercury: exact 2026-11-22; transiting Sun in Sagittarius, whole sign house 4",
+    "- [T9] transiting Sun opposition natal Sun: exact 2027-01-20; transiting Sun in Capricorn, whole sign house 5",
+    "- [S1] Mercury stations direct 2026-11-13 (plus or minus 1 day) at 5°02' Scorpio, whole sign house 3. Contacts:",
+    "  - [S1a] stationing Mercury square natal Moon, orb 0°32'",
+    "- [C1] Mercury opposition Midheaven, orb 5°02': on the IC, same as [A20]",
+    "- [C2] Sun opposition Ascendant, orb 2°00': on the Descendant, same as [A9]"
+  ].join("\n");
+  const flags = (reading: string) => checkReading(SHEET_O, reading).violations.map((v) => `${v.kind}: ${v.named}`);
+
+  it("flags a house said of an aspect's planets when one is elsewhere", () => {
+    expect(flags("[A1] Moon square Mercury and [A13] Sun conjunction Mercury, both in the seventh house of others.")).toEqual(["house-mismatch: Moon, Mercury, Sun both in the seventh house"]);
+    expect(flags("[A13] Sun conjunction Mercury, both in the seventh house of others.")).toEqual([]);
+    expect(flags("The Sun and Mercury are both in Pisces.")).toEqual([]);
+    expect(flags("**Moon and pressure.** The Sun and Mercury sit together in the seventh house.")).toEqual([]);
+  });
+
+  it("flags \"near the window's end\" or \"early in the window\" for a date that is not there", () => {
+    expect(flags("Near the window's end, [S1a] stationing Mercury square natal Moon falls in mid-November.")).toEqual(["date-mismatch: \"Near the window's end\" for 2026-11-13 ([S1a])"]);
+    expect(flags("Near the window's end, [T9] transiting Sun opposition natal Sun is exact 2027-01-20.")).toEqual([]);
+    expect(flags("Early in the window, [S1a] stationing Mercury square natal Moon marks a pause.")).toEqual([]);
+    expect(flags("Late in the window, [T5] transiting Mars square natal Mars is exact 2026-11-22.")).toEqual(["date-mismatch: \"Late in the window\" for 2026-11-22"]);
+  });
+
+  it("flags a line said to fall on the same day as another line with another date", () => {
+    expect(flags("Guidance: the week of [T5] transiting Mars square natal Mars, exact 2026-11-22, is a good time to pause. [T4] transiting Sun trine natal Moon falls the same day.")).toEqual(['date-mismatch: [T4] "the same day"']);
+    expect(flags("[T5] transiting Mars square natal Mars is exact 2026-11-22. [T6] transiting Sun square natal Mercury falls the same day.")).toEqual([]);
+    expect(flags("On 2026-11-22 comes [T5] transiting Mars square natal Mars, with [T6] transiting Sun square natal Mercury on the same day.")).toEqual([]);
+    expect(flags("On 2026-11-22 comes [T5] transiting Mars square natal Mars, with [T4] transiting Sun trine natal Moon on the same day.")).toEqual(['date-mismatch: [T4] "the same day"']);
+    expect(flags("Keep that day light.")).toEqual([]);
+  });
+
+  it("flags a birth-time shift said to keep the rising sign when the [E] line says it changes", () => {
+    const sheet = "[P1] Ascendant 11°44' Virgo; Midheaven 9°10' Gemini (whole sign house 10)\n- [E1] Rising sign Virgo (Ascendant 11°44' Virgo): it would be Leo if the birth time were 49 minutes earlier or more, and Libra if the birth time were 75 minutes later or more.";
+    const f = (reading: string) => checkReading(sheet, reading).violations.map((v) => `${v.kind}: ${v.named}`);
+    expect(f("[E2] The Moon would be in Aries if the birth time were 141 minutes later or more. A shift of that size would change the Moon's sign, but not the rising sign.".replace("[E2] ", ""))).toEqual(["sign-mismatch: rising sign kept at 141 minutes later"]);
+    expect(f("A birth time 30 minutes later would keep the rising sign ([E1]).")).toEqual([]);
+  });
+
+  it("flags a list of planets on an angle called complete when it leaves one out", () => {
+    expect(flags("[C2] Sun opposition Ascendant puts the Sun on the Descendant. These are the only angle placements.")).toEqual(['not-on-sheet: "the only angle placements" without [C1]']);
+    expect(flags("[C2] Sun opposition Ascendant puts the Sun on the Descendant, and [C1] Mercury opposition Midheaven puts Mercury on the IC. No other planet is on an angle.")).toEqual([]);
+  });
+});
+
 describe("counts of planets on an angle", () => {
   const SHEET4 = [
     "[P1] Ascendant 20°10' Libra; Midheaven 23°36' Cancer (whole sign house 10)",

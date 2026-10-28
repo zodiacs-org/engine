@@ -264,6 +264,8 @@ export interface ChartVersion {
   /** The solar return for the next birthday: the local date the Sun is back at its natal longitude. Null when born on or after the window start. */
   solarReturn: { date: string; inWindow: boolean } | null;
   edges: EdgePoint[];
+  /** The rising sign's sensitivity to the birth time: the shift, minutes, that moves the Ascendant into the sign before or after; null without a birth time, a side null when none within the search. */
+  risingShift: { sign: string; degree: string; earlier: { sign: string; minutes: number } | null; later: { sign: string; minutes: number } | null } | null;
   transits: Transit[];
   transitPoints: string[];
   stationContacts: StationContact[];
@@ -709,6 +711,18 @@ function edgePoints(points: { name: string; lon: number }[], ms: number, input: 
   return out;
 }
 
+/** How far the birth time can move, each way, before the Ascendant changes sign (searched minute by minute up to 12 hours). */
+function risingSensitivity(asc: number, ms: number, input: ReadingInput): NonNullable<ChartVersion["risingShift"]> {
+  const ascAt = (t: number) => natalChart({ utc: new Date(t), latitude: input.lat, longitude: input.lon, houseSystem: "whole", timeKnown: true }).angles!.asc;
+  const index = signIndexForLongitude(asc);
+  const side = (direction: 1 | -1) => {
+    const neighbour = (index + (direction === 1 ? 1 : 11)) % 12;
+    const minutes = shiftToSign(ascAt, ms, neighbour, direction, 1, 720);
+    return minutes === null ? null : { sign: SIGNS[neighbour]!.name, minutes };
+  };
+  return { sign: SIGNS[index]!.name, degree: degreeText(asc), earlier: side(-1), later: side(1) };
+}
+
 // ------------------------------------------------------------------ one chart version
 
 let natalPolicy: AspectPolicy | null = null;
@@ -788,6 +802,7 @@ function chartVersion(input: ReadingInput, instant: Instant, timeKnown: boolean,
   const edgeInput = shown.map((b) => ({ name: b.body as string, lon: b.lon }));
   if (asc !== null && mc !== null) edgeInput.push({ name: "Ascendant", lon: asc }, { name: "Midheaven", lon: mc });
   const edges = edgePoints(edgeInput, instant.ms, input, timeKnown);
+  const risingShift = asc === null || !timeKnown ? null : risingSensitivity(asc, instant.ms, input);
 
   const transitNames = timeKnown ? ["Sun", "Moon", "Mercury", "Venus", "Mars"] : ["Sun", "Mercury", "Venus", "Mars"];
   const transitPoints = shown.filter((b) => transitNames.includes(b.body)).map((b) => ({ name: b.body as string, lon: b.lon }));
@@ -861,6 +876,7 @@ function chartVersion(input: ReadingInput, instant: Instant, timeKnown: boolean,
     angularHouses,
     solarReturn,
     edges,
+    risingShift,
     transits,
     transitPoints: transitPoints.map((p) => p.name),
     stationContacts: stationContacts(stations, positions),
@@ -1202,13 +1218,20 @@ export function formatReadingFacts(f: ReadingFacts): string {
       L.push(`${ids.next("H")} Points in the angular houses (whole sign houses 1, 4, 7 and 10; a house placement, not a contact with the angle's degree): ${held.length ? held.join("; ") : "none"}.`);
     }
 
+    if (v.risingShift) {
+      // The rising sign's birth-time margin, whether or not the Ascendant is near an edge (v7 O15: "not the rising sign" was guessed).
+      const r = v.risingShift;
+      const way = (x: { sign: string; minutes: number } | null, dir: string) => (x ? `${x.sign} if the birth time were ${x.minutes} ${x.minutes === 1 ? "minute" : "minutes"} ${dir} or more` : `no other sign within 720 minutes ${dir}`);
+      L.push("Rising sign and the birth time (engine check; every whole sign house, the chart ruler and the angle contacts change with the rising sign):");
+      L.push(`- ${ids.next("E")} Rising sign ${r.sign} (Ascendant ${r.degree} ${r.sign}): it would be ${way(r.earlier, "earlier")}, and ${way(r.later, "later")}.`);
+    }
     L.push(`Points within ${EDGE_DEGREES}° of a sign edge (engine check over every point listed above):`);
     if (v.edges.length === 0) L.push(`${ids.next("E")} none: no listed point is within ${EDGE_DEGREES}° of a sign edge.`);
     for (const e of v.edges) {
       const where = e.edge === "start" ? `${orbText(e.distance)} after the start of ${e.sign} (${e.neighbour} before it)` : `${orbText(e.distance)} before the end of ${e.sign} (${e.neighbour} next)`;
       const shift = e.shiftMinutes === null
         ? ""
-        : `; it would be in ${e.neighbour} if the birth time were ${e.shiftMinutes} minutes ${e.edge === "start" ? "earlier" : "later"} or more`;
+        : `; it would be in ${e.neighbour} if the birth time were ${e.shiftMinutes} ${e.shiftMinutes === 1 ? "minute" : "minutes"} ${e.edge === "start" ? "earlier" : "later"} or more`;
       L.push(`- ${ids.next("E")} ${e.point} ${e.degree} ${e.sign}: ${where}${shift}`);
     }
 

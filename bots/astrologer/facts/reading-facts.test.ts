@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { ageAt, angleContactsFrom, buildReadingFacts, dispositorChains, formatReadingFacts, degreeText, nextBirthday, orbText, sectRole, SECT_TEAMS, STATION_ORB, SLOW } from "./reading-facts.js";
 import type { ReadingFacts, ReadingInput } from "./reading-facts.js";
 import { bodyLongitude, longitudeSpeed } from "../../../src/ephemeris.js";
+import { natalChart } from "../../../src/api.js";
 
 // Synthetic births from bots/astrologer/testset/charts.inputs.json (no real person).
 const RESOLVED: ReadingInput = { date: "1998-04-04", time: "14:44", timeKnown: true, zone: "Europe/Istanbul", lat: 41.0082, lon: 28.9784 };
@@ -74,6 +75,20 @@ describe("natal facts", () => {
     const all = [...v.placements, v.ascendant!, v.midheaven!];
     const near = all.filter((p) => p.lon % 30 < 2 || p.lon % 30 > 28).map((p) => p.point).sort();
     expect(v.edges.map((e) => e.point).sort()).toEqual(near);
+  }, 60_000);
+
+  it("gives the birth-time shift each way that changes the rising sign, to the minute (v7 O15)", async () => {
+    const v = (await facts(RESOLVED)).versions[0]!;
+    const r = v.risingShift!;
+    const ms = Date.parse(v.utc.replace("Z", ":00Z"));
+    const signAt = (minutes: number) => Math.floor(natalChart({ utc: new Date(ms + minutes * T), latitude: RESOLVED.lat, longitude: RESOLVED.lon, houseSystem: "whole", timeKnown: true }).angles!.asc / 30);
+    const here = signAt(0);
+    expect(signAt(-r.earlier!.minutes)).toBe((here + 11) % 12);
+    expect(signAt(-(r.earlier!.minutes - 1))).toBe(here);
+    expect(signAt(r.later!.minutes)).toBe((here + 1) % 12);
+    expect(signAt(r.later!.minutes - 1)).toBe(here);
+    expect(formatReadingFacts(await facts(RESOLVED))).toContain(`Rising sign ${r.sign} (Ascendant ${r.degree} ${r.sign}): it would be ${r.earlier!.sign} if the birth time were ${r.earlier!.minutes} minutes earlier or more`);
+    expect((await facts(UNKNOWN)).versions[0]!.risingShift).toBeNull();
   }, 60_000);
 
   it("formats degrees truncated and orbs rounded to the arcminute", () => {
