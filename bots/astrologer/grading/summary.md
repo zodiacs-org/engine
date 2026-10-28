@@ -1,20 +1,19 @@
-# Model grading v8 (chart ruler opening paragraph; angle as house and ruler chain checks), 64 test charts
-Run 2026-10-28 (ICT). Same rubric, charts and method as v7 (Sonnet writer, Opus blind strict grader, Claude Max via `claude -p`, no API credit). Checker passed on 62 of 64 final readings.
+# Model grading v9 (Opus writer), 64 test charts
+Run 2026-10-28 (ICT). Same rubric, charts, grader (Opus, same prompt) and instructions as v8; only the writer changed from Sonnet to Opus, plus the P2 rulership check and three checker false positive fixes (M2, G4). Claude Max via `claude -p`, no API credit. About 157 Opus calls (64 writes, 29 revisions, 64 grades), roughly 50 minutes at 3 in parallel; no usage limit hit. Checker passed on 63 of 64 final readings.
 
-## Overall: 4.14 / 5 (v7 4.12). 6 of 8 criteria pass.
-| Criterion | v7 | v8 | Bar | Pass? |
+## Overall: 4.33 / 5 (v8 4.14). 7 of 8 criteria pass.
+| Criterion | v8 | v9 | Bar | Pass? |
 |---|---|---|---|---|
-| C1 Fidelity | 4.62 | 4.69 | 4.5 | yes |
-| C2 Fact vs reading | 4.20 | 4.20 | 4.5 | no |
-| C3 Technique | 3.86 | 3.80 | 3.5 | yes |
-| C4 Timing | 4.20 | 4.31 | 3.5 | yes |
-| C5 Uncertainty | 3.78 | 4.05 | 3.5 | yes |
-| C6 Synthesis | 3.44 | 3.47 | 3.5 | no |
-| C7 Usefulness | 3.88 | 3.70 | 3.5 | yes |
-| C8 Boundaries | 4.95 | 4.94 | 4.5 | yes |
+| C1 Fidelity | 4.69 | 4.81 | 4.5 | yes |
+| C2 Fact vs reading | 4.20 | 4.33 | 4.5 | no |
+| C3 Technique | 3.80 | 4.00 | 3.5 | yes |
+| C4 Timing | 4.31 | 4.39 | 3.5 | yes |
+| C5 Uncertainty | 4.05 | 4.19 | 3.5 | yes |
+| C6 Synthesis | 3.47 | 3.97 | 3.5 | yes |
+| C7 Usefulness | 3.70 | 3.92 | 3.5 | yes |
+| C8 Boundaries | 4.94 | 5.00 | 4.5 | yes |
 
-Critical errors: 1 chart (v7: 5): P2 ("Saturn also rules the house where it sits ... the second house", a rulership claim phrased without a house number next to the planet).
+Critical errors: 0 charts (v8: 1).
 
-## Next fixes
-1. Checker: "rules the house where it sits" style rulership phrasing.
-2. C2 and C6: likely need grader calibration review or a writer model change; rule tightening has plateaued (4.20 and about 3.45 over the last two rounds).
+## Next
+C2 is the only fail (4.33 vs 4.5): review its per chart notes; likely interpretation stated as fact.
