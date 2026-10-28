@@ -1,24 +1,24 @@
-64 graded; overall 4.33
-C1 4.86 n= 64
-C2 4.62 n= 64
+64 graded; overall 4.34
+C1 4.89 n= 64
+C2 4.64 n= 64
 C3 3.98 n= 64
 C4 4.45 n= 64
-C5 4 n= 64
+C5 4.02 n= 64
 C6 3.88 n= 64
 C7 3.84 n= 64
 C8 5 n= 64
-critical 1 charts w/ critical 1
+critical 0 charts w/ critical 0
 mismatch charts 10
 WORST P8 ['pre1970', 'lmt'] 2.5 It delivers no natal reading and no 90-day timing at all for a valid, resolved pre-1970 test chart, so C3, C4 and C6 are absent.
 WORST H3 ['high-latitude', 'polar', 'transit'] 3.88 The 90-day section is largely a list of quoted fact IDs with thin or no interpretation, and the advice that is given is generic enough to apply to anyone.
 WORST O11 ['ordinary'] 3.88 It contradicts the sheet's dispositor facts by claiming Venus disposes nothing, even though [L1] and [L8] route the Sun and Uranus through Venus.
-WORST P14 ['pre1970', 'lmt'] 3.88 A relational timing claim ('two days earlier') contradicts the sheet's dates, and several interpretive glosses (detriment 'against its own nature', Neptune 'blurs then softens', the Sun 'carrying' the Leo pair) are presented as if they followed from the factors.
 WORST F4 ['dst-fold', 'midnight'] 4.12 The uncertainty section undercounts and misframes the A/B differences: it never says what the chart-A-only Moon/Node on the Midheaven would change, it omits the 17-day shift in the Sun-Ascendant transit, and it pads with an impossible Mars-in-Aries scenario.
 WORST F5 ['dst-fold'] 4.12 The reading is mostly a well-cited inventory: chart-specific differences such as Moon in 1 vs 12, the Pluto-Ascendant square and the Jupiter station on chart A's Ascendant are listed but not weighed into a coherent picture for either chart, and several interpretations fall back on generational or generic phrasing.
 WORST G2 ['dst-gap'] 4.12 The reading never says how chart A's tight angularity (Mars and the Node on the Descendant at under 1°, Sun and Venus on the IC) would change the interpretation, so the fold is documented but not synthesised. It also silently drops chart-dependent timing such as the Sun conjunction Ascendant ([A-T5] 2026-12-05 vs [B-T9] 2026-12-17) and [B-T3].
 WORST M3 ['midnight'] 4.12 The reading never uses house rulership, so Saturn's lordship of the 4th and 5th is missed. That is the link that would actually join the IC, Saturn and fifth-house threads, and the advice falls back on generic prompts.
 WORST M6 ['midnight', 'pre1970'] 4.12 Many of the practical prompts attached to transits and themes are generic or loosely linked to their factor, notably the Sun-on-Ascendant 'home creative project', so the usable guidance is weaker than the technical scaffolding.
 WORST O13 ['ordinary'] 4.12 The uncertainty section is thin: it cites a Venus sign-edge point that birth time does not affect, leaves out the Neptune edge, and never says what a different rising sign would change.
+WORST O2 ['quarter-hour-zone'] 4.12 The uncertainty section only repeats [E1] without saying what a Capricorn or Pisces rising would change (chart ruler, all house placements, the angle contacts), and Mercury's combustion and retrogradation are ignored while it is treated as a chart centre.
 BEST G3 ['dst-gap'] 4.62
 BEST H8 ['high-latitude', 'polar-edge'] 4.62
 BEST M4 ['midnight'] 4.62
@@ -27,7 +27,6 @@ BEST O17 ['ordinary'] 4.62
 FIX P8 When the sheet resolves, read the chart as given: use the chart ruler, sect, dignities, the Saturn/MC contact, the station-anchored transit dates [T1]-[T17] and [S1]-[S5], and flag the [E3] MC cusp sensitivity. Do not refuse over the implied age, and mention any data doubt in one sentence.
 FIX H3 Interpret each timed factor through the natal themes already built (ruler, Saturn MC, Mercury ASC, Sun-Saturn/Uranus), and make the uncertainty note state concretely how large a time error would change the Sun's sign and Uranus's sign.
 FIX O11 Check each structural claim (dispositorship, isolation, channelling) against the [L] lines before stating it, and list every in-window station, including Jupiter and Mars turning retrograde.
-FIX P14 Never paraphrase intervals between dates; quote both dates with their ± qualifiers. Mark every interpretive gloss as interpretation and tie it to a named technique (aspect, reception, sect) or drop it.
 FIX F4 Replace the Mars sign-edge aside with a short list of what the fold actually changes in interpretation, namely the Moon and North Node on the Midheaven (chart A only) and the [A-T2]/[B-T5] date split, and stop calling the ruler's lords 'strong' when Venus has only term.
 FIX F5 Spend fewer words on ID citations and more on interpreting what each chart's distinct factors (Moon house, tightest aspect, angular stations, B-T14) would mean, and only flag a sign-edge uncertainty when the birth-time question can actually change it.
 FIX G2 Add a short paragraph stating what each candidate chart would emphasise beyond the shared core, and include all angle transits that differ between the charts, so the parents see concretely what the birth-time question decides.
@@ -58,6 +57,7 @@ FIX O18 Interpret every station and transit you cite (or explain why you skip it
 FIX O3 Mark every interpretive clause clearly apart from the quoted engine lines. Bring in house rulerships (for example, Saturn rules houses 7 and 8, Venus rules houses 4 and 11). State what a Gemini or Leo Ascendant would change.
 FIX O8 Cover the chart ruler's January retrograde station and the tightest unused natal aspects before the background solar transits. Tie each piece of advice only to the house the transit or station actually occupies. In the uncertainty section, say concretely what Pisces rising would change (Jupiter as ruler, Venus rising in sign, every planet shifted one house) instead of flagging sign-edge planets that a time error cannot move.
 FIX P10 State the direction of each station, include [S3] Saturn stations direct as part of the Saturn theme, and either use or explicitly set aside the remaining Sun transits (especially [T13]) so the timing section matches the natal synthesis.
+FIX P14 Cut the repeated ID quotations to one mention each and use the space to weigh the chart's real tensions (the exalted ruler against a peregrine Mars and the Moon to Saturn pair; the station cluster on Moon/Saturn against Pluto opposite the Ascendant), keeping the ±1-day qualifiers on every station.
 FIX P3 Read squares as squares, tie every dated sentence to its fact ID, and replace generic advice with the specific houses involved (for example, name the houses Saturn rules).
 FIX P5 Turn the bare transit IDs into one-line meanings, and synthesise the coincidence of [T1]/[T2], [B1] and [S6] around 9 to 12 January instead of listing them.
 FIX P6 Tie each inference to the factor that actually produces it (peregrine leads to dependence on the lord; cadent and bad places affect the 6th-house Jupiter and 12th-house Sun) and replace the stock Venus and Uranus phrases with meanings drawn from this chart's houses and chain.
@@ -88,4 +88,3 @@ FIX H8 Quote every station contact in the sheet's order, including the tightest,
 FIX M4 Join each transit and station back to the natal themes with concrete, chart-specific reflection, state plainly that the 50- and 96-minute margins are comfortable for a certificate time, and drop the electional-style advice tied to fast Sun aspects.
 FIX O1 State plainly that the Taurus rising boundary is only 11 minutes away, so the ruler, the houses and the Uranus to Ascendant transit are the least secure parts of the reading, and keep each interpretation attached to the single aspect it comes from.
 FIX O17 Quote every cited transit line in full (including [T8]), and in the uncertainty section state exactly which Midheaven-based contacts and interpretations would change if the Midheaven fell in Aquarius.
-CRIT P14 [{"type": "a", "quote": "Two days earlier in that week, [T2] transiting Mars conjunction natal Moon is exact 2026-11-16"}]

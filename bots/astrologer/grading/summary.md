@@ -1,19 +1,19 @@
-# Model grading v10 (C2 fixes: no rankings, interpretation marked, Opus writer), 64 test charts
-Run 2026-10-28 (ICT). Same rubric, charts, grader (Opus, same prompt) and Opus writer as v9. New: writer prompt and checker against the six C2 patterns in c2-analysis.md (rankings as fact, sect/dignity as outcome, dispositor chain as cause, self derived facts, transit tied to an untouched theme, modern meaning called traditional); P10 checker false positive fixed. Claude Max via `claude -p`, no API credit. About 160 Opus calls (64 writes, 32 revisions, 64 grades), roughly 80 minutes at 3 in parallel; no usage limit hit. Checker passed on 64 of 64 final readings.
+# Model grading v10.1 (relative date check), 64 test charts
+Run 2026-10-29 (ICT). v10 plus a checker rule for relative date phrases ("two days earlier", "a week later"). Over the 64 v10 readings it flagged only P14 (0 false positives); P14 was revised by sentence splice (Opus) and regraded with the unchanged grader. Other 63 charts unchanged from v10. Max usage: 2 Opus calls (1 revision, 1 grade), no usage limit hit.
 
-## Overall: 4.33 / 5 (v9 4.33). 8 of 8 criteria pass.
-| Criterion | v9 | v10 | Bar | Pass? |
-|---|---|---|---|---|
-| C1 Fidelity | 4.81 | 4.86 | 4.5 | yes |
-| C2 Fact vs reading | 4.33 | 4.62 | 4.5 | yes |
-| C3 Technique | 4.00 | 3.98 | 3.5 | yes |
-| C4 Timing | 4.39 | 4.45 | 3.5 | yes |
-| C5 Uncertainty | 4.19 | 4.00 | 3.5 | yes |
-| C6 Synthesis | 3.97 | 3.88 | 3.5 | yes |
-| C7 Usefulness | 3.92 | 3.84 | 3.5 | yes |
-| C8 Boundaries | 5.00 | 5.00 | 4.5 | yes |
+## Overall: 4.34 / 5 (v10 4.33). 8 of 8 criteria pass.
+| Criterion | v10 | v10.1 | Bar |
+|---|---|---|---|
+| C1 Fidelity | 4.86 | 4.89 | 4.5 |
+| C2 Fact vs reading | 4.62 | 4.64 | 4.5 |
+| C3 Technique | 3.98 | 3.98 | 3.5 |
+| C4 Timing | 4.45 | 4.45 | 3.5 |
+| C5 Uncertainty | 4.00 | 4.02 | 3.5 |
+| C6 Synthesis | 3.88 | 3.88 | 3.5 |
+| C7 Usefulness | 3.84 | 3.84 | 3.5 |
+| C8 Boundaries | 5.00 | 5.00 | 4.5 |
 
-Critical errors: 1 chart (v9: 0): P14, a relative date ("two days earlier in that week") that does not match the sheet dates.
+Critical errors: 0 charts (v10: 1, P14).
 
-## Next
-Checker: verify relative day offsets ("two days earlier", "the next day") between quoted dates.
+## Open before launch
+Writer output still contains en dashes (49 in 24 readings, e.g. "Moon–Saturn"); house copy rules forbid dashes in user facing text. Add a dash replacement step after writing.
