@@ -1,0 +1,43 @@
+{
+  "retrieved": "2026-10-15",
+  "sourceScale": "USNO UT minute labels treated as UTC",
+  "phaseAcceptanceSeconds": 60,
+  "longitudeAcceptanceDegrees": 0.01,
+  "ayanamsaAcceptanceArcseconds": 0.01,
+  "licenseBasis": "US Government numerical facts; ERFA numerical results only; see SOURCES.md",
+  "usno": {
+    "url": "https://aa.usno.navy.mil/api/moon/phases/date?date=1982-12-01&nump=12",
+    "responseSHA256": "d300e75b8a3cc27ac18d72df658f43f236b487def3a68dc232cd636660f8f0f6",
+    "apiVersion": "4.0.1"
+  },
+  "referenceTool": "docs/evidence/vedic-2026-09-28/tools/reference_values.py",
+  "pyerfa": "2.0.1.5",
+  "rows": [
+    {
+      "newMoonUT": "1983-01-14T05:08:00Z",
+      "sunTropicalDegrees": 293.4580656,
+      "lahiriTrueDegreesERFA": 23.615666808050225,
+      "sunSiderealDegreesReference": 269.8423987919498,
+      "solarSign": 8,
+      "horizons": {
+        "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%2710%27&OBJ_DATA=%27NO%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&START_TIME=%271983-01-14+05%3A08%27&STOP_TIME=%271983-01-14+05%3A09%27&STEP_SIZE=%271+m%27&QUANTITIES=%2731%27&CSV_FORMAT=%27YES%27&EXTRA_PREC=%27YES%27",
+        "responseSHA256": "6ca6279eb83795477755b87f67bf1fe87737ade97cfab5304437613ea45e4d34",
+        "version": "1.2",
+        "source": "NASA/JPL Horizons API"
+      }
+    },
+    {
+      "newMoonUT": "1983-02-13T00:32:00Z",
+      "sunTropicalDegrees": 323.7302938,
+      "lahiriTrueDegreesERFA": 23.61692046336642,
+      "sunSiderealDegreesReference": 300.11337333663363,
+      "solarSign": 10,
+      "horizons": {
+        "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%2710%27&OBJ_DATA=%27NO%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&START_TIME=%271983-02-13+00%3A32%27&STOP_TIME=%271983-02-13+00%3A33%27&STEP_SIZE=%271+m%27&QUANTITIES=%2731%27&CSV_FORMAT=%27YES%27&EXTRA_PREC=%27YES%27",
+        "responseSHA256": "7780a50f87d6275e57c6003892ba9927dcdacb354d4431153c22e80c4082f5d3",
+        "version": "1.2",
+        "source": "NASA/JPL Horizons API"
+      }
+    }
+  ]
+}
