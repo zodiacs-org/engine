@@ -209,6 +209,6 @@ interface NatalZoneTransition {
     cause: TransitionCause;
 }
 
-// exported by @zodiacs/engine (TimeScaleName)
+// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
 type TimeScaleName = "utc" | "ut1" | "tt";
 ```

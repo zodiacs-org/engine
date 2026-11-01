@@ -9,10 +9,11 @@ the release it leads to.
 
 ## What is public
 
-- **The entry points.** The thirteen that `package.json` exports and the
+- **The entry points.** The fourteen that `package.json` exports and the
   README documents: the root, `./calc`, `./conventions` (from 1.1.0-rc.1),
   `./crossings`, `./deltat`, `./geo`, `./houses`, `./receipt`, `./sky`,
-  `./techniques`, `./timing`, `./vedic` and `./window`. `./internal` and `./internal/math` are private to Zodiacs.org
+  `./techniques`, `./time` (from 1.1.0-rc.2), `./timing`, `./vedic` and
+  `./window`. `./internal` and `./internal/math` are private to Zodiacs.org
   and carry no promise (README, *Internal site entry points*).
 - **Their declarations.** Every name each entry point exports, its type, a
   function's parameters and result, the shape of each result, the members of

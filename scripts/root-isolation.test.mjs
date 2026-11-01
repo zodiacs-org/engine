@@ -127,6 +127,18 @@ describe("the root entry's isolation check", () => {
     expect(() => checkRootIsolation(bypass)).toThrow(/the root entry reaches src\/window-ranges\.ts/);
   });
 
+  it("names the time entry's own files whole, and not the root's time-scale modules", () => {
+    for (const path of ["src/time.ts", "src/time.mts", "src/time-bands.ts", "src/time-bands.mts"]) expect(OPT_IN_SOURCE.test(path), path).toBe(true);
+    // Written as calc's and window's are, (?:time)(?:-[^/]*)?, the pattern would take these two, and the root would fail.
+    for (const path of ["src/time-scale.ts", "src/time-scale-data.ts", "src/time-scale.mts", "src/timeline.ts", "src/times.ts", "src/time/a.ts"]) {
+      expect(OPT_IN_SOURCE.test(path), path).toBe(false);
+    }
+    const bypass = build({ chunkModules: ["src/api.ts", "src/ephemeris.ts", "src/time.ts"], rootImports: ["src/time.ts"] });
+    expect(() => checkRootIsolation(bypass)).toThrow(/the root entry reaches src\/time\.ts/);
+    const core = build({ chunkModules: ["src/api.ts", "src/ephemeris.ts", "src/time-scale.ts", "src/time-scale-data.ts"] });
+    expect(checkRootIsolation(core).held).toEqual(["src/api.ts", "src/ephemeris.ts", "src/index.ts", "src/time-scale-data.ts", "src/time-scale.ts"]);
+  });
+
   it.runIf(existsSync(new URL("../dist/metafile-esm.json", import.meta.url)))("passes this checkout's build", () => {
     const dist = new URL("../dist/", import.meta.url);
     const graph = checkRootIsolation({

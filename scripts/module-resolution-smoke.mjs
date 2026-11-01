@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 
 import { UNMARKED_SOURCE, assertNoBreaches, checkBuild } from "./pure-tables.mjs";
-import { checkRootIsolation, staticGraph } from "./root-isolation.mjs";
+import { OPT_IN_SOURCE, checkRootIsolation, staticGraph } from "./root-isolation.mjs";
 
 const engine = await import("@zodiacs/engine");
 const calc = await import("@zodiacs/engine/calc");
@@ -13,6 +13,7 @@ const houses = await import("@zodiacs/engine/houses");
 const receipt = await import("@zodiacs/engine/receipt");
 const conventions = await import("@zodiacs/engine/conventions");
 const techniques = await import("@zodiacs/engine/techniques");
+const time = await import("@zodiacs/engine/time");
 const timing = await import("@zodiacs/engine/timing");
 const vedic = await import("@zodiacs/engine/vedic");
 const window = await import("@zodiacs/engine/window");
@@ -278,6 +279,31 @@ assert.throws(() => engine.positions("4000-01-01"), (error) => error instanceof 
 assert.equal(engine.SUN_BOUND_LATITUDE, 0.001);
 assert.equal("chartBodyDeclinations" in engine, false, "the chart-only declination helper leaked into the root entry");
 
+// The time entry gives the clock and the frame of date the root's charts are
+// computed on, without the ephemeris: its own names, none of them the root's
+// but the span and the model name, which are the root's own values.
+assert.deepEqual(Object.keys(time), [
+  "DELTA_T_IERS_MODEL", "EPHEMERIS_SPAN", "TIME_SCALE_NAMES", "eclipticFrame", "eclipticOfDate", "elapsedDays", "meanEcliptic", "tilt", "timeBasis"
+], "the time entry's runtime exports changed");
+for (const name of Object.keys(time)) {
+  if (name === "EPHEMERIS_SPAN" || name === "DELTA_T_IERS_MODEL") assert.equal(time[name], engine[name], `root and time entry disagree: ${name}`);
+  else assert.equal(name in engine, false, `time leaked into root: ${name}`);
+}
+assert.ok(Object.isFrozen(time.TIME_SCALE_NAMES), "TIME_SCALE_NAMES must be frozen");
+assert.deepEqual(time.TIME_SCALE_NAMES, ["utc", "ut1", "tt"]);
+{
+  // 2017-01-01, the day of the last leap second: TAI - UTC is 37 s from 0h UTC and 36 s a millisecond before.
+  const at = Date.UTC(2017, 0, 1);
+  const basis = time.timeBasis(at);
+  assert.equal(basis.timeScale.leapSeconds.taiMinusUtc, 37);
+  assert.equal(time.timeBasis(at - 1).timeScale.leapSeconds.taiMinusUtc, 36);
+  const chart = engine.natalChart({ utc: new Date(at), timeKnown: false });
+  assert.deepEqual([basis.deltaT, basis.timeScale], [chart.deltaT, chart.timeScale], "the time entry's basis differs from the chart's");
+  const frame = time.eclipticFrame(basis.ttDays);
+  assert.ok(Object.isFrozen(frame) && Object.isFrozen(frame.rows) && Object.isFrozen(frame.tilt), "the time entry's frame must be a frozen copy");
+  assert.throws(() => time.timeBasis(Number.NaN), RangeError);
+}
+
 assert.equal(engine.PROGRESSION_DAYS_PER_YEAR, 365.2422);
 assert.equal(engine.progressedInstant("2019-12-31", "2020-12-30T05:48:46.080Z").toISOString(), "2020-01-01T00:00:00.000Z");
 assert.deepEqual(engine.progressedBodies("2019-12-31", "2020-12-30T05:48:46.080Z"), engine.positions("2020-01-01"));
@@ -379,6 +405,8 @@ assert(!/^(?:import|export)\s[^;]*?\bfrom\s*["']/mu.test(readFileSync(new URL(".
   "the houses entry imports a module");
 checkSelfContained("crossings");
 checkSelfContained("deltat");
+// The time entry loads no ephemeris: its graph has no external import at all.
+checkSelfContained("time");
 // The core entry reaches no zone history and loads nothing lazily; its one
 // dependency is the ephemeris.
 checkSelfContained("index", ["astronomy-engine"]);
@@ -406,6 +434,24 @@ for (const reading of [root.sources, root.held, root.marked]) {
     assert.deepEqual([...new Set(reading)].sort(), ["src/convention-ids.ts", "src/conventions.ts"], "the conventions entry reaches another module");
   }
 }
+// The time entry's graph, read both ways, holds its own file, the time basis,
+// the ΔT model, the spans, the nutation and the frame of date, with the two
+// modules they import (src/houses.ts, src/signs.ts), and nothing else: no
+// module that imports astronomy-engine, and of the opt-in modules only its own.
+{
+  const graph = staticGraph({ metafile, read: readBuilt, entryOutput: "dist/time.js", entrySource: "src/time.ts" });
+  const own = [
+    "src/deltat.ts", "src/frame.ts", "src/houses.ts", "src/nutation.ts", "src/reference-span.ts", "src/signs.ts",
+    "src/time-scale-data.ts", "src/time-scale.ts", "src/time.ts"
+  ];
+  assert.deepEqual(graph.sources, own, "the time entry's source graph changed");
+  for (const source of new Set([...graph.held, ...graph.marked])) {
+    assert(own.includes(source), `the time entry's graph holds ${source}`);
+    assert(!(metafile.inputs[source]?.imports ?? []).some((edge) => edge.path === "astronomy-engine"),
+      `the time entry's graph holds ${source}, which imports astronomy-engine`);
+    assert(!OPT_IN_SOURCE.test(source) || /^src\/time(?:-bands)?\.ts$/u.test(source), `the time entry's graph holds ${source}, an opt-in entry's module`);
+  }
+}
 
 // The build keeps what lets a bundler leave out a table nothing reads
 // (scripts/pure-tables.mjs), module by module as the markers above attribute
@@ -431,6 +477,7 @@ for (const [entry, own] of [
   ["window", /^src\/window-ranges\.ts$/u],
   ["techniques", /^src\/techniques\//u],
   ["houses-extra", /^src\/houses-extra\.ts$/u],
+  ["time", /^src\/time\.ts$/u],
   ["sky", /^src\/sky\//u]
 ]) {
   const graph = staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
@@ -453,7 +500,7 @@ for (const entry of ["geo", "techniques"]) {
   for (const file of outputsOf(entry)) assert(!/(?:^|\/)tzdb-[^/]*$/u.test(file), `zone-history shard in the static ${entry} graph`);
 }
 console.log(
-  "@zodiacs/engine export smoke test passed; receipt, conventions, crossings and deltat graphs have no external imports, " +
+  "@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat and time graphs have no external imports, " +
     `the core graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
     `${root.outputs.length} files) reaches no module of an opt-in entry and no zone history, ` +
     "the geo entry loads its 16 shards lazily, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic"

@@ -25,6 +25,24 @@
   meridian within ε of the equator, not within 90° − ε. `ChartInput.deltaT`
   falls back to the engine's time basis. Receipts name the ephemeris from the
   rc.8 conventions set on, not only in the current one.
+- **`@zodiacs/engine/time`** (zodiacs.org's finding F-53), a new entry point
+  that loads no ephemeris: `timeBasis(ms, scale, pin)`, an instant's UT1 and
+  TT with the `deltaT` and `timeScale` records a chart carries, and
+  `elapsedDays`; `EPHEMERIS_SPAN`; and the frame of date the ephemeris uses,
+  `tilt`, `eclipticFrame`, `meanEcliptic` and `eclipticOfDate`; with
+  `DELTA_T_IERS_MODEL`, `TIME_SCALE_NAMES` and the types they take and give
+  (`api/time.api.md`, `docs/time.md`). Each is the function a chart computes
+  with, behind a check that throws `RangeError` for an argument it refuses;
+  `tilt` and `eclipticFrame` give frozen results, so a caller cannot change
+  the frame the engine keeps for its next chart. Through them
+  astronomy-engine's vectors give `natalChart`'s longitudes to the bit
+  (`src/time.test.ts`; the preregistered checks are in
+  `docs/evidence/1.1.0-rc.2-20261102/time-entry/`). The root does not import
+  the entry. zodiacs.org bundled these functions from `dist/` until now. The
+  nutation and frame modules move out of the ephemeris chunk into a shared
+  chunk that it and `dist/time.js` import (NOTICE, LICENSING.md), so each
+  graph that loads the ephemeris grows by the imports and exports that join
+  the two.
 
 ## 1.1.0-rc.1 — unreleased candidate
 

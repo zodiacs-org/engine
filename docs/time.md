@@ -136,6 +136,72 @@ longer calls, reuses the one it computed last for any time within 1e-6 day
 (86 ms), so code that calls astronomy-engine directly can see two calculations
 at almost the same TT differ in the twelfth decimal of a degree.
 
+## Without the ephemeris: `@zodiacs/engine/time`
+
+`@zodiacs/engine/time` (from 1.1.0-rc.2) exports the clock and the frame of
+date a chart is computed on, for code that calls astronomy-engine itself. It
+loads no ephemeris: no module in its import graph imports astronomy-engine
+(`npm run exports:smoke` checks the build), and the root entry does not
+import it.
+
+| Export | What it gives |
+| --- | --- |
+| `timeBasis(ms, scale?, pin?)` | an instant's UT1 and TT, days from 2000-01-01T12:00 on each scale (`ut1Days`, `ttDays`), with the `deltaT` and `timeScale` records a chart reports (above); `ms` is the instant on `scale` (UTC unless given) in milliseconds since 1970, and `pin` a ΔT in seconds |
+| `elapsedDays(before, after, days)` | the time between two samples taken `days` apart on an input's scale: `days` where both lie in one piece of the time basis, else the TT between them (*From an instant to UT1 and TT*, on speeds) |
+| `EPHEMERIS_SPAN` | the TT span over which astronomy-engine is evaluated, the root's own object |
+| `tilt(tt)` | at `tt`, days of TT from J2000.0: IAU 2000B's Δψ and Δε (arcseconds), the IAU 2006 mean obliquity and the true obliquity (degrees), and the equation of the equinoxes (arcseconds) |
+| `eclipticFrame(tt)` | the rotation from astronomy-engine's EQJ (the J2000 mean equator and equinox) to the mean ecliptic and equinox of date, with that instant's tilt |
+| `meanEcliptic(frame, x, y, z)` | an EQJ vector on the mean ecliptic and equinox of date |
+| `eclipticOfDate(x, y, z, tt)` | an EQJ vector's longitude and latitude on the true ecliptic and equinox of date, degrees |
+| `DELTA_T_IERS_MODEL`, `TIME_SCALE_NAMES` | `"iers-utc/1"`, the root's own value, and the frozen list `["utc", "ut1", "tt"]` |
+
+The entry also exports the types these take and give: `TimeBasis`,
+`TimeScale`, `TimeScaleName`, `Ut1MinusUtc`, `LeapSeconds`, `DeltaT`,
+`DeltaTSegment`, `Tilt` and `EclipticFrame` (`api/time.api.md`).
+
+Each function is the one the engine computes with (`src/time-scale.ts`,
+`src/nutation.ts`, `src/frame.ts`), behind a check. It throws `RangeError`
+for an `ms` that is not a number within the range of a `Date`, a `scale`
+other than the three, a `pin` that is not a finite number of seconds at most
+1e10 in size, any other argument that is not a finite number, and a vector
+with no direction, such as the zero vector. For every argument it accepts it
+gives what the engine's function gives, value for value. `tilt` gives a
+frozen object, and `eclipticFrame` a frozen copy of the frame, its rows and
+its tilt: the engine keeps the last frame it computed for its next call at
+the same TT, and a caller that changed that object would change the next
+chart computed there. The entry keeps no state of its own.
+
+A chart's positions are this computation (`src/ephemeris.ts`): astronomy-engine
+2.1.19's vector, taken with ΔT held at the basis's and time made at its UT1,
+turned to the ecliptic of date.
+
+```js
+import { Body, GeoVector, MakeTime, SetDeltaTFunction } from "astronomy-engine";
+import { deltaT } from "@zodiacs/engine/deltat";
+import { eclipticOfDate, timeBasis } from "@zodiacs/engine/time";
+
+const basis = timeBasis(Date.UTC(2017, 0, 1));
+SetDeltaTFunction(() => basis.deltaT.seconds);
+try {
+  const time = MakeTime(basis.ut1Days);
+  const sun = GeoVector(Body.Sun, time, true);
+  // natalChart({ utc: "2017-01-01T00:00:00Z", timeKnown: false })'s Sun longitude, to the bit:
+  const { lon } = eclipticOfDate(sun.x, sun.y, sun.z, time.tt);
+} finally {
+  SetDeltaTFunction(deltaT); // the engine's model, as every engine call leaves it
+}
+```
+
+`src/time.test.ts` checks that this gives `natalChart`'s longitude of each of
+its twelve bodies (the true node from `GeoMoonState`, through `eclipticFrame`
+and `meanEcliptic`) to the bit at 192 instants between 1800 and 2200, and the
+preregistered check T5 (`docs/evidence/1.1.0-rc.2-20261102/time-entry/`)
+runs the comparison over a larger corpus. The values follow the release's
+IERS and ΔT tables (docs/versioning.md, *Numbers*), so a caller that compares
+them with stored ones runs that comparison again with each release. Their
+accuracy is the chart's: see *Limits* below and the ERFA comparisons in
+`src/nutation.test.ts`.
+
 ## Local wall times: `@zodiacs/engine/geo`
 
 ```ts

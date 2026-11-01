@@ -354,10 +354,10 @@ interface ChartInput {
     flags?: readonly ChartFlag[];
 }
 
-// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment)
+// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
 type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
 
-// exported by @zodiacs/engine (EPHEMERIS_SPAN)
+// exported by @zodiacs/engine (EPHEMERIS_SPAN), @zodiacs/engine/time (EPHEMERIS_SPAN)
 declare const EPHEMERIS_SPAN: Readonly<{
     readonly timeScale: "TT";
     readonly daysFromJ2000: Readonly<{
@@ -374,16 +374,16 @@ interface Houses {
     cusps: number[];
 }
 
-// exported by @zodiacs/engine (LeapSeconds)
+// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
 interface LeapSeconds {
     taiMinusUtc: number;
     listed: boolean;
 }
 
-// exported by @zodiacs/engine (TimeScaleName)
+// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
 type TimeScaleName = "utc" | "ut1" | "tt";
 
-// exported by @zodiacs/engine (Ut1MinusUtc)
+// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
 interface Ut1MinusUtc {
     seconds: number;
     sigma: number;

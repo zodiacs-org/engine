@@ -228,6 +228,12 @@ for (const aspect of today.aspects) {
 - `@zodiacs/engine/conventions`, new in 1.1.0-rc.1, gives the ids of the
   conventions registry a natal receipt names, and each id's address (see
   *Draft natal receipts*). It imports no module of another entry point.
+- `@zodiacs/engine/time`, new in 1.1.0-rc.2, gives the clock and the frame of
+  date a chart is computed on, and loads no ephemeris: `timeBasis`, an
+  instant's UT1 and TT with the `deltaT` and `timeScale` records a chart
+  reports; `elapsedDays`; `EPHEMERIS_SPAN`; and the frame that turns
+  astronomy-engine's vectors to the ecliptic of date: `tilt`,
+  `eclipticFrame`, `meanEcliptic` and `eclipticOfDate` (see *Time*).
 
 ### Uniform calculation API
 
@@ -894,7 +900,9 @@ planets on Terrestrial Time (TT). `utc` is on UTC unless `timeScale` says
 ut1MinusUtc, leapSeconds }`). `@zodiacs/engine/deltat` exports the model with
 no dependencies. astronomy-engine keeps one ΔT for its whole module; every
 engine call leaves the model installed, and code that calls astronomy-engine
-directly should install it too: `SetDeltaTFunction(deltaT)`.
+directly should install it too: `SetDeltaTFunction(deltaT)`. Such code can
+take the engine's clock and frame of date from `@zodiacs/engine/time`, which
+loads no ephemeris ([docs/time.md](docs/time.md), *Without the ephemeris*).
 
 `@zodiacs/engine/geo` reads wall times before 1970 on the tzdb 2025c history
 with backzone, shipped as 16 lazily imported chunks: `prepareLocalTime(date,
@@ -962,7 +970,7 @@ package implementation while keeping its scanner-oriented functions and lazy
 bundle boundary intact. They are not covered by semantic-versioning guarantees;
 third-party code must use the documented entry points: the root, `/calc`,
 `/geo`, `/houses`, `/sky`, `/techniques`, `/timing`, `/vedic`, `/window`,
-`/receipt`, `/conventions`, `/crossings` and `/deltat`.
+`/receipt`, `/conventions`, `/crossings`, `/deltat` and `/time`.
 
 ## GeoNames request recovery
 

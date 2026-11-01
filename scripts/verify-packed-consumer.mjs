@@ -82,6 +82,19 @@ const leapSeconds: LeapSeconds | null = basis.leapSeconds;
 const ut1: Ut1MinusUtc | null = basis.ut1MinusUtc;
 void leapSeconds; void ut1;
 const ayanamsaValue: AyanamsaValue = ayanamsa("lahiri", "1990-06-15T12:30:00Z", {timeScale: "tt"});
+import { timeBasis, elapsedDays, eclipticFrame, eclipticOfDate, meanEcliptic, tilt, TIME_SCALE_NAMES, DELTA_T_IERS_MODEL, EPHEMERIS_SPAN as TIME_SPAN, type TimeBasis, type EclipticFrame, type Tilt, type DeltaTSegment } from "@zodiacs/engine/time";
+const leapBasis: TimeBasis = timeBasis(Date.UTC(2017, 0, 1), "utc");
+const leapTai: number | undefined = leapBasis.timeScale.leapSeconds?.taiMinusUtc;
+const frameOfDate: EclipticFrame = eclipticFrame(leapBasis.ttDays);
+const tiltOfDate: Tilt = tilt(leapBasis.ttDays);
+const timeSegment: DeltaTSegment = leapBasis.deltaT.segment;
+const lonOfDate: number = eclipticOfDate(1, 0, 0, leapBasis.ttDays).lon;
+const meanVector: [number, number, number] = meanEcliptic(frameOfDate, 1, 0, 0);
+const twoDays: number = elapsedDays(leapBasis, timeBasis(Date.UTC(2017, 0, 3)), 2);
+const scaleNames: readonly TimeScaleName[] = TIME_SCALE_NAMES;
+const iersModel: "iers-utc/1" = DELTA_T_IERS_MODEL;
+const timeSpanStart: -730000 = TIME_SPAN.daysFromJ2000.from;
+void leapTai; void tiltOfDate; void timeSegment; void lonOfDate; void meanVector; void twoDays; void scaleNames; void iersModel; void timeSpanStart;
 const ayanamsaScale: TimeScale = ayanamsaValue.timeScale;
 void ayanamsaScale;
 await prepareLocalTime("1883-11-18", "America/New_York");
@@ -222,6 +235,7 @@ import { calc } from "@zodiacs/engine/calc";
 import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError } from "@zodiacs/engine/window";
 import * as techniques from "@zodiacs/engine/techniques";
 import * as sky from "@zodiacs/engine/sky";
+import * as time from "@zodiacs/engine/time";
 globalThis.fetch = () => { throw new Error("Calculation attempted a network request"); };
 const chart = natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(chart.houses.system, "whole");
@@ -446,6 +460,13 @@ const ttChart = natalChart({utc: "1990-06-15T12:30:00Z", timeScale: "tt", latitu
 assert.equal(ttChart.timeScale.input, "tt");
 assert.deepEqual(vedic.siderealChart(ttChart, "lahiri").ayanamsaValue.timeScale, ttChart.timeScale);
 assert.throws(() => natalChart({utc: "1990-06-15T12:30:00Z", timeScale: "tai"}), RangeError);
+// The time entry gives that clock and the frame of date without the ephemeris: the last leap second, a chart's ΔT, the root's span.
+assert.equal(time.timeBasis(Date.UTC(2017, 0, 1)).timeScale.leapSeconds.taiMinusUtc, 37);
+assert.equal(time.timeBasis(Date.UTC(2017, 0, 1) - 1).timeScale.leapSeconds.taiMinusUtc, 36);
+assert.deepEqual(time.timeBasis(Date.parse("1990-06-15T12:30:00Z")).deltaT, leapChart.deltaT);
+assert.equal(time.EPHEMERIS_SPAN, EPHEMERIS_SPAN);
+assert(Object.isFrozen(time.eclipticFrame(0).rows));
+assert.throws(() => time.timeBasis(Number.NaN), RangeError);
 // Wall times before 1970 read the packed tzdb 2025c history, loaded lazily.
 assert.equal(TZDB.version, "2025c");
 assert.throws(() => resolveLocalToUtc("1947-07-01", "12:00", "Europe/Stockholm"), (error) => error instanceof ZoneHistoryNotLoadedError && /prepareLocalTime/.test(error.message));
@@ -580,7 +601,7 @@ assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-
   assert.deepEqual(conventionsEntry.parseConventionId("frame:a:b"), {namespace: "frame", value: "a:b"});
   assert.equal(parseNatalEnvelope(serializeNatalEnvelope(createNatalEnvelope(natalChart({utc: "2000-01-01T12:00:00Z"})))).ok, true);
 }
-console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
+console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

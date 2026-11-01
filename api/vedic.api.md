@@ -416,7 +416,7 @@ interface Definition {
     readonly source: string;
 }
 
-// exported by @zodiacs/engine (DeltaT), @zodiacs/engine/calc (DeltaT), @zodiacs/engine/deltat (DeltaT)
+// exported by @zodiacs/engine (DeltaT), @zodiacs/engine/calc (DeltaT), @zodiacs/engine/deltat (DeltaT), @zodiacs/engine/time (DeltaT)
 interface DeltaT {
     seconds: number;
     sigma: number | null;
@@ -426,7 +426,7 @@ interface DeltaT {
     segment: DeltaTSegment;
 }
 
-// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment)
+// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
 type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
 
 // exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
@@ -438,13 +438,13 @@ interface Houses {
     cusps: number[];
 }
 
-// exported by @zodiacs/engine (LeapSeconds)
+// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
 interface LeapSeconds {
     taiMinusUtc: number;
     listed: boolean;
 }
 
-// exported by @zodiacs/engine (TimeScale), @zodiacs/engine/calc (TimeScale)
+// exported by @zodiacs/engine (TimeScale), @zodiacs/engine/calc (TimeScale), @zodiacs/engine/time (TimeScale)
 interface TimeScale {
     input: TimeScaleName;
     basis: "iers" | "delta-t" | "pinned";
@@ -452,10 +452,10 @@ interface TimeScale {
     leapSeconds: LeapSeconds | null;
 }
 
-// exported by @zodiacs/engine (TimeScaleName)
+// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
 type TimeScaleName = "utc" | "ut1" | "tt";
 
-// exported by @zodiacs/engine (Ut1MinusUtc)
+// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
 interface Ut1MinusUtc {
     seconds: number;
     sigma: number;

@@ -32,6 +32,8 @@ const required = [
   "dist/receipt.js",
   "dist/techniques.d.ts",
   "dist/techniques.js",
+  "dist/time.d.ts",
+  "dist/time.js",
   "dist/sky.d.ts",
   "dist/sky.js",
   "dist/timing.d.ts",
@@ -358,6 +360,25 @@ assert.deepEqual(gregorianImporters.sort(), ["dist/geo.js", "dist/techniques.js"
 assert(notice.includes("in a shared chunk under dist/ that dist/geo.js and dist/techniques.js import"), "NOTICE must say where the Gregorian adoption table is");
 assert(prose("LICENSING.md").includes("shared chunk under `dist/` that `dist/geo.js` and `dist/techniques.js` import"),
   "LICENSING.md must say where the Gregorian adoption table is");
+// The IAU 2000B nutation and the frame of date, the same way: NOTICE and
+// LICENSING.md say they are in a shared chunk under dist/ that the ephemeris
+// chunk and dist/time.js import (until 1.1.0-rc.2 they were in the ephemeris
+// chunk itself), which LICENSING.md says the graphs of nine entry points load.
+// The series' first coefficient stands for them.
+const nutationHolders = files.filter((file) => file.endsWith(".js") && read(file).includes("-172064161,"));
+assert(nutationHolders.length === 1 && /^dist\/chunk-[^/]+\.js$/u.test(nutationHolders[0]),
+  `the nutation must be in exactly one shared chunk under dist/, as NOTICE says; found it in ${nutationHolders.join(", ") || "no file"}`);
+const nutationChunk = `./${nutationHolders[0].slice("dist/".length)}`;
+assert(!read(nutationHolders[0]).includes('"astronomy-engine"'), "the chunk that holds the nutation must not import astronomy-engine");
+assert(read("dist/time.js").includes(nutationChunk), "dist/time.js must import the chunk that holds the nutation");
+assert(files.some((file) => /^dist\/chunk-[^/]+\.js$/u.test(file) && /\bfunction gastHours\(/u.test(read(file)) && read(file).includes(nutationChunk)),
+  "the ephemeris chunk must import the chunk that holds the nutation");
+assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].sizes.has(nutationHolders[0])).sort(),
+  [".", "./calc", "./internal", "./sky", "./techniques", "./time", "./timing", "./vedic", "./window"],
+  "the entry points whose graphs load the nutation must be the ones LICENSING.md names");
+assert(notice.includes("built into a shared chunk under dist/ that the ephemeris chunk and dist/time.js import"), "NOTICE must say where the frame and the nutation are");
+assert(prose("LICENSING.md").includes("shared chunk under `dist/` that the ephemeris chunk and `dist/time.js` import"),
+  "LICENSING.md must say where the nutation is");
 assert(read("README.md").includes(LICENSE_EXPRESSION), "README.md must state the licence expression");
 // The shipped text refers to the separate earlier package without naming it.
 for (const file of files) {

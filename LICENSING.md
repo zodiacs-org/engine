@@ -151,8 +151,10 @@ instrument, and only statistics are committed.
 `src/nutation.ts` carries the IAU 2000B nutation series: the multipliers
 (385) and coefficients (462) of its 77 luni-solar terms, the 10 coefficients
 of its five fundamental arguments and its two fixed offsets for the planetary
-terms. The build places them in the ephemeris chunk under `dist/`, which the
-root, `./internal`, `./timing` and `./vedic` import. The model is D. D.
+terms. The build places them in a shared chunk under `dist/` that the
+ephemeris chunk and `dist/time.js` import, so the graphs of the root,
+`./calc`, `./internal`, `./sky`, `./techniques`, `./time`, `./timing`,
+`./vedic` and `./window` load them. The model is D. D.
 McCarthy and B. J. Luzum, "An abridged model of the precession-nutation of
 the celestial pole", Celestial Mechanics and Dynamical Astronomy 85, 37–49
 (2003), as the IERS Conventions (2003), chapter 5, give it.
@@ -198,7 +200,8 @@ From 1970 conversion uses the host's `Intl`/ICU data.
 ## Leap-second and UT1 data
 
 `src/time-scale-data.ts` holds the time basis's two IERS tables, which the
-root entry's import graph under `dist/` carries. `scripts/build-time-scales.mjs`
+import graphs of the root entry and of `@zodiacs/engine/time` under `dist/`
+carry. `scripts/build-time-scales.mjs`
 builds it from inputs committed in `scripts/time-scale-sources/` and checks
 each one's SHA-256:
 
