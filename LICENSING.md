@@ -290,8 +290,9 @@ state.
 ## Gregorian adoption dates
 
 `@zodiacs/engine/geo` carries a table of when 18 countries took the Gregorian
-calendar (`GREGORIAN_ADOPTION`, `src/geo/calendar.ts`, built into
-`dist/geo.js`). Its dates and names come from public-domain sources only:
+calendar (`GREGORIAN_ADOPTION`, `src/geo/calendar.ts`), in a shared chunk
+under `dist/` that `dist/geo.js` and `dist/techniques.js` import. Its dates
+and names come from public-domain sources only:
 
 - the `calendars` file of tzdata 2025c (the archive whose SHA-256 the zone
   histories pin), which says of itself "This file is in the public domain",
@@ -367,7 +368,10 @@ Its bounds (`src/calc-bounds.ts`) and its barycentre's error
 (`BARYCENTRE_ERROR` in `src/calc-reduce.ts`) are measurements, not
 coefficients derived from JPL data: the largest differences between this
 package's own results and NASA JPL Horizons (DE441) responses at 32
-preregistered instants, rounded up, and the largest distance of
+preregistered instants, rounded up (for the mean node, the mean south node
+and Black Moon Lilith, from the same definitions evaluated with ERFA's
+fundamental arguments at those instants, which checks the implementation,
+not an ephemeris), and the largest distance of
 astronomy-engine's barycentre from a Newtonian barycentre of the same
 positions, scanned daily from 1800 to 2200 and compared with Horizons's
 barycentre at 88 instants (`docs/evidence/calc-api/`). No value of a JPL

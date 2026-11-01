@@ -288,7 +288,11 @@ direction and the arbiter's, arcseconds), `bounds.distance` (relative) and
 none is proven. The measured values are the largest differences from NASA JPL
 Horizons (DE441) over a preregistered corpus of 32 instants from 1802 to 2188,
 by center, correction and body, in every frame, rounded up to two
-significant figures: `docs/evidence/calc-api/`. They are the largest seen on
+significant figures: `docs/evidence/calc-api/`. For the mean node, the mean
+south node and Black Moon Lilith they are the largest differences, on the
+same instants, from the same definitions evaluated with ERFA's fundamental
+arguments, which checks the implementation, not an ephemeris; their `basis`
+says so. They are the largest seen on
 those instants, not limits: another instant can exceed them. They come from
 the comparison rerun on this version's build, after the engine took the full
 IAU 2000B nutation (`docs/evidence/calc-api/rc16/`); none is larger than the

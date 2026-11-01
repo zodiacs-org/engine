@@ -342,8 +342,8 @@ export function housePosition(system: HouseSystem, input: AngleInput, body: Ecli
  * Munkasey's polar ascendant (Swiss Ephemeris's `ascmc[4]` to `ascmc[7]`).
  * Each is the ecliptic point of an oblique ascension under a pole, taken as
  * the formula gives it: inside the polar circle (and, for Munkasey's
- * co-ascendant, within 90° − ε of the equator) it can lie west of the
- * meridian, and it is not turned east as the ascendant is.
+ * co-ascendant, within ε of the equator) it can lie west of the meridian,
+ * and it is not turned east as the ascendant is.
  */
 export function coAscendants(input: AngleInput): CoAscendants {
   const { ramc, latitude, obliquity } = placeOf(input);

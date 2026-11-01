@@ -61,8 +61,10 @@ composes it, and the obliquity of J2000.0 of the IAU 2006 precession,
 
 Its bounds and its barycentre's error are measurements: the largest
 differences of this package's own results from NASA JPL Horizons (DE441)
-responses at 32 instants, and of astronomy-engine's barycentre from a
-Newtonian barycentre and from Horizons's. They are not coefficients derived
+responses at 32 instants (for the mean nodes and Black Moon Lilith, from
+their definitions evaluated with ERFA at those instants), and of
+astronomy-engine's barycentre from a Newtonian barycentre and from
+Horizons's. They are not coefficients derived
 from JPL data, and no JPL ephemeris value is in the package.
 
 Essential dignities
@@ -178,8 +180,9 @@ Gregorian adoption dates
 ------------------------
 
 @zodiacs/engine/geo carries a table of when 18 countries took the Gregorian
-calendar (GREGORIAN_ADOPTION, in dist/geo.js). Its dates come from these
-public-domain sources:
+calendar (GREGORIAN_ADOPTION), in a shared chunk under dist/ that dist/geo.js
+and dist/techniques.js import. Its dates come from these public-domain
+sources:
 
   IANA Time Zone Database 2025c, file calendars, which quotes H. Grotefend,
   Taschenbuch der Zeitrechnung des deutschen Mittelalters und der Neuzeit,

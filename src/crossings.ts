@@ -363,9 +363,11 @@ function run<B extends string>(
  * the direction of the sample before it. Offsets of 90° or more are read as
  * the far side of the circle, not a crossing.
  *
- * A plain scan loses both crossings when a station falls between two samples
- * just past the target: at a 5-day step, a Saturn station within 0.0103° of
- * it, or a Jupiter station within 0.0205°. Where the sampled motion turns
+ * A plain scan can lose both crossings when a station takes the body less
+ * than f″h²/8 past the target (f″ the second derivative of its longitude at
+ * the station, h the step), since both can then fall between two samples: at
+ * a 5-day step, up to 0.0056° for Saturn and 0.011° for Jupiter at their
+ * stations from 2019 to 2024. Where the sampled motion turns
  * without the offset changing sign, and the turning sample is within reach of
  * the local curvature, a golden-section search finds the extremum. Both
  * crossings are bisected when it passes the target, and one is reported, as

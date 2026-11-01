@@ -1,5 +1,31 @@
 # Engine changelog
 
+## 1.1.0-rc.2 (unreleased candidate)
+
+- **Corrections (zodiacs.org's finding F-89).** Statements that 1.0.0 and
+  1.1.0-rc.1 made in the README, NOTICE, LICENSING.md and doc comments, and
+  that zodiacs.org's claims ledger found to say more than their evidence, now
+  say what was measured or what the code does
+  (`docs/evidence/1.1.0-rc.2-20261102/f89/`). The README no longer says that
+  the Vertex and the East Point agree with Swiss Ephemeris's
+  `swe_houses_armc` to within 0.00001″ given its inputs, which zodiacs.org's
+  points record of 0.1.1-rc.10 does not bear out; it gives the conformance
+  suite's figures instead, within 0.013″ and 0.007″ on its ten L2 vectors for
+  them, whose arbiter is ERFA (`conformance/RESULTS.md`). A plain 5-day
+  crossing scan can miss a station that takes the body less than f″h²/8 past
+  the target: up to 0.0056° for Saturn and 0.011° for Jupiter at their
+  stations from 2019 to 2024, not the 0.0103° and 0.0205° given before. A
+  local-time resolution names a transition only where there is one, and no
+  tzdb version where the runtime reports none. The Gregorian adoption table is
+  in a shared chunk that `dist/geo.js` and `dist/techniques.js` import. The
+  calc bounds of the mean node, the mean south node and Black Moon Lilith were
+  measured against their definitions evaluated with ERFA, and their `basis`
+  now says so; no bound's value changes. Placidus's step count near the polar
+  limit is no longer given. Munkasey's co-ascendant can lie west of the
+  meridian within ε of the equator, not within 90° − ε. `ChartInput.deltaT`
+  falls back to the engine's time basis. Receipts name the ephemeris from the
+  rc.8 conventions set on, not only in the current one.
+
 ## 1.1.0-rc.1 — unreleased candidate
 
 The first candidate for 1.1.0, on 1.0.0 (main at `4771fa6`): natal receipts

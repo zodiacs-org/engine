@@ -11,6 +11,8 @@
  * calc-bounds.test.ts checks the two agree.
  */
 export const MEASURED_BASIS = "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16";
+/** The basis of the mean node's, the mean south node's and Black Moon Lilith's bounds. */
+export const MEAN_POINTS_BASIS = "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16";
 type Rows = Readonly<Record<string, readonly [number, number | null, number | null]>>;
 const BARYCENTRIC_APPARENT: Rows = {
   "Earth": [3.0, 1.4e-05, 0.18],

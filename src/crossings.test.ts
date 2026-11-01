@@ -170,6 +170,34 @@ describe("grazing crossing pairs", () => {
   });
 });
 
+describe("a plain scan's blind band, f″h²/8", () => {
+  // F-89, item 2 (docs/evidence/1.1.0-rc.2-20261102/f89/PREREGISTRATION.md, E3 a), on an exact
+  // parabola with no ephemeris. A station that takes the body a depth δ past the target has its two
+  // crossings 2·sqrt(2δ/f″) apart, less than one step h exactly when δ < f″h²/8. With the station at
+  // the centre of a cell, the samples either side of it are h/2 away, f″h²/8 short of the station.
+  const step = 5;
+  const curvature = 0.002; // f″, degrees a day squared
+  const band = (curvature * step ** 2) / 8;
+  const past = (depth: number) => (day: number) => 100 + depth - (curvature / 2) * (day - 12.5) ** 2;
+  /** Sign changes of the offset from 100° between neighbouring samples every 5 days from day 0 to day 25. */
+  const plainScan = (depth: number) => {
+    const offsets = [0, 5, 10, 15, 20, 25].map((day) => past(depth)(day) - 100);
+    return offsets.slice(1).filter((offset, k) => Math.sign(offset) !== Math.sign(offsets[k]!)).length;
+  };
+
+  it("misses both crossings of a station just under f″h²/8 past the target, and finds both just over it", () => {
+    expect(plainScan(band * 0.999)).toBe(0);
+    expect(plainScan(band * 1.001)).toBe(2);
+    // 1.1.0-rc.1's figures implied a miss at 1.5 times f″h²/8 too; the plain scan finds both there.
+    expect(plainScan(band * 1.5)).toBe(2);
+  });
+
+  it("leaves the pair the plain scan misses to the sampled turn, where the search finds it", () => {
+    const found = findLongitudeCrossingsWith(byDay(past(band * 0.999)), "Saturn", 100, new Date(0), new Date(25 * DAY), step);
+    expect(found.map((crossing) => crossing.retrograde)).toEqual([false, true]);
+  });
+});
+
 describe("sample budget", () => {
   const refused = (samples: number, maxSamples: number) => ({
     status: "refused",

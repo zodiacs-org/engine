@@ -346,6 +346,18 @@ for (const entry of ["dist/vedic.js", "dist/calc.js"]) {
 assert(notice.includes("in a shared chunk under dist/ that dist/vedic.js and dist/calc.js import"), "NOTICE must say where the star values are");
 assert(prose("LICENSING.md").includes("shared chunk under `dist/` that `dist/vedic.js` and `dist/calc.js` import"),
   "LICENSING.md must say where the star values are");
+// The Gregorian adoption table, the same way: NOTICE and LICENSING.md say it
+// is in a shared chunk under dist/ that dist/geo.js and dist/techniques.js
+// import (1.0.0 and 1.1.0-rc.1 said dist/geo.js, which only re-exports it).
+const gregorianHolders = files.filter((file) => file.endsWith(".js") && read(file).includes("var GREGORIAN_ADOPTION ="));
+assert(gregorianHolders.length === 1 && /^dist\/chunk-[^/]+\.js$/u.test(gregorianHolders[0]),
+  `the Gregorian adoption table must be in exactly one shared chunk under dist/, as NOTICE says; found it in ${gregorianHolders.join(", ") || "no file"}`);
+const gregorianImporters = files.filter((file) => file.endsWith(".js") && read(file).includes(`./${gregorianHolders[0].slice("dist/".length)}`));
+assert.deepEqual(gregorianImporters.sort(), ["dist/geo.js", "dist/techniques.js"],
+  "exactly dist/geo.js and dist/techniques.js must import the chunk that holds the Gregorian adoption table, as NOTICE says");
+assert(notice.includes("in a shared chunk under dist/ that dist/geo.js and dist/techniques.js import"), "NOTICE must say where the Gregorian adoption table is");
+assert(prose("LICENSING.md").includes("shared chunk under `dist/` that `dist/geo.js` and `dist/techniques.js` import"),
+  "LICENSING.md must say where the Gregorian adoption table is");
 assert(read("README.md").includes(LICENSE_EXPRESSION), "README.md must state the licence expression");
 // The shipped text refers to the separate earlier package without naming it.
 for (const file of files) {

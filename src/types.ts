@@ -107,7 +107,7 @@ export interface ChartInput {
   utc: Date;
   /** Present when the instant is not UTC. */
   timeScale?: Exclude<TimeScaleName, "utc">;
-  /** A caller's fixed ΔT in seconds; the engine's model when absent. */
+  /** A caller's fixed ΔT (TT − UT1) in seconds, as BirthInput.deltaT; the engine's time basis when absent. */
   deltaT?: number;
   latitude?: number;
   longitude?: number;

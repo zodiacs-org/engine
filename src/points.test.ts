@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { describe, expect, it } from "vitest";
 
 import { chartPoints, natalChart } from "./api.js";
@@ -207,5 +209,39 @@ describe("chartPoints", () => {
     const vertex = (result: ReturnType<typeof chartPoints>) =>
       result.points.find((point) => point.point === "Vertex")!.lon;
     expect(vertex(chartPoints(claimed))).toBe(vertex(chartPoints(chart)));
+  });
+});
+
+describe("the README's figures for the Vertex and the East Point", () => {
+  // F-89, item 1 under OQ9 (c) (docs/evidence/1.1.0-rc.2-20261102/f89/PREREGISTRATION.md, E10): the
+  // README states the conformance suite's figures, the largest residuals of its L2 vectors for the two
+  // points, whose arbiter is ERFA (conformance/RESULTS.md, which the harness regenerates).
+  const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+  /** @zodiacs/engine's angles.vertex-east-point row: its vector count and the two largest residuals. */
+  const engineRow = (results: string) => {
+    const row = results
+      .slice(results.indexOf("\n## @zodiacs/engine "))
+      .split("\n")
+      .find((line) => line.startsWith("| L2 | `angles.vertex-east-point` |"));
+    const match = row?.match(/^\| L2 \| `angles\.vertex-east-point` \| (\d+) \|.*vertex: [\d.]+″ \/ [\d.]+″ \/ ([\d.]+)″<br>east_point: [\d.]+″ \/ [\d.]+″ \/ ([\d.]+)″/u);
+    return match ? { line: row!, vectors: Number(match[1]), maxima: [match[2]!, match[3]!] } : null;
+  };
+  const stated = read("README.md")
+    .replace(/\s+/gu, " ")
+    .match(/On the conformance suite's ten L2 vectors for them, at latitudes from 60° S to 60° N, whose arbiter is ERFA's sidereal time and obliquity with each point's published definition, they are within ([\d.]+)″ and ([\d.]+)″ \(`conformance\/RESULTS\.md`\)/u);
+
+  it("are the conformance results' largest residuals, on ten vectors from 60° S to 60° N", () => {
+    const results = read("conformance/RESULTS.md");
+    const row = engineRow(results);
+    expect(stated?.slice(1)).toEqual(row?.maxima);
+    expect(row?.vectors).toBe(10);
+    const vectors = (JSON.parse(read("conformance/vectors/L2-houses-angles.json")) as { vectors: { kind: string; input: { lat: number } }[] }).vectors
+      .filter((vector) => vector.kind === "angles.vertex-east-point");
+    expect(vectors).toHaveLength(10);
+    expect([Math.min(...vectors.map((vector) => vector.input.lat)), Math.max(...vectors.map((vector) => vector.input.lat))]).toEqual([-60, 60]);
+    // The comparison sees a change: the Vertex's largest residual changed in its last digit does not match.
+    const changedLine = row!.line.replace(/(vertex: [\d.]+″ \/ [\d.]+″ \/ [\d.]*)(\d)″/u, (_, head: string, digit: string) => `${head}${(Number(digit) + 1) % 10}″`);
+    expect(changedLine).not.toBe(row!.line);
+    expect(stated?.slice(1)).not.toEqual(engineRow(results.replace(row!.line, changedLine))?.maxima);
   });
 });

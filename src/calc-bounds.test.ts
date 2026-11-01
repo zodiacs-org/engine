@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { AstroTime, BaryState, Body, HelioVector } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
-import { MEASURED, MEASURED_BASIS } from "./calc-bounds.js";
+import { MEAN_POINTS_BASIS, MEASURED, MEASURED_BASIS } from "./calc-bounds.js";
 import { BARYCENTRE_ERROR } from "./calc-reduce.js";
 import { calc } from "./calc.js";
 import type { CalcPosition } from "./calc.js";
@@ -60,6 +60,27 @@ describe("the measured bounds", () => {
       expect(point.bounds.position.value).toBe(MEASURED["geocentric/apparent"]![body]![0]);
       expect(point.bounds.distance).toBeNull();
     }
+  });
+
+  it("name ERFA, not Horizons, as the basis of the mean points' bounds", () => {
+    // F-89, item 5 (docs/evidence/1.1.0-rc.2-20261102/f89/PREREGISTRATION.md, E6): the mean node, the
+    // mean south node and Black Moon Lilith were compared with their definitions evaluated on ERFA's
+    // fundamental arguments, the true node with Horizons's osculating node
+    // (docs/evidence/calc-api/PREREGISTRATION.md). No bound's value changes.
+    expect(MEAN_POINTS_BASIS).toBe(
+      "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) " +
+        "and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), " +
+        "in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
+    );
+    expect(MEAN_POINTS_BASIS).not.toContain("Horizons");
+    for (const body of ["Mean Node", "Mean South Node", "Black Moon Lilith"] as const) {
+      const point = ok(calc({ body, time }));
+      const [position, , speed] = MEASURED["geocentric/apparent"]![body]!;
+      expect(point.bounds.position, body).toEqual({ value: position, unit: "arcsec", label: "measured", basis: MEAN_POINTS_BASIS });
+      expect(point.bounds.speed, body).toMatchObject({ value: speed, unit: "arcsec/day", label: "measured", basis: MEAN_POINTS_BASIS });
+    }
+    const node = ok(calc({ body: "North Node", time }));
+    expect(node.bounds.position).toEqual({ value: MEASURED["geocentric/apparent"]!["North Node"]![0], unit: "arcsec", label: "measured", basis: MEASURED_BASIS });
   });
 });
 

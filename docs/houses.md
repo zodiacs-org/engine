@@ -183,7 +183,7 @@ The last three belong to Munkasey's eight Personal Sensitive Points [SE-G
 equatorial ascendant, A = RAMC + 270° with p = φ for the polar ascendant (the
 Koch co-ascendant is its opposite), and A = RAMC + 90° with p = 90° − φ for
 Munkasey's co-ascendant. Where that point lies west of the meridian (inside
-the polar circle, and for Munkasey's within 90° − ε of the equator), it is not
+the polar circle, and for Munkasey's within ε of the equator), it is not
 turned east as the ascendant is.
 
 Against Swiss's `swe_houses_armc` given the same RAMC, latitude and obliquity,

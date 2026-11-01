@@ -155,4 +155,28 @@ describe("the cause of a gap or fold, from the record", () => {
     expect(modern.transition).toBeNull();
     expect(modern.zone).toMatchObject({ source: "intl", dataForm: "host", abbreviation: null, dst: null });
   });
+
+  it("names no tzdb version where the host's Intl answered and the runtime reports none", () => {
+    // F-89, item 3 (docs/evidence/1.1.0-rc.2-20261102/f89/PREREGISTRATION.md, E4): from 1970 the
+    // version is the host's, process.versions.tz, which a runtime need not report. Removed for the call.
+    const versions = process.versions as unknown as Record<string, unknown>;
+    const reported = Object.getOwnPropertyDescriptor(versions, "tz");
+    const modernWith = (tz: string | undefined) => {
+      try {
+        if (tz === undefined) delete versions.tz;
+        else Object.defineProperty(versions, "tz", { value: tz, writable: false, enumerable: true, configurable: true });
+        return resolveLocalToUtc("2020-07-01", "12:00", "Europe/London");
+      } finally {
+        if (reported) Object.defineProperty(versions, "tz", reported);
+        else delete versions.tz;
+      }
+    };
+    const unreported = modernWith(undefined);
+    expect(unreported.zone).toMatchObject({ source: "intl", tzdbVersion: null, dataForm: "host" });
+    expect(unreported.localResolution.tzdbVersion).toBeNull();
+    expect(unreported.transition).toBeNull();
+    // Where the runtime reports a version, the resolution names it.
+    expect(modernWith("2025c").zone).toMatchObject({ source: "intl", tzdbVersion: "2025c" });
+    expect(Object.getOwnPropertyDescriptor(versions, "tz")).toEqual(reported);
+  });
 });

@@ -432,6 +432,25 @@ describe("co-ascendants and the polar ascendant", () => {
       }
     }
   });
+
+  it("puts Munkasey's co-ascendant west of the meridian only within ε of the equator", () => {
+    // F-89, item 7 (docs/evidence/1.1.0-rc.2-20261102/f89/PREREGISTRATION.md, E7), exact geometry: the
+    // co-ascendant is the ascendant at the colatitude, which is inside the polar circle, where an
+    // ascendant can lie west of the meridian, when the latitude is within ε of the equator. 1.1.0-rc.1's
+    // doc comment said within 90° − ε. West: its longitude less the MC, in [0°, 360°), is 180° or more.
+    const westOn1DegreeGrid = (latitude: number) =>
+      Array.from({ length: 360 }, (_, ramc) => ramc).filter(
+        (ramc) => normalize(coAscendants(input(ramc, latitude)).munkaseyCoAscendant - computeAngles(input(ramc, latitude)).mc) >= 180
+      ).length;
+    for (const latitude of [0, 10, OBLIQUITY - 0.5]) {
+      expect(westOn1DegreeGrid(latitude), `${latitude}`).toBeGreaterThan(0);
+      expect(westOn1DegreeGrid(-latitude), `${-latitude}`).toBeGreaterThan(0);
+    }
+    for (const latitude of [OBLIQUITY + 0.5, 30, 45, 60]) {
+      expect(westOn1DegreeGrid(latitude), `${latitude}`).toBe(0);
+      expect(westOn1DegreeGrid(-latitude), `${-latitude}`).toBe(0);
+    }
+  });
 });
 
 describe("speeds", () => {

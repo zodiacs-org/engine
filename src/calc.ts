@@ -13,7 +13,7 @@ import { AstroTime, Body, GeoMoonState } from "astronomy-engine";
 // Imported first so that the build keeps the root entry's shared chunks byte for byte.
 import { bodyLongitude, computeChart, gastHours, onChartClock } from "./ephemeris.js";
 import { assertDerivedFlags, snapshotFlags, timeFlags, validateBirthSettings } from "./birth-input.js";
-import { MEASURED, MEASURED_BASIS } from "./calc-bounds.js";
+import { MEAN_POINTS_BASIS, MEASURED, MEASURED_BASIS } from "./calc-bounds.js";
 import {
   CALC_FRAMES as FRAMES,
   apply,
@@ -726,10 +726,18 @@ function positionIds(body: CalcBody, frame: CalcFrame, kind: Center["kind"], cor
   return ids;
 }
 
-function bound(value: number | null | undefined, unit: CalcBound["unit"], estimated: string | null): CalcBound {
+/** The mean points' bounds are differences from their definitions evaluated with ERFA, not from Horizons. */
+const MEAN_POINTS: readonly string[] = ["Mean Node", "Mean South Node", "Black Moon Lilith"];
+
+function bound(
+  value: number | null | undefined,
+  unit: CalcBound["unit"],
+  estimated: string | null,
+  measured: string = MEASURED_BASIS
+): CalcBound {
   return value === undefined || value === null
     ? { value: null, unit, label: "estimated", basis: "not compared with an independent ephemeris" }
-    : { value, unit, label: estimated === null ? "measured" : "estimated", basis: estimated ?? MEASURED_BASIS };
+    : { value, unit, label: estimated === null ? "measured" : "estimated", basis: estimated ?? measured };
 }
 
 /** Rounded up to two significant figures. */
@@ -845,6 +853,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     // the barycentric Sun's come from the barycentre's error.
     let row = MEASURED[`${kind}/${point ? "apparent" : correction}`]?.[body];
     let estimated: string | null = null;
+    const measured = MEAN_POINTS.includes(body) ? MEAN_POINTS_BASIS : MEASURED_BASIS;
     if (!row && kind === "topocentric") {
       row = MEASURED[`geocentric/${correction}`]?.[body];
       estimated = "the geocentric bound for this correction; topocentric positions were compared only for the Sun, the Moon and Mars";
@@ -874,10 +883,10 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
           : null,
       ayanamsa: sidereal && ayanamsaValue(definition!, sidereal, frame === "ecliptic-true-of-date" ? "true" : "mean", k),
       bounds: {
-        position: withAyanamsa(bound(row?.[0], "arcsec", estimated), added && { value: added.position, basis: added.basis }),
+        position: withAyanamsa(bound(row?.[0], "arcsec", estimated, measured), added && { value: added.position, basis: added.basis }),
         distance: point ? null : bound(row?.[1], "relative", estimated),
         speed: method && {
-          ...withAyanamsa(bound(row?.[2], "arcsec/day", estimated), added && { value: added.rate, basis: added.basis }),
+          ...withAyanamsa(bound(row?.[2], "arcsec/day", estimated, measured), added && { value: added.rate, basis: added.basis }),
           method,
           stepDays: analytic ? null : step
         }

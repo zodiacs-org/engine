@@ -240,8 +240,10 @@ apparent, astrometric or geometric positions with distances and speeds; and
 the tropical or the sidereal zodiac, with any ayanamsa of
 `@zodiacs/engine/vedic` or a caller's own (Swiss Ephemeris's `SE_SIDM_USER`).
 Results carry bounds and a receipt of convention ids. A measured bound is the
-largest difference from JPL Horizons on 32 instants from 1802 to 2188: a
-sample maximum, not a limit. In the sidereal zodiac a bound adds the
+largest difference from JPL Horizons on 32 instants from 1802 to 2188 (for
+the mean nodes and Black Moon Lilith, from their definitions evaluated with
+ERFA on the same instants): a sample maximum, not a limit. In the sidereal
+zodiac a bound adds the
 ayanamsa's: the largest difference of its mean, and of its rate, from ERFA's
 construction of the same definition, over every year from 1800 to 2199. An
 estimated bound names what it rests on. What this version does not compute
@@ -562,8 +564,10 @@ Every chart gets those three. The Vertex, the East Point, the sect and the
 lots need a birth time and place.
 
 - The Vertex and the East Point come from the instant and the place, not from a
-  supplied chart's angles. Given Swiss's sidereal time, latitude and obliquity,
-  they agree with its `swe_houses_armc` to within 0.00001″.
+  supplied chart's angles. On the conformance suite's ten L2 vectors for them,
+  at latitudes from 60° S to 60° N, whose arbiter is ERFA's sidereal time and
+  obliquity with each point's published definition, they are within 0.013″
+  and 0.007″ (`conformance/RESULTS.md`).
 - The sect is day when the Sun is between the descendant and the ascendant
   through the midheaven.
 - The lots use the chart's own ascendant and bodies. Each is the ascendant plus
@@ -670,9 +674,13 @@ before it; a sampled plateau on the target is returned where it begins.
 Offsets of 90° or more on either side of a step are the far side of the circle,
 not a crossing.
 
-A fixed step alone loses both crossings when a station falls between two
-samples just past the target: at 5 days, a Saturn station within 0.0103° of
-it, or a Jupiter station within 0.0205°. Wherever the sampled motion turns
+A fixed step alone can lose both crossings when a station takes the body
+less than f″h²/8 past the target, f″ being the second derivative of its
+longitude at the station and h the step, since both crossings can then fall
+between two samples: at 5 days, up to 0.0056° for Saturn and 0.011° for
+Jupiter at their stations from 2019 to 2024
+(`docs/evidence/1.1.0-rc.2-20261102/f89/blind-band.json`).
+Wherever the sampled motion turns
 without the offset changing sign, and the turning sample is within reach of the
 local curvature, the solver finds the extremum by golden-section search. It
 bisects both crossings when the extremum passes the target, and returns one,
@@ -894,8 +902,12 @@ timeZone)` loads the one a zone needs, and a wall time before 1970 throws until
 it has. From 1970 the host's Intl answers. A `longitude` reads a time in a
 zone's local mean time era on the birthplace's own mean time; `calendar:
 "julian"` takes an Old Style date, and `country` adds a note from the country's
-Gregorian adoption. Each resolution names the tzdb version, the transition
-behind the offset and its cause (`dst`, `legal-change` or `date-line`).
+Gregorian adoption. Each resolution names the tzdb version (the host's where
+its Intl answered, null when the runtime does not report one) and, where
+there is one, the transition behind the offset with its cause (`dst`,
+`legal-change` or `date-line`): the jump's in a gap or fold, or, where the
+shipped history answered, the last change it records before the time. From
+1970, outside a gap or fold, the transition is null.
 [docs/time.md](docs/time.md) describes every field.
 
 ## Nutation

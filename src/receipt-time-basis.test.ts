@@ -27,6 +27,7 @@ import { natalConventionIds } from "./conventions.js";
 
 const RC13 = readFileSync(new URL("./fixtures/receipt-rc13.json", import.meta.url), "utf8");
 const RC14 = readFileSync(new URL("./fixtures/receipt-rc14.json", import.meta.url), "utf8");
+const RC7 = readFileSync(new URL("./fixtures/receipt-rc7.json", import.meta.url), "utf8");
 
 function envelopeOf(birth: Partial<BirthInput> = {}): NatalEnvelope {
   return createNatalEnvelope(
@@ -156,6 +157,14 @@ describe("a receipt written by 0.1.1-rc.14 (the rc.8 conventions set)", () => {
   it("is refused under a version after rc.14, and with a time basis added", () => {
     expect(verdict(RC14, (copy) => (copy.receipt.engine.version = "0.1.1-rc.15"))).toBe("inconsistent_result");
     expect(verdict(RC14, (copy) => (copy.receipt.timeScale = "utc"))).toBe("invalid_shape");
+  });
+
+  it("is refused without the ephemeris it names, which receipts carry from the rc.8 set on", () => {
+    // F-89, item 9 (docs/evidence/1.1.0-rc.2-20261102/f89/PREREGISTRATION.md, E8): the codec requires
+    // engine.ephemeris from the rc.8 conventions set on, not only in the current set. An rc.7 receipt
+    // names none and parses without it (src/receipt-conventions.test.ts).
+    expect(verdict(RC14, (copy) => delete copy.receipt.engine.ephemeris)).toBe("invalid_shape");
+    expect(verdict(RC7, (copy) => delete copy.receipt.engine.ephemeris)).toBe("ok");
   });
 });
 

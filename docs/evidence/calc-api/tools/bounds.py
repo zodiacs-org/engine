@@ -31,6 +31,12 @@ def render(summary):
     first, last = min(summary['instants']), max(summary['instants'])
     basis = (f"largest difference from JPL Horizons (DE441) over {len(summary['instants'])} instants from "
              f"JD {first} to {last} (TT), in all eight frames; {EVIDENCE}")
+    # The mean points were compared with their definitions evaluated with ERFA, not with Horizons
+    # (PREREGISTRATION.md, the true node and the mean points; compare.py's compare_point).
+    points_basis = (f"largest difference from the same definition evaluated with ERFA's fundamental "
+                    f"arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over "
+                    f"{len(summary['instants'])} instants from JD {first} to {last} (TT), in all eight "
+                    f"frames: a check of the implementation, not of an ephemeris; {EVIDENCE}")
     groups = {}
     for key, row in summary['bounds'].items():
         if key in DERIVED:
@@ -64,6 +70,8 @@ def render(summary):
  * calc-bounds.test.ts checks the two agree.
  */
 export const MEASURED_BASIS = {json.dumps(basis)};
+/** The basis of the mean node's, the mean south node's and Black Moon Lilith's bounds. */
+export const MEAN_POINTS_BASIS = {json.dumps(points_basis)};
 type Rows = Readonly<Record<string, readonly [number, number | null, number | null]>>;
 {"".join(constants)}export const MEASURED: Readonly<Record<string, Rows>> = {{
 {body}
