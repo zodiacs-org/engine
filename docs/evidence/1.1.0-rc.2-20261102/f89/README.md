@@ -12,6 +12,36 @@ OQ9 is unanswered, and pyswisseph, which (a) needs, is not approved (OQ6).
   E2 run. It is the draft's tool with the scan's method unchanged; item 1's
   edit and E2 phrase are those of OQ9 (c), and edit 2a names this folder's
   `blind-band.json` (the cut plan's correction K27).
+- `blind-band.mjs` and its output `blind-band.json`: E3 (b), item 2's
+  figures (below).
+
+## The blind band of a plain 5-day scan (item 2)
+
+    npm run build
+    node docs/evidence/1.1.0-rc.2-20261102/f89/blind-band.mjs
+
+It is a port of zodiacs.org's
+`docs/platform/evidence/claims-engine-references-20261012/tools/blind-band.mjs`
+(site main 9a67f761) to this repository's build. On the engine's own
+longitudes it finds the 12 Saturn and 11 Jupiter stations from 2019 to 2024,
+takes f″ at each by a central difference over ±1 day, and scans 40 days
+around each at 100 phases of the 5-day grid for a target a given depth short
+of the station. Run on the build of the unit's first commit, `48e4e76`
+(Node 22.22.2, macOS on arm64), and run again there with the same bytes
+(SHA-256 `0c4c6b0fc248dd3b5f6661f705ac41611d5d4895b45caa213493342c196c8886`):
+
+- the largest band f″h²/8 is 0.00554984° for Saturn and 0.0109673° for
+  Jupiter, which rounded up to two significant figures are the 0.0056° and
+  0.011° that README.md and `dist/crossings.d.ts` state;
+- at those depths no phase misses both crossings, at any station (the check);
+- at 0.9 times each station's own band, 5 phases of 100 miss both, at every
+  station (the control, which must find a miss);
+- each station's time, f″ and band are those of the site's record on engine
+  1.0.0, `blind-band.json` beside that tool, in all 23 rows.
+
+The figures describe a fixed-step scan of the engine's own motion, not the
+sky. The run is repeated at the source commit, where it must give the same
+bytes.
 
 ## The bounds generator (item 5)
 
@@ -34,6 +64,7 @@ comment only. The calc-api record's other files are not rewritten.
 | --- | --- | --- |
 | E1, E2 | all | `tools/f89_edits.py package`, on an unpacked package |
 | E3 (a) | 2 | `src/crossings.test.ts`, "a plain scan's blind band, f″h²/8" |
+| E3 (b) | 2 | `blind-band.mjs` and its output `blind-band.json` |
 | E4 | 3 | `src/geo/flags.test.ts`, "names no tzdb version where ..." |
 | E5 | 4 | `scripts/verify-package-contents.mjs`, the Gregorian adoption table |
 | E6 | 5 | `src/calc-bounds.test.ts`, "name ERFA, not Horizons, ..." |
