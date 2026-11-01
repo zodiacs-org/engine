@@ -82,7 +82,7 @@ const leapSeconds: LeapSeconds | null = basis.leapSeconds;
 const ut1: Ut1MinusUtc | null = basis.ut1MinusUtc;
 void leapSeconds; void ut1;
 const ayanamsaValue: AyanamsaValue = ayanamsa("lahiri", "1990-06-15T12:30:00Z", {timeScale: "tt"});
-import { timeBasis, elapsedDays, eclipticFrame, eclipticOfDate, meanEcliptic, tilt, TIME_SCALE_NAMES, DELTA_T_IERS_MODEL, EPHEMERIS_SPAN as TIME_SPAN, type TimeBasis, type EclipticFrame, type Tilt, type DeltaTSegment } from "@zodiacs/engine/time";
+import { timeBasis, elapsedDays, eclipticFrame, eclipticOfDate, meanEcliptic, tilt, timeBands, TIME_SCALE_NAMES, DELTA_T_IERS_MODEL, EPHEMERIS_SPAN as TIME_SPAN, type TimeBasis, type TimeBands, type EclipticFrame, type Tilt, type DeltaTSegment } from "@zodiacs/engine/time";
 const leapBasis: TimeBasis = timeBasis(Date.UTC(2017, 0, 1), "utc");
 const leapTai: number | undefined = leapBasis.timeScale.leapSeconds?.taiMinusUtc;
 const frameOfDate: EclipticFrame = eclipticFrame(leapBasis.ttDays);
@@ -94,7 +94,9 @@ const twoDays: number = elapsedDays(leapBasis, timeBasis(Date.UTC(2017, 0, 3)), 
 const scaleNames: readonly TimeScaleName[] = TIME_SCALE_NAMES;
 const iersModel: "iers-utc/1" = DELTA_T_IERS_MODEL;
 const timeSpanStart: -730000 = TIME_SPAN.daysFromJ2000.from;
-void leapTai; void tiltOfDate; void timeSegment; void lonOfDate; void meanVector; void twoDays; void scaleNames; void iersModel; void timeSpanStart;
+const leapBands: TimeBands = timeBands(leapBasis);
+const ttBand: number = timeBands(onTt).ut1;
+void leapTai; void tiltOfDate; void timeSegment; void lonOfDate; void meanVector; void twoDays; void scaleNames; void iersModel; void timeSpanStart; void leapBands; void ttBand;
 const ayanamsaScale: TimeScale = ayanamsaValue.timeScale;
 void ayanamsaScale;
 await prepareLocalTime("1883-11-18", "America/New_York");
@@ -467,6 +469,7 @@ assert.deepEqual(time.timeBasis(Date.parse("1990-06-15T12:30:00Z")).deltaT, leap
 assert.equal(time.EPHEMERIS_SPAN, EPHEMERIS_SPAN);
 assert(Object.isFrozen(time.eclipticFrame(0).rows));
 assert.throws(() => time.timeBasis(Number.NaN), RangeError);
+assert.deepEqual(time.timeBands(leapChart), {tt: 0, ut1: leapChart.timeScale.ut1MinusUtc.sigma});
 // Wall times before 1970 read the packed tzdb 2025c history, loaded lazily.
 assert.equal(TZDB.version, "2025c");
 assert.throws(() => resolveLocalToUtc("1947-07-01", "12:00", "Europe/Stockholm"), (error) => error instanceof ZoneHistoryNotLoadedError && /prepareLocalTime/.test(error.message));

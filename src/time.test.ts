@@ -23,14 +23,15 @@ import type { EclipticFrame, TimeBasis } from "./time.js";
 
 const DAY = 86_400_000;
 const RAD = 180 / Math.PI;
-/** R1: the entry's runtime exports. */
+/** R1: the entry's runtime exports, with P1.M3c's default timeBands. */
 const VALUES = [
   "DELTA_T_IERS_MODEL", "EPHEMERIS_SPAN", "TIME_SCALE_NAMES", "eclipticFrame", "eclipticOfDate", "elapsedDays", "meanEcliptic", "tilt",
-  "timeBasis"
+  "timeBands", "timeBasis"
 ];
-/** R1: its declarations, the nine values and the types they take and give. */
+/** R1: its declarations, the ten values and the types they take and give. */
 const DECLARED = [
-  ...VALUES, "DeltaT", "DeltaTSegment", "EclipticFrame", "LeapSeconds", "Tilt", "TimeBasis", "TimeScale", "TimeScaleName", "Ut1MinusUtc"
+  ...VALUES, "DeltaT", "DeltaTSegment", "EclipticFrame", "LeapSeconds", "Tilt", "TimeBands", "TimeBasis", "TimeScale", "TimeScaleName",
+  "Ut1MinusUtc"
 ].sort();
 const SCALES: TimeScaleName[] = ["utc", "ut1", "tt"];
 const PINS = [undefined, 69.184, -1.5];
@@ -67,11 +68,11 @@ const ERFA = JSON.parse(readFileSync(new URL("./fixtures/nutation-erfa.json", im
 };
 
 describe("@zodiacs/engine/time", () => {
-  it("exports exactly the nine values of R1", () => {
+  it("exports exactly the ten values of R1, timeBands with P1.M3c's default", () => {
     expect(Object.keys(time).sort()).toEqual(VALUES);
   });
 
-  it("declares exactly R1's eighteen names in api/time.api.md", () => {
+  it("declares exactly R1's twenty names in api/time.api.md, TimeBands and timeBands with P1.M3c's default", () => {
     const report = readFileSync(new URL("../api/time.api.md", import.meta.url), "utf8");
     const block = /## Exported \((\d+)\)\n\n```ts\n([\s\S]*?)\n```/u.exec(report);
     expect(block?.[1]).toBe(String(DECLARED.length));
@@ -231,7 +232,7 @@ describe("@zodiacs/engine/time", () => {
     expect(bodies).toBe(12 * (155 + 37));
   });
 
-  it("imports no ephemeris: its source graph is the nine modules of T2", () => {
+  it("imports no ephemeris: its source graph is the ten modules of T2, src/time-bands.ts with P1.M3c's default", () => {
     const graph = new Map<string, string[]>();
     const visit = (path: string) => {
       if (graph.has(path)) return;
@@ -252,8 +253,8 @@ describe("@zodiacs/engine/time", () => {
     };
     visit("src/time.ts");
     expect([...graph.keys()].sort()).toEqual([
-      "src/deltat.ts", "src/frame.ts", "src/houses.ts", "src/nutation.ts", "src/reference-span.ts", "src/signs.ts", "src/time-scale-data.ts",
-      "src/time-scale.ts", "src/time.ts"
+      "src/deltat.ts", "src/frame.ts", "src/houses.ts", "src/nutation.ts", "src/reference-span.ts", "src/signs.ts", "src/time-bands.ts",
+      "src/time-scale-data.ts", "src/time-scale.ts", "src/time.ts"
     ]);
   });
 

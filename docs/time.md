@@ -136,6 +136,63 @@ longer calls, reuses the one it computed last for any time within 1e-6 day
 (86 ms), so code that calls astronomy-engine directly can see two calculations
 at almost the same TT differ in the twelfth decimal of a degree.
 
+### The time bands
+
+Two of a chart's records are 1-σ bands: d, `deltaT.sigma`, the ΔT band (null
+for a pin), and u, `timeScale.ut1MinusUtc.sigma`, the UT1 − UTC band (none
+before 1972, for UT1 input after the table, or with a pin on UT1 or TT
+input). From them and the instant's scale and basis, `timeBands(record)` in
+`@zodiacs/engine/time` (from 1.1.0-rc.2) gives the 1-σ bands of the TT and
+the UT1 the engine used, in seconds, reading d and u as 0 where there are
+none:
+
+| input | basis | `tt`, the band of TT | `ut1`, the band of UT1 |
+| --- | --- | --- | --- |
+| `tt` | any | 0 | d |
+| `ut1` | any | d | 0 |
+| `utc` | `iers`, from 1972-01-01 to 2027-10-02 | 0 | u |
+| `utc` | `pinned` | u | u |
+| `utc` | `delta-t` | √(u² + d²) | u |
+
+On TT input the instant is TT, and UT1 = TT − ΔT; on UT1 input TT = UT1 +
+ΔT. On UTC input on the IERS basis TT comes from the leap seconds exactly, so
+its band is 0, and UT1 carries the band of UT1 − UTC (on that basis d is u).
+With a pin, TT = UT1 + the pin, which is exact, so a pin on TT or UT1 input
+gives 0 for both. On the ΔT model before 1972 u is 0: civil time is read as
+UT1 by definition, and TT carries d. After the table UT1 − UTC is 0 within
+±0.9 s, so UT1 carries the 0.9 s, and TT both bands, combined as the root of
+the sum of their squares.
+
+So on UTC input from 1972-01-01 to 2027-10-02 the band of TT, which moves the
+planets, is 0, and the time basis's band falls on UT1, which turns the Earth.
+The bands step where the time basis steps, and `src/time-bands.test.ts`
+checks each of these a millisecond either side: at 1956.0
+(1956-01-01T12:00Z, UT1), where the model's σ falls from 0.46 s to the
+observed 0.03 s; at 1972-01-01, where the band of TT falls from 0.03 s to 0
+and that of UT1 rises from 0 to 2.69 ms (C04's 1.9 ms plus the table's
+0.79 ms); after 2026-09-24, the last observed day, where the predictions'
+formal errors take over; and after 2027-10-02, the table's last day, where
+the band of UT1 becomes 0.9 s and that of TT √(0.81 s² + d²), 0.908 s a
+millisecond later. The IERS formal error taken also changes at the start of
+each year (*What a chart reports*). The step of ΔT itself at 1941.0 leaves its
+σ unchanged, and no band is added for a leap second not yet announced after
+the leap-second list expires on 2027-06-28.
+
+A band is not a bound and not an error. It inherits σ's nature: on the IERS
+basis the IERS formal error plus 0.79 ms, which is optimistic in the
+predicted segment, where the formal errors of Bulletin A's predictions are
+smaller than the errors those predictions turn out to have; on the ΔT model
+0.03 s where observed and a band that grows with the years since the last
+observation after it, and before 1956 a band built from measured indicators,
+before 1620 an estimate rather than a calibrated 1-σ (zodiacs.org's
+`docs/platform/evidence/deltat-2026-09-25/`); after the table, the ±0.9 s
+range taken as a 1-σ. It leaves out the input time's own uncertainty and how
+far a civil time before 1972 was from UT1. `timeBands` reads the two bands,
+the scale and the basis only, and recomputes no σ, so a record read back
+gives the bands the engine gave. Root charts and natal envelopes carry no
+band of their own; theirs follow from the fields they record, through
+`timeBands`.
+
 ## Without the ephemeris: `@zodiacs/engine/time`
 
 `@zodiacs/engine/time` (from 1.1.0-rc.2) exports the clock and the frame of
@@ -154,10 +211,12 @@ import it.
 | `meanEcliptic(frame, x, y, z)` | an EQJ vector on the mean ecliptic and equinox of date |
 | `eclipticOfDate(x, y, z, tt)` | an EQJ vector's longitude and latitude on the true ecliptic and equinox of date, degrees |
 | `DELTA_T_IERS_MODEL`, `TIME_SCALE_NAMES` | `"iers-utc/1"`, the root's own value, and the frozen list `["utc", "ut1", "tt"]` |
+| `timeBands(record)` | the 1-σ bands, in seconds, of the TT and the UT1 of a recorded instant, `{ tt, ut1 }`, from its `deltaT` and `timeScale`: a `TimeBasis`, a chart, a calc instant, or a natal envelope's result from the time-basis set on (*The time bands*, above) |
 
 The entry also exports the types these take and give: `TimeBasis`,
 `TimeScale`, `TimeScaleName`, `Ut1MinusUtc`, `LeapSeconds`, `DeltaT`,
-`DeltaTSegment`, `Tilt` and `EclipticFrame` (`api/time.api.md`).
+`DeltaTSegment`, `Tilt`, `EclipticFrame` and `TimeBands`
+(`api/time.api.md`).
 
 Each function is the one the engine computes with (`src/time-scale.ts`,
 `src/nutation.ts`, `src/frame.ts`), behind a check. It throws `RangeError`
@@ -169,7 +228,11 @@ gives what the engine's function gives, value for value. `tilt` gives a
 frozen object, and `eclipticFrame` a frozen copy of the frame, its rows and
 its tilt: the engine keeps the last frame it computed for its next call at
 the same TT, and a caller that changed that object would change the next
-chart computed there. The entry keeps no state of its own.
+chart computed there. The entry keeps no state of its own. `timeBands`
+(`src/time-bands.ts`) checks its own argument: it throws `RangeError` for a
+record without a `deltaT` or a `timeScale`, such as a natal result from
+before the time-basis set, and for a scale, a basis or a band it does not
+know.
 
 A chart's positions are this computation (`src/ephemeris.ts`): astronomy-engine
 2.1.19's vector, taken with ΔT held at the basis's and time made at its UT1,

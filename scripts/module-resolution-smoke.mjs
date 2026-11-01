@@ -283,7 +283,8 @@ assert.equal("chartBodyDeclinations" in engine, false, "the chart-only declinati
 // computed on, without the ephemeris: its own names, none of them the root's
 // but the span and the model name, which are the root's own values.
 assert.deepEqual(Object.keys(time), [
-  "DELTA_T_IERS_MODEL", "EPHEMERIS_SPAN", "TIME_SCALE_NAMES", "eclipticFrame", "eclipticOfDate", "elapsedDays", "meanEcliptic", "tilt", "timeBasis"
+  "DELTA_T_IERS_MODEL", "EPHEMERIS_SPAN", "TIME_SCALE_NAMES", "eclipticFrame", "eclipticOfDate", "elapsedDays", "meanEcliptic", "tilt", "timeBands",
+  "timeBasis"
 ], "the time entry's runtime exports changed");
 for (const name of Object.keys(time)) {
   if (name === "EPHEMERIS_SPAN" || name === "DELTA_T_IERS_MODEL") assert.equal(time[name], engine[name], `root and time entry disagree: ${name}`);
@@ -302,6 +303,10 @@ assert.deepEqual(time.TIME_SCALE_NAMES, ["utc", "ut1", "tt"]);
   const frame = time.eclipticFrame(basis.ttDays);
   assert.ok(Object.isFrozen(frame) && Object.isFrozen(frame.rows) && Object.isFrozen(frame.tilt), "the time entry's frame must be a frozen copy");
   assert.throws(() => time.timeBasis(Number.NaN), RangeError);
+  // The bands of the time basis: on UTC input on the IERS basis TT is exact and UT1 carries UT1 - UTC's band.
+  assert.deepEqual(time.timeBands(basis), { tt: 0, ut1: basis.timeScale.ut1MinusUtc.sigma });
+  assert.deepEqual(time.timeBands(chart), time.timeBands(basis));
+  assert.throws(() => time.timeBands({ deltaT: basis.deltaT }), RangeError);
 }
 
 assert.equal(engine.PROGRESSION_DAYS_PER_YEAR, 365.2422);
@@ -436,13 +441,14 @@ for (const reading of [root.sources, root.held, root.marked]) {
 }
 // The time entry's graph, read both ways, holds its own file, the time basis,
 // the ΔT model, the spans, the nutation and the frame of date, with the two
-// modules they import (src/houses.ts, src/signs.ts), and nothing else: no
-// module that imports astronomy-engine, and of the opt-in modules only its own.
+// modules they import (src/houses.ts, src/signs.ts), and the bands of the time
+// basis (src/time-bands.ts), and nothing else: no module that imports
+// astronomy-engine, and of the opt-in modules only its own.
 {
   const graph = staticGraph({ metafile, read: readBuilt, entryOutput: "dist/time.js", entrySource: "src/time.ts" });
   const own = [
     "src/deltat.ts", "src/frame.ts", "src/houses.ts", "src/nutation.ts", "src/reference-span.ts", "src/signs.ts",
-    "src/time-scale-data.ts", "src/time-scale.ts", "src/time.ts"
+    "src/time-bands.ts", "src/time-scale-data.ts", "src/time-scale.ts", "src/time.ts"
   ];
   assert.deepEqual(graph.sources, own, "the time entry's source graph changed");
   for (const source of new Set([...graph.held, ...graph.marked])) {

@@ -231,9 +231,10 @@ for (const aspect of today.aspects) {
 - `@zodiacs/engine/time`, new in 1.1.0-rc.2, gives the clock and the frame of
   date a chart is computed on, and loads no ephemeris: `timeBasis`, an
   instant's UT1 and TT with the `deltaT` and `timeScale` records a chart
-  reports; `elapsedDays`; `EPHEMERIS_SPAN`; and the frame that turns
+  reports; `elapsedDays`; `EPHEMERIS_SPAN`; the frame that turns
   astronomy-engine's vectors to the ecliptic of date: `tilt`,
-  `eclipticFrame`, `meanEcliptic` and `eclipticOfDate` (see *Time*).
+  `eclipticFrame`, `meanEcliptic` and `eclipticOfDate`; and `timeBands`, the
+  1-σ bands of a recorded instant's TT and UT1 (see *Time*).
 
 ### Uniform calculation API
 
@@ -903,6 +904,11 @@ engine call leaves the model installed, and code that calls astronomy-engine
 directly should install it too: `SetDeltaTFunction(deltaT)`. Such code can
 take the engine's clock and frame of date from `@zodiacs/engine/time`, which
 loads no ephemeris ([docs/time.md](docs/time.md), *Without the ephemeris*).
+Its `timeBands` turns a record's two bands, `deltaT.sigma` and
+`timeScale.ut1MinusUtc.sigma`, into the 1-σ bands of the TT and the UT1 the
+engine used: on UTC input from 1972-01-01 to 2027-10-02 TT comes from the leap
+seconds exactly, so its band is 0, and UT1 carries the band of UT1 − UTC
+([docs/time.md](docs/time.md), *The time bands*).
 
 `@zodiacs/engine/geo` reads wall times before 1970 on the tzdb 2025c history
 with backzone, shipped as 16 lazily imported chunks: `prepareLocalTime(date,

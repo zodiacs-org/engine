@@ -43,6 +43,19 @@
   chunk that it and `dist/time.js` import (NOTICE, LICENSING.md), so each
   graph that loads the ephemeris grows by the imports and exports that join
   the two.
+- **Bands from the time basis** (unit P1.M3c of zodiacs.org's programme).
+  `timeBands(record)`, exported by `@zodiacs/engine/time`, gives the 1-σ
+  bands, in seconds, of the TT and the UT1 of a recorded instant (a
+  `TimeBasis`, a chart, a calc instant, or a natal result from the time-basis
+  set on) from its two recorded bands, `deltaT.sigma` and
+  `timeScale.ut1MinusUtc.sigma`, by the scale the instant was given on and the
+  basis that gave UT1 and TT (`docs/time.md`, *The time bands*). On UTC input
+  from 1972-01-01 to 2027-10-02 TT comes from the leap seconds exactly, so its
+  band is 0, and UT1 carries the band of UT1 − UTC; after the table, TT takes
+  both bands, combined as the root of the sum of their squares. It reads the
+  recorded fields only, and throws `RangeError` for a record without a time
+  scale. The preregistered checks are in
+  `docs/evidence/1.1.0-rc.2-20261102/time-bands/`.
 
 ## 1.1.0-rc.1 — unreleased candidate
 

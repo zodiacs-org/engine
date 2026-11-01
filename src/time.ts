@@ -7,7 +7,8 @@
  * value for value. Nothing in this entry's graph imports astronomy-engine, and
  * the root entry does not import this file (`scripts/root-isolation.mjs`). It
  * keeps no state of its own; the state its graph holds is the engine's, shared
- * with the root.
+ * with the root. `timeBands`, the bands of a recorded instant's TT and UT1
+ * (`src/time-bands.ts`), checks its own argument.
  */
 import { eclipticFrame as frameAt, eclipticOfDate as placeOfDate, meanEcliptic as meanOf } from "./frame.js";
 import type { EclipticFrame } from "./frame.js";
@@ -20,6 +21,8 @@ export type { DeltaT, DeltaTSegment } from "./deltat.js";
 export type { EclipticFrame } from "./frame.js";
 export type { Tilt } from "./nutation.js";
 export { EPHEMERIS_SPAN } from "./reference-span.js";
+export { timeBands } from "./time-bands.js";
+export type { TimeBands } from "./time-bands.js";
 export { DELTA_T_IERS_MODEL, TIME_SCALE_NAMES } from "./time-scale.js";
 export type { LeapSeconds, TimeBasis, TimeScale, TimeScaleName, Ut1MinusUtc } from "./time-scale.js";
 
