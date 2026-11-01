@@ -165,6 +165,8 @@ the sum of their squares.
 
 So on UTC input from 1972-01-01 to 2027-10-02 the band of TT, which moves the
 planets, is 0, and the time basis's band falls on UT1, which turns the Earth.
+`@zodiacs/engine/calc` carries the two bands into its positions, angles,
+cusps and events, to first order ([calc.md](calc.md), *Bands*).
 The bands step where the time basis steps, and `src/time-bands.test.ts`
 checks each of these a millisecond either side: at 1956.0
 (1956-01-01T12:00Z, UT1), where the model's σ falls from 0.46 s to the
@@ -190,8 +192,9 @@ range taken as a 1-σ. It leaves out the input time's own uncertainty and how
 far a civil time before 1972 was from UT1. `timeBands` reads the two bands,
 the scale and the basis only, and recomputes no σ, so a record read back
 gives the bands the engine gave. Root charts and natal envelopes carry no
-band of their own; theirs follow from the fields they record, through
-`timeBands`.
+band of their own, and nor do the events of `@zodiacs/engine/sky`,
+`@zodiacs/engine/timing` and the root's crossing search; theirs follow from
+the fields they record, through `timeBands`.
 
 ## Without the ephemeris: `@zodiacs/engine/time`
 
@@ -229,7 +232,8 @@ frozen object, and `eclipticFrame` a frozen copy of the frame, its rows and
 its tilt: the engine keeps the last frame it computed for its next call at
 the same TT, and a caller that changed that object would change the next
 chart computed there. The entry keeps no state of its own. `timeBands`
-(`src/time-bands.ts`) checks its own argument: it throws `RangeError` for a
+(`src/time-bands.ts`), the function `@zodiacs/engine/calc` computes its bands
+with, checks its own argument: it throws `RangeError` for a
 record without a `deltaT` or a `timeScale`, such as a natal result from
 before the time-basis set, and for a scale, a basis or a band it does not
 know.

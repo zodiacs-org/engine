@@ -8,7 +8,8 @@
  * the root entry does not import this file (`scripts/root-isolation.mjs`). It
  * keeps no state of its own; the state its graph holds is the engine's, shared
  * with the root. `timeBands`, the bands of a recorded instant's TT and UT1
- * (`src/time-bands.ts`), checks its own argument.
+ * (`src/time-bands.ts`), is the function `@zodiacs/engine/calc` computes its
+ * bands with, and checks its own argument.
  */
 import { eclipticFrame as frameAt, eclipticOfDate as placeOfDate, meanEcliptic as meanOf } from "./frame.js";
 import type { EclipticFrame } from "./frame.js";

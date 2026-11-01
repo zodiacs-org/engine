@@ -15,7 +15,7 @@ const mars = calc({
   flags: { correction: "apparent", cartesian: true }
 });
 if (mars.status === "ok") {
-  console.log(mars.lon, mars.lat, mars.dist, mars.speeds, mars.bounds, mars.receipt);
+  console.log(mars.lon, mars.lat, mars.dist, mars.speeds, mars.bounds, mars.band, mars.receipt);
 } else {
   console.log(mars.reason, mars.detail); // a typed refusal
 }
@@ -30,10 +30,10 @@ computed before it.
 
 | function | takes | gives |
 | --- | --- | --- |
-| `calc` | `{ body, time, frame?, center?, zodiac?, flags? }` | `{ lon, lat, dist, speeds, cartesian, ayanamsa, bounds, receipt }` |
-| `houses` | `{ time, place, houseSystem?, zodiac? }` | angles, Vertex, East Point, ARMC, obliquity and the cusps, with `ayanamsa`, `bounds` and a receipt, as `natalChart()` computes them |
-| `events` | `{ kind: "longitude-crossing", body, longitude, from, to, zodiac?, stepDays?, maxSamples? }` | every instant in (from, to] the body sits on the longitude, from the engine's crossing search |
-| `chart` | `{ time, place?, houseSystem?, timeKnown?, timeFlags?, zodiac? }` | the chart `natalChart()` gives, with its sidereal longitudes in the sidereal zodiac, and a receipt |
+| `calc` | `{ body, time, frame?, center?, zodiac?, flags? }` | `{ lon, lat, dist, speeds, cartesian, ayanamsa, bounds, band, receipt }` |
+| `houses` | `{ time, place, houseSystem?, zodiac? }` | angles, Vertex, East Point, ARMC, obliquity and the cusps, with `ayanamsa`, `bounds`, `band` and a receipt, as `natalChart()` computes them |
+| `events` | `{ kind: "longitude-crossing", body, longitude, from, to, zodiac?, stepDays?, maxSamples? }` | every instant in (from, to] the body sits on the longitude, from the engine's crossing search, each with its `band` |
+| `chart` | `{ time, place?, houseSystem?, timeKnown?, timeFlags?, zodiac? }` | the chart `natalChart()` gives, with its sidereal longitudes in the sidereal zodiac, its `band` and a receipt |
 
 Each returns `status: "ok"` or a typed refusal (below). Malformed input (an
 unknown body, frame or field, an invalid date, a latitude out of range) throws
@@ -383,6 +383,96 @@ apart the two computations of the same definition are, not that such a star
 is seen. It is against this engine's definition, not another program's:
 definitions differ between programs by far more.
 
+## Bands
+
+Every result also carries `band`, from 1.1.0-rc.2: how far it moves, to first
+order, when the TT and the UT1 of its instant move by their 1-σ bands. Those
+two come from the bands the instant records, `deltaT.sigma` and
+`timeScale.ut1MinusUtc.sigma`, by the rule of [time.md](time.md), *The time
+bands* (`timeBands` in `@zodiacs/engine/time`), and every band gives them as
+`time: { tt, ut1 }`, in seconds. A band is not a bound and not an error. It
+leaves out the ephemeris's error, which `bounds` gives, the input time's own
+uncertainty, how far a civil time before 1972 was from UT1, and terms of the
+second order, and it is as good as the σ it comes from (time.md says what each
+is). It is kept apart from `bounds`, whose values are the largest differences
+from an arbiter, labelled measured or estimated; `events()`'s `bounds.timing`
+stays the bisection bracket.
+
+- **`calc()`**: `band` is `{ time, lon, lat, dist }`, and null without
+  speeds. A geocentric, heliocentric or barycentric position, a node and
+  Lilith move with TT alone, so `lon` and `lat` are their speeds times the
+  TT band, in arcseconds (degrees a day × `tt` / 24), and `dist` the
+  distance's rate times it, in au (au a day × `tt` / 86,400), null where
+  `dist` is. `lon` is the band of the frame's longitude, or of the right
+  ascension in an equatorial frame. Under `units: "radians"` the band stays
+  in arcseconds. A speed is per day of the input's scale, which the band takes
+  as a rate on TT; in the sidereal zodiac it is the sidereal longitude's, so
+  the ayanamsa's own rate is in the band. A topocentric position also turns
+  with the observer, and the observer turns with UT1, while its speed is the
+  rate with both scales moving together. Its band adds at most the rate at
+  which the observer's turn moves it: w = ω (a + h⁺) / (dist (1 − 10⁻³))
+  radians a second in direction and v = ω (a + h⁺) km a second in distance,
+  with ω = 7.292115 × 10⁻⁵ rad/s and a = 6,378.1366 km, the constants of the
+  engine's observer (`src/calc-reduce.ts`), h⁺ the height when it is above
+  the ellipsoid and 0 below it, and dist the reported distance in km. a + h⁺
+  is at least the site's distance from the Earth's axis at any latitude, and
+  the 10⁻³ covers the difference between the reported light path and the
+  length of the apparent vector. So, with each speed in arcseconds or au a
+  second and w in arcseconds a second, `lon` = (|speed| + w / cos lat) `tt` +
+  (w / cos lat) `ut1`, `lat` = (|speed| + w) `tt` + w `ut1`, and `dist` =
+  (|speed| + v) `tt` + v `ut1`, with v in au a second. The two terms are
+  summed, which is at least their root sum of squares, whatever the
+  correlation of the two bands.
+- **`houses()`**: `band` is `{ time, asc, mc, vertex, eastPoint, cusps }`,
+  in arcseconds. The angles and cusps turn with UT1 through the Earth rotation
+  angle: each one's band is its rate on UT1 times the UT1 band, the rate being
+  its difference with the sidereal time moved by ±1 s of UT1
+  (±1.00273781191135448 / 3,600 hour), the latitude and the obliquity held
+  fixed, wrapped into (−180°, 180°] and divided by 2 s. Its rate on TT,
+  through the precession and the nutation in the sidereal time and the
+  obliquity, is left out: the largest term, the sidereal time's 4612.156534″ a
+  Julian century, is 1.46 × 10⁻⁶″ a second, against the Earth's turn of
+  15.04″ a second, and the preregistered check C4c measures what is left out
+  (`docs/evidence/1.1.0-rc.2-20261102/time-bands/`). Whole-sign cusps, and
+  the cusps where Placidus or Koch falls back to whole signs, are sign starts,
+  with band 0: a difference across a change of the ascendant's sign would give
+  30°. Inside the polar circle a cusp that turns with the ascendant can jump,
+  and a difference across a jump gives a large band, which says that the
+  cusp is not determined better than that there. In the sidereal zodiac the
+  angles and cusps have the tropical ones' bands, because the ayanamsa moves
+  with TT alone; its own rate is left out, up to 3,600″ a Julian year for a
+  caller's linear ayanamsa, 1.14 × 10⁻⁴″ per second of the TT band.
+- **`events()`**: each event's `band` is `{ utc, ut1 }`, in seconds. The
+  ephemeris fixes an event in TT, so its `jdTt` has no band, and only its
+  clock labels move: `utc` is the band of TT − UTC at the event (0 on the
+  IERS basis, the ΔT band before 1972, √(u² + d²) after the table) and `ut1`
+  that of TT − UT1, the ΔT band there. An event's band is computed from its
+  own `at`, not from the window's instants that the receipt records.
+- **`chart()`**: `band` is `{ time, bodies, asc, mc }`: each of the chart's
+  bodies' longitude band, its speed times the TT band, in arcseconds, and the
+  ascendant's and the midheaven's, as `houses()` gives them for the chart's
+  place, null without angles. It describes `chart`, the tropical chart: in the
+  sidereal zodiac `sidereal`'s longitudes also move by the ayanamsa's rate
+  times the TT band, which it leaves out. It gives no cusp bands; `houses()`
+  does.
+
+The bands step where the time basis steps (time.md). The consequence to keep
+in mind: **on UTC input from 1972-01-01 to 2027-10-02, TT comes from the leap
+seconds exactly, so every geocentric, heliocentric and barycentric position's
+band is 0, and so are a chart's bodies'**. The time basis's band then appears
+only in the angles and cusps, in topocentric positions and in each event's
+UT1. A band that the rule makes zero is exactly 0.
+
+Bands are confined to this entry point. The root's `positions()` and
+`natalChart()`, natal envelopes, and the events of `@zodiacs/engine/sky`,
+`@zodiacs/engine/timing` and the root's crossing search carry none; theirs
+follow from the fields they record: `timeBands(chart)` for the instant, and a
+body's speed times the TT band. A reader can recompute every band here: the
+instant's from the receipt's instant, a position's from the result's own
+speeds, distance and latitude, an angle's by repeating the request, and an
+event's from its `at`. A receipt whose result carries a band names
+`time-band:first-order`, last; `calc()` without speeds names none.
+
 ## Refusals
 
 A refusal is `{ status: "refused", reason, detail }`, the `status` and
@@ -417,7 +507,8 @@ is no comparison to take one from.
   time read as UT1), its UT1 and TT as Julian dates, the ΔT value with its
   band and its source, and the time basis's record, as a chart's `timeScale`
   gives it.
-- `conventions`: ids from the vocabulary below.
+- `conventions`: ids from the vocabulary below; a result that carries a band
+  names `time-band:first-order` last.
 - `engine`: the package version and the ephemeris.
 
 ### Convention ids
@@ -449,6 +540,7 @@ is no comparison to take one from.
 | `house:<system>`, `polar-fallback:whole` | the house system asked for, and whole sign where Placidus or Koch is undefined |
 | `angles:gast-and-true-obliquity`, `sidereal-time:gast-iau2006-era` | the angles from the engine's apparent sidereal time (the Earth rotation angle, astronomy-engine's IAU 2006 polynomial, and the equation of the equinoxes: Δψ cos εA and the two largest IAU 2000 complementary terms) and the true obliquity |
 | `aspects:major`, `search:scan-and-bisect` | the chart's major aspects; the crossing search |
+| `time-band:first-order` | the result carries bands from the time basis (*Bands*): each instant's TT and UT1 bands by the rule of [time.md](time.md)'s *The time bands*, after the IERS table on UTC input the root of the sum of the squares of the two recorded bands; propagated to first order, a position's rates times the TT band, with the observer's turn bounded for a topocentric one, an angle's or cusp's rate on UT1 times the UT1 band, with whole-sign and fallback cusps 0, and an event's clock labels |
 
 ## Swiss Ephemeris `calc_ut` flags
 

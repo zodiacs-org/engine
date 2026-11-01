@@ -3,12 +3,13 @@
  * houses, longitude crossings and charts, in the tropical or the sidereal
  * zodiac. The four functions share one vocabulary for instants, places,
  * frames, centers and the zodiac; each result carries a receipt that names its
- * conventions by id; positions carry bounds; and what this version does not
- * compute comes back as a typed refusal.
+ * conventions by id; positions carry bounds, and every result carries bands
+ * from the time basis; and what this version does not compute comes back as a
+ * typed refusal.
  * Malformed input throws RangeError, as everywhere in the engine. The
  * repository's docs/calc.md is the reference.
  */
-import { AstroTime, Body, GeoMoonState } from "astronomy-engine";
+import { AstroTime, Body, GeoMoonState, KM_PER_AU } from "astronomy-engine";
 
 // Imported first so that the build keeps the root entry's shared chunks byte for byte.
 import { bodyLongitude, computeChart, gastHours, onChartClock } from "./ephemeris.js";
@@ -25,7 +26,7 @@ import {
   transpose
 } from "./calc-frames.js";
 import type { CalcCorrection, CalcFrame, Vec3 } from "./calc-frames.js";
-import { BARYCENTRE_ERROR, geometricState, length, locate } from "./calc-reduce.js";
+import { ANGVEL, BARYCENTRE_ERROR, EARTH_EQUATORIAL_RADIUS_KM, geometricState, length, locate } from "./calc-reduce.js";
 import type { Center } from "./calc-reduce.js";
 import { searchLongitudeCrossingsWith } from "./crossings.js";
 import type { BodyLongitudeAt } from "./crossings.js";
@@ -33,10 +34,13 @@ import { dateFrom } from "./date-input.js";
 import type { DeltaT } from "./deltat.js";
 import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
 import { computeAngles, computeHouses, eastPointOf, isPolarUndefinedHouseSystem, ramcOf, vertexOf } from "./houses.js";
+import type { AngleInput } from "./houses.js";
 import { tilt } from "./nutation.js";
 import { meanApogee, meanNodeLongitude } from "./points.js";
 import { EPHEMERIS_SPAN, REFERENCE_SPAN } from "./reference-span.js";
 import { normalizeLongitude } from "./signs.js";
+import { timeBands } from "./time-bands.js";
+import type { TimeBands } from "./time-bands.js";
 import { TIME_SCALE_NAMES, elapsedDays, timeBasis } from "./time-scale.js";
 import type { TimeBasis, TimeScale, TimeScaleName } from "./time-scale.js";
 import { ENGINE_VERSION, EPHEMERIS } from "./types.js";
@@ -256,6 +260,23 @@ export interface CalcBounds {
     | null;
 }
 
+/**
+ * A position's band from the time basis: how far its coordinates move, to
+ * first order, when the instant's TT and UT1 move by their 1-σ bands. It is
+ * not a bound: it leaves out the ephemeris's error, which `bounds` gives, and
+ * the input time's own (docs/calc.md, "Bands").
+ */
+export interface CalcTimeBand {
+  /** The 1-σ bands of the instant's TT and UT1, seconds (`timeBands` in `@zodiacs/engine/time`). */
+  readonly time: TimeBands;
+  /** Arcseconds, in `lon`'s coordinate, whatever `flags.units` says. */
+  readonly lon: number;
+  /** Arcseconds. */
+  readonly lat: number;
+  /** au; null where `dist` is null. */
+  readonly dist: number | null;
+}
+
 export interface CalcPosition {
   readonly status: "ok";
   readonly body: CalcBody;
@@ -281,6 +302,8 @@ export interface CalcPosition {
   readonly ayanamsa: CalcAyanamsaValue | null;
   /** In the sidereal zodiac, each includes the ayanamsa's own bound. */
   readonly bounds: CalcBounds;
+  /** The band from the time basis, which is not a bound; null without speeds. */
+  readonly band: CalcTimeBand | null;
   readonly receipt: CalcReceipt<CalcRequest>;
 }
 
@@ -582,7 +605,8 @@ function instant(basis: TimeBasis): CalcInstant {
 /** The time basis, as the natal receipt's time-basis set names it (src/receipt.ts). */
 const TIME_BASIS_ID = "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise";
 
-function receipt<Request>(request: Request, instants: CalcInstant[], ids: string[], pin?: number): CalcReceipt<Request> {
+/** A result's receipt; one whose result carries bands from the time basis (`banded`) names their rule last. */
+function receipt<Request>(request: Request, instants: CalcInstant[], ids: string[], pin?: number, banded = true): CalcReceipt<Request> {
   return {
     schema: CALC_RECEIPT_SCHEMA,
     request,
@@ -591,7 +615,8 @@ function receipt<Request>(request: Request, instants: CalcInstant[], ids: string
       ...ids,
       `ephemeris:astronomy-engine@${EPHEMERIS.version}`,
       pin === undefined ? "deltat:time-basis" : "deltat:pinned",
-      TIME_BASIS_ID
+      TIME_BASIS_ID,
+      ...(banded ? ["time-band:first-order"] : [])
     ],
     engine: { name: "@zodiacs/engine", version: ENGINE_VERSION, ephemeris: { ...EPHEMERIS } }
   };
@@ -869,6 +894,28 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     const sidereal = definition === null ? null : (now as SiderealRow).ayanamsa;
     const added = sidereal && ayanamsaBound(definition!, sidereal.elongation);
 
+    // The band from the time basis (docs/calc.md, "Bands"): each coordinate's
+    // rate, in degrees and au a day, times the TT band. A topocentric position
+    // also turns with the observer, on TT and on UT1 alike, at most at
+    // v = ω (a + h⁺), au a second, in distance, and w = v / (dist (1 − 10⁻³)),
+    // arcseconds a second, in direction: a + h⁺ bounds the site's distance from
+    // the Earth's axis, and the 10⁻³ the light path's difference from the
+    // apparent vector's length.
+    const bands = timeBands(basis);
+    let band: CalcTimeBand | null = null;
+    if (speeds) {
+      const v = center.kind === "topocentric" ? (ANGVEL * (EARTH_EQUATORIAL_RADIUS_KM + Math.max(center.site.height, 0) / 1000)) / KM_PER_AU : 0;
+      const w = v && (v / (now.dist! * (1 - 1e-3))) * RAD * 3600;
+      const across = w / Math.cos(now.lat * DEG);
+      const { tt, ut1 } = bands;
+      band = {
+        time: bands,
+        lon: (Math.abs(speeds.lon) / 24 + across) * tt + across * ut1,
+        lat: (Math.abs(speeds.lat) / 24 + w) * tt + w * ut1,
+        dist: speeds.dist === null ? null : (Math.abs(speeds.dist) / 86_400 + v) * tt + v * ut1
+      };
+    }
+
     return {
       status: "ok",
       body,
@@ -891,11 +938,13 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
           stepDays: analytic ? null : step
         }
       },
+      band,
       receipt: receipt(
         { body, time: time.record, frame, center: centerRecord, zodiac: zodiac.record, flags },
         [instant(basis)],
         ids,
-        time.pin
+        time.pin,
+        band !== null
       )
     };
   });
@@ -935,7 +984,49 @@ export interface HousesResult {
   readonly ayanamsa: CalcAyanamsaValue | null;
   /** In the sidereal zodiac, each includes the ayanamsa's own bound. */
   readonly bounds: { readonly angles: CalcBound; readonly cusps: CalcBound };
+  /**
+   * The bands from the time basis, which are not bounds: the instant's, and
+   * each angle's and cusp's, arcseconds, from its rate on UT1 times the UT1
+   * band. Whole-sign cusps, and the cusps where Placidus or Koch falls back to
+   * whole signs, have none: 0 (docs/calc.md, "Bands").
+   */
+  readonly band: {
+    readonly time: TimeBands;
+    readonly asc: number;
+    readonly mc: number;
+    readonly vertex: number;
+    readonly eastPoint: number;
+    readonly cusps: readonly number[];
+  };
   readonly receipt: CalcReceipt<HousesRequest>;
+}
+
+/** One second of UT1 in hours of sidereal time: the Earth rotation angle turns 1.00273781191135448 times a UT1 day (src/ephemeris.ts). */
+const UT1_SECOND = 1.00273781191135448 / 3600;
+
+/**
+ * The bands of the angles and cusps from a UT1 band `sigma`, arcseconds: each
+ * one's rate, the difference of its values with the sidereal time moved by
+ * ±1 s of UT1, the latitude and the obliquity held fixed, wrapped into
+ * (−180°, 180°] and divided by 2 s, times `sigma`. Whole-sign cusps, and the
+ * cusps where Placidus or Koch falls back to them (`system` as computed), are
+ * sign starts and get 0: a difference across a change of the ascendant's sign
+ * would give 30°.
+ */
+function turnBands(input: AngleInput, system: HouseSystem, sigma: number) {
+  const at = (hours: number) => {
+    const moved = { ...input, gastHours: input.gastHours + hours };
+    const angles = computeAngles(moved);
+    return [angles.asc, angles.mc, vertexOf(moved, angles), eastPointOf(moved), ...(system === "whole" ? [] : computeHouses(system, moved, angles).houses.cusps)];
+  };
+  const before = at(-UT1_SECOND);
+  const [asc, mc, vertex, eastPoint, ...cusps] = at(UT1_SECOND).map((value, index) => {
+    let turn = value - before[index]!;
+    if (turn > 180) turn -= 360;
+    else if (turn <= -180) turn += 360;
+    return Math.abs(turn) * 1800 * sigma;
+  });
+  return { asc: asc!, mc: mc!, vertex: vertex!, eastPoint: eastPoint!, cusps: system === "whole" ? Array<number>(12).fill(0) : cusps };
 }
 
 /** The angles, the Vertex, the East Point and the cusps for an instant and a place, as natalChart() computes them. */
@@ -965,6 +1056,8 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
     const cusps = value === null ? computed.cusps : computed.system === "whole" ? wholeSignCusps(angles.asc) : computed.cusps.map(zodiacal);
     const bounded = definition && value && ayanamsaBound(definition, value.elongation);
     const added = bounded && { value: bounded.position, basis: bounded.basis };
+    // An angle's rate on UT1 is the tropical one in either zodiac: the ayanamsa moves with TT alone.
+    const bands = timeBands(used);
     // Conformance suite 0.1.0, level L2, for this engine: conformance/RESULTS.md.
     const basis = (what: string) =>
       `largest difference over the conformance suite's L2 ${what}, whose arbiter is ERFA with each system's definition`;
@@ -988,6 +1081,7 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
         ),
         cusps: withAyanamsa({ value: 0.08, unit: "arcsec", label: "measured", basis: basis("cusp vectors, thirteen systems") }, added)
       },
+      band: { time: bands, ...turnBands(input, computed.system, bands.ut1) },
       receipt: receipt(
         { time: time.record, place: { latitude, longitude }, houseSystem: system, zodiac: zodiac.record },
         [instant(used)],
@@ -1031,6 +1125,12 @@ export interface CalcEvent {
   readonly jdTt: number;
   /** True when the body moved backward through the longitude. */
   readonly retrograde: boolean;
+  /**
+   * The 1-σ bands, seconds, of the event's UTC and UT1 from the time basis at
+   * the event: the ephemeris fixes it in TT, so its TT has none, `utc` is the
+   * band of TT − UTC there and `ut1` that of TT − UT1 (docs/calc.md, "Bands").
+   */
+  readonly band: { readonly utc: number; readonly ut1: number };
 }
 
 export interface EventsResult {
@@ -1097,8 +1197,14 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
       status: "ok",
       kind,
       events: found.crossings.map(({ at, retrograde }) => {
-        const { ut1Days, ttDays } = timeBasis(at.getTime(), "utc");
-        return { at: at.toISOString(), jdUt1: J2000_JD + ut1Days, jdTt: J2000_JD + ttDays, retrograde };
+        const basis = timeBasis(at.getTime(), "utc");
+        return {
+          at: at.toISOString(),
+          jdUt1: J2000_JD + basis.ut1Days,
+          jdTt: J2000_JD + basis.ttDays,
+          retrograde,
+          band: { utc: timeBands(basis).tt, ut1: basis.deltaT.sigma ?? 0 }
+        };
       }),
       samples: found.samples,
       bounds: {
@@ -1141,6 +1247,18 @@ export interface ChartResult {
   readonly chart: Chart;
   /** In the sidereal zodiac, the chart's longitudes as `@zodiacs/engine/vedic`'s siderealChart() gives them; null in the tropical zodiac. */
   readonly sidereal: CalcSiderealChart | null;
+  /**
+   * The bands of `chart`, the tropical chart, from the time basis, which are
+   * not bounds: the instant's; each body's longitude, its speed times the TT
+   * band; and the ascendant's and the midheaven's, their rates on UT1 times
+   * the UT1 band, null without angles; arcseconds (docs/calc.md, "Bands").
+   */
+  readonly band: {
+    readonly time: TimeBands;
+    readonly bodies: readonly { readonly body: BodyName; readonly lon: number }[];
+    readonly asc: number | null;
+    readonly mc: number | null;
+  };
   readonly receipt: CalcReceipt<ChartRequest>;
 }
 
@@ -1211,10 +1329,22 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
     const used = instant(basis);
     const computed = computeChart(input);
     assertDerivedFlags(supplied ?? [], computed.flags);
+    const bands = timeBands(basis);
+    // The angles' rates from the sidereal time and the true obliquity the chart's angles were computed from.
+    const turned =
+      computed.angles &&
+      place &&
+      turnBands(onInput(whole, whole.ms, (at) => ({ gastHours: gastHours(at), ...place, obliquity: tilt(at.tt).tobl })), "whole", bands.ut1);
     return {
       status: "ok",
       chart: computed,
       sidereal: zodiac.definition && siderealOfChart(computed, zodiac.definition),
+      band: {
+        time: bands,
+        bodies: computed.bodies.map(({ body, speed }) => ({ body, lon: (Math.abs(speed) / 24) * bands.tt })),
+        asc: turned ? turned.asc : null,
+        mc: turned ? turned.mc : null
+      },
       receipt: receipt(
         {
           time: time.record,

@@ -54,7 +54,18 @@
   band is 0, and UT1 carries the band of UT1 − UTC; after the table, TT takes
   both bands, combined as the root of the sum of their squares. It reads the
   recorded fields only, and throws `RangeError` for a record without a time
-  scale. The preregistered checks are in
+  scale. `@zodiacs/engine/calc` carries the bands into its results, to first
+  order, as a new `band` field kept apart from `bounds` (`docs/calc.md`,
+  *Bands*): `calc()`'s positions (null without speeds), from each
+  coordinate's rate times the TT band, with a conservative bound on the
+  observer's turn for a topocentric one; `houses()`' angles and cusps, from
+  each one's rate on UT1 times the UT1 band, whole-sign and fallback cusps 0;
+  each event's UTC and UT1; and `chart()`'s bodies, ascendant and midheaven.
+  On UTC input from 1972-01-01 to 2027-10-02 every geocentric, heliocentric
+  and barycentric position's band is 0. Each such receipt names the new id
+  `time-band:first-order`, last. A band is not a bound and leaves out the
+  ephemeris's error. Root charts, natal envelopes and the other entries'
+  results carry none. The preregistered checks are in
   `docs/evidence/1.1.0-rc.2-20261102/time-bands/`.
 
 ## 1.1.0-rc.1 — unreleased candidate

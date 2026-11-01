@@ -107,10 +107,10 @@ const gregorian: string | null = julianToGregorian("1917-10-25");
 const tzdbVersion: string = TZDB.version;
 void cause; void gregorian; void tzdbVersion;
 
-import { calc, houses, events, chart as calcChart, type CalcRequest, type CalcPosition, type CalcRefusal, type CalcUserAyanamsa, type CalcAyanamsaValue, type CalcSiderealChart } from "@zodiacs/engine/calc";
+import { calc, houses, events, chart as calcChart, type CalcRequest, type CalcPosition, type CalcRefusal, type CalcUserAyanamsa, type CalcAyanamsaValue, type CalcSiderealChart, type CalcTimeBand } from "@zodiacs/engine/calc";
 const calcRequest: CalcRequest = {body: "Mars", time: {jd: 2451545, scale: "tt"}, frame: "equatorial-icrs", center: {topocentric: {latitude: 0, longitude: 0}}, flags: {correction: "astrometric", cartesian: true}};
 const calcResult: CalcPosition | CalcRefusal = calc(calcRequest);
-if (calcResult.status === "ok") { const replayed: CalcRequest = calcResult.receipt.request; void replayed; } else { const reason: string = calcResult.reason; void reason; }
+if (calcResult.status === "ok") { const replayed: CalcRequest = calcResult.receipt.request; const band: CalcTimeBand | null = calcResult.band; const ttBand: number | undefined = band?.time.tt; void replayed; void ttBand; } else { const reason: string = calcResult.reason; void reason; }
 const userAyanamsa: CalcUserAyanamsa = {epoch: {jd: 2451545, scale: "tt"}, value: 23.85};
 const siderealResult = calc({body: "Moon", time: "2000-02-29", zodiac: {sidereal: userAyanamsa}});
 if (siderealResult.status === "ok") { const subtracted: CalcAyanamsaValue | null = siderealResult.ayanamsa; void subtracted; }
@@ -253,6 +253,7 @@ assert.equal("ayanamsa" in root, false);
 assert.equal(positions("2000-02-29").length, 12);
 assert.equal(calc({body: "Moon", time: "2000-02-29"}).lon, positions("2000-02-29")[1].lon);
 assert.equal(calc({body: "Moon", time: "1700-01-01"}).reason, "out-of-range");
+assert.deepEqual(calc({body: "Moon", time: "2000-02-29"}).band.time, time.timeBands(calc({body: "Moon", time: "2000-02-29"}).receipt.instants[0]));
 assert.equal(calc({body: "Moon", time: "2000-02-29", zodiac: {sidereal: "lahiri"}}).lon, vedic.siderealLongitude(positions("2000-02-29")[1].lon, vedic.ayanamsa("lahiri", "2000-02-29")).lon);
 assert.equal(PROGRESSION_DAYS_PER_YEAR, 365.2422);
 assert.equal(progressedInstant("2019-12-31", "2020-12-30T05:48:46.080Z").toISOString(), "2020-01-01T00:00:00.000Z");

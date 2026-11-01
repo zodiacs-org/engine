@@ -67,11 +67,12 @@ export const length = ([x, y, z]: Vec3): number => Math.hypot(x, y, z);
 
 // astronomy-engine 2.1.19's figure and rotation of the Earth, as its terra
 // uses them: the IERS 2003 ellipsoid (a = 6378.1366 km, 1/f = 298.25642) and
-// the Earth's angular velocity, rad/s.
+// the Earth's angular velocity, rad/s. calc's topocentric bands bound the
+// observer's turn with the last two (src/calc.ts).
 const EARTH_FLATTENING = 0.996647180302104;
 const EARTH_FLATTENING_SQUARED = EARTH_FLATTENING * EARTH_FLATTENING;
-const EARTH_EQUATORIAL_RADIUS_KM = 6378.1366;
-const ANGVEL = 7.292115e-5;
+export const EARTH_EQUATORIAL_RADIUS_KM = 6378.1366;
+export const ANGVEL = 7.292115e-5;
 
 /**
  * The observer's position (au) and velocity (au/day) on the true equator and

@@ -253,7 +253,14 @@ ERFA on the same instants): a sample maximum, not a limit. In the sidereal
 zodiac a bound adds the
 ayanamsa's: the largest difference of its mean, and of its rate, from ERFA's
 construction of the same definition, over every year from 1800 to 2199. An
-estimated bound names what it rests on. What this version does not compute
+estimated bound names what it rests on. Results also carry `band`, which is
+not a bound: to first order, how far a position, an angle, a cusp or an
+event's clock label moves when the instant's TT and UT1 move by the 1-σ bands
+its time basis records. On UTC input from 1972-01-01 to 2027-10-02 TT comes
+from the leap seconds exactly, so every geocentric, heliocentric and
+barycentric position's band is 0 there, and the band falls on the angles and
+cusps, topocentric positions and each event's UT1 (docs/calc.md, *Bands*).
+Root charts and natal envelopes carry none. What this version does not compute
 comes back as a typed refusal, such as gravitational deflection, or an
 instant whose UT1 or TT is outside 1800 to 2200: there calc has no
 comparison to take a bound from, while the root entry's functions

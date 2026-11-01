@@ -2,8 +2,9 @@
  * The bands of the time basis (docs/time.md, "The time bands"): from the ΔT
  * band and the UT1 − UTC band an instant records, the 1-σ bands of the TT and
  * the UT1 the engine used, by the scale the instant was given on and the basis
- * that gave UT1 and TT. `@zodiacs/engine/time` exports them. This module
- * imports types only, so that the entries that use it can share it.
+ * that gave UT1 and TT. `@zodiacs/engine/calc` carries them into its results
+ * (docs/calc.md, "Bands") and `@zodiacs/engine/time` exports them. This module
+ * imports types only, so that the two entries can share it.
  */
 import type { DeltaT } from "./deltat.js";
 import type { TimeScale } from "./time-scale.js";
