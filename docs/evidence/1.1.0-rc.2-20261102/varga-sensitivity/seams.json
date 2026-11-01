@@ -1,0 +1,1178 @@
+{
+ "generator": "docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/seams.mjs",
+ "corpus": "F3, the planted seam cases (PREREGISTRATION.md, section 6)",
+ "engine": {
+  "version": "1.1.0-rc.1",
+  "distJsFiles": 48,
+  "distJsDigest": "43aaeb12c7ad40ad432745efc8756623f1ffbd6545e5e002fb4ef47ad950bb5c"
+ },
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "latitude": 30,
+ "pinnedDeltaT": 60,
+ "key": "D60",
+ "stepThresholdMs": 0.01,
+ "windowMs": 3000,
+ "cases": [
+  {
+   "id": 0,
+   "seam": "leap-second-2017",
+   "label": "the leap second before 2017-01-01",
+   "clock": "utc",
+   "timeScale": "utc",
+   "point": "Ascendant",
+   "key": "D60",
+   "events": [
+    {
+     "ms": 1483228800000,
+     "at": "2017-01-01T00:00:00.000Z",
+     "ut1StepMs": 1000,
+     "ttStepMs": 1000,
+     "stepped": true,
+     "provenanceBefore": "iers iers-utc/1 observed observed 36 knots",
+     "provenanceAt": "iers iers-utc/1 observed observed 37 knots"
+    }
+   ],
+   "seamAt": "2017-01-01T00:00:00.000Z",
+   "seamAtMs": 1483228800000,
+   "steps": {
+    "ut1Ms": 1000,
+    "ttMs": 1000
+   },
+   "plantedOn": "UT1",
+   "adjusted": "the place's longitude",
+   "status": "planted",
+   "rule": "inside-forward-step",
+   "input": {
+    "utc": "2017-01-01T00:00:30.000Z",
+    "timeScale": "utc",
+    "latitude": 30,
+    "longitude": 0.175541,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": "lahiri",
+   "options": {
+    "points": [
+     "Ascendant"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1440
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "previous",
+    "at": "2017-01-01T00:00:00.000Z",
+    "atMs": 1483228800000,
+    "minutes": -0.5,
+    "boundaryTicks": 1251180,
+    "boundary": 165.5,
+    "from": "pisces",
+    "to": "aries"
+   },
+   "checks": {
+    "lonAtMinus1": 165.49817923161544,
+    "lonAt": 165.5018171345812,
+    "marginBelowDegrees": 0.001820768384504845,
+    "marginAboveDegrees": 0.0018171345811879291,
+    "birthSignSamples": 32
+   }
+  },
+  {
+   "id": 1,
+   "seam": "leap-second-2017",
+   "label": "the leap second before 2017-01-01",
+   "clock": "utc-pinned",
+   "timeScale": "utc",
+   "deltaT": 60,
+   "point": "Ascendant",
+   "key": "D60",
+   "events": [
+    {
+     "ms": 1483228800000,
+     "at": "2017-01-01T00:00:00.000Z",
+     "ut1StepMs": 1000,
+     "ttStepMs": 1000,
+     "stepped": true,
+     "provenanceBefore": "pinned pinned pinned observed none knots",
+     "provenanceAt": "pinned pinned pinned observed none knots"
+    }
+   ],
+   "seamAt": "2017-01-01T00:00:00.000Z",
+   "seamAtMs": 1483228800000,
+   "steps": {
+    "ut1Ms": 1000,
+    "ttMs": 1000
+   },
+   "plantedOn": "UT1",
+   "adjusted": "the place's longitude",
+   "status": "planted",
+   "rule": "inside-forward-step",
+   "input": {
+    "utc": "2017-01-01T00:00:30.000Z",
+    "timeScale": "utc",
+    "deltaT": 60,
+    "latitude": 30,
+    "longitude": 0.175540998,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": "lahiri",
+   "options": {
+    "points": [
+     "Ascendant"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1440
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "previous",
+    "at": "2017-01-01T00:00:00.000Z",
+    "atMs": 1483228800000,
+    "minutes": -0.5,
+    "boundaryTicks": 1251180,
+    "boundary": 165.5,
+    "from": "pisces",
+    "to": "aries"
+   },
+   "checks": {
+    "lonAtMinus1": 165.49817923092345,
+    "lonAt": 165.50181713388918,
+    "marginBelowDegrees": 0.0018207690765166262,
+    "marginAboveDegrees": 0.001817133889176148,
+    "birthSignSamples": 32
+   }
+  },
+  {
+   "id": 2,
+   "seam": "utc-1972",
+   "label": "1972-01-01T00:00:00Z",
+   "clock": "utc",
+   "timeScale": "utc",
+   "point": "Ascendant",
+   "key": "D60",
+   "events": [
+    {
+     "ms": 63072000000,
+     "at": "1972-01-01T00:00:00.000Z",
+     "ut1StepMs": -45,
+     "ttStepMs": -44.549,
+     "stepped": true,
+     "provenanceBefore": "delta-t zodiacs-deltat/1 observed none none knots",
+     "provenanceAt": "iers iers-utc/1 observed observed 10 knots"
+    }
+   ],
+   "seamAt": "1972-01-01T00:00:00.000Z",
+   "seamAtMs": 63072000000,
+   "steps": {
+    "ut1Ms": -45,
+    "ttMs": -44.549
+   },
+   "plantedOn": "UT1",
+   "adjusted": "the place's longitude",
+   "status": "planted",
+   "rule": "half-step-before-backward-step",
+   "plantedBeforeSeamMs": 23,
+   "input": {
+    "utc": "1971-12-31T23:59:29.977Z",
+    "timeScale": "utc",
+    "latitude": 30,
+    "longitude": -0.608420794,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": "lahiri",
+   "options": {
+    "points": [
+     "Ascendant"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1440
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "next",
+    "at": "1971-12-31T23:59:59.977Z",
+    "atMs": 63071999977,
+    "minutes": 0.5,
+    "boundaryTicks": 1243620,
+    "boundary": 164.5,
+    "from": "capricorn",
+    "to": "aquarius"
+   },
+   "checks": {
+    "lonAtMinus1": 164.49999818190753,
+    "lonAt": 164.50000181857288,
+    "lonSeamMinus1": 164.50008182405196,
+    "lonSeam": 164.4999218130913,
+    "marginBelowDegrees": 0.000001818092414396233,
+    "marginAboveDegrees": 0.0000018185728549724445,
+    "birthSignSamples": 31
+   }
+  },
+  {
+   "id": 3,
+   "seam": "utc-1972",
+   "label": "1972-01-01T00:00:00Z",
+   "clock": "utc-pinned",
+   "timeScale": "utc",
+   "deltaT": 60,
+   "point": "Ascendant",
+   "key": "D60",
+   "events": [
+    {
+     "ms": 63072000000,
+     "at": "1972-01-01T00:00:00.000Z",
+     "ut1StepMs": -45,
+     "ttStepMs": -45,
+     "stepped": true,
+     "provenanceBefore": "pinned pinned pinned none none knots",
+     "provenanceAt": "pinned pinned pinned observed none knots"
+    }
+   ],
+   "seamAt": "1972-01-01T00:00:00.000Z",
+   "seamAtMs": 63072000000,
+   "steps": {
+    "ut1Ms": -45,
+    "ttMs": -45
+   },
+   "plantedOn": "UT1",
+   "adjusted": "the place's longitude",
+   "status": "planted",
+   "rule": "half-step-before-backward-step",
+   "plantedBeforeSeamMs": 23,
+   "input": {
+    "utc": "1971-12-31T23:59:29.977Z",
+    "timeScale": "utc",
+    "deltaT": 60,
+    "latitude": 30,
+    "longitude": -0.60842079,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": "lahiri",
+   "options": {
+    "points": [
+     "Ascendant"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1440
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "next",
+    "at": "1971-12-31T23:59:59.977Z",
+    "atMs": 63071999977,
+    "minutes": 0.5,
+    "boundaryTicks": 1243620,
+    "boundary": 164.5,
+    "from": "capricorn",
+    "to": "aquarius"
+   },
+   "checks": {
+    "lonAtMinus1": 164.49999818176173,
+    "lonAt": 164.50000181842708,
+    "lonSeamMinus1": 164.50008182390613,
+    "lonSeam": 164.49992181294562,
+    "marginBelowDegrees": 0.0000018182382746090298,
+    "marginAboveDegrees": 0.0000018184271084464854,
+    "birthSignSamples": 31
+   }
+  },
+  {
+   "id": 4,
+   "seam": "utc-1972",
+   "label": "1972-01-01T00:00:00Z",
+   "clock": "ut1",
+   "timeScale": "ut1",
+   "point": "Moon",
+   "key": "D60",
+   "events": [
+    {
+     "ms": 63072000000,
+     "at": "1972-01-01T00:00:00.000Z",
+     "ut1StepMs": 0,
+     "ttStepMs": 0.451,
+     "stepped": true,
+     "provenanceBefore": "delta-t zodiacs-deltat/1 observed none none knots",
+     "provenanceAt": "iers iers-utc/1 observed observed 10 knots"
+    }
+   ],
+   "seamAt": "1972-01-01T00:00:00.000Z",
+   "seamAtMs": 63072000000,
+   "steps": {
+    "ut1Ms": 0,
+    "ttMs": 0.451
+   },
+   "plantedOn": "TT",
+   "adjusted": "the epoch ayanamsa's value",
+   "status": "planted",
+   "rule": "inside-forward-step",
+   "input": {
+    "utc": "1972-01-01T00:10:00.000Z",
+    "timeScale": "ut1",
+    "latitude": 30,
+    "longitude": 0,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": {
+    "name": "seam-1972-ut1",
+    "epoch": {
+     "julianDateTT": 2451545
+    },
+    "value": 23.517728361308,
+    "model": "engine"
+   },
+   "options": {
+    "points": [
+     "Moon"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1440
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "previous",
+    "at": "1972-01-01T00:00:00.000Z",
+    "atMs": 63072000000,
+    "minutes": -10,
+    "boundaryTicks": 593460,
+    "boundary": 78.5,
+    "from": "gemini",
+    "to": "cancer"
+   },
+   "checks": {
+    "lonAtMinus1": 78.49999980361011,
+    "lonAt": 78.50000003613893,
+    "marginBelowDegrees": 1.963899194379337e-7,
+    "marginAboveDegrees": 3.6138885661785025e-8,
+    "birthSignSamples": 62
+   }
+  },
+  {
+   "id": 5,
+   "seam": "utc-1972",
+   "label": "1972-01-01T00:00:00Z",
+   "clock": "tt",
+   "timeScale": "tt",
+   "point": "Ascendant",
+   "key": "D60",
+   "events": [
+    {
+     "ms": 63072042229,
+     "at": "1972-01-01T00:00:42.229Z",
+     "ut1StepMs": -0.451,
+     "ttStepMs": 0,
+     "stepped": true,
+     "provenanceBefore": "delta-t zodiacs-deltat/1 observed none none knots",
+     "provenanceAt": "iers iers-utc/1 observed observed 10 knots"
+    }
+   ],
+   "seamAt": "1972-01-01T00:00:42.229Z",
+   "seamAtMs": 63072042229,
+   "steps": {
+    "ut1Ms": -0.451,
+    "ttMs": 0
+   },
+   "plantedOn": "UT1",
+   "adjusted": "the place's longitude",
+   "status": "not-planted",
+   "rule": "half-step-before-backward-step",
+   "reason": "the step goes back by 0.451 ms, under a millisecond, so no millisecond lies half a step before the seam and the step undoes no crossing on the millisecond lattice",
+   "input": {
+    "utc": "1972-01-01T00:00:12.229Z",
+    "timeScale": "tt",
+    "latitude": 30,
+    "longitude": 0,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": "lahiri",
+   "options": {
+    "points": [
+     "Ascendant"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1440
+   },
+   "expected": null
+  },
+  {
+   "id": 6,
+   "seam": "table-end-2027",
+   "label": "2027-10-02T00:00:00Z, the end of the IERS UT1 table",
+   "clock": "utc",
+   "timeScale": "utc",
+   "point": "Ascendant",
+   "key": "D60",
+   "events": [
+    {
+     "ms": 1822435200001,
+     "at": "2027-10-02T00:00:00.001Z",
+     "ut1StepMs": 148,
+     "ttStepMs": 146,
+     "stepped": true,
+     "provenanceBefore": "iers iers-utc/1 predicted predicted 37 knots",
+     "provenanceAt": "delta-t zodiacs-deltat/1 extrapolated fallback none knots"
+    }
+   ],
+   "seamAt": "2027-10-02T00:00:00.001Z",
+   "seamAtMs": 1822435200001,
+   "steps": {
+    "ut1Ms": 148,
+    "ttMs": 146
+   },
+   "plantedOn": "UT1",
+   "adjusted": "the place's longitude",
+   "status": "planted",
+   "rule": "inside-forward-step",
+   "input": {
+    "utc": "2027-10-02T00:00:30.001Z",
+    "timeScale": "utc",
+    "latitude": 30,
+    "longitude": -1.433095252,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": "lahiri",
+   "options": {
+    "points": [
+     "Ascendant"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1440
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "previous",
+    "at": "2027-10-02T00:00:00.001Z",
+    "atMs": 1822435200001,
+    "minutes": -0.5,
+    "boundaryTicks": 653940,
+    "boundary": 86.5,
+    "from": "libra",
+    "to": "scorpio"
+   },
+   "checks": {
+    "lonAtMinus1": 86.49973202776613,
+    "lonAt": 86.50026439928044,
+    "marginBelowDegrees": 0.00026797223381436197,
+    "marginAboveDegrees": 0.0002643992804678419,
+    "birthSignSamples": 32
+   }
+  },
+  {
+   "id": 7,
+   "seam": "table-end-2027",
+   "label": "2027-10-02T00:00:00Z, the end of the IERS UT1 table",
+   "clock": "utc-pinned",
+   "timeScale": "utc",
+   "deltaT": 60,
+   "point": "Ascendant",
+   "key": "D60",
+   "events": [
+    {
+     "ms": 1822435200001,
+     "at": "2027-10-02T00:00:00.001Z",
+     "ut1StepMs": 148,
+     "ttStepMs": 148,
+     "stepped": true,
+     "provenanceBefore": "pinned pinned pinned predicted none knots",
+     "provenanceAt": "pinned pinned pinned fallback none knots"
+    }
+   ],
+   "seamAt": "2027-10-02T00:00:00.001Z",
+   "seamAtMs": 1822435200001,
+   "steps": {
+    "ut1Ms": 148,
+    "ttMs": 148
+   },
+   "plantedOn": "UT1",
+   "adjusted": "the place's longitude",
+   "status": "planted",
+   "rule": "inside-forward-step",
+   "input": {
+    "utc": "2027-10-02T00:00:30.001Z",
+    "timeScale": "utc",
+    "deltaT": 60,
+    "latitude": 30,
+    "longitude": -1.433095254,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": "lahiri",
+   "options": {
+    "points": [
+     "Ascendant"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1440
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "previous",
+    "at": "2027-10-02T00:00:00.001Z",
+    "atMs": 1822435200001,
+    "minutes": -0.5,
+    "boundaryTicks": 653940,
+    "boundary": 86.5,
+    "from": "libra",
+    "to": "scorpio"
+   },
+   "checks": {
+    "lonAtMinus1": 86.49973202739396,
+    "lonAt": 86.50026439890806,
+    "marginBelowDegrees": 0.00026797260602506867,
+    "marginAboveDegrees": 0.0002643989080297615,
+    "birthSignSamples": 32
+   }
+  },
+  {
+   "id": 8,
+   "seam": "table-end-2027",
+   "label": "2027-10-02T00:00:00Z, the end of the IERS UT1 table",
+   "clock": "ut1",
+   "timeScale": "ut1",
+   "point": "Moon",
+   "key": "D60",
+   "events": [
+    {
+     "ms": 1822435200001,
+     "at": "2027-10-02T00:00:00.001Z",
+     "ut1StepMs": 0,
+     "ttStepMs": -2,
+     "stepped": true,
+     "provenanceBefore": "iers iers-utc/1 predicted predicted 37 knots",
+     "provenanceAt": "delta-t zodiacs-deltat/1 extrapolated none none knots"
+    }
+   ],
+   "seamAt": "2027-10-02T00:00:00.001Z",
+   "seamAtMs": 1822435200001,
+   "steps": {
+    "ut1Ms": 0,
+    "ttMs": -2
+   },
+   "plantedOn": "TT",
+   "adjusted": "the epoch ayanamsa's value",
+   "status": "planted",
+   "rule": "half-step-before-backward-step",
+   "plantedBeforeSeamMs": 1,
+   "input": {
+    "utc": "2027-10-01T23:50:00.000Z",
+    "timeScale": "ut1",
+    "latitude": 30,
+    "longitude": 0,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": {
+    "name": "seam-2027-ut1",
+    "epoch": {
+     "julianDateTT": 2451545
+    },
+    "value": 23.735651495917,
+    "model": "engine"
+   },
+   "options": {
+    "points": [
+     "Moon"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1440
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "next",
+    "at": "2027-10-02T00:00:00.000Z",
+    "atMs": 1822435200000,
+    "minutes": 10,
+    "boundaryTicks": 1432620,
+    "boundary": 189.5,
+    "from": "aries",
+    "to": "taurus"
+   },
+   "checks": {
+    "lonAtMinus1": 189.49999991958865,
+    "lonAt": 189.50000008041042,
+    "lonSeamMinus1": 189.50000008041042,
+    "lonSeam": 189.49999991958865,
+    "marginBelowDegrees": 8.041138244152535e-8,
+    "marginAboveDegrees": 8.041047294682357e-8,
+    "birthSignSamples": 61
+   }
+  },
+  {
+   "id": 9,
+   "seam": "table-end-2027",
+   "label": "2027-10-02T00:00:00Z, the end of the IERS UT1 table",
+   "clock": "tt",
+   "timeScale": "tt",
+   "point": "Ascendant",
+   "key": "D60",
+   "events": [
+    {
+     "ms": 1822435269331,
+     "at": "2027-10-02T00:01:09.331Z",
+     "ut1StepMs": 2,
+     "ttStepMs": 0,
+     "stepped": true,
+     "provenanceBefore": "iers iers-utc/1 predicted predicted 37 knots",
+     "provenanceAt": "delta-t zodiacs-deltat/1 extrapolated fallback none knots"
+    }
+   ],
+   "seamAt": "2027-10-02T00:01:09.331Z",
+   "seamAtMs": 1822435269331,
+   "steps": {
+    "ut1Ms": 2,
+    "ttMs": 0
+   },
+   "plantedOn": "UT1",
+   "adjusted": "the place's longitude",
+   "status": "planted",
+   "rule": "inside-forward-step",
+   "input": {
+    "utc": "2027-10-02T00:01:39.331Z",
+    "timeScale": "tt",
+    "latitude": 30,
+    "longitude": -1.433400251,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": "lahiri",
+   "options": {
+    "points": [
+     "Ascendant"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1440
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "previous",
+    "at": "2027-10-02T00:01:09.331Z",
+    "atMs": 1822435269331,
+    "minutes": -0.5,
+    "boundaryTicks": 653940,
+    "boundary": 86.5,
+    "from": "libra",
+    "to": "scorpio"
+   },
+   "checks": {
+    "lonAtMinus1": 86.49999285427224,
+    "lonAt": 86.50000357330882,
+    "marginBelowDegrees": 0.000007145727749957587,
+    "marginAboveDegrees": 0.0000035733088452616357,
+    "birthSignSamples": 32
+   }
+  },
+  {
+   "id": 10,
+   "seam": "handover-1941",
+   "label": "1940-12-31T18:00 UT1, the ΔT model's handover",
+   "clock": "utc",
+   "timeScale": "utc",
+   "point": "Moon",
+   "key": "D60",
+   "events": [
+    {
+     "ms": -915170400000,
+     "at": "1940-12-31T18:00:00.000Z",
+     "ut1StepMs": 0,
+     "ttStepMs": -13.948,
+     "stepped": true,
+     "provenanceBefore": "delta-t zodiacs-deltat/1 reconstructed none none spline",
+     "provenanceAt": "delta-t zodiacs-deltat/1 reconstructed none none knots"
+    }
+   ],
+   "seamAt": "1940-12-31T18:00:00.000Z",
+   "seamAtMs": -915170400000,
+   "steps": {
+    "ut1Ms": 0,
+    "ttMs": -13.948
+   },
+   "plantedOn": "TT",
+   "adjusted": "the epoch ayanamsa's value",
+   "status": "planted",
+   "rule": "half-step-before-backward-step",
+   "plantedBeforeSeamMs": 7,
+   "input": {
+    "utc": "1940-12-31T17:49:59.993Z",
+    "timeScale": "utc",
+    "latitude": 30,
+    "longitude": 0,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": {
+    "name": "seam-1941-utc",
+    "epoch": {
+     "julianDateTT": 2451545
+    },
+    "value": 23.692579541822,
+    "model": "engine"
+   },
+   "options": {
+    "points": [
+     "Moon"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1440
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "next",
+    "at": "1940-12-31T17:59:59.993Z",
+    "atMs": -915170400007,
+    "minutes": 10,
+    "boundaryTicks": 2215080,
+    "boundary": 293,
+    "from": "libra",
+    "to": "scorpio"
+   },
+   "checks": {
+    "lonAtMinus1": 292.9999999249661,
+    "lonAt": 293.0000000750344,
+    "lonSeamMinus1": 293.0000009755501,
+    "lonSeam": 292.9999990322638,
+    "marginBelowDegrees": 7.503388133045519e-8,
+    "marginAboveDegrees": 7.50344497646438e-8,
+    "birthSignSamples": 61
+   }
+  },
+  {
+   "id": 11,
+   "seam": "handover-1941",
+   "label": "1940-12-31T18:00 UT1, the ΔT model's handover",
+   "clock": "ut1",
+   "timeScale": "ut1",
+   "point": "Moon",
+   "key": "D60",
+   "events": [
+    {
+     "ms": -915170400000,
+     "at": "1940-12-31T18:00:00.000Z",
+     "ut1StepMs": 0,
+     "ttStepMs": -13.948,
+     "stepped": true,
+     "provenanceBefore": "delta-t zodiacs-deltat/1 reconstructed none none spline",
+     "provenanceAt": "delta-t zodiacs-deltat/1 reconstructed none none knots"
+    }
+   ],
+   "seamAt": "1940-12-31T18:00:00.000Z",
+   "seamAtMs": -915170400000,
+   "steps": {
+    "ut1Ms": 0,
+    "ttMs": -13.948
+   },
+   "plantedOn": "TT",
+   "adjusted": "the epoch ayanamsa's value",
+   "status": "planted",
+   "rule": "half-step-before-backward-step",
+   "plantedBeforeSeamMs": 7,
+   "input": {
+    "utc": "1940-12-31T17:49:59.993Z",
+    "timeScale": "ut1",
+    "latitude": 30,
+    "longitude": 0,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": {
+    "name": "seam-1941-ut1",
+    "epoch": {
+     "julianDateTT": 2451545
+    },
+    "value": 23.692579541822,
+    "model": "engine"
+   },
+   "options": {
+    "points": [
+     "Moon"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1440
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "next",
+    "at": "1940-12-31T17:59:59.993Z",
+    "atMs": -915170400007,
+    "minutes": 10,
+    "boundaryTicks": 2215080,
+    "boundary": 293,
+    "from": "libra",
+    "to": "scorpio"
+   },
+   "checks": {
+    "lonAtMinus1": 292.9999999249661,
+    "lonAt": 293.0000000750344,
+    "lonSeamMinus1": 293.0000009755501,
+    "lonSeam": 292.9999990322638,
+    "marginBelowDegrees": 7.503388133045519e-8,
+    "marginAboveDegrees": 7.50344497646438e-8,
+    "birthSignSamples": 61
+   }
+  },
+  {
+   "id": 12,
+   "seam": "handover-1941",
+   "label": "1940-12-31T18:00 UT1, the ΔT model's handover",
+   "clock": "tt",
+   "timeScale": "tt",
+   "point": "Ascendant",
+   "key": "D60",
+   "events": [
+    {
+     "ms": -915170375180,
+     "at": "1940-12-31T18:00:24.820Z",
+     "ut1StepMs": 13.948,
+     "ttStepMs": 0,
+     "stepped": true,
+     "provenanceBefore": "delta-t zodiacs-deltat/1 reconstructed none none spline",
+     "provenanceAt": "delta-t zodiacs-deltat/1 reconstructed none none knots"
+    }
+   ],
+   "seamAt": "1940-12-31T18:00:24.820Z",
+   "seamAtMs": -915170375180,
+   "steps": {
+    "ut1Ms": 13.948,
+    "ttMs": 0
+   },
+   "plantedOn": "UT1",
+   "adjusted": "the place's longitude",
+   "status": "planted",
+   "rule": "inside-forward-step",
+   "input": {
+    "utc": "1940-12-31T18:00:54.820Z",
+    "timeScale": "tt",
+    "latitude": 30,
+    "longitude": 0.553995846,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": "lahiri",
+   "options": {
+    "points": [
+     "Ascendant"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1440
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "previous",
+    "at": "1940-12-31T18:00:24.820Z",
+    "atMs": -915170375180,
+    "minutes": -0.5,
+    "boundaryTicks": 672840,
+    "boundary": 89,
+    "from": "pisces",
+    "to": "aries"
+   },
+   "checks": {
+    "lonAtMinus1": 88.99997157549574,
+    "lonAt": 89.0000248594167,
+    "marginBelowDegrees": 0.000028424504307622556,
+    "marginAboveDegrees": 0.00002485941672603076,
+    "birthSignSamples": 32
+   }
+  }
+ ],
+ "clocksWithoutStep": [
+  {
+   "seam": "leap-second-2017",
+   "clock": "ut1",
+   "steps": 0,
+   "events": [
+    {
+     "ms": 1483228800591,
+     "at": "2017-01-01T00:00:00.591Z",
+     "ut1StepMs": 0,
+     "ttStepMs": 0,
+     "stepped": false,
+     "provenanceBefore": "iers iers-utc/1 observed observed 36 knots",
+     "provenanceAt": "iers iers-utc/1 observed observed 37 knots"
+    }
+   ]
+  },
+  {
+   "seam": "leap-second-2017",
+   "clock": "tt",
+   "steps": 0,
+   "events": [
+    {
+     "ms": 1483228869184,
+     "at": "2017-01-01T00:01:09.184Z",
+     "ut1StepMs": 0,
+     "ttStepMs": 0,
+     "stepped": false,
+     "provenanceBefore": "iers iers-utc/1 observed observed 36 knots",
+     "provenanceAt": "iers iers-utc/1 observed observed 37 knots"
+    }
+   ]
+  },
+  {
+   "seam": "handover-1941",
+   "clock": "utc-pinned",
+   "steps": 0,
+   "events": [
+    {
+     "ms": -915170400000,
+     "at": "1940-12-31T18:00:00.000Z",
+     "ut1StepMs": 0,
+     "ttStepMs": 0,
+     "stepped": false,
+     "provenanceBefore": "pinned pinned pinned none none spline",
+     "provenanceAt": "pinned pinned pinned none none knots"
+    }
+   ]
+  }
+ ]
+}
