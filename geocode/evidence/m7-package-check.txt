@@ -1,0 +1,15 @@
+M7 package gate: command-output excerpt from this session.
+Runtime: Node.js v22.22.2, using the cached executable under geocode/.cache/npm.
+
+Command (from repository root, cached Node directory prepended to PATH):
+npm --cache geocode/.cache/npm run package:contents
+Exit status: 1
+
+> @zodiacs/engine@1.0.0 package:contents
+> node scripts/verify-package-contents.mjs
+
+AssertionError [ERR_ASSERTION]: packed package is missing dist/calc.d.ts
+    at file:///workspace/codex-infra/wt-geocode/scripts/verify-package-contents.mjs:50:3
+
+The task forbids generating root dist/. The geocode exclusion dry run
+does not replace the complete root contents, build or size-budget gates.

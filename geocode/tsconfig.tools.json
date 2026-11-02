@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": ".",
+    "outDir": ".cache/tools"
+  },
+  "include": ["src/build-index.ts", "src/dataset.ts", "src/lookup.ts", "src/types.ts", "scripts/**/*.ts"],
+  "exclude": ["tests"]
+}

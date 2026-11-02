@@ -1,0 +1,16 @@
+{
+  "runtime": {
+    "node": "v22.22.2",
+    "icu": "78.2",
+    "tz": "2025c"
+  },
+  "checks": [
+    "guards detect attempted filesystem, network, timer, listener and Intl work, including caught errors",
+    "core graph reuses engine geo and timezone histories without Node loaders, atlas files or chart math",
+    "core import, factories, lookup and date-only resolution perform no guarded work",
+    "modern and historical IANA resolution work without filesystem, network, timers or listeners",
+    "optional atlas, index-loader and HTTP entries import without guarded work",
+    "HTTP factory and close-before-start open no listener or timer"
+  ],
+  "passed": true
+}

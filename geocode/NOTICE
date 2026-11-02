@@ -1,0 +1,40 @@
+GeoNames sample and derived place indexes
+
+Contains geographical data from GeoNames (https://www.geonames.org/),
+licensed under Creative Commons Attribution 4.0 International:
+https://creativecommons.org/licenses/by/4.0/
+
+The GeoNames Gazetteer extract files are published at:
+https://download.geonames.org/export/dump/
+Their format and license statement are in:
+https://download.geonames.org/export/dump/readme.txt
+
+data/geonames-sample.tsv, data/admin1-sample.tsv and
+data/country-info-sample.tsv contain selected complete upstream rows.
+Rows were selected and sorted; their field values and row bytes were not
+edited. data/sample-receipt.json records each input URL, retrieval time,
+SHA-256 digest, archive member, selected identifier and output digest.
+Generated indexes transform these rows into this project's JSON format.
+Redistributed indexes must retain the GeoNames attribution, source link,
+license link and description of the transformation.
+
+GeoNames provides its data "as is" without warranty or any representation
+of accuracy, timeliness or completeness. GeoNames does not endorse this
+project. Modern place coordinates and timezone labels are not evidence of
+historical jurisdiction boundaries or historical civil-clock offsets.
+
+The sample selector and index builder are MIT, under ../LICENSE.
+
+Historical civil-time resolution
+
+Atlas-derived answers contain data from the Zodiacs.org historical time
+atlas, licensed CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
+https://github.com/zodiacs-org/engine/tree/main/atlas
+The result identifies the atlas version and release date,
+its GeoNames coordinate source, rule versions and primary-source citations.
+The adapter copies those result fields without changing their values.
+Retain that provenance with redistributed atlas-derived answers.
+The atlas resolver tools and this adapter are MIT.
+
+Other offsets use the engine's IANA tzdb histories and host Intl/ICU.
+See ../LICENSING.md, GeoNames and timezone data, and ../docs/time.md.
