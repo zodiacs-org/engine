@@ -1,0 +1,39 @@
+P7 final phase 2 local validation
+Runtime: Node 22.23.3; npm 10.9.9
+Working directory: mcp/
+
+Clean locked install command:
+npm ci --ignore-scripts --cache .cache/npm
+added 59 packages, and audited 60 packages in 1s
+
+15 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Complete validation command:
+node scripts/validate.mjs
+Node 22.23.3
+Source baseline: 0c4f36ca7d21ef776a759867b47a4e04b1a26494
+Validation inputs SHA-256: 9e86a0337aa891f25052af7b9bf02561604cfa364424bde5ae1ba6e4e5bffa8e
+Project lockfile SHA-256: 574dbfe07d0bd270fd2c74e4a00ac895a459ed8396d5f2e96feb963871241cb0
+Engine archive SHA-256: c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6
+Project disk bytes before checks: 160506698; cap: 2000000000
+Disk preflight reserve bytes: 20000000
+typecheck: passed
+build: passed
+vitest: passed
+Vitest tests: 312 passed; 0 failed; 0 pending
+Authored/build/report file sizes, Markdown dash exclusion and JSON snippets: passed
+Working tree scope, parent file/dist snapshot and whitespace: passed
+Parent pack exclusion: passed in test/isolation.mcp-test.ts
+Project disk bytes after checks: 161139445; cap: 2000000000
+Raw reports: mcp/.generated/ (gitignored)
+Parent build-dependent gates: not run; parent dist must remain untouched
+
+Coverage: all synthetic cases in test/*.mcp-test.ts, including authentication,
+worker cancellation and deadlines, request limits, advertised schemas for every
+tool over stdio and HTTP, native receipts, factual wording and parent isolation.
+Result: local integration and resource-policy checks passed on the first run.
+Client GUIs, public gateways and independent accuracy checks: not run.
+Remote CI: the harness checks it after committing and pushing this session.
