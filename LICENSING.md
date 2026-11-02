@@ -130,6 +130,22 @@ port or translation of Swiss Ephemeris code. This licensing decision must be
 revisited before accepting any Swiss Ephemeris source, binary, table, or
 generated fixture into the package.
 
+## Fixed stars
+
+The stars entry (`src/stars.ts`, `src/stars-data.ts`) ports the method of
+Ephemera's `src/stars.cpp` and its catalogue `data/stars_data.cpp`, MIT,
+Copyright (c) 2026 Intellecat, at commit
+`ce1bc21c7f9e1da150cd6e012d01474073147b15` (catalogue sha256
+`25d39822c005cb7524d2dd2c6dbe21aaab9920e6e53767984c46ce79c50aa25e`, checked by
+`scripts/port-stars-data.py`). `NOTICE` carries the MIT notice. Ephemera built
+the catalogue from the Hipparcos new reduction (ESA; van Leeuwen 2007, VizieR
+I/311), SIMBAD radial velocities (CDS) and the IAU WGSN names, each free to use
+with acknowledgement; `NOTICE` carries the acknowledgements. No HYG data (CC
+BY-SA) and no Caelus code or fixture is used. The test reference,
+`src/fixtures/stars-erfa.json`, is computed by ERFA (pyerfa) with
+`scripts/make-star-reference.py`; no Swiss Ephemeris code, output or value is
+used.
+
 ## ΔT data
 
 `src/deltat.ts` ships 32 values of Table S15 of Stephenson, Morrison &
