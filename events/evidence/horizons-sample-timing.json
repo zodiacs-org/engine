@@ -1,0 +1,252 @@
+{
+  "reference": "references/horizons-sample.json",
+  "referenceSha256": "004a82ecc8e0684c3b42a75680507c2e67b49cd295214f5356158f8a2c331334",
+  "planSha256": "0671606ad7e64614f753b7af7853790f9ab096ebb437d8a8fd075310272dff87",
+  "clock": "tt",
+  "toleranceMs": {
+    "ingress": 600000,
+    "station": 1200000
+  },
+  "parentVersion": "1.0.0",
+  "rounding": "Absolute timing errors rounded up to whole seconds; acceptance uses unrounded milliseconds.",
+  "scope": "Only selected hourly source windows and identities; daily selection and these comparisons do not prove a full inventory or physical timing bounds.",
+  "scans": [
+    {
+      "id": "hourly",
+      "options": {
+        "stepMs": 3600000
+      },
+      "cases": [
+        {
+          "id": "mercury-1900-station-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 143
+        },
+        {
+          "id": "mercury-1900-station-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 291
+        },
+        {
+          "id": "mercury-1900-ingress-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 46
+        },
+        {
+          "id": "mercury-1900-ingress-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 19
+        },
+        {
+          "id": "venus-1950-station-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 129
+        },
+        {
+          "id": "venus-1950-station-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 305
+        },
+        {
+          "id": "venus-1950-ingress-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 101
+        },
+        {
+          "id": "jupiter-2000-station-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 300
+        },
+        {
+          "id": "jupiter-2000-ingress-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 396
+        },
+        {
+          "id": "mars-2001-station-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 99
+        },
+        {
+          "id": "mars-2001-station-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 467
+        },
+        {
+          "id": "mars-2001-ingress-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 25
+        },
+        {
+          "id": "saturn-2050-station-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 122
+        },
+        {
+          "id": "saturn-2050-station-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 290
+        },
+        {
+          "id": "saturn-2050-ingress-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": false,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 701
+        },
+        {
+          "id": "neptune-2100-station-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 350
+        },
+        {
+          "id": "neptune-2100-station-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 502
+        }
+      ],
+      "summary": {
+        "referenceCases": 17,
+        "matchedCases": 17,
+        "missingCases": 0,
+        "ambiguousCases": 0,
+        "timingWithinThreshold": 16,
+        "timingOutsideThreshold": 1
+      }
+    },
+    {
+      "id": "station-aware",
+      "options": {
+        "stepMs": 86400000,
+        "stationStepMs": 21600000
+      },
+      "cases": [
+        {
+          "id": "mercury-1900-station-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 143
+        },
+        {
+          "id": "mercury-1900-station-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 291
+        },
+        {
+          "id": "mercury-1900-ingress-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 46
+        },
+        {
+          "id": "mercury-1900-ingress-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 19
+        },
+        {
+          "id": "venus-1950-station-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 129
+        },
+        {
+          "id": "venus-1950-station-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 305
+        },
+        {
+          "id": "venus-1950-ingress-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 101
+        },
+        {
+          "id": "jupiter-2000-station-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 300
+        },
+        {
+          "id": "jupiter-2000-ingress-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 396
+        },
+        {
+          "id": "mars-2001-station-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 99
+        },
+        {
+          "id": "mars-2001-station-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 467
+        },
+        {
+          "id": "mars-2001-ingress-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 25
+        },
+        {
+          "id": "saturn-2050-station-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 122
+        },
+        {
+          "id": "saturn-2050-station-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 290
+        },
+        {
+          "id": "saturn-2050-ingress-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": false,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 701
+        },
+        {
+          "id": "neptune-2100-station-direct",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 350
+        },
+        {
+          "id": "neptune-2100-station-retrograde",
+          "matchedIdentities": 1,
+          "timingWithinThreshold": true,
+          "maxAbsoluteTimingErrorSecondsRoundedUp": 502
+        }
+      ],
+      "summary": {
+        "referenceCases": 17,
+        "matchedCases": 17,
+        "missingCases": 0,
+        "ambiguousCases": 0,
+        "timingWithinThreshold": 16,
+        "timingOutsideThreshold": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "selection": "First daily-table station and first tropical ingress in each available direction per body-year; refine their padded windows with hourly tables.",
+  "surveys": [
+    { "body": "Mercury", "command": "199", "year": 1900 },
+    { "body": "Venus", "command": "299", "year": 1950 },
+    { "body": "Jupiter", "command": "599", "year": 2000 },
+    { "body": "Mars", "command": "499", "year": 2001 },
+    { "body": "Saturn", "command": "699", "year": 2050 },
+    { "body": "Neptune", "command": "899", "year": 2100 }
+  ],
+  "toleranceMs": { "ingress": 600000, "station": 1200000 }
+}

@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "baselineCommit": "baadfcc94f70879381ca130376d09b087ebdd0d6",
+  "baselineFile": "src/engine.ts",
+  "rounds": 3,
+  "scope": "Local sequential queries on TT. The Mercury span uses guarded endpoints inside parent coverage. Full returned payloads, including numerical brackets, residuals, clipping, unresolved tails and evaluation counts, must agree exactly. These are consistency and cost measurements, not independent astronomical accuracy evidence.",
+  "cases": [
+    {
+      "id": "mercury-stations",
+      "query": "all Mercury stations from 1800-01-02 to 2199-12-31 clock tt",
+      "options": { "stepMs": 86400000, "maxEvaluations": 1000000 }
+    },
+    {
+      "id": "venus-leo-retrogrades",
+      "query": "all Venus retrogrades in Leo 1900-2100 clock tt",
+      "options": { "stepMs": 86400000, "maxEvaluations": 1000000 }
+    },
+    {
+      "id": "moon-void-periods",
+      "query": "all void-of-course Moon with Sun , Mercury , Venus , Mars , Jupiter , Saturn aspects conjunction , sextile , square , trine , opposition from 2000-01-01 to 2001-01-01 clock tt",
+      "options": { "stepMs": 86400000, "stationStepMs": 21600000, "maxEvaluations": 1000000 }
+    },
+    {
+      "id": "mercury-coverage-edge",
+      "query": "all Mercury stations from 2199-12-31 to 2200-01-01 clock tt",
+      "options": { "stepMs": 86400000, "maxEvaluations": 100 }
+    }
+  ]
+}

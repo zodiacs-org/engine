@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "clock": "tt",
+  "maxEvaluationsPerQuery": 200000,
+  "horizonsSamplePlan": "references/horizons-sample-plan.json",
+  "nasaSamplePlan": "references/nasa-sample-plan.json",
+  "policies": [
+    { "id": "original", "options": { "stepMs": 86400000 } },
+    { "id": "station-aware", "options": { "stepMs": 86400000, "stationStepMs": 21600000 } }
+  ],
+  "loopPolicies": [
+    { "id": "original", "options": { "stepMs": 172800000 } },
+    { "id": "station-aware", "options": { "stepMs": 172800000, "stationStepMs": 172800000 } }
+  ],
+  "queries": {
+    "horizonsSample": "Full calendar year, all stations and all tropical sign ingresses, for every body-year in the bound sample plan.",
+    "horizonsOriginal": "Full calendar year of each original reference case, retaining its body and event policy, without a direction filter.",
+    "loops": "Each independent loop source window, as a longitude crossing and as a fixed conjunction to the same invented longitude.",
+    "nasa": "Full calendar year, solar and lunar separately, for every year in the bound sample plan; pad by the derivative half-width and filter back to the requested window."
+  },
+  "matching": "Unique identity inside the independent source window for Horizons, or kind and full TT catalog date for NASA, before comparing timing or classification. Ambiguous candidates are not assigned.",
+  "calendarOwnership": "Calendar year and date windows include their midnight and exclude the next midnight, encoded as integer search coordinates one millisecond before each midnight.",
+  "scope": "Fixed selected years and source windows spanning 1900 through 2100, not a continuous inventory of that span. Horizons coverage is sparse; NASA covers every retained catalog row in the selected years."
+}
