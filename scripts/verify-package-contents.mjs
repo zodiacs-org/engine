@@ -34,6 +34,8 @@ const required = [
   "dist/techniques.js",
   "dist/sky.d.ts",
   "dist/sky.js",
+  "dist/stars.d.ts",
+  "dist/stars.js",
   "dist/timing.d.ts",
   "dist/timing.js",
   "dist/vedic.d.ts",
@@ -184,6 +186,11 @@ const ENTRY_BUDGETS = {
   // takes from it (src/equator.ts, shared with ./calc) in place of
   // astronomy-engine's; 5.31 per cent of headroom.
   "./sky": 97_000,
+  // New (feat/fixed-stars-hipparcos): the 411 IAU-named Hipparcos stars and
+  // their apparent places. 113,208 bytes as first built, 47,226 beyond the
+  // core's graph, of which about 41,000 are the catalogue; 5.66 per cent of
+  // headroom. The other entries' graphs are unchanged.
+  "./stars": 120_000,
   // rc.15: 112,485, the core's graph included; as carried, 114,916. With
   // planetary returns 117,219. rc.16: 123,039, raised from 120,000 for the
   // nutation in the ephemeris chunk; 4.84 per cent of headroom.
@@ -304,7 +311,11 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // (docs/evidence/1.1.0-rc.1-20261026/sizes.json). Raised from 1,000,000 to
 // 1,020,000 with the owner's approval of 2026-10-26, which leaves 13,506
 // bytes.
-const TOTAL_CAP = 1_020_000;
+// feat/fixed-stars-hipparcos: 1,055,863 bytes in 79 files, 49,369 more than
+// 1.1.0-rc.1, for the ./stars entry (its catalogue, about 41,000 bytes, and
+// its declarations). Proposed: raised from 1,020,000 to 1,060,000, which
+// needs the owner's approval before merge; it leaves 4,137 bytes.
+const TOTAL_CAP = 1_060_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 
 // The licence expression covers the code (MIT) and the ΔT values (CC BY 4.0),

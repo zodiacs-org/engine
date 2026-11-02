@@ -1,5 +1,18 @@
 # Engine changelog
 
+## Unreleased: fixed stars (feat/fixed-stars-hipparcos)
+
+- **New entry point `@zodiacs/engine/stars`.** `fixedStars()`,
+  `findFixedStar(query)` and `fixedStarPosition(star, date, options)` give the
+  411 IAU-named stars of the Hipparcos new reduction, and the Galactic Center,
+  as apparent (or astrometric) places on the ecliptic of date. The method and
+  catalogue are ported from Ephemera (MIT, Copyright (c) 2026 Intellecat);
+  attribution is in `NOTICE` and `LICENSING.md`. Additive only: no existing
+  export, value or entry's import graph changes. Tested against ERFA's
+  apparent places for all 411 stars at four epochs (1,644 cases, worst
+  0.0020 arcsec). The package's total size cap is proposed up from 1,020,000
+  to 1,060,000 bytes, which needs the owner's approval.
+
 ## 1.1.0-rc.1 — unreleased candidate
 
 The first candidate for 1.1.0, on 1.0.0 (main at `4771fa6`): natal receipts

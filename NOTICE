@@ -214,3 +214,57 @@ Astronomical Observatory, France:
 
 The other two, the proper motion of Sgr A*, come from M. J. Reid and
 A. Brunthaler 2004, ApJ 616, 872, table 2. LICENSING.md gives the terms.
+
+Ephemera (fixed stars)
+----------------------
+
+The stars entry (src/stars.ts and src/stars-data.ts, built into
+dist/stars.js) ports the fixed-star method of Ephemera's src/stars.cpp and
+its star catalogue, data/stars_data.cpp, at commit
+ce1bc21c7f9e1da150cd6e012d01474073147b15
+(https://github.com/intellecat/ephemera):
+
+  MIT License
+
+  Copyright (c) 2026 Intellecat
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+Hipparcos, SIMBAD and the IAU star names
+----------------------------------------
+
+The catalogue's positions, proper motions and parallaxes are from the
+Hipparcos new reduction:
+
+  This work has made use of data from the European Space Agency (ESA)
+  mission Hipparcos. F. van Leeuwen 2007, Validation of the new Hipparcos
+  reduction. Astronomy & Astrophysics 474, 653-664 (VizieR catalogue I/311).
+
+Its radial velocities are from SIMBAD:
+
+  This research has made use of the SIMBAD database, operated at CDS,
+  Strasbourg, France (M. Wenger et al. 2000, A&AS 143, 9), and of the VizieR
+  catalogue access tool, CDS, Strasbourg, France (F. Ochsenbein et al. 2000,
+  A&AS 143, 23).
+
+Its star names are those of the IAU Working Group on Star Names (WGSN),
+https://www.iau.org/public/themes/naming_stars/ (E. E. Mamajek et al.).
+
+The Galactic Center (Sgr A*) follows M. J. Reid and A. Brunthaler (2004 and
+2020), as Ephemera's catalogue gives it.
