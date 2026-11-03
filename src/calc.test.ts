@@ -562,16 +562,62 @@ describe("bands from the time basis", () => {
     expect(placidus.band.cusps[0]).toBe(placidus.band.asc);
   });
 
-  it("give sidereal angles and cusps the tropical ones' bands", () => {
-    // After the table, where both TT and UT1 carry a band.
-    const time = "2050-06-01T12:00:00Z";
+  /** An angle's or a cusp's band, by name, and its value: the four angles, then the cusps unless they are sign starts. */
+  const angleRows = (result: HousesResult) => [
+    ["asc", result.band.asc, result.angles.asc],
+    ["mc", result.band.mc, result.angles.mc],
+    ["vertex", result.band.vertex, result.vertex],
+    ["eastPoint", result.band.eastPoint, result.eastPoint],
+    ...(result.system === "whole" ? [] : result.cusps.map((cusp, k) => [`cusps.${k}`, result.band.cusps[k]!, cusp]))
+  ] as [string, number, number][];
+
+  it("add each angle's and cusp's rate on TT, UT1 held, times the TT band", () => {
+    // UT1 input: TT carries the ΔT band and UT1 none, so the band is the rate on TT times it. The same rate,
+    // by another road: half the difference with ΔT pinned at d0 ± 600 s on the same UT1, over 600 s.
+    const jd = 2_469_807.5;
+    const place = { latitude: 51.5, longitude: -0.1 };
+    let compared = 0;
+    for (const houseSystem of ["whole", "placidus", "regiomontanus", "morinus"] as const) {
+      for (const zodiac of [undefined, { sidereal: "lahiri" } as const]) {
+        const request = { place, houseSystem, ...(zodiac ? { zodiac } : {}) };
+        const result = housesOk(houses({ ...request, time: { jd, scale: "ut1" } }));
+        const { tt, ut1 } = result.band.time;
+        expect([tt > 0, zero(ut1)]).toEqual([true, true]);
+        const d0 = result.receipt.instants[0]!.deltaT.seconds;
+        const [plus, minus] = [d0 + 600, d0 - 600].map((pin) => angleRows(housesOk(houses({ ...request, time: { jd, scale: "ut1", deltaT: pin } }))));
+        angleRows(result).forEach(([name, band], index) => {
+          const expected = ((Math.abs(turn(plus![index]![2], minus![index]![2])) * 3600) / 1200) * tt;
+          expect(band, `${houseSystem} ${zodiac ? "lahiri" : "tropical"} ${name}`).toBeGreaterThan(0);
+          // The two roads round TT apart by a unit in its last place, and each angle by a few in its own.
+          expect(Math.abs(band - expected), `${houseSystem} ${zodiac ? "lahiri" : "tropical"} ${name}`).toBeLessThanOrEqual(1e-6 * expected + 1e-10);
+          compared += 1;
+        });
+      }
+    }
+    expect(compared).toBe(2 * (4 + 16 * 3));
+  });
+
+  it("give sidereal angles and cusps the tropical ones' rate on UT1, and on TT the sidereal longitude's", () => {
+    const place = { latitude: 51.5, longitude: -0.1 };
+    // On UTC input on the IERS basis TT has no band, so the two zodiacs' bands are the same.
     for (const houseSystem of HOUSE_SYSTEMS) {
-      const place = { latitude: 51.5, longitude: -0.1 };
+      const time = "2020-06-01T12:00:00Z";
       const tropical = housesOk(houses({ time, place, houseSystem }));
-      expect(tropical.band.time.tt, houseSystem).toBeGreaterThan(0);
+      expect(zero(tropical.band.time.tt), houseSystem).toBe(true);
       for (const sidereal of ["lahiri", "fagan-bradley"] as const) {
         expect(housesOk(houses({ time, place, houseSystem, zodiac: { sidereal } })).band, `${houseSystem} ${sidereal}`).toEqual(tropical.band);
       }
+    }
+    // After the table both carry a band, and the ayanamsa's rate on TT moves every sidereal angle and cusp.
+    for (const houseSystem of ["whole", "placidus", "koch"] as const) {
+      const time = "2050-06-01T12:00:00Z";
+      const tropical = housesOk(houses({ time, place, houseSystem }));
+      const sidereal = housesOk(houses({ time, place, houseSystem, zodiac: { sidereal: "lahiri" } }));
+      expect(sidereal.band.time).toEqual(tropical.band.time);
+      expect(tropical.band.time.tt, houseSystem).toBeGreaterThan(0);
+      angleRows(sidereal).forEach(([name, band], index) => {
+        expect(band, `${houseSystem} ${name}`).not.toBe(angleRows(tropical)[index]![1]);
+      });
     }
   });
 
@@ -643,11 +689,14 @@ describe("bands from the time basis", () => {
     expect(timed.band.asc).toBeGreaterThan(0);
     expect([timeless.band.asc, timeless.band.mc]).toEqual([null, null]);
     expect(timeless.band.bodies.every((row) => zero(row.lon))).toBe(true);
-    // UT1 input: the bodies take the ΔT band, and the angles none.
+    // UT1 input: the bodies take the ΔT band, and the angles their rate on TT times it, as houses() gives them.
     const d = onUt1.chart.deltaT.sigma!;
     expect(onUt1.band.time).toEqual({ tt: d, ut1: 0 });
     onUt1.chart.bodies.forEach((row, index) => expect(onUt1.band.bodies[index]!.lon, row.body).toBe((Math.abs(row.speed) / 24) * d));
-    expect([zero(onUt1.band.asc!), zero(onUt1.band.mc!)]).toEqual([true, true]);
+    const onUt1Angles = housesOk(houses({ time: { jd: 2_447_104.75, scale: "ut1" }, place })).band;
+    expect([onUt1.band.asc, onUt1.band.mc]).toEqual([onUt1Angles.asc, onUt1Angles.mc]);
+    expect(onUt1.band.asc).toBeGreaterThan(0);
+    expect(onUt1.band.mc).toBeGreaterThan(0);
   });
 
   it("name time-band:first-order last in every receipt whose result carries a band", () => {

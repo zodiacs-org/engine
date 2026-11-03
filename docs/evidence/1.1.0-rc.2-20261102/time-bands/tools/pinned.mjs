@@ -10,23 +10,28 @@
 // holds TT. d0 is the unpinned record's deltaT.seconds.
 // - C4a, positions: F2 with pins d0 ± σTT; half the wrapped difference of lon,
 //   lat and dist equals the band's TT term within max(1e-4 × band, 1e-6″)
-//   (dist: max(1e-4 × band, 1e-15 au)). The true nodes are reported.
+//   (dist: max(1e-4 × band, F), F = 6e-12 au × (1 + σTT / 86.4 s), the floor
+//   the amendment of 2026-11-03 (review 1) derives with distance-floor.mjs,
+//   in place of 1e-15 au). The true nodes are reported.
 // - C4b, angles: F1 at S1 to S5 and S7, 13 systems, whole-sign and fallback
 //   cusps left out. (i) pins d0 ± 1 s: half the difference over 1 s equals
 //   band ÷ σUT1 within 1e-6 relative (Placidus cusps: plus 3.6e-6″ a second),
 //   at every site; (ii) pins d0 ± σUT1: half the difference equals the band
 //   within max(1e-3 × band, 1e-6″), judged at S1 to S4, reported at S5, S7.
-// - C4c, the angles' TT term: F2 with pins d0 ± 100 s, the same sites and
-//   systems: |half the difference| ≤ 1e-6 × |∂Q/∂UT1| × 100 s in the tropical
-//   zodiac and Lahiri's, ∂Q/∂UT1 = band ÷ σUT1 of the F1 record.
+// - C4c, the angles' TT term, as the amendment of 2026-11-03 (review 1)
+//   makes it: F2 (σUT1 = 0, so the band is the TT term alone) with pins
+//   d0 ± σTT, the same sites and systems, in the tropical zodiac and Lahiri's:
+//   half the wrapped difference equals the band within max(1e-3 × band, 1e-6″),
+//   Placidus cusps plus 3.6e-6″, at every site.
 // - C4d, the topocentric bound: Sun, Moon, Mars, Jupiter and Pluto at S1, S2
 //   and S6; P_TT from F2 and P_UT1 from F1 with pins d0 ± 10 s; for each of F1
 //   to F5, band ≥ P_TT σTT + P_UT1 σUT1 − 1e-9″ for lon and lat (dist in au,
 //   − 1e-15). Reported: band / (P_TT σTT + P_UT1 σUT1).
 // Controls: C4a with the bands × 1.001; C4b with the angle bands from the
-// solar-time rate, 0.27 % off, which must fail (i) and (ii); C4c's probe made
-// in F1, where UT1 moves, whose ratio must exceed 0.5; C4d with the bands
-// without w, which must fail on F1 records.
+// solar-time rate, 0.27 % off, which must fail (i) and (ii); C4c with
+// b11c5e8's bands, which leave the TT term out (0 in F2), and with the bands
+// × 1.1, each of which must fail; C4d with the bands without w, which must
+// fail on F1 records.
 import { CORPORA, SITES, forms } from "./corpora.mjs";
 import { entry, finish, manifest, options } from "./load.mjs";
 
@@ -48,9 +53,19 @@ const quantities = (result) => ({ asc: result.angles.asc, mc: result.angles.mc, 
 const bandOf = (band, name) => (name.startsWith("cusps.") ? band.cusps[Number(name.slice(6))] : band[name]);
 
 const out = { C4a: [], C4aReported: [], C4b: [], C4bReported: [], C4c: [], C4d: [], C4dRatios: [] };
-const controls = { "C4a: bands × 1.001": [], "C4b: the solar-time rate, (i)": [], "C4b: the solar-time rate, (ii)": [], "C4c: the probe in F1": [], "C4d: the bands without w": [] };
+const controls = {
+  "C4a: bands × 1.001": [],
+  "C4b: the solar-time rate, (i)": [],
+  "C4b: the solar-time rate, (ii)": [],
+  "C4c: b11c5e8's bands, without the TT term": [],
+  "C4c: bands × 1.1": [],
+  "C4d: the bands without w": []
+};
+/** C4a's distance floor (distance-floor.mjs): the rounding of two evaluations and of the band's two speed samples. */
+const distanceFloor = (sigmaTt) => 6e-12 * (1 + sigmaTt / 86.4);
+/** C4c's tolerance for a band, with Placidus's settling to 1e-9° for its cusps. */
+const c4cLimit = (band, placidusCusp) => Math.max(1e-3 * band, 1e-6) + (placidusCusp ? 3.6e-6 : 0);
 let c4cLargest = 0;
-let c4cControlSmallest = Infinity;
 let records = 0;
 
 for (const item of CORPORA[args.corpus]()) {
@@ -76,11 +91,12 @@ for (const item of CORPORA[args.corpus]()) {
     for (const name of ["lon", "lat", "dist"]) {
       if (half[name] === null) continue;
       const band = base.band[name];
-      const limit = Math.max(1e-4 * band, name === "dist" ? 1e-15 : 1e-6);
+      const floor = name === "dist" ? distanceFloor(sigma) : 1e-6;
+      const limit = Math.max(1e-4 * band, floor);
       const row = { entry: item.id, request, what: name, band, half: half[name] };
       const target = request.body === "North Node" || request.body === "South Node" ? out.C4aReported : out.C4a;
       if (Math.abs(half[name] - band) > limit) target.push(row);
-      if (target === out.C4a && Math.abs(half[name] - 1.001 * band) > Math.max(1e-4 * 1.001 * band, name === "dist" ? 1e-15 : 1e-6)) controls["C4a: bands × 1.001"].push(row);
+      if (target === out.C4a && Math.abs(half[name] - 1.001 * band) > Math.max(1e-4 * 1.001 * band, floor)) controls["C4a: bands × 1.001"].push(row);
     }
   }
 
@@ -113,20 +129,20 @@ for (const item of CORPORA[args.corpus]()) {
             if (judged2 && Math.abs(half - solar) > Math.max(1e-3 * solar, 1e-6)) controls["C4b: the solar-time rate, (ii)"].push(row);
           }
         }
-        // C4c: TT moves by ± 100 s with UT1 held (F2); the control moves UT1 instead (F1).
-        const tt = [quantities(ok(houses({ ...request, time: pinned(F2, d0 - 100) }))), quantities(ok(houses({ ...request, time: pinned(F2, d0 + 100) })))];
-        const ut1 = [quantities(ok(houses({ ...request, time: pinned(F1, d0 - 100) }))), quantities(ok(houses({ ...request, time: pinned(F1, d0 + 100) })))];
+        // C4c: TT moves by ± σTT with UT1 held (F2), where the band is the TT term alone.
+        const onUt1Input = ok(houses({ ...request, time: F2 }));
+        const sigmaTt = onUt1Input.band.time.tt;
+        const d2 = onUt1Input.receipt.instants[0].deltaT.seconds;
+        const tt = [quantities(ok(houses({ ...request, time: pinned(F2, d2 - sigmaTt) }))), quantities(ok(houses({ ...request, time: pinned(F2, d2 + sigmaTt) })))];
         for (const name of names) {
-          const perSecond = bandOf(onTt.band, name) / sigmaUt1;
-          const scale = perSecond * 100;
+          const band = bandOf(onUt1Input.band, name);
           const half = (Math.abs(wrap(tt[0][name] - tt[1][name])) / 2) * 3600;
-          const control = (Math.abs(wrap(ut1[0][name] - ut1[1][name])) / 2) * 3600;
-          if (scale > 0) {
-            c4cLargest = Math.max(c4cLargest, half / scale);
-            c4cControlSmallest = Math.min(c4cControlSmallest, control / scale);
-          }
-          if (half > 1e-6 * scale) out.C4c.push({ entry: item.id, site, houseSystem, zodiac: zodiac ? "lahiri" : "tropical", what: name, half, limit: 1e-6 * scale });
-          if (control > 1e-6 * scale) controls["C4c: the probe in F1"].push({ entry: item.id, site, houseSystem, what: name, ratio: control / scale });
+          const placidusCusp = houseSystem === "placidus" && name.startsWith("cusps.");
+          const row = { entry: item.id, site, houseSystem, zodiac: zodiac ? "lahiri" : "tropical", what: name, band, sigmaTt, half };
+          if (band > 0) c4cLargest = Math.max(c4cLargest, Math.abs(half - band) / band);
+          if (Math.abs(half - band) > c4cLimit(band, placidusCusp)) out.C4c.push(row);
+          if (half > c4cLimit(0, placidusCusp)) controls["C4c: b11c5e8's bands, without the TT term"].push(row);
+          if (Math.abs(half - 1.1 * band) > c4cLimit(1.1 * band, placidusCusp)) controls["C4c: bands × 1.1"].push(row);
         }
       }
     }
@@ -178,13 +194,8 @@ finish({
   reportedNotJudged: {
     trueNodes: { outside: out.C4aReported.length, first: out.C4aReported.slice(0, 5) },
     angleFirstOrderAtS5AndS7: { outside: out.C4bReported.length, first: out.C4bReported.slice(0, 5) },
-    c4cLargestRatio: c4cLargest,
-    c4cControlSmallestRatio: c4cControlSmallest,
+    c4cLargestRelativeDifference: c4cLargest,
     c4dBandOverPartials: ratios.length ? { cases: ratios.length, smallest: ratios[0], median: ratios[Math.floor(ratios.length / 2)], largest: ratios.at(-1) } : null
   },
-  controls: Object.fromEntries(Object.entries(controls).map(([name, found]) => [
-    name,
-    // C4c's control must see the full turn: its ratio must exceed 0.5 for every quantity probed.
-    name.startsWith("C4c") ? { failed: found.length > 0 && c4cControlSmallest > 0.5, problems: found.length, smallestRatio: c4cControlSmallest } : { failed: found.length > 0, problems: found.length }
-  ]))
+  controls: Object.fromEntries(Object.entries(controls).map(([name, found]) => [name, { failed: found.length > 0, problems: found.length }]))
 }, args.out);

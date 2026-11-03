@@ -364,7 +364,7 @@ function run<B extends string>(
  * the far side of the circle, not a crossing.
  *
  * A plain scan can lose both crossings when a station takes the body less
- * than f″h²/8 past the target (f″ the second derivative of its longitude at
+ * than |f″|h²/8 past the target (f″ the second derivative of its longitude at
  * the station, h the step), since both can then fall between two samples: at
  * a 5-day step, up to 0.0056° for Saturn and 0.011° for Jupiter at their
  * stations from 2019 to 2024. Where the sampled motion turns

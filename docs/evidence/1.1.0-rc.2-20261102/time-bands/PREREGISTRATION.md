@@ -716,3 +716,189 @@ OQ5 is not answered under that delegation (zodiacs.org
 `DECISIONS-2026-10-05.md` §4). R-M3c, with the bands confined to `./calc`, and `timeBands`
 exported from `./time` stay unratified, so P1.M3c is `validated` at most
 until the owner ratifies them.
+
+**2026-11-03, review 1: what the independent review ran before the formal
+run.** Review 1 of 1.1.0-rc.2 (programme notes,
+`notes/rc2-2026-11-01/review1/`, outside this repository) ran, on the build
+of b11c5e8 and before any formal run, `tools/pinned.mjs` (check C4) and a
+replica of C4c's rule on corpus T2, and `calc events()` on corpus E's Moon
+windows of 1971 to 1972 and of 2027. Nothing of it was committed; its outputs
+are in those notes. So T2 and those windows of E are no longer unseen
+(section 2). The amendments below that touch C4 (C4a's floor; C4c, with
+R2 (c)) or C5 (the IERS table's end in `tools/bands.py`) were adopted after
+those results were seen, so every reading they touch counts as `validated`
+only, until the owner ratifies it (section 10's preamble); under OQ5 the unit
+is `validated` at most anyway. The formal run still runs T2 and E as section
+5 fixes them.
+
+**2026-11-03, review 1: the angles' rate on TT (R2 (c), C3, C4c, the named
+tests).** Review 1 found C4c failing as preregistered, on T0 among others: at
+slow or near-degenerate angles (the Vertex near the equator, Regiomontanus
+cusps inside the polar circle) the obliquity's rate dominates, and in a
+sidereal zodiac the ayanamsa's, so R2 (c)'s premise, a TT term below 1e-6 of
+∂Q/∂UT1, is false there. The coordinator chose to make the angle bands
+complete to first order rather than to weaken C4c. Adopted after review 1,
+before any formal run:
+
+- *R2 (c) now reads:* the ascendant, midheaven, Vertex, East Point and cusps:
+  band = |∂Q/∂UT1| × σUT1 + |∂Q/∂TT| × σTT. ∂Q/∂UT1 is as before: the central
+  difference over ±1 s of UT1 (the sidereal time moved by
+  ±1.00273781191135448 / 3,600 hour), latitude and obliquity held fixed.
+  ∂Q/∂TT is the central difference over ±600 s of TT with UT1 held: the
+  sidereal time on the moved TT (its precession and its equation of the
+  equinoxes; `gastHours` with UT1 held and TT moved), the true obliquity on
+  the moved TT, and in the sidereal zodiac the true ayanamsa there, which the
+  sidereal longitude subtracts. Each difference is wrapped into
+  (−180°, 180°] and divided by its 2 s or 1,200 s. Where σTT = 0 the TT term
+  is not computed and is 0, so there the band is the one b11c5e8 gave, to the
+  bit. Whole-sign cusps, and the cusps where Placidus or Koch falls back,
+  keep band 0. `chart()`'s ascendant and midheaven take the tropical
+  zodiac's, as `houses()` gives them. The code is in `./calc`'s own module
+  (`src/calc.ts`, `movedOnTt` and `angleBands`), calling the root's
+  `gastHours` and `tilt` and `./vedic`'s `ayanamsaAt` with the moved TT; no
+  root module changes, and the built chunks of the root modules that the
+  site's engine chunk carries are b11c5e8's byte for byte.
+- *The step, 600 s, and why it is sound.* The step must be long against the
+  rounding of an angle (a few units in the last place of up to 360°) and
+  Placidus's settling to 1e-9°, and short against the nutation's periods, the
+  obliquity's and a star ayanamsa's motion (a star's deflection grows fast
+  near the Sun). `tools/tt-step.mjs` measures it, a development run on
+  synthetic inputs and none of section 5's corpora: 24 UT1 instants from 1800
+  to 2199, 15 latitudes from 69° S to 66.4° N, the 13 systems in the tropical
+  zodiac and whole sign and Placidus in Lahiri's, True Chitra's and True
+  Pushya's, 90,720 quantities; for each it takes the rate over ±h for h from
+  1 s to a day by pinning ΔT at d0 ± h on the instant's UT1, the engine's own
+  difference by another road. Its output, `tt-step.json` (this commit's build,
+  Node 22.22.2, darwin-arm64): over ±600 s the rate differs from the rate over
+  ±60 s by at most 2.3e-10″ a second, and by at most 4.9e-4 of it where it is
+  at least 1e-8″ a second (True Pushya's near the Sun included, 6.0e-5); over
+  ±3,600 s by up to 1.4 per cent (Koch's cusps at 66° N), and over ±1 s by up
+  to 5.9e-9″ a second, the rounding. The bands the engine gives equal the
+  pinned rate over ±600 s within 3.5e-13″ a second.
+- *C3* is judged only on the records whose σTT is 0: F1 at every instant, and
+  F3 from 1972-01-01 to the end of the IERS table. The arbiter's geometry gives
+  the rate on UT1 only; the rate on TT would need the arbiter's sidereal time
+  and obliquity on TT from ERFA, which the standard-library tool does not load.
+  The records with σTT not 0 (F3 after the table, F5 from 1972) are counted
+  and not judged; the Lahiri copies must equal the tropical bands exactly
+  where σTT is 0, and only there. `tools/angles.py` does this. The TT term
+  rests on C4c, a consistency check, and on the engine's nutation, obliquity
+  and ayanamsas, which their own units compare with ERFA.
+- *C4c* becomes a first-order check of the TT term, as C4b (ii) is of the
+  UT1 term: T2 in F2 (σUT1 = 0, so the band is the TT term alone) at S1 to S5
+  and S7, the 13 systems less the whole-sign and fallback cusps, in the
+  tropical zodiac and in Lahiri's, with pins d0 ± σTT on the record's UT1
+  (TT moves, UT1 holds), d0 the F2 record's own `deltaT.seconds`. Rule: half
+  the wrapped difference equals the band within max(1e-3 × band, 1e-6″), and
+  for Placidus cusps 3.6e-6″ more (its settling to 1e-9°), at every site: the
+  TT shifts move the angles' inputs by at most milliarcseconds, so no site is
+  left out for nonlinearity. Controls, each of which must fail: b11c5e8's
+  bands, which leave the TT term out (0 in F2); and the bands times 1.1.
+  `tools/pinned.mjs` does this; C4c's old probe at d0 ± 100 s and its control
+  in F1 are withdrawn.
+- *The named tests* (section 6). In `src/calc.test.ts`, a new test, "add each
+  angle's and cusp's rate on TT, UT1 held, times the TT band": on UT1 input
+  each band equals the rate over ±600 s from pins at d0 ± 600 s on the same
+  UT1, times σTT, within 1e-6 of itself plus 1e-10″, in whole sign, Placidus,
+  Regiomontanus and Morinus, tropical and Lahiri. "give sidereal angles and
+  cusps the tropical ones' bands" becomes "give sidereal angles and cusps the
+  tropical ones' rate on UT1, and on TT the sidereal longitude's": on UTC
+  input on the IERS basis, where σTT = 0, the two zodiacs' bands are equal;
+  after the table each sidereal angle's and cusp's differs from the tropical
+  one's. In "carry the events' and the charts' bands", the chart on UT1 input
+  carries its angles' rate on TT times the ΔT band, as `houses()` gives them,
+  in place of 0. Controls: "the angle bands without their rate on TT
+  (b11c5e8's)" must fail the new test, the sidereal test and the events' and
+  charts' test; "sidereal angle bands whose rate on TT leaves out the
+  ayanamsa's (the tropical ones')" must fail the new test and the sidereal
+  test, in place of the control that added 50.29″ a year to the tropical
+  bands, which no longer describes a wrong rule. `tools/named-controls.mjs`
+  holds them.
+- *The documents:* `docs/calc.md`, *Bands*, says what an angle's band holds
+  and why the step is 600 s, and drops the figures of the term it left out;
+  README.md says what an angle's band contains; the doc comments of
+  `HousesResult.band` and `ChartResult.band` say the same.
+
+**2026-11-03, review 1: C4a's floor for distances.** Review 1 found C4a's
+`dist` floor, max(1e-4 × band, 1e-15 au), below a distance's own numerical
+noise where σTT is under a millisecond. The floor is now derived from how a
+distance is computed, not from the failures the review saw:
+`tools/distance-floor.mjs` reads astronomy-engine 2.1.19's source and bounds,
+from 1800 to 2200, what rounding can move one evaluation of a distance by
+beyond its first-order response: the VSOP87 series' terms and sums (the
+secular term t × L1, up to Mercury's 26,088 rad a millennium, dominates); the
+rounding of the instant itself and of the light-time instant, times the
+body's and the Earth's greatest heliocentric speeds; and the light-time
+solution, which returns once two light times agree to 1e-9 day, after one
+correction or two (for every body k² τ < 1e-9 day, k = v / c), and can switch
+between them only where the first correction is about 1e-9 day, which moves
+the distance by at most c² (1e-9 day)² / r. Its output, `distance-floor.json`:
+at most 5.62e-12 au per evaluation (Mercury's; Mars's and Venus's next). The half
+difference of two evaluations carries at most that, and the band carries it
+again through its speed's two samples 0.002 day apart, times σTT / 86.4 s.
+So C4a's rule for `dist` is |half − band| ≤ max(1e-4 × band, F) with
+F = 6e-12 au × (1 + σTT / 86.4 s), the bound rounded up. `lon` and `lat` keep
+their floor of 1e-6″. C4a's control, the bands × 1.001, keeps the same
+floors.
+
+**2026-11-03, review 1: tool errors, and a measurement made late.**
+- `tools/bands.py` gave the end of the IERS table as 1822521600000 ms,
+  2027-10-03T00:00Z, one day late, so C1b expected a table source on
+  2027-10-02 after 00:00Z, where the engine correctly gives the fallback (its
+  C1 events rule and C5's reference used the same constant, and `horizons.py`
+  imports it). It is now 1822435200000 ms, 2027-10-02T00:00Z, the engine's
+  table end. A tool error found by review 1; corrected before any formal run.
+- Section 8, step 3, asked for `./time` measured with and without the
+  `timeBands` re-export at the band commits. It was not done then; it is done
+  now, late, on this commit's tree, whose changes do not reach `./time`'s
+  graph: 42,306 bytes in 7 files with the re-export and 41,420 in 6 without
+  (`npm run package:contents`, Node 22.22.2, darwin-arm64). The `timeBands`
+  chunk is 822 bytes and the import and export that join it 64 more. Both are
+  under 42,400, so `timeBands` stays exported from `./time` (OQ5: home of
+  `timeBands`). The figures of reports 3 and 6 (section 8) are not
+  reconciled: their prototypes are gone.
+- The changed tools were tried on T0, and C4 also on two synthetic instants
+  after the IERS table, 2150-06-15T06:00Z and 2195-02-03T18:00Z (in the
+  programme's notes, not a corpus of this file), where every C4 check passed
+  and every control, C4c's two among them, failed as required; the named
+  tests' controls were run once on this tree, and each failed as required. No
+  tool ran on T1, T2, T3 or E.
+
+**2026-11-03, review 1: the mean points' speed basis (C6, rule (iv)).** The
+mean node's, the mean south node's and Black Moon Lilith's speeds were
+compared with their definitions in the true ecliptic of date only (calc-api's
+`compare.py`, `compare_point`), while `MEAN_POINTS_BASIS` says "in all eight
+frames" and was the basis of their speed bounds too. Their speed bounds now
+have a basis of their own, `MEAN_POINTS_SPEED_BASIS`
+(`docs/evidence/calc-api/tools/bounds.py` writes it into
+`src/calc-bounds.ts`): "largest difference from the rate of the same
+definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03)
+and nut06a's nutation in longitude, taken over 0.0001 day either side, over
+32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true
+ecliptic of date only: a check of the implementation, not of an ephemeris;
+docs/evidence/calc-api/rc16". C6's rule (iv) is now: the `basis` of the
+position bounds of the three mean-point cases, now `MEAN_POINTS_BASIS`, and
+of their speed bounds, now `MEAN_POINTS_SPEED_BASIS`. `tools/fixture-diff.mjs`
+needs no change: it counts any change of those bases as (iv). The fixture
+that commit X regenerates differs from b11c5e8's in those three speed bases
+and in the bands of the two `houses()` cases whose TT band is not 0 (the
+whole-sign case of 1950 with the Krishnamurti ayanamsa, and the Placidus case
+of 2133 with the galactic-center one); both fall under rules (i) and (iv)
+against a253973's.
+
+**2026-11-03, the site run (SR) on b11c5e8: C8 is void as run.** SR, the
+cut's scratch site run (programme notes, `notes/rc2-2026-11-01/sr/`),
+planted C8's control sentence, "The band bounds the error of every
+position.", in a scratch copy of the rc.2 reference, as a paragraph of
+`release/README.txt` and as the first paragraph of the comment of
+`functions/time.timeBands.html`. The claims extractor did not list it: none
+of its words is a trigger of lexicon 2 ("band", "bound" and "error" alone are
+not). With ", in arcseconds" added it was listed in both places, so the plants
+were in text the extractor reads. By section 9 a check whose control does not
+fail is void: C8, as run in SR on b11c5e8, is void. Its version 2 is due in
+the site's adoption, with a lexicon that selects the band sentences, citing
+this result; no other planted sentence is chosen now. Version 1 of P1.M3c
+therefore cannot meet R-M3c on C8 in this cut (section 7: "C1 to C9 pass").
+SR's two rewordings, the README's sentences that TT comes from the leap
+seconds "exactly" to 2027-10-02, now say that the shipped list expires on
+2027-06-28 and that its last value is carried after it.

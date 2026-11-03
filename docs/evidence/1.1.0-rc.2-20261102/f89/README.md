@@ -30,7 +30,7 @@ of the station. Run on the build of the unit's first commit, `48e4e76`
 (Node 22.22.2, macOS on arm64), and run again there with the same bytes
 (SHA-256 `0c4c6b0fc248dd3b5f6661f705ac41611d5d4895b45caa213493342c196c8886`):
 
-- the largest band f″h²/8 is 0.00554984° for Saturn and 0.0109673° for
+- the largest band |f″|h²/8 is 0.00554984° for Saturn and 0.0109673° for
   Jupiter, which rounded up to two significant figures are the 0.0056° and
   0.011° that README.md and `dist/crossings.d.ts` state;
 - at those depths no phase misses both crossings, at any station (the check);
@@ -56,14 +56,18 @@ written again from the same summary:
     CALC_API_RESULTS=docs/evidence/calc-api/rc16 python3 -I docs/evidence/calc-api/tools/bounds.py --check
 
 No value changed: the file differs from a253973's by the new constant and its
-comment only. The calc-api record's other files are not rewritten.
+comment only. The calc-api record's other files are not rewritten. After
+review 1 (the preregistration's amendment of 2026-11-03) the generator also
+writes `MEAN_POINTS_SPEED_BASIS`, the basis of the three points' speed bounds,
+because their speeds were compared in the true ecliptic of date only; again
+no value changed.
 
 ## Where each check is
 
 | check | item | where |
 | --- | --- | --- |
 | E1, E2 | all | `tools/f89_edits.py package`, on an unpacked package |
-| E3 (a) | 2 | `src/crossings.test.ts`, "a plain scan's blind band, f″h²/8" |
+| E3 (a) | 2 | `src/crossings.test.ts`, "a plain scan's blind band, f″h²/8" (the test's name; its `curvature` is the size of f″) |
 | E3 (b) | 2 | `blind-band.mjs` and its output `blind-band.json` |
 | E4 | 3 | `src/geo/flags.test.ts`, "names no tzdb version where ..." |
 | E5 | 4 | `scripts/verify-package-contents.mjs`, the Gregorian adoption table |
@@ -72,7 +76,10 @@ comment only. The calc-api record's other files are not rewritten.
 | E8 | 9 | `src/receipt-time-basis.test.ts`, "is refused without the ephemeris ..." |
 | E10 | 1 | `src/points.test.ts`, "the README's figures for the Vertex and the East Point" |
 
-E10 reads the README and `conformance/RESULTS.md`, so it holds the README to
-rc.2's figures once the cut's commit X regenerates the results. E9 and E11
+E10 reads the README and `conformance/results/summary.json`, and requires each
+figure to be the unrounded maximum there rounded up to three decimals (the
+amendment of 2026-11-03, after review 1 found 0.013″, the Vertex's
+0.013370956″ rounded to the nearest), so it holds the README to rc.2's figures
+once the cut's commit X regenerates the results. E9 and E11
 belong to OQ9's options (a) and (b) and are not run. The formal runs of E1,
 E2 and E3 (b), at the source commit, record their outputs here.

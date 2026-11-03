@@ -19,6 +19,12 @@ where Placidus or Koch falls back exactly 0; a case where the arbiter raises
 is counted and reported, not judged; the Lahiri copies equal the tropical
 bands exactly. At S7 the angles are reported, not judged.
 
+Since the amendment of 2026-11-03 (review 1), an angle's band adds its rate
+on TT times the TT band, which this arbiter's geometry does not give: C3
+judges only the records whose TT band is 0 (F1, and F3 from 1972 to the end
+of the IERS table), and counts the others (F3 after the table, F5 from
+1972), unjudged; C4c checks the TT term.
+
 The arbiter imports pyerfa at its head and calls erfa.cal2jd when it loads,
 for four date constants (build.py lines 156 and 1256 to 1259) that none of
 the functions used here reads. It is loaded with a stub erfa module that
@@ -101,13 +107,22 @@ def selected(record):
     return record['form'] in ('F3', 'F5') and utc_ms(record['instant']) >= IERS_FROM_MS
 
 
+def judged(record):
+    """Selected, and judged only where its TT band is 0 (the amendment of 2026-11-03, review 1)."""
+    return selected(record) and time_bands(record['instant'])[0] == 0
+
+
 def problems_of(l2, records, variant=None):
-    problems, raised, reported = [], [], []
+    problems, raised, reported, unjudged = [], [], [], []
     tropical = {}
     for record in records:
         if 'C3' not in record.get('checks', []) or record.get('refused') or not selected(record):
             continue
         tt, ut1 = time_bands(record['instant'])
+        if tt != 0:
+            # The band adds the rate on TT times the TT band, which the arbiter's geometry does not give.
+            unjudged.append(record)
+            continue
         sigma = tt if variant == 'b' else ut1
         step = SOLAR_SECOND if variant == 'a' else ONE_SECOND
         band = record['band']
@@ -146,7 +161,7 @@ def problems_of(l2, records, variant=None):
                 reported.append(entry)
             elif abs(got - expected) > limit:
                 problems.append(dict(entry, limit=limit))
-    return problems, raised, reported
+    return problems, raised, reported, unjudged
 
 
 def main():
@@ -157,16 +172,17 @@ def main():
     args = parser.parse_args()
     l2 = arbiter(args.arbiter)
     records = load(args.dump)
-    problems, raised, reported = problems_of(l2, records)
-    judged = sum(1 for r in records if 'C3' in r.get('checks', []) and not r.get('refused') and selected(r))
+    problems, raised, reported, unjudged = problems_of(l2, records)
+    judged_count = sum(1 for r in records if 'C3' in r.get('checks', []) and not r.get('refused') and judged(r))
     controls = {
         'a: the solar-time rate, 15 arcseconds a second': problems_of(l2, records, 'a')[0],
         'b: the TT band in place of the UT1 band': problems_of(l2, records, 'b')[0],
     }
     report = {
         'check': 'C3',
-        'pass': judged > 0 and not problems,
-        'records': judged,
+        'pass': judged_count > 0 and not problems,
+        'records': judged_count,
+        'notJudgedWithTtBand': {'records': len(unjudged), 'forms': sorted({r['form'] for r in unjudged})},
         'problems': len(problems),
         'firstProblems': problems[:20],
         'arbiterRaised': {'cases': len(raised), 'first': raised[:10]},
@@ -180,7 +196,7 @@ def main():
         with open(args.out, 'w', encoding='utf-8') as f:
             f.write(text)
     controls_text = ', '.join(f'{name} {"failed" if c["failed"] else "PASSED"}' for name, c in report['controls'].items())
-    print(f'C3: {"pass" if report["pass"] else "FAIL"} ({judged} records, {len(raised)} where the arbiter raised, {len(reported)} values reported); controls: {controls_text}')
+    print(f'C3: {"pass" if report["pass"] else "FAIL"} ({judged_count} records, {len(unjudged)} with a TT band not judged, {len(raised)} where the arbiter raised, {len(reported)} values reported); controls: {controls_text}')
     sys.exit(0 if report['pass'] and all(c['failed'] for c in report['controls'].values()) else 1)
 
 

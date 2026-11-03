@@ -473,6 +473,43 @@ OQ5 is not answered under that delegation (zodiacs.org
 `DECISIONS-2026-10-05.md` §4). R1 to R6, the MF layout and its fixed S rule stay unratified, so
 F-53 is recorded "fixed and deployed; readings awaiting ratification".
 
+**2026-11-03, review 1: the controls' tool, T9 made late, and the refusals'
+wording.** Adopted after review 1 (programme notes,
+`notes/rc2-2026-11-01/review1/`), before any formal run. Review 1 ran none of
+this file's corpora; every reading here stays `validated` at most under OQ5.
+
+- `tools/controls.sh` did not work on the cut's build (review 1): T1's list
+  control compared the entry's names with R1 without P1.M3c's `timeBands`, so
+  it exited as "not behaving"; and the copy of the build that T1's API control
+  and both T2 controls make lacked `scripts/lite-entry.mjs`, which the export
+  smoke test imports, and `scripts/refuse-ephemeris.mjs`, which it starts Node
+  with, so T2's controls failed with `ERR_MODULE_NOT_FOUND` rather than the
+  message they look for. R1's list in the tool now has `timeBands` (20
+  declared names, 10 runtime ones, as R1 says with P1.M3c's default), and
+  the copy has both scripts. Run on this commit's build, T1's two controls
+  and T2's two fail as required; with b11c5e8's `controls.sh` three of the
+  four did not. The tool's other controls were not run (T4's and T5's read
+  K2).
+- T9's measurement at the P1.M3c commits, `./time` with and without the
+  `timeBands` re-export (section 3), was not made then. Made now, late, on
+  this commit's tree, whose changes do not reach `./time`'s graph: 42,306
+  bytes in 7 files with the re-export and 41,420 in 6 without
+  (`npm run package:contents`, Node 22.22.2, darwin-arm64), both under
+  42,400, so `timeBands` stays in `./time`. P1.M3c's file records the same
+  (its amendment of this date).
+- `docs/time.md` said every argument of the entry that is not a finite
+  number throws `RangeError`. It now says what the functions check: `ms`,
+  `scale`, `pin`, and `days`, `tt`, `x`, `y` and `z` as finite numbers, and a
+  vector with a direction; `elapsedDays`' records and `meanEcliptic`'s frame
+  are taken as given (another object can throw `TypeError` or give NaN); and a
+  finite `tt` far from the series' years is not refused. No check is added
+  (`./time` has 94 bytes of headroom). T10's calls and their outcomes do not
+  change.
+- `@zodiacs/engine/calc` now also exports the type `TimeBands`, which its
+  bands use: `api/calc.api.md` lists it among its exported declarations;
+  `api/time.api.md` does not change, having no block of declarations
+  referenced and not exported. T1's names do not change.
+
 ## 12. Tools and order (to be written on the cut branch)
 
 Under `docs/evidence/1.1.0-rc.2-20261102/time-entry/tools/`, each reading only

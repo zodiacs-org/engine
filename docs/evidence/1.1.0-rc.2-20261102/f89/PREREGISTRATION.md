@@ -526,3 +526,90 @@ the fixes close F-89 only and P1.14 stays partial; Q3, F-90 is not in rc.2;
 Q4, the footer allowance is site work after rc.2. OQ5 is not answered under that delegation (zodiacs.org
 `DECISIONS-2026-10-05.md` §4). R-F89 stays
 unratified, and so does OQ10's Q5, which is not answered either.
+
+**2026-11-03, review 1: item 1's figure, its E2 phrase and E10.** Reviews A
+and C of review 1 (programme notes, `notes/rc2-2026-11-01/review1/`) found
+that the text of section 4, option (c), rounds in the engine's favour: the
+Vertex's largest residual on the ten L2 vectors is 0.013370956″ (vector
+L2-VTX-0006; `conformance/results/summary.json` and
+`conformance/results/zodiacs-engine.json`), which `conformance/RESULTS.md`
+prints rounded to the nearest 0.001″, and the README turned that 0.013″ into a
+bound; E10, comparing the text with RESULTS.md, could not see it. Adopted
+after review 1, before any formal run; F-89 has no corpus, so review 1 saw no
+result of one, and every reading here stays `validated` at most under OQ5.
+
+- *Item 1's text* (README.md) is now: "On the conformance suite's ten L2
+  vectors for them, from 1833 to 2182 at latitudes from 60° S to 60° N, whose
+  arbiter is ERFA's sidereal time and obliquity with each point's published
+  definition, they are within 0.014″ and 0.007″ (`conformance/RESULTS.md`)."
+  0.014″ is the Vertex's maximum rounded up, 0.007″ the East Point's,
+  0.00679320316″, rounded up; the years are the vectors' first and last UT1
+  dates (1833-09-07 and 2182-02-06), so the sentence names the span it was
+  measured over. CHANGELOG.md says the same.
+- *E2's phrase for item 1* is that sentence up to "0.007″", in the form of
+  section 5: `[1, "eng.points-vertex-given (OQ9 c)", "On the conformance
+  suite's ten L2 vectors for them, from 1833 to 2182 at latitudes from 60° S
+  to 60° N, whose arbiter is ERFA's sidereal time and obliquity with each
+  point's published definition, they are within 0.014″ and 0.007″"]`.
+  `tools/f89_edits.py` holds it (`ITEM_1_NEW`), and edit 1-V3 writes the new
+  text, so that E1, E2 and the `apply` step use it.
+- *E10* now reads: each stated figure equals the unrounded maximum of
+  `conformance/results/summary.json` (the zodiacs-engine run,
+  `angles.vertex-east-point`, the Vertex's and the East Point's
+  `residuals.max`), rounded up to three decimals, and is not below it; the
+  ten vectors' latitudes run from 60° S to 60° N and their UT1 years from 1833
+  to 2182. Controls, each of which must fail: the text as first shipped,
+  "0.013″"; and a copy of the summary whose Vertex maximum is moved up by
+  0.001″. `src/points.test.ts`, "the README's figures for the Vertex and the
+  East Point", holds both.
+- *Why OQ9 (c)* (OWNER-ANSWERS.md gave none): it states the engine's own
+  suite figure, whose arbiter is ERFA, so the repository holds no Swiss
+  output and no figure measured on another build; it retires the Swiss
+  claim, as a passing rerun under (a) would have closed it; and pyswisseph,
+  which OQ6 approved, stays for the site's methodology test.
+
+**2026-11-03, review 1: item 2's |f″|.** f″ is negative at the stations of
+`blind-band.json` where the longitude has a maximum (`secondDerivativeDegPerDay2`,
+for example −0.0016456 at Saturn's of 2019-04-30), so the band is |f″|h²/8. README.md and the
+doc comment of `findLongitudeCrossingsWith` (`src/crossings.ts`) now say
+"|f″|h²/8"; E2's two phrases for item 2 are now "can lose both crossings when
+a station takes the body less than |f″|h²/8 past the target, f″ being" and
+"can lose both crossings when a station takes the body less than |f″|h²/8
+past the target (f″ the", and edits 2a and 2b write them
+(`tools/f89_edits.py`). The figures, E3 and `blind-band.mjs` do not change, so
+that E3's run at the source commit can give the same bytes.
+
+**2026-11-03, review 1: item 5's speed basis (E6).** Review 1 found that
+`MEAN_POINTS_BASIS` says "in all eight frames" and was the basis of the mean
+points' speed bounds too, while calc-api compared their speeds in the true
+ecliptic of date only (`docs/evidence/calc-api/tools/compare.py`,
+`compare_point`). Their speed bounds now carry `MEAN_POINTS_SPEED_BASIS`, which
+`docs/evidence/calc-api/tools/bounds.py` writes into `src/calc-bounds.ts`
+beside the other: "largest difference from the rate of the same definition
+evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and
+nut06a's nutation in longitude, taken over 0.0001 day either side, over 32
+instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic
+of date only: a check of the implementation, not of an ephemeris;
+docs/evidence/calc-api/rc16". No bound's value changes. Item 5's edits 5b, 5c,
+5d, 5f and 5h in `tools/f89_edits.py` write the final text. E6 now checks both
+strings, that neither names Horizons, and that the three points' position
+bounds carry `MEAN_POINTS_BASIS` and their speed bounds
+`MEAN_POINTS_SPEED_BASIS`, in the true ecliptic of date and in the ICRS
+equatorial frame; its control is unchanged. E6's fixture rule (iv), as in
+P1.M3c's file (amended the same day): the `basis` of the position bounds of
+the three mean-point cases, now `MEAN_POINTS_BASIS`, and of their speed
+bounds, now `MEAN_POINTS_SPEED_BASIS`. `PACKAGE_ONLY_NEW`'s phrase is in both
+strings and does not change.
+
+**2026-11-03, the site run (SR) on b11c5e8: S1 holds.** SR, the cut's scratch
+site run (programme notes, `notes/rc2-2026-11-01/sr/`), ran S1: on rc.1's
+reference the extractor lists none of the new sentences, and on rc.2's R2
+flags 13 of the fifteen replaced records from the reference alone, and all
+fifteen once the MCP adapter's NOTICE carries rc.2's NOTICE (in scratch, as
+the adoption's rebuild would): S1's control behaves, and S1 holds. Open for
+the adoption: the new texts of items 2, 6 and 7 carry no trigger word of
+lexicon 2, so once their old records go, `eng.crossings-blind-band`,
+`eng.api-placidus-steps` and `eng.api-coascendant-west` have no sentence (R9)
+unless the lexicon or those claims change in the adoption. The amendments
+above change packed text (items 1 and 2), so S1 is due again on the review
+commit's candidate (section 5).

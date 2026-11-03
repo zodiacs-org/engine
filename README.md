@@ -272,8 +272,13 @@ construction of the same definition, over every year from 1800 to 2199. An
 estimated bound names what it rests on. Results also carry `band`, which is
 not a bound: to first order, how far a position, an angle, a cusp or an
 event's clock label moves when the instant's TT and UT1 move by the 1-σ bands
-its time basis records. On UTC input from 1972-01-01 to 2027-10-02 TT comes
-from the leap seconds exactly, so every geocentric, heliocentric and
+its time basis records. An angle's or a cusp's band is its rate on UT1 times
+the UT1 band plus its rate on TT (the frame's precession and nutation, the
+obliquity and a sidereal zodiac's ayanamsa) times the TT band; the true
+nodes' is their speed over ±0.25 day times the TT band, which smooths their
+short-period motion. On UTC input from 1972-01-01 to 2027-10-02 TT comes from
+the leap seconds (exactly to 2027-06-28, when the shipped list expires; after
+it the list's last value is carried), so every geocentric, heliocentric and
 barycentric position's band is 0 there, and the band falls on the angles and
 cusps, topocentric positions and each event's UT1 (docs/calc.md, *Bands*).
 Root charts and natal envelopes carry none. What this version does not compute
@@ -597,9 +602,9 @@ lots need a birth time and place.
 
 - The Vertex and the East Point come from the instant and the place, not from a
   supplied chart's angles. On the conformance suite's ten L2 vectors for them,
-  at latitudes from 60° S to 60° N, whose arbiter is ERFA's sidereal time and
-  obliquity with each point's published definition, they are within 0.013″
-  and 0.007″ (`conformance/RESULTS.md`).
+  from 1833 to 2182 at latitudes from 60° S to 60° N, whose arbiter is ERFA's
+  sidereal time and obliquity with each point's published definition, they are
+  within 0.014″ and 0.007″ (`conformance/RESULTS.md`).
 - The sect is day when the Sun is between the descendant and the ascendant
   through the midheaven. `sectReading`, in `@zodiacs/engine/lite`, reads the
   sect under the convention a caller names: this one, or the Sun's altitude
@@ -709,7 +714,7 @@ Offsets of 90° or more on either side of a step are the far side of the circle,
 not a crossing.
 
 A fixed step alone can lose both crossings when a station takes the body
-less than f″h²/8 past the target, f″ being the second derivative of its
+less than |f″|h²/8 past the target, f″ being the second derivative of its
 longitude at the station and h the step, since both crossings can then fall
 between two samples: at 5 days, up to 0.0056° for Saturn and 0.011° for
 Jupiter at their stations from 2019 to 2024
@@ -934,7 +939,9 @@ loads no ephemeris ([docs/time.md](docs/time.md), *Without the ephemeris*).
 Its `timeBands` turns a record's two bands, `deltaT.sigma` and
 `timeScale.ut1MinusUtc.sigma`, into the 1-σ bands of the TT and the UT1 the
 engine used: on UTC input from 1972-01-01 to 2027-10-02 TT comes from the leap
-seconds exactly, so its band is 0, and UT1 carries the band of UT1 − UTC
+seconds (exactly to 2027-06-28, when the shipped list expires; after it the
+list's last value is carried, with no band for a leap second not yet
+announced), so its band is 0, and UT1 carries the band of UT1 − UTC
 ([docs/time.md](docs/time.md), *The time bands*).
 
 `@zodiacs/engine/geo` reads wall times before 1970 on the tzdb 2025c history

@@ -33,8 +33,9 @@ followed in "Fix the inputs of the varga sensitivity check", before any of
 its code. Each unit's check tools are in its `tools/`, committed before its
 formal runs; `f89/` also has its own README and item 2's blind-band record.
 `docs/evidence/calc-api/tools/bounds.py`, the generator of
-`src/calc-bounds.ts`, gained `MEAN_POINTS_BASIS`, and no bound's value
-changed (`f89/README.md`, *The bounds generator*).
+`src/calc-bounds.ts`, gained `MEAN_POINTS_BASIS` and, after review 1,
+`MEAN_POINTS_SPEED_BASIS`, and no bound's value changed (`f89/README.md`,
+*The bounds generator*).
 
 ## The owner's answers
 

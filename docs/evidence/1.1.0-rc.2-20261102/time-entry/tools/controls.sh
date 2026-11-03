@@ -44,10 +44,12 @@ tool() { # control name, tool, its arguments
   if [ -s "$work/$name.json" ]; then note "$name" "$code" "$(field "$work/$name.json")"; else note "$name" "$code" false; fi
 }
 copy_build() { # dir: the manifest, dist/ and the named scripts, node_modules linked
+  # The export smoke test imports lite-entry.mjs and starts Node with refuse-ephemeris.mjs; both were added
+  # to the copy by the amendment of 2026-11-03 (review 1), before any formal run.
   mkdir -p "$1/scripts"
   cp "$repo/package.json" "$1/"
   cp -R "$repo/dist" "$1/dist"
-  for name in module-resolution-smoke.mjs root-isolation.mjs pure-tables.mjs api-report.mjs; do cp "$repo/scripts/$name" "$1/scripts/"; done
+  for name in module-resolution-smoke.mjs root-isolation.mjs pure-tables.mjs api-report.mjs lite-entry.mjs refuse-ephemeris.mjs; do cp "$repo/scripts/$name" "$1/scripts/"; done
   ln -s "$repo/node_modules" "$1/node_modules"
 }
 
@@ -57,7 +59,8 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 const [tools, pkg] = process.argv.slice(2);
 const { entry } = await import(pathToFileURL(join(tools, "load.mjs")).href);
-const R1 = ["DELTA_T_IERS_MODEL", "EPHEMERIS_SPAN", "TIME_SCALE_NAMES", "eclipticFrame", "eclipticOfDate", "elapsedDays", "meanEcliptic", "tilt", "timeBasis"];
+// R1's runtime names with P1.M3c's timeBands, which the entry exports (added by the amendment of 2026-11-03, review 1).
+const R1 = ["DELTA_T_IERS_MODEL", "EPHEMERIS_SPAN", "TIME_SCALE_NAMES", "eclipticFrame", "eclipticOfDate", "elapsedDays", "meanEcliptic", "tilt", "timeBands", "timeBasis"];
 const less = R1.filter((name) => name !== "elapsedDays");
 const keys = Object.keys(await entry(pkg, "./time")).sort();
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);

@@ -14,7 +14,7 @@ import { AstroTime, Body, GeoMoonState, KM_PER_AU } from "astronomy-engine";
 // Imported first so that the build keeps the root entry's shared chunks byte for byte.
 import { bodyLongitude, computeChart, gastHours, onChartClock } from "./ephemeris.js";
 import { assertDerivedFlags, snapshotFlags, timeFlags, validateBirthSettings } from "./birth-input.js";
-import { MEAN_POINTS_BASIS, MEASURED, MEASURED_BASIS } from "./calc-bounds.js";
+import { MEAN_POINTS_BASIS, MEAN_POINTS_SPEED_BASIS, MEASURED, MEASURED_BASIS } from "./calc-bounds.js";
 import {
   CALC_FRAMES as FRAMES,
   apply,
@@ -50,7 +50,7 @@ import { AYANAMSAS, ayanamsaAt, isUserAyanamsaName, userAyanamsa } from "./vedic
 import type { AyanamsaDefinition, AyanamsaName, AyanamsaPrecessionModel } from "./vedic/ayanamsa.js";
 import { siderealChartOf, wholeSignCusps, wrap360 } from "./vedic/sidereal.js";
 
-export type { Angles, CalcCorrection, CalcFrame, Chart, ChartFlag, DeltaT, HouseSystem, TimeScale };
+export type { Angles, CalcCorrection, CalcFrame, Chart, ChartFlag, DeltaT, HouseSystem, TimeBands, TimeScale };
 
 /** The Sun, Moon, Earth and planets, the true and mean lunar nodes, and Black Moon Lilith (the mean apogee). */
 export type CalcBody =
@@ -262,7 +262,9 @@ export interface CalcBounds {
 
 /**
  * A position's band from the time basis: how far its coordinates move, to
- * first order, when the instant's TT and UT1 move by their 1-σ bands. It is
+ * first order, when the instant's TT and UT1 move by their 1-σ bands; for the
+ * true nodes, whose speed is a difference over ±0.25 day, the band is that
+ * smoothed speed times the TT band, not their first-order movement. It is
  * not a bound: it leaves out the ephemeris's error, which `bounds` gives, and
  * the input time's own (docs/calc.md, "Bands").
  */
@@ -878,7 +880,8 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     // the barycentric Sun's come from the barycentre's error.
     let row = MEASURED[`${kind}/${point ? "apparent" : correction}`]?.[body];
     let estimated: string | null = null;
-    const measured = MEAN_POINTS.includes(body) ? MEAN_POINTS_BASIS : MEASURED_BASIS;
+    const mean = MEAN_POINTS.includes(body);
+    const measured = mean ? MEAN_POINTS_BASIS : MEASURED_BASIS;
     if (!row && kind === "topocentric") {
       row = MEASURED[`geocentric/${correction}`]?.[body];
       estimated = "the geocentric bound for this correction; topocentric positions were compared only for the Sun, the Moon and Mars";
@@ -933,7 +936,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
         position: withAyanamsa(bound(row?.[0], "arcsec", estimated, measured), added && { value: added.position, basis: added.basis }),
         distance: point ? null : bound(row?.[1], "relative", estimated),
         speed: method && {
-          ...withAyanamsa(bound(row?.[2], "arcsec/day", estimated, measured), added && { value: added.rate, basis: added.basis }),
+          ...withAyanamsa(bound(row?.[2], "arcsec/day", estimated, mean ? MEAN_POINTS_SPEED_BASIS : MEASURED_BASIS), added && { value: added.rate, basis: added.basis }),
           method,
           stepDays: analytic ? null : step
         }
@@ -986,9 +989,11 @@ export interface HousesResult {
   readonly bounds: { readonly angles: CalcBound; readonly cusps: CalcBound };
   /**
    * The bands from the time basis, which are not bounds: the instant's, and
-   * each angle's and cusp's, arcseconds, from its rate on UT1 times the UT1
-   * band. Whole-sign cusps, and the cusps where Placidus or Koch falls back to
-   * whole signs, have none: 0 (docs/calc.md, "Bands").
+   * each angle's and cusp's, arcseconds, its rate on UT1 times the UT1 band
+   * plus its rate on TT times the TT band (in the sidereal zodiac the sidereal
+   * longitude's, with the ayanamsa's rate). Whole-sign cusps, and the cusps
+   * where Placidus or Koch falls back to whole signs, have none: 0
+   * (docs/calc.md, "Bands").
    */
   readonly band: {
     readonly time: TimeBands;
@@ -1003,29 +1008,63 @@ export interface HousesResult {
 
 /** One second of UT1 in hours of sidereal time: the Earth rotation angle turns 1.00273781191135448 times a UT1 day (src/ephemeris.ts). */
 const UT1_SECOND = 1.00273781191135448 / 3600;
+/** The step of an angle's rate on TT, days: 600 s (docs/calc.md, "Bands"). */
+const TT_STEP = 600 / 86_400;
+
+/** An angle's inputs with TT moved and UT1 held, and in the sidereal zodiac the true ayanamsa there, which a sidereal longitude subtracts. */
+interface MovedOnTt {
+  readonly input: AngleInput;
+  readonly less: number;
+}
 
 /**
- * The bands of the angles and cusps from a UT1 band `sigma`, arcseconds: each
- * one's rate, the difference of its values with the sidereal time moved by
- * ±1 s of UT1, the latitude and the obliquity held fixed, wrapped into
- * (−180°, 180°] and divided by 2 s, times `sigma`. Whole-sign cusps, and the
- * cusps where Placidus or Koch falls back to them (`system` as computed), are
- * sign starts and get 0: a difference across a change of the ascendant's sign
+ * The angles' inputs at `at` with TT moved by +TT_STEP and −TT_STEP and UT1
+ * held: the sidereal time on that TT (gastHours reads only a time's ut and tt,
+ * src/ephemeris.ts), the true obliquity there, and with a `definition` the true
+ * ayanamsa there.
+ */
+function movedOnTt(at: AstroTime, place: CalcLocation, definition: AyanamsaDefinition | null): MovedOnTt[] {
+  return [TT_STEP, -TT_STEP].map((days) => {
+    const moved = at.AddDays(days);
+    return {
+      input: { gastHours: gastHours({ ut: at.ut, tt: moved.tt } as AstroTime), ...place, obliquity: tilt(moved.tt).tobl },
+      less: definition === null ? 0 : ayanamsaAt(definition, moved).true
+    };
+  });
+}
+
+/**
+ * The bands of the angles and cusps, arcseconds: each one's rate on UT1 times
+ * the UT1 band, plus its rate on TT times the TT band. The rate on UT1 is the
+ * difference of its values with the sidereal time moved by ±1 s of UT1, the
+ * latitude and the obliquity held fixed, over 2 s; the rate on TT the
+ * difference of its values at `moved` (TT moved by ±TT_STEP, UT1 held: the
+ * sidereal time's precession and nutation, the obliquity and a sidereal
+ * zodiac's ayanamsa move), over 2 TT_STEP, null where the TT band is 0. Each
+ * difference is wrapped into (−180°, 180°]. Whole-sign cusps, and the cusps
+ * where Placidus or Koch falls back to them (`system` as computed), are sign
+ * starts and get 0: a difference across a change of the ascendant's sign
  * would give 30°.
  */
-function turnBands(input: AngleInput, system: HouseSystem, sigma: number) {
-  const at = (hours: number) => {
-    const moved = { ...input, gastHours: input.gastHours + hours };
-    const angles = computeAngles(moved);
-    return [angles.asc, angles.mc, vertexOf(moved, angles), eastPointOf(moved), ...(system === "whole" ? [] : computeHouses(system, moved, angles).houses.cusps)];
+function angleBands(input: AngleInput, system: HouseSystem, bands: TimeBands, moved: readonly MovedOnTt[] | null) {
+  const values = (at: AngleInput, less = 0) => {
+    const angles = computeAngles(at);
+    return [angles.asc, angles.mc, vertexOf(at, angles), eastPointOf(at), ...(system === "whole" ? [] : computeHouses(system, at, angles).houses.cusps)].map(
+      (value) => value - less
+    );
   };
-  const before = at(-UT1_SECOND);
-  const [asc, mc, vertex, eastPoint, ...cusps] = at(UT1_SECOND).map((value, index) => {
-    let turn = value - before[index]!;
-    if (turn > 180) turn -= 360;
-    else if (turn <= -180) turn += 360;
-    return Math.abs(turn) * 1800 * sigma;
-  });
+  // Arcseconds a second: the difference of `after` and `before` over `seconds`.
+  const rates = (before: number[], after: number[], seconds: number) =>
+    after.map((value, index) => {
+      let turn = value - before[index]!;
+      if (turn > 180) turn -= 360;
+      else if (turn <= -180) turn += 360;
+      return (Math.abs(turn) * 3600) / seconds;
+    });
+  const before = values({ ...input, gastHours: input.gastHours - UT1_SECOND });
+  const onUt1 = rates(before, values({ ...input, gastHours: input.gastHours + UT1_SECOND }), 2);
+  const onTt = moved && rates(values(moved[1]!.input, moved[1]!.less), values(moved[0]!.input, moved[0]!.less), 2 * TT_STEP * 86_400);
+  const [asc, mc, vertex, eastPoint, ...cusps] = onUt1.map((rate, index) => rate * bands.ut1 + (onTt ? onTt[index]! * bands.tt : 0));
   return { asc: asc!, mc: mc!, vertex: vertex!, eastPoint: eastPoint!, cusps: system === "whole" ? Array<number>(12).fill(0) : cusps };
 }
 
@@ -1040,10 +1079,13 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
   if (refusal) return refusal;
   const definition = zodiac.definition;
   return inSpan(time, (used): HousesResult => {
-    // As natalChart(): the Earth's rotation from UT1, the true obliquity on TT.
-    const { input, value } = onInput(time, time.ms, (at) => ({
+    const bands = timeBands(used);
+    // As natalChart(): the Earth's rotation from UT1, the true obliquity on TT; and for the angles'
+    // rate on TT, where TT has a band, the same with TT moved and UT1 held.
+    const { input, value, moved } = onInput(time, time.ms, (at) => ({
       input: { gastHours: gastHours(at), latitude, longitude, obliquity: tilt(at.tt).tobl },
-      value: definition && ayanamsaAt(definition, at)
+      value: definition && ayanamsaAt(definition, at),
+      moved: bands.tt === 0 ? null : movedOnTt(at, { latitude, longitude }, definition)
     }));
     const tropical = computeAngles(input);
     const { houses: computed, fellBack } = computeHouses(system, input, tropical);
@@ -1056,8 +1098,6 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
     const cusps = value === null ? computed.cusps : computed.system === "whole" ? wholeSignCusps(angles.asc) : computed.cusps.map(zodiacal);
     const bounded = definition && value && ayanamsaBound(definition, value.elongation);
     const added = bounded && { value: bounded.position, basis: bounded.basis };
-    // An angle's rate on UT1 is the tropical one in either zodiac: the ayanamsa moves with TT alone.
-    const bands = timeBands(used);
     // Conformance suite 0.1.0, level L2, for this engine: conformance/RESULTS.md.
     const basis = (what: string) =>
       `largest difference over the conformance suite's L2 ${what}, whose arbiter is ERFA with each system's definition`;
@@ -1081,7 +1121,9 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
         ),
         cusps: withAyanamsa({ value: 0.08, unit: "arcsec", label: "measured", basis: basis("cusp vectors, thirteen systems") }, added)
       },
-      band: { time: bands, ...turnBands(input, computed.system, bands.ut1) },
+      // An angle's rate on UT1 is the tropical one in either zodiac, the ayanamsa moving with TT alone; its rate on
+      // TT is the sidereal longitude's in the sidereal zodiac.
+      band: { time: bands, ...angleBands(input, computed.system, bands, moved) },
       receipt: receipt(
         { time: time.record, place: { latitude, longitude }, houseSystem: system, zodiac: zodiac.record },
         [instant(used)],
@@ -1250,8 +1292,9 @@ export interface ChartResult {
   /**
    * The bands of `chart`, the tropical chart, from the time basis, which are
    * not bounds: the instant's; each body's longitude, its speed times the TT
-   * band; and the ascendant's and the midheaven's, their rates on UT1 times
-   * the UT1 band, null without angles; arcseconds (docs/calc.md, "Bands").
+   * band; and the ascendant's and the midheaven's, their rates on UT1 and on
+   * TT times those bands, as houses() gives them in the tropical zodiac, null
+   * without angles; arcseconds (docs/calc.md, "Bands").
    */
   readonly band: {
     readonly time: TimeBands;
@@ -1330,11 +1373,18 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
     const computed = computeChart(input);
     assertDerivedFlags(supplied ?? [], computed.flags);
     const bands = timeBands(basis);
-    // The angles' rates from the sidereal time and the true obliquity the chart's angles were computed from.
+    // The angles' rates from the sidereal time and the true obliquity the chart's angles were computed from, and
+    // on TT, where TT has a band, from the same with TT moved and UT1 held: the tropical chart's.
     const turned =
       computed.angles &&
       place &&
-      turnBands(onInput(whole, whole.ms, (at) => ({ gastHours: gastHours(at), ...place, obliquity: tilt(at.tt).tobl })), "whole", bands.ut1);
+      (() => {
+        const { input: angleInput, moved } = onInput(whole, whole.ms, (at) => ({
+          input: { gastHours: gastHours(at), ...place, obliquity: tilt(at.tt).tobl },
+          moved: bands.tt === 0 ? null : movedOnTt(at, place, null)
+        }));
+        return angleBands(angleInput, "whole", bands, moved);
+      })();
     return {
       status: "ok",
       chart: computed,

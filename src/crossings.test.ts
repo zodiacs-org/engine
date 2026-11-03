@@ -173,10 +173,10 @@ describe("grazing crossing pairs", () => {
 describe("a plain scan's blind band, f″h²/8", () => {
   // F-89, item 2 (docs/evidence/1.1.0-rc.2-20261102/f89/PREREGISTRATION.md, E3 a), on an exact
   // parabola with no ephemeris. A station that takes the body a depth δ past the target has its two
-  // crossings 2·sqrt(2δ/f″) apart, less than one step h exactly when δ < f″h²/8. With the station at
-  // the centre of a cell, the samples either side of it are h/2 away, f″h²/8 short of the station.
+  // crossings 2·sqrt(2δ/|f″|) apart, less than one step h exactly when δ < |f″|h²/8. With the station at
+  // the centre of a cell, the samples either side of it are h/2 away, |f″|h²/8 short of the station.
   const step = 5;
-  const curvature = 0.002; // f″, degrees a day squared
+  const curvature = 0.002; // |f″|, degrees a day squared (the parabola below has a maximum, f″ = −0.002)
   const band = (curvature * step ** 2) / 8;
   const past = (depth: number) => (day: number) => 100 + depth - (curvature / 2) * (day - 12.5) ** 2;
   /** Sign changes of the offset from 100° between neighbouring samples every 5 days from day 0 to day 25. */

@@ -42,8 +42,10 @@ TABLE_BOUND = 0.00079
 DAY_MS = 86400000.0
 MJD_UNIX = 40587
 # The IERS basis: UTC from 1972-01-01 to the table's last instant, 2027-10-02T00:00Z (docs/time.md).
+# TABLE_TO_MS read 1822521600000.0 (2027-10-03T00:00Z), one day late, until the amendment of 2026-11-03
+# (review 1), which corrected it before any formal run.
 IERS_FROM_MS = 63072000000.0
-TABLE_TO_MS = 1822521600000.0
+TABLE_TO_MS = 1822435200000.0
 
 
 def load(paths):

@@ -74,9 +74,9 @@ EDITS = [
         ),
         "new": (
             "  supplied chart's angles. On the conformance suite's ten L2 vectors for them,\n"
-            "  at latitudes from 60° S to 60° N, whose arbiter is ERFA's sidereal time and\n"
-            "  obliquity with each point's published definition, they are within 0.013″\n"
-            "  and 0.007″ (`conformance/RESULTS.md`).\n"
+            "  from 1833 to 2182 at latitudes from 60° S to 60° N, whose arbiter is ERFA's\n"
+            "  sidereal time and obliquity with each point's published definition, they are\n"
+            "  within 0.014″ and 0.007″ (`conformance/RESULTS.md`).\n"
         ),
     },
     # 2. eng.crossings-blind-band (README and the crossing search's doc comment).
@@ -90,7 +90,7 @@ EDITS = [
         ),
         "new": (
             "A fixed step alone can lose both crossings when a station takes the body\n"
-            "less than f″h²/8 past the target, f″ being the second derivative of its\n"
+            "less than |f″|h²/8 past the target, f″ being the second derivative of its\n"
             "longitude at the station and h the step, since both crossings can then fall\n"
             "between two samples: at 5 days, up to 0.0056° for Saturn and 0.011° for\n"
             "Jupiter at their stations from 2019 to 2024\n"
@@ -123,7 +123,7 @@ EDITS = [
         ),
         "new": (
             " * A plain scan can lose both crossings when a station takes the body less\n"
-            " * than f″h²/8 past the target (f″ the second derivative of its longitude at\n"
+            " * than |f″|h²/8 past the target (f″ the second derivative of its longitude at\n"
             " * the station, h the step), since both can then fall between two samples: at\n"
             " * a 5-day step, up to 0.0056° for Saturn and 0.011° for Jupiter at their\n"
             " * stations from 2019 to 2024. Where the sampled motion turns\n"
@@ -251,6 +251,13 @@ EDITS = [
             "                    f\"arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over \"\n"
             "                    f\"{len(summary['instants'])} instants from JD {first} to {last} (TT), in all eight \"\n"
             "                    f\"frames: a check of the implementation, not of an ephemeris; {EVIDENCE}\")\n"
+            "    # Their speeds were compared in the true ecliptic of date only, with the definition's rate differenced\n"
+            "    # over ±0.0001 day (compare.py's compare_point and STEP).\n"
+            "    points_speed_basis = (f\"largest difference from the rate of the same definition evaluated with ERFA's \"\n"
+            "                          f\"fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, \"\n"
+            "                          f\"taken over 0.0001 day either side, over {len(summary['instants'])} instants from JD {first} \"\n"
+            "                          f\"to {last} (TT), in the true ecliptic of date only: a check of the implementation, not of \"\n"
+            "                          f\"an ephemeris; {EVIDENCE}\")\n"
         ),
     },
     {
@@ -261,13 +268,15 @@ EDITS = [
             "export const MEASURED_BASIS = {json.dumps(basis)};\n"
             "/** The basis of the mean node's, the mean south node's and Black Moon Lilith's bounds. */\n"
             "export const MEAN_POINTS_BASIS = {json.dumps(points_basis)};\n"
+            "/** The basis of their speed bounds, compared in the true ecliptic of date only. */\n"
+            "export const MEAN_POINTS_SPEED_BASIS = {json.dumps(points_speed_basis)};\n"
         ),
     },
     {
         "id": "5d", "item": 5, "claim": "eng.calc-bounds-basis", "file": "src/calc.ts", "packed": True,
         "variant": "recommended",
         "old": "import { MEASURED, MEASURED_BASIS } from \"./calc-bounds.js\";\n",
-        "new": "import { MEAN_POINTS_BASIS, MEASURED, MEASURED_BASIS } from \"./calc-bounds.js\";\n",
+        "new": "import { MEAN_POINTS_BASIS, MEAN_POINTS_SPEED_BASIS, MEASURED, MEASURED_BASIS } from \"./calc-bounds.js\";\n",
     },
     {
         "id": "5e", "item": 5, "claim": "eng.calc-bounds-basis", "file": "src/calc.ts", "packed": True,
@@ -301,7 +310,8 @@ EDITS = [
         "old": "    let estimated: string | null = null;\n",
         "new": (
             "    let estimated: string | null = null;\n"
-            "    const measured = MEAN_POINTS.includes(body) ? MEAN_POINTS_BASIS : MEASURED_BASIS;\n"
+            "    const mean = MEAN_POINTS.includes(body);\n"
+            "    const measured = mean ? MEAN_POINTS_BASIS : MEASURED_BASIS;\n"
         ),
     },
     {
@@ -314,7 +324,7 @@ EDITS = [
         "id": "5h", "item": 5, "claim": "eng.calc-bounds-basis", "file": "src/calc.ts", "packed": True,
         "variant": "recommended",
         "old": "          ...withAyanamsa(bound(row?.[2], \"arcsec/day\", estimated), added && { value: added.rate, basis: added.basis }),\n",
-        "new": "          ...withAyanamsa(bound(row?.[2], \"arcsec/day\", estimated, measured), added && { value: added.rate, basis: added.basis }),\n",
+        "new": "          ...withAyanamsa(bound(row?.[2], \"arcsec/day\", estimated, mean ? MEAN_POINTS_SPEED_BASIS : MEASURED_BASIS), added && { value: added.rate, basis: added.basis }),\n",
     },
     {
         "id": "5i", "item": 5, "claim": "eng.calc-bounds (supported on the site; same defect)", "file": "README.md", "packed": True,
@@ -480,13 +490,13 @@ OLD_PHRASES = [
 # E2's phrase for item 1, by OQ9 (PREREGISTRATION.md, section 4).
 ITEM_1_NEW = {
     "b": (1, "eng.points-vertex-given", "to within 0.00002″ on zodiacs.org's points record of 0.1.1-rc.10"),
-    "c": (1, "eng.points-vertex-given (OQ9 c)", "On the conformance suite's ten L2 vectors for them, at latitudes from 60° S to 60° N, whose arbiter is ERFA's sidereal time and obliquity with each point's published definition, they are within 0.013″ and 0.007″"),
+    "c": (1, "eng.points-vertex-given (OQ9 c)", "On the conformance suite's ten L2 vectors for them, from 1833 to 2182 at latitudes from 60° S to 60° N, whose arbiter is ERFA's sidereal time and obliquity with each point's published definition, they are within 0.014″ and 0.007″"),
     "d": (1, "eng.points-vertex-given", "to within 0.00002″ on zodiacs.org's points record of 0.1.1-rc.10"),
 }
 NEW_PHRASES = [
     ITEM_1_NEW[OQ9],
-    (2, "eng.crossings-blind-band (README)", "can lose both crossings when a station takes the body less than f″h²/8 past the target, f″ being"),
-    (2, "eng.crossings-blind-band (doc comment)", "can lose both crossings when a station takes the body less than f″h²/8 past the target (f″ the"),
+    (2, "eng.crossings-blind-band (README)", "can lose both crossings when a station takes the body less than |f″|h²/8 past the target, f″ being"),
+    (2, "eng.crossings-blind-band (doc comment)", "can lose both crossings when a station takes the body less than |f″|h²/8 past the target (f″ the"),
     (3, "eng.geo-resolution-names", "the jump's in a gap or fold, or, where the shipped history answered, the last change it records before the time"),
     (4, "eng.gregorian-table-location (NOTICE)", "in a shared chunk under dist/ that dist/geo.js and dist/techniques.js import"),
     (4, "eng.gregorian-table-location (LICENSING)", "shared chunk under `dist/` that `dist/geo.js` and `dist/techniques.js` import"),

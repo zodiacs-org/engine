@@ -225,9 +225,16 @@ Each function is the one the engine computes with (`src/time-scale.ts`,
 `src/nutation.ts`, `src/frame.ts`), behind a check. It throws `RangeError`
 for an `ms` that is not a number within the range of a `Date`, a `scale`
 other than the three, a `pin` that is not a finite number of seconds at most
-1e10 in size, any other argument that is not a finite number, and a vector
-with no direction, such as the zero vector. For every argument it accepts it
-gives what the engine's function gives, value for value. `tilt` gives a
+1e10 in size, a `days`, `tt`, `x`, `y` or `z` that is not a finite number,
+and a vector with no direction, such as the zero vector. That is all it
+checks. `elapsedDays`' two records and `meanEcliptic`'s frame are taken to be
+ones `timeBasis` and `eclipticFrame` gave: another object can throw
+`TypeError`, as `{}` does, or give NaN, as a frame with no rows does. A
+finite `tt` is not refused however far it lies from the years the series are
+for: at 1e300 `tilt` and `eclipticFrame` give NaN in the obliquity and the
+equation of the equinoxes, and `eclipticOfDate` throws `RangeError` for the
+longitude it cannot reduce. For every argument it accepts it gives what the
+engine's function gives, value for value. `tilt` gives a
 frozen object, and `eclipticFrame` a frozen copy of the frame, its rows and
 its tilt: the engine keeps the last frame it computed for its next call at
 the same TT, and a caller that changed that object would change the next

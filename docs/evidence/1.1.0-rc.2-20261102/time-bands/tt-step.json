@@ -1,0 +1,732 @@
+{
+ "check": "the step of the angles' rate on TT (development, synthetic inputs; not a check)",
+ "pass": true,
+ "records": 90720,
+ "engine": {
+  "name": "@zodiacs/engine",
+  "version": "1.1.0-rc.2"
+ },
+ "node": "v22.22.2",
+ "platform": "darwin-arm64",
+ "units": "arcseconds a second; relative differences only where the rate over ±60 s is at least 1e-8″ a second",
+ "steps": [
+  1,
+  10,
+  60,
+  600,
+  3600,
+  21600,
+  86400
+ ],
+ "reference": 60,
+ "instants": [
+  2396467.062,
+  2499771.1200906676,
+  2456981.178181335,
+  2414191.2362720026,
+  2517495.29436267,
+  2474705.3524533375,
+  2431915.4105440048,
+  2389125.4686346725,
+  2492429.5267253397,
+  2449639.5848160074,
+  2406849.6429066746,
+  2510153.7009973424,
+  2467363.7590880096,
+  2424573.8171786773,
+  2381783.8752693445,
+  2485087.9333600122,
+  2442297.9914506795,
+  2399508.049541347,
+  2502812.1076320144,
+  2460022.165722682,
+  2417232.2238133494,
+  2520536.281904017,
+  2477746.3399946843,
+  2434956.398085352
+ ],
+ "sites": [
+  {
+   "latitude": -69,
+   "longitude": -170
+  },
+  {
+   "latitude": -60,
+   "longitude": -146.3
+  },
+  {
+   "latitude": -45,
+   "longitude": -122.6
+  },
+  {
+   "latitude": -20,
+   "longitude": -98.9
+  },
+  {
+   "latitude": -5,
+   "longitude": -75.2
+  },
+  {
+   "latitude": 0.3,
+   "longitude": -51.5
+  },
+  {
+   "latitude": 0.5,
+   "longitude": -27.8
+  },
+  {
+   "latitude": 12,
+   "longitude": -4.1
+  },
+  {
+   "latitude": 33,
+   "longitude": 19.6
+  },
+  {
+   "latitude": 45,
+   "longitude": 43.3
+  },
+  {
+   "latitude": 52,
+   "longitude": 67
+  },
+  {
+   "latitude": 60,
+   "longitude": 90.7
+  },
+  {
+   "latitude": 64,
+   "longitude": 114.4
+  },
+  {
+   "latitude": 66,
+   "longitude": 138.1
+  },
+  {
+   "latitude": 66.4,
+   "longitude": 161.8
+  }
+ ],
+ "summary": {
+  "tropical": {
+   "fromRateOver60s": {
+    "1 s": {
+     "absolute": 5.849187800777145e-9,
+     "relative": 0.02775549494625381,
+     "absoluteAt": {
+      "jdUt1": 2517495.29436267,
+      "latitude": -69,
+      "longitude": -170,
+      "houseSystem": "regiomontanus",
+      "what": "cusps.1",
+      "rateOver60s": 0.000034007604199359776,
+      "rate": 0.000034001755011559
+     },
+     "relativeAt": {
+      "jdUt1": 2389125.4686346725,
+      "latitude": 45,
+      "longitude": 43.3,
+      "houseSystem": "koch",
+      "what": "cusps.7",
+      "rateOver60s": 1.062915089278249e-8,
+      "rate": 1.0334133548894897e-8
+     }
+    },
+    "10 s": {
+     "absolute": 2.1827872842550278e-10,
+     "relative": 0.0016863406408094434,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 64,
+      "longitude": 114.4,
+      "houseSystem": "koch",
+      "what": "cusps.2",
+      "rateOver60s": 0.00000401775423597428,
+      "rate": 0.000004017972514702706
+     },
+     "relativeAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 0.5,
+      "longitude": -27.8,
+      "houseSystem": "whole",
+      "what": "vertex",
+      "rateOver60s": 1.2134933058405295e-8,
+      "rate": 1.2155396689195186e-8
+     }
+    },
+    "60 s": {
+     "absolute": 0,
+     "relative": 0,
+     "absoluteAt": null,
+     "relativeAt": null
+    },
+    "600 s": {
+     "absolute": 7.128164725145325e-11,
+     "relative": 0.0004884004884004884,
+     "absoluteAt": {
+      "jdUt1": 2389125.4686346725,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "koch",
+      "what": "cusps.1",
+      "rateOver60s": 0.000020495782564466936,
+      "rate": 0.000020495711282819684
+     },
+     "relativeAt": {
+      "jdUt1": 2389125.4686346725,
+      "latitude": 52,
+      "longitude": 67,
+      "houseSystem": "regiomontanus",
+      "what": "cusps.1",
+      "rateOver60s": 1.6759713616920635e-8,
+      "rate": 1.675152816460468e-8
+     }
+    },
+    "3600 s": {
+     "absolute": 3.636074552559876e-9,
+     "relative": 0.01344661735059606,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "koch",
+      "what": "cusps.1",
+      "rateOver60s": 2.70408122560184e-7,
+      "rate": 2.667720480076241e-7
+     },
+     "relativeAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "koch",
+      "what": "cusps.1",
+      "rateOver60s": 2.70408122560184e-7,
+      "rate": 2.667720480076241e-7
+     }
+    },
+    "21600 s": {
+     "absolute": 1.323022426428603e-7,
+     "relative": 0.489268744556348,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "koch",
+      "what": "cusps.1",
+      "rateOver60s": 2.70408122560184e-7,
+      "rate": 1.3810587991732368e-7
+     },
+     "relativeAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "koch",
+      "what": "cusps.1",
+      "rateOver60s": 2.70408122560184e-7,
+      "rate": 1.3810587991732368e-7
+     }
+    },
+    "86400 s": {
+     "absolute": 0.0000015498401756038522,
+     "relative": 5.731521431043954,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "koch",
+      "what": "cusps.7",
+      "rateOver60s": 2.7040641725761816e-7,
+      "rate": 0.0000018202465928614704
+     },
+     "relativeAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "koch",
+      "what": "cusps.7",
+      "rateOver60s": 2.7040641725761816e-7,
+      "rate": 0.0000018202465928614704
+     }
+    }
+   },
+   "bandAgainstPinsOver600s": {
+    "absolute": 3.410605132707272e-13,
+    "relative": 0.000010283833813245577,
+    "at": {
+     "jdUt1": 2442297.9914506795,
+     "latitude": -45,
+     "longitude": -122.6,
+     "houseSystem": "whole",
+     "what": "vertex",
+     "rateOver60s": 8.580366284149932e-7,
+     "bandRate": 8.580383337175589e-7
+    }
+   }
+  },
+  "lahiri": {
+   "fromRateOver60s": {
+    "1 s": {
+     "absolute": 9.204370599036338e-10,
+     "relative": 0.03117505995203837,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "placidus",
+      "what": "cusps.6",
+      "rateOver60s": 0.000005960594791076801,
+      "rate": 0.000005959674354016897
+     },
+     "relativeAt": {
+      "jdUt1": 2434956.398085352,
+      "latitude": 0.5,
+      "longitude": -27.8,
+      "houseSystem": "placidus",
+      "what": "cusps.1",
+      "rateOver60s": 1.2800001059076749e-8,
+      "rate": 1.3199041859479621e-8
+     }
+    },
+    "10 s": {
+     "absolute": 1.254463199984457e-10,
+     "relative": 0.0038514442916093533,
+     "absoluteAt": {
+      "jdUt1": 2431915.4105440048,
+      "latitude": 64,
+      "longitude": 114.4,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 4.4771088170136863e-7,
+      "rate": 4.478363280213671e-7
+     },
+     "relativeAt": {
+      "jdUt1": 2431915.4105440048,
+      "latitude": 52,
+      "longitude": 67,
+      "houseSystem": "placidus",
+      "what": "cusps.8",
+      "rateOver60s": 1.2397549653542228e-8,
+      "rate": 1.234980118169915e-8
+     }
+    },
+    "60 s": {
+     "absolute": 0,
+     "relative": 0,
+     "absoluteAt": null,
+     "relativeAt": null
+    },
+    "600 s": {
+     "absolute": 3.1889157980913296e-11,
+     "relative": 0.0004167148975575877,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 0.000005960595217402442,
+      "rate": 0.0000059605633282444614
+     },
+     "relativeAt": {
+      "jdUt1": 2434956.398085352,
+      "latitude": -20,
+      "longitude": -98.9,
+      "houseSystem": "whole",
+      "what": "mc",
+      "rateOver60s": 1.4732108866155613e-8,
+      "rate": 1.4725969776918646e-8
+     }
+    },
+    "3600 s": {
+     "absolute": 8.890879144018982e-10,
+     "relative": 0.0023739250838070254,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 0.000005960595217402442,
+      "rate": 0.0000059597061294880405
+     },
+     "relativeAt": {
+      "jdUt1": 2414191.2362720026,
+      "latitude": 64,
+      "longitude": 114.4,
+      "houseSystem": "placidus",
+      "what": "cusps.6",
+      "rateOver60s": 1.560010787216015e-8,
+      "rate": 1.5563074384772335e-8
+     }
+    },
+    "21600 s": {
+     "absolute": 3.1716808734927326e-8,
+     "relative": 0.08271965942768307,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 0.000005960595217402442,
+      "rate": 0.000005928878408667515
+     },
+     "relativeAt": {
+      "jdUt1": 2414191.2362720026,
+      "latitude": 64,
+      "longitude": 114.4,
+      "houseSystem": "placidus",
+      "what": "cusps.6",
+      "rateOver60s": 1.560010787216015e-8,
+      "rate": 1.4309672261939946e-8
+     }
+    },
+    "86400 s": {
+     "absolute": 4.997226431176687e-7,
+     "relative": 1.2879055957756465,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 0.000005960595217402442,
+      "rate": 0.000005460872574284774
+     },
+     "relativeAt": {
+      "jdUt1": 2449639.5848160074,
+      "latitude": 33,
+      "longitude": 19.6,
+      "houseSystem": "whole",
+      "what": "vertex",
+      "rateOver60s": 4.569699285639217e-8,
+      "rate": 1.045504056662594e-7
+     }
+    }
+   },
+   "bandAgainstPinsOver600s": {
+    "absolute": 3.4106051319131787e-13,
+    "relative": 0.000019377341428755976,
+    "at": {
+     "jdUt1": 2477746.3399946843,
+     "latitude": 52,
+     "longitude": 67,
+     "houseSystem": "whole",
+     "what": "vertex",
+     "rateOver60s": 2.324412662346731e-7,
+     "bandRate": 2.3243828195518288e-7
+    }
+   }
+  },
+  "true-chitra": {
+   "fromRateOver60s": {
+    "1 s": {
+     "absolute": 9.336531547887716e-10,
+     "relative": 0.010550400406762426,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "placidus",
+      "what": "cusps.6",
+      "rateOver60s": 0.0000020216148755025642,
+      "rate": 0.0000020206812223477755
+     },
+     "relativeAt": {
+      "jdUt1": 2449639.5848160074,
+      "latitude": 0.3,
+      "longitude": -51.5,
+      "houseSystem": "placidus",
+      "what": "cusps.2",
+      "rateOver60s": 1.34156152853393e-8,
+      "rate": 1.3557155398302712e-8
+     }
+    },
+    "10 s": {
+     "absolute": 1.2075673794242903e-10,
+     "relative": 0.0014627011214041932,
+     "absoluteAt": {
+      "jdUt1": 2431915.4105440048,
+      "latitude": 64,
+      "longitude": 114.4,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 0.0000010408564676822607,
+      "rate": 0.0000010409772244202031
+     },
+     "relativeAt": {
+      "jdUt1": 2449639.5848160074,
+      "latitude": 60,
+      "longitude": 90.7,
+      "houseSystem": "whole",
+      "what": "eastPoint",
+      "rateOver60s": 1.0492726687516551e-8,
+      "rate": 1.050807441060897e-8
+     }
+    },
+    "60 s": {
+     "absolute": 0,
+     "relative": 0,
+     "absoluteAt": null,
+     "relativeAt": null
+    },
+    "600 s": {
+     "absolute": 2.843592028511921e-11,
+     "relative": 0.00028020718349324955,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "placidus",
+      "what": "cusps.6",
+      "rateOver60s": 0.0000020216148755025642,
+      "rate": 0.000002021586439582279
+     },
+     "relativeAt": {
+      "jdUt1": 2467363.7590880096,
+      "latitude": 33,
+      "longitude": 19.6,
+      "houseSystem": "placidus",
+      "what": "cusps.6",
+      "rateOver60s": 1.004167415885604e-8,
+      "rate": 1.004448790808965e-8
+     }
+    },
+    "3600 s": {
+     "absolute": 8.855280952957401e-10,
+     "relative": 0.0030246426379023066,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "placidus",
+      "what": "cusps.6",
+      "rateOver60s": 0.0000020216148755025642,
+      "rate": 0.0000020207293474072685
+     },
+     "relativeAt": {
+      "jdUt1": 2502812.1076320144,
+      "latitude": 66.4,
+      "longitude": 161.8,
+      "houseSystem": "placidus",
+      "what": "cusps.7",
+      "rateOver60s": 9.722782579046907e-8,
+      "rate": 9.752190521794546e-8
+     }
+    },
+    "21600 s": {
+     "absolute": 3.171154835020706e-8,
+     "relative": 0.10734753037699626,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "placidus",
+      "what": "cusps.6",
+      "rateOver60s": 0.0000020216148755025642,
+      "rate": 0.000001989903327152357
+     },
+     "relativeAt": {
+      "jdUt1": 2502812.1076320144,
+      "latitude": 66.4,
+      "longitude": 161.8,
+      "houseSystem": "placidus",
+      "what": "cusps.7",
+      "rateOver60s": 9.722782579046907e-8,
+      "rate": 1.0766499277300075e-7
+     }
+    },
+    "86400 s": {
+     "absolute": 4.996906447137424e-7,
+     "relative": 1.691942532179641,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "placidus",
+      "what": "cusps.6",
+      "rateOver60s": 0.0000020216148755025642,
+      "rate": 0.0000015219242307888219
+     },
+     "relativeAt": {
+      "jdUt1": 2502812.1076320144,
+      "latitude": 66.4,
+      "longitude": 161.8,
+      "houseSystem": "placidus",
+      "what": "cusps.7",
+      "rateOver60s": 9.722782579046907e-8,
+      "rate": 2.617317195567163e-7
+     }
+    }
+   },
+   "bandAgainstPinsOver600s": {
+    "absolute": 3.4106051358836456e-13,
+    "relative": 0.000003957418180379121,
+    "at": {
+     "jdUt1": 2517495.29436267,
+     "latitude": 66,
+     "longitude": 138.1,
+     "houseSystem": "whole",
+     "what": "vertex",
+     "rateOver60s": 0.000003674995241453871,
+     "bandRate": 0.0000036749975436123346
+    }
+   }
+  },
+  "true-pushya": {
+   "fromRateOver60s": {
+    "1 s": {
+     "absolute": 9.046630111697596e-10,
+     "relative": 0.006079650249333971,
+     "absoluteAt": {
+      "jdUt1": 2399508.049541347,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "placidus",
+      "what": "cusps.6",
+      "rateOver60s": 0.0000048345933123528084,
+      "rate": 0.000004833688649341639
+     },
+     "relativeAt": {
+      "jdUt1": 2406849.6429066746,
+      "latitude": 52,
+      "longitude": 67,
+      "houseSystem": "whole",
+      "what": "vertex",
+      "rateOver60s": 4.992784852220211e-8,
+      "rate": 4.96243046654854e-8
+     }
+    },
+    "10 s": {
+     "absolute": 1.2672529692281387e-10,
+     "relative": 0.00042819566502864834,
+     "absoluteAt": {
+      "jdUt1": 2431915.4105440048,
+      "latitude": 64,
+      "longitude": 114.4,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 0.000003315992067598472,
+      "rate": 0.0000033158653423015494
+     },
+     "relativeAt": {
+      "jdUt1": 2389125.4686346725,
+      "latitude": 66,
+      "longitude": 138.1,
+      "houseSystem": "placidus",
+      "what": "cusps.4",
+      "rateOver60s": 6.272486530178867e-8,
+      "rate": 6.27517238172004e-8
+     }
+    },
+    "60 s": {
+     "absolute": 0,
+     "relative": 0,
+     "absoluteAt": null,
+     "relativeAt": null
+    },
+    "600 s": {
+     "absolute": 2.276578925375361e-10,
+     "relative": 0.00005923451336188522,
+     "absoluteAt": {
+      "jdUt1": 2434956.398085352,
+      "latitude": 64,
+      "longitude": 114.4,
+      "houseSystem": "placidus",
+      "what": "cusps.8",
+      "rateOver60s": 0.00000531092268829525,
+      "rate": 0.000005311150346187787
+     },
+     "relativeAt": {
+      "jdUt1": 2434956.398085352,
+      "latitude": -69,
+      "longitude": -170,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 0.000003792231382249156,
+      "rate": 0.000003792456013229639
+     }
+    },
+    "3600 s": {
+     "absolute": 8.148113295192161e-9,
+     "relative": 0.0021486329482246808,
+     "absoluteAt": {
+      "jdUt1": 2434956.398085352,
+      "latitude": -69,
+      "longitude": -170,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 0.000003792231382249156,
+      "rate": 0.000003800379495544348
+     },
+     "relativeAt": {
+      "jdUt1": 2434956.398085352,
+      "latitude": -69,
+      "longitude": -170,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 0.000003792231382249156,
+      "rate": 0.000003800379495544348
+     }
+    },
+    "21600 s": {
+     "absolute": 3.09478546493362e-7,
+     "relative": 0.0816085611078435,
+     "absoluteAt": {
+      "jdUt1": 2434956.398085352,
+      "latitude": -69,
+      "longitude": -170,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 0.000003792231382249156,
+      "rate": 0.000004101709928742518
+     },
+     "relativeAt": {
+      "jdUt1": 2434956.398085352,
+      "latitude": -69,
+      "longitude": -170,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 0.000003792231382249156,
+      "rate": 0.000004101709928742518
+     }
+    },
+    "86400 s": {
+     "absolute": 0.000006325570415318301,
+     "relative": 1.6680338770802094,
+     "absoluteAt": {
+      "jdUt1": 2434956.398085352,
+      "latitude": -69,
+      "longitude": -170,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 0.000003792231382249156,
+      "rate": 0.000010117801797567457
+     },
+     "relativeAt": {
+      "jdUt1": 2434956.398085352,
+      "latitude": -69,
+      "longitude": -170,
+      "houseSystem": "whole",
+      "what": "asc",
+      "rateOver60s": 0.000003792231382249156,
+      "rate": 0.000010117801797567457
+     }
+    }
+   },
+   "bandAgainstPinsOver600s": {
+    "absolute": 3.410605131648481e-13,
+    "relative": 0.0000022554907101976376,
+    "at": {
+     "jdUt1": 2499771.1200906676,
+     "latitude": 33,
+     "longitude": 19.6,
+     "houseSystem": "whole",
+     "what": "vertex",
+     "rateOver60s": 0.000002309546687229158,
+     "bandRate": 0.000002309543702949668
+    }
+   }
+  }
+ }
+}

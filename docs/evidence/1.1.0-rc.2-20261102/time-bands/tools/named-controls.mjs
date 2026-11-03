@@ -1,11 +1,12 @@
 // The controls of the named regression tests (../PREREGISTRATION.md, section
-// 6, "Named regression tests, in npm test, and their controls"). Every new
-// named test is run once against a deliberately wrong timeBands (the TT band d
-// on every UTC input, C1's control a) and once against bands without the
-// topocentric w (C1's control d); the tests those two variants reach must fail
-// under them, and each test neither reaches must fail under its own control.
-// Each control is an exact edit of a copy of the source, which must match
-// once; then the real source must pass every named test.
+// 6, "Named regression tests, in npm test, and their controls", as the
+// amendment of 2026-11-03, review 1, changes them). Every new named test is
+// run once against a deliberately wrong timeBands (the TT band d on every UTC
+// input, C1's control a) and once against bands without the topocentric w
+// (C1's control d); the tests those two variants reach must fail under them,
+// and each test neither reaches must fail under its own control. Each control
+// is an exact edit of a copy of the source, which must match once; then the
+// real source must pass every named test.
 //
 //   node named-controls.mjs --repo <checkout> --work <dir outside the checkout> --out <named.json>
 //
@@ -34,7 +35,8 @@ const TESTS = {
   nullBand: "bands from the time basis are null without speeds and present otherwise",
   radians: "bands from the time basis are in arcseconds under units: radians",
   whole: "bands from the time basis give whole-sign cusps 0, and the cusps where Placidus or Koch falls back to whole signs",
-  sidereal: "bands from the time basis give sidereal angles and cusps the tropical ones' bands",
+  ttTerm: "bands from the time basis add each angle's and cusp's rate on TT, UT1 held, times the TT band",
+  sidereal: "bands from the time basis give sidereal angles and cusps the tropical ones' rate on UT1, and on TT the sidereal longitude's",
   topocentric: "bands from the time basis bound a topocentric position at or above its partials on TT and UT1 from pinned evaluations",
   eventsCharts: "bands from the time basis carry the events' and the charts' bands",
   id: "bands from the time basis name time-band:first-order last in every receipt whose result carries a band"
@@ -70,9 +72,13 @@ const CONTROLS = {
     edits: [["src/calc.ts", 'cusps: system === "whole" ? Array<number>(12).fill(0) : cusps', 'cusps: system === "whole" ? Array<number>(12).fill(asc!) : cusps']],
     mustFail: ["whole"]
   },
-  "sidereal angle bands that add the ayanamsa's rate times the TT band": {
-    edits: [["src/calc.ts", "      band: { time: bands, ...turnBands(input, computed.system, bands.ut1) },", "      band: (() => {\n        const b = turnBands(input, computed.system, bands.ut1);\n        const add = value === null ? 0 : (50.29 / 31_557_600) * bands.tt;\n        return { time: bands, asc: b.asc + add, mc: b.mc + add, vertex: b.vertex + add, eastPoint: b.eastPoint + add, cusps: b.cusps.map((cusp) => cusp + add) };\n      })(),"]],
-    mustFail: ["sidereal"]
+  "the angle bands without their rate on TT (b11c5e8's)": {
+    edits: [["src/calc.ts", "onUt1.map((rate, index) => rate * bands.ut1 + (onTt ? onTt[index]! * bands.tt : 0));", "onUt1.map((rate) => rate * bands.ut1);"]],
+    mustFail: ["ttTerm", "sidereal", "eventsCharts"]
+  },
+  "sidereal angle bands whose rate on TT leaves out the ayanamsa's (the tropical ones')": {
+    edits: [["src/calc.ts", "      less: definition === null ? 0 : ayanamsaAt(definition, moved).true", "      less: 0"]],
+    mustFail: ["ttTerm", "sidereal"]
   },
   "the id left out of events()'s receipt": {
     edits: [["src/calc.ts", '        [...positionIds(body, "ecliptic-true-of-date", "geocentric", "apparent", zodiac), "search:scan-and-bisect"]\n      )', '        [...positionIds(body, "ecliptic-true-of-date", "geocentric", "apparent", zodiac), "search:scan-and-bisect"],\n        undefined,\n        false\n      )']],
