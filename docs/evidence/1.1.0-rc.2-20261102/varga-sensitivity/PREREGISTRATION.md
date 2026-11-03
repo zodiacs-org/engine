@@ -615,3 +615,62 @@ rule, and completeness derived only for the Ascendant and the mean nodes,
 stays unratified, and the true node stays out. The unit is `validated` at
 most (section 11, condition 3) until the owner ratifies. This amendment is
 the answer section 2's "Owner's answer" line waits for.
+
+**2026-11-03, the implementation's departures.** Commits `9259a6c`,
+`da193bf` and `e546f15` implement this file. In writing them the design was
+departed from in the points below, each found while writing the code or in
+light trials on a development corpus of 40 births drawn by `generate.mjs`
+with seed 1 (section 2: unit tests use seeds 1 to 3). All come before any
+formal run: F2, F3 and F4 have not been run. No reading of section 3, pass
+rule, seed, fixture or tolerance changes, and no control's pass condition.
+
+- **`a` for a star definition is 0.0213 degree a day**, 0.0003 plus 0.021,
+  not 0.0003. Section 7 defines `a` as the ayanamsa's rate bound, and 0.0003
+  is not one for a star definition: near the Sun's conjunction with the
+  star, the light deflection that `src/vedic/ayanamsa.ts` applies moved
+  true-pushya's ayanamsa by up to 0.019 degree a day (sampled each minute
+  around 2000-07-31) and true-revati's by up to 0.0027 (around 2000-04-09).
+  With 0.0003 the bracket guard refused the mean nodes with `rate-bound` for
+  about three days. The 0.021 is derived from that code: the deflection
+  moves at most (2GM/c²)/r/f radian for each radian the Sun moves, f = 1e-6
+  / max(r², 1) being the code's floor of 1 - cos E (r the Earth's distance
+  from the Sun, at least 0.98 au; E the star's angle from the Sun), so at
+  most 0.02015, and the Sun moves at most 1.0194 degrees a day. Every other
+  definition keeps 0.0003, and a linear definition adds its own rate, as
+  section 7 has it. In section 7's bounds this moves `R_lo` and `R_hi` by
+  at most 0.021 degree a day, against an Ascendant rate of at least 28.6
+  degrees a day up to 66 degrees, where `R_lo` stays above zero. The mean
+  nodes still decrease: their leading rate is 0.0529 degree a day.
+  `tools/derived_bounds.py` adds a column for this bound.
+- **The mean nodes' guard** takes their leading rate within a relative 1e-5
+  of itself, for the polynomial's higher terms (under 4.3e-6 of it from 1800
+  to 2200), give or take `a`.
+- **Rounding.** A bracket's advance is held to its bounds with 1e-9 degree
+  of slack, for floating-point rounding. The design had none.
+- **The seam walk** reaches the step's size plus one second on each side, so
+  a leap second costs 4,001 evaluations a point, where INPUTS.md's estimate
+  (section 6) counted 3,001; the estimate's total becomes 55,230. The
+  budget, 2,000,000 a call, does not change.
+- **Seams on a pinned UTC clock.** TAI - UTC is read at the record's UTC
+  instant, so a leap second counts as a seam on that clock too.
+- **A birth out of range** reports the birth instant alone as `searched`.
+- **The output.** Each row also names its `varga` and `scheme`, so that a
+  refused row whose position is `null` still says which varga it is. The
+  result gives each point's `evaluations`, which G-V3 reports (section 8)
+  and which the output could not otherwise show.
+- **C3c's build** reports each Ascendant change, with the signs of the true
+  crossing, at the end of its 60 s bracket. A build that only moved the
+  instant would compute the signs again there, and M2 alone would not catch
+  it.
+- **G-V4's side rule.** "Where a birth lies within 5 s of a crossing, its
+  side is counted, not judged" (section 3, R4) is read as covering both
+  sides of the key: when the birth lies within 5 s of the arbiter's crossing
+  at either end of the key's run, neither side of that key is judged, since
+  the birth's own sign is then in doubt. This is part of section 3's reading
+  that OQ5 leaves unratified.
+- **An erratum in INPUTS.md** (section 6): the longest Ascendant bracket at
+  0 degrees is 71,715,147 ms by the floor, not 71,715,148. Its bisection
+  still takes at most 27 halvings, and with `a` of 0.0213 the bracket is
+  71,711,853 ms, with the same count of halvings.
+
+The unit stays `validated` at most until the owner ratifies OQ5.
