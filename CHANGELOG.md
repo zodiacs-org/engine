@@ -134,11 +134,11 @@ npm until the owner approves it. Checks: `docs/evidence/1.1.0-rc.2-20261102/`.
   `src/vedic/fixtures/varga-changes.json` (the preregistered checks are in
   `docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/`).
 - **Sizes.** `./time`'s import graph is 42,306 bytes in 7 files and
-  `./lite`'s 28,918 in 5, under budgets of their own, 42,400 and 29,000
-  (94 and 82 bytes left). `./calc`'s is 150,932 bytes, 5,671 more than
+  `./lite`'s 28,930 in 5, under budgets of their own, 42,400 and 29,000
+  (94 and 70 bytes left). `./calc`'s is 151,426 bytes, 6,165 more than
   1.1.0-rc.1's 145,261, for the corrections, the time bands and the chunks it
   shares with `./time`: over its budget of 145,500, which this candidate
-  raises to 156,000. `./vedic`'s is 141,300, 13,549 more than 127,751, for
+  raises to 156,000. `./vedic`'s is 141,340, 13,589 more than 127,751, for
   the varga sensitivity and the same chunks: over its budget of 128,000,
   raised to 143,000. The graphs of the root, `./internal`, `./internal/math`,
   `./receipt`, `./sky`, `./techniques`, `./timing` and `./window` grow by 49
@@ -146,12 +146,12 @@ npm until the owner approves it. Checks: `docs/evidence/1.1.0-rc.2-20261102/`.
   that join the chunks `./time` shares with them (and, in `./techniques`, the
   two modules the composite functions and the name helpers moved to); none
   of their budgets is raised, and `./window`'s leaves 443 bytes. The package
-  is 1,095,070 bytes unpacked in 90 files, 88,576 more than 1.1.0-rc.1's
+  is 1,096,783 bytes unpacked in 90 files, 90,289 more than 1.1.0-rc.1's
   1,006,494, over the cap of 1,020,000, which this candidate raises to
   1,100,000 for the two entries, the bands, the varga sensitivity, the
   corrections and their documentation, rather than move the CHANGELOG's 0.x
-  history out of the package: 50,146 bytes of JavaScript that only the
-  opt-in entry points load, 21,049 of declarations, 16,616 of README,
+  history out of the package: 50,692 bytes of JavaScript that only the
+  opt-in entry points load, 21,520 of declarations, 17,312 of README,
   CHANGELOG, LICENSING.md and NOTICE, 420 of manifest and 345 of the root's
   graph (`sizes.json`). The two new budgets, the two raised ones and the cap
   are the ceilings approved under the owner's delegation of 2026-11-03 (OQ3

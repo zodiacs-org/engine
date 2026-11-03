@@ -200,12 +200,12 @@
    },
    "./calc": {
     "files": 15,
-    "bytes": 150932,
-    "gzip": 49526,
-    "beyondCore": 70554,
-    "beyondCoreGzip": 21890,
+    "bytes": 151426,
+    "gzip": 49688,
+    "beyondCore": 71048,
+    "beyondCoreGzip": 22052,
     "budget": 156000,
-    "headroomPercent": 3.35
+    "headroomPercent": 3.02
    },
    "./conventions": {
     "files": 2,
@@ -272,12 +272,12 @@
    },
    "./lite": {
     "files": 5,
-    "bytes": 28918,
-    "gzip": 8938,
-    "beyondCore": 28918,
-    "beyondCoreGzip": 8938,
+    "bytes": 28930,
+    "gzip": 8940,
+    "beyondCore": 28930,
+    "beyondCoreGzip": 8940,
     "budget": 29000,
-    "headroomPercent": 0.28
+    "headroomPercent": 0.24
    },
    "./receipt": {
     "files": 8,
@@ -326,12 +326,12 @@
    },
    "./vedic": {
     "files": 14,
-    "bytes": 141300,
-    "gzip": 47467,
-    "beyondCore": 48999,
-    "beyondCoreGzip": 16292,
+    "bytes": 141340,
+    "gzip": 47476,
+    "beyondCore": 49039,
+    "beyondCoreGzip": 16301,
     "budget": 143000,
-    "headroomPercent": 1.2
+    "headroomPercent": 1.17
    },
    "./window": {
     "files": 10,
@@ -372,16 +372,16 @@
   },
   "package": {
    "files": 90,
-   "total": 1095070,
+   "total": 1096783,
    "cap": 1100000,
-   "headroomPercent": 0.45,
+   "headroomPercent": 0.29,
    "split": {
     "rootJs": 106325,
-    "optInJs": 341913,
+    "optInJs": 342459,
     "zoneHistories": 189144,
     "rootDeclarations": 62794,
-    "otherDeclarations": 153330,
-    "documents": 237168,
+    "otherDeclarations": 153801,
+    "documents": 237864,
     "manifest": 4396
    },
    "zoneHistories": {
@@ -391,15 +391,15 @@
    },
    "growthFrom": {
     "label": "1.1.0-rc.1",
-    "bytes": 88576,
+    "bytes": 90289,
     "split": {
      "rootJs": {
       "bytes": 345,
-      "percentOfGrowth": 0.39
+      "percentOfGrowth": 0.38
      },
      "optInJs": {
-      "bytes": 50146,
-      "percentOfGrowth": 56.61
+      "bytes": 50692,
+      "percentOfGrowth": 56.14
      },
      "zoneHistories": {
       "bytes": 0,
@@ -407,15 +407,15 @@
      },
      "rootDeclarations": {
       "bytes": 1012,
-      "percentOfGrowth": 1.14
+      "percentOfGrowth": 1.12
      },
      "otherDeclarations": {
-      "bytes": 20037,
-      "percentOfGrowth": 22.62
+      "bytes": 20508,
+      "percentOfGrowth": 22.71
      },
      "documents": {
-      "bytes": 16616,
-      "percentOfGrowth": 18.76
+      "bytes": 17312,
+      "percentOfGrowth": 19.17
      },
      "manifest": {
       "bytes": 420,

@@ -116,19 +116,17 @@ fixture it passes, and each of its five controls fails.
 ## Sizes
 
 `sizes.json` (`../rc16-20260930/sizes.mjs`) measures the carried 1.1.0-rc.1
-archive and this tree's build at **[PLACEHOLDER, for the coordinator to fill
-when the size records are redone after review 2: the commit whose build they
-measure]** (Node 22.22.2, darwin-arm64): each entry point's import graph, in
-bytes, against its budget in `scripts/verify-package-contents.mjs`, and the
-package. The headroom is the budget's excess over the graph, per cent of the
-graph, rounded down. Until then the table and `sizes.json` hold the figures
-of the build of `4f4c1e8`, "Update the size records after review 1"; the
-commit that acts on review 2 changes packed bytes after it.
+archive and the build of the tree of the commit that writes them, "Update
+the size records after review 2" (Node 22.22.2, darwin-arm64): each entry
+point's import graph, in bytes, against its budget in
+`scripts/verify-package-contents.mjs`, and the package. The headroom is the
+budget's excess over the graph, per cent of the graph, rounded down. A later
+commit that changes packed bytes measures them again.
 
 | | 1.1.0-rc.1 | 1.1.0-rc.2 | budget | headroom, % |
 | --- | ---: | ---: | ---: | ---: |
 | `.` | 105,980 | 106,325 in 13 files | 108,500 | 2.04 |
-| `./calc` | 145,261 | 150,932 in 15 | 156,000, from 145,500 | 3.35 |
+| `./calc` | 145,261 | 151,426 in 15 | 156,000, from 145,500 | 3.02 |
 | `./conventions` | 2,754 | 2,754 in 2 | 2,900 | 5.30 |
 | `./crossings` | 9,942 | 9,942 in 2 | 10,000 | 0.58 |
 | `./deltat` | 5,232 | 5,232 in 2 | 5,500 | 5.12 |
@@ -136,15 +134,15 @@ commit that acts on review 2 changes packed bytes after it.
 | `./houses` | 13,678 | 13,678 in 1 | 15,000 | 9.66 |
 | `./internal` | 66,287 | 66,586 in 8 | 68,000 | 2.12 |
 | `./internal/math` | 19,175 | 19,224 in 4 | 20,000 | 4.03 |
-| `./lite` | | 28,918 in 5 | 29,000 (new) | 0.28 |
+| `./lite` | | 28,930 in 5 | 29,000 (new) | 0.24 |
 | `./receipt` | 72,500 | 72,549 in 8 | 76,500 | 5.44 |
 | `./sky` | 94,149 | 94,448 in 12 | 97,000 | 2.70 |
 | `./techniques` | 155,805 | 156,210 in 15 | 160,000 | 2.42 |
 | `./time` | | 42,306 in 7 | 42,400 (new) | 0.22 |
 | `./timing` | 125,356 | 125,693 in 15 | 129,000 | 2.63 |
-| `./vedic` | 127,751 | 141,300 in 14 | 143,000, from 128,000 | 1.20 |
+| `./vedic` | 127,751 | 141,340 in 14 | 143,000, from 128,000 | 1.17 |
 | `./window` | 104,242 | 104,557 in 10 | 105,000 | 0.42 |
-| package, unpacked | 1,006,494 in 77 files | 1,095,070 in 90 files | 1,100,000, from 1,020,000 | 0.45 |
+| package, unpacked | 1,006,494 in 77 files | 1,096,783 in 90 files | 1,100,000, from 1,020,000 | 0.29 |
 
 The two new budgets, `./calc`'s and `./vedic`'s raises and the cap are the
 ceilings approved under the owner's delegation of 2026-11-03 (OQ3 in
@@ -160,9 +158,9 @@ exports that join the parts, and `./techniques`' also by the two modules the
 composite functions and the name helpers moved to. `./conventions`,
 `./crossings`, `./deltat`, `./geo` and `./houses` do not change.
 
-The package grows by 88,576 bytes: 50,146 of JavaScript that only the opt-in
-entry points load, 345 of the root's graph, 21,049 of declarations (1,012 of
-them reached from the root's `index.d.ts`), 16,616 of README, CHANGELOG,
+The package grows by 90,289 bytes: 50,692 of JavaScript that only the opt-in
+entry points load, 345 of the root's graph, 21,520 of declarations (1,012 of
+them reached from the root's `index.d.ts`), 17,312 of README, CHANGELOG,
 LICENSING.md and NOTICE, and 420 of manifest. The zone histories are
 unchanged, 189,144 bytes in 16 files of their 200,000. The CHANGELOG keeps
 its whole history: OQ3's other choice, moving its 0.x history out of the
