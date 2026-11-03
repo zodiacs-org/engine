@@ -4,31 +4,38 @@ Pure TypeScript astrology calculations for browsers and Node.js. The package
 computes tropical planetary positions, natal charts, transit snapshots,
 synastry, secondary progressions, Moon phase, and Saturn-return seasons, and,
 in separate entries, one calculation API over frames, centers and
-corrections with bounds and receipts, birth-time windows, house positions and
-cusp speeds, rise, set and transit times and planetary hours, returns and
-relationship charts, Hellenistic timing techniques, and sidereal positions
-and Jyotish techniques. Its calculations are synchronous; only loading a zone's
-history before 1970 (`prepareLocalTime`) and the GeoNames client, both in
-`@zodiacs/engine/geo`, are asynchronous. It is ESM-only, has no import-time
-side effects, and performs no network request from its core entry point. Its
-one runtime side effect is the ΔT it installs in astronomy-engine (see Time
-below).
+corrections with bounds, time bands and receipts, birth-time windows, house
+positions and cusp speeds, rise, set and transit times and planetary hours,
+returns and relationship charts, Hellenistic timing techniques, sidereal
+positions and Jyotish techniques, the time basis and the frame of date
+without the ephemeris, and declination parallels, sect, composite midpoints
+and dignities without it. Its calculations are synchronous; only loading a
+zone's history before 1970 (`prepareLocalTime`) and the GeoNames client,
+both in `@zodiacs/engine/geo`, are asynchronous. It is ESM-only, has no
+import-time side effects, and performs no network request from its core
+entry point. Its one runtime side effect is the ΔT it installs in
+astronomy-engine (see Time below).
 
-**1.1.0-rc.1**, a candidate for 1.1.0, not published: natal receipts name
-their conventions as ids of the Zodiacs conventions registry, which a new
-entry, `@zodiacs/engine/conventions`, gives (see *Draft natal receipts*;
-CHANGELOG.md). The package follows Semantic Versioning:
+**1.1.0-rc.2**, the second candidate for 1.1.0, not published. Over 1.0.0,
+natal receipts name their conventions as ids of the Zodiacs conventions
+registry, which a new entry, `@zodiacs/engine/conventions`, gives (from
+1.1.0-rc.1; see *Draft natal receipts*). This candidate adds two entries
+that load no ephemeris, `@zodiacs/engine/time` and `@zodiacs/engine/lite`,
+for fifteen public entry points in all; time bands in
+`@zodiacs/engine/calc`; how far the birth time can move before each varga
+sign changes; and corrections of statements that said more than their
+evidence (CHANGELOG.md). The package follows Semantic Versioning:
 [docs/versioning.md](docs/versioning.md) says what is public, how a number
 may change, which records stay readable and how something public is
 deprecated, and `api/` holds each public entry point's declarations. npm
 carries 1.0.0, the first stable release, under `latest`: `npm install
-@zodiacs/engine` installs it, without `./conventions` and writing no ids.
-This candidate is not published there. Install the exact candidate tarball,
-`artifacts/zodiacs-engine-1.1.0-rc.1.tgz` in the repository, retaining its
-SHA-256 receipt:
+@zodiacs/engine` installs it, without `./conventions`, `./time` or `./lite`,
+and writing no ids. This candidate is not published there. Install the exact
+candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.2.tgz` in the
+repository, retaining its SHA-256 receipt:
 
 ```sh
-npm install ./zodiacs-engine-1.1.0-rc.1.tgz
+npm install ./zodiacs-engine-1.1.0-rc.2.tgz
 ```
 
 The Release workflow publishes the archive carried in `artifacts/` as it is,
@@ -52,7 +59,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.1.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.2.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -112,8 +119,9 @@ to 2027-10-02 as UTC, with TT from the leap seconds and UT1 from IERS
 UT1 − UTC, and otherwise as UT1 with the ΔT model, or on UT1 or TT when
 `timeScale` says so (see Time). The ephemeris is still astronomy-engine
 2.1.19. See CHANGELOG.md for the release history and
-`docs/evidence/1.1.0-rc.1-20261026/` for this candidate's checks (1.0.0's are
-in `docs/evidence/1.0.0-20261011/`, 1.0.0-rc.2's in
+`docs/evidence/1.1.0-rc.2-20261102/` for this candidate's checks
+(1.1.0-rc.1's are in `docs/evidence/1.1.0-rc.1-20261026/`, 1.0.0's in
+`docs/evidence/1.0.0-20261011/`, 1.0.0-rc.2's in
 `docs/evidence/1.0.0-rc.2-20261006/`, 1.0.0-rc.1's in
 `docs/evidence/1.0.0-rc.1-20261006/`, rc.17's in
 `docs/evidence/rc17-20261005/`). Site adoption is reviewed separately.

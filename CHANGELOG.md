@@ -2,6 +2,15 @@
 
 ## 1.1.0-rc.2 (unreleased candidate)
 
+The second candidate for 1.1.0, on 1.1.0-rc.1 (main at `a253973`):
+corrections of statements that said more than their evidence; two new entry
+points that load no ephemeris, `@zodiacs/engine/time` and
+`@zodiacs/engine/lite`, which make fifteen public entry points; time bands in
+`@zodiacs/engine/calc`; and the birth-time sensitivity of the vargas in
+`@zodiacs/engine/vedic`. The 500 conformance verdicts are 1.1.0-rc.1's: 267
+pass, 192 fail, 41 unsupported, none in error. It is not to be published on
+npm until the owner approves it. Checks: `docs/evidence/1.1.0-rc.2-20261102/`.
+
 - **Corrections (zodiacs.org's finding F-89).** Statements that 1.0.0 and
   1.1.0-rc.1 made in the README, NOTICE, LICENSING.md and doc comments, and
   that zodiacs.org's claims ledger found to say more than their evidence, now
@@ -43,7 +52,7 @@
   chunk that it and `dist/time.js` import (NOTICE, LICENSING.md), so each
   graph that loads the ephemeris grows by the imports and exports that join
   the two.
-- **Bands from the time basis** (unit P1.M3c of zodiacs.org's programme).
+- **Bands from the time basis** (zodiacs.org's unit P1.M3c).
   `timeBands(record)`, exported by `@zodiacs/engine/time`, gives the 1-σ
   bands, in seconds, of the TT and the UT1 of a recorded instant (a
   `TimeBasis`, a chart, a calc instant, or a natal result from the time-basis
@@ -91,8 +100,7 @@
   techniques' name helpers move to modules of their own
   (`src/techniques/composite.ts`, `src/techniques/names.ts`), with no public
   change. esbuild 0.27.7, the version tsup runs, is now a direct dev
-  dependency. The entry's import graph has a budget of its own, 29,000 bytes,
-  the ceiling approved under the owner's delegation of 2026-11-03.
+  dependency.
 - **The birth-time sensitivity of the vargas** (zodiacs.org's unit
   P2.B.vargas). `vargaSensitivity(natal, ayanamsa, options?)`, exported by
   `@zodiacs/engine/vedic` with `VARGA_POINTS` and seven types, gives for each
@@ -114,6 +122,31 @@
   boundaries are held to an engine-free fixture,
   `src/vedic/fixtures/varga-changes.json` (the preregistered checks are in
   `docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/`).
+- **Sizes.** `./time`'s import graph is 42,306 bytes in 7 files and
+  `./lite`'s 28,918 in 5, under budgets of their own, 42,400 and 29,000
+  (94 and 82 bytes left). `./calc`'s is 149,254 bytes, 3,993 more than
+  1.1.0-rc.1's 145,261, for the corrections, the time bands and the chunks it
+  shares with `./time`: over its budget of 145,500, which this candidate
+  raises to 156,000. `./vedic`'s is 141,243, 13,492 more than 127,751, for
+  the varga sensitivity and the same chunks: over its budget of 128,000,
+  raised to 143,000. The graphs of the root, `./internal`, `./internal/math`,
+  `./receipt`, `./sky`, `./techniques`, `./timing` and `./window` grow by 49
+  to 405 bytes, the root's by 345 to 106,325, for the imports and exports
+  that join the chunks `./time` shares with them (and, in `./techniques`, the
+  two modules the composite functions and the name helpers moved to); none
+  of their budgets is raised, and `./window`'s leaves 443 bytes. The package
+  is 1,090,842 bytes unpacked in 90 files, 84,348 more than 1.1.0-rc.1's
+  1,006,494, over the cap of 1,020,000, which this candidate raises to
+  1,100,000 for the two entries, the bands, the varga sensitivity, the
+  corrections and their documentation, rather than move the CHANGELOG's 0.x
+  history out of the package: 48,411 bytes of JavaScript that only the
+  opt-in entry points load, 20,559 of declarations, 14,613 of README,
+  CHANGELOG, LICENSING.md and NOTICE, 420 of manifest and 345 of the root's
+  graph (`sizes.json`). The two new budgets, the two raised ones and the cap
+  are the ceilings approved under the owner's delegation of 2026-11-03 (OQ3
+  in `docs/evidence/1.1.0-rc.2-20261102/OWNER-ANSWERS.md`), not about 5 per
+  cent over a measured graph as before; `scripts/verify-package-contents.mjs`
+  gives each graph's headroom.
 
 ## 1.1.0-rc.1 — unreleased candidate
 

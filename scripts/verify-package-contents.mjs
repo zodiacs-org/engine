@@ -122,10 +122,21 @@ for (const file of files) {
 //
 // 1.1.0-rc.2 adds ./time and ./lite, each with a budget of its own, and
 // raises ./calc's and ./vedic's, each to the ceiling approved under the
-// owner's delegation of 2026-11-03 (OQ3 in docs/evidence/1.1.0-rc.2-20261102/OWNER-ANSWERS.md) rather than to about 5 per cent over
-// a measured graph: ./calc for the F-89 corrections and the time bands,
-// ./vedic for the varga sensitivity. The graphs they fit are in
-// docs/evidence/1.1.0-rc.2-20261102/sizes.json.
+// owner's delegation of 2026-11-03 (OQ3 in
+// docs/evidence/1.1.0-rc.2-20261102/OWNER-ANSWERS.md) rather than to about 5
+// per cent over a measured graph: ./calc for the F-89 corrections and the
+// time bands, ./vedic for the varga sensitivity. The graphs they fit are in
+// docs/evidence/1.1.0-rc.2-20261102/sizes.json. ./time loads the root's time
+// scale, ΔT, nutation, frame, houses and signs without the ephemeris, so the
+// build moves the nutation and the frame out of the ephemeris chunk, and
+// src/signs.ts out of the chunk it shared with src/aspects.ts and
+// src/types.ts, into chunks of their own. Each graph that loads them grows
+// by the imports and exports that join the parts: the root's by 345 bytes,
+// ./timing's by 337, ./window's by 315 (443 bytes, 0.42 per cent, left),
+// ./internal's and ./sky's by 299, and ./receipt's and ./internal/math's by
+// 49; ./techniques's by 405, with the two modules the composite functions
+// and the name helpers moved to (src/techniques/composite.ts and
+// src/techniques/names.ts). None of those budgets is raised.
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -153,11 +164,11 @@ const ENTRY_BUDGETS = {
   // headroom. 1.0.0-rc.1: 144,694, with the reviews' checks and a caller's
   // epochs across EPHEMERIS_SPAN; 0.55 per cent, not raised
   // (docs/evidence/1.0.0-rc.1-20261006/sizes.json). 1.0.0-rc.2: 145,261, with
-  // the core's marks; 0.16 per cent, not raised. 1.1.0-rc.2: 149,254 at the
-  // sizes commit, with the F-89 corrections and the time bands (and the
-  // timeBands chunk it shares with ./time); raised to 156,000, the ceiling
-  // approved under the owner's delegation of 2026-11-03 (OQ3); 4.52 per cent
-  // of headroom.
+  // the core's marks; 0.16 per cent, not raised. 1.1.0-rc.2: 149,254, 3,993
+  // more than 1.1.0-rc.1's 145,261, with the F-89 corrections, the time bands
+  // (and the timeBands chunk it shares with ./time) and the chunks split out
+  // for ./time (above); raised to 156,000, the ceiling approved under the
+  // owner's delegation of 2026-11-03 (OQ3); 4.51 per cent of headroom.
   "./calc": 156_000,
   // New in 1.1.0-rc.1: the ids of the conventions registry. 2,754 bytes, its
   // own file and the chunk of ids it shares with ./receipt; 5.30 per cent of
@@ -186,9 +197,9 @@ const ENTRY_BUDGETS = {
   // convention, composite midpoints and their aspects, and the dignities,
   // without the ephemeris: dist/lite.js and the four files it re-exports,
   // each built on its own and importing nothing (scripts/build-lite.mjs).
-  // 28,918 bytes in 5 files at the entry's own commit. 29,000 is the ceiling
-  // approved under the owner's delegation of 2026-11-03 (OQ3); 0.28 per cent
-  // of headroom.
+  // 1.1.0-rc.2: 28,918 bytes in 5 files. 29,000 is the ceiling approved
+  // under the owner's delegation of 2026-11-03 (OQ3); 0.28 per cent of
+  // headroom.
   "./lite": 29_000,
   // rc.15: 62,880. 1.0.0: 69,491. 1.1.0-rc.1: 72,500, 3,009 more, raised
   // from 70,000 with the owner's approval of 2026-10-26 for the receipt's
@@ -205,7 +216,7 @@ const ENTRY_BUDGETS = {
   "./techniques": 160_000,
   // New in 1.1.0-rc.2: the time basis and the frame of date with no
   // ephemeris (Zodiacs.org's finding F-53), and the time bands it re-exports.
-  // 42,306 bytes at the sizes commit: dist/time.js and the six chunks it
+  // 1.1.0-rc.2: 42,306 bytes in 7 files, dist/time.js and the six chunks it
   // imports, the timeBands chunk it shares with ./calc among them. 42,400 is
   // the ceiling approved under the owner's delegation of 2026-11-03 (OQ3);
   // 0.22 per cent of headroom.
@@ -228,10 +239,11 @@ const ENTRY_BUDGETS = {
   // 123,639, its ayanamsas and sidereal charts now in a chunk it shares with
   // ./calc; 3.52 per cent, not raised. 1.0.0-rc.1: 127,184, its options and
   // inputs read strictly; 0.64 per cent, not raised. 1.0.0-rc.2: 127,751,
-  // with the core's marks; 0.19 per cent, not raised. 1.1.0-rc.2: 128,126 at
-  // the sizes commit, before the varga sensitivity, for which it is raised to
-  // 143,000, the ceiling approved under the owner's delegation of 2026-11-03
-  // (OQ3).
+  // with the core's marks; 0.19 per cent, not raised. 1.1.0-rc.2: 141,243,
+  // 13,492 more than 1.1.0-rc.1's 127,751, with the varga sensitivity and the
+  // chunks split out for ./time (above); raised to 143,000, the ceiling
+  // approved under the owner's delegation of 2026-11-03 (OQ3); 1.24 per cent
+  // of headroom.
   "./vedic": 143_000,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
@@ -342,12 +354,16 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // 1,020,000 with the owner's approval of 2026-10-26, which leaves 13,506
 // bytes.
 //
-// 1.1.0-rc.2: raised from 1,020,000 to 1,100,000, the ceiling approved under
-// the owner's delegation of 2026-11-03 (OQ3 in docs/evidence/1.1.0-rc.2-20261102/OWNER-ANSWERS.md), for the
+// 1.1.0-rc.2: 1,090,842 bytes in 90 files, 84,348 more than 1.1.0-rc.1:
+// 48,411 bytes of JavaScript that only the opt-in entry points load, for the
 // entries ./time and ./lite, the time bands, the varga sensitivity and the
-// F-89 corrections; the CHANGELOG stays whole. 1,030,414 bytes in 84 files at
-// the sizes commit, before ./lite and the varga sensitivity; the candidate's
-// size is in docs/evidence/1.1.0-rc.2-20261102/sizes.json.
+// F-89 corrections; 20,559 of declarations; 14,613 of README, CHANGELOG,
+// LICENSING.md and NOTICE; 420 of manifest; and 345 of the root's graph
+// (docs/evidence/1.1.0-rc.2-20261102/sizes.json). Raised from 1,020,000 to
+// 1,100,000, the ceiling approved under the owner's delegation of 2026-11-03
+// (OQ3 in docs/evidence/1.1.0-rc.2-20261102/OWNER-ANSWERS.md), for those
+// entries and features, rather than moving the CHANGELOG's 0.x history out
+// of the package; it leaves 9,158 bytes, 0.83 per cent.
 const TOTAL_CAP = 1_100_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 
