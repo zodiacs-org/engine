@@ -92,48 +92,63 @@ export const EPHEMERIS_FINGERPRINTS = Object.freeze([
 const STATEMENTS = /^(?:import|export)\s[^;]*?\bfrom\s*["']([^"']+)["']|^import\s*["']([^"']+)["']/gmu;
 const sorted = (list) => [...list].sort();
 
-/**
- * Checks the built entry: L1, L2 and L3. `metafile` is the build's merged
- * module list, `files` the dist/*.js paths ("dist/lite.js" and the like) and
- * `read(path)` a file's text. Throws an AssertionError naming the first
- * fault; returns the entry's static graph.
- */
-export function checkLiteEntry({ metafile, files, read }) {
-  const parts = LITE_PARTS.map((part) => `dist/lite-${part}.js`);
-  const closure = ["dist/lite.js", ...parts];
-  for (const file of closure) assert(files.includes(file), `${file} is not in the build`);
+const PART_FILES = LITE_PARTS.map((part) => `dist/lite-${part}.js`);
+const ENTRY_FILES = ["dist/lite.js", ...PART_FILES];
 
-  // L1, no dynamic import, and L3, no string that comes only with the
-  // ephemeris, in any file of the entry.
-  for (const file of closure) {
-    const code = read(file);
-    assert(!/\bimport\s*\(/u.test(code), `dynamic import in ${file}`);
-    for (const print of EPHEMERIS_FINGERPRINTS) assert(!code.includes(print), `${file} holds ${JSON.stringify(print)}`);
-  }
-  // L1. dist/lite.js imports the four parts and holds nothing else; a part
-  // imports nothing.
+/** The entry's files must all be in the build. */
+function present(files) {
+  for (const file of ENTRY_FILES) assert(files.includes(file), `${file} is not in the build`);
+}
+
+/**
+ * L1: no file of the entry holds a dynamic import; dist/lite.js imports the
+ * four parts and holds nothing else; no part imports or re-exports a module.
+ * `files` are the dist/*.js paths ("dist/lite.js" and the like) and
+ * `read(path)` gives a file's text. Throws an AssertionError.
+ */
+export function checkLiteClosure({ files, read }) {
+  present(files);
+  for (const file of ENTRY_FILES) assert(!/\bimport\s*\(/u.test(read(file)), `dynamic import in ${file}`);
   const entry = read("dist/lite.js");
   const specifiers = [...entry.matchAll(STATEMENTS)].map((match) => match[1] ?? match[2]);
   assert.deepEqual(specifiers, LITE_PARTS.map((part) => `./lite-${part}.js`),
     "dist/lite.js must import exactly the four lite parts, declinations, sect, composite and dignities, in that order");
   assert.equal(entry, LITE_PARTS.map((part) => `export * from "./lite-${part}.js";\n`).join(""),
     "dist/lite.js must hold the four export lines of its parts and nothing else");
-  for (const file of parts) {
+  for (const file of PART_FILES) {
     for (const specifier of [...read(file).matchAll(STATEMENTS)].map((match) => match[1] ?? match[2])) {
       assert.fail(`${file} imports or re-exports ${specifier}; a lite part must import nothing`);
     }
   }
+}
 
-  // L2. The module list describes the build, and the entry holds only its pinned modules.
+/** L3: no file of the entry holds a string of EPHEMERIS_FINGERPRINTS. Throws an AssertionError. */
+export function checkLiteFingerprints({ files, read }) {
+  present(files);
+  for (const file of ENTRY_FILES) {
+    const code = read(file);
+    for (const print of EPHEMERIS_FINGERPRINTS) assert(!code.includes(print), `${file} holds ${JSON.stringify(print)}`);
+  }
+}
+
+/**
+ * L2: `metafile`, the build's merged module list, describes every dist/*.js
+ * file byte for byte; the entry's sources are the pinned ones; each part's
+ * sources, held modules and marked modules are inside its own pin; nothing
+ * is under node_modules/. Throws an AssertionError; returns the entry's
+ * static graph.
+ */
+export function checkLiteModules({ metafile, files, read }) {
+  present(files);
   checkModuleList({ metafile, files, read });
   const graph = staticGraph({ metafile, read, entryOutput: "dist/lite.js", entrySource: "src/lite.ts" });
-  assert.deepEqual(graph.outputs, sorted(closure), "the lite entry's static graph must be dist/lite.js and its four parts");
+  assert.deepEqual(graph.outputs, sorted(ENTRY_FILES), "the lite entry's static graph must be dist/lite.js and its four parts");
   assert.deepEqual(graph.sources, sorted(new Set(Object.values(LITE_SOURCES).flat())), "the lite entry's source graph is not the pinned one");
   for (const reading of [graph.sources, graph.held, graph.marked]) {
     for (const source of reading) assert(!source.includes("node_modules/"), `the lite entry holds ${source}`);
   }
   assert.deepEqual(Object.keys(metafile.outputs["dist/lite.js"].inputs ?? {}), ["src/lite.ts"], "dist/lite.js holds a module but src/lite.ts");
-  for (const [index, file] of parts.entries()) {
+  for (const [index, file] of PART_FILES.entries()) {
     const pinned = LITE_SOURCES[file];
     const part = staticGraph({ metafile, read, entryOutput: file, entrySource: `src/lite/${LITE_PARTS[index]}.ts` });
     assert.deepEqual(part.outputs, [file], `${file} loads another file`);
@@ -142,6 +157,17 @@ export function checkLiteEntry({ metafile, files, read }) {
     }
   }
   return graph;
+}
+
+/**
+ * The checks of the built entry, L3, L1 and L2 in that order, so that a
+ * build that fails one of them names its own fault first. Throws an
+ * AssertionError naming the first fault; returns the entry's static graph.
+ */
+export function checkLiteEntry({ metafile, files, read }) {
+  checkLiteFingerprints({ files, read });
+  checkLiteClosure({ files, read });
+  return checkLiteModules({ metafile, files, read });
 }
 
 /** Every name of LITE_NAMES, values and types, sorted. */
