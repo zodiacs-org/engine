@@ -571,7 +571,7 @@
       "value": 0.0032,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16",
+      "basis": "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -1583,7 +1583,7 @@
       "value": 0.00081,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16",
+      "basis": "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -2542,7 +2542,7 @@
       "value": 0.0012,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.00039 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "basis": "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.00039 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -3036,10 +3036,10 @@
       "tt": 0.46,
       "ut1": 0
      },
-     "asc": 0,
-     "mc": 0,
-     "vertex": 0,
-     "eastPoint": 0,
+     "asc": 3.986731712757319e-8,
+     "mc": 7.522605045551245e-8,
+     "vertex": 8.530928266736737e-7,
+     "eastPoint": 3.909566430593259e-9,
      "cusps": [
       0,
       0,
@@ -3189,23 +3189,23 @@
       "tt": 62.9991515242699,
       "ut1": 0.9
      },
-     "asc": 12.368593074581895,
-     "mc": 14.487702393583959,
-     "vertex": 9.333744567661597,
-     "eastPoint": 12.615699210803086,
+     "asc": 12.368822161818802,
+     "mc": 14.487946773402356,
+     "vertex": 9.33399369408658,
+     "eastPoint": 12.615938900016834,
      "cusps": [
-      12.368593074581895,
-      15.35702865693679,
-      16.331382862999817,
-      14.487702393676045,
-      12.531420096975125,
-      11.689123281660159,
-      12.368593074581895,
-      15.357028656844705,
-      16.331382862999817,
-      14.487702393583959,
-      12.531420096975125,
-      11.689123281660159
+      12.368822161818802,
+      15.35726083193745,
+      16.331623626660573,
+      14.487946773497129,
+      12.531661755162807,
+      11.689359272261735,
+      12.368822161821488,
+      15.357260831821192,
+      16.3316236266552,
+      14.487946773402356,
+      12.531661755149377,
+      11.689359272269792
      ]
     },
     "receipt": {
