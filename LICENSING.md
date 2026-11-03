@@ -61,7 +61,13 @@ SHA-256 the entry's preregistration records
   `untimedMoonSign` in `src/lib/share-card.ts` — the Moon signs possible over
   a date (`src/techniques/moon-sign.ts`)
 
-The site repository's `LICENSE` at that commit reserves all rights in its
+The lite entry's sect part, added in 1.1.0-rc.2 (`src/sect.ts`, built into
+`dist/lite-sect.js`), ports the rule of the Zodiacs.org module
+`src/lib/sect.ts`, the sect by the Sun's altitude (`sectReading`'s
+`"altitude"` convention), read at the site repository's commit
+`9a67f761bc231741c6571af2dfae65b798954e11` (2026-11-01).
+
+The site repository's `LICENSE` at both commits reserves all rights in its
 contents but the parts it names (the engine, which it states is MIT, its
 shared sky data and the GeoNames data), and grants no licence to this code.
 These modules therefore come into the package on the same condition as the
