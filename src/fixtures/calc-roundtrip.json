@@ -43,6 +43,15 @@
       "stepDays": 0.001
      }
     },
+    "band": {
+     "time": {
+      "tt": 0,
+      "ut1": 0.000809
+     },
+     "lon": 0,
+     "lat": 0,
+     "dist": 0
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -103,11 +112,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -173,6 +183,15 @@
       "stepDays": 0.001
      }
     },
+    "band": {
+     "time": {
+      "tt": 0,
+      "ut1": 0
+     },
+     "lon": 0,
+     "lat": 0,
+     "dist": 0
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -224,11 +243,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:pinned",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -293,6 +313,15 @@
       "stepDays": 0.001
      }
     },
+    "band": {
+     "time": {
+      "tt": 0.46,
+      "ut1": 0
+     },
+     "lon": 0.01933793272769435,
+     "lat": 0.0000030883583398138895,
+     "dist": 3.866344254271697e-10
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -344,11 +373,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -419,6 +449,15 @@
       "stepDays": 0.001
      }
     },
+    "band": {
+     "time": {
+      "tt": 73.19496883507185,
+      "ut1": 0.9
+     },
+     "lon": 4.014176416399812,
+     "lat": 0.5068774153322861,
+     "dist": 0.0000035561914993626048
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -482,11 +521,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -524,17 +564,26 @@
       "value": 0.0023,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
      },
      "distance": null,
      "speed": {
       "value": 0.0032,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16",
+      "basis": "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16",
       "method": "central-difference",
       "stepDays": 0.001
      }
+    },
+    "band": {
+     "time": {
+      "tt": 0.46,
+      "ut1": 0
+     },
+     "lon": 0.0021357926177027293,
+     "lat": 0.00019567276745569018,
+     "dist": null
     },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
@@ -586,11 +635,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -657,6 +707,15 @@
       "stepDays": 0.001
      }
     },
+    "band": {
+     "time": {
+      "tt": 0.46,
+      "ut1": 0
+     },
+     "lon": 0.0007307208571205592,
+     "lat": 0.00014665237189959157,
+     "dist": 9.872448821409327e-10
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -706,11 +765,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -773,6 +833,15 @@
       "stepDays": null
      }
     },
+    "band": {
+     "time": {
+      "tt": 0,
+      "ut1": 0.002256
+     },
+     "lon": 0,
+     "lat": 0,
+     "dist": 0
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -829,11 +898,12 @@
       "speed:analytic",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -899,6 +969,15 @@
       "stepDays": 0.001
      }
     },
+    "band": {
+     "time": {
+      "tt": 0,
+      "ut1": 11.890488150149935
+     },
+     "lon": 0,
+     "lat": 0,
+     "dist": 0
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -953,11 +1032,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1003,6 +1083,15 @@
       "method": "central-difference",
       "stepDays": 0.25
      }
+    },
+    "band": {
+     "time": {
+      "tt": 1.5810889410189446,
+      "ut1": 0.9
+     },
+     "lon": 0.015227677268109856,
+     "lat": 0.003710786260820185,
+     "dist": null
     },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
@@ -1059,11 +1148,12 @@
       "speed:central-difference-0.25d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1125,6 +1215,15 @@
       "stepDays": 0.001
      }
     },
+    "band": {
+     "time": {
+      "tt": 1.388548939082832,
+      "ut1": 0
+     },
+     "lon": 0.35238962904193005,
+     "lat": 0.043176519603773,
+     "dist": 4.026963593382336e-8
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -1178,11 +1277,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1251,6 +1351,15 @@
       "stepDays": 0.001
      }
     },
+    "band": {
+     "time": {
+      "tt": 42.39837277198139,
+      "ut1": 0.9
+     },
+     "lon": 1.8090430575714473,
+     "lat": 0.03096147949133909,
+     "dist": 1.3988117491356334e-7
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -1311,11 +1420,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1368,6 +1478,7 @@
      },
      "speed": null
     },
+    "band": null,
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -1429,7 +1540,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1465,17 +1576,26 @@
       "value": 0.0023,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
      },
      "distance": null,
      "speed": {
       "value": 0.00081,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16",
+      "basis": "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16",
       "method": "central-difference",
       "stepDays": 0.001
      }
+    },
+    "band": {
+     "time": {
+      "tt": 0,
+      "ut1": 0.000909
+     },
+     "lon": 0,
+     "lat": 0,
+     "dist": null
     },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
@@ -1535,11 +1655,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1601,6 +1722,15 @@
       "stepDays": 0.001
      }
     },
+    "band": {
+     "time": {
+      "tt": 96.59324509039506,
+      "ut1": 0.9
+     },
+     "lon": 0.06469964511691496,
+     "lat": 0.0017781868657242696,
+     "dist": 0.000014574918806497898
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -1656,11 +1786,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1726,6 +1857,15 @@
       "stepDays": 0.001
      }
     },
+    "band": {
+     "time": {
+      "tt": 0,
+      "ut1": 0.000827
+     },
+     "lon": 0,
+     "lat": 0,
+     "dist": 0
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -1787,11 +1927,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1957,6 +2098,30 @@
       "basis": "largest difference over the conformance suite's L2 cusp vectors, thirteen systems, whose arbiter is ERFA with each system's definition"
      }
     },
+    "band": {
+     "time": {
+      "tt": 0,
+      "ut1": 0.000811
+     },
+     "asc": 0.010547553254218894,
+     "mc": 0.013200481012572766,
+     "vertex": 0.008873251405165865,
+     "eastPoint": 0.011259911106514642,
+     "cusps": [
+      0.010547553254218894,
+      0.013260022405896927,
+      0.014644371095924395,
+      0.013200481012489785,
+      0.011322969351782137,
+      0.01032586498978942,
+      0.010547553254218894,
+      0.013260022405896927,
+      0.014644371095841416,
+      0.013200481012572766,
+      0.011322969351740647,
+      0.01032586498974793
+     ]
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -2007,11 +2172,12 @@
       "obliquity:iau2006",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2037,7 +2203,11 @@
       "at": "2024-03-20T03:06:26.001Z",
       "jdUt1": 2460389.6294674994,
       "jdTt": 2460389.630268345,
-      "retrograde": false
+      "retrograde": false,
+      "band": {
+       "utc": 0,
+       "ut1": 0.000809
+      }
      }
     ],
     "samples": 99,
@@ -2132,11 +2302,12 @@
       "search:scan-and-bisect",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2238,6 +2409,15 @@
       "stepDays": 0.001
      }
     },
+    "band": {
+     "time": {
+      "tt": 0.46,
+      "ut1": 0
+     },
+     "lon": 0.0011750240353928614,
+     "lat": 0.0000451305539533875,
+     "dist": 4.419438641732352e-8
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -2301,11 +2481,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2354,17 +2535,26 @@
       "value": 0.0036,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": null,
      "speed": {
       "value": 0.0012,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.00039 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "basis": "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.00039 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
       "method": "central-difference",
       "stepDays": 0.001
      }
+    },
+    "band": {
+     "time": {
+      "tt": 28.780813991895876,
+      "ut1": 0.9
+     },
+     "lon": 0.06346614479507628,
+     "lat": 0,
+     "dist": null
     },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
@@ -2424,11 +2614,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2504,6 +2695,15 @@
       "stepDays": 0.001
      }
     },
+    "band": {
+     "time": {
+      "tt": 0.000811,
+      "ut1": 0
+     },
+     "lon": 0.000041455804265730256,
+     "lat": 0.000001368170546523421,
+     "dist": 4.691356625193322e-11
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -2575,11 +2775,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2667,6 +2868,15 @@
       "stepDays": 0.001
      }
     },
+    "band": {
+     "time": {
+      "tt": 0,
+      "ut1": 0.000827
+     },
+     "lon": 0,
+     "lat": 0,
+     "dist": 0
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -2738,11 +2948,12 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2820,6 +3031,30 @@
       "basis": "largest difference over the conformance suite's L2 cusp vectors, thirteen systems, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      }
     },
+    "band": {
+     "time": {
+      "tt": 0.46,
+      "ut1": 0
+     },
+     "asc": 0,
+     "mc": 0,
+     "vertex": 0,
+     "eastPoint": 0,
+     "cusps": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -2866,11 +3101,12 @@
       "obliquity:iau2006",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2948,6 +3184,30 @@
       "basis": "largest difference over the conformance suite's L2 cusp vectors, thirteen systems, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      }
     },
+    "band": {
+     "time": {
+      "tt": 62.9991515242699,
+      "ut1": 0.9
+     },
+     "asc": 12.368593074581895,
+     "mc": 14.487702393583959,
+     "vertex": 9.333744567661597,
+     "eastPoint": 12.615699210803086,
+     "cusps": [
+      12.368593074581895,
+      15.35702865693679,
+      16.331382862999817,
+      14.487702393676045,
+      12.531420096975125,
+      11.689123281660159,
+      12.368593074581895,
+      15.357028656844705,
+      16.331382862999817,
+      14.487702393583959,
+      12.531420096975125,
+      11.689123281660159
+     ]
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -2998,11 +3258,12 @@
       "obliquity:iau2006",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3031,13 +3292,21 @@
       "at": "2026-01-25T08:05:56.475Z",
       "jdUt1": 2461065.8374600294,
       "jdTt": 2461065.838259942,
-      "retrograde": false
+      "retrograde": false,
+      "band": {
+       "utc": 0,
+       "ut1": 0.000817
+      }
      },
      {
       "at": "2026-02-21T13:37:15.522Z",
       "jdUt1": 2461093.067541545,
       "jdTt": 2461093.068341505,
-      "retrograde": false
+      "retrograde": false,
+      "band": {
+       "utc": 0,
+       "ut1": 0.000817
+      }
      }
     ],
     "samples": 61,
@@ -3133,11 +3402,12 @@
       "search:scan-and-bisect",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3393,9 +3663,67 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.1"
+     "engineVersion": "1.1.0-rc.2"
     },
     "sidereal": null,
+    "band": {
+     "time": {
+      "tt": 0,
+      "ut1": 0.000842
+     },
+     "bodies": [
+      {
+       "body": "Sun",
+       "lon": 0
+      },
+      {
+       "body": "Moon",
+       "lon": 0
+      },
+      {
+       "body": "Mercury",
+       "lon": 0
+      },
+      {
+       "body": "Venus",
+       "lon": 0
+      },
+      {
+       "body": "Mars",
+       "lon": 0
+      },
+      {
+       "body": "Jupiter",
+       "lon": 0
+      },
+      {
+       "body": "Saturn",
+       "lon": 0
+      },
+      {
+       "body": "Uranus",
+       "lon": 0
+      },
+      {
+       "body": "Neptune",
+       "lon": 0
+      },
+      {
+       "body": "Pluto",
+       "lon": 0
+      },
+      {
+       "body": "North Node",
+       "lon": 0
+      },
+      {
+       "body": "South Node",
+       "lon": 0
+      }
+     ],
+     "asc": 0.010152644730735029,
+     "mc": 0.013531596998297084
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -3459,11 +3787,12 @@
       "speed:central-difference-0.25d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3729,9 +4058,67 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.1"
+     "engineVersion": "1.1.0-rc.2"
     },
     "sidereal": null,
+    "band": {
+     "time": {
+      "tt": 0,
+      "ut1": 0.000804
+     },
+     "bodies": [
+      {
+       "body": "Sun",
+       "lon": 0
+      },
+      {
+       "body": "Moon",
+       "lon": 0
+      },
+      {
+       "body": "Mercury",
+       "lon": 0
+      },
+      {
+       "body": "Venus",
+       "lon": 0
+      },
+      {
+       "body": "Mars",
+       "lon": 0
+      },
+      {
+       "body": "Jupiter",
+       "lon": 0
+      },
+      {
+       "body": "Saturn",
+       "lon": 0
+      },
+      {
+       "body": "Uranus",
+       "lon": 0
+      },
+      {
+       "body": "Neptune",
+       "lon": 0
+      },
+      {
+       "body": "Pluto",
+       "lon": 0
+      },
+      {
+       "body": "North Node",
+       "lon": 0
+      },
+      {
+       "body": "South Node",
+       "lon": 0
+      }
+     ],
+     "asc": null,
+     "mc": null
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -3788,11 +4175,12 @@
       "speed:central-difference-0.25d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -4051,7 +4439,7 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.1"
+     "engineVersion": "1.1.0-rc.2"
     },
     "sidereal": {
      "ayanamsa": {
@@ -4135,6 +4523,64 @@
       180
      ]
     },
+    "band": {
+     "time": {
+      "tt": 0,
+      "ut1": 0.000842
+     },
+     "bodies": [
+      {
+       "body": "Sun",
+       "lon": 0
+      },
+      {
+       "body": "Moon",
+       "lon": 0
+      },
+      {
+       "body": "Mercury",
+       "lon": 0
+      },
+      {
+       "body": "Venus",
+       "lon": 0
+      },
+      {
+       "body": "Mars",
+       "lon": 0
+      },
+      {
+       "body": "Jupiter",
+       "lon": 0
+      },
+      {
+       "body": "Saturn",
+       "lon": 0
+      },
+      {
+       "body": "Uranus",
+       "lon": 0
+      },
+      {
+       "body": "Neptune",
+       "lon": 0
+      },
+      {
+       "body": "Pluto",
+       "lon": 0
+      },
+      {
+       "body": "North Node",
+       "lon": 0
+      },
+      {
+       "body": "South Node",
+       "lon": 0
+      }
+     ],
+     "asc": 0.010152644730735029,
+     "mc": 0.013531596998297084
+    },
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -4201,11 +4647,12 @@
       "speed:central-difference-0.25d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
