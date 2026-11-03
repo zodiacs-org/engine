@@ -90,9 +90,11 @@ a rule it did not name.
   the ascendant counts to the night, and one exactly on the descendant to the
   day. The root's `chartPoints` takes a chart's sect this way.
 
-The two agree wherever the midheaven is above the horizon. Inside the polar
-circles it can be below it, and then the ecliptic rule gives the opposite of
-the Sun's altitude ([timing-hellenistic.md](timing-hellenistic.md),
+The two agree wherever the midheaven is above the horizon, but for a Sun
+exactly on the ascendant: taken on the ecliptic, its altitude there is 0, so
+the altitude rule gives the day and the ecliptic rule the night. Inside the
+polar circles the midheaven can be below the horizon, and then the ecliptic
+rule gives the opposite of the Sun's altitude ([timing-hellenistic.md](timing-hellenistic.md),
 *Flags*). That guide's two charts at 78.2° N show it: on 1810-01-07 at 17.8405° E the
 ecliptic rule gives day with the Sun 11.0° below the horizon, and on
 2100-06-26 at 22.924° W night with the Sun 12.1° above it; the altitude rule
@@ -105,9 +107,10 @@ Jupiter, Saturn) or `NOCTURNAL_PLANETS` (the Moon, Venus, Mars), then the
 other half, with Mercury last in the list its side belongs to. Mercury goes
 with the day when it is oriental, rising ahead of the Sun, and with the night
 when it is occidental. `orientality(bodyLon, sunLon)` decides it: oriental
-when the signed arc from the body to the Sun, in (-180, 180], is above 0.
-Exactly opposite the Sun counts as oriental, and exactly on it as
-occidental. Uranus, Neptune and Pluto are on neither list. The result and
+when the signed arc from the body to the Sun, in (-180, 180], is above 0,
+each longitude taken modulo 360 first, so that one of any size counts as its
+place on the circle. Exactly opposite the Sun counts as oriental, and exactly
+on it as occidental. Uranus, Neptune and Pluto are on neither list. The result and
 its lists are frozen; `sunAltitude` is the altitude given, unchanged, or
 null under the ecliptic convention, and `mercury` is null when no Mercury
 longitude was given (null or absent).

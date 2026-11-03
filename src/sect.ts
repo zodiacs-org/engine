@@ -44,13 +44,14 @@ function degrees(value: unknown, name: string): number {
 
 /**
  * Whether a body rises ahead of the Sun or behind it, from their ecliptic
- * longitudes in degrees, finite and of any size. The signed arc from the body
- * to the Sun, in (-180, 180], is above 0 for an oriental body: one earlier in
- * the order of the signs, which the ascendant reaches first. A body exactly
- * opposite the Sun is oriental, and one exactly on it occidental.
+ * longitudes in degrees, finite and of any size: each is reduced modulo 360,
+ * which is exact, before their difference is taken. The signed arc from the
+ * body to the Sun, in (-180, 180], is above 0 for an oriental body: one
+ * earlier in the order of the signs, which the ascendant reaches first. A body
+ * exactly opposite the Sun is oriental, and one exactly on it occidental.
  */
 export function orientality(bodyLon: number, sunLon: number): Orientality {
-  const raw = (((degrees(sunLon, "sunLon") - degrees(bodyLon, "bodyLon")) % 360) + 360) % 360;
+  const raw = (((degrees(sunLon, "sunLon") % 360 - degrees(bodyLon, "bodyLon") % 360) % 360) + 360) % 360;
   return (raw > 180 ? raw - 360 : raw) > 0 ? "oriental" : "occidental";
 }
 

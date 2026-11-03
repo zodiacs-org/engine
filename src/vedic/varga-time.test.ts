@@ -157,7 +157,12 @@ function disagreements(result: VargaSensitivity, birth: BirthInput, ayanamsa: Ay
       }
       const tick = Math.round(change.boundary * T);
       const [before, after] = [lon(at - 1, row.point).lon, lon(at, row.point).lon];
-      const arc = (end: number) => ((end - before + 540) % 360) - 180;
+      // Wrapped once into (−180, 180], not through + 540, where a step of one unit in the last place of a
+      // longitude rounds to 0 (review 2 of 1.1.0-rc.2).
+      const arc = (end: number) => {
+        const d = end - before;
+        return d > 180 ? d - 360 : d <= -180 ? d + 360 : d;
+      };
       const step = arc(after);
       const reach = arc(tick / T);
       if (change.boundary !== tick / T || !changeBoundaries(row.varga, row.scheme).includes(tick) ||
@@ -268,6 +273,18 @@ describe("the search core: analytic contract cases", () => {
     const station = (ms: number) => 101 - 2 ** -30 - (ms - 10_000) ** 2 * 2 ** -30;
     expect(searchRuns(station, 0, [0, 2 ** -14], [run(100.5, 101)], 0, -30_000, 30_000, []))
       .toEqual([[[-13_170, 100.5 * T]], [null]]);
+  });
+
+  it("a station whose last step onto a boundary is one unit in the last place: the boundary that step reaches", () => {
+    // Review 2 of 1.1.0-rc.2: the longitude peaks at 285 at m, and 285 − 2^−44 is the double below 285, so
+    // the last step is 2^−44°, which the direction test rounded to 0 through + 180 and % 360, giving the
+    // run's other end. Every value is 285 − k 2^−44 for a whole k below 2^44, which a double holds exactly;
+    // the longitude leaves the run below 284.5 where k exceeds 2^43, at m − 2,965,821.
+    const m = 10_000;
+    const station = (ms: number) => 285 - (ms - m) ** 2 * 2 ** -44;
+    expect(station(m - 1)).toBe(285 - 2 ** -44);
+    expect(searchRuns(station, 0, [0, 2 ** -20], [run(284.5, 285)], 0, -3_000_000, 3_000_000, []))
+      .toEqual([[[m - 2_965_820, 284.5 * T]], [[m, 285 * T]]]);
   });
 
   it("a seam stepping forward across a boundary changes on the seam's first millisecond", () => {
@@ -474,6 +491,26 @@ describe("the docs' synthetic birth (docs/vedic.md), a regression example", () =
   it("is borne out by the public API, row by row", () => {
     expect(disagreements(call(), birth, AYANAMSAS.lahiri)).toEqual([]);
   });
+});
+
+describe("review 2's station against a boundary, through the public API", () => {
+  // Review 2 of 1.1.0-rc.2 (programme notes, review2/code/varga/station-d2/case.json and station-case/case.json):
+  // Saturn's retrograde station of May 2020 planted against a boundary with a caller's epoch ayanamsa, at a
+  // synthetic place. Its sidereal longitude reaches the boundary from one unit in the last place below it, at
+  // 2020-05-11T03:06:51.806Z: 284.99999999999994 to 285 for the D2, and 277.99999999999994 to 278 for the D60.
+  // Before the fix the change came back with the run's other end, 255 and 277.5.
+  const birth: BirthInput = { utc: "2020-05-10T21:07:02.000Z", latitude: 30, longitude: 0, houseSystem: "whole" };
+  it.each([
+    ["D2", 285, 16.676891618933478, "cancer", "leo"],
+    ["D60", 278, 23.676891618933478, "aries", "taurus"]
+  ] as const)("a last step of one unit in the last place: the %s change gives the boundary it reaches, %s", (varga, boundary, value, from, to) => {
+    const definition = userAyanamsa({ name: "probe", epoch: { julianDateTT: 2_451_545 }, value });
+    const result = vargaSensitivity(birth, definition, { points: ["Saturn"], vargas: [varga], horizonMinutes: 720 });
+    expect(result.rows[0]!.next).toEqual({ at: "2020-05-11T03:06:51.806Z", minutes: 359.8301, boundary, from, to });
+    const at = Date.parse("2020-05-11T03:06:51.806Z");
+    expect([publicAt(birth, definition, at - 1)("Saturn").lon, publicAt(birth, definition, at)("Saturn").lon]).toEqual([boundary - 2 ** -44, boundary]);
+    expect(disagreements(result, birth, definition)).toEqual([]);
+  }, 60_000);
 });
 
 describe("a star definition near the Sun", () => {

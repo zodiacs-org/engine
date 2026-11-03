@@ -613,3 +613,18 @@ lexicon 2, so once their old records go, `eng.crossings-blind-band`,
 unless the lexicon or those claims change in the adoption. The amendments
 above change packed text (items 1 and 2), so S1 is due again on the review
 commit's candidate (section 5).
+
+**2026-11-04, review 2: item 1's text cites summary.json.** Review 2 of
+1.1.0-rc.2 (programme notes, `notes/rc2-2026-11-01/review2/`, outside this
+repository) found that README.md and CHANGELOG.md cite `conformance/RESULTS.md`
+for 0.014″, while RESULTS.md prints the Vertex's maximum as 0.013″, rounded to
+the nearest 0.001″; the 0.014″ is `conformance/results/summary.json`'s
+unrounded maximum, 0.013370956″, rounded up (the amendment "review 1: item
+1's figure, its E2 phrase and E10"). Adopted after review 2, before any
+formal run: item 1's text now ends "they are within 0.014″ and 0.007″
+(`conformance/RESULTS.md`, which rounds to the nearest 0.001″, and
+`conformance/results/summary.json`).", and CHANGELOG.md cites the two files
+the same way. Edit 1-V3 in `tools/f89_edits.py` writes the new text. E2's
+phrase for item 1 ends at "0.007″" and does not change; E10's test in
+`src/points.test.ts` reads the README's sentence with its new citation, and
+its controls do not change. No figure changes.

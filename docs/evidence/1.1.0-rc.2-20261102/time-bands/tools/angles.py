@@ -112,9 +112,22 @@ def judged(record):
     return selected(record) and time_bands(record['instant'])[0] == 0
 
 
+def rotated_bands(records):
+    """Control b since review 2: each judged record's UT1 band replaced by the next larger distinct UT1
+    band among the judged records (the largest by the smallest), a wrong band of the right kind. With one
+    distinct band among them, as on T0, there is no wrong one to take, and the control cannot fail."""
+    values = sorted({time_bands(r['instant'])[1] for r in records
+                     if 'C3' in r.get('checks', []) and not r.get('refused') and judged(r)})
+    return {value: values[(k + 1) % len(values)] for k, value in enumerate(values)}
+
+
 def problems_of(l2, records, variant=None):
     problems, raised, reported, unjudged = [], [], [], []
     tropical = {}
+    # Control b was "the TT band in place of the UT1 band"; since review 1 every judged record's TT band is
+    # 0, so it asked only for a band of 0. Since review 2 (the amendment of 2026-11-04) it puts another
+    # judged record's UT1 band in place of the record's own (rotated_bands).
+    rotated = rotated_bands(records) if variant == 'b' else None
     for record in records:
         if 'C3' not in record.get('checks', []) or record.get('refused') or not selected(record):
             continue
@@ -123,7 +136,7 @@ def problems_of(l2, records, variant=None):
             # The band adds the rate on TT times the TT band, which the arbiter's geometry does not give.
             unjudged.append(record)
             continue
-        sigma = tt if variant == 'b' else ut1
+        sigma = rotated[ut1] if variant == 'b' else ut1
         step = SOLAR_SECOND if variant == 'a' else ONE_SECOND
         band = record['band']
         sidereal = 'zodiac' in record['request']
@@ -176,7 +189,7 @@ def main():
     judged_count = sum(1 for r in records if 'C3' in r.get('checks', []) and not r.get('refused') and judged(r))
     controls = {
         'a: the solar-time rate, 15 arcseconds a second': problems_of(l2, records, 'a')[0],
-        'b: the TT band in place of the UT1 band': problems_of(l2, records, 'b')[0],
+        'b: another judged record\'s UT1 band, the next larger, in place of its own': problems_of(l2, records, 'b')[0],
     }
     report = {
         'check': 'C3',

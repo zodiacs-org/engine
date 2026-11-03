@@ -193,6 +193,15 @@ describe("sectReading at its boundaries", () => {
     expect(sectReading({ convention: "ecliptic", ascendant: 720, sunLon: -10 }).sect).toBe("day");
   });
 
+  it("takes each longitude modulo 360 before the difference, so orientality reads one of any size as its place on the circle", () => {
+    // Review 2 of 1.1.0-rc.2: 3.6e17 is 360 × 10^15, whose remainder is exactly 0, while 3.6e17 − 175, the
+    // difference taken first, rounds to a multiple of 64 and gave "oriental"; and so for −3.6e17 and 10.
+    expect(orientality(175, 0)).toBe("occidental");
+    expect(orientality(175, 3.6e17)).toBe("occidental");
+    expect(orientality(0, 10)).toBe("oriental");
+    expect(orientality(-3.6e17, 10)).toBe("oriental");
+  });
+
   it("reads the two charts at 78.2° N of docs/timing-hellenistic.md: each convention gives the other's sect", () => {
     const polarNight = { utc: "1810-01-07T11:57:42.814Z", latitude: 78.2, longitude: 17.8405 } as const;
     const midnightSun = { utc: "2100-06-26T00:24:28.491Z", latitude: 78.2, longitude: -22.924 } as const;

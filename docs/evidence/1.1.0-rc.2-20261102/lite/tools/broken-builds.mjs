@@ -8,9 +8,19 @@
 // (L2). This checkout's own build must pass all three, and each broken build
 // must fail the check it is the control of:
 //
-// - L1 a: the composite part also re-exporting compositeChart, so that esbuild
-//   inlines astronomy-engine (fails L3 and L2);
-// - L1 b: the same, built with astronomy-engine external (fails L1);
+// - L1 a: dist/lite.js also re-exporting compositeChart, the case
+//   ../PREREGISTRATION.md (section 3, L1) names: this checkout's four parts as
+//   the build makes them, and dist/lite.js with a fifth export line,
+//   `export { compositeChart } from "./lite-composite-chart.js";`, whose file
+//   esbuild bundles from src/techniques/relationship.ts, inlining
+//   astronomy-engine (fails L1). Until review 2 (the amendment "2026-11-04,
+//   review 2: L1's control (a) is the case it names") the tool built the next
+//   case under this name, which L1 passes, and marked it as behaving when L3
+//   and L2 failed;
+// - L3 and L2, extra: the composite part also re-exporting compositeChart, so
+//   that esbuild inlines astronomy-engine into the part (fails L3 and L2);
+// - L1 b: the composite part re-exporting compositeChart, built with
+//   astronomy-engine external (fails L1);
 // - L1 c: the four parts built with splitting on (fails L1);
 // - L2 a: the composite part built from src/techniques/relationship.ts, whose
 //   sources then include src/api.ts (fails L2);
@@ -82,6 +92,33 @@ async function buildLite(dir, variant = {}) {
   return fromDirectory(outdir, metafile);
 }
 
+/**
+ * L1's control (a) as ../PREREGISTRATION.md names it, "lite.js also
+ * re-exporting compositeChart": this checkout's four parts as the build makes
+ * them, then dist/lite.js with a fifth export line naming
+ * dist/lite-composite-chart.js, into which esbuild bundles
+ * src/techniques/relationship.ts, astronomy-engine inlined; its module list
+ * describes the new file and the fifth import.
+ */
+async function liteReexportingCompositeChart(dir) {
+  const { metafile } = await buildLite(dir);
+  const outdir = join(dir, "dist");
+  const extra = await build({
+    absWorkingDir: checkout,
+    entryPoints: { "lite-composite-chart": "src/techniques/relationship.ts" },
+    bundle: true, splitting: false, format: "esm", platform: "neutral", target: "es2022", tsconfig: "tsconfig.build.json",
+    metafile: true, minify: false, outdir, write: true, logLevel: "silent"
+  });
+  const liteJs = `${LITE_PARTS.map((part) => `export * from "./lite-${part}.js";\n`).join("")}export { compositeChart } from "./lite-composite-chart.js";\n`;
+  writeFileSync(join(outdir, "lite.js"), liteJs);
+  Object.assign(metafile.inputs, extra.metafile.inputs);
+  for (const [path, output] of Object.entries(extra.metafile.outputs)) metafile.outputs[`dist/${basename(path)}`] = output;
+  metafile.outputs["dist/lite.js"].bytes = Buffer.byteLength(liteJs);
+  metafile.outputs["dist/lite.js"].imports.push({ path: "dist/lite-composite-chart.js", kind: "import-statement" });
+  metafile.inputs["src/lite.ts"].imports.push({ path: "src/techniques/relationship.ts", kind: "import-statement" });
+  return fromDirectory(outdir, metafile);
+}
+
 /** A build as the checks read it: the .js files of `outdir`, read from it, with `metafile`. */
 function fromDirectory(outdir, metafile) {
   const files = readdirSync(outdir).filter((name) => name.endsWith(".js")).map((name) => `dist/${name}`);
@@ -126,9 +163,11 @@ try {
   const baseline = verdicts(own);
 
   const cases = [
-    ["L1 a: composite part re-exporting compositeChart, astronomy-engine inlined", ["L3", "L2"],
-      () => buildLite(join(scratch, "l1a"), { plugins: [rewrite("src/lite/composite.ts", withCompositeChart)] })],
-    ["L1 b: the same, astronomy-engine external", ["L1"],
+    ["L1 a: dist/lite.js also re-exporting compositeChart, a fifth export line, astronomy-engine inlined in its file", ["L1"],
+      () => liteReexportingCompositeChart(join(scratch, "l1a"))],
+    ["L3 and L2, extra: composite part re-exporting compositeChart, astronomy-engine inlined", ["L3", "L2"],
+      () => buildLite(join(scratch, "extra"), { plugins: [rewrite("src/lite/composite.ts", withCompositeChart)] })],
+    ["L1 b: composite part re-exporting compositeChart, astronomy-engine external", ["L1"],
       () => buildLite(join(scratch, "l1b"), { plugins: [rewrite("src/lite/composite.ts", withCompositeChart)], external: ["astronomy-engine"] })],
     ["L1 c: the four parts built with splitting on", ["L1"], () => buildLite(join(scratch, "l1c"), { splitting: true })],
     ["L2 a: composite part built from src/techniques/relationship.ts", ["L2"],

@@ -812,3 +812,106 @@ largest linear rate and 66.498271498° for a star definition (0.0213), so 66°
 is a margin short of where the lower bound reaches zero, as section 7 and
 section 12 have it; the detail and `docs/vedic.md` now say so. No rule
 changes.
+
+**2026-11-04, review 2: what the second review ran before the formal run.**
+Review 2 of 1.1.0-rc.2 (programme notes, `notes/rc2-2026-11-01/review2/`,
+outside this repository) ran, on the build of 4f4c1e8 and before any formal
+run: `tools/run.mjs` and `tools/checker.mjs` on both cases of F3b, with that
+build (PASS) and with a copy of it whose seam finder returns none (M6 failed
+on both cases, as C3d requires); `vargaSensitivity` called directly, with
+both builds, on the same two cases and on F3's cases 2, 3, 8, 10 and 11;
+`run.mjs` and `checker.mjs` on a development corpus of 24 births that
+`tools/generate.mjs` drew with seed 4242 (PASS); `tools/time_per_arcsecond.mjs`,
+G-V5's table; and `tools/derived_bounds.py` with its control latitude. It
+wrote F2's and F4's files, F3b, `c3d-replica.json` and `rate-premises.json`
+again with their generators and found them byte for byte the committed ones,
+and it made no `vargaSensitivity` call on any birth of F2 or F4. It also ran
+synthetic probes, among them the two station cases of the next amendment.
+Nothing of it was committed. The amendment "review 1: C3d and the seam input
+F3b" says that "No case of F2, F3 or F4 was run, and no `vargaSensitivity`
+call was made on F3b": true when it was written, that no longer holds for F3
+and F3b. So F3b's two cases, those five cases of F3, C3d's outcome on F3b and
+G-V5's table have been seen (section 2), and every reading they touch counts
+as `validated` only until the owner ratifies it (this section's preamble);
+under OQ5 the unit is `validated` at most anyway. The formal run still runs
+F2, F3 and F3b as section 6 and the amendments above fix them.
+
+**2026-11-04, review 2: the boundary of a change at a station.** Review 2
+found that the search could name the wrong `boundary` where a point reaches
+a boundary in its last millisecond by a step of one unit in the last place
+of its longitude, as at a station. `searchRuns` took a change's direction
+from `signed(x(at) − x(at − 1)) > 0`, with `signed(d)` written as
+turn(d + 180) − 180; near 540 that sum rounds any step of up to 2^−44° (half
+a unit in the last place of 540) to 0, so the change was taken for one going
+the other way, and `boundary` named the run's other end, while `at`, `from`
+and `to` were right. Review 2's case (synthetic: Saturn's station of May 2020
+at 30° N, 0° E, birth 2020-05-10T21:07:02.000Z on UTC, a caller's epoch
+ayanamsa of 16.676891618933478° at JD 2451545.0 TT, the D2, a horizon of 720
+minutes): the public API's longitude goes from 284.99999999999994 to 285 at
+2020-05-11T03:06:51.806Z, and `next` gave the boundary 255; with the value
+23.676891618933478° and the D60, it gave 277.5 for 278. The checker could not
+see it: M4 took the direction through the same form (`arc` in
+`tools/checker.mjs`), so it looked for the reported boundary on the arc the
+other way, found it there, and passed it; on the D2 case the verdict was
+PASS. Adopted after review 2, before any formal run; no reading of section 3,
+and no rule or control of section 8, changes:
+
+- *The fix.* `signed` in `src/vedic/varga-time.ts` is the plain difference
+  of two longitudes in [0, 360), wrapped once: d − 360 above 180, d + 360 at
+  or below −180, d otherwise. It also gives the distance to a run's end that
+  sizes a body's step. `arc` in `tools/checker.mjs`, which M4 uses, and `arc`
+  in the test's `disagreements` (`src/vedic/varga-time.test.ts`) are written
+  the same way. Under the checker so changed, review 2's results from
+  4f4c1e8's build fail M4 (and G-V2 (b)) on both cases, and `run.mjs` with
+  this commit's build gives 285 and 278 there, which pass every check (a run
+  on review 2's two synthetic case files; outputs in the programme notes).
+- *The named tests* (section 8) gain two contract cases. In "the search
+  core: analytic contract cases", "a station whose last step onto a boundary
+  is one unit in the last place: the boundary that step reaches": the
+  longitude 285 − (t − m)² 2^−44, exact in doubles, which peaks at 285 at m;
+  the search must give [m, 285] as `next` and [m − 2,965,820, 284.5] as
+  `previous`. And review 2's two cases through the public API, "review 2's
+  station against a boundary, through the public API": `next` must be the
+  instant above with the boundary 285 (D2, cancer to leo) and 278 (D60, aries
+  to taurus), the public API must give the boundary less 2^−44 at at − 1 ms
+  and the boundary at `at`, and the row must have no disagreement in the
+  test's `disagreements`. Their control, in `tools/test-controls.mjs`:
+  `signed` written as before, turn(d + 180) − 180, which must fail all three.
+  Run once on this commit's tree, not the formal run, it failed exactly those
+  three, and the tests pass as they stand.
+
+**2026-11-04, review 2: the procedure's checks can fail.** Review 2 found four
+steps of `tools/checks.sh` that could not fail: it wrote `boundaries.json`'s
+SHA-256 without comparing it with the recorded value; section 7's control at
+66.6° exited 0 whatever the script said; the named-test step left out the
+existing Vedic tests that section 8's table lists; and G-V5's `--check` ran
+straight after `--write`, against the table just written. Adopted after
+review 2, before any formal run; no pass rule changes:
+
+- The SHA-256 of `boundaries.json` (section 6), of the inputs and their
+  generators (INPUTS.md, section 1) and of F3b and its generator (the
+  amendment "review 1: C3d and the seam input F3b") are compared with the
+  recorded values (`shasum -c`), as a check.
+- Section 7's control is a step of its own, a control: a check that asks for
+  a real lower bound at 66.6°, which fails only where the table's three rows
+  for 66.6° have none and the script says so on stderr for each of its three
+  rates. Tried on this commit's tree, it failed on the table with the 66.6°
+  rows and passed on a table without them.
+- The named-test step runs every `src/vedic/*.test.ts` and
+  `src/sign-rulers.test.ts`.
+- G-V5: the formal run writes the table (`--table`, `--write`) and runs its
+  control on a copy (`--control-copy`, then `--check` on the copy, which must
+  fail). `--check` against `docs/vedic.md` is now a step of `../gates.sh`,
+  after its build, against the table as committed: `gates.sh` runs again on
+  the source commit, which commits the table. Before the table is written the
+  step says so and does not count; a table written but not committed fails
+  it.
+
+**2026-11-04, review 2: the derived bounds' output is committed.**
+`docs/vedic.md` cited 66.498° from `tools/derived_bounds.py`, whose output
+was in no committed file, only in the amendment "review 1: 66° is a margin".
+The script's output is now committed beside this file as `derived-bounds.json`
+(`python3 -I -B tools/derived_bounds.py --out derived-bounds.json`, Python
+3.9.6, without a further latitude), and `docs/vedic.md` cites it. It gives
+66.498285945°, 66.498284072° and 66.498271498° for the three rates, as that
+amendment says. No rule changes.

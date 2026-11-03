@@ -65,6 +65,10 @@ EDITS = [
             "  23.38° N, where the zenith is 0.075° from the ecliptic.\n"
         ),
     },
+    # Edit 1-V3's new text cites conformance/results/summary.json beside
+    # conformance/RESULTS.md, which rounds to the nearest 0.001″, since review
+    # 2 (PREREGISTRATION.md, section 12, 2026-11-04); E2's phrase for item 1,
+    # which ends at "0.007″", does not change.
     {
         "id": "1-V3", "item": 1, "claim": "eng.points-vertex-given", "file": "README.md", "packed": True,
         "variant": "owner-V3", "twin": "1",
@@ -76,7 +80,8 @@ EDITS = [
             "  supplied chart's angles. On the conformance suite's ten L2 vectors for them,\n"
             "  from 1833 to 2182 at latitudes from 60° S to 60° N, whose arbiter is ERFA's\n"
             "  sidereal time and obliquity with each point's published definition, they are\n"
-            "  within 0.014″ and 0.007″ (`conformance/RESULTS.md`).\n"
+            "  within 0.014″ and 0.007″ (`conformance/RESULTS.md`, which rounds to the\n"
+            "  nearest 0.001″, and `conformance/results/summary.json`).\n"
         ),
     },
     # 2. eng.crossings-blind-band (README and the crossing search's doc comment).

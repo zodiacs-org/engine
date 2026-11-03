@@ -26,8 +26,8 @@ Each folder holds the unit's `PREREGISTRATION.md`. The commit "Preregister
 1.1.0-rc.2's units before any code" committed the five together and nothing
 else, before any code of the cut, and none has been edited in place since:
 the owner's answers, the varga sensitivity's departures from its design and
-the changes made after review 1 are dated amendments added to each one's
-amendments section, with no line removed or changed. The varga sensitivity's
+the changes made after reviews 1 and 2 are dated amendments added to each
+one's amendments section, with no line removed or changed. The varga sensitivity's
 inputs (`INPUTS.md`, `births.json`, `births-erfa.json` and `seams.json`, with
 their generators) followed in "Fix the inputs of the varga sensitivity
 check", before any of its code; after review 1 a further seam input,
@@ -36,7 +36,9 @@ a dated amendment. Each unit's check tools are in its `tools/`, committed
 before its formal runs; `f89/` also has its own README and item 2's
 blind-band record, and the amendments made after review 1 have the outputs
 they cite beside them (`time-bands/tt-step.json` and `distance-floor.json`,
-`varga-sensitivity/c3d-replica.json` and `rate-premises.json`).
+`varga-sensitivity/c3d-replica.json` and `rate-premises.json`), and so does
+the amendment made after review 2 for the varga sensitivity's derived bounds
+(`varga-sensitivity/derived-bounds.json`).
 `docs/evidence/calc-api/tools/bounds.py`, the generator of
 `src/calc-bounds.ts`, gained `MEAN_POINTS_BASIS` and, after review 1,
 `MEAN_POINTS_SPEED_BASIS`, and no bound's value changed (`f89/README.md`,
@@ -54,6 +56,14 @@ answered under that delegation and stay with the owner. Until the owner
 ratifies those readings, a unit that these runs decide can be `validated`,
 not `accepted`, and F-53 is recorded "fixed and deployed; readings awaiting
 ratification".
+
+SR, the cut's scratch site run on b11c5e8, found the time bands' check C8
+void as run: the claims extractor did not list its control sentence
+(`time-bands/PREREGISTRATION.md`, the amendment of 2026-11-03 on SR). So
+version 1 of P1.M3c cannot meet R-M3c on C8 in this cut, whatever its other
+checks give; C8's version 2 is due in the site's adoption. The lite entry's
+B5, whose control was the same sentence, did not behave there either
+(`lite/PREREGISTRATION.md`, its amendment on SR).
 
 ## Regenerated on Linux x86-64
 
@@ -87,14 +97,33 @@ exits 0.
   reported; its output is recorded with the time bands' formal results
   (below).
 
+The commit "Regenerate the x86-64 outputs after review 1" (`8173f1e`) ran
+the same script again, with the official Node 22.22.2 linux-x64 build in an
+x86-64 virtual machine on a Mac, under emulation, because review 1's batch A
+moved calc values: the `houses()` bands of the fixture's cases 30
+and 31 gained the angles' rate on TT, and the speed bounds of the three
+mean-point cases took `MEAN_POINTS_SPEED_BASIS`. It built from the tree of
+`6d7486d`, the commit before it, and its output is
+`results/x86-64-regeneration-after-review-1.log`. Every step exits 0; the
+conformance outputs came back byte for byte as committed, and only the
+fixture changed, so the fixture in the tree is that run's. The two logs have
+the same header and name no commit; the commits that took them in say which
+tree each built. After review 2, `time-bands/tools/fixture-diff.mjs` holds each
+allowed change to its own rule (the time bands' amendment of 2026-11-04,
+"review 2: C6's tool holds each allowed change to its rule"); run on this
+fixture it passes, and each of its five controls fails.
+
 ## Sizes
 
 `sizes.json` (`../rc16-20260930/sizes.mjs`) measures the carried 1.1.0-rc.1
-archive and this tree's build at the commit "Document 1.1.0-rc.2" (Node
-22.22.2, darwin-arm64): each entry point's import graph, in bytes, against
-its budget in `scripts/verify-package-contents.mjs`, and the package. The
-headroom is the budget's excess over the graph, per cent of the graph,
-rounded down.
+archive and this tree's build at **[PLACEHOLDER, for the coordinator to fill
+when the size records are redone after review 2: the commit whose build they
+measure]** (Node 22.22.2, darwin-arm64): each entry point's import graph, in
+bytes, against its budget in `scripts/verify-package-contents.mjs`, and the
+package. The headroom is the budget's excess over the graph, per cent of the
+graph, rounded down. Until then the table and `sizes.json` hold the figures
+of the build of `4f4c1e8`, "Update the size records after review 1"; the
+commit that acts on review 2 changes packed bytes after it.
 
 | | 1.1.0-rc.1 | 1.1.0-rc.2 | budget | headroom, % |
 | --- | ---: | ---: | ---: | ---: |
@@ -167,6 +196,15 @@ changes, each commented where it is made:
 - **The generators only in CI.** The conformance workflow's `generators` job
   installs pyerfa and numpy and downloads tzdata from IANA;
   `carrier-gates.sh` refuses it.
+- **G-V5's check of the committed table** (after review 2). `gates.sh` runs
+  the varga sensitivity's `time_per_arcsecond.mjs --check` after the build,
+  against `docs/vedic.md` as committed: the varga sensitivity's formal run
+  writes the table and the source commit commits it, so `gates.sh` runs again
+  on the source commit for this step. Before the table is written the step
+  says so and does not count (`varga-sensitivity/PREREGISTRATION.md`, the
+  amendment of 2026-11-04, "review 2: the procedure's checks can fail").
+- **The time entry's checks on the archive** (after review 2).
+  `carrier-gates.sh` has a job, `time-entry`, for the rerun below.
 
 The record of the gates cites the CI run of each job left to CI.
 
@@ -211,6 +249,22 @@ of that commit. `carrier/carrier-gates.sh` then runs CI's jobs on the
 carrier (engine on the three Node versions, pack, consumer on four,
 conformance and atlas); the archives job, the engine job's archive step and
 the generators job run in CI, cited here by run id.
+
+The time entry's checks T1 to T13 run again on the carried archive, as
+`time-entry/PREREGISTRATION.md` requires (sections 6 and 9: T1 to T13
+committed at the source commit and rerun on the archive, in the carrier's
+gates): `carrier-gates.sh time-entry` on the carrier, in a sparse clone, with
+the site's `src/lib/engine/time-basis.mjs` and `time-basis.d.mts` read from
+site main's git objects (9a67f761) into files outside every checkout, and
+Node 20.19.0 for T3. It extracts the archive into a consumer and finds the
+clone's build byte for byte the archive's `dist/*.js` and `dist/*.d.ts`; T1's
+runtime names, T3, T4, T5, T7, T8 and T10 read the archive; T1's `api:check`
+and `src/time.test.ts`, T2 and T13 (the export smoke test) and T9 (package
+contents) read the build, whose module lists the archive does not carry; T6
+and T11 read the sources. T12's tool, `time-entry/tools/declarations.mts`,
+which that preregistration's section 12 names, is not yet in the tree, so
+the job records T12 as not run, and fails, until the tool is committed and
+the job runs it.
 
 ## Not covered here
 

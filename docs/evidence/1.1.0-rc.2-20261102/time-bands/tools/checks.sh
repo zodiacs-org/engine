@@ -58,9 +58,11 @@ step "named tests' controls" node "$tools/named-controls.mjs" --repo "$repo" --w
 GIT_NO_LAZY_FETCH=1 git -C "$repo" cat-file -p a253973:src/fixtures/calc-roundtrip.json > "$work/base-calc-roundtrip.json" || status=1
 if cmp -s "$work/base-calc-roundtrip.json" "$repo/src/fixtures/calc-roundtrip.json"; then
   echo "=== C6: not run; the fixture is a253973's, so commit X has not regenerated it"
-  step "C6 selftest" node "$tools/fixture-diff.mjs" --base "$work/base-calc-roundtrip.json" --selftest
+  step "C6 selftest" node "$tools/fixture-diff.mjs" --base "$work/base-calc-roundtrip.json" --package "$repo" --selftest
 else
-  step C6 node "$tools/fixture-diff.mjs" --base "$work/base-calc-roundtrip.json" --fixture "$repo/src/fixtures/calc-roundtrip.json" --control --out "$work/results/c6.json"
+  # Since review 2 (the amendment of 2026-11-04) the tool reads the package's version and the bases from
+  # --package, and runs five controls.
+  step C6 node "$tools/fixture-diff.mjs" --base "$work/base-calc-roundtrip.json" --fixture "$repo/src/fixtures/calc-roundtrip.json" --package "$repo" --control --out "$work/results/c6.json"
 fi
 echo "=== dumps"
 for corpus in $instants $events; do shasum -a 256 "$work/dump-$corpus.json" | sed "s|$work/||"; done

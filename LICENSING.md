@@ -62,13 +62,16 @@ SHA-256 the entry's preregistration records
   a date (`src/techniques/moon-sign.ts`)
 
 The lite entry's sect part, added in 1.1.0-rc.2 (`src/sect.ts`, built into
-`dist/lite-sect.js`), ports the rule of the Zodiacs.org module
-`src/lib/sect.ts`, the sect by the Sun's altitude (`sectReading`'s
-`"altitude"` convention), read at the site repository's commit
-`9a67f761bc231741c6571af2dfae65b798954e11` (2026-11-01).
+`dist/lite-sect.js`), ports from the Zodiacs.org module `src/lib/sect.ts`,
+read at the site repository's commit
+`9a67f761bc231741c6571af2dfae65b798954e11` (2026-11-01): the sect by the
+Sun's altitude (`sectReading`'s `"altitude"` convention), `orientality`, the
+diurnal and nocturnal planet lists (`DIURNAL_PLANETS`, `NOCTURNAL_PLANETS`),
+the sect light, and Mercury's side of the Sun with the lists of the planets
+in and out of sect.
 
 The site repository's `LICENSE` at both commits reserves all rights in its
-contents but the parts it names (the engine, which it states is MIT, its
+contents but the parts it names (the engine, whose code it states is MIT, its
 shared sky data and the GeoNames data), and grants no licence to this code.
 These modules therefore come into the package on the same condition as the
 ones above: that the repository operator has authority to publish the

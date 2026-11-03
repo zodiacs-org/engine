@@ -902,3 +902,119 @@ therefore cannot meet R-M3c on C8 in this cut (section 7: "C1 to C9 pass").
 SR's two rewordings, the README's sentences that TT comes from the leap
 seconds "exactly" to 2027-10-02, now say that the shipped list expires on
 2027-06-28 and that its last value is carried after it.
+
+**2026-11-04, review 2: what the second review ran.** Review 2 of
+1.1.0-rc.2 (programme notes, `notes/rc2-2026-11-01/review2/`, outside this
+repository) ran, on the build of 4f4c1e8 and before any formal run, C6 on the
+committed fixture, C7, and the named tests' controls (`tools/named-controls.mjs`),
+each of which passed with every control failing, and probes of the bands on
+synthetic instants, which its report puts at least 229 days from any instant
+of T1 or T2 and none from T0, T3 or E. Nothing of it was committed. No corpus
+of section 5 was run.
+
+**2026-11-04, review 2: the cusps' rate on TT at the polar limit.** Review 2
+found the angles' TT term wrong just inside the polar limit. Placidus and
+Koch fall back to whole signs where |latitude| ≥ 90° − ε (`src/houses.ts`),
+and the rate on TT moves ε with TT, so TT moved by 600 s one way can make
+them fall back where the instant does not; the central difference then took
+a whole-sign cusp against the instant's Placidus or Koch cusp. Review 2's
+case (synthetic): `houses()` at 2121-08-30T03:33:00Z on UTC, after the IERS
+table, at 90° − ε − 1e-9° (ε the instant's true obliquity) and 33.3° E, in
+Placidus, gave cusp bands up to 4,120.1″, against 12.8″ at 1e-4° further
+from the limit; it ran Placidus only, and expected Koch to do the same from
+its code. Koch does: up to 3,995.4″ at the same place on 4f4c1e8's build (a
+probe in the programme notes). Adopted after review 2, before any formal run:
+
+- *R2 (c), as the amendment "review 1: the angles' rate on TT" has it, now
+  also reads:* where TT moved by 600 s one way makes Placidus or Koch fall
+  back (|latitude| ≥ 90° − ε at the true obliquity of the moved TT) and the
+  instant does not, a cusp's rate on TT is the one-sided difference between
+  its value at the instant and at TT moved the other way (UT1 held, as
+  before), wrapped into (−180°, 180°] and divided by 600 s. Where TT moved
+  either way makes them fall back, which needs the instant's obliquity to be
+  below the obliquity 600 s before and 600 s after, with the latitude in
+  between, the cusps take no rate on TT (0) and keep their rate on UT1. The
+  angles never fall back and keep the central difference; whole-sign cusps,
+  and the cusps where the instant falls back, keep band 0. The code is
+  `angleBands` in `src/calc.ts`, which `houses()` now also gives the true
+  ayanamsa it subtracts at the instant; no root module changes, and the
+  built chunks of the root modules that the site's engine chunk carries are
+  4f4c1e8's byte for byte.
+- *A named test* (section 6), in `src/calc.test.ts`: "take a cusp's rate on
+  TT from the side that keeps Placidus or Koch, where TT moved the other way
+  makes it fall back". At review 2's instant and at 2121-09-06T03:33:00Z,
+  where it is TT 600 s later that makes them fall back, at 90° − ε − 1e-9°
+  and 33.3° E, in Placidus and in Koch: the instant keeps its system, exactly
+  the expected moved side falls back, and each cusp's band equals its rate on
+  UT1, from pins at d0 ± 1 s on the instant's TT, times the UT1 band, plus its
+  one-sided rate on TT, from pins at d0 and at d0 ± 600 s on the instant's UT1,
+  times the TT band, within 1e-6 of itself plus 1e-10″ (48 cusps). Its
+  control, in `tools/named-controls.mjs`: the one-sided rule turned off, so
+  that the rate on TT is the central difference across the side that falls
+  back (4f4c1e8's), which must fail it. On this commit's tree the test passes;
+  on review 2's three instants that fall back on one side, the cusp bands of
+  Placidus and Koch, at most 12.8″, are within 8.1e-8 of themselves of the
+  bands the pins give (the probe in the programme notes).
+- C1 to C9 do not change.
+- *The documents:* `docs/calc.md`, *Bands*, and the doc comment of
+  `HousesResult.band` say so.
+
+**2026-11-04, review 2: C6's tool holds each allowed change to its rule.**
+Review 2 found `tools/fixture-diff.mjs` weaker than C6's rule. Any changed
+`version` under a path naming "engine" counted as (iii),
+`receipt.engine.ephemeris.version` included, and the verdict checked neither
+the count nor the new value, so a fixture regenerated as another version, or
+with another ephemeris version, would pass; any new basis string counted as
+(iv); and a `band` key added anywhere counted as (i). Adopted after review 2,
+before any formal run; C6's rule as section 6 and the amendment "review 1:
+the mean points' speed basis (C6, rule (iv))" word it does not change, and
+the tool now holds each part to it:
+
+- (i) a `band` key only where a result carries one (R5): at
+  `cases.N.result.band` of a computed `calc()`, `houses()` or `chart()`
+  result, null exactly where a `calc()` result's `speeds` is null, and at
+  `cases.N.result.events.M.band` of each event a computed `events()` result
+  finds; and every such place must gain one.
+- (iii) exactly 27 `version` strings at `cases.N.result.receipt.engine.version`
+  and 3 `engineVersion` strings at `cases.N.result.chart.engineVersion`, each
+  changed to the version in the package's `package.json`; any other version
+  string that changes, the ephemeris's among them, is a difference of its own.
+- (iv) exactly six bases, the position and speed bounds' of the three
+  mean-point cases, each from `MEASURED_BASIS` to `MEAN_POINTS_BASIS`
+  (position) or `MEAN_POINTS_SPEED_BASIS` (speed), the constants read from
+  `src/calc-bounds.ts`, with what follows the constant (the ayanamsa's part,
+  in the sidereal case) unchanged.
+- The controls, each of which must fail, are five: section 6's (one longitude
+  changed in its last place and one key added, both reported); one engine
+  version set to another version; one receipt's ephemeris version changed;
+  one mean point's basis given another text; and a band key added to a
+  refused result. `--selftest` builds the four allowed changes on a253973's
+  fixture and must pass. `tools/checks.sh` gives the tool `--package`.
+- Run on the committed fixture (8173f1e's) against a253973's, not as the
+  formal run, it passes: 38 records; 28 band keys, one of them null; 26
+  `conventions` arrays; 27 `version` and 3 `engineVersion` strings, all from
+  1.1.0-rc.1 to 1.1.0-rc.2; the six bases; nothing else. Each of the five
+  controls fails (output in the programme notes). F-89's E6 states the same
+  fixture rule.
+
+**2026-11-04, review 2: C3's control (b) and C1's dump.** Review 2 found two
+parts of the tools no longer testing what they name. C3's control (b), "σTT
+in place of σUT1": since the amendment "review 1: the angles' rate on TT" every
+record C3 judges has σTT = 0, so the control asked only for a band of 0. It
+now puts a wrong band of the right kind in place of each judged record's
+σUT1: the next larger distinct σUT1 among the judged records, the largest
+replaced by the smallest (`tools/angles.py`, `rotated_bands`). Where the
+judged records carry one distinct σUT1, as T0's two judged forms do, it
+cannot fail; T2 in F1 carries the ΔT band of 64 instants from 1800 to 2199.
+And C1's clause "`band` is null exactly where `speeds` is null" was never
+exercised, since the dumps held no position without speeds (the named test
+`nullBand` covers the engine): `tools/dump.mjs` now adds Mars without speeds
+(`flags: { speeds: false }`), tagged C1, in every form of every instant, and
+C1 gains a control, (e), a zero band given to each position without speeds,
+which must fail. Adopted after review 2, before any formal run. Tried on T0
+and its window E0 only: C1 passed, its controls (a), (c), (d) and (e) failed,
+and (b), the linear sum after the table, passed, as it does on any instant of
+the IERS era; C3 passed, its control (a) failed and (b) passed. On three
+synthetic TT instants (JD 2400123.25, 2452345.75 and 2469999.125, F1, S1 to
+S5, all 13 systems), C3 passed and both controls failed (outputs in the
+programme notes).

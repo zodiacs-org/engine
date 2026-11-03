@@ -155,18 +155,22 @@ none:
 | `utc` | `delta-t` | √(u² + d²) | u |
 
 On TT input the instant is TT, and UT1 = TT − ΔT; on UT1 input TT = UT1 +
-ΔT. On UTC input on the IERS basis TT comes from the leap seconds exactly, so
-its band is 0, and UT1 carries the band of UT1 − UTC (on that basis d is u).
-With a pin, TT = UT1 + the pin, which is exact, so a pin on TT or UT1 input
-gives 0 for both. On the ΔT model before 1972 u is 0: civil time is read as
-UT1 by definition, and TT carries d. After the table UT1 − UTC is 0 within
-±0.9 s, so UT1 carries the 0.9 s, and TT both bands, combined as the root of
-the sum of their squares.
+ΔT. On UTC input on the IERS basis, which a pin replaces, TT comes from the
+leap seconds: exactly up to 2027-06-28, when the shipped list expires, and
+after it with the list's last value carried and no band for a leap second
+not yet announced. So its band is 0, and UT1 carries the band of UT1 − UTC
+(on that basis d is u). With a pin, TT = UT1 + the pin, which is exact, so a
+pin on TT or UT1 input gives 0 for both, and a pin on UTC input gives both
+the band of UT1 − UTC, which UT1 takes from UTC. On the ΔT model before 1972
+u is 0: civil time is read as UT1 by definition, and TT carries d. After the
+table UT1 − UTC is 0 within ±0.9 s, so UT1 carries the 0.9 s, and TT both
+bands, combined as the root of the sum of their squares.
 
-So on UTC input from 1972-01-01 to 2027-10-02 the band of TT, which moves the
-planets, is 0, and the time basis's band falls on UT1, which turns the Earth.
-`@zodiacs/engine/calc` carries the two bands into its positions, angles,
-cusps and events, to first order ([calc.md](calc.md), *Bands*).
+So on UTC input from 1972-01-01 to 2027-10-02 without a pinned ΔT the band of
+TT, which moves the planets, is 0, and the time basis's band falls on UT1,
+which turns the Earth. `@zodiacs/engine/calc` carries the two bands into its
+positions, angles, cusps and events, to first order ([calc.md](calc.md),
+*Bands*).
 The bands step where the time basis steps, and `src/time-bands.test.ts`
 checks each of these a millisecond either side: at 1956.0
 (1956-01-01T12:00Z, UT1), where the model's σ falls from 0.46 s to the

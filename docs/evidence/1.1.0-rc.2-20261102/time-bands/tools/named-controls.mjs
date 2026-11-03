@@ -1,6 +1,6 @@
 // The controls of the named regression tests (../PREREGISTRATION.md, section
 // 6, "Named regression tests, in npm test, and their controls", as the
-// amendment of 2026-11-03, review 1, changes them). Every new named test is
+// amendments of 2026-11-03 (review 1) and 2026-11-04 (review 2) change them). Every new named test is
 // run once against a deliberately wrong timeBands (the TT band d on every UTC
 // input, C1's control a) and once against bands without the topocentric w
 // (C1's control d); the tests those two variants reach must fail under them,
@@ -36,6 +36,8 @@ const TESTS = {
   radians: "bands from the time basis are in arcseconds under units: radians",
   whole: "bands from the time basis give whole-sign cusps 0, and the cusps where Placidus or Koch falls back to whole signs",
   ttTerm: "bands from the time basis add each angle's and cusp's rate on TT, UT1 held, times the TT band",
+  // Added after review 2 (the amendment of 2026-11-04, "review 2: the cusps' rate on TT at the polar limit").
+  polarLimit: "bands from the time basis take a cusp's rate on TT from the side that keeps Placidus or Koch, where TT moved the other way makes it fall back",
   sidereal: "bands from the time basis give sidereal angles and cusps the tropical ones' rate on UT1, and on TT the sidereal longitude's",
   topocentric: "bands from the time basis bound a topocentric position at or above its partials on TT and UT1 from pinned evaluations",
   eventsCharts: "bands from the time basis carry the events' and the charts' bands",
@@ -79,6 +81,10 @@ const CONTROLS = {
   "sidereal angle bands whose rate on TT leaves out the ayanamsa's (the tropical ones')": {
     edits: [["src/calc.ts", "      less: definition === null ? 0 : ayanamsaAt(definition, moved).true", "      less: 0"]],
     mustFail: ["ttTerm", "sidereal"]
+  },
+  "the cusps' rate on TT taken across a side that falls back (4f4c1e8's)": {
+    edits: [["src/calc.ts", "    const [up, down] = moved.map((side) => isPolarUndefinedHouseSystem(system) && Math.abs(side.input.latitude) >= 90 - side.input.obliquity);", "    const [up, down] = [false, false];"]],
+    mustFail: ["polarLimit"]
   },
   "the id left out of events()'s receipt": {
     edits: [["src/calc.ts", '        [...positionIds(body, "ecliptic-true-of-date", "geocentric", "apparent", zodiac), "search:scan-and-bisect"]\n      )', '        [...positionIds(body, "ecliptic-true-of-date", "geocentric", "apparent", zodiac), "search:scan-and-bisect"],\n        undefined,\n        false\n      )']],

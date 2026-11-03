@@ -217,7 +217,8 @@ describe("the README's figures for the Vertex and the East Point", () => {
   // amended on 2026-11-03 after review 1): the README states the conformance suite's figures, the
   // largest residuals of its L2 vectors for the two points, whose arbiter is ERFA, each rounded up to
   // three decimals from the unrounded maximum in conformance/results/summary.json (which the harness
-  // regenerates with conformance/RESULTS.md, where the residuals are rounded to the nearest 0.001″).
+  // regenerates with conformance/RESULTS.md, where the residuals are rounded to the nearest 0.001″). Since
+  // review 2 the README cites both files, and says that RESULTS.md rounds (F-89's amendment of 2026-11-04).
   const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
   interface Summary {
     runs: { adapter: { name: string }; summary: { byKind: Record<string, { count: number; residuals: Record<string, { max: number }> }> } }[];
@@ -239,7 +240,7 @@ describe("the README's figures for the Vertex and the East Point", () => {
     text
       .replace(/\s+/gu, " ")
       .match(
-        /On the conformance suite's ten L2 vectors for them, from 1833 to 2182 at latitudes from 60° S to 60° N, whose arbiter is ERFA's sidereal time and obliquity with each point's published definition, they are within ([\d.]+)″ and ([\d.]+)″ \(`conformance\/RESULTS\.md`\)/u
+        /On the conformance suite's ten L2 vectors for them, from 1833 to 2182 at latitudes from 60° S to 60° N, whose arbiter is ERFA's sidereal time and obliquity with each point's published definition, they are within ([\d.]+)″ and ([\d.]+)″ \(`conformance\/RESULTS\.md`, which rounds to the nearest 0\.001″, and `conformance\/results\/summary\.json`\)/u
       )
       ?.slice(1);
   const summary = JSON.parse(read("conformance/results/summary.json")) as Summary;

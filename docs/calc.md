@@ -409,23 +409,28 @@ stays the bisection bracket.
   as a rate on TT; in the sidereal zodiac it is the sidereal longitude's, so
   the ayanamsa's own rate is in the band. A topocentric position also turns
   with the observer, and the observer turns with UT1, while its speed is the
-  rate with both scales moving together. Its band adds at most the rate at
-  which the observer's turn moves it: w = ω (a + h⁺) / (dist (1 − 10⁻³))
-  radians a second in direction and v = ω (a + h⁺) km a second in distance,
-  with ω = 7.292115 × 10⁻⁵ rad/s and a = 6,378.1366 km, the constants of the
-  engine's observer (`src/calc-reduce.ts`), h⁺ the height when it is above
-  the ellipsoid and 0 below it, and dist the reported distance in km. a + h⁺
-  is at least the site's distance from the Earth's axis at any latitude, and
+  rate with both scales moving together. Its band adds rates that are at
+  least those at which the observer's turn moves it: w = ω (a + h⁺) /
+  (dist (1 − 10⁻³)) radians a second in direction and v = ω (a + h⁺) km a
+  second in distance, with ω = 7.292115 × 10⁻⁵ rad/s and a = 6,378.1366 km,
+  the constants of the engine's observer (`src/calc-reduce.ts`), h⁺ the
+  height when it is above the ellipsoid and 0 below it, and dist the reported
+  distance in km. a + h⁺ is at least the site's distance from the Earth's
+  axis at any latitude, and
   the 10⁻³ covers the difference between the reported light path and the
   length of the apparent vector. So, with each speed in arcseconds or au a
   second and w in arcseconds a second, `lon` = (|speed| + w / cos lat) `tt` +
   (w / cos lat) `ut1`, `lat` = (|speed| + w) `tt` + w `ut1`, and `dist` =
   (|speed| + v) `tt` + v `ut1`, with v in au a second. The two terms are
   summed, which is at least their root sum of squares, whatever the
-  correlation of the two bands. The true nodes are the exception to "first
-  order": their speed is a difference over ±0.25 day (*Speeds*), which
-  smooths their short-period motion, so their band is that smoothed speed
-  times the TT band, not how far they move when TT moves by its band.
+  correlation of the two bands. Two kinds of position are exceptions to
+  "first order". A topocentric position's band is a conservative bound on
+  how far it moves to first order, at or above that movement rather than
+  equal to it (`src/calc.test.ts` holds it at or above the partials on TT and
+  UT1 taken from pinned evaluations). And the true nodes' speed is a
+  difference over ±0.25 day (*Speeds*), which smooths their short-period
+  motion, so their band is that smoothed speed times the TT band, not how far
+  they move when TT moves by its band.
 - **`houses()`**: `band` is `{ time, asc, mc, vertex, eastPoint, cusps }`,
   in arcseconds. The angles and cusps turn with UT1, through the Earth
   rotation angle, and move with TT, through the precession and the nutation in
@@ -445,13 +450,19 @@ stays the bisection bracket.
   not where an angle's rate on UT1 is small, as for the Vertex near the
   equator. Whole-sign cusps, and the cusps where Placidus or Koch falls back
   to whole signs, are sign starts, with band 0: a difference across a change
-  of the ascendant's sign would give 30°. Inside the polar circle a cusp that
-  turns with the ascendant can jump, and a difference across a jump gives a
-  large band, which says that the cusp is not determined better than that
-  there. In the sidereal zodiac the rate on UT1 is the tropical one, because
-  the ayanamsa moves with TT alone, and the rate on TT is the sidereal
-  longitude's, the ayanamsa's own rate in it; so the two zodiacs' bands are
-  the same where the TT band is 0, and differ where it is not.
+  of the ascendant's sign would give 30°. Placidus and Koch fall back where
+  the latitude is 90° − ε or more from the equator, and the obliquity ε moves
+  with TT: where TT moved by 600 s one way would make them fall back and the
+  instant does not, a cusp's rate on TT is the one-sided difference between
+  the instant and TT moved the other way, over 600 s; where both ways would,
+  the cusps take no rate on TT. The angles do not fall back and keep the
+  central difference. Inside the polar circle a cusp that turns with the
+  ascendant can jump, and a difference across a jump gives a large band,
+  which says that the cusp is not determined better than that there. In the
+  sidereal zodiac the rate on UT1 is the tropical one, because the ayanamsa
+  moves with TT alone, and the rate on TT is the sidereal longitude's, the
+  ayanamsa's own rate in it; so the two zodiacs' bands are the same where the
+  TT band is 0, and differ where it is not.
 - **`events()`**: each event's `band` is `{ utc, ut1 }`, in seconds. The
   ephemeris fixes an event in TT, so its `jdTt` has no band, and only its
   clock labels move: `utc` is the band of TT − UTC at the event (0 on the
@@ -469,14 +480,16 @@ stays the bisection bracket.
   bands; `houses()` does.
 
 The bands step where the time basis steps (time.md). The consequence to keep
-in mind: **on UTC input from 1972-01-01 to 2027-10-02, TT comes from the leap
-seconds, so every geocentric, heliocentric and barycentric position's band is
-0, and so are a chart's bodies'**. That is exact up to 2027-06-28, when the
-shipped leap-second list expires; after it the list's last value is carried,
-and no band is added for a leap second not yet announced (time.md). The time
-basis's band then appears only in the angles and cusps, through their rate on
-UT1, in topocentric positions and in each event's UT1. A band that the rule
-makes zero is exactly 0.
+in mind: **on UTC input from 1972-01-01 to 2027-10-02 without a pinned ΔT,
+TT comes from the leap seconds, so every geocentric, heliocentric and
+barycentric position's band is 0, and so are a chart's bodies'**. TT comes
+from them exactly up to 2027-06-28, when the shipped leap-second list
+expires; after it the list's last value is carried, and no band is added for
+a leap second not yet announced (time.md). The time basis's band then
+appears only in the angles and cusps, through their rate on UT1, in
+topocentric positions and in each event's UT1. With a pin on UTC input, TT
+is UT1 plus the pin and takes UT1's band (time.md), so the positions have
+one too. A band that the rule makes zero is exactly 0.
 
 Bands are confined to this entry point. The root's `positions()` and
 `natalChart()`, natal envelopes, and the events of `@zodiacs/engine/sky`,
@@ -485,8 +498,9 @@ follow from the fields they record: `timeBands(chart)` for the instant, and a
 body's speed times the TT band. A reader can recompute every band here: the
 instant's from the receipt's instant, a position's from the result's own
 speeds, distance and latitude, an angle's by repeating the request (with ΔT
-pinned at the recorded value ± 600 s on the instant's UT1 for its rate on TT),
-and an event's from its `at`. Every receipt of the four functions names
+pinned at the recorded value ± 600 s on the instant's UT1 for its rate on TT,
+and at the recorded value too where one side falls back), and an event's from
+its `at`. Every receipt of the four functions names
 `time-band:first-order`, last, but `calc()`'s without speeds, whose result
 has no band; `events()` names it even when it finds no event.
 

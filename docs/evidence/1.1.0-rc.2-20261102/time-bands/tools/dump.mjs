@@ -122,6 +122,9 @@ if (corpus === "E" || corpus === "E0") {
       for (const site of ["S1", "S2", "S6"]) {
         for (const body of TOPOCENTRIC) records.push(position(["C1"], item.id, form, { body, time, center: { topocentric: SITES[site] } }));
       }
+      // C1: a position without speeds, whose band must be null (added after review 2, the amendment of
+      // 2026-11-04, so that C1's "band is null exactly where speeds is null" is exercised in the dump).
+      records.push(position(["C1"], item.id, form, { body: "Mars", time, flags: { speeds: false } }));
       // C2, on T1 only: the rest of the ten bodies' geocentric apparent and geometric cases in the two ICRS frames.
       if (corpus === "T1") {
         for (const body of HORIZONS_BODIES) {

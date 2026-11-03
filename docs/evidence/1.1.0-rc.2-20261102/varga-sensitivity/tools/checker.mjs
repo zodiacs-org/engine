@@ -67,8 +67,14 @@ export function exactTicks(lon) {
   return Number(exponent >= 0 ? product << BigInt(exponent) : product >> BigInt(-exponent));
 }
 
-/** A difference of longitudes, degrees, in [−180, 180). */
-const arc = (value) => ((((value + 180) % 360) + 360) % 360) - 180;
+/**
+ * A difference of two longitudes in [0, 360), degrees, wrapped once into
+ * (−180, 180]. Changed after review 2 (PREREGISTRATION.md, section 13,
+ * 2026-11-04): the form it replaces, through + 180 and % 360, rounded a step
+ * of up to 2^−44° to 0, so M4 read a change reaching a boundary in one unit in
+ * the last place as one going the other way, and passed the run's other end.
+ */
+const arc = (value) => (value > 180 ? value - 360 : value <= -180 ? value + 360 : value);
 
 /** Checks one call's line; returns its failures and what the report counts. */
 export function checkLine(engine, line, { changes, expected, stepScale, disclose }) {

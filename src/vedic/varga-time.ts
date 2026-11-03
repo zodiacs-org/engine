@@ -224,8 +224,14 @@ function firstWhere(holds: (ms: number) => boolean, from: number, to: number): n
 }
 
 const turn = (value: number): number => ((value % 360) + 360) % 360;
-/** A difference of longitudes, degrees, in [−180, 180). */
-const signed = (value: number): number => turn(value + 180) - 180;
+/**
+ * A difference of two longitudes in [0, 360), degrees, wrapped once into
+ * (−180, 180]. Not turn(value + 180) − 180: its sum near 540 rounds a step of
+ * up to 2^−44° (half a unit in the last place of 540) to 0, the last step of a
+ * longitude reaching a boundary at a station can be that small, and a change
+ * was then taken for one the other way (review 2 of 1.1.0-rc.2).
+ */
+const signed = (value: number): number => (value > 180 ? value - 360 : value <= -180 ? value + 360 : value);
 
 /** A key's run, in ticks: the change boundary it starts on, and the next one round the circle. */
 export type Run = readonly [start: number, end: number];

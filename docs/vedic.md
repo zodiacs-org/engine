@@ -466,9 +466,11 @@ evidence.
   bracket's advance must lie within the bounds, or the Ascendant's rows are
   refused with `rate-bound`. The lower bound stays above zero up to 66.498°
   from the equator for each ayanamsa rate the search allows for, a caller's
-  linear and star definitions included (the preregistration's
-  `tools/derived_bounds.py`); the search stops at 66°, a margin short of that,
-  and more than 66° from the equator the rows are refused with `polar`.
+  linear and star definitions included
+  (`docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/derived-bounds.json`,
+  the output of the preregistration's `tools/derived_bounds.py`); the search
+  stops at 66°, a margin short of that, and more than 66° from the equator the
+  rows are refused with `polar`.
 - The mean nodes' sidereal longitudes only decrease, at the rate of their
   polynomial's leading term less or more the ayanamsa's bound, and are searched
   the same way.

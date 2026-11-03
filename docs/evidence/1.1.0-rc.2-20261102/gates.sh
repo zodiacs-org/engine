@@ -12,6 +12,15 @@
 # commits themselves (carrier/); on the carrier, where it rebuilds HEAD, only in
 # CI.
 #
+# Since review 2 (varga-sensitivity/PREREGISTRATION.md, section 13, 2026-11-04)
+# it also runs G-V5's --check, after the build: the table of
+# docs/vedic.md, as committed, against the table recomputed from this build.
+# The varga sensitivity's formal run writes that table and the source commit
+# commits it, so this script is run again on the source commit for that step.
+# Before the table is written docs/vedic.md holds its placeholder, and the
+# step says so and does not count; once written, the file must be HEAD's blob
+# and --check must pass.
+#
 #   TMPDIR=<tmp> sh gates.sh <checkout> <directory of the node and npm to use> <scratch directory>
 set -u
 unset NODE_OPTIONS
@@ -53,5 +62,19 @@ for step in "npm run typecheck" "npm test" "npm run build" "npm run exports:smok
   fi
   printf 'exit %s\n' "$status" >> "$out/gates.log"
 done
+# G-V5 of the varga sensitivity (above): the committed table, checked. git reads one blob by name here.
+printf '## %s\n' "G-V5: docs/vedic.md's committed table, time_per_arcsecond.mjs --check" >> "$out/gates.log"
+if grep -q '^\*Not written yet: the formal run of the varga sensitivity check writes this$' docs/vedic.md; then
+  printf 'not run: docs/vedic.md holds the placeholder; the formal run has not written the table\n' >> "$out/gates.log"
+elif [ "$(git hash-object docs/vedic.md)" != "$(git rev-parse HEAD:docs/vedic.md)" ]; then
+  printf 'docs/vedic.md differs from HEAD'"'"'s: its table must be committed before it is checked\nexit 1\n' >> "$out/gates.log"
+  failed=1
+else
+  node docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/time_per_arcsecond.mjs --check > "$scratch/step.out" 2>&1
+  status=$?
+  shorten < "$scratch/step.out" >> "$out/gates.log"
+  printf 'exit %s\n' "$status" >> "$out/gates.log"
+  [ "$status" -eq 0 ] || failed=1
+fi
 printf '\n' >> "$out/gates.log"
 exit $failed

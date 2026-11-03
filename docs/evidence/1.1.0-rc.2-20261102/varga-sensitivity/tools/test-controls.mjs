@@ -81,6 +81,16 @@ const CONTROLS = [
     name: "an instant 1 ms later", file: SEARCH, test: TEST,
     replace: [["at: new Date(found[0]).toISOString(),", "at: new Date(found[0] + 1).toISOString(),"]],
     mustFail: "the docs' synthetic birth", judge: (failed) => failed.some((name) => name.includes("pins the engine's own instants"))
+  },
+  // Added after review 2 (PREREGISTRATION.md, section 13, 2026-11-04): the direction of a change taken
+  // through turn(d + 180) − 180, as before review 2, must fail the contract case of a last step of one unit
+  // in the last place and review 2's two cases through the public API.
+  {
+    name: "a change's direction through turn(d + 180) - 180 (4f4c1e8's)", file: SEARCH, test: TEST,
+    replace: [["const signed = (value: number): number => (value > 180 ? value - 360 : value <= -180 ? value + 360 : value);", "const signed = (value: number): number => turn(value + 180) - 180;"]],
+    mustFail: "the last step of one unit in the last place, analytic and through the public API",
+    judge: (failed) => failed.some((name) => name.includes("last step onto a boundary is one unit in the last place")) &&
+      ["D2", "D60"].every((varga) => failed.some((name) => name.includes(`the ${varga} change gives the boundary it reaches`)))
   }
 ];
 

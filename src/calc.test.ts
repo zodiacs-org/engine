@@ -597,6 +597,45 @@ describe("bands from the time basis", () => {
     expect(compared).toBe(2 * (4 + 16 * 3));
   });
 
+  it("take a cusp's rate on TT from the side that keeps Placidus or Koch, where TT moved the other way makes it fall back", () => {
+    // Review 2 of 1.1.0-rc.2: 1e-9° inside the polar limit 90° − ε, ε the instant's true obliquity, TT moved by
+    // 600 s one way moves ε past the latitude, and Placidus and Koch fall back to whole signs there though not at
+    // the instant; the central difference across that side gave cusp bands of thousands of arcseconds. On UTC
+    // input after the IERS table, so the TT band is tens of seconds. The rates by another road, from pins: ΔT at
+    // d0 and d0 ± 600 s on the instant's UT1 (TT moves, UT1 holds), and at d0 ± 1 s on its TT (UT1 moves, TT holds).
+    const longitude = 33.3;
+    let compared = 0;
+    // On the first instant TT 600 s earlier makes the systems fall back, on the second TT 600 s later.
+    for (const [time, fallsBack] of [["2121-08-30T03:33:00Z", [false, true]], ["2121-09-06T03:33:00Z", [true, false]]] as const) {
+      const epsilon = housesOk(houses({ time, place: { latitude: 10, longitude }, houseSystem: "placidus" })).obliquity;
+      const place = { latitude: 90 - epsilon - 1e-9, longitude };
+      for (const houseSystem of ["placidus", "koch"] as const) {
+        const label = `${time} ${houseSystem}`;
+        const result = housesOk(houses({ time, place, houseSystem }));
+        expect(result.system, label).toBe(houseSystem);
+        const { tt, ut1 } = result.band.time;
+        expect([tt > 10, ut1], label).toEqual([true, 0.9]);
+        const instant = result.receipt.instants[0]!;
+        const d0 = instant.deltaT.seconds;
+        const onUt1 = (pin: number) => housesOk(houses({ time: { jd: instant.jdUt1, scale: "ut1", deltaT: pin }, place, houseSystem }));
+        const onTt = (pin: number) => housesOk(houses({ time: { jd: instant.jdTt, scale: "tt", deltaT: pin }, place, houseSystem }));
+        const [later, earlier, here] = [onUt1(d0 + 600), onUt1(d0 - 600), onUt1(d0)];
+        expect([later.system === "whole", earlier.system === "whole", here.system], label).toEqual([...fallsBack, houseSystem]);
+        const kept = fallsBack[0] ? earlier : later;
+        // UT1 = TT − ΔT: the larger pin gives the earlier UT1.
+        const [before, after] = [onTt(d0 + 1), onTt(d0 - 1)];
+        result.band.cusps.forEach((band, k) => {
+          const onTtRate = (Math.abs(turn(kept.cusps[k]!, here.cusps[k]!)) * 3600) / 600;
+          const onUt1Rate = (Math.abs(turn(after.cusps[k]!, before.cusps[k]!)) * 3600) / 2;
+          const expected = onUt1Rate * ut1 + onTtRate * tt;
+          expect(Math.abs(band - expected), `${label} cusps.${k}`).toBeLessThanOrEqual(1e-6 * expected + 1e-10);
+          compared += 1;
+        });
+      }
+    }
+    expect(compared).toBe(2 * 2 * 12);
+  });
+
   it("give sidereal angles and cusps the tropical ones' rate on UT1, and on TT the sidereal longitude's", () => {
     const place = { latitude: 51.5, longitude: -0.1 };
     // On UTC input on the IERS basis TT has no band, so the two zodiacs' bands are the same.

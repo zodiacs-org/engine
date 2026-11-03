@@ -208,11 +208,17 @@ def c1(args):
             zeros.append(dict(record, events=[dict(e, band=tiny_zeros(e['band'])) if e.get('band') else e for e in record['events']]))
         else:
             zeros.append(record)
+    # Control e (added after review 2, the amendment of 2026-11-04): a zero band given to each position
+    # without speeds, which "band is null exactly where speeds is null" must reject. It fails only on a dump
+    # that holds such a position, as dump.mjs's since that amendment do.
+    unbanded = [dict(r, band={'time': {'tt': 0.0, 'ut1': 0.0}, 'lon': 0.0, 'lat': 0.0, 'dist': 0.0})
+                if r.get('kind') == 'position' and not r.get('refused') and r.get('speeds') is None else r for r in records]
     controls = {
         'a: the TT band d on every UTC input': c1_problems(rebanded(records, 'a'))[0],
         'b: the linear sum u + d after the table': c1_problems(rebanded(records, 'b'))[0],
         'c: every zero band replaced by 5e-324': c1_problems(zeros)[0],
         'd: the topocentric bands without w': c1_problems(rebanded(records, 'd'))[0],
+        'e: a zero band where speeds is null': c1_problems(unbanded)[0],
     }
     return {
         'check': 'C1',

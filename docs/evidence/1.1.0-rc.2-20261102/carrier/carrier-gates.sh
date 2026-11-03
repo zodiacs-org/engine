@@ -32,6 +32,23 @@
 #              with pyerfa 2.0.1.5 and numpy 2.4.6, the L3 generator
 #              downloading tzdata and tzcode 2025c from IANA, then
 #              git diff --exit-code
+# time-entry   the time entry's checks T1 to T13 run again on the carried
+#              archive (time-entry/PREREGISTRATION.md, sections 6 and 9),
+#              added after review 2: npm ci and the build in the clone; the
+#              archive extracted into a consumer under <work>, with the
+#              clone's astronomy-engine beside it; a step that finds the
+#              build's dist/*.js and dist/*.d.ts byte for byte the archive's;
+#              then each check: T1's runtime names on the archive, with
+#              api:check and src/time.test.ts; T2 and T13 (the export smoke
+#              test) and T9 (package contents) on the build, since they read
+#              its module lists, which the archive does not carry; T3, T4,
+#              T5, T7, T8, T10 and T12 on the archive; T6 and T11 on the
+#              clone's sources. Its tools' reports go to
+#              time-entry-<commit>-<node version>/ beside this file. It needs
+#              in the environment SITE_TIME_BASIS and SITE_TIME_BASIS_DTS, the
+#              site's src/lib/engine/time-basis.mjs and time-basis.d.mts at
+#              9a67f761, read from its git objects into files outside every
+#              checkout, and NODE20, Node 20.19.0's node.
 set -u
 unset NODE_OPTIONS
 job=$1
@@ -70,6 +87,8 @@ step() {
   case "$filter" in
     summary) grep -E 'Test Files|Tests ' "$clone.out" ;;
     quiet) grep -v -E '^(CLI|ESM|DTS) |^[[:space:]]*$|^> ' "$clone.out" ;;
+    # A tool's JSON report on stdout: its verdict line alone (the time-entry job).
+    pass) grep -E '^ "pass": ' "$clone.out" ;;
     *) cat "$clone.out" ;;
   esac | shorten >> "$log"
   printf 'exit %s\n' "$status" >> "$log"
@@ -140,6 +159,44 @@ case "$job" in
   atlas)
     step "node atlas/tools/check.mjs" all node atlas/tools/check.mjs
     step "node --test atlas/tools/selftest.mjs" quiet node --test atlas/tools/selftest.mjs ;;
+  time-entry)
+    : "${SITE_TIME_BASIS:?the time-basis.mjs of the site}" "${SITE_TIME_BASIS_DTS:?the time-basis.d.mts of the site}" "${NODE20:?the node of Node 20.19.0}"
+    tools="$clone/docs/evidence/1.1.0-rc.2-20261102/time-entry/tools"
+    archive="$clone/artifacts/zodiacs-engine-1.1.0-rc.2.tgz"
+    consumer="$work/time-entry-consumer"
+    pkg="$consumer/node_modules/@zodiacs/engine"
+    reports="$out/time-entry-$short-$version"
+    rm -rf "$consumer" "$reports" && mkdir -p "$consumer/node_modules/@zodiacs" "$consumer/extract" "$reports"
+    step "npm ci" quiet npm ci --no-audit --no-fund
+    step "npm run build" quiet npm run build
+    step "the carried archive, extracted into the consumer" all sh -c "shasum -a 256 '$archive' | sed 's#  .*/#  #' && tar -xzf '$archive' -C '$consumer/extract' && mv '$consumer/extract/package' '$pkg' && ln -s '$clone/node_modules/astronomy-engine' '$consumer/node_modules/astronomy-engine'"
+    step "the build's dist/*.js and dist/*.d.ts, byte for byte the archive's" all sh -c "cd dist && for f in *.js *.d.ts; do cmp \"\$f\" '$pkg/dist/'\"\$f\" || exit 1; done && cd '$pkg/dist' && for f in *.js *.d.ts; do [ -e '$clone/dist/'\"\$f\" ] || { echo \"\$f is only in the archive\"; exit 1; }; done && echo identical"
+    # T1's runtime names: R1's list with P1.M3c's timeBands, as tools/controls.sh has it.
+    step "T1: the archive's runtime names of ./time, R1's" all node --input-type=module -e '
+const [tools, pkg] = process.argv.slice(1);
+const { pathToFileURL } = await import("node:url");
+const { entry } = await import(pathToFileURL(`${tools}/load.mjs`).href);
+const R1 = ["DELTA_T_IERS_MODEL", "EPHEMERIS_SPAN", "TIME_SCALE_NAMES", "eclipticFrame", "eclipticOfDate", "elapsedDays", "meanEcliptic", "tilt", "timeBands", "timeBasis"];
+const keys = Object.keys(await entry(pkg, "./time")).sort();
+console.log(JSON.stringify({ keys, equalsR1: JSON.stringify(keys) === JSON.stringify(R1) }));
+process.exitCode = JSON.stringify(keys) === JSON.stringify(R1) ? 0 : 1;' "$tools" "$pkg"
+    step "T1: npm run api:check" quiet npm run api:check
+    step "T1: src/time.test.ts" summary npx vitest run src/time.test.ts
+    step "T2 and T13: npm run exports:smoke" quiet npm run exports:smoke
+    step "T3: no-ephemeris.sh on the archive, Node 22.22.2 and 20.19.0" all sh "$tools/no-ephemeris.sh" "$archive" "$bin/node" "$NODE20"
+    step "T4: site-module.mjs" pass node "$tools/site-module.mjs" --package "$pkg" --site "$SITE_TIME_BASIS" --fixture src/fixtures/nutation-erfa.json --out "$reports/T4.json"
+    step "T5: natal-parity.mjs" pass node "$tools/natal-parity.mjs" --package "$pkg" --out "$reports/T5.json"
+    step "T6: source-pins.mjs" pass node "$tools/source-pins.mjs" --repo . --commit HEAD --out "$reports/T6.json"
+    step "T7: independent.mjs" pass node "$tools/independent.mjs" --package "$pkg" --repo . --out "$reports/T7.json"
+    step "T8: one-copy.mjs" pass node "$tools/one-copy.mjs" --package "$pkg" --out "$reports/T8.json"
+    step "T9: npm run package:contents" quiet npm run package:contents
+    step "T10: behaviour.mjs" pass node "$tools/behaviour.mjs" --package "$pkg" --out "$reports/T10.json"
+    step "T11: state-scan.mjs" pass node "$tools/state-scan.mjs" --repo . --out "$reports/T11.json"
+    # T12's tool, declarations.mts (section 12), was not in the tree that added this job, so its run, on the
+    # archive's dist/time.d.ts and SITE_TIME_BASIS_DTS, goes here with the tool; until then T12 is recorded as
+    # not run, and the job fails, since T1 to T13 must all run again on the archive.
+    printf '## T12: declarations.mts\nnot run: tools/declarations.mts, which section 12 names, is not in this tree\nexit 1\n' >> "$log"
+    failed=1 ;;
   *)
     echo "unknown job $job" >&2
     exit 2 ;;

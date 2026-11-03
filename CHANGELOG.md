@@ -20,8 +20,9 @@ npm until the owner approves it. Checks: `docs/evidence/1.1.0-rc.2-20261102/`.
   `swe_houses_armc` to within 0.00001″ given its inputs, which zodiacs.org's
   points record of 0.1.1-rc.10 does not bear out; it gives the conformance
   suite's figures instead, within 0.014″ and 0.007″ on its ten L2 vectors for
-  them, from 1833 to 2182, whose arbiter is ERFA (`conformance/RESULTS.md`). A
-  plain 5-day crossing scan can miss a station that takes the body less than
+  them, from 1833 to 2182, whose arbiter is ERFA (`conformance/RESULTS.md`,
+  which rounds to the nearest 0.001″, and `conformance/results/summary.json`).
+  A plain 5-day crossing scan can miss a station that takes the body less than
   |f″|h²/8 past the target: up to 0.0056° for Saturn and 0.011° for Jupiter at
   their stations from 2019 to 2024, not the 0.0103° and 0.0205° given before. A
   local-time resolution names a transition only where there is one, and no
@@ -61,28 +62,30 @@ npm until the owner approves it. Checks: `docs/evidence/1.1.0-rc.2-20261102/`.
   set on) from its two recorded bands, `deltaT.sigma` and
   `timeScale.ut1MinusUtc.sigma`, by the scale the instant was given on and the
   basis that gave UT1 and TT (`docs/time.md`, *The time bands*). On UTC input
-  from 1972-01-01 to 2027-10-02 TT comes from the leap seconds (exactly to
-  2027-06-28, when the shipped list expires; after it the list's last value is
-  carried, with no band for a leap second not yet announced), so its band is
-  0, and UT1 carries the band of UT1 − UTC; after the table, TT takes both
-  bands, combined as the root of the sum of their squares. It reads the
+  from 1972-01-01 to 2027-10-02 without a pinned ΔT, TT comes from the leap
+  seconds (exactly to 2027-06-28, when the shipped list expires; after it the
+  list's last value is carried, with no band for a leap second not yet
+  announced), so its band is 0, and UT1 carries the band of UT1 − UTC; with a
+  pin, TT is UT1 plus the pin and takes UT1's band; after the table, TT takes
+  both bands, combined as the root of the sum of their squares. It reads the
   recorded fields only, and throws `RangeError` for a record without a time
   scale. `@zodiacs/engine/calc` carries the bands into its results, to first
   order, as a new `band` field kept apart from `bounds` (`docs/calc.md`,
-  *Bands*), and exports the `TimeBands` type they use: `calc()`'s positions
-  (null without speeds), from each coordinate's rate times the TT band, with
-  a conservative bound on the observer's turn for a topocentric one, and for
-  the true nodes from their speed over ±0.25 day, which smooths their
-  short-period motion; `houses()`' angles and cusps, from each one's rate on
-  UT1 times the UT1 band plus its rate on TT times the TT band (in the
-  sidereal zodiac the sidereal longitude's, the ayanamsa's rate in it),
-  whole-sign and fallback cusps 0; each event's UTC and UT1; and `chart()`'s
-  bodies, ascendant and midheaven. So on UTC input from 1972-01-01 to
-  2027-10-02 every geocentric, heliocentric and barycentric position's band
-  is 0. Each receipt names the new id `time-band:first-order`, last, but
-  `calc()`'s without speeds; `events()`' even when it finds no event. A band
-  is not a bound and leaves out the ephemeris's error. Root charts, natal
-  envelopes and the other entries' results carry none. The preregistered
+  *Bands*), and exports the `TimeBands` and `CalcTimeBand` types they use:
+  `calc()`'s positions (null without speeds), from each coordinate's rate
+  times the TT band, with a conservative bound on the observer's turn for a
+  topocentric one, and for the true nodes from their speed over ±0.25 day,
+  which smooths their short-period motion; `houses()`' angles and cusps, from
+  each one's rate on UT1 times the UT1 band plus its rate on TT times the TT
+  band (in the sidereal zodiac the sidereal longitude's, the ayanamsa's rate
+  in it), whole-sign and fallback cusps 0; each event's UTC and UT1; and
+  `chart()`'s bodies, ascendant and midheaven. So on UTC input from
+  1972-01-01 to 2027-10-02 without a pinned ΔT every geocentric, heliocentric
+  and barycentric position's band is 0. Each receipt names the new id
+  `time-band:first-order`, last, but `calc()`'s without speeds; `events()`'
+  even when it finds no event. A band is not a bound on the error and leaves
+  out the ephemeris's error. Root charts, natal envelopes and the other
+  entries' results carry none. The preregistered
   checks are in `docs/evidence/1.1.0-rc.2-20261102/time-bands/`.
 - **`@zodiacs/engine/lite`** (zodiacs.org's units P2.E: declinations, sect,
   composite and dignities), a new entry point that loads no ephemeris: the

@@ -802,3 +802,40 @@ planted sentence the extractor's lexicon selects, citing this result; no
 other sentence is chosen now. This commit rewords packed text (README.md's
 sentence on `./lite`'s copies, among others), so SR runs again on the
 candidate after it, as section 5 says.
+
+**2026-11-04, review 2: L1's control (a) is the case it names.** Review 2 of
+1.1.0-rc.2 (programme notes, `notes/rc2-2026-11-01/review2/`, outside this
+repository) found that `tools/broken-builds.mjs` did not build L1's control
+(a) as section 3 names it, "`lite.js` also re-exporting `compositeChart`":
+it built the composite part re-exporting `compositeChart` instead, which L1
+passes (esbuild inlines astronomy-engine's ESM, which has no import lines),
+and counted that control as behaving when L3 and L2 failed. No amendment
+recorded the departure, and as built, one of L1's preregistered controls
+would have passed, voiding L1. Adopted after review 2, before any formal run:
+the tool now builds the case section 3 names, this checkout's four parts as
+the build makes them and `dist/lite.js` with a fifth export line, `export {
+compositeChart } from "./lite-composite-chart.js";`, whose file esbuild
+bundles from `src/techniques/relationship.ts` with astronomy-engine inlined,
+and L1 must fail it ("dist/lite.js must import exactly the four lite parts");
+L2 fails it too, and L3 passes, since that file is not one of the entry's
+five. The composite-part build stays, under a name of its own, as an extra
+control that L3 and L2 must fail. Run on this commit's build, not the formal
+run: the build passes L1, L2 and L3, and each of the seven controls fails as
+it must (output in the programme notes). No pass condition changes.
+
+**2026-11-04, review 2: orientality takes each longitude modulo 360 first.**
+Review 2 found that `orientality` (`src/sect.ts`), whose doc comment says it
+takes longitudes "of any size", subtracted before reducing:
+`orientality(175, 3.6e17)` gave "oriental", while `orientality(175, 0)` gives
+"occidental" and 3.6e17 is 360 × 10^15. Adopted after review 2, before any
+formal run: each longitude is reduced modulo 360, which is exact, before the
+difference; `./lite`'s graph stays within its 29,000 bytes
+(`npm run package:contents`). L7 gains a case in `src/sect.test.ts`, from the
+definition: `orientality(175, 3.6e17)` and `orientality(-3.6e17, 10)` must
+give what `orientality(175, 0)` and `orientality(0, 10)` give. L7's controls
+and `tools/sect-controls.mjs` do not change (the line the second control
+edits is the same). L5 does not reach `orientality`, which is the lite
+entry's own. `docs/lite.md` now also says what review 2 found missing there:
+for a Sun exactly on the ascendant, whose altitude taken on the ecliptic is 0,
+the two conventions disagree, the altitude rule giving the day and the
+ecliptic rule the night.

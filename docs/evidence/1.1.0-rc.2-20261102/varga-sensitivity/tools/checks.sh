@@ -20,9 +20,19 @@
 # several controls (test-controls.mjs, controls.mjs, varga_ascendant.py's C4a
 # and C4b) record each control's outcome in their own outputs. G-V3 runs F3b
 # (seams-f3b.json) beside F2 and F3, and C3d runs on F3b. G-V5's table is
-# written into docs/vedic.md here, then checked there with --check, and its
-# control, a copy of docs/vedic.md with one figure changed, must fail that
-# check. The script exits 1 if any check failed or any control passed.
+# written into docs/vedic.md here, and its control, a copy of docs/vedic.md
+# with one figure changed, must fail --check. The script exits 1 if any check
+# failed or any control passed.
+#
+# Changed after review 2 (PREREGISTRATION.md, section 13, 2026-11-04): the
+# SHA-256 of boundaries.json and of the inputs is compared with the values
+# recorded for them, not only written; section 7's control at 66.6 degrees is
+# a step of its own, whose verdict is whether the script says the lower bound
+# has no real value there; the named-test step runs the existing Vedic tests
+# too (src/vedic/*.test.ts and src/sign-rulers.test.ts); and G-V5's --check
+# against docs/vedic.md is no longer run here, straight after --write, where
+# it could not fail: it is a step of ../../gates.sh, run on the source commit
+# once the table is committed.
 set -u
 work=${1:?WORK, a directory outside the repository}
 workers=${2:-1}
@@ -49,12 +59,29 @@ record "G-V1: boundary_fixtures.py --output" check $?
 cmp "$work/boundaries.json" src/vedic/fixtures/boundaries.json
 record "G-V1: the regenerated boundaries.json equals the committed one" check $?
 shasum -a 256 src/vedic/fixtures/boundaries.json > "$results/boundaries-sha256.txt"
-record "G-V1: boundaries.json's SHA-256" check $?
+record "G-V1: boundaries.json's SHA-256 written" check $?
+# The SHA-256 recorded for each, compared with the files (since review 2): boundaries.json's in section 6
+# (docs/evidence/vedic-2026-09-28/README.md:581-583), the inputs' in INPUTS.md, section 1, and F3b's and its
+# generator's in the amendment of 2026-11-03, "review 1: C3d and the seam input F3b".
+print -r -- "3578be675ddb51bb80ab543431d654c9a6e7bcab4d70d9abcae381ea29dcd51f  src/vedic/fixtures/boundaries.json
+c5fa637151d8407466ead69dad053eb39c04dcff863061ff508ff74501f2ef46  $here/tools/varga_changes.py
+2207fbea5b7e02a14f387ab77e76dea4006088ba7baf27c52d29ee8312f82750  src/vedic/fixtures/varga-changes.json
+349c69805fa8d823078d6cd44efbd85a6bd46b825a1ee57babf3ccf626bcbcfd  $here/tools/generate.mjs
+e333a037563d94f1e5b9ed42269166a4024808284b510b7ce199ab6817aff5c7  $here/births.json
+5c6ddf9d0a3f2325923538b8965bd3acc2a3b4975a96ce502b60c7b488cab6d9  $here/births-erfa.json
+2c146c35389454182078d6cff8d7081ee4beec2e1b8c9fe6464ccdc88bbb7dac  $here/tools/seams.mjs
+956a3ad8a9e3d29249b16c55a3f25372e6e42850510e9d31555e86bccb648d70  $here/seams.json
+052c05131e33f63dd5b8693b08f4facd50421ce74583e62ad26cf1bea828469e  $here/seams-f3b.json
+f8d4822b814b1db14ce7f972a9926a13d0c9c8889186416cc151de1f5e191360  $here/tools/seams_f3b.mjs" > "$results/inputs-sha256.recorded"
+shasum -a 256 -c "$results/inputs-sha256.recorded" > "$results/inputs-sha256.txt" 2>&1
+record "G-V1 and section 6: boundaries.json and the inputs against their recorded SHA-256" check $?
 
 step "G-V1, G-V2 (a) and the named tests, then their controls"
-npx vitest run src/vedic/boundaries.test.ts src/vedic/varga-time.test.ts src/sign-rulers.test.ts \
+# Section 8's named tests: G-V1 and G-V2 (a) in boundaries.test.ts and varga-time.test.ts, and, since review 2,
+# the existing Vedic tests its table lists, every src/vedic/*.test.ts and src/sign-rulers.test.ts.
+npx vitest run src/vedic/*.test.ts src/sign-rulers.test.ts \
   --reporter=json --outputFile="$results/tests.json" > /dev/null
-record "G-V1, G-V2 (a) and the named tests (vitest)" check $?
+record "G-V1, G-V2 (a), the named tests and the existing Vedic tests (vitest)" check $?
 node $here/tools/test-controls.mjs --out "$results/test-controls.json"
 record "their controls: test-controls.mjs (each control's outcome in test-controls.json)" check $?
 
@@ -71,14 +98,29 @@ record "controls.json copied" check $?
 step "Section 7's table of the derived bounds, with its control at 66.6 degrees"
 /usr/bin/python3 -I -B $here/tools/derived_bounds.py --out "$results/derived-bounds.json" --latitude 66.6 > /dev/null 2> "$results/derived-bounds-control.txt"
 record "section 7: derived_bounds.py (its control's note in derived-bounds-control.txt)" check $?
+# The control (since review 2 a step of its own): at 66.6 degrees, beyond 90 - 23.5, the lower bound has no real
+# value, and the script must say so for each of its three rates, in the table and on stderr. The check run on
+# that latitude asks for a real lower bound there, so it must fail; it fails only where the script says there
+# is none.
+/usr/bin/python3 -I -B -c '
+import json, sys
+table = json.load(open(sys.argv[1], encoding="utf-8"))
+note = "no real value: |phi| is beyond 90 - 23.5 = 66.5 degrees"
+rows = [row for entry in table["rates"].values() for row in entry["rows"] if row["latitude"] == 66.6]
+said = [row for row in rows if row["R_lo"] is None and row["note"] == note]
+lines = [line for line in open(sys.argv[2], encoding="utf-8") if line.rstrip().endswith(", 66.6 degrees: the lower bound has " + note)]
+print(f"66.6 degrees: {len(rows)} rows; {len(said)} with no real lower bound in the table, {len(lines)} said so on stderr")
+sys.exit(1 if len(rows) == 3 and len(said) == 3 and len(lines) == 3 else 0)
+' "$results/derived-bounds.json" "$results/derived-bounds-control.txt" > "$results/derived-bounds-control-verdict.txt" 2>&1
+record "section 7 control: a real lower bound asked for at 66.6 degrees (must fail; the script says there is none)" control $?
 
-step "G-V5: the table, written into docs/vedic.md, checked there, then its control on a copy"
+step "G-V5: the table, written into docs/vedic.md, then its control on a copy"
 node $here/tools/time_per_arcsecond.mjs --out "$results/time-per-arcsecond.json" --table > "$results/time-per-arcsecond.md"
 record "G-V5: time_per_arcsecond.mjs --table" check $?
 node $here/tools/time_per_arcsecond.mjs --write > "$results/time-per-arcsecond-write.txt" 2>&1
 record "G-V5: the table written into docs/vedic.md (--write)" check $?
-node $here/tools/time_per_arcsecond.mjs --check > "$results/time-per-arcsecond-check.txt" 2>&1
-record "G-V5: --check against docs/vedic.md" check $?
+# No --check here (since review 2): straight after --write it could not fail. It is a step of ../../gates.sh,
+# against the table once committed.
 node $here/tools/time_per_arcsecond.mjs --control-copy "$work/vedic-g-v5-control.md" > "$results/time-per-arcsecond-control-copy.txt" 2>&1
 record "G-V5: the control's copy of docs/vedic.md, one figure changed (--control-copy)" check $?
 node $here/tools/time_per_arcsecond.mjs --check --docs "$work/vedic-g-v5-control.md" > "$results/time-per-arcsecond-control.txt" 2>&1
