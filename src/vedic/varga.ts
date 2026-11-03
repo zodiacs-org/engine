@@ -103,15 +103,26 @@ const TRIMSAMSA = [
  * scheme, or an unimplemented variant, is a RangeError.
  */
 export function vargaOf(position: SiderealLongitude, varga: VargaName, scheme: VargaScheme = "parashari"): VargaPosition {
+  const found = ruleOf(varga, scheme);
+  return positionOf(found, scheme, ticksOf(requireSidereal(position).lon));
+}
+
+/** The rule of a varga under a scheme; RangeError for an unknown varga or scheme, or an unimplemented variant. */
+function ruleOf(varga: VargaName, scheme: VargaScheme): Rule {
   const found = RULES.find((candidate) => candidate.name === varga);
   if (!found) throw new RangeError(`Unknown varga: ${String(varga)}.`);
   if (!found.schemes.includes(scheme)) {
     throw new RangeError(found.notImplemented.includes(scheme) || scheme === "cyclic"
       ? `The ${String(scheme)} ${varga} is not implemented.` : `Unknown varga scheme: ${String(scheme)}.`);
   }
-  const ticks = ticksOf(requireSidereal(position).lon);
+  return found;
+}
+
+/** The part of the natal sign, from 0, and the sign index a rule gives at a whole tick in [0, 2,721,600). */
+function placed(found: Rule, scheme: VargaScheme, ticks: number): [part: number, signIndex: number] {
   const s = Math.floor(ticks / SIGN_TICKS);
   const within = ticks - s * SIGN_TICKS;
+  const varga = found.name;
   let part: number;
   let sign: number;
   if (varga === "D30") {
@@ -124,6 +135,48 @@ export function vargaOf(position: SiderealLongitude, varga: VargaName, scheme: V
     else if (varga === "D2") sign = (odd(s) ? part === 0 : part === 1) ? 4 : 3;
     else sign = found.start!(s) + (varga === "D3" ? 4 * part : varga === "D4" ? 3 * part : part);
   }
-  const signIndex = ((sign % 12) + 12) % 12;
-  return Object.freeze({ varga, scheme, part: part + 1, sign: SIGN_SLUGS[signIndex]!, signIndex });
+  return [part, ((sign % 12) + 12) % 12];
+}
+
+function positionOf(found: Rule, scheme: VargaScheme, ticks: number): VargaPosition {
+  const [part, signIndex] = placed(found, scheme, ticks);
+  return Object.freeze({ varga: found.name, scheme, part: part + 1, sign: SIGN_SLUGS[signIndex]!, signIndex });
+}
+
+/** Internal: vargaOf's result for a longitude given by its whole tick in [0, 2,721,600). */
+export function vargaAtTick(ticks: number, varga: VargaName, scheme: VargaScheme = "parashari"): VargaPosition {
+  return positionOf(ruleOf(varga, scheme), scheme, ticks);
+}
+
+/** The ticks in 360°. */
+const CIRCLE = 12 * SIGN_TICKS;
+const CHANGES = new Map<string, readonly number[]>();
+
+/**
+ * Internal: the change boundaries of a varga under a scheme, in ticks,
+ * ascending: the part boundaries T at which the sign on the tick below,
+ * T − 1 (round the circle for T = 0), differs from the sign at T. The others
+ * keep the sign: the Parashari D2 at its 12 sign starts, D10 and D24 at the
+ * starts of the six even signs. Built once per key, on first use.
+ */
+export function changeBoundaries(varga: VargaName, scheme: VargaScheme = "parashari"): readonly number[] {
+  const key = `${varga} ${scheme}`;
+  let list = CHANGES.get(key);
+  if (!list) {
+    const found = ruleOf(varga, scheme);
+    const signAt = (ticks: number): number => placed(found, scheme, (ticks + CIRCLE) % CIRCLE)[1];
+    const changes: number[] = [];
+    for (let s = 0; s < 12; s += 1) {
+      const starts = varga === "D30"
+        ? [0, ...TRIMSAMSA[odd(s) ? 0 : 1]!.ends.slice(0, 4)]
+        : Array.from({ length: found.divisions }, (_, k) => (k * SIGN_TICKS) / found.divisions);
+      for (const start of starts) {
+        const t = s * SIGN_TICKS + start;
+        if (signAt(t - 1) !== signAt(t)) changes.push(t);
+      }
+    }
+    list = Object.freeze(changes);
+    CHANGES.set(key, list);
+  }
+  return list;
 }
