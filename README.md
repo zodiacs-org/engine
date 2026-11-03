@@ -235,6 +235,12 @@ for (const aspect of today.aspects) {
   astronomy-engine's vectors to the ecliptic of date: `tilt`,
   `eclipticFrame`, `meanEcliptic` and `eclipticOfDate`; and `timeBands`, the
   1-σ bands of a recorded instant's TT and UT1 (see *Time*).
+- `@zodiacs/engine/lite`, new in 1.1.0-rc.2, gives declination parallels and
+  out-of-bounds flags, a chart's sect under a named convention
+  (`sectReading`), composite midpoints and their aspects, and the essential
+  dignities, and loads no ephemeris. Its functions are copies of the root's
+  and `@zodiacs/engine/techniques`', with the same results (see
+  [docs/lite.md](docs/lite.md)).
 
 ### Uniform calculation API
 
@@ -501,6 +507,8 @@ short way round between the two supplied longitudes, reduced exactly modulo
 (1 + 2⁻⁵⁰ apart), and 1.1 and 0.1 (1 + 3·2⁻⁵⁵), do not. Body labels follow
 the configured-aspect rule. `eclipticToEquatorial` and `declinationsForBodies`
 expose the same geometry with an explicitly supplied obliquity.
+`@zodiacs/engine/lite` carries copies of these, and of `findDeclinationAspects`,
+that load no ephemeris ([docs/lite.md](docs/lite.md)).
 
 These are derived coordinates of the existing ephemeris, with its existing
 corrections and limits. They do not establish the programme's 0.01″ physical
@@ -583,7 +591,9 @@ lots need a birth time and place.
   obliquity with each point's published definition, they are within 0.013″
   and 0.007″ (`conformance/RESULTS.md`).
 - The sect is day when the Sun is between the descendant and the ascendant
-  through the midheaven.
+  through the midheaven. `sectReading`, in `@zodiacs/engine/lite`, reads the
+  sect under the convention a caller names: this one, or the Sun's altitude
+  ([docs/lite.md](docs/lite.md)).
 - The lots use the chart's own ascendant and bodies. Each is the ascendant plus
   the arc between two points, taken as Paulus gives it by day and reversed by
   night. Ptolemy's Fortune, which does not reverse, is `asc + moon − sun`.
@@ -983,7 +993,7 @@ package implementation while keeping its scanner-oriented functions and lazy
 bundle boundary intact. They are not covered by semantic-versioning guarantees;
 third-party code must use the documented entry points: the root, `/calc`,
 `/geo`, `/houses`, `/sky`, `/techniques`, `/timing`, `/vedic`, `/window`,
-`/receipt`, `/conventions`, `/crossings`, `/deltat` and `/time`.
+`/receipt`, `/conventions`, `/crossings`, `/deltat`, `/time` and `/lite`.
 
 ## GeoNames request recovery
 

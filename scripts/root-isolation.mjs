@@ -10,12 +10,15 @@
 //   file, `// src/...`, read whatever the path's extension, spaces included.
 //
 // Either way, no module of an opt-in entry (timing, Vedic, geo, calc,
-// window, techniques, houses or sky) and no zone history may be in the root's
-// static graph. The two readings must agree:
+// window, techniques, houses, sky, time or lite) and no zone history may be
+// in the root's static graph. The two readings must agree:
 // every marked module must be one the module list gives for that file, and
 // the module list must describe the files on disk byte for byte, so that a
-// stale list cannot hide a module either.
+// stale list cannot hide a module either. The lite entry's files are built by
+// a second esbuild run (scripts/build-lite.mjs), which writes its own list,
+// dist/metafile-lite.json; readModuleList reads the two as one.
 import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
 
 /**
  * Source paths of the opt-in entries' modules and of the zone histories,
@@ -26,12 +29,16 @@ import assert from "node:assert/strict";
  * (src/houses.ts is the root's own); src/equator.ts, the equator of date
  * that calc and sky share (the root's charts need only src/frame.ts);
  * src/first-millisecond.ts, the sky entry's search for an event's first
- * millisecond, which sits outside src/sky/; and the time entry's own files,
+ * millisecond, which sits outside src/sky/; the time entry's own files,
  * src/time.ts and src/time-bands.ts, each named whole, so that the root's
- * src/time-scale.ts and src/time-scale-data.ts are not.
+ * src/time-scale.ts and src/time-scale-data.ts are not; and the lite entry's
+ * file and directory, src/lite.ts and src/lite/, and src/sect.ts, whole, which
+ * only its sect part imports. The root modules the lite parts are built from
+ * (src/declination.ts, src/points.ts and the like) are the root's own; the
+ * export smoke test pins the lite entry's modules (scripts/lite-entry.mjs).
  */
 export const OPT_IN_SOURCE =
-  /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|(?:houses-extra|equator|first-millisecond|time|time-bands)\.[^/]*$)/u;
+  /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky|lite)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|(?:houses-extra|equator|first-millisecond|time|time-bands|sect)\.[^/]*$)/u;
 
 /** The source path of every module esbuild marks in an output file: `// src/...`, any extension. */
 export function sourceMarkers(code) {
@@ -54,6 +61,41 @@ function closure(start, edges, what) {
     }
   }
   return seen;
+}
+
+/**
+ * Module lists merged into one: their outputs, which must not overlap, and
+ * their inputs, where a source two lists name must have the same record in
+ * each (its bytes and its imports).
+ */
+export function mergeModuleLists(...lists) {
+  const merged = { inputs: {}, outputs: {} };
+  for (const list of lists) {
+    assert(list && typeof list === "object" && list.outputs && list.inputs, "a module list is missing or not an esbuild metafile; rebuild with npm run build");
+    for (const [path, output] of Object.entries(list.outputs)) {
+      assert(!Object.hasOwn(merged.outputs, path), `${path} is in two of the build's module lists`);
+      merged.outputs[path] = output;
+    }
+    for (const [path, input] of Object.entries(list.inputs)) {
+      if (Object.hasOwn(merged.inputs, path)) assert.deepEqual(input, merged.inputs[path], `the build's module lists disagree on ${path}`);
+      else merged.inputs[path] = input;
+    }
+  }
+  return merged;
+}
+
+/**
+ * The build's module list: dist/metafile-esm.json, which tsup writes, and
+ * dist/metafile-lite.json, which scripts/build-lite.mjs writes, merged
+ * (mergeModuleLists). `dist` is the URL of the dist/ directory, with its
+ * trailing slash.
+ */
+export function readModuleList(dist) {
+  return mergeModuleLists(...["metafile-esm.json", "metafile-lite.json"].map((name) => {
+    const url = new URL(name, dist);
+    assert(existsSync(url), `dist/${name} is missing; rebuild with npm run build`);
+    return JSON.parse(readFileSync(url, "utf8"));
+  }));
 }
 
 /**

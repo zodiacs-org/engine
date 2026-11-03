@@ -67,6 +67,32 @@
   ephemeris's error. Root charts, natal envelopes and the other entries'
   results carry none. The preregistered checks are in
   `docs/evidence/1.1.0-rc.2-20261102/time-bands/`.
+- **`@zodiacs/engine/lite`** (zodiacs.org's units P2.E: declinations, sect,
+  composite and dignities), a new entry point that loads no ephemeris: the
+  root's declination parallels and out-of-bounds flags
+  (`findDeclinationAspects`, `declinationsForBodies`, `declinationOf`,
+  `declinationOrb`, `eclipticToEquatorial`, with their constants and types),
+  `@zodiacs/engine/techniques`' composite midpoints and their aspects and its
+  essential dignities with their tables and mutual reception, and
+  `sectReading`, new: a chart's sect under the convention a caller names,
+  `"altitude"` (the Sun's altitude, which the caller computes; day from 0 up)
+  or `"ecliptic"` (the root's `sectOf`), with the sect light, Mercury's side
+  of the Sun (`orientality`) and the planets in and out of sect
+  (`docs/lite.md`, `api/lite.api.md`). There is no default convention, and
+  `sectOf` does not change. Each function and table of the declination,
+  composite and dignity parts is a copy of the root's or the techniques
+  entry's, with the same results and not the same object; the declarations are
+  theirs. Each of the four parts is built into a file of its own that imports
+  nothing (`scripts/build-lite.mjs`, which `npm run build` runs after tsup),
+  and `npm run exports:smoke` checks that the entry holds only its pinned
+  modules and loads in a Node process that cannot load astronomy-engine
+  (`scripts/lite-entry.mjs`; the preregistered checks are in
+  `docs/evidence/1.1.0-rc.2-20261102/lite/`). The composite functions and the
+  techniques' name helpers move to modules of their own
+  (`src/techniques/composite.ts`, `src/techniques/names.ts`), with no public
+  change. esbuild 0.27.7, the version tsup runs, is now a direct dev
+  dependency. The entry's import graph has a budget of its own, 29,000 bytes,
+  the ceiling approved under the owner's delegation of 2026-11-03.
 
 ## 1.1.0-rc.1 — unreleased candidate
 

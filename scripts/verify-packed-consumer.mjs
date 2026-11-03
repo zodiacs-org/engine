@@ -188,6 +188,21 @@ const marsDignities: PlanetDignities = essentialDignities("Mars", 10, "day");
 const sunInLeo: SignDignity | null = dignityFor("Sun", "leo");
 const moonSigns: readonly string[] = moonSignsBetween("2020-06-01T00:00:00Z", "2020-06-05T00:00:00Z");
 void solarReturned; void lunarReturned; void davison; void composite; void voidWindow; void marsDignities; void sunInLeo; void moonSigns;
+import { sectReading, orientality, findDeclinationAspects as liteParallels, declinationsForBodies as liteDeclinations, compositeMidpoints as liteMidpoints, compositeAspects as liteCompositeAspects, essentialDignities as liteEssential, dignitiesFor as liteDignitiesFor, SECT_CONVENTIONS, DIURNAL_PLANETS, type SectReading, type SectInput, type SectConvention, type Orientality, type AltitudeSectInput, type EclipticSectInput, type DeclinationAspect as LiteDeclinationAspect, type CompositeAspect as LiteCompositeAspect, type SignDignity as LiteSignDignity } from "@zodiacs/engine/lite";
+const liteByAltitude: AltitudeSectInput = {convention: "altitude", sunAltitude: -3, sunLon: 10, mercuryLon: null};
+const liteByEcliptic: EclipticSectInput = {convention: "ecliptic", ascendant: 0, sunLon: 200};
+const liteInputs: SectInput[] = [liteByAltitude, liteByEcliptic];
+const liteReadings: SectReading[] = liteInputs.map((input) => sectReading(input));
+const liteConventions: readonly SectConvention[] = SECT_CONVENTIONS;
+const liteSide: Orientality = orientality(100, 120);
+const liteDayPlanets: readonly ["Sun", "Jupiter", "Saturn"] = DIURNAL_PLANETS;
+const liteDeclinationAspects: LiteDeclinationAspect[] = liteParallels([{body: "Sun", lon: 90, lat: 0}, {body: "Moon", lon: 91, lat: 0.5}], 23.4392911);
+// One declaration per name: the lite entry's types are the root's and the techniques entry's own.
+const liteRow: DeclinationRow = liteDeclinations([{body: "Mars", lon: 10, lat: 1}], 23.44).rows[0];
+const liteMarsDignities: PlanetDignities = liteEssential("Mars", 10, "day");
+const liteCompositeRows: readonly LiteCompositeAspect[] = liteCompositeAspects(liteMidpoints([{body: "Sun", lon: 0}], [{body: "Sun", lon: 2}]));
+const liteSunInLeo: readonly LiteSignDignity[] = liteDignitiesFor("Sun", "leo");
+void liteReadings; void liteConventions; void liteSide; void liteDayPlanets; void liteDeclinationAspects; void liteRow; void liteMarsDignities; void liteCompositeRows; void liteSunInLeo;
 import { skyEvents, planetaryHours, planetaryHourAt, STANDARD_REFRACTION_ARCMIN, type SkyEvents, type SkyEventKind, type Observer, type PlanetaryDay, type PlanetaryHour } from "@zodiacs/engine/sky";
 const observer: Observer = {latitude: 51.48, longitude: 0, height: 45};
 const sunEvents: SkyEvents = skyEvents("Sun", observer, "2024-06-21T00:00:00Z", "2024-06-22T00:00:00Z", {limb: "upper", refraction: "standard"});
@@ -238,6 +253,7 @@ import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError } from "@zodiacs/en
 import * as techniques from "@zodiacs/engine/techniques";
 import * as sky from "@zodiacs/engine/sky";
 import * as time from "@zodiacs/engine/time";
+import * as lite from "@zodiacs/engine/lite";
 globalThis.fetch = () => { throw new Error("Calculation attempted a network request"); };
 const chart = natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(chart.houses.system, "whole");
@@ -545,6 +561,20 @@ const voidStatus = techniques.voidOfCourseAt(new Date((voids[0].from.getTime() +
 assert.equal(voidStatus.isVoid, true);
 assert.equal(voidStatus.current.to.getTime(), voids[0].to.getTime());
 assert.equal(moonSign(new Date(voids[0].to.getTime() + 1000).toISOString()), voids[0].nextSign);
+// The lite entry: copies of the root's declinations and the techniques
+// entry's composite and dignities, with the same answers and not the same
+// functions, and the sect under a named convention, whose ecliptic one is the
+// root's sectOf.
+assert.equal(Object.keys(lite).length, 27);
+assert.equal("sectReading" in root, false);
+const liteBodies = chart.bodies.map(({body, lon, lat}) => ({body, lon, lat}));
+assert.deepEqual(lite.findDeclinationAspects(liteBodies, 23.4392911), findDeclinationAspects(liteBodies, 23.4392911));
+assert.notEqual(lite.findDeclinationAspects, findDeclinationAspects);
+assert.deepEqual(lite.compositeMidpoints(invented.bodies, chart.bodies), techniques.compositeMidpoints(invented.bodies, chart.bodies));
+assert.deepEqual(lite.essentialDignities("Mars", 10, "day"), techniques.essentialDignities("Mars", 10, "day"));
+assert.equal(lite.sectReading({convention: "ecliptic", ascendant: chart.angles.asc, sunLon: chart.bodies[0].lon}).sect, root.sectOf(chart.angles.asc, chart.bodies[0].lon));
+assert.equal(lite.sectReading({convention: "altitude", sunAltitude: 0, sunLon: 0}).sect, "day");
+assert.throws(() => lite.sectReading({sunAltitude: 1, sunLon: 0}), RangeError);
 // The sky entry: the Sun's rise at Greenwich on 2024-06-21, a Friday, begins
 // Venus's day; its hours follow the Chaldean order; the rise is where the
 // Sun's upper limb meets the standard refraction.
@@ -605,7 +635,7 @@ assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-
   assert.deepEqual(conventionsEntry.parseConventionId("frame:a:b"), {namespace: "frame", value: "a:b"});
   assert.equal(parseNatalEnvelope(serializeNatalEnvelope(createNatalEnvelope(natalChart({utc: "2000-01-01T12:00:00Z"})))).ok, true);
 }
-console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
+console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", liteEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

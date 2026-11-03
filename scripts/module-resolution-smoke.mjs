@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { readdirSync, readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 
+import { LITE_NAMES, LITE_PARTS, checkLiteEntry, checkLiteNames, declaredNames } from "./lite-entry.mjs";
 import { UNMARKED_SOURCE, assertNoBreaches, checkBuild } from "./pure-tables.mjs";
-import { OPT_IN_SOURCE, checkRootIsolation, staticGraph } from "./root-isolation.mjs";
+import { OPT_IN_SOURCE, checkRootIsolation, readModuleList, staticGraph } from "./root-isolation.mjs";
 
 const engine = await import("@zodiacs/engine");
 const calc = await import("@zodiacs/engine/calc");
@@ -20,6 +23,7 @@ const window = await import("@zodiacs/engine/window");
 const sky = await import("@zodiacs/engine/sky");
 const internal = await import("@zodiacs/engine/internal");
 const internalMath = await import("@zodiacs/engine/internal/math");
+const lite = await import("@zodiacs/engine/lite");
 
 for (const name of [
   "positions",
@@ -309,6 +313,54 @@ assert.deepEqual(time.TIME_SCALE_NAMES, ["utc", "ut1", "tt"]);
   assert.throws(() => time.timeBands({ deltaT: basis.deltaT }), RangeError);
 }
 
+// The lite entry: the root's declinations and the techniques entry's
+// composite and dignities, each part built into a file that imports nothing
+// (scripts/build-lite.mjs), and the sect under a named convention. Its names
+// are the 51 of scripts/lite-entry.mjs (L8 of
+// docs/evidence/1.1.0-rc.2-20261102/lite/PREREGISTRATION.md), none lost to
+// two parts exporting it. Its functions and tables are copies: equal values,
+// never the same objects (L5). The sect names are its own.
+{
+  const parts = {};
+  for (const part of LITE_PARTS) parts[part] = Object.keys(await import(new URL(`../dist/lite-${part}.js`, import.meta.url).href));
+  checkLiteNames({ runtime: Object.keys(lite), parts, declared: declaredNames(fileURLToPath(new URL("../dist/lite.d.ts", import.meta.url))) });
+  for (const [part, home] of [["declinations", engine], ["composite", techniques], ["dignities", techniques]]) {
+    for (const name of LITE_NAMES[part].values) {
+      assert.equal(typeof lite[name], typeof home[name], `the lite entry's ${name} is not its home entry's kind of value`);
+      if (typeof lite[name] === "function" || typeof lite[name] === "object") assert.notEqual(lite[name], home[name], `the lite entry shares ${name}`);
+      if (typeof lite[name] !== "function") assert.deepEqual(lite[name], home[name], `the lite entry's ${name} differs from its home entry's`);
+    }
+  }
+  for (const name of LITE_NAMES.sect.values) {
+    assert.equal(name in engine || name in techniques, false, `the lite entry's ${name} is in the root or the techniques entry`);
+  }
+  for (const name of ["SECT_CONVENTIONS", "DIURNAL_PLANETS", "NOCTURNAL_PLANETS", "EGYPTIAN_TERMS", "TRIPLICITY_LORDS", "DEFAULT_DECLINATION_ORB_POLICY"]) {
+    assert.ok(Object.isFrozen(lite[name]), `lite ${name} must be frozen`);
+  }
+  // The same answers as the entries they are copied from, and the same refusals.
+  const bodies = [{ body: "Sun", lon: 89.5, lat: 0 }, { body: "Moon", lon: 271, lat: 4.9 }, { body: "Mars", lon: 95, lat: 1.2 }, { body: "Pluto", lon: 300, lat: -11 }];
+  assert.deepEqual(lite.declinationsForBodies(bodies, 23.4392911), engine.declinationsForBodies(bodies, 23.4392911));
+  assert.deepEqual(lite.findDeclinationAspects(bodies, 23.44, { orb: 2, luminaryOrb: 3 }), engine.findDeclinationAspects(bodies, 23.44, { orb: 2, luminaryOrb: 3 }));
+  const first = [{ body: "Sun", lon: 359 }, { body: "Moon", lon: 10 }, { body: "Venus", lon: 100 }];
+  const second = [{ body: "Sun", lon: 1 }, { body: "Moon", lon: 190 }, { body: "Venus", lon: 222 }];
+  assert.deepEqual(lite.compositeAspects(lite.compositeMidpoints(first, second)), techniques.compositeAspects(techniques.compositeMidpoints(first, second)));
+  assert.deepEqual(lite.mutualReceptions([{ body: "Sun", lon: 15 }, { body: "Mars", lon: 135 }]), techniques.mutualReceptions([{ body: "Sun", lon: 15 }, { body: "Mars", lon: 135 }]));
+  assert.deepEqual(lite.essentialDignities("Mars", 10, "day"), techniques.essentialDignities("Mars", 10, "day"));
+  for (const [ascendant, sun] of [[100, 100], [100, 280], [17.25, 3], [300, 10]]) {
+    assert.equal(lite.sectReading({ convention: "ecliptic", ascendant, sunLon: sun }).sect, engine.sectOf(ascendant, sun), "the ecliptic convention differs from sectOf");
+  }
+  assert.equal(lite.sectReading({ convention: "altitude", sunAltitude: -0, sunLon: 0 }).sect, "day");
+  for (const [run, again] of [
+    [() => lite.findDeclinationAspects([{ body: "Sun", lon: 0, lat: 0 }, { body: "Sun", lon: 1, lat: 0 }], 23.44), () => engine.findDeclinationAspects([{ body: "Sun", lon: 0, lat: 0 }, { body: "Sun", lon: 1, lat: 0 }], 23.44)],
+    [() => lite.compositeMidpoints([{ body: "Chiron", lon: 0 }], []), () => techniques.compositeMidpoints([{ body: "Chiron", lon: 0 }], [])],
+    [() => lite.dignityFor("Sun", "Leo"), () => techniques.dignityFor("Sun", "Leo")]
+  ]) {
+    assert.throws(run, RangeError);
+    assert.throws(again, RangeError);
+  }
+  assert.throws(() => lite.sectReading({ sunAltitude: 1, sunLon: 0 }), RangeError);
+}
+
 assert.equal(engine.PROGRESSION_DAYS_PER_YEAR, 365.2422);
 assert.equal(engine.progressedInstant("2019-12-31", "2020-12-30T05:48:46.080Z").toISOString(), "2020-01-01T00:00:00.000Z");
 assert.deepEqual(engine.progressedBodies("2019-12-31", "2020-12-30T05:48:46.080Z"), engine.positions("2020-01-01"));
@@ -412,19 +464,22 @@ checkSelfContained("crossings");
 checkSelfContained("deltat");
 // The time entry loads no ephemeris: its graph has no external import at all.
 checkSelfContained("time");
+// Nor does the lite entry: dist/lite.js and its four parts, which import nothing.
+checkSelfContained("lite");
 // The core entry reaches no zone history and loads nothing lazily; its one
 // dependency is the ephemeris.
 checkSelfContained("index", ["astronomy-engine"]);
 
 // The root imports no subpath: no module of an opt-in entry (timing, Vedic,
-// geo, calc, window, techniques, houses or sky), and no zone history, is in
-// its static graph (OPT_IN_SOURCE in scripts/root-isolation.mjs). That script
-// reads the graph from the build's own module list (dist/metafile-esm.json,
-// which `npm run build` writes and which must match dist/ byte for byte) and
-// from every `// src/...` marker the build writes, whatever the extension.
+// geo, calc, window, techniques, houses, sky, time or lite), and no zone
+// history, is in its static graph (OPT_IN_SOURCE in scripts/root-isolation.mjs).
+// That script reads the graph from the build's own module list
+// (dist/metafile-esm.json and dist/metafile-lite.json, which `npm run build`
+// writes, read as one, and which must match dist/ byte for byte) and from
+// every `// src/...` marker the build writes, whatever the extension.
 const distUrl = new URL("../dist/", import.meta.url);
 const readBuilt = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
-const metafile = JSON.parse(readFileSync(new URL("metafile-esm.json", distUrl), "utf8"));
+const metafile = readModuleList(distUrl);
 const builtFiles = readdirSync(distUrl).filter((name) => name.endsWith(".js")).map((name) => `dist/${name}`);
 const root = checkRootIsolation({ metafile, files: builtFiles, read: readBuilt });
 for (const reading of [root.sources, root.held, root.marked]) {
@@ -438,6 +493,26 @@ for (const reading of [root.sources, root.held, root.marked]) {
   for (const reading of [graph.sources, graph.held, graph.marked]) {
     assert.deepEqual([...new Set(reading)].sort(), ["src/convention-ids.ts", "src/conventions.ts"], "the conventions entry reaches another module");
   }
+}
+// The lite entry's files, read four ways (scripts/lite-entry.mjs, L1 to L3):
+// dist/lite.js imports its four parts and nothing else, and the parts import
+// nothing; no file holds a dynamic import or a string that comes only with
+// the ephemeris; and the entry holds its pinned source modules and no other.
+const liteGraph = checkLiteEntry({ metafile, files: builtFiles, read: readBuilt });
+// L4: the lite entry loads in a Node that cannot load astronomy-engine
+// (scripts/refuse-ephemeris.mjs), with every export defined; the root, the
+// control, fails there with the hook's error.
+{
+  const probe = (specifier) => spawnSync(process.execPath, [
+    "--import", new URL("./refuse-ephemeris.mjs", import.meta.url).href, "--input-type=module", "-e",
+    `const entry = await import(${JSON.stringify(specifier)}); console.log(JSON.stringify(Object.keys(entry).filter((name) => entry[name] !== undefined)));`
+  ], { cwd: fileURLToPath(new URL("..", import.meta.url)), encoding: "utf8" });
+  const loaded = probe("@zodiacs/engine/lite");
+  assert.equal(loaded.status, 0, `the lite entry does not load without astronomy-engine: ${loaded.stderr}`);
+  assert.deepEqual(JSON.parse(loaded.stdout), Object.keys(lite), "the lite entry loaded without astronomy-engine leaves an export undefined");
+  const refused = probe("@zodiacs/engine");
+  assert.notEqual(refused.status, 0, "the root entry loaded where astronomy-engine is refused: the refusing hook does not work");
+  assert.match(refused.stderr, /refuse-ephemeris: astronomy-engine may not be loaded/u, "the root entry failed, but not with the refusing hook's error");
 }
 // The time entry's graph, read both ways, holds its own file, the time basis,
 // the ΔT model, the spans, the nutation and the frame of date, with the two
@@ -484,6 +559,9 @@ for (const [entry, own] of [
   ["techniques", /^src\/techniques\//u],
   ["houses-extra", /^src\/houses-extra\.ts$/u],
   ["time", /^src\/time\.ts$/u],
+  // The modules under src/lite/ only re-export, so they leave no code to mark;
+  // src/sect.ts, which only the lite entry loads, is its own and marked.
+  ["lite", /^src\/(?:lite\/|sect\.ts$)/u],
   ["sky", /^src\/sky\//u]
 ]) {
   const graph = staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
@@ -506,7 +584,9 @@ for (const entry of ["geo", "techniques"]) {
   for (const file of outputsOf(entry)) assert(!/(?:^|\/)tzdb-[^/]*$/u.test(file), `zone-history shard in the static ${entry} graph`);
 }
 console.log(
-  "@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat and time graphs have no external imports, " +
+  "@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat, time and lite graphs have no external imports, " +
+    `the lite entry holds its ${liteGraph.sources.length} pinned source modules in ${liteGraph.outputs.length} files that import nothing ` +
+    "and loads where astronomy-engine cannot, " +
     `the core graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
     `${root.outputs.length} files) reaches no module of an opt-in entry and no zone history, ` +
     "the geo entry loads its 16 shards lazily, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic"

@@ -46,6 +46,12 @@ const required = [
   "dist/internal-math.js",
   "dist/internal.d.ts",
   "dist/internal.js",
+  "dist/lite.d.ts",
+  "dist/lite.js",
+  "dist/lite-composite.js",
+  "dist/lite-declinations.js",
+  "dist/lite-dignities.js",
+  "dist/lite-sect.js",
   "dist/window.d.ts",
   "dist/window.js",
   "package.json"
@@ -176,6 +182,14 @@ const ENTRY_BUDGETS = {
   // the nutation in the ephemeris chunk; 4.88 per cent of headroom.
   "./internal": 68_000,
   "./internal/math": 20_000, // rc.15: 18,165
+  // New in 1.1.0-rc.2: declination parallels, the sect under a named
+  // convention, composite midpoints and their aspects, and the dignities,
+  // without the ephemeris: dist/lite.js and the four files it re-exports,
+  // each built on its own and importing nothing (scripts/build-lite.mjs).
+  // 28,918 bytes in 5 files at the entry's own commit. 29,000 is the ceiling
+  // approved under the owner's delegation of 2026-11-03 (OQ3); 0.28 per cent
+  // of headroom.
+  "./lite": 29_000,
   // rc.15: 62,880. 1.0.0: 69,491. 1.1.0-rc.1: 72,500, 3,009 more, raised
   // from 70,000 with the owner's approval of 2026-10-26 for the receipt's
   // convention ids: the chunk of ids it shares with ./conventions and the
