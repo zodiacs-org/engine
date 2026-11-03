@@ -390,7 +390,8 @@ order, when the TT and the UT1 of its instant move by their 1-σ bands. Those
 two come from the bands the instant records, `deltaT.sigma` and
 `timeScale.ut1MinusUtc.sigma`, by the rule of [time.md](time.md), *The time
 bands* (`timeBands` in `@zodiacs/engine/time`), and every band gives them as
-`time: { tt, ut1 }`, in seconds. A band is not a bound and not an error. It
+`time: { tt, ut1 }`, in seconds. A band is not a bound on the error, and not
+an error. It
 leaves out the ephemeris's error, which `bounds` gives, the input time's own
 uncertainty, how far a civil time before 1972 was from UT1, and terms of the
 second order, and it is as good as the σ it comes from (time.md says what each
