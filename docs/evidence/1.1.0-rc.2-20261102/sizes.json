@@ -200,12 +200,12 @@
    },
    "./calc": {
     "files": 15,
-    "bytes": 149254,
-    "gzip": 49092,
-    "beyondCore": 68876,
-    "beyondCoreGzip": 21456,
+    "bytes": 150932,
+    "gzip": 49526,
+    "beyondCore": 70554,
+    "beyondCoreGzip": 21890,
     "budget": 156000,
-    "headroomPercent": 4.51
+    "headroomPercent": 3.35
    },
    "./conventions": {
     "files": 2,
@@ -326,12 +326,12 @@
    },
    "./vedic": {
     "files": 14,
-    "bytes": 141243,
-    "gzip": 47443,
-    "beyondCore": 48942,
-    "beyondCoreGzip": 16268,
+    "bytes": 141300,
+    "gzip": 47467,
+    "beyondCore": 48999,
+    "beyondCoreGzip": 16292,
     "budget": 143000,
-    "headroomPercent": 1.24
+    "headroomPercent": 1.2
    },
    "./window": {
     "files": 10,
@@ -372,16 +372,16 @@
   },
   "package": {
    "files": 90,
-   "total": 1090842,
+   "total": 1095070,
    "cap": 1100000,
-   "headroomPercent": 0.83,
+   "headroomPercent": 0.45,
    "split": {
     "rootJs": 106325,
-    "optInJs": 340178,
+    "optInJs": 341913,
     "zoneHistories": 189144,
-    "rootDeclarations": 62792,
-    "otherDeclarations": 152842,
-    "documents": 235165,
+    "rootDeclarations": 62794,
+    "otherDeclarations": 153330,
+    "documents": 237168,
     "manifest": 4396
    },
    "zoneHistories": {
@@ -391,35 +391,35 @@
    },
    "growthFrom": {
     "label": "1.1.0-rc.1",
-    "bytes": 84348,
+    "bytes": 88576,
     "split": {
      "rootJs": {
       "bytes": 345,
-      "percentOfGrowth": 0.41
+      "percentOfGrowth": 0.39
      },
      "optInJs": {
-      "bytes": 48411,
-      "percentOfGrowth": 57.39
+      "bytes": 50146,
+      "percentOfGrowth": 56.61
      },
      "zoneHistories": {
       "bytes": 0,
       "percentOfGrowth": 0
      },
      "rootDeclarations": {
-      "bytes": 1010,
-      "percentOfGrowth": 1.2
+      "bytes": 1012,
+      "percentOfGrowth": 1.14
      },
      "otherDeclarations": {
-      "bytes": 19549,
-      "percentOfGrowth": 23.18
+      "bytes": 20037,
+      "percentOfGrowth": 22.62
      },
      "documents": {
-      "bytes": 14613,
-      "percentOfGrowth": 17.32
+      "bytes": 16616,
+      "percentOfGrowth": 18.76
      },
      "manifest": {
       "bytes": 420,
-      "percentOfGrowth": 0.5
+      "percentOfGrowth": 0.47
      }
     }
    }

@@ -99,7 +99,7 @@ rounded down.
 | | 1.1.0-rc.1 | 1.1.0-rc.2 | budget | headroom, % |
 | --- | ---: | ---: | ---: | ---: |
 | `.` | 105,980 | 106,325 in 13 files | 108,500 | 2.04 |
-| `./calc` | 145,261 | 149,254 in 15 | 156,000, from 145,500 | 4.51 |
+| `./calc` | 145,261 | 150,932 in 15 | 156,000, from 145,500 | 3.35 |
 | `./conventions` | 2,754 | 2,754 in 2 | 2,900 | 5.30 |
 | `./crossings` | 9,942 | 9,942 in 2 | 10,000 | 0.58 |
 | `./deltat` | 5,232 | 5,232 in 2 | 5,500 | 5.12 |
@@ -113,9 +113,9 @@ rounded down.
 | `./techniques` | 155,805 | 156,210 in 15 | 160,000 | 2.42 |
 | `./time` | | 42,306 in 7 | 42,400 (new) | 0.22 |
 | `./timing` | 125,356 | 125,693 in 15 | 129,000 | 2.63 |
-| `./vedic` | 127,751 | 141,243 in 14 | 143,000, from 128,000 | 1.24 |
+| `./vedic` | 127,751 | 141,300 in 14 | 143,000, from 128,000 | 1.20 |
 | `./window` | 104,242 | 104,557 in 10 | 105,000 | 0.42 |
-| package, unpacked | 1,006,494 in 77 files | 1,090,842 in 90 files | 1,100,000, from 1,020,000 | 0.83 |
+| package, unpacked | 1,006,494 in 77 files | 1,095,070 in 90 files | 1,100,000, from 1,020,000 | 0.45 |
 
 The two new budgets, `./calc`'s and `./vedic`'s raises and the cap are the
 ceilings approved under the owner's delegation of 2026-11-03 (OQ3 in
@@ -131,9 +131,9 @@ exports that join the parts, and `./techniques`' also by the two modules the
 composite functions and the name helpers moved to. `./conventions`,
 `./crossings`, `./deltat`, `./geo` and `./houses` do not change.
 
-The package grows by 84,348 bytes: 48,411 of JavaScript that only the opt-in
-entry points load, 345 of the root's graph, 20,559 of declarations (1,010 of
-them reached from the root's `index.d.ts`), 14,613 of README, CHANGELOG,
+The package grows by 88,576 bytes: 50,146 of JavaScript that only the opt-in
+entry points load, 345 of the root's graph, 21,049 of declarations (1,012 of
+them reached from the root's `index.d.ts`), 16,616 of README, CHANGELOG,
 LICENSING.md and NOTICE, and 420 of manifest. The zone histories are
 unchanged, 189,144 bytes in 16 files of their 200,000. The CHANGELOG keeps
 its whole history: OQ3's other choice, moving its 0.x history out of the

@@ -164,11 +164,11 @@ const ENTRY_BUDGETS = {
   // headroom. 1.0.0-rc.1: 144,694, with the reviews' checks and a caller's
   // epochs across EPHEMERIS_SPAN; 0.55 per cent, not raised
   // (docs/evidence/1.0.0-rc.1-20261006/sizes.json). 1.0.0-rc.2: 145,261, with
-  // the core's marks; 0.16 per cent, not raised. 1.1.0-rc.2: 149,254, 3,993
+  // the core's marks; 0.16 per cent, not raised. 1.1.0-rc.2: 150,932, 5,671
   // more than 1.1.0-rc.1's 145,261, with the F-89 corrections, the time bands
   // (and the timeBands chunk it shares with ./time) and the chunks split out
   // for ./time (above); raised to 156,000, the ceiling approved under the
-  // owner's delegation of 2026-11-03 (OQ3); 4.51 per cent of headroom.
+  // owner's delegation of 2026-11-03 (OQ3); 3.35 per cent of headroom.
   "./calc": 156_000,
   // New in 1.1.0-rc.1: the ids of the conventions registry. 2,754 bytes, its
   // own file and the chunk of ids it shares with ./receipt; 5.30 per cent of
@@ -239,10 +239,10 @@ const ENTRY_BUDGETS = {
   // 123,639, its ayanamsas and sidereal charts now in a chunk it shares with
   // ./calc; 3.52 per cent, not raised. 1.0.0-rc.1: 127,184, its options and
   // inputs read strictly; 0.64 per cent, not raised. 1.0.0-rc.2: 127,751,
-  // with the core's marks; 0.19 per cent, not raised. 1.1.0-rc.2: 141,243,
-  // 13,492 more than 1.1.0-rc.1's 127,751, with the varga sensitivity and the
+  // with the core's marks; 0.19 per cent, not raised. 1.1.0-rc.2: 141,300,
+  // 13,549 more than 1.1.0-rc.1's 127,751, with the varga sensitivity and the
   // chunks split out for ./time (above); raised to 143,000, the ceiling
-  // approved under the owner's delegation of 2026-11-03 (OQ3); 1.24 per cent
+  // approved under the owner's delegation of 2026-11-03 (OQ3); 1.20 per cent
   // of headroom.
   "./vedic": 143_000,
   // New in rc.16 (feature-window): birth-time window partitions, the search
@@ -354,16 +354,16 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // 1,020,000 with the owner's approval of 2026-10-26, which leaves 13,506
 // bytes.
 //
-// 1.1.0-rc.2: 1,090,842 bytes in 90 files, 84,348 more than 1.1.0-rc.1:
-// 48,411 bytes of JavaScript that only the opt-in entry points load, for the
+// 1.1.0-rc.2: 1,095,070 bytes in 90 files, 88,576 more than 1.1.0-rc.1:
+// 50,146 bytes of JavaScript that only the opt-in entry points load, for the
 // entries ./time and ./lite, the time bands, the varga sensitivity and the
-// F-89 corrections; 20,559 of declarations; 14,613 of README, CHANGELOG,
+// F-89 corrections; 21,049 of declarations; 16,616 of README, CHANGELOG,
 // LICENSING.md and NOTICE; 420 of manifest; and 345 of the root's graph
 // (docs/evidence/1.1.0-rc.2-20261102/sizes.json). Raised from 1,020,000 to
 // 1,100,000, the ceiling approved under the owner's delegation of 2026-11-03
 // (OQ3 in docs/evidence/1.1.0-rc.2-20261102/OWNER-ANSWERS.md), for those
 // entries and features, rather than moving the CHANGELOG's 0.x history out
-// of the package; it leaves 9,158 bytes, 0.83 per cent.
+// of the package; it leaves 4,930 bytes, 0.45 per cent.
 const TOTAL_CAP = 1_100_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 
