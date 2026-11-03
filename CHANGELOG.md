@@ -93,6 +93,27 @@
   change. esbuild 0.27.7, the version tsup runs, is now a direct dev
   dependency. The entry's import graph has a budget of its own, 29,000 bytes,
   the ceiling approved under the owner's delegation of 2026-11-03.
+- **The birth-time sensitivity of the vargas** (zodiacs.org's unit
+  P2.B.vargas). `vargaSensitivity(natal, ayanamsa, options?)`, exported by
+  `@zodiacs/engine/vedic` with `VARGA_POINTS` and seven types, gives for each
+  point and varga the first millisecond after the birth at which the point's
+  varga sign changes and the last change before it, up to 2,880 minutes on
+  each side: the instant, its minutes from the birth, the boundary crossed and
+  the signs on either side (`docs/vedic.md`, *Birth-time sensitivity*). The
+  points are the Ascendant, the Sun to Pluto and the two mean nodes; the true
+  node is not offered. Each instant is exact in the engine's own arithmetic on
+  the chart's clock, as `siderealChart` and `chartPoints` compute the
+  positions, which is not a claim of accuracy. That none is missed rests on
+  derived rate bounds for the Ascendant and the mean nodes, and on bounds
+  scanned, not derived, for the bodies. A row the search cannot compute
+  carries a typed refusal:
+  `no-angles`, `polar` (more than 66° from the equator), `out-of-range`
+  (outside 1800 to 2200), `rate-bound` or `evaluation-budget` (2,000,000
+  evaluations a call). `vargaOf` places a longitude as before, through an
+  internal function that takes a whole tick, and the vargas' change
+  boundaries are held to an engine-free fixture,
+  `src/vedic/fixtures/varga-changes.json` (the preregistered checks are in
+  `docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/`).
 
 ## 1.1.0-rc.1 — unreleased candidate
 

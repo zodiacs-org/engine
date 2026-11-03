@@ -219,7 +219,9 @@ for (const aspect of today.aspects) {
   and the speeds of the cusps and the angles (see `docs/houses.md`). It
   imports no ephemeris and no module of the root entry.
 - `@zodiacs/engine/vedic` provides the sidereal zodiac: ayanamsas, sidereal
-  charts, nakshatras, vargas, KP sub-lords and dashas (see `docs/vedic.md`).
+  charts, nakshatras, vargas, KP sub-lords and dashas, and, new in
+  1.1.0-rc.2, how far the birth time can move before each varga sign changes
+  (`vargaSensitivity`; see `docs/vedic.md`).
 - `@zodiacs/engine/sky` provides rise, set and transit times for an observer
   and planetary hours (see `docs/sky.md`).
 - `@zodiacs/engine/window` partitions a birth-time window into cells within

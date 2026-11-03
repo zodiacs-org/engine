@@ -52,6 +52,7 @@ for (const name of [
   "siderealChart",
   "nakshatraOf",
   "vargaOf",
+  "vargaSensitivity",
   "kpLordsOf",
   "vimshottariDasha",
   "dashaSubperiods",
@@ -62,11 +63,12 @@ for (const name of [
   assert.equal(typeof vedic[name], "function", `missing vedic export: ${name}`);
   assert.equal(name in engine, false, `vedic leaked into root: ${name}`);
 }
-for (const name of ["AYANAMSAS", "NAKSHATRAS", "VARGAS", "KP_SUBS", "YOGINIS", "DASHA_YEAR_DAYS"]) {
+for (const name of ["AYANAMSAS", "NAKSHATRAS", "VARGAS", "VARGA_POINTS", "KP_SUBS", "YOGINIS", "DASHA_YEAR_DAYS"]) {
   assert.ok(Object.isFrozen(vedic[name]), `vedic ${name} must be frozen`);
   assert.equal(name in engine, false, `vedic leaked into root: ${name}`);
 }
 assert.equal(vedic.KP_SUBS.length, 249);
+assert.equal(vedic.VARGA_POINTS.length, 13);
 
 // The timing techniques are a separate entry point, absent from the root.
 for (const name of [
