@@ -603,3 +603,15 @@ reading `validated` only, until the owner ratifies it. Once a formal run has
 been seen, a change of rule is a new version (section 10).
 
 None at commit P.
+
+**2026-11-03, the owner's answers.** The answers to OQ1 to OQ14, given under
+the owner's delegation of that day and before any formal run, are in
+[`../OWNER-ANSWERS.md`](../OWNER-ANSWERS.md). For P2.B.vargas: OQ1, KP
+waits; OQ3, `./vedic`'s ceiling 143,000; OQ6 yes, so G-V4 can run with
+pyerfa in the scratch environment; OQ7 yes. OQ5 is not answered under that delegation (zodiacs.org
+`DECISIONS-2026-10-05.md` §4). Section 3's
+reading, with its 5 s and side rule, R5 as narrower than the brief's Phase 2
+rule, and completeness derived only for the Ascendant and the mean nodes,
+stays unratified, and the true node stays out. The unit is `validated` at
+most (section 11, condition 3) until the owner ratifies. This amendment is
+the answer section 2's "Owner's answer" line waits for.

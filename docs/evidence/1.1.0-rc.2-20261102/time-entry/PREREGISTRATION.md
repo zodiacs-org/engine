@@ -464,6 +464,15 @@ version of this preregistration, which cites this one and its results.
 
 None at commit P.
 
+**2026-11-03, the owner's answers.** The answers to OQ1 to OQ14, given under
+the owner's delegation of that day and before any formal run, are in
+[`../OWNER-ANSWERS.md`](../OWNER-ANSWERS.md). For F-53: OQ2 yes, the frame
+functions public; OQ3, `./time`'s ceiling 42,400; OQ6 yes; OQ12, the site's
+CLAUDE.md line removed in the adoption pull request; OQ13, no table refresh.
+OQ5 is not answered under that delegation (zodiacs.org
+`DECISIONS-2026-10-05.md` §4). R1 to R6, the MF layout and its fixed S rule stay unratified, so
+F-53 is recorded "fixed and deployed; readings awaiting ratification".
+
 ## 12. Tools and order (to be written on the cut branch)
 
 Under `docs/evidence/1.1.0-rc.2-20261102/time-entry/tools/`, each reading only

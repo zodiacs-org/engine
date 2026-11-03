@@ -715,3 +715,13 @@ seen, a change of rule is a new version of this preregistration, which cites
 this one and its results.
 
 None at commit P.
+
+**2026-11-03, the owner's answers.** The answers to OQ1 to OQ14, given under
+the owner's delegation of that day and before any formal run, are in
+[`../OWNER-ANSWERS.md`](../OWNER-ANSWERS.md). For these four units: OQ2 yes; OQ3,
+`./lite`'s ceiling 29,000 with its declarations by re-export; OQ4 yes to
+each convention; OQ6 yes; OQ11, check 16 retargeted to the package.
+OQ5 is not answered under that delegation (zodiacs.org
+`DECISIONS-2026-10-05.md` §4). R3, R4's causes and 1e-12 thresholds, and R6 stay unratified,
+so each of the four units is `validated` at most until the owner ratifies
+them.

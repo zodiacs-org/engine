@@ -517,3 +517,12 @@ ratifies it. Once a formal run has been seen, a change of rule is a new
 version of this preregistration, which cites this one and its results.
 
 None at commit P.
+
+**2026-11-03, the owner's answers.** The answers to OQ1 to OQ14, given under
+the owner's delegation of that day and before any formal run, are in
+[`../OWNER-ANSWERS.md`](../OWNER-ANSWERS.md). For this unit: item 1 under OQ9 (c),
+as commit 48e4e76 applied it, so E10 runs and E9 and E11 do not; OQ10's Q2,
+the fixes close F-89 only and P1.14 stays partial; Q3, F-90 is not in rc.2;
+Q4, the footer allowance is site work after rc.2. OQ5 is not answered under that delegation (zodiacs.org
+`DECISIONS-2026-10-05.md` §4). R-F89 stays
+unratified, and so does OQ10's Q5, which is not answered either.

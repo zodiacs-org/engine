@@ -707,3 +707,12 @@ only, until the owner ratifies it. A new version is made only after a formal
 run has been seen (section 9).
 
 None at commit P.
+
+**2026-11-03, the owner's answers.** The answers to OQ1 to OQ14, given under
+the owner's delegation of that day and before any formal run, are in
+[`../OWNER-ANSWERS.md`](../OWNER-ANSWERS.md). For P1.M3c: OQ3, `./calc`'s
+ceiling 156,000 and `./time`'s 42,400; OQ7 yes; OQ13, no table refresh.
+OQ5 is not answered under that delegation (zodiacs.org
+`DECISIONS-2026-10-05.md` §4). R-M3c, with the bands confined to `./calc`, and `timeBands`
+exported from `./time` stay unratified, so P1.M3c is `validated` at most
+until the owner ratifies them.
