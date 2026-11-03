@@ -510,6 +510,27 @@ this file's corpora; every reading here stays `validated` at most under OQ5.
   `api/time.api.md` does not change, having no block of declarations
   referenced and not exported. T1's names do not change.
 
+**2026-11-04, T12's tool, written late.** Section 12 names
+`tools/declarations.mts` for T12, and commit 3129ede, which added the entry's
+check tools, did not hold it; review 2 (programme notes,
+`notes/rc2-2026-11-01/review2/`) found the carrier's job recording T12 as not
+run. Written now, before any formal run: `tools/declarations.mts`, the file T12
+compiles, which asserts the nine types both ways and the package's
+`EPHEMERIS_SPAN` one way, as section 6 says; and `tools/declarations.sh`, which
+the row's "path given at run time, digest checked" needs: it refuses a site
+file whose SHA-256 is not section 5's pin
+(`8cc3670eb2aae747a2e22e667633594b8d24f7f6982dfcee2c0ffc2a2cff6ff9`), copies
+it beside the file as `site/time-basis.d.mts`, links the extracted package as
+`@zodiacs/engine`, and compiles with the TypeScript given (5.9.3: `--strict`,
+`--noEmit`, NodeNext). T12's control, the copy's `TimeBasis` with a required
+`extra: number`, is a step of `tools/controls.sh` (the `.d.mts` beside the
+site's `time-basis.mjs`) and of the carrier's `time-entry` job. Tried once on
+this tree's build with the site's file read from its git objects at 9a67f761:
+the check compiles (exit 0) and the control fails in `declarations.mts` with
+TS2344 on each assertion that no longer holds. T12 has no corpus; no reading,
+rule or other check changes, and every reading here stays `validated` at most
+under OQ5.
+
 ## 12. Tools and order (to be written on the cut branch)
 
 Under `docs/evidence/1.1.0-rc.2-20261102/time-entry/tools/`, each reading only

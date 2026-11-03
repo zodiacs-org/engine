@@ -192,11 +192,8 @@ process.exitCode = JSON.stringify(keys) === JSON.stringify(R1) ? 0 : 1;' "$tools
     step "T9: npm run package:contents" quiet npm run package:contents
     step "T10: behaviour.mjs" pass node "$tools/behaviour.mjs" --package "$pkg" --out "$reports/T10.json"
     step "T11: state-scan.mjs" pass node "$tools/state-scan.mjs" --repo . --out "$reports/T11.json"
-    # T12's tool, declarations.mts (section 12), was not in the tree that added this job, so its run, on the
-    # archive's dist/time.d.ts and SITE_TIME_BASIS_DTS, goes here with the tool; until then T12 is recorded as
-    # not run, and the job fails, since T1 to T13 must all run again on the archive.
-    printf '## T12: declarations.mts\nnot run: tools/declarations.mts, which section 12 names, is not in this tree\nexit 1\n' >> "$log"
-    failed=1 ;;
+    # T12's tool, declarations.mts (section 12), with its runner, added by the amendment of 2026-11-04.
+    step "T12: declarations.sh on the archive's dist/time.d.ts" all sh "$tools/declarations.sh" "$pkg" "$SITE_TIME_BASIS_DTS" node_modules/typescript/bin/tsc ;;
   *)
     echo "unknown job $job" >&2
     exit 2 ;;

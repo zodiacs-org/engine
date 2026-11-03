@@ -134,5 +134,11 @@ printf '\nexport { timeBasis } from "./time.js";\n' >> "$work/t13/src/index.ts"
 (cd "$work/t13" && npm run build > "$work/T13-build.out" 2>&1 && "$node22" scripts/module-resolution-smoke.mjs) > "$work/T13.out" 2>&1
 code=$?; note T13-root-reexports-timeBasis "$code" "$(grep -q 'time leaked into root: timeBasis\|the root entry reaches src/time.ts' "$work/T13.out" && echo true || echo false)"
 
+# T12: the site's TimeBasis with a required extra field must not compile against the entry's
+# (declarations.sh, added with the amendment of 2026-11-04, before any formal run). The site's
+# time-basis.d.mts sits beside its time-basis.mjs.
+sh "$tools/declarations.sh" "$pkg" "${site%.mjs}.d.mts" "$repo/node_modules/typescript/bin/tsc" control > "$work/T12.out" 2>&1
+code=$?; note T12-site-TimeBasis-extra-field "$code" "$(grep -q 'declarations.mts' "$work/T12.out" && echo true || echo false)"
+
 echo "controls that failed as required: $behaved; controls that did not: $broken"
 [ "$broken" -eq 0 ]
