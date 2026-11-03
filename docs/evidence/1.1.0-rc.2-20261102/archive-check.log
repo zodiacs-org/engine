@@ -1,0 +1,4 @@
+# GIT_NO_LAZY_FETCH=1 TMPDIR=<tmp> node scripts/verify-archive-binding.mjs (no --rebuild-all); Node v22.22.2, darwin-arm64, 2026-11-03
+No archive artifacts/zodiacs-engine-1.1.0-rc.2.tgz is carried for 1.1.0-rc.2 yet; skipping the rebuild of HEAD.
+16 recorded archives (15 carried, 1 superseded) and their receipts hold only their recorded bytes across 316 commits, and each is bound to its source commit.
+exit 0

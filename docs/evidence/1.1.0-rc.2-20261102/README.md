@@ -208,24 +208,48 @@ The record of the gates cites the CI run of each job left to CI.
 
 ## Checks on the tree before the source commit
 
-*To be filled.* On the reviewed tree, one at a time: `gates.sh`, CI's engine
-job, on Node 22.22.2, 20.19.0 and 24.21.0 (`gates.log`,
-`full-tests-*.log`); `tree-jobs.sh`, the pack, the packed consumer on Node
-20.19.0, 22.7.0, 22.22.2 and 24.21.0, conformance and the atlas
-(`tree-jobs.log`); and the archive check, which skips the rebuild of HEAD
-while no 1.1.0-rc.2 archive is carried. On darwin-arm64 the suite may fail
-nothing but the 4 tests that fail there in 1.1.0-rc.1's record (the time
-bands' check C6 holds it to that): tests 25 and 17 of
-`src/calc-fixtures.test.ts`, which replay one round-trip case, and the
-returns and void-of-course checks of `src/techniques/site-parity.test.ts`.
-CI runs the suite on x86-64, where the pins were taken.
+On the reviewed tree (`e2edd3a`), one at a time, on darwin-arm64:
+
+- `gates.sh`, CI's engine job, on Node 22.22.2, 20.19.0 and 24.21.0
+  (`gates.log`, `full-tests-*.log`): typecheck, the build, the export smoke
+  test, the API check, the package contents and the pack dry run pass on
+  each. The suite fails on each only the 4 tests that fail on darwin-arm64 in
+  1.1.0-rc.1's record: tests 25 and 17 of `src/calc-fixtures.test.ts`, which
+  replay one round-trip case, and the returns and void-of-course checks of
+  `src/techniques/site-parity.test.ts`. CI runs the suite on x86-64, where
+  the pins were taken. G-V5's step is recorded as not run: `docs/vedic.md`
+  holds its placeholder until the varga sensitivity's formal run writes the
+  table.
+- `tree-jobs.sh` (`tree-jobs.log`): the build, the pack, the packed consumer
+  on Node 20.19.0, 22.7.0, 22.22.2 and 24.21.0, the conformance job's four
+  checks and the atlas job's two pass.
+- The archive check (`archive-check.log`), with lazy fetching off and no
+  `--rebuild-all`: every recorded archive holds its recorded bytes and is
+  bound to its source commit, and the rebuild of HEAD is skipped while no
+  1.1.0-rc.2 archive is carried. Rebuilds run only in CI (K12).
 
 ## Reviews and the site run
 
-*To be filled:* the independent review and the second review, what each
-found and the commits that act on them; and the site run on the candidate,
-which builds zodiacs.org with this package in place of 1.1.0-rc.1 in a
-scratch clone and commits nothing.
+Two independent reviews read the candidate, each in parts: the first on
+`b11c5e8`, acted on in `a5c1a38`, `b954a78` and `6d7486d`, with the x86-64
+regeneration (`8173f1e`) and the size records (`4f4c1e8`) after them; the
+second on `4f4c1e8`, acted on in `415781e`, with T12's tool (`7d3c5ae`,
+written late), the size records (`5c00cb8`) and `e2edd3a`. Each commit's
+message says what it changes and why. Both reviews ran some inputs the formal
+runs hold before those runs; each unit's amendments say which, and the
+readings they touch are `validated` only until the owner ratifies.
+
+The site run built zodiacs.org's main with the packed candidate in place of
+1.1.0-rc.1, in a scratch clone outside every repository, on `b11c5e8`,
+`4f4c1e8` and `5c00cb8`, and committed nothing; its records are kept with
+the programme's notes, outside the repository. Every bundle allowance held on
+the default build and with production's flags; the engine reference built for
+all fifteen public entry points, and its export-coverage control failed as it
+must; every new sentence the site's claims extractor selects is backed by
+committed evidence here; F-89's S1 holds. The time bands' C8, and lite's B5,
+are void as run: the sentence their control plants has no trigger word in the
+extractor's lexicon, so it was not selected, and each needs a version 2 in
+the site's adoption (time-bands and lite amendments of 2026-11-03).
 
 ## Formal runs
 

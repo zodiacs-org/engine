@@ -1,0 +1,651 @@
+# TMPDIR=<tmp> npm test, Node v20.19.0
+
+> @zodiacs/engine@1.1.0-rc.2 test
+> vitest run
+
+
+ RUN  v2.1.9 <checkout>
+
+ ✓ src/timing/releasing.test.ts (18 tests) 442ms
+   ✓ zodiacal releasing invariants > tile every period exactly with its sub-periods, loosening at most once and only after a full round 302ms
+ ✓ src/calc.test.ts (87 tests) 646ms
+ ✓ src/receipt.test.ts (38 tests) 340ms
+ ✓ scripts/pure-tables.test.mjs (28 tests) 1717ms
+   ✓ this checkout > has no table in src/ that a bundler cannot leave out but those, nothing that keeps one, and no misplaced mark 1096ms
+ ✓ src/time-scale.test.ts (103 tests) 666ms
+   ✓ UT1 − UTC from IERS: EOP 20 C04 in 1972, finals2000A.all of 2026-09-24 from 1973-01-02 > reproduces every daily IERS value, observed and predicted, within the table's stated bound 374ms
+ ✓ src/receipt-time-basis.test.ts (53 tests) 334ms
+ ✓ src/vedic/ayanamsa.test.ts (24 tests) 142ms
+ ✓ src/aspect-exactness.test.ts (8 tests) 1793ms
+   ✓ configured aspects under exact binary semantics > agree with the exact rational oracle on a decimal grid, wrapped and unwrapped, in both row orders 477ms
+   ✓ configured aspects under exact binary semantics > would fail the same oracle harness on the rc.11 arithmetic 542ms
+ ✓ src/geo/calendar.test.ts (30 tests) 381ms
+ ✓ src/declination.test.ts (25 tests) 161ms
+ ✓ src/crossings.test.ts (55 tests) 55ms
+ ✓ src/timing/profections.test.ts (16 tests) 684ms
+   ✓ dated profections > place a date in the same year and month profectionYear lists 309ms
+ ✓ src/receipt-ids.test.ts (25 tests) 204ms
+ ✓ bots/astrologer/facts/check-reading.test.ts (66 tests) 5045ms
+   ✓ a builder sheet read as a reading > passes itself: every line names a relation that is on the sheet 4842ms
+ ✓ src/configured-aspects.test.ts (52 tests) 160ms
+ ✓ src/geo/birthplace.test.ts (44 tests) 386ms
+ ✓ src/calc-sidereal.test.ts (65 tests) 3538ms
+   ✓ the sidereal zodiac in houses() > gives siderealChart()'s ascendant, midheaven and cusps to the bit, for every system 380ms
+   ✓ the sidereal zodiac in chart() > adds siderealChart()'s longitudes beside natalChart()'s chart 1481ms
+ ✓ src/house-systems.test.ts (1903 tests) 649ms
+ ✓ src/input-flags.test.ts (66 tests) 161ms
+ ✓ src/geo/zone-history.test.ts (24 tests | 1 skipped) 132ms
+ ✓ src/time.test.ts (10 tests) 500ms
+ ✓ src/sect.test.ts (20 tests) 252ms
+ ✓ src/geo/geonames-schema.test.ts (67 tests) 48ms
+ ✓ bots/astrologer/facts/reading-facts.test.ts (33 tests) 7015ms
+   ✓ civil time > gives both readings of a skipped wall time (IANA: New York sprang from UTC-5 to UTC-4 at 02:00 on 2026-03-08) 2302ms
+   ✓ civil time > gives both occurrences of a repeated wall time (IANA: New York fell back from UTC-4 to UTC-5 at 02:00 on 2026-11-01) 2065ms
+   ✓ civil time > never gives houses, angles, sect or a Moon degree without a birth time 631ms
+   ✓ natal facts > ranks aspects by orb, tightest first, numbered from 1 1099ms
+   ✓ line IDs > gives the same IDs for the same input 884ms
+ ✓ src/vedic/dasha.test.ts (17 tests) 980ms
+   ✓ Vimshottari > finds each period from its own start and end: boundaries round-trip through the ISO strings 818ms
+ ✓ src/timing/solar-arc.test.ts (16 tests) 241ms
+ ✓ src/houses-extra.test.ts (24 tests) 6839ms
+   ✓ the entry's angles are the root's > puts the root's cusps at whole house positions, for every system, in and out of the polar circle 1087ms
+   ✓ the entry's angles are the root's > orders ecliptic points between the cusps: positions rise with longitude, once round 349ms
+   ✓ the entry's angles are the root's > gives whole sign, Equal, Vehlow, Equal from the midheaven, Porphyry and Morinus by longitude alone 745ms
+   ✓ house circles through a body off the ecliptic > Regiomontanus: the circle through the north point and the equator at the body's position holds the body 328ms
+   ✓ house circles through a body off the ecliptic > Koch: the body is on the horizon of the sidereal time its position names, within the house circles 429ms
+   ✓ where a system defines no position > Placidus follows Otto Ludwig for circumpolar bodies: 10th to 12th house east, 7th to 9th west 1574ms
+   ✓ speeds > agree with a central difference of the root's own cusps and angles 1054ms
+   ✓ speeds > differentiates the cusps of every other system inside the polar circle, away from their jumps 486ms
+ ✓ src/points.test.ts (15 tests) 66ms
+ ✓ src/timing/firdaria.test.ts (12 tests) 532ms
+ ✓ scripts/root-isolation.test.mjs (12 tests) 29ms
+ ✓ src/techniques/dignities.test.ts (18 tests) 16ms
+ ✓ src/vedic/jyotish.test.ts (14 tests) 101ms
+ ✓ src/geo/flags.test.ts (48 tests) 114ms
+ ✓ scripts/lite-entry.test.mjs (13 tests) 497ms
+   ✓ this checkout's build of the lite entry > passes L8 at run time and in its declarations 453ms
+ ✓ src/timing/planetary-returns.test.ts (36 tests) 4362ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Sun': the same returns as a fine plain scan over the fixture's window 463ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Moon': the same returns as a fine plain scan over the fixture's window 328ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Uranus': the same returns as a fine plain scan over the fixture's window 413ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Neptune': the same returns as a fine plain scan over the fixture's window 323ms
+   ✓ consistency with a plain scan of the engine's own longitudes > 'Pluto': the same returns as a fine plain scan over the fixture's window 1593ms
+ ✓ src/crossings-ephemeris.test.ts (11 tests) 3770ms
+   ✓ the audit's s2 cases, with the site's answers > returns 2400 days of Moon crossings of 0° at a quarter-day step, where rc.7 threw 316ms
+   ✓ the audit's s2 cases, with the site's answers > matches an hourly scan of the 2,600-day Moon window, crossing by crossing 1162ms
+   ✓ the audit's s2 cases, with the site's answers > returns Saturn's crossings of 0° from 1900 to 2100 at a 5-day step, and a daily scan agrees 1557ms
+ ✓ src/time-bands.test.ts (5 tests) 100ms
+ ✓ src/calc-bounds.test.ts (7 tests) 4665ms
+   ✓ the barycentric Sun's bounds > rest on the barycentre's error, which a daily scan of 1800 to 2200 against the full Newtonian barycentre and Horizons bear out 4607ms
+ ✓ src/geo/birthplace-clock.test.ts (28 tests) 3689ms
+   ✓ the birthplace clock at each change of its shipped history before 1970 > America/New_York: New York 541ms
+   ✓ the birthplace clock on its zone's own meridian > matches the zone clock at every such era end 894ms
+ ✓ src/engine.test.ts (24 tests) 120ms
+ ✓ src/progressions.test.ts (21 tests) 71ms
+ ✓ src/nutation.test.ts (10 tests) 78ms
+ ✓ src/techniques/aspect-patterns.test.ts (23 tests) 61ms
+ ✓ src/techniques/returns.test.ts (81 tests) 474ms
+ ✓ src/timing/shared.test.ts (7 tests) 943ms
+   ✓ timing flags > mark the sect exactly when the Sun's altitude, found another way, disagrees with it 310ms
+ ✓ src/sky/hours.test.ts (8 tests) 155ms
+ ✓ src/speed.test.ts (23 tests) 635ms
+ ✓ src/placidus-limit.test.ts (3 tests) 3621ms
+   ✓ the Placidus limit against the ERFA arbiter (brief v1 rule 1h) > computes Placidus exactly where the arbiter's limit allows it 325ms
+   ✓ Placidus just below the polar limit > keeps Placidus at every millisecond of the review's reproduction, where the iteration alone fell back 1767ms
+   ✓ Placidus just below the polar limit > solves every cusp within 1e-6° of the limit, at the sidereal times where the iteration alone fails 1528ms
+ ✓ src/deltat-chart.test.ts (11 tests) 73ms
+ ✓ src/receipt-nutation.test.ts (6 tests) 136ms
+ ✓ src/porphyry.test.ts (14 tests) 122ms
+ ✓ src/techniques/relationship.test.ts (12 tests) 84ms
+ ✓ src/geo/geonames.test.ts (10 tests) 27ms
+ ✓ src/deltat.test.ts (12 tests) 82ms
+ ✓ src/techniques/moon-sign.test.ts (13 tests) 123ms
+ ✓ src/replay-time-basis.test.ts (3 tests) 56ms
+ ✓ src/public-input.test.ts (78 tests) 68ms
+ ✓ src/sky/riseset.test.ts (8 tests) 108ms
+ ✓ src/vedic/varga-time.test.ts (83 tests) 13702ms
+   ✓ review 2's station against a boundary, through the public API > a last step of one unit in the last place: the D2 change gives the boundary it reaches, 285 6049ms
+   ✓ review 2's station against a boundary, through the public API > a last step of one unit in the last place: the D60 change gives the boundary it reaches, 278 6134ms
+ ❯ src/calc-fixtures.test.ts (68 tests | 2 failed) 208ms
+   × calc round-trip fixtures > 25: calc gives the committed result for the committed request 5ms
+     → result.speeds.lon: expected 1.4210854715202004e-11 to be less than or equal to 1e-12
+   × calc round-trip fixtures > 17: calc gives the same result again for its receipt's request 1ms
+     → result.speeds.lon: expected 1.4210854715202004e-11 to be less than or equal to 1e-12
+ ✓ src/reference-span.test.ts (7 tests) 128ms
+ ✓ src/returns-bounds.test.ts (19 tests) 51ms
+ ✓ src/geo.test.ts (40 tests) 43ms
+ ✓ src/receipt-conventions.test.ts (6 tests) 48ms
+ ✓ src/window-ranges.test.ts (7 tests) 1689ms
+   ✓ oblique longitude ranges > contains, and closely bounds, the ascendant and the circle cusps 1637ms
+ ✓ src/semver.test.ts (22 tests) 126ms
+ ✓ src/receipt-json.test.ts (88 tests) 14ms
+ ✓ src/equator.test.ts (2 tests) 12ms
+ ✓ scripts/verify-release-archive.test.mjs (10 tests) 1619ms
+   ✓ verify-release-archive > refuses versions that are not strict 317ms
+   ✓ verify-release-archive > passes every archive carried in this repository 658ms
+ ✓ src/houses-regression.test.ts (6 tests) 175ms
+ ✓ src/techniques/void-of-course.test.ts (8 tests) 1595ms
+   ✓ the void-of-course Moon > misses no aspect: a sweep every 30 minutes finds a reported one in every crossing 1342ms
+ ✓ bots/astrologer/facts/dedash.test.ts (9 tests) 8ms
+ ✓ src/geo/timezone-precision.test.ts (17 tests) 55ms
+ ✓ src/receipt-versions.test.ts (13 tests) 283ms
+ ✓ src/returns-crossings.test.ts (16 tests) 5ms
+ ✓ src/public-tables.test.ts (5 tests) 38ms
+ ✓ src/ephemeris-span.test.ts (6 tests) 167ms
+ ✓ src/body-label.test.ts (15 tests) 16ms
+ ✓ src/vedic/boundaries.test.ts (21 tests) 49ms
+ ✓ src/exact.test.ts (5 tests) 2015ms
+   ✓ exact sums of binary64 terms > round once to the nearest double, ties to even, and give the exact sign 1929ms
+ ✓ scripts/build-tz-shards.test.mjs (3 tests) 5ms
+ ✓ src/angles-erfa.test.ts (12 tests) 110ms
+ ✓ src/ephemeris-errors.test.ts (6 tests) 72ms
+ ✓ src/receipt-growth.test.ts (3 tests) 80ms
+ ✓ scripts/build-time-scales.test.mjs (3 tests) 131ms
+ ✓ src/sky/published.test.ts (1 test) 119ms
+ ✓ src/configured-aspects-isolation.test.ts (1 test) 3ms
+ ✓ src/lite.test.ts (2 tests) 528ms
+   ✓ the lite entry's source > exports the 51 names of L8, 27 values and 24 types 525ms
+ ✓ src/sign-rulers.test.ts (1 test) 4ms
+ ✓ src/timing/solar-years.test.ts (1 test) 1856ms
+   ✓ solar-return years > stay within hours of the mean tropical year, far inside the three days the solver searches 1855ms
+ ❯ src/techniques/site-parity.test.ts (6 tests | 2 failed) 6592ms
+   × parity with the site's code > returns: every instant and chart of R-SI, R-SM, R-SC, R-LI and R-LC 4273ms
+     → R-SC: expected [ { index: +0, …(2) }, …(21) ] to deeply equal []
+   × parity with the site's code > void-of-course windows and status 1905ms
+     → V-W: expected [ { index: 4, site: [ …(4) ], …(1) } ] to deeply equal []
+ ✓ src/aspects.test.ts (12 tests) 8936ms
+   ✓ findAspects applying flags against the engine's own motion > match the sign of the orb's rate, measured over ±1 s, every 30 minutes in the first quarter of 2024 8869ms
+ ✓ scripts/api-report.test.mjs (12 tests) 13330ms
+   ✓ the API report > writes one file for each public entry point and none for the internal ones 772ms
+   ✓ the API report > gives the exported declarations without comments, sorted by name, and what they refer to 671ms
+   ✓ the API report > names the entry points that do export a referenced declaration, and an export under another name 1166ms
+   ✓ the API report > changes when the API changes 4965ms
+   ✓ the API report > does not change when only a comment or the order of declarations changes 1846ms
+   ✓ the API report > keeps the two release tags, and only them, from the comments 808ms
+   ✓ the API report > keeps a release tag on a member, and on an export under another name 1802ms
+   ✓ the API report > leaves out comments the source keeps between a declaration's tokens, and keeps a namespace member's tags 378ms
+   ✓ the API report > follows a type written as import("…") 625ms
+ ✓ src/window.test.ts (58 tests) 26201ms
+   ✓ birthWindow against natalChart > mid-latitude Placidus: every cell and switch 656ms
+   ✓ birthWindow against natalChart > Koch just inside the polar circle: every cell and switch 488ms
+   ✓ birthWindow against natalChart > Regiomontanus in the south polar region: every cell and switch 405ms
+   ✓ birthWindow against natalChart > Porphyry at 78°: every cell and switch 410ms
+   ✓ birthWindow against natalChart > Alcabitius near the pole: every cell and switch 411ms
+   ✓ birthWindow against natalChart > Campanus near the pole: every cell and switch 437ms
+   ✓ birthWindow against natalChart > Topocentric at 69°: every cell and switch 454ms
+   ✓ birthWindow against natalChart > a whole day in six systems, at five-minute samples and every switch 2913ms
+   ✓ stations near a sign boundary > a station just inside a boundary: Uranus turns 0.0017° short of Leo 2592ms
+   ✓ stations near a sign boundary > a station just past a boundary: Mercury enters Aquarius by 0.0034° and returns 2894ms
+   ✓ stations near a sign boundary > the polar ascendant turning 0.001° inside Scorpio's end jumps once 524ms
+   ✓ stations near a sign boundary > the polar ascendant turning 0.001° past it crosses, jumps and recrosses 429ms
+   ✓ Placidus and Koch at the polar circle > switches between the requested system and its whole-sign fallback where the obliquity crosses 90° − |φ| 828ms
+   ✓ the true node's jitter > reports, and natalChart confirms, each change of a jittering node's house 1480ms
+   ✓ Placidus just below the polar limit > keeps Placidus through the review's reproduction, where the iteration alone fell back 3043ms
+   ✓ the ΔT model's seam > agrees with natalChart at every millisecond across the Moon's and the node's steps 1555ms
+   ✓ the ΔT model's seam > steps the Sun at the same millisecond, not one light time later, and agrees with natalChart there 1360ms
+   ✓ the steps of the time basis > reports a switch at the leap second of 2016-12-31, where the angles step, and agrees with natalChart around it 939ms
+   ✓ the steps of the time basis > reports a switch at 1972-01-01, where the leap seconds begin, where the angles step, and agrees with natalChart around it 824ms
+   ✓ the steps of the time basis > reports a switch at the end of the IERS table, where the angles step, and agrees with natalChart around it 749ms
+   ✓ sign ingresses of the true node > resolves every flicker of a fast ingress, where natalChart confirms each 1740ms
+   ✓ sign ingresses of the true node > leaves a slow ingress unresolved, and flags it, rather than run out of budget 333ms
+ ✓ src/geo/roundtrip.test.ts (18 tests) 24596ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 1 of 12 3343ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 2 of 12 2447ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 3 of 12 1814ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 4 of 12 2023ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 5 of 12 1801ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 6 of 12 1768ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 7 of 12 1844ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 8 of 12 1766ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 9 of 12 1852ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 10 of 12 1958ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 11 of 12 1777ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 12 of 12 1718ms
+ ✓ scripts/verify-archive-binding.test.mjs (23 tests) 47398ms
+   ✓ archive binding check > passes a clean history and skips the rebuild until the version's archive exists 912ms
+   ✓ archive binding check > sees a rewrite on a side branch hidden by merge simplification 1668ms
+   ✓ archive binding check > sees an archive carried and removed on a merged side branch 1680ms
+   ✓ archive binding check > allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry 5311ms
+   ✓ archive binding check > refuses a rewritten manifest that whitelists replaced bytes 3081ms
+   ✓ archive binding check > refuses artifacts/ as a symbolic link, at HEAD or in a middle commit restored by a merge 2598ms
+   ✓ archive binding check > refuses anything under artifacts/ but archives, receipts, the manifest and its README 1120ms
+   ✓ archive binding check > reads HEAD from git objects, never the working tree 2854ms
+   ✓ archive binding check > rebuilds HEAD in both modes, so a packed file changed after the carrier fails either way 4383ms
+   ✓ archive binding check > checks the receipt of every version, not only the current one 557ms
+   ✓ archive binding check > binds each archive to its recorded source commit 497ms
+   ✓ archive binding check > refuses an archive carried by a commit that does not follow its source commit 560ms
+   ✓ archive binding check > refuses a second archive under a version npm reads as an existing one, and a HEAD changed only by build metadata 1737ms
+   ✓ archive binding check > refuses numeric identifiers above 2^53 - 1, where npm's semver.eq takes two versions for one 1741ms
+   ✓ archive binding check > refuses names that a case-insensitive or normalizing file system takes for one: variants of artifacts/, or two archives in it 3142ms
+   ✓ archive binding check > rebuilds with its own npm ci, whatever the checkout's node_modules holds 6496ms
+   ✓ archive binding check > never finds a build tool through the checkout's node_modules/.bin on PATH 739ms
+   ✓ archive binding check > never runs a git that npm run puts on PATH from the checkout 2086ms
+   ✓ archive binding check > keeps code that an .npmrc names for NODE_OPTIONS out of the check and its rebuilds 1174ms
+   ✓ archive binding check > refuses a TMPDIR inside the checkout, or with a node_modules or package.json above it 1103ms
+   ✓ archive binding check > runs no hook from the checkout's .git 1949ms
+   ✓ archive binding check > ignores replace refs and grafts in the checkout's .git 1099ms
+   ✓ archive binding check > refuses an archive without a manifest entry, and a shallow checkout 619ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/calc-fixtures.test.ts > calc round-trip fixtures > 25: calc gives the committed result for the committed request
+AssertionError: result.speeds.lon: expected 1.4210854715202004e-11 to be less than or equal to 1e-12
+ ❯ expectSame src/calc-fixtures.test.ts:32:47
+     30|     (where === "result.receipt.engine" && key === "version") || (where…
+     31|   if (typeof expected === "number" && typeof actual === "number") {
+     32|     expect(Math.abs(actual - expected), path).toBeLessThanOrEqual(1e-1…
+       |                                               ^
+     33|   } else if (expected !== null && typeof expected === "object" && actu…
+     34|     expect(Object.keys(actual).sort(), path).toEqual(Object.keys(expec…
+ ❯ expectSame src/calc-fixtures.test.ts:37:7
+ ❯ expectSame src/calc-fixtures.test.ts:37:7
+ ❯ src/calc-fixtures.test.ts:75:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/calc-fixtures.test.ts > calc round-trip fixtures > 17: calc gives the same result again for its receipt's request
+AssertionError: result.speeds.lon: expected 1.4210854715202004e-11 to be less than or equal to 1e-12
+ ❯ expectSame src/calc-fixtures.test.ts:32:47
+     30|     (where === "result.receipt.engine" && key === "version") || (where…
+     31|   if (typeof expected === "number" && typeof actual === "number") {
+     32|     expect(Math.abs(actual - expected), path).toBeLessThanOrEqual(1e-1…
+       |                                               ^
+     33|   } else if (expected !== null && typeof expected === "object" && actu…
+     34|     expect(Object.keys(actual).sort(), path).toEqual(Object.keys(expec…
+ ❯ expectSame src/calc-fixtures.test.ts:37:7
+ ❯ expectSame src/calc-fixtures.test.ts:37:7
+ ❯ src/calc-fixtures.test.ts:82:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/techniques/site-parity.test.ts > parity with the site's code > returns: every instant and chart of R-SI, R-SM, R-SC, R-LI and R-LC
+AssertionError: R-SC: expected [ { index: +0, …(2) }, …(21) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   Object {
++     "index": 0,
++     "package": Array [
++       -3729612263182,
++       "a9b53d34ff7bee07fb3a203d8fe7c9a7",
++     ],
++     "site": Array [
++       -3729612263182,
++       "aedd58c737ab0c700eeef6f9bc068071",
++     ],
++   },
++   Object {
++     "index": 1,
++     "package": Array [
++       6335416483682,
++       "00299d5ace36e967d9f78e0099fd463a",
++     ],
++     "site": Array [
++       6335416483682,
++       "4a25155cfd4d4b5a599613425ac82cd3",
++     ],
++   },
++   Object {
++     "index": 2,
++     "package": Array [
++       -3550309069934,
++       "e701f53e15f40a1dfa7bed46b82e9cdf",
++     ],
++     "site": Array [
++       -3550309069934,
++       "1f878baec9d4f5be717edc4d3e57fc54",
++     ],
++   },
++   Object {
++     "index": 4,
++     "package": Array [
++       528959218057,
++       "094bb7b3cb339f59cc23fae0db29cefe",
++     ],
++     "site": Array [
++       528959218057,
++       "1ff7cea1e04ebd57c01b2696c1225ee0",
++     ],
++   },
++   Object {
++     "index": 7,
++     "package": Array [
++       193829892204,
++       "bbee46d1a74950365d8ce7b12e91fda5",
++     ],
++     "site": Array [
++       193829892204,
++       "6054ffbf19f78ae30599a4f2bb4cf544",
++     ],
++   },
++   Object {
++     "index": 12,
++     "package": Array [
++       3733896010016,
++       "f1fa8098e0308ad6f286c27b594b24f0",
++     ],
++     "site": Array [
++       3733896010016,
++       "46ab2ab16b4f0576cf405ea98e038b30",
++     ],
++   },
++   Object {
++     "index": 14,
++     "package": Array [
++       -2478597281632,
++       "91fa3bcd1001395b5c71e372d2e78a23",
++     ],
++     "site": Array [
++       -2478597281632,
++       "40fe036bc6878a1c89c7736571d1e80f",
++     ],
++   },
++   Object {
++     "index": 16,
++     "package": Array [
++       6740722826412,
++       "4928a1e251f26acf3dbee05f542c88c2",
++     ],
++     "site": Array [
++       6740722826412,
++       "3942f1654ae0afc38610c973bf64e86e",
++     ],
++   },
++   Object {
++     "index": 17,
++     "package": Array [
++       -3887210022555,
++       "5492b70b51a40b51295d86adab6fbe4a",
++     ],
++     "site": Array [
++       -3887210022555,
++       "af2aab4309baf5f1b8113c3695bea8cb",
++     ],
++   },
++   Object {
++     "index": 18,
++     "package": Array [
++       7197200592053,
++       "c0e16b7f70cb3f01cbd112c82f6aace8",
++     ],
++     "site": Array [
++       7197200592053,
++       "3705417b884962403fd9583d9be6c081",
++     ],
++   },
++   Object {
++     "index": 19,
++     "package": Array [
++       3370253772329,
++       "b177daf35dc510fefe9d2c46c51e7c35",
++     ],
++     "site": Array [
++       3370253772329,
++       "3274499b7c5761ef54832b602e43d96c",
++     ],
++   },
++   Object {
++     "index": 25,
++     "package": Array [
++       -1432659574469,
++       "34161293f84d21c23313544df7cc2f2b",
++     ],
++     "site": Array [
++       -1432659574469,
++       "3f9f36b6e2c077bf2a12aab14efd55f6",
++     ],
++   },
++   Object {
++     "index": 32,
++     "package": Array [
++       6306127919861,
++       "8dc13bfa081a6a949f7decff33003d30",
++     ],
++     "site": Array [
++       6306127919861,
++       "48a45c3795a074b98647c0c0b9009d8d",
++     ],
++   },
++   Object {
++     "index": 33,
++     "package": Array [
++       2235615330727,
++       "2fad6ee9deb282fc57c8c905fb4d0263",
++     ],
++     "site": Array [
++       2235615330727,
++       "19bb24fcbe624f0690242e242d3e7370",
++     ],
++   },
++   Object {
++     "index": 35,
++     "package": Array [
++       4934804969765,
++       "52fc01ddcbe866fb4eb8018537b29f22",
++     ],
++     "site": Array [
++       4934804969765,
++       "aec6bb21bcd0d82899e549379e573502",
++     ],
++   },
++   Object {
++     "index": 39,
++     "package": Array [
++       -3713276420034,
++       "25284de75c4562a14d3411bccd7cfc25",
++     ],
++     "site": Array [
++       -3713276420034,
++       "34edc7e0d4a5f34d3bc7d380fbc5ba0d",
++     ],
++   },
++   Object {
++     "index": 40,
++     "package": Array [
++       5425858002886,
++       "b3100618f2efa6c217be120256596f90",
++     ],
++     "site": Array [
++       5425858002886,
++       "3cdbdf39c89f6b0e770ab08311b656bf",
++     ],
++   },
++   Object {
++     "index": 47,
++     "package": Array [
++       -3728836508679,
++       "81d8565301ec931c8e006244dbc863c4",
++     ],
++     "site": Array [
++       -3728836508679,
++       "61b1cb0a321a9ccb059a39159c8151d2",
++     ],
++   },
++   Object {
++     "index": 51,
++     "package": Array [
++       6774646629566,
++       "43f50caf937583adee0b88eec94b4f23",
++     ],
++     "site": Array [
++       6774646629566,
++       "818a5501cc31bd808c182451b7b6220b",
++     ],
++   },
++   Object {
++     "index": 53,
++     "package": Array [
++       4893512276669,
++       "13fc96d97aa099def3139b3c9233d454",
++     ],
++     "site": Array [
++       4893512276669,
++       "619e48ddabf55cfff376d333916399c4",
++     ],
++   },
++   Object {
++     "index": 56,
++     "package": Array [
++       -53270546907,
++       "5d0518e8b8d1f616f155c47512138bb3",
++     ],
++     "site": Array [
++       -53270546907,
++       "f4e88162784d6057c2bb823255dcba7a",
++     ],
++   },
++   Object {
++     "index": 59,
++     "package": Array [
++       -1444451042361,
++       "c0af03bfdde7a5888613e0df044a5024",
++     ],
++     "site": Array [
++       -1444451042361,
++       "74732836dc5c09f42d3b94a4021b6db8",
++     ],
++   },
++ ]
+
+ ❯ src/techniques/site-parity.test.ts:36:51
+     34|     const results = checkReturns(api, fixture("returns"));
+     35|     for (const result of results.filter((row) => row.corpus !== "R-E")…
+     36|       expect(result.disagreements, result.corpus).toEqual([]);
+       |                                                   ^
+     37|       expect(result.cases, result.corpus).toBeGreaterThanOrEqual(60);
+     38|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/techniques/site-parity.test.ts > parity with the site's code > void-of-course windows and status
+AssertionError: V-W: expected [ { index: 4, site: [ …(4) ], …(1) } ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   Object {
++     "index": 4,
++     "package": Array [
++       Array [
++         -5224898757062,
++         -5224880717045,
++         Array [
++           -5224898757062,
++           "Saturn",
++           "trine",
++           56.84007692091808,
++         ],
++         1,
++         2,
++       ],
++       Array [
++         -5224726270928,
++         -5224708014274,
++         Array [
++           -5224726270928,
++           "Saturn",
++           "square",
++           86.87003514868076,
++         ],
++         2,
++         3,
++       ],
++       Array [
++         -5224546818982,
++         -5224527703144,
++         Array [
++           -5224546818982,
++           "Saturn",
++           "sextile",
++           116.90834966148009,
++         ],
++         3,
++         4,
++       ],
++       Array [
++         -5224360708432,
++         -5224334512212,
++         Array [
++           -5224360708432,
++           "Jupiter",
++           "sextile",
++           146.0593924293458,
++         ],
++         4,
++         5,
++       ],
++     ],
++     "site": Array [
++       Array [
++         -5224898757062,
++         -5224880717045,
++         Array [
++           -5224898757062,
++           "Saturn",
++           "trine",
++           56.84007692091808,
++         ],
++         1,
++         2,
++       ],
++       Array [
++         -5224726270928,
++         -5224708014274,
++         Array [
++           -5224726270928,
++           "Saturn",
++           "square",
++           86.87003514868076,
++         ],
++         2,
++         3,
++       ],
++       Array [
++         -5224546818982,
++         -5224527703144,
++         Array [
++           -5224546818982,
++           "Saturn",
++           "sextile",
++           116.90834966148014,
++         ],
++         3,
++         4,
++       ],
++       Array [
++         -5224360708432,
++         -5224334512212,
++         Array [
++           -5224360708432,
++           "Jupiter",
++           "sextile",
++           146.0593924293458,
++         ],
++         4,
++         5,
++       ],
++     ],
++   },
++ ]
+
+ ❯ src/techniques/site-parity.test.ts:55:121
+     53| 
+     54|   it("void-of-course windows and status", () => {
+     55|     for (const result of checkVoidOfCourse(api, fixture("void-of-cours…
+       |                                                                                                                         ^
+     56|   }, 120_000);
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+ Test Files  2 failed | 94 passed (96)
+      Tests  4 failed | 4133 passed | 1 skipped (4138)
+   Start at  00:35:39
+   Duration  47.64s (transform 3.17s, setup 0ms, collect 14.22s, tests 210.49s, environment 13ms, prepare 5.54s)
+
+exit 1
