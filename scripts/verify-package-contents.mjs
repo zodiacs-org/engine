@@ -113,6 +113,13 @@ for (const file of files) {
 // after measuring the graph it fits
 // (docs/evidence/1.1.0-rc.1-20261026/sizes.json). Each graph that loads the
 // engine's version grows by the five bytes of "1.1.0-rc.1" over "1.0.0".
+//
+// 1.1.0-rc.2 adds ./time and ./lite, each with a budget of its own, and
+// raises ./calc's and ./vedic's, each to the ceiling approved under the
+// owner's delegation of 2026-11-03 (OQ3 in docs/evidence/1.1.0-rc.2-20261102/OWNER-ANSWERS.md) rather than to about 5 per cent over
+// a measured graph: ./calc for the F-89 corrections and the time bands,
+// ./vedic for the varga sensitivity. The graphs they fit are in
+// docs/evidence/1.1.0-rc.2-20261102/sizes.json.
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -140,8 +147,12 @@ const ENTRY_BUDGETS = {
   // headroom. 1.0.0-rc.1: 144,694, with the reviews' checks and a caller's
   // epochs across EPHEMERIS_SPAN; 0.55 per cent, not raised
   // (docs/evidence/1.0.0-rc.1-20261006/sizes.json). 1.0.0-rc.2: 145,261, with
-  // the core's marks; 0.16 per cent, not raised.
-  "./calc": 145_500,
+  // the core's marks; 0.16 per cent, not raised. 1.1.0-rc.2: 149,254 at the
+  // sizes commit, with the F-89 corrections and the time bands (and the
+  // timeBands chunk it shares with ./time); raised to 156,000, the ceiling
+  // approved under the owner's delegation of 2026-11-03 (OQ3); 4.52 per cent
+  // of headroom.
+  "./calc": 156_000,
   // New in 1.1.0-rc.1: the ids of the conventions registry. 2,754 bytes, its
   // own file and the chunk of ids it shares with ./receipt; 5.30 per cent of
   // headroom.
@@ -178,6 +189,13 @@ const ENTRY_BUDGETS = {
   // cent of headroom. rc.16: 152,472, raised from 150,000 for the nutation
   // in the ephemeris chunk; 4.93 per cent of headroom.
   "./techniques": 160_000,
+  // New in 1.1.0-rc.2: the time basis and the frame of date with no
+  // ephemeris (Zodiacs.org's finding F-53), and the time bands it re-exports.
+  // 42,306 bytes at the sizes commit: dist/time.js and the six chunks it
+  // imports, the timeBands chunk it shares with ./calc among them. 42,400 is
+  // the ceiling approved under the owner's delegation of 2026-11-03 (OQ3);
+  // 0.22 per cent of headroom.
+  "./time": 42_400,
   // Rise, set, transit and planetary hours, 83,254 bytes as first built, of
   // which 15,902 are beyond the core's graph; it reaches the ephemeris chunk
   // for the engine's clock (onChartClock), and so the core modules that chunk
@@ -196,8 +214,11 @@ const ENTRY_BUDGETS = {
   // 123,639, its ayanamsas and sidereal charts now in a chunk it shares with
   // ./calc; 3.52 per cent, not raised. 1.0.0-rc.1: 127,184, its options and
   // inputs read strictly; 0.64 per cent, not raised. 1.0.0-rc.2: 127,751,
-  // with the core's marks; 0.19 per cent, not raised.
-  "./vedic": 128_000,
+  // with the core's marks; 0.19 per cent, not raised. 1.1.0-rc.2: 128,126 at
+  // the sizes commit, before the varga sensitivity, for which it is raised to
+  // 143,000, the ceiling approved under the owner's delegation of 2026-11-03
+  // (OQ3).
+  "./vedic": 143_000,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
   // 33,971 of them beyond the core's graph; 8.17 per cent of headroom. With
@@ -306,7 +327,14 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // (docs/evidence/1.1.0-rc.1-20261026/sizes.json). Raised from 1,000,000 to
 // 1,020,000 with the owner's approval of 2026-10-26, which leaves 13,506
 // bytes.
-const TOTAL_CAP = 1_020_000;
+//
+// 1.1.0-rc.2: raised from 1,020,000 to 1,100,000, the ceiling approved under
+// the owner's delegation of 2026-11-03 (OQ3 in docs/evidence/1.1.0-rc.2-20261102/OWNER-ANSWERS.md), for the
+// entries ./time and ./lite, the time bands, the varga sensitivity and the
+// F-89 corrections; the CHANGELOG stays whole. 1,030,414 bytes in 84 files at
+// the sizes commit, before ./lite and the varga sensitivity; the candidate's
+// size is in docs/evidence/1.1.0-rc.2-20261102/sizes.json.
+const TOTAL_CAP = 1_100_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 
 // The licence expression covers the code (MIT) and the ΔT values (CC BY 4.0),

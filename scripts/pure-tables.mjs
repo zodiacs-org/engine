@@ -169,11 +169,14 @@
 // UNMARKED_SOURCE names the modules the rule leaves out, those that only the
 // ./calc and ./vedic entries reach through their static imports, which the
 // export smoke test checks. Their marks, 16 bytes each in the built files,
-// would put those two entries over their budgets in
-// scripts/verify-package-contents.mjs, which count every byte; a budget is
-// raised only with the owner's approval, and until it is given, these tables,
+// would add to those two entries' graphs, which
+// scripts/verify-package-contents.mjs counts byte for byte against their
+// budgets. These tables,
 // and what those modules read of the others' when they load, stay as
-// 1.0.0-rc.1 had them. Marks are checked there too.
+// 1.0.0-rc.1 had them: marking them is a change of its own, with its own
+// measurement of what a bundler then leaves out, which 1.1.0-rc.2 does not
+// make (docs/evidence/1.1.0-rc.2-20261102/OWNER-ANSWERS.md, OQ3 (b)). Marks
+// are checked there too.
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, posix, relative, resolve } from "node:path";
