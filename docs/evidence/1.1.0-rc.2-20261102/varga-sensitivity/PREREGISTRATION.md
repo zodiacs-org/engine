@@ -674,3 +674,141 @@ rule, seed, fixture or tolerance changes, and no control's pass condition.
   71,711,853 ms, with the same count of halvings.
 
 The unit stays `validated` at most until the owner ratifies OQ5.
+
+**2026-11-03, review 1: C3d and the seam input F3b.** Review 1 of
+1.1.0-rc.2 (programme notes, `notes/rc2-2026-11-01/review1/`, outside this
+repository) found that C3d cannot fail on F3 as F3 is built. Without seam
+walks, the only F3 cases whose brackets cross a backward step are the two
+Ascendant plants at 1972-01-01 on UTC input (cases 2 and 3); their births lie
+30,023 ms before the seam with a horizon of 1,440 minutes, and the bisection
+of the first bracket takes a midpoint inside the planted window and so finds
+the planted crossing; the Moon plants (cases 8, 10 and 11) are found by the
+bodies' 1 ms terminal steps with or without walks, and a forward step leaves
+the longitude monotone. Review 1 showed it with a replica of the built search
+core on synthetic longitudes shaped like the cases (`review1/b/c3d-replica.mjs`
+in those notes), not by running F3; it also ran `run.mjs` and `checker.mjs` on
+a development corpus of 8 births (seed 99) and 10 edge probes, none of F2, F3
+or F4. Nothing of it was committed. Adopted after review 1, before any formal
+run; since review 1 had seen how C3d would come out on F3's geometry, the
+reading this amendment touches, C3d's, counts as `validated` only until the
+owner ratifies it (the unit is `validated` at most anyway under OQ5):
+
+- *F3 is not changed.* A further seam input, **F3b**, `seams-f3b.json` beside
+  this file (5,696 bytes, SHA-256
+  `052c05131e33f63dd5b8693b08f4facd50421ce74583e62ad26cf1bea828469e`), is
+  written by `tools/seams_f3b.mjs` (15,918 bytes, SHA-256
+  `f8d4822b814b1db14ce7f972a9926a13d0c9c8889186416cc151de1f5e191360`) from
+  the build of this commit's tree (Node 22.22.2, darwin arm64; the file
+  records the build's version and a digest of its JavaScript files). It uses
+  the public entry points only, as `seams.mjs` does, and never runs the
+  search. Run twice, it wrote the same bytes.
+- *Its two cases* are the seam of 1972-01-01T00:00:00Z on UTC input, plain
+  and with ΔT pinned at 60 s, where UT1 steps back by 45 ms at the seam's
+  first millisecond z. The Ascendant (lahiri, latitude 30°) is planted as
+  `seams.mjs` plants a backward step, 23 ms before z, on the D60 boundary at
+  164.5° (1,243,620 ticks); the generator finds again the place longitudes of
+  F3 cases 2 and 3 (-0.608420794° and -0.60842079°). The step undoes the
+  crossing from z to z + 21 ms, and the Ascendant crosses again at z + 22 ms.
+  The horizon is 1 minute, the least the options take, and the birth lies
+  59,990 ms before z, so the span searched after the birth ends at z + 10 ms,
+  inside the undone window. The expected change is the D60 row's `next`, at
+  1971-12-31T23:59:59.977Z (z - 23 ms), capricorn to aquarius. The generator
+  checks each case through the public API with lone calls, as its header
+  says; both are recorded as planted.
+- *Why C3d's build fails there whatever its brackets.* Every Ascendant bracket
+  at 30° is longer than the 60,000 ms the span holds after the birth, so a
+  build whose seam finder returns none ends its first bracket at the span's
+  end, where the Ascendant is back in its birth run: it reports no `next`, and
+  M6 fails. The build under test walks every millisecond from z - 1,045 ms
+  and finds z - 23 ms.
+- *The replica, as a tool.* `tools/c3d_replica.mjs` runs the search core of
+  the built `dist/vedic.js` (from `firstWhere` to `subset`), with `timeBasis`
+  from the built `./time`, on synthetic longitudes shaped like each planted
+  backward-step case. Its output, `c3d-replica.json` beside this file (SHA-256
+  `27b833af5fb8576e225fea47c1f85b493e0c1e8e79aa2a848763331b3a7d4c7d`, this
+  commit's build): on each F3b case, with the seam walks the build's own
+  finder gives ([z - 1,045 ms, z + 10 ms]) the `next` change is at z - 23 ms
+  on the expected boundary, and with none there is no `next`; on F3 cases 2
+  and 3 both give z - 23 ms, as review 1 found. No case of F2, F3 or F4 was
+  run, and no `vargaSensitivity` call was made on F3b.
+- *The rules.* G-V3's run and checker take F3b's cases beside F2's births and
+  F3's cases (`run.mjs` and `checker.mjs`, option `--f3b`, by default
+  `seams-f3b.json`, results labelled `F3b`), with M0 to M6 for each, so G-V3's
+  pass rule is zero failures of M0 to M6 over all 1,000 births, the 13 cases
+  of F3 and the 2 of F3b. C3d now reads: a build whose seam finder returns
+  none must fail M6 on at least one F3b case. `controls.mjs` runs it on F3b,
+  and C3b and C3c without F3b.
+
+**2026-11-03, review 1: the procedure records every step.** Review 1 found
+that `tools/checks.sh` stopped at its first failing step (`set -eu`), before
+the run, the checker and the controls were recorded, against "A FAIL stays
+recorded" (section 10), and that G-V5's `--check` against `docs/vedic.md` and
+its control were left as manual steps. Adopted after review 1, before any
+formal run; no pass rule changes:
+
+- `checks.sh` runs every step whatever the steps before it gave, writes each
+  step's name, kind and exit status to `results/steps.tsv` (a check must exit
+  0; a control, a check run on a broken input, must not), and exits 1 at the
+  end if any check failed or any control passed. So that a step's exit
+  carries its verdict, `checker.mjs` exits 1 when any check fails,
+  `test-controls.mjs` and `controls.mjs` exit 1 unless each of their controls
+  failed as it must, and `varga_ascendant.py` exits 1 on a FAIL or a control
+  that did not fail.
+- G-V5's steps, in order: `time_per_arcsecond.mjs --table` as before; the
+  table written into `docs/vedic.md` (`--write`, which replaces what lies
+  between the two marker lines `docs/vedic.md` holds since this commit at
+  the end of *Birth-time sensitivity*; until then they hold a line saying
+  that the formal run writes the table); `--check` against `docs/vedic.md`,
+  which must pass; and the
+  control, a copy of `docs/vedic.md` outside the repository with one figure
+  of the table changed (`--control-copy`: the first body's figure at the
+  median speed, its last digit raised by one), against which `--check` must
+  fail.
+- Tried once on this commit's tree, not the formal run, with every output in
+  the programme notes: G-V5's new steps on a copy of `docs/vedic.md` outside
+  the repository (`--check` failed on the placeholder, passed after
+  `--write`, and failed on the control's copy; `docs/vedic.md` itself was not
+  written); `controls.mjs --dry-run` (the replacements of C3b's, C3c's and
+  C3d's builds each match once); and `test-controls.mjs` (each of its nine
+  controls failed as it must, and every file it changed was restored).
+
+**2026-11-03, review 1: C4a's verdict side by side.** C4a's verdict was a
+count: the control counted as failed when the mismatches numbered at least
+the compared sides (`tools/varga_ascendant.py`, lines 291 to 292 at
+b11c5e8), so a side where only one of the two reports a change could make up
+for a compared side that passed. As section 8 words it,
+every compared side must fail: the verdict is now taken side by side over the
+sides where both report a change, and a one-sided side does not count towards
+it. The tool's self-test covers the case the count let through. Adopted after
+review 1, before any formal run; G-V4 has not run.
+
+**2026-11-03, review 1: two figures of the departures, rounded the wrong
+way.** The amendment "the implementation's departures" above rounds two
+figures in the engine's favour; both are corrected here, and nothing else in
+it changes:
+
+- "The Sun moves at most 1.0194 degrees a day" is too low: review 1 measured
+  the engine's Sun at 1.01991° a day on 1804-12-31 (`review1/b/sun-speed.mjs`
+  in the programme notes). `tools/rate_premises.mjs` measures it on this
+  commit's build: sampled every hour of UTC from 1800 to 2200, the Sun's
+  speed reaches 1.0199079° a day (1804-12-31T12:00Z), and the largest change
+  between neighbouring samples is 0.0000277° a day, so with what the grid can
+  miss it stays under 1.019922° a day (`rate-premises.json` beside this
+  file). The figure is now 1.0200, in `src/vedic/varga-time.ts`'s comment
+  too: 0.02015 × 1.0200 = 0.020553, still under 0.021, so the bound of 0.021
+  and a star definition's `a` of 0.0213 do not change.
+- "Under 4.3e-6": over the span, the mean node polynomial's higher terms move
+  its rate by at most 4.3055e-6 of its leading rate, at the span's end (T =
+  1.99996 Julian centuries of TT; `rate-premises.json`, from the
+  coefficients of `src/points.ts`, which the tool checks against the built
+  `lunarMeanArguments`; review 1 gave 4.3056e-6 at T = 2). The figure is now
+  "under 4.31e-6". The guard's relative 1e-5 does not change.
+
+**2026-11-03, review 1: 66° is a margin.** The `polar` refusal's detail and
+`docs/vedic.md` said that beyond 66° the Ascendant's rate bounds "no longer
+hold". `tools/derived_bounds.py` gives the largest latitude at which `R_lo`
+stays above zero as 66.498285945° for `a` of 0.0003, 66.498284072° for the
+largest linear rate and 66.498271498° for a star definition (0.0213), so 66°
+is a margin short of where the lower bound reaches zero, as section 7 and
+section 12 have it; the detail and `docs/vedic.md` now say so. No rule
+changes.

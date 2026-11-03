@@ -1,9 +1,10 @@
 // Check L11 (../PREREGISTRATION.md, section 3), the part npm run
 // package:contents does not: between the build of the commit before the lite
-// unit's first commit (L-a) and this one, every entry's import graph but
-// ./lite's keeps its files and bytes, except ./techniques's, which grows by
-// the moved modules. And its control: the package check with the ./lite
-// budget one byte under its measured graph must fail.
+// unit's first commit (L-a), 1deb29e, and the build of L-c, 16ad4fe, every
+// entry's import graph but ./lite's keeps its files and bytes, except
+// ./techniques's, which grows by the moved modules. And its control: the
+// package check with the ./lite budget one byte under its measured graph must
+// fail.
 //
 //   node graphs.mjs --measure <root> --out graphs.json
 //   node graphs.mjs --before graphs-before.json --after graphs-after.json [--out report.json]
@@ -14,6 +15,19 @@
 // with their bytes, astronomy-engine not counted. --budget-control runs a
 // copy of that script, in a scratch directory and reading this checkout,
 // with ./lite's budget set one byte under the graph it measures.
+//
+// Which builds (the amendment "2026-11-03, review 1: L9 and L11 on L-c's
+// build" of ../PREREGISTRATION.md, section 11): "before" is 1deb29e's build
+// and "after" L-c's, 16ad4fe's, not the cut's, whose later commits change
+// ./vedic's graph (P2.B.vargas) and ./calc's (P1.M3c). Each is measured in a
+// scratch copy of its commit outside every checkout, made as
+// api-reports.mjs's header says (a sparse, blobless clone of this repository
+// checked out at the commit, as carrier/pack-source.sh's sparse_clone makes
+// it; never a plain clone or a worktree, and not git archive in a blobless
+// clone). Then, in <root>, npm ci and npm run build on Node 22.22.2, and
+// --measure <root>. The rest of L11, npm run package:contents with ./lite's
+// budget and files, and --budget-control, run on the cut's build, this
+// checkout's.
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";

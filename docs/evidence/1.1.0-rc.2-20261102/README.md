@@ -1,9 +1,9 @@
 # 1.1.0-rc.2, 2026-11-02
 
 The second candidate for 1.1.0, cut from engine main at `a253973` (the merge
-of zodiacs-org/engine#77), which carries 1.1.0-rc.1. It brings five units of
-zodiacs.org's programme into the package (below), two of them as new entry
-points that load no ephemeris, `@zodiacs/engine/time` and
+of zodiacs-org/engine#77), which carries 1.1.0-rc.1. It brings five
+preregistered units of the cut into the package (below), two of them as new
+entry points that load no ephemeris, `@zodiacs/engine/time` and
 `@zodiacs/engine/lite`, which make fifteen public entry points. CHANGELOG.md,
 *1.1.0-rc.2*, says what changes for a caller. It is not to be published on
 npm until the owner approves it. Times are Asia/Bangkok.
@@ -14,7 +14,7 @@ writes it, with their outputs beside it.
 
 ## The units
 
-| Unit of zodiacs.org's programme | In the package | Folder |
+| Unit, as zodiacs.org names it | In the package | Folder |
 | --- | --- | --- |
 | F-89, nine wording corrections (the F-89 part of P1.14) | statements in the README, NOTICE, LICENSING.md and doc comments | [`f89/`](f89/) |
 | F-53 | `@zodiacs/engine/time`: the time basis and the frame of date without the ephemeris | [`time-entry/`](time-entry/) |
@@ -25,13 +25,18 @@ writes it, with their outputs beside it.
 Each folder holds the unit's `PREREGISTRATION.md`. The commit "Preregister
 1.1.0-rc.2's units before any code" committed the five together and nothing
 else, before any code of the cut, and none has been edited in place since:
-the owner's answers, and the varga sensitivity's departures from its design,
-are dated amendments added to each one's amendments section, with no line
-removed or changed. The varga sensitivity's inputs (`INPUTS.md`,
-`births.json`, `births-erfa.json` and `seams.json`, with their generators)
-followed in "Fix the inputs of the varga sensitivity check", before any of
-its code. Each unit's check tools are in its `tools/`, committed before its
-formal runs; `f89/` also has its own README and item 2's blind-band record.
+the owner's answers, the varga sensitivity's departures from its design and
+the changes made after review 1 are dated amendments added to each one's
+amendments section, with no line removed or changed. The varga sensitivity's
+inputs (`INPUTS.md`, `births.json`, `births-erfa.json` and `seams.json`, with
+their generators) followed in "Fix the inputs of the varga sensitivity
+check", before any of its code; after review 1 a further seam input,
+`seams-f3b.json` (F3b), and its generator `tools/seams_f3b.mjs` were added by
+a dated amendment. Each unit's check tools are in its `tools/`, committed
+before its formal runs; `f89/` also has its own README and item 2's
+blind-band record, and the amendments made after review 1 have the outputs
+they cite beside them (`time-bands/tt-step.json` and `distance-floor.json`,
+`varga-sensitivity/c3d-replica.json` and `rate-premises.json`).
 `docs/evidence/calc-api/tools/bounds.py`, the generator of
 `src/calc-bounds.ts`, gained `MEAN_POINTS_BASIS` and, after review 1,
 `MEAN_POINTS_SPEED_BASIS`, and no bound's value changed (`f89/README.md`,
@@ -150,7 +155,8 @@ changes, each commented where it is made:
   it. From a local repository each clone runs its upload-pack with
   `uploadpack.allowFilter`, without which git ignores the filter. `gates.sh`
   and `tree-jobs.sh` run in the checkout they are given, and refuse one whose
-  sparse checkout does not leave the folder out.
+  sparse checkout does not leave the folder out, or in which the folder
+  exists (an untracked copy, say), as review 1 asked.
 - **Archive rebuilds only in CI.** `node scripts/verify-archive-binding.mjs
   --rebuild-all`, and the archive check on the carrier, which rebuilds HEAD,
   write every file of a rebuilt tree from git objects, that folder included

@@ -71,8 +71,9 @@ from JPL data, and no JPL ephemeris value is in the package.
 Essential dignities
 -------------------
 
-The techniques entry (dist/techniques.js) carries the tables of the
-essential dignities as these works give them, and none of their text:
+The techniques entry (dist/techniques.js) and the lite entry
+(dist/lite-dignities.js, which dist/lite.js re-exports) carry the tables of
+the essential dignities as these works give them, and none of their text:
 
   Ptolemy, Tetrabiblos I.17-I.20, tr. F. E. Robbins (Loeb Classical Library,
   1940): domiciles, exaltations, the Egyptian terms.

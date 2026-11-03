@@ -24,8 +24,13 @@ cd "$checkout" || exit 2
 # docs/evidence/calc-sidereal-2026-10-05/, as the clone the cut is made in
 # does, never in a plain clone, which holds that folder (the cut's plan,
 # corrections K6 and K12). None of the steps reads it.
+# The folder must not exist either, whatever the pattern says (an untracked
+# copy would pass the pattern, and the suite's default glob would walk it):
+# review 1 of 1.1.0-rc.2. Only the path is tested; nothing in it is read.
 [ "$(git sparse-checkout list 2>/dev/null)" = "$(printf '%s\n%s' '/*' '!/docs/evidence/calc-sidereal-2026-10-05/')" ] ||
   { echo "gates.sh: the checkout must leave out docs/evidence/calc-sidereal-2026-10-05/ (git sparse-checkout list)" >&2; exit 2; }
+[ ! -e docs/evidence/calc-sidereal-2026-10-05 ] ||
+  { echo "gates.sh: docs/evidence/calc-sidereal-2026-10-05 must not exist in the checkout" >&2; exit 2; }
 export PATH="$bin:$PATH"
 version=$(node --version)
 platform=$(node -p 'process.platform + "-" + process.arch')

@@ -5,7 +5,8 @@
  * instant by e divided by the body's rate. The bodies' instants are stated with
  * this, not judged.
  *
- *   node time_per_arcsecond.mjs [--out FILE] [--table] [--check] [--docs FILE]
+ *   node time_per_arcsecond.mjs [--out FILE] [--table] [--write] [--check] [--docs FILE]
+ *                               [--control-copy FILE]
  *
  * For each of the ten bodies, the engine's own longitude speed (the root's
  * `positions`, degrees a day) every 5 days from 1800-01-01 to 2199-12-27 UTC,
@@ -19,13 +20,23 @@
  * G-V5 table -->"; --check recomputes it and exits 1 unless that table is the
  * same (the control: one figure there changed by hand must fail). --docs names
  * the file to check (default docs/vedic.md). Load the package as load.mjs says.
+ *
+ * Added after review 1 (PREREGISTRATION.md, section 13), so that the formal
+ * run (checks.sh) does each step of G-V5 itself: --write puts the recomputed
+ * table into the docs file in place of what lies between the two lines, which
+ * must each be there once, in that order (it exits 1 otherwise); and
+ * --control-copy FILE writes FILE, a copy of the docs file whose G-V5 table
+ * has one figure changed (the first body's figure at the median speed, its
+ * last digit raised by one), for the control: --check --docs FILE must fail.
+ * With more than one of them, --write runs before --check, and
+ * --control-copy last.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { ROOT, loadEngine, options } from "./load.mjs";
 
-const args = options(process.argv.slice(2), ["--out", "--table", "--check", "--docs"]);
+const args = options(process.argv.slice(2), ["--out", "--table", "--write", "--check", "--docs", "--control-copy"]);
 const BODIES = ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"];
 const STEP_DAYS = 5;
 const FROM = Date.UTC(1800, 0, 1);
@@ -86,8 +97,19 @@ const report = {
 };
 if (args.has("--out")) writeFileSync(resolve(String(args.get("--out"))), JSON.stringify(report, null, 1) + "\n");
 if (args.has("--table")) console.log(table);
+const docs = resolve(String(args.get("--docs") ?? resolve(ROOT, "docs/vedic.md")));
+if (args.has("--write")) {
+  const text = readFileSync(docs, "utf8");
+  const start = text.indexOf(OPEN);
+  const end = text.indexOf(CLOSE);
+  if (text.split(OPEN).length !== 2 || text.split(CLOSE).length !== 2 || !(end > start)) {
+    console.error(`${docs} must hold the line "${OPEN}" once and, after it, the line "${CLOSE}" once.`);
+    process.exit(1);
+  }
+  writeFileSync(docs, text.slice(0, start) + table + text.slice(end + CLOSE.length));
+  console.log(`wrote the G-V5 table into ${docs}`);
+}
 if (args.has("--check")) {
-  const docs = resolve(String(args.get("--docs") ?? resolve(ROOT, "docs/vedic.md")));
   const text = readFileSync(docs, "utf8");
   const start = text.indexOf(OPEN);
   const end = text.indexOf(CLOSE);
@@ -98,4 +120,20 @@ if (args.has("--check")) {
   }
   console.log(`${docs}'s G-V5 table matches the recomputed one.`);
 }
-if (!args.has("--table") && !args.has("--check")) console.log(JSON.stringify(rows.map(({ body, atMedian, atTenthPercentile }) => ({ body, atMedian, atTenthPercentile }))));
+if (args.has("--control-copy")) {
+  const text = readFileSync(docs, "utf8");
+  const start = text.indexOf(OPEN);
+  const end = text.indexOf(CLOSE);
+  const row = start >= 0 && end > start ? /^\| [^|\n]+ \| ([0-9]+(?:\.[0-9]+)?) [a-z]+ \|/mu.exec(text.slice(start, end)) : null;
+  if (!row) {
+    console.error(`${docs} holds no G-V5 table row whose figure the control could change.`);
+    process.exit(1);
+  }
+  const decimals = (row[1].split(".")[1] ?? "").length;
+  const changed = (Number(row[1]) + 10 ** -decimals).toFixed(decimals);
+  const at = start + row.index + row[0].indexOf(` ${row[1]} `) + 1;
+  const copy = resolve(String(args.get("--control-copy")));
+  writeFileSync(copy, text.slice(0, at) + changed + text.slice(at + row[1].length));
+  console.log(`wrote ${copy}: ${docs} with the G-V5 table's figure ${row[1]} in "${row[0]}" changed to ${changed}`);
+}
+if (!args.has("--table") && !args.has("--check") && !args.has("--write") && !args.has("--control-copy")) console.log(JSON.stringify(rows.map(({ body, atMedian, atTenthPercentile }) => ({ body, atMedian, atTenthPercentile }))));

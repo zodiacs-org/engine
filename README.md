@@ -248,8 +248,10 @@ for (const aspect of today.aspects) {
 - `@zodiacs/engine/lite`, new in 1.1.0-rc.2, gives declination parallels and
   out-of-bounds flags, a chart's sect under a named convention
   (`sectReading`), composite midpoints and their aspects, and the essential
-  dignities, and loads no ephemeris. Its functions are copies of the root's
-  and `@zodiacs/engine/techniques`', with the same results (see
+  dignities, and loads no ephemeris. The functions and tables of its
+  declination, composite and dignity parts are copies of the root's and
+  `@zodiacs/engine/techniques`', with the same results; its sect part
+  (`sectReading`, `orientality` and their constants) is new (see
   [docs/lite.md](docs/lite.md)).
 
 ### Uniform calculation API

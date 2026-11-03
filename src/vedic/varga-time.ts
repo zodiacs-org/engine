@@ -147,7 +147,7 @@ export const BODY_RATE_BOUNDS = /*#__PURE__*/ Object.freeze({
 
 const DETAILS = /*#__PURE__*/ Object.freeze({
   "no-angles": "The chart has no angles: its time is not known, or it has no place.",
-  polar: "The latitude is more than 66° from the equator, where the Ascendant's rate bounds no longer hold.",
+  polar: "The latitude is more than 66° from the equator. The search stops there, short of the latitude where the Ascendant's derived lower rate bound reaches zero.",
   "out-of-range": "The birth instant's UT1 or TT lies outside REFERENCE_SPAN, 1800 to 2200.",
   "rate-bound": "The point moved as its rate bound says it cannot, so no change can be said to be the first.",
   "evaluation-budget": "The call spent its 2,000,000 evaluations before this point's search was done."
@@ -366,9 +366,11 @@ function subset<T extends string>(value: unknown, all: readonly T[], label: stri
  * a run is the arc between two boundaries at which the sign changes, so a run
  * can span a sign start.
  *
- * Malformed input throws RangeError: an option key not named, an unknown or
- * repeated point or varga, a horizon that is not a whole number of minutes from
- * 1 to 2,880, and whatever siderealChart refuses. What cannot be computed is
+ * Malformed input throws RangeError: options that are not a plain object of
+ * data properties, an option key not named, points or vargas not given as an
+ * array, an unknown or repeated point or varga, `cyclic` other than true or
+ * false, a horizon that is not a whole number of minutes from 1 to 2,880, and
+ * whatever siderealChart refuses. What cannot be computed is
  * a refusal on the rows it touches: `no-angles` and `polar` (beyond 66°) for the
  * Ascendant, `out-of-range` for every row when the birth's UT1 or TT lies
  * outside REFERENCE_SPAN, `rate-bound` for a point that moved as its bound says
@@ -417,8 +419,11 @@ export function vargaSensitivity(
   // star's place in a day as src/vedic/ayanamsa.ts computes it: by at most
   // (2GM/c²) / r / f per radian the Sun moves, f = 1e-6 / max(r², 1) the floor
   // of 1 − cos E (r the Earth's distance from the Sun, 0.98 au or more; E the
-  // star's angle from the Sun), so 0.02015, and the Sun moves at most 1.0194° a
-  // day.
+  // star's angle from the Sun), so 0.02015, and the Sun moves at most 1.0200° a
+  // day (the engine's own positions, sampled every hour from 1800 to 2200,
+  // reach 1.019908° a day, and at most 1.019922° with what the grid can miss:
+  // docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/rate-premises.json);
+  // 0.02015 × 1.0200 = 0.020553, under 0.021.
   const a = 0.0003 + (definition.kind === "linear" ? Math.abs(definition.rate) / 3600 / 365.25 : definition.kind === "star" ? 0.021 : 0);
   const budget = { left: VARGA_BUDGET };
   let spent = false;

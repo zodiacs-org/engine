@@ -464,8 +464,11 @@ evidence.
   ayanamsa's. It is stepped in brackets too short for it to leave a run and
   come back into it, and each change is bisected to its first millisecond. Each
   bracket's advance must lie within the bounds, or the Ascendant's rows are
-  refused with `rate-bound`. More than 66° from the equator the lower bound no
-  longer holds, and the rows are refused with `polar`.
+  refused with `rate-bound`. The lower bound stays above zero up to 66.498°
+  from the equator for each ayanamsa rate the search allows for, a caller's
+  linear and star definitions included (the preregistration's
+  `tools/derived_bounds.py`); the search stops at 66°, a margin short of that,
+  and more than 66° from the equator the rows are refused with `polar`.
 - The mean nodes' sidereal longitudes only decrease, at the rate of their
   polynomial's leading term less or more the ayanamsa's bound, and are searched
   the same way.
@@ -526,6 +529,17 @@ evidence.
 A refused row's `previous` and `next` are `null` and say nothing; its
 `position` is `null` when the point was not evaluated. The other rows are still
 computed.
+
+How far an error of 1″ in a body's longitude moves its instants, at the
+median and at the 10th percentile of the size of its speed in the engine's
+own positions, sampled every 5 days from 1800 to 2199, rounded up to two
+significant figures (G-V5 of the preregistration; its
+`tools/time_per_arcsecond.mjs` writes the table at the check's formal run):
+
+<!-- G-V5 table, tools/time_per_arcsecond.mjs -->
+*Not written yet: the formal run of the varga sensitivity check writes this
+table.*
+<!-- end of the G-V5 table -->
 
 ## KP sub-lords
 
@@ -638,8 +652,10 @@ These all throw a `RangeError`:
 - a dasha Moon without an instant;
 - `levels` outside 1–5 or `cycles` outside 1–10;
 - an instant outside the Vimshottari cycle;
-- a point or varga `vargaSensitivity` does not know, or one given twice, and
-  a horizon that is not a whole number of minutes from 1 to 2,880.
+- a point or varga `vargaSensitivity` does not know, or one given twice,
+  points or vargas not given as an array, `cyclic` other than `true` or
+  `false`, a horizon that is not a whole number of minutes from 1 to 2,880,
+  and options that are not a plain object of data properties.
 
 Results outside 1800–2200 carry `outside-reference-span`, as charts do.
 `vargaSensitivity` refuses what it cannot compute row by row, with a typed

@@ -1,26 +1,48 @@
 // Check L9 (../PREREGISTRATION.md, section 3): the API reports that
-// scripts/api-report.mjs writes from this checkout's build equal api/ (as
+// scripts/api-report.mjs writes from a build equal that tree's api/ (as
 // npm run api:check holds them), api/lite.api.md among them, and every other
-// file of api/ is byte for byte its state at --before, the commit before the
-// lite entry's (L-c): the entry changes no report but its own. The control:
+// file of that api/ is byte for byte its state at --before, the commit before
+// the lite entry's (L-c): the entry changes no report but its own. The control:
 // the same comparison with api/lite.api.md left out of api/ must report it
 // missing, as npm run api:check does.
 //
-//   node api-reports.mjs --before <commit> [--out report.json]
+//   node api-reports.mjs --package <dir> --before 874077e [--out report.json]
 //
-// Run it after npm run build. The files at --before are read by name with
-// git cat-file; no tree is walked.
+// L9's build is L-c's, 16ad4fe (the amendment "2026-11-03, review 1: L9 and
+// L11 on L-c's build" of ../PREREGISTRATION.md, section 11): the cut's later
+// commits change api/ for other units (P2.B.vargas's api/vedic.api.md,
+// P1.M3c's api/calc.api.md), so L9 cannot hold on the cut's own build. <dir>
+// is a scratch copy of 16ad4fe outside every checkout: a sparse, blobless
+// clone of this repository checked out at 16ad4fe, made as the
+// preregistration's section 0 makes one and as carrier/pack-source.sh's
+// sparse_clone makes it (git clone --no-checkout --no-local
+// --filter=blob:none, from a local repository with --upload-pack "git -c
+// uploadpack.allowFilter=true upload-pack"; then git sparse-checkout set
+// --no-cone '/*' '!/docs/evidence/calc-sidereal-2026-10-05/'; then git
+// checkout --detach 16ad4fe), never a plain clone or a worktree. git archive
+// 16ad4fe -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05' would do
+// only in a repository that holds every blob it reads: in a blobless clone
+// such as engine-rc2 it asks the promisor remote for a blob that is not on
+// disk even when the pathspec names src/ alone (git 2.50.1), and so would
+// fetch it over the network. Then, in <dir>, npm ci and npm run build on
+// Node 22.22.2. The tool imports <dir>'s own scripts/api-report.mjs, builds
+// the reports from <dir>'s build, compares them with <dir>'s api/, and reads
+// the files at --before by name with git cat-file in this checkout's
+// repository, which holds the history; no tree is walked. Without --package,
+// <dir> is this checkout.
 import { execFileSync } from "node:child_process";
 import { readdirSync, readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { CHECKOUT, finish, options } from "./load.mjs";
 
 const args = options();
-if (!args.before) throw new Error("usage: node api-reports.mjs --before <commit> [--out report.json]");
-const { buildApiReports } = await import(new URL("scripts/api-report.mjs", CHECKOUT).href);
-const checkout = fileURLToPath(CHECKOUT);
-const reports = buildApiReports(checkout);
-const committed = Object.fromEntries(readdirSync(new URL("api/", CHECKOUT)).filter((name) => name.endsWith(".api.md")).map((name) => [name, readFileSync(new URL(`api/${name}`, CHECKOUT), "utf8")]));
+if (!args.before) throw new Error("usage: node api-reports.mjs --package <dir> --before <commit> [--out report.json]");
+const repository = fileURLToPath(CHECKOUT);
+const built = args.package ? resolve(String(args.package)) : repository;
+const { buildApiReports } = await import(pathToFileURL(resolve(built, "scripts/api-report.mjs")).href);
+const reports = buildApiReports(built);
+const committed = Object.fromEntries(readdirSync(resolve(built, "api")).filter((name) => name.endsWith(".api.md")).map((name) => [name, readFileSync(resolve(built, "api", name), "utf8")]));
 
 /** What npm run api:check reports for `files`, a map from name to text standing for api/. */
 function problems(files) {
@@ -33,10 +55,10 @@ function problems(files) {
   return out;
 }
 
-const before = execFileSync("git", ["rev-parse", "--verify", `${args.before}^{commit}`], { cwd: checkout, encoding: "utf8" }).trim();
+const before = execFileSync("git", ["rev-parse", "--verify", `${args.before}^{commit}`], { cwd: repository, encoding: "utf8" }).trim();
 const atBefore = (name) => {
   try {
-    return execFileSync("git", ["cat-file", "-p", `${before}:api/${name}`], { cwd: checkout, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+    return execFileSync("git", ["cat-file", "-p", `${before}:api/${name}`], { cwd: repository, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
   } catch {
     return null;
   }
@@ -47,6 +69,8 @@ const { ["lite.api.md"]: _lite, ...withoutLite } = committed;
 const control = problems(withoutLite);
 finish({
   check: "L9",
+  package: built,
+  version: JSON.parse(readFileSync(resolve(built, "package.json"), "utf8")).version,
   before,
   reports: [...reports.keys()],
   apiCheck: check.length === 0 ? "pass" : check,

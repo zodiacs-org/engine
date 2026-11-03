@@ -725,3 +725,80 @@ OQ5 is not answered under that delegation (zodiacs.org
 `DECISIONS-2026-10-05.md` §4). R3, R4's causes and 1e-12 thresholds, and R6 stay unratified,
 so each of the four units is `validated` at most until the owner ratifies
 them.
+
+**2026-11-03, review 1: L9 and L11 on L-c's build.** Review 1 of 1.1.0-rc.2
+(programme notes, `notes/rc2-2026-11-01/review1/`, outside this repository)
+ran `tools/api-reports.mjs --before 874077e` on b11c5e8's build: L9 failed,
+`api/vedic.api.md` differing from 874077e's, because P2.B.vargas (da193bf,
+after L-c) adds its names there; its control behaved. Since then review 1's
+batch A (a5c1a38) changes `api/calc.api.md` too (`./calc` re-exports
+`TimeBands`). L11 measured on the cut's build fails the same way: `./vedic`'s
+and `./calc`'s graphs grow for their own units. Section 3 asks L9 for the
+commit before L-c and L11 for the builds of the commit before L-a and of L-c,
+but it says each check runs on the cut's build, and the tools did not say
+which build is "after". Adopted after review 1, before any formal run; since
+review 1 had seen L9 fail on b11c5e8, the readings of L9 and L11 count as
+`validated` only until the owner ratifies them (each unit is `validated` at
+most anyway under OQ5):
+
+- *L9* is judged on L-c's build, 16ad4fe: the reports `scripts/api-report.mjs`
+  writes from 16ad4fe's build equal 16ad4fe's `api/`, `api/lite.api.md` is
+  new there, and every other file of 16ad4fe's `api/` equals 874077e's byte
+  for byte; its control is the same comparison with `api/lite.api.md` left
+  out. On the cut's build `npm run api:check` stays CI's gate (`gates.sh`).
+- *L11*'s comparison of graphs is between the builds of 1deb29e, the commit
+  before L-a, and of 16ad4fe. The rest of L11, `npm run package:contents`
+  with `./lite`'s budget and six files, and its control, stays on the cut's
+  build, as do L1 to L8, L10 and L12.
+- *The builds* are made in a scratch copy of each commit outside every
+  checkout: a sparse, blobless clone of the repository checked out at the
+  commit, made as section 0 says and as `carrier/pack-source.sh`'s
+  `sparse_clone` makes it, never a plain clone or a worktree; then `npm ci`
+  and `npm run build` on Node 22.22.2. `tools/api-reports.mjs` (`--package
+  <dir>`, reading the files at `--before` with `git cat-file` in this
+  repository) and `tools/graphs.mjs` (`--measure <dir>`) say so. A copy made
+  with `git archive <commit> -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05'`
+  does not serve in the clone the cut is made in: it is blobless, and there
+  `git archive` asks its promisor remote for a blob that is not on disk even
+  when the pathspec names `src/` alone (git 2.50.1; with lazy fetching turned
+  off it stopped there, and nothing was fetched); with lazy fetching on and
+  the network up, it would fetch that blob from the remote.
+- *Tried once, not the formal run.* On such clones of 16ad4fe and 1deb29e,
+  made from `engine-rc2` and built with `npm ci --offline` and `npm run build`
+  (Node 22.22.2, darwin-arm64), L9 passed with its control behaving, and
+  L11's graphs differed only in `./lite`, new, and `./techniques`; on this
+  commit's tree L9 differed in `api/calc.api.md` and `api/vedic.api.md` and
+  L11 in `./calc` and `./vedic`. The outputs are in the programme notes.
+
+**2026-11-03, review 1: L7's controls get a tool.** L7's two preregistered
+controls, a `sectReading` with the altitude test written `> 0` and one with
+orientality's test written `>= 0`, had no committed tool (one manual run is
+recorded in 874077e's message). `tools/sect-controls.mjs` now runs them, as
+the varga sensitivity's `tools/test-controls.mjs` runs its own: first
+`src/sect.test.ts` on the checkout as it stands, which must pass; then, for
+each control, one exact replacement in `src/sect.ts` (it must match once),
+`src/sect.test.ts` run with vitest's JSON reporter and its failing tests
+recorded, and `src/sect.ts` restored and checked against its SHA-256. A
+control behaves when at least one of L7's tests fails. Tried once on this
+commit's tree, not the formal run: the tests passed as they stand, and each
+control failed as it must, among its failing tests the ones `src/sect.test.ts`
+names for it. No pass condition or control changes.
+
+**2026-11-03, the site run (SR) on b11c5e8: B5's planted sentence.** SR, the
+cut's scratch site run (programme notes, `notes/rc2-2026-11-01/sr/`), ran
+B5's two controls on b11c5e8's candidate. The engine reference build with
+`sectReading` left out of `./lite`'s documented names failed its
+export-coverage assertion, as it must. The claims extractor's control took
+the sentence time-bands' C8 plants, "The band bounds the error of every
+position.", as B5 says ("as time-bands C8's control does"), planted in a
+scratch copy of the rc.2 reference as a paragraph of `release/README.txt` and
+as the first paragraph of the comment of `functions/time.timeBands.html`. The
+extractor did not list it: none of its words is a trigger of lexicon 2. With
+", in arcseconds" added it was listed in both places, so the plants were in
+text the extractor reads. So B5's claims-extractor control did not behave in
+SR on b11c5e8, and B5, as run there, cannot show that the extractor sees the
+new sentences of `./lite`. Its version 2 is due in the site's adoption, with a
+planted sentence the extractor's lexicon selects, citing this result; no
+other sentence is chosen now. This commit rewords packed text (README.md's
+sentence on `./lite`'s copies, among others), so SR runs again on the
+candidate after it, as section 5 says.

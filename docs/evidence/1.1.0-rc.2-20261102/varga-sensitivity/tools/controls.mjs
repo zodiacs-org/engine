@@ -17,9 +17,12 @@
  *   bracket's last millisecond, the previous one a millisecond after the
  *   bracket's first.
  * - C3d, seams ignored: a build whose seam finder returns none must fail M6 on
- *   at least one F3 case.
+ *   at least one F3b case (seams-f3b.json). It ran on F3 as first written;
+ *   review 1 found that F3's backward-step plants cannot make it fail, and the
+ *   amendment of 2026-11-03 (PREREGISTRATION.md, section 13) added F3b, whose
+ *   search span ends inside the window the step undoes, and names it here.
  *
- *   node controls.mjs --work DIR [--results FILE] [--births FILE] [--seams FILE]
+ *   node controls.mjs --work DIR [--results FILE] [--births FILE] [--f3b FILE]
  *                     [--only NAME,...] [--workers N] [--step-scale N] [--dry-run]
  *
  * The copies of the results are taken from --results (default
@@ -29,7 +32,10 @@
  * link to the astronomy-engine the package resolves (nothing is installed);
  * run.mjs and checker.mjs run on it as separate processes, and the copy is
  * removed afterwards. DIR must lie outside the repository. --dry-run makes and checks
- * the builds' replacements and runs nothing. Writes DIR/controls.json.
+ * the builds' replacements and runs nothing. Writes DIR/controls.json, and
+ * exits 1 unless every control failed as it must (since review 1, so that
+ * checks.sh records it as the step's exit; the checker's own exit 1 on a
+ * failing copy is what a control expects, and is read from its report).
  */
 import { execFileSync } from "node:child_process";
 import { cpSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
@@ -38,13 +44,13 @@ import { relative, resolve } from "node:path";
 
 import { FOLDER, HERE, ROOT, options } from "./load.mjs";
 
-const args = options(process.argv.slice(2), ["--work", "--results", "--births", "--seams", "--only", "--workers", "--step-scale", "--dry-run"]);
+const args = options(process.argv.slice(2), ["--work", "--results", "--births", "--f3b", "--only", "--workers", "--step-scale", "--dry-run"]);
 if (!args.has("--work")) throw new Error("--work DIR is required: a directory outside the repository.");
 const work = resolve(args.get("--work"));
 if (!relative(ROOT, work).startsWith("..")) throw new Error(`${work} lies inside the repository.`);
 const resultsFile = resolve(args.get("--results") ?? resolve(FOLDER, "results/results.jsonl"));
 const births = resolve(args.get("--births") ?? resolve(FOLDER, "births.json"));
-const seams = resolve(args.get("--seams") ?? resolve(FOLDER, "seams.json"));
+const f3b = resolve(args.get("--f3b") ?? resolve(FOLDER, "seams-f3b.json"));
 const only = args.has("--only") ? String(args.get("--only")).split(",") : null;
 const workers = String(args.get("--workers") ?? 1);
 const stepScale = String(args.get("--step-scale") ?? 1);
@@ -52,11 +58,18 @@ const dryRun = args.has("--dry-run");
 const dist = resolve(process.env.ZODIACS_ENGINE_DIST ?? resolve(ROOT, "dist"));
 mkdirSync(work, { recursive: true });
 
-const node = (script, list, env = {}) =>
-  execFileSync(process.execPath, [resolve(HERE, script), ...list], { env: { ...process.env, ...env }, stdio: ["ignore", "pipe", "inherit"] }).toString();
+/** Runs a tool; `failing` lets it exit 1, as the checker does on results that fail a check. */
+const node = (script, list, env = {}, failing = false) => {
+  try {
+    return execFileSync(process.execPath, [resolve(HERE, script), ...list], { env: { ...process.env, ...env }, stdio: ["ignore", "pipe", "inherit"] }).toString();
+  } catch (error) {
+    if (failing && error.status === 1) return String(error.stdout ?? "");
+    throw error;
+  }
+};
 const check = (results, extra = []) => {
   const out = resolve(work, `check-${Math.random().toString(36).slice(2)}.json`);
-  node("checker.mjs", ["--results", results, "--out", out, "--workers", workers, "--step-scale", stepScale, ...extra]);
+  node("checker.mjs", ["--results", results, "--out", out, "--workers", workers, "--step-scale", stepScale, ...extra], {}, true);
   const report = JSON.parse(readFileSync(out, "utf8"));
   return { verdict: report.verdict, failuresByCheck: report.failuresByCheck, failures: report.failures.slice(0, 20) };
 };
@@ -120,7 +133,7 @@ if (!dryRun && wanted("C3a-next-1ms-later")) {
     row.next.minutes = (at - Date.parse(result.utc)) / 60_000;
     return `${row.point} ${row.varga} ${row.scheme} next.at ${row.next.at}`;
   });
-  const outcome = check(copy.file, ["--seams", "none"]);
+  const outcome = check(copy.file, ["--seams", "none", "--f3b", "none"]);
   report.controls["C3a-next-1ms-later"] = { ...copy, ...outcome, mustFail: "M2", failed: outcome.failuresByCheck.M2 > 0 };
 }
 if (!dryRun && wanted("C3a-next-null")) {
@@ -130,7 +143,7 @@ if (!dryRun && wanted("C3a-next-null")) {
     row.next = null;
     return `${row.point} ${row.varga} ${row.scheme} next set to null`;
   });
-  const outcome = check(copy.file, ["--seams", "none"]);
+  const outcome = check(copy.file, ["--seams", "none", "--f3b", "none"]);
   report.controls["C3a-next-null"] = { ...copy, ...outcome, mustFail: "M5", failed: outcome.failuresByCheck.M5 > 0 };
 }
 if (!dryRun && wanted("G-V2-iii-d2-keep")) {
@@ -141,7 +154,7 @@ if (!dryRun && wanted("G-V2-iii-d2-keep")) {
     row.next.boundary = start % 360;
     return `${row.point} D2 next.boundary ${row.next.boundary}, the sign start next to it`;
   });
-  const outcome = check(copy.file, ["--seams", "none"]);
+  const outcome = check(copy.file, ["--seams", "none", "--f3b", "none"]);
   report.controls["G-V2-iii-d2-keep"] = { ...copy, ...outcome, mustFail: "G-V2b once", failed: outcome.failuresByCheck["G-V2b"] === 1 };
 }
 for (const name of Object.keys(BUILDS).filter(wanted)) {
@@ -152,9 +165,9 @@ for (const name of Object.keys(BUILDS).filter(wanted)) {
     continue;
   }
   const out = resolve(work, `${name}-results`);
-  const corpus = name.startsWith("C3d") ? ["--births", "none", "--seams", seams] : ["--births", births, "--seams", "none", "--limit", "50"];
+  const corpus = name.startsWith("C3d") ? ["--births", "none", "--seams", "none", "--f3b", f3b] : ["--births", births, "--seams", "none", "--f3b", "none", "--limit", "50"];
   node("run.mjs", [...corpus, "--out", out], { ZODIACS_ENGINE_DIST: copy });
-  const outcome = check(resolve(out, "results.jsonl"), name.startsWith("C3d") ? ["--seams", seams] : ["--seams", "none"]);
+  const outcome = check(resolve(out, "results.jsonl"), name.startsWith("C3d") ? ["--seams", "none", "--f3b", f3b] : ["--seams", "none", "--f3b", "none"]);
   const failed = name.startsWith("C3b") ? outcome.verdict !== "PASS" && Object.values(outcome.failuresByCheck).some((n) => n > 0)
     : name.startsWith("C3c") ? outcome.failuresByCheck.M2 > 0
       : outcome.failuresByCheck.M6 > 0;
@@ -163,4 +176,5 @@ for (const name of Object.keys(BUILDS).filter(wanted)) {
 }
 report.allFailed = Object.values(report.controls).every((control) => dryRun || control.failed);
 writeFileSync(resolve(work, "controls.json"), JSON.stringify(report, null, 1) + "\n");
+process.exitCode = report.allFailed ? 0 : 1;
 console.log(JSON.stringify(Object.fromEntries(Object.entries(report.controls).map(([name, control]) => [name, dryRun ? "replacements match" : control.failed ? `failed as it must (${control.mustFail})` : "DID NOT FAIL"]))));

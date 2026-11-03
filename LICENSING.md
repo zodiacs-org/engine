@@ -38,8 +38,10 @@ modules:
 - `src/lib/geo/search.ts` — client for the separately hosted GeoNames index
 
 The techniques entry, added in 0.1.1-rc.16 (`src/techniques/`, built into
-`dist/techniques.js`), was adapted from these Zodiacs.org TypeScript modules,
-read at the site repository's commit
+`dist/techniques.js`, and from 1.1.0-rc.2 its composite and dignity modules
+also into `dist/lite-composite.js` and `dist/lite-dignities.js`, which
+`@zodiacs/engine/lite` re-exports), was adapted from these Zodiacs.org
+TypeScript modules, read at the site repository's commit
 `67cccac5a19a7779a07f85b09218c1ffbe2300cd` (2026-09-29), whose files'
 SHA-256 the entry's preregistration records
 (`docs/evidence/techniques-2026-09-29/PREREGISTRATION.md`):
@@ -47,7 +49,8 @@ SHA-256 the entry's preregistration records
 - `src/lib/engine/solar-return.ts` and `src/lib/engine/lunar-return.ts` —
   solar and lunar returns (`src/techniques/returns.ts`)
 - `src/lib/composite.ts` — composite midpoints and their aspects
-  (`src/techniques/relationship.ts`)
+  (`src/techniques/composite.ts`; `src/techniques/relationship.ts` until
+  1.1.0-rc.2)
 - `src/lib/engine/void-of-course.ts` — the void-of-course Moon
   (`src/techniques/void-of-course.ts`)
 - `src/lib/engine/aspect-patterns.ts` and `src/lib/aspect-pattern-model.ts` —
@@ -391,8 +394,10 @@ not values taken from ERFA.
 
 ## Techniques tables
 
-`@zodiacs/engine/techniques` (`dist/techniques.js`) carries the tables of the
-essential dignities of the seven classical planets, as these works give them
+`@zodiacs/engine/techniques` (`dist/techniques.js`) and, from 1.1.0-rc.2,
+`@zodiacs/engine/lite` (`dist/lite-dignities.js`, which `dist/lite.js`
+re-exports) carry the tables of the essential dignities of the seven
+classical planets, as these works give them
 (`src/techniques/dignities.ts`; `docs/techniques.md` quotes each and names
 the copies read):
 

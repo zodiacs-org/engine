@@ -77,8 +77,13 @@ a rule it did not name.
   zodiacs.org's chart view used (its `src/lib/sect.ts`), ported. The engine's
   own check of a chart's sect against the Sun's altitude in
   `@zodiacs/engine/timing` (the flag `"sect-contradicts-altitude"`) counts
-  the Sun as above the horizon only when its altitude is greater than 0; the
-  two differ only for a Sun exactly on the horizon.
+  the Sun as above the horizon only when its altitude is greater than 0, and
+  it computes that altitude itself, from the chart's latitude, midheaven and
+  true obliquity, with the Sun taken on the ecliptic (`src/timing/shared.ts`),
+  not from an altitude a caller passes. Given the same altitude, the two differ
+  only for a Sun exactly on the horizon; an altitude computed another way,
+  such as the one a caller passes here, can put the Sun on the other side of
+  the horizon from the flag's.
 - `"ecliptic"`: `{ convention, ascendant, sunLon, mercuryLon? }`. The root's
   `sectOf(ascendant, sunLon)`: day when the Sun is on the half of the ecliptic
   from the descendant through the midheaven to the ascendant. A Sun exactly on

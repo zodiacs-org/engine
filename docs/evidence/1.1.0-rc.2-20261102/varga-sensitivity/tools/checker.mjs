@@ -6,8 +6,8 @@
  * imports nothing from the search module and shares no code with it; it places
  * a longitude on the 1/7560° grid with its own exact arithmetic (BigInt).
  *
- *   node checker.mjs [--results FILE] [--seams FILE] [--changes FILE] [--out FILE]
- *                    [--workers N] [--step-scale N]
+ *   node checker.mjs [--results FILE] [--seams FILE|none] [--f3b FILE|none] [--changes FILE]
+ *                    [--out FILE] [--workers N] [--step-scale N]
  *
  * M0 the call returned, and no row is refused; M1 each row's position is
  * vargaOf at the birth; M2 each change's `from` is the sign at at − 1 ms and
@@ -18,10 +18,11 @@
  * [previous, next) the sign is the birth sign (every second for the
  * Ascendant, 10 s for the Moon, 60 s for the other points, counted from the
  * birth both ways, and the interval's first and last milliseconds; a null side
- * extends the interval to that end of `searched`); M6 every F3 case gives its
- * expected change. G-V2 (b): every reported boundary T is a change row of F1
- * for its key, with `from` and `to` F1's signs below and at T in the direction
- * of the crossing.
+ * extends the interval to that end of `searched`); M6 every F3 and F3b case
+ * gives its expected change (F3b, seams-f3b.json, added after review 1 by the
+ * amendment of 2026-11-03 in section 13). G-V2 (b): every reported boundary
+ * T is a change row of F1 for its key, with `from` and `to` F1's signs below
+ * and at T in the direction of the crossing.
  *
  * Lone calls: a chart a day away is evaluated before the first instant of
  * each call and before any instant within 100 ms of the one before, as
@@ -31,9 +32,11 @@
  * same bits at each F2 birth instant alone and 1 ms after a call at the
  * millisecond before.
  *
- * Writes FILE (default ../results/check.json). --step-scale N multiplies M5's
- * sample spacing; it is for trials only, and the output records it. Each
- * worker thread loads its own copy of the package.
+ * Writes FILE (default ../results/check.json), and exits 1 if any check
+ * failed (since review 1, so that checks.sh records the verdict as the step's
+ * exit). --step-scale N multiplies M5's sample spacing; it is for trials only,
+ * and the output records it. Each worker thread loads its own copy of the
+ * package.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { availableParallelism } from "node:os";
@@ -190,15 +193,17 @@ async function work(data) {
 }
 
 if (isMainThread) {
-  const args = options(process.argv.slice(2), ["--results", "--seams", "--changes", "--out", "--workers", "--step-scale"]);
+  const args = options(process.argv.slice(2), ["--results", "--seams", "--f3b", "--changes", "--out", "--workers", "--step-scale"]);
   const resultsFile = resolve(args.get("--results") ?? resolve(FOLDER, "results/results.jsonl"));
   const out = resolve(args.get("--out") ?? resolve(resultsFile, "../check.json"));
   const seamsFile = args.get("--seams") === "none" ? null : resolve(args.get("--seams") ?? resolve(FOLDER, "seams.json"));
+  const f3bFile = args.get("--f3b") === "none" ? null : resolve(args.get("--f3b") ?? resolve(FOLDER, "seams-f3b.json"));
   const stepScale = Number(args.get("--step-scale") ?? 1);
   const workers = Number(args.get("--workers") ?? 1);
   const lines = readFileSync(resultsFile, "utf8").trim().split("\n").map((text) => JSON.parse(text));
   const expected = {};
   if (seamsFile) for (const entry of readJson(seamsFile).cases) expected[`F3 ${entry.id}`] = entry.expected;
+  if (f3bFile) for (const entry of readJson(f3bFile).cases) expected[`F3b ${entry.id}`] = entry.expected;
   const data = { changes: args.get("--changes") ?? undefined, expected, stepScale };
   const outcomes = new Array(lines.length);
   let next = 0;
@@ -258,6 +263,7 @@ if (isMainThread) {
   };
   writeFileSync(out, JSON.stringify(report, null, 1) + "\n");
   console.log(JSON.stringify({ calls: report.calls, verdict: report.verdict, failuresByCheck: byCheck, minutes: report.checkerMinutes.toFixed(2) }));
+  process.exitCode = failures.length === 0 ? 0 : 1;
 } else {
   const check = await work(workerData);
   parentPort.on("message", ({ index, line }) => parentPort.postMessage({ index, outcome: check(line) }));

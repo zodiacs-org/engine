@@ -422,10 +422,16 @@ assert(prose("LICENSING.md").includes("shared chunk under `dist/` that `dist/geo
 // LICENSING.md say they are in a shared chunk under dist/ that the ephemeris
 // chunk and dist/time.js import (until 1.1.0-rc.2 they were in the ephemeris
 // chunk itself), which LICENSING.md says the graphs of nine entry points load.
-// The series' first coefficient stands for them.
+// The series' first coefficient stands for the nutation, and the marker
+// esbuild writes before the frame module's code, `// src/frame.ts`, for the
+// frame: NOTICE says the frame is built into that same chunk (review 1 of
+// 1.1.0-rc.2), so the marker must be there and in no other file.
 const nutationHolders = files.filter((file) => file.endsWith(".js") && read(file).includes("-172064161,"));
 assert(nutationHolders.length === 1 && /^dist\/chunk-[^/]+\.js$/u.test(nutationHolders[0]),
   `the nutation must be in exactly one shared chunk under dist/, as NOTICE says; found it in ${nutationHolders.join(", ") || "no file"}`);
+const frameHolders = files.filter((file) => file.endsWith(".js") && read(file).includes("\n// src/frame.ts\n"));
+assert.deepEqual(frameHolders, nutationHolders,
+  `the frame module must be built into the chunk that holds the nutation, as NOTICE says; found its marker in ${frameHolders.join(", ") || "no file"}`);
 const nutationChunk = `./${nutationHolders[0].slice("dist/".length)}`;
 assert(!read(nutationHolders[0]).includes('"astronomy-engine"'), "the chunk that holds the nutation must not import astronomy-engine");
 assert(read("dist/time.js").includes(nutationChunk), "dist/time.js must import the chunk that holds the nutation");
@@ -437,6 +443,26 @@ assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].sizes.has(nut
 assert(notice.includes("built into a shared chunk under dist/ that the ephemeris chunk and dist/time.js import"), "NOTICE must say where the frame and the nutation are");
 assert(prose("LICENSING.md").includes("shared chunk under `dist/` that the ephemeris chunk and `dist/time.js` import"),
   "LICENSING.md must say where the nutation is");
+// The essential dignities' tables and the composite code adapted from the
+// site, the same way: NOTICE and LICENSING.md say that dist/techniques.js and
+// @zodiacs/engine/lite's dist/lite-dignities.js carry the tables, and
+// LICENSING.md that the composite code is built into dist/techniques.js and
+// dist/lite-composite.js (review 1 of 1.1.0-rc.2). The marker esbuild writes
+// before each module's code, `// src/techniques/dignities.ts` and
+// `// src/techniques/composite.ts`, stands for them.
+const holding = (marker) => files.filter((file) => file.endsWith(".js") && read(file).includes(`\n// ${marker}\n`)).sort();
+assert.deepEqual(holding("src/techniques/dignities.ts"), ["dist/lite-dignities.js", "dist/techniques.js"],
+  "the dignity tables (src/techniques/dignities.ts) must be built into dist/techniques.js and dist/lite-dignities.js and no other file, as NOTICE says");
+assert.deepEqual(holding("src/techniques/composite.ts"), ["dist/lite-composite.js", "dist/techniques.js"],
+  "the composite code (src/techniques/composite.ts) must be built into dist/techniques.js and dist/lite-composite.js and no other file, as LICENSING.md says");
+assert(read("dist/lite.js").includes("./lite-dignities.js") && read("dist/lite.js").includes("./lite-composite.js"),
+  "dist/lite.js must re-export dist/lite-dignities.js and dist/lite-composite.js, as NOTICE and LICENSING.md say");
+assert(notice.includes("The techniques entry (dist/techniques.js) and the lite entry (dist/lite-dignities.js, which dist/lite.js re-exports) carry the tables of the essential dignities"),
+  "NOTICE must say where the dignity tables are");
+assert(prose("LICENSING.md").includes("`@zodiacs/engine/lite` (`dist/lite-dignities.js`, which `dist/lite.js` re-exports) carry the tables of the essential dignities"),
+  "LICENSING.md must say where the dignity tables are");
+assert(prose("LICENSING.md").includes("also into `dist/lite-composite.js` and `dist/lite-dignities.js`, which `@zodiacs/engine/lite` re-exports"),
+  "LICENSING.md must say where the composite and dignity code adapted from the site is built");
 assert(read("README.md").includes(LICENSE_EXPRESSION), "README.md must state the licence expression");
 // The shipped text refers to the separate earlier package without naming it.
 for (const file of files) {

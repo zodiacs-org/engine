@@ -50,9 +50,10 @@ the release it leads to.
 Not public: the text of an error message or of a refusal's `detail` (branch
 on the class, the `reason` or the code, never on the wording); the names of
 the chunk files under `dist/`; whether two entry points give the same object
-for a name (`./lite`'s functions and tables are copies of the root's and
-`./techniques`', with the same results, and a later release may share them
-or not); any field, export or behaviour the declarations and documents do
+for a name (the functions and tables of `./lite`'s declination, composite
+and dignity parts are copies of the root's and `./techniques`', with the same
+results, and a later release may share them or not; its sect part is its
+own); any field, export or behaviour the declarations and documents do
 not name; and the order of entries in a result where no order is
 documented.
 

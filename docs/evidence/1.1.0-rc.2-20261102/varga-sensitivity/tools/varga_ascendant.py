@@ -43,7 +43,15 @@ and not judged.
 The controls: --control c4a shifts the engine's instants by 6 s, which must
 fail every compared side; --control c4b gives the arbiter the other
 definition's ayanamsa (krishnamurti for lahiri and the reverse), which must
-fail at least one comparison.
+fail at least one comparison. C4a's verdict is taken side by side (since
+review 1, PREREGISTRATION.md section 13, 2026-11-03): every compared side,
+one where both report a change, must fail, and the sides where only one
+reports a change do not count towards it. It was a count over all judged
+sides, which a side with a change on one side only could make up for a
+compared side that passed.
+
+The script exits 1 when the comparison FAILs or a control does not fail as
+it must (since review 1, so that checks.sh records it as the step's exit).
 
 Needs pyerfa 2.0.1.5 and numpy 2.4.6 (OQ6), installed in a scratch
 environment outside every repository; --self-test needs neither, and checks
@@ -196,6 +204,13 @@ def compare(engine_rows, arbiter, t0, lo, hi, shift_ms=0):
     return judged, not_judged
 
 
+def c4a_failed_every_compared_side(judged):
+    """C4a's verdict, side by side: at least one compared side (both report a
+    change, so a difference exists) and every one of them failed."""
+    compared = [entry for entry in judged if entry["difference"] is not None]
+    return len(compared) > 0 and all(not entry["ok"] for entry in compared)
+
+
 def summary(differences):
     values = sorted(abs(d) for d in differences)
     if not values:
@@ -251,6 +266,7 @@ def main_compare(args):
     bands = {band: [] for band in BANDS}
     totals = {"judged": 0, "notJudged": 0, "mismatches": 0}
     failures = []
+    all_judged = []
     for line in lines:
         birth = births[line["id"]]
         result = line.get("result")
@@ -267,6 +283,7 @@ def main_compare(args):
             continue
         arbiter = arbiter_runs(x, t0, lo, hi, changes, [key_of(row) for row in rows])
         judged, not_judged = compare(rows, arbiter, t0, lo, hi, shift)
+        all_judged.extend(judged)
         totals["judged"] += len(judged)
         totals["notJudged"] += len(not_judged)
         band = next(b for b in BANDS if b[0] <= abs(birth["latitude"]) <= b[1])
@@ -277,6 +294,7 @@ def main_compare(args):
                 totals["mismatches"] += 1
                 failures.append({"id": line["id"], **entry})
     compared = sum(len(values) for values in bands.values())
+    compared_failed = sum(1 for entry in all_judged if entry["difference"] is not None and not entry["ok"])
     report = {
         "tool": "docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/varga_ascendant.py",
         "erfa": erfa_version,
@@ -285,11 +303,12 @@ def main_compare(args):
         "births": len(lines),
         **totals,
         "compared": compared,
+        "comparedFailed": compared_failed,
         "bands": {f"{low} to {high} degrees": summary(values) for (low, high), values in bands.items()},
         "failures": failures[:200],
     }
     if args.control == "c4a":
-        report["verdict"] = "control failed as it must" if totals["mismatches"] >= compared and compared > 0 else "CONTROL DID NOT FAIL"
+        report["verdict"] = "control failed as it must" if c4a_failed_every_compared_side(all_judged) else "CONTROL DID NOT FAIL"
     elif args.control == "c4b":
         report["verdict"] = "control failed as it must" if totals["mismatches"] > 0 else "CONTROL DID NOT FAIL"
     else:
@@ -297,7 +316,8 @@ def main_compare(args):
     text = json.dumps(report, indent=1) + "\n"
     if args.out:
         Path(args.out).write_text(text)
-    print(json.dumps({key: report[key] for key in ("births", "judged", "notJudged", "compared", "mismatches", "verdict")}))
+    print(json.dumps({key: report[key] for key in ("births", "judged", "notJudged", "compared", "comparedFailed", "mismatches", "verdict")}))
+    return 0 if report["verdict"] in ("PASS", "control failed as it must") else 1
 
 
 def self_test():
@@ -330,9 +350,17 @@ def self_test():
     near = arbiter_runs(lambda ms: wrap(359.99999 + ms * rate), 0, -DAY_MS, DAY_MS, changes, ["D1"])
     _, not_judged = compare([row], near, 0, -DAY_MS, DAY_MS)
     assert len(not_judged) == 2, not_judged
+    # C4a's verdict side by side: a compared side that passes is not made up
+    # for by a side with a change on one side only (review 1).
+    shifted, _ = compare([row], arbiter, 0, -DAY_MS, DAY_MS, shift_ms=6_000)
+    assert c4a_failed_every_compared_side(shifted), shifted
+    one_side_only = {"key": "D1", "side": "next", "ok": False, "difference": None, "why": "a change on one side only"}
+    passing = {"key": "D1", "side": "previous", "ok": True, "difference": 10}
+    assert not c4a_failed_every_compared_side([passing, one_side_only])
+    assert not c4a_failed_every_compared_side([one_side_only])
     assert iso_ms("2000-01-01T12:00:00.250Z") == 946_728_000_250
     assert summary([1, -3, 2])["maxMs"] == 3
-    print("self-test: the search, the comparison, its controls' shifts and the side rule behave on synthetic longitudes")
+    print("self-test: the search, the comparison, its controls' shifts, C4a's verdict side by side and the side rule behave on synthetic longitudes")
 
 
 def main():
@@ -347,11 +375,11 @@ def main():
     args = parser.parse_args()
     if args.self_test:
         self_test()
-        return
+        return 0
     if not args.results:
         parser.error("--results is required")
-    main_compare(args)
+    return main_compare(args)
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

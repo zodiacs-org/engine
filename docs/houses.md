@@ -24,8 +24,9 @@ planetaryReturns({ utc: "1995-04-09T12:04:00Z" }, "Mercury", "2031-02-15", "2031
 // { status: "complete", returns: [direct, retrograde, direct], … }
 ```
 
-The houses entry is one file of 13,606 bytes that imports no other module: no
-ephemeris and nothing of the root entry. The RAMC is `gastHours × 15 +
+The houses entry is one file of 13,678 bytes on 1.1.0-rc.2's build
+(`docs/evidence/1.1.0-rc.2-20261102/sizes.json`) that imports no other
+module: no ephemeris and nothing of the root entry. The RAMC is `gastHours × 15 +
 longitude`; to start from a RAMC, pass `gastHours: ramc / 15, longitude: 0`.
 Invalid input throws `RangeError`.
 

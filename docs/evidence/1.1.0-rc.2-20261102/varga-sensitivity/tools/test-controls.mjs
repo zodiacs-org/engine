@@ -10,7 +10,9 @@
  * Run it from the repository root of a checkout whose node_modules holds
  * vitest (engine-rc2, or a sparse clone made as the preregistration's scope
  * limitation says), alone: it changes tracked files while it runs, and puts
- * each back. Writes FILE (default ../results/test-controls.json).
+ * each back. Writes FILE (default ../results/test-controls.json), and exits 1
+ * unless every control failed as it must (since review 1, so that checks.sh
+ * records it as the step's exit).
  */
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
@@ -129,3 +131,4 @@ rmSync(work, { recursive: true, force: true });
 report.allFailedAsTheyMust = report.controls.every((control) => control.failedAsItMust);
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, JSON.stringify(report, null, 1) + "\n");
+process.exitCode = report.allFailedAsTheyMust ? 0 : 1;

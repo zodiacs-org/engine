@@ -1,10 +1,12 @@
 /*
  * G-V3's run (PREREGISTRATION.md, section 8): vargaSensitivity from the
- * package under test on every birth of F2 (births.json) and every case of F3
- * (seams.json), in their order, one call each, nothing dropped or rerun on its
- * own. For G-V4, the same on F4 (--births births-erfa.json --seams none).
+ * package under test on every birth of F2 (births.json), every case of F3
+ * (seams.json) and every case of F3b (seams-f3b.json, added after review 1 by
+ * the amendment of 2026-11-03 in section 13), in their order, one call each,
+ * nothing dropped or rerun on its own. For G-V4, the same on F4 (--births
+ * births-erfa.json --seams none --f3b none).
  *
- *   node run.mjs [--births FILE|none] [--seams FILE|none] [--out DIR] [--limit N]
+ *   node run.mjs [--births FILE|none] [--seams FILE|none] [--f3b FILE|none] [--out DIR] [--limit N]
  *
  * Writes DIR/results.jsonl, one line per call ({ corpus, id, birth, ayanamsa,
  * options, ms, result } or, if the call threw, { ..., error }), and DIR/run.json
@@ -19,12 +21,13 @@ import { resolve } from "node:path";
 
 import { FOLDER, ayanamsaOf, callsOf, loadEngine, options } from "./load.mjs";
 
-const args = options(process.argv.slice(2), ["--births", "--seams", "--out", "--limit"]);
+const args = options(process.argv.slice(2), ["--births", "--seams", "--f3b", "--out", "--limit"]);
 const out = resolve(args.get("--out") ?? resolve(FOLDER, "results"));
 const limit = args.has("--limit") ? Number(args.get("--limit")) : null;
 const sources = [
   ...(args.get("--births") === "none" ? [] : [["F2", resolve(args.get("--births") ?? resolve(FOLDER, "births.json"))]]),
-  ...(args.get("--seams") === "none" ? [] : [["F3", resolve(args.get("--seams") ?? resolve(FOLDER, "seams.json"))]])
+  ...(args.get("--seams") === "none" ? [] : [["F3", resolve(args.get("--seams") ?? resolve(FOLDER, "seams.json"))]]),
+  ...(args.get("--f3b") === "none" ? [] : [["F3b", resolve(args.get("--f3b") ?? resolve(FOLDER, "seams-f3b.json"))]])
 ];
 const engine = await loadEngine();
 const { vedic } = engine;

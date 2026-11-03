@@ -23,7 +23,7 @@
 // the installed candidate). --lite names another directory whose dist/ holds
 // the lite files to test against that package's root and techniques entry:
 // the control, a lite build whose declinations treat the luminaries with an
-// orb of 1.4 (control-builds.mjs), must fail.
+// orb of 1.4 (broken-builds.mjs --l5-control <dir>), must fail.
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { attempt, difference, entry, finish, fnv1a, manifest, mulberry32, options } from "./load.mjs";
