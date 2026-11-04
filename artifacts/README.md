@@ -97,7 +97,8 @@ runs, so CI starts the check with node directly.
 | 1.0.0-rc.1 | `cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284` | 284,750 | 74 | `77a16c26889220f5481f41d16c4ca4e70a09250b` | `bb1736a` | Candidate, merged |
 | 1.0.0-rc.2 | `4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002` | 287,011 | 74 | `7fa964d2a77d09dbb819b5733b36e303fc7fc513` | `e790362` | Candidate, merged |
 | 1.0.0 | `c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6` | 288,063 | 74 | `ca2c8cefbaa1a9d6f5f78ee86713e813633942ca` | `38d3185` | Release, merged; on npm as `latest` |
-| 1.1.0-rc.1 | `52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6` | 292,721 | 77 | `c41706266caf4dde7e03aaa18c08acd569d19a7e` | "Carry the packed 1.1.0-rc.1 tarball" | Candidate under review |
+| 1.1.0-rc.1 | `52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6` | 292,721 | 77 | `c41706266caf4dde7e03aaa18c08acd569d19a7e` | `6ec3464` | Candidate, merged |
+| 1.1.0-rc.2 | `c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c` | 318,004 | 90 | `806f76b43c0ee652016fe1b522c02d6f6e9c7ae5` | "Carry the packed 1.1.0-rc.2 tarball" | Candidate under review |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -277,3 +278,19 @@ source commit (CI run 40349378234, Conformance 40349378157 and Atlas
 40349378175) and two reviews of the first source commit had been acted on.
 It is not to be published on npm until the owner approves it. The record is
 in `docs/evidence/1.1.0-rc.1-20261026/`.
+
+1.1.0-rc.2 is the second candidate for 1.1.0: corrections of statements that
+said more than their evidence (zodiacs.org's finding F-89); two new entry
+points that load no ephemeris, `@zodiacs/engine/time` and
+`@zodiacs/engine/lite`, which make fifteen public entry points; time bands in
+`@zodiacs/engine/calc`; and the birth-time sensitivity of the vargas in
+`@zodiacs/engine/vedic`. The archive is 318,004 bytes, 1,096,783 unpacked in
+90 files, under the package cap of 1,100,000, which it raises from 1,020,000
+under the owner's delegation of 2026-11-03, as it adds two budgets and raises
+two. It was packed once, from clean clones of its source commit, each
+installed with `npm ci`, which packed the same bytes on Node 22.22.2, 20.19.0
+and 24.21.0; the carried file is the Node 22.22.2 one. It was carried after
+the gate workflows had passed on the source commit (CI run 41799118407,
+Conformance 41799118412 and Atlas 41799118391) and two reviews of the cut had
+been acted on. It is not to be published on npm until the owner approves it.
+The record is in `docs/evidence/1.1.0-rc.2-20261102/`.
