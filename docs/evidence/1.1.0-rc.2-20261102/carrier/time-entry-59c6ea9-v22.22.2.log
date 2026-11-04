@@ -1,0 +1,70 @@
+# sh carrier-gates.sh time-entry at 59c6ea9 in a clean full-history clone, blobless, its sparse checkout leaving out docs/evidence/calc-sidereal-2026-10-05/, without NODE_OPTIONS; Node v22.22.2, npm 10.9.7, git 2.50.1, 2026-11-04
+## npm ci
+added 109 packages in 773ms
+exit 0
+## npm run build
+lite: dist/lite.js 146 bytes
+lite: dist/lite-declinations.js 9665 bytes
+lite: dist/lite-sect.js 3439 bytes
+lite: dist/lite-composite.js 3783 bytes
+lite: dist/lite-dignities.js 11897 bytes
+lite: dist/lite.d.ts 5135 bytes
+lite: dist/metafile-lite.json 5357 bytes
+exit 0
+## the carried archive, extracted into the consumer
+c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c  zodiacs-engine-1.1.0-rc.2.tgz
+exit 0
+## the build's dist/*.js and dist/*.d.ts, byte for byte the archive's
+identical
+exit 0
+## T1: the archive's runtime names of ./time, R1's
+{"keys":["DELTA_T_IERS_MODEL","EPHEMERIS_SPAN","TIME_SCALE_NAMES","eclipticFrame","eclipticOfDate","elapsedDays","meanEcliptic","tilt","timeBands","timeBasis"],"equalsR1":true}
+exit 0
+## T1: npm run api:check
+api-report: 15 entry points match api/
+exit 0
+## T1: src/time.test.ts
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+exit 0
+## T2 and T13: npm run exports:smoke
+@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat, time and lite graphs have no external imports, the lite entry holds its 16 pinned source modules in 5 files that import nothing and loads where astronomy-engine cannot, the core graph (24 source modules in the build's module list, 23 marked in 13 files) reaches no module of an opt-in entry and no zone history, the geo entry loads its 16 shards lazily, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic
+exit 0
+## T3: no-ephemeris.sh on the archive, Node 22.22.2 and 20.19.0
+installed: @zodiacs engine
+node v22.22.2, flag: --no-experimental-detect-module
+  check: {"taiMinusUtc":37,"model":"iers-utc/1","lon":359.9961300933642,"lat":0,"pass":true}
+  control: {"rejected":true,"code":"ERR_MODULE_NOT_FOUND","namesAstronomyEngine":true,"controlBehaved":true}
+node v20.19.0, flag: --no-experimental-detect-module
+  check: {"taiMinusUtc":37,"model":"iers-utc/1","lon":359.9961300933642,"lat":0,"pass":true}
+  control: {"rejected":true,"code":"ERR_MODULE_NOT_FOUND","namesAstronomyEngine":true,"controlBehaved":true}
+exit 0
+## T4: site-module.mjs
+ "pass": true
+exit 0
+## T5: natal-parity.mjs
+ "pass": true
+exit 0
+## T6: source-pins.mjs
+ "pass": true
+exit 0
+## T7: independent.mjs
+ "pass": true
+exit 0
+## T8: one-copy.mjs
+ "pass": true
+exit 0
+## T9: npm run package:contents
+@zodiacs/engine package contents passed (90 files, 1096783 bytes unpacked of 1100000; import graphs: . 106325 of 108500, ./calc 151426 of 156000 (71048 beyond the core's), ./conventions 2754 of 2900 (2754 beyond the core's), ./crossings 9942 of 10000 (173 beyond the core's), ./deltat 5232 of 5500 (161 beyond the core's), ./geo 35439 of 35500 (32510 beyond the core's), ./houses 13678 of 15000 (13678 beyond the core's), ./internal 66586 of 68000 (365 beyond the core's), ./internal/math 19224 of 20000 (1363 beyond the core's), ./lite 28930 of 29000 (28930 beyond the core's), ./receipt 72549 of 76500 (46579 beyond the core's), ./sky 94448 of 97000 (16999 beyond the core's), ./techniques 156210 of 160000 (63909 beyond the core's), ./time 42306 of 42400 (2924 beyond the core's), ./timing 125693 of 129000 (32720 beyond the core's), ./vedic 141340 of 143000 (49039 beyond the core's), ./window 104557 of 105000 (33948 beyond the core's); zone histories 189144 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
+exit 0
+## T10: behaviour.mjs
+ "pass": true
+exit 0
+## T11: state-scan.mjs
+ "pass": true
+exit 0
+## T12: declarations.sh on the archive's dist/time.d.ts
+TypeScript Version 5.9.3
+T12 check: exit 0
+exit 0
+

@@ -310,28 +310,57 @@ owner's merge of the cut and the site's adoption, as its `RESULTS.md` says.
 
 ## On the carrier
 
-*To be filled.* The archive is packed once from the source commit by
-`carrier/pack-source.sh` on Node 22.22.2, 20.19.0 and 24.21.0, and carried,
-with its SHA-256 receipt and its `artifacts/archives.json` entry, by a child
-of that commit. `carrier/carrier-gates.sh` then runs CI's jobs on the
-carrier (engine on the three Node versions, pack, consumer on four,
-conformance and atlas); the archives job, the engine job's archive step and
-the generators job run in CI, cited here by run id.
+The carrier commit `59c6ea9` adds the archive packed from the source commit
+`806f76b` by `carrier/pack-source.sh`: clean clones, blobless and sparse,
+each installed with `npm ci`, packed the same bytes on Node 22.22.2, 20.19.0
+and 24.21.0 (SHA-256
+`c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c`, 318,004
+bytes, 90 files), the archive the size records and the formal runs measured;
+the carried file is the Node 22.22.2 one. It was carried after the gate
+workflows had passed on `806f76b`: CI run 41799118407, Conformance
+41799118412 and Atlas 41799118391. `carrier/carrier-gates.sh` then ran CI's
+jobs on the carrier, one at a time, each in a clean full-history clone,
+blobless and sparse, on darwin-arm64 (`carrier/*-59c6ea9-*.log`):
 
-The time entry's checks T1 to T13 run again on the carried archive, as
+- **engine**, on Node 22.22.2, 20.19.0 and 24.21.0: `npm ci`, typecheck, the
+  build, the export smoke test, the API check, the package contents and the
+  pack dry run pass; the suite fails 4 tests in 2 files on each, the counts
+  of the 4 darwin-arm64 failures that `full-tests-v22.22.2-darwin-arm64.log`
+  names on the source tree (the job's log keeps the suite's summary only).
+- **pack**: the archive packed from the carrier has the carried one's
+  SHA-256.
+- **consumer**: the packed-consumer check passes on the carried archive with
+  Node 20.19.0, 22.7.0, 22.22.2 and 24.21.0.
+- **conformance** and **atlas**: pass.
+- **time-entry**: T1 to T13 pass on the carried archive (below).
+
+The jobs that rebuild archives or download run in CI only (K12), on the
+carrier, and pass: CI run 41799761466, whose archives job ("Every carried
+archive rebuilds from its source commit", `--rebuild-all`) rebuilds every
+carried archive, this one included, and whose engine job, on Node 20, 22
+and 24, runs the archive step that rebuilds HEAD; Conformance 41799761607,
+whose generators job ("Conformance vectors rebuild from their sources")
+rebuilds the vectors; and Atlas 41799761432.
+
+The time entry's checks T1 to T13 ran again on the carried archive, as
 `time-entry/PREREGISTRATION.md` requires (sections 6 and 9: T1 to T13
 committed at the source commit and rerun on the archive, in the carrier's
 gates): `carrier-gates.sh time-entry` on the carrier, in a sparse clone, with
 the site's `src/lib/engine/time-basis.mjs` and `time-basis.d.mts` read from
-site main's git objects (9a67f761) into files outside every checkout, and
-Node 20.19.0 for T3. It extracts the archive into a consumer and finds the
-clone's build byte for byte the archive's `dist/*.js` and `dist/*.d.ts`; T1's
-runtime names, T3, T4, T5, T7, T8, T10 and T12 read the archive (T12 runs
+site main's git objects (9a67f761) into files outside every checkout, each
+matching its pinned SHA-256, and Node 20.19.0 for T3. It extracted the
+archive into a consumer and found the clone's build byte for byte the
+archive's `dist/*.js` and `dist/*.d.ts`; T1's runtime names, T3, T4, T5, T7,
+T8, T10 and T12 read the archive (T12 runs
 `time-entry/tools/declarations.sh` and its `declarations.mts`, committed with
 that preregistration's amendment of 2026-11-04, on the archive's
 `dist/time.d.ts`); T1's `api:check` and `src/time.test.ts`, T2 and T13 (the
 export smoke test) and T9 (package contents) read the build, whose module
-lists the archive does not carry; T6 and T11 read the sources.
+lists the archive does not carry; T6 and T11 read the sources. Every step
+passes (`carrier/time-entry-59c6ea9-v22.22.2.log`, with the tools' reports in
+`carrier/time-entry-59c6ea9-v22.22.2/`).
+
+From here a packed change needs 1.1.0-rc.3.
 
 ## Not covered here
 

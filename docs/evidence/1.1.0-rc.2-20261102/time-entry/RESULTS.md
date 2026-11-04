@@ -228,3 +228,17 @@ figure moves.
 (36 files: each control's report and standard error, and the outputs of the
 runs `controls.sh` reads), `18-s0-record.log`, `19-figures.log` and
 `99-end.log`; and this `RESULTS.md`.
+
+## T1 to T13 on the carried archive (2026-11-04, added with the carrier's record)
+
+Sections 6 and 9 also require T1 to T13 on the carried archive. The
+carrier's gates ran them once, on the carrier `59c6ea9`, whose archive
+(SHA-256 `c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c`)
+is the one packed above: `carrier-gates.sh time-entry`, in a clean blobless
+and sparse clone, Node 22.22.2 and 20.19.0 for T3, with the site's two files
+read from its git objects at 9a67f761, each matching its pin. The build's
+`dist/*.js` and `dist/*.d.ts` are byte for byte the archive's, and every
+step passes, T1 to T13 (`../carrier/time-entry-59c6ea9-v22.22.2.log`, the
+tools' reports in `../carrier/time-entry-59c6ea9-v22.22.2/`). No control
+runs there: the controls are this run's. F-53 still needs the merge of the
+cut and S1 to S3 in the site's adoption; its state does not change.
