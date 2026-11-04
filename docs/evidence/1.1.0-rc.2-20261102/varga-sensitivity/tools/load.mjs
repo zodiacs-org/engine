@@ -34,8 +34,15 @@ export async function loadEngine() {
  * The calls of a corpus, in its order: F2 or F4 (births.json, births-erfa.json,
  * or a development corpus written by generate.mjs with another seed), each
  * birth a BirthInput with the corpus's shared input, an ayanamsa (a name, or
- * a userAyanamsa input) and the corpus's options with the birth's points; or
- * F3 (seams.json), each case with its own input, ayanamsa and options.
+ * a userAyanamsa input) and the corpus's options, with the birth's points in
+ * place of the corpus's where the birth carries them (each birth of F2 does;
+ * those of F4 carry none and take F4's, the Ascendant alone); or F3
+ * (seams.json), each case with its own input, ayanamsa and options.
+ *
+ * Changed after G-V4's interruption (PREREGISTRATION.md, section 13,
+ * 2026-11-04): the options were { ...corpus.options, points }, whose points,
+ * undefined for a birth that carries none, dropped F4's, so that each call of
+ * F4 searched the default ten points. No call of F2, F3 or F3b changes.
  */
 export function callsOf(corpus, name) {
   if (Array.isArray(corpus.cases)) {
@@ -45,7 +52,8 @@ export function callsOf(corpus, name) {
     }));
   }
   return corpus.births.map(({ id, ayanamsa, points, ...fields }) => ({
-    corpus: name, id, birth: { ...corpus.input, ...fields }, ayanamsa, options: { ...corpus.options, points }, expected: null
+    corpus: name, id, birth: { ...corpus.input, ...fields }, ayanamsa,
+    options: points === undefined ? { ...corpus.options } : { ...corpus.options, points }, expected: null
   }));
 }
 

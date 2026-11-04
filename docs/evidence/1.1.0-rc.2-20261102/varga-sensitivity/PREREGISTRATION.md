@@ -915,3 +915,42 @@ The script's output is now committed beside this file as `derived-bounds.json`
 3.9.6, without a further latitude), and `docs/vedic.md` cites it. It gives
 66.498285945°, 66.498284072° and 66.498271498° for the three rates, as that
 amendment says. No rule changes.
+
+**2026-11-04, after the formal run: G-V4's interruption and the loader.**
+The formal run (`RESULTS.md`, committed in 47df12f) made section 10's steps 3
+to 5 on 237b226's build. Its disk watch, which stops a run under 4 GiB free,
+stopped it after G-V4's run on F4 and its comparison, while C4a had started;
+C4a and C4b wrote nothing. The fall came from outside the run (all it wrote
+comes to 106,259,086 bytes). The run also found that F4's calls had not
+searched the Ascendant alone: `tools/load.mjs` built each call of F2 and F4
+with `{ ...corpus.options, points }`, and `points`, undefined for every birth
+of F4, which carries none, dropped F4's `["Ascendant"]`, so each call searched
+the default ten points (180,000 rows), of which the arbiter read the
+Ascendant's 18,000. That comparison was seen before this amendment: 35,204
+sides judged, 0 mismatches, the largest difference 1.3603515625 ms. Adopted
+after the run; no reading of section 3, input, seed, pass rule, tolerance or
+control changes, so this is not a new version:
+
+- *The loader.* `callsOf` takes a birth's `points` in place of the corpus's
+  only where the birth carries them. Each birth of F2 does, and F3 and F3b
+  are cases with their own options, so their calls do not change:
+  `tools/calls_digest.mjs`, run with 47df12f's loader and this one, gives the
+  same SHA-256 for the calls of F2 (1,000), F3 (13) and F3b (2), and F4's
+  1,000 calls now name `["Ascendant"]` where they named no points
+  (`loader-fix.json`). F4's calls are as section 6 fixes them.
+- *Run again in full.* Section 10: "an interrupted run is run again in full".
+  The run interrupted is G-V4's, section 10's step 5, which runs alone after
+  G-V3's step 4. Steps 3 and 4, section 7's table, G-V5's table and the named
+  tests completed, and their verdicts stand as recorded. G-V4 runs again in
+  full with this loader: `run.mjs` on all of F4, the arbiter and the
+  comparison, then C4a and C4b, each alone, by `zsh tools/checks.sh --g-v4
+  WORK WORKERS PYTHON`, a mode of `checks.sh` that runs the same four
+  commands as its last step and records them in `results-erfa/steps.tsv`.
+  Its outputs replace the interrupted run's in `results-erfa/`, which stay in
+  47df12f.
+- *A note, not a check.* After G-V4 has run, its Ascendant rows are compared
+  with the interrupted run's 18,000 (47df12f's `results-erfa/results.jsonl`),
+  and `RESULTS.md` says whether they are the same. No verdict depends on it.
+- *Its reading.* The interrupted run's comparison was seen before this
+  amendment, so G-V4's reading is `validated` only until the owner ratifies
+  it, as OQ5 already leaves every reading here.

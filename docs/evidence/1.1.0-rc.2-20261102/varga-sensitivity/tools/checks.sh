@@ -33,12 +33,21 @@
 # against docs/vedic.md is no longer run here, straight after --write, where
 # it could not fail: it is a step of ../../gates.sh, run on the source commit
 # once the table is committed.
+#
+# Changed after G-V4's interruption (PREREGISTRATION.md, section 13,
+# 2026-11-04): `zsh checks.sh --g-v4 WORK WORKERS PYTHON` runs section 10's
+# step 5 alone, G-V4 with the same four commands as below, and records its
+# steps in results-erfa/steps.tsv; so an interrupted G-V4 is run again in
+# full without the steps before it.
 set -u
+only=
+if [[ ${1:-} == --g-v4 ]]; then only=g-v4; shift; fi
 work=${1:?WORK, a directory outside the repository}
 workers=${2:-1}
 python=${3:-}
 here=docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity
 results=$here/results
+if [[ $only == g-v4 ]]; then results=$here/results-erfa; fi
 mkdir -p "$work" "$results"
 steps=$results/steps.tsv
 print -r -- $'step\tkind\texit\tas required' > "$steps"
@@ -50,6 +59,30 @@ record() {
   if [[ $2 == check && $3 -ne 0 ]] || [[ $2 == control && $3 -eq 0 ]]; then required=NO; outcome=1; fi
   print -r -- "$1	$2	$3	$required" >> "$steps"
 }
+
+# G-V4 (section 10, step 5), the last step of the full run: a function, so
+# that --g-v4 can run it alone.
+g_v4() {
+  if [[ -n "$python" ]]; then
+    step "G-V4: the run on F4, the arbiter's comparison, then C4a and C4b"
+    node $here/tools/run.mjs --births $here/births-erfa.json --seams none --f3b none --out $here/results-erfa
+    record "G-V4: run.mjs on F4" check $?
+    "$python" -I -B $here/tools/varga_ascendant.py --results $here/results-erfa/results.jsonl --out $here/results-erfa/compare.json
+    record "G-V4: varga_ascendant.py" check $?
+    "$python" -I -B $here/tools/varga_ascendant.py --results $here/results-erfa/results.jsonl --control c4a --out $here/results-erfa/control-c4a.json
+    record "G-V4 control C4a: varga_ascendant.py --control c4a (its verdict in control-c4a.json)" check $?
+    "$python" -I -B $here/tools/varga_ascendant.py --results $here/results-erfa/results.jsonl --control c4b --out $here/results-erfa/control-c4b.json
+    record "G-V4 control C4b: varga_ascendant.py --control c4b (its verdict in control-c4b.json)" check $?
+  else
+    step "G-V4 not run: no interpreter with pyerfa and numpy was given"
+    print -r -- $'G-V4: not run, no interpreter with pyerfa and numpy was given\tcheck\t-\tNO' >> "$steps"
+    outcome=1
+  fi
+}
+if [[ $only == g-v4 ]]; then
+  g_v4
+  exit $outcome
+fi
 
 step "F1 still as committed, and boundaries.json still the texts' (G-V1)"
 /usr/bin/python3 -I -B $here/tools/varga_changes.py --check > "$results/f1-check.json"
@@ -126,19 +159,5 @@ record "G-V5: the control's copy of docs/vedic.md, one figure changed (--control
 node $here/tools/time_per_arcsecond.mjs --check --docs "$work/vedic-g-v5-control.md" > "$results/time-per-arcsecond-control.txt" 2>&1
 record "G-V5 control: --check against the copy must fail" control $?
 
-if [[ -n "$python" ]]; then
-  step "G-V4: the run on F4, the arbiter's comparison, then C4a and C4b"
-  node $here/tools/run.mjs --births $here/births-erfa.json --seams none --f3b none --out $here/results-erfa
-  record "G-V4: run.mjs on F4" check $?
-  "$python" -I -B $here/tools/varga_ascendant.py --results $here/results-erfa/results.jsonl --out $here/results-erfa/compare.json
-  record "G-V4: varga_ascendant.py" check $?
-  "$python" -I -B $here/tools/varga_ascendant.py --results $here/results-erfa/results.jsonl --control c4a --out $here/results-erfa/control-c4a.json
-  record "G-V4 control C4a: varga_ascendant.py --control c4a (its verdict in control-c4a.json)" check $?
-  "$python" -I -B $here/tools/varga_ascendant.py --results $here/results-erfa/results.jsonl --control c4b --out $here/results-erfa/control-c4b.json
-  record "G-V4 control C4b: varga_ascendant.py --control c4b (its verdict in control-c4b.json)" check $?
-else
-  step "G-V4 not run: no interpreter with pyerfa and numpy was given"
-  print -r -- $'G-V4: not run, no interpreter with pyerfa and numpy was given\tcheck\t-\tNO' >> "$steps"
-  outcome=1
-fi
+g_v4
 exit $outcome
