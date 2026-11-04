@@ -1,0 +1,25 @@
+# varga-sensitivity, G-V4 run again in full (@zodiacs/engine 1.1.0-rc.2): tools/checks.sh --g-v4, G-V4 run again in full (section 13, 2026-11-04), once, alone, under nice -n 10
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3, with -I) where a tool says so; for G-V4's arbiter only, Python 3.11.16 with pyerfa 2.0.1.5 and numpy 2.4.6 (<programme>/toolchain/py311-oq6/venv/bin/python, the OQ6 environment, with -I)
+# commit 7b29dddf179ea1e4b0643fd86108d5d826988ed7 (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 13507724 KiB, 12.9 GiB
+# cwd <checkout>
+# command: nice -n 10 zsh docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/checks.sh --g-v4 <scratch>/work 10 <programme>/toolchain/py311-oq6/venv/bin/python
+# started 2026-11-04 15:09:18 +0700
+== G-V4: the run on F4, the arbiter's comparison, then C4a and C4b
+100 calls, 0.0 min
+200 calls, 0.0 min
+300 calls, 0.0 min
+400 calls, 0.0 min
+500 calls, 0.0 min
+600 calls, 0.0 min
+700 calls, 0.0 min
+800 calls, 0.0 min
+900 calls, 0.0 min
+1000 calls, 0.0 min
+{"calls":1000,"threw":0,"callMs":{"mean":1.9926420000000005,"median":1.906,"max":21.438},"wallMinutes":"0.03"}
+{"births": 1000, "judged": 35204, "notJudged": 796, "compared": 35204, "comparedFailed": 0, "mismatches": 0, "verdict": "PASS"}
+{"births": 1000, "judged": 35204, "notJudged": 796, "compared": 35204, "comparedFailed": 35204, "mismatches": 35204, "verdict": "control failed as it must"}
+{"births": 1000, "judged": 35208, "notJudged": 792, "compared": 35208, "comparedFailed": 34829, "mismatches": 34829, "verdict": "control failed as it must"}
+# exit 0, finished 2026-11-04 15:13:50 +0700

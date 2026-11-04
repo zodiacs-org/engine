@@ -1,0 +1,88 @@
+# varga-sensitivity, G-V4 run again in full (@zodiacs/engine 1.1.0-rc.2): the state at the start
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3, with -I) where a tool says so; for G-V4's arbiter only, Python 3.11.16 with pyerfa 2.0.1.5 and numpy 2.4.6 (<programme>/toolchain/py311-oq6/venv/bin/python, the OQ6 environment, with -I)
+# commit 7b29dddf179ea1e4b0643fd86108d5d826988ed7 (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 13788848 KiB, 13.2 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/start.sh
+# started 2026-11-04 15:09:01 +0700
+## git rev-parse HEAD
+7b29dddf179ea1e4b0643fd86108d5d826988ed7
+## git branch --show-current
+rc2/main-first
+## git log --oneline -3 -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+7b29ddd Amend the varga sensitivity after G-V4's interruption
+47df12f Record the formal runs of 1.1.0-rc.2
+237b226 Record the checks on the reviewed tree of 1.1.0-rc.2
+## git status --porcelain -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+(end of status)
+## git sparse-checkout list
+/*
+!/docs/evidence/calc-sidereal-2026-10-05/
+## test -e docs/evidence/calc-sidereal-2026-10-05 (the path only)
+absent
+## df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   228Gi   185Gi    13Gi    94%    5.2M  138M    4%   /System/Volumes/Data
+## the machine: CPUs (all, performance, efficiency), memory, Node's availableParallelism(), swap, load
+hw.ncpu 10, hw.perflevel0.physicalcpu 4, hw.perflevel1.physicalcpu 6, hw.memsize 17179869184
+availableParallelism() 10
+vm.swapusage: total = 6144.00M  used = 5409.38M  free = 734.62M  (encrypted)
+load averages: 3.62 4.41 9.92
+node or python processes above 20% CPU (another heavy job would show here): 0
+## node, npm, python3, git
+v22.22.2 darwin-arm64
+10.9.7
+3.9.6 arm64
+<programme>/toolchain/node-v22.22.2-darwin-arm64/bin/node
+<programme>/toolchain/node-v22.22.2-darwin-arm64/bin/npm
+/usr/bin/python3
+/usr/bin/git
+git version 2.50.1 (Apple Git-155)
+## the OQ6 environment, for G-V4's arbiter (approved under OQ6)
+<programme>/toolchain/py311-oq6/venv/bin/python
+Python 3.11.16 arm64
+pyerfa 2.0.1.5
+numpy 2.4.6
+## the installed tools (node_modules/<name>/package.json)
+tsup 8.5.1
+esbuild 0.27.7
+typescript 5.9.3
+astronomy-engine 2.1.19
+vitest 2.1.9
+## shasum -a 256 of the preregistration, the amendment's outputs, F4 and the tools as run (the status above is empty: they are as committed at HEAD)
+292a84d3bd95c5d465ef63f2dd00ec8dbac88da630bb85ba58044c4f0e3348c2  PREREGISTRATION.md
+e79976efb83dabd9f976ebf38c7537b0b9f34a48b5b7e852f9290c782d2e2357  INPUTS.md
+9dcd6e47f0b91e625c6efbc875fb573db16c147774a93aaa63784e9a870c6b8e  loader-fix.json
+5c6ddf9d0a3f2325923538b8965bd3acc2a3b4975a96ce502b60c7b488cab6d9  births-erfa.json
+4eac4e3096520aa7fd01150b5dc68fd249672ddbe91289838aaf017400aae8fe  tools/c3d_replica.mjs
+d18e180e2b5f6cc0b7e78cf239a033956fd55a736d7ab43e68c1380bb7bd0b09  tools/calls_digest.mjs
+fefe5a6c951a11739ccca7a1eac961bca6c00bd92d88d8b29fbe7df37c3c31e3  tools/checker.mjs
+6d1b9ec971596d0513dce9b0d892e29aa657ee0e1cf052f7d3968332dbc2abb7  tools/checks.sh
+5c4d57ad11f71175c26df136bd79b8826f80305c0a77228c77aa3a74bf63fbb1  tools/controls.mjs
+f2fec468a526b56dadbcbb524d00e371af77eddf8ea48da6ff9d3682dc052ce0  tools/derived_bounds.py
+349c69805fa8d823078d6cd44efbd85a6bd46b825a1ee57babf3ccf626bcbcfd  tools/generate.mjs
+63c5d26dec61e78ac015f1f5f6d1ba082949a6dcd8ac0012035dc213cad7e7b6  tools/load.mjs
+3c24cc596bc4bb30407d329c94caec7d1309931bf9c9e43e6c7141f0b1d72e4d  tools/rate_premises.mjs
+2e3782767588ae6a7c14d842011b6acb4e3b879213e77085a18ea83cebb61bcd  tools/run.mjs
+2c146c35389454182078d6cff8d7081ee4beec2e1b8c9fe6464ccdc88bbb7dac  tools/seams.mjs
+f8d4822b814b1db14ce7f972a9926a13d0c9c8889186416cc151de1f5e191360  tools/seams_f3b.mjs
+e0156597d0dc45bb6bc91f06f2e26342125cc998f027b7ab775752e80c40eadc  tools/test-controls.mjs
+32dc8ef79b30445c0d68bf0ee6f435955139fec889133e2db9f5ab86ff0283e6  tools/time_per_arcsecond.mjs
+bfdcdc822d9bb2bec6665dd9c9a7df8ed9fc9a6c52f270750b08c4817f75a082  tools/varga_ascendant.py
+c5fa637151d8407466ead69dad053eb39c04dcff863061ff508ff74501f2ef46  tools/varga_changes.py
+## results-erfa/ at the start: the interrupted run's outputs, as committed in 47df12f (git rev-parse 47df12f:<file>, then shasum -a 256 of the file in the tree)
+compare.json: blob a392ea0281850611fde57d2405d95c3b0a66cb6f, sha256 f4822b62f1873a78cb4982969f17f3f4d5c9502f4419b3d947fe2cbcef7d55ba
+results.jsonl: blob 0afb2ec44dcbedf56e0c0a48fdbec5398f9b3e5e, sha256 c7edbf99b616503759e3ef63484091031aaa39768f7c90b33c0a2d401c5f1768
+run.json: blob 57edc90f72a37fc3d0c5ff02a5f1da19c3315a18, sha256 28b9fc47d51e4dcb809762bcbfa1e333a99451d923d21b0cdadaa8bc643158b3
+compare.json
+results.jsonl
+run.json
+## every file under docs/evidence/1.1.0-rc.2-20261102 at the start outside varga-sensitivity/results-erfa/, shasum -a 256, kept in <scratch>/others-start.sha256 to compare at the end
+files: 256
+## docs/vedic.md and src/ at the start (git status --porcelain --untracked-files=all with the exclusion pathspec; empty when as committed)
+(end of status)
+## no __pycache__ beside the unit's tools or the references they import
+(end of list)
+# exit 0, finished 2026-11-04 15:09:02 +0700

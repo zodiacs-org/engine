@@ -272,7 +272,7 @@ the carrier names.
 | The time entry (`time-entry/`) | T1 to T13; every control failed as required | none. T11's first invocation, with `--repo .`, stopped with a Node error before it scanned anything; the unchanged tool then ran once with the checkout's absolute path, as its usage line documents, and passed. `carrier/carrier-gates.sh` now passes the clone's absolute path |
 | The time bands (`time-bands/`) | C1, C2, C3, C4 (C4a to C4d), C5, C6, C7 and the named tests; their controls failed as required | **C1b failed**, with both its controls failing: 19 problems, all at two seams of T3's corpus. 14 are 1 µs at 2026-09-24T00:00Z and the millisecond before: the engine's table generator rounds a formal error of 26.5 µs up, the reference to even. 5 are records that, at a step's own instant, carry the other side's σ: at 2026-09-24T00:00Z `calc()` and `houses()` on TT and UT1 input record the prediction's, where UTC input and `chart()` record the observed; at 1956-01-01T12:00Z TT input records 0.46 s for 0.03 s. C8 is void as SR ran it; C9 is not due |
 | The lite entry (`lite/`) | L1 to L12; every control failed as required | none |
-| The varga sensitivity (`varga-sensitivity/`) | F1 and the inputs, G-V1, G-V2 (a) and (b), G-V3 on F2, F3 and F3b, section 7's table and the named tests; every control failed as required; G-V5's table is in `docs/vedic.md` | **G-V4 not complete**: the disk watch stopped the run under 4 GiB free, after G-V4's comparison (35,204 sides judged, 0 mismatches) and before its controls C4a and C4b; and F4's calls searched ten points, not the Ascendant alone, through `tools/load.mjs`. G-V5's `--check` is a step of `gates.sh` |
+| The varga sensitivity (`varga-sensitivity/`) | F1 and the inputs, G-V1, G-V2 (a) and (b), G-V3 on F2, F3 and F3b, section 7's table and the named tests; every control failed as required; G-V5's table is in `docs/vedic.md`; G-V4, run again in full (below): 35,204 sides judged, 0 mismatches, the largest difference 1.3603515625 ms, and C4a and C4b failed as required | G-V4 in the formal run: the disk watch stopped the run under 4 GiB free, after G-V4's comparison and before its controls, and F4's calls had searched ten points, not the Ascendant alone, through `tools/load.mjs`. G-V5's `--check` is a step of `gates.sh` |
 
 P1.M3c's version 1 does not meet its gate in this cut: by its section 9 a fix
 of C1b is a version 2, with a preregistration of its own citing these
@@ -283,8 +283,16 @@ a half microsecond rounds or which side of a step an instant on it takes;
 `docs/time.md`, which put 2026-09-24T00:00Z on the observed side, now says
 what the run found there.
 
-The varga sensitivity's G-V4 runs again in full, as its section 10 requires
-of an interrupted run, after a dated amendment that fixes the loader.
+The varga sensitivity's G-V4 ran again in full, as its section 10 requires
+of an interrupted run, after a dated amendment (7b29ddd) that fixed the
+loader, so that F4's calls name the Ascendant alone, and added
+`checks.sh --g-v4` to run that step alone; the calls of F2, F3 and F3b did
+not change (`varga-sensitivity/loader-fix.json`). It ran at 7b29ddd, whose
+build is 237b226's digest for digest: G-V4 passes, both controls failed as
+required, and its 18,000 Ascendant rows are those of the interrupted run
+(`varga-sensitivity/results-erfa/`). The comparison had been seen before
+the amendment, so G-V4's reading is `validated` only until the owner
+ratifies it.
 
 No unit changes state on these runs. OQ5 is with the owner, so a unit can
 reach `validated` at most, and each also needs the carried archive, the

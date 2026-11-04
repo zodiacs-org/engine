@@ -1,0 +1,5 @@
+step	kind	exit	as required
+G-V4: run.mjs on F4	check	0	yes
+G-V4: varga_ascendant.py	check	0	yes
+G-V4 control C4a: varga_ascendant.py --control c4a (its verdict in control-c4a.json)	check	0	yes
+G-V4 control C4b: varga_ascendant.py --control c4b (its verdict in control-c4b.json)	check	0	yes
