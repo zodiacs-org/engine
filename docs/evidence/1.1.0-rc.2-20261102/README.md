@@ -228,6 +228,16 @@ On the reviewed tree (`e2edd3a`), one at a time, on darwin-arm64:
   bound to its source commit, and the rebuild of HEAD is skipped while no
   1.1.0-rc.2 archive is carried. Rebuilds run only in CI (K12).
 
+On the source tree, `83bde1e` (the formal runs' outputs committed, G-V5's
+table in `docs/vedic.md`), `gates.sh` ran once more on Node 22.22.2 for
+G-V5's step. It appended its run to `gates.log` (whose heading, the script's
+fixed text, still names the tree before the source commit) and replaced
+`full-tests-v22.22.2-darwin-arm64.log`, whose run on `e2edd3a` is in
+`237b226`. G-V5's `--check` passes against `docs/vedic.md` as committed;
+typecheck, the build, the export smoke test, the API check, the package
+contents and the pack dry run pass; and the suite fails only the same 4
+tests, 4,134 of 4,138 passing.
+
 ## Reviews and the site run
 
 Two independent reviews read the candidate, each in parts: the first on
