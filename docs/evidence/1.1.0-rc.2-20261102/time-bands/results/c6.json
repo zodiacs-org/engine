@@ -1,0 +1,102 @@
+{
+ "check": "C6",
+ "pass": true,
+ "records": 38,
+ "package": {
+  "version": "1.1.0-rc.2"
+ },
+ "differences": {
+  "i": 28,
+  "ii": 26,
+  "iii": 30,
+  "iv": 6,
+  "other": 0
+ },
+ "versions": {
+  "version": 27,
+  "engineVersion": 3,
+  "from": [
+   "1.1.0-rc.1"
+  ],
+  "to": [
+   "1.1.0-rc.2"
+  ]
+ },
+ "meanPointBases": [
+  "cases.4.result.bounds.position.basis",
+  "cases.4.result.bounds.speed.basis",
+  "cases.12.result.bounds.position.basis",
+  "cases.12.result.bounds.speed.basis",
+  "cases.26.result.bounds.position.basis",
+  "cases.26.result.bounds.speed.basis"
+ ],
+ "bands": [
+  "cases.0.result.band",
+  "cases.1.result.band",
+  "cases.2.result.band",
+  "cases.3.result.band",
+  "cases.4.result.band",
+  "cases.5.result.band",
+  "cases.6.result.band",
+  "cases.7.result.band",
+  "cases.8.result.band",
+  "cases.9.result.band",
+  "cases.10.result.band",
+  "cases.11.result.band",
+  "cases.12.result.band",
+  "cases.13.result.band",
+  "cases.14.result.band",
+  "cases.22.result.band",
+  "cases.23.result.events.0.band",
+  "cases.25.result.band",
+  "cases.26.result.band",
+  "cases.27.result.band",
+  "cases.29.result.band",
+  "cases.30.result.band",
+  "cases.31.result.band",
+  "cases.32.result.events.0.band",
+  "cases.32.result.events.1.band",
+  "cases.33.result.band",
+  "cases.34.result.band",
+  "cases.35.result.band"
+ ],
+ "other": [],
+ "controls": {
+  "one longitude in its last place and one added key": {
+   "failed": true,
+   "problems": 2,
+   "reported": [
+    "cases.0.result.lon: a value changed",
+    "cases.0.result.addedByTheControl: a key added"
+   ]
+  },
+  "one engine version string set to another version": {
+   "failed": true,
+   "problems": 1,
+   "reported": [
+    "cases.0.result.receipt.engine.version: a version changed to \"1.1.0-rc.3\", not the package's 1.1.0-rc.2"
+   ]
+  },
+  "one receipt's ephemeris version changed": {
+   "failed": true,
+   "problems": 1,
+   "reported": [
+    "cases.0.result.receipt.engine.ephemeris.version: a value changed"
+   ]
+  },
+  "one mean point's basis given another text": {
+   "failed": true,
+   "problems": 1,
+   "reported": [
+    "cases.4.result.bounds.speed.basis: a mean point's basis is not its constant of src/calc-bounds.ts"
+   ]
+  },
+  "a band key added to a refused result": {
+   "failed": true,
+   "problems": 1,
+   "reported": [
+    "cases.15.result.band: a band key where no result carries one"
+   ]
+  }
+ }
+}

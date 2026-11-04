@@ -1,0 +1,46 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: the controls' reports, copied from controls.sh's work folder into results/controls/ with local paths shortened
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 12219460 KiB, 11.7 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/copy-controls.sh
+# started 2026-11-04 12:39:56 +0700
+T1-api.out: 288 bytes, 288 after shortening
+T1-list.out: 203 bytes, 203 after shortening
+T10-site-module.err: 0 bytes, 0 after shortening
+T10-site-module.json: 1036 bytes, 1036 after shortening
+T11-let-cache.err: 0 bytes, 0 after shortening
+T11-let-cache.json: 505 bytes, 505 after shortening
+T12.out: 903 bytes, 468 after shortening
+T13-build.out: 4585 bytes, 4585 after shortening
+T13.out: 532 bytes, 387 after shortening
+T2-index.out: 1466 bytes, 741 after shortening
+T2-time.out: 1001 bytes, 566 after shortening
+T3.out: 537 bytes, 537 after shortening
+T4-a.err: 0 bytes, 0 after shortening
+T4-a.json: 6043 bytes, 6043 after shortening
+T4-b.err: 0 bytes, 0 after shortening
+T4-b.json: 7413 bytes, 7413 after shortening
+T4-c.err: 0 bytes, 0 after shortening
+T4-c.json: 6047 bytes, 6047 after shortening
+T5-a.err: 0 bytes, 0 after shortening
+T5-a.json: 2718 bytes, 2718 after shortening
+T5-b.err: 0 bytes, 0 after shortening
+T5-b.json: 2616 bytes, 2616 after shortening
+T6-frame-byte.err: 0 bytes, 0 after shortening
+T6-frame-byte.json: 2764 bytes, 2764 after shortening
+T6-types.err: 0 bytes, 0 after shortening
+T6-types.json: 2997 bytes, 2997 after shortening
+T7-leap.err: 0 bytes, 0 after shortening
+T7-leap.json: 1602 bytes, 1602 after shortening
+T7-tilt.err: 0 bytes, 0 after shortening
+T7-tilt.json: 1433 bytes, 1433 after shortening
+T7-ut1.err: 0 bytes, 0 after shortening
+T7-ut1.json: 6610 bytes, 6610 after shortening
+T8.json: 684 bytes, 684 after shortening
+T9-measure.out: 1041 bytes, 1041 after shortening
+T9.out: 782 bytes, 637 after shortening
+t1a.mjs: 864 bytes, 864 after shortening
+not copied (directories): t13/ t1b/ t2a/ t2b/ t8/ t9/ 
+# exit 0, finished 2026-11-04 12:39:56 +0700

@@ -1,0 +1,34 @@
+# time-bands formal run of @zodiacs/engine 1.1.0-rc.2: the site inputs checks.sh used, the dumps it judged, and its outputs copied unchanged to results/
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 8066244 KiB, 7.7 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/outputs.sh
+# started 2026-11-04 13:00:23 +0700
+## the site inputs checks.sh extracted (git cat-file -p at 9a67f761bc231741c6571af2dfae65b798954e11), shasum -a 256; 01-site-inputs.log gives the blobs'
+c220599dbe409f464a8bbea19cd02585b3f0c005c770eaede4fa1e17e51e600f  <scratch>/work/site/lib.py
+80ddc3598a2c4332dea3af97051a821525189a04c77281cf7c7e3ab94793c175  <scratch>/work/site/table.json
+## the dumps (the engine's results the references read; kept in <scratch>/work, not committed): bytes, SHA-256, and their records by kind
+dump-T1.json: 22092167 bytes, sha256 04beb1cd7a4bb7fdb343b76c2494d02345f2d2d5bb1559a7afb27d9a038c1f2a
+{"records":13312,"refused":0,"engine":{"name":"@zodiacs/engine","version":"1.1.0-rc.2"},"node":"v22.22.2","kinds":{"anchor":32,"position":12800,"chart":320,"houses":160},"taggedFor":{"C1":8480,"C2":6400},"refusedBy":{}}
+dump-T2.json: 82962041 bytes, sha256 98e63ed8cfe9753d9141de258b5049f20f8784e6c9651189430debf719f948da
+{"records":42304,"refused":0,"engine":{"name":"@zodiacs/engine","version":"1.1.0-rc.2"},"node":"v22.22.2","kinds":{"anchor":64,"position":16000,"chart":640,"houses":25600},"taggedFor":{"C1":16960,"C3":25600},"refusedBy":{}}
+dump-T3.json: 27717890 bytes, sha256 d7ea757458e49670e55ec4dc05a5989e8fa542736880536bb495eb000dc0411f
+{"records":13881,"refused":0,"engine":{"name":"@zodiacs/engine","version":"1.1.0-rc.2"},"node":"v22.22.2","kinds":{"anchor":21,"position":5250,"chart":210,"houses":8400},"taggedFor":{"C1":5565,"C3":8400},"refusedBy":{}}
+dump-E.json: 24272 bytes, sha256 3c596f1a14fd0cf957afd94ceda1efbf4a1d22e01715307325c464c7be28b650
+{"records":11,"refused":0,"engine":{"name":"@zodiacs/engine","version":"1.1.0-rc.2"},"node":"v22.22.2","kinds":{"events":11},"taggedFor":{"C1":11,"C5":11},"refusedBy":{},"eventsFound":16}
+## the outputs in <scratch>/work/results/: a search for local paths, then each copied unchanged to results/
+no local path in any output
+834f9afc27fa6f55a7496b044a60535dd4ffa928c973a69083f0fbe592b726fa  c1.json
+268eb704afae6f4919cc952bb836d261ca4a4a9c48ac36f9993cfb8c0fb0c892  c1b.json
+4ebbb74494b7af69aa78318bad3f14cb10bf03a6edf8afc1870b3c35288a8646  c2.json
+3ba3a5985bb55856d4b748d58087690019c7b2f16c3ecbef902a55bcd287b579  c3.json
+894b5bac6205923d572b6408947d998cb86fc8a3c9e8a7c66e41786ee72aec54  c4.json
+7f177dae84b7686529fa2ebf52679601d1cb33dc7c566f965e7ba7b7f430dc0b  c5.json
+2f3c261961862d186c360eb27e6b3485f07049c3fdd2a31b9a971aeda43c843e  c6.json
+6a902df70ab538395bf55447fb6c55c1ef3342d8f18f337b9233460cf82957ba  c7.json
+8a4e5712065398bece7b98be04e830bd2e8d5bbbdb3b9a47cc43fce3809fef7c  named-controls.json
+the copies in results/ are byte for byte the outputs
+# exit 0, finished 2026-11-04 13:00:24 +0700

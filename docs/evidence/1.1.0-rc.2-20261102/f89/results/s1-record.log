@@ -1,0 +1,41 @@
+# F-89 formal run of @zodiacs/engine 1.1.0-rc.2: S1, recorded from SR3 (the cut's latest scratch site run, on the 5c00cb8 candidate; its records are programme notes outside this repository, notes/rc2-2026-11-01/sr3/), with the check that F-89's packed text is unchanged since 5c00cb8
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# cwd <checkout>
+# command: zsh -c echo '## git diff --stat 5c00cb8 -- README.md NOTICE LICENSING.md (with the exclusion pathspec FORMAL-COMMON requires appended)'; git diff --stat 5c00cb8 -- README.md NOTICE LICENSING.md ':(exclude)docs/evidence/calc-sidereal-2026-10-05'; echo "(end of diff --stat; exit $?)"; echo '## git merge-base --is-ancestor 5c00cb8 HEAD'; git merge-base --is-ancestor 5c00cb8 HEAD && echo 'yes: 5c00cb8 is an ancestor of HEAD'; echo '## git log --oneline 5c00cb8..HEAD'; git log --oneline 5c00cb8..HEAD; echo '## the candidate SR3 ran on (sr3/engine-head.txt, sr3/tarball.sha256)'; cat <programme>/notes/rc2-2026-11-01/sr3/engine-head.txt; cut -d' ' -f1 <programme>/notes/rc2-2026-11-01/sr3/tarball.sha256; echo '## this tree packs to the same bytes: see 02-pack.log (cmp identical, SHA-256 c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c)'; echo '## SR3 REPORT.md, its S1 lines'; grep -n -A4 '^\*\*S1 and C8\*\*' <programme>/notes/rc2-2026-11-01/sr3/REPORT.md | head -6; echo '## sr3/10-claims-unlisted-rc1-reference.log and 10b-claims-orphans-rc1-reference.log (the control, on the rc.1 reference)'; grep -E 'unlisted sentences|orphans$|exit code' <programme>/notes/rc2-2026-11-01/sr3/10-claims-unlisted-rc1-reference.log <programme>/notes/rc2-2026-11-01/sr3/10b-claims-orphans-rc1-reference.log | sed 's#^.*/##'; echo '## sr3/15-claims-unlisted-rc2-reference.log (rc.2 reference)'; grep -E 'unlisted sentences|exit code' <programme>/notes/rc2-2026-11-01/sr3/15-claims-unlisted-rc2-reference.log | sed 's#^.*/##'; echo '## sr3/16-s1-r2-f89-records.log (R2 on the rc.2 reference alone)'; grep -E 'records; .* flagged|maxOpenOverstated' <programme>/notes/rc2-2026-11-01/sr3/16-s1-r2-f89-records.log; echo '## sr3/18-s1-control-with-mcp-notice.log (the MCP adapter NOTICE carrying rc.2 NOTICE, in scratch)'; grep -E 'records; .* flagged|orphans$|unlisted sentences' <programme>/notes/rc2-2026-11-01/sr3/18-s1-control-with-mcp-notice.log
+# started 2026-11-04 12:02:15 +0700
+## git diff --stat 5c00cb8 -- README.md NOTICE LICENSING.md (with the exclusion pathspec FORMAL-COMMON requires appended)
+(end of diff --stat; exit 0)
+## git merge-base --is-ancestor 5c00cb8 HEAD
+yes: 5c00cb8 is an ancestor of HEAD
+## git log --oneline 5c00cb8..HEAD
+237b226 Record the checks on the reviewed tree of 1.1.0-rc.2
+e2edd3a Say in docs/calc.md that a band is not a bound on the error
+## the candidate SR3 ran on (sr3/engine-head.txt, sr3/tarball.sha256)
+5c00cb8bef5d5cd3862de2c85fc1765aa8a6880c
+c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c
+## this tree packs to the same bytes: see 02-pack.log (cmp identical, SHA-256 c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c)
+## SR3 REPORT.md, its S1 lines
+58:**S1 and C8**
+59-- **S1 holds:** the result is identical to sr2's. From the reference alone, 13 of the 15 records are flagged. With the MCP NOTICE refreshed in scratch, exactly 15 are flagged (20 orphans, 50 unlisted, the same listings as sr2). The NOTICE was restored with git.
+60-  - The 2,540 versus 2,541 question is resolved: the header is 2,541 bytes, which is 2,540 characters, because "Δ" takes two bytes.
+61-  - F-89 items 2, 6 and 7 still carry no trigger word.
+62-- **C8 is unchanged:** the planted sentence is not listed. The listing is identical with and without it, and the reference was restored.
+## sr3/10-claims-unlisted-rc1-reference.log and 10b-claims-orphans-rc1-reference.log (the control, on the rc.1 reference)
+10-claims-unlisted-rc1-reference.log:0 unlisted sentences
+10-claims-unlisted-rc1-reference.log:# finished 2026-11-04 00:21:28 +0700; exit code: 0
+claims-ledger.mjs --orphans
+10b-claims-orphans-rc1-reference.log:0 orphans
+10b-claims-orphans-rc1-reference.log:# finished 2026-11-04 00:21:32 +0700; exit code: 0
+## sr3/15-claims-unlisted-rc2-reference.log (rc.2 reference)
+47 unlisted sentences
+# finished 2026-11-04 00:22:53 +0700; exit code: 1
+## sr3/16-s1-r2-f89-records.log (R2 on the rc.2 reference alone)
+18 records; 13 flagged
+maxOpenOverstated 11 overstated now 11
+## sr3/18-s1-control-with-mcp-notice.log (the MCP adapter NOTICE carrying rc.2 NOTICE, in scratch)
+# command: nice -n 10 node scripts/claims-ledger.mjs --orphans
+20 orphans
+18 records; 15 flagged
+50 unlisted sentences
+# exit code 0; finished 2026-11-04 12:02:15 +0700

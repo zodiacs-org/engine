@@ -1,0 +1,271 @@
+{
+ "check": "named tests' controls",
+ "pass": true,
+ "records": 14,
+ "real": {
+  "rows": "passed",
+  "seams": "passed",
+  "same": "passed",
+  "zeros": "passed",
+  "range": "passed",
+  "nullBand": "passed",
+  "radians": "passed",
+  "whole": "passed",
+  "ttTerm": "passed",
+  "polarLimit": "passed",
+  "sidereal": "passed",
+  "topocentric": "passed",
+  "eventsCharts": "passed",
+  "id": "passed"
+ },
+ "controls": {
+  "a: the TT band d on every UTC input": {
+   "failed": true,
+   "mustFail": [
+    "the time bands give every row of R1",
+    "the time bands step where the time basis steps, at each seam of T3, a millisecond either side",
+    "the time bands are exactly 0 where R3 makes them 0",
+    "bands from the time basis carry the events' and the charts' bands"
+   ],
+   "outcomes": {
+    "rows": "failed",
+    "seams": "failed",
+    "same": "passed",
+    "zeros": "failed",
+    "range": "passed",
+    "nullBand": "passed",
+    "radians": "passed",
+    "whole": "passed",
+    "ttTerm": "passed",
+    "polarLimit": "passed",
+    "sidereal": "failed",
+    "topocentric": "passed",
+    "eventsCharts": "failed",
+    "id": "passed"
+   }
+  },
+  "d: the topocentric bands without w": {
+   "failed": true,
+   "mustFail": [
+    "bands from the time basis bound a topocentric position at or above its partials on TT and UT1 from pinned evaluations"
+   ],
+   "outcomes": {
+    "rows": "passed",
+    "seams": "passed",
+    "same": "passed",
+    "zeros": "passed",
+    "range": "passed",
+    "nullBand": "passed",
+    "radians": "passed",
+    "whole": "passed",
+    "ttTerm": "passed",
+    "polarLimit": "passed",
+    "sidereal": "passed",
+    "topocentric": "failed",
+    "eventsCharts": "passed",
+    "id": "passed"
+   }
+  },
+  "the calc instant's record given timeScale.input tt": {
+   "failed": true,
+   "mustFail": [
+    "the time bands are the same from a TimeBasis, a Chart, a calc instant and a natal result"
+   ],
+   "outcomes": {
+    "rows": "passed",
+    "seams": "passed",
+    "same": "failed",
+    "zeros": "passed",
+    "range": "passed",
+    "nullBand": "failed",
+    "radians": "passed",
+    "whole": "passed",
+    "ttTerm": "passed",
+    "polarLimit": "passed",
+    "sidereal": "passed",
+    "topocentric": "passed",
+    "eventsCharts": "passed",
+    "id": "passed"
+   }
+  },
+  "a timeBands that returns zeros for a record without a time scale": {
+   "failed": true,
+   "mustFail": [
+    "the time bands throw RangeError for a record without a time scale"
+   ],
+   "outcomes": {
+    "rows": "passed",
+    "seams": "passed",
+    "same": "passed",
+    "zeros": "passed",
+    "range": "failed",
+    "nullBand": "passed",
+    "radians": "passed",
+    "whole": "passed",
+    "ttTerm": "passed",
+    "polarLimit": "passed",
+    "sidereal": "passed",
+    "topocentric": "passed",
+    "eventsCharts": "passed",
+    "id": "passed"
+   }
+  },
+  "a calc() that gives a zero band without speeds": {
+   "failed": true,
+   "mustFail": [
+    "bands from the time basis are null without speeds and present otherwise"
+   ],
+   "outcomes": {
+    "rows": "passed",
+    "seams": "passed",
+    "same": "passed",
+    "zeros": "passed",
+    "range": "passed",
+    "nullBand": "failed",
+    "radians": "passed",
+    "whole": "passed",
+    "ttTerm": "passed",
+    "polarLimit": "passed",
+    "sidereal": "passed",
+    "topocentric": "passed",
+    "eventsCharts": "passed",
+    "id": "failed"
+   }
+  },
+  "bands left in radians": {
+   "failed": true,
+   "mustFail": [
+    "bands from the time basis are in arcseconds under units: radians"
+   ],
+   "outcomes": {
+    "rows": "passed",
+    "seams": "passed",
+    "same": "passed",
+    "zeros": "passed",
+    "range": "passed",
+    "nullBand": "passed",
+    "radians": "failed",
+    "whole": "passed",
+    "ttTerm": "passed",
+    "polarLimit": "passed",
+    "sidereal": "passed",
+    "topocentric": "passed",
+    "eventsCharts": "passed",
+    "id": "passed"
+   }
+  },
+  "whole-sign cusp bands set to the ascendant's": {
+   "failed": true,
+   "mustFail": [
+    "bands from the time basis give whole-sign cusps 0, and the cusps where Placidus or Koch falls back to whole signs"
+   ],
+   "outcomes": {
+    "rows": "passed",
+    "seams": "passed",
+    "same": "passed",
+    "zeros": "passed",
+    "range": "passed",
+    "nullBand": "passed",
+    "radians": "passed",
+    "whole": "failed",
+    "ttTerm": "passed",
+    "polarLimit": "passed",
+    "sidereal": "passed",
+    "topocentric": "passed",
+    "eventsCharts": "passed",
+    "id": "passed"
+   }
+  },
+  "the angle bands without their rate on TT (b11c5e8's)": {
+   "failed": true,
+   "mustFail": [
+    "bands from the time basis add each angle's and cusp's rate on TT, UT1 held, times the TT band",
+    "bands from the time basis give sidereal angles and cusps the tropical ones' rate on UT1, and on TT the sidereal longitude's",
+    "bands from the time basis carry the events' and the charts' bands"
+   ],
+   "outcomes": {
+    "rows": "passed",
+    "seams": "passed",
+    "same": "passed",
+    "zeros": "passed",
+    "range": "passed",
+    "nullBand": "passed",
+    "radians": "passed",
+    "whole": "passed",
+    "ttTerm": "failed",
+    "polarLimit": "failed",
+    "sidereal": "failed",
+    "topocentric": "passed",
+    "eventsCharts": "failed",
+    "id": "passed"
+   }
+  },
+  "sidereal angle bands whose rate on TT leaves out the ayanamsa's (the tropical ones')": {
+   "failed": true,
+   "mustFail": [
+    "bands from the time basis add each angle's and cusp's rate on TT, UT1 held, times the TT band",
+    "bands from the time basis give sidereal angles and cusps the tropical ones' rate on UT1, and on TT the sidereal longitude's"
+   ],
+   "outcomes": {
+    "rows": "passed",
+    "seams": "passed",
+    "same": "passed",
+    "zeros": "passed",
+    "range": "passed",
+    "nullBand": "passed",
+    "radians": "passed",
+    "whole": "passed",
+    "ttTerm": "failed",
+    "polarLimit": "passed",
+    "sidereal": "failed",
+    "topocentric": "passed",
+    "eventsCharts": "passed",
+    "id": "passed"
+   }
+  },
+  "the cusps' rate on TT taken across a side that falls back (4f4c1e8's)": {
+   "failed": true,
+   "mustFail": [
+    "bands from the time basis take a cusp's rate on TT from the side that keeps Placidus or Koch, where TT moved the other way makes it fall back"
+   ],
+   "outcomes": {
+    "rows": "passed",
+    "seams": "passed",
+    "same": "passed",
+    "zeros": "passed",
+    "range": "passed",
+    "nullBand": "passed",
+    "radians": "passed",
+    "whole": "passed",
+    "ttTerm": "passed",
+    "polarLimit": "failed",
+    "sidereal": "passed",
+    "topocentric": "passed",
+    "eventsCharts": "passed",
+    "id": "passed"
+   }
+  },
+  "the id left out of events()'s receipt": {
+   "failed": true,
+   "mustFail": [
+    "bands from the time basis name time-band:first-order last in every receipt whose result carries a band"
+   ],
+   "outcomes": {
+    "rows": "passed",
+    "seams": "passed",
+    "same": "passed",
+    "zeros": "passed",
+    "range": "passed",
+    "nullBand": "passed",
+    "radians": "passed",
+    "whole": "passed",
+    "ttTerm": "passed",
+    "polarLimit": "passed",
+    "sidereal": "passed",
+    "topocentric": "passed",
+    "eventsCharts": "passed",
+    "id": "failed"
+   }
+  }
+ }
+}

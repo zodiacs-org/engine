@@ -7,7 +7,8 @@ built on it:
 - nine named ayanamsas and user-defined ones;
 - sidereal charts;
 - nakshatras and padas;
-- the sixteen Parashari vargas;
+- the sixteen Parashari vargas, and how far the birth time can move before
+  each varga sign changes;
 - Krishnamurti Paddhati (KP) sub-lords and sub-sub-lords;
 - Vimshottari dashas to five levels, and Yogini and Ashtottari mahadashas.
 
@@ -373,6 +374,185 @@ ch. 6, Santhanam's translation):
   drekkanas.
 - Unknown vargas and schemes are rejected with a `RangeError`.
 
+## Birth-time sensitivity
+
+`vargaSensitivity(natal, ayanamsa, options?)` says how far the birth time can
+move before a varga sign changes. For each point and varga it gives the first
+millisecond after the birth at which the point's sign in that varga differs
+from its sign at the birth, and the last change before the birth, on the
+chart's own clock and in the engine's own arithmetic. The checks are
+preregistered in
+[`evidence/1.1.0-rc.2-20261102/varga-sensitivity/`](evidence/1.1.0-rc.2-20261102/varga-sensitivity/PREREGISTRATION.md).
+
+```ts
+import { vargaSensitivity } from "@zodiacs/engine/vedic";
+
+const birth = { utc: "1990-05-17T08:30:00Z", latitude: 12.97, longitude: 77.59 }; // synthetic
+const result = vargaSensitivity(birth, "lahiri");
+const d60 = result.rows.find((row) => row.point === "Ascendant" && row.varga === "D60")!;
+d60.position?.sign; // "sagittarius"
+d60.previous; // { at: "1990-05-17T08:28:59.039Z", minutes: -1.0160166666666666, boundary: 146, from: "scorpio", to: "sagittarius" }
+d60.next;     // { at: "1990-05-17T08:31:00.240Z", minutes: 1.004, boundary: 146.5, from: "sagittarius", to: "capricorn" }
+```
+
+The birth is read as `siderealChart` reads it: its input scale (UTC, UT1 or
+TT) and any pinned ΔT. A supplied `Chart` gives the instant, the place and the
+clock; every position, the birth's included, is computed again from them, so
+the chart's own numbers are not used. The options, each optional (a key not
+named is a `RangeError`):
+
+- `points`: distinct entries of `VARGA_POINTS`, the Ascendant, the Sun to
+  Pluto, `"Mean Node"` and `"Mean South Node"`. Default: the Ascendant, the
+  Sun to Saturn and the two mean nodes.
+- `vargas`: distinct vargas of the sixteen; default all.
+- `cyclic`: also the cyclic D2 and D3, for whichever of the two is asked for;
+  default `false`.
+- `horizonMinutes`: whole minutes searched on each side of the birth, 1 to
+  2,880; default 1,440.
+
+There is one row for each point and varga, the points in `VARGA_POINTS` order
+whatever the order asked, and within a point the vargas in `VARGAS` order, a
+cyclic row after its Parashari one. A row gives `point`, `varga` and `scheme`;
+`position`, `vargaOf` at the birth; `previous` and `next`; `completeness`; and
+`refusal`. The result also gives the ayanamsa's name, the birth instant and its
+`timeScale` record, the horizon, `searched`, `verification`, the evaluations
+it made for each point (`evaluations`) and the flags `siderealChart` gives.
+
+**Definitions.** A point's sidereal longitude at a millisecond is what the
+public API gives for a chart at that millisecond with the same place and
+clock: `siderealChart`'s ascendant and bodies, and for the mean nodes
+`siderealLongitude` of `chartPoints`' `"Mean Node"` and `"Mean South Node"`
+with the chart's `ayanamsaValue`, as in the example at the top of this page.
+Its sign is `vargaOf`'s. A run is the arc of longitudes between two
+neighbouring boundaries at which the varga's sign changes. Most part
+boundaries change the sign, but 24 of the 3,480 do not: the Parashari D2 keeps
+its sign across the 12 sign starts, and D10 and D24 across the starts of the
+six even signs. So a run can span a sign start, and can wrap through 0°: the D2
+holds Leo from 345° to 15°. A longitude on a boundary belongs to the run that
+starts there, as it does for `vargaOf`.
+
+- `next` is the first millisecond after the birth, within the horizon, at which
+  the longitude lies outside the run holding it at the birth.
+- `previous` is the millisecond after the last one before the birth, within
+  the horizon, at which it lies outside that run.
+- So the birth sign holds at every millisecond from `previous.at` up to, not
+  including, `next.at`, and not at the millisecond before `previous.at` nor at
+  `next.at`. A side is `null` when no change lies in `searched`.
+
+Each change gives `at`, ISO 8601 on the chart's input scale and named as
+`ChartInput.utc` is; `minutes`, (at − birth) / 60,000, zero or negative for
+`previous`; `boundary`, the boundary crossed in degrees, the double nearest
+T / 7560 for a whole number T (every boundary is a whole number of 1/7560°,
+*Nakshatras and padas*); and `from` and `to`, the signs at at − 1 ms and at
+`at`. Minutes are minutes of the input scale: on UTC a leap second has no
+millisecond of its own, so it is not counted. `searched` is the span
+searched, the horizon cut where an instant's UT1 or TT would leave 1800 to 2200
+(`REFERENCE_SPAN`). Without a known time, the bodies' rows are computed around
+the instant the chart was given, which is then not a birth time.
+
+**How it is computed.** The search evaluates a point's sidereal longitude at
+milliseconds of the chart's clock with the calls a chart makes, keeps each
+value for the call, and finds each change by bracketing and bisection. A test
+holds these evaluations to `siderealChart` and `chartPoints` bit for bit, on
+UTC, UT1, TT and pinned clocks, for each kind of ayanamsa, alone and a
+millisecond after another evaluation; it is a regression test, not accuracy
+evidence.
+
+- Within one piece of the time basis the Ascendant's sidereal longitude only
+  increases, at a rate between bounds derived from the latitude and the
+  obliquity, with margins for the obliquity's own motion and for the
+  ayanamsa's. It is stepped in brackets too short for it to leave a run and
+  come back into it, and each change is bisected to its first millisecond. Each
+  bracket's advance must lie within the bounds, or the Ascendant's rows are
+  refused with `rate-bound`. The lower bound stays above zero up to 66.498°
+  from the equator for each ayanamsa rate the search allows for, a caller's
+  linear and star definitions included
+  (`docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/derived-bounds.json`,
+  the output of the preregistration's `tools/derived_bounds.py`); the search
+  stops at 66°, a margin short of that, and more than 66° from the equator the
+  rows are refused with `polar`.
+- The mean nodes' sidereal longitudes only decrease, at the rate of their
+  polynomial's leading term less or more the ayanamsa's bound, and are searched
+  the same way.
+- A body can station, so it is stepped by a rate bound: from a millisecond at a
+  distance d from the nearest end of a run still open, the next step is
+  floor(d / bound) milliseconds, at least one: by the bound, the body cannot
+  leave the run before the step's last millisecond. A change found earlier
+  means the bound was broken, and the body's rows are refused with
+  `rate-bound`. The bound is the body's `WINDOW_RATE_BOUNDS` (*Birth-time
+  windows* in the README) plus a bound on the ayanamsa's own rate, which for a
+  star definition covers the Sun's deflection of the star's light near the
+  Sun.
+- Where the time basis steps, at a leap second on UTC input, at 1972-01-01, at
+  the end of the IERS UT1 table (2027-10-02) and at the ΔT model's handover
+  (1941.0), no bracket crosses the step: every millisecond from a second before
+  it to a second after it is evaluated, with the size of the step added on each
+  side. The steps are found where the provenance of the time basis's record
+  changes on the chart's clock, so on UT1 and TT input too.
+- One budget of 2,000,000 evaluations covers a call. When it is spent, the
+  point in progress and every later one are refused with `evaluation-budget`;
+  the Ascendant, searched first, is the last to be lost.
+
+**What the numbers mean.**
+
+- *Exact in the engine's own arithmetic.* Each `at` is the millisecond at which
+  the engine's own varga sign changes, as the public API computes it at
+  at − 1 ms and at `at`. That is a statement about the engine's positions on the
+  millisecond lattice of the chart's clock, not about the sky, and not about
+  time between milliseconds.
+- *None missed between `previous` and `next`.* For the Ascendant and the mean
+  nodes this rests on the derived bounds (`completeness: "derived"`). For the
+  bodies it rests on bounds scanned, not derived, over 1800 to 2200, and on the
+  premise that an evaluation does not jump between neighbouring milliseconds by
+  as much as one millisecond's bound (`completeness: "scanned"`). The
+  preregistered checks sample densely to test the premises; sampling does not
+  prove them.
+- *Accuracy.* The instants are as accurate as the engine's positions: a body's
+  instant moves with any error in its longitude, by that error divided by its
+  rate, which grows without limit near a station. The preregistered checks
+  compare the Ascendant's instants with an independent ERFA computation, and
+  state the bodies' without judging them.
+- *Rahu and Ketu.* These rows' nodes are the mean nodes. `siderealChart`'s
+  North and South Node are the true node, which is not offered: the engine
+  derives it from a velocity astronomy-engine takes by differencing the Moon's
+  position, so from one millisecond to the next it departs from its smooth
+  motion, and no rate bound covers its steps.
+- The ΔT band of an instant (*The time bands* in [time.md](time.md)) would
+  widen these instants; they do not carry it.
+
+| `refusal.reason` | Rows | When |
+| --- | --- | --- |
+| `no-angles` | the Ascendant's | The chart has no angles: its time is not known, or it has no place. |
+| `polar` | the Ascendant's | The latitude is more than 66° from the equator. |
+| `out-of-range` | every row | The birth's UT1 or TT lies outside 1800 to 2200 (`REFERENCE_SPAN`); `searched` is then the birth instant alone. |
+| `rate-bound` | the point's | The point moved as its bound says it cannot, so no change can be said to be the first. |
+| `evaluation-budget` | the point's and every later point's | The call spent its 2,000,000 evaluations. |
+
+A refused row's `previous` and `next` are `null` and say nothing; its
+`position` is `null` when the point was not evaluated. The other rows are still
+computed.
+
+How far an error of 1″ in a body's longitude moves its instants, at the
+median and at the 10th percentile of the size of its speed in the engine's
+own positions, sampled every 5 days from 1800 to 2199, rounded up to two
+significant figures (G-V5 of the preregistration; its
+`tools/time_per_arcsecond.mjs` writes the table at the check's formal run):
+
+<!-- G-V5 table, tools/time_per_arcsecond.mjs -->
+| Body | 1″ moves an instant by, at the median speed | at the 10th percentile speed |
+| --- | ---: | ---: |
+| Sun | 25 s | 26 s |
+| Moon | 1.9 s | 2.1 s |
+| Mercury | 18 s | 1.3 min |
+| Venus | 21 s | 47 s |
+| Mars | 38 s | 1.8 min |
+| Jupiter | 3.2 min | 13 min |
+| Saturn | 5.7 min | 25 min |
+| Uranus | 12 min | 51 min |
+| Neptune | 18 min | 1.4 h |
+| Pluto | 25 min | 1.8 h |
+<!-- end of the G-V5 table -->
+
 ## KP sub-lords
 
 KP cuts each nakshatra into nine subs in Vimshottari proportions (a lord's
@@ -483,9 +663,15 @@ These all throw a `RangeError`:
   `timeScale`;
 - a dasha Moon without an instant;
 - `levels` outside 1–5 or `cycles` outside 1–10;
-- an instant outside the Vimshottari cycle.
+- an instant outside the Vimshottari cycle;
+- a point or varga `vargaSensitivity` does not know, or one given twice,
+  points or vargas not given as an array, `cyclic` other than `true` or
+  `false`, a horizon that is not a whole number of minutes from 1 to 2,880,
+  and options that are not a plain object of data properties.
 
 Results outside 1800–2200 carry `outside-reference-span`, as charts do.
+`vargaSensitivity` refuses what it cannot compute row by row, with a typed
+refusal, not an error (*Birth-time sensitivity*).
 
 ## Not included
 
@@ -494,6 +680,9 @@ Results outside 1800–2200 carry `outside-reference-span`, as charts do.
 - Balances computed from the Moon's time in the nakshatra.
 - Varga variants beyond those named above, and vargas outside the sixteen
   (D5, D6, D8, D11, D81, D108 and so on).
+- In the birth-time sensitivity: the true node, the Ascendant more than 66°
+  from the equator, the ΔT band of each instant, and Krishnamurti's ruling
+  planets.
 - Other ayanamsas: Lahiri's original ICRC value (23°15′00″ at 1956-03-21,
   used by the IAE before 1985), Lahiri's 1940 value and his zero point of
   285 CE, the IAE's pre-2021 IAU 1976 carry, the Krishnamurti–Senthilathiban

@@ -1,0 +1,47 @@
+{
+ "check": "T4",
+ "tool": "site-module.mjs",
+ "package": {
+  "name": "@zodiacs/engine",
+  "version": "1.1.0-rc.2"
+ },
+ "site": {
+  "sha256": "5857c888df07dd5a1695273797632ea8736f37a26aad2fe908b3d857d2333f40"
+ },
+ "control": null,
+ "controlBehaved": null,
+ "counts": {
+  "instants": {
+   "K1": 14765,
+   "K2": 100000,
+   "K3": 41
+  },
+  "records": 1033254,
+  "elapsedPairs": 266400,
+  "elapsedPairsOutsideDateRange": 108,
+  "frameTts": 114907,
+  "frameNumbers": 10916165,
+  "vectors": 15
+ },
+ "differences": {
+  "records": 0,
+  "elapsedDays": 0,
+  "frameNumbers": 0,
+  "ttsDiffering": 0,
+  "span": false
+ },
+ "unpinnedUtcFrom2017To20271002": {
+  "from": 1483228800000,
+  "to": 1822435200000,
+  "inRange": 1734,
+  "inRangeDiffering": 0,
+  "outsideDiffering": 0
+ },
+ "examples": {
+  "records": [],
+  "elapsedDays": [],
+  "frame": []
+ },
+ "node": "v22.22.2",
+ "pass": true
+}

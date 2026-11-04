@@ -1,0 +1,48 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: T10, public behaviour of the pack's ./time (tools/behaviour.mjs)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 10544332 KiB, 10.1 GiB
+# cwd <checkout>
+# command: node <checkout>/docs/evidence/1.1.0-rc.2-20261102/time-entry/tools/behaviour.mjs --package <scratch>/consumer/node_modules/@zodiacs/engine --out <checkout>/docs/evidence/1.1.0-rc.2-20261102/time-entry/results/T10.json
+# started 2026-11-04 12:37:53 +0700
+{
+ "check": "T10",
+ "tool": "behaviour.mjs",
+ "subject": "@zodiacs/engine@1.1.0-rc.2/time",
+ "controlBehaved": null,
+ "refusals": {
+  "timeBasis(NaN)": "RangeError",
+  "timeBasis(Infinity)": "RangeError",
+  "timeBasis(8.64e15 + 1)": "RangeError",
+  "timeBasis(0, \"UTC\")": "RangeError",
+  "timeBasis(0, \"utc\", NaN)": "RangeError",
+  "timeBasis(0, \"utc\", 1e10 + 1)": "RangeError",
+  "elapsedDays(b, b, NaN)": "RangeError",
+  "tilt(NaN)": "RangeError",
+  "eclipticFrame(Infinity)": "RangeError",
+  "meanEcliptic(eclipticFrame(0), NaN, 0, 0)": "RangeError",
+  "eclipticOfDate(0, 0, 0, 0)": "RangeError",
+  "eclipticOfDate(1, 0, 0, NaN)": "RangeError"
+ },
+ "acceptances": {
+  "timeBasis(8.64e15)": "returned",
+  "timeBasis(-8.64e15, \"tt\")": "returned",
+  "timeBasis(0, \"tt\", -1e10)": "returned",
+  "timeBasis(0, undefined)": "returned"
+ },
+ "frozen": {
+  "frame": true,
+  "rows": true,
+  "tilt": true,
+  "tiltResult": true
+ },
+ "writes": {
+  "strict": "TypeError",
+  "sloppyIgnored": true,
+  "sameAfter": true
+ },
+ "node": "v22.22.2",
+ "pass": true
+}
+# exit 0, finished 2026-11-04 12:37:53 +0700

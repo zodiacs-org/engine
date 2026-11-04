@@ -1,0 +1,8 @@
+# F-89 formal run of @zodiacs/engine 1.1.0-rc.2: E6: CALC_API_RESULTS=docs/evidence/calc-api/rc16 python3 -I docs/evidence/calc-api/tools/bounds.py --check (src/calc-bounds.ts against its generator)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# cwd <checkout>
+# command: env CALC_API_RESULTS=docs/evidence/calc-api/rc16 python3 -I docs/evidence/calc-api/tools/bounds.py --check
+# started 2026-11-04 11:59:55 +0700
+src/calc-bounds.ts agrees with docs/evidence/calc-api/rc16/summary.json
+# exit code 0; finished 2026-11-04 11:59:55 +0700

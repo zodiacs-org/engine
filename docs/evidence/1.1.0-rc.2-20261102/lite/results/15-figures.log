@@ -1,0 +1,83 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: figures the checks read but do not print, from the files by name, and L5's control build compared with this build; not a run of any check
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>
+# command: sh <scratch>/bin/figures.sh
+# started 2026-11-04 12:20:16 +0700
+## L11: the six lite files in required, and the ./lite budget with its comment (scripts/verify-package-contents.mjs)
+49:  "dist/lite.d.ts",
+50:  "dist/lite.js",
+51:  "dist/lite-composite.js",
+52:  "dist/lite-declinations.js",
+53:  "dist/lite-dignities.js",
+54:  "dist/lite-sect.js",
+459:  "dist/lite.js must re-export dist/lite-dignities.js and dist/lite-composite.js, as NOTICE and LICENSING.md say");
+ 196:   // New in 1.1.0-rc.2: declination parallels, the sect under a named
+ 197:   // convention, composite midpoints and their aspects, and the dignities,
+ 198:   // without the ephemeris: dist/lite.js and the four files it re-exports,
+ 199:   // each built on its own and importing nothing (scripts/build-lite.mjs).
+ 200:   // 1.1.0-rc.2: 28,930 bytes in 5 files. 29,000 is the ceiling approved
+ 201:   // under the owner's delegation of 2026-11-03 (OQ3); 0.24 per cent of
+ 202:   // headroom.
+ 203:   "./lite": 29_000,
+ 204:   // rc.15: 62,880. 1.0.0: 69,491. 1.1.0-rc.1: 72,500, 3,009 more, raised
+## L10: OPT_IN_SOURCE (scripts/root-isolation.mjs)
+  40: export const OPT_IN_SOURCE =
+  41:   /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky|lite)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|(?:houses-extra|equator|first-millisecond|time|time-bands|sect)\.[^/]*$)/u;
+## L1: dist/lite.js as built, and the bytes of the entry's five files and its declarations
+## cat dist/lite.js
+export * from "./lite-declinations.js";
+export * from "./lite-sect.js";
+export * from "./lite-composite.js";
+export * from "./lite-dignities.js";
+## wc -c dist/lite.js dist/lite-declinations.js dist/lite-sect.js dist/lite-composite.js dist/lite-dignities.js dist/lite.d.ts
+     146 dist/lite.js
+    9665 dist/lite-declinations.js
+    3439 dist/lite-sect.js
+    3783 dist/lite-composite.js
+   11897 dist/lite-dignities.js
+    5135 dist/lite.d.ts
+   34065 total
+## L5: the control build (<scratch>/l5-control/dist, from broken-builds.mjs --l5-control) against this build
+lite.js: identical to this build's
+lite-sect.js: identical to this build's
+lite-composite.js: identical to this build's
+lite-dignities.js: identical to this build's
+## diff dist/lite-declinations.js <scratch>/l5-control/dist/lite-declinations.js
+78c78
+< var DECLINATION_ORB_LUMINARY = 1.5;
+---
+> var DECLINATION_ORB_LUMINARY = 1.4;
+## L2: the pin, LITE_SOURCES (scripts/lite-entry.mjs)
+modules in the pin, src/lite.ts among them: 16 ["src/aspects.ts","src/body-label.ts","src/declination.ts","src/exact.ts","src/lite.ts","src/lite/composite.ts","src/lite/declinations.ts","src/lite/dignities.ts","src/lite/sect.ts","src/points.ts","src/read-options.ts","src/sect.ts","src/signs.ts","src/techniques/composite.ts","src/techniques/dignities.ts","src/techniques/names.ts"]
+L8 names: 51 (27 values, 24 types)
+# exit 0, finished 2026-11-04 12:20:16 +0700
+# the source of <scratch>/bin/figures.sh, which wrote this log
+# Figures cited in RESULTS.md that the checks read but do not print, read from the files by name; and the
+# L5 control build compared with this build. Not a run of any check. Each command is printed before its output.
+. "$(dirname "$0")/env.sh"
+cd "$CHECKOUT" || exit 2
+run() { printf '## %s\n' "$*"; "$@"; }
+printf '## L11: the six lite files in required, and the ./lite budget with its comment (scripts/verify-package-contents.mjs)\n'
+grep -n -E '^  "dist/lite[.-]' scripts/verify-package-contents.mjs
+sed -n '196,204p' scripts/verify-package-contents.mjs | nl -ba -v 196 -w4 -s': '
+printf '## L10: OPT_IN_SOURCE (scripts/root-isolation.mjs)\n'
+sed -n '40,41p' scripts/root-isolation.mjs | nl -ba -v 40 -w4 -s': '
+printf '## L1: dist/lite.js as built, and the bytes of the entry'"'"'s five files and its declarations\n'
+run cat dist/lite.js
+run wc -c dist/lite.js dist/lite-declinations.js dist/lite-sect.js dist/lite-composite.js dist/lite-dignities.js dist/lite.d.ts
+printf '## L5: the control build (<scratch>/l5-control/dist, from broken-builds.mjs --l5-control) against this build\n'
+for f in lite.js lite-sect.js lite-composite.js lite-dignities.js; do
+  if cmp -s "dist/$f" "$RUN/l5-control/dist/$f"; then echo "$f: identical to this build's"; else echo "$f: differs"; fi
+done
+printf '## diff dist/lite-declinations.js <scratch>/l5-control/dist/lite-declinations.js\n'
+diff "dist/lite-declinations.js" "$RUN/l5-control/dist/lite-declinations.js"
+printf '## L2: the pin, LITE_SOURCES (scripts/lite-entry.mjs)\n'
+node --input-type=module -e '
+const { LITE_SOURCES, LITE_NAMES, LITE_PARTS } = await import(new URL("scripts/lite-entry.mjs", "file://" + process.cwd() + "/").href);
+const all = [...new Set(Object.values(LITE_SOURCES).flat())].sort();
+console.log("modules in the pin, src/lite.ts among them:", all.length, JSON.stringify(all));
+const values = LITE_PARTS.flatMap((p) => LITE_NAMES[p].values), types = LITE_PARTS.flatMap((p) => LITE_NAMES[p].types);
+console.log("L8 names:", values.length + types.length, "(" + values.length + " values, " + types.length + " types)");
+'

@@ -1,0 +1,72 @@
+# varga-sensitivity, G-V4 run again in full (@zodiacs/engine 1.1.0-rc.2): the state at the end, before RESULTS.md and README.md (a record step: it runs no check)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3, with -I) where a tool says so; for G-V4's arbiter only, Python 3.11.16 with pyerfa 2.0.1.5 and numpy 2.4.6 (<programme>/toolchain/py311-oq6/venv/bin/python, the OQ6 environment, with -I)
+# commit 7b29dddf179ea1e4b0643fd86108d5d826988ed7 (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 15293112 KiB, 14.6 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/end.sh
+# started 2026-11-04 15:14:38 +0700
+## git rev-parse HEAD
+7b29dddf179ea1e4b0643fd86108d5d826988ed7
+unchanged since the start (00-start.log)
+## git branch --show-current
+rc2/main-first
+## git status --porcelain -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+ M docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/results.jsonl
+ M docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/run.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/00-start.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/01-build.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/02-g-v4.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/03-outputs.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/04-note.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/control-c4a.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/control-c4b.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/steps.tsv
+(end of status)
+## git status --porcelain --untracked-files=all -- docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+ M docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/results.jsonl
+ M docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/run.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/00-start.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/01-build.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/02-g-v4.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/03-outputs.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/04-note.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/control-c4a.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/control-c4b.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/steps.tsv
+(end of status)
+## git diff --stat -- docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa ':(exclude)docs/evidence/calc-sidereal-2026-10-05': the interrupted run's three files, replaced by this run's (they stay in 47df12f)
+ .../varga-sensitivity/results-erfa/results.jsonl   | 2000 ++++++++++----------
+ .../varga-sensitivity/results-erfa/run.json        |    8 +-
+ 2 files changed, 1004 insertions(+), 1004 deletions(-)
+(end of diff)
+## docs/vedic.md and src/ against HEAD (git status --porcelain --untracked-files=all with the exclusion pathspec; empty when unchanged)
+(end of status)
+## every file under docs/evidence/1.1.0-rc.2-20261102 outside varga-sensitivity/results-erfa/, shasum -a 256, against the start
+identical to the start: 256 files, the same names and bytes
+## no __pycache__ beside the unit's tools or the references they import
+(end of list)
+## git sparse-checkout list
+/*
+!/docs/evidence/calc-sidereal-2026-10-05/
+## test -e docs/evidence/calc-sidereal-2026-10-05 (the path only)
+absent
+## local paths in results-erfa/, this log aside (the user name, a home folder's prefix, the temporary folders' prefixes: fixed strings, not printed here)
+none
+## the files in results-erfa/ before this log, shasum -a 256
+990a5fe9cb0365ce6188125a16b9f1acfb60bbd758e15e962f77610b29b6d7ef  results-erfa/00-start.log
+5425affc9d146b3d63aad3bc1918d6eb54f537fbe361ec19bea3f1b09ac6b735  results-erfa/01-build.log
+f76bd0c11aa36efcbbb2b675b0bf4a537ae08865bf409f9b41b6cb61ff3236f8  results-erfa/02-g-v4.log
+f72fdc8fbae06202e2650aa374329f8604b3b51e724727cd265981b08b85e1c1  results-erfa/03-outputs.log
+ec33f3d06e0193a386c04d7d7e915951ffc0abc89b205d082a24a23e756780b3  results-erfa/04-note.log
+f4822b62f1873a78cb4982969f17f3f4d5c9502f4419b3d947fe2cbcef7d55ba  results-erfa/compare.json
+8dfa5b31b433223fb8d6d0f80702ca026465cb06b04e33f91f1ca46113993b63  results-erfa/control-c4a.json
+2f3078f13ca1924638468bde56c93eb47b685d2908a4bbe37047500da9f4a410  results-erfa/control-c4b.json
+46feb98ce348e76b3b2a6e275b6448736d1c53e82a3b34a4649c95a335e2e8cd  results-erfa/results.jsonl
+60fc4272b3382ef49dad9280f0cb55150e44cf9bdfff471a76dc99f77959198c  results-erfa/run.json
+8873664e386dd848b2e3e1d3d3b32f7f5acb3ca115309cf6f6deddb48d8cfcc0  results-erfa/steps.tsv
+## df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   228Gi   183Gi    15Gi    93%    5.1M  153M    3%   /System/Volumes/Data
+# exit 0, finished 2026-11-04 15:14:39 +0700

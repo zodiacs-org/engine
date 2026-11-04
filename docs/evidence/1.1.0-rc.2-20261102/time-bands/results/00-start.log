@@ -1,0 +1,67 @@
+# time-bands formal run of @zodiacs/engine 1.1.0-rc.2: the state at the start
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 11197700 KiB, 10.7 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/start.sh
+# started 2026-11-04 12:55:27 +0700
+## git rev-parse HEAD
+237b2265fcc53ae51abcb4f8e895e64c66321f5e
+## git branch --show-current
+rc2/main-first
+## git status --porcelain -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+ M docs/evidence/1.1.0-rc.2-20261102/carrier/carrier-gates.sh
+?? docs/evidence/1.1.0-rc.2-20261102/f89/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/
+?? docs/evidence/1.1.0-rc.2-20261102/lite/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/
+(end of status)
+## git status --porcelain --untracked-files=all -- docs/evidence/1.1.0-rc.2-20261102/time-bands
+(end of status)
+## git sparse-checkout list
+/*
+!/docs/evidence/calc-sidereal-2026-10-05/
+## test -e docs/evidence/calc-sidereal-2026-10-05 (the path only)
+absent
+## df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   228Gi   190Gi    11Gi    95%    5.5M  112M    5%   /System/Volumes/Data
+## node, npm, python3, git
+v22.22.2 darwin-arm64
+10.9.7
+3.9.6 arm64
+<programme>/toolchain/node-v22.22.2-darwin-arm64/bin/node
+<programme>/toolchain/node-v22.22.2-darwin-arm64/bin/npm
+/usr/bin/python3
+/usr/bin/git
+git version 2.50.1 (Apple Git-155)
+## the installed tools (node_modules/<name>/package.json)
+tsup 8.5.1
+esbuild 0.27.7
+typescript 5.9.3
+astronomy-engine 2.1.19
+vitest 2.1.9
+## shasum -a 256 of the preregistration, the amendments' outputs and the tools as run (the unit folder's status above is empty: they are as committed)
+18648141a4d6267707d23b2a7e0fc2d0b08132940e42739e0cdba1da53547256  PREREGISTRATION.md
+d428f072d0fa6a2120acc80e7c9e7a65355972e9d1c3d2c98911f09b656392e7  distance-floor.json
+f40370e79f2f622651def77b02ab1733d966a4bb96b20beb4f91aabbe687b32a  tt-step.json
+44057fd4e201b44ebbab2e048d40e1ecfcf0f282113a8e2b07a7681560202ad0  tools/angles.py
+ba13228f2b8d4265ca40a3586e8c8a1f710f1581d87e9833b12b6bb354474e1b  tools/api-grows.mjs
+d06c97ce1611afd722326f6582a5bce804c1107aad2e604d5a827f8fc3929962  tools/bands.py
+fe6028eb0325844df77d59bdce1cb609fd12ef83ee5d4a076d73b680352bfb28  tools/checks.sh
+86cde21e251bfa76b710ceb4b802f5594913bfaaedf52d530f18f00d5b97896e  tools/corpora.mjs
+ecc535527e409ebac14417cd83484f30bdc2646ca61287be5a80129df08c7df8  tools/distance-floor.mjs
+263caeeed9cda11a9f442590ffc9cbc9876f278589add7d8d7f058f8712da2b1  tools/dump.mjs
+a7d9577329ede315a5ca59a7f1a55e4437cdfd598d5da2cca171cf1cd22d579a  tools/fixture-diff.mjs
+060b50b88d1b743f9f6ef2cfd22f126f57f3459790c613d20a40ee0bd7f4ad4b  tools/horizons.py
+df7178c0a92c64ceac013dcc17d42e5ae114e949978abeef6d8eb595ad80c66a  tools/load.mjs
+f1a53aec66f8563a3e38d85d9cb731ab701f2da8f995648fae4f34c4d9e2be26  tools/named-controls.mjs
+36479fa3e60acc322a6f791bc46a592c9f63331eaee60352ac364a3860742183  tools/pinned.mjs
+2f4171175be8755089c8640a21a5956d130cda6ff1cd1256300898c980566771  tools/tt-step.mjs
+## every other file under docs/evidence/1.1.0-rc.2-20261102 at the start (outside time-bands/), shasum -a 256, kept in <scratch>/others-start.sha256 to compare at the end
+files: 193
+# exit 0, finished 2026-11-04 12:55:28 +0700

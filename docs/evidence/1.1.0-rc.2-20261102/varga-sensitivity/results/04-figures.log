@@ -1,0 +1,1042 @@
+# varga-sensitivity formal run of @zodiacs/engine 1.1.0-rc.2: the figures RESULTS.md cites, read from the outputs (not a check, not a rerun) (a record step after the stop: it runs no check)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3, with -I) where a tool says so; for G-V4's arbiter only, Python 3.11.16 with pyerfa 2.0.1.5 and numpy 2.4.6 (<programme>/toolchain/py311-oq6/venv/bin/python, the OQ6 environment, with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 2663380 KiB, 2.5 GiB
+# cwd <checkout>
+# command: sh -c node '<scratch>/bin/figures.mjs' '<checkout>/docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity' && echo '## the script, <scratch>/bin/figures.mjs' && cat '<scratch>/bin/figures.mjs'
+# started 2026-11-04 14:46:05 +0700
+## results/steps.tsv
+step	kind	exit	as required
+F1: varga_changes.py --check	check	0	yes
+G-V1: boundary_fixtures.py --output	check	0	yes
+G-V1: the regenerated boundaries.json equals the committed one	check	0	yes
+G-V1: boundaries.json's SHA-256 written	check	0	yes
+G-V1 and section 6: boundaries.json and the inputs against their recorded SHA-256	check	0	yes
+G-V1, G-V2 (a), the named tests and the existing Vedic tests (vitest)	check	0	yes
+their controls: test-controls.mjs (each control's outcome in test-controls.json)	check	0	yes
+G-V3: run.mjs on F2, F3 and F3b	check	0	yes
+G-V3 and G-V2 (b): checker.mjs	check	0	yes
+their controls: controls.mjs (each control's outcome in controls.json)	check	0	yes
+controls.json copied	check	0	yes
+section 7: derived_bounds.py (its control's note in derived-bounds-control.txt)	check	0	yes
+section 7 control: a real lower bound asked for at 66.6 degrees (must fail; the script says there is none)	control	1	yes
+G-V5: time_per_arcsecond.mjs --table	check	0	yes
+G-V5: the table written into docs/vedic.md (--write)	check	0	yes
+G-V5: the control's copy of docs/vedic.md, one figure changed (--control-copy)	check	0	yes
+G-V5 control: --check against the copy must fail	control	1	yes
+G-V4: run.mjs on F4	check	0	yes
+G-V4: varga_ascendant.py	check	0	yes
+## results/tests.json: totals
+{
+ "success": true,
+ "suites": 29,
+ "suitesFailed": 0,
+ "tests": 160,
+ "passed": 160,
+ "failed": 0,
+ "pending": 0,
+ "todo": 0
+}
+## results/tests.json: by file (passed, failed, other)
+src/sign-rulers.test.ts: 1 passed, 0 failed, 0 other; passed
+src/vedic/ayanamsa.test.ts: 24 passed, 0 failed, 0 other; passed
+src/vedic/boundaries.test.ts: 21 passed, 0 failed, 0 other; passed
+src/vedic/dasha.test.ts: 17 passed, 0 failed, 0 other; passed
+src/vedic/jyotish.test.ts: 14 passed, 0 failed, 0 other; passed
+src/vedic/varga-time.test.ts: 83 passed, 0 failed, 0 other; passed
+## G-V1: the varga tests of src/vedic/boundaries.test.ts ('places D.. exactly')
+18 tests, 18 passed: places D1 exactly at and around every part boundary; places D2 exactly at and around every part boundary; places D3 exactly at and around every part boundary; places D4 exactly at and around every part boundary; places D7 exactly at and around every part boundary; places D9 exactly at and around every part boundary; places D10 exactly at and around every part boundary; places D12 exactly at and around every part boundary; places D16 exactly at and around every part boundary; places D20 exactly at and around every part boundary; places D24 exactly at and around every part boundary; places D27 exactly at and around every part boundary; places D30 exactly at and around every part boundary; places D40 exactly at and around every part boundary; places D45 exactly at and around every part boundary; places D60 exactly at and around every part boundary; places D2cyclic exactly at and around every part boundary; places D3cyclic exactly at and around every part boundary
+## G-V2 (a): the per-key tests 'the change boundaries are the fixture's change rows'
+18 tests, 18 passed
+## tests not passed
+none
+## results/f1-check.json
+{
+ "check": "identical",
+ "sha256": "2207fbea5b7e02a14f387ab77e76dea4006088ba7baf27c52d29ee8312f82750",
+ "total": {
+  "boundaries": 3480,
+  "changes": 3456,
+  "keeps": 24
+ },
+ "keepsInDegrees": {
+  "D2": [
+   0,
+   30,
+   60,
+   90,
+   120,
+   150,
+   180,
+   210,
+   240,
+   270,
+   300,
+   330
+  ],
+  "D10": [
+   30,
+   90,
+   150,
+   210,
+   270,
+   330
+  ],
+  "D24": [
+   30,
+   90,
+   150,
+   210,
+   270,
+   330
+  ]
+ }
+}
+## results/inputs-sha256.txt
+src/vedic/fixtures/boundaries.json: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/varga_changes.py: OK
+src/vedic/fixtures/varga-changes.json: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/generate.mjs: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/births.json: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/births-erfa.json: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/seams.mjs: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/seams.json: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/seams-f3b.json: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/seams_f3b.mjs: OK
+## results/boundaries-sha256.txt
+3578be675ddb51bb80ab543431d654c9a6e7bcab4d70d9abcae381ea29dcd51f  src/vedic/fixtures/boundaries.json
+## results/test-controls.json
+{
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "allFailedAsTheyMust": true
+}
+- G-V1 naive floor | src/vedic/grid.ts | src/vedic/boundaries.test.ts | must fail: at least one of the 18 varga tests | 6 of 21 failed | failed as it must
+    boundary fixtures from the texts places nakshatras and padas exactly at and around every pada boundary
+    boundary fixtures from the texts places KP subs (1–249) and sub-sub lords exactly at and around every sub-sub and sign boundary
+    boundary fixtures from the texts places D7 exactly at and around every part boundary
+    boundary fixtures from the texts places D9 exactly at and around every part boundary
+    boundary fixtures from the texts places D27 exactly at and around every part boundary
+    boundary fixtures from the texts places D45 exactly at and around every part boundary
+- G-V2 (a) control (i): every part boundary a change | src/vedic/varga.ts | src/vedic/varga-time.test.ts | must fail: G-V2 (a) with exactly 24 mismatches | 5 of 83 failed | failed as it must
+    the varga change boundaries against F1 (G-V2 a) D2: the change boundaries are the fixture's change rows
+    the varga change boundaries against F1 (G-V2 a) D10: the change boundaries are the fixture's change rows
+    the varga change boundaries against F1 (G-V2 a) D24: the change boundaries are the fixture's change rows
+    the search core: analytic contract cases the D2 run from 345 to 15 degrees keeps its sign through 0
+    the docs' synthetic birth (docs/vedic.md), a regression example is borne out by the public API, row by row
+- G-V2 (a) control (ii): one change row of F1 a keep | src/vedic/fixtures/varga-changes.json | src/vedic/varga-time.test.ts | must fail: G-V2 (a) with exactly one mismatch | 3 of 83 failed | failed as it must
+    the varga change boundaries against F1 (G-V2 a) covers the 18 keys: 3,480 part boundaries, 3,456 changes and 24 keeps
+    the varga change boundaries against F1 (G-V2 a) D45: the change boundaries are the fixture's change rows
+    the varga change boundaries against F1 (G-V2 a) control (i): every part boundary taken for a change is 24 mismatches, the keeps
+- the mean ayanamsa subtracted | src/vedic/varga-time.ts | src/vedic/varga-time.test.ts | must fail: the evaluation paths' test | 11 of 83 failed | failed as it must
+    the three evaluation paths (a regression test, not accuracy evidence) equal siderealChart and chartPoints bit for bit on 'UTC', alone and 1 ms after another call
+    the three evaluation paths (a regression test, not accuracy evidence) equal siderealChart and chartPoints bit for bit on 'UT1', alone and 1 ms after another call
+    the three evaluation paths (a regression test, not accuracy evidence) equal siderealChart and chartPoints bit for bit on 'TT', alone and 1 ms after another call
+    the three evaluation paths (a regression test, not accuracy evidence) equal siderealChart and chartPoints bit for bit on 'UTC with a pinned ΔT', alone and 1 ms after another call
+    the three evaluation paths (a regression test, not accuracy evidence) equal siderealChart and chartPoints bit for bit on 'UT1 with a pinned ΔT', alone and 1 ms after another call
+    the three evaluation paths (a regression test, not accuracy evidence) equal siderealChart and chartPoints bit for bit on 'TT with a pinned ΔT', alone and 1 ms after another call
+    the seams of the time basis gives changes the public API bears out across one (the leap second before 2017, on UTC)
+    the docs' synthetic birth (docs/vedic.md), a regression example pins the engine's own instants of the Ascendant's D1, D9 and D60 and the Moon's D9
+    the docs' synthetic birth (docs/vedic.md), a regression example is borne out by the public API, row by row
+    review 2's station against a boundary, through the public API a last step of one unit in the last place: the D2 change gives the boundary it reaches, 285
+    review 2's station against a boundary, through the public API a last step of one unit in the last place: the D60 change gives the boundary it reaches, 278
+- one copied rate bound changed | src/vedic/varga-time.ts | src/vedic/varga-time.test.ts | must fail: the copied bounds' test | 1 of 83 failed | failed as it must
+    the copied rate bounds equal WINDOW_RATE_BOUNDS body by body
+- no 1 ms terminal step | src/vedic/varga-time.ts | src/vedic/varga-time.test.ts | must fail: the one-millisecond touch | 8 of 83 failed | failed as it must
+    the search core: analytic contract cases a rate-bounded point: steps shrink to a millisecond at the boundary
+    the search core: analytic contract cases a station touching a boundary for one millisecond, at 10000, is a change
+    the search core: analytic contract cases a station touching a boundary for one millisecond, at 10001, is a change
+    the search core: analytic contract cases a station stopping short of a boundary is none
+    the search core: analytic contract cases a station whose last step onto a boundary is one unit in the last place: the boundary that step reaches
+    the docs' synthetic birth (docs/vedic.md), a regression example pins the engine's own instants of the Ascendant's D1, D9 and D60 and the Moon's D9
+    review 2's station against a boundary, through the public API a last step of one unit in the last place: the D2 change gives the boundary it reaches, 285
+    review 2's station against a boundary, through the public API a last step of one unit in the last place: the D60 change gives the boundary it reaches, 278
+- brackets allowed across seams | src/vedic/varga-time.ts | src/vedic/varga-time.test.ts | must fail: the backward step | 1 of 83 failed | failed as it must
+    the search core: analytic contract cases a seam stepping back after a crossing just before it: the crossing it undoes is the change
+- a build that computes instead of refusing | src/vedic/varga-time.ts | src/vedic/varga-time.test.ts | must fail: each refusal test | 18 of 83 failed | failed as it must
+    refusals refuses the Ascendant's rows with no-angles without a known time, and computes the bodies around the instant
+    refusals refuses them with no-angles without a place
+    refusals computes the Ascendant at 66 degrees and refuses it with polar beyond, in either hemisphere
+    refusals refuses every row with out-of-range when the birth's UT1 or TT is outside REFERENCE_SPAN: '1799-12-31T23:59:59.999Z'
+    refusals refuses every row with out-of-range when the birth's UT1 or TT is outside REFERENCE_SPAN: '2200-01-01T00:00:00Z'
+    refusals refuses every row with out-of-range when the birth's UT1 or TT is outside REFERENCE_SPAN: '2199-12-31T23:30:00Z'
+    refusals throws RangeError for an option key not named
+    refusals throws RangeError for the true node, which is not offered
+    refusals throws RangeError for a repeated point
+    refusals throws RangeError for points not in an array
+    refusals throws RangeError for a varga outside the sixteen
+    refusals throws RangeError for a repeated varga
+    refusals throws RangeError for cyclic not a boolean
+    refusals throws RangeError for a horizon of 0 minutes
+    refusals throws RangeError for a horizon of 2,881 minutes
+    refusals throws RangeError for a horizon in part minutes
+    refusals throws RangeError for a horizon as a string
+    refusals throws RangeError for options that are not an object
+- an instant 1 ms later | src/vedic/varga-time.ts | src/vedic/varga-time.test.ts | must fail: the docs' synthetic birth | 5 of 83 failed | failed as it must
+    the seams of the time basis gives changes the public API bears out across one (the leap second before 2017, on UTC)
+    the docs' synthetic birth (docs/vedic.md), a regression example pins the engine's own instants of the Ascendant's D1, D9 and D60 and the Moon's D9
+    the docs' synthetic birth (docs/vedic.md), a regression example is borne out by the public API, row by row
+    review 2's station against a boundary, through the public API a last step of one unit in the last place: the D2 change gives the boundary it reaches, 285
+    review 2's station against a boundary, through the public API a last step of one unit in the last place: the D60 change gives the boundary it reaches, 278
+- a change's direction through turn(d + 180) - 180 (4f4c1e8's) | src/vedic/varga-time.ts | src/vedic/varga-time.test.ts | must fail: the last step of one unit in the last place, analytic and through the public API | 3 of 83 failed | failed as it must
+    the search core: analytic contract cases a station whose last step onto a boundary is one unit in the last place: the boundary that step reaches
+    review 2's station against a boundary, through the public API a last step of one unit in the last place: the D2 change gives the boundary it reaches, 285
+    review 2's station against a boundary, through the public API a last step of one unit in the last place: the D60 change gives the boundary it reaches, 278
+## results/run.json
+{
+ "engine": {
+  "version": "1.1.0-rc.2",
+  "jsFiles": 57,
+  "jsDigest": "21b80ef0dcafb71f108a397e015218083e1cf346741961b4b36ff429c8888109"
+ },
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "limit": null,
+ "corpora": [
+  {
+   "corpus": "F2",
+   "file": "<checkout>/docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/births.json",
+   "sha256": "e333a037563d94f1e5b9ed42269166a4024808284b510b7ce199ab6817aff5c7",
+   "seed": 20261102,
+   "calls": 1000
+  },
+  {
+   "corpus": "F3",
+   "file": "<checkout>/docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/seams.json",
+   "sha256": "956a3ad8a9e3d29249b16c55a3f25372e6e42850510e9d31555e86bccb648d70",
+   "seed": null,
+   "calls": 13
+  },
+  {
+   "corpus": "F3b",
+   "file": "<checkout>/docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/seams-f3b.json",
+   "sha256": "052c05131e33f63dd5b8693b08f4facd50421ce74583e62ad26cf1bea828469e",
+   "seed": null,
+   "calls": 2
+  }
+ ],
+ "calls": 1015,
+ "threw": [],
+ "callMs": {
+  "mean": 17.765512315270946,
+  "median": 15.344,
+  "max": 149.738
+ },
+ "wallMinutes": 0.30312381875
+}
+## results/results.jsonl by corpus: calls, rows, refused rows, changes, null sides (refused rows' sides included), the largest evaluations of a call
+{
+ "F2": {
+  "calls": 1000,
+  "rows": 185562,
+  "refused": 0,
+  "changes": 132594,
+  "nullSides": 238530,
+  "maxEvaluations": 22292
+ },
+ "F3": {
+  "calls": 13,
+  "rows": 234,
+  "refused": 0,
+  "changes": 460,
+  "nullSides": 8,
+  "maxEvaluations": 4405
+ },
+ "F3b": {
+  "calls": 2,
+  "rows": 36,
+  "refused": 0,
+  "changes": 6,
+  "nullSides": 66,
+  "maxEvaluations": 1089
+ }
+}
+## refusals in results.jsonl, by reason
+{}
+## F3 and F3b: each case's expected change (seams.json, seams-f3b.json) and the row's change in results.jsonl
+F3 0: Ascendant D60 previous: expected 2017-01-01T00:00:00.000Z 165.5 pisces->aries; got 2017-01-01T00:00:00.000Z 165.5 pisces->aries
+F3 1: Ascendant D60 previous: expected 2017-01-01T00:00:00.000Z 165.5 pisces->aries; got 2017-01-01T00:00:00.000Z 165.5 pisces->aries
+F3 2: Ascendant D60 next: expected 1971-12-31T23:59:59.977Z 164.5 capricorn->aquarius; got 1971-12-31T23:59:59.977Z 164.5 capricorn->aquarius
+F3 3: Ascendant D60 next: expected 1971-12-31T23:59:59.977Z 164.5 capricorn->aquarius; got 1971-12-31T23:59:59.977Z 164.5 capricorn->aquarius
+F3 4: Moon D60 previous: expected 1972-01-01T00:00:00.000Z 78.5 gemini->cancer; got 1972-01-01T00:00:00.000Z 78.5 gemini->cancer
+F3 5: expected null (not planted); call returned, 18 rows, refused 0
+F3 6: Ascendant D60 previous: expected 2027-10-02T00:00:00.001Z 86.5 libra->scorpio; got 2027-10-02T00:00:00.001Z 86.5 libra->scorpio
+F3 7: Ascendant D60 previous: expected 2027-10-02T00:00:00.001Z 86.5 libra->scorpio; got 2027-10-02T00:00:00.001Z 86.5 libra->scorpio
+F3 8: Moon D60 next: expected 2027-10-02T00:00:00.000Z 189.5 aries->taurus; got 2027-10-02T00:00:00.000Z 189.5 aries->taurus
+F3 9: Ascendant D60 previous: expected 2027-10-02T00:01:09.331Z 86.5 libra->scorpio; got 2027-10-02T00:01:09.331Z 86.5 libra->scorpio
+F3 10: Moon D60 next: expected 1940-12-31T17:59:59.993Z 293 libra->scorpio; got 1940-12-31T17:59:59.993Z 293 libra->scorpio
+F3 11: Moon D60 next: expected 1940-12-31T17:59:59.993Z 293 libra->scorpio; got 1940-12-31T17:59:59.993Z 293 libra->scorpio
+F3 12: Ascendant D60 previous: expected 1940-12-31T18:00:24.820Z 89 pisces->aries; got 1940-12-31T18:00:24.820Z 89 pisces->aries
+F3b 0: Ascendant D60 next: expected 1971-12-31T23:59:59.977Z 164.5 capricorn->aquarius; got 1971-12-31T23:59:59.977Z 164.5 capricorn->aquarius
+F3b 1: Ascendant D60 next: expected 1971-12-31T23:59:59.977Z 164.5 capricorn->aquarius; got 1971-12-31T23:59:59.977Z 164.5 capricorn->aquarius
+## results/check.json
+{
+ "results": "<checkout>/docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/results.jsonl",
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "stepScale": 1,
+ "trial": false,
+ "calls": 1015,
+ "verdict": "PASS",
+ "failuresByCheck": {
+  "M0": 0,
+  "M1": 0,
+  "M2": 0,
+  "M3": 0,
+  "M4": 0,
+  "M5": 0,
+  "M6": 0,
+  "G-V2b": 0
+ },
+ "failures": [],
+ "checkerMinutes": 74.7705425625
+}
+## G-V3 reported: changes by point (summed over the 18 keys), all calls
+{
+ "Ascendant": 36330,
+ "Sun": 15329,
+ "Moon": 33652,
+ "Mercury": 15777,
+ "Venus": 15464,
+ "Mars": 10345,
+ "Jupiter": 2637,
+ "Saturn": 1275,
+ "Mean Node": 1056,
+ "Mean South Node": 1056,
+ "Uranus": 50,
+ "Neptune": 46,
+ "Pluto": 43
+}
+## G-V3 reported: changes in all
+133060
+## G-V3 reported: changes by point and key
+{
+ "Ascendant D1": 2018,
+ "Ascendant D2": 2018,
+ "Ascendant D2cyclic": 2018,
+ "Ascendant D3": 2018,
+ "Ascendant D3cyclic": 2018,
+ "Ascendant D4": 2018,
+ "Ascendant D7": 2018,
+ "Ascendant D9": 2018,
+ "Ascendant D10": 2018,
+ "Ascendant D12": 2018,
+ "Ascendant D16": 2018,
+ "Ascendant D20": 2018,
+ "Ascendant D24": 2018,
+ "Ascendant D27": 2020,
+ "Ascendant D30": 2018,
+ "Ascendant D40": 2020,
+ "Ascendant D45": 2018,
+ "Ascendant D60": 2020,
+ "Sun D1": 59,
+ "Sun D2": 62,
+ "Sun D2cyclic": 121,
+ "Sun D3": 190,
+ "Sun D3cyclic": 190,
+ "Sun D4": 245,
+ "Sun D7": 450,
+ "Sun D9": 574,
+ "Sun D10": 627,
+ "Sun D12": 781,
+ "Sun D16": 1053,
+ "Sun D20": 1346,
+ "Sun D24": 1548,
+ "Sun D27": 1774,
+ "Sun D30": 309,
+ "Sun D40": 2000,
+ "Sun D45": 2000,
+ "Sun D60": 2000,
+ "Moon D1": 892,
+ "Moon D2": 874,
+ "Moon D2cyclic": 1766,
+ "Moon D3": 2008,
+ "Moon D3cyclic": 2008,
+ "Moon D4": 2008,
+ "Moon D7": 2008,
+ "Moon D9": 2008,
+ "Moon D10": 2008,
+ "Moon D12": 2008,
+ "Moon D16": 2008,
+ "Moon D20": 2008,
+ "Moon D24": 2008,
+ "Moon D27": 2008,
+ "Moon D30": 2008,
+ "Moon D40": 2008,
+ "Moon D45": 2008,
+ "Moon D60": 2008,
+ "Mercury D1": 83,
+ "Mercury D2": 74,
+ "Mercury D2cyclic": 157,
+ "Mercury D3": 248,
+ "Mercury D3cyclic": 248,
+ "Mercury D4": 314,
+ "Mercury D7": 568,
+ "Mercury D9": 742,
+ "Mercury D10": 756,
+ "Mercury D12": 966,
+ "Mercury D16": 1250,
+ "Mercury D20": 1468,
+ "Mercury D24": 1536,
+ "Mercury D27": 1598,
+ "Mercury D30": 408,
+ "Mercury D40": 1750,
+ "Mercury D45": 1772,
+ "Mercury D60": 1839,
+ "Venus D1": 83,
+ "Venus D2": 57,
+ "Venus D2cyclic": 140,
+ "Venus D3": 214,
+ "Venus D3cyclic": 214,
+ "Venus D4": 280,
+ "Venus D7": 490,
+ "Venus D9": 624,
+ "Venus D10": 674,
+ "Venus D12": 846,
+ "Venus D16": 1104,
+ "Venus D20": 1382,
+ "Venus D24": 1636,
+ "Venus D27": 1757,
+ "Venus D30": 343,
+ "Venus D40": 1851,
+ "Venus D45": 1862,
+ "Venus D60": 1907,
+ "Mars D1": 37,
+ "Mars D2": 29,
+ "Mars D2cyclic": 66,
+ "Mars D3": 121,
+ "Mars D3cyclic": 121,
+ "Mars D4": 157,
+ "Mars D7": 261,
+ "Mars D9": 360,
+ "Mars D10": 317,
+ "Mars D12": 459,
+ "Mars D16": 621,
+ "Mars D20": 754,
+ "Mars D24": 898,
+ "Mars D27": 1020,
+ "Mars D30": 195,
+ "Mars D40": 1505,
+ "Mars D45": 1650,
+ "Mars D60": 1774,
+ "Jupiter D1": 10,
+ "Jupiter D2": 9,
+ "Jupiter D2cyclic": 19,
+ "Jupiter D3": 32,
+ "Jupiter D3cyclic": 32,
+ "Jupiter D4": 41,
+ "Jupiter D7": 53,
+ "Jupiter D9": 82,
+ "Jupiter D10": 89,
+ "Jupiter D12": 121,
+ "Jupiter D16": 150,
+ "Jupiter D20": 182,
+ "Jupiter D24": 221,
+ "Jupiter D27": 221,
+ "Jupiter D30": 59,
+ "Jupiter D40": 374,
+ "Jupiter D45": 418,
+ "Jupiter D60": 524,
+ "Saturn D1": 3,
+ "Saturn D2": 3,
+ "Saturn D2cyclic": 6,
+ "Saturn D3": 11,
+ "Saturn D3cyclic": 11,
+ "Saturn D4": 17,
+ "Saturn D7": 35,
+ "Saturn D9": 42,
+ "Saturn D10": 39,
+ "Saturn D12": 56,
+ "Saturn D16": 77,
+ "Saturn D20": 89,
+ "Saturn D24": 97,
+ "Saturn D27": 128,
+ "Saturn D30": 22,
+ "Saturn D40": 178,
+ "Saturn D45": 188,
+ "Saturn D60": 273,
+ "Mean Node D1": 5,
+ "Mean Node D2": 5,
+ "Mean Node D2cyclic": 10,
+ "Mean Node D3": 15,
+ "Mean Node D3cyclic": 15,
+ "Mean Node D4": 20,
+ "Mean Node D7": 24,
+ "Mean Node D9": 38,
+ "Mean Node D10": 33,
+ "Mean Node D12": 48,
+ "Mean Node D16": 55,
+ "Mean Node D20": 71,
+ "Mean Node D24": 86,
+ "Mean Node D27": 100,
+ "Mean Node D30": 23,
+ "Mean Node D40": 140,
+ "Mean Node D45": 157,
+ "Mean Node D60": 211,
+ "Mean South Node D1": 5,
+ "Mean South Node D2": 5,
+ "Mean South Node D2cyclic": 10,
+ "Mean South Node D3": 15,
+ "Mean South Node D3cyclic": 15,
+ "Mean South Node D4": 20,
+ "Mean South Node D7": 24,
+ "Mean South Node D9": 38,
+ "Mean South Node D10": 33,
+ "Mean South Node D12": 48,
+ "Mean South Node D16": 55,
+ "Mean South Node D20": 71,
+ "Mean South Node D24": 86,
+ "Mean South Node D27": 100,
+ "Mean South Node D30": 23,
+ "Mean South Node D40": 140,
+ "Mean South Node D45": 157,
+ "Mean South Node D60": 211,
+ "Uranus D1": 1,
+ "Uranus D2": 0,
+ "Uranus D2cyclic": 1,
+ "Uranus D3": 1,
+ "Uranus D3cyclic": 1,
+ "Uranus D4": 1,
+ "Uranus D7": 1,
+ "Uranus D9": 1,
+ "Uranus D10": 2,
+ "Uranus D12": 2,
+ "Uranus D16": 3,
+ "Uranus D20": 3,
+ "Uranus D24": 5,
+ "Uranus D27": 5,
+ "Uranus D30": 1,
+ "Uranus D40": 5,
+ "Uranus D45": 8,
+ "Uranus D60": 9,
+ "Neptune D1": 1,
+ "Neptune D2": 0,
+ "Neptune D2cyclic": 1,
+ "Neptune D3": 2,
+ "Neptune D3cyclic": 2,
+ "Neptune D4": 1,
+ "Neptune D7": 1,
+ "Neptune D9": 3,
+ "Neptune D10": 2,
+ "Neptune D12": 2,
+ "Neptune D16": 1,
+ "Neptune D20": 2,
+ "Neptune D24": 3,
+ "Neptune D27": 8,
+ "Neptune D30": 2,
+ "Neptune D40": 4,
+ "Neptune D45": 7,
+ "Neptune D60": 4,
+ "Pluto D1": 0,
+ "Pluto D2": 1,
+ "Pluto D2cyclic": 1,
+ "Pluto D3": 0,
+ "Pluto D3cyclic": 0,
+ "Pluto D4": 1,
+ "Pluto D7": 0,
+ "Pluto D9": 0,
+ "Pluto D10": 2,
+ "Pluto D12": 2,
+ "Pluto D16": 2,
+ "Pluto D20": 6,
+ "Pluto D24": 3,
+ "Pluto D27": 0,
+ "Pluto D30": 2,
+ "Pluto D40": 8,
+ "Pluto D45": 5,
+ "Pluto D60": 10
+}
+## G-V3 reported: null sides, evaluations per call and per point, call times, public calls, M5 samples
+{
+ "nullSides": 238604,
+ "evaluationsPerCall": {
+  "calls": 1015,
+  "mean": 2410.1556650246307,
+  "median": 2338,
+  "max": 22292
+ },
+ "evaluationsPerPoint": {
+  "Ascendant": {
+   "calls": 1011,
+   "mean": 403.9347181008902,
+   "median": 379,
+   "max": 4405
+  },
+  "Sun": {
+   "calls": 1000,
+   "mean": 240.471,
+   "median": 241,
+   "max": 335
+  },
+  "Moon": {
+   "calls": 1004,
+   "mean": 543.4033864541833,
+   "median": 533,
+   "max": 2636
+  },
+  "Mercury": {
+   "calls": 1000,
+   "mean": 537.537,
+   "median": 453,
+   "max": 20522
+  },
+  "Venus": {
+   "calls": 1000,
+   "mean": 303.237,
+   "median": 285,
+   "max": 1651
+  },
+  "Mars": {
+   "calls": 1000,
+   "mean": 235.172,
+   "median": 223,
+   "max": 2194
+  },
+  "Jupiter": {
+   "calls": 1000,
+   "mean": 84.824,
+   "median": 75,
+   "max": 783
+  },
+  "Saturn": {
+   "calls": 1000,
+   "mean": 51.755,
+   "median": 40,
+   "max": 1028
+  },
+  "Mean Node": {
+   "calls": 1000,
+   "mean": 16.633,
+   "median": 3,
+   "max": 57
+  },
+  "Mean South Node": {
+   "calls": 1000,
+   "mean": 16.633,
+   "median": 3,
+   "max": 57
+  },
+  "Uranus": {
+   "calls": 103,
+   "mean": 25.145631067961165,
+   "median": 6,
+   "max": 370
+  },
+  "Neptune": {
+   "calls": 103,
+   "mean": 14.135922330097088,
+   "median": 5,
+   "max": 174
+  },
+  "Pluto": {
+   "calls": 103,
+   "mean": 19.854368932038835,
+   "median": 5,
+   "max": 211
+  }
+ },
+ "callMs": {
+  "calls": 1015,
+  "mean": 17.765512315270946,
+  "median": 15.344,
+  "max": 149.738
+ },
+ "publicCalls": 28968291,
+ "m5Samples": 28894264
+}
+## G-V3 reported: the disclosure
+{
+ "what": "F2 birth instants at which a point's public longitude differs alone and 1 ms after a call at the millisecond before",
+ "births": 1000,
+ "differing": []
+}
+## results/controls.json
+{
+ "results": "<checkout>/docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/results.jsonl",
+ "stepScale": 1,
+ "dryRun": false,
+ "allFailed": true
+}
+- C3a-next-1ms-later | must fail: M2 | failed as it must | verdict FAIL | {"M0":0,"M1":0,"M2":1,"M3":0,"M4":1,"M5":1,"M6":0,"G-V2b":0} | F2 birth 0: Ascendant D1 parashari next.at 1831-05-26T10:12:14.150Z (<scratch>/work/controls/C3a-next-1ms-later.jsonl)
+    first failures: [{"corpus":"F2","id":0,"check":"M2","detail":"Ascendant D1 next at 1831-05-26T10:12:14.150Z"},{"corpus":"F2","id":0,"check":"M4","detail":"Ascendant D1 next boundary 150"},{"corpus":"F2","id":0,"check":"M5","detail":"Ascendant D1 at 1831-05-26T10:12:14.149Z"}]
+- C3a-next-null | must fail: M5 | failed as it must | verdict FAIL | {"M0":0,"M1":0,"M2":0,"M3":0,"M4":0,"M5":1,"M6":0,"G-V2b":0} | F2 birth 0: Ascendant D1 parashari next set to null (<scratch>/work/controls/C3a-next-null.jsonl)
+    first failures: [{"corpus":"F2","id":0,"check":"M5","detail":"Ascendant D1 at 1831-05-26T10:12:14.761Z"}]
+- G-V2-iii-d2-keep | must fail: G-V2b once | failed as it must | verdict FAIL | {"M0":0,"M1":0,"M2":0,"M3":0,"M4":1,"M5":0,"M6":0,"G-V2b":1} | F2 birth 0: Ascendant D2 next.boundary 150, the sign start next to it (<scratch>/work/controls/G-V2-iii-d2-keep.jsonl)
+    first failures: [{"corpus":"F2","id":0,"check":"M4","detail":"Ascendant D2 next boundary 150"},{"corpus":"F2","id":0,"check":"G-V2b","detail":"Ascendant D2 next boundary 150"}]
+- C3b-body-bounds-divided-by-10 | must fail: not pass | failed as it must | verdict FAIL | {"M0":5364,"M1":0,"M2":0,"M3":0,"M4":0,"M5":0,"M6":0,"G-V2b":0}
+    first failures: [{"corpus":"F2","id":0,"check":"M0","detail":"Sun D1 refused: rate-bound"},{"corpus":"F2","id":0,"check":"M0","detail":"Sun D2 refused: rate-bound"},{"corpus":"F2","id":0,"check":"M0","detail":"Sun D2cyclic refused: rate-bound"}]
+- C3c-ascendant-at-60s-bracket-ends | must fail: M2 | failed as it must | verdict FAIL | {"M0":0,"M1":0,"M2":1800,"M3":0,"M4":1800,"M5":900,"M6":0,"G-V2b":0}
+    first failures: [{"corpus":"F2","id":0,"check":"M2","detail":"Ascendant D1 previous at 1831-05-26T08:38:40.762Z"},{"corpus":"F2","id":0,"check":"M4","detail":"Ascendant D1 previous boundary 120"},{"corpus":"F2","id":0,"check":"M2","detail":"Ascendant D1 next at 1831-05-26T10:12:40.761Z"}]
+- C3d-no-seams | must fail: M6 | failed as it must | verdict FAIL | {"M0":0,"M1":0,"M2":0,"M3":0,"M4":0,"M5":0,"M6":2,"G-V2b":0}
+    first failures: [{"corpus":"F3b","id":0,"check":"M6","detail":"case 0: null for {\"at\":\"1971-12-31T23:59:59.977Z\",\"boundary\":164.5,\"from\":\"capricorn\",\"to\":\"aquarius\"}"},{"corpus":"F3b","id":1,"check":"M6","detail":"case 1: null for {\"at\":\"1971-12-31T23:59:59.977Z\",\"boundary\":164.5,\"from\":\"capricorn\",\"to\":\"aquarius\"}"}]
+## results/derived-bounds.json
+{
+ "epoch": {
+  "a": 0.0003,
+  "largest": 66.498285945,
+  "rows": [
+   "0: R_lo 327.734672, R_hi 397.570172, longest bracket 71715641 ms",
+   "30: R_lo 274.737476, R_hi 530.828866, longest bracket 53712225 ms",
+   "45: R_lo 208.689612, R_hi 703.430195, longest bracket 40532806 ms",
+   "60: R_lo 107.805477, R_hi 1610.358539, longest bracket 17705373 ms",
+   "66: R_lo 28.659597, R_hi 16993.494669, longest bracket 1677818 ms",
+   "66.6: R_lo null, R_hi null, longest bracket null ms, no real value: |phi| is beyond 90 - 23.5 = 66.5 degrees"
+  ]
+ },
+ "largest linear": {
+  "a": 0.003037851,
+  "largest": 66.498284072,
+  "rows": [
+   "0: R_lo 327.731934, R_hi 397.572909, longest bracket 71715147 ms",
+   "30: R_lo 274.734738, R_hi 530.831604, longest bracket 53711948 ms",
+   "45: R_lo 208.686874, R_hi 703.432933, longest bracket 40532648 ms",
+   "60: R_lo 107.802739, R_hi 1610.361277, longest bracket 17705343 ms",
+   "66: R_lo 28.656859, R_hi 16993.497407, longest bracket 1677818 ms",
+   "66.6: R_lo null, R_hi null, longest bracket null ms, no real value: |phi| is beyond 90 - 23.5 = 66.5 degrees"
+  ]
+ },
+ "star (addition)": {
+  "a": 0.0213,
+  "largest": 66.498271498,
+  "rows": [
+   "0: R_lo 327.713672, R_hi 397.591172, longest bracket 71711853 ms",
+   "30: R_lo 274.716476, R_hi 530.849866, longest bracket 53710101 ms",
+   "45: R_lo 208.668612, R_hi 703.451195, longest bracket 40531596 ms",
+   "60: R_lo 107.784477, R_hi 1610.379539, longest bracket 17705142 ms",
+   "66: R_lo 28.638597, R_hi 16993.515669, longest bracket 1677816 ms",
+   "66.6: R_lo null, R_hi null, longest bracket null ms, no real value: |phi| is beyond 90 - 23.5 = 66.5 degrees"
+  ]
+ }
+}
+## results/derived-bounds-control.txt
+epoch, 66.6 degrees: the lower bound has no real value: |phi| is beyond 90 - 23.5 = 66.5 degrees
+largest linear, 66.6 degrees: the lower bound has no real value: |phi| is beyond 90 - 23.5 = 66.5 degrees
+star (addition), 66.6 degrees: the lower bound has no real value: |phi| is beyond 90 - 23.5 = 66.5 degrees
+## results/derived-bounds-control-verdict.txt
+66.6 degrees: 3 rows; 3 with no real lower bound in the table, 3 said so on stderr
+## results/time-per-arcsecond.json
+{
+ "engine": {
+  "version": "1.1.0-rc.2",
+  "jsDigest": "21b80ef0dcafb71f108a397e015218083e1cf346741961b4b36ff429c8888109"
+ },
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "sampled": {
+  "from": "1800-01-01T00:00:00.000Z",
+  "to": "2200-01-01T00:00:00.000Z",
+  "everyDays": 5,
+  "timeScale": "UTC"
+ },
+ "rows": [
+  {
+   "body": "Sun",
+   "samples": 29220,
+   "medianSpeed": 0.984945943571347,
+   "tenthPercentileSpeed": 0.9548943475579108,
+   "smallestSpeed": 0.952884209198146,
+   "atMedian": "25 s",
+   "atTenthPercentile": "26 s"
+  },
+  {
+   "body": "Moon",
+   "samples": 29220,
+   "medianSpeed": 13.058943290729985,
+   "tenthPercentileSpeed": 11.881226129844435,
+   "smallestSpeed": 11.7629146503333,
+   "atMedian": "1.9 s",
+   "atTenthPercentile": "2.1 s"
+  },
+  {
+   "body": "Mercury",
+   "samples": 29220,
+   "medianSpeed": 1.3563413523343115,
+   "tenthPercentileSpeed": 0.32531007920511,
+   "smallestSpeed": 0.00015257256791301188,
+   "atMedian": "18 s",
+   "atTenthPercentile": "1.3 min"
+  },
+  {
+   "body": "Venus",
+   "samples": 29220,
+   "medianSpeed": 1.1957168887022362,
+   "tenthPercentileSpeed": 0.5110808487813756,
+   "smallestSpeed": 0.00006813156971929857,
+   "atMedian": "21 s",
+   "atTenthPercentile": "47 s"
+  },
+  {
+   "body": "Mars",
+   "samples": 29220,
+   "medianSpeed": 0.6355549684258222,
+   "tenthPercentileSpeed": 0.23476963046675792,
+   "smallestSpeed": 0.000192083007277688,
+   "atMedian": "38 s",
+   "atTenthPercentile": "1.8 min"
+  },
+  {
+   "body": "Jupiter",
+   "samples": 29220,
+   "medianSpeed": 0.12897006118350873,
+   "tenthPercentileSpeed": 0.031928532564506895,
+   "smallestSpeed": 0.000008213362434617011,
+   "atMedian": "3.2 min",
+   "atTenthPercentile": "13 min"
+  },
+  {
+   "body": "Saturn",
+   "samples": 29220,
+   "medianSpeed": 0.07060063200015065,
+   "tenthPercentileSpeed": 0.01637938225940161,
+   "smallestSpeed": 0.0000035591369851317722,
+   "atMedian": "5.7 min",
+   "atTenthPercentile": "25 min"
+  },
+  {
+   "body": "Uranus",
+   "samples": 29220,
+   "medianSpeed": 0.035335935308467015,
+   "tenthPercentileSpeed": 0.007983081019347082,
+   "smallestSpeed": 7.829044079699088e-7,
+   "atMedian": "12 min",
+   "atTenthPercentile": "51 min"
+  },
+  {
+   "body": "Neptune",
+   "samples": 29220,
+   "medianSpeed": 0.02277643750403513,
+   "tenthPercentileSpeed": 0.005090647050565167,
+   "smallestSpeed": 7.016183189989533e-7,
+   "atMedian": "18 min",
+   "atTenthPercentile": "1.4 h"
+  },
+  {
+   "body": "Pluto",
+   "samples": 29220,
+   "medianSpeed": 0.01650972026823183,
+   "tenthPercentileSpeed": 0.00370785014069952,
+   "smallestSpeed": 6.461107204813743e-7,
+   "atMedian": "25 min",
+   "atTenthPercentile": "1.8 h"
+  }
+ ]
+}
+## results/time-per-arcsecond-write.txt
+wrote the G-V5 table into <checkout>/docs/vedic.md
+## results/time-per-arcsecond-control-copy.txt
+wrote <scratch>/work/vedic-g-v5-control.md: <checkout>/docs/vedic.md with the G-V5 table's figure 25 in "| Sun | 25 s |" changed to 26
+## results/time-per-arcsecond-control.txt
+<scratch>/work/vedic-g-v5-control.md's G-V5 table differs from the recomputed one:
+<!-- G-V5 table, tools/time_per_arcsecond.mjs -->
+| Body | 1″ moves an instant by, at the median speed | at the 10th percentile speed |
+| --- | ---: | ---: |
+| Sun | 25 s | 26 s |
+| Moon | 1.9 s | 2.1 s |
+| Mercury | 18 s | 1.3 min |
+| Venus | 21 s | 47 s |
+| Mars | 38 s | 1.8 min |
+| Jupiter | 3.2 min | 13 min |
+| Saturn | 5.7 min | 25 min |
+| Uranus | 12 min | 51 min |
+| Neptune | 18 min | 1.4 h |
+| Pluto | 25 min | 1.8 h |
+<!-- end of the G-V5 table -->
+## results-erfa/run.json
+{
+ "engine": {
+  "version": "1.1.0-rc.2",
+  "jsFiles": 57,
+  "jsDigest": "21b80ef0dcafb71f108a397e015218083e1cf346741961b4b36ff429c8888109"
+ },
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "corpora": [
+  {
+   "corpus": "F4",
+   "file": "<checkout>/docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/births-erfa.json",
+   "sha256": "5c6ddf9d0a3f2325923538b8965bd3acc2a3b4975a96ce502b60c7b488cab6d9",
+   "seed": 20261103,
+   "calls": 1000
+  }
+ ],
+ "calls": 1000,
+ "threw": [],
+ "callMs": {
+  "mean": 16.791716,
+  "median": 15.771,
+  "max": 131.319
+ },
+ "wallMinutes": 0.2839089014
+}
+## results-erfa/results.jsonl: rows, refused rows, changes, null sides
+{
+ "calls": 1000,
+ "rows": 180000,
+ "refused": 0,
+ "changes": 131670,
+ "nullSides": 228330
+}
+## results-erfa/compare.json
+{
+ "erfa": "pyerfa 2.0.1.5",
+ "python": "3.11.16",
+ "control": null,
+ "births": 1000,
+ "judged": 35204,
+ "notJudged": 796,
+ "mismatches": 0,
+ "compared": 35204,
+ "comparedFailed": 0,
+ "bands": {
+  "0 to 45 degrees": {
+   "count": 18114,
+   "maxMs": 1.060546875,
+   "medianMs": 0.5,
+   "p99Ms": 0.9931640625
+  },
+  "45 to 60 degrees": {
+   "count": 6320,
+   "maxMs": 1.24609375,
+   "medianMs": 0.51513671875,
+   "p99Ms": 1.0634765625
+  },
+  "60 to 66 degrees": {
+   "count": 10770,
+   "maxMs": 1.3603515625,
+   "medianMs": 0.5073089599609375,
+   "p99Ms": 1.0791015625
+  }
+ },
+ "verdict": "PASS",
+ "failures": 0,
+ "firstFailures": []
+}
+## results-erfa/control-c4a.json
+absent: not written (the run was stopped before it)
+## results-erfa/control-c4b.json
+absent: not written (the run was stopped before it)
+## the script, <scratch>/bin/figures.mjs
+/*
+ * Not a check and not a rerun: it runs no engine and no reference, and
+ * changes no verdict. It reads this run's outputs in results/ and
+ * results-erfa/ (after the hand shortening of their paths) and prints the
+ * figures RESULTS.md cites that the tools' summaries do not print as such:
+ * sums, counts by corpus and point, and listings. Run from the unit folder.
+ */
+import { existsSync, readFileSync } from "node:fs";
+
+if (process.argv[2]) process.chdir(process.argv[2]);
+const json = (path) => JSON.parse(readFileSync(path, "utf8"));
+const lines = (path) => readFileSync(path, "utf8").trim().split("\n").map((text) => JSON.parse(text));
+const show = (title, value) => console.log(`## ${title}\n${typeof value === "string" ? value : JSON.stringify(value, null, 1)}`);
+
+show("results/steps.tsv", readFileSync("results/steps.tsv", "utf8").trim());
+
+// G-V1, G-V2 (a) and the named tests: vitest's report.
+const tests = json("results/tests.json");
+show("results/tests.json: totals", {
+  success: tests.success, suites: tests.numTotalTestSuites, suitesFailed: tests.numFailedTestSuites,
+  tests: tests.numTotalTests, passed: tests.numPassedTests, failed: tests.numFailedTests, pending: tests.numPendingTests, todo: tests.numTodoTests
+});
+show("results/tests.json: by file (passed, failed, other)", tests.testResults.map((file) => {
+  const by = (status) => file.assertionResults.filter((test) => test.status === status).length;
+  return `${file.name.replace(/^.*?\/src\//u, "src/")}: ${by("passed")} passed, ${by("failed")} failed, ${file.assertionResults.length - by("passed") - by("failed")} other; ${file.status}`;
+}).join("\n"));
+const all = tests.testResults.flatMap((file) => file.assertionResults.map((test) => ({ file: file.name.replace(/^.*?\/src\//u, "src/"), ...test })));
+const gv1 = all.filter((test) => /places D\d+(cyclic)? exactly/u.test(test.fullName));
+show("G-V1: the varga tests of src/vedic/boundaries.test.ts ('places D.. exactly')", `${gv1.length} tests, ${gv1.filter((test) => test.status === "passed").length} passed: ${gv1.map((test) => test.title).join("; ")}`);
+const gv2a = all.filter((test) => test.fullName.endsWith("the change boundaries are the fixture's change rows"));
+show("G-V2 (a): the per-key tests 'the change boundaries are the fixture's change rows'", `${gv2a.length} tests, ${gv2a.filter((test) => test.status === "passed").length} passed`);
+show("tests not passed", all.filter((test) => test.status !== "passed").map((test) => `${test.file}: ${test.fullName} (${test.status})`).join("\n") || "none");
+
+show("results/f1-check.json", (({ check, sha256, total, keepsInDegrees }) => ({ check, sha256, total, keepsInDegrees }))(json("results/f1-check.json")));
+show("results/inputs-sha256.txt", readFileSync("results/inputs-sha256.txt", "utf8").trim());
+show("results/boundaries-sha256.txt", readFileSync("results/boundaries-sha256.txt", "utf8").trim());
+
+const testControls = json("results/test-controls.json");
+show("results/test-controls.json", { node: testControls.node, platform: testControls.platform, allFailedAsTheyMust: testControls.allFailedAsTheyMust });
+for (const control of testControls.controls) {
+  console.log(`- ${control.name} | ${control.file} | ${control.test} | must fail: ${control.mustFail} | ${control.failedTests} of ${control.of} failed | ${control.failedAsItMust ? "failed as it must" : "DID NOT FAIL AS IT MUST"}\n    ${control.failed.join("\n    ")}`);
+}
+
+// G-V3: the run and the checker.
+const run = json("results/run.json");
+show("results/run.json", { engine: run.engine, node: run.node, platform: run.platform, limit: run.limit, corpora: run.corpora.map(({ corpus, file, sha256, seed, calls }) => ({ corpus, file, sha256, seed, calls })), calls: run.calls, threw: run.threw, callMs: run.callMs, wallMinutes: run.wallMinutes });
+const results = lines("results/results.jsonl");
+const rows = results.flatMap((line) => (line.result?.rows ?? []).map((row) => ({ corpus: line.corpus, id: line.id, ...row })));
+const byCorpus = {};
+for (const line of results) {
+  const entry = (byCorpus[line.corpus] ??= { calls: 0, rows: 0, refused: 0, changes: 0, nullSides: 0, maxEvaluations: 0 });
+  entry.calls += 1;
+  for (const row of line.result?.rows ?? []) {
+    entry.rows += 1;
+    if (row.refusal) entry.refused += 1;
+    for (const side of ["previous", "next"]) row[side] ? (entry.changes += 1) : (entry.nullSides += 1);
+  }
+  const total = Object.values(line.result?.evaluations ?? {}).reduce((a, b) => a + b, 0);
+  entry.maxEvaluations = Math.max(entry.maxEvaluations, total);
+}
+show("results/results.jsonl by corpus: calls, rows, refused rows, changes, null sides (refused rows' sides included), the largest evaluations of a call", byCorpus);
+show("refusals in results.jsonl, by reason", rows.filter((row) => row.refusal).reduce((out, row) => ({ ...out, [row.refusal.reason]: (out[row.refusal.reason] ?? 0) + 1 }), {}));
+const seams = [...json("seams.json").cases.map((entry) => ["F3", entry]), ...json("seams-f3b.json").cases.map((entry) => ["F3b", entry])];
+show("F3 and F3b: each case's expected change (seams.json, seams-f3b.json) and the row's change in results.jsonl", seams.map(([corpus, entry]) => {
+  const line = results.find((each) => each.corpus === corpus && each.id === entry.id);
+  const want = entry.expected;
+  if (!want) return `${corpus} ${entry.id}: expected null (not planted); call ${line?.error ? "threw" : "returned"}, ${line?.result?.rows.length} rows, refused ${line?.result?.rows.filter((row) => row.refusal).length}`;
+  const row = line.result.rows.find((each) => each.point === line.options.points[0] && each.varga === want.varga && each.scheme === want.scheme);
+  const got = row?.[want.side];
+  return `${corpus} ${entry.id}: ${line.options.points[0]} ${want.varga} ${want.side}: expected ${want.at} ${want.boundary} ${want.from}->${want.to}; got ${got ? `${got.at} ${got.boundary} ${got.from}->${got.to}` : "null"}`;
+}).join("\n"));
+
+const check = json("results/check.json");
+show("results/check.json", { results: check.results, node: check.node, platform: check.platform, stepScale: check.stepScale, trial: check.trial, calls: check.calls, verdict: check.verdict, failuresByCheck: check.failuresByCheck, failures: check.failures.slice(0, 50), checkerMinutes: check.checkerMinutes });
+const reported = check.reported;
+const perPoint = {};
+for (const [key, count] of Object.entries(reported.changesByPointAndKey)) {
+  const point = key.replace(/ D\d+(cyclic)?$/u, "");
+  perPoint[point] = (perPoint[point] ?? 0) + count;
+}
+show("G-V3 reported: changes by point (summed over the 18 keys), all calls", perPoint);
+show("G-V3 reported: changes in all", Object.values(perPoint).reduce((a, b) => a + b, 0));
+show("G-V3 reported: changes by point and key", reported.changesByPointAndKey);
+show("G-V3 reported: null sides, evaluations per call and per point, call times, public calls, M5 samples", { nullSides: reported.nullSides, evaluationsPerCall: reported.evaluationsPerCall, evaluationsPerPoint: reported.evaluationsPerPoint, callMs: reported.callMs, publicCalls: reported.publicCalls, m5Samples: reported.m5Samples });
+show("G-V3 reported: the disclosure", reported.disclosure);
+
+const controls = json("results/controls.json");
+show("results/controls.json", { results: controls.results, stepScale: controls.stepScale, dryRun: controls.dryRun, allFailed: controls.allFailed });
+for (const [name, control] of Object.entries(controls.controls)) {
+  console.log(`- ${name} | must fail: ${control.mustFail} | ${control.failed ? "failed as it must" : "DID NOT FAIL"} | verdict ${control.verdict} | ${JSON.stringify(control.failuresByCheck)}${control.id !== undefined ? ` | F2 birth ${control.id}: ${control.changed} (${control.file})` : ""}\n    first failures: ${JSON.stringify((control.failures ?? []).slice(0, 3))}`);
+}
+
+// Section 7 and G-V5.
+const bounds = json("results/derived-bounds.json");
+show("results/derived-bounds.json", Object.fromEntries(Object.entries(bounds.rates).map(([name, entry]) => [name, { a: entry.a, largest: entry.largestLatitudeWithPositiveLowerBound, rows: entry.rows.map((row) => `${row.latitude}: R_lo ${row.R_lo}, R_hi ${row.R_hi}, longest bracket ${row.longestBracketMs} ms${row.note ? `, ${row.note}` : ""}`) }])));
+show("results/derived-bounds-control.txt", readFileSync("results/derived-bounds-control.txt", "utf8").trim());
+show("results/derived-bounds-control-verdict.txt", readFileSync("results/derived-bounds-control-verdict.txt", "utf8").trim());
+const g5 = json("results/time-per-arcsecond.json");
+show("results/time-per-arcsecond.json", { engine: g5.engine, node: g5.node, platform: g5.platform, sampled: g5.sampled, rows: g5.rows.map(({ body, samples, medianSpeed, tenthPercentileSpeed, smallestSpeed, atMedian, atTenthPercentile }) => ({ body, samples, medianSpeed, tenthPercentileSpeed, smallestSpeed, atMedian, atTenthPercentile })) });
+for (const name of ["time-per-arcsecond-write.txt", "time-per-arcsecond-control-copy.txt", "time-per-arcsecond-control.txt"]) show(`results/${name}`, readFileSync(`results/${name}`, "utf8").trim());
+
+// G-V4.
+const runErfa = json("results-erfa/run.json");
+show("results-erfa/run.json", { engine: runErfa.engine, node: runErfa.node, platform: runErfa.platform, corpora: runErfa.corpora.map(({ corpus, file, sha256, seed, calls }) => ({ corpus, file, sha256, seed, calls })), calls: runErfa.calls, threw: runErfa.threw, callMs: runErfa.callMs, wallMinutes: runErfa.wallMinutes });
+const erfaLines = lines("results-erfa/results.jsonl");
+show("results-erfa/results.jsonl: rows, refused rows, changes, null sides", erfaLines.reduce((out, line) => {
+  for (const row of line.result?.rows ?? []) {
+    out.rows += 1;
+    if (row.refusal) out.refused += 1;
+    for (const side of ["previous", "next"]) row[side] ? (out.changes += 1) : (out.nullSides += 1);
+  }
+  return out;
+}, { calls: erfaLines.length, rows: 0, refused: 0, changes: 0, nullSides: 0 }));
+for (const name of ["compare.json", "control-c4a.json", "control-c4b.json"]) {
+  if (!existsSync(`results-erfa/${name}`)) {
+    show(`results-erfa/${name}`, "absent: not written (the run was stopped before it)");
+    continue;
+  }
+  const report = json(`results-erfa/${name}`);
+  show(`results-erfa/${name}`, { erfa: report.erfa, python: report.python, control: report.control, births: report.births, judged: report.judged, notJudged: report.notJudged, mismatches: report.mismatches, compared: report.compared, comparedFailed: report.comparedFailed, bands: report.bands, verdict: report.verdict, failures: report.failures.length, firstFailures: report.failures.slice(0, 5) });
+}
+# exit 0, finished 2026-11-04 14:46:05 +0700

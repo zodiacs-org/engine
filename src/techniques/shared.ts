@@ -1,10 +1,10 @@
 /*
  * Internal helpers of the techniques entry point: options, names, places,
  * flags and dates. Only the types below are re-exported, from
- * src/techniques.ts.
+ * src/techniques.ts. The names, the options reader and the readers of
+ * degrees are in names.ts, and re-exported here.
  */
 import { outsideReferenceSpan } from "../reference-span.js";
-import type { BodyName } from "../types.js";
 
 /** `"outside-reference-span"`: the ephemeris was read outside 1800–2200 (`REFERENCE_SPAN`). */
 export type TechniqueFlag = "outside-reference-span";
@@ -18,30 +18,7 @@ export interface GeoPlace {
 export const DAY_MS = 86_400_000;
 const MAX_DATE_MS = 8_640_000_000_000_000;
 
-export const BODY_NAMES: readonly BodyName[] = [
-  "Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "North Node", "South Node"
-];
-
-/** A body name, or a RangeError. */
-export function bodyName(value: unknown, label: string): BodyName {
-  if (typeof value === "string" && (BODY_NAMES as readonly string[]).includes(value)) return value as BodyName;
-  throw new RangeError(`${label} must be a body name.`);
-}
-
-export { readOptions } from "../read-options.js";
-
-/** One of a fixed list of names, or the default when absent. */
-export function oneOf<T extends string>(value: unknown, allowed: readonly T[], fallback: T, label: string): T {
-  if (value === undefined) return fallback;
-  if (typeof value === "string" && (allowed as readonly string[]).includes(value)) return value as T;
-  throw new RangeError(`${label} must be one of ${allowed.map((name) => `"${name}"`).join(", ")}.`);
-}
-
-/** A finite number of degrees. */
-export function finiteDegrees(value: unknown, label: string): number {
-  if (typeof value !== "number" || !Number.isFinite(value)) throw new RangeError(`${label} must be a finite number of degrees.`);
-  return value;
-}
+export { BODY_NAMES, bodyName, finiteDegrees, oneOf, readOptions } from "./names.js";
 
 /** A valid place, copied and frozen. */
 export function placeOf(value: unknown, label: string): GeoPlace {

@@ -1,0 +1,76 @@
+# F-89 formal run of @zodiacs/engine 1.1.0-rc.2: figures for RESULTS.md, printed from the files the checks read (not a second run of any check): E10's inputs, E5's chunk and importers in the unpacked rc.2 pack, item 8's old wording in the time entry's guide and declarations
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# cwd <checkout>
+# command: python3 -I <scratch>/figures.py <checkout> <scratch>/rc2/package
+# started 2026-11-04 12:01:48 +0700
+## E10: conformance/results/summary.json, the zodiacs-engine run, angles.vertex-east-point
+vectors 10 ; Vertex max 0.013370956 ; East Point max 0.00679320316
+README.md states 0.014″ and 0.007″
+conformance/RESULTS.md rows naming angles.vertex-east-point: 3
+    | L2 | `angles.vertex-east-point` | 10 | vertex ±1″ (on the circle); east_point ±1″ (on the circle) |
+    | L2 | `angles.vertex-east-point` | 10 | 0 | 0 | 0 | vertex: 0.003″ / 0.013″ / 0.013″<br>east_point: 0.003″ / 0.007″ / 0.007″ |
+    | L2 | `angles.vertex-east-point` | 6 | 4 | 0 | 0 | vertex: 0.024″ / 2.952″ / 2.952″<br>east_point: 0.026″ / 2.040″ / 2.040″ |
+L2 vectors of that kind: 10 ; latitudes -60.0 to 60.0
+## E5: the Gregorian adoption table in the unpacked rc.2 pack
+holders: ['chunk-HTT4HMQ6.js']
+files that import it: ['geo.js', 'techniques.js']
+## item 8: the old wording in the time entry's guide and declarations
+docs/time.md (not packed): absent
+dist/time.d.ts (packed, also in E1's scan): absent
+# exit code 0; finished 2026-11-04 12:01:48 +0700
+## appended after the run, for the record: the script that printed the above, <scratch>/figures.py
+    """Figures for RESULTS.md, printed from the files the checks read (not a second
+    run of any check): E10's inputs, E5's chunk and its importers in the unpacked
+    rc.2 pack, and the old item 8 wording in the time entry's guide.
+        python3 -I figures.py <checkout> <unpacked rc.2 package>
+    """
+    import json
+    import os
+    import re
+    import sys
+    
+    checkout, package = sys.argv[1], sys.argv[2]
+    
+    
+    def text(path):
+        with open(path, encoding="utf-8") as f:
+            return f.read()
+    
+    
+    summary = json.loads(text(os.path.join(checkout, "conformance/results/summary.json")))
+    run = [r for r in summary["runs"] if r["adapter"]["name"] == "zodiacs-engine"][0]
+    kind = run["summary"]["byKind"]["angles.vertex-east-point"]
+    print("## E10: conformance/results/summary.json, the zodiacs-engine run, angles.vertex-east-point")
+    print("vectors", kind["count"], "; Vertex max", repr(kind["residuals"]["vertex"]["max"]),
+          "; East Point max", repr(kind["residuals"]["east_point"]["max"]))
+    readme = re.sub(r"\s+", " ", text(os.path.join(checkout, "README.md")))
+    m = re.search(r"On the conformance suite's ten L2 vectors for them, [^.]*?they are within ([\d.]+)″ and ([\d.]+)″", readme)
+    if m:
+        print("README.md states", m.group(1) + "″", "and", m.group(2) + "″")
+    else:
+        print("README.md states no figures in that sentence")
+    results_md = text(os.path.join(checkout, "conformance/RESULTS.md"))
+    row = [line for line in results_md.splitlines() if "angles.vertex-east-point" in line]
+    print("conformance/RESULTS.md rows naming angles.vertex-east-point:", len(row))
+    for line in row:
+        print("   ", line.strip())
+    vectors = [v for v in json.loads(text(os.path.join(checkout, "conformance/vectors/L2-houses-angles.json")))["vectors"]
+               if v["kind"] == "angles.vertex-east-point"]
+    lats = [v["input"]["lat"] for v in vectors]
+    print("L2 vectors of that kind:", len(vectors), "; latitudes", min(lats), "to", max(lats))
+    
+    print("## E5: the Gregorian adoption table in the unpacked rc.2 pack")
+    dist = os.path.join(package, "dist")
+    js = sorted(n for n in os.listdir(dist) if n.endswith(".js"))
+    holders = [n for n in js if "var GREGORIAN_ADOPTION =" in text(os.path.join(dist, n))]
+    print("holders:", holders)
+    importers = [n for n in js if holders and "./" + holders[0] in text(os.path.join(dist, n))]
+    print("files that import it:", importers)
+    
+    print("## item 8: the old wording in the time entry's guide and declarations")
+    old = "the engine's model when absent"
+    for rel in ("docs/time.md",):
+        print(rel, "(not packed):", "present" if old in re.sub(r"\s+", " ", text(os.path.join(checkout, rel))) else "absent")
+    decl = re.sub(r"\s+", " ", "\n".join(re.sub(r"^\s*\*\s?", "", l) for l in text(os.path.join(dist, "time.d.ts")).split("\n")))
+    print("dist/time.d.ts (packed, also in E1's scan):", "present" if old in decl else "absent")

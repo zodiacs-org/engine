@@ -1,5 +1,164 @@
 # Engine changelog
 
+## 1.1.0-rc.2 (unreleased candidate)
+
+The second candidate for 1.1.0, on 1.1.0-rc.1 (main at `a253973`):
+corrections of statements that said more than their evidence; two new entry
+points that load no ephemeris, `@zodiacs/engine/time` and
+`@zodiacs/engine/lite`, which make fifteen public entry points; time bands in
+`@zodiacs/engine/calc`; and the birth-time sensitivity of the vargas in
+`@zodiacs/engine/vedic`. The 500 conformance verdicts are 1.1.0-rc.1's: 267
+pass, 192 fail, 41 unsupported, none in error. It is not to be published on
+npm until the owner approves it. Checks: `docs/evidence/1.1.0-rc.2-20261102/`.
+
+- **Corrections (zodiacs.org's finding F-89).** Statements that 1.0.0 and
+  1.1.0-rc.1 made in the README, NOTICE, LICENSING.md and doc comments, and
+  that zodiacs.org's claims ledger found to say more than their evidence, now
+  say what was measured or what the code does
+  (`docs/evidence/1.1.0-rc.2-20261102/f89/`). The README no longer says that
+  the Vertex and the East Point agree with Swiss Ephemeris's
+  `swe_houses_armc` to within 0.00001″ given its inputs, which zodiacs.org's
+  points record of 0.1.1-rc.10 does not bear out; it gives the conformance
+  suite's figures instead, within 0.014″ and 0.007″ on its ten L2 vectors for
+  them, from 1833 to 2182, whose arbiter is ERFA (`conformance/RESULTS.md`,
+  which rounds to the nearest 0.001″, and `conformance/results/summary.json`).
+  A plain 5-day crossing scan can miss a station that takes the body less than
+  |f″|h²/8 past the target: up to 0.0056° for Saturn and 0.011° for Jupiter at
+  their stations from 2019 to 2024, not the 0.0103° and 0.0205° given before. A
+  local-time resolution names a transition only where there is one, and no
+  tzdb version where the runtime reports none. The Gregorian adoption table is
+  in a shared chunk that `dist/geo.js` and `dist/techniques.js` import. The
+  calc bounds of the mean node, the mean south node and Black Moon Lilith were
+  measured against their definitions evaluated with ERFA, and their `basis`
+  now says so; their speed bounds' basis also says that their speeds were
+  compared in the true ecliptic of date only. No bound's value changes.
+  Placidus's step count near the polar limit is no longer given. Munkasey's
+  co-ascendant can lie west of the meridian within ε of the equator, not
+  within 90° − ε. `ChartInput.deltaT` falls back to the engine's time basis.
+  Receipts name the ephemeris from the rc.8 conventions set on, not only in
+  the current one.
+- **`@zodiacs/engine/time`** (zodiacs.org's finding F-53), a new entry point
+  that loads no ephemeris: `timeBasis(ms, scale, pin)`, an instant's UT1 and
+  TT with the `deltaT` and `timeScale` records a chart carries, and
+  `elapsedDays`; `EPHEMERIS_SPAN`; and the frame of date the ephemeris uses,
+  `tilt`, `eclipticFrame`, `meanEcliptic` and `eclipticOfDate`; with
+  `DELTA_T_IERS_MODEL`, `TIME_SCALE_NAMES` and the types they take and give
+  (`api/time.api.md`, `docs/time.md`). Each is the function a chart computes
+  with, behind a check that throws `RangeError` for an argument it refuses;
+  `tilt` and `eclipticFrame` give frozen results, so a caller cannot change
+  the frame the engine keeps for its next chart. Through them
+  astronomy-engine's vectors give `natalChart`'s longitudes to the bit
+  (`src/time.test.ts`; the preregistered checks are in
+  `docs/evidence/1.1.0-rc.2-20261102/time-entry/`). The root does not import
+  the entry. zodiacs.org bundled these functions from `dist/` until now. The
+  nutation and frame modules move out of the ephemeris chunk into a shared
+  chunk that it and `dist/time.js` import (NOTICE, LICENSING.md), so each
+  graph that loads the ephemeris grows by the imports and exports that join
+  the two.
+- **Bands from the time basis** (zodiacs.org's unit P1.M3c).
+  `timeBands(record)`, exported by `@zodiacs/engine/time`, gives the 1-σ
+  bands, in seconds, of the TT and the UT1 of a recorded instant (a
+  `TimeBasis`, a chart, a calc instant, or a natal result from the time-basis
+  set on) from its two recorded bands, `deltaT.sigma` and
+  `timeScale.ut1MinusUtc.sigma`, by the scale the instant was given on and the
+  basis that gave UT1 and TT (`docs/time.md`, *The time bands*). On UTC input
+  from 1972-01-01 to 2027-10-02 without a pinned ΔT, TT comes from the leap
+  seconds (exactly to 2027-06-28, when the shipped list expires; after it the
+  list's last value is carried, with no band for a leap second not yet
+  announced), so its band is 0, and UT1 carries the band of UT1 − UTC; with a
+  pin, TT is UT1 plus the pin and takes UT1's band; after the table, TT takes
+  both bands, combined as the root of the sum of their squares. It reads the
+  recorded fields only, and throws `RangeError` for a record without a time
+  scale. `@zodiacs/engine/calc` carries the bands into its results, to first
+  order, as a new `band` field kept apart from `bounds` (`docs/calc.md`,
+  *Bands*), and exports the `TimeBands` and `CalcTimeBand` types they use:
+  `calc()`'s positions (null without speeds), from each coordinate's rate
+  times the TT band, with a conservative bound on the observer's turn for a
+  topocentric one, and for the true nodes from their speed over ±0.25 day,
+  which smooths their short-period motion; `houses()`' angles and cusps, from
+  each one's rate on UT1 times the UT1 band plus its rate on TT times the TT
+  band (in the sidereal zodiac the sidereal longitude's, the ayanamsa's rate
+  in it), whole-sign and fallback cusps 0; each event's UTC and UT1; and
+  `chart()`'s bodies, ascendant and midheaven. So on UTC input from
+  1972-01-01 to 2027-10-02 without a pinned ΔT every geocentric, heliocentric
+  and barycentric position's band is 0. Each receipt names the new id
+  `time-band:first-order`, last, but `calc()`'s without speeds; `events()`'
+  even when it finds no event. A band is not a bound on the error and leaves
+  out the ephemeris's error. Root charts, natal envelopes and the other
+  entries' results carry none. The preregistered
+  checks are in `docs/evidence/1.1.0-rc.2-20261102/time-bands/`.
+- **`@zodiacs/engine/lite`** (zodiacs.org's units P2.E: declinations, sect,
+  composite and dignities), a new entry point that loads no ephemeris: the
+  root's declination parallels and out-of-bounds flags
+  (`findDeclinationAspects`, `declinationsForBodies`, `declinationOf`,
+  `declinationOrb`, `eclipticToEquatorial`, with their constants and types),
+  `@zodiacs/engine/techniques`' composite midpoints and their aspects and its
+  essential dignities with their tables and mutual reception, and
+  `sectReading`, new: a chart's sect under the convention a caller names,
+  `"altitude"` (the Sun's altitude, which the caller computes; day from 0 up)
+  or `"ecliptic"` (the root's `sectOf`), with the sect light, Mercury's side
+  of the Sun (`orientality`) and the planets in and out of sect
+  (`docs/lite.md`, `api/lite.api.md`). There is no default convention, and
+  `sectOf` does not change. Each function and table of the declination,
+  composite and dignity parts is a copy of the root's or the techniques
+  entry's, with the same results and not the same object; the declarations are
+  theirs. Each of the four parts is built into a file of its own that imports
+  nothing (`scripts/build-lite.mjs`, which `npm run build` runs after tsup),
+  and `npm run exports:smoke` checks that the entry holds only its pinned
+  modules and loads in a Node process that cannot load astronomy-engine
+  (`scripts/lite-entry.mjs`; the preregistered checks are in
+  `docs/evidence/1.1.0-rc.2-20261102/lite/`). The composite functions and the
+  techniques' name helpers move to modules of their own
+  (`src/techniques/composite.ts`, `src/techniques/names.ts`), with no public
+  change. esbuild 0.27.7, the version tsup runs, is now a direct dev
+  dependency.
+- **The birth-time sensitivity of the vargas** (zodiacs.org's unit
+  P2.B.vargas). `vargaSensitivity(natal, ayanamsa, options?)`, exported by
+  `@zodiacs/engine/vedic` with `VARGA_POINTS` and seven types, gives for each
+  point and varga the first millisecond after the birth at which the point's
+  varga sign changes and the last change before it, up to 2,880 minutes on
+  each side: the instant, its minutes from the birth, the boundary crossed and
+  the signs on either side (`docs/vedic.md`, *Birth-time sensitivity*). The
+  points are the Ascendant, the Sun to Pluto and the two mean nodes; the true
+  node is not offered. Each instant is exact in the engine's own arithmetic on
+  the chart's clock, as `siderealChart` and `chartPoints` compute the
+  positions, which is not a claim of accuracy. That none is missed rests on
+  derived rate bounds for the Ascendant and the mean nodes, and on bounds
+  scanned, not derived, for the bodies. A row the search cannot compute
+  carries a typed refusal:
+  `no-angles`, `polar` (more than 66° from the equator), `out-of-range`
+  (outside 1800 to 2200), `rate-bound` or `evaluation-budget` (2,000,000
+  evaluations a call). `vargaOf` places a longitude as before, through an
+  internal function that takes a whole tick, and the vargas' change
+  boundaries are held to an engine-free fixture,
+  `src/vedic/fixtures/varga-changes.json` (the preregistered checks are in
+  `docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/`).
+- **Sizes.** `./time`'s import graph is 42,306 bytes in 7 files and
+  `./lite`'s 28,930 in 5, under budgets of their own, 42,400 and 29,000
+  (94 and 70 bytes left). `./calc`'s is 151,426 bytes, 6,165 more than
+  1.1.0-rc.1's 145,261, for the corrections, the time bands and the chunks it
+  shares with `./time`: over its budget of 145,500, which this candidate
+  raises to 156,000. `./vedic`'s is 141,340, 13,589 more than 127,751, for
+  the varga sensitivity and the same chunks: over its budget of 128,000,
+  raised to 143,000. The graphs of the root, `./internal`, `./internal/math`,
+  `./receipt`, `./sky`, `./techniques`, `./timing` and `./window` grow by 49
+  to 405 bytes, the root's by 345 to 106,325, for the imports and exports
+  that join the chunks `./time` shares with them (and, in `./techniques`, the
+  two modules the composite functions and the name helpers moved to); none
+  of their budgets is raised, and `./window`'s leaves 443 bytes. The package
+  is 1,096,783 bytes unpacked in 90 files, 90,289 more than 1.1.0-rc.1's
+  1,006,494, over the cap of 1,020,000, which this candidate raises to
+  1,100,000 for the two entries, the bands, the varga sensitivity, the
+  corrections and their documentation, rather than move the CHANGELOG's 0.x
+  history out of the package: 50,692 bytes of JavaScript that only the
+  opt-in entry points load, 21,520 of declarations, 17,312 of README,
+  CHANGELOG, LICENSING.md and NOTICE, 420 of manifest and 345 of the root's
+  graph (`sizes.json`). The two new budgets, the two raised ones and the cap
+  are the ceilings approved under the owner's delegation of 2026-11-03 (OQ3
+  in `docs/evidence/1.1.0-rc.2-20261102/OWNER-ANSWERS.md`), not about 5 per
+  cent over a measured graph as before; `scripts/verify-package-contents.mjs`
+  gives each graph's headroom.
+
 ## 1.1.0-rc.1 — unreleased candidate
 
 The first candidate for 1.1.0, on 1.0.0 (main at `4771fa6`): natal receipts

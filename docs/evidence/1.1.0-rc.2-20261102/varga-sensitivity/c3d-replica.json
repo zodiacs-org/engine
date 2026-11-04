@@ -1,0 +1,167 @@
+{
+ "tool": "docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/c3d_replica.mjs",
+ "vedicJs": {
+  "sha256": "77c5b5279388e8f0af318279db7384355c029a5c4504d974c4972be44804b65e",
+  "coreBytes": 3692
+ },
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "corpora": {
+  "F3b": {
+   "file": "seams-f3b.json",
+   "sha256": "052c05131e33f63dd5b8693b08f4facd50421ce74583e62ad26cf1bea828469e"
+  },
+  "F3": {
+   "file": "seams.json",
+   "sha256": "956a3ad8a9e3d29249b16c55a3f25372e6e42850510e9d31555e86bccb648d70"
+  }
+ },
+ "cases": [
+  {
+   "corpus": "F3b",
+   "id": 0,
+   "clock": "utc",
+   "seamAtMs": 63072000000,
+   "stepMs": -45,
+   "expectedNextAtMs": 63071999977,
+   "boundaryTicks": 1243620,
+   "birthBeforeSeamMs": 59990,
+   "horizonMinutes": 1,
+   "rateDegreesPerMs": 0.0000036366126853305434,
+   "syntheticRecrossAfterSeamMs": 22,
+   "caseRecrossAfterSeamMs": 22,
+   "birthRun": [
+    1239840,
+    1243620
+   ],
+   "seamWalks": [
+    [
+     63071998955,
+     63072000010
+    ]
+   ],
+   "nextWithWalks": {
+    "at": "1971-12-31T23:59:59.977Z",
+    "atMs": 63071999977,
+    "afterSeamMs": -23,
+    "boundaryTicks": 1243620
+   },
+   "nextWithoutWalks": null,
+   "realBuildGivesExpected": true,
+   "seamBlindBuildFailsM6": true
+  },
+  {
+   "corpus": "F3b",
+   "id": 1,
+   "clock": "utc-pinned",
+   "seamAtMs": 63072000000,
+   "stepMs": -45,
+   "expectedNextAtMs": 63071999977,
+   "boundaryTicks": 1243620,
+   "birthBeforeSeamMs": 59990,
+   "horizonMinutes": 1,
+   "rateDegreesPerMs": 0.0000036366126840386475,
+   "syntheticRecrossAfterSeamMs": 22,
+   "caseRecrossAfterSeamMs": 22,
+   "birthRun": [
+    1239840,
+    1243620
+   ],
+   "seamWalks": [
+    [
+     63071998955,
+     63072000010
+    ]
+   ],
+   "nextWithWalks": {
+    "at": "1971-12-31T23:59:59.977Z",
+    "atMs": 63071999977,
+    "afterSeamMs": -23,
+    "boundaryTicks": 1243620
+   },
+   "nextWithoutWalks": null,
+   "realBuildGivesExpected": true,
+   "seamBlindBuildFailsM6": true
+  },
+  {
+   "corpus": "F3",
+   "id": 2,
+   "clock": "utc",
+   "seamAtMs": 63072000000,
+   "stepMs": -45,
+   "expectedNextAtMs": 63071999977,
+   "boundaryTicks": 1243620,
+   "birthBeforeSeamMs": 30023,
+   "horizonMinutes": 1440,
+   "rateDegreesPerMs": 0.0000036366126853305434,
+   "syntheticRecrossAfterSeamMs": 22,
+   "caseRecrossAfterSeamMs": null,
+   "birthRun": [
+    1239840,
+    1243620
+   ],
+   "seamWalks": [
+    [
+     63071998955,
+     63072001045
+    ]
+   ],
+   "nextWithWalks": {
+    "at": "1971-12-31T23:59:59.977Z",
+    "atMs": 63071999977,
+    "afterSeamMs": -23,
+    "boundaryTicks": 1243620
+   },
+   "nextWithoutWalks": {
+    "at": "1971-12-31T23:59:59.977Z",
+    "atMs": 63071999977,
+    "afterSeamMs": -23,
+    "boundaryTicks": 1243620
+   },
+   "realBuildGivesExpected": true,
+   "seamBlindBuildFailsM6": false
+  },
+  {
+   "corpus": "F3",
+   "id": 3,
+   "clock": "utc-pinned",
+   "seamAtMs": 63072000000,
+   "stepMs": -45,
+   "expectedNextAtMs": 63071999977,
+   "boundaryTicks": 1243620,
+   "birthBeforeSeamMs": 30023,
+   "horizonMinutes": 1440,
+   "rateDegreesPerMs": 0.0000036366126840386475,
+   "syntheticRecrossAfterSeamMs": 22,
+   "caseRecrossAfterSeamMs": null,
+   "birthRun": [
+    1239840,
+    1243620
+   ],
+   "seamWalks": [
+    [
+     63071998955,
+     63072001045
+    ]
+   ],
+   "nextWithWalks": {
+    "at": "1971-12-31T23:59:59.977Z",
+    "atMs": 63071999977,
+    "afterSeamMs": -23,
+    "boundaryTicks": 1243620
+   },
+   "nextWithoutWalks": {
+    "at": "1971-12-31T23:59:59.977Z",
+    "atMs": 63071999977,
+    "afterSeamMs": -23,
+    "boundaryTicks": 1243620
+   },
+   "realBuildGivesExpected": true,
+   "seamBlindBuildFailsM6": false
+  }
+ ],
+ "f3bEveryCase": {
+  "realBuildGivesExpected": true,
+  "seamBlindBuildFailsM6": true
+ }
+}

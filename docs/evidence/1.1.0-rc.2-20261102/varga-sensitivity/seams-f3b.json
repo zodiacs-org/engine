@@ -1,0 +1,229 @@
+{
+ "generator": "docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/seams_f3b.mjs",
+ "corpus": "F3b, the planted seam cases for C3d (PREREGISTRATION.md, section 13, 2026-11-03)",
+ "engine": {
+  "version": "1.1.0-rc.2",
+  "distJsFiles": 57,
+  "distJsDigest": "c04ed8a5f28266a5f30145b84ea838675ce497fb58e39abc6c028b70363599ca"
+ },
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "latitude": 30,
+ "pinnedDeltaT": 60,
+ "key": "D60",
+ "horizonMinutes": 1,
+ "stepThresholdMs": 0.01,
+ "windowMs": 3000,
+ "cases": [
+  {
+   "id": 0,
+   "seam": "utc-1972",
+   "label": "1972-01-01T00:00:00Z",
+   "clock": "utc",
+   "timeScale": "utc",
+   "point": "Ascendant",
+   "key": "D60",
+   "events": [
+    {
+     "ms": 63072000000,
+     "at": "1972-01-01T00:00:00.000Z",
+     "ut1StepMs": -45,
+     "ttStepMs": -44.549,
+     "stepped": true,
+     "provenanceBefore": "delta-t zodiacs-deltat/1 observed none none",
+     "provenanceAt": "iers iers-utc/1 observed observed 10"
+    }
+   ],
+   "seamAt": "1972-01-01T00:00:00.000Z",
+   "seamAtMs": 63072000000,
+   "steps": {
+    "ut1Ms": -45,
+    "ttMs": -44.549
+   },
+   "plantedOn": "UT1",
+   "adjusted": "the place's longitude",
+   "status": "planted",
+   "rule": "half-step-before-backward-step, the span searched ending inside the undone window",
+   "plantedBeforeSeamMs": 23,
+   "undoneWindow": {
+    "from": "1972-01-01T00:00:00.000Z",
+    "fromMs": 63072000000,
+    "to": "1972-01-01T00:00:00.021Z",
+    "toMs": 63072000021,
+    "recrossAt": "1972-01-01T00:00:00.022Z",
+    "recrossAtMs": 63072000022
+   },
+   "spanEnd": {
+    "at": "1972-01-01T00:00:00.010Z",
+    "atMs": 63072000010,
+    "afterSeamMs": 10
+   },
+   "input": {
+    "utc": "1971-12-31T23:59:00.010Z",
+    "timeScale": "utc",
+    "latitude": 30,
+    "longitude": -0.608420794,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": "lahiri",
+   "options": {
+    "points": [
+     "Ascendant"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "next",
+    "at": "1971-12-31T23:59:59.977Z",
+    "atMs": 63071999977,
+    "minutes": 0.99945,
+    "boundaryTicks": 1243620,
+    "boundary": 164.5,
+    "from": "capricorn",
+    "to": "aquarius"
+   },
+   "seamBlind": "a build whose seam finder returns none brackets from the birth to the span's end, inside the undone window, where the Ascendant is back in its birth run: it reports no next, and M6 fails",
+   "checks": {
+    "lonAtMinus1": 164.49999818190753,
+    "lonAt": 164.50000181857288,
+    "lonSeamMinus1": 164.50008182405196,
+    "lonSeam": 164.4999218130913,
+    "lonRecross": 164.5000018185728,
+    "lonSpanEnd": 164.49995817916692,
+    "lonBirth": 164.28191601759372,
+    "marginBelowDegrees": 0.000001818092414396233,
+    "marginAboveDegrees": 0.0000018185728549724445,
+    "undoneWindowMs": 22,
+    "birthSignSamples": 61
+   }
+  },
+  {
+   "id": 1,
+   "seam": "utc-1972",
+   "label": "1972-01-01T00:00:00Z",
+   "clock": "utc-pinned",
+   "timeScale": "utc",
+   "deltaT": 60,
+   "point": "Ascendant",
+   "key": "D60",
+   "events": [
+    {
+     "ms": 63072000000,
+     "at": "1972-01-01T00:00:00.000Z",
+     "ut1StepMs": -45,
+     "ttStepMs": -45,
+     "stepped": true,
+     "provenanceBefore": "pinned pinned pinned none none",
+     "provenanceAt": "pinned pinned pinned observed none"
+    }
+   ],
+   "seamAt": "1972-01-01T00:00:00.000Z",
+   "seamAtMs": 63072000000,
+   "steps": {
+    "ut1Ms": -45,
+    "ttMs": -45
+   },
+   "plantedOn": "UT1",
+   "adjusted": "the place's longitude",
+   "status": "planted",
+   "rule": "half-step-before-backward-step, the span searched ending inside the undone window",
+   "plantedBeforeSeamMs": 23,
+   "undoneWindow": {
+    "from": "1972-01-01T00:00:00.000Z",
+    "fromMs": 63072000000,
+    "to": "1972-01-01T00:00:00.021Z",
+    "toMs": 63072000021,
+    "recrossAt": "1972-01-01T00:00:00.022Z",
+    "recrossAtMs": 63072000022
+   },
+   "spanEnd": {
+    "at": "1972-01-01T00:00:00.010Z",
+    "atMs": 63072000010,
+    "afterSeamMs": 10
+   },
+   "input": {
+    "utc": "1971-12-31T23:59:00.010Z",
+    "timeScale": "utc",
+    "deltaT": 60,
+    "latitude": 30,
+    "longitude": -0.60842079,
+    "houseSystem": "whole"
+   },
+   "ayanamsa": "lahiri",
+   "options": {
+    "points": [
+     "Ascendant"
+    ],
+    "vargas": [
+     "D1",
+     "D2",
+     "D3",
+     "D4",
+     "D7",
+     "D9",
+     "D10",
+     "D12",
+     "D16",
+     "D20",
+     "D24",
+     "D27",
+     "D30",
+     "D40",
+     "D45",
+     "D60"
+    ],
+    "cyclic": true,
+    "horizonMinutes": 1
+   },
+   "expected": {
+    "key": "D60",
+    "varga": "D60",
+    "scheme": "parashari",
+    "side": "next",
+    "at": "1971-12-31T23:59:59.977Z",
+    "atMs": 63071999977,
+    "minutes": 0.99945,
+    "boundaryTicks": 1243620,
+    "boundary": 164.5,
+    "from": "capricorn",
+    "to": "aquarius"
+   },
+   "seamBlind": "a build whose seam finder returns none brackets from the birth to the span's end, inside the undone window, where the Ascendant is back in its birth run: it reports no next, and M6 fails",
+   "checks": {
+    "lonAtMinus1": 164.49999818176173,
+    "lonAt": 164.50000181842708,
+    "lonSeamMinus1": 164.50008182390613,
+    "lonSeam": 164.49992181294562,
+    "lonRecross": 164.50000181842708,
+    "lonSpanEnd": 164.4999581790212,
+    "lonBirth": 164.28191601744982,
+    "marginBelowDegrees": 0.0000018182382746090298,
+    "marginAboveDegrees": 0.0000018184271084464854,
+    "undoneWindowMs": 22,
+    "birthSignSamples": 61
+   }
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "check": "T10",
+ "tool": "behaviour.mjs",
+ "subject": "@zodiacs/engine@1.1.0-rc.2/time",
+ "controlBehaved": null,
+ "refusals": {
+  "timeBasis(NaN)": "RangeError",
+  "timeBasis(Infinity)": "RangeError",
+  "timeBasis(8.64e15 + 1)": "RangeError",
+  "timeBasis(0, \"UTC\")": "RangeError",
+  "timeBasis(0, \"utc\", NaN)": "RangeError",
+  "timeBasis(0, \"utc\", 1e10 + 1)": "RangeError",
+  "elapsedDays(b, b, NaN)": "RangeError",
+  "tilt(NaN)": "RangeError",
+  "eclipticFrame(Infinity)": "RangeError",
+  "meanEcliptic(eclipticFrame(0), NaN, 0, 0)": "RangeError",
+  "eclipticOfDate(0, 0, 0, 0)": "RangeError",
+  "eclipticOfDate(1, 0, 0, NaN)": "RangeError"
+ },
+ "acceptances": {
+  "timeBasis(8.64e15)": "returned",
+  "timeBasis(-8.64e15, \"tt\")": "returned",
+  "timeBasis(0, \"tt\", -1e10)": "returned",
+  "timeBasis(0, undefined)": "returned"
+ },
+ "frozen": {
+  "frame": true,
+  "rows": true,
+  "tilt": true,
+  "tiltResult": true
+ },
+ "writes": {
+  "strict": "TypeError",
+  "sloppyIgnored": true,
+  "sameAfter": true
+ },
+ "node": "v22.22.2",
+ "pass": true
+}

@@ -1,0 +1,34 @@
+# F-89 formal run of @zodiacs/engine 1.1.0-rc.2: the control of E1 and E2: the same scan on the carried 1.1.0-rc.1 archive (artifacts/zodiacs-engine-1.1.0-rc.1.tgz, SHA-256 52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6 as its receipt and archives.json give it), unpacked in scratch, --expect new; it must fail
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# cwd <checkout>
+# command: python3 -I docs/evidence/1.1.0-rc.2-20261102/f89/tools/f89_edits.py package <scratch>/rc1/package --expect new
+# started 2026-11-04 11:57:16 +0700
+FAIL old  1 eng.points-vertex-given: README.md
+FAIL old  2 eng.crossings-blind-band: README.md, dist/crossings.d.ts
+FAIL old  3 eng.geo-resolution-names: README.md
+FAIL old  4 eng.gregorian-table-location: NOTICE
+FAIL old  4 eng.gregorian-table-location: LICENSING.md
+FAIL old  5 eng.calc-bounds-basis: LICENSING.md
+FAIL old  5 eng.calc-bounds (companion): README.md
+FAIL old  5 eng.calc-bounds-measured (companion): NOTICE
+FAIL old  6 eng.api-placidus-steps: dist/houses-CFERsAlK.d.ts
+FAIL old  7 eng.api-coascendant-west: dist/houses-extra.d.ts
+FAIL old  8 eng.api-deltat-absent: dist/types-B-yb_tGL.d.ts
+FAIL old  9 eng.receipt-ephemeris-from: dist/zone-history-Ce7i6Y1N.d.ts
+FAIL new  1 eng.points-vertex-given (OQ9 c): absent
+FAIL new  2 eng.crossings-blind-band (README): absent
+FAIL new  2 eng.crossings-blind-band (doc comment): absent
+FAIL new  3 eng.geo-resolution-names: absent
+FAIL new  4 eng.gregorian-table-location (NOTICE): absent
+FAIL new  4 eng.gregorian-table-location (LICENSING): absent
+FAIL new  5 eng.calc-bounds-basis (LICENSING): absent
+FAIL new  5 eng.calc-bounds (companion): absent
+FAIL new  5 eng.calc-bounds-measured (companion): absent
+FAIL new  6 eng.api-placidus-steps: absent
+FAIL new  7 eng.api-coascendant-west: absent
+FAIL new  8 eng.api-deltat-absent: absent
+FAIL new  9 eng.receipt-ephemeris-from: absent
+FAIL new  5 eng.calc-bounds-basis (dist/calc.js): absent
+26 failure(s) against --expect new
+# exit code 1; finished 2026-11-04 11:57:16 +0700

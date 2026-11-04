@@ -1,0 +1,173 @@
+{
+ "check": "C4",
+ "pass": true,
+ "records": 16768,
+ "corpus": "T2",
+ "engine": {
+  "name": "@zodiacs/engine",
+  "version": "1.1.0-rc.2"
+ },
+ "node": "v22.22.2",
+ "failures": {
+  "C4a": 0,
+  "C4b": 0,
+  "C4c": 0,
+  "C4d": 0
+ },
+ "firstFailures": {
+  "C4a": [],
+  "C4b": [],
+  "C4c": [],
+  "C4d": []
+ },
+ "reportedNotJudged": {
+  "trueNodes": {
+   "outside": 372,
+   "first": [
+    {
+     "entry": "T2-0",
+     "request": {
+      "body": "North Node",
+      "frame": "ecliptic-true-of-date"
+     },
+     "what": "lon",
+     "band": 0.00014306140341342183,
+     "half": 0.0047414346624918835
+    },
+    {
+     "entry": "T2-0",
+     "request": {
+      "body": "North Node",
+      "frame": "equatorial-icrs"
+     },
+     "what": "lon",
+     "band": 0.0001456284339611121,
+     "half": 0.004866132201186701
+    },
+    {
+     "entry": "T2-0",
+     "request": {
+      "body": "North Node",
+      "frame": "equatorial-icrs"
+     },
+     "what": "lat",
+     "band": 0.00003422505267989114,
+     "half": 0.0011437976709771647
+    },
+    {
+     "entry": "T2-0",
+     "request": {
+      "body": "South Node",
+      "frame": "ecliptic-true-of-date"
+     },
+     "what": "lon",
+     "band": 0.00014306140341342183,
+     "half": 0.0047414347136509605
+    },
+    {
+     "entry": "T2-0",
+     "request": {
+      "body": "South Node",
+      "frame": "equatorial-icrs"
+     },
+     "what": "lon",
+     "band": 0.0001456284339622016,
+     "half": 0.004866132303504855
+    }
+   ]
+  },
+  "angleFirstOrderAtS5AndS7": {
+   "outside": 108,
+   "first": [
+    {
+     "entry": "T2-6",
+     "site": "S7",
+     "houseSystem": "whole",
+     "what": "asc",
+     "band": 15.021604169547931,
+     "sigmaUt1": 61.72725845108859,
+     "rate": 0.24335452513923883,
+     "half": 15.001304451675423,
+     "part": "ii"
+    },
+    {
+     "entry": "T2-6",
+     "site": "S7",
+     "houseSystem": "placidus",
+     "what": "asc",
+     "band": 15.021604169547931,
+     "sigmaUt1": 61.72725845108859,
+     "rate": 0.24335452513923883,
+     "half": 15.001304451675423,
+     "part": "ii"
+    },
+    {
+     "entry": "T2-6",
+     "site": "S7",
+     "houseSystem": "porphyry",
+     "what": "asc",
+     "band": 15.021604169547931,
+     "sigmaUt1": 61.72725845108859,
+     "rate": 0.24335452513923883,
+     "half": 15.001304451675423,
+     "part": "ii"
+    },
+    {
+     "entry": "T2-6",
+     "site": "S7",
+     "houseSystem": "porphyry",
+     "what": "cusps.0",
+     "band": 15.021604169547931,
+     "sigmaUt1": 61.72725845108859,
+     "rate": 0.24335452513923883,
+     "half": 15.001304451675423,
+     "part": "ii"
+    },
+    {
+     "entry": "T2-6",
+     "site": "S7",
+     "houseSystem": "porphyry",
+     "what": "cusps.6",
+     "band": 15.02160417586375,
+     "sigmaUt1": 61.72725845108859,
+     "rate": 0.24335452503692068,
+     "half": 15.001304451470787,
+     "part": "ii"
+    }
+   ]
+  },
+  "c4cLargestRelativeDifference": 612.2006775867486,
+  "c4dBandOverPartials": {
+   "cases": 10215,
+   "smallest": 1.000285837230734,
+   "median": 1.681658303343823,
+   "largest": 24281796.758687064
+  }
+ },
+ "controls": {
+  "C4a: bands × 1.001": {
+   "failed": true,
+   "problems": 2988
+  },
+  "C4b: the solar-time rate, (i)": {
+   "failed": true,
+   "problems": 73728
+  },
+  "C4b: the solar-time rate, (ii)": {
+   "failed": true,
+   "problems": 50085
+  },
+  "C4c: b11c5e8's bands, without the TT term": {
+   "failed": true,
+   "problems": 64124
+  },
+  "C4c: bands × 1.1": {
+   "failed": true,
+   "problems": 38855
+  },
+  "C4d: the bands without w": {
+   "failed": true,
+   "problems": 1912
+  }
+ }
+}

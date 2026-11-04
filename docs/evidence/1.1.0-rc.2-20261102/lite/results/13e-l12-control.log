@@ -1,0 +1,53 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: L12's control, run once: the packed consumer whose installed package.json exports lack ./lite (tools/consumer-control.py, system Python 3.9.6 with -I), on Node 22.22.2 with the pack; it must exit non-zero naming @zodiacs/engine/lite
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>
+# command: sh <scratch>/bin/l12-control.sh
+# started 2026-11-04 12:19:06 +0700
+## /usr/bin/python3 -I <checkout>/docs/evidence/1.1.0-rc.2-20261102/lite/tools/consumer-control.py <checkout> <scratch>/l12-control/verify-packed-consumer-without-lite.mjs
+wrote <scratch>/l12-control/verify-packed-consumer-without-lite.mjs
+## diff scripts/verify-packed-consumer.mjs <the copy>
+20c20
+< const manifest = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+---
+> const manifest = JSON.parse(readFileSync("<checkout>/package.json", "utf8"));
+49a50,57
+> // The control: the installed package's "exports" without ./lite.
+> {
+>   const path = join(directory, "node_modules/@zodiacs/engine/package.json");
+>   const installedManifest = JSON.parse(readFileSync(path, "utf8"));
+>   if (!installedManifest.exports["./lite"]) throw new Error("the archive exports no ./lite to remove");
+>   delete installedManifest.exports["./lite"];
+>   writeFileSync(path, JSON.stringify(installedManifest, null, 2));
+> }
+## node <the copy> <the pack> (Node v22.22.2)
+node:internal/errors:983
+  const err = new Error(message);
+              ^
+
+Error: Command failed: <programme>/toolchain/node-v22.22.2-darwin-arm64/bin/node <scratch>/tmp/zodiacs-engine-consumer-1BQn1S/node_modules/typescript/bin/tsc -p tsconfig.json
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:916:11)
+    at execFileSync (node:child_process:952:15)
+    at run (file://<scratch>/l12-control/verify-packed-consumer-without-lite.mjs:33:3)
+    at file://<scratch>/l12-control/verify-packed-consumer-without-lite.mjs:241:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  status: 2,
+  signal: null,
+  output: [
+    null,
+    "consumer.ts(128,563): error TS2307: Cannot find module '@zodiacs/engine/lite' or its corresponding type declarations.\n",
+    ''
+  ],
+  pid: 99242,
+  stdout: "consumer.ts(128,563): error TS2307: Cannot find module '@zodiacs/engine/lite' or its corresponding type declarations.\n",
+  stderr: ''
+}
+
+Node.js v22.22.2
+## the copy exited 1
+# exit 1, finished 2026-11-04 12:19:08 +0700

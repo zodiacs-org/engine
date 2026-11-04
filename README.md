@@ -4,31 +4,38 @@ Pure TypeScript astrology calculations for browsers and Node.js. The package
 computes tropical planetary positions, natal charts, transit snapshots,
 synastry, secondary progressions, Moon phase, and Saturn-return seasons, and,
 in separate entries, one calculation API over frames, centers and
-corrections with bounds and receipts, birth-time windows, house positions and
-cusp speeds, rise, set and transit times and planetary hours, returns and
-relationship charts, Hellenistic timing techniques, and sidereal positions
-and Jyotish techniques. Its calculations are synchronous; only loading a zone's
-history before 1970 (`prepareLocalTime`) and the GeoNames client, both in
-`@zodiacs/engine/geo`, are asynchronous. It is ESM-only, has no import-time
-side effects, and performs no network request from its core entry point. Its
-one runtime side effect is the ΔT it installs in astronomy-engine (see Time
-below).
+corrections with bounds, time bands and receipts, birth-time windows, house
+positions and cusp speeds, rise, set and transit times and planetary hours,
+returns and relationship charts, Hellenistic timing techniques, sidereal
+positions and Jyotish techniques, the time basis and the frame of date
+without the ephemeris, and declination parallels, sect, composite midpoints
+and dignities without it. Its calculations are synchronous; only loading a
+zone's history before 1970 (`prepareLocalTime`) and the GeoNames client,
+both in `@zodiacs/engine/geo`, are asynchronous. It is ESM-only, has no
+import-time side effects, and performs no network request from its core
+entry point. Its one runtime side effect is the ΔT it installs in
+astronomy-engine (see Time below).
 
-**1.1.0-rc.1**, a candidate for 1.1.0, not published: natal receipts name
-their conventions as ids of the Zodiacs conventions registry, which a new
-entry, `@zodiacs/engine/conventions`, gives (see *Draft natal receipts*;
-CHANGELOG.md). The package follows Semantic Versioning:
+**1.1.0-rc.2**, the second candidate for 1.1.0, not published. Over 1.0.0,
+natal receipts name their conventions as ids of the Zodiacs conventions
+registry, which a new entry, `@zodiacs/engine/conventions`, gives (from
+1.1.0-rc.1; see *Draft natal receipts*). This candidate adds two entries
+that load no ephemeris, `@zodiacs/engine/time` and `@zodiacs/engine/lite`,
+for fifteen public entry points in all; time bands in
+`@zodiacs/engine/calc`; how far the birth time can move before each varga
+sign changes; and corrections of statements that said more than their
+evidence (CHANGELOG.md). The package follows Semantic Versioning:
 [docs/versioning.md](docs/versioning.md) says what is public, how a number
 may change, which records stay readable and how something public is
 deprecated, and `api/` holds each public entry point's declarations. npm
 carries 1.0.0, the first stable release, under `latest`: `npm install
-@zodiacs/engine` installs it, without `./conventions` and writing no ids.
-This candidate is not published there. Install the exact candidate tarball,
-`artifacts/zodiacs-engine-1.1.0-rc.1.tgz` in the repository, retaining its
-SHA-256 receipt:
+@zodiacs/engine` installs it, without `./conventions`, `./time` or `./lite`,
+and writing no ids. This candidate is not published there. Install the exact
+candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.2.tgz` in the
+repository, retaining its SHA-256 receipt:
 
 ```sh
-npm install ./zodiacs-engine-1.1.0-rc.1.tgz
+npm install ./zodiacs-engine-1.1.0-rc.2.tgz
 ```
 
 The Release workflow publishes the archive carried in `artifacts/` as it is,
@@ -52,7 +59,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.1.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.2.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -112,8 +119,9 @@ to 2027-10-02 as UTC, with TT from the leap seconds and UT1 from IERS
 UT1 − UTC, and otherwise as UT1 with the ΔT model, or on UT1 or TT when
 `timeScale` says so (see Time). The ephemeris is still astronomy-engine
 2.1.19. See CHANGELOG.md for the release history and
-`docs/evidence/1.1.0-rc.1-20261026/` for this candidate's checks (1.0.0's are
-in `docs/evidence/1.0.0-20261011/`, 1.0.0-rc.2's in
+`docs/evidence/1.1.0-rc.2-20261102/` for this candidate's checks
+(1.1.0-rc.1's are in `docs/evidence/1.1.0-rc.1-20261026/`, 1.0.0's in
+`docs/evidence/1.0.0-20261011/`, 1.0.0-rc.2's in
 `docs/evidence/1.0.0-rc.2-20261006/`, 1.0.0-rc.1's in
 `docs/evidence/1.0.0-rc.1-20261006/`, rc.17's in
 `docs/evidence/rc17-20261005/`). Site adoption is reviewed separately.
@@ -219,7 +227,9 @@ for (const aspect of today.aspects) {
   and the speeds of the cusps and the angles (see `docs/houses.md`). It
   imports no ephemeris and no module of the root entry.
 - `@zodiacs/engine/vedic` provides the sidereal zodiac: ayanamsas, sidereal
-  charts, nakshatras, vargas, KP sub-lords and dashas (see `docs/vedic.md`).
+  charts, nakshatras, vargas, KP sub-lords and dashas, and, new in
+  1.1.0-rc.2, how far the birth time can move before each varga sign changes
+  (`vargaSensitivity`; see `docs/vedic.md`).
 - `@zodiacs/engine/sky` provides rise, set and transit times for an observer
   and planetary hours (see `docs/sky.md`).
 - `@zodiacs/engine/window` partitions a birth-time window into cells within
@@ -228,6 +238,21 @@ for (const aspect of today.aspects) {
 - `@zodiacs/engine/conventions`, new in 1.1.0-rc.1, gives the ids of the
   conventions registry a natal receipt names, and each id's address (see
   *Draft natal receipts*). It imports no module of another entry point.
+- `@zodiacs/engine/time`, new in 1.1.0-rc.2, gives the clock and the frame of
+  date a chart is computed on, and loads no ephemeris: `timeBasis`, an
+  instant's UT1 and TT with the `deltaT` and `timeScale` records a chart
+  reports; `elapsedDays`; `EPHEMERIS_SPAN`; the frame that turns
+  astronomy-engine's vectors to the ecliptic of date: `tilt`,
+  `eclipticFrame`, `meanEcliptic` and `eclipticOfDate`; and `timeBands`, the
+  1-σ bands of a recorded instant's TT and UT1 (see *Time*).
+- `@zodiacs/engine/lite`, new in 1.1.0-rc.2, gives declination parallels and
+  out-of-bounds flags, a chart's sect under a named convention
+  (`sectReading`), composite midpoints and their aspects, and the essential
+  dignities, and loads no ephemeris. The functions and tables of its
+  declination, composite and dignity parts are copies of the root's and
+  `@zodiacs/engine/techniques`', with the same results; its sect part
+  (`sectReading`, `orientality` and their constants) is new (see
+  [docs/lite.md](docs/lite.md)).
 
 ### Uniform calculation API
 
@@ -240,11 +265,27 @@ apparent, astrometric or geometric positions with distances and speeds; and
 the tropical or the sidereal zodiac, with any ayanamsa of
 `@zodiacs/engine/vedic` or a caller's own (Swiss Ephemeris's `SE_SIDM_USER`).
 Results carry bounds and a receipt of convention ids. A measured bound is the
-largest difference from JPL Horizons on 32 instants from 1802 to 2188: a
-sample maximum, not a limit. In the sidereal zodiac a bound adds the
+largest difference from JPL Horizons on 32 instants from 1802 to 2188 (for
+the mean nodes and Black Moon Lilith, from their definitions evaluated with
+ERFA on the same instants): a sample maximum, not a limit. In the sidereal
+zodiac a bound adds the
 ayanamsa's: the largest difference of its mean, and of its rate, from ERFA's
 construction of the same definition, over every year from 1800 to 2199. An
-estimated bound names what it rests on. What this version does not compute
+estimated bound names what it rests on. Results also carry `band`, which is
+not a bound on the error: to first order, how far a position, an angle, a
+cusp or an event's clock label moves when the instant's TT and UT1 move by
+the 1-σ bands its time basis records. An angle's or a cusp's band is its rate
+on UT1 times the UT1 band plus its rate on TT (the frame's precession and
+nutation, the obliquity and a sidereal zodiac's ayanamsa) times the TT band;
+the true nodes' is their speed over ±0.25 day times the TT band, which
+smooths their short-period motion; and a topocentric position's is an upper
+bound on its first-order movement, not that movement. On UTC input from
+1972-01-01 to 2027-10-02 without a pinned ΔT, TT comes from the leap seconds
+(exactly to 2027-06-28, when the shipped list expires; after it the list's
+last value is carried), so every geocentric, heliocentric and barycentric
+position's band is 0 there, and the band falls on the angles and cusps,
+topocentric positions and each event's UT1 (docs/calc.md, *Bands*).
+Root charts and natal envelopes carry none. What this version does not compute
 comes back as a typed refusal, such as gravitational deflection, or an
 instant whose UT1 or TT is outside 1800 to 2200: there calc has no
 comparison to take a bound from, while the root entry's functions
@@ -485,6 +526,8 @@ short way round between the two supplied longitudes, reduced exactly modulo
 (1 + 2⁻⁵⁰ apart), and 1.1 and 0.1 (1 + 3·2⁻⁵⁵), do not. Body labels follow
 the configured-aspect rule. `eclipticToEquatorial` and `declinationsForBodies`
 expose the same geometry with an explicitly supplied obliquity.
+`@zodiacs/engine/lite` carries copies of these, and of `findDeclinationAspects`,
+that load no ephemeris ([docs/lite.md](docs/lite.md)).
 
 These are derived coordinates of the existing ephemeris, with its existing
 corrections and limits. They do not establish the programme's 0.01″ physical
@@ -562,10 +605,15 @@ Every chart gets those three. The Vertex, the East Point, the sect and the
 lots need a birth time and place.
 
 - The Vertex and the East Point come from the instant and the place, not from a
-  supplied chart's angles. Given Swiss's sidereal time, latitude and obliquity,
-  they agree with its `swe_houses_armc` to within 0.00001″.
+  supplied chart's angles. On the conformance suite's ten L2 vectors for them,
+  from 1833 to 2182 at latitudes from 60° S to 60° N, whose arbiter is ERFA's
+  sidereal time and obliquity with each point's published definition, they are
+  within 0.014″ and 0.007″ (`conformance/RESULTS.md`, which rounds to the
+  nearest 0.001″, and `conformance/results/summary.json`).
 - The sect is day when the Sun is between the descendant and the ascendant
-  through the midheaven.
+  through the midheaven. `sectReading`, in `@zodiacs/engine/lite`, reads the
+  sect under the convention a caller names: this one, or the Sun's altitude
+  ([docs/lite.md](docs/lite.md)).
 - The lots use the chart's own ascendant and bodies. Each is the ascendant plus
   the arc between two points, taken as Paulus gives it by day and reversed by
   night. Ptolemy's Fortune, which does not reverse, is `asc + moon − sun`.
@@ -670,9 +718,13 @@ before it; a sampled plateau on the target is returned where it begins.
 Offsets of 90° or more on either side of a step are the far side of the circle,
 not a crossing.
 
-A fixed step alone loses both crossings when a station falls between two
-samples just past the target: at 5 days, a Saturn station within 0.0103° of
-it, or a Jupiter station within 0.0205°. Wherever the sampled motion turns
+A fixed step alone can lose both crossings when a station takes the body
+less than |f″|h²/8 past the target, f″ being the second derivative of its
+longitude at the station and h the step, since both crossings can then fall
+between two samples: at 5 days, up to 0.0056° for Saturn and 0.011° for
+Jupiter at their stations from 2019 to 2024
+(`docs/evidence/1.1.0-rc.2-20261102/f89/blind-band.json`).
+Wherever the sampled motion turns
 without the offset changing sign, and the turning sample is within reach of the
 local curvature, the solver finds the extremum by golden-section search. It
 bisects both crossings when the extremum passes the target, and returns one,
@@ -886,7 +938,17 @@ planets on Terrestrial Time (TT). `utc` is on UTC unless `timeScale` says
 ut1MinusUtc, leapSeconds }`). `@zodiacs/engine/deltat` exports the model with
 no dependencies. astronomy-engine keeps one ΔT for its whole module; every
 engine call leaves the model installed, and code that calls astronomy-engine
-directly should install it too: `SetDeltaTFunction(deltaT)`.
+directly should install it too: `SetDeltaTFunction(deltaT)`. Such code can
+take the engine's clock and frame of date from `@zodiacs/engine/time`, which
+loads no ephemeris ([docs/time.md](docs/time.md), *Without the ephemeris*).
+Its `timeBands` turns a record's two bands, `deltaT.sigma` and
+`timeScale.ut1MinusUtc.sigma`, into the 1-σ bands of the TT and the UT1 the
+engine used: on UTC input from 1972-01-01 to 2027-10-02 without a pinned ΔT,
+TT comes from the leap seconds (exactly to 2027-06-28, when the shipped list
+expires; after it the list's last value is carried, with no band for a leap
+second not yet announced), so its band is 0, and UT1 carries the band of
+UT1 − UTC; with a pin, TT is UT1 plus the pin and takes UT1's band
+([docs/time.md](docs/time.md), *The time bands*).
 
 `@zodiacs/engine/geo` reads wall times before 1970 on the tzdb 2025c history
 with backzone, shipped as 16 lazily imported chunks: `prepareLocalTime(date,
@@ -894,8 +956,12 @@ timeZone)` loads the one a zone needs, and a wall time before 1970 throws until
 it has. From 1970 the host's Intl answers. A `longitude` reads a time in a
 zone's local mean time era on the birthplace's own mean time; `calendar:
 "julian"` takes an Old Style date, and `country` adds a note from the country's
-Gregorian adoption. Each resolution names the tzdb version, the transition
-behind the offset and its cause (`dst`, `legal-change` or `date-line`).
+Gregorian adoption. Each resolution names the tzdb version (the host's where
+its Intl answered, null when the runtime does not report one) and, where
+there is one, the transition behind the offset with its cause (`dst`,
+`legal-change` or `date-line`): the jump's in a gap or fold, or, where the
+shipped history answered, the last change it records before the time. From
+1970, outside a gap or fold, the transition is null.
 [docs/time.md](docs/time.md) describes every field.
 
 ## Nutation
@@ -950,7 +1016,7 @@ package implementation while keeping its scanner-oriented functions and lazy
 bundle boundary intact. They are not covered by semantic-versioning guarantees;
 third-party code must use the documented entry points: the root, `/calc`,
 `/geo`, `/houses`, `/sky`, `/techniques`, `/timing`, `/vedic`, `/window`,
-`/receipt`, `/conventions`, `/crossings` and `/deltat`.
+`/receipt`, `/conventions`, `/crossings`, `/deltat`, `/time` and `/lite`.
 
 ## GeoNames request recovery
 

@@ -1,0 +1,104 @@
+# varga-sensitivity formal run of @zodiacs/engine 1.1.0-rc.2: the state at the start
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3, with -I) where a tool says so; for G-V4's arbiter only, Python 3.11.16 with pyerfa 2.0.1.5 and numpy 2.4.6 (<programme>/toolchain/py311-oq6/venv/bin/python, the OQ6 environment, with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 7736732 KiB, 7.4 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/start.sh
+# started 2026-11-04 13:15:16 +0700
+## git rev-parse HEAD
+237b2265fcc53ae51abcb4f8e895e64c66321f5e
+## git branch --show-current
+rc2/main-first
+## git status --porcelain -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+ M docs/evidence/1.1.0-rc.2-20261102/carrier/carrier-gates.sh
+?? docs/evidence/1.1.0-rc.2-20261102/f89/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/
+?? docs/evidence/1.1.0-rc.2-20261102/lite/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/
+(end of status)
+## git status --porcelain --untracked-files=all -- docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity docs/vedic.md src ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+(end of status)
+## git sparse-checkout list
+/*
+!/docs/evidence/calc-sidereal-2026-10-05/
+## test -e docs/evidence/calc-sidereal-2026-10-05 (the path only)
+absent
+## df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   228Gi   192Gi   7.4Gi    97%    5.5M   77M    7%   /System/Volumes/Data
+## the machine: CPUs (all, performance, efficiency), memory, Node's availableParallelism() (the most worker threads checker.mjs takes), swap, load
+hw.ncpu 10, hw.perflevel0.physicalcpu 4, hw.perflevel1.physicalcpu 6, hw.memsize 17179869184
+availableParallelism() 10
+vm.swapusage: total = 4096.00M  used = 2850.69M  free = 1245.31M  (encrypted)
+load averages: 4.95 4.97 6.76
+node or python processes above 20% CPU (another heavy job would show here): 0
+## node, npm, python3, git
+v22.22.2 darwin-arm64
+10.9.7
+3.9.6 arm64
+<programme>/toolchain/node-v22.22.2-darwin-arm64/bin/node
+<programme>/toolchain/node-v22.22.2-darwin-arm64/bin/npm
+/usr/bin/python3
+/usr/bin/git
+git version 2.50.1 (Apple Git-155)
+## the OQ6 environment, for G-V4's arbiter only (approved under OQ6)
+<programme>/toolchain/py311-oq6/venv/bin/python
+Python 3.11.16 arm64
+pyerfa 2.0.1.5
+numpy 2.4.6
+## the installed tools (node_modules/<name>/package.json)
+tsup 8.5.1
+esbuild 0.27.7
+typescript 5.9.3
+astronomy-engine 2.1.19
+vitest 2.1.9
+## docs/vedic.md at the start: git hash-object, then HEAD's blob (git reads one blob by name), then the lines between the G-V5 markers
+98d5dbc29b98d088b1cf78266dfd01abb613852d
+98d5dbc29b98d088b1cf78266dfd01abb613852d
+<!-- G-V5 table, tools/time_per_arcsecond.mjs -->
+*Not written yet: the formal run of the varga sensitivity check writes this
+table.*
+<!-- end of the G-V5 table -->
+## shasum -a 256 of the preregistration, INPUTS.md, the committed inputs and the amendments' outputs, and the tools as run (the unit folder's status above is empty: they are as committed)
+993a9682ce92bffce66f78bee763fce4a4825f48a7d6fff8660529ef99cbb436  PREREGISTRATION.md
+e79976efb83dabd9f976ebf38c7537b0b9f34a48b5b7e852f9290c782d2e2357  INPUTS.md
+e333a037563d94f1e5b9ed42269166a4024808284b510b7ce199ab6817aff5c7  births.json
+5c6ddf9d0a3f2325923538b8965bd3acc2a3b4975a96ce502b60c7b488cab6d9  births-erfa.json
+956a3ad8a9e3d29249b16c55a3f25372e6e42850510e9d31555e86bccb648d70  seams.json
+052c05131e33f63dd5b8693b08f4facd50421ce74583e62ad26cf1bea828469e  seams-f3b.json
+27b833af5fb8576e225fea47c1f85b493e0c1e8e79aa2a848763331b3a7d4c7d  c3d-replica.json
+0622d984860fc9af4754f3fd6c9af58f94d9f356200db5c38f31e6b4b5bd8176  rate-premises.json
+5f67a4d1524240edcdbba6e028bab9e3d0dfc0ad59fc4bba9bbb7a2c575e9e80  derived-bounds.json
+4eac4e3096520aa7fd01150b5dc68fd249672ddbe91289838aaf017400aae8fe  tools/c3d_replica.mjs
+fefe5a6c951a11739ccca7a1eac961bca6c00bd92d88d8b29fbe7df37c3c31e3  tools/checker.mjs
+36e34c0f6366be9916b828de5145fa31a646dd5cc2c0f8af533fb7b80fdddeae  tools/checks.sh
+5c4d57ad11f71175c26df136bd79b8826f80305c0a77228c77aa3a74bf63fbb1  tools/controls.mjs
+f2fec468a526b56dadbcbb524d00e371af77eddf8ea48da6ff9d3682dc052ce0  tools/derived_bounds.py
+349c69805fa8d823078d6cd44efbd85a6bd46b825a1ee57babf3ccf626bcbcfd  tools/generate.mjs
+7a85d02aee87ad383090fbaa6c71e43a8d3b58ed7043c0aaee6ef0cf1ccca8f0  tools/load.mjs
+3c24cc596bc4bb30407d329c94caec7d1309931bf9c9e43e6c7141f0b1d72e4d  tools/rate_premises.mjs
+2e3782767588ae6a7c14d842011b6acb4e3b879213e77085a18ea83cebb61bcd  tools/run.mjs
+2c146c35389454182078d6cff8d7081ee4beec2e1b8c9fe6464ccdc88bbb7dac  tools/seams.mjs
+f8d4822b814b1db14ce7f972a9926a13d0c9c8889186416cc151de1f5e191360  tools/seams_f3b.mjs
+e0156597d0dc45bb6bc91f06f2e26342125cc998f027b7ab775752e80c40eadc  tools/test-controls.mjs
+32dc8ef79b30445c0d68bf0ee6f435955139fec889133e2db9f5ab86ff0283e6  tools/time_per_arcsecond.mjs
+bfdcdc822d9bb2bec6665dd9c9a7df8ed9fc9a6c52f270750b08c4817f75a082  tools/varga_ascendant.py
+c5fa637151d8407466ead69dad053eb39c04dcff863061ff508ff74501f2ef46  tools/varga_changes.py
+## the files test-controls.mjs edits and restores while it runs, F1, boundaries.json and docs/vedic.md, shasum -a 256 (compared at the end)
+a84b2ecf329462d493ec3570581faea9082a0eb0561d0c2a29abc375edcea676  src/vedic/grid.ts
+14aa1f0ecbff6535739d34d7710ca911c5437225be6ec89c40725b1c866e12ab  src/vedic/varga.ts
+5eb99026936a8e7997c3818197aa34287a8be7cce1e91b52a218fc940aa39231  src/vedic/varga-time.ts
+2207fbea5b7e02a14f387ab77e76dea4006088ba7baf27c52d29ee8312f82750  src/vedic/fixtures/varga-changes.json
+3578be675ddb51bb80ab543431d654c9a6e7bcab4d70d9abcae381ea29dcd51f  src/vedic/fixtures/boundaries.json
+826530edc3a39f904424d4c2d113e535d9fe790c19cce1d47bae078f4da7f31f  docs/vedic.md
+## every other file under docs/evidence/1.1.0-rc.2-20261102 at the start (outside varga-sensitivity/), shasum -a 256, kept in <scratch>/others-start.sha256 to compare at the end
+files: 202
+## no __pycache__ beside the unit's tools or the rules and references they import
+(end of list)
+# exit 0, finished 2026-11-04 13:15:17 +0700

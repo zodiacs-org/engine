@@ -268,7 +268,7 @@ export interface NatalReceipt {
   /** Only time-resolution assertions may be supplied to this draft's creator. */
   inputFlags: ChartFlag[];
   resultFlags: ChartFlag[];
-  /** From the current conventions set on, the engine also names its ephemeris. */
+  /** From the rc.8 conventions set on, the engine also names its ephemeris. */
   engine: {
     name: "@zodiacs/engine";
     version: string;

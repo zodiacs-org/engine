@@ -1,0 +1,143 @@
+{
+ "check": "C1b",
+ "pass": false,
+ "records": 586,
+ "models": {
+  "zodiacs-deltat/1": 465,
+  "iers-utc/1": 121
+ },
+ "problems": 19,
+ "firstProblems": [
+  {
+   "utc": "1956-01-01T12:00:00.000Z",
+   "what": "deltaT.sigma",
+   "got": 0.46,
+   "expected": 0.03
+  },
+  {
+   "utc": "2026-09-23T23:59:59.999Z",
+   "what": "ut1MinusUtc.sigma",
+   "got": 0.000817,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-23T23:59:59.999Z",
+   "what": "deltaT.sigma on the IERS basis",
+   "got": 0.000817,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-23T23:59:59.999Z",
+   "what": "ut1MinusUtc.sigma",
+   "got": 0.000817,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-23T23:59:59.999Z",
+   "what": "deltaT.sigma on the IERS basis",
+   "got": 0.000817,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-23T23:59:59.999Z",
+   "what": "ut1MinusUtc.sigma",
+   "got": 0.000817,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-23T23:59:59.999Z",
+   "what": "deltaT.sigma on the IERS basis",
+   "got": 0.000817,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-23T23:59:59.999Z",
+   "what": "ut1MinusUtc.sigma",
+   "got": 0.000817,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-23T23:59:59.999Z",
+   "what": "deltaT.sigma on the IERS basis",
+   "got": 0.000817,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-24T00:00:00.000Z",
+   "what": "ut1MinusUtc.sigma",
+   "got": 0.000817,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-24T00:00:00.000Z",
+   "what": "deltaT.sigma on the IERS basis",
+   "got": 0.000817,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-24T00:00:00.000Z",
+   "what": "ut1MinusUtc.sigma",
+   "got": 0.000898,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-24T00:00:00.000Z",
+   "what": "deltaT.sigma on the IERS basis",
+   "got": 0.000898,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-24T00:00:00.000Z",
+   "what": "ut1MinusUtc.sigma",
+   "got": 0.000817,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-24T00:00:00.000Z",
+   "what": "deltaT.sigma on the IERS basis",
+   "got": 0.000817,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-24T00:00:00.000Z",
+   "what": "ut1MinusUtc.sigma",
+   "got": 0.000898,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-24T00:00:00.000Z",
+   "what": "deltaT.sigma on the IERS basis",
+   "got": 0.000898,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-24T00:00:00.000Z",
+   "what": "ut1MinusUtc.sigma",
+   "got": 0.000817,
+   "expected": 0.000816
+  },
+  {
+   "utc": "2026-09-24T00:00:00.000Z",
+   "what": "deltaT.sigma on the IERS basis",
+   "got": 0.000817,
+   "expected": 0.000816
+  }
+ ],
+ "controls": {
+  "a: u without the 0.79 ms": {
+   "failed": true,
+   "problems": 243
+  },
+  "b: d at the year of jdTt": {
+   "failed": true,
+   "problems": 282
+  }
+ },
+ "python": "3.9.6",
+ "dumps": [
+  "dump-T1.json",
+  "dump-T2.json",
+  "dump-T3.json",
+  "dump-E.json"
+ ]
+}

@@ -24,6 +24,11 @@ return frozen objects, keep no state between calls, and reject bad input with
 a `RangeError`. Where a technique needs a chart, it takes a `NatalSource` (a
 birth, or a `Chart` from `natalChart`), as the timing techniques do.
 
+This entry loads the ephemeris. `@zodiacs/engine/lite` (from 1.1.0-rc.2)
+carries copies of `compositeMidpoints`, `compositeAspects` and the essential
+dignities with their tables, which give the same results and load none
+([lite.md](lite.md)).
+
 ```ts
 import { dignityRulersAt, lunarReturn, moonSignCandidates, mutualReceptions, solarReturn } from "@zodiacs/engine/techniques";
 

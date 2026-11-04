@@ -1,0 +1,22 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: L4: tools/no-ephemeris.sh on the packed tarball (<scratch>/pack, SHA-256 c5aef0e3...351c), Node 20.19.0, 22.22.2 and 24.21.0; its control, the root under the same hook
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>
+# command: sh <checkout>/docs/evidence/1.1.0-rc.2-20261102/lite/tools/no-ephemeris.sh <scratch>/pack/zodiacs-engine-1.1.0-rc.2.tgz <programme>/toolchain/node-v20.19.0-darwin-arm64/bin/node <programme>/toolchain/node-v22.22.2-darwin-arm64/bin/node <programme>/toolchain/node-v24.21.0-darwin-arm64/bin/node
+# started 2026-11-04 12:16:07 +0700
+installed: @zodiacs
+astronomy-engine engine
+node v20.19.0
+  lite under the hook: {"exports":27,"undefinedNames":[],"pass":true}
+  root under the hook (control): {"loaded":false,"refusedByHook":true,"message":"refuse-ephemeris: astronomy-engine may not be loaded; imported by file://<scratch, cut by the tool>"}
+  root without the hook: {"loaded":true,"natalChart":"function"}
+node v22.22.2
+  lite under the hook: {"exports":27,"undefinedNames":[],"pass":true}
+  root under the hook (control): {"loaded":false,"refusedByHook":true,"message":"refuse-ephemeris: astronomy-engine may not be loaded; imported by file://<scratch, cut by the tool>"}
+  root without the hook: {"loaded":true,"natalChart":"function"}
+node v24.21.0
+  lite under the hook: {"exports":27,"undefinedNames":[],"pass":true}
+  root under the hook (control): {"loaded":false,"refusedByHook":true,"message":"refuse-ephemeris: astronomy-engine may not be loaded; imported by file://<scratch, cut by the tool>"}
+  root without the hook: {"loaded":true,"natalChart":"function"}
+# exit 0, finished 2026-11-04 12:16:08 +0700

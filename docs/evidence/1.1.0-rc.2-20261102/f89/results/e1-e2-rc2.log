@@ -1,0 +1,34 @@
+# F-89 formal run of @zodiacs/engine 1.1.0-rc.2: E1 and E2, f89_edits.py package on the unpacked rc.2 pack (SHA-256 c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c), --expect new; the tool's SHA-256 is 9b55e0b21a69a360a129cc91efcf8a2fa31796a850aab7cc47b5e6423c58423c
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# cwd <checkout>
+# command: python3 -I docs/evidence/1.1.0-rc.2-20261102/f89/tools/f89_edits.py package <scratch>/rc2/package --expect new
+# started 2026-11-04 11:57:08 +0700
+ok   old  1 eng.points-vertex-given: absent
+ok   old  2 eng.crossings-blind-band: absent
+ok   old  3 eng.geo-resolution-names: absent
+ok   old  4 eng.gregorian-table-location: absent
+ok   old  4 eng.gregorian-table-location: absent
+ok   old  5 eng.calc-bounds-basis: absent
+ok   old  5 eng.calc-bounds (companion): absent
+ok   old  5 eng.calc-bounds-measured (companion): absent
+ok   old  6 eng.api-placidus-steps: absent
+ok   old  7 eng.api-coascendant-west: absent
+ok   old  8 eng.api-deltat-absent: absent
+ok   old  9 eng.receipt-ephemeris-from: absent
+ok   new  1 eng.points-vertex-given (OQ9 c): README.md
+ok   new  2 eng.crossings-blind-band (README): README.md
+ok   new  2 eng.crossings-blind-band (doc comment): dist/crossings.d.ts
+ok   new  3 eng.geo-resolution-names: README.md
+ok   new  4 eng.gregorian-table-location (NOTICE): NOTICE
+ok   new  4 eng.gregorian-table-location (LICENSING): LICENSING.md
+ok   new  5 eng.calc-bounds-basis (LICENSING): LICENSING.md
+ok   new  5 eng.calc-bounds (companion): README.md
+ok   new  5 eng.calc-bounds-measured (companion): NOTICE
+ok   new  6 eng.api-placidus-steps: dist/houses-CbUv-r4H.d.ts
+ok   new  7 eng.api-coascendant-west: dist/houses-extra.d.ts
+ok   new  8 eng.api-deltat-absent: dist/types-BYjEY8-r.d.ts
+ok   new  9 eng.receipt-ephemeris-from: dist/zone-history-CJLB_V8s.d.ts
+ok   new  5 eng.calc-bounds-basis (dist/calc.js): dist/calc.js
+0 failure(s) against --expect new
+# exit code 0; finished 2026-11-04 11:57:08 +0700

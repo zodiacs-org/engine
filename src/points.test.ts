@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { describe, expect, it } from "vitest";
 
 import { chartPoints, natalChart } from "./api.js";
@@ -207,5 +209,60 @@ describe("chartPoints", () => {
     const vertex = (result: ReturnType<typeof chartPoints>) =>
       result.points.find((point) => point.point === "Vertex")!.lon;
     expect(vertex(chartPoints(claimed))).toBe(vertex(chartPoints(chart)));
+  });
+});
+
+describe("the README's figures for the Vertex and the East Point", () => {
+  // F-89, item 1 under OQ9 (c) (docs/evidence/1.1.0-rc.2-20261102/f89/PREREGISTRATION.md, E10, as
+  // amended on 2026-11-03 after review 1): the README states the conformance suite's figures, the
+  // largest residuals of its L2 vectors for the two points, whose arbiter is ERFA, each rounded up to
+  // three decimals from the unrounded maximum in conformance/results/summary.json (which the harness
+  // regenerates with conformance/RESULTS.md, where the residuals are rounded to the nearest 0.001″). Since
+  // review 2 the README cites both files, and says that RESULTS.md rounds (F-89's amendment of 2026-11-04).
+  const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+  interface Summary {
+    runs: { adapter: { name: string }; summary: { byKind: Record<string, { count: number; residuals: Record<string, { max: number }> }> } }[];
+  }
+  /** @zodiacs/engine's angles.vertex-east-point row of a summary: its vector count and the two largest residuals, arcseconds. */
+  const maxima = (summary: Summary) => {
+    const kind = summary.runs.find((run) => run.adapter.name === "zodiacs-engine")!.summary.byKind["angles.vertex-east-point"]!;
+    return { count: kind.count, vertex: kind.residuals.vertex!.max, eastPoint: kind.residuals.east_point!.max };
+  };
+  /** A residual rounded up to three decimals, as the README writes it: never below the residual. */
+  const up3 = (x: number) => {
+    const thousandths = x * 1000;
+    const nearest = Math.round(thousandths);
+    return ((Math.abs(thousandths - nearest) < 1e-9 ? nearest : Math.ceil(thousandths)) / 1000).toFixed(3);
+  };
+  const figures = (summary: Summary) => [up3(maxima(summary).vertex), up3(maxima(summary).eastPoint)];
+  /** The two figures a README text states. */
+  const statedIn = (text: string) =>
+    text
+      .replace(/\s+/gu, " ")
+      .match(
+        /On the conformance suite's ten L2 vectors for them, from 1833 to 2182 at latitudes from 60° S to 60° N, whose arbiter is ERFA's sidereal time and obliquity with each point's published definition, they are within ([\d.]+)″ and ([\d.]+)″ \(`conformance\/RESULTS\.md`, which rounds to the nearest 0\.001″, and `conformance\/results\/summary\.json`\)/u
+      )
+      ?.slice(1);
+  const summary = JSON.parse(read("conformance/results/summary.json")) as Summary;
+
+  it("are the conformance results' largest residuals rounded up, on ten vectors from 1833 to 2182 and 60° S to 60° N", () => {
+    const readme = read("README.md");
+    expect(statedIn(readme)).toEqual(figures(summary));
+    expect(maxima(summary).count).toBe(10);
+    for (const [index, max] of [maxima(summary).vertex, maxima(summary).eastPoint].entries()) {
+      expect(Number(statedIn(readme)![index])).toBeGreaterThanOrEqual(max);
+    }
+    const vectors = (JSON.parse(read("conformance/vectors/L2-houses-angles.json")) as { vectors: { kind: string; input: { lat: number; jd_ut1: number } }[] }).vectors
+      .filter((vector) => vector.kind === "angles.vertex-east-point");
+    expect(vectors).toHaveLength(10);
+    expect([Math.min(...vectors.map((vector) => vector.input.lat)), Math.max(...vectors.map((vector) => vector.input.lat))]).toEqual([-60, 60]);
+    const year = (jd: number) => new Date((jd - 2_440_587.5) * 86_400_000).getUTCFullYear();
+    expect([Math.min(...vectors.map((vector) => year(vector.input.jd_ut1))), Math.max(...vectors.map((vector) => year(vector.input.jd_ut1)))]).toEqual([1833, 2182]);
+    // The controls: the text 1.1.0-rc.2 first shipped, 0.013″ (the maximum rounded to the nearest), fails;
+    // and so does a summary whose Vertex maximum is moved across a thousandth.
+    expect(statedIn(readme.replace("within 0.014″ and 0.007″", "within 0.013″ and 0.007″"))).not.toEqual(figures(summary));
+    const moved = structuredClone(summary);
+    moved.runs.find((run) => run.adapter.name === "zodiacs-engine")!.summary.byKind["angles.vertex-east-point"]!.residuals.vertex!.max += 0.001;
+    expect(statedIn(readme)).not.toEqual(figures(moved));
   });
 });

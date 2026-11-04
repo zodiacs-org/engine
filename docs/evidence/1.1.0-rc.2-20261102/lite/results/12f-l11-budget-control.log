@@ -1,0 +1,16 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: L11's control on this build: tools/graphs.mjs --budget-control, the package check with ./lite's budget one byte under its measured graph
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>
+# command: node <checkout>/docs/evidence/1.1.0-rc.2-20261102/lite/tools/graphs.mjs --budget-control
+# started 2026-11-04 12:18:20 +0700
+{
+ "check": "L11, control",
+ "graph": 28930,
+ "budget": 28929,
+ "status": 1,
+ "message": "the ./lite entry's import graph is 28930 bytes, over its budget of 28929",
+ "pass": true
+}
+# exit 0, finished 2026-11-04 12:18:20 +0700

@@ -1,0 +1,5 @@
+TypeScript Version 5.9.3
+../../../../..<scratch>/tmp/time-entry-t12-CD9Ay5/declarations.mts(17,9): error TS2344: Type 'false' does not satisfy the constraint 'true'.
+../../../../..<scratch>/tmp/time-entry-t12-CD9Ay5/declarations.mts(18,9): error TS2344: Type 'false' does not satisfy the constraint 'true'.
+../../../../..<scratch>/tmp/time-entry-t12-CD9Ay5/declarations.mts(23,9): error TS2344: Type 'false' does not satisfy the constraint 'true'.
+T12 control: exit 2

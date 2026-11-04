@@ -1,0 +1,31 @@
+# time-bands formal run of @zodiacs/engine 1.1.0-rc.2: what the engine recorded at C1b's problem times, and the IERS row behind its 1 microsecond (not a check, not a rerun)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 6997588 KiB, 6.7 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/c1b-records.sh
+# started 2026-11-04 13:00:56 +0700
+## every distinct non-pinned instant recorded at C1b's problem times in dump-T3.json: the records that carry it, its input, its recorded jdUt1, deltaT (sigma, segment, seconds) and ut1MinusUtc (sigma, source)
+1956-01-01T12:00:00.000Z | anchor anchor (1), chart F3 (2), houses F3 (80), position F3 (50) | input utc | jdUt1 2435474 | deltaT 0.03 observed 31.35 | ut1MinusUtc None
+1956-01-01T12:00:00.000Z | houses F1 (80), position F1 (50) | input tt | jdUt1 2435474 | deltaT 0.46 reconstructed 31.34999999999981 | ut1MinusUtc None
+1956-01-01T12:00:00.000Z | chart F1 (2) | input tt | jdUt1 2435474 | deltaT 0.03 observed 31.35 | ut1MinusUtc None
+1956-01-01T12:00:00.000Z | chart F2 (2), houses F2 (80), position F2 (50) | input ut1 | jdUt1 2435474 | deltaT 0.03 observed 31.35 | ut1MinusUtc None
+2026-09-23T23:59:59.999Z | anchor anchor (1), chart F3 (2), houses F3 (80), position F3 (50) | input utc | jdUt1 2461307.499999838 | deltaT 0.000817 observed 69.197 | ut1MinusUtc (0.000817, 'observed')
+2026-09-23T23:59:59.999Z | houses F1 (80), position F1 (50) | input tt | jdUt1 2461307.499999838 | deltaT 0.000817 observed 69.197 | ut1MinusUtc (0.000817, 'observed')
+2026-09-23T23:59:59.999Z | chart F1 (2) | input tt | jdUt1 2461307.499999838 | deltaT 0.000817 observed 69.197 | ut1MinusUtc (0.000817, 'observed')
+2026-09-23T23:59:59.999Z | chart F2 (2), houses F2 (80), position F2 (50) | input ut1 | jdUt1 2461307.499999838 | deltaT 0.000817 observed 69.197 | ut1MinusUtc (0.000817, 'observed')
+2026-09-24T00:00:00.000Z | anchor anchor (1), chart F3 (2), houses F3 (80), position F3 (50) | input utc | jdUt1 2461307.4999998496 | deltaT 0.000817 observed 69.197 | ut1MinusUtc (0.000817, 'observed')
+2026-09-24T00:00:00.000Z | houses F1 (80), position F1 (50) | input tt | jdUt1 2461307.4999998496 | deltaT 0.000898 predicted 69.197 | ut1MinusUtc (0.000898, 'predicted')
+2026-09-24T00:00:00.000Z | chart F1 (2) | input tt | jdUt1 2461307.4999998496 | deltaT 0.000817 observed 69.197 | ut1MinusUtc (0.000817, 'observed')
+2026-09-24T00:00:00.000Z | houses F2 (80), position F2 (50) | input ut1 | jdUt1 2461307.4999998496 | deltaT 0.000898 predicted 69.197 | ut1MinusUtc (0.000898, 'predicted')
+2026-09-24T00:00:00.000Z | chart F2 (2) | input ut1 | jdUt1 2461307.4999998496 | deltaT 0.000817 observed 69.197 | ut1MinusUtc (0.000817, 'observed')
+## the largest formal error of the rows flagged I in 2026, scripts/time-scale-sources/finals2000A-20260924-ut1.csv.gz
+267 rows; the largest: 61295,2026-09-12,I,-0.0038602,0.0000265; error x 1e6 = 26.5; Python's round(): 26 (halves to even)
+JavaScript's Math.round(Number("0.0000265") * 1e6): 27 (halves up)
+## the two roundings: the engine's table generator and C1b's reference
+235:    observedErrors[year] = Math.max(observedErrors[year] ?? 0, Math.round(error * 1e6));
+270:                    self.observed[year] = max(self.observed.get(year, 0), round(float(error) * 1e6))
+273:                    predicted[mjd] = round(float(error) * 1e6)
+# exit 0, finished 2026-11-04 13:00:57 +0700

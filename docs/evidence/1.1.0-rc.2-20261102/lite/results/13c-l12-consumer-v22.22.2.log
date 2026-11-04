@@ -1,0 +1,58 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: L12: node scripts/verify-packed-consumer.mjs <the pack> on Node v22.22.2, with that Node's npm; npm's offline mode, so the archive's dependency and TypeScript 5.9.3 come from the npm cache
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>
+# command: env PATH=<programme>/toolchain/node-v22.22.2-darwin-arm64/bin:/usr/bin:/bin sh -c node --version && npm --version && exec nice -n 10 node scripts/verify-packed-consumer.mjs "$1" sh <scratch>/pack/zodiacs-engine-1.1.0-rc.2.tgz
+# started 2026-11-04 12:18:41 +0700
+v22.22.2
+10.9.7
+{
+  "version": "1.1.0-rc.2",
+  "birthWindow": "passed",
+  "techniques": "passed",
+  "sky": "passed",
+  "houses": "passed",
+  "planetaryReturns": "passed",
+  "timeBasis": "passed",
+  "timeEntry": "passed",
+  "liteEntry": "passed",
+  "zoneHistory": "passed",
+  "timing": "passed",
+  "configuredAspects": "passed",
+  "exactAspectBoundaries": "passed",
+  "chartDeclinations": "passed",
+  "sunConvention": "passed",
+  "boundMargin": "passed",
+  "exactSeparation": "passed",
+  "ephemerisSpan": "passed",
+  "metadata": "passed",
+  "bodyLabels": "passed",
+  "ephemerisRangeErrors": "passed",
+  "crossings": "passed",
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "oneZeroAdditions": "passed",
+  "conventionIds": "passed",
+  "artifact": "<scratch>/pack/zodiacs-engine-1.1.0-rc.2.tgz",
+  "sha256": "c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c",
+  "runtime": "v22.22.2",
+  "typescript": "5.9.3",
+  "typeRoots": "none (types: [])",
+  "directory": "<scratch>/tmp/zodiacs-engine-consumer-wkcvBv",
+  "types": "passed",
+  "directoryRemoved": true
+}
+# exit 0, finished 2026-11-04 12:18:43 +0700

@@ -1,0 +1,26 @@
+# T11, tools/state-scan.mjs --repo <checkout> --out results/T11.json, the unchanged tool with the checkout as an absolute path (its usage line), run once by the coordinator after 04-t11-state-scan.log stopped on --repo .; Node v22.22.2, darwin-arm64, 2026-11-04T05:47Z, commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e
+{
+ "check": "T11",
+ "tool": "state-scan.mjs",
+ "typescript": "5.9.3",
+ "control": false,
+ "controlBehaved": null,
+ "topLevelStatements": 21,
+ "importedBindings": [
+  "EclipticFrame",
+  "TIME_SCALE_NAMES",
+  "Tilt",
+  "TimeBasis",
+  "TimeScaleName",
+  "basisOf",
+  "elapsedOf",
+  "frameAt",
+  "meanOf",
+  "placeOfDate",
+  "tiltAt"
+ ],
+ "findings": [],
+ "node": "v22.22.2",
+ "pass": true
+}
+exit 0

@@ -1,0 +1,65 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: the named tests, whole files, one vitest run: scripts/lite-entry.test.mjs (L1, L2, L3 and L8, their synthetic controls, and this build), src/lite.test.ts (L8 on the source), src/sect.test.ts (L7), scripts/root-isolation.test.mjs (L10 and its controls)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>
+# command: nice -n 10 vitest run scripts/lite-entry.test.mjs src/lite.test.ts src/sect.test.ts scripts/root-isolation.test.mjs --reporter=verbose --reporter=json --outputFile.json=<scratch>/out/tests.json
+# started 2026-11-04 12:15:41 +0700
+
+ RUN  v2.1.9 <checkout>
+
+ ✓ scripts/root-isolation.test.mjs > the root entry's isolation check > passes a root that reaches only core modules, and reads them both ways
+ ✓ scripts/root-isolation.test.mjs > the root entry's isolation check > finds a timing module whatever its extension: the review's rulers.mts
+ ✓ scripts/root-isolation.test.mjs > the root entry's isolation check > finds a module whose path has a space, and the opt-in entry files themselves
+ ✓ scripts/root-isolation.test.mjs > the root entry's isolation check > finds a module from either reading alone
+ ✓ scripts/root-isolation.test.mjs > the root entry's isolation check > refuses a module list that does not describe the build
+ ✓ scripts/root-isolation.test.mjs > the root entry's isolation check > refuses a zone history in the root's static graph, and follows no dynamic import
+ ✓ scripts/root-isolation.test.mjs > the root entry's isolation check > names the opt-in sources by directory and entry file, not by extension
+ ✓ scripts/root-isolation.test.mjs > the root entry's isolation check > names the modules of the calc, window, techniques, houses and sky entries, and not the root's houses.ts
+ ✓ scripts/root-isolation.test.mjs > the root entry's isolation check > names the time entry's own files whole, and not the root's time-scale modules
+ ✓ scripts/root-isolation.test.mjs > the root entry's isolation check > names the lite entry's files and src/sect.ts, and not files whose names only begin as theirs (L10)
+ ✓ scripts/root-isolation.test.mjs > the root entry's isolation check > reads the two module lists of the build as one: outputs apart, shared sources alike
+ ✓ scripts/root-isolation.test.mjs > the root entry's isolation check > passes this checkout's build
+ ✓ src/sect.test.ts > orientality > calls a body earlier in zodiacal order a morning star
+ ✓ src/sect.test.ts > orientality > measures the short way round the circle
+ ✓ src/sect.test.ts > orientality > counts a body exactly on the Sun as occidental
+ ✓ src/sect.test.ts > sect > reads the Sun above the horizon as a day chart
+ ✓ src/sect.test.ts > sect > reads the Sun below the horizon as a night chart
+ ✓ src/sect.test.ts > sect > gives the Sun on the horizon itself to the day
+ ✓ src/sect.test.ts > sect > puts a morning Mercury with the day and an evening one with the night
+ ✓ src/sect.test.ts > sect > flips Mercury’s side with the chart’s, not with its own
+ ✓ src/sect.test.ts > sect > leaves Mercury off both lists when its longitude is unknown
+ ✓ src/sect.test.ts > sect > claims nothing about the modern planets
+ ✓ src/sect.test.ts > sect > carries the altitude it was handed, so the readout can quote it
+ ✓ src/sect.test.ts > sectReading at its boundaries > gives an altitude of 0 and of -0 to the day, and hands each back unchanged
+ ✓ src/sect.test.ts > sectReading at its boundaries > under the ecliptic convention, counts a Sun exactly on the ascendant to the night and on the descendant to the day
+ ✓ src/sect.test.ts > sectReading at its boundaries > under the ecliptic convention, gives the root's sectOf
+ ✓ src/sect.test.ts > sectReading at its boundaries > calls Mercury on the Sun occidental and Mercury opposite it oriental
+ ✓ src/sect.test.ts > sectReading at its boundaries > reads longitudes outside [0, 360) as their place on the circle
+ ✓ src/sect.test.ts > sectReading at its boundaries > takes each longitude modulo 360 before the difference, so orientality reads one of any size as its place on the circle
+ ✓ src/sect.test.ts > sectReading at its boundaries > reads the two charts at 78.2° N of docs/timing-hellenistic.md: each convention gives the other's sect
+ ✓ src/sect.test.ts > sectReading's results and refusals > gives frozen readings, with the lists in order and Mercury last
+ ✓ src/sect.test.ts > sectReading's results and refusals > refuses with RangeError what it cannot read, and names no default convention
+ ✓ scripts/lite-entry.test.mjs > the lite entry's checks (L1 to L3) > pass a build laid out as the entry's, and give its graph
+ ✓ scripts/lite-entry.test.mjs > the lite entry's checks (L1 to L3) > refuse a part that imports a chunk, in any form (L1)
+ ✓ scripts/lite-entry.test.mjs > the lite entry's checks (L1 to L3) > refuses a dynamic import in any file of the entry (L1)
+ ✓ scripts/lite-entry.test.mjs > the lite entry's checks (L1 to L3) > refuses a dist/lite.js that imports a fifth file, misses a part, or holds anything else (L1)
+ ✓ scripts/lite-entry.test.mjs > the lite entry's checks (L1 to L3) > refuses each string that comes only with the ephemeris, in any file of the entry (L3)
+ ✓ scripts/lite-entry.test.mjs > the lite entry's checks (L1 to L3) > refuses a composite part built from the relationship module, whose sources reach the ephemeris (L2)
+ ✓ scripts/lite-entry.test.mjs > the lite entry's checks (L1 to L3) > refuses a part that holds a module outside its pin, by the module list or by its markers (L2)
+ ✓ scripts/lite-entry.test.mjs > the lite entry's checks (L1 to L3) > refuses a module list one byte stale, or one that leaves a file out (L2)
+ ✓ scripts/lite-entry.test.mjs > the lite entry's names (L8) > are 51, 27 values and 24 types, and pass when every reading gives them
+ ✓ scripts/lite-entry.test.mjs > the lite entry's names (L8) > refuse a lite.d.ts or a source that misses a name, or declares a value as a type
+ ✓ scripts/lite-entry.test.mjs > the lite entry's names (L8) > refuse two parts exporting one name, which dist/lite.js then loses
+ ✓ scripts/lite-entry.test.mjs > this checkout's build of the lite entry > passes L1 to L3
+ ✓ scripts/lite-entry.test.mjs > this checkout's build of the lite entry > passes L8 at run time and in its declarations
+ ✓ src/lite.test.ts > the lite entry's source > exports the 51 names of L8, 27 values and 24 types
+ ✓ src/lite.test.ts > the lite entry's source > takes each value from its part, and each part's from its one module
+
+ Test Files  4 passed (4)
+      Tests  47 passed (47)
+   Start at  12:15:41
+   Duration  807ms (transform 425ms, setup 0ms, collect 974ms, tests 730ms, environment 0ms, prepare 184ms)
+
+JSON report written to <scratch>/out/tests.json
+# exit 0, finished 2026-11-04 12:15:42 +0700

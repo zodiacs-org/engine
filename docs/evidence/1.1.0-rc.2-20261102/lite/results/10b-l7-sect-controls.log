@@ -1,0 +1,99 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: L7's controls: tools/sect-controls.mjs, run in the sparse clone of this commit (10a-clone-237b226.log), whose tool, src/sect.ts and src/sect.test.ts are this checkout's bytes (SHA-256 below)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <scratch>/clones/c237b226
+# command: sh -c shasum -a 256 docs/evidence/1.1.0-rc.2-20261102/lite/tools/sect-controls.mjs docs/evidence/1.1.0-rc.2-20261102/lite/tools/load.mjs src/sect.ts src/sect.test.ts && exec nice -n 10 node docs/evidence/1.1.0-rc.2-20261102/lite/tools/sect-controls.mjs
+# started 2026-11-04 12:17:17 +0700
+82678ea83a24cd0f9caaa8ffefe6c103afc328de276ea41cd82e6d04ef4411ae  docs/evidence/1.1.0-rc.2-20261102/lite/tools/sect-controls.mjs
+474fc76314015521e98f476b1df1ff532bf6dc83b5f1b1998dff93e4d258066f  docs/evidence/1.1.0-rc.2-20261102/lite/tools/load.mjs
+a528c3166480aa05f92c0d06959a80444fd6234d729a8ebd783343cec2c30ac6  src/sect.ts
+06272ffeb183469f22583f2bf2d1a918a85ed3680d9e922fd3e20f76ea3b9433  src/sect.test.ts
+{
+ "check": "L7, controls",
+ "tool": "docs/evidence/1.1.0-rc.2-20261102/lite/tools/sect-controls.mjs",
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "source": {
+  "file": "src/sect.ts",
+  "sha256": "a528c3166480aa05f92c0d06959a80444fd6234d729a8ebd783343cec2c30ac6"
+ },
+ "test": "src/sect.test.ts",
+ "controls": [
+  {
+   "name": "L7 control: the altitude test written > 0",
+   "replaced": "const day = sunAltitude === null ? sectOf(degrees(read.ascendant, \"ascendant\"), sunLon) === \"day\" : sunAltitude >= 0;",
+   "with": "const day = sunAltitude === null ? sectOf(degrees(read.ascendant, \"ascendant\"), sunLon) === \"day\" : sunAltitude > 0;",
+   "tests": 20,
+   "failed": [
+    "sect gives the Sun on the horizon itself to the day",
+    "sectReading at its boundaries gives an altitude of 0 and of -0 to the day, and hands each back unchanged"
+   ],
+   "messages": [
+    {
+     "name": "sect gives the Sun on the horizon itself to the day",
+     "message": "AssertionError: expected 'night' to be 'day' // Object.is equality"
+    },
+    {
+     "name": "sectReading at its boundaries gives an altitude of 0 and of -0 to the day, and hands each back unchanged",
+     "message": "AssertionError: expected 'night' to be 'day' // Object.is equality"
+    }
+   ],
+   "failedAsItMust": true,
+   "namedInTheTestFile": [
+    {
+     "name": "sect gives the Sun on the horizon itself to the day",
+     "failed": true
+    },
+    {
+     "name": "sectReading at its boundaries gives an altitude of 0 and of -0 to the day, and hands each back unchanged",
+     "failed": true
+    }
+   ]
+  },
+  {
+   "name": "L7 control: orientality's test written >= 0",
+   "replaced": "return (raw > 180 ? raw - 360 : raw) > 0 ? \"oriental\" : \"occidental\";",
+   "with": "return (raw > 180 ? raw - 360 : raw) >= 0 ? \"oriental\" : \"occidental\";",
+   "tests": 20,
+   "failed": [
+    "orientality counts a body exactly on the Sun as occidental",
+    "sectReading at its boundaries calls Mercury on the Sun occidental and Mercury opposite it oriental",
+    "sectReading at its boundaries reads longitudes outside [0, 360) as their place on the circle"
+   ],
+   "messages": [
+    {
+     "name": "orientality counts a body exactly on the Sun as occidental",
+     "message": "AssertionError: expected 'oriental' to be 'occidental' // Object.is equality"
+    },
+    {
+     "name": "sectReading at its boundaries calls Mercury on the Sun occidental and Mercury opposite it oriental",
+     "message": "AssertionError: expected 'oriental' to be 'occidental' // Object.is equality"
+    },
+    {
+     "name": "sectReading at its boundaries reads longitudes outside [0, 360) as their place on the circle",
+     "message": "AssertionError: expected 'oriental' to be 'occidental' // Object.is equality"
+    }
+   ],
+   "failedAsItMust": true,
+   "namedInTheTestFile": [
+    {
+     "name": "orientality counts a body exactly on the Sun as occidental",
+     "failed": true
+    },
+    {
+     "name": "sectReading at its boundaries calls Mercury on the Sun occidental and Mercury opposite it oriental",
+     "failed": true
+    }
+   ]
+  }
+ ],
+ "asItStands": {
+  "tests": 20,
+  "failed": [],
+  "messages": []
+ },
+ "restored": true,
+ "pass": true
+}
+# exit 0, finished 2026-11-04 12:17:20 +0700

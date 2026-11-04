@@ -1,0 +1,36 @@
+{
+ "check": "C1",
+ "pass": true,
+ "records": 31016,
+ "problems": 0,
+ "firstProblems": [],
+ "controls": {
+  "a: the TT band d on every UTC input": {
+   "failed": true,
+   "problems": 27923
+  },
+  "b: the linear sum u + d after the table": {
+   "failed": true,
+   "problems": 8569
+  },
+  "c: every zero band replaced by 5e-324": {
+   "failed": true,
+   "problems": 78068
+  },
+  "d: the topocentric bands without w": {
+   "failed": true,
+   "problems": 12540
+  },
+  "e: a zero band where speeds is null": {
+   "failed": true,
+   "problems": 585
+  }
+ },
+ "python": "3.9.6",
+ "dumps": [
+  "dump-T1.json",
+  "dump-T2.json",
+  "dump-T3.json",
+  "dump-E.json"
+ ]
+}

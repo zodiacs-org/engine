@@ -1,0 +1,217 @@
+# varga-sensitivity, G-V4 run again in full (@zodiacs/engine 1.1.0-rc.2): the note the amendment announces (not a check): this run's Ascendant rows against the interrupted run's 18,000 (a record step: it runs no check)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3, with -I) where a tool says so; for G-V4's arbiter only, Python 3.11.16 with pyerfa 2.0.1.5 and numpy 2.4.6 (<programme>/toolchain/py311-oq6/venv/bin/python, the OQ6 environment, with -I)
+# commit 7b29dddf179ea1e4b0643fd86108d5d826988ed7 (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 15345356 KiB, 14.6 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/note.sh
+# started 2026-11-04 15:14:30 +0700
+## the interrupted run's results, read from git: GIT_NO_LAZY_FETCH=1 git show 47df12f:docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/results.jsonl > <scratch>/interrupted/results.jsonl
+blob 0afb2ec44dcbedf56e0c0a48fdbec5398f9b3e5e, 52322903 bytes, sha256 c7edbf99b616503759e3ef63484091031aaa39768f7c90b33c0a2d401c5f1768
+as the formal run wrote it (results/03-outputs.log): 52322903 bytes  c7edbf99b616503759e3ef63484091031aaa39768f7c90b33c0a2d401c5f1768  results-erfa/results.jsonl
+## this run's results: docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/results.jsonl, 8385354 bytes, sha256 46feb98ce348e76b3b2a6e275b6448736d1c53e82a3b34a4649c95a335e2e8cd
+## the comparison: node <scratch>/bin/note.mjs <scratch>/interrupted/results.jsonl docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/results.jsonl
+{
+ "calls": {
+  "interrupted": 1000,
+  "rerun": 1000
+ },
+ "corpora": {
+  "interrupted": [
+   "F4"
+  ],
+  "rerun": [
+   "F4"
+  ]
+ },
+ "sameIdsInOrder": true,
+ "threw": {
+  "interrupted": 0,
+  "rerun": 0
+ },
+ "pointsSearched": {
+  "interrupted": {
+   "[\"Ascendant\",\"Sun\",\"Moon\",\"Mercury\",\"Venus\",\"Mars\",\"Jupiter\",\"Saturn\",\"Mean Node\",\"Mean South Node\"]": 1000
+  },
+  "rerun": {
+   "[\"Ascendant\"]": 1000
+  }
+ },
+ "optionsPoints": {
+  "interrupted": {
+   "null": 1000
+  },
+  "rerun": {
+   "[\"Ascendant\"]": 1000
+  }
+ },
+ "rows": {
+  "interruptedAscendant": 18000,
+  "rerunAll": 18000,
+  "rerunAscendant": 18000,
+  "compared": 18000,
+  "identical": 18000,
+  "differing": 0,
+  "unmatched": 0
+ },
+ "differingFields": {},
+ "differingByKey": {},
+ "examples": [],
+ "callFields": {
+  "ayanamsa": {
+   "equal": 1000,
+   "differing": 0,
+   "example": null
+  },
+  "utc": {
+   "equal": 1000,
+   "differing": 0,
+   "example": null
+  },
+  "timeScale": {
+   "equal": 1000,
+   "differing": 0,
+   "example": null
+  },
+  "horizonMinutes": {
+   "equal": 1000,
+   "differing": 0,
+   "example": null
+  },
+  "searched": {
+   "equal": 1000,
+   "differing": 0,
+   "example": null
+  },
+  "verification": {
+   "equal": 1000,
+   "differing": 0,
+   "example": null
+  },
+  "flags": {
+   "equal": 1000,
+   "differing": 0,
+   "example": null
+  }
+ },
+ "ascendantEvaluations": {
+  "equal": 1000,
+  "differing": 0,
+  "examples": []
+ },
+ "answer": "the same: each of the interrupted run's 18000 Ascendant rows equals this run's row for its birth and key"
+}
+## the script, <scratch>/bin/note.mjs
+/*
+ * The note of G-V4 run again in full (PREREGISTRATION.md, section 13,
+ * 2026-11-04, "after the formal run: G-V4's interruption and the loader"):
+ * not a check, and no verdict depends on it. It runs no engine. It compares
+ * the Ascendant's rows of this run's results-erfa/results.jsonl with those of
+ * the interrupted run's (47df12f), birth by birth and row by row (matched by
+ * varga and scheme), and says whether they are the same; where not, how many
+ * rows differ and in which fields. Beside the rows it compares, call by call,
+ * the result's other fields (the instant, the time scale record, the span
+ * searched and the like) and the Ascendant's count of evaluations, and it
+ * lists the points each run's calls searched.
+ *
+ *   node note.mjs INTERRUPTED.jsonl RERUN.jsonl
+ */
+import { readFileSync } from "node:fs";
+
+const [interruptedFile, rerunFile] = process.argv.slice(2);
+const read = (file) => readFileSync(file, "utf8").trim().split("\n").map((text) => JSON.parse(text));
+const before = read(interruptedFile);
+const after = read(rerunFile);
+
+/** JSON with the keys of every object sorted, so that equal values give equal text whatever their key order. */
+const canonical = (value) => JSON.stringify(value, (_, item) => (item && typeof item === "object" && !Array.isArray(item)
+  ? Object.fromEntries(Object.keys(item).sort().map((key) => [key, item[key]]))
+  : item));
+const same = (a, b) => canonical(a) === canonical(b);
+const keyOf = (row) => `${row.varga}${row.scheme === "cyclic" ? "cyclic" : ""}`;
+const count = (map, key) => map.set(key, (map.get(key) ?? 0) + 1);
+
+const out = {
+  calls: { interrupted: before.length, rerun: after.length },
+  corpora: { interrupted: [...new Set(before.map((line) => line.corpus))], rerun: [...new Set(after.map((line) => line.corpus))] },
+  sameIdsInOrder: before.length === after.length && before.every((line, k) => line.id === after[k].id),
+  threw: { interrupted: before.filter((line) => line.error).length, rerun: after.filter((line) => line.error).length },
+  pointsSearched: { interrupted: new Map(), rerun: new Map() },
+  optionsPoints: { interrupted: new Map(), rerun: new Map() },
+  rows: { interruptedAscendant: 0, rerunAll: 0, rerunAscendant: 0, compared: 0, identical: 0, differing: 0, unmatched: 0 },
+  differingFields: new Map(),
+  differingByKey: new Map(),
+  examples: [],
+  callFields: new Map(),
+  ascendantEvaluations: { equal: 0, differing: 0, examples: [] }
+};
+const byId = new Map(after.map((line) => [line.id, line]));
+for (const old of before) {
+  const now = byId.get(old.id);
+  count(out.pointsSearched.interrupted, canonical([...new Set(old.result.rows.map((row) => row.point))]));
+  count(out.optionsPoints.interrupted, canonical(old.options.points ?? null));
+  if (!now) {
+    out.rows.unmatched += 18;
+    continue;
+  }
+  count(out.pointsSearched.rerun, canonical([...new Set(now.result.rows.map((row) => row.point))]));
+  count(out.optionsPoints.rerun, canonical(now.options.points ?? null));
+  // The result's fields other than its rows and its evaluations, call by call.
+  for (const field of new Set([...Object.keys(old.result), ...Object.keys(now.result)])) {
+    if (field === "rows" || field === "evaluations") continue;
+    const entry = out.callFields.get(field) ?? { equal: 0, differing: 0, example: null };
+    if (same(old.result[field], now.result[field])) entry.equal += 1;
+    else {
+      entry.differing += 1;
+      entry.example ??= { id: old.id, interrupted: old.result[field], rerun: now.result[field] };
+    }
+    out.callFields.set(field, entry);
+  }
+  // The Ascendant's evaluations.
+  if (old.result.evaluations?.Ascendant === now.result.evaluations?.Ascendant) out.ascendantEvaluations.equal += 1;
+  else {
+    out.ascendantEvaluations.differing += 1;
+    if (out.ascendantEvaluations.examples.length < 5) out.ascendantEvaluations.examples.push({ id: old.id, interrupted: old.result.evaluations?.Ascendant, rerun: now.result.evaluations?.Ascendant });
+  }
+  // The rows.
+  const oldRows = old.result.rows.filter((row) => row.point === "Ascendant");
+  const nowRows = now.result.rows.filter((row) => row.point === "Ascendant");
+  out.rows.interruptedAscendant += oldRows.length;
+  out.rows.rerunAll += now.result.rows.length;
+  out.rows.rerunAscendant += nowRows.length;
+  const nowByKey = new Map(nowRows.map((row) => [keyOf(row), row]));
+  for (const row of oldRows) {
+    const twin = nowByKey.get(keyOf(row));
+    if (!twin) {
+      out.rows.unmatched += 1;
+      continue;
+    }
+    out.rows.compared += 1;
+    if (same(row, twin)) {
+      out.rows.identical += 1;
+      continue;
+    }
+    out.rows.differing += 1;
+    count(out.differingByKey, keyOf(row));
+    for (const field of new Set([...Object.keys(row), ...Object.keys(twin)])) {
+      if (same(row[field], twin[field])) continue;
+      if ((field === "previous" || field === "next") && row[field] && twin[field]) {
+        for (const part of new Set([...Object.keys(row[field]), ...Object.keys(twin[field])])) {
+          if (!same(row[field][part], twin[field][part])) count(out.differingFields, `${field}.${part}`);
+        }
+      } else count(out.differingFields, field);
+    }
+    if (out.examples.length < 10) out.examples.push({ id: old.id, key: keyOf(row), interrupted: row, rerun: twin });
+  }
+}
+const plain = (value) => (value instanceof Map ? Object.fromEntries(value) : value);
+const report = Object.fromEntries(Object.entries(out).map(([key, value]) => [key, plain(value)]));
+report.pointsSearched = { interrupted: plain(out.pointsSearched.interrupted), rerun: plain(out.pointsSearched.rerun) };
+report.optionsPoints = { interrupted: plain(out.optionsPoints.interrupted), rerun: plain(out.optionsPoints.rerun) };
+report.callFields = Object.fromEntries([...out.callFields].map(([field, entry]) => [field, entry]));
+report.answer = out.rows.compared === out.rows.interruptedAscendant && out.rows.unmatched === 0 && out.rows.differing === 0
+  ? `the same: each of the interrupted run's ${out.rows.interruptedAscendant} Ascendant rows equals this run's row for its birth and key`
+  : `NOT the same: ${out.rows.differing} of ${out.rows.compared} rows compared differ, ${out.rows.unmatched} unmatched`;
+console.log(JSON.stringify(report, null, 1));
+# exit 0, finished 2026-11-04 15:14:31 +0700

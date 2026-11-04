@@ -107,7 +107,7 @@ export interface ChartInput {
   utc: Date;
   /** Present when the instant is not UTC. */
   timeScale?: Exclude<TimeScaleName, "utc">;
-  /** A caller's fixed ΔT in seconds; the engine's model when absent. */
+  /** A caller's fixed ΔT (TT − UT1) in seconds, as BirthInput.deltaT; the engine's time basis when absent. */
   deltaT?: number;
   latitude?: number;
   longitude?: number;
@@ -289,7 +289,7 @@ export interface MoonPhase {
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "1.1.0-rc.1";
+export const ENGINE_VERSION: string = "1.1.0-rc.2";
 
 /**
  * The ephemeris underneath every position. The dependency is pinned to this

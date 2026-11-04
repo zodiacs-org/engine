@@ -1,0 +1,43 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: the corpora K1 to K4 and V (section 5), tools/corpora.mjs, with their SHA-256
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 12041748 KiB, 11.5 GiB
+# cwd <checkout>
+# command: node <checkout>/docs/evidence/1.1.0-rc.2-20261102/time-entry/tools/corpora.mjs src/fixtures/nutation-erfa.json <checkout>/docs/evidence/1.1.0-rc.2-20261102/time-entry/results/corpora.json
+# started 2026-11-04 12:34:35 +0700
+{
+ "tool": "corpora.mjs",
+ "node": "v22.22.2",
+ "corpora": {
+  "K1": {
+   "count": 14765,
+   "sha256": "cd0c4b8b1fa5f8852f97753b6d4a599041f1074acd0542770c63a8f8cd11eb12"
+  },
+  "K2a": {
+   "count": 50000,
+   "sha256": "7540e24156aff74a2ef25125d0091a60fe13921de5afbfce9b9b71e0cc3c4175"
+  },
+  "K2b": {
+   "count": 50000,
+   "sha256": "d3c6b261c78bff4e03fa4ed0b0a42003f0d5a88b9c88c2c3cb4c1d376a9d2089"
+  },
+  "V2": {
+   "count": 10,
+   "sha256": "6f96862ab74540784ed29b5449581667ea24f356fb30dc9990ce437ee345c38b"
+  },
+  "K3": {
+   "count": 41,
+   "sha256": "0b4798ed37a6e5a009ecb149824353aae79832f3cd61acbecd35c4adec8b3ba0"
+  },
+  "K4": {
+   "count": 101,
+   "sha256": "e04b5dcf69a15435c580ddbce955371cc8aecc39fd54541f30056d881b8d23ac"
+  },
+  "V": {
+   "count": 15,
+   "sha256": "e86737ad8dc7bfcfd449eda06e9c110e45a314d99951397b4403a9964f3011c3"
+  }
+ }
+}
+# exit 0, finished 2026-11-04 12:34:35 +0700

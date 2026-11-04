@@ -9,10 +9,12 @@ the release it leads to.
 
 ## What is public
 
-- **The entry points.** The thirteen that `package.json` exports and the
+- **The entry points.** The fifteen that `package.json` exports and the
   README documents: the root, `./calc`, `./conventions` (from 1.1.0-rc.1),
-  `./crossings`, `./deltat`, `./geo`, `./houses`, `./receipt`, `./sky`,
-  `./techniques`, `./timing`, `./vedic` and `./window`. `./internal` and `./internal/math` are private to Zodiacs.org
+  `./crossings`, `./deltat`, `./geo`, `./houses`, `./lite` (from
+  1.1.0-rc.2), `./receipt`, `./sky`, `./techniques`, `./time` (from
+  1.1.0-rc.2), `./timing`, `./vedic` and `./window`. `./internal` and
+  `./internal/math` are private to Zodiacs.org
   and carry no promise (README, *Internal site entry points*).
 - **Their declarations.** Every name each entry point exports, its type, a
   function's parameters and result, the shape of each result, the members of
@@ -47,9 +49,13 @@ the release it leads to.
 
 Not public: the text of an error message or of a refusal's `detail` (branch
 on the class, the `reason` or the code, never on the wording); the names of
-the chunk files under `dist/`; any field, export or behaviour the
-declarations and documents do not name; and the order of entries in a result
-where no order is documented.
+the chunk files under `dist/`; whether two entry points give the same object
+for a name (the functions and tables of `./lite`'s declination, composite
+and dignity parts are copies of the root's and `./techniques`', with the same
+results, and a later release may share them or not; its sect part is its
+own); any field, export or behaviour the declarations and documents do
+not name; and the order of entries in a result where no order is
+documented.
 
 Results are the engine's to make. Where a declaration says a result is
 frozen, it is frozen at its top level: a `Date` or a chart inside it is not,

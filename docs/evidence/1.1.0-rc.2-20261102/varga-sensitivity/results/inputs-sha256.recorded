@@ -1,0 +1,10 @@
+3578be675ddb51bb80ab543431d654c9a6e7bcab4d70d9abcae381ea29dcd51f  src/vedic/fixtures/boundaries.json
+c5fa637151d8407466ead69dad053eb39c04dcff863061ff508ff74501f2ef46  docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/varga_changes.py
+2207fbea5b7e02a14f387ab77e76dea4006088ba7baf27c52d29ee8312f82750  src/vedic/fixtures/varga-changes.json
+349c69805fa8d823078d6cd44efbd85a6bd46b825a1ee57babf3ccf626bcbcfd  docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/generate.mjs
+e333a037563d94f1e5b9ed42269166a4024808284b510b7ce199ab6817aff5c7  docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/births.json
+5c6ddf9d0a3f2325923538b8965bd3acc2a3b4975a96ce502b60c7b488cab6d9  docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/births-erfa.json
+2c146c35389454182078d6cff8d7081ee4beec2e1b8c9fe6464ccdc88bbb7dac  docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/seams.mjs
+956a3ad8a9e3d29249b16c55a3f25372e6e42850510e9d31555e86bccb648d70  docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/seams.json
+052c05131e33f63dd5b8693b08f4facd50421ce74583e62ad26cf1bea828469e  docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/seams-f3b.json
+f8d4822b814b1db14ce7f972a9926a13d0c9c8889186416cc151de1f5e191360  docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/seams_f3b.mjs

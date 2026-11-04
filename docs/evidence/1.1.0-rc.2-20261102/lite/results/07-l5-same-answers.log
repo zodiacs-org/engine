@@ -1,0 +1,51 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: L5: tools/same-answers.mjs on this build (the checkout after npm run build): ./lite against the root and ./techniques on the preregistered corpus
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>
+# command: nice -n 10 node <checkout>/docs/evidence/1.1.0-rc.2-20261102/lite/tools/same-answers.mjs --package <checkout>
+# started 2026-11-04 12:16:20 +0700
+{
+ "check": "L5",
+ "package": "1.1.0-rc.2",
+ "lite": "the package's own ./lite",
+ "node": "v22.22.2",
+ "parts": [
+  {
+   "part": "declinations",
+   "cases": 5010,
+   "agree": 5010,
+   "refusedAlike": 7,
+   "differences": [],
+   "differing": 0
+  },
+  {
+   "part": "composite",
+   "cases": 2004,
+   "agree": 2004,
+   "refusedAlike": 4,
+   "differences": [],
+   "differing": 0
+  },
+  {
+   "part": "dignities",
+   "cases": 2115,
+   "agree": 2115,
+   "refusedAlike": 9,
+   "differences": [],
+   "differing": 0
+  },
+  {
+   "part": "sect",
+   "cases": 2000,
+   "agree": 2000,
+   "refusedAlike": 0,
+   "differences": [],
+   "differing": 0
+  }
+ ],
+ "identityDiffers": true,
+ "shared": [],
+ "pass": true
+}
+# exit 0, finished 2026-11-04 12:16:20 +0700

@@ -8,7 +8,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-import { OPT_IN_SOURCE, checkRootIsolation, sourceMarkers, staticGraph } from "./root-isolation.mjs";
+import { OPT_IN_SOURCE, checkRootIsolation, mergeModuleLists, readModuleList, sourceMarkers, staticGraph } from "./root-isolation.mjs";
 
 /** A build: output files with their source modules, and the source import graph. */
 function build({ chunkModules = ["src/api.ts", "src/ephemeris.ts"], markers, rootImports = [], extraFiles = {} } = {}) {
@@ -127,10 +127,50 @@ describe("the root entry's isolation check", () => {
     expect(() => checkRootIsolation(bypass)).toThrow(/the root entry reaches src\/window-ranges\.ts/);
   });
 
-  it.runIf(existsSync(new URL("../dist/metafile-esm.json", import.meta.url)))("passes this checkout's build", () => {
+  it("names the time entry's own files whole, and not the root's time-scale modules", () => {
+    for (const path of ["src/time.ts", "src/time.mts", "src/time-bands.ts", "src/time-bands.mts"]) expect(OPT_IN_SOURCE.test(path), path).toBe(true);
+    // Written as calc's and window's are, (?:time)(?:-[^/]*)?, the pattern would take these two, and the root would fail.
+    for (const path of ["src/time-scale.ts", "src/time-scale-data.ts", "src/time-scale.mts", "src/timeline.ts", "src/times.ts", "src/time/a.ts"]) {
+      expect(OPT_IN_SOURCE.test(path), path).toBe(false);
+    }
+    const bypass = build({ chunkModules: ["src/api.ts", "src/ephemeris.ts", "src/time.ts"], rootImports: ["src/time.ts"] });
+    expect(() => checkRootIsolation(bypass)).toThrow(/the root entry reaches src\/time\.ts/);
+    const core = build({ chunkModules: ["src/api.ts", "src/ephemeris.ts", "src/time-scale.ts", "src/time-scale-data.ts"] });
+    expect(checkRootIsolation(core).held).toEqual(["src/api.ts", "src/ephemeris.ts", "src/index.ts", "src/time-scale-data.ts", "src/time-scale.ts"]);
+  });
+
+  it("names the lite entry's files and src/sect.ts, and not files whose names only begin as theirs (L10)", () => {
+    for (const path of ["src/lite.ts", "src/lite.mts", "src/lite/x.ts", "src/lite/declinations.ts", "src/sect.ts", "src/sect.mts"]) {
+      expect(OPT_IN_SOURCE.test(path), path).toBe(true);
+    }
+    for (const path of ["src/literal.ts", "src/lites/x.ts", "src/sector.ts", "src/sects.ts", "src/sect/a.ts", "src/declination.ts", "src/points.ts", "src/read-options.ts"]) {
+      expect(OPT_IN_SOURCE.test(path), path).toBe(false);
+    }
+    // L10's controls: a root that imports a lite part, or the module of the sect part, fails the check.
+    for (const [path, pattern] of [["src/lite/declinations.ts", /the root entry reaches src\/lite\/declinations\.ts/], ["src/sect.ts", /the root entry reaches src\/sect\.ts/]]) {
+      const bypass = build({ chunkModules: ["src/api.ts", "src/ephemeris.ts", path], rootImports: [path] });
+      expect(() => checkRootIsolation(bypass)).toThrow(pattern);
+    }
+  });
+
+  it("reads the two module lists of the build as one: outputs apart, shared sources alike", () => {
+    const tsup = build().metafile;
+    const lite = {
+      inputs: { "src/lite.ts": { imports: [] }, "src/api.ts": tsup.inputs["src/api.ts"] },
+      outputs: { "dist/lite.js": { bytes: 1, inputs: { "src/lite.ts": {} }, imports: [] } }
+    };
+    const merged = mergeModuleLists(tsup, lite);
+    expect(Object.keys(merged.outputs).sort()).toEqual([...Object.keys(tsup.outputs), "dist/lite.js"].sort());
+    expect(merged.inputs["src/lite.ts"]).toEqual({ imports: [] });
+    expect(() => mergeModuleLists(tsup, { ...lite, outputs: { "dist/index.js": tsup.outputs["dist/index.js"] } })).toThrow(/dist\/index\.js is in two/);
+    expect(() => mergeModuleLists(tsup, { ...lite, inputs: { "src/api.ts": { imports: [] } } })).toThrow(/disagree on src\/api\.ts/);
+    expect(() => mergeModuleLists(tsup, undefined)).toThrow(/not an esbuild metafile/);
+  });
+
+  it.runIf(["metafile-esm.json", "metafile-lite.json"].every((name) => existsSync(new URL(`../dist/${name}`, import.meta.url))))("passes this checkout's build", () => {
     const dist = new URL("../dist/", import.meta.url);
     const graph = checkRootIsolation({
-      metafile: JSON.parse(readFileSync(new URL("metafile-esm.json", dist), "utf8")),
+      metafile: readModuleList(dist),
       files: readdirSync(dist).filter((name) => name.endsWith(".js")).map((name) => `dist/${name}`),
       read: (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8")
     });

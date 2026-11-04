@@ -202,13 +202,19 @@ repository root, such as this one, is not packed unless `files` lists it or
 npm packs it by default (`package.json` and any README, LICENSE, LICENCE or
 COPYING file). `conformance/` and `atlas/` are not packed. The core entry
 point makes no network request and has no import-time side effects;
-`@zodiacs/engine/crossings` and `@zodiacs/engine/deltat` import no ephemeris.
+`@zodiacs/engine/crossings`, `@zodiacs/engine/deltat`,
+`@zodiacs/engine/time` and `@zodiacs/engine/lite` import no ephemeris.
 `@zodiacs/engine/timing`, `@zodiacs/engine/vedic`, `@zodiacs/engine/geo`,
 `@zodiacs/engine/calc`, `@zodiacs/engine/window`,
-`@zodiacs/engine/techniques`, `@zodiacs/engine/houses` and
-`@zodiacs/engine/sky` are opt-in: the root imports none of them, and
+`@zodiacs/engine/techniques`, `@zodiacs/engine/houses`,
+`@zodiacs/engine/sky`, `@zodiacs/engine/time` and `@zodiacs/engine/lite`
+are opt-in: the root imports none of them, and
 `npm run exports:smoke` fails if its static graph reaches one of their
-modules or a zone history.
+modules or a zone history. `@zodiacs/engine/lite` is built apart from the
+others: `npm run build` runs `scripts/build-lite.mjs` after tsup, which
+bundles each of its four parts (`src/lite/`) into a file of its own that
+imports nothing, and the export smoke test checks that it reaches only its
+pinned modules (`scripts/lite-entry.mjs`, `docs/lite.md`).
 `@zodiacs/engine/internal` and `@zodiacs/engine/internal/math` exist for
 zodiacs.org and carry no semantic-versioning guarantee.
 

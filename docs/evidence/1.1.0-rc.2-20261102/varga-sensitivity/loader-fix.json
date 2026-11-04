@@ -1,0 +1,98 @@
+{
+  "tool": "calls_digest.mjs",
+  "node": "v22.22.2",
+  "loaders": {
+    "before": {
+      "sha256": "7a85d02aee87ad383090fbaa6c71e43a8d3b58ed7043c0aaee6ef0cf1ccca8f0"
+    },
+    "after": {
+      "sha256": "63c5d26dec61e78ac015f1f5f6d1ba082949a6dcd8ac0012035dc213cad7e7b6"
+    }
+  },
+  "corpora": [
+    {
+      "corpus": "F2",
+      "file": "births.json",
+      "fileSha256": "e333a037563d94f1e5b9ed42269166a4024808284b510b7ce199ab6817aff5c7",
+      "before": {
+        "calls": 1000,
+        "sha256": "0d78efcabf2d102ef389f5673cb0deaca199a1db34f4297289213a1cce0e2a3f",
+        "points": {
+          "[\"Ascendant\",\"Sun\",\"Moon\",\"Mercury\",\"Venus\",\"Mars\",\"Jupiter\",\"Saturn\",\"Mean Node\",\"Mean South Node\"]": 897,
+          "[\"Ascendant\",\"Sun\",\"Moon\",\"Mercury\",\"Venus\",\"Mars\",\"Jupiter\",\"Saturn\",\"Uranus\",\"Neptune\",\"Pluto\",\"Mean Node\",\"Mean South Node\"]": 103
+        }
+      },
+      "after": {
+        "calls": 1000,
+        "sha256": "0d78efcabf2d102ef389f5673cb0deaca199a1db34f4297289213a1cce0e2a3f",
+        "points": {
+          "[\"Ascendant\",\"Sun\",\"Moon\",\"Mercury\",\"Venus\",\"Mars\",\"Jupiter\",\"Saturn\",\"Mean Node\",\"Mean South Node\"]": 897,
+          "[\"Ascendant\",\"Sun\",\"Moon\",\"Mercury\",\"Venus\",\"Mars\",\"Jupiter\",\"Saturn\",\"Uranus\",\"Neptune\",\"Pluto\",\"Mean Node\",\"Mean South Node\"]": 103
+        }
+      },
+      "same": true
+    },
+    {
+      "corpus": "F3",
+      "file": "seams.json",
+      "fileSha256": "956a3ad8a9e3d29249b16c55a3f25372e6e42850510e9d31555e86bccb648d70",
+      "before": {
+        "calls": 13,
+        "sha256": "c296e31d0ea93fc6d7d78be5bb5da6df234f085d4d1272099759b6c9b437b262",
+        "points": {
+          "[\"Ascendant\"]": 9,
+          "[\"Moon\"]": 4
+        }
+      },
+      "after": {
+        "calls": 13,
+        "sha256": "c296e31d0ea93fc6d7d78be5bb5da6df234f085d4d1272099759b6c9b437b262",
+        "points": {
+          "[\"Ascendant\"]": 9,
+          "[\"Moon\"]": 4
+        }
+      },
+      "same": true
+    },
+    {
+      "corpus": "F3b",
+      "file": "seams-f3b.json",
+      "fileSha256": "052c05131e33f63dd5b8693b08f4facd50421ce74583e62ad26cf1bea828469e",
+      "before": {
+        "calls": 2,
+        "sha256": "58d382650406ff90a897e12fe885e38f6213b5b3d130f7a3e7b6b6bebaf53978",
+        "points": {
+          "[\"Ascendant\"]": 2
+        }
+      },
+      "after": {
+        "calls": 2,
+        "sha256": "58d382650406ff90a897e12fe885e38f6213b5b3d130f7a3e7b6b6bebaf53978",
+        "points": {
+          "[\"Ascendant\"]": 2
+        }
+      },
+      "same": true
+    },
+    {
+      "corpus": "F4",
+      "file": "births-erfa.json",
+      "fileSha256": "5c6ddf9d0a3f2325923538b8965bd3acc2a3b4975a96ce502b60c7b488cab6d9",
+      "before": {
+        "calls": 1000,
+        "sha256": "ed288d7be7781e3bfa164ac9febb862ebbabfaf6e56aa03f9b1872a174640971",
+        "points": {
+          "null": 1000
+        }
+      },
+      "after": {
+        "calls": 1000,
+        "sha256": "d729de1c8e52f94f6242d6e2626c3c1188e9be1a40219a4bb37ffcf43fd810c2",
+        "points": {
+          "[\"Ascendant\"]": 1000
+        }
+      },
+      "same": false
+    }
+  ]
+}

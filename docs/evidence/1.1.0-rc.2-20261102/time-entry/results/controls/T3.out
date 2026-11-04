@@ -1,0 +1,7 @@
+installed: @zodiacs engine
+node v22.22.2, flag: --no-experimental-detect-module
+  check: {"taiMinusUtc":37,"model":"iers-utc/1","lon":359.9961300933642,"lat":0,"pass":true}
+  control: {"rejected":true,"code":"ERR_MODULE_NOT_FOUND","namesAstronomyEngine":true,"controlBehaved":true}
+node v20.19.0, flag: --no-experimental-detect-module
+  check: {"taiMinusUtc":37,"model":"iers-utc/1","lon":359.9961300933642,"lat":0,"pass":true}
+  control: {"rejected":true,"code":"ERR_MODULE_NOT_FOUND","namesAstronomyEngine":true,"controlBehaved":true}

@@ -21,7 +21,7 @@
  */
 import { SIGN_SLUGS, SIGNS, normalizeLongitude, signIndexForLongitude } from "../signs.js";
 import type { BodyName, Element, Sect, ZodiacSign } from "../types.js";
-import { bodyName, finiteDegrees, oneOf, readOptions } from "./shared.js";
+import { bodyName, finiteDegrees, oneOf, readOptions } from "./names.js";
 
 export type ClassicalPlanet = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn";
 

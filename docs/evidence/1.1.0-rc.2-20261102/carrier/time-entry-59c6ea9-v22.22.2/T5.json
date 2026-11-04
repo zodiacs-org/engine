@@ -1,0 +1,23 @@
+{
+ "check": "T5",
+ "tool": "natal-parity.mjs",
+ "package": {
+  "name": "@zodiacs/engine",
+  "version": "1.1.0-rc.2"
+ },
+ "astronomyEngine": "2.1.19",
+ "control": null,
+ "controlBehaved": null,
+ "counts": {
+  "records": 16765,
+  "longitudes": 201180
+ },
+ "differences": {
+  "records": 0,
+  "longitudes": 0,
+  "instantsWithLongitudeDifferences": 0
+ },
+ "examples": [],
+ "node": "v22.22.2",
+ "pass": true
+}

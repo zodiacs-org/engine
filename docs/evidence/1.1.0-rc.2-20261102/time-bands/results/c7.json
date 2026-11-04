@@ -1,0 +1,104 @@
+{
+ "check": "C7",
+ "pass": true,
+ "records": 15,
+ "bases": {
+  "a253973": {
+   "files": 13,
+   "added": [
+    "calc.api.md: Exported: CalcTimeBand",
+    "calc.api.md: Exported: TimeBands",
+    "vedic.api.md: Exported: VARGA_POINTS",
+    "vedic.api.md: Exported: VargaChange",
+    "vedic.api.md: Exported: VargaPoint",
+    "vedic.api.md: Exported: VargaRefusal",
+    "vedic.api.md: Exported: VargaRefusalReason",
+    "vedic.api.md: Exported: VargaSensitivity",
+    "vedic.api.md: Exported: VargaSensitivityOptions",
+    "vedic.api.md: Exported: VargaSensitivityRow",
+    "vedic.api.md: Exported: vargaSensitivity"
+   ],
+   "grew": [
+    "calc.api.md: Exported: CalcEvent",
+    "calc.api.md: Exported: CalcPosition",
+    "calc.api.md: Exported: ChartResult",
+    "calc.api.md: Exported: HousesResult"
+   ],
+   "gained": [
+    "calc.api.md: Referenced, not exported here: DeltaTSegment",
+    "calc.api.md: Referenced, not exported here: EPHEMERIS_SPAN",
+    "calc.api.md: Referenced, not exported here: LeapSeconds",
+    "calc.api.md: Referenced, not exported here: TimeScaleName",
+    "calc.api.md: Referenced, not exported here: Ut1MinusUtc",
+    "geo.api.md: Referenced, not exported here: TimeScaleName",
+    "receipt.api.md: Referenced, not exported here: DeltaT",
+    "receipt.api.md: Referenced, not exported here: DeltaTSegment",
+    "receipt.api.md: Referenced, not exported here: LeapSeconds",
+    "receipt.api.md: Referenced, not exported here: TimeScale",
+    "receipt.api.md: Referenced, not exported here: TimeScaleName",
+    "receipt.api.md: Referenced, not exported here: Ut1MinusUtc",
+    "techniques.api.md: Referenced, not exported here: DeltaT",
+    "techniques.api.md: Referenced, not exported here: DeltaTSegment",
+    "techniques.api.md: Referenced, not exported here: LeapSeconds",
+    "techniques.api.md: Referenced, not exported here: TimeScale",
+    "techniques.api.md: Referenced, not exported here: TimeScaleName",
+    "techniques.api.md: Referenced, not exported here: Ut1MinusUtc",
+    "timing.api.md: Referenced, not exported here: DeltaT",
+    "timing.api.md: Referenced, not exported here: DeltaTSegment",
+    "timing.api.md: Referenced, not exported here: LeapSeconds",
+    "timing.api.md: Referenced, not exported here: TimeScale",
+    "timing.api.md: Referenced, not exported here: TimeScaleName",
+    "timing.api.md: Referenced, not exported here: Ut1MinusUtc",
+    "vedic.api.md: Referenced, not exported here: DeltaT",
+    "vedic.api.md: Referenced, not exported here: DeltaTSegment",
+    "vedic.api.md: Referenced, not exported here: LeapSeconds",
+    "vedic.api.md: Referenced, not exported here: TimeScale",
+    "vedic.api.md: Referenced, not exported here: TimeScaleName",
+    "vedic.api.md: Referenced, not exported here: Ut1MinusUtc"
+   ],
+   "newFiles": [
+    "lite.api.md",
+    "time.api.md"
+   ]
+  },
+  "3129edec9195a2e1949d907c9f74cf16dfc2c7ef": {
+   "files": 14,
+   "added": [
+    "calc.api.md: Exported: CalcTimeBand",
+    "calc.api.md: Exported: TimeBands",
+    "time.api.md: Exported: TimeBands",
+    "time.api.md: Exported: timeBands",
+    "vedic.api.md: Exported: VARGA_POINTS",
+    "vedic.api.md: Exported: VargaChange",
+    "vedic.api.md: Exported: VargaPoint",
+    "vedic.api.md: Exported: VargaRefusal",
+    "vedic.api.md: Exported: VargaRefusalReason",
+    "vedic.api.md: Exported: VargaSensitivity",
+    "vedic.api.md: Exported: VargaSensitivityOptions",
+    "vedic.api.md: Exported: VargaSensitivityRow",
+    "vedic.api.md: Exported: vargaSensitivity"
+   ],
+   "grew": [
+    "calc.api.md: Exported: CalcEvent",
+    "calc.api.md: Exported: CalcPosition",
+    "calc.api.md: Exported: ChartResult",
+    "calc.api.md: Exported: HousesResult"
+   ],
+   "gained": [],
+   "newFiles": [
+    "lite.api.md"
+   ]
+  }
+ },
+ "problems": [],
+ "controls": {
+  "a declaration line removed": {
+   "failed": true,
+   "problems": 1
+  },
+  "an exported-by line that loses an entry point": {
+   "failed": true,
+   "problems": 1
+  }
+ }
+}

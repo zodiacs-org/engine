@@ -167,8 +167,8 @@ export function wholeSignCusps(ascendant: number): number[] {
  * circle, so the map is a contraction with slope at most 2q/3. The iteration
  * settles to 1e-9° within 64 steps except within about 1e-8° of the polar
  * limit, near the sidereal times at which a cusp's right ascension reaches 90°
- * or 270°: it needs up to 63 steps there, and the rounding of asin near ±1
- * moves each step by about the tolerance. Where it does not settle, the cusp
+ * or 270°, where the rounding of asin near ±1 can keep it from settling.
+ * Where it does not settle, the cusp
  * is found by bisection on RAMC + offset ± (90° m + 1°), across which
  * α − RAMC − offset − m·AD(α) increases strictly, so below the limit Placidus
  * never falls back. Near the limit, either way, a cusp carries the rounding of

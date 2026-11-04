@@ -1,0 +1,46 @@
+{
+ "check": "T8",
+ "tool": "one-copy.mjs",
+ "package": {
+  "name": "@zodiacs/engine",
+  "version": "1.1.0-rc.2"
+ },
+ "layout": "MF",
+ "holders": {
+  "deltaTModel": [
+   "chunk-BHJXUY67.js"
+  ],
+  "ut1Table": [
+   "chunk-B5LKF437.js"
+  ],
+  "nutation": [
+   "chunk-2BB5GQ3P.js"
+  ]
+ },
+ "expectedHolders": {
+  "deltaTModel": 1,
+  "ut1Table": 1,
+  "nutation": 1
+ },
+ "timeGraph": [
+  "chunk-2BB5GQ3P.js",
+  "chunk-B5LKF437.js",
+  "chunk-BHJXUY67.js",
+  "chunk-I3L4POY7.js",
+  "chunk-NNOSOOWS.js",
+  "chunk-RMBWKZI2.js",
+  "time.js"
+ ],
+ "identities": {
+  "ephemerisSpan": true,
+  "deltaTIersModel": true,
+  "timeScaleNamesFrozen": true,
+  "timeScaleNames": true
+ },
+ "controlSignature": {
+  "twoHolders": false,
+  "spanIdentityFalse": false
+ },
+ "node": "v22.22.2",
+ "pass": true
+}

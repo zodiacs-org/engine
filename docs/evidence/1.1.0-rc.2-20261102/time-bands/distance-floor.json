@@ -1,0 +1,118 @@
+{
+ "check": "C4a's distance floor (a derivation; not a check)",
+ "pass": true,
+ "records": 10,
+ "engine": {
+  "name": "@zodiacs/engine",
+  "version": "1.1.0-rc.2"
+ },
+ "ephemeris": {
+  "name": "astronomy-engine",
+  "version": "2.1.19"
+ },
+ "node": "v22.22.2",
+ "platform": "darwin-arm64",
+ "units": "au; per evaluation of a distance from 1800 to 2200",
+ "timeRoundingDays": 1.5386136809070194e-11,
+ "largestPerEvaluationAu": 5.619470134809673e-12,
+ "floorAu": 6e-12,
+ "floor": "F = 6e-12 au × (1 + σTT / 86.4 s): the largest per-evaluation bound, rounded up to one significant figure, for the half difference of two evaluations, plus the same carried into the band through the speed's two samples 0.002 day apart (σTT × 2 ε / 0.002 day)",
+ "bodies": {
+  "Mercury": {
+   "heliocentricSpeedAuPerDay": 0.03406087848086082,
+   "heliocentricRadiusAu": 0.46671840403964326,
+   "nearestGeocentricAu": 0.5489777965612856,
+   "kSquaredTauDays": 3.3157934732333696e-10,
+   "seriesAu": 2.9532010953558076e-12,
+   "instantAu": 1.048130672287279e-12,
+   "earthAu": 1.5628706553566732e-12,
+   "lightTimeJumpAu": 5.4608882208521723e-14,
+   "perEvaluationAu": 5.619470134809673e-12
+  },
+  "Venus": {
+   "heliocentricSpeedAuPerDay": 0.020366175039541096,
+   "heliocentricRadiusAu": 0.7283236936430372,
+   "nearestGeocentricAu": 0.2641431450963135,
+   "kSquaredTauDays": 1.3945256685423535e-10,
+   "seriesAu": 1.1911419504779503e-12,
+   "instantAu": 6.267135108716998e-13,
+   "earthAu": 1.5628706553566732e-12,
+   "lightTimeJumpAu": 1.1349552083427303e-13,
+   "perEvaluationAu": 3.49499664322834e-12
+  },
+  "Mars": {
+   "heliocentricSpeedAuPerDay": 0.015309229890596692,
+   "heliocentricRadiusAu": 1.6663959471542011,
+   "nearestGeocentricAu": 0.3727130319691418,
+   "kSquaredTauDays": 1.211539217076049e-10,
+   "seriesAu": 1.5259036491738191e-12,
+   "instantAu": 4.710998110764549e-13,
+   "earthAu": 1.5628706553566732e-12,
+   "lightTimeJumpAu": 8.04347078209788e-14,
+   "perEvaluationAu": 3.641500416881515e-12
+  },
+  "Jupiter": {
+   "heliocentricSpeedAuPerDay": 0.007924750356238712,
+   "heliocentricRadiusAu": 5.457566525234802,
+   "nearestGeocentricAu": 3.948052194592073,
+   "kSquaredTauDays": 7.833279817533807e-11,
+   "seriesAu": 9.286885546224538e-13,
+   "instantAu": 2.4386258631763317e-13,
+   "earthAu": 1.5628706553566732e-12,
+   "lightTimeJumpAu": 7.593380824238723e-15,
+   "perEvaluationAu": 2.7458903885210135e-12
+  },
+  "Saturn": {
+   "heliocentricSpeedAuPerDay": 0.00589096492901095,
+   "heliocentricRadiusAu": 10.075791119711043,
+   "nearestGeocentricAu": 8.028163135099094,
+   "kSquaredTauDays": 7.416177388026242e-11,
+   "seriesAu": 9.38535370892596e-13,
+   "instantAu": 1.8127838467039394e-13,
+   "earthAu": 1.5628706553566732e-12,
+   "lightTimeJumpAu": 3.734237000795451e-15,
+   "perEvaluationAu": 2.691344763031544e-12
+  },
+  "Uranus": {
+   "heliocentricSpeedAuPerDay": 0.004127970394906976,
+   "heliocentricRadiusAu": 20.10746805159897,
+   "nearestGeocentricAu": 17.28748928666043,
+   "kSquaredTauDays": 6.934711782792508e-11,
+   "seriesAu": 1.0198061294869068e-12,
+   "instantAu": 1.270270344796605e-13,
+   "earthAu": 1.5628706553566732e-12,
+   "lightTimeJumpAu": 1.7341479338264485e-15,
+   "perEvaluationAu": 2.720819041850306e-12
+  },
+  "Neptune": {
+   "heliocentricSpeedAuPerDay": 0.0031747120689869382,
+   "heliocentricRadiusAu": 30.33980319435695,
+   "nearestGeocentricAu": 28.814371367294505,
+   "kSquaredTauDays": 6.088510600951938e-11,
+   "seriesAu": 5.977104708835584e-13,
+   "instantAu": 9.769310844567865e-14,
+   "earthAu": 1.5628706553566732e-12,
+   "lightTimeJumpAu": 1.0404205403396904e-15,
+   "perEvaluationAu": 2.2732397994479575e-12
+  },
+  "Pluto": {
+   "heliocentricSpeedAuPerDay": 0.0035322671180424477,
+   "heliocentricRadiusAu": 49.32025774635204,
+   "nearestGeocentricAu": 28.686673377928734,
+   "kSquaredTauDays": 1.2099518749154393e-10,
+   "seriesAu": 3.552713678800501e-13,
+   "instantAu": 1.086958902487624e-13,
+   "earthAu": 1.5628706553566732e-12,
+   "lightTimeJumpAu": 1.045051945638795e-15,
+   "perEvaluationAu": 2.0502371247174224e-12
+  },
+  "Sun": {
+   "perEvaluationAu": 1.5633222203507921e-12
+  },
+  "Moon": {
+   "geocentricSpeedAuPerDay": 0.0006378673496411677,
+   "geocentricRadiusAu": 0.002718638030971155,
+   "perEvaluationAu": 1.0116143761378595e-14
+  }
+ }
+}

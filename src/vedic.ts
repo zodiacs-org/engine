@@ -23,6 +23,16 @@ export { NAKSHATRAS, VIMSHOTTARI_LORDS, VIMSHOTTARI_YEARS, nakshatraOf } from ".
 export type { NakshatraName, NakshatraPosition, VimshottariLord } from "./vedic/nakshatra.js";
 export { VARGAS, vargaOf } from "./vedic/varga.js";
 export type { VargaDefinition, VargaName, VargaPosition, VargaScheme } from "./vedic/varga.js";
+export { VARGA_POINTS, vargaSensitivity } from "./vedic/varga-time.js";
+export type {
+  VargaChange,
+  VargaPoint,
+  VargaRefusal,
+  VargaRefusalReason,
+  VargaSensitivity,
+  VargaSensitivityOptions,
+  VargaSensitivityRow
+} from "./vedic/varga-time.js";
 export { KP_SUBS, SIGN_LORDS, kpLordsOf } from "./vedic/kp.js";
 export type { KpLords, KpSub, SignLord } from "./vedic/kp.js";
 export {

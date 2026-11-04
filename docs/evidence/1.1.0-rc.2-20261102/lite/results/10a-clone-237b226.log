@@ -1,0 +1,22 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: a sparse, blobless clone of this commit, 237b226, for L7's controls (tools/sect-controls.mjs edits src/sect.ts while it runs; its header allows such a clone), and npm ci
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <scratch>/clones
+# command: nice -n 10 sh <scratch>/bin/clone.sh 237b2265fcc53ae51abcb4f8e895e64c66321f5e <scratch>/clones/c237b226
+# started 2026-11-04 12:17:05 +0700
+## sparse_clone <checkout> <scratch>/clones/c237b226 237b2265fcc53ae51abcb4f8e895e64c66321f5e
+## git rev-parse HEAD; git sparse-checkout list; the excluded folder (path only); git status
+237b2265fcc53ae51abcb4f8e895e64c66321f5e
+/*
+!/docs/evidence/calc-sidereal-2026-10-05/
+docs/evidence/calc-sidereal-2026-10-05 absent
+(end of status)
+<checkout>
+## npm ci --offline --no-audit --no-fund (Node v22.22.2, npm 10.9.7)
+
+added 109 packages in 2s
+## df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   228Gi   189Gi    11Gi    95%    5.5M  120M    4%   /System/Volumes/Data
+# exit 0, finished 2026-11-04 12:17:08 +0700

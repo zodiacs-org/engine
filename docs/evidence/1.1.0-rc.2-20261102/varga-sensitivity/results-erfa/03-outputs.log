@@ -1,0 +1,40 @@
+# varga-sensitivity, G-V4 run again in full (@zodiacs/engine 1.1.0-rc.2): the disk watch, the steps, the outputs as written, and the local paths shortened by hand (a record step: it runs no check)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3, with -I) where a tool says so; for G-V4's arbiter only, Python 3.11.16 with pyerfa 2.0.1.5 and numpy 2.4.6 (<programme>/toolchain/py311-oq6/venv/bin/python, the OQ6 environment, with -I)
+# commit 7b29dddf179ea1e4b0643fd86108d5d826988ed7 (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 15345428 KiB, 14.6 GiB
+# cwd <checkout>
+# command: bash <scratch>/bin/outputs.sh
+# started 2026-11-04 15:14:23 +0700
+## the free disk beside checks.sh --g-v4 (<scratch>/logs/df-watch.log, a sample every 15 s): the first sample at each step, the least, the last line
+2026-11-04 15:09:18 +0700 free 13507728 KiB; at (before the first step)
+2026-11-04 15:09:33 +0700 free 14748172 KiB; at == G-V4: the run on F4, the arbiter's comparison, then C4a and C4b
+the least: 13507728 KiB, 12.9 GiB (2026-11-04 15:09:18 +0700 free 13507728 KiB; at (before the first step))
+samples: 19
+2026-11-04 15:14:03 +0700 the checks.sh --g-v4 step ended, exit 0
+## results-erfa/steps.tsv
+step	kind	exit	as required
+G-V4: run.mjs on F4	check	0	yes
+G-V4: varga_ascendant.py	check	0	yes
+G-V4 control C4a: varga_ascendant.py --control c4a (its verdict in control-c4a.json)	check	0	yes
+G-V4 control C4b: varga_ascendant.py --control c4b (its verdict in control-c4b.json)	check	0	yes
+## counts read from results-erfa/results.jsonl: calls, the points the calls name and search, rows, refused rows, changes, null sides
+{"calls":1000,"threw":0,"optionsPoints":{"[\"Ascendant\"]":1000},"pointsSearched":{"[\"Ascendant\"]":1000},"rows":18000,"refused":0,"changes":36000,"nullSides":0}
+## the outputs as checks.sh --g-v4 wrote them: bytes and SHA-256
+702 bytes  f4822b62f1873a78cb4982969f17f3f4d5c9502f4419b3d947fe2cbcef7d55ba  results-erfa/compare.json
+25537 bytes  8dfa5b31b433223fb8d6d0f80702ca026465cb06b04e33f91f1ca46113993b63  results-erfa/control-c4a.json
+26072 bytes  2f3078f13ca1924638468bde56c93eb47b685d2908a4bbe37047500da9f4a410  results-erfa/control-c4b.json
+8385354 bytes  46feb98ce348e76b3b2a6e275b6448736d1c53e82a3b34a4649c95a335e2e8cd  results-erfa/results.jsonl
+752 bytes  124b409ff014e4a408f1da7c6a040b787f20a6d1ad4c51f52647050d62e8103b  results-erfa/run.json
+290 bytes  8873664e386dd848b2e3e1d3d3b32f7f5acb3ca115309cf6f6deddb48d8cfcc0  results-erfa/steps.tsv
+## the outputs that hold a local path (fixed strings, not printed here), each with the count of lines that do
+results-erfa/run.json: 1 lines
+## each of them kept as written in <scratch>/as-written/ and shortened by hand: the occurrences replaced, by placeholder, then the SHA-256 after
+results-erfa/run.json: <scratch> 0, <scratchpad> outside it 0, <checkout> 1, <programme> outside the checkout 0, <home> outside the programme 0
+  after: 696 bytes  60fc4272b3382ef49dad9280f0cb55150e44cf9bdfff471a76dc99f77959198c
+## the shortened JSON outputs still parse
+results-erfa/run.json: parses
+## local paths left in any output or log of results-erfa/ after the shortening (the same search)
+none
+# exit 0, finished 2026-11-04 15:14:23 +0700

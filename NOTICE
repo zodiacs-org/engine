@@ -9,10 +9,11 @@ Don Cross, distributed under the MIT License. Its distributed JavaScript source
 retains the full MIT permission and warranty notice. Source and license metadata:
 https://github.com/cosinekitty/astronomy
 
-The package's frame module (src/frame.ts, built into the ephemeris chunk under
-dist/) reproduces astronomy-engine's precession function, precession_rot, and
-the calc entry's reduction module (src/calc-reduce.ts, built into
-dist/calc.js) its function for an observer on the Earth's ellipsoid, terra:
+The package's frame module (src/frame.ts, built into a shared chunk under
+dist/ that the ephemeris chunk and dist/time.js import) reproduces
+astronomy-engine's precession function, precession_rot, and the calc entry's
+reduction module (src/calc-reduce.ts, built into dist/calc.js) its function
+for an observer on the Earth's ellipsoid, terra:
 
   Copyright (c) 2019-2023 Don Cross <cosinekitty@gmail.com>
   MIT License: the permission and warranty notice is the one in this
@@ -61,15 +62,18 @@ composes it, and the obliquity of J2000.0 of the IAU 2006 precession,
 
 Its bounds and its barycentre's error are measurements: the largest
 differences of this package's own results from NASA JPL Horizons (DE441)
-responses at 32 instants, and of astronomy-engine's barycentre from a
-Newtonian barycentre and from Horizons's. They are not coefficients derived
+responses at 32 instants (for the mean nodes and Black Moon Lilith, from
+their definitions evaluated with ERFA at those instants), and of
+astronomy-engine's barycentre from a Newtonian barycentre and from
+Horizons's. They are not coefficients derived
 from JPL data, and no JPL ephemeris value is in the package.
 
 Essential dignities
 -------------------
 
-The techniques entry (dist/techniques.js) carries the tables of the
-essential dignities as these works give them, and none of their text:
+The techniques entry (dist/techniques.js) and the lite entry
+(dist/lite-dignities.js, which dist/lite.js re-exports) carry the tables of
+the essential dignities as these works give them, and none of their text:
 
   Ptolemy, Tetrabiblos I.17-I.20, tr. F. E. Robbins (Loeb Classical Library,
   1940): domiciles, exaltations, the Egyptian terms.
@@ -178,8 +182,9 @@ Gregorian adoption dates
 ------------------------
 
 @zodiacs/engine/geo carries a table of when 18 countries took the Gregorian
-calendar (GREGORIAN_ADOPTION, in dist/geo.js). Its dates come from these
-public-domain sources:
+calendar (GREGORIAN_ADOPTION), in a shared chunk under dist/ that dist/geo.js
+and dist/techniques.js import. Its dates come from these public-domain
+sources:
 
   IANA Time Zone Database 2025c, file calendars, which quotes H. Grotefend,
   Taschenbuch der Zeitrechnung des deutschen Mittelalters und der Neuzeit,

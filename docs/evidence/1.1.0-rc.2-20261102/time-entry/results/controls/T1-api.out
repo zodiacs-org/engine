@@ -1,0 +1,6 @@
+api-report: the public API changed:
+- api/time.api.md differs from the build's declarations (- api/, + the build):
+    - # @zodiacs/engine/tame
+    + # @zodiacs/engine/time
+      
+If the change is meant, run npm run api:report and commit api/ with a CHANGELOG entry (docs/versioning.md).

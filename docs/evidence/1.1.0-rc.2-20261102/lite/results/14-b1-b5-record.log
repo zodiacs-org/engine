@@ -1,0 +1,116 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: B1 and B5, not run here (they belong to the site's adoption): the lines of the latest site runs' records, SR3 (5c00cb8, this pack) and SR2 (4f4c1e8), that give B1's figures and B5's controls; nothing is run
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <programme>/notes/rc2-2026-11-01
+# command: sh <scratch>/bin/b1-b5-record.sh
+# started 2026-11-04 12:19:47 +0700
+## sr3/REPORT.md, lines 1,1
+   1: **SR3 on 1.1.0-rc.2 at 5c00cb8 (2026-11-04, ICT): passes**
+## sr3/REPORT.md, lines 11,25
+  11: **S0: skipped**
+  12: - **What differs:** 8 of 90 files:
+  13:   - text: CHANGELOG.md, LICENSING.md, README.md
+  14:   - type declarations: `dist/calc.d.ts`, `dist/lite.d.ts`
+  15:   - JavaScript, only `dist/calc.js` (+494 bytes), `dist/vedic.js` (+40) and `dist/lite-sect.js` (+12)
+  16: - **What is unchanged:** NOTICE, `package.json`, every shared chunk, the tzdb files and the other lite files are byte-identical.
+  17: - **The code changes:**
+  18:   - `angleBands` in calc: a one-sided rate on TT near the Placidus/Koch fallback.
+  19:   - `signed()` in varga-time.
+  20:   - `orientality` in `src/sect.ts`, which is built only into `lite-sect.js`.
+  21: - **Why no site chunk carries them:**
+  22:   - Nothing in `dist/` imports `calc.js` or `vedic.js`, and only `dist/lite.js` imports `lite-sect.js`.
+  23:   - The site's `src/` imports none of `./calc`, `./vedic` or `./lite`; only tests and code samples written as strings do.
+  24:   - sr's attribution build has none of the three in its client (290 chunks), worker (5) or prerender (2,724) builds.
+  25: - **Correction to sr2:** the API bundles do not contain `calc.js` or `vedic.js`. They only name `./calc` and `./vedic` in a comment (`api/_compute/compute.mjs:206`). The skip stands either way.
+## sr2/REPORT.md, lines 1,1
+   1: # SR2 on 1.1.0-rc.2 at 4f4c1e8 (2026-11-03, ICT)
+## sr2/REPORT.md, lines 13,24
+  13: ## S0: nothing moved
+  14: The review changed only `calc.js` and `vedic.js`, and no client, worker or prerender chunk bundles either file. The site uses `./calc` and `./vedic` only server-side, in `api/_compute/compute.mjs` and `api/_ai/runtime.mjs`.
+  15: 
+  16: | Build | Engine chunk (allowance 33,380.4) | Largest chunk (allowance 61,440) | Routes moved | Served chunks identical to the previous run |
+  17: | --- | --- | --- | --- | --- |
+  18: | Default | 33,361, 19.4 left | 51,331, `client.D2SwsgPS.js` | 0 of 19 | 294 of 294 |
+  19: | Production flags | 33,361, 19.4 left | 51,366, `client.CCm7tF5v.js` | 0 of 19 | 296 of 296 |
+  20: 
+  21: - **Production flags:** the three `_SECRET` variables were set from the start to a 37-character stand-in; no CI value was read. So `/birth-chart/` is 70,284 bytes in 45 chunks with the daily-email island, matching CI's graph. Against the previous run's instructed build (17-character stand-ins), only `/birth-chart/` differs: +3,189 bytes, the island chunk, because of the stand-ins and not the engine.
+  22: - **Visible values:** the 20 visible values match the workflow job, with 0 mismatches.
+  23: - **Control:** with the engine-chunk allowance cut to 33,360 bytes, both builds print the warning (exit 0), and `--fail` exits 1 with the engine chunk as the only failure.
+  24: - **Against main's CI:** unchanged from the previous report, since main and the bytes are the same. For example, `/birth-chart/` is +77 to +180 bytes by default and the engine chunk +30 to +132.
+## sr2/04-report-bundles-default.log and sr2/08-report-bundles-production.log: the routes and gates B1 names
+sr2/04-report-bundles-default.log:3:# command: nice -n 10 npm run report:bundles; started 2026-11-03 22:32:06 +0700
+sr2/04-report-bundles-default.log:10:  /birth-chart/      65.5 KB /   71 KB  (44 chunks)
+sr2/04-report-bundles-default.log:19:  /compatibility/    33.8 KB /   36 KB  (25 chunks)
+sr2/04-report-bundles-default.log:29:  chunk-max          50.1 KB /   60 KB  (/_astro/client.D2SwsgPS.js)
+sr2/04-report-bundles-default.log:30:  engine-chunk       32.6 KB / 32.598046875 KB  (/_astro/full.AUZx8EGL.js; 8 static chunks)
+sr2/04-report-bundles-default.log:32:report-bundles: within budgets
+sr2/04-report-bundles-default.log:33:# finished 2026-11-03 22:32:07 +0700; exit code: 0
+sr2/08-report-bundles-production.log:3:# command: nice -n 10 npm run report:bundles; started 2026-11-03 22:33:47 +0700
+sr2/08-report-bundles-production.log:10:  /birth-chart/      68.6 KB /   71 KB  (45 chunks)
+sr2/08-report-bundles-production.log:19:  /compatibility/    34.2 KB /   36 KB  (25 chunks)
+sr2/08-report-bundles-production.log:29:  chunk-max          50.2 KB /   60 KB  (/_astro/client.CCm7tF5v.js)
+sr2/08-report-bundles-production.log:30:  engine-chunk       32.6 KB / 32.598046875 KB  (/_astro/full.AUZx8EGL.js; 8 static chunks)
+sr2/08-report-bundles-production.log:32:report-bundles: within budgets
+sr2/08-report-bundles-production.log:33:# finished 2026-11-03 22:33:49 +0700; exit code: 0
+## sr2/data/bundles-default.json and bundles-production.json: the same figures in bytes (gzip)
+sr2/data/bundles-default.json: {"/birth-chart/":{"gzip":67098,"limitBytes":72704,"chunks":44},"/compatibility/":{"gzip":34592,"limitBytes":36864,"chunks":25},"chunk-max":{"path":"/_astro/client.D2SwsgPS.js","gzip":51331,"limitBytes":61440},"engine-chunk":{"path":"/_astro/full.AUZx8EGL.js","closureGzip":33361,"limitBytes":33380.4},"failures":[]}
+sr2/data/bundles-production.json: {"/birth-chart/":{"gzip":70284,"limitBytes":72704,"chunks":45},"/compatibility/":{"gzip":35037,"limitBytes":36864,"chunks":25},"chunk-max":{"path":"/_astro/client.CCm7tF5v.js","gzip":51366,"limitBytes":61440},"engine-chunk":{"path":"/_astro/full.AUZx8EGL.js","closureGzip":33361,"limitBytes":33380.4},"failures":[]}
+## B5: the engine reference build and its export-coverage control
+## sr3/REPORT.md, lines 27,31
+  27: **Reference build**
+  28: - **On rc.1 first:** the extractor gave 0 unlisted and 0 orphans, and the drift check passed (13 entry points). The reference tools were checked with `npm ls` (typedoc 0.28.20, typescript 5.9.3) rather than reinstalled.
+  29: - **Generated:** 15 entry points, archive `c5aef0e3…`, 587 paths. Every entry's export list is identical to sr2's.
+  30: - **Control:** leaving `sectReading` out of `./lite` makes the build exit 1 ("Export coverage differs for ./lite: sectReading"). `build.mjs` was restored with the same SHA-256.
+  31: - **Drift check on the new output:** passes.
+## sr2/REPORT.md, lines 26,29
+  26: ## Reference build
+  27: - It generates 15 entry points, and the rc.1 and rc.2 drift checks pass.
+  28: - `./calc` now has 47 exports (was 46): it also exports `TimeBands`, so that page moved from `interfaces/time.TimeBands.html` to `interfaces/calc.TimeBands.html`.
+  29: - **Control:** leaving `sectReading` out of `./lite`'s documented names fails the coverage check (exit 1), as required.
+sr3/14c-reference-coverage-control-lite.log:1:# control (lite B5): one ./lite name (sectReading) left out of the documented names; must fail the export-coverage assertion
+sr3/14c-reference-coverage-control-lite.log:12:      if (JSON.stringify(names) !== JSON.stringify(documented)) throw new Error(`Export coverage differs for ${subpath}: ${names.filter((name) => !documented.includes(name))}`);
+sr3/14c-reference-coverage-control-lite.log:15:Error: Export coverage differs for ./lite: sectReading
+sr3/14c-reference-coverage-control-lite.log:20:# exit code: 1
+sr3/14c-reference-coverage-control-lite.log:21:# restored build.mjs: sha256 0b88ca8e55d3f7daa6e1830b40483b505e376d8c15164cbf173d935788dd5131 (before control: 0b88ca8e55d3f7daa6e1830b40483b505e376d8c15164cbf173d935788dd5131)
+## B5: the claims extractor's planted-sentence control (the sentence of time-bands C8)
+## sr3/REPORT.md, lines 58,62
+  58: **S1 and C8**
+  59: - **S1 holds:** the result is identical to sr2's. From the reference alone, 13 of the 15 records are flagged. With the MCP NOTICE refreshed in scratch, exactly 15 are flagged (20 orphans, 50 unlisted, the same listings as sr2). The NOTICE was restored with git.
+  60:   - The 2,540 versus 2,541 question is resolved: the header is 2,541 bytes, which is 2,540 characters, because "Δ" takes two bytes.
+  61:   - F-89 items 2, 6 and 7 still carry no trigger word.
+  62: - **C8 is unchanged:** the planted sentence is not listed. The listing is identical with and without it, and the reference was restored.
+## sr2/REPORT.md, lines 58,61
+  58: ## S1 and C8
+  59: - **S1 holds, as before:** `16-s1-r2-f89-records.log` is identical to the previous run's (13 of 15 records flagged from the reference alone). With the MCP adapter's NOTICE refreshed in scratch, exactly 15 are flagged (20 orphans, 50 unlisted). The NOTICE was restored with git. Its header was kept byte for byte: 2,541 bytes where the previous log printed 2,540, a one-byte difference I did not resolve; the diff starts at line 58 and the file ends with the installed NOTICE.
+  60: - **Still open for the adoption:** the new texts of F-89 items 2, 6 and 7 still carry no trigger word.
+  61: - **C8 is unchanged:** the planted sentence is not listed (47 with and without it), so C8 and B5's planted control stay void. No other sentence was tried.
+sr3/17-control-c8-planted-sentence.log:1:# C8 control (time-bands) and lite B5's planted-sentence control, run once more only to confirm it is unchanged; no other sentence tried. The sentence
+sr3/17-control-c8-planted-sentence.log:4:planted: The band bounds the error of every position.
+sr3/17-control-c8-planted-sentence.log:15:# command: nice -n 10 node scripts/claims-ledger.mjs --unlisted
+sr3/17-control-c8-planted-sentence.log:16:# exit code: 1
+sr3/17-control-c8-planted-sentence.log:122:(none: the planted sentence is NOT listed)
+sr3/17-control-c8-planted-sentence.log:123:# unlisted count with the plant: 47 unlisted sentences; without it: 47 unlisted sentences
+sr3/17-control-c8-planted-sentence.log:124:# the listing with the plant is identical, line for line, to step 15's listing without it
+sr3/17-control-c8-planted-sentence.log:125:# restored the reference: identical to the regenerated 5c00cb8 reference
+## The amendment of 2026-11-03 on SR (lite/PREREGISTRATION.md, section 11)
+## PREREGISTRATION.md, lines 787,804
+ 787: **2026-11-03, the site run (SR) on b11c5e8: B5's planted sentence.** SR, the
+ 788: cut's scratch site run (programme notes, `notes/rc2-2026-11-01/sr/`), ran
+ 789: B5's two controls on b11c5e8's candidate. The engine reference build with
+ 790: `sectReading` left out of `./lite`'s documented names failed its
+ 791: export-coverage assertion, as it must. The claims extractor's control took
+ 792: the sentence time-bands' C8 plants, "The band bounds the error of every
+ 793: position.", as B5 says ("as time-bands C8's control does"), planted in a
+ 794: scratch copy of the rc.2 reference as a paragraph of `release/README.txt` and
+ 795: as the first paragraph of the comment of `functions/time.timeBands.html`. The
+ 796: extractor did not list it: none of its words is a trigger of lexicon 2. With
+ 797: ", in arcseconds" added it was listed in both places, so the plants were in
+ 798: text the extractor reads. So B5's claims-extractor control did not behave in
+ 799: SR on b11c5e8, and B5, as run there, cannot show that the extractor sees the
+ 800: new sentences of `./lite`. Its version 2 is due in the site's adoption, with a
+ 801: planted sentence the extractor's lexicon selects, citing this result; no
+ 802: other sentence is chosen now. This commit rewords packed text (README.md's
+ 803: sentence on `./lite`'s copies, among others), so SR runs again on the
+ 804: candidate after it, as section 5 says.
+# exit 0, finished 2026-11-04 12:19:47 +0700

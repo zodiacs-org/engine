@@ -1,0 +1,77 @@
+{
+ "tool": "docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/rate_premises.mjs",
+ "engine": {
+  "version": "1.1.0-rc.2",
+  "jsDigest": "cd8af854c6f9a8c87c473c8e44c2275d1c515e86cb79c2955cacb536cd9d676f"
+ },
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "span": {
+  "from": "1800-01-01T00:00:00.000Z",
+  "to": "2200-01-01T00:00:00.000Z",
+  "everyHours": 1,
+  "timeScale": "UTC"
+ },
+ "sun": {
+  "what": "the Sun's longitude speed in the engine's own positions, degrees a day",
+  "samples": 3506328,
+  "largest": 1.0199078159303099,
+  "largestAt": "1804-12-31T12:00:00.000Z",
+  "positionsGivesTheSameAtTheLargest": true,
+  "largestChangeBetweenNeighbours": 0.00002762965323199751,
+  "largestChangeAt": "1841-03-31T10:00:00.000Z",
+  "bound": 1.0199216307569259,
+  "stated": 1.02,
+  "holds": true,
+  "starRateBound": {
+   "deflectionPerRadianOfTheSun": 0.02015,
+   "product": 0.020553000000000002,
+   "bound": 0.021,
+   "holds": true
+  }
+ },
+ "meanNode": {
+  "what": "|2 c2 T + 3 c3 T² + 4 c4 T³| / |c1|, the polynomial's higher terms' rate against its leading rate, T Julian centuries of TT",
+  "coefficientsArcsec": {
+   "c0": 450160.398036,
+   "c1": -6962890.5431,
+   "c2": 7.4722,
+   "c3": 0.007702,
+   "c4": -0.00005939
+  },
+  "sameAsBuilt": true,
+  "checkpoints": [
+   {
+    "t": -2,
+    "built": 3993.3253640193775,
+    "fromSource": 3993.3253640193775
+   },
+   {
+    "t": -1,
+    "built": 2059.182890437392,
+    "fromSource": 2059.182890437392
+   },
+   {
+    "t": 0,
+    "built": 125.04455501000001,
+    "fromSource": 125.04455501000001
+   },
+   {
+    "t": 1,
+    "built": -1809.089629228164,
+    "fromSource": -1809.089629228164
+   },
+   {
+    "t": 2,
+    "built": -3743.219649638401,
+    "fromSource": -3743.219649638401
+   }
+  ],
+  "largest": 0.000004305497339686044,
+  "largestAtT": 1.9999589722435418,
+  "stated": 0.00000431,
+  "holds": true,
+  "guard": 0.00001,
+  "underTheGuard": true
+ }
+}

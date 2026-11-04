@@ -1,0 +1,33 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: every control, tools/controls.sh (checkout built, the pack's package, the site module, Node 22.22.2 and 20.19.0, work folder <scratch>/controls)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 10520148 KiB, 10.0 GiB
+# cwd <checkout>
+# command: nice -n 10 sh <checkout>/docs/evidence/1.1.0-rc.2-20261102/time-entry/tools/controls.sh <checkout> <scratch>/consumer/node_modules/@zodiacs/engine <scratch>/site/time-basis.mjs <programme>/toolchain/node-v22.22.2-darwin-arm64/bin/node <programme>/toolchain/node-v20.19.0-darwin-arm64/bin/node <scratch>/controls
+# started 2026-11-04 12:39:05 +0700
+control T1-list-less-elapsedDays: failed as required
+control T1-api-check-one-character: failed as required
+control T2-index-no-external: failed as required
+control T2-time-imports-astronomy-engine: failed as required
+T3 with its control: exit 0 (0 means both runtimes passed and both controls rejected as required)
+  control: {"rejected":true,"code":"ERR_MODULE_NOT_FOUND","namesAstronomyEngine":true,"controlBehaved":true}
+  control: {"rejected":true,"code":"ERR_MODULE_NOT_FOUND","namesAstronomyEngine":true,"controlBehaved":true}
+control T4-a: failed as required
+control T4-b: failed as required
+control T4-c: failed as required
+control T5-a: failed as required
+control T5-b: failed as required
+control T6-types: failed as required
+control T6-frame-byte: failed as required
+control T7-leap: failed as required
+control T7-ut1: failed as required
+control T7-tilt: failed as required
+control T8-unsplit-time-js: failed as required
+control T9-budget-measured-less-one: failed as required
+control T10-site-module: failed as required
+control T11-let-cache: failed as required
+control T13-root-reexports-timeBasis: failed as required
+control T12-site-TimeBasis-extra-field: failed as required
+controls that failed as required: 20; controls that did not: 0
+# exit 0, finished 2026-11-04 12:39:35 +0700

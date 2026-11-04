@@ -24,8 +24,9 @@ planetaryReturns({ utc: "1995-04-09T12:04:00Z" }, "Mercury", "2031-02-15", "2031
 // { status: "complete", returns: [direct, retrograde, direct], … }
 ```
 
-The houses entry is one file of 13,606 bytes that imports no other module: no
-ephemeris and nothing of the root entry. The RAMC is `gastHours × 15 +
+The houses entry is one file of 13,678 bytes on 1.1.0-rc.2's build
+(`docs/evidence/1.1.0-rc.2-20261102/sizes.json`) that imports no other
+module: no ephemeris and nothing of the root entry. The RAMC is `gastHours × 15 +
 longitude`; to start from a RAMC, pass `gastHours: ramc / 15, longitude: 0`.
 Invalid input throws `RangeError`.
 
@@ -183,7 +184,7 @@ The last three belong to Munkasey's eight Personal Sensitive Points [SE-G
 equatorial ascendant, A = RAMC + 270° with p = φ for the polar ascendant (the
 Koch co-ascendant is its opposite), and A = RAMC + 90° with p = 90° − φ for
 Munkasey's co-ascendant. Where that point lies west of the meridian (inside
-the polar circle, and for Munkasey's within 90° − ε of the equator), it is not
+the polar circle, and for Munkasey's within ε of the equator), it is not
 turned east as the ascendant is.
 
 Against Swiss's `swe_houses_armc` given the same RAMC, latitude and obliquity,

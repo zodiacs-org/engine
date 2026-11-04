@@ -1,0 +1,11 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: T12, the site's time-basis.d.mts against the pack's ./time declarations (tools/declarations.sh, TypeScript 5.9.3)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 10519672 KiB, 10.0 GiB
+# cwd <checkout>
+# command: sh <checkout>/docs/evidence/1.1.0-rc.2-20261102/time-entry/tools/declarations.sh <scratch>/consumer/node_modules/@zodiacs/engine <scratch>/site/time-basis.d.mts <checkout>/node_modules/typescript/bin/tsc
+# started 2026-11-04 12:38:03 +0700
+TypeScript Version 5.9.3
+T12 check: exit 0
+# exit 0, finished 2026-11-04 12:38:03 +0700

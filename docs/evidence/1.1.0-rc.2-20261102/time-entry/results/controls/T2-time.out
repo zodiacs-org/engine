@@ -1,0 +1,17 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: external dependency in time build: astronomy-engine
+    at visit (file://<scratch>/controls/t2b/scripts/module-resolution-smoke.mjs:451:7)
+    at checkSelfContained (file://<scratch>/controls/t2b/scripts/module-resolution-smoke.mjs:457:3)
+    at file://<scratch>/controls/t2b/scripts/module-resolution-smoke.mjs:468:1 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.22.2

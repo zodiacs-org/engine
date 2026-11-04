@@ -38,8 +38,10 @@ modules:
 - `src/lib/geo/search.ts` — client for the separately hosted GeoNames index
 
 The techniques entry, added in 0.1.1-rc.16 (`src/techniques/`, built into
-`dist/techniques.js`), was adapted from these Zodiacs.org TypeScript modules,
-read at the site repository's commit
+`dist/techniques.js`, and from 1.1.0-rc.2 its composite and dignity modules
+also into `dist/lite-composite.js` and `dist/lite-dignities.js`, which
+`@zodiacs/engine/lite` re-exports), was adapted from these Zodiacs.org
+TypeScript modules, read at the site repository's commit
 `67cccac5a19a7779a07f85b09218c1ffbe2300cd` (2026-09-29), whose files'
 SHA-256 the entry's preregistration records
 (`docs/evidence/techniques-2026-09-29/PREREGISTRATION.md`):
@@ -47,7 +49,8 @@ SHA-256 the entry's preregistration records
 - `src/lib/engine/solar-return.ts` and `src/lib/engine/lunar-return.ts` —
   solar and lunar returns (`src/techniques/returns.ts`)
 - `src/lib/composite.ts` — composite midpoints and their aspects
-  (`src/techniques/relationship.ts`)
+  (`src/techniques/composite.ts`; `src/techniques/relationship.ts` until
+  1.1.0-rc.2)
 - `src/lib/engine/void-of-course.ts` — the void-of-course Moon
   (`src/techniques/void-of-course.ts`)
 - `src/lib/engine/aspect-patterns.ts` and `src/lib/aspect-pattern-model.ts` —
@@ -58,8 +61,17 @@ SHA-256 the entry's preregistration records
   `untimedMoonSign` in `src/lib/share-card.ts` — the Moon signs possible over
   a date (`src/techniques/moon-sign.ts`)
 
-The site repository's `LICENSE` at that commit reserves all rights in its
-contents but the parts it names (the engine, which it states is MIT, its
+The lite entry's sect part, added in 1.1.0-rc.2 (`src/sect.ts`, built into
+`dist/lite-sect.js`), ports from the Zodiacs.org module `src/lib/sect.ts`,
+read at the site repository's commit
+`9a67f761bc231741c6571af2dfae65b798954e11` (2026-11-01): the sect by the
+Sun's altitude (`sectReading`'s `"altitude"` convention), `orientality`, the
+diurnal and nocturnal planet lists (`DIURNAL_PLANETS`, `NOCTURNAL_PLANETS`),
+the sect light, and Mercury's side of the Sun with the lists of the planets
+in and out of sect.
+
+The site repository's `LICENSE` at both commits reserves all rights in its
+contents but the parts it names (the engine, whose code it states is MIT, its
 shared sky data and the GeoNames data), and grants no licence to this code.
 These modules therefore come into the package on the same condition as the
 ones above: that the repository operator has authority to publish the
@@ -151,8 +163,10 @@ instrument, and only statistics are committed.
 `src/nutation.ts` carries the IAU 2000B nutation series: the multipliers
 (385) and coefficients (462) of its 77 luni-solar terms, the 10 coefficients
 of its five fundamental arguments and its two fixed offsets for the planetary
-terms. The build places them in the ephemeris chunk under `dist/`, which the
-root, `./internal`, `./timing` and `./vedic` import. The model is D. D.
+terms. The build places them in a shared chunk under `dist/` that the
+ephemeris chunk and `dist/time.js` import, so the graphs of the root,
+`./calc`, `./internal`, `./sky`, `./techniques`, `./time`, `./timing`,
+`./vedic` and `./window` load them. The model is D. D.
 McCarthy and B. J. Luzum, "An abridged model of the precession-nutation of
 the celestial pole", Celestial Mechanics and Dynamical Astronomy 85, 37–49
 (2003), as the IERS Conventions (2003), chapter 5, give it.
@@ -198,7 +212,8 @@ From 1970 conversion uses the host's `Intl`/ICU data.
 ## Leap-second and UT1 data
 
 `src/time-scale-data.ts` holds the time basis's two IERS tables, which the
-root entry's import graph under `dist/` carries. `scripts/build-time-scales.mjs`
+import graphs of the root entry and of `@zodiacs/engine/time` under `dist/`
+carry. `scripts/build-time-scales.mjs`
 builds it from inputs committed in `scripts/time-scale-sources/` and checks
 each one's SHA-256:
 
@@ -290,8 +305,9 @@ state.
 ## Gregorian adoption dates
 
 `@zodiacs/engine/geo` carries a table of when 18 countries took the Gregorian
-calendar (`GREGORIAN_ADOPTION`, `src/geo/calendar.ts`, built into
-`dist/geo.js`). Its dates and names come from public-domain sources only:
+calendar (`GREGORIAN_ADOPTION`, `src/geo/calendar.ts`), in a shared chunk
+under `dist/` that `dist/geo.js` and `dist/techniques.js` import. Its dates
+and names come from public-domain sources only:
 
 - the `calendars` file of tzdata 2025c (the archive whose SHA-256 the zone
   histories pin), which says of itself "This file is in the public domain",
@@ -367,7 +383,10 @@ Its bounds (`src/calc-bounds.ts`) and its barycentre's error
 (`BARYCENTRE_ERROR` in `src/calc-reduce.ts`) are measurements, not
 coefficients derived from JPL data: the largest differences between this
 package's own results and NASA JPL Horizons (DE441) responses at 32
-preregistered instants, rounded up, and the largest distance of
+preregistered instants, rounded up (for the mean node, the mean south node
+and Black Moon Lilith, from the same definitions evaluated with ERFA's
+fundamental arguments at those instants, which checks the implementation,
+not an ephemeris), and the largest distance of
 astronomy-engine's barycentre from a Newtonian barycentre of the same
 positions, scanned daily from 1800 to 2200 and compared with Horizons's
 barycentre at 88 instants (`docs/evidence/calc-api/`). No value of a JPL
@@ -384,8 +403,10 @@ not values taken from ERFA.
 
 ## Techniques tables
 
-`@zodiacs/engine/techniques` (`dist/techniques.js`) carries the tables of the
-essential dignities of the seven classical planets, as these works give them
+`@zodiacs/engine/techniques` (`dist/techniques.js`) and, from 1.1.0-rc.2,
+`@zodiacs/engine/lite` (`dist/lite-dignities.js`, which `dist/lite.js`
+re-exports) carry the tables of the essential dignities of the seven
+classical planets, as these works give them
 (`src/techniques/dignities.ts`; `docs/techniques.md` quotes each and names
 the copies read):
 

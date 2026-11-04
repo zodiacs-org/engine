@@ -1,0 +1,108 @@
+# varga-sensitivity formal run of @zodiacs/engine 1.1.0-rc.2: the checks step's log, the disk watch and the stop, the outputs as written, and the local paths shortened by hand (a record step after the stop: it runs no check)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3, with -I) where a tool says so; for G-V4's arbiter only, Python 3.11.16 with pyerfa 2.0.1.5 and numpy 2.4.6 (<programme>/toolchain/py311-oq6/venv/bin/python, the OQ6 environment, with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 2649388 KiB, 2.5 GiB
+# cwd <checkout>
+# command: bash <scratch>/bin/outputs.sh
+# started 2026-11-04 14:45:29 +0700
+## the checks step's log: step.sh was stopped with the run, so it wrote neither its closing line nor the shortened copy; here the raw log (<scratch>/logs/02-checks.log), unchanged, is shortened to results/02-checks.log as step.sh would have
+raw: 71 lines, 4653 bytes, sha256 ffa569647205590d4f6fb678b4244741324269f3548ca91f93e44d4671a7a894
+results/02-checks.log: 71 lines, 4129 bytes, sha256 6ab56dc4992604a15abce96e0d63da8a861fefbb76fc5432916a9c37b4562ffd
+its last 3 lines:
+1000 calls, 0.3 min
+{"calls":1000,"threw":0,"callMs":{"mean":16.791716,"median":15.771,"max":131.319},"wallMinutes":"0.28"}
+{"births": 1000, "judged": 35204, "notJudged": 796, "compared": 35204, "comparedFailed": 0, "mismatches": 0, "verdict": "PASS"}
+## the free disk beside checks.sh (<scratch>/logs/df-watch.log, a sample every 15 s): the first sample at each step, the least before the stop, and its last 8 lines
+2026-11-04 13:15:31 +0700 free 7748848 KiB; at (before the first step)
+2026-11-04 13:15:46 +0700 free 7746076 KiB; at == G-V1, G-V2 (a) and the named tests, then their controls
+2026-11-04 13:16:46 +0700 free 9714516 KiB; at == G-V3 and G-V2 (b): the run on F2, F3 and F3b, the checker, then the controls
+2026-11-04 14:39:46 +0700 free 6089512 KiB; at == G-V5: the table, written into docs/vedic.md, then its control on a copy
+2026-11-04 14:40:31 +0700 free 5959532 KiB; at == G-V4: the run on F4, the arbiter's comparison, then C4a and C4b
+the least: 2759188 KiB, 2.6 GiB (2026-11-04 14:42:31 +0700 free 2759188 KiB; at == G-V4: the run on F4, the arbiter's comparison, then C4a and C4b)
+samples: 348
+2026-11-04 14:41:16 +0700 free 5926968 KiB; at == G-V4: the run on F4, the arbiter's comparison, then C4a and C4b
+2026-11-04 14:41:31 +0700 free 5934044 KiB; at == G-V4: the run on F4, the arbiter's comparison, then C4a and C4b
+2026-11-04 14:41:46 +0700 free 5941492 KiB; at == G-V4: the run on F4, the arbiter's comparison, then C4a and C4b
+2026-11-04 14:42:01 +0700 free 5913668 KiB; at == G-V4: the run on F4, the arbiter's comparison, then C4a and C4b
+2026-11-04 14:42:16 +0700 free 4217776 KiB; at == G-V4: the run on F4, the arbiter's comparison, then C4a and C4b
+2026-11-04 14:42:31 +0700 free 2759188 KiB; at == G-V4: the run on F4, the arbiter's comparison, then C4a and C4b
+2026-11-04 14:42:31 +0700 under 4 GiB free: the run is stopped (FORMAL-COMMON.md)
+2026-11-04 14:42:31 +0700 the checks.sh step ended, exit 143
+## what the stop left: the last rows of results/steps.tsv, the files in results-erfa/, and the run's processes
+G-V5 control: --check against the copy must fail	control	1	yes
+G-V4: run.mjs on F4	check	0	yes
+G-V4: varga_ascendant.py	check	0	yes
+compare.json
+results.jsonl
+run.json
+results-erfa/control-c4a.json: absent
+results-erfa/control-c4b.json: absent
+processes of the run still running (run.mjs, checker.mjs, controls.mjs, checks.sh, varga_ascendant.py): 0
+## the outputs as checks.sh wrote them: bytes and SHA-256
+702 bytes  f4822b62f1873a78cb4982969f17f3f4d5c9502f4419b3d947fe2cbcef7d55ba  results-erfa/compare.json
+52322903 bytes  c7edbf99b616503759e3ef63484091031aaa39768f7c90b33c0a2d401c5f1768  results-erfa/results.jsonl
+738 bytes  a74351f7d36e212d82e7e78c4a8fa66897b43f88168a3f747bc1af584e44c55c  results-erfa/run.json
+101 bytes  9e5f685d8508ad535be07f85f15a53c365d38f6f7d7b320af73248670e2cd3c7  results/boundaries-sha256.txt
+7625 bytes  eed1dc56d6ad9ff47928397effd101ab5c7962246e1ca91d4b100b210ea444db  results/check.json
+305 bytes  79315f40ae3897ca712fe16754e079f8751ff13b9e64d16f61b64a53a0f18733  results/controls-summary.txt
+8658 bytes  aa639e81a7718a5aa66b02e2c1677ba3e7e22efdac00db97a2069f52250913ac  results/controls.json
+83 bytes  2f2dc6729d9af69ea9763725bb26e3b26560b1b25ccc3a433fda5105c144a7aa  results/derived-bounds-control-verdict.txt
+310 bytes  25e500341b1c5d7c7f89b5de73e8be77ac8a007e29f3db7efcb7d8c19154298a  results/derived-bounds-control.txt
+3308 bytes  ecc08ba15a1e93c7e529f1dd1d74a635970712b2a9220943336fd3d04c64bf1b  results/derived-bounds.json
+1877 bytes  4171294a3d3d751eb3823f9cb827e526d6db7aadc92b5b686e84dc715e1a239c  results/f1-check.json
+1282 bytes  f1bce2366f88444a2dbf016164e401ea044d443f06903643517b177a19bc7348  results/inputs-sha256.recorded
+662 bytes  350caa06039df132107fbfeb13466b7aa82b370983af4e3d4e55e2b805d3b116  results/inputs-sha256.txt
+53838874 bytes  288d197680813d6353ae07748141473e5ffb2232fdc220f58488f31b41b8b310  results/results.jsonl
+1317 bytes  d03dde3bcaae3a0a6101936c2cfd24713e4ee553b1b32c421fa8e649ce0b11eb  results/run.json
+1265 bytes  485339aa6ab5aaafe28d49198294931c09fd11dae73f189a5d1fe1d3e625b3ea  results/steps.tsv
+10133 bytes  536b6312df670f5b920bc45a8900768fcd43c2a244b6345a1bea65dd87383bea  results/test-controls.json
+53173 bytes  02c4cc0a835718156b4b5d7ffd258bdb5c8742222caf5a972180db8255a3f548  results/tests.json
+331 bytes  468885b87df1851d375fda0230f5f8ddb7fd6df2cca99f684f95c55b43412df8  results/time-per-arcsecond-control-copy.txt
+686 bytes  1046d5396a51ddbabb2e87c88ee148eacc96b09621e3efc4b95ba5a192eb1347  results/time-per-arcsecond-control.txt
+107 bytes  73f916d5445b64dcf8dd103b16d9a51911a2419493d74e59c86c5d6b2da7b546  results/time-per-arcsecond-write.txt
+4183 bytes  696ba002dbb11400fb221f7f2c9a22f91ed3a87398a7782e16bc44234a67e55d  results/time-per-arcsecond.json
+463 bytes  c0957fa80557319da849bf271d1d671b8dd5ec2f778079ebd6b954067031c336  results/time-per-arcsecond.md
+## local paths in the outputs as written: the files that hold any, with the lines that do (grep -c -E '/Users/|/private/|(^|[^>])/tmp/|/var/folders|<user>')
+results-erfa/run.json: 1 lines
+results/check.json: 1 lines
+results/controls.json: 4 lines
+results/f1-check.json: 1 lines
+results/run.json: 3 lines
+results/tests.json: 1 lines
+results/time-per-arcsecond-control-copy.txt: 1 lines
+results/time-per-arcsecond-control.txt: 1 lines
+results/time-per-arcsecond-write.txt: 1 lines
+## each of them kept as written in <scratch>/as-written/ and shortened by hand: the occurrences replaced, by placeholder, then the SHA-256 after
+results-erfa/run.json: <scratch> 0, <scratchpad> outside it 0, <checkout> 1, <programme> outside the checkout 0, <home> outside the programme 0
+  after: 682 bytes  28b9fc47d51e4dcb809762bcbfa1e333a99451d923d21b0cdadaa8bc643158b3
+results/check.json: <scratch> 0, <scratchpad> outside it 0, <checkout> 1, <programme> outside the checkout 0, <home> outside the programme 0
+  after: 7569 bytes  befa9cbc262e16e75f515795fd29758d58b216162937a0c72fecaa98e8c5237e
+results/controls.json: <scratch> 3, <scratchpad> outside it 0, <checkout> 1, <programme> outside the checkout 0, <home> outside the programme 0
+  after: 8182 bytes  0fda2ced64ec476bba5c4ec64392d043cbeffef2449e8edb7960bebb1f13ba5f
+results/f1-check.json: <scratch> 0, <scratchpad> outside it 0, <checkout> 1, <programme> outside the checkout 0, <home> outside the programme 0
+  after: 1821 bytes  430253e4c6f6a46f487da8a85e618cb58d671a3c3c5bf8ee2b62a6c7ff4b8e24
+results/run.json: <scratch> 0, <scratchpad> outside it 0, <checkout> 3, <programme> outside the checkout 0, <home> outside the programme 0
+  after: 1149 bytes  e1144bfe37e5acf301c0c33f6573071eb4a994c3a9dadfa220c2eed41ab3982c
+results/tests.json: <scratch> 0, <scratchpad> outside it 0, <checkout> 6, <programme> outside the checkout 0, <home> outside the programme 0
+  after: 52837 bytes  4712daff5967b90ae333e481496bca4faece0beac71e73f561e8f8abfef29335
+results/time-per-arcsecond-control-copy.txt: <scratch> 1, <scratchpad> outside it 0, <checkout> 1, <programme> outside the checkout 0, <home> outside the programme 0
+  after: 135 bytes  db4a95e88128ea4e889d79991af196a4f5e334f25f8fbfc5b60d630de4be994d
+results/time-per-arcsecond-control.txt: <scratch> 1, <scratchpad> outside it 0, <checkout> 0, <programme> outside the checkout 0, <home> outside the programme 0
+  after: 546 bytes  94b65b897dd31e079b580f1773104117e0504c5e46cac4b7eb8fb8318ad08386
+results/time-per-arcsecond-write.txt: <scratch> 0, <scratchpad> outside it 0, <checkout> 1, <programme> outside the checkout 0, <home> outside the programme 0
+  after: 51 bytes  4b5c0f5e87308cea293446ce8103e07a9d8025290e76a1484dfe11b2831e0b47
+## the shortened JSON outputs still parse
+results-erfa/run.json: parses
+results/check.json: parses
+results/controls.json: parses
+results/f1-check.json: parses
+results/run.json: parses
+results/tests.json: parses
+results/time-per-arcsecond-control-copy.txt: text
+results/time-per-arcsecond-control.txt: text
+results/time-per-arcsecond-write.txt: text
+## local paths left in any output or log after the shortening (grep -l -E '/Users/|/private/|(^|[^>])/tmp/|/var/folders|<user>')
+none
+# exit 0, finished 2026-11-04 14:45:35 +0700

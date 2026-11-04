@@ -1,0 +1,80 @@
+# F-89 formal run of @zodiacs/engine 1.1.0-rc.2: E5's controls: the committed scripts/verify-package-contents.mjs, copied unchanged, in a scratch mirror of the unpacked rc.2 pack, with 1.1.0-rc.1's NOTICE, with its LICENSING.md, and with the Gregorian table's definition moved into dist/geo.js
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# cwd <scratch>
+# command: nice -n 10 zsh <scratch>/e5-controls.sh <checkout> <scratch>
+# started 2026-11-04 11:59:28 +0700
+## this harness, <scratch>/e5-controls.sh:
+    #!/bin/zsh
+    # E5's controls (F-89 PREREGISTRATION.md, section 5), run at the formal run in
+    # scratch, nothing in the checkout changed: scripts/verify-package-contents.mjs,
+    # copied unchanged, in a mirror of the unpacked rc.2 pack (<scratch>/rc2/package).
+    # First as packed, where it must pass (else the mirror is wrong); then with
+    # 1.1.0-rc.1's NOTICE; then with 1.1.0-rc.1's LICENSING.md; then with the
+    # Gregorian adoption table's definition moved into dist/geo.js. Each of the last
+    # three must fail, on the assertion named.
+    #   zsh e5-controls.sh <checkout> <scratch>
+    set -u
+    R=$1
+    S=$2
+    M=$S/e5-mirror
+    print -r -- "## this harness, $0:"
+    sed 's/^/    /' $0
+    rm -rf $M && mkdir -p $M/scripts
+    cp -R $S/rc2/package/. $M/
+    cp $R/scripts/verify-package-contents.mjs $M/scripts/
+    cmp $R/scripts/verify-package-contents.mjs $M/scripts/verify-package-contents.mjs &&
+      print -r -- "## scripts/verify-package-contents.mjs copied unchanged (SHA-256 $(shasum -a 256 $M/scripts/verify-package-contents.mjs | cut -d' ' -f1))"
+    print -r -- "## mirror: $(ls $M | tr '\n' ' ')"
+    bad=0
+    run() { # label, "pass" or the assertion message the run must fail on
+      local label=$1 want=$2
+      local out
+      out=$(cd $M && node scripts/verify-package-contents.mjs 2>&1)
+      local rc=$?
+      print -r -- "## $label: exit $rc"
+      print -r -- "$out" | grep -m1 -E "AssertionError|package contents passed" | cut -c1-260 | sed 's/^/   /'
+      if [[ $want == pass ]]; then
+        if [[ $rc == 0 ]]; then print -r -- "   as required: passes"; else print -r -- "   NOT as required: the mirror must pass as packed"; bad=1; fi
+      else
+        if [[ $rc != 0 && $out == *"AssertionError [ERR_ASSERTION]: $want"* ]]; then
+          print -r -- "   as required: fails on \"$want\""
+        else
+          print -r -- "   NOT as required: it must fail on \"$want\""; bad=1
+        fi
+      fi
+    }
+    run "mirror as packed" pass
+    cp $S/rc1/package/NOTICE $M/NOTICE
+    run "control 1, 1.1.0-rc.1's NOTICE in place of rc.2's" "NOTICE must say where the Gregorian adoption table is"
+    cp $S/rc2/package/NOTICE $M/NOTICE
+    cp $S/rc1/package/LICENSING.md $M/LICENSING.md
+    run "control 2, 1.1.0-rc.1's LICENSING.md in place of rc.2's" "LICENSING.md must say where the Gregorian adoption table is"
+    cp $S/rc2/package/LICENSING.md $M/LICENSING.md
+    holder=$(grep -l "var GREGORIAN_ADOPTION =" $M/dist/*.js)
+    print -r -- "## the table's holder as packed: ${holder#$M/}"
+    perl -pi -e 's/var GREGORIAN_ADOPTION =/var GREGORIAN_ADOPTION_ =/' $holder
+    printf '\nvar GREGORIAN_ADOPTION = Object.freeze([]);\n' >> $M/dist/geo.js
+    print -r -- "## holders after the move: $(grep -l 'var GREGORIAN_ADOPTION =' $M/dist/*.js | sed "s#$M/##" | tr '\n' ' ')"
+    run "control 3, the table's definition moved into dist/geo.js" "the Gregorian adoption table must be in exactly one shared chunk under dist/, as NOTICE says; found it in dist/geo.js"
+    rm -rf $M
+    if [[ $bad == 0 ]]; then print -r -- "## the mirror passed as packed and each of the 3 controls failed on its assertion"; else print -r -- "## NOT as required (see above)"; fi
+    exit $bad
+## scripts/verify-package-contents.mjs copied unchanged (SHA-256 063ec4ca4cedfc73d88a2998e7c04018a77fb2a243d4f1befbd1f7ee54a21b51)
+## mirror: CHANGELOG.md LICENSE LICENSING.md NOTICE README.md dist package.json scripts 
+## mirror as packed: exit 0
+   @zodiacs/engine package contents passed (90 files, 1096783 bytes unpacked of 1100000; import graphs: . 106325 of 108500, ./calc 151426 of 156000 (71048 beyond the core's), ./conventions 2754 of 2900 (2754 beyond the core's), ./crossings 9942 of 10000 (173 beyo
+   as required: passes
+## control 1, 1.1.0-rc.1's NOTICE in place of rc.2's: exit 1
+   AssertionError [ERR_ASSERTION]: NOTICE must say where the Gregorian adoption table is
+   as required: fails on "NOTICE must say where the Gregorian adoption table is"
+## control 2, 1.1.0-rc.1's LICENSING.md in place of rc.2's: exit 1
+   AssertionError [ERR_ASSERTION]: LICENSING.md must say where the Gregorian adoption table is
+   as required: fails on "LICENSING.md must say where the Gregorian adoption table is"
+## the table's holder as packed: dist/chunk-HTT4HMQ6.js
+## holders after the move: dist/geo.js 
+## control 3, the table's definition moved into dist/geo.js: exit 1
+   AssertionError [ERR_ASSERTION]: the Gregorian adoption table must be in exactly one shared chunk under dist/, as NOTICE says; found it in dist/geo.js
+   as required: fails on "the Gregorian adoption table must be in exactly one shared chunk under dist/, as NOTICE says; found it in dist/geo.js"
+## the mirror passed as packed and each of the 3 controls failed on its assertion
+# exit code 0; finished 2026-11-04 11:59:29 +0700

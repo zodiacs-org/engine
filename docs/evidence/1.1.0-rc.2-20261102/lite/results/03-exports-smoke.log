@@ -1,0 +1,13 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: npm run exports:smoke on this build: L1, L2 and L3 (checkLiteEntry), L8 at run time and in dist/lite.d.ts (checkLiteNames), L10 (root isolation, the table check), and L4's probe in the checkout
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>
+# command: npm run exports:smoke
+# started 2026-11-04 12:15:31 +0700
+
+> @zodiacs/engine@1.1.0-rc.2 exports:smoke
+> node scripts/module-resolution-smoke.mjs
+
+@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat, time and lite graphs have no external imports, the lite entry holds its 16 pinned source modules in 5 files that import nothing and loads where astronomy-engine cannot, the core graph (24 source modules in the build's module list, 23 marked in 13 files) reaches no module of an opt-in entry and no zone history, the geo entry loads its 16 shards lazily, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic
+# exit 0, finished 2026-11-04 12:15:31 +0700
