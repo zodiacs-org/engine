@@ -1,0 +1,67 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: L6: tools/site-fixtures.mjs on this build: checkComposite and checkDignities on src/techniques/fixtures/site-parity/ with ./lite and with ./techniques; its control, one composite longitude moved by one unit in the last place
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>
+# command: nice -n 10 node <checkout>/docs/evidence/1.1.0-rc.2-20261102/lite/tools/site-fixtures.mjs --package <checkout>
+# started 2026-11-04 12:16:33 +0700
+{
+ "check": "L6",
+ "package": "1.1.0-rc.2",
+ "fixtures": {
+  "siteCommit": "67cccac5a19a7779a07f85b09218c1ffbe2300cd",
+  "composite": 400,
+  "dignities": 144
+ },
+ "node": "v22.22.2",
+ "runs": {
+  "lite": [
+   {
+    "corpus": "C-M+C-A",
+    "cases": 400,
+    "agree": 400,
+    "disagreeing": []
+   },
+   {
+    "corpus": "D-X",
+    "cases": 144,
+    "agree": 144,
+    "disagreeing": []
+   }
+  ],
+  "techniques": [
+   {
+    "corpus": "C-M+C-A",
+    "cases": 400,
+    "agree": 400,
+    "disagreeing": []
+   },
+   {
+    "corpus": "D-X",
+    "cases": 144,
+    "agree": 144,
+    "disagreeing": []
+   }
+  ]
+ },
+ "control": {
+  "case": 0,
+  "longitude": [
+   336.81281017139554,
+   336.8128101713956
+  ],
+  "result": [
+   {
+    "corpus": "C-M+C-A",
+    "cases": 400,
+    "agree": 399,
+    "disagreeing": [
+     0
+    ]
+   }
+  ],
+  "behaved": true
+ },
+ "pass": true
+}
+# exit 0, finished 2026-11-04 12:16:33 +0700

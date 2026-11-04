@@ -1,0 +1,37 @@
+{
+ "check": "C3",
+ "pass": true,
+ "records": 6644,
+ "notJudgedWithTtBand": {
+  "records": 5350,
+  "forms": [
+   "F3",
+   "F5"
+  ]
+ },
+ "problems": 0,
+ "firstProblems": [],
+ "arbiterRaised": {
+  "cases": 0,
+  "first": []
+ },
+ "reportedNotJudged": {
+  "cases": 576,
+  "largestRelativeDifference": 2.09932422756363e-10
+ },
+ "controls": {
+  "a: the solar-time rate, 15 arcseconds a second": {
+   "failed": true,
+   "problems": 77224
+  },
+  "b: another judged record's UT1 band, the next larger, in place of its own": {
+   "failed": true,
+   "problems": 75852
+  }
+ },
+ "python": "3.9.6",
+ "dumps": [
+  "dump-T2.json",
+  "dump-T3.json"
+ ]
+}

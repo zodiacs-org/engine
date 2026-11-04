@@ -1,0 +1,14 @@
+# varga-sensitivity formal run of @zodiacs/engine 1.1.0-rc.2: the user name in two headings of 03-outputs.log replaced by hand with <user> (a record step after the stop: it runs no check)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3, with -I) where a tool says so; for G-V4's arbiter only, Python 3.11.16 with pyerfa 2.0.1.5 and numpy 2.4.6 (<programme>/toolchain/py311-oq6/venv/bin/python, the OQ6 environment, with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 2444716 KiB, 2.3 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/hand-edit.sh
+# started 2026-11-04 14:48:06 +0700
+## results/03-outputs.log before: sha256 f517340f5dbbe94e4ac59af54758bd462797e6f9c53c825c912f4af23c0c452c, 9640 bytes; lines holding the user name: 2
+## after: sha256 88677c607eafdd3789527787937957d6739af1d85618dbf301ba2ef03ff8d594, 9630 bytes; lines holding the user name: 0
+67:## local paths in the outputs as written: the files that hold any, with the lines that do (grep -c -E '/Users/|/private/|(^|[^>])/tmp/|/var/folders|<user>')
+106:## local paths left in any output or log after the shortening (grep -l -E '/Users/|/private/|(^|[^>])/tmp/|/var/folders|<user>')
+# exit 0, finished 2026-11-04 14:48:07 +0700

@@ -1,0 +1,128 @@
+{
+ "tool": "docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/time_per_arcsecond.mjs",
+ "engine": {
+  "version": "1.1.0-rc.2",
+  "jsDigest": "21b80ef0dcafb71f108a397e015218083e1cf346741961b4b36ff429c8888109"
+ },
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "sampled": {
+  "from": "1800-01-01T00:00:00.000Z",
+  "to": "2200-01-01T00:00:00.000Z",
+  "everyDays": 5,
+  "timeScale": "UTC"
+ },
+ "rows": [
+  {
+   "body": "Sun",
+   "samples": 29220,
+   "medianSpeed": 0.984945943571347,
+   "tenthPercentileSpeed": 0.9548943475579108,
+   "smallestSpeed": 0.952884209198146,
+   "secondsAtMedian": 24.366819475369006,
+   "secondsAtTenthPercentile": 25.133670611181923,
+   "atMedian": "25 s",
+   "atTenthPercentile": "26 s"
+  },
+  {
+   "body": "Moon",
+   "samples": 29220,
+   "medianSpeed": 13.058943290729985,
+   "tenthPercentileSpeed": 11.881226129844435,
+   "smallestSpeed": 11.7629146503333,
+   "secondsAtMedian": 1.8378209833437769,
+   "secondsAtTenthPercentile": 2.0199935375116236,
+   "atMedian": "1.9 s",
+   "atTenthPercentile": "2.1 s"
+  },
+  {
+   "body": "Mercury",
+   "samples": 29220,
+   "medianSpeed": 1.3563413523343115,
+   "tenthPercentileSpeed": 0.32531007920511,
+   "smallestSpeed": 0.00015257256791301188,
+   "secondsAtMedian": 17.694660683090692,
+   "secondsAtTenthPercentile": 73.77576513658481,
+   "atMedian": "18 s",
+   "atTenthPercentile": "1.3 min"
+  },
+  {
+   "body": "Venus",
+   "samples": 29220,
+   "medianSpeed": 1.1957168887022362,
+   "tenthPercentileSpeed": 0.5110808487813756,
+   "smallestSpeed": 0.00006813156971929857,
+   "secondsAtMedian": 20.071640893228704,
+   "secondsAtTenthPercentile": 46.959302148037345,
+   "atMedian": "21 s",
+   "atTenthPercentile": "47 s"
+  },
+  {
+   "body": "Mars",
+   "samples": 29220,
+   "medianSpeed": 0.6355549684258222,
+   "tenthPercentileSpeed": 0.23476963046675792,
+   "smallestSpeed": 0.000192083007277688,
+   "secondsAtMedian": 37.76227264723385,
+   "secondsAtTenthPercentile": 102.22787313795372,
+   "atMedian": "38 s",
+   "atTenthPercentile": "1.8 min"
+  },
+  {
+   "body": "Jupiter",
+   "samples": 29220,
+   "medianSpeed": 0.12897006118350873,
+   "tenthPercentileSpeed": 0.031928532564506895,
+   "smallestSpeed": 0.000008213362434617011,
+   "secondsAtMedian": 186.08970004170902,
+   "secondsAtTenthPercentile": 751.6787673066884,
+   "atMedian": "3.2 min",
+   "atTenthPercentile": "13 min"
+  },
+  {
+   "body": "Saturn",
+   "samples": 29220,
+   "medianSpeed": 0.07060063200015065,
+   "tenthPercentileSpeed": 0.01637938225940161,
+   "smallestSpeed": 0.0000035591369851317722,
+   "secondsAtMedian": 339.940299683844,
+   "secondsAtTenthPercentile": 1465.2567245766688,
+   "atMedian": "5.7 min",
+   "atTenthPercentile": "25 min"
+  },
+  {
+   "body": "Uranus",
+   "samples": 29220,
+   "medianSpeed": 0.035335935308467015,
+   "tenthPercentileSpeed": 0.007983081019347082,
+   "smallestSpeed": 7.829044079699088e-7,
+   "secondsAtMedian": 679.1952665322332,
+   "secondsAtTenthPercentile": 3006.358064240579,
+   "atMedian": "12 min",
+   "atTenthPercentile": "51 min"
+  },
+  {
+   "body": "Neptune",
+   "samples": 29220,
+   "medianSpeed": 0.02277643750403513,
+   "tenthPercentileSpeed": 0.005090647050565167,
+   "smallestSpeed": 7.016183189989533e-7,
+   "secondsAtMedian": 1053.7205388572336,
+   "secondsAtTenthPercentile": 4714.528381482567,
+   "atMedian": "18 min",
+   "atTenthPercentile": "1.4 h"
+  },
+  {
+   "body": "Pluto",
+   "samples": 29220,
+   "medianSpeed": 0.01650972026823183,
+   "tenthPercentileSpeed": 0.00370785014069952,
+   "smallestSpeed": 6.461107204813743e-7,
+   "secondsAtMedian": 1453.689075894341,
+   "secondsAtTenthPercentile": 6472.753506556815,
+   "atMedian": "25 min",
+   "atTenthPercentile": "1.8 h"
+  }
+ ],
+ "table": "<!-- G-V5 table, tools/time_per_arcsecond.mjs -->\n| Body | 1″ moves an instant by, at the median speed | at the 10th percentile speed |\n| --- | ---: | ---: |\n| Sun | 25 s | 26 s |\n| Moon | 1.9 s | 2.1 s |\n| Mercury | 18 s | 1.3 min |\n| Venus | 21 s | 47 s |\n| Mars | 38 s | 1.8 min |\n| Jupiter | 3.2 min | 13 min |\n| Saturn | 5.7 min | 25 min |\n| Uranus | 12 min | 51 min |\n| Neptune | 18 min | 1.4 h |\n| Pluto | 25 min | 1.8 h |\n<!-- end of the G-V5 table -->"
+}

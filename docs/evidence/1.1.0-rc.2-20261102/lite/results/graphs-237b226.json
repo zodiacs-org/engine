@@ -1,0 +1,227 @@
+{
+ "version": "1.1.0-rc.2",
+ "graphs": {
+  ".": {
+   "bytes": 106325,
+   "files": {
+    "dist/chunk-2BB5GQ3P.js": 6436,
+    "dist/chunk-2K3DWRJN.js": 672,
+    "dist/chunk-B5LKF437.js": 13218,
+    "dist/chunk-BHJXUY67.js": 5071,
+    "dist/chunk-CPALRSPC.js": 1459,
+    "dist/chunk-F4JKI3XV.js": 3204,
+    "dist/chunk-NIRYKLHT.js": 23635,
+    "dist/chunk-NNOSOOWS.js": 11639,
+    "dist/chunk-PFGUCNOK.js": 2929,
+    "dist/chunk-QRBHGADI.js": 11923,
+    "dist/chunk-RMBWKZI2.js": 3018,
+    "dist/chunk-TSS2SZWQ.js": 9769,
+    "dist/index.js": 13352
+   }
+  },
+  "./calc": {
+   "bytes": 151426,
+   "files": {
+    "dist/calc.js": 49769,
+    "dist/chunk-2BB5GQ3P.js": 6436,
+    "dist/chunk-47ERTK5X.js": 989,
+    "dist/chunk-B5LKF437.js": 13218,
+    "dist/chunk-BHJXUY67.js": 5071,
+    "dist/chunk-CPALRSPC.js": 1459,
+    "dist/chunk-DCDIMC7W.js": 18172,
+    "dist/chunk-F4JKI3XV.js": 3204,
+    "dist/chunk-I3L4POY7.js": 822,
+    "dist/chunk-NIRYKLHT.js": 23635,
+    "dist/chunk-NNOSOOWS.js": 11639,
+    "dist/chunk-PFGUCNOK.js": 2929,
+    "dist/chunk-RMBWKZI2.js": 3018,
+    "dist/chunk-RRB65OLH.js": 1296,
+    "dist/chunk-TSS2SZWQ.js": 9769
+   }
+  },
+  "./conventions": {
+   "bytes": 2754,
+   "files": {
+    "dist/chunk-OVXQQEXL.js": 2018,
+    "dist/conventions.js": 736
+   }
+  },
+  "./crossings": {
+   "bytes": 9942,
+   "files": {
+    "dist/chunk-TSS2SZWQ.js": 9769,
+    "dist/crossings.js": 173
+   }
+  },
+  "./deltat": {
+   "bytes": 5232,
+   "files": {
+    "dist/chunk-BHJXUY67.js": 5071,
+    "dist/deltat.js": 161
+   }
+  },
+  "./geo": {
+   "bytes": 35439,
+   "files": {
+    "dist/chunk-HTT4HMQ6.js": 24064,
+    "dist/chunk-KFTJMMG7.js": 2397,
+    "dist/chunk-PFGUCNOK.js": 2929,
+    "dist/geo.js": 6049
+   }
+  },
+  "./houses": {
+   "bytes": 13678,
+   "files": {
+    "dist/houses-extra.js": 13678
+   }
+  },
+  "./internal": {
+   "bytes": 66586,
+   "files": {
+    "dist/chunk-2BB5GQ3P.js": 6436,
+    "dist/chunk-B5LKF437.js": 13218,
+    "dist/chunk-BHJXUY67.js": 5071,
+    "dist/chunk-F4JKI3XV.js": 3204,
+    "dist/chunk-NIRYKLHT.js": 23635,
+    "dist/chunk-NNOSOOWS.js": 11639,
+    "dist/chunk-RMBWKZI2.js": 3018,
+    "dist/internal.js": 365
+   }
+  },
+  "./internal/math": {
+   "bytes": 19224,
+   "files": {
+    "dist/chunk-F4JKI3XV.js": 3204,
+    "dist/chunk-NNOSOOWS.js": 11639,
+    "dist/chunk-RMBWKZI2.js": 3018,
+    "dist/internal-math.js": 1363
+   }
+  },
+  "./lite": {
+   "bytes": 28930,
+   "files": {
+    "dist/lite-composite.js": 3783,
+    "dist/lite-declinations.js": 9665,
+    "dist/lite-dignities.js": 11897,
+    "dist/lite-sect.js": 3439,
+    "dist/lite.js": 146
+   }
+  },
+  "./receipt": {
+   "bytes": 72549,
+   "files": {
+    "dist/chunk-B5LKF437.js": 13218,
+    "dist/chunk-BHJXUY67.js": 5071,
+    "dist/chunk-CPALRSPC.js": 1459,
+    "dist/chunk-F4JKI3XV.js": 3204,
+    "dist/chunk-KFTJMMG7.js": 2397,
+    "dist/chunk-OVXQQEXL.js": 2018,
+    "dist/chunk-RMBWKZI2.js": 3018,
+    "dist/receipt.js": 42164
+   }
+  },
+  "./sky": {
+   "bytes": 94448,
+   "files": {
+    "dist/chunk-2BB5GQ3P.js": 6436,
+    "dist/chunk-A3U2ZS2W.js": 508,
+    "dist/chunk-B5LKF437.js": 13218,
+    "dist/chunk-BHJXUY67.js": 5071,
+    "dist/chunk-CPALRSPC.js": 1459,
+    "dist/chunk-F4JKI3XV.js": 3204,
+    "dist/chunk-NIRYKLHT.js": 23635,
+    "dist/chunk-NNOSOOWS.js": 11639,
+    "dist/chunk-RMBWKZI2.js": 3018,
+    "dist/chunk-RRB65OLH.js": 1296,
+    "dist/chunk-TSS2SZWQ.js": 9769,
+    "dist/sky.js": 15195
+   }
+  },
+  "./techniques": {
+   "bytes": 156210,
+   "files": {
+    "dist/chunk-2BB5GQ3P.js": 6436,
+    "dist/chunk-47ERTK5X.js": 989,
+    "dist/chunk-B5LKF437.js": 13218,
+    "dist/chunk-BHJXUY67.js": 5071,
+    "dist/chunk-CPALRSPC.js": 1459,
+    "dist/chunk-F4JKI3XV.js": 3204,
+    "dist/chunk-HTT4HMQ6.js": 24064,
+    "dist/chunk-KFTJMMG7.js": 2397,
+    "dist/chunk-NIRYKLHT.js": 23635,
+    "dist/chunk-NNOSOOWS.js": 11639,
+    "dist/chunk-PFGUCNOK.js": 2929,
+    "dist/chunk-QRBHGADI.js": 11923,
+    "dist/chunk-RMBWKZI2.js": 3018,
+    "dist/chunk-TSS2SZWQ.js": 9769,
+    "dist/techniques.js": 36459
+   }
+  },
+  "./time": {
+   "bytes": 42306,
+   "files": {
+    "dist/chunk-2BB5GQ3P.js": 6436,
+    "dist/chunk-B5LKF437.js": 13218,
+    "dist/chunk-BHJXUY67.js": 5071,
+    "dist/chunk-I3L4POY7.js": 822,
+    "dist/chunk-NNOSOOWS.js": 11639,
+    "dist/chunk-RMBWKZI2.js": 3018,
+    "dist/time.js": 2102
+   }
+  },
+  "./timing": {
+   "bytes": 125693,
+   "files": {
+    "dist/chunk-2BB5GQ3P.js": 6436,
+    "dist/chunk-2K3DWRJN.js": 672,
+    "dist/chunk-47ERTK5X.js": 989,
+    "dist/chunk-A3U2ZS2W.js": 508,
+    "dist/chunk-B5LKF437.js": 13218,
+    "dist/chunk-BHJXUY67.js": 5071,
+    "dist/chunk-CPALRSPC.js": 1459,
+    "dist/chunk-F4JKI3XV.js": 3204,
+    "dist/chunk-NIRYKLHT.js": 23635,
+    "dist/chunk-NNOSOOWS.js": 11639,
+    "dist/chunk-PFGUCNOK.js": 2929,
+    "dist/chunk-QRBHGADI.js": 11923,
+    "dist/chunk-RMBWKZI2.js": 3018,
+    "dist/chunk-TSS2SZWQ.js": 9769,
+    "dist/timing.js": 31223
+   }
+  },
+  "./vedic": {
+   "bytes": 141340,
+   "files": {
+    "dist/chunk-2BB5GQ3P.js": 6436,
+    "dist/chunk-47ERTK5X.js": 989,
+    "dist/chunk-B5LKF437.js": 13218,
+    "dist/chunk-BHJXUY67.js": 5071,
+    "dist/chunk-CPALRSPC.js": 1459,
+    "dist/chunk-DCDIMC7W.js": 18172,
+    "dist/chunk-F4JKI3XV.js": 3204,
+    "dist/chunk-NIRYKLHT.js": 23635,
+    "dist/chunk-NNOSOOWS.js": 11639,
+    "dist/chunk-PFGUCNOK.js": 2929,
+    "dist/chunk-QRBHGADI.js": 11923,
+    "dist/chunk-RMBWKZI2.js": 3018,
+    "dist/chunk-TSS2SZWQ.js": 9769,
+    "dist/vedic.js": 29878
+   }
+  },
+  "./window": {
+   "bytes": 104557,
+   "files": {
+    "dist/chunk-2BB5GQ3P.js": 6436,
+    "dist/chunk-B5LKF437.js": 13218,
+    "dist/chunk-BHJXUY67.js": 5071,
+    "dist/chunk-CPALRSPC.js": 1459,
+    "dist/chunk-F4JKI3XV.js": 3204,
+    "dist/chunk-NIRYKLHT.js": 23635,
+    "dist/chunk-NNOSOOWS.js": 11639,
+    "dist/chunk-PFGUCNOK.js": 2929,
+    "dist/chunk-RMBWKZI2.js": 3018,
+    "dist/window.js": 33948
+   }
+  }
+ }
+}

@@ -1,0 +1,138 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: L11, the comparison of graphs between 1deb29e's build and 16ad4fe's: tools/graphs.mjs --before graphs-1deb29e.json --after graphs-16ad4fe.json
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>/docs/evidence/1.1.0-rc.2-20261102/lite/results
+# command: node <checkout>/docs/evidence/1.1.0-rc.2-20261102/lite/tools/graphs.mjs --before graphs-1deb29e.json --after graphs-16ad4fe.json
+# started 2026-11-04 12:18:06 +0700
+{
+ "check": "L11, graphs",
+ "rows": [
+  {
+   "entry": ".",
+   "before": 106325,
+   "after": 106325,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./calc",
+   "before": 149254,
+   "after": 149254,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./conventions",
+   "before": 2754,
+   "after": 2754,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./crossings",
+   "before": 9942,
+   "after": 9942,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./deltat",
+   "before": 5232,
+   "after": 5232,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./geo",
+   "before": 35439,
+   "after": 35439,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./houses",
+   "before": 13678,
+   "after": 13678,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./internal",
+   "before": 66586,
+   "after": 66586,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./internal/math",
+   "before": 19224,
+   "after": 19224,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./lite",
+   "before": null,
+   "after": 28918,
+   "kind": "new"
+  },
+  {
+   "entry": "./receipt",
+   "before": 72549,
+   "after": 72549,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./sky",
+   "before": 94448,
+   "after": 94448,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./techniques",
+   "before": 156150,
+   "after": 156210,
+   "change": 60,
+   "same": false
+  },
+  {
+   "entry": "./time",
+   "before": 42306,
+   "after": 42306,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./timing",
+   "before": 125693,
+   "after": 125693,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./vedic",
+   "before": 128126,
+   "after": 128126,
+   "change": 0,
+   "same": true
+  },
+  {
+   "entry": "./window",
+   "before": 104557,
+   "after": 104557,
+   "change": 0,
+   "same": true
+  }
+ ],
+ "changed": [
+  "./techniques"
+ ],
+ "added": [
+  "./lite"
+ ],
+ "pass": true
+}
+# exit 0, finished 2026-11-04 12:18:06 +0700

@@ -1,0 +1,1 @@
+wrote <scratch>/work/vedic-g-v5-control.md: <checkout>/docs/vedic.md with the G-V5 table's figure 25 in "| Sun | 25 s |" changed to 26

@@ -1,0 +1,14 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: T1, npm run api:check on this build
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 12003564 KiB, 11.4 GiB
+# cwd <checkout>
+# command: npm run api:check
+# started 2026-11-04 12:36:38 +0700
+
+> @zodiacs/engine@1.1.0-rc.2 api:check
+> node scripts/api-report.mjs --check
+
+api-report: 15 entry points match api/
+# exit 0, finished 2026-11-04 12:36:39 +0700

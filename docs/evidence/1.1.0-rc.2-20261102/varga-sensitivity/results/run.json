@@ -1,0 +1,42 @@
+{
+ "tool": "docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/run.mjs",
+ "engine": {
+  "version": "1.1.0-rc.2",
+  "jsFiles": 57,
+  "jsDigest": "21b80ef0dcafb71f108a397e015218083e1cf346741961b4b36ff429c8888109"
+ },
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "limit": null,
+ "corpora": [
+  {
+   "corpus": "F2",
+   "file": "<checkout>/docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/births.json",
+   "sha256": "e333a037563d94f1e5b9ed42269166a4024808284b510b7ce199ab6817aff5c7",
+   "seed": 20261102,
+   "calls": 1000
+  },
+  {
+   "corpus": "F3",
+   "file": "<checkout>/docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/seams.json",
+   "sha256": "956a3ad8a9e3d29249b16c55a3f25372e6e42850510e9d31555e86bccb648d70",
+   "seed": null,
+   "calls": 13
+  },
+  {
+   "corpus": "F3b",
+   "file": "<checkout>/docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/seams-f3b.json",
+   "sha256": "052c05131e33f63dd5b8693b08f4facd50421ce74583e62ad26cf1bea828469e",
+   "seed": null,
+   "calls": 2
+  }
+ ],
+ "calls": 1015,
+ "threw": [],
+ "callMs": {
+  "mean": 17.765512315270946,
+  "median": 15.344,
+  "max": 149.738
+ },
+ "wallMinutes": 0.30312381875
+}

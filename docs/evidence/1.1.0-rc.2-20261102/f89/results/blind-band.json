@@ -1,0 +1,360 @@
+{
+  "engine": "1.1.0-rc.2",
+  "check": "E3 (b), docs/evidence/1.1.0-rc.2-20261102/f89/PREREGISTRATION.md",
+  "stepDays": 5,
+  "phasesOf": 100,
+  "windowDays": 40,
+  "rule": "a plain scan misses both crossings only when they fall inside one cell: depth < f″·h²/8",
+  "statedFigures": {
+    "README.md": {
+      "Saturn": 0.0056,
+      "Jupiter": 0.011
+    },
+    "dist/crossings.d.ts": {
+      "Saturn": 0.0056,
+      "Jupiter": 0.011
+    }
+  },
+  "bodies": {
+    "Saturn": {
+      "stations": 12,
+      "largestBandDeg": 0.00554984,
+      "roundedUpDeg": 0.0056
+    },
+    "Jupiter": {
+      "stations": 11,
+      "largestBandDeg": 0.0109673,
+      "roundedUpDeg": 0.011
+    }
+  },
+  "stations": [
+    {
+      "body": "Saturn",
+      "station": "2019-04-30T00:52:14.172Z",
+      "secondDerivativeDegPerDay2": -0.0016456,
+      "bandDeg": 0.00514,
+      "atStatedFigure": {
+        "depthDeg": 0.0056,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00462819,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Saturn",
+      "station": "2019-09-18T08:46:01.059Z",
+      "secondDerivativeDegPerDay2": 0.0016427,
+      "bandDeg": 0.00513,
+      "atStatedFigure": {
+        "depthDeg": 0.0056,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00462017,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Saturn",
+      "station": "2020-05-11T04:11:16.747Z",
+      "secondDerivativeDegPerDay2": -0.0016297,
+      "bandDeg": 0.00509,
+      "atStatedFigure": {
+        "depthDeg": 0.0056,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00458363,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Saturn",
+      "station": "2020-09-29T05:08:53.882Z",
+      "secondDerivativeDegPerDay2": 0.0016428,
+      "bandDeg": 0.00513,
+      "atStatedFigure": {
+        "depthDeg": 0.0056,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00462041,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Saturn",
+      "station": "2021-05-23T09:22:54.137Z",
+      "secondDerivativeDegPerDay2": -0.001611,
+      "bandDeg": 0.00503,
+      "atStatedFigure": {
+        "depthDeg": 0.0056,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00453089,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Saturn",
+      "station": "2021-10-11T02:18:12.356Z",
+      "secondDerivativeDegPerDay2": 0.0016943,
+      "bandDeg": 0.00529,
+      "atStatedFigure": {
+        "depthDeg": 0.0056,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00476527,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Saturn",
+      "station": "2022-06-04T21:45:17.318Z",
+      "secondDerivativeDegPerDay2": -0.0016495,
+      "bandDeg": 0.00515,
+      "atStatedFigure": {
+        "depthDeg": 0.0056,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00463928,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Saturn",
+      "station": "2022-10-23T04:09:11.091Z",
+      "secondDerivativeDegPerDay2": 0.001712,
+      "bandDeg": 0.00535,
+      "atStatedFigure": {
+        "depthDeg": 0.0056,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00481511,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Saturn",
+      "station": "2023-06-17T17:23:21.043Z",
+      "secondDerivativeDegPerDay2": -0.0016549,
+      "bandDeg": 0.00517,
+      "atStatedFigure": {
+        "depthDeg": 0.0056,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00465447,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Saturn",
+      "station": "2023-11-04T07:01:18.804Z",
+      "secondDerivativeDegPerDay2": 0.001719,
+      "bandDeg": 0.00537,
+      "atStatedFigure": {
+        "depthDeg": 0.0056,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00483464,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Saturn",
+      "station": "2024-06-29T19:04:04.341Z",
+      "secondDerivativeDegPerDay2": -0.0016596,
+      "bandDeg": 0.00519,
+      "atStatedFigure": {
+        "depthDeg": 0.0056,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00466769,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Saturn",
+      "station": "2024-11-15T14:19:38.673Z",
+      "secondDerivativeDegPerDay2": 0.0017759,
+      "bandDeg": 0.00555,
+      "atStatedFigure": {
+        "depthDeg": 0.0056,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00499485,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Jupiter",
+      "station": "2019-04-10T17:04:39.917Z",
+      "secondDerivativeDegPerDay2": -0.0031306,
+      "bandDeg": 0.00978,
+      "atStatedFigure": {
+        "depthDeg": 0.011,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.0088049,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Jupiter",
+      "station": "2019-08-11T13:40:16.430Z",
+      "secondDerivativeDegPerDay2": 0.0030916,
+      "bandDeg": 0.00966,
+      "atStatedFigure": {
+        "depthDeg": 0.011,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00869509,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Jupiter",
+      "station": "2020-05-14T14:31:49.698Z",
+      "secondDerivativeDegPerDay2": -0.0031838,
+      "bandDeg": 0.00995,
+      "atStatedFigure": {
+        "depthDeg": 0.011,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00895444,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Jupiter",
+      "station": "2020-09-13T00:43:39.204Z",
+      "secondDerivativeDegPerDay2": 0.0032219,
+      "bandDeg": 0.01007,
+      "atStatedFigure": {
+        "depthDeg": 0.011,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00906146,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Jupiter",
+      "station": "2021-06-20T15:04:27.374Z",
+      "secondDerivativeDegPerDay2": -0.0031858,
+      "bandDeg": 0.00996,
+      "atStatedFigure": {
+        "depthDeg": 0.011,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00896007,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Jupiter",
+      "station": "2021-10-18T05:29:39.685Z",
+      "secondDerivativeDegPerDay2": 0.0033524,
+      "bandDeg": 0.01048,
+      "atStatedFigure": {
+        "depthDeg": 0.011,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00942856,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Jupiter",
+      "station": "2022-07-28T20:34:19.692Z",
+      "secondDerivativeDegPerDay2": -0.0033182,
+      "bandDeg": 0.01037,
+      "atStatedFigure": {
+        "depthDeg": 0.011,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00933242,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Jupiter",
+      "station": "2022-11-23T23:00:21.488Z",
+      "secondDerivativeDegPerDay2": 0.0035095,
+      "bandDeg": 0.01097,
+      "atStatedFigure": {
+        "depthDeg": 0.011,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00987059,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Jupiter",
+      "station": "2023-09-04T14:09:48.105Z",
+      "secondDerivativeDegPerDay2": -0.0033256,
+      "bandDeg": 0.01039,
+      "atStatedFigure": {
+        "depthDeg": 0.011,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00935339,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Jupiter",
+      "station": "2023-12-31T02:36:57.798Z",
+      "secondDerivativeDegPerDay2": 0.0034564,
+      "bandDeg": 0.0108,
+      "atStatedFigure": {
+        "depthDeg": 0.011,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00972102,
+        "missedPhasesOf100": 5
+      }
+    },
+    {
+      "body": "Jupiter",
+      "station": "2024-10-09T07:04:36.198Z",
+      "secondDerivativeDegPerDay2": -0.0033497,
+      "bandDeg": 0.01047,
+      "atStatedFigure": {
+        "depthDeg": 0.011,
+        "missedPhasesOf100": 0
+      },
+      "atNineTenthsOfBand": {
+        "depthDeg": 0.00942097,
+        "missedPhasesOf100": 5
+      }
+    }
+  ],
+  "checks": {
+    "stations": "pass",
+    "statedFigures": "pass",
+    "noMissAtStatedFigure": "pass",
+    "controlMissAtNineTenthsOfBand": "pass"
+  }
+}

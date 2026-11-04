@@ -1,0 +1,53 @@
+# F-89 formal run of @zodiacs/engine 1.1.0-rc.2: the state at the end of the runs (before RESULTS.md was written)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# cwd <checkout>
+# command: zsh -c echo '## git rev-parse HEAD'; git rev-parse HEAD; [ "$(git rev-parse HEAD)" = 237b2265fcc53ae51abcb4f8e895e64c66321f5e ] && echo 'unchanged since the start (00-start.log)'; echo '## git status --porcelain -- . :(exclude)docs/evidence/calc-sidereal-2026-10-05'; git status --porcelain -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05'; echo '(end of status)'; echo '## git status --porcelain --untracked-files=all -- docs/evidence/1.1.0-rc.2-20261102/f89'; git status --porcelain --untracked-files=all -- docs/evidence/1.1.0-rc.2-20261102/f89; echo '## df -h /System/Volumes/Data'; df -h /System/Volumes/Data; echo '## SHA-256 of the outputs written so far'; cd docs/evidence/1.1.0-rc.2-20261102/f89/results && shasum -a 256 00-start.log 01-build.log 02-pack.log e1-e2-rc2.log e1-e2-control-rc1.log e3b-blind-band.log blind-band.json tests.log tests.json e5-package-contents.log e5-controls.log e6-bounds-check.log e6-fixture-rule.log e6-fixture-rule.json e6-control-rc1.log figures.log s1-record.log
+# started 2026-11-04 12:02:52 +0700
+## git rev-parse HEAD
+237b2265fcc53ae51abcb4f8e895e64c66321f5e
+unchanged since the start (00-start.log)
+## git status --porcelain -- . :(exclude)docs/evidence/calc-sidereal-2026-10-05
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/
+(end of status)
+## git status --porcelain --untracked-files=all -- docs/evidence/1.1.0-rc.2-20261102/f89
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/00-start.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/01-build.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/02-pack.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/99-end.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/blind-band.json
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/e1-e2-control-rc1.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/e1-e2-rc2.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/e3b-blind-band.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/e5-controls.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/e5-package-contents.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/e6-bounds-check.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/e6-control-rc1.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/e6-fixture-rule.json
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/e6-fixture-rule.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/figures.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/s1-record.log
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/tests.json
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/tests.log
+## df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   228Gi   191Gi    10Gi    95%    5.5M  106M    5%   /System/Volumes/Data
+## SHA-256 of the outputs written so far
+53792371b87c9014b7cdaed6ce6f085273f2065ac5cb0f71cfd25d77770e7dbf  00-start.log
+b02776772f9336d9e039a221b8be27ffc406f818bf23ac39059c1ebe57cc95f8  01-build.log
+424b34fbd9a62ea347665b8727a66be7eb6969f2d831c99c3242f68d063e15c8  02-pack.log
+107af71fb94713bfc2abe4f5ec49b288f0952a7ce0fa41a361d3d7984738c628  e1-e2-rc2.log
+86ec1ad86993890fe56b653e71f797b4b2a31cc68ac3bee1e427fd285c5fc81a  e1-e2-control-rc1.log
+ae54caf7d2c1bb8c058cbf7cc2bb52a7785a1eb87744ca7110a91af45b2ffaf9  e3b-blind-band.log
+0c4c6b0fc248dd3b5f6661f705ac41611d5d4895b45caa213493342c196c8886  blind-band.json
+a62e03d941eb0776259e8dd1e5d1ee7596d0b3c22b714a5b0c7cff42b355e84e  tests.log
+00d7467b8fd4694c16f143e985441668fa299f09eafa293edfb97e0236f9cbee  tests.json
+717a7bc5a22d12f18e2d649585267ecae0bbba4181407423c9044d8a26cd01f8  e5-package-contents.log
+52271f7acd5a1b8879953fcfe18d766a92d0bc5638e35072c8eb1444f1a88384  e5-controls.log
+f38680c4bf03f85af9315a6b4bf7aba2092f5185c45bbc46b7fef2a608541c90  e6-bounds-check.log
+91ebb90ee138853e956702d6c34e77626f078766b502b805bf604a792652d6c5  e6-fixture-rule.log
+2f3c261961862d186c360eb27e6b3485f07049c3fdd2a31b9a971aeda43c843e  e6-fixture-rule.json
+57866cf262a93e1d514f14e5a7c45241f42a790f072cfac07137d67b04e76957  e6-control-rc1.log
+fe4c2acd5ebe1e0f8c63ab73c8f7c5421da6804baa5480ca96a83525c63c3cd8  figures.log
+9359a4c751bf902940e8bc8e412f5b1fd376f0117ec63b4e2087cdf5723e974b  s1-record.log
+# exit code 0; finished 2026-11-04 12:02:52 +0700

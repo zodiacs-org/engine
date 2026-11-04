@@ -1,0 +1,42 @@
+{
+ "check": "C5",
+ "pass": true,
+ "records": 16,
+ "windows": 11,
+ "problems": 0,
+ "firstProblems": [],
+ "controls": {
+  "a: band.utc = d": {
+   "failed": true,
+   "problems": 10,
+   "windows": [
+    "E-Moon-0-1971-12",
+    "E-Moon-0-2027-09",
+    "E-Moon-90-1971-12",
+    "E-Moon-90-2027-09",
+    "E-Sun-0-2000",
+    "E-Sun-0-2050",
+    "E-Sun-0-2050-lahiri",
+    "E-Sun-0-2150"
+   ]
+  },
+  "b: the bands of the window's first instant": {
+   "failed": true,
+   "problems": 18,
+   "windows": [
+    "E-Moon-0-1971-12",
+    "E-Moon-0-2027-09",
+    "E-Moon-90-1971-12",
+    "E-Moon-90-2027-09",
+    "E-Sun-0-1801",
+    "E-Sun-0-2050",
+    "E-Sun-0-2050-lahiri",
+    "E-Sun-0-2150"
+   ]
+  }
+ },
+ "python": "3.9.6",
+ "dumps": [
+  "dump-E.json"
+ ]
+}

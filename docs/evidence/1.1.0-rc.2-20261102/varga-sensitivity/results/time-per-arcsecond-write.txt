@@ -1,0 +1,1 @@
+wrote the G-V5 table into <checkout>/docs/vedic.md

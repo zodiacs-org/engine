@@ -1,0 +1,71 @@
+# varga-sensitivity formal run of @zodiacs/engine 1.1.0-rc.2: tools/checks.sh, the formal procedure (PREREGISTRATION.md section 10, steps 3 to 6, as amended), once, alone, under nice -n 10
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3, with -I) where a tool says so; for G-V4's arbiter only, Python 3.11.16 with pyerfa 2.0.1.5 and numpy 2.4.6 (<programme>/toolchain/py311-oq6/venv/bin/python, the OQ6 environment, with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 7748840 KiB, 7.4 GiB
+# cwd <checkout>
+# command: nice -n 10 zsh docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/checks.sh <scratch>/work 10 <programme>/toolchain/py311-oq6/venv/bin/python
+# started 2026-11-04 13:15:31 +0700
+== F1 still as committed, and boundaries.json still the texts' (G-V1)
+== G-V1, G-V2 (a) and the named tests, then their controls
+G-V1 naive floor: 6 of 21 failed; failed as it must (at least one of the 18 varga tests)
+G-V2 (a) control (i): every part boundary a change: 5 of 83 failed; failed as it must (G-V2 (a) with exactly 24 mismatches)
+G-V2 (a) control (ii): one change row of F1 a keep: 3 of 83 failed; failed as it must (G-V2 (a) with exactly one mismatch)
+the mean ayanamsa subtracted: 11 of 83 failed; failed as it must (the evaluation paths' test)
+one copied rate bound changed: 1 of 83 failed; failed as it must (the copied bounds' test)
+no 1 ms terminal step: 8 of 83 failed; failed as it must (the one-millisecond touch)
+brackets allowed across seams: 1 of 83 failed; failed as it must (the backward step)
+a build that computes instead of refusing: 18 of 83 failed; failed as it must (each refusal test)
+an instant 1 ms later: 5 of 83 failed; failed as it must (the docs' synthetic birth)
+a change's direction through turn(d + 180) - 180 (4f4c1e8's): 3 of 83 failed; failed as it must (the last step of one unit in the last place, analytic and through the public API)
+== G-V3 and G-V2 (b): the run on F2, F3 and F3b, the checker, then the controls
+100 calls, 0.0 min
+200 calls, 0.1 min
+300 calls, 0.1 min
+400 calls, 0.1 min
+500 calls, 0.1 min
+600 calls, 0.2 min
+700 calls, 0.2 min
+800 calls, 0.2 min
+900 calls, 0.3 min
+1000 calls, 0.3 min
+{"calls":1015,"threw":0,"callMs":{"mean":17.765512315270946,"median":15.344,"max":149.738},"wallMinutes":"0.30"}
+50/1015 calls checked, 3.7 min
+100/1015 calls checked, 7.4 min
+150/1015 calls checked, 10.8 min
+200/1015 calls checked, 14.3 min
+250/1015 calls checked, 17.7 min
+300/1015 calls checked, 21.7 min
+350/1015 calls checked, 25.0 min
+400/1015 calls checked, 28.6 min
+450/1015 calls checked, 31.6 min
+500/1015 calls checked, 35.0 min
+550/1015 calls checked, 39.7 min
+600/1015 calls checked, 43.1 min
+650/1015 calls checked, 46.3 min
+700/1015 calls checked, 51.1 min
+750/1015 calls checked, 54.9 min
+800/1015 calls checked, 58.7 min
+850/1015 calls checked, 63.1 min
+900/1015 calls checked, 67.4 min
+950/1015 calls checked, 71.1 min
+1000/1015 calls checked, 74.4 min
+{"calls":1015,"verdict":"PASS","failuresByCheck":{"M0":0,"M1":0,"M2":0,"M3":0,"M4":0,"M5":0,"M6":0,"G-V2b":0},"minutes":"74.77"}
+50/50 calls checked, 2.3 min
+50/50 calls checked, 4.0 min
+== Section 7's table of the derived bounds, with its control at 66.6 degrees
+== G-V5: the table, written into docs/vedic.md, then its control on a copy
+== G-V4: the run on F4, the arbiter's comparison, then C4a and C4b
+100 calls, 0.0 min
+200 calls, 0.1 min
+300 calls, 0.1 min
+400 calls, 0.1 min
+500 calls, 0.1 min
+600 calls, 0.2 min
+700 calls, 0.2 min
+800 calls, 0.2 min
+900 calls, 0.3 min
+1000 calls, 0.3 min
+{"calls":1000,"threw":0,"callMs":{"mean":16.791716,"median":15.771,"max":131.319},"wallMinutes":"0.28"}
+{"births": 1000, "judged": 35204, "notJudged": 796, "compared": 35204, "comparedFailed": 0, "mismatches": 0, "verdict": "PASS"}

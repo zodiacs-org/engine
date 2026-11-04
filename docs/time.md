@@ -183,6 +183,16 @@ millisecond later. The IERS formal error taken also changes at the start of
 each year (*What a chart reports*). The step of ΔT itself at 1941.0 leaves its
 σ unchanged, and no band is added for a leap second not yet announced after
 the leap-second list expires on 2027-06-28.
+At a step's own instant the side taken can depend on the input and the
+function. 1.1.0-rc.2's formal run of the time bands (check C1b,
+[`evidence/1.1.0-rc.2-20261102/time-bands/RESULTS.md`](evidence/1.1.0-rc.2-20261102/time-bands/RESULTS.md))
+found, at 2026-09-24T00:00Z, `calc()` and `houses()` on TT and on UT1 input
+recording the prediction's σ (source `"predicted"`), where UTC input and
+`chart()` on the same TT and UT1 input record the observed one; and at
+1956.0, `calc()` and `houses()` on TT input recording the model's 0.46 s,
+where the other inputs and `chart()` record the observed 0.03 s. A
+millisecond either side of both steps, those inputs and functions record the
+same σ.
 
 A band is not a bound and not an error. It inherits σ's nature: on the IERS
 basis the IERS formal error plus 0.79 ms, which is optimistic in the

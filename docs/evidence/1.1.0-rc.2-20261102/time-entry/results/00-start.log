@@ -1,0 +1,62 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: the state at the start
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 12040428 KiB, 11.5 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/start.sh
+# started 2026-11-04 12:34:04 +0700
+## git rev-parse HEAD
+237b2265fcc53ae51abcb4f8e895e64c66321f5e
+## git branch --show-current
+rc2/main-first
+## git status --porcelain -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+?? docs/evidence/1.1.0-rc.2-20261102/f89/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/
+?? docs/evidence/1.1.0-rc.2-20261102/lite/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/
+(end of status)
+## git status --porcelain --untracked-files=all -- docs/evidence/1.1.0-rc.2-20261102/time-entry
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/00-start.log
+(end of status)
+## git sparse-checkout list
+/*
+!/docs/evidence/calc-sidereal-2026-10-05/
+## test -e docs/evidence/calc-sidereal-2026-10-05 (the path only)
+absent
+## df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   228Gi   189Gi    11Gi    95%    5.5M  120M    4%   /System/Volumes/Data
+## node, npm, python3; the Node versions this run uses
+v22.22.2 darwin-arm64
+10.9.7
+3.9.6 arm64
+<programme>/toolchain/node-v22.22.2-darwin-arm64/bin: v22.22.2, npm 10.9.7
+<programme>/toolchain/node-v20.19.0-darwin-arm64/bin: v20.19.0, npm 10.8.2
+## git --version
+git version 2.50.1 (Apple Git-155)
+## the installed tools of section 4 (node_modules/<name>/package.json)
+tsup 8.5.1
+esbuild 0.27.7
+typescript 5.9.3
+astronomy-engine 2.1.19
+vitest 2.1.9
+## shasum -a 256 of the preregistration and the tools as run (the unit folder's status above is empty: they are as committed)
+f4d0e3dbbe5c3a2aa5435d4fff76956fd5a68e2ba217dbb5a4b255fb15558f41  PREREGISTRATION.md
+362fad980240cd35b71807bf30b19c3be06b71782869db90aa53fa77fa9b9dff  tools/behaviour.mjs
+7c89264e90d98eb5c8eb8bf8de9172b020334e2f3dc2d1504b8a2c28ec2d7a8a  tools/controls.sh
+33a3a86575ce14694c6b23e36bfbaf252e55175e4e42458942ce4d4ebd1ffc22  tools/corpora.mjs
+e453d2741c0a0e4a0bf73fa171cfbdef898d82f9ec929a892e97a6b0476a94c7  tools/declarations.mts
+bd2319cc45db44f43188edfec39d8bdf00c6765b0c723d58618ddc67c4533c26  tools/declarations.sh
+a38e89955ef11522a8269b91948b72fe22f9d09f173b5ee66dabf4d5c450b507  tools/independent.mjs
+60ea45a21c01b4a9f150764996d67d9328d3918ff58d0e088869e469914ce727  tools/load.mjs
+9918e38737e694bac4bffc1a8017b5523a0c448cecf16c715a0c5a0b0032da72  tools/natal-parity.mjs
+11011c11a532ce6b39c7c2b78268e04de63c465d4bcd4ea6967952794e117d97  tools/no-ephemeris.sh
+be8aa55fabb1fd09545cdad830d2d338f9969fc2156af18a2d1f1b8fc0f470cc  tools/one-copy.mjs
+1f6d1b041043a41c5b840a24380704dff4e6a4fb793dbebedff5de36aee2a092  tools/site-module.mjs
+c5a0edb89104da4fa699909ef28e6cb8070b2289e248889e2e715a73b6586fd1  tools/source-pins.mjs
+0361af3f20f73f136a19bee1f56b4d6320c2b1b92f434c860185480c35c149ac  tools/state-scan.mjs
+## the other units' uncommitted outputs at the start (f89/, lite/): shasum -a 256, kept to compare at the end
+files: 54
+# exit 0, finished 2026-11-04 12:34:05 +0700

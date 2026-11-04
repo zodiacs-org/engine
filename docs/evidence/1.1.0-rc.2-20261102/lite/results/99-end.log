@@ -1,0 +1,133 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: the state at the end of the runs (before RESULTS.md was written)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>
+# command: sh <scratch>/bin/end.sh
+# started 2026-11-04 12:21:46 +0700
+## git rev-parse HEAD
+237b2265fcc53ae51abcb4f8e895e64c66321f5e
+unchanged since the start (00-start.log)
+## git branch --show-current
+rc2/main-first
+## git status --porcelain -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+?? docs/evidence/1.1.0-rc.2-20261102/f89/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/
+(end of status)
+## git status --porcelain --untracked-files=all -- docs/evidence/1.1.0-rc.2-20261102/lite
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/00-start.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/01-build.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/02-pack.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/03-exports-smoke.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/04-tests.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/05-l1-l3-broken-builds.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/06-l4-no-ephemeris.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/07-l5-same-answers.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/08-l5-control.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/09-l6-site-fixtures.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/10a-clone-237b226.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/10b-l7-sect-controls.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/11a-clone-16ad4fe.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/11b-l9-api-reports.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/12a-clone-1deb29e.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/12b-l11-graphs-1deb29e.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/12c-l11-graphs-16ad4fe.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/12d-l11-graphs-compare.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/12e-l11-package-contents.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/12f-l11-budget-control.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/12g-sizes-237b226.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/13a-l12-consumer-v20.19.0.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/13b-l12-consumer-v22.7.0.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/13c-l12-consumer-v22.22.2.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/13d-l12-consumer-v24.21.0.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/13e-l12-control.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/14-b1-b5-record.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/15-figures.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/99-end.log
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/graphs-16ad4fe.json
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/graphs-1deb29e.json
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/graphs-237b226.json
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/tests.json
+(end of status)
+## git sparse-checkout list
+/*
+!/docs/evidence/calc-sidereal-2026-10-05/
+## test -e docs/evidence/calc-sidereal-2026-10-05 (the path only)
+absent
+## f89/ untouched: its files' modification times (this run began at 12:14:59), and its results against the SHA-256 list in f89/results/99-end.log
+2026-11-04 12:05:03 docs/evidence/1.1.0-rc.2-20261102/f89/RESULTS.md
+2026-11-04 11:56:33 docs/evidence/1.1.0-rc.2-20261102/f89/results/00-start.log
+2026-11-04 11:56:41 docs/evidence/1.1.0-rc.2-20261102/f89/results/01-build.log
+2026-11-04 11:56:58 docs/evidence/1.1.0-rc.2-20261102/f89/results/02-pack.log
+2026-11-04 12:02:52 docs/evidence/1.1.0-rc.2-20261102/f89/results/99-end.log
+2026-11-04 11:57:33 docs/evidence/1.1.0-rc.2-20261102/f89/results/blind-band.json
+2026-11-04 11:57:16 docs/evidence/1.1.0-rc.2-20261102/f89/results/e1-e2-control-rc1.log
+2026-11-04 11:57:08 docs/evidence/1.1.0-rc.2-20261102/f89/results/e1-e2-rc2.log
+2026-11-04 11:57:33 docs/evidence/1.1.0-rc.2-20261102/f89/results/e3b-blind-band.log
+2026-11-04 11:59:29 docs/evidence/1.1.0-rc.2-20261102/f89/results/e5-controls.log
+2026-11-04 11:58:28 docs/evidence/1.1.0-rc.2-20261102/f89/results/e5-package-contents.log
+2026-11-04 11:59:55 docs/evidence/1.1.0-rc.2-20261102/f89/results/e6-bounds-check.log
+2026-11-04 12:00:37 docs/evidence/1.1.0-rc.2-20261102/f89/results/e6-control-rc1.log
+2026-11-04 12:00:07 docs/evidence/1.1.0-rc.2-20261102/f89/results/e6-fixture-rule.json
+2026-11-04 12:00:07 docs/evidence/1.1.0-rc.2-20261102/f89/results/e6-fixture-rule.log
+2026-11-04 12:02:37 docs/evidence/1.1.0-rc.2-20261102/f89/results/figures.log
+2026-11-04 12:02:15 docs/evidence/1.1.0-rc.2-20261102/f89/results/s1-record.log
+2026-11-04 11:58:12 docs/evidence/1.1.0-rc.2-20261102/f89/results/tests.json
+2026-11-04 11:58:01 docs/evidence/1.1.0-rc.2-20261102/f89/results/tests.log
+00-start.log: OK
+01-build.log: OK
+02-pack.log: OK
+e1-e2-rc2.log: OK
+e1-e2-control-rc1.log: OK
+e3b-blind-band.log: OK
+blind-band.json: OK
+tests.log: OK
+tests.json: OK
+e5-package-contents.log: OK
+e5-controls.log: OK
+e6-bounds-check.log: OK
+e6-fixture-rule.log: OK
+e6-fixture-rule.json: OK
+e6-control-rc1.log: OK
+figures.log: OK
+s1-record.log: OK
+## shasum -a 256 src/sect.ts (as at the start, 00-start.log)
+a528c3166480aa05f92c0d06959a80444fd6234d729a8ebd783343cec2c30ac6  src/sect.ts
+## df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   228Gi   190Gi    11Gi    95%    5.5M  115M    5%   /System/Volumes/Data
+## SHA-256 of the outputs written so far
+509d8426365e1bc9e711fabaf25d441e84cbe1f8f28ba39c6cfda6f6b6fdfe56  00-start.log
+06bd76c2546b8a9dead91fa09db48ef6b27dcab82139a674ccaaa608fe07e74e  01-build.log
+ac6a509ac7cf0c072bca90446574bd1eb9cfeebade164144f7597a3bb6425889  02-pack.log
+d83bde3cbd5ff8d1e9c7921973437550cc2df06b0ecee2b15da783495f31c50f  03-exports-smoke.log
+1f6d495571fa6099b9c6477bdd055400693e86688e7fd6c36222dba9c6b83faf  04-tests.log
+d83f04169f59e481992b1145c1a4a60fcd3acdf3566a7a7e2789ed8692dc8d72  05-l1-l3-broken-builds.log
+d82f3ee30ac499b725097e6902448f97cd9a9fccf999f9d5e299e5698b8d0b33  06-l4-no-ephemeris.log
+711886ce29287590e651ec3b87fbc03bca51b67d6730cc8b414dc166f5b685ee  07-l5-same-answers.log
+88ddd42a4795ae49111ecabb52d8fb71f269e529bd2661e9169e91f1fbf58dec  08-l5-control.log
+1937bb4ccea8e562d0b144a01dbe66ace05cb42e915836051c874d5991b8886e  09-l6-site-fixtures.log
+8fb3137f3da8bd6cac07ed8803e568a5fb7b2ca17ac446d0e1de01e791c7c163  10a-clone-237b226.log
+aed9a8659b3261ae2251151a711a750fec801d72bb99c2cce99f975abe95ab91  10b-l7-sect-controls.log
+f6cd784ea8d189e66951791c907aaef31a6769b43c85c3d0ac9991cbdc69112d  11a-clone-16ad4fe.log
+4a256ffa126fe032b724a9eb4c56a898eef214689c9e43b37b6fb03b24a98462  11b-l9-api-reports.log
+ac13a967f20849bfe7e6504f1600003326f4f2ff26162c9548cf2dd3fa306781  12a-clone-1deb29e.log
+9ac4c997ab82c3bd42441e1e404d670c3d21d7b2bcf0472eac9988e9c8428fa9  12b-l11-graphs-1deb29e.log
+b81c48f6412c1e8e75623409662f4d9b8d3a5835d9b512383e9a781451394f1e  12c-l11-graphs-16ad4fe.log
+79054e1ce8af6c7f695e6594cb2f0d4773e9960fb725462e7690fb7fc98c1550  12d-l11-graphs-compare.log
+9e7d94663e2956cf0a1162a2abfcf27fc83d7fb9d232036c5cdde58f822ca921  12e-l11-package-contents.log
+b578b8bd1be827d6cbab444dbf52b5dee301cd349a8685bb5d966ab09ff4f479  12f-l11-budget-control.log
+644e794c6168753e40afc430ee728d887e25950b625d539d5d6704cc35fc75cc  12g-sizes-237b226.log
+c0b73e3689b4f6dbd36313b053a0509f236b57c1d0b09af2770cb33d06d0595a  13a-l12-consumer-v20.19.0.log
+cb4c06bbbf1791d45fe29bbf6d40c43794a77492cc3ba5e09e21ef55d8c9063a  13b-l12-consumer-v22.7.0.log
+74e29338c1c35f50e297932c1a9e8d2e014903feacc8cb6d1e27d4b113f3a3a0  13c-l12-consumer-v22.22.2.log
+22d6d60cfa28665b37000370b0bf688e1cf5db29f5896049e260c1d4a4e42eda  13d-l12-consumer-v24.21.0.log
+4dd04968423dbd7e0d25c504fe978dd59b121b351726d4e16f84671d6dc1ab84  13e-l12-control.log
+82f3cee3bc8064638715fc13eaddb8eb6ccfc740a31abafe963a2c986064e63c  14-b1-b5-record.log
+cea657188f5fcbe8ab416faee5232e6740660bcb1d226abc5174e05e51b65832  15-figures.log
+a94abf030b185e0087eb6a901461f1edaed086dbdab5ca510e89ebde53d5a54c  graphs-16ad4fe.json
+1d0af0167fbef08c5e2a524e5af106ead6745028426910a9c7b7a6abb73d1131  graphs-1deb29e.json
+c7821571115aebdb5d38963ea32efc9285ad74fe8315a8a47d18e5d938152b67  graphs-237b226.json
+04151fcbca5dc083f1e072687d9a378827ece7227c4d13c9637b92bd87581b89  tests.json
+# exit 0, finished 2026-11-04 12:21:47 +0700

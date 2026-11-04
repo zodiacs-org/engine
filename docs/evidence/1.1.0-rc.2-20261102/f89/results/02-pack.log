@@ -1,0 +1,29 @@
+# F-89 formal run of @zodiacs/engine 1.1.0-rc.2: the candidate packed from this tree (npm pack --ignore-scripts into scratch), unpacked for E1, E2 and E5's controls
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# cwd <checkout>
+# command: zsh -c nice -n 10 npm pack --ignore-scripts --pack-destination <scratch>/pack 2>&1 | grep -E 'Tarball Details|name:|version:|filename:|package size|unpacked size|shasum|integrity|total files'; echo '## shasum -a 256 (the pack)'; shasum -a 256 <scratch>/pack/zodiacs-engine-1.1.0-rc.2.tgz; echo '## bytes and members'; stat -f '%z bytes' <scratch>/pack/zodiacs-engine-1.1.0-rc.2.tgz; tar -tzf <scratch>/pack/zodiacs-engine-1.1.0-rc.2.tgz | wc -l | tr -d ' '; echo '## SR3 ran on the 5c00cb8 candidate: its recorded SHA-256 (notes/rc2-2026-11-01/sr3/tarball.sha256, outside this repository), and that file hashed now'; cut -d' ' -f1 <programme>/notes/rc2-2026-11-01/sr3/tarball.sha256; shasum -a 256 <programme>/notes/rc2-2026-11-01/sr3/zodiacs-engine-1.1.0-rc.2.tgz | cut -d' ' -f1; echo '## the same bytes as the SR3 candidate?'; cmp <scratch>/pack/zodiacs-engine-1.1.0-rc.2.tgz <programme>/notes/rc2-2026-11-01/sr3/zodiacs-engine-1.1.0-rc.2.tgz && echo 'identical (cmp)'; echo '## unpacked into <scratch>/rc2'; tar -xzf <scratch>/pack/zodiacs-engine-1.1.0-rc.2.tgz -C <scratch>/rc2 && ls <scratch>/rc2/package | tr '\n' ' '; echo; ls <scratch>/rc2/package/dist | wc -l | tr -d ' '
+# started 2026-11-04 11:56:58 +0700
+npm notice Tarball Details
+npm notice name: @zodiacs/engine
+npm notice version: 1.1.0-rc.2
+npm notice filename: zodiacs-engine-1.1.0-rc.2.tgz
+npm notice package size: 318.0 kB
+npm notice unpacked size: 1.1 MB
+npm notice shasum: 18888303c1ff43075eaece0e5a011515b63c090e
+npm notice integrity: sha512-3FwnWH2ZfYc3V[...]QUOg/MlcRm0Qw==
+npm notice total files: 90
+## shasum -a 256 (the pack)
+c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c  <scratch>/pack/zodiacs-engine-1.1.0-rc.2.tgz
+## bytes and members
+318004 bytes
+90
+## SR3 ran on the 5c00cb8 candidate: its recorded SHA-256 (notes/rc2-2026-11-01/sr3/tarball.sha256, outside this repository), and that file hashed now
+c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c
+c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c
+## the same bytes as the SR3 candidate?
+identical (cmp)
+## unpacked into <scratch>/rc2
+CHANGELOG.md LICENSE LICENSING.md NOTICE README.md dist package.json 
+84
+# exit code 0; finished 2026-11-04 11:56:58 +0700

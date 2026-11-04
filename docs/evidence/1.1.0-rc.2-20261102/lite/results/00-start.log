@@ -1,0 +1,53 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: the state at the start
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>
+# command: sh <scratch>/bin/start.sh
+# started 2026-11-04 12:14:59 +0700
+## git rev-parse HEAD
+237b2265fcc53ae51abcb4f8e895e64c66321f5e
+## git branch --show-current
+rc2/main-first
+## git status --porcelain -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+?? docs/evidence/1.1.0-rc.2-20261102/f89/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/
+(end of status)
+## git status --porcelain --untracked-files=all -- docs/evidence/1.1.0-rc.2-20261102/lite
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/00-start.log
+(end of status)
+## git sparse-checkout list
+/*
+!/docs/evidence/calc-sidereal-2026-10-05/
+## test -e docs/evidence/calc-sidereal-2026-10-05 (the path only)
+absent
+## df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   228Gi   189Gi    11Gi    95%    5.5M  121M    4%   /System/Volumes/Data
+## node, npm, python3; the Node versions of the toolchain
+v22.22.2 darwin-arm64
+10.9.7
+3.9.6 arm64
+<programme>/toolchain/node-v20.19.0-darwin-arm64/bin: v20.19.0, npm 10.8.2
+<programme>/toolchain/node-v22.7.0-darwin-arm64/bin: v22.7.0, npm 10.8.2
+<programme>/toolchain/node-v22.22.2-darwin-arm64/bin: v22.22.2, npm 10.9.7
+<programme>/toolchain/node-v24.21.0-darwin-arm64/bin: v24.21.0, npm 11.19.0
+## git --version
+git version 2.50.1 (Apple Git-155)
+## shasum -a 256 of the preregistration and the tools as run (git status above shows them unmodified)
+9019d67cc9a39b0039d0b9a6f89346f7685034a4e5bdd22393052ff2b05a115f  PREREGISTRATION.md
+ddf5e58de06c702093c0283b2d30879253ba4469f379edd855b7b2c47758beb2  tools/api-reports.mjs
+a9925c14b0b6588570459d2c59295449b8c5f1ac8a9a5553224673d9617b93a0  tools/broken-builds.mjs
+686f43635c0ad58a9aec1c9bfc4a1d600519b31aeed7bf6a147ed8d78dcd6744  tools/consumer-control.py
+43f2c9b0d4e82d798e9509579c6129cd1fe0537c00a1d37dedd5cb5206fc3141  tools/graphs.mjs
+474fc76314015521e98f476b1df1ff532bf6dc83b5f1b1998dff93e4d258066f  tools/load.mjs
+916ecfa1859cc6a25dfdc50d1c286670a89e5155061f14a0e8bf910b46ad7b70  tools/no-ephemeris.sh
+fc4967fef2121c5febc470ceac9f204bbf0f92a5c52643d831679b77c27c4659  tools/same-answers.mjs
+82678ea83a24cd0f9caaa8ffefe6c103afc328de276ea41cd82e6d04ef4411ae  tools/sect-controls.mjs
+82d5d9ef453c6f24d6f34bf7d8bbe2a278e65c93ab65616bf02bca28d5d6bd77  tools/site-fixtures.mjs
+## shasum -a 256 src/sect.ts src/sect.test.ts src/lite.ts
+a528c3166480aa05f92c0d06959a80444fd6234d729a8ebd783343cec2c30ac6  src/sect.ts
+06272ffeb183469f22583f2bf2d1a918a85ed3680d9e922fd3e20f76ea3b9433  src/sect.test.ts
+43fa7bf0d6b5df1e8f61d12bdd147e321e751807e82eb5986db35c240b2db448  src/lite.ts
+# exit 0, finished 2026-11-04 12:15:01 +0700

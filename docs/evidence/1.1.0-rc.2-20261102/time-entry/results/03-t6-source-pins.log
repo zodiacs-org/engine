@@ -1,0 +1,92 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: T6, the sources byte for byte (tools/source-pins.mjs), no build
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 12041576 KiB, 11.5 GiB
+# cwd <checkout>
+# command: node <checkout>/docs/evidence/1.1.0-rc.2-20261102/time-entry/tools/source-pins.mjs --repo . --commit HEAD --out <checkout>/docs/evidence/1.1.0-rc.2-20261102/time-entry/results/T6.json
+# started 2026-11-04 12:34:40 +0700
+{
+ "check": "T6",
+ "tool": "source-pins.mjs",
+ "commit": "237b2265fcc53ae51abcb4f8e895e64c66321f5e",
+ "control": null,
+ "controlBehaved": null,
+ "results": [
+  {
+   "path": "src/time-scale.ts",
+   "pinnedBlob": "f7db33bb6390ad5766cad33400c5001e30f4352f",
+   "blobAtCommit": "f7db33bb6390ad5766cad33400c5001e30f4352f",
+   "workingBlob": "f7db33bb6390ad5766cad33400c5001e30f4352f",
+   "workingSha256": "6358ab9f119f55e367b7a8cb601c0ed2a6fa0a1b083a8e48b2aa59cd96c7b9d6",
+   "pass": true
+  },
+  {
+   "path": "src/time-scale-data.ts",
+   "pinnedBlob": "5615b94de7dd4f84c850e404ee7bff55a8c865ba",
+   "blobAtCommit": "5615b94de7dd4f84c850e404ee7bff55a8c865ba",
+   "workingBlob": "5615b94de7dd4f84c850e404ee7bff55a8c865ba",
+   "workingSha256": "44c6b80db298e55a050b59cb75975ba2059abb775b16b849022ee5a5849280a0",
+   "pass": true
+  },
+  {
+   "path": "src/deltat.ts",
+   "pinnedBlob": "38192fa5dc4f1f947d6b18e2179b2418e6ce68cf",
+   "blobAtCommit": "38192fa5dc4f1f947d6b18e2179b2418e6ce68cf",
+   "workingBlob": "38192fa5dc4f1f947d6b18e2179b2418e6ce68cf",
+   "workingSha256": "2ce7e227bdf0e75bc2401793b8b09ed4113d80d8845376fbec7d0129c12f8b27",
+   "pass": true
+  },
+  {
+   "path": "src/reference-span.ts",
+   "pinnedBlob": "9d607a3dcb5ceaabfe31d198681d75b857276c31",
+   "blobAtCommit": "9d607a3dcb5ceaabfe31d198681d75b857276c31",
+   "workingBlob": "9d607a3dcb5ceaabfe31d198681d75b857276c31",
+   "workingSha256": "5bce5a05494448a5740027c078527ab4fb7b0c02f71ff83465c01fd085a4d996",
+   "pass": true
+  },
+  {
+   "path": "src/nutation.ts",
+   "pinnedBlob": "e25e9e2928d983fad78aa81c5cc4a84cbf419400",
+   "blobAtCommit": "e25e9e2928d983fad78aa81c5cc4a84cbf419400",
+   "workingBlob": "e25e9e2928d983fad78aa81c5cc4a84cbf419400",
+   "workingSha256": "c11af594d4e8ad64e0a7ff1097505063c70812d2da84e14a6c0280d4841e62b0",
+   "pass": true
+  },
+  {
+   "path": "src/frame.ts",
+   "pinnedBlob": "6657c7ee2c399620bc3ed84bcf55f1a95b077b99",
+   "blobAtCommit": "6657c7ee2c399620bc3ed84bcf55f1a95b077b99",
+   "workingBlob": "6657c7ee2c399620bc3ed84bcf55f1a95b077b99",
+   "workingSha256": "98d0bee44839b23d3ec64dac470e31ab8e366c6907d325a4259f8f37285a7c50",
+   "pass": true
+  },
+  {
+   "path": "src/houses.ts",
+   "function": "meanObliquity",
+   "workingIsCommit": true,
+   "sha256": "34119d1f24d214feb94f6a5d401bbdfcc3e4662067250c3058af4c3bf2734777",
+   "pass": true
+  },
+  {
+   "path": "src/signs.ts",
+   "function": "normalizeLongitude",
+   "workingIsCommit": true,
+   "sha256": "c515faf25565b74111049e7a2ab15c6a1019c81f4099212e5b832bb4d818e99e",
+   "pass": true
+  },
+  {
+   "path": "package-lock.json",
+   "workingIsCommit": true,
+   "versions": {
+    "tsup": "8.5.1",
+    "esbuild": "0.27.7",
+    "typescript": "5.9.3"
+   },
+   "pass": true
+  }
+ ],
+ "node": "v22.22.2",
+ "pass": true
+}
+# exit 0, finished 2026-11-04 12:34:40 +0700

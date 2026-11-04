@@ -1,0 +1,134 @@
+{
+ "output": "<checkout>/src/vedic/fixtures/varga-changes.json",
+ "sha256": "2207fbea5b7e02a14f387ab77e76dea4006088ba7baf27c52d29ee8312f82750",
+ "total": {
+  "boundaries": 3480,
+  "changes": 3456,
+  "keeps": 24
+ },
+ "counts": {
+  "D1": {
+   "boundaries": 12,
+   "changes": 12,
+   "keeps": 0
+  },
+  "D2": {
+   "boundaries": 24,
+   "changes": 12,
+   "keeps": 12
+  },
+  "D3": {
+   "boundaries": 36,
+   "changes": 36,
+   "keeps": 0
+  },
+  "D4": {
+   "boundaries": 48,
+   "changes": 48,
+   "keeps": 0
+  },
+  "D7": {
+   "boundaries": 84,
+   "changes": 84,
+   "keeps": 0
+  },
+  "D9": {
+   "boundaries": 108,
+   "changes": 108,
+   "keeps": 0
+  },
+  "D10": {
+   "boundaries": 120,
+   "changes": 114,
+   "keeps": 6
+  },
+  "D12": {
+   "boundaries": 144,
+   "changes": 144,
+   "keeps": 0
+  },
+  "D16": {
+   "boundaries": 192,
+   "changes": 192,
+   "keeps": 0
+  },
+  "D20": {
+   "boundaries": 240,
+   "changes": 240,
+   "keeps": 0
+  },
+  "D24": {
+   "boundaries": 288,
+   "changes": 282,
+   "keeps": 6
+  },
+  "D27": {
+   "boundaries": 324,
+   "changes": 324,
+   "keeps": 0
+  },
+  "D30": {
+   "boundaries": 60,
+   "changes": 60,
+   "keeps": 0
+  },
+  "D40": {
+   "boundaries": 480,
+   "changes": 480,
+   "keeps": 0
+  },
+  "D45": {
+   "boundaries": 540,
+   "changes": 540,
+   "keeps": 0
+  },
+  "D60": {
+   "boundaries": 720,
+   "changes": 720,
+   "keeps": 0
+  },
+  "D2cyclic": {
+   "boundaries": 24,
+   "changes": 24,
+   "keeps": 0
+  },
+  "D3cyclic": {
+   "boundaries": 36,
+   "changes": 36,
+   "keeps": 0
+  }
+ },
+ "keepsInDegrees": {
+  "D2": [
+   0.0,
+   30.0,
+   60.0,
+   90.0,
+   120.0,
+   150.0,
+   180.0,
+   210.0,
+   240.0,
+   270.0,
+   300.0,
+   330.0
+  ],
+  "D10": [
+   30.0,
+   90.0,
+   150.0,
+   210.0,
+   270.0,
+   330.0
+  ],
+  "D24": [
+   30.0,
+   90.0,
+   150.0,
+   210.0,
+   270.0,
+   330.0
+  ]
+ },
+ "check": "identical"
+}

@@ -1,0 +1,20 @@
+step	kind	exit	as required
+F1: varga_changes.py --check	check	0	yes
+G-V1: boundary_fixtures.py --output	check	0	yes
+G-V1: the regenerated boundaries.json equals the committed one	check	0	yes
+G-V1: boundaries.json's SHA-256 written	check	0	yes
+G-V1 and section 6: boundaries.json and the inputs against their recorded SHA-256	check	0	yes
+G-V1, G-V2 (a), the named tests and the existing Vedic tests (vitest)	check	0	yes
+their controls: test-controls.mjs (each control's outcome in test-controls.json)	check	0	yes
+G-V3: run.mjs on F2, F3 and F3b	check	0	yes
+G-V3 and G-V2 (b): checker.mjs	check	0	yes
+their controls: controls.mjs (each control's outcome in controls.json)	check	0	yes
+controls.json copied	check	0	yes
+section 7: derived_bounds.py (its control's note in derived-bounds-control.txt)	check	0	yes
+section 7 control: a real lower bound asked for at 66.6 degrees (must fail; the script says there is none)	control	1	yes
+G-V5: time_per_arcsecond.mjs --table	check	0	yes
+G-V5: the table written into docs/vedic.md (--write)	check	0	yes
+G-V5: the control's copy of docs/vedic.md, one figure changed (--control-copy)	check	0	yes
+G-V5 control: --check against the copy must fail	control	1	yes
+G-V4: run.mjs on F4	check	0	yes
+G-V4: varga_ascendant.py	check	0	yes

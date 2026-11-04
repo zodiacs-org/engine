@@ -1,0 +1,14 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: T2 and T13, npm run exports:smoke on this build (one run serves both, as in the carrier's time-entry job)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 12002804 KiB, 11.4 GiB
+# cwd <checkout>
+# command: npm run exports:smoke
+# started 2026-11-04 12:36:52 +0700
+
+> @zodiacs/engine@1.1.0-rc.2 exports:smoke
+> node scripts/module-resolution-smoke.mjs
+
+@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat, time and lite graphs have no external imports, the lite entry holds its 16 pinned source modules in 5 files that import nothing and loads where astronomy-engine cannot, the core graph (24 source modules in the build's module list, 23 marked in 13 files) reaches no module of an opt-in entry and no zone history, the geo entry loads its 16 shards lazily, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic
+# exit 0, finished 2026-11-04 12:36:53 +0700

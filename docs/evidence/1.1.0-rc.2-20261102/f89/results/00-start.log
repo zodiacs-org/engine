@@ -1,0 +1,22 @@
+# F-89 formal run of @zodiacs/engine 1.1.0-rc.2: the state at the start
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# cwd <checkout>
+# command: zsh -c echo "## git rev-parse HEAD"; git rev-parse HEAD; echo "## git status --porcelain -- . :(exclude)docs/evidence/calc-sidereal-2026-10-05"; git status --porcelain -- . ":(exclude)docs/evidence/calc-sidereal-2026-10-05"; echo "(end of status)"; echo "## git sparse-checkout list"; git sparse-checkout list; echo "## df -h /System/Volumes/Data"; df -h /System/Volumes/Data; echo "## node, npm, python3"; node -p "process.version + \" \" + process.platform + \"-\" + process.arch"; npm --version; python3 -I -c "import sys, platform; print(sys.version.split()[0], platform.machine())"
+# started 2026-11-04 11:56:33 +0700
+## git rev-parse HEAD
+237b2265fcc53ae51abcb4f8e895e64c66321f5e
+## git status --porcelain -- . :(exclude)docs/evidence/calc-sidereal-2026-10-05
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/
+(end of status)
+## git sparse-checkout list
+/*
+!/docs/evidence/calc-sidereal-2026-10-05/
+## df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   228Gi   191Gi    10Gi    95%    5.5M  106M    5%   /System/Volumes/Data
+## node, npm, python3
+v22.22.2 darwin-arm64
+10.9.7
+3.9.6 arm64
+# exit code 0; finished 2026-11-04 11:56:33 +0700

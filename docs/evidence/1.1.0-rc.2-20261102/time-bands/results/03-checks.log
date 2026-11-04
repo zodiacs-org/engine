@@ -1,0 +1,42 @@
+# time-bands formal run of @zodiacs/engine 1.1.0-rc.2: tools/checks.sh in formal mode, once: the dumps of T1, T2, T3 and E, then C1, C1b, C2, C3, C4 (C4a to C4d), C5, C7, the named tests' controls and C6
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 9616808 KiB, 9.2 GiB
+# cwd <checkout>
+# command: nice -n 10 sh docs/evidence/1.1.0-rc.2-20261102/time-bands/tools/checks.sh <checkout> <scratch>/work <programme>/site-b3c formal
+# started 2026-11-04 12:56:02 +0700
+=== dump T1 2026-11-04 12:56:02 +07
+dump T1: pass (13312 records)
+=== dump T2 2026-11-04 12:56:03 +07
+dump T2: pass (42304 records)
+=== dump T3 2026-11-04 12:56:06 +07
+dump T3: pass (13881 records)
+=== dump E 2026-11-04 12:56:07 +07
+dump E: pass (11 records)
+=== C1 2026-11-04 12:56:07 +07
+C1: pass (31016 records); controls: a: the TT band d on every UTC input failed, b: the linear sum u + d after the table failed, c: every zero band replaced by 5e-324 failed, d: the topocentric bands without w failed, e: a zero band where speeds is null failed
+=== C1b 2026-11-04 12:56:10 +07
+C1b: FAIL (586 records); controls: a: u without the 0.79 ms failed, b: d at the year of jdTt failed
+=== C2 2026-11-04 12:56:12 +07
+C2: pass (3080 records, 0 without Horizons rows); controls: a: bands times 1.05 failed, b: the UT1 band in place of the TT band failed, c: each body against the next body's expected value failed
+=== C3 2026-11-04 12:56:12 +07
+C3: pass (6644 records, 5350 with a TT band not judged, 0 where the arbiter raised, 576 values reported); controls: a: the solar-time rate, 15 arcseconds a second failed, b: another judged record's UT1 band, the next larger, in place of its own failed
+=== C4 2026-11-04 12:56:16 +07
+C4: pass (16768 records); controls: C4a: bands × 1.001 failed, C4b: the solar-time rate, (i) failed, C4b: the solar-time rate, (ii) failed, C4c: b11c5e8's bands, without the TT term failed, C4c: bands × 1.1 failed, C4d: the bands without w failed
+=== C5 2026-11-04 12:56:19 +07
+C5: pass (16 records); controls: a: band.utc = d failed, b: the bands of the window's first instant failed
+=== C7 2026-11-04 12:56:19 +07
+C7: pass (15 records); controls: a declaration line removed failed, an exported-by line that loses an entry point failed
+=== named tests' controls 2026-11-04 12:56:20 +07
+named tests' controls: pass (14 records); controls: a: the TT band d on every UTC input failed, d: the topocentric bands without w failed, the calc instant's record given timeScale.input tt failed, a timeBands that returns zeros for a record without a time scale failed, a calc() that gives a zero band without speeds failed, bands left in radians failed, whole-sign cusp bands set to the ascendant's failed, the angle bands without their rate on TT (b11c5e8's) failed, sidereal angle bands whose rate on TT leaves out the ayanamsa's (the tropical ones') failed, the cusps' rate on TT taken across a side that falls back (4f4c1e8's) failed, the id left out of events()'s receipt failed
+=== C6 2026-11-04 12:56:32 +07
+C6: pass (38 records); controls: one longitude in its last place and one added key failed, one engine version string set to another version failed, one receipt's ephemeris version changed failed, one mean point's basis given another text failed, a band key added to a refused result failed
+=== dumps
+04beb1cd7a4bb7fdb343b76c2494d02345f2d2d5bb1559a7afb27d9a038c1f2a  dump-T1.json
+98e63ed8cfe9753d9141de258b5049f20f8784e6c9651189430debf719f948da  dump-T2.json
+d7ea757458e49670e55ec4dc05a5989e8fa542736880536bb495eb000dc0411f  dump-T3.json
+3c596f1a14fd0cf957afd94ceda1efbf4a1d22e01715307325c464c7be28b650  dump-E.json
+=== v22.22.2, Python 3.9.6, 237b2265fcc53ae51abcb4f8e895e64c66321f5e
+# exit 1, finished 2026-11-04 12:56:33 +0700

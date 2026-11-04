@@ -1,0 +1,24 @@
+# time-bands formal run of @zodiacs/engine 1.1.0-rc.2: the site inputs, from the site clone's git objects at the pinned commit
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 11121744 KiB, 10.6 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/site-inputs.sh
+# started 2026-11-04 12:55:28 +0700
+## git -C <programme>/site-b3c rev-parse --verify 9a67f761bc231741c6571af2dfae65b798954e11^{commit}
+9a67f761bc231741c6571af2dfae65b798954e11
+## docs/platform/evidence/deltat-2026-09-25/tools/lib.py
+blob 59e06bcfd7bad63aca364355db8fa91d6d3000f2, 13405 bytes
+sha256 c220599dbe409f464a8bbea19cd02585b3f0c005c770eaede4fa1e17e51e600f
+## docs/platform/evidence/deltat-2026-09-25/table.json
+blob 6220b0d2cd8887d2ac45f212e8db7f4dcd2cc6aa, 4642 bytes
+sha256 80ddc3598a2c4332dea3af97051a821525189a04c77281cf7c7e3ab94793c175
+## lib.py's imports (the standard library only, so the system python3 loads it)
+19:import hashlib
+20:import json
+21:import math
+22:import os
+23:import re
+# exit 0, finished 2026-11-04 12:55:28 +0700

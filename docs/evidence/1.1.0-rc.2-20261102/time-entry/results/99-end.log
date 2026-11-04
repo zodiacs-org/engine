@@ -1,0 +1,169 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: the state at the end, before RESULTS.md
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 12158492 KiB, 11.6 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/end.sh
+# started 2026-11-04 12:41:26 +0700
+## git rev-parse HEAD
+237b2265fcc53ae51abcb4f8e895e64c66321f5e
+unchanged since the start (00-start.log)
+## git branch --show-current
+rc2/main-first
+## git status --porcelain -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+?? docs/evidence/1.1.0-rc.2-20261102/f89/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/
+?? docs/evidence/1.1.0-rc.2-20261102/lite/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/
+(end of status)
+## git status --porcelain --untracked-files=all -- docs/evidence/1.1.0-rc.2-20261102/time-entry
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/00-start.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/01-site-inputs.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/02-corpora.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/03-t6-source-pins.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/04-t11-state-scan.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/05-build.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/06-pack.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/07a-t1-runtime-names.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/07b-t1-api-check.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/07c-t1-time-test.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/08-t2-t13-exports-smoke.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/09-t8-one-copy.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/10-t9-package-contents.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/11-t3-no-ephemeris.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/12-t4-site-module.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/13-t7-independent.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/14-t10-behaviour.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/15-t12-declarations.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/16-t5-natal-parity.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/17-controls.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/17b-controls-outputs.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/18-s0-record.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/19-figures.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/99-end.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/T10.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/T4.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/T5.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/T6.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/T7.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/T8.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T1-api.out
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T1-list.out
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T10-site-module.err
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T10-site-module.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T11-let-cache.err
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T11-let-cache.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T12.out
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T13-build.out
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T13.out
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T2-index.out
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T2-time.out
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T3.out
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T4-a.err
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T4-a.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T4-b.err
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T4-b.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T4-c.err
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T4-c.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T5-a.err
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T5-a.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T5-b.err
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T5-b.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T6-frame-byte.err
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T6-frame-byte.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T6-types.err
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T6-types.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T7-leap.err
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T7-leap.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T7-tilt.err
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T7-tilt.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T7-ut1.err
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T7-ut1.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T8.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T9-measure.out
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/T9.out
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/controls/t1a.mjs
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/corpora.json
+(end of status)
+## git sparse-checkout list
+/*
+!/docs/evidence/calc-sidereal-2026-10-05/
+## test -e docs/evidence/calc-sidereal-2026-10-05 (the path only)
+absent
+## f89/ and lite/ untouched: their uncommitted outputs now, against the SHA-256 list taken at the start (00-start.log)
+identical: the same 54 files with the same SHA-256
+## df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   228Gi   189Gi    12Gi    95%    5.5M  122M    4%   /System/Volumes/Data
+## local paths in results/: grep -r -l -E for the user name, the scratch folder's parent, /private/tmp and /Users/
+none
+## SHA-256 of the outputs written so far
+1c19182a34ad553ad9f700516960270fabdc5fe25056edeb42f5df14c406a8a4  00-start.log
+175b7152ace85558c5bde724fbffbb0951da4f70cd0eae385df27d895f0243e5  01-site-inputs.log
+666a8ec11479915c15087e7782f57b6f0ebaae08d5cff860ba365fbd0bce621c  02-corpora.log
+e2c4fbec43cf085a1f019d437d48840f71f36fefcd5afabad96e900440690bca  03-t6-source-pins.log
+9cc8a41e13ad21d36646f6b00bfbf8e38ff4ca386786d8d91e820c58248021ec  04-t11-state-scan.log
+3fcb08243821395f578a4488401648c15139aa7236e4f787c19601541caea87b  05-build.log
+00b36543804643fd7b22e89c0f84645aa232dd867871a64fbcb0cf84c9956310  06-pack.log
+33c5d17b0acf5dafe8e9818ed650dce0cdd9278946ce45c420b49c7be39d4289  07a-t1-runtime-names.log
+d782188c2e7c2fbd2b831c6e9bb1ad9f634c3de89359929144b8e2a3c2f2fca8  07b-t1-api-check.log
+0887aca5782fa32095e495fa5fcdebc3f81eedba6f51b86cea1644fa199d3e11  07c-t1-time-test.log
+05c8843372b4f513e82c3b45a46c7f52467066d010ba7035dfb379f92932e53b  08-t2-t13-exports-smoke.log
+91cab5875da8beff103c30725ef4863d810773b441d4a6c3e44ebdccb16ad46d  09-t8-one-copy.log
+33624fc20abadd340a31ef88a67307f5c1318a472836bf9117432e7ce6874d24  10-t9-package-contents.log
+9b48bfef162aac90cd356d950b2a759124c896f2f0853ba5da68511b2f6c21e8  11-t3-no-ephemeris.log
+3549c3228c90ec05e26b32d7938e2134a95603f809effd329068c770b3fc4054  12-t4-site-module.log
+1ba767b89d2977b8728af8403b8ff7a039868baf8ad26eaa08dee326774158f6  13-t7-independent.log
+d9857bf0579045a9cf3b70ea1b33278c4d29d1a64d54309a1a4963a254898edb  14-t10-behaviour.log
+3476120f5ba1c0d30230d6a4baaa5b6ae575495154f5f4df22257c506631896f  15-t12-declarations.log
+91dea570ce1eccdb9264b2edd93579619da7e1cc4654f095d10650e221908432  16-t5-natal-parity.log
+b426f2823f33455f24ee6a535970fd64bcba317f9f762975b2fd0957639837ae  17-controls.log
+135b1280f79ae2b386b571cf19f1e7c75ec24b7d74afd69943768623ce4e3300  17b-controls-outputs.log
+c1c375403cbf9faec6cda0afa8f057bdf11f8ec42da73b09c3103f9ad2367862  18-s0-record.log
+77373c2357cdb43b056d1f25c00f7ec71445c78ce96870a640430a66b2babca6  19-figures.log
+64ac7d9b42d3d9982619cde5a0b2cad4cf6d430056b98296512b5bd86aa9a55f  T10.json
+e1a05e5db698d5ee370c0e055d3abf12280f8ad8dd92c48c68719cfb67c9dbd4  T4.json
+5a56b025ffa7992246410a994c860c087c0a648b067e0ff35fc1f4b12f7bfacd  T5.json
+6156d2233106b720705c9c1f07a4f4f7eaf1d7e31f3ff79a176f54971487842d  T6.json
+9ee3146ea6cc06519ca2f33e7c1aa56f50d28ac5929806370e62b079db1fe854  T7.json
+9cdb63a88e9dc19f6ed61406060752917dc7f1a4b88a7b6c9e541584b4248ac3  T8.json
+df02fcbb5200504d1972a2d5ff7fea064f1d6e4d96e69463ce14b93a70541fd9  controls/T1-api.out
+76c4b808fb00b7976a87a4e403dc2341308c38ef6ae19078436f8c2d2cfa5dc7  controls/T1-list.out
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  controls/T10-site-module.err
+3caa87003e1c0501b30148c2ea0ec543f56382c1d7da5c0ce888354bd559b810  controls/T10-site-module.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  controls/T11-let-cache.err
+dfbd8b5f8686935bc2f9301c7ab3a23f8bc5d6eaa113614b86d7760a00b735f4  controls/T11-let-cache.json
+33faa64da2cf2eb0183d9da10e7fa86d8eda09b144244b84334e41ecffb899c7  controls/T12.out
+5008dac49d2706acecabf6784be97dfd0b1807ccf7ba79724007587e32b333f3  controls/T13-build.out
+0f5ba6ca7f05b55569d7478e292ce393e561fea463d6781ac8718bd5ad9e630a  controls/T13.out
+351ad6f3aab41e7802523420e02666bc7c6db296fa8168aad622a3a991741ef8  controls/T2-index.out
+32447c7a016bca93dde07fbcca84d7933eed30c89c8ae9f67e67cf785e2007f0  controls/T2-time.out
+f7a419c628a6ede3396949a69fcec69c363da29fb8c7274016feb4d98ac56fda  controls/T3.out
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  controls/T4-a.err
+0abb4d401f883b37d760b10e356d39531279502e55a423e7d276aab7ea245a19  controls/T4-a.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  controls/T4-b.err
+8e16ba64193feea0f45ade425909089f027171428db6c8dca541fd0d5964ee51  controls/T4-b.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  controls/T4-c.err
+276bbe7679b3b6717d2ae2bd97b41aea07ddeca03f7379e5de15f88610f60c71  controls/T4-c.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  controls/T5-a.err
+b5ceaae149d20d2bd20ee0e1446531c73b1e15d5fbe16f71e2c283cc9de04956  controls/T5-a.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  controls/T5-b.err
+1e9ce7fc8cc3c0ff5dba7c923591a87332a66e00ac1543c19a600d8d0c3ca80a  controls/T5-b.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  controls/T6-frame-byte.err
+eaffe0b680150a52114011a7ddb3b8cdbe5759a1740110c9a50deb660d307c50  controls/T6-frame-byte.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  controls/T6-types.err
+1042a33a2d986499a8c9d366754cc8962b372267a3b78b3cf29a462f76551de0  controls/T6-types.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  controls/T7-leap.err
+a01098e67798afbd02b568349657c20f56f4558874bb5a603e1f23f51ee0beed  controls/T7-leap.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  controls/T7-tilt.err
+041ce10240b1f01e2726668f7732974c2ee52ada0b98b21aacac981741d37ca1  controls/T7-tilt.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  controls/T7-ut1.err
+80ccb725f263bf3cfb8b3c57b41652e3108ad30944d13da4beee25eb40774f94  controls/T7-ut1.json
+3be90fbb6fbef02bccd8f1d7a174bc8ee1462d11f04049a41ffc15067dc44a79  controls/T8.json
+422343c9bc6a124a3ad45f569bfe54b2adbcbf7fa624c72e03b89b157eb8f6ea  controls/T9-measure.out
+cd99d6ad632b2ed787f93860410d8490c70d8c2e71b261073d26531ace5ee3d2  controls/T9.out
+6963be3ba6617a701a965c7a0f3bfa6d2e18a0465851deadac6482d9ce44f2b2  controls/t1a.mjs
+680a6adb96d9e4018547f0b097b9833e779f51a3456c36ebc09cbb8909c88353  corpora.json
+# exit 0, finished 2026-11-04 12:41:27 +0700

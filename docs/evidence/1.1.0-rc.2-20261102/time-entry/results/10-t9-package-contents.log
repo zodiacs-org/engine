@@ -1,0 +1,14 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: T9, npm run package:contents on this build
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 10712316 KiB, 10.2 GiB
+# cwd <checkout>
+# command: npm run package:contents
+# started 2026-11-04 12:37:03 +0700
+
+> @zodiacs/engine@1.1.0-rc.2 package:contents
+> node scripts/verify-package-contents.mjs
+
+@zodiacs/engine package contents passed (90 files, 1096783 bytes unpacked of 1100000; import graphs: . 106325 of 108500, ./calc 151426 of 156000 (71048 beyond the core's), ./conventions 2754 of 2900 (2754 beyond the core's), ./crossings 9942 of 10000 (173 beyond the core's), ./deltat 5232 of 5500 (161 beyond the core's), ./geo 35439 of 35500 (32510 beyond the core's), ./houses 13678 of 15000 (13678 beyond the core's), ./internal 66586 of 68000 (365 beyond the core's), ./internal/math 19224 of 20000 (1363 beyond the core's), ./lite 28930 of 29000 (28930 beyond the core's), ./receipt 72549 of 76500 (46579 beyond the core's), ./sky 94448 of 97000 (16999 beyond the core's), ./techniques 156210 of 160000 (63909 beyond the core's), ./time 42306 of 42400 (2924 beyond the core's), ./timing 125693 of 129000 (32720 beyond the core's), ./vedic 141340 of 143000 (49039 beyond the core's), ./window 104557 of 105000 (33948 beyond the core's); zone histories 189144 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
+# exit 0, finished 2026-11-04 12:37:04 +0700

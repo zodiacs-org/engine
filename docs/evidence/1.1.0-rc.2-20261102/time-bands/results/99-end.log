@@ -1,0 +1,68 @@
+# time-bands formal run of @zodiacs/engine 1.1.0-rc.2: the state at the end, before RESULTS.md
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 8049344 KiB, 7.7 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/end.sh
+# started 2026-11-04 13:01:44 +0700
+## git rev-parse HEAD
+237b2265fcc53ae51abcb4f8e895e64c66321f5e
+unchanged since the start (00-start.log)
+## git branch --show-current
+rc2/main-first
+## git status --porcelain -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+ M docs/evidence/1.1.0-rc.2-20261102/carrier/carrier-gates.sh
+?? docs/evidence/1.1.0-rc.2-20261102/f89/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/
+?? docs/evidence/1.1.0-rc.2-20261102/lite/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/
+(end of status)
+## git status --porcelain --untracked-files=all -- docs/evidence/1.1.0-rc.2-20261102/time-bands
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/00-start.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/01-site-inputs.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/02-build.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/03-checks.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/04-outputs.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/05-c1b-records.log
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/c1.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/c1b.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/c2.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/c3.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/c4.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/c5.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/c6.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/c7.json
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/named-controls.json
+(end of status)
+## every other file under docs/evidence/1.1.0-rc.2-20261102 (outside time-bands/), shasum -a 256, against the start
+identical to the start: 193 files, the same names and bytes
+## git sparse-checkout list
+/*
+!/docs/evidence/calc-sidereal-2026-10-05/
+## test -e docs/evidence/calc-sidereal-2026-10-05 (the path only)
+absent
+## the files written to results/ before this log, shasum -a 256
+64230651d985ccc10f8e56c80d486b2079ea8f766398babb36c232aeb51feec9  00-start.log
+14ac031fb462b5f37325da6588b18d2bd3565addf251731dd3f2fe548ab7f765  01-site-inputs.log
+9a8729eb46ab85f3eeca22e716014e704c686f8e375bcd9de0e6918eb29d8ca7  02-build.log
+d30e4768593805f84ec7e3458ae46a48387d598b3d7ac3c50e9ef5fd0ca4b73a  03-checks.log
+760002685e33b7c6bafdba1c3ba822b91698ef6be0a4c71fcb039c5c418c1325  04-outputs.log
+7df028f123df6efa158318edb3a7eb25c889efad9f814ad00c2107bc3f11ebf8  05-c1b-records.log
+834f9afc27fa6f55a7496b044a60535dd4ffa928c973a69083f0fbe592b726fa  c1.json
+268eb704afae6f4919cc952bb836d261ca4a4a9c48ac36f9993cfb8c0fb0c892  c1b.json
+4ebbb74494b7af69aa78318bad3f14cb10bf03a6edf8afc1870b3c35288a8646  c2.json
+3ba3a5985bb55856d4b748d58087690019c7b2f16c3ecbef902a55bcd287b579  c3.json
+894b5bac6205923d572b6408947d998cb86fc8a3c9e8a7c66e41786ee72aec54  c4.json
+7f177dae84b7686529fa2ebf52679601d1cb33dc7c566f965e7ba7b7f430dc0b  c5.json
+2f3c261961862d186c360eb27e6b3485f07049c3fdd2a31b9a971aeda43c843e  c6.json
+6a902df70ab538395bf55447fb6c55c1ef3342d8f18f337b9233460cf82957ba  c7.json
+8a4e5712065398bece7b98be04e830bd2e8d5bbbdb3b9a47cc43fce3809fef7c  named-controls.json
+## df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   228Gi   192Gi   7.7Gi    97%    5.5M   80M    6%   /System/Volumes/Data
+# exit 0, finished 2026-11-04 13:01:45 +0700

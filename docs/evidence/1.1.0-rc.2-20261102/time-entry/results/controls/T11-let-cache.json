@@ -1,0 +1,27 @@
+{
+ "check": "T11",
+ "tool": "state-scan.mjs",
+ "typescript": "5.9.3",
+ "control": true,
+ "controlBehaved": true,
+ "topLevelStatements": 22,
+ "importedBindings": [
+  "EclipticFrame",
+  "TIME_SCALE_NAMES",
+  "Tilt",
+  "TimeBasis",
+  "TimeScaleName",
+  "basisOf",
+  "elapsedOf",
+  "frameAt",
+  "meanOf",
+  "placeOfDate",
+  "tiltAt"
+ ],
+ "findings": [
+  "top-level let or var: let cache = new Map();",
+  "top-level binding to a mutable value: let cache = new Map();"
+ ],
+ "node": "v22.22.2",
+ "pass": false
+}

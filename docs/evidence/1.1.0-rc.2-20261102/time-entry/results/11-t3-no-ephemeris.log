@@ -1,0 +1,16 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: T3, tools/no-ephemeris.sh on the packed tarball, Node 22.22.2 and 20.19.0, with its control
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 10550096 KiB, 10.1 GiB
+# cwd <checkout>
+# command: sh <checkout>/docs/evidence/1.1.0-rc.2-20261102/time-entry/tools/no-ephemeris.sh <scratch>/pack/zodiacs-engine-1.1.0-rc.2.tgz <programme>/toolchain/node-v22.22.2-darwin-arm64/bin/node <programme>/toolchain/node-v20.19.0-darwin-arm64/bin/node
+# started 2026-11-04 12:37:11 +0700
+installed: @zodiacs engine
+node v22.22.2, flag: --no-experimental-detect-module
+  check: {"taiMinusUtc":37,"model":"iers-utc/1","lon":359.9961300933642,"lat":0,"pass":true}
+  control: {"rejected":true,"code":"ERR_MODULE_NOT_FOUND","namesAstronomyEngine":true,"controlBehaved":true}
+node v20.19.0, flag: --no-experimental-detect-module
+  check: {"taiMinusUtc":37,"model":"iers-utc/1","lon":359.9961300933642,"lat":0,"pass":true}
+  control: {"rejected":true,"code":"ERR_MODULE_NOT_FOUND","namesAstronomyEngine":true,"controlBehaved":true}
+# exit 0, finished 2026-11-04 12:37:12 +0700

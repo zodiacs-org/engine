@@ -1,0 +1,70 @@
+{
+ "check": "T7",
+ "tool": "independent.mjs",
+ "package": {
+  "name": "@zodiacs/engine",
+  "version": "1.1.0-rc.2"
+ },
+ "references": {
+  "conformance/sources/l2/Leap_Second.dat": "6cb6f5d4b819f2e568e25db4b0b26d89dedf031fdffb18bc94d40f4e94e268d7",
+  "scripts/time-scale-sources/finals2000A-20260924-ut1.csv.gz": "b741c4e051866897a60c54f870ef08f329b7f177655f46baa7c92a0a5badb6e1",
+  "scripts/time-scale-sources/eopc04-1972.txt": "e85f6211d216b8dc1988fddef6da9c079c522e1e4830fda3ac9a4639fe317d55",
+  "src/fixtures/nutation-erfa.json": "2719dd382310ca5514db0577fc4b3607e99edd941111f0f872957125b4713604"
+ },
+ "control": "leap",
+ "controlBehaved": true,
+ "t7a": {
+  "changes": 28,
+  "checks": 58,
+  "failures": 1,
+  "firstFailures": [
+   {
+    "at": "2017-01-01T00:00:00.000Z",
+    "expected": 36,
+    "got": {
+     "taiMinusUtc": 37,
+     "listed": true
+    },
+    "ttMinusUtc": 69.184
+   }
+  ],
+  "pass": false
+ },
+ "t7b": {
+  "finals": {
+   "rows": 19997,
+   "bound": 0.00079,
+   "worst": 0.0007881000000017069,
+   "failures": 0,
+   "firstFailures": []
+  },
+  "c04": {
+   "rows": 367,
+   "bound": 0.00066,
+   "worst": 0.0006568999999992942,
+   "failures": 0,
+   "firstFailures": []
+  },
+  "pass": true
+ },
+ "t7c": {
+  "epochs": 101,
+  "worstArcsec": {
+   "dpsi": 5.329070518200751e-15,
+   "deps": 3.552713678800501e-15,
+   "mobl": 2.9103830456733704e-11,
+   "ee": 0.000015035156014919782,
+   "rotation": 7.11028263288594e-7
+  },
+  "tolerances": {
+   "dpsi": 1e-10,
+   "deps": 1e-10,
+   "mobl": 1e-9,
+   "ee": 0.00005,
+   "rotation": 0.000005
+  },
+  "pass": true
+ },
+ "node": "v22.22.2",
+ "pass": false
+}

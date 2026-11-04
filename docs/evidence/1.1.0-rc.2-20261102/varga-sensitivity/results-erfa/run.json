@@ -1,0 +1,28 @@
+{
+ "tool": "docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/run.mjs",
+ "engine": {
+  "version": "1.1.0-rc.2",
+  "jsFiles": 57,
+  "jsDigest": "21b80ef0dcafb71f108a397e015218083e1cf346741961b4b36ff429c8888109"
+ },
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "limit": null,
+ "corpora": [
+  {
+   "corpus": "F4",
+   "file": "<checkout>/docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/births-erfa.json",
+   "sha256": "5c6ddf9d0a3f2325923538b8965bd3acc2a3b4975a96ce502b60c7b488cab6d9",
+   "seed": 20261103,
+   "calls": 1000
+  }
+ ],
+ "calls": 1000,
+ "threw": [],
+ "callMs": {
+  "mean": 16.791716,
+  "median": 15.771,
+  "max": 131.319
+ },
+ "wallMinutes": 0.2839089014
+}

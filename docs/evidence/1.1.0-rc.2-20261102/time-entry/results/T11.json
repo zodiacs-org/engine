@@ -1,0 +1,24 @@
+{
+ "check": "T11",
+ "tool": "state-scan.mjs",
+ "typescript": "5.9.3",
+ "control": false,
+ "controlBehaved": null,
+ "topLevelStatements": 21,
+ "importedBindings": [
+  "EclipticFrame",
+  "TIME_SCALE_NAMES",
+  "Tilt",
+  "TimeBasis",
+  "TimeScaleName",
+  "basisOf",
+  "elapsedOf",
+  "frameAt",
+  "meanOf",
+  "placeOfDate",
+  "tiltAt"
+ ],
+ "findings": [],
+ "node": "v22.22.2",
+ "pass": true
+}

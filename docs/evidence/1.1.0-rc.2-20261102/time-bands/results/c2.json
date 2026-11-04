@@ -1,0 +1,32 @@
+{
+ "check": "C2",
+ "pass": true,
+ "records": 3080,
+ "missingHorizonsRows": 0,
+ "problems": 0,
+ "firstProblems": [],
+ "reportedNotJudged": {
+  "distanceBand": {
+   "cases": 3080,
+   "largestDifferenceAu": 3.261304379933091e-09
+  }
+ },
+ "controls": {
+  "a: bands times 1.05": {
+   "failed": true,
+   "problems": 5880
+  },
+  "b: the UT1 band in place of the TT band": {
+   "failed": true,
+   "problems": 4678
+  },
+  "c: each body against the next body's expected value": {
+   "failed": true,
+   "problems": 6141
+  }
+ },
+ "python": "3.9.6",
+ "dumps": [
+  "dump-T1.json"
+ ]
+}

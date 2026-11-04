@@ -191,7 +191,7 @@ process.exitCode = JSON.stringify(keys) === JSON.stringify(R1) ? 0 : 1;' "$tools
     step "T8: one-copy.mjs" pass node "$tools/one-copy.mjs" --package "$pkg" --out "$reports/T8.json"
     step "T9: npm run package:contents" quiet npm run package:contents
     step "T10: behaviour.mjs" pass node "$tools/behaviour.mjs" --package "$pkg" --out "$reports/T10.json"
-    step "T11: state-scan.mjs" pass node "$tools/state-scan.mjs" --repo . --out "$reports/T11.json"
+    step "T11: state-scan.mjs" pass node "$tools/state-scan.mjs" --repo "$clone" --out "$reports/T11.json"
     # T12's tool, declarations.mts (section 12), with its runner, added by the amendment of 2026-11-04.
     step "T12: declarations.sh on the archive's dist/time.d.ts" all sh "$tools/declarations.sh" "$pkg" "$SITE_TIME_BASIS_DTS" node_modules/typescript/bin/tsc ;;
   *)

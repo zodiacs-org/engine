@@ -1,0 +1,39 @@
+{
+ "check": "T10",
+ "tool": "behaviour.mjs",
+ "subject": "the site module (control)",
+ "controlBehaved": true,
+ "refusals": {
+  "timeBasis(NaN)": "returned",
+  "timeBasis(Infinity)": "RangeError",
+  "timeBasis(8.64e15 + 1)": "returned",
+  "timeBasis(0, \"UTC\")": "returned",
+  "timeBasis(0, \"utc\", NaN)": "returned",
+  "timeBasis(0, \"utc\", 1e10 + 1)": "returned",
+  "elapsedDays(b, b, NaN)": "returned",
+  "tilt(NaN)": "returned",
+  "eclipticFrame(Infinity)": "returned",
+  "meanEcliptic(eclipticFrame(0), NaN, 0, 0)": "returned",
+  "eclipticOfDate(0, 0, 0, 0)": "returned",
+  "eclipticOfDate(1, 0, 0, NaN)": "RangeError"
+ },
+ "acceptances": {
+  "timeBasis(8.64e15)": "returned",
+  "timeBasis(-8.64e15, \"tt\")": "returned",
+  "timeBasis(0, \"tt\", -1e10)": "returned",
+  "timeBasis(0, undefined)": "returned"
+ },
+ "frozen": {
+  "frame": false,
+  "rows": false,
+  "tilt": false,
+  "tiltResult": false
+ },
+ "writes": {
+  "strict": "returned",
+  "sloppyIgnored": false,
+  "sameAfter": false
+ },
+ "node": "v22.22.2",
+ "pass": false
+}

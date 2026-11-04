@@ -1,0 +1,90 @@
+# F-89 formal run of @zodiacs/engine 1.1.0-rc.2: E6's control: the bases the committed test asserts, checked by a scratch harness on the calc entry of the unpacked rc.2 pack (must hold) and of the carried 1.1.0-rc.1 archive (must fail); astronomy-engine 2.1.19 copied from the checkout's node_modules beside each
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# cwd <scratch>
+# command: zsh -c echo '## this harness, e6-control.mjs:'; sed 's/^/    /' <scratch>/e6-control.mjs; for p in rc2 rc1; do mkdir -p <scratch>/$p/package/node_modules && cp -R <checkout>/node_modules/astronomy-engine <scratch>/$p/package/node_modules/; done; echo '## astronomy-engine beside each:' $(node -p 'require("<scratch>/rc2/package/node_modules/astronomy-engine/package.json").version') $(node -p 'require("<scratch>/rc1/package/node_modules/astronomy-engine/package.json").version'); echo '## on the rc.2 pack (must hold)'; nice -n 10 node <scratch>/e6-control.mjs <scratch>/rc2/package; a=$?; echo "exit $a"; echo '## on the 1.1.0-rc.1 archive (must fail)'; nice -n 10 node <scratch>/e6-control.mjs <scratch>/rc1/package; b=$?; echo "exit $b"; if [ $a = 0 ] && [ $b != 0 ]; then echo '## as required: the bases hold on rc.2 and the control fails on rc.1'; exit 0; else echo '## NOT as required'; exit 1; fi
+# started 2026-11-04 12:00:37 +0700
+## this harness, e6-control.mjs:
+    // E6's control (F-89 PREREGISTRATION.md, section 5, as amended on 2026-11-03), run at the formal
+    // run in scratch: the bases that src/calc-bounds.test.ts's case "name ERFA, not Horizons, as the
+    // basis of the mean points' bounds" asserts, for the Mean Node, the Mean South Node and Black Moon
+    // Lilith in the true ecliptic of date and the ICRS equatorial frame at the test's instant, checked on
+    // the calc entry of the package in the directory given (its package.json and dist/, with
+    // astronomy-engine resolvable from it). On the rc.2 pack they must hold, or this harness is wrong;
+    // on the carried 1.1.0-rc.1 archive they must fail, since the mean points' basis there is the
+    // Horizons text (dist/calc.js of that archive).
+    //   node e6-control.mjs <package directory>
+    import { readFileSync } from "node:fs";
+    import { join, resolve } from "node:path";
+    import { pathToFileURL } from "node:url";
+    
+    const root = resolve(process.argv[2]);
+    const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+    const { calc } = await import(pathToFileURL(join(root, manifest.exports["./calc"].import)).href);
+    // The two constants as the committed test spells them (src/calc-bounds.test.ts).
+    const MEAN_POINTS_BASIS =
+      "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) " +
+      "and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), " +
+      "in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16";
+    const MEAN_POINTS_SPEED_BASIS =
+      "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments " +
+      "(faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants " +
+      "from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the " +
+      "implementation, not of an ephemeris; docs/evidence/calc-api/rc16";
+    const time = "2011-02-03T04:05:06Z";
+    console.log(`package ${manifest.name}@${manifest.version}`);
+    let checked = 0;
+    let failures = 0;
+    for (const body of ["Mean Node", "Mean South Node", "Black Moon Lilith"]) {
+      for (const frame of ["ecliptic-true-of-date", "equatorial-icrs"]) {
+        const result = calc({ body, time, frame });
+        if (result.status !== "ok") throw new Error(`${body}, ${frame}: ${result.status} ${result.reason}`);
+        for (const [kind, want] of [["position", MEAN_POINTS_BASIS], ["speed", MEAN_POINTS_SPEED_BASIS]]) {
+          const basis = result.bounds[kind]?.basis;
+          checked += 1;
+          if (basis !== want) failures += 1;
+          console.log(`${basis === want ? "holds" : "FAILS"}  ${body}, ${frame}, ${kind} bound's basis: ${JSON.stringify(basis)}`);
+        }
+      }
+    }
+    const node = calc({ body: "North Node", time });
+    console.log(`(the North Node's position bound, which keeps MEASURED_BASIS: ${JSON.stringify(node.status === "ok" ? node.bounds.position.basis : node.status)})`);
+    console.log(`${failures} of ${checked} assertions fail`);
+    process.exit(failures ? 1 : 0);
+## astronomy-engine beside each: 2.1.19 2.1.19
+## on the rc.2 pack (must hold)
+package @zodiacs/engine@1.1.0-rc.2
+holds  Mean Node, ecliptic-true-of-date, position bound's basis: "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
+holds  Mean Node, ecliptic-true-of-date, speed bound's basis: "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
+holds  Mean Node, equatorial-icrs, position bound's basis: "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
+holds  Mean Node, equatorial-icrs, speed bound's basis: "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
+holds  Mean South Node, ecliptic-true-of-date, position bound's basis: "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
+holds  Mean South Node, ecliptic-true-of-date, speed bound's basis: "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
+holds  Mean South Node, equatorial-icrs, position bound's basis: "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
+holds  Mean South Node, equatorial-icrs, speed bound's basis: "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
+holds  Black Moon Lilith, ecliptic-true-of-date, position bound's basis: "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
+holds  Black Moon Lilith, ecliptic-true-of-date, speed bound's basis: "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
+holds  Black Moon Lilith, equatorial-icrs, position bound's basis: "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
+holds  Black Moon Lilith, equatorial-icrs, speed bound's basis: "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16"
+(the North Node's position bound, which keeps MEASURED_BASIS: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16")
+0 of 12 assertions fail
+exit 0
+## on the 1.1.0-rc.1 archive (must fail)
+package @zodiacs/engine@1.1.0-rc.1
+FAILS  Mean Node, ecliptic-true-of-date, position bound's basis: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+FAILS  Mean Node, ecliptic-true-of-date, speed bound's basis: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+FAILS  Mean Node, equatorial-icrs, position bound's basis: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+FAILS  Mean Node, equatorial-icrs, speed bound's basis: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+FAILS  Mean South Node, ecliptic-true-of-date, position bound's basis: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+FAILS  Mean South Node, ecliptic-true-of-date, speed bound's basis: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+FAILS  Mean South Node, equatorial-icrs, position bound's basis: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+FAILS  Mean South Node, equatorial-icrs, speed bound's basis: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+FAILS  Black Moon Lilith, ecliptic-true-of-date, position bound's basis: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+FAILS  Black Moon Lilith, ecliptic-true-of-date, speed bound's basis: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+FAILS  Black Moon Lilith, equatorial-icrs, position bound's basis: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+FAILS  Black Moon Lilith, equatorial-icrs, speed bound's basis: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+(the North Node's position bound, which keeps MEASURED_BASIS: "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16")
+12 of 12 assertions fail
+exit 1
+## as required: the bases hold on rc.2 and the control fails on rc.1
+# exit code 0; finished 2026-11-04 12:00:37 +0700

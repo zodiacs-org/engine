@@ -1,0 +1,10 @@
+src/vedic/fixtures/boundaries.json: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/varga_changes.py: OK
+src/vedic/fixtures/varga-changes.json: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/generate.mjs: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/births.json: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/births-erfa.json: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/seams.mjs: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/seams.json: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/seams-f3b.json: OK
+docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/seams_f3b.mjs: OK

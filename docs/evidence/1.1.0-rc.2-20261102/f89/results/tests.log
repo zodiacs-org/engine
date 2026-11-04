@@ -1,0 +1,243 @@
+# F-89 formal run of @zodiacs/engine 1.1.0-rc.2: the suite's named tests: E3 (a) src/crossings.test.ts; E4 src/geo/flags.test.ts; E6 src/calc-bounds.test.ts; E7 src/houses-extra.test.ts; E8 src/receipt-time-basis.test.ts, with its control in src/receipt-conventions.test.ts and the existing case beside it in src/reference-span.test.ts; E10 src/points.test.ts; and item 8's behaviour, src/deltat-chart.test.ts (whole files, one vitest run)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# cwd <checkout>
+# command: nice -n 10 vitest run src/crossings.test.ts src/geo/flags.test.ts src/calc-bounds.test.ts src/houses-extra.test.ts src/receipt-time-basis.test.ts src/receipt-conventions.test.ts src/reference-span.test.ts src/points.test.ts src/deltat-chart.test.ts --reporter=verbose --reporter=json --outputFile.json=<scratch>/tests.json
+# started 2026-11-04 11:57:56 +0700
+
+ RUN  v2.1.9 <checkout>
+
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > direct: excludes an exact lower endpoint
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > direct: emits an exact internal sample once
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > direct: includes an exact upper endpoint once
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > direct: still bisects between samples
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > direct: recognizes the real 360° wrap once
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > direct: rejects the antipodal sign change
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > retrograde: excludes an exact lower endpoint
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > retrograde: emits an exact internal sample once
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > retrograde: includes an exact upper endpoint once
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > retrograde: still bisects between samples
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > retrograde: recognizes the real 360° wrap once
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > retrograde: rejects the antipodal sign change
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > reports a touch at a coarse sample once, in the direction it arrived
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > reports a sampled plateau on the target once, where it begins
+ ✓ src/crossings.test.ts > longitude crossing interval (from, to] > has no crossings, and takes no sample, in a zero-length window
+ ✓ src/crossings.test.ts > grazing crossing pairs > finds a synthetic pair inside one 5-day cell
+ ✓ src/crossings.test.ts > grazing crossing pairs > never evaluates outside [from, to], and finds a pair in the first or the last cell
+ ✓ src/crossings.test.ts > grazing crossing pairs > finds a pair inside a window of one short cell
+ ✓ src/crossings.test.ts > grazing crossing pairs > reports an extremum that only touches the target once, as direct
+ ✓ src/crossings.test.ts > grazing crossing pairs > leaves an extremum short of the target alone
+ ✓ src/crossings.test.ts > grazing crossing pairs > takes one sample per step and 24 per crossing where nothing turns
+ ✓ src/crossings.test.ts > a plain scan's blind band, f″h²/8 > misses both crossings of a station just under f″h²/8 past the target, and finds both just over it
+ ✓ src/crossings.test.ts > a plain scan's blind band, f″h²/8 > leaves the pair the plain scan misses to the sampled turn, where the search finds it
+ ✓ src/crossings.test.ts > sample budget > has no limit unless one is given
+ ✓ src/crossings.test.ts > sample budget > refuses before sampling when the coarse scan alone is over budget
+ ✓ src/crossings.test.ts > sample budget > accepts a coarse scan of exactly the budget, with a short last cell
+ ✓ src/crossings.test.ts > sample budget > stops at the budget when refinements would pass it, and returns no partial result
+ ✓ src/crossings.test.ts > sample budget > counts grazing searches and edge probes as samples
+ ✓ src/crossings.test.ts > sample budget > refuses a single sample without throwing
+ ✓ src/crossings.test.ts > input errors > rejects an invalid start with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects an invalid end with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a start that is not a Date with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a reversed window with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a NaN target with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects an infinite target with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a zero step with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a negative step with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a NaN step with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects an infinite step with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a step of a string with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a sub-millisecond step with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects the smallest step with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a step that overflows with RangeError before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a maxSamples of 0 before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a maxSamples of -1 before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a maxSamples of 1.5 before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a maxSamples of NaN before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a maxSamples of -Infinity before any sample
+ ✓ src/crossings.test.ts > input errors > rejects a maxSamples of null before any sample
+ ✓ src/crossings.test.ts > input errors > rejects an option it does not name, and options that are not plain data, before any sample
+ ✓ src/crossings.test.ts > input errors > rejects options that are not an object
+ ✓ src/crossings.test.ts > input errors > rejects a non-finite longitude from the longitude function
+ ✓ src/crossings.test.ts > input errors > passes the body and the sample instant to the longitude function
+ ✓ src/crossings.test.ts > a window's ends > are Dates in this entry, and any DateInput in the root's crossing functions, with one answer
+ ✓ src/crossings.test.ts > a window's ends > take a body name of the caller's own, typed by the longitude function
+ ✓ src/points.test.ts > the Moon's mean elements > are the IERS 2003 fundamental arguments at J2000
+ ✓ src/points.test.ts > the Moon's mean elements > move the node back 19.34° a year and the perigee forward 40.69°
+ ✓ src/points.test.ts > the Moon's mean elements > puts the mean node on the ecliptic of date, nutation included
+ ✓ src/points.test.ts > the Moon's mean elements > puts Black Moon Lilith on the mean orbit, opposite the perigee
+ ✓ src/points.test.ts > sect and the lots > counts the Sun above the horizon from the descendant through the midheaven to the ascendant
+ ✓ src/points.test.ts > sect and the lots > takes each lot from the ascendant by day, as Paulus gives it
+ ✓ src/points.test.ts > sect and the lots > reverses every lot's arc by night
+ ✓ src/points.test.ts > antiscia and midpoints > mirrors a longitude across the solstices and the equinoxes
+ ✓ src/points.test.ts > antiscia and midpoints > takes the nearer midpoint across 0°, and 90° past the first for opposite points
+ ✓ src/points.test.ts > chartPoints > returns the node, Lilith, the Vertex, the East Point and the lots with a time and place
+ ✓ src/points.test.ts > chartPoints > gives the same points for the chart and for the birth it came from
+ ✓ src/points.test.ts > chartPoints > returns only the time-dependent points without a birth time or place
+ ✓ src/points.test.ts > chartPoints > uses the chart's own clock, a pinned ΔT included
+ ✓ src/points.test.ts > chartPoints > computes the Vertex and East Point from the instant and place, not from a supplied chart's claims
+ ✓ src/points.test.ts > the README's figures for the Vertex and the East Point > are the conformance results' largest residuals rounded up, on ten vectors from 1833 to 2182 and 60° S to 60° N
+ ✓ src/receipt-conventions.test.ts > receipt conventions > still reads an rc.6 receipt and replays it
+ ✓ src/receipt-conventions.test.ts > receipt conventions > records the current conventions, and judges applying by them
+ ✓ src/receipt-conventions.test.ts > receipt conventions > still reads an rc.7 receipt, and keeps each set to the engines that wrote it
+ ✓ src/receipt-conventions.test.ts > receipt conventions > names what the positions are corrected for
+ ✓ src/receipt-conventions.test.ts > receipt conventions > does not judge an old receipt's flags by the new rule
+ ✓ src/receipt-conventions.test.ts > receipt conventions > refuses a mixed conventions set, and an old set from a newer engine
+ ✓ src/deltat-chart.test.ts > the engine's clock > computes a chart in the leap-second era from the leap seconds and IERS UT1 − UTC, and says so
+ ✓ src/deltat-chart.test.ts > the engine's clock > computes a chart before 1972, where UTC as now was not defined, on the model
+ ✓ src/deltat-chart.test.ts > the engine's clock > uses a caller's pin for one chart and restores the model after it
+ ✓ src/deltat-chart.test.ts > the engine's clock > restores the model when a pinned chart throws
+ ✓ src/deltat-chart.test.ts > the engine's clock > refuses a pin that is not a finite number of seconds
+ ✓ src/deltat-chart.test.ts > the engine's clock > moves today's Moon by what the old clock got wrong
+ ✓ src/deltat-chart.test.ts > ΔT in receipts > records the model's value and checks it against this release's table
+ ✓ src/deltat-chart.test.ts > ΔT in receipts > reads a value from another release's table as a claim
+ ✓ src/deltat-chart.test.ts > ΔT in receipts > refuses a missing, unknown or malformed ΔT
+ ✓ src/deltat-chart.test.ts > ΔT in receipts > does not let an older conventions set carry a ΔT
+ ✓ src/deltat-chart.test.ts > ΔT in receipts > replays a pinned chart with its pin, and a modelled one without
+ ✓ src/reference-span.test.ts > reference span (rule 1e) > runs from 1800-01-01T00:00Z up to, not including, 2200-01-01T00:00Z
+ ✓ src/reference-span.test.ts > reference span (rule 1e) > flags a chart in 2300 and one in 900, and none inside the span
+ ✓ src/reference-span.test.ts > reference span (rule 1e) > accepts the flag as an echo only where the calculation derives it
+ ✓ src/reference-span.test.ts > reference span (rule 1e) > carries the flag through a receipt, which checks it against the instant
+ ✓ src/reference-span.test.ts > reference span (rule 1e) > does not let an older conventions set carry the flag
+ ✓ src/reference-span.test.ts > ephemeris identity (rule 1j) > names the exact astronomy-engine version the package depends on
+ ✓ src/reference-span.test.ts > ephemeris identity (rule 1j) > puts it in every receipt and refuses a current receipt without it
+ ✓ src/receipt-time-basis.test.ts > a receipt written by 0.1.1-rc.13 (the rc.8 conventions set) > still parses, under the set its engine recorded, with no time basis
+ ✓ src/receipt-time-basis.test.ts > a receipt written by 0.1.1-rc.13 (the rc.8 conventions set) > replays as a UTC request; today's basis moves the result by well under an arcsecond
+ ✓ src/receipt-time-basis.test.ts > a receipt written by 0.1.1-rc.13 (the rc.8 conventions set) > is refused with a time basis added, or under a version the set did not come from
+ ✓ src/receipt-time-basis.test.ts > a receipt written by 0.1.1-rc.14 (the rc.8 conventions set) > still parses, under the set its engine recorded, with no time basis
+ ✓ src/receipt-time-basis.test.ts > a receipt written by 0.1.1-rc.14 (the rc.8 conventions set) > replays as a UTC request under this engine, within the time basis's change
+ ✓ src/receipt-time-basis.test.ts > a receipt written by 0.1.1-rc.14 (the rc.8 conventions set) > is refused under a version after rc.14, and with a time basis added
+ ✓ src/receipt-time-basis.test.ts > a receipt written by 0.1.1-rc.14 (the rc.8 conventions set) > is refused without the ephemeris it names, which receipts carry from the rc.8 set on
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > records the scale, the basis and the ΔT it came with
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses the receipt's scale removed
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses an unknown receipt scale
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses the result's basis removed
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses another input scale
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses another basis
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses an unknown basis
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses UT1 − UTC moved 1 µs
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses UT1 − UTC beyond a second
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses its σ changed
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses a predicted source
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses no UT1 − UTC
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses another TAI − UTC
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses a fractional TAI − UTC
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses the list marked expired
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses ΔT moved 1 µs
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses the model's ΔT in the leap-second era
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses a model the set does not know
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > refuses the IERS model without a basis to match
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > keeps another release's UT1 table as a claim, checked for shape only
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > is refused under an engine version before the computation it describes, which 0.1.1-rc.16 released
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > records the model before 1972, and after the IERS table the fallback band
+ ✓ src/receipt-time-basis.test.ts > a receipt of the current conventions set > records a pinned ΔT as the pinned basis
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > is accepted by createNatalEnvelope, as rc.14 accepted it, and parses back unchanged
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks calendar gregorian when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks an unknown calendar when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks the date as written, with no calendar when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks another written date, with no calendar (so Gregorian) when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks a Julian written date that converts to the date when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks a Julian written date that does not when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks a tzdb version when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks a malformed tzdb version when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks the host's data when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks shipped data with no tzdb version when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks a legal clock when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks a local-mean-time clock without the lmt flag when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks no transition when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks the transition behind the offset when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks a transition to another offset when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks a date-line cause for an hour when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks no birthplace mean time when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > checks a birthplace mean time that read nothing when that field is the only one added
+ ✓ src/receipt-time-basis.test.ts > a local resolution in rc.14's shape, under the current set > stays refused, with any field rc.15 added, under the rc.8 set
+ ✓ src/receipt-time-basis.test.ts > receipts of an instant on TT or UT1 > record the tt instant and replay the same request and result
+ ✓ src/receipt-time-basis.test.ts > receipts of an instant on TT or UT1 > record the ut1 instant and replay the same request and result
+ ✓ src/receipt-time-basis.test.ts > receipts of an instant on TT or UT1 > refuses a local resolution on any scale but UTC
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > Guam 1890: local mean time in whole minutes
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > Kolkata 1900: Madras time, a legal time with seconds
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > Monrovia 1960: Monrovia Mean Time, legal
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > New York 1883-11-18 12:02: the change to standard time repeated the minute
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > Apia 2011-12-30: Samoa skipped the day across the date line
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > Kwajalein 1993-08-21: skipped across the date line
+ ✓ src/geo/flags.test.ts > time-5's six flag probes > classified them wrongly under the old rule, which receipts from before this set still use
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 2024-03-10 02:30 in America/New_York is a gap caused by dst
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 2024-11-03 01:30 in America/New_York is a fold caused by dst
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 1941-05-04 02:30 in Europe/London is a gap caused by dst
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 1941-08-10 02:30 in Europe/London is a fold caused by dst
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 2011-03-27 02:30 in Europe/Moscow is a gap caused by legal-change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 2014-10-26 01:30 in Europe/Moscow is a fold caused by legal-change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 1972-01-07 00:20 in Africa/Monrovia is a gap caused by legal-change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > 1892-07-04 12:00 in Pacific/Apia is a fold caused by date-line
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Argentina/Catamarca's change of standard offset at 1991-03-03T02:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Argentina/ComodRivadavia's change of standard offset at 1991-03-03T02:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Argentina/Cordoba's change of standard offset at 1991-03-03T02:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Argentina/Jujuy's change of standard offset at 1990-03-04T02:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Argentina/La_Rioja's change of standard offset at 1991-03-01T02:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Argentina/Mendoza's change of standard offset at 1990-03-04T02:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Argentina/Salta's change of standard offset at 1991-03-03T02:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Argentina/San_Juan's change of standard offset at 1991-03-01T02:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Argentina/San_Luis's change of standard offset at 1990-03-14T02:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Argentina/San_Luis's change of standard offset at 2008-01-21T02:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Argentina/Tucuman's change of standard offset at 1991-03-03T02:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Cancun's change of standard offset at 1998-08-02T06:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Iqaluit's change of standard offset at 1999-10-31T06:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Juneau's change of standard offset at 1983-10-30T09:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/La_Paz's change of standard offset at 1932-03-21T03:32:36Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Pangnirtung's change of standard offset at 1999-10-31T06:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Santiago's change of standard offset at 1946-08-29T03:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels America/Sitka's change of standard offset at 1983-10-30T09:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels Asia/Barnaul's change of standard offset at 1995-05-27T16:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels Asia/Novosibirsk's change of standard offset at 1993-05-22T16:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels Asia/Tbilisi's change of standard offset at 2004-06-26T19:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels Asia/Tehran's change of standard offset at 1977-10-20T19:30:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels Asia/Tomsk's change of standard offset at 2002-04-30T19:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels Europe/Athens's change of standard offset at 1941-04-29T21:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels Europe/Chisinau's change of standard offset at 1941-07-16T21:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels Europe/Chisinau's change of standard offset at 1990-05-05T22:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels Europe/Kyiv's change of standard offset at 1990-06-30T22:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels Europe/Monaco's change of standard offset at 1945-09-16T01:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels Europe/Paris's change of standard offset at 1945-09-16T01:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels Europe/Tiraspol's change of standard offset at 1941-07-16T21:00:00Z a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > labels the reviewers' Kyiv 1990-07-01 01:30, the first reading, and its receipt, a legal change
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > gives an ordinary time the transition behind its offset where the shipped history has one
+ ✓ src/geo/flags.test.ts > the cause of a gap or fold, from the record > names no tzdb version where the host's Intl answered and the runtime reports none
+ ✓ src/calc-bounds.test.ts > the measured bounds > are the committed comparison's, by the preregistered rule, but for the barycentric Sun
+ ✓ src/calc-bounds.test.ts > the measured bounds > reach calc() results, labelled measured
+ ✓ src/calc-bounds.test.ts > the measured bounds > give a topocentric body not compared its geocentric bound, as an estimate
+ ✓ src/calc-bounds.test.ts > the measured bounds > cover the lunar points, which have no distance
+ ✓ src/calc-bounds.test.ts > the measured bounds > name ERFA, not Horizons, as the basis of the mean points' bounds
+ ✓ src/calc-bounds.test.ts > the barycentric Sun's bounds > come from the barycentre's error, and cover the difference from Horizons at 2130-03-05 and where a daily scan finds it worst
+ ✓ src/calc-bounds.test.ts > the barycentric Sun's bounds > rest on the barycentre's error, which a daily scan of 1800 to 2200 against the full Newtonian barycentre and Horizons bear out 2464ms
+ ✓ src/houses-extra.test.ts > the rate of sidereal time > is Meeus's, and SIDEREAL_RATE, deprecated, is the same value
+ ✓ src/houses-extra.test.ts > the entry's angles are the root's > computes the same ascendant and midheaven, bit for bit
+ ✓ src/houses-extra.test.ts > the entry's angles are the root's > puts the root's cusps at whole house positions, for every system, in and out of the polar circle 815ms
+ ✓ src/houses-extra.test.ts > the entry's angles are the root's > orders ecliptic points between the cusps: positions rise with longitude, once round
+ ✓ src/houses-extra.test.ts > the entry's angles are the root's > gives whole sign, Equal, Vehlow, Equal from the midheaven, Porphyry and Morinus by longitude alone 419ms
+ ✓ src/houses-extra.test.ts > house circles through a body off the ecliptic > Campanus: the circle through the north point and the prime vertical at the body's position holds the body
+ ✓ src/houses-extra.test.ts > house circles through a body off the ecliptic > Regiomontanus: the circle through the north point and the equator at the body's position holds the body
+ ✓ src/houses-extra.test.ts > house circles through a body off the ecliptic > Meridian and Alcabitius: hour circles, so the body's right ascension alone decides
+ ✓ src/houses-extra.test.ts > house circles through a body off the ecliptic > Placidus: the fraction of the body's own semi-arc, from its diurnal circle searched numerically
+ ✓ src/houses-extra.test.ts > house circles through a body off the ecliptic > Koch: the body is on the horizon of the sidereal time its position names, within the house circles
+ ✓ src/houses-extra.test.ts > house circles through a body off the ecliptic > Topocentric: the body is on the circle of its position, a horizon of pole height atan(s tan φ)
+ ✓ src/houses-extra.test.ts > where a system defines no position > Koch has none outside its house circles, and none where the midheaven never rises
+ ✓ src/houses-extra.test.ts > where a system defines no position > Topocentric has none where no circle of the quadrant passes through a body that never rises or sets
+ ✓ src/houses-extra.test.ts > where a system defines no position > Placidus follows Otto Ludwig for circumpolar bodies: 10th to 12th house east, 7th to 9th west 773ms
+ ✓ src/houses-extra.test.ts > where a system defines no position > refuses invalid input
+ ✓ src/houses-extra.test.ts > docs/houses.md > gives the example's position (a regression pin, not accuracy evidence)
+ ✓ src/houses-extra.test.ts > co-ascendants and the polar ascendant > takes the equatorial ascendant as the East Point
+ ✓ src/houses-extra.test.ts > co-ascendants and the polar ascendant > puts Koch's co-ascendant and the polar ascendant on the horizon of RAMC + 180°, opposite each other
+ ✓ src/houses-extra.test.ts > co-ascendants and the polar ascendant > puts Munkasey's co-ascendant on the horizon of the colatitude at the RAMC
+ ✓ src/houses-extra.test.ts > co-ascendants and the polar ascendant > puts Munkasey's co-ascendant west of the meridian only within ε of the equator
+ ✓ src/houses-extra.test.ts > speeds > agree with a central difference of the root's own cusps and angles 547ms
+ ✓ src/houses-extra.test.ts > speeds > carries the midheaven at the sidereal rate on average: its speed integrates to 360° a sidereal day
+ ✓ src/houses-extra.test.ts > speeds > falls back with Placidus and Koch inside the polar circle, as computeHouses does
+ ✓ src/houses-extra.test.ts > speeds > differentiates the cusps of every other system inside the polar circle, away from their jumps
+
+ Test Files  9 passed (9)
+      Tests  226 passed (226)
+   Start at  11:57:56
+   Duration  4.47s (transform 1.43s, setup 0ms, collect 2.89s, tests 7.55s, environment 1ms, prepare 693ms)
+
+JSON report written to <scratch>/tests.json
+# exit code 0; finished 2026-11-04 11:58:01 +0700

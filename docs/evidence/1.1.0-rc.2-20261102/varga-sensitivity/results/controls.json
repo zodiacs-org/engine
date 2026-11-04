@@ -1,0 +1,408 @@
+{
+ "tool": "docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/controls.mjs",
+ "results": "<checkout>/docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/results.jsonl",
+ "stepScale": 1,
+ "dryRun": false,
+ "controls": {
+  "C3a-next-1ms-later": {
+   "file": "<scratch>/work/controls/C3a-next-1ms-later.jsonl",
+   "id": 0,
+   "changed": "Ascendant D1 parashari next.at 1831-05-26T10:12:14.150Z",
+   "verdict": "FAIL",
+   "failuresByCheck": {
+    "M0": 0,
+    "M1": 0,
+    "M2": 1,
+    "M3": 0,
+    "M4": 1,
+    "M5": 1,
+    "M6": 0,
+    "G-V2b": 0
+   },
+   "failures": [
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M2",
+     "detail": "Ascendant D1 next at 1831-05-26T10:12:14.150Z"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M4",
+     "detail": "Ascendant D1 next boundary 150"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M5",
+     "detail": "Ascendant D1 at 1831-05-26T10:12:14.149Z"
+    }
+   ],
+   "mustFail": "M2",
+   "failed": true
+  },
+  "C3a-next-null": {
+   "file": "<scratch>/work/controls/C3a-next-null.jsonl",
+   "id": 0,
+   "changed": "Ascendant D1 parashari next set to null",
+   "verdict": "FAIL",
+   "failuresByCheck": {
+    "M0": 0,
+    "M1": 0,
+    "M2": 0,
+    "M3": 0,
+    "M4": 0,
+    "M5": 1,
+    "M6": 0,
+    "G-V2b": 0
+   },
+   "failures": [
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M5",
+     "detail": "Ascendant D1 at 1831-05-26T10:12:14.761Z"
+    }
+   ],
+   "mustFail": "M5",
+   "failed": true
+  },
+  "G-V2-iii-d2-keep": {
+   "file": "<scratch>/work/controls/G-V2-iii-d2-keep.jsonl",
+   "id": 0,
+   "changed": "Ascendant D2 next.boundary 150, the sign start next to it",
+   "verdict": "FAIL",
+   "failuresByCheck": {
+    "M0": 0,
+    "M1": 0,
+    "M2": 0,
+    "M3": 0,
+    "M4": 1,
+    "M5": 0,
+    "M6": 0,
+    "G-V2b": 1
+   },
+   "failures": [
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M4",
+     "detail": "Ascendant D2 next boundary 150"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "G-V2b",
+     "detail": "Ascendant D2 next boundary 150"
+    }
+   ],
+   "mustFail": "G-V2b once",
+   "failed": true
+  },
+  "C3b-body-bounds-divided-by-10": {
+   "verdict": "FAIL",
+   "failuresByCheck": {
+    "M0": 5364,
+    "M1": 0,
+    "M2": 0,
+    "M3": 0,
+    "M4": 0,
+    "M5": 0,
+    "M6": 0,
+    "G-V2b": 0
+   },
+   "failures": [
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D1 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D2 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D2cyclic refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D3 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D3cyclic refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D4 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D7 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D9 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D10 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D12 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D16 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D20 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D24 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D27 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D30 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D40 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D45 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Sun D60 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Moon D1 refused: rate-bound"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M0",
+     "detail": "Moon D2 refused: rate-bound"
+    }
+   ],
+   "mustFail": "not pass",
+   "failed": true
+  },
+  "C3c-ascendant-at-60s-bracket-ends": {
+   "verdict": "FAIL",
+   "failuresByCheck": {
+    "M0": 0,
+    "M1": 0,
+    "M2": 1800,
+    "M3": 0,
+    "M4": 1800,
+    "M5": 900,
+    "M6": 0,
+    "G-V2b": 0
+   },
+   "failures": [
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M2",
+     "detail": "Ascendant D1 previous at 1831-05-26T08:38:40.762Z"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M4",
+     "detail": "Ascendant D1 previous boundary 120"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M2",
+     "detail": "Ascendant D1 next at 1831-05-26T10:12:40.761Z"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M4",
+     "detail": "Ascendant D1 next boundary 150"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M2",
+     "detail": "Ascendant D2 previous at 1831-05-26T07:46:40.762Z"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M4",
+     "detail": "Ascendant D2 previous boundary 105"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M2",
+     "detail": "Ascendant D2 next at 1831-05-26T09:27:40.761Z"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M4",
+     "detail": "Ascendant D2 next boundary 135"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M2",
+     "detail": "Ascendant D2cyclic previous at 1831-05-26T08:38:40.762Z"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M4",
+     "detail": "Ascendant D2cyclic previous boundary 120"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M2",
+     "detail": "Ascendant D2cyclic next at 1831-05-26T09:27:40.761Z"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M4",
+     "detail": "Ascendant D2cyclic next boundary 135"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M2",
+     "detail": "Ascendant D3 previous at 1831-05-26T09:10:40.762Z"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M4",
+     "detail": "Ascendant D3 previous boundary 130"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M2",
+     "detail": "Ascendant D3 next at 1831-05-26T09:42:40.761Z"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M4",
+     "detail": "Ascendant D3 next boundary 140"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M2",
+     "detail": "Ascendant D3cyclic previous at 1831-05-26T09:10:40.762Z"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M4",
+     "detail": "Ascendant D3cyclic previous boundary 130"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M2",
+     "detail": "Ascendant D3cyclic next at 1831-05-26T09:42:40.761Z"
+    },
+    {
+     "corpus": "F2",
+     "id": 0,
+     "check": "M4",
+     "detail": "Ascendant D3cyclic next boundary 140"
+    }
+   ],
+   "mustFail": "M2",
+   "failed": true
+  },
+  "C3d-no-seams": {
+   "verdict": "FAIL",
+   "failuresByCheck": {
+    "M0": 0,
+    "M1": 0,
+    "M2": 0,
+    "M3": 0,
+    "M4": 0,
+    "M5": 0,
+    "M6": 2,
+    "G-V2b": 0
+   },
+   "failures": [
+    {
+     "corpus": "F3b",
+     "id": 0,
+     "check": "M6",
+     "detail": "case 0: null for {\"at\":\"1971-12-31T23:59:59.977Z\",\"boundary\":164.5,\"from\":\"capricorn\",\"to\":\"aquarius\"}"
+    },
+    {
+     "corpus": "F3b",
+     "id": 1,
+     "check": "M6",
+     "detail": "case 1: null for {\"at\":\"1971-12-31T23:59:59.977Z\",\"boundary\":164.5,\"from\":\"capricorn\",\"to\":\"aquarius\"}"
+    }
+   ],
+   "mustFail": "M6",
+   "failed": true
+  }
+ },
+ "allFailed": true
+}

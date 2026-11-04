@@ -1,0 +1,173 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: L1, L2 and L3: this build and the seven broken builds of tools/broken-builds.mjs (L1's control (a) as amended on 2026-11-04); with --l5-control, L5's control build (luminary orb 1.4) into <scratch>/l5-control/dist/
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>
+# command: nice -n 10 node <checkout>/docs/evidence/1.1.0-rc.2-20261102/lite/tools/broken-builds.mjs --l5-control <scratch>/l5-control
+# started 2026-11-04 12:15:56 +0700
+{
+ "checks": "L1, L2 and L3 controls on real builds",
+ "ownBuild": {
+  "L1": "pass",
+  "L3": "pass",
+  "L2": "pass"
+ },
+ "controls": [
+  {
+   "name": "L1 a: dist/lite.js also re-exporting compositeChart, a fifth export line, astronomy-engine inlined in its file",
+   "mustFail": [
+    "L1"
+   ],
+   "verdicts": {
+    "L1": "fail: dist/lite.js must import exactly the four lite parts, declinations, sect, composite and dignities, in that order",
+    "L3": "pass",
+    "L2": "fail: the lite entry's static graph must be dist/lite.js and its four parts"
+   },
+   "files": {
+    "dist/lite-composite-chart.js": 135631,
+    "dist/lite-composite.js": 3783,
+    "dist/lite-declinations.js": 9665,
+    "dist/lite-dignities.js": 11897,
+    "dist/lite-sect.js": 3439,
+    "dist/lite.js": 206
+   },
+   "behaved": true
+  },
+  {
+   "name": "L3 and L2, extra: composite part re-exporting compositeChart, astronomy-engine inlined",
+   "mustFail": [
+    "L3",
+    "L2"
+   ],
+   "verdicts": {
+    "L1": "pass",
+    "L3": "fail: dist/lite-composite.js holds \"astronomy-engine\"",
+    "L2": "fail: the lite entry's source graph is not the pinned one"
+   },
+   "files": {
+    "dist/lite-composite.js": 131045,
+    "dist/lite-declinations.js": 9665,
+    "dist/lite-dignities.js": 11897,
+    "dist/lite-sect.js": 3439,
+    "dist/lite.js": 146
+   },
+   "behaved": true
+  },
+  {
+   "name": "L1 b: composite part re-exporting compositeChart, astronomy-engine external",
+   "mustFail": [
+    "L1"
+   ],
+   "verdicts": {
+    "L1": "fail: dist/lite-composite.js imports or re-exports astronomy-engine; a lite part must import nothing",
+    "L3": "fail: dist/lite-composite.js holds \"astronomy-engine\"",
+    "L2": "fail: the lite entry's source graph is not the pinned one"
+   },
+   "files": {
+    "dist/lite-composite.js": 56731,
+    "dist/lite-declinations.js": 9665,
+    "dist/lite-dignities.js": 11897,
+    "dist/lite-sect.js": 3439,
+    "dist/lite.js": 146
+   },
+   "behaved": true
+  },
+  {
+   "name": "L1 c: the four parts built with splitting on",
+   "mustFail": [
+    "L1"
+   ],
+   "verdicts": {
+    "L1": "fail: dist/lite-sect.js imports or re-exports ./chunk-3KZLMQOJ.js; a lite part must import nothing",
+    "L3": "pass",
+    "L2": "fail: the lite entry's static graph must be dist/lite.js and its four parts"
+   },
+   "files": {
+    "dist/chunk-3KZLMQOJ.js": 451,
+    "dist/chunk-7GY2FNFB.js": 869,
+    "dist/chunk-WJWCDBYH.js": 3489,
+    "dist/lite-composite.js": 2961,
+    "dist/lite-declinations.js": 9665,
+    "dist/lite-dignities.js": 7884,
+    "dist/lite-sect.js": 2212,
+    "dist/lite.js": 146
+   },
+   "behaved": true
+  },
+  {
+   "name": "L2 a: composite part built from src/techniques/relationship.ts",
+   "mustFail": [
+    "L2"
+   ],
+   "verdicts": {
+    "L1": "pass",
+    "L3": "pass",
+    "L2": "fail: the lite entry's source graph is not the pinned one"
+   },
+   "files": {
+    "dist/lite-composite.js": 3844,
+    "dist/lite-declinations.js": 9665,
+    "dist/lite-dignities.js": 11897,
+    "dist/lite-sect.js": 3439,
+    "dist/lite.js": 146
+   },
+   "behaved": true
+  },
+  {
+   "name": "L2 b: module list one byte stale",
+   "mustFail": [
+    "L2"
+   ],
+   "verdicts": {
+    "L1": "pass",
+    "L3": "pass",
+    "L2": "fail: dist/lite-composite.js differs from the build's module list; rebuild with npm run build"
+   },
+   "files": {
+    "dist/lite-composite.js": 3783,
+    "dist/lite-declinations.js": 9665,
+    "dist/lite-dignities.js": 11897,
+    "dist/lite-sect.js": 3439,
+    "dist/lite.js": 146
+   },
+   "behaved": true
+  },
+  {
+   "name": "L3: a part's copy holding a string that only the ephemeris holds",
+   "mustFail": [
+    "L3"
+   ],
+   "verdicts": {
+    "L1": "pass",
+    "L3": "fail: dist/lite-dignities.js holds \"Light-travel time solver did not converge\"",
+    "L2": "pass"
+   },
+   "files": {
+    "dist/lite-composite.js": 3783,
+    "dist/lite-declinations.js": 9665,
+    "dist/lite-dignities.js": 11942,
+    "dist/lite-sect.js": 3439,
+    "dist/lite.js": 146
+   },
+   "behaved": true
+  }
+ ],
+ "l5Control": {
+  "dir": "<scratch>/l5-control",
+  "files": [
+   "dist/lite-composite.js",
+   "dist/lite-declinations.js",
+   "dist/lite-dignities.js",
+   "dist/lite-sect.js",
+   "dist/lite.js"
+  ],
+  "verdicts": {
+   "L1": "pass",
+   "L3": "pass",
+   "L2": "pass"
+  }
+ },
+ "node": "v22.22.2",
+ "pass": true
+}
+# exit 0, finished 2026-11-04 12:15:57 +0700

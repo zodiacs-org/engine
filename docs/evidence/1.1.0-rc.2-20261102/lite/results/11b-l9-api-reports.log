@@ -1,0 +1,98 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: L9 on L-c's build (the amendment of 2026-11-03, review 1): tools/api-reports.mjs --package <the 16ad4fe clone, 11a-clone-16ad4fe.log> --before 874077e, the files at 874077e read with git cat-file in this checkout's repository, lazy fetching off; its control, api/lite.api.md left out
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <checkout>
+# command: nice -n 10 node <checkout>/docs/evidence/1.1.0-rc.2-20261102/lite/tools/api-reports.mjs --package <scratch>/clones/c16ad4fe --before 874077e
+# started 2026-11-04 12:17:40 +0700
+{
+ "check": "L9",
+ "package": "<scratch>/clones/c16ad4fe",
+ "version": "1.1.0-rc.2",
+ "before": "874077e4ecce0d86ee8a1ebbb2b74e7efc6c59b0",
+ "reports": [
+  "engine.api.md",
+  "calc.api.md",
+  "conventions.api.md",
+  "crossings.api.md",
+  "deltat.api.md",
+  "geo.api.md",
+  "houses.api.md",
+  "lite.api.md",
+  "receipt.api.md",
+  "sky.api.md",
+  "techniques.api.md",
+  "time.api.md",
+  "timing.api.md",
+  "vedic.api.md",
+  "window.api.md"
+ ],
+ "apiCheck": "pass",
+ "liteReport": "new",
+ "othersUnchanged": [
+  {
+   "name": "calc.api.md",
+   "same": true
+  },
+  {
+   "name": "conventions.api.md",
+   "same": true
+  },
+  {
+   "name": "crossings.api.md",
+   "same": true
+  },
+  {
+   "name": "deltat.api.md",
+   "same": true
+  },
+  {
+   "name": "engine.api.md",
+   "same": true
+  },
+  {
+   "name": "geo.api.md",
+   "same": true
+  },
+  {
+   "name": "houses.api.md",
+   "same": true
+  },
+  {
+   "name": "receipt.api.md",
+   "same": true
+  },
+  {
+   "name": "sky.api.md",
+   "same": true
+  },
+  {
+   "name": "techniques.api.md",
+   "same": true
+  },
+  {
+   "name": "time.api.md",
+   "same": true
+  },
+  {
+   "name": "timing.api.md",
+   "same": true
+  },
+  {
+   "name": "vedic.api.md",
+   "same": true
+  },
+  {
+   "name": "window.api.md",
+   "same": true
+  }
+ ],
+ "control": {
+  "result": [
+   "api/lite.api.md is missing"
+  ],
+  "behaved": true
+ },
+ "pass": true
+}
+# exit 0, finished 2026-11-04 12:17:41 +0700

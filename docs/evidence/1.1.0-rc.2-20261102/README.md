@@ -253,14 +253,42 @@ the site's adoption (time-bands and lite amendments of 2026-11-03).
 
 ## Formal runs
 
-*To be filled.* Each unit's checks as its preregistration fixes them, on the
-reviewed tree's build, one heavy job at a time: F-89's in `f89/`, the time
-entry's in `time-entry/`, the time bands' in `time-bands/`, the lite entry's
-in `lite/` and the varga sensitivity's in `varga-sensitivity/`. Each output
-is committed unchanged in method, with the machine, Node, Python and commit
-recorded, and each folder's `RESULTS.md` gives each check's verdict, each
-control's outcome and every departure from the preregistration. They form
-the source commit, which changes no packed byte.
+Each unit's checks ran once on 2026-11-04, as its preregistration and every
+dated amendment fix them, with the committed tools, on the reviewed tree at
+`237b226`, whose packed bytes are this cut's: darwin-arm64, Node 22.22.2,
+one heavy job at a time. Each folder's `RESULTS.md` gives each check's
+verdict and figures, each control's outcome, what was not run and why, and
+the state the unit reaches; its `results/` holds the outputs, unchanged in
+method, each log beginning with the machine, Node, Python and commit.
+F-89's, the lite entry's and the time entry's runs packed the tree: SHA-256
+`c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c`, 318,004
+bytes, 90 files, the archive the size records measure. The commits that
+record the runs change no packed byte; the last of them is the source commit
+the carrier names.
+
+| Unit | Passed | Failed, void or not run |
+| --- | --- | --- |
+| F-89 (`f89/`) | every check; every control failed as required | none |
+| The time entry (`time-entry/`) | T1 to T13; every control failed as required | none. T11's first invocation, with `--repo .`, stopped with a Node error before it scanned anything; the unchanged tool then ran once with the checkout's absolute path, as its usage line documents, and passed. `carrier/carrier-gates.sh` now passes the clone's absolute path |
+| The time bands (`time-bands/`) | C1, C2, C3, C4 (C4a to C4d), C5, C6, C7 and the named tests; their controls failed as required | **C1b failed**, with both its controls failing: 19 problems, all at two seams of T3's corpus. 14 are 1 µs at 2026-09-24T00:00Z and the millisecond before: the engine's table generator rounds a formal error of 26.5 µs up, the reference to even. 5 are records that, at a step's own instant, carry the other side's σ: at 2026-09-24T00:00Z `calc()` and `houses()` on TT and UT1 input record the prediction's, where UTC input and `chart()` record the observed; at 1956-01-01T12:00Z TT input records 0.46 s for 0.03 s. C8 is void as SR ran it; C9 is not due |
+| The lite entry (`lite/`) | L1 to L12; every control failed as required | none |
+| The varga sensitivity (`varga-sensitivity/`) | F1 and the inputs, G-V1, G-V2 (a) and (b), G-V3 on F2, F3 and F3b, section 7's table and the named tests; every control failed as required; G-V5's table is in `docs/vedic.md` | **G-V4 not complete**: the disk watch stopped the run under 4 GiB free, after G-V4's comparison (35,204 sides judged, 0 mismatches) and before its controls C4a and C4b; and F4's calls searched ten points, not the Ascendant alone, through `tools/load.mjs`. G-V5's `--check` is a step of `gates.sh` |
+
+P1.M3c's version 1 does not meet its gate in this cut: by its section 9 a fix
+of C1b is a version 2, with a preregistration of its own citing these
+results, and C8's version 2 is due in the site's adoption. The bands ship in
+this candidate as built. C1b's problems are at those two seams' own instants
+(no instant 1 ms either side failed), and nothing in the package states how
+a half microsecond rounds or which side of a step an instant on it takes;
+`docs/time.md`, which put 2026-09-24T00:00Z on the observed side, now says
+what the run found there.
+
+The varga sensitivity's G-V4 runs again in full, as its section 10 requires
+of an interrupted run, after a dated amendment that fixes the loader.
+
+No unit changes state on these runs. OQ5 is with the owner, so a unit can
+reach `validated` at most, and each also needs the carried archive, the
+owner's merge of the cut and the site's adoption, as its `RESULTS.md` says.
 
 ## On the carrier
 
@@ -280,13 +308,12 @@ the site's `src/lib/engine/time-basis.mjs` and `time-basis.d.mts` read from
 site main's git objects (9a67f761) into files outside every checkout, and
 Node 20.19.0 for T3. It extracts the archive into a consumer and finds the
 clone's build byte for byte the archive's `dist/*.js` and `dist/*.d.ts`; T1's
-runtime names, T3, T4, T5, T7, T8 and T10 read the archive; T1's `api:check`
-and `src/time.test.ts`, T2 and T13 (the export smoke test) and T9 (package
-contents) read the build, whose module lists the archive does not carry; T6
-and T11 read the sources. T12's tool, `time-entry/tools/declarations.mts`,
-which that preregistration's section 12 names, is not yet in the tree, so
-the job records T12 as not run, and fails, until the tool is committed and
-the job runs it.
+runtime names, T3, T4, T5, T7, T8, T10 and T12 read the archive (T12 runs
+`time-entry/tools/declarations.sh` and its `declarations.mts`, committed with
+that preregistration's amendment of 2026-11-04, on the archive's
+`dist/time.d.ts`); T1's `api:check` and `src/time.test.ts`, T2 and T13 (the
+export smoke test) and T9 (package contents) read the build, whose module
+lists the archive does not carry; T6 and T11 read the sources.
 
 ## Not covered here
 

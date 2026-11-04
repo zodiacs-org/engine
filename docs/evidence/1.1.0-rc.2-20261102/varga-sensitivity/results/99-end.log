@@ -1,0 +1,139 @@
+# varga-sensitivity formal run of @zodiacs/engine 1.1.0-rc.2: the state at the end, before RESULTS.md, written a third time: after the hand edit of 05-hand-edit.log, and with a search that does not match its own heading (a record step after the stop: it runs no check)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, the system python3, with -I) where a tool says so; for G-V4's arbiter only, Python 3.11.16 with pyerfa 2.0.1.5 and numpy 2.4.6 (<programme>/toolchain/py311-oq6/venv/bin/python, the OQ6 environment, with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 GIT_OPTIONAL_LOCKS=0 NODE_OPTIONS=unset
+# PATH begins <programme>/toolchain/node-v22.22.2-darwin-arm64/bin:<checkout>/node_modules/.bin
+# free disk before the step (df -k /System/Volumes/Data): 2438880 KiB, 2.3 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/end.sh
+# started 2026-11-04 14:48:40 +0700
+## git rev-parse HEAD
+237b2265fcc53ae51abcb4f8e895e64c66321f5e
+unchanged since the start (00-start.log)
+## git branch --show-current
+rc2/main-first
+## git status --porcelain -- . ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+ M docs/evidence/1.1.0-rc.2-20261102/carrier/carrier-gates.sh
+ M docs/vedic.md
+?? docs/evidence/1.1.0-rc.2-20261102/f89/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/f89/results/
+?? docs/evidence/1.1.0-rc.2-20261102/lite/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/lite/results/
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/time-bands/results/
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/RESULTS.md
+?? docs/evidence/1.1.0-rc.2-20261102/time-entry/results/
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/
+(end of status)
+## git status --porcelain --untracked-files=all -- docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity docs/vedic.md src ':(exclude)docs/evidence/calc-sidereal-2026-10-05'
+ M docs/vedic.md
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/compare.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/results.jsonl
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results-erfa/run.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/00-start.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/01-build.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/02-checks.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/03-outputs.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/04-figures.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/05-hand-edit.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/99-end.log
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/boundaries-sha256.txt
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/check.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/controls-summary.txt
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/controls.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/derived-bounds-control-verdict.txt
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/derived-bounds-control.txt
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/derived-bounds.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/f1-check.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/inputs-sha256.recorded
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/inputs-sha256.txt
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/results.jsonl
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/run.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/steps.tsv
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/test-controls.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/tests.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/time-per-arcsecond-control-copy.txt
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/time-per-arcsecond-control.txt
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/time-per-arcsecond-write.txt
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/time-per-arcsecond.json
+?? docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/results/time-per-arcsecond.md
+(end of status)
+## git diff -- docs/vedic.md ':(exclude)docs/evidence/calc-sidereal-2026-10-05': the G-V5 table time_per_arcsecond.mjs --write put between the markers, the one change outside the unit folder
+diff --git a/docs/vedic.md b/docs/vedic.md
+index 98d5dbc..8350708 100644
+--- a/docs/vedic.md
++++ b/docs/vedic.md
+@@ -539,8 +539,18 @@ significant figures (G-V5 of the preregistration; its
+ `tools/time_per_arcsecond.mjs` writes the table at the check's formal run):
+ 
+ <!-- G-V5 table, tools/time_per_arcsecond.mjs -->
+-*Not written yet: the formal run of the varga sensitivity check writes this
+-table.*
++| Body | 1″ moves an instant by, at the median speed | at the 10th percentile speed |
++| --- | ---: | ---: |
++| Sun | 25 s | 26 s |
++| Moon | 1.9 s | 2.1 s |
++| Mercury | 18 s | 1.3 min |
++| Venus | 21 s | 47 s |
++| Mars | 38 s | 1.8 min |
++| Jupiter | 3.2 min | 13 min |
++| Saturn | 5.7 min | 25 min |
++| Uranus | 12 min | 51 min |
++| Neptune | 18 min | 1.4 h |
++| Pluto | 25 min | 1.8 h |
+ <!-- end of the G-V5 table -->
+ 
+ ## KP sub-lords
+(end of diff)
+## the files test-controls.mjs edits and restores, F1 and boundaries.json, against the start (docs/vedic.md is the diff above)
+src/vedic/grid.ts: OK
+src/vedic/varga.ts: OK
+src/vedic/varga-time.ts: OK
+src/vedic/fixtures/varga-changes.json: OK
+src/vedic/fixtures/boundaries.json: OK
+## every other file under docs/evidence/1.1.0-rc.2-20261102 (outside varga-sensitivity/), shasum -a 256, against the start
+identical to the start: 202 files, the same names and bytes
+## no __pycache__ beside the unit's tools or the rules and references they import, and no work folder left in results/
+(end of list)
+## git sparse-checkout list
+/*
+!/docs/evidence/calc-sidereal-2026-10-05/
+## test -e docs/evidence/calc-sidereal-2026-10-05 (the path only)
+absent
+## local paths in results/ and results-erfa/, this log aside (it replaces its earlier writing): the files that hold the user name, which the home folder's path holds, or the prefix of the system's, the private or the session's temporary folders (grep -r -l -F; the strings are not printed here, so that this log does not hold them)
+none
+## the files written to results/ and results-erfa/ before this log, shasum -a 256
+f4822b62f1873a78cb4982969f17f3f4d5c9502f4419b3d947fe2cbcef7d55ba  results-erfa/compare.json
+c7edbf99b616503759e3ef63484091031aaa39768f7c90b33c0a2d401c5f1768  results-erfa/results.jsonl
+28b9fc47d51e4dcb809762bcbfa1e333a99451d923d21b0cdadaa8bc643158b3  results-erfa/run.json
+6859ee47d65c3e990882aeeff50a8f75a70482b9073107742e9fbe00124cd07e  results/00-start.log
+f3939c7fd8bc41d8a6503d86d1ad92d7d654e05d9b8203f7966657bc4e48cf32  results/01-build.log
+6ab56dc4992604a15abce96e0d63da8a861fefbb76fc5432916a9c37b4562ffd  results/02-checks.log
+88677c607eafdd3789527787937957d6739af1d85618dbf301ba2ef03ff8d594  results/03-outputs.log
+cdbeb2bf355cb22d1afdf9ac579787b37bb17b20cc0a5d92d580619d9b5741ae  results/04-figures.log
+256a52cbef179386b933b1c9f42aaebbabd756f34fc27119bea0daa42c3fc311  results/05-hand-edit.log
+9e5f685d8508ad535be07f85f15a53c365d38f6f7d7b320af73248670e2cd3c7  results/boundaries-sha256.txt
+befa9cbc262e16e75f515795fd29758d58b216162937a0c72fecaa98e8c5237e  results/check.json
+79315f40ae3897ca712fe16754e079f8751ff13b9e64d16f61b64a53a0f18733  results/controls-summary.txt
+0fda2ced64ec476bba5c4ec64392d043cbeffef2449e8edb7960bebb1f13ba5f  results/controls.json
+2f2dc6729d9af69ea9763725bb26e3b26560b1b25ccc3a433fda5105c144a7aa  results/derived-bounds-control-verdict.txt
+25e500341b1c5d7c7f89b5de73e8be77ac8a007e29f3db7efcb7d8c19154298a  results/derived-bounds-control.txt
+ecc08ba15a1e93c7e529f1dd1d74a635970712b2a9220943336fd3d04c64bf1b  results/derived-bounds.json
+430253e4c6f6a46f487da8a85e618cb58d671a3c3c5bf8ee2b62a6c7ff4b8e24  results/f1-check.json
+f1bce2366f88444a2dbf016164e401ea044d443f06903643517b177a19bc7348  results/inputs-sha256.recorded
+350caa06039df132107fbfeb13466b7aa82b370983af4e3d4e55e2b805d3b116  results/inputs-sha256.txt
+288d197680813d6353ae07748141473e5ffb2232fdc220f58488f31b41b8b310  results/results.jsonl
+e1144bfe37e5acf301c0c33f6573071eb4a994c3a9dadfa220c2eed41ab3982c  results/run.json
+485339aa6ab5aaafe28d49198294931c09fd11dae73f189a5d1fe1d3e625b3ea  results/steps.tsv
+536b6312df670f5b920bc45a8900768fcd43c2a244b6345a1bea65dd87383bea  results/test-controls.json
+4712daff5967b90ae333e481496bca4faece0beac71e73f561e8f8abfef29335  results/tests.json
+db4a95e88128ea4e889d79991af196a4f5e334f25f8fbfc5b60d630de4be994d  results/time-per-arcsecond-control-copy.txt
+94b65b897dd31e079b580f1773104117e0504c5e46cac4b7eb8fb8318ad08386  results/time-per-arcsecond-control.txt
+4b5c0f5e87308cea293446ce8103e07a9d8025290e76a1484dfe11b2831e0b47  results/time-per-arcsecond-write.txt
+696ba002dbb11400fb221f7f2c9a22f91ed3a87398a7782e16bc44234a67e55d  results/time-per-arcsecond.json
+c0957fa80557319da849bf271d1d671b8dd5ec2f778079ebd6b954067031c336  results/time-per-arcsecond.md
+## df -h /System/Volumes/Data
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   228Gi   195Gi   2.3Gi    99%    5.5M   24M   18%   /System/Volumes/Data
+# exit 0, finished 2026-11-04 14:48:41 +0700

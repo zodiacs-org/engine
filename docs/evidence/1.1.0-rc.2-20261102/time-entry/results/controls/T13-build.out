@@ -1,0 +1,98 @@
+
+> @zodiacs/engine@1.1.0-rc.2 build
+> tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/techniques.ts src/timing.ts src/vedic.ts src/internal.ts src/internal-math.ts src/calc.ts src/window.ts src/houses-extra.ts src/sky.ts src/conventions.ts src/time.ts --format esm --dts --clean --splitting --metafile --tsconfig tsconfig.build.json && node scripts/build-lite.mjs
+
+CLI Building entry: src/calc.ts, src/conventions.ts, src/crossings.ts, src/deltat.ts, src/geo.ts, src/houses-extra.ts, src/index.ts, src/internal-math.ts, src/internal.ts, src/receipt.ts, src/sky.ts, src/techniques.ts, src/time.ts, src/timing.ts, src/vedic.ts, src/window.ts
+CLI Using tsconfig: tsconfig.build.json
+CLI tsup v8.5.1
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+ESM dist/tzdb-2025c-09-MTXIO3QL.js 10.05 KB
+ESM dist/tzdb-2025c-10-ASL4UW5C.js 8.99 KB
+ESM dist/tzdb-2025c-11-EQEOANYB.js 13.91 KB
+ESM dist/tzdb-2025c-14-C25H45R5.js 10.00 KB
+ESM dist/tzdb-2025c-13-DYTF3UC7.js 9.97 KB
+ESM dist/tzdb-2025c-00-6GVG6RYL.js 11.33 KB
+ESM dist/tzdb-2025c-15-7OYYZWRY.js 11.27 KB
+ESM dist/tzdb-2025c-12-NKCCXJ5G.js 11.95 KB
+ESM dist/tzdb-2025c-03-PLHP6VH4.js 8.52 KB
+ESM dist/tzdb-2025c-01-CEYMG3LE.js 10.63 KB
+ESM dist/tzdb-2025c-05-3K5YKZBL.js 12.36 KB
+ESM dist/tzdb-2025c-08-DA7QQIGD.js 12.15 KB
+ESM dist/tzdb-2025c-07-H3GLGJGY.js 15.18 KB
+ESM dist/tzdb-2025c-06-L2VV5XJV.js 10.24 KB
+ESM dist/time.js                   565.00 B
+ESM dist/tzdb-2025c-04-MEKUJA6M.js 11.82 KB
+ESM dist/timing.js                 30.49 KB
+ESM dist/chunk-RRB65OLH.js         1.27 KB
+ESM dist/internal.js               365.00 B
+ESM dist/tzdb-2025c-02-NWQJCVUU.js 16.33 KB
+ESM dist/techniques.js             35.60 KB
+ESM dist/chunk-A3U2ZS2W.js         508.00 B
+ESM dist/calc.js                   48.58 KB
+ESM dist/receipt.js                41.17 KB
+ESM dist/vedic.js                  29.18 KB
+ESM dist/window.js                 33.15 KB
+ESM dist/conventions.js            736.00 B
+ESM dist/chunk-DCDIMC7W.js         17.74 KB
+ESM dist/chunk-47ERTK5X.js         989.00 B
+ESM dist/chunk-OVXQQEXL.js         1.97 KB
+ESM dist/chunk-KFTJMMG7.js         2.34 KB
+ESM dist/chunk-HTT4HMQ6.js         23.50 KB
+ESM dist/crossings.js              173.00 B
+ESM dist/geo.js                    5.91 KB
+ESM dist/houses-extra.js           13.36 KB
+ESM dist/deltat.js                 161.00 B
+ESM dist/chunk-2K3DWRJN.js         672.00 B
+ESM dist/chunk-QRBHGADI.js         11.64 KB
+ESM dist/chunk-I3L4POY7.js         822.00 B
+ESM dist/chunk-TSS2SZWQ.js         9.54 KB
+ESM dist/index.js                  13.13 KB
+ESM dist/chunk-B5LKF437.js         12.91 KB
+ESM dist/chunk-BHJXUY67.js         4.95 KB
+ESM dist/chunk-2BB5GQ3P.js         6.29 KB
+ESM dist/sky.js                    14.84 KB
+ESM dist/internal-math.js          1.33 KB
+ESM dist/chunk-PFGUCNOK.js         2.86 KB
+ESM dist/chunk-CPALRSPC.js         1.42 KB
+ESM dist/chunk-RMBWKZI2.js         2.95 KB
+ESM dist/chunk-S4325TVO.js         1.81 KB
+ESM dist/chunk-F4JKI3XV.js         3.13 KB
+ESM dist/chunk-NIRYKLHT.js         23.08 KB
+ESM dist/chunk-NNOSOOWS.js         11.37 KB
+ESM ⚡️ Build success in 48ms
+DTS Build start
+DTS ⚡️ Build success in 1593ms
+DTS dist/houses-extra.d.ts           4.60 KB
+DTS dist/internal.d.ts               557.00 B
+DTS dist/crossings.d.ts              4.67 KB
+DTS dist/window.d.ts                 7.80 KB
+DTS dist/deltat.d.ts                 4.92 KB
+DTS dist/calc.d.ts                   20.77 KB
+DTS dist/conventions.d.ts            2.92 KB
+DTS dist/sky.d.ts                    7.82 KB
+DTS dist/time.d.ts                   3.72 KB
+DTS dist/index.d.ts                  15.23 KB
+DTS dist/geo.d.ts                    9.26 KB
+DTS dist/timing.d.ts                 23.29 KB
+DTS dist/vedic.d.ts                  20.55 KB
+DTS dist/techniques.d.ts             21.58 KB
+DTS dist/receipt.d.ts                944.00 B
+DTS dist/internal-math.d.ts          1.11 KB
+DTS dist/houses-6YSK3a7q.d.ts        7.44 KB
+DTS dist/rulers-DMaYJUi_.d.ts        835.00 B
+DTS dist/ayanamsa-7-lfviNO.d.ts      6.30 KB
+DTS dist/types-DFPl9bI0.d.ts         8.28 KB
+DTS dist/time-scale-thhxuODo.d.ts    1.92 KB
+DTS dist/zone-history-BoN2nlrm.d.ts  11.20 KB
+DTS dist/time-bands-BVXFvmWT.d.ts    3.64 KB
+DTS dist/api-D5gaDpSk.d.ts           10.73 KB
+DTS dist/internal-math-ByFKtAt-.d.ts 6.02 KB
+lite: dist/lite.js 146 bytes
+lite: dist/lite-declinations.js 9665 bytes
+lite: dist/lite-sect.js 3439 bytes
+lite: dist/lite-composite.js 3783 bytes
+lite: dist/lite-dignities.js 11897 bytes
+lite: dist/lite.d.ts 5135 bytes
+lite: dist/metafile-lite.json 5357 bytes

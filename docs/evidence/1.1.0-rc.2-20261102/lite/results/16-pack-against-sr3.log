@@ -1,0 +1,12 @@
+# lite formal run of @zodiacs/engine 1.1.0-rc.2: this pack against SR3's copy of the candidate it ran on (programme notes, notes/rc2-2026-11-01/sr3/), byte for byte; written after 99-end.log
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3, run with -I)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# cwd <programme>/notes/rc2-2026-11-01/sr3
+# command: sh -c cat tarball.sha256; shasum -a 256 zodiacs-engine-1.1.0-rc.2.tgz "$1"; cmp zodiacs-engine-1.1.0-rc.2.tgz "$1" && echo "cmp: identical" sh <scratch>/pack/zodiacs-engine-1.1.0-rc.2.tgz
+# started 2026-11-04 12:24:23 +0700
+c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c  ../notes/rc2-2026-11-01/sr3/zodiacs-engine-1.1.0-rc.2.tgz
+c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c  zodiacs-engine-1.1.0-rc.2.tgz
+c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c  <scratch>/pack/zodiacs-engine-1.1.0-rc.2.tgz
+cmp: identical
+# exit 0, finished 2026-11-04 12:24:23 +0700

@@ -1,0 +1,179 @@
+{
+ "tool": "docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/test-controls.mjs",
+ "node": "v22.22.2",
+ "platform": "darwin arm64",
+ "controls": [
+  {
+   "name": "G-V1 naive floor",
+   "file": "src/vedic/grid.ts",
+   "test": "src/vedic/boundaries.test.ts",
+   "mustFail": "at least one of the 18 varga tests",
+   "failedTests": 6,
+   "of": 21,
+   "failedAsItMust": true,
+   "failed": [
+    "boundary fixtures from the texts places nakshatras and padas exactly at and around every pada boundary",
+    "boundary fixtures from the texts places KP subs (1–249) and sub-sub lords exactly at and around every sub-sub and sign boundary",
+    "boundary fixtures from the texts places D7 exactly at and around every part boundary",
+    "boundary fixtures from the texts places D9 exactly at and around every part boundary",
+    "boundary fixtures from the texts places D27 exactly at and around every part boundary",
+    "boundary fixtures from the texts places D45 exactly at and around every part boundary"
+   ]
+  },
+  {
+   "name": "G-V2 (a) control (i): every part boundary a change",
+   "file": "src/vedic/varga.ts",
+   "test": "src/vedic/varga-time.test.ts",
+   "mustFail": "G-V2 (a) with exactly 24 mismatches",
+   "failedTests": 5,
+   "of": 83,
+   "failedAsItMust": true,
+   "failed": [
+    "the varga change boundaries against F1 (G-V2 a) D2: the change boundaries are the fixture's change rows",
+    "the varga change boundaries against F1 (G-V2 a) D10: the change boundaries are the fixture's change rows",
+    "the varga change boundaries against F1 (G-V2 a) D24: the change boundaries are the fixture's change rows",
+    "the search core: analytic contract cases the D2 run from 345 to 15 degrees keeps its sign through 0",
+    "the docs' synthetic birth (docs/vedic.md), a regression example is borne out by the public API, row by row"
+   ]
+  },
+  {
+   "name": "G-V2 (a) control (ii): one change row of F1 a keep",
+   "file": "src/vedic/fixtures/varga-changes.json",
+   "test": "src/vedic/varga-time.test.ts",
+   "mustFail": "G-V2 (a) with exactly one mismatch",
+   "failedTests": 3,
+   "of": 83,
+   "failedAsItMust": true,
+   "failed": [
+    "the varga change boundaries against F1 (G-V2 a) covers the 18 keys: 3,480 part boundaries, 3,456 changes and 24 keeps",
+    "the varga change boundaries against F1 (G-V2 a) D45: the change boundaries are the fixture's change rows",
+    "the varga change boundaries against F1 (G-V2 a) control (i): every part boundary taken for a change is 24 mismatches, the keeps"
+   ]
+  },
+  {
+   "name": "the mean ayanamsa subtracted",
+   "file": "src/vedic/varga-time.ts",
+   "test": "src/vedic/varga-time.test.ts",
+   "mustFail": "the evaluation paths' test",
+   "failedTests": 11,
+   "of": 83,
+   "failedAsItMust": true,
+   "failed": [
+    "the three evaluation paths (a regression test, not accuracy evidence) equal siderealChart and chartPoints bit for bit on 'UTC', alone and 1 ms after another call",
+    "the three evaluation paths (a regression test, not accuracy evidence) equal siderealChart and chartPoints bit for bit on 'UT1', alone and 1 ms after another call",
+    "the three evaluation paths (a regression test, not accuracy evidence) equal siderealChart and chartPoints bit for bit on 'TT', alone and 1 ms after another call",
+    "the three evaluation paths (a regression test, not accuracy evidence) equal siderealChart and chartPoints bit for bit on 'UTC with a pinned ΔT', alone and 1 ms after another call",
+    "the three evaluation paths (a regression test, not accuracy evidence) equal siderealChart and chartPoints bit for bit on 'UT1 with a pinned ΔT', alone and 1 ms after another call",
+    "the three evaluation paths (a regression test, not accuracy evidence) equal siderealChart and chartPoints bit for bit on 'TT with a pinned ΔT', alone and 1 ms after another call",
+    "the seams of the time basis gives changes the public API bears out across one (the leap second before 2017, on UTC)",
+    "the docs' synthetic birth (docs/vedic.md), a regression example pins the engine's own instants of the Ascendant's D1, D9 and D60 and the Moon's D9",
+    "the docs' synthetic birth (docs/vedic.md), a regression example is borne out by the public API, row by row",
+    "review 2's station against a boundary, through the public API a last step of one unit in the last place: the D2 change gives the boundary it reaches, 285",
+    "review 2's station against a boundary, through the public API a last step of one unit in the last place: the D60 change gives the boundary it reaches, 278"
+   ]
+  },
+  {
+   "name": "one copied rate bound changed",
+   "file": "src/vedic/varga-time.ts",
+   "test": "src/vedic/varga-time.test.ts",
+   "mustFail": "the copied bounds' test",
+   "failedTests": 1,
+   "of": 83,
+   "failedAsItMust": true,
+   "failed": [
+    "the copied rate bounds equal WINDOW_RATE_BOUNDS body by body"
+   ]
+  },
+  {
+   "name": "no 1 ms terminal step",
+   "file": "src/vedic/varga-time.ts",
+   "test": "src/vedic/varga-time.test.ts",
+   "mustFail": "the one-millisecond touch",
+   "failedTests": 8,
+   "of": 83,
+   "failedAsItMust": true,
+   "failed": [
+    "the search core: analytic contract cases a rate-bounded point: steps shrink to a millisecond at the boundary",
+    "the search core: analytic contract cases a station touching a boundary for one millisecond, at 10000, is a change",
+    "the search core: analytic contract cases a station touching a boundary for one millisecond, at 10001, is a change",
+    "the search core: analytic contract cases a station stopping short of a boundary is none",
+    "the search core: analytic contract cases a station whose last step onto a boundary is one unit in the last place: the boundary that step reaches",
+    "the docs' synthetic birth (docs/vedic.md), a regression example pins the engine's own instants of the Ascendant's D1, D9 and D60 and the Moon's D9",
+    "review 2's station against a boundary, through the public API a last step of one unit in the last place: the D2 change gives the boundary it reaches, 285",
+    "review 2's station against a boundary, through the public API a last step of one unit in the last place: the D60 change gives the boundary it reaches, 278"
+   ]
+  },
+  {
+   "name": "brackets allowed across seams",
+   "file": "src/vedic/varga-time.ts",
+   "test": "src/vedic/varga-time.test.ts",
+   "mustFail": "the backward step",
+   "failedTests": 1,
+   "of": 83,
+   "failedAsItMust": true,
+   "failed": [
+    "the search core: analytic contract cases a seam stepping back after a crossing just before it: the crossing it undoes is the change"
+   ]
+  },
+  {
+   "name": "a build that computes instead of refusing",
+   "file": "src/vedic/varga-time.ts",
+   "test": "src/vedic/varga-time.test.ts",
+   "mustFail": "each refusal test",
+   "failedTests": 18,
+   "of": 83,
+   "failedAsItMust": true,
+   "failed": [
+    "refusals refuses the Ascendant's rows with no-angles without a known time, and computes the bodies around the instant",
+    "refusals refuses them with no-angles without a place",
+    "refusals computes the Ascendant at 66 degrees and refuses it with polar beyond, in either hemisphere",
+    "refusals refuses every row with out-of-range when the birth's UT1 or TT is outside REFERENCE_SPAN: '1799-12-31T23:59:59.999Z'",
+    "refusals refuses every row with out-of-range when the birth's UT1 or TT is outside REFERENCE_SPAN: '2200-01-01T00:00:00Z'",
+    "refusals refuses every row with out-of-range when the birth's UT1 or TT is outside REFERENCE_SPAN: '2199-12-31T23:30:00Z'",
+    "refusals throws RangeError for an option key not named",
+    "refusals throws RangeError for the true node, which is not offered",
+    "refusals throws RangeError for a repeated point",
+    "refusals throws RangeError for points not in an array",
+    "refusals throws RangeError for a varga outside the sixteen",
+    "refusals throws RangeError for a repeated varga",
+    "refusals throws RangeError for cyclic not a boolean",
+    "refusals throws RangeError for a horizon of 0 minutes",
+    "refusals throws RangeError for a horizon of 2,881 minutes",
+    "refusals throws RangeError for a horizon in part minutes",
+    "refusals throws RangeError for a horizon as a string",
+    "refusals throws RangeError for options that are not an object"
+   ]
+  },
+  {
+   "name": "an instant 1 ms later",
+   "file": "src/vedic/varga-time.ts",
+   "test": "src/vedic/varga-time.test.ts",
+   "mustFail": "the docs' synthetic birth",
+   "failedTests": 5,
+   "of": 83,
+   "failedAsItMust": true,
+   "failed": [
+    "the seams of the time basis gives changes the public API bears out across one (the leap second before 2017, on UTC)",
+    "the docs' synthetic birth (docs/vedic.md), a regression example pins the engine's own instants of the Ascendant's D1, D9 and D60 and the Moon's D9",
+    "the docs' synthetic birth (docs/vedic.md), a regression example is borne out by the public API, row by row",
+    "review 2's station against a boundary, through the public API a last step of one unit in the last place: the D2 change gives the boundary it reaches, 285",
+    "review 2's station against a boundary, through the public API a last step of one unit in the last place: the D60 change gives the boundary it reaches, 278"
+   ]
+  },
+  {
+   "name": "a change's direction through turn(d + 180) - 180 (4f4c1e8's)",
+   "file": "src/vedic/varga-time.ts",
+   "test": "src/vedic/varga-time.test.ts",
+   "mustFail": "the last step of one unit in the last place, analytic and through the public API",
+   "failedTests": 3,
+   "of": 83,
+   "failedAsItMust": true,
+   "failed": [
+    "the search core: analytic contract cases a station whose last step onto a boundary is one unit in the last place: the boundary that step reaches",
+    "review 2's station against a boundary, through the public API a last step of one unit in the last place: the D2 change gives the boundary it reaches, 285",
+    "review 2's station against a boundary, through the public API a last step of one unit in the last place: the D60 change gives the boundary it reaches, 278"
+   ]
+  }
+ ],
+ "allFailedAsTheyMust": true
+}

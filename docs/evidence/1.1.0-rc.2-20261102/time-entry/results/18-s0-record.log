@@ -1,0 +1,253 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: S0, recorded from the cut's site runs (not run here; programme notes kept outside the repository)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 10509972 KiB, 10.0 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/s0-record.sh
+# started 2026-11-04 12:40:55 +0700
+## <programme>/notes/rc2-2026-11-01/sr2/REPORT.md, lines 1 to 3
+# SR2 on 1.1.0-rc.2 at 4f4c1e8 (2026-11-03, ICT)
+
+I repeated SR on the candidate packed from engine `4f4c1e8`, and it passes. Every S0 figure is identical to the previous run, the reference build and its control behave, and the two README "exactly" sentences are now backed. Nothing was committed, pushed or opened on GitHub, and no server was started.
+## <programme>/notes/rc2-2026-11-01/sr2/REPORT.md, lines 13 to 24
+## S0: nothing moved
+The review changed only `calc.js` and `vedic.js`, and no client, worker or prerender chunk bundles either file. The site uses `./calc` and `./vedic` only server-side, in `api/_compute/compute.mjs` and `api/_ai/runtime.mjs`.
+
+| Build | Engine chunk (allowance 33,380.4) | Largest chunk (allowance 61,440) | Routes moved | Served chunks identical to the previous run |
+| --- | --- | --- | --- | --- |
+| Default | 33,361, 19.4 left | 51,331, `client.D2SwsgPS.js` | 0 of 19 | 294 of 294 |
+| Production flags | 33,361, 19.4 left | 51,366, `client.CCm7tF5v.js` | 0 of 19 | 296 of 296 |
+
+- **Production flags:** the three `_SECRET` variables were set from the start to a 37-character stand-in; no CI value was read. So `/birth-chart/` is 70,284 bytes in 45 chunks with the daily-email island, matching CI's graph. Against the previous run's instructed build (17-character stand-ins), only `/birth-chart/` differs: +3,189 bytes, the island chunk, because of the stand-ins and not the engine.
+- **Visible values:** the 20 visible values match the workflow job, with 0 mismatches.
+- **Control:** with the engine-chunk allowance cut to 33,360 bytes, both builds print the warning (exit 0), and `--fail` exits 1 with the engine chunk as the only failure.
+- **Against main's CI:** unchanged from the previous report, since main and the bytes are the same. For example, `/birth-chart/` is +77 to +180 bytes by default and the engine chunk +30 to +132.
+## <programme>/notes/rc2-2026-11-01/sr2/04-report-bundles-default.log (whole)
+# cwd: <programme>/site-sr-rc2
+# budgets.json sha256: f128c1d65367f3ffbdbcc6ac4ba28ca6c5956ee1964235d6df5ff08fad1b8284
+# command: nice -n 10 npm run report:bundles; started 2026-11-03 22:32:06 +0700
+
+> zodiacs-org@1.0.0 report:bundles
+> node scripts/report-bundles.mjs
+
+route gzip sizes (initial transitive local JS):
+  /                  19.1 KB /   42 KB  (22 chunks)
+  /birth-chart/      65.5 KB /   71 KB  (44 chunks)
+  /big-three/        26.5 KB /   30 KB  (20 chunks)
+  /transits/         27.7 KB /   30 KB  (25 chunks)
+  /solar-return/     22.3 KB /   30 KB  (18 chunks)
+  /lunar-return/     22.2 KB /   30 KB  (18 chunks)
+  /numerology/       17.3 KB /   30 KB  (7 chunks)
+  /numerology/life-path/7/   17.3 KB /   30 KB  (7 chunks)
+  /void-of-course-moon/    0.0 KB /    5 KB  (0 chunks)
+  /today/            20.1 KB / 21.5 KB  (14 chunks)
+  /compatibility/    33.8 KB /   36 KB  (25 chunks)
+  /aries/             0.0 KB /    0 KB  (0 chunks)
+  /almanac/           0.0 KB /    0 KB  (0 chunks)
+  /almanac/sky-2026-08/    0.0 KB /    0 KB  (0 chunks)
+  /almanac/reading-a-childs-chart/    0.0 KB /    0 KB  (0 chunks)
+  /registry/collection/    0.0 KB /   48 KB  (0 chunks)
+  /learn/aspects/sun-moon/    0.0 KB /    0 KB  (0 chunks)
+  /learn/aspects/moon-venus/    0.0 KB /    0 KB  (0 chunks)
+  /learn/aspects/venus-mars/    0.0 KB /    0 KB  (0 chunks)
+chunk gates:
+  chunk-max          50.1 KB /   60 KB  (/_astro/client.D2SwsgPS.js)
+  engine-chunk       32.6 KB / 32.598046875 KB  (/_astro/full.AUZx8EGL.js; 8 static chunks)
+engine isolation: package boundary clear; homepage markers clear
+report-bundles: within budgets
+# finished 2026-11-03 22:32:07 +0700; exit code: 0
+## <programme>/notes/rc2-2026-11-01/sr2/08-report-bundles-production.log (whole)
+# cwd: <programme>/site-sr-rc2
+# budgets.json sha256: f128c1d65367f3ffbdbcc6ac4ba28ca6c5956ee1964235d6df5ff08fad1b8284; scripts/report-bundles.mjs reads no environment variable
+# command: nice -n 10 npm run report:bundles; started 2026-11-03 22:33:47 +0700
+
+> zodiacs-org@1.0.0 report:bundles
+> node scripts/report-bundles.mjs
+
+route gzip sizes (initial transitive local JS):
+  /                  19.1 KB /   42 KB  (22 chunks)
+  /birth-chart/      68.6 KB /   71 KB  (45 chunks)
+  /big-three/        26.5 KB /   30 KB  (20 chunks)
+  /transits/         27.7 KB /   30 KB  (25 chunks)
+  /solar-return/     22.3 KB /   30 KB  (18 chunks)
+  /lunar-return/     22.2 KB /   30 KB  (18 chunks)
+  /numerology/       17.3 KB /   30 KB  (7 chunks)
+  /numerology/life-path/7/   17.3 KB /   30 KB  (7 chunks)
+  /void-of-course-moon/    0.0 KB /    5 KB  (0 chunks)
+  /today/            20.1 KB / 21.5 KB  (14 chunks)
+  /compatibility/    34.2 KB /   36 KB  (25 chunks)
+  /aries/             0.0 KB /    0 KB  (0 chunks)
+  /almanac/           0.0 KB /    0 KB  (0 chunks)
+  /almanac/sky-2026-08/    0.0 KB /    0 KB  (0 chunks)
+  /almanac/reading-a-childs-chart/    0.0 KB /    0 KB  (0 chunks)
+  /registry/collection/   33.0 KB /   48 KB  (20 chunks)
+  /learn/aspects/sun-moon/    0.0 KB /    0 KB  (0 chunks)
+  /learn/aspects/moon-venus/    0.0 KB /    0 KB  (0 chunks)
+  /learn/aspects/venus-mars/    0.0 KB /    0 KB  (0 chunks)
+chunk gates:
+  chunk-max          50.2 KB /   60 KB  (/_astro/client.CCm7tF5v.js)
+  engine-chunk       32.6 KB / 32.598046875 KB  (/_astro/full.AUZx8EGL.js; 8 static chunks)
+engine isolation: package boundary clear; homepage markers clear
+report-bundles: within budgets
+# finished 2026-11-03 22:33:49 +0700; exit code: 0
+## <programme>/notes/rc2-2026-11-01/sr2/04c-control-default.log: the control's change and the two runs' verdicts
+# cwd: <programme>/site-sr-rc2
+# measured engine-chunk static closure: 33361 bytes; control allowance: (33361 - 1)/1024 = 32.578125 KB = 33360 bytes
+# command: sed -i '' 's/"engine-chunk": 32.598046875,/"engine-chunk": 32.578125,/' budgets.json
+# git diff budgets.json:
+# command: nice -n 10 npm run report:bundles
+report-bundles: 1 warnings
+  - engine-chunk: /_astro/full.AUZx8EGL.js is 32.6 KB gz (static closure) (limit 32.578125 KB)
+# exit code: 0
+# command: nice -n 10 node scripts/report-bundles.mjs --fail
+report-bundles: 1 failures
+  - engine-chunk: /_astro/full.AUZx8EGL.js is 32.6 KB gz (static closure) (limit 32.578125 KB)
+# exit code: 1
+# restored budgets.json; sha256 f128c1d65367f3ffbdbcc6ac4ba28ca6c5956ee1964235d6df5ff08fad1b8284 (before control: f128c1d65367f3ffbdbcc6ac4ba28ca6c5956ee1964235d6df5ff08fad1b8284); git diff --stat budgets.json: []
+## <programme>/notes/rc2-2026-11-01/sr2/08c-control-production.log: the same
+# cwd: <programme>/site-sr-rc2 (dist/ = the production-flags build of step 7)
+# measured engine-chunk static closure: 33361 bytes; control allowance: (33361 - 1)/1024 = 32.578125 KB = 33360 bytes
+# command: sed -i '' 's/"engine-chunk": 32.598046875,/"engine-chunk": 32.578125,/' budgets.json
+# git diff budgets.json:
+# command: nice -n 10 npm run report:bundles
+report-bundles: 1 warnings
+  - engine-chunk: /_astro/full.AUZx8EGL.js is 32.6 KB gz (static closure) (limit 32.578125 KB)
+# exit code: 0
+# command: nice -n 10 node scripts/report-bundles.mjs --fail
+report-bundles: 1 failures
+  - engine-chunk: /_astro/full.AUZx8EGL.js is 32.6 KB gz (static closure) (limit 32.578125 KB)
+# exit code: 1
+# restored budgets.json; sha256 f128c1d65367f3ffbdbcc6ac4ba28ca6c5956ee1964235d6df5ff08fad1b8284 (before control: f128c1d65367f3ffbdbcc6ac4ba28ca6c5956ee1964235d6df5ff08fad1b8284); git diff --stat budgets.json: []
+## <programme>/notes/rc2-2026-11-01/sr/REPORT.md, lines 18 to 22
+| S0, default build | **PASS**: every allowance holds. Engine chunk 33,361 of 33,380.4 bytes (19.4 left); largest chunk 51,331 of 61,440 (`/_astro/client.D2SwsgPS.js`) |
+| S0, production flags (as instructed) | **PASS**. Engine chunk 33,361 of 33,380.4 (19.4 left); largest chunk 51,366 of 61,440 (`/_astro/client.CCm7tF5v.js`) |
+| S0, production flags, supplementary run (37-character stand-ins) | **PASS**, same engine and largest chunk; reproduces CI's production graph (below) |
+| S0 control (engine chunk allowance = 33,360 bytes) | fails as required on both builds: warning in `npm run report:bundles` (exit 0), `--fail` exit 1 |
+| Grown | the engine chunk's static closure (+30 to +132 bytes against main's CI, +94 against report 6's 33,267; 7 to 8 chunks) and `/birth-chart/` (+77 to +191 bytes, one more chunk). Cause: rc.2's chunk split (`chunk-YJ7WZ7NS.js` into `chunk-F4JKI3XV.js` and `chunk-RMBWKZI2.js`), not new code. Seven routes shrank by 0.3 to 0.5 KB for the same reason |
+## <programme>/notes/rc2-2026-11-01/sr/REPORT.md, lines 133 to 175
+### What grew, and which engine files it holds
+
+Relative to main, two budgeted items grew: the engine chunk's static
+closure and `/birth-chart/` (both builds). Every other route is the same or
+smaller; the largest chunks are byte for byte main's.
+
+The engine chunk's closure, all eight chunks (33,361 bytes):
+
+| Site chunk | Gzip | Holds | Against rc.1 |
+| --- | ---: | --- | --- |
+| `full.AUZx8EGL.js` | 313 | the site's `src/lib/engine/full.ts` | site code; new name because its imports changed |
+| `chart-adapter.D7gaZnvr.js` | 304 | the site's `src/lib/engine/chart-adapter.ts` | site code |
+| `rolldown-runtime.DK3Fl9T5.js` | 154 | the bundler's runtime | |
+| `chunk-B5LKF437.7_bxrzb_.js` | 6,537 | `dist/chunk-BHJXUY67.js` (`deltat.ts`) and `dist/chunk-B5LKF437.js` (`reference-span.ts`, `time-scale-data.ts`, `time-scale.ts`) | both files byte-identical to rc.1's |
+| `chunk-NIRYKLHT.Bm5YfgXm.js` | 22,989 | `dist/chunk-2BB5GQ3P.js` (`nutation.ts`, `frame.ts`), astronomy-engine 2.1.19 `esm/astronomy.js`, `dist/chunk-NIRYKLHT.js` (`body-label.ts`, `exact.ts`, `declination.ts`, `points.ts`, `ephemeris.ts`) | new files; in rc.1 all seven modules were the ephemeris chunk `dist/chunk-W2TMLFJ3.js`; still one site chunk |
+| `chunk-NNOSOOWS.CflCEcE2.js` | 1,781 | `dist/chunk-NNOSOOWS.js` (`houses.ts`) | rc.1's `dist/chunk-VDVUUMY2.js`, same 11,639 bytes; now imports signs from the next row |
+| `chunk-F4JKI3XV.DXFJXQuL.js` | 745 | `dist/chunk-F4JKI3XV.js` (`aspects.ts`, `types.ts`) | **new chunk**: rc.1 held `aspects.ts`, `signs.ts` and `types.ts` in one file, `dist/chunk-YJ7WZ7NS.js` |
+| `chunk-RMBWKZI2.DZR4n1wo.js` | 538 | `dist/chunk-RMBWKZI2.js` (`signs.ts`) | **new chunk**, the other half of that split |
+
+`/birth-chart/` holds three engine-bearing chunks, `chunk-F4JKI3XV`,
+`chunk-NNOSOOWS` and `chunk-RMBWKZI2` (3,064 bytes); in rc.1 it would have
+held two, the chunks of `chunk-YJ7WZ7NS.js` and `chunk-VDVUUMY2.js`. Its other
+41 chunks (42 with the daily-email island) hold no engine module.
+
+**The code did not grow.** Split by tsup's `// src/<file>` markers, every
+source module in these chunks has the same code in rc.1 and rc.2 apart from
+renamed locals (`RAD4` to `RAD3` and the like, which minification renames
+anyway) and `ENGINE_VERSION` ("1.1.0-rc.1" to "1.1.0-rc.2", same length)
+(`tools/module-sections.mjs`). The growth is structural: to let `./time` load
+the signs, the nutation and the frame without the ephemeris, rc.2 splits
+`signs.ts` out of the chunk it shared with `aspects.ts` and `types.ts`, and
+moves `nutation.ts` and `frame.ts` out of the ephemeris chunk (as the rc.2
+evidence README, *Sizes*, says). In the site the first split adds one static
+chunk to the engine closure and to `/birth-chart/` (one more gzip stream and
+the import and export statements that join the parts); the second stays
+inside one site chunk.
+
+**The same split shrinks seven routes** (`/`, `/transits/`,
+`/solar-return/`, `/lunar-return/`, `/today/`, `/compatibility/`,
+`/registry/collection/`) by 0.3 to 0.5 KB: their only engine-bearing chunk is
+now `chunk-F4JKI3XV` (aspects and types, 745 bytes), where rc.1 gave them the
+chunk of `chunk-YJ7WZ7NS.js`, which also carried the signs code the engine
+needs elsewhere.
+## <programme>/notes/rc2-2026-11-01/sr3/REPORT.md, lines 1 to 3
+**SR3 on 1.1.0-rc.2 at 5c00cb8 (2026-11-04, ICT): passes**
+
+The candidate passes everything SR3 ran. S0 is skipped under your rule. The reference build and its control behave. The extractor lists 47 unlisted sentences and the same 17 orphans as sr2. None of the 7 changed sentences needs rewording, and S1 and C8 come out as before. Nothing was committed, pushed or opened on GitHub, no server was started, and `engine-rc2` was only read. Logs, data and scripts are in `<programme>/notes/rc2-2026-11-01/sr3/`.
+## <programme>/notes/rc2-2026-11-01/sr3/REPORT.md, lines 11 to 25
+**S0: skipped**
+- **What differs:** 8 of 90 files:
+  - text: CHANGELOG.md, LICENSING.md, README.md
+  - type declarations: `dist/calc.d.ts`, `dist/lite.d.ts`
+  - JavaScript, only `dist/calc.js` (+494 bytes), `dist/vedic.js` (+40) and `dist/lite-sect.js` (+12)
+- **What is unchanged:** NOTICE, `package.json`, every shared chunk, the tzdb files and the other lite files are byte-identical.
+- **The code changes:**
+  - `angleBands` in calc: a one-sided rate on TT near the Placidus/Koch fallback.
+  - `signed()` in varga-time.
+  - `orientality` in `src/sect.ts`, which is built only into `lite-sect.js`.
+- **Why no site chunk carries them:**
+  - Nothing in `dist/` imports `calc.js` or `vedic.js`, and only `dist/lite.js` imports `lite-sect.js`.
+  - The site's `src/` imports none of `./calc`, `./vedic` or `./lite`; only tests and code samples written as strings do.
+  - sr's attribution build has none of the three in its client (290 chunks), worker (5) or prerender (2,724) builds.
+- **Correction to sr2:** the API bundles do not contain `calc.js` or `vedic.js`. They only name `./calc` and `./vedic` in a comment (`api/_compute/compute.mjs:206`). The skip stands either way.
+## <programme>/notes/rc2-2026-11-01/sr3/06-pack-comparison-and-s0-decision.log (whole)
+# S0 decision: the new tarball (5c00cb8, c5aef0e3...) against sr2's (4f4c1e8, 8965710c...), both unpacked fresh into new scratchpad folders (sr3/unpacked-5c00cb8, sr3/unpacked-4f4c1e8)
+# files: 90 in the new pack, 90 in sr2's
+# command: diff -rq unpacked-4f4c1e8/package unpacked-5c00cb8/package (all files, lite and tzdb included)
+Files unpacked-4f4c1e8/package/CHANGELOG.md and unpacked-5c00cb8/package/CHANGELOG.md differ
+Files unpacked-4f4c1e8/package/LICENSING.md and unpacked-5c00cb8/package/LICENSING.md differ
+Files unpacked-4f4c1e8/package/README.md and unpacked-5c00cb8/package/README.md differ
+Files unpacked-4f4c1e8/package/dist/calc.d.ts and unpacked-5c00cb8/package/dist/calc.d.ts differ
+Files unpacked-4f4c1e8/package/dist/calc.js and unpacked-5c00cb8/package/dist/calc.js differ
+Files unpacked-4f4c1e8/package/dist/lite-sect.js and unpacked-5c00cb8/package/dist/lite-sect.js differ
+Files unpacked-4f4c1e8/package/dist/lite.d.ts and unpacked-5c00cb8/package/dist/lite.d.ts differ
+Files unpacked-4f4c1e8/package/dist/vedic.js and unpacked-5c00cb8/package/dist/vedic.js differ
+# diff exit 1 (1 = some differ)
+# sizes, bytes (4f4c1e8 -> 5c00cb8):
+  CHANGELOG.md 130460 -> 130677 (217)
+  LICENSING.md 27236 -> 27426 (190)
+  README.md 67999 -> 68288 (289)
+  dist/calc.d.ts 20951 -> 21341 (390)
+  dist/calc.js 49275 -> 49769 (494)
+  dist/lite-sect.js 3427 -> 3439 (12)
+  dist/lite.d.ts 5054 -> 5135 (81)
+  dist/vedic.js 29838 -> 29878 (40)
+# JavaScript files that differ: dist/calc.js dist/lite-sect.js dist/vedic.js 
+# (NOTICE, package.json, every chunk-*.js, every tzdb file, lite.js, lite-declinations.js, lite-composite.js, lite-dignities.js and every other .d.ts are byte-identical)
+# which packed dist/*.js files import the three (static or dynamic import of ./calc.js, ./vedic.js or ./lite-sect.js):
+  dist/lite.js:2:export * from "./lite-sect.js";
+  (calc.js and vedic.js are entry files only, ./calc and ./vedic; lite-sect.js is imported by dist/lite.js, the ./lite entry, alone)
+# source-module sections (tools/module-sections.mjs, which leaves out tzdb and lite files): 75 modules; with the same code: 73
+calc.ts                      calc.js              -> calc.js              code differs (33773 -> 34267 chars)
+vedic/varga-time.ts          vedic.js             -> vedic.js             code differs (11649 -> 11689 chars)
+# lite-sect.js (src/sect.ts, orientality; this module is built into lite-sect.js alone):
+48c48
+<   const raw = ((degrees(sunLon, "sunLon") - degrees(bodyLon, "bodyLon")) % 360 + 360) % 360;
+---
+>   const raw = ((degrees(sunLon, "sunLon") % 360 - degrees(bodyLon, "bodyLon") % 360) % 360 + 360) % 360;
+# the site's imports of the three entries (git grep in the scratch clone, generated reference and docs left out):
+#   src/: none import @zodiacs/engine/calc, @zodiacs/engine/vedic or @zodiacs/engine/lite (src/lib/engine/lite.ts is the site's own module, not the engine's ./lite)
+  scripts/engine-entry-imports.test.mjs:40:      "import { calc } from '@zodiacs/engine/calc';",
+  scripts/engine-entry-imports.test.mjs:41:      'export { siderealChart } from "@zodiacs/engine/vedic";',
+  scripts/engine-entry-imports.test.mjs:42:      "const { chart } = await import('@zodiacs/engine/calc');",
+  src/data/developer-guides.json:330:          "source": "import { calc } from '@zodiacs/engine/calc';\nconst result = calc({\n  body: 'Sun', 
+  src/data/developer-guides.json:369:          "source": "import { calc } from '@zodiacs/engine/calc';\ntry {\n  const result = calc({ body: '
+  src/data/developer-guides.json:404:          "source": "import { chart } from '@zodiacs/engine/calc';\nconst result = chart({\n  time: '2000
+  src/data/developer-guides.json:736:          "source": "import { siderealChart, nakshatraOf } from '@zodiacs/engine/vedic';\nconst chart = s
+  src/pages/developers/engine/index.astro:35:  ['@zodiacs/engine/vedic', 'The sidereal zodiac, a separate import: ayanamsas, sidereal charts, 
+  tests/conventions-registry.test.ts:10:import { CALC_AYANAMSAS, CALC_BODIES, CALC_FRAMES, calc, chart, events, houses } from '@zodiacs/engine
+  tests/conventions-registry.test.ts:11:import { AYANAMSAS } from '@zodiacs/engine/vedic';
+#   (tests, and code samples held as strings in src/data/developer-guides.json; the api bundles name ./calc and ./vedic only in a comment, api/_compute/compute.mjs:206)
+# sr's attribution build (sr/data/attribution-default.jsonl; its chunks were byte-identical to sr's S0 default build, and sr2's served chunks to sr's, 294 of 294): engine dist files per build
+  prerender build: 2724 chunks, 0 engine dist files; calc.js, vedic.js or lite*.js among them: none
+  worker build: 1 chunks, 10 engine dist files; calc.js, vedic.js or lite*.js among them: none
+  worker build: 1 chunks, 7 engine dist files; calc.js, vedic.js or lite*.js among them: none
+  worker build: 1 chunks, 6 engine dist files; calc.js, vedic.js or lite*.js among them: none
+  worker build: 1 chunks, 7 engine dist files; calc.js, vedic.js or lite*.js among them: none
+  worker build: 1 chunks, 10 engine dist files; calc.js, vedic.js or lite*.js among them: none
+  client build: 290 chunks, 37 engine dist files; calc.js, vedic.js or lite*.js among them: none
+  (the prerender build bundles no engine file: the engine is external there and loaded from node_modules, and no prerendered page's source imports the three entries)
+# decision: the only JavaScript files that differ are dist/calc.js, dist/vedic.js and dist/lite-sect.js, which no client, worker or prerender chunk of the site bundles; S0 is not repeated, as instructed
+## <programme>/notes/rc2-2026-11-01/sr3/tarball.sha256, against this run's pack
+c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c  ../notes/rc2-2026-11-01/sr3/zodiacs-engine-1.1.0-rc.2.tgz
+c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c  <scratch>/pack/zodiacs-engine-1.1.0-rc.2.tgz
+# exit 0, finished 2026-11-04 12:40:55 +0700

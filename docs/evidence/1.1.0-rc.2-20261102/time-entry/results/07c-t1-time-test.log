@@ -1,0 +1,28 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: T1, src/time.test.ts (vitest, verbose reporter): R1's names at the source and api/time.api.md's twenty declarations
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 12012068 KiB, 11.5 GiB
+# cwd <checkout>
+# command: npx vitest run src/time.test.ts --reporter=verbose
+# started 2026-11-04 12:36:45 +0700
+
+ RUN  v2.1.9 <checkout>
+
+ ✓ src/time.test.ts > @zodiacs/engine/time > exports exactly the ten values of R1, timeBands with P1.M3c's default
+ ✓ src/time.test.ts > @zodiacs/engine/time > declares exactly R1's twenty names in api/time.api.md, TimeBands and timeBands with P1.M3c's default
+ ✓ src/time.test.ts > @zodiacs/engine/time > throws RangeError for each argument it refuses (T10)
+ ✓ src/time.test.ts > @zodiacs/engine/time > accepts the ends of the Date range and of a pin, and an absent scale, giving the engine's records (T10)
+ ✓ src/time.test.ts > @zodiacs/engine/time > gives what the engine's own functions give, value for value
+ ✓ src/time.test.ts > @zodiacs/engine/time > gives frozen copies and never hands out the frame the engine keeps (T10)
+ ✓ src/time.test.ts > @zodiacs/engine/time > meets the committed ERFA references through its public functions (T7c)
+ ✓ src/time.test.ts > @zodiacs/engine/time > turns astronomy-engine's vectors to natalChart's longitudes, bit for bit (T5's method)
+ ✓ src/time.test.ts > @zodiacs/engine/time > imports no ephemeris: its source graph is the ten modules of T2, src/time-bands.ts with P1.M3c's default
+ ✓ src/time.test.ts > @zodiacs/engine/time > keeps no module state of its own (T11)
+
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+   Start at  12:36:46
+   Duration  912ms (transform 186ms, setup 0ms, collect 433ms, tests 227ms, environment 0ms, prepare 38ms)
+
+# exit 0, finished 2026-11-04 12:36:46 +0700

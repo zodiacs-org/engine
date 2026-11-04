@@ -1,0 +1,19 @@
+# time-entry formal run of @zodiacs/engine 1.1.0-rc.2: T1, the runtime names of ./time on the pack (the carrier job's T1 script)
+# machine darwin-arm64 (macOS 27.0.1); Node v22.22.2, npm 10.9.7; Python 3.9.6 (/usr/bin/python3; no check of this unit runs Python)
+# commit 237b2265fcc53ae51abcb4f8e895e64c66321f5e (branch rc2/main-first)
+# environment: TMPDIR=<scratch>/tmp npm_config_offline=true GIT_NO_LAZY_FETCH=1 NODE_OPTIONS=unset
+# free disk before the step (df -k /System/Volumes/Data): 12007164 KiB, 11.5 GiB
+# cwd <checkout>
+# command: sh <scratch>/bin/t1-names.sh
+# started 2026-11-04 12:36:34 +0700
+## the script, <scratch>/bin/t1-names.mjs
+const [tools, pkg] = process.argv.slice(2);
+const { pathToFileURL } = await import("node:url");
+const { entry } = await import(pathToFileURL(`${tools}/load.mjs`).href);
+const R1 = ["DELTA_T_IERS_MODEL", "EPHEMERIS_SPAN", "TIME_SCALE_NAMES", "eclipticFrame", "eclipticOfDate", "elapsedDays", "meanEcliptic", "tilt", "timeBands", "timeBasis"];
+const keys = Object.keys(await entry(pkg, "./time")).sort();
+console.log(JSON.stringify({ keys, equalsR1: JSON.stringify(keys) === JSON.stringify(R1) }));
+process.exitCode = JSON.stringify(keys) === JSON.stringify(R1) ? 0 : 1;
+## node <scratch>/bin/t1-names.mjs <checkout>/docs/evidence/1.1.0-rc.2-20261102/time-entry/tools <scratch>/consumer/node_modules/@zodiacs/engine
+{"keys":["DELTA_T_IERS_MODEL","EPHEMERIS_SPAN","TIME_SCALE_NAMES","eclipticFrame","eclipticOfDate","elapsedDays","meanEcliptic","tilt","timeBands","timeBasis"],"equalsR1":true}
+# exit 0, finished 2026-11-04 12:36:34 +0700

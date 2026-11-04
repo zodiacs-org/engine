@@ -1,0 +1,155 @@
+{
+ "tool": "docs/evidence/1.1.0-rc.2-20261102/varga-sensitivity/tools/derived_bounds.py",
+ "python": "3.9.6",
+ "units": "degrees a day; latitudes in degrees; brackets in milliseconds",
+ "formulae": {
+  "R_hi": "1.01 * 360.9856 * cos(phi) / cos(|phi| + 23.5) + a",
+  "R_lo": "0.99 * 360.9856 * sqrt(cos^2 phi - sin^2 23.5) - 5e-5 / cos(|phi| + 23.5) - a"
+ },
+ "rates": {
+  "epoch": {
+   "a": 0.0003,
+   "rows": [
+    {
+     "latitude": 0,
+     "R_lo": 327.734672,
+     "R_hi": 397.570172,
+     "longestBracketMs": 71715641,
+     "note": null
+    },
+    {
+     "latitude": 30,
+     "R_lo": 274.737476,
+     "R_hi": 530.828866,
+     "longestBracketMs": 53712225,
+     "note": null
+    },
+    {
+     "latitude": 45,
+     "R_lo": 208.689612,
+     "R_hi": 703.430195,
+     "longestBracketMs": 40532806,
+     "note": null
+    },
+    {
+     "latitude": 60,
+     "R_lo": 107.805477,
+     "R_hi": 1610.358539,
+     "longestBracketMs": 17705373,
+     "note": null
+    },
+    {
+     "latitude": 66,
+     "R_lo": 28.659597,
+     "R_hi": 16993.494669,
+     "longestBracketMs": 1677818,
+     "note": null
+    },
+    {
+     "latitude": 66.6,
+     "R_lo": null,
+     "R_hi": null,
+     "longestBracketMs": null,
+     "note": "no real value: |phi| is beyond 90 - 23.5 = 66.5 degrees"
+    }
+   ],
+   "largestLatitudeWithPositiveLowerBound": 66.498285945
+  },
+  "largest linear": {
+   "a": 0.003037851,
+   "rows": [
+    {
+     "latitude": 0,
+     "R_lo": 327.731934,
+     "R_hi": 397.572909,
+     "longestBracketMs": 71715147,
+     "note": null
+    },
+    {
+     "latitude": 30,
+     "R_lo": 274.734738,
+     "R_hi": 530.831604,
+     "longestBracketMs": 53711948,
+     "note": null
+    },
+    {
+     "latitude": 45,
+     "R_lo": 208.686874,
+     "R_hi": 703.432933,
+     "longestBracketMs": 40532648,
+     "note": null
+    },
+    {
+     "latitude": 60,
+     "R_lo": 107.802739,
+     "R_hi": 1610.361277,
+     "longestBracketMs": 17705343,
+     "note": null
+    },
+    {
+     "latitude": 66,
+     "R_lo": 28.656859,
+     "R_hi": 16993.497407,
+     "longestBracketMs": 1677818,
+     "note": null
+    },
+    {
+     "latitude": 66.6,
+     "R_lo": null,
+     "R_hi": null,
+     "longestBracketMs": null,
+     "note": "no real value: |phi| is beyond 90 - 23.5 = 66.5 degrees"
+    }
+   ],
+   "largestLatitudeWithPositiveLowerBound": 66.498284072
+  },
+  "star (addition)": {
+   "a": 0.0213,
+   "rows": [
+    {
+     "latitude": 0,
+     "R_lo": 327.713672,
+     "R_hi": 397.591172,
+     "longestBracketMs": 71711853,
+     "note": null
+    },
+    {
+     "latitude": 30,
+     "R_lo": 274.716476,
+     "R_hi": 530.849866,
+     "longestBracketMs": 53710101,
+     "note": null
+    },
+    {
+     "latitude": 45,
+     "R_lo": 208.668612,
+     "R_hi": 703.451195,
+     "longestBracketMs": 40531596,
+     "note": null
+    },
+    {
+     "latitude": 60,
+     "R_lo": 107.784477,
+     "R_hi": 1610.379539,
+     "longestBracketMs": 17705142,
+     "note": null
+    },
+    {
+     "latitude": 66,
+     "R_lo": 28.638597,
+     "R_hi": 16993.515669,
+     "longestBracketMs": 1677816,
+     "note": null
+    },
+    {
+     "latitude": 66.6,
+     "R_lo": null,
+     "R_hi": null,
+     "longestBracketMs": null,
+     "note": "no real value: |phi| is beyond 90 - 23.5 = 66.5 degrees"
+    }
+   ],
+   "largestLatitudeWithPositiveLowerBound": 66.498271498
+  }
+ }
+}
