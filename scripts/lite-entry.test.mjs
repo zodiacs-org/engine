@@ -86,7 +86,7 @@ describe("the lite entry's checks (L1 to L3)", () => {
       const broken = liteBuild((code) => {
         code[file] += 'const later = () => import("./chunk-A.js");\n';
       });
-      expect(() => checkLiteEntry(broken), file).toThrow(new RegExp(`dynamic import in ${file.replace(/[./]/gu, "\\$&")}`));
+      expect(() => checkLiteEntry(broken), file).toThrow(new RegExp(`dynamic import in ${file.replace(/[\\^$.*+?()[\]{}|/]/gu, "\\$&")}`));
     }
   });
 
@@ -117,7 +117,7 @@ describe("the lite entry's checks (L1 to L3)", () => {
         const broken = liteBuild((code) => {
           code[file] += `// ${print}\n`;
         });
-        expect(() => checkLiteEntry(broken), `${file} ${print}`).toThrow(new RegExp(`${file.replace(/[./]/gu, "\\$&")} holds`));
+        expect(() => checkLiteEntry(broken), `${file} ${print}`).toThrow(new RegExp(`${file.replace(/[\\^$.*+?()[\]{}|/]/gu, "\\$&")} holds`));
       }
     }
   });
