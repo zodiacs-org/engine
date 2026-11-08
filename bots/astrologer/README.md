@@ -2,6 +2,8 @@
 
 Planning and template files for an Astrologer bot on the Grok Bot template marketplace: a person's natal chart and their next 90 days of transits, with exact dates, every calculated fact from the zodiacs.org MCP server. Nothing here is live, and nothing here ships in the npm package (`files` in `package.json` does not include `bots/`).
 
+**Status, 8 November 2026.** The bot that goes to the marketplace first is built on the live `zodiacs.org/mcp` tools instead: zodiacs-org/site#919, `integrations/grok-bot/`. The engine tools this plan relies on (place lookup, `resolve_civil_time`, `reading_facts`, `natal_chart`, `transits_at`, `event_search`) are not hosted anywhere, so a bot built from these files cannot calculate anything yet. Since this plan was written, the live server has gained a place lookup, a natal chart with whole sign houses and dated personal transits, which cover its blockers B3 and B7, most of B2 and B4, and the links in B8 (`PLAN.md`). This plan stays the path for what the live tools do not have: Placidus houses, Chiron, station and eclipse search, the facts sheet with its checks, and the blind rating. The live template keeps no profile and no check-in routine, because it stores no birth details.
+
 | File | What it is |
 | --- | --- |
 | `TRIAGE.md`, `triage.csv` | The 192 failing and 41 unsupported conformance cases (suite 0.2.0, PR #76), sorted into real error, tolerance and scope, and which block launch |
