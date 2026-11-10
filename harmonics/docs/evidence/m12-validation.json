@@ -1,0 +1,177 @@
+{
+  "node": "22.22.2",
+  "isolation": {
+    "base": "7307665bdbc432269fdac006104f661be16000bc",
+    "changesConfinedToProject": true,
+    "whitespace": "passed",
+    "protectedFilesUnchangedDuringAudit": true,
+    "distPresent": false
+  },
+  "sourceIdentity": {
+    "method": "SHA-256 of JSON-encoded sorted [path, file SHA-256] pairs",
+    "engineTrackedFilesSha256": "0c5be59bdbb8246bf51486532bd20b72470462aa92915ffd043efa939bbc38f7",
+    "projectSourcesTestsToolingFixturesSha256": "fa154ba70c1b70f2af31e11299316ae8d73112eebc6823d045e74134fce9dc5a"
+  },
+  "typecheck": "passed",
+  "vitest": {
+    "status": "passed",
+    "tests": 458,
+    "files": [
+      "test/cli-analysis.test.ts",
+      "test/cli-input.test.ts",
+      "test/cli-pure.test.ts",
+      "test/cli.test.ts",
+      "test/dial.test.ts",
+      "test/engine.test.ts",
+      "test/harmonic-aspects.test.ts",
+      "test/harmonic-chart.test.ts",
+      "test/harmonic-patterns.test.ts",
+      "test/harmonic-spectrum.test.ts",
+      "test/midpoint-trees.test.ts",
+      "test/planetary-pictures.test.ts",
+      "test/pure-entry.test.ts"
+    ]
+  },
+  "determinism": [
+    {
+      "command": "chart",
+      "fixture": "fixtures/chart-points.json",
+      "options": [
+        "--harmonic",
+        "3"
+      ],
+      "repeatedFileAndStdin": "identical",
+      "stdoutSha256": "3386f911fa0daf3991832c71e056e5f6a6d6785109e32786d42dc77d5c172d0c"
+    },
+    {
+      "command": "chart",
+      "fixture": "fixtures/chart-birth.json",
+      "options": [
+        "--harmonic",
+        "3",
+        "--include-angles",
+        "--include-chart-points"
+      ],
+      "repeatedFileAndStdin": "identical",
+      "stdoutSha256": "0d7dab1498a3b8b7200ee47f9632cba5de42750f6660a039b2cb4af87a531223"
+    },
+    {
+      "command": "spectrum",
+      "fixture": "fixtures/chart-points.json",
+      "options": [
+        "--harmonics",
+        "3,1,2"
+      ],
+      "repeatedFileAndStdin": "identical",
+      "stdoutSha256": "c6742947e55c46b94d74b07fed9bb1eeff429e49a2c7774f7cbcca39ebe6ccad"
+    },
+    {
+      "command": "spectrum",
+      "fixture": "fixtures/chart-birth.json",
+      "options": [
+        "--harmonics",
+        "3,1,2",
+        "--include-angles",
+        "--include-chart-points",
+        "--bodies",
+        "[\"Sun\",\"Moon\",\"Mercury\"]"
+      ],
+      "repeatedFileAndStdin": "identical",
+      "stdoutSha256": "85d1c1633776d74e2b7d55bb4183b4a6ceb9dc27dc7e46e760601e2c810e4dac"
+    },
+    {
+      "command": "dial",
+      "fixture": "fixtures/dial-points.json",
+      "options": [
+        "--circle",
+        "90",
+        "--contact-orb",
+        "0"
+      ],
+      "repeatedFileAndStdin": "identical",
+      "stdoutSha256": "59eb7f7c098d957e4f92ccea96993694e9eb06fbc09ff44f9967603e9d957953"
+    },
+    {
+      "command": "dial",
+      "fixture": "fixtures/chart-birth.json",
+      "options": [
+        "--circle",
+        "90",
+        "--include-angles",
+        "--include-chart-points",
+        "--bodies",
+        "[\"Sun\",\"Moon\",\"Mercury\"]"
+      ],
+      "repeatedFileAndStdin": "identical",
+      "stdoutSha256": "5309ccb6d4186065eaa76c62bb2122b387b09fd2c57042109f091762b259ad4e"
+    },
+    {
+      "command": "dial",
+      "fixture": "fixtures/dial-points.json",
+      "options": [
+        "--circle",
+        "45",
+        "--contact-orb",
+        "0"
+      ],
+      "repeatedFileAndStdin": "identical",
+      "stdoutSha256": "c121c2c6c1a8b9376ff6cb265ba901b94c29e0ef3e1cd87d89e72e31eab8144d"
+    },
+    {
+      "command": "dial",
+      "fixture": "fixtures/chart-birth.json",
+      "options": [
+        "--circle",
+        "45",
+        "--include-angles",
+        "--include-chart-points",
+        "--bodies",
+        "[\"Sun\",\"Moon\",\"Mercury\"]"
+      ],
+      "repeatedFileAndStdin": "identical",
+      "stdoutSha256": "6a4099e6319af9aeb29725d097389c9d10a2d500714943d94f29f4399f436b63"
+    },
+    {
+      "command": "dial",
+      "fixture": "fixtures/dial-points.json",
+      "options": [
+        "--circle",
+        "22.5",
+        "--contact-orb",
+        "0"
+      ],
+      "repeatedFileAndStdin": "identical",
+      "stdoutSha256": "463bb07c8d6322b2186fca20f0a2f8c299b8f0098e0816231f8192b432f649be"
+    },
+    {
+      "command": "dial",
+      "fixture": "fixtures/chart-birth.json",
+      "options": [
+        "--circle",
+        "22.5",
+        "--include-angles",
+        "--include-chart-points",
+        "--bodies",
+        "[\"Sun\",\"Moon\",\"Mercury\"]"
+      ],
+      "repeatedFileAndStdin": "identical",
+      "stdoutSha256": "37162b10982e71804b96e8e7e144a914311193b566e882f9fc00e52f69a16ed1"
+    }
+  ],
+  "packageExclusion": {
+    "status": "passed",
+    "method": "npm pack --dry-run --json --ignore-scripts",
+    "scope": "Current source-checkout manifest; no archive created and no dist build performed."
+  },
+  "packageContents": {
+    "status": "unavailable",
+    "reason": "Missing dist/calc.d.ts; engine build prohibited by project scope."
+  },
+  "projectFiles": {
+    "regularFiles": "passed",
+    "fileSizeLimitBytes": 2000000,
+    "fileSizes": "passed",
+    "documentationDashes": "passed",
+    "generatedFilesIgnored": "passed"
+  }
+}
