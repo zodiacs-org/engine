@@ -1,0 +1,54 @@
+{
+  "schema": "edge-http-runtime/1",
+  "passed": true,
+  "node": "v22.22.2",
+  "runtime": {
+    "name": "deno",
+    "version": "2.5.4",
+    "v8": "14.0.365.5-rusty"
+  },
+  "versionOutput": [
+    "deno 2.5.4 (stable, release, x86_64-unknown-linux-gnu)",
+    "v8 14.0.365.5-rusty",
+    "typescript 5.9.2"
+  ],
+  "engineVersion": "1.0.0",
+  "sourceDigest": "653d73852d61386461b1c27cd2c0c76724d4b1baf48048278c935c844a0842e9",
+  "output": {
+    "path": "deno.mjs",
+    "bytes": 133707,
+    "sha256": "a6e6b80c480e4595668045e4eaef9d662fcc9751e7b5aa6e6001681546c0ae06"
+  },
+  "importWithoutListener": true,
+  "checkedCases": [
+    "whole",
+    "southern-placidus",
+    "unknown-time",
+    "polar-fallback",
+    "date-only",
+    "explicit-offset-ut1",
+    "tt",
+    "json-charset",
+    "chunked-valid",
+    "body-at-limit",
+    "unknown-route",
+    "wrong-method",
+    "head",
+    "query",
+    "media-type",
+    "encoding",
+    "malformed-json",
+    "malformed-utf8",
+    "missing-body",
+    "unknown-field",
+    "missing-coordinate",
+    "latitude-range",
+    "unsupported-house",
+    "invalid-date",
+    "outside-ephemeris",
+    "body-over-limit",
+    "chunked-over-limit",
+    "after-errors"
+  ],
+  "scope": "Native HTTP contract and JSON structure; no exact cross-runtime comparison."
+}

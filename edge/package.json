@@ -1,0 +1,34 @@
+{
+  "name": "@zodiacs/engine-edge-lab",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "build": "node scripts/build-bundles.mjs",
+    "build:report": "node scripts/build-report.mjs",
+    "build:reference": "node scripts/build-reference.mjs",
+    "smoke:node": "node scripts/smoke-node.mjs",
+    "smoke:runtimes": "node scripts/smoke-runtimes.mjs",
+    "smoke:web": "node scripts/smoke-web.mjs",
+    "benchmark": "node scripts/benchmark.mjs",
+    "benchmark:baseline": "node scripts/benchmark-baseline.mjs",
+    "benchmark:gate": "node scripts/benchmark-gate.mjs",
+    "profile:kernels": "node scripts/profile-kernels.mjs",
+    "build:wasm": "node scripts/build-wasm.mjs",
+    "wasm:evaluate": "node scripts/evaluate-wasm.mjs",
+    "test": "node --test tests/*.check.mjs",
+    "typecheck": "tsc --project tsconfig.json",
+    "check:isolation": "node scripts/check-isolation.mjs"
+  },
+  "devDependencies": {
+    "assemblyscript": "0.28.9",
+    "astronomy-engine": "2.1.19",
+    "esbuild": "0.27.7",
+    "miniflare": "4.20251011.0",
+    "playwright-core": "1.56.1",
+    "typescript": "5.9.3"
+  }
+}

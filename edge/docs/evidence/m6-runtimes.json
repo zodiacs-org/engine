@@ -1,0 +1,146 @@
+{
+  "schema": "edge-runtime-smoke/1",
+  "passed": false,
+  "requiredRuntimes": [
+    "node",
+    "deno",
+    "bun"
+  ],
+  "unselectedRuntimes": [],
+  "protocol": "edge-exact/1",
+  "engineVersion": "1.0.0",
+  "ephemeris": {
+    "name": "astronomy-engine",
+    "version": "2.1.19"
+  },
+  "toolchain": {
+    "node": "v22.22.2",
+    "esbuild": "0.27.7"
+  },
+  "runnerSources": [
+    {
+      "path": "scripts/smoke-runtimes.mjs",
+      "bytes": 8917,
+      "sha256": "851fee9fa1204dc560492a357d02b41c00b29fe61f8577a633f7ff1a79edd666"
+    },
+    {
+      "path": "scripts/runtime-process.mjs",
+      "bytes": 3969,
+      "sha256": "2bbac21e7fb2102d88c37ee48fc726de9ea20c969fd8ed1a0d9a07398294e61d"
+    },
+    {
+      "path": "scripts/build-reference.mjs",
+      "bytes": 2194,
+      "sha256": "6fe4710e9aeb10d37b8a4aa4811f503098503ebf2a78f50e370c63f92c353ee4"
+    },
+    {
+      "path": "src/exact.ts",
+      "bytes": 10332,
+      "sha256": "d3c8db867a5fc55051ca9d70177f90efe5408ef93ea7060b2d601b7a598cc974"
+    },
+    {
+      "path": "src/workloads.ts",
+      "bytes": 2724,
+      "sha256": "cd6ad2a37b7eee43eede2a6b5183ececd810c8216c69fdd5e3e19c5fc6bcb5c8"
+    }
+  ],
+  "reports": [
+    {
+      "name": "node",
+      "build": {
+        "target": "node-reference",
+        "output": {
+          "path": "workloads.mjs",
+          "bytes": 142897,
+          "sha256": "5b1b7312bf0001133af06c6b4d5d699cad30d2b57f7af64f8ff175885a490c9f"
+        }
+      },
+      "runtime": {
+        "name": "node",
+        "version": "22.22.2",
+        "v8": "12.4.254.21-node.39",
+        "platform": "linux",
+        "arch": "x64"
+      },
+      "result": {
+        "path": "exact-report",
+        "bytes": 62456,
+        "sha256": "d88ccb3e93309cdf3e3f761d46c3660a280f60c56966bdc45d4ba17671643370"
+      },
+      "stderr": "",
+      "stderrTruncated": false,
+      "repeatable": true,
+      "status": "passed",
+      "difference": null
+    },
+    {
+      "name": "deno",
+      "build": {
+        "target": "deno",
+        "sourceDigest": "8aaeffd745d5010f2ca5927c2e639a0dd54b43e96bfdbccd4bf1c5a7391d2bbc",
+        "output": {
+          "path": "workloads.mjs",
+          "bytes": 143024,
+          "sha256": "4ff4022924da3bde9b4d81d89cd7580c79679817ecc64b15fc9e52c37a02d6e9"
+        }
+      },
+      "runtime": {
+        "name": "deno",
+        "version": "2.5.4",
+        "v8": "14.0.365.5-rusty",
+        "platform": "linux",
+        "arch": "x86_64"
+      },
+      "result": {
+        "path": "exact-report",
+        "bytes": 62456,
+        "sha256": "8f67abc5a08ddbe26b6e19f051acede94029791bb0093997ef7ced62ffec7eaa"
+      },
+      "stderr": "",
+      "stderrTruncated": false,
+      "repeatable": true,
+      "status": "mismatch",
+      "difference": {
+        "path": "$[\"charts\"][0][\"result\"][\"bodies\"][2][\"lat\"]",
+        "reason": "value",
+        "expected": "binary64:bf9a0e65afdb2339",
+        "actual": "binary64:bf9a0e65afdb20e9"
+      }
+    },
+    {
+      "name": "bun",
+      "build": {
+        "target": "bun",
+        "sourceDigest": "27363302a6f33c1fa4446e40719cbd1d594be21d39b7d85af94971bd39cc298a",
+        "output": {
+          "path": "workloads.mjs",
+          "bytes": 143024,
+          "sha256": "4ff4022924da3bde9b4d81d89cd7580c79679817ecc64b15fc9e52c37a02d6e9"
+        }
+      },
+      "runtime": {
+        "name": "bun",
+        "version": "1.4.2",
+        "revision": "744846f844374847c902b5e7fd59b4342a51ef99",
+        "platform": "linux",
+        "arch": "x64"
+      },
+      "result": {
+        "path": "exact-report",
+        "bytes": 62456,
+        "sha256": "dbacd6dcd143edce5463a84b92f1557fb2181d1b07ddb8c1b8b8da27a953674a"
+      },
+      "stderr": "",
+      "stderrTruncated": false,
+      "repeatable": true,
+      "status": "mismatch",
+      "difference": {
+        "path": "$[\"charts\"][0][\"result\"][\"bodies\"][1][\"speed\"]",
+        "reason": "value",
+        "expected": "binary64:402afaac235bd1c0",
+        "actual": "binary64:402afaac235bf100"
+      }
+    }
+  ],
+  "scope": "Full synthetic chart, houses and transit-scan results compared exactly to Node; runtime compatibility only."
+}
