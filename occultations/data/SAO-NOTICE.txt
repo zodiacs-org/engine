@@ -1,0 +1,37 @@
+Stellar source records: Smithsonian Astrophysical Observatory Star Catalog
+(SAO Staff, 1966), NASA Astronomical Data Center J2000 edition corrected
+through May 1991, supplied by NASA HEASARC from ADC/CDS catalogue I/131A.
+
+Catalogue documentation: Nancy G. Roman and Wayne H. Warren Jr.,
+Documentation for the Machine-Readable Version, NSSDC/WDC-A-R&S 89-08,
+NASA Goddard Space Flight Center. J2000 positions and proper motions were
+computed by Clayton A. Smith at the US Naval Observatory.
+
+NASA NTRS classifies the original catalogue and its documentation as works
+of the US Government with public use permitted. The original compilation's
+source codes are retained. This statement does not apply to other catalogues
+hosted by NASA or CDS. SIMBAD-derived magnitude corrections for SAO 84129
+and SAO 92548 and imported cross-identification fields are excluded.
+
+Retain sao-documentation.txt with machine-readable distributions, as its
+Introduction requests. It is an unchanged copy of the NASA CD-ROM text from:
+https://cdsarc.cds.unistra.fr/ftp/I/131A/doc.txt
+
+Catalogue description:
+https://heasarc.gsfc.nasa.gov/W3Browse/star-catalog/sao.html
+Original catalogue rights records:
+https://ntrs.nasa.gov/citations/19660017606
+https://ntrs.nasa.gov/citations/19660017607
+https://ntrs.nasa.gov/citations/19660017608
+https://ntrs.nasa.gov/citations/19660017609
+Documentation rights record:
+https://ntrs.nasa.gov/citations/19910021722
+
+Common-name labels are curated factual identifiers checked in SIMBAD's
+Identifiers tables, CDS, Strasbourg. Per-name citations are retained in
+sao-aliases.json and the catalogue's aliasSourceUrl fields. No SIMBAD
+astrometry or photometry is included.
+
+The software and authored documentation are MIT. The bundled engine also
+carries attributed CC BY data; retain its LICENSE, LICENSING.md and NOTICE.
+Catalogue transcription and naming do not establish contact-time accuracy.

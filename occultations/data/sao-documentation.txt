@@ -1,0 +1,1479 @@
+                                                         NSSDC/WDC-A-R&S 89-08
+
+
+
+
+
+           SMITHSONIAN ASTROPHYSICAL OBSERVATORY STAR CATALOG (SAO)
+
+                DOCUMENTATION FOR THE MACHINE-READABLE VERSION
+
+
+                                (VERSION 1990)
+
+
+
+
+
+
+                    Nancy G. Roman and Wayne H. Warren Jr.
+
+
+
+
+
+
+                                   June 1989
+                                 November 1990
+
+
+
+
+
+
+                                   ABSTRACT
+
+
+   An updated, corrected and extended machine-readable version of the catalog
+is described. Published and unpublished errors discovered in the previous
+version have been corrected, and multiple-star and supplemental BD
+identifications have been added to stars where more than one SAO entry has the
+same Durchmusterung number. Henry Draper Extension (HDE) numbers have been
+added for stars found in both volumes of the extension. Data for duplicate SAO
+entries (those referring to the same star) have been flagged. J2000 positions
+in usual units and in radians have been added.
+
+
+
+
+
+
+                  National Space Science Data Center (NSSDC)/
+          World Data Center A for Rockets and Satellites (WDC-A-R&S)
+                 National Aeronautics and Space Administration
+                          Goddard Space Flight Center
+                          Greenbelt, Maryland  20771
+
+
+                               TABLE OF CONTENTS
+
+
+
+Section 1 - Introduction and Procedure . . . . . . . . . . . .      1-1
+Section 2 - File Contents  . . . . . . . . . . . . . . . . . .      2-1
+Section 3 - File Characteristics . . . . . . . . . . . . . . .      3-1
+Section 4 - Remarks, Acknowledgments and References  . . . . .      4-1
+Section A - Addendum for 1990 Version  . . . . . . . . . . . .       A
+
+
+                         LIST OF TABLES
+
+Table
+
+  1  File Contents . . . . . . . . . . . . . . . . . . . . . .      2- 1
+  2  Explanation of HD Codes . . . . . . . . . . . . . . . . .      2- 5
+  3  Visual Magnitude Sources  . . . . . . . . . . . . . . . .      2- 6
+  4  Star-Number Sources and Footnotes . . . . . . . . . . . .      2- 7
+  5  Photographic Magnitude Sources  . . . . . . . . . . . . .      2- 7
+  6  Proper-Motion Sources . . . . . . . . . . . . . . . . . .      2- 8
+  7  Spectral-Type Sources . . . . . . . . . . . . . . . . . .      2- 8
+  8  Miscellaneous Coded Remarks for Duplicity and Variability      2- 9
+  9  References for the Source Catalogs  . . . . . . . . . . .      2-10
+ 10  File Characteristics  . . . . . . . . . . . . . . . . . .      3- 1
+ 11  References for Changes to the SAO Catalog, Version 1984 .      4- 1
+ 12  Explanatory Notes to Individual Changes . . . . . . . . .      4- 2
+ 13  Changes to the 1984 Version . . . . . . . . . . . . . . .      4- 3
+ 14  Sources for Changes Since 1984 Version  . . . . . . . . .      4- 6
+ 15  Changes to the 1990 Version   . . . . . . . . . . . . . .      4- 7
+ 16  Sources for 1990 Changes  . . . . . . . . . . . . . . . .      4- 8
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ii
+                    SECTION 1 - INTRODUCTION AND PROCEDURE
+
+INTRODUCTION
+
+A character-coded machine-readable version of the "Smithsonian Astrophysical
+Observatory Star Catalog" (SAO, SAO Staff 1966) was prepared by T. A. Nagy
+(1979) from a packed binary tape obtained from the Smithsonian Astrophysical
+Observatory.  In addition to certain format modifications, equatorial
+coordinates in radians and cross identifications from the Table of
+Correspondences SAO/HD/DM/GC (Morin 1973) were added to the converted version;
+however, the known errata lists were not incorporated at that time.  This
+version of the catalog served as a starting point for the version described
+here.  As a prelude to creation of the 1984 version of the SAO, a new version
+of the "SAO-HD-GC-DM Cross Index" was prepared (Roman, Warren and Schofield
+1983), since most of the changes and extensions for the SAO involve data
+presently in the Cross Index.  The original SAO did not use lower case letters,
+making some spectral types seem strange.  All capital letters that really
+should have been lower case in the spectral types have been changed.  These
+changes, which are numerous, are not listed in Table 1.
+
+The 1984 version of the SAO contains the corrected and extended cross
+identifications, all errata published up to January 1984 and known to us,
+numerous errors forwarded to us by colleagues, and errors discovered at the
+Astronomical Data Center during the course of this work.  Recently, Clayton A.
+Smith of the U.S.  Naval Observatory, volunteered to provide J2000.0 positions
+and proper motions for the SAO stars.  These data have been added to the end of
+each record, the positions in both sexigessimal and radian form.  Additional
+errors of which we are aware (as of May 1991) have been corrected.
+
+This document describes the current version of the machine-readable SAO
+Catalog.  It outlines the procedures used to correct and extend the previous
+versions and is intended to enable users to read and process the data without
+problems and guesswork.  The following section describes the analysis and
+methods used to cross identify the stars and to add component identifications
+for stars where more than one SAO record has the same Durchmusterung (DM)
+identification.  Section 2 provides detailed descriptions of the catalog format
+and codes used in the data records, while Section 3 contains information on the
+characteristics of the magnetic tape file.  Miscellaneous remarks and sources
+for the corrections incorporated into each version and in this version are
+given in Section 4, which also contains bibliographical references.  A sample
+listing of data records exactly as they are recorded in the machine-readable
+form comprises Section 5. A copy of this document should accompany any
+machine-readable version of the SAO Catalog, originating from any one of the
+International Network of Astronomical Data Centers.
+
+PROCEDURE
+
+The assignment of components to SAO stars for which more than one entry has the
+same DM number was done when preparing the 1983 SAO-HD-GC-DM Cross Index.
+That procedure is described in Roman et al. (1983). A somewhat less detailed
+description is given here for completeness.
+
+Components were assigned according to the Index Catalogue of Visual Double Stars
+
+                                     1 - 1
+
+(IDS, Jeffers et al. 1963; Worley 1980); for stars not in the IDS, components
+were labeled according to visual magnitude.  Supplemental (footnoted) BD stars
+(Warren and Kress 1980) were identified and entered with lower case letters.
+Corrections and additions to cross-identification data were made as necessary.
+Some duplicate DM numbers actually referred to the same star for which SAO data
+had been obtained from different source catalogs.  In these cases, one record
+has been marked "D" in byte 7, normally the one whose position was judged to be
+of lower accuracy.  However, all data have been retained so that a different
+choice may be made by the user.  Many stars occur in two DM catalogs (CD, CPD)
+in the southern hemisphere.  The SAO gives numbers from different catalogs for
+the components of some double stars; hence, although there are no duplicate DM
+numbers, component confusion can occur.  Although a search for such systems was
+not exhaustive, the catalog was searched for adjacent entries with declinations
+within 3 arcmin of each other.  Most of these entries proved to be double stars
+and were appended with letter designations as if their DM numbers had been the
+same.  These DM numbers were not changed.
+
+An important subset of rather bright stars in the published SAO Catalog has no
+DM numbers given. (Most of the stars in this subset were identified as FK3
+double stars which were omitted from the FK4.) Many of these had been identified
+by W. L. Stein, who supplied probable DM numbers. The positions for these stars
+were compared manually with their positions in the various DM catalogs and many
+additional identifications were made.
+
+The Astronomical Data Center (ADC) has recently completed the preparation of
+machine-readable versions of the three DM catalogs: the BD, the CD, and the CPD.
+Using these versions, Mr. Barry Rappaport compared the positions of the stars in
+the Smithsonian Astrophysical Observatory Star Catalog (SAO) with the positions
+of the DM stars whose number had been assigned to each entry. A very lengthy
+list of possible assignment errors resulted. Each of these has been checked and
+the assignment corrected in those cases in which correction appeared desirable.
+In many cases, the assignment in the printed SAO is probably incorrect, but the
+evidence was not strong enough to warrant a change. As the Henry Draper
+Catalogue numbers (HD) had been derived from the DM numbers, those were also
+corrected as necessary.
+
+Although the "Henry Draper Extension" (Cannon 1925-1936) stars from "Harvard
+Annals", Volume 100, having DM numbers listed in the original catalog, were
+included in the SAO, those listed with AG numbers only (Astronomische
+Gesellschaft, zones +50 to +54 degrees, Harvard, Rogers 1892; zones +55 to +59
+degrees, Helsingfors-Gotha, Kruger 1890) had not been cross identified and
+inserted into the machine version. The "Yale Zone Catalogues" (YZ, Barney et al.
+1959a, 1959b), which identify stars by their AG numbers, but also give
+corresponding DM numbers, were used to cross identify the AG stars. This was
+accomplished by using the magnetic tape versions of the YZ and HD catalogs and
+matching the stars by machine. A cross index of Henry Draper Extension stars
+from "Harvard Annals", Volume 112 (Cannon and Walton Mayall 1949) and DM numbers
+(Bonnet 1978) was used to insert HDE numbers from the final HD volume.
+
+Since the GC (Boss 1937) numbers in the "SAO-HD-GC-DM Cross Index" had been
+assigned by comparing with HD numbers in the GC, stars without HD numbers in the
+
+                                     1 - 2
+
+Cross Index were missing GC identifications. The magnetic tape file of the GC
+was therefore searched by DM number for all stars having no GC numbers in the
+Cross Index. Additional GC numbers were found manually (by position) for the few
+remaining stars without DM numbers. Fourteen GC stars were found not to be in
+the SAO Catalog. HD numbers in the GC were then compared with their counterparts
+in the Cross Index for stars in common, leading to the detection and correction
+of a number of additional errors.
+
+The catalog contains a numerical code appended to each HD number. The code
+originally followed the convention of the "Strasbourg Catalog of Stellar
+Identifications" (CSI, Ochsenbein et al. 1981) which assigned the numbers
+1, 2, ... for individual components of multiple systems and the digit 9 if two
+contiguous HD stars are included in the entry (the lower HD number is usually
+given with code 9). Since the component codes were assigned to CSI entries
+without regard to letter designations, and because letter designations have now
+been added, the HD code was changed to a consistent indication of major
+contamination of the spectral type of the component to which the entry applies
+by the spectrum of another star (see Table 2). A visual magnitude difference of
+0.3 mag was used as the limit for which contamination was indicated. Although
+photographic magnitudes would have been more appropriate, the visual magnitudes
+in the SAO appeared to be more consistent.
+
+
+Many HD numbers were added to the "SAO-HD-GC-DM Cross Index" and subsequently to
+the SAO, and quite a few incorrect HD numbers were changed. The SAO already
+contained spectral types for many of these stars; those types were compared with
+the types in the HD, and discrepancies were corrected only where it seemed
+desirable. For stars with new HD numbers and no spectral types in the SAO, the
+latter were inserted using the machine version of the HD for the main catalog
+and the first extension. Spectral types were read from the charts of the second
+extension ("Harvard Annals" 112) and approximately 5000 inserted manually; types
+were also inserted for other HD stars for which they were missing in the SAO.
+For components of multiple stars, spectral types were added or removed according
+to the likelihood that the star contributed to the HD type.
+
+Following completion of the Cross Index, all appropriate cross-identification
+data were replaced in the 1984 SAO. Additional corrections involving the SAO
+only were then made. In certain cases, SAO positions had been found in error,
+but correct positions in the SAO system could not have been derived without a
+re-reduction of all the original data. Since this would clearly have been
+impracticable, positions were taken from the "Cape Photographic Catalogues" for
+1950.0 (CPC). (Errata for the CPCs have been published in the zone catalog for
+-80 to -90 degrees (Stoy 1968)). The CPC proper motions were applied to the
+positions at epoch to bring them to epoch 1950.0.
+
+In the 1984 version, a total of 12,373 SAO records was corrected or
+supplemented with 17,915 individual data changes.  All changes are listed in
+the accompanying file of corrections (see Section 4).  Changes in the 1989
+version, from the 1984 version, are given in Table 13, and those additional
+data changed in the 1990 version are given in Table 15.
+
+As noted in the introduction, Clay Smith provided positions and proper motions
+at equinox and epoch J2000.0 and on the system of the FK5.
+
+                                     1 - 3
+ 
+                           SECTION 2 - FILE CONTENTS
+
+
+A byte-by-byte description of the contents of the machine-readable SAO Catalog
+is given in Table 1. The suggested format specifications apply to FORTRAN
+formatted read statements and can be modified depending upon individual
+programming and processing requirements. All data fields with primary A-format
+specifications are blank for missing data; hence the alternate numerical
+specifications used for machine searches will produce zero values. Data are
+always present in fields for which primary numerical formats are given, except
+where specifically noted.
+
+
+Table 1.  File Contents.  Smithsonian Astrophysical Observatory Star
+          Catalog,  version 1989.
+
+
+                Suggested
+Byte(s)  Units   Format           Description
+
+
+  1-  6   ---     I6              SAO number.
+
+      7   ---     A1              "D" if this SAO entry refers to a duplicate
+                                   star from the catalog.
+
+  8-  9  hours    I2               Right ascension B1950.0 equinox and epoch.
+
+ 10- 11   min     I2               RA
+
+ 12- 17   sec     F6.3             RA
+
+ 18- 24  sec/yr   F7.4             Annual proper motion in RA.
+
+ 25- 26   0.001   I2(F2.3)         Standard deviation of pm (RA).
+         arcsec/yr
+
+     27   ---     A1               A "+" or "-" to indicate that the minutes of time
+                                   associated with the seconds portion of RA (bytes
+                                   28-33) must be increased or decreased by 1,
+                                   respectively; otherwise blank (if RA2 is the same
+                                   minute as RA sec in bytes 12-17).
+
+ 28- 33   sec     F6.3             Seconds portion (RA2) of RA at original epoch,
+                                   precessed to 1950.0 (i.e. 1950 position
+                                   modified by proper motion).
+
+ 34- 35  0.01     I2(F2.2)         Standard deviation of RA2.
+        arcsec/yr
+
+ 36- 41   years   F6.1             Epoch of RA2.
+
+
+
+                                     2 - 1
+
+Table 1.  (continued)
+
+
+                Suggested
+Byte(s)  Units   Format            Description
+
+
+     42   ---     A1               Sign of declination.
+
+ 43- 44   deg     I2               Declination B1950.0 equinox and epoch.
+
+ 45- 46  arcmin   I2               Dec
+
+ 47- 51  arcsec   F5.2             Dec
+
+ 52- 57  arcsec/  F6.3             Annual proper motion mu(delta).
+          yr
+
+ 58- 59  0.001    I2(F2.3)         Standard deviation of mu(delta).
+        arcsec/yr
+
+     60   ---     A1               A "+" or "-" to indicate that the arcminutes
+                                   associated with the arcseconds portion of Dec
+                                   (bytes 61-65) must be increased or decreased by 1,
+                                   respectively; otherwise blank (if Dec2 is in the
+                                   same minute as Dec in bytes 47-51).
+
+ 61- 65  arcsec   F5.2             Seconds portion (Dec2) of Dec at original
+                                   epoch, precessed to 1950.0 (i.e. 1950
+                                   position modified by the proper motion).
+
+ 66- 67   0.01    I2(F2.2)         Standard deviation of Dec2.
+         arcsec
+
+ 68- 73   years   F6.1             Epoch of Dec2.
+
+ 74- 76   0.01    I3(F3.2)         Standard deviation of position at epoch
+         arcsec                    1950.0.
+
+ 77- 80    mag    F4.1             Photographic magnitude mpg (99.9 if no value
+                                   present).  When both magnitude fields are
+                                   99.9, the miscellaneous code (byte 95) should
+                                   be checked for possible variability, in which
+                                   case magnitudes may not be reported.
+
+ 81- 84    mag    F4.1             Visual magnitude mv (99.9 if no value
+                                   present).
+
+ 85- 87    ---    A3               Spectral type ("+++" for composite spectra).
+
+ 88- 89    ---    I2               Coded source of visual magnitude (see
+                                   Table 3).
+
+
+                                      2 - 2
+
+Table 1.  (continued)
+
+
+                Suggested
+Byte(s)  Units   Format            Description
+
+ 90- 91   ---     I2               Coded source of star number and footnotes
+                                   (see Table 4).
+
+     92   ---     I1               Coded source of photographic magnitude
+                                   (see Table 5).
+
+     93   ---     I1               Coded source of proper motions (see Table 6).
+
+     94   ---     I1               Coded source of spectral type (see Table 7).
+
+     95   ---     I1               Coded miscellaneous remarks for duplicity and
+                                   variability (see Table 8).
+
+     96   ---     I1               Accuracy of visual magnitude:  0 indicates
+                                   that the magnitude in the source catalog is
+                                   reported to 0.00 mag; 1 to 0.0 mag.
+
+     97   ---     I1               Accuracy of photographic magnitude same coding
+                                   as for byte 96.
+
+ 98- 99   ---     I2               Code for source catalog (see Table 9).
+
+100-104   ---     I5               Number in source catalog.
+
+105-106   ---     A2               Durchmusterung (DM) identification
+                                   BD  Bonner Durchmusterung
+                                   CD  Cordoba Durchmusterung
+                                   CP  Cape Photographic Durchmusterung
+                                   All DM fields are blank if no DM
+                                   identification is present.
+
+    107   ---     A1               Sign of DM zone.
+
+108-109   ---     I2 (A2)          DM zone.
+
+110-114   ---     I5 (A5)          DM number.
+
+115-116   ---     A2               Component identification if there are two or
+                                   more SAO stars having the same DM number. For
+                                   multiple systems included in the "Index
+                                   Catalogue of Visual Double Stars" (IDS, see
+                                   Worley 1980) the IDS components are given;
+                                   for non-IDS stars, components were assigned
+                                   on the basis of magnitude. If two components
+                                   of southern double stars are listed, DM
+                                   numbers from different catalogs are often
+                                   quoted for the components. In these cases,
+                                   component identifications are usually given
+                                   without changing the DM numbers.
+
+                                      2 - 3
+Table 1.  (concluded)
+
+
+                Suggested
+Byte(s)  Units   Format            Description
+
+    117   ---     A1               Lower case letter identification for BD
+                                   supplemental stars (Warren and Kress 1980).
+
+118-123   ---     A6 (I6)          Henry Draper (HD or HDE) Catalogue number
+
+    124   ---     A1 (I1)          HD Code (1, 2, ... for component
+                                   identifications where more than one star has
+                                   the same HD number (not necessarily
+                                   equivalent to A, B, ... or to the component
+                                   identifications in the IDS; see Table 2))
+
+125-129   ---     A5 (I5)          Number in the "General Catalogue of 33342
+                                   Stars for 1950" (GC, Boss 1937).
+
+130-139    rad    F10.8            Right ascension (B1950.0).
+
+140-150    rad    F11.8            Declination (B1950.0).
+
+151-152   hours   I2               Right ascension for J2000.0.
+
+153-154    min    I2               RA
+
+155-160    sec    F6.3             RA
+
+161-167   sec/yr  F7.4             Annual proper motion in right ascension
+                                   for J2000.0.
+
+    168    ---    A1               Sign of declination.
+
+169-170    deg    I2               Declination for J2000.0.
+
+171-172   arcmin  I2               Dec
+
+173-177   arcsec  F5.2             Dec
+
+178-183   arcsec/ F6.3             Annual proper motion in declination
+            yr                     for J2000.0.
+
+184-193    rad    F10.8            RA (J2000.0)
+
+194-204    rad    F11.8            Dec (J2000.0)
+
+
+                                     2 - 4
+
+Table 2 gives a detailed description for each HD code that can occur
+in byte 124 of a data record.
+
+Table 2.  Explanation of HD Codes.
+
+Code   Meaning
+
+
+  0    Single star or primary with a companion > 0.3 mag (visual) fainter.
+
+  1    Brighter component with a companion <= 0.3 mag fainter.
+
+  2    Fainter component with a companion <= 0.3 mag brighter.
+
+  9    The "SAO Catalog" entry refers to two consecutive HD numbers, the
+       lower of which is given.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      2 - 5
+
+
+Tables 3 through 9 give data sources and duplicity / variablility codes.
+
+Table 3.  Visual Magnitude Sources.
+
+       Photo-
+Visual visual Magnitude source
+
+
+  0           Does not appear in source catalog
+
+  1      21   Determined by source catalog
+
+  2      22   Determined by source catalog or by authority in footnote
+
+  3      23   Source cited in source catalog introduction
+
+         24   Source unspecified
+
+  5           Taken from "Bonner Durchmusterung"
+
+  8           Based on Durchmusterung magnitudes and visual estimates
+
+  9           Taken from AGK1
+
+  10          Taken from Cordoba Zones (Resultados)
+
+  12          Taken from CGA (Perrine 1911a, b) or Cordoba Zones
+
+  13          Taken from Harvard publications
+
+  14          Taken from Harvard or San Luis photometry
+
+  15          Taken from the "Henry Draper Catalogue"
+
+  16          Combined magnitude of component stars
+
+  17          Arithmetic mean of maximum and minimum magnitudes of a
+              variable star
+
+   Always check the duplicity / variability code (Table 8) when using
+magnitudes. When blank, code = 0 and field = 99.9.
+
+
+
+
+
+
+
+
+
+
+
+
+                                     2 - 6
+
+Table 4.  Star-Number Sources and Footnotes.
+
+  Footnote
+without with  Star Number
+
+
+  0      16   Source catalog only
+
+  1      17   Source catalog and BD
+
+  2      18   Source catalog and CD
+
+  3      19   Source catalog and CPD
+
+  4      20   Cordoba B (Resultados) and CD
+
+  5      21   Cordoba A (Resultados) and CD
+
+  6      22   AGK1 and BD
+
+  7           GC and BD
+
+  8      24   Cordoba B (Resultados) and CPD
+
+  9           Cordoba A (Resultados) and CPD
+
+   When blank, the code for DM is 0 or 16, footnote is 0 through 9, and field
+is all zeros. Footnotes and star numbers are those appearing in the source
+catalogs.
+
+
+Table 5.  Photographic Magnitude Sources.
+
+Code  Source
+
+  0   Does not appear in source catalog
+
+  1   Determined by source catalog
+
+
+  4  Taken from magnitudes of the CPD and diameters of the  Cape Astrographic
+     Catalogue
+
+  8  Source cited in source catalog introduction
+
+
+  9  Columbia Contributions Numbers 30 and 31 (Schilt and Hill
+     1937, 1938)
+
+When blank, code is 0 and field is all zeros.
+
+
+
+
+                                     2 - 7
+
+Table 6.  Proper-Motion Sources.
+
+Code  Source
+
+
+  1   Determined by source catalog
+
+  3   Determined by comparison of catalog and Greenwich AC
+
+  5   Determined by comparison of catalog and AGK1
+
+  6   Determined by comparison of catalog and Greenwich AC on the basis of the
+      smallest difference in positions (see page xiii of source reference)
+
+  8   Determined by comparison of catalog and AGK1 on the basis of the smallest
+      difference in positions (see page xiii of source reference)
+
+
+Table 7.  Spectral-Type Sources.
+
+
+Code  Source
+
+  0   Taken from the Henry Draper Catalogue or no spectrum in source
+      catalog
+
+  1   Taken from the HD with M stars reclassified by Miss Cannon
+
+  2   Classified by G. G. Cillie
+
+  3   Classified by Goedicke
+
+  4   Classified by D. Hoffleit
+
+  5   Classified by M. W. Mayall
+
+  6   Classified at Leander McCormick Observatory
+
+  7   Classified by Nassau and Seyfert
+
+If the spectrum is composite, "+++" is stored in the field and the code is 0.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     2 - 8
+
+Table 8.  Miscellaneous Coded Remarks for Duplicity and Variability.
+
+
+Code  Meaning
+
+  0   No additional information
+
+  1   Double star - see source catalog for source
+
+  2   Double star in Aitken's Double Star Catalogue (Aitken 1932)
+
+  3   Double star in Burnham's Double Star Catalogue (Burnham 1906)
+
+  4   Variable star in visual magnitude in source catalog
+
+  5   Variable star in photographic magnitude in source catalog
+
+  6   Variable star in both magnitudes
+
+  7   Both double and variable, in either visual or photographic magnitudes
+
+When blank, code is 0, no field is involved.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     2 - 9
+
+
+Table 9.  References for the Source Catalogs.
+
+
+         No.      Abbreviated Title
+
+
+         01       AGK2, Volume 1
+         02       AGK2, Volume 2
+         03       AGK2, Volume 5
+         04       AGK2, Volume 6
+         05       AGK2, Volume 7
+         06       AGK2, Volume 8
+
+         20       Yale Transactions 11
+         21       Yale Transactions 12   Part I
+         22       Yale Transactions 12   Part II
+         23       Yale Transactions 13   Part I
+         24       Yale Transactions 13   Part II
+         25       Yale Transactions 14
+         26       Yale Transactions 16
+         27       Yale Transactions 17
+         28       Yale Transactions 18
+         29       Yale Transactions 19
+         30       Yale Transactions 20
+         31       Yale Transactions 21
+         32       Yale Transactions 22   Part I
+         33       Yale Transactions 22   Part II
+         34       Yale Transactions 24
+         35       Yale Transactions 25
+         36       Yale Transactions 26   Part I
+         37       Yale Transactions 26   Part II
+         38       Yale Transactions 27
+
+         40       Cape Annals 17
+         41       Cape Annals 18
+         42       Cape Annals 19
+         43       Cape Annals 20
+
+         48       Cape Zone
+
+         60       Melbourne 3
+         61       Melbourne 4
+
+         70       GC
+         71       FK3
+         74       FK4
+
+
+
+
+
+
+
+                                    2 - 10
+
+                       SECTION 3 - FILE CHARACTERISTICS
+
+The information in Table 10 is sufficient for a user to describe the indigenous
+characteristics of the machine-readable Smithsonian Astrophysical Observatory
+Star Catalog, Version 1990 to a computer. Not included is information easily
+varied from installation to installation, such as block size (physical record
+length), blocking factor (number of logical records per physical record), total
+number of blocks, tape density, number of tracks, and internal coding (EBCDIC,
+ASCII, etc.). These parameters should always be transmitted if secondary copies
+of the catalog are supplied to other users or installations.
+
+
+Table 10.  File Characteristics.  "Smithsonian Astrophysical Observatory Star
+           Catalog", Version 1989.
+
+
+NUMBER OF FILES  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+
+LOGICAL RECORD LENGTH (BYTES)  . . . . . . . . . . . . . . . . . . . . 204
+
+TOTAL NUMBER OF LOGICAL RECORDS  . . . . . . . . . . . . . . . . .  258997
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     3 - 1
+
+              SECTION 4 - REMARKS, ACKNOWLEDGMENTS AND REFERENCES
+
+
+As mentioned in Section 1, the individual data corrections, additions and
+changes included in the 1984 version of the SAO Catalog number 17,915, with
+12,373 records (4.8%) having at least one change.  Since many of the changes
+involve corrections to data given in previously published catalogs, it is
+important for a user to have access to the individual changes if a discrepancy
+is found between this catalog and a previously published one.  For this reason,
+we have prepared a complete table of all changes made to the previous version
+to produce the 1984 version as well as tables of additional changes in the 1989
+and 1990 versions.  The first corrections and changes table was prepared by
+comparing the uncorrected file against the new version with a computer program
+which compared the data fields one by one and produced a formatted changes
+table.  The complete table for the 1984 version is given in the accompanying
+file of corrections.  If a data entry is blank in either version, it is blank
+for the corresponding item in the table.  The column labeled "S" gives the
+source of the change, as defined in Table 11 by its numerical code.  Table 13
+lists the changes in the 1989 version and Table 15 lists the changes in the
+1990 version.  Table 14 explains the codes for the source of the 1989 changes
+and table 16 gives the sources of those corrections in the 1990 version that
+did not result from the ADC checking of Mr. Rappaport's suggested changes.
+
+Table 11.  References for Changes to the SAO Catalog, Version 1984.
+
+Code   Reference(s)
+
+  1    Haramundanis, K. undated,  "Errata Sheet for the SAO Star Catalog";
+         1971, Note on SAO Catalog Errata (January).
+
+  2    Stein, W. L. and Rudisill, J. C., 1977, "Introduction to the
+         Dahlgren General Catalog", Naval Surface Weapons Center
+         NSWC/DL TR-3607.
+
+       Stein, W. L. 1978, in Bischoff, M., Bull. Inf. Cent. Donnees
+         Stellaires, No. 14, 2; No. 15, 103.
+
+       Stein, W. L., private communication.
+
+  3    Bischoff, M. 1978, Bull. Inf. Cent. Donnees Stellaires, No. 14,
+       2; No. 15, 103.
+
+  4    Hoffleit, D., private communication.
+
+  5    Parsons, S. B. 1977, Bull. Inf. Cent. Donnees Stellaires,
+       No. 12, 41.
+
+  6    Nagy, T. A. 1979, Documentation for the Machine-Readable
+       Version of the "Smithsonian Astrophysical Observatory Catalog(ue)"
+       (EBCDIC Version), Systems and Applied Sciences Corporation
+       R-SAW-7/79-34.
+
+                                      4-1
+
+  7    Houziaux, L. and Blondelot-Lickes, J. 1970, Centre Univ. Mons,
+         Fac. Sci., Dept. Astrophys., Communication No. 13.
+
+  8    Stoy, R. H. 1968, "Cape Photographic Catalogue for 1950.0",  Zones
+         -80 to -90 degrees, Ann. Cape Obs. 22 (London: Her Majesty's
+         Stationery Office).
+
+  9    McLaughlin, S. F., private communication.
+
+ 10    Bonnet, R. 1978, "Cross Identifications of HDE Stars", Bull. Inf.
+         Cent. Donnees Stellaires, No. 15, 155. Magnetic tape version,
+         CDS Strasbourg catalog number 4008.
+
+ 11    Warren, W. H. Jr. and Kress, K. 1980, Catalog of Supplemental
+         Stars to the Bonner Durchmusterung, Astron. Data Center Bull. 1, 19.
+
+ 12    Errors and additions from the ADC work.
+
+ 13    Schmidtke, P. C., private communication.
+
+ 14    Herald, D. 1979, Occultation Newsl. 2, 49.
+
+
+Table 12 includes further notes on entries in the microfiche table for which
+additional explanations are considered useful to clarify the reasons for
+certain changes.
+
+
+Table 12.  Explanatory Notes to Individual Changes.
+
+
+  SAO   Note(s)
+
+  6404  The GC incorrectly identifies this star as BD+76 309;
+        GC 11190 is BD+76 309, while this star is +77 309.
+
+  9947  This star is misidentified as BD+70 1162 in the GC, as it is in
+        the IDS and ADS (Aitken 1932).  Source 3 corrects the DM number
+        to +70 1161, assuming that the double entry for +70 1161
+        represents the two components of the double star.  This is not
+        the case.  SAO 9949 is a duplicate entry and should be deleted.
+
+ 15097  The GC incorrectly lists this star as BD+65 761.  It is
+        actually +65 751, while +65 761 is SAO 15120, which does not
+        appear in the GC.
+
+ 17589  The GC incorrectly identifies this star as BD+68x 936, whereas
+        it is actually +69 936.
+
+                                      4-2
+
+
+ 23221  Source 1 incorrectly gives this star as BD+53 568a.  It is
+        actually +52 568a.
+
+ SAO    Note(s)
+
+ 24753  This star is listed as BD+57 825 in several catalogs.  It is
+        not in the proper position for the BD star, however.  There is
+        a star at the SAO position on photographs, but it is not in the
+        BD.
+
+
+ 29370  These corrections are probably in error.  The BD gives +54 1724
+ 29372  as being SW of +54 1725 and lists both star as magnitude 7.5.
+        The SAO, AGK3 and IDS list the brighter star (delta m = 0.6 mag)
+        as SE.  the HD also lists the brighter star as south, but gives
+        the same right ascension for both stars.  The IDS identifies the
+        brighter star as BD+54 1724, as do the HD and SAO, but the AGK3
+        reverses the DM numbers, listing the brighter star as +54 1725.
+
+101858  Sources 2 and 3 suggested changing this stars to BD+17 2945.
+        It is part of a triple system of which C, the fainter, more
+        distant component, is +17 2945.  SAO 101858 and 101859 appear
+        to be the A and B components, respectively, of +17 2946.
+
+238176  The GC is in error.  GC 14513 is CP-54 3795 and is not in the
+        HD.  GC 14517 is CP-54 3797, which is HD 91593.
+
+
+Table 13.  1989 Changes to the 1984 Version.
+
+
+ No.    Field      For          Read                 S
+
+ 5840   DM No.    BD+78 222                          21
+ 9160   DM No.    BD+69 993a    BD+69 993            21
+ 9773   DM No.    BD+77 778                          21
+12509   Spectrum  B:            Bp                   22
+20758   DM No.    BD+63 2030    BD+63 2030a          21
+23221   DM No.    BD+53 568a    BD+52 568a           21
+27123   DM No.    BD+57 1199    BD+57 1194           21
+29370   DM No.    BD+54 1725    BD+54 1724           21
+29372   DM No.    BD+54 1724    BD+54 1725           21
+39436   Spectrum  B:            Bp                   22
+45289   DM No.    BD+46 2005a   BD+46 2005           21
+56771   Spectrum  GO            G0                   22
+62236   DM No.    CD+31 2180    BD+31 2180           21
+64711   DM No.    BD+40 2872    BD+39 2872           21
+74667   DM No.    BD+28 255     BD+28 225            21
+76943   DM No.    BD+28 741     BD+28 742            21
+
+                                      4-3
+
+Table 13.  (continued)
+
+
+No.     Field     For           Read                 S
+
+76943   HD No.    HD 32479                           21
+76944   DM No.    BD+28 742     BD+28 741            21
+76944   HD No.                  HD 32479             21
+82706   DM No.    CD+28 2193    BD+28 2193           21
+85564   DM No.    BD+29 3149a   BD+29 3149           21
+85567   DM No.    BD+29 3149    BD+29 3149a          21
+86043   DM No.    CD+29 3259    BD+29 3259           21
+94818   HD No.    HD 247073                          23
+97434   RA        7h56m2.355s   7h56m4.172s          24
+97434   PM (RA)   +0.0021s/a    +0.0302 s/a          24
+107156  DM No.    BD+13 4710    BD+13 4714           21
+111240  DM No.    BD+ 0 602     BD+ 0 603            21
+114916  DM No.    BD+ 1 1687    BD+ 1 1686           21
+128522  DM No.    BD- 0 5077    BD+ 0 5077           21
+129898  DM No.    BD- 0 361     BD- 0 361a           21
+130238  PM (RA)   0.03s/a       +0.019:s/a           25
+130238  PM (DEC)  1.30"/a       -0.08:"/a            25
+131091  DM No.    BD- 7 787     BD- 7 788            21
+133461  Record                  Delete               23
+142402  Record                  Delete               23
+156969  HD No.                  HD 103314            21
+156999  HD No.    HD  103314                         21
+159442  DM No.    CD-19 4188    BD-19 4188           21
+159682  DM No.    CD-19 4307    BD-19 4307           21
+163131  DM No.    BD-12 5991    BD-12 5591           21
+163131  HD No.    HD 204013     HD 188763            21
+167662  DM No.    CD-30 804     CD-29 804            21
+172151  DM No.    BD-20 1550    BD-21 1550           21
+172631  Record                  Delete               23
+172821  DM No.    CD-28 3844    CD-28 3744           21
+178737  DM No.    BD-21 3161    BD-20 3161           21
+178737  HD No.    HD 93814      HD 89913             21
+179258  DM No.    BD-20 3161    BD-21 3161           21
+179258  HD No.    HD 89913      HD 93814             21
+180619  Record                  Delete               23
+181584  Record                  Delete               23
+185579  DM No.    CD-27 11769   CD-27 11768          21
+186318  DM No.    CD-23 13936   CD-23 13937          21
+186419  DM No.    CD-26 12900   CD-26 12898          21
+186717  Record                  Delete               23
+187331  DM No.    BD-22 13325   CD-22 13325          21
+190341  DM No.    BD-22 15388   CD-22 15388          21
+192236  DM No.    CD-22 16507   CD-22 16508          21
+193858  Record                  Delete               23
+193896  Record                  Delete               23
+
+
+
+                                      4-4
+
+Table 13.  (concluded)
+
+
+No.     Field     For           Read                 S
+
+198195  DM No.    BD-34 3755    CD-34 3755           23
+201368  DM No.    CD-37 6528B                        21
+204943  DM No.    CD-31 10729   CD-31 10727          21
+206001  DM No.    CD-38 9673    CD-38 9693           21
+208948  DM No.    CD-36 11642   CD-36 11632          21
+209763  DM No.    CD-31 15539   CD-31 15149          21
+209763  HD No.    HD 165930     HD 165725            21
+210778  DM No.    CD-38 13224   CD-38 13239          21
+211312  DM No.    CD-36 13215   CD-37 13215          21
+213279  DM No.    CD-32 16734                        21
+215182  Record                  Delete               23
+216710  DM No.    BD-42 1425    CD-42 1425           21
+220069  Spectrum  B:            Bp                   22
+222287  Record                  Delete               23
+223213  DM No.    CP-49 4828    CP-49 4827           21
+226867  DM No.    CD-45 10733   CD-45 10731          21
+226867  GC No.                  GC 22215             21
+226868  DM No.    CP-45 8001C   CP-45 8001           21
+226868  GC No.    GC 22215                           21
+227380  Record                  Delete               23
+227535  DM No.    CD-44 11300   CD-43 11300          21
+228027  Record                  Delete               21
+228306  Record    Delete        Keep                 21
+229059  Record                  Delete               23
+232734  RA        2h20m50.218s  2h20m53.218s         24
+234389  Record                  Delete               23
+236668  Record                  Delete               23
+238148  DM No.    CP-53 3909    CP-53 3909B          26
+238511  Record                  Delete               23
+240305  Record                  Delete               23
+241167  Record                  Delete               23
+242605  Record                  Delete               23
+242962  Record                  Delete               23
+244399  HD No.    HD 153772     HD 153771            26
+244399  GC No.    GC 22982                           21
+244400  HD No.                  HD 153772            26
+244400  GC No.                  GC 22982             21
+244725  DM No.    CD-55 8100    CP-55 8100           21
+246634  DM No.    CP-51 10511   CP-51 11511          21
+250957  Dec.      -60d51'49.26" -60d31'49.26"        24
+251166  DM No.    CP-66 1447    CP-66 1453           21
+251166  HD No.    HD 94494                           21
+252071  DM No.    CP-59 4544                         21
+252312  Spectrum  B:            Bp                   22
+256721  DM No.    CP-73 746     CP-73 745            21
+256935  DM No.                  CD-74 677            21
+258552  DM No.    CP-83 398     CP-80 398            21
+
+                                4-5
+
+
+All communications resulting in the changes in Table 13 are unpublished. For
+13028, it is apparent that the proper motions are in error but accurate values
+are unavailable. In addition to the changes noted in Table 13, R. E. Reaves
+pointed out that plus signs were missing in bytes 27 and 60, that minus signs
+were occasionally found in byte 61, and that the seconds of arc field for the
+declinations sometimes read 60.00. These problems have been corrected.
+
+
+Table 14.  Sources for Changes in the 1989 Version.
+
+
+
+
+Code                    Source
+
+
+21                      T. Lederle
+22                      R. E. Reaves
+23                      T. Lederle and ADC
+24                      T. Lederle and T. E. Corbin
+25                      H. Jahreiss and T. E. Corbin
+26                      ADC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 4-6
+
+   Table 15.  Changes to the SAO since the 1989 Version
+
+  +--------------+-------------------+--------------+-------------+
+  |              |                   |              |             |
+  | SAO Number   |      Field        |     For      |    Read     |
+  |              |                   |              |             |
+  +--------------+-------------------+--------------+-------------+
+  |     15475    |     DM Number     |   +66  717   |             |
+  |     19985    |     DM Number     |   +61 2278   |  +61 2277   |
+  |     19985    |     HD Number     |              |   211871    |
+  |     27062    |    Spec. Type     |       5      |     R5      |
+  |     27100    |    Spec. Type     |       5      |     R5      |
+  |     31951    |    Spec. Type     |       P      |     Pd      |
+  |     32162    |     DM Number     |   +57 2104   |  +57 2103   |
+  |     32162    |     HD Number     |     239271   |             |
+  |     35236    |     DM Number     |   +56 2966   |  +56 2967   |
+  |     35236    |     HD Number     |     219134   |             |
+  |     40312    |     DM Number     |   +43 1261   |  +43 1260   |
+  |     40314    |     DM Number     |   +43 1260   |  +43 1261   |
+  |     51472    |     DM Number     |   +46 3506   |  +46 3505   |
+  |     52114    |     DM Number     |   +48 3759   |  +48 3757   |
+  |    187331    |     DM Catalog    |      CD      |      BD     |
+  |    190341    |     DM Catalog    |      CD      |      BD     |
+  |    209822    |     DM Number     |   3512351   |  3512350   |
+  |    211074    |     DM Number     |   3713108   |  3713109   |
+  |    212391    |     DM Number     |   3018140   |  3018139   |
+  |    212470    |  Mu Dec. - J2000  |    0.003    |             |
+  |    215732    |     DM Number     |   43  611   |  43  612   |
+  |    217573    |     HD Number     |              |    39563    |
+  |    219568    |     DM Catalog    |      CP      |      CD     |
+  |    219568    |     HD Number     |     39563    |    68602    |
+  |    227379    |     HD Number     |    152233    |             |
+  |    227380    |     HD Number     |              |    152233   |
+  |    227380    |    Delete Code    |       D      |             |
+  |    228306    |  RA Sec at Epoch  |    36.692    |   36.693    |
+  |    232345    |     DM Number     |   51  312   |  51  311   |
+  |    232345    |     HD Number     |       7456   |     7455    |
+  |    232346    |     DM Number     |   51  311   |  51  312   |
+  |    232346    |     HD Number     |       7455   |     7456    |
+  |    234535    |    Spec. Type     |       GO     |     G0      |
+  |    239348    |     DM Number     |   58 3829   |  58 3823   |
+  |    239348    |     HD Number     |    307183    |   102117    |
+  |    244400    |    Supp. Code     |       1      |             |
+  |    244400    |     HD Number     |    537720    |    153772   |
+  |    244400    |      HD Code      |       2      |      0      |
+  |    244400    |     GC Number     |     29820    |    22982    |
+  +--------------+-------------------+--------------+-------------+
+
+
+                                     4 - 7
+
+
+   Table 16.  Sources of Changes since 1989 other than DM Numbers
+
+  +--------------+------------------------+-----------------------+
+  |              |                        |                       |
+  | SAO Number   |         Field          |        Source         |
+  |              |                        |                       |
+  +--------------+------------------------+-----------------------+
+  |    27062     |      Spec. Type        |      Allan Moluf      |
+  |    27100     |      Spec. Type        |      Allan Moluf      |
+  |    31951     |      Spec. Type        |      ADC              |
+  |    56597     |      Declination       |      Allan Moluf      |
+  |    75878     |      Dec Sec at Epoch  |      William M. Owen  |
+  |    84129     |      Magnitudes        |      William M. Owen  |
+  |    92548     |      Magnitudes        |      David W. Dunham  |
+  |    97645     |      HD Number         |       A. R. Peters    |
+  |    97646     |      HD Number         |       A. R. Peters    |
+  |   143378     |      J2000 Positions   |      Clayton A. Smith |
+  |   187331     |      DM Catalog        |      Carl Cole        |
+  |   190341     |      DM Catalog        |      Carl Cole        |
+  |   194834     |      Spec. Type        |      Allan Moluf      |
+  |   208759     |      Mu Dec. - J2000   |      Allan Moluf      |
+  |   208795     |      Mu Dec. - J2000   |      Allan Moluf      |
+  |   212470     |      Mu Dec. - J2000   |      Allan Moluf      |
+  |   217573     |      HD Number         |      ADC              |
+  |   219568     |      DM Catalog        |      ADC              |
+  |   219568     |      HD Number         |      S. F. McLaughlin |
+  |   227379     |      HD Number         |      A. R. Peters     |
+  |   227380     |      Delete Code       |      ADC              |
+  |   227380     |      HD Number         |      A. R. Peters     |
+  |   228306     |      RA Sec at Epoch   |      ADC              |
+  |   234535     |      Spec. Type        |      Allan Moluf      |
+  |   244400     |      Misalignment      |      Allan Moluf      |
+  +--------------+------------------------+-----------------------+
+  |NOTE: The  magnitudes  for 84129 and 92548 are from the SIMBAD |
+  |data bank of the Centre de Donnees Astronomiques de Strasbourg.|
+  +--------------+------------------------+-----------------------+
+
+
+ACKNOWLEDGMENTS
+
+We wish to express our appreciation to N. J. Schofield Jr., who worked on an
+early phase of the SAO project in connection with the revised "SAO-HD-GC-DM
+Cross Index", and to D. Hoffleit, S. F. McLaughlin, R. E. Reaves, P. C.
+Schmidtke and W. L. Stein for communicating errors. We also thank the several
+people who pointed out additional errors, and T. E. Corbin for checking
+data for several stars in other catalogs and Mr. Rappaport for sending
+us the extensive list of possible problems in the DM numbers assigned
+in the SAO. We also thank those listed in Table 16 on page 4 - 7.
+
+for alerting us to other errors. Especially significant was the work
+of T. Lederle (Astronomisches Rechen-Institut, Heidelberg), who analyzed
+a large number of cross identifications for Durchmusterung stars, provided
+a large list of possible errors, and worked with us to improve the changes,
+which were then inserted into the 1989 version.
+
+                                     4 - 8
+
+
+Finally, the new J2000 version of the catalog owes much to the work of C.A.
+Smith (U.S. Naval Observatory), who computed the J2000 positions and proper
+motions and added them to the data records.
+
+
+                                   REFERENCES
+
+
+Argelander, F.W.A. 1859-1862, Bonner Sternverzeichniss, erste bis dritte
+ Sektion, Astronomischen Beobachtungen auf der Sternwarte des Koeniglichen
+ Rhein., Friedrich-Wilhelms-Universitaet zu Bonn, Baende 3-5.
+
+Aitken, R. G. 1932, New General Catalogue of Double Stars within 120 deg of the
+ North Pole, Carnegie Institution of Washington Pub. 417 (Washington: Carnegie
+ Institution of Washington).
+
+Barney, I., Hoffleit, D. and Jones, R. B. 1959a, Catalogue of the Positions and
+ Proper Motions of 8380 Stars Between Declinations +50 and +55 degrees, reduced
+ without applying Proper Motions to the Equinox 1950.0, Trans. Astron. Obs. Yale
+ Univ. 26, Part II.
+
+Barney, I., Hoffleit, D. and Jones, R. B. 1959b, Catalogue of the Positions and
+ Proper Motions of 8164 Stars Between Declinations +55 and +60 degrees, reduced
+ without applying Proper Motions to the Equinox 1950.0, Trans. Astron. Obs. Yale
+ Univ. 27.
+
+Becker, F. 1949, Bonner Durchmusterung, Sue dlicher Teil, Deklinations-Zonen -2
+ bis -22 Sternverzeichnis, zweite, berichtigte Auflage, Ferd. Duemmlers Verlag,
+ Bonn.
+
+Becker, F. 1951, Bonner Durchmusterung, Noerdlicher Teil, Deklinations Zonen -1
+ bis +89 deg Sternverzeichnis, dritte, berichtigte Auflage, Ferd. Duemmlers
+ Verlag, Bonn.
+
+Bonnet, R. 1978, Bull. Inf. Cent. Donnees Stellaires, No. 15, 115.
+
+Boss, B. 1937, General Catalogue of 33342 Stars for the Epoch 1950, Carnegie
+ Institution of Washington Pub. 468 (Washington: Carnegie Institution of
+ Washington).
+
+Burnham, S. W. 1906, A General Catalogue of Double Stars within 120 deg of the
+ North Pole (Washington: Carnegie Institution of Washington).
+
+Cannon, A. J. 1925-1936, The Henry Draper Extension, Ann. Astron. Obs. Harvard
+ College 100.
+
+Cannon, A. J. and Pickering, E. C. 1918-1924, The Henry Draper Catalogue Ann.
+ Astron. Obs. Harvard Coll., 91-99.
+
+Cannon, A. J. and Walton Mayall, M. 1949, The Henry Draper Extension, The Annie
+ J. Cannon Memorial Volume, Ann. Astron. Obs. Harvard College 112.
+
+Gill, D. and Kapteyn, J. C. 1895-1900, Cape Photographic Durchmusterung, Ann.
+ Cape Obs. 3 (1895, Part I: zones -18 to -37); 4 (1897, Part II: zones -38 to
+ -52); 5 (1900, Part III: zones -53 to -89).
+
+Jeffers, H. M., van den Bos, W. H. and Greeby, F. M. 1963, Index Catalogue of
+
+                                     4 - 9
+
+ Visual Double Stars, 1961.0, Pub. Lick Obs. 21.
+
+Krueger, A. 1890, Zonenbeobachtungen der Sterne zwischen 55 and 65 deg noerd.
+ Decl. angestellt an der Sternwarten von Helsingfors und Gotha. I Band, Enhaltd.
+ Zonen 1-338 nebst den mittleren Oertern der Sterne fuer 1875 (Helsingfors:
+ Kaiserl. Alexanders-Universitaet).
+
+Kuestner, F. 1903, Bonner Durchmusterung des Noerdlichen Himmels, zweite
+ berichtigte Auflage, Bonn Universitaets Sternwarte, A. Marcus und E. Weber's
+ Verlag, Bonn.
+
+Morin, D. 1973, Table of Correspondences SAO/HD/DM/GC, Obs. de Meudon,
+ unpublished.
+
+Nagy, T. A 1979, Documentation for the Machine-Readable Version of the
+ Smithsonian Astrophysical Observatory Catalog(ue) (EBCDIC Version), Systems and
+ Applied Sciences Corporation R-SAW-7/79-34.
+
+Ochsenbein, F., Bischoff, M. and Egret, D. 1981, Astron. Astrophys. Suppl. 43,
+ 259.
+
+Perrine, C. D. 1911a, Cat logo de 5791 estrellas para 1900.0. II. Catlogo
+ General Argentino, Resultados del Observatorio Nacional Argentino en Cordoba
+ 20, 1.
+REFERENCES  (continued)
+
+Perrine, C. D. 1911b, Secundo Cat logo General Argentino. Estrellas Borealis,
+ Resultados del Observatorio Nacional Argentino en Cordoba 20, 106.
+
+Rogers, W. A. 1892, Catalogue of 8627 Stars, Ann. Astron. Obs.
+ Harvard College 15, Part II.
+
+Roman, N. G., Warren, W. H. Jr. and Schofield, N. J. Jr. 1983, Documentation for
+ the Machine-Readable Version of the SAO-HD-GC-DM Cross Index, Version 1983,
+ NSSDC/WDC-A 83-17.
+
+Schilt, J. and Hill, S. J. 1937, Photographic Magnitudes for 6,902 Stars in the
+ Zone +55 to +60 degrees, Contr. Rutherfurd Obs., Columbia Univ., No. 30; 1938,
+ Photographic Magnitudes of 7,280 Stars in the Zone +50 to +55 deg, Contr.
+ Rutherfurd Obs., Columbia Univ., No. 31.
+
+Schoenfeld, E. 1886, Bonner Sternverzeichniss, vierte Sektion, Astronomische
+ Beobachtungen auf der Sternwarte der Koeniglichen Rhein. Friedrich-Wilhelms-
+ Universitaet zu Bonn 8, Part IV, Adolph Marcus, Bonn.
+
+Smithsonian Astrophysical Observatory Staff 1966, Star Catalog. Positions and
+ Proper Motions of 258,997 Stars for the Epoch and Equinox of 1950.0, Pub. of
+ the Smithsonian Institution of Washington, D.C. No. 4652 (Washington:
+ Smithsonian Institution).
+
+Stoy, R H. 1968, Cape Photographic Catalogue for 1950.0. Zone -80 to -90
+ degrees, Ann. Cape Obs. 22.
+
+                                    4 - 10
+
+Thome, J. M. 1892-1932, Cordoba Durchmusterung, Resultados del Observatorio
+ Nacional Argentino 16 (1892, Part I: -22 to -3 arcsec); 17 (1894, Part II: -32
+ to -42); 18 (1900, Part III: -42 to -52); 21 (Part I) (1914, Part IV, -52 to
+ -62); 21 (Part II) (1932, Part V: -62 to -90).
+
+Warren, W. H. Jr. and Kress, K. 1980, Astron. Data Center Bull. 1, 19.
+
+Worley, C. E. 1980, Bull. Inf. Cent. Donnees Stellaires, No. 18, 20.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

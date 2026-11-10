@@ -1,0 +1,997 @@
+{
+  "schema": "occultations-event-references/1",
+  "partition": "held-out",
+  "cases": [
+    {
+      "id": "mars-jupiter-ra-2024",
+      "kind": "right-ascension-conjunction",
+      "pair": [
+        "Mars",
+        "Jupiter"
+      ],
+      "sourceId": "naoj-mars-jupiter-ra",
+      "rights": "eco",
+      "origin": "geocentric",
+      "frame": "Apparent true equator/equinox of date for RA; apparent ecliptic of date for longitude. Interpreted from NAOJ almanac conventions; the CGI does not expose its complete reduction.",
+      "published": {
+        "date": "2024-08-14",
+        "time": "17:00:00",
+        "timeScale": "TT",
+        "precisionSeconds": 3600,
+        "coordinateDifferenceDegrees": 0,
+        "crossCoordinateDifference": "+0deg19arcmin"
+      },
+      "partition": "held-out",
+      "eventGroup": "mars-jupiter-2024-08-14",
+      "window": {
+        "from": "2024-08-14T00:00:00",
+        "to": "2024-08-15T00:00:00",
+        "scale": "tt"
+      },
+      "validationUse": "coordinate-event",
+      "criteriaId": "coarse-planet-hour",
+      "qualifications": [
+        "The Calendar and Ephemeris Office says the web edition uses its latest theory. Its 2026 revision adopts JPL DE440; earlier 2016-2025 editions use DE430. The 2009 revision adopts IAU 2006 precession/nutation. Thus newly queried 2026 web tables use the latest DE-series implementation, not the printed almanac of the event year. No Swiss-derived source is invoked.",
+        "Printed resolution is not source accuracy. Use TT directly; do not relabel it UTC."
+      ],
+      "checks": [
+        {
+          "key": "eventTime",
+          "value": 1723654800.0,
+          "unit": "nominal-tt-seconds",
+          "maximumAbsoluteError": 3600
+        }
+      ],
+      "locator": "Results table, 2024-08-14 17:00 TT row; right-ascension difference 0 degrees"
+    },
+    {
+      "id": "mars-jupiter-ecliptic-2024",
+      "kind": "ecliptic-longitude-conjunction",
+      "pair": [
+        "Mars",
+        "Jupiter"
+      ],
+      "sourceId": "naoj-mars-jupiter-ecliptic",
+      "rights": "eco",
+      "origin": "geocentric",
+      "frame": "Apparent true equator/equinox of date for RA; apparent ecliptic of date for longitude. Interpreted from NAOJ almanac conventions; the CGI does not expose its complete reduction.",
+      "published": {
+        "date": "2024-08-14",
+        "time": "15:00:00",
+        "timeScale": "TT",
+        "precisionSeconds": 3600,
+        "coordinateDifferenceDegrees": 0,
+        "crossCoordinateDifference": "+0deg18arcmin"
+      },
+      "partition": "held-out",
+      "eventGroup": "mars-jupiter-2024-08-14",
+      "window": {
+        "from": "2024-08-14T00:00:00",
+        "to": "2024-08-15T00:00:00",
+        "scale": "tt"
+      },
+      "validationUse": "coordinate-event",
+      "criteriaId": "coarse-planet-hour",
+      "qualifications": [
+        "The Calendar and Ephemeris Office says the web edition uses its latest theory. Its 2026 revision adopts JPL DE440; earlier 2016-2025 editions use DE430. The 2009 revision adopts IAU 2006 precession/nutation. Thus newly queried 2026 web tables use the latest DE-series implementation, not the printed almanac of the event year. No Swiss-derived source is invoked.",
+        "Printed resolution is not source accuracy. Use TT directly; do not relabel it UTC."
+      ],
+      "checks": [
+        {
+          "key": "eventTime",
+          "value": 1723647600.0,
+          "unit": "nominal-tt-seconds",
+          "maximumAbsoluteError": 3600
+        }
+      ],
+      "locator": "Results table, 2024-08-14 15:00 TT row; ecliptic-longitude difference 0 degrees"
+    },
+    {
+      "id": "venus-jupiter-ra-2022",
+      "kind": "right-ascension-conjunction",
+      "pair": [
+        "Venus",
+        "Jupiter"
+      ],
+      "sourceId": "naoj-venus-jupiter-ra",
+      "rights": "eco",
+      "origin": "geocentric",
+      "frame": "Apparent true equator/equinox of date for RA; apparent ecliptic of date for longitude. Interpreted from NAOJ almanac conventions; the CGI does not expose its complete reduction.",
+      "published": {
+        "date": "2022-04-30",
+        "time": "19:00:00",
+        "timeScale": "TT",
+        "precisionSeconds": 3600,
+        "coordinateDifferenceDegrees": 0,
+        "crossCoordinateDifference": "-0deg15arcmin"
+      },
+      "partition": "held-out",
+      "eventGroup": "venus-jupiter-2022-04-30",
+      "window": {
+        "from": "2022-04-30T00:00:00",
+        "to": "2022-05-01T00:00:00",
+        "scale": "tt"
+      },
+      "validationUse": "coordinate-event",
+      "criteriaId": "coarse-planet-hour",
+      "qualifications": [
+        "The Calendar and Ephemeris Office says the web edition uses its latest theory. Its 2026 revision adopts JPL DE440; earlier 2016-2025 editions use DE430. The 2009 revision adopts IAU 2006 precession/nutation. Thus newly queried 2026 web tables use the latest DE-series implementation, not the printed almanac of the event year. No Swiss-derived source is invoked.",
+        "Printed resolution is not source accuracy. Use TT directly; do not relabel it UTC."
+      ],
+      "checks": [
+        {
+          "key": "eventTime",
+          "value": 1651345200.0,
+          "unit": "nominal-tt-seconds",
+          "maximumAbsoluteError": 3600
+        }
+      ],
+      "locator": "Results table, 2022-04-30 19:00 TT row; right-ascension difference 0 degrees"
+    },
+    {
+      "id": "venus-jupiter-ecliptic-2022",
+      "kind": "ecliptic-longitude-conjunction",
+      "pair": [
+        "Venus",
+        "Jupiter"
+      ],
+      "sourceId": "naoj-venus-jupiter-ecliptic",
+      "rights": "eco",
+      "origin": "geocentric",
+      "frame": "Apparent true equator/equinox of date for RA; apparent ecliptic of date for longitude. Interpreted from NAOJ almanac conventions; the CGI does not expose its complete reduction.",
+      "published": {
+        "date": "2022-04-30",
+        "time": "21:00:00",
+        "timeScale": "TT",
+        "precisionSeconds": 3600,
+        "coordinateDifferenceDegrees": 0,
+        "crossCoordinateDifference": "-0deg14arcmin"
+      },
+      "partition": "held-out",
+      "eventGroup": "venus-jupiter-2022-04-30",
+      "window": {
+        "from": "2022-04-30T00:00:00",
+        "to": "2022-05-01T00:00:00",
+        "scale": "tt"
+      },
+      "validationUse": "coordinate-event",
+      "criteriaId": "coarse-planet-hour",
+      "qualifications": [
+        "The Calendar and Ephemeris Office says the web edition uses its latest theory. Its 2026 revision adopts JPL DE440; earlier 2016-2025 editions use DE430. The 2009 revision adopts IAU 2006 precession/nutation. Thus newly queried 2026 web tables use the latest DE-series implementation, not the printed almanac of the event year. No Swiss-derived source is invoked.",
+        "Printed resolution is not source accuracy. Use TT directly; do not relabel it UTC."
+      ],
+      "checks": [
+        {
+          "key": "eventTime",
+          "value": 1651352400.0,
+          "unit": "nominal-tt-seconds",
+          "maximumAbsoluteError": 3600
+        }
+      ],
+      "locator": "Results table, 2022-04-30 21:00 TT row; ecliptic-longitude difference 0 degrees"
+    },
+    {
+      "id": "moon-mars-ra-2024-nov",
+      "kind": "right-ascension-conjunction",
+      "pair": [
+        "Moon",
+        "Mars"
+      ],
+      "sourceId": "naoj-moon-mars-ra",
+      "rights": "eco",
+      "origin": "geocentric",
+      "frame": "Apparent true equator/equinox of date for RA; apparent ecliptic of date for longitude. Interpreted from NAOJ almanac conventions; the CGI does not expose its complete reduction.",
+      "published": {
+        "date": "2024-11-20",
+        "time": "21:10:00",
+        "timeScale": "TT",
+        "precisionSeconds": 60,
+        "coordinateDifferenceDegrees": 0,
+        "crossCoordinateDifference": "+2deg26arcmin"
+      },
+      "partition": "held-out",
+      "eventGroup": "moon-mars-2024-11-20",
+      "window": {
+        "from": "2024-11-20T00:00:00",
+        "to": "2024-11-21T00:00:00",
+        "scale": "tt"
+      },
+      "validationUse": "coordinate-event",
+      "criteriaId": "moon-conjunction-minute",
+      "qualifications": [
+        "The Calendar and Ephemeris Office says the web edition uses its latest theory. Its 2026 revision adopts JPL DE440; earlier 2016-2025 editions use DE430. The 2009 revision adopts IAU 2006 precession/nutation. Thus newly queried 2026 web tables use the latest DE-series implementation, not the printed almanac of the event year. No Swiss-derived source is invoked.",
+        "Printed resolution is not source accuracy. Use TT directly; do not relabel it UTC."
+      ],
+      "checks": [
+        {
+          "key": "eventTime",
+          "value": 1732137000.0,
+          "unit": "nominal-tt-seconds",
+          "maximumAbsoluteError": 180
+        }
+      ],
+      "locator": "Results table, 2024-11-20 21:10 TT row; right-ascension difference 0 degrees"
+    },
+    {
+      "id": "moon-mars-ecliptic-2024-nov",
+      "kind": "ecliptic-longitude-conjunction",
+      "pair": [
+        "Moon",
+        "Mars"
+      ],
+      "sourceId": "naoj-moon-mars-ecliptic",
+      "rights": "eco",
+      "origin": "geocentric",
+      "frame": "Apparent true equator/equinox of date for RA; apparent ecliptic of date for longitude. Interpreted from NAOJ almanac conventions; the CGI does not expose its complete reduction.",
+      "published": {
+        "date": "2024-11-20",
+        "time": "22:17:00",
+        "timeScale": "TT",
+        "precisionSeconds": 60,
+        "coordinateDifferenceDegrees": 0,
+        "crossCoordinateDifference": "+2deg20arcmin"
+      },
+      "partition": "held-out",
+      "eventGroup": "moon-mars-2024-11-20",
+      "window": {
+        "from": "2024-11-20T00:00:00",
+        "to": "2024-11-21T00:00:00",
+        "scale": "tt"
+      },
+      "validationUse": "coordinate-event",
+      "criteriaId": "moon-conjunction-minute",
+      "qualifications": [
+        "The Calendar and Ephemeris Office says the web edition uses its latest theory. Its 2026 revision adopts JPL DE440; earlier 2016-2025 editions use DE430. The 2009 revision adopts IAU 2006 precession/nutation. Thus newly queried 2026 web tables use the latest DE-series implementation, not the printed almanac of the event year. No Swiss-derived source is invoked.",
+        "Printed resolution is not source accuracy. Use TT directly; do not relabel it UTC."
+      ],
+      "checks": [
+        {
+          "key": "eventTime",
+          "value": 1732141020.0,
+          "unit": "nominal-tt-seconds",
+          "maximumAbsoluteError": 180
+        }
+      ],
+      "locator": "Results table, 2024-11-20 22:17 TT row; ecliptic-longitude difference 0 degrees"
+    },
+    {
+      "id": "venus-jupiter-appulse-2022",
+      "kind": "appulse",
+      "pair": [
+        "Venus",
+        "Jupiter"
+      ],
+      "sourceId": "naoj-venus-jupiter-minimum",
+      "rights": "main",
+      "origin": "Tokyo outreach context; per-page precise observing coordinates and topocentric/geocentric distinction not specified",
+      "published": {
+        "date": "2022-05-01",
+        "time": "06:00:00",
+        "timeScale": "Japan Standard Time (UTC+09:00)",
+        "precisionSeconds": 3600,
+        "qualifier": "approximately",
+        "utcFromStatedZone": "2022-04-30T21:00:00Z",
+        "excerpt": "金星と木星が最も近付くのは6時頃ですが、その頃にはすでに太陽が昇り、空が明るくなっています。"
+      },
+      "partition": "held-out",
+      "eventGroup": "venus-jupiter-2022-04-30",
+      "window": {
+        "from": "2022-04-30T00:00:00",
+        "to": "2022-05-01T00:00:00",
+        "scale": "utc"
+      },
+      "validationUse": "coarse-occurrence",
+      "criteriaId": "coarse-planet-hour",
+      "qualifications": [
+        "The outreach pages are NAOJ primary predictions and link its ephemeris services, but they do not name an ephemeris version or executable. DE430 was the institutional almanac model at publication. Treat exact outreach reduction/version as unknown, not as a measured DE430 software receipt.",
+        "Observer centre and exact site are not supplied. Compare only coarse occurrence time, never treat this as precision geocentric appulse validation.",
+        "No source uncertainty interval or rounding rule is specified for the approximate hour."
+      ],
+      "checks": [
+        {
+          "key": "eventTime",
+          "value": 1651352400.0,
+          "unit": "nominal-utc-seconds",
+          "maximumAbsoluteError": 3600
+        }
+      ],
+      "locator": "Article paragraph stating the closest approach at approximately 06:00 JST on 2022-05-01; retained Japanese excerpt in published"
+    },
+    {
+      "id": "mars-jupiter-appulse-2024",
+      "kind": "appulse",
+      "pair": [
+        "Mars",
+        "Jupiter"
+      ],
+      "sourceId": "naoj-mars-jupiter-minimum",
+      "rights": "main",
+      "origin": "Tokyo outreach context; per-page precise observing coordinates and topocentric/geocentric distinction not specified",
+      "published": {
+        "date": "2024-08-15",
+        "time": "00:00:00",
+        "timeScale": "Japan Standard Time (UTC+09:00)",
+        "precisionSeconds": 3600,
+        "qualifier": "approximately",
+        "utcFromStatedZone": "2024-08-14T15:00:00Z",
+        "excerpt": "最接近は8月15日0時頃で、そのときの離角は、18.3分角です。"
+      },
+      "partition": "held-out",
+      "eventGroup": "mars-jupiter-2024-08-14",
+      "window": {
+        "from": "2024-08-14T00:00:00",
+        "to": "2024-08-15T00:00:00",
+        "scale": "utc"
+      },
+      "validationUse": "coarse-occurrence",
+      "criteriaId": "coarse-planet-hour",
+      "qualifications": [
+        "The outreach pages are NAOJ primary predictions and link its ephemeris services, but they do not name an ephemeris version or executable. DE430 was the institutional almanac model at publication. Treat exact outreach reduction/version as unknown, not as a measured DE430 software receipt.",
+        "Observer centre and exact site are not supplied. Compare only coarse occurrence time, never treat this as precision geocentric appulse validation.",
+        "No source uncertainty interval or rounding rule is specified for the approximate hour."
+      ],
+      "checks": [
+        {
+          "key": "eventTime",
+          "value": 1723647600.0,
+          "unit": "nominal-utc-seconds",
+          "maximumAbsoluteError": 3600
+        }
+      ],
+      "locator": "Article paragraph stating the closest approach at approximately 00:00 JST on 2024-08-15; retained Japanese excerpt in published"
+    },
+    {
+      "id": "usno-ae1923-aldebaran-apr19-washington",
+      "partition": "held-out",
+      "eventGroup": "moon-aldebaran-1923-04-19",
+      "kind": "stellar-contacts",
+      "pair": [
+        "Moon",
+        "sao:94027"
+      ],
+      "sourceId": "usno-american-ephemeris-1923",
+      "locator": "p. 608: Apr. 19 alpha Tauri (Aldebar.) row, Washington Mean Time and Angle East from North Point columns",
+      "validationUse": "historical-sphere-model-comparison",
+      "criteriaId": "lunar-contact",
+      "observer": {
+        "latitude": 38.92055555555555,
+        "longitude": -77.06575000000001,
+        "elevationMeters": 82
+      },
+      "observerSource": {
+        "source": "pp. 682-683, observatory 246, U.S.N. Obs., Georgetown Heights",
+        "latitudeDegrees": 38.92055555555555,
+        "longitudeEastDegrees": -77.06575000000001,
+        "nominalElevationMeters": 82,
+        "printedLatitude": "+38 deg 55 min 14.0 sec",
+        "printedLongitude": "5 h 8 min 15.78 s west of Greenwich",
+        "printedElevation": "82 meters; ground floor of main building",
+        "clockOffsetSecondsWestOfGreenwich": 18495.78,
+        "assumptions": [
+          "Contact tables say Washington without explicitly naming observatory 246. Using the then-current USNO at Georgetown Heights is an inference.",
+          "The source also lists former USNO station 247, latitude 38 deg 53 min 38.7 sec, longitude 5 h 8 min 12.15 s west, altitude 31 m. This alternative must not be silently discarded.",
+          "Latitude and longitude refer to center of clock room; altitude refers to ground floor of main building.",
+          "Source vertical datum is not explicit in the row. Treating the printed altitude as modern ellipsoidal elevation is a model approximation.",
+          "Historical astronomical coordinates have no explicit transformation to a modern geodetic datum."
+        ]
+      },
+      "conventions": {
+        "geometry": {
+          "locators": [
+            "p. 763: Bessel fundamental plane and cylinder",
+            "p. 765: contact equation and position angle",
+            "p. xvi: terrestrial ellipsoid"
+          ],
+          "sourceMoonRadiusEarthEquatorialRadii": 0.2725,
+          "sourceEarthEquatorialRadiusKm": 6378.388,
+          "sourceEarthFlattening": "1/297",
+          "derivedOccultationSphereRadiusKm": 1738.11073,
+          "positionAngle": "Eastward from the north point, 0 to 360 degrees",
+          "lunarLimb": "sphere, not terrain model",
+          "parallax": "observer projected into Bessel fundamental plane",
+          "refraction": "not a term in the printed geometric contact equations",
+          "lightTimeAberration": "Apparent places are used; the contact explanation does not individually expose all correction conventions. Do not infer exact agreement with the engine apparent-place convention.",
+          "cautions": [
+            "Do not substitute the separately described irradiated ephemeris semidiameter or eclipse radius for the 0.2725 contact-equation radius.",
+            "The first contact-time correction is included in the Boston worked example. A paragraph says omitting this correction can introduce up to one and a half minutes; that does not prove the Washington tables omit it."
+          ],
+          "engineMoonRadiusKm": 1737.4,
+          "engineMoonRadiusLocator": "src/sky/riseset.ts: SKY_RADII_KM.Moon (constant read only, no engine evaluation)",
+          "sourceMinusEngineMoonRadiusKm": 0.71073,
+          "radiusDifferenceInterpretation": "This signed geometric radius difference is independent of contact time. No seconds-of-time bound can be assigned without normal limb-crossing speed."
+        },
+        "clock": {
+          "sourceDefinitionLocator": "p. 746: astronomical day begins at noon; astronomical time is used throughout the volume",
+          "conversion": "Civil date-time = printed astronomical date at midnight + 12 h + printed mean time + west longitude in time (zero for printed Greenwich times).",
+          "canonicalScale": "UT1 approximation to historical Greenwich mean solar time; not UTC",
+          "zSuffixMeaning": "The Z suffix is only the parser-compatible timestamp representation. The separately recorded ut1 scale controls semantics.",
+          "earthRotationCaveat": "The publication predates modern UT1. No UT0/UT1 polar-motion correction or modern time realization is documented; do not imply subsecond equivalence.",
+          "washingtonLongitudeChoice": "Station 246 west longitude is an explicit inference, shared with observer selection.",
+          "checkedConversions": true,
+          "alternative247ClockDifferenceSeconds": -3.63
+        }
+      },
+      "published": [
+        {
+          "kind": "disappearance",
+          "printedMeanTime": "Apr. 19, 5 h 14 min",
+          "canonicalUt1": "1923-04-19T22:22:15.780Z",
+          "timePrintedResolutionSeconds": 60,
+          "roundingHalfStepSeconds": 30.0,
+          "positionAngleDegrees": 101,
+          "alternative247CanonicalUt1": "1923-04-19T22:22:12.150Z"
+        },
+        {
+          "kind": "reappearance",
+          "printedMeanTime": "Apr. 19, 6 h 31 min",
+          "canonicalUt1": "1923-04-19T23:39:15.780Z",
+          "timePrintedResolutionSeconds": 60,
+          "roundingHalfStepSeconds": 30.0,
+          "positionAngleDegrees": 250,
+          "alternative247CanonicalUt1": "1923-04-19T23:39:12.150Z"
+        }
+      ],
+      "qualifications": [
+        "Reference is a published prediction, not an observed contact.",
+        "Lunar terrain is absent from the Besselian sphere model; no subsecond terrain accuracy follows from these data.",
+        "The published prediction uses the historical Catalogue of Zodiacal Stars; the package star uses the SAO J2000 catalogue. Identity agrees, but catalogue positions and motions are not a shared modern truth source.",
+        "Contact tables say Washington without explicitly naming observatory 246. Using the then-current USNO at Georgetown Heights is an inference.",
+        "The source also lists former USNO station 247, latitude 38 deg 53 min 38.7 sec, longitude 5 h 8 min 12.15 s west, altitude 31 m. This alternative must not be silently discarded.",
+        "Latitude and longitude refer to center of clock room; altitude refers to ground floor of main building.",
+        "Source vertical datum is not explicit in the row. Treating the printed altitude as modern ellipsoidal elevation is a model approximation.",
+        "Historical astronomical coordinates have no explicit transformation to a modern geodetic datum."
+      ],
+      "checks": [
+        {
+          "key": "disappearanceTime",
+          "value": -1473817064.22,
+          "unit": "nominal-ut1-seconds",
+          "maximumAbsoluteError": 120
+        },
+        {
+          "key": "disappearancePositionAngle",
+          "value": 101,
+          "unit": "degrees",
+          "maximumAbsoluteError": 2,
+          "difference": "circular-degrees"
+        },
+        {
+          "key": "reappearanceTime",
+          "value": -1473812444.22,
+          "unit": "nominal-ut1-seconds",
+          "maximumAbsoluteError": 120
+        },
+        {
+          "key": "reappearancePositionAngle",
+          "value": 250,
+          "unit": "degrees",
+          "maximumAbsoluteError": 2,
+          "difference": "circular-degrees"
+        }
+      ],
+      "window": {
+        "from": "1923-04-19T00:00:00",
+        "to": "1923-04-21T00:00:00",
+        "scale": "ut1"
+      },
+      "stationPolicy": "Qualified coarse comparison only. Both preregistered station variants must satisfy the same gate; never choose the better result. Retain the same event partition for all variants."
+    },
+    {
+      "id": "usno-ae1923-aldebaran-apr19-washington-station247",
+      "partition": "held-out",
+      "eventGroup": "moon-aldebaran-1923-04-19",
+      "kind": "stellar-contacts",
+      "pair": [
+        "Moon",
+        "sao:94027"
+      ],
+      "sourceId": "usno-american-ephemeris-1923",
+      "locator": "p. 608: Apr. 19 alpha Tauri (Aldebar.) row, Washington Mean Time and Angle East from North Point columns",
+      "validationUse": "historical-sphere-model-comparison",
+      "criteriaId": "lunar-contact",
+      "observer": {
+        "latitude": 38.894083333333334,
+        "longitude": -77.05062500000001,
+        "elevationMeters": 31
+      },
+      "observerSource": {
+        "source": "pp. 682-683, observatory 247, U.S. Naval Observatory 1842-1893",
+        "latitudeDegrees": 38.894083333333334,
+        "longitudeEastDegrees": -77.05062500000001,
+        "nominalElevationMeters": 31,
+        "printedLatitude": "+38 deg 53 min 38.7 sec",
+        "printedLongitude": "5 h 8 min 12.15 s west of Greenwich",
+        "printedElevation": "31 meters; barometer",
+        "clockOffsetSecondsWestOfGreenwich": 18492.15,
+        "assumptions": [
+          "This is the former observatory, not explicitly identified as the contact-table station. It is retained as a preregistered alternative to prevent favorable station selection.",
+          "Source vertical datum and conversion from historical astronomical to modern geodetic coordinates remain unresolved."
+        ]
+      },
+      "conventions": {
+        "geometry": {
+          "locators": [
+            "p. 763: Bessel fundamental plane and cylinder",
+            "p. 765: contact equation and position angle",
+            "p. xvi: terrestrial ellipsoid"
+          ],
+          "sourceMoonRadiusEarthEquatorialRadii": 0.2725,
+          "sourceEarthEquatorialRadiusKm": 6378.388,
+          "sourceEarthFlattening": "1/297",
+          "derivedOccultationSphereRadiusKm": 1738.11073,
+          "positionAngle": "Eastward from the north point, 0 to 360 degrees",
+          "lunarLimb": "sphere, not terrain model",
+          "parallax": "observer projected into Bessel fundamental plane",
+          "refraction": "not a term in the printed geometric contact equations",
+          "lightTimeAberration": "Apparent places are used; the contact explanation does not individually expose all correction conventions. Do not infer exact agreement with the engine apparent-place convention.",
+          "cautions": [
+            "Do not substitute the separately described irradiated ephemeris semidiameter or eclipse radius for the 0.2725 contact-equation radius.",
+            "The first contact-time correction is included in the Boston worked example. A paragraph says omitting this correction can introduce up to one and a half minutes; that does not prove the Washington tables omit it."
+          ],
+          "engineMoonRadiusKm": 1737.4,
+          "engineMoonRadiusLocator": "src/sky/riseset.ts: SKY_RADII_KM.Moon (constant read only, no engine evaluation)",
+          "sourceMinusEngineMoonRadiusKm": 0.71073,
+          "radiusDifferenceInterpretation": "This signed geometric radius difference is independent of contact time. No seconds-of-time bound can be assigned without normal limb-crossing speed."
+        },
+        "clock": {
+          "sourceDefinitionLocator": "p. 746: astronomical day begins at noon; astronomical time is used throughout the volume",
+          "conversion": "Civil date-time = printed astronomical date at midnight + 12 h + printed mean time + west longitude in time (zero for printed Greenwich times).",
+          "canonicalScale": "UT1 approximation to historical Greenwich mean solar time; not UTC",
+          "zSuffixMeaning": "The Z suffix is only the parser-compatible timestamp representation. The separately recorded ut1 scale controls semantics.",
+          "earthRotationCaveat": "The publication predates modern UT1. No UT0/UT1 polar-motion correction or modern time realization is documented; do not imply subsecond equivalence.",
+          "washingtonLongitudeChoice": "Station 246 west longitude is an explicit inference, shared with observer selection.",
+          "checkedConversions": true,
+          "alternative247ClockDifferenceSeconds": -3.63
+        }
+      },
+      "published": [
+        {
+          "kind": "disappearance",
+          "printedMeanTime": "Apr. 19, 5 h 14 min",
+          "canonicalUt1": "1923-04-19T22:22:12.150Z",
+          "timePrintedResolutionSeconds": 60,
+          "roundingHalfStepSeconds": 30.0,
+          "positionAngleDegrees": 101
+        },
+        {
+          "kind": "reappearance",
+          "printedMeanTime": "Apr. 19, 6 h 31 min",
+          "canonicalUt1": "1923-04-19T23:39:12.150Z",
+          "timePrintedResolutionSeconds": 60,
+          "roundingHalfStepSeconds": 30.0,
+          "positionAngleDegrees": 250
+        }
+      ],
+      "qualifications": [
+        "Reference is a published prediction, not an observed contact.",
+        "Lunar terrain is absent from the Besselian sphere model; no subsecond terrain accuracy follows from these data.",
+        "The published prediction uses the historical Catalogue of Zodiacal Stars; the package star uses the SAO J2000 catalogue. Identity agrees, but catalogue positions and motions are not a shared modern truth source.",
+        "This is the former observatory, not explicitly identified as the contact-table station. It is retained as a preregistered alternative to prevent favorable station selection.",
+        "Source vertical datum and conversion from historical astronomical to modern geodetic coordinates remain unresolved."
+      ],
+      "checks": [
+        {
+          "key": "disappearanceTime",
+          "value": -1473817067.85,
+          "unit": "nominal-ut1-seconds",
+          "maximumAbsoluteError": 120
+        },
+        {
+          "key": "disappearancePositionAngle",
+          "value": 101,
+          "unit": "degrees",
+          "maximumAbsoluteError": 2,
+          "difference": "circular-degrees"
+        },
+        {
+          "key": "reappearanceTime",
+          "value": -1473812447.85,
+          "unit": "nominal-ut1-seconds",
+          "maximumAbsoluteError": 120
+        },
+        {
+          "key": "reappearancePositionAngle",
+          "value": 250,
+          "unit": "degrees",
+          "maximumAbsoluteError": 2,
+          "difference": "circular-degrees"
+        }
+      ],
+      "window": {
+        "from": "1923-04-19T00:00:00",
+        "to": "1923-04-21T00:00:00",
+        "scale": "ut1"
+      },
+      "stationPolicy": "Qualified coarse comparison only. Both preregistered station variants must satisfy the same gate; never choose the better result. Retain the same event partition for all variants."
+    },
+    {
+      "partition": "held-out",
+      "eventGroup": "moon-mars-2025-01-14",
+      "pair": [
+        "Moon",
+        "Mars"
+      ],
+      "window": {
+        "from": "2025-01-14T00:00:00",
+        "to": "2025-01-15T00:00:00",
+        "scale": "ut1"
+      },
+      "qualifications": [
+        "CGI source page version 2.0i, exact ephemeris release not exposed in output. NAOJ institutional DE-family lineage documented separately; do not assert a specific DE release from event year alone.",
+        "No explicit source lunar radius, Earth ellipsoid, vertical datum, refraction implementation, or planetary shape convention found yet. Source rows expose calculated angular semidiameters.",
+        "Map polyline points have no timestamps. Local source queries supply closest-approach times but minimum angular separation can differ by seconds from exactly tangential varying-radius contact.",
+        "Time field says UT; source time glossary distinguishes UT1/UTC, source output alone does not say UTC.",
+        "Maps have no daylight exclusion. Horizon arcs exist, but north/south representative nodes selected away from horizon caps.",
+        "NAOJ site grants free reuse but remains copyright NAOJ; this is not public-domain stellar catalogue material."
+      ],
+      "conventions": {
+        "deltaTSeconds": 69,
+        "sourceTimeScale": "UT",
+        "comparisonTimeScale": "ut1",
+        "timeScaleQualification": "Compare nominal UT1; modern UT realization is not explicit in the CGI output. No UTC assertion.",
+        "lunarLimb": "smooth apparent limb inferred from contact tables; radius not documented",
+        "planet": "Apparent disk interpretation; rings exclusion inferred from published semidiameters and contact geometry; detailed shape not documented.",
+        "heightDatum": "unspecified; zero is a nominal model input",
+        "engineModel": "Use the planned engine model; do not fit radii, coordinates or time offsets to these predictions."
+      },
+      "id": "naoj-contacts-202503",
+      "kind": "planetary-contacts",
+      "validationUse": "qualified-disk-model-comparison",
+      "criteriaId": "lunar-contact",
+      "sourceId": "naoj-contacts-202503",
+      "locator": "Results / Local Prediction: explicitly supplied station, UT, fixed delta-T; row descriptions retained",
+      "observer": {
+        "latitude": 40,
+        "longitude": -75,
+        "elevationMeters": 0
+      },
+      "published": {
+        "columns": [
+          "date",
+          "time",
+          "pDeg",
+          "qDeg",
+          "VDeg",
+          "BDeg",
+          "moonAltitudeDeg",
+          "moonAzimuthDeg",
+          "moonSemidiameterArcsec",
+          "planetSemidiameterArcsec",
+          "separationArcsec",
+          "description"
+        ],
+        "rows": [
+          [
+            "2025-01-14",
+            "2:19:22",
+            "107",
+            "-57",
+            "164",
+            "43",
+            "48.9",
+            "97.0",
+            "950",
+            "7",
+            "958",
+            "Disappearance starts"
+          ],
+          [
+            "2025-01-14",
+            "2:19:56",
+            "107",
+            "-57",
+            "164",
+            "43",
+            "49.0",
+            "97.1",
+            "950",
+            "7",
+            "943",
+            "Disappearance ends"
+          ],
+          [
+            "2025-01-14",
+            "2:57:06",
+            "200",
+            "-55",
+            "255",
+            "45",
+            "55.8",
+            "104.7",
+            "951",
+            "7",
+            "100",
+            "Least angular distance"
+          ],
+          [
+            "2025-01-14",
+            "3:34:37",
+            "277",
+            "-50",
+            "328",
+            "47",
+            "62.4",
+            "114.6",
+            "952",
+            "7",
+            "945",
+            "Reappearance starts"
+          ],
+          [
+            "2025-01-14",
+            "3:35:13",
+            "278",
+            "-50",
+            "328",
+            "47",
+            "62.5",
+            "114.8",
+            "952",
+            "7",
+            "959",
+            "Reappearance ends"
+          ]
+        ]
+      },
+      "checks": [
+        {
+          "key": "disappearanceStartTime",
+          "value": 1736821162.0,
+          "unit": "nominal-ut1-seconds",
+          "maximumAbsoluteError": 120
+        },
+        {
+          "key": "disappearanceStartPositionAngle",
+          "value": 107.0,
+          "unit": "degrees",
+          "maximumAbsoluteError": 2,
+          "difference": "circular-degrees"
+        },
+        {
+          "key": "disappearanceStartMoonAltitude",
+          "value": 48.9,
+          "unit": "degrees",
+          "maximumAbsoluteError": 0.5
+        },
+        {
+          "key": "disappearanceEndTime",
+          "value": 1736821196.0,
+          "unit": "nominal-ut1-seconds",
+          "maximumAbsoluteError": 120
+        },
+        {
+          "key": "disappearanceEndPositionAngle",
+          "value": 107.0,
+          "unit": "degrees",
+          "maximumAbsoluteError": 2,
+          "difference": "circular-degrees"
+        },
+        {
+          "key": "disappearanceEndMoonAltitude",
+          "value": 49.0,
+          "unit": "degrees",
+          "maximumAbsoluteError": 0.5
+        },
+        {
+          "key": "closestApproachTime",
+          "value": 1736823426.0,
+          "unit": "nominal-ut1-seconds",
+          "maximumAbsoluteError": 120
+        },
+        {
+          "key": "reappearanceStartTime",
+          "value": 1736825677.0,
+          "unit": "nominal-ut1-seconds",
+          "maximumAbsoluteError": 120
+        },
+        {
+          "key": "reappearanceStartPositionAngle",
+          "value": 277.0,
+          "unit": "degrees",
+          "maximumAbsoluteError": 2,
+          "difference": "circular-degrees"
+        },
+        {
+          "key": "reappearanceStartMoonAltitude",
+          "value": 62.4,
+          "unit": "degrees",
+          "maximumAbsoluteError": 0.5
+        },
+        {
+          "key": "reappearanceEndTime",
+          "value": 1736825713.0,
+          "unit": "nominal-ut1-seconds",
+          "maximumAbsoluteError": 120
+        },
+        {
+          "key": "reappearanceEndPositionAngle",
+          "value": 278.0,
+          "unit": "degrees",
+          "maximumAbsoluteError": 2,
+          "difference": "circular-degrees"
+        },
+        {
+          "key": "reappearanceEndMoonAltitude",
+          "value": 62.5,
+          "unit": "degrees",
+          "maximumAbsoluteError": 0.5
+        },
+        {
+          "key": "disappearanceDiskCrossingDuration",
+          "value": 34.0,
+          "unit": "seconds",
+          "maximumAbsoluteError": 10
+        },
+        {
+          "key": "reappearanceDiskCrossingDuration",
+          "value": 36.0,
+          "unit": "seconds",
+          "maximumAbsoluteError": 10
+        }
+      ]
+    },
+    {
+      "partition": "held-out",
+      "eventGroup": "moon-mars-2025-01-14",
+      "pair": [
+        "Moon",
+        "Mars"
+      ],
+      "window": {
+        "from": "2025-01-14T00:00:00",
+        "to": "2025-01-15T00:00:00",
+        "scale": "ut1"
+      },
+      "qualifications": [
+        "CGI source page version 2.0i, exact ephemeris release not exposed in output. NAOJ institutional DE-family lineage documented separately; do not assert a specific DE release from event year alone.",
+        "No explicit source lunar radius, Earth ellipsoid, vertical datum, refraction implementation, or planetary shape convention found yet. Source rows expose calculated angular semidiameters.",
+        "Map polyline points have no timestamps. Local source queries supply closest-approach times but minimum angular separation can differ by seconds from exactly tangential varying-radius contact.",
+        "Time field says UT; source time glossary distinguishes UT1/UTC, source output alone does not say UTC.",
+        "Maps have no daylight exclusion. Horizon arcs exist, but north/south representative nodes selected away from horizon caps.",
+        "NAOJ site grants free reuse but remains copyright NAOJ; this is not public-domain stellar catalogue material."
+      ],
+      "conventions": {
+        "deltaTSeconds": 69,
+        "sourceTimeScale": "UT",
+        "comparisonTimeScale": "ut1",
+        "timeScaleQualification": "Compare nominal UT1; modern UT realization is not explicit in the CGI output. No UTC assertion.",
+        "lunarLimb": "smooth apparent limb inferred from contact tables; radius not documented",
+        "planet": "Apparent disk interpretation; rings exclusion inferred from published semidiameters and contact geometry; detailed shape not documented.",
+        "heightDatum": "unspecified; zero is a nominal model input",
+        "engineModel": "Use the planned engine model; do not fit radii, coordinates or time offsets to these predictions."
+      },
+      "id": "naoj-map-202503",
+      "kind": "visibility-outline",
+      "validationUse": "coarse-boundary-model-comparison",
+      "criteriaId": "coarse-outline",
+      "sourceId": "naoj-map-202503",
+      "locator": "Source map arrays and zero-based node indices retained in published; no interpolation of the reference",
+      "published": [
+        {
+          "side": "north",
+          "contactLimit": "inner",
+          "array": "points1",
+          "indexZeroBased": 20,
+          "latitudeDeg": 55.461646,
+          "longitudeEastDeg": -100.406093,
+          "sourceText": "new google.maps.LatLng(55.461646, -100.406093)"
+        },
+        {
+          "side": "north",
+          "contactLimit": "inner",
+          "array": "points1",
+          "indexZeroBased": 55,
+          "latitudeDeg": 58.14129,
+          "longitudeEastDeg": -59.967817,
+          "sourceText": "new google.maps.LatLng(58.141290, -59.967817)"
+        },
+        {
+          "side": "south",
+          "contactLimit": "inner",
+          "array": "points2",
+          "indexZeroBased": 9,
+          "latitudeDeg": 19.288988,
+          "longitudeEastDeg": -100.376954,
+          "sourceText": "new google.maps.LatLng(19.288988, -100.376954)"
+        },
+        {
+          "side": "south",
+          "contactLimit": "inner",
+          "array": "points2",
+          "indexZeroBased": 87,
+          "latitudeDeg": 25.077384,
+          "longitudeEastDeg": -59.92378,
+          "sourceText": "new google.maps.LatLng(25.077384, -59.923780)"
+        },
+        {
+          "side": "south",
+          "contactLimit": "outer",
+          "array": "points3",
+          "indexZeroBased": 9,
+          "latitudeDeg": 19.085907,
+          "longitudeEastDeg": -100.219686,
+          "sourceText": "new google.maps.LatLng(19.085907, -100.219686)"
+        },
+        {
+          "side": "south",
+          "contactLimit": "outer",
+          "array": "points3",
+          "indexZeroBased": 87,
+          "latitudeDeg": 24.842668,
+          "longitudeEastDeg": -59.984803,
+          "sourceText": "new google.maps.LatLng(24.842668, -59.984803)"
+        },
+        {
+          "side": "north",
+          "contactLimit": "outer",
+          "array": "points4",
+          "indexZeroBased": 20,
+          "latitudeDeg": 55.963033,
+          "longitudeEastDeg": -99.548929,
+          "sourceText": "new google.maps.LatLng(55.963033, -99.548929)"
+        },
+        {
+          "side": "north",
+          "contactLimit": "outer",
+          "array": "points4",
+          "indexZeroBased": 54,
+          "latitudeDeg": 58.423606,
+          "longitudeEastDeg": -59.979847,
+          "sourceText": "new google.maps.LatLng(58.423606, -59.979847)"
+        }
+      ],
+      "curveInterpretation": "Inferred by numeric north/south ordering and independent NAOJ local contact semantics at curve nodes; array identifiers themselves are not labeled inner/outer by the provider. See supportRows.",
+      "checks": [
+        {
+          "key": "node0Latitude",
+          "value": 55.461646,
+          "unit": "degrees",
+          "maximumAbsoluteError": 1
+        },
+        {
+          "key": "node1Latitude",
+          "value": 58.14129,
+          "unit": "degrees",
+          "maximumAbsoluteError": 1
+        },
+        {
+          "key": "node2Latitude",
+          "value": 19.288988,
+          "unit": "degrees",
+          "maximumAbsoluteError": 1
+        },
+        {
+          "key": "node3Latitude",
+          "value": 25.077384,
+          "unit": "degrees",
+          "maximumAbsoluteError": 1
+        },
+        {
+          "key": "node4Latitude",
+          "value": 19.085907,
+          "unit": "degrees",
+          "maximumAbsoluteError": 1
+        },
+        {
+          "key": "node5Latitude",
+          "value": 24.842668,
+          "unit": "degrees",
+          "maximumAbsoluteError": 1
+        },
+        {
+          "key": "node6Latitude",
+          "value": 55.963033,
+          "unit": "degrees",
+          "maximumAbsoluteError": 1
+        },
+        {
+          "key": "node7Latitude",
+          "value": 58.423606,
+          "unit": "degrees",
+          "maximumAbsoluteError": 1
+        }
+      ],
+      "comparisonRule": "Evaluate the matching north/south inner/outer limit at each node exact longitude. Require a finite resolved limit for every node and all local-contact checks. A single global min/max or a nearby longitude band is not equivalent. No accuracy inference about untested longitudes or horizon caps."
+    }
+  ]
+}

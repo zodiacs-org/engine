@@ -1,0 +1,844 @@
+# Geometry and verification design
+
+This is the implemented geometry and verification contract. The
+position adapter, input/receipt foundation, source catalogue, apparent
+stellar reduction, geocentric coordinate conjunctions, appulse searches and
+lunar candidate screening, local spherical-limb contacts, contact sky facts and
+coarse global outlines, local closest approach, shared window searches and an
+offline CLI are implemented. [RESULTS.md](RESULTS.md) records finite-reference
+agreement and its limits; successful execution is not an established error bound.
+
+## Engine boundary and clock
+
+`src/engine.ts` calls the adjacent engine's `calc` with apparent corrections,
+true equator or true ecliptic of date, Cartesian output and no speed samples.
+It preserves the engine receipt and bounds. `src/input.ts` reuses the engine's
+date parser. Frame precession, nutation, delta-T, TT, UT1 and observer rotation
+remain the engine's responsibility. The conjunction search calls the engine's
+`src/crossings.ts`; the other event searches reuse it too. Sky facts reuse
+`src/sky.ts` constants and the engine phase and rotation machinery below.
+
+The source interfaces and their qualifications are in `../docs/calc.md`,
+`../docs/sky.md`, `../src/calc-reduce.ts` and `../src/time-scale.ts`. Their
+acceptance range is not an occultation-validation span. A successful position
+requires both TT and UT1 within the engine's calculation span; a nominal civil
+date just inside an endpoint can still be refused. Tests exercise this boundary.
+Seams of the engine time basis must be split or reported before continuous
+event root solving. A leap second is not representable as a JavaScript Date.
+
+## Parallax, light-time and aberration
+
+Topocentric samples use the engine's ellipsoidal observer at reception time,
+with geodetic latitude, east longitude and elevation in metres. Calc uses the
+IERS 2003 ellipsoid; the sky rise/set API uses WGS84. Our elevation is an
+ellipsoidal height, not height above mean sea level. Contact horizon facts
+and outlines preserve this distinction and any reference station's
+vertical-datum uncertainty; they do not relabel the calc observer as WGS84.
+
+The engine's geocentric apparent Moon is its geometric series at the instant.
+Its topocentric apparent Moon instead passes through the engine's retarded
+target/observer calculation. Planets use the engine's light-time and apparent
+direction treatment. No second aberration or light-time correction may be
+applied to these returned directions. The original correction identifiers
+are retained in every successful receipt, including the lunar exception.
+
+Star samples propagate catalogue epoch and proper motion in the catalogue's
+stated frame, with the normalized RA motion multiplied by cos(declination).
+Missing fields, double stars and variable magnitudes remain explicit in each
+receipt. Gravitational deflection is absent from both adapters; reference
+comparisons near the Sun must expose that omitted correction. The engine's
+Moon exception and the stellar aberration formula are distinct correction
+models on common axes. Do not add stellar annual aberration to the returned
+Moon: lunar light-time and aberration largely cancel. Their remaining model
+difference must enter the contact validation and correction budget.
+
+## Stellar reduction implemented in M3
+
+`starPositionAt` accepts an exact frozen catalogue id and the same instant,
+observer and frame vocabulary as `positionAt`. Both TT and UT1 must lie
+inside the engine calculation span. It returns an immutable unit direction,
+angular coordinates and a receipt; unknown distance stays null. Missing either
+proper-motion component yields `proper-motion-unavailable`, even at the source
+epoch, rather than treating an unknown motion as zero.
+
+`src/astrometry.ts` first forms the catalogue unit vector `p` and tangent
+motion `m` from east and north unit vectors. This avoids division by the
+declination cosine at a pole. FK5 J2000 positions and motion then become
+ICRS directions using the published orientation matrix `R` and spin `s`:
+`pICRS = R p` and `mICRS = R (m + p cross s)`. This is the Mignard and
+Froeschle rotation/spin model documented by ERFA `fk5hip` and `fk52h`, with
+no FK5 zonal correction. It is separate from the engine's ICRS-to-J2000
+frame bias. The published matrix and spin are checked in
+`test/erfa-published.test.ts` against the retained ERFA validation values.
+
+The direction propagation follows the model described by ERFA `pmpx`.
+Let `b` be the barycentre-to-observer vector in AU, `px` the parallax in
+radians, and `vr` the radial velocity in AU per Julian year. The propagated
+direction is proportional to
+
+```text
+p + dt * (m + vr * px * p) - px * b
+dt = elapsedJulianYears + dot(p, b) / speedOfLightAuPerJulianYear
+```
+
+The additional term in `dt` is the observer's Roemer modulation of reception
+time. Catalogue epochs already refer to reception at the barycentre; there
+is no subtraction of the star's absolute light-travel time. Finite parallax
+and radial velocity are supported in the internal kernel and tested with
+synthetic astrometry against ERFA. SAO supplies neither here, so those terms
+are omitted and flagged in the public result. The resulting distance and
+perspective uncertainty are unknown. This approximation supplies no binary
+orbit, photocentre, catalogue-error covariance or full relativistic stellar
+space-motion solution. Motion uses TT as an approximation to TDB and Julian
+years; the receipt records that choice.
+
+`geometricState` from the engine supplies the Earth's barycentric position
+and velocity. The negative of its topocentric Earth state supplies the
+geocentric observer state, reusing the engine ellipsoid, sidereal rotation
+and UT1 basis. Both states are rotated to ICRS before stellar propagation.
+With observer velocity `beta` in units of light speed and
+`g = sqrt(1 - dot(beta, beta))`, aberration normalizes
+`g * p + (1 + dot(p, beta) / (1 + g)) * beta`. This includes annual and
+diurnal aberration but excludes solar gravitational deflection and the
+solar-potential term. The engine's frame matrix carries that direction back
+to its J2000 axes and then to the requested true frame.
+
+`test/astrometry.test.ts` checks analytic geometry, and the extended ERFA
+comparison checks independent motion, aberration, Earth state and frame
+reduction. Its cases and maximum-error criteria were fixed before comparison
+in `test/fixtures/astrometry-cases.json` and `test/fixtures/ASTROMETRY.md`.
+The reference's full reduction uses IAU 2006/2000A; the engine uses its
+IAU 2000B nutation. Agreement on shared source coordinates measures the
+reduction model, not the physical accuracy of the historical SAO positions.
+SOURCES.md names the primary documentation and the fixture licence.
+
+## Catalogue selection and stellar limitations
+
+M2 adopts the public-domain SAO catalogue on the basis recorded in
+SOURCES.md. The source extractor selects historical visual magnitudes at most
+4.5 within 8 degrees of the J2000 ecliptic, with explicit named Pleiades
+inclusions. These are implementation policies checked in
+`test/catalogue.test.ts`, not measured lunar-path limits. The latitude uses
+the engine's `eclipticOfDate` at J2000; nutation in longitude does not change
+that latitude. Treating the catalogue FK5 axes as the engine's mean J2000
+axes is sufficient for this broad prefilter, not a stellar reduction model.
+There is no claim that this fixed list covers every possible contact
+throughout a time window. M3 handles frame differences and motion;
+M7 checks retention of every registered positive development event, without
+claiming all-target completeness for those windows.
+
+The source positions have epoch and equinox J2000 in FK5. The FK5 RA motion
+is a coordinate rate in seconds of time per year. Catalogue normalization
+converts it to milliarcseconds per year along the tangent with
+`raRate * 15 * cos(dec) * 1000`; declination motion is converted from
+arcseconds per year to milliarcseconds per year. These unit conversions do
+not propagate the positions. The original source rows and provenance codes
+are retained, and the tests exercise the cosine factor and absent values.
+
+SAO provides no parallax or radial velocity here. M3 exposes the resulting
+distance and perspective-motion limitations without replacing unknown
+values with observed zeros. Source duplicity and variability flags are
+retained; a blank warning or zero code means unknown status. Proper names
+are labels on a catalogue entry, not a choice of a resolved component in a
+binary. Neither orbital motion nor a photocentre correction is supplied.
+The historical USNO contact comparisons qualify agreement for their Aldebaran
+cases only. They supply no catalogue-wide stellar error or timing budget.
+
+The data flow is a digest-pinned NASA TAP query, exact selected source lines,
+then normalized output in the ignored `.generated/` folder. Only source
+records and provenance are committed. Normal use is offline. Re-extraction
+checks the complete parent response, its completion footer and the query
+digest, and refuses changed upstream data. Tests of extraction and units are
+source-transcription checks, not independent evidence of sky accuracy.
+
+## Coordinate conjunctions implemented in M5
+
+`searchConjunctions` passes the first-minus-second apparent coordinate to
+`searchLongitudeCrossingsWith`, with a target of zero. Right ascension and
+ecliptic longitude select the corresponding true-of-date frame. The first
+target is a physical solar-system body; the second is another body or a
+catalogue star. Each sample calls the existing position adapters without a
+second aberration, light-time or frame correction. The engine solver handles
+angular wrap, sign changes and relative stations. An antipodal sign jump is
+not a conjunction. At the returned time the spherical separation is
+`atan2(norm(cross(a,b)), dot(a,b))` for unit directions.
+
+The window owns `(from, to]`. The engine refines floating timestamps while
+its Date callbacks evaluate whole milliseconds. A bounded adjacent-millisecond
+check canonicalizes each candidate to the first represented instant at or
+past the crossing, using no samples outside the window. This also handles
+Date truncation before the Unix epoch. An unconfirmed candidate refuses the
+whole search with `unresolved-root`; it is not silently omitted. Exact
+sampled contacts with the coordinate are retained under the solver's original
+touch convention: a coarse sample uses the preceding side, while an extremum
+touch found by the station probe is marked direct. This direction flag is not
+evidence of a transit through a stellar or lunar disk.
+
+The coarse step is capped by `CONJUNCTION_LIMITS`, can be reduced by the
+caller and is rounded down to whole milliseconds. The paired-position budget
+counts every callback, including repeated instants, root verification and the
+samples retained in event records. Preflight tests can refuse the coarse scan
+before evaluating positions. Exhaustion during any later operation discards
+all events. The receipt states the requested step, actual step, budget and
+work consumed. No unbounded-budget option is accepted.
+
+`time-seams.ts` derives candidate boundaries from the engine's delta-T model,
+leap list and IERS table, then confirms each adjacent-millisecond clock change
+using the engine's `elapsedDays` and `timeBasis`. IERS fallback starts after
+the inclusive table endpoint. A seam in `(from, to]` produces a receipted
+`time-discontinuity` refusal before position sampling. This conservative
+policy avoids treating a skipped leap second or model jump as a continuous
+root. Caller-split subwindows cannot resolve the missing clock interval.
+Both boundary clocks must also lie inside the engine calculation span.
+
+The algorithm inherits the solver's smooth-motion and relative-station
+assumptions, its merging of very close roots, and its inability to guarantee
+unsampled tangencies. The capped step is a sampling policy, not a proof of
+completeness. `complete` means the calculation finished within its budget.
+`test/conjunction-geometry.test.ts` uses independent analytic trajectories
+for wrap, stations, endpoint ownership and budgets; `test/conjunctions.test.ts`
+checks actual engine integration; `test/time-seams.test.ts` checks all declared
+clock boundaries. These establish numerical behavior, not physical timing.
+
+The separate NAOJ comparison in `test/conjunction-references.test.ts` uses
+the frozen development coordinate events only. It converts source TT windows
+through the engine clock and converts returned instants back to nominal TT
+seconds before applying each original gate. No reference value or tolerance
+has been fitted to these results. The measured scope is in VALIDATION.md;
+neither that comparison nor numerical root precision supplies a general
+physical timing bound or validates an appulse or occultation contact.
+
+## Appulses implemented in M6
+
+`searchAppulses` accepts two distinct Moon/planet targets and a required
+maximum separation in degrees. It returns local minima of their apparent
+geocentric spherical separation that satisfy the inclusive limit. There is
+no observer, ranking or default closeness criterion. Stars and the Sun are
+outside this API. Equal RA, equal ecliptic longitude and disk contacts remain
+separate calculations.
+
+Let `a` and `b` be unit directions, `q = |a-b|^2`, and `theta` their
+great-circle separation. Then `q = 4 sin(theta/2)^2`. A decreasing-to-increasing
+zero of `q`'s time derivative describes a separation minimum; the opposite
+direction describes a maximum. This also handles a zero-separation passage
+without differentiating a singular angular norm. Reported separation uses
+`atan2(|a cross b|, a dot b)`, retaining precision near coincidence and the
+antipode. Exact coordinate poles have longitude-independent directions.
+
+The numerical rate is `(q(t+h)-q(t-h))/(2h)`, with the fixed half width
+`h = 60 s` in `APPULSE_LIMITS`. `test/appulse-geometry.test.ts` checks that
+stencil, its analytic bias, slow motion and window boundaries. To avoid
+subtracting nearly equal squared lengths, the kernel uses the haversine:
+
+```text
+q = 4 [sin((decA-decB)/2)^2
+     + cos(decA) cos(decB) sin((raA-raB)/2)^2]
+sin(x/2)^2 - sin(y/2)^2 = sin((x+y)/2) sin((x-y)/2)
+cos(x) - cos(y) = -2 sin((x+y)/2) sin((x-y)/2)
+```
+
+Each factor difference and product difference is formed before summing the
+terms. Relative longitudes at the two epochs use a common continuous branch;
+an exact pole's cosine is zero. Directions at each epoch share the engine's
+true-of-date frame, so scalar separation is unchanged by that epoch's common
+rotation. No second frame, light-time or aberration correction is applied.
+
+The rate in squared unit-chord per day becomes `atan(10000*rate)*90/pi`
+degrees for `searchLongitudeCrossingsWith`. This bounded monotone mapping
+keeps the same zeros while avoiding an artificial circular wrap. Candidate
+times are verified against the untransformed rate at adjacent integer
+milliseconds, including before the Unix epoch. Only negative-to-positive
+transitions or isolated exact zeros between those signs become events.
+Maxima and stationary touches are omitted. A detected zero plateau or an
+unconfirmed candidate refuses the complete search with `unresolved-minimum`.
+Constant separation has no isolated event. Limits compare the separation at
+the reported numerical instant without an accuracy allowance.
+
+Events own `(from,to]`. Stencil samples and adjacent-millisecond verification
+can evaluate outside that event window: `search.evaluationWindow` covers
+`[from-h-1 ms,to+h+1 ms]`. Both endpoints must fit the engine clock and
+calculation span, and any clock seam inside that expanded support refuses
+the search before position sampling. No stencil crosses a leap second or
+the delta-T/table handovers. The step is capped and rounded down to integer
+milliseconds. Every pair of adapter calls, including repeated instants,
+consumes the same finite budget; an exhausted budget discards all events.
+
+This is a numerical approximation to a minimum, not a claim of physical
+millisecond accuracy. For smooth `q` with a nonzero second derivative, the
+leading stencil shift is approximately `-h^2 q'''/(6 q'')` seconds when the
+derivatives use seconds. It grows without a bound as curvature vanishes.
+Position errors and roundoff perturb the derivative too: their local timing
+effect is approximately `E(q')/abs(q'')` seconds, in addition to clock and
+solver errors. These expressions are sensitivities, not assigned error
+budgets; missing derivative-error bounds remain unknown. A constructed
+asymmetric polynomial in the analytic test demonstrates a stencil shift
+even with exact input geometry.
+
+The inherited smooth-motion and station assumptions and merging of very
+close roots still apply. No sampling policy proves all minima were found,
+and slow shallow minima can be unresolved or numerically unstable. The
+receipts retain these limitations, the stencil, actual evaluation support,
+budget and both position receipts. The independent NAOJ development appulse
+test checks only the frozen approximate Jupiter/Saturn occurrence time.
+The reference's center is unspecified; there is no precision geocentric
+Moon/planet minimum validation or general timing bound. The held-out checks
+and measured residuals are in RESULTS.md. They retain the same coarse
+occurrence scope. VALIDATION.md records the executed checks.
+
+## Local closest approach implemented in M12
+
+`searchLocalClosestApproaches` applies the appulse squared-chord derivative
+construction to the existing topocentric Moon and target adapters. The target
+is an occultation planet or an exact catalogue star. The observer, frame,
+aberration, light-time and missing stellar distance retain the same conventions
+as the contact calculation. Angular minima have no disk-radius, horizon or
+proximity condition, and are evaluated independently of all contact times.
+
+`LOCAL_CLOSEST_APPROACH_LIMITS` fixes a five-minute default/maximum sampling
+step and a sixty-second derivative half-width. These policies were fixed and
+tested against analytic trajectories and the development Saturn minimum
+before the held-out run. Raw-rate checks bracket the numerical zero on
+adjacent milliseconds and require a negative-to-positive change. An isolated
+exact zero is allowed, a maximum or stationary touch is excluded, and a
+detected nonisolated zero refuses the search. Constant separation supplies no
+isolated event. The event owns `(from,to]`, including before the Unix epoch.
+
+All positions, including stencil support, adjacent verification and output,
+consume the same finite budget. The expanded evaluation interval extends
+one stencil half-width and one millisecond beyond each requested endpoint;
+clock seams or range violations anywhere in it refuse before sampling.
+Any later failure discards earlier events and retains the search receipt.
+The window API and CLI debit this search's work from the shared budget.
+
+`test/closest-approach-geometry.test.ts` checks spherical wrap, coincidences,
+nonconjunction minima, stationary touches, constant separation, exact and
+fractional roots, pre-Unix ownership, finite-difference bias, transformed-zero
+refusal and sample budgets. These are model semantics. The complete event
+suite compares the separately found Saturn and Mars minima with the frozen
+NAOJ local-minimum rows; RESULTS.md records their residuals. The centered
+stencil and shallow-curvature sensitivities derived for appulses above apply
+here too. Its numerical bracket is not a physical minimum-time enclosure.
+
+## Lunar candidates and window-local series implemented in M7
+
+`searchLunarOccultations` screens one planet or catalogue star. It searches
+intervals of negative clearance against the observer envelope, and separately
+against the geocentric disk limit. Both functions are evaluated at every
+solver sample using the current ranges. Screening only at an angular
+separation minimum would overlook changes of apparent radius and parallax.
+The boundary search delegates to `src/crossings.ts` through the monotone
+transform `atan(clearanceDegrees)*90/pi`, which has no circular branch jump.
+
+Let `dM` and `dT` be geocentric distances, `rM` and `rT` the adopted spherical
+radii, `R` a sphere enclosing the observers, and `s` the angular separation.
+For rigidly translated vectors, each center changes direction by at most
+`asin(R/d)`, and each angular radius is at most `asin(r/(d-R))`. The spherical
+triangle inequality therefore gives the necessary candidate condition:
+
+```text
+s <= asin(R/dM) + asin(R/dT) + asin(rM/(dM-R)) + asin(rT/(dT-R))
+```
+
+The limit is capped at a half circle. Infinite point-source stars contribute
+no target terms, an explicit approximation rather than a measured zero
+parallax. The geocentric overlap condition is
+`s <= asin(rM/dM) + asin(rT/dT)`. Both assume that the target is beyond the
+Moon. Finite-target validation enforces the sufficient radial ordering
+`dT-R-rT > dM+R+rM`; all observers must also be outside the lunar sphere.
+
+The lunar radius comes from the engine's `SKY_RADII_KM`. Planet radii are
+nominal equatorial-radius spheres from the cited JPL table in
+`data/radii-source.json`, without a fitted contact correction, oblate limb,
+rings, atmosphere or uncertainty enlargement. The enclosing observer radius
+uses the calc ellipsoid's equatorial radius plus the maximum height accepted
+by `normalizeObserver`. This includes elevated observers without replacing
+the actual ellipsoid used by later local calculations. The source constants
+and height contract are checked in `test/occultations.test.ts`.
+
+This is a conservative bound for the stated translated-vector spheres, not
+for every physical uncertainty or every apparent-place convention. The
+engine's geocentric lunar exception and topocentric light-time treatment
+differ. No unknown correction error, catalogue parallax or lunar relief has
+been given a zero error bound. A positive candidate need not correspond to
+any visible event; horizon, shadow intersection and local contacts remain
+subsequent calculations. Geocentric disk overlap does not imply visibility.
+
+`clearance-intervals.ts` checks every returned root against the raw clearance
+and all sampled signs against the reconstructed interval topology. A
+nonintegral entry uses the last outside millisecond; an exit uses the first
+outside millisecond. Exact zeros between opposite signs become point
+boundaries. A detected tangent or zero plateau is unresolved. A zero at
+the owned upper endpoint approached from positive clearance is also
+unresolved, as its following side lies outside the window. No singleton
+candidate is silently inferred or omitted there. The unowned lower endpoint
+uses its in-window side; active intervals at either edge retain clipping.
+`geocentricOverlap` means detected positive-duration disk overlap, not a
+proof that an unsampled touch did or did not occur.
+
+The search unwraps Moon-minus-target RA across its coarse grid. Sampled
+negative motion or an ambiguous large advance refuses passage assignment.
+The initial signed angle sets a window-local origin; nearest complete
+revolutions assign passage indices. Candidate interval edges and midpoint
+must belong to the same passage. Consecutive accepted indices form a local
+series; a missing index breaks it. There is no date-gap heuristic or claim
+of correspondence to published global series numbers. Continuation beyond
+the requested window stays unknown. This relies on the stated smooth
+motion and sampling assumptions, including the engine solver's limitations.
+
+All position pairs, including the winding scan, both clearance scans,
+verification and output witnesses, share one finite budget without caching.
+A failed or ambiguous calculation discards every candidate and series.
+Clocks at both window boundaries must be inside the engine span, and any
+clock seam refuses the complete window. Search, candidate and series receipts
+retain model constants, source identity, clock conventions and limitations.
+
+`test/occultation-geometry.test.ts` checks analytic point-source shadow
+constructions and direct Cartesian observer translations. Interval and
+series tests cover changing radii, narrow sampled encounters, wrap, rejected
+passages, near misses, clipping and budget accounting. These check the
+screening construction, not physical ephemeris accuracy. The independent
+development references require containment of all published local event
+instants under `test/fixtures/events/CANDIDATES.md`; no local timing gate or
+held-out case has been used to select radii or search parameters. The finite
+positive-event check supplies no all-target completeness or contact accuracy
+claim. `VALIDATION.md` records its scope.
+
+## Spherical-limb contacts implemented in M8
+
+The lunar limb is a sphere using the radius already exported by the
+engine's sky entry, with no mountains, valleys or limb-darkening profile.
+Planet radii use M7's cited JPL nominal equatorial values. Saturn's rings
+are absent, and no planet flattening or atmosphere is modeled. For a radius
+`r` and topocentric range `d`, the sphere subtends `asin(r/d)`. The adapters'
+reported `dist` supplies that range. In the engine's apparent reduction it
+is the astrometric light path; the apparent direction comes from a separately
+retarded relative vector. This is an inherited approximation, not an exact
+retarded silhouette construction. The correction uncertainty stays unknown.
+
+Let `s` be the angular center separation and `m` and `p` the apparent lunar
+and target semidiameters. External clearance is `s - (m + p)`; negative means
+some target disk is covered. Internal clearance is `s - (m - p)`; negative
+means the whole target disk is covered. The difference is signed, not absolute:
+a larger background disk cannot be fully hidden by a smaller lunar disk.
+The target's near surface must lie beyond the Moon's far surface, a sufficient
+radial ordering check at every sample. Infinite point-source stars have no
+target radius and only one clearance scan; unknown stellar parallax is an
+omission, not a measured zero.
+
+External ingress starts partial disappearance, internal ingress completes
+disappearance, internal egress starts reappearance, and external egress ends
+partial reappearance. Stars have only disappearance and reappearance.
+The external and internal negative-clearance intervals are returned separately.
+Full intervals must be contained in overlap intervals; conflicting geometry
+or coincident distinct disk contact times refuses the search. A partial-only
+event has overlap without full coverage. Clipping does not claim anything
+about the rest of the event beyond the window.
+
+Compute separation from unit vectors with atan2(norm(cross), dot) to retain
+precision near coincidence. A sign-changing contact and a tangent graze need
+separate detection. Closest angular approach, equal right ascension and equal
+ecliptic longitude are separate events and must not share a timestamp merely
+because they occur nearby. A geocentric disk overlap is also distinct from
+an occultation visible somewhere on Earth.
+
+`contact-intervals.ts` delegates each scalar zero search through the same
+bounded `atan(clearance)*90/pi` transform as candidate screening. The engine
+finds crossings and probes sampled extrema. Raw clearance checks then recover
+adjacent integer milliseconds with opposite signs or an exact isolated zero.
+Every sampled sign and each reconstructed partition midpoint must agree with
+the resulting topology. Detected tangencies, zero plateaus, inconsistent
+sample values or lost roots refuse the entire result as `unresolved-contact`.
+An unsampled tangency can still escape detection; the inherited smooth-motion,
+station-spacing and close-root-merging assumptions remain in the receipt.
+
+Contacts own `(from,to]`; both directions use the first integer millisecond
+on or after the numerical root. A halo of one millisecond on either side
+classifies exact endpoint roots. It is checked for clock seams and calculation
+range before positions are evaluated. The numerical bracket is either a
+point or one millisecond wide, as enforced in `test/contact-intervals.test.ts`
+and `test/contacts.test.ts`; it supplies no physical error bound.
+Intervals are clipped to the request and use these quantized contact edges.
+An ingress exactly at the upper endpoint is a contact with no positive-duration
+interval; an unowned lower endpoint never duplicates the previous window's
+contact. A fully covered window can have no contacts and a clipped interval.
+
+The topocentric scan does not depend on M7 screening, whose translated-vector
+envelope has different correction approximations. `CONTACT_LIMITS` caps the
+step at five minutes, a sampling policy rather than a completeness proof.
+Both clearance scans, verification and output share a finite paired-position
+budget; output receipts fix the consumed count only after all output samples
+succeed. Failure discards all events and intervals. Below-horizon geometry is
+retained without a visibility claim. The observer ellipsoid, corrections,
+range approximation, radii, star source and boundary clocks remain in receipts.
+
+`test/contact-geometry.test.ts` and `test/contact-search-geometry.test.ts`
+check independent analytic trajectories, partial and full coverage, reversed
+containment and grazing ambiguity. `test/contacts.test.ts` checks engine
+integration, clipped windows, ownership, clock halos, source receipts and
+bounded work. These are distinct from the published prediction comparison in
+`test/contact-references.test.ts`: it applies the original development time
+and disk-duration gates, including clock conversion. No radius, station or
+time offset was fitted to those predictions. The development subset is listed
+in `test/fixtures/events/CONTACTS.md`. M12 completes the separate local minima
+and all held-out check quantities in `test/event-validation.test.ts`;
+RESULTS.md records the measured scope.
+
+## Contact sky facts implemented in M9
+
+`contact.sky` reports context at the solved contact instant. The Moon and
+target directions are the existing topocentric contact samples; the Sun uses
+the same position adapter and true-of-date axes. No extra light-time,
+aberration, parallax or refraction correction enters the contact equation.
+The result remains present in daylight and below the horizon.
+
+Let `u` be the lunar unit direction, `v` the target direction, `t` the unit
+projection of `v` on the tangent plane at `u`, `d` the lunar distance and
+`m = asin(lunarRadius/d)`. The apparent contact ray, surface normal and
+point on the sphere are
+
+```text
+q = cos(m) u + sin(m) t
+n = -sin(m) u + cos(m) t
+P = d cos(m) q
+```
+
+`P` lies on the sphere and `P dot n = 0`, establishing the tangent condition.
+Both internal and external contacts use the target-facing lunar limb.
+Position angle is `atan2(t dot east, t dot north)` from celestial north
+through east at the Moon. The projected Sun gives the separate
+`brightLimbPositionAngleDegrees`, which is an orientation, not an illuminated
+fraction or contact angle. Collinear directions and a celestial pole have
+undefined position angles, reported as null. Direction norms below the
+`CONTACT_SKY_MODEL` numerical degeneracy threshold are also undefined;
+this is tested in `test/sky-geometry.test.ts`, not a physical error allowance.
+
+For the topocentric solar vector `S`, use `S - P` to find the solar center's
+altitude above the local tangent plane with normal `n`. The engine's solar
+radius and `|S - P|` give its angular semidiameter there. The limb is bright
+when the whole solar disk lies above that plane, dark when the whole disk
+lies below, and terminator while the disk straddles or touches it. Direct
+floating-point comparisons decide the band; no unknown physical uncertainty
+has been added. This finite-source transition does not have to agree with
+the sign of a projected position-angle difference. In particular, the finite
+observer distance matters at new/full Moon, even with an undefined solar
+position angle. If the target-facing tangent is undefined, limb and contact
+point are explicitly unavailable while center altitudes remain reportable.
+
+These are simultaneous apparent-sphere vectors using the inherited light-path
+ranges. They do not include a separate Sun-to-Moon propagation calculation,
+surface relief, Earth shadow during a lunar eclipse, solar occultation or
+photometry. A bright label describes this incidence model, not a measured
+brightness or a guarantee that the target can be detected.
+
+For horizontal coordinates, `onChartClock` and `gastHours` provide the engine's
+UT1 rotation and TT nutation. The local apparent sidereal angle and geodetic
+latitude rotate each already topocentric vector onto east, north and the
+ellipsoid normal. The sky entry's instantaneous state function is private
+and uses a different observer reduction; calling it indirectly would replace
+the contact directions. This local vector projection preserves the calc
+IERS observer. It does not add a second parallax subtraction or duplicate the
+engine's ephemeris, clock, frame or rise/set search.
+
+The Moon center, Sun center and actual lunar contact ray each have geometric
+altitude and an above-geometric-horizon flag, strictly positive above the
+ellipsoid-normal plane. Azimuth is north through east and is null at the
+zenith, nadir or geographic pole. The horizon has no terrain or elevation
+dip; height still affects the topocentric positions. `standardHorizonMarginDegrees`
+uses the sky entry's imported refraction allowance plus geometric altitude
+and, for each center, its upper semidiameter. The contact ray has no disk
+radius. This reuses the engine rise/set definition rather than finding a
+new crossing for every contact.
+
+The separately reported `refractedAltitudeDegrees` adds the pinned dependency's
+altitude-dependent `Refraction("normal", h)` at its nominal sea-level conditions.
+Negative lift near the zenith is clamped to zero and the altitude capped at
+the zenith. Below the reporting cutoff in `CONTACT_SKY_MODEL` it is null;
+no downward extrapolation is presented as refraction. Weather and altitude
+scaling are absent. The constant rise/set allowance and this model are
+different conventions, so `aboveStandardHorizon` is not obtained from the
+sign of `refractedAltitudeDegrees`. The tests enforce cutoff, zenith,
+center-versus-contact horizon and polar cases.
+
+`moonPhase` delegates to the engine's existing function: geocentric ecliptic
+longitude excess, its phase name and waxing flag, and the approximate
+illuminated fraction `(1 - cos(elongation))/2`. This omits lunar latitude and
+finite solar distance and is not used to classify the local limb. The
+approximation is named in both the field and receipt.
+
+One composite sky evaluation consists of the Sun adapter, the existing phase
+function and horizontal/illumination geometry. It consumes one additional
+unit of the shared finite search budget per contact, alongside the position
+pairs. The phase function itself evaluates lunar and solar longitudes.
+Search receipt v2 identifies both work units and counts composite sky
+evaluations separately; subtracting that count from `samples` gives paired
+evaluations. No sky work is done for an empty contact list. A budget or Sun
+position failure discards contacts and intervals, including failures in
+output. Each sky record carries the source positions, engine identity,
+clock, observer, sidereal angle, policies and omissions.
+
+Analytic tangent and local-axis constructions in `test/sky-geometry.test.ts`
+check the geometry independently of an ephemeris. The unchanged USNO/NAOJ
+development angle and refracted-altitude gates run in
+`test/contact-sky-references.test.ts`. Additional USNO solar-altitude,
+primary-phase, rise/set and polar samples were preregistered in
+`test/fixtures/sky/PREREGISTRATION.md` before comparison and run in
+`test/sky-evidence.test.ts`. These do not establish observed atmospheric
+visibility, all-phase illuminated-fraction accuracy or a general limb bound.
+VALIDATION.md and RESULTS.md record the final checked scope, including held-out
+contact angles and refracted altitudes.
+
+## Coarse global outline implemented in M10
+
+`lunarVisibilityOutline` returns the latitude sets intercepted by the shadow
+over a supplied window, at exact requested meridians. Its footprint uses
+zero ellipsoidal height and requires the target center above the geometric
+ellipsoid-normal horizon. There is no darkness filter, atmospheric refraction,
+horizon dip or terrain. It is a sampled model footprint, not a claim of
+practical observability or a terrain-corrected graze prediction.
+
+The Besselian-style construction uses a geocentric fundamental plane normal
+to the shadow axis, with orthogonal transverse axes. The NASA references in
+SOURCES.md describe this construction and its sphere limitations; no source
+implementation or ephemeris table is copied. `shadow-geometry.ts` independently
+derives common tangents of the lunar sphere and a target sphere. Let `M` and
+`T` be their geocentric vectors, `Rm` and `Rt` their radii, `D = |T-M|`,
+`k = (T-M)/D`, and `z = dot(O-M,k)` for an observer `O`. For a transverse
+distance `r` from the axis, the cone boundaries are:
+
+```text
+external radius(z) = (Rm*D - z*(Rt+Rm)) / sqrt(D*D - (Rt+Rm)*(Rt+Rm))
+internal radius(z) = (Rm*D + z*(Rt-Rm)) / sqrt(D*D - (Rt-Rm)*(Rt-Rm))
+```
+
+The external cone describes any disk overlap; the internal cone describes
+full coverage. Both require a positive signed radius and an observer behind
+the lunar plane. A negative internal radius beyond the cone vertex does not
+become full coverage by taking its absolute value. For an infinite point
+source, the axis is the apparent stellar direction and both cones reduce
+to a cylinder of radius `Rm`. The full target sphere must be farther than
+the Moon for every modeled observer. This strong distance-order check prevents
+reversing the occluder. The source range remains unknown for SAO stars.
+
+At each instant, the engine's negative topocentric geometric Earth state
+supplies the equator and pole semiaxis vectors, rotated with its existing
+frame matrix. This reuses the calc IERS ellipsoid, UT1 sidereal rotation,
+precession and nutation. No WGS84 constants or independent sidereal model
+are substituted. For meridian vectors `U` and `V`, with lengths `a` and `b`,
+the ellipsoid is `O = U*cos(theta) + V*sin(theta)`. The returned geodetic
+latitude is `atan2(a*sin(theta), b*cos(theta))`, not `theta`. Rotating `U`
+about the true pole selects east longitude; the pole remains common.
+
+Substitution `t = tan(theta/2)` makes squared transverse distance minus
+squared cone radius a polynomial of degree at most four on `[-1,1]`.
+The solver recursively isolates derivative roots, bisects on the resulting
+monotone intervals, and checks the intervening signs. Signed cone radius,
+depth ordering and the target-center horizon supply additional cuts. The
+normal is proportional to `U*cos(theta)/a^2 + V*sin(theta)/b^2`.
+Every surviving latitude interval is kept. Detected tangencies, plateaus,
+coincident roots and numerical ambiguities mark the meridian unresolved.
+The spatial polynomial roots are not time crossings; the existing engine
+crossing solver remains the owner of time contacts and conjunctions.
+
+The time grid includes both window endpoints. Thus this API reports a closed
+footprint intersection, whereas the contact event list owns `(from,to]`.
+Window clipping does not create a contact. At each meridian, the union of
+sampled latitude intervals preserves gaps. Each extremal witness is refined
+within its neighboring time cells with exact engine samples, assuming smooth
+motion. An extension must come from a whole refined interval intersecting
+the original component, so the refinement cannot join unrelated latitude
+strips just because their times are close. Conflicting independently refined
+components make the meridian unresolved. Short components between time samples
+can still be missed. No polygon or topology between meridians is inferred.
+
+The initial plane uses geocentric apparent directions and the adapter's
+reported light-path distances as sphere-center ranges. Those conventions
+are an approximation: the engine's geocentric Moon and its topocentric
+apparent Moon have different correction paths, and stellar aberration also
+depends on the observer. No second light-time or aberration correction is
+applied. Every reported boundary is therefore checked and refined using the
+existing topocentric adapters at its witness time. A limb edge brackets the
+local external or internal angular clearance; a horizon edge brackets the
+target's geometric altitude and requires disk coverage. A pole requires
+coverage and a nonnegative altitude. These checks verify the chosen model
+locally; they do not bound its physical error.
+
+The numerical policies were recorded before the comparison in
+`test/fixtures/events/OUTLINES.md`: a default time step of 60 seconds, at
+most 300 seconds, and a local latitude guard of 0.1 degree with a final
+bracket at most 0.00001 degree. `OUTLINE_LIMITS` and the outline tests enforce
+them. The guard is a refusal policy, not an extra reference allowance.
+Receipts also expose the spatial solver's numerical tolerances and the
+time-extremum bracket policy. The physical latitude-error field is null.
+The time-extremum bracket describes the optimizer's termination; it is not
+a proof of a global extremum or a physical timing error in seconds.
+
+Each longitude gets a circular band with explicit width and dateline flag,
+but only its exact meridian was evaluated. Empty intervals mean no hit in
+the sampled model. Unresolved bands carry no partial interval list. A global
+position or resource refusal discards the entire result, including earlier
+resolved bands. Ephemeris-pair evaluations and polynomial intersections have
+separate bounded budgets; cached exact-time plane samples are counted once,
+and local boundary evaluations count individually. Clock seams and range
+failures are refused before sampling. Every meridian carries the final search
+receipt, and each boundary carries its actual local sample receipts.
+
+`test/shadow-geometry.test.ts` compares the construction with analytic sphere
+and ellipsoid cases and independently calculated angular disks, including
+horizons, poles and disconnected intervals. `test/outline-references.test.ts`
+passes every frozen NAOJ development limit at its exact source longitude,
+preserves distinct inner/outer curves, and checks local contact existence
+on either side. The unchanged acceptance maximum is 1 degree latitude for
+the May 31, 2024 Saturn map. This is a finite development gate, not a measured
+general uncertainty bound; the source's exact shape and correction models
+remain qualified as in EVENTS.md. The held-out map comparison and measured
+residuals are recorded in RESULTS.md.
+
+## Accuracy budget in seconds of time
+
+Finite published-prediction comparisons are recorded in RESULTS.md. They do
+not fill the physical uncertainty budget. The final evaluator reports a local
+sensitivity for every reference contact, while unknown physical uncertainties
+remain unknown. Define:
+
+- `Eposition`, `Estar`, `Eframe`, `Ecorrection`, `Eradius` in arcseconds;
+- `vnormal`, the absolute time derivative of angular limb clearance, in
+  arcseconds per second;
+- `Eclock` and `Esolver` in seconds;
+- `Esite` and `Elimb`, transverse station and unmodelled limb error, in km;
+- `vshadow`, the corresponding normal shadow speed in km per second.
+
+The conservative linearized budget in seconds is
+
+```text
+Etime = Eclock + Esolver
+      + (Eposition + Estar + Eframe + Ecorrection + Eradius) / abs(vnormal)
+      + (Esite + Elimb) / abs(vshadow)
+```
+
+This is a local sensitivity estimate, not a proven bound. The errors are not
+assumed independent, so they are not combined in quadrature. Do not count a
+limb-radius uncertainty in both `Eradius` and `Elimb`. Engine sample maxima
+are evidence over their measured corpus, not universal error limits.
+
+Near grazing, either normal speed can approach zero and this estimate becomes
+unbounded; terrain can create or erase contacts. Such cases require an
+uncertain/grazing result, not a fixed seconds claim. Solver precision alone
+cannot support a physical timing claim. Missing uncertainty inputs remain
+unknown rather than being assigned zero.
+
+M4's [event reference contract](test/fixtures/events/EVENTS.md) freezes
+numerical maximum-error assertions against USNO and NAOJ published
+predictions before event implementation. It records source clocks, precision,
+limb and station qualifications, and documented ephemeris lineage. Unknown
+source conventions remain explicit. Development and held-out whole events
+are separate. These thresholds are acceptance criteria, not a measured error
+budget. M8 records the original development comparisons. M12 checks every
+original check quantity in both partitions, with measured residuals and any failures
+recorded in RESULTS.md. Acceptance limits remain separate from measured residuals.
+M3's angular reduction comparison cannot fill the
+unknown stellar catalogue term or produce a physical seconds guarantee.
+Its allowed reduction error would contribute that angular allowance divided
+by `abs(vnormal)` to the sensitivity budget; it does not replace `Estar`,
+and must not be counted again inside a later end-to-end contact comparison.
+
+The final evidence evaluator uses the complete local clearance, including
+the changing lunar and target semidiameters, at one second before and after
+each computed contact. The centered rate is
+`vnormal = abs(clearanceAfter - clearanceBefore) * 3600 / 2` in arcseconds
+per second. The angular conversion is `1/vnormal` seconds per arcsecond.
+For lunar distance `d` in kilometres, the small-angle transverse conversion
+is `(180*3600/pi)/(d*vnormal)` seconds per kilometre. This is a transverse
+displacement sensitivity, not the derivative of the adopted sphere radius.
+Tests independently check the units and leave zero, nonfinite or overflowing
+sensitivities null. The observed sensitivity ranges for the finite reference
+contacts are in RESULTS.md; they are not evidence of physical uncertainty.
+
+The final budget has the following status. An unknown row prevents a finite
+total, even when the published-prediction comparison passes:
+
+| Contribution | Seconds-of-time treatment | Evidence or missing information |
+| --- | --- | --- |
+| Represented contact instant | Numerical bracket width at most 0.001 s | Adjacent-sign ownership tests in `contact-intervals.test.ts`; this does not bound the physical root. |
+| Clock and source time convention | `Eclock` remains unknown as a complete absolute error | Engine time-basis receipt, rounded source clocks, historical nominal UT1 and fixed source delta-T remain distinct. |
+| Moon and planet position | Angular error divided by `vnormal` | Engine bounds retain their own sample span and qualifications; they do not give a uniform occultation error. |
+| Stellar position and motion | `Estar/vnormal`, unknown | ERFA verifies reduction of shared SAO inputs, not catalogue covariance, stellar parallax or component motion. |
+| Frame and apparent correction differences | `(Eframe + Ecorrection)/vnormal`, unknown jointly | Independent frame/reduction checks are finite; the inherited lunar and apparent-range conventions still differ from a full retarded silhouette. |
+| Adopted radius and actual limb | `Eradius/vnormal` or `Elimb/vshadow`, without double counting | Nominal spheres are specified, but relief, rings, oblateness and atmospheres are absent. |
+| Observer position and datum | `Esite/vshadow`, unknown | Synthetic modern inputs are explicit; historical astronomical coordinates and height datums have no established transformation. |
+| Minima and outline sampling | No finite general time bound | Centered-difference bias, shallow curvature and between-sample topology are not covered by contact quantization. |
+
+The report's `physicalTimingErrorSeconds` therefore remains null, including
+for contacts with small reference residuals. The source prediction and this
+model can share approximations, and an empirical difference is not a certified
+absolute error. No post-validation offset, radius, motion or clock correction
+was introduced to improve the held-out comparison.
+
+## Receipts and bounded work
+
+M11's `searchWindow` composes explicit queries on a single normalized window.
+It validates the complete request before calling a position adapter. Query
+records are captured once; observer records and longitude arrays are copied.
+Arrays must have ordinary own data slots. Custom iteration cannot expand a
+bounded query list. Output does not freeze caller-owned objects.
+
+Each query delegates to its existing search without modifying numerical
+parameters or reference allowances. Per-query sampling ceilings still apply;
+the wrapper additionally caps the sum of actual samples and the sum of outline
+intersections. Remaining allowance is passed into the next search before it
+starts. Contact sky evaluations are part of the existing sample unit and are
+not counted twice. This bounds algorithmic work units, not elapsed time or
+uniform-cost ephemeris calls. The policies in `WINDOW_LIMITS` are checked by
+`test/window.test.ts` and `test/window-review.test.ts`.
+
+The combined result is atomic on refusal: earlier event lists do not escape.
+Search audit receipts remain available, alongside the failing child's reason
+and receipt, or a wrapper-only refusal when no allowance remains to start it.
+The wrapper reports completed and attempted query counts independently of its
+empty refused result list. Unresolved outline meridians retain their existing
+status and empty intervals; completing a batch does not resolve them. There
+is no automatic candidate filter before a contact or outline query, no hidden
+target selection and no observer-dependent change to a geocentric event.
+
+The CLI accepts one bounded JSON value through standard input. It returns a
+transport envelope containing the library result and an explicit CLI receipt.
+Malformed input has a fixed error code without echoing raw caller values.
+The deterministic serializer traverses only plain data, orders object keys,
+and accounts for encoded UTF-8 bytes incrementally. It rejects nonfinite or
+unsupported values, cycles and resource-limit overruns without invoking
+serialization hooks. Shared receipt objects are encoded as repeated values,
+not mistaken for cycles. The limits and behavior are enforced by
+`test/json.test.ts` and `test/cli.test.ts`.
+
+No partial JSON is written on a serialization failure. A transport-budget
+refusal keeps the normalized window and transport receipt, with no calculated
+events or search receipts. This differs from the library's scientific/search
+refusal, which retains its full audit. There is no file-path or network input,
+automatic downloading, current-time field, ranking or interpretation. The
+build writes both local entry bundles only to the ignored `.generated/` folder.
+
+The initial position receipt records its schema and adapter implementation,
+normalized request, engine identity, engine calculation receipt, frame and
+unit conventions, and an explicit unmeasured-validation status. Refusals
+also carry a request receipt; no fabricated engine calculation is attached.
+Receipts are immutable JSON snapshots, not signatures or trusted attestations.
+
+Stellar receipts add the complete source record, source-row and catalogue
+digests, normalized observer, engine time basis, the frame and motion models,
+missing-distance and correction limitations, and an explicit separation
+between tested astrometric reduction and unmeasured catalogue/contact accuracy.
+Out-of-range refusals carry no time basis. Missing-motion refusals retain
+the resolved time basis without claiming that a direction was calculated.
+
+Conjunction receipts now add catalogue identity and digest when relevant,
+window ownership, both boundary clocks, seam records, search resolution/budget
+and limitations. Each event retains both position receipts and its time basis.
+Refusals retain the same normalized request and available provenance, with
+the originating position refusal when one occurs. Contact receipts now add
+the observer, spherical disk models, classification halo, raw numerical bracket
+and finite-reference validation scope without a general timing bound. Outline receipts add the shadow and
+ellipsoid models, sampled meridians, work budgets, unresolved bands and
+locally checked boundaries, with physical sampling uncertainty left unknown.
+Exhausting a search budget must produce an explicit
+refusal or unresolved interval, never a silently complete partial list.
+No network request is part of a calculation. Bulk downloads and generated
+outputs stay in ignored folders, and no authored file may reach the root build.

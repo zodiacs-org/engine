@@ -1,0 +1,119 @@
+{
+  "schema": "zodiacs.occultations.sao-aliases.v1",
+  "retrievedAt": "2026-10-15",
+  "description": "Curated labels and identifiers only; no astrometry copied.",
+  "entries": [
+    {
+      "sao": 98967,
+      "label": "Regulus",
+      "aliases": [],
+      "group": "named-lunar-target",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Regulus",
+      "locator": "Identifiers"
+    },
+    {
+      "sao": 157923,
+      "label": "Spica",
+      "aliases": [],
+      "group": "named-lunar-target",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Spica",
+      "locator": "Identifiers"
+    },
+    {
+      "sao": 184415,
+      "label": "Antares",
+      "aliases": [],
+      "group": "named-lunar-target",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Antares",
+      "locator": "Identifiers"
+    },
+    {
+      "sao": 94027,
+      "label": "Aldebaran",
+      "aliases": [],
+      "group": "named-lunar-target",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Aldebaran",
+      "locator": "Identifiers"
+    },
+    {
+      "sao": 76126,
+      "label": "Celaeno",
+      "aliases": ["16 Tauri", "16 Tau"],
+      "group": "pleiades",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Celaeno",
+      "locator": "Identifiers"
+    },
+    {
+      "sao": 76131,
+      "label": "Electra",
+      "aliases": ["17 Tauri", "17 Tau"],
+      "group": "pleiades",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Electra",
+      "locator": "Identifiers"
+    },
+    {
+      "sao": 76140,
+      "label": "Taygeta",
+      "aliases": ["19 Tauri", "19 Tau"],
+      "group": "pleiades",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Taygeta",
+      "locator": "Identifiers"
+    },
+    {
+      "sao": 76155,
+      "label": "Maia",
+      "aliases": ["20 Tauri", "20 Tau"],
+      "group": "pleiades",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Maia",
+      "locator": "Identifiers"
+    },
+    {
+      "sao": 76159,
+      "label": "Asterope",
+      "aliases": ["21 Tauri", "21 Tau"],
+      "group": "pleiades",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Asterope",
+      "locator": "Identifiers"
+    },
+    {
+      "sao": 76164,
+      "label": "22 Tauri",
+      "aliases": ["22 Tau"],
+      "group": "pleiades",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=22%20Tau",
+      "locator": "Identifiers"
+    },
+    {
+      "sao": 76172,
+      "label": "Merope",
+      "aliases": ["23 Tauri", "23 Tau"],
+      "group": "pleiades",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Merope",
+      "locator": "Identifiers"
+    },
+    {
+      "sao": 76199,
+      "label": "Alcyone",
+      "aliases": ["25 Tauri", "25 Tau"],
+      "group": "pleiades",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Alcyone",
+      "locator": "Identifiers"
+    },
+    {
+      "sao": 76228,
+      "label": "Atlas",
+      "aliases": ["27 Tauri", "27 Tau"],
+      "group": "pleiades",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Atlas",
+      "locator": "Identifiers"
+    },
+    {
+      "sao": 76229,
+      "label": "Pleione",
+      "aliases": ["28 Tauri", "28 Tau"],
+      "group": "pleiades",
+      "sourceUrl": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Pleione",
+      "locator": "Identifiers"
+    }
+  ]
+}

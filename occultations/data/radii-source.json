@@ -1,0 +1,25 @@
+{
+  "schema": "occultations-radius-sources/1",
+  "source": {
+    "title": "JPL Solar System Dynamics: Planetary Physical Parameters",
+    "url": "https://ssd.jpl.nasa.gov/planets/phys_par.html",
+    "retrieved": "2026-10-15",
+    "sha256": "e49a487947295c389ba6e5833dd8fb04b63e826d39f70c123881882096e5e68b",
+    "bytes": 58244,
+    "locator": "Equatorial Radius (km), planet and dwarf planet tables; reference D",
+    "reference": "Archinal et al. (2018), Report of the IAU Working Group on Cartographic Coordinates and Rotational Elements: 2015, Celestial Mechanics and Dynamical Astronomy 130:22",
+    "rights": "Individually transcribed scientific facts; no source prose, layout, code or catalogue redistributed."
+  },
+  "equatorialRadiusKm": {
+    "Mercury": 2440.53,
+    "Venus": 6051.8,
+    "Earth": 6378.1366,
+    "Mars": 3396.19,
+    "Jupiter": 71492,
+    "Saturn": 60268,
+    "Uranus": 25559,
+    "Neptune": 24764,
+    "Pluto": 1188.3
+  },
+  "convention": "Nominal equatorial-radius spheres for screening; no rings, atmosphere, terrain or uncertainty expansion. Not precision planetary limb models."
+}

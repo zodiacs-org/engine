@@ -1,0 +1,144 @@
+{
+  "source": "US Naval Observatory Astronomical Applications API",
+  "retrieved": "2026-10-15",
+  "rights": "US Government numerical predictions; see PREREGISTRATION.md",
+  "altitudes": [
+    {
+      "url": "https://aa.usno.navy.mil/api/celnav?date=2024-06-21&time=17:10:00&coords=38.89,-77.03",
+      "responseSha256": "4130c1e4a50110735b52ecf9c01cb0c72411f570503b4740936fefe59f35fac3",
+      "apiVersion": "4.0.1",
+      "date": "2024-06-21",
+      "timeUt1": "17:10:00",
+      "latitude": 38.89,
+      "longitude": -77.03,
+      "selectedFields": {
+        "properties.data[object=Sun].almanac_data.hc": 74.545733,
+        "properties.data[object=Sun].altitude_corrections.pa": 0.000632
+      }
+    },
+    {
+      "url": "https://aa.usno.navy.mil/api/celnav?date=2000-09-22&time=12:00:00&coords=51.48,0.0",
+      "responseSha256": "02513fbbb9c77cf4f87ac7deb300e2b36092e0675fdd848e6ff6b7489239df4d",
+      "apiVersion": "4.0.1",
+      "date": "2000-09-22",
+      "timeUt1": "12:00:00",
+      "latitude": 51.48,
+      "longitude": 0.0,
+      "selectedFields": {
+        "properties.data[object=Sun].almanac_data.hc": 38.584618,
+        "properties.data[object=Sun].altitude_corrections.pa": 0.001894
+      }
+    },
+    {
+      "url": "https://aa.usno.navy.mil/api/celnav?date=2020-01-15&time=02:00:00&coords=-33.87,151.21",
+      "responseSha256": "be33004872ae99b8ef4cb2c1b9e6dda100e742bc950f4861e6796315489756e6",
+      "apiVersion": "4.0.1",
+      "date": "2020-01-15",
+      "timeUt1": "02:00:00",
+      "latitude": -33.87,
+      "longitude": 151.21,
+      "selectedFields": {
+        "properties.data[object=Sun].almanac_data.hc": 77.338002,
+        "properties.data[object=Sun].altitude_corrections.pa": 0.000536
+      }
+    },
+    {
+      "url": "https://aa.usno.navy.mil/api/celnav?date=2024-06-21&time=12:00:00&coords=78.2232,15.6469",
+      "responseSha256": "4c70fab26420215474a0a1ab0a54ca4fc8a142e257e9fb544a4cb37657163533",
+      "apiVersion": "4.0.1",
+      "date": "2024-06-21",
+      "timeUt1": "12:00:00",
+      "latitude": 78.2232,
+      "longitude": 15.6469,
+      "selectedFields": {
+        "properties.data[object=Sun].almanac_data.hc": 34.75752,
+        "properties.data[object=Sun].altitude_corrections.pa": 0.001967
+      }
+    }
+  ],
+  "phases": {
+    "url": "https://aa.usno.navy.mil/api/moon/phases/date?date=2024-01-01&nump=4",
+    "responseSha256": "697a46e2a52d9ef6e242318272761ba432f6fe8da90c3899dcdbd6918d827a7b",
+    "apiVersion": "4.0.1",
+    "phasedata": [
+      {
+        "day": 4,
+        "month": 1,
+        "phase": "Last Quarter",
+        "time": "03:30",
+        "year": 2024
+      },
+      {
+        "day": 11,
+        "month": 1,
+        "phase": "New Moon",
+        "time": "11:57",
+        "year": 2024
+      },
+      {
+        "day": 18,
+        "month": 1,
+        "phase": "First Quarter",
+        "time": "03:52",
+        "year": 2024
+      },
+      {
+        "day": 25,
+        "month": 1,
+        "phase": "Full Moon",
+        "time": "17:54",
+        "year": 2024
+      }
+    ]
+  },
+  "polar": [
+    {
+      "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2024-06-21&coords=78.2232,15.6469&tz=0",
+      "responseSha256": "f6fec1920c3dc39d0e46c69ded0eb09013dda6056bb015ebf00d830cb84bcaae",
+      "apiVersion": "4.0.1",
+      "date": "2024-06-21",
+      "latitude": 78.2232,
+      "longitude": 15.6469,
+      "selectedFields": {
+        "properties.data.sundata": [
+          {
+            "phen": "Object continuously above the Horizon",
+            "time": null
+          },
+          {
+            "phen": "Object continuously above the Twilight Limit",
+            "time": null
+          },
+          {
+            "phen": "Upper Transit",
+            "time": "10:59"
+          },
+          {
+            "phen": "Lower Transit",
+            "time": "22:59"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2024-12-21&coords=78.2232,15.6469&tz=0",
+      "responseSha256": "596e0588cdc97c23eb26fa4dae9598ad8889301ce4f6df4ccbce2b82fd202124",
+      "apiVersion": "4.0.1",
+      "date": "2024-12-21",
+      "latitude": 78.2232,
+      "longitude": 15.6469,
+      "selectedFields": {
+        "properties.data.sundata": [
+          {
+            "phen": "Object continuously below the Horizon",
+            "time": null
+          },
+          {
+            "phen": "Object continuously below the Twilight Limit",
+            "time": null
+          }
+        ]
+      }
+    }
+  ]
+}
