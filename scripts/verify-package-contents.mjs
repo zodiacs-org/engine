@@ -21,6 +21,8 @@ const required = [
   "dist/conventions.d.ts",
   "dist/conventions.js",
   "dist/crossings.d.ts",
+  "dist/de440.d.ts",
+  "dist/de440.js",
   "dist/crossings.js",
   "dist/deltat.d.ts",
   "dist/deltat.js",
@@ -149,8 +151,12 @@ const ENTRY_BUDGETS = {
   // src/ephemeris.ts, and 46 of imports, exports and their use in
   // src/declination.ts and src/points.ts), and for 39 bytes of export names
   // the calc, window and sky entries import from the root's chunk (gastHours,
-  // tilt, eclipticOfDate); 4.79 per cent of headroom.
-  ".": 108_500,
+  // tilt, eclipticOfDate); 4.79 per cent of headroom. 1.1.0-rc.3: 108,531,
+  // 2,206 more than 1.1.0-rc.2's 106,325, for withEphemeris and the source's
+  // path in the ephemeris chunk, and, after the cut's reviews, the refusal of
+  // the code that computes its own positions; raised to 109,000 under the
+  // owner's delegation of 2026-11-04; 0.43 per cent of headroom.
+  ".": 109_000,
   // New in rc.16 (feature-api): the uniform calculation API, its frames,
   // centers, corrections, bounds and receipts. 106,779 bytes as integrated on
   // rc.15's time basis, 34,449 of them beyond the core's graph; 7.69 per cent
@@ -189,9 +195,19 @@ const ENTRY_BUDGETS = {
   // module, the root's included, so that its graph cannot grow with the core
   // (docs/evidence/houses-extra-2026-09-29/).
   "./houses": 15_000,
+  // New in 1.1.0-rc.3: positions from a sealed DE440 pack the caller
+  // supplies (zodiacs.org's P4.1, the hosted backend): dist/de440.js, the
+  // pack reader, the reduction and its IAU 2006 frames, and the shared chunks
+  // it imports, the one with the engine's IAU 2000B terms among them. 45,793
+  // bytes in 4 files; 48,000 approved by the owner on 2026-11-10; 4.81 per
+  // cent of headroom.
+  "./de440": 48_000,
   // rc.15: 56,961; as carried, 58,997. rc.16: 64,830, raised from 60,000 for
   // the nutation in the ephemeris chunk; 4.88 per cent of headroom.
-  "./internal": 68_000,
+  // 1.1.0-rc.3: 68,758, with withEphemeris, the source's path and the
+  // refusal in the ephemeris chunk; raised to 69,000 with the owner's
+  // approval of 2026-11-10; 0.35 per cent of headroom.
+  "./internal": 69_000,
   "./internal/math": 20_000, // rc.15: 18,165
   // New in 1.1.0-rc.2: declination parallels, the sect under a named
   // convention, composite midpoints and their aspects, and the dignities,
@@ -220,7 +236,10 @@ const ENTRY_BUDGETS = {
   // imports, the timeBands chunk it shares with ./calc among them. 42,400 is
   // the ceiling approved under the owner's delegation of 2026-11-03 (OQ3);
   // 0.22 per cent of headroom.
-  "./time": 42_400,
+  // 1.1.0-rc.3: 42,472, the nutation chunk now also exporting its terms,
+  // arguments and offsets to ./de440; raised to 42,600 with the owner's
+  // approval of 2026-11-10; 0.30 per cent of headroom.
+  "./time": 42_600,
   // Rise, set, transit and planetary hours, 83,254 bytes as first built, of
   // which 15,902 are beyond the core's graph; it reaches the ephemeris chunk
   // for the engine's clock (onChartClock), and so the core modules that chunk
@@ -243,14 +262,20 @@ const ENTRY_BUDGETS = {
   // 13,589 more than 1.1.0-rc.1's 127,751, with the varga sensitivity and the
   // chunks split out for ./time (above); raised to 143,000, the ceiling
   // approved under the owner's delegation of 2026-11-03 (OQ3); 1.17 per cent
-  // of headroom.
-  "./vedic": 143_000,
+  // of headroom. 1.1.0-rc.3: 143,652, 2,312 more, the ephemeris chunk's
+  // growth (above) and the refusals in the ayanamsas and the varga timing;
+  // raised to 144,500 under the owner's delegation of 2026-11-04; 0.59 per
+  // cent of headroom.
+  "./vedic": 144_500,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
   // 33,971 of them beyond the core's graph; 8.17 per cent of headroom. With
   // the nutation, 102,590: 2.34 per cent, not raised
-  // (docs/evidence/rc16-20260930/sizes.json).
-  "./window": 105_000
+  // (docs/evidence/rc16-20260930/sizes.json). 1.1.0-rc.3: 106,786, with
+  // withEphemeris and the source's path in the ephemeris chunk and
+  // birthWindow's refusal inside it; raised to 107,000 with the owner's
+  // approval of 2026-11-10; 0.20 per cent of headroom.
+  "./window": 107_000
 };
 
 /** The dist/ files an entry loads statically, with their bytes. */
@@ -364,7 +389,13 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // (OQ3 in docs/evidence/1.1.0-rc.2-20261102/OWNER-ANSWERS.md), for those
 // entries and features, rather than moving the CHANGELOG's 0.x history out
 // of the package; it leaves 3,217 bytes, 0.29 per cent.
-const TOTAL_CAP = 1_100_000;
+//
+// 1.1.0-rc.3: 1,142,818 bytes in 94 files, 46,035 more than 1.1.0-rc.2, for
+// @zodiacs/engine/de440 (dist/de440.js and its declarations), withEphemeris
+// and its refusals, the receipts' DE440 set, and their README, CHANGELOG,
+// NOTICE and LICENSING.md lines; raised from 1,100,000 to 1,145,000 with the
+// owner's approval of 2026-11-10, which leaves 0.19 per cent.
+const TOTAL_CAP = 1_145_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 
 // The licence expression covers the code (MIT) and the ΔT values (CC BY 4.0),
@@ -418,30 +449,39 @@ assert.deepEqual(gregorianImporters.sort(), ["dist/geo.js", "dist/techniques.js"
 assert(notice.includes("in a shared chunk under dist/ that dist/geo.js and dist/techniques.js import"), "NOTICE must say where the Gregorian adoption table is");
 assert(prose("LICENSING.md").includes("shared chunk under `dist/` that `dist/geo.js` and `dist/techniques.js` import"),
   "LICENSING.md must say where the Gregorian adoption table is");
-// The IAU 2000B nutation and the frame of date, the same way: NOTICE and
-// LICENSING.md say they are in a shared chunk under dist/ that the ephemeris
-// chunk and dist/time.js import (until 1.1.0-rc.2 they were in the ephemeris
-// chunk itself), which LICENSING.md says the graphs of nine entry points load.
+// The IAU 2000B nutation and the frame of date, the same way: NOTICE says the
+// frame is in a shared chunk under dist/ that the ephemeris chunk and
+// dist/time.js import, and LICENSING.md that the nutation is in a shared
+// chunk that the ephemeris chunk, dist/time.js and dist/de440.js import
+// (until 1.1.0-rc.2 both were in the ephemeris chunk itself; until
+// 1.1.0-rc.3, when ./de440 came to load the nutation without the frame, in
+// one chunk), which LICENSING.md says the graphs of ten entry points load.
 // The series' first coefficient stands for the nutation, and the marker
 // esbuild writes before the frame module's code, `// src/frame.ts`, for the
-// frame: NOTICE says the frame is built into that same chunk (review 1 of
-// 1.1.0-rc.2), so the marker must be there and in no other file.
+// frame: each must be in exactly one shared chunk, and the frame's chunk
+// must hold or import the nutation's.
 const nutationHolders = files.filter((file) => file.endsWith(".js") && read(file).includes("-172064161,"));
 assert(nutationHolders.length === 1 && /^dist\/chunk-[^/]+\.js$/u.test(nutationHolders[0]),
   `the nutation must be in exactly one shared chunk under dist/, as NOTICE says; found it in ${nutationHolders.join(", ") || "no file"}`);
 const frameHolders = files.filter((file) => file.endsWith(".js") && read(file).includes("\n// src/frame.ts\n"));
-assert.deepEqual(frameHolders, nutationHolders,
-  `the frame module must be built into the chunk that holds the nutation, as NOTICE says; found its marker in ${frameHolders.join(", ") || "no file"}`);
+assert(frameHolders.length === 1 && /^dist\/chunk-[^/]+\.js$/u.test(frameHolders[0]),
+  `the frame module must be in exactly one shared chunk under dist/, as NOTICE says; found its marker in ${frameHolders.join(", ") || "no file"}`);
 const nutationChunk = `./${nutationHolders[0].slice("dist/".length)}`;
+assert(frameHolders[0] === nutationHolders[0] || read(frameHolders[0]).includes(nutationChunk),
+  "the chunk that holds the frame must hold or import the nutation");
+assert(read("dist/time.js").includes(`./${frameHolders[0].slice("dist/".length)}`), "dist/time.js must import the chunk that holds the frame");
 assert(!read(nutationHolders[0]).includes('"astronomy-engine"'), "the chunk that holds the nutation must not import astronomy-engine");
 assert(read("dist/time.js").includes(nutationChunk), "dist/time.js must import the chunk that holds the nutation");
 assert(files.some((file) => /^dist\/chunk-[^/]+\.js$/u.test(file) && /\bfunction gastHours\(/u.test(read(file)) && read(file).includes(nutationChunk)),
   "the ephemeris chunk must import the chunk that holds the nutation");
 assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].sizes.has(nutationHolders[0])).sort(),
-  [".", "./calc", "./internal", "./sky", "./techniques", "./time", "./timing", "./vedic", "./window"],
+  [".", "./calc", "./de440", "./internal", "./sky", "./techniques", "./time", "./timing", "./vedic", "./window"],
   "the entry points whose graphs load the nutation must be the ones LICENSING.md names");
-assert(notice.includes("built into a shared chunk under dist/ that the ephemeris chunk and dist/time.js import"), "NOTICE must say where the frame and the nutation are");
-assert(prose("LICENSING.md").includes("shared chunk under `dist/` that the ephemeris chunk and `dist/time.js` import"),
+assert(read("dist/de440.js").includes(nutationChunk), "dist/de440.js must import the chunk that holds the nutation");
+assert(notice.includes("built into a shared chunk under dist/ that the ephemeris chunk and dist/time.js import"), "NOTICE must say where the frame is");
+assert(notice.replace(/\s+/gu, " ").includes("src/nutation.ts, built into a shared chunk under dist/ that the ephemeris chunk, dist/time.js and dist/de440.js import"),
+  "NOTICE must say where the nutation is");
+assert(prose("LICENSING.md").includes("shared chunk under `dist/` that the ephemeris chunk, `dist/time.js` and `dist/de440.js` import"),
   "LICENSING.md must say where the nutation is");
 // The essential dignities' tables and the composite code adapted from the
 // site, the same way: NOTICE and LICENSING.md say that dist/techniques.js and

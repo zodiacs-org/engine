@@ -207,8 +207,8 @@ point makes no network request and has no import-time side effects;
 `@zodiacs/engine/timing`, `@zodiacs/engine/vedic`, `@zodiacs/engine/geo`,
 `@zodiacs/engine/calc`, `@zodiacs/engine/window`,
 `@zodiacs/engine/techniques`, `@zodiacs/engine/houses`,
-`@zodiacs/engine/sky`, `@zodiacs/engine/time` and `@zodiacs/engine/lite`
-are opt-in: the root imports none of them, and
+`@zodiacs/engine/sky`, `@zodiacs/engine/time`, `@zodiacs/engine/lite` and
+`@zodiacs/engine/de440` are opt-in: the root imports none of them, and
 `npm run exports:smoke` fails if its static graph reaches one of their
 modules or a zone history. `@zodiacs/engine/lite` is built apart from the
 others: `npm run build` runs `scripts/build-lite.mjs` after tsup, which

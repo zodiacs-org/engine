@@ -70,6 +70,59 @@ jobs:
       - name: Carried archives match history and source
         run: node scripts/verify-archive-binding.mjs
 
+  de440-tier-b:
+    # docs/de440.md, Checks: the DE440 reduction on NAIF's de440.bsp against
+    # the ERFA chain's places and nodes (src/de440-kernel.test.ts). The kernel
+    # is fetched from NAIF, checked by its SHA-256 and cached by it; it is
+    # never uploaded as an artifact. A failed download is not a failure of the
+    # engine: re-run the job.
+    name: DE440 on the kernel (tier B)
+    runs-on: ubuntu-latest
+    env:
+      KERNEL_URL: https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440.bsp
+      KERNEL_SHA256: a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Restore the kernel
+        id: kernel
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/kernels/de440.bsp
+          key: de440-bsp-a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5
+
+      - name: Fetch the kernel from NAIF
+        if: steps.kernel.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/kernels"
+          curl -sS --fail --retry 4 --retry-delay 15 -o "$RUNNER_TEMP/kernels/de440.bsp" "$KERNEL_URL"
+
+      - name: Check the kernel's digest
+        run: echo "$KERNEL_SHA256  $RUNNER_TEMP/kernels/de440.bsp" | sha256sum -c -
+
+      - name: Save the kernel
+        if: steps.kernel.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/kernels/de440.bsp
+          key: de440-bsp-a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5
+
+      - name: Tier B
+        # A skipped test fails the job: every tier-B test must run here.
+        run: |
+          PRECISION_KERNEL="$RUNNER_TEMP/kernels/de440.bsp" npx vitest run src/de440-kernel.test.ts --reporter=default --reporter=json --outputFile.json="$RUNNER_TEMP/tier-b.json"
+          node -e 'const r = JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8")); if (r.numPendingTests + r.numTodoTests > 0 || r.numPassedTests !== r.numTotalTests || r.numTotalTests < 3) { console.error("tier B: " + JSON.stringify({ total: r.numTotalTests, passed: r.numPassedTests, skipped: r.numPendingTests })); process.exit(1); } console.log("tier B: " + r.numPassedTests + " of " + r.numTotalTests + " passed, none skipped");' "$RUNNER_TEMP/tier-b.json"
+
   archives:
     name: Every carried archive rebuilds from its source commit
     runs-on: ubuntu-latest

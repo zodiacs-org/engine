@@ -1,0 +1,107 @@
+# sh carrier-gates.sh conformance at d2794d2 in a clean full-history clone, blobless, its sparse checkout leaving out docs/evidence/calc-sidereal-2026-10-05/, without NODE_OPTIONS; Node v22.22.2, npm 10.9.7, git 2.50.1, 2026-11-10
+## npm ci
+added 109 packages in 1s
+exit 0
+## npm run build
+lite: dist/lite.js 146 bytes
+lite: dist/lite-declinations.js 9665 bytes
+lite: dist/lite-sect.js 3439 bytes
+lite: dist/lite-composite.js 3783 bytes
+lite: dist/lite-dignities.js 11897 bytes
+lite: dist/lite.d.ts 5135 bytes
+lite: dist/metafile-lite.json 5357 bytes
+exit 0
+## node --test conformance/harness/selftest.mjs
+TAP version 13
+# Subtest: longitudes compare on the circle, in the rule unit
+ok 1 - longitudes compare on the circle, in the rule unit
+  ---
+  duration_ms: 0.468084
+  type: 'test'
+  ...
+# Subtest: arrays compare element by element and report the worst residual
+ok 2 - arrays compare element by element and report the worst residual
+  ---
+  duration_ms: 0.115625
+  type: 'test'
+  ...
+# Subtest: exact fields, missing fields and non-numbers fail
+ok 3 - exact fields, missing fields and non-numbers fail
+  ---
+  duration_ms: 0.116916
+  type: 'test'
+  ...
+# Subtest: validation accepts a conforming file and names each problem in a bad one
+ok 4 - validation accepts a conforming file and names each problem in a bad one
+  ---
+  duration_ms: 1.7125
+  type: 'test'
+  ...
+# Subtest: from 0.2.0 each vector names its kind and arbiter as registry ids, and 0.1.0 is as released
+ok 5 - from 0.2.0 each vector names its kind and arbiter as registry ids, and 0.1.0 is as released
+  ---
+  duration_ms: 0.297458
+  type: 'test'
+  ...
+# Subtest: a release holds the vectors released before it, and nothing else differs
+ok 6 - a release holds the vectors released before it, and nothing else differs
+  ---
+  duration_ms: 0.134958
+  type: 'test'
+  ...
+# Subtest: the committed vector files conform to SPEC.md, and this version holds 0.1.0's vectors
+ok 7 - the committed vector files conform to SPEC.md, and this version holds 0.1.0's vectors
+  ---
+  duration_ms: 13.021666
+  type: 'test'
+  ...
+# Subtest: the protocol: a handshake, then one response per request, in order
+ok 8 - the protocol: a handshake, then one response per request, in order
+  ---
+  duration_ms: 29.946083
+  type: 'test'
+  ...
+# Subtest: the protocol: a missing handshake or an answer out of order is refused
+ok 9 - the protocol: a missing handshake or an answer out of order is refused
+  ---
+  duration_ms: 74.469208
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 160.812708
+exit 0
+## node conformance/harness/validate.mjs --expect-total 500
+0.1.0: 500 vectors as released; 0.2.0 holds each of them, with its convention ids
+L1 Positions: 240 vectors, 1 arbiter(s), sha256 4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8
+  position.apparent.ecliptic-true-of-date: 240
+L2 Houses and angles: 150 vectors, 5 arbiter(s), sha256 fc5321b9061b9860bfb9af5254e5813be1c4bc3c858df6f623ea1617b76b88e5
+  angles.asc-mc: 60
+  angles.vertex-east-point: 10
+  houses.cusps: 80
+L3 Time and calendars: 110 vectors, 5 arbiter(s), sha256 51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66
+  time.zone-offset: 45
+  time.local-mean-time: 5
+  time.tt-minus-utc: 10
+  time.delta-t: 15
+  calendar.to-jdn: 25
+  calendar.from-jdn: 10
+conformance: 500 vectors conform to SPEC.md
+exit 0
+## node conformance/harness/run.mjs --check
+zodiacs-engine 1.1.0-rc.3: 267 pass, 192 fail, 41 unsupported, 0 error (of 500)
+  L1: 48 pass, 192 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 69 pass, 0 fail, 41 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine.json
+exit 0
+## node conformance/harness/report.mjs --check
+conformance: RESULTS.md and results/summary.json are current
+exit 0
+

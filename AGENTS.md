@@ -18,15 +18,16 @@ and documentation CC BY 4.0, tools and schema MIT). Read `README.md`,
   `src/window.ts` and `src/window-*.ts`, `src/houses-extra.ts` (the houses
   entry), `src/equator.ts` (shared by calc and sky),
   `src/first-millisecond.ts` (the sky entry's), `src/time.ts` and
-  `src/time-bands.ts` (the time entry's), and `src/lite.ts` and
-  `src/sect.ts` (the lite entry's); `OPT_IN_SOURCE` in
+  `src/time-bands.ts` (the time entry's), `src/lite.ts` and
+  `src/sect.ts` (the lite entry's), and `src/de440.ts` with `src/de440/`
+  (the DE440 entry's); `OPT_IN_SOURCE` in
   `scripts/root-isolation.mjs` names them all. The lite entry is built
   apart: `npm run build` runs `scripts/build-lite.mjs` after tsup, which
   bundles each of its four parts into a file of its own that imports
   nothing. Their guides are `docs/time.md`, `docs/timing-hellenistic.md`,
   `docs/vedic.md`, `docs/techniques.md`, `docs/calc.md`, `docs/houses.md`,
-  `docs/sky.md` and `docs/lite.md`, and the README's *Birth-time windows*
-  for the window entry.
+  `docs/sky.md`, `docs/lite.md` and `docs/de440.md`, and the README's
+  *Birth-time windows* for the window entry.
 - Package and release scripts: `scripts/` (export smoke test, package
   contents and size budgets, packed consumer, archive binding, release
   archive check, compatibility checks), and the generators of the time data:
@@ -149,8 +150,8 @@ below no `package.json` or `node_modules`. The package supports Node
   effects, and keep `@zodiacs/engine/crossings`, `@zodiacs/engine/deltat`,
   `@zodiacs/engine/time` and `@zodiacs/engine/lite` free of the ephemeris.
   The root must not import `@zodiacs/engine/timing`, `/vedic`, `/geo`,
-  `/calc`, `/window`, `/techniques`, `/houses`, `/sky`, `/time` or `/lite`,
-  which are opt-in; `npm run exports:smoke` checks it.
+  `/calc`, `/window`, `/techniques`, `/houses`, `/sky`, `/time`, `/lite` or
+  `/de440`, which are opt-in; `npm run exports:smoke` checks it.
 - Every entry point in `package.json` `exports` has a budget for its import
   graph in `scripts/verify-package-contents.mjs`, the zone histories have
   their own (200,000 bytes, 16 files) and the package a total cap. Add a

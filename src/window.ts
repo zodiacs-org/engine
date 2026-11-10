@@ -8,7 +8,7 @@
 import { ASPECTS, ASPECT_TYPES, matchAspect, separation } from "./aspects.js";
 import { validateBirthSettings } from "./birth-input.js";
 import { dateFrom } from "./date-input.js";
-import { bodyLongitude, gastHours, onChartClock } from "./ephemeris.js";
+import { bodyLongitude, gastHours, onChartClock, refuseUnderSource } from "./ephemeris.js";
 import { computeAngles, computeHouses, houseOf, isPolarUndefinedHouseSystem } from "./houses.js";
 import type { AngleInput } from "./houses.js";
 import { tilt } from "./nutation.js";
@@ -1129,6 +1129,8 @@ function change(id: number, from: number, to: number, system: HouseSystem): Wind
  * RangeError, when the search would need more than two million instants.
  */
 export function birthWindow(input: BirthWindowInput): BirthWindow {
+  // Its enclosures' bounds were measured on astronomy-engine's smooth motions.
+  refuseUnderSource("birthWindow");
   if (!input || typeof input !== "object") throw new RangeError("input must be an object.");
   const settings = validateBirthSettings({
     latitude: input.latitude,

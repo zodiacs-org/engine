@@ -218,6 +218,13 @@ const derivedIds: string[] = natalConventionIds(idsEnvelope);
 const splitId: ConventionIdParts = parseConventionId(conventionId("zodiac", "tropical"));
 const idAddress: string = conventionAddress(splitId.namespace + ":" + splitId.value) + CONVENTIONS_REGISTRY;
 void carriedIds; void derivedIds; void idAddress;
+import { withEphemeris, type PositionSource } from "@zodiacs/engine";
+import { openDe440Pack, De440Error, REDUCED_BODIES, type De440Source, type De440ErrorCode } from "@zodiacs/engine/de440";
+const opening: Promise<De440Source> = openDe440Pack(new Uint8Array(0), { expectDigest: "0".repeat(64) });
+const asSource = (source: De440Source): PositionSource => source;
+const inside: number = withEphemeris({ ephemeris: { name: "x", version: "0" }, place: () => ({ lon: 0, lat: 0 }), trueNode: () => 0 }, () => 1);
+const errorCode = (error: unknown): De440ErrorCode | null => (error instanceof De440Error ? error.code : null);
+void opening.catch(() => {}); void asSource; void inside; void errorCode; void REDUCED_BODIES;
 `
 );
 // An explicit project: "types": [] keeps @types packages in parent directories
@@ -635,7 +642,17 @@ assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-
   assert.deepEqual(conventionsEntry.parseConventionId("frame:a:b"), {namespace: "frame", value: "a:b"});
   assert.equal(parseNatalEnvelope(serializeNatalEnvelope(createNatalEnvelope(natalChart({utc: "2000-01-01T12:00:00Z"})))).ok, true);
 }
-console.log(JSON.stringify({version: ENGINE_VERSION, birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", liteEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
+{
+  // The DE440 entry: it refuses what is not a pack, and the root's switch runs a source.
+  const de440 = await import("@zodiacs/engine/de440");
+  await assert.rejects(() => de440.openDe440Pack(new Uint8Array(64), { expectDigest: "0".repeat(64) }), de440.De440Error);
+  const flat = { ephemeris: { name: "flat", version: "0" }, place: () => ({ lon: 10, lat: 0 }), trueNode: () => 20 };
+  const rows = root.withEphemeris(flat, () => positions("2000-01-01T12:00:00Z"));
+  assert.equal(rows.find((row) => row.body === "Sun").lon, 10);
+  assert.equal(rows.find((row) => row.body === "North Node").lon, 20);
+  assert.notEqual(positions("2000-01-01T12:00:00Z").find((row) => row.body === "Sun").lon, 10);
+}
+console.log(JSON.stringify({version: ENGINE_VERSION, de440: "passed", birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", liteEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

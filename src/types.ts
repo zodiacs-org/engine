@@ -49,6 +49,24 @@ export type BodyName =
   | "North Node"
   | "South Node";
 
+/** A body whose apparent place a position source gives; the nodes come from its `trueNode`. */
+export type SourceBody = Exclude<BodyName, "North Node" | "South Node">;
+
+/**
+ * Where the engine takes body positions from instead of astronomy-engine,
+ * inside `withEphemeris`: for example the source `@zodiacs/engine/de440`
+ * opens. `place` gives a body's apparent geocentric longitude in [0, 360)
+ * and latitude, degrees, on the true ecliptic and equinox of date, at
+ * `ttDays`, TT days past J2000.0; `trueNode` the longitude of the Moon's true
+ * node there. `ephemeris` is what a receipt names. Either may throw for an
+ * instant the source does not cover.
+ */
+export interface PositionSource {
+  readonly ephemeris: { readonly name: string; readonly version: string };
+  place(body: SourceBody, ttDays: number): { lon: number; lat: number };
+  trueNode(ttDays: number): number;
+}
+
 export type HouseSystem =
   | "whole"
   | "placidus"
@@ -221,6 +239,11 @@ export interface Chart {
   /** How the instant became UT1 (for the angles) and TT (for the positions). */
   timeScale: TimeScale;
   engineVersion: string;
+  /**
+   * The ephemeris the bodies came from, when it was not astronomy-engine: the
+   * source `withEphemeris` ran the chart with. Absent for astronomy-engine.
+   */
+  ephemeris?: { readonly name: string; readonly version: string };
 }
 
 export interface MinimalBody {
@@ -289,7 +312,7 @@ export interface MoonPhase {
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "1.1.0-rc.2";
+export const ENGINE_VERSION: string = "1.1.0-rc.3";
 
 /**
  * The ephemeris underneath every position. The dependency is pinned to this

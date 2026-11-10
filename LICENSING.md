@@ -70,6 +70,22 @@ diurnal and nocturnal planet lists (`DIURNAL_PLANETS`, `NOCTURNAL_PLANETS`),
 the sect light, and Mercury's side of the Sun with the lists of the planets
 in and out of sect.
 
+The DE440 entry, added in 1.1.0-rc.3 (`src/de440.ts` and `src/de440/`,
+built into `dist/de440.js` and the chunks it imports), ports the pack reader,
+the reduction, the IAU 2006 frames and the nutation sum of zodiacs.org's
+research runtime, `examples/precision-alpha/src/core/` (`container.mjs`,
+`ephemeris.mjs`, `errors.mjs`, `reduce.mjs`, `frames.mjs`, `nutation.mjs`
+and, for the digest helpers, `source.mjs`), read at the
+site repository's commit `4fa9ffbf87e78948f2187a603a596cfb47d3c530`
+(2026-11-09), with the geocentric Moon as the site's preregistration of P4.1
+(commit `5305fc74`) specifies it. That directory declares the MIT license
+(its `package.json` and `NOTICE.md`), so the port comes in under the MIT
+license as it is. The runtime's own nutation table, which its `NOTICE.md`
+gives as ERFA's (BSD 3-Clause), was not taken: the port sums the engine's
+table, arguments and offsets (*Nutation* below), which equal the runtime's
+term for term and double for double. `src/de440/kernel.testkit.ts`, a reader
+of `de440.bsp` for the tests, is not packed.
+
 The site repository's `LICENSE` at both commits reserves all rights in its
 contents but the parts it names (the engine, whose code it states is MIT, its
 shared sky data and the GeoNames data), and grants no licence to this code.
@@ -118,8 +134,9 @@ The tests and their fixtures, none of which is packed, contain:
 - values computed with ERFA (BSD 3-Clause) through pyerfa 2.0.1.5, such as
   `src/fixtures/nutation-erfa.json`, the ayanamsas and rates of
   `src/fixtures/ayanamsa-rates.json`, `src/fixtures/ayanamsa-rates-dense.json`
-  and `src/fixtures/ayanamsa-epochs.json`,
-  and the Vedic and angle references:
+  and `src/fixtures/ayanamsa-epochs.json`, the DE440 entry's oracles
+  (`docs/evidence/de440-20261110/oracles/`, an ERFA chain over NAIF's
+  `de440.bsp`), and the Vedic and angle references:
   numbers ERFA returned, not its code or tables, none of which is copied;
 - US Naval Observatory tables from its Astronomical Applications API, the
   Earth's Seasons times of `src/techniques/fixtures/usno-seasons.json` and the
@@ -164,9 +181,11 @@ instrument, and only statistics are committed.
 (385) and coefficients (462) of its 77 luni-solar terms, the 10 coefficients
 of its five fundamental arguments and its two fixed offsets for the planetary
 terms. The build places them in a shared chunk under `dist/` that the
-ephemeris chunk and `dist/time.js` import, so the graphs of the root,
-`./calc`, `./internal`, `./sky`, `./techniques`, `./time`, `./timing`,
-`./vedic` and `./window` load them. The model is D. D.
+ephemeris chunk, `dist/time.js` and `dist/de440.js` import, so the graphs of
+the root, `./calc`, `./de440`, `./internal`, `./sky`, `./techniques`,
+`./time`, `./timing`, `./vedic` and `./window` load them;
+`@zodiacs/engine/de440` sums the same terms in the order the research
+runtime of zodiacs.org sums them. The model is D. D.
 McCarthy and B. J. Luzum, "An abridged model of the precession-nutation of
 the celestial pole", Celestial Mechanics and Dynamical Astronomy 85, 37–49
 (2003), as the IERS Conventions (2003), chapter 5, give it.

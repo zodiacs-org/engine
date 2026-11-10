@@ -151,7 +151,7 @@ interface NatalProvenanceClaims {
         tzdbVersion?: string;
     };
     ephemeris?: {
-        name: "astronomy-engine";
+        name: "astronomy-engine" | "jpl-de440";
         version: string;
     };
 }
@@ -179,7 +179,7 @@ interface NatalReceipt {
         name: "@zodiacs/engine";
         version: string;
         ephemeris?: {
-            name: "astronomy-engine";
+            name: "astronomy-engine" | "jpl-de440";
             version: string;
         };
     };
@@ -294,6 +294,10 @@ interface Chart {
     deltaT: DeltaT;
     timeScale: TimeScale;
     engineVersion: string;
+    ephemeris?: {
+        readonly name: string;
+        readonly version: string;
+    };
 }
 
 // exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)

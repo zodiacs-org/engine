@@ -24,6 +24,7 @@ const sky = await import("@zodiacs/engine/sky");
 const internal = await import("@zodiacs/engine/internal");
 const internalMath = await import("@zodiacs/engine/internal/math");
 const lite = await import("@zodiacs/engine/lite");
+const de440 = await import("@zodiacs/engine/de440");
 
 for (const name of [
   "positions",
@@ -468,12 +469,18 @@ checkSelfContained("deltat");
 checkSelfContained("time");
 // Nor does the lite entry: dist/lite.js and its four parts, which import nothing.
 checkSelfContained("lite");
+// The DE440 entry reads the caller's pack: no ephemeris package, nothing lazy.
+checkSelfContained("de440");
+for (const name of ["openDe440Pack", "De440Error", "REDUCED_BODIES", "BARYCENTRE_NOT_CENTRE", "DE440_EPHEMERIS_NAME"]) {
+  assert.ok(name in de440, `@zodiacs/engine/de440 exports ${name}`);
+}
+assert.equal(typeof engine.withEphemeris, "function", "the root exports withEphemeris");
 // The core entry reaches no zone history and loads nothing lazily; its one
 // dependency is the ephemeris.
 checkSelfContained("index", ["astronomy-engine"]);
 
 // The root imports no subpath: no module of an opt-in entry (timing, Vedic,
-// geo, calc, window, techniques, houses, sky, time or lite), and no zone
+// geo, calc, window, techniques, houses, sky, time, lite or de440), and no zone
 // history, is in its static graph (OPT_IN_SOURCE in scripts/root-isolation.mjs).
 // That script reads the graph from the build's own module list
 // (dist/metafile-esm.json and dist/metafile-lite.json, which `npm run build`
@@ -546,7 +553,7 @@ assertNoBreaches(checkBuild({ files: builtFiles, read: readBuilt }), "dist/");
 const exportsMap = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).exports;
 for (const [subpath, target] of Object.entries(exportsMap)) {
   if (subpath === "./calc" || subpath === "./vedic") continue;
-  const entry = /^\.\/dist\/([a-z-]+)\.js$/u.exec(target.import)[1];
+  const entry = /^\.\/dist\/([a-z0-9-]+)\.js$/u.exec(target.import)[1];
   const graph = staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
   for (const source of new Set([...graph.sources, ...graph.held, ...graph.marked])) {
     assert(!UNMARKED_SOURCE.test(source), `${subpath} reaches ${source}, which the table check leaves out because only ./calc and ./vedic reach it`);

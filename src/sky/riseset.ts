@@ -8,7 +8,7 @@ import { Body, GeoVector } from "astronomy-engine";
 
 import { searchLongitudeCrossingsWith } from "../crossings.js";
 import { dateFrom } from "../date-input.js";
-import { gastHours, onChartClock } from "../ephemeris.js";
+import { gastHours, onChartClock, refuseUnderSource } from "../ephemeris.js";
 import { equatorRows, turn } from "../equator.js";
 import { firstMillisecond } from "../first-millisecond.js";
 import { outsideReferenceSpan } from "../reference-span.js";
@@ -192,6 +192,7 @@ interface State {
 }
 
 function stateAt(body: SkyBody, site: Readonly<Required<Observer>>, conventions: SkyConventions, ms: number): State {
+  refuseUnderSource("@zodiacs/engine/sky's rising and setting");
   return onChartClock(ms, "utc", undefined, (time) => {
     // Geocentric apparent place (light time and aberration, as astronomy-engine
     // gives them) on the true equator and equinox of date, in au, by the

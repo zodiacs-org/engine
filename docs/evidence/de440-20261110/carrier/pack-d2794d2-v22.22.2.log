@@ -1,0 +1,128 @@
+# sh carrier-gates.sh pack at d2794d2 in a clean full-history clone, blobless, its sparse checkout leaving out docs/evidence/calc-sidereal-2026-10-05/, without NODE_OPTIONS; Node v22.22.2, npm 10.9.7, git 2.50.1, 2026-11-10
+## npm ci
+added 109 packages in 1s
+exit 0
+## npm run build
+lite: dist/lite.js 146 bytes
+lite: dist/lite-declinations.js 9665 bytes
+lite: dist/lite-sect.js 3439 bytes
+lite: dist/lite-composite.js 3783 bytes
+lite: dist/lite-dignities.js 11897 bytes
+lite: dist/lite.d.ts 5135 bytes
+lite: dist/metafile-lite.json 5357 bytes
+exit 0
+## npm pack --ignore-scripts
+npm notice
+npm notice package: @zodiacs/engine@1.1.0-rc.3
+npm notice Tarball Contents
+npm notice 134.9kB CHANGELOG.md
+npm notice 1.1kB LICENSE
+npm notice 28.7kB LICENSING.md
+npm notice 11.3kB NOTICE
+npm notice 69.1kB README.md
+npm notice 11.0kB dist/api-Cg9u5VA1.d.ts
+npm notice 6.5kB dist/ayanamsa-CGoXczA5.d.ts
+npm notice 21.3kB dist/calc.d.ts
+npm notice 50.1kB dist/calc.js
+npm notice 2.3kB dist/chunk-2PZYJQV5.js
+npm notice 18.2kB dist/chunk-3OATBIXH.js
+npm notice 672B dist/chunk-4TWOPV3A.js
+npm notice 1.3kB dist/chunk-4XOYTBLS.js
+npm notice 989B dist/chunk-47ERTK5X.js
+npm notice 11.9kB dist/chunk-63ZBQK2X.js
+npm notice 508B dist/chunk-A3U2ZS2W.js
+npm notice 25.6kB dist/chunk-AMCCLJCB.js
+npm notice 3.2kB dist/chunk-AWVBVRFH.js
+npm notice 13.2kB dist/chunk-B5LKF437.js
+npm notice 24.1kB dist/chunk-BAAMCZU4.js
+npm notice 5.1kB dist/chunk-BHJXUY67.js
+npm notice 1.5kB dist/chunk-CPALRSPC.js
+npm notice 822B dist/chunk-I3L4POY7.js
+npm notice 2.4kB dist/chunk-KFTJMMG7.js
+npm notice 11.6kB dist/chunk-NNOSOOWS.js
+npm notice 2.0kB dist/chunk-OVXQQEXL.js
+npm notice 2.9kB dist/chunk-PFGUCNOK.js
+npm notice 3.0kB dist/chunk-RMBWKZI2.js
+npm notice 9.8kB dist/chunk-TSS2SZWQ.js
+npm notice 4.3kB dist/chunk-Y4E3WJU5.js
+npm notice 3.0kB dist/conventions.d.ts
+npm notice 736B dist/conventions.js
+npm notice 4.8kB dist/crossings.d.ts
+npm notice 173B dist/crossings.js
+npm notice 4.3kB dist/de440.d.ts
+npm notice 26.8kB dist/de440.js
+npm notice 5.1kB dist/deltat.d.ts
+npm notice 161B dist/deltat.js
+npm notice 9.5kB dist/geo.d.ts
+npm notice 6.0kB dist/geo.js
+npm notice 4.7kB dist/houses-extra.d.ts
+npm notice 13.7kB dist/houses-extra.js
+npm notice 7.7kB dist/houses-iEiJUS5Y.d.ts
+npm notice 15.7kB dist/index.d.ts
+npm notice 13.4kB dist/index.js
+npm notice 1.1kB dist/internal-CYQ7u-zJ.d.ts
+npm notice 6.2kB dist/internal-math-BHGvc0-8.d.ts
+npm notice 1.1kB dist/internal-math.d.ts
+npm notice 1.4kB dist/internal-math.js
+npm notice 208B dist/internal.d.ts
+npm notice 395B dist/internal.js
+npm notice 3.8kB dist/lite-composite.js
+npm notice 9.7kB dist/lite-declinations.js
+npm notice 11.9kB dist/lite-dignities.js
+npm notice 3.4kB dist/lite-sect.js
+npm notice 5.1kB dist/lite.d.ts
+npm notice 146B dist/lite.js
+npm notice 944B dist/receipt.d.ts
+npm notice 44.1kB dist/receipt.js
+npm notice 2.0kB dist/reference-span-CILpclrz.d.ts
+npm notice 835B dist/rulers-lw2tQCGG.d.ts
+npm notice 8.0kB dist/sky.d.ts
+npm notice 15.3kB dist/sky.js
+npm notice 22.1kB dist/techniques.d.ts
+npm notice 36.5kB dist/techniques.js
+npm notice 1.7kB dist/time-bands-CZA9AlLg.d.ts
+npm notice 2.0kB dist/time-scale-DIFNa0gz.d.ts
+npm notice 3.9kB dist/time.d.ts
+npm notice 2.1kB dist/time.js
+npm notice 23.9kB dist/timing.d.ts
+npm notice 31.3kB dist/timing.js
+npm notice 9.7kB dist/types-BkwX5bcZ.d.ts
+npm notice 11.6kB dist/tzdb-2025c-00-6GVG6RYL.js
+npm notice 10.9kB dist/tzdb-2025c-01-CEYMG3LE.js
+npm notice 16.7kB dist/tzdb-2025c-02-NWQJCVUU.js
+npm notice 8.7kB dist/tzdb-2025c-03-PLHP6VH4.js
+npm notice 12.1kB dist/tzdb-2025c-04-MEKUJA6M.js
+npm notice 12.7kB dist/tzdb-2025c-05-3K5YKZBL.js
+npm notice 10.5kB dist/tzdb-2025c-06-L2VV5XJV.js
+npm notice 15.5kB dist/tzdb-2025c-07-H3GLGJGY.js
+npm notice 12.4kB dist/tzdb-2025c-08-DA7QQIGD.js
+npm notice 10.3kB dist/tzdb-2025c-09-MTXIO3QL.js
+npm notice 9.2kB dist/tzdb-2025c-10-ASL4UW5C.js
+npm notice 14.2kB dist/tzdb-2025c-11-EQEOANYB.js
+npm notice 12.2kB dist/tzdb-2025c-12-NKCCXJ5G.js
+npm notice 10.2kB dist/tzdb-2025c-13-DYTF3UC7.js
+npm notice 10.2kB dist/tzdb-2025c-14-C25H45R5.js
+npm notice 11.5kB dist/tzdb-2025c-15-7OYYZWRY.js
+npm notice 21.1kB dist/vedic.d.ts
+npm notice 30.0kB dist/vedic.js
+npm notice 8.0kB dist/window.d.ts
+npm notice 34.0kB dist/window.js
+npm notice 12.0kB dist/zone-history-CKimvqoW.d.ts
+npm notice 4.6kB package.json
+npm notice Tarball Details
+npm notice name: @zodiacs/engine
+npm notice version: 1.1.0-rc.3
+npm notice filename: zodiacs-engine-1.1.0-rc.3.tgz
+npm notice package size: 332.0 kB
+npm notice unpacked size: 1.1 MB
+npm notice shasum: 304dc522ff1ef73ec9cc83ddb164cc5402dfcb01
+npm notice integrity: sha512-xAEGQov54qPXc[...]XenLDy8n6YbCQ==
+npm notice total files: 94
+npm notice
+zodiacs-engine-1.1.0-rc.3.tgz
+exit 0
+## the packed archive against the carried one
+3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590  zodiacs-engine-1.1.0-rc.3.tgz
+3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590  zodiacs-engine-1.1.0-rc.3.tgz
+exit 0
+

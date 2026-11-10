@@ -418,6 +418,10 @@ interface Chart {
     deltaT: DeltaT;
     timeScale: TimeScale;
     engineVersion: string;
+    ephemeris?: {
+        readonly name: string;
+        readonly version: string;
+    };
 }
 
 // exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
