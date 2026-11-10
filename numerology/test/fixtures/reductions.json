@@ -1,0 +1,23 @@
+[
+  { "id": "zero", "input": "0", "policy": "preserve", "path": ["0"], "value": 0, "debts": [] },
+  { "id": "single", "input": "7", "policy": "preserve", "path": ["7"], "value": 7, "debts": [] },
+  { "id": "leading-zeroes", "input": "00010", "policy": "preserve", "path": ["10", "1"], "value": 1, "debts": [] },
+  { "id": "master-eleven", "input": "11", "policy": "preserve", "path": ["11"], "value": 11, "debts": [] },
+  { "id": "master-twenty-two", "input": "22", "policy": "preserve", "path": ["22"], "value": 22, "debts": [] },
+  { "id": "master-thirty-three", "input": "33", "policy": "preserve", "path": ["33"], "value": 33, "debts": [] },
+  { "id": "eleven-reduced", "input": "11", "policy": "reduce", "path": ["11", "2"], "value": 2, "debts": [] },
+  { "id": "twenty-two-reduced", "input": "22", "policy": "reduce", "path": ["22", "4"], "value": 4, "debts": [] },
+  { "id": "thirty-three-reduced", "input": "33", "policy": "reduce", "path": ["33", "6"], "value": 6, "debts": [] },
+  { "id": "intermediate-master", "input": "29", "policy": "preserve", "path": ["29", "11"], "value": 11, "debts": [] },
+  { "id": "intermediate-master-reduced", "input": "29", "policy": "reduce", "path": ["29", "11", "2"], "value": 2, "debts": [] },
+  { "id": "intermediate-twenty-two", "input": "499", "policy": "preserve", "path": ["499", "22"], "value": 22, "debts": [] },
+  { "id": "intermediate-thirty-three", "input": "6999", "policy": "preserve", "path": ["6999", "33"], "value": 33, "debts": [] },
+  { "id": "debt-thirteen", "input": "13", "policy": "preserve", "path": ["13", "4"], "value": 4, "debts": [{ "number": 13, "stage": 0 }] },
+  { "id": "debt-fourteen", "input": "14", "policy": "preserve", "path": ["14", "5"], "value": 5, "debts": [{ "number": 14, "stage": 0 }] },
+  { "id": "debt-sixteen", "input": "16", "policy": "reduce", "path": ["16", "7"], "value": 7, "debts": [{ "number": 16, "stage": 0 }] },
+  { "id": "debt-nineteen", "input": "19", "policy": "reduce", "path": ["19", "10", "1"], "value": 1, "debts": [{ "number": 19, "stage": 0 }] },
+  { "id": "intermediate-debt", "input": "49", "policy": "preserve", "path": ["49", "13", "4"], "value": 4, "debts": [{ "number": 13, "stage": 1 }] },
+  { "id": "debt-substring-is-not-debt", "input": "130", "policy": "preserve", "path": ["130", "4"], "value": 4, "debts": [] },
+  { "id": "multiple-sums", "input": "99", "policy": "preserve", "path": ["99", "18", "9"], "value": 9, "debts": [] },
+  { "id": "exact-long-input", "input": "999999999999999999999", "policy": "reduce", "path": ["999999999999999999999", "189", "18", "9"], "value": 9, "debts": [] }
+]

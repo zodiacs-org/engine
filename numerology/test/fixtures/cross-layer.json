@@ -1,0 +1,27 @@
+{
+  "provenance": "Handwritten synthetic spellings, mappings, Gregorian dates, and arithmetic. Letter values follow the project's declared tables. No engine output or person's birth data supplied an expectation. Transliteration examples are spelling conventions, not pronunciation claims.",
+  "names": [
+    {"id":"latin-ligature-and-y-token","name":"Ðé-Œy","ascii":"DE OEY","pythagorean":[4,5,6,5,7],"chaldean":[4,5,7,5,1]},
+    {"id":"greek-expanded-consonants","name":"Φυ-Ξα","ascii":"PHY XA","pythagorean":[7,8,7,6,1],"chaldean":[8,5,1,5,1]},
+    {"id":"cyrillic-digraph-and-y","name":"Ђя","ascii":"DJYA","pythagorean":[4,1,7,1],"chaldean":[4,1,1,1]},
+    {"id":"cyrillic-canonical-context","name":"Ёй","ascii":"YOY","pythagorean":[7,6,7],"chaldean":[1,7,1]},
+    {"id":"silent-cyrillic-tokens","name":"Ъ Ь А","ascii":"A","pythagorean":[1],"chaldean":[1]},
+    {"id":"caller-han-y-per-token","name":"星 雨","ascii":"SYN YU","custom":{"id":"synthetic-m11-han/1","mappings":{"星":"SYN","雨":"YU"}},"pythagorean":[1,7,5,7,3],"chaldean":[3,1,5,1,6]},
+    {"id":"caller-devanagari-attached-mark","name":"मि","ascii":"MI","custom":{"id":"synthetic-m11-devanagari/1","mappings":{"म":"M","ि":"I"}},"pythagorean":[4,9],"chaldean":[4,1]},
+    {"id":"caller-hebrew-attached-mark","name":"בָ","ascii":"BA","custom":{"id":"synthetic-m11-hebrew/1","mappings":{"ב":"B","ָ":"A"}},"pythagorean":[2,1],"chaldean":[2,1]},
+    {"id":"astral-source-and-latin-expansion","name":"𐐁æ","ascii":"BAE","custom":{"id":"synthetic-m11-deseret/1","mappings":{"𐐁":"B"}},"pythagorean":[2,1,5],"chaldean":[2,1,5]},
+    {"id":"caller-overrides-silent-letter","name":"Ъ","ascii":"AE","custom":{"id":"synthetic-m11-override/1","mappings":{"Ъ":"AE"}},"pythagorean":[1,5],"chaldean":[1,5]},
+    {"id":"ligature-master-22","name":"ŒŒ","ascii":"OEOE","pythagorean":[6,5,6,5],"chaldean":[7,5,7,5]},
+    {"id":"ligature-master-33","name":"ŒŒŒ","ascii":"OEOEOE","pythagorean":[6,5,6,5,6,5],"chaldean":[7,5,7,5,7,5]}
+  ],
+  "dates": [
+    {"id":"lower-domain","birth":"0001-01-01","target":"0001-01-01","components":[[1],[1],[1]],"lifePath":[3],"wholeDate":[3],"birthday":[1],"pinnacles":[2,2,4,2],"challenges":[0,0,0,0],"cycles":[3,4,5]},
+    {"id":"upper-domain","birth":"9999-12-31","target":"9999-12-31","components":[[9999,36,9],[12,3],[31,4]],"lifePath":[16,7],"wholeDate":[43,7],"birthday":[31,4],"pinnacles":[7,4,11,3],"challenges":[1,5,4,6],"cycles":[7,1,5]},
+    {"id":"non-leap-century-last-february","birth":"1900-02-28","target":"1900-03-01","components":[[1900,10,1],[2],[28,10,1]],"lifePath":[4],"wholeDate":[22],"birthday":[28,10,1],"pinnacles":[3,2,5,3],"challenges":[1,0,1,1],"cycles":[4,7,8]},
+    {"id":"leap-century-day","birth":"2400-02-29","target":"2400-02-29","components":[[2400,6],[2],[29,11]],"lifePath":[19,10,1],"wholeDate":[19,10,1],"birthday":[29,11],"pinnacles":[4,8,3,8],"challenges":[0,4,4,4],"cycles":[1,3,5]},
+    {"id":"year-turn-before","birth":"2009-11-22","target":"2399-12-31","components":[[2009,11],[11],[22]],"lifePath":[44,8],"wholeDate":[17,8],"birthday":[22],"pinnacles":[33,33,3,22],"challenges":[2,2,0,0],"cycles":[11,5,9]},
+    {"id":"year-turn-after","birth":"2009-11-22","target":"2400-01-01","components":[[2009,11],[11],[22]],"lifePath":[44,8],"wholeDate":[17,8],"birthday":[22],"pinnacles":[33,33,3,22],"challenges":[2,2,0,0],"cycles":[3,4,5]},
+    {"id":"target-before-birth","birth":"2400-03-01","target":"0001-12-31","components":[[2400,6],[3],[1]],"lifePath":[10,1],"wholeDate":[10,1],"birthday":[1],"pinnacles":[4,7,11,9],"challenges":[2,5,3,3],"cycles":[5,8,3]},
+    {"id":"calendar-anniversary-is-not-cycle-boundary","birth":"2000-02-29","target":"2100-02-28","components":[[2000,2],[2],[29,11]],"lifePath":[15,6],"wholeDate":[15,6],"birthday":[29,11],"pinnacles":[4,4,8,4],"challenges":[0,0,0,0],"cycles":[7,9,1]}
+  ]
+}

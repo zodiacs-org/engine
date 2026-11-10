@@ -1,0 +1,14 @@
+[
+  { "id": "greek-digraphs-and-tonos", "input": "Θύρα Ψάλη", "normalized": "THYRA PSALE", "letters": "THYRAPSALE", "vowels": "AAE", "consonants": "THYRPSL" },
+  { "id": "greek-polytonic-and-final-sigma", "input": "Ἄλφας", "normalized": "ALPHAS", "letters": "ALPHAS", "vowels": "AA", "consonants": "LPHS" },
+  { "id": "greek-y-context", "input": "Υρ", "policy": "when-no-other-vowels", "normalized": "YR", "letters": "YR", "vowels": "Y", "consonants": "R" },
+  { "id": "cyrillic-preserves-composed-letters", "input": "Ёр Йа", "normalized": "YOR YA", "letters": "YORYA", "vowels": "OA", "consonants": "YRY" },
+  { "id": "cyrillic-expansion-and-soft-sign", "input": "Ља Щирь", "normalized": "LJA SHCHIR", "letters": "LJASHCHIR", "vowels": "AI", "consonants": "LJSHCHR" },
+  { "id": "cyrillic-regional-entries", "input": "Єра Їль Ўна", "normalized": "YERA YIL WNA", "letters": "YERAYILWNA", "vowels": "EAIA", "consonants": "YRYLWN" },
+  { "id": "cyrillic-nfd-and-silent-tokens", "input": "Ъ-Й ь-Ё", "normalized": "Y YO", "letters": "YYO", "vowels": "O", "consonants": "YY" },
+  { "id": "mixed-script-tokens", "input": "Æ-Θя", "normalized": "AE THYA", "letters": "AETHYA", "vowels": "AEA", "consonants": "THY" },
+  { "id": "caller-han-table", "input": "岚禾", "custom": { "id": "synthetic-han/1", "mappings": { "岚": "LAN", "禾": "HE" } }, "normalized": "LANHE", "letters": "LANHE", "vowels": "AE", "consonants": "LNH" },
+  { "id": "caller-hebrew-attached-mark", "input": "אֵל", "custom": { "id": "synthetic-hebrew/1", "mappings": { "א": "A", "ֵ": "E", "ל": "L" } }, "normalized": "AEL", "letters": "AEL", "vowels": "AE", "consonants": "L" },
+  { "id": "caller-devanagari-mark", "input": "का", "custom": { "id": "synthetic-devanagari/1", "mappings": { "क": "K", "ा": "A" } }, "normalized": "KA", "letters": "KA", "vowels": "A", "consonants": "K" },
+  { "id": "caller-astral-letter-index", "input": "𐐀Ω", "custom": { "id": "synthetic-deseret/1", "mappings": { "𐐀": "A" } }, "normalized": "AO", "letters": "AO", "vowels": "AO", "consonants": "" }
+]
