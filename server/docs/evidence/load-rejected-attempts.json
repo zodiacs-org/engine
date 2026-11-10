@@ -1,0 +1,95 @@
+{
+  "schema": "zodiacs-http-load-rejected-attempts/1",
+  "status": "failed-attempts-only",
+  "note": "These attempts did not produce successful reports. They used one shared temporary key and wall-clock duration for throughput before the final harness added per-connection keys and monotonic run timing. They are retained as diagnostics, not accepted performance evidence. Full build/context snapshots were not retained by that earlier harness.",
+  "command": [
+    "node",
+    "server/scripts/load.mjs",
+    "--duration",
+    "10",
+    "--warmup",
+    "2",
+    "--connections",
+    "1,4",
+    "--repetitions",
+    "2"
+  ],
+  "runtime": "v22.23.3",
+  "configuration": {
+    "configuredKeys": 1,
+    "keyAssignment": "shared by all connections",
+    "rateLimit": {
+      "capacity": 10000,
+      "refillPerSecond": 10000
+    },
+    "calculationTimeoutMs": 5000,
+    "calculationQueueSize": 8,
+    "logLevel": "info"
+  },
+  "attempts": [
+    {
+      "workload": "natal",
+      "repetition": 1,
+      "connections": 4,
+      "outcome": "failed after measurement during the between-phase calculation; no successful report",
+      "failureHttpStatus": null,
+      "failureErrorCode": null,
+      "cause": "The original harness did not record the barrier response status or a monotonic elapsed time. These records do not establish the cause of the extended interval or failure.",
+      "precedingMeasurement": {
+        "passed": true,
+        "startedAt": "2026-10-13T11:19:53.968Z",
+        "finishedAt": "2026-10-13T11:20:09.472Z",
+        "durationSeconds": 15.49,
+        "sent": 3206,
+        "completed": 3202,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 206.71400903808907,
+        "statusCounts": {
+          "200": 3202
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 0,
+        "non2xx": 0,
+        "latencyMs": {
+          "samples": 3202,
+          "p50": 7.258111,
+          "p95": 16.572415,
+          "max": 64.749567
+        }
+      }
+    },
+    {
+      "workload": "houses",
+      "repetition": 2,
+      "connections": 4,
+      "outcome": "failed measurement because some responses were HTTP 429 and did not contain calculation receipts",
+      "failureHttpStatus": 429,
+      "cause": "The shared per-key token bucket limited requests. The corrected benchmark keeps each limit active and assigns a distinct temporary key to each concurrent connection.",
+      "measurement": {
+        "passed": false,
+        "startedAt": "2026-10-13T11:27:24.353Z",
+        "finishedAt": "2026-10-13T11:27:35.354Z",
+        "durationSeconds": 11,
+        "sent": 116121,
+        "completed": 116117,
+        "unfinishedAtStop": 4,
+        "successfulResponsesPerSecond": 10510.636363636364,
+        "statusCounts": {
+          "200": 115617,
+          "429": 500
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "bodyMismatches": 500,
+        "non2xx": 500,
+        "latencyMs": {
+          "samples": 116117,
+          "p50": 0.320767,
+          "p95": 0.601087,
+          "max": 61.669375
+        }
+      }
+    }
+  ]
+}
