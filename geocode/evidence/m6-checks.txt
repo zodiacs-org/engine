@@ -1,0 +1,88 @@
+M6 validation record: command-output excerpts from this session.
+Runtime: Node.js v22.22.2, using the cached Node executable under geocode/.cache/npm.
+
+Command (from geocode/, cached Node directory prepended to PATH):
+npm ci --ignore-scripts --cache .cache/npm
+Exit status: 0
+
+Command (from geocode/, same PATH):
+npm run typecheck
+Exit status: 0
+
+> @zodiacs/geocode-workbench@0.0.0 typecheck
+> tsc -p tsconfig.json
+
+Command (from geocode/, same PATH):
+npm test -- --reporter=dot
+Exit status: 0
+
+PASS tests/lookup.test.ts (93 tests)
+PASS tests/build-index.test.ts (99 tests)
+PASS tests/load-index.test.ts (50 tests)
+PASS tests/geocoder.test.ts (55 tests)
+PASS tests/dataset.test.ts (111 tests)
+PASS tests/geocoder-atlas.test.ts (21 tests)
+PASS tests/sample.test.ts (20 tests)
+PASS tests/build-commands.test.ts (6 tests)
+PASS tests/atlas-time.test.ts (48 tests)
+PASS tests/cli.test.ts (87 tests)
+PASS tests/iana-time.test.ts (42 tests)
+Test Files: 11 passed (11)
+Tests: 632 passed (632)
+
+Command (from geocode/, same PATH):
+npm run scope:check
+Exit status: 0
+
+PASS: geocode candidate files are regular files below 2 MB; documentation has no em dashes.
+PASS: npm pack --dry-run --ignore-scripts excludes geocode/ from the engine package.
+Scope checks do not substitute for the root package's build and size-budget checks.
+
+Command (from geocode/, same PATH):
+npm --silent run geocode -- --help
+Exit status: 0
+
+Usage:
+  geocode lookup <query> --index PATH [--country TEXT] [--region TEXT] [--limit N] [--json]
+  geocode tz <query> --index PATH --date YYYY-MM-DD [--time HH:MM] [--country TEXT] [--region TEXT] [--limit N] [--json]
+  geocode tz --place-id ID --index PATH --date YYYY-MM-DD [--time HH:MM] [--json]
+  geocode [lookup|tz] --help
+
+Command (from geocode/, cached Node executable):
+node ../atlas/tools/check.mjs
+Exit status: 0
+
+atlas 0.1.0: 21 places, 14 jurisdictions, 59 rules, 66 citations
+  rules by flag: documented 27, inferred 26, uncertain 6
+  citations by type: decree 5, law 9, ministerial-decision 1, municipal-notice 1, newspaper-report 45, parliamentary-debate 3, railway-notice 2
+  excerpts taken from: page-image 66
+  excerpts checked against (citations): ocr matches 24, ocr partial 5, page-image matches 16, search-service matches 29, search-service partial 8
+  258 boundaries and 2735 round trips checked
+  tzdb comparison current, every difference matched by exactly one explanation
+atlas: all checks passed
+
+Command (from geocode/, cached Node executable):
+node --test ../atlas/tools/selftest.mjs
+Exit status: 0
+
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+
+Command (from repository root, cached Node directory prepended to PATH):
+npm --cache geocode/.cache/npm run package:contents
+Exit status: 1
+
+> @zodiacs/engine@1.0.0 package:contents
+> node scripts/verify-package-contents.mjs
+
+AssertionError [ERR_ASSERTION]: packed package is missing dist/calc.d.ts
+    at file:///workspace/codex-infra/wt-geocode/scripts/verify-package-contents.mjs:50:3
+
+The task forbids generating root dist/. The passing exclusion check above
+does not replace the full root build, package-contents or size-budget gates.

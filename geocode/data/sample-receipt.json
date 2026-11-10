@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "dataset": "GeoNames Gazetteer extract",
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "Contains geographical data from GeoNames (https://www.geonames.org/), licensed CC BY 4.0.",
+  "changes": "Selected complete source rows, sorted by numeric GeoNames id for places and by source code for metadata. Row bytes, field values and line endings are unchanged.",
+  "selectionTool": "geocode/scripts/select-sample.py",
+  "licenseEvidence": {
+    "fetchedAt": "2026-10-13T12:42:57+00:00",
+    "lastModified": "Tue, 13 Oct 2026 01:48:10 GMT",
+    "file": "readme.txt",
+    "url": "https://download.geonames.org/export/dump/readme.txt",
+    "sha256": "b1957379b6c1242c700c98ac9a8aa0a09f56c3c0a50ee72175527005f48ef2c5",
+    "bytes": 8843
+  },
+  "upstream": [
+    {
+      "fetchedAt": "2026-10-13T12:42:52+00:00",
+      "lastModified": "Tue, 13 Oct 2026 01:57:19 GMT",
+      "file": "cities15000.zip",
+      "url": "https://download.geonames.org/export/dump/cities15000.zip",
+      "sha256": "19de48da195cd1ef7f636c2293bb8b6d1591addf23b45cd94d5684de5f261aed",
+      "bytes": 3361377,
+      "archiveMember": "cities15000.txt",
+      "memberSha256": "94120f4fcd00272a344c3a11ea9f4e9b1c069a58b90a526236ec395266e1aedf",
+      "memberBytes": 8537911,
+      "selectedKeys": [
+        "184745",
+        "1275004",
+        "1283240",
+        "1850147",
+        "2078025",
+        "2729907",
+        "2973783",
+        "2988507",
+        "3030300",
+        "3448439",
+        "4250542",
+        "4409896",
+        "4951788",
+        "5128581"
+      ]
+    },
+    {
+      "fetchedAt": "2026-10-13T12:42:53+00:00",
+      "lastModified": "Tue, 13 Oct 2026 01:54:43 GMT",
+      "file": "NZ.zip",
+      "url": "https://download.geonames.org/export/dump/NZ.zip",
+      "sha256": "651edc01bebb29e6e541e1866f6a6da3e84b302023f76fed2f3ea60c8dc1323f",
+      "bytes": 1434829,
+      "archiveMember": "NZ.txt",
+      "memberSha256": "bc1cd487baa51611f4c71db8e0961641cf124df88ad343b809133a1a9cf0fd87",
+      "memberBytes": 7325209,
+      "selectedKeys": [
+        "4032804"
+      ]
+    },
+    {
+      "fetchedAt": "2026-10-13T12:42:54+00:00",
+      "lastModified": "Tue, 13 Oct 2026 01:50:09 GMT",
+      "file": "AQ.zip",
+      "url": "https://download.geonames.org/export/dump/AQ.zip",
+      "sha256": "2276e3f28d206d28323734d1213dc6e0f93815beee08782959788417f0779716",
+      "bytes": 576792,
+      "archiveMember": "AQ.txt",
+      "memberSha256": "265cb9daabf6e322afbccc82c3707a4a625c2e00ffac1cd776c2f4e9067ee1f3",
+      "memberBytes": 2354900,
+      "selectedKeys": [
+        "13664897"
+      ]
+    },
+    {
+      "fetchedAt": "2026-10-13T12:42:56+00:00",
+      "lastModified": "Tue, 13 Oct 2026 01:57:19 GMT",
+      "file": "admin1CodesASCII.txt",
+      "url": "https://download.geonames.org/export/dump/admin1CodesASCII.txt",
+      "sha256": "1da92a6323a5fec3176f3f743bf4cf4040fd56a876da55e46fbca23c863aa60a",
+      "bytes": 151583,
+      "selectedKeys": [
+        "AU.05",
+        "BR.27",
+        "FR.11",
+        "FR.44",
+        "FR.53",
+        "IN.28",
+        "JP.40",
+        "KE.05",
+        "NP.3",
+        "NZ.10",
+        "SJ.21",
+        "US.IL",
+        "US.MA",
+        "US.MO",
+        "US.NY"
+      ]
+    },
+    {
+      "fetchedAt": "2026-10-13T12:42:56+00:00",
+      "lastModified": "Tue, 13 Oct 2026 02:02:56 GMT",
+      "file": "countryInfo.txt",
+      "url": "https://download.geonames.org/export/dump/countryInfo.txt",
+      "sha256": "c5997ea659df5bcf42509eb937064d172b2a998bb873608603e8421d714a9974",
+      "bytes": 31680,
+      "selectedKeys": [
+        "AQ",
+        "AU",
+        "BR",
+        "FR",
+        "IN",
+        "JP",
+        "KE",
+        "NP",
+        "NZ",
+        "SJ",
+        "US"
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "file": "geonames-sample.tsv",
+      "sha256": "2f553cac4c5b5579c7203d51fad0f570193825263f852c95a96447a44e9817f4",
+      "bytes": 14400,
+      "rows": 16
+    },
+    {
+      "file": "admin1-sample.tsv",
+      "sha256": "73b18d4511db1c783b1b33be8b89f0f06d2b5dc1438fa8a5ae7bd2373c187491",
+      "bytes": 562,
+      "rows": 15
+    },
+    {
+      "file": "country-info-sample.tsv",
+      "sha256": "ebd85318fd077b6a2c6f326ba1228360eb2f479bda3670c062bd46a00bb51f80",
+      "bytes": 1335,
+      "rows": 11
+    }
+  ]
+}
