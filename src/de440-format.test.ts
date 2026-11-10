@@ -8,13 +8,14 @@
  * the Chebyshev series of the written coefficients, evaluated here.
  */
 import { createHash } from "node:crypto";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { chart as calcChart, calc, events as calcEvents } from "./calc.js";
 import { openDe440Pack, type De440Source } from "./de440.js";
 import { De440Error, PackEphemeris, parsePack } from "./de440/pack.js";
 import { positions, withEphemeris } from "./index.js";
-import { skyEvents } from "./sky.js";
-import { vargaSensitivity } from "./vedic.js";
+import { planetaryHours, skyEvents } from "./sky.js";
+import { ayanamsa, siderealChart, vargaSensitivity } from "./vedic.js";
+import { birthWindow } from "./window.js";
 
 const RADIUS = 1e9;
 const NREC = 4;
@@ -215,14 +216,43 @@ describe("withEphemeris, at its edges", () => {
     const time = "2001-03-04T05:06:07Z";
     const calls: [string, () => unknown][] = [
       ["calc", () => calc({ body: "Moon", time })],
+      ["calc, a point", () => calc({ body: "North Node", time })],
       ["calc chart", () => calcChart({ time, place: { latitude: 10, longitude: 20 } })],
       ["calc events", () => calcEvents({ kind: "longitude-crossing", body: "Sun", longitude: 0, from: time, to: "2001-04-01" })],
       ["sky", () => skyEvents("Sun", { latitude: 10, longitude: 20 }, time, "2001-03-05T05:06:07Z")],
+      ["sky planetary hours", () => planetaryHours({ latitude: 10, longitude: 20 }, "2001-03-04")],
+      ["vedic star-anchored ayanamsa", () => ayanamsa("true-chitra", time)],
+      ["vedic sidereal chart on a star-anchored ayanamsa", () => siderealChart({ utc: time, latitude: 10, longitude: 20 }, "true-chitra")],
+      ["window", () => birthWindow({ start: new Date(time), end: new Date(Date.parse(time) + 600_000), latitude: 10, longitude: 20 })],
       ["vedic varga timing", () => vargaSensitivity({ utc: time, latitude: 10, longitude: 20 }, "lahiri", { points: ["Moon"], horizonMinutes: 20 })]
     ];
     for (const [name, call] of calls) {
       expect(() => withEphemeris(source, call), name).toThrow(/does not run inside withEphemeris/u);
       expect(call, name).not.toThrow();
+    }
+    // A tropical-anchored ayanamsa needs no star place, and runs inside.
+    expect(() => withEphemeris(source, () => siderealChart({ utc: time, latitude: 10, longitude: 20 }, "lahiri"))).not.toThrow();
+  });
+
+  it("refuses an asynchronous function without leaving its rejection unhandled", async () => {
+    const source = await openPack(PACK);
+    const unhandled = vi.fn();
+    process.on("unhandledRejection", unhandled);
+    try {
+      expect(() => withEphemeris(source, async () => { throw new Error("later"); })).toThrow(TypeError);
+      await new Promise((resolve) => setTimeout(resolve, 20));
+      expect(unhandled).not.toHaveBeenCalled();
+    } finally {
+      process.off("unhandledRejection", unhandled);
+    }
+  });
+
+  it("asks for WebCrypto with a TypeError when there is none", async () => {
+    vi.stubGlobal("crypto", undefined);
+    try {
+      await expect(openPack(PACK)).rejects.toThrow(TypeError);
+    } finally {
+      vi.unstubAllGlobals();
     }
   });
 });

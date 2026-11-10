@@ -35,9 +35,10 @@ workflow `precision-pack.yml`), both files came out byte for byte the same.
 `pack-accuracy.json` is `tools/pack-accuracy.ts` run on 10 November 2026
 (Node 22.22.2, macOS arm64) on that sealed pack and NAIF's `de440.bsp`, both
 checked by digest: the reduction on the pack against the same reduction on
-the raw kernel at 20,001 TT instants from 1800 to 2200 (`dense`), and against
-the oracles at their 200 instants (`oracles`), by ten bodies and the true
-node, with the pack's own per-body budgets and proven errors from its header
+the raw kernel at 20,001 TT instants from 1800 to 2200 (`dense`) and either
+side of every edge of the pack's records, where a refit errs most
+(`recordEdges`; the largest of both in `largest`), and against the oracles at
+their 200 instants (`oracles`), by ten bodies and the true node, with the pack's own per-body budgets and proven errors from its header
 (`packBodies`). `docs/de440.md` and `CHANGELOG.md` quote its maxima, rounded
 up. zodiacs.org's tier B checks the pack it builds against the oracles.
 
@@ -56,8 +57,9 @@ What is enforced, and where:
   (float64 records, and quantised records written by an independent writer
   with every field width the reader accepts): the digest and trailer checks,
   the reader's decoding and record selection, the Sun-relative body and the
-  Earth-Moon system, the switch and its nesting, the refusals of the entries
-  that compute their own positions, and the receipts.
+  Earth-Moon system, the switch and its nesting, its refusal of asynchronous
+  functions and of runs without WebCrypto, the refusals of the functions that
+  compute their own positions, and the receipts.
 - `src/de440-sources.test.ts`: no astronomy-engine position function is
   called under a DE440 source, in the calls zodiacs.org's compute API makes.
 - `src/de440-kernel.test.ts`, with PRECISION_KERNEL set (CI's tier-B job

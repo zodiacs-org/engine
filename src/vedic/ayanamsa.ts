@@ -343,7 +343,7 @@ function bias(v: V3): V3 {
  * angle from the Sun before the deflection and aberration, degrees.
  */
 function apparentStar(s: CatalogueStar, time: AstroTime): { readonly direction: V3; readonly elongation: number } {
-  refuseUnderSource("@zodiacs/engine/vedic");
+  refuseUnderSource("A star-anchored ayanamsa");
   const ra = s.ra * DEG;
   const dec = s.dec * DEG;
   const p0 = bias([Math.cos(dec) * Math.cos(ra), Math.cos(dec) * Math.sin(ra), Math.sin(dec)]);

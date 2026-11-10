@@ -192,7 +192,7 @@ interface State {
 }
 
 function stateAt(body: SkyBody, site: Readonly<Required<Observer>>, conventions: SkyConventions, ms: number): State {
-  refuseUnderSource("@zodiacs/engine/sky");
+  refuseUnderSource("@zodiacs/engine/sky's rising and setting");
   return onChartClock(ms, "utc", undefined, (time) => {
     // Geocentric apparent place (light time and aberration, as astronomy-engine
     // gives them) on the true equator and equinox of date, in au, by the

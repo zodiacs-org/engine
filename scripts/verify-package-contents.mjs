@@ -151,11 +151,11 @@ const ENTRY_BUDGETS = {
   // src/ephemeris.ts, and 46 of imports, exports and their use in
   // src/declination.ts and src/points.ts), and for 39 bytes of export names
   // the calc, window and sky entries import from the root's chunk (gastHours,
-  // tilt, eclipticOfDate); 4.79 per cent of headroom. 1.1.0-rc.3: 108,546,
-  // 2,221 more than 1.1.0-rc.2's 106,325, for withEphemeris and the source's
-  // path in the ephemeris chunk, and, after the cut's two reviews, the
-  // refusals of the code that computes its own positions; raised to 109,000
-  // under the owner's delegation of 2026-11-04; 0.41 per cent of headroom.
+  // tilt, eclipticOfDate); 4.79 per cent of headroom. 1.1.0-rc.3: 108,531,
+  // 2,206 more than 1.1.0-rc.2's 106,325, for withEphemeris and the source's
+  // path in the ephemeris chunk, and, after the cut's reviews, the refusal of
+  // the code that computes its own positions; raised to 109,000 under the
+  // owner's delegation of 2026-11-04; 0.43 per cent of headroom.
   ".": 109_000,
   // New in rc.16 (feature-api): the uniform calculation API, its frames,
   // centers, corrections, bounds and receipts. 106,779 bytes as integrated on
@@ -204,9 +204,9 @@ const ENTRY_BUDGETS = {
   "./de440": 48_000,
   // rc.15: 56,961; as carried, 58,997. rc.16: 64,830, raised from 60,000 for
   // the nutation in the ephemeris chunk; 4.88 per cent of headroom.
-  // 1.1.0-rc.3: 68,773, with withEphemeris, the source's path and the
-  // refusals in the ephemeris chunk; raised to 69,000 with the owner's
-  // approval of 2026-11-10; 0.33 per cent of headroom.
+  // 1.1.0-rc.3: 68,758, with withEphemeris, the source's path and the
+  // refusal in the ephemeris chunk; raised to 69,000 with the owner's
+  // approval of 2026-11-10; 0.35 per cent of headroom.
   "./internal": 69_000,
   "./internal/math": 20_000, // rc.15: 18,165
   // New in 1.1.0-rc.2: declination parallels, the sect under a named
@@ -262,19 +262,19 @@ const ENTRY_BUDGETS = {
   // 13,589 more than 1.1.0-rc.1's 127,751, with the varga sensitivity and the
   // chunks split out for ./time (above); raised to 143,000, the ceiling
   // approved under the owner's delegation of 2026-11-03 (OQ3); 1.17 per cent
-  // of headroom. 1.1.0-rc.3: 143,669, 2,329 more, the ephemeris chunk's
+  // of headroom. 1.1.0-rc.3: 143,652, 2,312 more, the ephemeris chunk's
   // growth (above) and the refusals in the ayanamsas and the varga timing;
-  // raised to 144,500 under the owner's delegation of 2026-11-04; 0.57 per
+  // raised to 144,500 under the owner's delegation of 2026-11-04; 0.59 per
   // cent of headroom.
   "./vedic": 144_500,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
   // 33,971 of them beyond the core's graph; 8.17 per cent of headroom. With
   // the nutation, 102,590: 2.34 per cent, not raised
-  // (docs/evidence/rc16-20260930/sizes.json). 1.1.0-rc.3: 106,744, with
-  // withEphemeris, the source's path and the refusals in the ephemeris chunk;
-  // raised to 107,000 with the owner's approval of 2026-11-10; 0.23 per cent
-  // of headroom.
+  // (docs/evidence/rc16-20260930/sizes.json). 1.1.0-rc.3: 106,786, with
+  // withEphemeris and the source's path in the ephemeris chunk and
+  // birthWindow's refusal inside it; raised to 107,000 with the owner's
+  // approval of 2026-11-10; 0.20 per cent of headroom.
   "./window": 107_000
 };
 
@@ -390,11 +390,11 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // entries and features, rather than moving the CHANGELOG's 0.x history out
 // of the package; it leaves 3,217 bytes, 0.29 per cent.
 //
-// 1.1.0-rc.3: 1,142,467 bytes in 94 files, 45,684 more than 1.1.0-rc.2, for
+// 1.1.0-rc.3: 1,142,818 bytes in 94 files, 46,035 more than 1.1.0-rc.2, for
 // @zodiacs/engine/de440 (dist/de440.js and its declarations), withEphemeris
 // and its refusals, the receipts' DE440 set, and their README, CHANGELOG,
 // NOTICE and LICENSING.md lines; raised from 1,100,000 to 1,145,000 with the
-// owner's approval of 2026-11-10, which leaves 0.22 per cent.
+// owner's approval of 2026-11-10, which leaves 0.19 per cent.
 const TOTAL_CAP = 1_145_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 

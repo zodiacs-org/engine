@@ -74,8 +74,8 @@ The DE440 entry, added in 1.1.0-rc.3 (`src/de440.ts` and `src/de440/`,
 built into `dist/de440.js` and the chunks it imports), ports the pack reader,
 the reduction, the IAU 2006 frames and the nutation sum of zodiacs.org's
 research runtime, `examples/precision-alpha/src/core/` (`container.mjs`,
-`ephemeris.mjs`, `errors.mjs`, `reduce.mjs`, `frames.mjs` and
-`nutation.mjs`), read at the
+`ephemeris.mjs`, `errors.mjs`, `reduce.mjs`, `frames.mjs`, `nutation.mjs`
+and, for the digest helpers, `source.mjs`), read at the
 site repository's commit `4fa9ffbf87e78948f2187a603a596cfb47d3c530`
 (2026-11-09), with the geocentric Moon as the site's preregistration of P4.1
 (commit `5305fc74`) specifies it. That directory declares the MIT license

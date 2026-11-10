@@ -81,12 +81,13 @@ export function withEphemeris<T>(positionSource: PositionSource, run: () => T): 
 }
 
 /**
- * For code that computes positions from astronomy-engine itself (the calc
- * entry, the sky entry's rising and setting, the vedic entry's ayanamsa and
- * varga timing): refuse inside withEphemeris rather than mix two ephemerides.
+ * For code that computes positions from astronomy-engine itself, or whose
+ * bounds were measured on it (the calc entry, the sky entry's rising and
+ * setting, the vedic entry's star-anchored ayanamsas and varga timing, the
+ * window entry): refuse inside withEphemeris rather than mix two ephemerides.
  */
-export function refuseUnderSource(entry: string): void {
-  if (source) throw new TypeError(`${entry} takes its positions from astronomy-engine, so it does not run inside withEphemeris`);
+export function refuseUnderSource(what: string): void {
+  if (source) throw new TypeError(`${what} does not run inside withEphemeris: it is computed on astronomy-engine`);
 }
 
 /** A source's longitude in [0, 360): 360 becomes 0 and -0 becomes 0, every other value unchanged. */

@@ -10,9 +10,14 @@
  *     npx vite-node docs/evidence/de440-20261110/tools/pack-accuracy.ts > docs/evidence/de440-20261110/pack-accuracy.json
  *
  * Instants: 20,001 TT instants evenly spaced from 1800-01-01T00:00 TT to
- * 2200-01-01T00:00 TT, by ten bodies and the true node; and the 200 instants
- * of the oracles. The angle between two places is atan2(|u x w|, u . w) of
- * their directions; the node's is its wrapped longitude difference.
+ * 2200-01-01T00:00 TT, by ten bodies and the true node; the edges of the
+ * pack's records, where a refit's error is largest: for the node, 1 ms and
+ * 10 ms either side of every boundary of the Moon's records, and for each
+ * body, 1 ms either side of every boundary of its own records at the instant
+ * its light left (the boundary plus the light time) and of the Earth-Moon
+ * system's records at reception; and the 200 instants of the oracles. The
+ * angle between two places is atan2(|u x w|, u . w) of their directions; the
+ * node's is its wrapped longitude difference.
  */
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -74,6 +79,39 @@ for (let k = 0; k <= STEPS; k += 1) {
   dense["North Node"]!.push({ value: wrappedArcsec(onPack.trueNode(ttDays), onKernel.trueNode(ttDays)), ttMs });
 }
 
+// The edges of the pack's records (TDB seconds; TT differs by under 2 ms).
+const recordsOf = (name: string) => header.bodies.find((b) => b.name === name)!;
+function boundaries(name: string): number[] {
+  const b = recordsOf(name);
+  const out: number[] = [];
+  const lo = ((FROM - J2000_MS) / 1000);
+  const hi = ((TO - J2000_MS) / 1000);
+  for (let k = 1; k < b.nrec; k += 1) {
+    const et = b.initEt + k * b.intervalSec;
+    if (et > lo && et < hi) out.push(et);
+  }
+  return out;
+}
+const PACK_BODY: Record<string, string> = { Sun: "sun", Moon: "moon", Mercury: "mercuryBary", Venus: "venusBary", Mars: "marsBary", Jupiter: "jupiterBary", Saturn: "saturnBary", Uranus: "uranusBary", Neptune: "neptuneBary", Pluto: "plutoBary" };
+const edges: Record<string, { value: number; ttMs: number }[]> = Object.fromEntries([...REDUCED_BODIES, "North Node"].map((b) => [b, []]));
+const observerEdges = [...boundaries("emb"), ...boundaries("moon")];
+const at = (body: (typeof REDUCED_BODIES)[number], ttDays: number) =>
+  edges[body]!.push({ value: angleArcsec(onPack.apparent(body, ttDays), onKernel.apparent(body, ttDays)), ttMs: J2000_MS + ttDays * DAY_MS });
+for (const body of REDUCED_BODIES) {
+  const own = body === "Moon" ? [...boundaries("moon"), ...boundaries("emb")] : boundaries(PACK_BODY[body]!);
+  for (const et of own) {
+    const tau = onKernel.apparent(body, et / 86400).lightTimeSec;
+    for (const d of [-0.001, 0.001]) at(body, (et + tau + d) / 86400);
+  }
+  if (body !== "Moon") for (const et of observerEdges) for (const d of [-0.001, 0.001]) at(body, (et + d) / 86400);
+}
+for (const et of boundaries("moon")) {
+  for (const d of [-0.01, -0.001, 0.001, 0.01]) {
+    const ttDays = (et + d) / 86400;
+    edges["North Node"]!.push({ value: wrappedArcsec(onPack.trueNode(ttDays), onKernel.trueNode(ttDays)), ttMs: J2000_MS + ttDays * DAY_MS });
+  }
+}
+
 const ORACLES = new URL("../oracles/", import.meta.url);
 const places = JSON.parse(readFileSync(new URL("erfa-places.json", ORACLES), "utf8")) as { rows: { ttMs: number; body: string; lon: string; lat: string }[] };
 const nodes = JSON.parse(readFileSync(new URL("erfa-nodes.json", ORACLES), "utf8")) as { rows: { ttMs: number; northNodeLon: string }[] };
@@ -94,5 +132,7 @@ process.stdout.write(`${JSON.stringify({
   packBodies: raw.bodies.map((b) => ({ name: b.name, encoding: b.encoding ?? null, budgetKm: b.budgetKm ?? null, provenPosKm: b.provenPosKm ?? null, provenVelKmS: b.provenVelKmS ?? null })),
   node: process.version,
   dense: { instants: STEPS + 1, from: "1800-01-01T00:00 TT", to: "2200-01-01T00:00 TT", byBody: Object.fromEntries(Object.entries(dense).map(([b, rows]) => [b, stats(rows)])) },
+  recordEdges: { what: "1 ms (the node also 10 ms) either side of each record boundary, 1800 to 2200 (above)", byBody: Object.fromEntries(Object.entries(edges).map(([b, rows]) => [b, stats(rows)])) },
+  largest: Object.fromEntries([...REDUCED_BODIES, "North Node"].map((b) => [b, Math.max(stats(dense[b]!).maxArcsec, stats(edges[b]!).maxArcsec)])),
   oracles: { instants: nodes.rows.length, byBody: Object.fromEntries(Object.entries(oracle).map(([b, rows]) => [b, stats(rows)])) }
 }, null, 1)}\n`);

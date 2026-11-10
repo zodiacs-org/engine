@@ -24,35 +24,39 @@ until the owner approves it.
 - **Accuracy.** On the raw kernel the reduction is within 1e-6″ of an ERFA
   chain over `de440.bsp` at 200 instants from 1800 to 2200, place and node.
   A pack adds its refit: on the pack compiled for 1790 to 2210, against the
-  kernel at 20,001 instants from 1800 to 2200 TT, the Moon's place differs by
-  at most 0.0016″, every other body's by at most 0.0008″, and the true node
-  by at most 0.37″ (`docs/evidence/de440-20261110/pack-accuracy.json`).
+  kernel at 20,001 instants from 1800 to 2200 TT and at the edges of its
+  records, the Moon's place differs by at most 0.0016″, every other body's by
+  at most 0.0008″, and the true node by at most 0.84″, at an edge of the
+  Moon's records (`docs/evidence/de440-20261110/pack-accuracy.json`).
 - **`withEphemeris(source, fn)`** in the root runs `fn` with the root's body
   positions from a source (`positions`, `natalChart` and what is built on
   them, the crossing searches, `moonPhase`), and restores the one before. A
   chart computed inside names it (`chart.ephemeris`); a chart from
-  astronomy-engine is unchanged. The calc entry, the sky entry's rising and
-  setting and the vedic entry's star-anchored ayanamsas and varga timing,
-  which compute positions from astronomy-engine themselves, throw a
-  TypeError inside it.
+  astronomy-engine is unchanged. The functions that compute positions from
+  astronomy-engine themselves, or whose bounds were measured on it (the calc
+  entry, the sky entry's rising, setting and planetary hours, the vedic
+  entry's star-anchored ayanamsas and `vargaSensitivity`, the window entry's
+  `birthWindow`), throw a TypeError inside it.
 - **Natal receipts** of a chart from a DE440 pack carry a new conventions
   set, the current one with the positions, the Moon and the frame of the
   DE440 reduction, name the ephemeris `jpl-de440` with the pack's SHA-256 as
   its version, and require the feature `ephemeris-jpl-de440`, so that an
   earlier engine refuses them. The set is the last of
-  `NATAL_RECEIPT_CONVENTION_SETS`, so no earlier set's index moved. A
-  provenance claim about the ephemeris must name the receipt's own.
+  `NATAL_RECEIPT_CONVENTION_SETS`, so no earlier set's index moved. On a
+  DE440 receipt, a provenance claim about the ephemeris must name its pack.
 - **Checks.** `src/de440.test.ts` and `src/de440-format.test.ts` (synthetic
   packs, float64 and quantised, against values written independently: the
   digest checks, the reader, the switch, the refusals, the receipts),
   `src/de440-sources.test.ts` (no astronomy-engine position function is
   called under a DE440 source in the calls zodiacs.org's compute API makes)
   and `src/de440-kernel.test.ts` (with PRECISION_KERNEL set, the 1e-6″ gates).
-- **Sizes.** The entry and the switch make the package 1,142,467 bytes
-  unpacked, 45,684 more than 1.1.0-rc.2's 1,096,783: `dist/de440.js` and its
-  chunks, 45,793 bytes, and `withEphemeris`, the source's path and the
-  refusals in the ephemeris chunk, which every entry that loads it carries:
-  the root's graph is 2,221 bytes larger (`docs/evidence/de440-20261110/sizes.json`). The cap rises from
+- **Sizes.** The entry and the switch make the package 1,142,818 bytes
+  unpacked, 46,035 more than 1.1.0-rc.2's 1,096,783: opt-in JavaScript
+  (`dist/de440.js`, its own chunks and the refusals) 29,536, the root's
+  JavaScript 2,206 (`withEphemeris` and the source's path in the ephemeris
+  chunk, which every entry that loads it carries), declarations 6,866,
+  documents 7,271 and the manifest 156
+  (`docs/evidence/de440-20261110/sizes.json`). The cap rises from
   1,100,000 to 1,145,000, with a budget of 48,000 for `./de440` and raised
   budgets for `./internal` (69,000), `./time` (42,600) and `./window`
   (107,000), with the owner's approval of 2026-11-10; the root's rises to

@@ -14,7 +14,7 @@
  * under docs/evidence/de440-20261110/oracles/, checked by digest.
  */
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { apply, equToEcl, npbMatrix } from "./de440/frames.js";
 import type { Mat3, Vec3 } from "./de440/frames.js";
@@ -47,6 +47,15 @@ function angleArcsec(u: Vec3, w: Vec3): number {
 }
 const wrapArcsec = (d: number): number => (((d * 3600 + 648000) % 1296000) + 1296000) % 1296000 - 648000;
 
+/** With DE440_KERNEL_REPORT set, the measured figures are written there as JSON (zodiacs.org's P4.1 harness records them). */
+const REPORT = process.env.DE440_KERNEL_REPORT;
+const measured: Record<string, unknown> = {};
+function report(key: string, value: unknown): void {
+  if (!REPORT) return;
+  measured[key] = value;
+  writeFileSync(REPORT, `${JSON.stringify({ kernelSha256: KERNEL_SHA256, oracles: DIGESTS, gateArcsec: GATE_ARCSEC, node: process.version, ...measured }, null, 1)}\n`);
+}
+
 describe.skipIf(!KERNEL)("de440 on the raw kernel (tier B)", () => {
   const kernel = (): KernelSource => {
     expect(existsSync(KERNEL!)).toBe(true);
@@ -60,12 +69,17 @@ describe.skipIf(!KERNEL)("de440 on the raw kernel (tier B)", () => {
     expect(places.rows).toHaveLength(2000);
     let worst = 0;
     const over: string[] = [];
+    const byBody: Record<string, { rows: number; maxArcsec: number }> = {};
     for (const row of places.rows) {
       const place = reducer.apparent(row.body, (row.ttMs - J2000_MS) / 86_400_000);
       const d = angleArcsec(unit(place.lon, place.lat), unit(Number(row.lon), Number(row.lat)));
       worst = Math.max(worst, d);
+      const entry = (byBody[row.body] ??= { rows: 0, maxArcsec: 0 });
+      entry.rows += 1;
+      entry.maxArcsec = Math.max(entry.maxArcsec, d);
       if (d > GATE_ARCSEC) over.push(`${row.body} at ${row.ttMs}: ${d}`);
     }
+    report("viii", { rows: places.rows.length, over: over.length, byBody });
     expect(over).toEqual([]);
     expect(worst).toBeLessThanOrEqual(GATE_ARCSEC);
   });
@@ -74,10 +88,9 @@ describe.skipIf(!KERNEL)("de440 on the raw kernel (tier B)", () => {
     const reducer = new Reducer(kernel());
     const nodes = oracle<{ rows: { ttMs: number; northNodeLon: string }[] }>("erfa-nodes.json");
     expect(nodes.rows).toHaveLength(200);
-    for (const row of nodes.rows) {
-      const d = wrapArcsec(reducer.trueNode((row.ttMs - J2000_MS) / 86_400_000) - Number(row.northNodeLon));
-      expect(Math.abs(d)).toBeLessThanOrEqual(GATE_ARCSEC);
-    }
+    const differences = nodes.rows.map((row) => Math.abs(wrapArcsec(reducer.trueNode((row.ttMs - J2000_MS) / 86_400_000) - Number(row.northNodeLon))));
+    report("c4", { rows: differences.length, maxArcsec: Math.max(...differences) });
+    for (const d of differences) expect(d).toBeLessThanOrEqual(GATE_ARCSEC);
   });
 
   it("C4's control: a node with the frame's rotation added to the velocity is not the oracle's", () => {
@@ -114,6 +127,7 @@ describe.skipIf(!KERNEL)("de440 on the raw kernel (tier B)", () => {
       if (lon < 0) lon += 360;
       largest = Math.max(largest, Math.abs(wrapArcsec(lon - Number(row.northNodeLon))));
     }
+    report("c4Control", { maxArcsec: largest, failsTheGate: largest > GATE_ARCSEC });
     expect(largest).toBeGreaterThan(GATE_ARCSEC);
   });
 });

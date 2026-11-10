@@ -173,7 +173,7 @@ export interface Sky {
  * siderealLongitude of chartPoints' mean nodes with the chart's ayanamsaValue.
  */
 export function siderealAt(point: VargaPoint, ms: number, sky: Sky): number {
-  refuseUnderSource("@zodiacs/engine/vedic");
+  refuseUnderSource("vargaSensitivity");
   return onChartClock(ms, sky.scale, sky.pin, (time) => {
     let lon: number;
     if (point === "Ascendant") {
