@@ -1,0 +1,246 @@
+{
+  "schema": "heliacal.phase-reference.v1",
+  "scope": "Selected independent phase examples only; not a visibility test or an accuracy bound over a date range.",
+  "provider": "NASA/JPL Solar System Dynamics, Horizons",
+  "retrieved": "2026-10-14",
+  "documentation": "https://ssd.jpl.nasa.gov/horizons/manual.html",
+  "apiVersion": "1.2",
+  "centerEphemeris": "DE441",
+  "earthOrientationFile": "eop.261013.p270109",
+  "at": "2020-01-01T00:00:00Z",
+  "observer": {
+    "latitude": 45,
+    "longitude": 10,
+    "height": 0
+  },
+  "units": {
+    "angles": "degrees",
+    "illuminatedDisk": "percent",
+    "observerHeight": "metres"
+  },
+  "conventions": {
+    "elongation": "Quantity 23, apparent Sun-observer-target angular separation",
+    "longitude": "Quantity 31, apparent observer-centered IAU76/80 ecliptic of date",
+    "phase": "Quantity 43 phi, true phase at target with retarded Sun and observer geometry",
+    "illumination": "Quantity 10 Illu%, percentage of the apparent disk illuminated by the Sun",
+    "comparison": "Library illumination uses simultaneous geometric positions, not Horizons retarded geometry; apparent elongation and longitude are compared separately.",
+    "sunLongitudes": "Corresponding independent Sun positions from geometry-reference.json at this instant and origin; used to derive signed target-minus-Sun longitude."
+  },
+  "tolerance": {
+    "phaseAngleDeg": 0.05,
+    "illuminatedFraction": 0.0005,
+    "apparentAngleArcsec": {
+      "Moon": 30,
+      "planets": 60
+    },
+    "declaredBeforeEngineComparison": true,
+    "basis": "Sample gates fixed before execution, allowing simultaneous versus retarded phase, existing engine position errors, source rounding and frame/correction differences. No inferred whole-span accuracy or visibility claim."
+  },
+  "cases": [
+    {
+      "body": "Moon",
+      "center": "geocentric",
+      "targetEphemeris": "DE441",
+      "request": {
+        "format": "text",
+        "COMMAND": "'301'",
+        "OBJ_DATA": "'NO'",
+        "MAKE_EPHEM": "'YES'",
+        "EPHEM_TYPE": "'OBSERVER'",
+        "CENTER": "'500@399'",
+        "QUANTITIES": "'10,23,24,31,43'",
+        "REF_SYSTEM": "'ICRF'",
+        "APPARENT": "'AIRLESS'",
+        "ANG_FORMAT": "'DEG'",
+        "EXTRA_PREC": "'YES'",
+        "CSV_FORMAT": "'YES'",
+        "TLIST": "'2458849.5'",
+        "TLIST_TYPE": "'JD'",
+        "TIME_TYPE": "'UT'"
+      },
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%27301%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2710%2C23%2C24%2C31%2C43%27&REF_SYSTEM=%27ICRF%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&TLIST=%272458849.5%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+      "expected": {
+        "illuminatedPercent": 29.95669,
+        "elongationDeg": 66.2213,
+        "phaseAngleDeg": 113.6323,
+        "longitudeDeg": 346.1383767
+      }
+    },
+    {
+      "body": "Mercury",
+      "center": "geocentric",
+      "targetEphemeris": "DE441",
+      "request": {
+        "format": "text",
+        "COMMAND": "'199'",
+        "OBJ_DATA": "'NO'",
+        "MAKE_EPHEM": "'YES'",
+        "EPHEM_TYPE": "'OBSERVER'",
+        "CENTER": "'500@399'",
+        "QUANTITIES": "'10,23,24,31,43'",
+        "REF_SYSTEM": "'ICRF'",
+        "APPARENT": "'AIRLESS'",
+        "ANG_FORMAT": "'DEG'",
+        "EXTRA_PREC": "'YES'",
+        "CSV_FORMAT": "'YES'",
+        "TLIST": "'2458849.5'",
+        "TLIST_TYPE": "'JD'",
+        "TIME_TYPE": "'UT'"
+      },
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%27199%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2710%2C23%2C24%2C31%2C43%27&REF_SYSTEM=%27ICRF%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&TLIST=%272458849.5%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+      "expected": {
+        "illuminatedPercent": 98.86285,
+        "elongationDeg": 5.7679,
+        "phaseAngleDeg": 12.243,
+        "longitudeDeg": 274.3833145
+      }
+    },
+    {
+      "body": "Venus",
+      "center": "geocentric",
+      "targetEphemeris": "DE441",
+      "request": {
+        "format": "text",
+        "COMMAND": "'299'",
+        "OBJ_DATA": "'NO'",
+        "MAKE_EPHEM": "'YES'",
+        "EPHEM_TYPE": "'OBSERVER'",
+        "CENTER": "'500@399'",
+        "QUANTITIES": "'10,23,24,31,43'",
+        "REF_SYSTEM": "'ICRF'",
+        "APPARENT": "'AIRLESS'",
+        "ANG_FORMAT": "'DEG'",
+        "EXTRA_PREC": "'YES'",
+        "CSV_FORMAT": "'YES'",
+        "TLIST": "'2458849.5'",
+        "TLIST_TYPE": "'JD'",
+        "TIME_TYPE": "'UT'"
+      },
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%27299%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2710%2C23%2C24%2C31%2C43%27&REF_SYSTEM=%27ICRF%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&TLIST=%272458849.5%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+      "expected": {
+        "illuminatedPercent": 82.1626,
+        "elongationDeg": 34.4431,
+        "phaseAngleDeg": 49.9653,
+        "longitudeDeg": 314.4094923
+      }
+    },
+    {
+      "body": "Mars",
+      "center": "geocentric",
+      "targetEphemeris": "mar099",
+      "request": {
+        "format": "text",
+        "COMMAND": "'499'",
+        "OBJ_DATA": "'NO'",
+        "MAKE_EPHEM": "'YES'",
+        "EPHEM_TYPE": "'OBSERVER'",
+        "CENTER": "'500@399'",
+        "QUANTITIES": "'10,23,24,31,43'",
+        "REF_SYSTEM": "'ICRF'",
+        "APPARENT": "'AIRLESS'",
+        "ANG_FORMAT": "'DEG'",
+        "EXTRA_PREC": "'YES'",
+        "CSV_FORMAT": "'YES'",
+        "TLIST": "'2458849.5'",
+        "TLIST_TYPE": "'JD'",
+        "TIME_TYPE": "'UT'"
+      },
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%27499%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2710%2C23%2C24%2C31%2C43%27&REF_SYSTEM=%27ICRF%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&TLIST=%272458849.5%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+      "expected": {
+        "illuminatedPercent": 95.58333,
+        "elongationDeg": 41.6262,
+        "phaseAngleDeg": 24.2633,
+        "longitudeDeg": 238.3846079
+      }
+    },
+    {
+      "body": "Jupiter",
+      "center": "geocentric",
+      "targetEphemeris": "jup365_merged",
+      "request": {
+        "format": "text",
+        "COMMAND": "'599'",
+        "OBJ_DATA": "'NO'",
+        "MAKE_EPHEM": "'YES'",
+        "EPHEM_TYPE": "'OBSERVER'",
+        "CENTER": "'500@399'",
+        "QUANTITIES": "'10,23,24,31,43'",
+        "REF_SYSTEM": "'ICRF'",
+        "APPARENT": "'AIRLESS'",
+        "ANG_FORMAT": "'DEG'",
+        "EXTRA_PREC": "'YES'",
+        "CSV_FORMAT": "'YES'",
+        "TLIST": "'2458849.5'",
+        "TLIST_TYPE": "'JD'",
+        "TIME_TYPE": "'UT'"
+      },
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%27599%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2710%2C23%2C24%2C31%2C43%27&REF_SYSTEM=%27ICRF%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&TLIST=%272458849.5%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+      "expected": {
+        "illuminatedPercent": 99.99697,
+        "elongationDeg": 3.3403,
+        "phaseAngleDeg": 0.6304,
+        "longitudeDeg": 276.6703386
+      }
+    },
+    {
+      "body": "Saturn",
+      "center": "geocentric",
+      "targetEphemeris": "sat441l",
+      "request": {
+        "format": "text",
+        "COMMAND": "'699'",
+        "OBJ_DATA": "'NO'",
+        "MAKE_EPHEM": "'YES'",
+        "EPHEM_TYPE": "'OBSERVER'",
+        "CENTER": "'500@399'",
+        "QUANTITIES": "'10,23,24,31,43'",
+        "REF_SYSTEM": "'ICRF'",
+        "APPARENT": "'AIRLESS'",
+        "ANG_FORMAT": "'DEG'",
+        "EXTRA_PREC": "'YES'",
+        "CSV_FORMAT": "'YES'",
+        "TLIST": "'2458849.5'",
+        "TLIST_TYPE": "'JD'",
+        "TIME_TYPE": "'UT'"
+      },
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%27699%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2710%2C23%2C24%2C31%2C43%27&REF_SYSTEM=%27ICRF%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&TLIST=%272458849.5%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+      "expected": {
+        "illuminatedPercent": 99.99067,
+        "elongationDeg": 11.3856,
+        "phaseAngleDeg": 1.1067,
+        "longitudeDeg": 291.3949664
+      }
+    },
+    {
+      "body": "Moon",
+      "center": "topocentric",
+      "targetEphemeris": "DE441",
+      "request": {
+        "format": "text",
+        "COMMAND": "'301'",
+        "OBJ_DATA": "'NO'",
+        "MAKE_EPHEM": "'YES'",
+        "EPHEM_TYPE": "'OBSERVER'",
+        "CENTER": "'coord@399'",
+        "QUANTITIES": "'10,23,24,31,43'",
+        "REF_SYSTEM": "'ICRF'",
+        "APPARENT": "'AIRLESS'",
+        "ANG_FORMAT": "'DEG'",
+        "EXTRA_PREC": "'YES'",
+        "CSV_FORMAT": "'YES'",
+        "TLIST": "'2458849.5'",
+        "TLIST_TYPE": "'JD'",
+        "TIME_TYPE": "'UT'",
+        "COORD_TYPE": "'GEODETIC'",
+        "SITE_COORD": "'10,45,0'"
+      },
+      "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%27301%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27coord%40399%27&QUANTITIES=%2710%2C23%2C24%2C31%2C43%27&REF_SYSTEM=%27ICRF%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&TLIST=%272458849.5%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27&COORD_TYPE=%27GEODETIC%27&SITE_COORD=%2710%2C45%2C0%27",
+      "expected": {
+        "illuminatedPercent": 29.38982,
+        "elongationDeg": 65.51,
+        "phaseAngleDeg": 114.3433,
+        "longitudeDeg": 345.4117914
+      }
+    }
+  ]
+}

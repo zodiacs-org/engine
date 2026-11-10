@@ -1,0 +1,285 @@
+{
+  "schema": "heliacal.odeh-reference.v1",
+  "scope": "Criterion arithmetic on invented geometry and selected published boundaries, not sighting dates or predictive-performance evidence.",
+  "source": {
+    "author": "Mohammad Sh. Odeh",
+    "title": "New Criterion for Lunar Crescent Visibility",
+    "publication": "Experimental Astronomy 18 (2004), 39-64; Springer publication 2006",
+    "doi": "10.1007/s10686-005-9002-5",
+    "url": "https://astronomycenter.net/pdf/2006_cri.pdf",
+    "retrieved": "2026-10-15",
+    "geometryLocator": "Printed p. 43, section 5: airless topocentric ARCV and topocentric W.",
+    "criterionLocator": "Printed p. 61, equation (2), units and the four category intervals immediately below.",
+    "publishedBoundaryLocator": "Printed p. 43, Table V, selected widths 0.1, 0.5 and 0.9 arcminutes.",
+    "bestTimeLocator": "Printed p. 43, equation (1).",
+    "sourceBasis": "Equation, category inequalities, units and selected criterion boundaries checked against rendered page images. No observational records, source program or publication prose is reproduced."
+  },
+  "arithmetic": {
+    "generator": "heliacal/scripts/build-odeh-reference.py",
+    "method": "Original Python Decimal direct cubic evaluation; output unchanged at 70 and 90 significant decimal digits. Exact integer rational arithmetic for the evening best time.",
+    "inputBasis": "Invented airless topocentric altitudes and directly supplied crescent width in arcminutes. No elongation-to-width formula is inferred. Sunset and moonset instants are invented."
+  },
+  "tolerance": {
+    "declaredBeforeImplementationComparison": true,
+    "numericAbsolute": 1e-12,
+    "publishedBoundaryAbsoluteDeg": 0.05,
+    "bestTimeMilliseconds": 0,
+    "basis": "The numeric gate checks formula arithmetic only. Table V values are printed to 0.1 degree, so half that printed unit is allowed for its boundary comparison. Exact category intervals and millisecond rounding are separate checks; no observational or ephemeris uncertainty is inferred."
+  },
+  "criterionCases": [
+    {
+      "id": "unaided-region",
+      "sample": {
+        "moonAltitudeTopocentricDeg": 4.0,
+        "sunAltitudeTopocentricDeg": -7.0,
+        "crescentWidthTopocentricArcmin": 0.5
+      },
+      "expected": {
+        "arcOfVisionDeg": 11.0,
+        "crescentWidthArcmin": 0.5,
+        "referenceArcOfVisionDeg": 4.17405,
+        "v": 6.82595,
+        "category": "A"
+      }
+    },
+    {
+      "id": "optical-and-possible-unaided-region",
+      "sample": {
+        "moonAltitudeTopocentricDeg": 3.0,
+        "sunAltitudeTopocentricDeg": -5.0,
+        "crescentWidthTopocentricArcmin": 0.5
+      },
+      "expected": {
+        "arcOfVisionDeg": 8.0,
+        "crescentWidthArcmin": 0.5,
+        "referenceArcOfVisionDeg": 4.17405,
+        "v": 3.82595,
+        "category": "B"
+      }
+    },
+    {
+      "id": "optical-only-region",
+      "sample": {
+        "moonAltitudeTopocentricDeg": 1.0,
+        "sunAltitudeTopocentricDeg": -4.0,
+        "crescentWidthTopocentricArcmin": 0.3
+      },
+      "expected": {
+        "arcOfVisionDeg": 5.0,
+        "crescentWidthArcmin": 0.3,
+        "referenceArcOfVisionDeg": 5.3314424,
+        "v": -0.3314424,
+        "category": "C"
+      }
+    },
+    {
+      "id": "below-optical-region",
+      "sample": {
+        "moonAltitudeTopocentricDeg": 0.0,
+        "sunAltitudeTopocentricDeg": -4.0,
+        "crescentWidthTopocentricArcmin": 0.1
+      },
+      "expected": {
+        "arcOfVisionDeg": 4.0,
+        "crescentWidthArcmin": 0.1,
+        "referenceArcOfVisionDeg": 6.5400572,
+        "v": -2.5400572,
+        "category": "D"
+      }
+    },
+    {
+      "id": "negative-lunar-altitude",
+      "sample": {
+        "moonAltitudeTopocentricDeg": -2.0,
+        "sunAltitudeTopocentricDeg": -8.0,
+        "crescentWidthTopocentricArcmin": 0.4
+      },
+      "expected": {
+        "arcOfVisionDeg": 6.0,
+        "crescentWidthArcmin": 0.4,
+        "referenceArcOfVisionDeg": 4.7466488,
+        "v": 1.2533512,
+        "category": "C"
+      }
+    },
+    {
+      "id": "wide-crescent",
+      "sample": {
+        "moonAltitudeTopocentricDeg": 7.0,
+        "sunAltitudeTopocentricDeg": -8.0,
+        "crescentWidthTopocentricArcmin": 0.9
+      },
+      "expected": {
+        "arcOfVisionDeg": 15.0,
+        "crescentWidthArcmin": 0.9,
+        "referenceArcOfVisionDeg": 1.9933868,
+        "v": 13.0066132,
+        "category": "A"
+      }
+    },
+    {
+      "id": "narrow-positive-width",
+      "sample": {
+        "moonAltitudeTopocentricDeg": 1.0,
+        "sunAltitudeTopocentricDeg": -5.0,
+        "crescentWidthTopocentricArcmin": 1e-12
+      },
+      "expected": {
+        "arcOfVisionDeg": 6.0,
+        "crescentWidthArcmin": 1e-12,
+        "referenceArcOfVisionDeg": 7.165099999993678,
+        "v": -1.1650999999936773,
+        "category": "D"
+      }
+    },
+    {
+      "id": "zero-width",
+      "sample": {
+        "moonAltitudeTopocentricDeg": 0.0,
+        "sunAltitudeTopocentricDeg": 0.0,
+        "crescentWidthTopocentricArcmin": 0.0
+      },
+      "expected": {
+        "arcOfVisionDeg": 0.0,
+        "crescentWidthArcmin": 0.0,
+        "referenceArcOfVisionDeg": 7.1651,
+        "v": -7.1651,
+        "category": "D"
+      }
+    },
+    {
+      "id": "nonround-inputs",
+      "sample": {
+        "moonAltitudeTopocentricDeg": 2.718281,
+        "sunAltitudeTopocentricDeg": -6.283185,
+        "crescentWidthTopocentricArcmin": 0.314159
+      },
+      "expected": {
+        "arcOfVisionDeg": 9.001466,
+        "crescentWidthArcmin": 0.314159,
+        "referenceArcOfVisionDeg": 5.247877388214293,
+        "v": 3.7535886117857076,
+        "category": "B"
+      }
+    }
+  ],
+  "categoryCases": [
+    {
+      "id": "5.65-below",
+      "v": 5.649999999999,
+      "category": "B"
+    },
+    {
+      "id": "5.65-equal",
+      "v": 5.65,
+      "category": "A"
+    },
+    {
+      "id": "5.65-above",
+      "v": 5.650000000001,
+      "category": "A"
+    },
+    {
+      "id": "2-below",
+      "v": 1.999999999999,
+      "category": "C"
+    },
+    {
+      "id": "2-equal",
+      "v": 2.0,
+      "category": "B"
+    },
+    {
+      "id": "2-above",
+      "v": 2.000000000001,
+      "category": "B"
+    },
+    {
+      "id": "-0.96-below",
+      "v": -0.960000000001,
+      "category": "D"
+    },
+    {
+      "id": "-0.96-equal",
+      "v": -0.96,
+      "category": "C"
+    },
+    {
+      "id": "-0.96-above",
+      "v": -0.959999999999,
+      "category": "C"
+    }
+  ],
+  "publishedBoundaries": [
+    {
+      "widthArcmin": 0.1,
+      "arcv1Deg": 5.6,
+      "arcv2Deg": 8.5,
+      "arcv3Deg": 12.2
+    },
+    {
+      "widthArcmin": 0.5,
+      "arcv1Deg": 3.2,
+      "arcv2Deg": 6.2,
+      "arcv3Deg": 9.8
+    },
+    {
+      "widthArcmin": 0.9,
+      "arcv1Deg": 1.0,
+      "arcv2Deg": 4.0,
+      "arcv3Deg": 7.6
+    }
+  ],
+  "bestTimeCases": [
+    {
+      "id": "exact-evening-fraction",
+      "sunset": "2002-03-04T18:00:00.000Z",
+      "moonset": "2002-03-04T18:54:00.000Z",
+      "expected": {
+        "at": "2002-03-04T18:24:00.000Z",
+        "lagMilliseconds": 3240000,
+        "offsetMilliseconds": 1440000
+      }
+    },
+    {
+      "id": "crosses-utc-year",
+      "sunset": "2002-12-31T23:55:00.000Z",
+      "moonset": "2003-01-01T00:22:00.000Z",
+      "expected": {
+        "at": "2003-01-01T00:07:00.000Z",
+        "lagMilliseconds": 1620000,
+        "offsetMilliseconds": 720000
+      }
+    },
+    {
+      "id": "fractional-millisecond-down",
+      "sunset": "2002-03-04T18:00:00.000Z",
+      "moonset": "2002-03-04T18:00:00.003Z",
+      "expected": {
+        "at": "2002-03-04T18:00:00.001Z",
+        "lagMilliseconds": 3,
+        "offsetMilliseconds": 1
+      }
+    },
+    {
+      "id": "fractional-millisecond-up",
+      "sunset": "2002-03-04T18:00:00.000Z",
+      "moonset": "2002-03-04T18:00:00.004Z",
+      "expected": {
+        "at": "2002-03-04T18:00:00.002Z",
+        "lagMilliseconds": 4,
+        "offsetMilliseconds": 2
+      }
+    },
+    {
+      "id": "ordinary-lag-rounding",
+      "sunset": "2002-03-04T18:00:00.000Z",
+      "moonset": "2002-03-04T18:54:00.002Z",
+      "expected": {
+        "at": "2002-03-04T18:24:00.001Z",
+        "lagMilliseconds": 3240002,
+        "offsetMilliseconds": 1440001
+      }
+    }
+  ]
+}

@@ -1,0 +1,338 @@
+{
+  "schema": "heliacal.yallop-reference.v1",
+  "scope": "Synthetic worked calculations of the published criterion, not observed sightings or predictive-performance evidence.",
+  "source": {
+    "author": "B. D. Yallop",
+    "title": "A Method for Predicting the First Sighting of the New Crescent Moon",
+    "publication": "HM Nautical Almanac Office, NAO Technical Note No. 69 (1997), updated April 1998",
+    "url": "https://webspace.science.uu.nl/~gent0113/islam/downloads/naotn_69.pdf",
+    "retrieved": "2026-10-15",
+    "geometryLocator": "Printed p. 1, section 2; p. 3, equations (3.8)-(3.10).",
+    "qLocator": "Printed p. 11, section 6, equation (6.1); p. 12, Table 5 category intervals.",
+    "bestTimeLocator": "Printed p. 4, section 4, equation (4.1).",
+    "sourceBasis": "Formula and interval notation checked against page images. No paper text, program, table of observations or source-calculated values is reproduced."
+  },
+  "arithmetic": {
+    "generator": "heliacal/scripts/build-yallop-reference.py",
+    "method": "Original Python standard-library Decimal power series for sin, cos and Machin pi; independent direct polynomial evaluation; output unchanged at 70 and 90 significant decimal digits.",
+    "inputBasis": "Invented airless geocentric lunar/solar altitudes, geocentric angular separation and lunar horizontal parallax. Best-time inputs are invented sunset/moonset instants."
+  },
+  "tolerance": {
+    "declaredBeforeImplementationComparison": true,
+    "numericAbsolute": 1e-12,
+    "nonzeroWidthRelative": 1e-12,
+    "bestTimeMilliseconds": 0,
+    "basis": "Arithmetic-only gates for these inputs; relative width additionally checks cancellation at tiny positive elongation. Category and rounded time results are exact. No ephemeris or observational error allowance is inferred."
+  },
+  "criterionCases": [
+    {
+      "id": "clear-positive-altitude",
+      "sample": {
+        "moonAltitudeGeocentricDeg": 8.0,
+        "sunAltitudeGeocentricDeg": -7.0,
+        "elongationGeocentricDeg": 16.0,
+        "moonHorizontalParallaxArcmin": 61.0
+      },
+      "expected": {
+        "arcOfVisionDeg": 15.0,
+        "geocentricSemidiameterArcmin": 16.61945,
+        "topocentricSemidiameterArcmin": 16.660489788427995,
+        "crescentWidthArcmin": 0.6453991192406573,
+        "referenceArcOfVisionDeg": 8.033997812987991,
+        "q": 0.6966002187012009,
+        "category": "A"
+      }
+    },
+    {
+      "id": "near-zero-q",
+      "sample": {
+        "moonAltitudeGeocentricDeg": 4.0,
+        "sunAltitudeGeocentricDeg": -7.0,
+        "elongationGeocentricDeg": 11.0,
+        "moonHorizontalParallaxArcmin": 60.0
+      },
+      "expected": {
+        "arcOfVisionDeg": 11.0,
+        "geocentricSemidiameterArcmin": 16.347,
+        "topocentricSemidiameterArcmin": 16.36690113746363,
+        "crescentWidthArcmin": 0.3007060721288394,
+        "referenceArcOfVisionDeg": 9.999269164942307,
+        "q": 0.10007308350576934,
+        "category": "B"
+      }
+    },
+    {
+      "id": "optical-finding-region",
+      "sample": {
+        "moonAltitudeGeocentricDeg": 3.0,
+        "sunAltitudeGeocentricDeg": -7.0,
+        "elongationGeocentricDeg": 10.0,
+        "moonHorizontalParallaxArcmin": 58.0
+      },
+      "expected": {
+        "arcOfVisionDeg": 10.0,
+        "geocentricSemidiameterArcmin": 15.8021,
+        "topocentricSemidiameterArcmin": 15.816052385800928,
+        "crescentWidthArcmin": 0.24028137421694368,
+        "referenceArcOfVisionDeg": 10.358741092790115,
+        "q": -0.035874109279011544,
+        "category": "C"
+      }
+    },
+    {
+      "id": "optical-only-region",
+      "sample": {
+        "moonAltitudeGeocentricDeg": 2.0,
+        "sunAltitudeGeocentricDeg": -6.7,
+        "elongationGeocentricDeg": 9.0,
+        "moonHorizontalParallaxArcmin": 55.0
+      },
+      "expected": {
+        "arcOfVisionDeg": 8.7,
+        "geocentricSemidiameterArcmin": 14.98475,
+        "topocentricSemidiameterArcmin": 14.993116406173272,
+        "crescentWidthArcmin": 0.18459014261025802,
+        "referenceArcOfVisionDeg": 10.69430848921816,
+        "q": -0.199430848921816,
+        "category": "D"
+      }
+    },
+    {
+      "id": "below-optical-region",
+      "sample": {
+        "moonAltitudeGeocentricDeg": 1.0,
+        "sunAltitudeGeocentricDeg": -7.2,
+        "elongationGeocentricDeg": 8.5,
+        "moonHorizontalParallaxArcmin": 61.0
+      },
+      "expected": {
+        "arcOfVisionDeg": 8.2,
+        "geocentricSemidiameterArcmin": 16.61945,
+        "topocentricSemidiameterArcmin": 16.624596418832407,
+        "crescentWidthArcmin": 0.1826068386174433,
+        "referenceArcOfVisionDeg": 10.706335528593439,
+        "q": -0.2506335528593439,
+        "category": "E"
+      }
+    },
+    {
+      "id": "small-crescent",
+      "sample": {
+        "moonAltitudeGeocentricDeg": 1.0,
+        "sunAltitudeGeocentricDeg": -5.0,
+        "elongationGeocentricDeg": 7.0,
+        "moonHorizontalParallaxArcmin": 54.0
+      },
+      "expected": {
+        "arcOfVisionDeg": 6.0,
+        "geocentricSemidiameterArcmin": 14.7123,
+        "topocentricSemidiameterArcmin": 14.716333089945724,
+        "crescentWidthArcmin": 0.10969331524825017,
+        "referenceArcOfVisionDeg": 11.15222535643297,
+        "q": -0.5152225356432969,
+        "category": "F"
+      }
+    },
+    {
+      "id": "negative-lunar-altitude",
+      "sample": {
+        "moonAltitudeGeocentricDeg": -3.0,
+        "sunAltitudeGeocentricDeg": -10.0,
+        "elongationGeocentricDeg": 8.0,
+        "moonHorizontalParallaxArcmin": 60.0
+      },
+      "expected": {
+        "arcOfVisionDeg": 7.0,
+        "geocentricSemidiameterArcmin": 16.347,
+        "topocentricSemidiameterArcmin": 16.332068840158094,
+        "crescentWidthArcmin": 0.15894257126036002,
+        "referenceArcOfVisionDeg": 10.850250738971516,
+        "q": -0.38502507389715157,
+        "category": "F"
+      }
+    },
+    {
+      "id": "lunar-geocentric-horizon",
+      "sample": {
+        "moonAltitudeGeocentricDeg": 0.0,
+        "sunAltitudeGeocentricDeg": -8.0,
+        "elongationGeocentricDeg": 9.0,
+        "moonHorizontalParallaxArcmin": 57.0
+      },
+      "expected": {
+        "arcOfVisionDeg": 8.0,
+        "geocentricSemidiameterArcmin": 15.52965,
+        "topocentricSemidiameterArcmin": 15.52965,
+        "crescentWidthArcmin": 0.1911957614767194,
+        "referenceArcOfVisionDeg": 10.654289370023847,
+        "q": -0.2654289370023847,
+        "category": "E"
+      }
+    },
+    {
+      "id": "tiny-positive-elongation",
+      "sample": {
+        "moonAltitudeGeocentricDeg": 0.0,
+        "sunAltitudeGeocentricDeg": 0.0,
+        "elongationGeocentricDeg": 1e-07,
+        "moonHorizontalParallaxArcmin": 60.0
+      },
+      "expected": {
+        "arcOfVisionDeg": 0.0,
+        "geocentricSemidiameterArcmin": 16.347,
+        "topocentricSemidiameterArcmin": 16.347,
+        "crescentWidthArcmin": 2.4897904806266627e-17,
+        "referenceArcOfVisionDeg": 11.8371,
+        "q": -1.18371,
+        "category": "F"
+      }
+    },
+    {
+      "id": "zero-elongation",
+      "sample": {
+        "moonAltitudeGeocentricDeg": 0.0,
+        "sunAltitudeGeocentricDeg": 0.0,
+        "elongationGeocentricDeg": 0.0,
+        "moonHorizontalParallaxArcmin": 60.0
+      },
+      "expected": {
+        "arcOfVisionDeg": 0.0,
+        "geocentricSemidiameterArcmin": 16.347,
+        "topocentricSemidiameterArcmin": 16.347,
+        "crescentWidthArcmin": 0.0,
+        "referenceArcOfVisionDeg": 11.8371,
+        "q": -1.18371,
+        "category": "F"
+      }
+    }
+  ],
+  "categoryCases": [
+    {
+      "id": "0.216-below",
+      "q": 0.215999999999,
+      "category": "B"
+    },
+    {
+      "id": "0.216-equal",
+      "q": 0.216,
+      "category": "B"
+    },
+    {
+      "id": "0.216-above",
+      "q": 0.216000000001,
+      "category": "A"
+    },
+    {
+      "id": "-0.014-below",
+      "q": -0.014000000001,
+      "category": "C"
+    },
+    {
+      "id": "-0.014-equal",
+      "q": -0.014,
+      "category": "C"
+    },
+    {
+      "id": "-0.014-above",
+      "q": -0.013999999999,
+      "category": "B"
+    },
+    {
+      "id": "-0.160-below",
+      "q": -0.160000000001,
+      "category": "D"
+    },
+    {
+      "id": "-0.160-equal",
+      "q": -0.16,
+      "category": "D"
+    },
+    {
+      "id": "-0.160-above",
+      "q": -0.159999999999,
+      "category": "C"
+    },
+    {
+      "id": "-0.232-below",
+      "q": -0.232000000001,
+      "category": "E"
+    },
+    {
+      "id": "-0.232-equal",
+      "q": -0.232,
+      "category": "E"
+    },
+    {
+      "id": "-0.232-above",
+      "q": -0.231999999999,
+      "category": "D"
+    },
+    {
+      "id": "-0.293-below",
+      "q": -0.293000000001,
+      "category": "F"
+    },
+    {
+      "id": "-0.293-equal",
+      "q": -0.293,
+      "category": "F"
+    },
+    {
+      "id": "-0.293-above",
+      "q": -0.292999999999,
+      "category": "E"
+    }
+  ],
+  "bestTimeCases": [
+    {
+      "id": "exact-evening-fraction",
+      "sunset": "2001-06-15T18:00:00.000Z",
+      "moonset": "2001-06-15T19:21:00.000Z",
+      "expected": {
+        "at": "2001-06-15T18:36:00.000Z",
+        "lagMilliseconds": 4860000,
+        "offsetMilliseconds": 2160000
+      }
+    },
+    {
+      "id": "crosses-utc-midnight",
+      "sunset": "2001-12-31T23:50:00.000Z",
+      "moonset": "2002-01-01T00:35:00.000Z",
+      "expected": {
+        "at": "2002-01-01T00:10:00.000Z",
+        "lagMilliseconds": 2700000,
+        "offsetMilliseconds": 1200000
+      }
+    },
+    {
+      "id": "fractional-millisecond-down",
+      "sunset": "2001-06-15T18:00:00.000Z",
+      "moonset": "2001-06-15T18:00:00.001Z",
+      "expected": {
+        "at": "2001-06-15T18:00:00.000Z",
+        "lagMilliseconds": 1,
+        "offsetMilliseconds": 0
+      }
+    },
+    {
+      "id": "fractional-millisecond-up",
+      "sunset": "2001-06-15T18:00:00.000Z",
+      "moonset": "2001-06-15T18:00:00.002Z",
+      "expected": {
+        "at": "2001-06-15T18:00:00.001Z",
+        "lagMilliseconds": 2,
+        "offsetMilliseconds": 1
+      }
+    },
+    {
+      "id": "ordinary-lag-rounding",
+      "sunset": "2001-06-15T18:00:00.000Z",
+      "moonset": "2001-06-15T18:45:00.001Z",
+      "expected": {
+        "at": "2001-06-15T18:20:00.000Z",
+        "lagMilliseconds": 2700001,
+        "offsetMilliseconds": 1200000
+      }
+    }
+  ]
+}
