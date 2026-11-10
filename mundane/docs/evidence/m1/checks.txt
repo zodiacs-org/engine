@@ -1,0 +1,24 @@
+M1 input foundation checks
+Runtime: Node.js v22.22.2 (temporary toolchain outside the checkout)
+
+Command: npm run check --prefix mundane
+TypeScript: tsc -p tsconfig.json --pretty false, exit 0
+Vitest: vitest run --config vitest.config.ts, exit 0
+Test Files: 1 passed (1)
+Tests: 76 passed (76)
+Scope: mundane/test/inputs.test.ts; synthetic places, calendar arithmetic,
+offset parsing, input snapshots, invalid inputs, and supported house settings.
+No astronomical accuracy measurement was performed in this milestone.
+
+Command: npm run package:contents
+Exit 1: AssertionError: packed package is missing dist/calc.d.ts
+This checkout has no dist/ tree. No engine build was run because this task
+confines generated output and modifications to mundane/.
+
+Additional check: npm pack --dry-run --ignore-scripts --json
+The resulting manifest was parsed and asserted to contain no path beginning
+with mundane/. The assertion passed. This check does not substitute for the
+full size and import-graph gate, which requires a built dist/ tree.
+
+Git inspection: git status --short reported only ?? mundane/
+No git mutation, real archive packing, or publication was performed.

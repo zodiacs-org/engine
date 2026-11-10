@@ -1,0 +1,93 @@
+M12 local CLI, 2026-10-15
+Checkout HEAD before this session's uncommitted mundane changes:
+1fbfecd57adfb408f73200a1946d0674717e2323
+
+All changes remain inside mundane/. No engine build or archive was created.
+The Node runtime and test caches are inside ignored mundane/node_modules/.
+The CLI bundle is inside ignored mundane/build/. Test-only synthetic modules,
+isolated executable copies, and full check logs are inside ignored
+mundane/generated/. Process-test scratch directories are removed after tests.
+Git metadata was read only.
+
+Commands below ran from mundane/ unless stated otherwise.
+
+$ npm exec --cache ./node_modules/.cache --yes --package=node@22.22.2 -- npm run check
+Exit status: 0
+Selected final output (existing independent timing measurements omitted):
+
+> check
+> npm run typecheck && npm test
+
+> typecheck
+> tsc -p tsconfig.json --pretty false
+
+> test
+> vitest run --config vitest.config.ts
+
+RUN v2.1.9
+PASS test/report.test.ts (47 tests)
+PASS test/lunations.test.ts (51 tests)
+PASS test/cli.test.ts (79 tests)
+PASS test/angle-rulers.test.ts (61 tests)
+PASS test/angularity.test.ts (77 tests)
+PASS test/ingresses.test.ts (44 tests)
+PASS test/factors.test.ts (11 tests)
+PASS test/chart.test.ts (59 tests)
+PASS test/eclipses.test.ts (37 tests)
+PASS test/events-bridge.test.ts (28 tests)
+PASS test/lunation-references.test.ts (10 tests)
+PASS test/ingress-references.test.ts (10 tests)
+PASS test/inputs.test.ts (76 tests)
+PASS test/events-loader.test.ts (2 tests)
+Test Files 14 passed (14)
+Tests 592 passed (592)
+
+The CLI tests invoke scripts/build-cli.mjs with the test runner's Node runtime,
+then spawn bin/mundane.mjs. The build bundles relative engine sources and the
+already-pinned astronomy-engine through esbuild, now an explicit dependency
+of this private workbench, at its existing locked version. No root dependency
+or configuration changed. The executable is also exercised from another
+working directory and with different host timezones.
+
+Process tests cover annual commands, date ranges, JSON equality with the
+current library APIs, text chart and factor fields, polar fallback, help,
+empty completed windows, strict arguments, invalid calendars and coordinates,
+unsupported ephemeris coverage, positive custom budgets, atomic budget refusals,
+and early-year normalization. Comparisons with current library output are
+integration evidence only, not independent astronomical accuracy evidence.
+
+The March 2024 CLI timing checks reuse the committed USNO season and phase
+fixtures with their previously set 120-second comparison threshold. Source
+definitions, digests, minute precision and UT1/UTC comparison caveats are
+documented in docs/ingress-references.md and docs/lunation-references.md.
+Expected instants are formatted from those source rows, never from prior engine
+output. This adds no broader timing or chart-factor accuracy claim.
+
+Optional events loading is tested at the production relative directory depth
+using isolated synthetic modules and invented event geometry. Tests cover an
+absent sibling, supplied minima, cumulative evaluations, evaluation-budget
+refusal, text labels, malformed settings and missing settings files. These
+are loader and contract checks, not eclipse timing evidence.
+
+$ npm exec --cache ./node_modules/.cache --yes --package=node@22.22.2 -- node scripts/check-package-isolation.mjs
+Exit status: 0
+PASS: npm dry-run manifest contains no mundane files; scripts disabled, no archive written.
+This is an isolation check; the full package gate also needs a built dist tree.
+
+$ npm exec --cache ./node_modules/.cache --yes --package=node@22.22.2 -- npm run package:contents --prefix ..
+Exit status: 1
+AssertionError [ERR_ASSERTION]: packed package is missing dist/calc.d.ts
+Node.js v22.22.2
+
+The full package gate requires the absent dist/ tree. This task forbids
+changing dist/, so it was not built. Manifest-only package isolation passed.
+
+Scope audit from the repository root, using git diff --name-only plus git
+ls-files --others --exclude-standard for changed paths, and git ls-files
+--cached --others --exclude-standard for mundane file sizes and Markdown:
+PASS: all changed paths stay inside mundane/.
+PASS: all nonignored mundane files are below 2,000,000 bytes.
+PASS: mundane Markdown contains no em dash; git diff --check passed.
+PASS: local build output is below 2,000,000 bytes; dist/ is absent.
+
+M12 is complete. M13 documentation and final audit is the next milestone.

@@ -1,0 +1,35 @@
+M2 event chart casting checks
+Runtime: Node.js v22.22.2 (existing temporary toolchain outside the checkout)
+
+Command: npm run check --prefix mundane
+TypeScript: tsc -p tsconfig.json --pretty false, exit 0
+Vitest: vitest run --config vitest.config.ts, exit 0
+Test Files: 2 passed (2)
+Tests: 135 passed (135)
+Scope: mundane/test/chart.test.ts and mundane/test/inputs.test.ts.
+The chart tests use synthetic places and arbitrary supplied instants, not
+claimed ingress, lunation, or eclipse timings. They check all supported house
+systems, Placidus and Koch fallback in both polar hemispheres, engine receipt
+conventions, original ISO spelling, exact dependency pinning, observed and
+predicted IERS metadata, model and fallback time bases, reference-coverage
+flags, ephemeris refusals, detached frozen snapshots, and invalid inputs.
+Engine comparisons are integration checks, not independent accuracy evidence.
+
+Command: node mundane/scripts/check-package-isolation.mjs
+Exit 0.
+PASS: npm dry-run manifest contains no mundane files; scripts disabled,
+no archive written.
+This is an isolation check; the full package gate also needs a built dist tree.
+
+Command: npm run package:contents
+Exit 1: AssertionError: packed package is missing dist/calc.d.ts
+The checkout has no dist tree. The engine build was not run because this task
+requires all edits and generated project files to stay inside mundane/.
+The dry-run manifest check does not substitute for the full package size and
+import-graph gate. No archive was packed.
+
+Command: git diff --check
+Exit 0.
+Git inspection: all modified and untracked files are inside mundane/.
+No engine source, root configuration, carried archive, or packed file changed.
+No git mutation, publication, or release workflow was performed.

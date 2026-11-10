@@ -1,0 +1,64 @@
+M7 lunation search checks
+Session date: 2026-10-15
+Base checkout: cc27be7
+Engine source version: 1.0.0; astronomy-engine dependency: 2.1.19
+Runtime: Node.js v22.22.2
+PATH prepends mundane/.cache/runtime/node_modules/node/bin.
+Runtime, npm cache and mundane dependencies are gitignored.
+No engine build or root dependency installation was performed.
+
+Command: npm run check --prefix mundane
+Exit 0.
+TypeScript: tsc -p tsconfig.json --pretty false, exit 0.
+Vitest: vitest run --config vitest.config.ts, exit 0.
+Final output:
+ RUN  v2.1.9 /workspace/codex-infra/wt-mundane/mundane
+ Test Files  7 passed (7)
+      Tests  378 passed (378)
+Scope: lunations.test.ts (51 tests), ingress-references.test.ts (10),
+ingresses.test.ts (44), angle-rulers.test.ts (61), angularity.test.ts (77),
+chart.test.ts (59), and inputs.test.ts (76).
+
+The new tests enforce directed phase definitions, the quarter-day step,
+default budget, shared refinement budgets, coarse refusal, exact budget
+exhaustion, absence of partial charts on refusal or ephemeris errors,
+opening/closing boundaries, adjacent windows, millisecond windows,
+chronological order, per-sample body evaluation counts and sample bounds,
+immutability, strict options, engine endpoint validation, polar fallback,
+reference flags, and use of the existing chart and factor analysis APIs.
+
+Synthetic timing references are hand-defined linear geometry, not engine
+output or astronomical accuracy evidence. The Sun is 350 + d degrees,
+the Moon 350 + 13d, each modulo 360, where d is elapsed days since
+2000-01-01T00:00:00Z. Elongation is therefore 12d modulo 360. The expected
+roots through elapsed day 60 are derived as full at days 15 and 45, new at
+days 30 and 60; the opening new root at day 0 is excluded. Reverse relative
+motion checks crossing direction. The real engine solver and chart caster
+run in these tests. Full derivation is in mundane/docs/lunations.md.
+
+Real ephemeris checks compare the synthetic year-2000 request against direct
+engine solver calls, and compare resulting charts and analyses against the
+existing APIs. A January-1750 range at ordinary and polar synthetic places
+checks place-independent timing, house fallback and reference flags. These
+are integration checks only. No independent astronomical lunation timing
+tolerance or accuracy claim was added; published references remain M8.
+
+Command: node mundane/scripts/check-package-isolation.mjs
+Exit 0.
+PASS: npm dry-run manifest contains no mundane files; scripts disabled, no archive written.
+This is an isolation check; the full package gate also needs a built dist tree.
+
+Command: npm run package:contents
+Exit 1: AssertionError: packed package is missing dist/calc.d.ts
+The checkout has no dist tree. Building it is excluded by the user's scope,
+so the full package size and import-graph gate cannot run here. No archive
+was packed. Other built-package and release gates were not run; all work
+is isolated under mundane/ and no engine build inputs changed.
+
+Command: git diff --check
+Exit 0.
+Project audit: nonignored mundane files are under 2 MB; Markdown contains
+no em-dash characters; all changed and new files are inside mundane/.
+M7 is checked in PLAN.md and CHANGES.txt has the session's one-line summary.
+No git mutation, root configuration change, engine source edit, archive
+modification, publication or release workflow ran.
