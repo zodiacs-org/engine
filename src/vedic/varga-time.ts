@@ -9,7 +9,7 @@ import { GeoMoon, GeoVector } from "astronomy-engine";
 import type { Body } from "astronomy-engine";
 
 import { resolvedChart } from "../api.js";
-import { gastHours, onChartClock } from "../ephemeris.js";
+import { gastHours, onChartClock, refuseUnderSource } from "../ephemeris.js";
 import { eclipticOfDate } from "../frame.js";
 import { computeAngles } from "../houses.js";
 import { tilt } from "../nutation.js";
@@ -173,6 +173,7 @@ export interface Sky {
  * siderealLongitude of chartPoints' mean nodes with the chart's ayanamsaValue.
  */
 export function siderealAt(point: VargaPoint, ms: number, sky: Sky): number {
+  refuseUnderSource("@zodiacs/engine/vedic");
   return onChartClock(ms, sky.scale, sky.pin, (time) => {
     let lon: number;
     if (point === "Ascendant") {

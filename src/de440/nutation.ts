@@ -3,21 +3,19 @@
  * obliquity, for the DE440 reduction: the research runtime's
  * (examples/precision-alpha/src/core/nutation.mjs in the site repository)
  * expressions, operation for operation, so that this reduction gives the
- * runtime's numbers bit for bit. The 77 terms are the ones the engine carries
- * (src/nutation.ts, transcribed from NOVAS C 3.1), which equal the runtime's
- * term for term and in the same order. Angles in arcseconds unless named
+ * runtime's numbers bit for bit. The 77 terms, the fundamental arguments and
+ * the two planetary offsets are the ones the engine carries (src/nutation.ts,
+ * transcribed from NOVAS C 3.1), which equal the runtime's, term for term, in
+ * the same order and as the same doubles. Angles in arcseconds unless named
  * otherwise; t is Julian centuries of TT since J2000.
  */
-import { MULTIPLIERS, NUTATION_TERMS, coefficients } from "../nutation.js";
+import { ARGUMENTS, MULTIPLIERS, NUTATION_TERMS, OFFSETS, coefficients } from "../nutation.js";
 
 const TURNAS = 1296000.0;
 const DAS2R = Math.PI / (180 * 3600);
 const D2PI = 2 * Math.PI;
 /** The series' units: 0.1 microarcsecond. */
 const U2A = 1e-7;
-/** The fixed planetary-bias offsets the 2000B model carries, arcseconds. */
-const DPPLAN_B = -0.000135;
-const DEPLAN_B = +0.000388;
 
 const fmod = (x: number, y: number): number => x % y;
 const arcsecArg = (a: number): number => fmod(a, TURNAS) * DAS2R;
@@ -48,11 +46,14 @@ function series(): readonly (readonly number[])[] {
 
 /** IAU 2000B, summed from the smallest term up, as the published algorithm prescribes. */
 export function nut00b(t: number): Nutation {
-  const el = arcsecArg(485868.249036 + 1717915923.2178 * t);
-  const elp = arcsecArg(1287104.79305 + 129596581.0481 * t);
-  const f = arcsecArg(335779.526232 + 1739527262.8478 * t);
-  const d = arcsecArg(1072260.70369 + 1602961601.209 * t);
-  const om = arcsecArg(450160.398036 - 6962890.5431 * t);
+  // The engine's own fundamental arguments and offsets (src/nutation.ts), the
+  // runtime's doubles: a + (-b) t is a - b t exactly.
+  const [l0, l1, lp0, lp1, f0, f1, d0, d1, om0, om1] = ARGUMENTS as unknown as number[];
+  const el = arcsecArg(l0! + l1! * t);
+  const elp = arcsecArg(lp0! + lp1! * t);
+  const f = arcsecArg(f0! + f1! * t);
+  const d = arcsecArg(d0! + d1! * t);
+  const om = arcsecArg(om0! + om1! * t);
   let dp = 0;
   let de = 0;
   const terms = series();
@@ -64,7 +65,7 @@ export function nut00b(t: number): Nutation {
     dp += (r[5]! + r[6]! * t) * s + r[7]! * c;
     de += (r[8]! + r[9]! * t) * c + r[10]! * s;
   }
-  return { dpsi: dp * U2A + DPPLAN_B, deps: de * U2A + DEPLAN_B };
+  return { dpsi: dp * U2A + OFFSETS[0], deps: de * U2A + OFFSETS[1] };
 }
 
 /** IAU 2006 (P03) mean obliquity of the ecliptic, arcseconds. */

@@ -190,7 +190,8 @@ function checkBodies(list: unknown, payloadOffset: number, payloadEnd: number, c
       for (let f = 0; f < fields; f += 1) {
         const w = layout.widths[f]!;
         const off = layout.fieldOffset[f]!;
-        if (![0, 1, 2, 3, 4, 5, 6, 8].includes(w)) fail("bad-header", `body ${b.name}: field width ${w} is not supported`);
+        // Width 6 is refused: the research runtime's reader weighs its top byte as 2^48, where its compiler wrote 2^40.
+        if (![0, 1, 2, 3, 4, 5, 8].includes(w)) fail("bad-header", `body ${b.name}: field width ${w} is not supported`);
         if (!isSafeCount(off)) fail("bad-header", `body ${b.name}: fieldOffset[${f}] is not a safe non-negative integer`);
         if (safeExtent(`body ${b.name} field ${f}`, off, 1, w) > layout.stride) fail("bad-geometry", `body ${b.name}: field ${f} ends past the stride`);
       }
@@ -237,12 +238,6 @@ function readField(dv: DataView, base: number, w: number): number {
       const lo = dv.getUint32(base, true);
       const hi = dv.getInt8(base + 4);
       return hi * 4294967296 + lo;
-    }
-    case 6: {
-      const lo = dv.getUint32(base, true);
-      const mid = dv.getUint8(base + 4);
-      const hi = dv.getInt8(base + 5);
-      return hi * 281474976710656 + mid * 4294967296 + lo;
     }
     default:
       return dv.getFloat64(base, true);
@@ -306,7 +301,7 @@ export class PackEphemeris implements StateSource {
   }
 
   private window(offset: number, length: number): DataView {
-    if (offset < 0 || offset + length > this.u8.byteLength) fail("truncated", "a read runs past the end of the pack");
+    if (!Number.isSafeInteger(offset) || !Number.isSafeInteger(length) || offset < 0 || offset + length > this.u8.byteLength) fail("truncated", "a read runs past the end of the pack");
     return new DataView(this.u8.buffer, this.u8.byteOffset + offset, length);
   }
 

@@ -30,9 +30,42 @@ sealed (`51428874...1fa7`). Rebuilt on macOS arm64 on 9 November 2026, and on
 Linux x86-64 in its CI the same day (zodiacs-org/site run 42663807980, the
 workflow `precision-pack.yml`), both files came out byte for byte the same.
 
+## The pack's own error
+
+`pack-accuracy.json` is `tools/pack-accuracy.ts` run on 10 November 2026
+(Node 22.22.2, macOS arm64) on that sealed pack and NAIF's `de440.bsp`, both
+checked by digest: the reduction on the pack against the same reduction on
+the raw kernel at 20,001 TT instants from 1800 to 2200 (`dense`), and against
+the oracles at their 200 instants (`oracles`), by ten bodies and the true
+node, with the pack's own per-body budgets and proven errors from its header
+(`packBodies`). `docs/de440.md` and `CHANGELOG.md` quote its maxima, rounded
+up. zodiacs.org's tier B checks the pack it builds against the oracles.
+
+## Sizes
+
+`sizes.json` (`../rc16-20260930/sizes.mjs`) measures the carried 1.1.0-rc.2
+archive and the build of this candidate's tree (Node 22.22.2, darwin-arm64):
+each entry point's import graph, in bytes, against its budget in
+`scripts/verify-package-contents.mjs`, and the package.
+
 ## The checks
 
-`src/de440.test.ts`, `src/de440-sources.test.ts` and, with PRECISION_KERNEL
-set, `src/de440-kernel.test.ts` enforce what `docs/de440.md` says the entry
-does; CI's job for tier B fetches the kernel from NAIF, checks its digest and
-runs the last.
+What is enforced, and where:
+
+- `src/de440.test.ts` and `src/de440-format.test.ts`, on synthetic packs
+  (float64 records, and quantised records written by an independent writer
+  with every field width the reader accepts): the digest and trailer checks,
+  the reader's decoding and record selection, the Sun-relative body and the
+  Earth-Moon system, the switch and its nesting, the refusals of the entries
+  that compute their own positions, and the receipts.
+- `src/de440-sources.test.ts`: no astronomy-engine position function is
+  called under a DE440 source, in the calls zodiacs.org's compute API makes.
+- `src/de440-kernel.test.ts`, with PRECISION_KERNEL set (CI's tier-B job
+  fetches the kernel from NAIF and checks its digest): the reduction on the
+  raw kernel within 1e-6″ of the oracles, place and node, and the node's
+  control.
+
+Not enforced here: the pack's size, digest and reproducibility (zodiacs.org's
+P4.2 record and its CI, above), the pack's own error (measured, above), and
+that the port gives the research runtime's numbers bit for bit, which
+zodiacs.org's check C9 compares.

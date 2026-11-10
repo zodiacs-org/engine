@@ -150,8 +150,8 @@ below no `package.json` or `node_modules`. The package supports Node
   effects, and keep `@zodiacs/engine/crossings`, `@zodiacs/engine/deltat`,
   `@zodiacs/engine/time` and `@zodiacs/engine/lite` free of the ephemeris.
   The root must not import `@zodiacs/engine/timing`, `/vedic`, `/geo`,
-  `/calc`, `/window`, `/techniques`, `/houses`, `/sky`, `/time` or `/lite`,
-  which are opt-in; `npm run exports:smoke` checks it.
+  `/calc`, `/window`, `/techniques`, `/houses`, `/sky`, `/time`, `/lite` or
+  `/de440`, which are opt-in; `npm run exports:smoke` checks it.
 - Every entry point in `package.json` `exports` has a budget for its import
   graph in `scripts/verify-package-contents.mjs`, the zone histories have
   their own (200,000 bytes, 16 files) and the package a total cap. Add a

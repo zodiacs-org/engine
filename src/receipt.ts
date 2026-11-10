@@ -112,7 +112,8 @@ export interface NatalProvenanceClaims {
     distributionCommit?: string;
   };
   runtime?: { name: string; version?: string; icuVersion?: string; tzdbVersion?: string };
-  ephemeris?: { name: "astronomy-engine"; version: string };
+  /** The receipt's own ephemeris: astronomy-engine, or with a DE440 chart its pack (jpl-de440 and the pack's SHA-256). */
+  ephemeris?: { name: "astronomy-engine" | "jpl-de440"; version: string };
 }
 
 export interface NatalEnvelopeContext {
@@ -1093,7 +1094,7 @@ function commit(value: unknown): void {
   if (typeof value !== "string" || !/^(?:[a-f0-9]{40}|[a-f0-9]{64})$/.test(value))
     fail("invalid_value");
 }
-function validateProvenance(value: unknown, engineVersion: string): void {
+function validateProvenance(value: unknown, engineVersion: string, de440Version: string | null): void {
   if (value === null) return;
   const facts = record(value);
   fields(facts, ["status"], ["source", "artifact", "runtime", "ephemeris"]);
@@ -1132,8 +1133,13 @@ function validateProvenance(value: unknown, engineVersion: string): void {
   if (facts.ephemeris !== undefined) {
     const ephemeris = record(facts.ephemeris);
     fields(ephemeris, ["name", "version"]);
-    if (ephemeris.name !== "astronomy-engine") fail("unsupported_feature");
-    version(ephemeris.version);
+    // A claim about the ephemeris must be the receipt's own: a DE440 receipt's claim names its pack.
+    if (de440Version !== null) {
+      if (ephemeris.name !== DE440_EPHEMERIS || ephemeris.version !== de440Version) fail("invalid_context");
+    } else {
+      if (ephemeris.name !== "astronomy-engine") fail("unsupported_feature");
+      version(ephemeris.version);
+    }
   }
 }
 
@@ -1264,7 +1270,7 @@ function validateEnvelope(input: unknown): NatalEnvelope {
       version(ephemeris.version);
     }
   }
-  validateProvenance(receipt.provenance, engineVersion);
+  validateProvenance(receipt.provenance, engineVersion, de440 ? (record(engine.ephemeris).version as string) : null);
   validateLocal(receipt.localResolution, receipt as unknown as NatalReceipt, timeBasis);
   if (
     (conventions === CONVENTIONS_RC3 && !RC3_TO_RC6.test(engineVersion)) ||

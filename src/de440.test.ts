@@ -255,6 +255,17 @@ describe("a DE440 chart's receipt", () => {
     expect(edited((e) => (e.receipt.engine.ephemeris.version = "2.1.19"))).toBe(false);
   });
 
+  it("takes a provenance claim about the ephemeris only when it is the receipt's own pack", async () => {
+    const source = await open();
+    const chart = withEphemeris(source, () => natalChart(birth));
+    const own = createNatalEnvelope(chart, { provenance: { ephemeris: { name: "jpl-de440", version: DIGEST } } });
+    expect(parseNatalEnvelope(serializeNatalEnvelope(own)).ok).toBe(true);
+    expect(() => createNatalEnvelope(chart, { provenance: { ephemeris: { name: "astronomy-engine", version: "2.1.19" } } })).toThrow();
+    expect(() => createNatalEnvelope(chart, { provenance: { ephemeris: { name: "jpl-de440", version: "0".repeat(64) } } })).toThrow();
+    // An astronomy-engine chart keeps its rule: astronomy-engine only.
+    expect(() => createNatalEnvelope(natalChart(birth), { provenance: { ephemeris: { name: "astronomy-engine", version: "2.1.19" } } })).not.toThrow();
+  });
+
   it("is unchanged for a chart from astronomy-engine", () => {
     const envelope = createNatalEnvelope(natalChart(birth));
     expect(envelope.requiredFeatures).toEqual(["convention-ids"]);

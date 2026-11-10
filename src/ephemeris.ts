@@ -60,7 +60,8 @@ let source: PositionSource | null = null;
  * source, so that throws TypeError (after `run` has returned). Calls nest.
  */
 export function withEphemeris<T>(positionSource: PositionSource, run: () => T): T {
-  if (typeof positionSource?.place !== "function" || typeof positionSource.trueNode !== "function" || typeof run !== "function")
+  const named = positionSource?.ephemeris;
+  if (typeof positionSource?.place !== "function" || typeof positionSource.trueNode !== "function" || typeof named?.name !== "string" || typeof named.version !== "string" || typeof run !== "function")
     throw new TypeError("withEphemeris needs a position source and a function");
   const previous = source;
   source = positionSource;
@@ -70,14 +71,31 @@ export function withEphemeris<T>(positionSource: PositionSource, run: () => T): 
   } finally {
     source = previous;
   }
-  if (typeof (result as { then?: unknown } | null)?.then === "function") throw new TypeError("withEphemeris runs synchronous functions only");
+  // A promise or an iterator would compute its later steps after the source is restored.
+  const later = result as { then?: unknown; next?: unknown } | null;
+  if (typeof later?.then === "function" || typeof later?.next === "function") {
+    if (typeof later.then === "function") (later as PromiseLike<unknown>).then(undefined, () => {});
+    throw new TypeError("withEphemeris runs synchronous functions only");
+  }
   return result;
 }
 
+/**
+ * For code that computes positions from astronomy-engine itself (the calc
+ * entry, the sky entry's rising and setting, the vedic entry's ayanamsa and
+ * varga timing): refuse inside withEphemeris rather than mix two ephemerides.
+ */
+export function refuseUnderSource(entry: string): void {
+  if (source) throw new TypeError(`${entry} takes its positions from astronomy-engine, so it does not run inside withEphemeris`);
+}
+
+/** A source's longitude in [0, 360): 360 becomes 0 and -0 becomes 0, every other value unchanged. */
+const tidy = (lon: number): number => (lon === 360 ? 0 : lon + 0);
+
 /** A body's longitude from a source: its place, or the true node and the point opposite. */
 function sourceLongitude(from: PositionSource, body: BodyName, ttDays: number): number {
-  if (body === "North Node") return from.trueNode(ttDays);
-  return body === "South Node" ? normalizeLongitude(from.trueNode(ttDays) + 180) : from.place(body, ttDays).lon;
+  if (body === "North Node") return tidy(from.trueNode(ttDays));
+  return body === "South Node" ? normalizeLongitude(from.trueNode(ttDays) + 180) : tidy(from.place(body, ttDays).lon);
 }
 
 /**
@@ -320,7 +338,7 @@ function sourceBodiesAt(from: PositionSource, ms: number, clock: Clock): BodyPos
   return (["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "North Node", "South Node"] as const).map(
     (body) => {
       const place = body === "North Node" || body === "South Node" ? { lon: sourceLongitude(from, body, tt), lat: 0 } : from.place(body as SourceBody, tt);
-      return position(body, place.lon, place.lat, speedAt(body, ms, clock));
+      return position(body, tidy(place.lon), place.lat, speedAt(body, ms, clock));
     }
   );
 }

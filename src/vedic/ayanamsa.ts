@@ -15,7 +15,7 @@ import type { AstroTime } from "astronomy-engine";
 import { dateFrom } from "../date-input.js";
 import { readOptions } from "../read-options.js";
 import type { DeltaT } from "../deltat.js";
-import { onChartClock } from "../ephemeris.js";
+import { onChartClock, refuseUnderSource } from "../ephemeris.js";
 import { eclipticFrame, meanEcliptic } from "../frame.js";
 import type { EclipticFrame } from "../frame.js";
 import { REFERENCE_SPAN, outsideReferenceSpan } from "../reference-span.js";
@@ -343,6 +343,7 @@ function bias(v: V3): V3 {
  * angle from the Sun before the deflection and aberration, degrees.
  */
 function apparentStar(s: CatalogueStar, time: AstroTime): { readonly direction: V3; readonly elongation: number } {
+  refuseUnderSource("@zodiacs/engine/vedic");
   const ra = s.ra * DEG;
   const dec = s.dec * DEG;
   const p0 = bias([Math.cos(dec) * Math.cos(ra), Math.cos(dec) * Math.sin(ra), Math.sin(dec)]);

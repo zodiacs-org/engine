@@ -12,7 +12,7 @@
 import { AstroTime, Body, GeoMoonState, KM_PER_AU } from "astronomy-engine";
 
 // Imported first so that the build keeps the root entry's shared chunks byte for byte.
-import { bodyLongitude, computeChart, gastHours, onChartClock } from "./ephemeris.js";
+import { bodyLongitude, computeChart, gastHours, onChartClock, refuseUnderSource } from "./ephemeris.js";
 import { assertDerivedFlags, snapshotFlags, timeFlags, validateBirthSettings } from "./birth-input.js";
 import { MEAN_POINTS_BASIS, MEAN_POINTS_SPEED_BASIS, MEASURED, MEASURED_BASIS } from "./calc-bounds.js";
 import {
@@ -795,6 +795,7 @@ function barycentricSun(r: number, v: number | null): [number, number, number | 
  * after the same earlier calls (docs/calc.md).
  */
 export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
+  refuseUnderSource("@zodiacs/engine/calc");
   const asked = fields(request, "calc request", ["body", "time", "frame", "center", "zodiac", "flags"]);
   const body = oneOf(asked.body, CALC_BODIES, "body");
   const time = readTime(asked.time, "time");
@@ -1212,6 +1213,7 @@ export interface EventsResult {
  * longitudes, under an optional budget of evaluations.
  */
 export function events(request: EventsRequest): EventsResult | CalcRefusal {
+  refuseUnderSource("@zodiacs/engine/calc");
   const asked = fields(request, "events request", ["kind", "body", "longitude", "from", "to", "zodiac", "stepDays", "maxSamples"]);
   const kind = oneOf(asked.kind, ["longitude-crossing"] as const, "kind");
   const body = oneOf(asked.body, CALC_BODIES, "body");
@@ -1359,6 +1361,7 @@ function siderealOfChart(computed: Chart, definition: AyanamsaDefinition): CalcS
 
 /** A natal chart from the calc vocabulary: natalChart()'s chart, with a receipt. */
 export function chart(request: ChartRequest): ChartResult | CalcRefusal {
+  refuseUnderSource("@zodiacs/engine/calc");
   const asked = fields(request, "chart request", ["time", "place", "houseSystem", "timeKnown", "timeFlags", "zodiac"]);
   const time = readTime(asked.time, "time");
   const site = asked.place === undefined ? null : readPlace(asked.place, "place");

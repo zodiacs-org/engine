@@ -8,38 +8,56 @@ P4.1), with sixteen public entry points. It is not to be published on npm
 until the owner approves it.
 
 - **`@zodiacs/engine/de440`**, a new entry point. `openDe440Pack(bytes,
-  { expectDigest })` opens a sealed pack of DE440's Chebyshev series
-  (`ZODEPH02`, compiled from NAIF's `de440.bsp` by zodiacs.org's research
-  runtime) that the caller supplies, refuses it unless its SHA-256 is the one
-  expected and its own trailer and header check, and returns a source that
-  places the Sun, the Moon, the planets and the true node. The reduction is
-  the research runtime's, ported operation for operation: light-time,
-  deflection of light by the Sun, relativistic annual aberration, IAU 2006
-  precession with frame bias, IAU 2000B nutation (the engine's own terms,
+  { expectDigest })` opens a sealed pack (`ZODEPH02`) of Chebyshev series that
+  zodiacs.org's research runtime refits from NAIF's `de440.bsp` and quantises,
+  refuses it unless its SHA-256 is the one expected and its trailer and
+  header check, and returns a source that places the Sun, the Moon, the
+  planets and the true node. The reduction is the research runtime's, ported
+  operation for operation: light-time, deflection of light by the Sun,
+  relativistic annual aberration, IAU 2006 precession with frame bias, IAU
+  2000B nutation (the engine's own terms, arguments and offsets,
   P03-adjusted) and the true obliquity; Mars to Pluto are planetary-system
   barycentres. The geocentric Moon is formed from the Earth-Moon system's
   parts, so that the barycentre's speed never multiplies the rounding of the
-  light-time epoch. The entry fetches nothing and ships no pack.
-- **`withEphemeris(source, fn)`** in the root runs `fn` with every body
-  position the engine computes taken from a source, and restores the one
-  before. A chart computed inside names it (`chart.ephemeris`); a chart from
-  astronomy-engine is unchanged.
+  light-time epoch. Six-byte quantised fields, which the runtime's reader
+  decodes wrongly, are refused. The entry fetches nothing and ships no pack.
+- **Accuracy.** On the raw kernel the reduction is within 1e-6″ of an ERFA
+  chain over `de440.bsp` at 200 instants from 1800 to 2200, place and node.
+  A pack adds its refit: on the pack compiled for 1790 to 2210, against the
+  kernel at 20,001 instants from 1800 to 2200 TT, the Moon's place differs by
+  at most 0.0016″, every other body's by at most 0.0008″, and the true node
+  by at most 0.37″ (`docs/evidence/de440-20261110/pack-accuracy.json`).
+- **`withEphemeris(source, fn)`** in the root runs `fn` with the root's body
+  positions from a source (`positions`, `natalChart` and what is built on
+  them, the crossing searches, `moonPhase`), and restores the one before. A
+  chart computed inside names it (`chart.ephemeris`); a chart from
+  astronomy-engine is unchanged. The calc entry, the sky entry's rising and
+  setting and the vedic entry's star-anchored ayanamsas and varga timing,
+  which compute positions from astronomy-engine themselves, throw a
+  TypeError inside it.
 - **Natal receipts** of a chart from a DE440 pack carry a new conventions
   set, the current one with the positions, the Moon and the frame of the
   DE440 reduction, name the ephemeris `jpl-de440` with the pack's SHA-256 as
   its version, and require the feature `ephemeris-jpl-de440`, so that an
   earlier engine refuses them. The set is the last of
-  `NATAL_RECEIPT_CONVENTION_SETS`, so no earlier set's index moved.
-- **Checks.** `src/de440.test.ts` (a synthetic pack: the digest checks, the
-  switch, the receipts), `src/de440-sources.test.ts` (no astronomy-engine
-  position function is called under a DE440 source) and
-  `src/de440-kernel.test.ts` (with PRECISION_KERNEL set: every place within
-  1e-6″ of an ERFA chain over `de440.bsp` at 200 instants from 1800 to 2200,
-  and the true node within 1e-6″ of the chain's).
-- **Sizes.** The package cap rises from 1,100,000 to 1,145,000 bytes
-  unpacked, with a new budget of 48,000 for `./de440` and raised budgets for
-  `./internal` (69,000), `./time` (42,600) and `./window` (107,000), with the
-  owner's approval of 2026-11-10 (`scripts/verify-package-contents.mjs`).
+  `NATAL_RECEIPT_CONVENTION_SETS`, so no earlier set's index moved. A
+  provenance claim about the ephemeris must name the receipt's own.
+- **Checks.** `src/de440.test.ts` and `src/de440-format.test.ts` (synthetic
+  packs, float64 and quantised, against values written independently: the
+  digest checks, the reader, the switch, the refusals, the receipts),
+  `src/de440-sources.test.ts` (no astronomy-engine position function is
+  called under a DE440 source in the calls zodiacs.org's compute API makes)
+  and `src/de440-kernel.test.ts` (with PRECISION_KERNEL set, the 1e-6″ gates).
+- **Sizes.** The entry and the switch make the package 1,142,467 bytes
+  unpacked, 45,684 more than 1.1.0-rc.2's 1,096,783: `dist/de440.js` and its
+  chunks, 45,793 bytes, and `withEphemeris`, the source's path and the
+  refusals in the ephemeris chunk, which every entry that loads it carries:
+  the root's graph is 2,221 bytes larger (`docs/evidence/de440-20261110/sizes.json`). The cap rises from
+  1,100,000 to 1,145,000, with a budget of 48,000 for `./de440` and raised
+  budgets for `./internal` (69,000), `./time` (42,600) and `./window`
+  (107,000), with the owner's approval of 2026-11-10; the root's rises to
+  109,000 and `./vedic`'s to 144,500 under the owner's delegation of
+  2026-11-04 (`scripts/verify-package-contents.mjs`).
 
 ## 1.1.0-rc.2 (unreleased candidate)
 

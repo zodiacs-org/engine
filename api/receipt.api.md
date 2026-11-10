@@ -151,7 +151,7 @@ interface NatalProvenanceClaims {
         tzdbVersion?: string;
     };
     ephemeris?: {
-        name: "astronomy-engine";
+        name: "astronomy-engine" | "jpl-de440";
         version: string;
     };
 }

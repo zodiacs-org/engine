@@ -22,7 +22,8 @@ for an observer on the Earth's ellipsoid, terra:
 IAU 2000B nutation
 ------------------
 
-The package's nutation module (src/nutation.ts, built into the same chunk)
+The package's nutation module (src/nutation.ts, built into a shared chunk
+under dist/ that the ephemeris chunk, dist/time.js and dist/de440.js import)
 carries the 77 luni-solar terms, fundamental arguments and fixed planetary
 offsets of the IAU 2000B nutation model,
 
@@ -67,6 +68,27 @@ their definitions evaluated with ERFA at those instants), and of
 astronomy-engine's barycentre from a Newtonian barycentre and from
 Horizons's. They are not coefficients derived
 from JPL data, and no JPL ephemeris value is in the package.
+
+DE440 entry
+-----------
+
+The DE440 entry (dist/de440.js and the chunks it imports) ports the
+reduction of zodiacs.org's research runtime (MIT; LICENSING.md says which
+files). It carries the Fukushima-Williams angles of the IAU 2006 precession,
+with the frame bias, and the IAU 2006 mean obliquity, from
+
+  N. Capitaine, P. T. Wallace and J. Chapront 2003, Expressions for IAU 2000
+  precession quantities. Astronomy & Astrophysics 412, 567-586 (adopted by
+  IAU 2006 Resolution B1),
+
+and the adjustment of the IAU 2000 nutation to that precession from
+
+  P. T. Wallace and N. Capitaine 2006, Precession-nutation procedures
+  consistent with IAU 2006 resolutions. Astronomy & Astrophysics 459,
+  981-985.
+
+It sums the nutation module's terms above. It holds no JPL ephemeris value:
+the pack it reads is the caller's.
 
 Essential dignities
 -------------------

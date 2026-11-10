@@ -51,7 +51,7 @@ const hex = (buffer: ArrayBuffer): string => Array.from(new Uint8Array(buffer), 
 
 async function sha256Hex(view: Uint8Array): Promise<string> {
   const subtle = globalThis.crypto?.subtle;
-  if (!subtle) throw new De440Error("digest-mismatch", "no WebCrypto is available to check the pack's digest");
+  if (!subtle) throw new TypeError("openDe440Pack needs WebCrypto (crypto.subtle) to check the pack's digest");
   const copy = new Uint8Array(view.byteLength);
   copy.set(view);
   return hex(await subtle.digest("SHA-256", copy.buffer));

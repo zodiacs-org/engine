@@ -151,8 +151,12 @@ const ENTRY_BUDGETS = {
   // src/ephemeris.ts, and 46 of imports, exports and their use in
   // src/declination.ts and src/points.ts), and for 39 bytes of export names
   // the calc, window and sky entries import from the root's chunk (gastHours,
-  // tilt, eclipticOfDate); 4.79 per cent of headroom.
-  ".": 108_500,
+  // tilt, eclipticOfDate); 4.79 per cent of headroom. 1.1.0-rc.3: 108,546,
+  // 2,221 more than 1.1.0-rc.2's 106,325, for withEphemeris and the source's
+  // path in the ephemeris chunk, and, after the cut's two reviews, the
+  // refusals of the code that computes its own positions; raised to 109,000
+  // under the owner's delegation of 2026-11-04; 0.41 per cent of headroom.
+  ".": 109_000,
   // New in rc.16 (feature-api): the uniform calculation API, its frames,
   // centers, corrections, bounds and receipts. 106,779 bytes as integrated on
   // rc.15's time basis, 34,449 of them beyond the core's graph; 7.69 per cent
@@ -194,15 +198,15 @@ const ENTRY_BUDGETS = {
   // New in 1.1.0-rc.3: positions from a sealed DE440 pack the caller
   // supplies (zodiacs.org's P4.1, the hosted backend): dist/de440.js, the
   // pack reader, the reduction and its IAU 2006 frames, and the shared chunks
-  // it imports, the one with the engine's IAU 2000B terms among them. 45,986
-  // bytes in 4 files; 48,000 approved by the owner on 2026-11-10; 4.38 per
+  // it imports, the one with the engine's IAU 2000B terms among them. 45,793
+  // bytes in 4 files; 48,000 approved by the owner on 2026-11-10; 4.81 per
   // cent of headroom.
   "./de440": 48_000,
   // rc.15: 56,961; as carried, 58,997. rc.16: 64,830, raised from 60,000 for
   // the nutation in the ephemeris chunk; 4.88 per cent of headroom.
-  // 1.1.0-rc.3: 68,233, with withEphemeris and the source's path in the
-  // ephemeris chunk; raised to 69,000 with the owner's approval of
-  // 2026-11-10; 1.11 per cent of headroom.
+  // 1.1.0-rc.3: 68,773, with withEphemeris, the source's path and the
+  // refusals in the ephemeris chunk; raised to 69,000 with the owner's
+  // approval of 2026-11-10; 0.33 per cent of headroom.
   "./internal": 69_000,
   "./internal/math": 20_000, // rc.15: 18,165
   // New in 1.1.0-rc.2: declination parallels, the sect under a named
@@ -232,9 +236,9 @@ const ENTRY_BUDGETS = {
   // imports, the timeBands chunk it shares with ./calc among them. 42,400 is
   // the ceiling approved under the owner's delegation of 2026-11-03 (OQ3);
   // 0.22 per cent of headroom.
-  // 1.1.0-rc.3: 42,448, the nutation chunk now also exporting its terms to
-  // ./de440; raised to 42,600 with the owner's approval of 2026-11-10; 0.36
-  // per cent of headroom.
+  // 1.1.0-rc.3: 42,472, the nutation chunk now also exporting its terms,
+  // arguments and offsets to ./de440; raised to 42,600 with the owner's
+  // approval of 2026-11-10; 0.30 per cent of headroom.
   "./time": 42_600,
   // Rise, set, transit and planetary hours, 83,254 bytes as first built, of
   // which 15,902 are beyond the core's graph; it reaches the ephemeris chunk
@@ -258,16 +262,19 @@ const ENTRY_BUDGETS = {
   // 13,589 more than 1.1.0-rc.1's 127,751, with the varga sensitivity and the
   // chunks split out for ./time (above); raised to 143,000, the ceiling
   // approved under the owner's delegation of 2026-11-03 (OQ3); 1.17 per cent
-  // of headroom.
-  "./vedic": 143_000,
+  // of headroom. 1.1.0-rc.3: 143,669, 2,329 more, the ephemeris chunk's
+  // growth (above) and the refusals in the ayanamsas and the varga timing;
+  // raised to 144,500 under the owner's delegation of 2026-11-04; 0.57 per
+  // cent of headroom.
+  "./vedic": 144_500,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
   // 33,971 of them beyond the core's graph; 8.17 per cent of headroom. With
   // the nutation, 102,590: 2.34 per cent, not raised
-  // (docs/evidence/rc16-20260930/sizes.json). 1.1.0-rc.3: 106,204, with
-  // withEphemeris and the source's path in the ephemeris chunk; raised to
-  // 107,000 with the owner's approval of 2026-11-10; 0.74 per cent of
-  // headroom.
+  // (docs/evidence/rc16-20260930/sizes.json). 1.1.0-rc.3: 106,744, with
+  // withEphemeris, the source's path and the refusals in the ephemeris chunk;
+  // raised to 107,000 with the owner's approval of 2026-11-10; 0.23 per cent
+  // of headroom.
   "./window": 107_000
 };
 
@@ -383,11 +390,11 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // entries and features, rather than moving the CHANGELOG's 0.x history out
 // of the package; it leaves 3,217 bytes, 0.29 per cent.
 //
-// 1.1.0-rc.3: 1,137,373 bytes in 94 files, 40,590 more than 1.1.0-rc.2, for
+// 1.1.0-rc.3: 1,142,467 bytes in 94 files, 45,684 more than 1.1.0-rc.2, for
 // @zodiacs/engine/de440 (dist/de440.js and its declarations), withEphemeris
-// and the receipts' DE440 set, and their README and CHANGELOG lines; raised
-// from 1,100,000 to 1,145,000 with the owner's approval of 2026-11-10, which
-// leaves 0.67 per cent.
+// and its refusals, the receipts' DE440 set, and their README, CHANGELOG,
+// NOTICE and LICENSING.md lines; raised from 1,100,000 to 1,145,000 with the
+// owner's approval of 2026-11-10, which leaves 0.22 per cent.
 const TOTAL_CAP = 1_145_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 
@@ -472,6 +479,8 @@ assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].sizes.has(nut
   "the entry points whose graphs load the nutation must be the ones LICENSING.md names");
 assert(read("dist/de440.js").includes(nutationChunk), "dist/de440.js must import the chunk that holds the nutation");
 assert(notice.includes("built into a shared chunk under dist/ that the ephemeris chunk and dist/time.js import"), "NOTICE must say where the frame is");
+assert(notice.replace(/\s+/gu, " ").includes("src/nutation.ts, built into a shared chunk under dist/ that the ephemeris chunk, dist/time.js and dist/de440.js import"),
+  "NOTICE must say where the nutation is");
 assert(prose("LICENSING.md").includes("shared chunk under `dist/` that the ephemeris chunk, `dist/time.js` and `dist/de440.js` import"),
   "LICENSING.md must say where the nutation is");
 // The essential dignities' tables and the composite code adapted from the

@@ -32,13 +32,13 @@ evidence (CHANGELOG.md). The package follows Semantic Versioning:
 may change, which records stay readable and how something public is
 deprecated, and `api/` holds each public entry point's declarations. npm
 carries 1.0.0, the first stable release, under `latest`: `npm install
-@zodiacs/engine` installs it, without `./conventions`, `./time` or `./lite`,
-and writing no ids. This candidate is not published there. Install the exact
-candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.2.tgz` in the
+@zodiacs/engine` installs it, without `./conventions`, `./time`, `./lite` or
+`./de440`, and writing no ids. This candidate is not published there. Install
+the exact candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.3.tgz` in the
 repository, retaining its SHA-256 receipt:
 
 ```sh
-npm install ./zodiacs-engine-1.1.0-rc.2.tgz
+npm install ./zodiacs-engine-1.1.0-rc.3.tgz
 ```
 
 The Release workflow publishes the archive carried in `artifacts/` as it is,
@@ -62,7 +62,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.2.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.3.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -122,8 +122,9 @@ to 2027-10-02 as UTC, with TT from the leap seconds and UT1 from IERS
 UT1 − UTC, and otherwise as UT1 with the ΔT model, or on UT1 or TT when
 `timeScale` says so (see Time). The ephemeris is still astronomy-engine
 2.1.19. See CHANGELOG.md for the release history and
-`docs/evidence/1.1.0-rc.2-20261102/` for this candidate's checks
-(1.1.0-rc.1's are in `docs/evidence/1.1.0-rc.1-20261026/`, 1.0.0's in
+`docs/evidence/de440-20261110/` for this candidate's checks
+(1.1.0-rc.2's are in `docs/evidence/1.1.0-rc.2-20261102/`, 1.1.0-rc.1's in
+`docs/evidence/1.1.0-rc.1-20261026/`, 1.0.0's in
 `docs/evidence/1.0.0-20261011/`, 1.0.0-rc.2's in
 `docs/evidence/1.0.0-rc.2-20261006/`, 1.0.0-rc.1's in
 `docs/evidence/1.0.0-rc.1-20261006/`, rc.17's in
@@ -249,11 +250,13 @@ for (const aspect of today.aspects) {
   `eclipticFrame`, `meanEcliptic` and `eclipticOfDate`; and `timeBands`, the
   1-σ bands of a recorded instant's TT and UT1 (see *Time*).
 - `@zodiacs/engine/de440`, new in 1.1.0-rc.3: `openDe440Pack` opens a sealed
-  pack of DE440's series that the caller supplies and checks it against the
-  SHA-256 it is given, and the root's `withEphemeris(source, fn)` runs `fn`
-  with every body position taken from it; charts name it, and so do their
-  receipts. The entry fetches nothing and ships no pack (see
-  [docs/de440.md](docs/de440.md)).
+  pack of Chebyshev series refitted from DE440 that the caller supplies and
+  checks it against the SHA-256 it is given, and the root's
+  `withEphemeris(source, fn)` runs `fn` with the root's body positions taken
+  from it; charts name it, and so do their receipts. The calc entry, the sky
+  entry's rising and setting and the vedic entry's star-anchored ayanamsas
+  and varga timing refuse inside it. The entry fetches nothing and ships no
+  pack (see [docs/de440.md](docs/de440.md)).
 - `@zodiacs/engine/lite`, new in 1.1.0-rc.2, gives declination parallels and
   out-of-bounds flags, a chart's sect under a named convention
   (`sectReading`), composite midpoints and their aspects, and the essential

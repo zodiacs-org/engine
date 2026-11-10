@@ -32,7 +32,7 @@ import type { AstroTime } from "astronomy-engine";
 
 import { apply, transpose } from "./calc-frames.js";
 import type { CalcCorrection as Correction, Vec3 } from "./calc-frames.js";
-import { gastHours } from "./ephemeris.js";
+import { gastHours, refuseUnderSource } from "./ephemeris.js";
 import { equatorRows } from "./equator.js";
 
 /** Geodetic latitude and east longitude, degrees, and height above the ellipsoid, metres. */
@@ -156,6 +156,7 @@ export interface Located {
 }
 
 export function locate(body: Body, center: Center, correction: Correction, time: AstroTime): Located {
+  refuseUnderSource("@zodiacs/engine/calc");
   const found = (v: Vec3, dist = length(v)): Located => ({ v, dist });
   if (center.kind === "barycentric") {
     // The barycentre does not move, so apparent and astrometric coincide.
@@ -191,6 +192,7 @@ export function locate(body: Body, center: Center, correction: Correction, time:
  * differences.
  */
 export function geometricState(body: Body, center: Center, time: AstroTime): { r: Vec3; v: Vec3 } | null {
+  refuseUnderSource("@zodiacs/engine/calc");
   if (body === Body.Moon) return null;
   const split = (s: State) => ({ r: vec(s), v: [s.vx, s.vy, s.vz] as Vec3 });
   if (center.kind === "barycentric") return split(BaryState(body, time));

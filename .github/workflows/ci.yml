@@ -118,7 +118,10 @@ jobs:
           key: de440-bsp-a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5
 
       - name: Tier B
-        run: PRECISION_KERNEL="$RUNNER_TEMP/kernels/de440.bsp" npx vitest run src/de440-kernel.test.ts
+        # A skipped test fails the job: every tier-B test must run here.
+        run: |
+          PRECISION_KERNEL="$RUNNER_TEMP/kernels/de440.bsp" npx vitest run src/de440-kernel.test.ts --reporter=json --outputFile="$RUNNER_TEMP/tier-b.json"
+          node -e 'const r = JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8")); if (r.numPendingTests + r.numTodoTests > 0 || r.numPassedTests !== r.numTotalTests || r.numTotalTests < 3) { console.error("tier B: " + JSON.stringify({ total: r.numTotalTests, passed: r.numPassedTests, skipped: r.numPendingTests })); process.exit(1); } console.log("tier B: " + r.numPassedTests + " of " + r.numTotalTests + " passed, none skipped");' "$RUNNER_TEMP/tier-b.json"
 
   archives:
     name: Every carried archive rebuilds from its source commit
