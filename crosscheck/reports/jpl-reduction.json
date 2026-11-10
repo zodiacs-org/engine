@@ -1,0 +1,1066 @@
+{
+  "schema": 1,
+  "what": "Reference reduction validation, not an engine error report or random chart campaign",
+  "command": "node crosscheck/tools/validate-jpl.mjs",
+  "software": {
+    "node": "v22.23.3"
+  },
+  "tooling": {
+    "lib/kernels.mjs": "6a071fd2352364d323acd2edbb78233b0c0d42daaeace168cb73f2f5f4188bf6",
+    "lib/spk.mjs": "c90d5ae7afc1b0d9ec7bfcfe5b8fac20b0c36b86ca6067972fc829d2a4499d2b",
+    "lib/reduction.mjs": "d806fb70b8c2580edcc98a1a3053673afe4d11f45c6a11b2aaea7347d854e108",
+    "lib/horizons.mjs": "15db49e88ba536b5e0a0ead4adee91259f32d58122c0e153c5773fff6125a04f",
+    "lib/statistics.mjs": "21ab062767b7644a84dd2d2ed47449cb1e23b71c60367722ebe174611f201bc7",
+    "tools/validate-jpl.mjs": "d1f4b453d67f15fc3ca8c089be879c943a73e9939b8c57e368451580f13d36ae"
+  },
+  "kernel": {
+    "name": "de440s.bsp",
+    "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2",
+    "source": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp"
+  },
+  "conventions": {
+    "frame": "ICRF (DE440 SPK frame 1)",
+    "center": 399,
+    "timeScale": "TT input, TDB kernel evaluation",
+    "timeModel": "NAIF-DELTET-periodic/naif0012",
+    "lightTime": "converged Newtonian reception",
+    "stellarAberration": "SPICE Newtonian",
+    "deflection": "none",
+    "targets": "Sun 10; Moon 301; Mercury 199; Venus 299; Mars through Pluto system barycenters 4 through 9"
+  },
+  "comparedWith": "JPL Horizons DE441 geometric, LT and LT+S ICRF geocentric Cartesian positions; CN is compared to Horizons LT",
+  "selection": "First, middle and last eligible row per file; a reception margin of one day at kernel start; all other covered rows unsampled",
+  "limits": {
+    "angleArcseconds": 0.1,
+    "rangeKm": 100
+  },
+  "span": {
+    "minJdTt": 2400772.763062,
+    "maxJdTt": 2504239.233188
+  },
+  "tested": 150,
+  "eligible": 1680,
+  "outsideCoverage": 560,
+  "references": [
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-10.2.txt",
+      "sha256": "7989a8273f1a6fdb2ad0aa426868515a80a52a6db48466bcc83c7fdb6e6545f5",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-10.txt",
+      "sha256": "b1b6ebbd205ed84c4752019954faa30e81b163faa6b590504db4f0ed71190e78",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-199.2.txt",
+      "sha256": "aefdb01314a7ffb40dda8c608172958a2b88177576bf8d67b25b73ca0ba3f1a3",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-199.txt",
+      "sha256": "ca697ef36205c2fe3a51ff5abea3c88611cb2b573085374dfd74623cd9198dba",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-299.2.txt",
+      "sha256": "8ab64fe2be3752536510861d2ca39182156abf99a12b2e4e6acf0e77d994e4fb",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-299.txt",
+      "sha256": "c18e4263a58af3fb52af92ac50beda2afcb00d6ac0f384ecafede811af72eeb8",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-301.2.txt",
+      "sha256": "2a6e2a03a0139ab9f46fa1945a6c2a7c9188e674a03773647c072fa40b8e3c1b",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-301.txt",
+      "sha256": "7e374514edd0c62a22b9181c52fe4ea11e01dd480f343e558ce1e9fff0c31677",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-4.2.txt",
+      "sha256": "214b0f9388979955883055202e96fc90c193c2a68ce640a9e10547a8c714382d",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-4.txt",
+      "sha256": "09eeceba055e4f61ce6cd5d7702a4818063d88be8e633150291557b097c2a5a6",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-5.2.txt",
+      "sha256": "38d7f72a87e3a8dcc547af2be980b1f57c0a49bcb63f1c4a35ec44b3c96d3305",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-5.txt",
+      "sha256": "4b8ad1be044927fb601b03605bad5d25553b2e1d341f7d83f02ee99d9630279e",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-6.2.txt",
+      "sha256": "b724f2c3a7b0d4b60a11ff5105f89629c4d40fd5da25c168be6fcd3a095808c6",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-6.txt",
+      "sha256": "11671c256271684b002ae817c633b172228d44debd4542e589e6ec66db88f837",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-7.2.txt",
+      "sha256": "af9b468e1b44ce2e34095a9eae5576212324aaddbedb695672e7310732db5d72",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-7.txt",
+      "sha256": "c9cb58462c937f289e0e71213b2dffa4253385b0700ad44a3ed3cf5cae852aba",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-8.2.txt",
+      "sha256": "58104b266e402833f72c19cc0fc9d2b3ca0ac9bf4bc3877158da4e378ece296f",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-8.txt",
+      "sha256": "908f10cd694eead199d6a4a911e1b8047c16e1b20882ee8e683f1b446d61ce2b",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-9.2.txt",
+      "sha256": "59130d347c5aae0cff298d997c79c4a2f1e4e50c04017ca1378b72a2fdee5244",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LT-9.txt",
+      "sha256": "447a833061b056098897aa645ebb309782d56c9a4a16fe94d360ac4d88aeb972",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-10.2.txt",
+      "sha256": "6f058606c3e254bc9520e8608063e1b88508632ddf13fa567ec3b5abc9c82cf0",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-10.txt",
+      "sha256": "64e5c6e4e4e8f46404a4d79d8514e06f4726eed8d31f197ea7e3e7e2ced34363",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-199.2.txt",
+      "sha256": "6bb728fa432a02dfea6b40dda78caa1e12985d1624b6658d2c1feb68ef68909f",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-199.txt",
+      "sha256": "fa631dbfd2e699cf863d2ba91b949f4a99d15701a8c332816d43d7dd2b3698e1",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-299.2.txt",
+      "sha256": "7ab709ee27cb382c323ea78dff1c0e444f35cb80062ee4d068e22d8d803e8c10",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-299.txt",
+      "sha256": "cba1f5d63c8f1bf0dfebacc61ab687cc9df363eb1b3e0f277761baa80269b4eb",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-301.2.txt",
+      "sha256": "21b7ba9fe5915fde8509328096e2410f2573c40c8cd7d884b83fb0ce750b51a5",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-301.txt",
+      "sha256": "eeff3bc601e6b7a48668d3b9b1108414449f76938772ea20b778bac54630f862",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-4.2.txt",
+      "sha256": "0f586254ee47f0ba761e633836daf70e97ca13e5209022f4c95ddb38ddb06635",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-4.txt",
+      "sha256": "971ef2e83a62a35f032e9e3c41fc32dfa35e1431268ffac1fcae4a3b562bac36",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-5.2.txt",
+      "sha256": "3509ae1e462b8169508b65bab8f4dd47d401eef90325f3949336e4d90dac840d",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-5.txt",
+      "sha256": "3cdc63b55806dce8188785431de28e1743c26bf2e582262451f9265c07de48d6",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-6.2.txt",
+      "sha256": "27c1d9d958a6275d0ea8f92ef73b3dc5125366c44556ff09e61a9fd296d78e57",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-6.txt",
+      "sha256": "4ca73908a81ffc508b7026a9de320650a156801f97113599ec9a0a11de6dca12",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-7.2.txt",
+      "sha256": "11ea4f3ade66ac33bf67bc38b813daf870fabe76d7025e8e62293e3d9b40c8fe",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-7.txt",
+      "sha256": "6b73cb367edcd395edaca4d0f20d57785669d23688b8f98b86ca153921e75b05",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-8.2.txt",
+      "sha256": "d79b194a484722a638eed6a20fe046e8708e0e48c030612df0f9f6e0d1a33728",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-8.txt",
+      "sha256": "b4c879bbaa7b470c54634944d55c1225120270d1a267b7f06c3be32b0b12999c",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-9.2.txt",
+      "sha256": "af4ac3178fd37a208683ff578ef73ba57cebc7bdd40a9233add02387316f8632",
+      "selected": 3,
+      "eligible": 13,
+      "outsideCoverage": 3
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-LTS-9.txt",
+      "sha256": "7dfd5bc08738782c5a0ea36b6a3fa64983e409019a0fafc1ad8c5093d3a8fc03",
+      "selected": 3,
+      "eligible": 59,
+      "outsideCoverage": 21
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-NONE-10.txt",
+      "sha256": "be795d42a16faf5610679c4948a3b92fc5141cfe125d6cf9ff75d1bd29128ed5",
+      "selected": 3,
+      "eligible": 24,
+      "outsideCoverage": 8
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-NONE-199.txt",
+      "sha256": "fea0f1196a7178ece60a56084c544cfe613156e94cbb6cbf2b6a34a167938d43",
+      "selected": 3,
+      "eligible": 24,
+      "outsideCoverage": 8
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-NONE-299.txt",
+      "sha256": "a92bd72d73b671a989c911eefc92b5d3bee66890c89ec7e4171f4bc1e0d2e51d",
+      "selected": 3,
+      "eligible": 24,
+      "outsideCoverage": 8
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-NONE-301.txt",
+      "sha256": "8413bd57f3f996a2b0bc118ca6b544c60193c98a295848acd599d5111c03fea1",
+      "selected": 3,
+      "eligible": 24,
+      "outsideCoverage": 8
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-NONE-4.txt",
+      "sha256": "cedd94b809e20602496c9b5181ee3c102859c0c5b3047350eab761b109b0d30b",
+      "selected": 3,
+      "eligible": 24,
+      "outsideCoverage": 8
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-NONE-5.txt",
+      "sha256": "ddea25fec7ed181e527b1ca2d496af21fa5bddf91c8201c10c510fa9f18e1383",
+      "selected": 3,
+      "eligible": 24,
+      "outsideCoverage": 8
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-NONE-6.txt",
+      "sha256": "920d629f2c5dac622ae283c15b30521af5309ec0558fad66217791461ed7d995",
+      "selected": 3,
+      "eligible": 24,
+      "outsideCoverage": 8
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-NONE-7.txt",
+      "sha256": "d6e370f23ae79a4f41c01de6f412794b06dbd42ed0b0a922bc6087b4775544e1",
+      "selected": 3,
+      "eligible": 24,
+      "outsideCoverage": 8
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-NONE-8.txt",
+      "sha256": "b900649be594d908615dc6daf35e0c6d6a66af67c8d7686f6f2ebcea10161f07",
+      "selected": 3,
+      "eligible": 24,
+      "outsideCoverage": 8
+    },
+    {
+      "path": "docs/evidence/calc-api/horizons/geo-NONE-9.txt",
+      "sha256": "38041ce0b2b952f7d8a100fe08cda5fecad20a3ecffe6d80bd3115d1384be316",
+      "selected": 3,
+      "eligible": 24,
+      "outsideCoverage": 8
+    }
+  ],
+  "groups": {
+    "CN+S/10": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.000007107562128121681,
+        "meanAbs": 0.000007107562128121681,
+        "rms": 0.000009850155454734338,
+        "populationStdDev": 0.00000681968643541058,
+        "maxAbs": 0.000017061123648371362
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.000012040138244628903,
+        "meanAbs": 0.00005015730857849121,
+        "rms": 0.00008040884553213744,
+        "populationStdDev": 0.0000795023113554654,
+        "maxAbs": 0.00018659234046936035
+      }
+    },
+    "CN+S/199": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.000298530628777887,
+        "meanAbs": 0.00029853062877788705,
+        "rms": 0.0003077983776796389,
+        "populationStdDev": 0.00007496202360993884,
+        "maxAbs": 0.0004077619734118405
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.00011842946211496988,
+        "meanAbs": 0.00017901758352915445,
+        "rms": 0.0003006835005068462,
+        "populationStdDev": 0.0002763784180796494,
+        "maxAbs": 0.0007030963897705078
+      }
+    },
+    "CN+S/299": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.000293871462908022,
+        "meanAbs": 0.000293871462908022,
+        "rms": 0.0003596154899474645,
+        "populationStdDev": 0.0002072748510998235,
+        "maxAbs": 0.0005140770643792939
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": -0.000006243586540222168,
+        "meanAbs": 0.00007205704847971599,
+        "rms": 0.00009963007973804163,
+        "populationStdDev": 0.0000994342517230521,
+        "maxAbs": 0.0001906752586364746
+      }
+    },
+    "CN+S/301": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.004913691852848083,
+        "meanAbs": 0.004913691852848083,
+        "rms": 0.00578716336193634,
+        "populationStdDev": 0.0030572687407214765,
+        "maxAbs": 0.008104403905455155
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.0001061649042336891,
+        "meanAbs": 0.0004209049220662564,
+        "rms": 0.0005340130247747763,
+        "populationStdDev": 0.0005233535360902392,
+        "maxAbs": 0.0009174738661386073
+      }
+    },
+    "CN+S/4": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.00033106294428855373,
+        "meanAbs": 0.0003310629442885538,
+        "rms": 0.0003568241771295865,
+        "populationStdDev": 0.00013311957145063403,
+        "maxAbs": 0.0005241927328084289
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.00002792974313100179,
+        "meanAbs": 0.00003510216871897379,
+        "rms": 0.00005730963735812575,
+        "populationStdDev": 0.000050043221146886036,
+        "maxAbs": 0.0001348257064819336
+      }
+    },
+    "CN+S/5": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.00034185346396307546,
+        "meanAbs": 0.00034185346396307546,
+        "rms": 0.0003757243343942234,
+        "populationStdDev": 0.00015590056007734046,
+        "maxAbs": 0.0005182306341397922
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.000018914540608723957,
+        "meanAbs": 0.00007887681325276692,
+        "rms": 0.00012583440714254232,
+        "populationStdDev": 0.00012440473533783207,
+        "maxAbs": 0.0002779960632324219
+      }
+    },
+    "CN+S/6": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.0002779481607229502,
+        "meanAbs": 0.00027794816072295017,
+        "rms": 0.00031457995026122073,
+        "populationStdDev": 0.0001473274076914447,
+        "maxAbs": 0.00045626933173994154
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.000007589658101399735,
+        "meanAbs": 0.00008801619211832683,
+        "rms": 0.00011025920604583486,
+        "populationStdDev": 0.00010999768001081534,
+        "maxAbs": 0.0001914501190185547
+      }
+    },
+    "CN+S/7": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.00041654278468437927,
+        "meanAbs": 0.0004165427846843793,
+        "rms": 0.00042179896873033524,
+        "populationStdDev": 0.00006638131174778912,
+        "maxAbs": 0.0004905367820521079
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.00001796086629231771,
+        "meanAbs": 0.00008424123128255208,
+        "rms": 0.00010217638616836228,
+        "populationStdDev": 0.00010058539244073057,
+        "maxAbs": 0.00016117095947265625
+      }
+    },
+    "CN+S/8": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.00033781460208399575,
+        "meanAbs": 0.00033781460208399575,
+        "rms": 0.00035127414890431726,
+        "populationStdDev": 0.0000963058788822576,
+        "maxAbs": 0.00046806418585196443
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.00007915496826171875,
+        "meanAbs": 0.00009854634602864583,
+        "rms": 0.00014112983668922223,
+        "populationStdDev": 0.00011684229458296698,
+        "maxAbs": 0.00029087066650390625
+      }
+    },
+    "CN+S/9": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.000420025295099141,
+        "meanAbs": 0.0004200252950991411,
+        "rms": 0.0004423648610515723,
+        "populationStdDev": 0.00013879993433015884,
+        "maxAbs": 0.000510061906568465
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.000018596649169921875,
+        "meanAbs": 0.00008789698282877605,
+        "rms": 0.00011177060275896631,
+        "populationStdDev": 0.00011021266842225303,
+        "maxAbs": 0.00020313262939453125
+      }
+    },
+    "CN/10": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 1.662735206680121e-7,
+        "meanAbs": 1.662735206680121e-7,
+        "rms": 2.3837353320508535e-7,
+        "populationStdDev": 1.7080707730460146e-7,
+        "maxAbs": 5.066896385043711e-7
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.000012050072352091469,
+        "meanAbs": 0.00005015730857849121,
+        "rms": 0.00008041954265854847,
+        "populationStdDev": 0.00007951162555072974,
+        "maxAbs": 0.00018662214279174805
+      }
+    },
+    "CN/199": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 1.2146161662557453e-7,
+        "meanAbs": 1.2146161662557453e-7,
+        "rms": 1.7375834978791448e-7,
+        "populationStdDev": 1.2425393276561187e-7,
+        "maxAbs": 3.6993508645323166e-7
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.00011841456095377603,
+        "meanAbs": 0.00017904241879781088,
+        "rms": 0.0003007070055829668,
+        "populationStdDev": 0.00027641037419170593,
+        "maxAbs": 0.0007031410932540894
+      }
+    },
+    "CN/299": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 1.7513282844555725e-7,
+        "meanAbs": 1.751328284455573e-7,
+        "rms": 3.2216027039686844e-7,
+        "populationStdDev": 2.703992089907853e-7,
+        "maxAbs": 7.712362019007088e-7
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": -0.000006260971228281661,
+        "meanAbs": 0.00007205456495285034,
+        "rms": 0.00009964151913499777,
+        "populationStdDev": 0.00009944462064289228,
+        "maxAbs": 0.0001907050609588623
+      }
+    },
+    "CN/301": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.004934525146889109,
+        "meanAbs": 0.00493452514688911,
+        "rms": 0.005851042586930664,
+        "populationStdDev": 0.003144067577008371,
+        "maxAbs": 0.008402225038365787
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.00010616496244135004,
+        "meanAbs": 0.0004209048832611491,
+        "rms": 0.0005340130198138771,
+        "populationStdDev": 0.0005233535192205771,
+        "maxAbs": 0.00091747404076159
+      }
+    },
+    "CN/4": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 1.5326348711757514e-7,
+        "meanAbs": 1.5326348711757517e-7,
+        "rms": 2.2434217085674052e-7,
+        "populationStdDev": 1.6382830384666691e-7,
+        "maxAbs": 4.5127666736939327e-7
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.000027949611345926922,
+        "meanAbs": 0.00003514190514882406,
+        "rms": 0.00005735451717069568,
+        "populationStdDev": 0.000050083528884207616,
+        "maxAbs": 0.00013491511344909668
+      }
+    },
+    "CN/5": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 2.0643144951741547e-8,
+        "meanAbs": 2.0643144951741547e-8,
+        "rms": 2.5982354000272653e-8,
+        "populationStdDev": 1.5777936680595212e-8,
+        "maxAbs": 4.5908043188675484e-8
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.00001895427703857422,
+        "meanAbs": 0.00007887681325276692,
+        "rms": 0.00012588203702412496,
+        "populationStdDev": 0.00012444686668328835,
+        "maxAbs": 0.0002779960632324219
+      }
+    },
+    "CN/6": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 1.0728411580854823e-8,
+        "meanAbs": 1.0728411580854824e-8,
+        "rms": 1.4541759958383164e-8,
+        "populationStdDev": 9.816515045524863e-9,
+        "maxAbs": 2.955755256679884e-8
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.000007828076680501301,
+        "meanAbs": 0.00008817513783772786,
+        "rms": 0.0001105599592026588,
+        "populationStdDev": 0.00011028248181092847,
+        "maxAbs": 0.0001926422119140625
+      }
+    },
+    "CN/7": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 7.1701887528355524e-9,
+        "meanAbs": 7.1701887528355524e-9,
+        "rms": 9.179778431589467e-9,
+        "populationStdDev": 5.732078619644513e-9,
+        "maxAbs": 1.6214428636122524e-8
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.00001811981201171875,
+        "meanAbs": 0.00008408228556315105,
+        "rms": 0.00010195844467852857,
+        "populationStdDev": 0.0001003354217309348,
+        "maxAbs": 0.00016069412231445312
+      }
+    },
+    "CN/8": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 4.964825154501715e-9,
+        "meanAbs": 4.964825154501715e-9,
+        "rms": 6.87636049831433e-9,
+        "populationStdDev": 4.757609156709357e-9,
+        "maxAbs": 1.353770060549799e-8
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.00007931391398111978,
+        "meanAbs": 0.00009934107462565105,
+        "rms": 0.0001416300011651918,
+        "populationStdDev": 0.00011733865637140968,
+        "maxAbs": 0.0002918243408203125
+      }
+    },
+    "CN/9": {
+      "angleArcseconds": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 2.9214425453017086e-9,
+        "meanAbs": 2.9214425453017086e-9,
+        "rms": 3.740702003792457e-9,
+        "populationStdDev": 2.3362416261333035e-9,
+        "maxAbs": 6.741077619057875e-9
+      },
+      "rangeKm": {
+        "n": 6,
+        "passed": 6,
+        "failed": 0,
+        "mean": 0.000019073486328125003,
+        "meanAbs": 0.00008869171142578125,
+        "rms": 0.00011291278372909291,
+        "populationStdDev": 0.00011129015611788734,
+        "maxAbs": 0.00020503997802734375
+      }
+    },
+    "NONE/10": {
+      "angleArcseconds": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 1.0546637164556637e-7,
+        "meanAbs": 1.0546637164556635e-7,
+        "rms": 1.446491051058008e-7,
+        "populationStdDev": 9.899600022136388e-8,
+        "maxAbs": 2.3961630662035234e-7
+      },
+      "rangeKm": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 0.0000643630822499593,
+        "meanAbs": 0.00007209181785583496,
+        "rms": 0.00010848732118080695,
+        "populationStdDev": 0.00008733208173559436,
+        "maxAbs": 0.00018668174743652344
+      }
+    },
+    "NONE/199": {
+      "angleArcseconds": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 8.704606366048305e-8,
+        "meanAbs": 8.704606366048305e-8,
+        "rms": 1.1032177492955615e-7,
+        "populationStdDev": 6.777814415298472e-8,
+        "maxAbs": 1.7738726330843482e-7
+      },
+      "rangeKm": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 0.00004638234774271646,
+        "meanAbs": 0.00008999307950337727,
+        "rms": 0.00011597159722271359,
+        "populationStdDev": 0.00010629247000733887,
+        "maxAbs": 0.00018930435180664062
+      }
+    },
+    "NONE/299": {
+      "angleArcseconds": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 6.598288879060923e-8,
+        "meanAbs": 6.598288879060923e-8,
+        "rms": 8.636322930106146e-8,
+        "populationStdDev": 5.5721322329551876e-8,
+        "maxAbs": 1.447468339385555e-7
+      },
+      "rangeKm": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 0.00003350774447123209,
+        "meanAbs": 0.00010076165199279785,
+        "rms": 0.0001246697853967069,
+        "populationStdDev": 0.00012008241524599497,
+        "maxAbs": 0.00019061565399169922
+      }
+    },
+    "NONE/301": {
+      "angleArcseconds": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 0.0056225254888071195,
+        "meanAbs": 0.0056225254888071195,
+        "rms": 0.006569602593742723,
+        "populationStdDev": 0.003398070830254334,
+        "maxAbs": 0.008403017842794847
+      },
+      "rangeKm": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 0.0005036314250901341,
+        "meanAbs": 0.0005079002973313133,
+        "rms": 0.0006329543986889315,
+        "populationStdDev": 0.0003833883911666438,
+        "maxAbs": 0.0009179548360407352
+      }
+    },
+    "NONE/4": {
+      "angleArcseconds": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 1.0927887519778154e-7,
+        "meanAbs": 1.0927887519778154e-7,
+        "rms": 1.5703133528141663e-7,
+        "populationStdDev": 1.1276953354418189e-7,
+        "maxAbs": 2.666451428031121e-7
+      },
+      "rangeKm": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 0.00006549557050069174,
+        "meanAbs": 0.00006549557050069173,
+        "rms": 0.00009559491371499502,
+        "populationStdDev": 0.00006963273492378611,
+        "maxAbs": 0.00016391277313232422
+      }
+    },
+    "NONE/5": {
+      "angleArcseconds": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 2.982962910299606e-8,
+        "meanAbs": 2.982962910299606e-8,
+        "rms": 3.50889397104044e-8,
+        "populationStdDev": 1.84777411384099e-8,
+        "maxAbs": 4.907487612576632e-8
+      },
+      "rangeKm": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": -0.000034252802530924484,
+        "meanAbs": 0.0000472863515218099,
+        "rms": 0.00007130416403534807,
+        "populationStdDev": 0.00006253822293251799,
+        "maxAbs": 0.00012230873107910156
+      }
+    },
+    "NONE/6": {
+      "angleArcseconds": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 6.246322886421537e-9,
+        "meanAbs": 6.246322886421536e-9,
+        "rms": 8.450657236635896e-9,
+        "populationStdDev": 5.691841365469804e-9,
+        "maxAbs": 1.4199402534118075e-8
+      },
+      "rangeKm": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 0.000020424524943033845,
+        "meanAbs": 0.00011754035949707031,
+        "rms": 0.0001391811211927841,
+        "populationStdDev": 0.00013767433775882797,
+        "maxAbs": 0.0001914501190185547
+      }
+    },
+    "NONE/7": {
+      "angleArcseconds": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 6.4908609447245774e-9,
+        "meanAbs": 6.490860944724578e-9,
+        "rms": 7.981971793161247e-9,
+        "populationStdDev": 4.6454922132182016e-9,
+        "maxAbs": 1.0940536777560067e-8
+      },
+      "rangeKm": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": -0.00003083546956380208,
+        "meanAbs": 0.00009028116861979167,
+        "rms": 0.0001074207337004548,
+        "populationStdDev": 0.00010289989234942796,
+        "maxAbs": 0.0001621246337890625
+      }
+    },
+    "NONE/8": {
+      "angleArcseconds": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 3.792755650949598e-9,
+        "meanAbs": 3.792755650949598e-9,
+        "rms": 5.232751523201361e-9,
+        "populationStdDev": 3.6050926584147678e-9,
+        "maxAbs": 8.807018468540723e-9
+      },
+      "rangeKm": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 0.0000362396240234375,
+        "meanAbs": 0.00007311503092447917,
+        "rms": 0.00009780626397755748,
+        "populationStdDev": 0.00009084467471397292,
+        "maxAbs": 0.000164031982421875
+      }
+    },
+    "NONE/9": {
+      "angleArcseconds": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 2.9003279302698066e-9,
+        "meanAbs": 2.900327930269806e-9,
+        "rms": 3.441014014361843e-9,
+        "populationStdDev": 1.85166825968678e-9,
+        "maxAbs": 5.280620008461967e-9
+      },
+      "rangeKm": {
+        "n": 3,
+        "passed": 3,
+        "failed": 0,
+        "mean": 0.00006866455078125,
+        "meanAbs": 0.00006866455078125,
+        "rms": 0.00008995260528063182,
+        "populationStdDev": 0.000058108955099728743,
+        "maxAbs": 0.00014209747314453125
+      }
+    }
+  },
+  "exclusions": [
+    "No engine positions evaluated",
+    "No Swiss instrument invoked",
+    "No true-of-date frames",
+    "No solar deflection or relativistic aberration",
+    "DE440 versus DE441 model differences included",
+    "No accuracy bound outside selected epochs"
+  ]
+}

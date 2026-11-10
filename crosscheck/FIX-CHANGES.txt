@@ -1,0 +1,4 @@
+F1: Isolate Node suites with .node-test.mjs names, update scripts and references; crosscheck tests, build verification and safeguards pass, and root Vitest discovers no crosscheck suites.
+F2: Add isolated Node 22 CI with locked dependencies, JavaScript syntax checks (no project typecheck script), build verification, 66 passing tests and safeguards; root Vitest selects no crosscheck suites.
+F3: Freshly verify all bounded DE440s campaign aggregates, enforce complete report coverage and unavailable references, correct stale README claims and reproduction guidance; 67 Node 22 tests and safeguards pass, and root Vitest selects no crosscheck suites.
+F4: Verify M10 with fresh DE440s stop/resume and report reproduction, add in-flight interruption and empty-shard coverage tests; 69 Node 22 tests, retention, size and npm exclusion safeguards pass, and root Vitest selects no crosscheck suites.

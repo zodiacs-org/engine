@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "what": "Frame and correction implementation validation against ERFA, not engine accuracy or a chart campaign",
+  "command": "node crosscheck/tools/validate-frames.mjs",
+  "node": "v22.23.3",
+  "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+  "compilerOptions": [
+    "-std=c99",
+    "-O2",
+    "-fno-fast-math",
+    "-lm"
+  ],
+  "reference": {
+    "version": "2.0.1",
+    "baseUrl": "https://raw.githubusercontent.com/liberfa/erfa/v2.0.1/src/",
+    "files": {
+      "nut00b.c": "a5246d525e987eb587bbe786b2846160e01be85b5d12af573870b89235695f49",
+      "pfw06.c": "085f49861026fab98633d8479795090b3278a0d246a938ebdf10fde326ef1987",
+      "fw2m.c": "480d1ae7780566980b8f80f4c6daa2be330a80e99861d892dc5a9f7b11da47c0",
+      "obl06.c": "550260874d5e5fa3be77296b85b92c54c726fee6fbb1bb44748d04c17ffb37c2",
+      "ab.c": "ff4bac5fc8a2ccb5d1f63404c96734fd125069382c7f7a29add598721a122527",
+      "ld.c": "affa41a6028f8f2ec23978c6b707771ab654438c2bdb9fcd4a1c4b1a42dad06a",
+      "ldsun.c": "42c5ffb96f12c8364a25880795a389546ab1126ec272a00a73246c30b174083e",
+      "erfam.h": "0da6313033aacf9c64533a7e74be49ecda97b4aaa87e134f98287e4ff279886f",
+      "erfa.h": "9549553b95ca2fbbcdcabcc69d82fb3cdd376c28b03c2793200138ff55727088",
+      "rx.c": "b740bba3cce0502620662f6e667369734f6adf56064919394ae1ae3ae3e70c64",
+      "rz.c": "d4ef2eb4a9744617b510c2370ba5ff5f3c0acaafb07a0eb6138c6f2128005bcc",
+      "ir.c": "55e3325cd77770315f20dfdee5e7028f56b7bfb97be966db922abcc8885091f1",
+      "pdp.c": "7c156c25e55eccbe06506e15accc7d28c45175a20295cbfd95908c9ed3a705c8",
+      "pxp.c": "b1e8e96ea633bcefa1d71b0e09fb6d9fe8ca8ad43e1546ee603396323bd68b12",
+      "t_erfa_c.c": "8a92d0099c48df31ca566bea881c19497dc295dba58dba7136cc2f8443c31f15"
+    }
+  },
+  "tooling": {
+    "lib/frames.mjs": "e47e82fe6de42211d7c5b130212ad974f12a20c164df4f7cd220bb36c7639ab6",
+    "lib/apparent.mjs": "fe2f2004c75d67687065e6675891a57a1bcee08a5e08d4f03f82bf1642d74fb5",
+    "lib/erfa.mjs": "8c545c57da30e5b511a4b90769dc63dddb30318003931454d327d71438772d7f",
+    "lib/erfa-catalog.json": "10e7ac382fcf8ba861c236de60ad7f4eab242e09de9ea938446d4585efc974da",
+    "lib/sampling.mjs": "d0f8a6d23a75934d7fa3c80d88ae4ad06d592c030d5281922ba697c75de9ac5b",
+    "lib/statistics.mjs": "21ab062767b7644a84dd2d2ed47449cb1e23b71c60367722ebe174611f201bc7",
+    "tools/validate-frames.mjs": "0001a45d457295b74e49fb97338e4093f8e27dfe9aeb89aa2c64f1c6dbf2e07f",
+    "tools/erfa-reference.c": "fff433f109675a2a6139eb9cadd952704bc067f3733fb3e9c51d32ad1ae9144b"
+  },
+  "frameModel": "IAU2006-bias-precession/IAU2000B-unadjusted-nutation",
+  "span": {
+    "minTtDaysSinceJ2000": -36525,
+    "maxTtDaysSinceJ2000": 36525
+  },
+  "cases": 257,
+  "sampling": {
+    "seed": "crosscheck-erfa-M5c",
+    "startMs": 946684800000,
+    "endMs": 978307200000,
+    "selection": "Uniformly spaced TT epochs including endpoints; indexed synthetic directions; conjunction and opposition override every eighth index",
+    "speedKmS": 299.792458,
+    "minSolarDistanceAu": 0.5,
+    "maxSolarDistanceAu": 2.5
+  },
+  "tolerance": {
+    "nutation": "radians",
+    "precession": "radians",
+    "otherGroups": "dimensionless Cartesian or matrix components",
+    "absolute": 5e-14
+  },
+  "groups": {
+    "nutation": {
+      "n": 514,
+      "passed": 514,
+      "failed": 0,
+      "mean": -9.7361411118615e-22,
+      "meanAbs": 4.332804234568812e-21,
+      "rms": 6.849740766564794e-21,
+      "populationStdDev": 6.780193517270641e-21,
+      "maxAbs": 2.710505431213761e-20
+    },
+    "precession": {
+      "n": 1028,
+      "passed": 1028,
+      "failed": 0,
+      "mean": 0,
+      "meanAbs": 0,
+      "rms": 0,
+      "populationStdDev": 0,
+      "maxAbs": 0
+    },
+    "true-equator-matrix": {
+      "n": 2313,
+      "passed": 2313,
+      "failed": 0,
+      "mean": 9.473146170667114e-20,
+      "meanAbs": 3.137470094305393e-18,
+      "rms": 1.8684039640663805e-17,
+      "populationStdDev": 1.868379948629454e-17,
+      "maxAbs": 2.220446049250313e-16
+    },
+    "true-ecliptic-matrix": {
+      "n": 2313,
+      "passed": 2313,
+      "failed": 0,
+      "mean": -2.3978686098865047e-19,
+      "meanAbs": 4.535700668403309e-18,
+      "rms": 2.78944843998003e-17,
+      "populationStdDev": 2.789345375158837e-17,
+      "maxAbs": 3.3306690738754696e-16
+    },
+    "relativistic-aberration": {
+      "n": 771,
+      "passed": 771,
+      "failed": 0,
+      "mean": 9.764850694862957e-19,
+      "meanAbs": 2.991329262400992e-17,
+      "rms": 6.155326044486461e-17,
+      "populationStdDev": 6.154551444502191e-17,
+      "maxAbs": 2.220446049250313e-16
+    },
+    "finite-target-solar-deflection": {
+      "n": 771,
+      "passed": 771,
+      "failed": 0,
+      "mean": 0,
+      "meanAbs": 0,
+      "rms": 0,
+      "populationStdDev": 0,
+      "maxAbs": 0
+    },
+    "distant-solar-deflection": {
+      "n": 771,
+      "passed": 771,
+      "failed": 0,
+      "mean": 0,
+      "meanAbs": 0,
+      "rms": 0,
+      "populationStdDev": 0,
+      "maxAbs": 0
+    }
+  },
+  "exclusions": [
+    "Shared published model constants and runtime coefficient data; this checks implementation, not model accuracy",
+    "IAU2000B abridged nutation, not IAU2000A or observed celestial pole offsets",
+    "No IAU2006 secular adjustment of nutation",
+    "Static single-Sun deflection and ERFA limiter, not moving-body ray integration",
+    "No end-to-end JPL apparent-coordinate accuracy validation",
+    "No engine charts, Swiss instrument, UTC resolution, topocentric positions or corrected velocities"
+  ]
+}
