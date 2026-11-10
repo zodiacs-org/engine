@@ -86,3 +86,24 @@ is skipped there for want of the kernel and runs in CI's tier-B job.
 `carrier/pack-source.sh` and `carrier/carrier-gates.sh` are 1.1.0-rc.2's,
 for this candidate's archive (the second without the time-entry job, a
 1.1.0-rc.2 unit).
+
+## On the carrier
+
+The archive was packed once by `carrier/pack-source.sh` from clean, sparse
+clones of the source commit `cc910b3`: the same bytes on Node 22.22.2,
+20.19.0 and 24.21.0 (SHA-256
+`3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590`, 331,979
+bytes, 94 files); the carried file is the Node 22.22.2 one. On the carrier
+`d2794d2`, `carrier/carrier-gates.sh` ran each job in a clean clone (the
+`<job>-d2794d2-<node>.log` files):
+
+| Job | Nodes | Result |
+| --- | --- | --- |
+| engine | 22.22.2, 20.19.0, 24.21.0 | every step exits 0 but the suite, whose 4 failures on each are the macOS-only ones above (the suite runs before the build, as in CI, so the steps that need the build are skipped there) |
+| pack | 22.22.2 | the packed archive is the carried one, byte for byte |
+| consumer | 20.19.0, 22.7.0, 22.22.2, 24.21.0 | the packed-consumer check passes on the carried archive, the new `de440` step included |
+| conformance | 22.22.2 | the self-test, the 500 vectors, the verdicts and RESULTS.md pass |
+| atlas | 22.22.2 | the atlas checks and self-test pass |
+
+The archive rebuilds and the generators run only in CI's own jobs, which
+the carrier's CI runs cite.

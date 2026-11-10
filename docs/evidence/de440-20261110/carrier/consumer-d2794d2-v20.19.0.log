@@ -1,0 +1,56 @@
+# sh carrier-gates.sh consumer at d2794d2 in a clean full-history clone, blobless, its sparse checkout leaving out docs/evidence/calc-sidereal-2026-10-05/, without NODE_OPTIONS; Node v20.19.0, npm 10.8.2, git 2.50.1, 2026-11-10
+## the carried archive
+3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590  artifacts/zodiacs-engine-1.1.0-rc.3.tgz
+exit 0
+## node scripts/verify-packed-consumer.mjs
+{
+  "version": "1.1.0-rc.3",
+  "de440": "passed",
+  "birthWindow": "passed",
+  "techniques": "passed",
+  "sky": "passed",
+  "houses": "passed",
+  "planetaryReturns": "passed",
+  "timeBasis": "passed",
+  "timeEntry": "passed",
+  "liteEntry": "passed",
+  "zoneHistory": "passed",
+  "timing": "passed",
+  "configuredAspects": "passed",
+  "exactAspectBoundaries": "passed",
+  "chartDeclinations": "passed",
+  "sunConvention": "passed",
+  "boundMargin": "passed",
+  "exactSeparation": "passed",
+  "ephemerisSpan": "passed",
+  "metadata": "passed",
+  "bodyLabels": "passed",
+  "ephemerisRangeErrors": "passed",
+  "crossings": "passed",
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "oneZeroAdditions": "passed",
+  "conventionIds": "passed",
+  "artifact": "<clone>/artifacts/zodiacs-engine-1.1.0-rc.3.tgz",
+  "sha256": "3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590",
+  "runtime": "v20.19.0",
+  "typescript": "5.9.3",
+  "typeRoots": "none (types: [])",
+  "directory": "<tmp>/zodiacs-engine-consumer-0AM2Hk",
+  "types": "passed",
+  "directoryRemoved": true
+}
+exit 0
+
