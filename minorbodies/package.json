@@ -1,0 +1,41 @@
+{
+  "name": "@zodiacs/minorbodies",
+  "private": true,
+  "description": "Development companion for JPL-derived minor-body positions in an engine source checkout",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "offline:check": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/check-offline.ts",
+    "check:offline-install": "node scripts/check-offline-install.mjs",
+    "cli": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/cli.ts",
+    "test": "vitest run --config vitest.config.ts",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "check:scope": "node scripts/check-scope.mjs",
+    "fixtures:check": "node --experimental-strip-types scripts/capture-horizons.ts --check",
+    "fixtures:capture": "node --experimental-strip-types scripts/capture-horizons.ts --capture",
+    "fixtures:replay": "node --experimental-strip-types scripts/capture-horizons.ts --replay",
+    "pilot:capture": "node --experimental-strip-types scripts/generate-pilot.ts --capture",
+    "pilot:check": "node --experimental-strip-types scripts/generate-pilot.ts --check",
+    "pilot:build": "node --experimental-strip-types scripts/generate-pilot.ts --build",
+    "pilot:validate": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/validate-pilot.ts",
+    "full:capture": "node --experimental-strip-types scripts/generate-full.ts --capture",
+    "full:check": "node --experimental-strip-types scripts/generate-full.ts --check",
+    "full:build": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/generate-full.ts --build",
+    "full:validate": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/validate-full.ts",
+    "full:test": "vitest run --config vitest.full.config.ts",
+    "full:reference:capture": "node --experimental-strip-types scripts/generate-speed-reference.ts",
+    "full:validate:v1": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/validate-full-v1.ts",
+    "final:capture": "node --experimental-strip-types scripts/capture-final.ts",
+    "final:validate": "node --import ./scripts/register-source.mjs --experimental-strip-types scripts/validate-final.ts",
+    "final:events:capture": "node --experimental-strip-types scripts/capture-final-events.ts --capture",
+    "final:events:replay": "node --experimental-strip-types scripts/capture-final-events.ts --replay",
+    "reference:test": ".cache/reference-venv/bin/python tests/reference-erfa.test.py",
+    "check": "npm run typecheck && npm test && npm run reference:test && npm run fixtures:check && npm run check:scope"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "astronomy-engine": "2.1.19",
+    "typescript": "5.9.3",
+    "vitest": "2.1.9"
+  }
+}
