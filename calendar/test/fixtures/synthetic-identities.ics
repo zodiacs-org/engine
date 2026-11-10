@@ -1,0 +1,62 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Zodiacs//Calendar Workbench//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:zcal-v1-27583a367717773e351ce540eba5a5736eb4919e0ee1ac33c912016d0c53566
+ 6@calendar.zodiacs.org
+DTSTAMP:20260101T000000Z
+DTSTART:20260203T040506Z
+SUMMARY:Synthetic Moon square Sun\; café\, 月 🌙\nPath \\ fixture
+TRANSP:TRANSPARENT
+DESCRIPTION:{"aspect":{"angleDegrees":90\,"name":"square"}\,"bodies":["Moon
+ "\,"Sun"]\,"engine":{"ephemeris":{"name":"astronomy-engine"\,"version":"2.
+ 1.19"}\,"name":"@zodiacs/engine"\,"version":"1.0.0"}\,"eventType":"natal-t
+ ransit"\,"orbDegrees":0.0000125\,"schema":"zodiacs-calendar-receipt/1"\,"s
+ ource":{"note":"Formatting\; only\, not an ephemeris result.\\nPath \\\\ f
+ ixture"\,"settings":{"timeScale":"utc"\,"zodiac":"tropical"}\,"synthetic":
+ true}\,"utc":"2026-02-03T04:05:06.789Z"}
+X-ZODIACS-SCHEMA;VALUE=TEXT:zodiacs-calendar-receipt/1
+X-ZODIACS-UTC;VALUE=TEXT:2026-02-03T04:05:06.789Z
+X-ZODIACS-EVENT-TYPE;VALUE=TEXT:natal-transit
+X-ZODIACS-BODIES;VALUE=TEXT:["Moon"\,"Sun"]
+X-ZODIACS-ASPECT;VALUE=TEXT:{"angleDegrees":90\,"name":"square"}
+X-ZODIACS-ORB-DEGREES;VALUE=TEXT:0.0000125
+X-ZODIACS-ENGINE;VALUE=TEXT:@zodiacs/engine@1.0.0
+X-ZODIACS-EPHEMERIS;VALUE=TEXT:astronomy-engine@2.1.19
+X-ZODIACS-IDENTITY;VALUE=TEXT:{"aspectAngleDegrees":90\,"bodies":["Moon"\,"
+ Sun"]\,"chartIds":["synthetic-chart-a/config-1"]\,"definition":{"id":"synt
+ hetic-transit/1"\,"parameters":{"branch":90\,"direction":"direct"\,"zodiac
+ ":"tropical"}}\,"eventType":"natal-transit"\,"namespace":"https://calendar
+ .invalid/fixtures"\,"occurrence":{"key":"synthetic-pass-a"\,"scheme":"sour
+ ce-key/1"}\,"schema":"zodiacs-calendar-event/1"}
+END:VEVENT
+BEGIN:VEVENT
+UID:zcal-v1-703fc6b7afe5a2e662cec3a1b1d99a78c864d88d5af0976e1102cedde2d2129
+ 6@calendar.zodiacs.org
+DTSTAMP:20260101T000000Z
+DTSTART:20260204T021500Z
+DTEND:20260204T063000Z
+SUMMARY:Synthetic void-of-course Moon
+TRANSP:TRANSPARENT
+DESCRIPTION:{"aspect":null\,"bodies":["Moon"]\,"engine":{"ephemeris":{"name
+ ":"astronomy-engine"\,"version":"2.1.19"}\,"name":"@zodiacs/engine"\,"vers
+ ion":"1.0.0"}\,"eventType":"void-of-course"\,"orbDegrees":null\,"schema":"
+ zodiacs-calendar-receipt/1"\,"utc":"2026-02-04T02:15:00.123Z"}
+X-ZODIACS-SCHEMA;VALUE=TEXT:zodiacs-calendar-receipt/1
+X-ZODIACS-UTC;VALUE=TEXT:2026-02-04T02:15:00.123Z
+X-ZODIACS-EVENT-TYPE;VALUE=TEXT:void-of-course
+X-ZODIACS-BODIES;VALUE=TEXT:["Moon"]
+X-ZODIACS-ASPECT;VALUE=TEXT:null
+X-ZODIACS-ORB-DEGREES;VALUE=TEXT:null
+X-ZODIACS-ENGINE;VALUE=TEXT:@zodiacs/engine@1.0.0
+X-ZODIACS-EPHEMERIS;VALUE=TEXT:astronomy-engine@2.1.19
+X-ZODIACS-IDENTITY;VALUE=TEXT:{"aspectAngleDegrees":null\,"bodies":["Moon"]
+ \,"chartIds":[]\,"definition":{"id":"synthetic-void/1"\,"parameters":{"ang
+ les":[0\,90\,180]\,"bodies":["Sun"\,"Mercury"]}}\,"eventType":"void-of-cou
+ rse"\,"namespace":"https://calendar.invalid/fixtures"\,"occurrence":{"key"
+ :"synthetic-lunar-segment-a"\,"scheme":"source-key/1"}\,"schema":"zodiacs-
+ calendar-event/1"}
+X-ZODIACS-END-UTC;VALUE=TEXT:2026-02-04T06:30:00.456Z
+END:VEVENT
+END:VCALENDAR

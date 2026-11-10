@@ -1,0 +1,52 @@
+{
+  "schema": "zodiacs-calendar-feed/1",
+  "dtstamp": "2026-01-01T00:00:00.000Z",
+  "schedule": {
+    "startUtc": "2026-02-01T00:00:00.000Z",
+    "endUtc": "2026-02-06T00:00:00.000Z",
+    "maxEvaluations": 1000000,
+    "windowDays": 1,
+    "maxBufferedEvents": 100,
+    "schedules": [
+      {
+        "kind": "ingress",
+        "request": { "namespace": "synthetic-cli.calendar.invalid", "clock": "utc", "body": "Moon", "stepMs": 3600000 }
+      },
+      {
+        "kind": "natal-transit",
+        "request": {
+          "namespace": "synthetic-cli.calendar.invalid", "clock": "utc", "body": "Sun", "natalBody": "Sun", "stepMs": 3600000,
+          "policy": { "aspects": [{ "id": "conjunction", "angleDegrees": 0 }] },
+          "natal": { "id": "synthetic-natal-a", "synthetic": true, "birth": {
+            "utc": "2001-02-03T04:05:06.789Z", "timeScale": "utc", "latitude": 12.5, "longitude": 34.25
+          } }
+        }
+      },
+      {
+        "kind": "synastry-exact",
+        "request": {
+          "namespace": "synthetic-cli.calendar.invalid", "clock": "utc", "firstBody": "Sun", "secondBody": "Sun", "stepMs": 3600000,
+          "convention": "secondary-progressed-first-to-natal-second/1",
+          "policy": { "aspects": [{ "id": "conjunction", "angleDegrees": 0 }] },
+          "first": { "id": "synthetic-synastry-a", "synthetic": true, "birth": {
+            "utc": "2001-02-03T04:05:06.789Z", "timeScale": "utc", "latitude": 12.5, "longitude": 34.25
+          } },
+          "second": { "id": "synthetic-synastry-b", "synthetic": true, "birth": {
+            "utc": "2001-02-28T04:06:11.790Z", "timeScale": "utc", "latitude": -23.5, "longitude": 45.25
+          } }
+        }
+      },
+      {
+        "kind": "station",
+        "request": { "namespace": "synthetic-cli.calendar.invalid", "clock": "utc", "body": "Mercury", "stepMs": 3600000 }
+      },
+      {
+        "kind": "eclipse",
+        "request": {
+          "namespace": "synthetic-cli.calendar.invalid", "clock": "utc", "kind": "solar", "stepMs": 3600000, "derivativeStepMs": 60000,
+          "model": { "sunRadiusAu": 0.00465, "moonRadiusAu": 0.0000116, "earthRadiusAu": 0.0000426 }
+        }
+      }
+    ]
+  }
+}
