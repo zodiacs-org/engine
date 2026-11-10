@@ -1,0 +1,28 @@
+Bootstrap isolated Node 22 skydb consumer with verified engine archive, locked dependencies, strict configuration and direct-call tests.
+Implement versioned lossless compressed position tile codec, document binary layout and validate corruption and bounded decoding.
+Generate lazy position tiles with bounded sampling, time-basis splits and exact decoded agreement against direct engine calls.
+Implement sampled aspect, ingress, station and lunation detection with direct root refinement, clock splits and synthetic and engine-residual tests.
+Implement resumable atomic position/event persistence with exclusive locking, configuration-bound checkpoints, distributed SHA-256 manifests and recovery tests.
+skydb: Implement bounded-cache integrity-checked queries, circular position interpolation and streaming event filters with seam, boundary and corruption tests.
+Implement strict SkyDB CLI commands, whole-database verification and reproducible attributed sample tiles with end-to-end and direct engine agreement tests.
+Add scoped reproducible SkyDB performance and direct-engine interpolation agreement benchmarks with committed Node 22 outputs and evidence tests.
+Harden SkyDB persisted event and cadence validation, bound store reads, document operations, refresh benchmarks and complete final project checks and plan.
+Measure a decade of sky database generation and record resource costs for full coverage with disk guards and regression checks.
+Start full-span sky database generation with bounded resumable sessions, disk guards and retained resource reports.
+Resume full-span sky database generation, verify the retained tiles and record the next checkpoint and resource report.
+Continue full-span sky database generation from its verified checkpoint and retain the next resource and progress report.
+Resume full-span sky database generation within its session and disk budgets, retaining the checkpoint and aggregate resource evidence.
+Continue full-span sky database generation from the retained checkpoint and record verified progress, storage use and session resource measurements.
+Resume full-span sky database generation, preserve the next verified checkpoint and record bounded-session resource measurements.
+Continue full-span sky database generation from its verified checkpoint and retain the next progress and storage report within session resource limits.
+Continue full-span generation, fix the directory link limit with compatible sharding and resumable migration, and record checkpoint and resource evidence.
+Continue full-span sky database generation through eight bounded passes and retain verified checkpoint progress and resource reports for resume.
+Resume full-span sky database generation through bounded passes and retain verified checkpoints, resource measurements and progress for the next continuation.
+Complete full-span sky database generation and retain bounded-session checkpoint and resource evidence below the disk cap.
+Verify the completed full-span sky database and record its manifest identity, storage totals and aggregate checks with regression coverage.
+Measure full-span sky database interpolation against direct engine calls with reproducible stratified sampling, boundary probes and per-body error summaries.
+Measure full-span sky database query performance and memory with reproducible cold and warm lookups, streamed event ranges and aggregate evidence checked against the completed store.
+Document sky database time, event and boundary differences from the public events workbench with pinned source receipts and passing project checks.
+Update sky database guides with completed full-span generation, verification, interpolation and query evidence, operating commands and measured limits.
+Retain PLAN.md, FIX.md, FIX-CHANGES.txt, PHASE2.md and CHANGES.txt as required milestone and session records; their removal conflicts with the instructed process.
+Fix committed-path isolation, require locked setup, enforce authored dash and local-link rules, check convention evidence offline, refresh test evidence and clarify operating docs.

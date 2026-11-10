@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "command": "node skydb/benchmarks/full.mjs",
+  "startedAt": "2026-10-19T09:16:36.227Z",
+  "finishedAt": "2026-10-19T09:26:41.422Z",
+  "status": "paused",
+  "pauseReason": "session-budget",
+  "directory": "skydb/generated/full",
+  "config": {
+    "startMs": -5364662400000,
+    "endMs": 7258118400000,
+    "stepMs": 3600000,
+    "tileMs": 86400000,
+    "timeScale": "utc",
+    "bodies": [
+      "Sun",
+      "Moon",
+      "Mercury",
+      "Venus",
+      "Mars",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune",
+      "Pluto"
+    ]
+  },
+  "runtime": {
+    "node": "v22.23.3",
+    "platform": "linux",
+    "arch": "x64",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "engine": {
+      "name": "@zodiacs/engine",
+      "version": "1.0.0",
+      "archive": "zodiacs-engine-1.0.0.tgz",
+      "sha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
+      "bytes": 288063,
+      "ephemeris": "2.1.19"
+    },
+    "osRelease": "6.12.94+",
+    "memoryBytes": 16779640832,
+    "generatorProcesses": 1
+  },
+  "method": "One sequential generator; wall and CPU include preflight, engine load, resume verification, generation, disk guards and final storage walks; cooperative deadline excludes final reporting walks; filesystem cache and host load uncontrolled",
+  "maxWallMs": 600000,
+  "initialCheckpoint": {
+    "version": 1,
+    "manifestSha256": "6b912245717eafeffc26c93b11feb94f9bd4379e504501564b7167a732b7005f",
+    "nextIndex": 15312,
+    "complete": false
+  },
+  "finalCheckpoint": {
+    "version": 1,
+    "manifestSha256": "6b912245717eafeffc26c93b11feb94f9bd4379e504501564b7167a732b7005f",
+    "nextIndex": 21713,
+    "complete": false
+  },
+  "budget": {
+    "diskCapBytes": 12000000000,
+    "tileReserveBytes": 7565536,
+    "freeReserveBytes": 67108864,
+    "generatedBefore": {
+      "bytes": 125709702,
+      "allocatedBytes": 388923392,
+      "files": 56902,
+      "directories": 18968
+    },
+    "generatedAfter": {
+      "bytes": 168135481,
+      "allocatedBytes": 520167424,
+      "files": 76105,
+      "directories": 25369
+    },
+    "freeBefore": 34430615552,
+    "freeAfter": 34095267840
+  },
+  "results": {
+    "plannedTiles": 146099,
+    "publishedTiles": 6401,
+    "checkpointedTiles": 6401,
+    "resumedVerifiedTiles": 15312,
+    "wallMs": 605193.3808279999,
+    "cpuUserMs": 499040.96,
+    "cpuSystemMs": 67260.587,
+    "peakRssBytes": 112603136,
+    "storage": {
+      "bytes": 143943258,
+      "allocatedBytes": 445239296,
+      "files": 65144,
+      "directories": 21715
+    }
+  },
+  "stop": null,
+  "selection": {
+    "config": {
+      "startMs": -5364662400000,
+      "endMs": 7258118400000,
+      "stepMs": 3600000,
+      "tileMs": 86400000,
+      "timeScale": "utc",
+      "bodies": [
+        "Sun",
+        "Moon",
+        "Mercury",
+        "Venus",
+        "Mars",
+        "Jupiter",
+        "Saturn",
+        "Uranus",
+        "Neptune",
+        "Pluto"
+      ]
+    },
+    "plannedTiles": 146099,
+    "estimatedRemainingAllocatedBytes": 2682184954,
+    "estimatedCoexistBytes": 3078673882,
+    "fitsDiskCap": true,
+    "trialSha256": "982a11993199f0251266aa58e6d810832fa14b625c78729f2d889c3ab3f2c0b3"
+  }
+}

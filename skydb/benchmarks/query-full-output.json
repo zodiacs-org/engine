@@ -1,0 +1,588 @@
+{
+  "version": 1,
+  "command": "node skydb/benchmarks/query-full.mjs",
+  "directory": "skydb/generated/full",
+  "startedAt": "2026-10-19T17:38:53.954Z",
+  "finishedAt": "2026-10-19T17:41:09.338Z",
+  "runtime": {
+    "node": "v22.23.3",
+    "platform": "linux",
+    "arch": "x64",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "engine": {
+      "name": "@zodiacs/engine",
+      "version": "1.0.0",
+      "archive": "zodiacs-engine-1.0.0.tgz",
+      "sha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
+      "bytes": 288063,
+      "ephemeris": "2.1.19"
+    },
+    "osRelease": "6.12.94+",
+    "memoryBytes": 16779640832,
+    "availableParallelism": 8
+  },
+  "elapsedMs": 135381.66365099998,
+  "cpu": {
+    "userMs": 104873.966,
+    "systemMs": 24141.014
+  },
+  "measurement": "Local sequential queries on a completed database; filesystem cache, host load and garbage collection uncontrolled; no latency or memory guarantee",
+  "method": {
+    "positions": "Fresh database per instant; opening timed separately; cold is one empty application-cache lookup, warm immediately repeats that instant; query timers exclude result checks, hashes and memory observations",
+    "events": "Fresh database per range; opening timed separately; completely consume iterator with ordered-range and filter checks, streaming counts and SHA-256 inside timer; filter still loads all overlapping tiles; fullSpan scans the whole database once",
+    "memory": "process.memoryUsage before work, after opening and position operations, every 128 yielded events and after ranges; sampled per-field maxima are not simultaneous or peak bounds; maxRSS is process-lifetime high water in KiB converted to bytes, including preflight; no forced garbage collection",
+    "statistics": "Milliseconds; median averages middle pair for even counts; p95 and p99 are nearest rank sorted[ceil(p * count) - 1]; no discarded warmup or latency threshold",
+    "elapsed": "Includes openings, queries, diagnostics, hashing and memory observations; excludes archive preflight, plan construction, metadata checks and report serialization; one process, no workers"
+  },
+  "manifest": {
+    "sha256": "7f9b034c1d80915329d9b20d3ec09bb00519adece2a2b467d850300c8f3126b1",
+    "bytes": 389,
+    "value": {
+      "version": 2,
+      "engineSha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
+      "config": {
+        "startMs": -5364662400000,
+        "endMs": 7258118400000,
+        "stepMs": 3600000,
+        "tileMs": 86400000,
+        "timeScale": "utc",
+        "bodies": [
+          "Sun",
+          "Moon",
+          "Mercury",
+          "Venus",
+          "Mars",
+          "Jupiter",
+          "Saturn",
+          "Uranus",
+          "Neptune",
+          "Pluto"
+        ]
+      },
+      "tiles": "shard-NNNNNNNN/tile-NNNNNNNN/receipt.json",
+      "positionFormat": 1,
+      "eventFormat": 1
+    }
+  },
+  "checkpoint": {
+    "version": 1,
+    "manifestSha256": "7f9b034c1d80915329d9b20d3ec09bb00519adece2a2b467d850300c8f3126b1",
+    "nextIndex": 146099,
+    "complete": true
+  },
+  "workload": {
+    "positionCount": 512,
+    "warmRepeats": 8,
+    "eventCount": 8,
+    "seed": 1370341103,
+    "cacheTiles": 4,
+    "planSha256": "6537972ea58095b75353719388cfef5fdd416f6f1367a44a17a4cf9c574028cc",
+    "positionSha256": "bb9081945261f3c299b4df46106b2e632764784b15e266ee867b69cfb8806690",
+    "firstPositionAtMs": -5342615619794,
+    "lastPositionAtMs": 7242710657953,
+    "positionSelection": "interpolate-full stratifiedInstants, excluding support samples with recorded seed and count",
+    "eventSelection": "Nominal days of 86400000 milliseconds; requested durations clipped to coverage; starts at startMs + floor((spanMs - durationMs + 1) * (2 * index + 1) / (2 * eventCount)) using exact integer arithmetic; fullSpan is one half-open coverage range",
+    "eventPlan": [
+      {
+        "name": "day",
+        "requestedDurationMs": 86400000,
+        "durationMs": 86400000,
+        "filter": {},
+        "ranges": [
+          {
+            "startMs": -4575744000000,
+            "endMs": -4575657600000
+          },
+          {
+            "startMs": -2997907200000,
+            "endMs": -2997820800000
+          },
+          {
+            "startMs": -1420070400000,
+            "endMs": -1419984000000
+          },
+          {
+            "startMs": 157766400000,
+            "endMs": 157852800000
+          },
+          {
+            "startMs": 1735603200000,
+            "endMs": 1735689600000
+          },
+          {
+            "startMs": 3313440000000,
+            "endMs": 3313526400000
+          },
+          {
+            "startMs": 4891276800000,
+            "endMs": 4891363200000
+          },
+          {
+            "startMs": 6469113600000,
+            "endMs": 6469200000000
+          }
+        ]
+      },
+      {
+        "name": "month",
+        "requestedDurationMs": 2592000000,
+        "durationMs": 2592000000,
+        "filter": {},
+        "ranges": [
+          {
+            "startMs": -4575900600000,
+            "endMs": -4573308600000
+          },
+          {
+            "startMs": -2998377000000,
+            "endMs": -2995785000000
+          },
+          {
+            "startMs": -1420853400000,
+            "endMs": -1418261400000
+          },
+          {
+            "startMs": 156670200000,
+            "endMs": 159262200000
+          },
+          {
+            "startMs": 1734193800000,
+            "endMs": 1736785800000
+          },
+          {
+            "startMs": 3311717400000,
+            "endMs": 3314309400000
+          },
+          {
+            "startMs": 4889241000000,
+            "endMs": 4891833000000
+          },
+          {
+            "startMs": 6466764600000,
+            "endMs": 6469356600000
+          }
+        ]
+      },
+      {
+        "name": "year",
+        "requestedDurationMs": 31536000000,
+        "durationMs": 31536000000,
+        "filter": {},
+        "ranges": [
+          {
+            "startMs": -4577709600000,
+            "endMs": -4546173600000
+          },
+          {
+            "startMs": -3003804000000,
+            "endMs": -2972268000000
+          },
+          {
+            "startMs": -1429898400000,
+            "endMs": -1398362400000
+          },
+          {
+            "startMs": 144007200000,
+            "endMs": 175543200000
+          },
+          {
+            "startMs": 1717912800000,
+            "endMs": 1749448800000
+          },
+          {
+            "startMs": 3291818400000,
+            "endMs": 3323354400000
+          },
+          {
+            "startMs": 4865724000000,
+            "endMs": 4897260000000
+          },
+          {
+            "startMs": 6439629600000,
+            "endMs": 6471165600000
+          }
+        ]
+      },
+      {
+        "name": "moonIngressMonth",
+        "requestedDurationMs": 2592000000,
+        "durationMs": 2592000000,
+        "filter": {
+          "kind": "ingress",
+          "body": "Moon"
+        },
+        "ranges": [
+          {
+            "startMs": -4575900600000,
+            "endMs": -4573308600000
+          },
+          {
+            "startMs": -2998377000000,
+            "endMs": -2995785000000
+          },
+          {
+            "startMs": -1420853400000,
+            "endMs": -1418261400000
+          },
+          {
+            "startMs": 156670200000,
+            "endMs": 159262200000
+          },
+          {
+            "startMs": 1734193800000,
+            "endMs": 1736785800000
+          },
+          {
+            "startMs": 3311717400000,
+            "endMs": 3314309400000
+          },
+          {
+            "startMs": 4889241000000,
+            "endMs": 4891833000000
+          },
+          {
+            "startMs": 6466764600000,
+            "endMs": 6469356600000
+          }
+        ]
+      },
+      {
+        "name": "mercuryStationYear",
+        "requestedDurationMs": 31536000000,
+        "durationMs": 31536000000,
+        "filter": {
+          "kind": "station",
+          "body": "Mercury"
+        },
+        "ranges": [
+          {
+            "startMs": -4577709600000,
+            "endMs": -4546173600000
+          },
+          {
+            "startMs": -3003804000000,
+            "endMs": -2972268000000
+          },
+          {
+            "startMs": -1429898400000,
+            "endMs": -1398362400000
+          },
+          {
+            "startMs": 144007200000,
+            "endMs": 175543200000
+          },
+          {
+            "startMs": 1717912800000,
+            "endMs": 1749448800000
+          },
+          {
+            "startMs": 3291818400000,
+            "endMs": 3323354400000
+          },
+          {
+            "startMs": 4865724000000,
+            "endMs": 4897260000000
+          },
+          {
+            "startMs": 6439629600000,
+            "endMs": 6471165600000
+          }
+        ]
+      },
+      {
+        "name": "fullSpan",
+        "requestedDurationMs": 12622780800000,
+        "durationMs": 12622780800000,
+        "filter": {},
+        "ranges": [
+          {
+            "startMs": -5364662400000,
+            "endMs": 7258118400000
+          }
+        ]
+      }
+    ]
+  },
+  "positionQueries": {
+    "opening": {
+      "count": 512,
+      "totalMs": 301.62800100000067,
+      "minimumMs": 0.3119350000000054,
+      "medianMs": 0.4401175000000137,
+      "p95Ms": 1.3196399999999358,
+      "p99Ms": 2.3637449999999944,
+      "maximumMs": 2.8473850000000027
+    },
+    "cold": {
+      "count": 512,
+      "totalMs": 591.6215340000001,
+      "minimumMs": 0.5485300000000279,
+      "medianMs": 0.8856819999999743,
+      "p95Ms": 2.122870999999975,
+      "p99Ms": 4.0717089999999985,
+      "maximumMs": 38.046502000000004
+    },
+    "warm": {
+      "count": 4096,
+      "totalMs": 31.57034699999835,
+      "minimumMs": 0.005201999999940199,
+      "medianMs": 0.007144499999981235,
+      "p95Ms": 0.011525000000006003,
+      "p99Ms": 0.016978999999992084,
+      "maximumMs": 0.09592800000007173
+    },
+    "maximumCacheSize": 1,
+    "resultSha256": {
+      "cold": "921eff8c094ab85b30e41776168a6d86c2398ffa5503a44b998220adb75855e8",
+      "warm": "921eff8c094ab85b30e41776168a6d86c2398ffa5503a44b998220adb75855e8"
+    }
+  },
+  "eventQueries": [
+    {
+      "name": "day",
+      "requestedDurationMs": 86400000,
+      "durationMs": 86400000,
+      "filter": {},
+      "ranges": 8,
+      "opening": {
+        "count": 8,
+        "totalMs": 5.138854000000265,
+        "minimumMs": 0.42733399999997346,
+        "medianMs": 0.47754250000002685,
+        "p95Ms": 1.7399729999999636,
+        "p99Ms": 1.7399729999999636,
+        "maximumMs": 1.7399729999999636
+      },
+      "latency": {
+        "count": 8,
+        "totalMs": 8.801805000000513,
+        "minimumMs": 0.773482999999942,
+        "medianMs": 1.0452010000001337,
+        "p95Ms": 1.9413730000001124,
+        "p99Ms": 1.9413730000001124,
+        "maximumMs": 1.9413730000001124
+      },
+      "events": 26,
+      "minimumEvents": 2,
+      "maximumEvents": 5,
+      "countsByKind": {
+        "ingress": 6,
+        "aspect": 20
+      },
+      "scannedTiles": 8,
+      "maximumCacheSize": 1,
+      "resultSha256": "70375583337b4c467291ab3b4d6b73a654b7bb10f24f74926de2959162254f79"
+    },
+    {
+      "name": "month",
+      "requestedDurationMs": 2592000000,
+      "durationMs": 2592000000,
+      "filter": {},
+      "ranges": 8,
+      "opening": {
+        "count": 8,
+        "totalMs": 3.3374770000002627,
+        "minimumMs": 0.36954900000000634,
+        "medianMs": 0.42758500000013555,
+        "p95Ms": 0.459671999999955,
+        "p99Ms": 0.459671999999955,
+        "maximumMs": 0.459671999999955
+      },
+      "latency": {
+        "count": 8,
+        "totalMs": 220.53142100000014,
+        "minimumMs": 22.583712000000105,
+        "medianMs": 28.067979000000037,
+        "p95Ms": 32.72371199999998,
+        "p99Ms": 32.72371199999998,
+        "maximumMs": 32.72371199999998
+      },
+      "events": 907,
+      "minimumEvents": 106,
+      "maximumEvents": 119,
+      "countsByKind": {
+        "aspect": 738,
+        "ingress": 140,
+        "lunation": 16,
+        "station": 13
+      },
+      "scannedTiles": 248,
+      "maximumCacheSize": 4,
+      "resultSha256": "b3482959d7855a0b7e0be347f462721e76236a54200a9c23be21793ecd8a5f9e"
+    },
+    {
+      "name": "year",
+      "requestedDurationMs": 31536000000,
+      "durationMs": 31536000000,
+      "filter": {},
+      "ranges": 8,
+      "opening": {
+        "count": 8,
+        "totalMs": 4.0839470000003075,
+        "minimumMs": 0.4205789999998615,
+        "medianMs": 0.49793850000003204,
+        "p95Ms": 0.6370019999999386,
+        "p99Ms": 0.6370019999999386,
+        "maximumMs": 0.6370019999999386
+      },
+      "latency": {
+        "count": 8,
+        "totalMs": 2613.3355639999995,
+        "minimumMs": 275.9409660000001,
+        "medianMs": 319.38158599999997,
+        "p95Ms": 398.22835399999985,
+        "p99Ms": 398.22835399999985,
+        "maximumMs": 398.22835399999985
+      },
+      "events": 10979,
+      "minimumEvents": 1359,
+      "maximumEvents": 1381,
+      "countsByKind": {
+        "aspect": 8960,
+        "ingress": 1678,
+        "station": 143,
+        "lunation": 198
+      },
+      "scannedTiles": 2928,
+      "maximumCacheSize": 4,
+      "resultSha256": "5c02c76afb8deb8031c775ab932a60b186964dd44883318d5b7ea1b773e6e5c6"
+    },
+    {
+      "name": "moonIngressMonth",
+      "requestedDurationMs": 2592000000,
+      "durationMs": 2592000000,
+      "filter": {
+        "kind": "ingress",
+        "body": "Moon"
+      },
+      "ranges": 8,
+      "opening": {
+        "count": 8,
+        "totalMs": 4.250039999999899,
+        "minimumMs": 0.4774879999999939,
+        "medianMs": 0.5282700000000204,
+        "p95Ms": 0.6061079999999492,
+        "p99Ms": 0.6061079999999492,
+        "maximumMs": 0.6061079999999492
+      },
+      "latency": {
+        "count": 8,
+        "totalMs": 186.1313750000004,
+        "minimumMs": 20.807196999999633,
+        "medianMs": 22.66695700000014,
+        "p95Ms": 28.704486000000088,
+        "p99Ms": 28.704486000000088,
+        "maximumMs": 28.704486000000088
+      },
+      "events": 106,
+      "minimumEvents": 13,
+      "maximumEvents": 14,
+      "countsByKind": {
+        "ingress": 106
+      },
+      "scannedTiles": 248,
+      "maximumCacheSize": 4,
+      "resultSha256": "00810b8e4a8a9bae7f36994d593bf3c589f899606eac9984782752753752c5ab"
+    },
+    {
+      "name": "mercuryStationYear",
+      "requestedDurationMs": 31536000000,
+      "durationMs": 31536000000,
+      "filter": {
+        "kind": "station",
+        "body": "Mercury"
+      },
+      "ranges": 8,
+      "opening": {
+        "count": 8,
+        "totalMs": 4.514703000000736,
+        "minimumMs": 0.4022899999999936,
+        "medianMs": 0.5026060000000143,
+        "p95Ms": 1.0749329999998736,
+        "p99Ms": 1.0749329999998736,
+        "maximumMs": 1.0749329999998736
+      },
+      "latency": {
+        "count": 8,
+        "totalMs": 1859.8173660000002,
+        "minimumMs": 211.93137300000035,
+        "medianMs": 230.88745150000022,
+        "p95Ms": 251.9006419999996,
+        "p99Ms": 251.9006419999996,
+        "maximumMs": 251.9006419999996
+      },
+      "events": 51,
+      "minimumEvents": 6,
+      "maximumEvents": 7,
+      "countsByKind": {
+        "station": 51
+      },
+      "scannedTiles": 2928,
+      "maximumCacheSize": 4,
+      "resultSha256": "63795838e46bc5dbe3a34bb381e8c478cc9f8e7dce9c1a8b55006d1773d5d684"
+    },
+    {
+      "name": "fullSpan",
+      "requestedDurationMs": 12622780800000,
+      "durationMs": 12622780800000,
+      "filter": {},
+      "ranges": 1,
+      "opening": {
+        "count": 1,
+        "totalMs": 0.5055670000001555,
+        "minimumMs": 0.5055670000001555,
+        "medianMs": 0.5055670000001555,
+        "p95Ms": 0.5055670000001555,
+        "p99Ms": 0.5055670000001555,
+        "maximumMs": 0.5055670000001555
+      },
+      "latency": {
+        "count": 1,
+        "totalMs": 129439.16020000001,
+        "minimumMs": 129439.16020000001,
+        "medianMs": 129439.16020000001,
+        "p95Ms": 129439.16020000001,
+        "p99Ms": 129439.16020000001,
+        "maximumMs": 129439.16020000001
+      },
+      "events": 549078,
+      "minimumEvents": 549078,
+      "maximumEvents": 549078,
+      "countsByKind": {
+        "station": 7284,
+        "aspect": 447865,
+        "ingress": 84035,
+        "lunation": 9894
+      },
+      "scannedTiles": 146099,
+      "maximumCacheSize": 4,
+      "resultSha256": "2a937d06cfe8d9037313e3baca5c3cf0b12008f46c7f68c2de795dd752977929"
+    }
+  ],
+  "memory": {
+    "unit": "bytes",
+    "baseline": {
+      "rss": 59666432,
+      "heapTotal": 10592256,
+      "heapUsed": 6490664,
+      "external": 5185806,
+      "arrayBuffers": 3026869
+    },
+    "final": {
+      "rss": 118513664,
+      "heapTotal": 43360256,
+      "heapUsed": 7186968,
+      "external": 37002413,
+      "arrayBuffers": 34817824
+    },
+    "sampledMaximum": {
+      "rss": 122560512,
+      "heapTotal": 44408832,
+      "heapUsed": 9904728,
+      "external": 49114918,
+      "arrayBuffers": 45391252
+    },
+    "observations": 9573,
+    "processLifetimeMaxRssBytes": 122937344
+  }
+}

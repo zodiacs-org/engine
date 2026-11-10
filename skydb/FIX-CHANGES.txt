@@ -1,0 +1,2 @@
+F1 Isolate SkyDB Node suites from root Vitest discovery; update test command and references; project tests pass and root discovers no SkyDB suites.
+F2/F3 Add Node 22 SkyDB CI with verified lockfile installation, module syntax and safety checks, and all Node suites; allow only its workflow in the isolation check; project tests pass and root discovers no SkyDB suites.

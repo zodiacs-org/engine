@@ -1,0 +1,1 @@
+{"version":1,"engineSha256":"c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6","config":{"startMs":978307200000,"endMs":978480000000,"stepMs":3600000,"tileMs":86400000,"timeScale":"utc","bodies":["Sun","Moon","Mercury","Venus","Mars","Jupiter","Saturn","Uranus","Neptune","Pluto"]},"tiles":"tile-NNNNNNNN/receipt.json","positionFormat":1,"eventFormat":1}
