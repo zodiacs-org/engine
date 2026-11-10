@@ -1,0 +1,642 @@
+{
+  "retrieved": "2026-10-15",
+  "acceptanceSeconds": 60,
+  "sourceScale": "Horizons UT (UTC for these dates); USNO UT minute labels treated as UTC",
+  "ayanamsa": "lahiri",
+  "reduction": "true Lahiri: independent ERFA epoch construction + nut00b",
+  "python": "3.13.5",
+  "numpy": "2.5.4",
+  "pyerfa": "2.0.1.5",
+  "referenceTool": "docs/evidence/vedic-2026-09-28/tools/reference_values.py",
+  "referenceToolSHA256": "87acc19799580853514d2197371cbfcdf2f052b64e0441aa2cf5c24c2e1a9b27",
+  "licenseBasis": "US Government numerical facts and ERFA numerical results only; see SOURCES.md",
+  "windows": [
+    {
+      "from": "2024-03-20T00:00:00.000Z",
+      "to": "2024-03-21T00:00:00.000Z",
+      "horizons": {
+        "sun": {
+          "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%2710%27&OBJ_DATA=%27NO%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&START_TIME=%272024-03-20+00%3A00%27&STOP_TIME=%272024-03-21+00%3A00%27&TIME_TYPE=%27UT%27&STEP_SIZE=%271+m%27&QUANTITIES=%2731%27&CSV_FORMAT=%27YES%27&EXTRA_PREC=%27YES%27&APPARENT=%27AIRLESS%27&CAL_FORMAT=%27CAL%27",
+          "responseSHA256": "903274bbe65596bf93930cccd4d8da53af340e217f66aafc0269ce1719a10fde",
+          "source": "NASA/JPL Horizons API",
+          "version": "1.2"
+        },
+        "moon": {
+          "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%27301%27&OBJ_DATA=%27NO%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&START_TIME=%272024-03-20+00%3A00%27&STOP_TIME=%272024-03-21+00%3A00%27&TIME_TYPE=%27UT%27&STEP_SIZE=%271+m%27&QUANTITIES=%2731%27&CSV_FORMAT=%27YES%27&EXTRA_PREC=%27YES%27&APPARENT=%27AIRLESS%27&CAL_FORMAT=%27CAL%27",
+          "responseSHA256": "d20173b1b1dc2b82f1fbdd197eca253799f3fe035409e55998d80b5387a026f4",
+          "version": "1.2",
+          "source": "NASA/JPL Horizons API"
+        }
+      },
+      "start": {
+        "utc": "2024-03-20T00:00:00.000Z",
+        "sunTropical": 359.8713785,
+        "moonTropical": 122.2517701,
+        "lahiriTrue": 24.194150035583505
+      },
+      "end": {
+        "utc": "2024-03-21T00:00:00.000Z",
+        "sunTropical": 0.8646333,
+        "moonTropical": 134.286827,
+        "lahiriTrue": 24.19418358655694
+      },
+      "transitions": [
+        {
+          "kind": "pada",
+          "beforeIndex": 29,
+          "afterIndex": 30,
+          "at": "2024-03-20T03:51:08.350Z",
+          "left": {
+            "utc": "2024-03-20T03:51:00.000Z",
+            "sunTropical": 0.0307555,
+            "moonTropical": 124.192988,
+            "lahiriTrue": 24.194156260595843
+          },
+          "right": {
+            "utc": "2024-03-20T03:52:00.000Z",
+            "sunTropical": 0.0314454,
+            "moonTropical": 124.2013818,
+            "lahiriTrue": 24.194156286856845
+          }
+        },
+        {
+          "kind": "karana",
+          "beforeIndex": 20,
+          "afterIndex": 21,
+          "at": "2024-03-20T07:49:50.734Z",
+          "left": {
+            "utc": "2024-03-20T07:49:00.000Z",
+            "sunTropical": 0.1949451,
+            "moonTropical": 126.1884469,
+            "lahiriTrue": 24.19416234194902
+          },
+          "right": {
+            "utc": "2024-03-20T07:50:00.000Z",
+            "sunTropical": 0.1956349,
+            "moonTropical": 126.1968217,
+            "lahiriTrue": 24.194162366782656
+          }
+        },
+        {
+          "kind": "pada",
+          "beforeIndex": 30,
+          "afterIndex": 31,
+          "at": "2024-03-20T10:29:00.370Z",
+          "left": {
+            "utc": "2024-03-20T10:29:00.000Z",
+            "sunTropical": 0.305315,
+            "moonTropical": 127.5274479,
+            "lahiriTrue": 24.194166238383183
+          },
+          "right": {
+            "utc": "2024-03-20T10:30:00.000Z",
+            "sunTropical": 0.3060048,
+            "moonTropical": 127.5358106,
+            "lahiriTrue": 24.19416626224786
+          }
+        },
+        {
+          "kind": "yoga",
+          "beforeIndex": 5,
+          "afterIndex": 6,
+          "at": "2024-03-20T11:30:23.260Z",
+          "left": {
+            "utc": "2024-03-20T11:30:00.000Z",
+            "sunTropical": 0.3473915,
+            "moonTropical": 128.0374362,
+            "lahiriTrue": 24.19416768300412
+          },
+          "right": {
+            "utc": "2024-03-20T11:31:00.000Z",
+            "sunTropical": 0.3480813,
+            "moonTropical": 128.0457944,
+            "lahiriTrue": 24.19416770649786
+          }
+        },
+        {
+          "kind": "nakshatra",
+          "beforeIndex": 7,
+          "afterIndex": 8,
+          "at": "2024-03-20T17:08:17.199Z",
+          "left": {
+            "utc": "2024-03-20T17:08:00.000Z",
+            "sunTropical": 0.5805162,
+            "moonTropical": 130.8584528,
+            "lahiriTrue": 24.194175276278244
+          },
+          "right": {
+            "utc": "2024-03-20T17:09:00.000Z",
+            "sunTropical": 0.5812058,
+            "moonTropical": 130.8667873,
+            "lahiriTrue": 24.19417529770693
+          }
+        },
+        {
+          "kind": "pada",
+          "beforeIndex": 31,
+          "afterIndex": 32,
+          "at": "2024-03-20T17:08:17.199Z",
+          "left": {
+            "utc": "2024-03-20T17:08:00.000Z",
+            "sunTropical": 0.5805162,
+            "moonTropical": 130.8584528,
+            "lahiriTrue": 24.194175276278244
+          },
+          "right": {
+            "utc": "2024-03-20T17:09:00.000Z",
+            "sunTropical": 0.5812058,
+            "moonTropical": 130.8667873,
+            "lahiriTrue": 24.19417529770693
+          }
+        },
+        {
+          "kind": "tithi",
+          "beforeIndex": 10,
+          "afterIndex": 11,
+          "at": "2024-03-20T20:53:28.424Z",
+          "left": {
+            "utc": "2024-03-20T20:53:00.000Z",
+            "sunTropical": 0.7356836,
+            "moonTropical": 132.7320687,
+            "lahiriTrue": 24.194179943396538
+          },
+          "right": {
+            "utc": "2024-03-20T20:54:00.000Z",
+            "sunTropical": 0.7363732,
+            "moonTropical": 132.7403887,
+            "lahiriTrue": 24.194179963447354
+          }
+        },
+        {
+          "kind": "karana",
+          "beforeIndex": 21,
+          "afterIndex": 22,
+          "at": "2024-03-20T20:53:28.424Z",
+          "left": {
+            "utc": "2024-03-20T20:53:00.000Z",
+            "sunTropical": 0.7356836,
+            "moonTropical": 132.7320687,
+            "lahiriTrue": 24.194179943396538
+          },
+          "right": {
+            "utc": "2024-03-20T20:54:00.000Z",
+            "sunTropical": 0.7363732,
+            "moonTropical": 132.7403887,
+            "lahiriTrue": 24.194179963447354
+          }
+        },
+        {
+          "kind": "pada",
+          "beforeIndex": 32,
+          "afterIndex": 33,
+          "at": "2024-03-20T23:48:51.004Z",
+          "left": {
+            "utc": "2024-03-20T23:48:00.000Z",
+            "sunTropical": 0.8563588,
+            "moonTropical": 134.18712,
+            "lahiriTrue": 24.194183359185352
+          },
+          "right": {
+            "utc": "2024-03-20T23:49:00.000Z",
+            "sunTropical": 0.8570483,
+            "moonTropical": 134.1954292,
+            "lahiriTrue": 24.194183378166542
+          }
+        }
+      ]
+    },
+    {
+      "from": "2024-04-08T00:00:00.000Z",
+      "to": "2024-04-09T00:00:00.000Z",
+      "horizons": {
+        "sun": {
+          "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%2710%27&OBJ_DATA=%27NO%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&START_TIME=%272024-04-08+00%3A00%27&STOP_TIME=%272024-04-09+00%3A00%27&TIME_TYPE=%27UT%27&STEP_SIZE=%271+m%27&QUANTITIES=%2731%27&CSV_FORMAT=%27YES%27&EXTRA_PREC=%27YES%27&APPARENT=%27AIRLESS%27&CAL_FORMAT=%27CAL%27",
+          "responseSHA256": "487c0fb71d3e3768ead7d19790b74d4750a85a34506189d01c8479bf311284a0",
+          "version": "1.2",
+          "source": "NASA/JPL Horizons API"
+        },
+        "moon": {
+          "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%27301%27&OBJ_DATA=%27NO%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&START_TIME=%272024-04-08+00%3A00%27&STOP_TIME=%272024-04-09+00%3A00%27&TIME_TYPE=%27UT%27&STEP_SIZE=%271+m%27&QUANTITIES=%2731%27&CSV_FORMAT=%27YES%27&EXTRA_PREC=%27YES%27&APPARENT=%27AIRLESS%27&CAL_FORMAT=%27CAL%27",
+          "responseSHA256": "c321acf738a7958c235fc83cd0f14c84f653fb84556b7ee3e9724cb6986228c3",
+          "source": "NASA/JPL Horizons API",
+          "version": "1.2"
+        }
+      },
+      "start": {
+        "utc": "2024-04-08T00:00:00.000Z",
+        "sunTropical": 18.6487944,
+        "moonTropical": 7.904177,
+        "lahiriTrue": 24.194638160698243
+      },
+      "end": {
+        "utc": "2024-04-09T00:00:00.000Z",
+        "sunTropical": 19.6319184,
+        "moonTropical": 22.9272524,
+        "lahiriTrue": 24.194641410355697
+      },
+      "transitions": [
+        {
+          "kind": "nakshatra",
+          "beforeIndex": 25,
+          "afterIndex": 26,
+          "at": "2024-04-08T04:42:42.340Z",
+          "left": {
+            "utc": "2024-04-08T04:42:00.000Z",
+            "sunTropical": 18.8413656,
+            "moonTropical": 10.853926,
+            "lahiriTrue": 24.194638017650572
+          },
+          "right": {
+            "utc": "2024-04-08T04:43:00.000Z",
+            "sunTropical": 18.8420484,
+            "moonTropical": 10.8643821,
+            "lahiriTrue": 24.194638017628566
+          }
+        },
+        {
+          "kind": "pada",
+          "beforeIndex": 103,
+          "afterIndex": 104,
+          "at": "2024-04-08T04:42:42.340Z",
+          "left": {
+            "utc": "2024-04-08T04:42:00.000Z",
+            "sunTropical": 18.8413656,
+            "moonTropical": 10.853926,
+            "lahiriTrue": 24.194638017650572
+          },
+          "right": {
+            "utc": "2024-04-08T04:43:00.000Z",
+            "sunTropical": 18.8420484,
+            "moonTropical": 10.8643821,
+            "lahiriTrue": 24.194638017628566
+          }
+        },
+        {
+          "kind": "karana",
+          "beforeIndex": 58,
+          "afterIndex": 59,
+          "at": "2024-04-08T08:05:25.858Z",
+          "left": {
+            "utc": "2024-04-08T08:05:00.000Z",
+            "sunTropical": 18.9799767,
+            "moonTropical": 12.9757679,
+            "lahiriTrue": 24.194638095702842
+          },
+          "right": {
+            "utc": "2024-04-08T08:06:00.000Z",
+            "sunTropical": 18.9806595,
+            "moonTropical": 12.9862163,
+            "lahiriTrue": 24.194638096522688
+          }
+        },
+        {
+          "kind": "pada",
+          "beforeIndex": 104,
+          "afterIndex": 105,
+          "at": "2024-04-08T10:01:41.133Z",
+          "left": {
+            "utc": "2024-04-08T10:01:00.000Z",
+            "sunTropical": 19.0591782,
+            "moonTropical": 14.1874789,
+            "lahiriTrue": 24.19463822178176
+          },
+          "right": {
+            "utc": "2024-04-08T10:02:00.000Z",
+            "sunTropical": 19.059861,
+            "moonTropical": 14.197922,
+            "lahiriTrue": 24.19463822314817
+          }
+        },
+        {
+          "kind": "yoga",
+          "beforeIndex": 25,
+          "afterIndex": 26,
+          "at": "2024-04-08T12:43:40.919Z",
+          "left": {
+            "utc": "2024-04-08T12:43:00.000Z",
+            "sunTropical": 19.1697813,
+            "moonTropical": 15.8785806,
+            "lahiriTrue": 24.194638509573174
+          },
+          "right": {
+            "utc": "2024-04-08T12:44:00.000Z",
+            "sunTropical": 19.170464,
+            "moonTropical": 15.8890151,
+            "lahiriTrue": 24.194638511779562
+          }
+        },
+        {
+          "kind": "pada",
+          "beforeIndex": 105,
+          "afterIndex": 106,
+          "at": "2024-04-08T15:21:08.505Z",
+          "left": {
+            "utc": "2024-04-08T15:21:00.000Z",
+            "sunTropical": 19.2776469,
+            "moonTropical": 17.5264945,
+            "lahiriTrue": 24.194638927921986
+          },
+          "right": {
+            "utc": "2024-04-08T15:22:00.000Z",
+            "sunTropical": 19.2783295,
+            "moonTropical": 17.5369194,
+            "lahiriTrue": 24.194638931030124
+          }
+        },
+        {
+          "kind": "tithi",
+          "beforeIndex": 29,
+          "afterIndex": 0,
+          "at": "2024-04-08T18:20:51.544Z",
+          "left": {
+            "utc": "2024-04-08T18:20:00.000Z",
+            "sunTropical": 19.399841,
+            "moonTropical": 19.3914822,
+            "lahiriTrue": 24.19463958206778
+          },
+          "right": {
+            "utc": "2024-04-08T18:21:00.000Z",
+            "sunTropical": 19.4005236,
+            "moonTropical": 19.4018948,
+            "lahiriTrue": 24.194639586290805
+          }
+        },
+        {
+          "kind": "karana",
+          "beforeIndex": 59,
+          "afterIndex": 0,
+          "at": "2024-04-08T18:20:51.544Z",
+          "left": {
+            "utc": "2024-04-08T18:20:00.000Z",
+            "sunTropical": 19.399841,
+            "moonTropical": 19.3914822,
+            "lahiriTrue": 24.19463958206778
+          },
+          "right": {
+            "utc": "2024-04-08T18:21:00.000Z",
+            "sunTropical": 19.4005236,
+            "moonTropical": 19.4018948,
+            "lahiriTrue": 24.194639586290805
+          }
+        },
+        {
+          "kind": "pada",
+          "beforeIndex": 106,
+          "afterIndex": 107,
+          "at": "2024-04-08T20:41:13.782Z",
+          "left": {
+            "utc": "2024-04-08T20:41:00.000Z",
+            "sunTropical": 19.4960886,
+            "moonTropical": 20.8589176,
+            "lahiriTrue": 24.194640242925928
+          },
+          "right": {
+            "utc": "2024-04-08T20:42:00.000Z",
+            "sunTropical": 19.4967712,
+            "moonTropical": 20.8693194,
+            "lahiriTrue": 24.194640248092806
+          }
+        }
+      ]
+    },
+    {
+      "from": "2024-09-17T00:00:00.000Z",
+      "to": "2024-09-18T00:00:00.000Z",
+      "horizons": {
+        "sun": {
+          "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%2710%27&OBJ_DATA=%27NO%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&START_TIME=%272024-09-17+00%3A00%27&STOP_TIME=%272024-09-18+00%3A00%27&TIME_TYPE=%27UT%27&STEP_SIZE=%271+m%27&QUANTITIES=%2731%27&CSV_FORMAT=%27YES%27&EXTRA_PREC=%27YES%27&APPARENT=%27AIRLESS%27&CAL_FORMAT=%27CAL%27",
+          "responseSHA256": "41f7b231ad97d6a694dc0245ba8c63ca2e67fe031b7bd98c037e32c8031f2cba",
+          "source": "NASA/JPL Horizons API",
+          "version": "1.2"
+        },
+        "moon": {
+          "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%27301%27&OBJ_DATA=%27NO%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&START_TIME=%272024-09-17+00%3A00%27&STOP_TIME=%272024-09-18+00%3A00%27&TIME_TYPE=%27UT%27&STEP_SIZE=%271+m%27&QUANTITIES=%2731%27&CSV_FORMAT=%27YES%27&EXTRA_PREC=%27YES%27&APPARENT=%27AIRLESS%27&CAL_FORMAT=%27CAL%27",
+          "responseSHA256": "e2507814f719703feea56c8db995e27a79e7ef4dbe608bc76642c739da164ac0",
+          "version": "1.2",
+          "source": "NASA/JPL Horizons API"
+        }
+      },
+      "start": {
+        "utc": "2024-09-17T00:00:00.000Z",
+        "sunTropical": 174.5992121,
+        "moonTropical": 338.9363447,
+        "lahiriTrue": 24.201778172932986
+      },
+      "end": {
+        "utc": "2024-09-18T00:00:00.000Z",
+        "sunTropical": 175.5745092,
+        "moonTropical": 354.0503629,
+        "lahiriTrue": 24.201778769369728
+      },
+      "transitions": [
+        {
+          "kind": "yoga",
+          "beforeIndex": 7,
+          "afterIndex": 8,
+          "at": "2024-09-17T02:18:02.777Z",
+          "left": {
+            "utc": "2024-09-17T02:18:00.000Z",
+            "sunTropical": 174.6926564,
+            "moonTropical": 340.3770528,
+            "lahiriTrue": 24.201778749187426
+          },
+          "right": {
+            "utc": "2024-09-17T02:19:00.000Z",
+            "sunTropical": 174.6933336,
+            "moonTropical": 340.3875002,
+            "lahiriTrue": 24.20177875287136
+          }
+        },
+        {
+          "kind": "pada",
+          "beforeIndex": 94,
+          "afterIndex": 95,
+          "at": "2024-09-17T03:05:01.450Z",
+          "left": {
+            "utc": "2024-09-17T03:05:00.000Z",
+            "sunTropical": 174.7244827,
+            "moonTropical": 340.8681929,
+            "lahiriTrue": 24.201778914856877
+          },
+          "right": {
+            "utc": "2024-09-17T03:06:00.000Z",
+            "sunTropical": 174.7251599,
+            "moonTropical": 340.8786452,
+            "lahiriTrue": 24.201778918216796
+          }
+        },
+        {
+          "kind": "tithi",
+          "beforeIndex": 13,
+          "afterIndex": 14,
+          "at": "2024-09-17T06:14:43.009Z",
+          "left": {
+            "utc": "2024-09-17T06:14:00.000Z",
+            "sunTropical": 174.8524702,
+            "moonTropical": 342.8454499,
+            "lahiriTrue": 24.201779431609538
+          },
+          "right": {
+            "utc": "2024-09-17T06:15:00.000Z",
+            "sunTropical": 174.8531474,
+            "moonTropical": 342.8559208,
+            "lahiriTrue": 24.20177943372816
+          }
+        },
+        {
+          "kind": "karana",
+          "beforeIndex": 27,
+          "afterIndex": 28,
+          "at": "2024-09-17T06:14:43.009Z",
+          "left": {
+            "utc": "2024-09-17T06:14:00.000Z",
+            "sunTropical": 174.8524702,
+            "moonTropical": 342.8454499,
+            "lahiriTrue": 24.201779431609538
+          },
+          "right": {
+            "utc": "2024-09-17T06:15:00.000Z",
+            "sunTropical": 174.8531474,
+            "moonTropical": 342.8559208,
+            "lahiriTrue": 24.20177943372816
+          }
+        },
+        {
+          "kind": "nakshatra",
+          "beforeIndex": 23,
+          "afterIndex": 24,
+          "at": "2024-09-17T08:23:27.643Z",
+          "left": {
+            "utc": "2024-09-17T08:23:00.000Z",
+            "sunTropical": 174.9398317,
+            "moonTropical": 344.1969501,
+            "lahiriTrue": 24.201779653982047
+          },
+          "right": {
+            "utc": "2024-09-17T08:24:00.000Z",
+            "sunTropical": 174.9405089,
+            "moonTropical": 344.2074326,
+            "lahiriTrue": 24.201779655313338
+          }
+        },
+        {
+          "kind": "pada",
+          "beforeIndex": 95,
+          "afterIndex": 96,
+          "at": "2024-09-17T08:23:27.643Z",
+          "left": {
+            "utc": "2024-09-17T08:23:00.000Z",
+            "sunTropical": 174.9398317,
+            "moonTropical": 344.1969501,
+            "lahiriTrue": 24.201779653982047
+          },
+          "right": {
+            "utc": "2024-09-17T08:24:00.000Z",
+            "sunTropical": 174.9405089,
+            "moonTropical": 344.2074326,
+            "lahiriTrue": 24.201779655313338
+          }
+        },
+        {
+          "kind": "pada",
+          "beforeIndex": 96,
+          "afterIndex": 97,
+          "at": "2024-09-17T13:41:03.299Z",
+          "left": {
+            "utc": "2024-09-17T13:41:00.000Z",
+            "sunTropical": 175.155205,
+            "moonTropical": 347.5345353,
+            "lahiriTrue": 24.201779796629655
+          },
+          "right": {
+            "utc": "2024-09-17T13:42:00.000Z",
+            "sunTropical": 175.1558823,
+            "moonTropical": 347.545043,
+            "lahiriTrue": 24.201779796245344
+          }
+        },
+        {
+          "kind": "karana",
+          "beforeIndex": 28,
+          "afterIndex": 29,
+          "at": "2024-09-17T16:25:46.140Z",
+          "left": {
+            "utc": "2024-09-17T16:25:00.000Z",
+            "sunTropical": 175.2662877,
+            "moonTropical": 349.2587196,
+            "lahiriTrue": 24.20177967111122
+          },
+          "right": {
+            "utc": "2024-09-17T16:26:00.000Z",
+            "sunTropical": 175.266965,
+            "moonTropical": 349.2692383,
+            "lahiriTrue": 24.201779669976013
+          }
+        },
+        {
+          "kind": "pada",
+          "beforeIndex": 97,
+          "afterIndex": 98,
+          "at": "2024-09-17T18:57:58.106Z",
+          "left": {
+            "utc": "2024-09-17T18:57:00.000Z",
+            "sunTropical": 175.3692482,
+            "moonTropical": 350.8582508,
+            "lahiriTrue": 24.201779451451277
+          },
+          "right": {
+            "utc": "2024-09-17T18:58:00.000Z",
+            "sunTropical": 175.3699256,
+            "moonTropical": 350.8687784,
+            "lahiriTrue": 24.20177944970629
+          }
+        },
+        {
+          "kind": "yoga",
+          "beforeIndex": 8,
+          "afterIndex": 9,
+          "at": "2024-09-17T22:11:07.110Z",
+          "left": {
+            "utc": "2024-09-17T22:11:00.000Z",
+            "sunTropical": 175.5006668,
+            "moonTropical": 352.9015622,
+            "lahiriTrue": 24.201779047587415
+          },
+          "right": {
+            "utc": "2024-09-17T22:12:00.000Z",
+            "sunTropical": 175.5013443,
+            "moonTropical": 352.9120994,
+            "lahiriTrue": 24.201779045189248
+          }
+        }
+      ]
+    }
+  ],
+  "usno": {
+    "url": "https://aa.usno.navy.mil/api/moon/phases/date?date=2024-04-01&nump=4",
+    "responseSHA256": "6ae08b873b47395456f82a2d62d1d7748a96a8770eaba1f39b776a513bb0da15",
+    "apiVersion": "4.0.1",
+    "rows": [
+      {
+        "phase": "Last Quarter",
+        "at": "2024-04-02T03:15:00.000Z",
+        "karanaAfterIndex": 45
+      },
+      {
+        "phase": "New Moon",
+        "at": "2024-04-08T18:21:00.000Z",
+        "karanaAfterIndex": 0
+      },
+      {
+        "phase": "First Quarter",
+        "at": "2024-04-15T19:13:00.000Z",
+        "karanaAfterIndex": 15
+      },
+      {
+        "phase": "Full Moon",
+        "at": "2024-04-23T23:49:00.000Z",
+        "karanaAfterIndex": 30
+      }
+    ]
+  }
+}

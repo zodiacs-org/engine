@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "astronomy-engine": ["./node_modules/astronomy-engine/astronomy.js"]
+    }
+  }
+}
