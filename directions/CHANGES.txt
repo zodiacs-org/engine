@@ -1,0 +1,12 @@
+Establish directions M1 with isolated TypeScript/Vitest tooling, explicit sourced convention validation, traditional converse role-swap selection, and evidence rules.
+Implement directions M2 natal adapter with frozen engine geometry and clock provenance, audited RAMC recovery, explicit input and polar refusals, and integration evidence.
+Implement directions M3 pure sphere primitives with stable semi-arcs, explicit quadrant and boundary geometry, typed polar refusals, hand-derived evidence, and passing local checks.
+Implement directions M4 direct conjunction arcs to fixed angles with audited geometry, explicit converse refusals, stable wraparound arithmetic, independent spherical evidence, and passing local checks.
+Implement directions M5 direct zodiacal body conjunctions and aspect rays with explicit zero-both projection, audited Placidus semi-arc transfer, sourced converse refusals, independent spherical fixtures, and passing local checks.
+Implement directions M6 mundane Placidus body conjunctions and aspects with explicit branches, converse role exchange, audited retained-coordinate geometry, independent spherical evidence, numerical refusals, and passing local checks.
+Implement directions M7 sourced Ptolemy, Naibod and solar-equatorial timing keys with explicit year units, audited TT-day engine sampling, independent rational evidence, typed refusals, and passing local checks.
+Implement directions M8 pure hit and natal-selection APIs with audited geometry and timing, explicit scope refusals, immutable results, independent complete-hit evidence, and passing local checks.
+Implement directions M9 bounded pure scans with explicit contacts and motions, exact age endpoints, stable deduplication and ordering, atomic refusals, independent enumerated evidence, and passing local checks.
+Implement directions M10 hit and scan CLI with strict JSON transport, isolated local build, audited natal scans, documented examples and exit codes, independent subprocess evidence, and passing local checks.
+Implement directions M11 independent geometry, latitude and timing boundary evidence with reproducible residual reports, repair false meridian and zodiacal ray coincidences, and pass local checks while keeping engine integration separate.
+Complete directions M12 with API, CLI and source convention guides, runnable synthetic examples and separate engine technique comparisons, verified solar-sample handoff, passing local checks and npm exclusion evidence.
