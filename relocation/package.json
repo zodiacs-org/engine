@@ -1,0 +1,31 @@
+{
+  "name": "@zodiacs/relocation-workbench",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Isolated relocation and astrocartography workbench using the carried engine archive.",
+  "engines": { "node": ">=22.7.0" },
+  "bin": { "relocation": "bin/relocation.mjs" },
+  "scripts": {
+    "build": "tsc -p tsconfig.cli.json --pretty false",
+    "cli": "node bin/relocation.mjs",
+    "fixtures:build": "tsc -p tsconfig.fixtures.json --pretty false",
+    "fixtures:generate": "npm run fixtures:build && node scripts/generate-golden.mjs",
+    "fixtures:check": "npm run fixtures:build && node scripts/generate-golden.mjs --check",
+    "examples:build": "tsc -p tsconfig.examples.json --pretty false",
+    "example": "npm run examples:build && node scripts/run-example.mjs",
+    "project:check": "node scripts/check-project.mjs",
+    "verify": "npm run typecheck && npm test && npm run fixtures:check && npm run project:check",
+    "test": "npm run build && npm run fixtures:build && npm run examples:build && vitest run",
+    "typecheck": "tsc -p tsconfig.json --pretty false"
+  },
+  "dependencies": {
+    "@zodiacs/engine": "file:../artifacts/zodiacs-engine-1.0.0.tgz"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "typescript": "5.9.3",
+    "vitest": "2.1.9"
+  }
+}
