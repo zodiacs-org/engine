@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "status": "frozen-before-target-execution",
+  "purpose": "Finite research acceptance criteria; not universal physical error bounds or prior guarantees from the engine author.",
+  "ascTypical": { "maximumAbsoluteLatitudeDeg": 45, "maximumErrorArcsec": 0.5 },
+  "ascExtended": { "maximumAbsoluteLatitudeDeg": 66, "maximumErrorArcsec": 8 },
+  "mc": { "maximumErrorArcsec": 0.5 },
+  "minimumHorizonIntersectionNorm": 0.001,
+  "outOfScopeAsc": "Above 66 degrees absolute latitude or below the conditioning cutoff: diagnostic only, no pass/fail claim."
+}

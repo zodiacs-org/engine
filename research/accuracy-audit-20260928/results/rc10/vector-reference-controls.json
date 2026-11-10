@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "scope": "Offline independent-reference parser checks; no target engine exercised",
+  "passed": 11,
+  "total": 11,
+  "controls": [
+    {
+      "control": "valid raw Sun NONE",
+      "passed": true,
+      "rows": 21
+    },
+    {
+      "control": "topocentric Earth header",
+      "passed": true,
+      "expectedRejection": "BODY CENTER"
+    },
+    {
+      "control": "calendar convention changed",
+      "passed": true,
+      "expectedRejection": "Gregorian"
+    },
+    {
+      "control": "reference frame changed",
+      "passed": true,
+      "expectedRejection": "Unexpected vector convention"
+    },
+    {
+      "control": "units changed",
+      "passed": true,
+      "expectedRejection": "Unexpected vector convention"
+    },
+    {
+      "control": "correction changed",
+      "passed": true,
+      "expectedRejection": "Expected geometric"
+    },
+    {
+      "control": "TT labels replaced by TDB",
+      "passed": true,
+      "expectedRejection": "explicitly JDTT"
+    },
+    {
+      "control": "wrong target",
+      "passed": true,
+      "expectedRejection": "Wrong target"
+    },
+    {
+      "control": "epoch shifted one second",
+      "passed": true,
+      "expectedRejection": "TT epoch mismatch"
+    },
+    {
+      "control": "nonfinite coordinate",
+      "passed": true,
+      "expectedRejection": "Nonfinite"
+    },
+    {
+      "control": "coordinate range mismatch",
+      "passed": true,
+      "expectedRejection": "norm differs"
+    }
+  ]
+}

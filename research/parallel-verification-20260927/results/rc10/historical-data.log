@@ -1,0 +1,7 @@
+{
+  "status": "pass",
+  "rules": 5,
+  "sources": 6,
+  "transition_fixtures": 8,
+  "meaning": "Local consistency and conditional civil-clock boundary checks only; not independent proof of historical local observance."
+}

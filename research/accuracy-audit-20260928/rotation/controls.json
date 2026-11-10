@@ -1,0 +1,127 @@
+{
+  "tests_run": 10,
+  "passed": true,
+  "errors": 0,
+  "failures": 0,
+  "reference_epoch": {
+    "versions": {
+      "pyerfa": "2.0.1.5",
+      "erfa": "2.0.1",
+      "sofa_heritage": "20231011"
+    },
+    "tt_jd_parts": [
+      2451545.0,
+      9777.75
+    ],
+    "input_frame": "icrs",
+    "mean_obliquity_rad": 0.4090318137528526,
+    "nutation_longitude_rad": 4.035765114082598e-05,
+    "nutation_obliquity_rad": 4.02688065289441e-05,
+    "matrix_sense": "output_column_vector = rotation_matrix @ input_column_vector",
+    "units": "input Cartesian units preserved; spherical angles in degrees",
+    "frame_note": "ICRS axes are treated as GCRS aligned axes for this rotation only; no relativistic BCRS/GCRS positional transformation is performed",
+    "omitted_effects": [
+      "ephemeris",
+      "light time",
+      "stellar aberration",
+      "gravitational deflection",
+      "parallax",
+      "observer displacement",
+      "time-scale conversion"
+    ],
+    "matrices": {
+      "fixed_j2000_iau2006": {
+        "values": [
+          [
+            0.9999999999999941,
+            -7.078368960971556e-08,
+            8.056213977613186e-08
+          ],
+          [
+            3.2897004077419646e-08,
+            0.9174821299149584,
+            0.39777699944404793
+          ],
+          [
+            -1.0207044725484355e-07,
+            -0.39777699944404304,
+            0.9174821299149556
+          ]
+        ],
+        "determinant": 0.9999999999999997,
+        "max_orthogonality_residual": 3.3306690738754696e-16
+      },
+      "fixed_j2000_obliquity_84381_448": {
+        "values": [
+          [
+            0.9999999999999941,
+            -7.078368960971556e-08,
+            8.056213977613186e-08
+          ],
+          [
+            3.289698329365627e-08,
+            0.9174820489188922,
+            0.39777718626335296
+          ],
+          [
+            -1.0207045395338686e-07,
+            -0.39777718626334807,
+            0.9174820489188894
+          ]
+        ],
+        "determinant": 0.9999999999999998,
+        "max_orthogonality_residual": 3.3306690738754696e-16
+      },
+      "mean_of_date_iau2006": {
+        "values": [
+          [
+            0.9999786990269547,
+            -0.005986391194376483,
+            -0.002600886930879049
+          ],
+          [
+            0.0065269796258390885,
+            0.9174867578081859,
+            0.3977127704557495
+          ],
+          [
+            5.415090690525769e-06,
+            -0.39772127472275326,
+            0.9175062875008461
+          ]
+        ],
+        "determinant": 1.0000000000000004,
+        "max_orthogonality_residual": 4.440892098500626e-16
+      },
+      "true_of_date_iau2006_2000a": {
+        "values": [
+          [
+            0.9999784347990353,
+            -0.006023418799989245,
+            -0.002616937682000912
+          ],
+          [
+            0.006567336411996343,
+            0.9174865154643245,
+            0.39771266516617676
+          ],
+          [
+            5.4150906905259015e-06,
+            -0.39772127472275326,
+            0.9175062875008458
+          ]
+        ],
+        "determinant": 0.9999999999999998,
+        "max_orthogonality_residual": 2.220446049250313e-16
+      }
+    },
+    "primary_sources": [
+      "https://github.com/liberfa/erfa/blob/v2.0.1/src/ecm06.c",
+      "https://github.com/liberfa/erfa/blob/v2.0.1/src/pmat06.c",
+      "https://github.com/liberfa/erfa/blob/v2.0.1/src/pnm06a.c",
+      "https://github.com/liberfa/erfa/blob/v2.0.1/src/nut06a.c",
+      "https://github.com/liberfa/pyerfa/blob/v2.0.1.5/erfa/tests/test_ufunc.py"
+    ]
+  },
+  "scope": "Orientation-only controls; no engine positional accuracy claim."
+}

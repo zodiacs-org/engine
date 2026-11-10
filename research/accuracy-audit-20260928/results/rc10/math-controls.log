@@ -1,0 +1,17 @@
+✔ spherical separation preserves tiny angles without acos cancellation (1.00978ms)
+✔ antipodal separation is 180 degrees (0.128225ms)
+✔ circular seam is a small signed difference (0.106224ms)
+✔ separation is scale invariant (0.142199ms)
+✔ right angle and latitude preserve vector geometry (0.152142ms)
+✔ known rotation maps x onto y (0.678589ms)
+✔ zero and nonfinite vectors cannot produce apparent agreement (0.258126ms)
+✔ signed-coordinate budget closes through a longitude seam with cancellation (0.25189ms)
+✔ nonfinite or out-of-domain decomposition inputs are rejected before closure (0.423186ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 88.448783

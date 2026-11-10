@@ -1,0 +1,583 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "zodiacs.birth-window.experimental/0.1"
+    },
+    "requestId": {
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "finite-preview",
+        "certified"
+      ]
+    },
+    "time": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "utc-union"
+            },
+            "intervals": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "start": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+                  },
+                  "end": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+                  },
+                  "includeStart": {
+                    "type": "boolean"
+                  },
+                  "includeEnd": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "id",
+                  "start",
+                  "end",
+                  "includeStart",
+                  "includeEnd"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "kind",
+            "intervals"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "local-wall-window"
+            },
+            "start": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}$"
+            },
+            "end": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}$"
+            },
+            "includeStart": {
+              "type": "boolean"
+            },
+            "includeEnd": {
+              "type": "boolean"
+            },
+            "calendar": {
+              "enum": [
+                "proleptic-gregorian",
+                "julian",
+                "civil-cutover"
+              ]
+            },
+            "timeZone": {
+              "type": "string"
+            },
+            "clockDataset": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "version": {
+                  "type": "string"
+                },
+                "hash": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "version",
+                "hash"
+              ],
+              "additionalProperties": false
+            },
+            "foldPolicy": {
+              "enum": [
+                "all",
+                "earlier",
+                "later"
+              ]
+            },
+            "gapPolicy": {
+              "enum": [
+                "reject",
+                "exclude-and-report"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "start",
+            "end",
+            "includeStart",
+            "includeEnd",
+            "calendar",
+            "timeZone",
+            "clockDataset",
+            "foldPolicy",
+            "gapPolicy"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "location": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "point"
+            },
+            "latitude": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "longitude": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            }
+          },
+          "required": [
+            "kind",
+            "latitude",
+            "longitude"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "absent"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "box"
+            },
+            "south": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "north": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "west": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "east": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "crossesAntimeridian": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "kind",
+            "south",
+            "north",
+            "west",
+            "east",
+            "crossesAntimeridian"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "model": {
+      "type": "object",
+      "properties": {
+        "engineCommit": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            }
+          ]
+        },
+        "houseSystems": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "whole",
+              "placidus",
+              "porphyry",
+              "equal",
+              "equal-mc",
+              "vehlow",
+              "koch",
+              "regiomontanus",
+              "campanus",
+              "topocentric",
+              "alcabitius",
+              "morinus",
+              "meridian"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "deltaT": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "engine"
+                }
+              },
+              "required": [
+                "kind"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "pinned"
+                },
+                "seconds": {
+                  "type": "number",
+                  "minimum": -10000000000.0,
+                  "maximum": 10000000000.0
+                }
+              },
+              "required": [
+                "kind",
+                "seconds"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "interval"
+                },
+                "lowerSeconds": {
+                  "type": "number",
+                  "minimum": -10000000000.0,
+                  "maximum": 10000000000.0
+                },
+                "upperSeconds": {
+                  "type": "number",
+                  "minimum": -10000000000.0,
+                  "maximum": 10000000000.0
+                }
+              },
+              "required": [
+                "kind",
+                "lowerSeconds",
+                "upperSeconds"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "engineCommit",
+        "houseSystems",
+        "deltaT"
+      ],
+      "additionalProperties": false
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "const": "body-sign"
+              },
+              "body": {
+                "enum": [
+                  "Sun",
+                  "Moon",
+                  "Mercury",
+                  "Venus",
+                  "Mars",
+                  "Jupiter",
+                  "Saturn",
+                  "Uranus",
+                  "Neptune",
+                  "Pluto",
+                  "North Node",
+                  "South Node"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "body"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "const": "angle-sign"
+              },
+              "angle": {
+                "enum": [
+                  "asc",
+                  "mc",
+                  "dsc",
+                  "ic"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "angle"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "const": "body-house"
+              },
+              "body": {
+                "enum": [
+                  "Sun",
+                  "Moon",
+                  "Mercury",
+                  "Venus",
+                  "Mars",
+                  "Jupiter",
+                  "Saturn",
+                  "Uranus",
+                  "Neptune",
+                  "Pluto",
+                  "North Node",
+                  "South Node"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "body"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "kind": {
+                "const": "aspect-present"
+              },
+              "a": {
+                "enum": [
+                  "Sun",
+                  "Moon",
+                  "Mercury",
+                  "Venus",
+                  "Mars",
+                  "Jupiter",
+                  "Saturn",
+                  "Uranus",
+                  "Neptune",
+                  "Pluto",
+                  "North Node",
+                  "South Node"
+                ]
+              },
+              "b": {
+                "enum": [
+                  "Sun",
+                  "Moon",
+                  "Mercury",
+                  "Venus",
+                  "Mars",
+                  "Jupiter",
+                  "Saturn",
+                  "Uranus",
+                  "Neptune",
+                  "Pluto",
+                  "North Node",
+                  "South Node"
+                ]
+              },
+              "angleDegrees": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 180
+              },
+              "orbDegrees": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 180
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "a",
+              "b",
+              "angleDegrees",
+              "orbDegrees"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "minItems": 1
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "maxStepMs": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxEvaluations": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        }
+      },
+      "required": [
+        "maxStepMs",
+        "maxEvaluations"
+      ],
+      "additionalProperties": false
+    },
+    "prior": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "none"
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "uniform-utc-union"
+            },
+            "justification": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "justification"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "external-measure"
+            },
+            "measureId": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "sha256": {
+              "type": "string"
+            },
+            "justification": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "measureId",
+            "version",
+            "sha256",
+            "justification"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "mode",
+    "time",
+    "location",
+    "model",
+    "features",
+    "budget",
+    "prior"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zodiacs:birth-window:experimental:0.1:request",
+  "title": "Experimental birth-window request; cross-field validation is mandatory"
+}

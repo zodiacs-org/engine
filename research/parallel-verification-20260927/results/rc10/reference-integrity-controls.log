@@ -1,0 +1,23 @@
+✔ complete fixture is linked to raw independent response (1.964899ms)
+✔ missing case cannot produce empty pass (0.578451ms)
+✔ modified processed expectation cannot pass raw integrity (0.550789ms)
+✔ wrong time scale is refused (0.194994ms)
+✔ modified raw response is refused (0.213852ms)
+✔ moved epoch is refused even with internally updated raw digest (0.343368ms)
+✔ changed case policy is refused (0.190687ms)
+✔ longitude seam comparison is circular (0.220993ms)
+✔ raw response body overrides claimed request metadata (0.714756ms)
+✔ raw response must be centered on Earth (0.327904ms)
+✔ an Earth surface observation is not a geocentric reference (0.271649ms)
+✔ raw TT header is checked independently of claimed request scale (0.433352ms)
+✔ raw calendar header is checked independently of request metadata (0.20576ms)
+✔ swapped reference coordinate columns are rejected (0.216206ms)
+✔ a missing source-header field is rejected (0.257828ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 106.338295

@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-09-28T07:25:40.943Z",
+  "planSha256": "bf7e631657e2a10962af68a26e33d293c182a19ebc95cd842eb9befc533d81fe",
+  "expectedPlanSha256": "bf7e631657e2a10962af68a26e33d293c182a19ebc95cd842eb9befc533d81fe",
+  "status": "blocked",
+  "adapterReviewRequired": true,
+  "adapterQualified": false,
+  "releaseAuthorized": false,
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "architecture": "x64",
+    "osRelease": "6.18.44",
+    "cpuModel": "AMD EPYC 9V74 80-Core Processor"
+  },
+  "gates": {
+    "integrity": {
+      "status": "fail",
+      "stage": "artifact-preflight"
+    }
+  },
+  "limitations": [
+    "One arcsecond is a research reference-residual target, not an existing production release gate or a certified physical error bound.",
+    "Reference correction, frame and physical-center differences remain explicit; matching declaration fields does not authenticate implementation semantics.",
+    "Existing cases are public regression data. A new unseen candidate does not turn them into a blind holdout.",
+    "Node timings and installed file bytes are diagnostic budgets, not browser performance, download size or peak-RSS measurements.",
+    "The child process bounds wall time, V8 old-space and transport; it does not cap total RSS and is not an OS security sandbox. Only trusted local candidate code may be executed.",
+    "Every outcome requires separate adapter and release review. No Verify trust inventory is changed.",
+    "These are previously evaluated regression epochs, not a new blind holdout or evidence of all-epoch accuracy.",
+    "JPL LT+S is not identical to the engine first-order approximation that retards both heliocentric Earth and target; correction mismatch can remain.",
+    "Strict ICRF/ICRS plus ERFA bias/precession/nutation differs from approximate engine EQJ/FK5, precession and truncated nutation conventions.",
+    "ICRS axes are treated as aligned GCRS directions for rotation; no relativistic BCRS/GCRS positional transformation is added.",
+    "Mars through Pluto are planetary-system barycenters, not guaranteed physical planet centers; optional body-center controls are not substituted.",
+    "Moon uses geometric NONE to match the audited geometric Moon treatment; this is not an apparent Moon reference.",
+    "Synthetic UT1+69s isolates the existing benchmark clock; it does not verify historical UTC, future Earth orientation or DeltaT.",
+    "Hashes authenticate committed bytes within this toolchain, not source authority, publisher identity or astronomical truth.",
+    "Finite position residuals do not establish event-time errors, interval invariance, certified bounds or Swiss Ephemeris equivalence.",
+    "Blocked runs cannot qualify a candidate, even if partial output contains valid rows."
+  ],
+  "checklist": [],
+  "protocol": {
+    "id": "zodiacs-candidate-qualification-20260928-v1",
+    "digest": "c817cd540a945ac0334176a0f8570881bd0d46bebd3156a2f9822286060b3584",
+    "policyStatus": "research-defaults-not-a-production-release-policy",
+    "thresholds": {
+      "referenceCoordinateTargetArcsec": 1,
+      "perCoordinateRegressionAllowanceArcsec": 0.1,
+      "maxChartP95Ms": 100,
+      "maxChartP95GrowthFactor": 3,
+      "chartRatioFloorMs": 1,
+      "maxInstalledBytes": 67108864,
+      "maxInstalledGrowthFactor": 3,
+      "installedRatioFloorBytes": 1048576
+    },
+    "executionLimits": {
+      "timeoutMs": 30000,
+      "memoryMb": 256,
+      "maxInputBytes": 1048576,
+      "maxOutputBytes": 2097152,
+      "maxStderrBytes": 65536
+    }
+  },
+  "reference": {
+    "digest": "sha256:b618ea0a59230a851e242bb3998160e6dec4161d31acaba8c72e92be77864132",
+    "provenance": {
+      "datasetRole": "known-regression-data-not-a-blind-holdout",
+      "referenceContractSha256": "3ac98b0de7cc74005720a30555e7348612f7ec4c78c63fc5b5aa7257f723e4f8",
+      "sourceArtifact": "research/accuracy-audit-20260928",
+      "inputFiles": {
+        "reference/cases.json": "464a443edce57537947a0200435044703416c956cb0d9509240721a59e17dbe2",
+        "reference/protocol.json": "a337cc4616b14434d57ff2954ea177f328a0db3f3dc2a59b0ea84104eb7d9dda",
+        "reference/snapshot/raw/jupiter-lts.json": "3603e72e9067e927f6ba4a93999de8acb79e21f1535f8604670788af5da9f55e",
+        "reference/snapshot/raw/jupiter-lts.receipt.json": "fa87134e38b92d09bbf938af6e81ee9c6163f3d524ca3fe8f54f4b0b00b664b5",
+        "reference/snapshot/raw/mars-lts.json": "276e4c6670ab9e4da015fe7689340712ca0c4526f284daf542fa12f694c04751",
+        "reference/snapshot/raw/mars-lts.receipt.json": "6d788f2cd82a0978fd3182c2ff8e4f106ae474c83591949e62e1758ffbc39b98",
+        "reference/snapshot/raw/mercury-lts.json": "e661d4b52b3df83c0c77a9eefcd320010f985780b4a2c04838772d8c34cf1a9b",
+        "reference/snapshot/raw/mercury-lts.receipt.json": "9dd237fbf8217177998f4c464e80154699502bb2803d202635c43664f7995606",
+        "reference/snapshot/raw/moon-none.json": "bfd7ea56b01dd820b27156c808babc862030db44efced1e6b75234e89372dac8",
+        "reference/snapshot/raw/moon-none.receipt.json": "81f35232554bfca431219a63a9372751a416e8b59e73b210b32cc31ed90921fe",
+        "reference/snapshot/raw/neptune-lts.json": "21abb27708fff1685df8670645ce3fa09c5acdba0055f46f3b0c557ac07fd06b",
+        "reference/snapshot/raw/neptune-lts.receipt.json": "8662608343e18527ba0faa47f9436bc4fceefc1594485dda6c1a4c56126e167f",
+        "reference/snapshot/raw/pluto-lts.json": "5850c9346a0da2567713810e0e0169ba8fbfa87d003275235a3e781691fc9191",
+        "reference/snapshot/raw/pluto-lts.receipt.json": "78df748c5bfb4705348243361bd15124f198ec175666657d094b6e3ecb6faf3c",
+        "reference/snapshot/raw/saturn-lts.json": "1c773ca226feaa7e9e55c52323f952425c6ccd915cde86e84a7fc2347ca08b35",
+        "reference/snapshot/raw/saturn-lts.receipt.json": "b1eb138661cc400e5f60a4f0939b2449098c53c16f055a0fbc3e372ac439ed27",
+        "reference/snapshot/raw/sun-lts.json": "30248c94fe5554fbdb5ed9ad75489fd12ddfe6314580ce145767eb66ddd2d7b4",
+        "reference/snapshot/raw/sun-lts.receipt.json": "e28826371b2d5d7adea229671f46214c73650e63a6f6b787174ceb09908dc35b",
+        "reference/snapshot/raw/uranus-lts.json": "e6848aca34a44277794c4378674e3afecd61c2e49adb0013e514dcc7d326fdd4",
+        "reference/snapshot/raw/uranus-lts.receipt.json": "c4232b7deff0db2aa2b25988965ad17b1be3abb18a41f6ee2b75ca50189512a8",
+        "reference/snapshot/raw/venus-lts.json": "838929b3430f5d07a7700e92946c8b21b434f44febeb113f12626f95ec796048",
+        "reference/snapshot/raw/venus-lts.receipt.json": "70edb159b1c497332d54ace596d1c693f2e5f87b9e2aa08963531b1022ef28c3",
+        "reference/snapshot/vectors.json": "5a4f9d6c1c5a08a81864e3e81366f6c27754817c841e55755666410e83e80c84",
+        "rotation/controls.json": "862a9f3fba6689c91df2b4b37e55b1153e178588381d0394f8d451953fa34c06",
+        "rotation/freeze.json": "f1c001884c891f2dff2a0bb77a2b3192764a30382934199663f03f6d13d63be8",
+        "rotation/rotation-matrices.json": "ebad7cf8e8288c3b3114c0169a5e4f3b54c6a0f294a986306220a9e03afa3360"
+      },
+      "sources": [
+        {
+          "tableId": "sun-lts",
+          "command": "10",
+          "correction": "LT+S",
+          "targetHeader": "Sun (10)                        {source: DE441}",
+          "rawSha256": "30248c94fe5554fbdb5ed9ad75489fd12ddfe6314580ce145767eb66ddd2d7b4",
+          "receiptSha256": "e28826371b2d5d7adea229671f46214c73650e63a6f6b787174ceb09908dc35b",
+          "requestStartedAtUtc": "2026-09-27T17:54:01.535770+00:00",
+          "retrievedAtUtc": "2026-09-27T17:54:10.341429+00:00",
+          "apiSignature": {
+            "version": "1.2",
+            "source": "NASA/JPL Horizons API"
+          }
+        },
+        {
+          "tableId": "moon-none",
+          "command": "301",
+          "correction": "NONE",
+          "targetHeader": "Moon (301)                      {source: DE441}",
+          "rawSha256": "bfd7ea56b01dd820b27156c808babc862030db44efced1e6b75234e89372dac8",
+          "receiptSha256": "81f35232554bfca431219a63a9372751a416e8b59e73b210b32cc31ed90921fe",
+          "requestStartedAtUtc": "2026-09-27T17:52:39.884230+00:00",
+          "retrievedAtUtc": "2026-09-27T17:52:49.880972+00:00",
+          "apiSignature": {
+            "version": "1.2",
+            "source": "NASA/JPL Horizons API"
+          }
+        },
+        {
+          "tableId": "mercury-lts",
+          "command": "199",
+          "correction": "LT+S",
+          "targetHeader": "Mercury (199)                   {source: DE441}",
+          "rawSha256": "e661d4b52b3df83c0c77a9eefcd320010f985780b4a2c04838772d8c34cf1a9b",
+          "receiptSha256": "9dd237fbf8217177998f4c464e80154699502bb2803d202635c43664f7995606",
+          "requestStartedAtUtc": "2026-09-27T17:54:19.446652+00:00",
+          "retrievedAtUtc": "2026-09-27T17:54:28.423983+00:00",
+          "apiSignature": {
+            "version": "1.2",
+            "source": "NASA/JPL Horizons API"
+          }
+        },
+        {
+          "tableId": "venus-lts",
+          "command": "299",
+          "correction": "LT+S",
+          "targetHeader": "Venus (299)                     {source: DE441}",
+          "rawSha256": "838929b3430f5d07a7700e92946c8b21b434f44febeb113f12626f95ec796048",
+          "receiptSha256": "70edb159b1c497332d54ace596d1c693f2e5f87b9e2aa08963531b1022ef28c3",
+          "requestStartedAtUtc": "2026-09-27T17:54:28.425509+00:00",
+          "retrievedAtUtc": "2026-09-27T17:54:37.331493+00:00",
+          "apiSignature": {
+            "source": "NASA/JPL Horizons API",
+            "version": "1.2"
+          }
+        },
+        {
+          "tableId": "mars-lts",
+          "command": "4",
+          "correction": "LT+S",
+          "targetHeader": "Mars Barycenter (4)             {source: DE441}",
+          "rawSha256": "276e4c6670ab9e4da015fe7689340712ca0c4526f284daf542fa12f694c04751",
+          "receiptSha256": "6d788f2cd82a0978fd3182c2ff8e4f106ae474c83591949e62e1758ffbc39b98",
+          "requestStartedAtUtc": "2026-09-27T17:54:37.332768+00:00",
+          "retrievedAtUtc": "2026-09-27T17:54:46.350339+00:00",
+          "apiSignature": {
+            "version": "1.2",
+            "source": "NASA/JPL Horizons API"
+          }
+        },
+        {
+          "tableId": "jupiter-lts",
+          "command": "5",
+          "correction": "LT+S",
+          "targetHeader": "Jupiter Barycenter (5)          {source: DE441}",
+          "rawSha256": "3603e72e9067e927f6ba4a93999de8acb79e21f1535f8604670788af5da9f55e",
+          "receiptSha256": "fa87134e38b92d09bbf938af6e81ee9c6163f3d524ca3fe8f54f4b0b00b664b5",
+          "requestStartedAtUtc": "2026-09-27T17:54:46.351742+00:00",
+          "retrievedAtUtc": "2026-09-27T17:54:54.971863+00:00",
+          "apiSignature": {
+            "source": "NASA/JPL Horizons API",
+            "version": "1.2"
+          }
+        },
+        {
+          "tableId": "saturn-lts",
+          "command": "6",
+          "correction": "LT+S",
+          "targetHeader": "Saturn Barycenter (6)           {source: DE441}",
+          "rawSha256": "1c773ca226feaa7e9e55c52323f952425c6ccd915cde86e84a7fc2347ca08b35",
+          "receiptSha256": "b1eb138661cc400e5f60a4f0939b2449098c53c16f055a0fbc3e372ac439ed27",
+          "requestStartedAtUtc": "2026-09-27T17:54:54.973178+00:00",
+          "retrievedAtUtc": "2026-09-27T17:55:05.106366+00:00",
+          "apiSignature": {
+            "source": "NASA/JPL Horizons API",
+            "version": "1.2"
+          }
+        },
+        {
+          "tableId": "uranus-lts",
+          "command": "7",
+          "correction": "LT+S",
+          "targetHeader": "Uranus Barycenter (7)           {source: DE441}",
+          "rawSha256": "e6848aca34a44277794c4378674e3afecd61c2e49adb0013e514dcc7d326fdd4",
+          "receiptSha256": "c4232b7deff0db2aa2b25988965ad17b1be3abb18a41f6ee2b75ca50189512a8",
+          "requestStartedAtUtc": "2026-09-27T17:55:05.107927+00:00",
+          "retrievedAtUtc": "2026-09-27T17:55:13.784254+00:00",
+          "apiSignature": {
+            "source": "NASA/JPL Horizons API",
+            "version": "1.2"
+          }
+        },
+        {
+          "tableId": "neptune-lts",
+          "command": "8",
+          "correction": "LT+S",
+          "targetHeader": "Neptune Barycenter (8)          {source: DE441}",
+          "rawSha256": "21abb27708fff1685df8670645ce3fa09c5acdba0055f46f3b0c557ac07fd06b",
+          "receiptSha256": "8662608343e18527ba0faa47f9436bc4fceefc1594485dda6c1a4c56126e167f",
+          "requestStartedAtUtc": "2026-09-27T17:55:13.785591+00:00",
+          "retrievedAtUtc": "2026-09-27T17:55:22.604039+00:00",
+          "apiSignature": {
+            "source": "NASA/JPL Horizons API",
+            "version": "1.2"
+          }
+        },
+        {
+          "tableId": "pluto-lts",
+          "command": "9",
+          "correction": "LT+S",
+          "targetHeader": "Pluto Barycenter (9)            {source: DE441}",
+          "rawSha256": "5850c9346a0da2567713810e0e0169ba8fbfa87d003275235a3e781691fc9191",
+          "receiptSha256": "78df748c5bfb4705348243361bd15124f198ec175666657d094b6e3ecb6faf3c",
+          "requestStartedAtUtc": "2026-09-27T17:55:22.605321+00:00",
+          "retrievedAtUtc": "2026-09-27T17:55:31.159950+00:00",
+          "apiSignature": {
+            "version": "1.2",
+            "source": "NASA/JPL Horizons API"
+          }
+        }
+      ],
+      "rotationModel": {
+        "pyerfa": "2.0.1.5",
+        "erfa": "2.0.1",
+        "sofa_heritage": "20231011"
+      },
+      "normalization": "Raw JPL CSV reconstructed and cross-checked against frozen vector manifest, then independently rotated; no target values used.",
+      "frozenBeforeNewCandidateEvaluation": true
+    },
+    "conventions": {
+      "origin": "Earth geocenter (500@399); geocentric vectors",
+      "inputFrame": "JPL ICRF equatorial vectors, treated as ICRS/GCRS-aligned directions for the orientation transform",
+      "outputFrame": "true tropical ecliptic/equinox of date via ERFA IAU2006/2000A with frame bias (trueOfDateICRS)",
+      "observationClock": "ISO Z labels are synthetic UT1; TT=encoded UT1+69 seconds at every epoch; not physical historical/future UTC",
+      "requestedReferenceTimeScale": "TT; returned raw tables must explicitly identify JDTT; Horizons handles TT/TDB internally",
+      "corrections": "Moon: instantaneous geometric NONE; all other selected bodies: JPL LT+S light-time and stellar aberration; no gravitational light bending",
+      "targetCenters": "Sun/Moon/Mercury/Venus body centers; Mars through Pluto planetary-system barycenters",
+      "angleUnits": "degrees, longitude[0,360), latitude[-90,90]",
+      "comparisonMeaning": "reference-normalized residuals under stated conventions; not a causal decomposition or proof of physical accuracy"
+    },
+    "expectedRows": 210
+  },
+  "blocker": {
+    "stage": "artifact-preflight",
+    "message": "Candidate installation changed after plan creation"
+  },
+  "completedAt": "2026-09-28T07:25:40.976Z",
+  "reportDigest": "9d1b549fe8bc159985e50a5a2c18c16800de10f991a657a4f0e7d510772caa32"
+}

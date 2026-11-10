@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Finite fresh diagnostic comparisons; not a certified error bound or Swiss parity claim",
+  "fixedBeforeTargetEvaluation": true,
+  "deltaTSeconds": 69,
+  "referenceEpochToleranceMilliseconds": 1,
+  "positionDiagnosticToleranceArcsec": 60,
+  "aspirationalToleranceArcsec": 1,
+  "referenceConvention": "JPL Horizons observer quantity31: IAU76/80 apparent geocentric ecliptic of date, TT epochs",
+  "knownDifferences": [
+    "Engine has no solar gravitational light deflection; JPL observer apparent quantities do.",
+    "Engine Moon geometry carries neither light-time nor aberration correction; JPL observer quantities do.",
+    "JPL IAU76/80 ecliptic reduction differs from the engine rotation model.",
+    "Mars through Pluto references below are planetary-system barycenters, not guaranteed physical body centers.",
+    "UTC-looking input labels are synthetic UT1 with TT minus UT1 pinned to69 seconds; they are not claims of historical physical UTC."
+  ],
+  "bodies": [
+    {"body": "Sun", "command": "10", "referenceTarget": "body-center"},
+    {"body": "Moon", "command": "301", "referenceTarget": "body-center"},
+    {"body": "Mercury", "command": "199", "referenceTarget": "body-center"},
+    {"body": "Venus", "command": "299", "referenceTarget": "body-center"},
+    {"body": "Mars", "command": "4", "referenceTarget": "system-barycenter"},
+    {"body": "Jupiter", "command": "5", "referenceTarget": "system-barycenter"},
+    {"body": "Saturn", "command": "6", "referenceTarget": "system-barycenter"},
+    {"body": "Uranus", "command": "7", "referenceTarget": "system-barycenter"},
+    {"body": "Neptune", "command": "8", "referenceTarget": "system-barycenter"},
+    {"body": "Pluto", "command": "9", "referenceTarget": "system-barycenter"}
+  ],
+  "instants": [
+    "1801-02-03T04:05:06.000Z", "1827-08-19T13:21:00.000Z",
+    "1853-11-07T23:10:00.000Z", "1888-04-29T06:12:00.000Z",
+    "1901-12-13T20:17:00.000Z", "1929-10-24T12:00:00.000Z",
+    "1957-10-04T19:28:00.000Z", "1972-06-30T15:16:17.000Z",
+    "1993-02-09T01:23:45.000Z", "2000-01-01T12:00:00.000Z",
+    "2012-06-05T22:10:00.000Z", "2024-04-08T18:17:00.000Z",
+    "2026-09-27T14:08:00.000Z", "2026-12-21T03:04:05.000Z",
+    "2033-07-17T09:11:00.000Z", "2051-03-14T15:09:26.000Z",
+    "2078-09-22T21:37:00.000Z", "2100-02-28T23:59:00.000Z",
+    "2137-05-11T10:20:30.000Z", "2164-01-30T07:08:09.000Z",
+    "2198-11-23T17:19:00.000Z"
+  ]
+}

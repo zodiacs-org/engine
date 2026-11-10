@@ -1,0 +1,1598 @@
+{
+  "assurance": "sampled-only",
+  "boundAssumptions": [],
+  "boundConsistency": {
+    "comparisons": 0,
+    "maxComparisons": 100000,
+    "uncheckedBoundIds": []
+  },
+  "boundViolations": [],
+  "budget": {
+    "callsUsed": 33,
+    "exhausted": true,
+    "maxSamples": 33,
+    "resolutionMs": 60000
+  },
+  "complete": false,
+  "features": [
+    {
+      "body": "Sun",
+      "id": "sun-sign",
+      "kind": "sign"
+    },
+    {
+      "body": "Moon",
+      "id": "moon-sign",
+      "kind": "sign"
+    },
+    {
+      "body": "Ascendant",
+      "id": "ascendant-sign",
+      "kind": "sign"
+    },
+    {
+      "a": "Sun",
+      "angle": 90,
+      "b": "Moon",
+      "id": "sun-moon-square",
+      "kind": "aspect",
+      "orb": 5
+    }
+  ],
+  "intervals": [
+    {
+      "from": "2000-01-01T12:00:00.000Z",
+      "to": "2000-01-01T12:30:00.000Z"
+    }
+  ],
+  "limits": {
+    "domain": "continuous model time over closed UTC intervals; sampling callback uses integer epoch milliseconds",
+    "maxBoundComparisons": 100000,
+    "maxFeatures": 64,
+    "maxIntervals": 32,
+    "maxSamples": 100000,
+    "maxSpanMs": 604800000
+  },
+  "model": {
+    "artifact": {
+      "digest": "sha256:2262b1e85cca39847d62b31ff9d0768407b183d5a498ef8adf78fa17500c3f74",
+      "scope": "sha256 manifest of all installed engine JS/MJS/CJS excluding node_modules, engine package.json, and every file of the resolved astronomy-engine 2.1.19 package; source ancestry and physical accuracy not authenticated"
+    },
+    "conventions": {
+      "aspectOrbPolicy": "longitude-only;10-physical-bodies;inclusive-orb;normal/luminary-degrees:conjunction8/10,sextile4/5,square7/8,trine7/8,opposition8/10;no-node-or-angle-aspects",
+      "corrections": "non-Moon:light-time-and-first-order-aberration;no-gravitational-deflection;Moon:no-light-time-or-aberration;nodes:instantaneous-geocentric-lunar-orbit-plane",
+      "deltaT": {
+        "model": "zodiacs-deltat/1",
+        "policy": "request-pin-or-engine-model",
+        "tableDigest": "6371988c510a1c6c",
+        "tableVersion": "2026-09-24"
+      },
+      "frame": "true-ecliptic-of-date;astronomy-engine-EQJ-precession-five-term-nutation-true-obliquity",
+      "origin": "geocentric",
+      "timeScale": "proleptic-gregorian-UTC-label-read-as-UT1;TT=UT1+deltaT;no-explicit-leap-second-or-TT-TDB-conversion",
+      "zodiac": "tropical"
+    },
+    "engine": "@zodiacs/engine",
+    "engineVersion": "0.1.1-rc.10",
+    "observer": {
+      "houseSystem": "whole",
+      "latitude": 51.5,
+      "longitude": 0,
+      "timeKnowledge": "exact"
+    }
+  },
+  "results": [
+    {
+      "boundIds": [],
+      "cells": [
+        {
+          "anchorUtc": "2000-01-01T12:00:28.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:00:00.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:00:56.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:01:24.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:00:56.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:01:52.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:02:20.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:01:52.500Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:02:48.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:03:16.875Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:02:48.750Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:03:45.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:13.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:03:45.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:04:41.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:09.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:04:41.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:05:37.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:06:05.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:05:37.500Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:06:33.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:07:01.875Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:06:33.750Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:07:30.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:07:58.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:07:30.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:08:26.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:08:54.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:08:26.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:09:22.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:09:50.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:09:22.500Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:10:18.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:10:46.875Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:10:18.750Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:11:15.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:11:43.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:11:15.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:12:11.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:12:39.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:12:11.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:13:07.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:13:35.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:13:07.500Z",
+          "reason": "sample-budget",
+          "to": "2000-01-01T12:14:03.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:14:03.750Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:14:03.750Z",
+          "reason": "sample-budget",
+          "to": "2000-01-01T12:15:00.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:15:00.000Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:15:00.000Z",
+          "reason": "sample-budget",
+          "to": "2000-01-01T12:30:00.000Z",
+          "value": null
+        }
+      ],
+      "coverage": "sampled",
+      "featureId": "sun-sign",
+      "status": "unresolved",
+      "unresolvedRanges": [
+        {
+          "from": "2000-01-01T12:00:00.000Z",
+          "to": "2000-01-01T12:30:00.000Z"
+        }
+      ],
+      "values": [
+        "Capricorn"
+      ],
+      "witnesses": [
+        {
+          "utc": "2000-01-01T12:00:00.000Z",
+          "value": "Capricorn"
+        }
+      ]
+    },
+    {
+      "boundIds": [],
+      "cells": [
+        {
+          "anchorUtc": "2000-01-01T12:00:28.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:00:00.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:00:56.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:01:24.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:00:56.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:01:52.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:02:20.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:01:52.500Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:02:48.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:03:16.875Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:02:48.750Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:03:45.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:13.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:03:45.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:04:41.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:09.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:04:41.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:05:37.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:06:05.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:05:37.500Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:06:33.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:07:01.875Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:06:33.750Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:07:30.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:07:58.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:07:30.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:08:26.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:08:54.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:08:26.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:09:22.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:09:50.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:09:22.500Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:10:18.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:10:46.875Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:10:18.750Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:11:15.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:11:43.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:11:15.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:12:11.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:12:39.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:12:11.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:13:07.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:13:35.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:13:07.500Z",
+          "reason": "sample-budget",
+          "to": "2000-01-01T12:14:03.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:14:03.750Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:14:03.750Z",
+          "reason": "sample-budget",
+          "to": "2000-01-01T12:15:00.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:15:00.000Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:15:00.000Z",
+          "reason": "sample-budget",
+          "to": "2000-01-01T12:30:00.000Z",
+          "value": null
+        }
+      ],
+      "coverage": "sampled",
+      "featureId": "moon-sign",
+      "status": "unresolved",
+      "unresolvedRanges": [
+        {
+          "from": "2000-01-01T12:00:00.000Z",
+          "to": "2000-01-01T12:30:00.000Z"
+        }
+      ],
+      "values": [
+        "Scorpio"
+      ],
+      "witnesses": [
+        {
+          "utc": "2000-01-01T12:00:00.000Z",
+          "value": "Scorpio"
+        }
+      ]
+    },
+    {
+      "boundIds": [],
+      "cells": [
+        {
+          "anchorUtc": "2000-01-01T12:00:28.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:00:00.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:00:56.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:01:24.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:00:56.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:01:52.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:02:20.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:01:52.500Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:02:48.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:03:16.875Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:02:48.750Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:03:45.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:13.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:03:45.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:04:41.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:09.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:04:41.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:05:37.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:06:05.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:05:37.500Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:06:33.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:07:01.875Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:06:33.750Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:07:30.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:07:58.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:07:30.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:08:26.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:08:54.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:08:26.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:09:22.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:09:50.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:09:22.500Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:10:18.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:10:46.875Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:10:18.750Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:11:15.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:11:43.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:11:15.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:12:11.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:12:39.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:12:11.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:13:07.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:13:35.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:13:07.500Z",
+          "reason": "sample-budget",
+          "to": "2000-01-01T12:14:03.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:14:03.750Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:14:03.750Z",
+          "reason": "sample-budget",
+          "to": "2000-01-01T12:15:00.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:15:00.000Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:15:00.000Z",
+          "reason": "sample-budget",
+          "to": "2000-01-01T12:30:00.000Z",
+          "value": null
+        }
+      ],
+      "coverage": "sampled",
+      "featureId": "ascendant-sign",
+      "status": "variable",
+      "unresolvedRanges": [
+        {
+          "from": "2000-01-01T12:00:00.000Z",
+          "to": "2000-01-01T12:30:00.000Z"
+        }
+      ],
+      "values": [
+        "Aries",
+        "Taurus"
+      ],
+      "witnesses": [
+        {
+          "utc": "2000-01-01T12:00:00.000Z",
+          "value": "Aries"
+        },
+        {
+          "utc": "2000-01-01T12:10:46.875Z",
+          "value": "Taurus"
+        }
+      ]
+    },
+    {
+      "boundIds": [],
+      "cells": [
+        {
+          "anchorUtc": "2000-01-01T12:00:28.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:00:00.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:00:56.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:01:24.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:00:56.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:01:52.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:02:20.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:01:52.500Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:02:48.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:03:16.875Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:02:48.750Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:03:45.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:04:13.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:03:45.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:04:41.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:05:09.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:04:41.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:05:37.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:06:05.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:05:37.500Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:06:33.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:07:01.875Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:06:33.750Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:07:30.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:07:58.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:07:30.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:08:26.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:08:54.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:08:26.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:09:22.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:09:50.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:09:22.500Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:10:18.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:10:46.875Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:10:18.750Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:11:15.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:11:43.125Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:11:15.000Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:12:11.250Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:12:39.375Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:12:11.250Z",
+          "reason": "missing-conservative-bound",
+          "to": "2000-01-01T12:13:07.500Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:13:35.625Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:13:07.500Z",
+          "reason": "sample-budget",
+          "to": "2000-01-01T12:14:03.750Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:14:03.750Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:14:03.750Z",
+          "reason": "sample-budget",
+          "to": "2000-01-01T12:15:00.000Z",
+          "value": null
+        },
+        {
+          "anchorUtc": "2000-01-01T12:15:00.000Z",
+          "boundIds": [],
+          "classification": "unresolved",
+          "from": "2000-01-01T12:15:00.000Z",
+          "reason": "sample-budget",
+          "to": "2000-01-01T12:30:00.000Z",
+          "value": null
+        }
+      ],
+      "coverage": "sampled",
+      "featureId": "sun-moon-square",
+      "status": "unresolved",
+      "unresolvedRanges": [
+        {
+          "from": "2000-01-01T12:00:00.000Z",
+          "to": "2000-01-01T12:30:00.000Z"
+        }
+      ],
+      "values": [
+        false
+      ],
+      "witnesses": [
+        {
+          "utc": "2000-01-01T12:00:00.000Z",
+          "value": false
+        }
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "longitudes": {
+        "Ascendant": 24.287248656681754,
+        "Jupiter": 25.254199836812234,
+        "Mars": 327.96389892447115,
+        "Mercury": 271.8889117586273,
+        "Midheaven": 279.6110618554153,
+        "Moon": 223.32388874968694,
+        "Neptune": 303.1954420524333,
+        "North Node": 123.95210697951524,
+        "Pluto": 251.45473515295618,
+        "Saturn": 40.396124141122925,
+        "South Node": 303.9521069795153,
+        "Sun": 280.36873843817517,
+        "Uranus": 314.8061046171985,
+        "Venus": 241.5652327012129
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:00:00.000Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 24.543939382760755,
+        "Jupiter": 25.25421310370797,
+        "Mars": 327.96415142413684,
+        "Mercury": 271.8894183629533,
+        "Midheaven": 279.7194461244918,
+        "Moon": 223.32780196287445,
+        "Neptune": 303.1954536316361,
+        "North Node": 123.95208900377992,
+        "Pluto": 251.45474659623807,
+        "Saturn": 40.396117650631766,
+        "South Node": 303.95208900378,
+        "Sun": 280.3690702845696,
+        "Uranus": 314.80612100582135,
+        "Venus": 241.56562627008313
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:00:28.125Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 24.800135854184248,
+        "Jupiter": 25.2542263709621,
+        "Mars": 327.96440392380646,
+        "Mercury": 271.8899249678477,
+        "Midheaven": 279.8278431504095,
+        "Moon": 223.33171516037646,
+        "Neptune": 303.1954652108624,
+        "North Node": 123.95207103682839,
+        "Pluto": 251.4547580394942,
+        "Saturn": 40.396111160334726,
+        "South Node": 303.95207103682833,
+        "Sun": 280.36940213097586,
+        "Uranus": 314.80613739449194,
+        "Venus": 241.56601983907512
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:00:56.250Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 25.055835073824255,
+        "Jupiter": 25.254239638574802,
+        "Mars": 327.96465642348,
+        "Mercury": 271.8904315733106,
+        "Midheaven": 279.93625307137313,
+        "Moon": 223.33562834219504,
+        "Neptune": 303.1954767901121,
+        "North Node": 123.95205310053859,
+        "Pluto": 251.45476948272452,
+        "Saturn": 40.396104670231864,
+        "South Node": 303.9520531005386,
+        "Sun": 280.3697339773939,
+        "Uranus": 314.80615378321,
+        "Venus": 241.56641340818902
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:01:24.375Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 25.311034108216575,
+        "Jupiter": 25.254252906545958,
+        "Mars": 327.9649089231573,
+        "Mercury": 271.8909381793419,
+        "Midheaven": 280.044676025468,
+        "Moon": 223.33954150833245,
+        "Neptune": 303.19548836938515,
+        "North Node": 123.95203511829197,
+        "Pluto": 251.45478092592901,
+        "Saturn": 40.396098180323236,
+        "South Node": 303.952035118292,
+        "Sun": 280.37006582382367,
+        "Uranus": 314.8061701719756,
+        "Venus": 241.5668069774247
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:01:52.500Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 25.565730087411396,
+        "Jupiter": 25.254266174875625,
+        "Mars": 327.96516142283843,
+        "Mercury": 271.8914447859417,
+        "Midheaven": 280.15311215065867,
+        "Moon": 223.34345465879073,
+        "Neptune": 303.19549994868186,
+        "North Node": 123.95201717372095,
+        "Pluto": 251.45479236910774,
+        "Saturn": 40.39609169060867,
+        "South Node": 303.95201717372095,
+        "Sun": 280.3703976702652,
+        "Uranus": 314.80618656078906,
+        "Venus": 241.56720054678226
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:02:20.625Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 25.819920204803964,
+        "Jupiter": 25.25427944356369,
+        "Mars": 327.96541392252345,
+        "Mercury": 271.89195139311,
+        "Midheaven": 280.26156158478705,
+        "Moon": 223.34736779357195,
+        "Neptune": 303.1955115280019,
+        "North Node": 123.95199922394261,
+        "Pluto": 251.45480381226065,
+        "Saturn": 40.39608520108828,
+        "South Node": 303.9519992239426,
+        "Sun": 280.3707295167185,
+        "Uranus": 314.80620294964984,
+        "Venus": 241.56759411626157
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:02:48.750Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 26.07360171695626,
+        "Jupiter": 25.254292712610322,
+        "Mars": 327.9656664222125,
+        "Mercury": 271.8924580008467,
+        "Midheaven": 280.3700244655717,
+        "Moon": 223.35128091267825,
+        "Neptune": 303.19552310734537,
+        "North Node": 123.9519812600538,
+        "Pluto": 251.45481525538776,
+        "Saturn": 40.39607871176213,
+        "South Node": 303.9519812600538,
+        "Sun": 280.3710613631835,
+        "Uranus": 314.80621933855826,
+        "Venus": 241.5679876858628
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:03:16.875Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 26.326771943399365,
+        "Jupiter": 25.25430598201541,
+        "Mars": 327.96591892190526,
+        "Mercury": 271.892964609152,
+        "Midheaven": 280.47850093060595,
+        "Moon": 223.3551940161118,
+        "Neptune": 303.19553468671234,
+        "North Node": 123.95196328419968,
+        "Pluto": 251.45482669848906,
+        "Saturn": 40.39607222263004,
+        "South Node": 303.9519632841997,
+        "Sun": 280.37139320966037,
+        "Uranus": 314.80623572751426,
+        "Venus": 241.56838125558576
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:03:45.000Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 26.57942826642295,
+        "Jupiter": 25.254319251778952,
+        "Mars": 327.9661714216018,
+        "Mercury": 271.8934712180257,
+        "Midheaven": 280.5869911173568,
+        "Moon": 223.35910710387475,
+        "Neptune": 303.19554626610267,
+        "North Node": 123.9519453305669,
+        "Pluto": 251.45483814156452,
+        "Saturn": 40.396065733692126,
+        "South Node": 303.9519453305669,
+        "Sun": 280.371725056149,
+        "Uranus": 314.8062521165178,
+        "Venus": 241.5687748254306
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:13.125Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 26.8315681308502,
+        "Jupiter": 25.254332521901006,
+        "Mars": 327.9664239213022,
+        "Mercury": 271.8939778274679,
+        "Midheaven": 280.6954951631631,
+        "Moon": 223.36302017596893,
+        "Neptune": 303.1955578455166,
+        "North Node": 123.95192736044129,
+        "Pluto": 251.4548495846142,
+        "Saturn": 40.39605924494845,
+        "South Node": 303.95192736044123,
+        "Sun": 280.37205690264926,
+        "Uranus": 314.8062685055691,
+        "Venus": 241.56916839539724
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:04:41.250Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 27.083189043799734,
+        "Jupiter": 25.254345792381514,
+        "Mars": 327.96667642100647,
+        "Mercury": 271.8944844374786,
+        "Midheaven": 280.80401320523475,
+        "Moon": 223.3669332323966,
+        "Neptune": 303.1955694249539,
+        "North Node": 123.95190939517403,
+        "Pluto": 251.45486102763812,
+        "Saturn": 40.39605275639889,
+        "South Node": 303.95190939517397,
+        "Sun": 280.37238874916136,
+        "Uranus": 314.8062848946677,
+        "Venus": 241.56956196548572
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:09.375Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 27.33428857443164,
+        "Jupiter": 25.254359063220534,
+        "Mars": 327.96692892071474,
+        "Mercury": 271.8949910480578,
+        "Midheaven": 280.9125453806503,
+        "Moon": 223.37084627315994,
+        "Neptune": 303.1955810044145,
+        "North Node": 123.95189141965471,
+        "Pluto": 251.45487247063616,
+        "Saturn": 40.396046268043506,
+        "South Node": 303.95189141965466,
+        "Sun": 280.3727205956853,
+        "Uranus": 314.8063012838141,
+        "Venus": 241.56995553569595
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:05:37.500Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 27.58486435368451,
+        "Jupiter": 25.254372334418008,
+        "Mars": 327.9671814204268,
+        "Mercury": 271.8954976592055,
+        "Midheaven": 281.0210918263568,
+        "Moon": 223.37475929826098,
+        "Neptune": 303.1955925838988,
+        "North Node": 123.95187345262161,
+        "Pluto": 251.45488391360846,
+        "Saturn": 40.3960397798823,
+        "South Node": 303.9518734526216,
+        "Sun": 280.37305244222085,
+        "Uranus": 314.80631767300815,
+        "Venus": 241.57034910602806
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:06:05.625Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 27.834914073994298,
+        "Jupiter": 25.254385605973994,
+        "Mars": 327.9674339201425,
+        "Mercury": 271.8960042709217,
+        "Midheaven": 281.12965267916724,
+        "Moon": 223.3786723077019,
+        "Neptune": 303.1956041634065,
+        "North Node": 123.9518554801781,
+        "Pluto": 251.4548953565549,
+        "Saturn": 40.39603329191522,
+        "South Node": 303.9518554801781,
+        "Sun": 280.3733842887683,
+        "Uranus": 314.8063340622495,
+        "Venus": 241.57074267648198
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:06:33.750Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 28.084435489005102,
+        "Jupiter": 25.254398877888434,
+        "Mars": 327.9676864198623,
+        "Mercury": 271.8965108832065,
+        "Midheaven": 281.23822807576005,
+        "Moon": 223.3825853014847,
+        "Neptune": 303.1956157429375,
+        "North Node": 123.95183750322894,
+        "Pluto": 251.45490679947557,
+        "Saturn": 40.396026804142366,
+        "South Node": 303.95183750322894,
+        "Sun": 280.3737161353274,
+        "Uranus": 314.8063504515387,
+        "Venus": 241.57113624705772
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:07:01.875Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 28.33342641326368,
+        "Jupiter": 25.25441215016133,
+        "Mars": 327.9679389195858,
+        "Mercury": 271.8970174960597,
+        "Midheaven": 281.3468181526764,
+        "Moon": 223.38649827961137,
+        "Neptune": 303.195627322492,
+        "North Node": 123.95181951880153,
+        "Pluto": 251.4549182423704,
+        "Saturn": 40.396020316563636,
+        "South Node": 303.9518195188016,
+        "Sun": 280.37404798189823,
+        "Uranus": 314.8063668408752,
+        "Venus": 241.57152981775522
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:07:30.000Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 28.581884721906192,
+        "Jupiter": 25.254425422792792,
+        "Mars": 327.96819141931314,
+        "Mercury": 271.8975241094815,
+        "Midheaven": 281.4554230463203,
+        "Moon": 223.39041124208438,
+        "Neptune": 303.19563890206996,
+        "North Node": 123.9518015654786,
+        "Pluto": 251.45492968523948,
+        "Saturn": 40.39601382917908,
+        "South Node": 303.9518015654786,
+        "Sun": 280.37437982848087,
+        "Uranus": 314.8063832302596,
+        "Venus": 241.57192338857456
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:07:58.125Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 28.829808350330552,
+        "Jupiter": 25.254438695782653,
+        "Mars": 327.96844391904455,
+        "Mercury": 271.8980307234718,
+        "Midheaven": 281.56404289295625,
+        "Moon": 223.39432418890556,
+        "Neptune": 303.1956504816714,
+        "North Node": 123.95178359187787,
+        "Pluto": 251.4549411280827,
+        "Saturn": 40.39600734198871,
+        "South Node": 303.95178359187787,
+        "Sun": 280.37471167507465,
+        "Uranus": 314.80639961969155,
+        "Venus": 241.57231695951572
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:08:26.250Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 29.077195293857187,
+        "Jupiter": 25.254451969131026,
+        "Mars": 327.9686964187796,
+        "Mercury": 271.89853733803056,
+        "Midheaven": 281.67267782870795,
+        "Moon": 223.39823712007717,
+        "Neptune": 303.1956620612963,
+        "North Node": 123.95176561434272,
+        "Pluto": 251.45495257090016,
+        "Saturn": 40.39600085499251,
+        "South Node": 303.9517656143428,
+        "Sun": 280.3750435216798,
+        "Uranus": 314.8064160091708,
+        "Venus": 241.57271053057866
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:08:54.375Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 29.324043607379508,
+        "Jupiter": 25.25446524283791,
+        "Mars": 327.9689489185185,
+        "Mercury": 271.89904395315796,
+        "Midheaven": 281.78132798955653,
+        "Moon": 223.40215003560115,
+        "Neptune": 303.1956736409446,
+        "North Node": 123.95174762220006,
+        "Pluto": 251.45496401369178,
+        "Saturn": 40.39599436819043,
+        "South Node": 303.95174762220006,
+        "Sun": 280.37537536829666,
+        "Uranus": 314.8064323986979,
+        "Venus": 241.57310410176342
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:09:22.500Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 29.57035140500568,
+        "Jupiter": 25.25447851690319,
+        "Mars": 327.9692014182612,
+        "Mercury": 271.8995505688539,
+        "Midheaven": 281.8899935113399,
+        "Moon": 223.40606293547967,
+        "Neptune": 303.19568522061627,
+        "North Node": 123.95172964676897,
+        "Pluto": 251.4549754564576,
+        "Saturn": 40.39598788158253,
+        "South Node": 303.95172964676897,
+        "Sun": 280.3757072149252,
+        "Uranus": 314.80644878827235,
+        "Venus": 241.57349767306897
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:09:50.625Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 29.816116859686304,
+        "Jupiter": 25.254491791326927,
+        "Mars": 327.96945391800796,
+        "Mercury": 271.9000571851184,
+        "Midheaven": 281.99867452975076,
+        "Moon": 223.40997581971487,
+        "Neptune": 303.19569680031157,
+        "North Node": 123.95171165614158,
+        "Pluto": 251.4549868991976,
+        "Saturn": 40.39598139516886,
+        "South Node": 303.9517116561416,
+        "Sun": 280.3760390615656,
+        "Uranus": 314.8064651778946,
+        "Venus": 241.57389124449605
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:10:18.750Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 30.061338202834065,
+        "Jupiter": 25.254505066109232,
+        "Mars": 327.96970641775846,
+        "Mercury": 271.90056380195136,
+        "Midheaven": 282.10737118033484,
+        "Moon": 223.4138886883087,
+        "Neptune": 303.1957083800302,
+        "North Node": 123.95169365706056,
+        "Pluto": 251.4549983419118,
+        "Saturn": 40.39597490894931,
+        "South Node": 303.95169365706056,
+        "Sun": 280.37637090821767,
+        "Uranus": 314.80648156756433,
+        "Venus": 241.57428481604495
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:10:46.875Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 30.306013723934882,
+        "Jupiter": 25.25451834124999,
+        "Mars": 327.96995891751277,
+        "Mercury": 271.90107041935295,
+        "Midheaven": 282.2160835984903,
+        "Moon": 223.41780154126354,
+        "Neptune": 303.1957199597722,
+        "North Node": 123.95167568991519,
+        "Pluto": 251.4550097846002,
+        "Saturn": 40.39596842292394,
+        "South Node": 303.9516756899152,
+        "Sun": 280.3767027548816,
+        "Uranus": 314.80649795728164,
+        "Venus": 241.57467838771572
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:11:15.000Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 30.550141770147036,
+        "Jupiter": 25.254531616749205,
+        "Mars": 327.9702114172709,
+        "Mercury": 271.9015770373231,
+        "Midheaven": 282.3248119194658,
+        "Moon": 223.42171437858133,
+        "Neptune": 303.19573153953786,
+        "North Node": 123.95165770415736,
+        "Pluto": 251.4550212272628,
+        "Saturn": 40.39596193709275,
+        "South Node": 303.95165770415736,
+        "Sun": 280.37703460155717,
+        "Uranus": 314.8065143470464,
+        "Venus": 241.57507195950822
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:11:43.125Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 30.79372074589196,
+        "Jupiter": 25.254544892606873,
+        "Mars": 327.97046391703304,
+        "Mercury": 271.90208365586034,
+        "Midheaven": 282.4335562783584,
+        "Moon": 223.42562720026422,
+        "Neptune": 303.1957431193267,
+        "North Node": 123.95163970540335,
+        "Pluto": 251.4550326698996,
+        "Saturn": 40.395955451455734,
+        "South Node": 303.9516397054033,
+        "Sun": 280.3773664482446,
+        "Uranus": 314.8065307368591,
+        "Venus": 241.57546553142254
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:12:11.250Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 31.036749112438088,
+        "Jupiter": 25.254558168823053,
+        "Mars": 327.9707164167989,
+        "Mercury": 271.9025902749661,
+        "Midheaven": 282.5423168101134,
+        "Moon": 223.42954000631426,
+        "Neptune": 303.1957546991392,
+        "North Node": 123.95162172898671,
+        "Pluto": 251.45504411251056,
+        "Saturn": 40.39594896601284,
+        "South Node": 303.95162172898677,
+        "Sun": 280.3776982949437,
+        "Uranus": 314.80654712671907,
+        "Venus": 241.5758591034586
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:12:39.375Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 31.2792253874743,
+        "Jupiter": 25.254571445397687,
+        "Mars": 327.97096891656855,
+        "Mercury": 271.9030968946403,
+        "Midheaven": 282.65109364952195,
+        "Moon": 223.4334527967335,
+        "Neptune": 303.19576627897504,
+        "North Node": 123.95160373995776,
+        "Pluto": 251.45505555509573,
+        "Saturn": 40.39594248076418,
+        "South Node": 303.9516037399578,
+        "Sun": 280.3780301416545,
+        "Uranus": 314.8065635166266,
+        "Venus": 241.5762526756165
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:13:07.500Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 31.52114814467575,
+        "Jupiter": 25.254584722330776,
+        "Mars": 327.97122141634196,
+        "Mercury": 271.9036035148831,
+        "Midheaven": 282.75988693121997,
+        "Moon": 223.4373655715242,
+        "Neptune": 303.19577785883433,
+        "North Node": 123.95158572860657,
+        "Pluto": 251.45506699765508,
+        "Saturn": 40.39593599570969,
+        "South Node": 303.9515857286066,
+        "Sun": 280.37836198837715,
+        "Uranus": 314.8065799065818,
+        "Venus": 241.57664624789615
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:13:35.625Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 31.76251601326055,
+        "Jupiter": 25.254597999622376,
+        "Mars": 327.97147391611946,
+        "Mercury": 271.9041101356946,
+        "Midheaven": 282.868696789686,
+        "Moon": 223.4412783306883,
+        "Neptune": 303.19578943871716,
+        "North Node": 123.95156776003921,
+        "Pluto": 251.45507844018863,
+        "Saturn": 40.39592951084933,
+        "South Node": 303.9515677600392,
+        "Sun": 280.37869383511145,
+        "Uranus": 314.80659629658476,
+        "Venus": 241.57703982029767
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:14:03.750Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 32.24358187647408,
+        "Jupiter": 25.25462455528094,
+        "Mars": 327.9719789156857,
+        "Mercury": 271.9051233790232,
+        "Midheaven": 283.08636677404496,
+        "Moon": 223.4491038021455,
+        "Neptune": 303.19581259855283,
+        "North Node": 123.9515317788219,
+        "Pluto": 251.45510132517828,
+        "Saturn": 40.39591654171119,
+        "South Node": 303.95153177882185,
+        "Sun": 280.37935752861546,
+        "Uranus": 314.8066290767331,
+        "Venus": 241.57782696546596
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:15:00.000Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    },
+    {
+      "longitudes": {
+        "Ascendant": 39.63250391050667,
+        "Jupiter": 25.25504964082387,
+        "Mars": 327.98005891080845,
+        "Mercury": 271.9213355816282,
+        "Midheaven": 286.5790442197215,
+        "Moon": 223.57430285950636,
+        "Neptune": 303.19618316867724,
+        "North Node": 123.95095527767387,
+        "Pluto": 251.45546747097058,
+        "Saturn": 40.39570914113449,
+        "South Node": 303.95095527767387,
+        "Sun": 280.38997663106545,
+        "Uranus": 314.80715358498475,
+        "Venus": 241.5904213544001
+      },
+      "status": "ok",
+      "utc": "2000-01-01T12:30:00.000Z",
+      "warnings": [
+        "utc-label-read-as-ut1",
+        "finite-reference-coverage-not-an-absolute-accuracy-bound"
+      ]
+    }
+  ],
+  "schema": "zodiacs.verify.uncertainty.v1",
+  "subjectId": "synthetic-example-person",
+  "warnings": [
+    "Bounds are externally asserted and not independently verified. Stable means full conditional coverage under all referenced bounds.",
+    "Finite pairwise consistency is necessary, not proof that a supplied bound holds between samples. Incomplete consistency checks force dependent results unresolved.",
+    "Variable means different sampled values were observed; it does not enumerate all possible values or locate every transition.",
+    "No probabilities, physical ephemeris accuracy, astrological interpretation or event-time completeness are established."
+  ],
+  "id": "sha256:119fe0ce51a7bfcb3e3ed11d842463e11ac8b9114a29b4280133e7aa4d8081b2"
+}

@@ -1,0 +1,651 @@
+{
+  "schemaVersion": "zodiacs-parallel-reproductions/1",
+  "startedAt": "2026-09-27T15:11:43.472Z",
+  "completedAt": "2026-09-27T15:11:43.819Z",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "engine": {
+    "entry": "/workspace/scratch/c1943cbff40d/parallel-runtime/package/dist/index.js",
+    "packageName": "@zodiacs/engine",
+    "packageVersion": "0.1.1-rc.10",
+    "runtimeVersion": "0.1.1-rc.10",
+    "sourceRef": "f5f33892a95cd0d6cd4a11a80e66f802b11bccfa",
+    "sourceRefStatus": "caller-supplied, not attested by package",
+    "ephemeris": {
+      "name": "astronomy-engine",
+      "version": "2.1.19"
+    },
+    "packageJsonSha256": "e2ff18b132f2a01cfea37ed4b8c3f827a1d5c238d26654bb481d44168a9afc4e",
+    "distributionFileManifestSha256": "1845cf54b1aebd3ad27abdad1c89979328db3f168ec8f1082fa95bd59bd8aa00",
+    "artifactFiles": [
+      {
+        "path": "dist/chunk-35EQGGYX.js",
+        "bytes": 10744,
+        "sha256": "21d1603de4a067c2cd0d9404de00a9a1753386a6b8d27eef805c55aada120f68"
+      },
+      {
+        "path": "dist/chunk-AECKV73C.js",
+        "bytes": 9237,
+        "sha256": "a812be9882c25f67c9fa8dfe19eb0d950a3867a7cdbede4c746c226ca760480c"
+      },
+      {
+        "path": "dist/chunk-CPALRSPC.js",
+        "bytes": 1459,
+        "sha256": "9db1a3814ec9bd00a40d4bc295e348debd6108f62a322ed91d18610c81b9fb08"
+      },
+      {
+        "path": "dist/chunk-FR5TX5ZG.js",
+        "bytes": 5263,
+        "sha256": "32992ee054cdb37c9e5548e5a4136f125dbf8da7857c5db8d3bbb530011bf9e1"
+      },
+      {
+        "path": "dist/chunk-IYNERVXW.js",
+        "bytes": 380,
+        "sha256": "2d297d94afc12e305da43c865415bbf9c4bf0cd4292936c7c10089c8d41beb84"
+      },
+      {
+        "path": "dist/chunk-N4WHSUFK.js",
+        "bytes": 10922,
+        "sha256": "0404459e3bb1a10413c34397f7a269d11a2599227ee6aff18c60e3f091964740"
+      },
+      {
+        "path": "dist/chunk-ONBZ4HK7.js",
+        "bytes": 4807,
+        "sha256": "50f11205373c177c728ea8c7d50d41b19ff80cd9921eb51c6e907a8045f93308"
+      },
+      {
+        "path": "dist/chunk-PFGUCNOK.js",
+        "bytes": 2929,
+        "sha256": "6d9d38ab4606288700b0959e732a61dfa5b4cdc570be21d17b4ac9b9fe1c0eb4"
+      },
+      {
+        "path": "dist/crossings.d.ts",
+        "bytes": 4436,
+        "sha256": "1552b52b24d15828e0df70a76c80a076ffc6df5da899af16ffe05234d0e9619f"
+      },
+      {
+        "path": "dist/crossings.js",
+        "bytes": 173,
+        "sha256": "bad1c9bcf76338a95d8c09d1019fb32a65f2d9622c611fd87f81a83392bd3f5f"
+      },
+      {
+        "path": "dist/deltat.d.ts",
+        "bytes": 3852,
+        "sha256": "cf6e092131aa2c6f5a4a8893078503a35fe5e5ca4bdcb52741f07650a93a1b86"
+      },
+      {
+        "path": "dist/deltat.js",
+        "bytes": 161,
+        "sha256": "43b1503b6597e82ed6e920c18991703fe02be05856e6de0fc347e4abcf4c15e4"
+      },
+      {
+        "path": "dist/geo.d.ts",
+        "bytes": 2194,
+        "sha256": "7a42344e57d435528d859d815e42e36945bfb7c12d5bec0140c669cbc7547654"
+      },
+      {
+        "path": "dist/geo.js",
+        "bytes": 11785,
+        "sha256": "65b0af0d4c6823483ad321ab91a703889303a6e8051f171d2de8fc3df7e94d64"
+      },
+      {
+        "path": "dist/index.d.ts",
+        "bytes": 10168,
+        "sha256": "f9340f719309315b2242c3fd71536d57a667dbb382afbfc18a38db9441851db5"
+      },
+      {
+        "path": "dist/index.js",
+        "bytes": 12600,
+        "sha256": "d3a2ef95bdff80c70c2edeb95b89569894eb58e235ffbbbd73035f08b81602c3"
+      },
+      {
+        "path": "dist/internal-math-BO56moyy.d.ts",
+        "bytes": 11530,
+        "sha256": "f365f81430d7fad2bbd7abe82090174ba91614915830096abc7cbdff895d83c0"
+      },
+      {
+        "path": "dist/internal-math.d.ts",
+        "bytes": 1060,
+        "sha256": "37c2c9005e2acc172c4ae3454febb6e1dab212f072fd4c3edfe80b860b42d305"
+      },
+      {
+        "path": "dist/internal-math.js",
+        "bytes": 1325,
+        "sha256": "5b9f2247f099f6fa2de0ecbe0b5ed730c6db5a630cd6e841b046c54f182d8d91"
+      },
+      {
+        "path": "dist/internal.d.ts",
+        "bytes": 450,
+        "sha256": "f040c4a44e1ec6d4d173d4614b02b7e3b19652070e8ab4fbd351497fc1060e8d"
+      },
+      {
+        "path": "dist/internal.js",
+        "bytes": 305,
+        "sha256": "09941e5ed9937f02d313609cf080e1cff76225aaea9f97def14a8a6d70382ce6"
+      },
+      {
+        "path": "dist/receipt.d.ts",
+        "bytes": 10703,
+        "sha256": "c2c68b4ae5f19e6b628bb314f8c4700ed9a3836dd54a3e64f10c0925ba823fb3"
+      },
+      {
+        "path": "dist/receipt.js",
+        "bytes": 31747,
+        "sha256": "ff7a6b2a8ce0d4be22225cb2752f33601bc7ebf9dde8aeedbf67a4bbf885de03"
+      },
+      {
+        "path": "dist/types-BcilIdPk.d.ts",
+        "bytes": 7558,
+        "sha256": "339798ec71fd38bb4b2a24fc332c5d73e18b380c1f7b89e576022750f80cda4c"
+      }
+    ],
+    "tarball": {
+      "path": "/workspace/scratch/c1943cbff40d/parallel-runtime/zodiacs-engine-0.1.1-rc.10.tgz",
+      "sha256": "a377cdc8c12e25ff7de4fe95ddf77a4cdee8d2da97071b0f8454e340b374565c"
+    }
+  },
+  "illuminationReference": {
+    "dependency": {
+      "name": "astronomy-engine",
+      "version": "2.1.19"
+    },
+    "resolvedEntry": "/workspace/scratch/c1943cbff40d/parallel-runtime/package/node_modules/astronomy-engine/astronomy.js",
+    "entrySha256": "729c0ce37cc1a8096034a689039a5f04585ee8184177c638e8c74dec4fa3185a",
+    "clock": "engine.deltaT explicitly installed",
+    "independence": "same astronomical dependency; separate phase-geometry computation, not JPL/Swiss validation"
+  },
+  "scope": {
+    "productionWrites": false,
+    "internetRequests": false,
+    "finiteCasesOnly": true,
+    "numericalCertification": false,
+    "existingReleaseGatesChanged": false
+  },
+  "observations": [
+    {
+      "id": "saturn-return-birth-clock",
+      "category": "contract-gap",
+      "status": "reproduced",
+      "severity": "moderate-for-callers-using-pinned-deltaT",
+      "expected": "A return calculated from an engine-created pinned natal chart should use that chart's natal Saturn target, or explicitly reject/document the unsupported clock override. This is a proposed consistency requirement; the existing return API does not explicitly promise pin support.",
+      "actual": {
+        "birth": {
+          "utc": "1990-02-01T12:00:00Z",
+          "timeKnown": false
+        },
+        "baselineDeltaT": {
+          "seconds": 56.92123203285413,
+          "sigma": 0.03,
+          "model": "zodiacs-deltat/1",
+          "table": "2026-09-24",
+          "tableDigest": "6371988c510a1c6c",
+          "segment": "observed"
+        },
+        "baselineNatalLongitude": 289.27865351977727,
+        "baselineReturnNatalLongitude": 289.27865351977727,
+        "rows": [
+          {
+            "extraSeconds": 1,
+            "purpose": "small accepted clock override",
+            "pinSeconds": 57.92123203285413,
+            "chartModel": "pinned",
+            "chartNatalLongitude": 289.2786548192579,
+            "birthReturnNatalLongitude": 289.27865351977727,
+            "chartReturnNatalLongitude": 289.27865351977727,
+            "chartShiftArcseconds": 0.004678130062529817,
+            "birthReturnMismatchArcseconds": 0.004678130062529817,
+            "chartReturnMismatchArcseconds": 0.004678130062529817,
+            "birthReturnUnchanged": true,
+            "chartReturnUnchanged": true,
+            "firstReturnedCrossing": "2019-03-21T16:04:15.052Z"
+          },
+          {
+            "extraSeconds": 3600,
+            "purpose": "accepted synthetic diagnostic; not an estimate of actual clock error",
+            "pinSeconds": 3656.9212320328543,
+            "chartModel": "pinned",
+            "chartNatalLongitude": 289.2833306530347,
+            "birthReturnNatalLongitude": 289.27865351977727,
+            "chartReturnNatalLongitude": 289.27865351977727,
+            "chartShiftArcseconds": 16.837679726904753,
+            "birthReturnMismatchArcseconds": 16.837679726904753,
+            "chartReturnMismatchArcseconds": 16.837679726904753,
+            "birthReturnUnchanged": true,
+            "chartReturnUnchanged": true,
+            "firstReturnedCrossing": "2019-03-21T16:04:15.052Z"
+          }
+        ]
+      },
+      "interpretation": "The natal pin is honored by natalChart but may be silently discarded by saturnReturn. This demonstrates an API consistency problem, not an independent astronomical accuracy result. No correction to future-event clocks is inferred.",
+      "sources": [
+        "https://github.com/zodiacs-org/engine/blob/f5f33892a95cd0d6cd4a11a80e66f802b11bccfa/src/api.ts",
+        "https://github.com/zodiacs-org/engine/blob/f5f33892a95cd0d6cd4a11a80e66f802b11bccfa/src/returns.ts",
+        "https://github.com/zodiacs-org/engine/blob/f5f33892a95cd0d6cd4a11a80e66f802b11bccfa/src/types.ts",
+        "https://github.com/zodiacs-org/engine/blob/f5f33892a95cd0d6cd4a11a80e66f802b11bccfa/README.md"
+      ]
+    },
+    {
+      "id": "moon-illumination-approximation",
+      "category": "documented-scope-clarification",
+      "status": "measured",
+      "severity": "low",
+      "expected": "If illumination is advertised as a physical illuminated fraction, define its geometry and precision. A longitude-only display approximation is legitimate if labeled accordingly.",
+      "actual": {
+        "sampleCount": 33,
+        "from": "2026-09-01T12:00:00.000Z",
+        "to": "2026-10-03T12:00:00.000Z",
+        "maximumAbsoluteDifferencePercentagePoints": 0.19867173740487076,
+        "worst": {
+          "utc": "2026-09-15T12:00:00.000Z",
+          "longitudeElongationDegrees": 52.670003651590605,
+          "reportedIllumination": 0.19679761227870612,
+          "longitudeOnlyFormula": 0.19679761227870612,
+          "geometryReferenceIllumination": 0.19878432965275483,
+          "geometryReferencePhaseAngleDegrees": 127.04422877599087,
+          "signedDifference": -0.0019867173740487076,
+          "differencePercentagePoints": -0.19867173740487076
+        },
+        "matchesLongitudeOnlyFormula": true,
+        "samples": [
+          {
+            "utc": "2026-09-01T12:00:00.000Z",
+            "longitudeElongationDegrees": 233.20003463884944,
+            "reportedIllumination": 0.7995115572118698,
+            "longitudeOnlyFormula": 0.7995115572118698,
+            "geometryReferenceIllumination": 0.7993534613281537,
+            "geometryReferencePhaseAngleDegrees": 53.22265617168434,
+            "signedDifference": 0.00015809588371618055,
+            "differencePercentagePoints": 0.015809588371618055
+          },
+          {
+            "utc": "2026-09-02T12:00:00.000Z",
+            "longitudeElongationDegrees": 246.07400258060773,
+            "reportedIllumination": 0.7027781895834178,
+            "longitudeOnlyFormula": 0.7027781895834178,
+            "geometryReferenceIllumination": 0.7030481327007192,
+            "geometryReferencePhaseAngleDegrees": 66.04015696970227,
+            "signedDifference": -0.00026994311730144105,
+            "differencePercentagePoints": -0.026994311730144105
+          },
+          {
+            "utc": "2026-09-03T12:00:00.000Z",
+            "longitudeElongationDegrees": 259.1117756838876,
+            "reportedIllumination": 0.5944468112339127,
+            "longitudeOnlyFormula": 0.5944468112339127,
+            "geometryReferenceIllumination": 0.5952833163841098,
+            "geometryReferencePhaseAngleDegrees": 79.01414592193572,
+            "signedDifference": -0.0008365051501970644,
+            "differencePercentagePoints": -0.08365051501970644
+          },
+          {
+            "utc": "2026-09-04T12:00:00.000Z",
+            "longitudeElongationDegrees": 272.2841774048415,
+            "reportedIllumination": 0.48007207145150044,
+            "longitudeOnlyFormula": 0.48007207145150044,
+            "geometryReferenceIllumination": 0.48142509859293425,
+            "geometryReferencePhaseAngleDegrees": 92.12901681475749,
+            "signedDifference": -0.0013530271414338157,
+            "differencePercentagePoints": -0.13530271414338157
+          },
+          {
+            "utc": "2026-09-05T12:00:00.000Z",
+            "longitudeElongationDegrees": 285.5572418265019,
+            "reportedIllumination": 0.36589951720317904,
+            "longitudeOnlyFormula": 0.36589951720317904,
+            "geometryReferenceIllumination": 0.36752003416207074,
+            "geometryReferencePhaseAngleDegrees": 105.36457194578048,
+            "signedDifference": -0.0016205169588917046,
+            "differencePercentagePoints": -0.16205169588917046
+          },
+          {
+            "utc": "2026-09-06T12:00:00.000Z",
+            "longitudeElongationDegrees": 298.8904127066903,
+            "reportedIllumination": 0.25843205742230013,
+            "longitudeOnlyFormula": 0.25843205742230013,
+            "geometryReferenceIllumination": 0.25996137911099987,
+            "geometryReferencePhaseAngleDegrees": 118.69044691719816,
+            "signedDifference": -0.0015293216886997363,
+            "differencePercentagePoints": -0.15293216886997363
+          },
+          {
+            "utc": "2026-09-07T12:00:00.000Z",
+            "longitudeElongationDegrees": 312.2350327894369,
+            "reportedIllumination": 0.16391329027102397,
+            "longitudeOnlyFormula": 0.16391329027102397,
+            "geometryReferenceIllumination": 0.1650381140497248,
+            "geometryReferencePhaseAngleDegrees": 132.0611817544254,
+            "signedDifference": -0.001124823778700823,
+            "differencePercentagePoints": -0.1124823778700823
+          },
+          {
+            "utc": "2026-09-08T12:00:00.000Z",
+            "longitudeElongationDegrees": 325.53412810908503,
+            "reportedIllumination": 0.08776828946363696,
+            "longitudeOnlyFormula": 0.08776828946363696,
+            "geometryReferenceIllumination": 0.088365206452792,
+            "geometryReferencePhaseAngleDegrees": 145.4134441203279,
+            "signedDifference": -0.0005969169891550385,
+            "differencePercentagePoints": -0.059691698915503855
+          },
+          {
+            "utc": "2026-09-09T12:00:00.000Z",
+            "longitudeElongationDegrees": 338.72444589078077,
+            "reportedIllumination": 0.034076935992839674,
+            "longitudeOnlyFormula": 0.034076935992839674,
+            "geometryReferenceIllumination": 0.03426869712984182,
+            "geometryReferencePhaseAngleDegrees": 158.663968430296,
+            "signedDifference": -0.00019176113700214437,
+            "differencePercentagePoints": -0.019176113700214437
+          },
+          {
+            "utc": "2026-09-10T12:00:00.000Z",
+            "longitudeElongationDegrees": 351.7411506673253,
+            "reportedIllumination": 0.005185393709248143,
+            "longitudeOnlyFormula": 0.005185393709248143,
+            "geometryReferenceIllumination": 0.0052782546725801405,
+            "geometryReferencePhaseAngleDegrees": 171.6673988772882,
+            "signedDifference": -0.00009286096333199767,
+            "differencePercentagePoints": -0.009286096333199767
+          },
+          {
+            "utc": "2026-09-11T12:00:00.000Z",
+            "longitudeElongationDegrees": 4.524544321253757,
+            "reportedIllumination": 0.0015581839917438445,
+            "longitudeOnlyFormula": 0.0015581839917438445,
+            "geometryReferenceIllumination": 0.001897873081764312,
+            "geometryReferencePhaseAngleDegrees": 175.00628584325435,
+            "signedDifference": -0.00033968909002046743,
+            "differencePercentagePoints": -0.03396890900204674
+          },
+          {
+            "utc": "2026-09-12T12:00:00.000Z",
+            "longitudeElongationDegrees": 17.02724942312375,
+            "reportedIllumination": 0.02191720093623073,
+            "longitudeOnlyFormula": 0.02191720093623073,
+            "geometryReferenceIllumination": 0.022743301459097753,
+            "geometryReferencePhaseAngleDegrees": 162.65239599489914,
+            "signedDifference": -0.0008261005228670237,
+            "differencePercentagePoints": -0.08261005228670237
+          },
+          {
+            "utc": "2026-09-13T12:00:00.000Z",
+            "longitudeElongationDegrees": 29.220136676696143,
+            "reportedIllumination": 0.0636247177765793,
+            "longitudeOnlyFormula": 0.0636247177765793,
+            "geometryReferenceIllumination": 0.06499229443797638,
+            "geometryReferencePhaseAngleDegrees": 150.46043042092774,
+            "signedDifference": -0.0013675766613970852,
+            "differencePercentagePoints": -0.13675766613970852
+          },
+          {
+            "utc": "2026-09-14T12:00:00.000Z",
+            "longitudeElongationDegrees": 41.09590100646619,
+            "reportedIllumination": 0.1231947901941376,
+            "longitudeOnlyFormula": 0.1231947901941376,
+            "geometryReferenceIllumination": 0.12498380296098227,
+            "geometryReferencePhaseAngleDegrees": 138.59318404334684,
+            "signedDifference": -0.0017890127668446776,
+            "differencePercentagePoints": -0.17890127668446776
+          },
+          {
+            "utc": "2026-09-15T12:00:00.000Z",
+            "longitudeElongationDegrees": 52.670003651590605,
+            "reportedIllumination": 0.19679761227870612,
+            "longitudeOnlyFormula": 0.19679761227870612,
+            "geometryReferenceIllumination": 0.19878432965275483,
+            "geometryReferencePhaseAngleDegrees": 127.04422877599087,
+            "signedDifference": -0.0019867173740487076,
+            "differencePercentagePoints": -0.19867173740487076
+          },
+          {
+            "utc": "2026-09-16T12:00:00.000Z",
+            "longitudeElongationDegrees": 63.97921066338313,
+            "reportedIllumination": 0.28065138075501217,
+            "longitudeOnlyFormula": 0.28065138075501217,
+            "geometryReferenceIllumination": 0.28259758852127653,
+            "geometryReferencePhaseAngleDegrees": 115.77287511193536,
+            "signedDifference": -0.0019462077662643629,
+            "differencePercentagePoints": -0.1946207766264363
+          },
+          {
+            "utc": "2026-09-17T12:00:00.000Z",
+            "longitudeElongationDegrees": 75.07822044577392,
+            "reportedIllumination": 0.37124994089550417,
+            "longitudeOnlyFormula": 0.37124994089550417,
+            "geometryReferenceIllumination": 0.37297393581064403,
+            "geometryReferencePhaseAngleDegrees": 104.71742657346068,
+            "signedDifference": -0.0017239949151398593,
+            "differencePercentagePoints": -0.17239949151398593
+          },
+          {
+            "utc": "2026-09-18T12:00:00.000Z",
+            "longitudeElongationDegrees": 86.03511807649227,
+            "reportedIllumination": 0.4654274861626328,
+            "longitudeOnlyFormula": 0.4654274861626328,
+            "geometryReferenceIllumination": 0.4668397361551771,
+            "geometryReferencePhaseAngleDegrees": 93.802677437485,
+            "signedDifference": -0.001412249992544301,
+            "differencePercentagePoints": -0.1412249992544301
+          },
+          {
+            "utc": "2026-09-19T12:00:00.000Z",
+            "longitudeElongationDegrees": 96.92652841349945,
+            "reportedIllumination": 0.560298240346033,
+            "longitudeOnlyFormula": 0.560298240346033,
+            "geometryReferenceIllumination": 0.5614007212575833,
+            "geometryReferencePhaseAngleDegrees": 82.9461904796952,
+            "signedDifference": -0.0011024809115502965,
+            "differencePercentagePoints": -0.11024809115502965
+          },
+          {
+            "utc": "2026-09-20T12:00:00.000Z",
+            "longitudeElongationDegrees": 107.83307091209747,
+            "reportedIllumination": 0.653122409787882,
+            "longitudeOnlyFormula": 0.653122409787882,
+            "geometryReferenceIllumination": 0.6539795913229743,
+            "geometryReferencePhaseAngleDegrees": 72.06371567972714,
+            "signedDifference": -0.0008571815350922884,
+            "differencePercentagePoints": -0.08571815350922884
+          },
+          {
+            "utc": "2026-09-21T12:00:00.000Z",
+            "longitudeElongationDegrees": 118.83510895586778,
+            "reportedIllumination": 0.7411452776651867,
+            "longitudeOnlyFormula": 0.7411452776651867,
+            "geometryReferenceIllumination": 0.741838519690486,
+            "geometryReferencePhaseAngleDegrees": 61.07416806199069,
+            "signedDifference": -0.000693242025299301,
+            "differencePercentagePoints": -0.0693242025299301
+          },
+          {
+            "utc": "2026-09-22T12:00:00.000Z",
+            "longitudeElongationDegrees": 130.00834496801474,
+            "reportedIllumination": 0.8214495875359797,
+            "longitudeOnlyFormula": 0.8214495875359797,
+            "geometryReferenceIllumination": 0.8220287593967652,
+            "geometryReferencePhaseAngleDegrees": 49.90495180499314,
+            "signedDifference": -0.0005791718607854879,
+            "differencePercentagePoints": -0.05791718607854879
+          },
+          {
+            "utc": "2026-09-23T12:00:00.000Z",
+            "longitudeElongationDegrees": 141.41892017475277,
+            "reportedIllumination": 0.8908632234580811,
+            "longitudeOnlyFormula": 0.8908632234580811,
+            "geometryReferenceIllumination": 0.8913114103135186,
+            "geometryReferencePhaseAngleDegrees": 38.49865033721474,
+            "signedDifference": -0.0004481868554374602,
+            "differencePercentagePoints": -0.04481868554374602
+          },
+          {
+            "utc": "2026-09-24T12:00:00.000Z",
+            "longitudeElongationDegrees": 153.1181472768751,
+            "reportedIllumination": 0.9459703921976903,
+            "longitudeOnlyFormula": 0.9459703921976903,
+            "geometryReferenceIllumination": 0.9461982875553475,
+            "geometryReferencePhaseAngleDegrees": 26.824038332220734,
+            "signedDifference": -0.00022789535765721514,
+            "differencePercentagePoints": -0.022789535765721514
+          },
+          {
+            "utc": "2026-09-25T12:00:00.000Z",
+            "longitudeElongationDegrees": 165.1374044746077,
+            "reportedIllumination": 0.9832718688497828,
+            "longitudeOnlyFormula": 0.9832718688497828,
+            "geometryReferenceIllumination": 0.9831535045984938,
+            "geometryReferencePhaseAngleDegrees": 14.915382834089296,
+            "signedDifference": 0.00011836425128897154,
+            "differencePercentagePoints": 0.011836425128897154
+          },
+          {
+            "utc": "2026-09-26T12:00:00.000Z",
+            "longitudeElongationDegrees": 177.48396310667874,
+            "reportedIllumination": 0.9995179867652284,
+            "longitudeOnlyFormula": 0.9995179867652284,
+            "geometryReferenceIllumination": 0.9989641984091107,
+            "geometryReferencePhaseAngleDegrees": 3.6886369913086554,
+            "signedDifference": 0.0005537883561177459,
+            "differencePercentagePoints": 0.05537883561177459
+          },
+          {
+            "utc": "2026-09-27T12:00:00.000Z",
+            "longitudeElongationDegrees": 190.13881453605165,
+            "reportedIllumination": 0.992192076693258,
+            "longitudeOnlyFormula": 0.992192076693258,
+            "geometryReferenceIllumination": 0.9912340181327273,
+            "geometryReferencePhaseAngleDegrees": 10.744580506994641,
+            "signedDifference": 0.0009580585605307723,
+            "differencePercentagePoints": 0.09580585605307723
+          },
+          {
+            "utc": "2026-09-28T12:00:00.000Z",
+            "longitudeElongationDegrees": 203.05780542798826,
+            "reportedIllumination": 0.9600550891717718,
+            "longitudeOnlyFormula": 0.9600550891717718,
+            "geometryReferenceIllumination": 0.9588904142626369,
+            "geometryReferencePhaseAngleDegrees": 23.39621947712647,
+            "signedDifference": 0.0011646749091349662,
+            "differencePercentagePoints": 0.11646749091349662
+          },
+          {
+            "utc": "2026-09-29T12:00:00.000Z",
+            "longitudeElongationDegrees": 216.17700974139905,
+            "reportedIllumination": 0.9035986155351239,
+            "longitudeOnlyFormula": 0.9035986155351239,
+            "geometryReferenceIllumination": 0.9025582209765437,
+            "geometryReferencePhaseAngleDegrees": 36.378497746073506,
+            "signedDifference": 0.0010403945585801821,
+            "differencePercentagePoints": 0.10403945585801821
+          },
+          {
+            "utc": "2026-09-30T12:00:00.000Z",
+            "longitudeElongationDegrees": 229.42191284040538,
+            "reportedIllumination": 0.8252418927230059,
+            "longitudeOnlyFormula": 0.8252418927230059,
+            "geometryReferenceIllumination": 0.8246746032278576,
+            "geometryReferencePhaseAngleDegrees": 49.50744721660893,
+            "signedDifference": 0.0005672894951482821,
+            "differencePercentagePoints": 0.05672894951482821
+          },
+          {
+            "utc": "2026-10-01T12:00:00.000Z",
+            "longitudeElongationDegrees": 242.7182496114348,
+            "reportedIllumination": 0.7291832462944114,
+            "longitudeOnlyFormula": 0.7291832462944114,
+            "geometryReferenceIllumination": 0.7293094216265343,
+            "geometryReferencePhaseAngleDegrees": 62.70198016443509,
+            "signedDifference": -0.0001261753321228909,
+            "differencePercentagePoints": -0.01261753321228909
+          },
+          {
+            "utc": "2026-10-02T12:00:00.000Z",
+            "longitudeElongationDegrees": 256.00141791528415,
+            "reportedIllumination": 0.6209489416678253,
+            "longitudeOnlyFormula": 0.6209489416678253,
+            "geometryReferenceIllumination": 0.6217615773115281,
+            "geometryReferencePhaseAngleDegrees": 75.90542645326353,
+            "signedDifference": -0.0008126356437028193,
+            "differencePercentagePoints": -0.08126356437028193
+          },
+          {
+            "utc": "2026-10-03T12:00:00.000Z",
+            "longitudeElongationDegrees": 269.2219603235327,
+            "reportedIllumination": 0.506789468366563,
+            "longitudeOnlyFormula": 0.506789468366563,
+            "geometryReferenceIllumination": 0.5080587669769902,
+            "geometryReferencePhaseAngleDegrees": 89.07649334135971,
+            "signedDifference": -0.0012692986104271275,
+            "differencePercentagePoints": -0.12692986104271275
+          }
+        ]
+      },
+      "interpretation": "This is a model/documentation limitation, not a newly proven defect or claimed failure versus ground truth. Moon phase angle for zodiac events can remain an intentional longitude elongation. No 33-day result is a global error bound.",
+      "sources": [
+        "https://github.com/zodiacs-org/engine/blob/f5f33892a95cd0d6cd4a11a80e66f802b11bccfa/src/api.ts",
+        "https://github.com/zodiacs-org/engine/blob/f5f33892a95cd0d6cd4a11a80e66f802b11bccfa/src/types.ts",
+        "https://github.com/zodiacs-org/engine/blob/f5f33892a95cd0d6cd4a11a80e66f802b11bccfa/README.md",
+        "https://github.com/cosinekitty/astronomy/blob/master/source/js/astronomy.ts"
+      ]
+    },
+    {
+      "id": "public-boundary-controls",
+      "category": "control",
+      "status": "passed",
+      "severity": "none",
+      "expected": "Existing documented guards remain intact.",
+      "actual": {
+        "guards": [
+          {
+            "name": "invalid-calendar-date",
+            "expected": "RangeError",
+            "actual": "RangeError",
+            "pass": true
+          },
+          {
+            "name": "nonfinite-pin",
+            "expected": "RangeError",
+            "actual": "RangeError",
+            "pass": true
+          },
+          {
+            "name": "contradictory-derived-polar-flag",
+            "expected": "RangeError",
+            "actual": "RangeError",
+            "pass": true
+          },
+          {
+            "name": "unknown-time-withholds-angles-houses-lots",
+            "expected": "null angles/houses/sect, no-time flag, three time-dependent mean lunar points only",
+            "actual": {
+              "angles": null,
+              "houses": null,
+              "flags": [
+                "no-time"
+              ],
+              "sect": null,
+              "points": [
+                "Mean Node",
+                "Mean South Node",
+                "Black Moon Lilith"
+              ]
+            },
+            "pass": true
+          },
+          {
+            "name": "pin-does-not-leak-into-later-natal-chart",
+            "expected": "engine model restored; baseline reproduced within 1e-9 degrees",
+            "actual": {
+              "model": "zodiacs-deltat/1",
+              "maximumLongitudeDifferenceDegrees": 0
+            },
+            "pass": true
+          }
+        ]
+      },
+      "interpretation": "A few targeted controls, not an exhaustive API/security audit."
+    }
+  ]
+}

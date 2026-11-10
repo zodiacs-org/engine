@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-27T18:00:19.306Z",
+  "tasks": [
+    {
+      "name": "math-controls",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "product-impact-controls",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "vector-reference-controls",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "raw-vector-replay",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "accuracy-attribution",
+      "passed": true,
+      "rows": 210
+    }
+  ],
+  "failedTasks": 0,
+  "rows": 210,
+  "exceedOneArcsecond": 168,
+  "accuracyGate": "None; successful execution means integrity/controls passed, not astronomical precision certified."
+}

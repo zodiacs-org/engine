@@ -1,0 +1,23 @@
+{
+  "output": "/workspace/scratch/c1943cbff40d/parallel-work/results/rc10/events.json",
+  "summary": {
+    "passed": 2,
+    "total": 2,
+    "allDiagnosticPassed": true,
+    "maximumAbsoluteDifferenceSeconds": 3.80012583732605
+  },
+  "cases": [
+    {
+      "id": "october-2026-new-moon",
+      "targetMinusJplInterpolatedSeconds": -2.9615354537963867,
+      "worstEndpointDifferenceSeconds": 3.716017961502075,
+      "diagnosticPassed": true
+    },
+    {
+      "id": "october-2026-full-moon",
+      "targetMinusJplInterpolatedSeconds": -3.80012583732605,
+      "worstEndpointDifferenceSeconds": 3.8459911346435547,
+      "diagnosticPassed": true
+    }
+  ]
+}

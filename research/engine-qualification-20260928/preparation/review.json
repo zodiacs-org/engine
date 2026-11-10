@@ -1,0 +1,20 @@
+{
+  "scope": "Historical rc.10 standalone preparation; full inventory checked without importing engine code.",
+  "lockSource": "https://raw.githubusercontent.com/zodiacs-org/engine/f5f33892a95cd0d6cd4a11a80e66f802b11bccfa/package-lock.json",
+  "originalDigest": "4691195c5e4b192c45638378270514bc99ce3f2a168d82d5cd3c472b9aeef599",
+  "replacementDigest": "8108b3d05d2a29b89eda9ddb499e4c5600b48f188ed1e076270f1edbe30cdfee",
+  "changedFiles": [
+    "package-lock.json"
+  ],
+  "originalLock": {
+    "sha256": "5b2bbf2ea0d12b71a15f3f59dc9aa07088e6e1823e66c214119d1f4ada55ce0d",
+    "bytes": 89081
+  },
+  "replacementLock": {
+    "sha256": "0ab582863d9a06943350114d7ce9b8e65698d1bd8f73dc9f9465bb069e6218f9",
+    "bytes": 89083
+  },
+  "unchangedFiles": 39,
+  "dependencyResolutionUnchanged": true,
+  "preparedInventoryMatches": true
+}

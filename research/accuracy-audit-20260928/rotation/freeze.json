@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "scope": "Independent orientation outputs and controls frozen without evaluating target positions; hashes are for reproducibility, not an assertion of physical accuracy.",
+  "files": {
+    "rotation-matrices.json": "ebad7cf8e8288c3b3114c0169a5e4f3b54c6a0f294a986306220a9e03afa3360",
+    "controls.json": "862a9f3fba6689c91df2b4b37e55b1153e178588381d0394f8d451953fa34c06",
+    "rotations.py": "d74df522ad8af53e5132048991f06ea37e7399bb1334a07c2d9565d10f569059",
+    "generate_matrices.py": "7809e02e9e065aaffb1392efc00a586745389cd4c171a101e42b20d71a5bbf71",
+    "test_rotations.py": "e6369f68954a6628479da2eadb3553e429453febe6af41d0d29b5f5be8b725cd"
+  }
+}
