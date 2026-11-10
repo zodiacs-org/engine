@@ -71,3 +71,18 @@ Not enforced here: the pack's size, digest and reproducibility (zodiacs.org's
 P4.2 record and its CI, above), the pack's own error (measured, above), and
 that the port gives the research runtime's numbers bit for bit, which
 zodiacs.org's check C9 compares.
+
+## The gates on the source tree
+
+`gates.log` and `full-tests-<node>-darwin-arm64.log` are `carrier/gates.sh`
+(1.1.0-rc.2's script, writing here, without its G-V5 step) on the tree before
+the source commit, on Node 22.22.2, 20.19.0 and 24.21.0 (macOS arm64, 10
+November 2026): typecheck, the full suite, build, the export smoke test, the
+API check, package contents and the pack dry run. Every step exits 0 but the
+suite, whose 4 failures on each Node are the macOS-only ones of
+`src/calc-fixtures.test.ts` (fixtures 17 and 25) and
+`src/techniques/site-parity.test.ts` (2), which CI on Linux passes; tier B
+is skipped there for want of the kernel and runs in CI's tier-B job.
+`carrier/pack-source.sh` and `carrier/carrier-gates.sh` are 1.1.0-rc.2's,
+for this candidate's archive (the second without the time-entry job, a
+1.1.0-rc.2 unit).
