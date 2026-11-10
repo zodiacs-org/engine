@@ -1,0 +1,39 @@
+Review follow-up local validation
+Working directory: mcp/
+
+Clean locked install command:
+npm ci --ignore-scripts --cache .cache/npm
+added 59 packages, and audited 60 packages in 1s
+
+15 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Complete validation command:
+node scripts/validate.mjs
+Node 22.23.3
+Source baseline: 48c7e321ab6dc13f8bc0f0ff29dbb7deda0219eb
+Validation inputs SHA-256: 0af49fa31527ba887aaaa2c509e9cd70bda946488c93d56bfa664a93cce95fb6
+Project lockfile SHA-256: 574dbfe07d0bd270fd2c74e4a00ac895a459ed8396d5f2e96feb963871241cb0
+Engine archive SHA-256: c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6
+Project disk bytes before checks: 160518356; cap: 2000000000
+Disk preflight reserve bytes: 20000000
+typecheck: passed
+build: passed
+vitest: passed
+Vitest tests: 315 passed; 0 failed; 0 pending
+Authored/build/report file sizes, Markdown dash exclusion and JSON snippets: passed
+Working tree scope, parent file/dist snapshot and whitespace: passed
+Parent pack exclusion: passed in test/isolation.mcp-test.ts
+Project disk bytes after checks: 161158644; cap: 2000000000
+Raw reports: mcp/.generated/ (gitignored)
+Parent build-dependent gates: not run; parent dist must remain untouched
+
+Coverage: all synthetic cases in test/*.mcp-test.ts, including the added
+embedded and CLI relative credential-file cases and npm cache configuration
+from both the checkout root and the MCP installation directory. Existing
+authentication, cancellation/deadline, query rejection, schema, tool, receipt,
+wording and parent isolation checks remain in the same complete run.
+Result: the clean install and complete validation passed on the first run.
+Client GUIs, public gateways and independent accuracy checks: not run.
