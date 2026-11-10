@@ -22,6 +22,10 @@ Alternatives: "Natal Chart and Transits", "Astrologer: Your Chart and Next 90 Da
 >
 > Astrologer does not make predictions about health, money or relationships.
 
+## Tool server
+
+MCP server URL: `https://zodiacs.org/mcp/engine` (streamable HTTP, no sign-in). Tools: `search_places`, `resolve_civil_time`, `reading_facts`, `natal_chart`, `transits_at`, `event_search`, `get_capabilities`. It is a separate endpoint from the consumer connector at `https://zodiacs.org/mcp`. It answers only once site PR zodiacs-org/site#868 is merged and the owner switches it on (`ZODIACS_ENGINE_MCP_ENABLED=1`).
+
 ## Category and tags
 
 Category: Lifestyle (or the closest the marketplace offers). Tags: astrology, natal chart, birth chart, transits, zodiac.

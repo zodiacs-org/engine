@@ -1,0 +1,147 @@
+{
+  "endpoint": "http://localhost/mcp/engine",
+  "charts": 64,
+  "arbiter": "Swiss Ephemeris via pyswisseph 2.10.03; civil time Python zoneinfo, system tzdb 2026c",
+  "server": {
+    "name": "zodiacs-engine",
+    "version": "1.0.0",
+    "engine": {
+      "name": "@zodiacs/engine",
+      "version": "1.1.0-rc.1"
+    },
+    "ephemeris": {
+      "name": "astronomy-engine",
+      "version": "2.1.19"
+    },
+    "shippedTzdb": {
+      "version": "2025c",
+      "sha256": "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957",
+      "form": "main+backzone"
+    },
+    "hostTzdb": "2026c",
+    "node": "22.23.3"
+  },
+  "checks": {
+    "status": {
+      "pass": 64,
+      "fail": 0
+    },
+    "sheet identical to the engine CLI": {
+      "pass": 64,
+      "fail": 0
+    },
+    "civil-time status": {
+      "pass": 62,
+      "fail": 0
+    },
+    "utc instants (1 s)": {
+      "pass": 61,
+      "fail": 1,
+      "maxResidual": 9,
+      "unit": "seconds"
+    },
+    "positions Sun to Pluto (30\")": {
+      "pass": 550,
+      "fail": 0,
+      "maxResidual": 18.1,
+      "unit": "arcsec"
+    },
+    "signs": {
+      "pass": 660,
+      "fail": 0
+    },
+    "retrograde flags": {
+      "pass": 605,
+      "fail": 0
+    },
+    "true node (60\")": {
+      "pass": 55,
+      "fail": 0,
+      "maxResidual": 10.46,
+      "unit": "arcsec"
+    },
+    "ascendant (30\" + 0.9 s x rate)": {
+      "pass": 54,
+      "fail": 1,
+      "maxResidual": 95.29,
+      "unit": "arcsec"
+    },
+    "midheaven (30\" + 0.9 s x rate)": {
+      "pass": 54,
+      "fail": 1,
+      "maxResidual": 146.89,
+      "unit": "arcsec"
+    },
+    "placidus cusps (30\" + 0.9 s x rate)": {
+      "pass": 49,
+      "fail": 1,
+      "maxResidual": 155.16,
+      "unit": "arcsec"
+    },
+    "stations in the window (1 day)": {
+      "pass": 6,
+      "fail": 0,
+      "maxResidual": 0.1,
+      "unit": "hours"
+    },
+    "fold: later ascendant": {
+      "pass": 6,
+      "fail": 0,
+      "maxResidual": 4.95,
+      "unit": "arcsec"
+    },
+    "fold: later ascendant sign": {
+      "pass": 6,
+      "fail": 0
+    },
+    "placidus undefined at a polar birthplace": {
+      "pass": 5,
+      "fail": 0
+    },
+    "transit listed": {
+      "pass": 55,
+      "fail": 0
+    },
+    "transit exact time Sun to Saturn (2 h)": {
+      "pass": 52,
+      "fail": 0,
+      "maxResidual": 14.09,
+      "unit": "minutes"
+    },
+    "transit day in the zone": {
+      "pass": 52,
+      "fail": 0
+    },
+    "no transit beyond the expected list": {
+      "pass": 10,
+      "fail": 0
+    },
+    "expected transit outside the local window (not checked)": {
+      "pass": 1,
+      "fail": 0
+    },
+    "transit Uranus to Pluto: range and +/-1 day (c1)": {
+      "pass": 3,
+      "fail": 0
+    },
+    "unknown time: houses and angles null": {
+      "pass": 2,
+      "fail": 0
+    },
+    "unknown time: Moon range ends (30\")": {
+      "pass": 4,
+      "fail": 0,
+      "maxResidual": 1.59,
+      "unit": "arcsec"
+    },
+    "unknown time: moonSignDepends": {
+      "pass": 2,
+      "fail": 0
+    }
+  },
+  "totals": {
+    "pass": 2482,
+    "fail": 4
+  },
+  "seconds": 107
+}
