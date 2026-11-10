@@ -1,0 +1,94 @@
+{
+  "schema": "zodiacs-webhook-events-vendor/1",
+  "repository": "https://github.com/zodiacs-org/engine",
+  "commit": "7d6fb88d03b3896ee1e5496ed99961015d291d3c",
+  "transformation": {
+    "from": "'../../src/calc.js'",
+    "to": "'../../../../src/calc.js'",
+    "executorContext": {
+      "file": "src/search.ts",
+      "replacements": [
+        {
+          "from": "  providers: QueryProviders = {}): QueryExecutionResult {",
+          "to": "  providers: QueryProviders = {},\n  // Trusted webhook adapter supplies its bounded context after schedule intersection.\n  executionContext?: EvaluationContext): QueryExecutionResult {"
+        },
+        {
+          "from": "  const window = validateWindow(query.range !== null ? { ...query.range, clock } : options.horizon!);",
+          "to": "  const window = executionContext?.window ?? validateWindow(query.range !== null ? { ...query.range, clock } : options.horizon!);"
+        },
+        {
+          "from": "  const context = new EvaluationContext(window, { maxEvaluations: options.maxEvaluations,",
+          "to": "  const context = executionContext ?? new EvaluationContext(window, { maxEvaluations: options.maxEvaluations,"
+        }
+      ]
+    }
+  },
+  "files": [
+    {
+      "source": "events/src/aspects.ts",
+      "file": "src/aspects.ts",
+      "upstreamSha256": "ebdcb755264e47e6a47676f4e7b1e846085ddb64895acd71ee41c74652881424",
+      "localSha256": "ebdcb755264e47e6a47676f4e7b1e846085ddb64895acd71ee41c74652881424"
+    },
+    {
+      "source": "events/src/context.ts",
+      "file": "src/context.ts",
+      "upstreamSha256": "2a7c6f34776f8b8655100e71b3d929dc7881ea459cc7bca2d061efb4ee382471",
+      "localSha256": "2a7c6f34776f8b8655100e71b3d929dc7881ea459cc7bca2d061efb4ee382471"
+    },
+    {
+      "source": "events/src/eclipses.ts",
+      "file": "src/eclipses.ts",
+      "upstreamSha256": "2ba8eaddec70153017dc47f1ff6c543b55039b90295fee4048c4e83af6b7a571",
+      "localSha256": "da0eb1039c7beb7f79f433a91369c42b60cd46b5a6e4fab1909db7c7f6b7e496"
+    },
+    {
+      "source": "events/src/engine.ts",
+      "file": "src/engine.ts",
+      "upstreamSha256": "a58325ad96e67b3d4b30ce7bef4916fb13dc9a182de858785921b45a7736bd02",
+      "localSha256": "29644c7a06d602fcbada3c79369ed377c0376a65d158ae163fa69d8f61d15d30"
+    },
+    {
+      "source": "events/src/longitude.ts",
+      "file": "src/longitude.ts",
+      "upstreamSha256": "e8d2b8129f45c4676f3d61a76fc0a7b56a9f50acaa992e359b61231f0ee13fe4",
+      "localSha256": "e8d2b8129f45c4676f3d61a76fc0a7b56a9f50acaa992e359b61231f0ee13fe4"
+    },
+    {
+      "source": "events/src/query.ts",
+      "file": "src/query.ts",
+      "upstreamSha256": "a94c3d9dc0c1d76bc070da0e70221cb1fbd1590ec3a4abc36c07d03ee9fc0897",
+      "localSha256": "a94c3d9dc0c1d76bc070da0e70221cb1fbd1590ec3a4abc36c07d03ee9fc0897"
+    },
+    {
+      "source": "events/src/root.ts",
+      "file": "src/root.ts",
+      "upstreamSha256": "4b9ab104568a44601ada9a34f374162a6c9a04a323dde6691335f0f59dfd4256",
+      "localSha256": "4b9ab104568a44601ada9a34f374162a6c9a04a323dde6691335f0f59dfd4256"
+    },
+    {
+      "source": "events/src/search.ts",
+      "file": "src/search.ts",
+      "upstreamSha256": "068b9983954e503bd2c3f07e901cc7b284230640bb9151a608da1111dd6967b6",
+      "localSha256": "6fb5c8cdda0ed2a42c2903cf156a409c90b748772e10c136ae73892284ee8fae"
+    },
+    {
+      "source": "events/src/stations.ts",
+      "file": "src/stations.ts",
+      "upstreamSha256": "887dfa33aa2bd5d6e9127aeb689256a28b3c97d00f6daab8d48bb8ba8fb49a0b",
+      "localSha256": "887dfa33aa2bd5d6e9127aeb689256a28b3c97d00f6daab8d48bb8ba8fb49a0b"
+    },
+    {
+      "source": "events/src/types.ts",
+      "file": "src/types.ts",
+      "upstreamSha256": "e568af57b36d414c7c95234783edda06680ebed6be2ee6139fc109e533eb33ae",
+      "localSha256": "e568af57b36d414c7c95234783edda06680ebed6be2ee6139fc109e533eb33ae"
+    },
+    {
+      "source": "events/src/void.ts",
+      "file": "src/void.ts",
+      "upstreamSha256": "679409d67caeb4677676ef8b56bb4c29ca7e8ba85ee184d54380e8fcd3ede8be",
+      "localSha256": "679409d67caeb4677676ef8b56bb4c29ca7e8ba85ee184d54380e8fcd3ede8be"
+    }
+  ]
+}
