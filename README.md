@@ -16,12 +16,15 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**1.1.0-rc.2**, the second candidate for 1.1.0, not published. Over 1.0.0,
-natal receipts name their conventions as ids of the Zodiacs conventions
-registry, which a new entry, `@zodiacs/engine/conventions`, gives (from
-1.1.0-rc.1; see *Draft natal receipts*). This candidate adds two entries
-that load no ephemeris, `@zodiacs/engine/time` and `@zodiacs/engine/lite`,
-for fifteen public entry points in all; time bands in
+**1.1.0-rc.3**, the third candidate for 1.1.0, not published. It adds
+`@zodiacs/engine/de440`, positions from JPL's DE440 through a pack the caller
+supplies, which the root's `withEphemeris` puts in place of astronomy-engine,
+for sixteen public entry points (see [docs/de440.md](docs/de440.md)). Over
+1.0.0, natal receipts name their conventions as ids of the Zodiacs
+conventions registry, which a new entry, `@zodiacs/engine/conventions`,
+gives (from 1.1.0-rc.1; see *Draft natal receipts*). 1.1.0-rc.2 added two
+entries that load no ephemeris, `@zodiacs/engine/time` and
+`@zodiacs/engine/lite`; time bands in
 `@zodiacs/engine/calc`; how far the birth time can move before each varga
 sign changes; and corrections of statements that said more than their
 evidence (CHANGELOG.md). The package follows Semantic Versioning:
@@ -245,6 +248,12 @@ for (const aspect of today.aspects) {
   astronomy-engine's vectors to the ecliptic of date: `tilt`,
   `eclipticFrame`, `meanEcliptic` and `eclipticOfDate`; and `timeBands`, the
   1-σ bands of a recorded instant's TT and UT1 (see *Time*).
+- `@zodiacs/engine/de440`, new in 1.1.0-rc.3: `openDe440Pack` opens a sealed
+  pack of DE440's series that the caller supplies and checks it against the
+  SHA-256 it is given, and the root's `withEphemeris(source, fn)` runs `fn`
+  with every body position taken from it; charts name it, and so do their
+  receipts. The entry fetches nothing and ships no pack (see
+  [docs/de440.md](docs/de440.md)).
 - `@zodiacs/engine/lite`, new in 1.1.0-rc.2, gives declination parallels and
   out-of-bounds flags, a chart's sect under a named convention
   (`sectReading`), composite midpoints and their aspects, and the essential

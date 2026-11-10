@@ -9,6 +9,7 @@ export {
   transits
 } from "./api.js";
 export type { NatalSource, SaturnReturnSource } from "./api.js";
+export { withEphemeris } from "./ephemeris.js";
 
 export { PROGRESSION_DAYS_PER_YEAR, progressedBodies, progressedInstant } from "./progressions.js";
 
@@ -173,8 +174,10 @@ export type {
   PointName,
   PointPosition,
   Polarity,
+  PositionSource,
   Sect,
   SignDefinition,
+  SourceBody,
   SynastryResult,
   TimeScale,
   TimeScaleName,

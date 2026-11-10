@@ -546,7 +546,7 @@ assertNoBreaches(checkBuild({ files: builtFiles, read: readBuilt }), "dist/");
 const exportsMap = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).exports;
 for (const [subpath, target] of Object.entries(exportsMap)) {
   if (subpath === "./calc" || subpath === "./vedic") continue;
-  const entry = /^\.\/dist\/([a-z-]+)\.js$/u.exec(target.import)[1];
+  const entry = /^\.\/dist\/([a-z0-9-]+)\.js$/u.exec(target.import)[1];
   const graph = staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
   for (const source of new Set([...graph.sources, ...graph.held, ...graph.marked])) {
     assert(!UNMARKED_SOURCE.test(source), `${subpath} reaches ${source}, which the table check leaves out because only ./calc and ./vedic reach it`);

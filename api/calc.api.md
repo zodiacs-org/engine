@@ -224,6 +224,10 @@ interface Chart {
     deltaT: DeltaT;
     timeScale: TimeScale;
     engineVersion: string;
+    ephemeris?: {
+        readonly name: string;
+        readonly version: string;
+    };
 }
 
 type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span";

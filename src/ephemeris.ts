@@ -27,7 +27,9 @@ import type {
   ChartInput,
   ChartPoints,
   PointName,
-  PointPosition
+  PointPosition,
+  PositionSource,
+  SourceBody
 } from "./types.js";
 import { ENGINE_VERSION } from "./types.js";
 
@@ -45,6 +47,38 @@ interface Clock {
 }
 
 const UTC_CLOCK: Clock = { scale: "utc", pin: undefined };
+
+/** The source `withEphemeris` installed, or null for astronomy-engine. */
+let source: PositionSource | null = null;
+
+/**
+ * Run `run` with every body position the engine computes taken from
+ * `positionSource` (for example `@zodiacs/engine/de440`'s), then restore the
+ * one before, whatever happens. Charts computed inside name it
+ * (`chart.ephemeris`), and so do their receipts. `run` must be synchronous:
+ * a function that returns a promise would leave its later steps on another
+ * source, so that throws TypeError (after `run` has returned). Calls nest.
+ */
+export function withEphemeris<T>(positionSource: PositionSource, run: () => T): T {
+  if (typeof positionSource?.place !== "function" || typeof positionSource.trueNode !== "function" || typeof run !== "function")
+    throw new TypeError("withEphemeris needs a position source and a function");
+  const previous = source;
+  source = positionSource;
+  let result: T;
+  try {
+    result = run();
+  } finally {
+    source = previous;
+  }
+  if (typeof (result as { then?: unknown } | null)?.then === "function") throw new TypeError("withEphemeris runs synchronous functions only");
+  return result;
+}
+
+/** A body's longitude from a source: its place, or the true node and the point opposite. */
+function sourceLongitude(from: PositionSource, body: BodyName, ttDays: number): number {
+  if (body === "North Node") return from.trueNode(ttDays);
+  return body === "South Node" ? normalizeLongitude(from.trueNode(ttDays) + 180) : from.place(body, ttDays).lon;
+}
 
 /**
  * astronomy-engine keeps one ΔT function for its whole module, and every time
@@ -186,6 +220,7 @@ function longitudeAt(body: BodyName, ms: number, clock: Clock): number {
 }
 
 function longitudeOn(body: BodyName, basis: TimeBasis): number {
+  if (source) return sourceLongitude(source, body, basis.ttDays);
   const time = timeOf(basis);
   if (body === "Moon") return moonOfDate(time).lon;
   if (body === "North Node") return trueNodeLongitude(time);
@@ -258,6 +293,7 @@ export function computeBodies(date: Date): BodyPosition[] {
 }
 
 function bodiesAt(ms: number, clock: Clock): BodyPosition[] {
+  if (source) return sourceBodiesAt(source, ms, clock);
   const bodies: BodyPosition[] = [];
   for (const planet of PLANETS) {
     const coordinates = planetOfDate(planet.body, timeAt(ms, clock));
@@ -276,6 +312,17 @@ function bodiesAt(ms: number, clock: Clock): BodyPosition[] {
     position("South Node", normalizeLongitude(northNode + 180), 0, nodeSpeed)
   );
   return bodies;
+}
+
+/** The bodies in the order bodiesAt gives them, from a source. */
+function sourceBodiesAt(from: PositionSource, ms: number, clock: Clock): BodyPosition[] {
+  const tt = basisAt(ms, clock).ttDays;
+  return (["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "North Node", "South Node"] as const).map(
+    (body) => {
+      const place = body === "North Node" || body === "South Node" ? { lon: sourceLongitude(from, body, tt), lat: 0 } : from.place(body as SourceBody, tt);
+      return position(body, place.lon, place.lat, speedAt(body, ms, clock));
+    }
+  );
 }
 
 const clockOf = (input: Pick<ChartInput, "timeScale" | "deltaT">): Clock => ({
@@ -326,7 +373,8 @@ function chartAt(input: ChartInput): Chart {
     flags,
     deltaT: basis.deltaT,
     timeScale: basis.timeScale,
-    engineVersion: ENGINE_VERSION
+    engineVersion: ENGINE_VERSION,
+    ...(source && { ephemeris: { name: source.ephemeris.name, version: source.ephemeris.version } })
   };
 }
 

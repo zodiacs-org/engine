@@ -194,6 +194,26 @@ const CONVENTIONS = /*#__PURE__*/ (() => Object.freeze({
   conventionIds: "zodiacs-conventions-registry;receipt-and-result;sorted-unique;in-receipt"
 } as const))();
 /**
+ * The conventions a chart computed from a DE440 pack records
+ * (`@zodiacs/engine/de440` through `withEphemeris`, from 1.1.0-rc.3): the
+ * current set, with the bodies placed by that entry's reduction instead of
+ * astronomy-engine's. The planets and the Moon alike: light-time by
+ * iteration, deflection of light by the Sun, relativistic annual aberration,
+ * from the ICRF to the true ecliptic and equinox of date by the IAU 2006
+ * precession (with frame bias) and IAU 2000B nutation (P03-adjusted), and TT
+ * to TDB by the three-term form; Mars to Pluto are planetary-system
+ * barycentres. The nodes are still the instantaneous orbit plane's, now of
+ * the ephemeris's Moon. The angles and the houses are computed as in the
+ * current set.
+ */
+const CONVENTIONS_DE440 = /*#__PURE__*/ (() => Object.freeze({
+  ...CONVENTIONS,
+  planetPositions:
+    "apparent-geocentric-ecliptic-of-date;light-time;solar-deflection;relativistic-aberration;barycentres-mars-to-pluto",
+  moonPosition: "ephemeris-geocentric-moon;light-time;solar-deflection;relativistic-aberration",
+  positionFrame: "icrf-to-true-ecliptic-of-date;iau2006-precession-with-bias;iau2000b-nutation-p03;tdb-three-term"
+} as const))();
+/**
  * A conventions set: what a receipt's numbers mean, as named ids, one for each
  * part of the calculation (`zodiac`, `nutation`, `angles` and so on). A
  * receipt carries exactly one of NATAL_RECEIPT_CONVENTION_SETS.
@@ -201,10 +221,12 @@ const CONVENTIONS = /*#__PURE__*/ (() => Object.freeze({
 export type NatalConventionSet = Readonly<Record<string, string>>;
 
 /**
- * Every conventions set a receipt may carry, newest first: index 0 is the set
- * this release writes, and the codec reads every set here. A minor release may
- * add a set at the front, so take a set by its content, not by an index other
- * than 0.
+ * Every conventions set a receipt may carry: index 0 is the set this release
+ * writes for a chart from astronomy-engine; then the earlier sets, newest
+ * first; and last the set it writes for a chart from a DE440 pack (from
+ * 1.1.0-rc.3), placed there so that no earlier set's index moved. The codec
+ * reads every set here. A minor release may add a set at the front, so take a
+ * set by its content, not by an index other than 0.
  */
 export const NATAL_RECEIPT_CONVENTION_SETS: readonly NatalConventionSet[] = /*#__PURE__*/ Object.freeze([
   CONVENTIONS,
@@ -212,7 +234,8 @@ export const NATAL_RECEIPT_CONVENTION_SETS: readonly NatalConventionSet[] = /*#_
   CONVENTIONS_RC15,
   CONVENTIONS_RC8,
   CONVENTIONS_RC7,
-  CONVENTIONS_RC3
+  CONVENTIONS_RC3,
+  CONVENTIONS_DE440
 ]);
 // The released versions that wrote each earlier set, with any build metadata:
 // exact lists, not ranges, so no other spelling passes them.
@@ -235,6 +258,13 @@ const before = (version: string, release: string): boolean => compareVersions(ve
 const NUTATION_RELEASE = "0.1.1-rc.16";
 /** The feature an envelope of the set from 1.1.0-rc.1 requires. */
 const IDS_FEATURE = "convention-ids";
+/** The feature an envelope of the DE440 set also requires, so that an engine before 1.1.0-rc.3 refuses it. */
+const DE440_FEATURE = "ephemeris-jpl-de440";
+/** The ephemeris a DE440 receipt names; its version is the pack's SHA-256. */
+const DE440_EPHEMERIS = "jpl-de440";
+/** The release that first wrote the DE440 set. */
+const DE440_RELEASE = "1.1.0-rc.3";
+const SHA256_HEX = /^[0-9a-f]{64}$/;
 /** Engines before 0.1.1-rc.9 offered only three house systems. */
 const RC9_RELEASE = "0.1.1-rc.9";
 /** Engines before 0.1.1-rc.10 did not offer Equal houses from the midheaven. */
@@ -272,7 +302,8 @@ export interface NatalReceipt {
   engine: {
     name: "@zodiacs/engine";
     version: string;
-    ephemeris?: { name: "astronomy-engine"; version: string };
+    /** astronomy-engine and its version, or `jpl-de440` and the SHA-256 of the pack. */
+    ephemeris?: { name: "astronomy-engine" | "jpl-de440"; version: string };
   };
   provenance: (NatalProvenanceClaims & { status: "claimed" }) | null;
   conventions: NatalConventionSet;
@@ -359,7 +390,8 @@ export interface NatalEnvelope {
   /**
    * `convention-ids` with the conventions set from 1.1.0-rc.1 on, so that an
    * earlier engine refuses the record as `unsupported_feature`, and none with
-   * an earlier set. Unknown features fail closed.
+   * an earlier set; `convention-ids` then `ephemeris-jpl-de440` with the DE440
+   * set. Unknown features fail closed.
    */
   requiredFeatures: string[];
   receipt: NatalReceipt;
@@ -1110,7 +1142,7 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   if (envelope.schema !== NATAL_ENVELOPE_SCHEMA) fail("unsupported_version");
   fields(envelope, ["schema", "requiredFeatures", "receipt", "result"], ["extensions"]);
   const features = list(envelope.requiredFeatures);
-  if (features.some((feature) => feature !== IDS_FEATURE)) fail("unsupported_feature");
+  if (features.some((feature) => feature !== IDS_FEATURE && feature !== DE440_FEATURE)) fail("unsupported_feature");
   const receipt = record(envelope.receipt);
   if (receipt.schema !== NATAL_RECEIPT_SCHEMA) fail("unsupported_version");
   fields(receipt, [
@@ -1153,13 +1185,17 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     if (timeKnown && Math.abs(coords.latitude as number) === 90) fail("unsupported_feature");
   }
   const conventions = conventionSet(receipt.conventions);
+  const de440 = conventions === CONVENTIONS_DE440;
+  // The sets from 1.1.0-rc.1 on carry convention ids.
+  const withIds = conventions === CONVENTIONS || de440;
   // The rc.8 set on records ΔT; the time-basis sets (rc.15 on) also the instant's scale and basis.
-  const timeBasis =
-    conventions === CONVENTIONS || conventions === CONVENTIONS_RC16 || conventions === CONVENTIONS_RC15;
+  const timeBasis = withIds || conventions === CONVENTIONS_RC16 || conventions === CONVENTIONS_RC15;
   const current = timeBasis || conventions === CONVENTIONS_RC8;
   if (timeBasis !== Object.hasOwn(receipt, "timeScale")) fail("invalid_shape");
-  if ((conventions === CONVENTIONS) !== Object.hasOwn(receipt, "conventionIds")) fail("invalid_shape");
-  if (features.length !== (conventions === CONVENTIONS ? 1 : 0)) fail("inconsistent_result");
+  if (withIds !== Object.hasOwn(receipt, "conventionIds")) fail("invalid_shape");
+  const expectedFeatures = de440 ? [IDS_FEATURE, DE440_FEATURE] : withIds ? [IDS_FEATURE] : [];
+  if (features.length !== expectedFeatures.length || features.some((feature, index) => feature !== expectedFeatures[index]))
+    fail("inconsistent_result");
   const scale = timeBasis ? choice(receipt.timeScale, TIME_SCALE_NAMES) : null;
   const result = validateResult(
     envelope.result,
@@ -1220,8 +1256,13 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   if (current) {
     const ephemeris = record(engine.ephemeris);
     fields(ephemeris, ["name", "version"]);
-    if (ephemeris.name !== "astronomy-engine") fail("unsupported_feature");
-    version(ephemeris.version);
+    if (de440) {
+      if (ephemeris.name !== DE440_EPHEMERIS) fail("unsupported_feature");
+      if (typeof ephemeris.version !== "string" || !SHA256_HEX.test(ephemeris.version)) fail("invalid_value");
+    } else {
+      if (ephemeris.name !== "astronomy-engine") fail("unsupported_feature");
+      version(ephemeris.version);
+    }
   }
   validateProvenance(receipt.provenance, engineVersion);
   validateLocal(receipt.localResolution, receipt as unknown as NatalReceipt, timeBasis);
@@ -1232,12 +1273,13 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     (conventions === CONVENTIONS_RC15 && !RC15.test(engineVersion)) ||
     ((conventions === CONVENTIONS || conventions === CONVENTIONS_RC16) &&
       before(engineVersion, NUTATION_RELEASE)) ||
+    (de440 && before(engineVersion, DE440_RELEASE)) ||
     (!HOUSE_SYSTEMS_BEFORE_RC9.includes(requested) && before(engineVersion, RC9_RELEASE)) ||
     (!HOUSE_SYSTEMS_BEFORE_RC10.includes(requested) && before(engineVersion, RC10_RELEASE))
   )
     fail("inconsistent_result");
   fixedFields(receipt.coverage, COVERAGE);
-  if (conventions === CONVENTIONS) {
+  if (withIds) {
     const ids = list(receipt.conventionIds);
     if (ids.some((id) => typeof id !== "string")) fail("invalid_value");
     const named = natalConventionIds({ receipt: receipt as unknown as NatalReceipt, result });
@@ -1296,6 +1338,15 @@ export function createNatalEnvelope(
       ["latitude", "longitude", "flags", "deltaT", "timeScale"]
     );
     if (!(input.utc instanceof Date)) fail("invalid_value");
+    // A chart from a DE440 pack names it (src/ephemeris.ts, withEphemeris);
+    // any other ephemeris it names is not one this codec can describe.
+    const ephemerisNamed = source.ephemeris === undefined ? null : record(source.ephemeris);
+    if (ephemerisNamed !== null) {
+      fields(ephemerisNamed, ["name", "version"]);
+      if (ephemerisNamed.name !== DE440_EPHEMERIS) fail("unsupported_feature");
+      if (typeof ephemerisNamed.version !== "string" || !SHA256_HEX.test(ephemerisNamed.version)) fail("invalid_value");
+    }
+    const de440 = ephemerisNamed !== null;
     const supplied = record(cloneData(context));
     fields(
       supplied,
@@ -1332,13 +1383,13 @@ export function createNatalEnvelope(
       engine: {
         name: "@zodiacs/engine",
         version: source.engineVersion,
-        ephemeris: { ...EPHEMERIS }
+        ephemeris: de440 ? { name: DE440_EPHEMERIS, version: ephemerisNamed!.version as string } : { ...EPHEMERIS }
       },
       provenance:
         supplied.provenance === undefined
           ? null
           : { ...record(supplied.provenance), status: "claimed" },
-      conventions: { ...CONVENTIONS },
+      conventions: { ...(de440 ? CONVENTIONS_DE440 : CONVENTIONS) },
       coverage: { ...COVERAGE }
     };
     // The fields the record's conventions set names, and only those.
@@ -1357,7 +1408,7 @@ export function createNatalEnvelope(
     } catch {}
     const envelope = {
       schema: NATAL_ENVELOPE_SCHEMA,
-      requiredFeatures: [IDS_FEATURE],
+      requiredFeatures: de440 ? [IDS_FEATURE, DE440_FEATURE] : [IDS_FEATURE],
       receipt: { ...receipt, conventionIds },
       result,
       ...(supplied.extensions === undefined ? {} : { extensions: supplied.extensions })

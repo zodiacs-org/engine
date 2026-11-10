@@ -164,9 +164,11 @@ instrument, and only statistics are committed.
 (385) and coefficients (462) of its 77 luni-solar terms, the 10 coefficients
 of its five fundamental arguments and its two fixed offsets for the planetary
 terms. The build places them in a shared chunk under `dist/` that the
-ephemeris chunk and `dist/time.js` import, so the graphs of the root,
-`./calc`, `./internal`, `./sky`, `./techniques`, `./time`, `./timing`,
-`./vedic` and `./window` load them. The model is D. D.
+ephemeris chunk, `dist/time.js` and `dist/de440.js` import, so the graphs of
+the root, `./calc`, `./de440`, `./internal`, `./sky`, `./techniques`,
+`./time`, `./timing`, `./vedic` and `./window` load them;
+`@zodiacs/engine/de440` sums the same terms in the order the research
+runtime of zodiacs.org sums them. The model is D. D.
 McCarthy and B. J. Luzum, "An abridged model of the precession-nutation of
 the celestial pole", Celestial Mechanics and Dynamical Astronomy 85, 37–49
 (2003), as the IERS Conventions (2003), chapter 5, give it.
