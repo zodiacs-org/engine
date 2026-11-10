@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zodiacs:evals:factual-claim:1.0.0",
+  "title": "Quoted chart-reading claim or unresolved assertion",
+  "description": "Resolution describes extraction, never factual correctness. Spans use half-open UTF-16 code-unit offsets into the unchanged reading text. Quote agreement and aspect-body distinctness require the local validator.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "span", "status"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "id": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/id" },
+    "span": { "$ref": "#/$defs/span" },
+    "status": { "enum": ["resolved", "ambiguous", "unsupported", "abstained", "interpretive"] },
+    "factor": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/properties/factor" },
+    "polarity": { "enum": ["affirmed", "negated"] },
+    "certainty": { "enum": ["unqualified", "hedged", "conditional"] },
+    "temporalScope": { "enum": ["reference-instant", "whole-day", "unspecified"] },
+    "reason": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/text" }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "status": { "const": "resolved" }, "reason": false,
+        "factor": true, "polarity": true, "certainty": true, "temporalScope": true
+      },
+      "required": ["factor", "polarity", "certainty", "temporalScope"]
+    },
+    {
+      "properties": {
+        "status": { "enum": ["ambiguous", "unsupported", "abstained", "interpretive"] },
+        "factor": false, "polarity": false, "certainty": false, "temporalScope": false,
+        "reason": true
+      },
+      "required": ["reason"]
+    }
+  ],
+  "$defs": {
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "quote"],
+      "properties": {
+        "start": { "type": "integer", "minimum": 0, "maximum": 65536 },
+        "end": { "type": "integer", "minimum": 1, "maximum": 65536 },
+        "quote": { "type": "string", "minLength": 1, "maxLength": 4096, "pattern": "\\S" }
+      }
+    }
+  }
+}

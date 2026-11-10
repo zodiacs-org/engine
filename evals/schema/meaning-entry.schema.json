@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zodiacs:evals:meaning-entry:1.0.0",
+  "title": "Original chart-factor meaning entry",
+  "description": "Symbolic interpretation metadata, not a scientific or predictive assertion. Validation does not establish authorship or license rights.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "language", "tradition", "factor", "meaning", "provenance", "license"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "id": { "$ref": "#/$defs/id" },
+    "language": { "const": "en" },
+    "tradition": { "const": "western-tropical" },
+    "factor": {
+      "oneOf": [
+        { "$ref": "#/$defs/placement" },
+        { "$ref": "#/$defs/aspect" },
+        { "$ref": "#/$defs/house" },
+        { "$ref": "#/$defs/dignity" }
+      ]
+    },
+    "meaning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "themes", "epistemicStatus"],
+      "properties": {
+        "summary": { "$ref": "#/$defs/text" },
+        "themes": {
+          "type": "array", "minItems": 1, "maxItems": 12, "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 80, "pattern": "\\S" }
+        },
+        "epistemicStatus": { "const": "symbolic-interpretation" }
+      }
+    },
+    "provenance": {
+      "oneOf": [
+        { "$ref": "#/$defs/authoredProvenance" },
+        { "$ref": "#/$defs/generatedProvenance" }
+      ]
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spdxId", "attribution"],
+      "properties": {
+        "spdxId": { "const": "MIT" },
+        "attribution": { "$ref": "#/$defs/text" }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 100, "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*(?![\\s\\S])" },
+    "text": { "type": "string", "minLength": 1, "maxLength": 1600, "pattern": "\\S" },
+    "body": {
+      "enum": ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "North Node", "South Node"]
+    },
+    "aspectBody": {
+      "enum": ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
+    },
+    "classicalPlanet": { "enum": ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"] },
+    "sign": {
+      "enum": ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]
+    },
+    "placement": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "body", "sign"],
+      "properties": {
+        "kind": { "const": "placement" },
+        "body": { "$ref": "#/$defs/body" },
+        "sign": { "$ref": "#/$defs/sign" }
+      }
+    },
+    "aspect": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "a", "b", "aspect", "policy"],
+      "properties": {
+        "kind": { "const": "aspect" },
+        "a": { "$ref": "#/$defs/aspectBody" },
+        "b": { "$ref": "#/$defs/aspectBody" },
+        "aspect": { "enum": ["conjunction", "sextile", "square", "trine", "opposition"] },
+        "policy": { "const": "natal-major-defaults" }
+      }
+    },
+    "house": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "body", "house", "houseSystem"],
+      "properties": {
+        "kind": { "const": "house" },
+        "body": { "$ref": "#/$defs/body" },
+        "house": { "type": "integer", "minimum": 1, "maximum": 12 },
+        "houseSystem": {
+          "enum": ["whole", "placidus", "koch", "porphyry", "regiomontanus", "campanus", "topocentric", "alcabitius", "equal", "equal-mc", "vehlow", "meridian", "morinus"]
+        }
+      }
+    },
+    "dignity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "body", "sign", "dignity", "system"],
+      "properties": {
+        "kind": { "const": "dignity" },
+        "body": { "$ref": "#/$defs/classicalPlanet" },
+        "sign": { "$ref": "#/$defs/sign" },
+        "dignity": { "enum": ["domicile", "exaltation", "detriment", "fall"] },
+        "system": { "const": "classical-sign" }
+      }
+    },
+    "authoredProvenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "authors", "note"],
+      "properties": {
+        "kind": { "const": "authored" },
+        "authors": {
+          "type": "array", "minItems": 1, "maxItems": 12, "uniqueItems": true,
+          "items": { "$ref": "#/$defs/text" }
+        },
+        "note": { "$ref": "#/$defs/text" }
+      }
+    },
+    "generatedProvenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "backend", "model", "promptVersion", "inputDigest", "sourceEntryIds", "reviewStatus"],
+      "properties": {
+        "kind": { "const": "generated" },
+        "backend": { "$ref": "#/$defs/id" },
+        "model": { "$ref": "#/$defs/text" },
+        "promptVersion": { "$ref": "#/$defs/id" },
+        "inputDigest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}(?![\\s\\S])" },
+        "sourceEntryIds": {
+          "type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "reviewStatus": { "const": "unreviewed" }
+      }
+    }
+  }
+}
