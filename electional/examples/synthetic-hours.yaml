@@ -1,0 +1,25 @@
+# Invented place and activity. No person's birth data.
+schemaVersion: electional/v1
+activity: Synthetic planetary-hour CLI example
+location:
+  latitude: 0
+  longitude: 0
+range:
+  start: 2000-01-02T06:00:00Z
+  end: 2000-01-02T07:00:00Z
+  clock: utc
+houseSystem: whole
+rules:
+  - id: known-hour
+    kind: planetary-hour
+    mode: require
+    options:
+      rulers: [Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn]
+      utcOffsetMinutes: 0
+  - id: venus-hour
+    kind: planetary-hour
+    mode: prefer
+    weight: 1
+    options:
+      rulers: [Venus]
+      utcOffsetMinutes: 0

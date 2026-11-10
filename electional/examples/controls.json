@@ -1,0 +1,11 @@
+{
+  "stepMs": 3600000,
+  "lookaheadMs": 432000000,
+  "maxEvaluations": 10000,
+  "maxSkySamples": 100000,
+  "chunkMs": 86400000,
+  "maxChunks": 31,
+  "maxChunkEvaluations": 10000,
+  "maxChunkSkySamples": 100000,
+  "maxFrameBytes": 1000000
+}

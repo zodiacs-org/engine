@@ -1,0 +1,38 @@
+{
+  "schema": "electional-m6-test-record/v1",
+  "runtime": "v22.22.2",
+  "startedAt": "2026-10-14T07:41:49.521Z",
+  "command": "npm test -- --reporter=default --reporter=json --outputFile=generated/m6-vitest.json",
+  "tests": {
+    "passed": 250,
+    "failed": 0,
+    "skipped": 0
+  },
+  "publishedReference": {
+    "source": "US Naval Observatory rise/set ephemeris, hand-reduced hour durations",
+    "date": "2000-09-22",
+    "referenceClock": "ut",
+    "comparedClock": "utc",
+    "passed": 2
+  },
+  "sha256": {
+    "references/hour-cases.json": "623c7d495275f1bdd627cfe93111597df041d1e4e8e1617c3956641b21cb7308",
+    "test/fixtures/hour-windows.json": "98503ce1a47100203e9b732e4c07c9412c3a7354effb8f5e2e09e5cd314bf55e",
+    "src/hour-rule.ts": "fe4d985387bbc59bfea3331f82aacb5db60e4b41ac56404e77da37cfcd36e9a6",
+    "src/sky-adapter.ts": "68699dfbdc0ce7598a31dd0023924846ed5fe3230dc4b3411840a612b01fc55b",
+    "src/adapter-contract.ts": "b15f4e0fa43883562e0972d2674caafeba3d8d85fc2c51e8ff26ad9818fb7196",
+    "src/engine-adapter.ts": "0785ef72f71c099a01120cfabc8712866cf812e8c6974427ef57e9b2fff989f2",
+    "src/rule-schema.ts": "1db07425798feeee7685cc2071c241702b75f2aa182e8381d32d46f905271534",
+    "src/rules.ts": "af8cd509ef8d989cb7208bde3907dd05958226cb0b1384e346bb47eae8f0247f",
+    "test/hour-rule.electional-check.ts": "37919decf1cd20ec32af2566d1d854cf32e30572783c66ad77d9321bb22d7793",
+    "test/hour-references.electional-check.ts": "1616e5ef02de3826e80a0c8d2ca82dfe27702d964c8932516d56ad96673841ce",
+    "scripts/build-engine.mjs": "81a291e5b02a0cca331467021e48734519d1588e8b86c353dcb0f3ed5d34069c",
+    "scripts/check-hour-esm.mjs": "3faa5a5f263a3c7983e0db3f73e774ce48773352e22b7027af5dcf00f1a91753",
+    "scripts/record-m6-tests.mjs": "5530c0f7334ecd1498bf2fbfd55e5af1974fdcc5d372c95cfd5212559480e567",
+    "package-lock.json": "048e2eb7352f7b829e968173e821e4da617dddf15b23eab83e06df0a6009367d",
+    "../src/sky/hours.ts": "6102033bd36da4a2127a60b21f1122a3237c6d0dfb178eff0a0dc27e2bae3e3b",
+    "../src/sky/riseset.ts": "b1107d8a51c04f9a4473ed82e0bc7dab8172f8a924325f1942ea115d082689c5",
+    "../src/sky/fixtures/usno-rstt.json": "5711ba81e650762681d99e6fcd9c5938f3dcd2e11f9e688a3268e316d2427cc4"
+  },
+  "scope": "Hand-derived interval logic and control flow, native sky API status delegation, and the nominal UT/UTC coordinate comparison declared in references/hour-cases.json only. No general physical accuracy or completeness claim."
+}

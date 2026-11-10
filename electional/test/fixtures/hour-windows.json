@@ -1,0 +1,45 @@
+{
+  "arbiter": "Hand-derived half-open sets on invented solar-day marks; no astronomical accuracy claim",
+  "baseUtc": "2000-01-02T00:00:00Z",
+  "units": "hours relative to baseUtc; date marks are hours relative to that date's fixed-offset midnight",
+  "dayRulersSundayFirst": ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"],
+  "hourRulersSunday": ["Sun", "Venus", "Mercury", "Moon", "Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury", "Moon", "Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury", "Moon", "Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury"],
+  "cases": [
+    {
+      "id": "sunrise-and-hour-boundary", "rangeHours": [5, 8], "offsetMinutes": 0, "rulers": ["Sun"],
+      "completeDates": ["2000-01-01", "2000-01-02"], "satisfied": [[6, 7]], "failed": [[5, 6], [7, 8]], "unknown": [],
+      "derivation": "Saturday's last night hour is Mars and ends at Sunday's sunrise at 6. Sunday's Sun owns [6,7); Venus owns [7,8)."
+    },
+    {
+      "id": "night-belongs-to-preceding-solar-day", "rangeHours": [24, 32], "offsetMinutes": 0, "rulers": ["Venus"],
+      "completeDates": ["2000-01-02", "2000-01-03"], "satisfied": [[28, 29]], "failed": [[24, 28], [29, 32]], "unknown": [],
+      "derivation": "Monday before sunrise still belongs to Sunday's night. Sunday's hour 23 is Venus from Monday 4 to 5. Monday's first two day hours are Moon and Saturn."
+    },
+    {
+      "id": "sunset-begins-night-hour", "rangeHours": [17, 20], "offsetMinutes": 0, "rulers": ["Jupiter"],
+      "completeDates": ["2000-01-02"], "satisfied": [[18, 19]], "failed": [[17, 18], [19, 20]], "unknown": [],
+      "derivation": "Sunday's twelfth day hour is Saturn. Sunset at 18 begins Jupiter's first night hour; Mars owns [19,20)."
+    },
+    {
+      "id": "unknown-pre-sunrise", "rangeHours": [5, 8], "offsetMinutes": 0, "rulers": ["Sun"],
+      "completeDates": ["2000-01-02"], "satisfied": [[6, 7]], "failed": [[7, 8]], "unknown": [[5, 6]],
+      "derivation": "No earlier complete day establishes [5,6). It is unknown, while Sunday's supplied hours classify the rest."
+    },
+    {
+      "id": "positive-fixed-offset", "rangeHours": [0, 3], "offsetMinutes": 330, "rulers": ["Sun"],
+      "completeDates": ["2000-01-01", "2000-01-02"], "satisfied": [[0.5, 1.5]], "failed": [[0, 0.5], [1.5, 3]], "unknown": [],
+      "derivation": "At UTC plus 5.5 hours Sunday's local sunrise 6 is UTC 0.5. The selected hour ends at UTC 1.5; weekday ownership follows the fixed-offset date."
+    },
+    {
+      "id": "negative-fixed-offset", "rangeHours": [10, 13], "offsetMinutes": -300, "rulers": ["Sun"],
+      "completeDates": ["2000-01-01", "2000-01-02"], "satisfied": [[11, 12]], "failed": [[10, 11], [12, 13]], "unknown": [],
+      "derivation": "At UTC minus 5 hours Sunday's local sunrise 6 is UTC 11. Its Sun hour owns [11,12)."
+    },
+    {
+      "id": "all-rulers-select-entire-established-day", "rangeHours": [6, 30], "offsetMinutes": 0,
+      "rulers": ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"],
+      "completeDates": ["2000-01-02"], "satisfied": [[6, 30]], "failed": [], "unknown": [],
+      "derivation": "Every ruler is selected, so the supplied sunrise-to-next-sunrise partition passes entirely. The ending sunrise is excluded."
+    }
+  ]
+}

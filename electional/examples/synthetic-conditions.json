@@ -1,0 +1,205 @@
+{
+  "schemaVersion": "electional/v1",
+  "activity": "Synthetic condition example",
+  "location": {
+    "latitude": 0,
+    "longitude": 0
+  },
+  "range": {
+    "start": "2000-01-02T06:00:00Z",
+    "end": "2000-01-02T07:00:00Z",
+    "clock": "utc"
+  },
+  "houseSystem": "whole",
+  "natal": {
+    "synthetic": true,
+    "instant": "2000-01-01T00:00:00Z",
+    "clock": "utc",
+    "location": {
+      "latitude": 0,
+      "longitude": 0
+    },
+    "houseSystem": "whole"
+  },
+  "rules": [
+    {
+      "id": "known-hour",
+      "kind": "planetary-hour",
+      "mode": "require",
+      "options": {
+        "rulers": [
+          "Sun",
+          "Moon",
+          "Mercury",
+          "Venus",
+          "Mars",
+          "Jupiter",
+          "Saturn"
+        ],
+        "utcOffsetMinutes": 0
+      }
+    },
+    {
+      "id": "moon-not-void",
+      "kind": "moon-not-void",
+      "mode": "prefer",
+      "weight": 1,
+      "options": {
+        "bodies": "traditional"
+      }
+    },
+    {
+      "id": "direct-planets",
+      "kind": "direct-motion",
+      "mode": "prefer",
+      "weight": 1,
+      "options": {
+        "bodies": [
+          "Mercury",
+          "Venus"
+        ]
+      }
+    },
+    {
+      "id": "moon-sign",
+      "kind": "moon-sign",
+      "mode": "prefer",
+      "weight": 1,
+      "options": {
+        "signs": [
+          "taurus",
+          "libra"
+        ]
+      }
+    },
+    {
+      "id": "moon-phase",
+      "kind": "moon-phase",
+      "mode": "prefer",
+      "weight": 1,
+      "options": {
+        "phases": [
+          "Waxing Crescent",
+          "First Quarter",
+          "Waxing Gibbous"
+        ]
+      }
+    },
+    {
+      "id": "venus-hour",
+      "kind": "planetary-hour",
+      "mode": "prefer",
+      "weight": 1,
+      "options": {
+        "rulers": [
+          "Venus"
+        ],
+        "utcOffsetMinutes": 0
+      }
+    },
+    {
+      "id": "benefic-houses",
+      "kind": "benefic-house",
+      "mode": "prefer",
+      "weight": 1,
+      "options": {
+        "bodies": [
+          "Venus",
+          "Jupiter"
+        ],
+        "houses": [
+          1,
+          4,
+          7,
+          10
+        ],
+        "match": "any",
+        "polarFallback": "reject"
+      }
+    },
+    {
+      "id": "benefic-angles",
+      "kind": "benefic-angular",
+      "mode": "prefer",
+      "weight": 1,
+      "options": {
+        "bodies": [
+          "Venus",
+          "Jupiter"
+        ],
+        "angles": [
+          "ascendant",
+          "midheaven"
+        ],
+        "maxOrbDegrees": 3,
+        "match": "any"
+      }
+    },
+    {
+      "id": "applying-moon",
+      "kind": "applying-aspect",
+      "mode": "prefer",
+      "weight": 1,
+      "options": {
+        "body": "Moon",
+        "targets": [
+          "Mercury",
+          "Jupiter"
+        ],
+        "aspects": [
+          "sextile",
+          "trine"
+        ],
+        "maxOrbDegrees": 3,
+        "match": "any"
+      }
+    },
+    {
+      "id": "eclipse-margin",
+      "kind": "avoid-eclipses",
+      "mode": "prefer",
+      "weight": 1,
+      "options": {
+        "kinds": [
+          "solar",
+          "lunar"
+        ],
+        "withinDays": 1
+      }
+    },
+    {
+      "id": "station-margin",
+      "kind": "avoid-stations",
+      "mode": "prefer",
+      "weight": 1,
+      "options": {
+        "bodies": [
+          "Mercury",
+          "Venus"
+        ],
+        "withinDays": 1
+      }
+    },
+    {
+      "id": "synthetic-natal-contact",
+      "kind": "synastry-aspect",
+      "mode": "prefer",
+      "weight": 1,
+      "options": {
+        "movingBodies": [
+          "Moon"
+        ],
+        "natalBodies": [
+          "Sun",
+          "Jupiter"
+        ],
+        "aspects": [
+          "sextile",
+          "trine"
+        ],
+        "maxOrbDegrees": 3,
+        "match": "any"
+      }
+    }
+  ]
+}

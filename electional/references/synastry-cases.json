@@ -1,0 +1,26 @@
+{
+  "source": "NASA/JPL Horizons DE441",
+  "clock": "tt",
+  "frame": "quantity 31 apparent IAU76/80 ecliptic of date, geocentric; natal longitudes held in their own date frame",
+  "range": { "startMs": 1696291200000, "endMs": 1698451200000 },
+  "natal": {
+    "synthetic": true,
+    "instant": "2023-09-30T23:58:50.816Z",
+    "clock": "utc",
+    "location": { "latitude": 0, "longitude": 0 },
+    "houseSystem": "whole"
+  },
+  "natalTtMs": 1696118400000,
+  "natalTtMinusUtcMs": 69184,
+  "clockDerivation": "IERS leap-seconds.list has TAI-UTC=37 seconds from 2017-01-01 through this synthetic instant; TT=TAI+32.184 seconds. Adding 69184 ms gives the first October Horizons row exactly. The reducer verifies the committed source digest and applicable leap row independently.",
+  "body": "Moon",
+  "targets": ["Sun", "Jupiter"],
+  "aspects": [
+    { "type": "sextile", "angle": 60, "nativeLuminaryOrb": 5 },
+    { "type": "square", "angle": 90, "nativeLuminaryOrb": 8 },
+    { "type": "trine", "angle": 120, "nativeLuminaryOrb": 8 }
+  ],
+  "maxOrbDegrees": 6,
+  "boundaryToleranceMs": 600000,
+  "derivation": "Use the first independent Sun/Jupiter longitude rows as fixed natal points, subtract each from the independent moving Moon series, and interpolate threshold crossings on the short arc. Effective orbs are min(6,5)=5 for sextile and min(6,8)=6 for square and trine. These are published native convention values, not astronomical expectations taken from engine output. Construct any/all pair sets independently. This is an invented natal input, not a person's birth."
+}

@@ -1,0 +1,126 @@
+{
+  "source": "NASA/JPL Horizons DE441",
+  "clock": "tt",
+  "frame": "quantity 31 apparent IAU76/80 ecliptic of date, geocentric; natal longitudes held in their own date frame",
+  "inputs": {
+    "references/horizons.json": "df42cf3e19e2810c28bcccf8eb7de085dbb73ee92f574b6554f8f8bd91f868d2",
+    "references/void-horizons.json": "b36f766240ddb4ed11f0058e91c53f7c6bede8aa1b74e9caa587841431e43d78",
+    "references/synastry-cases.json": "49098d7a82c18075d1d1ff637d8ce47a97c039f41bdcf43c88edcede2b9e06c2",
+    "../scripts/time-scale-sources/leap-seconds.list": "db5a895f16853b03bfc865e8d68f9fc8710ef1740e3400c701cd46a5bbbc3433"
+  },
+  "natalTtMs": 1696118400000,
+  "perTarget": [
+    {
+      "body": "Sun",
+      "natalLongitude": 187.5621369,
+      "windows": [
+        {
+          "startMs": 1696319513445,
+          "endMs": 1696398026525
+        },
+        {
+          "startMs": 1696519946883,
+          "endMs": 1696603752887
+        },
+        {
+          "startMs": 1696739636583,
+          "endMs": 1696812197936
+        },
+        {
+          "startMs": 1697588461511,
+          "endMs": 1697654283507
+        },
+        {
+          "startMs": 1697776916843,
+          "endMs": 1697852781270
+        },
+        {
+          "startMs": 1697964431722,
+          "endMs": 1698037584283
+        }
+      ]
+    },
+    {
+      "body": "Jupiter",
+      "natalLongitude": 44.4341459,
+      "windows": [
+        {
+          "startMs": 1696574718365,
+          "endMs": 1696645387154
+        },
+        {
+          "startMs": 1696782186627,
+          "endMs": 1696869572327
+        },
+        {
+          "startMs": 1697000821325,
+          "endMs": 1697087810265
+        },
+        {
+          "startMs": 1697820508087,
+          "endMs": 1697895699012
+        },
+        {
+          "startMs": 1698006437941,
+          "endMs": 1698079080294
+        },
+        {
+          "startMs": 1698192654880,
+          "endMs": 1698251984548
+        }
+      ]
+    }
+  ],
+  "any": [
+    {
+      "startMs": 1696319513445,
+      "endMs": 1696398026525
+    },
+    {
+      "startMs": 1696519946883,
+      "endMs": 1696645387154
+    },
+    {
+      "startMs": 1696739636583,
+      "endMs": 1696869572327
+    },
+    {
+      "startMs": 1697000821325,
+      "endMs": 1697087810265
+    },
+    {
+      "startMs": 1697588461511,
+      "endMs": 1697654283507
+    },
+    {
+      "startMs": 1697776916843,
+      "endMs": 1697895699012
+    },
+    {
+      "startMs": 1697964431722,
+      "endMs": 1698079080294
+    },
+    {
+      "startMs": 1698192654880,
+      "endMs": 1698251984548
+    }
+  ],
+  "all": [
+    {
+      "startMs": 1696574718365,
+      "endMs": 1696603752887
+    },
+    {
+      "startMs": 1696782186627,
+      "endMs": 1696812197936
+    },
+    {
+      "startMs": 1697820508087,
+      "endMs": 1697852781270
+    },
+    {
+      "startMs": 1698006437941,
+      "endMs": 1698037584283
+    }
+  ]
+}

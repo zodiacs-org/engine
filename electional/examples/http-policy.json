@@ -1,0 +1,16 @@
+{
+  "maxConcurrentSearches": 2,
+  "deadlineMs": 10000,
+  "maxRequestBytes": 131072,
+  "maxResponseBytes": 1600000,
+  "maxFrameBytes": 1000000,
+  "maxRangeMs": 2678400000,
+  "minStepMs": 1000,
+  "maxLookaheadMs": 604800000,
+  "maxChunkMs": 3600000,
+  "maxChunks": 744,
+  "maxEvaluations": 100000,
+  "maxSkySamples": 1000000,
+  "maxChunkEvaluations": 1000,
+  "maxChunkSkySamples": 10000
+}

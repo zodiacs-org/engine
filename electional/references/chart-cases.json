@@ -1,0 +1,12 @@
+{
+  "source": "NASA/JPL Horizons DE441",
+  "clock": "tt",
+  "frame": "quantity 31 apparent IAU76/80 ecliptic of date, geocentric",
+  "range": { "startMs": 1696291200000, "endMs": 1698451200000 },
+  "body": "Moon",
+  "targets": ["Sun", "Jupiter"],
+  "aspects": ["conjunction", "sextile", "square", "trine", "opposition"],
+  "maxOrbDegrees": 5,
+  "boundaryToleranceMs": 600000,
+  "derivation": "Relative Moon-target hourly longitudes increase throughout this span. Each applying interval begins five degrees before an exact branch and ends at that branch. Hourly short-arc residuals are linearly interpolated by the independent reducer. Any/all target membership is union/intersection of those sets. References are TT coordinate labels, never UTC times."
+}

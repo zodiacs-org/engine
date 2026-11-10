@@ -1,0 +1,132 @@
+{
+  "schema": "electional-m14-examples/v1",
+  "runtime": "v22.23.3",
+  "status": "passed",
+  "command": "node scripts/check-examples-esm.mjs",
+  "consumerGraphs": [
+    "src/index.ts",
+    "src/cli-main.ts",
+    "src/http.ts",
+    "src/http-worker.ts",
+    "examples/library.mjs",
+    "examples/http.mjs"
+  ],
+  "events": {
+    "status": "missing"
+  },
+  "runs": [
+    {
+      "command": "node examples/library.mjs hours",
+      "status": "passed",
+      "terminalStatus": "complete",
+      "range": {
+        "start": "2000-01-02T06:00:00Z",
+        "end": "2000-01-02T07:00:00Z",
+        "clock": "utc"
+      },
+      "chunks": 1,
+      "fragmentCount": 1,
+      "evaluations": 18,
+      "skySamples": 1494,
+      "maxChunkBytes": 92229,
+      "reference": "All-ruler required-set membership, chronology, native receipt transport and inherited source assumptions; no pinned ephemeris boundaries."
+    },
+    {
+      "command": "node bin/electional.mjs search --rules examples/synthetic-hours.yaml --controls examples/controls.json",
+      "status": "passed",
+      "terminalStatus": "complete",
+      "range": {
+        "start": "2000-01-02T06:00:00Z",
+        "end": "2000-01-02T07:00:00Z",
+        "clock": "utc"
+      },
+      "chunks": 1,
+      "fragmentCount": 1,
+      "evaluations": 18,
+      "skySamples": 1494,
+      "maxChunkBytes": 92229,
+      "reference": "All-ruler required-set membership, chronology, native receipt transport and inherited source assumptions; no pinned ephemeris boundaries."
+    },
+    {
+      "command": "node examples/library.mjs conditions",
+      "status": "passed",
+      "terminalStatus": "unresolved",
+      "range": {
+        "start": "2000-01-02T06:00:00Z",
+        "end": "2000-01-02T07:00:00Z",
+        "clock": "utc"
+      },
+      "chunks": 1,
+      "fragmentCount": 1,
+      "evaluations": 21,
+      "skySamples": 1494,
+      "maxChunkBytes": 123732,
+      "reference": "All-ruler required-set membership, chronology, native receipt transport and inherited source assumptions; no pinned ephemeris boundaries."
+    },
+    {
+      "command": "node bin/electional.mjs search --rules examples/synthetic-conditions.json --controls examples/conditions-controls.json",
+      "status": "passed",
+      "terminalStatus": "unresolved",
+      "range": {
+        "start": "2000-01-02T06:00:00Z",
+        "end": "2000-01-02T07:00:00Z",
+        "clock": "utc"
+      },
+      "chunks": 1,
+      "fragmentCount": 1,
+      "evaluations": 21,
+      "skySamples": 1494,
+      "maxChunkBytes": 123732,
+      "reference": "All-ruler required-set membership, chronology, native receipt transport and inherited source assumptions; no pinned ephemeris boundaries."
+    },
+    {
+      "command": "node examples/library.mjs long-range",
+      "status": "passed",
+      "terminalStatus": "complete",
+      "range": {
+        "start": "2000-01-01T00:00:00Z",
+        "end": "2000-02-01T00:00:00Z",
+        "clock": "utc"
+      },
+      "chunks": 31,
+      "fragmentCount": 243,
+      "evaluations": 558,
+      "skySamples": 46314,
+      "maxChunkBytes": 334985,
+      "reference": "All-ruler required-set membership, chronology, native receipt transport and inherited source assumptions; no pinned ephemeris boundaries."
+    },
+    {
+      "command": "node bin/electional.mjs search --rules examples/synthetic-long-range.yaml --controls examples/controls.json",
+      "status": "passed",
+      "terminalStatus": "complete",
+      "range": {
+        "start": "2000-01-01T00:00:00Z",
+        "end": "2000-02-01T00:00:00Z",
+        "clock": "utc"
+      },
+      "chunks": 31,
+      "fragmentCount": 243,
+      "evaluations": 558,
+      "skySamples": 46314,
+      "maxChunkBytes": 334985,
+      "reference": "All-ruler required-set membership, chronology, native receipt transport and inherited source assumptions; no pinned ephemeris boundaries."
+    },
+    {
+      "command": "node examples/http.mjs",
+      "status": "passed",
+      "terminalStatus": "complete",
+      "range": {
+        "start": "2000-01-02T06:00:00Z",
+        "end": "2000-01-02T07:00:00Z",
+        "clock": "utc"
+      },
+      "chunks": 1,
+      "fragmentCount": 1,
+      "evaluations": 18,
+      "skySamples": 1494,
+      "maxChunkBytes": 92229,
+      "reference": "All-ruler required-set membership, chronology, native receipt transport and inherited source assumptions; no pinned ephemeris boundaries."
+    }
+  ],
+  "scope": "Built executable examples and a native all-ruler month, not astronomical accuracy, exhaustive event completeness, heap or throughput measurements. Raw results are consumed and discarded; only check summaries are recorded."
+}

@@ -1,0 +1,14 @@
+{
+  "arbiter": "Hand enumeration of integer labels satisfying abs(t-root) <= margin; no astronomical output",
+  "window": { "startMs": 0, "endMs": 10, "clock": "tt" },
+  "cases": [
+    { "id": "empty-complete", "marginMs": 2, "roots": [], "satisfied": [[0,10]], "failed": [], "unknown": [], "derivation": "No forbidden labels after a complete source scan." },
+    { "id": "outside-both-edges", "marginMs": 2, "roots": [[-2,-2,-2],[11,11,11]], "satisfied": [[1,9]], "failed": [[0,1],[9,10]], "unknown": [], "derivation": "The -2 root excludes label 0 inclusively; the 11 root excludes label 9 even though both roots are outside the requested domain." },
+    { "id": "zero-margin-owned-start", "marginMs": 0, "roots": [[0,0,0],[10,10,10]], "satisfied": [[1,10]], "failed": [[0,1]], "unknown": [], "derivation": "Only the exact root label is excluded. Label 0 belongs to the domain and label 10 does not." },
+    { "id": "overlapping-closed-margins", "marginMs": 2, "roots": [[3,3,3],[6,6,6]], "satisfied": [[0,1],[9,10]], "failed": [[1,9]], "unknown": [], "derivation": "The closed integer margins 1..5 and 4..8 merge into 1..8." },
+    { "id": "uncertain-margin-edges", "marginMs": 2, "roots": [[5,4,6]], "satisfied": [[0,2],[9,10]], "failed": [[4,7]], "unknown": [[2,4],[7,9]], "derivation": "Roots 4,5,6 exclude respectively 2..6,3..7,4..8. Their union is 2..8 and their intersection is 4..6." },
+    { "id": "wide-bracket-empty-certain-core", "marginMs": 1, "roots": [[5,2,8]], "satisfied": [[0,1]], "failed": [], "unknown": [[1,10]], "derivation": "A root anywhere in 2..8 can exclude 1..9, but no label is excluded by all allowed roots." },
+    { "id": "zero-margin-uncertain-root", "marginMs": 0, "roots": [[5,4,6]], "satisfied": [[0,4],[7,10]], "failed": [], "unknown": [[4,7]], "derivation": "Any of labels 4,5,6 can be the excluded singleton and none is certainly excluded." },
+    { "id": "certain-overlap-resolves-other-root", "marginMs": 2, "roots": [[5,4,6],[4,4,4]], "satisfied": [[0,2],[9,10]], "failed": [[2,7]], "unknown": [[7,9]], "derivation": "A second exact root excludes 2..6, including the first root's uncertain left edge. Labels 7..8 remain uncertain." }
+  ]
+}

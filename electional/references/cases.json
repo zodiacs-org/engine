@@ -1,0 +1,15 @@
+{
+  "source": "NASA/JPL Horizons DE441",
+  "clock": "tt",
+  "frame": "quantity 31 apparent IAU76/80 ecliptic of date, geocentric",
+  "crossingToleranceMs": 600000,
+  "stationToleranceMs": 1200000,
+  "series": [
+    { "id": "moon-october-2023", "body": "Moon", "command": "301", "start": "2023-10-01", "end": "2023-11-01" },
+    { "id": "sun-october-2023", "body": "Sun", "command": "10", "start": "2023-10-01", "end": "2023-11-01" },
+    { "id": "mercury-retrograde-april-2023", "body": "Mercury", "command": "199", "start": "2023-04-20", "end": "2023-04-23", "stationDirection": "retrograde" },
+    { "id": "mercury-direct-september-2023", "body": "Mercury", "command": "199", "start": "2023-09-14", "end": "2023-09-17", "stationDirection": "direct" },
+    { "id": "venus-retrograde-july-2023", "body": "Venus", "command": "299", "start": "2023-07-22", "end": "2023-07-25", "stationDirection": "retrograde" },
+    { "id": "venus-direct-september-2023", "body": "Venus", "command": "299", "start": "2023-09-03", "end": "2023-09-06", "stationDirection": "direct" }
+  ]
+}

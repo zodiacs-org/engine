@@ -1,0 +1,18 @@
+{
+  "schema": "electional-m13-http-esm/v1",
+  "runtime": "v22.22.2",
+  "status": "passed",
+  "checks": [
+    "built import-safe factory with native worker",
+    "loopback executable native receipt transport",
+    "strict startup inputs and bounded errors",
+    "SIGINT and SIGTERM shutdown",
+    "facts-only output",
+    "consumer import graphs exclude internal-scoring"
+  ],
+  "reference": "Synthetic all-ruler hours example: select every ruler, without astronomical golden positions",
+  "ruleDocument": "examples/synthetic-hours.yaml",
+  "controls": "examples/http-controls.json",
+  "policy": "examples/http-policy.json",
+  "scope": "Executable and HTTP transport behavior only; no astronomical accuracy or performance claim."
+}
