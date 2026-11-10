@@ -1,0 +1,13 @@
+M1: Add isolated Rust/WASM workspace, pinned build tooling, TypeScript loader, exact longitude-normalization parity tests, scope documentation and package-isolation checks.
+M2: Port angular arithmetic, sign annotations, strict date validation and Julian/Gregorian helpers to Rust/WASM with matching TypeScript signatures, native tests and bit-level parity coverage.
+M3: Port Delta T and UTC/UT1/TT time bases to Rust/WASM with digest-checked generated tables, retained attribution, leap and pin parity tests, explicit math tolerances and immutable metadata snapshots.
+M4: Port nutation, precession, frame rotations, obliquity and apparent sidereal time to Rust/WASM with matching TypeScript signatures, native tests, synthetic parity coverage, explicit angular tolerances and retained source attribution.
+M5: Port pinned solar and planetary series through Neptune, analytic velocities, light time and aberration to Rust/WASM with checked coefficient generation, native and synthetic parity tests, explicit tolerances and preserved MIT provenance.
+M6: Port Moon series, finite-difference states, true lunar nodes and longitude speeds to Rust/WASM with checked coefficients, synthetic wrap/station parity, explicit rounding limits, native tests and retained provenance.
+M7: Port Pluto integration and complete planetary position rows to Rust/WASM with checked state data, longitude speeds, span and input guards, exact metadata arithmetic, synthetic parity tests and documented rounding limits.
+M8: Port chart angles, seven house cusp systems and house membership to Rust/WASM with matching TypeScript helpers, exact boundary tests, polar geometry checks and explicit parity limits.
+M9: Complete all house systems in Rust/WASM with Placidus and Koch polar fallbacks, preserved convergence and cusp ordering, native geometry tests, synthetic parity coverage and documented tolerance limits.
+M10: Complete review and verification of legacy/configured Rust/WASM aspects, add maximum-capacity policy, label and result parity coverage, and document exact arithmetic compatibility.
+M11: Complete synchronous wrapper contracts with exact signature checks, compatible WASM build validation and retry, browser loading smoke tests, preserved metadata types, and Date-error and calendar-result boundary fixes.
+M12: Complete synthetic position-to-house and aspect parity over 1800-2200, bound finite near-singular geometry and threshold deviations, and add reproducible reports with source/build identities and coverage checks.
+M13: Add native Criterion and Node WASM/TypeScript benchmarks with shared synthetic workloads, measured baselines and machine/source identities, validated summaries, usage/provenance docs and package-isolation checks.

@@ -1,0 +1,8 @@
+/target/
+/pkg/
+/node_modules/
+/.cache/
+/.tools/
+/generated/
+/coverage/
+*.tsbuildinfo
