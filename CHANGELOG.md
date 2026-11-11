@@ -1,5 +1,62 @@
 # Engine changelog
 
+## 1.1.0-rc.6 (unreleased candidate)
+
+The next candidate for 1.1.0 after 1.1.0-rc.3 (main at `bc0b5a7`): a choice
+for a birth in an hour the clock showed twice. It is not to be published on
+npm until the owner approves it.
+
+Two drafts came before it, and neither archive is carried here. 1.1.0-rc.4
+was drafted in pull request 89 with this choice and with a refusal of a birth
+given as a calendar date with no time. It was not merged. The refusal changes
+documented behaviour, and by the owner's decision of 2026-11-11 it is held
+for 2.0.0: in 1.x a birth's `utc` given as `YYYY-MM-DD` is read as midnight
+UTC, as the README's *Resolved instant inputs* says. 1.1.0-rc.5 was drafted
+in pull request 90 with the choice alone. An independent review of it found
+that it recorded `"later"` for times that have no second pass, and it was
+superseded by this candidate before merging.
+
+- **`fold: "earlier" | "later"`** in `@zodiacs/engine/geo`.
+  `resolveLocalToUtc`, `resolveLocalBirth` and `resolveBirth` take the new
+  option for a wall time the clock showed twice. The default, `"earlier"`,
+  gives what earlier versions gave. With `fold: "later"`, 01:30 in New York
+  on 2021-11-07 resolves to 06:30 UTC where the default gives 05:30 UTC.
+  Both passes carry the `dst-fold` flag and the same `jump` and `transition`,
+  so a birth form can ask which pass it was and resolve again. The option
+  changes nothing for a time the clock showed once, neither the result nor
+  the record a receipt keeps, and a skipped time moves forward by the jump
+  whichever value is given. The expected instants in
+  `src/geo/fold-choice.test.ts` are written out from the IANA time zone
+  database's rules ([docs/time.md](docs/time.md)).
+- **Receipts.** `localResolution.policy.fold` records the pass taken:
+  `"later"` only for a repeated time whose later pass was asked for,
+  `"earlier"` for every other time. The codec checks it against the instant
+  and the recorded clock change: an `"earlier"` record of a repeated time
+  must fall before the change, a `"later"` one at or after it, inside the
+  repeated span, and a `"later"` record without the `dst-fold` flag is
+  refused as `invalid_context`. 1.1.0-rc.1 and 1.1.0-rc.3 refuse a record
+  that says `"later"` as `unsupported_feature`, and read this candidate's
+  `"earlier"` records, among them those of an ordinary and of a skipped time
+  asked for their later pass (`docs/evidence/1.1.0-rc.6-20261111/`).
+  Records that say `"earlier"`, which is every record written before this
+  candidate, are read as before.
+- **`api/`.** `api/geo.api.md` gains the exported type `FoldChoice` and the
+  optional `fold` of the three functions' options. It and
+  `api/receipt.api.md` widen `policy.fold` from `"earlier"` to
+  `"earlier" | "later"`, a new member of a union a result carries, which
+  `docs/versioning.md` allows in a minor release.
+- **`lunarReturn`** still refuses a birth flagged `dst-fold`, whichever pass
+  was chosen.
+- **Sizes.** The option, its input check and its error message make
+  `./geo`'s import graph 35,584 bytes, over its budget of 35,500, which
+  rises to 35,600. The package is 1,148,327 bytes unpacked in 94 files,
+  5,509 more than 1.1.0-rc.3's 1,142,818: this entry 3,499, the README's
+  lines 355, declarations 927 and JavaScript 728. That is over the
+  cap of 1,145,000, which rises to 1,150,000
+  (`scripts/verify-package-contents.mjs`,
+  `docs/evidence/1.1.0-rc.6-20261111/sizes.json`). The owner approved both
+  rises on 2026-11-11.
+
 ## 1.1.0-rc.3 (unreleased candidate)
 
 The third candidate for 1.1.0, on 1.1.0-rc.2 (main at `883371f`): positions
