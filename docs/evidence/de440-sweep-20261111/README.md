@@ -158,3 +158,16 @@ The era files themselves need the kernel: run the workflow.
    committed files are that tar's, and each one's SHA-256 is the one the job
    printed. The same directory is the run's artifact `de440-sweep-results`.
 3. **No change of method.** The plan was followed as written.
+
+## A second run
+
+The workflow ran again when these results were committed (run
+[43040210028](https://github.com/zodiacs-org/engine/actions/runs/43040210028),
+commit `1313fed`, all green). It is not committed; it was compared with the
+run above. The engine's values were the same bytes in all eight eras, every
+position, longitude, latitude and distance statistic was the same, and so
+were the bounds, the report and the dry-run diff. Some of the angular-rate
+statistics differ in their sixth significant figure (247 of them, by at most
+0.02 percent), in four of the eras: the arbiter's rates are differences over
+0.0001 day, which magnify the last bit of a coordinate, and the runners'
+processors do not all round alike. No bound moves.
