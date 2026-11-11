@@ -301,8 +301,8 @@ const resolved = resolveLocalToUtc("1883-11-18", "12:02", "America/New_York", { 
 
 `resolveLocalToUtc(date, time, timeZone, options?)` reads `time` (HH:MM) on
 `date` (YYYY-MM-DD) in the IANA zone `timeZone`. A wall time the clock showed
-twice (a fold) takes the earlier instant; one it skipped (a gap) moves forward
-by the jump.
+twice (a fold) takes the earlier instant, or the later one with the option
+`fold: "later"`; one it skipped (a gap) moves forward by the jump.
 
 - **Before 1970** the zone's history is the one this package ships: tzdata
   2025c compiled with its `backzone` file (`TZDB`: version, archive sha256,
@@ -352,7 +352,7 @@ by the jump.
 
 ### Options
 
-`options` is `{ longitude?, calendar?, country? }`. Any other key, or a value
+`options` is `{ longitude?, calendar?, country?, fold? }`. Any other key, or a value
 of the wrong kind, throws `RangeError`, as does any unknown key of
 `resolveLocalBirth`'s and `resolveBirth`'s input (so a misspelled `calender`
 is refused rather than ignored).
@@ -373,6 +373,18 @@ is refused rather than ignored).
   late in 9999 that resolves into the Gregorian year 10000 among them. The
   note never changes the resolution. A country the table does not date gets
   no note.
+- `fold`: `"earlier"` (default) or `"later"`: which instant a wall time the
+  clock showed twice takes, its first pass or its second. `resolveLocalBirth`
+  and `resolveBirth` take the same field. When clocks went back in New York
+  on 2021-11-07, 01:30 happened at 05:30 UTC (daylight time, −4:00) and again
+  at 06:30 UTC (standard time, −5:00): the default gives the first, and
+  `fold: "later"` the second. Both carry the `dst-fold` flag and the same
+  `jump` and `transition`, so a form can ask which pass a birth was in when
+  it sees the flag, and resolve again with the answer. The option changes
+  nothing for a wall time the clock showed once, and a skipped one moves
+  forward by the jump whichever value is given. `localResolution.policy.fold`
+  records the value asked for (tests in `src/geo/fold-choice.test.ts`, with
+  the instants written out from the tz database's rules).
 
 `julianToGregorian` and `gregorianToJulian` convert YYYY-MM-DD strings for
 years 0000–9999; `gregorianAdoption(country)` returns a row of the table;
@@ -546,6 +558,12 @@ must convert to the resolved date, a gap's transition must account for the
 shift, a date-line cause needs a change of 12 hours or more, and a birthplace
 mean time must equal `longitude × 240` seconds at the instant (or just before
 a gap out of it). A local resolution requires `receipt.timeScale` `"utc"`.
+Its `policy` is `{ fold: "earlier" | "later", gap: "shift-forward" }`: with
+`"earlier"` a fold's instant must fall before its transition, on the offset
+the clock left, and with `"later"` at or after it, within the repeated span,
+on the offset the clock took. An engine from before the choice existed
+refuses a record with `"later"` as `unsupported_feature`, and this one
+refuses `"later"` under a conventions set older than rc.15's.
 
 Receipts under rc.15's set, under the rc.8 set (0.1.1-rc.8 to rc.14), which
 read the instant as UT1, and under the older sets stay readable, each
