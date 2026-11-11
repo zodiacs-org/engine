@@ -16,7 +16,10 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**1.1.0-rc.3**, the third candidate for 1.1.0, not published. It adds
+**1.1.0-rc.5**, the next candidate for 1.1.0 after 1.1.0-rc.3, not
+published. A birth in an hour the clock showed twice can take the later pass
+(`fold: "later"` in `@zodiacs/engine/geo`; see [docs/time.md](docs/time.md)).
+1.1.0-rc.4 was a draft that was not merged (CHANGELOG.md). 1.1.0-rc.3 added
 `@zodiacs/engine/de440`, positions from JPL's DE440 through a pack the caller
 supplies, which the root's `withEphemeris` puts in place of astronomy-engine,
 for sixteen public entry points (see [docs/de440.md](docs/de440.md)). Over
@@ -34,11 +37,11 @@ deprecated, and `api/` holds each public entry point's declarations. npm
 carries 1.0.0, the first stable release, under `latest`: `npm install
 @zodiacs/engine` installs it, without `./conventions`, `./time`, `./lite` or
 `./de440`, and writing no ids. This candidate is not published there. Install
-the exact candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.3.tgz` in the
+the exact candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.5.tgz` in the
 repository, retaining its SHA-256 receipt:
 
 ```sh
-npm install ./zodiacs-engine-1.1.0-rc.3.tgz
+npm install ./zodiacs-engine-1.1.0-rc.5.tgz
 ```
 
 The Release workflow publishes the archive carried in `artifacts/` as it is,
@@ -62,7 +65,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.3.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.5.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -968,7 +971,8 @@ timeZone)` loads the one a zone needs, and a wall time before 1970 throws until
 it has. From 1970 the host's Intl answers. A `longitude` reads a time in a
 zone's local mean time era on the birthplace's own mean time; `calendar:
 "julian"` takes an Old Style date, and `country` adds a note from the country's
-Gregorian adoption. Each resolution names the tzdb version (the host's where
+Gregorian adoption. A wall time the clock showed twice takes its first pass,
+or its second with `fold: "later"` (from 1.1.0-rc.5). Each resolution names the tzdb version (the host's where
 its Intl answered, null when the runtime does not report one) and, where
 there is one, the transition behind the offset with its cause (`dst`,
 `legal-change` or `date-line`): the jump's in a gap or fold, or, where the
