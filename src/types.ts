@@ -97,7 +97,9 @@ export interface BirthInput {
   /**
    * The instant, on the scale `timeScale` names: UTC by default, and UT1 or
    * TT when `timeScale` says so. The field keeps its name on every scale,
-   * because receipts record it under that name (docs/time.md).
+   * because receipts record it under that name (docs/time.md). A calendar
+   * date string with no time, such as "1990-05-03", reads as 00:00 UTC and
+   * is refused with a RangeError unless `timeKnown` is false.
    */
   utc: DateInput;
   /** "utc" (default), "ut1" or "tt" (docs/time.md). */

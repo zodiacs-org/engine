@@ -142,7 +142,8 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   const settings = validateBirthSettings(birth);
   const supplied = birth.flags;
   const flags = supplied === undefined ? undefined : snapshotFlags(supplied);
-  const utc = dateFrom(birth.utc, "birth.utc");
+  const suppliedUtc: unknown = birth.utc;
+  const utc = dateFrom(suppliedUtc as DateInput, "birth.utc");
   const pin = birth.deltaT;
   if (pin !== undefined && (typeof pin !== "number" || !Number.isFinite(pin) || Math.abs(pin) > 1e10)) {
     throw new RangeError("deltaT must be a finite number of seconds, at most 1e10 in size.");
@@ -162,6 +163,13 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   }
   if (outsideReferenceSpan(utc)) possible.push("outside-reference-span");
   assertDerivedFlags(flags?.values ?? [], possible);
+  // A calendar date with no time reads as 00:00 UTC. Taken as a known birth
+  // time, that is a chart for midnight UTC that nobody asked for.
+  if (typeof suppliedUtc === "string" && !suppliedUtc.includes("T") && settings.timeKnown !== false) {
+    throw new RangeError(
+      "birth.utc is a calendar date with no time. Give the birth instant with its UTC offset, such as 1990-05-03T08:30:00+02:00, or set timeKnown: false if the birth time is not known."
+    );
+  }
   const input: ChartInput = {
     utc,
     houseSystem: settings.houseSystem ?? "whole",

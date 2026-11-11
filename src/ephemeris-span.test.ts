@@ -57,7 +57,7 @@ describe("the ephemeris span", () => {
       ["chartDeclinations", () => chartDeclinations({ utc: far })],
       ["chartPoints", () => chartPoints({ utc: far, latitude: 10, longitude: 20 })],
       ["moonPhase", () => moonPhase(far)],
-      ["transits", () => transits({ utc: "2000-01-01" }, far)],
+      ["transits", () => transits({ utc: "2000-01-01T00:00:00Z" }, far)],
       // 1,001 years of life after 3998-08-30 map to about 1,001 days later, past the end.
       ["progressedBodies", () => progressedBodies("3998-08-30", "+005000-01-01")],
       ["findLongitudeCrossings", () => findLongitudeCrossings("Sun", 0, new Date("3998-01-01"), new Date("3999-06-01"))],
