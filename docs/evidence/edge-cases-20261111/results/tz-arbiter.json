@@ -1,0 +1,561 @@
+{
+ "what": "IANA tzdb 2025c (main data, compiled by zic 2025c) against the engine, T1 to T3",
+ "tzdata": {
+  "url": "https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz",
+  "sha256": "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957"
+ },
+ "tzcode": {
+  "url": "https://data.iana.org/time-zones/releases/tzcode2025c.tar.gz",
+  "sha256": "697ebe6625444aef5080f58e49d03424bbb52e08bf483d3ddb5acf10cbd15740"
+ },
+ "python": "3.13.5",
+ "engineHostTz": "2026c",
+ "counts": {
+  "pass": 23,
+  "fail": 0
+ },
+ "records": [
+  {
+   "id": "T2/L3-TZ-0028",
+   "zone": "America/New_York",
+   "wall": "2021-03-14T02:30",
+   "iana": {
+    "kind": "gap",
+    "readings": [],
+    "offsetBeforeJumpSeconds": -18000,
+    "ruleUtc": "2021-03-14T07:30:00.000Z"
+   },
+   "engine": {
+    "utc": "2021-03-14T07:30:00.000Z",
+    "flags": [
+     "dst-gap"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1/L3-TZ-0029",
+   "zone": "America/New_York",
+   "wall": "2021-11-07T01:30",
+   "iana": {
+    "kind": "fold",
+    "readings": [
+     {
+      "utc": "2021-11-07T05:30:00Z",
+      "offsetSeconds": -14400
+     },
+     {
+      "utc": "2021-11-07T06:30:00Z",
+      "offsetSeconds": -18000
+     }
+    ],
+    "offsetBeforeJumpSeconds": null,
+    "ruleUtc": "2021-11-07T05:30:00.000Z"
+   },
+   "engine": {
+    "utc": "2021-11-07T05:30:00.000Z",
+    "flags": [
+     "dst-fold"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1/L3-TZ-0030",
+   "zone": "Australia/Sydney",
+   "wall": "2020-04-05T02:30",
+   "iana": {
+    "kind": "fold",
+    "readings": [
+     {
+      "utc": "2020-04-04T15:30:00Z",
+      "offsetSeconds": 39600
+     },
+     {
+      "utc": "2020-04-04T16:30:00Z",
+      "offsetSeconds": 36000
+     }
+    ],
+    "offsetBeforeJumpSeconds": null,
+    "ruleUtc": "2020-04-04T15:30:00.000Z"
+   },
+   "engine": {
+    "utc": "2020-04-04T15:30:00.000Z",
+    "flags": [
+     "dst-fold"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1/L3-TZ-0031",
+   "zone": "Australia/Lord_Howe",
+   "wall": "2021-04-04T01:45",
+   "iana": {
+    "kind": "fold",
+    "readings": [
+     {
+      "utc": "2021-04-03T14:45:00Z",
+      "offsetSeconds": 39600
+     },
+     {
+      "utc": "2021-04-03T15:15:00Z",
+      "offsetSeconds": 37800
+     }
+    ],
+    "offsetBeforeJumpSeconds": null,
+    "ruleUtc": "2021-04-03T14:45:00.000Z"
+   },
+   "engine": {
+    "utc": "2021-04-03T14:45:00.000Z",
+    "flags": [
+     "dst-fold"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2/L3-TZ-0032",
+   "zone": "Europe/London",
+   "wall": "1941-05-04T02:30",
+   "iana": {
+    "kind": "gap",
+    "readings": [],
+    "offsetBeforeJumpSeconds": 3600,
+    "ruleUtc": "1941-05-04T01:30:00.000Z"
+   },
+   "engine": {
+    "utc": "1941-05-04T01:30:00.000Z",
+    "flags": [
+     "dst-gap"
+    ],
+    "zoneSource": "tzdb",
+    "tzdbVersion": "2025c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1/L3-TZ-0033",
+   "zone": "Europe/London",
+   "wall": "1941-08-10T02:30",
+   "iana": {
+    "kind": "fold",
+    "readings": [
+     {
+      "utc": "1941-08-10T00:30:00Z",
+      "offsetSeconds": 7200
+     },
+     {
+      "utc": "1941-08-10T01:30:00Z",
+      "offsetSeconds": 3600
+     }
+    ],
+    "offsetBeforeJumpSeconds": null,
+    "ruleUtc": "1941-08-10T00:30:00.000Z"
+   },
+   "engine": {
+    "utc": "1941-08-10T00:30:00.000Z",
+    "flags": [
+     "dst-fold"
+    ],
+    "zoneSource": "tzdb",
+    "tzdbVersion": "2025c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2/L3-TZ-0034",
+   "zone": "America/Caracas",
+   "wall": "2016-05-01T02:40",
+   "iana": {
+    "kind": "gap",
+    "readings": [],
+    "offsetBeforeJumpSeconds": -16200,
+    "ruleUtc": "2016-05-01T07:10:00.000Z"
+   },
+   "engine": {
+    "utc": "2016-05-01T07:10:00.000Z",
+    "flags": [
+     "dst-gap"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2/L3-TZ-0035",
+   "zone": "Pacific/Apia",
+   "wall": "2011-12-30T12:00",
+   "iana": {
+    "kind": "gap",
+    "readings": [],
+    "offsetBeforeJumpSeconds": -36000,
+    "ruleUtc": "2011-12-30T22:00:00.000Z"
+   },
+   "engine": {
+    "utc": "2011-12-30T22:00:00.000Z",
+    "flags": [
+     "dst-gap"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1/L3-TZ-0036",
+   "zone": "America/Sitka",
+   "wall": "1867-10-19T00:00",
+   "iana": {
+    "kind": "fold",
+    "readings": [
+     {
+      "utc": "1867-10-18T09:01:13Z",
+      "offsetSeconds": 53927
+     },
+     {
+      "utc": "1867-10-19T09:01:13Z",
+      "offsetSeconds": -32473
+     }
+    ],
+    "offsetBeforeJumpSeconds": null,
+    "ruleUtc": "1867-10-18T09:01:13.000Z"
+   },
+   "engine": {
+    "utc": "1867-10-18T09:01:13.000Z",
+    "flags": [
+     "dst-fold",
+     "lmt"
+    ],
+    "zoneSource": "tzdb",
+    "tzdbVersion": "2025c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1-f",
+   "zone": "America/New_York",
+   "wall": "2021-11-07T01:00",
+   "iana": {
+    "kind": "fold",
+    "readings": [
+     {
+      "utc": "2021-11-07T05:00:00Z",
+      "offsetSeconds": -14400
+     },
+     {
+      "utc": "2021-11-07T06:00:00Z",
+      "offsetSeconds": -18000
+     }
+    ],
+    "offsetBeforeJumpSeconds": null,
+    "ruleUtc": "2021-11-07T05:00:00.000Z"
+   },
+   "engine": {
+    "utc": "2021-11-07T05:00:00.000Z",
+    "flags": [
+     "dst-fold"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1-g",
+   "zone": "America/New_York",
+   "wall": "2021-11-07T01:59",
+   "iana": {
+    "kind": "fold",
+    "readings": [
+     {
+      "utc": "2021-11-07T05:59:00Z",
+      "offsetSeconds": -14400
+     },
+     {
+      "utc": "2021-11-07T06:59:00Z",
+      "offsetSeconds": -18000
+     }
+    ],
+    "offsetBeforeJumpSeconds": null,
+    "ruleUtc": "2021-11-07T05:59:00.000Z"
+   },
+   "engine": {
+    "utc": "2021-11-07T05:59:00.000Z",
+    "flags": [
+     "dst-fold"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1-h",
+   "zone": "America/New_York",
+   "wall": "2021-11-07T00:59",
+   "iana": {
+    "kind": null,
+    "readings": [
+     {
+      "utc": "2021-11-07T04:59:00Z",
+      "offsetSeconds": -14400
+     }
+    ],
+    "offsetBeforeJumpSeconds": null,
+    "ruleUtc": "2021-11-07T04:59:00.000Z"
+   },
+   "engine": {
+    "utc": "2021-11-07T04:59:00.000Z",
+    "flags": [],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1-i",
+   "zone": "America/New_York",
+   "wall": "2021-11-07T02:00",
+   "iana": {
+    "kind": null,
+    "readings": [
+     {
+      "utc": "2021-11-07T07:00:00Z",
+      "offsetSeconds": -18000
+     }
+    ],
+    "offsetBeforeJumpSeconds": null,
+    "ruleUtc": "2021-11-07T07:00:00.000Z"
+   },
+   "engine": {
+    "utc": "2021-11-07T07:00:00.000Z",
+    "flags": [],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2-d",
+   "zone": "America/New_York",
+   "wall": "2021-03-14T02:00",
+   "iana": {
+    "kind": "gap",
+    "readings": [],
+    "offsetBeforeJumpSeconds": -18000,
+    "ruleUtc": "2021-03-14T07:00:00.000Z"
+   },
+   "engine": {
+    "utc": "2021-03-14T07:00:00.000Z",
+    "flags": [
+     "dst-gap"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2-e",
+   "zone": "America/New_York",
+   "wall": "2021-03-14T02:59",
+   "iana": {
+    "kind": "gap",
+    "readings": [],
+    "offsetBeforeJumpSeconds": -18000,
+    "ruleUtc": "2021-03-14T07:59:00.000Z"
+   },
+   "engine": {
+    "utc": "2021-03-14T07:59:00.000Z",
+    "flags": [
+     "dst-gap"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2-f",
+   "zone": "America/New_York",
+   "wall": "2021-03-14T01:59",
+   "iana": {
+    "kind": null,
+    "readings": [
+     {
+      "utc": "2021-03-14T06:59:00Z",
+      "offsetSeconds": -18000
+     }
+    ],
+    "offsetBeforeJumpSeconds": null,
+    "ruleUtc": "2021-03-14T06:59:00.000Z"
+   },
+   "engine": {
+    "utc": "2021-03-14T06:59:00.000Z",
+    "flags": [],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2-g",
+   "zone": "America/New_York",
+   "wall": "2021-03-14T03:00",
+   "iana": {
+    "kind": null,
+    "readings": [
+     {
+      "utc": "2021-03-14T07:00:00Z",
+      "offsetSeconds": -14400
+     }
+    ],
+    "offsetBeforeJumpSeconds": null,
+    "ruleUtc": "2021-03-14T07:00:00.000Z"
+   },
+   "engine": {
+    "utc": "2021-03-14T07:00:00.000Z",
+    "flags": [],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-a",
+   "zone": "Pacific/Apia",
+   "wall": "2011-12-30T12:00",
+   "iana": {
+    "kind": "gap",
+    "readings": [],
+    "offsetBeforeJumpSeconds": -36000,
+    "ruleUtc": "2011-12-30T22:00:00.000Z"
+   },
+   "engine": {
+    "utc": "2011-12-30T22:00:00.000Z",
+    "flags": [
+     "dst-gap"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-b",
+   "zone": "Pacific/Apia",
+   "wall": "2011-12-30T00:00",
+   "iana": {
+    "kind": "gap",
+    "readings": [],
+    "offsetBeforeJumpSeconds": -36000,
+    "ruleUtc": "2011-12-30T10:00:00.000Z"
+   },
+   "engine": {
+    "utc": "2011-12-30T10:00:00.000Z",
+    "flags": [
+     "dst-gap"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-c",
+   "zone": "Pacific/Apia",
+   "wall": "2011-12-30T23:59",
+   "iana": {
+    "kind": "gap",
+    "readings": [],
+    "offsetBeforeJumpSeconds": -36000,
+    "ruleUtc": "2011-12-31T09:59:00.000Z"
+   },
+   "engine": {
+    "utc": "2011-12-31T09:59:00.000Z",
+    "flags": [
+     "dst-gap"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-d",
+   "zone": "Pacific/Apia",
+   "wall": "2011-12-29T23:59",
+   "iana": {
+    "kind": null,
+    "readings": [
+     {
+      "utc": "2011-12-30T09:59:00Z",
+      "offsetSeconds": -36000
+     }
+    ],
+    "offsetBeforeJumpSeconds": null,
+    "ruleUtc": "2011-12-30T09:59:00.000Z"
+   },
+   "engine": {
+    "utc": "2011-12-30T09:59:00.000Z",
+    "flags": [],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-e",
+   "zone": "Pacific/Apia",
+   "wall": "2011-12-31T00:00",
+   "iana": {
+    "kind": null,
+    "readings": [
+     {
+      "utc": "2011-12-30T10:00:00Z",
+      "offsetSeconds": 50400
+     }
+    ],
+    "offsetBeforeJumpSeconds": null,
+    "ruleUtc": "2011-12-30T10:00:00.000Z"
+   },
+   "engine": {
+    "utc": "2011-12-30T10:00:00.000Z",
+    "flags": [],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-f",
+   "zone": "Pacific/Kwajalein",
+   "wall": "1993-08-21T12:00",
+   "iana": {
+    "kind": "gap",
+    "readings": [],
+    "offsetBeforeJumpSeconds": -43200,
+    "ruleUtc": "1993-08-22T00:00:00.000Z"
+   },
+   "engine": {
+    "utc": "1993-08-22T00:00:00.000Z",
+    "flags": [
+     "dst-gap"
+    ],
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "verdict": "pass"
+  }
+ ]
+}
