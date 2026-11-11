@@ -23,22 +23,22 @@
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 6.6,
+      "value": 23,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "distance": {
-      "value": 0.000058,
+      "value": 0.000087,
       "unit": "relative",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "speed": {
-      "value": 0.45,
+      "value": 0.74,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16",
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -117,7 +117,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -163,22 +163,22 @@
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 8.3,
+      "value": 12,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "distance": {
-      "value": 0.00014,
+      "value": 0.00015,
       "unit": "relative",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "speed": {
-      "value": 1.1,
+      "value": 2.9,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16",
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -248,7 +248,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -378,7 +378,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -429,19 +429,19 @@
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 11,
+      "value": 24,
       "unit": "arcsec",
       "label": "estimated",
       "basis": "the geocentric bound for this correction; topocentric positions were compared only for the Sun, the Moon and Mars"
      },
      "distance": {
-      "value": 0.000032,
+      "value": 0.000083,
       "unit": "relative",
       "label": "estimated",
       "basis": "the geocentric bound for this correction; topocentric positions were compared only for the Sun, the Moon and Mars"
      },
      "speed": {
-      "value": 0.64,
+      "value": 1.4,
       "unit": "arcsec/day",
       "label": "estimated",
       "basis": "the geocentric bound for this correction; topocentric positions were compared only for the Sun, the Moon and Mars",
@@ -526,7 +526,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -640,7 +640,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -770,7 +770,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -813,22 +813,22 @@
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 13,
+      "value": 17,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "distance": {
-      "value": 0.000047,
+      "value": 0.000079,
       "unit": "relative",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "speed": {
-      "value": 0.061,
+      "value": 0.11,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16",
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111",
       "method": "analytic",
       "stepDays": null
      }
@@ -903,7 +903,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -949,22 +949,22 @@
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 25,
+      "value": 30,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "distance": {
       "value": 0.000063,
       "unit": "relative",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "speed": {
-      "value": 0.014,
+      "value": 0.018,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16",
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -1037,7 +1037,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1069,10 +1069,10 @@
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 16,
+      "value": 33,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "distance": null,
      "speed": {
@@ -1153,7 +1153,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1282,7 +1282,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1425,7 +1425,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1540,7 +1540,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1660,7 +1660,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1702,22 +1702,22 @@
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 21,
+      "value": 22,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "distance": {
-      "value": 0.000042,
+      "value": 0.000047,
       "unit": "relative",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "speed": {
-      "value": 0.013,
+      "value": 0.019,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16",
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -1791,7 +1791,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1837,22 +1837,22 @@
     },
     "bounds": {
      "position": {
-      "value": 8.30000046,
+      "value": 12.00000046,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": {
-      "value": 0.00014,
+      "value": 0.00015,
       "unit": "relative",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "speed": {
-      "value": 1.10000016,
+      "value": 2.90000016,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 1.6e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 1.6e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -1932,7 +1932,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2177,7 +2177,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2307,7 +2307,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2389,22 +2389,22 @@
     },
     "bounds": {
      "position": {
-      "value": 18.00000046,
+      "value": 24.00000046,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": {
-      "value": 0.000068,
+      "value": 0.000077,
       "unit": "relative",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "speed": {
-      "value": 0.03000016,
+      "value": 0.06000016,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 1.6e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 1.6e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -2486,7 +2486,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2619,7 +2619,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2675,22 +2675,22 @@
     },
     "bounds": {
      "position": {
-      "value": 11.00000046,
+      "value": 24.00000046,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": {
-      "value": 0.000032,
+      "value": 0.000083,
       "unit": "relative",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "speed": {
-      "value": 0.64000016,
+      "value": 1.40000016,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 1.6e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 1.6e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -2780,7 +2780,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2848,22 +2848,22 @@
     },
     "bounds": {
      "position": {
-      "value": 6.6037,
+      "value": 23.0037,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.0037 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition, for epochs from 0001 to 3998 outside 1800 to 2200; docs/evidence/calc-epochs-2026-10-06"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 0.0037 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition, for epochs from 0001 to 3998 outside 1800 to 2200; docs/evidence/calc-epochs-2026-10-06"
      },
      "distance": {
-      "value": 0.000058,
+      "value": 0.000087,
       "unit": "relative",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
      },
      "speed": {
-      "value": 0.45000013,
+      "value": 0.74000013,
       "unit": "arcsec/day",
       "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16; plus the ayanamsa's, 1.3e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition, for epochs from 0001 to 3998 outside 1800 to 2200; docs/evidence/calc-epochs-2026-10-06",
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 1.3e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition, for epochs from 0001 to 3998 outside 1800 to 2200; docs/evidence/calc-epochs-2026-10-06",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -2953,7 +2953,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3106,7 +3106,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3263,7 +3263,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3407,7 +3407,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3663,7 +3663,7 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.2"
+     "engineVersion": "1.1.0-rc.7"
     },
     "sidereal": null,
     "band": {
@@ -3792,7 +3792,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -4058,7 +4058,7 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.2"
+     "engineVersion": "1.1.0-rc.7"
     },
     "sidereal": null,
     "band": {
@@ -4180,7 +4180,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -4439,7 +4439,7 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.2"
+     "engineVersion": "1.1.0-rc.7"
     },
     "sidereal": {
      "ayanamsa": {
@@ -4652,7 +4652,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.7",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"

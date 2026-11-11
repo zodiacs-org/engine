@@ -1,5 +1,49 @@
 # Engine changelog
 
+## 1.1.0-rc.7 (unreleased candidate)
+
+The next candidate for 1.1.0 after 1.1.0-rc.6, which it contains: the error
+limits a `calc()` result quotes, now from a far larger comparison. It is not
+to be published on npm until the owner approves it.
+
+- **Error limits from 146,097 daily comparisons with DE440.** Each position
+  from `@zodiacs/engine/calc` carries `bounds`: how far its position,
+  distance and speed were found to be from an independent ephemeris. For
+  the geocentric Sun, Moon, Mercury to Pluto (each correction) and the true
+  node and its opposite point, these were the largest differences from JPL
+  Horizons at 32 instants, and on other days the engine went past ten of
+  the eleven apparent position limits. They are now the largest differences
+  from JPL's DE440 at noon TT on each of the 146,097 days from 1800-01-01 to
+  2199-12-31, in all eight frames, rounded up to two significant figures
+  (`docs/evidence/de440-sweep-20261111/`). Position limits of the apparent
+  places, in arcseconds, old to new: Sun 3.0 to 3.4, Moon 8.3 to 12,
+  Mercury 9.3 to 17, Venus 11 to 24, Mars 6.6 to 23, Jupiter 13 to 17,
+  Saturn 18 to 24, Uranus 20 (unchanged), Neptune 21 to 22, Pluto 25 to 30,
+  and the true node and its opposite point 16 to 33. The astrometric and
+  geometric rows and the distance and speed limits of the same bodies move
+  by the same rule (`src/calc-bounds.ts`); none falls. `docs/versioning.md`
+  lets a bound found to be wrong be corrected in a minor release; these are
+  such corrections. Each bound's `basis` now names the comparison it rests
+  on.
+- **What they mean.** They are the largest differences found at one instant
+  a day, not proven limits. The true node's is 33 arcseconds, so "within 30
+  arcseconds of DE440" holds for the Sun, the Moon and the planets only.
+  Pluto's largest is 29.86 arcseconds (29.19 in ecliptic longitude), on the
+  last day and still growing: a thin margin, for 1800 to 2199 only.
+- **What keeps the old limits.** The 72 rows the sweep did not take
+  (heliocentric, barycentric and topocentric positions, and the mean nodes
+  and Black Moon Lilith) keep their values and their basis. The topocentric
+  Sun, Moon and Mars keep limits (3.0, 7.8 and 6.6 arcseconds) below the
+  geocentric ones the sweep found ([docs/calc.md](docs/calc.md)).
+- **No position changes.** This candidate computes the positions 1.1.0-rc.6
+  and 1.1.0-rc.3 compute (`docs/evidence/1.1.0-rc.7-20261111/`).
+- **Sizes.** The package is 1,152,017 bytes unpacked in 94 files, 3,690 more
+  than 1.1.0-rc.6's 1,148,327: this entry 2,888, the README's lines 379,
+  LICENSING.md and NOTICE 365, and JavaScript 58. That is over the cap
+  of 1,150,000, which rises to 1,155,000 (`scripts/verify-package-contents.mjs`,
+  `docs/evidence/1.1.0-rc.7-20261111/sizes.json`), a rise the owner decides
+  with this candidate. No entry point's budget changes.
+
 ## 1.1.0-rc.6 (unreleased candidate)
 
 The next candidate for 1.1.0 after 1.1.0-rc.3 (main at `bc0b5a7`): a choice

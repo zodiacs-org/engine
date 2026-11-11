@@ -21,7 +21,6 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPOSITORY = os.path.normpath(os.path.join(HERE, '..', '..', '..', '..'))
 CALC_API = os.path.join(REPOSITORY, 'docs', 'evidence', 'calc-api')
 RESULTS = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.path.normpath(os.path.join(HERE, '..', 'results'))
-TARGET = os.path.join(REPOSITORY, 'src', 'calc-bounds.ts')
 BOUNDS_PY = os.path.join(CALC_API, 'tools', 'bounds.py')
 # The summary the committed table was written from (src/calc-bounds.ts names it).
 CURRENT = os.path.join(CALC_API, 'rc16')
@@ -52,9 +51,10 @@ def main():
     sweep = json.load(open(os.path.join(RESULTS, 'summary.json')))
     current = json.load(open(os.path.join(CURRENT, 'summary.json')))
     bounds = bounds_module()
-    committed = open(TARGET).read()
-    if bounds.render(current) != committed:
-        raise SystemExit('src/calc-bounds.ts is not bounds.py\'s output from rc16/summary.json: the dry run has no baseline')
+    # The baseline is the table bounds.py writes from rc16/summary.json, which src/calc-bounds.ts held until
+    # 1.1.0-rc.7. From 1.1.0-rc.7 the file is write_bounds.py's, which takes the sweep's rows; "now" in the
+    # report means the table before that candidate, and write_bounds.py --against checks a run against the file.
+    committed = bounds.render(current)
 
     # 1. The unmodified tool on the sweep's summary.
     check = subprocess.run([sys.executable, BOUNDS_PY, '--check'], env={**os.environ, 'CALC_API_RESULTS': RESULTS},

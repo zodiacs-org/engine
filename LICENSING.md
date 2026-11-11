@@ -405,12 +405,16 @@ package's own results and NASA JPL Horizons (DE441) responses at 32
 preregistered instants, rounded up (for the mean node, the mean south node
 and Black Moon Lilith, from the same definitions evaluated with ERFA's
 fundamental arguments at those instants, which checks the implementation,
-not an ephemeris), and the largest distance of
+not an ephemeris; from 1.1.0-rc.7, for the geocentric Sun, Moon, planets and
+true nodes, from JPL's DE440 at noon TT on each of 146,097 days from
+1800-01-01 to 2199-12-31, `docs/evidence/de440-sweep-20261111/`), and the
+largest distance of
 astronomy-engine's barycentre from a Newtonian barycentre of the same
 positions, scanned daily from 1800 to 2200 and compared with Horizons's
 barycentre at 88 instants (`docs/evidence/calc-api/`). No value of a JPL
 ephemeris, and no coefficient fitted to one, is in the package; the Horizons
-responses are in that evidence directory, which is not packed.
+responses are in that evidence directory, and the DE440 kernel was read only
+in the sweep's workflow, neither of which is packed.
 
 Since 0.1.1-rc.17 it also carries the star values of *Timing and Vedic
 values*, in the chunk it shares with `./vedic`. Its ayanamsa bounds

@@ -193,6 +193,9 @@ jobs:
           python "$SWEEP/tools/dry_run.py" "$RUNNER_TEMP/results"
           git diff --exit-code
 
+      - name: The build against the limits src/calc-bounds.ts quotes
+        run: python "$SWEEP/tools/write_bounds.py" --against "$RUNNER_TEMP/results"
+
       - name: Keep the results
         uses: actions/upload-artifact@v4
         with:
