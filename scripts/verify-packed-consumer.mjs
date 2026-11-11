@@ -326,7 +326,7 @@ assert.equal(findDeclinationAspects([{body: "A", lon: -1e-20, lat: 0}, {body: "B
 // Outside astronomy-engine's tabulated years every calculation refuses at once.
 assert.deepEqual(EPHEMERIS_SPAN.daysFromJ2000, {from: -730000, to: 730000});
 assert.throws(() => positions("4000-01-01"), {name: "RangeError", message: /^The instant is outside the ephemeris span/});
-assert.throws(() => natalChart({utc: "0001-01-01"}), {name: "RangeError", message: /^The instant is outside the ephemeris span/});
+assert.throws(() => natalChart({utc: "0001-01-01T00:00:00Z"}), {name: "RangeError", message: /^The instant is outside the ephemeris span/});
 for (const label of [" Mars", "Mars\\u0000", "x".repeat(200)]) {
   assert.throws(() => declinationsForBodies([{body: label, lon: 0, lat: 0}], 23.4), RangeError);
   assert.throws(() => createAspectPolicy({bodies: [label]}), RangeError);
@@ -343,6 +343,9 @@ assert(unknown.flags.includes("no-time"));
 assert.throws(() => natalChart({utc: "2023-02-29T12:00:00Z"}), RangeError);
 assert.throws(() => natalChart({utc: "2000-01-01T12:00:00"}), RangeError);
 assert.throws(() => natalChart({utc: "2000-01-01", houseSystem: "unsupported"}), RangeError);
+// A calendar date with no time is refused unless the birth time is declared unknown.
+assert.throws(() => natalChart({utc: "2000-01-01"}), {name: "RangeError", message: /calendar date with no time/});
+assert(natalChart({utc: "2000-01-01", timeKnown: false}).flags.includes("no-time"));
 for (const name of ["react", "@zodiacs/sdk"]) {
   assert.throws(() => import.meta.resolve(name), {code: "ERR_MODULE_NOT_FOUND"});
 }
@@ -445,14 +448,14 @@ let hooks = 0;
 const accessorFlags = ["lmt"];
 Object.defineProperty(accessorFlags, "0", {get() { hooks++; return "lmt"; }});
 for (const flags of [["PRIVATE_FLAG_SENTINEL"], ["dst-gap", "dst-fold"], ["no-time"], ["polar-fallback"], "lmt", new Set(["lmt"]), [null], Array(1), accessorFlags, Array(65).fill("lmt")]) {
-  assert.throws(() => natalChart({utc: "2000-01-01", flags}), (error) => error instanceof RangeError && !error.message.includes("PRIVATE_FLAG_SENTINEL"));
+  assert.throws(() => natalChart({utc: "2000-01-01T00:00:00Z", flags}), (error) => error instanceof RangeError && !error.message.includes("PRIVATE_FLAG_SENTINEL"));
 }
 assert.equal(hooks, 0);
 const iterableFlags = ["lmt"];
 iterableFlags[Symbol.iterator] = () => { throw new Error("Custom iterator called"); };
-assert.deepEqual(natalChart({utc: "2000-01-01", flags: iterableFlags}).flags, ["lmt"]);
+assert.deepEqual(natalChart({utc: "2000-01-01T00:00:00Z", flags: iterableFlags}).flags, ["lmt"]);
 let latitudeReads = 0;
-const captured = natalChart({utc: "2000-01-01", get latitude() { return ++latitudeReads === 1 ? 0 : 999; }, longitude: 0});
+const captured = natalChart({utc: "2000-01-01T00:00:00Z", get latitude() { return ++latitudeReads === 1 ? 0 : 999; }, longitude: 0});
 assert.equal(latitudeReads, 1);
 assert.equal(captured.input.latitude, 0);
 const originalFormatter = Intl.DateTimeFormat;
