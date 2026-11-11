@@ -67,3 +67,36 @@ only when a candidate is cut, with the reason in `CHANGELOG.md`.
 ## scripts/verify-rc10-compatibility.mjs
 
 Not changed. The 1.1.0-rc.4 draft changed it only because of the refusal.
+
+## The archive
+
+`carrier/pack-source-a117a41.log`: clean clones of the source commit
+`a117a41`, each installed with `npm ci`, built and packed with
+`npm pack --ignore-scripts` outside the checkout, on Node 22.22.2, 20.19.0,
+24.21.0 and 22.23.4 (Linux x86-64, 11 November 2026). All four packed
+SHA-256 `536187846fa74d6179071c5306064c3be3cabd3f3881463003e8b92c2d5dd184`,
+333,868 bytes, 94 files; the carried file is the Node 22.22.2 one.
+
+## The gates on the carrier
+
+Run locally on the carrier `9ee3061` before anything was pushed (Linux
+x86-64, `TMPDIR` outside the checkout):
+
+- `carrier/gates-9ee3061.log`: the engine job's steps on Node 22.22.2
+  (typecheck, the suite with 100 files and 4,193 tests passed and 3 tests
+  skipped, build, export smoke, `api:check`, package contents, pack dry
+  run), `node scripts/verify-archive-binding.mjs` on Node 20.19.0, 24.21.0
+  and 22.22.2, each rebuilding HEAD to the carried bytes, the
+  packed-consumer check on the carried archive on Node 22.22.2, 20.19.0 and
+  24.21.0, and on Node 22.22.2 the conformance checks (the self-test, the
+  count of 500 vectors, `run.mjs --check` and `report.mjs --check`) and the
+  atlas check and self-test. Every step exits 0.
+- `carrier/rebuild-all-9ee3061-v22.23.4.log`:
+  `node scripts/verify-archive-binding.mjs --rebuild-all` on Node 22.23.4,
+  the lines that name each archive: every recorded archive, this one
+  included, rebuilds from its source commit byte for byte.
+
+The gate workflows had not run on the source commit when the archive was
+carried. An independent review of the cut follows the draft and is not
+recorded here. The tier-B check on NAIF's kernel and the packed consumer on
+Node 22.7.0 were not run locally.
