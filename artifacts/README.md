@@ -99,7 +99,8 @@ runs, so CI starts the check with node directly.
 | 1.0.0 | `c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6` | 288,063 | 74 | `ca2c8cefbaa1a9d6f5f78ee86713e813633942ca` | `38d3185` | Release, merged; on npm as `latest` |
 | 1.1.0-rc.1 | `52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6` | 292,721 | 77 | `c41706266caf4dde7e03aaa18c08acd569d19a7e` | `6ec3464` | Candidate, merged |
 | 1.1.0-rc.2 | `c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c` | 318,004 | 90 | `806f76b43c0ee652016fe1b522c02d6f6e9c7ae5` | `59c6ea9` | Candidate, merged |
-| 1.1.0-rc.3 | `3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590` | 331,979 | 94 | `cc910b3775e279222e23af0b395bb6f2b51a3c3a` | "Carry the packed 1.1.0-rc.3 tarball" | Candidate under review |
+| 1.1.0-rc.3 | `3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590` | 331,979 | 94 | `cc910b3775e279222e23af0b395bb6f2b51a3c3a` | `d2794d2` | Candidate, merged |
+| 1.1.0-rc.4 | `d3687574d7051601a81fd7da86ccec0e41f8ff2b0fd3faf194523d65547d4dfd` | 334,645 | 94 | `d1373670b6a31932b270251a2edc210c556016fd` | "Carry the packed 1.1.0-rc.4 tarball" | Draft candidate, awaiting the owner's review |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -311,3 +312,19 @@ on the source commit (CI run 42738993989, Conformance 42738993913 and Atlas
 42738993899), and two reviews of the cut and a re-check of their fixes had been
 acted on. It is not to be published on npm until the owner approves it. The
 record is in `docs/evidence/de440-20261110/`.
+
+1.1.0-rc.4 is the fourth candidate for 1.1.0, cut as a draft for the owner's
+review: a birth in an hour the clock showed twice can take the later pass
+(`fold: "later"` in `@zodiacs/engine/geo`), and a birth given as a calendar
+date with no time is refused unless `timeKnown` is `false`, a breaking
+change. The archive is 334,645 bytes, 1,149,810 unpacked in 94 files, under
+the package cap of 1,152,000, which it raises from 1,145,000, as it raises
+`./geo`'s budget; both rises wait for the owner's approval with the draft.
+It was packed once, from clean clones of its source commit, each installed
+with `npm ci`, which packed the same bytes on Node 22.22.2, 20.19.0, 24.21.0
+and 22.23.4 (Linux x86-64); the carried file is the Node 22.22.2 one. Unlike
+the candidates before it, it was carried before the gate workflows had run
+on the source commit, after the engine job's steps and the packed-consumer
+check had passed locally on Node 22.22.2, and no independent review of the
+cut has been made. It is not to be published on npm until the owner approves
+it. The record is in `docs/evidence/1.1.0-rc.4-20261111/`.
