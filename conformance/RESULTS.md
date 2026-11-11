@@ -19,7 +19,7 @@ Suite 0.2.0: 500 vectors (L1 240, L2 150, L3 110). Each vector names its arbiter
 | L3 | `calendar.to-jdn` | 25 | jdn exact |
 | L3 | `calendar.from-jdn` | 10 | year exact; month exact; day exact |
 
-## @zodiacs/engine 1.1.0-rc.3
+## @zodiacs/engine 1.1.0-rc.4
 
 Adapter `zodiacs-engine` 0.2.0; results in [`results/zodiacs-engine.json`](results/zodiacs-engine.json).
 

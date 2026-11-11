@@ -72,7 +72,7 @@ describe("the nutation set, which 0.1.1-rc.16 to 1.0.0 wrote", () => {
     const envelope = current();
     expect(envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[0]);
     expect(NATAL_RECEIPT_CONVENTION_SETS[0]).toMatchObject(set);
-    expect(envelope.receipt.engine.version).toBe("1.1.0-rc.3");
+    expect(envelope.receipt.engine.version).toBe("1.1.0-rc.4");
     expect(verdict(envelope)).toBe("ok");
   });
 

@@ -16,7 +16,11 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**1.1.0-rc.3**, the third candidate for 1.1.0, not published. It adds
+**1.1.0-rc.4**, the fourth candidate for 1.1.0, not published. A birth in
+an hour the clock showed twice can take the later pass (`fold: "later"` in
+`@zodiacs/engine/geo`; see [docs/time.md](docs/time.md)), and a birth given
+as a calendar date with no time is refused unless `timeKnown` is `false`,
+which is a breaking change (CHANGELOG.md). 1.1.0-rc.3 added
 `@zodiacs/engine/de440`, positions from JPL's DE440 through a pack the caller
 supplies, which the root's `withEphemeris` puts in place of astronomy-engine,
 for sixteen public entry points (see [docs/de440.md](docs/de440.md)). Over
@@ -34,11 +38,11 @@ deprecated, and `api/` holds each public entry point's declarations. npm
 carries 1.0.0, the first stable release, under `latest`: `npm install
 @zodiacs/engine` installs it, without `./conventions`, `./time`, `./lite` or
 `./de440`, and writing no ids. This candidate is not published there. Install
-the exact candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.3.tgz` in the
+the exact candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.4.tgz` in the
 repository, retaining its SHA-256 receipt:
 
 ```sh
-npm install ./zodiacs-engine-1.1.0-rc.3.tgz
+npm install ./zodiacs-engine-1.1.0-rc.4.tgz
 ```
 
 The Release workflow publishes the archive carried in `artifacts/` as it is,
@@ -62,7 +66,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.3.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.4.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -145,7 +149,10 @@ const chart = natalChart({
 console.log(chart.bodies, chart.houses);
 ```
 
-`utc` must be a resolved instant. If a user enters a local wall time, use the
+`utc` must be a resolved instant. A calendar date string with no time, such
+as `"1990-05-03"`, is refused with a `RangeError` unless `timeKnown` is
+`false` (from 1.1.0-rc.4; see *Resolved instant inputs*). If a user enters a
+local wall time, use the
 optional geo entry point so daylight-saving and historical timezone rules are
 handled before the chart is computed:
 
@@ -876,6 +883,11 @@ string forms:
 
 - `YYYY-MM-DD`, interpreted as midnight UTC using the proleptic Gregorian
   calendar. This convenience does not infer a birthplace's local midnight.
+  From 1.1.0-rc.4 a birth's `utc` (the `utc` of a `BirthInput`) in this form
+  is refused with a `RangeError` unless the birth sets `timeKnown: false`,
+  because nobody gave the midnight it would be read as. Write the instant out
+  (`1990-05-03T00:00:00Z`) to ask for midnight UTC. A date passed on its own,
+  as to `positions` or `moonPhase`, is read as before.
 - `YYYY-MM-DDTHH:mm[:ss[.sss]]Z`, or the same date-time with an explicit
   `+HH:mm` or `-HH:mm` offset. Fractional seconds, when supplied, have one to
   three digits. ISO expanded years use a sign and six digits, such as
@@ -968,7 +980,8 @@ timeZone)` loads the one a zone needs, and a wall time before 1970 throws until
 it has. From 1970 the host's Intl answers. A `longitude` reads a time in a
 zone's local mean time era on the birthplace's own mean time; `calendar:
 "julian"` takes an Old Style date, and `country` adds a note from the country's
-Gregorian adoption. Each resolution names the tzdb version (the host's where
+Gregorian adoption. A wall time the clock showed twice takes its first pass,
+or its second with `fold: "later"` (from 1.1.0-rc.4). Each resolution names the tzdb version (the host's where
 its Intl answered, null when the runtime does not report one) and, where
 there is one, the transition behind the offset with its cause (`dst`,
 `legal-change` or `date-line`): the jump's in a gap or fold, or, where the

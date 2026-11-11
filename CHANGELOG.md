@@ -1,5 +1,67 @@
 # Engine changelog
 
+## 1.1.0-rc.4 (unreleased candidate)
+
+The fourth candidate for 1.1.0, on 1.1.0-rc.3 (main at `bc0b5a7`): a choice
+for a birth in an hour the clock showed twice, and a refusal of a birth given
+as a calendar date with no time. It is not to be published on npm until the
+owner approves it.
+
+- **Breaking: a birth given as a bare calendar date is refused.** A birth
+  whose `utc` is a calendar date string with no time, such as
+  `natalChart({ utc: "1990-05-03" })`, throws a `RangeError` unless the birth
+  sets `timeKnown: false`. Until now the date was read as 00:00 UTC and the
+  chart was marked `timeKnown: true`, with a rising sign and houses for a
+  midnight nobody gave. With `timeKnown: false` the date is accepted as
+  before, and the chart carries the `no-time` flag with no angles or houses.
+  A full instant (`1990-05-03T00:00:00Z`, or one with an offset), a `Date`
+  and an epoch number are read as before, so midnight UTC can still be asked
+  for by writing it out. The check applies wherever a birth is given as a
+  `BirthInput`: `natalChart`, `transits`, `synastry`, `saturnReturn` with a
+  birth object, and the entries that take a birth. A date passed on its own
+  (`positions`, `moonPhase`, `saturnReturn` with a date) is read as before,
+  and charts and receipts already made are not affected. The README's
+  *Resolved instant inputs* documented the old reading, so
+  `docs/versioning.md` counts this as a change of documented behaviour
+  inside 1.x; it is made in a candidate because the old reading gave a chart
+  for a time nobody supplied (tests in `src/public-input.test.ts`).
+- **`fold: "earlier" | "later"`** in `@zodiacs/engine/geo`.
+  `resolveLocalToUtc`, `resolveLocalBirth` and `resolveBirth` take the new
+  option for a wall time the clock showed twice. The default, `"earlier"`,
+  gives what earlier versions gave. With `fold: "later"`, 01:30 in New York
+  on 2021-11-07 resolves to 06:30 UTC where the default gives 05:30 UTC.
+  Both passes carry the `dst-fold` flag and the same `jump` and `transition`,
+  so a birth form can ask which pass it was and resolve again. The option
+  changes nothing for a time the clock showed once, and a skipped time moves
+  forward by the jump whichever value is given. The expected instants in
+  `src/geo/fold-choice.test.ts` are written out from the IANA time zone
+  database's rules ([docs/time.md](docs/time.md)).
+- **Receipts.** `localResolution.policy.fold` records the pass asked for, and
+  the codec checks it against the instant and the recorded clock change: an
+  `"earlier"` record must fall before the change, a `"later"` one at or after
+  it, inside the repeated span. 1.1.0-rc.3 refuses a record that says
+  `"later"` as `unsupported_feature`, and reads this candidate's `"earlier"`
+  record (`docs/evidence/1.1.0-rc.4-20261111/later-receipt-on-rc3.json`).
+  Records that say `"earlier"`, which is every record written before this
+  candidate, are read as before.
+- **`api/`.** `api/geo.api.md` gains the exported type `FoldChoice` and the
+  optional `fold` of the three functions' options. It and
+  `api/receipt.api.md` widen `policy.fold` from `"earlier"` to
+  `"earlier" | "later"`, a new member of a union a result carries, which
+  `docs/versioning.md` allows in a minor release.
+- **`lunarReturn`** still refuses a birth flagged `dst-fold`, whichever pass
+  was chosen.
+- **Sizes.** The option, its input check and its error message make
+  `./geo`'s import graph 35,574 bytes, over its budget of 35,500, which
+  rises to 35,600. The package is 1,149,810 bytes unpacked in 94 files,
+  6,992 more than 1.1.0-rc.3's 1,142,818: this entry 3,962, the README's
+  lines 935, declarations 1,098 and JavaScript 997. That is over the cap of
+  1,145,000, which rises to 1,152,000
+  (`scripts/verify-package-contents.mjs`,
+  `docs/evidence/1.1.0-rc.4-20261111/sizes.json`). Both rises are part of
+  the draft the owner asked for on 2026-11-11 and wait for the owner's
+  approval with it.
+
 ## 1.1.0-rc.3 (unreleased candidate)
 
 The third candidate for 1.1.0, on 1.1.0-rc.2 (main at `883371f`): positions

@@ -119,17 +119,17 @@ function fixtures() {
   const invalid = [
     {id: 'invalid-leap-day', input: {utc: '2023-02-29T12:00:00Z'}},
     {id: 'missing-offset', input: {utc: '2000-01-01T12:00:00'}},
-    {id: 'unsupported-house', input: {utc: '2000-01-01', houseSystem: 'unsupported'}},
-    {id: 'null-house', input: {utc: '2000-01-01', houseSystem: null}},
-    {id: 'null-time-known', input: {utc: '2000-01-01', timeKnown: null}},
-    {id: 'latitude-out-of-range', input: {utc: '2000-01-01', latitude: 91, longitude: 0}},
-    {id: 'partial-location', input: {utc: '2000-01-01', latitude: 0}},
-    {id: 'contradictory-dst-flags', input: {utc: '2000-01-01', flags: ['dst-gap', 'dst-fold']}},
-    {id: 'false-no-time-echo', input: {utc: '2000-01-01', flags: ['no-time']}},
-    {id: 'false-polar-echo', input: {utc: '2000-01-01', latitude: 0, longitude: 0, flags: ['polar-fallback']}},
-    {id: 'delta-t-too-large', input: {utc: '2000-01-01', deltaT: 1e11}},
+    {id: 'unsupported-house', input: {utc: '2000-01-01T00:00:00Z', houseSystem: 'unsupported'}},
+    {id: 'null-house', input: {utc: '2000-01-01T00:00:00Z', houseSystem: null}},
+    {id: 'null-time-known', input: {utc: '2000-01-01T00:00:00Z', timeKnown: null}},
+    {id: 'latitude-out-of-range', input: {utc: '2000-01-01T00:00:00Z', latitude: 91, longitude: 0}},
+    {id: 'partial-location', input: {utc: '2000-01-01T00:00:00Z', latitude: 0}},
+    {id: 'contradictory-dst-flags', input: {utc: '2000-01-01T00:00:00Z', flags: ['dst-gap', 'dst-fold']}},
+    {id: 'false-no-time-echo', input: {utc: '2000-01-01T00:00:00Z', flags: ['no-time']}},
+    {id: 'false-polar-echo', input: {utc: '2000-01-01T00:00:00Z', latitude: 0, longitude: 0, flags: ['polar-fallback']}},
+    {id: 'delta-t-too-large', input: {utc: '2000-01-01T00:00:00Z', deltaT: 1e11}},
   ];
-  const edges = [{id: 'exact-geographic-pole', input: {utc: '2000-01-01', latitude: 90, longitude: 0}}];
+  const edges = [{id: 'exact-geographic-pole', input: {utc: '2000-01-01T00:00:00Z', latitude: 90, longitude: 0}}];
   return {schema: 'zodiacs.rc10-compatibility-fixtures.v1', charts, invalid, edges};
 }
 function materialize(test) {

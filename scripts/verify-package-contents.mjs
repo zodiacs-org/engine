@@ -190,7 +190,11 @@ const ENTRY_BUDGETS = {
   // and calendarNote's input checks from the API review; raised from 35,000 to
   // 35,500 with the owner's approval of 2026-10-06; 0.35 per cent of headroom.
   // 1.0.0-rc.2: 35,439, with the marks; 0.17 per cent, not raised.
-  "./geo": 35_500,
+  // 1.1.0-rc.4: 35,574, with the fold option of the local-time resolver, its
+  // input check and its error message; raised from 35,500 to 35,600 in the
+  // candidate drafted for the owner on 2026-11-11, pending approval; 0.07 per
+  // cent of headroom.
+  "./geo": 35_600,
   // Unreleased (feature-houses-extra): 13,606, one file that imports no other
   // module, the root's included, so that its graph cannot grow with the core
   // (docs/evidence/houses-extra-2026-09-29/).
@@ -395,7 +399,14 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // and its refusals, the receipts' DE440 set, and their README, CHANGELOG,
 // NOTICE and LICENSING.md lines; raised from 1,100,000 to 1,145,000 with the
 // owner's approval of 2026-11-10, which leaves 0.19 per cent.
-const TOTAL_CAP = 1_145_000;
+//
+// 1.1.0-rc.4: 1,149,810 bytes in 94 files, 6,992 more than 1.1.0-rc.3: its
+// CHANGELOG entry 3,962, its README lines 935, declarations 1,098 (the fold
+// option and BirthInput's comment) and JavaScript 997 (the fold option and
+// the bare-date refusal); raised from 1,145,000 to 1,152,000 in the candidate
+// drafted for the owner on 2026-11-11, pending approval, which leaves 0.19
+// per cent.
+const TOTAL_CAP = 1_152_000;
 assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
 
 // The licence expression covers the code (MIT) and the ΔT values (CC BY 4.0),

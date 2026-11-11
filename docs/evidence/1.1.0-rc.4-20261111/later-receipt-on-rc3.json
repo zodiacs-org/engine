@@ -1,0 +1,27 @@
+{
+ "candidate": "1.1.0-rc.4",
+ "reader": "1.1.0-rc.3",
+ "node": "v22.22.2",
+ "passes": {
+  "earlier": {
+   "instant": "2021-11-07T05:30:00.000Z",
+   "policy": {
+    "fold": "earlier",
+    "gap": "shift-forward"
+   },
+   "candidateReads": true,
+   "rc3ReadsAsWritten": "ok",
+   "rc3ReadsUnderItsOwnVersion": "ok"
+  },
+  "later": {
+   "instant": "2021-11-07T06:30:00.000Z",
+   "policy": {
+    "fold": "later",
+    "gap": "shift-forward"
+   },
+   "candidateReads": true,
+   "rc3ReadsAsWritten": "unsupported_feature",
+   "rc3ReadsUnderItsOwnVersion": "unsupported_feature"
+  }
+ }
+}
