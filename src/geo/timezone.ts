@@ -334,7 +334,7 @@ export function resolveLocalToUtc(
   }
 
   const lmt = inEra || (!place && history?.zoneEraEnd != null && chosen.utcMs < history.zoneEraEnd);
-  const flags: LocalTimeResolution["flags"] = kind ? [kind === "gap" ? "dst-gap" : "dst-fold"] : [];
+  const flags: LocalTimeResolution["flags"] = kind ? [`dst-${kind}`] : [];
   if (lmt) flags.push("lmt");
   const localMeanTime =
     longitude !== undefined && place && (inEra || (kind === "gap" && reading.at === place.endMs))
@@ -369,7 +369,7 @@ export function resolveLocalToUtc(
       timeZone,
       offsetMinutes,
       gapShiftMinutes: kind === "gap" && transition ? transition.offsetAfterMinutes - transition.offsetBeforeMinutes : 0,
-      policy: { fold, gap: "shift-forward" },
+      policy: { fold: kind === "fold" ? fold : "earlier", gap: "shift-forward" },
       calendar,
       writtenDate: date,
       tzdbVersion: zone.tzdbVersion,

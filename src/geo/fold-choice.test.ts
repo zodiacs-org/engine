@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { beforeAll, describe, expect, it } from "vitest";
 
 import { natalChart } from "../api.js";
@@ -107,8 +109,13 @@ describe("the pass of a repeated wall time", () => {
     expect(asked.utc.toISOString()).toBe("2021-06-15T05:30:00.000Z");
     expect(asked.flags).toEqual([]);
     expect({ ...asked, localResolution: null }).toEqual({ ...once, localResolution: null });
-    // The record keeps the pass asked for.
-    expect(asked.localResolution).toEqual({ ...once.localResolution, policy: { fold: "later", gap: "shift-forward" } });
+    // No second pass was there to take, so the record says "earlier", as it would unasked.
+    expect(asked).toEqual(once);
+    expect(asked.localResolution.policy).toEqual({ fold: "earlier", gap: "shift-forward" });
+    // Noon on the same day, the reviewer's case.
+    const noon = resolveLocalToUtc("2021-06-15", "12:00", "America/New_York", { fold: "later" });
+    expect(noon).toEqual(resolveLocalToUtc("2021-06-15", "12:00", "America/New_York"));
+    expect(noon.localResolution.policy.fold).toBe("earlier");
   });
 
   it("moves a skipped wall time forward whichever pass is asked for", () => {
@@ -120,7 +127,8 @@ describe("the pass of a repeated wall time", () => {
       expect(gap.utc.toISOString()).toBe("2021-03-14T07:30:00.000Z");
       expect(gap.flags).toEqual(["dst-gap"]);
       expect(gap.localResolution.gapShiftMinutes).toBe(60);
-      expect(gap.localResolution.policy).toEqual({ fold, gap: "shift-forward" });
+      // A skipped time has no second pass either.
+      expect(gap.localResolution.policy).toEqual({ fold: "earlier", gap: "shift-forward" });
     }
   });
 
@@ -192,6 +200,72 @@ describe("a local birth in a repeated hour", () => {
     // The second pass ends when the repeated hour does: the same record an hour on is not a fold's.
     const late = structuredClone(resolve("later"));
     late.receipt.localResolution!.transition!.at = "2021-11-07T05:00:00.000Z";
-    expect(parseNatalEnvelope(JSON.stringify(late)).ok).toBe(false);
+    expect(parseNatalEnvelope(JSON.stringify(late))).toEqual({ ok: false, code: "invalid_context" });
+  });
+});
+
+describe("receipts of the later pass", () => {
+  // [label, form, later UTC, offset on the later pass (min)]: the instants of FOLDS above. With a
+  // longitude of 74° W the 1883 birthplace's own mean time is 4:56:00 behind UTC (4 minutes of time
+  // a degree), which ended with the zone's at 17:00 UTC, so 12:02 was 16:58:00 UTC and again 17:02 UTC.
+  const LATER = [
+    ["Lord Howe, a half-hour fold", { date: "2021-04-04", time: "01:45", timeZone: "Australia/Lord_Howe", latitude: -31.55, longitude: 159.08 }, "2021-04-03T15:15:00.000Z", 630],
+    ["Sydney", { date: "2021-04-04", time: "02:30", timeZone: "Australia/Sydney", latitude: -33.87, longitude: 151.21 }, "2021-04-03T16:30:00.000Z", 600],
+    ["São Paulo", { date: "2019-02-16", time: "23:30", timeZone: "America/Sao_Paulo", latitude: -23.55, longitude: -46.63 }, "2019-02-17T02:30:00.000Z", -180],
+    ["New York 1883 with no birthplace, read on the zone's mean time", { date: "1883-11-18", time: "12:02", timeZone: "America/New_York" }, "1883-11-18T17:02:00.000Z", -300],
+    ["New York 1883, read on the birthplace's mean time", { date: "1883-11-18", time: "12:02", timeZone: "America/New_York", latitude: 40.7, longitude: -74 }, "1883-11-18T17:02:00.000Z", -300]
+  ] as const;
+
+  beforeAll(() => Promise.all(LATER.map(([, form]) => prepareLocalTime(form.date, form.timeZone))));
+
+  it.each(LATER)("%s: the record of the later pass is written, read back and unchanged", (_label, form, laterUtc, offset) => {
+    const { birth, resolution, reference } = resolveLocalBirth({ ...form, fold: "later" });
+    expect(birth.utc).toEqual(new Date(laterUtc));
+    const envelope = createNatalEnvelope(natalChart(birth), { reference, localResolution: resolution.localResolution });
+    expect(envelope.receipt.instant).toBe(laterUtc);
+    expect(envelope.receipt.inputFlags).toEqual(["dst-fold"]);
+    expect(envelope.receipt.localResolution?.policy).toEqual({ fold: "later", gap: "shift-forward" });
+    expect(envelope.receipt.localResolution?.offsetMinutes).toBe(offset);
+    const text = serializeNatalEnvelope(envelope);
+    const parsed = parseNatalEnvelope(text);
+    expect(parsed).toMatchObject({ ok: true });
+    if (parsed.ok) expect(serializeNatalEnvelope(parsed.envelope)).toBe(text);
+  });
+
+  it.each([
+    ["an ordinary time", "2021-06-15", "12:00"],
+    ["a skipped time", "2021-03-14", "02:30"]
+  ])("%s asked for its later pass gives the record it gives unasked", (_label, date, time) => {
+    const form = { date, time, timeZone: "America/New_York", latitude: 40.7, longitude: -74 };
+    const envelopeOf = (fold?: "later") => {
+      const { birth, resolution, reference } = resolveLocalBirth(fold ? { ...form, fold } : form);
+      return createNatalEnvelope(natalChart(birth), { reference, localResolution: resolution.localResolution });
+    };
+    expect(serializeNatalEnvelope(envelopeOf("later"))).toBe(serializeNatalEnvelope(envelopeOf()));
+    expect(envelopeOf("later").receipt.localResolution?.policy.fold).toBe("earlier");
+  });
+
+  it.each([
+    ["an ordinary time", "2021-06-15", "12:00"],
+    ["a skipped time", "2021-03-14", "02:30"]
+  ])("a record that says later for %s is refused: there was no second pass", (_label, date, time) => {
+    const { birth, resolution, reference } = resolveLocalBirth({ date, time, timeZone: "America/New_York", latitude: 40.7, longitude: -74 });
+    const envelope = createNatalEnvelope(natalChart(birth), { reference, localResolution: resolution.localResolution });
+    expect(parseNatalEnvelope(serializeNatalEnvelope(envelope))).toMatchObject({ ok: true });
+    const altered = structuredClone(envelope);
+    (altered.receipt.localResolution!.policy as { fold: string }).fold = "later";
+    expect(parseNatalEnvelope(JSON.stringify(altered))).toEqual({ ok: false, code: "invalid_context" });
+    expect(() =>
+      createNatalEnvelope(natalChart(birth), { reference, localResolution: altered.receipt.localResolution! })
+    ).toThrow();
+  });
+
+  it("is another engine's feature under a conventions set from before the time basis", () => {
+    // Written by the carried 0.1.1-rc.13 archive, under the rc.8 set (src/receipt-time-basis.test.ts).
+    const rc13 = JSON.parse(readFileSync(new URL("../fixtures/receipt-rc13.json", import.meta.url), "utf8"));
+    expect(parseNatalEnvelope(JSON.stringify(rc13))).toMatchObject({ ok: true });
+    expect(rc13.receipt.localResolution.policy).toEqual({ fold: "earlier", gap: "shift-forward" });
+    rc13.receipt.localResolution.policy.fold = "later";
+    expect(parseNatalEnvelope(JSON.stringify(rc13))).toEqual({ ok: false, code: "unsupported_feature" });
   });
 });

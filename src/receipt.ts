@@ -93,10 +93,10 @@ export interface NatalLocalResolution {
   /** Forward wall-clock shift; positive only for a reported gap. */
   gapShiftMinutes: number;
   /**
-   * How a repeated or skipped wall time was read. `fold` is the pass asked
-   * for, "earlier" unless the caller chose "later"; it changes the instant
-   * only where `inputFlags` has `dst-fold`. An engine from before the choice
-   * existed refuses a record with "later" as `unsupported_feature`.
+   * How a repeated or skipped wall time was read. `fold` is the pass taken:
+   * "later" only where the caller chose it and `inputFlags` has `dst-fold`,
+   * "earlier" otherwise. An engine from before the choice existed refuses a
+   * record with "later" as `unsupported_feature`.
    */
   policy: { fold: "earlier" | "later"; gap: "shift-forward" };
   calendar?: "gregorian" | "julian";
@@ -1006,6 +1006,8 @@ function validateLocal(value: unknown, receipt: NatalReceipt, timeBasis: boolean
   const later = policy.fold === "later";
   // The sets before the time-basis set were written before the choice existed.
   if (later && !timeBasis) fail("unsupported_feature");
+  // Only a wall time the clock showed twice has a later pass.
+  if (later && !receipt.inputFlags.includes("dst-fold")) fail("invalid_context");
   if (receipt.inputFlags.includes("dst-gap") !== shift > 0) fail("invalid_context");
   if (receipt.reference === "local-noon" && time !== "12:00") fail("invalid_context");
   // Before the time-basis set, lmt meant an offset with seconds.

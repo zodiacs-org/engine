@@ -383,8 +383,10 @@ is refused rather than ignored).
   it sees the flag, and resolve again with the answer. The option changes
   nothing for a wall time the clock showed once, and a skipped one moves
   forward by the jump whichever value is given. `localResolution.policy.fold`
-  records the value asked for (tests in `src/geo/fold-choice.test.ts`, with
-  the instants written out from the tz database's rules).
+  records the pass taken: `"later"` only where it was asked for and the clock
+  showed the time twice, `"earlier"` for every other time, whichever value
+  was given (tests in `src/geo/fold-choice.test.ts`, with the instants
+  written out from the tz database's rules).
 
 `julianToGregorian` and `gregorianToJulian` convert YYYY-MM-DD strings for
 years 0000–9999; `gregorianAdoption(country)` returns a row of the table;
@@ -561,9 +563,11 @@ a gap out of it). A local resolution requires `receipt.timeScale` `"utc"`.
 Its `policy` is `{ fold: "earlier" | "later", gap: "shift-forward" }`: with
 `"earlier"` a fold's instant must fall before its transition, on the offset
 the clock left, and with `"later"` at or after it, within the repeated span,
-on the offset the clock took. An engine from before the choice existed
-refuses a record with `"later"` as `unsupported_feature`, and this one
-refuses `"later"` under a conventions set older than rc.15's.
+on the offset the clock took. A record with `"later"` and no `dst-fold` flag
+is refused as `invalid_context`: only a repeated time has a second pass, and
+the resolver writes `"earlier"` for every other time. An engine from before
+the choice existed refuses a record with `"later"` as `unsupported_feature`,
+and this one refuses `"later"` under a conventions set older than rc.15's.
 
 Receipts under rc.15's set, under the rc.8 set (0.1.1-rc.8 to rc.14), which
 read the instant as UT1, and under the older sets stay readable, each
