@@ -1,0 +1,213 @@
+name: DE440 sweep
+
+# The dense comparison of docs/evidence/de440-sweep-20261111/PLAN.md: the calc
+# entry point against NAIF's de440.bsp at noon TT of every day from 1800 to
+# 2200 (146,097 instants), geocentric, in all eight frames. It measures and
+# reports; it changes no file, and nothing in the package depends on it. It
+# runs when its own tools or the bounds table change, and by hand.
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/de440-sweep.yml
+      - docs/evidence/de440-sweep-20261111/PLAN.md
+      - docs/evidence/de440-sweep-20261111/tools/**
+      - src/calc-bounds.ts
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: de440-sweep-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # The kernel, its digest and its cache key are those of ci.yml's tier-B job,
+  # so that one copy fetched from NAIF serves both. It is never uploaded.
+  KERNEL_URL: https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440.bsp
+  KERNEL_SHA256: a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5
+  SWEEP: docs/evidence/de440-sweep-20261111
+  # The versions conformance/arbiters/l1/validation.json was made with.
+  PYTHON_LIBRARIES: pyerfa==2.0.1.5 numpy==2.4.6 jplephem==2.24
+
+jobs:
+  kernel:
+    # Fetches the kernel once, checks it, and checks the arbiter the sweep
+    # forms from it against what the repository already holds (PLAN.md, S1
+    # and S2) before any era runs. A failed download is not a failure of the
+    # engine: re-run the job.
+    name: The kernel from NAIF, and the arbiter's self-checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install the arbiter's libraries
+        run: python -m pip install $PYTHON_LIBRARIES
+
+      - name: Restore the kernel
+        id: kernel
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/kernels/de440.bsp
+          key: de440-bsp-a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5
+
+      - name: Fetch the kernel from NAIF
+        if: steps.kernel.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/kernels"
+          curl -sS --fail --retry 4 --retry-delay 15 -o "$RUNNER_TEMP/kernels/de440.bsp" "$KERNEL_URL"
+
+      - name: Check the kernel's digest
+        run: |
+          echo "$KERNEL_SHA256  $RUNNER_TEMP/kernels/de440.bsp" | sha256sum -c -
+          echo "kernel: cache-hit=${{ steps.kernel.outputs.cache-hit }} bytes=$(stat -c %s "$RUNNER_TEMP/kernels/de440.bsp") url=$KERNEL_URL"
+
+      - name: Save the kernel
+        if: steps.kernel.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/kernels/de440.bsp
+          key: de440-bsp-a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5
+
+      - name: Self-checks S1 and S2
+        run: |
+          mkdir -p "$RUNNER_TEMP/results"
+          python "$SWEEP/tools/sweep.py" selfcheck "$RUNNER_TEMP/kernels/de440.bsp" "$RUNNER_TEMP/results/selfcheck.json"
+
+      - name: Keep the self-checks
+        uses: actions/upload-artifact@v4
+        with:
+          name: de440-sweep-selfcheck
+          path: ${{ runner.temp }}/results/selfcheck.json
+          if-no-files-found: error
+
+  era:
+    name: Sweep ${{ matrix.from }} to ${{ matrix.to }}
+    needs: kernel
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { from: 1800, to: 1850 }
+          - { from: 1850, to: 1900 }
+          - { from: 1900, to: 1950 }
+          - { from: 1950, to: 2000 }
+          - { from: 2000, to: 2050 }
+          - { from: 2050, to: 2100 }
+          - { from: 2100, to: 2150 }
+          - { from: 2150, to: 2200 }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install
+        run: |
+          npm ci
+          python -m pip install $PYTHON_LIBRARIES
+
+      - name: Build
+        run: npm run build
+
+      - name: Restore the kernel
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/kernels/de440.bsp
+          key: de440-bsp-a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5
+          fail-on-cache-miss: true
+
+      - name: Check the kernel's digest
+        run: echo "$KERNEL_SHA256  $RUNNER_TEMP/kernels/de440.bsp" | sha256sum -c -
+
+      - name: The engine at every instant of the era
+        run: node "$SWEEP/tools/engine_sweep.mjs" --from-year ${{ matrix.from }} --to-year ${{ matrix.to }} --out "$RUNNER_TEMP/engine.bin"
+
+      - name: The engine against the kernel
+        run: |
+          mkdir -p "$RUNNER_TEMP/results"
+          python "$SWEEP/tools/sweep.py" shard "$RUNNER_TEMP/kernels/de440.bsp" "$RUNNER_TEMP/engine.bin" "$RUNNER_TEMP/results/era-${{ matrix.from }}.json"
+
+      - name: Keep the era's results
+        uses: actions/upload-artifact@v4
+        with:
+          name: de440-sweep-era-${{ matrix.from }}
+          path: ${{ runner.temp }}/results/era-${{ matrix.from }}.json
+          if-no-files-found: error
+
+  results:
+    name: Sweep results
+    needs: era
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install the arbiter's libraries
+        run: python -m pip install $PYTHON_LIBRARIES
+
+      - name: Fetch the eras' results and the self-checks
+        uses: actions/download-artifact@v4
+        with:
+          pattern: de440-sweep-*
+          path: ${{ runner.temp }}/parts
+          merge-multiple: true
+
+      - name: Summary and tables
+        env:
+          SWEEP_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/results/eras"
+          cp "$RUNNER_TEMP"/parts/era-*.json "$RUNNER_TEMP/results/eras/"
+          cp "$RUNNER_TEMP/parts/selfcheck.json" "$RUNNER_TEMP/results/"
+          python "$SWEEP/tools/sweep.py" merge "$RUNNER_TEMP/results" "$RUNNER_TEMP/results/selfcheck.json" "$RUNNER_TEMP"/results/eras/era-*.json
+
+      - name: What the bounds table would become (a dry run; no file is changed)
+        run: |
+          python "$SWEEP/tools/dry_run.py" "$RUNNER_TEMP/results"
+          git diff --exit-code
+
+      - name: Keep the results
+        uses: actions/upload-artifact@v4
+        with:
+          name: de440-sweep-results
+          path: ${{ runner.temp }}/results
+          if-no-files-found: error
+
+      # The same files as text, for a reader who can reach the log and not the
+      # artifact store: a gzipped tar of the results directory in base64,
+      # between two marker lines, with its SHA-256.
+      - name: The results in the log
+        run: |
+          tar -C "$RUNNER_TEMP" --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner -cf - results | gzip -n -9 > "$RUNNER_TEMP/results.tar.gz"
+          (cd "$RUNNER_TEMP/results" && find . -type f | sort | xargs sha256sum)
+          echo "results.tar.gz sha256 $(sha256sum "$RUNNER_TEMP/results.tar.gz" | cut -d' ' -f1)"
+          echo "-----BEGIN DE440 SWEEP RESULTS-----"
+          base64 -w 76 "$RUNNER_TEMP/results.tar.gz"
+          echo "-----END DE440 SWEEP RESULTS-----"

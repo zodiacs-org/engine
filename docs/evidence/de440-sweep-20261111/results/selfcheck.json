@@ -1,0 +1,245 @@
+{
+ "kernel": {
+  "file": "de440.bsp",
+  "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440.bsp",
+  "sha256": "a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5",
+  "bytes": 119799808
+ },
+ "software": {
+  "python": "3.11.18",
+  "numpy": "2.4.6",
+  "pyerfa": "2.0.1.5",
+  "erfa": "2.0.1",
+  "jplephem": "2.24"
+ },
+ "S1": {
+  "what": "apparent places with deflection, and the osculating node, formed here from the kernel, against the ERFA chain's oracles (docs/evidence/de440-20261110/oracles/), angle between directions; the node as a longitude difference",
+  "gateArcsec": 0.01,
+  "maxArcsec": 0.00291469,
+  "verdict": "PASS",
+  "byBody": {
+   "Sun": {
+    "n": 200,
+    "maxArcsec": 0.00291469
+   },
+   "Moon": {
+    "n": 200,
+    "maxArcsec": 0.00289239
+   },
+   "Mercury": {
+    "n": 200,
+    "maxArcsec": 0.00291313
+   },
+   "Venus": {
+    "n": 200,
+    "maxArcsec": 0.00291047
+   },
+   "Mars": {
+    "n": 200,
+    "maxArcsec": 0.00291428
+   },
+   "Jupiter": {
+    "n": 200,
+    "maxArcsec": 0.00291435
+   },
+   "Saturn": {
+    "n": 200,
+    "maxArcsec": 0.00291349
+   },
+   "Uranus": {
+    "n": 200,
+    "maxArcsec": 0.0029145
+   },
+   "Neptune": {
+    "n": 200,
+    "maxArcsec": 0.00291358
+   },
+   "Pluto": {
+    "n": 200,
+    "maxArcsec": 0.00289952
+   },
+   "North Node": {
+    "n": 200,
+    "maxArcsec": 0.00291451
+   }
+  }
+ },
+ "S2": {
+  "what": "geocentric ICRF vectors formed here from the kernel (DE440) against Horizons's committed vectors (DE441, docs/evidence/calc-api/horizons/) at the 32 instants of docs/evidence/calc-api/PREREGISTRATION.md",
+  "gateArcsec": 0.05,
+  "maxArcsec": 0.0216393,
+  "verdict": "PASS",
+  "byBody": {
+   "Sun": {
+    "NONE": {
+     "n": 32,
+     "maxArcsec": 1.28853e-06,
+     "maxRelativeDistance": 3.14865e-12
+    },
+    "LT": {
+     "n": 32,
+     "maxArcsec": 1.28853e-06,
+     "maxRelativeDistance": 3.16424e-12
+    },
+    "LTS": {
+     "n": 32,
+     "maxArcsec": 1.54747e-06,
+     "maxRelativeDistance": 3.16424e-12
+    }
+   },
+   "Moon": {
+    "NONE": {
+     "n": 32,
+     "maxArcsec": 0.0216393,
+     "maxRelativeDistance": 7.12891e-09
+    },
+    "LT": {
+     "n": 32,
+     "maxArcsec": 0.0216369,
+     "maxRelativeDistance": 7.09106e-09
+    },
+    "LTS": {
+     "n": 32,
+     "maxArcsec": 0.0216348,
+     "maxRelativeDistance": 7.09106e-09
+    }
+   },
+   "Mercury": {
+    "NONE": {
+     "n": 32,
+     "maxArcsec": 2.12863e-06,
+     "maxRelativeDistance": 1.14505e-11
+    },
+    "LT": {
+     "n": 32,
+     "maxArcsec": 2.12851e-06,
+     "maxRelativeDistance": 1.14498e-11
+    },
+    "LTS": {
+     "n": 32,
+     "maxArcsec": 2.13314e-06,
+     "maxRelativeDistance": 1.14496e-11
+    }
+   },
+   "Venus": {
+    "NONE": {
+     "n": 32,
+     "maxArcsec": 1.59808e-06,
+     "maxRelativeDistance": 3.62286e-12
+    },
+    "LT": {
+     "n": 32,
+     "maxArcsec": 1.60403e-06,
+     "maxRelativeDistance": 3.75703e-12
+    },
+    "LTS": {
+     "n": 32,
+     "maxArcsec": 1.71005e-06,
+     "maxRelativeDistance": 3.75703e-12
+    }
+   },
+   "Mars": {
+    "NONE": {
+     "n": 32,
+     "maxArcsec": 1.01595e-06,
+     "maxRelativeDistance": 2.80846e-12
+    },
+    "LT": {
+     "n": 32,
+     "maxArcsec": 8.60999e-07,
+     "maxRelativeDistance": 2.80866e-12
+    },
+    "LTS": {
+     "n": 32,
+     "maxArcsec": 1.18247e-06,
+     "maxRelativeDistance": 2.80866e-12
+    }
+   },
+   "Jupiter": {
+    "NONE": {
+     "n": 32,
+     "maxArcsec": 2.19041e-07,
+     "maxRelativeDistance": 1.06732e-12
+    },
+    "LT": {
+     "n": 32,
+     "maxArcsec": 2.16021e-07,
+     "maxRelativeDistance": 1.06648e-12
+    },
+    "LTS": {
+     "n": 32,
+     "maxArcsec": 5.24399e-07,
+     "maxRelativeDistance": 1.06648e-12
+    }
+   },
+   "Saturn": {
+    "NONE": {
+     "n": 32,
+     "maxArcsec": 1.55012e-07,
+     "maxRelativeDistance": 5.42674e-13
+    },
+    "LT": {
+     "n": 32,
+     "maxArcsec": 1.55517e-07,
+     "maxRelativeDistance": 5.42479e-13
+    },
+    "LTS": {
+     "n": 32,
+     "maxArcsec": 5.22376e-07,
+     "maxRelativeDistance": 5.42479e-13
+    }
+   },
+   "Uranus": {
+    "NONE": {
+     "n": 32,
+     "maxArcsec": 6.37062e-08,
+     "maxRelativeDistance": 2.59308e-13
+    },
+    "LT": {
+     "n": 32,
+     "maxArcsec": 6.35894e-08,
+     "maxRelativeDistance": 2.59308e-13
+    },
+    "LTS": {
+     "n": 32,
+     "maxArcsec": 4.47545e-07,
+     "maxRelativeDistance": 2.59672e-13
+    }
+   },
+   "Neptune": {
+    "NONE": {
+     "n": 32,
+     "maxArcsec": 3.9208e-08,
+     "maxRelativeDistance": 2.00785e-13
+    },
+    "LT": {
+     "n": 32,
+     "maxArcsec": 3.91925e-08,
+     "maxRelativeDistance": 2.01135e-13
+    },
+    "LTS": {
+     "n": 32,
+     "maxArcsec": 4.39574e-07,
+     "maxRelativeDistance": 2.00785e-13
+    }
+   },
+   "Pluto": {
+    "NONE": {
+     "n": 32,
+     "maxArcsec": 4.76058e-08,
+     "maxRelativeDistance": 1.54653e-13
+    },
+    "LT": {
+     "n": 32,
+     "maxArcsec": 4.76173e-08,
+     "maxRelativeDistance": 1.54653e-13
+    },
+    "LTS": {
+     "n": 32,
+     "maxArcsec": 4.38375e-07,
+     "maxRelativeDistance": 1.54653e-13
+    }
+   }
+  }
+ }
+}
