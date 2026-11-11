@@ -18,7 +18,16 @@ export interface LocalTimeOptions {
   calendar?: CalendarName | undefined;
   /** ISO 3166-1 alpha-2 code, or the country's name in tzdata's iso3166.tab, for `calendarNote`. */
   country?: string | undefined;
+  /**
+   * Which instant a wall time the clock showed twice takes: "earlier" (the
+   * default), its first pass, or "later", its second. It changes nothing for
+   * any other wall time; a skipped one moves forward either way.
+   */
+  fold?: FoldChoice | undefined;
 }
+
+/** The pass of a repeated wall time to take: the first ("earlier") or the second ("later"). */
+export type FoldChoice = "earlier" | "later";
 
 /** A change of the clock that read the wall time. */
 export interface ZoneTransition {
@@ -72,6 +81,8 @@ export interface LocalBirthInput {
   timeKnown?: boolean;
   calendar?: CalendarName;
   country?: string;
+  /** Which pass of a repeated wall time the birth was in; "earlier" by default (as `LocalTimeOptions`). */
+  fold?: FoldChoice;
 }
 
 const offsetFormatters = new Map<string, Intl.DateTimeFormat>();
@@ -157,10 +168,11 @@ function firstChange(clockAt: Clock, lo: number, hi: number): number {
 
 /**
  * Reads a wall time on a clock: its readings are enumerated, a repeated one
- * takes the earlier instant, and a skipped one moves forward by the offset
- * the clock showed just before it jumped, at `at`.
+ * takes the earlier instant or, with `fold` "later", the later one, and a
+ * skipped one moves forward by the offset the clock showed just before it
+ * jumped, at `at`, whatever `fold` says.
  */
-function readClock(wallMs: number, clockAt: Clock, samples: readonly number[]) {
+function readClock(wallMs: number, clockAt: Clock, samples: readonly number[], fold: FoldChoice) {
   const readings: Reading[] = [];
   for (const offset of new Set(samples.map(clockAt))) {
     const utcMs = wallMs - offset * 1000;
@@ -171,7 +183,7 @@ function readClock(wallMs: number, clockAt: Clock, samples: readonly number[]) {
   const [first, second] = readings.sort((a, b) => a.utcMs - b.utcMs);
   if (first) {
     return second
-      ? { chosen: first, kind: "fold" as const, at: firstChange(clockAt, first.utcMs, second.utcMs) }
+      ? { chosen: fold === "later" ? second : first, kind: "fold" as const, at: firstChange(clockAt, first.utcMs, second.utcMs) }
       : { chosen: first, kind: null, at: null };
   }
   let lo = wallMs - PROBE - DAY;
@@ -224,15 +236,14 @@ function birthplaceClock(history: ZoneHistory, wallMs: number, longitude: number
   };
 }
 
-function readOptions(options: unknown): LocalTimeOptions & { calendar: CalendarName } {
-  if (options === undefined) return { calendar: "gregorian" };
+function readOptions(options: unknown = {}): LocalTimeOptions & { calendar: CalendarName; fold: FoldChoice } {
   if (!options || typeof options !== "object" || Array.isArray(options)) {
     throw new RangeError("options must be an object.");
   }
   for (const key of Object.getOwnPropertyNames(options)) {
-    if (!["longitude", "calendar", "country"].includes(key)) throw new RangeError(`Unknown local time option "${key}".`);
+    if (!["longitude", "calendar", "country", "fold"].includes(key)) throw new RangeError(`Unknown local time option "${key}".`);
   }
-  const { longitude, calendar = "gregorian", country } = options as Record<string, unknown>;
+  const { longitude, calendar = "gregorian", country, fold = "earlier" } = options as Record<string, unknown>;
   if (longitude !== undefined && !(typeof longitude === "number" && Math.abs(longitude) <= 180)) {
     throw new RangeError("longitude must be between -180 and 180 degrees.");
   }
@@ -240,14 +251,16 @@ function readOptions(options: unknown): LocalTimeOptions & { calendar: CalendarN
   if (country !== undefined && (typeof country !== "string" || !country.trim())) {
     throw new RangeError("country must be a nonempty string.");
   }
-  return { longitude: longitude as number | undefined, calendar, country: country as string | undefined };
+  if (fold !== "earlier" && fold !== "later") throw new RangeError('fold must be "earlier" or "later".');
+  return { longitude: longitude as number | undefined, calendar, country: country as string | undefined, fold };
 }
 
 const pad = (value: number, width = 2): string => String(value).padStart(width, "0");
 
 /**
  * Resolve a local wall time in an IANA zone to UTC: a repeated one takes the
- * earlier instant, a skipped one moves forward by the jump. Before 1970 the
+ * earlier instant, or the later one with `options.fold` "later"; a skipped
+ * one moves forward by the jump. Before 1970 the
  * shipped tzdb 2025c history answers, loaded by `prepareLocalTime` (a wall
  * time before 1970-01-02 throws otherwise); from 1970, and in the fixed Etc
  * zones, the host's Intl.
@@ -259,7 +272,7 @@ export function resolveLocalToUtc(
   options?: LocalTimeOptions
 ): LocalTimeResolution {
   offsetFormatter(timeZone);
-  const { longitude, calendar, country } = readOptions(options);
+  const { longitude, calendar, country, fold } = readOptions(options);
   const written = parseCalendarDate(date, calendar);
   const hhmm = typeof time === "string" ? /^([01]\d|2[0-3]):([0-5]\d)$/u.exec(time) : null;
   if (!written || !hhmm) {
@@ -281,8 +294,8 @@ export function resolveLocalToUtc(
   const place = longitude !== undefined && history ? birthplaceClock(history, wallMs, longitude, zoneAt) : null;
   const samples = [wallMs - PROBE, wallMs, wallMs + PROBE, ...(place ? [place.endMs - 1, place.endMs, place.legalFrom] : [])];
   const clockAt = place ? place.clockAt : zoneAt;
-  const zoneReading = readClock(wallMs, zoneAt, samples);
-  const reading = place ? readClock(wallMs, clockAt, samples) : zoneReading;
+  const zoneReading = readClock(wallMs, zoneAt, samples, fold);
+  const reading = place ? readClock(wallMs, clockAt, samples, fold) : zoneReading;
   const { chosen, kind } = reading;
 
   // The shipped history answered where the instant is in the birthplace's era, or before 1970 with a local time there.
@@ -356,7 +369,7 @@ export function resolveLocalToUtc(
       timeZone,
       offsetMinutes,
       gapShiftMinutes: kind === "gap" && transition ? transition.offsetAfterMinutes - transition.offsetBeforeMinutes : 0,
-      policy: { fold: "earlier", gap: "shift-forward" },
+      policy: { fold, gap: "shift-forward" },
       calendar,
       writtenDate: date,
       tzdbVersion: zone.tzdbVersion,
@@ -421,7 +434,8 @@ const LOCAL_BIRTH_KEYS = [
   "houseSystem",
   "timeKnown",
   "calendar",
-  "country"
+  "country",
+  "fold"
 ] as const;
 
 /** A local birth resolved, with how its wall time was read and the receipt's `reference`. */
@@ -442,15 +456,16 @@ export function resolveLocalBirth(input: LocalBirthInput): LocalBirthResolution 
   // One read of each field.
   const fields = Object.fromEntries(LOCAL_BIRTH_KEYS.map((key) => [key, input[key]])) as unknown as LocalBirthInput;
   const settings = validateBirthSettings(fields);
-  const time = fields.time;
+  const { time, calendar, country, fold } = fields;
   const timeKnown = settings.timeKnown ?? time !== undefined;
   if (timeKnown && time === undefined) {
     throw new RangeError("time is required when timeKnown is true.");
   }
   const resolution = resolveLocalToUtc(fields.date, time === undefined ? "12:00" : time, fields.timeZone, {
     longitude: settings.longitude,
-    calendar: fields.calendar,
-    country: fields.country
+    calendar,
+    country,
+    fold
   });
   return {
     birth: {
