@@ -249,8 +249,9 @@ describe("Zodiacs draft natal receipt", () => {
     });
   });
 
-  it("retains date-only UTC-midnight input if supplied, and rejects mismatched/malformed source strings", () => {
-    const captured = envelope({ utc: "2000-02-29" }, { sourceInstant: "2000-02-29" });
+  it("retains date-only UTC-midnight input if supplied with an unknown time, and rejects mismatched/malformed source strings", () => {
+    expect(() => envelope({ utc: "2000-02-29" }, { sourceInstant: "2000-02-29" })).toThrow(/calendar date with no time/);
+    const captured = envelope({ utc: "2000-02-29", timeKnown: false }, { sourceInstant: "2000-02-29" });
     expect(captured.receipt.instant).toBe("2000-02-29T00:00:00.000Z");
     expect(captured.receipt.sourceInstant).toBe("2000-02-29");
     for (const sourceInstant of [
