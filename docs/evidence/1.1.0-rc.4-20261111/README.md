@@ -60,3 +60,35 @@ Its cases that gave a birth as the bare date `2000-01-01` now write the same
 instant out, `2000-01-01T00:00:00Z`, which 0.1.1-rc.10 reads as it read the
 date. The `date-only` case, which sets `timeKnown: false`, is unchanged. The
 script was not run for this candidate.
+
+## The archive
+
+`carrier/pack-source-d137367.log`: clean clones of the source commit
+`d137367`, each installed with `npm ci`, built and packed with
+`npm pack --ignore-scripts` outside the checkout, on Node 22.22.2, 20.19.0,
+24.21.0 and 22.23.4 (Linux x86-64, 11 November 2026). All four packed
+SHA-256 `d3687574d7051601a81fd7da86ccec0e41f8ff2b0fd3faf194523d65547d4dfd`,
+334,645 bytes, 94 files; the carried file is the Node 22.22.2 one.
+
+## The gates on the carrier
+
+Run locally on the carrier `0992d2f` before anything was pushed (Linux
+x86-64, `TMPDIR` outside the checkout):
+
+- `carrier/gates-0992d2f.log`: the engine job's steps on Node 22.22.2
+  (typecheck, the suite with 100 files and 4,194 tests passed and 3 tests
+  skipped, build, export smoke, `api:check`, package contents, pack dry
+  run), `node scripts/verify-archive-binding.mjs` on Node 20.19.0, 24.21.0
+  and 22.22.2, each rebuilding HEAD to the carried bytes, and the
+  packed-consumer check on the carried archive on Node 22.22.2, 20.19.0 and
+  24.21.0. Every step exits 0.
+- `carrier/rebuild-all-0992d2f-v22.23.4.log`:
+  `node scripts/verify-archive-binding.mjs --rebuild-all` on Node 22.23.4,
+  the lines that name each archive: every recorded archive, this one
+  included, rebuilds from its source commit byte for byte.
+
+The conformance checks (`run.mjs --check`, `report.mjs --check`, on Node
+22.22.2) and `node atlas/tools/check.mjs` also passed there; their output
+was not kept. The gate workflows had not run on the source commit when the
+archive was carried, and no independent review of the cut has been made.
+The tier-B check on NAIF's kernel was not run locally.
