@@ -150,7 +150,35 @@ On a pull request, `actions/checkout` builds the merge of the head into
 `main` (the review's finding 1). While `main` is `bc0b5a7`, which this
 branch contains, that merge has this branch's tree.
 
-The run's result is recorded after the source commit's gates (below).
+It ran on the source commit `ca3ae0f` as run 43055363587 (attempt 1,
+event `pull_request`), ten jobs, all green. The checkout was GitHub's merge
+commit `42a864b` of `ca3ae0f` into `bc0b5a7`; its tree is `ca3ae0f`'s
+(`f031cff`), checked here with git. The build was `@zodiacs/engine`
+1.1.0-rc.7, `distSha256` `a8da9056…3a29`, on Node v22.23.4; the kernel's
+digest was checked as before.
+
+- `remeasure/against-43055363587.log`: the new step's output, as the job
+  printed it (and as `write_bounds.py --against` gives it here on the
+  fetched results). In all eight eras the engine's values are the same bytes
+  as the committed sweep's on 1.1.0-rc.3, and every largest difference of
+  the 32 rows, position, distance and rate, is within the limit
+  `src/calc-bounds.ts` quotes. Position, apparent places, largest found
+  against the limit, arcseconds: Sun 3.332 / 3.4, Moon 11.875 / 12, Mercury
+  16.9101 / 17, Venus 23.3123 / 24, Mars 22.9118 / 23, Jupiter 16.8076 / 17,
+  Saturn 23.2102 / 24, Uranus 19.6414 / 20, Neptune 21.2794 / 22, Pluto
+  29.8591 / 30, the nodes 32.639 / 33.
+- `remeasure/results-43055363587.sha256`: the SHA-256 of each file of the
+  run's results and of the tar the job printed in its log. The results were
+  read from the log, as the sweep's were (its deviation 2), and each file
+  matches the digest the job printed. Their bounds and longitudes are the
+  committed sweep's, number for number. They are not committed again: the
+  committed sweep is the source of `src/calc-bounds.ts`, and this run shows
+  that it holds for this build.
+
+The margins are thin by construction: a limit is the largest difference
+rounded up to two significant figures, so the Sun's rate (0.239 against
+0.24), Pluto's position (29.86 against 30) and Mars's (22.91 against 23)
+are close to theirs.
 
 ## Sizes
 
@@ -168,3 +196,56 @@ The package cap rises from 1,150,000 to 1,155,000, which leaves 0.25 per
 cent. AGENTS.md allows a rise only when a candidate is cut, with the reason
 in `CHANGELOG.md`. The owner has not yet approved it: it is one of this
 candidate's decisions. No entry point's budget changes.
+
+## The archive
+
+`carrier/pack-source-ca3ae0f.log`: clean clones of the source commit
+`ca3ae0f`, each installed with `npm ci`, built and packed with
+`npm pack --ignore-scripts` outside the checkout, on Node 22.22.2, 20.19.0
+and 24.21.0 (Linux x86-64, 11 November 2026). All three packed SHA-256
+`71348be1f8dc2772945cc86c72af475091d105da9e7ff5b4411c517adc9fc80a`, 335,403
+bytes, 94 files; the carried file is the Node 22.22.2 one.
+
+## The gates on the source commit
+
+The gate workflows ran on the source commit `ca3ae0f` on GitHub, as the head
+of draft pull request 95, before the archive was carried, and every job
+passed: CI run 43055363489 (the engine job on Node 20, 22 and 24, the
+rebuild of every archive carried then, the pack, the packed consumers on
+Node 20.19.0, 22.7.0, 22 and 24, and the DE440 tier-B job), Conformance run
+43055363317 and Atlas run 43055363454. The repository's other workflows
+passed on it too: DE440 sweep 43055363587 (above), Python package
+43055363627, Offline CLI consumer 43055363474 and CodeQL 43055363385.
+
+## The gates on the carrier
+
+Run locally on the carrier `4428332` before it was pushed (Linux x86-64,
+`TMPDIR` outside the checkout):
+
+- `carrier/gates-4428332.log`: the engine job's steps on Node 22.22.2
+  (typecheck, the suite with 100 files and 4,204 tests passed and 3 tests
+  skipped, build, export smoke, `api:check`, package contents, pack dry
+  run), `node scripts/verify-archive-binding.mjs` on Node 20.19.0, 24.21.0
+  and 22.22.2, each rebuilding HEAD to the carried bytes, the
+  packed-consumer check on the carried archive on Node 22.22.2, 20.19.0 and
+  24.21.0, on Node 22.22.2 the conformance checks (the self-test, the count
+  of 500 vectors, `run.mjs --check` and `report.mjs --check`) and the atlas
+  check and self-test, and `write_bounds.py --check`. Every step exits 0.
+- `carrier/rebuild-all-4428332-v22.22.2.log`:
+  `node scripts/verify-archive-binding.mjs --rebuild-all` on Node 22.22.2,
+  the lines that name each archive: every recorded archive, this one
+  included, rebuilds from its source commit byte for byte.
+
+The workflow runs on the carrier and on this record's commit come after
+this file and are on pull request 95. The tier-B check on NAIF's kernel and
+the packed consumer on Node 22.7.0 were not run locally; the CI run on the
+source commit has a job for each, and both passed.
+
+## Reviews
+
+No independent review of this candidate has been done. The sweep had one,
+read-only, in draft pull request 93; this candidate acts on its findings 2
+and 4 in the tool, and its findings 1 and 3 are above and in the owner's
+decisions. If a review finds anything in the package, the fix is a new
+candidate, not an edit of this archive.
+
