@@ -99,7 +99,8 @@ runs, so CI starts the check with node directly.
 | 1.0.0 | `c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6` | 288,063 | 74 | `ca2c8cefbaa1a9d6f5f78ee86713e813633942ca` | `38d3185` | Release, merged; on npm as `latest` |
 | 1.1.0-rc.1 | `52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6` | 292,721 | 77 | `c41706266caf4dde7e03aaa18c08acd569d19a7e` | `6ec3464` | Candidate, merged |
 | 1.1.0-rc.2 | `c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c` | 318,004 | 90 | `806f76b43c0ee652016fe1b522c02d6f6e9c7ae5` | `59c6ea9` | Candidate, merged |
-| 1.1.0-rc.3 | `3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590` | 331,979 | 94 | `cc910b3775e279222e23af0b395bb6f2b51a3c3a` | "Carry the packed 1.1.0-rc.3 tarball" | Candidate under review |
+| 1.1.0-rc.3 | `3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590` | 331,979 | 94 | `cc910b3775e279222e23af0b395bb6f2b51a3c3a` | `d2794d2` | Candidate, merged |
+| 1.1.0-rc.6 | `648714ca7485c7381f338286b84a211752ddd425035f50f6e24267e80de6abde` | 333,982 | 94 | `c3efe9175644ee6a0d9f40e2d9fa0766aa264fa6` | "Carry the packed 1.1.0-rc.6 tarball" | Draft candidate, awaiting the owner's review |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -311,3 +312,27 @@ on the source commit (CI run 42738993989, Conformance 42738993913 and Atlas
 42738993899), and two reviews of the cut and a re-check of their fixes had been
 acted on. It is not to be published on npm until the owner approves it. The
 record is in `docs/evidence/de440-20261110/`.
+
+1.1.0-rc.6 is the next candidate for 1.1.0 after 1.1.0-rc.3, cut as a draft
+for the owner's review: a birth in an hour the clock showed twice can take
+the later pass (`fold: "later"` in `@zodiacs/engine/geo`). There is no
+1.1.0-rc.4 and no 1.1.0-rc.5 archive here. 1.1.0-rc.4 was drafted in pull
+request 89 with this change and with a refusal of a birth given as a
+calendar date with no time; it was not merged, and the owner decided on
+2026-11-11 to hold the refusal for 2.0.0. 1.1.0-rc.5 was drafted in pull
+request 90 with this change alone; an independent review of that draft
+found that it recorded the later pass for times that have no second pass,
+and it was superseded by this candidate before merging. Both numbers are
+skipped and never packed again. The 1.1.0-rc.6 archive is 333,982 bytes,
+1,148,327 unpacked in 94 files, under the package cap of 1,150,000, which it
+raises from 1,145,000, as it raises `./geo`'s budget from 35,500 to 35,600;
+the owner approved both rises on 2026-11-11. It was packed once, from clean
+clones of its source commit, each installed with `npm ci`, which packed the
+same bytes on Node 22.22.2, 20.19.0 and 24.21.0 (Linux x86-64); the carried
+file is the Node 22.22.2 one. It was carried after the gate workflows had
+passed on the source commit (CI run 43014592658, Conformance 43014592715 and
+Atlas 43014592797) and after the findings of the independent review of
+1.1.0-rc.5 had been acted on. The independent review of this candidate's own
+change, the fix to what is recorded, follows the draft. It is not to be
+published on npm until the owner approves it. The record is in
+`docs/evidence/1.1.0-rc.6-20261111/`.
