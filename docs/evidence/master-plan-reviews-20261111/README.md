@@ -100,7 +100,6 @@ OpenAI's plugin guidelines, and the MCP Registry's pages.
 | `de440.bsp` | Not used. Pull request 92's sweep was read, not rerun. |
 | Production configuration | Whether production serves the site's `main` was not checked. |
 | Job 1's worktree (ZOD-97) | Not read. The plan's edge cases are left to that job. |
-| The shared task board | Not updated by this job. |
 
 ## How the facts were gathered, and what was run
 
