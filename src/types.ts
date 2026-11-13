@@ -81,13 +81,15 @@ export type HouseSystem =
   | "alcabitius"
   | "morinus"
   | "meridian";
+/** `"delta-t-extrapolated"`: a UTC or UT1 instant whose TT rests on an extrapolated ΔT (docs/time.md). */
 export type ChartFlag =
   | "dst-gap"
   | "dst-fold"
   | "lmt"
   | "no-time"
   | "polar-fallback"
-  | "outside-reference-span";
+  | "outside-reference-span"
+  | "delta-t-extrapolated";
 
 /**
  * A resolved birth instant. Use `resolveBirth` from `@zodiacs/engine/geo`

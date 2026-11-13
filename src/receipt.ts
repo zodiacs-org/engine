@@ -436,6 +436,8 @@ const BODIES = [
 ] as const;
 const FLAGS_RC7 = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"] as const;
 const FLAGS = [...FLAGS_RC7, "outside-reference-span"] as const;
+/** The time-basis sets also take "delta-t-extrapolated", whose condition the record's ΔT and time scale show. */
+const FLAGS_TIME_BASIS = [...FLAGS, "delta-t-extrapolated"] as const;
 const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
 const HOUSE_SYSTEMS = [
   "whole",
@@ -1273,13 +1275,22 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   )
     fail("inconsistent_result");
   const inputFlags = flagList(receipt.inputFlags, TIME_FLAGS);
-  const resultFlags = flagList(receipt.resultFlags, current ? FLAGS : FLAGS_RC7);
+  const resultFlags = flagList(receipt.resultFlags, timeBasis ? FLAGS_TIME_BASIS : current ? FLAGS : FLAGS_RC7);
   const expected = [...inputFlags];
   if (!timeKnown) expected.push("no-time");
   if (POLAR_UNDEFINED.includes(requested) && result.houses?.system === "whole")
     expected.push("polar-fallback");
   if (current && outsideReferenceSpan(new Date(receipt.instant as string)))
     expected.push("outside-reference-span");
+  // "delta-t-extrapolated" belongs where the record's own ΔT and time scale show
+  // a UTC or UT1 instant on a forecast ΔT (src/birth-input.ts). Records written
+  // before the flag lack it there, so it is allowed there, and refused anywhere else.
+  const forecast =
+    timeBasis &&
+    scale !== "tt" &&
+    result.timeScale?.basis === "delta-t" &&
+    (result.deltaT?.segment === "extrapolated" || result.deltaT?.segment === "predicted");
+  if (forecast && resultFlags.includes("delta-t-extrapolated")) expected.push("delta-t-extrapolated");
   if (!sameFlags(expected, resultFlags)) fail("inconsistent_result");
   const engine = record(receipt.engine);
   // Receipts in the current set must say which ephemeris computed them.

@@ -382,6 +382,7 @@ function chartAt(input: ChartInput): Chart {
     flags.push("no-time");
   }
   if (outsideReferenceSpan(input.utc)) flags.push("outside-reference-span");
+  deltaTExtrapolated(basis) && flags.push("delta-t-extrapolated");
 
   return {
     input,
@@ -396,6 +397,14 @@ function chartAt(input: ChartInput): Chart {
     ...(source && { ephemeris: { name: source.ephemeris.name, version: source.ephemeris.version } })
   };
 }
+
+/**
+ * Whether an instant's TT rests on a ΔT the model forecasts: given on UTC or
+ * UT1 (not TT, and with no pinned ΔT) where the time basis is the ΔT model and
+ * its value is past the observed one, after the end of the IERS table. The
+ * chart flag `"delta-t-extrapolated"` and calc()'s widened bounds follow it.
+ */
+export const deltaTExtrapolated = ({ deltaT: d, timeScale: t }: Pick<TimeBasis, "deltaT" | "timeScale">): boolean => t.input != "tt" && t.basis == "delta-t" && /^(e|pr)/.test(d.segment);
 
 /** The mean node and the mean apogee at an instant's time basis, on the chart's clock. */
 function meanLunarPoints(basis: TimeBasis): { node: number; apogee: { lon: number; lat: number } } {

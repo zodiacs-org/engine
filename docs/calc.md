@@ -30,7 +30,7 @@ computed before it.
 
 | function | takes | gives |
 | --- | --- | --- |
-| `calc` | `{ body, time, frame?, center?, zodiac?, flags? }` | `{ lon, lat, dist, speeds, cartesian, ayanamsa, bounds, band, receipt }` |
+| `calc` | `{ body, time, frame?, center?, zodiac?, flags? }` | `{ lon, lat, dist, speeds, cartesian, ayanamsa, bounds, band, flags, receipt }` |
 | `houses` | `{ time, place, houseSystem?, zodiac? }` | angles, Vertex, East Point, ARMC, obliquity and the cusps, with `ayanamsa`, `bounds`, `band` and a receipt, as `natalChart()` computes them |
 | `events` | `{ kind: "longitude-crossing", body, longitude, from, to, zodiac?, stepDays?, maxSamples? }` | every instant in (from, to] the body sits on the longitude, from the engine's crossing search, each with its `band` |
 | `chart` | `{ time, place?, houseSystem?, timeKnown?, timeFlags?, zodiac? }` | the chart `natalChart()` gives, with its sidereal longitudes in the sidereal zodiac, its `band` and a receipt |
@@ -296,8 +296,8 @@ two significant figures by the same rule: 32 rows,
 held the 32 instants' values, and the engine was found beyond ten of the
 eleven apparent position limits on other days.
 
-Every other row (heliocentric, barycentric and topocentric positions, and the
-mean points) keeps the measured values that follow, 72 rows. They are the
+Every other row (heliocentric and barycentric positions, and the mean points)
+keeps the measured values that follow, 63 rows. They are the
 largest differences from NASA JPL
 Horizons (DE441) over a preregistered corpus of 32 instants from 1802 to 2188,
 by center, correction and body, in every frame, rounded up to two
@@ -315,13 +315,41 @@ first run's, and the rate bounds of the outer planets and the position and
 rate bounds of the mean node and Lilith, which carried the five-term
 nutation's error, are smaller. Topocentric
 positions were compared for the Sun, the Moon and Mars, in all three
-corrections; another topocentric body takes its geocentric bound for the
-same correction, labelled `estimated`. The sweep did not take topocentric
-places, and the topocentric Sun, Moon and Mars keep position bounds (3.0″,
-7.8″ and 6.6″) below the geocentric ones it found (3.4″, 12″ and 23″). A
-topocentric place is the geocentric one moved by the parallax, so the
-geocentric differences carry over and those three bounds are probably too
-small until topocentric places are swept too.
+corrections, on the same 32 instants; another topocentric body takes its
+geocentric bound for the same correction, labelled `estimated`. The sweep did
+not take topocentric places. A topocentric place is the geocentric one moved
+by the parallax, so the geocentric differences carry over: each value of the
+topocentric Sun's, Moon's and Mars's rows (9 rows) is the larger of its own
+32 instants' value and the geocentric row's for the same correction and body,
+and its `basis` says so. In every one of those rows the geocentric value is
+the larger, so the topocentric position bounds are 3.4″, 12″ and 23″ in place
+of the 32 instants' 3.0″, 7.8″ and 6.6″ (`calc-bounds.test.ts` checks each
+value against both summaries).
+
+A clock time past the end of the IERS predictions (after 2027-10-02) has no
+measured TT: the engine adds a ΔT its model extrapolates, with a 1-σ band
+`deltaT.sigma` that grows with the years ([time.md](time.md)), and no arbiter
+gives positions for such a clock time. So when an instant is given on UTC
+(an ISO string or a Date) or as a UT1 Julian date there, and its ΔT is not
+pinned, `calc()` returns `flags: ["delta-t-extrapolated"]` (empty
+otherwise), names `bounds:plus-delta-t-band` in its receipt, and widens each
+bound by how far its quantity moves, to first order, while TT and UT1 move by
+their bands, s and u seconds (`band.time`): the position's by (Ω + w) s + w u,
+with Ω the direction's angular rate √((λ′ cos β)² + β′²) in arcseconds a
+second; the speed's by (Ω′ + w ω⊕) s + w ω⊕ u, with Ω′ the change of that
+rate; and the distance's by (|r′| / r + v / r) s + (v / r) u. Ω, Ω′ and r′
+come from samples 0.001 day (0.25 day for the true node) either side, as the
+speeds do, whether or not speeds were asked for; w and v bound a topocentric
+observer's turn, as in *Bands*, and are 0 for other centers. A widened bound
+is labelled `estimated`, and its `basis` adds the amount and the TT band. On
+UTC input s is √(u² + σ²), with u = 0.9 s past the IERS table. For the Moon
+at 2199-06-15T12:00Z given on UTC, σ is over 100 s and the position bound
+grows by between 50″ and 65″ (`src/calc-delta-t.test.ts`). TT input, a pinned
+ΔT and an instant inside the IERS table keep their bounds unchanged, with no
+flag. The widening uses a 1-σ band, so it is not a limit either: the true ΔT
+can be further off. `natalChart()` and `chart()` carry the same flag in the
+chart's `flags`; `positions()` returns a bare list of bodies and carries
+none.
 
 A broader sample on 2026-11-13 compared the geocentric apparent positions in
 the true ecliptic of date with JPL DE421 at 1,711 instants per body from 1900
@@ -601,7 +629,8 @@ is no comparison to take one from.
   gives it.
 - `conventions`: ids from the vocabulary below; every receipt but that of
   `calc()` without speeds names `time-band:first-order` last, `events()`'s
-  even when it finds no event.
+  even when it finds no event. A `calc()` receipt whose bounds were widened
+  for an extrapolated ΔT names `bounds:plus-delta-t-band` (*Bounds*).
 - `engine`: the package version and the ephemeris.
 
 ### Convention ids
@@ -633,6 +662,7 @@ is no comparison to take one from.
 | `house:<system>`, `polar-fallback:whole` | the house system asked for, and whole sign where Placidus or Koch is undefined |
 | `angles:gast-and-true-obliquity`, `sidereal-time:gast-iau2006-era` | the angles from the engine's apparent sidereal time (the Earth rotation angle, astronomy-engine's IAU 2006 polynomial, and the equation of the equinoxes: Δψ cos εA and the two largest IAU 2000 complementary terms) and the true obliquity |
 | `aspects:major`, `search:scan-and-bisect` | the chart's major aspects; the crossing search |
+| `bounds:plus-delta-t-band` | `calc()`'s bounds widened for a clock time past the IERS predictions, by how far each quantity moves while TT and UT1 move by their bands (*Bounds*) |
 | `time-band:first-order` | the result carries bands from the time basis (*Bands*): each instant's TT and UT1 bands by the rule of [time.md](time.md)'s *The time bands*, after the IERS table on UTC input the root of the sum of the squares of the two recorded bands; propagated to first order, a position's rates times the TT band, with the observer's turn bounded for a topocentric one, an angle's or cusp's rates on UT1 and on TT times those bands, with whole-sign and fallback cusps 0, and an event's clock labels |
 
 ## Swiss Ephemeris `calc_ut` flags

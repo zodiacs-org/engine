@@ -123,6 +123,7 @@ interface CalcPosition {
     readonly ayanamsa: CalcAyanamsaValue | null;
     readonly bounds: CalcBounds;
     readonly band: CalcTimeBand | null;
+    readonly flags: readonly ChartFlag[];
     readonly receipt: CalcReceipt<CalcRequest>;
 }
 
@@ -230,7 +231,7 @@ interface Chart {
     };
 }
 
-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span";
+type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated";
 
 interface ChartRequest {
     readonly time: CalcTime;

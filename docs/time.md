@@ -125,6 +125,18 @@ came from the leap seconds, and null otherwise. Where both are given,
 32.184 s + `taiMinusUtc` − `ut1MinusUtc.seconds` is `deltaT.seconds`, inside a
 leap second too.
 
+A chart given on UTC or UT1 after the table, with no pinned ΔT, has its TT
+from a ΔT the model forecasts (`basis` `"delta-t"`, `segment`
+`"extrapolated"`, or `"predicted"` where the model still has Bulletin A's
+predictions), and nothing measures how far that is from the ΔT the date will
+have. Its `flags` then hold `"delta-t-extrapolated"`: the bodies can be off by
+about `deltaT.sigma` seconds times each one's rate, on top of the ephemeris's own error. A
+caller may echo the flag only where the chart derives it. A chart given on TT
+does not carry it, since its TT is the input. `calc()` widens its bounds by
+the same rule (calc.md, *Bounds*), and natal receipts of the time-basis sets
+carry the flag where the record's ΔT and time scale show it; a record written
+before the flag existed is still read without it.
+
 astronomy-engine keeps one ΔT function for its whole module. The engine
 installs a constant ΔT for each sample and restores its model,
 `deltaT` from `@zodiacs/engine/deltat`, when every call returns. Code that calls

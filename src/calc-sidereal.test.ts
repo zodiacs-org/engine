@@ -255,6 +255,8 @@ describe("the sidereal zodiac in calc()", () => {
         for (const body of ["Sun", "Moon", "Pluto", "Mean Node"] as const) {
           const tropical = ok(calc({ body, time: iso }));
           const sidereal = ok(calc({ body, time: iso, zodiac }));
+          // Past the IERS predictions a UTC instant's bounds also widen by the TT band (calc-delta-t.test.ts).
+          if (tropical.flags.includes("delta-t-extrapolated")) continue;
           const at = AstroTime.FromTerrestrialTime(sidereal.receipt.instants[0]!.jdTt - 2_451_545);
           const added = ayanamsaBound(definition, ayanamsaAt(definition, at).elongation);
           expect(sidereal.ayanamsa!.bound).toEqual({ value: added.position, unit: "arcsec", label: "measured", basis: AYANAMSA_BASIS });

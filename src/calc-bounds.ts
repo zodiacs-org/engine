@@ -6,15 +6,18 @@
  * barycentric Sun is left out: calc.ts derives its bounds from the
  * barycentre's error.
  *
- * Each row rests on one of three bases:
+ * Each row rests on one of four bases:
  * - SWEPT_BASIS, the dense DE440 sweep: every row of the groups SWEPT names
  *   but the mean points (32 rows), from
  *   docs/evidence/de440-sweep-20261111/results/summary.json;
  * - MEAN_POINTS_BASIS (their rates MEAN_POINTS_SPEED_BASIS): the Mean Node,
- *   the Mean South Node and Black Moon Lilith (3 rows), and
- * - MEASURED_BASIS, 32 instants against JPL Horizons: every other row
- *   (69 rows, heliocentric, barycentric and topocentric), both from
- *   docs/evidence/calc-api/rc16/summary.json.
+ *   the Mean South Node and Black Moon Lilith (3 rows);
+ * - MEASURED_BASIS, 32 instants against JPL Horizons: every other row but
+ *   the topocentric ones (60 rows, heliocentric and barycentric), both
+ *   from docs/evidence/calc-api/rc16/summary.json; and
+ * - TOPOCENTRIC_BASIS: the topocentric Sun, Moon and Mars (9 rows), each
+ *   value the larger of its own 32 instants' value and the geocentric row's
+ *   of the same correction and body.
  *
  * Written by docs/evidence/de440-sweep-20261111/tools/write_bounds.py; do not
  * edit by hand. calc-bounds.test.ts checks that they agree.
@@ -23,6 +26,8 @@ export const SWEPT_BASIS = "largest difference from JPL's DE440 found at noon TT
 /** The groups whose rows, but the mean points', rest on SWEPT_BASIS. */
 export const SWEPT: readonly string[] = ["geocentric/apparent", "geocentric/astrometric", "geocentric/geometric"];
 export const MEASURED_BASIS = "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16";
+/** The basis of the topocentric rows. */
+export const TOPOCENTRIC_BASIS = "the larger of the largest difference from JPL Horizons on 32 instants (docs/evidence/calc-api/rc16) and the geocentric bound for the same correction and body (docs/evidence/de440-sweep-20261111), since a topocentric place is the geocentric one moved by the parallax";
 /** The basis of the mean node's, the mean south node's and Black Moon Lilith's bounds. */
 export const MEAN_POINTS_BASIS = "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16";
 /** The basis of their speed bounds, compared in the true ecliptic of date only. */
@@ -63,6 +68,11 @@ const HELIOCENTRIC_APPARENT: Rows = {
   "Saturn": [18.0, 6.5e-05, 0.023],
   "Uranus": [19.0, 4.2e-05, 0.0091],
   "Venus": [6.6, 1.2e-05, 0.21]
+};
+const TOPOCENTRIC_ASTROMETRIC: Rows = {
+  "Mars": [23.0, 8.7e-05, 0.74],
+  "Moon": [12.0, 4.8e-05, 2.9],
+  "Sun": [3.4, 1.7e-05, 0.24]
 };
 export const MEASURED: Readonly<Record<string, Rows>> = {
   "barycentric/apparent": BARYCENTRIC_APPARENT,
@@ -113,18 +123,10 @@ export const MEASURED: Readonly<Record<string, Rows>> = {
     "Venus": [6.6, 1.2e-05, 0.21]
   },
   "topocentric/apparent": {
-    "Mars": [6.6, 5.8e-05, 0.46],
-    "Moon": [7.8, 3.6e-05, 1.4],
-    "Sun": [3.0, 1.5e-05, 0.19]
+    "Mars": [23.0, 8.7e-05, 0.74],
+    "Moon": [12.0, 0.00015, 2.9],
+    "Sun": [3.4, 1.7e-05, 0.24]
   },
-  "topocentric/astrometric": {
-    "Mars": [6.6, 5.8e-05, 0.45],
-    "Moon": [7.8, 3.6e-05, 1.4],
-    "Sun": [3.0, 1.5e-05, 0.18]
-  },
-  "topocentric/geometric": {
-    "Mars": [6.6, 5.8e-05, 0.45],
-    "Moon": [7.8, 3.6e-05, 1.5],
-    "Sun": [3.0, 1.5e-05, 0.18]
-  }
+  "topocentric/astrometric": TOPOCENTRIC_ASTROMETRIC,
+  "topocentric/geometric": TOPOCENTRIC_ASTROMETRIC
 };
