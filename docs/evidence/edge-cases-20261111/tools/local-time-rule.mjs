@@ -15,8 +15,7 @@
  * record carries the host's tz release (process.versions.tz) and each case's
  * zone source.
  *
- * STATUS: written on 2026-11-11 and NOT RUN: the session that wrote it could
- * not execute node. Treat every expectation as unverified until it has run.
+ * First run on 2026-11-11: ../results/local-time-rule.json.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
