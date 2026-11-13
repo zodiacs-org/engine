@@ -1,0 +1,195 @@
+{
+  "what": "A broad sample of calc() geocentric apparent positions (true ecliptic of date) and of the Sun's and the Moon's event times against JPL DE421, beside the published measured bounds, which are the largest differences seen on the 32-instant Horizons corpus (docs/evidence/calc-api/rc16).",
+  "measured": "2026-11-13",
+  "build": "1.1.0-rc.3 archive (source commit cc910b3, identical src to bc0b5a7), astronomy-engine 2.1.19",
+  "reference": "JPL DE421 with jplephem 2.24 and pyerfa 2.0.1.5: light time, solar deflection, annual aberration, IAU 2006/2000A to the true ecliptic of date; Mars to Pluto as system barycentres; each instant at the engine's own TT and UT1. Calibrated against the 140 committed Horizons DE441 L1 vectors inside 1900 to 2050: in longitude Sun to Saturn within 0.008 arcseconds and Uranus to Pluto within 0.26 arcseconds; in latitude within 0.018 and 0.13 arcseconds (outputs/calibrate-l1.txt).",
+  "sample": {
+    "instantsPerBody": 1711,
+    "sets": {
+      "A: 1900 to 2050, 4 seeded instants a year": 604,
+      "B: 2020 to 2031, every 4 days": 1096,
+      "E: edge instants": 11
+    }
+  },
+  "notes": [
+    "angle is the angle between the two directions, as bounds.position is defined",
+    "speeds compare the longitude rate alone (no cos latitude factor, no latitude rate) with a central difference of +/- 1 minute of the reference without solar deflection (ephemeris only); the published bounds.speed is the angular rate difference hypot(dLonRate * cos lat, dLatRate), a different metric, so these show the bounds exceeded in longitude rate, not angular rate maxima; the true node's speed was not compared; the engine applies no deflection (docs/calc.md), so near conjunction with the Sun the difference from a deflected reference is larger",
+    "the true node is compared with the ascending node of the osculating geocentric orbit of the DE421 Moon; the frame choice moves that node by several arcseconds, so its figure is definition-sensitive",
+    "event times are absolute differences in seconds of TT; reference events are found independently of the engine"
+  ],
+  "positions": {
+    "Sun": {
+      "n": 1711,
+      "longitudeMaxArcsec": 1.97,
+      "angleMaxArcsec": 2.1,
+      "angleMedianArcsec": 0.7,
+      "publishedPositionBound": 3,
+      "instantsOverPositionBound": 0,
+      "speedMaxArcsecPerDay_noDeflectionReference": 0.1558,
+      "publishedSpeedBound": 0.18,
+      "instantsOverSpeedBound_noDeflectionReference": 0
+    },
+    "Moon": {
+      "n": 1711,
+      "longitudeMaxArcsec": 4.63,
+      "angleMaxArcsec": 4.64,
+      "angleMedianArcsec": 0.78,
+      "publishedPositionBound": 8.3,
+      "instantsOverPositionBound": 0,
+      "speedMaxArcsecPerDay_noDeflectionReference": 1.6171,
+      "publishedSpeedBound": 1.1,
+      "instantsOverSpeedBound_noDeflectionReference": 19
+    },
+    "Mercury": {
+      "n": 1711,
+      "longitudeMaxArcsec": 10.86,
+      "angleMaxArcsec": 11.91,
+      "angleMedianArcsec": 2.24,
+      "publishedPositionBound": 9.3,
+      "instantsOverPositionBound": 4,
+      "speedMaxArcsecPerDay_noDeflectionReference": 1.9982,
+      "publishedSpeedBound": 2.2,
+      "instantsOverSpeedBound_noDeflectionReference": 0
+    },
+    "Venus": {
+      "n": 1711,
+      "longitudeMaxArcsec": 20.43,
+      "angleMaxArcsec": 20.54,
+      "angleMedianArcsec": 1.6,
+      "publishedPositionBound": 11,
+      "instantsOverPositionBound": 29,
+      "speedMaxArcsecPerDay_noDeflectionReference": 0.6674,
+      "publishedSpeedBound": 0.64,
+      "instantsOverSpeedBound_noDeflectionReference": 5
+    },
+    "Mars": {
+      "n": 1711,
+      "longitudeMaxArcsec": 11.82,
+      "angleMaxArcsec": 14.05,
+      "angleMedianArcsec": 1.44,
+      "publishedPositionBound": 6.6,
+      "instantsOverPositionBound": 70,
+      "speedMaxArcsecPerDay_noDeflectionReference": 0.5877,
+      "publishedSpeedBound": 0.45,
+      "instantsOverSpeedBound_noDeflectionReference": 1
+    },
+    "Jupiter": {
+      "n": 1711,
+      "longitudeMaxArcsec": 10.14,
+      "angleMaxArcsec": 13.86,
+      "angleMedianArcsec": 3.77,
+      "publishedPositionBound": 13,
+      "instantsOverPositionBound": 1,
+      "speedMaxArcsecPerDay_noDeflectionReference": 0.0618,
+      "publishedSpeedBound": 0.061,
+      "instantsOverSpeedBound_noDeflectionReference": 1
+    },
+    "Saturn": {
+      "n": 1711,
+      "longitudeMaxArcsec": 12.7,
+      "angleMaxArcsec": 21.96,
+      "angleMedianArcsec": 10.16,
+      "publishedPositionBound": 18,
+      "instantsOverPositionBound": 121,
+      "speedMaxArcsecPerDay_noDeflectionReference": 0.0432,
+      "publishedSpeedBound": 0.03,
+      "instantsOverSpeedBound_noDeflectionReference": 20
+    },
+    "Uranus": {
+      "n": 1711,
+      "longitudeMaxArcsec": 11.88,
+      "angleMaxArcsec": 19.45,
+      "angleMedianArcsec": 5.61,
+      "publishedPositionBound": 20,
+      "instantsOverPositionBound": 0,
+      "speedMaxArcsecPerDay_noDeflectionReference": 0.0188,
+      "publishedSpeedBound": 0.02,
+      "instantsOverSpeedBound_noDeflectionReference": 0
+    },
+    "Neptune": {
+      "n": 1711,
+      "longitudeMaxArcsec": 18.25,
+      "angleMaxArcsec": 20.51,
+      "angleMedianArcsec": 14.51,
+      "publishedPositionBound": 21,
+      "instantsOverPositionBound": 0,
+      "speedMaxArcsecPerDay_noDeflectionReference": 0.0151,
+      "publishedSpeedBound": 0.013,
+      "instantsOverSpeedBound_noDeflectionReference": 9
+    },
+    "Pluto": {
+      "n": 1711,
+      "longitudeMaxArcsec": 4.91,
+      "angleMaxArcsec": 5.03,
+      "angleMedianArcsec": 1.53,
+      "publishedPositionBound": 25,
+      "instantsOverPositionBound": 0,
+      "speedMaxArcsecPerDay_noDeflectionReference": 0.0078,
+      "publishedSpeedBound": 0.014,
+      "instantsOverSpeedBound_noDeflectionReference": 0
+    },
+    "North Node (true)": {
+      "n": 1711,
+      "longitudeMaxArcsec": 19.2,
+      "publishedPositionBound": 16,
+      "instantsOverPositionBound": 2
+    }
+  },
+  "eventsSeconds": {
+    "ingress:Sun": {
+      "n": 1812,
+      "median": 9.71,
+      "p95": 29.23,
+      "max": 50.32,
+      "worst_tt": "2003-02-19T02:01 TT"
+    },
+    "ingress:Moon": {
+      "n": 4169,
+      "median": 1.27,
+      "p95": 4.02,
+      "max": 7.64,
+      "worst_tt": "1900-02-28T19:05 TT"
+    },
+    "lunation:Moon-Sun": {
+      "n": 3736,
+      "median": 1.81,
+      "p95": 5.59,
+      "max": 10.32,
+      "worst_tt": "1909-05-05T12:07 TT"
+    },
+    "quarter:Moon-Sun": {
+      "n": 297,
+      "median": 1.18,
+      "p95": 3.43,
+      "max": 5.75,
+      "worst_tt": "2026-06-08T10:01 TT"
+    },
+    "sunIngressByEra": {
+      "1900-1949": {
+        "n": 600,
+        "median": 9.22,
+        "max": 40.04
+      },
+      "1950-1999": {
+        "n": 600,
+        "median": 9.28,
+        "max": 50.31
+      },
+      "2000-2025": {
+        "n": 312,
+        "median": 9.54,
+        "max": 50.32
+      },
+      "2026-2030": {
+        "n": 60,
+        "median": 10.96,
+        "max": 42.76
+      },
+      "2031-2050": {
+        "n": 240,
+        "median": 11.67,
+        "max": 47.86
+      }
+    }
+  }
+}
