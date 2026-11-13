@@ -35,8 +35,8 @@
  */
 import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { createRequire } from 'node:module';
 import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import * as engine from '@zodiacs/engine';
 import { DE440_PACK, de440PackBytes, openShippedDe440Pack } from '@zodiacs/engine/de440/pack';
 
@@ -53,7 +53,8 @@ const boundsPath = option('bounds');
 const outDir = option('out');
 
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
-const installed = dirname(createRequire(import.meta.url).resolve('@zodiacs/engine/package.json'));
+// The installed package's directory: its root entry is dist/index.js.
+const installed = dirname(dirname(fileURLToPath(import.meta.resolve('@zodiacs/engine'))));
 const manifest = JSON.parse(readFileSync(resolve(installed, 'package.json'), 'utf8'));
 const vectors = JSON.parse(readFileSync(vectorsPath, 'utf8')).vectors;
 
@@ -136,7 +137,7 @@ function tally(sourceName, list) {
 const summary = {
   package: `${manifest.name} ${manifest.version}`,
   engineVersion: engine.ENGINE_VERSION,
-  importedFrom: 'node_modules/@zodiacs/engine of the directory this script ran in',
+  importedFrom: installed.endsWith('/node_modules/@zodiacs/engine') ? 'node_modules/@zodiacs/engine of the directory this script ran in' : installed,
   node: process.version,
   environment: Object.keys(process.env).filter((name) => /^ZODIACS_/u.test(name)),
   vectors: { file: 'conformance/vectors/L1-positions.json', sha256: sha256(readFileSync(vectorsPath)), count: vectors.length },

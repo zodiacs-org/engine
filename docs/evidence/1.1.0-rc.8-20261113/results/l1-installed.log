@@ -1,0 +1,5 @@
+tarball zodiacs-engine-1.1.0-rc.8.tgz: 53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43, 2696971 bytes
+installed: 1.1.0-rc.8, with @zodiacs astronomy-engine 
+@zodiacs/engine 1.1.0-rc.8, installed; node v22.22.2; ZODIACS_* variables set: 0
+shipped: suite ±1″ 240/240; longitude 30″ 240/240; receipt bound 240/240; largest Δlon 0.0126″ (L1-POS-0002), Δlat 0.0010″ (L1-POS-0222), angle 0.0127″ (L1-POS-0002)
+root: suite ±1″ 48/240; longitude 30″ 240/240; receipt bound 237/240; largest Δlon 18.7745″ (L1-POS-0209), Δlat 19.0281″ (L1-POS-0237), angle 19.0384″ (L1-POS-0237)
