@@ -1,5 +1,106 @@
 # Engine changelog
 
+## 1.1.0-rc.7 (unreleased candidate)
+
+The next candidate for 1.1.0 after 1.1.0-rc.6, which it contains: the error
+limits a `calc()` result quotes, now from a far larger comparison. It is not
+to be published on npm until the owner approves it.
+
+- **Error limits from 146,097 daily comparisons with DE440.** Each position
+  from `@zodiacs/engine/calc` carries `bounds`: how far its position,
+  distance and speed were found to be from an independent ephemeris. For
+  the geocentric Sun, Moon, Mercury to Pluto (each correction) and the true
+  node and its opposite point, these were the largest differences from JPL
+  Horizons at 32 instants, and on other days the engine went past ten of
+  the eleven apparent position limits. They are now the largest differences
+  from JPL's DE440 at noon TT on each of the 146,097 days from 1800-01-01 to
+  2199-12-31, in all eight frames, rounded up to two significant figures
+  (`docs/evidence/de440-sweep-20261111/`). Position limits of the apparent
+  places, in arcseconds, old to new: Sun 3.0 to 3.4, Moon 8.3 to 12,
+  Mercury 9.3 to 17, Venus 11 to 24, Mars 6.6 to 23, Jupiter 13 to 17,
+  Saturn 18 to 24, Uranus 20 (unchanged), Neptune 21 to 22, Pluto 25 to 30,
+  and the true node and its opposite point 16 to 33. The astrometric and
+  geometric rows and the distance and speed limits of the same bodies move
+  by the same rule (`src/calc-bounds.ts`); none falls. `docs/versioning.md`
+  lets a bound found to be wrong be corrected in a minor release; these are
+  such corrections. Each bound's `basis` now names the comparison it rests
+  on.
+- **What they mean.** They are the largest differences found at one instant
+  a day, not proven limits. The true node's is 33 arcseconds, so "within 30
+  arcseconds of DE440" holds for the Sun, the Moon and the planets only.
+  Pluto's largest is 29.86 arcseconds (29.19 in ecliptic longitude), on the
+  last day and still growing: a thin margin, for 1800 to 2199 only.
+- **What keeps the old limits.** The 72 rows the sweep did not take
+  (heliocentric, barycentric and topocentric positions, and the mean nodes
+  and Black Moon Lilith) keep their values and their basis. The topocentric
+  Sun, Moon and Mars keep limits (3.0, 7.8 and 6.6 arcseconds) below the
+  geocentric ones the sweep found ([docs/calc.md](docs/calc.md)).
+- **No position changes.** This candidate computes the positions 1.1.0-rc.6
+  and 1.1.0-rc.3 compute (`docs/evidence/1.1.0-rc.7-20261111/`).
+- **Sizes.** The package is 1,152,017 bytes unpacked in 94 files, 3,690 more
+  than 1.1.0-rc.6's 1,148,327: this entry 2,888, the README's lines 379,
+  LICENSING.md and NOTICE 365, and JavaScript 58. That is over the cap
+  of 1,150,000, which rises to 1,155,000 (`scripts/verify-package-contents.mjs`,
+  `docs/evidence/1.1.0-rc.7-20261111/sizes.json`), a rise the owner decides
+  with this candidate. No entry point's budget changes.
+
+## 1.1.0-rc.6 (unreleased candidate)
+
+The next candidate for 1.1.0 after 1.1.0-rc.3 (main at `bc0b5a7`): a choice
+for a birth in an hour the clock showed twice. It is not to be published on
+npm until the owner approves it.
+
+Two drafts came before it, and neither archive is carried here. 1.1.0-rc.4
+was drafted in pull request 89 with this choice and with a refusal of a birth
+given as a calendar date with no time. It was not merged. The refusal changes
+documented behaviour, and by the owner's decision of 2026-11-11 it is held
+for 2.0.0: in 1.x a birth's `utc` given as `YYYY-MM-DD` is read as midnight
+UTC, as the README's *Resolved instant inputs* says. 1.1.0-rc.5 was drafted
+in pull request 90 with the choice alone. An independent review of it found
+that it recorded `"later"` for times that have no second pass, and it was
+superseded by this candidate before merging.
+
+- **`fold: "earlier" | "later"`** in `@zodiacs/engine/geo`.
+  `resolveLocalToUtc`, `resolveLocalBirth` and `resolveBirth` take the new
+  option for a wall time the clock showed twice. The default, `"earlier"`,
+  gives what earlier versions gave. With `fold: "later"`, 01:30 in New York
+  on 2021-11-07 resolves to 06:30 UTC where the default gives 05:30 UTC.
+  Both passes carry the `dst-fold` flag and the same `jump` and `transition`,
+  so a birth form can ask which pass it was and resolve again. The option
+  changes nothing for a time the clock showed once, neither the result nor
+  the record a receipt keeps, and a skipped time moves forward by the jump
+  whichever value is given. The expected instants in
+  `src/geo/fold-choice.test.ts` are written out from the IANA time zone
+  database's rules ([docs/time.md](docs/time.md)).
+- **Receipts.** `localResolution.policy.fold` records the pass taken:
+  `"later"` only for a repeated time whose later pass was asked for,
+  `"earlier"` for every other time. The codec checks it against the instant
+  and the recorded clock change: an `"earlier"` record of a repeated time
+  must fall before the change, a `"later"` one at or after it, inside the
+  repeated span, and a `"later"` record without the `dst-fold` flag is
+  refused as `invalid_context`. 1.1.0-rc.1 and 1.1.0-rc.3 refuse a record
+  that says `"later"` as `unsupported_feature`, and read this candidate's
+  `"earlier"` records, among them those of an ordinary and of a skipped time
+  asked for their later pass (`docs/evidence/1.1.0-rc.6-20261111/`).
+  Records that say `"earlier"`, which is every record written before this
+  candidate, are read as before.
+- **`api/`.** `api/geo.api.md` gains the exported type `FoldChoice` and the
+  optional `fold` of the three functions' options. It and
+  `api/receipt.api.md` widen `policy.fold` from `"earlier"` to
+  `"earlier" | "later"`, a new member of a union a result carries, which
+  `docs/versioning.md` allows in a minor release.
+- **`lunarReturn`** still refuses a birth flagged `dst-fold`, whichever pass
+  was chosen.
+- **Sizes.** The option, its input check and its error message make
+  `./geo`'s import graph 35,584 bytes, over its budget of 35,500, which
+  rises to 35,600. The package is 1,148,327 bytes unpacked in 94 files,
+  5,509 more than 1.1.0-rc.3's 1,142,818: this entry 3,499, the README's
+  lines 355, declarations 927 and JavaScript 728. That is over the
+  cap of 1,145,000, which rises to 1,150,000
+  (`scripts/verify-package-contents.mjs`,
+  `docs/evidence/1.1.0-rc.6-20261111/sizes.json`). The owner approved both
+  rises on 2026-11-11.
+
 ## 1.1.0-rc.3 (unreleased candidate)
 
 The third candidate for 1.1.0, on 1.1.0-rc.2 (main at `883371f`): positions

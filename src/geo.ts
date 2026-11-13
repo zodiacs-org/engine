@@ -18,6 +18,7 @@ export {
 export type {
   LocalBirthInput,
   LocalBirthResolution,
+  FoldChoice,
   LocalTimeOptions,
   LocalTimeResolution,
   TransitionCause,

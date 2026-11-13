@@ -92,7 +92,13 @@ export interface NatalLocalResolution {
   offsetMinutes: number;
   /** Forward wall-clock shift; positive only for a reported gap. */
   gapShiftMinutes: number;
-  policy: { fold: "earlier"; gap: "shift-forward" };
+  /**
+   * How a repeated or skipped wall time was read. `fold` is the pass taken:
+   * "later" only where the caller chose it and `inputFlags` has `dst-fold`,
+   * "earlier" otherwise. An engine from before the choice existed refuses a
+   * record with "later" as `unsupported_feature`.
+   */
+  policy: { fold: "earlier" | "later"; gap: "shift-forward" };
   calendar?: "gregorian" | "julian";
   writtenDate?: string;
   tzdbVersion?: string | null;
@@ -993,7 +999,15 @@ function validateLocal(value: unknown, receipt: NatalReceipt, timeBasis: boolean
     dateFrom(receipt.instant, "instant").getTime()
   )
     fail("invalid_context");
-  fixedFields(local.policy, { fold: "earlier", gap: "shift-forward" });
+  const policy = record(local.policy);
+  fields(policy, ["fold", "gap"]);
+  if ((policy.fold !== "earlier" && policy.fold !== "later") || policy.gap !== "shift-forward")
+    fail("unsupported_feature");
+  const later = policy.fold === "later";
+  // The sets before the time-basis set were written before the choice existed.
+  if (later && !timeBasis) fail("unsupported_feature");
+  // Only a wall time the clock showed twice has a later pass.
+  if (later && !receipt.inputFlags.includes("dst-fold")) fail("invalid_context");
   if (receipt.inputFlags.includes("dst-gap") !== shift > 0) fail("invalid_context");
   if (receipt.reference === "local-noon" && time !== "12:00") fail("invalid_context");
   // Before the time-basis set, lmt meant an offset with seconds.
@@ -1001,7 +1015,7 @@ function validateLocal(value: unknown, receipt: NatalReceipt, timeBasis: boolean
     if (receipt.inputFlags.includes("lmt") !== Math.abs(offset % 1) > 1e-9) fail("invalid_context");
     return;
   }
-  validateLocalRecord(local, receipt, date, offset, shift);
+  validateLocalRecord(local, receipt, date, offset, shift, later);
 }
 
 /**
@@ -1012,7 +1026,14 @@ function validateLocal(value: unknown, receipt: NatalReceipt, timeBasis: boolean
  * and against the other fields present. A date without `calendar` was written
  * in the Gregorian calendar, as before rc.15.
  */
-function validateLocalRecord(local: RecordValue, receipt: NatalReceipt, date: string, offset: number, shift: number): void {
+function validateLocalRecord(
+  local: RecordValue,
+  receipt: NatalReceipt,
+  date: string,
+  offset: number,
+  shift: number,
+  later: boolean
+): void {
   const has = (key: string): boolean => Object.hasOwn(local, key);
   const calendar = has("calendar") ? choice(local.calendar, ["gregorian", "julian"] as const) : "gregorian";
   const written = has("writtenDate") ? text(local.writtenDate, 10) : null;
@@ -1054,7 +1075,13 @@ function validateLocalRecord(local: RecordValue, receipt: NatalReceipt, date: st
       !(gap
         ? after > before && near(after - before, shift) && near(offset, after) && at <= instant
         : fold
-          ? after < before && near(offset, before) && at > instant
+          ? after < before &&
+            // The first pass is before the clock went back, on the offset it
+            // left; the second is after it, within the repeated span, on the
+            // offset it took.
+            (later
+              ? near(offset, after) && at <= instant && instant - at < (before - after) * 60_000
+              : near(offset, before) && at > instant)
           : near(offset, after) && at <= instant)
     )
       fail("invalid_context");

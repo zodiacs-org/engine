@@ -16,7 +16,14 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**1.1.0-rc.3**, the third candidate for 1.1.0, not published. It adds
+**1.1.0-rc.7**, the next candidate for 1.1.0 after 1.1.0-rc.6, not
+published. The error limits `@zodiacs/engine/calc` quotes for geocentric
+positions come from DE440 on every day from 1800 through 2199 (CHANGELOG.md).
+From 1.1.0-rc.6 a birth in an hour the clock showed twice can take the
+later pass (`fold: "later"` in `@zodiacs/engine/geo`; see
+[docs/time.md](docs/time.md)).
+1.1.0-rc.4 and 1.1.0-rc.5 were drafts that were not merged (CHANGELOG.md).
+1.1.0-rc.3 added
 `@zodiacs/engine/de440`, positions from JPL's DE440 through a pack the caller
 supplies, which the root's `withEphemeris` puts in place of astronomy-engine,
 for sixteen public entry points (see [docs/de440.md](docs/de440.md)). Over
@@ -34,11 +41,11 @@ deprecated, and `api/` holds each public entry point's declarations. npm
 carries 1.0.0, the first stable release, under `latest`: `npm install
 @zodiacs/engine` installs it, without `./conventions`, `./time`, `./lite` or
 `./de440`, and writing no ids. This candidate is not published there. Install
-the exact candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.3.tgz` in the
+the exact candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.7.tgz` in the
 repository, retaining its SHA-256 receipt:
 
 ```sh
-npm install ./zodiacs-engine-1.1.0-rc.3.tgz
+npm install ./zodiacs-engine-1.1.0-rc.7.tgz
 ```
 
 The Release workflow publishes the archive carried in `artifacts/` as it is,
@@ -62,7 +69,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.3.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.7.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -277,9 +284,12 @@ apparent, astrometric or geometric positions with distances and speeds; and
 the tropical or the sidereal zodiac, with any ayanamsa of
 `@zodiacs/engine/vedic` or a caller's own (Swiss Ephemeris's `SE_SIDM_USER`).
 Results carry bounds and a receipt of convention ids. A measured bound is the
-largest difference from JPL Horizons on 32 instants from 1802 to 2188 (for
-the mean nodes and Black Moon Lilith, from their definitions evaluated with
-ERFA on the same instants): a sample maximum, not a limit. In the sidereal
+largest difference found, rounded up: for the geocentric Sun, Moon, planets
+and true nodes, from JPL's DE440 at noon TT on each of the 146,097 days from
+1800-01-01 to 2199-12-31; for every other center and body, from JPL Horizons
+on 32 instants from 1802 to 2188 (for the mean nodes and Black Moon Lilith,
+from their definitions evaluated with ERFA on the same instants). Its
+`basis` says which. It is a sample maximum, not a limit. In the sidereal
 zodiac a bound adds the
 ayanamsa's: the largest difference of its mean, and of its rate, from ERFA's
 construction of the same definition, over every year from 1800 to 2199. An
@@ -968,7 +978,8 @@ timeZone)` loads the one a zone needs, and a wall time before 1970 throws until
 it has. From 1970 the host's Intl answers. A `longitude` reads a time in a
 zone's local mean time era on the birthplace's own mean time; `calendar:
 "julian"` takes an Old Style date, and `country` adds a note from the country's
-Gregorian adoption. Each resolution names the tzdb version (the host's where
+Gregorian adoption. A wall time the clock showed twice takes its first pass,
+or its second with `fold: "later"` (from 1.1.0-rc.6). Each resolution names the tzdb version (the host's where
 its Intl answered, null when the runtime does not report one) and, where
 there is one, the transition behind the offset with its cause (`dst`,
 `legal-change` or `date-line`): the jump's in a gap or fold, or, where the

@@ -64,7 +64,9 @@ composes it, and the obliquity of J2000.0 of the IAU 2006 precession,
 Its bounds and its barycentre's error are measurements: the largest
 differences of this package's own results from NASA JPL Horizons (DE441)
 responses at 32 instants (for the mean nodes and Black Moon Lilith, from
-their definitions evaluated with ERFA at those instants), and of
+their definitions evaluated with ERFA at those instants; from 1.1.0-rc.7,
+for the geocentric Sun, Moon, planets and true nodes, from JPL's DE440 on
+146,097 days), and of
 astronomy-engine's barycentre from a Newtonian barycentre and from
 Horizons's. They are not coefficients derived
 from JPL data, and no JPL ephemeris value is in the package.
