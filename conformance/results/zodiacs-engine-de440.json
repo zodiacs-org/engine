@@ -8,7 +8,7 @@
     "name": "zodiacs-engine-de440",
     "version": "0.2.0",
     "engine": "@zodiacs/engine with a DE440 pack",
-    "engineVersion": "1.1.0-rc.3",
+    "engineVersion": "1.1.0-rc.7",
     "configuration": {
       "ephemeris": "positions from jpl-de440, a sealed pack with SHA-256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7, through withEphemeris (@zodiacs/engine/de440); astronomy-engine 2.1.19 is not used for them",
       "deltaTModel": "zodiacs-deltat/1",
