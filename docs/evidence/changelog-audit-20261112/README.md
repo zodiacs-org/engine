@@ -27,6 +27,16 @@ touched; their heads were `ce4ba826` and `255b615b` before and after
 The site's half is in the site repository under
 `docs/platform/evidence/changelog-audit-20261112/`.
 
+## Fix round, 13 November 2026
+
+After the second session's review (`BREAKER.md`) the owner approved one fix
+round. It is recorded in `FIX-ROUND.md`: the missed inventory items, six row
+settlements, two more lines on the unsupported list (14 in all), the
+correction notes (`docs/changelog-corrections.md`), and draft notes and
+commands for a 1.0.0 tag and GitHub release (`docs/releases/`, nothing run).
+The tables below are the first pass as written; `FIX-ROUND.md` gives the
+changed counts.
+
 ## Result in numbers
 
 | Text | Rows | Supported | Not supported | Unchecked |
@@ -51,7 +61,7 @@ The site's half is in the site repository under
    and rc.16's "rc.15's 95,273 bytes" (that is rc.15's first local cut; rc.15
    as carried is 97,704).
 3. **Pull request 91's test release 1.1.0-rc.6 holds up.** Its archive digest,
-   sizes, file counts, test total, commit list and CI runs match, and its New
+   sizes, file counts, test total, commit list and check runs match, and its New
    York example was reproduced by running the packed archive. It is
    unpublished and says so. The fault it reports in the withdrawn rc.5 draft
    is visible in rc.5's code, so the rc.4 and rc.5 drafts each have one line
