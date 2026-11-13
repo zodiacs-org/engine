@@ -1,0 +1,114 @@
+# The same commands without the mount namespace, run earlier on this branch's tree before it was committed (HEAD 8da3a4e plus the changes of e0c4e1c).
+node v22.23.3
+=== npm run typecheck
+
+> @zodiacs/engine@1.1.0-rc.3 typecheck
+> tsc -p tsconfig.typecheck.json --pretty false
+
+=== exit 0: npm run typecheck
+=== npm test
+AssertionError: expected '::error file=scripts/verify-archive-b…' to contain 'is carried without a carried entry'
+
+- Expected
++ Received
+
+- is carried without a carried entry
++ ::error file=scripts/verify-archive-binding.mjs::/node_modules lies at or above the temporary directory /tmp/job9/tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
++ 1 archive binding failure.
++
+
+ ❯ scripts/verify-archive-binding.test.mjs:686:31
+    684|     const unrecorded = r.check();
+    685|     expect(unrecorded.status).toBe(1);
+    686|     expect(unrecorded.output).toContain("is carried without a carried …
+       |                               ^
+    687| 
+    688|     const clone = scratch("zodiacs-binding-shallow-");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/23]⎯
+
+ Test Files  1 failed | 98 passed | 1 skipped (100)
+      Tests  23 failed | 4150 passed | 4 skipped (4177)
+   Start at  15:59:25
+   Duration  57.07s (transform 3.35s, setup 0ms, collect 14.65s, tests 166.74s, environment 14ms, prepare 5.01s)
+
+=== exit 1: npm test
+=== npm run build
+DTS dist/geo.d.ts                     9.26 KB
+DTS dist/timing.d.ts                  23.29 KB
+DTS dist/vedic.d.ts                   20.55 KB
+DTS dist/techniques.d.ts              21.58 KB
+DTS dist/receipt.d.ts                 944.00 B
+DTS dist/internal-math.d.ts           1.11 KB
+DTS dist/internal.d.ts                208.00 B
+DTS dist/houses-iEiJUS5Y.d.ts         7.44 KB
+DTS dist/time-bands-CZA9AlLg.d.ts     1.68 KB
+DTS dist/reference-span-CILpclrz.d.ts 1.97 KB
+DTS dist/rulers-lw2tQCGG.d.ts         835.00 B
+DTS dist/ayanamsa-CGoXczA5.d.ts       6.30 KB
+DTS dist/types-BkwX5bcZ.d.ts          9.48 KB
+DTS dist/time-scale-DIFNa0gz.d.ts     1.92 KB
+DTS dist/zone-history-CKimvqoW.d.ts   11.69 KB
+DTS dist/api-Cg9u5VA1.d.ts            10.73 KB
+DTS dist/internal-math-BHGvc0-8.d.ts  6.02 KB
+DTS dist/internal-CYQ7u-zJ.d.ts       1.07 KB
+lite: dist/lite.js 146 bytes
+lite: dist/lite-declinations.js 9665 bytes
+lite: dist/lite-sect.js 3439 bytes
+lite: dist/lite-composite.js 3783 bytes
+lite: dist/lite-dignities.js 11897 bytes
+lite: dist/lite.d.ts 5135 bytes
+lite: dist/metafile-lite.json 5357 bytes
+=== exit 0: npm run build
+=== npm run exports:smoke
+
+> @zodiacs/engine@1.1.0-rc.3 exports:smoke
+> node scripts/module-resolution-smoke.mjs
+
+@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat, time and lite graphs have no external imports, the lite entry holds its 16 pinned source modules in 5 files that import nothing and loads where astronomy-engine cannot, the core graph (24 source modules in the build's module list, 23 marked in 14 files) reaches no module of an opt-in entry and no zone history, the geo entry loads its 16 shards lazily, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic
+=== exit 0: npm run exports:smoke
+=== npm run api:check
+
+> @zodiacs/engine@1.1.0-rc.3 api:check
+> node scripts/api-report.mjs --check
+
+api-report: 16 entry points match api/
+=== exit 0: npm run api:check
+=== npm run package:contents
+
+> @zodiacs/engine@1.1.0-rc.3 package:contents
+> node scripts/verify-package-contents.mjs
+
+@zodiacs/engine package contents passed (94 files, 1142818 bytes unpacked of 1145000; import graphs: . 108531 of 109000, ./calc 153922 of 156000 (71402 beyond the core's), ./conventions 2754 of 2900 (2754 beyond the core's), ./crossings 9942 of 10000 (173 beyond the core's), ./deltat 5232 of 5500 (161 beyond the core's), ./geo 35439 of 35500 (32510 beyond the core's), ./houses 13678 of 15000 (13678 beyond the core's), ./internal 68758 of 69000 (395 beyond the core's), ./internal/math 19224 of 20000 (1363 beyond the core's), ./lite 28930 of 29000 (28930 beyond the core's), ./receipt 74455 of 76500 (48485 beyond the core's), ./sky 96706 of 97000 (17115 beyond the core's), ./techniques 158382 of 160000 (63939 beyond the core's), ./time 42472 of 42600 (2962 beyond the core's), ./de440 45793 of 48000 (26845 beyond the core's), ./timing 127865 of 129000 (32750 beyond the core's), ./vedic 143652 of 144500 (49209 beyond the core's), ./window 106786 of 107000 (34035 beyond the core's); zone histories 189144 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
+=== exit 0: npm run package:contents
+=== npm run pack:dry-run
+npm notice 12.4kB dist/tzdb-2025c-08-DA7QQIGD.js
+npm notice 10.3kB dist/tzdb-2025c-09-MTXIO3QL.js
+npm notice 9.2kB dist/tzdb-2025c-10-ASL4UW5C.js
+npm notice 14.2kB dist/tzdb-2025c-11-EQEOANYB.js
+npm notice 12.2kB dist/tzdb-2025c-12-NKCCXJ5G.js
+npm notice 10.2kB dist/tzdb-2025c-13-DYTF3UC7.js
+npm notice 10.2kB dist/tzdb-2025c-14-C25H45R5.js
+npm notice 11.5kB dist/tzdb-2025c-15-7OYYZWRY.js
+npm notice 21.1kB dist/vedic.d.ts
+npm notice 30.0kB dist/vedic.js
+npm notice 8.0kB dist/window.d.ts
+npm notice 34.0kB dist/window.js
+npm notice 12.0kB dist/zone-history-CKimvqoW.d.ts
+npm notice 4.6kB package.json
+npm notice Tarball Details
+npm notice name: @zodiacs/engine
+npm notice version: 1.1.0-rc.3
+npm notice filename: zodiacs-engine-1.1.0-rc.3.tgz
+npm notice package size: 332.0 kB
+npm notice unpacked size: 1.1 MB
+npm notice shasum: 304dc522ff1ef73ec9cc83ddb164cc5402dfcb01
+npm notice integrity: sha512-xAEGQov54qPXc[...]XenLDy8n6YbCQ==
+npm notice total files: 94
+npm notice
+zodiacs-engine-1.1.0-rc.3.tgz
+=== exit 0: npm run pack:dry-run
+=== node scripts/verify-archive-binding.mjs
+::error file=scripts/verify-archive-binding.mjs::/node_modules lies at or above the temporary directory /tmp/job9/tmp (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
+1 archive binding failure.
+=== exit 1: node scripts/verify-archive-binding.mjs

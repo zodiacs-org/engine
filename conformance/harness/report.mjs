@@ -11,7 +11,7 @@ import { resolve } from 'node:path';
 import { KINDS, LEVEL_FILES, RELEASES, SUITE, SUITE_DIR, SUITE_VERSION, readSuite } from './lib.mjs';
 
 const RESULTS_DIR = resolve(SUITE_DIR, 'results');
-const RUN_ORDER = ['zodiacs-engine.json', 'pyswisseph.json'];
+const RUN_ORDER = ['zodiacs-engine.json', 'zodiacs-engine-de440.json', 'pyswisseph.json'];
 const SYMBOL = { arcsec: '″', deg: '°', s: ' s' };
 
 function describeRule(rule) {

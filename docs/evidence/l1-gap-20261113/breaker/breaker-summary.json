@@ -1,0 +1,697 @@
+{
+ "node": "v22.22.2",
+ "engine": "1.1.0-rc.3",
+ "commit": "6b1f9505d1bb1c290b2988461909821a34fc890f",
+ "vectors": {
+  "sha256": "853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c",
+  "count": 240
+ },
+ "pack": {
+  "sha256": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
+  "bytes": 2489664
+ },
+ "tolerances": [
+  "1/1 arcsec/arcsec"
+ ],
+ "rawHorizons": {
+  "everyFileOnTT": true,
+  "largestRawMinusVectorLon": {
+   "arcsec": 0.3852,
+   "id": "L1-POS-0010",
+   "body": "Pluto"
+  },
+  "largestRawMinusVectorLat": {
+   "arcsec": 0.047,
+   "id": "L1-POS-0002",
+   "body": "Moon"
+  },
+  "rowsMatched": 240
+ },
+ "routes": {
+  "defaultCalcExactJdVsNatalChartMillisecondArcsec": 0.0002667515299711362,
+  "fixedDeltaT300sMovesDefaultPlaceByArcsec": 5.615068881741356e-7,
+  "calcRefusedInsideWithEphemeris": "240 of 240",
+  "packEphemerisNames": [
+   "jpl-de440"
+  ],
+  "defaultEphemerisNames": [
+   null
+  ],
+  "smallestPackMoveFromDefaultArcsec": 0.12461841965339208
+ },
+ "instants": {
+  "afterHorizonsFetch20260922": {
+   "cases": 70,
+   "instants": 7
+  },
+  "afterToday20261113": {
+   "cases": 70
+  }
+ },
+ "default": {
+  "all": {
+   "cases": 240,
+   "suitePass": 48,
+   "lon30Pass": 240,
+   "angle30Pass": 240,
+   "receiptWholeAnglePass": 237,
+   "receiptLongitudeOnlyPass": 239,
+   "largestLon": {
+    "arcsec": 18.7745,
+    "id": "L1-POS-0209",
+    "body": "Neptune"
+   },
+   "largestLat": {
+    "arcsec": 19.0281,
+    "id": "L1-POS-0237",
+    "body": "Saturn"
+   },
+   "largestAngle": {
+    "arcsec": 19.0384,
+    "id": "L1-POS-0237",
+    "body": "Saturn"
+   },
+   "receiptWholeAngleFailures": [
+    "L1-POS-0117 Saturn 18.236 > 18",
+    "L1-POS-0164 Venus 13.015 > 11",
+    "L1-POS-0237 Saturn 19.038 > 18"
+   ]
+  },
+  "past": {
+   "cases": 170,
+   "suitePass": 35,
+   "lon30Pass": 170,
+   "angle30Pass": 170,
+   "receiptWholeAnglePass": 168,
+   "receiptLongitudeOnlyPass": 169,
+   "largestLon": {
+    "arcsec": 17.3622,
+    "id": "L1-POS-0099",
+    "body": "Neptune"
+   },
+   "largestLat": {
+    "arcsec": 17.5987,
+    "id": "L1-POS-0117",
+    "body": "Saturn"
+   },
+   "largestAngle": {
+    "arcsec": 18.7102,
+    "id": "L1-POS-0149",
+    "body": "Neptune"
+   },
+   "receiptWholeAngleFailures": [
+    "L1-POS-0117 Saturn 18.236 > 18",
+    "L1-POS-0164 Venus 13.015 > 11"
+   ]
+  },
+  "future": {
+   "cases": 70,
+   "suitePass": 13,
+   "lon30Pass": 70,
+   "angle30Pass": 70,
+   "receiptWholeAnglePass": 69,
+   "receiptLongitudeOnlyPass": 70,
+   "largestLon": {
+    "arcsec": 18.7745,
+    "id": "L1-POS-0209",
+    "body": "Neptune"
+   },
+   "largestLat": {
+    "arcsec": 19.0281,
+    "id": "L1-POS-0237",
+    "body": "Saturn"
+   },
+   "largestAngle": {
+    "arcsec": 19.0384,
+    "id": "L1-POS-0237",
+    "body": "Saturn"
+   },
+   "receiptWholeAngleFailures": [
+    "L1-POS-0237 Saturn 19.038 > 18"
+   ]
+  },
+  "byBody": {
+   "Sun": {
+    "cases": 24,
+    "suitePass": 15,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 1.3058,
+     "id": "L1-POS-0161",
+     "body": "Sun"
+    },
+    "largestLat": {
+     "arcsec": 1.6334,
+     "id": "L1-POS-0201",
+     "body": "Sun"
+    },
+    "largestAngle": {
+     "arcsec": 1.7305,
+     "id": "L1-POS-0201",
+     "body": "Sun"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Moon": {
+    "cases": 24,
+    "suitePass": 13,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 3.7407,
+     "id": "L1-POS-0002",
+     "body": "Moon"
+    },
+    "largestLat": {
+     "arcsec": 1.7194,
+     "id": "L1-POS-0232",
+     "body": "Moon"
+    },
+    "largestAngle": {
+     "arcsec": 3.7419,
+     "id": "L1-POS-0002",
+     "body": "Moon"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Mercury": {
+    "cases": 24,
+    "suitePass": 2,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 7.9733,
+     "id": "L1-POS-0113",
+     "body": "Mercury"
+    },
+    "largestLat": {
+     "arcsec": 6.148,
+     "id": "L1-POS-0223",
+     "body": "Mercury"
+    },
+    "largestAngle": {
+     "arcsec": 7.9937,
+     "id": "L1-POS-0113",
+     "body": "Mercury"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Venus": {
+    "cases": 24,
+    "suitePass": 4,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 23,
+    "receiptLongitudeOnlyPass": 23,
+    "largestLon": {
+     "arcsec": 12.5946,
+     "id": "L1-POS-0164",
+     "body": "Venus"
+    },
+    "largestLat": {
+     "arcsec": 5.2046,
+     "id": "L1-POS-0144",
+     "body": "Venus"
+    },
+    "largestAngle": {
+     "arcsec": 13.0147,
+     "id": "L1-POS-0164",
+     "body": "Venus"
+    },
+    "receiptWholeAngleFailures": [
+     "L1-POS-0164 Venus 13.015 > 11"
+    ]
+   },
+   "Mars": {
+    "cases": 24,
+    "suitePass": 5,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 4.4397,
+     "id": "L1-POS-0195",
+     "body": "Mars"
+    },
+    "largestLat": {
+     "arcsec": 5.2729,
+     "id": "L1-POS-0035",
+     "body": "Mars"
+    },
+    "largestAngle": {
+     "arcsec": 5.861,
+     "id": "L1-POS-0035",
+     "body": "Mars"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Jupiter": {
+    "cases": 24,
+    "suitePass": 2,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 7.8221,
+     "id": "L1-POS-0186",
+     "body": "Jupiter"
+    },
+    "largestLat": {
+     "arcsec": 6.6342,
+     "id": "L1-POS-0216",
+     "body": "Jupiter"
+    },
+    "largestAngle": {
+     "arcsec": 9.4376,
+     "id": "L1-POS-0186",
+     "body": "Jupiter"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Saturn": {
+    "cases": 24,
+    "suitePass": 1,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 22,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 10.2168,
+     "id": "L1-POS-0167",
+     "body": "Saturn"
+    },
+    "largestLat": {
+     "arcsec": 19.0281,
+     "id": "L1-POS-0237",
+     "body": "Saturn"
+    },
+    "largestAngle": {
+     "arcsec": 19.0384,
+     "id": "L1-POS-0237",
+     "body": "Saturn"
+    },
+    "receiptWholeAngleFailures": [
+     "L1-POS-0117 Saturn 18.236 > 18",
+     "L1-POS-0237 Saturn 19.038 > 18"
+    ]
+   },
+   "Uranus": {
+    "cases": 24,
+    "suitePass": 2,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 12.0435,
+     "id": "L1-POS-0128",
+     "body": "Uranus"
+    },
+    "largestLat": {
+     "arcsec": 16.4162,
+     "id": "L1-POS-0178",
+     "body": "Uranus"
+    },
+    "largestAngle": {
+     "arcsec": 17.8911,
+     "id": "L1-POS-0178",
+     "body": "Uranus"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Neptune": {
+    "cases": 24,
+    "suitePass": 0,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 18.7745,
+     "id": "L1-POS-0209",
+     "body": "Neptune"
+    },
+    "largestLat": {
+     "arcsec": 9.7133,
+     "id": "L1-POS-0169",
+     "body": "Neptune"
+    },
+    "largestAngle": {
+     "arcsec": 18.8033,
+     "id": "L1-POS-0209",
+     "body": "Neptune"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Pluto": {
+    "cases": 24,
+    "suitePass": 4,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 14.2683,
+     "id": "L1-POS-0240",
+     "body": "Pluto"
+    },
+    "largestLat": {
+     "arcsec": 3.5164,
+     "id": "L1-POS-0240",
+     "body": "Pluto"
+    },
+    "largestAngle": {
+     "arcsec": 14.5055,
+     "id": "L1-POS-0240",
+     "body": "Pluto"
+    },
+    "receiptWholeAngleFailures": []
+   }
+  }
+ },
+ "de440": {
+  "all": {
+   "cases": 240,
+   "suitePass": 240,
+   "lon30Pass": 240,
+   "angle30Pass": 240,
+   "receiptWholeAnglePass": 240,
+   "receiptLongitudeOnlyPass": 240,
+   "largestLon": {
+    "arcsec": 0.0126,
+    "id": "L1-POS-0002",
+    "body": "Moon"
+   },
+   "largestLat": {
+    "arcsec": 0.001,
+    "id": "L1-POS-0222",
+    "body": "Moon"
+   },
+   "largestAngle": {
+    "arcsec": 0.0127,
+    "id": "L1-POS-0002",
+    "body": "Moon"
+   },
+   "receiptWholeAngleFailures": []
+  },
+  "past": {
+   "cases": 170,
+   "suitePass": 170,
+   "lon30Pass": 170,
+   "angle30Pass": 170,
+   "receiptWholeAnglePass": 170,
+   "receiptLongitudeOnlyPass": 170,
+   "largestLon": {
+    "arcsec": 0.0126,
+    "id": "L1-POS-0002",
+    "body": "Moon"
+   },
+   "largestLat": {
+    "arcsec": 0.0009,
+    "id": "L1-POS-0002",
+    "body": "Moon"
+   },
+   "largestAngle": {
+    "arcsec": 0.0127,
+    "id": "L1-POS-0002",
+    "body": "Moon"
+   },
+   "receiptWholeAngleFailures": []
+  },
+  "future": {
+   "cases": 70,
+   "suitePass": 70,
+   "lon30Pass": 70,
+   "angle30Pass": 70,
+   "receiptWholeAnglePass": 70,
+   "receiptLongitudeOnlyPass": 70,
+   "largestLon": {
+    "arcsec": 0.0094,
+    "id": "L1-POS-0232",
+    "body": "Moon"
+   },
+   "largestLat": {
+    "arcsec": 0.001,
+    "id": "L1-POS-0222",
+    "body": "Moon"
+   },
+   "largestAngle": {
+    "arcsec": 0.0094,
+    "id": "L1-POS-0232",
+    "body": "Moon"
+   },
+   "receiptWholeAngleFailures": []
+  },
+  "byBody": {
+   "Sun": {
+    "cases": 24,
+    "suitePass": 24,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 0.0036,
+     "id": "L1-POS-0011",
+     "body": "Sun"
+    },
+    "largestLat": {
+     "arcsec": 0.0002,
+     "id": "L1-POS-0081",
+     "body": "Sun"
+    },
+    "largestAngle": {
+     "arcsec": 0.0036,
+     "id": "L1-POS-0011",
+     "body": "Sun"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Moon": {
+    "cases": 24,
+    "suitePass": 24,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 0.0126,
+     "id": "L1-POS-0002",
+     "body": "Moon"
+    },
+    "largestLat": {
+     "arcsec": 0.001,
+     "id": "L1-POS-0222",
+     "body": "Moon"
+    },
+    "largestAngle": {
+     "arcsec": 0.0127,
+     "id": "L1-POS-0002",
+     "body": "Moon"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Mercury": {
+    "cases": 24,
+    "suitePass": 24,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 0.0037,
+     "id": "L1-POS-0013",
+     "body": "Mercury"
+    },
+    "largestLat": {
+     "arcsec": 0.0002,
+     "id": "L1-POS-0223",
+     "body": "Mercury"
+    },
+    "largestAngle": {
+     "arcsec": 0.0037,
+     "id": "L1-POS-0013",
+     "body": "Mercury"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Venus": {
+    "cases": 24,
+    "suitePass": 24,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 0.0037,
+     "id": "L1-POS-0014",
+     "body": "Venus"
+    },
+    "largestLat": {
+     "arcsec": 0.0002,
+     "id": "L1-POS-0054",
+     "body": "Venus"
+    },
+    "largestAngle": {
+     "arcsec": 0.0037,
+     "id": "L1-POS-0014",
+     "body": "Venus"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Mars": {
+    "cases": 24,
+    "suitePass": 24,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 0.0034,
+     "id": "L1-POS-0015",
+     "body": "Mars"
+    },
+    "largestLat": {
+     "arcsec": 0.0002,
+     "id": "L1-POS-0035",
+     "body": "Mars"
+    },
+    "largestAngle": {
+     "arcsec": 0.0034,
+     "id": "L1-POS-0015",
+     "body": "Mars"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Jupiter": {
+    "cases": 24,
+    "suitePass": 24,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 0.0038,
+     "id": "L1-POS-0016",
+     "body": "Jupiter"
+    },
+    "largestLat": {
+     "arcsec": 0.0002,
+     "id": "L1-POS-0116",
+     "body": "Jupiter"
+    },
+    "largestAngle": {
+     "arcsec": 0.0038,
+     "id": "L1-POS-0016",
+     "body": "Jupiter"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Saturn": {
+    "cases": 24,
+    "suitePass": 24,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 0.0034,
+     "id": "L1-POS-0017",
+     "body": "Saturn"
+    },
+    "largestLat": {
+     "arcsec": 0.0002,
+     "id": "L1-POS-0137",
+     "body": "Saturn"
+    },
+    "largestAngle": {
+     "arcsec": 0.0034,
+     "id": "L1-POS-0017",
+     "body": "Saturn"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Uranus": {
+    "cases": 24,
+    "suitePass": 24,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 0.0038,
+     "id": "L1-POS-0018",
+     "body": "Uranus"
+    },
+    "largestLat": {
+     "arcsec": 0.0002,
+     "id": "L1-POS-0168",
+     "body": "Uranus"
+    },
+    "largestAngle": {
+     "arcsec": 0.0038,
+     "id": "L1-POS-0018",
+     "body": "Uranus"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Neptune": {
+    "cases": 24,
+    "suitePass": 24,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 0.0034,
+     "id": "L1-POS-0019",
+     "body": "Neptune"
+    },
+    "largestLat": {
+     "arcsec": 0.0002,
+     "id": "L1-POS-0019",
+     "body": "Neptune"
+    },
+    "largestAngle": {
+     "arcsec": 0.0034,
+     "id": "L1-POS-0019",
+     "body": "Neptune"
+    },
+    "receiptWholeAngleFailures": []
+   },
+   "Pluto": {
+    "cases": 24,
+    "suitePass": 24,
+    "lon30Pass": 24,
+    "angle30Pass": 24,
+    "receiptWholeAnglePass": 24,
+    "receiptLongitudeOnlyPass": 24,
+    "largestLon": {
+     "arcsec": 0.0036,
+     "id": "L1-POS-0020",
+     "body": "Pluto"
+    },
+    "largestLat": {
+     "arcsec": 0.0002,
+     "id": "L1-POS-0090",
+     "body": "Pluto"
+    },
+    "largestAngle": {
+     "arcsec": 0.0035,
+     "id": "L1-POS-0020",
+     "body": "Pluto"
+    },
+    "receiptWholeAngleFailures": []
+   }
+  }
+ }
+}
