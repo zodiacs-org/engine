@@ -52,10 +52,32 @@ Adapter `zodiacs-engine` 0.2.0; results in [`results/zodiacs-engine.json`](resul
 | --- | ---: | ---: | ---: | ---: |
 | `backzone-history` | 20 | 0 | 0 | 0 |
 
-- **Positions (L1).** The engine computes positions with astronomy-engine 2.1.19's series. Against DE441 they differ by a median of 2.08″ in longitude. The largest differences are 18.8″ in longitude (Neptune) and 19.0″ in latitude (Saturn); the Sun is within 1.64″ and the Moon within 3.75″. Since the engine took the full IAU 2000B nutation in place of astronomy-engine's five terms, L1-POS-0041 (the Sun in 1908, 1.076″ off in longitude before) passes. A precise backend is planned to close this gap.
+- **Positions (L1).** The engine computes positions with astronomy-engine 2.1.19's series. Against DE441 they differ by a median of 2.08″ in longitude. The largest differences are 18.8″ in longitude (Neptune) and 19.0″ in latitude (Saturn); the Sun is within 1.64″ and the Moon within 3.75″. Since the engine took the full IAU 2000B nutation in place of astronomy-engine's five terms, L1-POS-0041 (the Sun in 1908, 1.076″ off in longitude before) passes. Run on a DE440 pack through `withEphemeris`, the same build passes all 240 (the next section); the engine as installed does not carry a pack, so this section is unchanged.
 - **Time zones (L3).** Before 1970 the engine reads the tzdb 2025c history with `backzone` that it ships, loaded with `prepareLocalTime`, so the 20 vectors tagged `backzone-history` pass; from 1970 it reads the host's `Intl` data. A repeated local time resolves to its earlier instant, and the transition the engine reports gives the offsets of both readings, so the five folds are answered. All 45 pass.
 - **TT − UTC and ΔT (L3).** From 1972 to 2027-10-02 the engine takes TAI − UTC from the IERS leap-second list updated 2026-07-06, and UT1 − UTC from IERS: the EOP 20 C04 series in 1972 and `finals2000A.all` of 2026-09-24 from 1973-01-02. The adapter reports TT − UTC as a chart's ΔT (TT − UT1) plus its UT1 − UTC. A leap second itself cannot be expressed as a JavaScript date, so that case is unsupported.
 - **Unsupported (L3).** Release 1.1.0-rc.2 converts dates between the Julian and Gregorian calendars and reads a birthplace's local mean time inside a zone's local mean time era, but has no public function for a Julian Day Number or for local mean time from a longitude alone, so the 35 calendar vectors and the 5 local mean time vectors are unsupported.
+
+## @zodiacs/engine with a DE440 pack 1.1.0-rc.3
+
+Adapter `zodiacs-engine-de440` 0.2.0; results in [`results/zodiacs-engine-de440.json`](results/zodiacs-engine-de440.json).
+
+| configuration | |
+| --- | --- |
+| ephemeris | positions from jpl-de440, a sealed pack with SHA-256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7, through withEphemeris (@zodiacs/engine/de440); astronomy-engine 2.1.19 is not used for them |
+| deltaTModel | zodiacs-deltat/1 |
+| timeBasis | from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise |
+| timeZones | before 1970 the shipped tzdb 2025c history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c) |
+| positions | natalChart with timeScale "tt" inside withEphemeris: the requested instant is read as TT; Mars to Pluto are system barycentres, as the vectors are |
+| angles | natalChart with timeScale "ut1": the requested instant is read as UT1 |
+
+| level | kind | pass | fail | unsupported | error | residual median / 95th percentile / max |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| L1 | `position.apparent.ecliptic-true-of-date` | 240 | 0 | 0 | 0 | lon: 0.002″ / 0.004″ / 0.013″<br>lat: 0.000″ / 0.000″ / 0.001″ |
+| **L1** | **all** | **240** | **0** | **0** | **0** | |
+
+- **What this run is.** The same adapter and the same build as the section above, with the 240 position requests answered from a DE440 pack the caller supplies: `natalChart` inside the root's `withEphemeris`, on a source opened with `@zodiacs/engine/de440`. Only L1 was run; the angles, houses and time vectors do not depend on the ephemeris. The engine as installed still computes positions with astronomy-engine, and its results are the section above.
+- **Positions (L1).** All 240 pass. Against DE441 the largest differences are 0.0127″ in longitude and 0.0011″ in latitude, both the Moon's (L1-POS-0002 in 1851 and L1-POS-0222 in 2125). The other nine bodies are within 0.0038″ in longitude and 0.0003″ in latitude. The arbiter's own check against DE440s (`arbiters/l1/README.md`) puts the lunar difference between DE440 and DE441 at up to 12.63 mas in 1851.
+- **The pack.** Sealed pack with SHA-256 `51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7` (2,489,664 bytes), compiled for this run from NAIF's `de440.bsp` (SHA-256 `a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5`) as `docs/de440.md` describes. No pack or kernel is in this repository, so continuous integration does not rerun this section. To rerun it, see `docs/evidence/l1-gap-20261113/README.md`.
 
 ## Swiss Ephemeris 2.10.03
 

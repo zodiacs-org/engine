@@ -1,0 +1,15 @@
+# node v22.22.2
+$ ZODIACS_ENGINE_DE440_PACK=<pack> ZODIACS_ENGINE_DE440_SHA256=51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7 node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs" --levels L1 --check conformance/results/zodiacs-engine-de440.json
+zodiacs-engine-de440 1.1.0-rc.3: 240 pass, 0 fail, 0 unsupported, 0 error (of 240)
+  L1: 240 pass, 0 fail, 0 unsupported, 0 error (of 240)
+conformance: every verdict matches conformance/results/zodiacs-engine-de440.json
+exit 0
+$ node docs/evidence/l1-gap-20261113/tools/score.mjs --pack <pack> --sha256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7
+default: suite ±1″ 48/240; longitude 30″ 240/240; receipt bound 237/240; largest Δlon 18.774″ (L1-POS-0209), Δlat 19.028″ (L1-POS-0237), angle 19.038″ (L1-POS-0237)
+de440: suite ±1″ 240/240; longitude 30″ 240/240; receipt bound 240/240; largest Δlon 0.013″ (L1-POS-0002), Δlat 0.001″ (L1-POS-0222), angle 0.013″ (L1-POS-0002)
+exit 0
+$ a wrong digest is refused (the first four digits replaced by 0000)
+  if (digest !== expect) throw new De440Error("digest-mismatch", "the pack's SHA-256 is not the one expected");
+De440Error: the pack's SHA-256 is not the one expected
+  code: 'digest-mismatch'
+exit 1
