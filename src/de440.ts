@@ -1,13 +1,14 @@
 /**
  * `@zodiacs/engine/de440`: positions from JPL's DE440, through a sealed pack
- * of its Chebyshev series that the caller supplies, for the engine to compute
- * charts, positions and events with (`withEphemeris` in the root entry).
+ * of Chebyshev series refitted from it, for the engine to compute charts,
+ * positions and events with (`withEphemeris` in the root entry).
  *
- * The pack is not part of this package and this entry fetches nothing: the
- * caller reads the bytes (from a pack compiled from its own copy of NAIF's
- * `de440.bsp`) and names the SHA-256 it expects. `openDe440Pack` hashes the
- * whole file and refuses any other bytes, then checks the pack's own trailer
- * and header. The returned source keeps a private copy of the bytes.
+ * This entry holds no pack and fetches nothing: the caller gives the bytes
+ * (of a pack compiled from its own copy of NAIF's `de440.bsp`, or of the one
+ * `@zodiacs/engine/de440/pack` ships, which that entry opens itself) and
+ * names the SHA-256 it expects. `openDe440Pack` hashes the whole file and
+ * refuses any other bytes, then checks the pack's own trailer and header.
+ * The returned source keeps a private copy of the bytes.
  *
  * The reduction is the research runtime's with its shipped options
  * (`src/de440/reduce.ts` says what it applies). Mars to Pluto are

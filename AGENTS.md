@@ -20,7 +20,8 @@ and documentation CC BY 4.0, tools and schema MIT). Read `README.md`,
   `src/first-millisecond.ts` (the sky entry's), `src/time.ts` and
   `src/time-bands.ts` (the time entry's), `src/lite.ts` and
   `src/sect.ts` (the lite entry's), and `src/de440.ts` with `src/de440/`
-  (the DE440 entry's); `OPT_IN_SOURCE` in
+  (the DE440 entry's) and `src/de440-pack.ts` (the entry that ships the
+  pack); `OPT_IN_SOURCE` in
   `scripts/root-isolation.mjs` names them all. The lite entry is built
   apart: `npm run build` runs `scripts/build-lite.mjs` after tsup, which
   bundles each of its four parts into a file of its own that imports
@@ -32,7 +33,9 @@ and documentation CC BY 4.0, tools and schema MIT). Read `README.md`,
   contents and size budgets, packed consumer, archive binding, release
   archive check, compatibility checks), and the generators of the time data:
   `scripts/build-tz-shards.mjs` writes `src/tzdb/` and
-  `scripts/build-time-scales.mjs` writes `src/time-scale-data.ts`. Regenerate
+  `scripts/build-time-scales.mjs` writes `src/time-scale-data.ts`; and the
+  writer of the shipped DE440 pack, `scripts/build-de440-pack.mjs`, which
+  writes `src/de440/pack-data.ts` from the sealed pack. Regenerate
   those files; never edit them by hand.
 - Release candidates: `artifacts/` (packed archives, SHA-256 receipts,
   `archives.json`), `CHANGELOG.md`, and each candidate's evidence in
@@ -150,8 +153,10 @@ below no `package.json` or `node_modules`. The package supports Node
   effects, and keep `@zodiacs/engine/crossings`, `@zodiacs/engine/deltat`,
   `@zodiacs/engine/time` and `@zodiacs/engine/lite` free of the ephemeris.
   The root must not import `@zodiacs/engine/timing`, `/vedic`, `/geo`,
-  `/calc`, `/window`, `/techniques`, `/houses`, `/sky`, `/time`, `/lite` or
-  `/de440`, which are opt-in; `npm run exports:smoke` checks it.
+  `/calc`, `/window`, `/techniques`, `/houses`, `/sky`, `/time`, `/lite`,
+  `/de440` or `/de440/pack`, which are opt-in; `npm run exports:smoke` checks
+  it. Only `/de440/pack` may hold the DE440 pack; `npm run package:contents`
+  checks that, and the pack's digest.
 - Every entry point in `package.json` `exports` has a budget for its import
   graph in `scripts/verify-package-contents.mjs`, the zone histories have
   their own (200,000 bytes, 16 files) and the package a total cap. Add a

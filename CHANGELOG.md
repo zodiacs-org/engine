@@ -1,5 +1,78 @@
 # Engine changelog
 
+## 1.1.0-rc.8 (unreleased candidate)
+
+The next candidate for 1.1.0, on 1.1.0-rc.3 (main at `8da3a4e`, with pull
+request 100's conformance run at `7d951d7`): the sealed DE440 pack, shipped
+in the package, with seventeen public entry points. The numbers 1.1.0-rc.4 to
+1.1.0-rc.7 name candidates on other branches of the repository; this one
+contains none of them, and none of their changes. It is a draft for the
+owner, and is not to be published on npm until the owner approves it. Checks:
+`docs/evidence/1.1.0-rc.8-20261113/`.
+
+- **`@zodiacs/engine/de440/pack`**, a new entry point, ships the pack that
+  1.1.0-rc.3 left to the caller: `de440-1790-2210.v2.zeph`, 2,489,664 bytes,
+  SHA-256 `51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7`,
+  the Chebyshev series zodiacs.org's pack compiler 2.0.0 refits from NAIF's
+  `de440.bsp` for 1790 to 2210. `openShippedDe440Pack()` opens it with
+  `openDe440Pack`, which refuses the bytes unless their SHA-256 is that one,
+  and resolves to the source for the root's `withEphemeris`;
+  `de440PackBytes()` gives the bytes and `DE440_PACK` describes them. The
+  bytes are base64 text in the entry's own file, `dist/de440-pack.js`, which
+  nothing else in the package imports. The entry fetches nothing.
+- **Accuracy against Horizons.** A chart computed inside `withEphemeris` on
+  the shipped pack is within 1″ in longitude and in latitude of JPL Horizons
+  (DE441, in the IAU 2006/2000A true ecliptic of date) at all 240 L1 vectors
+  of the conformance suite: 24 TT instants from 1851 to 2148, the Sun, the
+  Moon and the planets, Mars to Pluto as system barycentres. The largest
+  differences are 0.0127″ in longitude and 0.0011″ in latitude, both the
+  Moon's (`src/de440-pack.test.ts`, which enforces them). The vectors do not
+  test the true node, speeds, or instants outside those years.
+- **What does not change.** The root's own positions, outside
+  `withEphemeris`, are astronomy-engine's, and no value of 1.1.0-rc.3
+  changes: on the same 240 vectors they pass 48, as before. Making DE440 the
+  source of a plain `natalChart` call is not part of this candidate. The
+  functions that refuse inside `withEphemeris` (the calc entry, the sky
+  entry's rising, setting and planetary hours, the vedic entry's
+  star-anchored ayanamsas and `vargaSensitivity`, the window entry's
+  `birthWindow`) still refuse, so no receipt of `calc()` carries a bound for
+  a DE440 position. A pack covers 1790 to 2210 and a source refuses instants
+  outside it; `EPHEMERIS_SPAN` is astronomy-engine's.
+- **`@zodiacs/engine/de440`** has the same API. With a second entry loading
+  its code, the build moves that code from `dist/de440.js` into a chunk the
+  two share, which `dist/de440.js` re-exports.
+- **Conformance.** The suite's adapter for this engine now answers the
+  position requests from the shipped pack, with nothing supplied to it: 459
+  of the 500 vectors pass, none fails and 41 are unsupported, where
+  1.1.0-rc.3 had 267, 192 and 41. Started with `--ephemeris
+  astronomy-engine` it runs the root's own positions, and those results (48
+  pass, 192 fail of the 240) are committed beside the first and checked in
+  continuous integration (`conformance/RESULTS.md`).
+- **Licensing.** The pack is data refitted from JPL's DE440. `NOTICE` cites
+  the ephemeris and says that Zodiacs.org made the pack; `LICENSING.md`
+  (*DE440 pack*) records what NAIF's rules for SPICE kernels state, that they
+  do not speak of data refitted from a kernel, and that shipping the pack
+  rests on the owner's position of 2026-11-13 that DE440 is JPL's public
+  data: an open question for the owner before publication. The licence
+  expression is unchanged.
+- **Sizes.** The package is 4,477,785 bytes unpacked in 97 files and
+  2,696,971 packed, against 1.1.0-rc.3's 1,142,818 in 94 files and 331,979:
+  3.9 times the unpacked size and 8.1 times the packed one, since the pack
+  compresses little. That is 3,334,967 bytes more unpacked, of which
+  3,319,552 are the pack's base64 text, 1,293 other JavaScript that only the
+  opt-in entries load (`dist/de440-pack.js`'s code and the chunk it shares
+  with `./de440`),
+  1,661 declarations, 12,306 documents and 155 the manifest; the
+  root's own graph is unchanged at 108,531 bytes
+  (`docs/evidence/1.1.0-rc.8-20261113/sizes.json`). An application that
+  imports the new entry carries the pack; one that does not, carries none of
+  it. The package gate now holds the pack to its exact size and digest, in
+  `dist/de440-pack.js` alone, and caps the rest of the package: that cap
+  rises from 1,145,000 to 1,165,000, and `./de440/pack` gets a budget of the
+  pack and 49,400 bytes (`scripts/verify-package-contents.mjs`). Both, and
+  shipping a package of this size, are for the owner to approve; the request
+  of 2026-11-13 to ship the pack is recorded, a figure is not.
+
 ## 1.1.0-rc.3 (unreleased candidate)
 
 The third candidate for 1.1.0, on 1.1.0-rc.2 (main at `883371f`): positions

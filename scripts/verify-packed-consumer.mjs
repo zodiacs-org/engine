@@ -224,6 +224,11 @@ const opening: Promise<De440Source> = openDe440Pack(new Uint8Array(0), { expectD
 const asSource = (source: De440Source): PositionSource => source;
 const inside: number = withEphemeris({ ephemeris: { name: "x", version: "0" }, place: () => ({ lon: 0, lat: 0 }), trueNode: () => 0 }, () => 1);
 const errorCode = (error: unknown): De440ErrorCode | null => (error instanceof De440Error ? error.code : null);
+import { DE440_PACK, de440PackBytes, openShippedDe440Pack, type De440PackDescription } from "@zodiacs/engine/de440/pack";
+const shippedPack: De440PackDescription = DE440_PACK;
+const shippedBytes: () => Uint8Array = de440PackBytes;
+const shippedSource: () => Promise<De440Source> = openShippedDe440Pack;
+void shippedPack; void shippedBytes; void shippedSource;
 void opening.catch(() => {}); void asSource; void inside; void errorCode; void REDUCED_BODIES;
 `
 );
@@ -652,7 +657,27 @@ assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-
   assert.equal(rows.find((row) => row.body === "North Node").lon, 20);
   assert.notEqual(positions("2000-01-01T12:00:00Z").find((row) => row.body === "Sun").lon, 10);
 }
-console.log(JSON.stringify({version: ENGINE_VERSION, de440: "passed", birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", liteEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
+{
+  // The shipped DE440 pack: the sealed bytes docs/de440.md names, opened with no
+  // file and no digest from the caller, and a chart from it inside the root's
+  // switch. The Sun is held to the conformance suite's vector L1-POS-0001
+  // (JPL Horizons, DE441, in the IAU 2006/2000A true ecliptic of date), 1″.
+  const shipped = await import("@zodiacs/engine/de440/pack");
+  const { createHash } = await import("node:crypto");
+  const bytes = shipped.de440PackBytes();
+  assert.equal(bytes.byteLength, 2489664);
+  assert.equal(createHash("sha256").update(bytes).digest("hex"), "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7");
+  assert.equal(shipped.DE440_PACK.sha256, "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7");
+  const source = await shipped.openShippedDe440Pack();
+  assert.deepEqual(source.ephemeris, { name: "jpl-de440", version: shipped.DE440_PACK.sha256 });
+  const instant = new Date(Math.round((2397195.6924745925 - 2440587.5) * 86400000));
+  const chart = root.withEphemeris(source, () => natalChart({ utc: instant, timeScale: "tt", timeKnown: false }));
+  assert.deepEqual(chart.ephemeris, source.ephemeris);
+  const sun = chart.bodies.find((row) => row.body === "Sun");
+  assert(Math.abs(sun.lon - 353.0330254813) * 3600 <= 1 && Math.abs(sun.lat - -0.0000304792) * 3600 <= 1, "the shipped pack's Sun is not within 1 arcsecond of Horizons");
+  assert.equal(Object.hasOwn(natalChart({ utc: instant, timeScale: "tt", timeKnown: false }), "ephemeris"), false);
+}
+console.log(JSON.stringify({version: ENGINE_VERSION, de440: "passed", de440Pack: "passed", birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", liteEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());

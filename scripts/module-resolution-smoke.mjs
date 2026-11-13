@@ -25,6 +25,7 @@ const internal = await import("@zodiacs/engine/internal");
 const internalMath = await import("@zodiacs/engine/internal/math");
 const lite = await import("@zodiacs/engine/lite");
 const de440 = await import("@zodiacs/engine/de440");
+const de440Pack = await import("@zodiacs/engine/de440/pack");
 
 for (const name of [
   "positions",
@@ -474,13 +475,23 @@ checkSelfContained("de440");
 for (const name of ["openDe440Pack", "De440Error", "REDUCED_BODIES", "BARYCENTRE_NOT_CENTRE", "DE440_EPHEMERIS_NAME"]) {
   assert.ok(name in de440, `@zodiacs/engine/de440 exports ${name}`);
 }
+// The entry that ships the pack: ./de440's graph and its own file, which holds
+// the pack; no ephemeris package, nothing lazy, nothing fetched. It opens as
+// a source that names the pack by its SHA-256.
+checkSelfContained("de440-pack");
+for (const name of ["DE440_PACK", "de440PackBytes", "openShippedDe440Pack"]) {
+  assert.ok(name in de440Pack, `@zodiacs/engine/de440/pack exports ${name}`);
+}
+assert.equal(de440Pack.de440PackBytes().byteLength, de440Pack.DE440_PACK.bytes, "the shipped pack is the size its description gives");
+assert.deepEqual((await de440Pack.openShippedDe440Pack()).ephemeris, { name: de440.DE440_EPHEMERIS_NAME, version: de440Pack.DE440_PACK.sha256 },
+  "the shipped pack opens as a DE440 source that names it");
 assert.equal(typeof engine.withEphemeris, "function", "the root exports withEphemeris");
 // The core entry reaches no zone history and loads nothing lazily; its one
 // dependency is the ephemeris.
 checkSelfContained("index", ["astronomy-engine"]);
 
 // The root imports no subpath: no module of an opt-in entry (timing, Vedic,
-// geo, calc, window, techniques, houses, sky, time, lite or de440), and no zone
+// geo, calc, window, techniques, houses, sky, time, lite, de440 or its pack), and no zone
 // history, is in its static graph (OPT_IN_SOURCE in scripts/root-isolation.mjs).
 // That script reads the graph from the build's own module list
 // (dist/metafile-esm.json and dist/metafile-lite.json, which `npm run build`

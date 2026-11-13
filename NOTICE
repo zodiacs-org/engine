@@ -67,7 +67,8 @@ responses at 32 instants (for the mean nodes and Black Moon Lilith, from
 their definitions evaluated with ERFA at those instants), and of
 astronomy-engine's barycentre from a Newtonian barycentre and from
 Horizons's. They are not coefficients derived
-from JPL data, and no JPL ephemeris value is in the package.
+from JPL data. The one file of the package that holds values derived from a
+JPL ephemeris is the DE440 pack's (DE440 pack, below).
 
 DE440 entry
 -----------
@@ -88,7 +89,31 @@ and the adjustment of the IAU 2000 nutation to that precession from
   981-985.
 
 It sums the nutation module's terms above. It holds no JPL ephemeris value:
-the pack it reads is the caller's.
+the pack it reads is the caller's, or the one below.
+
+DE440 pack
+----------
+
+@zodiacs/engine/de440/pack (dist/de440-pack.js, and no other file) carries,
+as base64 text, the sealed pack de440-1790-2210.v2.zeph (2,489,664 bytes,
+SHA-256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7):
+Chebyshev series for the Sun, the Moon, the Earth-Moon barycentre, Mercury,
+Venus and the barycentres of the systems of Mars to Pluto, from 1790 to 2210,
+which Zodiacs.org's pack compiler 2.0.0 refitted and quantised from the
+planetary and lunar ephemeris DE440 of the Jet Propulsion Laboratory,
+California Institute of Technology, as the Navigation and Ancillary
+Information Facility (NAIF) distributes it in the SPICE kernel de440.bsp
+(SHA-256 a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5):
+
+  R. S. Park, W. M. Folkner, J. G. Williams and D. H. Boggs 2021, The JPL
+  Planetary and Lunar Ephemerides DE440 and DE441. The Astronomical Journal
+  161, 105.
+
+The pack is not the kernel and does not hold DE440's own series. Zodiacs.org
+made it and made the last modification to the data; its errors are
+Zodiacs.org's (docs/de440.md in the repository states them). JPL and NAIF
+have not reviewed or endorsed it. LICENSING.md, DE440 pack, records what
+NAIF's rules for SPICE kernels say and what they leave open.
 
 Essential dignities
 -------------------

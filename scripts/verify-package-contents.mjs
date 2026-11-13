@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 
 const output = execFileSync("npm", ["pack", "--dry-run", "--json", "--ignore-scripts"], {
@@ -23,6 +24,8 @@ const required = [
   "dist/crossings.d.ts",
   "dist/de440.d.ts",
   "dist/de440.js",
+  "dist/de440-pack.d.ts",
+  "dist/de440-pack.js",
   "dist/crossings.js",
   "dist/deltat.d.ts",
   "dist/deltat.js",
@@ -202,6 +205,17 @@ const ENTRY_BUDGETS = {
   // bytes in 4 files; 48,000 approved by the owner on 2026-11-10; 4.81 per
   // cent of headroom.
   "./de440": 48_000,
+  // New in 1.1.0-rc.8: the sealed DE440 pack itself, shipped (docs/de440.md).
+  // dist/de440-pack.js holds the pack's 2,489,664 bytes as 3,319,552
+  // characters of base64 (PACK_DATA_BYTES below, checked on its own) and
+  // 1,017 bytes of code that decode and open it; the rest of the graph is
+  // ./de440's, which it opens the pack with: 3,366,303 bytes in 5 files,
+  // 46,751 of them not the pack. The budget is the pack and 49,400, which
+  // leaves that code 5.67 per cent of headroom; for the owner to approve.
+  // With a second entry loading it, the build moves ./de440's code from
+  // dist/de440.js into a chunk the two share, and ./de440's graph grows by
+  // the 276 bytes that join them, to 46,069; its budget is not raised.
+  "./de440/pack": 3_319_552 + 49_400,
   // rc.15: 56,961; as carried, 58,997. rc.16: 64,830, raised from 60,000 for
   // the nutation in the ephemeris chunk; 4.88 per cent of headroom.
   // 1.1.0-rc.3: 68,758, with withEphemeris, the source's path and the
@@ -395,8 +409,37 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // and its refusals, the receipts' DE440 set, and their README, CHANGELOG,
 // NOTICE and LICENSING.md lines; raised from 1,100,000 to 1,145,000 with the
 // owner's approval of 2026-11-10, which leaves 0.19 per cent.
-const TOTAL_CAP = 1_145_000;
-assert(report.unpackedSize <= TOTAL_CAP, `package is unexpectedly large: ${report.unpackedSize} bytes unpacked, over ${TOTAL_CAP}`);
+//
+// 1.1.0-rc.8 ships the sealed DE440 pack (docs/de440.md), which is data, not
+// code, and larger than everything else in the package together. Like the
+// zone histories it has a size of its own, so that it cannot hide growth in
+// the code, and unlike them an exact one, since its bytes are fixed: the
+// pack's 2,489,664 bytes are 3,319,552 characters of base64, in
+// dist/de440-pack.js and in no other packed file, and only ./de440/pack's
+// graph holds that file. The cap bounds the rest of the package, the unpacked
+// size less those characters. 1.1.0-rc.8: 4,477,785 bytes in 97 files, of
+// which 1,158,233 are not the pack, 15,415 more than 1.1.0-rc.3: the new
+// entry's code and declarations, and the README, CHANGELOG, LICENSING.md and
+// NOTICE lines for the pack (docs/evidence/1.1.0-rc.8-20261113/sizes.json).
+// Raised from 1,145,000 to 1,165,000 for the owner to approve, which leaves
+// 6,767 bytes.
+const PACK_DATA_BYTES = 3_319_552;
+const PACK_DATA = /"([A-Za-z0-9+/]{1000,}={0,2})"/gu;
+const packed = (name) => readFileSync(new URL(`../${name}`, import.meta.url), "utf8");
+const packHolders = files.filter((file) => file.endsWith(".js") && packed(file).search(PACK_DATA) !== -1);
+assert.deepEqual(packHolders, ["dist/de440-pack.js"], "the DE440 pack's base64 text must be in dist/de440-pack.js and in no other packed file");
+const packText = [...packed("dist/de440-pack.js").matchAll(PACK_DATA)];
+assert(packText.length === 1 && packText[0][1].length === PACK_DATA_BYTES,
+  `dist/de440-pack.js must hold the pack once, as ${PACK_DATA_BYTES} characters of base64`);
+const packBytes = Buffer.from(packText[0][1], "base64");
+assert.equal(packBytes.length, 2_489_664, "the shipped DE440 pack must be 2,489,664 bytes");
+assert.equal(createHash("sha256").update(packBytes).digest("hex"), "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
+  "the shipped DE440 pack must be the sealed pack docs/de440.md names");
+assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].sizes.has("dist/de440-pack.js")), ["./de440/pack"],
+  "only ./de440/pack's graph may hold the DE440 pack");
+const TOTAL_CAP = 1_165_000;
+const restBytes = report.unpackedSize - PACK_DATA_BYTES;
+assert(restBytes <= TOTAL_CAP, `package is unexpectedly large: ${restBytes} bytes unpacked beside the DE440 pack, over ${TOTAL_CAP}`);
 
 // The licence expression covers the code (MIT) and the ΔT values (CC BY 4.0),
 // and the packed licensing files say the same.
@@ -455,7 +498,8 @@ assert(prose("LICENSING.md").includes("shared chunk under `dist/` that `dist/geo
 // chunk that the ephemeris chunk, dist/time.js and dist/de440.js import
 // (until 1.1.0-rc.2 both were in the ephemeris chunk itself; until
 // 1.1.0-rc.3, when ./de440 came to load the nutation without the frame, in
-// one chunk), which LICENSING.md says the graphs of ten entry points load.
+// one chunk), which LICENSING.md says the graphs of eleven entry points load
+// (ten until 1.1.0-rc.8 added ./de440/pack, which opens its pack with ./de440).
 // The series' first coefficient stands for the nutation, and the marker
 // esbuild writes before the frame module's code, `// src/frame.ts`, for the
 // frame: each must be in exactly one shared chunk, and the frame's chunk
@@ -475,7 +519,7 @@ assert(read("dist/time.js").includes(nutationChunk), "dist/time.js must import t
 assert(files.some((file) => /^dist\/chunk-[^/]+\.js$/u.test(file) && /\bfunction gastHours\(/u.test(read(file)) && read(file).includes(nutationChunk)),
   "the ephemeris chunk must import the chunk that holds the nutation");
 assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].sizes.has(nutationHolders[0])).sort(),
-  [".", "./calc", "./de440", "./internal", "./sky", "./techniques", "./time", "./timing", "./vedic", "./window"],
+  [".", "./calc", "./de440", "./de440/pack", "./internal", "./sky", "./techniques", "./time", "./timing", "./vedic", "./window"],
   "the entry points whose graphs load the nutation must be the ones LICENSING.md names");
 assert(read("dist/de440.js").includes(nutationChunk), "dist/de440.js must import the chunk that holds the nutation");
 assert(notice.includes("built into a shared chunk under dist/ that the ephemeris chunk and dist/time.js import"), "NOTICE must say where the frame is");
@@ -518,7 +562,7 @@ const budgets = Object.entries(graphs)
   .map(([name, graph]) => `${name} ${graph.bytes} of ${ENTRY_BUDGETS[name]}` + (name === "." ? "" : ` (${beyondCore(graph)} beyond the core's)`))
   .join(", ");
 console.log(
-  `@zodiacs/engine package contents passed (${files.length} files, ${report.unpackedSize} bytes unpacked of ${TOTAL_CAP}; ` +
+  `@zodiacs/engine package contents passed (${files.length} files, ${report.unpackedSize} bytes unpacked: the DE440 pack ${PACK_DATA_BYTES}, the rest ${restBytes} of ${TOTAL_CAP}; ` +
     `import graphs: ${budgets}; zone histories ${shardBytes} of ${SHARD_BUDGET} in ${shards.length} files; ` +
     `license ${manifest.license}; node ${manifest.engines.node})`
 );

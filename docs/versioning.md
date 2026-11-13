@@ -9,9 +9,10 @@ the release it leads to.
 
 ## What is public
 
-- **The entry points.** The sixteen that `package.json` exports and the
+- **The entry points.** The seventeen that `package.json` exports and the
   README documents: the root, `./calc`, `./conventions` (from 1.1.0-rc.1),
-  `./crossings`, `./de440` (from 1.1.0-rc.3), `./deltat`, `./geo`,
+  `./crossings`, `./de440` (from 1.1.0-rc.3), `./de440/pack` (from
+  1.1.0-rc.8), `./deltat`, `./geo`,
   `./houses`, `./lite` (from 1.1.0-rc.2), `./receipt`, `./sky`,
   `./techniques`, `./time` (from 1.1.0-rc.2), `./timing`, `./vedic` and
   `./window`. `./internal` and

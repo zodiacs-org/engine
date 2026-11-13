@@ -34,12 +34,13 @@ import { existsSync, readFileSync } from "node:fs";
  * src/time-scale.ts and src/time-scale-data.ts are not; and the lite entry's
  * file and directory, src/lite.ts and src/lite/, and src/sect.ts, whole, which
  * only its sect part imports; and the DE440 entry's file and directory,
- * src/de440.ts and src/de440/. The root modules the lite parts are built from
+ * src/de440.ts and src/de440/, with src/de440-pack.ts, the entry that ships
+ * the pack (its data is src/de440/pack-data.ts). The root modules the lite parts are built from
  * (src/declination.ts, src/points.ts and the like) are the root's own; the
  * export smoke test pins the lite entry's modules (scripts/lite-entry.mjs).
  */
 export const OPT_IN_SOURCE =
-  /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky|lite|de440)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|(?:houses-extra|equator|first-millisecond|time|time-bands|sect)\.[^/]*$)/u;
+  /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky|lite|de440)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|(?:houses-extra|equator|first-millisecond|time|time-bands|sect|de440-pack)\.[^/]*$)/u;
 
 /** The source path of every module esbuild marks in an output file: `// src/...`, any extension. */
 export function sourceMarkers(code) {
