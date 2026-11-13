@@ -180,9 +180,12 @@ only.
 ## Existing checks (A3)
 
 `results/gates.log` is the engine job's commands from `AGENTS.md` run on this
-branch (Node 22.23.3, Linux x86-64), and `results/conformance.log` the
-conformance and atlas commands (Node 22.22.2). See the log for each exit
-status. This machine has a root-owned `/node_modules`, which the
+branch at `e0c4e1c` (Node 22.23.3, Linux x86-64): every command exits 0, and
+the suite reports 4,173 tests passed and 4 skipped in 99 files, with one file
+skipped. That file is `src/de440-kernel.test.ts`, which needs the kernel;
+`results/tier-b.log` is it run on the kernel fetched here, 3 of 3 passing.
+`results/conformance.log` is the conformance and atlas commands (Node
+22.22.2), each exiting 0. This machine has a root-owned `/node_modules`, which the
 archive-binding check refuses to have above `TMPDIR`; the gates were
 therefore run inside a mount namespace that hides that one directory
 (`tools/gates.sh` and the `bwrap` line at its top). Run without it on this
@@ -225,4 +228,5 @@ seconds, given a pack.
   body, with the digests of the vectors, the bounds file and the pack.
 - `results/baseline-engine.log`, `results/baseline-pyswisseph-l1.json`: A1.
 - `results/de440-run.log`: the harness's output for the DE440 run.
-- `results/gates.log`, `results/conformance.log`: A3.
+- `results/gates.log`, `results/gates-without-namespace.log`,
+  `results/conformance.log`, `results/tier-b.log`: A3.
