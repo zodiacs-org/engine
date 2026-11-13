@@ -105,7 +105,7 @@ Each branch's `CHANGELOG.md` only adds lines to `main`'s
 
 | Branch | Head when read | Pull request | Entry it adds | Published? | Line check |
 | --- | --- | --- | --- | --- | --- |
-| `admin/engine-1.1.0-rc.6` | `ce4ba826cbb1a74206c679ff9fb0bb10da60d4ca` | #91, open, draft. **PR 91's test release** | `## 1.1.0-rc.6 (unreleased candidate)` | no: not on npm, no tag, no GitHub release | `lines-pr91-1.1.0-rc.6.md` |
+| `admin/engine-1.1.0-rc.6` | `ce4ba826cbb1a74206c679ff9fb0bb10da60d4ca` | #91, open, draft. **PR 91's test release** | `## 1.1.0-rc.6 (unreleased candidate)` | no: not on npm, no tag, no GitHub release | `LINES-pr91-1.1.0-rc.6.md` |
 | `admin/engine-1.1.0-rc.4` | `95f00e928ee2c36d962f6a4220e490ca8cc3f906` | #89, closed without merging, draft | `## 1.1.0-rc.4 (unreleased candidate)` | no | `LINES-branch-candidates.md` |
 | `admin/engine-1.1.0-rc.5` | `a09110e51dfba1cfc8e06e522d73c57d147b7f0b` | #90, closed without merging, draft | `## 1.1.0-rc.5 (unreleased candidate)` | no | same file |
 | `admin/engine-1.1.0-rc.7` | `406240c1975cbc6eb5a132315d6760d472f3ebd4` | #95, open, draft | `## 1.1.0-rc.7 (unreleased candidate)` (and it carries rc.6's entry) | no | same file |
@@ -131,7 +131,7 @@ in a release's pull request. This is a stated gap, not a finding.
 | `README.md`, lines 19 to 49 and 94 to 130 | Which version this is, what npm carries, which candidates were never published | `LINES-other-files.md` |
 | `CITATION.cff` | States no version and no release date, on purpose, and that no DOI has been minted | `LINES-other-files.md`, row O-cff-01 (the DOI statement is out of date). |
 | GitHub release `v0.1.1-rc.15` body | A copy of the rc.15 changelog entry with a preface | Compared with the changelog in `LINES-other-files.md` (rows O-rel-01 to 06). |
-| Pull request 91's body | Describes test release 1.1.0-rc.6 | `lines-pr91-1.1.0-rc.6.md` |
+| Pull request 91's body | Describes test release 1.1.0-rc.6 | `LINES-pr91-1.1.0-rc.6.md` |
 
 ## Other packages in the repository
 
