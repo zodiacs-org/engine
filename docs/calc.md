@@ -293,7 +293,8 @@ south node and Black Moon Lilith they are the largest differences, on the
 same instants, from the same definitions evaluated with ERFA's fundamental
 arguments, which checks the implementation, not an ephemeris; their `basis`
 says so. They are the largest seen on
-those instants, not limits: another instant can exceed them. They come from
+those 32 instants, not limits: another instant can exceed them, and on a
+broader sample some do (below). They come from
 the comparison rerun on this version's build, after the engine took the full
 IAU 2000B nutation (`docs/evidence/calc-api/rc16/`); none is larger than the
 first run's, and the rate bounds of the outer planets and the position and
@@ -302,6 +303,31 @@ nutation's error, are smaller. Topocentric
 positions were compared for the Sun, the Moon and Mars, in all three
 corrections; another topocentric body takes its geocentric bound for the
 same correction, labelled `estimated`.
+
+A broader sample on 2026-11-13 compared the geocentric apparent positions in
+the true ecliptic of date with JPL DE421 at 1,711 instants per body from 1900
+to 2050 (`docs/evidence/broad-sample-2026-11-13/`). Where its largest
+difference is above the published bound, the two are:
+
+| Body | Published `bounds.position`, largest seen on 32 instants | Largest on 1,711 instants, 1900 to 2050 | Published `bounds.speed`, largest seen on 32 instants | Largest on 1,711 instants, 1900 to 2050 |
+| --- | ---: | ---: | ---: | ---: |
+| Moon | 8.3″ | | 1.1″ a day | 1.62″ a day |
+| Mercury | 9.3″ | 11.91″ | 2.2″ a day | |
+| Venus | 11″ | 20.54″ | 0.64″ a day | 0.667″ a day |
+| Mars | 6.6″ | 14.05″ | 0.45″ a day | 0.59″ a day |
+| Jupiter | 13″ | 13.86″ | 0.061″ a day | 0.062″ a day |
+| Saturn | 18″ | 21.96″ | 0.03″ a day | 0.043″ a day |
+| Neptune | 21″ | | 0.013″ a day | 0.015″ a day |
+| True node | 16″ | 19.2″ | | |
+
+An empty cell is a broader-sample figure within the published bound. The Sun,
+Uranus and Pluto stay within both of theirs. The speeds there compare the rate
+of longitude with a reference without solar deflection, so they are the
+ephemeris's difference alone; within about 10° of the Sun the engine's lack of
+deflection adds more. The true node's figure depends on how the reference's
+osculating node is defined, which moves it by several arcseconds. The values
+`calc()` returns are unchanged: they are still the 32-instant maxima, and
+their `basis` says so.
 
 The barycentric Sun is the exception: its error comes from the barycentre,
 and its distance from the barycentre, 1.0 × 10⁻⁴ to 0.01 au, decides what
@@ -640,12 +666,16 @@ IAU 2000B's own difference from IAU 2000A, under 0.0023″ here. The first run's
 true-of-date figures differed from the others in the last digit, by the
 five-term nutation. The differences are the ephemeris's own: largest for the
 outer planets (Pluto 24.6″, Neptune 20.1″, Uranus 19.5″, Saturn 17.6″
-geocentric at worst), 2.9″ for the Sun and 8.3″ for the Moon. Geocentric
-angular rates differ from Horizons's by 0.03″ a day median and 2.1″ a day at
-worst (Mercury). For Jupiter to Pluto the largest rate difference is 0.013″
-(Neptune) to 0.060″ a day (Jupiter) in every frame; on the five-term
-nutation it was up to 0.082″ a day in the true-of-date frames (Neptune's
-0.051″ against 0.013″ in the other frames).
+geocentric at worst on these 32 instants), 2.9″ for the Sun and 8.3″ for the
+Moon. Geocentric angular rates differ from Horizons's by 0.03″ a day median
+and 2.1″ a day at worst (Mercury) on these 32 instants. For Jupiter to Pluto
+the largest rate difference on them is 0.013″ (Neptune) to 0.060″ a day
+(Jupiter) in every frame; on the five-term nutation it was up to 0.082″ a day
+in the true-of-date frames (Neptune's 0.051″ against 0.013″ in the other
+frames). The broader DE421 sample of 1,711 instants per body from 1900 to 2050
+finds more for some bodies: Saturn 21.96″, Venus 20.54″, Mars 14.05″,
+Jupiter 13.86″ and Mercury 11.91″, and rates up to 0.043″ a day for Saturn,
+0.062″ for Jupiter and 0.015″ for Neptune (see Bounds).
 
 The frame transforms were checked against ERFA 2.0.1 on the engine's own
 output, and all twelve checks pass on this version's build. Those without
@@ -659,4 +689,6 @@ The mean node and Lilith agree with their definitions evaluated on ERFA's
 fundamental arguments to under 10⁻⁶″ in the frames without the nutation, and
 to 0.0023″ in the true-of-date frames, where ERFA's definition takes IAU
 2000A's nutation (0.2″ on the five-term nutation); the true node is 6.6″ median and 16″ at worst from the node of the
-osculating orbit of Horizons's Moon.
+osculating orbit of Horizons's Moon on the 32 instants, and up to 19.2″ on the
+broader sample's 1,711, a figure that depends on how the reference node is
+defined.

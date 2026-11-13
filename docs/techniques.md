@@ -96,11 +96,17 @@ to the minute. For the 20 of 1850, 1900, 1950, 2000 and 2022,
 `solarReturnInstant` is within 42.27 s of the published minute; the gate was
 120 s. Inverting the 24 JPL Horizons longitudes of the Sun and the 24 of the
 Moon in the conformance suite's L1 vectors (1851 to 2148) gives the vectors'
-instants within 32.05 s for the Sun and 6.81 s for the Moon, compared in TT;
-the gates were 60 s and 15 s. Those are 0.1.1-rc.16's figures, on the
-engine's full IAU 2000B nutation; on astronomy-engine's five-term nutation,
-which the engine used up to rc.15, they were 45.35 s, 33.23 s and 6.87 s
-(`docs/evidence/techniques-2026-09-29/rc16/`).
+instants within 32.05 s for the Sun and 6.81 s for the Moon on the original
+24 instants each, compared in TT; the gates were 60 s and 15 s. Those are
+0.1.1-rc.16's figures, on the engine's full IAU 2000B nutation; on
+astronomy-engine's five-term nutation, which the engine used up to rc.15,
+they were 45.35 s, 33.23 s and 6.87 s
+(`docs/evidence/techniques-2026-09-29/rc16/`). A broader sample of
+1.1.0-rc.3 against JPL DE421 from 1900 to 2050
+(`docs/evidence/broad-sample-2026-11-13/`) puts the Sun's sign changes within
+50.3 s (1,812 of them; 42.8 s from 2026 to 2030) and the Moon's within 7.64 s
+(4,169), so the Sun and the Moon still pass the preregistered gates of 60 s
+and 15 s.
 
 **Differences from the site.** The site clips its searches to 1800–2200 and
 refuses a return it cannot find inside; it limits a lunar return's date to
