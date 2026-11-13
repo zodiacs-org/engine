@@ -109,6 +109,7 @@ runs, so CI starts the check with node directly.
 | 1.1.0-rc.6 | `648714ca7485c7381f338286b84a211752ddd425035f50f6e24267e80de6abde` | 333,982 | 94 | `c3efe9175644ee6a0d9f40e2d9fa0766aa264fa6` | `7210037` | Draft candidate, awaiting the owner's review |
 | 1.1.0-rc.7 | `71348be1f8dc2772945cc86c72af475091d105da9e7ff5b4411c517adc9fc80a` | 335,403 | 94 | `ca3ae0ff197e0b4e7bfc68bf88c3d0afbeb360f8` | "Carry the packed 1.1.0-rc.7 tarball" | Draft candidate, awaiting the owner's review |
 | 1.1.0-rc.8 | `53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43` | 2,696,971 | 97 | `e3939499d603e511f1f23f7198eb425bc5f48359` | `7dec96f` | **Withdrawn before merge; never released; no file here.** Still reachable in the commits `7dec96f`, `3de6a27` and `0738bc9`. |
+| 1.1.0-rc.9 | `f1801f0a35ef643a89c73ecd280e1e41142ae36e12c3690433536f9c3368396a` | 2,703,974 | 98 | `18bcfca5e7bed57e797ee09da2221c1fbc8e9f33` | "Carry the packed 1.1.0-rc.9 tarball" | Draft candidate, awaiting the owner's review |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -385,3 +386,25 @@ to admit this is a change that review must catch, as the threat model above
 says: it is for the owner to accept with pull request 101, and the
 alternative, keeping the 1.1.0-rc.8 file in `artifacts/` as a superseded
 archive, needs the same pinned exception for the manifest's order.
+
+1.1.0-rc.9 is the next candidate for 1.1.0 after 1.1.0-rc.7, cut as a draft
+for the owner's review on main at `6825eb3` (1.1.0-rc.7 with pull request
+100 merged): the sealed DE440 pack, shipped in the package, and the root
+entry computing on it by default, so that a plain `natalChart` is on JPL's
+DE440 inside 1790 to 2210 and on astronomy-engine outside, and says which;
+seventeen public entry points. Its source commit is the merge of main into
+pull request 101's branch. The archive is 2,703,974 bytes, 4,502,147
+unpacked in 98 files, 8.1 times 1.1.0-rc.7's packed size and 3.9 times its
+unpacked size: 3,319,552 of those bytes are the pack, as base64 text, which
+the package gate holds to its exact size and digest in one file, and the
+rest, 1,182,595, is under a cap of 1,185,000, raised from 1,155,000, with ten
+entry budgets raised; the size and every one of those figures are for the
+owner to approve (CHANGELOG.md). It was packed once, from clean clones of its
+source commit, each installed with `npm ci`; the carried file is the Node
+22.22.2 one, and `docs/evidence/1.1.0-rc.9-20261114/` records which other
+Node versions packed the same bytes. It was carried after the gate commands
+had passed locally on the source commit, and before the gate workflows had
+run on it or any review had read it. It is not to be published on npm until
+the owner approves it, and its licensing record leaves the redistribution of
+the pack as an open question (LICENSING.md, *DE440 pack*). The record is in
+`docs/evidence/1.1.0-rc.9-20261114/`.

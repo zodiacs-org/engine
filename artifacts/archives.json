@@ -216,6 +216,15 @@
       "status": "superseded",
       "onlyInCommit": "0738bc989790daac840d45c5b375f56009c03c8e",
       "note": "Withdrawn before merge: a draft cut on 1.1.0-rc.3 in pull request 101 while main moved to 1.1.0-rc.7; removed where the branch joined main and cut again as 1.1.0-rc.9. Never released."
+    },
+    {
+      "version": "1.1.0-rc.9",
+      "file": "zodiacs-engine-1.1.0-rc.9.tgz",
+      "sha256": "f1801f0a35ef643a89c73ecd280e1e41142ae36e12c3690433536f9c3368396a",
+      "bytes": 2703974,
+      "files": 98,
+      "sourceCommit": "18bcfca5e7bed57e797ee09da2221c1fbc8e9f33",
+      "status": "carried"
     }
   ]
 }
