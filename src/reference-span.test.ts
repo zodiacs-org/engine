@@ -43,13 +43,13 @@ describe("reference span (rule 1e)", () => {
     expect(
       computeChart({ utc: new Date("2300-06-01T12:00:00Z"), houseSystem: "whole", timeKnown: false })
         .flags
-    ).toEqual(["no-time", FLAG]);
+    ).toEqual(["no-time", FLAG, "delta-t-extrapolated"]);
   });
 
   it("accepts the flag as an echo only where the calculation derives it", () => {
     expect(
       natalChart({ utc: "2300-06-01T12:00:00Z", timeKnown: true, flags: [FLAG] }).flags
-    ).toEqual([FLAG]);
+    ).toEqual([FLAG, "delta-t-extrapolated"]);
     expect(() => natalChart({ utc: "2026-06-01T12:00:00Z", flags: [FLAG] })).toThrow(RangeError);
     // A supplied Chart's flags must agree with its instant.
     const outside = chartAt("2300-06-01T12:00:00Z");
@@ -66,7 +66,8 @@ describe("reference span (rule 1e)", () => {
     const parsed = parseNatalEnvelope(json);
     expect(parsed.ok).toBe(true);
     if (!parsed.ok) return;
-    expect(parsed.envelope.receipt.resultFlags).toEqual([FLAG]);
+    // A UTC instant in 2300 also rests on an extrapolated ΔT.
+    expect(parsed.envelope.receipt.resultFlags).toEqual([FLAG, "delta-t-extrapolated"]);
     const dropped = JSON.parse(json);
     dropped.receipt.resultFlags = [];
     withOwnIds(dropped);

@@ -436,6 +436,8 @@ const BODIES = [
 ] as const;
 const FLAGS_RC7 = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"] as const;
 const FLAGS = [...FLAGS_RC7, "outside-reference-span"] as const;
+/** The time-basis sets also take "delta-t-extrapolated", whose condition the record's ΔT and time scale show. */
+const FLAGS_TIME_BASIS = [...FLAGS, "delta-t-extrapolated"] as const;
 const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
 const HOUSE_SYSTEMS = [
   "whole",
@@ -1273,19 +1275,32 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   )
     fail("inconsistent_result");
   const inputFlags = flagList(receipt.inputFlags, TIME_FLAGS);
-  const resultFlags = flagList(receipt.resultFlags, current ? FLAGS : FLAGS_RC7);
+  const resultFlags = flagList(receipt.resultFlags, timeBasis ? FLAGS_TIME_BASIS : current ? FLAGS : FLAGS_RC7);
   const expected = [...inputFlags];
   if (!timeKnown) expected.push("no-time");
   if (POLAR_UNDEFINED.includes(requested) && result.houses?.system === "whole")
     expected.push("polar-fallback");
   if (current && outsideReferenceSpan(new Date(receipt.instant as string)))
     expected.push("outside-reference-span");
-  if (!sameFlags(expected, resultFlags)) fail("inconsistent_result");
   const engine = record(receipt.engine);
   // Receipts in the current set must say which ephemeris computed them.
   fields(engine, current ? ["name", "version", "ephemeris"] : ["name", "version"]);
   if (engine.name !== "@zodiacs/engine") fail("unsupported_feature");
   const engineVersion = version(engine.version);
+  // "delta-t-extrapolated" belongs where the record's own ΔT and time scale show
+  // an extrapolated ΔT under its result: on UTC or UT1 input, or on TT input
+  // with houses (src/ephemeris.ts). An engine after 1.1.0-rc.7 sets it there, so
+  // its records must carry it; earlier records lack it, so it is allowed there.
+  // It is refused anywhere else.
+  if (
+    timeBasis &&
+    (scale !== "tt" || result.houses) &&
+    result.timeScale?.basis === "delta-t" &&
+    result.deltaT?.segment === "extrapolated" &&
+    (resultFlags.includes("delta-t-extrapolated") || compareVersions(engineVersion, "1.1.0-rc.7") > 0)
+  )
+    expected.push("delta-t-extrapolated");
+  if (!sameFlags(expected, resultFlags)) fail("inconsistent_result");
   if (current) {
     const ephemeris = record(engine.ephemeris);
     fields(ephemeris, ["name", "version"]);
