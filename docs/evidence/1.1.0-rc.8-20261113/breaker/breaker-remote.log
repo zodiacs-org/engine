@@ -1,0 +1,49 @@
+{"author":"zodiacs-org","baseRefName":"main","commits":[{"a":"admin@zodiacs.org","h":"Conformance: run the 240 L1 positions on a DE440 pack; evidence for Z…","oid":"e0c4e1c"},{"a":"admin@zodiacs.org","h":"Evidence: the existing checks on the L1 gap branch (ZOD-206)","oid":"6b1f950"},{"a":"admin@zodiacs.org","h":"Evidence: a second session's rerun of the 240 L1 cases and the checks…","oid":"7d951d7"},{"a":"admin@zodiacs.org","h":"Begin 1.1.0-rc.8: ship the sealed DE440 pack (@zodiacs/engine/de440/p…","oid":"e393949"},{"a":"admin@zodiacs.org","h":"Carry the packed 1.1.0-rc.8 tarball","oid":"7dec96f"},{"a":"admin@zodiacs.org","h":"Record the gates and the installed-package L1 run on 1.1.0-rc.8","oid":"3de6a27"}],"headRefName":"audit/fable-job9-de440-rc","headRefOid":"3de6a275d85fb3ec79eb90497ca3c44f0f90deeb","isDraft":true,"mergedAt":null,"number":101,"state":"OPEN","url":"https://github.com/zodiacs-org/engine/pull/101"}
+4470 /tmp/job9rc-breaker/pr-body.txt
+attribution lines in PR body naming a tool or model: 1 (line 39); the other match is the branch name on line 1
+em/en dashes in PR body: 0
+commit messages on the branch beyond main with model/co-author: 0
+      6 admin@zodiacs.org admin@zodiacs.org
+91	admin/engine-1.1.0-rc.6	ce4ba82	true	MERGED	2026-11-13T16:43:04Z
+92	admin/zod-65-engine-phase-1-replace-receipt-error-limits	255b615	true	MERGED	2026-11-13T16:43:04Z
+95	admin/engine-1.1.0-rc.7	0e82803	false	MERGED	2026-11-13T16:44:13Z
+100	audit/fable-job9-l1-accuracy	7d951d7	true	OPEN	2026-11-13T10:14:46Z
+--- tags on remote naming 1.1.0-rc.8 or newer than rc.3:
+none
+--- releases:
+0.1.1-rc.15	Pre-release	v0.1.1-rc.15	2026-10-01T10:13:53Z
+--- npm:
+["0.1.1-rc.14","0.1.1-rc.15","0.1.1-rc.16","1.0.0"]
+{  "latest": "1.0.0",  "next": "0.1.1-rc.16"}
+--- remote branch head:
+3de6a275d85fb3ec79eb90497ca3c44f0f90deeb	refs/heads/audit/fable-job9-de440-rc
+7d951d753b2a8d7568f90df61fdb0dbbeccc0cf0	refs/heads/audit/fable-job9-l1-accuracy
+fa4447e6406dfcbdecbb667d7f63679432d92a0d	refs/heads/main
+--- main moved:
+fa4447e Merge pull request #95 from zodiacs-org/admin/engine-1.1.0-rc.7
+0e82803 Merge main into 1.1.0-rc.7
+406240c Record the gates and the re-measure on the 1.1.0-rc.7 source commit and carrier
+4428332 Carry the packed 1.1.0-rc.7 tarball
+ca3ae0f Begin 1.1.0-rc.7: error limits from the DE440 sweep
+26bc45f Merge the DE440 sweep (ZOD-65, pull request #92) into 1.1.0-rc.7
+255b615 Record the second sweep run, which reproduces the first (ZOD-65)
+1313fed Results of the dense DE440 sweep, run 43037857931 (ZOD-65)
+3cb8aee Plan and tools for a dense DE440 sweep of the calc bounds (ZOD-65)
+ce4ba82 Record the gates on the 1.1.0-rc.6 source commit and carrier
+ src/receipt-time-basis.test.ts                     |   2 +-
+ src/receipt.ts                                     |  37 +-
+ src/types.ts                                       |   2 +-
+ typedoc.json                                       |   2 +-
+ 72 files changed, 5033 insertions(+), 207 deletions(-)
+8da3a4ee5f1e70389a049bb1561bcb972e87d0a5
+--- rc.8 name in use elsewhere:
+  origin/admin/engine-1.1.0-rc.4
+  origin/admin/engine-1.1.0-rc.5
+  origin/admin/engine-1.1.0-rc.6
+  origin/admin/engine-1.1.0-rc.7
+1.1.0-rc.4 origin/admin/engine-1.1.0-rc.4
+1.1.0-rc.5 origin/admin/engine-1.1.0-rc.5
+1.1.0-rc.6 origin/admin/engine-1.1.0-rc.6
+1.1.0-rc.7 origin/admin/engine-1.1.0-rc.7
+1.1.0-rc.7 origin/main
+1.1.0-rc.8 origin/audit/fable-job9-de440-rc

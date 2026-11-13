@@ -1,0 +1,61 @@
+rc.3: tgz 331979 bytes, sha256 3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590, files 94, unpacked 1142818
+rc.8: tgz 2696971 bytes, sha256 53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43, files 97, unpacked 4477785
+53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43  zodiacs-engine-1.1.0-rc.8.tgz
+files in rc.8 not in rc.3:
+30a31
+> ./dist/chunk-X.js
+34a36,37
+> ./dist/de440-pack.d.ts
+> ./dist/de440-pack.js
+-rw-r--r-- 1 box box 3320569 Oct 26  1985 /tmp/job9rc-breaker/x8/package/dist/de440-pack.js
+base64 strings 1 chars 3319552 bytes 2489664 sha256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7
+identical to job 9 pack file: True
+code beside the pack: 1017 chars
+import {
+  openDe440Pack
+} from "./chunk-CSNG7AYM.js";
+import "./chunk-Y4E3WJU5.js";
+import "./chunk-NNOSOOWS.js";
+import "./chunk-RMBWKZI2.js";
+
+// src/de440/pack-data.ts
+var DE440_PACK_BASE64 = "<pack>";
+
+// src/de440-pack.ts
+var DE440_PACK = /* @__PURE__ */ Object.freeze({
+  file: "de440-1790-2210.v2.zeph",
+  sha256: "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
+  bytes: 2489664,
+  fromYear: 1790,
+  toYear: 2210,
+  kernel: /* @__PURE__ */ Object.freeze({
+    file: "de440.bsp",
+    sha256: "a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5"
+  })
+});
+function de440PackBytes() {
+  const binary = atob(DE440_PACK_BASE64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+var opened;
+function openShippedDe440Pack() {
+  opened ??= openDe440Pack(de440PackBytes(), { expectDigest: DE440_PACK.sha256 });
+  return opened;
+}
+export {
+  DE440_PACK,
+  de440PackBytes,
+  openShippedDe440Pack
+};
+
+--- other dist js with long base64:
+/tmp/job9rc-breaker/x8/package/dist/de440-pack.js
+--- root static import closure:
+index.js chunk-WAP4PJ6C.js chunk-GWQ4DQRA.js chunk-MHEUYAWN.js chunk-2PZYJQV5.js chunk-Y4E3WJU5.js chunk-NNOSOOWS.js chunk-RMBWKZI2.js chunk-B5LKF437.js chunk-BHJXUY67.js chunk-CPALRSPC.js chunk-TPR3OMQJ.js chunk-TSS2SZWQ.js chunk-PFGUCNOK.js
+dynamic import( in dist: chunk-RLLZE2XB.js
+files importing de440-pack: de440-pack.js
+3:  "version": "1.1.0-rc.8",
+105:  "files": [
+1.1.0-rc.8 . ./calc ./conventions ./crossings ./deltat ./geo ./houses ./internal ./internal/math ./lite ./receipt ./sky ./techniques ./time ./de440 ./de440/pack ./timing ./vedic ./window {"astronomy-engine":"2.1.19"} false []
