@@ -287,14 +287,14 @@ describe("the sidereal zodiac in calc()", () => {
       expect(elongation, time).toBeLessThan(to);
       expect(result.ayanamsa!.bound.value).toBe(position);
       expect(result.bounds.position.value).toBe(addBounds(ok(calc({ body: "Moon", time })).bounds.position.value!, position));
-      expect(result.bounds.speed!.value).toBe(addBounds(1.1, rate));
+      expect(result.bounds.speed!.value).toBe(addBounds(ok(calc({ body: "Moon", time })).bounds.speed!.value!, rate));
       const housesResult = ok(houses({ time, place: PLACE, zodiac })) as HousesResult;
       expect(housesResult.ayanamsa!.bound.value).toBe(position);
       expect(housesResult.bounds.angles.value).toBe(addBounds(0.02, position));
     }
     const lahiri = ok(calc({ body: "Moon", time: "2000-07-31T15:30:00Z", zodiac: { sidereal: "lahiri" } }));
     expect(lahiri.ayanamsa!.bound.value).toBe(4.6e-7);
-    expect(lahiri.bounds.speed!.value).toBe(addBounds(1.1, 1.6e-7));
+    expect(lahiri.bounds.speed!.value).toBe(addBounds(ok(calc({ body: "Moon", time: "2000-07-31T15:30:00Z" })).bounds.speed!.value!, 1.6e-7));
   });
 
   it("put each band's edge in the band beyond it", () => {

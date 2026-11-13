@@ -165,6 +165,24 @@
       "files": 94,
       "sourceCommit": "cc910b3775e279222e23af0b395bb6f2b51a3c3a",
       "status": "carried"
+    },
+    {
+      "version": "1.1.0-rc.6",
+      "file": "zodiacs-engine-1.1.0-rc.6.tgz",
+      "sha256": "648714ca7485c7381f338286b84a211752ddd425035f50f6e24267e80de6abde",
+      "bytes": 333982,
+      "files": 94,
+      "sourceCommit": "c3efe9175644ee6a0d9f40e2d9fa0766aa264fa6",
+      "status": "carried"
+    },
+    {
+      "version": "1.1.0-rc.7",
+      "file": "zodiacs-engine-1.1.0-rc.7.tgz",
+      "sha256": "71348be1f8dc2772945cc86c72af475091d105da9e7ff5b4411c517adc9fc80a",
+      "bytes": 335403,
+      "files": 94,
+      "sourceCommit": "ca3ae0ff197e0b4e7bfc68bf88c3d0afbeb360f8",
+      "status": "carried"
     }
   ]
 }

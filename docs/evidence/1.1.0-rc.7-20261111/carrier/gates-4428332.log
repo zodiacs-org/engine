@@ -1,0 +1,25 @@
+node v22.22.2 npm run typecheck: exit 0
+node v22.22.2 npm run test: exit 0
+node v22.22.2 npm run build: exit 0
+node v22.22.2 npm run exports:smoke: exit 0
+node v22.22.2 npm run api:check: exit 0
+node v22.22.2 npm run package:contents: exit 0
+node v22.22.2 npm run pack:dry-run: exit 0
+ Test Files  100 passed | 1 skipped (101)
+      Tests  4204 passed | 3 skipped (4207)
+node v20.19.0 verify-archive-binding: exit 0
+artifacts/zodiacs-engine-1.1.0-rc.7.tgz is byte-identical to a rebuild of HEAD (4428332240af) on Node v20.19.0: sha256 71348be1f8dc2772945cc86c72af475091d105da9e7ff5b4411c517adc9fc80a, 335403 bytes.
+node v24.21.0 verify-archive-binding: exit 0
+artifacts/zodiacs-engine-1.1.0-rc.7.tgz is byte-identical to a rebuild of HEAD (4428332240af) on Node v24.21.0: sha256 71348be1f8dc2772945cc86c72af475091d105da9e7ff5b4411c517adc9fc80a, 335403 bytes.
+node v22.22.2 verify-archive-binding: exit 0
+artifacts/zodiacs-engine-1.1.0-rc.7.tgz is byte-identical to a rebuild of HEAD (4428332240af) on Node v22.22.2: sha256 71348be1f8dc2772945cc86c72af475091d105da9e7ff5b4411c517adc9fc80a, 335403 bytes.
+node v22.22.2 verify-packed-consumer on the carried archive: exit 0
+node v20.19.0 verify-packed-consumer on the carried archive: exit 0
+node v24.21.0 verify-packed-consumer on the carried archive: exit 0
+node v22.22.2 conformance selftest: exit 0
+node v22.22.2 conformance validate --expect-total 500: exit 0
+node v22.22.2 conformance run --check: exit 0
+node v22.22.2 conformance report --check: exit 0
+node v22.22.2 atlas check: exit 0
+node v22.22.2 atlas selftest: exit 0
+python 3.13.18 write_bounds.py --check: exit 0

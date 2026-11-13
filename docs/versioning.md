@@ -156,6 +156,16 @@ gain a field in a minor release without any record changing
 (`createNatalEnvelope` keeps the fields its set names). An id is never reused
 for a different shape.
 
+One field's values were widened inside the current sets, without a new set:
+from 1.1.0-rc.6 `localResolution.policy.fold` may say `"later"` as well as
+`"earlier"`. The record's shape and every record written before are
+unchanged, and a `"later"` record is written only for a birth in a repeated
+hour whose second pass the caller chose. Engines from before the choice
+refuse such a record as `unsupported_feature` and do not misread it;
+1.1.0-rc.1 and 1.1.0-rc.3 were run
+(`docs/evidence/1.1.0-rc.6-20261111/later-receipt-on-rc1.json` and
+`later-receipt-on-rc3.json`).
+
 The other ids name values the engine makes and does not read back:
 `./calc`'s `CALC_RECEIPT_SCHEMA` (a receipt's `request` can be passed back to
 repeat a calculation, but no codec parses a calc receipt; 0.1.1-rc.16 and

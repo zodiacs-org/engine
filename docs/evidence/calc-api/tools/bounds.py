@@ -3,6 +3,12 @@
 PREREGISTRATION.md (compare.py applies the rule; this only writes it out), or
 from the summary.json of the directory CALC_API_RESULTS names.
 
+Until 1.1.0-rc.6. From 1.1.0-rc.7 the file is written by
+docs/evidence/de440-sweep-20261111/tools/write_bounds.py, which takes the
+dense DE440 sweep's geocentric rows and this tool's other rows and bases from
+rc16/summary.json; this tool no longer writes it, and its --check now says
+the file differs.
+
     python3 docs/evidence/calc-api/tools/bounds.py           # write
     python3 docs/evidence/calc-api/tools/bounds.py --check   # fail if the file differs
 """
@@ -95,8 +101,7 @@ def main():
             raise SystemExit(f'src/calc-bounds.ts differs from {SOURCE}; run tools/bounds.py')
         print(f'src/calc-bounds.ts agrees with {SOURCE}')
         return
-    with open(TARGET, 'w') as f:
-        f.write(text)
+    raise SystemExit('from 1.1.0-rc.7 src/calc-bounds.ts is written by docs/evidence/de440-sweep-20261111/tools/write_bounds.py')
 
 
 if __name__ == '__main__':

@@ -118,7 +118,7 @@ interface NatalLocalResolution {
     offsetMinutes: number;
     gapShiftMinutes: number;
     policy: {
-        fold: "earlier";
+        fold: "earlier" | "later";
         gap: "shift-forward";
     };
     calendar?: "gregorian" | "julian";
