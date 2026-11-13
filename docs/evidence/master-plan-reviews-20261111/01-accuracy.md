@@ -224,9 +224,12 @@ hosted compute API uses it on its server". That is not so today:
   says "Until P4.1 is recorded `validated`, a request that names no backend
   is answered by astronomy-engine."
 
-So `docs/de440.md` and `CHANGELOG.md:5-7` describe a use that is planned.
-The engine's documentation states it in the present tense, which the house
-rules do not allow for something not yet true.
+So `docs/de440.md:7-8` describes a use that is planned, in the present
+tense, which the house rules do not allow for something not yet true.
+`CHANGELOG.md:5-7` is different: it says "positions from JPL's DE440, for
+zodiacs.org's hosted compute API", which states a purpose and does not
+claim the use. The earlier wording of this paragraph put the two together;
+only `docs/de440.md` needs the correction (fix round, `BREAKER.md` S7).
 
 ## Finding A6: Swiss Ephemeris as a yardstick in the README
 
@@ -319,8 +322,12 @@ with a median of 2.0 arcseconds and a largest of 22.9 arcseconds (Venus in
   (`docs/platform/evidence/site-engine-1-1-0-rc2/accuracy-refresh/multiyear-1800-2199.json`:
   `n: 91201, p50: 1.96, p95: 11.894, max: 22.886`, Venus, 1878-03-03). The
   same file gives, for 2027 to 2199, a largest of 29.108″ (Pluto,
-  2199-12-25). The page does not print that figure; it says of the far
-  future only that "none of them reaches one arcminute".
+  2199-12-25). The page does not print that figure. Of the far future it
+  says "none of them reaches one arcminute: the largest is 24.8 arcseconds,
+  Pluto at 2190, where the two ephemerides differ". That 24.8″ is the
+  largest of the page's 20 far-future cases, not of the every-tenth-day
+  run, whose largest after 2026 is the 29.108″ above. (The earlier wording
+  here cut the page's sentence short.)
 - The page's 22.9″ for Venus and the DE440 sweep's 22.92″ agree, as they
   should if both references are right. That is corroboration, and the sweep
   is the one the rules allow to be cited.
@@ -378,7 +385,22 @@ the wrong moment, so "within 30 arcseconds" and "the date a planet changes
 sign" must never appear as if one supported the other. And the live
 connector prints these times to the millisecond (Review 2, B10).
 
-This is one reader's measurement on one day. It has had no second reader.
+Fix round. The measurement has now had a second reader (`BREAKER.md`, N2):
+the engine file was reproduced byte for byte, seven records were asked of
+Horizons again and agreed, and a scan of one Horizons row a day found the
+same counts of sign changes as the engine (103 and 73), so Horizons has
+none that the engine lacks at that resolution. That reader's scripts and
+responses are in the job folder and are not committed, and they have had no
+third reader. Two cautions stand, both in `sign-changes/README.md`: the
+requests did not carry the User-Agent that JPL's fair-use policy asks for,
+and the digests kept with each record cannot be checked against anything.
+
+The second reader also found the clearest case of the last point above. On
+1823-12-15, by Horizons, Pluto turns direct 0.375″ inside Aries with no
+crossing; the engine's Pluto on those days comes no closer than 13.3″ to
+the boundary. Neither source has a sign change there, so nothing is
+missing, and the margin on the sky is about 35 times smaller than the
+engine's error at that date.
 
 ## Not checked
 

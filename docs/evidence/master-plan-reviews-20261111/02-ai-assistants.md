@@ -58,11 +58,22 @@ The package's own README, which is what an assistant reads when asked to use
 (`README.md:345-346`), the `dst-gap` and `dst-fold` flags
 (`README.md:650-654`). It does not say what to tell a person.
 
-ZOD-64 and ZOD-66 are fixing two of the traps in code, on their own branches:
-a bare date is refused unless the time is declared unknown
-(`admin/zod-64-...`, commit `ac2b453`), and a repeated hour can take the
-later pass (`admin/zod-66-...`, commit `3ea3e98`). Both make the skill's
-rules enforceable. Neither updates the skill.
+ZOD-64 and ZOD-66 each drafted a fix for one of the traps, on their own
+branches: a bare date refused unless the time is declared unknown
+(`admin/zod-64-...`, commit `ac2b453`, pull request 88), and a repeated hour
+that can take the later pass (`admin/zod-66-...`, commit `3ea3e98`, carried
+in the 1.1.0-rc.6 draft, pull request 91). Neither updates the skill.
+
+Fix round, 2026-11-13. Only the second is on its way into 1.x. The owner
+decided on 2026-11-11 to hold the bare-date refusal for 2.0.0: ZOD-66's
+comment of 12:19 UTC says "The bare-date refusal (ZOD-64, #88) is held for
+2.0.0", and pull request 91's body says "It does not contain #88. In 1.x a
+birth given as a bare date such as `"1990-05-03"` is still read as midnight
+UTC, as documented. The refusal is held for 2.0.0 by your decision of 11
+November 2026." The earlier wording of this paragraph presented pull request
+88 as the pending fix. It is a draft for a later major version, so the
+skill's rule "A date is an interval, not midnight UTC" stays unenforced by
+the package through 1.x (`05-disagreements.md`, item 17).
 
 ### B3. Errors are typed in three places and plain `RangeError` elsewhere
 
@@ -155,11 +166,27 @@ The two connector tools differ from each other in the third decimal of a
 second (.087 and .084), and both differ from the page by 3 hours 4 minutes.
 Each tool result links to the methodology page as "How we calculate", so an
 assistant that follows the link finds the page contradicting the tool that
-sent it there. Site pull request 975 (open, draft) says two more tools,
-`search_sky_events` and `get_horoscope_period`, said 14:30:44; those were
-not called here. The site's own table has both engine values for the row
-(`src/data/nasa-event-instants.json` in the site repository: `"engine":
-["2026-01-26T14:30:44.561Z", "2026-01-26T14:31:41.082Z"]`).
+sent it there.
+
+Fix round: what was seen, and what was only relayed. This review called two
+tools. The second reader called a third at 15:29 UTC the same day:
+`get_horoscope_period` with `{"sign":"aries","period":"month","date":"2026-01-15"}`
+returned `"utc":"2026-01-26T14:31:41.093Z"` (`BREAKER.md`, S1). So what was
+observed on the live connector is three tools and three values that differ
+in the third decimal of a second (.087, .084, .093), all 3 hours 4 minutes
+before the page's time.
+
+The earlier wording of this paragraph also repeated, from site pull request
+975, that `search_sky_events` and `get_horoscope_period` "said 14:30:44".
+Nobody in this job saw that value on a live tool. `get_horoscope_period`
+answered 14:31:41.093 when called, and `search_sky_events` is not among the
+19 names in the live `tools/list`, so it cannot be called through the
+connector. The value 14:30:44.561 does exist in the site's table as a
+second engine instant for the row (`src/data/nasa-event-instants.json` in
+the site repository: `"engine": ["2026-01-26T14:30:44.561Z",
+"2026-01-26T14:31:41.082Z"]`), which is where the pull request has it from.
+One call with one set of arguments does not show that it never appears in
+an answer.
 
 `check_sky_fact`'s answer is "depends" on the time zone, which is right for
 either time on that date. Its description says it "answers yes, no, or that
@@ -179,7 +206,9 @@ times to the minute and gives ISO local times. It is not live.
 
 - Engine, `main` build (1.1.0-rc.3): `natalChart({ utc: "1990-05-03" })`
   returns a chart whose `flags` is `[]`. Nothing marks that a time was
-  assumed. Pull request 88 (`ac2b453`, open, draft) refuses it.
+  assumed. Pull request 88 (`ac2b453`, open, draft) would refuse it, and
+  the owner has held that refusal for 2.0.0 (B2, fix round). In 1.x the
+  bare date stays midnight UTC, "as documented" in pull request 91's words.
 - Connector: `get_natal_chart` with `birthDate` 1990-05-03 and nothing else
   returned `"timeKnown":false`, `"castFor":{"utc":"1990-05-03T12:00:00.000Z","basis":"utc-noon"}`,
   no rising sign, `"moon":{"sign":null,"possibleSigns":["leo","virgo"]}`, and
@@ -188,7 +217,10 @@ times to the minute and gives ISO local times. It is not live.
   from the engine's (noon, declared, against midnight, undeclared).
 
 So the defect ZOD-64 names is in the package, and an assistant using the
-npm package directly still meets it on every published version.
+npm package directly meets it on every published version and, by the
+owner's decision of 2026-11-11, on every 1.x version to come. Pull request
+91's body leaves one more part open for 2.0.0: "Whether `saturnReturn` and
+the progressions should also refuse a bare date".
 
 ### B12. Under 13 and "the chart for right now" (ZOD-62): confirmed live
 
@@ -223,6 +255,14 @@ given 12° past new. ZOD-64 says 17°. The engine already returns `waxing`;
 the connector's `get_sky` returned only `"moonPhase":{"name":"Waxing
 Crescent","angle":26.127...}` with no times of the last or next new Moon.
 
+Fix round. The two figures agree. The second reader stepped the same build
+every 15 minutes from this instant and found the label change from "New
+Moon" to "Waxing Crescent" at about 22.59° (`BREAKER.md`, S6), so 17° is
+inside the range where the label reads "New Moon". ZOD-64's comment of
+07:06 UTC on 2026-11-11 adds that the last and next new and full Moon times
+"are written but not switched on, because they need a change to a published
+tool definition".
+
 ### B15. What the live developer pages tell an assistant
 
 - `https://zodiacs.org/developers/ai/`, the documentation address in the
@@ -244,8 +284,9 @@ Crescent","angle":26.127...}` with no times of the last or next new Moon.
 
 ## Not checked
 
-- `search_sky_events` and `get_horoscope_period` were not called; their
-  14:30:44 is taken from site pull request 975.
+- `get_horoscope_period` was called by the second reader, not by this
+  review. `search_sky_events` is not offered by the live server. No live
+  answer of 14:30:44 was seen by anyone in this job (B9).
 - Whether the skill or the Python wrapper is published anywhere.
 - Any behaviour of any assistant model given these tools. The calls above
   show what the tools return, not what an assistant then says.

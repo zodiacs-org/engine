@@ -12,6 +12,7 @@ publication.
 | [03-licences.md](03-licences.md) | Review 3: licences |
 | [04-connector-listing.md](04-connector-listing.md) | Review 4: listing in an AI connector directory |
 | [05-disagreements.md](05-disagreements.md) | Disagreements with the plan |
+| [BREAKER.md](BREAKER.md) | A second session's attempt to break the reviews against ZOD-98's tests, written 2026-11-11 |
 | [sign-changes/](sign-changes/) | This job's one measurement: the engine's Neptune and Pluto sign changes against JPL Horizons |
 
 ## Two passes
@@ -27,6 +28,21 @@ The reviews were written in two passes on the same day.
   disagreements list were rewritten, because the first pass had neither the
   connector's records nor the plan's text. The first pass's wording
   survives in reviews 1 to 3 wherever it still holds.
+
+- **Fix round, 2026-11-13.** One round of repairs after `BREAKER.md`, with
+  the owner's approval of which to make: its blocker B1 (the bare-date
+  refusal was held for 2.0.0 on 2026-11-11 and the reviews had not read
+  that) and its should-fix items S1 to S8. Each repair is marked "fix
+  round" where it was made. Only wording, citations and coverage in these
+  files changed. No source was re-measured, nothing was sent to any
+  provider, and no licence file was touched.
+
+The reviews cite this repository at `bc0b5a7`. The branch has since been
+rebased onto `main` at `8da3a4e`, which changed `docs/calc.md` and
+`docs/techniques.md` (pull requests 97 and 98, about how the measured
+bounds are labelled). Line numbers given for `docs/calc.md` are those of
+`bc0b5a7`. The reviews were not re-read against the new text, so Review 1's
+remarks on that guide's wording describe it as it was on 2026-11-11.
 
 ## What these reviews are, and are not
 
@@ -53,7 +69,11 @@ connector.
 
 **Linear.** ZOD-98 (this job's tests, also from the copy in the job
 folder), ZOD-58, ZOD-62, ZOD-63, ZOD-64, ZOD-65 and ZOD-66, with the
-comments on ZOD-63 and ZOD-65.
+comments on ZOD-63 and ZOD-65. The comments on ZOD-64 (07:06 and 08:16 UTC
+on 2026-11-11) and on ZOD-66 (07:07, 08:16 and 12:19 UTC) were not read in
+the second pass, which is how the 2.0.0 decision was missed. They were read
+in the fix round, on 2026-11-13, with pull request 91's body (`gh pr view
+91`, read only).
 
 **The site repository** (`zodiacs-org/site`) at `47fee79f`, a clone of one
 commit, read and not changed: the connector's source (`src/ai-tools/`), the

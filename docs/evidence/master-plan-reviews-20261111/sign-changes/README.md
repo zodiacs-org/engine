@@ -3,7 +3,8 @@
 This job's one measurement, made on 2026-11-11 to re-check two figures that
 ZOD-63 and the master plan quote from a review whose data was not found
 ("Neptune up to 9.4 h, Pluto up to 29 h off on the default path"). It is a
-check by one reader. Nobody else has run it or read it.
+check by one reader. A second reader has since reproduced parts of it
+(`../BREAKER.md`, N2); that reader's scripts are not committed.
 
 ## What was run
 
@@ -78,11 +79,20 @@ Limits:
   place has the Sun's light deflection, which the engine's does not. Both
   are milliarcseconds, which for Pluto can still be minutes of time.
 - One build, one day's Horizons. The responses are not kept, only their
-  digests.
+  SHA-256 digests. The digests are a record and not a check: every Horizons
+  response begins with a line that carries the time it was made, so the
+  same request never returns the same bytes and no digest here can be
+  compared with a new response. What can be checked is the two bracketing
+  rows kept with each record. The second reader asked for seven of them
+  again and they agreed (`../BREAKER.md`, N2).
 - JPL's fair-use policy for this API asks automated clients for "a valid,
   application-specific User-Agent request header that includes correct
   product name, version, and contact information", and for one request at a
   time. The script made one request at a time. It sent Python's default
-  User-Agent with no contact, because this job was not to send the
-  project's details to outside services. A rerun under the project's name
-  should set the header.
+  User-Agent with no product name and no contact. That was this session's
+  own caution about sending the project's details to outside services; it
+  was not an instruction in the job's brief. The outcome is 176 requests
+  that did not meet the policy, and the second reader's 12 did not meet it
+  either. Until a rerun is made under the project's name and contact, which
+  is the owner's call, the figures stand on requests the policy does not
+  cover.

@@ -18,14 +18,14 @@ set against text fetched on 2026-11-11.
 
 | Question or claim | Provider's text today | Verdict |
 | --- | --- | --- |
-| **EOP 20 C04**: "No statement of terms or licence was found" (`LICENSING.md:312-313`) | The file's header (`https://hpiers.obspm.fr/iers/eop/eopc04/eopc04.1962-now`, first 3 KB) has six lines, with a description link and a contact and no terms. The readme (`https://hpiers.obspm.fr/iers/eop/eopc04/readme`), the Centre's page (`https://hpiers.obspm.fr/eop-pc/index.php?index=C04&lang=en`, "Page updated on 2026, February 21"), the IERS legal page (`https://www.iers.org/iers/en/service/imprint`) and the data centre's record of the series state none. | **Still open.** Confirmed that nothing is stated. The data centre now calls the series "EOP 20u24 C04"; the letter should use both names. |
+| **EOP 20 C04**: "No statement of terms or licence was found" (`LICENSING.md:312-313`) | The file's header (`https://hpiers.obspm.fr/iers/eop/eopc04/eopc04.1962-now`, first 3 KB) has six lines, with a description link and a contact and no terms. The readme (`https://hpiers.obspm.fr/iers/eop/eopc04/readme`), the Centre's page (`https://hpiers.obspm.fr/eop-pc/index.php?index=C04&lang=en`, "Page updated on 2026, February 21"), the IERS legal page (`https://www.iers.org/iers/en/service/imprint`) and the data centre's record of the series state none. | **Still open.** Confirmed that nothing is stated. The data centre now calls the series "EOP 20u24 C04" (`https://datacenter.iers.org/eop.php`); the letter should use both names. |
 | **Bulletin A**: the USNO page ends "Distribution Statement A. Approved for public release: distribution unlimited." (`LICENSING.md:290-291`) | The sentence is on `https://maia.usno.navy.mil/products/bulletin-a` today. | Confirmed. |
 | **Leap-second list**: "This file is in the public domain." (`LICENSING.md:246-247`) | Lines 49 to 50 of `https://hpiers.obspm.fr/iers/bul/bulc/ntp/leap-seconds.list`: "COPYRIGHT STATUS OF THIS FILE" / "This file is in the public domain." | Confirmed. |
-| **CDS**: commercial use of the 20 values "is not settled by these sources" (`LICENSING.md:385-387`) | `https://cds.unistra.fr/legals/` and `.../vizier-org/licences_vizier.html` both return 404 today; the site serves a notice, "Last updated November 09, 2026", of "a cybersecurity incident within its network of servers located in Strasbourg". Archived copies (Wayback, 2026-09-09 and 2026-10-25) carry the sentences `LICENSING.md` quotes, word for word, including "The commercial usage of the data is subject to rules depending of the origin". The ReadMe files of I/311 and III/252, read from the CfA mirror, state no licence. | **Still open**, and the CDS cannot be read or, presumably, written to at its usual address today. |
+| **CDS**: commercial use of the 20 values "is not settled by these sources" (`LICENSING.md:385-387`) | `https://cds.unistra.fr/legals/` and `.../vizier-org/licences_vizier.html` both return 404 today; the site serves a notice, "Last updated November 09, 2026", of "a cybersecurity incident within its network of servers located in Strasbourg". Archived copies carry the sentences `LICENSING.md` quotes, word for word, one page each. The copy of `/legals/` (`https://web.archive.org/web/20260909122430/https://cds.unistra.fr/legals/`, "Updated at: 7 January 2026") has "The Data Sets must be cited in any work or product that uses them". The copy of the VizieR page (`https://web.archive.org/web/20261025102348/https://cds.unistra.fr/vizier-org/licences_vizier.html`) has "The commercial usage of the data is subject to rules depending of the origin", and under it a list by origin with this entry: "Tabular data, spectra or images coming from A&A (J/A+A) are free for a scientific usage." Famaey et al. 2005 is `J/A+A/430/165`, one of the three catalogues (C13). The ReadMe files of I/311 and III/252 (`https://vizier.cfa.harvard.edu/ftp/cats/I/311/ReadMe` and `.../III/252/ReadMe`, a mirror) state no licence; the second reader did not fetch them again. | **Still open**, and the CDS cannot be read or, presumably, written to at its usual address today. |
 | **Hipparcos**, the origin of most of those values | ESA, `https://www.cosmos.esa.int/web/hipparcos/catalogues`: "The Hipparcos and Tycho Catalogues are distributed under the CC BY-NC 3.0 IGO licence". ESA's archive terms, `https://www.cosmos.esa.int/web/esdc/terms-and-conditions`: "Prior to any commercial use by the User of any Data or Data Product ... a detailed request for authorisation/licence shall be made". ESA's page for the new reduction states no licence and says "A copy of the VizieR data is available from the ESA legacy archive". | **New problem (C9).** `LICENSING.md` does not mention ESA. |
 | **Reid and Brunthaler**: "no terms for them were read" (`LICENSING.md:383-385`) | The journal page, `https://iopscience.iop.org/article/10.1086/424960`: "© 2004. The American Astronomical Society. All rights reserved." arXiv (`astro-ph/0408107`) shows only its own non-exclusive licence to distribute. | **Still open as a question of terms.** The terms are now read: no licence is granted to anyone. What ships is two numbers from a table, with citation; whether two measured values need a licence is the lawyer's question, not the authors'. |
 | **Stephenson, Morrison and Hohenkerk 2016**: "The article and its electronic supplement are CC BY 4.0" (`LICENSING.md:166-168`) | The publisher's page refused automated reading (403). The full text at Europe PMC (PMC5247521): "Published by the Royal Society under the terms of the Creative Commons Attribution License http://creativecommons.org/licenses/by/4.0/". The two supplement files are listed inside that record with no licence statement of their own. Crossref lists no Creative Commons licence for the article. | Confirmed for the article. For the supplement, where Table S15 is, **by inclusion only**: no separate statement was found. |
-| **The 2020 addendum** "has no established licence" (`LICENSING.md:168-169`) | Crossref (doi:10.1098/rspa.2020.0776) lists only a text-mining policy; OpenAlex gives it as closed, no licence. | Consistent. Not shipped. |
+| **The 2020 addendum** "has no established licence" (`LICENSING.md:168-169`) | Crossref (`https://api.crossref.org/works/10.1098/rspa.2020.0776`) lists only a text-mining policy. OpenAlex's record for the same DOI gave it as closed with no licence; that record's address was not kept and the second reader did not fetch it again, so it rests on one reading. | Consistent. Not shipped. |
 | **NAIF**: may a pack derived from DE440 be redistributed (`docs/de440.md:38-40`) | `https://naif.jpl.nasa.gov/naif/rules.html`: "Redistribution of SPICE kernels distributed by NAIF is permitted as long as they have not been modified." A modified kernel must carry the modifier's name and a changed file name. "No fees or licensing are required." The page has no sentence on data derived from a kernel. | **Still open.** The rules cover kernels and modified kernels, and a refit is neither. The site repository records that the question "was sent once, on 2026-09-30 at 10:54 UTC ... No answer yet" (`docs/platform/programme/STATUS.md:1512`). |
 | **Horizons output** is "public" (`LICENSING.md:132`) | `https://ssd.jpl.nasa.gov/faq.html`: "No permissions are needed. The data provided on this site are considered public domain." It asks for a citation and that "If the data obtained is subsequently modified, that modification should be made clear." | Confirmed, and now citable. See the amended C1. |
 | **GeoNames** is CC BY 4.0 (`LICENSING.md:221-222`) | `https://download.geonames.org/export/dump/readme.txt`: "This work is licensed under a Creative Commons Attribution 4.0 License". | Confirmed. |
@@ -41,15 +41,31 @@ chart engine, @zodiacs/engine, is MIT AND CC-BY-4.0", which is the grant
 `LICENSING.md` does not: "the MIT grant weak because many commits are
 AI-written with no contributor agreement". That is for the lawyer.
 
-### C9 (new). ESA's terms for Hipparcos are non-commercial, and the record does not mention them
+### C9 (new). Whether ESA's terms reach the Hipparcos values is a question the record does not ask
+
+(Fix round: the heading used to read "ESA's terms for Hipparcos are
+non-commercial". That said more than was found.)
 
 `LICENSING.md:357-368` gives the Hipparcos new reduction as the source of
-the star values and reads only the CDS's terms for them. ESA distributes the
-Hipparcos catalogues under CC BY-NC 3.0 IGO and requires a request before
-any commercial use of data from its archives. The new reduction is van
-Leeuwen's, published through VizieR, and ESA's page for it states no
-licence; so whether ESA's terms reach those values is not settled by what
-was read. It is settled that the question exists and is not in the record.
+the star values and reads only the CDS's terms for them. What ESA's pages
+say, and no more:
+
+- The 1997 catalogues: "The Hipparcos and Tycho Catalogues are distributed
+  under the CC BY-NC 3.0 IGO licence"
+  (`https://www.cosmos.esa.int/web/hipparcos/catalogues`).
+- ESA's archive terms ask for a request before commercial use: "Prior to
+  any commercial use by the User of any Data or Data Product ... a detailed
+  request for authorisation/licence shall be made"
+  (`https://www.cosmos.esa.int/web/esdc/terms-and-conditions`). They do not
+  use the word "non-commercial" of the data as a whole.
+- The values the engine carries are from van Leeuwen's 2007 reduction,
+  through VizieR. ESA's page for that reduction
+  (`https://www.cosmos.esa.int/web/hipparcos/hipparcos-2`) states no
+  licence and says "A copy of the VizieR data is available from the ESA
+  legacy archive".
+
+So whether ESA's terms reach those values is not settled by what was read.
+What is settled is that the question exists and is not in the record.
 It matters far more for `feat/fixed-stars-hipparcos` (pull request 80, "411
 Hipparcos stars"), whose `LICENSING.md:142-143` says these sources are
 "each free to use with acknowledgement" (C7).
@@ -85,6 +101,19 @@ distinctive numbers and timestamps that left", of which "40,597 ... are
 `:21-24` says "Git history was not rewritten". The plan's figure is the
 record's. The clone read here has a depth of one commit, so the history
 itself was not inspected.
+
+### C13 (fix round). The CDS's own rule for one of the three catalogues
+
+Found by the second reader (`BREAKER.md`, S3) and not in `LICENSING.md` or
+in this review's first two passes. The archived VizieR page lists rules by
+origin, and for data from Astronomy & Astrophysics it grants scientific use
+and names no other: "Tabular data, spectra or images coming from A&A
+(J/A+A) are free for a scientific usage." Famaey et al. 2005
+(`J/A+A/430/165`) is the source of some of the 20 values
+(`LICENSING.md:359-362`). This does not close the commercial-use question.
+It sharpens it for those values. Recording it in `LICENSING.md` is for a
+later candidate and the owner; this review changes no licence file and
+nothing was sent to the CDS.
 
 ## First pass
 

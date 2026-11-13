@@ -191,8 +191,13 @@ In the live `tools/list` and instructions today:
 - `get_compatibility`: "lead with the score and verdict in plain words".
 
 On the plain wording the first is the clearest fail, the other two are
-tone-setting that the first rule also covers. The Anthropic rule names tool
-descriptions; whether it reaches the server's `instructions` is not stated.
+tone-setting that the first rule also covers. The review-criteria sentence
+names tool descriptions and does not mention the server's `instructions`.
+The policy's section 2 is wider: it applies to software that gives the
+assistant tools or capabilities through natural-language descriptions, and
+2G says "All behavioral guidance must be human-readable and clearly
+presented". That reads as covering `instructions` too. It is a reading, not
+a ruling (`BREAKER.md`, S5).
 Site pull request 971 (open, draft) rewrites 15 of the 19 descriptions,
 removes the schedule offer, and reports version 0.6.7 on its branch. It
 leaves sign-up and invite links in results. It is not live: the server
@@ -246,10 +251,12 @@ Two things sit beside it:
 - **GeoNames.** `find_birthplace` returns `source: { name: 'GeoNames
   cities15000', licence: 'CC BY 4.0', ... }`
   (`src/ai-tools/features/birthplace.ts:174-178`). It names the source and
-  the licence and gives no link to either. GeoNames's own page, read today,
-  asks users to "give credit to GeoNames when using data or web services
-  with a link or another reference to GeoNames" (Review 3), so a name
-  without a link meets "another reference".
+  the licence and gives no link to either. GeoNames's export page
+  (`https://www.geonames.org/export/`, read 2026-11-11) asks users to "give
+  credit to GeoNames when using data or web services with a link or another
+  reference to GeoNames", so a name without a link meets "another
+  reference". (Review 3 quotes GeoNames's `readme.txt`, which has the
+  licence and not this sentence.)
 - **Coordinates.** OpenAI's guidelines say "Avoid requesting raw location
   fields (for example, city or coordinates) in your input schema." Five
   tools take latitude and longitude. They are a birthplace's, not the
@@ -286,11 +293,30 @@ Two things sit beside it:
   `https://zodiacs.org/mcp/engine` beside `/mcp`
   (`bot/astrologer-hosted-tools:bots/astrologer/template/LISTING.md:27`),
   with other tool names. It was not probed here.
-- **Result size.** Anthropic's limit is about 150,000 characters per
-  result. The live `tools/list` response alone is 150,468 bytes, and the
-  portal noted "some items were left out to fit its size limits". No tool
-  result seen here came near the limit; the largest results were not
-  measured.
+- **Size, and two published rules not set against the server before**
+  (fix round, `BREAKER.md` S5). The earlier wording set the 150,468 bytes
+  of the live `tools/list` response against Anthropic's limit of about
+  150,000 characters for a tool *result*. Those are different things; no
+  tool result seen came near that limit. The rules the size bears on are
+  these.
+  - Anthropic's policy, 5B: "MCP servers must be frugal with their use of
+    tokens ... When possible, users should be given options to exclude
+    unnecessary text in the response." Observed: `tools/list` is 150,468
+    bytes, every tool carries an `outputSchema`, the portal noted "some
+    items were left out to fit its size limits", and each result this
+    review received carried a full receipt (conventions, coverage and about
+    25 convention identifiers) beside its answer. The second reader
+    measured three results at 9,089 to 15,277 bytes. The server gives no
+    option to leave the receipt out. The plan lists "short conventions
+    instead of 3 KB per result".
+  - OpenAI's guidelines: "Do not include diagnostic, telemetry, or internal
+    identifiers ... such as session IDs, trace IDs, request IDs,
+    timestamps, or logging metadata ... unless they are strictly required
+    to fulfill the user's query." Observed: every result carries a receipt
+    with a SHA-256 digest, engine and ephemeris versions and convention
+    identifiers. Whether a receipt is "strictly required" is the
+    reviewer's call. It is the product's provenance, and the server's own
+    instructions say to mention such details "only if the person asks".
 
 ### What ZOD-62 means for the listing
 
@@ -311,6 +337,7 @@ with the resubmission, not after it.
 | Mismatch | Portal description and notes against the live server (D1) | Draft note in site PR 968, not sent |
 | Thin evidence | Storage claim on production (D3) | One staging log review, 2026-10-02 |
 | Open | Coordinates in schemas, capabilities count, token footer, support address (D7, D8) | No record of a decision |
+| Open | Token frugality and receipts in every result (D8, Anthropic 5B; OpenAI's rule on identifiers) | No record of a decision |
 
 ## Not checked
 
