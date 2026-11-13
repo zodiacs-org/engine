@@ -1,0 +1,20 @@
+{
+ "name": "zodiacs",
+ "version": "0.1.0a1",
+ "releases": {
+  "0.1.0a1": [
+   {
+    "filename": "zodiacs-0.1.0a1-py3-none-any.whl",
+    "upload_time": "2026-09-30T10:14:10.841919Z",
+    "sha256": "22ba04fa82bac4f9ebff357eeac59655c39e44726c11ba05a6456ffe1bf2e464",
+    "size": 593411
+   },
+   {
+    "filename": "zodiacs-0.1.0a1.tar.gz",
+    "upload_time": "2026-09-30T10:14:12.604311Z",
+    "sha256": "8043891edced9ded247ee02a5a6884a9e8ebc7c23b7bde19817c3a2c94f841aa",
+    "size": 598895
+   }
+  ]
+ }
+}

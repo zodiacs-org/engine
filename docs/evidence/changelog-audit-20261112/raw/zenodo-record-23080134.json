@@ -1,0 +1,22 @@
+{
+ "queried": "https://zenodo.org/api/records/23080134",
+ "id": 23080134,
+ "doi": "10.5281/zenodo.23080134",
+ "conceptdoi": "10.5281/zenodo.23080133",
+ "created": "2026-10-01T10:13:57.901413+00:00",
+ "status": "published",
+ "submitted": true,
+ "title": "Zodiacs Engine (@zodiacs/engine)",
+ "version": "v0.1.1-rc.15",
+ "publication_date": "2026-10-01",
+ "license": {
+  "id": "mit-license"
+ },
+ "files": [
+  {
+   "key": "zodiacs-org/engine-v0.1.1-rc.15.zip",
+   "size": 3151916,
+   "checksum": "md5:f993fcd18500064ef8ad51155451fe9e"
+  }
+ ]
+}

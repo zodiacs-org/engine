@@ -1,0 +1,38 @@
+grid done
+ingress done
+stations done
+aspects done
+aspect-slow:Jupiter-Neptune        n=  163 med=  1398.93s p95=  6296.50s max=  26379.85s mean=  +176.48 >1s=  163 >60s=  160 unm(ref/eng)=0/0 worst=1968-04-20T04:22 TT
+aspect-slow:Jupiter-Pluto          n=  162 med=   406.71s p95=  1982.02s max=   7455.37s mean=   +47.83 >1s=  162 >60s=  147 unm(ref/eng)=0/0 worst=1922-06-20T17:32 TT
+aspect-slow:Jupiter-Saturn         n=  163 med=   459.74s p95=  3479.07s max=   5078.09s mean=   -49.49 >1s=  163 >60s=  150 unm(ref/eng)=0/0 worst=1963-09-12T06:15 TT
+aspect-slow:Jupiter-Uranus         n=  162 med=   524.91s p95=  2278.11s max=   2956.86s mean=   -93.38 >1s=  162 >60s=  159 unm(ref/eng)=0/0 worst=1946-07-30T06:15 TT
+aspect-slow:Neptune-Pluto          n=   49 med= 11380.48s p95= 38737.26s max=  47319.08s mean=  -240.28 >1s=   49 >60s=   49 unm(ref/eng)=0/0 worst=2032-02-29T09:51 TT
+aspect-slow:Saturn-Neptune         n=   89 med=  2368.33s p95=  8077.98s max=  23214.92s mean=  +235.67 >1s=   89 >60s=   88 unm(ref/eng)=0/0 worst=1983-06-07T17:38 TT
+aspect-slow:Saturn-Pluto           n=   81 med=   862.61s p95=  3423.53s max=   9809.34s mean=  +123.67 >1s=   81 >60s=   79 unm(ref/eng)=0/0 worst=1973-10-07T12:58 TT
+aspect-slow:Saturn-Uranus          n=   91 med=   996.69s p95=  5899.20s max=  23122.61s mean=  -116.92 >1s=   91 >60s=   86 unm(ref/eng)=0/0 worst=1935-10-08T03:56 TT
+aspect-slow:Uranus-Neptune         n=   43 med=  4345.06s p95= 26393.25s max=  27031.59s mean=  +221.78 >1s=   43 >60s=   42 unm(ref/eng)=0/0 worst=1993-08-20T07:56 TT
+aspect-slow:Uranus-Pluto           n=   43 med=   928.96s p95=  6014.28s max=  11618.17s mean=  +102.47 >1s=   43 >60s=   41 unm(ref/eng)=0/0 worst=1966-04-04T20:49 TT
+aspect:planet pairs 2020-2031      n= 2171 med=    63.16s p95=   349.16s max=   1468.28s mean=   +20.10 >1s= 2156 >60s= 1132 unm(ref/eng)=0/0 worst=2022-10-12T05:47 TT
+ingress:Jupiter                    n=  231 med=   283.76s p95=  1328.25s max=   2015.22s mean=    +2.15 >1s=  230 >60s=  203 unm(ref/eng)=0/0 worst=1949-06-27T18:30 TT
+ingress:Mars                       n= 1037 med=    29.61s p95=   185.35s max=   3347.15s mean=    -7.26 >1s= 1016 >60s=  243 unm(ref/eng)=0/0 worst=1988-10-23T22:02 TT
+ingress:Mercury                    n= 2236 med=    23.49s p95=   120.52s max=   1001.85s mean=    +1.89 >1s= 2179 >60s=  286 unm(ref/eng)=0/2 worst=2000-11-07T07:28 TT
+ingress:Moon                       n= 4169 med=     1.27s p95=     4.02s max=      7.64s mean=    -0.37 >1s= 2464 >60s=    0 unm(ref/eng)=1/0 worst=1900-02-28T19:05 TT
+ingress:Neptune                    n=   37 med=  8472.57s p95= 21404.58s max=  28495.76s mean=  -400.11 >1s=   37 >60s=   36 unm(ref/eng)=0/0 worst=1916-03-19T15:34 TT
+ingress:Pluto                      n=   35 med=  1758.51s p95=  5086.87s max=   6916.20s mean=   -91.72 >1s=   35 >60s=   35 unm(ref/eng)=0/0 worst=1912-10-20T08:29 TT
+ingress:Saturn                     n=  128 med=   591.42s p95=  3099.28s max=   5547.98s mean=   +72.42 >1s=  128 >60s=  120 unm(ref/eng)=0/0 worst=2042-06-21T10:27 TT
+ingress:Sun                        n= 1812 med=     9.71s p95=    29.23s max=     50.32s mean=    +4.05 >1s= 1723 >60s=    0 unm(ref/eng)=0/0 worst=2003-02-19T02:01 TT
+ingress:Uranus                     n=   61 med=  1427.49s p95=  8724.34s max=   9397.59s mean=  +175.27 >1s=   61 >60s=   61 unm(ref/eng)=0/0 worst=1969-05-20T20:57 TT
+ingress:Venus                      n= 1913 med=    19.01s p95=   133.41s max=   5124.39s mean=    +0.80 >1s= 1844 >60s=  189 unm(ref/eng)=0/0 worst=1954-10-27T10:43 TT
+lunation:Moon-Sun                  n= 3736 med=     1.81s p95=     5.59s max=     10.32s mean=    -1.35 >1s= 2656 >60s=    0 unm(ref/eng)=0/0 worst=1909-05-05T12:07 TT
+quarter:Moon-Sun                   n=  297 med=     1.18s p95=     3.43s max=      5.75s mean=    +0.28 >1s=  164 >60s=    0 unm(ref/eng)=0/0 worst=2026-06-08T10:01 TT
+station:Jupiter                    n=  277 med=    98.18s p95=   254.50s max=    325.12s mean=    +4.09 >1s=  276 >60s=  187 unm(ref/eng)=0/0 worst=1960-08-20T16:40 TT
+station:Mars                       n=  142 med=   113.18s p95=   393.35s max=    580.14s mean=   +56.97 >1s=  141 >60s=  111 unm(ref/eng)=0/0 worst=1924-07-24T11:01 TT
+station:Mercury                    n=  952 med=   126.99s p95=   383.94s max=    589.04s mean=    -1.23 >1s=  947 >60s=  719 unm(ref/eng)=0/0 worst=1916-05-25T02:33 TT
+station:Neptune                    n=  300 med=   247.11s p95=   494.78s max=    596.67s mean=   +64.35 >1s=  299 >60s=  265 unm(ref/eng)=2/0 worst=2001-05-11T01:13 TT
+station:Pluto                      n=  301 med=    44.14s p95=   109.60s max=    206.26s mean=   +16.40 >1s=  296 >60s=  102 unm(ref/eng)=0/0 worst=1994-08-05T17:08 TT
+station:Saturn                     n=  292 med=    97.34s p95=   274.54s max=    468.88s mean=   -19.32 >1s=  290 >60s=  192 unm(ref/eng)=0/0 worst=2000-09-12T11:34 TT
+station:Uranus                     n=  299 med=    96.79s p95=   303.15s max=    439.72s mean=   -29.83 >1s=  296 >60s=  208 unm(ref/eng)=0/0 worst=2001-10-30T22:56 TT
+station:Venus                      n=  190 med=   102.16s p95=   264.04s max=    381.73s mean=   -13.37 >1s=  189 >60s=  125 unm(ref/eng)=0/0 worst=1953-05-04T12:33 TT
+_sun_by_era {"1900-1949": {"n": 600, "median": 9.220920206280425, "max": 40.0425213156268}, "1950-1999": {"n": 600, "median": 9.281839145114645, "max": 50.310726690804586}, "2000-2025": {"n": 312, "median": 9.536887116337311, "max": 50.32204882154474}, "2026-2030": {"n": 60, "median": 10.96110797370784, "max": 42.7585516765248}, "2031-2050": {"n": 240, "median": 11.671429948182777, "max": 47.857382555957884}}
+_solver_consistency {"step025_vs_step5_max_s": 0.02400000812485814, "n_step025": 144, "solarReturn_vs_crossing_max_s": 0.021000124979764223, "n_solarReturn": 48}
+_moonIngresses_vs_solver {"n": 160, "max_s": 0.0}

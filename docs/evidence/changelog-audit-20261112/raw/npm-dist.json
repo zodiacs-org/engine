@@ -1,0 +1,24 @@
+{
+  "dist.shasum": "30498f08cc95550445ef2666e1324a5ac007d7d4",
+  "dist.integrity": "sha512-uOruhtGRmzAFnbaF+Kc8tPFDPZEk0cm77gLfF5Fdl78FjxkcZjvjyMrql/gTSkWFAniapdjpUoKxch4p/elc7Q==",
+  "dist.fileCount": 30,
+  "dist.unpackedSize": 282469
+}
+{
+  "dist.shasum": "e4a49148b2cedc1c21fdba324e83b76f6d6b4862",
+  "dist.integrity": "sha512-eezpBQ0NU73dsp519FZ54A1dJUNK7C+2YRtRHWmNeiKc8wDN9CHe8SIbQy37T0RqqlZIno/PfeF7Y2f8A24hsw==",
+  "dist.fileCount": 54,
+  "dist.unpackedSize": 668343
+}
+{
+  "dist.shasum": "f57e312b313f78fe43817079a146fb72da823afa",
+  "dist.integrity": "sha512-QeYb1iVORqn+/dWBcIJ/XF+myvzhf9Avyb1OrP/wIITTkdfA2b6cESCQiyBRx+u84JI63wW3qb945PQl6V+xHw==",
+  "dist.fileCount": 69,
+  "dist.unpackedSize": 923282
+}
+{
+  "dist.shasum": "72b7a0266f59a25a21f4c72f6a50f41e5784dc27",
+  "dist.integrity": "sha512-npoQ6scEH1Ozdix4H8juvsXqpYIMypmCU3CRSvYJ7cI8vDX2A9tPDSDaasqDSt9niPgQoW/y93vRWw62m/Kj7A==",
+  "dist.fileCount": 74,
+  "dist.unpackedSize": 991915
+}
