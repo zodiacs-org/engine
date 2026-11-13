@@ -1,0 +1,62 @@
+body                     n  lon med  lon p95  lon max  lat max  ang max >bound  spd max spd>b
+Sun                   1711    0.435    1.220    1.974    1.743    2.105      0   0.1558     0
+Moon                  1711    0.641    1.972    4.630    1.218    4.637      0   1.6171    19
+Mercury               1711    1.692    5.111   10.858    7.200   11.910      4   1.9983     0
+Venus                 1711    1.002    5.535   20.428    8.867   20.544     29   0.6675     5
+Mars                  1711    0.764    4.669   11.816   11.251   14.054     70   0.7143     2
+Jupiter               1711    2.181    5.697   10.143   13.601   13.855      1   1.1812    15
+Saturn                1711    2.894    9.808   12.697   21.408   21.960    121   1.7414    54
+Uranus                1711    1.898    6.070   11.885   18.975   19.447      0   4.6319    48
+Neptune               1711   11.385   15.435   18.251   10.044   20.512      0   0.9785    76
+Pluto                 1711    1.417    2.904    4.912    1.565    5.030      0   0.1552    18
+North Node (true)     1711    5.083   11.234   19.195      nan      nan      2      nan  None
+South Node consistency 2.0463630789890885e-10
+== visible
+  Sun {"n": 1711, "excluded": 0, "lon": {"n": 1711, "median": 0.435, "p95": 1.22, "max": 1.974}, "angle": {"n": 1711, "median": 0.7, "p95": 1.393, "max": 2.105}, "speed": {"n": 1711, "median": 0.052, "p95": 0.118, "max": 0.156}, "over_bound": 0, "speed_over_bound": 0, "excluded_utc": []}
+  Moon {"n": 1711, "excluded": 0, "lon": {"n": 1711, "median": 0.641, "p95": 1.972, "max": 4.63}, "angle": {"n": 1711, "median": 0.783, "p95": 2.013, "max": 4.637}, "speed": {"n": 1711, "median": 0.227, "p95": 0.727, "max": 1.617}, "over_bound": 0, "speed_over_bound": 19, "excluded_utc": []}
+  Mercury {"n": 1710, "excluded": 1, "lon": {"n": 1710, "median": 1.692, "p95": 5.111, "max": 10.858}, "angle": {"n": 1710, "median": 2.238, "p95": 5.69, "max": 11.91}, "speed": {"n": 1710, "median": 0.438, "p95": 1.211, "max": 1.998}, "over_bound": 4, "speed_over_bound": 0, "excluded_utc": ["2020-05-04T12:36:43.000Z"]}
+  Venus {"n": 1710, "excluded": 1, "lon": {"n": 1710, "median": 1.002, "p95": 5.538, "max": 20.428}, "angle": {"n": 1710, "median": 1.596, "p95": 7.179, "max": 20.544}, "speed": {"n": 1710, "median": 0.047, "p95": 0.256, "max": 0.667}, "over_bound": 29, "speed_over_bound": 5, "excluded_utc": ["2024-06-04T10:32:02.000Z"]}
+  Mars {"n": 1709, "excluded": 2, "lon": {"n": 1709, "median": 0.765, "p95": 4.67, "max": 11.816}, "angle": {"n": 1709, "median": 1.442, "p95": 6.009, "max": 14.054}, "speed": {"n": 1709, "median": 0.026, "p95": 0.126, "max": 0.588}, "over_bound": 70, "speed_over_bound": 1, "excluded_utc": ["2023-11-17T07:47:06.000Z", "2030-05-24T08:44:45.000Z"]}
+  Jupiter {"n": 1710, "excluded": 1, "lon": {"n": 1710, "median": 2.178, "p95": 5.697, "max": 10.143}, "angle": {"n": 1710, "median": 3.771, "p95": 7.603, "max": 13.855}, "speed": {"n": 1710, "median": 0.011, "p95": 0.033, "max": 0.902}, "over_bound": 1, "speed_over_bound": 14, "excluded_utc": ["2019-12-28T09:21:43.000Z"]}
+  Saturn {"n": 1710, "excluded": 1, "lon": {"n": 1710, "median": 2.891, "p95": 9.809, "max": 12.697}, "angle": {"n": 1710, "median": 10.16, "p95": 18.734, "max": 21.96}, "speed": {"n": 1710, "median": 0.01, "p95": 0.026, "max": 1.274}, "over_bound": 121, "speed_over_bound": 53, "excluded_utc": ["1945-07-06T16:37:07.000Z"]}
+  Uranus {"n": 1708, "excluded": 3, "lon": {"n": 1708, "median": 1.897, "p95": 6.074, "max": 11.885}, "angle": {"n": 1708, "median": 5.611, "p95": 14.243, "max": 19.447}, "speed": {"n": 1708, "median": 0.004, "p95": 0.013, "max": 0.84}, "over_bound": 0, "speed_over_bound": 45, "excluded_utc": ["2020-04-26T04:45:37.000Z", "2025-05-18T07:31:11.000Z", "2030-06-09T03:10:38.000Z"]}
+  Neptune {"n": 1711, "excluded": 0, "lon": {"n": 1711, "median": 11.385, "p95": 15.435, "max": 18.251}, "angle": {"n": 1711, "median": 14.508, "p95": 17.93, "max": 20.512}, "speed": {"n": 1711, "median": 0.005, "p95": 0.012, "max": 0.978}, "over_bound": 0, "speed_over_bound": 76, "excluded_utc": []}
+  Pluto {"n": 1711, "excluded": 0, "lon": {"n": 1711, "median": 1.417, "p95": 2.904, "max": 4.912}, "angle": {"n": 1711, "median": 1.529, "p95": 2.886, "max": 5.03}, "speed": {"n": 1711, "median": 0.002, "p95": 0.006, "max": 0.155}, "over_bound": 0, "speed_over_bound": 18, "excluded_utc": []}
+== nodefl
+  Sun {"lon": {"n": 1711, "median": 0.435, "p95": 1.22, "max": 1.974}, "angle": {"n": 1711, "median": 0.7, "p95": 1.393, "max": 2.105}, "speed": {"n": 1711, "median": 0.052, "p95": 0.118, "max": 0.156}, "over_bound": 0, "speed_over_bound": 0}
+  Moon {"lon": {"n": 1711, "median": 0.641, "p95": 1.972, "max": 4.63}, "angle": {"n": 1711, "median": 0.783, "p95": 2.013, "max": 4.637}, "speed": {"n": 1711, "median": 0.227, "p95": 0.727, "max": 1.617}, "over_bound": 0, "speed_over_bound": 19}
+  Mercury {"lon": {"n": 1711, "median": 1.699, "p95": 5.108, "max": 10.859}, "angle": {"n": 1711, "median": 2.236, "p95": 5.69, "max": 11.91}, "speed": {"n": 1711, "median": 0.44, "p95": 1.211, "max": 1.998}, "over_bound": 4, "speed_over_bound": 0}
+  Venus {"lon": {"n": 1711, "median": 1.0, "p95": 5.534, "max": 20.427}, "angle": {"n": 1711, "median": 1.6, "p95": 7.179, "max": 20.544}, "speed": {"n": 1711, "median": 0.047, "p95": 0.256, "max": 0.667}, "over_bound": 29, "speed_over_bound": 5}
+  Mars {"lon": {"n": 1711, "median": 0.77, "p95": 4.67, "max": 11.816}, "angle": {"n": 1711, "median": 1.444, "p95": 6.003, "max": 14.054}, "speed": {"n": 1711, "median": 0.026, "p95": 0.126, "max": 0.588}, "over_bound": 70, "speed_over_bound": 1}
+  Jupiter {"lon": {"n": 1711, "median": 2.169, "p95": 5.692, "max": 10.142}, "angle": {"n": 1711, "median": 3.776, "p95": 7.604, "max": 13.855}, "speed": {"n": 1711, "median": 0.011, "p95": 0.03, "max": 0.062}, "over_bound": 1, "speed_over_bound": 1}
+  Saturn {"lon": {"n": 1711, "median": 2.901, "p95": 9.808, "max": 12.696}, "angle": {"n": 1711, "median": 10.164, "p95": 18.734, "max": 21.96}, "speed": {"n": 1711, "median": 0.01, "p95": 0.025, "max": 0.043}, "over_bound": 121, "speed_over_bound": 20}
+  Uranus {"lon": {"n": 1711, "median": 1.893, "p95": 6.077, "max": 11.883}, "angle": {"n": 1711, "median": 5.58, "p95": 14.234, "max": 19.448}, "speed": {"n": 1711, "median": 0.003, "p95": 0.01, "max": 0.019}, "over_bound": 0, "speed_over_bound": 0}
+  Neptune {"lon": {"n": 1711, "median": 11.378, "p95": 15.435, "max": 18.251}, "angle": {"n": 1711, "median": 14.504, "p95": 17.93, "max": 20.512}, "speed": {"n": 1711, "median": 0.004, "p95": 0.01, "max": 0.015}, "over_bound": 0, "speed_over_bound": 9}
+  Pluto {"lon": {"n": 1711, "median": 1.419, "p95": 2.905, "max": 4.913}, "angle": {"n": 1711, "median": 1.529, "p95": 2.89, "max": 5.031}, "speed": {"n": 1711, "median": 0.002, "p95": 0.005, "max": 0.008}, "over_bound": 0, "speed_over_bound": 0}
+== near_sun
+  Sun {"n": 1711, "speed_over": 0, "speed_over_far": 0, "speed_max_far": null, "speed0_over_far": 0, "speed0_max_far": null}
+  Moon {"n": 83, "speed_over": 2, "speed_over_far": 17, "speed_max_far": 1.6170673325177631, "speed0_over_far": 17, "speed0_max_far": 1.6170685112228966}
+  Mercury {"n": 496, "speed_over": 0, "speed_over_far": 0, "speed_max_far": 1.9983321012659871, "speed0_over_far": 0, "speed0_max_far": 1.9981821110377496}
+  Venus {"n": 246, "speed_over": 1, "speed_over_far": 4, "speed_max_far": 0.6580422161732713, "speed0_over_far": 4, "speed0_max_far": 0.6580209994808683}
+  Mars {"n": 145, "speed_over": 1, "speed_over_far": 1, "speed_max_far": 0.5877081339349388, "speed0_over_far": 1, "speed0_max_far": 0.5876936947970535}
+  Jupiter {"n": 106, "speed_over": 14, "speed_over_far": 1, "speed_max_far": 0.06178749390528537, "speed0_over_far": 1, "speed0_max_far": 0.06175478483783081}
+  Saturn {"n": 109, "speed_over": 33, "speed_over_far": 21, "speed_max_far": 0.04315260775911156, "speed0_over_far": 19, "speed0_max_far": 0.04318708488426637}
+  Uranus {"n": 105, "speed_over": 48, "speed_over_far": 0, "speed_max_far": 0.01886913742055185, "speed0_over_far": 0, "speed0_max_far": 0.018832597561413422}
+  Neptune {"n": 92, "speed_over": 65, "speed_over_far": 11, "speed_max_far": 0.01522931233921554, "speed0_over_far": 9, "speed0_max_far": 0.015050149158923887}
+  Pluto {"n": 75, "speed_over": 18, "speed_over_far": 0, "speed_max_far": 0.00874543547979556, "speed0_over_far": 0, "speed0_max_far": 0.007779850875522243}
+angles {"asc": {"n": 1029, "median": 0.0002958435288746841, "p95": 0.001182481410069157, "max": 0.01575241431055474}, "mc": {"n": 1029, "median": 0.00031393747121910565, "p95": 0.0010710091373766772, "max": 0.002224778108939063}}
+points {"Vertex": {"n": 1029, "median": 0.0002622807187435683, "p95": 0.0012692287054960607, "max": 0.020738064449687954}, "East Point": {"n": 1029, "median": 0.0003223701241950039, "p95": 0.0010726413165684783, "max": 0.0023577761567139532}, "Mean Node": {"n": 1029, "median": 0.00035099710657959804, "p95": 0.0011873145922436379, "max": 0.0024941973606473766}, "Black Moon Lilith": {"n": 1029, "median": 0.00035099383239867166, "p95": 0.0011873555195052177, "max": 0.0024942562959040515}, "Black Moon Lilith lat": {"n": 1029, "median": 8.824940778140444e-10, "p95": 6.303757515979669e-09, "max": 1.6550760761901984e-08}}
+  whole                        n=1029 max=0.00000" p95=0.00000
+  placidus                     n=1029 max=0.01575" p95=0.00156
+  porphyry                     n=1029 max=0.01575" p95=0.00132
+  equal                        n=1029 max=0.01575" p95=0.00118
+  equal-mc                     n=1029 max=0.00222" p95=0.00107
+  vehlow                       n=1029 max=0.01575" p95=0.00118
+  koch                         n=1029 max=0.06752" p95=0.00208
+  regiomontanus                n=1029 max=0.01575" p95=0.00173
+  campanus                     n=1029 max=0.01575" p95=0.00148
+  topocentric                  n=1029 max=0.01575" p95=0.00152
+  alcabitius                   n=1029 max=0.01575" p95=0.00134
+  morinus                      n=1029 max=0.00250" p95=0.00120
+  meridian                     n=1029 max=0.00250" p95=0.00120
+house outliers >1": 0 []

@@ -2,7 +2,7 @@
   "what": "A broad sample of calc() geocentric apparent positions (true ecliptic of date) and of the Sun's and the Moon's event times against JPL DE421, beside the published measured bounds, which are the largest differences seen on the 32-instant Horizons corpus (docs/evidence/calc-api/rc16).",
   "measured": "2026-11-13",
   "build": "1.1.0-rc.3 archive (source commit cc910b3, identical src to bc0b5a7), astronomy-engine 2.1.19",
-  "reference": "JPL DE421 with jplephem 2.24 and pyerfa 2.0.1.5: light time, solar deflection, annual aberration, IAU 2006/2000A to the true ecliptic of date; Mars to Pluto as system barycentres; each instant at the engine's own TT and UT1. Calibrated against the 140 committed Horizons DE441 L1 vectors inside 1900 to 2050: Sun to Saturn within 0.008 arcseconds, Uranus to Pluto within 0.26 arcseconds.",
+  "reference": "JPL DE421 with jplephem 2.24 and pyerfa 2.0.1.5: light time, solar deflection, annual aberration, IAU 2006/2000A to the true ecliptic of date; Mars to Pluto as system barycentres; each instant at the engine's own TT and UT1. Calibrated against the 140 committed Horizons DE441 L1 vectors inside 1900 to 2050: in longitude Sun to Saturn within 0.008 arcseconds and Uranus to Pluto within 0.26 arcseconds; in latitude within 0.018 and 0.13 arcseconds (outputs/calibrate-l1.txt).",
   "sample": {
     "instantsPerBody": 1711,
     "sets": {
@@ -13,7 +13,7 @@
   },
   "notes": [
     "angle is the angle between the two directions, as bounds.position is defined",
-    "speeds compare the longitude rate with a central difference of +/- 1 minute of the reference without solar deflection (ephemeris only); the engine applies no deflection (docs/calc.md), so near conjunction with the Sun the difference from a deflected reference is larger",
+    "speeds compare the longitude rate alone (no cos latitude factor, no latitude rate) with a central difference of +/- 1 minute of the reference without solar deflection (ephemeris only); the published bounds.speed is the angular rate difference hypot(dLonRate * cos lat, dLatRate), a different metric, so these show the bounds exceeded in longitude rate, not angular rate maxima; the true node's speed was not compared; the engine applies no deflection (docs/calc.md), so near conjunction with the Sun the difference from a deflected reference is larger",
     "the true node is compared with the ascending node of the osculating geocentric orbit of the DE421 Moon; the frame choice moves that node by several arcseconds, so its figure is definition-sensitive",
     "event times are absolute differences in seconds of TT; reference events are found independently of the engine"
   ],
