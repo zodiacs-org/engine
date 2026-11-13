@@ -309,7 +309,7 @@ the true ecliptic of date with JPL DE421 at 1,711 instants per body from 1900
 to 2050 (`docs/evidence/broad-sample-2026-11-13/`). Where its largest
 difference is above the published bound, the two are:
 
-| Body | Published `bounds.position`, largest seen on 32 instants | Largest on 1,711 instants, 1900 to 2050 | Published `bounds.speed`, largest seen on 32 instants | Largest on 1,711 instants, 1900 to 2050 |
+| Body | Published `bounds.position`, largest seen on 32 instants | Largest on 1,711 instants, 1900 to 2050 | Published `bounds.speed` (angular rate), largest seen on 32 instants | Largest longitude rate difference on 1,711 instants, 1900 to 2050 |
 | --- | ---: | ---: | ---: | ---: |
 | Moon | 8.3″ | | 1.1″ a day | 1.62″ a day |
 | Mercury | 9.3″ | 11.91″ | 2.2″ a day | |
@@ -318,13 +318,23 @@ difference is above the published bound, the two are:
 | Jupiter | 13″ | 13.86″ | 0.061″ a day | 0.062″ a day |
 | Saturn | 18″ | 21.96″ | 0.03″ a day | 0.043″ a day |
 | Neptune | 21″ | | 0.013″ a day | 0.015″ a day |
-| True node | 16″ | 19.2″ | | |
+| True node | 16″ | 19.2″ | not compared (`null`) | not compared |
 
-An empty cell is a broader-sample figure within the published bound. The Sun,
-Uranus and Pluto stay within both of theirs. The speeds there compare the rate
-of longitude with a reference without solar deflection, so they are the
-ephemeris's difference alone; within about 10° of the Sun the engine's lack of
-deflection adds more. The true node's figure depends on how the reference's
+An empty cell in a measured column means the broader sample stayed within that
+published bound. The true node has no measured speed bound (its `value` is
+null) and its speed was compared in neither sample. The Sun, Uranus and Pluto
+stay within both of theirs.
+
+The two speed columns are not the same metric. The published `bounds.speed`
+is the largest angular rate difference, hypot(Δ(longitude rate) × cos
+latitude, Δ(latitude rate)), on the 32 instants
+(`docs/evidence/calc-api/tools/compare.py`). The broader sample measured the
+difference in the rate of longitude alone, in arcseconds a day, with no
+cos latitude factor and no latitude rate, against a reference without solar
+deflection, so its figures are the ephemeris's difference in longitude rate
+alone; within about 10° of the Sun the engine's lack of deflection adds more.
+Its speed figures show that the published bounds are exceeded in longitude
+rate; they are not angular rate maxima. The true node's figure depends on how the reference's
 osculating node is defined, which moves it by several arcseconds. The values
 `calc()` returns are unchanged: they are still the 32-instant maxima, and
 their `basis` says so.
@@ -674,8 +684,9 @@ the largest rate difference on them is 0.013″ (Neptune) to 0.060″ a day
 in the true-of-date frames (Neptune's 0.051″ against 0.013″ in the other
 frames). The broader DE421 sample of 1,711 instants per body from 1900 to 2050
 finds more for some bodies: Saturn 21.96″, Venus 20.54″, Mars 14.05″,
-Jupiter 13.86″ and Mercury 11.91″, and rates up to 0.043″ a day for Saturn,
-0.062″ for Jupiter and 0.015″ for Neptune (see Bounds).
+Jupiter 13.86″ and Mercury 11.91″, and longitude rate differences up to
+0.043″ a day for Saturn, 0.062″ for Jupiter and 0.015″ for Neptune, a
+different metric from the angular rates above (see Bounds).
 
 The frame transforms were checked against ERFA 2.0.1 on the engine's own
 output, and all twelve checks pass on this version's build. Those without
