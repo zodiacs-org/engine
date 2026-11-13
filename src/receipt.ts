@@ -1282,21 +1282,25 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     expected.push("polar-fallback");
   if (current && outsideReferenceSpan(new Date(receipt.instant as string)))
     expected.push("outside-reference-span");
-  // "delta-t-extrapolated" belongs where the record's own ΔT and time scale show
-  // a UTC or UT1 instant on a forecast ΔT (src/birth-input.ts). Records written
-  // before the flag lack it there, so it is allowed there, and refused anywhere else.
-  const forecast =
-    timeBasis &&
-    scale !== "tt" &&
-    result.timeScale?.basis === "delta-t" &&
-    (result.deltaT?.segment === "extrapolated" || result.deltaT?.segment === "predicted");
-  if (forecast && resultFlags.includes("delta-t-extrapolated")) expected.push("delta-t-extrapolated");
-  if (!sameFlags(expected, resultFlags)) fail("inconsistent_result");
   const engine = record(receipt.engine);
   // Receipts in the current set must say which ephemeris computed them.
   fields(engine, current ? ["name", "version", "ephemeris"] : ["name", "version"]);
   if (engine.name !== "@zodiacs/engine") fail("unsupported_feature");
   const engineVersion = version(engine.version);
+  // "delta-t-extrapolated" belongs where the record's own ΔT and time scale show
+  // an extrapolated ΔT under its result: on UTC or UT1 input, or on TT input
+  // with houses (src/ephemeris.ts). An engine after 1.1.0-rc.7 sets it there, so
+  // its records must carry it; earlier records lack it, so it is allowed there.
+  // It is refused anywhere else.
+  if (
+    timeBasis &&
+    (scale !== "tt" || result.houses) &&
+    result.timeScale?.basis === "delta-t" &&
+    result.deltaT?.segment === "extrapolated" &&
+    (resultFlags.includes("delta-t-extrapolated") || compareVersions(engineVersion, "1.1.0-rc.7") > 0)
+  )
+    expected.push("delta-t-extrapolated");
+  if (!sameFlags(expected, resultFlags)) fail("inconsistent_result");
   if (current) {
     const ephemeris = record(engine.ephemeris);
     fields(ephemeris, ["name", "version"]);

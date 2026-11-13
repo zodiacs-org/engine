@@ -81,7 +81,7 @@ export type HouseSystem =
   | "alcabitius"
   | "morinus"
   | "meridian";
-/** `"delta-t-extrapolated"`: a UTC or UT1 instant whose TT rests on an extrapolated ΔT (docs/time.md). */
+/** `"delta-t-extrapolated"`: a result that moves with a ΔT extrapolated past the IERS table (docs/time.md). */
 export type ChartFlag =
   | "dst-gap"
   | "dst-fold"

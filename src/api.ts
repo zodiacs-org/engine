@@ -86,12 +86,12 @@ export function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } 
     expected.push("polar-fallback");
   }
   if (outsideReferenceSpan(input.utc)) expected.push("outside-reference-span");
-  // "delta-t-extrapolated" is allowed where the instant rests on an extrapolated
-  // ΔT, as a natal receipt allows it; a chart from a release before the flag
-  // lacks it there. Any other flag the chart has beyond these fails below.
+  // "delta-t-extrapolated" is allowed where the chart rests on an extrapolated
+  // ΔT (on TT input, through its houses), as a natal receipt allows it; a chart
+  // from a release before the flag lacks it there. Any other flag fails below.
   if (
     resultFlags.values.length > expected.length &&
-    deltaTExtrapolated(timeBasis(+input.utc, input.timeScale, input.deltaT))
+    deltaTExtrapolated(timeBasis(+input.utc, input.timeScale, input.deltaT), hasHouses)
   )
     expected.push("delta-t-extrapolated");
   assertDerivedFlags(inputFlags?.values ?? [], expected);

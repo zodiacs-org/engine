@@ -283,6 +283,7 @@ interface EventsResult {
     readonly kind: "longitude-crossing";
     readonly events: readonly CalcEvent[];
     readonly samples: number;
+    readonly flags: readonly ChartFlag[];
     readonly bounds: {
         readonly timing: CalcBound;
     };
