@@ -99,7 +99,8 @@ runs, so CI starts the check with node directly.
 | 1.0.0 | `c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6` | 288,063 | 74 | `ca2c8cefbaa1a9d6f5f78ee86713e813633942ca` | `38d3185` | Release, merged; on npm as `latest` |
 | 1.1.0-rc.1 | `52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6` | 292,721 | 77 | `c41706266caf4dde7e03aaa18c08acd569d19a7e` | `6ec3464` | Candidate, merged |
 | 1.1.0-rc.2 | `c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c` | 318,004 | 90 | `806f76b43c0ee652016fe1b522c02d6f6e9c7ae5` | `59c6ea9` | Candidate, merged |
-| 1.1.0-rc.3 | `3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590` | 331,979 | 94 | `cc910b3775e279222e23af0b395bb6f2b51a3c3a` | "Carry the packed 1.1.0-rc.3 tarball" | Candidate under review |
+| 1.1.0-rc.3 | `3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590` | 331,979 | 94 | `cc910b3775e279222e23af0b395bb6f2b51a3c3a` | `d2794d2` | Candidate, merged |
+| 1.1.0-rc.8 | `53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43` | 2,696,971 | 97 | `e3939499d603e511f1f23f7198eb425bc5f48359` | "Carry the packed 1.1.0-rc.8 tarball" | Candidate, draft, under review |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -311,3 +312,27 @@ on the source commit (CI run 42738993989, Conformance 42738993913 and Atlas
 42738993899), and two reviews of the cut and a re-check of their fixes had been
 acted on. It is not to be published on npm until the owner approves it. The
 record is in `docs/evidence/de440-20261110/`.
+
+1.1.0-rc.8 is the next candidate for 1.1.0 on this line of history: the
+sealed DE440 pack, shipped in the package through a new entry point,
+`@zodiacs/engine/de440/pack`, so that positions from JPL's DE440 need no pack
+from the caller; seventeen public entry points. The numbers 1.1.0-rc.4 to
+1.1.0-rc.7 name candidates carried on other branches (pull requests 91 and
+95 among them), which are not in this history: a branch that carries one of
+them and this branch cannot both merge as they are, because `archives.json`
+is append-only, and whichever merges second is cut again under a new number.
+The archive is 2,696,971 bytes, 4,477,785 unpacked in 97 files, 8.1 times
+1.1.0-rc.3's packed size and 3.9 times its unpacked size: 3,319,552 of those
+bytes are the pack, as base64 text, which the package gate now holds to its
+exact size and digest, and the rest, 1,158,233, is under a cap of 1,165,000,
+raised from 1,145,000 with a new budget for the entry; the size and both
+figures are for the owner to approve (CHANGELOG.md). It was packed once, from
+clean clones of its source commit, each installed with `npm ci`, which packed
+the same bytes on Node 22.22.2, 20.19.0 and 24.21.0; the carried file is the
+Node 22.22.2 one. It was carried after the gate commands had passed locally
+on the source commit, and before the gate workflows had run on it or any
+review had read it: it is a draft for the owner, who decides whether it
+stands. It is not to be published on npm until the owner approves it, and
+its licensing record leaves the redistribution of the pack as an open
+question (LICENSING.md, *DE440 pack*). The record is in
+`docs/evidence/1.1.0-rc.8-20261113/`.
