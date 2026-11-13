@@ -12,7 +12,7 @@ the release it leads to.
 - **The entry points.** The seventeen that `package.json` exports and the
   README documents: the root, `./calc`, `./conventions` (from 1.1.0-rc.1),
   `./crossings`, `./de440` (from 1.1.0-rc.3), `./de440/pack` (from
-  1.1.0-rc.8), `./deltat`, `./geo`,
+  1.1.0-rc.9), `./deltat`, `./geo`,
   `./houses`, `./lite` (from 1.1.0-rc.2), `./receipt`, `./sky`,
   `./techniques`, `./time` (from 1.1.0-rc.2), `./timing`, `./vedic` and
   `./window`. `./internal` and
@@ -156,6 +156,16 @@ and a record's fields change only with a new conventions set; a chart may
 gain a field in a minor release without any record changing
 (`createNatalEnvelope` keeps the fields its set names). An id is never reused
 for a different shape.
+
+One field's values were widened inside the current sets, without a new set:
+from 1.1.0-rc.6 `localResolution.policy.fold` may say `"later"` as well as
+`"earlier"`. The record's shape and every record written before are
+unchanged, and a `"later"` record is written only for a birth in a repeated
+hour whose second pass the caller chose. Engines from before the choice
+refuse such a record as `unsupported_feature` and do not misread it;
+1.1.0-rc.1 and 1.1.0-rc.3 were run
+(`docs/evidence/1.1.0-rc.6-20261111/later-receipt-on-rc1.json` and
+`later-receipt-on-rc3.json`).
 
 The other ids name values the engine makes and does not read back:
 `./calc`'s `CALC_RECEIPT_SCHEMA` (a receipt's `request` can be passed back to

@@ -1,52 +1,84 @@
 # Engine changelog
 
-## 1.1.0-rc.8 (unreleased candidate)
+## 1.1.0-rc.9 (unreleased candidate)
 
-The next candidate for 1.1.0, on 1.1.0-rc.3 (main at `8da3a4e`, with pull
-request 100's conformance run at `7d951d7`): the sealed DE440 pack, shipped
-in the package, with seventeen public entry points. The numbers 1.1.0-rc.4 to
-1.1.0-rc.7 name candidates on other branches of the repository; this one
-contains none of them, and none of their changes. It is a draft for the
-owner, and is not to be published on npm until the owner approves it. Checks:
-`docs/evidence/1.1.0-rc.8-20261113/`.
+The next candidate for 1.1.0 after 1.1.0-rc.7, which it contains: the sealed
+DE440 pack, shipped in the package, and the root entry computing on it by
+default. It is a draft for the owner, and is not to be published on npm until
+the owner approves it. Checks: `docs/evidence/1.1.0-rc.9-20261114/`.
 
-- **`@zodiacs/engine/de440/pack`**, a new entry point, ships the pack that
-  1.1.0-rc.3 left to the caller: `de440-1790-2210.v2.zeph`, 2,489,664 bytes,
-  SHA-256 `51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7`,
-  the Chebyshev series zodiacs.org's pack compiler 2.0.0 refits from NAIF's
-  `de440.bsp` for 1790 to 2210. `openShippedDe440Pack()` opens it with
-  `openDe440Pack`, which refuses the bytes unless their SHA-256 is that one,
-  and resolves to the source for the root's `withEphemeris`;
-  `de440PackBytes()` gives the bytes and `DE440_PACK` describes them. The
-  bytes are base64 text in the entry's own file, `dist/de440-pack.js`, which
-  nothing else in the package imports. The entry fetches nothing.
-- **Accuracy against Horizons.** A chart computed inside `withEphemeris` on
-  the shipped pack is within 1″ in longitude and in latitude of JPL Horizons
-  (DE441, in the IAU 2006/2000A true ecliptic of date) at all 240 L1 vectors
-  of the conformance suite: 24 TT instants from 1851 to 2148, the Sun, the
-  Moon and the planets, Mars to Pluto as system barycentres. The largest
-  differences are 0.0127″ in longitude and 0.0011″ in latitude, both the
-  Moon's (`src/de440-pack.test.ts`, which enforces them). The vectors do not
-  test the true node, speeds, or instants outside those years.
-- **What does not change.** The root's own positions, outside
-  `withEphemeris`, are astronomy-engine's, and no value of 1.1.0-rc.3
-  changes: on the same 240 vectors they pass 48, as before. Making DE440 the
-  source of a plain `natalChart` call is not part of this candidate. The
-  functions that refuse inside `withEphemeris` (the calc entry, the sky
-  entry's rising, setting and planetary hours, the vedic entry's
-  star-anchored ayanamsas and `vargaSensitivity`, the window entry's
-  `birthWindow`) still refuse, so no receipt of `calc()` carries a bound for
-  a DE440 position. A pack covers 1790 to 2210 and a source refuses instants
-  outside it; `EPHEMERIS_SPAN` is astronomy-engine's.
-- **`@zodiacs/engine/de440`** has the same API. With a second entry loading
-  its code, the build moves that code from `dist/de440.js` into a chunk the
-  two share, which `dist/de440.js` re-exports.
-- **Conformance.** The suite's adapter for this engine now answers the
-  position requests from the shipped pack, with nothing supplied to it: 459
-  of the 500 vectors pass, none fails and 41 are unsupported, where
-  1.1.0-rc.3 had 267, 192 and 41. Started with `--ephemeris
-  astronomy-engine` it runs the root's own positions, and those results (48
-  pass, 192 fail of the 240) are committed beside the first and checked in
+There is no 1.1.0-rc.8 archive. 1.1.0-rc.8 was a draft cut on 1.1.0-rc.3 in
+pull request 101 that shipped the pack behind `withEphemeris` only: a plain
+call still computed on astronomy-engine. Before it was reviewed, main moved
+to 1.1.0-rc.7, and its archive, which held none of 1.1.0-rc.6's or
+1.1.0-rc.7's changes, was withdrawn where the branch joined main. The number
+is not used again (`artifacts/README.md`).
+
+- **DE440 by default.** A call in the root entry outside `withEphemeris`
+  (`natalChart`, `positions` and the functions built on them, the crossing
+  searches, `moonPhase`, and the opt-in entries that build on them) takes the
+  Sun, the Moon, the planets and the true node from the shipped pack when its
+  instant is at least a day inside the pack's coverage, which is 1790 to 2210,
+  and from astronomy-engine otherwise. Nothing is opened, supplied or fetched
+  by the caller, and no environment variable is read. A chart from the pack
+  names it in `chart.ephemeris` (`jpl-de440`, with the pack's SHA-256), and
+  its receipt is a DE440 receipt, which engines before 1.1.0-rc.3 refuse; a
+  chart from astronomy-engine has no `ephemeris` property, as before.
+- **Positions change.** `docs/versioning.md` lets a value change in a minor
+  release when the engine computes it more accurately, with its size listed.
+  Inside the pack's years every default position of the root moves from
+  astronomy-engine's value to DE440's. The largest such moves found by the
+  sweep of 1.1.0-rc.7, which compared astronomy-engine's apparent places with
+  DE440 at noon TT on each of the 146,097 days from 1800-01-01 to 2199-12-31
+  (`docs/evidence/de440-sweep-20261111/`), are, in arcseconds: Sun 3.4, Moon
+  12, Mercury 17, Venus 24, Mars 23, Jupiter 17, Saturn 24, Uranus 20,
+  Neptune 22, Pluto 30, the true node 33. (The sweep read the kernel; the
+  pack's own places were not swept, and 1790 to 1799 and 2200 to 2209 were
+  not in it.) Mars to Pluto become planetary-system barycentres. Speeds,
+  aspects, house placements near a cusp, ingress and return times move with
+  them. `setDefaultEphemeris("astronomy-engine")` gives 1.1.0-rc.7's values
+  at every instant, to the bit.
+- **Accuracy against Horizons.** A plain `natalChart` is within 1″ in
+  longitude and in latitude of JPL Horizons (DE441, in the IAU 2006/2000A
+  true ecliptic of date) at all 240 L1 vectors of the conformance suite: 24
+  TT instants from 1851 to 2148, the Sun, the Moon and the planets, Mars to
+  Pluto as system barycentres. The largest differences are 0.0127″ in
+  longitude and 0.0011″ in latitude, both the Moon's
+  (`src/de440-default.test.ts`, which enforces them; the same on the package
+  installed from its archive, `docs/evidence/1.1.0-rc.9-20261114/`). On
+  astronomy-engine 48 of the 240 pass. The vectors do not test the true node,
+  speeds, or instants outside those years.
+- **The fallback, and what says so.** New in the root: `defaultEphemeris()`
+  reports the default (`"de440"` or `"astronomy-engine"`), whether the pack
+  opened, its SHA-256, the two instants between which it is used, and why it
+  did not open if it did not; `setDefaultEphemeris(name)` chooses. If the
+  pack's bytes are not the sealed pack's, or the runtime cannot decode them,
+  the engine computes on astronomy-engine, does not throw, and every chart
+  says which ephemeris it came from. A search across an end of the pack reads
+  two ephemerides, one on each side (`docs/de440.md`, *The default source*).
+- **What stays on astronomy-engine.** The calc entry (`calc`, `houses`,
+  `chart`, `events`), `birthWindow`, the sky entry's rising, setting and
+  planetary hours, and the vedic entry's star-anchored ayanamsas and
+  `vargaSensitivity` compute as before, with the bounds measured on
+  astronomy-engine, and name it; they still refuse inside `withEphemeris`. A
+  default `calc()` position and the root's `positions()` were equal to the
+  bit; inside the pack's years they now differ, within the limits `calc()`
+  quotes. No receipt of `calc()` carries a bound for a DE440 position.
+- **`@zodiacs/engine/de440/pack`**, a new entry point (seventeen public entry
+  points): `DE440_PACK` describes the pack (`de440-1790-2210.v2.zeph`,
+  2,489,664 bytes, SHA-256
+  `51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7`, refitted
+  by zodiacs.org's pack compiler 2.0.0 from NAIF's `de440.bsp`),
+  `de440PackBytes()` gives its bytes, and `shippedDe440Source()` the source
+  the root's default uses (`openShippedDe440Pack()`, the same as a promise).
+- **`@zodiacs/engine/de440`** gains `openDe440PackSync`, `openDe440Pack`
+  without WebCrypto and without a promise, which checks the digest with the
+  engine's own SHA-256 (`src/de440/sha256.test.ts` compares it with Node's).
+- **Conformance.** The suite's adapter answers every request with a plain
+  call: 459 of the 500 vectors pass, none fails and 41 are unsupported, where
+  1.1.0-rc.7 had 267, 192 and 41. Started with `--ephemeris
+  astronomy-engine` it sets the fallback, and those results (267, 192 and
+  41, 1.1.0-rc.7's verdicts) are committed beside the first and checked in
   continuous integration (`conformance/RESULTS.md`).
 - **Licensing.** The pack is data refitted from JPL's DE440. `NOTICE` cites
   the ephemeris and says that Zodiacs.org made the pack; `LICENSING.md`
@@ -55,23 +87,125 @@ owner, and is not to be published on npm until the owner approves it. Checks:
   rests on the owner's position of 2026-11-13 that DE440 is JPL's public
   data: an open question for the owner before publication. The licence
   expression is unchanged.
-- **Sizes.** The package is 4,477,785 bytes unpacked in 97 files and
-  2,696,971 packed, against 1.1.0-rc.3's 1,142,818 in 94 files and 331,979:
-  3.9 times the unpacked size and 8.1 times the packed one, since the pack
-  compresses little. That is 3,334,967 bytes more unpacked, of which
-  3,319,552 are the pack's base64 text, 1,293 other JavaScript that only the
-  opt-in entries load (`dist/de440-pack.js`'s code and the chunk it shares
-  with `./de440`),
-  1,661 declarations, 12,306 documents and 155 the manifest; the
-  root's own graph is unchanged at 108,531 bytes
-  (`docs/evidence/1.1.0-rc.8-20261113/sizes.json`). An application that
-  imports the new entry carries the pack; one that does not, carries none of
-  it. The package gate now holds the pack to its exact size and digest, in
-  `dist/de440-pack.js` alone, and caps the rest of the package: that cap
-  rises from 1,145,000 to 1,165,000, and `./de440/pack` gets a budget of the
-  pack and 49,400 bytes (`scripts/verify-package-contents.mjs`). Both, and
-  shipping a package of this size, are for the owner to approve; the request
-  of 2026-11-13 to ship the pack is recorded, a figure is not.
+- **Sizes.** The package is 4,502,147 bytes unpacked in 98 files, against
+  1.1.0-rc.7's 1,152,017 in 94: 3.9 times. 3,319,552 of those bytes are the
+  pack's base64 text, in one shared chunk; the rest is 1,182,595, 30,578 more
+  than 1.1.0-rc.7 (`docs/evidence/1.1.0-rc.9-20261114/sizes.json`, which
+  also gives the packed sizes). The pack compresses little, so every install
+  downloads about eight times what 1.1.0-rc.7's did, and, because the root
+  entry now imports the pack, so does every application that bundles the
+  root, `./calc`, `./sky`, `./techniques`, `./timing`, `./vedic` or
+  `./window`: the root's import graph is 142,693 bytes beside the pack's
+  3,319,552, where 1.1.0-rc.7's was 108,531. The package gate holds the pack
+  to its exact size and digest, in one file, measures every graph without it,
+  and caps the rest of the package: that cap rises from 1,155,000 to
+  1,185,000, the budgets of the eight graphs that load the ephemeris rise by
+  the code that reads a pack (the root's from 109,000 to 144,000), `./de440`'s
+  from 48,000 to 50,700, and `./de440/pack` gets 52,000
+  (`scripts/verify-package-contents.mjs`). None of these figures, and not the
+  size itself, has the owner's approval: they are for the owner to decide
+  with this candidate.
+
+## 1.1.0-rc.7 (unreleased candidate)
+
+The next candidate for 1.1.0 after 1.1.0-rc.6, which it contains: the error
+limits a `calc()` result quotes, now from a far larger comparison. It is not
+to be published on npm until the owner approves it.
+
+- **Error limits from 146,097 daily comparisons with DE440.** Each position
+  from `@zodiacs/engine/calc` carries `bounds`: how far its position,
+  distance and speed were found to be from an independent ephemeris. For
+  the geocentric Sun, Moon, Mercury to Pluto (each correction) and the true
+  node and its opposite point, these were the largest differences from JPL
+  Horizons at 32 instants, and on other days the engine went past ten of
+  the eleven apparent position limits. They are now the largest differences
+  from JPL's DE440 at noon TT on each of the 146,097 days from 1800-01-01 to
+  2199-12-31, in all eight frames, rounded up to two significant figures
+  (`docs/evidence/de440-sweep-20261111/`). Position limits of the apparent
+  places, in arcseconds, old to new: Sun 3.0 to 3.4, Moon 8.3 to 12,
+  Mercury 9.3 to 17, Venus 11 to 24, Mars 6.6 to 23, Jupiter 13 to 17,
+  Saturn 18 to 24, Uranus 20 (unchanged), Neptune 21 to 22, Pluto 25 to 30,
+  and the true node and its opposite point 16 to 33. The astrometric and
+  geometric rows and the distance and speed limits of the same bodies move
+  by the same rule (`src/calc-bounds.ts`); none falls. `docs/versioning.md`
+  lets a bound found to be wrong be corrected in a minor release; these are
+  such corrections. Each bound's `basis` now names the comparison it rests
+  on.
+- **What they mean.** They are the largest differences found at one instant
+  a day, not proven limits. The true node's is 33 arcseconds, so "within 30
+  arcseconds of DE440" holds for the Sun, the Moon and the planets only.
+  Pluto's largest is 29.86 arcseconds (29.19 in ecliptic longitude), on the
+  last day and still growing: a thin margin, for 1800 to 2199 only.
+- **What keeps the old limits.** The 72 rows the sweep did not take
+  (heliocentric, barycentric and topocentric positions, and the mean nodes
+  and Black Moon Lilith) keep their values and their basis. The topocentric
+  Sun, Moon and Mars keep limits (3.0, 7.8 and 6.6 arcseconds) below the
+  geocentric ones the sweep found ([docs/calc.md](docs/calc.md)).
+- **No position changes.** This candidate computes the positions 1.1.0-rc.6
+  and 1.1.0-rc.3 compute (`docs/evidence/1.1.0-rc.7-20261111/`).
+- **Sizes.** The package is 1,152,017 bytes unpacked in 94 files, 3,690 more
+  than 1.1.0-rc.6's 1,148,327: this entry 2,888, the README's lines 379,
+  LICENSING.md and NOTICE 365, and JavaScript 58. That is over the cap
+  of 1,150,000, which rises to 1,155,000 (`scripts/verify-package-contents.mjs`,
+  `docs/evidence/1.1.0-rc.7-20261111/sizes.json`), a rise the owner decides
+  with this candidate. No entry point's budget changes.
+
+## 1.1.0-rc.6 (unreleased candidate)
+
+The next candidate for 1.1.0 after 1.1.0-rc.3 (main at `bc0b5a7`): a choice
+for a birth in an hour the clock showed twice. It is not to be published on
+npm until the owner approves it.
+
+Two drafts came before it, and neither archive is carried here. 1.1.0-rc.4
+was drafted in pull request 89 with this choice and with a refusal of a birth
+given as a calendar date with no time. It was not merged. The refusal changes
+documented behaviour, and by the owner's decision of 2026-11-11 it is held
+for 2.0.0: in 1.x a birth's `utc` given as `YYYY-MM-DD` is read as midnight
+UTC, as the README's *Resolved instant inputs* says. 1.1.0-rc.5 was drafted
+in pull request 90 with the choice alone. An independent review of it found
+that it recorded `"later"` for times that have no second pass, and it was
+superseded by this candidate before merging.
+
+- **`fold: "earlier" | "later"`** in `@zodiacs/engine/geo`.
+  `resolveLocalToUtc`, `resolveLocalBirth` and `resolveBirth` take the new
+  option for a wall time the clock showed twice. The default, `"earlier"`,
+  gives what earlier versions gave. With `fold: "later"`, 01:30 in New York
+  on 2021-11-07 resolves to 06:30 UTC where the default gives 05:30 UTC.
+  Both passes carry the `dst-fold` flag and the same `jump` and `transition`,
+  so a birth form can ask which pass it was and resolve again. The option
+  changes nothing for a time the clock showed once, neither the result nor
+  the record a receipt keeps, and a skipped time moves forward by the jump
+  whichever value is given. The expected instants in
+  `src/geo/fold-choice.test.ts` are written out from the IANA time zone
+  database's rules ([docs/time.md](docs/time.md)).
+- **Receipts.** `localResolution.policy.fold` records the pass taken:
+  `"later"` only for a repeated time whose later pass was asked for,
+  `"earlier"` for every other time. The codec checks it against the instant
+  and the recorded clock change: an `"earlier"` record of a repeated time
+  must fall before the change, a `"later"` one at or after it, inside the
+  repeated span, and a `"later"` record without the `dst-fold` flag is
+  refused as `invalid_context`. 1.1.0-rc.1 and 1.1.0-rc.3 refuse a record
+  that says `"later"` as `unsupported_feature`, and read this candidate's
+  `"earlier"` records, among them those of an ordinary and of a skipped time
+  asked for their later pass (`docs/evidence/1.1.0-rc.6-20261111/`).
+  Records that say `"earlier"`, which is every record written before this
+  candidate, are read as before.
+- **`api/`.** `api/geo.api.md` gains the exported type `FoldChoice` and the
+  optional `fold` of the three functions' options. It and
+  `api/receipt.api.md` widen `policy.fold` from `"earlier"` to
+  `"earlier" | "later"`, a new member of a union a result carries, which
+  `docs/versioning.md` allows in a minor release.
+- **`lunarReturn`** still refuses a birth flagged `dst-fold`, whichever pass
+  was chosen.
+- **Sizes.** The option, its input check and its error message make
+  `./geo`'s import graph 35,584 bytes, over its budget of 35,500, which
+  rises to 35,600. The package is 1,148,327 bytes unpacked in 94 files,
+  5,509 more than 1.1.0-rc.3's 1,142,818: this entry 3,499, the README's
+  lines 355, declarations 927 and JavaScript 728. That is over the
+  cap of 1,145,000, which rises to 1,150,000
+  (`scripts/verify-package-contents.mjs`,
+  `docs/evidence/1.1.0-rc.6-20261111/sizes.json`). The owner approved both
+  rises on 2026-11-11.
 
 ## 1.1.0-rc.3 (unreleased candidate)
 

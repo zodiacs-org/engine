@@ -89,12 +89,14 @@ SE_EPHE_PATH=/path/to/ephe node conformance/harness/run.mjs \
   --adapter "python3 conformance/adapters/pyswisseph.py" \
   --out conformance/results/pyswisseph.json --values none
 
-# this engine's own positions, astronomy-engine's, which natalChart gives
-# outside withEphemeris (the run above answers the positions from the DE440
-# pack the package ships; docs/de440.md)
+# this engine on astronomy-engine, its fallback and what every build before
+# 1.1.0-rc.9 computed on (the run above is a plain call, which computes on
+# the DE440 pack the package ships; docs/de440.md). All 500 vectors: it is
+# also the baseline the offline CLI's consumer check holds the carried
+# 1.0.0-rc.2 archive to (tools/cli/scripts/prepare-consumer.mjs)
 node conformance/harness/run.mjs \
   --adapter "node conformance/adapters/zodiacs-engine.mjs --ephemeris astronomy-engine" \
-  --levels L1 --out conformance/results/zodiacs-engine-astronomy-engine.json
+  --out conformance/results/zodiacs-engine-astronomy-engine.json
 
 node conformance/harness/report.mjs   # rewrites RESULTS.md
 ```

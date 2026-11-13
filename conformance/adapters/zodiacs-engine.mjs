@@ -10,24 +10,26 @@
  * ZODIACS_ENGINE_DIST points it at another build, for example an extracted
  * release archive's `package/dist`.
  *
- * Positions. From 1.1.0-rc.8 the package ships a sealed DE440 pack
- * (`@zodiacs/engine/de440/pack`, docs/de440.md), and by default the adapter
- * answers the position requests from it: it opens the shipped pack, which the
- * engine checks against its SHA-256, and computes each position inside the
- * root's `withEphemeris`. Nothing is supplied and nothing is fetched. Every
- * other kind is answered as before. Two other runs can be asked for:
+ * Positions. From 1.1.0-rc.9 a plain call computes on the sealed DE440 pack
+ * the package ships (docs/de440.md), and by default the adapter answers the
+ * position requests the way an application would: a plain `natalChart`, with
+ * nothing opened, supplied or fetched. Every other kind is answered the same
+ * way, so their bodies are the pack's too. Two other runs can be asked for:
  *
- * - `--ephemeris astronomy-engine` (an argument of this script) answers the
- *   position requests from the root's own positions, astronomy-engine's,
- *   which is what `natalChart` gives outside `withEphemeris`. A build without
- *   the pack entry (an archive before 1.1.0-rc.8, through ZODIACS_ENGINE_DIST)
- *   is run this way whatever the argument.
+ * - `--ephemeris astronomy-engine` (an argument of this script) first calls
+ *   `setDefaultEphemeris("astronomy-engine")`, so that every request is
+ *   answered from astronomy-engine, as the engine answers outside the pack's
+ *   years and as every build before 1.1.0-rc.9 answered. A build without
+ *   `setDefaultEphemeris` (an archive before 1.1.0-rc.9, through
+ *   ZODIACS_ENGINE_DIST) is such a build, and runs this way whatever the
+ *   argument.
  * - ZODIACS_ENGINE_DE440_PACK and ZODIACS_ENGINE_DE440_SHA256 (both, or
- *   neither) answer them from a sealed DE440 pack the caller supplies: the
- *   adapter opens it with `@zodiacs/engine/de440`, which refuses it unless
- *   its SHA-256 is the one given.
+ *   neither) answer the position requests from a sealed DE440 pack the
+ *   caller supplies: the adapter opens it with `@zodiacs/engine/de440`, which
+ *   refuses it unless its SHA-256 is the one given, and computes inside the
+ *   root's `withEphemeris`.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { createInterface } from 'node:readline';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -49,18 +51,18 @@ if ((asked !== null && asked !== 'astronomy-engine') || (asked && packPath)) {
   process.exit(2);
 }
 /**
- * Where the position requests are answered from: "shipped" (the package's own
- * DE440 pack), "supplied" (the caller's pack) or "astronomy-engine".
+ * Where the requests are answered from: "default" (a plain call: the shipped
+ * DE440 pack inside its years), "supplied" (the caller's pack, for the
+ * position requests) or "astronomy-engine".
  */
-const mode = packPath ? 'supplied' : asked === 'astronomy-engine' || !existsSync(resolve(dist, 'de440-pack.js')) ? 'astronomy-engine' : 'shipped';
-/** The DE440 source for the position requests, or null for the root's own positions. */
+const mode = packPath ? 'supplied' : asked === 'astronomy-engine' || typeof engine.setDefaultEphemeris !== 'function' ? 'astronomy-engine' : 'default';
+/** The caller's DE440 source for the position requests, or null. */
 let de440Source = null;
 if (mode === 'supplied') {
   const de440 = await import(pathToFileURL(resolve(dist, 'de440.js')).href);
   de440Source = await de440.openDe440Pack(new Uint8Array(readFileSync(resolve(packPath))), { expectDigest: packDigest });
-} else if (mode === 'shipped') {
-  const shipped = await import(pathToFileURL(resolve(dist, 'de440-pack.js')).href);
-  de440Source = await shipped.openShippedDe440Pack();
+} else if (mode === 'astronomy-engine' && typeof engine.setDefaultEphemeris === 'function') {
+  engine.setDefaultEphemeris('astronomy-engine');
 }
 
 const UNIX_EPOCH_JD = 2440587.5;
@@ -99,7 +101,7 @@ const handlers = {
     const chart = de440Source ? engine.withEphemeris(de440Source, compute) : compute();
     const body = chart.bodies.find((candidate) => candidate.body === input.body);
     if (!body) return { unsupported: `no body ${input.body}` };
-    const meta = { ...(chart.flags.length ? { flags: chart.flags } : {}), ...(de440Source ? { ephemeris: chart.ephemeris } : {}) };
+    const meta = { ...(chart.flags.length ? { flags: chart.flags } : {}), ...(chart.ephemeris ? { ephemeris: chart.ephemeris } : {}) };
     return { output: { lon: body.lon, lat: body.lat }, ...(Object.keys(meta).length ? { meta } : {}) };
   },
 
@@ -182,13 +184,18 @@ const handlers = {
   },
 };
 
-const NAMES = { shipped: 'zodiacs-engine', supplied: 'zodiacs-engine-de440', 'astronomy-engine': 'zodiacs-engine-astronomy-engine' };
+const NAMES = { default: 'zodiacs-engine', supplied: 'zodiacs-engine-de440', 'astronomy-engine': 'zodiacs-engine-astronomy-engine' };
 const ENGINES = {
-  shipped: '@zodiacs/engine with the DE440 pack it ships',
-  supplied: '@zodiacs/engine with a DE440 pack',
+  default: '@zodiacs/engine',
+  supplied: '@zodiacs/engine with a DE440 pack the caller supplies',
   'astronomy-engine': '@zodiacs/engine on astronomy-engine',
 };
-const PACKS = { shipped: 'the sealed pack the package ships (@zodiacs/engine/de440/pack)', supplied: 'a sealed pack the caller supplies (@zodiacs/engine/de440)' };
+/** What the default source is, from the engine's own report of it. */
+function defaultSourceText() {
+  const { de440 } = engine.defaultEphemeris();
+  if (!de440.opened) return `${engine.EPHEMERIS.name} ${engine.EPHEMERIS.version}: the shipped DE440 pack did not open (${de440.error})`;
+  return `the default source: jpl-de440 from the sealed pack the package ships, SHA-256 ${de440.version}, for instants from ${de440.fromTtDays} to ${de440.toTtDays} days of TT from J2000.0; ${engine.EPHEMERIS.name} ${engine.EPHEMERIS.version} outside them`;
+}
 
 process.stdout.write(`${JSON.stringify({
   adapter: {
@@ -198,14 +205,16 @@ process.stdout.write(`${JSON.stringify({
     engineVersion: engine.ENGINE_VERSION,
     configuration: {
       ephemeris: de440Source
-        ? `positions from ${de440Source.ephemeris.name}, ${PACKS[mode]}, SHA-256 ${de440Source.ephemeris.version}, through withEphemeris; ${engine.EPHEMERIS.name} ${engine.EPHEMERIS.version} is not used for them`
-        : `${engine.EPHEMERIS.name} ${engine.EPHEMERIS.version}`,
+        ? `positions from ${de440Source.ephemeris.name}, a sealed pack the caller supplies (@zodiacs/engine/de440), SHA-256 ${de440Source.ephemeris.version}, through withEphemeris; ${engine.EPHEMERIS.name} ${engine.EPHEMERIS.version} is not used for them`
+        : mode === 'default' ? defaultSourceText() : `${engine.EPHEMERIS.name} ${engine.EPHEMERIS.version}`,
       deltaTModel: engine.DELTA_T_MODEL,
       timeBasis: 'from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise',
       timeZones: `before 1970 the shipped tzdb ${geo.TZDB.version} history (${geo.TZDB.form}), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node ${process.versions.node}, ICU ${process.versions.icu}, tz ${process.versions.tz})`,
       positions: de440Source
         ? 'natalChart with timeScale "tt" inside withEphemeris: the requested instant is read as TT; Mars to Pluto are system barycentres, as the vectors are'
-        : 'natalChart with timeScale "tt", outside withEphemeris: the requested instant is read as TT',
+        : mode === 'default'
+          ? 'a plain natalChart with timeScale "tt", outside withEphemeris: the requested instant is read as TT; from the shipped pack, Mars to Pluto are system barycentres, as the vectors are'
+          : 'natalChart with timeScale "tt", outside withEphemeris: the requested instant is read as TT',
       angles: 'natalChart with timeScale "ut1": the requested instant is read as UT1',
     },
   },

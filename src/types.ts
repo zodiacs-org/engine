@@ -241,7 +241,9 @@ export interface Chart {
   engineVersion: string;
   /**
    * The ephemeris the bodies came from, when it was not astronomy-engine: the
-   * source `withEphemeris` ran the chart with. Absent for astronomy-engine.
+   * shipped DE440 pack, which is the default source inside its years
+   * (`defaultEphemeris`), or the source `withEphemeris` ran the chart with.
+   * Absent for astronomy-engine.
    */
   ephemeris?: { readonly name: string; readonly version: string };
 }
@@ -312,10 +314,15 @@ export interface MoonPhase {
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "1.1.0-rc.8";
+export const ENGINE_VERSION: string = "1.1.0-rc.9";
 
 /**
- * The ephemeris underneath every position. The dependency is pinned to this
- * exact version, so receipts can name it without asking the caller.
+ * astronomy-engine, the ephemeris the engine computes on where the shipped
+ * DE440 pack is not the source: outside the pack's years, after
+ * `setDefaultEphemeris("astronomy-engine")`, and in the entries that compute
+ * on it themselves (calc, window, the sky entry's rising and setting). The
+ * dependency is pinned to this exact version, so receipts can name it
+ * without asking the caller. Until 1.1.0-rc.7 it was underneath every
+ * position.
  */
 export const EPHEMERIS = /*#__PURE__*/ Object.freeze({ name: "astronomy-engine" as const, version: "2.1.19" as string });

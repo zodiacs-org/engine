@@ -87,9 +87,31 @@ import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
 
 /**
- * The only superseded archive: rc.11's first packing, replaced under the same
- * version before merge. Its bytes may appear in commit 00bdae79 and nowhere else.
+ * The superseded archives. rc.11's first packing was replaced under the same
+ * version before merge; its bytes may appear in commit 00bdae79 and nowhere
+ * else.
+ *
+ * 1.1.0-rc.8 was withdrawn before merge: a draft candidate carried on a
+ * branch cut from 1.1.0-rc.3 (pull request 101) while 1.1.0-rc.6 and
+ * 1.1.0-rc.7 were carried on another, which merged first. Two manifests that
+ * each append to rc.3's cannot both be prefixes of one, so the branch's
+ * archive was removed where it joined main, and the candidate was cut again
+ * as 1.1.0-rc.9. A withdrawn entry (`withdrawn: true`) pins one commit that
+ * held the bytes, like any superseded entry, and also means: the version has
+ * no carried archive and never gets one, its archive and receipt are absent
+ * from HEAD, and in its pinned commits alone the manifest may record it as
+ * carried, an entry that is set aside when that manifest is compared with
+ * its children's and with HEAD's.
  */
+const RC8_WITHDRAWN = {
+  version: "1.1.0-rc.8",
+  file: "zodiacs-engine-1.1.0-rc.8.tgz",
+  sha256: "53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43",
+  bytes: 2696971,
+  files: 97,
+  sourceCommit: "e3939499d603e511f1f23f7198eb425bc5f48359",
+  withdrawn: true
+};
 const PINNED_SUPERSEDED = [{
   version: "0.1.1-rc.11",
   file: "zodiacs-engine-0.1.1-rc.11.tgz",
@@ -98,7 +120,11 @@ const PINNED_SUPERSEDED = [{
   files: 30,
   sourceCommit: "00bdae79a9256c2bba4294ed07af79e323c6cd66",
   onlyInCommit: "00bdae79a9256c2bba4294ed07af79e323c6cd66"
-}];
+},
+// The three commits of pull request 101's branch that held 1.1.0-rc.8: the one that carried it and the two after.
+{ ...RC8_WITHDRAWN, onlyInCommit: "7dec96f445963f37e052c43e17b44037dbd1ca29" },
+{ ...RC8_WITHDRAWN, onlyInCommit: "3de6a275d85fb3ec79eb90497ca3c44f0f90deeb" },
+{ ...RC8_WITHDRAWN, onlyInCommit: "0738bc989790daac840d45c5b375f56009c03c8e" }];
 
 const args = process.argv.slice(2);
 const valueOf = (flag) => { const index = args.indexOf(flag); return index >= 0 ? args[index + 1] : undefined; };
@@ -404,21 +430,45 @@ for (const version of carriedVersions) {
       "compares versions (semver.eq), so HEAD must be that version or another one.");
   }
 }
+// A withdrawn version: every archive of it superseded before merge, and none carried, ever.
+const withdrawn = pinnedSuperseded.filter((item) => item.withdrawn === true);
+const withdrawnVersions = [...new Set(withdrawn.map((item) => item.version))];
+for (const version of withdrawnVersions) {
+  for (const other of carriedVersions) {
+    if (npmEqual(version, other)) {
+      fail(MANIFEST, `The carried version ${other} is the withdrawn ${version} as npm compares versions (semver.eq); a withdrawn version is never packed again.`);
+    }
+  }
+  if (strictVersion(headVersion) && npmEqual(version, headVersion)) {
+    fail("package.json", `The version in package.json at HEAD, ${headVersion}, is the withdrawn ${version} as npm compares versions (semver.eq); a withdrawn version is never packed again.`);
+  }
+}
 if (failures > 0) done();
+/**
+ * A commit's manifest list as it is compared: in a commit pinned for a
+ * withdrawn archive, without that archive's entry as the branch recorded it
+ * (carried), which HEAD's manifest holds as superseded instead.
+ */
+const WITHDRAWN_AS_CARRIED = ["version", "file", "sha256", "bytes", "files", "sourceCommit"];
+const comparable = (commit, archives) => {
+  const here = withdrawn.filter((item) => item.onlyInCommit === commit)
+    .map((item) => canonical({ ...Object.fromEntries(WITHDRAWN_AS_CARRIED.map((field) => [field, item[field]])), status: "carried" }));
+  return archives.map(canonical).filter((entry) => !here.includes(entry));
+};
 const headEntries = entries.map(canonical);
 const isPrefix = (shorter, longer) => shorter.length <= longer.length && shorter.every((entry, index) => entry === longer[index]);
 const manifestProblems = new Map();
 for (const commit of commits) {
   const manifest = trees.get(commit).get(MANIFEST)?.manifest;
   if (manifest === undefined) continue;
-  const list = Array.isArray(manifest?.archives) ? manifest.archives.map(canonical) : null;
+  const list = Array.isArray(manifest?.archives) ? comparable(commit, manifest.archives) : null;
   const problems = [];
   if (list === null) problems.push(`${MANIFEST} is not a manifest`);
   else if (!isPrefix(list, headEntries)) problems.push(`${MANIFEST} is not a prefix of HEAD's (the manifest is append-only)`);
   for (const parent of parents.get(commit) ?? []) {
     const before = trees.get(parent)?.get(MANIFEST)?.manifest;
     if (before === undefined || list === null) continue;
-    if (!Array.isArray(before?.archives) || !isPrefix(before.archives.map(canonical), list)) {
+    if (!Array.isArray(before?.archives) || !isPrefix(comparable(parent, before.archives), list)) {
       problems.push(`${MANIFEST} drops or changes entries of its parent ${short(parent)}'s (the manifest is append-only)`);
     }
   }
@@ -427,6 +477,13 @@ for (const commit of commits) {
 for (const [problem, where] of manifestProblems) fail(MANIFEST, `${problem}, in ${where.length} commit(s): ${listed(where)}.`);
 const PINNED_FIELDS = ["version", "file", "sha256", "bytes", "files", "sourceCommit", "onlyInCommit"];
 const pinnedKey = (entry) => canonical(Object.fromEntries(PINNED_FIELDS.map((field) => [field, entry[field]])));
+// Every pinned commit of a withdrawn archive is recorded, so that the manifest names each commit that held it.
+for (const item of withdrawn) {
+  if (!trees.has(item.onlyInCommit)) continue; // a history without that commit, such as a test's
+  if (!entries.some((entry) => entry.status === "superseded" && pinnedKey(entry) === pinnedKey(item))) {
+    fail(MANIFEST, `${MANIFEST} does not record the withdrawn ${item.version} as superseded in ${String(item.onlyInCommit).slice(0, 7)}.`);
+  }
+}
 const pinnedKeys = pinnedSuperseded.map(pinnedKey);
 const superseded = entries.filter((item) => item.status === "superseded");
 for (const entry of superseded) {
@@ -480,7 +537,12 @@ for (const entry of entries) {
 // 4. History: recorded bytes only, and nothing removed.
 const everCommitted = new Set();
 for (const here of trees.values()) for (const path of here.keys()) everCommitted.add(path);
+const withdrawnPaths = new Set(withdrawn.flatMap((item) => [`artifacts/${item.file}`, `artifacts/${receiptOf(item.file)}`]));
+for (const path of withdrawnPaths) {
+  if (headTree.has(path)) fail(path, `${path} is an archive or receipt of a withdrawn version and must not be in HEAD.`);
+}
 for (const path of [...everCommitted].sort()) {
+  if (withdrawnPaths.has(path)) continue;
   if (!headTree.has(path)) fail(path, `${path} was committed and is missing from HEAD; nothing under artifacts/ is ever removed.`);
 }
 function allowed(commit, path, content) {

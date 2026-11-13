@@ -260,6 +260,10 @@ import * as vedic from "@zodiacs/engine/vedic";
 import * as houses from "@zodiacs/engine/houses";
 import { planetaryReturns } from "@zodiacs/engine/timing";
 import * as root from "@zodiacs/engine";
+// The checks below pin values written on astronomy-engine, the engine's
+// fallback, and are run on it; the default source, the shipped DE440 pack,
+// is checked in its own block at the end, which sets it.
+root.setDefaultEphemeris("astronomy-engine");
 import { calc } from "@zodiacs/engine/calc";
 import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError } from "@zodiacs/engine/window";
 import * as techniques from "@zodiacs/engine/techniques";
@@ -675,7 +679,20 @@ assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-
   assert.deepEqual(chart.ephemeris, source.ephemeris);
   const sun = chart.bodies.find((row) => row.body === "Sun");
   assert(Math.abs(sun.lon - 353.0330254813) * 3600 <= 1 && Math.abs(sun.lat - -0.0000304792) * 3600 <= 1, "the shipped pack's Sun is not within 1 arcsecond of Horizons");
-  assert.equal(Object.hasOwn(natalChart({ utc: instant, timeScale: "tt", timeKnown: false }), "ephemeris"), false);
+  // The default source (1.1.0-rc.9): a plain call, with nothing opened by the
+  // caller, is on the shipped pack, names it, and gives the same Sun; after
+  // setDefaultEphemeris("astronomy-engine") it is on astronomy-engine and
+  // names no ephemeris, as it is outside the pack's years under either setting.
+  const plainInput = { utc: instant, timeScale: "tt", timeKnown: false };
+  root.setDefaultEphemeris("de440");
+  assert.deepEqual(root.defaultEphemeris().de440.version, shipped.DE440_PACK.sha256);
+  const plain = natalChart(plainInput);
+  assert.deepEqual(plain.ephemeris, source.ephemeris);
+  assert.deepEqual(plain.bodies, chart.bodies);
+  assert.equal(Object.hasOwn(natalChart({ utc: "1700-06-01T00:00:00Z", timeKnown: false }), "ephemeris"), false);
+  root.setDefaultEphemeris("astronomy-engine");
+  assert.equal(root.defaultEphemeris().name, "astronomy-engine");
+  assert.equal(Object.hasOwn(natalChart(plainInput), "ephemeris"), false);
 }
 console.log(JSON.stringify({version: ENGINE_VERSION, de440: "passed", de440Pack: "passed", birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", liteEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
 `

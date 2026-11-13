@@ -27,6 +27,13 @@ const lite = await import("@zodiacs/engine/lite");
 const de440 = await import("@zodiacs/engine/de440");
 const de440Pack = await import("@zodiacs/engine/de440/pack");
 
+// The checks below pin values and receipts written on astronomy-engine, and
+// compare the root with the entries that compute on it (calc, window, sky).
+// astronomy-engine is the engine's fallback and those entries' ephemeris, so
+// they are run on it; the default source, the shipped DE440 pack, has its own
+// checks further down, which set it and set this back.
+engine.setDefaultEphemeris("astronomy-engine");
+
 for (const name of [
   "positions",
   "progressedInstant",
@@ -472,26 +479,38 @@ checkSelfContained("time");
 checkSelfContained("lite");
 // The DE440 entry reads the caller's pack: no ephemeris package, nothing lazy.
 checkSelfContained("de440");
-for (const name of ["openDe440Pack", "De440Error", "REDUCED_BODIES", "BARYCENTRE_NOT_CENTRE", "DE440_EPHEMERIS_NAME"]) {
+for (const name of ["openDe440Pack", "openDe440PackSync", "De440Error", "REDUCED_BODIES", "BARYCENTRE_NOT_CENTRE", "DE440_EPHEMERIS_NAME"]) {
   assert.ok(name in de440, `@zodiacs/engine/de440 exports ${name}`);
 }
 // The entry that ships the pack: ./de440's graph and its own file, which holds
 // the pack; no ephemeris package, nothing lazy, nothing fetched. It opens as
 // a source that names the pack by its SHA-256.
 checkSelfContained("de440-pack");
-for (const name of ["DE440_PACK", "de440PackBytes", "openShippedDe440Pack"]) {
+for (const name of ["DE440_PACK", "de440PackBytes", "openShippedDe440Pack", "shippedDe440Source"]) {
   assert.ok(name in de440Pack, `@zodiacs/engine/de440/pack exports ${name}`);
 }
 assert.equal(de440Pack.de440PackBytes().byteLength, de440Pack.DE440_PACK.bytes, "the shipped pack is the size its description gives");
 assert.deepEqual((await de440Pack.openShippedDe440Pack()).ephemeris, { name: de440.DE440_EPHEMERIS_NAME, version: de440Pack.DE440_PACK.sha256 },
   "the shipped pack opens as a DE440 source that names it");
 assert.equal(typeof engine.withEphemeris, "function", "the root exports withEphemeris");
+// The default source (1.1.0-rc.9): the root opens the shipped pack itself,
+// without a promise, and a plain chart inside the pack's years names it.
+assert.equal(de440Pack.shippedDe440Source(), await de440Pack.openShippedDe440Pack(), "the pack entry gives one source, with or without a promise");
+for (const name of ["defaultEphemeris", "setDefaultEphemeris"]) assert.equal(typeof engine[name], "function", `the root exports ${name}`);
+engine.setDefaultEphemeris("de440");
+assert.deepEqual(engine.defaultEphemeris().de440.version, de440Pack.DE440_PACK.sha256, "the root's default source is the shipped pack");
+assert.deepEqual(engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false }).ephemeris,
+  { name: de440.DE440_EPHEMERIS_NAME, version: de440Pack.DE440_PACK.sha256 }, "a plain chart names the shipped pack");
+assert.equal(engine.natalChart({ utc: "1700-01-01T12:00:00Z", timeKnown: false }).ephemeris, undefined, "a plain chart outside the pack's years is astronomy-engine's");
+engine.setDefaultEphemeris("astronomy-engine");
+assert.equal(engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false }).ephemeris, undefined, 'after setDefaultEphemeris("astronomy-engine") a plain chart is astronomy-engine\'s');
 // The core entry reaches no zone history and loads nothing lazily; its one
 // dependency is the ephemeris.
 checkSelfContained("index", ["astronomy-engine"]);
 
 // The root imports no subpath: no module of an opt-in entry (timing, Vedic,
-// geo, calc, window, techniques, houses, sky, time, lite, de440 or its pack), and no zone
+// geo, calc, window, techniques, houses, sky, time or lite; from 1.1.0-rc.9
+// the DE440 files and the pack are the root's own), and no zone
 // history, is in its static graph (OPT_IN_SOURCE in scripts/root-isolation.mjs).
 // That script reads the graph from the build's own module list
 // (dist/metafile-esm.json and dist/metafile-lite.json, which `npm run build`

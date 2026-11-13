@@ -1,7 +1,7 @@
 {
   "name": "@zodiacs/engine",
-  "version": "1.1.0-rc.8",
-  "description": "Browser-first astrology calculations used by Zodiacs.org: tropical charts; one calculation API with bounds and receipts in ./calc; birth-time windows in ./window; returns, relationship charts, the void-of-course Moon, patterns and dignities in ./techniques; house positions and cusp speeds in ./houses; rise, set, transit and planetary hours in ./sky; Hellenistic timing techniques and planetary returns in ./timing; the time basis and the frame of date, without the ephemeris, in ./time; declination parallels, sect, composite midpoints and dignities, without the ephemeris, in ./lite; positions from a DE440 pack in ./de440, and the pack itself in ./de440/pack; and the sidereal zodiac and Jyotish techniques in ./vedic.",
+  "version": "1.1.0-rc.9",
+  "description": "Browser-first astrology calculations used by Zodiacs.org: tropical charts; one calculation API with bounds and receipts in ./calc; birth-time windows in ./window; returns, relationship charts, the void-of-course Moon, patterns and dignities in ./techniques; house positions and cusp speeds in ./houses; rise, set, transit and planetary hours in ./sky; Hellenistic timing techniques and planetary returns in ./timing; the time basis and the frame of date, without the ephemeris, in ./time; declination parallels, sect, composite midpoints and dignities, without the ephemeris, in ./lite; positions from JPL's DE440 by default, from a pack it ships (./de440/pack), or from a caller's pack in ./de440; and the sidereal zodiac and Jyotish techniques in ./vedic.",
   "license": "MIT AND CC-BY-4.0",
   "keywords": [
     "astrology",

@@ -285,7 +285,20 @@ null.
 Every position carries `bounds.position` (the angle between the reported
 direction and the arbiter's, arcseconds), `bounds.distance` (relative) and
 `bounds.speed` (arcseconds a day), each labelled `measured` or `estimated`;
-none is proven. The measured values are the largest differences from NASA JPL
+none is proven. Each one's `basis` says which comparison it rests on.
+
+From 1.1.0-rc.7 the geocentric Sun, Moon, Mercury to Pluto (with each of the
+three corrections) and the true node and its opposite point take the largest
+differences from JPL's DE440 (NAIF's `de440.bsp`) found at noon TT on each of
+the 146,097 days from 1800-01-01 to 2199-12-31, in every frame, rounded up to
+two significant figures by the same rule: 32 rows,
+`docs/evidence/de440-sweep-20261111/` (the section below). Before, those rows
+held the 32 instants' values, and the engine was found beyond ten of the
+eleven apparent position limits on other days.
+
+Every other row (heliocentric, barycentric and topocentric positions, and the
+mean points) keeps the measured values that follow, 72 rows. They are the
+largest differences from NASA JPL
 Horizons (DE441) over a preregistered corpus of 32 instants from 1802 to 2188,
 by center, correction and body, in every frame, rounded up to two
 significant figures: `docs/evidence/calc-api/`. For the mean node, the mean
@@ -293,8 +306,9 @@ south node and Black Moon Lilith they are the largest differences, on the
 same instants, from the same definitions evaluated with ERFA's fundamental
 arguments, which checks the implementation, not an ephemeris; their `basis`
 says so. They are the largest seen on
-those 32 instants, not limits: another instant can exceed them, and on a
-broader sample some do (below). They come from
+those 32 instants, not limits: another instant can exceed them, as a
+broader sample found for the geocentric rows while they held the 32
+instants' values (below). They come from
 the comparison rerun on this version's build, after the engine took the full
 IAU 2000B nutation (`docs/evidence/calc-api/rc16/`); none is larger than the
 first run's, and the rate bounds of the outer planets and the position and
@@ -302,12 +316,18 @@ rate bounds of the mean node and Lilith, which carried the five-term
 nutation's error, are smaller. Topocentric
 positions were compared for the Sun, the Moon and Mars, in all three
 corrections; another topocentric body takes its geocentric bound for the
-same correction, labelled `estimated`.
+same correction, labelled `estimated`. The sweep did not take topocentric
+places, and the topocentric Sun, Moon and Mars keep position bounds (3.0″,
+7.8″ and 6.6″) below the geocentric ones it found (3.4″, 12″ and 23″). A
+topocentric place is the geocentric one moved by the parallax, so the
+geocentric differences carry over and those three bounds are probably too
+small until topocentric places are swept too.
 
 A broader sample on 2026-11-13 compared the geocentric apparent positions in
 the true ecliptic of date with JPL DE421 at 1,711 instants per body from 1900
-to 2050 (`docs/evidence/broad-sample-2026-11-13/`). Where its largest
-difference is above the published bound, the two are:
+to 2050 (`docs/evidence/broad-sample-2026-11-13/`). It was read against the
+bounds published before 1.1.0-rc.7, the 32 instants' values. Where its largest
+difference is above that published bound, the two are:
 
 | Body | Published `bounds.position`, largest seen on 32 instants | Largest on 1,711 instants, 1900 to 2050 | Published `bounds.speed` (angular rate), largest seen on 32 instants | Largest longitude rate difference on 1,711 instants, 1900 to 2050 |
 | --- | ---: | ---: | ---: | ---: |
@@ -336,9 +356,12 @@ deflection, so its figures are the ephemeris's difference in longitude rate
 alone; within about 10° of the Sun the engine's lack of deflection adds more.
 Its speed figures show that the published bounds are exceeded in longitude
 rate; they are not angular rate maxima. The true node's figure depends on how the reference's
-osculating node is defined, which moves it by several arcseconds. The values
-`calc()` returns are unchanged: they are still the 32-instant maxima, and
-their `basis` says so.
+osculating node is defined, which moves it by several arcseconds. The sample
+changed no value `calc()` returns. From 1.1.0-rc.7 the geocentric rows in this
+table no longer hold the 32-instant maxima: they take the DE440 sweep's values
+(above), and each position bound the sweep gives (the last column of the table
+in *Measured against DE440 every day*) is at or above the largest position
+difference in this table. Their `basis` says which comparison they rest on.
 
 The barycentric Sun is the exception: its error comes from the barycentre,
 and its distance from the barycentre, 1.0 × 10⁻⁴ to 0.01 au, decides what
@@ -651,6 +674,48 @@ lunar series puts it arcminutes from where it is. Chiron, Ceres, Pallas, Juno
 and Vesta are planned for the hosted API. The flags Swiss Ephemeris returns,
 which say what it actually computed, correspond to the receipt's conventions,
 and its error returns to the typed refusals.
+
+## Measured against DE440 every day
+
+`docs/evidence/de440-sweep-20261111/` compares `calc()` with NAIF's
+`de440.bsp` (SHA-256 `a4ce9bf9…c4b5`) at noon TT on each of the 146,097 days
+from 1800-01-01 to 2199-12-31, geocentric, in all eight frames, for the Sun,
+the Moon, Mercury to Pluto (Mars to Pluto as system barycentres, on both
+sides) with each correction, and the true node and its opposite point. The
+reference is formed from the kernel with ERFA, as the Horizons comparison
+turns Horizons's vectors; apparent places leave out the Sun's light
+deflection, as the engine does. It ran in GitHub Actions (`PLAN.md`,
+`README.md`, `results/`). The largest differences, apparent places, in
+arcseconds, and the position bound each gives, beside the 32 instants':
+
+| body | ecliptic longitude of date | angle, any frame | bound from 32 instants | bound from the sweep |
+| --- | ---: | ---: | ---: | ---: |
+| Sun | 2.39 | 3.34 | 3.0 | 3.4 |
+| Moon | 11.92 | 11.88 | 8.3 | 12 |
+| Mercury | 14.12 | 16.92 | 9.3 | 17 |
+| Venus | 22.92 | 23.32 | 11 | 24 |
+| Mars | 14.32 | 22.92 | 6.6 | 23 |
+| Jupiter | 10.64 | 16.81 | 13 | 17 |
+| Saturn | 13.10 | 23.22 | 18 | 24 |
+| Uranus | 12.09 | 19.65 | 20 | 20 |
+| Neptune | 19.71 | 21.28 | 21 | 22 |
+| Pluto | 29.19 | 29.86 | 25 | 30 |
+| True node | 32.64 | 32.64 | 16 | 33 |
+
+The first two columns are rounded up to 0.01″ from the sweep's
+`results/tables.md`. The true node's bound, 33″, is over 30″, so a statement
+that positions agree with DE440 to within 30″ covers the Sun, the Moon and
+the planets only. Pluto's largest difference is on the last day of the span
+and still growing, 0.81″ under 30″ in longitude and 0.14″ in angle, and the
+statement holds for no day outside the span. These are the largest found at
+one instant a day: another instant can exceed them.
+
+The sweep measured 1.1.0-rc.3's build. 1.1.0-rc.7 computes the same
+positions: its sources differ from 1.1.0-rc.3's only in local-time
+resolution, receipts, the version and the bounds, none of which a geocentric
+position reads, and the sweep's workflow, run again on 1.1.0-rc.7's build,
+checks every largest difference against the bounds the build quotes
+(`docs/evidence/1.1.0-rc.7-20261111/`).
 
 ## Measured against JPL Horizons and ERFA
 

@@ -2,13 +2,15 @@
   "suite": "zodiacs-conformance",
   "suiteVersion": "0.2.0",
   "vectors": {
-    "vectors/0.2.0/L1-positions.json": "4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8"
+    "vectors/0.2.0/L1-positions.json": "4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8",
+    "vectors/0.2.0/L2-houses-angles.json": "fc5321b9061b9860bfb9af5254e5813be1c4bc3c858df6f623ea1617b76b88e5",
+    "vectors/0.2.0/L3-time-calendars.json": "51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66"
   },
   "adapter": {
     "name": "zodiacs-engine-astronomy-engine",
     "version": "0.3.0",
     "engine": "@zodiacs/engine on astronomy-engine",
-    "engineVersion": "1.1.0-rc.8",
+    "engineVersion": "1.1.0-rc.9",
     "configuration": {
       "ephemeris": "astronomy-engine 2.1.19",
       "deltaTModel": "zodiacs-deltat/1",
@@ -21,10 +23,10 @@
   "values": "residuals",
   "summary": {
     "total": {
-      "count": 240,
-      "pass": 48,
+      "count": 500,
+      "pass": 267,
       "fail": 192,
-      "unsupported": 0,
+      "unsupported": 41,
       "error": 0
     },
     "byLevel": {
@@ -33,6 +35,20 @@
         "pass": 48,
         "fail": 192,
         "unsupported": 0,
+        "error": 0
+      },
+      "L2": {
+        "count": 150,
+        "pass": 150,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0
+      },
+      "L3": {
+        "count": 110,
+        "pass": 69,
+        "fail": 0,
+        "unsupported": 41,
         "error": 0
       }
     },
@@ -59,9 +75,139 @@
             "max": 19.0281186
           }
         }
+      },
+      "angles.asc-mc": {
+        "count": 60,
+        "pass": 60,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "asc": {
+            "unit": "arcsec",
+            "n": 60,
+            "median": 0.00339286018,
+            "p95": 0.00579574655,
+            "max": 0.0189601719
+          },
+          "mc": {
+            "unit": "arcsec",
+            "n": 60,
+            "median": 0.00438274993,
+            "p95": 0.00643026337,
+            "max": 0.0081454935
+          }
+        }
+      },
+      "angles.vertex-east-point": {
+        "count": 10,
+        "pass": 10,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "vertex": {
+            "unit": "arcsec",
+            "n": 10,
+            "median": 0.00289897902,
+            "p95": 0.013370956,
+            "max": 0.013370956
+          },
+          "east_point": {
+            "unit": "arcsec",
+            "n": 10,
+            "median": 0.00346328309,
+            "p95": 0.00679320316,
+            "max": 0.00679320316
+          }
+        }
+      },
+      "houses.cusps": {
+        "count": 80,
+        "pass": 80,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "cusps": {
+            "unit": "arcsec",
+            "n": 70,
+            "median": 0.00389697157,
+            "p95": 0.00933804084,
+            "max": 0.0711573788
+          }
+        }
+      },
+      "time.zone-offset": {
+        "count": 45,
+        "pass": 45,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0
+      },
+      "time.local-mean-time": {
+        "count": 5,
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 5,
+        "error": 0
+      },
+      "time.tt-minus-utc": {
+        "count": 10,
+        "pass": 9,
+        "fail": 0,
+        "unsupported": 1,
+        "error": 0,
+        "residuals": {
+          "tt_minus_utc_s": {
+            "unit": "s",
+            "n": 9,
+            "median": 0,
+            "p95": 2.03450554e-8,
+            "max": 2.03450554e-8
+          }
+        }
+      },
+      "time.delta-t": {
+        "count": 15,
+        "pass": 15,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "delta_t_s": {
+            "unit": "s",
+            "n": 15,
+            "median": 0.0001318,
+            "p95": 0.000505451953,
+            "max": 0.000505451953
+          }
+        }
+      },
+      "calendar.to-jdn": {
+        "count": 25,
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 25,
+        "error": 0
+      },
+      "calendar.from-jdn": {
+        "count": 10,
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 10,
+        "error": 0
       }
     },
-    "byTag": {}
+    "byTag": {
+      "backzone-history": {
+        "count": 20,
+        "pass": 20,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0
+      }
+    }
   },
   "results": [
     {
@@ -3183,6 +3329,2124 @@
           "no-time"
         ]
       }
+    },
+    {
+      "id": "L2-ASC-0001",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00863001743,
+        "mc": -0.00484957359
+      }
+    },
+    {
+      "id": "L2-ASC-0002",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00327473007,
+        "mc": -0.00541003392
+      }
+    },
+    {
+      "id": "L2-ASC-0003",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00417592923,
+        "mc": -0.00250053715
+      }
+    },
+    {
+      "id": "L2-ASC-0004",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00340218789,
+        "mc": 0.00161864987
+      }
+    },
+    {
+      "id": "L2-ASC-0005",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00418252303,
+        "mc": -0.00762196527
+      }
+    },
+    {
+      "id": "L2-ASC-0006",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.003919389,
+        "mc": 0.00499336084
+      }
+    },
+    {
+      "id": "L2-ASC-0007",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0049365674,
+        "mc": -0.00531011676
+      }
+    },
+    {
+      "id": "L2-ASC-0008",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00465952269,
+        "mc": 0.00481128046
+      }
+    },
+    {
+      "id": "L2-ASC-0009",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00195663047,
+        "mc": 0.00188778969
+      }
+    },
+    {
+      "id": "L2-ASC-0010",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00409777433,
+        "mc": 0.00495476305
+      }
+    },
+    {
+      "id": "L2-ASC-0011",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00269810046,
+        "mc": -0.00263385791
+      }
+    },
+    {
+      "id": "L2-ASC-0012",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00504192579,
+        "mc": -0.00424957702
+      }
+    },
+    {
+      "id": "L2-ASC-0013",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0051098255,
+        "mc": 0.00633636733
+      }
+    },
+    {
+      "id": "L2-ASC-0014",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00301561251,
+        "mc": -0.00614248466
+      }
+    },
+    {
+      "id": "L2-ASC-0015",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00358452642,
+        "mc": -0.0081454935
+      }
+    },
+    {
+      "id": "L2-ASC-0016",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00370899174,
+        "mc": 0.00630826993
+      }
+    },
+    {
+      "id": "L2-ASC-0017",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.000581847684,
+        "mc": -0.000775731131
+      }
+    },
+    {
+      "id": "L2-ASC-0018",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00360354777,
+        "mc": 0.00540547697
+      }
+    },
+    {
+      "id": "L2-ASC-0019",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0000691034302,
+        "mc": -0.0000688395517
+      }
+    },
+    {
+      "id": "L2-ASC-0020",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.000679643426,
+        "mc": -0.000400082092
+      }
+    },
+    {
+      "id": "L2-ASC-0021",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.000722428581,
+        "mc": -0.00114883949
+      }
+    },
+    {
+      "id": "L2-ASC-0022",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00338353248,
+        "mc": 0.0002378011
+      }
+    },
+    {
+      "id": "L2-ASC-0023",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00206769181,
+        "mc": 0.00246725158
+      }
+    },
+    {
+      "id": "L2-ASC-0024",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00246162821,
+        "mc": 0.00481186828
+      }
+    },
+    {
+      "id": "L2-ASC-0025",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00424412991,
+        "mc": 0.00277937125
+      }
+    },
+    {
+      "id": "L2-ASC-0026",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0057074929,
+        "mc": 0.00608265013
+      }
+    },
+    {
+      "id": "L2-ASC-0027",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0055599691,
+        "mc": 0.00605822966
+      }
+    },
+    {
+      "id": "L2-ASC-0028",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00416946193,
+        "mc": -0.0056625674
+      }
+    },
+    {
+      "id": "L2-ASC-0029",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00342935122,
+        "mc": 0.00574870271
+      }
+    },
+    {
+      "id": "L2-ASC-0030",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00441696379,
+        "mc": 0.00587801183
+      }
+    },
+    {
+      "id": "L2-ASC-0031",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00624240717,
+        "mc": -0.00616885523
+      }
+    },
+    {
+      "id": "L2-ASC-0032",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00244051553,
+        "mc": 0.00567458487
+      }
+    },
+    {
+      "id": "L2-ASC-0033",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.000597817859,
+        "mc": 0.00107068016
+      }
+    },
+    {
+      "id": "L2-ASC-0034",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00196755027,
+        "mc": -0.00280351609
+      }
+    },
+    {
+      "id": "L2-ASC-0035",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00579574655,
+        "mc": 0.00611559203
+      }
+    },
+    {
+      "id": "L2-ASC-0036",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00344463908,
+        "mc": 0.0060717247
+      }
+    },
+    {
+      "id": "L2-ASC-0037",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0011293289,
+        "mc": -0.00284574453
+      }
+    },
+    {
+      "id": "L2-ASC-0038",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00490003857,
+        "mc": -0.00619421212
+      }
+    },
+    {
+      "id": "L2-ASC-0039",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00356946667,
+        "mc": -0.00643026337
+      }
+    },
+    {
+      "id": "L2-ASC-0040",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00125591093,
+        "mc": 0.000135962102
+      }
+    },
+    {
+      "id": "L2-ASC-0041",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00015814079,
+        "mc": 0.000225011945
+      }
+    },
+    {
+      "id": "L2-ASC-0042",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00377390791,
+        "mc": 0.00648677635
+      }
+    },
+    {
+      "id": "L2-ASC-0043",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00332079053,
+        "mc": -0.00418590827
+      }
+    },
+    {
+      "id": "L2-ASC-0044",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00498126427,
+        "mc": 0.00597649277
+      }
+    },
+    {
+      "id": "L2-ASC-0045",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00109722727,
+        "mc": -0.00196057974
+      }
+    },
+    {
+      "id": "L2-ASC-0046",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.000580401365,
+        "mc": -0.000797579423
+      }
+    },
+    {
+      "id": "L2-ASC-0047",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00363944671,
+        "mc": -0.00334255467
+      }
+    },
+    {
+      "id": "L2-ASC-0048",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00123497909,
+        "mc": 0.00186759436
+      }
+    },
+    {
+      "id": "L2-ASC-0049",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00277102874,
+        "mc": -0.00638153722
+      }
+    },
+    {
+      "id": "L2-ASC-0050",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00195004803,
+        "mc": -0.00271135076
+      }
+    },
+    {
+      "id": "L2-ASC-0051",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.0189601719,
+        "mc": 0.00451592284
+      }
+    },
+    {
+      "id": "L2-ASC-0052",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00413093605,
+        "mc": -0.00603548863
+      }
+    },
+    {
+      "id": "L2-ASC-0053",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00478802066,
+        "mc": 0.00567092311
+      }
+    },
+    {
+      "id": "L2-ASC-0054",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.00295637383,
+        "mc": -0.00347583139
+      }
+    },
+    {
+      "id": "L2-ASC-0055",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0000684434269,
+        "mc": 0.00223971546
+      }
+    },
+    {
+      "id": "L2-ASC-0056",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.000154721829,
+        "mc": 0.000219839762
+      }
+    },
+    {
+      "id": "L2-ASC-0057",
+      "verdict": "pass",
+      "residual": {
+        "asc": -0.0015334763,
+        "mc": -0.00277152969
+      }
+    },
+    {
+      "id": "L2-ASC-0058",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00076227966,
+        "mc": 0.000271382532
+      }
+    },
+    {
+      "id": "L2-ASC-0059",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00101008062,
+        "mc": 0.000816892998
+      }
+    },
+    {
+      "id": "L2-ASC-0060",
+      "verdict": "pass",
+      "residual": {
+        "asc": 0.00240933387,
+        "mc": 0.0015503748
+      }
+    },
+    {
+      "id": "L2-VTX-0001",
+      "verdict": "pass",
+      "residual": {
+        "vertex": 0.00262490614,
+        "east_point": 0.0020648774
+      }
+    },
+    {
+      "id": "L2-VTX-0002",
+      "verdict": "pass",
+      "residual": {
+        "vertex": 0.000311973884,
+        "east_point": -0.000276741957
+      }
+    },
+    {
+      "id": "L2-VTX-0003",
+      "verdict": "pass",
+      "residual": {
+        "vertex": -0.000604126966,
+        "east_point": 0.00327102758
+      }
+    },
+    {
+      "id": "L2-VTX-0004",
+      "verdict": "pass",
+      "residual": {
+        "vertex": -0.00317305191,
+        "east_point": -0.00314425135
+      }
+    },
+    {
+      "id": "L2-VTX-0005",
+      "verdict": "pass",
+      "residual": {
+        "vertex": 0.00121993822,
+        "east_point": 0.00513428752
+      }
+    },
+    {
+      "id": "L2-VTX-0006",
+      "verdict": "pass",
+      "residual": {
+        "vertex": 0.013370956,
+        "east_point": 0.00365553859
+      }
+    },
+    {
+      "id": "L2-VTX-0007",
+      "verdict": "pass",
+      "residual": {
+        "vertex": 0.00975666831,
+        "east_point": -0.00679320316
+      }
+    },
+    {
+      "id": "L2-VTX-0008",
+      "verdict": "pass",
+      "residual": {
+        "vertex": 0.00184143514,
+        "east_point": 0.00250768832
+      }
+    },
+    {
+      "id": "L2-VTX-0009",
+      "verdict": "pass",
+      "residual": {
+        "vertex": 0.0051171437,
+        "east_point": 0.003893477
+      }
+    },
+    {
+      "id": "L2-VTX-0010",
+      "verdict": "pass",
+      "residual": {
+        "vertex": 0.00721297884,
+        "east_point": 0.00417865028
+      }
+    },
+    {
+      "id": "L2-CSP-0001",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00330931166
+      }
+    },
+    {
+      "id": "L2-CSP-0002",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00584080739
+      }
+    },
+    {
+      "id": "L2-CSP-0003",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00618241627
+      }
+    },
+    {
+      "id": "L2-CSP-0004",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.000488322861
+      }
+    },
+    {
+      "id": "L2-CSP-0005",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00342720274
+      }
+    },
+    {
+      "id": "L2-CSP-0006",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00323253314
+      }
+    },
+    {
+      "id": "L2-CSP-0007",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.000318089184
+      }
+    },
+    {
+      "id": "L2-CSP-0008",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00898451283
+      }
+    },
+    {
+      "id": "L2-CSP-0009",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.000594124276
+      }
+    },
+    {
+      "id": "L2-CSP-0010",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.000723574749
+      }
+    },
+    {
+      "id": "L2-CSP-0011",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00391133592
+      }
+    },
+    {
+      "id": "L2-CSP-0012",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0051915909
+      }
+    },
+    {
+      "id": "L2-CSP-0013",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00554780329
+      }
+    },
+    {
+      "id": "L2-CSP-0014",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.000473380464
+      }
+    },
+    {
+      "id": "L2-CSP-0015",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.012030349
+      }
+    },
+    {
+      "id": "L2-CSP-0016",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0000521847141
+      }
+    },
+    {
+      "id": "L2-CSP-0017",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00385608207
+      }
+    },
+    {
+      "id": "L2-CSP-0018",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.000324768257
+      }
+    },
+    {
+      "id": "L2-CSP-0019",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00120619045
+      }
+    },
+    {
+      "id": "L2-CSP-0020",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00412830331
+      }
+    },
+    {
+      "id": "L2-CSP-0021",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00597841045
+      }
+    },
+    {
+      "id": "L2-CSP-0022",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00659415938
+      }
+    },
+    {
+      "id": "L2-CSP-0023",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00856880051
+      }
+    },
+    {
+      "id": "L2-CSP-0024",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0711573788
+      }
+    },
+    {
+      "id": "L2-CSP-0025",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00213988453
+      }
+    },
+    {
+      "id": "L2-CSP-0026",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0049174555
+      }
+    },
+    {
+      "id": "L2-CSP-0027",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.004720851
+      }
+    },
+    {
+      "id": "L2-CSP-0028",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00660752316
+      }
+    },
+    {
+      "id": "L2-CSP-0029",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.000983089015
+      }
+    },
+    {
+      "id": "L2-CSP-0030",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00418069051
+      }
+    },
+    {
+      "id": "L2-CSP-0031",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00387164998
+      }
+    },
+    {
+      "id": "L2-CSP-0032",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00621837476
+      }
+    },
+    {
+      "id": "L2-CSP-0033",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.000834602267
+      }
+    },
+    {
+      "id": "L2-CSP-0034",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00532844665
+      }
+    },
+    {
+      "id": "L2-CSP-0035",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00381886837
+      }
+    },
+    {
+      "id": "L2-CSP-0036",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00678109585
+      }
+    },
+    {
+      "id": "L2-CSP-0037",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.000109362554
+      }
+    },
+    {
+      "id": "L2-CSP-0038",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00269908322
+      }
+    },
+    {
+      "id": "L2-CSP-0039",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00301772948
+      }
+    },
+    {
+      "id": "L2-CSP-0040",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0
+      }
+    },
+    {
+      "id": "L2-CSP-0041",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0
+      }
+    },
+    {
+      "id": "L2-CSP-0042",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0
+      }
+    },
+    {
+      "id": "L2-CSP-0043",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0
+      }
+    },
+    {
+      "id": "L2-CSP-0044",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0
+      }
+    },
+    {
+      "id": "L2-CSP-0045",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00271097904
+      }
+    },
+    {
+      "id": "L2-CSP-0046",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00600536698
+      }
+    },
+    {
+      "id": "L2-CSP-0047",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.0000615965519
+      }
+    },
+    {
+      "id": "L2-CSP-0048",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00497168699
+      }
+    },
+    {
+      "id": "L2-CSP-0049",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00387586283
+      }
+    },
+    {
+      "id": "L2-CSP-0050",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00352254372
+      }
+    },
+    {
+      "id": "L2-CSP-0051",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00695766251
+      }
+    },
+    {
+      "id": "L2-CSP-0052",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00609190952
+      }
+    },
+    {
+      "id": "L2-CSP-0053",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00311515744
+      }
+    },
+    {
+      "id": "L2-CSP-0054",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00661000608
+      }
+    },
+    {
+      "id": "L2-CSP-0055",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00542168304
+      }
+    },
+    {
+      "id": "L2-CSP-0056",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.0412556861
+      }
+    },
+    {
+      "id": "L2-CSP-0057",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00933804084
+      }
+    },
+    {
+      "id": "L2-CSP-0058",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00378914267
+      }
+    },
+    {
+      "id": "L2-CSP-0059",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00174636871
+      }
+    },
+    {
+      "id": "L2-CSP-0060",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00551542971
+      }
+    },
+    {
+      "id": "L2-CSP-0061",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00665893094
+      }
+    },
+    {
+      "id": "L2-CSP-0062",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00530263096
+      }
+    },
+    {
+      "id": "L2-CSP-0063",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00413855968
+      }
+    },
+    {
+      "id": "L2-CSP-0064",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00388260723
+      }
+    },
+    {
+      "id": "L2-CSP-0065",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00405486394
+      }
+    },
+    {
+      "id": "L2-CSP-0066",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.000960646423
+      }
+    },
+    {
+      "id": "L2-CSP-0067",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00656128034
+      }
+    },
+    {
+      "id": "L2-CSP-0068",
+      "verdict": "pass",
+      "residual": {
+        "cusps": -0.00571715071
+      }
+    },
+    {
+      "id": "L2-CSP-0069",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00238848984
+      }
+    },
+    {
+      "id": "L2-CSP-0070",
+      "verdict": "pass",
+      "residual": {
+        "cusps": 0.00582809873
+      }
+    },
+    {
+      "id": "L2-POL-0001",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0002",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0003",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0005",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0006",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0007",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0008",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0009",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0010",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L2-POL-0011",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "polar-fallback"
+        ],
+        "substituted": "whole"
+      }
+    },
+    {
+      "id": "L3-TZ-0001",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0002",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0003",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0004",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0005",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0006",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0007",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0008",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0009",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0010",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0011",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0012",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0013",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0014",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0015",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0016",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0017",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0018",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0019",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0020",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0021",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
+    },
+    {
+      "id": "L3-TZ-0022",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
+    },
+    {
+      "id": "L3-TZ-0023",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
+    },
+    {
+      "id": "L3-TZ-0024",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
+    },
+    {
+      "id": "L3-TZ-0025",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
+    },
+    {
+      "id": "L3-TZ-0026",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
+    },
+    {
+      "id": "L3-TZ-0027",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
+    },
+    {
+      "id": "L3-TZ-0028",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "dst-gap"
+        ],
+        "zone": "intl",
+        "dataForm": "host",
+        "cause": "dst"
+      }
+    },
+    {
+      "id": "L3-TZ-0029",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "dst-fold"
+        ],
+        "zone": "intl",
+        "dataForm": "host",
+        "cause": "dst"
+      }
+    },
+    {
+      "id": "L3-TZ-0030",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "dst-fold"
+        ],
+        "zone": "intl",
+        "dataForm": "host",
+        "cause": "dst"
+      }
+    },
+    {
+      "id": "L3-TZ-0031",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "dst-fold"
+        ],
+        "zone": "intl",
+        "dataForm": "host",
+        "cause": "dst"
+      }
+    },
+    {
+      "id": "L3-TZ-0032",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "dst-gap"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone",
+        "cause": "dst"
+      }
+    },
+    {
+      "id": "L3-TZ-0033",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "dst-fold"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone",
+        "cause": "dst"
+      }
+    },
+    {
+      "id": "L3-TZ-0034",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "dst-gap"
+        ],
+        "zone": "intl",
+        "dataForm": "host",
+        "cause": "legal-change"
+      }
+    },
+    {
+      "id": "L3-TZ-0035",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "dst-gap"
+        ],
+        "zone": "intl",
+        "dataForm": "host",
+        "cause": "date-line"
+      }
+    },
+    {
+      "id": "L3-TZ-0036",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "dst-fold",
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone",
+        "cause": "date-line"
+      }
+    },
+    {
+      "id": "L3-TZ-0037",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0038",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0039",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0040",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0041",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0042",
+      "verdict": "pass",
+      "meta": {
+        "flags": [
+          "lmt"
+        ],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0043",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "tzdb",
+        "dataForm": "main+backzone"
+      }
+    },
+    {
+      "id": "L3-TZ-0044",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
+    },
+    {
+      "id": "L3-TZ-0045",
+      "verdict": "pass",
+      "meta": {
+        "flags": [],
+        "zone": "intl",
+        "dataForm": "host"
+      }
+    },
+    {
+      "id": "L3-LMT-0001",
+      "verdict": "unsupported",
+      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
+    },
+    {
+      "id": "L3-LMT-0002",
+      "verdict": "unsupported",
+      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
+    },
+    {
+      "id": "L3-LMT-0003",
+      "verdict": "unsupported",
+      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
+    },
+    {
+      "id": "L3-LMT-0004",
+      "verdict": "unsupported",
+      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
+    },
+    {
+      "id": "L3-LMT-0005",
+      "verdict": "unsupported",
+      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
+    },
+    {
+      "id": "L3-TTU-0001",
+      "verdict": "pass",
+      "residual": {
+        "tt_minus_utc_s": 0
+      },
+      "meta": {
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 10,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
+      }
+    },
+    {
+      "id": "L3-TTU-0002",
+      "verdict": "pass",
+      "residual": {
+        "tt_minus_utc_s": 4.20464374e-9
+      },
+      "meta": {
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 10,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
+      }
+    },
+    {
+      "id": "L3-TTU-0003",
+      "verdict": "pass",
+      "residual": {
+        "tt_minus_utc_s": 7.10542736e-15
+      },
+      "meta": {
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 11,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
+      }
+    },
+    {
+      "id": "L3-TTU-0004",
+      "verdict": "pass",
+      "residual": {
+        "tt_minus_utc_s": -2.03450554e-8
+      },
+      "meta": {
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 19,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
+      }
+    },
+    {
+      "id": "L3-TTU-0005",
+      "verdict": "pass",
+      "residual": {
+        "tt_minus_utc_s": 0
+      },
+      "meta": {
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 25,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
+      }
+    },
+    {
+      "id": "L3-TTU-0006",
+      "verdict": "pass",
+      "residual": {
+        "tt_minus_utc_s": 0
+      },
+      "meta": {
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 32,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
+      }
+    },
+    {
+      "id": "L3-TTU-0007",
+      "verdict": "pass",
+      "residual": {
+        "tt_minus_utc_s": 1.15740875e-8
+      },
+      "meta": {
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 36,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
+      }
+    },
+    {
+      "id": "L3-TTU-0008",
+      "verdict": "unsupported",
+      "detail": "the engine takes instants as JavaScript dates, which have no leap second"
+    },
+    {
+      "id": "L3-TTU-0009",
+      "verdict": "pass",
+      "residual": {
+        "tt_minus_utc_s": 0
+      },
+      "meta": {
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 37,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
+      }
+    },
+    {
+      "id": "L3-TTU-0010",
+      "verdict": "pass",
+      "residual": {
+        "tt_minus_utc_s": 0
+      },
+      "meta": {
+        "basis": "iers",
+        "leapSeconds": {
+          "taiMinusUtc": 37,
+          "listed": true
+        },
+        "deltaTModel": "iers-utc/1"
+      }
+    },
+    {
+      "id": "L3-DT-0001",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0000561694824
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0002",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": 0.0001743
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0003",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.000118212988
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0004",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": 0.0000226870117
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0005",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": 0.00000572597656
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0006",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.000232925977
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0007",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0003482
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0008",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0000754259766
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0009",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": 0.0001963
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0010",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0004561
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0011",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": 0.0001638
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0012",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0000957519531
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0013",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.0000872480469
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0014",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": -0.000505451953
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-DT-0015",
+      "verdict": "pass",
+      "residual": {
+        "delta_t_s": 0.0001318
+      },
+      "meta": {
+        "model": "iers-utc/1",
+        "segment": "observed"
+      }
+    },
+    {
+      "id": "L3-JDN-0001",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0002",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0003",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0004",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0005",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0006",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0007",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0008",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0009",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0010",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0011",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0012",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0013",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0014",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0015",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0016",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0017",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0018",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0019",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0020",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0021",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0022",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0023",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0024",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-JDN-0025",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-CAL-0001",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-CAL-0002",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-CAL-0003",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-CAL-0004",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-CAL-0005",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-CAL-0006",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-CAL-0007",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-CAL-0008",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-CAL-0009",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+    },
+    {
+      "id": "L3-CAL-0010",
+      "verdict": "unsupported",
+      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
     }
   ]
 }

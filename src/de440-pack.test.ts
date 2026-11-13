@@ -14,8 +14,8 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { DE440_PACK, de440PackBytes, openShippedDe440Pack } from "./de440-pack.js";
-import { EPHEMERIS, natalChart, positions, withEphemeris } from "./index.js";
+import { DE440_PACK, de440PackBytes, openShippedDe440Pack, shippedDe440Source } from "./de440-pack.js";
+import { EPHEMERIS, natalChart, positions, setDefaultEphemeris, withEphemeris } from "./index.js";
 import { createNatalEnvelope } from "./receipt.js";
 
 interface Vector {
@@ -83,16 +83,24 @@ describe("the shipped DE440 pack", () => {
     expect(largestLat).toBeLessThanOrEqual(0.0011);
   });
 
-  it("leaves the root's own positions on astronomy-engine", async () => {
+  it("is the source a plain call uses by default, and not after setDefaultEphemeris(\"astronomy-engine\")", async () => {
     const source = await openShippedDe440Pack();
+    expect(shippedDe440Source()).toBe(source);
     const at = "1990-04-15T08:30:00Z";
-    const before = positions(at);
-    const inside = withEphemeris(source, () => positions(at));
-    expect(positions(at)).toEqual(before);
-    expect(inside.find((row) => row.body === "Neptune")!.lon).not.toBe(before.find((row) => row.body === "Neptune")!.lon);
-    const chart = natalChart({ utc: at, latitude: 51.5, longitude: -0.12 });
-    expect(chart.ephemeris).toBeUndefined();
-    expect(createNatalEnvelope(chart).receipt.engine.ephemeris).toEqual({ name: EPHEMERIS.name, version: EPHEMERIS.version });
+    setDefaultEphemeris("de440");
+    try {
+      const inside = withEphemeris(source, () => positions(at));
+      expect(positions(at)).toEqual(inside);
+      expect(natalChart({ utc: at, latitude: 51.5, longitude: -0.12 }).ephemeris).toEqual(source.ephemeris);
+      setDefaultEphemeris("astronomy-engine");
+      const fallback = positions(at);
+      expect(fallback.find((row) => row.body === "Neptune")!.lon).not.toBe(inside.find((row) => row.body === "Neptune")!.lon);
+      const chart = natalChart({ utc: at, latitude: 51.5, longitude: -0.12 });
+      expect(chart.ephemeris).toBeUndefined();
+      expect(createNatalEnvelope(chart).receipt.engine.ephemeris).toEqual({ name: EPHEMERIS.name, version: EPHEMERIS.version });
+    } finally {
+      setDefaultEphemeris("astronomy-engine");
+    }
   });
 
   it("writes a DE440 receipt that names the shipped pack", async () => {

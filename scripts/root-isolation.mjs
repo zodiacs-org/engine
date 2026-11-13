@@ -33,14 +33,15 @@ import { existsSync, readFileSync } from "node:fs";
  * src/time.ts and src/time-bands.ts, each named whole, so that the root's
  * src/time-scale.ts and src/time-scale-data.ts are not; and the lite entry's
  * file and directory, src/lite.ts and src/lite/, and src/sect.ts, whole, which
- * only its sect part imports; and the DE440 entry's file and directory,
- * src/de440.ts and src/de440/, with src/de440-pack.ts, the entry that ships
- * the pack (its data is src/de440/pack-data.ts). The root modules the lite parts are built from
+ * only its sect part imports. The DE440 files (src/de440.ts, src/de440/ and
+ * src/de440-pack.ts, with the pack's data in src/de440/pack-data.ts) were
+ * opt-in until 1.1.0-rc.9, which makes the shipped pack the root's default
+ * source: the root imports them now, and they are not in this list. The root modules the lite parts are built from
  * (src/declination.ts, src/points.ts and the like) are the root's own; the
  * export smoke test pins the lite entry's modules (scripts/lite-entry.mjs).
  */
 export const OPT_IN_SOURCE =
-  /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky|lite|de440)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|(?:houses-extra|equator|first-millisecond|time|time-bands|sect|de440-pack)\.[^/]*$)/u;
+  /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky|lite)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|(?:houses-extra|equator|first-millisecond|time|time-bands|sect)\.[^/]*$)/u;
 
 /** The source path of every module esbuild marks in an output file: `// src/...`, any extension. */
 export function sourceMarkers(code) {

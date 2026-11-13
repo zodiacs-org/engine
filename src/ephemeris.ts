@@ -9,6 +9,7 @@ import {
 } from "astronomy-engine";
 
 import { findAspects } from "./aspects.js";
+import { shippedDe440Source } from "./de440-pack.js";
 import { chartBodyDeclinations } from "./declination.js";
 import type { ChartDeclinations } from "./declination.js";
 import { deltaT } from "./deltat.js";
@@ -48,13 +49,142 @@ interface Clock {
 
 const UTC_CLOCK: Clock = { scale: "utc", pin: undefined };
 
-/** The source `withEphemeris` installed, or null for astronomy-engine. */
+/** The source `withEphemeris` installed, or null for the default source. */
 let source: PositionSource | null = null;
+
+/** What a call outside `withEphemeris` computes on. */
+export type DefaultEphemerisName = "de440" | "astronomy-engine";
+let defaultName: DefaultEphemerisName = "de440";
+/** Above zero inside `onAstronomyEngine`. */
+let astronomyEngineOnly = 0;
+
+/**
+ * The default source keeps a day inside each end of the shipped pack, so
+ * that a position, its speed samples (six hours each side for the node) and
+ * the light-time lookback (under seven hours for Pluto) all come from one
+ * ephemeris.
+ */
+const DEFAULT_MARGIN_DAYS = 1;
+const SECONDS_PER_DAY = 86_400;
+
+interface ShippedDefault {
+  readonly source: PositionSource;
+  /** Days of TT from J2000.0 between which the default source is the pack, the ends included. */
+  readonly fromTtDays: number;
+  readonly toTtDays: number;
+}
+let shipped: ShippedDefault | null | undefined;
+let shippedError: string | null = null;
+
+/** The shipped pack as the default source, opened at the first use, or null when it cannot be opened. */
+function shippedDefault(): ShippedDefault | null {
+  if (shipped !== undefined) return shipped;
+  try {
+    const opened = shippedDe440Source();
+    shipped = {
+      source: opened,
+      fromTtDays: opened.pack.startEtSecTdb / SECONDS_PER_DAY + DEFAULT_MARGIN_DAYS,
+      toTtDays: opened.pack.stopEtSecTdb / SECONDS_PER_DAY - DEFAULT_MARGIN_DAYS
+    };
+  } catch (error) {
+    shipped = null;
+    shippedError = error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+  }
+  return shipped;
+}
+
+/**
+ * The source for a calculation at `ttDays` (TT days from J2000.0), decided
+ * once for the instant and used for each of its speed samples: the one
+ * `withEphemeris` installed; or the shipped DE440 pack, when the default is
+ * "de440", the pack opened, and the instant is inside it by a day; or null,
+ * for astronomy-engine.
+ */
+function sourceAt(ttDays: number): PositionSource | null {
+  if (astronomyEngineOnly > 0) return null;
+  if (source) return source;
+  if (defaultName !== "de440") return null;
+  const pack = shippedDefault();
+  return pack !== null && ttDays >= pack.fromTtDays && ttDays <= pack.toTtDays ? pack.source : null;
+}
+
+/** What `defaultEphemeris` reports. */
+export interface DefaultEphemeris {
+  /**
+   * `"de440"`: a call outside `withEphemeris` computes on the shipped DE440
+   * pack where `de440` says it can, and on astronomy-engine elsewhere.
+   * `"astronomy-engine"`: it computes on astronomy-engine always.
+   */
+  readonly name: DefaultEphemerisName;
+  /** The shipped pack as the default source. */
+  readonly de440: {
+    /** Whether the pack opened. When false, every default call is astronomy-engine's. */
+    readonly opened: boolean;
+    /** The pack's SHA-256, a chart's `ephemeris.version`, or null when it did not open. */
+    readonly version: string | null;
+    /**
+     * Days of TT from J2000.0 between which the default is the pack, the
+     * ends included: a day inside each end of the pack's coverage. Null when
+     * it did not open.
+     */
+    readonly fromTtDays: number | null;
+    readonly toTtDays: number | null;
+    /** Why the pack did not open, or null. */
+    readonly error: string | null;
+  };
+}
+
+/**
+ * What a call outside `withEphemeris` computes on. The first call opens the
+ * shipped pack if nothing has yet (which hashes its 2,489,664 bytes twice).
+ * A chart says which ephemeris it came from: `chart.ephemeris` names the
+ * pack, and is absent on a chart from astronomy-engine.
+ */
+export function defaultEphemeris(): DefaultEphemeris {
+  const pack = shippedDefault();
+  return Object.freeze({
+    name: defaultName,
+    de440: Object.freeze({
+      opened: pack !== null,
+      version: pack?.source.ephemeris.version ?? null,
+      fromTtDays: pack?.fromTtDays ?? null,
+      toTtDays: pack?.toTtDays ?? null,
+      error: shippedError
+    })
+  });
+}
+
+/**
+ * Choose what a call outside `withEphemeris` computes on, from now on:
+ * `"de440"` (the package's default) or `"astronomy-engine"`, which gives the
+ * positions 1.1.0-rc.7 and earlier gave at every instant. It is one setting
+ * for the whole module, so set it once, before computing; `withEphemeris`
+ * still overrides it for the calls inside.
+ */
+export function setDefaultEphemeris(name: DefaultEphemerisName): void {
+  if (name !== "de440" && name !== "astronomy-engine") throw new TypeError('setDefaultEphemeris takes "de440" or "astronomy-engine"');
+  defaultName = name;
+}
+
+/**
+ * Run `run` on astronomy-engine whatever the default: for the modules that
+ * compute on astronomy-engine themselves and call this file's functions
+ * beside it (the calc and window entries), so that one result never mixes
+ * two ephemerides. They refuse inside `withEphemeris` before they get here.
+ */
+export function onAstronomyEngine<T>(run: () => T): T {
+  astronomyEngineOnly += 1;
+  try {
+    return run();
+  } finally {
+    astronomyEngineOnly -= 1;
+  }
+}
 
 /**
  * Run `run` with every body position the engine computes taken from
- * `positionSource` (for example `@zodiacs/engine/de440`'s), then restore the
- * one before, whatever happens. Charts computed inside name it
+ * `positionSource` (for example `@zodiacs/engine/de440`'s), in place of the
+ * default source, then restore the one before, whatever happens. Charts computed inside name it
  * (`chart.ephemeris`), and so do their receipts. `run` must be synchronous:
  * a function that returns a promise would leave its later steps on another
  * source, so that throws TypeError (after `run` has returned). Calls nest.
@@ -235,11 +365,12 @@ function trueNodeLongitude(time: AstroTime): number {
 }
 
 function longitudeAt(body: BodyName, ms: number, clock: Clock): number {
-  return longitudeOn(body, basisAt(ms, clock));
+  const basis = basisAt(ms, clock);
+  return longitudeOn(body, basis, sourceAt(basis.ttDays));
 }
 
-function longitudeOn(body: BodyName, basis: TimeBasis): number {
-  if (source) return sourceLongitude(source, body, basis.ttDays);
+function longitudeOn(body: BodyName, basis: TimeBasis, from: PositionSource | null): number {
+  if (from) return sourceLongitude(from, body, basis.ttDays);
   const time = timeOf(basis);
   if (body === "Moon") return moonOfDate(time).lon;
   if (body === "North Node") return trueNodeLongitude(time);
@@ -289,10 +420,10 @@ function centralDifference(
   return difference / elapsedDays(before, after, 2 * stepDays);
 }
 
-function speedAt(body: BodyName, ms: number, clock: Clock): number {
+function speedAt(body: BodyName, ms: number, clock: Clock, from: PositionSource | null = sourceAt(basisAt(ms, clock).ttDays)): number {
   const stepDays =
     body === "North Node" || body === "South Node" ? NODE_SPEED_STEP_DAYS : SPEED_STEP_DAYS;
-  return centralDifference((basis) => longitudeOn(body, basis), ms, clock, stepDays);
+  return centralDifference((basis) => longitudeOn(body, basis, from), ms, clock, stepDays);
 }
 
 function position(body: BodyName, lon: number, lat: number, speed: number): BodyPosition {
@@ -311,21 +442,21 @@ export function computeBodies(date: Date): BodyPosition[] {
   return evaluated(() => bodiesAt(date.getTime(), UTC_CLOCK));
 }
 
-function bodiesAt(ms: number, clock: Clock): BodyPosition[] {
-  if (source) return sourceBodiesAt(source, ms, clock);
+function bodiesAt(ms: number, clock: Clock, from: PositionSource | null = sourceAt(basisAt(ms, clock).ttDays)): BodyPosition[] {
+  if (from) return sourceBodiesAt(from, ms, clock);
   const bodies: BodyPosition[] = [];
   for (const planet of PLANETS) {
     const coordinates = planetOfDate(planet.body, timeAt(ms, clock));
     bodies.push(
-      position(planet.name, coordinates.lon, coordinates.lat, speedAt(planet.name, ms, clock))
+      position(planet.name, coordinates.lon, coordinates.lat, speedAt(planet.name, ms, clock, null))
     );
   }
 
   const moon = moonOfDate(timeAt(ms, clock));
-  bodies.splice(1, 0, position("Moon", moon.lon, moon.lat, speedAt("Moon", ms, clock)));
+  bodies.splice(1, 0, position("Moon", moon.lon, moon.lat, speedAt("Moon", ms, clock, null)));
 
   const northNode = trueNodeLongitude(timeAt(ms, clock));
-  const nodeSpeed = speedAt("North Node", ms, clock);
+  const nodeSpeed = speedAt("North Node", ms, clock, null);
   bodies.push(
     position("North Node", northNode, 0, nodeSpeed),
     position("South Node", normalizeLongitude(northNode + 180), 0, nodeSpeed)
@@ -339,7 +470,7 @@ function sourceBodiesAt(from: PositionSource, ms: number, clock: Clock): BodyPos
   return (["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "North Node", "South Node"] as const).map(
     (body) => {
       const place = body === "North Node" || body === "South Node" ? { lon: sourceLongitude(from, body, tt), lat: 0 } : from.place(body as SourceBody, tt);
-      return position(body, tidy(place.lon), place.lat, speedAt(body, ms, clock));
+      return position(body, tidy(place.lon), place.lat, speedAt(body, ms, clock, from));
     }
   );
 }
@@ -357,8 +488,9 @@ function chartAt(input: ChartInput): Chart {
   const flags = [...(input.flags ?? [])];
   const ms = input.utc.getTime();
   const clock = clockOf(input);
-  const bodies = bodiesAt(ms, clock);
   const basis = timeBasis(ms, clock.scale, clock.pin);
+  const from = sourceAt(basis.ttDays);
+  const bodies = bodiesAt(ms, clock, from);
   let angles = null;
   let houses = null;
 
@@ -393,7 +525,7 @@ function chartAt(input: ChartInput): Chart {
     deltaT: basis.deltaT,
     timeScale: basis.timeScale,
     engineVersion: ENGINE_VERSION,
-    ...(source && { ephemeris: { name: source.ephemeris.name, version: source.ephemeris.version } })
+    ...(from && { ephemeris: { name: from.ephemeris.name, version: from.ephemeris.version } })
   };
 }
 

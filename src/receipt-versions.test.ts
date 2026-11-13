@@ -14,6 +14,10 @@ import { describe, expect, it } from "vitest";
 import { natalChart } from "./api.js";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from "./receipt.js";
 import type { NatalEnvelopeErrorCode } from "./receipt.js";
+import { setDefaultEphemeris } from "./ephemeris.js";
+
+// This file computes while it is collected, before src/test-setup.ts's hook: astronomy-engine, as that hook sets.
+setDefaultEphemeris("astronomy-engine");
 
 const RC14 = readFileSync(new URL("./fixtures/receipt-rc14.json", import.meta.url), "utf8");
 const RC15 = readFileSync(new URL("./fixtures/receipt-rc15.json", import.meta.url), "utf8");

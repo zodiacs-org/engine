@@ -90,7 +90,9 @@ gives as ERFA's (BSD 3-Clause), was not taken: the port sums the engine's
 table, arguments and offsets (*Nutation* below), which equal the runtime's
 term for term and double for double. `src/de440/kernel.testkit.ts`, a reader
 of `de440.bsp` for the tests, is not packed. `src/de440-pack.ts`, added in
-1.1.0-rc.8 and built into `dist/de440-pack.js`, is this package's own code;
+1.1.0-rc.9 and built into a shared chunk under `dist/`, and
+`src/de440/sha256.ts`, a SHA-256 written for this package from FIPS 180-4,
+are this package's own code;
 the pack it carries is the subject of *DE440 pack* below.
 
 The site repository's `LICENSE` at both commits reserves all rights in its
@@ -168,11 +170,15 @@ generated fixture into the package.
 
 ## DE440 pack
 
-From 1.1.0-rc.8 the package carries a sealed DE440 pack.
+From 1.1.0-rc.9 the package carries a sealed DE440 pack, and its root entry
+computes on it by default (`docs/de440.md`, *The default source*).
 `scripts/build-de440-pack.mjs` writes it, as base64 text, into
-`src/de440/pack-data.ts`, which the build places in `dist/de440-pack.js`, the
-file of `@zodiacs/engine/de440/pack`, and in no other file
+`src/de440/pack-data.ts`, which the build places in one shared chunk under
+`dist/` that the root's ephemeris chunk and `dist/de440-pack.js`, the file of
+`@zodiacs/engine/de440/pack`, import, and in no other file
 (`scripts/verify-package-contents.mjs` checks that, and the pack's digest).
+The withdrawn draft 1.1.0-rc.8 carried the same pack behind that entry
+alone.
 The pack is `de440-1790-2210.v2.zeph`, 2,489,664 bytes, SHA-256
 `51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7`: Chebyshev
 series for the Sun, the Moon, the Earth-Moon barycentre, Mercury, Venus and
@@ -220,8 +226,12 @@ whoever made the last modification: `NOTICE` and `docs/de440.md` say that
 Zodiacs.org made the pack, name JPL's ephemeris as its source, and say that
 JPL and NAIF have not reviewed it. NAIF's rules speak of SPICE kernels; they
 do not speak of data refitted from one, and no statement of JPL's on
-redistributing DE440 or data derived from it was found. The owner's position,
-given on 2026-11-13 for this candidate, is that DE440 is JPL's public data.
+redistributing DE440 or data derived from it was found. NAIF's directory of
+the planetary kernels has no readme for DE440 (its two `aareadme` files are
+for DE430, DE431 and DE432s), and its `de440_tech-comments.txt`, which a
+second session read in full on 2026-11-13, gives constants and the reference
+above and no terms (`docs/evidence/1.1.0-rc.8-20261113/breaker/README.md`).
+The owner's position, given on 2026-11-13, is that DE440 is JPL's public data.
 1.1.0-rc.3 shipped no pack while a question about redistributing one was
 with NAIF (`docs/de440.md` at 1.1.0-rc.3); no answer to it is
 recorded in this repository. Shipping the pack therefore rests on the
@@ -479,14 +489,16 @@ package's own results and NASA JPL Horizons (DE441) responses at 32
 preregistered instants, rounded up (for the mean node, the mean south node
 and Black Moon Lilith, from the same definitions evaluated with ERFA's
 fundamental arguments at those instants, which checks the implementation,
-not an ephemeris), and the largest distance of
+not an ephemeris; from 1.1.0-rc.7, for the geocentric Sun, Moon, planets and
+true nodes, from JPL's DE440 at noon TT on each of 146,097 days from
+1800-01-01 to 2199-12-31, `docs/evidence/de440-sweep-20261111/`), and the
+largest distance of
 astronomy-engine's barycentre from a Newtonian barycentre of the same
 positions, scanned daily from 1800 to 2200 and compared with Horizons's
 barycentre at 88 instants (`docs/evidence/calc-api/`). No value of a JPL
-ephemeris, and no coefficient fitted to one, is in the calc entry; the
-Horizons responses are in that evidence directory, which is not packed. From
-1.1.0-rc.8 one file of the package does hold coefficients fitted to a JPL
-ephemeris, the DE440 pack's (*DE440 pack* below).
+ephemeris, and no coefficient fitted to one, is in the package; the Horizons
+responses are in that evidence directory, and the DE440 kernel was read only
+in the sweep's workflow, neither of which is packed.
 
 Since 0.1.1-rc.17 it also carries the star values of *Timing and Vedic
 values*, in the chunk it shares with `./vedic`. Its ayanamsa bounds

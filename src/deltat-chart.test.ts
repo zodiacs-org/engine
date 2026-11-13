@@ -13,6 +13,10 @@ import {
   serializeNatalEnvelope
 } from "./receipt.js";
 import { natalConventionIds } from "./conventions.js";
+import { setDefaultEphemeris } from "./ephemeris.js";
+
+// This file computes while it is collected, before src/test-setup.ts's hook: astronomy-engine, as that hook sets.
+setDefaultEphemeris("astronomy-engine");
 
 const J2000 = Date.UTC(2000, 0, 1, 12);
 const utOf = (date: Date) => (date.getTime() - J2000) / 86_400_000;

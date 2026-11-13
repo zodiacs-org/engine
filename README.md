@@ -16,21 +16,38 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**1.1.0-rc.8**, the next candidate for 1.1.0 after 1.1.0-rc.3, not
-published. It ships the sealed DE440 pack: a new entry,
-`@zodiacs/engine/de440/pack`, holds the pack and opens it, so that positions
-from JPL's DE440 need nothing but the package
-(`withEphemeris(await openShippedDe440Pack(), fn)`), for seventeen public
-entry points (see [docs/de440.md](docs/de440.md)). Computed that way, the Sun,
-the Moon and the planets are within 1″ of JPL Horizons (DE441) at all 240
-position vectors of the repository's conformance suite, 24 instants from
-1851 to 2148, the largest difference 0.0127″
-(`src/de440-pack.test.ts`). The root's own positions, outside `withEphemeris`,
-are astronomy-engine's as before, and 48 of those 240 are within 1″. The pack
-makes the package much larger: 2,696,971 bytes packed against 1.1.0-rc.3's
-331,979, and 4,477,785 unpacked against 1,142,818 (CHANGELOG.md). Only
-code that imports the new entry loads it. 1.1.0-rc.3 added `@zodiacs/engine/de440`, positions from a DE440
-pack, which the root's `withEphemeris` puts in place of astronomy-engine. Over
+**1.1.0-rc.9**, the next candidate for 1.1.0 after 1.1.0-rc.7, not
+published. It ships a sealed pack of JPL's DE440 for 1790 to 2210 and
+computes on it by default: a plain `natalChart` or `positions` call, with
+nothing opened or supplied, takes the Sun, the Moon, the planets and the true
+node from the pack, and the chart names it (`chart.ephemeris`). On that
+default the Sun, the Moon and the planets are within 1″ of JPL Horizons
+(DE441) at all 240 position vectors of the repository's conformance suite, 24
+instants from 1851 to 2148, the largest difference 0.0127″
+(`src/de440-default.test.ts`); on astronomy-engine, which every earlier
+release computed on, 48 of the 240 are. Outside 1790-01-02 to 2209-12-31 the
+engine falls back to astronomy-engine and the chart says so, and
+`setDefaultEphemeris("astronomy-engine")` gives earlier releases' positions
+everywhere. `@zodiacs/engine/calc`, `birthWindow` and the sky entry's rising
+and setting still compute on astronomy-engine, so a default `calc()` position
+and the root's now differ inside the pack's years, within the limits
+`calc()` quotes. The pack makes the package about four times larger
+unpacked (4,502,147 bytes against 1.1.0-rc.7's 1,152,017), and an application
+that bundles the root entry bundles the pack's 3,319,552 characters (see
+[docs/de440.md](docs/de440.md) and CHANGELOG.md). 1.1.0-rc.8 was a draft
+that shipped the pack behind `withEphemeris` only; it was withdrawn and its
+number is not used again. From 1.1.0-rc.7 the error limits
+`@zodiacs/engine/calc` quotes for geocentric
+positions come from DE440 on every day from 1800 through 2199 (CHANGELOG.md).
+From 1.1.0-rc.6 a birth in an hour the clock showed twice can take the
+later pass (`fold: "later"` in `@zodiacs/engine/geo`; see
+[docs/time.md](docs/time.md)).
+1.1.0-rc.4 and 1.1.0-rc.5 were drafts that were not merged (CHANGELOG.md).
+1.1.0-rc.3 added
+`@zodiacs/engine/de440`, positions from JPL's DE440 through a pack the caller
+supplies, which the root's `withEphemeris` puts in place of the default
+source; with `@zodiacs/engine/de440/pack` there are seventeen public entry
+points (see [docs/de440.md](docs/de440.md)). Over
 1.0.0, natal receipts name their conventions as ids of the Zodiacs
 conventions registry, which a new entry, `@zodiacs/engine/conventions`,
 gives (from 1.1.0-rc.1; see *Draft natal receipts*). 1.1.0-rc.2 added two
@@ -44,13 +61,12 @@ may change, which records stay readable and how something public is
 deprecated, and `api/` holds each public entry point's declarations. npm
 carries 1.0.0, the first stable release, under `latest`: `npm install
 @zodiacs/engine` installs it, without `./conventions`, `./time`, `./lite`,
-`./de440` or `./de440/pack`, and writing no ids. This candidate is not
-published there. Install
-the exact candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.8.tgz` in the
+`./de440` or the DE440 pack, computing on astronomy-engine, and writing no ids. This candidate is not published there. Install
+the exact candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.9.tgz` in the
 repository, retaining its SHA-256 receipt:
 
 ```sh
-npm install ./zodiacs-engine-1.1.0-rc.8.tgz
+npm install ./zodiacs-engine-1.1.0-rc.9.tgz
 ```
 
 The Release workflow publishes the archive carried in `artifacts/` as it is,
@@ -74,7 +90,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.8.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.9.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -132,9 +148,12 @@ gained a conventions set that names the nutation; rc.15's receipts stay
 readable. As in rc.15, a chart's instant is read on a time basis: from 1972
 to 2027-10-02 as UTC, with TT from the leap seconds and UT1 from IERS
 UT1 − UTC, and otherwise as UT1 with the ΔT model, or on UT1 or TT when
-`timeScale` says so (see Time). The ephemeris is still astronomy-engine
-2.1.19. See CHANGELOG.md for the release history and
-`docs/evidence/1.1.0-rc.8-20261113/` for this candidate's checks
+`timeScale` says so (see Time). From 1.1.0-rc.9 the ephemeris is the shipped
+DE440 pack inside its years and astronomy-engine 2.1.19 elsewhere; where this
+document speaks of the ephemeris's accuracy or of its error limits without
+naming DE440, it speaks of astronomy-engine, the fallback and the calc
+entry's ephemeris. See CHANGELOG.md for the release history and
+`docs/evidence/1.1.0-rc.9-20261114/` for this candidate's checks
 (1.1.0-rc.3's are in `docs/evidence/de440-20261110/`, 1.1.0-rc.2's in
 `docs/evidence/1.1.0-rc.2-20261102/`, 1.1.0-rc.1's in
 `docs/evidence/1.1.0-rc.1-20261026/`, 1.0.0's in
@@ -271,14 +290,18 @@ for (const aspect of today.aspects) {
   and varga timing refuse inside it. The entry fetches nothing; the pack is
   the caller's, or the one the next entry ships (see
   [docs/de440.md](docs/de440.md)).
-- `@zodiacs/engine/de440/pack`, new in 1.1.0-rc.8, ships that pack:
+- `@zodiacs/engine/de440/pack`, new in 1.1.0-rc.9, gives out the pack the
+  package ships and the root computes on by default:
   `de440-1790-2210.v2.zeph`, 2,489,664 bytes, refitted from NAIF's
-  `de440.bsp` for 1790 to 2210, as base64 text in the entry's own file.
-  `openShippedDe440Pack()` opens it, checked against its SHA-256, and gives
-  the source for `withEphemeris`; `de440PackBytes()` gives the bytes and
-  `DE440_PACK` describes them. Nothing else in the package imports it, and it
-  fetches nothing. Outside `withEphemeris` the root's positions are
-  astronomy-engine's (see [docs/de440.md](docs/de440.md)).
+  `de440.bsp` for 1790 to 2210, as base64 text in one file that this entry
+  and the root share. `shippedDe440Source()` opens it, checked against its
+  SHA-256, and gives the source (`openShippedDe440Pack()` gives the same one
+  as a promise); `de440PackBytes()` gives the bytes and `DE440_PACK`
+  describes them. It fetches nothing. A plain root call needs none of this:
+  the root's `defaultEphemeris()` says what it computes on, and
+  `setDefaultEphemeris("astronomy-engine")` puts it back on astronomy-engine.
+  The `withEphemeris` callback must be synchronous (see
+  [docs/de440.md](docs/de440.md)).
 - `@zodiacs/engine/lite`, new in 1.1.0-rc.2, gives declination parallels and
   out-of-bounds flags, a chart's sect under a named convention
   (`sectReading`), composite midpoints and their aspects, and the essential
@@ -299,9 +322,12 @@ apparent, astrometric or geometric positions with distances and speeds; and
 the tropical or the sidereal zodiac, with any ayanamsa of
 `@zodiacs/engine/vedic` or a caller's own (Swiss Ephemeris's `SE_SIDM_USER`).
 Results carry bounds and a receipt of convention ids. A measured bound is the
-largest difference from JPL Horizons on 32 instants from 1802 to 2188 (for
-the mean nodes and Black Moon Lilith, from their definitions evaluated with
-ERFA on the same instants): a sample maximum, not a limit. In the sidereal
+largest difference found, rounded up: for the geocentric Sun, Moon, planets
+and true nodes, from JPL's DE440 at noon TT on each of the 146,097 days from
+1800-01-01 to 2199-12-31; for every other center and body, from JPL Horizons
+on 32 instants from 1802 to 2188 (for the mean nodes and Black Moon Lilith,
+from their definitions evaluated with ERFA on the same instants). Its
+`basis` says which. It is a sample maximum, not a limit. In the sidereal
 zodiac a bound adds the
 ayanamsa's: the largest difference of its mean, and of its rate, from ERFA's
 construction of the same definition, over every year from 1800 to 2199. An
@@ -990,7 +1016,8 @@ timeZone)` loads the one a zone needs, and a wall time before 1970 throws until
 it has. From 1970 the host's Intl answers. A `longitude` reads a time in a
 zone's local mean time era on the birthplace's own mean time; `calendar:
 "julian"` takes an Old Style date, and `country` adds a note from the country's
-Gregorian adoption. Each resolution names the tzdb version (the host's where
+Gregorian adoption. A wall time the clock showed twice takes its first pass,
+or its second with `fold: "later"` (from 1.1.0-rc.6). Each resolution names the tzdb version (the host's where
 its Intl answered, null when the runtime does not report one) and, where
 there is one, the transition behind the offset with its cause (`dst`,
 `legal-change` or `date-line`): the jump's in a gap or fold, or, where the

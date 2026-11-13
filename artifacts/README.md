@@ -28,7 +28,12 @@ included, and fails unless:
   history is a prefix of HEAD's, entry for entry, and each commit's extends its
   parents'. Its superseded entries are exactly the ones pinned in the script:
   rc.11's first packing, allowed only in commit `00bdae7`, where it was
-  committed;
+  committed, and the withdrawn 1.1.0-rc.8, allowed only in the three commits
+  of pull request 101's branch that held it (`7dec96f`, `3de6a27` and
+  `0738bc9`). A withdrawn version has no carried archive and never gets one;
+  its archive and receipt are absent from HEAD; and in its pinned commits
+  alone the manifest recorded it as carried, an entry that is set aside when
+  those manifests are compared with their children's and with HEAD's;
 - every recorded version, every `<version>` in a file name here, and
   `package.json`'s version at HEAD is a strict semantic version: SemVer 2.0.0
   with no `v` prefix, no build metadata and no numeric identifier above
@@ -40,7 +45,8 @@ included, and fails unless:
   tree with the receipt naming the recorded bytes, and this README lists every
   recorded digest;
 - in every commit, each archive and receipt holds only its recorded bytes, and
-  nothing ever committed under `artifacts/` is missing from HEAD;
+  nothing ever committed under `artifacts/` is missing from HEAD, but the
+  archive and receipt of a withdrawn version, which must be;
 - each archive's source commit is in the history of HEAD and names its
   version, the commit that introduces the archive is that source commit or a
   child of it, and the packed `package.json`, README, CHANGELOG, LICENSE,
@@ -100,7 +106,9 @@ runs, so CI starts the check with node directly.
 | 1.1.0-rc.1 | `52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6` | 292,721 | 77 | `c41706266caf4dde7e03aaa18c08acd569d19a7e` | `6ec3464` | Candidate, merged |
 | 1.1.0-rc.2 | `c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c` | 318,004 | 90 | `806f76b43c0ee652016fe1b522c02d6f6e9c7ae5` | `59c6ea9` | Candidate, merged |
 | 1.1.0-rc.3 | `3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590` | 331,979 | 94 | `cc910b3775e279222e23af0b395bb6f2b51a3c3a` | `d2794d2` | Candidate, merged |
-| 1.1.0-rc.8 | `53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43` | 2,696,971 | 97 | `e3939499d603e511f1f23f7198eb425bc5f48359` | "Carry the packed 1.1.0-rc.8 tarball" | Candidate, draft, under review |
+| 1.1.0-rc.6 | `648714ca7485c7381f338286b84a211752ddd425035f50f6e24267e80de6abde` | 333,982 | 94 | `c3efe9175644ee6a0d9f40e2d9fa0766aa264fa6` | `7210037` | Draft candidate, awaiting the owner's review |
+| 1.1.0-rc.7 | `71348be1f8dc2772945cc86c72af475091d105da9e7ff5b4411c517adc9fc80a` | 335,403 | 94 | `ca3ae0ff197e0b4e7bfc68bf88c3d0afbeb360f8` | "Carry the packed 1.1.0-rc.7 tarball" | Draft candidate, awaiting the owner's review |
+| 1.1.0-rc.8 | `53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43` | 2,696,971 | 97 | `e3939499d603e511f1f23f7198eb425bc5f48359` | `7dec96f` | **Withdrawn before merge; never released; no file here.** Still reachable in the commits `7dec96f`, `3de6a27` and `0738bc9`. |
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -313,26 +321,67 @@ on the source commit (CI run 42738993989, Conformance 42738993913 and Atlas
 acted on. It is not to be published on npm until the owner approves it. The
 record is in `docs/evidence/de440-20261110/`.
 
-1.1.0-rc.8 is the next candidate for 1.1.0 on this line of history: the
-sealed DE440 pack, shipped in the package through a new entry point,
-`@zodiacs/engine/de440/pack`, so that positions from JPL's DE440 need no pack
-from the caller; seventeen public entry points. The numbers 1.1.0-rc.4 to
-1.1.0-rc.7 name candidates carried on other branches (pull requests 91 and
-95 among them), which are not in this history: a branch that carries one of
-them and this branch cannot both merge as they are, because `archives.json`
-is append-only, and whichever merges second is cut again under a new number.
-The archive is 2,696,971 bytes, 4,477,785 unpacked in 97 files, 8.1 times
-1.1.0-rc.3's packed size and 3.9 times its unpacked size: 3,319,552 of those
-bytes are the pack, as base64 text, which the package gate now holds to its
-exact size and digest, and the rest, 1,158,233, is under a cap of 1,165,000,
-raised from 1,145,000 with a new budget for the entry; the size and both
-figures are for the owner to approve (CHANGELOG.md). It was packed once, from
-clean clones of its source commit, each installed with `npm ci`, which packed
-the same bytes on Node 22.22.2, 20.19.0 and 24.21.0; the carried file is the
-Node 22.22.2 one. It was carried after the gate commands had passed locally
-on the source commit, and before the gate workflows had run on it or any
-review had read it: it is a draft for the owner, who decides whether it
-stands. It is not to be published on npm until the owner approves it, and
-its licensing record leaves the redistribution of the pack as an open
-question (LICENSING.md, *DE440 pack*). The record is in
-`docs/evidence/1.1.0-rc.8-20261113/`.
+1.1.0-rc.6 is the next candidate for 1.1.0 after 1.1.0-rc.3, cut as a draft
+for the owner's review: a birth in an hour the clock showed twice can take
+the later pass (`fold: "later"` in `@zodiacs/engine/geo`). There is no
+1.1.0-rc.4 and no 1.1.0-rc.5 archive here. 1.1.0-rc.4 was drafted in pull
+request 89 with this change and with a refusal of a birth given as a
+calendar date with no time; it was not merged, and the owner decided on
+2026-11-11 to hold the refusal for 2.0.0. 1.1.0-rc.5 was drafted in pull
+request 90 with this change alone; an independent review of that draft
+found that it recorded the later pass for times that have no second pass,
+and it was superseded by this candidate before merging. Both numbers are
+skipped and never packed again. The 1.1.0-rc.6 archive is 333,982 bytes,
+1,148,327 unpacked in 94 files, under the package cap of 1,150,000, which it
+raises from 1,145,000, as it raises `./geo`'s budget from 35,500 to 35,600;
+the owner approved both rises on 2026-11-11. It was packed once, from clean
+clones of its source commit, each installed with `npm ci`, which packed the
+same bytes on Node 22.22.2, 20.19.0 and 24.21.0 (Linux x86-64); the carried
+file is the Node 22.22.2 one. It was carried after the gate workflows had
+passed on the source commit (CI run 43014592658, Conformance 43014592715 and
+Atlas 43014592797) and after the findings of the independent review of
+1.1.0-rc.5 had been acted on. The independent review of this candidate's own
+change, the fix to what is recorded, follows the draft. It is not to be
+published on npm until the owner approves it. The record is in
+`docs/evidence/1.1.0-rc.6-20261111/`.
+
+1.1.0-rc.7 is the next candidate for 1.1.0 after 1.1.0-rc.6, cut as a draft
+for the owner's review, on 1.1.0-rc.6 with the dense DE440 sweep merged
+(pull requests 91 and 92). The error limits `@zodiacs/engine/calc` quotes
+for the geocentric Sun, Moon, Mercury to Pluto and true nodes are now the
+largest differences from JPL's DE440 found at noon TT on each of the 146,097
+days from 1800-01-01 to 2199-12-31; no position changes. The archive is
+335,403 bytes, 1,152,017 unpacked in 94 files, under the package cap of
+1,155,000, which it raises from 1,150,000 for the owner to decide with the
+candidate. It was packed once, from clean clones of its source commit, each
+installed with `npm ci`, which packed the same bytes on Node 22.22.2, 20.19.0
+and 24.21.0 (Linux x86-64); the carried file is the Node 22.22.2 one. It was
+carried after the gate workflows had passed on the source commit (CI run
+43055363489, Conformance 43055363317 and Atlas 43055363454) and after the
+DE440 sweep's workflow had run on it (run 43055363587) and found every
+largest difference within the limits it quotes. No independent review of
+this candidate has been done. It is not to be published on npm until the
+owner approves it. The record is in `docs/evidence/1.1.0-rc.7-20261111/`.
+
+1.1.0-rc.8 is the second breach of "once carried, never removed", and the
+one withdrawn version. It was a draft candidate cut on 1.1.0-rc.3 in pull
+request 101 (source commit `e393949`, carried in `7dec96f` on 2026-11-13): the
+sealed DE440 pack, shipped behind a new entry point, with a plain call still
+on astronomy-engine. While it waited for review the owner merged 1.1.0-rc.6
+and 1.1.0-rc.7 into main (pull requests 91, 92 and 95, then 100). The two
+branches had each appended to 1.1.0-rc.3's manifest, and an append-only
+manifest cannot hold both orders, so one had to give way; and the archive,
+built on 1.1.0-rc.3, held none of 1.1.0-rc.6's or 1.1.0-rc.7's changes, so it
+was not a candidate anyone should install. A second session's review of it
+also found that it did not do what was asked of it: a plain `natalChart` was
+not on DE440 (`docs/evidence/1.1.0-rc.8-20261113/breaker/`). Its archive and
+receipt were therefore removed in the commit that merged main into the
+branch, its manifest entry became three superseded entries, one for each
+commit that held the bytes, and `scripts/verify-archive-binding.mjs` pins
+those three commits and refuses any archive, or any `package.json`, that
+names 1.1.0-rc.8 again. `53df553c…` must not be installed or cited as a
+candidate. It was never pushed to npm, tagged or released. Changing the check
+to admit this is a change that review must catch, as the threat model above
+says: it is for the owner to accept with pull request 101, and the
+alternative, keeping the 1.1.0-rc.8 file in `artifacts/` as a superseded
+archive, needs the same pinned exception for the manifest's order.

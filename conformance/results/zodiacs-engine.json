@@ -9,14 +9,14 @@
   "adapter": {
     "name": "zodiacs-engine",
     "version": "0.3.0",
-    "engine": "@zodiacs/engine with the DE440 pack it ships",
-    "engineVersion": "1.1.0-rc.8",
+    "engine": "@zodiacs/engine",
+    "engineVersion": "1.1.0-rc.9",
     "configuration": {
-      "ephemeris": "positions from jpl-de440, the sealed pack the package ships (@zodiacs/engine/de440/pack), SHA-256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7, through withEphemeris; astronomy-engine 2.1.19 is not used for them",
+      "ephemeris": "the default source: jpl-de440 from the sealed pack the package ships, SHA-256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7, for instants from -76699.5 to 76699.5 days of TT from J2000.0; astronomy-engine 2.1.19 outside them",
       "deltaTModel": "zodiacs-deltat/1",
       "timeBasis": "from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise",
       "timeZones": "before 1970 the shipped tzdb 2025c history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
-      "positions": "natalChart with timeScale \"tt\" inside withEphemeris: the requested instant is read as TT; Mars to Pluto are system barycentres, as the vectors are",
+      "positions": "a plain natalChart with timeScale \"tt\", outside withEphemeris: the requested instant is read as TT; from the shipped pack, Mars to Pluto are system barycentres, as the vectors are",
       "angles": "natalChart with timeScale \"ut1\": the requested instant is read as UT1"
     }
   },

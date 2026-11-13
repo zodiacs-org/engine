@@ -1,19 +1,19 @@
 /**
  * `@zodiacs/engine/de440/pack`: the sealed DE440 pack itself, shipped in the
- * package, and a source opened from it, so that a caller has positions from
- * JPL's DE440 without supplying a pack.
+ * package, and a source opened from it.
  *
  * The pack is `de440-1790-2210.v2.zeph` (`DE440_PACK`), the Chebyshev series
  * zodiacs.org's pack compiler 2.0.0 refits from NAIF's `de440.bsp` for 1790
- * to 2210, 2,489,664 bytes, carried as base64 text in this entry's own file.
- * Nothing else in the package imports it: only code that imports this entry
- * loads it. `openShippedDe440Pack` opens it with `openDe440Pack` of
- * `@zodiacs/engine/de440`, which hashes the bytes and refuses them unless
- * their SHA-256 is `DE440_PACK.sha256`; the source it gives goes to the
- * root's `withEphemeris`. The root's own positions, outside `withEphemeris`,
- * are astronomy-engine's as before. This entry fetches nothing.
+ * to 2210, 2,489,664 bytes, carried as base64 text in one file of the
+ * package, which this entry and the root entry share. From 1.1.0-rc.9 the
+ * root entry computes on this pack by default (`src/ephemeris.ts`,
+ * `defaultEphemeris`), so a caller needs this entry only for the bytes, the
+ * description, or a source to hand to `withEphemeris` explicitly, which
+ * refuses an instant outside the pack where the default falls back to
+ * astronomy-engine. `shippedDe440Source` hashes the bytes and refuses them
+ * unless their SHA-256 is `DE440_PACK.sha256`. This entry fetches nothing.
  */
-import { openDe440Pack } from "./de440.js";
+import { openDe440PackSync } from "./de440.js";
 import type { De440Source } from "./de440.js";
 import { DE440_PACK_BASE64 } from "./de440/pack-data.js";
 
@@ -53,16 +53,34 @@ export function de440PackBytes(): Uint8Array {
   return bytes;
 }
 
-let opened: Promise<De440Source> | undefined;
+let opened: De440Source | undefined;
+let refused: unknown;
 
 /**
- * A DE440 source on the shipped pack, for `withEphemeris`. The first call
- * decodes the pack and opens it with `openDe440Pack`, expecting
- * `DE440_PACK.sha256` (so it needs WebCrypto, and rejects as `openDe440Pack`
- * does); later calls give the same source, which holds no state that a
- * caller can change.
+ * A DE440 source on the shipped pack, opened without a promise: the first
+ * call decodes the pack and opens it with `openDe440PackSync`, expecting
+ * `DE440_PACK.sha256`; later calls give the same source, which holds no
+ * state that a caller can change. If the pack cannot be opened (its bytes
+ * are not the sealed pack's, or the runtime has no `atob`), the first call
+ * throws, and every later call throws the same error without trying again.
+ * The root entry's default source is this one.
+ */
+export function shippedDe440Source(): De440Source {
+  if (opened) return opened;
+  if (refused !== undefined) throw refused;
+  try {
+    opened = openDe440PackSync(de440PackBytes(), { expectDigest: DE440_PACK.sha256 });
+  } catch (error) {
+    refused = error ?? new Error("the shipped DE440 pack could not be opened");
+    throw refused;
+  }
+  return opened;
+}
+
+/**
+ * The same source as `shippedDe440Source`, as a promise, as 1.1.0-rc.8's
+ * draft gave it: it rejects where that function throws.
  */
 export function openShippedDe440Pack(): Promise<De440Source> {
-  opened ??= openDe440Pack(de440PackBytes(), { expectDigest: DE440_PACK.sha256 });
-  return opened;
+  return new Promise((resolve) => resolve(shippedDe440Source()));
 }

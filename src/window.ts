@@ -8,7 +8,7 @@
 import { ASPECTS, ASPECT_TYPES, matchAspect, separation } from "./aspects.js";
 import { validateBirthSettings } from "./birth-input.js";
 import { dateFrom } from "./date-input.js";
-import { bodyLongitude, gastHours, onChartClock, refuseUnderSource } from "./ephemeris.js";
+import { bodyLongitude as defaultBodyLongitude, gastHours, onAstronomyEngine, onChartClock, refuseUnderSource } from "./ephemeris.js";
 import { computeAngles, computeHouses, houseOf, isPolarUndefinedHouseSystem } from "./houses.js";
 import type { AngleInput } from "./houses.js";
 import { tilt } from "./nutation.js";
@@ -36,6 +36,14 @@ import {
   wrap360
 } from "./window-ranges.js";
 import type { Range } from "./window-ranges.js";
+
+/**
+ * A window is computed on astronomy-engine, as its sidereal time and its
+ * tolerances are; so the longitudes it takes from src/ephemeris.ts are
+ * astronomy-engine's too, whatever the root's default source is.
+ */
+const bodyLongitude = (body: Parameters<typeof defaultBodyLongitude>[0], date: Date): number =>
+  onAstronomyEngine(() => defaultBodyLongitude(body, date));
 
 const DAY = 86_400_000;
 const DEG = Math.PI / 180;
