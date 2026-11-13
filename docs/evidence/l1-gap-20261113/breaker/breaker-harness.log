@@ -1,0 +1,32 @@
+# node v22.22.2; commit 6b1f9505d1bb1c290b2988461909821a34fc890f; breaker's harness runs
+$ ZODIACS_ENGINE_DIST=dist node conformance/harness/run.mjs --adapter "node <origin/main at 8da3a4e>/conformance/adapters/zodiacs-engine.mjs" --out <tmp>/main-default.json
+zodiacs-engine 1.1.0-rc.3: 267 pass, 192 fail, 41 unsupported, 0 error (of 500)
+  L1: 48 pass, 192 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 69 pass, 0 fail, 41 unsupported, 0 error (of 110)
+conformance: wrote <tmp>/main-default.json
+$ node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs" --out <tmp>/branch-default.json; cmp with main-default.json and with conformance/results/zodiacs-engine.json
+conformance: wrote <tmp>/branch-default.json
+cmp: identical to the origin/main adapter's output
+cmp: identical to conformance/results/zodiacs-engine.json
+$ ZODIACS_ENGINE_DE440_PACK=<pack recompiled by the breaker> ZODIACS_ENGINE_DE440_SHA256=51428874...1fa7 node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs" --levels L1 --out <tmp>/de440.json
+zodiacs-engine-de440 1.1.0-rc.3: 240 pass, 0 fail, 0 unsupported, 0 error (of 240)
+  L1: 240 pass, 0 fail, 0 unsupported, 0 error (of 240)
+conformance: wrote <tmp>/de440.json
+cmp: identical to conformance/results/zodiacs-engine-de440.json
+$ same, with a wrong digest (expect a refusal)
+  if (digest !== expect) throw new De440Error("digest-mismatch", "the pack's SHA-256 is not the one expected");
+De440Error: the pack's SHA-256 is not the one expected
+  code: 'digest-mismatch'
+exit 1
+$ SE_EPHE_PATH=<ephe> node conformance/harness/run.mjs --adapter "<venv>/python conformance/adapters/pyswisseph.py" --levels L1 --out <tmp>/pyswisseph-l1.json --values none   (verdicts and statistics only)
+pyswisseph 2.10.03: 240 pass, 0 fail, 0 unsupported, 0 error (of 240)
+  L1: 240 pass, 0 fail, 0 unsupported, 0 error (of 240)
+conformance: wrote <tmp>/pyswisseph-l1.json
+$ sha256sum of the kernel, and of the pack the breaker recompiled from it (compiler copy at the builder's <site>/examples/precision-alpha, 51 s)
+a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5  de440.bsp
+08b5d1a2f5c6ac85c7ec3f4e4b38a23a729f3aef16c94babb3a03f8b7fbc9b62  de440-1790-2210.zeph
+51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7  de440-1790-2210.v2.zeph
+$ PRECISION_KERNEL=<de440.bsp> npx vitest run src/de440-kernel.test.ts
+ Test Files  1 passed (1)
+      Tests  3 passed (3)

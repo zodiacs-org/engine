@@ -1,0 +1,66 @@
+default: suite ±1″ 48/240; lon 30″ 240/240; angle 30″ 240/240; receipt (angle) 237/240; receipt (lon only) 239/240; max dlon 18.7745 (L1-POS-0209), dlat 19.0281 (L1-POS-0237), angle 19.0384 (L1-POS-0237)
+de440: suite ±1″ 240/240; lon 30″ 240/240; angle 30″ 240/240; receipt (angle) 240/240; receipt (lon only) 240/240; max dlon 0.0126 (L1-POS-0002), dlat 0.001 (L1-POS-0222), angle 0.0127 (L1-POS-0002)
+{
+ "tolerances": [
+  "1/1 arcsec/arcsec"
+ ],
+ "rawHorizons": {
+  "everyFileOnTT": true,
+  "largestRawMinusVectorLon": {
+   "arcsec": 0.3852,
+   "id": "L1-POS-0010",
+   "body": "Pluto"
+  },
+  "largestRawMinusVectorLat": {
+   "arcsec": 0.047,
+   "id": "L1-POS-0002",
+   "body": "Moon"
+  },
+  "rowsMatched": 240
+ },
+ "routes": {
+  "defaultCalcExactJdVsNatalChartMillisecondArcsec": 0.0002667515299711362,
+  "fixedDeltaT300sMovesDefaultPlaceByArcsec": 5.615068881741356e-7,
+  "calcRefusedInsideWithEphemeris": "240 of 240",
+  "packEphemerisNames": [
+   "jpl-de440"
+  ],
+  "defaultEphemerisNames": [
+   null
+  ],
+  "smallestPackMoveFromDefaultArcsec": 0.12461841965339208
+ },
+ "instants": {
+  "afterHorizonsFetch20260922": {
+   "cases": 70,
+   "instants": 7
+  },
+  "afterToday20261113": {
+   "cases": 70
+  }
+ },
+ "futureDefault": {
+  "suite": 13,
+  "of": 70
+ },
+ "futureDe440": {
+  "suite": 70,
+  "maxLon": {
+   "arcsec": 0.0094,
+   "id": "L1-POS-0232",
+   "body": "Moon"
+  }
+ },
+ "pastDe440": {
+  "maxLon": {
+   "arcsec": 0.0126,
+   "id": "L1-POS-0002",
+   "body": "Moon"
+  }
+ },
+ "defaultReceiptFailures": [
+  "L1-POS-0117 Saturn 18.236 > 18",
+  "L1-POS-0164 Venus 13.015 > 11",
+  "L1-POS-0237 Saturn 19.038 > 18"
+ ]
+}

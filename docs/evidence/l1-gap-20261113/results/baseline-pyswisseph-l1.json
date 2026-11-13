@@ -1,0 +1,2470 @@
+{
+  "suite": "zodiacs-conformance",
+  "suiteVersion": "0.2.0",
+  "vectors": {
+    "vectors/0.2.0/L1-positions.json": "4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8"
+  },
+  "adapter": {
+    "name": "pyswisseph",
+    "version": "0.1.0",
+    "engine": "Swiss Ephemeris",
+    "engineVersion": "2.10.03",
+    "configuration": {
+      "binding": "pyswisseph 20230604",
+      "flags": "SEFLG_SWIEPH: apparent geocentric positions in the true ecliptic and equinox of date",
+      "ephemerisFiles": {
+        "seas_18.se1": "a2cd8fc33807c78ca9a700c91c2e042258b12fc4796519e00781440b5ad8b2e2",
+        "semo_18.se1": "1ca07bd67c24374d77226180c20a4f9996cba013697894810518e7eb582ca4f7",
+        "sepl_18.se1": "ca1393ceab3a44fbc895887cf789c68819ae6a1cbc9b22225872dbe4ccd99a66"
+      },
+      "houses": "houses_ex2 at the UT1 Julian date; a polar-circle error is reported as status undefined"
+    }
+  },
+  "values": "none",
+  "summary": {
+    "total": {
+      "count": 240,
+      "pass": 240,
+      "fail": 0,
+      "unsupported": 0,
+      "error": 0
+    },
+    "byLevel": {
+      "L1": {
+        "count": 240,
+        "pass": 240,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0
+      }
+    },
+    "byKind": {
+      "position.apparent.ecliptic-true-of-date": {
+        "count": 240,
+        "pass": 240,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "lon": {
+            "unit": "arcsec",
+            "n": 240,
+            "median": 0.00138710729,
+            "p95": 0.00328854373,
+            "max": 0.00545194169
+          },
+          "lat": {
+            "unit": "arcsec",
+            "n": 240,
+            "median": 0.000207826296,
+            "p95": 0.000732376763,
+            "max": 0.00186330806
+          }
+        }
+      }
+    },
+    "byTag": {}
+  },
+  "results": [
+    {
+      "id": "L1-POS-0001",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0002",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0003",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0004",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0005",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0006",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0007",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0008",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0009",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0010",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0011",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0012",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0013",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0014",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0015",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0016",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0017",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0018",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0019",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0020",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0021",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0022",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0023",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0024",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0025",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0026",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0027",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0028",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0029",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0030",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0031",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0032",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0033",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0034",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0035",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0036",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0037",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0038",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0039",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0040",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0041",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0042",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0043",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0044",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0045",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0046",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0047",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0048",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0049",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0050",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0051",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0052",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0053",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0054",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0055",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0056",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0057",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0058",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0059",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0060",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0061",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0062",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0063",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0064",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0065",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0066",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0067",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0068",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0069",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0070",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0071",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0072",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0073",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0074",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0075",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0076",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0077",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0078",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0079",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0080",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0081",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0082",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0083",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0084",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0085",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0086",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0087",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0088",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0089",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0090",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0091",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0092",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0093",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0094",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0095",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0096",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0097",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0098",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0099",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0100",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0101",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0102",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0103",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0104",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0105",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0106",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0107",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0108",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0109",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0110",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0111",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0112",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0113",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0114",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0115",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0116",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0117",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0118",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0119",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0120",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0121",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0122",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0123",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0124",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0125",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0126",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0127",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0128",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0129",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0130",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0131",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0132",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0133",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0134",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0135",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0136",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0137",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0138",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0139",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0140",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0141",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0142",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0143",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0144",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0145",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0146",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0147",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0148",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0149",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0150",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0151",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0152",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0153",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0154",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0155",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0156",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0157",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0158",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0159",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0160",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0161",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0162",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0163",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0164",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0165",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0166",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0167",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0168",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0169",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0170",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0171",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0172",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0173",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0174",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0175",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0176",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0177",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0178",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0179",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0180",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0181",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0182",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0183",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0184",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0185",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0186",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0187",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0188",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0189",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0190",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0191",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0192",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0193",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0194",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0195",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0196",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0197",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0198",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0199",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0200",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0201",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0202",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0203",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0204",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0205",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0206",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0207",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0208",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0209",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0210",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0211",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0212",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0213",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0214",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0215",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0216",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0217",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0218",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0219",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0220",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0221",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0222",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0223",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0224",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0225",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0226",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0227",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0228",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0229",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0230",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0231",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0232",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0233",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0234",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0235",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0236",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0237",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0238",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0239",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    },
+    {
+      "id": "L1-POS-0240",
+      "verdict": "pass",
+      "meta": {
+        "retflags": 2,
+        "flags": [
+          "SWIEPH"
+        ]
+      }
+    }
+  ]
+}
