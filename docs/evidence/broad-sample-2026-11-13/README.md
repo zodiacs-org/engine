@@ -79,7 +79,7 @@ tar -xzf artifacts/zodiacs-engine-1.1.0-rc.3.tgz -C "$RUN/node_modules/@zodiacs/
 cp -r node_modules/astronomy-engine "$RUN/node_modules/"   # 2.1.19, the archive's dependency
 cp docs/evidence/broad-sample-2026-11-13/tools/*.mjs "$RUN/"
 T=$PWD/docs/evidence/broad-sample-2026-11-13/tools
-export DE421_BSP=/path/to/de421.bsp
+cp /path/to/de421.bsp "$T/de421.bsp"   # the kernel is read from tools/; do not commit it
 python3 -I "$T/calibrate-l1.py"
 (cd "$RUN" && node sample-positions.mjs positions.jsonl && node events.mjs events.jsonl)
 python3 -I "$T/compare-positions.py" "$RUN/positions.jsonl" "$RUN/positions.json"

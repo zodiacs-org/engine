@@ -5,15 +5,15 @@ light-time (3 iterations), solar light deflection (erfa.ld, not for the Sun),
 annual aberration (erfa.ab), GCRS -> true equator of date (erfa.pnm06a),
 then R1(true obliquity) to the ecliptic of date.
 All times: TT as days from J2000.0 (TDB taken from TT + erfa.dtdb at the geocentre).
-The kernel is NAIF's de421.bsp, named by the DE421_BSP environment variable
-(see ../README.md for its address and SHA-256).
+The kernel is NAIF's de421.bsp, read from this tools folder (download it there
+and do not commit it; see ../README.md for its address and SHA-256).
 """
 import os
 import numpy as np
 import erfa
 from jplephem.spk import SPK
 
-KERNEL = os.environ["DE421_BSP"]
+KERNEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), "de421.bsp")
 J2000 = 2451545.0
 AU_KM = 149597870.700
 C_AUD = 173.1446326846693  # speed of light, au/day

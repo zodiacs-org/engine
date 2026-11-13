@@ -320,10 +320,11 @@ difference is above the published bound, the two are:
 | Neptune | 21″ | | 0.013″ a day | 0.015″ a day |
 | True node | 16″ | 19.2″ | not compared (`null`) | not compared |
 
-An empty cell in a measured column means the broader sample stayed within that
-published bound. The true node has no measured speed bound (its `value` is
-null) and its speed was compared in neither sample. The Sun, Uranus and Pluto
-stay within both of theirs.
+An empty position cell means the broader sample stayed within that published
+bound. An empty speed cell means the broader sample's longitude rate stayed
+within the published figure; because that is a different metric (see below), it
+does not show the angular rate bound holds. The true node has no measured speed
+bound (its `value` is null) and its speed was compared in neither sample.
 
 The two speed columns are not the same metric. The published `bounds.speed`
 is the largest angular rate difference, hypot(Δ(longitude rate) × cos
