@@ -1,0 +1,414 @@
+{
+ "what": "ZOD-97 T3, calendar switch, and chart flags",
+ "node": "v22.23.3",
+ "counts": {
+  "pass": 7,
+  "noted": 5,
+  "silent": 2
+ },
+ "records": [
+  {
+   "id": "T3-j",
+   "zone": "Europe/Rome",
+   "country": "IT",
+   "date": "1582-10-04",
+   "calendar": "julian",
+   "existedThere": true,
+   "what": "the last Julian day in Rome",
+   "arbiter": {
+    "jdn": 2299160,
+    "utcOfLocalNoon": "1582-10-14T11:10:04.000Z",
+    "lmtSeconds": 2996
+   },
+   "engine": {
+    "utc": "1582-10-14T11:10:04.000Z",
+    "gregorianDate": "1582-10-14",
+    "flags": [
+     "lmt"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "outside-reference-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-k",
+   "zone": "Europe/Rome",
+   "country": "IT",
+   "date": "1582-10-15",
+   "calendar": "gregorian",
+   "existedThere": true,
+   "what": "the first Gregorian day in Rome, the next day",
+   "arbiter": {
+    "jdn": 2299161,
+    "utcOfLocalNoon": "1582-10-15T11:10:04.000Z",
+    "lmtSeconds": 2996
+   },
+   "engine": {
+    "utc": "1582-10-15T11:10:04.000Z",
+    "gregorianDate": "1582-10-15",
+    "flags": [
+     "lmt"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "outside-reference-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-l",
+   "zone": "Europe/Rome",
+   "country": "IT",
+   "date": "1582-10-10",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "a Gregorian date inside the ten skipped days, country given",
+   "arbiter": {
+    "jdn": 2299156,
+    "utcOfLocalNoon": "1582-10-10T11:10:04.000Z",
+    "lmtSeconds": 2996
+   },
+   "engine": {
+    "utc": "1582-10-10T11:10:04.000Z",
+    "gregorianDate": "1582-10-10",
+    "flags": [
+     "lmt"
+    ],
+    "calendarNote": {
+     "kind": "old-style",
+     "firstGregorian": "1582-10-15",
+     "lastJulian": "1582-10-04"
+    },
+    "chartFlags": [
+     "lmt",
+     "outside-reference-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "noted"
+  },
+  {
+   "id": "T3-l",
+   "zone": "Europe/Rome",
+   "country": null,
+   "date": "1582-10-10",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "the same date, no country given",
+   "arbiter": {
+    "jdn": 2299156,
+    "utcOfLocalNoon": "1582-10-10T11:10:04.000Z",
+    "lmtSeconds": 2996
+   },
+   "engine": {
+    "utc": "1582-10-10T11:10:04.000Z",
+    "gregorianDate": "1582-10-10",
+    "flags": [
+     "lmt"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "outside-reference-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "silent"
+  },
+  {
+   "id": "T3-l",
+   "zone": "Europe/Rome",
+   "country": "IT",
+   "date": "1582-10-05",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "the first skipped date",
+   "arbiter": {
+    "jdn": 2299151,
+    "utcOfLocalNoon": "1582-10-05T11:10:04.000Z",
+    "lmtSeconds": 2996
+   },
+   "engine": {
+    "utc": "1582-10-05T11:10:04.000Z",
+    "gregorianDate": "1582-10-05",
+    "flags": [
+     "lmt"
+    ],
+    "calendarNote": {
+     "kind": "old-style",
+     "firstGregorian": "1582-10-15",
+     "lastJulian": "1582-10-04"
+    },
+    "chartFlags": [
+     "lmt",
+     "outside-reference-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "noted"
+  },
+  {
+   "id": "T3-l",
+   "zone": "Europe/Rome",
+   "country": "IT",
+   "date": "1582-10-14",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "the last skipped date",
+   "arbiter": {
+    "jdn": 2299160,
+    "utcOfLocalNoon": "1582-10-14T11:10:04.000Z",
+    "lmtSeconds": 2996
+   },
+   "engine": {
+    "utc": "1582-10-14T11:10:04.000Z",
+    "gregorianDate": "1582-10-14",
+    "flags": [
+     "lmt"
+    ],
+    "calendarNote": {
+     "kind": "old-style",
+     "firstGregorian": "1582-10-15",
+     "lastJulian": "1582-10-04"
+    },
+    "chartFlags": [
+     "lmt",
+     "outside-reference-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "noted"
+  },
+  {
+   "id": "T3-m",
+   "zone": "Europe/London",
+   "country": "GB",
+   "date": "1752-09-02",
+   "calendar": "julian",
+   "existedThere": true,
+   "what": "the last Julian day in Britain",
+   "arbiter": {
+    "jdn": 2361221,
+    "utcOfLocalNoon": "1752-09-13T12:01:15.000Z",
+    "lmtSeconds": -75
+   },
+   "engine": {
+    "utc": "1752-09-13T12:01:15.000Z",
+    "gregorianDate": "1752-09-13",
+    "flags": [
+     "lmt"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "outside-reference-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-m",
+   "zone": "Europe/London",
+   "country": "GB",
+   "date": "1752-09-14",
+   "calendar": "gregorian",
+   "existedThere": true,
+   "what": "the first Gregorian day in Britain, the next day",
+   "arbiter": {
+    "jdn": 2361222,
+    "utcOfLocalNoon": "1752-09-14T12:01:15.000Z",
+    "lmtSeconds": -75
+   },
+   "engine": {
+    "utc": "1752-09-14T12:01:15.000Z",
+    "gregorianDate": "1752-09-14",
+    "flags": [
+     "lmt"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "outside-reference-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-n",
+   "zone": "Europe/London",
+   "country": "GB",
+   "date": "1752-09-08",
+   "calendar": "julian",
+   "existedThere": false,
+   "what": "a date of the eleven days Britain skipped, read as Julian",
+   "arbiter": {
+    "jdn": 2361227,
+    "utcOfLocalNoon": "1752-09-19T12:01:15.000Z",
+    "lmtSeconds": -75
+   },
+   "engine": {
+    "utc": "1752-09-19T12:01:15.000Z",
+    "gregorianDate": "1752-09-19",
+    "flags": [
+     "lmt"
+    ],
+    "calendarNote": {
+     "kind": "new-style",
+     "firstGregorian": "1752-09-14",
+     "lastJulian": "1752-09-02"
+    },
+    "chartFlags": [
+     "lmt",
+     "outside-reference-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "noted"
+  },
+  {
+   "id": "T3-n",
+   "zone": "Europe/London",
+   "country": "GB",
+   "date": "1752-09-08",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "the same date read as Gregorian",
+   "arbiter": {
+    "jdn": 2361216,
+    "utcOfLocalNoon": "1752-09-08T12:01:15.000Z",
+    "lmtSeconds": -75
+   },
+   "engine": {
+    "utc": "1752-09-08T12:01:15.000Z",
+    "gregorianDate": "1752-09-08",
+    "flags": [
+     "lmt"
+    ],
+    "calendarNote": {
+     "kind": "old-style",
+     "firstGregorian": "1752-09-14",
+     "lastJulian": "1752-09-02"
+    },
+    "chartFlags": [
+     "lmt",
+     "outside-reference-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "noted"
+  },
+  {
+   "id": "T3-n",
+   "zone": "Europe/London",
+   "country": null,
+   "date": "1752-09-08",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "the same, no country given",
+   "arbiter": {
+    "jdn": 2361216,
+    "utcOfLocalNoon": "1752-09-08T12:01:15.000Z",
+    "lmtSeconds": -75
+   },
+   "engine": {
+    "utc": "1752-09-08T12:01:15.000Z",
+    "gregorianDate": "1752-09-08",
+    "flags": [
+     "lmt"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "outside-reference-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "silent"
+  },
+  {
+   "id": "T1-a/chart",
+   "zone": "America/New_York",
+   "date": "2021-11-07",
+   "time": "01:30",
+   "what": "the flag on the resolved birth and on the chart computed from it",
+   "engine": {
+    "utc": "2021-11-07T05:30:00.000Z",
+    "birthFlags": [
+     "dst-fold"
+    ],
+    "chartFlags": [
+     "dst-fold"
+    ],
+    "chartInputFlags": [
+     "dst-fold"
+    ],
+    "jump": {
+     "kind": "fold",
+     "cause": "dst"
+    },
+    "gapShiftMinutes": 0
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2-a/chart",
+   "zone": "America/New_York",
+   "date": "2021-03-14",
+   "time": "02:30",
+   "what": "the flag on the resolved birth and on the chart computed from it",
+   "engine": {
+    "utc": "2021-03-14T07:30:00.000Z",
+    "birthFlags": [
+     "dst-gap"
+    ],
+    "chartFlags": [
+     "dst-gap"
+    ],
+    "chartInputFlags": [
+     "dst-gap"
+    ],
+    "jump": {
+     "kind": "gap",
+     "cause": "dst"
+    },
+    "gapShiftMinutes": 60
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-a/chart",
+   "zone": "Pacific/Apia",
+   "date": "2011-12-30",
+   "time": "12:00",
+   "what": "the flag on the resolved birth and on the chart computed from it",
+   "engine": {
+    "utc": "2011-12-30T22:00:00.000Z",
+    "birthFlags": [
+     "dst-gap"
+    ],
+    "chartFlags": [
+     "dst-gap"
+    ],
+    "chartInputFlags": [
+     "dst-gap"
+    ],
+    "jump": {
+     "kind": "gap",
+     "cause": "date-line"
+    },
+    "gapShiftMinutes": 1440
+   },
+   "verdict": "pass"
+  }
+ ]
+}
