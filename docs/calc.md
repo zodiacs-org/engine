@@ -22,9 +22,70 @@ if (mars.status === "ok") {
 ```
 
 With every default, `calc({ body, time })` is the position `positions()` and
-`natalChart()` give, to the bit: the same longitude, latitude and speed. Every
-result is a function of its request alone: nothing depends on what was
-computed before it.
+`natalChart()` give, to the bit: the same longitude, latitude and speed, from
+the same ephemeris (*Which ephemeris* below). Every result is a function of
+its request and of the default source alone (`setDefaultEphemeris` in the
+root entry): nothing depends on what was computed before it.
+
+## Which ephemeris
+
+From 1.1.0-rc.10 the calc entry follows the root's default source
+([de440.md](de440.md), *The default source*), so that every function gives
+one position for one instant. In 1.1.0-rc.9 it stayed on astronomy-engine,
+and a default `calc()` could be up to 29.19″ from `positions()`.
+
+| request | computed on |
+| --- | --- |
+| `calc()`: the Sun, the Moon, Mercury to Pluto, geocentric and apparent (the defaults), in any frame | the shipped DE440 pack |
+| `calc()`: the true node and its opposite point | the shipped DE440 pack |
+| `chart()` | as `natalChart()`: the shipped DE440 pack |
+| `events()` | as `searchLongitudeCrossings()`: the shipped DE440 pack |
+| `calc()`: a heliocentric, barycentric or topocentric center; an astrometric or geometric correction; the Earth | astronomy-engine |
+| `calc()`: the mean node, the mean south node, Black Moon Lilith | no ephemeris: their own series |
+| `houses()` | no ephemeris |
+
+The entry computes only inside `CALC_SPAN`, 1800 to 2200, which the pack
+covers, so no request leaves the pack's years.
+
+**A position from the pack** is the pack's apparent place as
+`natalChart()` takes it: light time by iteration, the Sun's light deflection,
+relativistic annual aberration, Mars to Pluto as planetary-system
+barycentres, and the Moon from the ephemeris with light time, in the true
+ecliptic of date ([de440.md](de440.md), *The reduction*). In any other frame
+the same direction is turned from the true ecliptic of date with the engine's
+own nutation and precession, as a node is. `dist` is the light path. Speeds
+are central differences, as `positions()` takes them.
+
+**What stays on astronomy-engine**, and why. The pack's reduction makes the
+apparent geocentric place and nothing else. The other centers and
+corrections are defined by astronomy-engine's own steps (its barycentre of
+the Sun and the giant planets, planet centres, no light deflection, a
+backdated observer), and every bound they quote was measured on
+astronomy-engine. Moving them needs a second reduction and new comparisons
+with an arbiter, which this candidate does not have. `natalChart()` gives
+none of them, so none of them disagrees with it; but a topocentric or
+geometric position of a body and its default position rest on two
+ephemerides, up to the limits under *Bounds* apart, beyond the parallax or
+the correction itself. The receipt of each says which it used.
+
+**The result says which.** `receipt.engine.ephemeris` is
+`{ name: "jpl-de440", version: <the pack's SHA-256> }` or
+`{ name: "astronomy-engine", version: "2.1.19" }`, and the conventions hold
+`ephemeris:<name>@<version>`. **No fallback is silent:** if the pack cannot
+be opened (its bytes are missing, their SHA-256 is wrong, or they cannot be
+decoded), a position the pack would have given is astronomy-engine's, its
+receipt names astronomy-engine, and its `flags` hold `"de440-unavailable"`;
+`chart()`'s chart and `events()`'s result carry the same flag.
+After `setDefaultEphemeris("astronomy-engine")`, the caller's own choice,
+the receipt names astronomy-engine and nothing is flagged. A request the
+pack never gives is not a fallback and is not flagged.
+
+In the sidereal zodiac the ayanamsa is the same on either ephemeris, but for
+a star-anchored one, whose star is placed with astronomy-engine's Earth and
+Sun ([vedic.md](vedic.md)), whatever the position came from.
+
+The calc entry refuses inside `withEphemeris`, as before: a caller's source
+gives no distance and has no measured bounds.
 
 ## The four functions
 
@@ -116,7 +177,10 @@ The precession is astronomy-engine's (IAU 2006, the angles of Capitaine et al.
 nutation the engine's own IAU 2000B (McCarthy and Luzum 2003): all 77 of its
 luni-solar terms and its two fixed planetary offsets (`src/nutation.ts`; the
 README's *Nutation*). They are the precession and nutation of `positions()`
-and `natalChart()`, so the default frame is `positions()` to the bit. Its Δψ
+and `natalChart()` on astronomy-engine, so there the default frame is
+`positions()` to the bit. (A place from the DE440 pack reaches the true
+ecliptic of date by the pack's own chain, with the P03 adjustment of the
+nutation; *Which ephemeris*.) Its Δψ
 and Δε equal ERFA's `nut00b` within 10⁻¹⁰″ from 1800 to 2200
 (`docs/evidence/nutation-2026-09-29`), and IAU 2000B's Δψ is at most 0.00394″
 from IAU 2006/2000A's (ERFA's `nut06a`) there, sampled every 0.1 day of TT
@@ -287,7 +351,25 @@ direction and the arbiter's, arcseconds), `bounds.distance` (relative) and
 `bounds.speed` (arcseconds a day), each labelled `measured` or `estimated`;
 none is proven. Each one's `basis` says which comparison it rests on.
 
-From 1.1.0-rc.7 the geocentric Sun, Moon, Mercury to Pluto (with each of the
+**A position from the shipped DE440 pack** (*Which ephemeris*) quotes none
+of the bounds below, which were measured on astronomy-engine. Its
+`bounds.position` is the largest angle from JPL Horizons's apparent
+geocentric place (DE441) at the conformance suite's 240 L1 vectors, 24 TT
+instants a body from 1851 to 2148, in the true ecliptic of date, rounded up
+to two significant figures: the Moon 0.013″; Jupiter, Uranus and Venus
+0.0038″; the Sun and Mercury 0.0037″; Neptune, Pluto and Saturn 0.0035″;
+Mars 0.0034″ (`src/calc-bounds-de440.ts`; `src/calc-bounds-de440.test.ts`
+recomputes each from the vectors). It is labelled `measured` in the true
+ecliptic of date and `estimated` in the seven other frames, where it was not
+compared. Twenty-four instants a body are few: a denser comparison may find
+more. Its `bounds.distance` and `bounds.speed`, and every bound of the true
+node and its opposite point, have `value: null` and the basis "not compared
+with an independent ephemeris": the suite has no vector for them. The ΔT
+widening below applies to a position from the pack as to any other.
+
+**On astronomy-engine** (the other centers and corrections, and every
+position where astronomy-engine stands in for the pack): from 1.1.0-rc.7
+the geocentric Sun, Moon, Mercury to Pluto (with each of the
 three corrections) and the true node and its opposite point take the largest
 differences from JPL's DE440 (NAIF's `de440.bsp`) found at noon TT on each of
 the 146,097 days from 1800-01-01 to 2199-12-31, in every frame, rounded up to
@@ -682,6 +764,13 @@ is no comparison to take one from.
 | `center:geocentric`, `center:heliocentric`, `center:barycentric`, `center:topocentric` | the origin |
 | `correction:apparent`, `correction:astrometric`, `correction:geometric` | as above; `correction:not-applicable` for the nodes and Lilith |
 | `light-time:newtonian` | astronomy-engine's light-time solution, iterated until successive light times agree to 10⁻⁹ day |
+| `light-time:iterated` | on the DE440 pack: light time by iteration on the pack's states, at most 12 steps, to 10⁻¹¹ s |
+| `deflection:sun` | on the DE440 pack: the Sun's gravitational light deflection (the form of ERFA's `eraLd`) |
+| `aberration:relativistic-annual` | on the DE440 pack: relativistic annual aberration from the Earth's barycentric velocity |
+| `target:system-barycentre` | on the DE440 pack: Mars to Pluto are planetary-system barycentres, not planet centres |
+| `place:icrf-to-true-ecliptic-of-date`, `frame-bias:iau2006-fukushima-williams`, `nutation:iau2000b-p03`, `time:tdb-three-term` | on the DE440 pack: the place is carried from the ICRF to the true ecliptic of date by the IAU 2006 Fukushima-Williams angles, frame bias included, and IAU 2000B nutation with the P03 adjustment, at a TDB formed from TT by three terms ([de440.md](de440.md), *The reduction*) |
+| `frame-turn:from-true-ecliptic-of-date` | on the DE440 pack, in a frame other than the true ecliptic of date: the pack's place of date, turned into the frame with the engine's own nutation and precession |
+| `ephemeris:jpl-de440@<SHA-256>` | the shipped DE440 pack, named by its digest |
 | `aberration:backdated-observer` | first-order aberration from backdating the observer with the target |
 | `deflection:none` | no gravitational light deflection |
 | `moon:series-at-instant` | the engine's Moon: astronomy-engine's lunar series at the instant, without light time or aberration |

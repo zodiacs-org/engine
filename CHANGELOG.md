@@ -1,6 +1,196 @@
 # Engine changelog
 
-## 1.1.0-rc.9 (unreleased candidate)
+## 1.1.0-rc.10 (unreleased candidate)
+
+The candidate for **1.1.0**, a minor release: the DE440 default of
+1.1.0-rc.9, now under every function, and a fallback that is never silent.
+It contains 1.1.0-rc.7 and 1.1.0-rc.9, and the far-future ΔT warning of pull
+request 102 (ZOD-65). It is a draft for the owner, and is not to be published
+on npm until the owner approves it. Checks:
+`docs/evidence/1.1.0-rc.10-20261114/`.
+
+1.1.0-rc.9 was a draft on this same pull request (101). It was superseded
+before review and was never tagged or published: this candidate replaces it.
+Its archive stays in `artifacts/`, as every carried archive does, because a
+version names one byte sequence and an archive is never repacked
+(`artifacts/README.md`); that is why this cut has a new number.
+
+- **Default positions move to DE440, and can shift by up to 29 arcseconds
+  for the Sun, the Moon and the planets (33 for the true node).** From
+  1.1.0-rc.9 `natalChart()`, `positions()` and the functions built on them
+  compute on the shipped DE440 pack; from this candidate `calc()`, `chart()`,
+  `events()` and `birthWindow()` do too, so every function gives the same
+  position for the same instant. Against 1.1.0-rc.7 and every release before
+  it, which computed on astronomy-engine, a position inside 1790 to 2210
+  changes by the difference between the two ephemerides. The largest
+  differences measured, astronomy-engine's apparent place against DE440 at
+  noon TT on each of the 146,097 days from 1800-01-01 to 2199-12-31
+  (`docs/evidence/de440-sweep-20261111/`), in arcseconds of ecliptic
+  longitude of date: Pluto 29.19 (on 2199-12-31, and still growing), Venus
+  22.92, Neptune 19.71, Mars 14.32, Mercury 14.12, Saturn 13.10, Uranus
+  12.09, the Moon 11.92, Jupiter 10.64, the Sun 2.39; and the true node
+  32.64, which is more than 29. As a whole angle the largest is Pluto's,
+  29.86. The sweep read JPL's kernel, not the pack, whose places are within
+  0.0016 arcseconds of the kernel's and whose true node is within 0.84
+  (`docs/evidence/de440-20261110/pack-accuracy.json`); the years 1790 to
+  1799 and 2200 to 2209 were not swept. Signs, houses near a cusp, aspects
+  near their orb, speeds, and ingress and return times move with the
+  positions: the Moon's 12 arcseconds are about 20 seconds of its motion.
+  Mars to Pluto become planetary-system barycentres.
+  `setDefaultEphemeris("astronomy-engine")` gives the earlier values at
+  every instant.
+- **`calc()`, `chart()`, `events()` and `birthWindow()` on DE440.** In
+  1.1.0-rc.9 these stayed on astronomy-engine, so a default `calc()` and
+  `positions()` could differ by up to 29.19 arcseconds for one instant.
+  Now `calc()` takes from the pack what `natalChart()` takes from it: the
+  apparent geocentric place of the Sun, the Moon and Mercury to Pluto, and
+  the true node and its opposite point, in all eight frames (the pack's
+  place is of date; another frame is reached from it with the engine's own
+  nutation and precession). With every default it is `positions()`'s
+  longitude, latitude and speed to the bit again, and `chart()` is
+  `natalChart()`'s chart. `events()` searches the same longitudes as
+  `searchLongitudeCrossings`. A `birthWindow()` is partitioned on the pack,
+  so each cell holds what a lone `natalChart()` call gives. Each receipt
+  names the ephemeris it used (`receipt.engine.ephemeris`, and
+  `ephemeris:jpl-de440@<the pack's SHA-256>` among its conventions), and a
+  window has a new `ephemeris` field.
+- **What `calc()` still computes on astronomy-engine, and says so in its
+  receipt:** a heliocentric, barycentric or topocentric position, an
+  astrometric or geometric one, and the Earth. The pack's reduction makes
+  the apparent geocentric place only; the others are defined by
+  astronomy-engine's own steps (its barycentre, planet centres, no light
+  deflection) and their bounds were measured on it. `natalChart()` gives
+  none of them, so none disagrees with it, but a topocentric or geometric
+  position and the default one for the same body rest on two ephemerides.
+  Also unchanged, on astronomy-engine: the sky entry's rising, setting and
+  planetary hours, and the vedic entry's star-anchored ayanamsas and
+  `vargaSensitivity`. The mean node, the mean south node and Black Moon
+  Lilith use no ephemeris. `houses()` uses none either.
+- **Bounds of a `calc()` position from the pack.** They are no longer
+  astronomy-engine's. `bounds.position` is the largest angle from JPL
+  Horizons (DE441) at the conformance suite's 240 L1 vectors, 24 TT instants
+  a body from 1851 to 2148, rounded up to two significant figures: the Moon
+  0.013 arcseconds, the Sun and the planets 0.0034 to 0.0038
+  (`src/calc-bounds-de440.ts`; `src/calc-bounds-de440.test.ts` recomputes
+  every row and fails on a stale one). It is labelled `measured` in the true
+  ecliptic of date, where it was measured, and `estimated` in the seven other
+  frames. Twenty-four instants a body are few. The distance and the speed of
+  such a position, and the true node, have been compared with no arbiter
+  on the pack: their bounds are `null`, not astronomy-engine's.
+- **Never a silent fallback.** Where a result that would have come from the
+  pack comes from astronomy-engine instead, the result itself says so. Two
+  new `ChartFlag` values (the type `EphemerisFallback`):
+  `"de440-unavailable"`, when the pack could not be opened (its bytes are
+  missing, their SHA-256 is not the sealed pack's, or they cannot be
+  decoded; `defaultEphemeris().de440.error` says which), and
+  `"outside-de440-span"`, when the instant is outside the pack's coverage
+  less a day at each end. They appear last in `chart.flags`, in
+  `calc()`'s and `events()`'s `flags`, in a window's `flags`
+  (`"de440-unavailable"`; a window lies inside the pack's years), in
+  the timing and techniques entries' `flags`, and in a natal receipt's
+  `resultFlags`. And every result names its ephemeris: `chart.ephemeris` is
+  now on every chart (`{ name: "astronomy-engine", version: "2.1.19" }`
+  where it was absent before), each `BodyPosition` from the engine carries
+  `ephemeris` (a name) and, on a fallback, `fallback` (the reason), so
+  `positions()`, `transits()` and `progressedBodies()` say so row by row;
+  `moonPhase()` carries the same two fields; `saturnReturn()` and a complete
+  `searchLongitudeCrossings()` carry `flags`, which also report a search
+  that runs past the end of the pack. `setDefaultEphemeris("astronomy-engine")`
+  is the caller's own choice: the result names astronomy-engine and carries
+  no fallback flag. `findLongitudeCrossings()` returns bare crossings and
+  cannot say; use `searchLongitudeCrossings()` where it matters.
+  Tests: `src/ephemeris-fallback.test.ts` (the pack missing, changed in one
+  character, cut short, not base64; an instant outside it; the caller's
+  choice), and the packed-consumer check, which does the same to the
+  installed package's own file (`scripts/verify-packed-consumer.mjs`).
+- **Compatibility of the new fields.** A chart's bodies now have two more
+  possible keys, so code that compares a computed chart's bodies with a
+  natal record's must leave `ephemeris` and `fallback` out: a record keeps
+  the computed fields and names the ephemeris once. A natal receipt whose
+  chart fell back carries the flag, which an engine before this candidate
+  refuses as an unknown flag. A supplied chart may carry a fallback flag
+  only if it names astronomy-engine (or, as a chart from an earlier
+  release, names nothing).
+- **Birth-time windows and the pack's records.** The pack is a series of
+  Chebyshev fits; where a read passes from one record to the next, two fits
+  meet within the pack's budget and not exactly: the true node steps by up
+  to 1.11 arcseconds across the 96,049 such instants from 1800 to 2200, the
+  Moon by up to 0.0011, the Sun and the planets by under 0.00025
+  (`docs/evidence/1.1.0-rc.10-20261114/results/window-pack-seams.json`). The window search's bounds describe smooth motion, so it now
+  treats each such instant as a seam, as it treats a leap second: the
+  DE440 source's new `steps(fromTtDays, toTtDays)` lists them, a few in 48
+  hours. `src/window-de440.test.ts` holds windows on the pack to
+  `natalChart()` at every whole second and, around each seam, at every
+  millisecond. The pack's reduction also bends light at the Sun, by the
+  inverse of the angle from it, so a planet passing behind the Sun moves far
+  faster in `natalChart()` than the body does (Neptune, 0.022° from the
+  Sun's centre on 1920-08-03, at more than ten times the search's rate bound); the
+  search raises its bound for Mercury to Pluto within a degree of the Sun by
+  what that deflection allows. On the 1,000 preregistered random windows of `docs/evidence/birth-window/` (1800 to 2200, all thirteen systems), run on the pack, all 24,188 sampled transitions were matched, none missed and none extra, over 12,259,372 whole-second samples, and no window was flagged `bound-exceeded` (`docs/evidence/1.1.0-rc.10-20261114/`). On astronomy-engine the search
+  is as it was.
+- **A far-future clock time is flagged, and its bounds widened (pull request
+  102, ZOD-65).** After the IERS table ends (2027-10-02 for this release's
+  table) ΔT is extrapolated, and no arbiter can check it. A result that
+  moves with it carries the new `ChartFlag` value `"delta-t-extrapolated"`:
+  `natalChart()` and `chart()` on UTC or UT1 input, and on TT input where
+  the chart has houses; `calc()` (new `flags`), `houses()` and `events()`
+  (new `flags`), whose bounds grow by how far the result moves while TT and
+  UT1 move by their 1-σ bands and are then labelled `estimated`
+  (`docs/calc.md`, *Bounds*; `src/calc-delta-t.test.ts`). A natal receipt
+  written by this candidate or later must carry the flag where its ΔT, time
+  scale and houses call for it; earlier records, 1.1.0-rc.9's among them,
+  are read without it. The topocentric Sun, Moon and Mars take the
+  geocentric bound, labelled `estimated`, as every other topocentric body
+  does. `ChartFlag` now has nine values.
+- **API, additive.** `EphemerisFallback`; `Chart.ephemeris` on every chart;
+  `BodyPosition.ephemeris` and `.fallback`; `MoonPhase.ephemeris` and
+  `.fallback`; `SaturnReturnResult.ephemeris` and `.flags`;
+  `CrossingSearchResult` `flags`; `BirthWindow.ephemeris` and the
+  `BirthWindowFlag` value; `CalcPosition.flags`, `EventsResult.flags`;
+  `PositionSource.place` may give `dist`, and `PositionSource.steps` is
+  optional; a DE440 source gives both. `CalcReceipt`'s
+  `engine.ephemeris.name` is typed `string`, where it was the literal
+  `"astronomy-engine"`. New convention ids of a `calc()` receipt on the
+  pack: `light-time:iterated`, `deflection:sun`,
+  `aberration:relativistic-annual`, `target:system-barycentre`,
+  `place:icrf-to-true-ecliptic-of-date`,
+  `frame-bias:iau2006-fukushima-williams`, `nutation:iau2000b-p03`,
+  `time:tdb-three-term` and `frame-turn:from-true-ecliptic-of-date`
+  (`docs/calc.md`).
+- **Conformance.** Regenerated on this candidate
+  (`conformance/RESULTS.md`): the verdicts are 1.1.0-rc.9's. A plain call
+  passes 459 of the 500 vectors, fails none, and 41 are unsupported (all 240
+  position vectors pass); started with `--ephemeris astronomy-engine` the
+  adapter gives 267, 192 and 41. Each position's `meta` now names the
+  ephemeris on either run.
+- **Licensing.** Unchanged from 1.1.0-rc.9: the pack is data refitted from
+  JPL's DE440, `NOTICE` credits JPL and cites the ephemeris, and
+  `LICENSING.md` (*DE440 pack*) records what the pack rests on.
+- **Sizes.** The package is 4,540,059 bytes unpacked in 98 files, against
+  1.1.0-rc.9's 4,502,147 and 1.1.0-rc.7's 1,152,017. 3,319,552 of them are
+  the pack's base64 text, unchanged; the rest is 1,220,507, 37,912 more than
+  1.1.0-rc.9's: documents 17,347 (this entry and the README's lines),
+  JavaScript 14,156 (5,139 of it in the root's import graph, which is
+  147,832 bytes beside the pack), declarations 6,408 and the
+  manifest 1 (`docs/evidence/1.1.0-rc.10-20261114/sizes.json`, which
+  also gives the packed sizes). The cap on the rest rises from 1,185,000 to
+  1,225,000. Eleven import-graph budgets rise, each to its measurement and
+  about one per cent: the root's from 144,000 to 149,400, `./calc`'s from
+  190,000 to 199,900, `./window`'s from 142,500 to 149,500, `./techniques`'s
+  from 194,500 to 199,900, `./timing`'s from 163,500 to 168,900, `./vedic`'s
+  from 179,500 to 184,800, `./sky`'s from 132,000 to 136,400, `./internal`'s
+  from 104,000 to 108,200, `./de440`'s from 50,700 to 53,200,
+  `./de440/pack`'s from 52,000 to 54,400 and `./geo`'s from 35,600 to 35,700
+  (`scripts/verify-package-contents.mjs` has each measurement and what the
+  bytes are). Part of the growth is pull request 102's. None of these
+  figures has the owner's approval: they are for the owner to decide with
+  this candidate.
+
+## 1.1.0-rc.9 (draft, superseded by 1.1.0-rc.10 before review)
+
+Never tagged or published. 1.1.0-rc.10 above contains it and changes what
+this entry's *The fallback, and what says so* and *What stays on
+astronomy-engine* describe.
 
 The next candidate for 1.1.0 after 1.1.0-rc.7, which it contains: the sealed
 DE440 pack, shipped in the package, and the root entry computing on it by

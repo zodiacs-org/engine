@@ -124,7 +124,10 @@ starts at 120°; the Sun is in house 10 and Saturn in house 6. For every other
 system each cusp is the chart's cusp less the ayanamsa: the sidereal longitude
 of the same point on the ecliptic.
 
-`@zodiacs/engine/calc` gives the same sidereal longitudes, to the bit, in its
+`@zodiacs/engine/calc` gives the same sidereal longitudes, to the bit, from
+the same ephemeris (from 1.1.0-rc.10 both follow the root's default source,
+the shipped DE440 pack inside its years; in 1.1.0-rc.9 the calc entry stayed
+on astronomy-engine and the two differed), in its
 uniform vocabulary: `calc`, `houses`, `events` and `chart` take
 `zodiac: { sidereal }` with any of the ayanamsas below or a caller's, and
 return plain numbers with bounds and a receipt ([calc.md](calc.md),

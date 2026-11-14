@@ -437,7 +437,9 @@ const BODIES = [
 const FLAGS_RC7 = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"] as const;
 const FLAGS = [...FLAGS_RC7, "outside-reference-span"] as const;
 /** The time-basis sets also take "delta-t-extrapolated", whose condition the record's ΔT and time scale show. */
-const FLAGS_TIME_BASIS = [...FLAGS, "delta-t-extrapolated"] as const;
+const FLAGS_TIME_BASIS = [...FLAGS, "delta-t-extrapolated", "de440-unavailable", "outside-de440-span"] as const;
+/** From 1.1.0-rc.10: the chart was to come from the shipped DE440 pack and came from astronomy-engine (src/types.ts, EphemerisFallback). */
+const FALLBACK_FLAGS = ["de440-unavailable", "outside-de440-span"] as const;
 const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
 const HOUSE_SYSTEMS = [
   "whole",
@@ -1289,17 +1291,21 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   const engineVersion = version(engine.version);
   // "delta-t-extrapolated" belongs where the record's own ΔT and time scale show
   // an extrapolated ΔT under its result: on UTC or UT1 input, or on TT input
-  // with houses (src/ephemeris.ts). An engine after 1.1.0-rc.7 sets it there, so
-  // its records must carry it; earlier records lack it, so it is allowed there.
+  // with houses (src/ephemeris.ts). An engine from 1.1.0-rc.10 sets it there, so
+  // its records must carry it; earlier records lack it (1.1.0-rc.9, a draft
+  // candidate, among them), so it is allowed there.
   // It is refused anywhere else.
   if (
     timeBasis &&
     (scale !== "tt" || result.houses) &&
     result.timeScale?.basis === "delta-t" &&
     result.deltaT?.segment === "extrapolated" &&
-    (resultFlags.includes("delta-t-extrapolated") || compareVersions(engineVersion, "1.1.0-rc.7") > 0)
+    (resultFlags.includes("delta-t-extrapolated") || compareVersions(engineVersion, "1.1.0-rc.9") > 0)
   )
     expected.push("delta-t-extrapolated");
+  // A fallback flag is the record's own claim about what computed it: allowed
+  // where the record names astronomy-engine, refused on a DE440 record.
+  if (!de440) for (const reason of FALLBACK_FLAGS) if (resultFlags.includes(reason)) expected.push(reason);
   if (!sameFlags(expected, resultFlags)) fail("inconsistent_result");
   if (current) {
     const ephemeris = record(engine.ephemeris);
@@ -1389,12 +1395,18 @@ export function createNatalEnvelope(
     // A chart from a DE440 pack names it (src/ephemeris.ts, withEphemeris);
     // any other ephemeris it names is not one this codec can describe.
     const ephemerisNamed = source.ephemeris === undefined ? null : record(source.ephemeris);
+    // From 1.1.0-rc.10 a chart from astronomy-engine names it too.
+    let de440 = false;
     if (ephemerisNamed !== null) {
       fields(ephemerisNamed, ["name", "version"]);
-      if (ephemerisNamed.name !== DE440_EPHEMERIS) fail("unsupported_feature");
-      if (typeof ephemerisNamed.version !== "string" || !SHA256_HEX.test(ephemerisNamed.version)) fail("invalid_value");
+      if (ephemerisNamed.name === EPHEMERIS.name) {
+        if (ephemerisNamed.version !== EPHEMERIS.version) fail("unsupported_feature");
+      } else {
+        if (ephemerisNamed.name !== DE440_EPHEMERIS) fail("unsupported_feature");
+        if (typeof ephemerisNamed.version !== "string" || !SHA256_HEX.test(ephemerisNamed.version)) fail("invalid_value");
+        de440 = true;
+      }
     }
-    const de440 = ephemerisNamed !== null;
     const supplied = record(cloneData(context));
     fields(
       supplied,

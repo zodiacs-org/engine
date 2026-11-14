@@ -1,4 +1,13 @@
-import { computeBodies, computeChart, computeChartDeclinations, computePoints, bodyLongitude, deltaTExtrapolated } from "./ephemeris.js";
+import {
+  computeBodies,
+  computeChart,
+  computeChartDeclinations,
+  computePoints,
+  bodyLongitude,
+  deltaTExtrapolated,
+  ephemerisAt,
+  notingFallbacks
+} from "./ephemeris.js";
 import type { ChartDeclinations } from "./declination.js";
 import { POLAR_FALLBACK, isPolarUndefinedHouseSystem } from "./houses.js";
 import { computeSaturnReturns } from "./returns.js";
@@ -94,6 +103,11 @@ export function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } 
     deltaTExtrapolated(timeBasis(+input.utc, input.timeScale, input.deltaT), hasHouses)
   )
     expected.push("delta-t-extrapolated");
+  // A fallback flag is allowed on a chart that names astronomy-engine, or, as a
+  // chart from before 1.1.0-rc.10, names nothing: the chart's own claim about
+  // what computed it, which nothing here recomputes.
+  if (source.ephemeris === undefined || source.ephemeris?.name === "astronomy-engine")
+    for (const reason of ["de440-unavailable", "outside-de440-span"] as const) if (resultFlags.values.includes(reason)) expected.push(reason);
   assertDerivedFlags(inputFlags?.values ?? [], expected);
   if (
     resultFlags.values.length !== expected.length ||
@@ -161,7 +175,8 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   }
   // "delta-t-extrapolated" is checked against the chart's own flags once computed
   // (computedBirth), and against a supplied chart's instant in resolvedChart.
-  const possible: ChartFlag[] = ["delta-t-extrapolated"];
+  // So are the two fallback flags, which depend on the source the chart is computed on.
+  const possible: ChartFlag[] = ["delta-t-extrapolated", "de440-unavailable", "outside-de440-span"];
   if (settings.timeKnown === false) possible.push("no-time");
   else if (
     settings.houseSystem !== undefined &&
@@ -263,12 +278,15 @@ function phaseName(angle: number): MoonPhaseName {
 export function moonPhase(date: DateInput): MoonPhase {
   const at = dateFrom(date, "date");
   const angle = normalizeLongitude(bodyLongitude("Moon", at) - bodyLongitude("Sun", at));
+  const { ephemeris, fallback } = ephemerisAt(at.getTime());
   return {
     at,
     angle,
     illumination: (1 - Math.cos((angle * Math.PI) / 180)) / 2,
     name: phaseName(angle),
-    waxing: angle < 180
+    waxing: angle < 180,
+    ephemeris: ephemeris.name,
+    ...(fallback !== null && { fallback })
   };
 }
 
@@ -298,5 +316,7 @@ export function saturnReturn(birth: SaturnReturnSource): SaturnReturnResult {
       validated.flags?.values.includes("polar-fallback") ? computedBirth(validated).input : validated.input
     );
   } else utc = dateFrom(birth, "birth");
-  return computeSaturnReturns(utc);
+  // The search reads the ephemeris from birth to about age 92: every kind of fallback it met is reported.
+  const { value, fallbacks } = notingFallbacks(() => computeSaturnReturns(utc));
+  return { ...value, ephemeris: ephemerisAt(utc.getTime()).ephemeris.name, flags: fallbacks };
 }

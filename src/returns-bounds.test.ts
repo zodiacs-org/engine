@@ -5,6 +5,8 @@ import { computeSaturnReturns, findLongitudeCrossings, searchLongitudeCrossings 
 vi.mock("./ephemeris.js", () => ({
   SPEED_STEP_DAYS: 0.001,
   bodyLongitude: vi.fn(),
+  // A mocked ephemeris falls back from nothing.
+  notingFallbacks: <T>(run: () => T) => ({ value: run(), fallbacks: [] }),
   longitudeSpeed: vi.fn()
 }));
 
@@ -73,6 +75,7 @@ describe("longitude crossing searches, with and without a budget", () => {
     expect(longitude).toHaveBeenCalledTimes(1_001 + 24 * 1_000);
     expect(searchLongitudeCrossings("Sun", 0, start, to, { stepDays: 1 })).toEqual({
       status: "complete",
+      flags: [],
       crossings,
       samples: 25_001
     });
@@ -82,6 +85,7 @@ describe("longitude crossing searches, with and without a budget", () => {
     const to = new Date(start.getTime() + 9_998.5 * DAY);
     expect(searchLongitudeCrossings("Sun", 0, start, to, { stepDays: 1, maxSamples: 10_000 })).toEqual({
       status: "complete",
+      flags: [],
       crossings: [],
       samples: 10_000
     });
@@ -98,6 +102,7 @@ describe("longitude crossing searches, with and without a budget", () => {
     expect(findLongitudeCrossings("Sun", 0, start, start)).toEqual([]);
     expect(searchLongitudeCrossings("Sun", 0, start, start, { maxSamples: 1 })).toEqual({
       status: "complete",
+      flags: [],
       crossings: [],
       samples: 0
     });

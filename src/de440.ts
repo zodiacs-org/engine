@@ -33,6 +33,17 @@ export const DE440_EPHEMERIS_NAME = "jpl-de440" as const;
 export interface De440Source extends PositionSource {
   /** `version` is the SHA-256 of the sealed pack the positions came from. */
   readonly ephemeris: { readonly name: typeof DE440_EPHEMERIS_NAME; readonly version: string };
+  /** The light-path distance too, au. */
+  place(body: ReducedBody, ttDays: number): { lon: number; lat: number; dist: number };
+  /**
+   * The instants in [fromTtDays, toTtDays] (TT days past J2000.0), ascending,
+   * at which a place or the true node may step by more than rounding: where
+   * a read passes from one Chebyshev record of the pack to the next (within
+   * the pack's fitting budget, src/de440/reduce.ts). Between two neighbours
+   * every place is a smooth function of time. The birth-time window search
+   * treats each as a seam.
+   */
+  steps(fromTtDays: number, toTtDays: number): number[];
   readonly pack: {
     readonly sha256: string;
     readonly bytes: number;
@@ -48,6 +59,9 @@ export interface De440OpenOptions {
   /** The SHA-256 of the whole sealed pack file, lower-case hexadecimal, obtained from somewhere other than the pack. */
   readonly expectDigest: string;
 }
+
+/** The astronomical unit, kilometres (IAU 2012), as src/de440/reduce.ts has it. */
+const AU_KM = 149597870.7;
 
 const hex = (buffer: ArrayBuffer): string => Array.from(new Uint8Array(buffer), (b) => b.toString(16).padStart(2, "0")).join("");
 
@@ -100,12 +114,15 @@ function sourceOf(copy: Uint8Array, digest: string, header: ReturnType<typeof pa
   return Object.freeze({
     ephemeris: Object.freeze({ name: DE440_EPHEMERIS_NAME, version: digest }),
     pack,
-    place(body: ReducedBody, ttDays: number): { lon: number; lat: number } {
+    place(body: ReducedBody, ttDays: number): { lon: number; lat: number; dist: number } {
       const place = reducer.apparent(body, ttDays);
-      return { lon: place.lon, lat: place.lat };
+      return { lon: place.lon, lat: place.lat, dist: place.distKm / AU_KM };
     },
     trueNode(ttDays: number): number {
       return reducer.trueNode(ttDays);
+    },
+    steps(fromTtDays: number, toTtDays: number): number[] {
+      return reducer.steps(fromTtDays, toTtDays);
     }
   });
 }

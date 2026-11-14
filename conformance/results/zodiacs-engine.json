@@ -10,7 +10,7 @@
     "name": "zodiacs-engine",
     "version": "0.3.0",
     "engine": "@zodiacs/engine",
-    "engineVersion": "1.1.0-rc.9",
+    "engineVersion": "1.1.0-rc.10",
     "configuration": {
       "ephemeris": "the default source: jpl-de440 from the sealed pack the package ships, SHA-256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7, for instants from -76699.5 to 76699.5 days of TT from J2000.0; astronomy-engine 2.1.19 outside them",
       "deltaTModel": "zodiacs-deltat/1",
@@ -4560,6 +4560,11 @@
       "residual": {
         "asc": -0.00196755027,
         "mc": -0.00280351609
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4568,6 +4573,11 @@
       "residual": {
         "asc": 0.00579574655,
         "mc": 0.00611559203
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4576,6 +4586,11 @@
       "residual": {
         "asc": 0.00344463908,
         "mc": 0.0060717247
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4584,6 +4599,11 @@
       "residual": {
         "asc": -0.0011293289,
         "mc": -0.00284574453
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4592,6 +4612,11 @@
       "residual": {
         "asc": -0.00490003857,
         "mc": -0.00619421212
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4600,6 +4625,11 @@
       "residual": {
         "asc": -0.00356946667,
         "mc": -0.00643026337
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4608,6 +4638,11 @@
       "residual": {
         "asc": 0.00125591093,
         "mc": 0.000135962102
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4616,6 +4651,11 @@
       "residual": {
         "asc": 0.00015814079,
         "mc": 0.000225011945
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4624,6 +4664,11 @@
       "residual": {
         "asc": 0.00377390791,
         "mc": 0.00648677635
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4632,6 +4677,11 @@
       "residual": {
         "asc": -0.00332079053,
         "mc": -0.00418590827
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4640,6 +4690,11 @@
       "residual": {
         "asc": 0.00498126427,
         "mc": 0.00597649277
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4648,6 +4703,11 @@
       "residual": {
         "asc": -0.00109722727,
         "mc": -0.00196057974
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4656,6 +4716,11 @@
       "residual": {
         "asc": -0.000580401365,
         "mc": -0.000797579423
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4664,6 +4729,11 @@
       "residual": {
         "asc": -0.00363944671,
         "mc": -0.00334255467
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4672,6 +4742,11 @@
       "residual": {
         "asc": 0.00123497909,
         "mc": 0.00186759436
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4680,6 +4755,11 @@
       "residual": {
         "asc": -0.00277102874,
         "mc": -0.00638153722
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4688,6 +4768,11 @@
       "residual": {
         "asc": -0.00195004803,
         "mc": -0.00271135076
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4696,6 +4781,11 @@
       "residual": {
         "asc": 0.0189601719,
         "mc": 0.00451592284
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4704,6 +4794,11 @@
       "residual": {
         "asc": -0.00413093605,
         "mc": -0.00603548863
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4712,6 +4807,11 @@
       "residual": {
         "asc": 0.00478802066,
         "mc": 0.00567092311
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4720,6 +4820,11 @@
       "residual": {
         "asc": -0.00295637383,
         "mc": -0.00347583139
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4728,6 +4833,11 @@
       "residual": {
         "asc": -0.0000684434269,
         "mc": 0.00223971546
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4736,6 +4846,11 @@
       "residual": {
         "asc": 0.000154721829,
         "mc": 0.000219839762
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4744,6 +4859,11 @@
       "residual": {
         "asc": -0.0015334763,
         "mc": -0.00277152969
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4752,6 +4872,11 @@
       "residual": {
         "asc": 0.00076227966,
         "mc": 0.000271382532
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4760,6 +4885,11 @@
       "residual": {
         "asc": 0.00101008062,
         "mc": 0.000816892998
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4768,6 +4898,11 @@
       "residual": {
         "asc": 0.00240933387,
         "mc": 0.0015503748
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4816,6 +4951,11 @@
       "residual": {
         "vertex": 0.013370956,
         "east_point": 0.00365553859
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4824,6 +4964,11 @@
       "residual": {
         "vertex": 0.00975666831,
         "east_point": -0.00679320316
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4832,6 +4977,11 @@
       "residual": {
         "vertex": 0.00184143514,
         "east_point": 0.00250768832
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4840,6 +4990,11 @@
       "residual": {
         "vertex": 0.0051171437,
         "east_point": 0.003893477
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4848,6 +5003,11 @@
       "residual": {
         "vertex": 0.00721297884,
         "east_point": 0.00417865028
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4876,6 +5036,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.000488322861
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4883,6 +5048,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.00342720274
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4890,6 +5060,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.00323253314
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4918,6 +5093,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.000723574749
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4925,6 +5105,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.00391133592
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4932,6 +5117,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.0051915909
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4960,6 +5150,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.0000521847141
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4967,6 +5162,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.00385608207
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4974,6 +5174,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.000324768257
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -4995,6 +5200,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.00597841045
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5002,6 +5212,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.00659415938
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5009,6 +5224,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.00856880051
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5016,6 +5236,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.0711573788
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5051,6 +5276,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.000983089015
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5072,6 +5302,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.00621837476
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5079,6 +5314,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.000834602267
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5086,6 +5326,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.00532844665
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5177,6 +5422,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.0000615965519
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5184,6 +5434,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.00497168699
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5191,6 +5446,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.00387586283
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5219,6 +5479,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.00311515744
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5226,6 +5491,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.00661000608
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5261,6 +5531,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.00174636871
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5268,6 +5543,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.00551542971
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5282,6 +5562,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.00530263096
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5289,6 +5574,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.00413855968
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5296,6 +5586,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.00388260723
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5303,6 +5598,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": -0.00405486394
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5331,6 +5631,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.00238848984
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5338,6 +5643,11 @@
       "verdict": "pass",
       "residual": {
         "cusps": 0.00582809873
+      },
+      "meta": {
+        "flags": [
+          "delta-t-extrapolated"
+        ]
       }
     },
     {
@@ -5355,7 +5665,8 @@
       "verdict": "pass",
       "meta": {
         "flags": [
-          "polar-fallback"
+          "polar-fallback",
+          "delta-t-extrapolated"
         ],
         "substituted": "whole"
       }
@@ -5375,7 +5686,8 @@
       "verdict": "pass",
       "meta": {
         "flags": [
-          "polar-fallback"
+          "polar-fallback",
+          "delta-t-extrapolated"
         ],
         "substituted": "whole"
       }
@@ -5395,7 +5707,8 @@
       "verdict": "pass",
       "meta": {
         "flags": [
-          "polar-fallback"
+          "polar-fallback",
+          "delta-t-extrapolated"
         ],
         "substituted": "whole"
       }
@@ -5415,7 +5728,8 @@
       "verdict": "pass",
       "meta": {
         "flags": [
-          "polar-fallback"
+          "polar-fallback",
+          "delta-t-extrapolated"
         ],
         "substituted": "whole"
       }
@@ -5435,7 +5749,8 @@
       "verdict": "pass",
       "meta": {
         "flags": [
-          "polar-fallback"
+          "polar-fallback",
+          "delta-t-extrapolated"
         ],
         "substituted": "whole"
       }

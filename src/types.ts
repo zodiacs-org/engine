@@ -63,8 +63,15 @@ export type SourceBody = Exclude<BodyName, "North Node" | "South Node">;
  */
 export interface PositionSource {
   readonly ephemeris: { readonly name: string; readonly version: string };
-  place(body: SourceBody, ttDays: number): { lon: number; lat: number };
+  /** `dist`, where a source gives it: the distance along the light path, au. The shipped DE440 pack's source gives it. */
+  place(body: SourceBody, ttDays: number): { lon: number; lat: number; dist?: number };
   trueNode(ttDays: number): number;
+  /**
+   * Optional: the instants in [fromTtDays, toTtDays], ascending, at which a
+   * place or the node may step by more than rounding (a DE440 pack's record
+   * boundaries). A source without it is taken to be smooth.
+   */
+  steps?(fromTtDays: number, toTtDays: number): number[];
 }
 
 export type HouseSystem =
@@ -89,7 +96,23 @@ export type ChartFlag =
   | "no-time"
   | "polar-fallback"
   | "outside-reference-span"
-  | "delta-t-extrapolated";
+  | "delta-t-extrapolated"
+  | EphemerisFallback;
+
+/**
+ * Why a result that would have come from the shipped DE440 pack, the default
+ * source, came from astronomy-engine instead; the result carries it as a flag
+ * and names astronomy-engine as its ephemeris, so the fallback is never
+ * silent. `"de440-unavailable"`: the pack could not be opened, because its
+ * bytes are missing, are not the sealed pack's (their SHA-256 differs) or
+ * cannot be decoded; `defaultEphemeris().de440.error` says which.
+ * `"outside-de440-span"`: an instant the result was computed at is outside
+ * the pack's coverage less a day at each end (`defaultEphemeris()` gives the
+ * ends; 1790-01-02 to 2209-12-31 at least). Neither is set after
+ * `setDefaultEphemeris("astronomy-engine")`, the caller's own choice, where
+ * the result still names astronomy-engine, nor inside `withEphemeris`.
+ */
+export type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
 
 /**
  * A resolved birth instant. Use `resolveBirth` from `@zodiacs/engine/geo`
@@ -151,6 +174,14 @@ export interface BodyPosition {
   sign: ZodiacSign;
   /** Longitude inside `sign`, degrees in [0, 30). */
   degree: number;
+  /**
+   * The ephemeris this position came from, on every position the engine
+   * computes from 1.1.0-rc.10: `"jpl-de440"`, `"astronomy-engine"`, or the
+   * name of the source `withEphemeris` ran the call with.
+   */
+  ephemeris?: string;
+  /** Present when `ephemeris` is astronomy-engine as a fallback from the shipped DE440 pack, and says why. */
+  fallback?: EphemerisFallback;
 }
 
 /** A chart point that is not a body; see `chartPoints`. */
@@ -242,10 +273,14 @@ export interface Chart {
   timeScale: TimeScale;
   engineVersion: string;
   /**
-   * The ephemeris the bodies came from, when it was not astronomy-engine: the
-   * shipped DE440 pack, which is the default source inside its years
-   * (`defaultEphemeris`), or the source `withEphemeris` ran the chart with.
-   * Absent for astronomy-engine.
+   * The ephemeris the bodies came from, on every chart from 1.1.0-rc.10:
+   * `"jpl-de440"` with the pack's SHA-256 for the shipped DE440 pack, the
+   * default source inside its years (`defaultEphemeris`); `"astronomy-engine"`
+   * with its version where the chart was computed on it, whether by the
+   * caller's choice (`setDefaultEphemeris`) or as a fallback, which `flags`
+   * then says (`"de440-unavailable"`, `"outside-de440-span"`); or the name
+   * of the source `withEphemeris` ran the chart with. Optional in the type
+   * because a chart from 1.1.0-rc.9 or earlier lacks it on astronomy-engine.
    */
   ephemeris?: { readonly name: string; readonly version: string };
 }
@@ -313,10 +348,14 @@ export interface MoonPhase {
   illumination: number;
   name: MoonPhaseName;
   waxing: boolean;
+  /** The ephemeris the Sun and the Moon came from, as a BodyPosition names it; set by the engine from 1.1.0-rc.10. */
+  ephemeris?: string;
+  /** Present when `ephemeris` is astronomy-engine as a fallback from the shipped DE440 pack, and says why. */
+  fallback?: EphemerisFallback;
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "1.1.0-rc.9";
+export const ENGINE_VERSION: string = "1.1.0-rc.10";
 
 /**
  * astronomy-engine, the ephemeris the engine computes on where the shipped

@@ -27,12 +27,13 @@ import type {
   Chart,
   ChartInput,
   ChartPoints,
+  EphemerisFallback,
   PointName,
   PointPosition,
   PositionSource,
   SourceBody
 } from "./types.js";
-import { ENGINE_VERSION } from "./types.js";
+import { ENGINE_VERSION, EPHEMERIS } from "./types.js";
 
 const RAD = 180 / Math.PI;
 const DAY = 86_400_000;
@@ -55,8 +56,6 @@ let source: PositionSource | null = null;
 /** What a call outside `withEphemeris` computes on. */
 export type DefaultEphemerisName = "de440" | "astronomy-engine";
 let defaultName: DefaultEphemerisName = "de440";
-/** Above zero inside `onAstronomyEngine`. */
-let astronomyEngineOnly = 0;
 
 /**
  * The default source keeps a day inside each end of the shipped pack, so
@@ -93,19 +92,105 @@ function shippedDefault(): ShippedDefault | null {
   return shipped;
 }
 
+/** The source a calculation at one instant uses, and why it is astronomy-engine when the default was the pack. */
+interface Chosen {
+  /** Null for astronomy-engine. */
+  readonly from: PositionSource | null;
+  /**
+   * Set when the default is "de440" and the calculation is astronomy-engine's
+   * all the same: the shipped pack could not be opened
+   * (`"de440-unavailable"`), or the instant is outside it
+   * (`"outside-de440-span"`). Null on the pack, inside `withEphemeris`, and
+   * after `setDefaultEphemeris("astronomy-engine")`, which is the caller's
+   * choice and not a fallback.
+   */
+  readonly fallback: EphemerisFallback | null;
+}
+const ON_ASTRONOMY_ENGINE: Chosen = { from: null, fallback: null };
+
 /**
  * The source for a calculation at `ttDays` (TT days from J2000.0), decided
  * once for the instant and used for each of its speed samples: the one
  * `withEphemeris` installed; or the shipped DE440 pack, when the default is
- * "de440", the pack opened, and the instant is inside it by a day; or null,
- * for astronomy-engine.
+ * "de440", the pack opened, and the instant is inside it by a day; or
+ * astronomy-engine, with the reason when that is a fallback.
  */
-function sourceAt(ttDays: number): PositionSource | null {
-  if (astronomyEngineOnly > 0) return null;
-  if (source) return source;
-  if (defaultName !== "de440") return null;
+function chosenAt(ttDays: number): Chosen {
+  if (source) return { from: source, fallback: null };
+  if (defaultName !== "de440") return ON_ASTRONOMY_ENGINE;
   const pack = shippedDefault();
-  return pack !== null && ttDays >= pack.fromTtDays && ttDays <= pack.toTtDays ? pack.source : null;
+  if (pack === null) return { from: null, fallback: "de440-unavailable" };
+  return ttDays >= pack.fromTtDays && ttDays <= pack.toTtDays ? { from: pack.source, fallback: null } : { from: null, fallback: "outside-de440-span" };
+}
+
+/** The fallbacks met while `notingFallbacks` runs, or null outside one. */
+let noted: Set<EphemerisFallback> | null = null;
+
+/** `chosenAt`'s source, with a fallback noted for `notingFallbacks`. */
+function sourceAt(ttDays: number): PositionSource | null {
+  const chosen = chosenAt(ttDays);
+  if (chosen.fallback !== null) noted?.add(chosen.fallback);
+  return chosen.from;
+}
+
+/**
+ * Run `run` and report each kind of fallback from the shipped DE440 pack to
+ * astronomy-engine that a position computed inside it met, in a fixed order:
+ * for results that are searched or sampled over many instants (a crossing
+ * search, a window), which must say so when any of them was not the pack's.
+ * Calls nest; an outer call also reports what an inner one met.
+ *
+ * @internal
+ */
+export function notingFallbacks<T>(run: () => T): { value: T; fallbacks: EphemerisFallback[] } {
+  const outer = noted;
+  const mine = new Set<EphemerisFallback>();
+  noted = mine;
+  try {
+    const value = run();
+    return { value, fallbacks: EPHEMERIS_FALLBACKS.filter((reason) => mine.has(reason)) };
+  } finally {
+    noted = outer;
+    if (outer) for (const reason of mine) outer.add(reason);
+  }
+}
+
+/**
+ * Each kind of fallback a position at one of `instants` (UTC milliseconds)
+ * meets, in the order results list them: for results built from positions at
+ * known instants (the timing and techniques entries' flags).
+ *
+ * @internal
+ */
+export function fallbacksAt(instants: readonly number[]): EphemerisFallback[] {
+  const met = new Set<EphemerisFallback | null>(instants.map((ms) => (Number.isFinite(ms) ? chosenAt(timeBasis(ms, "utc").ttDays).fallback : null)));
+  return EPHEMERIS_FALLBACKS.filter((reason) => met.has(reason));
+}
+
+/** Every fallback flag, in the order results list them. */
+export const EPHEMERIS_FALLBACKS: readonly EphemerisFallback[] = ["de440-unavailable", "outside-de440-span"];
+
+/** The name and version of what `from` is: a source's own, or astronomy-engine's. */
+const named = (from: PositionSource | null): { name: string; version: string } =>
+  from ? { name: from.ephemeris.name, version: from.ephemeris.version } : { ...EPHEMERIS };
+
+/**
+ * What a calculation at an instant computes on, by the rule every position
+ * follows: the source (null for astronomy-engine), its name and version, and
+ * the fallback flag when the default was the pack and this is not it. `ms` is
+ * read on `scale` with `pin`, as a chart reads its instant. For the modules
+ * that build results beside this file's (the calc and window entries, the
+ * timing, techniques and vedic entries' flags).
+ *
+ * @internal
+ */
+export function ephemerisAt(
+  ms: number,
+  scale: TimeScaleName = "utc",
+  pin?: number
+): { from: PositionSource | null; ephemeris: { name: string; version: string }; fallback: EphemerisFallback | null } {
+  const { from, fallback } = chosenAt(timeBasis(ms, scale, pin).ttDays);
+  return { from, ephemeris: named(from), fallback };
 }
 
 /** What `defaultEphemeris` reports. */
@@ -167,21 +252,6 @@ export function setDefaultEphemeris(name: DefaultEphemerisName): void {
 }
 
 /**
- * Run `run` on astronomy-engine whatever the default: for the modules that
- * compute on astronomy-engine themselves and call this file's functions
- * beside it (the calc and window entries), so that one result never mixes
- * two ephemerides. They refuse inside `withEphemeris` before they get here.
- */
-export function onAstronomyEngine<T>(run: () => T): T {
-  astronomyEngineOnly += 1;
-  try {
-    return run();
-  } finally {
-    astronomyEngineOnly -= 1;
-  }
-}
-
-/**
  * Run `run` with every body position the engine computes taken from
  * `positionSource` (for example `@zodiacs/engine/de440`'s), in place of the
  * default source, then restore the one before, whatever happens. Charts computed inside name it
@@ -211,13 +281,14 @@ export function withEphemeris<T>(positionSource: PositionSource, run: () => T): 
 }
 
 /**
- * For code that computes positions from astronomy-engine itself, or whose
- * bounds were measured on it (the calc entry, the sky entry's rising and
- * setting, the vedic entry's star-anchored ayanamsas and varga timing, the
+ * For code that computes positions from astronomy-engine itself (the sky
+ * entry's rising and setting, the vedic entry's star-anchored ayanamsas and
+ * varga timing, the calc entry's other centers and corrections), or whose
+ * bounds and distances a caller's source cannot give (the calc entry, the
  * window entry): refuse inside withEphemeris rather than mix two ephemerides.
  */
 export function refuseUnderSource(what: string): void {
-  if (source) throw new TypeError(`${what} does not run inside withEphemeris: it is computed on astronomy-engine`);
+  if (source) throw new TypeError(`${what} does not run inside withEphemeris: it computes on the engine's own sources, not a caller's`);
 }
 
 /** A source's longitude in [0, 360): 360 becomes 0 and -0 becomes 0, every other value unchanged. */
@@ -426,7 +497,7 @@ function speedAt(body: BodyName, ms: number, clock: Clock, from: PositionSource 
   return centralDifference((basis) => longitudeOn(body, basis, from), ms, clock, stepDays);
 }
 
-function position(body: BodyName, lon: number, lat: number, speed: number): BodyPosition {
+function position(body: BodyName, lon: number, lat: number, speed: number, chosen: Chosen): BodyPosition {
   return {
     body,
     lon,
@@ -434,7 +505,9 @@ function position(body: BodyName, lon: number, lat: number, speed: number): Body
     speed,
     retrograde: speed < 0,
     sign: signForLongitude(lon).slug,
-    degree: degreeInSign(lon)
+    degree: degreeInSign(lon),
+    ephemeris: chosen.from ? chosen.from.ephemeris.name : EPHEMERIS.name,
+    ...(chosen.fallback !== null && { fallback: chosen.fallback })
   };
 }
 
@@ -442,35 +515,36 @@ export function computeBodies(date: Date): BodyPosition[] {
   return evaluated(() => bodiesAt(date.getTime(), UTC_CLOCK));
 }
 
-function bodiesAt(ms: number, clock: Clock, from: PositionSource | null = sourceAt(basisAt(ms, clock).ttDays)): BodyPosition[] {
-  if (from) return sourceBodiesAt(from, ms, clock);
+function bodiesAt(ms: number, clock: Clock, chosen: Chosen = chosenAt(basisAt(ms, clock).ttDays)): BodyPosition[] {
+  if (chosen.fallback !== null) noted?.add(chosen.fallback);
+  if (chosen.from) return sourceBodiesAt(chosen, chosen.from, ms, clock);
   const bodies: BodyPosition[] = [];
   for (const planet of PLANETS) {
     const coordinates = planetOfDate(planet.body, timeAt(ms, clock));
     bodies.push(
-      position(planet.name, coordinates.lon, coordinates.lat, speedAt(planet.name, ms, clock, null))
+      position(planet.name, coordinates.lon, coordinates.lat, speedAt(planet.name, ms, clock, null), chosen)
     );
   }
 
   const moon = moonOfDate(timeAt(ms, clock));
-  bodies.splice(1, 0, position("Moon", moon.lon, moon.lat, speedAt("Moon", ms, clock, null)));
+  bodies.splice(1, 0, position("Moon", moon.lon, moon.lat, speedAt("Moon", ms, clock, null), chosen));
 
   const northNode = trueNodeLongitude(timeAt(ms, clock));
   const nodeSpeed = speedAt("North Node", ms, clock, null);
   bodies.push(
-    position("North Node", northNode, 0, nodeSpeed),
-    position("South Node", normalizeLongitude(northNode + 180), 0, nodeSpeed)
+    position("North Node", northNode, 0, nodeSpeed, chosen),
+    position("South Node", normalizeLongitude(northNode + 180), 0, nodeSpeed, chosen)
   );
   return bodies;
 }
 
 /** The bodies in the order bodiesAt gives them, from a source. */
-function sourceBodiesAt(from: PositionSource, ms: number, clock: Clock): BodyPosition[] {
+function sourceBodiesAt(chosen: Chosen, from: PositionSource, ms: number, clock: Clock): BodyPosition[] {
   const tt = basisAt(ms, clock).ttDays;
   return (["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "North Node", "South Node"] as const).map(
     (body) => {
       const place = body === "North Node" || body === "South Node" ? { lon: sourceLongitude(from, body, tt), lat: 0 } : from.place(body as SourceBody, tt);
-      return position(body, tidy(place.lon), place.lat, speedAt(body, ms, clock, from));
+      return position(body, tidy(place.lon), place.lat, speedAt(body, ms, clock, from), chosen);
     }
   );
 }
@@ -489,8 +563,9 @@ function chartAt(input: ChartInput): Chart {
   const ms = input.utc.getTime();
   const clock = clockOf(input);
   const basis = timeBasis(ms, clock.scale, clock.pin);
-  const from = sourceAt(basis.ttDays);
-  const bodies = bodiesAt(ms, clock, from);
+  const chosen = chosenAt(basis.ttDays);
+  const { from, fallback } = chosen;
+  const bodies = bodiesAt(ms, clock, chosen);
   let angles = null;
   let houses = null;
 
@@ -515,6 +590,8 @@ function chartAt(input: ChartInput): Chart {
   }
   if (outsideReferenceSpan(input.utc)) flags.push("outside-reference-span");
   deltaTExtrapolated(basis, angles) && flags.push("delta-t-extrapolated");
+  // Last: the chart was to come from the shipped DE440 pack and did not.
+  if (fallback !== null) flags.push(fallback);
 
   return {
     input,
@@ -526,7 +603,7 @@ function chartAt(input: ChartInput): Chart {
     deltaT: basis.deltaT,
     timeScale: basis.timeScale,
     engineVersion: ENGINE_VERSION,
-    ...(from && { ephemeris: { name: from.ephemeris.name, version: from.ephemeris.version } })
+    ephemeris: named(from)
   };
 }
 

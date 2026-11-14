@@ -12,10 +12,10 @@
  */
 import { readFileSync } from "node:fs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { calc, chart as calcChart } from "./calc.js";
+import { calc, chart as calcChart, events } from "./calc.js";
 import { DE440_PACK, shippedDe440Source } from "./de440-pack.js";
 import { bodyLongitude } from "./ephemeris.js";
-import { EPHEMERIS, defaultEphemeris, natalChart, positions, setDefaultEphemeris, withEphemeris } from "./index.js";
+import { EPHEMERIS, defaultEphemeris, findLongitudeCrossings, natalChart, positions, setDefaultEphemeris, withEphemeris } from "./index.js";
 import { createNatalEnvelope } from "./receipt.js";
 
 interface Vector {
@@ -87,13 +87,18 @@ describe("the default source", () => {
     expect(envelope.requiredFeatures).toContain("ephemeris-jpl-de440");
   });
 
-  it('computes on astronomy-engine after setDefaultEphemeris("astronomy-engine"), and says so', () => {
+  it('computes on astronomy-engine after setDefaultEphemeris("astronomy-engine"), names it, and flags no fallback', () => {
     const input = { utc: "1990-04-15T08:30:00Z", latitude: 51.5, longitude: -0.12 };
     const de440 = natalChart(input);
+    expect(de440.flags).toEqual([]);
+    expect(de440.bodies.every((row) => row.ephemeris === "jpl-de440" && !("fallback" in row))).toBe(true);
     setDefaultEphemeris("astronomy-engine");
     expect(defaultEphemeris().name).toBe("astronomy-engine");
     const chart = natalChart(input);
-    expect(chart.ephemeris).toBeUndefined();
+    // The caller's choice is named on the result, and is not a fallback.
+    expect(chart.ephemeris).toEqual({ name: EPHEMERIS.name, version: EPHEMERIS.version });
+    expect(chart.flags).toEqual([]);
+    expect(chart.bodies.every((row) => row.ephemeris === "astronomy-engine" && !("fallback" in row))).toBe(true);
     expect(createNatalEnvelope(chart).receipt.engine.ephemeris).toEqual({ name: EPHEMERIS.name, version: EPHEMERIS.version });
     const neptune = (from: typeof chart): number => from.bodies.find((row) => row.body === "Neptune")!.lon;
     expect(neptune(chart)).not.toBe(neptune(de440));
@@ -104,23 +109,28 @@ describe("the default source", () => {
     expect(() => setDefaultEphemeris("swiss" as never)).toThrow(TypeError);
   });
 
-  it("falls back to astronomy-engine outside the pack, position and speed together, and says so", () => {
+  it("falls back to astronomy-engine outside the pack, position and speed together, and flags it on the chart and each row", () => {
     const { fromTtDays, toTtDays } = defaultEphemeris().de440;
     const outside = [ttDate(fromTtDays! - 0.01), ttDate(toTtDays! + 0.01), new Date("1700-06-01T00:00:00Z"), new Date("2300-06-01T00:00:00Z")];
     for (const utc of outside) {
       const input = { utc, timeScale: "tt" as const, timeKnown: false };
       const chart = natalChart(input);
-      expect(chart.ephemeris, utc.toISOString()).toBeUndefined();
+      expect(chart.ephemeris, utc.toISOString()).toEqual({ name: EPHEMERIS.name, version: EPHEMERIS.version });
+      expect(chart.flags.at(-1)).toBe("outside-de440-span");
+      expect(chart.bodies.every((row) => row.ephemeris === "astronomy-engine" && row.fallback === "outside-de440-span")).toBe(true);
       setDefaultEphemeris("astronomy-engine");
-      const fallback = natalChart(input);
+      const chosen = natalChart(input);
       setDefaultEphemeris("de440");
-      expect(chart.bodies).toEqual(fallback.bodies);
+      // The same numbers as the caller's own choice of astronomy-engine gives, which carries no fallback.
+      expect(chosen.flags).not.toContain("outside-de440-span");
+      expect(chart.bodies.map(({ fallback: _why, ...row }) => row)).toEqual(chosen.bodies);
     }
     // Just inside each end the chart, its speeds included, is the pack's.
     for (const utc of [ttDate(fromTtDays! + 0.01), ttDate(toTtDays! - 0.01)]) {
       const input = { utc, timeScale: "tt" as const, timeKnown: false };
       const chart = natalChart(input);
       expect(chart.ephemeris).toEqual(DE440);
+      expect(chart.flags).not.toContain("outside-de440-span");
       expect(chart.bodies).toEqual(withEphemeris(shippedDe440Source(), () => natalChart(input)).bodies);
     }
   });
@@ -132,15 +142,72 @@ describe("the default source", () => {
     expect(bodyLongitude("Sun", new Date(at))).toBe(inside.sun);
   });
 
-  it("leaves the calc entry on astronomy-engine, which its receipts name", () => {
-    const request = { body: "Neptune", time: "1990-04-15T08:30:00Z" } as const;
-    const birth = { time: "1990-04-15T08:30:00Z", place: { latitude: 51.5, longitude: -0.12 } } as const;
-    const position = calc(request);
-    const whole = calcChart(birth as never);
+  it("gives calc(), chart() and events() the same source as natalChart(), named in their receipts", () => {
+    const at = "1990-04-15T08:30:00Z";
+    const rows = positions(at);
+    for (const row of rows) {
+      const position = calc({ body: row.body, time: at });
+      if (position.status !== "ok") throw new Error(position.reason);
+      // To the bit: longitude, latitude and longitude speed.
+      expect([position.lon, position.lat, position.speeds!.lon], row.body).toEqual([row.lon, row.lat, row.speed]);
+      expect(position.receipt.engine.ephemeris).toEqual(DE440);
+      expect(position.receipt.conventions).toContain(`ephemeris:jpl-de440@${DE440_PACK.sha256}`);
+      expect(position.flags).toEqual([]);
+    }
+    const birth = { time: at, place: { latitude: 51.5, longitude: -0.12 } } as const;
+    const whole = calcChart(birth);
+    if (whole.status !== "ok") throw new Error(whole.reason);
+    expect(whole.chart).toEqual(natalChart({ utc: at, latitude: 51.5, longitude: -0.12 }));
+    expect(whole.receipt.engine.ephemeris).toEqual(DE440);
+    const found = events({ kind: "longitude-crossing", body: "Sun", longitude: 30, from: "1990-01-01T00:00:00Z", to: "1991-01-01T00:00:00Z" });
+    if (found.status !== "ok") throw new Error(found.reason);
+    expect(found.receipt.engine.ephemeris).toEqual(DE440);
+    expect(found.flags).toEqual([]);
+    expect(found.events.map((event) => event.at)).toEqual(
+      findLongitudeCrossings("Sun", 30, new Date("1990-01-01T00:00:00Z"), new Date("1991-01-01T00:00:00Z")).map((crossing) => crossing.at.toISOString())
+    );
+    // After the caller's own choice of astronomy-engine they follow it, and say so, with no fallback flag.
     setDefaultEphemeris("astronomy-engine");
-    expect(calc(request)).toEqual(position);
-    expect(calcChart(birth as never)).toEqual(whole);
-    expect(JSON.stringify(position)).toContain(`ephemeris:astronomy-engine@${EPHEMERIS.version}`);
-    expect(JSON.stringify(position)).not.toContain("jpl-de440");
+    const chosen = calc({ body: "Neptune", time: at });
+    if (chosen.status !== "ok") throw new Error(chosen.reason);
+    expect(chosen.receipt.engine.ephemeris).toEqual({ name: EPHEMERIS.name, version: EPHEMERIS.version });
+    expect(chosen.flags).toEqual([]);
+    expect(chosen.lon).toBe(positions(at).find((row) => row.body === "Neptune")!.lon);
+  });
+
+  it("leaves on astronomy-engine, by its receipt's own word, what the pack's reduction does not give", () => {
+    const at = "1990-04-15T08:30:00Z";
+    const requests = [
+      { body: "Mars", time: at, center: "heliocentric" },
+      { body: "Mars", time: at, center: "barycentric" },
+      { body: "Mars", time: at, center: { topocentric: { latitude: 10, longitude: 20 } } },
+      { body: "Mars", time: at, flags: { correction: "astrometric" } },
+      { body: "Mars", time: at, flags: { correction: "geometric" } },
+      { body: "Earth", time: at, center: "heliocentric" }
+    ] as const;
+    for (const request of requests) {
+      const position = calc(request);
+      if (position.status !== "ok") throw new Error(position.reason);
+      expect(position.receipt.engine.ephemeris, JSON.stringify(request)).toEqual({ name: EPHEMERIS.name, version: EPHEMERIS.version });
+      // Not a fallback: these are never the pack's.
+      expect(position.flags).toEqual([]);
+    }
+  });
+
+  it("gives calc() the pack's place in every frame, turned from the true ecliptic of date", () => {
+    const at = "1990-04-15T08:30:00Z";
+    for (const frame of ["ecliptic-mean-of-date", "ecliptic-j2000", "ecliptic-icrs", "equatorial-true-of-date", "equatorial-mean-of-date", "equatorial-j2000", "equatorial-icrs"] as const) {
+      const here = calc({ body: "Jupiter", time: at, frame, flags: { cartesian: true } });
+      setDefaultEphemeris("astronomy-engine");
+      const there = calc({ body: "Jupiter", time: at, frame, flags: { cartesian: true } });
+      setDefaultEphemeris("de440");
+      if (here.status !== "ok" || there.status !== "ok") throw new Error("refused");
+      expect(here.receipt.engine.ephemeris).toEqual(DE440);
+      expect(here.bounds.position.label).toBe("estimated");
+      // The two ephemerides' directions differ by under astronomy-engine's own limit for Jupiter, 17″ (src/calc-bounds.ts).
+      const dot = (here.cartesian!.x * there.cartesian!.x + here.cartesian!.y * there.cartesian!.y + here.cartesian!.z * there.cartesian!.z) / (here.dist! * there.dist!);
+      expect(Math.acos(Math.min(1, dot)) * 206_264.806).toBeLessThan(17);
+      expect(Math.abs(here.dist! / there.dist! - 1)).toBeLessThan(7.9e-5);
+    }
   });
 });

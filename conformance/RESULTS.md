@@ -19,7 +19,7 @@ Suite 0.2.0: 500 vectors (L1 240, L2 150, L3 110). Each vector names its arbiter
 | L3 | `calendar.to-jdn` | 25 | jdn exact |
 | L3 | `calendar.from-jdn` | 10 | year exact; month exact; day exact |
 
-## @zodiacs/engine 1.1.0-rc.9
+## @zodiacs/engine 1.1.0-rc.10
 
 Adapter `zodiacs-engine` 0.3.0; results in [`results/zodiacs-engine.json`](results/zodiacs-engine.json).
 
@@ -58,7 +58,7 @@ Adapter `zodiacs-engine` 0.3.0; results in [`results/zodiacs-engine.json`](resul
 - **TT − UTC and ΔT (L3).** From 1972 to 2027-10-02 the engine takes TAI − UTC from the IERS leap-second list updated 2026-07-06, and UT1 − UTC from IERS: the EOP 20 C04 series in 1972 and `finals2000A.all` of 2026-09-24 from 1973-01-02. The adapter reports TT − UTC as a chart's ΔT (TT − UT1) plus its UT1 − UTC. A leap second itself cannot be expressed as a JavaScript date, so that case is unsupported.
 - **Unsupported (L3).** Release 1.1.0-rc.2 converts dates between the Julian and Gregorian calendars and reads a birthplace's local mean time inside a zone's local mean time era, but has no public function for a Julian Day Number or for local mean time from a longitude alone, so the 35 calendar vectors and the 5 local mean time vectors are unsupported.
 
-## @zodiacs/engine on astronomy-engine 1.1.0-rc.9
+## @zodiacs/engine on astronomy-engine 1.1.0-rc.10
 
 Adapter `zodiacs-engine-astronomy-engine` 0.3.0; results in [`results/zodiacs-engine-astronomy-engine.json`](results/zodiacs-engine-astronomy-engine.json).
 

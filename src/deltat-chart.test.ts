@@ -200,7 +200,8 @@ describe("ΔT in receipts", () => {
     if (!pinned.ok) return;
     const replay = natalChart(natalReplayInput(pinned.envelope));
     expect(replay.deltaT.seconds).toBe(70);
-    expect(replay.bodies).toEqual(pinned.envelope.result.bodies);
+    // A record keeps a body's computed fields; the ephemeris is named once, in the receipt.
+    expect(replay.bodies.map(({ ephemeris: _named, ...row }) => row)).toEqual(pinned.envelope.result.bodies);
     const inconsistent = JSON.parse(pinnedJson);
     inconsistent.result.deltaT.sigma = 0.1;
     expect(parseNatalEnvelope(JSON.stringify(inconsistent))).toMatchObject({
@@ -210,7 +211,7 @@ describe("ΔT in receipts", () => {
     const modelled = parseNatalEnvelope(json);
     if (!modelled.ok) return;
     expect(natalReplayInput(modelled.envelope)).not.toHaveProperty("deltaT");
-    expect(natalChart(natalReplayInput(modelled.envelope)).bodies).toEqual(
+    expect(natalChart(natalReplayInput(modelled.envelope)).bodies.map(({ ephemeris: _named, ...row }) => row)).toEqual(
       modelled.envelope.result.bodies
     );
   });

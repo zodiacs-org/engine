@@ -4,10 +4,17 @@
  * src/techniques.ts. The names, the options reader and the readers of
  * degrees are in names.ts, and re-exported here.
  */
+import { fallbacksAt } from "../ephemeris.js";
 import { outsideReferenceSpan } from "../reference-span.js";
+import type { EphemerisFallback } from "../types.js";
 
-/** `"outside-reference-span"`: the ephemeris was read outside 1800–2200 (`REFERENCE_SPAN`). */
-export type TechniqueFlag = "outside-reference-span";
+/**
+ * `"outside-reference-span"`: the ephemeris was read outside 1800 to 2200
+ * (`REFERENCE_SPAN`). `"de440-unavailable"` and `"outside-de440-span"`: a
+ * position was astronomy-engine's as a fallback from the shipped DE440 pack
+ * (the root entry's `EphemerisFallback`).
+ */
+export type TechniqueFlag = "outside-reference-span" | EphemerisFallback;
 
 /** Latitude in [−90, 90] and longitude east in [−180, 180], degrees. */
 export interface GeoPlace {
@@ -40,5 +47,6 @@ export function dateAt(milliseconds: number, label: string): Date {
 
 /** A result's flags, from the instants the ephemeris was read at. */
 export function techniqueFlags(instants: readonly number[]): readonly TechniqueFlag[] {
-  return Object.freeze(instants.some((milliseconds) => outsideReferenceSpan(new Date(milliseconds))) ? ["outside-reference-span"] : []);
+  const flags: TechniqueFlag[] = instants.some((milliseconds) => outsideReferenceSpan(new Date(milliseconds))) ? ["outside-reference-span"] : [];
+  return Object.freeze([...flags, ...fallbacksAt(instants)]);
 }

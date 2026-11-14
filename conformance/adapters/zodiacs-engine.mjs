@@ -14,7 +14,9 @@
  * the package ships (docs/de440.md), and by default the adapter answers the
  * position requests the way an application would: a plain `natalChart`, with
  * nothing opened, supplied or fetched. Every other kind is answered the same
- * way, so their bodies are the pack's too. Two other runs can be asked for:
+ * way, so their bodies are the pack's too. From 1.1.0-rc.10 every chart names
+ * its ephemeris, so each position's meta carries it on either run, and a
+ * fallback's flag with it. Two other runs can be asked for:
  *
  * - `--ephemeris astronomy-engine` (an argument of this script) first calls
  *   `setDefaultEphemeris("astronomy-engine")`, so that every request is

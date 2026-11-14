@@ -12,9 +12,10 @@
 import { AstroTime, Body, GeoMoonState, KM_PER_AU } from "astronomy-engine";
 
 // Imported first so that the build keeps the root entry's shared chunks byte for byte.
-import { bodyLongitude, computeChart, deltaTExtrapolated, gastHours, onChartClock, refuseUnderSource } from "./ephemeris.js";
+import { bodyLongitude, computeChart, deltaTExtrapolated, ephemerisAt, gastHours, onChartClock, refuseUnderSource } from "./ephemeris.js";
 import { assertDerivedFlags, snapshotFlags, timeFlags, validateBirthSettings } from "./birth-input.js";
 import { MEAN_POINTS_BASIS, MEAN_POINTS_SPEED_BASIS, MEASURED, MEASURED_BASIS, SWEPT, SWEPT_BASIS } from "./calc-bounds.js";
+import { DE440_MEASURED, DE440_MEASURED_BASIS, DE440_TURNED_BASIS } from "./calc-bounds-de440.js";
 import {
   CALC_FRAMES as FRAMES,
   apply,
@@ -44,7 +45,7 @@ import type { TimeBands } from "./time-bands.js";
 import { TIME_SCALE_NAMES, elapsedDays, timeBasis } from "./time-scale.js";
 import type { TimeBasis, TimeScale, TimeScaleName } from "./time-scale.js";
 import { ENGINE_VERSION, EPHEMERIS } from "./types.js";
-import type { Angles, BodyName, Chart, ChartFlag, ChartInput, HouseSystem } from "./types.js";
+import type { Angles, BodyName, Chart, ChartFlag, ChartInput, HouseSystem, PositionSource, SourceBody } from "./types.js";
 import { addBounds, ayanamsaBound } from "./calc-ayanamsa.js";
 import { AYANAMSAS, ayanamsaAt, isUserAyanamsaName, userAyanamsa } from "./vedic/ayanamsa.js";
 import type { AyanamsaDefinition, AyanamsaName, AyanamsaPrecessionModel } from "./vedic/ayanamsa.js";
@@ -236,7 +237,13 @@ export interface CalcReceipt<Request> {
   readonly engine: {
     readonly name: "@zodiacs/engine";
     readonly version: string;
-    readonly ephemeris: { readonly name: "astronomy-engine"; readonly version: string };
+    /**
+     * What the result was computed on: `"jpl-de440"` with the shipped pack's
+     * SHA-256, or `"astronomy-engine"` with its version (docs/calc.md, "Which
+     * ephemeris"). Where astronomy-engine stands in for the pack, the
+     * result's flags say so.
+     */
+    readonly ephemeris: { readonly name: string; readonly version: string };
   };
 }
 
@@ -309,7 +316,11 @@ export interface CalcPosition {
   readonly bounds: CalcBounds;
   /** The band from the time basis, which is not a bound on the error; null without speeds. */
   readonly band: CalcTimeBand | null;
-  /** "delta-t-extrapolated" where the position moves with an extrapolated ΔT, and `bounds` are widened (docs/calc.md, "Bounds"). */
+  /**
+   * "delta-t-extrapolated" where the position moves with an extrapolated ΔT, and `bounds` are widened (docs/calc.md,
+   * "Bounds"). "de440-unavailable" where the shipped DE440 pack gives this position and could not be opened, so
+   * that astronomy-engine gave it: never silently (docs/calc.md, "Which ephemeris").
+   */
   readonly flags: readonly ChartFlag[];
   readonly receipt: CalcReceipt<CalcRequest>;
 }
@@ -613,19 +624,26 @@ function instant(basis: TimeBasis): CalcInstant {
 const TIME_BASIS_ID = "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise";
 
 /** A result's receipt; one whose result carries bands from the time basis (`banded`) names their rule last. */
-function receipt<Request>(request: Request, instants: CalcInstant[], ids: string[], pin?: number, banded = true): CalcReceipt<Request> {
+function receipt<Request>(
+  request: Request,
+  instants: CalcInstant[],
+  ids: string[],
+  pin?: number,
+  banded = true,
+  ephemeris: { readonly name: string; readonly version: string } = EPHEMERIS
+): CalcReceipt<Request> {
   return {
     schema: CALC_RECEIPT_SCHEMA,
     request,
     instants,
     conventions: [
       ...ids,
-      `ephemeris:astronomy-engine@${EPHEMERIS.version}`,
+      `ephemeris:${ephemeris.name}@${ephemeris.version}`,
       pin === undefined ? "deltat:time-basis" : "deltat:pinned",
       TIME_BASIS_ID,
       ...(banded ? ["time-band:first-order"] : [])
     ],
-    engine: { name: "@zodiacs/engine", version: ENGINE_VERSION, ephemeris: { ...EPHEMERIS } }
+    engine: { name: "@zodiacs/engine", version: ENGINE_VERSION, ephemeris: { name: ephemeris.name, version: ephemeris.version } }
   };
 }
 
@@ -676,7 +694,56 @@ function pointAt(body: Point, at: AstroTime): Row {
   return row(raw, normalizeLongitude(body === "Mean Node" ? raw : raw + 180));
 }
 
-function evaluator(body: CalcBody, frame: CalcFrame, center: Center, correction: CalcCorrection): (at: AstroTime) => Row {
+/** A row at an instant: astronomy-engine's time for it, and the time basis it was built on. */
+type Evaluate<R extends Row = Row> = (at: AstroTime, basis: TimeBasis) => R;
+
+/** Mars to Pluto, which a DE440 pack places as planetary-system barycentres. */
+const BARYCENTRES: readonly string[] = ["Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"];
+
+/**
+ * Whether the shipped DE440 pack gives this position: the apparent geocentric
+ * place of a body positions() gives (the Sun, the Moon, Mercury to Pluto), or
+ * the true node or its opposite point. These are what natalChart() and
+ * positions() compute, and calc() takes them from the same source, so the
+ * two agree. Every other request (another center or correction, the Earth)
+ * is astronomy-engine's, as its receipt says (docs/calc.md, "Which
+ * ephemeris").
+ */
+const packGives = (body: CalcBody, kind: Center["kind"], correction: CalcCorrection): boolean =>
+  kind === "geocentric" && (isTrueNode(body) || (!isPoint(body) && body !== "Earth" && correction === "apparent"));
+
+/**
+ * A position from a source, as positions() takes it (src/ephemeris.ts): the
+ * source's longitude and latitude in the true ecliptic of date, to the bit,
+ * with its light-path distance. In another frame the direction is turned
+ * from the true ecliptic of date with the engine's own nutation and
+ * precession, as a node or Lilith is.
+ */
+function packed(from: PositionSource, body: CalcBody, frame: CalcFrame): Evaluate {
+  const tidy = (lon: number): number => (lon === 360 ? 0 : lon + 0);
+  return (at, basis) => {
+    let lon: number;
+    let lat = 0;
+    let dist: number | null = null;
+    if (isTrueNode(body)) {
+      const node = from.trueNode(basis.ttDays);
+      lon = body === "North Node" ? tidy(node) : normalizeLongitude(node + 180);
+    } else {
+      const place = from.place(body as SourceBody, basis.ttDays);
+      lon = tidy(place.lon);
+      lat = place.lat;
+      dist = place.dist ?? null;
+    }
+    const scaled = (v: Vec3): Vec3 | null => (dist === null ? null : [v[0] * dist, v[1] * dist, v[2] * dist]);
+    const along = fromSpherical(lon, lat, 1);
+    if (frame === "ecliptic-true-of-date") return { lon, lat, dist, xyz: scaled(along), raw: lon };
+    const turned = apply(frameMatrix(frame, at), apply(transpose(frameMatrix("ecliptic-true-of-date", at)), along));
+    const there = toSpherical(turned);
+    return { lon: there.lon, lat: there.lat, dist, xyz: scaled(turned), raw: there.lon };
+  };
+}
+
+function evaluator(body: CalcBody, frame: CalcFrame, center: Center, correction: CalcCorrection): Evaluate {
   if (isPoint(body)) {
     return (at) => {
       const point = pointAt(body, at);
@@ -718,10 +785,10 @@ interface SiderealRow extends Row {
  * vector turned with it. The longitude a speed differences is turned too, so
  * a speed is the sidereal longitude's.
  */
-function siderealOf(evaluate: (at: AstroTime) => Row, definition: AyanamsaDefinition, frame: CalcFrame): (at: AstroTime) => SiderealRow {
+function siderealOf(evaluate: Evaluate, definition: AyanamsaDefinition, frame: CalcFrame): Evaluate<SiderealRow> {
   const trueOfDate = frame === "ecliptic-true-of-date";
-  return (at) => {
-    const row = evaluate(at);
+  return (at, basis) => {
+    const row = evaluate(at, basis);
     const value = ayanamsaAt(definition, at);
     const subtracted = trueOfDate ? value.true : value.mean;
     return {
@@ -736,10 +803,16 @@ function siderealOf(evaluate: (at: AstroTime) => Row, definition: AyanamsaDefini
 }
 
 /** The convention ids of a position; calc(), events() and chart() share them. */
-function positionIds(body: CalcBody, frame: CalcFrame, kind: Center["kind"], correction: CalcCorrection, zodiac: Zodiac): string[] {
+function positionIds(body: CalcBody, frame: CalcFrame, kind: Center["kind"], correction: CalcCorrection, zodiac: Zodiac, onPack = false): string[] {
   const ids = [...zodiac.ids, `frame:${frame}`, `center:${kind}`];
   if (isPoint(body)) {
     ids.push("correction:not-applicable", body.endsWith("Lilith") ? "lilith:mean" : body.startsWith("Mean") ? "node:mean" : "node:true-osculating");
+    if (onPack) ids.push(...PACK_PLACE_IDS);
+  } else if (onPack) {
+    // The DE440 reduction's own chain (src/de440/reduce.ts), in place of astronomy-engine's.
+    ids.push(`correction:${correction}`, "light-time:iterated", "deflection:sun", "aberration:relativistic-annual");
+    if (BARYCENTRES.includes(body)) ids.push("target:system-barycentre");
+    ids.push(...PACK_PLACE_IDS);
   } else {
     ids.push(`correction:${correction}`);
     if (body === "Moon" && kind === "geocentric" && correction !== "astrometric") ids.push("moon:series-at-instant");
@@ -747,6 +820,14 @@ function positionIds(body: CalcBody, frame: CalcFrame, kind: Center["kind"], cor
       ids.push("light-time:newtonian", "deflection:none");
       if (correction === "apparent" && kind !== "barycentric") ids.push("aberration:backdated-observer");
     }
+  }
+  if (onPack) {
+    // The pack's place is of date (PACK_PLACE_IDS); any other frame is reached from there with the engine's own
+    // nutation and precession.
+    ids.push("precession:iau2006", "obliquity:iau2006");
+    if (frame !== "ecliptic-true-of-date") ids.push("frame-turn:from-true-ecliptic-of-date", "nutation:iau2000b");
+    if (frame.endsWith("icrs")) ids.push("frame-bias:iau2000");
+    return ids;
   }
   // A node or Lilith is found in the ecliptic of date and turned from there into every other frame.
   if (isPoint(body) || !inertial(frame)) ids.push("precession:iau2006");
@@ -757,6 +838,9 @@ function positionIds(body: CalcBody, frame: CalcFrame, kind: Center["kind"], cor
   if (kind === "topocentric") ids.push("observer:iers2003-ellipsoid;no-polar-motion");
   return ids;
 }
+
+/** How a DE440 pack's place reaches the true ecliptic of date (src/de440/frames.ts); docs/calc.md defines each. */
+const PACK_PLACE_IDS = ["place:icrf-to-true-ecliptic-of-date", "frame-bias:iau2006-fukushima-williams", "nutation:iau2000b-p03", "time:tdb-three-term"] as const;
 
 /** The mean points' bounds are differences from their definitions evaluated with ERFA, not from Horizons. */
 const MEAN_POINTS: readonly string[] = ["Mean Node", "Mean South Node", "Black Moon Lilith"];
@@ -846,7 +930,10 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
   const correction = flags.correction;
   const definition = zodiac.definition;
   return inSpan(time, (basis): CalcPosition => {
-    const tropical = evaluator(body, frame, center, correction);
+    // The source is chosen once, for the instant, and used for each of its speed samples, as positions() does.
+    const chosen = packGives(body, kind, correction) ? ephemerisAt(time.ms, time.scale, time.pin) : null;
+    const from = chosen?.from ?? null;
+    const tropical = from ? packed(from, body, frame) : evaluator(body, frame, center, correction);
     const evaluate = definition === null ? tropical : siderealOf(tropical, definition, frame);
     const now = onInput(time, time.ms, evaluate);
     const step = isTrueNode(body) ? NODE_STEP_DAYS : STEP_DAYS;
@@ -856,7 +943,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     // Samples `days` either side on the input's scale, with the time basis each was read on.
     const shift = (days: number) => {
       const ms = time.ms + days * DAY_MS;
-      return onInput(time, ms, (at, sampled) => ({ row: evaluate(at), basis: sampled }));
+      return onInput(time, ms, (at, sampled) => ({ row: evaluate(at, sampled), basis: sampled }));
     };
     if (analytic) {
       const { state, turn } = onInput(time, time.ms, (at) => ({
@@ -893,12 +980,20 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     // Moon and Mars too, whose topocentric differences fall within it,
     // src/calc-bounds.ts); the barycentric Sun's come from the barycentre's error.
     const group = `${kind}/${point ? "apparent" : correction}`;
-    let row = MEASURED[group]?.[body];
+    let row: readonly [number | null, number | null, number | null] | undefined = MEASURED[group]?.[body];
     let estimated: string | null = null;
     const mean = MEAN_POINTS.includes(body);
     const swept = SWEPT.includes(group) ? SWEPT_BASIS : MEASURED_BASIS;
-    const measured = mean ? MEAN_POINTS_BASIS : swept;
-    if (!row && kind === "topocentric") {
+    let measured = mean ? MEAN_POINTS_BASIS : swept;
+    if (from) {
+      // On the pack: the position's difference from Horizons at the L1 vectors, measured in the true ecliptic of
+      // date; in another frame the same bound as an estimate. Its distance and speed, and the true node, have
+      // been compared with no arbiter (src/calc-bounds-de440.ts).
+      const position = DE440_MEASURED[body];
+      row = position === undefined ? undefined : [position, null, null];
+      measured = DE440_MEASURED_BASIS;
+      if (frame !== "ecliptic-true-of-date") estimated = DE440_TURNED_BASIS;
+    } else if (!row && kind === "topocentric") {
       row = MEASURED[`geocentric/${correction}`]?.[body];
       estimated = "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it";
     } else if (kind === "barycentric" && body === "Sun") {
@@ -906,7 +1001,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
       estimated = `the largest angle, relative distance and rate of direction that the error of astronomy-engine's barycentre, ${BARYCENTRE_ERROR.au.toExponential()} au and ${BARYCENTRE_ERROR.auPerDay.toExponential()} au/day from 1800 to 2200, allows at this distance and speed; docs/evidence/calc-api`;
     }
 
-    const ids = positionIds(body, frame, kind, correction, zodiac);
+    const ids = positionIds(body, frame, kind, correction, zodiac, from !== null);
     if (method) ids.push(method === "analytic" ? "speed:analytic" : `speed:central-difference-${step}d`);
 
     // A topocentric position also turns with the observer, on TT and on UT1
@@ -985,10 +1080,13 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
           withAyanamsa(bound(row?.[0], "arcsec", estimated, measured), added && { value: added.position, basis: added.basis }),
           widen[0]!
         ),
-        distance: point ? null : stretched(bound(row?.[1], "relative", estimated, swept), widen[1]!),
+        distance: point ? null : stretched(bound(row?.[1], "relative", estimated, from ? measured : swept), widen[1]!),
         speed: method && {
           ...stretched(
-            withAyanamsa(bound(row?.[2], "arcsec/day", estimated, mean ? MEAN_POINTS_SPEED_BASIS : swept), added && { value: added.rate, basis: added.basis }),
+            withAyanamsa(
+              bound(row?.[2], "arcsec/day", estimated, mean ? MEAN_POINTS_SPEED_BASIS : from ? measured : swept),
+              added && { value: added.rate, basis: added.basis }
+            ),
             widen[2]!
           ),
           method,
@@ -996,13 +1094,15 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
         }
       },
       band,
-      flags: extrapolated ? ["delta-t-extrapolated"] : [],
+      // Last, a position the pack gives that astronomy-engine gave instead says why.
+      flags: [...(extrapolated ? (["delta-t-extrapolated"] as const) : []), ...(chosen?.fallback ? [chosen.fallback] : [])],
       receipt: receipt(
         { body, time: time.record, frame, center: centerRecord, zodiac: zodiac.record, flags },
         [instant(basis)],
         ids,
         time.pin,
-        band !== null
+        band !== null,
+        chosen?.ephemeris
       )
     };
   });
@@ -1266,7 +1366,11 @@ export interface EventsResult {
   readonly events: readonly CalcEvent[];
   /** Longitude evaluations made. */
   readonly samples: number;
-  /** "delta-t-extrapolated" where an event's UTC moves with an extrapolated ΔT; `timing` then adds the widest such band. */
+  /**
+   * "delta-t-extrapolated" where an event's UTC moves with an extrapolated ΔT; `timing` then adds the widest such
+   * band. "de440-unavailable" where the search ran on astronomy-engine because the shipped DE440 pack could not be
+   * opened.
+   */
   readonly flags: readonly ChartFlag[];
   readonly bounds: { readonly timing: CalcBound };
   readonly receipt: CalcReceipt<EventsRequest>;
@@ -1297,6 +1401,8 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
         : null) ?? epochRefusal(zodiac);
   if (refusal) return refusal;
   const definition = zodiac.definition;
+  // The search runs on the engine's longitudes, the default source's (src/ephemeris.ts): the shipped DE440 pack,
+  // which covers CALC_SPAN, or astronomy-engine.
   // In the sidereal zodiac, each longitude less the true ayanamsa at its own instant and clock.
   const longitudeAt: BodyLongitudeAt =
     definition === null
@@ -1309,6 +1415,8 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
   const end = resolve(to);
   if (start === null || end === null) return outOfRange();
   {
+    // One source for the whole search: both ends are in CALC_SPAN, which the pack covers.
+    const chosen = ephemerisAt(Math.round(start.utcMs));
     // The search runs on UTC instants, as searchLongitudeCrossings does.
     const dated = (basis: TimeBasis) => new Date(Math.round(basis.utcMs));
     const found = searchLongitudeCrossingsWith(
@@ -1343,7 +1451,7 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
       kind,
       events,
       samples: found.samples,
-      flags: late ? ["delta-t-extrapolated"] : [],
+      flags: [...(late ? (["delta-t-extrapolated"] as const) : []), ...(chosen.fallback ? [chosen.fallback] : [])],
       bounds: {
         timing: stretched(
           {
@@ -1360,7 +1468,14 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
       receipt: receipt(
         { kind, body, longitude, from: from.record, to: to.record, zodiac: zodiac.record, stepDays, ...limit },
         [instant(start), instant(end)],
-        [...positionIds(body, "ecliptic-true-of-date", "geocentric", "apparent", zodiac), "search:scan-and-bisect", ...(late ? ["bounds:plus-delta-t-band"] : [])]
+        [
+          ...positionIds(body, "ecliptic-true-of-date", "geocentric", "apparent", zodiac, chosen.from !== null),
+          "search:scan-and-bisect",
+          ...(late ? ["bounds:plus-delta-t-band"] : [])
+        ],
+        undefined,
+        true,
+        chosen.ephemeris
       )
     };
   }
@@ -1459,7 +1574,7 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
         ? ["polar-fallback"]
         : [];
     // Checked against the chart's own flags below.
-    possible.push("delta-t-extrapolated");
+    possible.push("delta-t-extrapolated", "de440-unavailable", "outside-de440-span");
     assertDerivedFlags(supplied ?? [], possible);
     const input: ChartInput = {
       utc,
@@ -1472,6 +1587,8 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
     };
     const used = instant(basis);
     const computed = computeChart(input);
+    // The chart names what computed it, and flags a fallback from the shipped pack (src/ephemeris.ts).
+    const onPack = computed.ephemeris !== undefined && computed.ephemeris.name !== EPHEMERIS.name;
     assertDerivedFlags(supplied ?? [], computed.flags);
     const bands = timeBands(basis);
     // The angles' rates from the sidereal time and the true obliquity the chart's angles were computed from, and
@@ -1511,12 +1628,16 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
           "frame:ecliptic-true-of-date",
           "center:geocentric",
           "correction:apparent",
-          "light-time:newtonian",
-          "deflection:none",
-          "aberration:backdated-observer",
-          "moon:series-at-instant",
-          "node:true-osculating",
-          "precession:iau2006",
+          ...(onPack
+            ? ["light-time:iterated", "deflection:sun", "aberration:relativistic-annual", "target:system-barycentre", "node:true-osculating", ...PACK_PLACE_IDS, "precession:iau2006"]
+            : [
+                "light-time:newtonian",
+                "deflection:none",
+                "aberration:backdated-observer",
+                "moon:series-at-instant",
+                "node:true-osculating",
+                "precession:iau2006"
+              ]),
           "nutation:iau2000b",
           "obliquity:iau2006",
           ...(computed.houses === null
@@ -1531,7 +1652,9 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
           `speed:central-difference-${STEP_DAYS}d`,
           `speed:central-difference-${NODE_STEP_DAYS}d`
         ],
-        time.pin
+        time.pin,
+        true,
+        computed.ephemeris
       )
     };
   });

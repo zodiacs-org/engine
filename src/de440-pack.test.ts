@@ -96,7 +96,10 @@ describe("the shipped DE440 pack", () => {
       const fallback = positions(at);
       expect(fallback.find((row) => row.body === "Neptune")!.lon).not.toBe(inside.find((row) => row.body === "Neptune")!.lon);
       const chart = natalChart({ utc: at, latitude: 51.5, longitude: -0.12 });
-      expect(chart.ephemeris).toBeUndefined();
+      // The caller's choice: named on the chart and on each row, and not flagged as a fallback.
+      expect(chart.ephemeris).toEqual({ name: EPHEMERIS.name, version: EPHEMERIS.version });
+      expect(chart.flags).toEqual([]);
+      expect(fallback.every((row) => row.ephemeris === "astronomy-engine" && !("fallback" in row))).toBe(true);
       expect(createNatalEnvelope(chart).receipt.engine.ephemeris).toEqual({ name: EPHEMERIS.name, version: EPHEMERIS.version });
     } finally {
       setDefaultEphemeris("astronomy-engine");

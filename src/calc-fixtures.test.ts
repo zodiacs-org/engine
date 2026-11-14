@@ -1,12 +1,19 @@
 import { readFileSync } from "node:fs";
 
 import { AstroTime } from "astronomy-engine";
-import { describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { calc, chart, events, houses } from "./calc.js";
 import type { CalcPosition, CalcRequest } from "./calc.js";
 import { CALC_FRAMES, apply, frameMatrix, fromSpherical, transpose } from "./calc-frames.js";
 import type { Vec3 } from "./calc-frames.js";
+import { setDefaultEphemeris } from "./ephemeris.js";
+
+// scripts/build-calc-roundtrip.mjs rebuilds the fixture from the build as a caller gets it, on the package's default
+// source (the shipped DE440 pack where it gives the position); the suite's setup would put this file on
+// astronomy-engine.
+beforeAll(() => setDefaultEphemeris("de440"));
+afterAll(() => setDefaultEphemeris("astronomy-engine"));
 
 interface Case {
   readonly function: "calc" | "houses" | "events" | "chart";

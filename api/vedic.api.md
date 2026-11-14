@@ -384,7 +384,7 @@ declare function vimshottariDasha(moon: SiderealLongitude, options?: DashaOption
 declare function yoginiDasha(moon: SiderealLongitude, options?: CycleOptions): DashaResult;
 ```
 
-## Referenced, not exported here (20)
+## Referenced, not exported here (21)
 
 ```ts
 // exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
@@ -431,6 +431,8 @@ interface BodyPosition {
     retrograde: boolean;
     sign: ZodiacSign;
     degree: number;
+    ephemeris?: string;
+    fallback?: EphemerisFallback;
 }
 
 // exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart)
@@ -451,7 +453,7 @@ interface Chart {
 }
 
 // exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated";
+type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 // exported by @zodiacs/engine (ChartInput)
 interface ChartInput {
@@ -487,6 +489,9 @@ interface DeltaT {
 
 // exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
 type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
+
+// exported by @zodiacs/engine (EphemerisFallback)
+type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
 
 // exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
 type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";

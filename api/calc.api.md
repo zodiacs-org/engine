@@ -136,7 +136,7 @@ interface CalcReceipt<Request> {
         readonly name: "@zodiacs/engine";
         readonly version: string;
         readonly ephemeris: {
-            readonly name: "astronomy-engine";
+            readonly name: string;
             readonly version: string;
         };
     };
@@ -231,7 +231,7 @@ interface Chart {
     };
 }
 
-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated";
+type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 interface ChartRequest {
     readonly time: CalcTime;
@@ -347,7 +347,7 @@ declare function events(request: EventsRequest): EventsResult | CalcRefusal;
 declare function houses(request: HousesRequest): HousesResult | CalcRefusal;
 ```
 
-## Referenced, not exported here (14)
+## Referenced, not exported here (15)
 
 ```ts
 // exported by @zodiacs/engine (Aspect)
@@ -380,6 +380,8 @@ interface BodyPosition {
     retrograde: boolean;
     sign: ZodiacSign;
     degree: number;
+    ephemeris?: string;
+    fallback?: EphemerisFallback;
 }
 
 // exported by @zodiacs/engine (ChartInput)
@@ -407,6 +409,9 @@ declare const EPHEMERIS_SPAN: Readonly<{
     readonly fromTT: "0001-04-30T12:00:00";
     readonly toTT: "3998-09-03T12:00:00";
 }>;
+
+// exported by @zodiacs/engine (EphemerisFallback)
+type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
 
 // exported by @zodiacs/engine (Houses)
 interface Houses {

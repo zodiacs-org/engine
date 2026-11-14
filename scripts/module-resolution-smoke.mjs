@@ -501,9 +501,21 @@ engine.setDefaultEphemeris("de440");
 assert.deepEqual(engine.defaultEphemeris().de440.version, de440Pack.DE440_PACK.sha256, "the root's default source is the shipped pack");
 assert.deepEqual(engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false }).ephemeris,
   { name: de440.DE440_EPHEMERIS_NAME, version: de440Pack.DE440_PACK.sha256 }, "a plain chart names the shipped pack");
-assert.equal(engine.natalChart({ utc: "1700-01-01T12:00:00Z", timeKnown: false }).ephemeris, undefined, "a plain chart outside the pack's years is astronomy-engine's");
-engine.setDefaultEphemeris("astronomy-engine");
-assert.equal(engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false }).ephemeris, undefined, 'after setDefaultEphemeris("astronomy-engine") a plain chart is astronomy-engine\'s');
+// Never a silent fallback (1.1.0-rc.10): outside the pack's years a plain chart
+// names astronomy-engine and carries the flag; after the caller's own choice of
+// astronomy-engine it names it and carries no fallback flag.
+{
+  const outside = engine.natalChart({ utc: "1700-01-01T12:00:00Z", timeKnown: false });
+  assert.deepEqual(outside.ephemeris, { ...engine.EPHEMERIS }, "a plain chart outside the pack's years names astronomy-engine");
+  assert.equal(outside.flags.at(-1), "outside-de440-span", "a plain chart outside the pack's years is flagged as a fallback");
+  assert(outside.bodies.every((row) => row.ephemeris === "astronomy-engine" && row.fallback === "outside-de440-span"), "and so is each of its bodies");
+  const inside = engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false });
+  assert(!inside.flags.includes("outside-de440-span") && !inside.flags.includes("de440-unavailable"), "a plain chart on the pack carries no fallback flag");
+  engine.setDefaultEphemeris("astronomy-engine");
+  const chosen = engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false });
+  assert.deepEqual(chosen.ephemeris, { ...engine.EPHEMERIS }, 'after setDefaultEphemeris("astronomy-engine") a plain chart names astronomy-engine');
+  assert(!chosen.flags.includes("de440-unavailable") && chosen.bodies.every((row) => !("fallback" in row)), "the caller's own choice is not flagged as a fallback");
+}
 // The core entry reaches no zone history and loads nothing lazily; its one
 // dependency is the ephemeris.
 checkSelfContained("index", ["astronomy-engine"]);

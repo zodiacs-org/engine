@@ -29,7 +29,7 @@ declare function openShippedDe440Pack(): Promise<De440Source>;
 declare function shippedDe440Source(): De440Source;
 ```
 
-## Referenced, not exported here (5)
+## Referenced, not exported here (7)
 
 ```ts
 // exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
@@ -44,6 +44,12 @@ interface De440Source extends PositionSource {
         readonly name: typeof DE440_EPHEMERIS_NAME;
         readonly version: string;
     };
+    place(body: ReducedBody, ttDays: number): {
+        lon: number;
+        lat: number;
+        dist: number;
+    };
+    steps(fromTtDays: number, toTtDays: number): number[];
     readonly pack: {
         readonly sha256: string;
         readonly bytes: number;
@@ -65,9 +71,28 @@ interface PositionSource {
     place(body: SourceBody, ttDays: number): {
         lon: number;
         lat: number;
+        dist?: number;
     };
     trueNode(ttDays: number): number;
+    steps?(fromTtDays: number, toTtDays: number): number[];
 }
+
+// exported by @zodiacs/engine/de440 (REDUCED_BODIES)
+declare const REDUCED_BODIES: readonly [
+    "Sun",
+    "Moon",
+    "Mercury",
+    "Venus",
+    "Mars",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Pluto"
+];
+
+// exported by @zodiacs/engine/de440 (ReducedBody)
+type ReducedBody = (typeof REDUCED_BODIES)[number];
 
 // exported by @zodiacs/engine (SourceBody)
 type SourceBody = Exclude<BodyName, "North Node" | "South Node">;

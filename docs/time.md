@@ -137,8 +137,8 @@ A caller may echo the flag only where the chart derives it. `calc()`,
 `houses()` and `events()` flag their results and widen their bounds by the
 same rule (calc.md, *Bounds*). Natal receipts of the time-basis sets carry
 the flag where the record's ΔT, time scale and houses show it; one written by
-an engine after 1.1.0-rc.7 without it there is refused, and one written
-earlier is still read without it. Before 1972 the model's ΔT is reconstructed
+an engine from 1.1.0-rc.10, the first to set it, without it there is refused,
+and one written earlier is still read without it. Before 1972 the model's ΔT is reconstructed
 from observations of the past, not extrapolated, so no chart is flagged
 there.
 

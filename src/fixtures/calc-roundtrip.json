@@ -11,34 +11,34 @@
     "status": "ok",
     "body": "Mars",
     "frame": "ecliptic-true-of-date",
-    "lon": 342.98696862022194,
-    "lat": -1.244304782474929,
-    "dist": 2.061065991654686,
+    "lon": 342.9869872260329,
+    "lat": -1.2445296834059434,
+    "dist": 2.06107969134094,
     "speeds": {
-     "lon": 0.7774701872733658,
-     "lat": -0.0024177860022955855,
-     "dist": -0.003813886306325287
+     "lon": 0.7774824227340105,
+     "lat": -0.002401620321057507,
+     "dist": -0.0038141722442652792
     },
     "cartesian": null,
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 23,
+      "value": 0.0034,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
+      "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, on the shipped DE440 pack; src/calc-bounds-de440.ts"
      },
      "distance": {
-      "value": 0.000087,
+      "value": null,
       "unit": "relative",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
+      "label": "estimated",
+      "basis": "not compared with an independent ephemeris"
      },
      "speed": {
-      "value": 0.74,
+      "value": null,
       "unit": "arcsec/day",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111",
+      "label": "estimated",
+      "basis": "not compared with an independent ephemeris",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -104,24 +104,28 @@
       "frame:ecliptic-true-of-date",
       "center:geocentric",
       "correction:apparent",
-      "light-time:newtonian",
-      "deflection:none",
-      "aberration:backdated-observer",
+      "light-time:iterated",
+      "deflection:sun",
+      "aberration:relativistic-annual",
+      "target:system-barycentre",
+      "place:icrf-to-true-ecliptic-of-date",
+      "frame-bias:iau2006-fukushima-williams",
+      "nutation:iau2000b-p03",
+      "time:tdb-three-term",
       "precession:iau2006",
-      "nutation:iau2000b",
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
-      "ephemeris:astronomy-engine@2.1.19",
+      "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
       "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
-       "name": "astronomy-engine",
-       "version": "2.1.19"
+       "name": "jpl-de440",
+       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
       }
      }
     }
@@ -145,41 +149,41 @@
     "status": "ok",
     "body": "Moon",
     "frame": "equatorial-icrs",
-    "lon": 225.35176407634998,
-    "lat": -11.809492505137174,
-    "dist": 0.0026945530645223915,
+    "lon": 225.35156715343348,
+    "lat": -11.809475608759353,
+    "dist": 0.002694405119245188,
     "speeds": {
-     "lon": 11.639444367034457,
-     "lat": -3.575040617933567,
-     "dist": 0.000016824941690730955
+     "lon": 11.639360240479846,
+     "lat": -3.574981600469762,
+     "dist": 0.000016858643544538643
     },
     "cartesian": {
-     "x": -0.001853522244900782,
-     "y": -0.0018764223083445413,
-     "z": -0.0005514624429024326,
-     "vx": 0.00039379648832690677,
-     "vy": -0.000363773394795007,
-     "vz": -0.00016801459090892788
+     "x": -0.001853427039773048,
+     "y": -0.0018763130283514036,
+     "z": -0.0005514313869300286,
+     "vx": 0.00039374663288345695,
+     "vy": -0.00036377662866629405,
+     "vz": -0.00016800974109144017
     },
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 12,
+      "value": 0.013,
       "unit": "arcsec",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
+      "label": "estimated",
+      "basis": "the bound measured in the true ecliptic of date (JPL Horizons, DE441, the conformance suite's L1 vectors, on the shipped DE440 pack), which this frame is reached from with the engine's own nutation and precession, not compared in this frame; src/calc-bounds-de440.ts"
      },
      "distance": {
-      "value": 0.00015,
+      "value": null,
       "unit": "relative",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
+      "label": "estimated",
+      "basis": "not compared with an independent ephemeris"
      },
      "speed": {
-      "value": 2.9,
+      "value": null,
       "unit": "arcsec/day",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111",
+      "label": "estimated",
+      "basis": "not compared with an independent ephemeris",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -240,20 +244,30 @@
       "frame:equatorial-icrs",
       "center:geocentric",
       "correction:apparent",
-      "moon:series-at-instant",
+      "light-time:iterated",
+      "deflection:sun",
+      "aberration:relativistic-annual",
+      "place:icrf-to-true-ecliptic-of-date",
+      "frame-bias:iau2006-fukushima-williams",
+      "nutation:iau2000b-p03",
+      "time:tdb-three-term",
+      "precession:iau2006",
+      "obliquity:iau2006",
+      "frame-turn:from-true-ecliptic-of-date",
+      "nutation:iau2000b",
       "frame-bias:iau2000",
       "speed:central-difference-0.001d",
-      "ephemeris:astronomy-engine@2.1.19",
+      "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:pinned",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
       "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
-       "name": "astronomy-engine",
-       "version": "2.1.19"
+       "name": "jpl-de440",
+       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
       }
      }
     }
@@ -381,7 +395,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -533,7 +547,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -648,7 +662,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -779,7 +793,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -913,7 +927,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1048,7 +1062,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1068,22 +1082,22 @@
     "status": "ok",
     "body": "North Node",
     "frame": "equatorial-true-of-date",
-    "lon": 231.2079718653262,
-    "lat": -18.666602265921203,
+    "lon": 231.20980897064933,
+    "lat": -18.667050012427815,
     "dist": null,
     "speeds": {
-     "lon": -0.23114718277588508,
-     "lat": 0.05632755245400034,
+     "lon": -0.23140466838543716,
+     "lat": 0.05638775203015456,
      "dist": null
     },
     "cartesian": null,
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 33.014896253,
+      "value": null,
       "unit": "arcsec",
       "label": "estimated",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus 0.0149 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+      "basis": "not compared with an independent ephemeris"
      },
      "distance": null,
      "speed": {
@@ -1100,8 +1114,8 @@
       "tt": 1.5810889410189446,
       "ut1": 0.9
      },
-     "lon": 0.015227677268109856,
-     "lat": 0.003710786260820185,
+     "lon": 0.015244640086848789,
+     "lat": 0.0037147521309914967,
      "dist": null
     },
     "flags": [
@@ -1156,22 +1170,27 @@
       "center:geocentric",
       "correction:not-applicable",
       "node:true-osculating",
+      "place:icrf-to-true-ecliptic-of-date",
+      "frame-bias:iau2006-fukushima-williams",
+      "nutation:iau2000b-p03",
+      "time:tdb-three-term",
       "precession:iau2006",
-      "nutation:iau2000b",
       "obliquity:iau2006",
+      "frame-turn:from-true-ecliptic-of-date",
+      "nutation:iau2000b",
       "speed:central-difference-0.25d",
       "bounds:plus-delta-t-band",
-      "ephemeris:astronomy-engine@2.1.19",
+      "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
       "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
-       "name": "astronomy-engine",
-       "version": "2.1.19"
+       "name": "jpl-de440",
+       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
       }
      }
     }
@@ -1298,7 +1317,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1445,7 +1464,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1561,7 +1580,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1682,7 +1701,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1705,41 +1724,41 @@
     "status": "ok",
     "body": "Neptune",
     "frame": "ecliptic-j2000",
-    "lon": 355.2363552090716,
-    "lat": -1.274400361944054,
-    "dist": 29.230361313011116,
+    "lon": 355.23283421375487,
+    "lat": -1.2774178077558642,
+    "dist": 29.230001892491742,
     "speeds": {
-     "lon": -0.01607557010174787,
-     "lat": 0.0004418164514241596,
-     "dist": 0.013036863848014946
+     "lon": -0.01607341303611065,
+     "lat": 0.00044429035317428145,
+     "dist": 0.013037339094523759
     },
     "cartesian": {
-     "x": 29.122187180850474,
-     "y": -2.4268505184451166,
-     "z": -0.6501021872044023,
-     "vx": 0.01231270805313045,
-     "vy": -0.0092536612805727,
-     "vz": -0.00006460430568289155
+     "x": 29.12164574140393,
+     "y": -2.4286074469319257,
+     "z": -0.6516331912569633,
+     "vx": 0.012312738029152115,
+     "vy": -0.009253253034469111,
+     "vz": -0.00006404257213432629
     },
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 22.064708079,
+      "value": 0.068199601,
       "unit": "arcsec",
       "label": "estimated",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus 0.0647 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+      "basis": "the bound measured in the true ecliptic of date (JPL Horizons, DE441, the conformance suite's L1 vectors, on the shipped DE440 pack), which this frame is reached from with the engine's own nutation and precession, not compared in this frame; src/calc-bounds-de440.ts; plus 0.0647 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "distance": {
-      "value": 0.000047499,
+      "value": null,
       "unit": "relative",
       "label": "estimated",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus 4.99e-7 relative, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+      "basis": "not compared with an independent ephemeris"
      },
      "speed": {
-      "value": 0.020817272,
+      "value": null,
       "unit": "arcsec/day",
       "label": "estimated",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus 0.00182 arcsec/day, ΔT extrapolated (docs/calc.md, \"Bounds\")",
+      "basis": "not compared with an independent ephemeris",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -1749,9 +1768,9 @@
       "tt": 96.59324509039506,
       "ut1": 0.9
      },
-     "lon": 0.06469964511691496,
-     "lat": 0.0017781868657242696,
-     "dist": 0.000014574918806497898
+     "lon": 0.06469096353484112,
+     "lat": 0.0017881436239775646,
+     "dist": 0.000014575450121341696
     },
     "flags": [
      "delta-t-extrapolated"
@@ -1804,23 +1823,31 @@
       "frame:ecliptic-j2000",
       "center:geocentric",
       "correction:apparent",
-      "light-time:newtonian",
-      "deflection:none",
-      "aberration:backdated-observer",
+      "light-time:iterated",
+      "deflection:sun",
+      "aberration:relativistic-annual",
+      "target:system-barycentre",
+      "place:icrf-to-true-ecliptic-of-date",
+      "frame-bias:iau2006-fukushima-williams",
+      "nutation:iau2000b-p03",
+      "time:tdb-three-term",
+      "precession:iau2006",
       "obliquity:iau2006",
+      "frame-turn:from-true-ecliptic-of-date",
+      "nutation:iau2000b",
       "speed:central-difference-0.001d",
       "bounds:plus-delta-t-band",
-      "ephemeris:astronomy-engine@2.1.19",
+      "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
       "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
-       "name": "astronomy-engine",
-       "version": "2.1.19"
+       "name": "jpl-de440",
+       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
       }
      }
     }
@@ -1839,13 +1866,13 @@
     "status": "ok",
     "body": "Moon",
     "frame": "ecliptic-true-of-date",
-    "lon": 193.44026021358079,
-    "lat": 5.231366335062896,
-    "dist": 0.0026800028065764652,
+    "lon": 193.4401320162526,
+    "lat": 5.231298129301762,
+    "dist": 0.0026798332259222323,
     "speeds": {
-     "lon": 12.103188055235137,
-     "lat": -0.06366097565146944,
-     "dist": 0.0000220273514040404
+     "lon": 12.103121655798077,
+     "lat": -0.0636273273371124,
+     "dist": 0.000022051225537613253
     },
     "cartesian": null,
     "ayanamsa": {
@@ -1863,22 +1890,22 @@
     },
     "bounds": {
      "position": {
-      "value": 12.00000046,
+      "value": 0.01300046,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": {
-      "value": 0.00015,
+      "value": null,
       "unit": "relative",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
+      "label": "estimated",
+      "basis": "not compared with an independent ephemeris"
      },
      "speed": {
-      "value": 2.90000016,
+      "value": null,
       "unit": "arcsec/day",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 1.6e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "label": "estimated",
+      "basis": "not compared with an independent ephemeris",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -1947,22 +1974,27 @@
       "frame:ecliptic-true-of-date",
       "center:geocentric",
       "correction:apparent",
-      "moon:series-at-instant",
+      "light-time:iterated",
+      "deflection:sun",
+      "aberration:relativistic-annual",
+      "place:icrf-to-true-ecliptic-of-date",
+      "frame-bias:iau2006-fukushima-williams",
+      "nutation:iau2000b-p03",
+      "time:tdb-three-term",
       "precession:iau2006",
-      "nutation:iau2000b",
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
-      "ephemeris:astronomy-engine@2.1.19",
+      "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
       "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
-       "name": "astronomy-engine",
-       "version": "2.1.19"
+       "name": "jpl-de440",
+       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
       }
      }
     }
@@ -2204,7 +2236,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2227,9 +2259,9 @@
     "kind": "longitude-crossing",
     "events": [
      {
-      "at": "2024-03-20T03:06:26.001Z",
-      "jdUt1": 2460389.6294674994,
-      "jdTt": 2460389.630268345,
+      "at": "2024-03-20T03:06:24.173Z",
+      "jdUt1": 2460389.629446342,
+      "jdTt": 2460389.6302471873,
       "retrograde": false,
       "band": {
        "utc": 0,
@@ -2321,24 +2353,27 @@
       "frame:ecliptic-true-of-date",
       "center:geocentric",
       "correction:apparent",
-      "light-time:newtonian",
-      "deflection:none",
-      "aberration:backdated-observer",
+      "light-time:iterated",
+      "deflection:sun",
+      "aberration:relativistic-annual",
+      "place:icrf-to-true-ecliptic-of-date",
+      "frame-bias:iau2006-fukushima-williams",
+      "nutation:iau2000b-p03",
+      "time:tdb-three-term",
       "precession:iau2006",
-      "nutation:iau2000b",
       "obliquity:iau2006",
       "search:scan-and-bisect",
-      "ephemeris:astronomy-engine@2.1.19",
+      "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
       "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
-       "name": "astronomy-engine",
-       "version": "2.1.19"
+       "name": "jpl-de440",
+       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
       }
      }
     }
@@ -2386,21 +2421,21 @@
     "status": "ok",
     "body": "Saturn",
     "frame": "ecliptic-mean-of-date",
-    "lon": 171.94253530655143,
-    "lat": 2.730449761932382,
-    "dist": 8.774775214115875,
+    "lon": 171.94157848048272,
+    "lat": 2.728204591565957,
+    "dist": 8.774249439535819,
     "speeds": {
-     "lon": -0.06130560184658407,
-     "lat": -0.0023546375975680434,
-     "dist": 0.008300858666210331
+     "lon": -0.06130989265784592,
+     "lat": -0.0023570250560212003,
+     "dist": 0.00830113823280243
     },
     "cartesian": {
-     "x": -8.678286857987642,
-     "y": 1.2285307208868184,
-     "z": 0.41800662264923194,
-     "vx": -0.006912081481402765,
-     "vy": 0.010450220196078774,
-     "vz": 0.00003523018626827579
+     "x": -8.677762559197156,
+     "y": 1.2286043203087367,
+     "z": 0.41763814182779285,
+     "vx": -0.006912185338769916,
+     "vy": 0.010450488089341903,
+     "vz": 0.000034574297841372115
     },
     "ayanamsa": {
      "name": "fixture-user",
@@ -2417,22 +2452,22 @@
     },
     "bounds": {
      "position": {
-      "value": 24.00000046,
+      "value": 0.00350046,
       "unit": "arcsec",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "label": "estimated",
+      "basis": "the bound measured in the true ecliptic of date (JPL Horizons, DE441, the conformance suite's L1 vectors, on the shipped DE440 pack), which this frame is reached from with the engine's own nutation and precession, not compared in this frame; src/calc-bounds-de440.ts; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": {
-      "value": 0.000077,
+      "value": null,
       "unit": "relative",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
+      "label": "estimated",
+      "basis": "not compared with an independent ephemeris"
      },
      "speed": {
-      "value": 0.06000016,
+      "value": null,
       "unit": "arcsec/day",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 1.6e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "label": "estimated",
+      "basis": "not compared with an independent ephemeris",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -2442,9 +2477,9 @@
       "tt": 0.46,
       "ut1": 0
      },
-     "lon": 0.0011750240353928614,
-     "lat": 0.0000451305539533875,
-     "dist": 4.419438641732352e-8
+     "lon": 0.001175106275942047,
+     "lat": 0.000045176313573739676,
+     "dist": 4.419587485056849e-8
     },
     "flags": [],
     "receipt": {
@@ -2502,23 +2537,30 @@
       "frame:ecliptic-mean-of-date",
       "center:geocentric",
       "correction:apparent",
-      "light-time:newtonian",
-      "deflection:none",
-      "aberration:backdated-observer",
+      "light-time:iterated",
+      "deflection:sun",
+      "aberration:relativistic-annual",
+      "target:system-barycentre",
+      "place:icrf-to-true-ecliptic-of-date",
+      "frame-bias:iau2006-fukushima-williams",
+      "nutation:iau2000b-p03",
+      "time:tdb-three-term",
       "precession:iau2006",
       "obliquity:iau2006",
+      "frame-turn:from-true-ecliptic-of-date",
+      "nutation:iau2000b",
       "speed:central-difference-0.001d",
-      "ephemeris:astronomy-engine@2.1.19",
+      "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
       "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
-       "name": "astronomy-engine",
-       "version": "2.1.19"
+       "name": "jpl-de440",
+       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
       }
      }
     }
@@ -2652,7 +2694,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2684,13 +2726,13 @@
     "status": "ok",
     "body": "Venus",
     "frame": "ecliptic-true-of-date",
-    "lon": 5.960595037743434,
-    "lat": -0.014701389971588581,
-    "dist": 1.3919454674204936,
+    "lon": 5.9606026805589245,
+    "lat": -0.014697354617788287,
+    "dist": 1.391935034374134,
     "speeds": {
-     "lon": 0.02141179615780922,
-     "lat": 0.0007066559042853944,
-     "dist": -0.00499794343300497
+     "lon": 0.02141189929107339,
+     "lat": 0.0007070286414775187,
+     "dist": -0.0049980383483028135
     },
     "cartesian": null,
     "ayanamsa": {
@@ -2708,22 +2750,22 @@
     },
     "bounds": {
      "position": {
-      "value": 24.00000046,
+      "value": 0.00380046,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": {
-      "value": 0.000083,
+      "value": null,
       "unit": "relative",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
+      "label": "estimated",
+      "basis": "not compared with an independent ephemeris"
      },
      "speed": {
-      "value": 1.40000016,
+      "value": null,
       "unit": "arcsec/day",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 1.6e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "label": "estimated",
+      "basis": "not compared with an independent ephemeris",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -2733,9 +2775,9 @@
       "tt": 0.000811,
       "ut1": 0
      },
-     "lon": 0.000041455804265730256,
-     "lat": 0.000001368170546523421,
-     "dist": 4.691356625193322e-11
+     "lon": 0.00004145600394409358,
+     "lat": 0.0000013688922104121195,
+     "dist": 4.6914457181407194e-11
     },
     "flags": [],
     "receipt": {
@@ -2800,24 +2842,27 @@
       "frame:ecliptic-true-of-date",
       "center:geocentric",
       "correction:apparent",
-      "light-time:newtonian",
-      "deflection:none",
-      "aberration:backdated-observer",
+      "light-time:iterated",
+      "deflection:sun",
+      "aberration:relativistic-annual",
+      "place:icrf-to-true-ecliptic-of-date",
+      "frame-bias:iau2006-fukushima-williams",
+      "nutation:iau2000b-p03",
+      "time:tdb-three-term",
       "precession:iau2006",
-      "nutation:iau2000b",
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
-      "ephemeris:astronomy-engine@2.1.19",
+      "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
       "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
-       "name": "astronomy-engine",
-       "version": "2.1.19"
+       "name": "jpl-de440",
+       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
       }
      }
     }
@@ -2858,13 +2903,13 @@
     "status": "ok",
     "body": "Mars",
     "frame": "ecliptic-true-of-date",
-    "lon": 292.35752829531145,
-    "lat": -1.0743096684077655,
-    "dist": 1.846951153331151,
+    "lon": 292.35690370193447,
+    "lat": -1.0740163487158871,
+    "dist": 1.8469768815843843,
     "speeds": {
-     "lon": 0.7756239044169888,
-     "lat": 0.012443724475508233,
-     "dist": 0.005421201390021224
+     "lon": 0.7756215392475951,
+     "lat": 0.012451567208637826,
+     "dist": 0.005421287663676111
     },
     "cartesian": null,
     "ayanamsa": {
@@ -2882,22 +2927,22 @@
     },
     "bounds": {
      "position": {
-      "value": 23.0037,
+      "value": 0.0071,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 0.0037 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition, for epochs from 0001 to 3998 outside 1800 to 2200; docs/evidence/calc-epochs-2026-10-06"
+      "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus the ayanamsa's, 0.0037 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition, for epochs from 0001 to 3998 outside 1800 to 2200; docs/evidence/calc-epochs-2026-10-06"
      },
      "distance": {
-      "value": 0.000087,
+      "value": null,
       "unit": "relative",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
+      "label": "estimated",
+      "basis": "not compared with an independent ephemeris"
      },
      "speed": {
-      "value": 0.74000013,
+      "value": null,
       "unit": "arcsec/day",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus the ayanamsa's, 1.3e-7 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition, for epochs from 0001 to 3998 outside 1800 to 2200; docs/evidence/calc-epochs-2026-10-06",
+      "label": "estimated",
+      "basis": "not compared with an independent ephemeris",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -2974,24 +3019,28 @@
       "frame:ecliptic-true-of-date",
       "center:geocentric",
       "correction:apparent",
-      "light-time:newtonian",
-      "deflection:none",
-      "aberration:backdated-observer",
+      "light-time:iterated",
+      "deflection:sun",
+      "aberration:relativistic-annual",
+      "target:system-barycentre",
+      "place:icrf-to-true-ecliptic-of-date",
+      "frame-bias:iau2006-fukushima-williams",
+      "nutation:iau2000b-p03",
+      "time:tdb-three-term",
       "precession:iau2006",
-      "nutation:iau2000b",
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
-      "ephemeris:astronomy-engine@2.1.19",
+      "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
       "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
-       "name": "astronomy-engine",
-       "version": "2.1.19"
+       "name": "jpl-de440",
+       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
       }
      }
     }
@@ -3141,7 +3190,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3301,7 +3350,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3327,9 +3376,9 @@
     "kind": "longitude-crossing",
     "events": [
      {
-      "at": "2026-01-25T08:05:56.475Z",
-      "jdUt1": 2461065.8374600294,
-      "jdTt": 2461065.838259942,
+      "at": "2026-01-25T08:05:56.707Z",
+      "jdUt1": 2461065.837462715,
+      "jdTt": 2461065.8382626274,
       "retrograde": false,
       "band": {
        "utc": 0,
@@ -3337,9 +3386,9 @@
       }
      },
      {
-      "at": "2026-02-21T13:37:15.522Z",
-      "jdUt1": 2461093.067541545,
-      "jdTt": 2461093.068341505,
+      "at": "2026-02-21T13:37:16.114Z",
+      "jdUt1": 2461093.0675483965,
+      "jdTt": 2461093.0683483565,
       "retrograde": false,
       "band": {
        "utc": 0,
@@ -3434,22 +3483,27 @@
       "frame:ecliptic-true-of-date",
       "center:geocentric",
       "correction:apparent",
-      "moon:series-at-instant",
+      "light-time:iterated",
+      "deflection:sun",
+      "aberration:relativistic-annual",
+      "place:icrf-to-true-ecliptic-of-date",
+      "frame-bias:iau2006-fukushima-williams",
+      "nutation:iau2000b-p03",
+      "time:tdb-three-term",
       "precession:iau2006",
-      "nutation:iau2000b",
       "obliquity:iau2006",
       "search:scan-and-bisect",
-      "ephemeris:astronomy-engine@2.1.19",
+      "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
       "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
-       "name": "astronomy-engine",
-       "version": "2.1.19"
+       "name": "jpl-de440",
+       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
       }
      }
     }
@@ -3478,111 +3532,123 @@
      "bodies": [
       {
        "body": "Sun",
-       "lon": 313.8145323123739,
-       "lat": -0.000011117709912775589,
-       "speed": 1.0142025214463501,
+       "lon": 313.814520545954,
+       "lat": -0.00020898069512073907,
+       "speed": 1.0142141435096619,
        "retrograde": false,
        "sign": "aquarius",
-       "degree": 13.814532312373899
+       "degree": 13.814520545953997,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Moon",
-       "lon": 184.44370582880475,
-       "lat": -4.834761370703018,
-       "speed": 13.181034408717096,
+       "lon": 184.4435725062733,
+       "lat": -4.834706376804121,
+       "speed": 13.180979552998906,
        "retrograde": false,
        "sign": "libra",
-       "degree": 4.443705828804696
+       "degree": 4.443572506273313,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Mercury",
-       "lon": 295.84278178063784,
-       "lat": -1.1486621855228174,
-       "speed": 1.4873373502553022,
+       "lon": 295.84296043135885,
+       "lat": -1.148780779444931,
+       "speed": 1.4873003400452944,
        "retrograde": false,
        "sign": "capricorn",
-       "degree": 25.84278178063778
+       "degree": 25.842960431358847,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Venus",
-       "lon": 336.1935504793711,
-       "lat": -1.5036860119116682,
-       "speed": 1.2444120250449942,
+       "lon": 336.1935846010197,
+       "lat": -1.5038790097988604,
+       "speed": 1.2444187136964047,
        "retrograde": false,
        "sign": "pisces",
-       "degree": 6.193550479371083
+       "degree": 6.193584601019666,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Mars",
-       "lon": 63.574200954052344,
-       "lat": 2.3381478744906863,
-       "speed": 0.32089397856793767,
+       "lon": 63.57460414583403,
+       "lat": 2.338331740966198,
+       "speed": 0.3208831307048854,
        "retrograde": false,
        "sign": "gemini",
-       "degree": 3.574200954052344
+       "degree": 3.57460414583403,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Jupiter",
-       "lon": 127.89964129946475,
-       "lat": 0.7671276313579903,
-       "speed": -0.13231639161404019,
+       "lon": 127.89968349238175,
+       "lat": 0.7668593095003089,
+       "speed": -0.1323240512149937,
        "retrograde": true,
        "sign": "leo",
-       "degree": 7.899641299464747
+       "degree": 7.899683492381769,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Saturn",
-       "lon": 299.5805870770136,
-       "lat": -0.18294558762658597,
-       "speed": 0.1165775042579753,
+       "lon": 299.5805434952676,
+       "lat": -0.182841300924724,
+       "speed": 0.11657660593300534,
        "retrograde": false,
        "sign": "capricorn",
-       "degree": 29.58058707701366
+       "degree": 29.580543495267648,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Uranus",
-       "lon": 281.6387301431133,
-       "lat": -0.3279391359243826,
-       "speed": 0.05292307616855396,
+       "lon": 281.6399772179478,
+       "lat": -0.32600846400843925,
+       "speed": 0.05292482876484428,
        "retrograde": false,
        "sign": "capricorn",
-       "degree": 11.638730143113321
+       "degree": 11.639977217947717,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Neptune",
-       "lon": 285.3390850242705,
-       "lat": 0.7889898179997695,
-       "speed": 0.03423317937745196,
+       "lon": 285.33909137639773,
+       "lat": 0.7881715251056454,
+       "speed": 0.034232390333954754,
        "retrograde": false,
        "sign": "capricorn",
-       "degree": 15.339085024270503
+       "degree": 15.339091376397732,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Pluto",
-       "lon": 230.27106025164545,
-       "lat": 15.166684984824366,
-       "speed": 0.011285587305565059,
+       "lon": 230.27040956625018,
+       "lat": 15.166729171504048,
+       "speed": 0.01128522974624957,
        "retrograde": false,
        "sign": "scorpio",
-       "degree": 20.271060251645395
+       "degree": 20.270409566250237,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "North Node",
-       "lon": 297.9452479262924,
+       "lon": 297.94695844496334,
        "lat": 0,
-       "speed": -0.03638443356578591,
+       "speed": -0.03661005167464282,
        "retrograde": true,
        "sign": "capricorn",
-       "degree": 27.94524792629238
+       "degree": 27.946958444963343,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "South Node",
-       "lon": 117.94524792629238,
+       "lon": 117.94695844496334,
        "lat": 0,
-       "speed": -0.03638443356578591,
+       "speed": -0.03661005167464282,
        "retrograde": true,
        "sign": "cancer",
-       "degree": 27.94524792629238
+       "degree": 27.946958444963343,
+       "ephemeris": "jpl-de440"
       }
      ],
      "angles": {
@@ -3613,70 +3679,70 @@
        "a": "Moon",
        "b": "Mars",
        "type": "trine",
-       "orb": 0.8695048747524083,
+       "orb": 0.8689683604392826,
        "applying": false
       },
       {
        "a": "Venus",
        "b": "Mars",
        "type": "square",
-       "orb": 2.6193495253187393,
+       "orb": 2.6189804551856923,
        "applying": false
       },
       {
        "a": "Moon",
        "b": "Jupiter",
        "type": "sextile",
-       "orb": 3.4559354706599947,
+       "orb": 3.456110986108456,
        "applying": true
       },
       {
        "a": "Uranus",
        "b": "Neptune",
        "type": "conjunction",
-       "orb": 3.700354881157182,
+       "orb": 3.6991141584499587,
        "applying": true
       },
       {
        "a": "Mercury",
        "b": "Saturn",
        "type": "conjunction",
-       "orb": 3.737805296375768,
+       "orb": 3.737583063908744,
        "applying": true
       },
       {
        "a": "Mars",
        "b": "Saturn",
        "type": "trine",
-       "orb": 3.99361387703874,
+       "orb": 3.994060650566439,
        "applying": false
       },
       {
        "a": "Moon",
        "b": "Saturn",
        "type": "trine",
-       "orb": 4.8631187517911485,
+       "orb": 4.863029011005722,
        "applying": false
       },
       {
        "a": "Sun",
        "b": "Jupiter",
        "type": "opposition",
-       "orb": 5.914891012909152,
+       "orb": 5.914837053572228,
        "applying": false
       },
       {
        "a": "Sun",
        "b": "Pluto",
        "type": "square",
-       "orb": 6.456527939271552,
+       "orb": 6.455889020296183,
        "applying": true
       },
       {
        "a": "Moon",
        "b": "Uranus",
        "type": "square",
-       "orb": 7.195024314308569,
+       "orb": 7.196404711674461,
        "applying": true
       }
      ],
@@ -3702,7 +3768,11 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.9"
+     "engineVersion": "1.1.0-rc.10",
+     "ephemeris": {
+      "name": "jpl-de440",
+      "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+     }
     },
     "sidereal": null,
     "band": {
@@ -3810,11 +3880,15 @@
       "frame:ecliptic-true-of-date",
       "center:geocentric",
       "correction:apparent",
-      "light-time:newtonian",
-      "deflection:none",
-      "aberration:backdated-observer",
-      "moon:series-at-instant",
+      "light-time:iterated",
+      "deflection:sun",
+      "aberration:relativistic-annual",
+      "target:system-barycentre",
       "node:true-osculating",
+      "place:icrf-to-true-ecliptic-of-date",
+      "frame-bias:iau2006-fukushima-williams",
+      "nutation:iau2000b-p03",
+      "time:tdb-three-term",
       "precession:iau2006",
       "nutation:iau2000b",
       "obliquity:iau2006",
@@ -3824,17 +3898,17 @@
       "aspects:major",
       "speed:central-difference-0.001d",
       "speed:central-difference-0.25d",
-      "ephemeris:astronomy-engine@2.1.19",
+      "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
       "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
-       "name": "astronomy-engine",
-       "version": "2.1.19"
+       "name": "jpl-de440",
+       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
       }
      }
     }
@@ -3857,111 +3931,123 @@
      "bodies": [
       {
        "body": "Sun",
-       "lon": 105.07118035671863,
-       "lat": 0.000030244894327725405,
-       "speed": 0.9532717641604904,
+       "lon": 105.07132589526705,
+       "lat": 0.0001349056792033507,
+       "speed": 0.9532776084881789,
        "retrograde": false,
        "sign": "cancer",
-       "degree": 15.071180356718628
+       "degree": 15.071325895267023,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Moon",
-       "lon": 357.2583612911887,
-       "lat": 0.6317703262751287,
-       "speed": 14.241356910702052,
+       "lon": 357.2583938854646,
+       "lat": 0.6319434672756062,
+       "speed": 14.241395525942835,
        "retrograde": false,
        "sign": "pisces",
-       "degree": 27.25836129118875
+       "degree": 27.258393885464557,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Mercury",
-       "lon": 87.74558918737682,
-       "lat": -0.9449565854654021,
-       "speed": 1.7186230215600062,
+       "lon": 87.74571547399083,
+       "lat": -0.9443563880951956,
+       "speed": 1.71852373728143,
        "retrograde": false,
        "sign": "gemini",
-       "degree": 27.745589187376822
+       "degree": 27.7457154739908,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Venus",
-       "lon": 145.4044569376315,
-       "lat": -0.33628410071808634,
-       "speed": 0.5483235592009805,
+       "lon": 145.40561398704023,
+       "lat": -0.3352789581054314,
+       "speed": 0.5483644500401397,
        "retrograde": false,
        "sign": "leo",
-       "degree": 25.404456937631494
+       "degree": 25.405613987040226,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Mars",
-       "lon": 98.66978313267111,
-       "lat": 0.7971887766514503,
-       "speed": 0.6661197668336172,
+       "lon": 98.66973749545873,
+       "lat": 0.7975996698642731,
+       "speed": 0.6661276309571917,
        "retrograde": false,
        "sign": "cancer",
-       "degree": 8.669783132671114
+       "degree": 8.669737495458719,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Jupiter",
-       "lon": 142.79474859761297,
-       "lat": 0.8574203733909405,
-       "speed": 0.1926322427721061,
+       "lon": 142.79409667778285,
+       "lat": 0.858088921591202,
+       "speed": 0.19263058013052614,
        "retrograde": false,
        "sign": "leo",
-       "degree": 22.794748597612966
+       "degree": 22.794096677782818,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Saturn",
-       "lon": 238.80393896966348,
-       "lat": 2.0775891489148313,
-       "speed": -0.039546704016402145,
+       "lon": 238.80381914558848,
+       "lat": 2.077662266610675,
+       "speed": -0.03954910940251466,
        "retrograde": true,
        "sign": "scorpio",
-       "degree": 28.803938969663477
+       "degree": 28.803819145588477,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Uranus",
-       "lon": 20.357583915181863,
-       "lat": -0.6426871214516113,
-       "speed": 0.015295423537509123,
+       "lon": 20.35708282408189,
+       "lat": -0.6425265674967632,
+       "speed": 0.015294318986391886,
        "retrograde": false,
        "sign": "aries",
-       "degree": 20.357583915181863
+       "degree": 20.357082824081886,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Neptune",
-       "lon": 339.65635931167446,
-       "lat": -0.7917697973955828,
-       "speed": -0.012909345940670391,
+       "lon": 339.6515052242532,
+       "lat": -0.7943167526223139,
+       "speed": -0.012911443491248065,
        "retrograde": true,
        "sign": "pisces",
-       "degree": 9.656359311674464
+       "degree": 9.651505224253242,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Pluto",
-       "lon": 284.24130207555146,
-       "lat": 1.9828897060668758,
-       "speed": -0.02492199723747035,
+       "lon": 284.2414430841209,
+       "lat": 1.982876084428886,
+       "speed": -0.02492262152031799,
        "retrograde": true,
        "sign": "capricorn",
-       "degree": 14.241302075551403
+       "degree": 14.241443084120874,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "North Node",
-       "lon": 184.42260783299915,
+       "lon": 184.42468287867266,
        "lat": 0,
-       "speed": -0.0074616040516843896,
+       "speed": -0.007510363334858994,
        "retrograde": true,
        "sign": "libra",
-       "degree": 4.42260783299912
+       "degree": 4.424682878672684,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "South Node",
-       "lon": 4.42260783299912,
+       "lon": 4.424682878672684,
        "lat": 0,
-       "speed": -0.0074616040516843896,
+       "speed": -0.007510363334858994,
        "retrograde": true,
        "sign": "aries",
-       "degree": 4.42260783299912
+       "degree": 4.424682878672684,
+       "ephemeris": "jpl-de440"
       }
      ],
      "angles": null,
@@ -3971,105 +4057,105 @@
        "a": "Moon",
        "b": "Mercury",
        "type": "square",
-       "orb": 0.4872278961881875,
+       "orb": 0.4873215885262425,
        "applying": true
       },
       {
        "a": "Sun",
        "b": "Pluto",
        "type": "opposition",
-       "orb": 0.8298782811671686,
+       "orb": 0.8298828111461773,
        "applying": false
       },
       {
        "a": "Mars",
        "b": "Neptune",
        "type": "trine",
-       "orb": 0.9865761790033503,
+       "orb": 0.9817677287944662,
        "applying": true
       },
       {
        "a": "Moon",
        "b": "Saturn",
        "type": "trine",
-       "orb": 1.5455776784747854,
+       "orb": 1.5454252601238636,
        "applying": true
       },
       {
        "a": "Mercury",
        "b": "Venus",
        "type": "sextile",
-       "orb": 2.3411322497453284,
+       "orb": 2.34010148695063,
        "applying": false
       },
       {
        "a": "Jupiter",
        "b": "Uranus",
        "type": "trine",
-       "orb": 2.437164682431103,
+       "orb": 2.4370138537009325,
        "applying": false
       },
       {
        "a": "Venus",
        "b": "Jupiter",
        "type": "conjunction",
-       "orb": 2.6097083400185284,
+       "orb": 2.6115173092573514,
        "applying": false
       },
       {
        "a": "Venus",
        "b": "Saturn",
        "type": "square",
-       "orb": 3.399482032031983,
+       "orb": 3.398205158548251,
        "applying": true
       },
       {
        "a": "Venus",
        "b": "Uranus",
        "type": "trine",
-       "orb": 5.046873022449631,
+       "orb": 5.048531162958341,
        "applying": false
       },
       {
        "a": "Sun",
        "b": "Uranus",
        "type": "square",
-       "orb": 5.286403558463235,
+       "orb": 5.2857569288148625,
        "applying": true
       },
       {
        "a": "Sun",
        "b": "Neptune",
        "type": "trine",
-       "orb": 5.414821045044164,
+       "orb": 5.419820671013866,
        "applying": false
       },
       {
        "a": "Mars",
        "b": "Pluto",
        "type": "opposition",
-       "orb": 5.5715189428803455,
+       "orb": 5.571705588662155,
        "applying": true
       },
       {
        "a": "Jupiter",
        "b": "Saturn",
        "type": "square",
-       "orb": 6.0091903720505115,
+       "orb": 6.009722467805659,
        "applying": true
       },
       {
        "a": "Uranus",
        "b": "Pluto",
        "type": "square",
-       "orb": 6.116281839630403,
+       "orb": 6.115639739961011,
        "applying": false
       },
       {
        "a": "Sun",
        "b": "Mars",
        "type": "conjunction",
-       "orb": 6.401397224047514,
+       "orb": 6.401588399808304,
        "applying": false
       }
      ],
@@ -4097,7 +4183,11 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.9"
+     "engineVersion": "1.1.0-rc.10",
+     "ephemeris": {
+      "name": "jpl-de440",
+      "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+     }
     },
     "sidereal": null,
     "band": {
@@ -4201,28 +4291,32 @@
       "frame:ecliptic-true-of-date",
       "center:geocentric",
       "correction:apparent",
-      "light-time:newtonian",
-      "deflection:none",
-      "aberration:backdated-observer",
-      "moon:series-at-instant",
+      "light-time:iterated",
+      "deflection:sun",
+      "aberration:relativistic-annual",
+      "target:system-barycentre",
       "node:true-osculating",
+      "place:icrf-to-true-ecliptic-of-date",
+      "frame-bias:iau2006-fukushima-williams",
+      "nutation:iau2000b-p03",
+      "time:tdb-three-term",
       "precession:iau2006",
       "nutation:iau2000b",
       "obliquity:iau2006",
       "aspects:major",
       "speed:central-difference-0.001d",
       "speed:central-difference-0.25d",
-      "ephemeris:astronomy-engine@2.1.19",
+      "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
       "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
-       "name": "astronomy-engine",
-       "version": "2.1.19"
+       "name": "jpl-de440",
+       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
       }
      }
     }
@@ -4254,111 +4348,123 @@
      "bodies": [
       {
        "body": "Sun",
-       "lon": 313.8145323123739,
-       "lat": -0.000011117709912775589,
-       "speed": 1.0142025214463501,
+       "lon": 313.814520545954,
+       "lat": -0.00020898069512073907,
+       "speed": 1.0142141435096619,
        "retrograde": false,
        "sign": "aquarius",
-       "degree": 13.814532312373899
+       "degree": 13.814520545953997,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Moon",
-       "lon": 184.44370582880475,
-       "lat": -4.834761370703018,
-       "speed": 13.181034408717096,
+       "lon": 184.4435725062733,
+       "lat": -4.834706376804121,
+       "speed": 13.180979552998906,
        "retrograde": false,
        "sign": "libra",
-       "degree": 4.443705828804696
+       "degree": 4.443572506273313,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Mercury",
-       "lon": 295.84278178063784,
-       "lat": -1.1486621855228174,
-       "speed": 1.4873373502553022,
+       "lon": 295.84296043135885,
+       "lat": -1.148780779444931,
+       "speed": 1.4873003400452944,
        "retrograde": false,
        "sign": "capricorn",
-       "degree": 25.84278178063778
+       "degree": 25.842960431358847,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Venus",
-       "lon": 336.1935504793711,
-       "lat": -1.5036860119116682,
-       "speed": 1.2444120250449942,
+       "lon": 336.1935846010197,
+       "lat": -1.5038790097988604,
+       "speed": 1.2444187136964047,
        "retrograde": false,
        "sign": "pisces",
-       "degree": 6.193550479371083
+       "degree": 6.193584601019666,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Mars",
-       "lon": 63.574200954052344,
-       "lat": 2.3381478744906863,
-       "speed": 0.32089397856793767,
+       "lon": 63.57460414583403,
+       "lat": 2.338331740966198,
+       "speed": 0.3208831307048854,
        "retrograde": false,
        "sign": "gemini",
-       "degree": 3.574200954052344
+       "degree": 3.57460414583403,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Jupiter",
-       "lon": 127.89964129946475,
-       "lat": 0.7671276313579903,
-       "speed": -0.13231639161404019,
+       "lon": 127.89968349238175,
+       "lat": 0.7668593095003089,
+       "speed": -0.1323240512149937,
        "retrograde": true,
        "sign": "leo",
-       "degree": 7.899641299464747
+       "degree": 7.899683492381769,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Saturn",
-       "lon": 299.5805870770136,
-       "lat": -0.18294558762658597,
-       "speed": 0.1165775042579753,
+       "lon": 299.5805434952676,
+       "lat": -0.182841300924724,
+       "speed": 0.11657660593300534,
        "retrograde": false,
        "sign": "capricorn",
-       "degree": 29.58058707701366
+       "degree": 29.580543495267648,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Uranus",
-       "lon": 281.6387301431133,
-       "lat": -0.3279391359243826,
-       "speed": 0.05292307616855396,
+       "lon": 281.6399772179478,
+       "lat": -0.32600846400843925,
+       "speed": 0.05292482876484428,
        "retrograde": false,
        "sign": "capricorn",
-       "degree": 11.638730143113321
+       "degree": 11.639977217947717,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Neptune",
-       "lon": 285.3390850242705,
-       "lat": 0.7889898179997695,
-       "speed": 0.03423317937745196,
+       "lon": 285.33909137639773,
+       "lat": 0.7881715251056454,
+       "speed": 0.034232390333954754,
        "retrograde": false,
        "sign": "capricorn",
-       "degree": 15.339085024270503
+       "degree": 15.339091376397732,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "Pluto",
-       "lon": 230.27106025164545,
-       "lat": 15.166684984824366,
-       "speed": 0.011285587305565059,
+       "lon": 230.27040956625018,
+       "lat": 15.166729171504048,
+       "speed": 0.01128522974624957,
        "retrograde": false,
        "sign": "scorpio",
-       "degree": 20.271060251645395
+       "degree": 20.270409566250237,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "North Node",
-       "lon": 297.9452479262924,
+       "lon": 297.94695844496334,
        "lat": 0,
-       "speed": -0.03638443356578591,
+       "speed": -0.03661005167464282,
        "retrograde": true,
        "sign": "capricorn",
-       "degree": 27.94524792629238
+       "degree": 27.946958444963343,
+       "ephemeris": "jpl-de440"
       },
       {
        "body": "South Node",
-       "lon": 117.94524792629238,
+       "lon": 117.94695844496334,
        "lat": 0,
-       "speed": -0.03638443356578591,
+       "speed": -0.03661005167464282,
        "retrograde": true,
        "sign": "cancer",
-       "degree": 27.94524792629238
+       "degree": 27.946958444963343,
+       "ephemeris": "jpl-de440"
       }
      ],
      "angles": {
@@ -4389,70 +4495,70 @@
        "a": "Moon",
        "b": "Mars",
        "type": "trine",
-       "orb": 0.8695048747524083,
+       "orb": 0.8689683604392826,
        "applying": false
       },
       {
        "a": "Venus",
        "b": "Mars",
        "type": "square",
-       "orb": 2.6193495253187393,
+       "orb": 2.6189804551856923,
        "applying": false
       },
       {
        "a": "Moon",
        "b": "Jupiter",
        "type": "sextile",
-       "orb": 3.4559354706599947,
+       "orb": 3.456110986108456,
        "applying": true
       },
       {
        "a": "Uranus",
        "b": "Neptune",
        "type": "conjunction",
-       "orb": 3.700354881157182,
+       "orb": 3.6991141584499587,
        "applying": true
       },
       {
        "a": "Mercury",
        "b": "Saturn",
        "type": "conjunction",
-       "orb": 3.737805296375768,
+       "orb": 3.737583063908744,
        "applying": true
       },
       {
        "a": "Mars",
        "b": "Saturn",
        "type": "trine",
-       "orb": 3.99361387703874,
+       "orb": 3.994060650566439,
        "applying": false
       },
       {
        "a": "Moon",
        "b": "Saturn",
        "type": "trine",
-       "orb": 4.8631187517911485,
+       "orb": 4.863029011005722,
        "applying": false
       },
       {
        "a": "Sun",
        "b": "Jupiter",
        "type": "opposition",
-       "orb": 5.914891012909152,
+       "orb": 5.914837053572228,
        "applying": false
       },
       {
        "a": "Sun",
        "b": "Pluto",
        "type": "square",
-       "orb": 6.456527939271552,
+       "orb": 6.455889020296183,
        "applying": true
       },
       {
        "a": "Moon",
        "b": "Uranus",
        "type": "square",
-       "orb": 7.195024314308569,
+       "orb": 7.196404711674461,
        "applying": true
       }
      ],
@@ -4478,7 +4584,11 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.9"
+     "engineVersion": "1.1.0-rc.10",
+     "ephemeris": {
+      "name": "jpl-de440",
+      "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+     }
     },
     "sidereal": {
      "ayanamsa": {
@@ -4497,51 +4607,51 @@
      "bodies": [
       {
        "body": "Sun",
-       "lon": 291.52219469894413
+       "lon": 291.52218293252423
       },
       {
        "body": "Moon",
-       "lon": 162.151368215375
+       "lon": 162.15123489284355
       },
       {
        "body": "Mercury",
-       "lon": 273.55044416720807
+       "lon": 273.5506228179291
       },
       {
        "body": "Venus",
-       "lon": 313.9012128659413
+       "lon": 313.90124698758996
       },
       {
        "body": "Mars",
-       "lon": 41.28186334062259
+       "lon": 41.28226653240428
       },
       {
        "body": "Jupiter",
-       "lon": 105.607303686035
+       "lon": 105.607345878952
       },
       {
        "body": "Saturn",
-       "lon": 277.28824946358384
+       "lon": 277.2882058818378
       },
       {
        "body": "Uranus",
-       "lon": 259.34639252968356
+       "lon": 259.347639604518
       },
       {
        "body": "Neptune",
-       "lon": 263.04674741084074
+       "lon": 263.04675376296797
       },
       {
        "body": "Pluto",
-       "lon": 207.9787226382157
+       "lon": 207.97807195282041
       },
       {
        "body": "North Node",
-       "lon": 275.6529103128626
+       "lon": 275.6546208315336
       },
       {
        "body": "South Node",
-       "lon": 95.65291031286263
+       "lon": 95.65462083153359
       }
      ],
      "ascendant": 235.23416786663677,
@@ -4670,11 +4780,15 @@
       "frame:ecliptic-true-of-date",
       "center:geocentric",
       "correction:apparent",
-      "light-time:newtonian",
-      "deflection:none",
-      "aberration:backdated-observer",
-      "moon:series-at-instant",
+      "light-time:iterated",
+      "deflection:sun",
+      "aberration:relativistic-annual",
+      "target:system-barycentre",
       "node:true-osculating",
+      "place:icrf-to-true-ecliptic-of-date",
+      "frame-bias:iau2006-fukushima-williams",
+      "nutation:iau2000b-p03",
+      "time:tdb-three-term",
       "precession:iau2006",
       "nutation:iau2000b",
       "obliquity:iau2006",
@@ -4684,17 +4798,17 @@
       "aspects:major",
       "speed:central-difference-0.001d",
       "speed:central-difference-0.25d",
-      "ephemeris:astronomy-engine@2.1.19",
+      "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
       "time-band:first-order"
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.9",
+      "version": "1.1.0-rc.10",
       "ephemeris": {
-       "name": "astronomy-engine",
-       "version": "2.1.19"
+       "name": "jpl-de440",
+       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
       }
      }
     }

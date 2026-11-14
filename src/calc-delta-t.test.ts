@@ -199,12 +199,13 @@ describe("natalChart() and chart() at a clock time past the IERS predictions", (
     // A record written before the flag existed stays readable.
     const before = JSON.parse(json);
     before.receipt.resultFlags = [];
+    before.receipt.engine.version = "1.1.0-rc.9";
     withOwnIds(before);
     expect(parseNatalEnvelope(JSON.stringify(before)).ok).toBe(true);
-    // From an engine after 1.1.0-rc.7, which sets it, a record that lacks it there is refused.
+    // From 1.1.0-rc.10, which sets it, a record that lacks it there is refused.
     const later = JSON.parse(json);
     later.receipt.resultFlags = [];
-    later.receipt.engine.version = "1.1.0-rc.8";
+    later.receipt.engine.version = "1.1.0-rc.10";
     withOwnIds(later);
     expect(parseNatalEnvelope(JSON.stringify(later))).toMatchObject({ ok: false, code: "inconsistent_result" });
     later.receipt.resultFlags = [FLAG];

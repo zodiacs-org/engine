@@ -162,6 +162,7 @@ export type {
   ChartPoints,
   DateInput,
   Element,
+  EphemerisFallback,
   HouseNumber,
   Houses,
   HouseSystem,
