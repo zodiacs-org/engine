@@ -109,7 +109,18 @@ runs, so CI starts the check with node directly.
 | 1.1.0-rc.6 | `648714ca7485c7381f338286b84a211752ddd425035f50f6e24267e80de6abde` | 333,982 | 94 | `c3efe9175644ee6a0d9f40e2d9fa0766aa264fa6` | `7210037` | Draft candidate, awaiting the owner's review |
 | 1.1.0-rc.7 | `71348be1f8dc2772945cc86c72af475091d105da9e7ff5b4411c517adc9fc80a` | 335,403 | 94 | `ca3ae0ff197e0b4e7bfc68bf88c3d0afbeb360f8` | "Carry the packed 1.1.0-rc.7 tarball" | Draft candidate, awaiting the owner's review |
 | 1.1.0-rc.8 | `53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43` | 2,696,971 | 97 | `e3939499d603e511f1f23f7198eb425bc5f48359` | `7dec96f` | **Withdrawn before merge; never released; no file here.** Still reachable in the commits `7dec96f`, `3de6a27` and `0738bc9`. |
-| 1.1.0-rc.9 | `f1801f0a35ef643a89c73ecd280e1e41142ae36e12c3690433536f9c3368396a` | 2,703,974 | 98 | `18bcfca5e7bed57e797ee09da2221c1fbc8e9f33` | "Carry the packed 1.1.0-rc.9 tarball" | Draft candidate, awaiting the owner's review |
+| 1.1.0-rc.9 | `f1801f0a35ef643a89c73ecd280e1e41142ae36e12c3690433536f9c3368396a` | 2,703,974 | 98 | `18bcfca5e7bed57e797ee09da2221c1fbc8e9f33` | "Carry the packed 1.1.0-rc.9 tarball" | Draft candidate, superseded by 1.1.0-rc.10 on the same pull request before review; never tagged or published. Still this file |
+| 1.1.0-rc.10 | `7fbdf3ade2a3350970e8e4195cda02ad596cbc2ca46c955ceae44a0ce7613246` | 2,716,319 | 98 | `cafc5dbd96d233cd730672a0a2827ccbbe82623d` | "Carry the packed 1.1.0-rc.10 tarball" | Draft candidate for 1.1.0, awaiting the owner's review |
+
+1.1.0-rc.9 and 1.1.0-rc.10 are two cuts of one draft, pull request 101.
+1.1.0-rc.9 was carried on 2026-11-14 and reviewed in draft; the owner then
+asked for `calc()` and `birthWindow` on DE440, for a fallback that is never
+silent, and for pull request 102 to be included. Those change packed files,
+and 1.1.0-rc.9 was already carried, so by the rule above the new bytes took
+a new version and 1.1.0-rc.9's archive stays, unchanged, with its receipt
+and its entry: nothing was repacked under its number and the check needed no
+exception. 1.1.0-rc.9 was never tagged or published and is not meant to be;
+1.1.0-rc.10 is the candidate for 1.1.0.
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
