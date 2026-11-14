@@ -1,0 +1,63 @@
+chunk /tmp/job9rc-brk/dmg-swap-halves/node_modules/@zodiacs/engine/dist/chunk-HRNDVLBS.js: 3320824 chars, base64 literal 3319552 chars at 111
+mode swap-halves: written 3320824 chars
+# swap-halves: year 1990; default {"name":"de440","de440":{"opened":false,"version":null,"fromTtDays":null,"toTtDays":null,"error":"De440Error: the pack's SHA-256 is not the one expected"}}
+SAYS NOTHING                                     defaultEphemeris [object] {"name":"de440","de440":{"opened":false,"version":null,"fromTtDays":null,"toTtDays":null,"
+de440-unavailable names-AE                       natalChart [object] flags=[de440-unavailable] 
+de440-unavailable names-AE                       natalChart_noTime [object] flags=[no-time,de440-unavailable] 
+de440-unavailable names-AE                       positions [array[12]] 
+de440-unavailable names-AE                       transits [object] 
+de440-unavailable names-AE                       synastry [object] 
+de440-unavailable names-AE                       progressedBodies [array[12]] 
+de440-unavailable names-AE                       moonPhase [object] 
+de440-unavailable names-AE                       saturnReturn [object] flags=[de440-unavailable] 
+de440-unavailable                                searchLongitudeCrossings [object] status=complete flags=[de440-unavailable] 
+SAYS NOTHING                                     findLongitudeCrossings [array[1]] [{"at":"1990-04-20T08:26:34.208Z","retrograde":false}]
+SAYS NOTHING                                     chartPoints [object] {"sect":"day","points":[{"point":"Mean Node","lon":312.9353998700801,"lat":0,"speed":-0.05
+SAYS NOTHING                                     chartDeclinations [object] {"trueObliquity":23.442361874798056,"rows":[{"body":"Sun","lon":25.11370234551123,"lat":-0
+SAYS NOTHING                                     internal.bodyLongitude [number] 262.14052599115115
+SAYS NOTHING                                     internal.longitudeSpeed [number] 11.943622823537225
+de440-unavailable names-AE                       internal.computeBodies [array[12]] 
+de440-unavailable names-AE                       internal.computeChart [object] flags=[no-time,de440-unavailable] 
+de440-unavailable names-AE                       receipt.createNatalEnvelope [object] 
+de440-unavailable names-AE                       calc.calc Sun [object] status=ok flags=[de440-unavailable] 
+de440-unavailable names-AE                       calc.calc Moon equatorial [object] status=ok flags=[de440-unavailable] 
+de440-unavailable names-AE                       calc.calc NNode [object] status=ok flags=[de440-unavailable] 
+names-AE                                         calc.calc Mars helio [object] status=ok flags=[] 
+names-AE                                         calc.calc Mars topo [object] status=ok flags=[] 
+de440-unavailable names-AE                       calc.calc Mars ecliptic-j2000 [object] status=ok flags=[de440-unavailable] 
+de440-unavailable names-AE                       calc.chart [object] status=ok 
+de440-unavailable names-AE                       calc.events [object] status=ok flags=[de440-unavailable] 
+names-AE                                         calc.houses [object] status=ok flags=[] 
+de440-unavailable names-AE                       window.birthWindow [object] flags=[de440-unavailable] 
+de440-unavailable names-AE                       tech.solarReturn [object] flags=[de440-unavailable] 
+de440-unavailable names-AE                       tech.lunarReturn [object] flags=[de440-unavailable] 
+SAYS NOTHING                                     tech.solarReturnInstant [Date] "2020-04-14T12:04:27.575Z"
+SAYS NOTHING                                     tech.mostRecentSolarReturnInstant [Date] "2019-04-15T06:10:02.541Z"
+SAYS NOTHING                                     tech.lunarReturnInstant [Date] "2020-03-26T03:31:08.541Z"
+SAYS NOTHING                                     tech.moonAspects [array[25]] [{"at":"1990-04-15T14:59:57.328Z","body":"Sun","aspect":"trine","moonLon":265.378772206088
+SAYS NOTHING                                     tech.moonIngresses [array[5]] [{"at":"1990-04-16T00:14:36.625Z","sign":"capricorn"},{"at":"1990-04-18T10:52:32.026Z","si
+de440-unavailable                                tech.moonSignCandidates [object] flags=[de440-unavailable] 
+SAYS NOTHING                                     tech.moonSignsBetween [array[6]] ["sagittarius","capricorn","aquarius","pisces","aries","taurus"]
+SAYS NOTHING                                     tech.voidOfCourseAt [object] {"at":"1990-04-15T08:30:00.000Z","isVoid":false,"current":null,"next":{"from":"1990-04-15T
+SAYS NOTHING                                     tech.voidOfCourseWindows [array[5]] [{"from":"1990-04-15T16:24:26.853Z","to":"1990-04-16T00:14:36.625Z","lastAspect":{"at":"19
+SAYS NOTHING                                     tech.compositeChart [object] {"bodies":[{"body":"Sun","lon":302.8060446790589},{"body":"Moon","lon":203.3726173135983},
+de440-unavailable names-AE                       tech.davisonChart [object] flags=[de440-unavailable] 
+SAYS NOTHING                                     tech.chartAspectPatterns [object] {"points":[{"body":"Sun","lon":25.11370234551123},{"body":"Moon","lon":262.1405259911512},
+de440-unavailable                                timing.profectionAt [object] flags=[de440-unavailable] 
+de440-unavailable                                timing.profectionYear [object] flags=[de440-unavailable] 
+de440-unavailable                                timing.firdaria [object] flags=[de440-unavailable] 
+de440-unavailable                                timing.firdariaAt [object] flags=[de440-unavailable] 
+de440-unavailable                                timing.planetaryReturns [object] status=complete flags=[de440-unavailable] 
+de440-unavailable                                timing.solarArc [object] flags=[de440-unavailable] 
+de440-unavailable                                timing.solarArcDirections [object] flags=[de440-unavailable] 
+de440-unavailable                                timing.zodiacalReleasing [object] flags=[de440-unavailable] 
+de440-unavailable                                timing.zodiacalReleasingAt [object] flags=[de440-unavailable] 
+SAYS NOTHING                                     sky.skyEvents Sun [object] status=complete flags=[] {"body":"Sun","observer":{"latitude":51.5,"longitude":-0.12,"height":0},"from":"1990-04-15
+SAYS NOTHING                                     sky.skyEventsOn Moon [object] status=complete flags=[] {"body":"Moon","observer":{"latitude":51.5,"longitude":-0.12,"height":0},"from":"1990-04-1
+SAYS NOTHING                                     sky.planetaryHours [object] status=complete flags=[] {"date":"1990-04-15","utcOffsetMinutes":-0.48,"weekday":0,"ruler":"Sun","conventions":{"li
+SAYS NOTHING                                     sky.planetaryHourAt [object] {"day":{"date":"1990-04-15","utcOffsetMinutes":-0.48,"weekday":0,"ruler":"Sun","convention
+SAYS NOTHING                                     vedic.ayanamsa lahiri [object] flags=[] {"ayanamsa":"lahiri","utc":"1990-04-15T08:30:00.000Z","timeScale":{"input":"utc","basis":"
+de440-unavailable                                vedic.siderealChart [object] flags=[de440-unavailable] 
+de440-unavailable                                vedic.vargaSensitivity [object] flags=[de440-unavailable] 
+SAYS NOTHING                                     vedic.vimshottariDasha(sidereal moon) [object] {"system":"vimshottari","yearLength":"julian","yearDays":365.25,"birth":"1990-04-15T08:30:
+exit 0

@@ -1,0 +1,504 @@
+{
+ "earlier": {
+  "version": "1.1.0-rc.9",
+  "archive": {
+   "sha256": "f1801f0a35ef643a89c73ecd280e1e41142ae36e12c3690433536f9c3368396a",
+   "bytes": 2703974
+  },
+  "files": 98,
+  "unpacked": 4502147,
+  "unpackedBesideThePack": 1182595,
+  "kinds": {
+   "de440Pack": 3319552,
+   "rootJavaScript": 142693,
+   "optInJavaScript": 347360,
+   "zoneHistories": 189144,
+   "declarations": 229476,
+   "documents": 269180,
+   "manifest": 4742
+  },
+  "entryGraphs": {
+   ".": {
+    "files": 16,
+    "bytesBesideThePack": 142693,
+    "loadsPack": true
+   },
+   "./calc": {
+    "files": 18,
+    "bytesBesideThePack": 188246,
+    "loadsPack": true
+   },
+   "./conventions": {
+    "files": 2,
+    "bytesBesideThePack": 2754,
+    "loadsPack": false
+   },
+   "./crossings": {
+    "files": 2,
+    "bytesBesideThePack": 9942,
+    "loadsPack": false
+   },
+   "./deltat": {
+    "files": 2,
+    "bytesBesideThePack": 5232,
+    "loadsPack": false
+   },
+   "./geo": {
+    "files": 4,
+    "bytesBesideThePack": 35584,
+    "loadsPack": false
+   },
+   "./houses": {
+    "files": 1,
+    "bytesBesideThePack": 13678,
+    "loadsPack": false
+   },
+   "./internal": {
+    "files": 11,
+    "bytesBesideThePack": 102834,
+    "loadsPack": true
+   },
+   "./internal/math": {
+    "files": 4,
+    "bytesBesideThePack": 19224,
+    "loadsPack": false
+   },
+   "./lite": {
+    "files": 5,
+    "bytesBesideThePack": 28930,
+    "loadsPack": false
+   },
+   "./receipt": {
+    "files": 8,
+    "bytesBesideThePack": 75038,
+    "loadsPack": false
+   },
+   "./sky": {
+    "files": 15,
+    "bytesBesideThePack": 130782,
+    "loadsPack": true
+   },
+   "./techniques": {
+    "files": 18,
+    "bytesBesideThePack": 192603,
+    "loadsPack": true
+   },
+   "./time": {
+    "files": 8,
+    "bytesBesideThePack": 42472,
+    "loadsPack": false
+   },
+   "./de440": {
+    "files": 5,
+    "bytesBesideThePack": 50140,
+    "loadsPack": false
+   },
+   "./de440/pack": {
+    "files": 6,
+    "bytesBesideThePack": 51360,
+    "loadsPack": true
+   },
+   "./timing": {
+    "files": 18,
+    "bytesBesideThePack": 161941,
+    "loadsPack": true
+   },
+   "./vedic": {
+    "files": 17,
+    "bytesBesideThePack": 177728,
+    "loadsPack": true
+   },
+   "./window": {
+    "files": 13,
+    "bytesBesideThePack": 140974,
+    "loadsPack": true
+   }
+  },
+  "de440Pack": {
+   "file": "dist/chunk-2ABJESXV.js",
+   "rootLoadsIt": true,
+   "base64Characters": 3319552,
+   "bytes": 2489664,
+   "sha256": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
+   "base64Gzip9": 2357278
+  },
+  "byFile": {
+   "LICENSE": 1068,
+   "NOTICE": 12933,
+   "dist/calc.js": 50361,
+   "dist/chunk-2ABJESXV.js": 3320824,
+   "dist/chunk-2PZYJQV5.js": 2273,
+   "dist/chunk-47ERTK5X.js": 989,
+   "dist/chunk-4XOYTBLS.js": 1296,
+   "dist/chunk-A3U2ZS2W.js": 508,
+   "dist/chunk-B5LKF437.js": 13218,
+   "dist/chunk-BHJXUY67.js": 5071,
+   "dist/chunk-CK4SMO2Y.js": 11923,
+   "dist/chunk-CPALRSPC.js": 1459,
+   "dist/chunk-GHCBIIXR.js": 27578,
+   "dist/chunk-H3TTSMLQ.js": 18242,
+   "dist/chunk-I3L4POY7.js": 822,
+   "dist/chunk-ID4ZJGOA.js": 672,
+   "dist/chunk-IVW3CRX2.js": 24209,
+   "dist/chunk-KFTJMMG7.js": 2397,
+   "dist/chunk-NNOSOOWS.js": 11639,
+   "dist/chunk-OVXQQEXL.js": 2018,
+   "dist/chunk-PFGUCNOK.js": 2929,
+   "dist/chunk-RJZS5OAR.js": 3204,
+   "dist/chunk-RMBWKZI2.js": 3018,
+   "dist/chunk-RSZKFHP5.js": 30815,
+   "dist/chunk-TSS2SZWQ.js": 9769,
+   "dist/chunk-Y4E3WJU5.js": 4291,
+   "dist/conventions.js": 736,
+   "dist/crossings.js": 173,
+   "dist/de440-pack.js": 325,
+   "dist/de440.js": 377,
+   "dist/deltat.js": 161,
+   "dist/geo.js": 6049,
+   "dist/houses-extra.js": 13678,
+   "dist/index.js": 13562,
+   "dist/internal-math.js": 1363,
+   "dist/internal.js": 455,
+   "dist/lite-composite.js": 3783,
+   "dist/lite-declinations.js": 9665,
+   "dist/lite-dignities.js": 11897,
+   "dist/lite-sect.js": 3439,
+   "dist/lite.js": 146,
+   "dist/receipt.js": 44653,
+   "dist/sky.js": 15371,
+   "dist/techniques.js": 36549,
+   "dist/time.js": 2140,
+   "dist/timing.js": 31313,
+   "dist/tzdb-2025c-00-6GVG6RYL.js": 11600,
+   "dist/tzdb-2025c-01-CEYMG3LE.js": 10882,
+   "dist/tzdb-2025c-02-NWQJCVUU.js": 16722,
+   "dist/tzdb-2025c-03-PLHP6VH4.js": 8729,
+   "dist/tzdb-2025c-04-MEKUJA6M.js": 12107,
+   "dist/tzdb-2025c-05-3K5YKZBL.js": 12660,
+   "dist/tzdb-2025c-06-L2VV5XJV.js": 10484,
+   "dist/tzdb-2025c-07-H3GLGJGY.js": 15543,
+   "dist/tzdb-2025c-08-DA7QQIGD.js": 12443,
+   "dist/tzdb-2025c-09-MTXIO3QL.js": 10295,
+   "dist/tzdb-2025c-10-ASL4UW5C.js": 9206,
+   "dist/tzdb-2025c-11-EQEOANYB.js": 14246,
+   "dist/tzdb-2025c-12-NKCCXJ5G.js": 12240,
+   "dist/tzdb-2025c-13-DYTF3UC7.js": 10206,
+   "dist/tzdb-2025c-14-C25H45R5.js": 10241,
+   "dist/tzdb-2025c-15-7OYYZWRY.js": 11540,
+   "dist/vedic.js": 30038,
+   "dist/window.js": 34207,
+   "package.json": 4742,
+   "CHANGELOG.md": 148593,
+   "LICENSING.md": 34079,
+   "README.md": 72507,
+   "dist/api-6wTK2zO4.d.ts": 11007,
+   "dist/ayanamsa-B4k-hzdv.d.ts": 6473,
+   "dist/calc.d.ts": 21341,
+   "dist/conventions.d.ts": 2993,
+   "dist/crossings.d.ts": 4796,
+   "dist/de440-pack.d.ts": 2010,
+   "dist/de440.d.ts": 4742,
+   "dist/deltat.d.ts": 5079,
+   "dist/geo.d.ts": 10095,
+   "dist/houses-ChqiGA6L.d.ts": 7674,
+   "dist/houses-extra.d.ts": 4724,
+   "dist/index.d.ts": 15790,
+   "dist/internal-CH0_14d8.d.ts": 3205,
+   "dist/internal-math-HX92fW34.d.ts": 6166,
+   "dist/internal-math.d.ts": 1134,
+   "dist/internal.d.ts": 208,
+   "dist/lite.d.ts": 5135,
+   "dist/receipt.d.ts": 944,
+   "dist/reference-span-CILpclrz.d.ts": 2017,
+   "dist/rulers-48cCgMif.d.ts": 835,
+   "dist/sky.d.ts": 8030,
+   "dist/techniques.d.ts": 22118,
+   "dist/time-bands-CZA9AlLg.d.ts": 1735,
+   "dist/time-scale-DIFNa0gz.d.ts": 1977,
+   "dist/time.d.ts": 3883,
+   "dist/timing.d.ts": 23861,
+   "dist/types-DZtUTDMK.d.ts": 10131,
+   "dist/vedic.d.ts": 21093,
+   "dist/window.d.ts": 7991,
+   "dist/zone-history-CePc9DjG.d.ts": 12289
+  }
+ },
+ "later": {
+  "version": "1.1.0-rc.10",
+  "archive": {
+   "sha256": "7fbdf3ade2a3350970e8e4195cda02ad596cbc2ca46c955ceae44a0ce7613246",
+   "bytes": 2716319
+  },
+  "files": 98,
+  "unpacked": 4540059,
+  "unpackedBesideThePack": 1220507,
+  "kinds": {
+   "de440Pack": 3319552,
+   "rootJavaScript": 147832,
+   "optInJavaScript": 356377,
+   "zoneHistories": 189144,
+   "declarations": 235884,
+   "documents": 286527,
+   "manifest": 4743
+  },
+  "entryGraphs": {
+   ".": {
+    "files": 16,
+    "bytesBesideThePack": 147832,
+    "loadsPack": true
+   },
+   "./calc": {
+    "files": 18,
+    "bytesBesideThePack": 197802,
+    "loadsPack": true
+   },
+   "./conventions": {
+    "files": 2,
+    "bytesBesideThePack": 2754,
+    "loadsPack": false
+   },
+   "./crossings": {
+    "files": 2,
+    "bytesBesideThePack": 9942,
+    "loadsPack": false
+   },
+   "./deltat": {
+    "files": 2,
+    "bytesBesideThePack": 5232,
+    "loadsPack": false
+   },
+   "./geo": {
+    "files": 4,
+    "bytesBesideThePack": 35614,
+    "loadsPack": false
+   },
+   "./houses": {
+    "files": 1,
+    "bytesBesideThePack": 13678,
+    "loadsPack": false
+   },
+   "./internal": {
+    "files": 11,
+    "bytesBesideThePack": 107011,
+    "loadsPack": true
+   },
+   "./internal/math": {
+    "files": 4,
+    "bytesBesideThePack": 19225,
+    "loadsPack": false
+   },
+   "./lite": {
+    "files": 5,
+    "bytesBesideThePack": 28930,
+    "loadsPack": false
+   },
+   "./receipt": {
+    "files": 8,
+    "bytesBesideThePack": 75814,
+    "loadsPack": false
+   },
+   "./sky": {
+    "files": 15,
+    "bytesBesideThePack": 134959,
+    "loadsPack": true
+   },
+   "./techniques": {
+    "files": 18,
+    "bytesBesideThePack": 197811,
+    "loadsPack": true
+   },
+   "./time": {
+    "files": 8,
+    "bytesBesideThePack": 42472,
+    "loadsPack": false
+   },
+   "./de440": {
+    "files": 5,
+    "bytesBesideThePack": 52616,
+    "loadsPack": false
+   },
+   "./de440/pack": {
+    "files": 6,
+    "bytesBesideThePack": 53836,
+    "loadsPack": true
+   },
+   "./timing": {
+    "files": 18,
+    "bytesBesideThePack": 167135,
+    "loadsPack": true
+   },
+   "./vedic": {
+    "files": 17,
+    "bytesBesideThePack": 182867,
+    "loadsPack": true
+   },
+   "./window": {
+    "files": 13,
+    "bytesBesideThePack": 147950,
+    "loadsPack": true
+   }
+  },
+  "de440Pack": {
+   "file": "dist/chunk-HRNDVLBS.js",
+   "rootLoadsIt": true,
+   "base64Characters": 3319552,
+   "bytes": 2489664,
+   "sha256": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
+   "base64Gzip9": 2357278
+  },
+  "byFile": {
+   "LICENSE": 1068,
+   "NOTICE": 12933,
+   "dist/calc.js": 55710,
+   "dist/chunk-2PZYJQV5.js": 2273,
+   "dist/chunk-47ERTK5X.js": 989,
+   "dist/chunk-4XOYTBLS.js": 1296,
+   "dist/chunk-6IAG7PLQ.js": 18242,
+   "dist/chunk-76T5NOBY.js": 33291,
+   "dist/chunk-7Y2F2IWN.js": 24209,
+   "dist/chunk-A3U2ZS2W.js": 508,
+   "dist/chunk-AKAHHUVE.js": 12855,
+   "dist/chunk-B5LKF437.js": 13218,
+   "dist/chunk-BHJXUY67.js": 5071,
+   "dist/chunk-BMDASNPB.js": 2959,
+   "dist/chunk-CPALRSPC.js": 1459,
+   "dist/chunk-HRNDVLBS.js": 3320824,
+   "dist/chunk-I3L4POY7.js": 822,
+   "dist/chunk-KFTJMMG7.js": 2397,
+   "dist/chunk-KNJ3BEAH.js": 29278,
+   "dist/chunk-NNOSOOWS.js": 11639,
+   "dist/chunk-OVXQQEXL.js": 2018,
+   "dist/chunk-RMBWKZI2.js": 3018,
+   "dist/chunk-SMWDFFRO.js": 3205,
+   "dist/chunk-TSS2SZWQ.js": 9769,
+   "dist/chunk-USFWXGDO.js": 672,
+   "dist/chunk-Y4E3WJU5.js": 4291,
+   "dist/conventions.js": 736,
+   "dist/crossings.js": 173,
+   "dist/de440-pack.js": 325,
+   "dist/de440.js": 377,
+   "dist/deltat.js": 161,
+   "dist/geo.js": 6049,
+   "dist/houses-extra.js": 13678,
+   "dist/index.js": 13562,
+   "dist/internal-math.js": 1363,
+   "dist/internal.js": 455,
+   "dist/lite-composite.js": 3783,
+   "dist/lite-declinations.js": 9665,
+   "dist/lite-dignities.js": 11897,
+   "dist/lite-sect.js": 3439,
+   "dist/lite.js": 146,
+   "dist/receipt.js": 45428,
+   "dist/sky.js": 15371,
+   "dist/techniques.js": 36618,
+   "dist/time.js": 2140,
+   "dist/timing.js": 31368,
+   "dist/tzdb-2025c-00-6GVG6RYL.js": 11600,
+   "dist/tzdb-2025c-01-CEYMG3LE.js": 10882,
+   "dist/tzdb-2025c-02-NWQJCVUU.js": 16722,
+   "dist/tzdb-2025c-03-PLHP6VH4.js": 8729,
+   "dist/tzdb-2025c-04-MEKUJA6M.js": 12107,
+   "dist/tzdb-2025c-05-3K5YKZBL.js": 12660,
+   "dist/tzdb-2025c-06-L2VV5XJV.js": 10484,
+   "dist/tzdb-2025c-07-H3GLGJGY.js": 15543,
+   "dist/tzdb-2025c-08-DA7QQIGD.js": 12443,
+   "dist/tzdb-2025c-09-MTXIO3QL.js": 10295,
+   "dist/tzdb-2025c-10-ASL4UW5C.js": 9206,
+   "dist/tzdb-2025c-11-EQEOANYB.js": 14246,
+   "dist/tzdb-2025c-12-NKCCXJ5G.js": 12240,
+   "dist/tzdb-2025c-13-DYTF3UC7.js": 10206,
+   "dist/tzdb-2025c-14-C25H45R5.js": 10241,
+   "dist/tzdb-2025c-15-7OYYZWRY.js": 11540,
+   "dist/vedic.js": 30038,
+   "dist/window.js": 36976,
+   "package.json": 4743,
+   "CHANGELOG.md": 161702,
+   "LICENSING.md": 34079,
+   "README.md": 76745,
+   "dist/api-vnaf78Xb.d.ts": 11753,
+   "dist/ayanamsa-BZDd-vR9.d.ts": 6473,
+   "dist/calc.d.ts": 22318,
+   "dist/conventions.d.ts": 2993,
+   "dist/crossings.d.ts": 5193,
+   "dist/de440-pack.d.ts": 2010,
+   "dist/de440.d.ts": 5406,
+   "dist/deltat.d.ts": 5079,
+   "dist/geo.d.ts": 10095,
+   "dist/houses-BfgH3-_D.d.ts": 7674,
+   "dist/houses-extra.d.ts": 4724,
+   "dist/index.d.ts": 15814,
+   "dist/internal-CvlwFTr6.d.ts": 3205,
+   "dist/internal-math-bDLCdufV.d.ts": 6166,
+   "dist/internal-math.d.ts": 1134,
+   "dist/internal.d.ts": 208,
+   "dist/lite.d.ts": 5135,
+   "dist/receipt.d.ts": 944,
+   "dist/reference-span-CILpclrz.d.ts": 2017,
+   "dist/rulers-Ct-5W_xK.d.ts": 835,
+   "dist/sky.d.ts": 8030,
+   "dist/techniques.d.ts": 22342,
+   "dist/time-bands-CZA9AlLg.d.ts": 1735,
+   "dist/time-scale-DIFNa0gz.d.ts": 1977,
+   "dist/time.d.ts": 3883,
+   "dist/timing.d.ts": 23905,
+   "dist/types-OLK4AtUS.d.ts": 12707,
+   "dist/vedic.d.ts": 21093,
+   "dist/window.d.ts": 8747,
+   "dist/zone-history-DgZ5Ua3q.d.ts": 12289
+  }
+ },
+ "difference": {
+  "files": 0,
+  "archiveBytes": 12345,
+  "archiveRatio": 1.005,
+  "unpacked": 37912,
+  "unpackedRatio": 1.008,
+  "kinds": {
+   "de440Pack": 0,
+   "rootJavaScript": 5139,
+   "optInJavaScript": 9017,
+   "zoneHistories": 0,
+   "declarations": 6408,
+   "documents": 17347,
+   "manifest": 1
+  },
+  "added": [
+   "dist/chunk-6IAG7PLQ.js",
+   "dist/chunk-76T5NOBY.js",
+   "dist/chunk-7Y2F2IWN.js",
+   "dist/chunk-AKAHHUVE.js",
+   "dist/chunk-BMDASNPB.js",
+   "dist/chunk-HRNDVLBS.js",
+   "dist/chunk-KNJ3BEAH.js",
+   "dist/chunk-SMWDFFRO.js",
+   "dist/chunk-USFWXGDO.js",
+   "dist/api-vnaf78Xb.d.ts",
+   "dist/ayanamsa-BZDd-vR9.d.ts",
+   "dist/houses-BfgH3-_D.d.ts",
+   "dist/internal-CvlwFTr6.d.ts",
+   "dist/internal-math-bDLCdufV.d.ts",
+   "dist/rulers-Ct-5W_xK.d.ts",
+   "dist/types-OLK4AtUS.d.ts",
+   "dist/zone-history-DgZ5Ua3q.d.ts"
+  ],
+  "removed": [
+   "dist/chunk-2ABJESXV.js",
+   "dist/chunk-CK4SMO2Y.js",
+   "dist/chunk-GHCBIIXR.js",
+   "dist/chunk-H3TTSMLQ.js",
+   "dist/chunk-ID4ZJGOA.js",
+   "dist/chunk-IVW3CRX2.js",
+   "dist/chunk-PFGUCNOK.js",
+   "dist/chunk-RJZS5OAR.js",
+   "dist/chunk-RSZKFHP5.js",
+   "dist/api-6wTK2zO4.d.ts",
+   "dist/ayanamsa-B4k-hzdv.d.ts",
+   "dist/houses-ChqiGA6L.d.ts",
+   "dist/internal-CH0_14d8.d.ts",
+   "dist/internal-math-HX92fW34.d.ts",
+   "dist/rulers-48cCgMif.d.ts",
+   "dist/types-DZtUTDMK.d.ts",
+   "dist/zone-history-CePc9DjG.d.ts"
+  ]
+ }
+}

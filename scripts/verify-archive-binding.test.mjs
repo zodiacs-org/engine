@@ -223,6 +223,58 @@ describe("archive binding check", () => {
     expect(result.output).toContain("artifacts/zodiacs-engine-0.0.2.tgz was committed and is missing from HEAD");
   });
 
+  it("admits a withdrawn version only as pinned: absent from HEAD, set aside in its commits' manifests, never packed again", () => {
+    // As with 1.1.0-rc.8: main carries 0.0.1; a side branch carries 0.0.3 on
+    // it; main carries 0.0.2; then the branch is merged with its archive
+    // removed and its entry recorded as superseded in the commit that held it.
+    const r = repository();
+    const s1 = r.source("0.0.1");
+    r.carry("0.0.1", r.pack(r.metadata("0.0.1")), s1);
+    r.commit("carry 0.0.1");
+    r.git("checkout", "-q", "-b", "side");
+    const s3 = r.source("0.0.3");
+    const withdrawnBytes = r.pack(r.metadata("0.0.3"));
+    r.carry("0.0.3", withdrawnBytes, s3);
+    const c3 = r.commit("carry 0.0.3 on the side branch");
+    const sideEntry = r.entries.pop();
+    r.git("checkout", "-q", "main");
+    const s2 = r.source("0.0.2");
+    r.carry("0.0.2", r.pack(r.metadata("0.0.2")), s2);
+    r.commit("carry 0.0.2");
+    r.git("merge", "-q", "--no-commit", "-s", "ours", "side");
+    r.entries.push({ ...sideEntry, status: "superseded", onlyInCommit: c3 });
+    r.writeManifest();
+    r.commit("merge the side branch, its archive withdrawn");
+    r.source("0.0.4");
+    const pinned = { ...sideEntry, onlyInCommit: c3 };
+    delete pinned.status;
+    const withdrawn = pinnedFile([{ ...pinned, withdrawn: true }]);
+    const clean = r.check("--pinned-superseded", withdrawn);
+    expect(clean.output).toContain("3 recorded archives (2 carried, 1 superseded)");
+    expect(clean.status).toBe(0);
+    // Pinned as an ordinary superseded archive, the same history is refused: the
+    // branch's manifest is not a prefix of HEAD's, and its files are gone.
+    const ordinary = r.check("--pinned-superseded", pinnedFile([pinned]));
+    expect(ordinary.status).toBe(1);
+    expect(ordinary.output).toContain("is not a prefix of HEAD's");
+    expect(ordinary.output).toContain("artifacts/zodiacs-engine-0.0.3.tgz was committed and is missing from HEAD");
+    // Not pinned at all, it is refused as any superseded entry is.
+    expect(r.check().output).toContain("is a superseded entry that this script does not pin");
+    // The withdrawn version is never packed again: not as HEAD's version,
+    for (const [name, text] of Object.entries(r.metadata("0.0.3"))) r.write(name, text);
+    r.commit("name the withdrawn version again");
+    const renamed = r.check("--pinned-superseded", withdrawn);
+    expect(renamed.status).toBe(1);
+    expect(renamed.output).toContain("is the withdrawn 0.0.3");
+    // and its archive may not come back into HEAD.
+    for (const [name, text] of Object.entries(r.metadata("0.0.4"))) r.write(name, text);
+    writeFileSync(join(r.dir, "artifacts", "zodiacs-engine-0.0.3.tgz"), withdrawnBytes);
+    r.commit("restore the withdrawn archive");
+    const restored = r.check("--pinned-superseded", withdrawn);
+    expect(restored.status).toBe(1);
+    expect(restored.output).toContain("is an archive or receipt of a withdrawn version and must not be in HEAD");
+  });
+
   it("allows pinned superseded bytes only in their pinned commit, and refuses any other superseded entry", () => {
     // As with rc.11: the first packing is carried with its source, then one
     // commit changes the source and replaces the archive under the same

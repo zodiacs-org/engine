@@ -51,16 +51,17 @@ export function validateBirthSettings(birth: BirthSettings): BirthSettings {
   };
 }
 
-const FLAGS: readonly ChartFlag[] = [
-  "dst-gap",
-  "dst-fold",
-  "lmt",
+/** Flags the engine derives from the calculation; a caller may only echo them. */
+const DERIVED_FLAGS = [
   "no-time",
   "polar-fallback",
-  "outside-reference-span"
-];
-/** Flags the engine derives from the calculation; a caller may only echo them. */
-const DERIVED_FLAGS = ["no-time", "polar-fallback", "outside-reference-span"] as const;
+  "outside-reference-span",
+  "delta-t-extrapolated",
+  "de440-unavailable",
+  "outside-de440-span"
+] as const;
+const FLAGS: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", ...DERIVED_FLAGS];
+
 
 export interface FlagSnapshot {
   values: ChartFlag[];

@@ -52,6 +52,14 @@ export type CrossingSearchResult =
       crossings: LongitudeCrossing[];
       /** Longitude evaluations made. */
       samples: number;
+      /**
+       * Set by the root entry's `searchLongitudeCrossings`, on the engine's
+       * own ephemeris: `"de440-unavailable"` or `"outside-de440-span"` where
+       * a longitude of the search was astronomy-engine's as a fallback from
+       * the shipped DE440 pack, or empty. Absent from a search on a caller's
+       * longitudes.
+       */
+      flags?: ("de440-unavailable" | "outside-de440-span")[];
     }
   | {
       status: "refused";

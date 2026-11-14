@@ -43,6 +43,9 @@ jobs:
       - name: This engine's verdicts match the committed results
         run: node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs" --check conformance/results/zodiacs-engine.json
 
+      - name: The verdicts of the engine on astronomy-engine, its fallback, match the committed results
+        run: node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs --ephemeris astronomy-engine" --check conformance/results/zodiacs-engine-astronomy-engine.json
+
       - name: RESULTS.md and summary.json are current
         run: node conformance/harness/report.mjs --check
 

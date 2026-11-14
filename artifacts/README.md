@@ -28,7 +28,12 @@ included, and fails unless:
   history is a prefix of HEAD's, entry for entry, and each commit's extends its
   parents'. Its superseded entries are exactly the ones pinned in the script:
   rc.11's first packing, allowed only in commit `00bdae7`, where it was
-  committed;
+  committed, and the withdrawn 1.1.0-rc.8, allowed only in the three commits
+  of pull request 101's branch that held it (`7dec96f`, `3de6a27` and
+  `0738bc9`). A withdrawn version has no carried archive and never gets one;
+  its archive and receipt are absent from HEAD; and in its pinned commits
+  alone the manifest recorded it as carried, an entry that is set aside when
+  those manifests are compared with their children's and with HEAD's;
 - every recorded version, every `<version>` in a file name here, and
   `package.json`'s version at HEAD is a strict semantic version: SemVer 2.0.0
   with no `v` prefix, no build metadata and no numeric identifier above
@@ -40,7 +45,8 @@ included, and fails unless:
   tree with the receipt naming the recorded bytes, and this README lists every
   recorded digest;
 - in every commit, each archive and receipt holds only its recorded bytes, and
-  nothing ever committed under `artifacts/` is missing from HEAD;
+  nothing ever committed under `artifacts/` is missing from HEAD, but the
+  archive and receipt of a withdrawn version, which must be;
 - each archive's source commit is in the history of HEAD and names its
   version, the commit that introduces the archive is that source commit or a
   child of it, and the packed `package.json`, README, CHANGELOG, LICENSE,
@@ -102,6 +108,19 @@ runs, so CI starts the check with node directly.
 | 1.1.0-rc.3 | `3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590` | 331,979 | 94 | `cc910b3775e279222e23af0b395bb6f2b51a3c3a` | `d2794d2` | Candidate, merged |
 | 1.1.0-rc.6 | `648714ca7485c7381f338286b84a211752ddd425035f50f6e24267e80de6abde` | 333,982 | 94 | `c3efe9175644ee6a0d9f40e2d9fa0766aa264fa6` | `7210037` | Draft candidate, awaiting the owner's review |
 | 1.1.0-rc.7 | `71348be1f8dc2772945cc86c72af475091d105da9e7ff5b4411c517adc9fc80a` | 335,403 | 94 | `ca3ae0ff197e0b4e7bfc68bf88c3d0afbeb360f8` | "Carry the packed 1.1.0-rc.7 tarball" | Draft candidate, awaiting the owner's review |
+| 1.1.0-rc.8 | `53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43` | 2,696,971 | 97 | `e3939499d603e511f1f23f7198eb425bc5f48359` | `7dec96f` | **Withdrawn before merge; never released; no file here.** Still reachable in the commits `7dec96f`, `3de6a27` and `0738bc9`. |
+| 1.1.0-rc.9 | `f1801f0a35ef643a89c73ecd280e1e41142ae36e12c3690433536f9c3368396a` | 2,703,974 | 98 | `18bcfca5e7bed57e797ee09da2221c1fbc8e9f33` | "Carry the packed 1.1.0-rc.9 tarball" | Draft candidate, superseded by 1.1.0-rc.10 on the same pull request before review; never tagged or published. Still this file |
+| 1.1.0-rc.10 | `7fbdf3ade2a3350970e8e4195cda02ad596cbc2ca46c955ceae44a0ce7613246` | 2,716,319 | 98 | `cafc5dbd96d233cd730672a0a2827ccbbe82623d` | "Carry the packed 1.1.0-rc.10 tarball" | Draft candidate for 1.1.0, awaiting the owner's review |
+
+1.1.0-rc.9 and 1.1.0-rc.10 are two cuts of one draft, pull request 101.
+1.1.0-rc.9 was carried on 2026-11-14 and reviewed in draft; the owner then
+asked for `calc()` and `birthWindow` on DE440, for a fallback that is never
+silent, and for pull request 102 to be included. Those change packed files,
+and 1.1.0-rc.9 was already carried, so by the rule above the new bytes took
+a new version and 1.1.0-rc.9's archive stays, unchanged, with its receipt
+and its entry: nothing was repacked under its number and the check needed no
+exception. 1.1.0-rc.9 was never tagged or published and is not meant to be;
+1.1.0-rc.10 is the candidate for 1.1.0.
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
@@ -355,3 +374,48 @@ DE440 sweep's workflow had run on it (run 43055363587) and found every
 largest difference within the limits it quotes. No independent review of
 this candidate has been done. It is not to be published on npm until the
 owner approves it. The record is in `docs/evidence/1.1.0-rc.7-20261111/`.
+
+1.1.0-rc.8 is the second breach of "once carried, never removed", and the
+one withdrawn version. It was a draft candidate cut on 1.1.0-rc.3 in pull
+request 101 (source commit `e393949`, carried in `7dec96f` on 2026-11-13): the
+sealed DE440 pack, shipped behind a new entry point, with a plain call still
+on astronomy-engine. While it waited for review the owner merged 1.1.0-rc.6
+and 1.1.0-rc.7 into main (pull requests 91, 92 and 95, then 100). The two
+branches had each appended to 1.1.0-rc.3's manifest, and an append-only
+manifest cannot hold both orders, so one had to give way; and the archive,
+built on 1.1.0-rc.3, held none of 1.1.0-rc.6's or 1.1.0-rc.7's changes, so it
+was not a candidate anyone should install. A second session's review of it
+also found that it did not do what was asked of it: a plain `natalChart` was
+not on DE440 (`docs/evidence/1.1.0-rc.8-20261113/breaker/`). Its archive and
+receipt were therefore removed in the commit that merged main into the
+branch, its manifest entry became three superseded entries, one for each
+commit that held the bytes, and `scripts/verify-archive-binding.mjs` pins
+those three commits and refuses any archive, or any `package.json`, that
+names 1.1.0-rc.8 again. `53df553c…` must not be installed or cited as a
+candidate. It was never pushed to npm, tagged or released. Changing the check
+to admit this is a change that review must catch, as the threat model above
+says: it is for the owner to accept with pull request 101, and the
+alternative, keeping the 1.1.0-rc.8 file in `artifacts/` as a superseded
+archive, needs the same pinned exception for the manifest's order.
+
+1.1.0-rc.9 is the next candidate for 1.1.0 after 1.1.0-rc.7, cut as a draft
+for the owner's review on main at `6825eb3` (1.1.0-rc.7 with pull request
+100 merged): the sealed DE440 pack, shipped in the package, and the root
+entry computing on it by default, so that a plain `natalChart` is on JPL's
+DE440 inside 1790 to 2210 and on astronomy-engine outside, and says which;
+seventeen public entry points. Its source commit is the merge of main into
+pull request 101's branch. The archive is 2,703,974 bytes, 4,502,147
+unpacked in 98 files, 8.1 times 1.1.0-rc.7's packed size and 3.9 times its
+unpacked size: 3,319,552 of those bytes are the pack, as base64 text, which
+the package gate holds to its exact size and digest in one file, and the
+rest, 1,182,595, is under a cap of 1,185,000, raised from 1,155,000, with ten
+entry budgets raised; the size and every one of those figures are for the
+owner to approve (CHANGELOG.md). It was packed once, from clean clones of its
+source commit, each installed with `npm ci`; the carried file is the Node
+22.22.2 one, and `docs/evidence/1.1.0-rc.9-20261114/` records which other
+Node versions packed the same bytes. It was carried after the gate commands
+had passed locally on the source commit, and before the gate workflows had
+run on it or any review had read it. It is not to be published on npm until
+the owner approves it, and its licensing record leaves the redistribution of
+the pack as an open question (LICENSING.md, *DE440 pack*). The record is in
+`docs/evidence/1.1.0-rc.9-20261114/`.

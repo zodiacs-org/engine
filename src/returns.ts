@@ -1,8 +1,8 @@
 import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith } from "./crossings.js";
 import type { CrossingSearchOptions, CrossingSearchResult, LongitudeCrossing } from "./crossings.js";
 import { dateFrom } from "./date-input.js";
-import { SPEED_STEP_DAYS, bodyLongitude, longitudeSpeed } from "./ephemeris.js";
-import type { BodyName, DateInput } from "./types.js";
+import { SPEED_STEP_DAYS, bodyLongitude, longitudeSpeed, notingFallbacks } from "./ephemeris.js";
+import type { BodyName, DateInput, EphemerisFallback } from "./types.js";
 
 const DAY = 86_400_000;
 
@@ -30,6 +30,15 @@ export interface SaturnReturnResult {
   natalLon: number;
   natalRetrograde: boolean;
   seasons: ReturnSeason[];
+  /** The ephemeris natal Saturn came from, as a BodyPosition names it; set by `saturnReturn` from 1.1.0-rc.10. */
+  ephemeris?: string;
+  /**
+   * Each kind of fallback from the shipped DE440 pack to astronomy-engine
+   * that the natal position or the search to about age 92 met, or none: a
+   * search that runs past the pack's last year reports `"outside-de440-span"`.
+   * Set by `saturnReturn` from 1.1.0-rc.10.
+   */
+  flags?: EphemerisFallback[];
 }
 
 /**
@@ -56,7 +65,10 @@ export function findLongitudeCrossings(
  * {@link findLongitudeCrossings} under an optional budget of ephemeris
  * evaluations, `maxSamples`, with the step as `stepDays` (default 5). Over
  * budget, it returns `{ status: "refused", reason: "sample-budget" }` with no
- * crossings rather than throwing.
+ * crossings rather than throwing. A complete result carries `flags`: each
+ * kind of fallback from the shipped DE440 pack to astronomy-engine that a
+ * longitude of the search met (`EphemerisFallback`), or none.
+ * `findLongitudeCrossings` returns the bare crossings and cannot say.
  */
 export function searchLongitudeCrossings(
   body: BodyName,
@@ -65,7 +77,11 @@ export function searchLongitudeCrossings(
   to: DateInput,
   options?: CrossingSearchOptions
 ): CrossingSearchResult {
-  return searchLongitudeCrossingsWith(bodyLongitude, body, targetLongitude, windowEnd(from, "start"), windowEnd(to, "end"), options);
+  const { value, fallbacks } = notingFallbacks(() =>
+    searchLongitudeCrossingsWith(bodyLongitude, body, targetLongitude, windowEnd(from, "start"), windowEnd(to, "end"), options)
+  );
+  // A complete search says which fallbacks from the shipped DE440 pack its longitudes met, if any.
+  return value.status === "complete" ? { ...value, flags: fallbacks } : value;
 }
 
 export function groupIntoSeasons(

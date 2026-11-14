@@ -1,0 +1,58 @@
+changed base64 character 1,000,000 of the pack text in chunk-2ABJESXV.js: 'Q' to 'A'
+[as-installed] 2000-01-01T12:00:00Z: chart.ephemeris jpl-de440; flags ["no-time"]; Pluto 251.4547533401717; receipt engine {"ephemeris":{"name":"jpl-de440","version":"51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"},"name":"@zodiacs/engine","version":"1.1.0-rc.9"}
+[as-installed] 1700-06-01T12:00:00Z: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; Pluto 129.2685376634297; receipt engine {"ephemeris":{"name":"astronomy-engine","version":"2.1.19"},"name":"@zodiacs/engine","version":"1.1.0-rc.9"}
+[as-installed] defaultEphemeris(): {"name":"de440","de440":{"opened":true,"version":"51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7","fromTtDays":-76699.5,"toTtDays":76699.5,"error":null}}
+[as-installed] shippedDe440Source(): opened
+[no-atob] 2000-01-01T12:00:00Z: chart.ephemeris absent; flags ["no-time"]; Pluto 251.4547389492442; receipt engine {"ephemeris":{"name":"astronomy-engine","version":"2.1.19"},"name":"@zodiacs/engine","version":"1.1.0-rc.9"}
+[no-atob] 1700-06-01T12:00:00Z: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; Pluto 129.2685376634297; receipt engine {"ephemeris":{"name":"astronomy-engine","version":"2.1.19"},"name":"@zodiacs/engine","version":"1.1.0-rc.9"}
+[no-atob] defaultEphemeris(): {"name":"de440","de440":{"opened":false,"version":null,"fromTtDays":null,"toTtDays":null,"error":"ReferenceError: atob is not defined"}}
+[no-atob] shippedDe440Source(): threw ReferenceError: atob is not defined
+[as-installed] import of the root, ms: 34.4
+[as-installed] first natalChart (opens the pack), ms: 64.5
+[as-installed] second natalChart, ms: 1.5
+[as-installed] defaultEphemeris(): {"name":"de440","de440":{"opened":true,"version":"51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7","fromTtDays":-76699.5,"toTtDays":76699.5,"error":null}}
+[as-installed] chart.ephemeris at 2000-01-01: {"name":"jpl-de440","version":"51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"}
+[as-installed] chart.flags at 2000-01-01: ["no-time"]
+[as-installed] Sun, Moon, Pluto longitude at 2000-01-01: [280.36816535966096,223.3148700367613,251.4547533401717]
+[as-installed] 1700-06-01T00:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 1700-06-01T12:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 1789-12-30T00:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 1789-12-30T12:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 1789-12-31T00:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 1789-12-31T12:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 1790-01-01T00:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 1790-01-01T12:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 1790-01-02T00:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 1790-01-02T12:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 1790-01-03T00:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 1790-01-03T12:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 1790-01-04T00:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 1790-01-04T12:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2000-01-01T00:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time"]; all speeds finite true
+[as-installed] 2000-01-01T12:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time"]; all speeds finite true
+[as-installed] 2209-12-28T00:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2209-12-28T12:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2209-12-29T00:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2209-12-29T12:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2209-12-30T00:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2209-12-30T12:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2209-12-31T00:00:00 TT: chart.ephemeris jpl-de440; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2209-12-31T12:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2210-01-01T00:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2210-01-01T12:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2210-01-02T00:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2210-01-02T12:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2300-06-01T00:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] 2300-06-01T12:00:00 TT: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; all speeds finite true
+[as-installed] findLongitudeCrossings Sun 280 2209-12-01T00:00:00Z to 2210-02-01T00:00:00Z: ["2210-01-01T02:39:53.350Z"]
+[as-installed] findLongitudeCrossings Sun 280 1789-12-01T00:00:00Z to 1790-02-01T00:00:00Z: ["1789-12-31T03:30:44.509Z"]
+[as-installed] lower switch instant (TT): 1790-01-02T00:00:00.000Z
+[as-installed] Sun one second before (astronomy-engine) and after (jpl-de440) the switch: step in arcsec: -0.41739810844774183
+[as-installed] Moon one second before (astronomy-engine) and after (jpl-de440) the switch: step in arcsec: -9.150998727318438
+[as-installed] Pluto one second before (astronomy-engine) and after (jpl-de440) the switch: step in arcsec: -22.644246512390964
+[as-installed] North Node one second before (astronomy-engine) and after (jpl-de440) the switch: step in arcsec: -4.996479323517633
+[as-installed] setDefaultEphemeris("swiss"): threw TypeError
+[one-character-changed] 2000-01-01T12:00:00Z: chart.ephemeris absent; flags ["no-time"]; Pluto 251.4547389492442; receipt engine {"ephemeris":{"name":"astronomy-engine","version":"2.1.19"},"name":"@zodiacs/engine","version":"1.1.0-rc.9"}
+[one-character-changed] 1700-06-01T12:00:00Z: chart.ephemeris absent; flags ["no-time","outside-reference-span"]; Pluto 129.2685376634297; receipt engine {"ephemeris":{"name":"astronomy-engine","version":"2.1.19"},"name":"@zodiacs/engine","version":"1.1.0-rc.9"}
+[one-character-changed] defaultEphemeris(): {"name":"de440","de440":{"opened":false,"version":null,"fromTtDays":null,"toTtDays":null,"error":"De440Error: the pack's SHA-256 is not the one expected"}}
+[one-character-changed] shippedDe440Source(): threw De440Error: the pack's SHA-256 is not the one expected

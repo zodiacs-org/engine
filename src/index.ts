@@ -9,7 +9,8 @@ export {
   transits
 } from "./api.js";
 export type { NatalSource, SaturnReturnSource } from "./api.js";
-export { withEphemeris } from "./ephemeris.js";
+export { defaultEphemeris, setDefaultEphemeris, withEphemeris } from "./ephemeris.js";
+export type { DefaultEphemeris, DefaultEphemerisName } from "./ephemeris.js";
 
 export { PROGRESSION_DAYS_PER_YEAR, progressedBodies, progressedInstant } from "./progressions.js";
 
@@ -161,6 +162,7 @@ export type {
   ChartPoints,
   DateInput,
   Element,
+  EphemerisFallback,
   HouseNumber,
   Houses,
   HouseSystem,

@@ -311,7 +311,7 @@ interface SolarArcDirections {
 
 declare const TRADITIONAL_RULERS: Readonly<Record<ZodiacSign, TraditionalPlanet>>;
 
-type TimingFlag = "outside-reference-span" | "sect-contradicts-altitude";
+type TimingFlag = "outside-reference-span" | "sect-contradicts-altitude" | EphemerisFallback;
 
 interface TimingOrigin {
     readonly point: ChartLongitudeName | null;
@@ -358,7 +358,7 @@ declare function zodiacalReleasing(natal: NatalSource, lot: ReleasingLot, from: 
 declare function zodiacalReleasingAt(natal: NatalSource, lot: ReleasingLot, date: DateInput, options?: ReleasingAtOptions): ReleasingAt;
 ```
 
-## Referenced, not exported here (23)
+## Referenced, not exported here (24)
 
 ```ts
 // exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
@@ -405,6 +405,8 @@ interface BodyPosition {
     retrograde: boolean;
     sign: ZodiacSign;
     degree: number;
+    ephemeris?: string;
+    fallback?: EphemerisFallback;
 }
 
 // exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart)
@@ -425,7 +427,7 @@ interface Chart {
 }
 
 // exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span";
+type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 // exported by @zodiacs/engine (ChartInput)
 interface ChartInput {
@@ -454,6 +456,9 @@ interface DeltaT {
 
 // exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
 type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
+
+// exported by @zodiacs/engine (EphemerisFallback)
+type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
 
 // exported by @zodiacs/engine (HouseNumber)
 type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;

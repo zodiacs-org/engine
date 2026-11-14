@@ -176,11 +176,14 @@ describe("withEphemeris", () => {
     expect(positions(instant)).toEqual(outside);
   });
 
-  it("names the source in a chart computed inside it, and nothing outside it", async () => {
+  it("names the source in a chart computed inside it, and the default source's outside it", async () => {
     const source = await open();
     const birth = { utc: instant, latitude: 10, longitude: 20 };
     expect(withEphemeris(source, () => natalChart(birth)).ephemeris).toEqual({ name: "jpl-de440", version: DIGEST });
-    expect(Object.hasOwn(natalChart(birth), "ephemeris")).toBe(false);
+    // The suite's default is astronomy-engine (src/test-setup.ts), by choice: named, and no fallback flagged.
+    const outside = natalChart(birth);
+    expect(outside.ephemeris).toEqual({ name: "astronomy-engine", version: "2.1.19" });
+    expect(outside.flags).toEqual([]);
   });
 
   it("gives moonPhase the source's Sun and Moon", async () => {

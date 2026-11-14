@@ -1,0 +1,90 @@
+{
+  "version": "1.1.0-rc.10",
+  "de440": "passed",
+  "de440Pack": "passed",
+  "birthWindow": "passed",
+  "techniques": "passed",
+  "sky": "passed",
+  "houses": "passed",
+  "planetaryReturns": "passed",
+  "timeBasis": "passed",
+  "timeEntry": "passed",
+  "liteEntry": "passed",
+  "zoneHistory": "passed",
+  "timing": "passed",
+  "configuredAspects": "passed",
+  "exactAspectBoundaries": "passed",
+  "chartDeclinations": "passed",
+  "sunConvention": "passed",
+  "boundMargin": "passed",
+  "exactSeparation": "passed",
+  "ephemerisSpan": "passed",
+  "metadata": "passed",
+  "bodyLabels": "passed",
+  "ephemerisRangeErrors": "passed",
+  "crossings": "passed",
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "oneZeroAdditions": "passed",
+  "conventionIds": "passed",
+  "fallback": {
+    "missing": {
+      "expected": "unavailable",
+      "error": "De440Error: the pack's SHA-256 is not the one expected",
+      "natalFlags": [
+        "de440-unavailable"
+      ],
+      "ephemeris": "astronomy-engine"
+    },
+    "damaged-one-character": {
+      "expected": "unavailable",
+      "error": "De440Error: the pack's SHA-256 is not the one expected",
+      "natalFlags": [
+        "de440-unavailable"
+      ],
+      "ephemeris": "astronomy-engine"
+    },
+    "damaged-cut-short": {
+      "expected": "unavailable",
+      "error": "De440Error: the pack's SHA-256 is not the one expected",
+      "natalFlags": [
+        "de440-unavailable"
+      ],
+      "ephemeris": "astronomy-engine"
+    },
+    "undecodable": {
+      "expected": "unavailable",
+      "error": "InvalidCharacterError: Invalid character",
+      "natalFlags": [
+        "de440-unavailable"
+      ],
+      "ephemeris": "astronomy-engine"
+    },
+    "restored": {
+      "expected": "whole",
+      "error": null,
+      "natalFlags": [],
+      "ephemeris": "jpl-de440"
+    }
+  },
+  "artifact": "/workspace/wt/engine-rc-de440/artifacts/zodiacs-engine-1.1.0-rc.10.tgz",
+  "sha256": "7fbdf3ade2a3350970e8e4195cda02ad596cbc2ca46c955ceae44a0ce7613246",
+  "runtime": "v24.21.0",
+  "typescript": "5.9.3",
+  "typeRoots": "none (types: [])",
+  "directory": "/tmp/job9rc/tmp/zodiacs-engine-consumer-cWEwI8",
+  "types": "passed",
+  "directoryRemoved": true
+}

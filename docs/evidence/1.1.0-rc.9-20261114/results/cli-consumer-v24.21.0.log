@@ -1,0 +1,5 @@
+CLI checkout byte receipt: {"schema":"zodiacs.cli-checkout-bytes.v1","checkedFiles":73,"method":"Only tracked tools/cli/, conformance/ and root LICENSE, restored from HEAD Git blobs without text conversion","changed":[]}
+CLI suite bundle: 500 vectors, 37 source files
+
+added 3 packages in 407ms
+CLI consumer: 29 checks passed; conformance {"count":500,"pass":267,"fail":192,"unsupported":41,"error":0}

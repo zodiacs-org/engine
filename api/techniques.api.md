@@ -264,7 +264,7 @@ declare const TRIPLICITY_LORDS: Readonly<Record<Element, {
     readonly participating: ClassicalPlanet;
 }>>;
 
-type TechniqueFlag = "outside-reference-span";
+type TechniqueFlag = "outside-reference-span" | EphemerisFallback;
 
 declare const VOID_BODIES: Readonly<Record<VoidBodies, readonly VoidBody[]>>;
 
@@ -368,7 +368,7 @@ declare function voidOfCourseAt(at: DateInput, options?: VoidOfCourseOptions): V
 declare function voidOfCourseWindows(from: DateInput, to: DateInput, options?: VoidOfCourseOptions): readonly VoidOfCourseWindow[];
 ```
 
-## Referenced, not exported here (22)
+## Referenced, not exported here (23)
 
 ```ts
 // exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
@@ -415,6 +415,8 @@ interface BodyPosition {
     retrograde: boolean;
     sign: ZodiacSign;
     degree: number;
+    ephemeris?: string;
+    fallback?: EphemerisFallback;
 }
 
 // exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart)
@@ -435,7 +437,7 @@ interface Chart {
 }
 
 // exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span";
+type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 // exported by @zodiacs/engine (ChartInput)
 interface ChartInput {
@@ -467,6 +469,9 @@ type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | 
 
 // exported by @zodiacs/engine (Element)
 type Element = "fire" | "earth" | "air" | "water";
+
+// exported by @zodiacs/engine (EphemerisFallback)
+type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
 
 // exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
 type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";

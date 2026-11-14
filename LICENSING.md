@@ -2,8 +2,13 @@
 
 Status: **GO for a package licensed `MIT AND CC-BY-4.0`**, subject to the
 repository operator having authority to publish the Zodiacs.org-authored
-TypeScript under the MIT license, and with three questions left open for the
-owner: no statement of terms was found for IERS EOP 20 C04, so whether its
+TypeScript under the MIT license, and with four questions left open for the
+owner: the package ships a pack of series refitted from JPL's DE440, which
+the owner holds to be public data (2026-11-13), and NAIF's rules permit
+redistributing its kernels unmodified but do not speak of data refitted from
+one, so whether the pack may be redistributed without other terms rests on
+the owner's reading and not on a statement of JPL's or NAIF's (*DE440
+pack*); no statement of terms was found for IERS EOP 20 C04, so whether its
 367 rows of 1972 that the repository carries, and the values the package
 derives from it (the UT1 table in 1972 and some of the ΔT table's values from
 1941), may be redistributed without other terms is not settled (*IERS
@@ -84,7 +89,11 @@ license as it is. The runtime's own nutation table, which its `NOTICE.md`
 gives as ERFA's (BSD 3-Clause), was not taken: the port sums the engine's
 table, arguments and offsets (*Nutation* below), which equal the runtime's
 term for term and double for double. `src/de440/kernel.testkit.ts`, a reader
-of `de440.bsp` for the tests, is not packed.
+of `de440.bsp` for the tests, is not packed. `src/de440-pack.ts`, added in
+1.1.0-rc.9 and built into a shared chunk under `dist/`, and
+`src/de440/sha256.ts`, a SHA-256 written for this package from FIPS 180-4,
+are this package's own code;
+the pack it carries is the subject of *DE440 pack* below.
 
 The site repository's `LICENSE` at both commits reserves all rights in its
 contents but the parts it names (the engine, whose code it states is MIT, its
@@ -159,6 +168,80 @@ port or translation of Swiss Ephemeris code. This licensing decision must be
 revisited before accepting any Swiss Ephemeris source, binary, table, or
 generated fixture into the package.
 
+## DE440 pack
+
+From 1.1.0-rc.9 the package carries a sealed DE440 pack, and its root entry
+computes on it by default (`docs/de440.md`, *The default source*).
+`scripts/build-de440-pack.mjs` writes it, as base64 text, into
+`src/de440/pack-data.ts`, which the build places in one shared chunk under
+`dist/` that the root's ephemeris chunk and `dist/de440-pack.js`, the file of
+`@zodiacs/engine/de440/pack`, import, and in no other file
+(`scripts/verify-package-contents.mjs` checks that, and the pack's digest).
+The withdrawn draft 1.1.0-rc.8 carried the same pack behind that entry
+alone.
+The pack is `de440-1790-2210.v2.zeph`, 2,489,664 bytes, SHA-256
+`51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7`: Chebyshev
+series for the Sun, the Moon, the Earth-Moon barycentre, Mercury, Venus and
+the barycentres of the systems of Mars to Pluto, from 1790 to 2210, which
+zodiacs.org's pack compiler 2.0.0 (part of its research runtime, MIT, above)
+refits body by body from NAIF's SPICE kernel `de440.bsp` (SHA-256
+`a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5`, 119,799,808
+bytes, fetched 2026-11-13 from
+https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440.bsp)
+and quantises (`docs/de440.md`, *The pack*). The kernel is in neither the
+repository nor the package. The ephemeris is the Jet Propulsion Laboratory's:
+R. S. Park, W. M. Folkner, J. G. Williams and D. H. Boggs, "The JPL Planetary
+and Lunar Ephemerides DE440 and DE441", The Astronomical Journal 161, 105
+(2021), which `NOTICE` cites.
+
+The pack holds values derived from DE440, not DE440's own coefficients: the
+compiler fits new series on records of its own and stores their coefficients
+quantised, so no record of the kernel is in it.
+
+What the providers state, read 2026-11-13:
+
+- **NAIF, "Rules Regarding Use of SPICE"**
+  (https://naif.jpl.nasa.gov/naif/rules.html; the page as served, 23,487
+  bytes, SHA-256
+  `ae85f851646e7c4f0a762db852907bc090a2ab50c815eb2a6cd8639e96b7e047`):
+  "Redistribution of SPICE kernels distributed by NAIF is permitted as long
+  as they have not been modified. If a kernel distributed by NAIF has been
+  modified in any way, any embedded or otherwise allied attribution of the
+  original kernel producer must be replaced with the name and institution of
+  whomever has made the last modification." And, of commercial use: "No fees
+  or licensing are required. Acknowledgement of the use of NASA's SPICE
+  system is encouraged."
+- **JPL Solar System Dynamics, "JPL Planetary and Lunar Ephemerides"**
+  (https://ssd.jpl.nasa.gov/planets/eph_export.html; the page as served,
+  29,979 bytes, SHA-256
+  `ce7db9fc032a395318911b6b07cb2f12717f2849dc9938cbd207cb662f4d1687`) names
+  DE440 and the paper above and where the files are. It states no licence
+  and no terms of redistribution.
+
+What follows from those statements, and what does not. The package does not
+redistribute a kernel, so the permission for unmodified kernels is not what
+it relies on. The pack is data that Zodiacs.org made from a kernel, and the
+rule for a modified kernel, read onto it, asks that the attribution name
+whoever made the last modification: `NOTICE` and `docs/de440.md` say that
+Zodiacs.org made the pack, name JPL's ephemeris as its source, and say that
+JPL and NAIF have not reviewed it. NAIF's rules speak of SPICE kernels; they
+do not speak of data refitted from one, and no statement of JPL's on
+redistributing DE440 or data derived from it was found. NAIF's directory of
+the planetary kernels has no readme for DE440 (its two `aareadme` files are
+for DE430, DE431 and DE432s), and its `de440_tech-comments.txt`, which a
+second session read in full on 2026-11-13, gives constants and the reference
+above and no terms (`docs/evidence/1.1.0-rc.8-20261113/breaker/README.md`).
+The owner's position, given on 2026-11-13, is that DE440 is JPL's public data.
+1.1.0-rc.3 shipped no pack while a question about redistributing one was
+with NAIF (`docs/de440.md` at 1.1.0-rc.3); no answer to it is
+recorded in this repository. Shipping the pack therefore rests on the
+owner's reading. It is the first open question in the status at the top of
+this file, to be settled, or accepted by the owner in writing, before this
+candidate is published.
+
+The pack does not change the SPDX expression: no licence is asserted for it
+that its providers do not state, as for the IERS data below.
+
 ## ΔT data
 
 `src/deltat.ts` ships 32 values of Table S15 of Stephenson, Morrison &
@@ -183,7 +266,8 @@ of its five fundamental arguments and its two fixed offsets for the planetary
 terms. The build places them in a shared chunk under `dist/` that the
 ephemeris chunk, `dist/time.js` and `dist/de440.js` import, so the graphs of
 the root, `./calc`, `./de440`, `./internal`, `./sky`, `./techniques`,
-`./time`, `./timing`, `./vedic` and `./window` load them;
+`./time`, `./timing`, `./vedic` and `./window` load them, and so does that
+of `./de440/pack`, which opens its pack with `./de440`;
 `@zodiacs/engine/de440` sums the same terms in the order the research
 runtime of zodiacs.org sums them. The model is D. D.
 McCarthy and B. J. Luzum, "An abridged model of the precession-nutation of

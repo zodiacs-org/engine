@@ -1,0 +1,13 @@
+tarball zodiacs-engine-1.1.0-rc.8.tgz: sha256 53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43, 2696971 bytes
+node_modules after install: @zodiacs/engine astronomy-engine 
+installed package: 97 files, 4477785 bytes
+process.env or ZODIACS mentions in installed dist: 0 files
+fetch( / XMLHttpRequest / node:fs / node:http mentions in installed dist: 0 files
+run: network unshared
+@zodiacs/engine 1.1.0-rc.8 from <consumer>/node_modules/@zodiacs/engine/dist/index.js; node v22.22.2; ZODIACS* variables: 0
+shipped pack bytes: 2489664, sha256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7
+plain root call (no pack opened): within 1 arcsec 48/240; longitude within 30 arcsec 240/240; largest dLon 18.7745 (L1-POS-0209 Neptune), dLat 19.0281 (L1-POS-0237 Saturn); ephemeris on the chart: null
+shipped pack through withEphemeris: within 1 arcsec 240/240; longitude within 30 arcsec 240/240; largest dLon 0.0126 (L1-POS-0002 Moon), dLat 0.0010 (L1-POS-0222 Moon); ephemeris on the chart: jpl-de440
+plain root call after the pack was used: identical to the first plain run: true
+async callback in withEphemeris threw: withEphemeris runs synchronous functions only
+consumer directory kept: /tmp/job9rc-breaker/tmp/breaker-consumer.FOoHIF

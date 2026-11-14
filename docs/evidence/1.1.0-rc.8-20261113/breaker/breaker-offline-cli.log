@@ -1,0 +1,33 @@
+CLI suite bundle: 500 vectors, 37 source files
+
+added 3 packages in 419ms
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+'fail' !== 'pass'
+
+    at file:///workspace/wt/engine-rc-de440/tools/cli/scripts/verify-consumer.mjs:177:14
+    at check (file:///workspace/wt/engine-rc-de440/tools/cli/scripts/verify-consumer.mjs:20:28)
+    at file:///workspace/wt/engine-rc-de440/tools/cli/scripts/verify-consumer.mjs:157:1 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'fail',
+  expected: 'pass',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.2
+file:///workspace/wt/engine-rc-de440/tools/cli/scripts/prepare-consumer.mjs:28
+  if (result.error || result.status !== 0) throw new Error('CLI preparation command failed');
+                                                 ^
+
+Error: CLI preparation command failed
+    at node (file:///workspace/wt/engine-rc-de440/tools/cli/scripts/prepare-consumer.mjs:28:50)
+    at file:///workspace/wt/engine-rc-de440/tools/cli/scripts/prepare-consumer.mjs:47:1
+
+Node.js v22.22.2
+exit 1

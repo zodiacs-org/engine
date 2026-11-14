@@ -158,7 +158,7 @@ declare function resolveLocalToUtc(date: string, time: string, timeZone: string,
 declare function zoneOffsetAt(timeZone: string, utcMilliseconds: number): number;
 ```
 
-## Referenced, not exported here (7)
+## Referenced, not exported here (8)
 
 ```ts
 // exported by @zodiacs/engine (BirthInput)
@@ -174,10 +174,13 @@ interface BirthInput {
 }
 
 // exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span";
+type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 // exported by @zodiacs/engine (DateInput)
 type DateInput = Date | string | number;
+
+// exported by @zodiacs/engine (EphemerisFallback)
+type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
 
 // exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
 type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";

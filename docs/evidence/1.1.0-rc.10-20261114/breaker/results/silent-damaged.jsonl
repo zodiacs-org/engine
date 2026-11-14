@@ -1,0 +1,16 @@
+{"call":"findLongitudeCrossings(Sun, 30)","packOpened":false,"says":null,"keys":["[]","at","retrograde"],"head":"[{\"at\":\"1990-04-20T08:26:34.208Z\",\"retrograde\":false}]"}
+{"call":"techniques.solarReturnInstant(25, 2020-03-01)","packOpened":false,"says":null,"keys":"string","head":"\"2020-04-14T12:04:27.575Z\""}
+{"call":"techniques.mostRecentSolarReturnInstant(25, 2020-03-01)","packOpened":false,"says":null,"keys":"string","head":"\"2019-04-15T06:10:02.541Z\""}
+{"call":"techniques.lunarReturnInstant(25, 2020-03-01)","packOpened":false,"says":null,"keys":"string","head":"\"2020-03-26T03:31:08.541Z\""}
+{"call":"techniques.moonIngresses","packOpened":false,"says":null,"keys":["[]","at","sign"],"head":"[{\"at\":\"1990-04-16T00:14:36.625Z\",\"sign\":\"capricorn\"},{\"at\":\"1990-04-18T10:52:32.026Z\",\"sign\":\"aquarius\"},{\"at\":\"1990-04-20T17:56:40.205Z\",\"sign\":\"pis"}
+{"call":"techniques.moonAspects","packOpened":false,"says":null,"keys":["[]","at","body","aspect","moonLon"],"head":"[{\"at\":\"1990-04-15T14:59:57.328Z\",\"body\":\"Sun\",\"aspect\":\"trine\",\"moonLon\":265.3787722060888},{\"at\":\"1990-04-15T16:24:26.853Z\",\"body\":\"Mars\",\"aspect\":\""}
+{"call":"techniques.voidOfCourseAt","packOpened":false,"says":null,"keys":["at","isVoid","current","next"],"head":"{\"at\":\"1990-04-15T08:30:00.000Z\",\"isVoid\":false,\"current\":null,\"next\":{\"from\":\"1990-04-15T16:24:26.853Z\",\"to\":\"1990-04-16T00:14:36.626Z\",\"lastAspect\":"}
+{"call":"techniques.voidOfCourseWindows","packOpened":false,"says":null,"keys":["[]","from","to","lastAspect","sign","nextSign"],"head":"[{\"from\":\"1990-04-15T16:24:26.853Z\",\"to\":\"1990-04-16T00:14:36.625Z\",\"lastAspect\":{\"at\":\"1990-04-15T16:24:26.853Z\",\"body\":\"Mars\",\"aspect\":\"sextile\",\"mo"}
+{"call":"techniques.moonSignsBetween","packOpened":false,"says":null,"keys":"object","head":"[\"sagittarius\",\"capricorn\",\"aquarius\",\"pisces\",\"aries\",\"taurus\"]"}
+{"call":"techniques.compositeChart(birth, birth)","packOpened":false,"says":null,"keys":["bodies","aspects"],"head":"{\"bodies\":[{\"body\":\"Sun\",\"lon\":302.8060446790589},{\"body\":\"Moon\",\"lon\":203.3726173135983},{\"body\":\"Mercury\",\"lon\":124.21171816897612},{\"body\":\"Venus\","}
+{"call":"techniques.chartAspectPatterns(birth)","packOpened":false,"says":null,"keys":["points","patterns"],"head":"{\"points\":[{\"body\":\"Sun\",\"lon\":25.11370234551123},{\"body\":\"Moon\",\"lon\":262.1405259911512},{\"body\":\"Mercury\",\"lon\":44.38025041284499},{\"body\":\"Venus\",\""}
+{"call":"internal.bodyLongitude(Moon)","packOpened":false,"says":null,"keys":"number","head":"262.14052599115115"}
+{"call":"internal.longitudeSpeed(Moon)","packOpened":false,"says":null,"keys":"number","head":"11.943622823537225"}
+{"call":"control techniques.solarReturn(birth).flags","packOpened":false,"says":"de440-unavailable","keys":"object","head":"[\"de440-unavailable\"]"}
+{"call":"control techniques.moonSignCandidates.flags","packOpened":false,"says":"de440-unavailable","keys":"object","head":"[\"de440-unavailable\"]"}
+{"call":"control searchLongitudeCrossings.flags","packOpened":false,"says":"de440-unavailable","keys":"object","head":"[\"de440-unavailable\"]"}

@@ -5,9 +5,10 @@
  */
 import { chartDeclinations, chartPoints, resolvedChart, utcOf } from "../api.js";
 import type { NatalSource } from "../api.js";
+import { fallbacksAt } from "../ephemeris.js";
 import { outsideReferenceSpan } from "../reference-span.js";
 import { SIGN_SLUGS, normalizeLongitude, signIndexForLongitude } from "../signs.js";
-import type { BodyName, Chart, ChartPoints, HouseNumber, PointName, ZodiacSign } from "../types.js";
+import type { BodyName, Chart, ChartPoints, EphemerisFallback, HouseNumber, PointName, ZodiacSign } from "../types.js";
 
 /** The four angles of a chart with a birth time and place. */
 export type AngleName = "Ascendant" | "Midheaven" | "Descendant" | "Imum Coeli";
@@ -34,7 +35,7 @@ export interface TimingOrigin {
  * depends on a sect that the Sun's altitude at birth contradicts, which can
  * happen only inside the polar circles.
  */
-export type TimingFlag = "outside-reference-span" | "sect-contradicts-altitude";
+export type TimingFlag = "outside-reference-span" | "sect-contradicts-altitude" | EphemerisFallback;
 
 /** One natal longitude, from the chart's bodies, its angles or `chartPoints`. */
 export interface ChartLongitude {
@@ -149,6 +150,7 @@ export function timingFlags(instants: readonly number[], sectContradicted: boole
     flags.push("outside-reference-span");
   }
   if (sectContradicted) flags.push("sect-contradicts-altitude");
+  flags.push(...fallbacksAt(instants));
   return Object.freeze(flags);
 }
 

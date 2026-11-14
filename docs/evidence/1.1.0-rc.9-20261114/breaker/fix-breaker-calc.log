@@ -1,0 +1,18 @@
+1851-03-14T04:37:00Z: natalChart names jpl-de440; largest |calc() - positions()| in longitude 15.4370" (Neptune); calc receipts name {"name":"astronomy-engine","version":"2.1.19"}
+2000-01-01T12:00:00Z: natalChart names jpl-de440; largest |calc() - positions()| in longitude 10.9919" (Uranus); calc receipts name {"name":"astronomy-engine","version":"2.1.19"}
+2024-04-08T18:21:30Z: natalChart names jpl-de440; largest |calc() - positions()| in longitude 11.2457" (Neptune); calc receipts name {"name":"astronomy-engine","version":"2.1.19"}
+2199-12-31T23:57:00Z: natalChart names jpl-de440; largest |calc() - positions()| in longitude 29.1876" (Pluto); calc receipts name {"name":"astronomy-engine","version":"2.1.19"}
+1700-06-01T12:00:00Z Sun: calc status refused
+1700-06-01T12:00:00Z Moon: calc status refused
+1700-06-01T12:00:00Z Mercury: calc status refused
+1700-06-01T12:00:00Z Venus: calc status refused
+1700-06-01T12:00:00Z Mars: calc status refused
+1700-06-01T12:00:00Z Jupiter: calc status refused
+1700-06-01T12:00:00Z Saturn: calc status refused
+1700-06-01T12:00:00Z Uranus: calc status refused
+1700-06-01T12:00:00Z Neptune: calc status refused
+1700-06-01T12:00:00Z Pluto: calc status refused
+1700-06-01T12:00:00Z North Node: calc status refused
+1700-06-01T12:00:00Z South Node: calc status refused
+1700-06-01T12:00:00Z: natalChart names astronomy-engine (no ephemeris property); largest |calc() - positions()| in longitude 0.0000" (); calc receipts name 
+after setDefaultEphemeris("astronomy-engine"), 2000-01-01T12:00:00Z: calc() equals positions() to the bit for every body: true

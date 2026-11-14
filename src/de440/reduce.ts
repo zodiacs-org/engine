@@ -206,6 +206,39 @@ export class Reducer {
   }
 
   /**
+   * The instants in [fromTtDays, toTtDays] (TT days past J2000) at which a
+   * place this reduction gives, or the true node, may step by more than
+   * rounding, in ascending order: where one of its reads passes a record
+   * boundary of the pack. For each boundary B (TDB) of any stored series
+   * these are B itself (the observer, the Sun at reception, the node), B - 60 s
+   * and B + 60 s (the two reads the barycentre's acceleration is differenced
+   * from), and for each body the instant whose light left it at B (its own
+   * state, and the Sun's at emission). The list is one for every body: a
+   * superset for each. Between two neighbours of it every read stays inside
+   * one record of every series, so each place is a smooth function of time.
+   */
+  steps(fromTtDays: number, toTtDays: number): number[] {
+    if (!Number.isFinite(fromTtDays) || !Number.isFinite(toTtDays)) fail("bad-instant", "ttDays must be a finite number");
+    const coverage = { from: etOf(fromTtDays), to: etOf(toTtDays) };
+    // A day back covers the longest light time, under seven hours for Pluto.
+    const instants: number[] = [];
+    const ttOf = (et: number): number => (et - tdbMinusTt(et / DAY + 2451545.0)) / DAY;
+    for (const boundary of this.backend.boundaries(coverage.from - DAY, coverage.to + 2 * ACCELERATION_STEP_SEC)) {
+      instants.push(boundary, boundary - ACCELERATION_STEP_SEC, boundary + ACCELERATION_STEP_SEC);
+      for (const body of REDUCED_BODIES) {
+        // t with t - tau(t) = boundary: tau changes by under 1e-3 of the change of t, so four rounds reach rounding.
+        let at = boundary;
+        for (let round = 0; round < 4; round += 1) {
+          if (!this.backend.covers(at) || !this.backend.covers(at - DAY)) break;
+          at = boundary + this.apparent(body, ttOf(at)).lightTimeSec;
+        }
+        instants.push(at);
+      }
+    }
+    return [...new Set(instants.map(ttOf))].filter((tt) => tt >= fromTtDays && tt <= toTtDays).sort((x, y) => x - y);
+  }
+
+  /**
    * The Moon's true node: the ascending node, on the true ecliptic and
    * equinox of date, of the plane of r x v, r and v the Moon's geometric
    * geocentric position and velocity in the ICRF at TDB (no light-time,

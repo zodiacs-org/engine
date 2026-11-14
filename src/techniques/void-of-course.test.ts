@@ -10,6 +10,10 @@ import {
   voidOfCourseAt,
   voidOfCourseWindows
 } from "./void-of-course.js";
+import { setDefaultEphemeris } from "../ephemeris.js";
+
+// This file computes while it is collected, before src/test-setup.ts's hook: astronomy-engine, as that hook sets.
+setDefaultEphemeris("astronomy-engine");
 
 const DAY = 86_400_000;
 const ANGLES: Record<string, number> = { conjunction: 0, sextile: 60, square: 90, trine: 120, opposition: 180 };

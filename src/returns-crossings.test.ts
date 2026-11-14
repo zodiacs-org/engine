@@ -2,7 +2,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { bodyLongitude } from "./ephemeris.js";
 import { findLongitudeCrossings } from "./returns.js";
 
-vi.mock("./ephemeris.js", () => ({ bodyLongitude: vi.fn() }));
+vi.mock("./ephemeris.js", () => ({ bodyLongitude: vi.fn(),
+  // A mocked ephemeris falls back from nothing.
+  notingFallbacks: <T>(run: () => T) => ({ value: run(), fallbacks: [] }) }));
 
 const DAY = 86_400_000;
 const longitude = vi.mocked(bodyLongitude);
