@@ -193,7 +193,7 @@ interface ChartDeclinations extends Declinations {
     deltaT: DeltaT;
 }
 
-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span";
+type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated";
 
 interface ChartInput {
     utc: Date;

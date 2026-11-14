@@ -32,13 +32,21 @@ describe("the measured bounds", () => {
     );
     const derived = ["apparent", "astrometric", "geometric"].map((correction) => `barycentric/${correction}/Sun`);
     // A row the sweep measured takes its values, but a value it did not measure (the nodes' distance and rate), which stays.
-    const expected = Object.fromEntries(
+    const merged = Object.fromEntries(
       Object.entries(summary.bounds)
         .filter(([key]) => !derived.includes(key))
         .map(([key, old]) => {
           const swept = sweep.bounds[key];
           return [key, swept ? old.map((value, k) => swept[k] ?? value) : old];
         })
+    );
+    // A topocentric row the geocentric row of the same correction and body covers, value by value, is left out.
+    const expected = Object.fromEntries(
+      Object.entries(merged).filter(([key, row]) => {
+        if (!key.startsWith("topocentric/")) return true;
+        const geocentric = merged[key.replace("topocentric/", "geocentric/")]!;
+        return !row.every((value, k) => geocentric[k] !== null && (value === null || geocentric[k]! >= value));
+      })
     );
     expect(flat).toEqual(expected);
     for (const key of derived) expect(summary.bounds[key]).toBeDefined();
@@ -47,7 +55,7 @@ describe("the measured bounds", () => {
     const swept = Object.keys(expected).filter((key) => SWEPT.includes(key.slice(0, key.lastIndexOf("/"))) && !MEAN.includes(key.slice(key.lastIndexOf("/") + 1)));
     expect(swept.sort()).toEqual(Object.keys(sweep.bounds).sort());
     expect(swept).toHaveLength(32);
-    expect(Object.keys(expected).length - swept.length - MEAN.length).toBe(69);
+    expect(Object.keys(expected).length - swept.length - MEAN.length).toBe(60);
     expect(MEASURED_BASIS).toContain("docs/evidence/calc-api/rc16");
     expect(MEASURED_BASIS).toContain("32 instants");
     expect(SWEPT_BASIS).toContain("docs/evidence/de440-sweep-20261111");
@@ -81,14 +89,32 @@ describe("the measured bounds", () => {
   it("give a topocentric body not compared its geocentric bound, as an estimate", () => {
     const site = { topocentric: { latitude: 10, longitude: 20 } };
     for (const correction of ["apparent", "astrometric", "geometric"] as const) {
-      expect(MEASURED[`topocentric/${correction}`]!["Jupiter"]).toBeUndefined();
+      expect(MEASURED[`topocentric/${correction}`]?.["Jupiter"]).toBeUndefined();
       const jupiter = ok(calc({ body: "Jupiter", time, center: site, flags: { correction } }));
       expect(jupiter.bounds.position.value).toBe(MEASURED[`geocentric/${correction}`]!["Jupiter"]![0]);
       expect(jupiter.bounds.position.label).toBe("estimated");
       expect(jupiter.bounds.position.basis).toContain("geocentric bound");
-      const moon = ok(calc({ body: "Moon", time, center: site, flags: { correction } }));
-      expect(moon.bounds.position).toMatchObject({ value: MEASURED[`topocentric/${correction}`]!["Moon"]![0], label: "measured" });
     }
+  });
+
+  it("give the topocentric Sun, Moon and Mars the geocentric bound, as an estimate, which covers their own comparison", () => {
+    const site = { topocentric: { latitude: 10, longitude: 20 } };
+    let checked = 0;
+    for (const correction of ["apparent", "astrometric", "geometric"] as const) {
+      expect(MEASURED[`topocentric/${correction}`]).toBeUndefined();
+      for (const body of ["Sun", "Moon", "Mars"] as const) {
+        const geocentric = MEASURED[`geocentric/${correction}`]![body]!;
+        const own = summary.bounds[`topocentric/${correction}/${body}`]!;
+        own.forEach((value, k) => expect(geocentric[k]!, `${correction} ${body} ${k}`).toBeGreaterThanOrEqual(value!));
+        const result = ok(calc({ body, time, center: site, flags: { correction } }));
+        expect(result.bounds.position).toMatchObject({ value: geocentric[0], label: "estimated" });
+        expect(result.bounds.position.basis).toContain("geocentric bound");
+        expect(result.bounds.distance).toMatchObject({ value: geocentric[1], label: "estimated" });
+        expect(result.bounds.speed).toMatchObject({ value: geocentric[2], label: "estimated" });
+        checked += 1;
+      }
+    }
+    expect(checked).toBe(9);
   });
 
   it("cover the lunar points, which have no distance", () => {
@@ -220,8 +246,16 @@ describe("the barycentric Sun's bounds", () => {
     expect(angle(r, first!.r) / 3600).toBeGreaterThan(2.66);
     expect(angle(r, first!.r) / 3600).toBeLessThan(2.67);
     expect(Math.abs(turned.dist! - norm(first!.r)) / norm(first!.r)).toBeGreaterThan(0.018);
-    expect(sun.bounds.position.value).toBe(turned.bounds.position.value);
-    expect([sun.bounds.position.value, sun.bounds.distance!.value, sun.bounds.speed!.value]).toEqual([27_000, 0.15, 3_400]);
+    // Given on UTC in 2130, the instant rests on an extrapolated ΔT, so its bounds also carry the TT band's
+    // widening (calc-delta-t.test.ts); on the same TT they are the barycentre's alone.
+    expect(sun.flags).toEqual(["delta-t-extrapolated"]);
+    const onTt = ok(calc({ body: "Sun", time: { jd: sun.receipt.instants[0]!.jdTt, scale: "tt" }, center: "barycentric", flags: { cartesian: true } }));
+    const turnedOnTt = ok(calc({ body: "Sun", time: { jd: sun.receipt.instants[0]!.jdTt, scale: "tt" }, center: "barycentric", frame: "equatorial-icrs", flags: { cartesian: true } }));
+    expect(onTt.bounds.position.value).toBe(turnedOnTt.bounds.position.value);
+    expect([onTt.bounds.position.value, onTt.bounds.distance!.value, onTt.bounds.speed!.value]).toEqual([27_000, 0.15, 3_400]);
+    expect(sun.bounds.position.value).toBeGreaterThan(27_000);
+    expect(sun.bounds.distance!.value).toBeGreaterThan(0.15);
+    expect(sun.bounds.speed!.value).toBeGreaterThan(3_400);
     expect(ok(calc({ body: "Sun", time: "2130-03-05T00:00:00Z", center: "barycentric", flags: { speeds: false } })).bounds.speed).toBeNull();
   });
 

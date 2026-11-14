@@ -13,9 +13,18 @@ point (32 rows). Those rows take the sweep's values, by the same rule
 (docs/evidence/calc-api/PREREGISTRATION.md: the largest over every instant
 and frame, rounded up to two significant figures), and the sweep's basis. A
 value the sweep did not measure (the nodes' distance and rate) keeps what the
-row had, which is null. Every other row (heliocentric, barycentric,
-topocentric, and the mean node, the mean south node and Black Moon Lilith)
-keeps its value and its basis from the 32 instants, word for word as
+row had, which is null. A topocentric row (the Sun, the Moon and Mars, with
+each correction) is compared, value by value, with the geocentric row of the
+same correction and body as written here: a topocentric place is the
+geocentric one moved by the parallax, so the geocentric differences carry
+over, and the sweep took no topocentric places. Where the geocentric row is at
+or above it in every value, the row is left out, and calc.ts gives the
+geocentric bound, labelled estimated, as it does for every other topocentric
+body; where it is at or above the geocentric row in every value, it stays, as
+measured; a row above in some values and below in others is refused, since
+neither label fits it. Every other row (heliocentric, barycentric, and the
+mean node, the mean south node and Black Moon Lilith) keeps its value and its
+basis from the 32 instants, word for word as
 docs/evidence/calc-api/tools/bounds.py writes them.
 
 Before writing, it refuses a sweep whose largest difference is over the plan's
@@ -108,6 +117,19 @@ def table(sweep, current):
         source[key] = 'sweep' if new is not None else 'mean' if key.split('/')[2] in MEAN_POINTS else 'horizons'
     if set(swept) - set(current['bounds']):
         raise SystemExit('the sweep measured a row the table does not have')
+    # A topocentric row is never below the geocentric row of the same correction and body, value by value:
+    # where the geocentric row is at or above it throughout, it is that row, an estimate the file leaves out
+    # (source 'geocentric'); where it is at or above the geocentric row throughout, it stays as measured.
+    for key in [k for k in rows if k.startswith('topocentric/')]:
+        _, correction, body = key.split('/')
+        geocentric = rows.get(f'geocentric/{correction}/{body}')
+        if geocentric is None:
+            raise SystemExit(f'{key}: no geocentric row of the same correction and body')
+        pairs = list(zip(rows[key], geocentric))
+        if all(b is not None and (a is None or b >= a) for a, b in pairs):
+            rows[key], source[key] = list(geocentric), 'geocentric'
+        elif not all(a is not None and (b is None or a >= b) for a, b in pairs):
+            raise SystemExit(f'{key}: above the geocentric row in some values and below it in others; label it before writing')
     return rows, source
 
 
@@ -118,7 +140,7 @@ def render(sweep, current):
     constant = lambda name: re.search(rf'^export const {name} = (".*");$', old, re.M).group(1)
     groups = {}
     for key, row in rows.items():
-        if key in bounds.DERIVED:
+        if key in bounds.DERIVED or source[key] == 'geocentric':
             continue
         center, correction, body = key.split('/')
         groups.setdefault(f'{center}/{correction}', []).append((body, row))
@@ -130,7 +152,7 @@ def render(sweep, current):
         in_group = key.rsplit('/', 1)[0] in swept_groups and s != 'mean'
         if in_group != (s == 'sweep'):
             raise SystemExit(f'{key}: the swept groups do not describe which rows the sweep gives')
-    counts = {s: sum(1 for key, v in source.items() if v == s and key not in bounds.DERIVED) for s in ('sweep', 'mean', 'horizons')}
+    counts = {s: sum(1 for key, v in source.items() if v == s and key not in bounds.DERIVED) for s in ('sweep', 'mean', 'horizons', 'geocentric')}
 
     corpus = sweep['corpus']
     swept_basis = (f"largest difference from JPL's DE440 found at noon TT on each of {corpus['n']:,} days, "
@@ -164,8 +186,13 @@ def render(sweep, current):
  * - MEAN_POINTS_BASIS (their rates MEAN_POINTS_SPEED_BASIS): the Mean Node,
  *   the Mean South Node and Black Moon Lilith ({counts['mean']} rows), and
  * - MEASURED_BASIS, 32 instants against JPL Horizons: every other row
- *   ({counts['horizons']} rows, heliocentric, barycentric and topocentric), both from
+ *   ({counts['horizons']} rows, heliocentric and barycentric), both from
  *   {rel(os.path.join(CURRENT, 'summary.json'))}.
+ *
+ * The topocentric rows of the Sun, the Moon and Mars ({counts['geocentric']} rows) are left out,
+ * since the geocentric row of the same correction is at or above each of
+ * their 32 instants' values: calc.ts gives that geocentric bound, labelled
+ * estimated, as it does for every other topocentric body.
  *
  * Written by {rel(os.path.abspath(__file__))}; do not
  * edit by hand. calc-bounds.test.ts checks that they agree.

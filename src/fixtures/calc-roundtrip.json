@@ -52,6 +52,7 @@
      "lat": 0,
      "dist": 0
     },
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -192,6 +193,7 @@
      "lat": 0,
      "dist": 0
     },
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -322,6 +324,7 @@
      "lat": 0.0000030883583398138895,
      "dist": 3.866344254271697e-10
     },
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -429,22 +432,22 @@
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 24,
+      "value": 27.752502313,
       "unit": "arcsec",
       "label": "estimated",
-      "basis": "the geocentric bound for this correction; topocentric positions were compared only for the Sun, the Moon and Mars"
+      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 3.75 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "distance": {
-      "value": 0.000083,
+      "value": 0.000085262,
       "unit": "relative",
       "label": "estimated",
-      "basis": "the geocentric bound for this correction; topocentric positions were compared only for the Sun, the Moon and Mars"
+      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 0.00000226 relative, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "speed": {
-      "value": 1.4,
+      "value": 1.676402519,
       "unit": "arcsec/day",
       "label": "estimated",
-      "basis": "the geocentric bound for this correction; topocentric positions were compared only for the Sun, the Moon and Mars",
+      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 0.276 arcsec/day, ΔT extrapolated (docs/calc.md, \"Bounds\")",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -458,6 +461,9 @@
      "lat": 0.5068774153322861,
      "dist": 0.0000035561914993626048
     },
+    "flags": [
+     "delta-t-extrapolated"
+    ],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -519,6 +525,7 @@
       "nutation:iau2000b",
       "observer:iers2003-ellipsoid;no-polar-motion",
       "speed:central-difference-0.001d",
+      "bounds:plus-delta-t-band",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
@@ -585,6 +592,7 @@
      "lat": 0.00019567276745569018,
      "dist": null
     },
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -716,6 +724,7 @@
      "lat": 0.00014665237189959157,
      "dist": 9.872448821409327e-10
     },
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -842,6 +851,7 @@
      "lat": 0,
      "dist": 0
     },
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -978,6 +988,7 @@
      "lat": 0,
      "dist": 0
     },
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -1069,10 +1080,10 @@
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 33,
+      "value": 33.014896253,
       "unit": "arcsec",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
+      "label": "estimated",
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus 0.0149 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "distance": null,
      "speed": {
@@ -1093,6 +1104,9 @@
      "lat": 0.003710786260820185,
      "dist": null
     },
+    "flags": [
+     "delta-t-extrapolated"
+    ],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -1146,6 +1160,7 @@
       "nutation:iau2000b",
       "obliquity:iau2006",
       "speed:central-difference-0.25d",
+      "bounds:plus-delta-t-band",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
@@ -1224,6 +1239,7 @@
      "lat": 0.043176519603773,
      "dist": 4.026963593382336e-8
     },
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -1331,22 +1347,22 @@
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 3,
+      "value": 5.209045099,
       "unit": "arcsec",
-      "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "label": "estimated",
+      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 1.81 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "distance": {
-      "value": 0.000015,
+      "value": 0.000017143,
       "unit": "relative",
-      "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+      "label": "estimated",
+      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 1.42e-7 relative, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "speed": {
-      "value": 0.18,
+      "value": 0.469758188,
       "unit": "arcsec/day",
-      "label": "measured",
-      "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16",
+      "label": "estimated",
+      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 0.23 arcsec/day, ΔT extrapolated (docs/calc.md, \"Bounds\")",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -1360,6 +1376,9 @@
      "lat": 0.03096147949133909,
      "dist": 1.3988117491356334e-7
     },
+    "flags": [
+     "delta-t-extrapolated"
+    ],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -1418,6 +1437,7 @@
       "obliquity:iau2006",
       "observer:iers2003-ellipsoid;no-polar-motion",
       "speed:central-difference-0.001d",
+      "bounds:plus-delta-t-band",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
@@ -1479,6 +1499,7 @@
      "speed": null
     },
     "band": null,
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -1597,6 +1618,7 @@
      "lat": 0,
      "dist": null
     },
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -1702,22 +1724,22 @@
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 22,
+      "value": 22.064708079,
       "unit": "arcsec",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
+      "label": "estimated",
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus 0.0647 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "distance": {
-      "value": 0.000047,
+      "value": 0.000047499,
       "unit": "relative",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111"
+      "label": "estimated",
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus 4.99e-7 relative, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "speed": {
-      "value": 0.019,
+      "value": 0.020817272,
       "unit": "arcsec/day",
-      "label": "measured",
-      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111",
+      "label": "estimated",
+      "basis": "largest difference from JPL's DE440 found at noon TT on each of 146,097 days, JD 2378497.0 to 2524593.0 (TT), in all eight frames; docs/evidence/de440-sweep-20261111; plus 0.00182 arcsec/day, ΔT extrapolated (docs/calc.md, \"Bounds\")",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -1731,6 +1753,9 @@
      "lat": 0.0017781868657242696,
      "dist": 0.000014574918806497898
     },
+    "flags": [
+     "delta-t-extrapolated"
+    ],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -1784,6 +1809,7 @@
       "aberration:backdated-observer",
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
+      "bounds:plus-delta-t-band",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
@@ -1866,6 +1892,7 @@
      "lat": 0,
      "dist": 0
     },
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -2211,6 +2238,7 @@
      }
     ],
     "samples": 99,
+    "flags": [],
     "bounds": {
      "timing": {
       "value": 0.02574920654296875,
@@ -2418,6 +2446,7 @@
      "lat": 0.0000451305539533875,
      "dist": 4.419438641732352e-8
     },
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -2532,17 +2561,17 @@
     },
     "bounds": {
      "position": {
-      "value": 0.0036,
+      "value": 0.067066145,
       "unit": "arcsec",
-      "label": "measured",
-      "basis": "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "label": "estimated",
+      "basis": "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05; plus 0.0635 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "distance": null,
      "speed": {
-      "value": 0.0012,
+      "value": 0.001200682,
       "unit": "arcsec/day",
-      "label": "measured",
-      "basis": "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.00039 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
+      "label": "estimated",
+      "basis": "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.00039 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05; plus 6.82e-7 arcsec/day, ΔT extrapolated (docs/calc.md, \"Bounds\")",
       "method": "central-difference",
       "stepDays": 0.001
      }
@@ -2556,6 +2585,9 @@
      "lat": 0,
      "dist": null
     },
+    "flags": [
+     "delta-t-extrapolated"
+    ],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -2612,6 +2644,7 @@
       "nutation:iau2000b",
       "obliquity:iau2006",
       "speed:central-difference-0.001d",
+      "bounds:plus-delta-t-band",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
@@ -2704,6 +2737,7 @@
      "lat": 0.000001368170546523421,
      "dist": 4.691356625193322e-11
     },
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -2877,6 +2911,7 @@
      "lat": 0,
      "dist": 0
     },
+    "flags": [],
     "receipt": {
      "schema": "zodiacs.calc-receipt.v1",
      "request": {
@@ -3156,7 +3191,9 @@
     "eastPoint": 78.06464477895213,
     "armc": 18.19068480449107,
     "obliquity": 23.423405660773263,
-    "flags": [],
+    "flags": [
+     "delta-t-extrapolated"
+    ],
     "ayanamsa": {
      "name": "galactic-center",
      "mean": 28.718890626551,
@@ -3172,16 +3209,16 @@
     },
     "bounds": {
      "angles": {
-      "value": 0.0213,
+      "value": 14.509246774,
       "unit": "arcsec",
-      "label": "measured",
-      "basis": "largest difference over the conformance suite's L2 vectors of the ascendant, midheaven, Vertex and East Point, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "label": "estimated",
+      "basis": "largest difference over the conformance suite's L2 vectors of the ascendant, midheaven, Vertex and East Point, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05; plus 14.5 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "cusps": {
-      "value": 0.0813,
+      "value": 16.412923627,
       "unit": "arcsec",
-      "label": "measured",
-      "basis": "largest difference over the conformance suite's L2 cusp vectors, thirteen systems, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "label": "estimated",
+      "basis": "largest difference over the conformance suite's L2 cusp vectors, thirteen systems, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05; plus 16.3 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      }
     },
     "band": {
@@ -3256,6 +3293,7 @@
       "sidereal-time:gast-iau2006-era",
       "nutation:iau2000b",
       "obliquity:iau2006",
+      "bounds:plus-delta-t-band",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
       "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
@@ -3310,6 +3348,7 @@
      }
     ],
     "samples": 61,
+    "flags": [],
     "bounds": {
      "timing": {
       "value": 0.02574920654296875,

@@ -12,14 +12,7 @@
 import { AstroTime, Body, GeoMoonState, KM_PER_AU } from "astronomy-engine";
 
 // Imported first so that the build keeps the root entry's shared chunks byte for byte.
-import {
-  bodyLongitude as defaultBodyLongitude,
-  computeChart as defaultComputeChart,
-  gastHours,
-  onAstronomyEngine,
-  onChartClock,
-  refuseUnderSource
-} from "./ephemeris.js";
+import { bodyLongitude, computeChart, deltaTExtrapolated, gastHours, onChartClock, refuseUnderSource } from "./ephemeris.js";
 import { assertDerivedFlags, snapshotFlags, timeFlags, validateBirthSettings } from "./birth-input.js";
 import { MEAN_POINTS_BASIS, MEAN_POINTS_SPEED_BASIS, MEASURED, MEASURED_BASIS, SWEPT, SWEPT_BASIS } from "./calc-bounds.js";
 import {
@@ -77,15 +70,6 @@ export type CalcBody =
   | "Mean Node"
   | "Mean South Node"
   | "Black Moon Lilith";
-
-/**
- * This entry computes on astronomy-engine, which its bounds were measured
- * on, and its receipts name it; so the two functions it takes from
- * src/ephemeris.ts run on astronomy-engine too, whatever the root's default
- * source is.
- */
-const bodyLongitude = (body: BodyName, date: Date): number => onAstronomyEngine(() => defaultBodyLongitude(body, date));
-const computeChart = (input: ChartInput): Chart => onAstronomyEngine(() => defaultComputeChart(input));
 
 const PLANETS = ["Sun", "Moon", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"];
 const POINTS = ["North Node", "South Node", "Mean Node", "Mean South Node", "Black Moon Lilith"] as const;
@@ -325,6 +309,8 @@ export interface CalcPosition {
   readonly bounds: CalcBounds;
   /** The band from the time basis, which is not a bound on the error; null without speeds. */
   readonly band: CalcTimeBand | null;
+  /** "delta-t-extrapolated" where the position moves with an extrapolated ΔT, and `bounds` are widened (docs/calc.md, "Bounds"). */
+  readonly flags: readonly ChartFlag[];
   readonly receipt: CalcReceipt<CalcRequest>;
 }
 
@@ -786,6 +772,12 @@ function bound(
     : { value, unit, label: estimated === null ? "measured" : "estimated", basis: estimated ?? measured };
 }
 
+/** A bound widened by `extra`, for a ΔT extrapolated, and labelled estimated; as it is where `extra` is 0. */
+const stretched = <B extends CalcBound>(b: B, extra: number): B =>
+  !extra || b.value === null
+    ? b
+    : { ...b, value: addBounds(b.value, extra), label: "estimated", basis: `${b.basis}; plus ${+extra.toPrecision(3)} ${b.unit}, ΔT extrapolated (docs/calc.md, "Bounds")` };
+
 /** Rounded up to two significant figures. */
 function up2(x: number): number {
   const unit = 10 ** (Math.floor(Math.log10(x)) - 1);
@@ -861,6 +853,11 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     const analytic = flags.speeds && correction === "geometric" && inertial(frame) && !point && body !== "Moon";
     let speeds: { lon: number; lat: number; dist: number | null } | null = null;
     let velocity: Vec3 | null = null;
+    // Samples `days` either side on the input's scale, with the time basis each was read on.
+    const shift = (days: number) => {
+      const ms = time.ms + days * DAY_MS;
+      return onInput(time, ms, (at, sampled) => ({ row: evaluate(at), basis: sampled }));
+    };
     if (analytic) {
       const { state, turn } = onInput(time, time.ms, (at) => ({
         state: geometricState(body as Body, center, at)!,
@@ -873,10 +870,6 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
       // bit: samples `step` days either side on the input's scale, and the time
       // between them the TT they span where the time basis steps between them
       // (elapsedDays in src/time-scale.ts).
-      const shift = (days: number) => {
-        const ms = time.ms + days * DAY_MS;
-        return onInput(time, ms, (at, sampled) => ({ row: evaluate(at), basis: sampled }));
-      };
       const before = shift(-step);
       const after = shift(step);
       const elapsed = elapsedDays(before.basis, after.basis, 2 * step);
@@ -896,18 +889,18 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     const k = flags.units === "radians" ? DEG : 1;
 
     // Bounds: measured for this center, correction and body where compared; a
-    // topocentric body not compared takes its geocentric bound, as an estimate;
-    // the barycentric Sun's come from the barycentre's error.
+    // topocentric body takes its geocentric bound, as an estimate (the Sun, the
+    // Moon and Mars too, whose topocentric differences fall within it,
+    // src/calc-bounds.ts); the barycentric Sun's come from the barycentre's error.
     const group = `${kind}/${point ? "apparent" : correction}`;
     let row = MEASURED[group]?.[body];
     let estimated: string | null = null;
     const mean = MEAN_POINTS.includes(body);
-    // Each row's basis: the DE440 sweep's for the geocentric rows it measured, the 32 instants' for the rest.
     const swept = SWEPT.includes(group) ? SWEPT_BASIS : MEASURED_BASIS;
     const measured = mean ? MEAN_POINTS_BASIS : swept;
     if (!row && kind === "topocentric") {
       row = MEASURED[`geocentric/${correction}`]?.[body];
-      estimated = "the geocentric bound for this correction; topocentric positions were compared only for the Sun, the Moon and Mars";
+      estimated = "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it";
     } else if (kind === "barycentric" && body === "Sun") {
       row = barycentricSun(now.dist!, velocity && length(velocity));
       estimated = `the largest angle, relative distance and rate of direction that the error of astronomy-engine's barycentre, ${BARYCENTRE_ERROR.au.toExponential()} au and ${BARYCENTRE_ERROR.auPerDay.toExponential()} au/day from 1800 to 2200, allows at this distance and speed; docs/evidence/calc-api`;
@@ -916,24 +909,56 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     const ids = positionIds(body, frame, kind, correction, zodiac);
     if (method) ids.push(method === "analytic" ? "speed:analytic" : `speed:central-difference-${step}d`);
 
-    // In the sidereal zodiac, the ayanamsa subtracted and its own bounds, at this instant.
+    // A topocentric position also turns with the observer, on TT and on UT1
+    // alike, at most at v = ω (a + h⁺), au a second, in distance, and
+    // w = v / (dist (1 − 10⁻³)), arcseconds a second, in direction: a + h⁺
+    // bounds the site's distance from the Earth's axis, and the 10⁻³ the light
+    // path's difference from the apparent vector's length. 0 for other centers.
+    const v = center.kind === "topocentric" ? (ANGVEL * (EARTH_EQUATORIAL_RADIUS_KM + Math.max(center.site.height, 0) / 1000)) / KM_PER_AU : 0;
+    const w = v && (v / (now.dist! * (1 - 1e-3))) * RAD * 3600;
+
+    // A ΔT the model extrapolates (docs/calc.md, "Bounds"), which no arbiter
+    // checks: each bound grows by how far its quantity moves, to first order,
+    // while TT and UT1 move by their bands (tt and ut1, seconds; on TT input tt
+    // is 0, so only a topocentric place, through w and v, moves): the position's by
+    // (Ω + w) tt + w ut1, with Ω the direction's angular rate,
+    // √((λ' cos β)² + β'²), arcseconds a second; the distance's by
+    // (|r'| / r + v / r) tt + (v / r) ut1; the speed's by (Ω' + w ω⊕) tt + w ω⊕ ut1,
+    // with Ω' the change of the angular rate and ω⊕ the Earth's rotation. Ω, r'
+    // and Ω' come from samples `step` days either side on the input's scale, as
+    // the speeds do (Ω' from second differences); w and v bound the observer's
+    // turn, as in the band below, so a topocentric widening is at or above the
+    // movement. A pinned ΔT, and a geocentric place on TT input, are untouched.
+    const bands = timeBands(basis);
+    const { tt, ut1 } = bands;
+    const extrapolated = deltaTExtrapolated(basis, w);
+    let widen = [0, 0, 0];
+    if (extrapolated) {
+      const [after, before] = [shift(step), shift(-step)];
+      const [a, b] = [after.row, before.row];
+      // Half the time between the samples, days.
+      const h = elapsedDays(before.basis, after.basis, 2 * step) / 2;
+      const turn = (x: number, y: number) => ((x - y + 540) % 360) - 180;
+      const cos = Math.cos(now.lat * DEG);
+      const spin = w * ANGVEL * 86_400;
+      const r = now.dist!;
+      widen = [
+        (Math.hypot(turn(a.raw, b.raw) * cos, a.lat - b.lat) / h / 48 + w) * tt + w * ut1,
+        r && ((Math.abs(a.dist! - b.dist!) / h / 172_800 + v) / r) * tt + (v / r) * ut1,
+        (Math.hypot((turn(a.raw, now.raw) - turn(now.raw, b.raw)) * cos, a.lat - 2 * now.lat + b.lat) / h / h / 24 + spin) * tt + spin * ut1
+      ];
+      ids.push("bounds:plus-delta-t-band");
+    }
+
     const sidereal = definition === null ? null : (now as SiderealRow).ayanamsa;
     const added = sidereal && ayanamsaBound(definition!, sidereal.elongation);
 
     // The band from the time basis (docs/calc.md, "Bands"): each coordinate's
-    // rate, in degrees and au a day, times the TT band. A topocentric position
-    // also turns with the observer, on TT and on UT1 alike, at most at
-    // v = ω (a + h⁺), au a second, in distance, and w = v / (dist (1 − 10⁻³)),
-    // arcseconds a second, in direction: a + h⁺ bounds the site's distance from
-    // the Earth's axis, and the 10⁻³ the light path's difference from the
-    // apparent vector's length.
-    const bands = timeBands(basis);
+    // rate, in degrees and au a day, times the TT band, and for a topocentric
+    // position the observer's turn, v and w above.
     let band: CalcTimeBand | null = null;
     if (speeds) {
-      const v = center.kind === "topocentric" ? (ANGVEL * (EARTH_EQUATORIAL_RADIUS_KM + Math.max(center.site.height, 0) / 1000)) / KM_PER_AU : 0;
-      const w = v && (v / (now.dist! * (1 - 1e-3))) * RAD * 3600;
       const across = w / Math.cos(now.lat * DEG);
-      const { tt, ut1 } = bands;
       band = {
         time: bands,
         lon: (Math.abs(speeds.lon) / 24 + across) * tt + across * ut1,
@@ -956,15 +981,22 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
           : null,
       ayanamsa: sidereal && ayanamsaValue(definition!, sidereal, frame === "ecliptic-true-of-date" ? "true" : "mean", k),
       bounds: {
-        position: withAyanamsa(bound(row?.[0], "arcsec", estimated, measured), added && { value: added.position, basis: added.basis }),
-        distance: point ? null : bound(row?.[1], "relative", estimated, swept),
+        position: stretched(
+          withAyanamsa(bound(row?.[0], "arcsec", estimated, measured), added && { value: added.position, basis: added.basis }),
+          widen[0]!
+        ),
+        distance: point ? null : stretched(bound(row?.[1], "relative", estimated, swept), widen[1]!),
         speed: method && {
-          ...withAyanamsa(bound(row?.[2], "arcsec/day", estimated, mean ? MEAN_POINTS_SPEED_BASIS : swept), added && { value: added.rate, basis: added.basis }),
+          ...stretched(
+            withAyanamsa(bound(row?.[2], "arcsec/day", estimated, mean ? MEAN_POINTS_SPEED_BASIS : swept), added && { value: added.rate, basis: added.basis }),
+            widen[2]!
+          ),
           method,
           stepDays: analytic ? null : step
         }
       },
       band,
+      flags: extrapolated ? ["delta-t-extrapolated"] : [],
       receipt: receipt(
         { body, time: time.record, frame, center: centerRecord, zodiac: zodiac.record, flags },
         [instant(basis)],
@@ -1142,6 +1174,13 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
     // Conformance suite 0.1.0, level L2, for this engine: conformance/RESULTS.md.
     const basis = (what: string) =>
       `largest difference over the conformance suite's L2 ${what}, whose arbiter is ERFA with each system's definition`;
+    // An angle's rate on UT1 is the tropical one in either zodiac, the ayanamsa moving with TT alone; its rate on
+    // TT is the sidereal longitude's in the sidereal zodiac.
+    const turned = angleBands(input, computed.system, bands, moved, value === null ? 0 : value.true);
+    // On a ΔT extrapolated, each bound grows by the largest band it covers (docs/calc.md, "Bounds").
+    const late = deltaTExtrapolated(used, 1);
+    const flags: ChartFlag[] = fellBack ? ["polar-fallback"] : [];
+    if (late) flags.push("delta-t-extrapolated");
     return {
       status: "ok",
       requested: system,
@@ -1153,18 +1192,22 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
       eastPoint: zodiacal(normalizeLongitude(eastPointOf(input))),
       armc: ramcOf(input),
       obliquity: input.obliquity,
-      flags: fellBack ? ["polar-fallback"] : [],
+      flags,
       ayanamsa: value && ayanamsaValue(definition!, value, "true", 1),
       bounds: {
-        angles: withAyanamsa(
-          { value: 0.02, unit: "arcsec", label: "measured", basis: basis("vectors of the ascendant, midheaven, Vertex and East Point") },
-          added
+        angles: stretched(
+          withAyanamsa(
+            { value: 0.02, unit: "arcsec", label: "measured", basis: basis("vectors of the ascendant, midheaven, Vertex and East Point") },
+            added
+          ),
+          late ? Math.max(turned.asc, turned.mc, turned.vertex, turned.eastPoint) : 0
         ),
-        cusps: withAyanamsa({ value: 0.08, unit: "arcsec", label: "measured", basis: basis("cusp vectors, thirteen systems") }, added)
+        cusps: stretched(
+          withAyanamsa({ value: 0.08, unit: "arcsec", label: "measured", basis: basis("cusp vectors, thirteen systems") }, added),
+          late ? Math.max(...turned.cusps) : 0
+        )
       },
-      // An angle's rate on UT1 is the tropical one in either zodiac, the ayanamsa moving with TT alone; its rate on
-      // TT is the sidereal longitude's in the sidereal zodiac.
-      band: { time: bands, ...angleBands(input, computed.system, bands, moved, value === null ? 0 : value.true) },
+      band: { time: bands, ...turned },
       receipt: receipt(
         { time: time.record, place: { latitude, longitude }, houseSystem: system, zodiac: zodiac.record },
         [instant(used)],
@@ -1175,7 +1218,8 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
           "angles:gast-and-true-obliquity",
           "sidereal-time:gast-iau2006-era",
           "nutation:iau2000b",
-          "obliquity:iau2006"
+          "obliquity:iau2006",
+          ...(late ? ["bounds:plus-delta-t-band"] : [])
         ],
         time.pin
       )
@@ -1222,6 +1266,8 @@ export interface EventsResult {
   readonly events: readonly CalcEvent[];
   /** Longitude evaluations made. */
   readonly samples: number;
+  /** "delta-t-extrapolated" where an event's UTC moves with an extrapolated ΔT; `timing` then adds the widest such band. */
+  readonly flags: readonly ChartFlag[];
   readonly bounds: { readonly timing: CalcBound };
   readonly receipt: CalcReceipt<EventsRequest>;
 }
@@ -1277,34 +1323,44 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
       const { samples, maxSamples } = found;
       return { status: "refused", reason: "sample-budget", detail: `The search needs more than ${maxSamples} evaluations.`, samples, maxSamples };
     }
+    // The widest UTC band of an event on a ΔT extrapolated, seconds: the ephemeris fixes the event in TT, so its UTC
+    // moves with the band of TT − UTC (docs/calc.md, "Bounds").
+    let late = 0;
+    const events = found.crossings.map(({ at, retrograde }) => {
+      const basis = timeBasis(at.getTime(), "utc");
+      const utc = timeBands(basis).tt;
+      if (deltaTExtrapolated(basis)) late = Math.max(late, utc);
+      return {
+        at: at.toISOString(),
+        jdUt1: J2000_JD + basis.ut1Days,
+        jdTt: J2000_JD + basis.ttDays,
+        retrograde,
+        band: { utc, ut1: basis.deltaT.sigma ?? 0 }
+      };
+    });
     return {
       status: "ok",
       kind,
-      events: found.crossings.map(({ at, retrograde }) => {
-        const basis = timeBasis(at.getTime(), "utc");
-        return {
-          at: at.toISOString(),
-          jdUt1: J2000_JD + basis.ut1Days,
-          jdTt: J2000_JD + basis.ttDays,
-          retrograde,
-          band: { utc: timeBands(basis).tt, ut1: basis.deltaT.sigma ?? 0 }
-        };
-      }),
+      events,
       samples: found.samples,
+      flags: late ? ["delta-t-extrapolated"] : [],
       bounds: {
-        timing: {
-          value: (stepDays * 86_400) / 2 ** 24,
-          unit: "s",
-          label: "estimated",
-          basis:
-            "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it" +
-            (definition === null ? "" : ", and in the sidereal zodiac the ayanamsa's")
-        }
+        timing: stretched(
+          {
+            value: (stepDays * 86_400) / 2 ** 24,
+            unit: "s",
+            label: "estimated",
+            basis:
+              "the bisection bracket, step / 2^24, on the engine's own longitudes; the ephemeris's error over the body's speed adds to it" +
+              (definition === null ? "" : ", and in the sidereal zodiac the ayanamsa's")
+          },
+          late
+        )
       },
       receipt: receipt(
         { kind, body, longitude, from: from.record, to: to.record, zodiac: zodiac.record, stepDays, ...limit },
         [instant(start), instant(end)],
-        [...positionIds(body, "ecliptic-true-of-date", "geocentric", "apparent", zodiac), "search:scan-and-bisect"]
+        [...positionIds(body, "ecliptic-true-of-date", "geocentric", "apparent", zodiac), "search:scan-and-bisect", ...(late ? ["bounds:plus-delta-t-band"] : [])]
       )
     };
   }
@@ -1402,6 +1458,8 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
       : settings.houseSystem && isPolarUndefinedHouseSystem(houseSystem) && place
         ? ["polar-fallback"]
         : [];
+    // Checked against the chart's own flags below.
+    possible.push("delta-t-extrapolated");
     assertDerivedFlags(supplied ?? [], possible);
     const input: ChartInput = {
       utc,

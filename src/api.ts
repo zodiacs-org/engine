@@ -1,4 +1,4 @@
-import { computeBodies, computeChart, computeChartDeclinations, computePoints, bodyLongitude } from "./ephemeris.js";
+import { computeBodies, computeChart, computeChartDeclinations, computePoints, bodyLongitude, deltaTExtrapolated } from "./ephemeris.js";
 import type { ChartDeclinations } from "./declination.js";
 import { POLAR_FALLBACK, isPolarUndefinedHouseSystem } from "./houses.js";
 import { computeSaturnReturns } from "./returns.js";
@@ -86,6 +86,14 @@ export function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } 
     expected.push("polar-fallback");
   }
   if (outsideReferenceSpan(input.utc)) expected.push("outside-reference-span");
+  // "delta-t-extrapolated" is allowed where the chart rests on an extrapolated
+  // ΔT (on TT input, through its houses), as a natal receipt allows it; a chart
+  // from a release before the flag lacks it there. Any other flag fails below.
+  if (
+    resultFlags.values.length > expected.length &&
+    deltaTExtrapolated(timeBasis(+input.utc, input.timeScale, input.deltaT), hasHouses)
+  )
+    expected.push("delta-t-extrapolated");
   assertDerivedFlags(inputFlags?.values ?? [], expected);
   if (
     resultFlags.values.length !== expected.length ||
@@ -151,7 +159,9 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   if (scale !== undefined && !TIME_SCALE_NAMES.includes(scale as never)) {
     throw new RangeError('timeScale must be "utc", "ut1" or "tt".');
   }
-  const possible: ChartFlag[] = [];
+  // "delta-t-extrapolated" is checked against the chart's own flags once computed
+  // (computedBirth), and against a supplied chart's instant in resolvedChart.
+  const possible: ChartFlag[] = ["delta-t-extrapolated"];
   if (settings.timeKnown === false) possible.push("no-time");
   else if (
     settings.houseSystem !== undefined &&

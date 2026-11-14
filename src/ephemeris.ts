@@ -514,6 +514,7 @@ function chartAt(input: ChartInput): Chart {
     flags.push("no-time");
   }
   if (outsideReferenceSpan(input.utc)) flags.push("outside-reference-span");
+  deltaTExtrapolated(basis, angles) && flags.push("delta-t-extrapolated");
 
   return {
     input,
@@ -528,6 +529,17 @@ function chartAt(input: ChartInput): Chart {
     ...(from && { ephemeris: { name: from.ephemeris.name, version: from.ephemeris.version } })
   };
 }
+
+/**
+ * Whether a result rests on a ΔT the model extrapolates past the end of the
+ * IERS table (src/deltat.ts; no pinned ΔT): one on UTC or UT1 input, whose TT
+ * carries it, or with `ut1` one that turns with UT1 (houses, angles, a
+ * topocentric place), on TT input too, whose UT1 then carries it. The flag
+ * `"delta-t-extrapolated"` and the widened bounds follow it (docs/time.md).
+ * Only that segment starts with "e".
+ */
+export const deltaTExtrapolated = ({ deltaT: d, timeScale: t }: Pick<TimeBasis, "deltaT" | "timeScale">, ut1?: unknown): boolean =>
+  (ut1 || t.input != "tt") && t.basis == "delta-t" && /^e/.test(d.segment);
 
 /** The mean node and the mean apogee at an instant's time basis, on the chart's clock. */
 function meanLunarPoints(basis: TimeBasis): { node: number; apogee: { lon: number; lat: number } } {

@@ -8,8 +8,8 @@
   "sourceSha256": "0e851883d89977ce12e16a02c7f2c8efbec4cc9b08ff64035a35b850fdca2a9e",
   "verificationRun": 37895777038,
   "verificationJob": 113706678168,
-  "subsetSha256": "2e8f3f45c4de8476724e48cafccc7582e9486ad12f2ea90e8b7153e33198dec2",
-  "transformation": "Keep the seven POST paths and all components reachable through their JSON Pointer references; preserve source info, servers, examples and licence.",
+  "subsetSha256": "378804e2d146f84d387d7fb016dabbc4dfb23c57513a2966733f7a0547b06195",
+  "transformation": "Keep the seven POST paths and all components reachable through their JSON Pointer references; preserve source info, servers, examples and licence. Then add \"delta-t-extrapolated\" to ChartFlag's enum, which engine PR 102 (ZOD-65) adds ahead of the production document; sourceSha256 and the production fields above describe the document before that addition.",
   "license": "CC-BY-4.0",
   "limitations": [
     "This is a derived contract subset, not the original full document.",
