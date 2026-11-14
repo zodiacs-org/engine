@@ -1,0 +1,60 @@
+# intact: year 2195; default {"name":"de440","de440":{"opened":true,"version":"51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7","fromTtDays":-76699.5,"toTtDays":76699.5,"error":null}}
+SAYS NOTHING                                     defaultEphemeris [object] {"name":"de440","de440":{"opened":true,"version":"51428874d9a47213abc0ff42cbcec65f338624ea
+names-DE440                                      natalChart [object] flags=[delta-t-extrapolated] 
+names-DE440                                      natalChart_noTime [object] flags=[no-time,delta-t-extrapolated] 
+names-DE440                                      positions [array[12]] 
+outside-de440-span names-AE names-DE440          transits [object] 
+names-DE440                                      synastry [object] 
+names-DE440                                      progressedBodies [array[12]] 
+names-DE440                                      moonPhase [object] 
+outside-de440-span names-DE440                   saturnReturn [object] flags=[outside-de440-span] 
+SAYS NOTHING                                     searchLongitudeCrossings [object] status=complete flags=[] {"status":"complete","crossings":[{"at":"2195-04-19T23:15:58.131Z","retrograde":false}],"s
+SAYS NOTHING                                     findLongitudeCrossings [array[1]] [{"at":"2195-04-19T23:15:58.131Z","retrograde":false}]
+SAYS NOTHING                                     chartPoints [object] {"sect":"day","points":[{"point":"Mean Node","lon":308.03042257760217,"lat":0,"speed":-0.0
+SAYS NOTHING                                     chartDeclinations [object] {"trueObliquity":23.41552668408157,"rows":[{"body":"Sun","lon":25.479128653585672,"lat":-0
+SAYS NOTHING                                     internal.bodyLongitude [number] 87.99208764114954
+SAYS NOTHING                                     internal.longitudeSpeed [number] 14.190516577464507
+names-DE440                                      internal.computeBodies [array[12]] 
+names-DE440                                      internal.computeChart [object] flags=[no-time,delta-t-extrapolated] 
+names-DE440                                      receipt.createNatalEnvelope [object] 
+names-DE440                                      calc.calc Sun [object] status=ok flags=[delta-t-extrapolated] 
+names-DE440                                      calc.calc Moon equatorial [object] status=ok flags=[delta-t-extrapolated] 
+names-DE440                                      calc.calc NNode [object] status=ok flags=[delta-t-extrapolated] 
+names-AE                                         calc.calc Mars helio [object] status=ok flags=[delta-t-extrapolated] 
+names-AE                                         calc.calc Mars topo [object] status=ok flags=[delta-t-extrapolated] 
+names-DE440                                      calc.calc Mars ecliptic-j2000 [object] status=ok flags=[delta-t-extrapolated] 
+names-DE440                                      calc.chart [object] status=ok 
+names-DE440                                      calc.events [object] status=ok flags=[delta-t-extrapolated] 
+names-AE                                         calc.houses [object] status=ok flags=[delta-t-extrapolated] 
+names-DE440                                      window.birthWindow [object] flags=[] 
+outside-de440-span names-AE                      tech.solarReturn [object] flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span names-AE                      tech.lunarReturn [object] flags=[outside-reference-span,outside-de440-span] 
+SAYS NOTHING                                     tech.solarReturnInstant [Date] "2225-04-15T03:25:03.454Z"
+SAYS NOTHING                                     tech.mostRecentSolarReturnInstant [Date] "2224-04-14T21:37:49.596Z"
+SAYS NOTHING                                     tech.lunarReturnInstant [Date] "2225-03-12T20:18:49.540Z"
+SAYS NOTHING                                     tech.moonAspects [array[28]] [{"at":"2195-04-15T00:14:03.241Z","body":"Mercury","aspect":"sextile","moonLon":83.1042271
+SAYS NOTHING                                     tech.moonIngresses [array[5]] [{"at":"2195-04-15T11:53:46.294Z","sign":"cancer"},{"at":"2195-04-17T14:47:43.389Z","sign"
+SAYS NOTHING                                     tech.moonSignCandidates [object] flags=[] {"date":"2195-04-15","timeZone":null,"from":"2195-04-14T10:00:00.000Z","to":"2195-04-16T11
+SAYS NOTHING                                     tech.moonSignsBetween [array[6]] ["gemini","cancer","leo","virgo","libra","scorpio"]
+SAYS NOTHING                                     tech.voidOfCourseAt [object] {"at":"2195-04-15T08:30:00.000Z","isVoid":true,"current":{"from":"2195-04-15T03:56:04.623Z
+SAYS NOTHING                                     tech.voidOfCourseWindows [array[5]] [{"from":"2195-04-15T03:56:04.623Z","to":"2195-04-15T11:53:46.294Z","lastAspect":{"at":"21
+SAYS NOTHING                                     tech.compositeChart [object] {"bodies":[{"body":"Sun","lon":303.14643562392246},{"body":"Moon","lon":22.038879823377897
+names-DE440                                      tech.davisonChart [object] flags=[] 
+SAYS NOTHING                                     tech.chartAspectPatterns [object] {"points":[{"body":"Sun","lon":25.47912865358569},{"body":"Moon","lon":87.99208764114951},
+outside-de440-span                               timing.profectionAt [object] flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span                               timing.profectionYear [object] flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span                               timing.firdaria [object] flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span                               timing.firdariaAt [object] flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span                               timing.planetaryReturns [object] status=complete flags=[outside-reference-span,outside-de440-span] 
+SAYS NOTHING                                     timing.solarArc [object] flags=[] {"birth":"2195-04-15T08:30:00.000Z","target":"2225-03-01T00:00:00.000Z","progressed":"2195
+SAYS NOTHING                                     timing.solarArcDirections [object] flags=[] {"arc":{"birth":"2195-04-15T08:30:00.000Z","target":"2225-03-01T00:00:00.000Z","progressed
+SAYS NOTHING                                     timing.zodiacalReleasing [object] flags=[] {"origin":{"point":"Lot of Fortune","lon":156.06700633889227,"sign":"virgo"},"birth":"2195
+SAYS NOTHING                                     timing.zodiacalReleasingAt [object] flags=[] {"origin":{"point":"Lot of Fortune","lon":156.06700633889227,"sign":"virgo"},"birth":"2195
+SAYS NOTHING                                     sky.skyEvents Sun [object] status=complete flags=[] {"body":"Sun","observer":{"latitude":51.5,"longitude":-0.12,"height":0},"from":"2195-04-15
+SAYS NOTHING                                     sky.skyEventsOn Moon [object] status=complete flags=[] {"body":"Moon","observer":{"latitude":51.5,"longitude":-0.12,"height":0},"from":"2195-04-1
+SAYS NOTHING                                     sky.planetaryHours [object] status=complete flags=[] {"date":"2195-04-15","utcOffsetMinutes":-0.48,"weekday":3,"ruler":"Mercury","conventions":
+SAYS NOTHING                                     sky.planetaryHourAt [object] {"day":{"date":"2195-04-15","utcOffsetMinutes":-0.48,"weekday":3,"ruler":"Mercury","conven
+SAYS NOTHING                                     vedic.ayanamsa lahiri [object] flags=[] {"ayanamsa":"lahiri","utc":"2195-04-15T08:30:00.000Z","timeScale":{"input":"utc","basis":"
+SAYS NOTHING                                     vedic.siderealChart [object] flags=[delta-t-extrapolated] {"ayanamsa":"lahiri","ayanamsaValue":{"ayanamsa":"lahiri","utc":"2195-04-15T08:30:00.000Z"
+SAYS NOTHING                                     vedic.vargaSensitivity [object] flags=[delta-t-extrapolated] {"ayanamsa":"lahiri","utc":"2195-04-15T08:30:00.000Z","timeScale":{"input":"utc","basis":"
+SAYS NOTHING                                     vedic.vimshottariDasha(sidereal moon) [object] {"system":"vimshottari","yearLength":"julian","yearDays":365.25,"birth":"2195-04-15T08:30:

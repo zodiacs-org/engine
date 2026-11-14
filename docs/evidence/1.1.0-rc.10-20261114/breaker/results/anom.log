@@ -1,0 +1,6 @@
+1800-01-02T00:00:00.000Z calc ok  | chart ok  | natalChart jpl-de440
+2199-12-30T00:00:00.000Z calc ok  | chart ok  | natalChart jpl-de440
+1800-01-01T00:00:00.000Z calc ok  | chart ok  | natalChart jpl-de440
+2199-12-31T23:59:00.000Z calc refused out-of-range | chart refused out-of-range | natalChart jpl-de440
+cells 3 {"signs":{"Sun":"aries","Moon":"sagittarius","Mercury":"taurus","Venus":"pisces","Mars":"aquarius","Jupiter":"cancer","Saturn":"capricorn","Uranus":"capricorn","Neptune":"capricorn","Pluto":"scorpio","North Node":"aquarius","South Node":"leo"},"ascendant":"gemini","midheaven":"pisces","houses":{"Sun":11,"Moon":7,"Mercury":12,"Venus":10,"Mars":9,"Jupiter":2,"Saturn":8,"Uranus":8,"Neptune":8,"Pluto"
+ascendant and midheaven sign of each cell at its midpoint equal natalChart: 3 of 3
