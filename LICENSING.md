@@ -239,6 +239,16 @@ owner's reading. It is the first open question in the status at the top of
 this file, to be settled, or accepted by the owner in writing, before this
 candidate is published.
 
+The rule behind the Sun's disc, from 1.1.0-rc.12, is NASA JPL's. The
+reduction bends no light from a planet farther than the Sun whose direction
+is within the Sun's apparent radius of the Sun's, with the Sun's radius
+taken as 695,700 km, because NASA JPL's Horizons system does so and gives
+that radius (`docs/de440.md`, *Behind the Sun's disc*). `NOTICE` credits
+NASA JPL for the convention. It is a convention and a published constant,
+not data: no Horizons response is in the package. The Horizons responses it
+was measured against are public responses kept in the repository only
+(`docs/evidence/1.1.0-rc.12-20261115/near-sun/`).
+
 The pack does not change the SPDX expression: no licence is asserted for it
 that its providers do not state, as for the IERS data below.
 

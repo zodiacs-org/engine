@@ -119,6 +119,16 @@ have not reviewed or endorsed it. From 1.1.0-rc.9 the root entry computes on
 it by default (docs/de440.md). LICENSING.md, DE440 pack, records what
 NAIF's rules for SPICE kernels say and what they leave open.
 
+Behind the Sun's disc, from 1.1.0-rc.12, the reduction bends no light from a
+planet farther than the Sun whose direction is within the Sun's apparent
+radius of the Sun's, the Sun's radius taken as 695,700 km. Both the rule and
+the radius are those of NASA JPL's Horizons system (Jet Propulsion
+Laboratory, California Institute of Technology), and the package credits
+NASA JPL for them. The package holds no Horizons response: the rule was
+measured against Horizons responses kept in the repository
+(docs/evidence/1.1.0-rc.12-20261115/near-sun/). JPL has not reviewed or
+endorsed the package's use of it.
+
 Essential dignities
 -------------------
 

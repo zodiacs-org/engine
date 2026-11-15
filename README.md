@@ -16,7 +16,8 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**1.1.0-rc.12**, the candidate for 1.1.0, not published. It ships a sealed
+**1.1.0-rc.13**, the candidate for 1.1.0, not published: 1.1.0-rc.12's code
+with its documentation corrected (CHANGELOG.md). It ships a sealed
 pack of JPL's DE440 for 1790 to 2210 and computes on it by default: a plain
 `natalChart`, `positions`, `calc` or `birthWindow` call, with nothing opened
 or supplied, takes the Sun, the Moon, the planets and the true node from the
@@ -33,7 +34,8 @@ the planets (Pluto, on 2199-12-31) and 32.64″ for the true node
 limit: near the Sun a planet moves more, because the pack bends its light by
 the Sun and astronomy-engine does not (at most 1.7512″, at the Sun's limb). From
 1.1.0-rc.12 the pack bends no light from a planet behind the Sun's disc, as
-JPL Horizons does not: at every passage behind the disc from 1800 to 2199
+NASA JPL's Horizons system does not, a convention this package follows
+from Horizons and credits to NASA JPL (`NOTICE`): at every passage behind the disc from 1800 to 2199
 (393 passages, 3,490 instants inside the disc) the pack's place is within
 0.0023″ of Horizons's, taken relative to the Sun, where the formula of
 1.1.0-rc.10 and rc.11, which bent the light there too, is up to 333.48″ from it
@@ -60,11 +62,12 @@ geocentric place (other centers and corrections, the Earth) and the sky
 entry's rising and setting still compute on astronomy-engine whatever the
 default, so none is a fallback: a calc receipt names astronomy-engine, and
 the sky entry's results name no ephemeris ([docs/de440.md](docs/de440.md)). The pack makes the package about four times larger unpacked
-(4,557,833 bytes against 1.1.0-rc.7's 1,152,017), and an application
+(4,578,211 bytes against 1.1.0-rc.7's 1,152,017), and an application
 that bundles the root entry bundles the pack's 3,319,552 characters (see
 [docs/de440.md](docs/de440.md) and CHANGELOG.md). 1.1.0-rc.9 was this
-candidate's first draft, superseded before review; 1.1.0-rc.10 and
-1.1.0-rc.11 were drafts on the same pull request, reviewed and replaced;
+candidate's first draft, superseded before review; 1.1.0-rc.10,
+1.1.0-rc.11 and 1.1.0-rc.12 were drafts on the same pull request, reviewed
+and replaced;
 1.1.0-rc.8 was a draft
 that shipped the pack behind `withEphemeris` only, withdrawn, and its
 number is not used again. From 1.1.0-rc.7 the error limits

@@ -1,5 +1,63 @@
 # Engine changelog
 
+## 1.1.0-rc.13 (unreleased candidate)
+
+The candidate for **1.1.0**, a minor release: 1.1.0-rc.12 with its
+documentation corrected and nothing else. It is a draft for the owner, and is
+not to be published on npm until the owner approves it. Checks:
+`docs/evidence/1.1.0-rc.13-20261115/`.
+
+1.1.0-rc.12 was a draft on this same pull request (101), reviewed with no
+blocker and not tagged or published: this candidate replaces it. The
+corrections below change `README.md`, `CHANGELOG.md`, `LICENSING.md` and
+`NOTICE`, which the package holds, and rc.12's archive is carried, so by the
+rule in `artifacts/README.md` the corrected package takes a new number. The
+code is rc.12's: the only change under `src/` is the version string
+(`ENGINE_VERSION`, and the tests and fixture that hold it), and `dist/` is
+rc.12's but for that string (`docs/evidence/1.1.0-rc.13-20261115/`). No
+position, bound, flag or size budget changes.
+
+- **Credit to NASA JPL for the rule behind the Sun's disc.** The pack bends
+  no light from a planet behind the Sun's disc because that is what NASA
+  JPL's Horizons system does, and its radius of the Sun, 695,700 km, is
+  Horizons's (1.1.0-rc.12, below). `NOTICE`, `LICENSING.md` and the README
+  now say so and credit NASA JPL for the convention. Horizons's responses
+  were the arbiter it was measured against; no Horizons response is in the
+  package.
+- **At the Sun's limb, said exactly.** rc.12's entry below and
+  `docs/de440.md` gave the pack as within 0.0005 arcseconds of Horizons
+  within 3 arcseconds of the limb. That holds only where both put the planet
+  on the same side of the limb. Within a second or two of a limb crossing
+  they can put it on different sides and then differ by the step at the
+  limb: the rc.12 review found 4 such instants of 50, 1.4732 to 1.6956
+  arcseconds apart, inside the 1.8 that `calc()` quotes there
+  (`docs/evidence/1.1.0-rc.12-20261115/breaker/BREAKER.md`, should-fix 3).
+  ERFA's `eraLdsun` figure is 5.76 arcseconds (5.761255 in the evidence),
+  not 5.77.
+- **A longitude search at the limb step, documented.** For a planet whose
+  longitude steps back at the limb, a target longitude within the step is
+  crossed three times, and `searchLongitudeCrossings` and calc's `events()`
+  return one of them, the last, with a complete status
+  (`docs/evidence/1.1.0-rc.12-20261115/breaker/BREAKER.md`, should-fix 2).
+  `docs/de440.md` now says so. The search is unchanged.
+- **rc.11's Neptune figure, marked as rc.11's.** The 1.1.0-rc.11 entry gave
+  33.37 arcseconds for Neptune near the Sun as the size of the change; that
+  came from rc.11's bending behind the disc, which rc.12 removed. The entry
+  now says so and no longer reads as a property of this package.
+- **The near-Sun evidence names its build.** The rows in
+  `docs/evidence/1.1.0-rc.12-20261115/near-sun/` record the engine version
+  `1.1.0-rc.11`: they were run on rc.12's source before its version string
+  was raised. The rc.12 review recomputed all 6,720 rows on the installed
+  rc.12 archive and found them identical to the bit (should-fix 1); that
+  evidence's README now says so. rc.13's code is rc.12's, so they hold for
+  this candidate too.
+- **Not changed.** The size of the change from earlier releases stays as
+  measured: up to 29.19 arcseconds of ecliptic longitude for the Sun, the
+  Moon and the planets and 32.64 for the true node at noon TT on each day
+  from 1800 to 2199 (1.1.0-rc.10, below). No larger round figure is given.
+  The size budgets rc.12 raised are as rc.12 left them, for the owner to
+  decide with the candidate.
+
 ## 1.1.0-rc.12 (unreleased candidate)
 
 The candidate for **1.1.0**, a minor release: 1.1.0-rc.11 with the place of
@@ -29,13 +87,19 @@ why this cut has a new number. Everything below is against 1.1.0-rc.11.
   Sun from 1800 to 2199 (393 passages, 3,490 instants inside the disc, 66
   within 3 arcseconds of the limb, 3,164 outside it), as the planet's
   offset from the Sun, which takes out the two frames' difference: within
-  0.0023 arcseconds inside the disc, 0.0005 at the limb and 0.0047
-  outside, where the 0.0047 is the comparison's own remainder (a reduction
-  of `de440.bsp` with the same rule gives it too, and the pack is within
-  0.0038 of that reduction at all 6,720 instants). The formula of rc.11,
-  reduced from `de440.bsp`, is up to 333.48 arcseconds from Horizons inside
-  the disc (Mercury), and ERFA's `eraLdsun` limiter, which tapers the
-  deflection inside about 0.08 degrees, up to 5.77 (Uranus): which is why
+  0.0023 arcseconds inside the disc and 0.0047 outside, where the 0.0047 is
+  the comparison's own remainder (a reduction of `de440.bsp` with the same
+  rule gives it too, and the pack is within 0.0038 of that reduction at all
+  6,720 instants). Within 3 arcseconds of the limb the two agree to 0.0005
+  only where both put the planet on the same side of it, as at all 66 of
+  those instants here; within a second or two of a limb crossing they can
+  put it on different sides, and then differ by the step at the limb: the
+  rc.12 review found 4 such instants of its 50 in that band, 1.4732 to
+  1.6956 arcseconds apart (`docs/evidence/1.1.0-rc.12-20261115/breaker/BREAKER.md`,
+  should-fix 3), inside the 1.8 that `calc()` quotes there. The formula of
+  rc.11, reduced from `de440.bsp`, is up to 333.48 arcseconds from Horizons
+  inside the disc (Mercury), and ERFA's `eraLdsun` limiter, which tapers the
+  deflection inside about 0.08 degrees, up to 5.76 (Uranus): which is why
   the candidate follows Horizons and not `eraLdsun`
   (`docs/evidence/1.1.0-rc.12-20261115/near-sun/`; [docs/de440.md](docs/de440.md),
   *Behind the Sun's disc*). What changes: the apparent place of Mercury to
@@ -174,13 +238,13 @@ why this cut has a new number. Everything below is against 1.1.0-rc.10.
   and undecodable.
 - **The size of the change to positions, said exactly.** The 29 arcseconds
   of 1.1.0-rc.10's first line are the largest difference at noon TT on each
-  of the 146,097 days the sweep read, not a limit. A planet passing behind
-  the Sun moves more, because the pack bends its light by the Sun (with no
-  cut at the Sun's limb) and astronomy-engine does not: Neptune, 0.0234°
-  from the Sun's centre at 1920-08-03T23:48:31Z, is 33.37 arcseconds in
-  longitude and 18.15 in latitude from astronomy-engine's place
-  (`docs/evidence/1.1.0-rc.11-20261115/results/near-sun.json`, measured on
-  this build). The README says the same.
+  of the 146,097 days the sweep read, not a limit. In this candidate a
+  planet passing behind the Sun moved more, because its pack bent the
+  planet's light by the Sun behind the disc too
+  (`docs/evidence/1.1.0-rc.11-20261115/results/near-sun.json` has the figures
+  measured on this build). That no longer holds: from 1.1.0-rc.12 the pack
+  bends no light behind the disc (1.1.0-rc.12, above), and outside it the
+  bending is at most 1.7512 arcseconds, at the limb.
 - **The dense DE440 sweep measures what its table holds.**
   `src/calc-bounds.ts` holds the bounds `calc()` quotes for astronomy-engine's
   results (on the pack it quotes `src/calc-bounds-de440.ts`), but from

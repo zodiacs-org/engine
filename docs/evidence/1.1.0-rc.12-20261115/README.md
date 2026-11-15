@@ -15,6 +15,16 @@ candidate's source, `dist/` with `sha256sum *.js *.d.ts | sha256sum` =
 `32a2c2ce5435c1e462737aca3e524735e600b1ae27c7d970aed134b06f0f90a6`, the
 `dist/` of the carried archive (*The archive*, below, checks that).
 
+One exception, found by the rc.12 review (`breaker/BREAKER.md`, should-fix
+1): the engine side of `near-sun/` (`passages.json.gz` and `summary.json`)
+records the engine version `1.1.0-rc.11` and a `dist` of
+`/tmp/rc12/final/dist`. It ran on rc.12's source before the version string
+was raised, so that build is not the archive's `dist/` (the version string
+is in it). The review recomputed all 6,720 rows with the installed rc.12
+archive and found every one identical to the bit, and the quoted bounds too
+(`breaker/results/builder-rows-recheck.json`), so the figures hold for the
+archive. Added with 1.1.0-rc.13, whose code is rc.12's.
+
 ## What changed against 1.1.0-rc.11
 
 - B2 of the rc.11 review: behind the Sun's disc the pack's place was up to
