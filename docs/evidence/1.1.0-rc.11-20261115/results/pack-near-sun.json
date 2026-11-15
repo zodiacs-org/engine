@@ -1,0 +1,831 @@
+{
+ "what": "The dense sweep's run on the shipped DE440 pack (engine_sweep.mjs --ephemeris de440), read instant by\ninstant near the Sun: where the pack's apparent place differs from the kernel's, and why.",
+ "engine": {
+  "name": "@zodiacs/engine",
+  "version": "1.1.0-rc.11",
+  "ephemeris": {
+   "name": "astronomy-engine",
+   "version": "2.1.19"
+  }
+ },
+ "ephemeris": "de440",
+ "distSha256": "f9b2e1caabfcbf37f6c4cca026d7341c748b0eec371031d35c98d3c30363017f",
+ "node": "v22.22.2",
+ "kernel": {
+  "file": "de440.bsp",
+  "sha256": "a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5"
+ },
+ "software": {
+  "python": "3.13.5",
+  "numpy": "2.4.6",
+  "pyerfa": "2.0.1.5",
+  "erfa": "2.0.1",
+  "jplephem": "2.24"
+ },
+ "corpus": {
+  "n": 146097,
+  "firstJdTt": 2378497.0,
+  "lastJdTt": 2524593.0,
+  "frame": "ecliptic-true-of-date"
+ },
+ "splitDegrees": 0.1,
+ "units": {
+  "position": "arcsec",
+  "longitude": "arcsec",
+  "rate": "arcsec/day"
+ },
+ "byBody": {
+  "Sun": {
+   "erfaLdsunLimiter": {
+    "position": {
+     "nearSun": {
+      "max": 0.00393151,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 0.0,
+      "n": 146097
+     }
+    },
+    "longitude": {
+     "nearSun": {
+      "max": 0.00393149,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 0.0,
+      "n": 146097
+     }
+    },
+    "rate": {
+     "nearSun": {
+      "max": 0.0221288,
+      "atJdTt": 2495488.0,
+      "fromSunDegrees": 0.0,
+      "n": 146097
+     }
+    }
+   },
+   "engineLimiter": {
+    "position": {
+     "nearSun": {
+      "max": 0.00393151,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 0.0,
+      "n": 146097
+     }
+    },
+    "longitude": {
+     "nearSun": {
+      "max": 0.00393149,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 0.0,
+      "n": 146097
+     }
+    },
+    "rate": {
+     "nearSun": {
+      "max": 0.0221288,
+      "atJdTt": 2495488.0,
+      "fromSunDegrees": 0.0,
+      "n": 146097
+     }
+    }
+   }
+  },
+  "Moon": {
+   "erfaLdsunLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00427234,
+      "atJdTt": 2524389.0,
+      "fromSunDegrees": 158.534,
+      "n": 146097
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00428245,
+      "atJdTt": 2524389.0,
+      "fromSunDegrees": 158.534,
+      "n": 146097
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.425512,
+      "atJdTt": 2500439.0,
+      "fromSunDegrees": 170.222,
+      "n": 146097
+     }
+    }
+   },
+   "engineLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00427234,
+      "atJdTt": 2524389.0,
+      "fromSunDegrees": 158.534,
+      "n": 146097
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00428245,
+      "atJdTt": 2524389.0,
+      "fromSunDegrees": 158.534,
+      "n": 146097
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.425512,
+      "atJdTt": 2500439.0,
+      "fromSunDegrees": 170.222,
+      "n": 146097
+     }
+    }
+   }
+  },
+  "Mercury": {
+   "erfaLdsunLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.0039345,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 21.4439,
+      "n": 146087
+     },
+     "nearSun": {
+      "max": 4.9999,
+      "atJdTt": 2431039.0,
+      "fromSunDegrees": 0.0177823,
+      "n": 10
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00393809,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 21.4439,
+      "n": 146087
+     },
+     "nearSun": {
+      "max": 0.42753,
+      "atJdTt": 2431039.0,
+      "fromSunDegrees": 0.0177823,
+      "n": 10
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.0383165,
+      "atJdTt": 2510570.0,
+      "fromSunDegrees": 27.1726,
+      "n": 146087
+     },
+     "nearSun": {
+      "max": 186.894,
+      "atJdTt": 2431039.0,
+      "fromSunDegrees": 0.0177823,
+      "n": 10
+     }
+    }
+   },
+   "engineLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.0039345,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 21.4439,
+      "n": 146087
+     },
+     "nearSun": {
+      "max": 0.0011816,
+      "atJdTt": 2504455.0,
+      "fromSunDegrees": 0.0332592,
+      "n": 10
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00393809,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 21.4439,
+      "n": 146087
+     },
+     "nearSun": {
+      "max": 0.00118152,
+      "atJdTt": 2504455.0,
+      "fromSunDegrees": 0.0332592,
+      "n": 10
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.0383165,
+      "atJdTt": 2510570.0,
+      "fromSunDegrees": 27.1726,
+      "n": 146087
+     },
+     "nearSun": {
+      "max": 0.414698,
+      "atJdTt": 2431039.0,
+      "fromSunDegrees": 0.0177823,
+      "n": 10
+     }
+    }
+   }
+  },
+  "Venus": {
+   "erfaLdsunLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00391111,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 6.96199,
+      "n": 146092
+     },
+     "nearSun": {
+      "max": 0.000600588,
+      "atJdTt": 2493161.0,
+      "fromSunDegrees": 0.0571827,
+      "n": 5
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00391112,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 6.96199,
+      "n": 146092
+     },
+     "nearSun": {
+      "max": 0.000600557,
+      "atJdTt": 2493161.0,
+      "fromSunDegrees": 0.0571827,
+      "n": 5
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.023659,
+      "atJdTt": 2440759.0,
+      "fromSunDegrees": 35.9551,
+      "n": 146092
+     },
+     "nearSun": {
+      "max": 0.00798479,
+      "atJdTt": 2460466.0,
+      "fromSunDegrees": 0.0771926,
+      "n": 5
+     }
+    }
+   },
+   "engineLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00391111,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 6.96199,
+      "n": 146092
+     },
+     "nearSun": {
+      "max": 0.000600588,
+      "atJdTt": 2493161.0,
+      "fromSunDegrees": 0.0571827,
+      "n": 5
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00391112,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 6.96199,
+      "n": 146092
+     },
+     "nearSun": {
+      "max": 0.000600557,
+      "atJdTt": 2493161.0,
+      "fromSunDegrees": 0.0571827,
+      "n": 5
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.023659,
+      "atJdTt": 2440759.0,
+      "fromSunDegrees": 35.9551,
+      "n": 146092
+     },
+     "nearSun": {
+      "max": 0.00798479,
+      "atJdTt": 2460466.0,
+      "fromSunDegrees": 0.0771926,
+      "n": 5
+     }
+    }
+   }
+  },
+  "Mars": {
+   "erfaLdsunLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00392239,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 32.0583,
+      "n": 146090
+     },
+     "nearSun": {
+      "max": 5.64254,
+      "atJdTt": 2402552.0,
+      "fromSunDegrees": 0.0319778,
+      "n": 7
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00392302,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 32.0583,
+      "n": 146090
+     },
+     "nearSun": {
+      "max": 5.25113,
+      "atJdTt": 2402552.0,
+      "fromSunDegrees": 0.0319778,
+      "n": 7
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.00658691,
+      "atJdTt": 2451545.0,
+      "fromSunDegrees": 47.6037,
+      "n": 146090
+     },
+     "nearSun": {
+      "max": 121.672,
+      "atJdTt": 2402552.0,
+      "fromSunDegrees": 0.0319778,
+      "n": 7
+     }
+    }
+   },
+   "engineLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00392239,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 32.0583,
+      "n": 146090
+     },
+     "nearSun": {
+      "max": 0.00159919,
+      "atJdTt": 2393230.0,
+      "fromSunDegrees": 0.0850333,
+      "n": 7
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00392302,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 32.0583,
+      "n": 146090
+     },
+     "nearSun": {
+      "max": 0.00159918,
+      "atJdTt": 2393230.0,
+      "fromSunDegrees": 0.0850333,
+      "n": 7
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.00658691,
+      "atJdTt": 2451545.0,
+      "fromSunDegrees": 47.6037,
+      "n": 146090
+     },
+     "nearSun": {
+      "max": 0.0105541,
+      "atJdTt": 2402552.0,
+      "fromSunDegrees": 0.0319778,
+      "n": 7
+     }
+    }
+   }
+  },
+  "Jupiter": {
+   "erfaLdsunLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00391545,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 56.5367,
+      "n": 146090
+     },
+     "nearSun": {
+      "max": 17.3073,
+      "atJdTt": 2499942.0,
+      "fromSunDegrees": 0.020623,
+      "n": 7
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00391553,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 56.5367,
+      "n": 146090
+     },
+     "nearSun": {
+      "max": 1.29846,
+      "atJdTt": 2499942.0,
+      "fromSunDegrees": 0.020623,
+      "n": 7
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.0149888,
+      "atJdTt": 2424152.0,
+      "fromSunDegrees": 7.32485,
+      "n": 146090
+     },
+     "nearSun": {
+      "max": 624.491,
+      "atJdTt": 2499942.0,
+      "fromSunDegrees": 0.020623,
+      "n": 7
+     }
+    }
+   },
+   "engineLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00391545,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 56.5367,
+      "n": 146090
+     },
+     "nearSun": {
+      "max": 0.0030277,
+      "atJdTt": 2378682.0,
+      "fromSunDegrees": 0.0973806,
+      "n": 7
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00391553,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 56.5367,
+      "n": 146090
+     },
+     "nearSun": {
+      "max": 0.0030277,
+      "atJdTt": 2378682.0,
+      "fromSunDegrees": 0.0973806,
+      "n": 7
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.0149888,
+      "atJdTt": 2424152.0,
+      "fromSunDegrees": 7.32485,
+      "n": 146090
+     },
+     "nearSun": {
+      "max": 0.885271,
+      "atJdTt": 2499942.0,
+      "fromSunDegrees": 0.020623,
+      "n": 7
+     }
+    }
+   }
+  },
+  "Saturn": {
+   "erfaLdsunLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00389774,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 165.428,
+      "n": 146094
+     },
+     "nearSun": {
+      "max": 7.24602,
+      "atJdTt": 2383621.0,
+      "fromSunDegrees": 0.0420204,
+      "n": 3
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.0039002,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 165.428,
+      "n": 146094
+     },
+     "nearSun": {
+      "max": 6.75376,
+      "atJdTt": 2383621.0,
+      "fromSunDegrees": 0.0420204,
+      "n": 3
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.00221204,
+      "atJdTt": 2442609.0,
+      "fromSunDegrees": 0.103878,
+      "n": 146094
+     },
+     "nearSun": {
+      "max": 286.74,
+      "atJdTt": 2383621.0,
+      "fromSunDegrees": 0.0420204,
+      "n": 3
+     }
+    }
+   },
+   "engineLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00389774,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 165.428,
+      "n": 146094
+     },
+     "nearSun": {
+      "max": 0.0015823,
+      "atJdTt": 2388920.0,
+      "fromSunDegrees": 0.0776645,
+      "n": 3
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.0039002,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 165.428,
+      "n": 146094
+     },
+     "nearSun": {
+      "max": 0.00158229,
+      "atJdTt": 2388920.0,
+      "fromSunDegrees": 0.0776645,
+      "n": 3
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.00221204,
+      "atJdTt": 2442609.0,
+      "fromSunDegrees": 0.103878,
+      "n": 146094
+     },
+     "nearSun": {
+      "max": 0.109498,
+      "atJdTt": 2383621.0,
+      "fromSunDegrees": 0.0420204,
+      "n": 3
+     }
+    }
+   }
+  },
+  "Uranus": {
+   "erfaLdsunLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00392233,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 0.882609,
+      "n": 146093
+     },
+     "nearSun": {
+      "max": 6.19537,
+      "atJdTt": 2492604.0,
+      "fromSunDegrees": 0.0463347,
+      "n": 4
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00392237,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 0.882609,
+      "n": 146093
+     },
+     "nearSun": {
+      "max": 2.7859,
+      "atJdTt": 2401299.0,
+      "fromSunDegrees": 0.0531851,
+      "n": 4
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.00363781,
+      "atJdTt": 2522767.0,
+      "fromSunDegrees": 144.655,
+      "n": 146093
+     },
+     "nearSun": {
+      "max": 146.239,
+      "atJdTt": 2401299.0,
+      "fromSunDegrees": 0.0531851,
+      "n": 4
+     }
+    }
+   },
+   "engineLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00392233,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 0.882609,
+      "n": 146093
+     },
+     "nearSun": {
+      "max": 0.000483571,
+      "atJdTt": 2401299.0,
+      "fromSunDegrees": 0.0531851,
+      "n": 4
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00392237,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 0.882609,
+      "n": 146093
+     },
+     "nearSun": {
+      "max": 0.00048357,
+      "atJdTt": 2401299.0,
+      "fromSunDegrees": 0.0531851,
+      "n": 4
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.00363781,
+      "atJdTt": 2522767.0,
+      "fromSunDegrees": 144.655,
+      "n": 146093
+     },
+     "nearSun": {
+      "max": 0.0742666,
+      "atJdTt": 2492604.0,
+      "fromSunDegrees": 0.0463347,
+      "n": 4
+     }
+    }
+   }
+  },
+  "Neptune": {
+   "erfaLdsunLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00391054,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 46.037,
+      "n": 146095
+     },
+     "nearSun": {
+      "max": 0.00105474,
+      "atJdTt": 2422173.0,
+      "fromSunDegrees": 0.0986356,
+      "n": 2
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00391166,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 46.037,
+      "n": 146095
+     },
+     "nearSun": {
+      "max": 0.00105474,
+      "atJdTt": 2422173.0,
+      "fromSunDegrees": 0.0986356,
+      "n": 2
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.00348859,
+      "atJdTt": 2453038.0,
+      "fromSunDegrees": 0.107758,
+      "n": 146095
+     },
+     "nearSun": {
+      "max": 0.007026,
+      "atJdTt": 2422908.0,
+      "fromSunDegrees": 0.0849911,
+      "n": 2
+     }
+    }
+   },
+   "engineLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00391054,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 46.037,
+      "n": 146095
+     },
+     "nearSun": {
+      "max": 0.00105474,
+      "atJdTt": 2422173.0,
+      "fromSunDegrees": 0.0986356,
+      "n": 2
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00391166,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 46.037,
+      "n": 146095
+     },
+     "nearSun": {
+      "max": 0.00105474,
+      "atJdTt": 2422173.0,
+      "fromSunDegrees": 0.0986356,
+      "n": 2
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.00348859,
+      "atJdTt": 2453038.0,
+      "fromSunDegrees": 0.107758,
+      "n": 146095
+     },
+     "nearSun": {
+      "max": 0.007026,
+      "atJdTt": 2422908.0,
+      "fromSunDegrees": 0.0849911,
+      "n": 2
+     }
+    }
+   }
+  },
+  "Pluto": {
+   "erfaLdsunLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00390065,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 75.5506,
+      "n": 146097
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00391921,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 75.5506,
+      "n": 146097
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.00201576,
+      "atJdTt": 2458495.0,
+      "fromSunDegrees": 0.121663,
+      "n": 146097
+     }
+    }
+   },
+   "engineLimiter": {
+    "position": {
+     "farFromSun": {
+      "max": 0.00390065,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 75.5506,
+      "n": 146097
+     }
+    },
+    "longitude": {
+     "farFromSun": {
+      "max": 0.00391921,
+      "atJdTt": 2521806.0,
+      "fromSunDegrees": 75.5506,
+      "n": 146097
+     }
+    },
+    "rate": {
+     "farFromSun": {
+      "max": 0.00201576,
+      "atJdTt": 2458495.0,
+      "fromSunDegrees": 0.121663,
+      "n": 146097
+     }
+    }
+   }
+  }
+ }
+}

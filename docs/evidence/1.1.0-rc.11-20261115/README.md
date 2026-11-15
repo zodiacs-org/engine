@@ -87,8 +87,54 @@ build; it was not waited for.
 
 ### The sweep on the pack
 
-`tools/run-sweep.sh de440` and `tools/pack_near_sun.py` on this candidate's
-build: added in the next commit, when the run ends.
+`tools/run-sweep.sh de440` (`KEEP=1`) on this candidate's build, then
+`tools/pack_near_sun.py` on the engine values it kept: `sweep-pack/` and
+`results/pack-near-sun.json`. The build swept is a `dist/` whose `.js`
+files have the carried archive's digest (`find dist -name '*.js' | sort |
+xargs sha256sum | sha256sum`: `ce728d56…` for both); its `.d.ts` files
+differ from the carried ones by one doc comment of `DetailedResult`, written
+after the copy was taken. `results/near-sun.json` was made on the same
+build. This is evidence about the pack, not a bounds table: `calc()` on the
+pack still quotes `src/calc-bounds-de440.ts`.
+
+Against the kernel's place with the deflection, with `erfa.ldsun`'s limiter
+(`sweep-pack/tables.md`), over the 146,097 instants and all eight frames:
+the Sun, the Moon, Venus, Neptune and Pluto are within 0.0045″ (the Moon
+0.00443″, the Sun 0.00394″); the true node within 0.566″ of the kernel's
+osculating node; Mercury, Mars, Jupiter, Saturn and Uranus within the same
+0.004″ except at a few instants, up to 17.308″ (Jupiter, JD 2499942.0 TT),
+with rate differences up to 624.5″ a day there.
+
+`results/pack-near-sun.json` splits each body's instants at 0.1° from the
+Sun's centre (the Sun's own row is all in the near part, at 0°, and means
+nothing there), true ecliptic of date:
+
+| body | instants within 0.1° | largest angle, farther, either limiter | within 0.1°, ldsun's limiter | within 0.1°, the engine's limiter (1e-14) |
+| --- | ---: | ---: | ---: | ---: |
+| Mercury | 10 | 0.0040″ | 5.000″ (0.0178° from the centre) | 0.0012″ |
+| Venus | 5 | 0.0040″ | 0.0007″ | 0.0007″ |
+| Mars | 7 | 0.0040″ | 5.643″ (0.0320°) | 0.0016″ |
+| Jupiter | 7 | 0.0040″ | 17.308″ (0.0206°) | 0.0031″ |
+| Saturn | 3 | 0.0039″ | 7.247″ (0.0420°) | 0.0016″ |
+| Uranus | 4 | 0.0040″ | 6.196″ (0.0463°) | 0.0005″ |
+| Neptune | 2 | 0.0040″ | 0.0011″ (0.0986°) | 0.0011″ |
+| Pluto | 0 | 0.0040″ | | |
+| Moon | 0 | 0.0043″ | | |
+
+Each figure is rounded up from `results/pack-near-sun.json`.
+
+Rates, against the arbiter's own central difference over 0.0001 day: farther
+than 0.1°, within 0.426″ a day for the Moon and 0.039″ for every other
+body, with either limiter; within 0.1°, up to 624.5″ a day (Jupiter) with
+ldsun's limiter and 0.89″ a day (Jupiter) with the engine's, the difference
+of the two steps over a deflection that changes fast.
+
+So the pack's place and rate agree with the kernel's to a few
+thousandths of an arcsecond wherever the deflection model is the same, in
+every frame, near the Sun too; every larger difference is at an instant
+within 0.1° of the Sun's centre (each body's largest within 0.05°), where
+`erfa.ldsun` tapers the deflection to zero (inside about 0.081°) and
+`src/de440/reduce.ts`, with its limiter of 1e-14, does not.
 
 ## The techniques entry's labels
 

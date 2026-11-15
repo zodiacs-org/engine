@@ -32,8 +32,8 @@ FRAME = 'ecliptic-true-of-date'
 
 
 def apparent(kernel, body, jd, engine_limit):
-    """sweep.geocentric's APPARENT, with erfa.ldsun's limiter or the engine's."""
-    if not engine_limit:
+    """sweep.geocentric's APPARENT, with erfa.ldsun's limiter or the engine's (neither bends the Sun's own light)."""
+    if not engine_limit or body == 'Sun':
         return sweep.geocentric(kernel, body, jd, deflection=True)['APPARENT']
     t = sweep.tdb(jd)
     earth, earth_v = kernel.state(sweep.EARTH, t)
