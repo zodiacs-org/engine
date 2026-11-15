@@ -1,0 +1,487 @@
+{
+ "year": 1991,
+ "defaultEphemeris": {
+  "name": "de440",
+  "de440": {
+   "opened": true,
+   "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
+   "fromTtDays": -76699.5,
+   "toTtDays": 76699.5,
+   "error": null
+  }
+ },
+ "results": {
+  ".:natalChart whole-sign": {
+   "threw": "RangeError: houseSystem must be one of \"whole\", \"placidus\", \"porphyry\", \"equal\", \"equal-mc\", \"vehlow\", \"koch\", \"regiomontanus\", \"campanus\", \"topocentric"
+  },
+  ".:natalChart tt": {
+   "digest": "e885e2d7ac6e78cf",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  ".:positions(Date)": {
+   "digest": "e77cc5e507dc0366",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true
+  },
+  ".:transits(chart, later)": {
+   "digest": "da916bb31c1c28eb",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true
+  },
+  ".:synastry(charts)": {
+   "digest": "9015ca6b76183710",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true
+  },
+  ".:synastry(chart, birth)": {
+   "digest": "9015ca6b76183710",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true
+  },
+  ".:progressedBodies": {
+   "digest": "d00b0597ffe14312",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true
+  },
+  ".:moonPhase(Date)": {
+   "digest": "1ba9959d63a62501",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440"
+  },
+  ".:saturnReturn(birth)": {
+   "digest": "423bc42287520b88",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  ".:saturnReturn(chart)": {
+   "digest": "423bc42287520b88",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  ".:chartPoints(chart)": {
+   "digest": "1d56c6ab0a361ce0",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  ".:chartPoints(birth, no time)": {
+   "digest": "79285efe002c6d32",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  ".:chartDeclinations(chart)": {
+   "digest": "a73ae3fcbf71861e",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  ".:chartDeclinations(birth, no time)": {
+   "digest": "a73ae3fcbf71861e",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  ".:searchLongitudeCrossings Moon": {
+   "digest": "b11aacbcddd58924",
+   "status": "complete",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  ".:searchLongitudeCrossings Mars": {
+   "digest": "cff9ab5c39103e84",
+   "status": "complete",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  ".:searchLongitudeCrossings North Node": {
+   "digest": "33f72d67b22a5605",
+   "status": "complete",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./internal:bodyLongitudeDetailed Moon": {
+   "digest": "7e825ce1aab80621",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  "./internal:bodyLongitudeDetailed North Node": {
+   "digest": "8141154bd7e00946",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  "./internal:longitudeSpeedDetailed Pluto": {
+   "digest": "ec98a4562efd61c7",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  "./internal:computeBodies": {
+   "digest": "af934f1ca07bb561",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true
+  },
+  "./receipt:createNatalEnvelope": {
+   "digest": "f0579f17bc982032",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true
+  },
+  "./receipt:serialize(create)": {
+   "digest": "f0579f17bc982032",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true
+  },
+  "./calc:calc Pluto ecliptic-j2000": {
+   "digest": "c866e22819636b97",
+   "status": "ok",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topFlags": []
+  },
+  "./calc:calc South Node": {
+   "digest": "155c588922e6a750",
+   "status": "ok",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topFlags": []
+  },
+  "./calc:calc Mercury cartesian": {
+   "digest": "44c3ee871c9d7581",
+   "status": "ok",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topFlags": []
+  },
+  "./calc:calc Moon topocentric": {
+   "digest": "3199271f5df408a8",
+   "status": "ok",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": true,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./calc:calc Saturn geometric": {
+   "digest": "32767d7566eb3eb5",
+   "status": "ok",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": true,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./calc:calc Lilith": {
+   "threw": "RangeError: body must be one of Sun, Moon, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Mean Node, Mean"
+  },
+  "./calc:chart sidereal": {
+   "digest": "30c2088e066cc509",
+   "status": "ok",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true
+  },
+  "./calc:chart no place": {
+   "digest": "fbbd017ac728c79a",
+   "status": "ok",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true
+  },
+  "./calc:events Moon crossing": {
+   "digest": "b1a9991c9469c775",
+   "status": "ok",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topFlags": []
+  },
+  "./calc:events station": {
+   "threw": "RangeError: kind must be one of longitude-crossing."
+  },
+  "./calc:events ingress": {
+   "threw": "RangeError: kind must be one of longitude-crossing."
+  },
+  "./window:birthWindow day": {
+   "digest": "d021d25e46e1e925",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  "./techniques:solarReturn(chart)": {
+   "digest": "145c55d691b8ccab",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topFlags": []
+  },
+  "./techniques:lunarReturn(chart)": {
+   "digest": "e9aa442462489803",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topFlags": []
+  },
+  "./techniques:compositeChart(chart, birth)": {
+   "digest": "250e8ed4634bb25f",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  "./techniques:davisonChart(charts)": {
+   "digest": "4977f1b8fb22c6db",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topFlags": []
+  },
+  "./techniques:voidOfCourseAt(later)": {
+   "digest": "9c9bb12286d22a8a",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  "./techniques:moonSignCandidates": {
+   "digest": "2011f0e7d955ce16",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./techniques:moonAspects": {
+   "digest": "0e4b5b4f997dd0f8",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true
+  },
+  "./techniques:chartAspectPatterns(no time)": {
+   "digest": "6e9880c1a2fbea10",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": true,
+   "topEphemeris": "jpl-de440",
+   "topFlags": []
+  },
+  "./timing:profectionAt(chart)": {
+   "digest": "0473a7df289e1631",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./timing:profectionYear(chart)": {
+   "digest": "41df0333d2fe40b6",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./timing:firdaria(chart)": {
+   "digest": "c9dcc00444e16edb",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./timing:firdariaAt(chart)": {
+   "digest": "52b01ed350f3e547",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./timing:planetaryReturns(chart) Mars": {
+   "digest": "6394d4136d0cd70e",
+   "status": "complete",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./timing:planetaryReturns(birth) Moon": {
+   "digest": "526d57ea82299828",
+   "status": "complete",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./timing:solarArcDirections(chart)": {
+   "digest": "576177fefd30a361",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./timing:zodiacalReleasing(chart) Spirit": {
+   "digest": "c69b542e982e5e2c",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./timing:zodiacalReleasingAt(chart)": {
+   "digest": "009e8cc585ec7737",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./vedic:siderealChart raman": {
+   "digest": "c8c51810bbb80d5a",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./vedic:siderealChart true-chitra": {
+   "digest": "83971b6b4cf14c8c",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./vedic:vargaSensitivity(chart)": {
+   "digest": "2daabbf980e1ca15",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./vedic:ayanamsa true-revati": {
+   "digest": "50100f76fb7405b9",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./vedic:ayanamsa galactic": {
+   "threw": "RangeError: Unknown ayanamsa: galactic-center-0-sag."
+  },
+  "./sky:skyEvents Moon": {
+   "digest": "be67585cfff39e4d",
+   "status": "complete",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./sky:skyEventsOn Venus": {
+   "digest": "e549d5752d772b39",
+   "status": "complete",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false,
+   "topFlags": []
+  },
+  "./sky:planetaryHourAt": {
+   "digest": "f581de9cf293e56d",
+   "unavailable": false,
+   "outside": false,
+   "namesAE": false,
+   "namesDe440": false
+  }
+ }
+}

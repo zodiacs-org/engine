@@ -1,0 +1,87 @@
+{
+ "n": 2500,
+ "insideDisc": 99,
+ "frames": [
+  "ecliptic-true-of-date",
+  "ecliptic-mean-of-date",
+  "ecliptic-j2000",
+  "ecliptic-icrs",
+  "equatorial-true-of-date",
+  "equatorial-mean-of-date",
+  "equatorial-j2000",
+  "equatorial-icrs"
+ ],
+ "ephemerisNames": [
+  "jpl-de440"
+ ],
+ "flagged": 0,
+ "deflectionConventions": [
+  "deflection:sun-outside-disc"
+ ],
+ "defaultEphemeris": {
+  "name": "de440",
+  "de440": {
+   "opened": true,
+   "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
+   "fromTtDays": -76699.5,
+   "toTtDays": 76699.5,
+   "error": null
+  }
+ },
+ "rateVsOwnCentralDifference": {
+  "stepDays": 0.01,
+  "arcsecPerDay": {
+   "Sun": {
+    "lon": 0.005584852260653861,
+    "lat": 0.0017724463454088782
+   },
+   "Moon": {
+    "lon": 0.053043654588691425,
+    "lat": 0.03447021356350888
+   },
+   "Mercury": {
+    "lon": 0.01517973714726395,
+    "lat": 0.004999249014758789
+   },
+   "Venus": {
+    "lon": 0.017237485678833764,
+    "lat": 0.0063743608791355655
+   },
+   "Mars": {
+    "lon": 0.028071804081264418,
+    "lat": 0.004381219227411748
+   },
+   "Jupiter": {
+    "lon": 0.0009409382073499728,
+    "lat": 0.0003103738066556616
+   },
+   "Saturn": {
+    "lon": 0.0007024550541245844,
+    "lat": 0.00030643327875168325
+   },
+   "Uranus": {
+    "lon": 0.0009548739399178885,
+    "lat": 0.0023472091470466694
+   },
+   "Neptune": {
+    "lon": 0.005259112185740378,
+    "lat": 0.0047744010345240895
+   },
+   "Pluto": {
+    "lon": 0.000275307456831797,
+    "lat": 0.00012743150534788583
+   }
+  }
+ },
+ "calcVsPositions": {
+  "total": 6000,
+  "equalToTheBit": 6000,
+  "natalChartEqualsPositions": 6000,
+  "worstArcsec": {
+   "lon": 0,
+   "lat": 0,
+   "speed": 0
+  }
+ },
+ "rowCount": 201584
+}
