@@ -129,7 +129,8 @@ def geocentric(kernel, body, jd, deflection=False):
     the stellar aberration of the geocentre's barycentric velocity, erfa.ab; its length the light path).
     NONE comes with the geometric velocity. With deflection, also the apparent direction with the Sun's
     light deflection applied before the aberration (erfa.ld with erfa.ldsun's limiter, as validate.py), with the
-    length of the light path, as LTS."""
+    length of the light path, as LTS; except for a body behind the Sun's disc, whose light is not bent, as JPL
+    Horizons does (behind_disc)."""
     t = tdb(jd)
     earth, earth_v = kernel.state(EARTH, t)
     target, target_v = kernel.state(TARGETS[body], t)
@@ -166,8 +167,30 @@ def geocentric(kernel, body, jd, deflection=False):
             em = norm(e)
             e = e / em[:, None]
             bent = erfa.ld(1.0, p, q, e, em, 1e-6 / np.maximum(em * em, 1.0))
+            bent = np.where(behind_disc(kernel, t, earth, p, length)[:, None], p, bent)
         out['APPARENT'] = erfa.ab(bent, v, s, bm1) * length[:, None]
     return out
+
+# The Sun's radius, km, as JPL Horizons gives it (IAU 2015 nominal).
+SUN_RADIUS_KM = 695700.0
+
+
+def behind_disc(kernel, t, earth, p, length):
+    """Where a body whose light-time direction from the geocentre is p (unit rows) at light-path length `length`
+    (au) is behind the Sun's disc at TDB t: farther than the Sun and within the Sun's apparent radius,
+    asin(R / d), of the Sun's direction, the Sun at its own light time. JPL Horizons bends no light there: its
+    apparent places of Mercury on 1954-05-08, Uranus on 2029-06-04 and Jupiter on 2032-01-01 are the kernel's
+    without the deflection inside the disc and with it outside, to the change at the limb
+    (docs/evidence/1.1.0-rc.12-20261115/near-sun/). From 1.1.0-rc.12 the shipped pack's reduction does the
+    same (src/de440/reduce.ts); erfa.ldsun's limiter alone tapers the deflection inside about 0.08 degrees and
+    is up to 5.8 arcseconds from Horizons inside the disc."""
+    sun = kernel.position(SUN, t) - earth
+    sun = kernel.position(SUN, t - norm(sun) / C) - earth
+    d = norm(sun)
+    s = sun / d[:, None]
+    apart = np.arctan2(norm(np.cross(p, s)), np.einsum('ni,ni->n', p, s))
+    return (length > d) & (apart < np.arcsin(SUN_RADIUS_KM / AU / d))
+
 
 # --------------------------------------------------------------------------- frames (ERFA, IAU 2006/2000A)
 
@@ -562,7 +585,7 @@ def merge(out_dir, selfcheck_path, shard_paths):
         'arbiter': {'kernel': first['kernel'],
                     'reduction': 'geocentric ICRF vectors from the kernel through jplephem (geometric; light time by iteration; light time '
                                  'and the stellar aberration of erfa.ab' + (', the apparent places with the Sun\'s light deflection of '
-                                 'erfa.ld before it, with erfa.ldsun\'s limiter' if ephemeris == 'de440' else '') + '), turned into each '
+                                 'erfa.ld before it, with erfa.ldsun\'s limiter, and none for a body behind the Sun\'s disc, as JPL Horizons' if ephemeris == 'de440' else '') + '), turned into each '
                                  'frame with ERFA\'s IAU 2006/2000A models as docs/evidence/calc-api/tools/compare.py does',
                     'software': first['software']},
         'run': run,

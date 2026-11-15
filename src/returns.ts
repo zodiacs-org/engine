@@ -30,7 +30,11 @@ export interface SaturnReturnResult {
   natalLon: number;
   natalRetrograde: boolean;
   seasons: ReturnSeason[];
-  /** The ephemeris natal Saturn came from, as a BodyPosition names it; set by `saturnReturn` from 1.1.0-rc.10. */
+  /**
+   * The ephemeris the result's positions came from, as a BodyPosition names it; set by `saturnReturn` from
+   * 1.1.0-rc.10. From 1.1.0-rc.12 it is astronomy-engine wherever `flags` holds a fallback, a search that ran
+   * past an end of the shipped DE440 pack included; in rc.10 and rc.11 it named natal Saturn's ephemeris there.
+   */
   ephemeris?: string;
   /**
    * Each kind of fallback from the shipped DE440 pack to astronomy-engine

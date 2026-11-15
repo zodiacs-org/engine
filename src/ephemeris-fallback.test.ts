@@ -187,8 +187,9 @@ describe("an instant outside the shipped pack's coverage", () => {
     expect(across).toMatchObject({ status: "complete", flags: ["outside-de440-span"] });
     const within = root.searchLongitudeCrossings("Sun", 30, "2000-01-01T00:00:00Z", "2001-01-01T00:00:00Z");
     expect(within).toMatchObject({ status: "complete", flags: [] });
-    // Born in 2150, the Saturn returns run to 2242, past the pack's last year.
-    expect(root.saturnReturn("2150-01-01T00:00:00Z")).toMatchObject({ ephemeris: "jpl-de440", flags: ["outside-de440-span"] });
+    // Born in 2150, the Saturn returns run to 2242, past the pack's last year: from 1.1.0-rc.12 the result names
+    // astronomy-engine, the source of the positions past the end, beside the flag (rc.11 named jpl-de440).
+    expect(root.saturnReturn("2150-01-01T00:00:00Z")).toMatchObject({ ephemeris: "astronomy-engine", flags: ["outside-de440-span"] });
     expect(root.saturnReturn(BIRTH.utc)).toMatchObject({ ephemeris: "jpl-de440", flags: [] });
   });
 

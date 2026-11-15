@@ -63,8 +63,13 @@ export type SourceBody = Exclude<BodyName, "North Node" | "South Node">;
  */
 export interface PositionSource {
   readonly ephemeris: { readonly name: string; readonly version: string };
-  /** `dist`, where a source gives it: the distance along the light path, au. The shipped DE440 pack's source gives it. */
-  place(body: SourceBody, ttDays: number): { lon: number; lat: number; dist?: number };
+  /**
+   * `dist`, where a source gives it: the distance along the light path, au. The shipped DE440 pack's source gives it,
+   * and from 1.1.0-rc.12 `behindDisc`: whether the body is behind the Sun's disc, where its reduction bends no light
+   * and so its place steps at the limb. A source that gives `behindDisc` takes `behind`, when given, as that decision
+   * instead of making it at `ttDays`; the engine passes a speed's middle instant's decision to its two samples.
+   */
+  place(body: SourceBody, ttDays: number, behind?: boolean): { lon: number; lat: number; dist?: number; behindDisc?: boolean };
   trueNode(ttDays: number): number;
   /**
    * Optional: the instants in [fromTtDays, toTtDays], ascending, at which a
@@ -248,6 +253,21 @@ export interface ChartPoints {
    * Vertex, the East Point and the seven lots only when the chart has angles.
    */
   points: PointPosition[];
+  /**
+   * From 1.1.0-rc.12: the ephemeris of the chart the points were derived
+   * from, its own `ephemeris` (`"jpl-de440"` on the shipped pack,
+   * astronomy-engine's name and version where the chart was computed on
+   * it); null for a supplied chart that names none (one from 1.1.0-rc.9 or
+   * earlier).
+   */
+  ephemeris: { readonly name: string; readonly version: string } | null;
+  /**
+   * From 1.1.0-rc.12: the chart's fallback flags (`EphemerisFallback`),
+   * `"de440-unavailable"` or `"outside-de440-span"` where its bodies are
+   * astronomy-engine's as a fallback from the shipped pack; none on the pack,
+   * after the caller chose astronomy-engine, or inside `withEphemeris`.
+   */
+  flags: EphemerisFallback[];
 }
 
 export interface Angles {
@@ -376,7 +396,7 @@ export interface MoonPhase {
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "1.1.0-rc.11";
+export const ENGINE_VERSION: string = "1.1.0-rc.12";
 
 /**
  * astronomy-engine, the ephemeris the engine computes on where the shipped

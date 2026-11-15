@@ -33,8 +33,13 @@ export const DE440_EPHEMERIS_NAME = "jpl-de440" as const;
 export interface De440Source extends PositionSource {
   /** `version` is the SHA-256 of the sealed pack the positions came from. */
   readonly ephemeris: { readonly name: typeof DE440_EPHEMERIS_NAME; readonly version: string };
-  /** The light-path distance too, au. */
-  place(body: ReducedBody, ttDays: number): { lon: number; lat: number; dist: number };
+  /**
+   * The light-path distance too, au, and from 1.1.0-rc.12 whether the body is
+   * behind the Sun's disc, where the reduction bends no light. `behind`, when
+   * given, is taken as that decision instead of making it at `ttDays`, as a
+   * speed's samples take the decision of their middle instant.
+   */
+  place(body: ReducedBody, ttDays: number, behind?: boolean): { lon: number; lat: number; dist: number; behindDisc: boolean };
   /**
    * The instants in [fromTtDays, toTtDays] (TT days past J2000.0), ascending,
    * at which a place or the true node may step by more than rounding: where
@@ -114,9 +119,9 @@ function sourceOf(copy: Uint8Array, digest: string, header: ReturnType<typeof pa
   return Object.freeze({
     ephemeris: Object.freeze({ name: DE440_EPHEMERIS_NAME, version: digest }),
     pack,
-    place(body: ReducedBody, ttDays: number): { lon: number; lat: number; dist: number } {
-      const place = reducer.apparent(body, ttDays);
-      return { lon: place.lon, lat: place.lat, dist: place.distKm / AU_KM };
+    place(body: ReducedBody, ttDays: number, behind?: boolean): { lon: number; lat: number; dist: number; behindDisc: boolean } {
+      const place = reducer.apparent(body, ttDays, behind);
+      return { lon: place.lon, lat: place.lat, dist: place.distKm / AU_KM, behindDisc: place.behindDisc };
     },
     trueNode(ttDays: number): number {
       return reducer.trueNode(ttDays);

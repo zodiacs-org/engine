@@ -143,6 +143,12 @@ const BODIES = [
 const NORTH = 10;
 const SOUTH = 11;
 const RATES = /*#__PURE__*/ BODIES.map((body) => WINDOW_RATE_BOUNDS[body]);
+/**
+ * The most the Sun's light deflection displaces a planet's longitude on the
+ * DE440 pack, degrees: 1.8″, above 4GM/c²R = 1.7512″, the deflection of
+ * light that passes at the Sun's limb (Sky.bend).
+ */
+const DEFLECTION_JITTER = 1.8 / 3600;
 /** Aspect pairs in natalChart's order: the first ten bodies, earlier body first. */
 const PAIRS: (readonly [number, number])[] = [];
 for (let first = 0; first < 10; first += 1) {
@@ -499,38 +505,35 @@ class Sky {
     return value;
   }
 
+  /** The bound on a body's longitude rate, degrees a day: its WINDOW_RATE_BOUNDS entry. */
+  rate(index: number): number {
+    return RATES[index]!;
+  }
+
   /**
-   * The bound on a body's longitude rate over [t1, t2], degrees a day: its
-   * WINDOW_RATE_BOUNDS entry, and on a source that bends light at the Sun
-   * (the DE440 pack's reduction, src/de440/reduce.ts) more for Mercury to
-   * Pluto near conjunction with the Sun. There the place is displaced from
-   * the Sun by d = k / θ, θ the elongation and k = 2 (2GM/c²)/r, 0.00407″
-   * at 1 au over θ in radians (1.75″ at the limb, and more behind the disk,
-   * where the reduction keeps the same form down to its limiter); as the
-   * body passes, d and its direction change at up to 2 k v / θ², v the rate
-   * of the body against the Sun. In degrees and days that is
-   * 2.7e-4 v / θ², with the Sun at perihelion. Farther than a degree from
-   * the Sun in longitude it is under 0.002 degrees a day, inside what every
-   * bound has in hand (each is about twice the body's largest rate). Nearer,
-   * θ is bounded below over the interval from the longitudes at its start,
-   * the body's latitude there, and the most either can change (the two
-   * longitude bounds, and a degree a day of latitude, above every planet's);
-   * within 0.01° of the Sun's centre the rate is taken as unbounded, and the
-   * search compares single milliseconds.
+   * The most the Sun's light deflection may displace a body's longitude at
+   * any instant of [t1, t2], degrees: on a source that bends light at the
+   * Sun (the DE440 pack's reduction, src/de440/reduce.ts), for Mercury to
+   * Pluto within a degree of the Sun in longitude, DEFLECTION_JITTER, and
+   * otherwise nothing. The reduction bends light outside the Sun's disc and
+   * not behind it (from 1.1.0-rc.12), so the place is the undeflected place,
+   * whose rate the body's bound covers, plus a displacement of at most
+   * 4GM/c²R = 1.7512″ (light passing at the limb), which steps to nothing
+   * where the body passes behind the limb. The search takes that
+   * displacement as it takes the true node's jitter. Farther than a degree
+   * in longitude the deflection's rate is under 0.002 degrees a day, inside
+   * what every rate bound has in hand (each is about twice the body's
+   * largest rate), and the disc is far away. Through 1.1.0-rc.11 the
+   * reduction bent light behind the disc too, without limit towards the
+   * centre, and the rate bound grew as the inverse square of the elongation
+   * instead.
    */
-  rate(index: number, t1: number, t2: number): number {
-    const base = RATES[index]!;
-    if (!this.source || index < 2 || index >= NORTH) return base;
+  bend(index: number, t1: number, t2: number): number {
+    if (!this.source || index < 2 || index >= NORTH) return 0;
     const days = (t2 - t1) / DAY;
-    const against = base + RATES[0]!;
+    const against = RATES[index]! + RATES[0]!;
     const apart = Math.min(Math.abs(signedDelta(this.lon(t1, 0), this.lon(t1, index))), Math.abs(signedDelta(this.lon(t2, 0), this.lon(t2, index))));
-    const inLongitude = Math.max(0, apart - against * days);
-    if (inLongitude >= 1) return base;
-    const tt = timeBasis(t1, "utc").ttDays;
-    const latitude = Math.abs(this.source.place(BODIES[index] as SourceBody, tt).lat - this.source.place("Sun", tt).lat);
-    const elongation = 0.99 * Math.hypot(inLongitude, Math.max(0, latitude - days));
-    if (elongation < 0.01) return Number.POSITIVE_INFINITY;
-    return base + (2.7e-4 * (against + 1)) / elongation ** 2;
+    return apart - against * days >= 1 ? 0 : DEFLECTION_JITTER;
   }
 
   node(time: number): number {
@@ -622,10 +625,11 @@ class Interval {
     const known = this.bodies[index];
     if (known !== undefined) return known;
     const { sky, t1, t2 } = this;
-    const reach = (sky.rate(index, t1, t2) * (t2 - t1)) / DAY;
+    const reach = (sky.rate(index) * (t2 - t1)) / DAY;
     // Each end is the smooth motion plus at most J, and so is every instant
     // between: the enclosure of the smooth part widens by J, then by J again.
-    const jitter = index >= NORTH ? 2 * Math.max(nodeJitter(t1), nodeJitter(t2)) : 0;
+    // J is the node's jitter, or for a planet near the Sun the light deflection's displacement.
+    const jitter = 2 * (index >= NORTH ? Math.max(nodeJitter(t1), nodeJitter(t2)) : sky.bend(index, t1, t2));
     let range: Range;
     if (!(reach + jitter < 90) || this.jumps(sky.seams.bodies[index]!)) range = null;
     else {
@@ -648,14 +652,16 @@ class Interval {
     if (this.jumps(sky.seams.bodies[first]!) || this.jumps(sky.seams.bodies[second]!)) return true;
     const s1 = separation(sky.lon(t1, first), sky.lon(t1, second));
     const s2 = separation(sky.lon(t2, first), sky.lon(t2, second));
-    const reach = ((sky.rate(first, t1, t2) + sky.rate(second, t1, t2)) * (t2 - t1)) / DAY;
+    const reach = ((sky.rate(first) + sky.rate(second)) * (t2 - t1)) / DAY;
+    // The separation is a smooth part plus at most the two light deflections' displacements, as body() takes them.
+    const jitter = 2 * (sky.bend(first, t1, t2) + sky.bend(second, t1, t2));
     if (!(reach < 360)) return true;
-    if (Math.abs(s2 - s1) > reach + 1e-12) {
+    if (Math.abs(s2 - s1) > reach + jitter + 1e-12) {
       this.violation();
       return true;
     }
-    const lo = (s1 + s2 - reach) / 2 - BAND;
-    const hi = (s1 + s2 + reach) / 2 + BAND;
+    const lo = (s1 + s2 - reach) / 2 - jitter - BAND;
+    const hi = (s1 + s2 + reach) / 2 + jitter + BAND;
     const edges = first < 2 ? LUMINARY_ORB_EDGES : ORB_EDGES;
     return edges.some((edge) => edge >= lo && edge <= hi);
   }

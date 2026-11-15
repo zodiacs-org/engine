@@ -16,7 +16,7 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**1.1.0-rc.10**, the candidate for 1.1.0, not published. It ships a sealed
+**1.1.0-rc.12**, the candidate for 1.1.0, not published. It ships a sealed
 pack of JPL's DE440 for 1790 to 2210 and computes on it by default: a plain
 `natalChart`, `positions`, `calc` or `birthWindow` call, with nothing opened
 or supplied, takes the Sun, the Moon, the planets and the true node from the
@@ -30,10 +30,16 @@ between the two ephemerides. At one instant a day (noon TT) from 1800 to
 2199 the largest is 29.19″ of ecliptic longitude for the Sun, the Moon and
 the planets (Pluto, on 2199-12-31) and 32.64″ for the true node
 (CHANGELOG.md has each body's). That is the largest at those instants, not a
-limit: a planet passing behind the Sun moves more, because the pack bends
-its light by the Sun and astronomy-engine does not (Neptune, 0.0234° from
-the Sun's centre at 1920-08-03T23:48:31Z, by 33.37″ in longitude;
-`docs/evidence/1.1.0-rc.11-20261115/`).
+limit: near the Sun a planet moves more, because the pack bends its light by
+the Sun and astronomy-engine does not (at most 1.7512″, at the Sun's limb). From
+1.1.0-rc.12 the pack bends no light from a planet behind the Sun's disc, as
+JPL Horizons does not: at every passage behind the disc from 1800 to 2199
+(393 passages, 3,490 instants inside the disc) the pack's place is within
+0.0023″ of Horizons's, taken relative to the Sun, where the formula of
+1.1.0-rc.10 and rc.11, which bent the light there too, is up to 333.48″ from it
+(Mercury; reduced from `de440.bsp`)
+([docs/de440.md](docs/de440.md), *Behind the Sun's disc*;
+`docs/evidence/1.1.0-rc.12-20261115/near-sun/`).
 **No fallback is silent**: outside 1790-01-02 to 2209-12-31, or if the pack
 cannot be opened, the engine computes on astronomy-engine, and the result
 says so with a flag (`"outside-de440-span"`, `"de440-unavailable"`) and by
@@ -43,7 +49,9 @@ labelled form beside it: `searchLongitudeCrossings` for
 `findLongitudeCrossings`, and from 1.1.0-rc.11 `solarReturnInstantDetailed`,
 `mostRecentSolarReturnInstantDetailed`, `lunarReturnInstantDetailed` and
 `moonSignsBetweenDetailed` in `@zodiacs/engine/techniques`, which return
-`{ value, ephemeris, flags }` ([docs/de440.md](docs/de440.md)).
+`{ value, ephemeris, flags }` ([docs/de440.md](docs/de440.md)). From
+1.1.0-rc.12 `chartPoints` and `chartDeclinations` carry their chart's
+`ephemeris` and fallback `flags` too, given a birth or a chart.
 `setDefaultEphemeris("astronomy-engine")` gives earlier releases' positions
 everywhere, named and not flagged. From this candidate `@zodiacs/engine/calc`
 (`calc`, `chart`, `events`) and `birthWindow` compute on the pack too, so
@@ -55,7 +63,9 @@ the sky entry's results name no ephemeris ([docs/de440.md](docs/de440.md)). The 
 (4,557,833 bytes against 1.1.0-rc.7's 1,152,017), and an application
 that bundles the root entry bundles the pack's 3,319,552 characters (see
 [docs/de440.md](docs/de440.md) and CHANGELOG.md). 1.1.0-rc.9 was this
-candidate's first draft, superseded before review; 1.1.0-rc.8 was a draft
+candidate's first draft, superseded before review; 1.1.0-rc.10 and
+1.1.0-rc.11 were drafts on the same pull request, reviewed and replaced;
+1.1.0-rc.8 was a draft
 that shipped the pack behind `withEphemeris` only, withdrawn, and its
 number is not used again. From 1.1.0-rc.7 the error limits
 `@zodiacs/engine/calc` quotes for geocentric
@@ -388,9 +398,13 @@ mapping and the measured accuracy, is
 [docs/calc.md](https://github.com/zodiacs-org/engine/blob/main/docs/calc.md).
 
 Returned longitudes use degrees in `[0, 360)` and positions include sign and degree
-annotations. Charts use the tropical ecliptic of date. Planetary positions are
-geocentric and corrected for light time and aberration, but not for the Sun's
-gravitational deflection; the Moon's series carries neither correction. The
+annotations. Charts use the tropical ecliptic of date. Positions are
+geocentric. On the shipped DE440 pack, the default, each body's place is
+corrected for light time, the Sun's light deflection (from 1.1.0-rc.12 none
+for a planet behind the Sun's disc, as JPL Horizons) and aberration; on
+astronomy-engine planetary positions are corrected for light time and
+aberration, not for the deflection, and the Moon's series carries neither
+correction. The
 chart functions do not calculate topocentric parallax; `@zodiacs/engine/calc`
 gives topocentric positions (`center: { topocentric }`), and
 `@zodiacs/engine/sky` finds rise and set for a topocentric observer.
@@ -944,21 +958,17 @@ ingress does not flicker. The pack's positions step where a read passes
 from one of its Chebyshev records to the next: the true node by up to
 1.11″, more than J, the Moon by up to 0.0011″; the search takes each such
 instant, a few in 48 hours, as a seam, like a step of the time basis. And
-`WINDOW_RATE_BOUNDS` does not hold near the Sun: the pack's reduction bends
-a planet's light by the inverse of its angle from the Sun, so behind the
-Sun its place moves faster than the body. The rate scan, run on the pack,
-divides each bound by the largest rate found plus what its grid can miss:
-1.92 to 2.06 for the Sun, the Moon, Mercury, Venus, Mars, Jupiter, Pluto
-and the true node, as on astronomy-engine; 1.48 for Saturn and 1.45 for
-Uranus, whose rates jump between daily samples near the Sun; and 0.39 for
-Neptune, whose largest rate, 0.142° a day on 1920-08-04, is 1.85 times its
-bound of 0.077 (and more than ten times it over ten seconds at its
-closest, 0.022° from the Sun's centre; `src/window-de440.test.ts`). The
-search therefore raises its
-bound for Mercury to Pluto within a degree of the Sun by what that
-deflection allows, and within 0.01° of the Sun's centre compares single
-milliseconds (`docs/evidence/1.1.0-rc.10-20261114/`, and
-[docs/de440.md](docs/de440.md)). On the 1,000 preregistered random windows of `docs/evidence/birth-window/` (1800 to 2200, all thirteen systems), run on the pack, all 24,188 sampled transitions were matched, none missed and none extra, over 12,259,372 whole-second samples, and no window was flagged `bound-exceeded` (`docs/evidence/1.1.0-rc.10-20261114/`).
+near the Sun the pack bends a planet's light, by at most 1.7512″ outside the
+Sun's disc and, from 1.1.0-rc.12, not at all behind it, so within a degree
+of the Sun the search takes that deflection as a displacement of at most
+1.8″, as it takes the node's jitter. The rate scan on the pack holds every
+bound with its margin, bound over largest rate plus what its grid can miss
+1.634 to 2.057 (`docs/evidence/1.1.0-rc.12-20261115/window/`). Through
+1.1.0-rc.11 the pack bent light behind the disc too, Neptune's place moved
+at 1.85 times its bound behind the Sun on 1920-08-04, and the search raised
+its bounds there and compared single milliseconds within 0.01° of the Sun's
+centre; from 1.1.0-rc.12 it does neither, and `src/window-de440.test.ts`
+holds a window across each limb and the centre of a passage to natalChart.
 
 In one thread, a 10-minute window takes about 2 ms, two hours about 20 ms and
 a whole day about 0.23 s (medians, Node.js 22; `timing.json`). A window over a

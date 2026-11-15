@@ -1,0 +1,11 @@
+body, the two Horizons instants (TT) between which it changes, how, the fraction there, and Horizons's edge inside the engine's, arcseconds; then each response's SHA-256
+Mercury  2434871.243189..2434871.243196 bent->straight fraction 0.9998772..0.9999090 edge inside by 0.087..0.117" (radius 950.19")
+         response 971d703b2d5c0ce7c6d5de4c9cf77b456d204c14bd6867480e98dabcc71caaa7
+Mercury  2434871.677466..2434871.677473 straight->bent fraction 0.9998846..0.9999164 edge inside by 0.079..0.110" (radius 950.10")
+         response 8241ce552679985ce5e37a10d142d37ebe498b7ea00845bb81d310020d80352c
+Uranus   2462291.891383..2462291.891390 bent->straight fraction 0.9998232..0.9998468 edge inside by 0.145..0.167" (radius 945.52")
+         response 7292667fb04810d15fd7438a1864aa66c8bd733a1a52deec29e797cf9dc3cf91
+Jupiter  2463232.476781..2463232.476788 bent->straight fraction 0.9999155..0.9999358 edge inside by 0.063..0.082" (radius 975.56")
+         response 4cc2d8adda0e39664aece0b4dc929112feffbd0eb07aa3dd1e354414e585d4d0
+Jupiter  2463233.164621..2463233.164628 straight->bent fraction 0.9998572..0.9998772 edge inside by 0.120..0.139" (radius 975.57")
+         response a9090212da09e733d5b4015d0e749fd55f7c21da1e349545484c49cbaf851ae7

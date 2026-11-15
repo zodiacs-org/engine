@@ -37,6 +37,7 @@ import type {
   TransitResult
 } from "./types.js";
 import type { SaturnReturnResult } from "./returns.js";
+import { EPHEMERIS } from "./types.js";
 
 export type NatalSource = Chart | BirthInput;
 export type SaturnReturnSource = NatalSource | DateInput;
@@ -316,7 +317,10 @@ export function saturnReturn(birth: SaturnReturnSource): SaturnReturnResult {
       validated.flags?.values.includes("polar-fallback") ? computedBirth(validated).input : validated.input
     );
   } else utc = dateFrom(birth, "birth");
-  // The search reads the ephemeris from birth to about age 92: every kind of fallback it met is reported.
+  // The search reads the ephemeris from birth to about age 92: every kind of fallback it met is reported,
+  // and a search that met one is named astronomy-engine, the source of those positions (from 1.1.0-rc.12;
+  // before, one that began inside the pack named jpl-de440 beside "outside-de440-span").
   const { value, fallbacks } = notingFallbacks(() => computeSaturnReturns(utc));
-  return { ...value, ephemeris: ephemerisAt(utc.getTime()).ephemeris.name, flags: fallbacks };
+  const ephemeris = fallbacks.length > 0 ? EPHEMERIS.name : ephemerisAt(utc.getTime()).ephemeris.name;
+  return { ...value, ephemeris, flags: fallbacks };
 }

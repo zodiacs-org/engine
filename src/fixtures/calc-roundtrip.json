@@ -23,10 +23,10 @@
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 0.0034,
+      "value": 0.004,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, on the shipped DE440 pack; src/calc-bounds-de440.ts"
+      "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts"
      },
      "distance": {
       "value": null,
@@ -105,7 +105,7 @@
       "center:geocentric",
       "correction:apparent",
       "light-time:iterated",
-      "deflection:sun",
+      "deflection:sun-outside-disc",
       "aberration:relativistic-annual",
       "target:system-barycentre",
       "place:icrf-to-true-ecliptic-of-date",
@@ -122,7 +122,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -171,7 +171,7 @@
       "value": 0.013,
       "unit": "arcsec",
       "label": "estimated",
-      "basis": "the bound measured in the true ecliptic of date (JPL Horizons, DE441, the conformance suite's L1 vectors, on the shipped DE440 pack), which this frame is reached from with the engine's own nutation and precession, not compared in this frame; src/calc-bounds-de440.ts"
+      "basis": "the bound measured in the true ecliptic of date (JPL Horizons, DE441, the conformance suite's L1 vectors; NAIF's de440.bsp every day from 1800 to 2199, which also covers this frame), on the shipped DE440 pack, reached in this frame with the engine's own nutation and precession; Horizons not compared in this frame; src/calc-bounds-de440.ts"
      },
      "distance": {
       "value": null,
@@ -245,7 +245,7 @@
       "center:geocentric",
       "correction:apparent",
       "light-time:iterated",
-      "deflection:sun",
+      "deflection:sun-outside-disc",
       "aberration:relativistic-annual",
       "place:icrf-to-true-ecliptic-of-date",
       "frame-bias:iau2006-fukushima-williams",
@@ -264,7 +264,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -395,7 +395,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -547,7 +547,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -662,7 +662,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -793,7 +793,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -927,7 +927,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1062,7 +1062,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1187,7 +1187,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -1317,7 +1317,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1464,7 +1464,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1580,7 +1580,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1701,7 +1701,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1743,10 +1743,10 @@
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 0.068199601,
+      "value": 0.068699601,
       "unit": "arcsec",
       "label": "estimated",
-      "basis": "the bound measured in the true ecliptic of date (JPL Horizons, DE441, the conformance suite's L1 vectors, on the shipped DE440 pack), which this frame is reached from with the engine's own nutation and precession, not compared in this frame; src/calc-bounds-de440.ts; plus 0.0647 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+      "basis": "the bound measured in the true ecliptic of date (JPL Horizons, DE441, the conformance suite's L1 vectors; NAIF's de440.bsp every day from 1800 to 2199, which also covers this frame), on the shipped DE440 pack, reached in this frame with the engine's own nutation and precession; Horizons not compared in this frame; src/calc-bounds-de440.ts; plus 0.0647 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "distance": {
       "value": null,
@@ -1824,7 +1824,7 @@
       "center:geocentric",
       "correction:apparent",
       "light-time:iterated",
-      "deflection:sun",
+      "deflection:sun-outside-disc",
       "aberration:relativistic-annual",
       "target:system-barycentre",
       "place:icrf-to-true-ecliptic-of-date",
@@ -1844,7 +1844,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -1893,7 +1893,7 @@
       "value": 0.01300046,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": {
       "value": null,
@@ -1975,7 +1975,7 @@
       "center:geocentric",
       "correction:apparent",
       "light-time:iterated",
-      "deflection:sun",
+      "deflection:sun-outside-disc",
       "aberration:relativistic-annual",
       "place:icrf-to-true-ecliptic-of-date",
       "frame-bias:iau2006-fukushima-williams",
@@ -1991,7 +1991,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -2236,7 +2236,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2354,7 +2354,7 @@
       "center:geocentric",
       "correction:apparent",
       "light-time:iterated",
-      "deflection:sun",
+      "deflection:sun-outside-disc",
       "aberration:relativistic-annual",
       "place:icrf-to-true-ecliptic-of-date",
       "frame-bias:iau2006-fukushima-williams",
@@ -2370,7 +2370,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -2452,10 +2452,10 @@
     },
     "bounds": {
      "position": {
-      "value": 0.00350046,
+      "value": 0.00390046,
       "unit": "arcsec",
       "label": "estimated",
-      "basis": "the bound measured in the true ecliptic of date (JPL Horizons, DE441, the conformance suite's L1 vectors, on the shipped DE440 pack), which this frame is reached from with the engine's own nutation and precession, not compared in this frame; src/calc-bounds-de440.ts; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "the bound measured in the true ecliptic of date (JPL Horizons, DE441, the conformance suite's L1 vectors; NAIF's de440.bsp every day from 1800 to 2199, which also covers this frame), on the shipped DE440 pack, reached in this frame with the engine's own nutation and precession; Horizons not compared in this frame; src/calc-bounds-de440.ts; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": {
       "value": null,
@@ -2538,7 +2538,7 @@
       "center:geocentric",
       "correction:apparent",
       "light-time:iterated",
-      "deflection:sun",
+      "deflection:sun-outside-disc",
       "aberration:relativistic-annual",
       "target:system-barycentre",
       "place:icrf-to-true-ecliptic-of-date",
@@ -2557,7 +2557,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -2694,7 +2694,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2750,10 +2750,10 @@
     },
     "bounds": {
      "position": {
-      "value": 0.00380046,
+      "value": 0.00400046,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
+      "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus the ayanamsa's, 4.6e-7 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": {
       "value": null,
@@ -2843,7 +2843,7 @@
       "center:geocentric",
       "correction:apparent",
       "light-time:iterated",
-      "deflection:sun",
+      "deflection:sun-outside-disc",
       "aberration:relativistic-annual",
       "place:icrf-to-true-ecliptic-of-date",
       "frame-bias:iau2006-fukushima-williams",
@@ -2859,7 +2859,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -2927,10 +2927,10 @@
     },
     "bounds": {
      "position": {
-      "value": 0.0071,
+      "value": 0.0077,
       "unit": "arcsec",
       "label": "measured",
-      "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus the ayanamsa's, 0.0037 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition, for epochs from 0001 to 3998 outside 1800 to 2200; docs/evidence/calc-epochs-2026-10-06"
+      "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus the ayanamsa's, 0.0037 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition, for epochs from 0001 to 3998 outside 1800 to 2200; docs/evidence/calc-epochs-2026-10-06"
      },
      "distance": {
       "value": null,
@@ -3020,7 +3020,7 @@
       "center:geocentric",
       "correction:apparent",
       "light-time:iterated",
-      "deflection:sun",
+      "deflection:sun-outside-disc",
       "aberration:relativistic-annual",
       "target:system-barycentre",
       "place:icrf-to-true-ecliptic-of-date",
@@ -3037,7 +3037,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -3190,7 +3190,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3350,7 +3350,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3484,7 +3484,7 @@
       "center:geocentric",
       "correction:apparent",
       "light-time:iterated",
-      "deflection:sun",
+      "deflection:sun-outside-disc",
       "aberration:relativistic-annual",
       "place:icrf-to-true-ecliptic-of-date",
       "frame-bias:iau2006-fukushima-williams",
@@ -3500,7 +3500,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -3768,7 +3768,7 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.11",
+     "engineVersion": "1.1.0-rc.12",
      "ephemeris": {
       "name": "jpl-de440",
       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -3881,7 +3881,7 @@
       "center:geocentric",
       "correction:apparent",
       "light-time:iterated",
-      "deflection:sun",
+      "deflection:sun-outside-disc",
       "aberration:relativistic-annual",
       "target:system-barycentre",
       "node:true-osculating",
@@ -3905,7 +3905,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -4183,7 +4183,7 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.11",
+     "engineVersion": "1.1.0-rc.12",
      "ephemeris": {
       "name": "jpl-de440",
       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -4292,7 +4292,7 @@
       "center:geocentric",
       "correction:apparent",
       "light-time:iterated",
-      "deflection:sun",
+      "deflection:sun-outside-disc",
       "aberration:relativistic-annual",
       "target:system-barycentre",
       "node:true-osculating",
@@ -4313,7 +4313,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -4584,7 +4584,7 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.11",
+     "engineVersion": "1.1.0-rc.12",
      "ephemeris": {
       "name": "jpl-de440",
       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -4781,7 +4781,7 @@
       "center:geocentric",
       "correction:apparent",
       "light-time:iterated",
-      "deflection:sun",
+      "deflection:sun-outside-disc",
       "aberration:relativistic-annual",
       "target:system-barycentre",
       "node:true-osculating",
@@ -4805,7 +4805,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.11",
+      "version": "1.1.0-rc.12",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"

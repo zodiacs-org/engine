@@ -50,7 +50,8 @@ The entry computes only inside `CALC_SPAN`, 1800 to 2200, which the pack
 covers, so no request leaves the pack's years.
 
 **A position from the pack** is the pack's apparent place as
-`natalChart()` takes it: light time by iteration, the Sun's light deflection,
+`natalChart()` takes it: light time by iteration, the Sun's light deflection
+(from 1.1.0-rc.12 none for a planet behind the Sun's disc, as JPL Horizons),
 relativistic annual aberration, Mars to Pluto as planetary-system
 barycentres, and the Moon from the ephemeris with light time, in the true
 ecliptic of date ([de440.md](de440.md), *The reduction*). In any other frame
@@ -136,7 +137,11 @@ unknown body, frame or field, an invalid date, a latitude out of range) throws
 - **`flags`**: `correction` (`"apparent"`, `"astrometric"` or `"geometric"`,
   default apparent), `speeds` (default true), `cartesian` (default false),
   `units` (`"degrees"` or `"radians"`, default degrees) and `deflection`
-  (default false; true is refused).
+  (default false; true is refused). `deflection` is not a switch: the
+  pack's apparent place has the Sun's light deflection (outside the Sun's
+  disc) whatever it says, and astronomy-engine's places have none. A
+  receipt echoes the request as given, `false` included; its conventions
+  say what was applied, `deflection:sun-outside-disc` or `deflection:none`.
 
 **Bodies**: the Sun, the Moon, Mercury to Pluto, the Earth (heliocentric and
 barycentric only), the true lunar nodes (`"North Node"`, `"South Node"`), the
@@ -276,7 +281,7 @@ Center differ ([vedic.md](vedic.md), *Agreement with Swiss Ephemeris*).
 
 | `correction` | what it is |
 | --- | --- |
-| `apparent` | light time and aberration: the observer is backdated with the target, as astronomy-engine's `GeoVector` does, which adds the observer's aberration to first order, annual and for a topocentric observer diurnal too. No gravitational deflection. |
+| `apparent` | on astronomy-engine: light time and aberration: the observer is backdated with the target, as astronomy-engine's `GeoVector` does, which adds the observer's aberration to first order, annual and for a topocentric observer diurnal too, and no gravitational deflection. A geocentric apparent place from the DE440 pack, the default, is the pack's instead: light time, the Sun's light deflection (none behind the Sun's disc) and relativistic annual aberration (*Which ephemeris*). |
 | `astrometric` | light time only: the target when its light left, from where the observer is when it arrives, on barycentric positions. |
 | `geometric` | where the target is at the instant, from where the observer is at the instant. |
 
@@ -357,17 +362,28 @@ none is proven. Each one's `basis` says which comparison it rests on.
 of the bounds below, which were measured on astronomy-engine. Its
 `bounds.position` is the largest angle from JPL Horizons's apparent
 geocentric place (DE441) at the conformance suite's 240 L1 vectors, 24 TT
-instants a body from 1851 to 2148, in the true ecliptic of date, rounded up
-to two significant figures: the Moon 0.013″; Jupiter, Uranus and Venus
-0.0038″; the Sun and Mercury 0.0037″; Neptune, Pluto and Saturn 0.0035″;
-Mars 0.0034″ (`src/calc-bounds-de440.ts`; `src/calc-bounds-de440.test.ts`
-recomputes each from the vectors). It is labelled `measured` in the true
-ecliptic of date and `estimated` in the seven other frames, where it was not
-compared. Twenty-four instants a body are few: a denser comparison may find
-more. Its `bounds.distance` and `bounds.speed`, and every bound of the true
-node and its opposite point, have `value: null` and the basis "not compared
-with an independent ephemeris": the suite has no vector for them. The ΔT
-widening below applies to a position from the pack as to any other.
+instants a body from 1851 to 2148, in the true ecliptic of date, and from
+1.1.0-rc.12 the largest angle from NAIF's `de440.bsp` at noon TT of each of
+the 146,097 days from 1800-01-01 to 2199-12-31 in all eight frames (the
+dense sweep run on the pack, *Measured against DE440 every day*), the
+larger of the two, rounded up to two significant figures: the Moon 0.013″
+(Horizons; DE440 and DE441 differ in the Moon), Saturn 0.0039″, every other
+body 0.0040″ (`src/calc-bounds-de440.ts`; `src/calc-bounds-de440.test.ts`
+recomputes the L1 rows from the vectors and reads the sweep's committed
+summary). In 1.1.0-rc.10 and rc.11 the table held the 24 instants alone,
+0.0034″ to 0.0038″ for the Sun and the planets; the sweep found up to
+0.00395″, the engine's IAU 2000B nutation against ERFA's 2000A in the frames
+of date. It is labelled `measured` in the true ecliptic of date and
+`estimated` in the seven other frames, where Horizons was not compared.
+Within 3″ of the Sun's limb a planet's bound is 1.8″, `estimated`
+(`DE440_AT_LIMB`): the pack bends no light behind the Sun's disc, as JPL
+Horizons does not, so the place steps at the limb by the deflection there,
+at most 1.7512″, and the two edges differ by 0.06″ to 0.17″
+([de440.md](de440.md), *Behind the Sun's disc*). Its `bounds.distance` and
+`bounds.speed`, and every bound of the true node and its opposite point,
+have `value: null` and the basis "not compared with an independent
+ephemeris". The ΔT widening below applies to a position from the pack as to
+any other.
 
 **On astronomy-engine** (the other centers and corrections, and every
 position where astronomy-engine stands in for the pack): from 1.1.0-rc.7
@@ -767,7 +783,7 @@ is no comparison to take one from.
 | `correction:apparent`, `correction:astrometric`, `correction:geometric` | as above; `correction:not-applicable` for the nodes and Lilith |
 | `light-time:newtonian` | astronomy-engine's light-time solution, iterated until successive light times agree to 10⁻⁹ day |
 | `light-time:iterated` | on the DE440 pack: light time by iteration on the pack's states, at most 12 steps, to 10⁻¹¹ s |
-| `deflection:sun` | on the DE440 pack: the Sun's gravitational light deflection (the form of ERFA's `eraLd`) |
+| `deflection:sun-outside-disc` | on the DE440 pack, from 1.1.0-rc.12: the Sun's gravitational light deflection (the form of ERFA's `eraLd`), none for a planet behind the Sun's disc, as JPL Horizons; 1.1.0-rc.10 and rc.11 wrote `deflection:sun`, the deflection behind the disc too |
 | `aberration:relativistic-annual` | on the DE440 pack: relativistic annual aberration from the Earth's barycentric velocity |
 | `target:system-barycentre` | on the DE440 pack: Mars to Pluto are planetary-system barycentres, not planet centres |
 | `place:icrf-to-true-ecliptic-of-date`, `frame-bias:iau2006-fukushima-williams`, `nutation:iau2000b-p03`, `time:tdb-three-term` | on the DE440 pack: the place is carried from the ICRF to the true ecliptic of date by the IAU 2006 Fukushima-Williams angles, frame bias included, and IAU 2000B nutation with the P03 adjustment, at a TDB formed from TT by three terms ([de440.md](de440.md), *The reduction*) |
@@ -807,7 +823,7 @@ uses no Swiss Ephemeris code, data or output.
 | `SEFLG_TOPOCTR` (with `swe_set_topo`) | topocentric | `center: { topocentric: { latitude, longitude, height } }` | supported |
 | `SEFLG_TRUEPOS` | geometric position | `flags.correction: "geometric"` | supported |
 | `SEFLG_NOABERR` | no aberration | `flags.correction: "astrometric"` | supported; there is never deflection here |
-| `SEFLG_NOGDEFL` | no gravitational deflection | always so; `flags.deflection: true` | supported as the only behaviour; deflection is refused (`not-in-this-version`) |
+| `SEFLG_NOGDEFL` | no gravitational deflection | on astronomy-engine always so (`setDefaultEphemeris("astronomy-engine")`, or another correction); on the DE440 pack, the default, the apparent place has the Sun's deflection and no flag removes it | partly: astronomy-engine's places have none; `flags.deflection` asks for deflection and `true` is refused (`not-in-this-version`) |
 | `SEFLG_ASTROMETRIC` | `NOABERR` and `NOGDEFL` | `flags.correction: "astrometric"` | supported |
 | `SEFLG_NONUT` | mean equinox of date | `frame: "ecliptic-mean-of-date"` or `"equatorial-mean-of-date"` | supported |
 | `SEFLG_J2000` | J2000.0 | `frame: "ecliptic-j2000"` or `"equatorial-j2000"` | supported |
@@ -841,8 +857,11 @@ from 1800-01-01 to 2199-12-31, geocentric, in all eight frames, for the Sun,
 the Moon, Mercury to Pluto (Mars to Pluto as system barycentres, on both
 sides) with each correction, and the true node and its opposite point. The
 reference is formed from the kernel with ERFA, as the Horizons comparison
-turns Horizons's vectors; apparent places leave out the Sun's light
-deflection, as the engine does. It ran in GitHub Actions (`PLAN.md`,
+turns Horizons's vectors; astronomy-engine's apparent places are compared
+with a place without the Sun's light deflection, as astronomy-engine
+computes them (a run on the pack, from 1.1.0-rc.11, with the deflection,
+and from 1.1.0-rc.12 none behind the Sun's disc, as Horizons; below). It
+ran in GitHub Actions (`PLAN.md`,
 `README.md`, `results/`). The largest differences, apparent places, in
 arcseconds, and the position bound each gives, beside the 32 instants':
 
@@ -886,6 +905,19 @@ light deflection the pack applies, and the workflow failed (run
 1.1.0-rc.10's head, the engine's values are the same bytes as 1.1.0-rc.3's
 in all eight eras and every row is within its limit
 (`docs/evidence/1.1.0-rc.11-20261115/sweep/`).
+
+From 1.1.0-rc.12 the workflow sweeps the pack too, `calc()`'s default
+(`engine_sweep.mjs --ephemeris de440`), against the kernel's apparent place
+with the Sun's light deflection (`erfa.ld` with `erfa.ldsun`'s limiter, and
+none for a planet behind the Sun's disc, as Horizons), and its job *Sweep
+results on the DE440 pack* holds every body's largest angle over all
+instants and frames to `src/calc-bounds-de440.ts` (`tools/check_pack.py`);
+it runs when the reduction or either table changes. On this build, at the
+146,097 instants: the Moon 0.0045″ and every other body 0.0040″, rounded
+up (0.004422″, and 0.003898″ to 0.003948″), near the Sun too, where 1.1.0-rc.11 was up to
+17.308″ (`docs/evidence/1.1.0-rc.12-20261115/sweep-pack/`). The pack's
+bounds take these, rounded up, where they are above the 24 Horizons
+instants' (*Bounds*).
 
 ## Measured against JPL Horizons and ERFA
 

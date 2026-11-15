@@ -1,5 +1,129 @@
 # Engine changelog
 
+## 1.1.0-rc.12 (unreleased candidate)
+
+The candidate for **1.1.0**, a minor release: 1.1.0-rc.11 with the place of
+a planet behind the Sun's disc made JPL Horizons's, the dense sweep's check
+on the default source restored, and two more root results labelled. It is a
+draft for the owner, and is not to be published on npm until the owner
+approves it. Checks: `docs/evidence/1.1.0-rc.12-20261115/`.
+
+1.1.0-rc.11 was a draft on this same pull request (101), reviewed and not
+tagged or published: this candidate replaces it. Its archive stays in
+`artifacts/`, as every carried archive does (`artifacts/README.md`), which is
+why this cut has a new number. Everything below is against 1.1.0-rc.11.
+
+- **No light deflection behind the Sun's disc, as JPL Horizons.** The
+  pack's reduction bent a planet's light by the Sun with the form of ERFA's
+  `eraLd` and a limiter of 1e-14, so behind the Sun's disc the deflection
+  grew towards the centre without limit, and the default place was far from
+  Horizons's: the rc.11 review measured 307.9 arcseconds for Mercury on
+  1954-05-08, 195.5 for Uranus on 2029-06-04, 56.3 for Jupiter on
+  2032-01-01, where `calc()` quoted 0.0037. Horizons applies the deflection
+  outside the disc and none inside it: its places at three passages, every
+  15 minutes for a day, are the kernel's with the deflection outside the
+  disc and without it inside, to the change at the limb. Now the reduction
+  bends no light from a planet farther than the Sun whose direction is within
+  the Sun's apparent radius of the Sun's (R = 695,700 km, Horizons's).
+  Measured against Horizons at every passage of Mercury to Pluto behind the
+  Sun from 1800 to 2199 (393 passages, 3,490 instants inside the disc, 66
+  within 3 arcseconds of the limb, 3,164 outside it), as the planet's
+  offset from the Sun, which takes out the two frames' difference: within
+  0.0023 arcseconds inside the disc, 0.0005 at the limb and 0.0047
+  outside, where the 0.0047 is the comparison's own remainder (a reduction
+  of `de440.bsp` with the same rule gives it too, and the pack is within
+  0.0038 of that reduction at all 6,720 instants). The formula of rc.11,
+  reduced from `de440.bsp`, is up to 333.48 arcseconds from Horizons inside
+  the disc (Mercury), and ERFA's `eraLdsun` limiter, which tapers the
+  deflection inside about 0.08 degrees, up to 5.77 (Uranus): which is why
+  the candidate follows Horizons and not `eraLdsun`
+  (`docs/evidence/1.1.0-rc.12-20261115/near-sun/`; [docs/de440.md](docs/de440.md),
+  *Behind the Sun's disc*). What changes: the apparent place of Mercury to
+  Pluto while behind the disc, in `natalChart()`, `positions()`, `calc()`
+  and everything built on them. Elsewhere nothing changes, bit for bit:
+  `positions()` of this build and of the carried rc.11 archive, at 20,000
+  pseudo-random instants from 1800 to 2199 and the 6,720 near-Sun ones,
+  differ in 3,583 of 320,640 rows, each a planet behind the disc
+  (`docs/evidence/1.1.0-rc.12-20261115/results/unchanged.json`); the 2026 Sagittarius ingress
+  is 2026-11-22T07:23:21 UTC to the second on every default-path search
+  (`src/de440-ingress.test.ts`). At the limb the place steps by the
+  deflection there, at most 4GM/c²R = 1.7512 arcseconds; Horizons's edge was
+  found 0.06 to 0.17 arcseconds inside the engine's at five limb crossings,
+  so within 3 arcseconds of the limb `calc()` quotes 1.8 arcseconds,
+  estimated (`DE440_AT_LIMB`). A speed's two samples (±0.001 day) take the
+  decision of the instant the speed is for, so a speed is the rate of the
+  place on that side and never the step over 0.002 day (1.7512 arcseconds
+  over 0.002 day is 876 arcseconds a day; `src/de440-behind-sun.test.ts`):
+  `place(body, ttDays, behind?)` of a source returns `behindDisc` and takes
+  `behind`, both optional, both new. The calc convention id is now
+  `deflection:sun-outside-disc` (rc.10 and rc.11 wrote `deflection:sun`).
+  The reduction is no longer the research runtime's operation for operation:
+  zodiacs.org's check C9 will find the two apart for a planet behind the
+  disc, and in a speed within 0.001 day of a limb crossing.
+- **The birth-time window search near the Sun.** rc.10 raised a planet's
+  rate bound near the Sun by the inverse square of its elongation and
+  compared single milliseconds within 0.01° of the Sun's centre, because the
+  deflection grew there. Behind the disc there is none now, so that raise is
+  gone: within a degree of the Sun in longitude the search takes the
+  deflection as a displacement of at most 1.8 arcseconds, as it takes the
+  true node's jitter (`Sky.bend` in `src/window.ts`). The rate scan on the
+  pack (`docs/evidence/1.1.0-rc.12-20261115/window/`) finds every bound
+  held with its margin, bound over largest rate plus what the grid can miss
+  1.634 to 2.057 (rc.10: 0.395 for Neptune, 1.455 for Uranus, 1.480 for
+  Saturn).
+- **The dense sweep checks the default source again.** From rc.11 the
+  workflow swept astronomy-engine only. It now also sweeps the pack
+  (`engine_sweep.mjs --ephemeris de440`) against the kernel's place with the
+  Sun's deflection, none behind the disc, and a new job, *Sweep results on
+  the DE440 pack*, holds every body's largest angle to
+  `src/calc-bounds-de440.ts` (`check_pack.py`). The astronomy-engine run and
+  its check against `src/calc-bounds.ts` are as they were. Run on this
+  build over the 146,097 days: every body but the Moon within 0.0040
+  arcseconds of the kernel (largest 0.003948), the Moon within 0.0045
+  (0.004422), near the Sun too, where rc.11 was up to 17.308.
+- **The pack's position bounds cover the dense sweep.** They were the
+  largest angle from Horizons at the 240 L1 vectors alone, 0.0034 to 0.0038
+  arcseconds for the Sun and the planets; the sweep finds up to 0.00395
+  (the engine's IAU 2000B nutation against ERFA's 2000A in the frames of
+  date). Each is now the larger of the two, rounded up: the Moon 0.013,
+  Saturn 0.0039, every other body 0.0040 (`src/calc-bounds-de440.test.ts`
+  holds both).
+- **No silent fallback in `chartPoints` and `chartDeclinations`.** Given a
+  birth they computed the chart themselves and their results named no
+  ephemeris and carried no flag, so with the pack damaged, or at 1750 or
+  2230, they returned astronomy-engine's values and said nothing. Both
+  results now carry `ephemeris` (the chart's: `{ name: "jpl-de440", version }`
+  or astronomy-engine's; null for a supplied chart that names none) and
+  `flags` (the chart's `"de440-unavailable"` or `"outside-de440-span"`),
+  given a birth or a chart (`src/ephemeris-fallback-root.test.ts`, and the
+  packed-consumer check with the pack removed, damaged and undecodable). No
+  other export that reads positions was found without a label (the sweep of
+  every entry point's exports is in the evidence).
+- **`saturnReturn` names astronomy-engine wherever its flags hold a
+  fallback.** A search that began on the pack and ran past its end named
+  `jpl-de440` beside `"outside-de440-span"`.
+- **What names its ephemeris, said exactly.** `docs/de440.md` said every
+  result names its ephemeris; the timing and vedic results,
+  `moonSignCandidates` and `searchLongitudeCrossings` carry the fallback
+  flags and name none. It now lists which do which.
+- **Sizes.** The root entry's import graph is 150,170 bytes beside the pack,
+  2,034 more than rc.11's (the disc rule, the labels, a speed's side of the
+  disc), over its budget of 149,400: raised to 151,700. Eight graphs that
+  share the root's chunks go over theirs with it and are raised the same
+  way, to the measurement and about one per cent: `./calc` 202,042 to
+  204,100, `./window` 149,947 to 151,500, `./timing` 169,473 to 171,200,
+  `./vedic` 185,205 to 187,100, `./sky` 137,224 to 138,600, `./internal`
+  109,770 to 110,900, `./de440` 53,988 to 54,600 and `./de440/pack` 55,208
+  to 55,800. The package beside the pack is 1,253,195 bytes unpacked, over
+  the cap of 1,245,000 (this entry, the README's lines and the code): raised
+  to 1,265,000. None of these has the owner's approval; they are for the
+  owner to decide with the candidate (`scripts/verify-package-contents.mjs`).
+- **`docs/calc.md` on the deflection.** It said an apparent place has no
+  deflection and that `SEFLG_NOGDEFL` is always so, which is astronomy-engine's
+  case only; the pack's apparent place has it. `flags.deflection` is a request
+  (`true` is refused) and a receipt echoes it as given; the conventions say
+  what was applied.
+
 ## 1.1.0-rc.11 (unreleased candidate)
 
 The candidate for **1.1.0**, a minor release: 1.1.0-rc.10 with every

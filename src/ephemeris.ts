@@ -313,9 +313,9 @@ export function refuseUnderSource(what: string): void {
 const tidy = (lon: number): number => (lon === 360 ? 0 : lon + 0);
 
 /** A body's longitude from a source: its place, or the true node and the point opposite. */
-function sourceLongitude(from: PositionSource, body: BodyName, ttDays: number): number {
+function sourceLongitude(from: PositionSource, body: BodyName, ttDays: number, behind?: boolean): number {
   if (body === "North Node") return tidy(from.trueNode(ttDays));
-  return body === "South Node" ? normalizeLongitude(from.trueNode(ttDays) + 180) : tidy(from.place(body, ttDays).lon);
+  return body === "South Node" ? normalizeLongitude(from.trueNode(ttDays) + 180) : tidy(from.place(body, ttDays, behind).lon);
 }
 
 /**
@@ -458,8 +458,8 @@ function longitudeAt(body: BodyName, ms: number, clock: Clock): number {
   return longitudeOn(body, basis, sourceAt(basis.ttDays));
 }
 
-function longitudeOn(body: BodyName, basis: TimeBasis, from: PositionSource | null): number {
-  if (from) return sourceLongitude(from, body, basis.ttDays);
+function longitudeOn(body: BodyName, basis: TimeBasis, from: PositionSource | null, behind?: boolean): number {
+  if (from) return sourceLongitude(from, body, basis.ttDays, behind);
   const time = timeOf(basis);
   if (body === "Moon") return moonOfDate(time).lon;
   if (body === "North Node") return trueNodeLongitude(time);
@@ -509,10 +509,22 @@ function centralDifference(
   return difference / elapsedDays(before, after, 2 * stepDays);
 }
 
-function speedAt(body: BodyName, ms: number, clock: Clock, from: PositionSource | null = sourceAt(basisAt(ms, clock).ttDays)): number {
-  const stepDays =
-    body === "North Node" || body === "South Node" ? NODE_SPEED_STEP_DAYS : SPEED_STEP_DAYS;
-  return centralDifference((basis) => longitudeOn(body, basis, from), ms, clock, stepDays);
+/**
+ * A body's longitude speed at `ms`. On a source whose place steps at the Sun's limb (the DE440 pack's, which bends no
+ * light behind the disc), both samples take the decision of `ms` itself, `behind` or the source's own there, so the
+ * speed is the rate of the place on that side of the step and never the step over the samples' 0.002 day.
+ */
+function speedAt(
+  body: BodyName,
+  ms: number,
+  clock: Clock,
+  from: PositionSource | null = sourceAt(basisAt(ms, clock).ttDays),
+  behind?: boolean
+): number {
+  const node = body === "North Node" || body === "South Node";
+  const stepDays = node ? NODE_SPEED_STEP_DAYS : SPEED_STEP_DAYS;
+  const side = from && !node && behind === undefined ? from.place(body as SourceBody, basisAt(ms, clock).ttDays).behindDisc : behind;
+  return centralDifference((basis) => longitudeOn(body, basis, from, side), ms, clock, stepDays);
 }
 
 function position(body: BodyName, lon: number, lat: number, speed: number, chosen: Chosen): BodyPosition {
@@ -562,7 +574,7 @@ function sourceBodiesAt(chosen: Chosen, from: PositionSource, ms: number, clock:
   return (["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "North Node", "South Node"] as const).map(
     (body) => {
       const place = body === "North Node" || body === "South Node" ? { lon: sourceLongitude(from, body, tt), lat: 0 } : from.place(body as SourceBody, tt);
-      return position(body, tidy(place.lon), place.lat, speedAt(body, ms, clock, from), chosen);
+      return position(body, tidy(place.lon), place.lat, speedAt(body, ms, clock, from, "behindDisc" in place ? place.behindDisc : undefined), chosen);
     }
   );
 }
@@ -663,7 +675,22 @@ function pointPosition(point: PointName, lon: number, lat: number, speed: number
  * instant and the place; the lots on the chart's own ascendant and bodies.
  */
 export function computePoints(chart: Chart): ChartPoints {
-  return evaluated(() => pointsAt(chart));
+  return { ...evaluated(() => pointsAt(chart)), ...chartLabel(chart) };
+}
+
+/**
+ * The label of a result derived from one chart's bodies: the chart's own
+ * ephemeris (null where a supplied chart names none) and the fallback flags
+ * it carries, so that a result derived from a chart computed on
+ * astronomy-engine as a fallback says so as the chart does.
+ */
+function chartLabel(chart: Chart): { ephemeris: { readonly name: string; readonly version: string } | null; flags: EphemerisFallback[] } {
+  const named = chart.ephemeris;
+  const flags: readonly string[] = Array.isArray(chart.flags) ? chart.flags : [];
+  return {
+    ephemeris: named ? { name: named.name, version: named.version } : null,
+    flags: EPHEMERIS_FALLBACKS.filter((reason) => flags.includes(reason))
+  };
 }
 
 /**
@@ -689,12 +716,13 @@ export function computeChartDeclinations(chart: Chart): ChartDeclinations {
     return {
       ...chartBodyDeclinations(bodies, tilt(timeOf(basis).tt).tobl),
       utc: date.toISOString(),
-      deltaT: basis.deltaT
+      deltaT: basis.deltaT,
+      ...chartLabel(chart)
     };
   });
 }
 
-function pointsAt(chart: Chart): ChartPoints {
+function pointsAt(chart: Chart): Omit<ChartPoints, "ephemeris" | "flags"> {
   const { utc, latitude, longitude } = chart.input;
   const ms = utc.getTime();
   const clock = clockOf(chart.input);

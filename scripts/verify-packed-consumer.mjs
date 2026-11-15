@@ -765,6 +765,12 @@ assert(root.positions(birth.utc).every((row) => row.ephemeris === name && row.fa
 assert.equal(root.moonPhase(birth.utc).ephemeris, name);
 assert.equal(root.moonPhase(birth.utc).fallback, flags[0]);
 assert.deepEqual(root.saturnReturn(birth.utc).flags, flags);
+assert.equal(root.saturnReturn(birth.utc).ephemeris, name);
+// chartPoints and chartDeclinations of a birth, and of the chart (1.1.0-rc.12): the chart's label, carried.
+for (const derived of [root.chartPoints(birth), root.chartDeclinations(birth), root.chartPoints(natal), root.chartDeclinations(natal)]) {
+  assert.deepEqual(derived.flags, flags);
+  assert.equal(derived.ephemeris.name, name);
+}
 assert.deepEqual(root.searchLongitudeCrossings("Sun", 30, "1990-01-01T00:00:00Z", "1991-01-01T00:00:00Z").flags, flags);
 for (const body of ["Sun", "Moon", "Pluto", "North Node"]) {
   const position = calc({ body, time: birth.utc });

@@ -15,7 +15,7 @@ import { AstroTime, Body, GeoMoonState, KM_PER_AU } from "astronomy-engine";
 import { bodyLongitude, computeChart, deltaTExtrapolated, ephemerisAt, gastHours, onChartClock, refuseUnderSource } from "./ephemeris.js";
 import { assertDerivedFlags, snapshotFlags, timeFlags, validateBirthSettings } from "./birth-input.js";
 import { MEAN_POINTS_BASIS, MEAN_POINTS_SPEED_BASIS, MEASURED, MEASURED_BASIS, SWEPT, SWEPT_BASIS } from "./calc-bounds.js";
-import { DE440_MEASURED, DE440_MEASURED_BASIS, DE440_TURNED_BASIS } from "./calc-bounds-de440.js";
+import { DE440_AT_LIMB, DE440_AT_LIMB_BASIS, DE440_LIMB_BAND, DE440_MEASURED, DE440_MEASURED_BASIS, DE440_TURNED_BASIS } from "./calc-bounds-de440.js";
 import {
   CALC_FRAMES as FRAMES,
   apply,
@@ -719,7 +719,7 @@ const packGives = (body: CalcBody, kind: Center["kind"], correction: CalcCorrect
  * from the true ecliptic of date with the engine's own nutation and
  * precession, as a node or Lilith is.
  */
-function packed(from: PositionSource, body: CalcBody, frame: CalcFrame): Evaluate {
+function packed(from: PositionSource, body: CalcBody, frame: CalcFrame, behind?: boolean): Evaluate {
   const tidy = (lon: number): number => (lon === 360 ? 0 : lon + 0);
   return (at, basis) => {
     let lon: number;
@@ -729,7 +729,7 @@ function packed(from: PositionSource, body: CalcBody, frame: CalcFrame): Evaluat
       const node = from.trueNode(basis.ttDays);
       lon = body === "North Node" ? tidy(node) : normalizeLongitude(node + 180);
     } else {
-      const place = from.place(body as SourceBody, basis.ttDays);
+      const place = from.place(body as SourceBody, basis.ttDays, behind);
       lon = tidy(place.lon);
       lat = place.lat;
       dist = place.dist ?? null;
@@ -741,6 +741,27 @@ function packed(from: PositionSource, body: CalcBody, frame: CalcFrame): Evaluat
     const there = toSpherical(turned);
     return { lon: there.lon, lat: there.lat, dist, xyz: scaled(turned), raw: there.lon };
   };
+}
+
+/** The Sun's radius, km, as src/de440/reduce.ts takes it (JPL Horizons's). */
+const SUN_RADIUS_KM = 695700;
+
+/**
+ * Whether a planet's place from a source is within DE440_LIMB_BAND of the
+ * Sun's limb and farther than the Sun: where the source's light deflection
+ * steps (src/de440/reduce.ts).
+ */
+function atLimb(from: PositionSource, body: CalcBody, ttDays: number): boolean {
+  if (body === "Sun" || body === "Moon" || isPoint(body) || isTrueNode(body) || body === "Earth") return false;
+  const sun = from.place("Sun", ttDays);
+  const place = from.place(body as SourceBody, ttDays);
+  if (sun.dist === undefined || place.dist === undefined || !(place.dist > sun.dist)) return false;
+  const a = fromSpherical(sun.lon, sun.lat, 1);
+  const b = fromSpherical(place.lon, place.lat, 1);
+  const cross = Math.hypot(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]);
+  const apart = Math.atan2(cross, a[0] * b[0] + a[1] * b[1] + a[2] * b[2]) * RAD * 3600;
+  const radius = Math.asin(SUN_RADIUS_KM / (sun.dist * KM_PER_AU)) * RAD * 3600;
+  return Math.abs(apart - radius) <= DE440_LIMB_BAND;
 }
 
 function evaluator(body: CalcBody, frame: CalcFrame, center: Center, correction: CalcCorrection): Evaluate {
@@ -810,7 +831,7 @@ function positionIds(body: CalcBody, frame: CalcFrame, kind: Center["kind"], cor
     if (onPack) ids.push(...PACK_PLACE_IDS);
   } else if (onPack) {
     // The DE440 reduction's own chain (src/de440/reduce.ts), in place of astronomy-engine's.
-    ids.push(`correction:${correction}`, "light-time:iterated", "deflection:sun", "aberration:relativistic-annual");
+    ids.push(`correction:${correction}`, "light-time:iterated", "deflection:sun-outside-disc", "aberration:relativistic-annual");
     if (BARYCENTRES.includes(body)) ids.push("target:system-barycentre");
     ids.push(...PACK_PLACE_IDS);
   } else {
@@ -941,9 +962,19 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     let speeds: { lon: number; lat: number; dist: number | null } | null = null;
     let velocity: Vec3 | null = null;
     // Samples `days` either side on the input's scale, with the time basis each was read on.
+    // On the pack a planet's place steps at the Sun's limb (src/de440/reduce.ts): the samples either side take the
+    // instant's own decision on the disc, so a speed is the rate of the place on that side, never the step.
+    let samples: Evaluate | null = null;
+    const sampling = (): Evaluate => {
+      if (samples) return samples;
+      const side = from && !isTrueNode(body) ? from.place(body as SourceBody, basis.ttDays).behindDisc : undefined;
+      const tropicalSamples = from && side !== undefined ? packed(from, body, frame, side) : tropical;
+      return (samples = definition === null ? tropicalSamples : siderealOf(tropicalSamples, definition, frame));
+    };
     const shift = (days: number) => {
       const ms = time.ms + days * DAY_MS;
-      return onInput(time, ms, (at, sampled) => ({ row: evaluate(at, sampled), basis: sampled }));
+      const at = sampling();
+      return onInput(time, ms, (instant, sampled) => ({ row: at(instant, sampled), basis: sampled }));
     };
     if (analytic) {
       const { state, turn } = onInput(time, time.ms, (at) => ({
@@ -993,6 +1024,11 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
       row = position === undefined ? undefined : [position, null, null];
       measured = DE440_MEASURED_BASIS;
       if (frame !== "ecliptic-true-of-date") estimated = DE440_TURNED_BASIS;
+      // At the Sun's limb, where the reduction's deflection steps (src/calc-bounds-de440.ts, DE440_AT_LIMB).
+      if (position !== undefined && atLimb(from, body, basis.ttDays)) {
+        row = [DE440_AT_LIMB, null, null];
+        estimated = DE440_AT_LIMB_BASIS;
+      }
     } else if (!row && kind === "topocentric") {
       row = MEASURED[`geocentric/${correction}`]?.[body];
       estimated = "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it";
@@ -1629,7 +1665,7 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
           "center:geocentric",
           "correction:apparent",
           ...(onPack
-            ? ["light-time:iterated", "deflection:sun", "aberration:relativistic-annual", "target:system-barycentre", "node:true-osculating", ...PACK_PLACE_IDS, "precession:iau2006"]
+            ? ["light-time:iterated", "deflection:sun-outside-disc", "aberration:relativistic-annual", "target:system-barycentre", "node:true-osculating", ...PACK_PLACE_IDS, "precession:iau2006"]
             : [
                 "light-time:newtonian",
                 "deflection:none",

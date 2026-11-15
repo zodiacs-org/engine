@@ -44,10 +44,11 @@ interface De440Source extends PositionSource {
         readonly name: typeof DE440_EPHEMERIS_NAME;
         readonly version: string;
     };
-    place(body: ReducedBody, ttDays: number): {
+    place(body: ReducedBody, ttDays: number, behind?: boolean): {
         lon: number;
         lat: number;
         dist: number;
+        behindDisc: boolean;
     };
     steps(fromTtDays: number, toTtDays: number): number[];
     readonly pack: {
@@ -68,10 +69,11 @@ interface PositionSource {
         readonly name: string;
         readonly version: string;
     };
-    place(body: SourceBody, ttDays: number): {
+    place(body: SourceBody, ttDays: number, behind?: boolean): {
         lon: number;
         lat: number;
         dist?: number;
+        behindDisc?: boolean;
     };
     trueNode(ttDays: number): number;
     steps?(fromTtDays: number, toTtDays: number): number[];

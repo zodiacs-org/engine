@@ -116,30 +116,62 @@ describe("the pack's record boundaries inside a window", () => {
   }, 300_000);
 });
 
-describe("a planet behind the Sun, where the pack's reduction bends its light", () => {
-  // Neptune passes 0.022° from the Sun's centre on 1920-08-03, near 23:28 UTC. The reduction's light deflection
-  // (src/de440/reduce.ts) grows as the inverse of that angle, so the place natalChart gives moves far faster than
-  // the body: the search's rate bound must grow with it (Sky.rate in src/window.ts).
+describe("a planet passing behind the Sun, where the pack's reduction stops bending its light at the limb", () => {
+  // Neptune passes 0.022° from the Sun's centre on 1920-08-03, near 23:28 UTC, about seven hours after it passes
+  // behind the limb. From 1.1.0-rc.12 the reduction (src/de440/reduce.ts) bends no light behind the disc, as JPL
+  // Horizons, so the place moves at the body's own rate there and steps at the limb by the deflection, at most
+  // 4GM/c²R = 1.7512″; the search takes that step as a displacement of at most 1.8″ (Sky.bend in src/window.ts).
+  // Through 1.1.0-rc.11 the deflection grew towards the centre, and the place moved at over ten times the bound.
   const closest = Date.UTC(1920, 7, 3, 23, 28);
   const place: Place = { latitude: 40, longitude: -74, houseSystem: "whole" };
+  const lon = (time: number) => bodyLongitude("Neptune", new Date(time));
+  const moved = (a: number, b: number) => Math.abs(((lon(b) - lon(a) + 540) % 360) - 180);
 
-  it("moves Neptune's place at over ten times its rate bound", () => {
-    let fastest = 0;
-    for (let time = closest - 600_000; time < closest + 600_000; time += 10_000) {
-      const moved = Math.abs(bodyLongitude("Neptune", new Date(time + 10_000)) - bodyLongitude("Neptune", new Date(time)));
-      fastest = Math.max(fastest, moved * 8640);
+  /** The millisecond at which Neptune's place steps at the limb, between `from` and `to` (one step between them). */
+  function limb(from: number, to: number): number {
+    let [a, b] = [from, to];
+    // The step is over 1e-4° (0.36″); the motion over the bracket is under 2e-5° once it is under ten minutes.
+    while (b - a > 1) {
+      const middle = Math.floor((a + b) / 2);
+      if (moved(a, middle) > moved(middle, b)) b = middle;
+      else a = middle;
     }
-    expect(fastest).toBeGreaterThan(10 * WINDOW_RATE_BOUNDS.Neptune);
+    return b;
+  }
+
+  it("moves Neptune's place at under its rate bound behind the disc, and steps it once at each limb by under 1.8″", () => {
+    let fastest = 0;
+    for (let time = closest - 600_000; time < closest + 600_000; time += 10_000) fastest = Math.max(fastest, moved(time, time + 10_000) * 8640);
+    expect(fastest).toBeLessThan(WINDOW_RATE_BOUNDS.Neptune);
+    // Minute by minute over the passage the place moves under 3e-5°, except across the two limbs.
+    const steps: number[] = [];
+    for (let time = closest - 12 * 3_600_000; time < closest + 12 * 3_600_000; time += 60_000) if (moved(time, time + 60_000) > 1e-4) steps.push(time);
+    expect(steps.length).toBe(2);
+    for (const minute of steps) {
+      const at = limb(minute, minute + 60_000);
+      const step = moved(at - 1, at) * 3600;
+      expect(step).toBeGreaterThan(1);
+      expect(step).toBeLessThan(1.8);
+    }
   });
 
-  it("is partitioned as natalChart has it, with no bound broken", () => {
+  it("is partitioned as natalChart has it across the centre and each limb, with no bound broken", () => {
     const window = partition(closest - 3_600_000, 2 * 3_600_000, place);
     expect(window.flags).toEqual([]);
     expectExact(window, place, 20_000);
-    // And the day before, a degree from the Sun, where the bound needs nothing added.
+    for (let time = closest - 12 * 3_600_000; time < closest + 12 * 3_600_000; time += 60_000) {
+      if (moved(time, time + 60_000) <= 1e-4) continue;
+      const at = limb(time, time + 60_000);
+      const across = partition(at - 1_800_000, 3_600_000, place);
+      expect(across.flags).toEqual([]);
+      expectExact(across, place, 20_000);
+      for (let near = at - 25; near <= at + 25; near += 1) {
+        expect(cellFeatures(cellAt(across, near)), new Date(near).toISOString()).toEqual(chartFeatures(near, place));
+      }
+    }
+    // And the day before, a degree from the Sun.
     const before = partition(closest - 30 * 3_600_000, 6 * 3_600_000, place);
     expect(before.flags).toEqual([]);
     expectExact(before, place, 60_000);
-  }, 120_000);
+  }, 240_000);
 });
-

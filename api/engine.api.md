@@ -193,6 +193,11 @@ interface Chart {
 interface ChartDeclinations extends Declinations {
     utc: string;
     deltaT: DeltaT;
+    ephemeris: {
+        readonly name: string;
+        readonly version: string;
+    } | null;
+    flags: EphemerisFallback[];
 }
 
 type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
@@ -211,6 +216,11 @@ interface ChartInput {
 interface ChartPoints {
     sect: Sect | null;
     points: PointPosition[];
+    ephemeris: {
+        readonly name: string;
+        readonly version: string;
+    } | null;
+    flags: EphemerisFallback[];
 }
 
 interface ConfiguredAspect {
@@ -516,10 +526,11 @@ interface PositionSource {
         readonly name: string;
         readonly version: string;
     };
-    place(body: SourceBody, ttDays: number): {
+    place(body: SourceBody, ttDays: number, behind?: boolean): {
         lon: number;
         lat: number;
         dist?: number;
+        behindDisc?: boolean;
     };
     trueNode(ttDays: number): number;
     steps?(fromTtDays: number, toTtDays: number): number[];
