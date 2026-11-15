@@ -875,6 +875,18 @@ position reads, and the sweep's workflow, run again on 1.1.0-rc.7's build,
 checks every largest difference against the bounds the build quotes
 (`docs/evidence/1.1.0-rc.7-20261111/`).
 
+These rows are the bounds of astronomy-engine's results: on the shipped
+DE440 pack, from 1.1.0-rc.10 the default, `calc()` quotes
+`src/calc-bounds-de440.ts` instead (*Which ephemeris*). The sweep's engine
+side ran `calc()` at its default, so on 1.1.0-rc.10 it measured the pack's
+apparent places against these limits and against an arbiter without the
+light deflection the pack applies, and the workflow failed (run
+43618467433). From 1.1.0-rc.11 it names the source (`engine_sweep.mjs
+--ephemeris`) and the workflow sweeps astronomy-engine; run so on
+1.1.0-rc.10's head, the engine's values are the same bytes as 1.1.0-rc.3's
+in all eight eras and every row is within its limit
+(`docs/evidence/1.1.0-rc.11-20261115/sweep/`).
+
 ## Measured against JPL Horizons and ERFA
 
 `docs/evidence/calc-api/` holds the preregistration, the Horizons requests and
