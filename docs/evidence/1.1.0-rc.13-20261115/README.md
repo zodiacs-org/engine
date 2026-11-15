@@ -28,8 +28,9 @@ Source commit `67a0e38`, against `86ad398`:
   `../1.1.0-rc.12-20261115/README.md` (the build the near-sun rows ran on).
 - The version string, 1.1.0-rc.12 to 1.1.0-rc.13: `package.json`,
   `package-lock.json`, `ENGINE_VERSION` in `src/types.ts`, `typedoc.json`,
-  the two tests that hold it and the 30 receipts in
-  `src/fixtures/calc-roundtrip.json`.
+  the two tests that hold it and, in
+  `src/fixtures/calc-roundtrip.json`, 27 receipts' engine versions and 3
+  `engineVersion` fields.
 - `scripts/verify-package-contents.mjs`: a comment recording this
   candidate's size. No budget and not the cap.
 
