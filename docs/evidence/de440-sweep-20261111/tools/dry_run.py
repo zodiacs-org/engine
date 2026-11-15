@@ -49,6 +49,8 @@ def show(x):
 
 def main():
     sweep = json.load(open(os.path.join(RESULTS, 'summary.json')))
+    if sweep.get('ephemeris', 'astronomy-engine') != 'astronomy-engine':
+        raise SystemExit(f"the sweep was run on {sweep['ephemeris']}; src/calc-bounds.ts holds astronomy-engine's bounds")
     current = json.load(open(os.path.join(CURRENT, 'summary.json')))
     bounds = bounds_module()
     # The baseline is the table bounds.py writes from rc16/summary.json, which src/calc-bounds.ts held until

@@ -115,6 +115,27 @@ export type ChartFlag =
 export type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
 
 /**
+ * A bare value (a Date, a longitude, a list of signs) with the label it
+ * cannot carry itself: the ephemeris its positions came from and the flags
+ * that say why that is astronomy-engine where the shipped DE440 pack was the
+ * default. What each `…Detailed` function of the techniques and internal
+ * entries returns, beside the plain function, which returns `value` alone
+ * and is unchanged.
+ */
+export interface DetailedResult<T, F extends string = EphemerisFallback> {
+  /** What the plain function returns, the same value. */
+  readonly value: T;
+  /** `{ name: "jpl-de440", version }` on the pack; astronomy-engine's name and version where any position was its. */
+  readonly ephemeris: { readonly name: string; readonly version: string };
+  /**
+   * `"de440-unavailable"` or `"outside-de440-span"` on a fallback, none on the pack or after the caller chose
+   * astronomy-engine; in the techniques entry also `"outside-reference-span"`, first, where a position was read
+   * outside 1800 to 2200.
+   */
+  readonly flags: readonly F[];
+}
+
+/**
  * A resolved birth instant. Use `resolveBirth` from `@zodiacs/engine/geo`
  * when starting from a local wall time and IANA timezone.
  */
@@ -355,7 +376,7 @@ export interface MoonPhase {
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "1.1.0-rc.10";
+export const ENGINE_VERSION: string = "1.1.0-rc.11";
 
 /**
  * astronomy-engine, the ephemeris the engine computes on where the shipped

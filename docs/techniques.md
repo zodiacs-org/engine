@@ -5,7 +5,8 @@ compute outside the package:
 
 - **Solar and lunar returns**: `solarReturnInstant`,
   `mostRecentSolarReturnInstant`, `lunarReturnInstant`, `solarReturn`,
-  `lunarReturn`.
+  `lunarReturn`, and the three instants' detailed forms
+  (`solarReturnInstantDetailed` and so on; *Which ephemeris*, below).
 - **Composite and Davison charts**: `compositeMidpoints`, `compositeAspects`,
   `compositeChart`, `davisonChart`, `davisonPlace`.
 - **The void-of-course Moon**: `moonIngresses`, `moonAspects`,
@@ -16,7 +17,7 @@ compute outside the package:
   `hasClassicalDignities`, `dignityRulersAt`, `essentialDignities`,
   `mutualReceptions`, and the tables they read.
 - **Moon signs for an unknown birth time**: `moonSignCandidates`,
-  `moonSignsBetween`.
+  `moonSignsBetween`, `moonSignsBetweenDetailed`.
 
 The root entry point does not import this one, so code that does not use
 these techniques does not carry them. The functions take explicit inputs,
@@ -359,6 +360,63 @@ Stockholm before 1900, where the midnights differ by 6 min 46 s or 18 min 44 s
 and the signs agree. The site's labels and share rules (`moonLabel`,
 `moonIsUncertain`) are presentation and are not moved.
 
+## Which ephemeris
+
+The functions here read the root entry's positions, so they compute where it
+does: on the shipped DE440 pack by default, and on astronomy-engine outside
+1790-01-02 to 2209-12-31, if the pack cannot be opened, or after
+`setDefaultEphemeris("astronomy-engine")` ([de440.md](de440.md), *The default
+source*). A result says which, and never falls back silently (from
+1.1.0-rc.11; in 1.1.0-rc.10 the functions in this section's lists said
+nothing):
+
+- `ephemeris`: `{ name: "jpl-de440", version }` (the version is the pack's
+  SHA-256) where every position behind the result was the pack's, and
+  `{ name: "astronomy-engine", version: "2.1.19" }` where any was
+  astronomy-engine's.
+- `flags`: `"de440-unavailable"` (the pack could not be opened) or
+  `"outside-de440-span"` (a position was read outside it) where
+  astronomy-engine stood in for the pack, after `"outside-reference-span"`
+  when the ephemeris was read outside 1800 to 2200. The caller's own choice
+  of astronomy-engine is named and not flagged.
+
+Where the label is:
+
+- On the object: `solarReturn`, `lunarReturn` and `davisonChart` (`flags`,
+  and the chart's own `ephemeris` and `flags`); `voidOfCourseAt` (over every
+  position its windows read); `compositeChart` and `chartAspectPatterns`
+  (from the charts: their `ephemeris` when the charts name one and the same,
+  otherwise `null`, as for a supplied chart from a release before
+  1.1.0-rc.10, which names none; and each flag either chart carries).
+- On each element: `moonIngresses`, `moonAspects` and `voidOfCourseWindows`
+  (a window's `lastAspect` too). An element is labelled by the positions it
+  was found from, within one coarse step of it (six hours for an ingress,
+  three for an aspect; a window from its first ingress to its last), so a
+  list that runs past an end of the pack labels the elements before the end
+  `jpl-de440` and those after it astronomy-engine, flagged.
+- In a detailed form, for the functions that return a bare value, which
+  cannot carry a label: `solarReturnInstant`, `mostRecentSolarReturnInstant`,
+  `lunarReturnInstant` (a `Date`) and `moonSignsBetween` (a list of signs).
+  Each plain function is unchanged; its sibling `solarReturnInstantDetailed`,
+  `mostRecentSolarReturnInstantDetailed`, `lunarReturnInstantDetailed` or
+  `moonSignsBetweenDetailed` takes the same arguments and returns
+  `{ value, ephemeris, flags }` (`DetailedResult`), `value` being what the
+  plain function returns, labelled over the whole window it searched. Use
+  the detailed form where it matters which ephemeris computed the value.
+- `moonSignCandidates` has `flags` as before.
+
+`src/ephemeris-fallback-techniques.test.ts` holds each of these with the
+pack whole, damaged, and outside its years (1750 and 2230).
+
+```ts
+import { solarReturnInstantDetailed } from "@zodiacs/engine/techniques";
+
+const found = solarReturnInstantDetailed(25, "2031-05-01");
+found.value;     // the Date solarReturnInstant(25, "2031-05-01") returns
+found.ephemeris; // { name: "jpl-de440", version: "5142…" }
+found.flags;     // []
+```
+
 ## Errors and flags
 
 Every function throws `RangeError` for input it cannot use: a name that is
@@ -367,9 +425,9 @@ non-finite number; an invalid date; an inverted or overlong window; a place
 out of range; and the refusals named above. astronomy-engine's own failures
 far from the present pass through as the root entry's do.
 
-`flags` is `["outside-reference-span"]` on a return, a Davison chart and a
-Moon-sign result when the ephemeris was read outside 1800–2200, and empty
-otherwise; the result is still computed.
+`flags` has `"outside-reference-span"` on a result when the ephemeris was
+read outside 1800–2200, and the fallback flags of *Which ephemeris*; the
+result is still computed.
 
 ## Not included
 

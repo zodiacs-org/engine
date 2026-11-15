@@ -10,8 +10,8 @@ import { dateFrom } from "../date-input.js";
 import { bodyLongitude } from "../ephemeris.js";
 import { resolveLocalToUtc } from "../geo/timezone.js";
 import { SIGN_SLUGS, signIndexForLongitude } from "../signs.js";
-import type { DateInput, ZodiacSign } from "../types.js";
-import { DAY_MS, readOptions, techniqueFlags } from "./shared.js";
+import type { DateInput, DetailedResult, ZodiacSign } from "../types.js";
+import { DAY_MS, detailed, readOptions, techniqueFlags } from "./shared.js";
 import type { TechniqueFlag } from "./shared.js";
 
 const HOUR_MS = 3_600_000;
@@ -57,11 +57,26 @@ function signsOver(fromT: number, toT: number): ZodiacSign[] {
 
 /** Every sign the apparent Moon is in during [from, to], at most 20 days, in order. */
 export function moonSignsBetween(from: DateInput, to: DateInput): readonly ZodiacSign[] {
+  const [fromT, toT] = moonSignSpan(from, to);
+  return Object.freeze(signsOver(fromT, toT));
+}
+
+/**
+ * `moonSignsBetween`'s signs as `value`, with the ephemeris the Moon's two
+ * longitudes came from and the flags that say why that is astronomy-engine
+ * where the shipped DE440 pack was the default (`DetailedResult`).
+ */
+export function moonSignsBetweenDetailed(from: DateInput, to: DateInput): DetailedResult<readonly ZodiacSign[], TechniqueFlag> {
+  const [fromT, toT] = moonSignSpan(from, to);
+  return detailed(Object.freeze(signsOver(fromT, toT)), [fromT, toT]);
+}
+
+function moonSignSpan(from: DateInput, to: DateInput): [number, number] {
   const fromT = dateFrom(from, "from").getTime();
   const toT = dateFrom(to, "to").getTime();
   if (fromT > toT) throw new RangeError("from must not be after to.");
   if (toT - fromT > MOON_SIGN_MAX_SPAN_DAYS * DAY_MS) throw new RangeError(`The span must not exceed ${MOON_SIGN_MAX_SPAN_DAYS} days.`);
-  return Object.freeze(signsOver(fromT, toT));
+  return [fromT, toT];
 }
 
 function civilDate(value: unknown): { year: number; month: number; day: number } {

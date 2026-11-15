@@ -90,8 +90,17 @@ def maxima(summary):
     return dict(sorted(out.items()))
 
 
+def astronomy_engine(summary, what):
+    """src/calc-bounds.ts holds the bounds calc() quotes for astronomy-engine's results (on the shipped DE440 pack it
+    quotes src/calc-bounds-de440.ts): a sweep of the pack is neither written into it nor checked against it."""
+    ephemeris = summary.get('ephemeris', 'astronomy-engine')
+    if ephemeris != 'astronomy-engine':
+        raise SystemExit(f'{what} was run on {ephemeris}; src/calc-bounds.ts holds astronomy-engine\'s bounds')
+
+
 def checked(sweep):
     """The sweep's rows, after the sanity limits and the rounding check."""
+    astronomy_engine(sweep, 'the sweep')
     raw = maxima(sweep)
     if raw.keys() != sweep['bounds'].keys():
         raise SystemExit('the sweep\'s bounds and its cases do not name the same rows')
@@ -222,6 +231,7 @@ def committed_limits():
 
 def against(directory):
     run = json.load(open(os.path.join(directory, 'summary.json')))
+    astronomy_engine(run, directory)
     limits = committed_limits()
     found = maxima(run)
     names = ('position', 'distance', 'rate')

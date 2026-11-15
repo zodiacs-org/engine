@@ -166,8 +166,11 @@ below no `package.json` or `node_modules`. The package supports Node
   where the pack was the default says so itself: it names astronomy-engine
   and carries `"de440-unavailable"` or `"outside-de440-span"`
   (`EphemerisFallback`; `docs/de440.md`, *The default source*). A new
-  function that reads positions must do the same;
-  `src/ephemeris-fallback.test.ts` and the packed-consumer check hold it.
+  function that reads positions must do the same, and one that returns a
+  bare value (a `Date`, a number, a list) needs a labelled form beside it,
+  as the techniques entry's `…Detailed` functions are (from 1.1.0-rc.11);
+  `src/ephemeris-fallback.test.ts`, `src/ephemeris-fallback-techniques.test.ts`
+  and the packed-consumer check hold it.
 - Every entry point in `package.json` `exports` has a budget for its import
   graph in `scripts/verify-package-contents.mjs`, the zone histories have
   their own (200,000 bytes, 16 files) and the package a total cap. Add a

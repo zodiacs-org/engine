@@ -167,6 +167,24 @@ export function fallbacksAt(instants: readonly number[]): EphemerisFallback[] {
   return EPHEMERIS_FALLBACKS.filter((reason) => met.has(reason));
 }
 
+/**
+ * The ephemeris positions at `instants` (UTC milliseconds) come from, by the
+ * rule every position follows: astronomy-engine's name and version when any
+ * of them is astronomy-engine's (a fallback, or the caller's choice), and
+ * otherwise the source's (the shipped pack, or the one `withEphemeris`
+ * installed). The pack is the default over one interval of time, so for a
+ * result whose positions were all read between two instants, those two
+ * instants decide it: with `fallbacksAt` of the same instants it labels the
+ * techniques entry's searches and their detailed forms.
+ *
+ * @internal
+ */
+export function ephemerisOver(instants: readonly number[]): { name: string; version: string } {
+  const sources = instants.filter((ms) => Number.isFinite(ms)).map((ms) => chosenAt(timeBasis(ms, "utc").ttDays).from);
+  const first = sources[0];
+  return first === undefined || sources.some((from) => from === null) ? { ...EPHEMERIS } : named(first);
+}
+
 /** Every fallback flag, in the order results list them. */
 export const EPHEMERIS_FALLBACKS: readonly EphemerisFallback[] = ["de440-unavailable", "outside-de440-span"];
 

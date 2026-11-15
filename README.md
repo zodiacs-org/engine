@@ -26,21 +26,33 @@ position vectors of the repository's conformance suite, 24 instants from 1851
 to 2148, the largest difference 0.0127″ (`src/de440-default.test.ts`); on
 astronomy-engine, which every release through 1.1.0-rc.7 computed on, 48 of
 the 240 are. **Positions change against those releases**, by the difference
-between the two ephemerides: up to 29.19″ of ecliptic longitude for the Sun,
-the Moon and the planets (Pluto, on 2199-12-31) and 32.64″ for the true node,
-over one instant a day from 1800 to 2199 (CHANGELOG.md has each body's).
+between the two ephemerides. At one instant a day (noon TT) from 1800 to
+2199 the largest is 29.19″ of ecliptic longitude for the Sun, the Moon and
+the planets (Pluto, on 2199-12-31) and 32.64″ for the true node
+(CHANGELOG.md has each body's). That is the largest at those instants, not a
+limit: a planet passing behind the Sun moves more, because the pack bends
+its light by the Sun and astronomy-engine does not (Neptune, 0.0234° from
+the Sun's centre at 1920-08-03T23:48:31Z, by 33.37″ in longitude;
+`docs/evidence/1.1.0-rc.11-20261115/`).
 **No fallback is silent**: outside 1790-01-02 to 2209-12-31, or if the pack
 cannot be opened, the engine computes on astronomy-engine, and the result
 says so with a flag (`"outside-de440-span"`, `"de440-unavailable"`) and by
-naming astronomy-engine as its ephemeris.
+naming astronomy-engine as its ephemeris. A function that returns a bare
+value (a `Date`, a number, a list) cannot carry that label, so it has a
+labelled form beside it: `searchLongitudeCrossings` for
+`findLongitudeCrossings`, and from 1.1.0-rc.11 `solarReturnInstantDetailed`,
+`mostRecentSolarReturnInstantDetailed`, `lunarReturnInstantDetailed` and
+`moonSignsBetweenDetailed` in `@zodiacs/engine/techniques`, which return
+`{ value, ephemeris, flags }` ([docs/de440.md](docs/de440.md)).
 `setDefaultEphemeris("astronomy-engine")` gives earlier releases' positions
 everywhere, named and not flagged. From this candidate `@zodiacs/engine/calc`
 (`calc`, `chart`, `events`) and `birthWindow` compute on the pack too, so
 they agree with `natalChart`; what `calc()` gives beyond the apparent
 geocentric place (other centers and corrections, the Earth) and the sky
-entry's rising and setting still compute on astronomy-engine, as their
-results say. The pack makes the package about four times larger unpacked
-(4,540,059 bytes against 1.1.0-rc.7's 1,152,017), and an application
+entry's rising and setting still compute on astronomy-engine whatever the
+default, so none is a fallback: a calc receipt names astronomy-engine, and
+the sky entry's results name no ephemeris ([docs/de440.md](docs/de440.md)). The pack makes the package about four times larger unpacked
+(4,557,833 bytes against 1.1.0-rc.7's 1,152,017), and an application
 that bundles the root entry bundles the pack's 3,319,552 characters (see
 [docs/de440.md](docs/de440.md) and CHANGELOG.md). 1.1.0-rc.9 was this
 candidate's first draft, superseded before review; 1.1.0-rc.8 was a draft

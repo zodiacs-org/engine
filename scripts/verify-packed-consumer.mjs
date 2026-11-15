@@ -741,6 +741,8 @@ import assert from "node:assert/strict";
 import * as root from "@zodiacs/engine";
 import { calc, chart, events } from "@zodiacs/engine/calc";
 import { birthWindow } from "@zodiacs/engine/window";
+import * as techniques from "@zodiacs/engine/techniques";
+import { bodyLongitude, bodyLongitudeDetailed } from "@zodiacs/engine/internal";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from "@zodiacs/engine/receipt";
 const expectUnavailable = process.argv[2] === "unavailable";
 const flags = expectUnavailable ? ["de440-unavailable"] : [];
@@ -778,6 +780,24 @@ assert.equal(found.receipt.engine.ephemeris.name, name);
 const window = birthWindow({ start: "1990-04-15T08:00:00Z", end: "1990-04-15T08:10:00Z", latitude: 51.5, longitude: -0.12 });
 assert.deepEqual(window.flags, flags);
 assert.equal(window.ephemeris.name, name);
+// The techniques entry (1.1.0-rc.11): a Date through its detailed form, objects, and a list's elements.
+const returned = techniques.solarReturnInstantDetailed(25, "2024-03-01T00:00:00Z");
+assert.equal(returned.value.getTime(), techniques.solarReturnInstant(25, "2024-03-01T00:00:00Z").getTime());
+assert.deepEqual(returned.flags, flags);
+assert.equal(returned.ephemeris.name, name);
+for (const labelled of [
+  techniques.voidOfCourseAt("2024-03-01T00:00:00Z"),
+  techniques.compositeChart(birth, { utc: "1992-07-01T12:00:00Z" }),
+  techniques.chartAspectPatterns(birth),
+  ...techniques.moonIngresses("2024-03-01T00:00:00Z", "2024-03-06T00:00:00Z")
+]) {
+  assert.deepEqual(labelled.flags, flags);
+  assert.equal(labelled.ephemeris.name, name);
+}
+const longitude = bodyLongitudeDetailed("Mars", new Date(birth.utc));
+assert.equal(longitude.value, bodyLongitude("Mars", new Date(birth.utc)));
+assert.deepEqual(longitude.flags, flags);
+assert.equal(longitude.ephemeris.name, name);
 console.log(JSON.stringify({ expected: process.argv[2], error: status.error, natalFlags: natal.flags, ephemeris: natal.ephemeris.name }));
 `
 );

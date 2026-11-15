@@ -32,7 +32,9 @@ root entry): nothing depends on what was computed before it.
 From 1.1.0-rc.10 the calc entry follows the root's default source
 ([de440.md](de440.md), *The default source*), so that every function gives
 one position for one instant. In 1.1.0-rc.9 it stayed on astronomy-engine,
-and a default `calc()` could be up to 29.19″ from `positions()`.
+and a default `calc()` was as much as 29.19″ from `positions()` at one
+instant a day (noon TT) from 1800 to 2199, and more for a planet passing
+behind the Sun.
 
 | request | computed on |
 | --- | --- |

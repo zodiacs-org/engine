@@ -201,6 +201,18 @@ for (const file of files) {
 // approval: they are for the owner to decide with the candidate. ./receipt
 // (75,814 of 76,500) and ./internal/math (19,225 of 20,000) grow inside
 // their budgets; the six other graphs do not change.
+//
+// 1.1.0-rc.11 labels every result of the techniques entry with the ephemeris
+// its positions came from and the fallback flags (the rc.10 breaker's B1),
+// and adds the detailed forms of its four functions that return a bare
+// value. Measured on this build, ./techniques is 201,294 bytes, 3,483 more
+// than 1.1.0-rc.10's 197,811 (the labels on three objects and on the
+// elements of three lists, and the detailed forms), over its budget of
+// 199,900: raised to 203,800, the measurement and about one per cent. It has
+// not the owner's approval: it is for the owner to decide with the
+// candidate. Every other graph grows inside its budget (the root by 304
+// bytes, `ephemerisOver`, which the techniques entry's labels and the
+// internal entry's detailed forms share with it in the ephemeris chunk).
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -308,7 +320,7 @@ const ENTRY_BUDGETS = {
   // it shares with ./geo (docs/evidence/techniques-2026-09-29/); 5.8 per
   // cent of headroom. rc.16: 152,472, raised from 150,000 for the nutation
   // in the ephemeris chunk; 4.93 per cent of headroom.
-  "./techniques": 199_900,
+  "./techniques": 203_800,
   // New in 1.1.0-rc.2: the time basis and the frame of date with no
   // ephemeris (Zodiacs.org's finding F-53), and the time bands it re-exports.
   // 1.1.0-rc.2: 42,306 bytes in 7 files, dist/time.js and the six chunks it
@@ -541,7 +553,14 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // manifest 1 (docs/evidence/1.1.0-rc.10-20261114/sizes.json). Raised from
 // 1,185,000 to 1,225,000 for the owner to decide with the candidate, which
 // leaves 0.37 per cent.
-const TOTAL_CAP = 1_225_000;
+//
+// 1.1.0-rc.11: 4,557,833 bytes in 98 files, of which 1,238,281 are not the
+// pack, 17,774 more than 1.1.0-rc.10's 1,220,507: this candidate's CHANGELOG
+// entry and the README's lines, and the labels and detailed forms of the
+// techniques entry with their declarations. Raised from 1,225,000 to
+// 1,245,000 for the owner to decide with the candidate, which leaves 0.54
+// per cent.
+const TOTAL_CAP = 1_245_000;
 const restBytes = report.unpackedSize - PACK_DATA_BYTES;
 assert(restBytes <= TOTAL_CAP, `package is unexpectedly large: ${restBytes} bytes unpacked beside the DE440 pack, over ${TOTAL_CAP}`);
 

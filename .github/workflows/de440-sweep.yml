@@ -141,7 +141,7 @@ jobs:
         run: echo "$KERNEL_SHA256  $RUNNER_TEMP/kernels/de440.bsp" | sha256sum -c -
 
       - name: The engine at every instant of the era
-        run: node "$SWEEP/tools/engine_sweep.mjs" --from-year ${{ matrix.from }} --to-year ${{ matrix.to }} --out "$RUNNER_TEMP/engine.bin"
+        run: node "$SWEEP/tools/engine_sweep.mjs" --ephemeris astronomy-engine --from-year ${{ matrix.from }} --to-year ${{ matrix.to }} --out "$RUNNER_TEMP/engine.bin"
 
       - name: The engine against the kernel
         run: |

@@ -57,6 +57,11 @@ BODIES = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranu
 POINTS = ['North Node', 'South Node']
 CORRECTIONS = ['geometric', 'astrometric', 'apparent']
 ARBITER = {'geometric': 'NONE', 'astrometric': 'LT', 'apparent': 'LTS'}
+# What the engine's values were computed on (engine_sweep.mjs --ephemeris). astronomy-engine's apparent place leaves
+# out the Sun's light deflection, and is compared with LTS; the shipped DE440 pack's applies it (src/de440/reduce.ts),
+# and its apparent places are compared with APPARENT, LTS with the deflection.
+EPHEMERIDES = ('astronomy-engine', 'de440')
+APPARENT_ARBITER = {'astronomy-engine': 'LTS', 'de440': 'APPARENT'}
 NAIF = {'Sun': '10', 'Moon': '301', 'Mercury': '199', 'Venus': '299', 'Mars': '4', 'Jupiter': '5',
         'Saturn': '6', 'Uranus': '7', 'Neptune': '8', 'Pluto': '9'}
 # The gates of ../PLAN.md, fixed before the first run.
@@ -123,7 +128,8 @@ def geocentric(kernel, body, jd, deflection=False):
     NONE (geometric), LT (the target where its light left, by iteration) and LTS (the LT direction with
     the stellar aberration of the geocentre's barycentric velocity, erfa.ab; its length the light path).
     NONE comes with the geometric velocity. With deflection, also the apparent direction with the Sun's
-    light deflection applied before the aberration (erfa.ld, as validate.py), a unit vector."""
+    light deflection applied before the aberration (erfa.ld with erfa.ldsun's limiter, as validate.py), with the
+    length of the light path, as LTS."""
     t = tdb(jd)
     earth, earth_v = kernel.state(EARTH, t)
     target, target_v = kernel.state(TARGETS[body], t)
@@ -160,7 +166,7 @@ def geocentric(kernel, body, jd, deflection=False):
             em = norm(e)
             e = e / em[:, None]
             bent = erfa.ld(1.0, p, q, e, em, 1e-6 / np.maximum(em * em, 1.0))
-        out['APPARENT'] = erfa.ab(bent, v, s, bm1)
+        out['APPARENT'] = erfa.ab(bent, v, s, bm1) * length[:, None]
     return out
 
 # --------------------------------------------------------------------------- frames (ERFA, IAU 2006/2000A)
@@ -350,6 +356,10 @@ def shard(kernel_path, engine_path, out_path):
         raise SystemExit('the engine was run on other cases')
     if sha256(engine_path) != meta['valuesSha256']:
         raise SystemExit('the engine values are not the ones the engine wrote')
+    ephemeris = meta.get('ephemeris', 'astronomy-engine')
+    if ephemeris not in EPHEMERIDES:
+        raise SystemExit(f'the engine was run on {ephemeris}, which this sweep has no arbiter for')
+    arbiter = {**ARBITER, 'apparent': APPARENT_ARBITER[ephemeris]}
     n = meta['count']
     jd = FIRST_JD + meta['startIndex'] + np.arange(n, dtype=float)
     if jd[0] != meta['firstJdTt']:
@@ -359,16 +369,16 @@ def shard(kernel_path, engine_path, out_path):
 
     cases, moon_state = [], None
     for body in BODIES:
-        names = ['NONE', 'LT', 'LTS']
+        bent = ephemeris == 'de440'
         vectors = geocentric(kernel, body, jd, deflection=True)
-        earlier, later = geocentric(kernel, body, jd - STEP), geocentric(kernel, body, jd + STEP)
+        earlier, later = geocentric(kernel, body, jd - STEP, deflection=bent), geocentric(kernel, body, jd + STEP, deflection=bent)
         if body == 'Moon':
             moon_state = (vectors['NONE'], vectors['NONE_V'])
         for correction in CORRECTIONS:
             engine = values[expected.index({'correction': correction, 'body': body})]
             # The engine's apparent Moon is its series at the instant: compared with LT+S (the bound's
-            # arbiter) and with NONE, as compare.py does.
-            for which in ([ARBITER[correction], 'NONE'] if (body, correction) == ('Moon', 'apparent') else [ARBITER[correction]]):
+            # arbiter; on the pack LT+S with the deflection) and with NONE, as compare.py does.
+            for which in ([arbiter[correction], 'NONE'] if (body, correction) == ('Moon', 'apparent') else [arbiter[correction]]):
                 frames = []
                 for f, frame in enumerate(FRAMES):
                     lon, lat, r = spherical(turn(here[frame], vectors[which]))
@@ -387,9 +397,10 @@ def shard(kernel_path, engine_path, out_path):
                                                      e_lat_rate - (lat1 - lat0) / (2 * STEP)) * 3600)}
                     frames.append(entry)
                 case = {'correction': correction, 'body': body, 'arbiter': which, 'frames': frames}
-                if correction == 'apparent' and which == 'LTS':
+                if correction == 'apparent' and which == arbiter['apparent']:
                     # Not part of the bounds rule: the same place with the Sun's light deflection, which
-                    # the engine's apparent leaves out, in the true ecliptic of date.
+                    # astronomy-engine's apparent leaves out, in the true ecliptic of date (on the pack the
+                    # bound's arbiter itself).
                     lon, lat, _ = spherical(turn(here['ecliptic-true-of-date'], vectors['APPARENT']))
                     case['withDeflection'] = {'frame': 'ecliptic-true-of-date',
                                               'position': stats(angle(unit(engine[0, :, 0], engine[0, :, 1]), unit(lon, lat)), jd),
@@ -414,7 +425,7 @@ def shard(kernel_path, engine_path, out_path):
     result = six({
         'era': {'fromYear': meta['fromYear'], 'toYear': meta['toYear'], 'firstJdTt': float(jd[0]), 'lastJdTt': float(jd[-1]), 'n': n,
                 'startIndex': meta['startIndex']},
-        'engine': meta['engine'], 'distSha256': meta['distSha256'], 'node': meta['node'], 'engineValuesSha256': meta['valuesSha256'],
+        'engine': meta['engine'], 'ephemeris': ephemeris, 'distSha256': meta['distSha256'], 'node': meta['node'], 'engineValuesSha256': meta['valuesSha256'],
         'kernel': {'file': 'de440.bsp', 'url': KERNEL_URL, 'sha256': KERNEL_SHA256, 'bytes': kernel.bytes},
         'software': software(),
         'statistics': STATISTICS,
@@ -485,8 +496,8 @@ def merge(out_dir, selfcheck_path, shard_paths):
         if doc['era']['startIndex'] != at:
             raise SystemExit('the eras do not join')
         at += doc['era']['n']
-        for field in ('engine', 'distSha256', 'kernel', 'software', 'node'):
-            if doc[field] != first[field]:
+        for field in ('engine', 'ephemeris', 'distSha256', 'kernel', 'software', 'node'):
+            if doc.get(field, 'astronomy-engine' if field == 'ephemeris' else None) != first.get(field, 'astronomy-engine' if field == 'ephemeris' else None):
                 raise SystemExit(f'the eras were not run on one {field}')
     if at != TOTAL:
         raise SystemExit(f'{at} instants, not {TOTAL}')
@@ -542,14 +553,17 @@ def merge(out_dir, selfcheck_path, shard_paths):
     run = {key: os.environ.get(name) for key, name in (('repository', 'GITHUB_REPOSITORY'), ('workflow', 'GITHUB_WORKFLOW'),
                                                        ('runId', 'GITHUB_RUN_ID'), ('runAttempt', 'GITHUB_RUN_ATTEMPT'),
                                                        ('commit', 'SWEEP_COMMIT'), ('event', 'GITHUB_EVENT_NAME'))}
+    ephemeris = first.get('ephemeris', 'astronomy-engine')
     summary = {
         'plan': 'docs/evidence/de440-sweep-20261111/PLAN.md',
         'engine': first['engine'],
+        'ephemeris': ephemeris,
         'build': {'distSha256': first['distSha256'], 'node': first['node'], 'commit': run['commit']},
         'arbiter': {'kernel': first['kernel'],
                     'reduction': 'geocentric ICRF vectors from the kernel through jplephem (geometric; light time by iteration; light time '
-                                 'and the stellar aberration of erfa.ab), turned into each frame with ERFA\'s IAU 2006/2000A models as '
-                                 'docs/evidence/calc-api/tools/compare.py does',
+                                 'and the stellar aberration of erfa.ab' + (', the apparent places with the Sun\'s light deflection of '
+                                 'erfa.ld before it, with erfa.ldsun\'s limiter' if ephemeris == 'de440' else '') + '), turned into each '
+                                 'frame with ERFA\'s IAU 2006/2000A models as docs/evidence/calc-api/tools/compare.py does',
                     'software': first['software']},
         'run': run,
         'corpus': {'n': TOTAL, 'firstJdTt': instants[0], 'lastJdTt': instants[-1], 'step': '1 day',

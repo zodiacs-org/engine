@@ -1,5 +1,92 @@
 # Engine changelog
 
+## 1.1.0-rc.11 (unreleased candidate)
+
+The candidate for **1.1.0**, a minor release: 1.1.0-rc.10 with every
+techniques result labelled, the dense DE440 sweep's check fixed, and the
+size of the change to positions said exactly. It is a draft for the owner,
+and is not to be published on npm until the owner approves it. Checks:
+`docs/evidence/1.1.0-rc.11-20261115/`.
+
+1.1.0-rc.10 was a draft on this same pull request (101), reviewed and not
+tagged or published: this candidate replaces it. Its archive stays in
+`artifacts/`, as every carried archive does (`artifacts/README.md`), which is
+why this cut has a new number. Everything below is against 1.1.0-rc.10.
+
+- **No silent fallback in `@zodiacs/engine/techniques` either.** In
+  1.1.0-rc.10 ten of its functions returned astronomy-engine's answer
+  with no flag and no ephemeris name where the shipped DE440 pack could not
+  be opened or the instant was outside it. Now each result says so, with the
+  names and flags the rest of the package uses (`ephemeris`
+  `{ name: "jpl-de440", version }` or astronomy-engine's; `flags`
+  `"de440-unavailable"` or `"outside-de440-span"`, after
+  `"outside-reference-span"`; the caller's own choice of astronomy-engine
+  named and not flagged):
+  - new fields `ephemeris` and `flags` on `voidOfCourseAt`'s result, on
+    `compositeChart`'s (`ephemeris` null where the two charts do not name
+    one and the same) and on `chartAspectPatterns`'s, now typed
+    `ChartAspectPatterns` (`AspectPatterns` with the two fields;
+    `aspectPatterns` is unchanged);
+  - the same two fields on each element of `moonIngresses`,
+    `moonAspects` and `voidOfCourseWindows` (and a window's `lastAspect`),
+    each labelled by the positions it was found from, so a list that runs
+    past an end of the pack labels each side;
+  - new functions for those that return a bare value, which cannot carry a
+    label: `solarReturnInstantDetailed`,
+    `mostRecentSolarReturnInstantDetailed`, `lunarReturnInstantDetailed` and
+    `moonSignsBetweenDetailed` take the same arguments as the plain function
+    and return `{ value, ephemeris, flags }` (new type `DetailedResult`),
+    `value` being the plain function's result; the plain functions are
+    unchanged. `./internal` has `bodyLongitudeDetailed` and
+    `longitudeSpeedDetailed` beside `bodyLongitude` and `longitudeSpeed`.
+    `findLongitudeCrossings` keeps `searchLongitudeCrossings` as its labelled
+    form. New types `TechniqueEphemeris`, `ChartAspectPatterns`,
+    `DetailedResult`. No signature or existing field changes.
+  Tests: `src/ephemeris-fallback-techniques.test.ts` (each of the twelve,
+  with the pack whole, damaged, and outside it at 1750 and 2230, and after
+  the caller's choice), and the packed-consumer check, which now also
+  checks a techniques `Date` through its detailed form, its objects and a
+  list's elements on the installed package with the pack removed, damaged
+  and undecodable.
+- **The size of the change to positions, said exactly.** The 29 arcseconds
+  of 1.1.0-rc.10's first line are the largest difference at noon TT on each
+  of the 146,097 days the sweep read, not a limit. A planet passing behind
+  the Sun moves more, because the pack bends its light by the Sun (with no
+  cut at the Sun's limb) and astronomy-engine does not: Neptune, 0.0234°
+  from the Sun's centre at 1920-08-03T23:48:31Z, is 33.37 arcseconds in
+  longitude and 18.15 in latitude from astronomy-engine's place
+  (`docs/evidence/1.1.0-rc.11-20261115/results/near-sun.json`, measured on
+  this build). The README says the same.
+- **The dense DE440 sweep measures what its table holds.**
+  `src/calc-bounds.ts` holds the bounds `calc()` quotes for astronomy-engine's
+  results (on the pack it quotes `src/calc-bounds-de440.ts`), but from
+  1.1.0-rc.10, when `calc()`'s default became the pack, the sweep's engine
+  side measured the pack's apparent places and its check compared them with
+  astronomy-engine's limits, and with an arbiter that leaves out the light
+  deflection the pack applies. Its workflow failed on 1.1.0-rc.10 (run
+  43618467433: the rates of Mercury to Pluto hundreds of arcseconds a day
+  over, at the days a planet passed behind the Sun). The sweep's engine side
+  now names the source it runs on (`--ephemeris`, astronomy-engine for the
+  table), refuses a result another source computed, and compares a run on
+  the pack with the kernel's place with the deflection; the table's tools
+  refuse a run on the pack. Run with the fixed tools on 1.1.0-rc.10's head,
+  whose position code this candidate keeps, over the same 146,097 instants,
+  the engine's values on astronomy-engine are the same bytes as 1.1.0-rc.3's
+  committed sweep in all eight eras, and every largest difference is within
+  the limit the table quotes, so `src/calc-bounds.ts` is unchanged
+  (`docs/evidence/1.1.0-rc.11-20261115/sweep/`). The workflow's run on this
+  candidate's head is the measurement of this build. The pack's own bounds
+  are still the 240 L1 vectors' (`src/calc-bounds-de440.ts`).
+- **PR 102's flag on the pack.** `src/calc-delta-t-de440.test.ts` holds the
+  `"delta-t-extrapolated"` flag and the widened bound on the pack, as
+  `src/calc-delta-t.test.ts` does on astronomy-engine.
+- **Sizes.** The techniques entry's import graph is 201,294 bytes, 3,483
+  more than 1.1.0-rc.10's, over its budget of 199,900: raised to 203,800.
+  The package beside the pack is 1,238,281 bytes unpacked, over the cap of
+  1,225,000 (this entry and the README's lines, and the labels): raised to
+  1,245,000. Neither has the owner's approval; both are for the owner to
+  decide with the candidate (`scripts/verify-package-contents.mjs`).
+
 ## 1.1.0-rc.10 (unreleased candidate)
 
 The candidate for **1.1.0**, a minor release: the DE440 default of
