@@ -171,10 +171,18 @@ rules live here once.
   name or a personal email address in a commit, a pull request, or a file.
 - Open draft pull requests only. Never merge (the merge-commit rule above is
   for the owner, who decides every merge), never mark a pull request ready
-  for review, and never push to `main`.
+  for review, and never push to `main`. Never force-push or rewrite history
+  that is already pushed.
 - Post nothing publicly: no npm publish, no release, no comments on other
-  projects, no messages to people.
-- Never read, print or commit credentials, tokens or `.env` values.
+  projects, no messages to people. Anything public waits for Dias's yes.
+- Never read, print, log or commit credentials, tokens or `.env` values,
+  and never write them into a brief, a log, a status file or a pull request.
+- Spend nothing without Dias's yes, and never spend on the OpenAI API (no
+  OpenAI API calls or keys in scripts or tools).
+- Never modify the `market-lens-paper` repository or its files.
+- Never log birth data or put it in a URL, in examples as anywhere else.
+  If documentation mentions children, children means under 13, and nothing
+  about a child is collected or used as an example.
 - No predictions in documentation or examples: the engine computes facts.
   No token, market or crypto language.
 - No em dashes or en dashes in prose you write. Use commas, colons, full
