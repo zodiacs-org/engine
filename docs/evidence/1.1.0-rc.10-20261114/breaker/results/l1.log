@@ -1,0 +1,35 @@
+{
+ "node": "v22.22.2",
+ "engine": "1.1.0-rc.10",
+ "zodiacsEnv": [],
+ "vectors": 240,
+ "within1arcsec": 240,
+ "worstLonArcsec": {
+  "v": 0.012647262974496698,
+  "id": "L1-POS-0002",
+  "body": "Moon"
+ },
+ "worstLatArcsec": {
+  "v": 0.0010105608430066582,
+  "id": "L1-POS-0222",
+  "body": "Moon"
+ },
+ "largestPerBodyArcsec": {
+  "Sun": 0.0036000024465465685,
+  "Moon": 0.012647262974496698,
+  "Mercury": 0.0036565892969520064,
+  "Venus": 0.0037444908230099827,
+  "Mars": 0.003383788225619355,
+  "Jupiter": 0.003771474166569533,
+  "Saturn": 0.003445359197939979,
+  "Uranus": 0.003756628211704083,
+  "Neptune": 0.003429217076700297,
+  "Pluto": 0.0036146396723779617
+ },
+ "ephemeris": [
+  "jpl-de440 jpl-de440"
+ ],
+ "flags": [
+  "no-time"
+ ]
+}

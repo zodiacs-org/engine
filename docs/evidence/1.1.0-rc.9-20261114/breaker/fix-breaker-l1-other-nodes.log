@@ -1,0 +1,14 @@
+node v20.19.0, npm 10.8.2
+node_modules after install: @zodiacs/engine astronomy-engine 
+plain: 240 of 240 within the vectors' limits; largest dLon 0.0126" (L1-POS-0002 Moon), dLat 0.0010" (L1-POS-0222 Moon); chart.ephemeris: {"jpl-de440@51428874":240}; default after: de440, pack opened true
+plain-utc: 240 of 240 within the vectors' limits; largest dLon 0.2934" (L1-POS-0122 Moon), dLat 0.0267" (L1-POS-0122 Moon); chart.ephemeris: {"jpl-de440@51428874":240}; default after: de440, pack opened true
+fallback: 48 of 240 within the vectors' limits; largest dLon 18.7745" (L1-POS-0209 Neptune), dLat 19.0281" (L1-POS-0237 Saturn); chart.ephemeris: {"absent":240}; default after: astronomy-engine, pack opened true
+no-atob: 48 of 240 within the vectors' limits; largest dLon 18.7745" (L1-POS-0209 Neptune), dLat 19.0281" (L1-POS-0237 Saturn); chart.ephemeris: {"absent":240}; default after: de440, pack opened false, error ReferenceError: atob is not defined
+plain tsv identical to Node 22.22.2's
+node v24.21.0, npm 11.19.0
+node_modules after install: @zodiacs/engine astronomy-engine 
+plain: 240 of 240 within the vectors' limits; largest dLon 0.0126" (L1-POS-0002 Moon), dLat 0.0010" (L1-POS-0222 Moon); chart.ephemeris: {"jpl-de440@51428874":240}; default after: de440, pack opened true
+plain-utc: 240 of 240 within the vectors' limits; largest dLon 0.2934" (L1-POS-0122 Moon), dLat 0.0267" (L1-POS-0122 Moon); chart.ephemeris: {"jpl-de440@51428874":240}; default after: de440, pack opened true
+fallback: 48 of 240 within the vectors' limits; largest dLon 18.7745" (L1-POS-0209 Neptune), dLat 19.0281" (L1-POS-0237 Saturn); chart.ephemeris: {"absent":240}; default after: astronomy-engine, pack opened true
+no-atob: 48 of 240 within the vectors' limits; largest dLon 18.7745" (L1-POS-0209 Neptune), dLat 19.0281" (L1-POS-0237 Saturn); chart.ephemeris: {"absent":240}; default after: de440, pack opened false, error ReferenceError: atob is not defined
+plain tsv identical to Node 22.22.2's

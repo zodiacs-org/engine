@@ -8,7 +8,7 @@
 import { ASPECTS, ASPECT_TYPES, matchAspect, separation } from "./aspects.js";
 import { validateBirthSettings } from "./birth-input.js";
 import { dateFrom } from "./date-input.js";
-import { bodyLongitude, gastHours, onChartClock, refuseUnderSource } from "./ephemeris.js";
+import { bodyLongitude, ephemerisAt, gastHours, onChartClock, refuseUnderSource } from "./ephemeris.js";
 import { computeAngles, computeHouses, houseOf, isPolarUndefinedHouseSystem } from "./houses.js";
 import type { AngleInput } from "./houses.js";
 import { tilt } from "./nutation.js";
@@ -24,6 +24,7 @@ import type {
   ZodiacSign
 } from "./types.js";
 import { ENGINE_VERSION } from "./types.js";
+import type { PositionSource, SourceBody } from "./types.js";
 import {
   advance,
   hull,
@@ -142,6 +143,12 @@ const BODIES = [
 const NORTH = 10;
 const SOUTH = 11;
 const RATES = /*#__PURE__*/ BODIES.map((body) => WINDOW_RATE_BOUNDS[body]);
+/**
+ * The most the Sun's light deflection displaces a planet's longitude on the
+ * DE440 pack, degrees: 1.8″, above 4GM/c²R = 1.7512″, the deflection of
+ * light that passes at the Sun's limb (Sky.bend).
+ */
+const DEFLECTION_JITTER = 1.8 / 3600;
 /** Aspect pairs in natalChart's order: the first ten bodies, earlier body first. */
 const PAIRS: (readonly [number, number])[] = [];
 for (let first = 0; first < 10; first += 1) {
@@ -288,7 +295,14 @@ export type BirthWindowFlag =
   /** An interval's end-to-end change broke a bound; completeness is then not established. */
   | "bound-exceeded"
   /** The result lists unresolved intervals. */
-  | "node-unresolved";
+  | "node-unresolved"
+  /**
+   * The window was to be computed on the shipped DE440 pack, the default
+   * source, and the pack could not be opened: it was computed on
+   * astronomy-engine, which `ephemeris` names (`EphemerisFallback` in the
+   * root entry).
+   */
+  | "de440-unavailable";
 
 export interface BirthWindow {
   readonly schema: typeof BIRTH_WINDOW_SCHEMA;
@@ -315,6 +329,15 @@ export interface BirthWindow {
   readonly unresolved: readonly WindowUnresolved[];
   readonly flags: readonly BirthWindowFlag[];
   readonly engineVersion: string;
+  /**
+   * What every position in the window was computed on, the source a lone
+   * natalChart call at any of its instants uses: `"jpl-de440"` with the
+   * shipped pack's SHA-256 (REFERENCE_SPAN lies inside the pack), or
+   * `"astronomy-engine"` with its version, by the caller's choice
+   * (`setDefaultEphemeris`) or, with the flag `"de440-unavailable"`, as a
+   * fallback.
+   */
+  readonly ephemeris: { readonly name: string; readonly version: string };
 }
 
 /** Thrown when a window needs more evaluated instants than the search allows. An Error, not a RangeError. */
@@ -399,7 +422,7 @@ const onePiece = (a: number, b: number): boolean =>
  * step is found from the engine's own arithmetic and kept with a millisecond
  * either side. A window of 48 hours holds at most two.
  */
-function seamsIn(start: number, end: number): Seams {
+function seamsIn(start: number, end: number, source: PositionSource | null): Seams {
   const steps: number[] = [];
   let from = start - 1;
   while (from < end && !onePiece(from, end)) {
@@ -407,7 +430,33 @@ function seamsIn(start: number, end: number): Seams {
     steps.push(at - 1, at, at + 1);
     from = at;
   }
-  return { bodies: BODIES.map(() => steps), angles: steps };
+  return { bodies: BODIES.map(() => [...steps, ...sourceSteps(start, end, source)]), angles: steps };
+}
+
+/**
+ * Where a source's own positions may step inside the window: the shipped
+ * DE440 pack's, at the boundaries of its Chebyshev records (`steps` of
+ * `@zodiacs/engine/de440`'s source), where two fits meet within the pack's
+ * budget and not exactly: across the 96,049 such instants from 1800 to 2200
+ * the true node steps by up to 3.07e-4 degrees (1.11 arcseconds), above its
+ * jitter bound, the Moon by up to 2.91e-7 degrees and the Sun and the planets
+ * by under 7e-8 (docs/evidence/1.1.0-rc.10-20261114/results/window-pack-seams.json). The rate bounds and the
+ * node's jitter bound describe smooth motion, so each such instant is a seam
+ * for every body, kept with two milliseconds either side for the rounding of
+ * its TT; the angles, which no ephemeris enters, have none. Each is the first
+ * UTC millisecond whose TT is at or past the step. A window of 48 hours holds
+ * a few.
+ */
+function sourceSteps(start: number, end: number, source: PositionSource | null): number[] {
+  if (!source?.steps) return [];
+  const tt = (time: number): number => timeBasis(time, "utc").ttDays;
+  const found: number[] = [];
+  for (const step of source.steps(tt(start - 1), tt(end))) {
+    if (!(tt(end) >= step)) continue;
+    const at = tt(start - 1) >= step ? start - 1 : firstWhere((time) => tt(time) >= step, start - 1, end);
+    for (let near = at - 2; near <= at + 2; near += 1) found.push(near);
+  }
+  return found;
 }
 
 class Sky {
@@ -421,7 +470,9 @@ class Sky {
     readonly latitude: number,
     readonly longitude: number,
     readonly system: HouseSystem,
-    readonly seams: Seams
+    readonly seams: Seams,
+    /** The source the window is computed on, when it is not astronomy-engine. */
+    readonly source: PositionSource | null = null
   ) {
     this.tanPhi = Math.tan(latitude * DEG);
     // RAMCs near which the cusps are sensitive, for Placidus and Koch.
@@ -452,6 +503,37 @@ class Sky {
       at.lon[body] = value;
     }
     return value;
+  }
+
+  /** The bound on a body's longitude rate, degrees a day: its WINDOW_RATE_BOUNDS entry. */
+  rate(index: number): number {
+    return RATES[index]!;
+  }
+
+  /**
+   * The most the Sun's light deflection may displace a body's longitude at
+   * any instant of [t1, t2], degrees: on a source that bends light at the
+   * Sun (the DE440 pack's reduction, src/de440/reduce.ts), for Mercury to
+   * Pluto within a degree of the Sun in longitude, DEFLECTION_JITTER, and
+   * otherwise nothing. The reduction bends light outside the Sun's disc and
+   * not behind it (from 1.1.0-rc.12), so the place is the undeflected place,
+   * whose rate the body's bound covers, plus a displacement of at most
+   * 4GM/c²R = 1.7512″ (light passing at the limb), which steps to nothing
+   * where the body passes behind the limb. The search takes that
+   * displacement as it takes the true node's jitter. Farther than a degree
+   * in longitude the deflection's rate is under 0.002 degrees a day, inside
+   * what every rate bound has in hand (each is about twice the body's
+   * largest rate), and the disc is far away. Through 1.1.0-rc.11 the
+   * reduction bent light behind the disc too, without limit towards the
+   * centre, and the rate bound grew as the inverse square of the elongation
+   * instead.
+   */
+  bend(index: number, t1: number, t2: number): number {
+    if (!this.source || index < 2 || index >= NORTH) return 0;
+    const days = (t2 - t1) / DAY;
+    const against = RATES[index]! + RATES[0]!;
+    const apart = Math.min(Math.abs(signedDelta(this.lon(t1, 0), this.lon(t1, index))), Math.abs(signedDelta(this.lon(t2, 0), this.lon(t2, index))));
+    return apart - against * days >= 1 ? 0 : DEFLECTION_JITTER;
   }
 
   node(time: number): number {
@@ -543,12 +625,13 @@ class Interval {
     const known = this.bodies[index];
     if (known !== undefined) return known;
     const { sky, t1, t2 } = this;
-    const reach = (RATES[index]! * (t2 - t1)) / DAY;
+    const reach = (sky.rate(index) * (t2 - t1)) / DAY;
     // Each end is the smooth motion plus at most J, and so is every instant
     // between: the enclosure of the smooth part widens by J, then by J again.
-    const jitter = index >= NORTH ? 2 * Math.max(nodeJitter(t1), nodeJitter(t2)) : 0;
+    // J is the node's jitter, or for a planet near the Sun the light deflection's displacement.
+    const jitter = 2 * (index >= NORTH ? Math.max(nodeJitter(t1), nodeJitter(t2)) : sky.bend(index, t1, t2));
     let range: Range;
-    if (reach + jitter >= 90 || this.jumps(sky.seams.bodies[index]!)) range = null;
+    if (!(reach + jitter < 90) || this.jumps(sky.seams.bodies[index]!)) range = null;
     else {
       const l1 = sky.lon(t1, index);
       const step = signedDelta(l1, sky.lon(t2, index));
@@ -569,13 +652,16 @@ class Interval {
     if (this.jumps(sky.seams.bodies[first]!) || this.jumps(sky.seams.bodies[second]!)) return true;
     const s1 = separation(sky.lon(t1, first), sky.lon(t1, second));
     const s2 = separation(sky.lon(t2, first), sky.lon(t2, second));
-    const reach = ((RATES[first]! + RATES[second]!) * (t2 - t1)) / DAY;
-    if (Math.abs(s2 - s1) > reach + 1e-12) {
+    const reach = ((sky.rate(first) + sky.rate(second)) * (t2 - t1)) / DAY;
+    // The separation is a smooth part plus at most the two light deflections' displacements, as body() takes them.
+    const jitter = 2 * (sky.bend(first, t1, t2) + sky.bend(second, t1, t2));
+    if (!(reach < 360)) return true;
+    if (Math.abs(s2 - s1) > reach + jitter + 1e-12) {
       this.violation();
       return true;
     }
-    const lo = (s1 + s2 - reach) / 2 - BAND;
-    const hi = (s1 + s2 + reach) / 2 + BAND;
+    const lo = (s1 + s2 - reach) / 2 - jitter - BAND;
+    const hi = (s1 + s2 + reach) / 2 + jitter + BAND;
     const edges = first < 2 ? LUMINARY_ORB_EDGES : ORB_EDGES;
     return edges.some((edge) => edge >= lo && edge <= hi);
   }
@@ -1129,7 +1215,7 @@ function change(id: number, from: number, to: number, system: HouseSystem): Wind
  * RangeError, when the search would need more than two million instants.
  */
 export function birthWindow(input: BirthWindowInput): BirthWindow {
-  // Its enclosures' bounds were measured on astronomy-engine's smooth motions.
+  // Its enclosures' bounds were scanned on the two sources a plain call uses, not on a caller's.
   refuseUnderSource("birthWindow");
   if (!input || typeof input !== "object") throw new RangeError("input must be an object.");
   const settings = validateBirthSettings({
@@ -1149,8 +1235,10 @@ export function birthWindow(input: BirthWindowInput): BirthWindow {
   }
   const system = settings.houseSystem ?? "whole";
   const { start, end, rounding } = resolvedWindow(input);
+  // One source for the whole window: it lies in REFERENCE_SPAN, which the pack covers by ten years at each end.
+  const chosen = ephemerisAt(start);
 
-  const sky = new Sky(latitude, longitude, system, seamsIn(start, end));
+  const sky = new Sky(latitude, longitude, system, seamsIn(start, end, chosen.from), chosen.from);
   const ids = Array.from({ length: SYSTEM + 1 }, (_, id) => id).filter(
     (id) => id !== SYSTEM || isPolarUndefinedHouseSystem(system)
   );
@@ -1249,6 +1337,7 @@ export function birthWindow(input: BirthWindowInput): BirthWindow {
   if (fallback) flags.push("polar-fallback");
   if (sky.violations > 0) flags.push("bound-exceeded");
   if (unresolved.length > 0) flags.push("node-unresolved");
+  if (chosen.fallback === "de440-unavailable") flags.push(chosen.fallback);
   return {
     schema: BIRTH_WINDOW_SCHEMA,
     verification: WINDOW_VERIFICATION,
@@ -1273,6 +1362,7 @@ export function birthWindow(input: BirthWindowInput): BirthWindow {
       };
     }),
     flags,
-    engineVersion: ENGINE_VERSION
+    engineVersion: ENGINE_VERSION,
+    ephemeris: chosen.ephemeris
   };
 }

@@ -5445,7 +5445,8 @@
           "lmt",
           "no-time",
           "polar-fallback",
-          "outside-reference-span"
+          "outside-reference-span",
+          "delta-t-extrapolated"
         ]
       },
       "DeltaT": {

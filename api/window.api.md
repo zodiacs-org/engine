@@ -30,6 +30,10 @@ interface BirthWindow {
     readonly unresolved: readonly WindowUnresolved[];
     readonly flags: readonly BirthWindowFlag[];
     readonly engineVersion: string;
+    readonly ephemeris: {
+        readonly name: string;
+        readonly version: string;
+    };
 }
 
 interface BirthWindowCell {
@@ -41,7 +45,7 @@ interface BirthWindowCell {
     readonly features: WindowFeatures;
 }
 
-type BirthWindowFlag = "polar-fallback" | "bound-exceeded" | "node-unresolved";
+type BirthWindowFlag = "polar-fallback" | "bound-exceeded" | "node-unresolved" | "de440-unavailable";
 
 interface BirthWindowInput {
     readonly start?: DateInput;

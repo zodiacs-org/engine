@@ -1,0 +1,154 @@
+{
+ "span": [
+  "1800-01-01T00:00:00.000Z",
+  "2200-01-01T00:00:00.000Z"
+ ],
+ "units": "degrees and days",
+ "note": "boundOverMaximum divides the bound by the scanned maximum plus the largest change of rate over half a grid step.",
+ "bodies": {
+  "Moon": {
+   "name": "Moon",
+   "stepHours": 1,
+   "maxAbs": 15.398475815971324,
+   "at": "2116-01-29T18:00:00.000Z",
+   "min": 11.760009892665039,
+   "max": 15.398475815971324,
+   "maxAcceleration": 0.6231483469018713,
+   "bound": 31,
+   "boundOverMaximum": 2.0114904023202755
+  },
+  "North Node": {
+   "name": "North Node",
+   "stepHours": 1,
+   "maxAbs": 0.26038460439758637,
+   "at": "2182-01-19T11:00:00.000Z",
+   "min": -0.26038460439758637,
+   "max": 0.03501571978085849,
+   "maxAcceleration": 0.46599742682883516,
+   "bound": 0.53,
+   "boundOverMaximum": 1.9622879059570908
+  },
+  "Mercury": {
+   "name": "Mercury",
+   "stepHours": 3,
+   "maxAbs": 2.2029582211744128,
+   "at": "2189-06-07T09:00:00.000Z",
+   "min": -1.3867056789395065,
+   "max": 2.2029582211744128,
+   "maxAcceleration": 0.7137327214222751,
+   "bound": 4.5,
+   "boundOverMaximum": 2.0021654386814243
+  },
+  "Venus": {
+   "name": "Venus",
+   "stepHours": 3,
+   "maxAbs": 1.294403936859453,
+   "at": "2113-12-10T06:00:00.000Z",
+   "min": -0.6327612780669369,
+   "max": 1.294403936859453,
+   "maxAcceleration": 0.3826918630365981,
+   "bound": 2.6,
+   "boundOverMaximum": 1.9722037926679232
+  },
+  "Mars": {
+   "name": "Mars",
+   "stepHours": 3,
+   "maxAbs": 0.7913948223158513,
+   "at": "2075-02-12T06:00:00.000Z",
+   "min": -0.4018794644753143,
+   "max": 0.7913948223158513,
+   "maxAcceleration": 0.5490931195527082,
+   "bound": 1.6,
+   "boundOverMaximum": 1.937718946275581
+  },
+  "Sun": {
+   "name": "Sun",
+   "stepHours": 6,
+   "maxAbs": 1.0205188740574158,
+   "at": "2006-01-01T00:00:00.000Z",
+   "min": 0.9528428759813323,
+   "max": 1.0205188740574158,
+   "maxAcceleration": 0.003494397325994214,
+   "bound": 2.1,
+   "boundOverMaximum": 2.0568963511822558
+  },
+  "Jupiter": {
+   "name": "Jupiter",
+   "stepHours": 24,
+   "maxAbs": 0.2467156659986358,
+   "at": "1866-01-01T00:00:00.000Z",
+   "min": -0.13658291895444563,
+   "max": 0.2467156659986358,
+   "maxAcceleration": 0.014840963581264077,
+   "bound": 0.49,
+   "boundOverMaximum": 1.928100367706497
+  },
+  "Saturn": {
+   "name": "Saturn",
+   "stepHours": 24,
+   "maxAbs": 0.1342351165585569,
+   "at": "2181-07-16T00:00:00.000Z",
+   "min": -0.08282565971876465,
+   "max": 0.1342351165585569,
+   "maxAcceleration": 0.09638713605363591,
+   "bound": 0.27,
+   "boundOverMaximum": 1.4800304053809181
+  },
+  "Uranus": {
+   "name": "Uranus",
+   "stepHours": 24,
+   "maxAbs": 0.06682675545016536,
+   "at": "2196-06-02T00:00:00.000Z",
+   "min": -0.04395147174182057,
+   "max": 0.06682675545016536,
+   "maxAcceleration": 0.04507996314441698,
+   "bound": 0.13,
+   "boundOverMaximum": 1.4546799439197742
+  },
+  "Neptune": {
+   "name": "Neptune",
+   "stepHours": 24,
+   "maxAbs": 0.14235590502903506,
+   "at": "1920-08-04T00:00:00.000Z",
+   "min": -0.028394894336997822,
+   "max": 0.14235590502903506,
+   "maxAcceleration": 0.10516290764644509,
+   "bound": 0.077,
+   "boundOverMaximum": 0.39499868292746315
+  },
+  "Pluto": {
+   "name": "Pluto",
+   "stepHours": 24,
+   "maxAbs": 0.0405145365775752,
+   "at": "1986-11-03T00:00:00.000Z",
+   "min": -0.028268169889997807,
+   "max": 0.0405145365775752,
+   "maxAcceleration": 0.003152853500068886,
+   "bound": 0.082,
+   "boundOverMaximum": 1.9481616365432994
+  },
+  "South Node": {
+   "sameAs": "North Node",
+   "bound": 0.53
+  }
+ },
+ "obliquity": {
+  "name": "obliquity",
+  "stepHours": 6,
+  "maxAbs": 0.000020728241906908806,
+  "at": "1955-05-07T00:00:00.000Z",
+  "min": -0.000020728241906908806,
+  "max": 0.00002001159737119451,
+  "maxAcceleration": 0.000005943194992141798,
+  "bound": 0.00005
+ },
+ "ramc": {
+  "name": "RAMC",
+  "stepHours": 24,
+  "maxAbs": 360.98569019840215,
+  "at": "2154-12-20T00:00:00.000Z",
+  "min": 360.9856047905578,
+  "max": 360.98569019840215,
+  "maxAcceleration": 0.0000125787237266195
+ }
+}

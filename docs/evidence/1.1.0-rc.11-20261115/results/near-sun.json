@@ -1,0 +1,61 @@
+{
+ "engine": "1.1.0-rc.11",
+ "node": "v22.22.2",
+ "dist": "dist (npm run build of the source commit)",
+ "rows": [
+  {
+   "utc": "1920-08-03T12:00:00Z",
+   "defaultEphemeris": {
+    "name": "jpl-de440",
+    "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+   },
+   "defaultFlags": [
+    "no-time"
+   ],
+   "otherEphemeris": {
+    "name": "astronomy-engine",
+    "version": "2.1.19"
+   },
+   "neptuneLonDifferenceArcsec": -11.8958,
+   "neptuneLatDifferenceArcsec": -2.2897,
+   "neptuneAngleArcsec": 12.1142,
+   "neptuneFromSunCentreDegrees": 0.4423
+  },
+  {
+   "utc": "1920-08-03T23:48:31Z",
+   "defaultEphemeris": {
+    "name": "jpl-de440",
+    "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+   },
+   "defaultFlags": [
+    "no-time"
+   ],
+   "otherEphemeris": {
+    "name": "astronomy-engine",
+    "version": "2.1.19"
+   },
+   "neptuneLonDifferenceArcsec": -33.369,
+   "neptuneLatDifferenceArcsec": 18.149,
+   "neptuneAngleArcsec": 37.9853,
+   "neptuneFromSunCentreDegrees": 0.02341
+  },
+  {
+   "utc": "1920-08-04T12:00:00Z",
+   "defaultEphemeris": {
+    "name": "jpl-de440",
+    "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+   },
+   "defaultFlags": [
+    "no-time"
+   ],
+   "otherEphemeris": {
+    "name": "astronomy-engine",
+    "version": "2.1.19"
+   },
+   "neptuneLonDifferenceArcsec": -13.8298,
+   "neptuneLatDifferenceArcsec": -2.296,
+   "neptuneAngleArcsec": 14.0191,
+   "neptuneFromSunCentreDegrees": 0.47877
+  }
+ ]
+}

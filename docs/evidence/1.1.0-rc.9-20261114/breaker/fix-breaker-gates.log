@@ -1,0 +1,207 @@
+node v22.22.2, npm 10.9.7; commit a812067a0708812730f703aa49565c477dfc4249; 0 modified tracked paths
+=== npm ci
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+=== exit 0: npm ci
+=== npm run typecheck
+
+> @zodiacs/engine@1.1.0-rc.9 typecheck
+> tsc -p tsconfig.typecheck.json --pretty false
+
+=== exit 0: npm run typecheck
+=== npm test
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 5 of 12 3269ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 6 of 12 3396ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 7 of 12 3171ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 8 of 12 3170ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 9 of 12 3022ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 10 of 12 3402ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 11 of 12 3314ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 12 of 12 3339ms
+
+ Test Files  104 passed | 1 skipped (105)
+      Tests  4224 passed | 3 skipped (4227)
+   Start at  01:01:49
+   Duration  67.05s (transform 4.29s, setup 640ms, collect 25.62s, tests 209.43s, environment 15ms, prepare 5.37s)
+
+=== exit 0: npm test
+=== npm run build
+DTS dist/internal-CH0_14d8.d.ts       3.13 KB
+lite: dist/lite.js 146 bytes
+lite: dist/lite-declinations.js 9665 bytes
+lite: dist/lite-sect.js 3439 bytes
+lite: dist/lite-composite.js 3783 bytes
+lite: dist/lite-dignities.js 11897 bytes
+lite: dist/lite.d.ts 5135 bytes
+lite: dist/metafile-lite.json 5357 bytes
+=== exit 0: npm run build
+=== npm run exports:smoke
+
+> @zodiacs/engine@1.1.0-rc.9 exports:smoke
+> node scripts/module-resolution-smoke.mjs
+
+@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat, time and lite graphs have no external imports, the lite entry holds its 16 pinned source modules in 5 files that import nothing and loads where astronomy-engine cannot, the core graph (32 source modules in the build's module list, 31 marked in 16 files) reaches no module of an opt-in entry and no zone history, the geo entry loads its 16 shards lazily, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic
+=== exit 0: npm run exports:smoke
+=== npm run api:check
+
+> @zodiacs/engine@1.1.0-rc.9 api:check
+> node scripts/api-report.mjs --check
+
+api-report: 17 entry points match api/
+=== exit 0: npm run api:check
+=== npm run package:contents
+
+> @zodiacs/engine@1.1.0-rc.9 package:contents
+> node scripts/verify-package-contents.mjs
+
+@zodiacs/engine package contents passed (98 files, 4502147 bytes unpacked: the DE440 pack 3319552, the rest 1182595 of 1185000; import graphs: . 142693 of 144000, ./calc 188246 of 190000 (71710 beyond the core's), ./conventions 2754 of 2900 (2754 beyond the core's), ./crossings 9942 of 10000 (173 beyond the core's), ./deltat 5232 of 5500 (161 beyond the core's), ./geo 35584 of 35600 (32655 beyond the core's), ./houses 13678 of 15000 (13678 beyond the core's), ./internal 102834 of 104000 (455 beyond the core's), ./internal/math 19224 of 20000 (1363 beyond the core's), ./lite 28930 of 29000 (28930 beyond the core's), ./receipt 75038 of 76500 (49068 beyond the core's), ./sky 130782 of 132000 (17175 beyond the core's), ./techniques 192603 of 194500 (64144 beyond the core's), ./time 42472 of 42600 (2962 beyond the core's), ./de440 50140 of 50700 (377 beyond the core's), ./de440/pack 51360 of 52000 (325 beyond the core's), ./timing 161941 of 163500 (32810 beyond the core's), ./vedic 177728 of 179500 (49269 beyond the core's), ./window 140974 of 142500 (34207 beyond the core's); zone histories 189144 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
+=== exit 0: npm run package:contents
+=== npm run pack:dry-run
+npm notice filename: zodiacs-engine-1.1.0-rc.9.tgz
+npm notice package size: 2.7 MB
+npm notice unpacked size: 4.5 MB
+npm notice shasum: 12a380860db749c25d6679c28cbd9fdf64d8f719
+npm notice integrity: sha512-z6Tij0iM+EQMR[...]vLHe2YIuPDzXg==
+npm notice total files: 98
+npm notice
+zodiacs-engine-1.1.0-rc.9.tgz
+=== exit 0: npm run pack:dry-run
+=== node scripts/build-de440-pack.mjs --check
+src/de440/pack-data.ts holds de440-1790-2210.v2.zeph: 2489664 bytes, sha256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7
+=== exit 0: node scripts/build-de440-pack.mjs --check
+=== node scripts/verify-archive-binding.mjs
+artifacts/zodiacs-engine-1.1.0-rc.9.tgz is byte-identical to a rebuild of HEAD (a812067a0708) on Node v22.22.2: sha256 f1801f0a35ef643a89c73ecd280e1e41142ae36e12c3690433536f9c3368396a, 2703974 bytes.
+24 recorded archives (20 carried, 4 superseded) and their receipts hold only their recorded bytes across 370 commits, and each is bound to its source commit.
+=== exit 0: node scripts/verify-archive-binding.mjs
+=== node --test conformance/harness/selftest.mjs
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 200.226381
+=== exit 0: node --test conformance/harness/selftest.mjs
+=== node conformance/harness/validate.mjs --expect-total 500
+L3 Time and calendars: 110 vectors, 5 arbiter(s), sha256 51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66
+  time.zone-offset: 45
+  time.local-mean-time: 5
+  time.tt-minus-utc: 10
+  time.delta-t: 15
+  calendar.to-jdn: 25
+  calendar.from-jdn: 10
+conformance: 500 vectors conform to SPEC.md
+=== exit 0: node conformance/harness/validate.mjs --expect-total 500
+=== node conformance/harness/run.mjs --adapter node conformance/adapters/zodiacs-engine.mjs --check conformance/results/zodiacs-engine.json
+zodiacs-engine 1.1.0-rc.9: 459 pass, 0 fail, 41 unsupported, 0 error (of 500)
+  L1: 240 pass, 0 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 69 pass, 0 fail, 41 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine.json
+=== exit 0: node conformance/harness/run.mjs --adapter node conformance/adapters/zodiacs-engine.mjs --check conformance/results/zodiacs-engine.json
+=== node conformance/harness/run.mjs --adapter node conformance/adapters/zodiacs-engine.mjs --ephemeris astronomy-engine --check conformance/results/zodiacs-engine-astronomy-engine.json
+zodiacs-engine-astronomy-engine 1.1.0-rc.9: 267 pass, 192 fail, 41 unsupported, 0 error (of 500)
+  L1: 48 pass, 192 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 69 pass, 0 fail, 41 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine-astronomy-engine.json
+=== exit 0: node conformance/harness/run.mjs --adapter node conformance/adapters/zodiacs-engine.mjs --ephemeris astronomy-engine --check conformance/results/zodiacs-engine-astronomy-engine.json
+=== node conformance/harness/report.mjs --check
+conformance: RESULTS.md and results/summary.json are current
+=== exit 0: node conformance/harness/report.mjs --check
+=== node atlas/tools/check.mjs
+atlas 0.1.0: 21 places, 14 jurisdictions, 59 rules, 66 citations
+  rules by flag: documented 27, inferred 26, uncertain 6
+  citations by type: decree 5, law 9, ministerial-decision 1, municipal-notice 1, newspaper-report 45, parliamentary-debate 3, railway-notice 2
+  excerpts taken from: page-image 66
+  excerpts checked against (citations): ocr matches 24, ocr partial 5, page-image matches 16, search-service matches 29, search-service partial 8
+  258 boundaries and 2735 round trips checked
+  tzdb comparison current, every difference matched by exactly one explanation
+atlas: all checks passed
+=== exit 0: node atlas/tools/check.mjs
+=== node --test atlas/tools/selftest.mjs
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 917.289155
+=== exit 0: node --test atlas/tools/selftest.mjs
+=== node tools/cli/scripts/preserve-checkout-bytes.mjs
+CLI checkout byte receipt: {"schema":"zodiacs.cli-checkout-bytes.v1","checkedFiles":73,"method":"Only tracked tools/cli/, conformance/ and root LICENSE, restored from HEAD Git blobs without text conversion","changed":[]}
+=== exit 0: node tools/cli/scripts/preserve-checkout-bytes.mjs
+=== node tools/cli/scripts/prepare-consumer.mjs
+CLI suite bundle: 500 vectors, 37 source files
+
+added 3 packages in 321ms
+CLI consumer: 29 checks passed; conformance {"count":500,"pass":267,"fail":192,"unsupported":41,"error":0}
+PROGRAMME_FILE {"path":"docs/evidence/offline-cli-20261009/producer-local/linux-node22.json","size":8219,"sha256":"a43baac3ca328334357a8c6e31bd646ac3104846fc8832952fff22ef38fa72d6","base64":"ewogICJzY2hlbWEiOiAiem9kaWFjcy5vZmZsaW5lLWNsaS1jb25zdW1lci52MSIsCiAgInByb2R1Y2VyIjogewogICAgIm5vZGUiOiAidjIyLjIyLjIiLAogICAgIm9zIjogImxpbnV4IiwKICAgICJhcmNoaXRlY3R1cmUiOiAieDY0IgogIH0sCiAgInByaXZhdGVQYWNrYWdlIjogdHJ1ZSwKICAicHVibGljYXRpb24iOiAibm90LXBlcmZvcm1lZCIsCiAgImNoZWNrcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAic3ltbGlua2VkIHBhY2thZ2UgZW50cnkgcnVucyBvbiBldmVyeSBwbGF0Zm9ybSIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJpbnN0YWxsZWQgem9kaWFjcyBjb21tYW5kIGxhdW5jaGVzIHRocm91Z2ggb2ZmbGluZSBucG0gZXhlYyIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJjaGFydCB1c2VzIGluc3RhbGxlZCBlbmdpbmUgd2l0aCBubyBuZXR3b3JrIiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogImNoYXJ0IHJlY2VpcHQgcmVwbGF5cyIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJjaGFydCBjaGFuZ2VkIG51bWJlciByZWZ1c2VzIHZlcmlmaWNhdGlvbiIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJjaGFydCB0ZXh0IGtlZXBzIHJlY2VpcHQiLAogICAgICAicGFzc2VkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAiY2hhcnQgU1ZHIGNvbnRhaW5zIGZ1bGwgZXNjYXBlZCByZWNlaXB0IiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogInBvc2l0aW9ucyB1c2VzIGluc3RhbGxlZCBlbmdpbmUgd2l0aCBubyBuZXR3b3JrIiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogInBvc2l0aW9ucyByZ
+PROGRAMME_FILE_FINAL {"path":"docs/evidence/offline-cli-20261009/producer-local/linux-node22.json","size":13856,"sha256":"c651002d6aff2829754c3b7f0fea6ac88fb90a2b2f94c532fed609bc06290a37","base64":"ewogICJzY2hlbWEiOiAiem9kaWFjcy5vZmZsaW5lLWNsaS1jb25zdW1lci52MSIsCiAgInByb2R1Y2VyIjogewogICAgIm5vZGUiOiAidjIyLjIyLjIiLAogICAgIm9zIjogImxpbnV4IiwKICAgICJhcmNoaXRlY3R1cmUiOiAieDY0IgogIH0sCiAgInByaXZhdGVQYWNrYWdlIjogdHJ1ZSwKICAicHVibGljYXRpb24iOiAibm90LXBlcmZvcm1lZCIsCiAgImNoZWNrcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAic3ltbGlua2VkIHBhY2thZ2UgZW50cnkgcnVucyBvbiBldmVyeSBwbGF0Zm9ybSIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJpbnN0YWxsZWQgem9kaWFjcyBjb21tYW5kIGxhdW5jaGVzIHRocm91Z2ggb2ZmbGluZSBucG0gZXhlYyIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJjaGFydCB1c2VzIGluc3RhbGxlZCBlbmdpbmUgd2l0aCBubyBuZXR3b3JrIiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogImNoYXJ0IHJlY2VpcHQgcmVwbGF5cyIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJjaGFydCBjaGFuZ2VkIG51bWJlciByZWZ1c2VzIHZlcmlmaWNhdGlvbiIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJjaGFydCB0ZXh0IGtlZXBzIHJlY2VpcHQiLAogICAgICAicGFzc2VkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAiY2hhcnQgU1ZHIGNvbnRhaW5zIGZ1bGwgZXNjYXBlZCByZWNlaXB0IiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogInBvc2l0aW9ucyB1c2VzIGluc3RhbGxlZCBlbmdpbmUgd2l0aCBubyBuZXR3b3JrIiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogInBvc2l0aW
+=== exit 0: node tools/cli/scripts/prepare-consumer.mjs
+=== node scripts/verify-packed-consumer.mjs /workspace/wt/engine-rc-de440/artifacts/zodiacs-engine-1.1.0-rc.9.tgz
+  "publicExamples": "passed",
+  "errors": "passed",
+  "optionalIsolation": "passed",
+  "geoRetry": "passed",
+  "geoSchemaRecovery": "passed",
+  "geoCacheMutationIsolation": "passed",
+  "natalEnvelope": "passed",
+  "redactedDiagnostic": "passed",
+  "typedFlagCompatibility": "passed",
+  "derivedEchoReplay": "passed",
+  "suppliedChartMetadata": "passed",
+  "flagRejections": "passed",
+  "scalarSnapshots": "passed",
+  "civilSettingsBeforeIntl": "passed",
+  "oneZeroAdditions": "passed",
+  "conventionIds": "passed",
+  "artifact": "/workspace/wt/engine-rc-de440/artifacts/zodiacs-engine-1.1.0-rc.9.tgz",
+  "sha256": "f1801f0a35ef643a89c73ecd280e1e41142ae36e12c3690433536f9c3368396a",
+  "runtime": "v22.22.2",
+  "typescript": "5.9.3",
+  "typeRoots": "none (types: [])",
+  "directory": "/tmp/fxb/gates/zodiacs-engine-consumer-ovCRcP",
+  "types": "passed",
+  "directoryRemoved": true
+}
+=== exit 0: node scripts/verify-packed-consumer.mjs /workspace/wt/engine-rc-de440/artifacts/zodiacs-engine-1.1.0-rc.9.tgz
+=== node scripts/verify-archive-binding.mjs --rebuild-all
+artifacts/zodiacs-engine-1.1.0-rc.9.tgz is byte-identical to a rebuild of HEAD (a812067a0708) on Node v22.22.2: sha256 f1801f0a35ef643a89c73ecd280e1e41142ae36e12c3690433536f9c3368396a, 2703974 bytes.
+0.1.1-rc.7 (49b2b03f50fe…) is byte-identical to a rebuild of source commit 6e14f3f7c5e3 on Node v22.22.2: sha256 49b2b03f50fea8a625d443d4fd0f6d03ffc22831e54009fd09c49d07c8698f90, 39252 bytes.
+0.1.1-rc.8 (3b934376fa53…) is byte-identical to a rebuild of source commit 352ea49d9e1d on Node v22.22.2: sha256 3b934376fa53983cbdd7eb1a6ecf0eb0d50fbc49df01bc610b20c63bd5d12be6, 51748 bytes.
+0.1.1-rc.9 (bb5592302b1f…) is byte-identical to a rebuild of source commit 82aad2fcc9b2 on Node v22.22.2: sha256 bb5592302b1fa542cc745a9410b5a77faf49bbf4e205347ab771810efc300a20, 55576 bytes.
+0.1.1-rc.10 (a377cdc8c12e…) is byte-identical to a rebuild of source commit 9c4f3fd77b5d on Node v22.22.2: sha256 a377cdc8c12e25ff7de4fe95ddf77a4cdee8d2da97071b0f8454e340b374565c, 61318 bytes.
+0.1.1-rc.11 (13d637db21e3…) is byte-identical to a rebuild of source commit 00bdae79a925 on Node v22.22.2: sha256 13d637db21e3e444c783fd85832e4f61dfdb4b7777b2c84038ec887b47029c4e, 70676 bytes.
+0.1.1-rc.11 (d88e0ff8db91…) is byte-identical to a rebuild of source commit be3585b3ebfe on Node v22.22.2: sha256 d88e0ff8db91e1183789763ad32feb2dac61716e35ad7676a943f7a1ad377862, 70989 bytes.
+0.1.1-rc.12 (c4cf150fe8fb…) is byte-identical to a rebuild of source commit a1d0f2c6cefb on Node v22.22.2: sha256 c4cf150fe8fb0b37f5769993c2e63275b2e5ef47b97d8a118aff3be00ebaf7f0, 73398 bytes.
+0.1.1-rc.13 (12db9dce0f2c…) is byte-identical to a rebuild of source commit f05ea02b3254 on Node v22.22.2: sha256 12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840, 79092 bytes.
+0.1.1-rc.14 (adc9805e22cd…) is byte-identical to a rebuild of source commit 03db4bb60237 on Node v22.22.2: sha256 adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e, 87415 bytes.
+0.1.1-rc.15 (24eeb597b015…) is byte-identical to a rebuild of source commit 104bd5a56ee0 on Node v22.22.2: sha256 24eeb597b0157598c0faa26bb615c0cb5dfaaeac0393d62c73fbd37c5da4d348, 190974 bytes.
+0.1.1-rc.16 (43a72d30e483…) is byte-identical to a rebuild of source commit ddbbaa0b1d21 on Node v22.22.2: sha256 43a72d30e483d8ff22024e403c4bd0d86d81bb6e1d0ad138f857cd001ab015d8, 266934 bytes.
+0.1.1-rc.17 (9cd24c788863…) is byte-identical to a rebuild of source commit aae419c05b77 on Node v22.22.2: sha256 9cd24c788863424ef614aaadec580db5a0dfc529303d385274db48a092a5299a, 273123 bytes.
+1.0.0-rc.1 (cf1417d40bc2…) is byte-identical to a rebuild of source commit 77a16c268892 on Node v22.22.2: sha256 cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284, 284750 bytes.
+1.0.0-rc.2 (4cd834b2dca0…) is byte-identical to a rebuild of source commit 7fa964d2a77d on Node v22.22.2: sha256 4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002, 287011 bytes.
+1.0.0 (c4d3754de899…) is byte-identical to a rebuild of source commit ca2c8cefbaa1 on Node v22.22.2: sha256 c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6, 288063 bytes.
+1.1.0-rc.1 (52352d3f8fde…) is byte-identical to a rebuild of source commit c41706266caf on Node v22.22.2: sha256 52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6, 292721 bytes.
+1.1.0-rc.2 (c5aef0e3f20a…) is byte-identical to a rebuild of source commit 806f76b43c0e on Node v22.22.2: sha256 c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c, 318004 bytes.
+1.1.0-rc.3 (3272dcd30264…) is byte-identical to a rebuild of source commit cc910b3775e2 on Node v22.22.2: sha256 3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590, 331979 bytes.
+1.1.0-rc.6 (648714ca7485…) is byte-identical to a rebuild of source commit c3efe9175644 on Node v22.22.2: sha256 648714ca7485c7381f338286b84a211752ddd425035f50f6e24267e80de6abde, 333982 bytes.
+1.1.0-rc.7 (71348be1f8dc…) is byte-identical to a rebuild of source commit ca3ae0ff197e on Node v22.22.2: sha256 71348be1f8dc2772945cc86c72af475091d105da9e7ff5b4411c517adc9fc80a, 335403 bytes.
+1.1.0-rc.8 (53df553c922e…) is byte-identical to a rebuild of source commit e3939499d603 on Node v22.22.2: sha256 53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43, 2696971 bytes.
+1.1.0-rc.8 (53df553c922e…) is byte-identical to a rebuild of source commit e3939499d603 on Node v22.22.2: sha256 53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43, 2696971 bytes.
+1.1.0-rc.8 (53df553c922e…) is byte-identical to a rebuild of source commit e3939499d603 on Node v22.22.2: sha256 53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43, 2696971 bytes.
+1.1.0-rc.9 (f1801f0a35ef…) is byte-identical to a rebuild of source commit 18bcfca5e7be on Node v22.22.2: sha256 f1801f0a35ef643a89c73ecd280e1e41142ae36e12c3690433536f9c3368396a, 2703974 bytes.
+24 recorded archives (20 carried, 4 superseded) and their receipts hold only their recorded bytes across 370 commits, and each is bound to its source commit.
+=== exit 0: node scripts/verify-archive-binding.mjs --rebuild-all
+tracked paths modified after the gates: 0
+overall status 0
+exit 0

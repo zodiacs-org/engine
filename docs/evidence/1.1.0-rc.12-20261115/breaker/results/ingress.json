@@ -1,0 +1,294 @@
+{
+ "engine": "1.1.0-rc.12",
+ "node": "v22.22.2",
+ "defaultPath": {
+  "default": "de440",
+  "rows": [
+   {
+    "fn": "positions(), bisected",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "jpl-de440"
+   },
+   {
+    "fn": "natalChart(), bisected",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "jpl-de440",
+    "flags": [],
+    "signBefore": "scorpio",
+    "signAt": "sagittarius"
+   },
+   {
+    "fn": "transits(natal, date) transiting Sun, bisected",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "jpl-de440",
+    "keys": [
+     "natal",
+     "at",
+     "positions",
+     "aspects"
+    ]
+   },
+   {
+    "fn": "calc(), bisected",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "jpl-de440",
+    "flags": []
+   },
+   {
+    "fn": "calc chart(), bisected",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "jpl-de440"
+   },
+   {
+    "fn": "internal bodyLongitude, bisected (label: bodyLongitudeDetailed)",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "jpl-de440",
+    "flags": []
+   },
+   {
+    "fn": "internal computeBodies, bisected",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "jpl-de440"
+   },
+   {
+    "fn": "vedic siderealChart tropical longitude of the Sun, bisected",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "(no name)",
+    "flags": [],
+    "sunKeys": [
+     "frame",
+     "lon",
+     "ayanamsa",
+     "trueAyanamsa",
+     "tropical",
+     "utc",
+     "body"
+    ]
+   },
+   {
+    "fn": "findLongitudeCrossings",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "(bare list, no label)",
+    "crossings": 1
+   },
+   {
+    "fn": "searchLongitudeCrossings",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "(flags only)",
+    "flags": [],
+    "status": "complete",
+    "crossings": 1
+   },
+   {
+    "fn": "crossings entry findLongitudeCrossingsWith(bodyLongitude)",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "(the caller's longitudes)"
+   },
+   {
+    "fn": "calc events() longitude-crossing",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "jpl-de440",
+    "flags": [],
+    "status": "ok"
+   },
+   {
+    "fn": "techniques solarReturnInstant(240)",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "(bare Date, no label)"
+   },
+   {
+    "fn": "techniques solarReturnInstantDetailed(240)",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "jpl-de440",
+    "flags": []
+   },
+   {
+    "fn": "techniques mostRecentSolarReturnInstantDetailed(240, 2026-12-01)",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "jpl-de440",
+    "flags": []
+   },
+   {
+    "fn": "techniques solarReturn(chart with the Sun at 240)",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "jpl-de440",
+    "flags": [],
+    "natalSunLon": 240.00000004429654
+   },
+   {
+    "fn": "timing planetaryReturns(same chart, Sun)",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "(flags only)",
+    "flags": [],
+    "status": "complete"
+   },
+   {
+    "fn": "window birthWindow 07:00 to 08:00, the Sun's sign switch",
+    "utc": "{\"at\":\"2026-11-22T07:23:20.564Z\",\"changes\":[{\"feature\":\"sign\",\"body\":\"Sun\",\"from\":\"scorpio\",\"to\":\"sagittarius\"},{\"feature\":\"house\",\"body\":\"Sun\",\"from\":12,\"to\":1}]}",
+    "names": "jpl-de440",
+    "flags": [],
+    "keys": [
+     "schema",
+     "verification",
+     "start",
+     "end",
+     "latitude",
+     "longitude",
+     "houseSystem",
+     "rounding",
+     "cells",
+     "switches",
+     "unresolved",
+     "flags",
+     "engineVersion",
+     "ephemeris"
+    ]
+   }
+  ]
+ },
+ "afterChoosingAstronomyEngine": {
+  "default": "astronomy-engine",
+  "rows": [
+   {
+    "fn": "positions(), bisected",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "astronomy-engine"
+   },
+   {
+    "fn": "natalChart(), bisected",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "astronomy-engine",
+    "flags": [],
+    "signBefore": "scorpio",
+    "signAt": "sagittarius"
+   },
+   {
+    "fn": "transits(natal, date) transiting Sun, bisected",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "astronomy-engine",
+    "keys": [
+     "natal",
+     "at",
+     "positions",
+     "aspects"
+    ]
+   },
+   {
+    "fn": "calc(), bisected",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "astronomy-engine",
+    "flags": []
+   },
+   {
+    "fn": "calc chart(), bisected",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "astronomy-engine"
+   },
+   {
+    "fn": "internal bodyLongitude, bisected (label: bodyLongitudeDetailed)",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "astronomy-engine",
+    "flags": []
+   },
+   {
+    "fn": "internal computeBodies, bisected",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "astronomy-engine"
+   },
+   {
+    "fn": "vedic siderealChart tropical longitude of the Sun, bisected",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "(no name)",
+    "flags": [],
+    "sunKeys": [
+     "frame",
+     "lon",
+     "ayanamsa",
+     "trueAyanamsa",
+     "tropical",
+     "utc",
+     "body"
+    ]
+   },
+   {
+    "fn": "findLongitudeCrossings",
+    "utc": "2026-11-22T07:23:38.242Z",
+    "names": "(bare list, no label)",
+    "crossings": 1
+   },
+   {
+    "fn": "searchLongitudeCrossings",
+    "utc": "2026-11-22T07:23:38.242Z",
+    "names": "(flags only)",
+    "flags": [],
+    "status": "complete",
+    "crossings": 1
+   },
+   {
+    "fn": "crossings entry findLongitudeCrossingsWith(bodyLongitude)",
+    "utc": "2026-11-22T07:23:38.242Z",
+    "names": "(the caller's longitudes)"
+   },
+   {
+    "fn": "calc events() longitude-crossing",
+    "utc": "2026-11-22T07:23:38.242Z",
+    "names": "astronomy-engine",
+    "flags": [],
+    "status": "ok"
+   },
+   {
+    "fn": "techniques solarReturnInstant(240)",
+    "utc": "2026-11-22T07:23:38.237Z",
+    "names": "(bare Date, no label)"
+   },
+   {
+    "fn": "techniques solarReturnInstantDetailed(240)",
+    "utc": "2026-11-22T07:23:38.237Z",
+    "names": "astronomy-engine",
+    "flags": []
+   },
+   {
+    "fn": "techniques mostRecentSolarReturnInstantDetailed(240, 2026-12-01)",
+    "utc": "2026-11-22T07:23:38.237Z",
+    "names": "astronomy-engine",
+    "flags": []
+   },
+   {
+    "fn": "techniques solarReturn(chart with the Sun at 240)",
+    "utc": "2026-11-22T07:23:38.242Z",
+    "names": "astronomy-engine",
+    "flags": [],
+    "natalSunLon": 240.0000000445932
+   },
+   {
+    "fn": "timing planetaryReturns(same chart, Sun)",
+    "utc": "2026-11-22T07:23:38.242Z",
+    "names": "(flags only)",
+    "flags": [],
+    "status": "complete"
+   },
+   {
+    "fn": "window birthWindow 07:00 to 08:00, the Sun's sign switch",
+    "utc": "{\"at\":\"2026-11-22T07:23:38.235Z\",\"changes\":[{\"feature\":\"sign\",\"body\":\"Sun\",\"from\":\"scorpio\",\"to\":\"sagittarius\"},{\"feature\":\"house\",\"body\":\"Sun\",\"from\":12,\"to\":1}]}",
+    "names": "astronomy-engine",
+    "flags": [],
+    "keys": [
+     "schema",
+     "verification",
+     "start",
+     "end",
+     "latitude",
+     "longitude",
+     "houseSystem",
+     "rounding",
+     "cells",
+     "switches",
+     "unresolved",
+     "flags",
+     "engineVersion",
+     "ephemeris"
+    ]
+   }
+  ]
+ }
+}

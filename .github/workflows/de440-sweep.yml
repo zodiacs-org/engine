@@ -4,7 +4,11 @@ name: DE440 sweep
 # entry point against NAIF's de440.bsp at noon TT of every day from 1800 to
 # 2200 (146,097 instants), geocentric, in all eight frames. It measures and
 # reports; it changes no file, and nothing in the package depends on it. It
-# runs when its own tools or the bounds table change, and by hand.
+# runs when its own tools, either bounds table or the pack's reduction change,
+# and by hand. Two runs of the engine: on astronomy-engine, held to
+# src/calc-bounds.ts (the "Sweep results" job), and from 1.1.0-rc.12 on the
+# shipped DE440 pack, calc()'s default, held to src/calc-bounds-de440.ts (the
+# "Sweep results on the DE440 pack" job).
 on:
   pull_request:
     branches:
@@ -14,6 +18,8 @@ on:
       - docs/evidence/de440-sweep-20261111/PLAN.md
       - docs/evidence/de440-sweep-20261111/tools/**
       - src/calc-bounds.ts
+      - src/calc-bounds-de440.ts
+      - src/de440/reduce.ts
   workflow_dispatch:
 
 permissions:
@@ -91,14 +97,16 @@ jobs:
           if-no-files-found: error
 
   era:
-    name: Sweep ${{ matrix.from }} to ${{ matrix.to }}
+    name: Sweep ${{ matrix.span.from }} to ${{ matrix.span.to }} on ${{ matrix.ephemeris }}
     needs: kernel
     runs-on: ubuntu-latest
     timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
-        include:
+        # astronomy-engine's shards keep their names (era-<from>.json); the pack's are pack-era-<from>.json.
+        ephemeris: [astronomy-engine, de440]
+        span:
           - { from: 1800, to: 1850 }
           - { from: 1850, to: 1900 }
           - { from: 1900, to: 1950 }
@@ -107,6 +115,10 @@ jobs:
           - { from: 2050, to: 2100 }
           - { from: 2100, to: 2150 }
           - { from: 2150, to: 2200 }
+    env:
+      FROM: ${{ matrix.span.from }}
+      TO: ${{ matrix.span.to }}
+      SHARD: ${{ matrix.ephemeris == 'de440' && 'pack-era' || 'era' }}-${{ matrix.span.from }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -141,18 +153,18 @@ jobs:
         run: echo "$KERNEL_SHA256  $RUNNER_TEMP/kernels/de440.bsp" | sha256sum -c -
 
       - name: The engine at every instant of the era
-        run: node "$SWEEP/tools/engine_sweep.mjs" --from-year ${{ matrix.from }} --to-year ${{ matrix.to }} --out "$RUNNER_TEMP/engine.bin"
+        run: node "$SWEEP/tools/engine_sweep.mjs" --ephemeris ${{ matrix.ephemeris }} --from-year "$FROM" --to-year "$TO" --out "$RUNNER_TEMP/engine.bin"
 
       - name: The engine against the kernel
         run: |
           mkdir -p "$RUNNER_TEMP/results"
-          python "$SWEEP/tools/sweep.py" shard "$RUNNER_TEMP/kernels/de440.bsp" "$RUNNER_TEMP/engine.bin" "$RUNNER_TEMP/results/era-${{ matrix.from }}.json"
+          python "$SWEEP/tools/sweep.py" shard "$RUNNER_TEMP/kernels/de440.bsp" "$RUNNER_TEMP/engine.bin" "$RUNNER_TEMP/results/$SHARD.json"
 
       - name: Keep the era's results
         uses: actions/upload-artifact@v4
         with:
-          name: de440-sweep-era-${{ matrix.from }}
-          path: ${{ runner.temp }}/results/era-${{ matrix.from }}.json
+          name: de440-sweep-${{ env.SHARD }}
+          path: ${{ runner.temp }}/results/${{ env.SHARD }}.json
           if-no-files-found: error
 
   results:
@@ -214,3 +226,51 @@ jobs:
           echo "-----BEGIN DE440 SWEEP RESULTS-----"
           base64 -w 76 "$RUNNER_TEMP/results.tar.gz"
           echo "-----END DE440 SWEEP RESULTS-----"
+
+  pack-results:
+    # From 1.1.0-rc.12: the run on the shipped DE440 pack, calc()'s default,
+    # merged as the astronomy-engine run is, and held to the position bounds
+    # calc() quotes for the pack (src/calc-bounds-de440.ts) by check_pack.py,
+    # against the kernel's apparent place with the Sun's light deflection
+    # (none behind the Sun's disc, as JPL Horizons).
+    name: Sweep results on the DE440 pack
+    needs: era
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install the arbiter's libraries
+        run: python -m pip install $PYTHON_LIBRARIES
+
+      - name: Fetch the pack's eras and the self-checks
+        uses: actions/download-artifact@v4
+        with:
+          pattern: de440-sweep-*
+          path: ${{ runner.temp }}/parts
+          merge-multiple: true
+
+      - name: Summary and tables
+        env:
+          SWEEP_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/pack/eras"
+          cp "$RUNNER_TEMP"/parts/pack-era-*.json "$RUNNER_TEMP/pack/eras/"
+          cp "$RUNNER_TEMP/parts/selfcheck.json" "$RUNNER_TEMP/pack/"
+          python "$SWEEP/tools/sweep.py" merge "$RUNNER_TEMP/pack" "$RUNNER_TEMP/pack/selfcheck.json" "$RUNNER_TEMP"/pack/eras/pack-era-*.json
+
+      - name: The pack against the limits src/calc-bounds-de440.ts quotes
+        run: python "$SWEEP/tools/check_pack.py" "$RUNNER_TEMP/pack"
+
+      - name: Keep the results
+        uses: actions/upload-artifact@v4
+        with:
+          name: de440-sweep-pack-results
+          path: ${{ runner.temp }}/pack
+          if-no-files-found: error

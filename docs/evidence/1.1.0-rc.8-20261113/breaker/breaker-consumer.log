@@ -1,0 +1,18 @@
+=== node v22.22.2: node scripts/verify-packed-consumer.mjs <tmp>/zodiacs-engine-1.1.0-rc.8.tgz (sha256 53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43)
+exit 0
+  "directory": "/tmp/job9rc-breaker/tmp/zodiacs-engine-consumer-PcaSHD",
+  "types": "passed",
+  "directoryRemoved": true
+}
+=== node v20.19.0: node scripts/verify-packed-consumer.mjs <tmp>/zodiacs-engine-1.1.0-rc.8.tgz (sha256 53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43)
+exit 0
+  "directory": "/tmp/job9rc-breaker/tmp/zodiacs-engine-consumer-f6eXRJ",
+  "types": "passed",
+  "directoryRemoved": true
+}
+=== node v24.21.0: node scripts/verify-packed-consumer.mjs <tmp>/zodiacs-engine-1.1.0-rc.8.tgz (sha256 53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43)
+exit 0
+  "directory": "/tmp/job9rc-breaker/tmp/zodiacs-engine-consumer-WvWh23",
+  "types": "passed",
+  "directoryRemoved": true
+}

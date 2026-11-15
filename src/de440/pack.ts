@@ -272,6 +272,13 @@ export interface StateSource {
   state(body: string, et: number, out: Float64Array): Float64Array;
   /** The Earth-Moon barycentre (from the SSB), the Moon and the Earth (each from that barycentre). */
   lunar(et: number, emb: Float64Array, moon: Float64Array, earth: Float64Array): void;
+  /**
+   * Every instant in [from, to] (TDB seconds past J2000) at which one stored
+   * series passes from one Chebyshev record to the next, in ascending order,
+   * each once. A state read either side of one comes from two different
+   * fits, which agree to the pack's budget and not exactly.
+   */
+  boundaries(from: number, to: number): number[];
 }
 
 export class PackEphemeris implements StateSource {
@@ -336,6 +343,17 @@ export class PackEphemeris implements StateSource {
   covers(et: number): boolean {
     const c = this.coverage;
     return Number.isFinite(et) && et >= c.startEtSecTdb && et <= c.stopEtSecTdb;
+  }
+
+  boundaries(from: number, to: number): number[] {
+    const found = new Set<number>();
+    if (!(from <= to)) return [];
+    for (const b of this.bodies.values()) {
+      const first = Math.max(1, Math.ceil((from - b.initEt) / b.intervalSec));
+      const last = Math.min(b.nrec - 1, Math.floor((to - b.initEt) / b.intervalSec));
+      for (let record = first; record <= last; record += 1) found.add(b.initEt + record * b.intervalSec);
+    }
+    return [...found].sort((x, y) => x - y);
   }
 
   /** Position (km) and velocity (km/s) of one stored body, as stored. */

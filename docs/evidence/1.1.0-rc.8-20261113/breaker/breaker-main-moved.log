@@ -1,0 +1,78 @@
+UNKNOWN	UNKNOWN
+--- trial merge of origin/main (fa4447e) into the head, in memory (git merge-tree), nothing written:
+CHANGELOG.md
+LICENSING.md
+README.md
+artifacts/README.md
+artifacts/archives.json
+conformance/RESULTS.md
+conformance/results/summary.json
+conformance/results/zodiacs-engine.json
+package-lock.json
+package.json
+scripts/verify-package-contents.mjs
+src/receipt-nutation.test.ts
+src/receipt-time-basis.test.ts
+src/types.ts
+typedoc.json
+Auto-merging CHANGELOG.md
+CONFLICT (content): Merge conflict in CHANGELOG.md
+Auto-merging LICENSING.md
+CONFLICT (content): Merge conflict in LICENSING.md
+Auto-merging NOTICE
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+Auto-merging artifacts/README.md
+CONFLICT (content): Merge conflict in artifacts/README.md
+Auto-merging artifacts/archives.json
+CONFLICT (content): Merge conflict in artifacts/archives.json
+Auto-merging conformance/RESULTS.md
+CONFLICT (content): Merge conflict in conformance/RESULTS.md
+Auto-merging conformance/results/summary.json
+CONFLICT (content): Merge conflict in conformance/results/summary.json
+Auto-merging conformance/results/zodiacs-engine.json
+CONFLICT (content): Merge conflict in conformance/results/zodiacs-engine.json
+Auto-merging docs/versioning.md
+Auto-merging package-lock.json
+CONFLICT (content): Merge conflict in package-lock.json
+Auto-merging package.json
+CONFLICT (content): Merge conflict in package.json
+Auto-merging scripts/verify-package-contents.mjs
+CONFLICT (content): Merge conflict in scripts/verify-package-contents.mjs
+Auto-merging src/receipt-nutation.test.ts
+CONFLICT (content): Merge conflict in src/receipt-nutation.test.ts
+Auto-merging src/receipt-time-basis.test.ts
+CONFLICT (content): Merge conflict in src/receipt-time-basis.test.ts
+Auto-merging src/types.ts
+CONFLICT (content): Merge conflict in src/types.ts
+Auto-merging typedoc.json
+CONFLICT (content): Merge conflict in typedoc.json
+--- archives.json versions on origin/main:
+      "version": "1.0.0",
+      "version": "1.1.0-rc.1",
+      "version": "1.1.0-rc.2",
+      "version": "1.1.0-rc.3",
+      "version": "1.1.0-rc.6",
+      "version": "1.1.0-rc.7",
+--- CHANGELOG top entries on origin/main:
+3:## 1.1.0-rc.7 (unreleased candidate)
+47:## 1.1.0-rc.6 (unreleased candidate)
+104:## 1.1.0-rc.3 (unreleased candidate)
+167:## 1.1.0-rc.2 (unreleased candidate)
+326:## 1.1.0-rc.1 — unreleased candidate
+405:## 1.0.0 — 2026-10-11
+--- on this head:
+3:## 1.1.0-rc.8 (unreleased candidate)
+76:## 1.1.0-rc.3 (unreleased candidate)
+139:## 1.1.0-rc.2 (unreleased candidate)
+298:## 1.1.0-rc.1 — unreleased candidate
+--- TOTAL_CAP and ./de440 budget on origin/main:
+159:  ".": 109_000,
+207:  "./de440": 48_000,
+413:const TOTAL_CAP = 1_155_000;
+--- rc.7 size on main:
+      "version": "1.1.0-rc.7",
+      "file": "zodiacs-engine-1.1.0-rc.7.tgz",
+      "sha256": "71348be1f8dc2772945cc86c72af475091d105da9e7ff5b4411c517adc9fc80a",
+      "bytes": 335403,
+      "files": 94,

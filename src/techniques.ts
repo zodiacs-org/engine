@@ -8,7 +8,8 @@
  *
  * @module
  */
-export type { GeoPlace, TechniqueFlag } from "./techniques/shared.js";
+export type { GeoPlace, TechniqueEphemeris, TechniqueFlag } from "./techniques/shared.js";
+export type { DetailedResult } from "./types.js";
 
 export {
   LUNAR_RETURN_HORIZON_DAYS,
@@ -18,9 +19,12 @@ export {
   SOLAR_RETURN_WINDOW_DAYS,
   lunarReturn,
   lunarReturnInstant,
+  lunarReturnInstantDetailed,
   mostRecentSolarReturnInstant,
+  mostRecentSolarReturnInstantDetailed,
   solarReturn,
-  solarReturnInstant
+  solarReturnInstant,
+  solarReturnInstantDetailed
 } from "./techniques/returns.js";
 export type {
   LunarReturn,
@@ -65,6 +69,7 @@ export { PATTERN_BODIES, aspectPatterns, chartAspectPatterns, patternContainment
 export type {
   AspectPattern,
   AspectPatterns,
+  ChartAspectPatterns,
   PatternBody,
   PatternContainment,
   PatternEdge,
@@ -99,5 +104,5 @@ export type {
   SignDignity
 } from "./techniques/dignities.js";
 
-export { EVERY_ZONE_OFFSETS, MOON_SIGN_MAX_SPAN_DAYS, moonSignCandidates, moonSignsBetween } from "./techniques/moon-sign.js";
+export { EVERY_ZONE_OFFSETS, MOON_SIGN_MAX_SPAN_DAYS, moonSignCandidates, moonSignsBetween, moonSignsBetweenDetailed } from "./techniques/moon-sign.js";
 export type { MoonSignCandidates, MoonSignOptions } from "./techniques/moon-sign.js";

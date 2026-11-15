@@ -1,0 +1,1046 @@
+{
+ "year": 1750,
+ "chose": null,
+ "defaultEphemeris": {
+  "name": "de440",
+  "de440": {
+   "opened": true,
+   "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
+   "fromTtDays": -76699.5,
+   "toTtDays": 76699.5,
+   "error": null
+  }
+ },
+ "notCalled": [
+  ".:alcabitiusCusps",
+  ".:antiscion",
+  ".:aspectMotion",
+  ".:campanusCusps",
+  ".:computeAngles",
+  ".:computeHouses",
+  ".:contraAntiscion",
+  ".:createAspectPolicy",
+  ".:declinationOf",
+  ".:declinationOrb",
+  ".:declinationsForBodies",
+  ".:degreeInSign",
+  ".:deltaT",
+  ".:deltaTAt",
+  ".:eastPointOf",
+  ".:eclipticToEquatorial",
+  ".:elementBalance",
+  ".:equalCusps",
+  ".:equalMcCusps",
+  ".:findAspects",
+  ".:findConfiguredAspects",
+  ".:findDeclinationAspects",
+  ".:findInterAspects",
+  ".:findLongitudeCrossingsWith",
+  ".:groupIntoSeasons",
+  ".:hellenisticLots",
+  ".:houseOf",
+  ".:isPolarUndefinedHouseSystem",
+  ".:kochCusps",
+  ".:lunarMeanArguments",
+  ".:matchAspect",
+  ".:meanApogee",
+  ".:meanNodeLongitude",
+  ".:meanObliquity",
+  ".:meridianCusps",
+  ".:midpoint",
+  ".:modalityBalance",
+  ".:morinusCusps",
+  ".:normalizeLongitude",
+  ".:placidusCusps",
+  ".:porphyryCusps",
+  ".:progressedInstant",
+  ".:ramcOf",
+  ".:regiomontanusCusps",
+  ".:searchLongitudeCrossingsWith",
+  ".:sectOf",
+  ".:separation",
+  ".:setDefaultEphemeris",
+  ".:signForLongitude",
+  ".:signIndexForLongitude",
+  ".:summarizePair",
+  ".:topocentricCusps",
+  ".:vehlowCusps",
+  ".:vertexOf",
+  ".:wholeSignCusps",
+  ".:withEphemeris",
+  "./window:WindowBudgetError",
+  "./techniques:aspectPatterns",
+  "./techniques:compositeAspects",
+  "./techniques:davisonPlace",
+  "./techniques:dignitiesFor",
+  "./techniques:dignityFor",
+  "./techniques:dignityRulersAt",
+  "./techniques:essentialDignities",
+  "./techniques:hasClassicalDignities",
+  "./techniques:mutualReceptions",
+  "./techniques:patternContainment",
+  "./timing:annualProfection",
+  "./timing:directLongitudes",
+  "./timing:firdariaPeriods",
+  "./timing:firdariaSequence",
+  "./vedic:ashtottariDasha",
+  "./vedic:dashaSubperiods",
+  "./vedic:declareSiderealLongitude",
+  "./vedic:kpLordsOf",
+  "./vedic:nakshatraOf",
+  "./vedic:siderealLongitude",
+  "./vedic:userAyanamsa",
+  "./vedic:vargaOf",
+  "./vedic:vimshottariDasha",
+  "./vedic:yoginiDasha",
+  "./houses:coAscendants",
+  "./houses:housePosition",
+  "./houses:houseSpeeds",
+  "./receipt:NatalEnvelopeError",
+  "./receipt:natalReplayInput",
+  "./receipt:parseNatalEnvelope",
+  "./receipt:redactNatalEnvelope",
+  "./receipt:serializeNatalEnvelope",
+  "./lite:compositeAspects",
+  "./lite:compositeMidpoints",
+  "./lite:declinationOf",
+  "./lite:declinationOrb",
+  "./lite:declinationsForBodies",
+  "./lite:dignitiesFor",
+  "./lite:dignityFor",
+  "./lite:dignityRulersAt",
+  "./lite:eclipticToEquatorial",
+  "./lite:essentialDignities",
+  "./lite:findDeclinationAspects",
+  "./lite:hasClassicalDignities",
+  "./lite:mutualReceptions",
+  "./lite:orientality",
+  "./lite:sectReading",
+  "./time:eclipticFrame",
+  "./time:eclipticOfDate",
+  "./time:elapsedDays",
+  "./time:meanEcliptic",
+  "./time:tilt",
+  "./time:timeBands",
+  "./time:timeBasis",
+  "./crossings:findLongitudeCrossingsWith",
+  "./crossings:searchLongitudeCrossingsWith",
+  "./geo:ZoneHistoryNotLoadedError",
+  "./geo:calendarNote",
+  "./geo:createGeoNamesClient",
+  "./geo:gregorianAdoption",
+  "./geo:gregorianToJulian",
+  "./geo:julianToGregorian",
+  "./geo:offsetAt",
+  "./geo:prepareLocalTime",
+  "./geo:resolveBirth",
+  "./geo:resolveLocalBirth",
+  "./geo:resolveLocalToUtc",
+  "./geo:zoneOffsetAt",
+  "./conventions:conventionAddress",
+  "./conventions:conventionId",
+  "./conventions:natalConventionIds",
+  "./conventions:parseConventionId",
+  "./deltat:deltaT",
+  "./deltat:deltaTAt",
+  "./internal/math:alcabitiusCusps",
+  "./internal/math:aspectMotion",
+  "./internal/math:campanusCusps",
+  "./internal/math:computeAngles",
+  "./internal/math:computeHouses",
+  "./internal/math:eastPointOf",
+  "./internal/math:equalCusps",
+  "./internal/math:equalMcCusps",
+  "./internal/math:findAspects",
+  "./internal/math:houseOf",
+  "./internal/math:isPolarUndefinedHouseSystem",
+  "./internal/math:kochCusps",
+  "./internal/math:matchAspect",
+  "./internal/math:meanObliquity",
+  "./internal/math:meridianCusps",
+  "./internal/math:morinusCusps",
+  "./internal/math:normalizeLongitude",
+  "./internal/math:placidusCusps",
+  "./internal/math:porphyryCusps",
+  "./internal/math:ramcOf",
+  "./internal/math:regiomontanusCusps",
+  "./internal/math:separation",
+  "./internal/math:topocentricCusps",
+  "./internal/math:vehlowCusps",
+  "./internal/math:vertexOf",
+  "./internal/math:wholeSignCusps",
+  "./de440:De440Error",
+  "./de440:openDe440Pack",
+  "./de440:openDe440PackSync",
+  "./de440/pack:de440PackBytes",
+  "./de440/pack:openShippedDe440Pack",
+  "./de440/pack:shippedDe440Source"
+ ],
+ "results": {
+  ".:natalChart": {
+   "kind": "object",
+   "digest": "d000fa539bc4cb48",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"input\":{\"utc\":\"1750-06-21T14:45:00.000Z\",\"houseSystem\":\"whole\",\"timeKnown\":true,\"latitude\":40.4,\"longitude\":-3.7},\"bod"
+  },
+  ".:natalChart(no time)": {
+   "kind": "object",
+   "digest": "10c81fb4f2f55c1a",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "no-time",
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"input\":{\"utc\":\"1750-06-21T14:45:00.000Z\",\"houseSystem\":\"whole\",\"timeKnown\":false},\"bodies\":[{\"body\":\"Sun\",\"lon\":89.960"
+  },
+  ".:positions": {
+   "kind": "array[12]",
+   "digest": "799414743156c521",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "head": "[{\"body\":\"Sun\",\"lon\":89.96048573085778,\"lat\":-0.000636641873082937,\"speed\":0.9532666430800418,\"retrograde\":false,\"sign\":"
+  },
+  ".:transits": {
+   "kind": "object",
+   "digest": "f9265d53ee264499",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "head": "{\"natal\":{\"input\":{\"utc\":\"1750-06-21T14:45:00.000Z\",\"houseSystem\":\"whole\",\"timeKnown\":true,\"latitude\":40.4,\"longitude\":-"
+  },
+  ".:transits(chart)": {
+   "kind": "object",
+   "digest": "f9265d53ee264499",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "head": "{\"natal\":{\"input\":{\"utc\":\"1750-06-21T14:45:00.000Z\",\"houseSystem\":\"whole\",\"timeKnown\":true,\"latitude\":40.4,\"longitude\":-"
+  },
+  ".:synastry": {
+   "kind": "object",
+   "digest": "014c389ad9f00ba0",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "head": "{\"a\":{\"input\":{\"utc\":\"1750-06-21T14:45:00.000Z\",\"houseSystem\":\"whole\",\"timeKnown\":true,\"latitude\":40.4,\"longitude\":-3.7}"
+  },
+  ".:progressedBodies": {
+   "kind": "array[12]",
+   "digest": "b480dc0f117ee837",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "head": "[{\"body\":\"Sun\",\"lon\":116.85442146646045,\"lat\":-0.0007799774833626936,\"speed\":0.9544659957327895,\"retrograde\":false,\"sign"
+  },
+  ".:moonPhase": {
+   "kind": "object",
+   "digest": "ac02982c9d44ee31",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "head": "{\"at\":\"1750-06-21T14:45:00.000Z\",\"angle\":201.45825859999673,\"illumination\":0.9653421631530412,\"name\":\"Full Moon\",\"waxing"
+  },
+  ".:saturnReturn": {
+   "kind": "object",
+   "digest": "8fea1e5e9960a1a4",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-de440-span"
+   ],
+   "head": "{\"natalLon\":236.58514076402295,\"natalRetrograde\":true,\"seasons\":[{\"index\":1,\"crossings\":[{\"at\":\"1779-02-12T21:45:42.468Z"
+  },
+  ".:searchLongitudeCrossings": {
+   "kind": "object",
+   "status": "complete",
+   "digest": "77b3ef0c5f2e8c96",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-de440-span"
+   ],
+   "head": "{\"status\":\"complete\",\"crossings\":[{\"at\":\"1750-11-22T08:22:06.392Z\",\"retrograde\":false}],\"samples\":98,\"flags\":[\"outside-d"
+  },
+  ".:findLongitudeCrossings": {
+   "kind": "array[1]",
+   "digest": "d760b642acf945e0",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "[{\"at\":\"1750-11-22T08:22:06.392Z\",\"retrograde\":false}]"
+  },
+  ".:chartPoints(birth)": {
+   "kind": "object",
+   "digest": "586374618cdc6d9d",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"sect\":\"day\",\"points\":[{\"point\":\"Mean Node\",\"lon\":271.2093489435456,\"lat\":0,\"speed\":-0.05292254490996129,\"sign\":\"capric"
+  },
+  ".:chartDeclinations(birth)": {
+   "kind": "object",
+   "digest": "09c7ed7a20c5cb7a",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"trueObliquity\":23.47163976321826,\"rows\":[{\"body\":\"Sun\",\"lon\":89.96048573085778,\"lat\":-0.000636641873082937,\"ra\":89.956"
+  },
+  ".:defaultEphemeris": {
+   "kind": "object",
+   "digest": "d2cacee6d0d374d5",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"name\":\"de440\",\"de440\":{\"opened\":true,\"version\":\"51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7\",\"fro"
+  },
+  "./internal:bodyLongitude": {
+   "kind": "number",
+   "digest": "5b22d7d5adfae2ac",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "107.54448492524932"
+  },
+  "./internal:bodyLongitudeDetailed": {
+   "kind": "object",
+   "digest": "dc3fac5ea35bd68d",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-de440-span"
+   ],
+   "head": "{\"value\":107.54448492524932,\"ephemeris\":{\"name\":\"astronomy-engine\",\"version\":\"2.1.19\"},\"flags\":[\"outside-de440-span\"]}"
+  },
+  "./internal:longitudeSpeed": {
+   "kind": "number",
+   "digest": "24808833925bf0fa",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "0.6427500268557651"
+  },
+  "./internal:longitudeSpeedDetailed": {
+   "kind": "object",
+   "digest": "2208d2fe6dafd808",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-de440-span"
+   ],
+   "head": "{\"value\":0.6427500268557651,\"ephemeris\":{\"name\":\"astronomy-engine\",\"version\":\"2.1.19\"},\"flags\":[\"outside-de440-span\"]}"
+  },
+  "./internal:computeBodies": {
+   "kind": "array[12]",
+   "digest": "799414743156c521",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "head": "[{\"body\":\"Sun\",\"lon\":89.96048573085778,\"lat\":-0.000636641873082937,\"speed\":0.9532666430800418,\"retrograde\":false,\"sign\":"
+  },
+  "./internal:computeChart": {
+   "kind": "object",
+   "digest": "3adcbed458341676",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"input\":{\"utc\":\"1750-06-21T14:45:00.000Z\",\"latitude\":40.4,\"longitude\":-3.7,\"timeKnown\":true,\"houseSystem\":\"placidus\"},\""
+  },
+  "./receipt:createNatalEnvelope": {
+   "kind": "object",
+   "digest": "027c96ae89fb4818",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "head": "{\"receipt\":{\"conventionIds\":[\"angleExclusions:exact-geographic-poles-and-ecliptic-horizon-coincidence\",\"angles:gast-and-"
+  },
+  "./calc:calc Sun": {
+   "kind": "object",
+   "status": "refused:out-of-range",
+   "digest": "b5c06d23b3562242",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"status\":\"refused\",\"reason\":\"out-of-range\",\"detail\":\"The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 220"
+  },
+  "./calc:calc Moon equatorial-icrs": {
+   "kind": "object",
+   "status": "refused:out-of-range",
+   "digest": "b5c06d23b3562242",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"status\":\"refused\",\"reason\":\"out-of-range\",\"detail\":\"The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 220"
+  },
+  "./calc:calc Venus sidereal": {
+   "kind": "object",
+   "status": "refused:out-of-range",
+   "digest": "b5c06d23b3562242",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"status\":\"refused\",\"reason\":\"out-of-range\",\"detail\":\"The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 220"
+  },
+  "./calc:calc North Node": {
+   "kind": "object",
+   "status": "refused:out-of-range",
+   "digest": "b5c06d23b3562242",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"status\":\"refused\",\"reason\":\"out-of-range\",\"detail\":\"The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 220"
+  },
+  "./calc:calc Mean Node": {
+   "kind": "object",
+   "status": "refused:out-of-range",
+   "digest": "b5c06d23b3562242",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"status\":\"refused\",\"reason\":\"out-of-range\",\"detail\":\"The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 220"
+  },
+  "./calc:calc Jupiter heliocentric": {
+   "kind": "object",
+   "status": "refused:out-of-range",
+   "digest": "b5c06d23b3562242",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"status\":\"refused\",\"reason\":\"out-of-range\",\"detail\":\"The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 220"
+  },
+  "./calc:calc Jupiter topocentric": {
+   "kind": "object",
+   "status": "refused:out-of-range",
+   "digest": "b5c06d23b3562242",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"status\":\"refused\",\"reason\":\"out-of-range\",\"detail\":\"The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 220"
+  },
+  "./calc:calc Jupiter astrometric": {
+   "kind": "object",
+   "status": "refused:out-of-range",
+   "digest": "b5c06d23b3562242",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"status\":\"refused\",\"reason\":\"out-of-range\",\"detail\":\"The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 220"
+  },
+  "./calc:chart": {
+   "kind": "object",
+   "status": "refused:out-of-range",
+   "digest": "b5c06d23b3562242",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"status\":\"refused\",\"reason\":\"out-of-range\",\"detail\":\"The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 220"
+  },
+  "./calc:events crossing": {
+   "kind": "object",
+   "status": "refused:out-of-range",
+   "digest": "b5c06d23b3562242",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"status\":\"refused\",\"reason\":\"out-of-range\",\"detail\":\"The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 220"
+  },
+  "./calc:houses": {
+   "kind": "object",
+   "status": "refused:out-of-range",
+   "digest": "b5c06d23b3562242",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"status\":\"refused\",\"reason\":\"out-of-range\",\"detail\":\"The instant's UT1 or TT is outside 1800-01-01T00:00:00.000Z to 220"
+  },
+  "./window:birthWindow": {
+   "threw": "RangeError: The window must lie inside REFERENCE_SPAN, 1800 to 2200."
+  },
+  "./techniques:solarReturn": {
+   "kind": "object",
+   "digest": "5abf32bce87d6697",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"body\":\"Sun\",\"selection\":\"nearest\",\"natalLongitude\":89.96048573085778,\"instant\":\"1778-06-21T09:35:01.996Z\",\"chart\":{\"in"
+  },
+  "./techniques:lunarReturn": {
+   "kind": "object",
+   "digest": "3e6ae817a0df336f",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"body\":\"Moon\",\"natalLongitude\":291.41874433085445,\"instant\":\"1778-09-30T02:01:59.854Z\",\"chart\":{\"input\":{\"utc\":\"1778-09"
+  },
+  "./techniques:solarReturnInstant": {
+   "kind": "Date",
+   "digest": "0ba556b4921eb14d",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "\"1778-06-07T19:38:44.512Z\""
+  },
+  "./techniques:solarReturnInstantDetailed": {
+   "kind": "object",
+   "digest": "ca607c469e4d5b45",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"value\":\"1778-06-07T19:38:44.512Z\",\"ephemeris\":{\"name\":\"astronomy-engine\",\"version\":\"2.1.19\"},\"flags\":[\"outside-referen"
+  },
+  "./techniques:mostRecentSolarReturnInstant": {
+   "kind": "Date",
+   "digest": "0ba556b4921eb14d",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "\"1778-06-07T19:38:44.512Z\""
+  },
+  "./techniques:mostRecentSolarReturnInstantDetailed": {
+   "kind": "object",
+   "digest": "ca607c469e4d5b45",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"value\":\"1778-06-07T19:38:44.512Z\",\"ephemeris\":{\"name\":\"astronomy-engine\",\"version\":\"2.1.19\"},\"flags\":[\"outside-referen"
+  },
+  "./techniques:lunarReturnInstant": {
+   "kind": "Date",
+   "digest": "fbf86f5a9d9cf808",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "\"1778-09-13T12:14:34.890Z\""
+  },
+  "./techniques:lunarReturnInstantDetailed": {
+   "kind": "object",
+   "digest": "c2225d3325d7909a",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"value\":\"1778-09-13T12:14:34.890Z\",\"ephemeris\":{\"name\":\"astronomy-engine\",\"version\":\"2.1.19\"},\"flags\":[\"outside-referen"
+  },
+  "./techniques:moonIngresses": {
+   "kind": "array[6]",
+   "digest": "2f978d0214875120",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "head": "[{\"at\":\"1750-06-20T00:06:16.075Z\",\"sign\":\"capricorn\",\"ephemeris\":{\"name\":\"astronomy-engine\",\"version\":\"2.1.19\"},\"flags\":"
+  },
+  "./techniques:moonAspects": {
+   "kind": "array[33]",
+   "digest": "1107f693551dd874",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "head": "[{\"at\":\"1750-06-21T01:50:58.355Z\",\"body\":\"Venus\",\"aspect\":\"trine\",\"moonLon\":284.19752080225066,\"ephemeris\":{\"name\":\"astr"
+  },
+  "./techniques:voidOfCourseAt": {
+   "kind": "object",
+   "digest": "174240868696f444",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"at\":\"1750-06-21T14:45:00.000Z\",\"isVoid\":false,\"current\":null,\"next\":{\"from\":\"1750-06-22T04:59:07.838Z\",\"to\":\"1750-06-2"
+  },
+  "./techniques:voidOfCourseWindows": {
+   "kind": "array[6]",
+   "digest": "0b86c75f35486f87",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "head": "[{\"from\":\"1750-06-19T22:24:04.211Z\",\"to\":\"1750-06-20T00:06:16.075Z\",\"lastAspect\":{\"at\":\"1750-06-19T22:24:04.211Z\",\"body\""
+  },
+  "./techniques:moonSignsBetween": {
+   "kind": "array[7]",
+   "digest": "49e5546323e9d7c3",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "[\"sagittarius\",\"capricorn\",\"aquarius\",\"pisces\",\"aries\",\"taurus\",\"gemini\"]"
+  },
+  "./techniques:moonSignsBetweenDetailed": {
+   "kind": "object",
+   "digest": "0fb4599c06395cc6",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"value\":[\"sagittarius\",\"capricorn\",\"aquarius\",\"pisces\",\"aries\",\"taurus\",\"gemini\"],\"ephemeris\":{\"name\":\"astronomy-engine"
+  },
+  "./techniques:moonSignCandidates": {
+   "kind": "object",
+   "digest": "a07de09349217e97",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"date\":\"1750-06-21\",\"timeZone\":null,\"from\":\"1750-06-20T10:00:00.000Z\",\"to\":\"1750-06-22T11:59:59.999Z\",\"signs\":[\"caprico"
+  },
+  "./techniques:compositeChart(births)": {
+   "kind": "object",
+   "digest": "e591596cc2634d5d",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"bodies\":[{\"body\":\"Sun\",\"lon\":9.27759885433153},{\"body\":\"Moon\",\"lon\":276.90266113866596},{\"body\":\"Mercury\",\"lon\":190.99"
+  },
+  "./techniques:compositeChart(charts)": {
+   "kind": "object",
+   "digest": "e591596cc2634d5d",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"bodies\":[{\"body\":\"Sun\",\"lon\":9.27759885433153},{\"body\":\"Moon\",\"lon\":276.90266113866596},{\"body\":\"Mercury\",\"lon\":190.99"
+  },
+  "./techniques:davisonChart": {
+   "kind": "object",
+   "digest": "01f53e5b5ac8b3ce",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"instant\":\"1748-09-29T21:02:30.000Z\",\"location\":{\"latitude\":3.25,\"longitude\":73.75},\"place\":\"coordinates\",\"chart\":{\"inp"
+  },
+  "./techniques:chartAspectPatterns(birth)": {
+   "kind": "object",
+   "digest": "01e9bfed1f40f256",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"points\":[{\"body\":\"Sun\",\"lon\":89.96048573085778},{\"body\":\"Moon\",\"lon\":291.41874433085445},{\"body\":\"Mercury\",\"lon\":109.3"
+  },
+  "./techniques:chartAspectPatterns(chart)": {
+   "kind": "object",
+   "digest": "01e9bfed1f40f256",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": true,
+   "namesDe440": false,
+   "topEphemeris": "astronomy-engine",
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"points\":[{\"body\":\"Sun\",\"lon\":89.96048573085778},{\"body\":\"Moon\",\"lon\":291.41874433085445},{\"body\":\"Mercury\",\"lon\":109.3"
+  },
+  "./techniques:compositeMidpoints(charts)": {
+   "kind": "array[12]",
+   "digest": "2d192e79a6cad246",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "[{\"body\":\"Sun\",\"lon\":9.27759885433153},{\"body\":\"Moon\",\"lon\":276.90266113866596},{\"body\":\"Mercury\",\"lon\":190.996840840968"
+  },
+  "./timing:profectionAt": {
+   "kind": "object",
+   "digest": "2be94307135472ae",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"at\":\"1778-09-03T00:00:00.000Z\",\"origin\":{\"point\":\"Ascendant\",\"lon\":209.4896439336319,\"sign\":\"libra\"},\"year\":{\"age\":28,"
+  },
+  "./timing:profectionYear": {
+   "kind": "object",
+   "digest": "1e3723667b9d2974",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"age\":30,\"sign\":\"aries\",\"ruler\":\"Mars\",\"house\":7,\"start\":\"1780-06-20T20:59:43.165Z\",\"end\":\"1781-06-21T02:46:14.653Z\",\"o"
+  },
+  "./timing:firdaria": {
+   "kind": "object",
+   "digest": "39e3c388a209a270",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"birth\":\"1750-06-21T14:45:00.000Z\",\"sect\":\"day\",\"periods\":[{\"lord\":\"Sun\",\"years\":10,\"cycle\":0,\"startAge\":0,\"endAge\":10,"
+  },
+  "./timing:firdariaAt": {
+   "kind": "object",
+   "digest": "c97fa866e29e8f4b",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"at\":\"1778-09-03T00:00:00.000Z\",\"sect\":\"day\",\"age\":28.201517629366485,\"period\":{\"lord\":\"Mercury\",\"years\":13,\"cycle\":0,\""
+  },
+  "./timing:planetaryReturns": {
+   "kind": "object",
+   "status": "complete",
+   "digest": "b10a4ed3f46ec2be",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"body\":\"Jupiter\",\"natalLongitude\":29.363108229485533,\"from\":\"1750-06-21T14:45:00.000Z\",\"to\":\"1778-09-03T00:00:00.000Z\","
+  },
+  "./timing:solarArc": {
+   "kind": "object",
+   "digest": "99db5cfacfccc925",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"birth\":\"1750-06-21T14:45:00.000Z\",\"target\":\"1778-09-03T00:00:00.000Z\",\"progressed\":\"1750-07-19T19:35:11.378Z\",\"natalSu"
+  },
+  "./timing:solarArcDirections": {
+   "kind": "object",
+   "digest": "874ce2d7cd937cf0",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"arc\":{\"birth\":\"1750-06-21T14:45:00.000Z\",\"target\":\"1778-09-03T00:00:00.000Z\",\"progressed\":\"1750-07-19T19:35:11.378Z\",\""
+  },
+  "./timing:zodiacalReleasing": {
+   "kind": "object",
+   "digest": "aa1f45849e66777f",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"origin\":{\"point\":\"Lot of Fortune\",\"lon\":50.94790253362862,\"sign\":\"taurus\"},\"birth\":\"1750-06-21T14:45:00.000Z\",\"from\":\""
+  },
+  "./timing:zodiacalReleasingAt": {
+   "kind": "object",
+   "digest": "aec580a714659a90",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"origin\":{\"point\":\"Lot of Fortune\",\"lon\":50.94790253362862,\"sign\":\"taurus\"},\"birth\":\"1750-06-21T14:45:00.000Z\",\"at\":\"17"
+  },
+  "./sky:skyEvents Sun": {
+   "kind": "object",
+   "status": "complete",
+   "digest": "613fe43b66f812c4",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span"
+   ],
+   "head": "{\"body\":\"Sun\",\"observer\":{\"latitude\":40.4,\"longitude\":-3.7,\"height\":0},\"from\":\"1750-06-20T00:00:00.000Z\",\"to\":\"1750-07-0"
+  },
+  "./sky:skyEvents Mars": {
+   "kind": "object",
+   "status": "complete",
+   "digest": "53fe254bde1b3707",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span"
+   ],
+   "head": "{\"body\":\"Mars\",\"observer\":{\"latitude\":40.4,\"longitude\":-3.7,\"height\":0},\"from\":\"1750-06-20T00:00:00.000Z\",\"to\":\"1750-07-"
+  },
+  "./sky:skyEventsOn Moon": {
+   "kind": "object",
+   "status": "complete",
+   "digest": "7c54e89c0d8f452c",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span"
+   ],
+   "head": "{\"body\":\"Moon\",\"observer\":{\"latitude\":40.4,\"longitude\":-3.7,\"height\":0},\"from\":\"1750-06-21T00:14:48.000Z\",\"to\":\"1750-06-"
+  },
+  "./sky:planetaryHours": {
+   "kind": "object",
+   "status": "complete",
+   "digest": "0edbe438da56cd88",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span"
+   ],
+   "head": "{\"date\":\"1750-06-21\",\"utcOffsetMinutes\":-14.8,\"weekday\":0,\"ruler\":\"Sun\",\"conventions\":{\"limb\":\"upper\",\"refraction\":\"stan"
+  },
+  "./sky:planetaryHourAt": {
+   "kind": "object",
+   "digest": "c91fc9f10eba0b35",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "{\"day\":{\"date\":\"1750-06-21\",\"utcOffsetMinutes\":-14.8,\"weekday\":0,\"ruler\":\"Sun\",\"conventions\":{\"limb\":\"upper\",\"refraction"
+  },
+  "./vedic:ayanamsa lahiri": {
+   "kind": "object",
+   "digest": "93dd5c0ea87cd87e",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span"
+   ],
+   "head": "{\"ayanamsa\":\"lahiri\",\"utc\":\"1750-06-21T14:45:00.000Z\",\"timeScale\":{\"input\":\"utc\",\"basis\":\"delta-t\",\"ut1MinusUtc\":null,\"l"
+  },
+  "./vedic:ayanamsa true-chitra": {
+   "kind": "object",
+   "digest": "2823e54c06c6f86a",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span"
+   ],
+   "head": "{\"ayanamsa\":\"true-chitra\",\"utc\":\"1750-06-21T14:45:00.000Z\",\"timeScale\":{\"input\":\"utc\",\"basis\":\"delta-t\",\"ut1MinusUtc\":nu"
+  },
+  "./vedic:siderealChart": {
+   "kind": "object",
+   "digest": "68266bbcb5e2a529",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"ayanamsa\":\"lahiri\",\"ayanamsaValue\":{\"ayanamsa\":\"lahiri\",\"utc\":\"1750-06-21T14:45:00.000Z\",\"timeScale\":{\"input\":\"utc\",\"b"
+  },
+  "./vedic:siderealChart(chart)": {
+   "kind": "object",
+   "digest": "68266bbcb5e2a529",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"ayanamsa\":\"lahiri\",\"ayanamsaValue\":{\"ayanamsa\":\"lahiri\",\"utc\":\"1750-06-21T14:45:00.000Z\",\"timeScale\":{\"input\":\"utc\",\"b"
+  },
+  "./vedic:vargaSensitivity": {
+   "kind": "object",
+   "digest": "9042d1a4bc4ec7aa",
+   "unavailable": false,
+   "outside": true,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "head": "{\"ayanamsa\":\"lahiri\",\"utc\":\"1750-06-21T14:45:00.000Z\",\"timeScale\":{\"input\":\"utc\",\"basis\":\"delta-t\",\"ut1MinusUtc\":null,\"l"
+  },
+  "./timing:releasingPeriods": {
+   "kind": "object",
+   "digest": "aa405ee239963706",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [],
+   "head": "{\"origin\":{\"point\":null,\"lon\":null,\"sign\":\"leo\"},\"birth\":\"1750-06-21T14:45:00.000Z\",\"from\":\"1750-06-21T14:45:00.000Z\",\"t"
+  },
+  "./timing:releasingAt": {
+   "kind": "object",
+   "digest": "2f5c87aa53fbfbd9",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "topFlags": [],
+   "head": "{\"origin\":{\"point\":null,\"lon\":null,\"sign\":\"leo\"},\"birth\":\"1750-06-21T14:45:00.000Z\",\"at\":\"1778-09-03T00:00:00.000Z\",\"ela"
+  },
+  "./vedic:vimshottariAt": {
+   "kind": "array[5]",
+   "digest": "a0b6df7ec29a05ba",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "[{\"system\":\"vimshottari\",\"level\":1,\"levelName\":\"mahadasha\",\"lords\":[\"Rahu\"],\"lord\":\"Rahu\",\"start\":\"1771-07-03T11:14:01.0"
+  },
+  ".:outsideReferenceSpan": {
+   "kind": "boolean",
+   "digest": "b5bea41b6c623f7c",
+   "unavailable": false,
+   "outside": false,
+   "namesAstronomyEngine": false,
+   "namesDe440": false,
+   "head": "true"
+  }
+ }
+}

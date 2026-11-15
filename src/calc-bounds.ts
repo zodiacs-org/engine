@@ -13,8 +13,13 @@
  * - MEAN_POINTS_BASIS (their rates MEAN_POINTS_SPEED_BASIS): the Mean Node,
  *   the Mean South Node and Black Moon Lilith (3 rows), and
  * - MEASURED_BASIS, 32 instants against JPL Horizons: every other row
- *   (69 rows, heliocentric, barycentric and topocentric), both from
+ *   (60 rows, heliocentric and barycentric), both from
  *   docs/evidence/calc-api/rc16/summary.json.
+ *
+ * The topocentric rows of the Sun, the Moon and Mars (9 rows) are left out,
+ * since the geocentric row of the same correction is at or above each of
+ * their 32 instants' values: calc.ts gives that geocentric bound, labelled
+ * estimated, as it does for every other topocentric body.
  *
  * Written by docs/evidence/de440-sweep-20261111/tools/write_bounds.py; do not
  * edit by hand. calc-bounds.test.ts checks that they agree.
@@ -111,20 +116,5 @@ export const MEASURED: Readonly<Record<string, Rows>> = {
     "Saturn": [18.0, 6.5e-05, 0.023],
     "Uranus": [19.0, 4.2e-05, 0.009],
     "Venus": [6.6, 1.2e-05, 0.21]
-  },
-  "topocentric/apparent": {
-    "Mars": [6.6, 5.8e-05, 0.46],
-    "Moon": [7.8, 3.6e-05, 1.4],
-    "Sun": [3.0, 1.5e-05, 0.19]
-  },
-  "topocentric/astrometric": {
-    "Mars": [6.6, 5.8e-05, 0.45],
-    "Moon": [7.8, 3.6e-05, 1.4],
-    "Sun": [3.0, 1.5e-05, 0.18]
-  },
-  "topocentric/geometric": {
-    "Mars": [6.6, 5.8e-05, 0.45],
-    "Moon": [7.8, 3.6e-05, 1.5],
-    "Sun": [3.0, 1.5e-05, 0.18]
   }
 };

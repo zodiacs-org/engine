@@ -16,6 +16,20 @@
  * case, frame, instant, [lon, lat, dist, lon rate, lat rate] (degrees, au,
  * degrees a day; NaN where the engine gives none), and what was run as JSON
  * to --out with ".json" added. ZODIACS_ENGINE_DIST names another build.
+ *
+ * --ephemeris names the source calc() runs on: "astronomy-engine" (the
+ * default) or "de440". src/calc-bounds.ts holds the bounds calc() quotes for
+ * astronomy-engine's results only (on the shipped DE440 pack it quotes
+ * src/calc-bounds-de440.ts), so the workflow sweeps astronomy-engine. From
+ * 1.1.0-rc.10 calc()'s default is the pack, and a sweep of the default
+ * measured the pack's apparent places against astronomy-engine's limits
+ * (workflow run 43618467433). The sweep sets the source with
+ * setDefaultEphemeris and refuses a result that another source computed or
+ * that carries a fallback flag. With "de440" the apparent places of the Sun,
+ * the Moon, Mercury to Pluto and the nodes come from the pack and every other
+ * case from astronomy-engine, as calc() gives them; sweep.py then compares the
+ * apparent places with the kernel's place with the Sun's light deflection,
+ * which the pack's reduction applies.
  */
 import { createHash } from "node:crypto";
 import { closeSync, openSync, readFileSync, readdirSync, writeFileSync, writeSync } from "node:fs";
@@ -32,6 +46,10 @@ if (!Number.isInteger(fromYear) || !Number.isInteger(toYear) || fromYear < 1800 
 
 const distDir = process.env.ZODIACS_ENGINE_DIST ? resolve(process.env.ZODIACS_ENGINE_DIST) : resolve(new URL("../../../../dist/", import.meta.url).pathname);
 const { calc, CALC_FRAMES } = await import(pathToFileURL(`${distDir}/calc.js`).href);
+const { setDefaultEphemeris } = await import(pathToFileURL(`${distDir}/index.js`).href);
+const ephemeris = args.ephemeris ?? "astronomy-engine";
+if (ephemeris !== "astronomy-engine" && ephemeris !== "de440") throw new Error('--ephemeris takes "astronomy-engine" or "de440"');
+setDefaultEphemeris(ephemeris);
 
 const FIRST_JD = 2378497.0;
 const TOTAL = 146097;
@@ -61,6 +79,10 @@ for (const [c, { correction, body }] of cases.entries()) {
       const result = calc({ body, time: { jd, scale: "tt" }, frame, center: "geocentric", flags: { correction } });
       if (result.status !== "ok") throw new Error(`refused: ${body} ${correction} ${frame} ${jd}: ${result.reason}`);
       if (result.receipt.instants[0].jdTt !== jd) throw new Error(`${jd}: the engine ran at ${result.receipt.instants[0].jdTt}`);
+      const source = ephemeris === "de440" && correction === "apparent" ? "jpl-de440" : "astronomy-engine";
+      if (result.receipt.engine.ephemeris.name !== source || result.flags.some((flag) => flag === "de440-unavailable" || flag === "outside-de440-span")) {
+        throw new Error(`${body} ${correction} ${frame} ${jd}: computed on ${result.receipt.engine.ephemeris.name} (flags ${result.flags.join(", ")}), not ${source}`);
+      }
       engine ??= result.receipt.engine;
       const at = (c * CALC_FRAMES.length + f) * block + i * FIELDS;
       values[at] = result.lon;
@@ -93,6 +115,7 @@ writeFileSync(
   `${args.out}.json`,
   `${JSON.stringify({
     engine,
+    ephemeris,
     distSha256: distDigest,
     node: process.version,
     fromYear,
@@ -107,4 +130,4 @@ writeFileSync(
     seconds: Math.round((Date.now() - started) / 1000)
   })}\n`
 );
-console.log(`engine sweep ${fromYear} to ${toYear}: ${count} instants from JD ${FIRST_JD + start} TT, ${cases.length} cases, ${CALC_FRAMES.length} frames, ${Math.round((Date.now() - started) / 1000)} s`);
+console.log(`engine sweep on ${ephemeris}, ${fromYear} to ${toYear}: ${count} instants from JD ${FIRST_JD + start} TT, ${cases.length} cases, ${CALC_FRAMES.length} frames, ${Math.round((Date.now() - started) / 1000)} s`);

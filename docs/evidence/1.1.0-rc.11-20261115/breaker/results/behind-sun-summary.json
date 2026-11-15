@@ -1,0 +1,2214 @@
+{
+ "what": "calc() on the pack (installed 1.1.0-rc.11), true ecliptic of date, every 30 s for 20 minutes each side of the least separation, for each passage of a planet behind the Sun closer than 0.06 deg from 1800 to 2200; the least separation was found on astronomy-engine, which bends no light",
+ "passagesBehindTheSun": 3285,
+ "behindTheDisc(0.2666deg)": 391,
+ "closerThan0.06deg": 86,
+ "rowsCompared": 6966,
+ "perBody": {
+  "Mercury": {
+   "passagesBehindTheDisc": 113,
+   "closerThan0.06deg": 25,
+   "leastSeparationDeg": 0.00044,
+   "largestDifference": {
+    "de440.bsp with the deflection and erfa.ldsun's limiter": {
+     "angleArcsec": 307.7922,
+     "jdTt": 2434871.460627,
+     "lonArcsec": 190.777,
+     "latArcsec": 298.3064,
+     "lonRateArcsecPerDay": 117267.67,
+     "rateJdTt": 2434871.4613214
+    },
+    "de440.bsp with the deflection and the engine's limiter (1e-14)": {
+     "angleArcsec": 0.0166,
+     "jdTt": 2434871.460627,
+     "lonArcsec": 0.0141,
+     "latArcsec": 0.0105,
+     "lonRateArcsecPerDay": 8.53,
+     "rateJdTt": 2434871.4595853
+    },
+    "de440.bsp without the deflection": {
+     "angleArcsec": 307.8999,
+     "jdTt": 2434871.460627,
+     "lonArcsec": 190.8766,
+     "latArcsec": 298.4107,
+     "lonRateArcsecPerDay": 117631.2,
+     "rateJdTt": 2434871.4613214
+    }
+   }
+  },
+  "Venus": {
+   "passagesBehindTheDisc": 27,
+   "closerThan0.06deg": 7,
+   "leastSeparationDeg": 0.00546,
+   "largestDifference": {
+    "de440.bsp with the deflection and erfa.ldsun's limiter": {
+     "angleArcsec": 34.2556,
+     "jdTt": 2457546.4129959,
+     "lonArcsec": 19.1091,
+     "latArcsec": 34.0711,
+     "lonRateArcsecPerDay": 1724.6,
+     "rateJdTt": 2457546.4119543
+    },
+    "de440.bsp with the deflection and the engine's limiter (1e-14)": {
+     "angleArcsec": 0.0009,
+     "jdTt": 2454626.6525768,
+     "lonArcsec": 0.0009,
+     "latArcsec": 0.0,
+     "lonRateArcsecPerDay": 0.0,
+     "rateJdTt": 2457546.3998015
+    },
+    "de440.bsp without the deflection": {
+     "angleArcsec": 35.1978,
+     "jdTt": 2457546.4129959,
+     "lonArcsec": 19.9334,
+     "latArcsec": 35.013,
+     "lonRateArcsecPerDay": 1771.81,
+     "rateJdTt": 2457546.4119543
+    }
+   }
+  },
+  "Mars": {
+   "passagesBehindTheDisc": 27,
+   "closerThan0.06deg": 5,
+   "leastSeparationDeg": 0.01027,
+   "largestDifference": {
+    "de440.bsp with the deflection and erfa.ldsun's limiter": {
+     "angleArcsec": 26.4688,
+     "jdTt": 2402551.9043814,
+     "lonArcsec": 9.3347,
+     "latArcsec": 26.4617,
+     "lonRateArcsecPerDay": 777.7,
+     "rateJdTt": 2402551.9047286
+    },
+    "de440.bsp with the deflection and the engine's limiter (1e-14)": {
+     "angleArcsec": 0.0013,
+     "jdTt": 2402551.8918814,
+     "lonArcsec": 0.0013,
+     "latArcsec": 0.0,
+     "lonRateArcsecPerDay": 0.0,
+     "rateJdTt": 2402551.9193119
+    },
+    "de440.bsp without the deflection": {
+     "angleArcsec": 27.6921,
+     "jdTt": 2402551.9043814,
+     "lonArcsec": 9.8289,
+     "latArcsec": 27.685,
+     "lonRateArcsecPerDay": 813.66,
+     "rateJdTt": 2402551.9047286
+    }
+   }
+  },
+  "Jupiter": {
+   "passagesBehindTheDisc": 58,
+   "closerThan0.06deg": 11,
+   "leastSeparationDeg": 0.00873,
+   "largestDifference": {
+    "de440.bsp with the deflection and erfa.ldsun's limiter": {
+     "angleArcsec": 55.6431,
+     "jdTt": 2463232.8208694,
+     "lonArcsec": 27.5838,
+     "latArcsec": 55.633,
+     "lonRateArcsecPerDay": 6095.46,
+     "rateJdTt": 2463232.8208694
+    },
+    "de440.bsp with the deflection and the engine's limiter (1e-14)": {
+     "angleArcsec": 0.0021,
+     "jdTt": 2402602.5603014,
+     "lonArcsec": 0.0021,
+     "latArcsec": 0.0001,
+     "lonRateArcsecPerDay": 0.03,
+     "rateJdTt": 2463232.8239944
+    },
+    "de440.bsp without the deflection": {
+     "angleArcsec": 56.2528,
+     "jdTt": 2463232.8208694,
+     "lonArcsec": 28.1828,
+     "latArcsec": 56.2427,
+     "lonRateArcsecPerDay": 6163.13,
+     "rateJdTt": 2463232.8208694
+    }
+   }
+  },
+  "Saturn": {
+   "passagesBehindTheDisc": 28,
+   "closerThan0.06deg": 7,
+   "leastSeparationDeg": 0.01694,
+   "largestDifference": {
+    "de440.bsp with the deflection and erfa.ldsun's limiter": {
+     "angleArcsec": 27.7141,
+     "jdTt": 2383620.957451,
+     "lonArcsec": 13.2885,
+     "latArcsec": 27.7141,
+     "lonRateArcsecPerDay": 1662.39,
+     "rateJdTt": 2383620.957451
+    },
+    "de440.bsp with the deflection and the engine's limiter (1e-14)": {
+     "angleArcsec": 0.0015,
+     "jdTt": 2517850.4365477,
+     "lonArcsec": 0.0015,
+     "latArcsec": 0.0,
+     "lonRateArcsecPerDay": 0.0,
+     "rateJdTt": 2383620.9546732
+    },
+    "de440.bsp without the deflection": {
+     "angleArcsec": 28.9002,
+     "jdTt": 2383620.957451,
+     "lonArcsec": 14.4273,
+     "latArcsec": 28.9002,
+     "lonRateArcsecPerDay": 1733.8,
+     "rateJdTt": 2383620.957451
+    }
+   }
+  },
+  "Uranus": {
+   "passagesBehindTheDisc": 94,
+   "closerThan0.06deg": 21,
+   "leastSeparationDeg": 0.00335,
+   "largestDifference": {
+    "de440.bsp with the deflection and erfa.ldsun's limiter": {
+     "angleArcsec": 195.2962,
+     "jdTt": 2462292.1837037,
+     "lonArcsec": 97.5856,
+     "latArcsec": 195.2143,
+     "lonRateArcsecPerDay": 67504.13,
+     "rateJdTt": 2462292.1837037
+    },
+    "de440.bsp with the deflection and the engine's limiter (1e-14)": {
+     "angleArcsec": 0.0019,
+     "jdTt": 2462292.1837037,
+     "lonArcsec": 0.0019,
+     "latArcsec": 0.0008,
+     "lonRateArcsecPerDay": 0.54,
+     "rateJdTt": 2462292.1823148
+    },
+    "de440.bsp without the deflection": {
+     "angleArcsec": 195.4658,
+     "jdTt": 2462292.1837037,
+     "lonArcsec": 97.7562,
+     "latArcsec": 195.3839,
+     "lonRateArcsecPerDay": 67572.33,
+     "rateJdTt": 2462292.1837037
+    }
+   }
+  },
+  "Neptune": {
+   "passagesBehindTheDisc": 41,
+   "closerThan0.06deg": 9,
+   "leastSeparationDeg": 0.00118,
+   "largestDifference": {
+    "de440.bsp with the deflection and erfa.ldsun's limiter": {
+     "angleArcsec": 154.5594,
+     "jdTt": 2392770.1159471,
+     "lonArcsec": 77.136,
+     "latArcsec": 154.5536,
+     "lonRateArcsecPerDay": 45943.65,
+     "rateJdTt": 2392770.1159471
+    },
+    "de440.bsp with the deflection and the engine's limiter (1e-14)": {
+     "angleArcsec": 0.002,
+     "jdTt": 2392770.1169888,
+     "lonArcsec": 0.002,
+     "latArcsec": 0.0001,
+     "lonRateArcsecPerDay": 0.04,
+     "rateJdTt": 2392770.1155999
+    },
+    "de440.bsp without the deflection": {
+     "angleArcsec": 154.7801,
+     "jdTt": 2392770.1159471,
+     "lonArcsec": 77.3614,
+     "latArcsec": 154.7742,
+     "lonRateArcsecPerDay": 46016.39,
+     "rateJdTt": 2392770.1159471
+    }
+   }
+  },
+  "Pluto": {
+   "passagesBehindTheDisc": 3,
+   "closerThan0.06deg": 1,
+   "leastSeparationDeg": 0.02435,
+   "largestDifference": {
+    "de440.bsp with the deflection and erfa.ldsun's limiter": {
+     "angleArcsec": 18.4361,
+     "jdTt": 2516753.301743,
+     "lonArcsec": 8.4842,
+     "latArcsec": 18.436,
+     "lonRateArcsecPerDay": 765.59,
+     "rateJdTt": 2516753.301743
+    },
+    "de440.bsp with the deflection and the engine's limiter (1e-14)": {
+     "angleArcsec": 0.0006,
+     "jdTt": 2516753.3097291,
+     "lonArcsec": 0.0006,
+     "latArcsec": 0.0,
+     "lonRateArcsecPerDay": 0.0,
+     "rateJdTt": 2516753.3007014
+    },
+    "de440.bsp without the deflection": {
+     "angleArcsec": 20.087,
+     "jdTt": 2516753.301743,
+     "lonArcsec": 9.8391,
+     "latArcsec": 20.0869,
+     "lonRateArcsecPerDay": 834.27,
+     "rateJdTt": 2516753.301743
+    }
+   }
+  }
+ },
+ "passagesBehindTheDisc": [
+  {
+   "body": "Mercury",
+   "jdTt": 2379714.1484342106,
+   "leastSeparationOnAstronomyEngineDeg": 0.11046957032974956
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2380632.144763432,
+   "leastSeparationOnAstronomyEngineDeg": 0.08514698576522704
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2381914.8118396006,
+   "leastSeparationOnAstronomyEngineDeg": 0.14409276974167362
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2384464.8691803776,
+   "leastSeparationOnAstronomyEngineDeg": 0.0423152045434153
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2385383.5019460367,
+   "leastSeparationOnAstronomyEngineDeg": 0.03224354006162812
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2386665.519086824,
+   "leastSeparationOnAstronomyEngineDeg": 0.20968118169399996
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2387014.8946744855,
+   "leastSeparationOnAstronomyEngineDeg": 0.2336101662230946
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2389215.5851196945,
+   "leastSeparationOnAstronomyEngineDeg": 0.025087749070075094
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2390134.879160584,
+   "leastSeparationOnAstronomyEngineDeg": 0.15165627127635356
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2391765.6227837764,
+   "leastSeparationOnAstronomyEngineDeg": 0.16461288915297234
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2392683.0934126,
+   "leastSeparationOnAstronomyEngineDeg": 0.17753688593465744
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2393966.2977077155,
+   "leastSeparationOnAstronomyEngineDeg": 0.09188907876640329
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2396516.3463041596,
+   "leastSeparationOnAstronomyEngineDeg": 0.09611534359063374
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2397434.4310643845,
+   "leastSeparationOnAstronomyEngineDeg": 0.0624093227969882
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2398717.008279577,
+   "leastSeparationOnAstronomyEngineDeg": 0.15822766869137073
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2401267.065872861,
+   "leastSeparationOnAstronomyEngineDeg": 0.028129427777355484
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2402185.7898023445,
+   "leastSeparationOnAstronomyEngineDeg": 0.05518728354735082
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2403467.716325175,
+   "leastSeparationOnAstronomyEngineDeg": 0.22390986030436513
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2403817.0948862433,
+   "leastSeparationOnAstronomyEngineDeg": 0.21897812046616577
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2406017.782549868,
+   "leastSeparationOnAstronomyEngineDeg": 0.03942335589024484
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2406937.168262409,
+   "leastSeparationOnAstronomyEngineDeg": 0.17469332192469317
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2408567.8209788366,
+   "leastSeparationOnAstronomyEngineDeg": 0.15025352700521244
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2409485.3748244513,
+   "leastSeparationOnAstronomyEngineDeg": 0.15543255743641315
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2410768.495136149,
+   "leastSeparationOnAstronomyEngineDeg": 0.10621966141183933
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2413318.544172369,
+   "leastSeparationOnAstronomyEngineDeg": 0.08175415585133661
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2414236.7184882844,
+   "leastSeparationOnAstronomyEngineDeg": 0.03952765298459611
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2415519.204539115,
+   "leastSeparationOnAstronomyEngineDeg": 0.17231880621825962
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2418069.2638732838,
+   "leastSeparationOnAstronomyEngineDeg": 0.013704299806965314
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2418988.0799471447,
+   "leastSeparationOnAstronomyEngineDeg": 0.07839245669947535
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2420269.911779508,
+   "leastSeparationOnAstronomyEngineDeg": 0.23781059090976595
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2420619.2952058334,
+   "leastSeparationOnAstronomyEngineDeg": 0.2043123726877316
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2421536.332893759,
+   "leastSeparationOnAstronomyEngineDeg": 0.24668274920422636
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2422819.9786726385,
+   "leastSeparationOnAstronomyEngineDeg": 0.05352666679465699
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2423739.4594984096,
+   "leastSeparationOnAstronomyEngineDeg": 0.19795383510858267
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2425370.02120707,
+   "leastSeparationOnAstronomyEngineDeg": 0.13551669732649865
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2426287.657620865,
+   "leastSeparationOnAstronomyEngineDeg": 0.13313779565324574
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2427570.6912350766,
+   "leastSeparationOnAstronomyEngineDeg": 0.12031294625911765
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2430120.7424849067,
+   "leastSeparationOnAstronomyEngineDeg": 0.06729857786175082
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2431039.002285078,
+   "leastSeparationOnAstronomyEngineDeg": 0.01704551277290182
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2432321.4013376907,
+   "leastSeparationOnAstronomyEngineDeg": 0.1865078977582806
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2432670.763764644,
+   "leastSeparationOnAstronomyEngineDeg": 0.25914807816776253
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2434871.460279772,
+   "leastSeparationOnAstronomyEngineDeg": 0.00044302477219158946
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2435790.3675702363,
+   "leastSeparationOnAstronomyEngineDeg": 0.10131112993808973
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2437072.1084260433,
+   "leastSeparationOnAstronomyEngineDeg": 0.25191017034348423
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2437421.493518371,
+   "leastSeparationOnAstronomyEngineDeg": 0.1899705822604146
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2438338.6129743634,
+   "leastSeparationOnAstronomyEngineDeg": 0.2248030741068381
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2439622.175725998,
+   "leastSeparationOnAstronomyEngineDeg": 0.06780015224491012
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2440541.752904888,
+   "leastSeparationOnAstronomyEngineDeg": 0.2214422903047188
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2442172.219651821,
+   "leastSeparationOnAstronomyEngineDeg": 0.12108075831893816
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2443089.9392466424,
+   "leastSeparationOnAstronomyEngineDeg": 0.1109572693949947
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2444372.887754489,
+   "leastSeparationOnAstronomyEngineDeg": 0.134472677936188
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2446922.9418018395,
+   "leastSeparationOnAstronomyEngineDeg": 0.05265665420615036
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2447841.2868121937,
+   "leastSeparationOnAstronomyEngineDeg": 0.005531399630515688
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2449123.596558808,
+   "leastSeparationOnAstronomyEngineDeg": 0.2004014214429779
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2449472.9622076564,
+   "leastSeparationOnAstronomyEngineDeg": 0.2448683983200727
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2451673.6586399963,
+   "leastSeparationOnAstronomyEngineDeg": 0.014943305170644993
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2452592.6550684813,
+   "leastSeparationOnAstronomyEngineDeg": 0.12420857346442969
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2453874.3041118532,
+   "leastSeparationOnAstronomyEngineDeg": 0.265837003787833
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2454223.6924148197,
+   "leastSeparationOnAstronomyEngineDeg": 0.17551561908356322
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2455140.8947800416,
+   "leastSeparationOnAstronomyEngineDeg": 0.20269456175589828
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2456424.3720746166,
+   "leastSeparationOnAstronomyEngineDeg": 0.08194580690215578
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2457344.042037925,
+   "leastSeparationOnAstronomyEngineDeg": 0.24442809792939285
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2458974.418069916,
+   "leastSeparationOnAstronomyEngineDeg": 0.10663216971370514
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2459892.222911222,
+   "leastSeparationOnAstronomyEngineDeg": 0.08851453845736348
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2461175.0835260283,
+   "leastSeparationOnAstronomyEngineDeg": 0.14850169448699932
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2463725.138789962,
+   "leastSeparationOnAstronomyEngineDeg": 0.03841706006246331
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2464643.5720628025,
+   "leastSeparationOnAstronomyEngineDeg": 0.02820052188250919
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2465925.793131536,
+   "leastSeparationOnAstronomyEngineDeg": 0.21452990560638246
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2466275.162109039,
+   "leastSeparationOnAstronomyEngineDeg": 0.23030282222924794
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2468475.8565660752,
+   "leastSeparationOnAstronomyEngineDeg": 0.029370737200502043
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2469394.9419249464,
+   "leastSeparationOnAstronomyEngineDeg": 0.1470338792603791
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2471025.8906053263,
+   "leastSeparationOnAstronomyEngineDeg": 0.1611605502537054
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2471943.1738795564,
+   "leastSeparationOnAstronomyEngineDeg": 0.1808653871320957
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2473226.5705460263,
+   "leastSeparationOnAstronomyEngineDeg": 0.09646988947102728
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2475776.615522193,
+   "leastSeparationOnAstronomyEngineDeg": 0.09234604855237821
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2476694.5069406936,
+   "leastSeparationOnAstronomyEngineDeg": 0.06601376627331751
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2477977.2805595603,
+   "leastSeparationOnAstronomyEngineDeg": 0.1627442997099408
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2480527.3369583646,
+   "leastSeparationOnAstronomyEngineDeg": 0.02396167911965618
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2481445.8600201127,
+   "leastSeparationOnAstronomyEngineDeg": 0.05118486786412646
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2482727.9886914245,
+   "leastSeparationOnAstronomyEngineDeg": 0.22846639368577193
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2483077.361702322,
+   "leastSeparationOnAstronomyEngineDeg": 0.2157786110198507
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2485278.0537295444,
+   "leastSeparationOnAstronomyEngineDeg": 0.043663822883618836
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2486197.2317043175,
+   "leastSeparationOnAstronomyEngineDeg": 0.17017546540807943
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2487828.090374495,
+   "leastSeparationOnAstronomyEngineDeg": 0.14651211700773042
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2488745.4571213736,
+   "leastSeparationOnAstronomyEngineDeg": 0.15852713287733647
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2490028.767214128,
+   "leastSeparationOnAstronomyEngineDeg": 0.11066959474362323
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2492578.8139714985,
+   "leastSeparationOnAstronomyEngineDeg": 0.07786759887606468
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2493496.7906433144,
+   "leastSeparationOnAstronomyEngineDeg": 0.04353030020240992
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2494779.478420402,
+   "leastSeparationOnAstronomyEngineDeg": 0.17713130664759577
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2497329.5336173587,
+   "leastSeparationOnAstronomyEngineDeg": 0.009767151616130567
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2498248.1453620787,
+   "leastSeparationOnAstronomyEngineDeg": 0.07387690939224112
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2499530.1862543495,
+   "leastSeparationOnAstronomyEngineDeg": 0.24274699654775128
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2499879.560539162,
+   "leastSeparationOnAstronomyEngineDeg": 0.2013582605756386
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2500796.422877304,
+   "leastSeparationOnAstronomyEngineDeg": 0.24912474715792068
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2502080.2508686325,
+   "leastSeparationOnAstronomyEngineDeg": 0.057956825073705205
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2502999.5233534346,
+   "leastSeparationOnAstronomyEngineDeg": 0.1935218178148996
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2504630.28832897,
+   "leastSeparationOnAstronomyEngineDeg": 0.1321700908454515
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2505547.7388527077,
+   "leastSeparationOnAstronomyEngineDeg": 0.1363337679615882
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2506830.9646351943,
+   "leastSeparationOnAstronomyEngineDeg": 0.12499881723515847
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2509381.012577399,
+   "leastSeparationOnAstronomyEngineDeg": 0.06335446483475468
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2510299.0758365914,
+   "leastSeparationOnAstronomyEngineDeg": 0.020860595102952153
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2511581.674733255,
+   "leastSeparationOnAstronomyEngineDeg": 0.19122546196875845
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2511931.0289543755,
+   "leastSeparationOnAstronomyEngineDeg": 0.2563034243772963
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2514131.7321778494,
+   "leastSeparationOnAstronomyEngineDeg": 0.004771524397762463
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2515050.4340355136,
+   "leastSeparationOnAstronomyEngineDeg": 0.09694765037147837
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2516332.382626812,
+   "leastSeparationOnAstronomyEngineDeg": 0.2568047256964603
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2516681.7602720275,
+   "leastSeparationOnAstronomyEngineDeg": 0.1867671936566614
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2517598.703775035,
+   "leastSeparationOnAstronomyEngineDeg": 0.2271324404238595
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2518882.4475974175,
+   "leastSeparationOnAstronomyEngineDeg": 0.07217489983353452
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2519801.811599016,
+   "leastSeparationOnAstronomyEngineDeg": 0.21646797327844816
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2521432.4872997636,
+   "leastSeparationOnAstronomyEngineDeg": 0.11763166957415612
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2522350.0216899775,
+   "leastSeparationOnAstronomyEngineDeg": 0.11398153850326581
+  },
+  {
+   "body": "Mercury",
+   "jdTt": 2523633.160495814,
+   "leastSeparationOnAstronomyEngineDeg": 0.13904941668346932
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2380469.3349751555,
+   "leastSeparationOnAstronomyEngineDeg": 0.2192190081093715
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2395646.406914519,
+   "leastSeparationOnAstronomyEngineDeg": 0.2093724662008199
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2398565.8684211196,
+   "leastSeparationOnAstronomyEngineDeg": 0.14412742736878903
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2401485.348602297,
+   "leastSeparationOnAstronomyEngineDeg": 0.07932192508860736
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2404404.820485746,
+   "leastSeparationOnAstronomyEngineDeg": 0.014021344507542957
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2407324.2985469466,
+   "leastSeparationOnAstronomyEngineDeg": 0.051045603670902925
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2410243.7965662833,
+   "leastSeparationOnAstronomyEngineDeg": 0.11518060532487898
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2413163.2792981043,
+   "leastSeparationOnAstronomyEngineDeg": 0.1796622472418489
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2416082.767459266,
+   "leastSeparationOnAstronomyEngineDeg": 0.2435247422927334
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2442947.560582295,
+   "leastSeparationOnAstronomyEngineDeg": 0.2568897027542508
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2445867.334802623,
+   "leastSeparationOnAstronomyEngineDeg": 0.20501934569649008
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2448787.107277512,
+   "leastSeparationOnAstronomyEngineDeg": 0.15278383840975931
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2451706.8857684657,
+   "leastSeparationOnAstronomyEngineDeg": 0.1005555345534507
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2454626.6560490336,
+   "leastSeparationOnAstronomyEngineDeg": 0.04783966366063629
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2457546.4136903808,
+   "leastSeparationOnAstronomyEngineDeg": 0.005464396698703402
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2460466.1803506706,
+   "leastSeparationOnAstronomyEngineDeg": 0.05841589303711376
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2463385.9405687815,
+   "leastSeparationOnAstronomyEngineDeg": 0.11155397427578276
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2466305.690057073,
+   "leastSeparationOnAstronomyEngineDeg": 0.16497898140125444
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2469225.4451267472,
+   "leastSeparationOnAstronomyEngineDeg": 0.2179607879767128
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2484402.3522628928,
+   "leastSeparationOnAstronomyEngineDeg": 0.20524976172710882
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2487321.818685252,
+   "leastSeparationOnAstronomyEngineDeg": 0.1401213299494119
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2490241.291487368,
+   "leastSeparationOnAstronomyEngineDeg": 0.0749566046778822
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2493160.775276363,
+   "leastSeparationOnAstronomyEngineDeg": 0.010084685015926853
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2496080.2587986533,
+   "leastSeparationOnAstronomyEngineDeg": 0.05480671745580044
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2498999.7420735285,
+   "leastSeparationOnAstronomyEngineDeg": 0.11957341047662465
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2501919.2428551596,
+   "leastSeparationOnAstronomyEngineDeg": 0.18336668309359327
+  },
+  {
+   "body": "Venus",
+   "jdTt": 2504838.7470352347,
+   "leastSeparationOnAstronomyEngineDeg": 0.2466070829348686
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2385392.5352663486,
+   "leastSeparationOnAstronomyEngineDeg": 0.1561488852582703
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2390854.3051934084,
+   "leastSeparationOnAstronomyEngineDeg": 0.18008288147770143
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2393230.107798999,
+   "leastSeparationOnAstronomyEngineDeg": 0.07961266319863183
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2402551.905770273,
+   "leastSeparationOnAstronomyEngineDeg": 0.010274090758132287
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2404931.1152818776,
+   "leastSeparationOnAstronomyEngineDeg": 0.16126962911435677
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2414249.9847544795,
+   "leastSeparationOnAstronomyEngineDeg": 0.20863275221362304
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2419711.608976734,
+   "leastSeparationOnAstronomyEngineDeg": 0.12980467060680909
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2422088.2629789975,
+   "leastSeparationOnAstronomyEngineDeg": 0.016900415538117886
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2431409.263267269,
+   "leastSeparationOnAstronomyEngineDeg": 0.06201499130091155
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2433789.022300546,
+   "leastSeparationOnAstronomyEngineDeg": 0.21937230020700613
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2436871.5986861526,
+   "leastSeparationOnAstronomyEngineDeg": 0.26277356305057537
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2439244.77043321,
+   "leastSeparationOnAstronomyEngineDeg": 0.20531300907013694
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2443107.526718391,
+   "leastSeparationOnAstronomyEngineDeg": 0.2616280566701927
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2448568.8948645685,
+   "leastSeparationOnAstronomyEngineDeg": 0.07941119843603339
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2450946.317978504,
+   "leastSeparationOnAstronomyEngineDeg": 0.04456328894979406
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2460266.726574363,
+   "leastSeparationOnAstronomyEngineDeg": 0.11473853729704694
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2465728.8130681054,
+   "leastSeparationOnAstronomyEngineDeg": 0.21436578182163674
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2468102.97553353,
+   "leastSeparationOnAstronomyEngineDeg": 0.14204836056542344
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2477426.2724257945,
+   "leastSeparationOnAstronomyEngineDeg": 0.0279091180356808
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2479804.3390737874,
+   "leastSeparationOnAstronomyEngineDeg": 0.10530026713229261
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2489124.1449608835,
+   "leastSeparationOnAstronomyEngineDeg": 0.16685325538838497
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2494586.128314926,
+   "leastSeparationOnAstronomyEngineDeg": 0.1645572106524047
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2496961.157551342,
+   "leastSeparationOnAstronomyEngineDeg": 0.07879273561394626
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2506283.613678566,
+   "leastSeparationOnAstronomyEngineDeg": 0.02335066085957251
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2508662.354241548,
+   "leastSeparationOnAstronomyEngineDeg": 0.16547341449886913
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2517981.547159973,
+   "leastSeparationOnAstronomyEngineDeg": 0.21853476783368422
+  },
+  {
+   "body": "Mars",
+   "jdTt": 2523443.4059742857,
+   "leastSeparationOnAstronomyEngineDeg": 0.11475203038448131
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2378682.039013481,
+   "leastSeparationOnAstronomyEngineDeg": 0.09207113478626276
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2381062.555712484,
+   "leastSeparationOnAstronomyEngineDeg": 0.22116893981092442
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2383069.9362948025,
+   "leastSeparationOnAstronomyEngineDeg": 0.1802309492099519
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2387457.7920976677,
+   "leastSeparationOnAstronomyEngineDeg": 0.266507974120084
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2389440.0886125807,
+   "leastSeparationOnAstronomyEngineDeg": 0.23321377708023264
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2393827.612796202,
+   "leastSeparationOnAstronomyEngineDeg": 0.14737048461728347
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2395833.258436037,
+   "leastSeparationOnAstronomyEngineDeg": 0.19338549703272867
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2398215.1465832153,
+   "leastSeparationOnAstronomyEngineDeg": 0.060162992185132866
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2400221.2449246347,
+   "leastSeparationOnAstronomyEngineDeg": 0.1035079823791759
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2402602.56412086,
+   "leastSeparationOnAstronomyEngineDeg": 0.027696400850994632
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2404609.1763796993,
+   "leastSeparationOnAstronomyEngineDeg": 0.013757120654067041
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2406990.11005119,
+   "leastSeparationOnAstronomyEngineDeg": 0.11606260591432124
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2408997.1331296815,
+   "leastSeparationOnAstronomyEngineDeg": 0.07539396814006905
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2411377.7269902946,
+   "leastSeparationOnAstronomyEngineDeg": 0.20422324852464205
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2413385.047710127,
+   "leastSeparationOnAstronomyEngineDeg": 0.16328435695956242
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2417772.796511228,
+   "leastSeparationOnAstronomyEngineDeg": 0.24915275120129027
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2419755.3423865032,
+   "leastSeparationOnAstronomyEngineDeg": 0.24849134391561914
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2424142.732545019,
+   "leastSeparationOnAstronomyEngineDeg": 0.163773392395538
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2426148.1491043875,
+   "leastSeparationOnAstronomyEngineDeg": 0.2105643023496821
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2428530.1782040363,
+   "leastSeparationOnAstronomyEngineDeg": 0.07746428913843698
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2430536.1975759855,
+   "leastSeparationOnAstronomyEngineDeg": 0.1212596882948662
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2432917.6472825957,
+   "leastSeparationOnAstronomyEngineDeg": 0.009842044334920728
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2434924.235850636,
+   "leastSeparationOnAstronomyEngineDeg": 0.03185094860922508
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2437305.2682261607,
+   "leastSeparationOnAstronomyEngineDeg": 0.09779883859210761
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2439312.086403523,
+   "leastSeparationOnAstronomyEngineDeg": 0.05676752793592061
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2441692.889232686,
+   "leastSeparationOnAstronomyEngineDeg": 0.1856168787516646
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2443699.941991923,
+   "leastSeparationOnAstronomyEngineDeg": 0.14431221503043093
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2448087.730187272,
+   "leastSeparationOnAstronomyEngineDeg": 0.23011083485121994
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2450070.4078877037,
+   "leastSeparationOnAstronomyEngineDeg": 0.26537372031512624
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2454457.7467900966,
+   "leastSeparationOnAstronomyEngineDeg": 0.181433455963328
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2456463.176620284,
+   "leastSeparationOnAstronomyEngineDeg": 0.2285490781279739
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2458845.27020937,
+   "leastSeparationOnAstronomyEngineDeg": 0.09564598865336621
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2460851.1378434356,
+   "leastSeparationOnAstronomyEngineDeg": 0.13990138025729063
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2463232.8212166065,
+   "leastSeparationOnAstronomyEngineDeg": 0.008732635912075458
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2465239.0730674677,
+   "leastSeparationOnAstronomyEngineDeg": 0.051018843064999105
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2467620.318747944,
+   "leastSeparationOnAstronomyEngineDeg": 0.07867819961150395
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2469626.9072751272,
+   "leastSeparationOnAstronomyEngineDeg": 0.03734246279960774
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2472007.8468622183,
+   "leastSeparationOnAstronomyEngineDeg": 0.16615043596597767
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2474014.8505613934,
+   "leastSeparationOnAstronomyEngineDeg": 0.12494529073674251
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2476395.3800404025,
+   "leastSeparationOnAstronomyEngineDeg": 0.2530140167818538
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2478402.7749228543,
+   "leastSeparationOnAstronomyEngineDeg": 0.2110595268932271
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2484772.9346605483,
+   "leastSeparationOnAstronomyEngineDeg": 0.19864366522083327
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2486778.00949616,
+   "leastSeparationOnAstronomyEngineDeg": 0.24648632723155992
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2489160.4086497757,
+   "leastSeparationOnAstronomyEngineDeg": 0.11343901779788108
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2491165.901693745,
+   "leastSeparationOnAstronomyEngineDeg": 0.1582861135068449
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2493547.8536885804,
+   "leastSeparationOnAstronomyEngineDeg": 0.027024888455312673
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2495553.9365694127,
+   "leastSeparationOnAstronomyEngineDeg": 0.06947993411011624
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2497935.26231056,
+   "leastSeparationOnAstronomyEngineDeg": 0.06003432860009074
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2499941.997491888,
+   "leastSeparationOnAstronomyEngineDeg": 0.019161623682376637
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2502322.887451482,
+   "leastSeparationOnAstronomyEngineDeg": 0.14755882933911413
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2504329.8743560105,
+   "leastSeparationOnAstronomyEngineDeg": 0.10674314383469968
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2506710.5719856434,
+   "leastSeparationOnAstronomyEngineDeg": 0.2347344311843631
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2508717.710714321,
+   "leastSeparationOnAstronomyEngineDeg": 0.19291512972351268
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2515088.068641985,
+   "leastSeparationOnAstronomyEngineDeg": 0.21446472568274597
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2517092.8711783225,
+   "leastSeparationOnAstronomyEngineDeg": 0.2627936883843574
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2519475.363899458,
+   "leastSeparationOnAstronomyEngineDeg": 0.12982815677005582
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2521481.048191296,
+   "leastSeparationOnAstronomyEngineDeg": 0.17440752582842492
+  },
+  {
+   "body": "Jupiter",
+   "jdTt": 2523862.9092288637,
+   "leastSeparationOnAstronomyEngineDeg": 0.04349183524265098
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2383620.9550204175,
+   "leastSeparationOnAstronomyEngineDeg": 0.01694132547681705
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2388920.04770102,
+   "leastSeparationOnAstronomyEngineDeg": 0.0663070303811497
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2394208.1623513624,
+   "leastSeparationOnAstronomyEngineDeg": 0.2196388455659407
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2394584.6016306235,
+   "leastSeparationOnAstronomyEngineDeg": 0.2318661212211369
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2399505.7422250323,
+   "leastSeparationOnAstronomyEngineDeg": 0.1786580326871785
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2405172.1743680937,
+   "leastSeparationOnAstronomyEngineDeg": 0.03992469182701612
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2410471.655609259,
+   "leastSeparationOnAstronomyEngineDeg": 0.13233160468095906
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2415759.423954305,
+   "leastSeparationOnAstronomyEngineDeg": 0.16099172485579835
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2421057.357500949,
+   "leastSeparationOnAstronomyEngineDeg": 0.10970947426505769
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2426723.4719566554,
+   "leastSeparationOnAstronomyEngineDeg": 0.1004989867736134
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2432023.401085185,
+   "leastSeparationOnAstronomyEngineDeg": 0.20393386476101033
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2437310.7560632857,
+   "leastSeparationOnAstronomyEngineDeg": 0.09884829866623976
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2442609.11294516,
+   "leastSeparationOnAstronomyEngineDeg": 0.0360619256590185
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2448274.8230363904,
+   "leastSeparationOnAstronomyEngineDeg": 0.16336678342450608
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2458862.136218289,
+   "leastSeparationOnAstronomyEngineDeg": 0.03483188861375001
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2464160.9082942586,
+   "leastSeparationOnAstronomyEngineDeg": 0.03948017486701163
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2469449.719776398,
+   "leastSeparationOnAstronomyEngineDeg": 0.22484109436950908
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2469826.1788174193,
+   "leastSeparationOnAstronomyEngineDeg": 0.22666487675439684
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2474747.045725179,
+   "leastSeparationOnAstronomyEngineDeg": 0.19286082985519903
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2480413.5128012393,
+   "leastSeparationOnAstronomyEngineDeg": 0.029083303677788247
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2485712.6791678444,
+   "leastSeparationOnAstronomyEngineDeg": 0.11384184063618856
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2491001.0551186604,
+   "leastSeparationOnAstronomyEngineDeg": 0.16255374982898696
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2496298.793496966,
+   "leastSeparationOnAstronomyEngineDeg": 0.11984840610714569
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2501964.8476214763,
+   "leastSeparationOnAstronomyEngineDeg": 0.09096498777980085
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2507264.3690144066,
+   "leastSeparationOnAstronomyEngineDeg": 0.18414194323815625
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2512552.3313889047,
+   "leastSeparationOnAstronomyEngineDeg": 0.10292557924663424
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2517850.4226588234,
+   "leastSeparationOnAstronomyEngineDeg": 0.05213840642758016
+  },
+  {
+   "body": "Saturn",
+   "jdTt": 2523516.1338265166,
+   "leastSeparationOnAstronomyEngineDeg": 0.14927359303080065
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2383198.6718245484,
+   "leastSeparationOnAstronomyEngineDeg": 0.24702564317059295
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2383568.386321434,
+   "leastSeparationOnAstronomyEngineDeg": 0.1916477617129588
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2383938.05843593,
+   "leastSeparationOnAstronomyEngineDeg": 0.13536648882652855
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2384307.702126045,
+   "leastSeparationOnAstronomyEngineDeg": 0.07856217686938748
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2384677.3107123673,
+   "leastSeparationOnAstronomyEngineDeg": 0.021609969648816597
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2385046.8803845355,
+   "leastSeparationOnAstronomyEngineDeg": 0.03512625919378048
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2385416.419944754,
+   "leastSeparationOnAstronomyEngineDeg": 0.09129678553506214
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2385785.92201222,
+   "leastSeparationOnAstronomyEngineDeg": 0.14656576931640689
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2386155.382867397,
+   "leastSeparationOnAstronomyEngineDeg": 0.20061813885399205
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2386524.8112795334,
+   "leastSeparationOnAstronomyEngineDeg": 0.2531573564406656
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2399450.5207477356,
+   "leastSeparationOnAstronomyEngineDeg": 0.22809739311057545
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2399820.1524914484,
+   "leastSeparationOnAstronomyEngineDeg": 0.17590461463344806
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2400189.819680541,
+   "leastSeparationOnAstronomyEngineDeg": 0.12237591889021691
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2400559.5217118124,
+   "leastSeparationOnAstronomyEngineDeg": 0.06779141557575906
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2400929.2674237695,
+   "leastSeparationOnAstronomyEngineDeg": 0.012449143775047375
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2401299.0363646485,
+   "leastSeparationOnAstronomyEngineDeg": 0.04333322933593714
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2401668.847181701,
+   "leastSeparationOnAstronomyEngineDeg": 0.09922641630597419
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2402038.685600379,
+   "leastSeparationOnAstronomyEngineDeg": 0.1548846978656255
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2402408.5693055997,
+   "leastSeparationOnAstronomyEngineDeg": 0.2099554484994688
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2402778.482617221,
+   "leastSeparationOnAstronomyEngineDeg": 0.26407517758820714
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2413880.1139671067,
+   "leastSeparationOnAstronomyEngineDeg": 0.23860961884964763
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2414249.8338768566,
+   "leastSeparationOnAstronomyEngineDeg": 0.18299378710409261
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2414619.5194182284,
+   "leastSeparationOnAstronomyEngineDeg": 0.12652704649024807
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2414989.174132063,
+   "leastSeparationOnAstronomyEngineDeg": 0.06958965972104937
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2415358.784544999,
+   "leastSeparationOnAstronomyEngineDeg": 0.012558470993074895
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2415728.363738847,
+   "leastSeparationOnAstronomyEngineDeg": 0.04420445169177016
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2416097.901892936,
+   "leastSeparationOnAstronomyEngineDeg": 0.10034811756869282
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2416467.401099921,
+   "leastSeparationOnAstronomyEngineDeg": 0.15553909810335084
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2416836.8653802,
+   "leastSeparationOnAstronomyEngineDeg": 0.20946510226782117
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2417206.2928066924,
+   "leastSeparationOnAstronomyEngineDeg": 0.2618298856864192
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2430132.0134597635,
+   "leastSeparationOnAstronomyEngineDeg": 0.22006241762475984
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2430501.6376990313,
+   "leastSeparationOnAstronomyEngineDeg": 0.16766931236393967
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2430871.3052053303,
+   "leastSeparationOnAstronomyEngineDeg": 0.11398382447132953
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2431240.9997367105,
+   "leastSeparationOnAstronomyEngineDeg": 0.05928934195172886
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2431610.7396340696,
+   "leastSeparationOnAstronomyEngineDeg": 0.003883962201982665
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2431980.504104593,
+   "leastSeparationOnAstronomyEngineDeg": 0.05191326828019068
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2432350.3045397066,
+   "leastSeparationOnAstronomyEngineDeg": 0.10777163841047603
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2432720.1423835815,
+   "leastSeparationOnAstronomyEngineDeg": 0.16334708685161553
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2433090.0236300533,
+   "leastSeparationOnAstronomyEngineDeg": 0.2182845838438101
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2444561.5507921716,
+   "leastSeparationOnAstronomyEngineDeg": 0.23006019750800452
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2444931.283518767,
+   "leastSeparationOnAstronomyEngineDeg": 0.1741980878940669
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2445300.9739304883,
+   "leastSeparationOnAstronomyEngineDeg": 0.11753980769485861
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2445670.6310571237,
+   "leastSeparationOnAstronomyEngineDeg": 0.060465911127757094
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2446040.247421963,
+   "leastSeparationOnAstronomyEngineDeg": 0.00335264751966955
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2446409.8238149374,
+   "leastSeparationOnAstronomyEngineDeg": 0.05343676917044865
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2446779.361394761,
+   "leastSeparationOnAstronomyEngineDeg": 0.10955413098369787
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2447148.8634162806,
+   "leastSeparationOnAstronomyEngineDeg": 0.16466749170272157
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2447518.323430487,
+   "leastSeparationOnAstronomyEngineDeg": 0.21846494874960679
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2460443.885191923,
+   "leastSeparationOnAstronomyEngineDeg": 0.26296435720120936
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2460813.4814879796,
+   "leastSeparationOnAstronomyEngineDeg": 0.21187872274632838
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2461183.102541654,
+   "leastSeparationOnAstronomyEngineDeg": 0.1592841632709607
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2461552.7588517005,
+   "leastSeparationOnAstronomyEngineDeg": 0.10544358682774763
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2461922.450534521,
+   "leastSeparationOnAstronomyEngineDeg": 0.050639770811686
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2462292.183703706,
+   "leastSeparationOnAstronomyEngineDeg": 0.00482718682748991
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2462661.9359441083,
+   "leastSeparationOnAstronomyEngineDeg": 0.06063622385781632
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2463031.738499199,
+   "leastSeparationOnAstronomyEngineDeg": 0.11645945900495867
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2463401.5732022263,
+   "leastSeparationOnAstronomyEngineDeg": 0.17194883763253055
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2463771.4505061237,
+   "leastSeparationOnAstronomyEngineDeg": 0.2267499361391742
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2475243.0592723466,
+   "leastSeparationOnAstronomyEngineDeg": 0.22136678759613315
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2475612.793852214,
+   "leastSeparationOnAstronomyEngineDeg": 0.16525356252071205
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2475982.487883674,
+   "leastSeparationOnAstronomyEngineDeg": 0.10840002469203455
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2476352.1493449723,
+   "leastSeparationOnAstronomyEngineDeg": 0.05118642986018117
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2476721.7593567125,
+   "leastSeparationOnAstronomyEngineDeg": 0.006008368034577538
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2477091.3382419245,
+   "leastSeparationOnAstronomyEngineDeg": 0.06282574314122892
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2477460.8745790445,
+   "leastSeparationOnAstronomyEngineDeg": 0.11891658544631455
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2477830.372545603,
+   "leastSeparationOnAstronomyEngineDeg": 0.17395088220040963
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2478199.8378716717,
+   "leastSeparationOnAstronomyEngineDeg": 0.22761992237596015
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2491125.434206307,
+   "leastSeparationOnAstronomyEngineDeg": 0.25486828408333123
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2491495.0268361378,
+   "leastSeparationOnAstronomyEngineDeg": 0.20353616845264044
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2491864.6382948635,
+   "leastSeparationOnAstronomyEngineDeg": 0.15074198251656848
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2492234.2967731105,
+   "leastSeparationOnAstronomyEngineDeg": 0.0967450707524891
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2492603.984432182,
+   "leastSeparationOnAstronomyEngineDeg": 0.04183339750158315
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2492973.710510577,
+   "leastSeparationOnAstronomyEngineDeg": 0.013692778580357046
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2493343.46635143,
+   "leastSeparationOnAstronomyEngineDeg": 0.0695133845929671
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2493713.26788002,
+   "leastSeparationOnAstronomyEngineDeg": 0.12529754360291487
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2494083.1058975034,
+   "leastSeparationOnAstronomyEngineDeg": 0.1806978683518074
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2494452.9894296536,
+   "leastSeparationOnAstronomyEngineDeg": 0.23535839983323198
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2505924.6289445153,
+   "leastSeparationOnAstronomyEngineDeg": 0.21252986311363042
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2506294.3679595096,
+   "leastSeparationOnAstronomyEngineDeg": 0.1561611974119663
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2506664.0609213365,
+   "leastSeparationOnAstronomyEngineDeg": 0.09911051126826363
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2507033.7134788916,
+   "leastSeparationOnAstronomyEngineDeg": 0.04175870455767995
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2507403.322213903,
+   "leastSeparationOnAstronomyEngineDeg": 0.015519006014630953
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2507772.8948764903,
+   "leastSeparationOnAstronomyEngineDeg": 0.07236270257858093
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2508142.424786168,
+   "leastSeparationOnAstronomyEngineDeg": 0.1284255641595912
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2508511.9252909105,
+   "leastSeparationOnAstronomyEngineDeg": 0.183379994027475
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2508881.3857880244,
+   "leastSeparationOnAstronomyEngineDeg": 0.23691637397088006
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2521806.9339801893,
+   "leastSeparationOnAstronomyEngineDeg": 0.24666006546476507
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2522176.514163697,
+   "leastSeparationOnAstronomyEngineDeg": 0.19508204720198188
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2522546.124014289,
+   "leastSeparationOnAstronomyEngineDeg": 0.14208398562021113
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2522915.7737402963,
+   "leastSeparationOnAstronomyEngineDeg": 0.08793095832383954
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2523285.4560994273,
+   "leastSeparationOnAstronomyEngineDeg": 0.032910172219206626
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2523655.1801514803,
+   "leastSeparationOnAstronomyEngineDeg": 0.02267733087283726
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2524024.929429861,
+   "leastSeparationOnAstronomyEngineDeg": 0.07850805320498892
+  },
+  {
+   "body": "Uranus",
+   "jdTt": 2524394.7353095897,
+   "leastSeparationOnAstronomyEngineDeg": 0.13425389746071004
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2391300.4836675646,
+   "leastSeparationOnAstronomyEngineDeg": 0.26259315307775294
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2391667.887992259,
+   "leastSeparationOnAstronomyEngineDeg": 0.197039660691915
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2392035.2950662514,
+   "leastSeparationOnAstronomyEngineDeg": 0.13116294260190672
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2392402.705109096,
+   "leastSeparationOnAstronomyEngineDeg": 0.06505812162980072
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2392770.1208082046,
+   "leastSeparationOnAstronomyEngineDeg": 0.0011789679861613177
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2393137.5355500663,
+   "leastSeparationOnAstronomyEngineDeg": 0.06744869689560518
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2393504.958837071,
+   "leastSeparationOnAstronomyEngineDeg": 0.13365796793858148
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2393872.390766206,
+   "leastSeparationOnAstronomyEngineDeg": 0.19970810962883653
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2394239.8250792073,
+   "leastSeparationOnAstronomyEngineDeg": 0.26549910521609665
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2421070.2293676,
+   "leastSeparationOnAstronomyEngineDeg": 0.25248372667897273
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2421437.7933454625,
+   "leastSeparationOnAstronomyEngineDeg": 0.18664215998027434
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2421805.355746403,
+   "leastSeparationOnAstronomyEngineDeg": 0.1205699353805278
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2422172.916762243,
+   "leastSeparationOnAstronomyEngineDeg": 0.05436640084251265
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2422540.4846509313,
+   "leastSeparationOnAstronomyEngineDeg": 0.01187166881071303
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2422908.038860237,
+   "leastSeparationOnAstronomyEngineDeg": 0.07803927189004937
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2423275.5924629904,
+   "leastSeparationOnAstronomyEngineDeg": 0.14404232731103023
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2423643.1355957985,
+   "leastSeparationOnAstronomyEngineDeg": 0.20977930594652855
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2451568.2590245013,
+   "leastSeparationOnAstronomyEngineDeg": 0.23241034500543364
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2451935.666877578,
+   "leastSeparationOnAstronomyEngineDeg": 0.16729728290452328
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2452303.077341446,
+   "leastSeparationOnAstronomyEngineDeg": 0.1019049034395532
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2452670.487283288,
+   "leastSeparationOnAstronomyEngineDeg": 0.03632800749419578
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2453037.899493795,
+   "leastSeparationOnAstronomyEngineDeg": 0.029337867030034926
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2453405.316519597,
+   "leastSeparationOnAstronomyEngineDeg": 0.09499682656148392
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2453772.735792497,
+   "leastSeparationOnAstronomyEngineDeg": 0.16055203847706223
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2454140.166493127,
+   "leastSeparationOnAstronomyEngineDeg": 0.22590801509239417
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2481338.007435792,
+   "leastSeparationOnAstronomyEngineDeg": 0.22334279406900245
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2481705.5615077927,
+   "leastSeparationOnAstronomyEngineDeg": 0.15797204715479618
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2482073.1233753236,
+   "leastSeparationOnAstronomyEngineDeg": 0.09241405474934682
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2482440.681119842,
+   "leastSeparationOnAstronomyEngineDeg": 0.026767247544764904
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2482808.240451465,
+   "leastSeparationOnAstronomyEngineDeg": 0.03887053171610642
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2483175.7924199644,
+   "leastSeparationOnAstronomyEngineDeg": 0.1044008002468749
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2483543.3458331726,
+   "leastSeparationOnAstronomyEngineDeg": 0.16972723314833832
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2483910.8993065264,
+   "leastSeparationOnAstronomyEngineDeg": 0.23475245096064895
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2511835.975170914,
+   "leastSeparationOnAstronomyEngineDeg": 0.20332205697330397
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2512203.3896074924,
+   "leastSeparationOnAstronomyEngineDeg": 0.13866832012502572
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2512570.8015875984,
+   "leastSeparationOnAstronomyEngineDeg": 0.07377616304469183
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2512938.2157937735,
+   "leastSeparationOnAstronomyEngineDeg": 0.008739875120997819
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2513305.6308000637,
+   "leastSeparationOnAstronomyEngineDeg": 0.056345234649490046
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2513673.053647832,
+   "leastSeparationOnAstronomyEngineDeg": 0.12138312161864714
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2514040.4673586404,
+   "leastSeparationOnAstronomyEngineDeg": 0.18627968794366292
+  },
+  {
+   "body": "Neptune",
+   "jdTt": 2514407.896167418,
+   "leastSeparationOnAstronomyEngineDeg": 0.2509364742504779
+  },
+  {
+   "body": "Pluto",
+   "jdTt": 2426169.75339061,
+   "leastSeparationOnAstronomyEngineDeg": 0.060094930741851356
+  },
+  {
+   "body": "Pluto",
+   "jdTt": 2458494.9849491157,
+   "leastSeparationOnAstronomyEngineDeg": 0.11974751438031424
+  },
+  {
+   "body": "Pluto",
+   "jdTt": 2516753.295840245,
+   "leastSeparationOnAstronomyEngineDeg": 0.024351450035110647
+  }
+ ]
+}

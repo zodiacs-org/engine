@@ -1,0 +1,5122 @@
+[
+ {
+  "body": "Mercury",
+  "jdTt": 2379538.874020776,
+  "minSepDeg": 0.01690371751888826,
+  "behind": false,
+  "planetAu": 0.6759187002460046,
+  "sunAu": 0.9897460006696174,
+  "sunRadiusDeg": 0.2692136437729614,
+  "relRateDegPerDay": 2.366366530248326
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2379714.1490850747,
+  "minSepDeg": 0.11001915856471485,
+  "behind": true,
+  "planetAu": 1.3245808896089253,
+  "sunAu": 1.0088181761742172,
+  "sunRadiusDeg": 0.2641239985776743,
+  "relRateDegPerDay": 1.206087332359712
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2380632.1438179426,
+  "minSepDeg": 0.0844974529751823,
+  "behind": true,
+  "planetAu": 1.4407657227409352,
+  "sunAu": 0.9903040354771052,
+  "sunRadiusDeg": 0.26906194118149585,
+  "relRateDegPerDay": 0.6140717720570271
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2381914.8119129194,
+  "minSepDeg": 0.14468542854918306,
+  "behind": true,
+  "planetAu": 1.322875827734352,
+  "sunAu": 1.0109905121031382,
+  "sunRadiusDeg": 0.2635564659488714,
+  "relRateDegPerDay": 1.2289768431293269
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2384289.606567476,
+  "minSepDeg": 0.15445952391940077,
+  "behind": false,
+  "planetAu": 0.6764316574607416,
+  "sunAu": 0.9892216363516846,
+  "sunRadiusDeg": 0.2693563489698605,
+  "relRateDegPerDay": 2.3746884909750006
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2384464.8683152758,
+  "minSepDeg": 0.041971961941241476,
+  "behind": true,
+  "planetAu": 1.3240638998529712,
+  "sunAu": 1.0094205127836067,
+  "sunRadiusDeg": 0.2639663906455228,
+  "relRateDegPerDay": 1.2127255450414263
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2385383.5017024856,
+  "minSepDeg": 0.032802539447892846,
+  "behind": true,
+  "planetAu": 1.442963474341226,
+  "sunAu": 0.9896454230473648,
+  "sunRadiusDeg": 0.2692410041455079,
+  "relRateDegPerDay": 0.6050365347219534
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2386665.51859257,
+  "minSepDeg": 0.21026927464251913,
+  "behind": true,
+  "planetAu": 1.3224809711482797,
+  "sunAu": 1.011414865336514,
+  "sunRadiusDeg": 0.2634458863729987,
+  "relRateDegPerDay": 1.2338351636990605
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2386839.6005372545,
+  "minSepDeg": 0.23300145198219308,
+  "behind": false,
+  "planetAu": 0.6749199299096683,
+  "sunAu": 0.990854027856207,
+  "sunRadiusDeg": 0.268912592135224,
+  "relRateDegPerDay": 2.3484652355024616
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2387014.89426558,
+  "minSepDeg": 0.23332828356874488,
+  "behind": true,
+  "planetAu": 1.3257529171401343,
+  "sunAu": 1.007697694202237,
+  "sunRadiusDeg": 0.26441768613926453,
+  "relRateDegPerDay": 1.1922691442910054
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2387931.775466852,
+  "minSepDeg": 0.28969360638398184,
+  "behind": true,
+  "planetAu": 1.4363094660309779,
+  "sunAu": 0.9917114694340174,
+  "sunRadiusDeg": 0.2686800864767977,
+  "relRateDegPerDay": 0.6325634555547491
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2389040.3357055373,
+  "minSepDeg": 0.29063900371753826,
+  "behind": false,
+  "planetAu": 0.6768515328790738,
+  "sunAu": 0.9886963794754747,
+  "sunRadiusDeg": 0.26949944883399496,
+  "relRateDegPerDay": 2.382156620341382
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2389215.584215627,
+  "minSepDeg": 0.02546150638514815,
+  "behind": true,
+  "planetAu": 1.3236047942884086,
+  "sunAu": 1.0100027846755983,
+  "sunRadiusDeg": 0.26381421156389634,
+  "relRateDegPerDay": 1.2188621218666629
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2390134.879849841,
+  "minSepDeg": 0.15219118238283222,
+  "behind": true,
+  "planetAu": 1.444970088704825,
+  "sunAu": 0.989022920302899,
+  "sunRadiusDeg": 0.2694104688721656,
+  "relRateDegPerDay": 0.5966275713763117
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2390309.017619703,
+  "minSepDeg": 0.1346545741398947,
+  "behind": false,
+  "planetAu": 0.558232671203261,
+  "sunAu": 1.009418541177548,
+  "sunRadiusDeg": 0.26396690623087815,
+  "relRateDegPerDay": 1.6093840469019967
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2391416.225230106,
+  "minSepDeg": 0.2754941748238361,
+  "behind": true,
+  "planetAu": 1.3222024799535554,
+  "sunAu": 1.0118731429673498,
+  "sunRadiusDeg": 0.2633265708167491,
+  "relRateDegPerDay": 1.238128298184834
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2391590.3387568397,
+  "minSepDeg": 0.09345927812148505,
+  "behind": false,
+  "planetAu": 0.6755098963255183,
+  "sunAu": 0.990278263206809,
+  "sunRadiusDeg": 0.2690689436456597,
+  "relRateDegPerDay": 2.358378403068808
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2391765.6228748355,
+  "minSepDeg": 0.16438771855136858,
+  "behind": true,
+  "planetAu": 1.3250856279778986,
+  "sunAu": 1.008295871283393,
+  "sunRadiusDeg": 0.264260817777408,
+  "relRateDegPerDay": 1.1999467939786448
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2392683.093833627,
+  "minSepDeg": 0.17686870636382768,
+  "behind": true,
+  "planetAu": 1.4388223890455771,
+  "sunAu": 0.9909843425447906,
+  "sunRadiusDeg": 0.2688772298025821,
+  "relRateDegPerDay": 0.6223663594532941
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2393966.2987131486,
+  "minSepDeg": 0.09221963194697172,
+  "behind": true,
+  "planetAu": 1.3231923002273729,
+  "sunAu": 1.0105466906664173,
+  "sunRadiusDeg": 0.2636722179829161,
+  "relRateDegPerDay": 1.2244824098075933
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2394886.274757241,
+  "minSepDeg": 0.2729923810561889,
+  "behind": true,
+  "planetAu": 1.4466863003726553,
+  "sunAu": 0.9883636054657456,
+  "sunRadiusDeg": 0.2695901877821316,
+  "relRateDegPerDay": 0.5889585215083399
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2395060.317226344,
+  "minSepDeg": 0.15198474550251562,
+  "behind": false,
+  "planetAu": 0.5562829053273844,
+  "sunAu": 1.0101141269568665,
+  "sunRadiusDeg": 0.26378513179665886,
+  "relRateDegPerDay": 1.5976575004018323
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2396341.074757005,
+  "minSepDeg": 0.04527308737779242,
+  "behind": false,
+  "planetAu": 0.6760406281856587,
+  "sunAu": 0.9897138562443247,
+  "sunRadiusDeg": 0.26922238749367733,
+  "relRateDegPerDay": 2.3674845936004276
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2396516.3464140836,
+  "minSepDeg": 0.09588660706297679,
+  "behind": true,
+  "planetAu": 1.3245043170231585,
+  "sunAu": 1.008902962268477,
+  "sunRadiusDeg": 0.2641018019921877,
+  "relRateDegPerDay": 1.2070536924879642
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2397434.430362571,
+  "minSepDeg": 0.061922222241583905,
+  "behind": true,
+  "planetAu": 1.4411410420959878,
+  "sunAu": 0.9902606684822927,
+  "sunRadiusDeg": 0.26907372443610555,
+  "relRateDegPerDay": 0.6127643311510415
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2398717.008709335,
+  "minSepDeg": 0.15860904504637205,
+  "behind": true,
+  "planetAu": 1.3227791007169147,
+  "sunAu": 1.0110121275203445,
+  "sunRadiusDeg": 0.26355083107764316,
+  "relRateDegPerDay": 1.2296828451012916
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2399066.363851591,
+  "minSepDeg": 0.2879099301630532,
+  "behind": true,
+  "planetAu": 1.3263938696859578,
+  "sunAu": 1.0071872713285621,
+  "sunRadiusDeg": 0.2645516888197411,
+  "relRateDegPerDay": 1.1852863995252971
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2401091.8052651873,
+  "minSepDeg": 0.18274452014517514,
+  "behind": false,
+  "planetAu": 0.6765130899295537,
+  "sunAu": 0.9891726183998003,
+  "sunRadiusDeg": 0.2693696968866792,
+  "relRateDegPerDay": 2.3756677506345354
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2401267.0652070665,
+  "minSepDeg": 0.027861149618076234,
+  "behind": true,
+  "planetAu": 1.3239571266897288,
+  "sunAu": 1.0094629073814023,
+  "sunRadiusDeg": 0.2639553047224521,
+  "relRateDegPerDay": 1.2136161865282655
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2402185.790075685,
+  "minSepDeg": 0.055765135024565544,
+  "behind": true,
+  "planetAu": 1.4432619749811335,
+  "sunAu": 0.9895555807310196,
+  "sunRadiusDeg": 0.2692654488700012,
+  "relRateDegPerDay": 0.6037924290811566
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2403467.7151201377,
+  "minSepDeg": 0.22422117400262867,
+  "behind": true,
+  "planetAu": 1.3224345121918166,
+  "sunAu": 1.011478070452518,
+  "sunRadiusDeg": 0.26342942408317827,
+  "relRateDegPerDay": 1.2344712954367882
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2403641.8015012695,
+  "minSepDeg": 0.20420436539740613,
+  "behind": false,
+  "planetAu": 0.6750037576059369,
+  "sunAu": 0.9907773147863063,
+  "sunRadiusDeg": 0.26893341342539895,
+  "relRateDegPerDay": 2.3498947834589554
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2403817.093786112,
+  "minSepDeg": 0.21888794641925344,
+  "behind": true,
+  "planetAu": 1.3256423150934618,
+  "sunAu": 1.007773614991554,
+  "sunRadiusDeg": 0.2643977660484384,
+  "relRateDegPerDay": 1.1934235552656358
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2404734.0538010756,
+  "minSepDeg": 0.2679753044322478,
+  "behind": true,
+  "planetAu": 1.4367256696316482,
+  "sunAu": 0.991665353227731,
+  "sunRadiusDeg": 0.2686925812131342,
+  "relRateDegPerDay": 0.6670750834837356
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2406017.782457968,
+  "minSepDeg": 0.03959061438003251,
+  "behind": true,
+  "planetAu": 1.3234902843429721,
+  "sunAu": 1.0100242780956428,
+  "sunRadiusDeg": 0.26380859753079217,
+  "relRateDegPerDay": 1.2196781975621178
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2406937.1685094303,
+  "minSepDeg": 0.175052287859482,
+  "behind": true,
+  "planetAu": 1.4452088547075281,
+  "sunAu": 0.9889129585634319,
+  "sunRadiusDeg": 0.2694404260710295,
+  "relRateDegPerDay": 0.5954965324486693
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2407111.291567878,
+  "minSepDeg": 0.07982147418960986,
+  "behind": false,
+  "planetAu": 0.557929240963706,
+  "sunAu": 1.0094943732129817,
+  "sunRadiusDeg": 0.26394707720564897,
+  "relRateDegPerDay": 1.60773372089025
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2408218.4211117486,
+  "minSepDeg": 0.2891822403187682,
+  "behind": true,
+  "planetAu": 1.322149147820958,
+  "sunAu": 1.011923291158117,
+  "sunRadiusDeg": 0.26331352096979616,
+  "relRateDegPerDay": 1.2387225149752217
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2408392.5397292078,
+  "minSepDeg": 0.06439101212132592,
+  "behind": false,
+  "planetAu": 0.6755935846198474,
+  "sunAu": 0.9902001567067606,
+  "sunRadiusDeg": 0.2690901678272871,
+  "relRateDegPerDay": 2.359726991769462
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2408567.82178477,
+  "minSepDeg": 0.15009709886777953,
+  "behind": true,
+  "planetAu": 1.3249558087810442,
+  "sunAu": 1.0083427382009595,
+  "sunRadiusDeg": 0.26424853507103324,
+  "relRateDegPerDay": 1.2010169822859902
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2409485.373992632,
+  "minSepDeg": 0.15502507826300185,
+  "behind": true,
+  "planetAu": 1.439176535679976,
+  "sunAu": 0.9909055035936336,
+  "sunRadiusDeg": 0.2688986225129266,
+  "relRateDegPerDay": 0.6210202546778715
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2410768.4952807305,
+  "minSepDeg": 0.10643013459335156,
+  "behind": true,
+  "planetAu": 1.323099204203564,
+  "sunAu": 1.010586586051695,
+  "sunRadiusDeg": 0.26366180880163087,
+  "relRateDegPerDay": 1.2252780105674532
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2411688.566672338,
+  "minSepDeg": 0.2960021594639147,
+  "behind": true,
+  "planetAu": 1.4469478039931898,
+  "sunAu": 0.9883223387862364,
+  "sunRadiusDeg": 0.2696014444071695,
+  "relRateDegPerDay": 0.5879584092923563
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2411862.598336327,
+  "minSepDeg": 0.20931905320787283,
+  "behind": false,
+  "planetAu": 0.5559921286674944,
+  "sunAu": 1.0101764522310372,
+  "sunRadiusDeg": 0.26376885682135803,
+  "relRateDegPerDay": 1.5960576900877024
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2413143.2740934836,
+  "minSepDeg": 0.07393693977647331,
+  "behind": false,
+  "planetAu": 0.6761702747949524,
+  "sunAu": 0.9896871725094598,
+  "sunRadiusDeg": 0.26922964626380214,
+  "relRateDegPerDay": 2.3685849624876383
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2413318.5444049947,
+  "minSepDeg": 0.08167537059168124,
+  "behind": true,
+  "planetAu": 1.3243539530705426,
+  "sunAu": 1.008912876118771,
+  "sunRadiusDeg": 0.2640992068382031,
+  "relRateDegPerDay": 1.2080421414992557
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2414236.7187494235,
+  "minSepDeg": 0.03892897964173456,
+  "behind": true,
+  "planetAu": 1.44147454239051,
+  "sunAu": 0.9901849215804075,
+  "sunRadiusDeg": 0.2690943081174096,
+  "relRateDegPerDay": 0.6114783038281195
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2415519.20445041,
+  "minSepDeg": 0.17238083907858753,
+  "behind": true,
+  "planetAu": 1.3227251255762738,
+  "sunAu": 1.011089630329143,
+  "sunRadiusDeg": 0.26353062903709024,
+  "relRateDegPerDay": 1.2304455700592383
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2415868.5635756953,
+  "minSepDeg": 0.2737424955939381,
+  "behind": true,
+  "planetAu": 1.3262619915113685,
+  "sunAu": 1.0072497637274405,
+  "sunRadiusDeg": 0.26453527522726905,
+  "relRateDegPerDay": 1.1864879422306256
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2417894.0047594337,
+  "minSepDeg": 0.21073411439648942,
+  "behind": false,
+  "planetAu": 0.6766479105300721,
+  "sunAu": 0.9891631337210608,
+  "sunRadiusDeg": 0.26937227978102096,
+  "relRateDegPerDay": 2.376594794306852
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2418069.2628740375,
+  "minSepDeg": 0.01373731655187752,
+  "behind": true,
+  "planetAu": 1.3238672589478688,
+  "sunAu": 1.0095235303956742,
+  "sunRadiusDeg": 0.2639394537997956,
+  "relRateDegPerDay": 1.214514223922785
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2418988.0815723743,
+  "minSepDeg": 0.0788819848752932,
+  "behind": true,
+  "planetAu": 1.4436175507433944,
+  "sunAu": 0.9895276186792552,
+  "sunRadiusDeg": 0.26927305782371835,
+  "relRateDegPerDay": 0.6025773565380365
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2420269.911948165,
+  "minSepDeg": 0.2379368408989131,
+  "behind": true,
+  "planetAu": 1.3223837477739158,
+  "sunAu": 1.0115343858785675,
+  "sunRadiusDeg": 0.26341475800263425,
+  "relRateDegPerDay": 1.2350815570855593
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2420444.0023422036,
+  "minSepDeg": 0.17520761392246648,
+  "behind": false,
+  "planetAu": 0.6751414868301049,
+  "sunAu": 0.9907459607369613,
+  "sunRadiusDeg": 0.26894192439973247,
+  "relRateDegPerDay": 2.3512234393826876
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2420619.295554376,
+  "minSepDeg": 0.20423321609563966,
+  "behind": true,
+  "planetAu": 1.3255050334367393,
+  "sunAu": 1.0078145573496342,
+  "sunRadiusDeg": 0.2643870248413692,
+  "relRateDegPerDay": 1.1945450508733235
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2421536.332702702,
+  "minSepDeg": 0.24639803492789764,
+  "behind": true,
+  "planetAu": 1.4370896583042454,
+  "sunAu": 0.9915678123691797,
+  "sunRadiusDeg": 0.26871901278633314,
+  "relRateDegPerDay": 0.6296844723115296
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2422819.978805609,
+  "minSepDeg": 0.05359653215949665,
+  "behind": true,
+  "planetAu": 1.3234336414373555,
+  "sunAu": 1.0101039303180157,
+  "sunRadiusDeg": 0.2637877946322807,
+  "relRateDegPerDay": 1.2204661502322534
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2423739.4592187973,
+  "minSepDeg": 0.19823290512443734,
+  "behind": true,
+  "planetAu": 1.4454874138829636,
+  "sunAu": 0.9888450772530205,
+  "sunRadiusDeg": 0.26945892250132053,
+  "relRateDegPerDay": 0.5943802309472064
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2423913.570385812,
+  "minSepDeg": 0.023498278060065096,
+  "behind": false,
+  "planetAu": 0.5576373843133532,
+  "sunAu": 1.0095874026664942,
+  "sunRadiusDeg": 0.26392275536292087,
+  "relRateDegPerDay": 1.6060474580797208
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2425194.7402377035,
+  "minSepDeg": 0.035750830647071914,
+  "behind": false,
+  "planetAu": 0.6757232894676437,
+  "sunAu": 0.9901721736757332,
+  "sunRadiusDeg": 0.26909777257935125,
+  "relRateDegPerDay": 2.3609240124126094
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2425370.0209986093,
+  "minSepDeg": 0.13554857605674928,
+  "behind": true,
+  "planetAu": 1.324835488166944,
+  "sunAu": 1.0083922325079853,
+  "sunRadiusDeg": 0.2642355650278006,
+  "relRateDegPerDay": 1.2020649598159652
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2426287.6569483075,
+  "minSepDeg": 0.1327391991913597,
+  "behind": true,
+  "planetAu": 1.439559689314968,
+  "sunAu": 0.9908558901209849,
+  "sunRadiusDeg": 0.2689120867235584,
+  "relRateDegPerDay": 0.619678845499932
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2427570.691759878,
+  "minSepDeg": 0.12027348134926623,
+  "behind": true,
+  "planetAu": 1.3229817067835286,
+  "sunAu": 1.0105986253428092,
+  "sunRadiusDeg": 0.26365866776858504,
+  "relRateDegPerDay": 1.2260549805034988
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2428664.87477612,
+  "minSepDeg": 0.2654295657046028,
+  "behind": false,
+  "planetAu": 0.555751087930291,
+  "sunAu": 1.01027569283563,
+  "sunRadiusDeg": 0.263742946304152,
+  "relRateDegPerDay": 1.5944697406669235
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2429945.473280037,
+  "minSepDeg": 0.10235092698244508,
+  "behind": false,
+  "planetAu": 0.6762261149270006,
+  "sunAu": 0.9895994308637719,
+  "sunRadiusDeg": 0.26925351736293823,
+  "relRateDegPerDay": 2.3697560403319198
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2430120.741865948,
+  "minSepDeg": 0.06739045600150649,
+  "behind": true,
+  "planetAu": 1.3242631568297942,
+  "sunAu": 1.0089902658704493,
+  "sunRadiusDeg": 0.26407895023369315,
+  "relRateDegPerDay": 1.2090265915846834
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2431039.0027149534,
+  "minSepDeg": 0.016635975050469414,
+  "behind": true,
+  "planetAu": 1.4418338466114469,
+  "sunAu": 0.9901445393380343,
+  "sunRadiusDeg": 0.26910528299132325,
+  "relRateDegPerDay": 0.6102323101115213
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2432321.400638868,
+  "minSepDeg": 0.18645229211626058,
+  "behind": true,
+  "planetAu": 1.3226177469276326,
+  "sunAu": 1.011096594877594,
+  "sunRadiusDeg": 0.26352881379531595,
+  "relRateDegPerDay": 1.2311449486918684
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2432495.463458388,
+  "minSepDeg": 0.2867506176228278,
+  "behind": false,
+  "planetAu": 0.6745999532709732,
+  "sunAu": 0.9912494994428949,
+  "sunRadiusDeg": 0.26880530525137925,
+  "relRateDegPerDay": 2.342314029458547
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2432670.762719445,
+  "minSepDeg": 0.2592209178206103,
+  "behind": true,
+  "planetAu": 1.3261441738096098,
+  "sunAu": 1.0073256792093126,
+  "sunRadiusDeg": 0.2645153388094971,
+  "relRateDegPerDay": 1.187679298955432
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2434696.2043587016,
+  "minSepDeg": 0.2393771062875713,
+  "behind": false,
+  "planetAu": 0.6767379341549316,
+  "sunAu": 0.9891097022728977,
+  "sunRadiusDeg": 0.269386831308546,
+  "relRateDegPerDay": 2.3775999951052573
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2434871.4605144057,
+  "minSepDeg": 0.0003289660729346041,
+  "behind": true,
+  "planetAu": 1.3237557451397393,
+  "sunAu": 1.0095591381539328,
+  "sunRadiusDeg": 0.263930144430599,
+  "relRateDegPerDay": 1.215400957942853
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2435790.3683254374,
+  "minSepDeg": 0.10175538871503516,
+  "behind": true,
+  "planetAu": 1.4439002310403177,
+  "sunAu": 0.9894443499255811,
+  "sunRadiusDeg": 0.26929571922658246,
+  "relRateDegPerDay": 0.601393251177095
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2435964.5519160246,
+  "minSepDeg": 0.25204008175348286,
+  "behind": false,
+  "planetAu": 0.5594189917361714,
+  "sunAu": 1.0089532888849482,
+  "sunRadiusDeg": 0.2640886284940961,
+  "relRateDegPerDay": 1.6166739315508158
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2437072.1082482934,
+  "minSepDeg": 0.25176282167001196,
+  "behind": true,
+  "planetAu": 1.3223161708697455,
+  "sunAu": 1.0115835407466867,
+  "sunRadiusDeg": 0.2634019580623533,
+  "relRateDegPerDay": 1.2357588779892903
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2437246.2037821086,
+  "minSepDeg": 0.14664419676665746,
+  "behind": false,
+  "planetAu": 0.6752140926494203,
+  "sunAu": 0.9906498873404268,
+  "sunRadiusDeg": 0.26896800662542125,
+  "relRateDegPerDay": 2.352680009926896
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2437421.494109029,
+  "minSepDeg": 0.19009357276775318,
+  "behind": true,
+  "planetAu": 1.3254162340504798,
+  "sunAu": 1.0079079470621557,
+  "sunRadiusDeg": 0.2643625273626646,
+  "relRateDegPerDay": 1.19564907741353
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2438338.6123366617,
+  "minSepDeg": 0.2245680628847783,
+  "behind": true,
+  "planetAu": 1.4374914626907802,
+  "sunAu": 0.9915142016002123,
+  "sunRadiusDeg": 0.2687335424204284,
+  "relRateDegPerDay": 0.6282910145187268
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2439622.1763921836,
+  "minSepDeg": 0.06758780658084382,
+  "behind": true,
+  "planetAu": 1.3233080031812166,
+  "sunAu": 1.0101162187386674,
+  "sunRadiusDeg": 0.2637845855378954,
+  "relRateDegPerDay": 1.2213018809984637
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2440541.7535725003,
+  "minSepDeg": 0.2217075689358988,
+  "behind": true,
+  "planetAu": 1.4457792272869159,
+  "sunAu": 0.9887980684823298,
+  "sunRadiusDeg": 0.2694717330300801,
+  "relRateDegPerDay": 0.5932820259862961
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2440715.8450277913,
+  "minSepDeg": 0.031693488750195335,
+  "behind": false,
+  "planetAu": 0.5573202816036602,
+  "sunAu": 1.0096372567505678,
+  "sunRadiusDeg": 0.26390972323657935,
+  "relRateDegPerDay": 1.604496511135343
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2441996.939562603,
+  "minSepDeg": 0.007332041744099513,
+  "behind": false,
+  "planetAu": 0.6758133526497736,
+  "sunAu": 0.9901094621536956,
+  "sunRadiusDeg": 0.26911481681095994,
+  "relRateDegPerDay": 2.362149336734127
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2442172.2201155135,
+  "minSepDeg": 0.12121223597374134,
+  "behind": true,
+  "planetAu": 1.3247158754279187,
+  "sunAu": 1.0084428730608532,
+  "sunRadiusDeg": 0.2642222959271738,
+  "relRateDegPerDay": 1.2031033141871474
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2443089.9390478674,
+  "minSepDeg": 0.11063227833375947,
+  "behind": true,
+  "planetAu": 1.439891033278145,
+  "sunAu": 0.9907576632669838,
+  "sunRadiusDeg": 0.2689387477156898,
+  "relRateDegPerDay": 0.6183148547360048
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2444372.8873671982,
+  "minSepDeg": 0.1342405540451297,
+  "behind": true,
+  "planetAu": 1.3229262930296084,
+  "sunAu": 1.010668952227474,
+  "sunRadiusDeg": 0.2636403210848881,
+  "relRateDegPerDay": 1.2267832321373873
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2446747.672187453,
+  "minSepDeg": 0.1307039815084808,
+  "behind": false,
+  "planetAu": 0.6763656500519479,
+  "sunAu": 0.9895913724023101,
+  "sunRadiusDeg": 0.26925570997003473,
+  "relRateDegPerDay": 2.370759301697148
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2446922.9408681793,
+  "minSepDeg": 0.05292934907557558,
+  "behind": true,
+  "planetAu": 1.324151566378132,
+  "sunAu": 1.0090296988494607,
+  "sunRadiusDeg": 0.2640686299294953,
+  "relRateDegPerDay": 1.2099467872749636
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2447841.2874383666,
+  "minSepDeg": 0.005888583641558534,
+  "behind": true,
+  "planetAu": 1.442157742539069,
+  "sunAu": 0.9900712596106569,
+  "sunRadiusDeg": 0.2691252008574412,
+  "relRateDegPerDay": 0.6089716342278956
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2449123.5959296525,
+  "minSepDeg": 0.20009391231651952,
+  "behind": true,
+  "planetAu": 1.322546962666292,
+  "sunAu": 1.011140925690748,
+  "sunRadiusDeg": 0.2635172599864613,
+  "relRateDegPerDay": 1.231820633728126
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2449297.664946518,
+  "minSepDeg": 0.2574275747021939,
+  "behind": false,
+  "planetAu": 0.674713362733936,
+  "sunAu": 0.991187229255514,
+  "sunRadiusDeg": 0.2688221927566394,
+  "relRateDegPerDay": 2.3438187570220093
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2449472.9620147366,
+  "minSepDeg": 0.24502647936163172,
+  "behind": true,
+  "planetAu": 1.325997488392329,
+  "sunAu": 1.0073607184512603,
+  "sunRadiusDeg": 0.2645061380508905,
+  "relRateDegPerDay": 1.1888214405873194
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2451498.404137234,
+  "minSepDeg": 0.26749729029866537,
+  "behind": false,
+  "planetAu": 0.6768270404582656,
+  "sunAu": 0.9890666792815719,
+  "sunRadiusDeg": 0.26939854933823687,
+  "relRateDegPerDay": 2.3785055251831984
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2451673.658272499,
+  "minSepDeg": 0.014633283401998385,
+  "behind": true,
+  "planetAu": 1.3236597030745894,
+  "sunAu": 1.0096149935875334,
+  "sunRadiusDeg": 0.26391554278837415,
+  "relRateDegPerDay": 1.2162926056538739
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2452592.6554313665,
+  "minSepDeg": 0.12444148502879576,
+  "behind": true,
+  "planetAu": 1.4442305761293883,
+  "sunAu": 0.9894121680975642,
+  "sunRadiusDeg": 0.2693044784602177,
+  "relRateDegPerDay": 0.6002519791121915
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2452766.828802686,
+  "minSepDeg": 0.1967555323098472,
+  "behind": false,
+  "planetAu": 0.5590744026077051,
+  "sunAu": 1.009013235340975,
+  "sunRadiusDeg": 0.2640729386211567,
+  "relRateDegPerDay": 1.6149629979321527
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2453874.304910223,
+  "minSepDeg": 0.26566324501271027,
+  "behind": true,
+  "planetAu": 1.3222003216320117,
+  "sunAu": 1.0115745828208917,
+  "sunRadiusDeg": 0.26340429061583726,
+  "relRateDegPerDay": 1.2364078388966815
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2454048.4042746294,
+  "minSepDeg": 0.11747621107221277,
+  "behind": false,
+  "planetAu": 0.6753509096641398,
+  "sunAu": 0.9906151815455647,
+  "sunRadiusDeg": 0.2689774298779728,
+  "relRateDegPerDay": 2.3540097937441455
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2454223.6927861487,
+  "minSepDeg": 0.17572986076803992,
+  "behind": true,
+  "planetAu": 1.325256255722546,
+  "sunAu": 1.0079269878331267,
+  "sunRadiusDeg": 0.26435753324888706,
+  "relRateDegPerDay": 1.1967607077818927
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2455140.8945661895,
+  "minSepDeg": 0.2024439303749055,
+  "behind": true,
+  "planetAu": 1.437870462488284,
+  "sunAu": 0.9914411060563647,
+  "sunRadiusDeg": 0.2687533553658195,
+  "relRateDegPerDay": 0.6268954271333492
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2456424.372986518,
+  "minSepDeg": 0.08157150015421756,
+  "behind": true,
+  "planetAu": 1.323225987919243,
+  "sunAu": 1.0101802452554673,
+  "sunRadiusDeg": 0.2637678664151505,
+  "relRateDegPerDay": 1.2221572501943951
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2457344.042145484,
+  "minSepDeg": 0.24463564889532763,
+  "behind": true,
+  "planetAu": 1.4460565148286846,
+  "sunAu": 0.9887511796324256,
+  "sunRadiusDeg": 0.2694845120922689,
+  "relRateDegPerDay": 0.5922088534307638
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2457518.123996211,
+  "minSepDeg": 0.088483172235954,
+  "behind": false,
+  "planetAu": 0.5570523550110326,
+  "sunAu": 1.0097315312006236,
+  "sunRadiusDeg": 0.26388508290478585,
+  "relRateDegPerDay": 1.6028710907014116
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2458799.1395520633,
+  "minSepDeg": 0.021093104201157422,
+  "behind": false,
+  "planetAu": 0.6759013226384387,
+  "sunAu": 0.9900329989992377,
+  "sunRadiusDeg": 0.2691356014910314,
+  "relRateDegPerDay": 2.363447894677813
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2458974.4176927544,
+  "minSepDeg": 0.10703047296894065,
+  "behind": true,
+  "planetAu": 1.3246509513690148,
+  "sunAu": 1.0085499236361066,
+  "sunRadiusDeg": 0.2641942503653346,
+  "relRateDegPerDay": 1.2041208666341001
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2459892.2236594176,
+  "minSepDeg": 0.08820036979713862,
+  "behind": true,
+  "planetAu": 1.4402870094927522,
+  "sunAu": 0.9907289596260253,
+  "sunRadiusDeg": 0.2689465395318827,
+  "relRateDegPerDay": 0.6170108283572661
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2461175.0836268933,
+  "minSepDeg": 0.14802922704498328,
+  "behind": true,
+  "planetAu": 1.3228028669806213,
+  "sunAu": 1.0106683798722669,
+  "sunRadiusDeg": 0.2636404703890304,
+  "relRateDegPerDay": 1.2275362610664737
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2463549.8717876263,
+  "minSepDeg": 0.15891180676546116,
+  "behind": false,
+  "planetAu": 0.6764265996033455,
+  "sunAu": 0.9895128543718937,
+  "sunRadiusDeg": 0.269277075618377,
+  "relRateDegPerDay": 2.37185468695985
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2463725.1384623493,
+  "minSepDeg": 0.038799908374990276,
+  "behind": true,
+  "planetAu": 1.32407685607139,
+  "sunAu": 1.0091110290415224,
+  "sunRadiusDeg": 0.2640473469350362,
+  "relRateDegPerDay": 1.2108685351455906
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2464643.5728230467,
+  "minSepDeg": 0.02849138700835479,
+  "behind": true,
+  "planetAu": 1.4424868280080356,
+  "sunAu": 0.9900049557812441,
+  "sunRadiusDeg": 0.26914322517393485,
+  "relRateDegPerDay": 0.6077052140532692
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2465925.7926269574,
+  "minSepDeg": 0.21402598767710868,
+  "behind": true,
+  "planetAu": 1.3224560828559435,
+  "sunAu": 1.0111644392695702,
+  "sunRadiusDeg": 0.26351113212306765,
+  "relRateDegPerDay": 1.2324980285182665
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2466099.866713197,
+  "minSepDeg": 0.22840697271358637,
+  "behind": false,
+  "planetAu": 0.6748334541723487,
+  "sunAu": 0.9911391006558211,
+  "sunRadiusDeg": 0.2688352465556865,
+  "relRateDegPerDay": 2.3451973789197065
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2466275.161590576,
+  "minSepDeg": 0.23053304050940163,
+  "behind": true,
+  "planetAu": 1.3258831027228335,
+  "sunAu": 1.0074318811241674,
+  "sunRadiusDeg": 0.26448745381243965,
+  "relRateDegPerDay": 1.1899856843002758
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2467191.864285293,
+  "minSepDeg": 0.29265837238809284,
+  "behind": true,
+  "planetAu": 1.435681483926019,
+  "sunAu": 0.992081962842435,
+  "sunRadiusDeg": 0.26857974705525933,
+  "relRateDegPerDay": 0.6358342374723132
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2468300.60334443,
+  "minSepDeg": 0.29555637739197865,
+  "behind": false,
+  "planetAu": 0.6769324331744329,
+  "sunAu": 0.9890391642584827,
+  "sunRadiusDeg": 0.26940604404845725,
+  "relRateDegPerDay": 2.3794059671141454
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2468475.857461105,
+  "minSepDeg": 0.028892361293744437,
+  "behind": true,
+  "planetAu": 1.3235531203484276,
+  "sunAu": 1.0096533642658274,
+  "sunRadiusDeg": 0.2639055129203392,
+  "relRateDegPerDay": 1.2171508478265898
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2469394.941764361,
+  "minSepDeg": 0.14723050966968879,
+  "behind": true,
+  "planetAu": 1.4444997872558911,
+  "sunAu": 0.9893204094858266,
+  "sunRadiusDeg": 0.26932945640148215,
+  "relRateDegPerDay": 0.5990793518901338
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2469569.101198445,
+  "minSepDeg": 0.14216923399554382,
+  "behind": false,
+  "planetAu": 0.5587397698948552,
+  "sunAu": 1.009068660543218,
+  "sunRadiusDeg": 0.26405843376114957,
+  "relRateDegPerDay": 1.6133517371512014
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2470676.500296383,
+  "minSepDeg": 0.2792624625813603,
+  "behind": true,
+  "planetAu": 1.3221657104847893,
+  "sunAu": 1.0116442611140033,
+  "sunRadiusDeg": 0.26338614818043593,
+  "relRateDegPerDay": 1.2369996722553642
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2470850.6052228855,
+  "minSepDeg": 0.08852545229916446,
+  "behind": false,
+  "planetAu": 0.6754330600007893,
+  "sunAu": 0.9905364954024093,
+  "sunRadiusDeg": 0.2689987970382468,
+  "relRateDegPerDay": 2.355388888419265
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2471025.89060104,
+  "minSepDeg": 0.16156995877738403,
+  "behind": true,
+  "planetAu": 1.3251574600246276,
+  "sunAu": 1.0080064869861534,
+  "sunRadiusDeg": 0.26433668383037984,
+  "relRateDegPerDay": 1.197839835217267
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2471943.1731042294,
+  "minSepDeg": 0.18082181512336248,
+  "behind": true,
+  "planetAu": 1.4382066478696907,
+  "sunAu": 0.991329419610289,
+  "sunRadiusDeg": 0.26878363422844115,
+  "relRateDegPerDay": 0.6254841759643655
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2473226.570195089,
+  "minSepDeg": 0.0958847544629571,
+  "behind": true,
+  "planetAu": 1.3231114071305932,
+  "sunAu": 1.0101998607717646,
+  "sunRadiusDeg": 0.26376274467673655,
+  "relRateDegPerDay": 1.2229620055795147
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2474146.333490221,
+  "minSepDeg": 0.2676053852105439,
+  "behind": true,
+  "planetAu": 1.4463385145105982,
+  "sunAu": 0.9887115450389754,
+  "sunRadiusDeg": 0.2694953150285728,
+  "relRateDegPerDay": 0.591169726289081
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2474320.4020042485,
+  "minSepDeg": 0.144592039962853,
+  "behind": false,
+  "planetAu": 0.5567215893108219,
+  "sunAu": 1.0097640525458962,
+  "sunRadiusDeg": 0.2638765839306448,
+  "relRateDegPerDay": 1.6012810568480402
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2475601.339128563,
+  "minSepDeg": 0.05020465329103403,
+  "behind": false,
+  "planetAu": 0.6760150120128491,
+  "sunAu": 0.9899888076444453,
+  "sunRadiusDeg": 0.26914761531809955,
+  "relRateDegPerDay": 2.3646328389209206
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2475776.614991056,
+  "minSepDeg": 0.09280061640650017,
+  "behind": true,
+  "planetAu": 1.324511579783638,
+  "sunAu": 1.0085710054841635,
+  "sunRadiusDeg": 0.2641887279554234,
+  "relRateDegPerDay": 1.205099335723832
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2476694.5074640275,
+  "minSepDeg": 0.06578927799057395,
+  "behind": true,
+  "planetAu": 1.440601010367233,
+  "sunAu": 0.9906259448069914,
+  "sunRadiusDeg": 0.2689745073867151,
+  "relRateDegPerDay": 0.6156948432070332
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2477977.2799035404,
+  "minSepDeg": 0.16206556133674715,
+  "behind": true,
+  "planetAu": 1.3227249531360947,
+  "sunAu": 1.010725250044168,
+  "sunRadiusDeg": 0.263625636105748,
+  "relRateDegPerDay": 1.2283324091260048
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2478326.627832028,
+  "minSepDeg": 0.2858614741008743,
+  "behind": true,
+  "planetAu": 1.3265090981359815,
+  "sunAu": 1.0068813141400301,
+  "sunRadiusDeg": 0.2646320777049773,
+  "relRateDegPerDay": 1.1828482926788328
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2480352.0719438195,
+  "minSepDeg": 0.18730122047638423,
+  "behind": false,
+  "planetAu": 0.6765403015946694,
+  "sunAu": 0.9894732764764863,
+  "sunRadiusDeg": 0.2692878464988644,
+  "relRateDegPerDay": 2.3729128174568244
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2480527.3367090393,
+  "minSepDeg": 0.024640464385948226,
+  "behind": true,
+  "planetAu": 1.3239739827785098,
+  "sunAu": 1.0091679747827917,
+  "sunRadiusDeg": 0.2640324470583875,
+  "relRateDegPerDay": 1.2118213544017264
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2481445.861421952,
+  "minSepDeg": 0.05148777880909212,
+  "behind": true,
+  "planetAu": 1.44283344009243,
+  "sunAu": 0.9899601268224906,
+  "sunRadiusDeg": 0.26915541303783436,
+  "relRateDegPerDay": 0.606475258548003
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2482727.989693813,
+  "minSepDeg": 0.22770100231541465,
+  "behind": true,
+  "planetAu": 1.3223746406880488,
+  "sunAu": 1.0112008628106484,
+  "sunRadiusDeg": 0.26350164036275786,
+  "relRateDegPerDay": 1.2331934937189342
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2482902.0676179677,
+  "minSepDeg": 0.19958928679139895,
+  "behind": false,
+  "planetAu": 0.6749794296722301,
+  "sunAu": 0.9911098582901755,
+  "sunRadiusDeg": 0.26884317850813966,
+  "relRateDegPerDay": 2.3465512712799947
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2483077.3626518697,
+  "minSepDeg": 0.21612700865239537,
+  "behind": true,
+  "planetAu": 1.3257098398095797,
+  "sunAu": 1.0074467821558415,
+  "sunRadiusDeg": 0.26448354178056843,
+  "relRateDegPerDay": 1.1911620161689507
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2483994.143093746,
+  "minSepDeg": 0.2711764893715934,
+  "behind": true,
+  "planetAu": 1.4360514742369785,
+  "sunAu": 0.991979562754722,
+  "sunRadiusDeg": 0.26860747221429043,
+  "relRateDegPerDay": 0.6343653573710116
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2485278.0544199785,
+  "minSepDeg": 0.043000049110953,
+  "behind": true,
+  "planetAu": 1.3235157242061744,
+  "sunAu": 1.0097628981834879,
+  "sunRadiusDeg": 0.2638768855968707,
+  "relRateDegPerDay": 1.2179936936187543
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2486197.2317103217,
+  "minSepDeg": 0.1702399339867886,
+  "behind": true,
+  "planetAu": 1.4448292349542082,
+  "sunAu": 0.9892913978672722,
+  "sunRadiusDeg": 0.2693373547224683,
+  "relRateDegPerDay": 0.5979212044073071
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2486371.38102015,
+  "minSepDeg": 0.08604707017763731,
+  "behind": false,
+  "planetAu": 0.5583927996185988,
+  "sunAu": 1.0091199102484874,
+  "sunRadiusDeg": 0.2640450230528945,
+  "relRateDegPerDay": 1.6116787660912768
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2487478.69620546,
+  "minSepDeg": 0.2929692606278863,
+  "behind": true,
+  "planetAu": 1.3220588687657144,
+  "sunAu": 1.0116387548772392,
+  "sunRadiusDeg": 0.2633875817719241,
+  "relRateDegPerDay": 1.2375954409271668
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2487652.805473108,
+  "minSepDeg": 0.05963305743433682,
+  "behind": false,
+  "planetAu": 0.6755802421055165,
+  "sunAu": 0.9905169243309941,
+  "sunRadiusDeg": 0.26900411207448777,
+  "relRateDegPerDay": 2.356612174142589
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2487828.0896250615,
+  "minSepDeg": 0.1469818733019268,
+  "behind": true,
+  "planetAu": 1.3250373745788058,
+  "sunAu": 1.008055887502172,
+  "sunRadiusDeg": 0.26432372972596163,
+  "relRateDegPerDay": 1.1988987058279972
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2488745.4572636075,
+  "minSepDeg": 0.15841674781948578,
+  "behind": true,
+  "planetAu": 1.4385725264092972,
+  "sunAu": 0.9912437701185517,
+  "sunRadiusDeg": 0.26880685893991163,
+  "relRateDegPerDay": 0.6240687931109242
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2490028.7671518615,
+  "minSepDeg": 0.10989593207395663,
+  "behind": true,
+  "planetAu": 1.3230228099493737,
+  "sunAu": 1.0102457783380006,
+  "sunRadiusDeg": 0.26375075608038684,
+  "relRateDegPerDay": 1.2237521741641169
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2490948.6249481672,
+  "minSepDeg": 0.2909779275216391,
+  "behind": true,
+  "planetAu": 1.4465818927599692,
+  "sunAu": 0.9886326813866484,
+  "sunRadiusDeg": 0.2695168129438074,
+  "relRateDegPerDay": 0.5901106654342465
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2491122.68025243,
+  "minSepDeg": 0.20130356361672305,
+  "behind": false,
+  "planetAu": 0.5564482206123132,
+  "sunAu": 1.009851033007559,
+  "sunRadiusDeg": 0.2638538555592318,
+  "relRateDegPerDay": 1.599674122832813
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2492403.5394878434,
+  "minSepDeg": 0.07870376841199855,
+  "behind": false,
+  "planetAu": 0.6760989778189069,
+  "sunAu": 0.9899278858439664,
+  "sunRadiusDeg": 0.26916417922964797,
+  "relRateDegPerDay": 2.365781450029547
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2492578.8126816265,
+  "minSepDeg": 0.0785733643324136,
+  "behind": true,
+  "planetAu": 1.3244343316340146,
+  "sunAu": 1.008659464575476,
+  "sunRadiusDeg": 0.2641655585298317,
+  "relRateDegPerDay": 1.2060819920543264
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2493496.7914523743,
+  "minSepDeg": 0.043388654747643765,
+  "behind": true,
+  "planetAu": 1.4409452574064612,
+  "sunAu": 0.9905485280292973,
+  "sunRadiusDeg": 0.26899552936801363,
+  "relRateDegPerDay": 0.6143644782419655
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2494779.4781424403,
+  "minSepDeg": 0.17624908339852377,
+  "behind": true,
+  "planetAu": 1.3226118980587545,
+  "sunAu": 1.010731902025785,
+  "sunRadiusDeg": 0.2636239010806076,
+  "relRateDegPerDay": 1.2290564492888125
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2495128.8284874912,
+  "minSepDeg": 0.27130486662393477,
+  "behind": true,
+  "planetAu": 1.32633793502908,
+  "sunAu": 1.0069096352814204,
+  "sunRadiusDeg": 0.26462463439972145,
+  "relRateDegPerDay": 1.1841034003816002
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2497154.272694585,
+  "minSepDeg": 0.2163592467658076,
+  "behind": false,
+  "planetAu": 0.6766209191328726,
+  "sunAu": 0.9894093673298153,
+  "sunRadiusDeg": 0.26930524079871715,
+  "relRateDegPerDay": 2.3739857849927692
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2497329.534187828,
+  "minSepDeg": 0.010481826393162754,
+  "behind": true,
+  "planetAu": 1.323884870029339,
+  "sunAu": 1.0092323436326274,
+  "sunRadiusDeg": 0.26401560694685383,
+  "relRateDegPerDay": 1.2127146695731825
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2498248.1449986557,
+  "minSepDeg": 0.07392328314556298,
+  "behind": true,
+  "planetAu": 1.443106255110823,
+  "sunAu": 0.9898519772993699,
+  "sunRadiusDeg": 0.2691848207112996,
+  "relRateDegPerDay": 0.6052469732837231
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2499530.186651808,
+  "minSepDeg": 0.24182840777036646,
+  "behind": true,
+  "planetAu": 1.3222745701392,
+  "sunAu": 1.0112202018604268,
+  "sunRadiusDeg": 0.2634966009981799,
+  "relRateDegPerDay": 1.233914812233851
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2499704.2688351693,
+  "minSepDeg": 0.1706569710291535,
+  "behind": false,
+  "planetAu": 0.6750882835469209,
+  "sunAu": 0.9910408054835613,
+  "sunRadiusDeg": 0.2688619108470808,
+  "relRateDegPerDay": 2.3480213336932723
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2499879.560823827,
+  "minSepDeg": 0.2018565170689281,
+  "behind": true,
+  "planetAu": 1.3255977253208244,
+  "sunAu": 1.0075230739191314,
+  "sunRadiusDeg": 0.26446351438904664,
+  "relRateDegPerDay": 1.1923103733055518
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2500796.42229095,
+  "minSepDeg": 0.24921405477373967,
+  "behind": true,
+  "planetAu": 1.436476617712888,
+  "sunAu": 0.9919389857042576,
+  "sunRadiusDeg": 0.268618460167145,
+  "relRateDegPerDay": 0.6329386664485323
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2502080.251403625,
+  "minSepDeg": 0.057024248534111574,
+  "behind": true,
+  "planetAu": 1.3233810015957128,
+  "sunAu": 1.009772997714799,
+  "sunRadiusDeg": 0.26387424633862483,
+  "relRateDegPerDay": 1.218871542050849
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2502999.523912153,
+  "minSepDeg": 0.19362756065249856,
+  "behind": true,
+  "planetAu": 1.4451149085840467,
+  "sunAu": 0.9892275595493765,
+  "sunRadiusDeg": 0.2693547361330135,
+  "relRateDegPerDay": 0.5967850747827841
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2503173.6581953764,
+  "minSepDeg": 0.030032067890011678,
+  "behind": false,
+  "planetAu": 0.5580962801943301,
+  "sunAu": 1.0092090083338514,
+  "sunRadiusDeg": 0.26402171165522,
+  "relRateDegPerDay": 1.6099954873138682
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2504455.0047552064,
+  "minSepDeg": 0.03131223573088874,
+  "behind": false,
+  "planetAu": 0.6756758058353826,
+  "sunAu": 0.9904550423899018,
+  "sunRadiusDeg": 0.26902091911592885,
+  "relRateDegPerDay": 2.3578653226978434
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2504630.2879723525,
+  "minSepDeg": 0.1328290480257015,
+  "behind": true,
+  "planetAu": 1.3248949512242572,
+  "sunAu": 1.0080893761482963,
+  "sunRadiusDeg": 0.26431494885111956,
+  "relRateDegPerDay": 1.199971723425466
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2505547.73963126,
+  "minSepDeg": 0.13630807714976545,
+  "behind": true,
+  "planetAu": 1.4389404276318878,
+  "sunAu": 0.9911699223489792,
+  "sunRadiusDeg": 0.2688268867193995,
+  "relRateDegPerDay": 0.622694846046927
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2506830.9639824545,
+  "minSepDeg": 0.12394981069364946,
+  "behind": true,
+  "planetAu": 1.3229666321544162,
+  "sunAu": 1.0103261734146287,
+  "sunRadiusDeg": 0.26372976839090206,
+  "relRateDegPerDay": 1.2245453421585342
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2507924.9607237913,
+  "minSepDeg": 0.2585130581443182,
+  "behind": false,
+  "planetAu": 0.5561059593892431,
+  "sunAu": 1.0098656742373715,
+  "sunRadiusDeg": 0.26385003012745106,
+  "relRateDegPerDay": 1.5981317708747063
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2509205.739644305,
+  "minSepDeg": 0.10747044307614927,
+  "behind": false,
+  "planetAu": 0.6762496987235341,
+  "sunAu": 0.9899236098826585,
+  "sunRadiusDeg": 0.2691653418891414,
+  "relRateDegPerDay": 2.3668190437436545
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2509381.0124089327,
+  "minSepDeg": 0.06410990647277295,
+  "behind": true,
+  "planetAu": 1.3243056418530594,
+  "sunAu": 1.0086877114178805,
+  "sunRadiusDeg": 0.26415816090251154,
+  "relRateDegPerDay": 1.2070460521955293
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2510299.076683051,
+  "minSepDeg": 0.02076773656029835,
+  "behind": true,
+  "planetAu": 1.4412546222772893,
+  "sunAu": 0.9904402924590856,
+  "sunRadiusDeg": 0.2690249254847486,
+  "relRateDegPerDay": 0.6130204647173061
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2511581.6749559315,
+  "minSepDeg": 0.19014856690372156,
+  "behind": true,
+  "planetAu": 1.3225764752501052,
+  "sunAu": 1.0108188194828818,
+  "sunRadiusDeg": 0.263601232645528,
+  "relRateDegPerDay": 1.2297556060222803
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2511755.7292336067,
+  "minSepDeg": 0.2819872856094083,
+  "behind": false,
+  "planetAu": 0.6745608264136971,
+  "sunAu": 0.9915939764015217,
+  "sunRadiusDeg": 0.26871192235954783,
+  "relRateDegPerDay": 2.3388239865608673
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2511931.0292181764,
+  "minSepDeg": 0.2567619552999709,
+  "behind": true,
+  "planetAu": 1.326198674529301,
+  "sunAu": 1.0069627963385432,
+  "sunRadiusDeg": 0.26461066384849885,
+  "relRateDegPerDay": 1.1853147491806937
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2513956.47322221,
+  "minSepDeg": 0.24456242302976314,
+  "behind": false,
+  "planetAu": 0.6767402988203891,
+  "sunAu": 0.9893879273659553,
+  "sunRadiusDeg": 0.2693110766665218,
+  "relRateDegPerDay": 2.3749239485622886
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2514131.732070661,
+  "minSepDeg": 0.0038169363359966068,
+  "behind": true,
+  "planetAu": 1.3237953754864924,
+  "sunAu": 1.0092930790889474,
+  "sunRadiusDeg": 0.26399971936952044,
+  "relRateDegPerDay": 1.2136018915990006
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2515050.434116327,
+  "minSepDeg": 0.09696880276524891,
+  "behind": true,
+  "planetAu": 1.4434293216489817,
+  "sunAu": 0.9897875331500163,
+  "sunRadiusDeg": 0.2692023472145712,
+  "relRateDegPerDay": 0.6040140919702284
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2515224.647014356,
+  "minSepDeg": 0.25676267179438417,
+  "behind": false,
+  "planetAu": 0.5599231697111616,
+  "sunAu": 1.0085888215499035,
+  "sunRadiusDeg": 0.2641840612002493,
+  "relRateDegPerDay": 1.6207332653390465
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2516332.383653287,
+  "minSepDeg": 0.25563591513065415,
+  "behind": true,
+  "planetAu": 1.322171366190984,
+  "sunAu": 1.0112308597263067,
+  "sunRadiusDeg": 0.26349382385663556,
+  "relRateDegPerDay": 1.2345870958431657
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2516506.468785324,
+  "minSepDeg": 0.1416005057782597,
+  "behind": false,
+  "planetAu": 0.6752263926787684,
+  "sunAu": 0.9910064366073731,
+  "sunRadiusDeg": 0.26887123525630047,
+  "relRateDegPerDay": 2.3493807243649982
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2516681.760051447,
+  "minSepDeg": 0.18737381963125055,
+  "behind": true,
+  "planetAu": 1.3254135491564258,
+  "sunAu": 1.007520976467979,
+  "sunRadiusDeg": 0.26446406495152164,
+  "relRateDegPerDay": 1.1934606019626426
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2517598.703771238,
+  "minSepDeg": 0.22730393718181033,
+  "behind": true,
+  "planetAu": 1.4368643979689342,
+  "sunAu": 0.9918620733200493,
+  "sunRadiusDeg": 0.2686392899157135,
+  "relRateDegPerDay": 0.6314799696844581
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2518882.4472978003,
+  "minSepDeg": 0.07109919607076981,
+  "behind": true,
+  "planetAu": 1.3233117254503504,
+  "sunAu": 1.0098505745823048,
+  "sunRadiusDeg": 0.2638539753374732,
+  "relRateDegPerDay": 1.2197169916376132
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2519801.812178788,
+  "minSepDeg": 0.21641901960530346,
+  "behind": true,
+  "planetAu": 1.4453809220961105,
+  "sunAu": 0.9891480149043386,
+  "sunRadiusDeg": 0.26937639708204547,
+  "relRateDegPerDay": 0.5956601354533593
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2519975.9378790976,
+  "minSepDeg": 0.02666236382233738,
+  "behind": false,
+  "planetAu": 0.5578214643209843,
+  "sunAu": 1.0093183548580464,
+  "sunRadiusDeg": 0.26399310813220567,
+  "relRateDegPerDay": 1.608244540791325
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2521257.2047814587,
+  "minSepDeg": 0.002516968034333814,
+  "behind": false,
+  "planetAu": 0.6757975169959395,
+  "sunAu": 0.9904086202747732,
+  "sunRadiusDeg": 0.26903352867081776,
+  "relRateDegPerDay": 2.359144811905844
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2521432.486219435,
+  "minSepDeg": 0.11849064483123183,
+  "behind": true,
+  "planetAu": 1.3247850152238843,
+  "sunAu": 1.0081564766629962,
+  "sunRadiusDeg": 0.2642973565474221,
+  "relRateDegPerDay": 1.201033892387786
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2522350.0233688345,
+  "minSepDeg": 0.11389768892714373,
+  "behind": true,
+  "planetAu": 1.439350915032545,
+  "sunAu": 0.9911423504151202,
+  "sunRadiusDeg": 0.268834365091734,
+  "relRateDegPerDay": 0.6213465886971151
+ },
+ {
+  "body": "Mercury",
+  "jdTt": 2523633.1605022047,
+  "minSepDeg": 0.13780037003211246,
+  "behind": true,
+  "planetAu": 1.3228674615782208,
+  "sunAu": 1.010356544845156,
+  "sunRadiusDeg": 0.2637218405886365,
+  "relRateDegPerDay": 1.2253257506796043
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2380469.334006618,
+  "minSepDeg": 0.2195984807175042,
+  "behind": true,
+  "planetAu": 1.7349811622691462,
+  "sunAu": 1.0139518863905008,
+  "sunRadiusDeg": 0.2627867106647819,
+  "relRateDegPerDay": 0.2731395693595159
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2383389.0801487556,
+  "minSepDeg": 0.2726666583744406,
+  "behind": true,
+  "planetAu": 1.734746640435071,
+  "sunAu": 1.0135471414995527,
+  "sunRadiusDeg": 0.26289165134336834,
+  "relRateDegPerDay": 0.27264400192961935
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2392726.9561071023,
+  "minSepDeg": 0.2748605287008621,
+  "behind": true,
+  "planetAu": 1.7106935828493914,
+  "sunAu": 0.9837643774437143,
+  "sunRadiusDeg": 0.27085056678049085,
+  "relRateDegPerDay": 0.24311460609971264
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2395646.4067547154,
+  "minSepDeg": 0.2095618326837204,
+  "behind": true,
+  "planetAu": 1.7107315484541248,
+  "sunAu": 0.9839624468641185,
+  "sunRadiusDeg": 0.27079604476651986,
+  "relRateDegPerDay": 0.2436193652643492
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2398565.8681856254,
+  "minSepDeg": 0.1443085575844048,
+  "behind": true,
+  "planetAu": 1.7107758036100353,
+  "sunAu": 0.9841588573168568,
+  "sunRadiusDeg": 0.2707420010831561,
+  "relRateDegPerDay": 0.24420162324633943
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2401485.3494967297,
+  "minSepDeg": 0.07947830598161214,
+  "behind": true,
+  "planetAu": 1.710864703825344,
+  "sunAu": 0.9844187963446086,
+  "sunRadiusDeg": 0.2706705102335305,
+  "relRateDegPerDay": 0.24485241028044072
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2404404.8211971857,
+  "minSepDeg": 0.014208733259301812,
+  "behind": true,
+  "planetAu": 1.710963808962481,
+  "sunAu": 0.9847051352095282,
+  "sunRadiusDeg": 0.2705918023440321,
+  "relRateDegPerDay": 0.24544785250485254
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2405866.671782921,
+  "minSepDeg": 0.2305422859250894,
+  "behind": false,
+  "planetAu": 0.2643308287560951,
+  "sunAu": 0.9846569528856342,
+  "sunRadiusDeg": 0.2706050433400611,
+  "relRateDegPerDay": 1.6443779549269317
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2407324.29731215,
+  "minSepDeg": 0.05081951814617494,
+  "behind": true,
+  "planetAu": 1.7111276492667744,
+  "sunAu": 0.9850443308443164,
+  "sunRadiusDeg": 0.2704986245678383,
+  "relRateDegPerDay": 0.24591894378489024
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2408786.2124303225,
+  "minSepDeg": 0.177019283546543,
+  "behind": false,
+  "planetAu": 0.26446853774315476,
+  "sunAu": 0.9849766116301902,
+  "sunRadiusDeg": 0.2705172220555059,
+  "relRateDegPerDay": 1.643871211462959
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2410243.795915621,
+  "minSepDeg": 0.114980822552857,
+  "behind": true,
+  "planetAu": 1.7113084773205365,
+  "sunAu": 0.9854203638193532,
+  "sunRadiusDeg": 0.27039540246937405,
+  "relRateDegPerDay": 0.24633561591594755
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2413163.2813533517,
+  "minSepDeg": 0.17944123933234216,
+  "behind": true,
+  "planetAu": 1.7115254724586133,
+  "sunAu": 0.9858505422766067,
+  "sunRadiusDeg": 0.270277413854394,
+  "relRateDegPerDay": 0.24680946005524929
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2416082.766711711,
+  "minSepDeg": 0.24328076990009267,
+  "behind": true,
+  "planetAu": 1.7117469692739888,
+  "sunAu": 0.9862715712883381,
+  "sunRadiusDeg": 0.2701620343997985,
+  "relRateDegPerDay": 0.24733293793841188
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2442947.559913844,
+  "minSepDeg": 0.25660448418840076,
+  "behind": true,
+  "planetAu": 1.7358795403917062,
+  "sunAu": 1.0160720431333605,
+  "sunRadiusDeg": 0.26223837069731337,
+  "relRateDegPerDay": 0.2766223886254512
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2445867.3333209967,
+  "minSepDeg": 0.20481428060320475,
+  "behind": true,
+  "planetAu": 1.735831355281021,
+  "sunAu": 1.015892930781448,
+  "sunRadiusDeg": 0.2622846063369008,
+  "relRateDegPerDay": 0.2764559985763697
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2448787.1085436493,
+  "minSepDeg": 0.1527093137855029,
+  "behind": true,
+  "planetAu": 1.7357519022775405,
+  "sunAu": 1.0156579059471917,
+  "sunRadiusDeg": 0.26234529983075944,
+  "relRateDegPerDay": 0.27610689069956523
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2451706.8858144907,
+  "minSepDeg": 0.10040282020415836,
+  "behind": true,
+  "planetAu": 1.735657011881325,
+  "sunAu": 1.0154173360548524,
+  "sunRadiusDeg": 0.26240745439471297,
+  "relRateDegPerDay": 0.2756650242975454
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2453164.847787843,
+  "minSepDeg": 0.17413621872164106,
+  "behind": false,
+  "planetAu": 0.28888309003486395,
+  "sunAu": 1.0150862521152815,
+  "sunRadiusDeg": 0.2624930426896293,
+  "relRateDegPerDay": 1.6023633492041336
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2454626.6549063204,
+  "minSepDeg": 0.047703611752570554,
+  "behind": true,
+  "planetAu": 1.7355779718322442,
+  "sunAu": 1.0152001076194728,
+  "sunRadiusDeg": 0.262463603678977,
+  "relRateDegPerDay": 0.27519012748032556
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2456084.5629959013,
+  "minSepDeg": 0.15399158883081224,
+  "behind": false,
+  "planetAu": 0.2887033542310823,
+  "sunAu": 1.0147419507959332,
+  "sunRadiusDeg": 0.26258210704089363,
+  "relRateDegPerDay": 1.6038207971760605
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2457546.413003289,
+  "minSepDeg": 0.00542301116940979,
+  "behind": true,
+  "planetAu": 1.735469371940838,
+  "sunAu": 1.0149317579040347,
+  "sunRadiusDeg": 0.2625329999961825,
+  "relRateDegPerDay": 0.27466544882297883
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2460466.180165629,
+  "minSepDeg": 0.058413283126563596,
+  "behind": true,
+  "planetAu": 1.7352764297028267,
+  "sunAu": 1.0145808693949374,
+  "sunRadiusDeg": 0.2626237965613173,
+  "relRateDegPerDay": 0.2741899895567636
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2463385.9405297777,
+  "minSepDeg": 0.11159955163878939,
+  "behind": true,
+  "planetAu": 1.7351167268393617,
+  "sunAu": 1.0142742138021403,
+  "sunRadiusDeg": 0.262703198777396,
+  "relRateDegPerDay": 0.2738536277825273
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2466305.6893511508,
+  "minSepDeg": 0.1647856525108888,
+  "behind": true,
+  "planetAu": 1.7348831726443426,
+  "sunAu": 1.0138803907545482,
+  "sunRadiusDeg": 0.2628052416817805,
+  "relRateDegPerDay": 0.2734610628492939
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2469225.444050717,
+  "minSepDeg": 0.2178267665100425,
+  "behind": true,
+  "planetAu": 1.734626058699698,
+  "sunAu": 1.0134623398213205,
+  "sunRadiusDeg": 0.26291364901296055,
+  "relRateDegPerDay": 0.2729884787476164
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2472145.1992978295,
+  "minSepDeg": 0.2707887932971306,
+  "behind": true,
+  "planetAu": 1.7344149717772102,
+  "sunAu": 1.0130945720417028,
+  "sunRadiusDeg": 0.26300909108779086,
+  "relRateDegPerDay": 0.272427555842315
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2481482.8738429034,
+  "minSepDeg": 0.26919009920725984,
+  "behind": true,
+  "planetAu": 1.7107597148782037,
+  "sunAu": 0.9839765712874449,
+  "sunRadiusDeg": 0.2707921576145672,
+  "relRateDegPerDay": 0.24384378633159923
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2484402.3527819966,
+  "minSepDeg": 0.20489617988002826,
+  "behind": true,
+  "planetAu": 1.710801157167231,
+  "sunAu": 0.9841696855526195,
+  "sunRadiusDeg": 0.27073902224720775,
+  "relRateDegPerDay": 0.2443605331820368
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2487321.8196847606,
+  "minSepDeg": 0.1397802084980363,
+  "behind": true,
+  "planetAu": 1.7109400172599103,
+  "sunAu": 0.9844747543919403,
+  "sunRadiusDeg": 0.2706551250691884,
+  "relRateDegPerDay": 0.24481823110044656
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2490241.2911100173,
+  "minSepDeg": 0.07476325010888177,
+  "behind": true,
+  "planetAu": 1.7111012163485149,
+  "sunAu": 0.9848027501802029,
+  "sunRadiusDeg": 0.2705649807219389,
+  "relRateDegPerDay": 0.2452042855786569
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2493160.7746754983,
+  "minSepDeg": 0.009760184983025484,
+  "behind": true,
+  "planetAu": 1.7112190916689347,
+  "sunAu": 0.9850957845668117,
+  "sunRadiusDeg": 0.2704844957239424,
+  "relRateDegPerDay": 0.24560394293680288
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2494622.61953988,
+  "minSepDeg": 0.20101588244618596,
+  "behind": false,
+  "planetAu": 0.2644990762854263,
+  "sunAu": 0.984979542534419,
+  "sunRadiusDeg": 0.2705164170987253,
+  "relRateDegPerDay": 1.645906690607825
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2496080.260441394,
+  "minSepDeg": 0.055137528949266365,
+  "behind": true,
+  "planetAu": 1.711422196157913,
+  "sunAu": 0.9854908251871928,
+  "sunRadiusDeg": 0.2703760693910155,
+  "relRateDegPerDay": 0.246197453788002
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2497542.170700877,
+  "minSepDeg": 0.2045458256975355,
+  "behind": false,
+  "planetAu": 0.26461452675815356,
+  "sunAu": 0.9852597253108658,
+  "sunRadiusDeg": 0.27043948854696787,
+  "relRateDegPerDay": 1.6451023235099242
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2498999.741853416,
+  "minSepDeg": 0.11972234712929047,
+  "behind": true,
+  "planetAu": 1.7115921113010217,
+  "sunAu": 0.9858569619559214,
+  "sunRadiusDeg": 0.2702756538554694,
+  "relRateDegPerDay": 0.246864375239972
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2501919.24202892,
+  "minSepDeg": 0.183596754250569,
+  "behind": true,
+  "planetAu": 1.7117366903985674,
+  "sunAu": 0.9861945371819089,
+  "sunRadiusDeg": 0.2701831375841939,
+  "relRateDegPerDay": 0.24751207878972853
+ },
+ {
+  "body": "Venus",
+  "jdTt": 2504838.7474672077,
+  "minSepDeg": 0.2469053527013444,
+  "behind": true,
+  "planetAu": 1.7119870170818616,
+  "sunAu": 0.9866540961011462,
+  "sunRadiusDeg": 0.2700572920716657,
+  "relRateDegPerDay": 0.24819022108299357
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2385392.533923107,
+  "minSepDeg": 0.1564060068237916,
+  "behind": true,
+  "planetAu": 2.5144339268476212,
+  "sunAu": 0.9877145903103185,
+  "sunRadiusDeg": 0.2697673334999805,
+  "relRateDegPerDay": 0.2980413987602473
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2390854.3049746184,
+  "minSepDeg": 0.1797582899707899,
+  "behind": true,
+  "planetAu": 2.561138264416349,
+  "sunAu": 0.9916054017400385,
+  "sunRadiusDeg": 0.2687088262215273,
+  "relRateDegPerDay": 0.31297008278498134
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2393230.108632353,
+  "minSepDeg": 0.07999481779406209,
+  "behind": true,
+  "planetAu": 2.4750781850825616,
+  "sunAu": 1.009216781777867,
+  "sunRadiusDeg": 0.26401967802621373,
+  "relRateDegPerDay": 0.23980957626468288
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2402551.904510498,
+  "minSepDeg": 0.010386128418708679,
+  "behind": true,
+  "planetAu": 2.536040436127762,
+  "sunAu": 0.9893990529289908,
+  "sunRadiusDeg": 0.2693080483035814,
+  "relRateDegPerDay": 0.30550301278318515
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2404931.115676947,
+  "minSepDeg": 0.1611341872337319,
+  "behind": true,
+  "planetAu": 2.506177168851034,
+  "sunAu": 1.0119664975596945,
+  "sunRadiusDeg": 0.26330227859186667,
+  "relRateDegPerDay": 0.250531342028385
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2410386.477817327,
+  "minSepDeg": 0.26919613658419267,
+  "behind": true,
+  "planetAu": 2.450240842942162,
+  "sunAu": 1.0064523884963554,
+  "sunRadiusDeg": 0.2647448582927288,
+  "relRateDegPerDay": 0.23151570301847868
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2414249.983610384,
+  "minSepDeg": 0.20880718501295065,
+  "behind": true,
+  "planetAu": 2.5095554287682167,
+  "sunAu": 0.9873978074024744,
+  "sunRadiusDeg": 0.2698538825195365,
+  "relRateDegPerDay": 0.29654655255681217
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2419711.6081890017,
+  "minSepDeg": 0.12963164787603537,
+  "behind": true,
+  "planetAu": 2.5566508922103246,
+  "sunAu": 0.9911964499398567,
+  "sunRadiusDeg": 0.26881969199831635,
+  "relRateDegPerDay": 0.31200075844636616
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2422088.262489073,
+  "minSepDeg": 0.016779848027311438,
+  "behind": true,
+  "planetAu": 2.481280219590821,
+  "sunAu": 1.0097433078481854,
+  "sunRadiusDeg": 0.26388200518833316,
+  "relRateDegPerDay": 0.24176589358307765
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2431409.263117968,
+  "minSepDeg": 0.062223895712379525,
+  "behind": true,
+  "planetAu": 2.531343207683316,
+  "sunAu": 0.9890477856777838,
+  "sunRadiusDeg": 0.26940369564869454,
+  "relRateDegPerDay": 0.30412656562333373
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2433789.021708538,
+  "minSepDeg": 0.21954303422821,
+  "behind": true,
+  "planetAu": 2.5117379238323063,
+  "sunAu": 1.0123612828020934,
+  "sunRadiusDeg": 0.26319959925498904,
+  "relRateDegPerDay": 0.2524510917505996
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2436871.598430359,
+  "minSepDeg": 0.2625593680120446,
+  "behind": true,
+  "planetAu": 2.5760662885988825,
+  "sunAu": 0.9930652785348003,
+  "sunRadiusDeg": 0.2683138021902197,
+  "relRateDegPerDay": 0.3175574543925549
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2439244.769404335,
+  "minSepDeg": 0.20520316151791673,
+  "behind": true,
+  "planetAu": 2.4563308417604204,
+  "sunAu": 1.0071177313665054,
+  "sunRadiusDeg": 0.2645699558451161,
+  "relRateDegPerDay": 0.2333103367392299
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2443107.5258143283,
+  "minSepDeg": 0.2622154291033448,
+  "behind": true,
+  "planetAu": 2.5040643143521093,
+  "sunAu": 0.9870356920134223,
+  "sunRadiusDeg": 0.2699528849845924,
+  "relRateDegPerDay": 0.2944717562515088
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2448568.894730551,
+  "minSepDeg": 0.07937898804490393,
+  "behind": true,
+  "planetAu": 2.552219941165424,
+  "sunAu": 0.9908181731222081,
+  "sunRadiusDeg": 0.26892232334577576,
+  "relRateDegPerDay": 0.31072843557899726
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2450946.3165180767,
+  "minSepDeg": 0.044716412285868444,
+  "behind": true,
+  "planetAu": 2.4870255537911605,
+  "sunAu": 1.0102885771372634,
+  "sunRadiusDeg": 0.26373958274273807,
+  "relRateDegPerDay": 0.2436519642643494
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2460266.7254262045,
+  "minSepDeg": 0.11517270138698546,
+  "behind": true,
+  "planetAu": 2.5260852696213294,
+  "sunAu": 0.9886382493711726,
+  "sunRadiusDeg": 0.2695152950210354,
+  "relRateDegPerDay": 0.3022249848225957
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2462646.909288154,
+  "minSepDeg": 0.276779225229405,
+  "behind": true,
+  "planetAu": 2.5173141432165504,
+  "sunAu": 1.012826285347713,
+  "sunRadiusDeg": 0.26307875983195234,
+  "relRateDegPerDay": 0.2546956162607898
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2465728.813099913,
+  "minSepDeg": 0.21448767360606666,
+  "behind": true,
+  "planetAu": 2.5719383420972797,
+  "sunAu": 0.992667700175643,
+  "sunRadiusDeg": 0.2684212666936726,
+  "relRateDegPerDay": 0.3163192653518185
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2468102.9746672055,
+  "minSepDeg": 0.14166171546962297,
+  "behind": true,
+  "planetAu": 2.4620602324296756,
+  "sunAu": 1.0078058568813544,
+  "sunRadiusDeg": 0.2643893073318257,
+  "relRateDegPerDay": 0.2349804901613656
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2477426.271793102,
+  "minSepDeg": 0.027479315592288025,
+  "behind": true,
+  "planetAu": 2.547299744002618,
+  "sunAu": 0.9903852125990221,
+  "sunRadiusDeg": 0.2690398873036094,
+  "relRateDegPerDay": 0.30896610188222356
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2479804.3404976577,
+  "minSepDeg": 0.10559274135914097,
+  "behind": true,
+  "planetAu": 2.492731605955507,
+  "sunAu": 1.0108907006467758,
+  "sunRadiusDeg": 0.26358248868332834,
+  "relRateDegPerDay": 0.24577511601277685
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2489124.1435784064,
+  "minSepDeg": 0.16722515836738233,
+  "behind": true,
+  "planetAu": 2.521116121639334,
+  "sunAu": 0.9882137250182501,
+  "sunRadiusDeg": 0.269631076301711,
+  "relRateDegPerDay": 0.3002532636190711
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2494586.127514343,
+  "minSepDeg": 0.1643440750322243,
+  "behind": true,
+  "planetAu": 2.5672936001558484,
+  "sunAu": 0.9921706537534493,
+  "sunRadiusDeg": 0.26855573832570356,
+  "relRateDegPerDay": 0.314797054664751
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2496961.1589296125,
+  "minSepDeg": 0.07842163321900744,
+  "behind": true,
+  "planetAu": 2.4676911754587634,
+  "sunAu": 1.008488745149159,
+  "sunRadiusDeg": 0.2642102774346883,
+  "relRateDegPerDay": 0.23701608838230967
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2506283.612466825,
+  "minSepDeg": 0.02345194618633435,
+  "behind": true,
+  "planetAu": 2.542476289226316,
+  "sunAu": 0.9899085769674639,
+  "sunRadiusDeg": 0.26916942950856393,
+  "relRateDegPerDay": 0.30729820525896234
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2508662.354519614,
+  "minSepDeg": 0.16585940539320862,
+  "behind": true,
+  "planetAu": 2.4989288428013,
+  "sunAu": 1.0114107027787453,
+  "sunRadiusDeg": 0.2634469706174565,
+  "relRateDegPerDay": 0.24823365355326518
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2511746.24434579,
+  "minSepDeg": 0.2942601330215493,
+  "behind": true,
+  "planetAu": 2.585994988466767,
+  "sunAu": 0.9940189427098038,
+  "sunRadiusDeg": 0.268056379401136,
+  "relRateDegPerDay": 0.31975415013583175
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2514117.296236946,
+  "minSepDeg": 0.2714708094289107,
+  "behind": true,
+  "planetAu": 2.4429856491742323,
+  "sunAu": 1.0056229281500375,
+  "sunRadiusDeg": 0.26496322734585576,
+  "relRateDegPerDay": 0.2288011784472677
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2517981.546617745,
+  "minSepDeg": 0.21858820800882514,
+  "behind": true,
+  "planetAu": 2.5162586858373435,
+  "sunAu": 0.9878809789514266,
+  "sunRadiusDeg": 0.2697218962938833,
+  "relRateDegPerDay": 0.29850131094642435
+ },
+ {
+  "body": "Mars",
+  "jdTt": 2523443.405128401,
+  "minSepDeg": 0.11455763296253865,
+  "behind": true,
+  "planetAu": 2.562800246744288,
+  "sunAu": 0.991687842781912,
+  "sunRadiusDeg": 0.2686864877425892,
+  "relRateDegPerDay": 0.31350924796616064
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2378682.038930063,
+  "minSepDeg": 0.09201292010600978,
+  "behind": true,
+  "planetAu": 6.215682056678319,
+  "sunAu": 1.0167218715340134,
+  "sunRadiusDeg": 0.2620707622936888,
+  "relRateDegPerDay": 0.7275079465129569
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2381062.5551517243,
+  "minSepDeg": 0.220321576378738,
+  "behind": true,
+  "planetAu": 6.140254254503553,
+  "sunAu": 0.983499381013611,
+  "sunRadiusDeg": 0.2709235459501135,
+  "relRateDegPerDay": 0.785030409073936
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2383069.937692089,
+  "minSepDeg": 0.1797608647856494,
+  "behind": true,
+  "planetAu": 6.231515050550196,
+  "sunAu": 1.0166362394180997,
+  "sunRadiusDeg": 0.2620928368859071,
+  "relRateDegPerDay": 0.7291596100521464
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2387457.790355307,
+  "minSepDeg": 0.26619531449078226,
+  "behind": true,
+  "planetAu": 6.254738207492865,
+  "sunAu": 1.0163286498008979,
+  "sunRadiusDeg": 0.2621721592566266,
+  "relRateDegPerDay": 0.7302492201596619
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2389440.0887760306,
+  "minSepDeg": 0.23450976243175883,
+  "behind": true,
+  "planetAu": 6.240376923435968,
+  "sunAu": 0.9836357906143208,
+  "sunRadiusDeg": 0.27088597427118666,
+  "relRateDegPerDay": 0.7895499337185335
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2391445.300941631,
+  "minSepDeg": 0.28123701816910185,
+  "behind": true,
+  "planetAu": 6.130975500439221,
+  "sunAu": 1.0160416340207743,
+  "sunRadiusDeg": 0.262246219284968,
+  "relRateDegPerDay": 0.7246081531193383
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2393827.6126285745,
+  "minSepDeg": 0.14686119061969063,
+  "behind": true,
+  "planetAu": 6.218906532973165,
+  "sunAu": 0.9833860616866361,
+  "sunRadiusDeg": 0.2709547657364597,
+  "relRateDegPerDay": 0.7887546941952192
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2395833.2576730372,
+  "minSepDeg": 0.19288628226505752,
+  "behind": true,
+  "planetAu": 6.152124980167416,
+  "sunAu": 1.0163759738154412,
+  "sunRadiusDeg": 0.2621599520360869,
+  "relRateDegPerDay": 0.7252946143484118
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2398215.1468152534,
+  "minSepDeg": 0.05873858411810544,
+  "behind": true,
+  "planetAu": 6.20029648568043,
+  "sunAu": 0.9832782769669002,
+  "sunRadiusDeg": 0.2709844674006979,
+  "relRateDegPerDay": 0.7885325484543741
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2400221.2447910723,
+  "minSepDeg": 0.10323219510856048,
+  "behind": true,
+  "planetAu": 6.169964671127897,
+  "sunAu": 1.0166343454124764,
+  "sunRadiusDeg": 0.2620933251723511,
+  "relRateDegPerDay": 0.7259201652813837
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2402602.564453896,
+  "minSepDeg": 0.026775297885245457,
+  "behind": true,
+  "planetAu": 6.1864873855956635,
+  "sunAu": 0.9831926029035009,
+  "sunRadiusDeg": 0.27100808079394706,
+  "relRateDegPerDay": 0.787276778831514
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2404609.1772054005,
+  "minSepDeg": 0.014584055326088878,
+  "behind": true,
+  "planetAu": 6.184775297140133,
+  "sunAu": 1.0166853355388095,
+  "sunRadiusDeg": 0.26208018023506957,
+  "relRateDegPerDay": 0.7260642032849942
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2406990.109660918,
+  "minSepDeg": 0.11526194460882476,
+  "behind": true,
+  "planetAu": 6.166095380108661,
+  "sunAu": 0.983290934784408,
+  "sunRadiusDeg": 0.2709809790155315,
+  "relRateDegPerDay": 0.786785179067029
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2408997.1313359654,
+  "minSepDeg": 0.07497974989897871,
+  "behind": true,
+  "planetAu": 6.208079661806771,
+  "sunAu": 1.0167527830373928,
+  "sunRadiusDeg": 0.26206279471505783,
+  "relRateDegPerDay": 0.7278192775691111
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2411377.727737261,
+  "minSepDeg": 0.20370952868662695,
+  "behind": true,
+  "planetAu": 6.141184544077824,
+  "sunAu": 0.9834042234426068,
+  "sunRadiusDeg": 0.2709497616385509,
+  "relRateDegPerDay": 0.7846727308783381
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2413385.0488099754,
+  "minSepDeg": 0.16381161079969192,
+  "behind": true,
+  "planetAu": 6.230884345059311,
+  "sunAu": 1.0165705807227388,
+  "sunRadiusDeg": 0.26210976516821505,
+  "relRateDegPerDay": 0.7286397496680764
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2415765.448216751,
+  "minSepDeg": 0.29304604797944306,
+  "behind": true,
+  "planetAu": 6.120647795889457,
+  "sunAu": 0.9836958351093731,
+  "sunRadiusDeg": 0.2708694393503899,
+  "relRateDegPerDay": 0.7833926858728794
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2417772.7969801966,
+  "minSepDeg": 0.24863959436288108,
+  "behind": true,
+  "planetAu": 6.250918338098308,
+  "sunAu": 1.0164243803915158,
+  "sunRadiusDeg": 0.2621474667450402,
+  "relRateDegPerDay": 0.7302800499047737
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2419755.341553975,
+  "minSepDeg": 0.24728036521816005,
+  "behind": true,
+  "planetAu": 6.245644989295885,
+  "sunAu": 0.9837503307628841,
+  "sunRadiusDeg": 0.27085443420465927,
+  "relRateDegPerDay": 0.7894033701302872
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2421760.182435059,
+  "minSepDeg": 0.298545410882199,
+  "behind": true,
+  "planetAu": 6.124736601453584,
+  "sunAu": 1.0158771273955507,
+  "sunRadiusDeg": 0.26228868656834964,
+  "relRateDegPerDay": 0.7248143044304363
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2424142.7327089626,
+  "minSepDeg": 0.1639547886207801,
+  "behind": true,
+  "planetAu": 6.2323609753325835,
+  "sunAu": 0.9835141596008892,
+  "sunRadiusDeg": 0.27091947493896373,
+  "relRateDegPerDay": 0.7896706795875786
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2426148.149691323,
+  "minSepDeg": 0.21185028468922049,
+  "behind": true,
+  "planetAu": 6.138722356263356,
+  "sunAu": 1.0162499430665297,
+  "sunRadiusDeg": 0.26219246416160613,
+  "relRateDegPerDay": 0.7249253675818089
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2428530.177421459,
+  "minSepDeg": 0.07774906990929305,
+  "behind": true,
+  "planetAu": 6.212788577401154,
+  "sunAu": 0.9832858301022696,
+  "sunRadiusDeg": 0.27098238581102785,
+  "relRateDegPerDay": 0.7884341268684409
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2430536.197217024,
+  "minSepDeg": 0.1221922599451993,
+  "behind": true,
+  "planetAu": 6.160648250524348,
+  "sunAu": 1.016477479746086,
+  "sunRadiusDeg": 0.26213377243435615,
+  "relRateDegPerDay": 0.7252458751686259
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2432917.649078477,
+  "minSepDeg": 0.008616159952470372,
+  "behind": true,
+  "planetAu": 6.187952517517703,
+  "sunAu": 0.9832749182778592,
+  "sunRadiusDeg": 0.2709853930414627,
+  "relRateDegPerDay": 0.7879380156426502
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2434924.2356031807,
+  "minSepDeg": 0.031039245688732238,
+  "behind": true,
+  "planetAu": 6.18390183871717,
+  "sunAu": 1.0166857166355787,
+  "sunRadiusDeg": 0.262080081995658,
+  "relRateDegPerDay": 0.7267405709160314
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2437305.267370728,
+  "minSepDeg": 0.09829810604897252,
+  "behind": true,
+  "planetAu": 6.166114810187109,
+  "sunAu": 0.9832382427022178,
+  "sunRadiusDeg": 0.27099550108950077,
+  "relRateDegPerDay": 0.7862687079882834
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2439312.0873332554,
+  "minSepDeg": 0.05705974963244246,
+  "behind": true,
+  "planetAu": 6.205322109576917,
+  "sunAu": 1.0166585210556258,
+  "sunRadiusDeg": 0.2620870926776005,
+  "relRateDegPerDay": 0.727181200185066
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2441692.8879959723,
+  "minSepDeg": 0.18746989688468615,
+  "behind": true,
+  "planetAu": 6.147684240916101,
+  "sunAu": 0.9833989696667493,
+  "sunRadiusDeg": 0.27095120918931276,
+  "relRateDegPerDay": 0.7854063713585867
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2443699.94309544,
+  "minSepDeg": 0.14466047270442062,
+  "behind": true,
+  "planetAu": 6.223265380684981,
+  "sunAu": 1.016617731865919,
+  "sunRadiusDeg": 0.26209760832608325,
+  "relRateDegPerDay": 0.7286338326353817
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2446080.430211058,
+  "minSepDeg": 0.2725996044563865,
+  "behind": true,
+  "planetAu": 6.1341823389429,
+  "sunAu": 0.9836095746613992,
+  "sunRadiusDeg": 0.2708931941956839,
+  "relRateDegPerDay": 0.7842511514835481
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2448087.730251572,
+  "minSepDeg": 0.22890404414103835,
+  "behind": true,
+  "planetAu": 6.2380225822160735,
+  "sunAu": 1.0164322166391946,
+  "sunRadiusDeg": 0.2621454456886643,
+  "relRateDegPerDay": 0.729480800627747
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2450070.4062470887,
+  "minSepDeg": 0.2648357235331929,
+  "behind": true,
+  "planetAu": 6.257982886512958,
+  "sunAu": 0.9839309172287924,
+  "sunRadiusDeg": 0.27080472237179415,
+  "relRateDegPerDay": 0.7901255873336218
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2454457.748269432,
+  "minSepDeg": 0.18230197670373702,
+  "behind": true,
+  "planetAu": 6.234426897097755,
+  "sunAu": 0.9835886048469559,
+  "sunRadiusDeg": 0.27089896960047966,
+  "relRateDegPerDay": 0.7889346894496787
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2456463.175742424,
+  "minSepDeg": 0.2278200153165248,
+  "behind": true,
+  "planetAu": 6.1370150719533125,
+  "sunAu": 1.0161081656024888,
+  "sunRadiusDeg": 0.2622290481036044,
+  "relRateDegPerDay": 0.7247389327727126
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2458845.2687027855,
+  "minSepDeg": 0.09522837739286691,
+  "behind": true,
+  "planetAu": 6.212555236149075,
+  "sunAu": 0.9834255253980796,
+  "sunRadiusDeg": 0.27094389255885687,
+  "relRateDegPerDay": 0.7888939551390488
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2460851.1381378984,
+  "minSepDeg": 0.13948649452959966,
+  "behind": true,
+  "planetAu": 6.159197348409705,
+  "sunAu": 1.0164221086578011,
+  "sunRadiusDeg": 0.26214805265653196,
+  "relRateDegPerDay": 0.7259459366040084
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2463232.8207160886,
+  "minSepDeg": 0.007095666774242173,
+  "behind": true,
+  "planetAu": 6.193006129311345,
+  "sunAu": 0.983257451010404,
+  "sunRadiusDeg": 0.2709902070498658,
+  "relRateDegPerDay": 0.7875933432816942
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2465239.072702243,
+  "minSepDeg": 0.050697458888013074,
+  "behind": true,
+  "planetAu": 6.177799732721483,
+  "sunAu": 1.0165587573632096,
+  "sunRadiusDeg": 0.2621128137274707,
+  "relRateDegPerDay": 0.7259445258374477
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2467620.319072308,
+  "minSepDeg": 0.07918068763204267,
+  "behind": true,
+  "planetAu": 6.178835827348499,
+  "sunAu": 0.9832898028632298,
+  "sunRadiusDeg": 0.270981290959574,
+  "relRateDegPerDay": 0.7872556044953007
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2469626.90744681,
+  "minSepDeg": 0.035670020776934215,
+  "behind": true,
+  "planetAu": 6.192849545919656,
+  "sunAu": 1.016672173681186,
+  "sunRadiusDeg": 0.2620835731538156,
+  "relRateDegPerDay": 0.7270683250351792
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2472007.846202569,
+  "minSepDeg": 0.16631476570639783,
+  "behind": true,
+  "planetAu": 6.159491344931626,
+  "sunAu": 0.9833690733556597,
+  "sunRadiusDeg": 0.2709594466885866,
+  "relRateDegPerDay": 0.7859831815982311
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2474014.850678348,
+  "minSepDeg": 0.12379530522428642,
+  "behind": true,
+  "planetAu": 6.214655957368853,
+  "sunAu": 1.016609517281343,
+  "sunRadiusDeg": 0.26209972618741784,
+  "relRateDegPerDay": 0.7279568645770782
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2476395.381930329,
+  "minSepDeg": 0.25153127403147235,
+  "behind": true,
+  "planetAu": 6.1346798579939765,
+  "sunAu": 0.9835258003271367,
+  "sunRadiusDeg": 0.27091626839070115,
+  "relRateDegPerDay": 0.7841461829933744
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2478402.7746739583,
+  "minSepDeg": 0.21178079699535168,
+  "behind": true,
+  "planetAu": 6.237375379305766,
+  "sunAu": 1.0164389299734171,
+  "sunRadiusDeg": 0.26214371426907784,
+  "relRateDegPerDay": 0.729290001773745
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2480385.4514948605,
+  "minSepDeg": 0.2820474569443784,
+  "behind": true,
+  "planetAu": 6.258059292429638,
+  "sunAu": 0.984048667019729,
+  "sunRadiusDeg": 0.27077231804270274,
+  "relRateDegPerDay": 0.7892115727482397
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2482790.537247071,
+  "minSepDeg": 0.29596069331562475,
+  "behind": true,
+  "planetAu": 6.258413139365855,
+  "sunAu": 1.0162412462560373,
+  "sunRadiusDeg": 0.2621947079733967,
+  "relRateDegPerDay": 0.7311209272425143
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2484772.933941775,
+  "minSepDeg": 0.1966049037922688,
+  "behind": true,
+  "planetAu": 6.238112155425948,
+  "sunAu": 0.9837711681319923,
+  "sunRadiusDeg": 0.27084869716331866,
+  "relRateDegPerDay": 0.7895223801949066
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2486778.0080571584,
+  "minSepDeg": 0.24632649546396707,
+  "behind": true,
+  "planetAu": 6.132927077031381,
+  "sunAu": 1.0160017466058748,
+  "sunRadiusDeg": 0.2622565149334158,
+  "relRateDegPerDay": 0.7252947209096472
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2489160.4083795147,
+  "minSepDeg": 0.112144953031914,
+  "behind": true,
+  "planetAu": 6.2230272895275975,
+  "sunAu": 0.9834829893557374,
+  "sunRadiusDeg": 0.27092806145187803,
+  "relRateDegPerDay": 0.7886607492421107
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2491165.90174981,
+  "minSepDeg": 0.1608804009292617,
+  "behind": true,
+  "planetAu": 6.148116850513441,
+  "sunAu": 1.0162580602357307,
+  "sunRadiusDeg": 0.2621903699342302,
+  "relRateDegPerDay": 0.7249292375960298
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2493547.8523609014,
+  "minSepDeg": 0.026119052137225336,
+  "behind": true,
+  "planetAu": 6.204325443463518,
+  "sunAu": 0.9833736750929293,
+  "sunRadiusDeg": 0.2709581787133383,
+  "relRateDegPerDay": 0.7884139006660552
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2495553.9371544635,
+  "minSepDeg": 0.07123938407624425,
+  "behind": true,
+  "planetAu": 6.168501027656563,
+  "sunAu": 1.0165406131284835,
+  "sunRadiusDeg": 0.26211749221206215,
+  "relRateDegPerDay": 0.7260962995402188
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2497935.262794152,
+  "minSepDeg": 0.05861399480717653,
+  "behind": true,
+  "planetAu": 6.180526079082793,
+  "sunAu": 0.9833062139152807,
+  "sunRadiusDeg": 0.27097676833868006,
+  "relRateDegPerDay": 0.7871408925364513
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2499941.9978599763,
+  "minSepDeg": 0.02007927209706871,
+  "behind": true,
+  "planetAu": 6.190971901000959,
+  "sunAu": 1.0165986538179006,
+  "sunRadiusDeg": 0.2621025270278916,
+  "relRateDegPerDay": 0.7267510183041672
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2502322.885052624,
+  "minSepDeg": 0.14765862339598146,
+  "behind": true,
+  "planetAu": 6.158365406850876,
+  "sunAu": 0.9833407019556791,
+  "sunRadiusDeg": 0.27096726448371883,
+  "relRateDegPerDay": 0.7857452501771136
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2504329.875432766,
+  "minSepDeg": 0.10739608933563695,
+  "behind": true,
+  "planetAu": 6.2134594281166535,
+  "sunAu": 1.0166189195752993,
+  "sunRadiusDeg": 0.2620973021169883,
+  "relRateDegPerDay": 0.7278594942717154
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2506710.5720941853,
+  "minSepDeg": 0.2359876230197947,
+  "behind": true,
+  "planetAu": 6.138918169852416,
+  "sunAu": 0.9835476742551803,
+  "sunRadiusDeg": 0.2709102432154317,
+  "relRateDegPerDay": 0.7848461855056957
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2508717.709695166,
+  "minSepDeg": 0.19352134477277222,
+  "behind": true,
+  "planetAu": 6.2323880016373305,
+  "sunAu": 1.0165172192625884,
+  "sunRadiusDeg": 0.2621235245587116,
+  "relRateDegPerDay": 0.7293485259938981
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2510700.6741552465,
+  "minSepDeg": 0.295769098827046,
+  "behind": true,
+  "planetAu": 6.265735038998868,
+  "sunAu": 0.984280641322754,
+  "sunRadiusDeg": 0.27070850221155585,
+  "relRateDegPerDay": 0.7899017427492552
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2513105.44736828,
+  "minSepDeg": 0.2761029745007121,
+  "behind": true,
+  "planetAu": 6.247577718030555,
+  "sunAu": 1.0162609624110241,
+  "sunRadiusDeg": 0.262189621181938,
+  "relRateDegPerDay": 0.7299123302562298
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2515088.0667896997,
+  "minSepDeg": 0.2126737563445545,
+  "behind": true,
+  "planetAu": 6.247969893854533,
+  "sunAu": 0.9838556146283576,
+  "sunRadiusDeg": 0.2708254494493951,
+  "relRateDegPerDay": 0.7891863582690062
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2517092.8717773156,
+  "minSepDeg": 0.26535549674701964,
+  "behind": true,
+  "planetAu": 6.123480201311383,
+  "sunAu": 1.0157618235049177,
+  "sunRadiusDeg": 0.2623184603958628,
+  "relRateDegPerDay": 0.7244978829126971
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2519475.364122442,
+  "minSepDeg": 0.13106158100289006,
+  "behind": true,
+  "planetAu": 6.226508910805852,
+  "sunAu": 0.9836544186213866,
+  "sunRadiusDeg": 0.2708808443156413,
+  "relRateDegPerDay": 0.7890026727975517
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2521481.0483361585,
+  "minSepDeg": 0.17414226207142056,
+  "behind": true,
+  "planetAu": 6.144493128618093,
+  "sunAu": 1.0162160514565164,
+  "sunRadiusDeg": 0.26220120854894624,
+  "relRateDegPerDay": 0.7254816005880174
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2523862.9084859295,
+  "minSepDeg": 0.04369096626840875,
+  "behind": true,
+  "planetAu": 6.204353056453754,
+  "sunAu": 0.9834402266141025,
+  "sunRadiusDeg": 0.2709398422523132,
+  "relRateDegPerDay": 0.7880709569399785
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2383620.957446344,
+  "minSepDeg": 0.014948442058433126,
+  "behind": true,
+  "planetAu": 11.006887273413103,
+  "sunAu": 0.9835651995834133,
+  "sunRadiusDeg": 0.2709054160557102,
+  "relRateDegPerDay": 0.9000499679572129
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2388920.0468880367,
+  "minSepDeg": 0.06561172641608225,
+  "behind": true,
+  "planetAu": 10.071154237477815,
+  "sunAu": 1.0163259947186065,
+  "sunRadiusDeg": 0.26217284416827813,
+  "relRateDegPerDay": 0.8247092902321439
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2394208.1645011147,
+  "minSepDeg": 0.21970566812435338,
+  "behind": true,
+  "planetAu": 11.035988845148019,
+  "sunAu": 0.9833154105614414,
+  "sunRadiusDeg": 0.2709742339575345,
+  "relRateDegPerDay": 0.901031845246674
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2394584.603851812,
+  "minSepDeg": 0.23089125830357698,
+  "behind": true,
+  "planetAu": 10.992001881026958,
+  "sunAu": 0.9840126363576067,
+  "sunRadiusDeg": 0.27078223273096796,
+  "relRateDegPerDay": 0.8993856222662003
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2399505.7419577306,
+  "minSepDeg": 0.18012803973953978,
+  "behind": true,
+  "planetAu": 10.050422146360773,
+  "sunAu": 1.0166023732630736,
+  "sunRadiusDeg": 0.2621015680661531,
+  "relRateDegPerDay": 0.8232926938737345
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2405172.175889346,
+  "minSepDeg": 0.04170553509101965,
+  "behind": true,
+  "planetAu": 10.9932130240967,
+  "sunAu": 0.9836093106370243,
+  "sunRadiusDeg": 0.27089326691046856,
+  "relRateDegPerDay": 0.8994884026756172
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2410471.6562326867,
+  "minSepDeg": 0.13375290463163814,
+  "behind": true,
+  "planetAu": 10.081851746928628,
+  "sunAu": 1.0161832261292478,
+  "sunRadiusDeg": 0.2622096783803165,
+  "relRateDegPerDay": 0.8252660856459655
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2415759.4258628758,
+  "minSepDeg": 0.16124399764387823,
+  "behind": true,
+  "planetAu": 11.027930667412704,
+  "sunAu": 0.9833990348623048,
+  "sunRadiusDeg": 0.2709511912261609,
+  "relRateDegPerDay": 0.9010790076777248
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2416135.888034473,
+  "minSepDeg": 0.2899124250832052,
+  "behind": true,
+  "planetAu": 10.982583178906633,
+  "sunAu": 0.9841214097110575,
+  "sunRadiusDeg": 0.2707523033843723,
+  "relRateDegPerDay": 0.8986745495168316
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2421057.3574924953,
+  "minSepDeg": 0.11168136807742167,
+  "behind": true,
+  "planetAu": 10.056149503554543,
+  "sunAu": 1.0165473392053632,
+  "sunRadiusDeg": 0.26211575787600566,
+  "relRateDegPerDay": 0.8234539904494933
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2426723.472215265,
+  "minSepDeg": 0.1015173408797937,
+  "behind": true,
+  "planetAu": 10.982249262263403,
+  "sunAu": 0.9837243073419827,
+  "sunRadiusDeg": 0.2708615994352019,
+  "relRateDegPerDay": 0.8994194871360273
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2432023.4019570965,
+  "minSepDeg": 0.20714178066171063,
+  "behind": true,
+  "planetAu": 10.090451299401122,
+  "sunAu": 1.0160018581565233,
+  "sunRadiusDeg": 0.26225648613908986,
+  "relRateDegPerDay": 0.8253661170480925
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2437310.7571832445,
+  "minSepDeg": 0.09984671437298878,
+  "behind": true,
+  "planetAu": 11.021002227467822,
+  "sunAu": 0.9834294804969833,
+  "sunRadiusDeg": 0.2709428028845065,
+  "relRateDegPerDay": 0.900651296722897
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2442609.115967758,
+  "minSepDeg": 0.037772360403988056,
+  "behind": true,
+  "planetAu": 10.062435066122365,
+  "sunAu": 1.0164692198420737,
+  "sunRadiusDeg": 0.2621359025676289,
+  "relRateDegPerDay": 0.8240993776663496
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2447898.377515821,
+  "minSepDeg": 0.2871298997536673,
+  "behind": true,
+  "planetAu": 11.01002689395751,
+  "sunAu": 0.9833154132447686,
+  "sunRadiusDeg": 0.270974233218079,
+  "relRateDegPerDay": 0.9004666054100298
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2448274.8231410626,
+  "minSepDeg": 0.16330388338092308,
+  "behind": true,
+  "planetAu": 10.972723386533566,
+  "sunAu": 0.9838709437110401,
+  "sunRadiusDeg": 0.2708212298546894,
+  "relRateDegPerDay": 0.8994433325476057
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2453195.194253399,
+  "minSepDeg": 0.26648171822075795,
+  "behind": true,
+  "planetAu": 10.059517411566159,
+  "sunAu": 1.016672792401503,
+  "sunRadiusDeg": 0.2620834136555347,
+  "relRateDegPerDay": 0.8235363353211593
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2453575.2089827927,
+  "minSepDeg": 0.2827395556500277,
+  "behind": true,
+  "planetAu": 10.098290522012698,
+  "sunAu": 1.0158403674738952,
+  "sunRadiusDeg": 0.26229817799951716,
+  "relRateDegPerDay": 0.8253904007893246
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2458862.1367805796,
+  "minSepDeg": 0.036429336918989516,
+  "behind": true,
+  "planetAu": 11.016517060249154,
+  "sunAu": 0.9834568809876473,
+  "sunRadiusDeg": 0.27093525398102053,
+  "relRateDegPerDay": 0.900072600408974
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2464160.90977233,
+  "minSepDeg": 0.03734059491457767,
+  "behind": true,
+  "planetAu": 10.066661912120958,
+  "sunAu": 1.0163814409977838,
+  "sunRadiusDeg": 0.26215854185069287,
+  "relRateDegPerDay": 0.8246825596809134
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2469449.7209593654,
+  "minSepDeg": 0.22514921505505697,
+  "behind": true,
+  "planetAu": 11.007012949755199,
+  "sunAu": 0.9833754555689898,
+  "sunRadiusDeg": 0.2709576881192887,
+  "relRateDegPerDay": 0.9007939508703525
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2469826.1799440756,
+  "minSepDeg": 0.225115925154934,
+  "behind": true,
+  "planetAu": 10.966257024141283,
+  "sunAu": 0.9839717704110063,
+  "sunRadiusDeg": 0.27079347884085464,
+  "relRateDegPerDay": 0.8991006232493925
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2474747.047403015,
+  "minSepDeg": 0.18898640371419476,
+  "behind": true,
+  "planetAu": 10.063237508750245,
+  "sunAu": 1.0165851404299993,
+  "sunRadiusDeg": 0.2621060111608815,
+  "relRateDegPerDay": 0.8234528361168753
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2480413.51249143,
+  "minSepDeg": 0.026545380730156193,
+  "behind": true,
+  "planetAu": 11.013297854464158,
+  "sunAu": 0.9835475858782419,
+  "sunRadiusDeg": 0.27091026755832737,
+  "relRateDegPerDay": 0.8998207622651433
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2485712.678995787,
+  "minSepDeg": 0.11113899184054105,
+  "behind": true,
+  "planetAu": 10.070553707292392,
+  "sunAu": 1.0162638493077043,
+  "sunRadiusDeg": 0.26218887637572363,
+  "relRateDegPerDay": 0.8248364806537252
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2491001.054554415,
+  "minSepDeg": 0.16398537088820828,
+  "behind": true,
+  "planetAu": 11.006855825545378,
+  "sunAu": 0.9834403673068686,
+  "sunRadiusDeg": 0.2709398034908781,
+  "relRateDegPerDay": 0.9007836576708204
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2491377.516993691,
+  "minSepDeg": 0.2863543448733571,
+  "behind": true,
+  "planetAu": 10.963137652245035,
+  "sunAu": 0.984049562268849,
+  "sunRadiusDeg": 0.27077207170299245,
+  "relRateDegPerDay": 0.8984263876448604
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2496298.7964703226,
+  "minSepDeg": 0.11576115466383441,
+  "behind": true,
+  "planetAu": 10.065202137583288,
+  "sunAu": 1.0164992987815284,
+  "sunRadiusDeg": 0.26212814572513626,
+  "relRateDegPerDay": 0.8238236953158429
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2501964.848311004,
+  "minSepDeg": 0.08764682285763778,
+  "behind": true,
+  "planetAu": 11.012909456097994,
+  "sunAu": 0.9836891167783463,
+  "sunRadiusDeg": 0.27087128932929605,
+  "relRateDegPerDay": 0.8999829123305413
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2507264.3691459605,
+  "minSepDeg": 0.18177427666247045,
+  "behind": true,
+  "planetAu": 10.072584733972317,
+  "sunAu": 1.0161216161222622,
+  "sunRadiusDeg": 0.2622255769230217,
+  "relRateDegPerDay": 0.8246905090657076
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2512552.331337275,
+  "minSepDeg": 0.1056117482793631,
+  "behind": true,
+  "planetAu": 11.008896736772144,
+  "sunAu": 0.9834684880445413,
+  "sunRadiusDeg": 0.2709320563347458,
+  "relRateDegPerDay": 0.9003264083492588
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2517850.4211819107,
+  "minSepDeg": 0.04762050979064957,
+  "behind": true,
+  "planetAu": 10.067088926010328,
+  "sunAu": 1.0164526704386978,
+  "sunRadiusDeg": 0.2621401705706426,
+  "relRateDegPerDay": 0.8243791058718983
+ },
+ {
+  "body": "Saturn",
+  "jdTt": 2523516.133572828,
+  "minSepDeg": 0.14622970317726147,
+  "behind": true,
+  "planetAu": 11.013346100839494,
+  "sunAu": 0.983812273258165,
+  "sunRadiusDeg": 0.2708373806214352,
+  "relRateDegPerDay": 0.9000578258004185
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2382828.9252536707,
+  "minSepDeg": 0.2981374857749576,
+  "behind": true,
+  "planetAu": 19.719649669814395,
+  "sunAu": 0.9892072696428887,
+  "sunRadiusDeg": 0.2693602609839105,
+  "relRateDegPerDay": 0.9451982072908223
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2383198.670253299,
+  "minSepDeg": 0.24393126680138003,
+  "behind": true,
+  "planetAu": 19.781070846594695,
+  "sunAu": 0.9881708041430255,
+  "sunRadiusDeg": 0.26964278772565786,
+  "relRateDegPerDay": 0.946813395875117
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2383568.3857540516,
+  "minSepDeg": 0.18856823697990283,
+  "behind": true,
+  "planetAu": 19.845290291268412,
+  "sunAu": 0.9873359441901577,
+  "sunRadiusDeg": 0.26987079079840415,
+  "relRateDegPerDay": 0.9494533004579762
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2383938.058018312,
+  "minSepDeg": 0.13276531681682213,
+  "behind": true,
+  "planetAu": 19.91129944623157,
+  "sunAu": 0.9864921064769819,
+  "sunRadiusDeg": 0.2701016378935924,
+  "relRateDegPerDay": 0.9505923609367376
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2384307.7018831335,
+  "minSepDeg": 0.0759722221887664,
+  "behind": true,
+  "planetAu": 19.978487568601064,
+  "sunAu": 0.9858054403070938,
+  "sunRadiusDeg": 0.270289779513587,
+  "relRateDegPerDay": 0.953050060108973
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2384677.310588802,
+  "minSepDeg": 0.019484642555409538,
+  "behind": true,
+  "planetAu": 20.04595422219699,
+  "sunAu": 0.9850840594646186,
+  "sunRadiusDeg": 0.270487715227785,
+  "relRateDegPerDay": 0.9539085333275724
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2385046.8802252784,
+  "minSepDeg": 0.03682969941498346,
+  "behind": true,
+  "planetAu": 20.113317049184012,
+  "sunAu": 0.9846014369226952,
+  "sunRadiusDeg": 0.2706203013020198,
+  "relRateDegPerDay": 0.955986830088787
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2385416.420125398,
+  "minSepDeg": 0.09278940729664238,
+  "behind": true,
+  "planetAu": 20.179825574323917,
+  "sunAu": 0.9841043597158616,
+  "sunRadiusDeg": 0.270756994309465,
+  "relRateDegPerDay": 0.9563675239291816
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2385785.923217058,
+  "minSepDeg": 0.147420506453515,
+  "behind": true,
+  "planetAu": 20.245429030506624,
+  "sunAu": 0.983816811163458,
+  "sunRadiusDeg": 0.27083613136087853,
+  "relRateDegPerDay": 0.9580437366175587
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2386155.3846566677,
+  "minSepDeg": 0.20142372576070544,
+  "behind": true,
+  "planetAu": 20.309840864117497,
+  "sunAu": 0.983483341517229,
+  "sunRadiusDeg": 0.27092796443839817,
+  "relRateDegPerDay": 0.9580914943079294
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2386524.813107658,
+  "minSepDeg": 0.25325192865898594,
+  "behind": true,
+  "planetAu": 20.373513754483188,
+  "sunAu": 0.9833733476214032,
+  "sunRadiusDeg": 0.2709582689453443,
+  "relRateDegPerDay": 0.9593883177193194
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2399080.919330134,
+  "minSepDeg": 0.28122369448222845,
+  "behind": true,
+  "planetAu": 20.59308048280573,
+  "sunAu": 1.0107071011413853,
+  "sunRadiusDeg": 0.26363036996959444,
+  "relRateDegPerDay": 0.9066787233039576
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2399450.5217242707,
+  "minSepDeg": 0.2301069260190126,
+  "behind": true,
+  "planetAu": 20.533237257032237,
+  "sunAu": 1.0116181039867398,
+  "sunRadiusDeg": 0.26339295853060823,
+  "relRateDegPerDay": 0.9046723960959709
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2399820.1541701052,
+  "minSepDeg": 0.1782770433589304,
+  "behind": true,
+  "planetAu": 20.470288727516504,
+  "sunAu": 1.01246779540992,
+  "sunRadiusDeg": 0.26317191020355885,
+  "relRateDegPerDay": 0.9029002788908695
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2400189.821269205,
+  "minSepDeg": 0.12497114025685613,
+  "behind": true,
+  "planetAu": 20.40445791619865,
+  "sunAu": 1.0132695464600974,
+  "sunRadiusDeg": 0.2629636735717294,
+  "relRateDegPerDay": 0.9012807438260636
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2400559.523208673,
+  "minSepDeg": 0.0704758212444511,
+  "behind": true,
+  "planetAu": 20.33628999649303,
+  "sunAu": 1.0140152371800255,
+  "sunRadiusDeg": 0.2627702929013101,
+  "relRateDegPerDay": 0.8995164258514254
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2400929.268271968,
+  "minSepDeg": 0.01553267689091508,
+  "behind": true,
+  "planetAu": 20.266551878803792,
+  "sunAu": 1.014712197486215,
+  "sunRadiusDeg": 0.2625898065062953,
+  "relRateDegPerDay": 0.8982723036157099
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2401299.0365801128,
+  "minSepDeg": 0.040459109197556326,
+  "behind": true,
+  "planetAu": 20.19590476549363,
+  "sunAu": 1.0152301849298566,
+  "sunRadiusDeg": 0.262455827851775,
+  "relRateDegPerDay": 0.8967276328119351
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2401668.8474041475,
+  "minSepDeg": 0.09584061606389395,
+  "behind": true,
+  "planetAu": 20.12531949095478,
+  "sunAu": 1.0157545118080684,
+  "sunRadiusDeg": 0.26232034865374343,
+  "relRateDegPerDay": 0.8960004785873669
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2402038.685951528,
+  "minSepDeg": 0.15141254222914327,
+  "behind": true,
+  "planetAu": 20.05538635283227,
+  "sunAu": 1.0161444337909857,
+  "sunRadiusDeg": 0.2622196885690424,
+  "relRateDegPerDay": 0.8944760186321262
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2402408.5696501574,
+  "minSepDeg": 0.20622573007448858,
+  "behind": true,
+  "planetAu": 19.986851483346413,
+  "sunAu": 1.01648468083034,
+  "sunRadiusDeg": 0.2621319153866434,
+  "relRateDegPerDay": 0.8942782240686497
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2402778.482657671,
+  "minSepDeg": 0.259803147814579,
+  "behind": true,
+  "planetAu": 19.92014397240532,
+  "sunAu": 1.0166183326853382,
+  "sunRadiusDeg": 0.26209745342583596,
+  "relRateDegPerDay": 0.9680147702521763
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2413510.3595058257,
+  "minSepDeg": 0.29062927085350887,
+  "behind": true,
+  "planetAu": 19.712006437810235,
+  "sunAu": 0.9893066233384592,
+  "sunRadiusDeg": 0.2693332095785434,
+  "relRateDegPerDay": 0.9449373351194987
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2413880.1150314137,
+  "minSepDeg": 0.23586398358532465,
+  "behind": true,
+  "planetAu": 19.774727916150564,
+  "sunAu": 0.988274779143787,
+  "sunRadiusDeg": 0.26961441877746634,
+  "relRateDegPerDay": 0.946637651590377
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2414249.834565863,
+  "minSepDeg": 0.1807218118776159,
+  "behind": true,
+  "planetAu": 19.83969151633922,
+  "sunAu": 0.9874256594634828,
+  "sunRadiusDeg": 0.2698462707643628,
+  "relRateDegPerDay": 0.9492059918022323
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2414619.519819921,
+  "minSepDeg": 0.1242450167007631,
+  "behind": true,
+  "planetAu": 19.905919701132476,
+  "sunAu": 0.9865606746545486,
+  "sunRadiusDeg": 0.2700828650854665,
+  "relRateDegPerDay": 0.9504642446887355
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2414989.1739424644,
+  "minSepDeg": 0.06786858350584077,
+  "behind": true,
+  "planetAu": 19.97290987137395,
+  "sunAu": 0.9858696229976809,
+  "sunRadiusDeg": 0.27027218281158916,
+  "relRateDegPerDay": 0.9528476303427238
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2415358.7838853737,
+  "minSepDeg": 0.011051978101786385,
+  "behind": true,
+  "planetAu": 20.03982840290819,
+  "sunAu": 0.9851507557769704,
+  "sunRadiusDeg": 0.2704694026324319,
+  "relRateDegPerDay": 0.9537350162563837
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2415728.3633823916,
+  "minSepDeg": 0.04534378939573789,
+  "behind": true,
+  "planetAu": 20.1064925604702,
+  "sunAu": 0.9846758113159128,
+  "sunRadiusDeg": 0.27059986069595854,
+  "relRateDegPerDay": 0.9557626336161705
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2416097.9021503865,
+  "minSepDeg": 0.10106399610979723,
+  "behind": true,
+  "planetAu": 20.172407560654914,
+  "sunAu": 0.9841963422829445,
+  "sunRadiusDeg": 0.27073168928882596,
+  "relRateDegPerDay": 0.9561142924381718
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2416467.4020595085,
+  "minSepDeg": 0.15625332302346837,
+  "behind": true,
+  "planetAu": 20.237723032997575,
+  "sunAu": 0.9838753178700524,
+  "sunRadiusDeg": 0.2708200258160028,
+  "relRateDegPerDay": 0.9578803779978636
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2416836.866472195,
+  "minSepDeg": 0.20940216159076994,
+  "behind": true,
+  "planetAu": 20.3024444285778,
+  "sunAu": 0.98353145846911,
+  "sunRadiusDeg": 0.27091470982933524,
+  "relRateDegPerDay": 0.9579674478089903
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2417206.293784417,
+  "minSepDeg": 0.26153530590933366,
+  "behind": true,
+  "planetAu": 20.367016083846877,
+  "sunAu": 0.9834158869360912,
+  "sunRadiusDeg": 0.27094654810053637,
+  "relRateDegPerDay": 0.9593095973589671
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2429762.4121852564,
+  "minSepDeg": 0.272917440323405,
+  "behind": true,
+  "planetAu": 20.600493811952305,
+  "sunAu": 1.0106033129688974,
+  "sunRadiusDeg": 0.26365744479419195,
+  "relRateDegPerDay": 0.9070133893532297
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2430132.012853113,
+  "minSepDeg": 0.2220996771053361,
+  "behind": true,
+  "planetAu": 20.540392344747175,
+  "sunAu": 1.011519982175543,
+  "sunRadiusDeg": 0.263418508966279,
+  "relRateDegPerDay": 0.904861132896048
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2430501.6375469165,
+  "minSepDeg": 0.1696969096172543,
+  "behind": true,
+  "planetAu": 20.476927936029604,
+  "sunAu": 1.012367705762247,
+  "sunRadiusDeg": 0.263197929375142,
+  "relRateDegPerDay": 0.9032353482494229
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2430871.3046852723,
+  "minSepDeg": 0.11633089505140543,
+  "behind": true,
+  "planetAu": 20.41067920387877,
+  "sunAu": 1.0131785284149493,
+  "sunRadiusDeg": 0.26298729685915606,
+  "relRateDegPerDay": 0.9014409904617369
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2431240.9991169367,
+  "minSepDeg": 0.061950720323518935,
+  "behind": true,
+  "planetAu": 20.342399677002632,
+  "sunAu": 1.0139510306416486,
+  "sunRadiusDeg": 0.2627869324516297,
+  "relRateDegPerDay": 0.8997289463757748
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2431610.7383599114,
+  "minSepDeg": 0.006519635916345946,
+  "behind": true,
+  "planetAu": 20.272805775496483,
+  "sunAu": 1.0146098679119724,
+  "sunRadiusDeg": 0.2626162904703435,
+  "relRateDegPerDay": 0.8984131528197369
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2431980.5030406285,
+  "minSepDeg": 0.048614989521442456,
+  "behind": true,
+  "planetAu": 20.202696220427068,
+  "sunAu": 1.0151604439880852,
+  "sunRadiusDeg": 0.26247385854313426,
+  "relRateDegPerDay": 0.8969170490385997
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2432350.303743507,
+  "minSepDeg": 0.1043613654232007,
+  "behind": true,
+  "planetAu": 20.132891145526376,
+  "sunAu": 1.015701004992001,
+  "sunRadiusDeg": 0.26233416770546863,
+  "relRateDegPerDay": 0.8960304034341828
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2432720.1422378477,
+  "minSepDeg": 0.15936428727364102,
+  "behind": true,
+  "planetAu": 20.06390886572531,
+  "sunAu": 1.0160888723604242,
+  "sunRadiusDeg": 0.2622340272781287,
+  "relRateDegPerDay": 0.8946316394982297
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2433090.0235183714,
+  "minSepDeg": 0.21385663580505584,
+  "behind": true,
+  "planetAu": 19.996434917769236,
+  "sunAu": 1.0164353090661242,
+  "sunRadiusDeg": 0.2621446481255679,
+  "relRateDegPerDay": 0.8943096899078186
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2433459.928546803,
+  "minSepDeg": 0.2682034822545539,
+  "behind": true,
+  "planetAu": 19.93069092049805,
+  "sunAu": 1.0165771058878237,
+  "sunRadiusDeg": 0.2621080827366424,
+  "relRateDegPerDay": 0.8931480467574595
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2444191.79398562,
+  "minSepDeg": 0.2831309342707711,
+  "behind": true,
+  "planetAu": 19.70711117476109,
+  "sunAu": 0.9894003263224179,
+  "sunRadiusDeg": 0.2693077016919876,
+  "relRateDegPerDay": 0.9446365293363909
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2444561.552214506,
+  "minSepDeg": 0.22829756758250527,
+  "behind": true,
+  "planetAu": 19.769741421948222,
+  "sunAu": 0.9883653516994723,
+  "sunRadiusDeg": 0.2695897114694486,
+  "relRateDegPerDay": 0.9464880326590541
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2444931.2847603275,
+  "minSepDeg": 0.17239541056995306,
+  "behind": true,
+  "planetAu": 19.83435282994845,
+  "sunAu": 0.9875022294157432,
+  "sunRadiusDeg": 0.26982534699506966,
+  "relRateDegPerDay": 0.9489931005604646
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2445300.97505928,
+  "minSepDeg": 0.11619673105689209,
+  "behind": true,
+  "planetAu": 19.900072546669673,
+  "sunAu": 0.9866490006887408,
+  "sunRadiusDeg": 0.2700586867555558,
+  "relRateDegPerDay": 0.9503207254639222
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2445670.6316815987,
+  "minSepDeg": 0.05905906927898214,
+  "behind": true,
+  "planetAu": 19.96638818279429,
+  "sunAu": 0.985932266999148,
+  "sunRadiusDeg": 0.2702550101749371,
+  "relRateDegPerDay": 0.952694995237781
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2446040.248489568,
+  "minSepDeg": 0.0024463453758597864,
+  "behind": true,
+  "planetAu": 20.032711598982004,
+  "sunAu": 0.9852344176115867,
+  "sunRadiusDeg": 0.2704464353729787,
+  "relRateDegPerDay": 0.9536112038550099
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2446409.825185541,
+  "minSepDeg": 0.05408532991355959,
+  "behind": true,
+  "planetAu": 20.09899318365624,
+  "sunAu": 0.9847764902954212,
+  "sunRadiusDeg": 0.2705721956159837,
+  "relRateDegPerDay": 0.955546100614298
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2446779.3638247913,
+  "minSepDeg": 0.1100453513760685,
+  "behind": true,
+  "planetAu": 20.16488334712412,
+  "sunAu": 0.9842583464981498,
+  "sunRadiusDeg": 0.2707146341824038,
+  "relRateDegPerDay": 0.9560335781378574
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2447148.865179347,
+  "minSepDeg": 0.16441247442019516,
+  "behind": true,
+  "planetAu": 20.230779251860614,
+  "sunAu": 0.9839292414581992,
+  "sunRadiusDeg": 0.2708051835939536,
+  "relRateDegPerDay": 0.9577662343517915
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2447518.324851292,
+  "minSepDeg": 0.2179113283482042,
+  "behind": true,
+  "planetAu": 20.29662005089448,
+  "sunAu": 0.983585258401741,
+  "sunRadiusDeg": 0.27089989128500885,
+  "relRateDegPerDay": 0.957851224174748
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2447887.7587855943,
+  "minSepDeg": 0.2691624632323654,
+  "behind": true,
+  "planetAu": 20.362623416200957,
+  "sunAu": 0.9834614229049029,
+  "sunRadiusDeg": 0.27093400271213625,
+  "relRateDegPerDay": 1.0318198917320305
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2460443.8851772165,
+  "minSepDeg": 0.26426896879338596,
+  "behind": true,
+  "planetAu": 20.602421016044968,
+  "sunAu": 1.010512734974678,
+  "sunRadiusDeg": 0.26368107807487845,
+  "relRateDegPerDay": 0.9072023256072793
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2460813.481541792,
+  "minSepDeg": 0.21265445314218046,
+  "behind": true,
+  "planetAu": 20.54131729324613,
+  "sunAu": 1.011401804275651,
+  "sunRadiusDeg": 0.2634492884897348,
+  "relRateDegPerDay": 0.9049784963010686
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2461183.1024118,
+  "minSepDeg": 0.1605866490349287,
+  "behind": true,
+  "planetAu": 20.477251956244256,
+  "sunAu": 1.0122915807885389,
+  "sunRadiusDeg": 0.2632177221668461,
+  "relRateDegPerDay": 0.9034026833571418
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2461552.758975095,
+  "minSepDeg": 0.10702360006365849,
+  "behind": true,
+  "planetAu": 20.410880400608196,
+  "sunAu": 1.0131176766916932,
+  "sunRadiusDeg": 0.263003092993182,
+  "relRateDegPerDay": 0.9014582523075576
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2461922.450403411,
+  "minSepDeg": 0.052507201855043706,
+  "behind": true,
+  "planetAu": 20.342968257881182,
+  "sunAu": 1.0138850389687764,
+  "sunRadiusDeg": 0.26280403682759734,
+  "relRateDegPerDay": 0.8999429869642583
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2462292.183631262,
+  "minSepDeg": 0.0022342552174140543,
+  "behind": true,
+  "planetAu": 20.274192559716415,
+  "sunAu": 1.0145424374797205,
+  "sunRadiusDeg": 0.2626337450916105,
+  "relRateDegPerDay": 0.8985058902477312
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2462661.9364143386,
+  "minSepDeg": 0.05785327975080012,
+  "behind": true,
+  "planetAu": 20.20522688747927,
+  "sunAu": 1.0151008502216352,
+  "sunRadiusDeg": 0.2624892677660221,
+  "relRateDegPerDay": 0.8971639764379344
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2463031.7392075984,
+  "minSepDeg": 0.11281382701652051,
+  "behind": true,
+  "planetAu": 20.1367342121006,
+  "sunAu": 1.0156323235864828,
+  "sunRadiusDeg": 0.26235190798888824,
+  "relRateDegPerDay": 0.8961636782918576
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2463401.5740915863,
+  "minSepDeg": 0.16797427800357656,
+  "behind": true,
+  "planetAu": 20.069126999050308,
+  "sunAu": 1.0160388230383428,
+  "sunRadiusDeg": 0.2622469448228571,
+  "relRateDegPerDay": 0.8948354345031524
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2463771.451243819,
+  "minSepDeg": 0.22244463130055306,
+  "behind": true,
+  "planetAu": 20.002767397415294,
+  "sunAu": 1.0163568498468258,
+  "sunRadiusDeg": 0.26216488492327544,
+  "relRateDegPerDay": 0.8944425265083942
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2464141.3608155074,
+  "minSepDeg": 0.27617045112442895,
+  "behind": true,
+  "planetAu": 19.937734521784623,
+  "sunAu": 1.0165248121346329,
+  "sunRadiusDeg": 0.2621215666288673,
+  "relRateDegPerDay": 0.8933300989251561
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2474873.2921117824,
+  "minSepDeg": 0.2738664913378459,
+  "behind": true,
+  "planetAu": 19.701047115549507,
+  "sunAu": 0.9894586487669598,
+  "sunRadiusDeg": 0.2692918275580098,
+  "relRateDegPerDay": 0.9444451885528475
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2475243.059234475,
+  "minSepDeg": 0.21846551252561403,
+  "behind": true,
+  "planetAu": 19.76315186422892,
+  "sunAu": 0.9884396291440141,
+  "sunRadiusDeg": 0.26956945268781773,
+  "relRateDegPerDay": 0.9463695382444077
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2475612.7934188247,
+  "minSepDeg": 0.16269857513295458,
+  "behind": true,
+  "planetAu": 19.826972624974303,
+  "sunAu": 0.9875868324909702,
+  "sunRadiusDeg": 0.2698022318399074,
+  "relRateDegPerDay": 0.9487107570563157
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2475982.4868779387,
+  "minSepDeg": 0.10575051673908221,
+  "behind": true,
+  "planetAu": 19.891717076917843,
+  "sunAu": 0.9867133995924289,
+  "sunRadiusDeg": 0.2700410609564681,
+  "relRateDegPerDay": 0.9501963269813497
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2476352.14817316,
+  "minSepDeg": 0.04916240369189732,
+  "behind": true,
+  "planetAu": 19.957150538783583,
+  "sunAu": 0.9860193928518696,
+  "sunRadiusDeg": 0.270231129941966,
+  "relRateDegPerDay": 0.9524122194916532
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2476721.758905885,
+  "minSepDeg": 0.007826963842915324,
+  "behind": true,
+  "planetAu": 20.022871396213397,
+  "sunAu": 0.9853491135885062,
+  "sunRadiusDeg": 0.27041495480633143,
+  "relRateDegPerDay": 0.9533533606246698
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2477091.338268903,
+  "minSepDeg": 0.06421902644016331,
+  "behind": true,
+  "planetAu": 20.089024050458818,
+  "sunAu": 0.9848690070412033,
+  "sunRadiusDeg": 0.27054677838291463,
+  "relRateDegPerDay": 0.9552742332165484
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2477460.8746738574,
+  "minSepDeg": 0.11969227382526279,
+  "behind": true,
+  "planetAu": 20.15552328590034,
+  "sunAu": 0.9843419493256665,
+  "sunRadiusDeg": 0.2706916414843056,
+  "relRateDegPerDay": 0.9558495190174382
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2477830.372638393,
+  "minSepDeg": 0.17437942048881436,
+  "behind": true,
+  "planetAu": 20.222706539627584,
+  "sunAu": 0.983985643846795,
+  "sunRadiusDeg": 0.2707896608340205,
+  "relRateDegPerDay": 0.9576106899518657
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2478199.83791323,
+  "minSepDeg": 0.22699950975189312,
+  "behind": true,
+  "planetAu": 20.290352815100874,
+  "sunAu": 0.9836393996691608,
+  "sunRadiusDeg": 0.2708849803605919,
+  "relRateDegPerDay": 0.9577648679466905
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2478569.272151146,
+  "minSepDeg": 0.2791601257102136,
+  "behind": true,
+  "planetAu": 20.358335121143146,
+  "sunAu": 0.9835232528004746,
+  "sunRadiusDeg": 0.2709169701245529,
+  "relRateDegPerDay": 0.9590503044349827
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2491125.433598074,
+  "minSepDeg": 0.25404891728093476,
+  "behind": true,
+  "planetAu": 20.595805907572437,
+  "sunAu": 1.010460576613513,
+  "sunRadiusDeg": 0.26369468896710296,
+  "relRateDegPerDay": 0.9073870055683453
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2491495.0260219323,
+  "minSepDeg": 0.20325220840041525,
+  "behind": true,
+  "planetAu": 20.533604333277147,
+  "sunAu": 1.011352280006021,
+  "sunRadiusDeg": 0.2634621892621071,
+  "relRateDegPerDay": 0.9050350939480977
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2491864.6369496826,
+  "minSepDeg": 0.15055585083444675,
+  "behind": true,
+  "planetAu": 20.468929397060084,
+  "sunAu": 1.0122461663803084,
+  "sunRadiusDeg": 0.2632295315088686,
+  "relRateDegPerDay": 0.9035712650808759
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2492234.29504719,
+  "minSepDeg": 0.09699769494286871,
+  "behind": true,
+  "planetAu": 20.402455749892184,
+  "sunAu": 1.013048260623382,
+  "sunRadiusDeg": 0.2630211146113212,
+  "relRateDegPerDay": 0.9015360461861042
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2492603.9826981043,
+  "minSepDeg": 0.042622866107669105,
+  "behind": true,
+  "planetAu": 20.334973294402808,
+  "sunAu": 1.0138198976002195,
+  "sunRadiusDeg": 0.26282092299715365,
+  "relRateDegPerDay": 0.9001054270691965
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2492973.708838829,
+  "minSepDeg": 0.012714328749972428,
+  "behind": true,
+  "planetAu": 20.267009295632448,
+  "sunAu": 1.0144362109170488,
+  "sunRadiusDeg": 0.2626612469444741,
+  "relRateDegPerDay": 0.8985962245272504
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2493343.4650449306,
+  "minSepDeg": 0.06758585516504091,
+  "behind": true,
+  "planetAu": 20.199285416340686,
+  "sunAu": 1.0150259899060434,
+  "sunRadiusDeg": 0.2625086270406712,
+  "relRateDegPerDay": 0.8973042884376754
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2493713.267139012,
+  "minSepDeg": 0.1231544917131769,
+  "behind": true,
+  "planetAu": 20.13226254590935,
+  "sunAu": 1.015571016234279,
+  "sunRadiusDeg": 0.2623677455945178,
+  "relRateDegPerDay": 0.8961300463553526
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2494083.1049080836,
+  "minSepDeg": 0.17790301417547694,
+  "behind": true,
+  "planetAu": 20.066138394734796,
+  "sunAu": 1.0159653933439396,
+  "sunRadiusDeg": 0.26226589905853465,
+  "relRateDegPerDay": 0.8949688684050614
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2494452.9887633547,
+  "minSepDeg": 0.2321754878721367,
+  "behind": true,
+  "planetAu": 20.001095433271676,
+  "sunAu": 1.0162947658577173,
+  "sunRadiusDeg": 0.2621809003117311,
+  "relRateDegPerDay": 0.8944475398298088
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2494822.8988427436,
+  "minSepDeg": 0.28615013048885557,
+  "behind": true,
+  "planetAu": 19.93693510751707,
+  "sunAu": 1.0164866184389363,
+  "sunRadiusDeg": 0.2621314157119924,
+  "relRateDegPerDay": 0.8934140949169318
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2505554.863501535,
+  "minSepDeg": 0.26388786450685225,
+  "behind": true,
+  "planetAu": 19.70301672328218,
+  "sunAu": 0.9895277289943623,
+  "sunRadiusDeg": 0.26927302780424134,
+  "relRateDegPerDay": 0.9442536289820084
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2505924.626665554,
+  "minSepDeg": 0.20873746986966638,
+  "behind": true,
+  "planetAu": 19.764027567204643,
+  "sunAu": 0.9885334264735869,
+  "sunRadiusDeg": 0.26954387431013016,
+  "relRateDegPerDay": 0.9462679873178685
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2506294.3651989894,
+  "minSepDeg": 0.15227851883254426,
+  "behind": true,
+  "planetAu": 19.82651984946078,
+  "sunAu": 0.9876606352685591,
+  "sunRadiusDeg": 0.2697820707637633,
+  "relRateDegPerDay": 0.9485548709725747
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2506664.0585668823,
+  "minSepDeg": 0.09579038786192536,
+  "behind": true,
+  "planetAu": 19.8899897203182,
+  "sunAu": 0.9868091702795696,
+  "sunRadiusDeg": 0.27001485304291106,
+  "relRateDegPerDay": 0.9500944526731477
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2507033.7117115017,
+  "minSepDeg": 0.038455335006271255,
+  "behind": true,
+  "planetAu": 19.954345871000648,
+  "sunAu": 0.9861022713182612,
+  "sunRadiusDeg": 0.27020841778692994,
+  "relRateDegPerDay": 0.9522393777078857
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2507403.3209471703,
+  "minSepDeg": 0.018233527030319246,
+  "behind": true,
+  "planetAu": 20.01947391424739,
+  "sunAu": 0.9854304953010308,
+  "sunRadiusDeg": 0.2703926224393094,
+  "relRateDegPerDay": 0.9532773245515193
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2507772.893599014,
+  "minSepDeg": 0.07470873622637252,
+  "behind": true,
+  "planetAu": 20.085660546947757,
+  "sunAu": 0.9849311694132326,
+  "sunRadiusDeg": 0.2705297031242626,
+  "relRateDegPerDay": 0.9551365918006486
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2508142.4231976112,
+  "minSepDeg": 0.13032904377491,
+  "behind": true,
+  "planetAu": 20.152773899375063,
+  "sunAu": 0.9843704618423792,
+  "sunRadiusDeg": 0.2706838007803501,
+  "relRateDegPerDay": 0.9558588969551456
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2508511.9239741843,
+  "minSepDeg": 0.18421634315810506,
+  "behind": true,
+  "planetAu": 20.221011193783188,
+  "sunAu": 0.9840259192751937,
+  "sunRadiusDeg": 0.2707785775377569,
+  "relRateDegPerDay": 0.9574998089984522
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2508881.384180433,
+  "minSepDeg": 0.2372966995575764,
+  "behind": true,
+  "planetAu": 20.28980288767089,
+  "sunAu": 0.9837071116140774,
+  "sunRadiusDeg": 0.2708663342765052,
+  "relRateDegPerDay": 0.9576195729633751
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2509250.8215236887,
+  "minSepDeg": 0.2885907029284199,
+  "behind": true,
+  "planetAu": 20.358703976926744,
+  "sunAu": 0.9835525441457684,
+  "sunRadiusDeg": 0.27090890184014554,
+  "relRateDegPerDay": 0.9589329224281699
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2521437.3856733358,
+  "minSepDeg": 0.2954360413001598,
+  "behind": true,
+  "planetAu": 20.657270214354604,
+  "sunAu": 1.0093388095311802,
+  "sunRadiusDeg": 0.2639877581635957,
+  "relRateDegPerDay": 0.9090640107199559
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2521806.933737372,
+  "minSepDeg": 0.2455037545365994,
+  "behind": true,
+  "planetAu": 20.59687416397154,
+  "sunAu": 1.0103783334502427,
+  "sunRadiusDeg": 0.26371615344014454,
+  "relRateDegPerDay": 0.907561054653787
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2522176.5134331496,
+  "minSepDeg": 0.19373789895362947,
+  "behind": true,
+  "planetAu": 20.533514665221016,
+  "sunAu": 1.0112314010600756,
+  "sunRadiusDeg": 0.2634936828017691,
+  "relRateDegPerDay": 0.9051896303915209
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2522546.1236544885,
+  "minSepDeg": 0.14125786844152163,
+  "behind": true,
+  "planetAu": 20.468201628196404,
+  "sunAu": 1.0121434789272692,
+  "sunRadiusDeg": 0.26325623776240303,
+  "relRateDegPerDay": 0.9038135848238302
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2522915.773330273,
+  "minSepDeg": 0.08738343019798768,
+  "behind": true,
+  "planetAu": 20.401476754135498,
+  "sunAu": 1.0129559434302615,
+  "sunRadiusDeg": 0.26304508558634604,
+  "relRateDegPerDay": 0.9016419397622071
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2523285.4562626723,
+  "minSepDeg": 0.03276914507901251,
+  "behind": true,
+  "planetAu": 20.33402113072017,
+  "sunAu": 1.0137165565345883,
+  "sunRadiusDeg": 0.2628477158758972,
+  "relRateDegPerDay": 0.9004015052223657
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2523655.1805484192,
+  "minSepDeg": 0.021892342475145925,
+  "behind": true,
+  "planetAu": 20.266339781363488,
+  "sunAu": 1.0143578960975654,
+  "sunRadiusDeg": 0.26268152618944013,
+  "relRateDegPerDay": 0.8987168145994194
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2524024.930341389,
+  "minSepDeg": 0.07736233818744644,
+  "behind": true,
+  "planetAu": 20.19899762946851,
+  "sunAu": 1.0149892922688923,
+  "sunRadiusDeg": 0.26251811828735566,
+  "relRateDegPerDay": 0.8974908282237438
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2524394.735804728,
+  "minSepDeg": 0.13219730550347514,
+  "behind": true,
+  "planetAu": 20.132183269543027,
+  "sunAu": 1.0155137810060775,
+  "sunRadiusDeg": 0.2623825329691882,
+  "relRateDegPerDay": 0.8962186117039126
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2391300.479296867,
+  "minSepDeg": 0.26064490385831807,
+  "behind": true,
+  "planetAu": 31.104054887583374,
+  "sunAu": 0.9843437365677126,
+  "sunRadiusDeg": 0.27069114999432625,
+  "relRateDegPerDay": 0.9791284147153826
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2391667.882928773,
+  "minSepDeg": 0.19540784864101632,
+  "behind": true,
+  "planetAu": 31.093471983558246,
+  "sunAu": 0.9845646599116401,
+  "sunRadiusDeg": 0.27063041001324306,
+  "relRateDegPerDay": 0.9787857610365573
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2392035.289975643,
+  "minSepDeg": 0.12942329901457916,
+  "behind": true,
+  "planetAu": 31.083943490578616,
+  "sunAu": 0.984791813928716,
+  "sunRadiusDeg": 0.27056798540640725,
+  "relRateDegPerDay": 0.9778963644647927
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2392402.699964909,
+  "minSepDeg": 0.0635854684936376,
+  "behind": true,
+  "planetAu": 31.07560025772567,
+  "sunAu": 0.9851385068064907,
+  "sunRadiusDeg": 0.27047276560760236,
+  "relRateDegPerDay": 0.97787631966312
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2392770.115972937,
+  "minSepDeg": 0.002962205399399276,
+  "behind": true,
+  "planetAu": 31.06802749659755,
+  "sunAu": 0.9853930768938484,
+  "sunRadiusDeg": 0.27040289015541047,
+  "relRateDegPerDay": 0.9765071799135683
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2393137.5307227084,
+  "minSepDeg": 0.0692318427012146,
+  "behind": true,
+  "planetAu": 31.06105660203038,
+  "sunAu": 0.9857459595877659,
+  "sunRadiusDeg": 0.27030608914146725,
+  "relRateDegPerDay": 0.9766144018800206
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2393504.953854897,
+  "minSepDeg": 0.1357651729403803,
+  "behind": true,
+  "planetAu": 31.0540735654208,
+  "sunAu": 0.9860254597316493,
+  "sunRadiusDeg": 0.2702294672344585,
+  "relRateDegPerDay": 0.9752501646436236
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2393872.3856277987,
+  "minSepDeg": 0.20179558558447266,
+  "behind": true,
+  "planetAu": 31.046794463199905,
+  "sunAu": 0.9864413813945657,
+  "sunRadiusDeg": 0.2701155272433332,
+  "relRateDegPerDay": 0.9750147190667279
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2394239.8200101173,
+  "minSepDeg": 0.26785439684673,
+  "behind": true,
+  "planetAu": 31.03850239343909,
+  "sunAu": 0.9867660853890635,
+  "sunRadiusDeg": 0.27002664271290533,
+  "relRateDegPerDay": 1.046591643071049
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2421070.2251586,
+  "minSepDeg": 0.2535228015316528,
+  "behind": true,
+  "planetAu": 31.033966636039047,
+  "sunAu": 1.01565271899672,
+  "sunRadiusDeg": 0.2623466396406778,
+  "relRateDegPerDay": 0.9185156642421934
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2421437.7891174024,
+  "minSepDeg": 0.1874230781736458,
+  "behind": true,
+  "planetAu": 31.04597538793927,
+  "sunAu": 1.0153489826406046,
+  "sunRadiusDeg": 0.2624251198192709,
+  "relRateDegPerDay": 0.9187179856406887
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2421805.352069184,
+  "minSepDeg": 0.12154148726054018,
+  "behind": true,
+  "planetAu": 31.057503674703945,
+  "sunAu": 1.0150599816317671,
+  "sunRadiusDeg": 0.2624998362461904,
+  "relRateDegPerDay": 0.9193943014296913
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2422172.9128296413,
+  "minSepDeg": 0.055209415165177286,
+  "behind": true,
+  "planetAu": 31.068039628434843,
+  "sunAu": 1.0147796819001798,
+  "sunRadiusDeg": 0.2625723437569114,
+  "relRateDegPerDay": 0.9200397022207175
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2422540.4804640496,
+  "minSepDeg": 0.010866949893147045,
+  "behind": true,
+  "planetAu": 31.077320708540544,
+  "sunAu": 1.0144441636888777,
+  "sunRadiusDeg": 0.26265918778767355,
+  "relRateDegPerDay": 0.9202695147246767
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2422908.0345095443,
+  "minSepDeg": 0.07721869437005005,
+  "behind": true,
+  "planetAu": 31.085483542316883,
+  "sunAu": 1.0141260939984125,
+  "sunRadiusDeg": 0.2627415685809217,
+  "relRateDegPerDay": 0.9215156118155657
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2423275.58835249,
+  "minSepDeg": 0.14298177342762194,
+  "behind": true,
+  "planetAu": 31.092699788922552,
+  "sunAu": 1.0137226265956194,
+  "sunRadiusDeg": 0.26284614196126993,
+  "relRateDegPerDay": 0.9215257393958614
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2423643.1315189437,
+  "minSepDeg": 0.20882394602228946,
+  "behind": true,
+  "planetAu": 31.099589869683264,
+  "sunAu": 1.0134528391695605,
+  "sunRadiusDeg": 0.26291611372415163,
+  "relRateDegPerDay": 0.9228465637728174
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2424010.6729248157,
+  "minSepDeg": 0.27429289951723623,
+  "behind": true,
+  "planetAu": 31.106299835712306,
+  "sunAu": 1.0129962444068945,
+  "sunRadiusDeg": 0.2630346205442668,
+  "relRateDegPerDay": 0.9228985767166701
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2451200.84948989,
+  "minSepDeg": 0.2956177895357301,
+  "behind": true,
+  "planetAu": 31.116737482710572,
+  "sunAu": 0.984186084599687,
+  "sunRadiusDeg": 0.270734511011901,
+  "relRateDegPerDay": 0.9796571158684771
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2451568.2565790955,
+  "minSepDeg": 0.23012814467332815,
+  "behind": true,
+  "planetAu": 31.104122108523928,
+  "sunAu": 0.9843618574417857,
+  "sunRadiusDeg": 0.27068616687079394,
+  "relRateDegPerDay": 0.9787533338438088
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2451935.6637097606,
+  "minSepDeg": 0.16529499157724445,
+  "behind": true,
+  "planetAu": 31.091660992197347,
+  "sunAu": 0.9846564245516022,
+  "sunRadiusDeg": 0.2706051885388463,
+  "relRateDegPerDay": 0.9788642116790037
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2452303.0738222003,
+  "minSepDeg": 0.09970188124925265,
+  "behind": true,
+  "planetAu": 31.07980832150439,
+  "sunAu": 0.9848591512939828,
+  "sunRadiusDeg": 0.2705494858365374,
+  "relRateDegPerDay": 0.9775868713021684
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2452670.482981245,
+  "minSepDeg": 0.03436609483962252,
+  "behind": true,
+  "planetAu": 31.069134058888718,
+  "sunAu": 0.9851626528916502,
+  "sunRadiusDeg": 0.27046613633991407,
+  "relRateDegPerDay": 0.977840074319515
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2453037.895734763,
+  "minSepDeg": 0.03142759611920577,
+  "behind": true,
+  "planetAu": 31.059578666870184,
+  "sunAu": 0.9854117859488614,
+  "sunRadiusDeg": 0.27039775624065676,
+  "relRateDegPerDay": 0.9766006156630206
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2453405.3125281353,
+  "minSepDeg": 0.09687908215789406,
+  "behind": true,
+  "planetAu": 31.05117831074871,
+  "sunAu": 0.9857938723767753,
+  "sunRadiusDeg": 0.27029295128875985,
+  "relRateDegPerDay": 0.9762700206496964
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2453772.731855629,
+  "minSepDeg": 0.16266492588490278,
+  "behind": true,
+  "planetAu": 31.043424405356014,
+  "sunAu": 0.9861174195041038,
+  "sunRadiusDeg": 0.27020426696513855,
+  "relRateDegPerDay": 0.975363704113308
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2454140.162055864,
+  "minSepDeg": 0.22785863996639644,
+  "behind": true,
+  "planetAu": 31.03598099964651,
+  "sunAu": 0.9864515525859425,
+  "sunRadiusDeg": 0.2701127420917783,
+  "relRateDegPerDay": 0.9746077879753611
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2454507.586361807,
+  "minSepDeg": 0.29365160065743673,
+  "behind": true,
+  "planetAu": 31.028403359619457,
+  "sunAu": 0.9868472633950734,
+  "sunRadiusDeg": 0.2700044301704892,
+  "relRateDegPerDay": 0.9742011912071069
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2480970.445789678,
+  "minSepDeg": 0.2884554806652954,
+  "behind": true,
+  "planetAu": 31.02213499212249,
+  "sunAu": 1.0157869047082013,
+  "sunRadiusDeg": 0.2623119833399294,
+  "relRateDegPerDay": 0.917938089749827
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2481338.003334323,
+  "minSepDeg": 0.22326791235187765,
+  "behind": true,
+  "planetAu": 31.03309194565098,
+  "sunAu": 1.0155372014036166,
+  "sunRadiusDeg": 0.2623764818406065,
+  "relRateDegPerDay": 0.91838251148195
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2481705.5569388345,
+  "minSepDeg": 0.1578559181992545,
+  "behind": true,
+  "planetAu": 31.04517178738281,
+  "sunAu": 1.0153258551409128,
+  "sunRadiusDeg": 0.26243109748574034,
+  "relRateDegPerDay": 0.9191185926511091
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2482073.1188983032,
+  "minSepDeg": 0.09241629561129551,
+  "behind": true,
+  "planetAu": 31.057647337917096,
+  "sunAu": 1.0150322259484463,
+  "sunRadiusDeg": 0.2625070142580009,
+  "relRateDegPerDay": 0.9191257648357486
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2482440.6764599755,
+  "minSepDeg": 0.026570029142154502,
+  "behind": true,
+  "planetAu": 31.069884188729638,
+  "sunAu": 1.014753175839762,
+  "sunRadiusDeg": 0.2625792023776063,
+  "relRateDegPerDay": 0.9203637625562642
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2482808.235840981,
+  "minSepDeg": 0.03878640126840191,
+  "behind": true,
+  "planetAu": 31.081207524979327,
+  "sunAu": 1.014358321304137,
+  "sunRadiusDeg": 0.2626814160757935,
+  "relRateDegPerDay": 0.9202755816858992
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2483175.787210365,
+  "minSepDeg": 0.10445062533597971,
+  "behind": true,
+  "planetAu": 31.091601258730723,
+  "sunAu": 1.01410735765303,
+  "sunRadiusDeg": 0.26274642294988587,
+  "relRateDegPerDay": 0.9215943159262087
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2483543.340651027,
+  "minSepDeg": 0.16943972810179894,
+  "behind": true,
+  "planetAu": 31.10077213282464,
+  "sunAu": 1.0137048064400864,
+  "sunRadiusDeg": 0.26285076262791873,
+  "relRateDegPerDay": 0.9216413330591756
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2483910.8936045095,
+  "minSepDeg": 0.23463195481643903,
+  "behind": true,
+  "planetAu": 31.109145097816846,
+  "sunAu": 1.0133592283153114,
+  "sunRadiusDeg": 0.2629404012365032,
+  "relRateDegPerDay": 0.9228479418803549
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2484278.4271641504,
+  "minSepDeg": 0.2993863418816616,
+  "behind": true,
+  "planetAu": 31.116916242189635,
+  "sunAu": 1.0129306589581164,
+  "sunRadiusDeg": 0.26305165168523037,
+  "relRateDegPerDay": 0.9233002655042427
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2511468.562327871,
+  "minSepDeg": 0.26647123945832785,
+  "behind": true,
+  "planetAu": 31.118909867477612,
+  "sunAu": 0.984223107557885,
+  "sunRadiusDeg": 0.2707243268707212,
+  "relRateDegPerDay": 0.979818943840856
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2511835.9762001494,
+  "minSepDeg": 0.20213947090510356,
+  "behind": true,
+  "planetAu": 31.107761551288128,
+  "sunAu": 0.9844196208583678,
+  "sunRadiusDeg": 0.27067028352815475,
+  "relRateDegPerDay": 0.9785323969747995
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2512203.390429642,
+  "minSepDeg": 0.13705063938487919,
+  "behind": true,
+  "planetAu": 31.0958533565402,
+  "sunAu": 0.9847002472677155,
+  "sunRadiusDeg": 0.27059314554143865,
+  "relRateDegPerDay": 0.9787357394569969
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2512570.8014656985,
+  "minSepDeg": 0.07237650322624123,
+  "behind": true,
+  "planetAu": 31.083722251421005,
+  "sunAu": 0.9849009972376072,
+  "sunRadiusDeg": 0.27053799079012786,
+  "relRateDegPerDay": 0.977674135300426
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2512938.215146303,
+  "minSepDeg": 0.007119606516411921,
+  "behind": true,
+  "planetAu": 31.072206885895067,
+  "sunAu": 0.9852139746811012,
+  "sunRadiusDeg": 0.2704520471069596,
+  "relRateDegPerDay": 0.9774399480182578
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2513305.6297523063,
+  "minSepDeg": 0.05763087295877697,
+  "behind": true,
+  "planetAu": 31.06159400915685,
+  "sunAu": 0.9855131619304213,
+  "sunRadiusDeg": 0.2703699412479342,
+  "relRateDegPerDay": 0.9767631558167116
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2513673.0524538457,
+  "minSepDeg": 0.12296116559957991,
+  "behind": true,
+  "planetAu": 31.052017114221925,
+  "sunAu": 0.9858097624209157,
+  "sunRadiusDeg": 0.27028859446561676,
+  "relRateDegPerDay": 0.975901405535414
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2514040.4661174472,
+  "minSepDeg": 0.18774792955980107,
+  "behind": true,
+  "planetAu": 31.04341397390446,
+  "sunAu": 0.9861712390534207,
+  "sunRadiusDeg": 0.2701895206623713,
+  "relRateDegPerDay": 0.9756296273374422
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2514407.8945202604,
+  "minSepDeg": 0.2527649162725239,
+  "behind": true,
+  "planetAu": 31.0353846948865,
+  "sunAu": 0.9864867646537453,
+  "sunRadiusDeg": 0.2701031005040861,
+  "relRateDegPerDay": 0.9742572849195131
+ },
+ {
+  "body": "Pluto",
+  "jdTt": 2426169.752766636,
+  "minSepDeg": 0.060094896028907725,
+  "behind": true,
+  "planetAu": 42.22166148945127,
+  "sunAu": 1.0165191185917393,
+  "sunRadiusDeg": 0.2621230347869842,
+  "relRateDegPerDay": 0.9270517244063282
+ },
+ {
+  "body": "Pluto",
+  "jdTt": 2458494.9854739355,
+  "minSepDeg": 0.11974844841972734,
+  "behind": true,
+  "planetAu": 34.70198601730752,
+  "sunAu": 0.9834356011007297,
+  "sunRadiusDeg": 0.27094111660642817,
+  "relRateDegPerDay": 0.9853696249912048
+ },
+ {
+  "body": "Pluto",
+  "jdTt": 2516753.3017057935,
+  "minSepDeg": 0.02230121497220274,
+  "behind": true,
+  "planetAu": 42.21713639605278,
+  "sunAu": 1.0165376070736862,
+  "sunRadiusDeg": 0.2621182673383698,
+  "relRateDegPerDay": 0.9278463525784512
+ }
+]

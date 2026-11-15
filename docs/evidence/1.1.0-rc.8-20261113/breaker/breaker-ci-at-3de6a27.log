@@ -1,0 +1,28 @@
+CLI macos-latest Node 22.22.2	fail	39s	https://github.com/zodiacs-org/engine/actions/runs/43441230367/job/131939049128	
+CLI ubuntu-latest Node 22.22.2	fail	20s	https://github.com/zodiacs-org/engine/actions/runs/43441230367/job/131939049084	
+CLI windows-latest Node 22.22.2	fail	43s	https://github.com/zodiacs-org/engine/actions/runs/43441230367/job/131939049168	
+Analyze (javascript-typescript)	pass	1m40s	https://github.com/zodiacs-org/engine/actions/runs/43441230550/job/131939048928	
+CLI macos-latest Node 24	pass	20s	https://github.com/zodiacs-org/engine/actions/runs/43441230367/job/131939049096	
+CLI ubuntu-latest Node 24	pass	20s	https://github.com/zodiacs-org/engine/actions/runs/43441230367/job/131939049143	
+CLI windows-latest Node 24	pass	49s	https://github.com/zodiacs-org/engine/actions/runs/43441230367/job/131939048646	
+CodeQL	pass	4s	https://github.com/zodiacs-org/engine/runs/131940439628	
+Conformance suite	pass	28s	https://github.com/zodiacs-org/engine/actions/runs/43441230511/job/131939048954	
+Conformance vectors rebuild from their sources	pass	47s	https://github.com/zodiacs-org/engine/actions/runs/43441230511/job/131939048474	
+DE440 on the kernel (tier B)	pass	20s	https://github.com/zodiacs-org/engine/actions/runs/43441230327/job/131939048777	
+Engine (Node 20)	pass	2m10s	https://github.com/zodiacs-org/engine/actions/runs/43441230327/job/131939048936	
+Engine (Node 22)	pass	2m46s	https://github.com/zodiacs-org/engine/actions/runs/43441230327/job/131939048866	
+Engine (Node 24)	pass	2m46s	https://github.com/zodiacs-org/engine/actions/runs/43441230327/job/131939048782	
+Every carried archive rebuilds from its source commit	pass	2m25s	https://github.com/zodiacs-org/engine/actions/runs/43441230327/job/131939048450	
+Pack	pass	23s	https://github.com/zodiacs-org/engine/actions/runs/43441230327/job/131939048774	
+Packed consumer (Node 20.19.0)	pass	17s	https://github.com/zodiacs-org/engine/actions/runs/43441230327/job/131939905943	
+Packed consumer (Node 22)	pass	14s	https://github.com/zodiacs-org/engine/actions/runs/43441230327/job/131939905932	
+Packed consumer (Node 22.7.0)	pass	19s	https://github.com/zodiacs-org/engine/actions/runs/43441230327/job/131939906050	
+Packed consumer (Node 24)	pass	14s	https://github.com/zodiacs-org/engine/actions/runs/43441230327/job/131939906045	
+Python 3.10 / Node 20.19.0 / ubuntu-latest	pass	29s	https://github.com/zodiacs-org/engine/actions/runs/43441230446/job/131939048823	
+Python 3.11 / Node 22.7.0 / ubuntu-latest	pass	28s	https://github.com/zodiacs-org/engine/actions/runs/43441230446/job/131939049000	
+Python 3.11 / Node 24 / macos-latest	pass	29s	https://github.com/zodiacs-org/engine/actions/runs/43441230446/job/131939048986	
+Python 3.11 / Node 24 / windows-latest	pass	51s	https://github.com/zodiacs-org/engine/actions/runs/43441230446/job/131939049088	
+Python 3.12 / Node 22 / ubuntu-latest	pass	22s	https://github.com/zodiacs-org/engine/actions/runs/43441230446/job/131939049101	
+Python 3.13 / Node 24 / ubuntu-latest	pass	23s	https://github.com/zodiacs-org/engine/actions/runs/43441230446/job/131939049039	
+Python 3.14 / Node 24 / ubuntu-latest	pass	35s	https://github.com/zodiacs-org/engine/actions/runs/43441230446/job/131939048686	
+Time atlas checks	pass	16s	https://github.com/zodiacs-org/engine/actions/runs/43441230579/job/131939049246	

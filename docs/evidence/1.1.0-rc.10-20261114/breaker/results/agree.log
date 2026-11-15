@@ -1,0 +1,43 @@
+{
+ "what": "calc() vs positions(), default call, arcsec",
+ "instants": 2000,
+ "rows": 23988,
+ "notOk": 12,
+ "bitIdentical": 23988,
+ "max": {
+  "lon": 0,
+  "lat": 0,
+  "speed": 0
+ },
+ "worst": {},
+ "ephemerisPairs": [
+  "jpl-de440|jpl-de440"
+ ],
+ "calcFlags": [
+  "delta-t-extrapolated"
+ ]
+}
+{"what":"chart() bodies, angles and houses equal natalChart() as JSON","charts":300,"same":299}
+{
+ "what": "birthWindow cell signs vs natalChart at random instants",
+ "windows": 150,
+ "cellsChecked": 1200,
+ "signRows": 14400,
+ "signSame": 14400,
+ "ascRows": 0,
+ "ascSame": 0,
+ "ephemeris": [
+  "jpl-de440"
+ ],
+ "flags": [],
+ "differences": [],
+ "featureKeys": [
+  "signs",
+  "ascendant",
+  "midheaven",
+  "houses",
+  "aspects",
+  "houseSystem"
+ ]
+}
+{"what":"for scale: calc() on astronomy-engine (as 1.1.0-rc.9 computed it) vs default positions(), 400 instants, arcsec longitude","max":29.17276925409169,"worst":{"body":"Pluto","at":"2199-12-30T00:00:00.000Z"}}

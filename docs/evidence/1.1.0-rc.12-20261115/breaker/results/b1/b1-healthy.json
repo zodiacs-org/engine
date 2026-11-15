@@ -1,0 +1,614 @@
+{
+ "state": "healthy",
+ "packOpened": true,
+ "error": null,
+ "checks": 42,
+ "failed": 0,
+ "rows": [
+  {
+   "year": 1991,
+   "fn": "solarReturnInstant / solarReturnInstantDetailed",
+   "labels": 1,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "plainEqualsDetailedValue": true,
+   "value": "1991-06-08T06:47:36.699Z",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1991,
+   "fn": "mostRecentSolarReturnInstant / …Detailed",
+   "labels": 1,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "plainEqualsDetailedValue": true,
+   "value": "1991-06-08T06:47:36.699Z",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1991,
+   "fn": "lunarReturnInstant / lunarReturnInstantDetailed",
+   "labels": 1,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "plainEqualsDetailedValue": true,
+   "value": "1991-09-29T13:42:44.128Z",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1991,
+   "fn": "moonSignsBetween / moonSignsBetweenDetailed",
+   "labels": 1,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "plainEqualsDetailedValue": true,
+   "value": "[\"libra\",\"scorpio\",\"sagittarius\",\"capricorn\",\"aquarius\",\"pis",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1991,
+   "fn": "internal bodyLongitude / bodyLongitudeDetailed",
+   "labels": 1,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "plainEqualsDetailedValue": true,
+   "value": "135.47527436758077",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1991,
+   "fn": "internal longitudeSpeed / longitudeSpeedDetailed",
+   "labels": 1,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "plainEqualsDetailedValue": true,
+   "value": "0.6007604880551298",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1991,
+   "fn": "moonIngresses (each element)",
+   "labels": 5,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "elements": 5,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1991,
+   "fn": "moonAspects (each element)",
+   "labels": 28,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "elements": 28,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1991,
+   "fn": "voidOfCourseAt",
+   "labels": 1,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1991,
+   "fn": "voidOfCourseWindows (each element and its lastAspect)",
+   "labels": 10,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "elements": 5,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1991,
+   "fn": "compositeChart(birth, birth)",
+   "labels": 1,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1991,
+   "fn": "compositeChart(chart, chart)",
+   "labels": 1,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1991,
+   "fn": "chartAspectPatterns(birth)",
+   "labels": 1,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1991,
+   "fn": "chartAspectPatterns(chart)",
+   "labels": 1,
+   "names": [
+    "jpl-de440"
+   ],
+   "flags": [],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "solarReturnInstant / solarReturnInstantDetailed",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "plainEqualsDetailedValue": true,
+   "value": "1750-06-08T00:47:34.985Z",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "mostRecentSolarReturnInstant / …Detailed",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "plainEqualsDetailedValue": true,
+   "value": "1750-06-08T00:47:34.985Z",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "lunarReturnInstant / lunarReturnInstantDetailed",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "plainEqualsDetailedValue": true,
+   "value": "1750-09-21T17:33:29.636Z",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "moonSignsBetween / moonSignsBetweenDetailed",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "plainEqualsDetailedValue": true,
+   "value": "[\"sagittarius\",\"capricorn\",\"aquarius\",\"pisces\",\"aries\",\"taur",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "internal bodyLongitude / bodyLongitudeDetailed",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-de440-span"
+   ],
+   "plainEqualsDetailedValue": true,
+   "value": "107.54448492524932",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "internal longitudeSpeed / longitudeSpeedDetailed",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-de440-span"
+   ],
+   "plainEqualsDetailedValue": true,
+   "value": "0.6427500268557651",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "moonIngresses (each element)",
+   "labels": 6,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "elements": 6,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "moonAspects (each element)",
+   "labels": 33,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "elements": 33,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "voidOfCourseAt",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "voidOfCourseWindows (each element and its lastAspect)",
+   "labels": 12,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "elements": 6,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "compositeChart(birth, birth)",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "compositeChart(chart, chart)",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "chartAspectPatterns(birth)",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 1750,
+   "fn": "chartAspectPatterns(chart)",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "solarReturnInstant / solarReturnInstantDetailed",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "plainEqualsDetailedValue": true,
+   "value": "2230-06-08T01:07:26.472Z",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "mostRecentSolarReturnInstant / …Detailed",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "plainEqualsDetailedValue": true,
+   "value": "2230-06-08T01:07:26.472Z",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "lunarReturnInstant / lunarReturnInstantDetailed",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "plainEqualsDetailedValue": true,
+   "value": "2230-09-29T01:46:56.229Z",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "moonSignsBetween / moonSignsBetweenDetailed",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "plainEqualsDetailedValue": true,
+   "value": "[\"libra\",\"scorpio\",\"sagittarius\",\"capricorn\",\"aquarius\",\"pis",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "internal bodyLongitude / bodyLongitudeDetailed",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-de440-span"
+   ],
+   "plainEqualsDetailedValue": true,
+   "value": "152.3413672502486",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "internal longitudeSpeed / longitudeSpeedDetailed",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-de440-span"
+   ],
+   "plainEqualsDetailedValue": true,
+   "value": "0.5630066160051683",
+   "plainHasNoLabel": true,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "moonIngresses (each element)",
+   "labels": 5,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "elements": 5,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "moonAspects (each element)",
+   "labels": 28,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "elements": 28,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "voidOfCourseAt",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "voidOfCourseWindows (each element and its lastAspect)",
+   "labels": 10,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "elements": 5,
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "compositeChart(birth, birth)",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "compositeChart(chart, chart)",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "chartAspectPatterns(birth)",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "ok": true,
+   "problems": []
+  },
+  {
+   "year": 2230,
+   "fn": "chartAspectPatterns(chart)",
+   "labels": 1,
+   "names": [
+    "astronomy-engine"
+   ],
+   "flags": [
+    "outside-reference-span",
+    "outside-de440-span"
+   ],
+   "ok": true,
+   "problems": []
+  }
+ ]
+}

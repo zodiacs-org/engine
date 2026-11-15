@@ -1,0 +1,354 @@
+[
+ {
+  "body": "Mercury",
+  "limb": "entering the disc",
+  "jdTtInside": 2434871.2431696146,
+  "jdTtOutside": 2434871.243169613,
+  "stepLonArcsec": -0.4119668108216956,
+  "stepLatArcsec": -0.059771339769268406,
+  "stepAngleArcsec": 0.4162801841968167,
+  "separationFromSunArcsec": 950.6122435412033,
+  "boundInside": [
+   1.8,
+   "estimated"
+  ],
+  "boundOutside": [
+   1.8,
+   "estimated"
+  ],
+  "speedLonInside": 2.1677164155526896,
+  "speedLonOutside": 2.1671910581737563,
+  "speedLonDifferenceArcsecPerDay": -1.8912865641596,
+  "conventionsSame": true,
+  "bandInsideArcsec": 3.4128027035133073,
+  "bandOutsideArcsec": 2.576049612160091,
+  "search": {
+   "target": 47.327488428208326,
+   "status": "complete",
+   "flags": [],
+   "crossings": [
+    {
+     "at": "1954-05-08T17:49:39.013Z"
+    }
+   ]
+  },
+  "events": {
+   "status": "ok",
+   "n": 1,
+   "events": [
+    "1954-05-08T17:49:39.013Z"
+   ],
+   "flags": []
+  },
+  "signChangesAtOneSecondSteps": 1
+ },
+ {
+  "body": "Mercury",
+  "limb": "leaving the disc",
+  "jdTtInside": 2434871.6774909277,
+  "jdTtOutside": 2434871.677490929,
+  "stepLonArcsec": 0.41057407785274336,
+  "stepLatArcsec": 0.060568491317464224,
+  "stepAngleArcsec": 0.4150175172926261,
+  "separationFromSunArcsec": 950.5187087097516,
+  "boundInside": [
+   1.8,
+   "estimated"
+  ],
+  "boundOutside": [
+   1.8,
+   "estimated"
+  ],
+  "speedLonInside": 2.171365521775215,
+  "speedLonOutside": 2.170838763923655,
+  "speedLonDifferenceArcsecPerDay": -1.8963282656159208,
+  "conventionsSame": true,
+  "bandInsideArcsec": 3.4123567742950627,
+  "bandOutsideArcsec": 2.5755497227005435,
+  "search": {
+   "target": 48.26990703304365,
+   "status": "complete",
+   "flags": [],
+   "crossings": [
+    {
+     "at": "1954-05-09T04:15:04.374Z"
+    }
+   ]
+  },
+  "events": {
+   "status": "ok",
+   "n": 1,
+   "events": [
+    "1954-05-09T04:15:04.374Z"
+   ],
+   "flags": []
+  },
+  "signChangesAtOneSecondSteps": 1
+ },
+ {
+  "body": "Uranus",
+  "limb": "entering the disc",
+  "jdTtInside": 2462291.8913381323,
+  "jdTtOutside": 2462291.8913381305,
+  "stepLonArcsec": 1.6634975549493447,
+  "stepLatArcsec": 0.013892762093511979,
+  "stepAngleArcsec": 1.6635555655133376,
+  "separationFromSunArcsec": 947.1858807878278,
+  "boundInside": [
+   1.8,
+   "estimated"
+  ],
+  "boundOutside": [
+   1.8,
+   "estimated"
+  ],
+  "speedLonInside": 0.05897034048274463,
+  "speedLonOutside": 0.060551005589104534,
+  "speedLonDifferenceArcsecPerDay": 5.690394382895647,
+  "conventionsSame": true,
+  "bandInsideArcsec": 4.2513323738141935,
+  "bandOutsideArcsec": 1.330360302924646,
+  "search": {
+   "target": 74.3136762235458,
+   "status": "complete",
+   "flags": [],
+   "crossings": [
+    {
+     "at": "2029-06-04T09:28:00.589Z"
+    }
+   ]
+  },
+  "events": {
+   "status": "ok",
+   "n": 1,
+   "events": [
+    "2029-06-04T09:28:00.589Z"
+   ],
+   "flags": [
+    "delta-t-extrapolated"
+   ]
+  },
+  "signChangesAtOneSecondSteps": 3
+ },
+ {
+  "body": "Uranus",
+  "limb": "leaving the disc",
+  "jdTtInside": 2462292.4759184606,
+  "jdTtOutside": 2462292.4759184625,
+  "stepLonArcsec": -1.6634841379186582,
+  "stepLatArcsec": 0.014414995180388364,
+  "stepAngleArcsec": 1.6635465921415205,
+  "separationFromSunArcsec": 947.1060793151175,
+  "boundInside": [
+   1.8,
+   "estimated"
+  ],
+  "boundOutside": [
+   1.8,
+   "estimated"
+  ],
+  "speedLonInside": 0.05897302546742367,
+  "speedLonOutside": 0.06055374696956051,
+  "speedLonDifferenceArcsecPerDay": 5.690597407692621,
+  "conventionsSame": true,
+  "bandInsideArcsec": 4.25099304786022,
+  "bandOutsideArcsec": 1.3301897226942856,
+  "search": {
+   "target": 74.34768794032298,
+   "status": "complete",
+   "flags": [],
+   "crossings": [
+    {
+     "at": "2029-06-04T23:29:39.586Z"
+    }
+   ]
+  },
+  "events": {
+   "status": "ok",
+   "n": 1,
+   "events": [
+    "2029-06-04T23:29:39.586Z"
+   ],
+   "flags": [
+    "delta-t-extrapolated"
+   ]
+  },
+  "signChangesAtOneSecondSteps": 3
+ },
+ {
+  "body": "Neptune",
+  "limb": "entering the disc",
+  "jdTtInside": 2392769.8390809298,
+  "jdTtOutside": 2392769.8390809284,
+  "stepLonArcsec": 1.6955432748318344,
+  "stepLatArcsec": -0.018311722697449302,
+  "stepAngleArcsec": 1.6956421524304819,
+  "separationFromSunArcsec": 975.1864897374222,
+  "boundInside": [
+   1.8,
+   "estimated"
+  ],
+  "boundOutside": [
+   1.8,
+   "estimated"
+  ],
+  "speedLonInside": 0.037993456686535865,
+  "speedLonOutside": 0.03969404428971757,
+  "speedLonDifferenceArcsecPerDay": 6.122115371454129,
+  "conventionsSame": true,
+  "bandInsideArcsec": 4.508044924052342,
+  "bandOutsideArcsec": 1.2984719229021948,
+  "search": {
+   "target": 310.08876611067376,
+   "status": "complete",
+   "flags": [],
+   "crossings": [
+    {
+     "at": "1839-01-30T08:17:04.397Z"
+    }
+   ]
+  },
+  "events": {
+   "status": "ok",
+   "n": 1,
+   "events": [
+    "1839-01-30T08:17:04.397Z"
+   ],
+   "flags": []
+  },
+  "signChangesAtOneSecondSteps": 3
+ },
+ {
+  "body": "Neptune",
+  "limb": "leaving the disc",
+  "jdTtInside": 2392770.3928644448,
+  "jdTtOutside": 2392770.392864446,
+  "stepLonArcsec": -1.6955315516270275,
+  "stepLatArcsec": -0.018836580239093258,
+  "stepAngleArcsec": 1.6956361791320718,
+  "separationFromSunArcsec": 975.1068725581523,
+  "boundInside": [
+   1.8,
+   "estimated"
+  ],
+  "boundOutside": [
+   1.8,
+   "estimated"
+  ],
+  "speedLonInside": 0.037986443004456305,
+  "speedLonOutside": 0.03968702534962176,
+  "speedLonDifferenceArcsecPerDay": 6.122096442595648,
+  "conventionsSame": true,
+  "bandInsideArcsec": 4.507589985620029,
+  "bandOutsideArcsec": 1.2982638685087977,
+  "search": {
+   "target": 310.10933341814496,
+   "status": "complete",
+   "flags": [],
+   "crossings": [
+    {
+     "at": "1839-01-30T21:34:08.899Z"
+    }
+   ]
+  },
+  "events": {
+   "status": "ok",
+   "n": 1,
+   "events": [
+    "1839-01-30T21:34:08.899Z"
+   ],
+   "flags": []
+  },
+  "signChangesAtOneSecondSteps": 3
+ },
+ {
+  "body": "Jupiter",
+  "limb": "entering the disc",
+  "jdTtInside": 2463232.4767588973,
+  "jdTtOutside": 2463232.476758896,
+  "stepLonArcsec": 1.4725654617222972,
+  "stepLatArcsec": 0.04153296076330956,
+  "stepAngleArcsec": 1.4731510408270247,
+  "separationFromSunArcsec": 977.0338497200568,
+  "boundInside": [
+   1.8,
+   "estimated"
+  ],
+  "boundOutside": [
+   1.8,
+   "estimated"
+  ],
+  "speedLonInside": 0.23142674862697277,
+  "speedLonOutside": 0.23261429834064984,
+  "speedLonDifferenceArcsecPerDay": 4.275178969237459,
+  "conventionsSame": true,
+  "bandInsideArcsec": 3.740609635462647,
+  "bandOutsideArcsec": 1.5225650560943222,
+  "search": {
+   "target": 280.3516403620656,
+   "status": "complete",
+   "flags": [],
+   "crossings": [
+    {
+     "at": "2031-12-31T23:26:38.502Z"
+    }
+   ]
+  },
+  "events": {
+   "status": "ok",
+   "n": 1,
+   "events": [
+    "2031-12-31T23:26:38.502Z"
+   ],
+   "flags": [
+    "delta-t-extrapolated"
+   ]
+  },
+  "signChangesAtOneSecondSteps": 3
+ },
+ {
+  "body": "Jupiter",
+  "limb": "leaving the disc",
+  "jdTtInside": 2463233.1646698266,
+  "jdTtOutside": 2463233.1646698276,
+  "stepLonArcsec": -1.4727102834513062,
+  "stepLatArcsec": 0.03560867575408792,
+  "stepAngleArcsec": 1.4731407027065961,
+  "separationFromSunArcsec": 977.0410739000466,
+  "boundInside": [
+   1.8,
+   "estimated"
+  ],
+  "boundOutside": [
+   1.8,
+   "estimated"
+  ],
+  "speedLonInside": 0.23144655466467157,
+  "speedLonOutside": 0.2326343785625795,
+  "speedLonDifferenceArcsecPerDay": 4.276166032468609,
+  "conventionsSame": true,
+  "bandInsideArcsec": 3.7406764847593195,
+  "bandOutsideArcsec": 1.5226181703798147,
+  "search": {
+   "target": 280.51043962285985,
+   "status": "complete",
+   "flags": [],
+   "crossings": [
+    {
+     "at": "2032-01-01T15:57:13.618Z"
+    }
+   ]
+  },
+  "events": {
+   "status": "ok",
+   "n": 1,
+   "events": [
+    "2032-01-01T15:57:13.618Z"
+   ],
+   "flags": [
+    "delta-t-extrapolated"
+   ]
+  },
+  "signChangesAtOneSecondSteps": 3
+ }
+]

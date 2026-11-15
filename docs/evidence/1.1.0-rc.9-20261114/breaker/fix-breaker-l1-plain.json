@@ -1,0 +1,102 @@
+{
+  "mode": "plain",
+  "package": "1.1.0-rc.9",
+  "node": "v22.22.2",
+  "resolvedRoot": "<consumer>/node_modules/@zodiacs/engine/dist/index.js",
+  "zodiacsEnvironmentVariables": [],
+  "nodeOptions": null,
+  "vectors": {
+    "sha256": "853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c",
+    "count": 240,
+    "jdTtMin": 2397195.6924745925,
+    "jdTtMax": 2505964.8145946246
+  },
+  "pass": 240,
+  "cases": 240,
+  "largestLon": {
+    "arcsec": 0.012647262974496698,
+    "id": "L1-POS-0002",
+    "body": "Moon"
+  },
+  "largestLat": {
+    "arcsec": 0.0010105608430066582,
+    "id": "L1-POS-0222",
+    "body": "Moon"
+  },
+  "ephemerisOnTheChart": {
+    "jpl-de440@51428874": 240
+  },
+  "failing": [],
+  "perBody": {
+    "Sun": {
+      "cases": 24,
+      "pass": 24,
+      "largestLon": 0.0036000025488647225,
+      "largestLat": 0.0001948490120855565
+    },
+    "Moon": {
+      "cases": 24,
+      "pass": 24,
+      "largestLon": 0.012647262974496698,
+      "largestLat": 0.0010105608430066582
+    },
+    "Mercury": {
+      "cases": 24,
+      "pass": 24,
+      "largestLon": 0.0036565893992701604,
+      "largestLat": 0.00023986028713229857
+    },
+    "Venus": {
+      "cases": 24,
+      "pass": 24,
+      "largestLon": 0.0037444908230099827,
+      "largestLat": 0.00020760648400397486
+    },
+    "Mars": {
+      "cases": 24,
+      "pass": 24,
+      "largestLon": 0.003383788327937509,
+      "largestLat": 0.00021382856285612206
+    },
+    "Jupiter": {
+      "cases": 24,
+      "pass": 24,
+      "largestLon": 0.003771473961933225,
+      "largestLat": 0.0001845388010401905
+    },
+    "Saturn": {
+      "cases": 24,
+      "pass": 24,
+      "largestLon": 0.003445359095621825,
+      "largestLat": 0.0001718864454769431
+    },
+    "Uranus": {
+      "cases": 24,
+      "pass": 24,
+      "largestLon": 0.0037566283140222367,
+      "largestLat": 0.00017206230070732076
+    },
+    "Neptune": {
+      "cases": 24,
+      "pass": 24,
+      "largestLon": 0.0034292172109928742,
+      "largestLat": 0.0001697278094070498
+    },
+    "Pluto": {
+      "cases": 24,
+      "pass": 24,
+      "largestLon": 0.0036146395700598077,
+      "largestLat": 0.0001769509530902269
+    }
+  },
+  "defaultEphemerisAfterTheRun": {
+    "name": "de440",
+    "de440": {
+      "opened": true,
+      "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
+      "fromTtDays": -76699.5,
+      "toTtDays": 76699.5,
+      "error": null
+    }
+  }
+}

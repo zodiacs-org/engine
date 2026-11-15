@@ -57,6 +57,8 @@ function withOwnIds(envelope: any): void {
   }
 }
 
+/** A chart's bodies as a record keeps them: the computed fields, without each row's ephemeris label, which the receipt names once. */
+const recorded = (bodies: Chart["bodies"]) => bodies.map(({ ephemeris: _named, fallback: _why, ...row }) => row);
 function imported(value: unknown) {
   return parseNatalEnvelope(JSON.stringify(value));
 }
@@ -96,7 +98,7 @@ describe("Zodiacs draft natal receipt", () => {
     });
     expect(captured.receipt.resultFlags).toEqual(["polar-fallback"]);
     expect(captured.result).toEqual({
-      bodies: original.bodies,
+      bodies: recorded(original.bodies),
       angles: original.angles,
       houses: original.houses,
       aspects: original.aspects,
@@ -132,7 +134,7 @@ describe("Zodiacs draft natal receipt", () => {
         const captured = createNatalEnvelope(original);
         const parsed = parseNatalEnvelope(serializeNatalEnvelope(captured));
         expect(parsed).toEqual({ ok: true, envelope: captured });
-        expect(captured.result.bodies).toEqual(original.bodies);
+        expect(captured.result.bodies).toEqual(recorded(original.bodies));
         expect(captured.result.aspects).toEqual(original.aspects);
       }
     }
