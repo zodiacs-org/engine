@@ -1,0 +1,249 @@
+API VERSION: 1.2
+API SOURCE: NASA/JPL Horizons API
+
+
+
+*******************************************************************************
+Ephemeris / API_USER Sat Nov 14 21:44:55 2026 Pasadena, USA      / Horizons    
+*******************************************************************************
+Target body name: Uranus Barycenter (7)           {source: DE441}
+Center body name: Earth (399)                     {source: DE441}
+Center-site name: GEOCENTRIC
+*******************************************************************************
+Start time      : A.D. 2029-Jun-04 04:24:32.0000 TT      
+Stop  time      : A.D. 2029-Jun-05 04:24:31.9997 TT      
+Step-size       : 96 steps
+*******************************************************************************
+Target pole/equ : undefined
+Target radii    : undefined                                                    
+Center geodetic : 0.0, 0.0, -6378.137             {E-lon(deg),Lat(deg),Alt(km)}
+Center cylindric: 0.0, 0.0, 0.0                   {E-lon(deg),Dxy(km),Dz(km)}
+Center pole/equ : ITRF93                          {East-longitude positive}
+Center radii    : 6378.137, 6378.137, 6356.752 km {Equator_a, b, pole_c}       
+Target primary  : Sun
+Vis. interferer : MOON (R_eq= 1737.400) km        {source: DE441}
+Rel. light bend : Sun                             {source: DE441}
+Rel. lght bnd GM: 1.3271E+11 km^3/s^2                                          
+Atmos refraction: NO (AIRLESS)
+RA format       : DEG
+Time format     : JD  
+Calendar mode   : Mixed Julian/Gregorian
+EOP file        : eop.261113.p270209                                           
+EOP coverage    : DATA-BASED 1962-JAN-20 TO 2026-NOV-13. PREDICTS-> 2027-FEB-08
+Units conversion: 1 au= 149597870.700 km, c= 299792.458 km/s, 1 day= 86400.0 s 
+Table cut-offs 1: Elevation (-90.0deg=NO ),Airmass (>38.000=NO), Daylight (NO )
+Table cut-offs 2: Solar elongation (  0.0,180.0=NO ),Local Hour Angle( 0.0=NO )
+Table cut-offs 3: RA/DEC angular rate (     0.0=NO )                           
+Table format    : Comma Separated Values (spreadsheet)
+********************************************************************************************
+Date_________JDTT, , , R.A.__(a-app), DEC___(a-app),     ObsEcLon,   ObsEcLat,     S-O-T,/r,
+********************************************************************************************
+$$SOE
+2462291.683703700, , ,  72.968323399,  22.514680702,   74.3014595,  0.0022992,    0.4495,/T,
+2462291.694120367, , ,  72.968989790,  22.514754517,   74.3020796,  0.0023009,    0.4401,/T,
+2462291.704537034, , ,  72.969656452,  22.514828362,   74.3026998,  0.0023025,    0.4308,/T,
+2462291.714953700, , ,  72.970323402,  22.514902239,   74.3033203,  0.0023041,    0.4214,/T,
+2462291.725370367, , ,  72.970990659,  22.514976150,   74.3039412,  0.0023057,    0.4121,/T,
+2462291.735787034, , ,  72.971658244,  22.515050099,   74.3045623,  0.0023074,    0.4027,/T,
+2462291.746203700, , ,  72.972326182,  22.515124088,   74.3051837,  0.0023090,    0.3934,/T,
+2462291.756620367, , ,  72.972994497,  22.515198120,   74.3058055,  0.0023107,    0.3840,/T,
+2462291.767037034, , ,  72.973663218,  22.515272199,   74.3064277,  0.0023123,    0.3747,/T,
+2462291.777453700, , ,  72.974332376,  22.515346330,   74.3070503,  0.0023140,    0.3653,/T,
+2462291.787870367, , ,  72.975002005,  22.515420517,   74.3076733,  0.0023156,    0.3560,/T,
+2462291.798287034, , ,  72.975672143,  22.515494764,   74.3082968,  0.0023173,    0.3466,/T,
+2462291.808703700, , ,  72.976342832,  22.515569077,   74.3089208,  0.0023190,    0.3373,/T,
+2462291.819120367, , ,  72.977014120,  22.515643463,   74.3095453,  0.0023207,    0.3279,/T,
+2462291.829537034, , ,  72.977686059,  22.515717928,   74.3101705,  0.0023224,    0.3186,/T,
+2462291.839953700, , ,  72.978358708,  22.515792481,   74.3107963,  0.0023241,    0.3092,/T,
+2462291.850370367, , ,  72.979032134,  22.515867130,   74.3114229,  0.0023259,    0.2999,/T,
+2462291.860787034, , ,  72.979706411,  22.515941886,   74.3120502,  0.0023276,    0.2905,/T,
+2462291.871203700, , ,  72.980381624,  22.516016760,   74.3126785,  0.0023294,    0.2812,/T,
+2462291.881620367, , ,  72.981057870,  22.516091765,   74.3133076,  0.0023312,    0.2718,/T,
+2462291.892037034, , ,  72.981237745,  22.516109148,   74.3134747,  0.0023292,    0.2620,/T,
+2462291.902453700, , ,  72.981897995,  22.516182176,   74.3140890,  0.0023307,    0.2527,/T,
+2462291.912870367, , ,  72.982558246,  22.516255201,   74.3147032,  0.0023323,    0.2433,/T,
+2462291.923287034, , ,  72.983218499,  22.516328223,   74.3153175,  0.0023339,    0.2339,/T,
+2462291.933703700, , ,  72.983878753,  22.516401241,   74.3159318,  0.0023354,    0.2246,/T,
+2462291.944120367, , ,  72.984539009,  22.516474257,   74.3165461,  0.0023370,    0.2152,/T,
+2462291.954537034, , ,  72.985199266,  22.516547269,   74.3171604,  0.0023385,    0.2059,/T,
+2462291.964953700, , ,  72.985859525,  22.516620278,   74.3177746,  0.0023401,    0.1965,/T,
+2462291.975370367, , ,  72.986519785,  22.516693285,   74.3183889,  0.0023417,    0.1871,/T,
+2462291.985787034, , ,  72.987180047,  22.516766288,   74.3190032,  0.0023432,    0.1778,/T,
+2462291.996203700, , ,  72.987840310,  22.516839287,   74.3196175,  0.0023448,    0.1684,/T,
+2462292.006620367, , ,  72.988500574,  22.516912284,   74.3202318,  0.0023463,    0.1591,/T,
+2462292.017037034, , ,  72.989160840,  22.516985278,   74.3208460,  0.0023479,    0.1497,/T,
+2462292.027453700, , ,  72.989821107,  22.517058268,   74.3214603,  0.0023495,    0.1403,/T,
+2462292.037870367, , ,  72.990481376,  22.517131255,   74.3220746,  0.0023510,    0.1310,/T,
+2462292.048287034, , ,  72.991141646,  22.517204240,   74.3226889,  0.0023526,    0.1216,/T,
+2462292.058703700, , ,  72.991801918,  22.517277221,   74.3233032,  0.0023541,    0.1123,/T,
+2462292.069120367, , ,  72.992462191,  22.517350199,   74.3239175,  0.0023557,    0.1029,/T,
+2462292.079537034, , ,  72.993122465,  22.517423173,   74.3245317,  0.0023573,    0.0936,/T,
+2462292.089953700, , ,  72.993782741,  22.517496145,   74.3251460,  0.0023588,    0.0842,/T,
+2462292.100370367, , ,  72.994443018,  22.517569113,   74.3257603,  0.0023604,    0.0748,/T,
+2462292.110787034, , ,  72.995103297,  22.517642079,   74.3263746,  0.0023620,    0.0655,/T,
+2462292.121203700, , ,  72.995763577,  22.517715041,   74.3269889,  0.0023635,    0.0561,/T,
+2462292.131620367, , ,  72.996423858,  22.517788000,   74.3276032,  0.0023651,    0.0468,/T,
+2462292.142037034, , ,  72.997084141,  22.517860956,   74.3282175,  0.0023666,    0.0374,/T,
+2462292.152453700, , ,  72.997744424,  22.517933909,   74.3288318,  0.0023682,    0.0281,/T,
+2462292.162870367, , ,  72.998404710,  22.518006858,   74.3294460,  0.0023698,    0.0188,/T,
+2462292.173287034, , ,  72.999064996,  22.518079805,   74.3300603,  0.0023713,    0.0096,/T,
+2462292.183703700, , ,  72.999725284,  22.518152748,   74.3306746,  0.0023729,    0.0022,/L,
+2462292.194120367, , ,  73.000385573,  22.518225688,   74.3312889,  0.0023744,    0.0097,/L,
+2462292.204537034, , ,  73.001045863,  22.518298625,   74.3319032,  0.0023760,    0.0189,/L,
+2462292.214953700, , ,  73.001706155,  22.518371559,   74.3325175,  0.0023776,    0.0282,/L,
+2462292.225370367, , ,  73.002366448,  22.518444490,   74.3331318,  0.0023791,    0.0376,/L,
+2462292.235787034, , ,  73.003026742,  22.518517418,   74.3337461,  0.0023807,    0.0469,/L,
+2462292.246203700, , ,  73.003687038,  22.518590342,   74.3343604,  0.0023822,    0.0563,/L,
+2462292.256620367, , ,  73.004347335,  22.518663263,   74.3349747,  0.0023838,    0.0656,/L,
+2462292.267037034, , ,  73.005007633,  22.518736182,   74.3355890,  0.0023854,    0.0750,/L,
+2462292.277453700, , ,  73.005667932,  22.518809096,   74.3362033,  0.0023869,    0.0843,/L,
+2462292.287870367, , ,  73.006328232,  22.518882008,   74.3368176,  0.0023885,    0.0937,/L,
+2462292.298287034, , ,  73.006988534,  22.518954917,   74.3374319,  0.0023900,    0.1030,/L,
+2462292.308703700, , ,  73.007648837,  22.519027822,   74.3380461,  0.0023916,    0.1124,/L,
+2462292.319120367, , ,  73.008309141,  22.519100725,   74.3386604,  0.0023932,    0.1218,/L,
+2462292.329537034, , ,  73.008969446,  22.519173624,   74.3392747,  0.0023947,    0.1311,/L,
+2462292.339953700, , ,  73.009629753,  22.519246520,   74.3398890,  0.0023963,    0.1405,/L,
+2462292.350370367, , ,  73.010290060,  22.519319413,   74.3405033,  0.0023978,    0.1498,/L,
+2462292.360787034, , ,  73.010950369,  22.519392303,   74.3411176,  0.0023994,    0.1592,/L,
+2462292.371203700, , ,  73.011610679,  22.519465189,   74.3417319,  0.0024010,    0.1685,/L,
+2462292.381620367, , ,  73.012270990,  22.519538073,   74.3423462,  0.0024025,    0.1779,/L,
+2462292.392037034, , ,  73.012931302,  22.519610953,   74.3429605,  0.0024041,    0.1873,/L,
+2462292.402453700, , ,  73.013591616,  22.519683830,   74.3435748,  0.0024056,    0.1966,/L,
+2462292.412870367, , ,  73.014251930,  22.519756704,   74.3441891,  0.0024072,    0.2060,/L,
+2462292.423287034, , ,  73.014912246,  22.519829574,   74.3448034,  0.0024088,    0.2153,/L,
+2462292.433703700, , ,  73.015572563,  22.519902442,   74.3454177,  0.0024103,    0.2247,/L,
+2462292.444120367, , ,  73.016232881,  22.519975306,   74.3460320,  0.0024119,    0.2341,/L,
+2462292.454537034, , ,  73.016893200,  22.520048168,   74.3466463,  0.0024134,    0.2434,/L,
+2462292.464953700, , ,  73.017553520,  22.520121026,   74.3472606,  0.0024150,    0.2528,/L,
+2462292.475370367, , ,  73.018213841,  22.520193881,   74.3478749,  0.0024165,    0.2621,/L,
+2462292.485787034, , ,  73.018393079,  22.520218535,   74.3480423,  0.0024219,    0.2719,/L,
+2462292.496203700, , ,  73.019069447,  22.520292874,   74.3486714,  0.0024232,    0.2813,/L,
+2462292.506620367, , ,  73.019744781,  22.520367121,   74.3492997,  0.0024245,    0.2906,/L,
+2462292.517037034, , ,  73.020419177,  22.520441283,   74.3499271,  0.0024259,    0.3000,/L,
+2462292.527453700, , ,  73.021092721,  22.520515368,   74.3505536,  0.0024272,    0.3093,/L,
+2462292.537870367, , ,  73.021765488,  22.520589382,   74.3511795,  0.0024286,    0.3187,/L,
+2462292.548287034, , ,  73.022437545,  22.520663330,   74.3518047,  0.0024300,    0.3280,/L,
+2462292.558703700, , ,  73.023108951,  22.520737216,   74.3524293,  0.0024315,    0.3374,/L,
+2462292.569120367, , ,  73.023779760,  22.520811046,   74.3530533,  0.0024329,    0.3467,/L,
+2462292.579537034, , ,  73.024450017,  22.520884823,   74.3536768,  0.0024343,    0.3561,/L,
+2462292.589953700, , ,  73.025119766,  22.520958551,   74.3542999,  0.0024358,    0.3654,/L,
+2462292.600370367, , ,  73.025789046,  22.521032233,   74.3549225,  0.0024372,    0.3748,/L,
+2462292.610787034, , ,  73.026457889,  22.521105872,   74.3555447,  0.0024387,    0.3841,/L,
+2462292.621203700, , ,  73.027126328,  22.521179471,   74.3561665,  0.0024402,    0.3935,/L,
+2462292.631620367, , ,  73.027794391,  22.521253031,   74.3567880,  0.0024417,    0.4028,/L,
+2462292.642037034, , ,  73.028462104,  22.521326556,   74.3574092,  0.0024431,    0.4122,/L,
+2462292.652453700, , ,  73.029129490,  22.521400048,   74.3580300,  0.0024446,    0.4215,/L,
+2462292.662870367, , ,  73.029796570,  22.521473507,   74.3586506,  0.0024461,    0.4309,/L,
+2462292.673287034, , ,  73.030463364,  22.521546937,   74.3592709,  0.0024476,    0.4402,/L,
+2462292.683703700, , ,  73.031129890,  22.521620338,   74.3598909,  0.0024491,    0.4496,/L,
+$$EOE
+********************************************************************************************
+Column meaning:
+ 
+TIME
+
+  Terrestrial Time ("TT") output was requested. This continuous timescale
+is the relativistic proper time of a clock at rest on the Earth's geoid (at
+"mean sea level"), but defined for a specified gravitational time dilation,
+so a coordinate time. It is appropriate for observations and measurements
+from the surface of the Earth.
+
+  TT runs at a uniform rate of one SI second per second and is independent of
+irregularities in Earth's rotation. It is a theoretical ideal, approximated
+(with a constant offset of 32.184 seconds) by the measured International Atomic
+Time (TAI) after 1955.  TT is the relativistic successor to the now deprecated
+non-relativistic Ephemeris Time (ET).
+
+  The TT scale requested here is a time-scale conversion from internal
+Barycentric Dynamical Time (TDB) and differs periodically from TDB with an
+amplitude less than 2 ms for several thousand years centered on present.
+The time-scale conversion for Earth is used regardless of observer location
+within the solar system, although clock rates may differ due to the local
+gravity field.
+
+  Any 'b' symbol in the 1st-column denotes a B.C. date. First-column blank
+(" ") denotes an A.D. date.
+ 
+CALENDAR SYSTEM
+
+  Mixed calendar mode was active such that calendar dates after AD 1582-Oct-15
+(if any) are in the modern Gregorian system. Dates prior to 1582-Oct-5 (if any)
+are in the Julian calendar system, which is automatically extended for dates
+prior to its adoption on 45-Jan-1 BC.  The Julian calendar is useful for
+matching historical dates. The Gregorian calendar more accurately corresponds
+to the Earth's orbital motion and seasons. A "Gregorian-only" calendar mode is
+available if such physical events are the primary interest.
+
+  NOTE: "n.a." in output means quantity "not available" at the print-time.
+ 
+ 'R.A.__(a-app), DEC___(a-app),' =
+  Airless apparent right ascension and declination of the target center
+with respect to an instantaneous reference frame defined by the Earth equator
+of-date (z-axis) and meridian containing the Earth equinox of-date (x-axis,
+EOP-corrected IAU76/80). Compensated for down-leg light-time delay,
+gravitational deflection of light, stellar aberration, precession & nutation.
+Note: equinox (RA origin) is offset -53 mas from the of-date frame defined by
+the IAU06/00a P & N system.
+
+  Units: RA  in decimal degrees, ddd.fffff{ffff}
+         DEC in decimal degrees  sdd.fffff{ffff}
+
+ 
+ 'ObsEcLon,   ObsEcLat,' =
+   Observer-centered IAU76/80 ecliptic-of-date longitude and latitude of the
+target centers' apparent position, with light-time, gravitational deflection of
+light, and stellar aberrations.  Units: DEGREES
+ 
+ 'S-O-T,/r,' =
+   Sun-Observer-Target apparent SOLAR ELONGATION ANGLE seen from the observers'
+location at print-time.
+
+   The '/r' column provides a code indicating the targets' apparent position
+relative to the Sun in the observers' sky, as described below:
+
+   Case A: For an observing location on the surface of a rotating body, that
+body rotational sense is considered:
+
+    /T indicates target TRAILS Sun   (evening sky: rises and sets AFTER Sun)
+    /L indicates target LEADS Sun    (morning sky: rises and sets BEFORE Sun)
+
+   Case B: For an observing point that does not have a rotational model (such
+as a spacecraft), the "leading" and "trailing" condition is defined by the
+observers' heliocentric ORBITAL motion:
+
+    * If continuing in the observers' current direction of heliocentric
+       motion would encounter the targets' apparent longitude first, followed
+       by the Sun's, the target LEADS the Sun as seen by the observer.
+
+    * If the Sun's apparent longitude would be encountered first, followed
+       by the targets', the target TRAILS the Sun.
+
+   Two other codes can be output:
+    /* indicates observer is Sun-centered    (undefined)
+    /? Target is aligned with Sun center     (no lead or trail)
+
+   The S-O-T solar elongation angle is numerically the minimum separation
+angle of the Sun and target in the sky in any direction. It does NOT indicate
+the amount of separation in the leading or trailing directions, which would
+be defined along the equator of a spherical coordinate system.
+
+   Units: DEGREES
+
+Computations by ...
+
+    Solar System Dynamics Group, Horizons On-Line Ephemeris System
+    4800 Oak Grove Drive, Jet Propulsion Laboratory
+    Pasadena, CA  91109   USA
+
+    General site: https://ssd.jpl.nasa.gov/
+    Mailing list: https://ssd.jpl.nasa.gov/email_list.html
+    System news : https://ssd.jpl.nasa.gov/horizons/news.html
+    User Guide  : https://ssd.jpl.nasa.gov/horizons/manual.html
+    Connect     : browser        https://ssd.jpl.nasa.gov/horizons/app.html#/x
+                  API            https://ssd-api.jpl.nasa.gov/doc/horizons.html
+                  command-line   telnet ssd.jpl.nasa.gov 6775
+                  e-mail/batch   https://ssd.jpl.nasa.gov/ftp/ssd/horizons_batch.txt
+                  scripts        https://ssd.jpl.nasa.gov/ftp/ssd/SCRIPTS
+    Inquiries   : Jon.D.Giorgini@jpl.nasa.gov
+
+********************************************************************************************
