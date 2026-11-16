@@ -699,6 +699,15 @@ const DELTA_T_SEGMENTS = [
 ] as const;
 const J2000_MS = Date.UTC(2000, 0, 1, 12);
 
+/**
+ * Mean obliquity of the ecliptic (IAU 2006), in degrees, at `t` Julian
+ * centuries of TT from J2000: `meanObliquity` in src/houses.ts, term for term,
+ * kept here so that this entry does not load the houses code
+ * (src/polar-angles.test.ts holds the two to the same coefficients).
+ */
+const meanObliquity = (t: number): number =>
+  (84381.406 - 46.836769 * t - 0.0001831 * t * t + 0.0020034 * t ** 3 - 0.000000576 * t ** 4 - 0.0000000434 * t ** 5) / 3600;
+
 const IERS_SEGMENTS = ["observed", "predicted", "fallback"] as const;
 
 /**
@@ -1308,14 +1317,21 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     expected.push("delta-t-extrapolated");
   // "polar-angles" is the record's claim that its angles are inside the polar
   // circle. The record carries no obliquity, so the claim is allowed with angles
-  // where |latitude| >= 90 - e0 - 0.003 degrees, e0 the mean obliquity at the
-  // instant, as src/api.ts allows it on a supplied chart, and refused anywhere
-  // else. Records from 1.1.0 and earlier lack it.
+  // where |latitude| >= 90 - e0 - 0.003 degrees, e0 the mean obliquity (the
+  // whole IAU 2006 polynomial) at the record's TT, its instant plus its ΔT on
+  // UTC or UT1 input (UT1 - UTC, under a second, left out), as src/api.ts
+  // allows it on a supplied chart, and refused anywhere else. Records from
+  // 1.1.0 and earlier lack it.
   if (
     resultFlags.includes("polar-angles") &&
     result.angles &&
     Math.abs((receipt.coordinates as { latitude: number }).latitude) >=
-      66.55772 + (Date.parse(receipt.instant as string) - 946_728_000_000) * 4.1227e-15
+      90 -
+        meanObliquity(
+          (Date.parse(receipt.instant as string) + (scale === "tt" ? 0 : (result.deltaT?.seconds ?? 0) * 1000) - J2000_MS) /
+            3_155_760_000_000
+        ) -
+        0.003
   )
     expected.push("polar-angles");
   // A fallback flag is the record's own claim about what computed it: allowed
