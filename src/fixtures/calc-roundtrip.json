@@ -122,7 +122,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -264,7 +264,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -395,7 +395,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -547,7 +547,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -662,7 +662,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -793,7 +793,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -927,7 +927,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1062,7 +1062,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1187,7 +1187,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -1317,7 +1317,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1464,7 +1464,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1580,7 +1580,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1701,7 +1701,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -1844,7 +1844,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -1991,7 +1991,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -2236,7 +2236,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2370,7 +2370,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -2557,7 +2557,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -2694,7 +2694,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -2859,7 +2859,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -3037,7 +3037,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -3190,7 +3190,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3350,7 +3350,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "astronomy-engine",
        "version": "2.1.19"
@@ -3500,7 +3500,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -3768,7 +3768,7 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.13",
+     "engineVersion": "1.1.0",
      "ephemeris": {
       "name": "jpl-de440",
       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -3905,7 +3905,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -4183,7 +4183,7 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.13",
+     "engineVersion": "1.1.0",
      "ephemeris": {
       "name": "jpl-de440",
       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -4313,7 +4313,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -4584,7 +4584,7 @@
        "listed": true
       }
      },
-     "engineVersion": "1.1.0-rc.13",
+     "engineVersion": "1.1.0",
      "ephemeris": {
       "name": "jpl-de440",
       "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -4805,7 +4805,7 @@
      ],
      "engine": {
       "name": "@zodiacs/engine",
-      "version": "1.1.0-rc.13",
+      "version": "1.1.0",
       "ephemeris": {
        "name": "jpl-de440",
        "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"

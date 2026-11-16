@@ -591,6 +591,12 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // candidate's CHANGELOG entry and the corrections in the README, LICENSING.md
 // and NOTICE); the code is rc.12's. The cap is not raised; 0.50 per cent is
 // left.
+//
+// 1.1.0: 4,580,765 bytes in 98 files, of which 1,261,213 are not the pack,
+// 2,554 more than 1.1.0-rc.13's 1,258,659: documents only (this release's
+// CHANGELOG entry and the README and LICENSING.md lines); the code is rc.13's
+// but for the version string. The budgets and the cap rc.12 raised were
+// approved with this release; 0.30 per cent is left.
 const TOTAL_CAP = 1_265_000;
 const restBytes = report.unpackedSize - PACK_DATA_BYTES;
 assert(restBytes <= TOTAL_CAP, `package is unexpectedly large: ${restBytes} bytes unpacked beside the DE440 pack, over ${TOTAL_CAP}`);
