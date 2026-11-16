@@ -117,10 +117,14 @@ heading of their own (`rc7-phase1`, `r44/conformance-0.2.0`,
 `p41/de440`) were read for their headings only and are not line-checked
 separately: every heading on them is on `main`.
 
-The other open draft branches (`infra/*`, `bot/*`, `feat/*`, `codex/*`,
-`audit/fable-job1-*`, `audit/fable-job2-*`, dependabot) were not searched for
-changelog edits one by one. Reason: none is a release branch and none is named
-in a release's pull request. This is a stated gap, not a finding.
+Fix round, 13 November 2026: every remote branch was then searched for a
+`## ` heading that `main` lacks (a loop over all 83 remote branches, as the
+second session did). Exactly five branches have one: the four above and this
+one.
+
+| Branch | Head when read | Pull request | Entry it adds | Published? | Line check |
+| --- | --- | --- | --- | --- | --- |
+| `feat/fixed-stars-hipparcos` | `253b3e773` | #80, open, draft | `## Unreleased: fixed stars (feat/fixed-stars-hipparcos)` (lines 3 to 14 on the branch) | no | `FIX-ROUND.md`, rows F-pr80-01 to 03. Read only. |
 
 ## Release-note files other than CHANGELOG.md
 
@@ -132,6 +136,10 @@ in a release's pull request. This is a stated gap, not a finding.
 | `CITATION.cff` | States no version and no release date, on purpose, and that no DOI has been minted | `LINES-other-files.md`, row O-cff-01 (the DOI statement is out of date). |
 | GitHub release `v0.1.1-rc.15` body | A copy of the rc.15 changelog entry with a preface | Compared with the changelog in `LINES-other-files.md` (rows O-rel-01 to 06). |
 | Pull request 91's body | Describes test release 1.1.0-rc.6 | `LINES-pr91-1.1.0-rc.6.md` |
+| `SECURITY.md`, lines 55 to 59 (added in the fix round) | "Only the latest release candidate is supported" | `FIX-ROUND.md`, row F-sec-01: out of date, on the unsupported list. |
+| `tools/cli/README.md`, lines 3 and 9 (added in the fix round) | Reviews against the carried 1.0.0-rc.2 archive; "npm's older latest" | `FIX-ROUND.md`, row F-cli-01: out of date, on the unsupported list. |
+| `skills/zodiacs-compute/references/tools.md`, lines 3 to 5 and 74 to 80 (added in the fix round) | Dated 2026-10-01: rc.16 published under `next`, `latest` remained rc.15 | `FIX-ROUND.md`, row F-skill-01: supported for its date. |
+| `docs/changelog-corrections.md` and `docs/releases/` (written in the fix round) | Correction notes for the unsupported lines; draft notes and commands for a 1.0.0 tag and GitHub release | New files from this audit, not checked against themselves. Nothing in `docs/releases/` has been run. |
 
 ## Other packages in the repository
 
