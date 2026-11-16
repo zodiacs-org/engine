@@ -436,8 +436,11 @@ const BODIES = [
 ] as const;
 const FLAGS_RC7 = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"] as const;
 const FLAGS = [...FLAGS_RC7, "outside-reference-span"] as const;
-/** The time-basis sets also take "delta-t-extrapolated", whose condition the record's ΔT and time scale show. */
-const FLAGS_TIME_BASIS = [...FLAGS, "delta-t-extrapolated", "de440-unavailable", "outside-de440-span", "calendar-unknown"] as const;
+/**
+ * The time-basis sets also take "delta-t-extrapolated", whose condition the record's ΔT and time scale show,
+ * "calendar-unknown" (below), and "polar-angles", the angles inside the polar circle (from the release after 1.1.0).
+ */
+const FLAGS_TIME_BASIS = [...FLAGS, "delta-t-extrapolated", "de440-unavailable", "outside-de440-span", "calendar-unknown", "polar-angles"] as const;
 /** From 1.1.0-rc.10: the chart was to come from the shipped DE440 pack and came from astronomy-engine (src/types.ts, EphemerisFallback). */
 const FALLBACK_FLAGS = ["de440-unavailable", "outside-de440-span"] as const;
 const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
@@ -1322,6 +1325,18 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     (resultFlags.includes("delta-t-extrapolated") || compareVersions(engineVersion, "1.1.0-rc.9") > 0)
   )
     expected.push("delta-t-extrapolated");
+  // "polar-angles" is the record's claim that its angles are inside the polar
+  // circle. The record carries no obliquity, so the claim is allowed with angles
+  // where |latitude| >= 90 - e0 - 0.003 degrees, e0 the mean obliquity at the
+  // instant, as src/api.ts allows it on a supplied chart, and refused anywhere
+  // else. Records from 1.1.0 and earlier lack it.
+  if (
+    resultFlags.includes("polar-angles") &&
+    result.angles &&
+    Math.abs((receipt.coordinates as { latitude: number }).latitude) >=
+      66.55772 + (Date.parse(receipt.instant as string) - 946_728_000_000) * 4.1227e-15
+  )
+    expected.push("polar-angles");
   // A fallback flag is the record's own claim about what computed it: allowed
   // where the record names astronomy-engine, refused on a DE440 record.
   if (!de440) for (const reason of FALLBACK_FLAGS) if (resultFlags.includes(reason)) expected.push(reason);

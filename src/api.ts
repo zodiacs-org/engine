@@ -95,6 +95,20 @@ export function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } 
   if (isPolarUndefinedHouseSystem(input.houseSystem) && actualHouseSystem === POLAR_FALLBACK) {
     expected.push("polar-fallback");
   }
+  // "polar-angles" is the chart's claim that its angles are inside the polar
+  // circle, which the engine sets on the true obliquity of date. A supplied
+  // chart carries no obliquity, so the claim is allowed where |latitude| >=
+  // 90 - e0 - 0.003 degrees, e0 the mean obliquity (IAU 2006, constant and
+  // linear terms: 90 - e0 is 66.560721 at J2000, growing 0.0130102 a century);
+  // the margin covers the nutation in obliquity, under 9.3". A chart from 1.1.0
+  // or earlier lacks the flag there; anywhere else the claim fails. The same
+  // test as a natal receipt's (src/receipt.ts).
+  if (
+    hasHouses &&
+    resultFlags.values.includes("polar-angles") &&
+    Math.abs(input.latitude!) >= 66.55772 + (input.utc.getTime() - 946_728_000_000) * 4.1227e-15
+  )
+    expected.push("polar-angles");
   if (outsideReferenceSpan(input.utc)) expected.push("outside-reference-span");
   // "delta-t-extrapolated" is allowed where the chart rests on an extrapolated
   // ΔT (on TT input, through its houses), as a natal receipt allows it; a chart
@@ -193,12 +207,10 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   // So are the two fallback flags, which depend on the source the chart is computed on.
   const possible: ChartFlag[] = ["delta-t-extrapolated", "de440-unavailable", "outside-de440-span"];
   if (settings.timeKnown === false) possible.push("no-time");
-  else if (
-    settings.houseSystem !== undefined &&
-    isPolarUndefinedHouseSystem(settings.houseSystem) &&
-    settings.latitude !== undefined
-  ) {
-    possible.push("polar-fallback");
+  else if (settings.latitude !== undefined) {
+    // "polar-angles" too is checked against the chart's own flags once computed.
+    possible.push("polar-angles");
+    if (settings.houseSystem !== undefined && isPolarUndefinedHouseSystem(settings.houseSystem)) possible.push("polar-fallback");
   }
   if (outsideReferenceSpan(utc)) possible.push("outside-reference-span");
   assertDerivedFlags(flags?.values ?? [], possible);
@@ -331,10 +343,10 @@ export function saturnReturn(birth: SaturnReturnSource): SaturnReturnResult {
     utc = utcOf(chart.input);
   } else if (isBirth(birth)) {
     const validated = validateBirth(birth);
-    // Only an explicit compatibility assertion needs a natal calculation to
-    // establish actual Placidus fallback. Ordinary return inputs remain date-only.
+    // Only an explicit compatibility assertion ("polar-fallback" or "polar-angles")
+    // needs a natal calculation to establish it. Ordinary return inputs remain date-only.
     utc = utcOf(
-      validated.flags?.values.includes("polar-fallback") ? computedBirth(validated).input : validated.input
+      validated.flags?.values.some((flag) => flag === "polar-fallback" || flag === "polar-angles") ? computedBirth(validated).input : validated.input
     );
   } else {
     utc = dateFrom(birth, "birth");

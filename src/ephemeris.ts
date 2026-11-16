@@ -14,7 +14,7 @@ import { chartBodyDeclinations } from "./declination.js";
 import type { ChartDeclinations } from "./declination.js";
 import { deltaT } from "./deltat.js";
 import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
-import { computeAngles, computeHouses, eastPointOf, vertexOf } from "./houses.js";
+import { computeAngles, computeHouses, eastPointOf, insidePolarCircle, vertexOf } from "./houses.js";
 import { tilt } from "./nutation.js";
 import { hellenisticLots, meanApogee, meanNodeLongitude, sectOf } from "./points.js";
 import { EPHEMERIS_SPAN, outsideReferenceSpan } from "./reference-span.js";
@@ -641,6 +641,7 @@ function chartAt(input: ChartInput): Chart {
     const result = computeHouses(input.houseSystem, angleInput, angles);
     houses = result.houses;
     if (result.fellBack) flags.push("polar-fallback");
+    if (insidePolarCircle(angleInput)) flags.push("polar-angles");
   } else if (!input.timeKnown) {
     flags.push("no-time");
   }

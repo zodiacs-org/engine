@@ -160,7 +160,7 @@ const progressionYear: number = PROGRESSION_DAYS_PER_YEAR;
 void progressionAt; void progressionRows; void progressionYear;
 const places: ReturnType<typeof createGeoNamesClient> = createGeoNamesClient({baseUrl: "https://example.test/cities"});
 void places;
-const typedFlags: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback", "calendar-unknown"];
+const typedFlags: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback", "calendar-unknown", "polar-angles"];
 const echoed: BirthInput = {utc: "2000-02-29T08:30:00Z", timeKnown: false, flags: [typedFlags[3]]};
 const echoChart: Chart = natalChart(echoed);
 saturnReturn(echoed);
@@ -274,6 +274,7 @@ globalThis.fetch = () => { throw new Error("Calculation attempted a network requ
 const chart = natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(chart.houses.system, "whole");
 assert(chart.flags.includes("polar-fallback"));
+assert(chart.flags.includes("polar-angles"));
 assert(((chart.angles.asc-chart.angles.mc+360)%360) < 180);
 assert.equal(chart.houses.cusps[0], Math.floor(chart.angles.asc/30)*30);
 const sidereal = vedic.siderealChart(chart, "lahiri");
@@ -441,7 +442,7 @@ assert.deepEqual(echoedUnknown.input.flags, ["lmt"]);
 assert.deepEqual(echoedUnknown.flags, ["lmt", "no-time"]);
 const echoedPolar = natalChart({...chart.input, flags: ["polar-fallback", "polar-fallback"]});
 assert.deepEqual(echoedPolar.input.flags, []);
-assert.deepEqual(echoedPolar.flags, ["polar-fallback"]);
+assert.deepEqual(echoedPolar.flags, ["polar-fallback", "polar-angles"]);
 for (const value of [echoedUnknown, echoedPolar]) {
   const parsedEcho = parseNatalEnvelope(serializeNatalEnvelope(createNatalEnvelope(value)));
   assert.equal(parsedEcho.ok, true);

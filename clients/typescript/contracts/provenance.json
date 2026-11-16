@@ -8,8 +8,8 @@
   "sourceSha256": "0e851883d89977ce12e16a02c7f2c8efbec4cc9b08ff64035a35b850fdca2a9e",
   "verificationRun": 37895777038,
   "verificationJob": 113706678168,
-  "subsetSha256": "30ac9fd333c0b89db8581d2213178864c464d27e78a6da4dd151f9572c12374e",
-  "transformation": "Keep the seven POST paths and all components reachable through their JSON Pointer references; preserve source info, servers, examples and licence. Then add \"delta-t-extrapolated\" to ChartFlag's enum, which engine PR 102 (ZOD-65) adds ahead of the production document, and \"calendar-unknown\" after \"lmt\" in ChartFlag's enum and in the flags of LocalResolution and TimeResult, which the engine release after 1.1.0 sets on a local date that a calendar changeover in its adoption table may have skipped where no tabled country or zone shows that the date was in use; sourceSha256 and the production fields above describe the document before those additions.",
+  "subsetSha256": "a1bbcaa3e0c709b0e6db896b966fbb853ebfb5b015fbcf0146cc0c079775811f",
+  "transformation": "Keep the seven POST paths and all components reachable through their JSON Pointer references; preserve source info, servers, examples and licence. Then add \"delta-t-extrapolated\" to ChartFlag's enum, which engine PR 102 (ZOD-65) adds ahead of the production document; \"calendar-unknown\" after \"lmt\" in ChartFlag's enum and in the flags of LocalResolution and TimeResult, which engine 2.0.0 sets on a local date that a calendar changeover in its adoption table may have skipped where no tabled country or zone shows that the date was in use, and \"polar-angles\" after \"polar-fallback\" in ChartFlag's enum, which engine 2.0.0 sets on every chart whose angles are inside the polar circle; sourceSha256 and the production fields above describe the document before those additions.",
   "license": "CC-BY-4.0",
   "limitations": [
     "This is a derived contract subset, not the original full document.",

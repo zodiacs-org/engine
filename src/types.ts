@@ -98,6 +98,8 @@ export type HouseSystem =
  * `"calendar-unknown"`: a local date resolved with no country the Gregorian adoption table dates that falls in
  * the days one of its changeovers skipped, where the zone does not rule that changeover out, so whether it was
  * in civil use where it was written is not known (docs/time.md).
+ * `"polar-angles"`: the angles were computed inside the polar circle, |latitude| ≥ 90° − ε, where the ascendant
+ * turns half a circle twice a sidereal day and is 0° or 180° at the poles (docs/houses.md).
  */
 export type ChartFlag =
   | "dst-gap"
@@ -106,6 +108,7 @@ export type ChartFlag =
   | "calendar-unknown"
   | "no-time"
   | "polar-fallback"
+  | "polar-angles"
   | "outside-reference-span"
   | "delta-t-extrapolated"
   | EphemerisFallback;
