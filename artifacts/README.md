@@ -106,7 +106,7 @@ runs, so CI starts the check with node directly.
 | 1.1.0-rc.1 | `52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6` | 292,721 | 77 | `c41706266caf4dde7e03aaa18c08acd569d19a7e` | `6ec3464` | Candidate, merged |
 | 1.1.0-rc.2 | `c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c` | 318,004 | 90 | `806f76b43c0ee652016fe1b522c02d6f6e9c7ae5` | `59c6ea9` | Candidate, merged |
 | 1.1.0-rc.3 | `3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590` | 331,979 | 94 | `cc910b3775e279222e23af0b395bb6f2b51a3c3a` | `d2794d2` | Candidate, merged |
-| 1.1.0-rc.6 | `648714ca7485c7381f338286b84a211752ddd425035f50f6e24267e80de6abde` | 333,982 | 94 | `c3efe9175644ee6a0d9f40e2d9fa0766aa264fa6` | `7210037` | Draft candidate, superseded by 1.1.0-rc.7 on the same pull request (95) before merge; never tagged or published. Still this file |
+| 1.1.0-rc.6 | `648714ca7485c7381f338286b84a211752ddd425035f50f6e24267e80de6abde` | 333,982 | 94 | `c3efe9175644ee6a0d9f40e2d9fa0766aa264fa6` | `7210037` | Candidate, merged (pull request 91); never tagged or published |
 | 1.1.0-rc.7 | `71348be1f8dc2772945cc86c72af475091d105da9e7ff5b4411c517adc9fc80a` | 335,403 | 94 | `ca3ae0ff197e0b4e7bfc68bf88c3d0afbeb360f8` | "Carry the packed 1.1.0-rc.7 tarball" | Candidate, merged (pull request 95); never tagged or published |
 | 1.1.0-rc.8 | `53df553c922eddc20e07b2c824b8f268fd0ea84f9c841dbe54294d6b6af8bc43` | 2,696,971 | 97 | `e3939499d603e511f1f23f7198eb425bc5f48359` | `7dec96f` | **Withdrawn before merge; never released; no file here.** Still reachable in the commits `7dec96f`, `3de6a27` and `0738bc9`. |
 | 1.1.0-rc.9 | `f1801f0a35ef643a89c73ecd280e1e41142ae36e12c3690433536f9c3368396a` | 2,703,974 | 98 | `18bcfca5e7bed57e797ee09da2221c1fbc8e9f33` | "Carry the packed 1.1.0-rc.9 tarball" | Draft candidate, superseded by 1.1.0-rc.10 on the same pull request before review; never tagged or published. Still this file |
@@ -130,7 +130,7 @@ found ten techniques functions that fell back to astronomy-engine without
 saying so, and the fix changes packed files. By the same rule the new bytes
 took a new version, 1.1.0-rc.11, and 1.1.0-rc.10's archive stays, unchanged,
 with its receipt and its entry; the check needed no exception. 1.1.0-rc.10
-was never tagged or published and is not meant to be; 1.1.0-rc.11 is the
+was never tagged or published and is not meant to be; 1.1.0-rc.11 became the
 candidate for 1.1.0.
 
 1.1.0-rc.11 was carried on 2026-11-15 and reviewed in draft; the review
@@ -139,7 +139,7 @@ a planet behind the Sun's disc far from JPL Horizons's, and the fixes change
 packed files. By the same rule the new bytes took a new version,
 1.1.0-rc.12, and 1.1.0-rc.11's archive stays, unchanged, with its receipt,
 its entry and its row above; the check needed no exception. 1.1.0-rc.11 was
-never tagged or published and is not meant to be; 1.1.0-rc.12 is the
+never tagged or published and is not meant to be; 1.1.0-rc.12 became the
 candidate for 1.1.0.
 
 1.1.0-rc.12 was carried on 2026-11-15 and reviewed in draft with no blocker;
@@ -148,7 +148,7 @@ and NOTICE, which the package holds. By the same rule the corrected package
 took a new version, 1.1.0-rc.13, whose code is rc.12's but for the version
 string, and 1.1.0-rc.12's archive stays, unchanged, with its receipt and its
 entry; the check needed no exception. 1.1.0-rc.12 was never tagged or
-published and is not meant to be; 1.1.0-rc.13 is the candidate for 1.1.0.
+published and is not meant to be; 1.1.0-rc.13 became the candidate for 1.1.0.
 
 1.1.0 is a minor release: 1.1.0-rc.13, merged in pull request 101, with the
 version changed. It changes no code and no value of rc.13: its packed

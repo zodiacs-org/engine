@@ -1,6 +1,6 @@
 # Review of the fix round (ZOD-152, engine)
 
-13 November 2026, 11:15 ICT. A new session, model id claude-fable-5-2, not
+13 November 2026, 11:15 ICT. A new session, not
 the builder's. It checks the one fix round the owner approved at 10:48 ICT
 (commit `ca95797`, draft pull request 99) against the five approved calls.
 Read commands only; nothing was changed but this file.
