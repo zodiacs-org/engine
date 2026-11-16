@@ -32,9 +32,8 @@ to `<checkout>` and `$TMPDIR`.
 | client contract generators `--check`, the TypeScript client's typecheck, build and `checks/run.mjs` | pass | (not logged) |
 
 On GitHub the gate workflows passed on the source commit: CI run
-43907668826 (28 check runs on the commit, all successful once the
-Python package workflow's queued macOS job is set aside), Conformance
-43907668642 and Atlas 43907668886. There, as here, the archive-binding
+43907668826, Conformance 43907668642 and Atlas 43907668886, and every
+other workflow that ran: all 29 check runs on the commit passed. There, as here, the archive-binding
 check passed but skipped the rebuild of HEAD, since no archive was carried
 for 2.0.0-rc.1 yet; that is why the archive was carried next.
 
