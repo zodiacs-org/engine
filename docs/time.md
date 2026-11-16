@@ -421,8 +421,8 @@ is refused rather than ignored).
   instant either; it rides on the birth into the chart's flags and the
   receipt's `inputFlags`. A receipt refuses the flag on an instant more than
   a day outside the skipped days, from 1582-10-04T00:00Z up to
-  1918-02-28T00:00Z, with or without a local record (from the release after
-  1.1.0; tests in `src/geo/calendar-unknown.test.ts`, which count each row's
+  1918-02-28T00:00Z, with or without a local record (from 2.0.0;
+  tests in `src/geo/calendar-unknown.test.ts`, which count each row's
   skipped dates against the Julian calendar's lag behind the Gregorian, 10 to
   13 days).
 - `fold`: `"earlier"` (default) or `"later"`: which instant a wall time the

@@ -126,7 +126,7 @@ which agrees with the root's cusps turning half a circle with the ascendant.
 There the Topocentric circles cross near the horizon, so a point on the
 horizon can lie on two of them.
 
-From the release after 1.1.0, every chart with angles inside the polar circle,
+From 2.0.0, every chart with angles inside the polar circle,
 |latitude| ≥ 90° − ε on the true obliquity of date, carries the flag
 `polar-angles`, in every house system, from `natalChart`, `chart()` and
 `houses()`. There the ascendant does not move steadily: it turns half a circle

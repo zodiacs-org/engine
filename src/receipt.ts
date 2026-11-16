@@ -438,14 +438,14 @@ const FLAGS_RC7 = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"] as
 const FLAGS = [...FLAGS_RC7, "outside-reference-span"] as const;
 /**
  * The time-basis sets also take "delta-t-extrapolated", whose condition the record's ΔT and time scale show,
- * "calendar-unknown" (below), and "polar-angles", the angles inside the polar circle (from the release after 1.1.0).
+ * "calendar-unknown" (below), and "polar-angles", the angles inside the polar circle (from 2.0.0).
  */
 const FLAGS_TIME_BASIS = [...FLAGS, "delta-t-extrapolated", "de440-unavailable", "outside-de440-span", "calendar-unknown", "polar-angles"] as const;
 /** From 1.1.0-rc.10: the chart was to come from the shipped DE440 pack and came from astronomy-engine (src/types.ts, EphemerisFallback). */
 const FALLBACK_FLAGS = ["de440-unavailable", "outside-de440-span"] as const;
 const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
 /**
- * The time-basis sets also take "calendar-unknown" (from the release after 1.1.0): a local date, given with no
+ * The time-basis sets also take "calendar-unknown" (from 2.0.0): a local date, given with no
  * country the table dates, that one of the Gregorian adoption table's changeovers skipped (src/geo/calendar.ts). The record
  * keeps no country, so the claim is refused only where its Gregorian date is outside every such day read in
  * either calendar: before 1582-10-05 (Italy's first skipped day, read as Gregorian) or after 1918-02-26 (Russia's

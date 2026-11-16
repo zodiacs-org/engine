@@ -15,7 +15,7 @@ LocalResolution_localMeanTime_Option0 = TypedDict("LocalResolution_localMeanTime
 
 LocalResolution = TypedDict("LocalResolution", {"offsetMinutes": Required[float], "flags": Required[list[Literal["dst-gap", "dst-fold", "lmt", "calendar-unknown"]]], "localMeanTime": Required[Union["LocalResolution_localMeanTime_Option0", None]], "zoneHistory": Required[Literal["pinned", "runtime"]], "zoneUncertain": Required[bool]}, total=False)
 
-BodyPosition = TypedDict("BodyPosition", {"body": Required[Literal["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "North Node", "South Node"]], "lon": Required[float], "lat": Required[float], "speed": Required[float], "retrograde": Required[bool], "sign": Required[Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]], "degree": Required[float]}, total=False)
+BodyPosition = TypedDict("BodyPosition", {"body": Required[Literal["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "North Node", "South Node"]], "lon": Required[float], "lat": Required[float], "speed": Required[float], "retrograde": Required[bool], "sign": Required[Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]], "degree": Required[float], "flags": NotRequired[list[Literal["outside-reference-span", "delta-t-extrapolated"]]]}, total=False)
 
 Angles = TypedDict("Angles", {"asc": Required[float], "mc": Required[float], "dsc": Required[float], "ic": Required[float]}, total=False)
 

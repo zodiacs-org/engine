@@ -344,7 +344,7 @@ for (const label of [" Mars", "Mars\\u0000", "x".repeat(200)]) {
 assert.throws(() => progressedBodies(8.64e15, 8.64e15), RangeError);
 assert.throws(() => positions(-8.64e15), RangeError);
 assert.equal(transits(chart, "2026-09-07T12:00:00Z").positions.length, 12);
-// Outside REFERENCE_SPAN positions() flags each row as natalChart() flags the chart (from the release after 1.1.0).
+// Outside REFERENCE_SPAN positions() flags each row as natalChart() flags the chart (from 2.0.0).
 const edgeRows = positions("2200-01-01T00:00:00Z");
 assert(edgeRows.every((row) => row.flags.includes("outside-reference-span")));
 assert.deepEqual(edgeRows[0].flags, natalChart({utc: "2200-01-01T00:00:00Z"}).flags);

@@ -171,7 +171,7 @@ describe("Porphyry receipts", () => {
       delete e.receipt.timeScale;
       delete e.result.deltaT;
       delete e.result.timeScale;
-      // rc.6 never set "polar-angles" (from the release after 1.1.0).
+      // rc.6 never set "polar-angles" (from 2.0.0).
       e.receipt.resultFlags = e.receipt.resultFlags.filter((flag: string) => flag !== "polar-angles");
     };
     expect(parseNatalEnvelope(edit(asRc6))).toMatchObject({ ok: false, code: "inconsistent_result" });

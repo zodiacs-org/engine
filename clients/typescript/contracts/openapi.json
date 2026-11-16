@@ -5333,6 +5333,16 @@
             "type": "number",
             "minimum": 0,
             "exclusiveMaximum": 30
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "outside-reference-span",
+                "delta-t-extrapolated"
+              ]
+            },
+            "description": "The flags the instant alone gives the row, as a chart at that instant carries them; absent where there are none."
           }
         }
       },

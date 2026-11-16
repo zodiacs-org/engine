@@ -756,8 +756,8 @@ The span is checked on both time scales, so a
 ΔT pin cannot move the ephemeris outside it, and with the engine's ΔT the
 last instant computed is about 2199-12-31T23:57:53Z (UTC, read as UT1 there). `natalChart()`
 still computes outside the span, with the `outside-reference-span` flag, as
-it always has, and so does `positions()`, whose rows carry the flag from the
-release after 1.1.0 (1.1.0's rows carried none). calc refuses instead
+it always has, and so does `positions()`, whose rows carry the flag from
+2.0.0 (1.1.0's rows carried none). calc refuses instead
 because every result it returns carries a bound, and outside the span there
 is no comparison to take one from.
 

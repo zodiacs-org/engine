@@ -543,7 +543,7 @@ function position(body: BodyName, lon: number, lat: number, speed: number, chose
 }
 
 /**
- * The positions at a UTC instant, as a chart's bodies; from the release after 1.1.0, each row carries the flags
+ * The positions at a UTC instant, as a chart's bodies; from 2.0.0, each row carries the flags
  * a chart at that instant would (`instantFlags`), where there are any.
  */
 export function computeBodies(date: Date): BodyPosition[] {
