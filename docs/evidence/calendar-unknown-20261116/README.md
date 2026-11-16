@@ -1,0 +1,62 @@
+# A skipped calendar date with no country (ZOD-97, T3), 2026-11-16
+
+The rerun of ZOD-97 on 1.1.0 (`../edge-cases-1.1.0-20261116/`) found T3
+failing on the calendar switch: a Gregorian date inside the days a country's
+change of calendar skipped is accepted; with the country given it gets a
+`calendarNote` ("noted"), with no country there is no signal at all
+("silent": 1582-10-10 for Rome, 1752-09-08 for London). This folder reruns
+the calendar-switch cases on the branch that flags such a date
+`"calendar-unknown"` when no country is given.
+
+The pass mark is the one the first run applied
+(`../edge-cases-20261111/README.md`, T3, "Calendar switch"; cases in
+`../edge-cases-20261111/EDGE-CASES.md`, T4): ZOD-97's "fail: it accepts a
+date that never existed as a normal civil date", and the valid neighbours
+resolve to the right instant. The arbiter is
+calendar arithmetic written in the tool (the Julian day number) and tzdb
+2025c's local mean time for each zone, not the engine's output.
+
+Synthetic dates and places only.
+
+## What was run, on what
+
+- Engine: the branch `admin/zod-97-calendar-switch-no-country`, from `main`
+  at `c0edf2a` (1.1.0), built with `npm ci && npm run build`, Node 22.23.4.
+- `tools/calendar-switch.mjs`: the first run's tool with one change: a date
+  that never existed there and carries `"calendar-unknown"` is "flagged", and
+  a date that did exist and carries it fails. Cases, arbiter and every other
+  verdict are the first run's.
+- `../edge-cases-1.1.0-20261116/tools/local-time-rule.mjs`, unchanged, for
+  the rest of T3 (Samoa 2011-12-30 and Kwajalein 1993-08-21) and T1 and T2,
+  to show the flag moved none of them. Host time zone data: tzdb 2026e.
+
+## Results
+
+`results/calendar-switch.json`:
+
+| cases | 1.1.0 | this branch |
+| --- | --- | --- |
+| the valid days either side of each switch (Rome, London), and the three chart-flag cases | pass, 7 | pass, 7 |
+| skipped dates with the country given (Rome 1582-10-05, -10, -14; London 1752-09-08 as Julian and as Gregorian) | noted, 5 | noted, 5 (unchanged: no flag where the country is given) |
+| skipped dates with no country (Rome 1582-10-10, London 1752-09-08) | silent, 2 | flagged, 2: `"calendar-unknown"` on the resolution and on the chart |
+
+Every instant still matches the arithmetic; the flag changes no instant.
+
+`results/local-time-rule.json`: pass, 23 of 23, as on 1.1.0.
+
+So the two silent cases, the ones that failed T3 with no signal, now carry a
+flag. The five noted cases are as before: their signal is the `calendarNote`
+on the resolution, not a flag on the chart, and whether that note passes is
+the reading the first run's `README.md` leaves to the reviewer (T3,
+"Calendar switch").
+
+## Rerunning
+
+```sh
+npm ci && npm run build
+E=docs/evidence/calendar-unknown-20261116
+node $E/tools/calendar-switch.mjs $E/results/calendar-switch.json
+node docs/evidence/edge-cases-1.1.0-20261116/tools/local-time-rule.mjs $E/results/local-time-rule.json
+```
+
+Nothing was merged, tagged, released or published.

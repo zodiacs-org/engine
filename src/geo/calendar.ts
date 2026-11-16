@@ -105,9 +105,14 @@ export interface CalendarNote {
  */
 export function calendarNote(gregorianDate: string, calendar: CalendarName, country: string): CalendarNote | null {
   if (!parseCalendarDate(gregorianDate, "gregorian")) throw new RangeError("gregorianDate must be a valid Gregorian date, YYYY-MM-DD.");
+  checkCalendarCountry(calendar, country);
+  return noteFor(gregorianDate, calendar, country);
+}
+
+/** Internal: the checks of a calendar and a country that calendarNote and resolveLocalToUtc's options share. */
+export function checkCalendarCountry(calendar: unknown, country: unknown): void {
   if (calendar !== "gregorian" && calendar !== "julian") throw new RangeError('calendar must be "gregorian" or "julian".');
   if (typeof country !== "string" || !country.trim()) throw new RangeError("country must be a nonempty string.");
-  return noteFor(gregorianDate, calendar, country);
 }
 
 /** Internal: calendarNote for a date resolveLocalBirth has resolved, which may lie past the year 9999. */

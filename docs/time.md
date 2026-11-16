@@ -389,7 +389,16 @@ is refused rather than ignored).
   and `"new-style"` when a Julian date falls on or after it, a Julian date
   late in 9999 that resolves into the Gregorian year 10000 among them. The
   note never changes the resolution. A country the table does not date gets
-  no note.
+  no note. Without `country`, a date that one of the table's changeovers
+  skipped, after a row's last Old Style day and before its first New Style
+  day (1582-10-05 to 1582-10-14 in Italy, 1752-09-03 to 1752-09-13 in Great
+  Britain), carries the flag `"calendar-unknown"`, in either calendar: such a
+  date was not in civil use in that country and may have been elsewhere, and
+  nothing given says which. The flag never changes the instant either; it
+  rides on the birth into the chart's flags and the receipt's `inputFlags`
+  (from the release after 1.1.0; tests in
+  `src/geo/calendar-unknown.test.ts`, which count each row's skipped dates
+  against the Julian calendar's lag behind the Gregorian, 10 to 13 days).
 - `fold`: `"earlier"` (default) or `"later"`: which instant a wall time the
   clock showed twice takes, its first pass or its second. `resolveLocalBirth`
   and `resolveBirth` take the same field. When clocks went back in New York
@@ -475,7 +484,7 @@ Paris, Galway and Bergen are in the tests with their values.
 | --- | --- |
 | `utc` | the instant |
 | `offsetMinutes` | minutes east at that instant; may be fractional |
-| `flags` | `"dst-gap"` or `"dst-fold"` for a gap or fold of any cause, and `"lmt"` when a local mean time clock read the wall time |
+| `flags` | `"dst-gap"` or `"dst-fold"` for a gap or fold of any cause, `"lmt"` when a local mean time clock read the wall time, and `"calendar-unknown"` for a skipped date given with no country (see Options) |
 | `date`, `writtenDate`, `calendar` | the Gregorian date resolved, and the date as written in its calendar |
 | `jump` | `{ kind: "gap" \| "fold", cause }`, or null |
 | `transition` | `{ at, offsetBeforeMinutes, offsetAfterMinutes, cause }`: the jump's, or the last change before the instant where the shipped history answered; null from 1970 without a jump |

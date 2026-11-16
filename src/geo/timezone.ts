@@ -3,7 +3,7 @@ import type { NatalLocalResolution } from "../receipt.js";
 import { validateBirthSettings } from "../birth-input.js";
 import { civilDateOf, julianDayNumber, parseCalendarDate } from "../civil-calendar.js";
 import type { CalendarName } from "../civil-calendar.js";
-import { noteFor } from "./calendar.js";
+import { GREGORIAN_ADOPTION, checkCalendarCountry, noteFor } from "./calendar.js";
 import type { CalendarNote } from "./calendar.js";
 import { TZDB, laterCause, loadHistory, loadedHistory, transitionAt, typeIndexAt } from "./zone-history.js";
 import type { TransitionCause, ZoneHistory } from "./zone-history.js";
@@ -16,7 +16,10 @@ export interface LocalTimeOptions {
   longitude?: number | undefined;
   /** The calendar `date` is written in; "gregorian" by default. */
   calendar?: CalendarName | undefined;
-  /** ISO 3166-1 alpha-2 code, or the country's name in tzdata's iso3166.tab, for `calendarNote`. */
+  /**
+   * ISO 3166-1 alpha-2 code, or the country's name in tzdata's iso3166.tab, for `calendarNote`. Without it, a
+   * date that one of the adoption table's changeovers skipped is flagged "calendar-unknown".
+   */
   country?: string | undefined;
   /**
    * Which instant a wall time the clock showed twice takes: "earlier" (the
@@ -43,8 +46,12 @@ export interface LocalTimeResolution {
   utc: Date;
   /** Minutes east at the resolved instant; may be fractional. */
   offsetMinutes: number;
-  /** A gap or fold of any cause ("dst-" names kept for compatibility; see `jump`), and a local mean time clock. */
-  flags: ("dst-gap" | "dst-fold" | "lmt")[];
+  /**
+   * A gap or fold of any cause ("dst-" names kept for compatibility; see `jump`), a local mean time clock, and
+   * "calendar-unknown": no `country`, and a date that one of the adoption table's changeovers skipped, so whether
+   * it was in civil use where it was written is not known (docs/time.md).
+   */
+  flags: ("dst-gap" | "dst-fold" | "lmt" | "calendar-unknown")[];
   /** The proleptic Gregorian date resolved. */
   date: string;
   writtenDate: string;
@@ -247,12 +254,10 @@ function readOptions(options: unknown = {}): LocalTimeOptions & { calendar: Cale
   if (longitude !== undefined && !(typeof longitude === "number" && Math.abs(longitude) <= 180)) {
     throw new RangeError("longitude must be between -180 and 180 degrees.");
   }
-  if (calendar !== "gregorian" && calendar !== "julian") throw new RangeError('calendar must be "gregorian" or "julian".');
-  if (country !== undefined && (typeof country !== "string" || !country.trim())) {
-    throw new RangeError("country must be a nonempty string.");
-  }
+  // An absent country is allowed; the checks are calendarNote's, shared to keep the entry's size.
+  checkCalendarCountry(calendar, country === undefined ? "-" : country);
   if (fold !== "earlier" && fold !== "later") throw new RangeError('fold must be "earlier" or "later".');
-  return { longitude: longitude as number | undefined, calendar, country: country as string | undefined, fold };
+  return { longitude: longitude as number | undefined, calendar: calendar as CalendarName, country: country as string | undefined, fold };
 }
 
 const pad = (value: number, width = 2): string => String(value).padStart(width, "0");
@@ -336,6 +341,10 @@ export function resolveLocalToUtc(
   const lmt = inEra || (!place && history?.zoneEraEnd != null && chosen.utcMs < history.zoneEraEnd);
   const flags: LocalTimeResolution["flags"] = kind ? [`dst-${kind}`] : [];
   if (lmt) flags.push("lmt");
+  // A date written in the days a changeover of the adoption table skipped, after its last Old Style day and
+  // before its first New Style day, in either calendar, was not in civil use in that country and may have been
+  // elsewhere. With a country, calendarNote says which; with none, nothing would (docs/time.md).
+  if (!country && GREGORIAN_ADOPTION.some((r) => date > r.lastJulian && date < r.firstGregorian)) flags.push("calendar-unknown");
   const localMeanTime =
     longitude !== undefined && place && (inEra || (kind === "gap" && reading.at === place.endMs))
       ? { longitude, zoneOffsetMinutes: zoneReading.chosen.offset / 60 }
