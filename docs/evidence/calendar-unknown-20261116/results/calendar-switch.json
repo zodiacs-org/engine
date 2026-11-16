@@ -4,7 +4,7 @@
  "counts": {
   "pass": 9,
   "noted": 5,
-  "flagged": 6
+  "flagged": 10
  },
  "records": [
   {
@@ -511,6 +511,130 @@
    "engine": {
     "utc": "1752-09-08T12:01:15.000Z",
     "gregorianDate": "1752-09-08",
+    "flags": [
+     "lmt",
+     "calendar-unknown"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "calendar-unknown",
+     "outside-reference-span",
+     "outside-de440-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "flagged"
+  },
+  {
+   "id": "T3-r",
+   "zone": "Europe/Amsterdam",
+   "country": null,
+   "date": "1701-01-05",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "a date Friesland and Groningen skipped (the NL note), in Amsterdam's zone, no country given",
+   "arbiter": {
+    "jdn": 2342342,
+    "utcOfLocalNoon": "1701-01-05T11:40:28.000Z",
+    "offsetSeconds": 1172
+   },
+   "engine": {
+    "utc": "1701-01-05T11:40:28.000Z",
+    "gregorianDate": "1701-01-05",
+    "flags": [
+     "lmt",
+     "calendar-unknown"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "calendar-unknown",
+     "outside-reference-span",
+     "outside-de440-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "flagged"
+  },
+  {
+   "id": "T3-r",
+   "zone": "Europe/Zurich",
+   "country": null,
+   "date": "1584-01-14",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "a date the Catholic cantons skipped (the CH note), in Zurich's zone, no country given",
+   "arbiter": {
+    "jdn": 2299617,
+    "utcOfLocalNoon": "1584-01-14T11:25:52.000Z",
+    "offsetSeconds": 2048
+   },
+   "engine": {
+    "utc": "1584-01-14T11:25:52.000Z",
+    "gregorianDate": "1584-01-14",
+    "flags": [
+     "lmt",
+     "calendar-unknown"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "calendar-unknown",
+     "outside-reference-span",
+     "outside-de440-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "flagged"
+  },
+  {
+   "id": "T3-r",
+   "zone": "Europe/Warsaw",
+   "country": null,
+   "date": "1584-01-14",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "a date Silesia skipped (the PL note), in Warsaw's zone, no country given",
+   "arbiter": {
+    "jdn": 2299617,
+    "utcOfLocalNoon": "1584-01-14T10:36:00.000Z",
+    "offsetSeconds": 5040
+   },
+   "engine": {
+    "utc": "1584-01-14T10:36:00.000Z",
+    "gregorianDate": "1584-01-14",
+    "flags": [
+     "lmt",
+     "calendar-unknown"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "calendar-unknown",
+     "outside-reference-span",
+     "outside-de440-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "flagged"
+  },
+  {
+   "id": "T3-r",
+   "zone": "Europe/Brussels",
+   "country": null,
+   "date": "1582-12-16",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "a date Brabant skipped by Grotefend's dating (the BE note), in Brussels's zone, no country given",
+   "arbiter": {
+    "jdn": 2299223,
+    "utcOfLocalNoon": "1582-12-16T11:42:30.000Z",
+    "offsetSeconds": 1050
+   },
+   "engine": {
+    "utc": "1582-12-16T11:42:30.000Z",
+    "gregorianDate": "1582-12-16",
     "flags": [
      "lmt",
      "calendar-unknown"

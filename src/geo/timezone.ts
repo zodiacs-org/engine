@@ -346,9 +346,10 @@ export function resolveLocalToUtc(
   // A date written in the days a changeover of the adoption table skipped, after its last Old Style day and
   // before its first New Style day, in either calendar, was not in civil use in that country and may have been
   // elsewhere. With a country the table dates, calendarNote says which. Without one (no country, or one the table
-  // does not date), the zone narrows the changeovers that can apply: the capital zone of a tabled country follows
-  // that country's alone, and a changeover after 1800 (Russia's, 1918) applies only in a zone under Europe/ or
-  // Asia/, or one that names no place (docs/time.md).
+  // does not date), the zone narrows the changeovers that can apply: the capital zone of 14 of the tabled
+  // countries follows that country's alone (zoneAdoption, which says why not the other four), and a changeover
+  // after 1800 (Russia's, 1918) applies only in a zone under Europe/ or Asia/, or one that names no place
+  // (docs/time.md).
   if (!(country && gregorianAdoption(country))) {
     const own = zoneAdoption(timeZone);
     const near = /^(europe|asia|etc)\/|^[^/]+$/i.test(timeZone);

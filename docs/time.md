@@ -397,9 +397,18 @@ is refused rather than ignored).
   date was not in civil use in that country and may have been elsewhere, and
   nothing given says which. The zone narrows the changeovers that can apply.
   In the zone tzdb's `zone.tab` gives a tabled country for its capital
-  (`Europe/Rome` for Italy, `Europe/London` for Great Britain, one for each
-  of the 18 rows), only that country's changeover applies, so Gregorian
-  1752-09-08 in `Europe/Rome` is not flagged. Russia's changeover of 1918,
+  (`Europe/Rome` for Italy, `Europe/London` for Great Britain, 14 of the 18
+  rows), only that country's changeover applies, so Gregorian 1752-09-08 in
+  `Europe/Rome` is not flagged. The zone name is matched without regard to
+  case, and a link is not followed: `Europe/Vatican` takes every changeover,
+  as does `Europe/Bratislava`, a link to Prague whose region followed
+  Hungary's change. The capital zones of Belgium, the Netherlands,
+  Switzerland and Poland are not narrowed, because their rows' notes date
+  changeovers within the zone whose skipped days fall in another row's and
+  not in their own (Brabant on 1582-12-25 by Grotefend, the Catholic cantons
+  in January 1584, Silesia on 1584-01-23, Friesland and Groningen on
+  1701-01-12), so Gregorian 1701-01-05 in `Europe/Amsterdam` and 1584-01-14
+  in `Europe/Zurich` or `Europe/Warsaw` are flagged. Russia's changeover of 1918,
   the only one after 1800, applies only in a zone under `Europe/` or `Asia/`
   or one that names no place (`Etc/UTC`, a name with no `/`), so 1918-02-05
   in `America/New_York` is not flagged. Any other zone takes every

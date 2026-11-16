@@ -28,7 +28,15 @@
  *   Zone America/New_York -4:56:02 - LMT 1883 Nov 18 17:00u
  *                         -5:00    US  E%sT 1920
  * (on 1918-02-05, before the US rules' first daylight saving time of
- * 1918-03-31, that is EST, -5:00). A date in the days a changeover skipped never existed there. ZOD-97's rule:
+ * 1918-03-31, that is EST, -5:00). The second review round added T3-r: dates
+ * that a region inside a tabled capital's zone skipped by its row's own note
+ * (Friesland and Groningen 1701-01-12, the Catholic cantons 1584-01-22,
+ * Silesia 1584-01-23, Brabant 1582-12-25 by Grotefend), given with no
+ * country, which must carry the flag; their local mean time, from `europe`:
+ *   Zone Europe/Amsterdam  0:19:32 - LMT 1835
+ *   Zone Europe/Zurich     0:34:08 - LMT 1853 Jul 16
+ *   Zone Europe/Warsaw     1:24:00 - LMT 1880
+ *   Zone Europe/Brussels   0:17:30 - LMT 1880 A date in the days a changeover skipped never existed there. ZOD-97's rule:
  * the engine refuses or flags such a date, and resolves the valid neighbours
  * to the right instant. Verdicts: "pass", "noted" (a calendarNote, when the
  * caller names the country; no flag), "flagged" (the "calendar-unknown" flag,
@@ -58,6 +66,10 @@ const ROME = 49 * 60 + 56;
 const LONDON = -75;
 const NEW_YORK = -(4 * 3600 + 56 * 60 + 2);
 const NEW_YORK_1918 = -5 * 3600;
+const AMSTERDAM = 19 * 60 + 32;
+const ZURICH = 34 * 60 + 8;
+const WARSAW = 3600 + 24 * 60;
+const BRUSSELS = 17 * 60 + 30;
 // [id, zone, the zone's offset that day (local mean time, or EST in New York in 1918), country, date, calendar, existed there?, what]
 const CASES = [
   ["T3-j", "Europe/Rome", ROME, "IT", "1582-10-04", "julian", true, "the last Julian day in Rome"],
@@ -76,10 +88,14 @@ const CASES = [
   ["T3-p", "America/New_York", NEW_YORK, undefined, "1752-09-08", "gregorian", false, "a date Britain skipped, in New York, which took Britain's change, no country given"],
   ["T3-q", "Europe/London", LONDON, "US", "1752-09-08", "gregorian", false, "a date Britain skipped, in London, with a country the table does not date"],
   ["T3-q", "Europe/London", LONDON, "IE", "1752-09-08", "gregorian", false, "the same with IE, also not in the table"],
-  ["T3-q", "Europe/London", LONDON, "ZZ", "1752-09-08", "gregorian", false, "the same with ZZ, no country at all"]
+  ["T3-q", "Europe/London", LONDON, "ZZ", "1752-09-08", "gregorian", false, "the same with ZZ, no country at all"],
+  ["T3-r", "Europe/Amsterdam", AMSTERDAM, undefined, "1701-01-05", "gregorian", false, "a date Friesland and Groningen skipped (the NL note), in Amsterdam's zone, no country given"],
+  ["T3-r", "Europe/Zurich", ZURICH, undefined, "1584-01-14", "gregorian", false, "a date the Catholic cantons skipped (the CH note), in Zurich's zone, no country given"],
+  ["T3-r", "Europe/Warsaw", WARSAW, undefined, "1584-01-14", "gregorian", false, "a date Silesia skipped (the PL note), in Warsaw's zone, no country given"],
+  ["T3-r", "Europe/Brussels", BRUSSELS, undefined, "1582-12-16", "gregorian", false, "a date Brabant skipped by Grotefend's dating (the BE note), in Brussels's zone, no country given"]
 ];
 /** A synthetic birthplace in each zone, for the chart's flags. */
-const PLACE = { "Europe/Rome": [41.9, 12.5], "Europe/London": [51.5, -0.12], "America/New_York": [40.7, -74.0] };
+const PLACE = { "Europe/Rome": [41.9, 12.5], "Europe/London": [51.5, -0.12], "America/New_York": [40.7, -74.0], "Europe/Amsterdam": [52.37, 4.9], "Europe/Zurich": [47.37, 8.54], "Europe/Warsaw": [52.23, 21.01], "Europe/Brussels": [50.85, 4.35] };
 
 const records = [];
 for (const [id, zone, lmt, country, date, calendar, existed, what] of CASES) {

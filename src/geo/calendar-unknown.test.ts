@@ -2,7 +2,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 
 import { natalChart } from "../index.js";
 import { createNatalEnvelope, parseNatalEnvelope } from "../receipt.js";
-import { GREGORIAN_ADOPTION, prepareLocalTime, resolveLocalBirth, resolveLocalToUtc } from "../geo.js";
+import { GREGORIAN_ADOPTION, gregorianToJulian, prepareLocalTime, resolveLocalBirth, resolveLocalToUtc } from "../geo.js";
 import { zoneAdoption } from "./calendar.js";
 
 // ZOD-97, T3: a date in the days a calendar changeover skipped. With a country the calendarNote says whether the
@@ -31,7 +31,12 @@ beforeAll(async () => {
     ["1752-09-08", "America/New_York"],
     ["1918-02-05", "America/New_York"],
     ["1918-02-05", "Asia/Tokyo"],
-    ["1923-02-20", "Europe/Athens"]
+    ["1923-02-20", "Europe/Athens"],
+    ["1701-01-05", "Europe/Amsterdam"],
+    ["1584-01-14", "Europe/Zurich"],
+    ["1584-01-14", "Europe/Warsaw"],
+    ["1582-12-16", "Europe/Brussels"],
+    ["1752-09-08", "Europe/Vatican"]
   ] as const)
     await prepareLocalTime(date, zone);
 });
@@ -65,8 +70,14 @@ describe('"calendar-unknown"', () => {
     expect(GREGORIAN_ADOPTION.map((row) => row.code)).toEqual(Object.keys(capitals));
     // Russia's is the only changeover after 1800, the one kept to zones under Europe/ and Asia/.
     expect(GREGORIAN_ADOPTION.filter((row) => row.firstGregorian >= "1800").map((row) => row.code)).toEqual(["RU"]);
-    for (const row of GREGORIAN_ADOPTION) expect(zoneAdoption(`Europe/${capitals[row.code]}`)).toBe(row);
-    for (const zone of ["Europe/Kaliningrad", "Europe/Vatican", "America/New_York", "Etc/UTC", "Rome", "europe/rome"])
+    // Four capitals are not narrowed: their rows' notes date changeovers that the next test finds.
+    const wide = ["BE", "CH", "NL", "PL"];
+    for (const row of GREGORIAN_ADOPTION) {
+      expect(zoneAdoption(`Europe/${capitals[row.code]}`), row.code).toBe(wide.includes(row.code) ? undefined : row);
+      expect(zoneAdoption(`EUROPE/${capitals[row.code]!.toUpperCase()}`), row.code).toBe(wide.includes(row.code) ? undefined : row);
+    }
+    // Links are not followed (Europe/Bratislava links to Prague but was Hungarian), nor are other zones.
+    for (const zone of ["Europe/Kaliningrad", "Europe/Vatican", "Europe/Bratislava", "America/New_York", "Etc/UTC", "Rome", "Europe/-"])
       expect(zoneAdoption(zone), zone).toBeUndefined();
 
     // Dates that certainly existed where they were written, unflagged: Rome and Moscow did not take Britain's
@@ -82,6 +93,7 @@ describe('"calendar-unknown"', () => {
       expect(resolved.flags, `${zone} ${date}`).not.toContain("calendar-unknown");
       expect(resolved.calendarNote).toBeNull();
     }
+    expect(resolveLocalToUtc("1752-09-08", "12:00", "europe/rome").flags).not.toContain("calendar-unknown");
     // Still flagged where the zone does not rule a changeover out. New York names no tabled country, and the
     // British colonies there took Britain's change of 1752 (Gregorian 1752-09-03 to 1752-09-13 were never written
     // there), while other places in the zone's area followed Spain's or France's; Asia/ includes zones of the
@@ -89,9 +101,45 @@ describe('"calendar-unknown"', () => {
     for (const [date, zone] of [
       ["1752-09-08", "America/New_York"],
       ["1918-02-05", "Asia/Tokyo"],
-      ["1918-02-05", "Etc/UTC"]
+      ["1918-02-05", "Etc/UTC"],
+      // A link is not followed, so Rome's narrowing does not reach it.
+      ["1752-09-08", "Europe/Vatican"],
+      // Days another row skipped and a region of the zone skipped too, by its row's note: Friesland and Groningen
+      // (1701-01-12, the NL note), the Catholic cantons (1584-01-22, the CH note), Silesia (1584-01-23, the PL
+      // note) and Brabant by Grotefend (1582-12-25, the BE note).
+      ["1701-01-05", "Europe/Amsterdam"],
+      ["1584-01-14", "Europe/Zurich"],
+      ["1584-01-14", "Europe/Warsaw"],
+      ["1582-12-16", "Europe/Brussels"]
     ] as const)
       expect(resolveLocalToUtc(date, "12:00", zone).flags, `${zone} ${date}`).toContain("calendar-unknown");
+  });
+
+  it("narrows no zone whose row's note dates a changeover with skipped days in another row's and not its own", () => {
+    /** The days a changeover whose first New Style day is `first` skipped, as an open range of written dates. */
+    const skipped = (first: string): [string, string] => {
+      const before = new Date(Date.parse(`${first}T00:00:00Z`) - 86_400_000).toISOString().slice(0, 10);
+      return [gregorianToJulian(before)!, first];
+    };
+    const capitals = ["Vienna", "Brussels", "Zurich", "Prague", "Berlin", "Copenhagen", "Madrid", "Helsinki", "Paris", "London", "Budapest", "Rome", "Amsterdam", "Oslo", "Warsaw", "Lisbon", "Moscow", "Stockholm"];
+    const narrowed: string[] = [];
+    GREGORIAN_ADOPTION.forEach((row, index) => {
+      if (zoneAdoption(`Europe/${capitals[index]}`) !== row) return;
+      narrowed.push(row.code);
+      const own = skipped(row.firstGregorian);
+      for (const date of row.note.match(/\d{4}-\d{2}-\d{2}/g) ?? []) {
+        const theirs = skipped(date);
+        for (const other of GREGORIAN_ADOPTION) {
+          if (other === row) continue;
+          const range = skipped(other.firstGregorian);
+          const from = theirs[0] > range[0] ? theirs[0] : range[0];
+          const to = theirs[1] < range[1] ? theirs[1] : range[1];
+          // Days in both lie in the row's own skipped days, which the narrowed zone still flags.
+          if (from < to) expect(own[0] <= from && to <= own[1], `${row.code} ${date} ${other.code}`).toBe(true);
+        }
+      }
+    });
+    expect(narrowed).toEqual(["AT", "CZ", "DE", "DK", "ES", "FI", "FR", "GB", "HU", "IT", "NO", "PT", "RU", "SE"]);
   });
 
   it("is silenced only by a country the table dates", () => {
