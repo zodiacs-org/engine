@@ -16,8 +16,8 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**1.1.0-rc.13**, the candidate for 1.1.0, not published: 1.1.0-rc.12's code
-with its documentation corrected (CHANGELOG.md). It ships a sealed
+**1.1.0**, a minor release: 1.1.0-rc.13 with the version changed
+(CHANGELOG.md). It ships a sealed
 pack of JPL's DE440 for 1790 to 2210 and computes on it by default: a plain
 `natalChart`, `positions`, `calc` or `birthWindow` call, with nothing opened
 or supplied, takes the Sun, the Moon, the planets and the true node from the
@@ -55,19 +55,20 @@ labelled form beside it: `searchLongitudeCrossings` for
 1.1.0-rc.12 `chartPoints` and `chartDeclinations` carry their chart's
 `ephemeris` and fallback `flags` too, given a birth or a chart.
 `setDefaultEphemeris("astronomy-engine")` gives earlier releases' positions
-everywhere, named and not flagged. From this candidate `@zodiacs/engine/calc`
+everywhere, named and not flagged. From 1.1.0-rc.10 `@zodiacs/engine/calc`
 (`calc`, `chart`, `events`) and `birthWindow` compute on the pack too, so
 they agree with `natalChart`; what `calc()` gives beyond the apparent
 geocentric place (other centers and corrections, the Earth) and the sky
 entry's rising and setting still compute on astronomy-engine whatever the
 default, so none is a fallback: a calc receipt names astronomy-engine, and
 the sky entry's results name no ephemeris ([docs/de440.md](docs/de440.md)). The pack makes the package about four times larger unpacked
-(4,578,211 bytes against 1.1.0-rc.7's 1,152,017), and an application
+(4,581,449 bytes against 1.1.0-rc.7's 1,152,017), and an application
 that bundles the root entry bundles the pack's 3,319,552 characters (see
-[docs/de440.md](docs/de440.md) and CHANGELOG.md). 1.1.0-rc.9 was this
-candidate's first draft, superseded before review; 1.1.0-rc.10,
+[docs/de440.md](docs/de440.md) and CHANGELOG.md). 1.1.0-rc.9 was
+1.1.0's first draft, superseded before review; 1.1.0-rc.10,
 1.1.0-rc.11 and 1.1.0-rc.12 were drafts on the same pull request, reviewed
-and replaced;
+and replaced, and this release is 1.1.0-rc.13 with
+the version changed;
 1.1.0-rc.8 was a draft
 that shipped the pack behind `withEphemeris` only, withdrawn, and its
 number is not used again. From 1.1.0-rc.7 the error limits
@@ -92,16 +93,18 @@ sign changes; and corrections of statements that said more than their
 evidence (CHANGELOG.md). The package follows Semantic Versioning:
 [docs/versioning.md](docs/versioning.md) says what is public, how a number
 may change, which records stay readable and how something public is
-deprecated, and `api/` holds each public entry point's declarations. npm
-carries 1.0.0, the first stable release, under `latest`: `npm install
-@zodiacs/engine` installs it, without `./conventions`, `./time`, `./lite`,
-`./de440` or the DE440 pack, computing on astronomy-engine, and writing no ids. This candidate is not published there. Install
-the exact candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.10.tgz` in the
-repository, retaining its SHA-256 receipt:
+deprecated, and `api/` holds each public entry point's declarations.
+Install it from npm:
 
 ```sh
-npm install ./zodiacs-engine-1.1.0-rc.10.tgz
+npm install @zodiacs/engine
 ```
+
+1.0.0, npm's `latest` before this release, has no `./conventions`, `./time`,
+`./lite`, `./de440` or DE440 pack, computes on astronomy-engine and writes no
+ids. Until this release is published, `artifacts/zodiacs-engine-1.1.0.tgz`
+in the repository, with its SHA-256 receipt, is the exact archive the Release
+workflow publishes.
 
 The Release workflow publishes the archive carried in `artifacts/` as it is,
 with provenance (CONTRIBUTING.md, *Releases*). Before 1.0.0 npm carried
@@ -124,7 +127,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.10.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -187,8 +190,10 @@ DE440 pack inside its years and astronomy-engine 2.1.19 elsewhere; where this
 document speaks of the ephemeris's accuracy or of its error limits without
 naming DE440, it speaks of astronomy-engine, the fallback and the ephemeris
 of what the pack does not give. See CHANGELOG.md for the release history and
-`docs/evidence/1.1.0-rc.10-20261114/` for this candidate's checks
-(1.1.0-rc.9's, its superseded draft's, are in
+`docs/evidence/1.1.0-20261116/` for this release's checks
+(1.1.0-rc.13's are in `docs/evidence/1.1.0-rc.13-20261115/`, 1.1.0-rc.12's in
+`docs/evidence/1.1.0-rc.12-20261115/`, 1.1.0-rc.11's and 1.1.0-rc.10's in
+their own dated folders there, 1.1.0-rc.9's, its superseded draft's, are in
 `docs/evidence/1.1.0-rc.9-20261114/`)
 (1.1.0-rc.3's are in `docs/evidence/de440-20261110/`, 1.1.0-rc.2's in
 `docs/evidence/1.1.0-rc.2-20261102/`, 1.1.0-rc.1's in

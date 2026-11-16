@@ -1,0 +1,5 @@
+
+> @zodiacs/engine@1.1.0 typecheck
+> tsc -p tsconfig.typecheck.json --pretty false
+
+EXIT 0

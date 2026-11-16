@@ -1,0 +1,86 @@
+TAP version 13
+# Subtest: longitudes compare on the circle, in the rule unit
+ok 1 - longitudes compare on the circle, in the rule unit
+  ---
+  duration_ms: 1.124999
+  type: 'test'
+  ...
+# Subtest: arrays compare element by element and report the worst residual
+ok 2 - arrays compare element by element and report the worst residual
+  ---
+  duration_ms: 0.234505
+  type: 'test'
+  ...
+# Subtest: exact fields, missing fields and non-numbers fail
+ok 3 - exact fields, missing fields and non-numbers fail
+  ---
+  duration_ms: 0.301756
+  type: 'test'
+  ...
+# Subtest: validation accepts a conforming file and names each problem in a bad one
+ok 4 - validation accepts a conforming file and names each problem in a bad one
+  ---
+  duration_ms: 2.363018
+  type: 'test'
+  ...
+# Subtest: from 0.2.0 each vector names its kind and arbiter as registry ids, and 0.1.0 is as released
+ok 5 - from 0.2.0 each vector names its kind and arbiter as registry ids, and 0.1.0 is as released
+  ---
+  duration_ms: 1.682369
+  type: 'test'
+  ...
+# Subtest: a release holds the vectors released before it, and nothing else differs
+ok 6 - a release holds the vectors released before it, and nothing else differs
+  ---
+  duration_ms: 0.344186
+  type: 'test'
+  ...
+# Subtest: the committed vector files conform to SPEC.md, and this version holds 0.1.0's vectors
+ok 7 - the committed vector files conform to SPEC.md, and this version holds 0.1.0's vectors
+  ---
+  duration_ms: 30.985197
+  type: 'test'
+  ...
+# Subtest: the protocol: a handshake, then one response per request, in order
+ok 8 - the protocol: a handshake, then one response per request, in order
+  ---
+  duration_ms: 38.023935
+  type: 'test'
+  ...
+# Subtest: the protocol: a missing handshake or an answer out of order is refused
+ok 9 - the protocol: a missing handshake or an answer out of order is refused
+  ---
+  duration_ms: 87.670959
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 227.869337
+0.1.0: 500 vectors as released; 0.2.0 holds each of them, with its convention ids
+L1 Positions: 240 vectors, 1 arbiter(s), sha256 4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8
+  position.apparent.ecliptic-true-of-date: 240
+L2 Houses and angles: 150 vectors, 5 arbiter(s), sha256 fc5321b9061b9860bfb9af5254e5813be1c4bc3c858df6f623ea1617b76b88e5
+  angles.asc-mc: 60
+  angles.vertex-east-point: 10
+  houses.cusps: 80
+L3 Time and calendars: 110 vectors, 5 arbiter(s), sha256 51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66
+  time.zone-offset: 45
+  time.local-mean-time: 5
+  time.tt-minus-utc: 10
+  time.delta-t: 15
+  calendar.to-jdn: 25
+  calendar.from-jdn: 10
+conformance: 500 vectors conform to SPEC.md
+zodiacs-engine 1.1.0: 459 pass, 0 fail, 41 unsupported, 0 error (of 500)
+  L1: 240 pass, 0 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 69 pass, 0 fail, 41 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine.json
+conformance: RESULTS.md and results/summary.json are current
+EXIT 0
