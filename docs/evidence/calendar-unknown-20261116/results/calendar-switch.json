@@ -2,9 +2,9 @@
  "what": "ZOD-97 T3, calendar switch, and chart flags",
  "node": "v22.23.4",
  "counts": {
-  "pass": 7,
+  "pass": 9,
   "noted": 5,
-  "flagged": 2
+  "flagged": 6
  },
  "records": [
   {
@@ -18,7 +18,7 @@
    "arbiter": {
     "jdn": 2299160,
     "utcOfLocalNoon": "1582-10-14T11:10:04.000Z",
-    "lmtSeconds": 2996
+    "offsetSeconds": 2996
    },
    "engine": {
     "utc": "1582-10-14T11:10:04.000Z",
@@ -47,7 +47,7 @@
    "arbiter": {
     "jdn": 2299161,
     "utcOfLocalNoon": "1582-10-15T11:10:04.000Z",
-    "lmtSeconds": 2996
+    "offsetSeconds": 2996
    },
    "engine": {
     "utc": "1582-10-15T11:10:04.000Z",
@@ -76,7 +76,7 @@
    "arbiter": {
     "jdn": 2299156,
     "utcOfLocalNoon": "1582-10-10T11:10:04.000Z",
-    "lmtSeconds": 2996
+    "offsetSeconds": 2996
    },
    "engine": {
     "utc": "1582-10-10T11:10:04.000Z",
@@ -109,7 +109,7 @@
    "arbiter": {
     "jdn": 2299156,
     "utcOfLocalNoon": "1582-10-10T11:10:04.000Z",
-    "lmtSeconds": 2996
+    "offsetSeconds": 2996
    },
    "engine": {
     "utc": "1582-10-10T11:10:04.000Z",
@@ -140,7 +140,7 @@
    "arbiter": {
     "jdn": 2299151,
     "utcOfLocalNoon": "1582-10-05T11:10:04.000Z",
-    "lmtSeconds": 2996
+    "offsetSeconds": 2996
    },
    "engine": {
     "utc": "1582-10-05T11:10:04.000Z",
@@ -173,7 +173,7 @@
    "arbiter": {
     "jdn": 2299160,
     "utcOfLocalNoon": "1582-10-14T11:10:04.000Z",
-    "lmtSeconds": 2996
+    "offsetSeconds": 2996
    },
    "engine": {
     "utc": "1582-10-14T11:10:04.000Z",
@@ -206,7 +206,7 @@
    "arbiter": {
     "jdn": 2361221,
     "utcOfLocalNoon": "1752-09-13T12:01:15.000Z",
-    "lmtSeconds": -75
+    "offsetSeconds": -75
    },
    "engine": {
     "utc": "1752-09-13T12:01:15.000Z",
@@ -235,7 +235,7 @@
    "arbiter": {
     "jdn": 2361222,
     "utcOfLocalNoon": "1752-09-14T12:01:15.000Z",
-    "lmtSeconds": -75
+    "offsetSeconds": -75
    },
    "engine": {
     "utc": "1752-09-14T12:01:15.000Z",
@@ -264,7 +264,7 @@
    "arbiter": {
     "jdn": 2361227,
     "utcOfLocalNoon": "1752-09-19T12:01:15.000Z",
-    "lmtSeconds": -75
+    "offsetSeconds": -75
    },
    "engine": {
     "utc": "1752-09-19T12:01:15.000Z",
@@ -297,7 +297,7 @@
    "arbiter": {
     "jdn": 2361216,
     "utcOfLocalNoon": "1752-09-08T12:01:15.000Z",
-    "lmtSeconds": -75
+    "offsetSeconds": -75
    },
    "engine": {
     "utc": "1752-09-08T12:01:15.000Z",
@@ -330,7 +330,183 @@
    "arbiter": {
     "jdn": 2361216,
     "utcOfLocalNoon": "1752-09-08T12:01:15.000Z",
-    "lmtSeconds": -75
+    "offsetSeconds": -75
+   },
+   "engine": {
+    "utc": "1752-09-08T12:01:15.000Z",
+    "gregorianDate": "1752-09-08",
+    "flags": [
+     "lmt",
+     "calendar-unknown"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "calendar-unknown",
+     "outside-reference-span",
+     "outside-de440-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "flagged"
+  },
+  {
+   "id": "T3-o",
+   "zone": "Europe/Rome",
+   "country": null,
+   "date": "1752-09-08",
+   "calendar": "gregorian",
+   "existedThere": true,
+   "what": "a date Britain skipped, in Rome, New Style since 1582, no country given",
+   "arbiter": {
+    "jdn": 2361216,
+    "utcOfLocalNoon": "1752-09-08T11:10:04.000Z",
+    "offsetSeconds": 2996
+   },
+   "engine": {
+    "utc": "1752-09-08T11:10:04.000Z",
+    "gregorianDate": "1752-09-08",
+    "flags": [
+     "lmt"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "outside-reference-span",
+     "outside-de440-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-o",
+   "zone": "America/New_York",
+   "country": null,
+   "date": "1918-02-05",
+   "calendar": "gregorian",
+   "existedThere": true,
+   "what": "a date Russia skipped, in New York, New Style since 1752, no country given",
+   "arbiter": {
+    "jdn": 2421630,
+    "utcOfLocalNoon": "1918-02-05T17:00:00.000Z",
+    "offsetSeconds": -18000
+   },
+   "engine": {
+    "utc": "1918-02-05T17:00:00.000Z",
+    "gregorianDate": "1918-02-05",
+    "flags": [],
+    "calendarNote": null,
+    "chartFlags": []
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-p",
+   "zone": "America/New_York",
+   "country": null,
+   "date": "1752-09-08",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "a date Britain skipped, in New York, which took Britain's change, no country given",
+   "arbiter": {
+    "jdn": 2361216,
+    "utcOfLocalNoon": "1752-09-08T16:56:02.000Z",
+    "offsetSeconds": -17762
+   },
+   "engine": {
+    "utc": "1752-09-08T16:56:02.000Z",
+    "gregorianDate": "1752-09-08",
+    "flags": [
+     "lmt",
+     "calendar-unknown"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "calendar-unknown",
+     "outside-reference-span",
+     "outside-de440-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "flagged"
+  },
+  {
+   "id": "T3-q",
+   "zone": "Europe/London",
+   "country": "US",
+   "date": "1752-09-08",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "a date Britain skipped, in London, with a country the table does not date",
+   "arbiter": {
+    "jdn": 2361216,
+    "utcOfLocalNoon": "1752-09-08T12:01:15.000Z",
+    "offsetSeconds": -75
+   },
+   "engine": {
+    "utc": "1752-09-08T12:01:15.000Z",
+    "gregorianDate": "1752-09-08",
+    "flags": [
+     "lmt",
+     "calendar-unknown"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "calendar-unknown",
+     "outside-reference-span",
+     "outside-de440-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "flagged"
+  },
+  {
+   "id": "T3-q",
+   "zone": "Europe/London",
+   "country": "IE",
+   "date": "1752-09-08",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "the same with IE, also not in the table",
+   "arbiter": {
+    "jdn": 2361216,
+    "utcOfLocalNoon": "1752-09-08T12:01:15.000Z",
+    "offsetSeconds": -75
+   },
+   "engine": {
+    "utc": "1752-09-08T12:01:15.000Z",
+    "gregorianDate": "1752-09-08",
+    "flags": [
+     "lmt",
+     "calendar-unknown"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "calendar-unknown",
+     "outside-reference-span",
+     "outside-de440-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "flagged"
+  },
+  {
+   "id": "T3-q",
+   "zone": "Europe/London",
+   "country": "ZZ",
+   "date": "1752-09-08",
+   "calendar": "gregorian",
+   "existedThere": false,
+   "what": "the same with ZZ, no country at all",
+   "arbiter": {
+    "jdn": 2361216,
+    "utcOfLocalNoon": "1752-09-08T12:01:15.000Z",
+    "offsetSeconds": -75
    },
    "engine": {
     "utc": "1752-09-08T12:01:15.000Z",

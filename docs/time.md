@@ -389,16 +389,31 @@ is refused rather than ignored).
   and `"new-style"` when a Julian date falls on or after it, a Julian date
   late in 9999 that resolves into the Gregorian year 10000 among them. The
   note never changes the resolution. A country the table does not date gets
-  no note. Without `country`, a date that one of the table's changeovers
+  no note. Without a country the table dates (no `country`, or one it does
+  not date, such as `"US"`), a date that one of the table's changeovers
   skipped, after a row's last Old Style day and before its first New Style
   day (1582-10-05 to 1582-10-14 in Italy, 1752-09-03 to 1752-09-13 in Great
   Britain), carries the flag `"calendar-unknown"`, in either calendar: such a
   date was not in civil use in that country and may have been elsewhere, and
-  nothing given says which. The flag never changes the instant either; it
-  rides on the birth into the chart's flags and the receipt's `inputFlags`
-  (from the release after 1.1.0; tests in
-  `src/geo/calendar-unknown.test.ts`, which count each row's skipped dates
-  against the Julian calendar's lag behind the Gregorian, 10 to 13 days).
+  nothing given says which. The zone narrows the changeovers that can apply.
+  In the zone tzdb's `zone.tab` gives a tabled country for its capital
+  (`Europe/Rome` for Italy, `Europe/London` for Great Britain, one for each
+  of the 18 rows), only that country's changeover applies, so Gregorian
+  1752-09-08 in `Europe/Rome` is not flagged. Russia's changeover of 1918,
+  the only one after 1800, applies only in a zone under `Europe/` or `Asia/`
+  or one that names no place (`Etc/UTC`, a name with no `/`), so 1918-02-05
+  in `America/New_York` is not flagged. Any other zone takes every
+  changeover: Gregorian 1752-09-08 in `America/New_York` is flagged, as the
+  British colonies there took Britain's change and places elsewhere in the
+  zone's area followed Spain's or France's. Greece's change of 1923 is not in
+  the table, so it is neither flagged nor noted. The flag never changes the
+  instant either; it rides on the birth into the chart's flags and the
+  receipt's `inputFlags`. A receipt refuses the flag on an instant more than
+  a day outside the skipped days, from 1582-10-04T00:00Z up to
+  1918-02-28T00:00Z, with or without a local record (from the release after
+  1.1.0; tests in `src/geo/calendar-unknown.test.ts`, which count each row's
+  skipped dates against the Julian calendar's lag behind the Gregorian, 10 to
+  13 days).
 - `fold`: `"earlier"` (default) or `"later"`: which instant a wall time the
   clock showed twice takes, its first pass or its second. `resolveLocalBirth`
   and `resolveBirth` take the same field. When clocks went back in New York
@@ -484,7 +499,7 @@ Paris, Galway and Bergen are in the tests with their values.
 | --- | --- |
 | `utc` | the instant |
 | `offsetMinutes` | minutes east at that instant; may be fractional |
-| `flags` | `"dst-gap"` or `"dst-fold"` for a gap or fold of any cause, `"lmt"` when a local mean time clock read the wall time, and `"calendar-unknown"` for a skipped date given with no country (see Options) |
+| `flags` | `"dst-gap"` or `"dst-fold"` for a gap or fold of any cause, `"lmt"` when a local mean time clock read the wall time, and `"calendar-unknown"` for a skipped date given with no country the table dates (see Options) |
 | `date`, `writtenDate`, `calendar` | the Gregorian date resolved, and the date as written in its calendar |
 | `jump` | `{ kind: "gap" \| "fold", cause }`, or null |
 | `transition` | `{ at, offsetBeforeMinutes, offsetAfterMinutes, cause }`: the jump's, or the last change before the instant where the shipped history answered; null from 1970 without a jump |

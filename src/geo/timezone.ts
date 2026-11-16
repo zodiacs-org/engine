@@ -3,7 +3,7 @@ import type { NatalLocalResolution } from "../receipt.js";
 import { validateBirthSettings } from "../birth-input.js";
 import { civilDateOf, julianDayNumber, parseCalendarDate } from "../civil-calendar.js";
 import type { CalendarName } from "../civil-calendar.js";
-import { GREGORIAN_ADOPTION, checkCalendarCountry, noteFor } from "./calendar.js";
+import { GREGORIAN_ADOPTION, checkCalendarCountry, gregorianAdoption, noteFor, zoneAdoption } from "./calendar.js";
 import type { CalendarNote } from "./calendar.js";
 import { TZDB, laterCause, loadHistory, loadedHistory, transitionAt, typeIndexAt } from "./zone-history.js";
 import type { TransitionCause, ZoneHistory } from "./zone-history.js";
@@ -17,8 +17,9 @@ export interface LocalTimeOptions {
   /** The calendar `date` is written in; "gregorian" by default. */
   calendar?: CalendarName | undefined;
   /**
-   * ISO 3166-1 alpha-2 code, or the country's name in tzdata's iso3166.tab, for `calendarNote`. Without it, a
-   * date that one of the adoption table's changeovers skipped is flagged "calendar-unknown".
+   * ISO 3166-1 alpha-2 code, or the country's name in tzdata's iso3166.tab, for `calendarNote`. Without a country
+   * the table dates, a date that one of the adoption table's changeovers skipped, and the zone does not rule out,
+   * is flagged "calendar-unknown" (docs/time.md).
    */
   country?: string | undefined;
   /**
@@ -48,8 +49,9 @@ export interface LocalTimeResolution {
   offsetMinutes: number;
   /**
    * A gap or fold of any cause ("dst-" names kept for compatibility; see `jump`), a local mean time clock, and
-   * "calendar-unknown": no `country`, and a date that one of the adoption table's changeovers skipped, so whether
-   * it was in civil use where it was written is not known (docs/time.md).
+   * "calendar-unknown": no `country` the table dates, and a date that one of the adoption table's changeovers
+   * skipped and the zone does not rule out, so whether it was in civil use where it was written is not known
+   * (docs/time.md).
    */
   flags: ("dst-gap" | "dst-fold" | "lmt" | "calendar-unknown")[];
   /** The proleptic Gregorian date resolved. */
@@ -343,8 +345,16 @@ export function resolveLocalToUtc(
   if (lmt) flags.push("lmt");
   // A date written in the days a changeover of the adoption table skipped, after its last Old Style day and
   // before its first New Style day, in either calendar, was not in civil use in that country and may have been
-  // elsewhere. With a country, calendarNote says which; with none, nothing would (docs/time.md).
-  if (!country && GREGORIAN_ADOPTION.some((r) => date > r.lastJulian && date < r.firstGregorian)) flags.push("calendar-unknown");
+  // elsewhere. With a country the table dates, calendarNote says which. Without one (no country, or one the table
+  // does not date), the zone narrows the changeovers that can apply: the capital zone of a tabled country follows
+  // that country's alone, and a changeover after 1800 (Russia's, 1918) applies only in a zone under Europe/ or
+  // Asia/, or one that names no place (docs/time.md).
+  if (!(country && gregorianAdoption(country))) {
+    const own = zoneAdoption(timeZone);
+    const near = /^(europe|asia|etc)\/|^[^/]+$/i.test(timeZone);
+    if ((own ? [own] : GREGORIAN_ADOPTION).some((r) => date > r.lastJulian && date < r.firstGregorian && (near || r.firstGregorian < "1800")))
+      flags.push("calendar-unknown");
+  }
   const localMeanTime =
     longitude !== undefined && place && (inEra || (kind === "gap" && reading.at === place.endMs))
       ? { longitude, zoneOffsetMinutes: zoneReading.chosen.offset / 60 }

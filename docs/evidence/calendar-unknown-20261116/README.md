@@ -24,8 +24,11 @@ Synthetic dates and places only.
   at `c0edf2a` (1.1.0), built with `npm ci && npm run build`, Node 22.23.4.
 - `tools/calendar-switch.mjs`: the first run's tool with one change: a date
   that never existed there and carries `"calendar-unknown"` is "flagged", and
-  a date that did exist and carries it fails. Cases, arbiter and every other
-  verdict are the first run's.
+  a date that did exist and carries it fails. The first run's cases, arbiter
+  and every other verdict are kept; the review round of 2026-11-16 added
+  T3-o to T3-q (below), with New York's offset from tzdb 2025c's
+  `northamerica` file (local mean time −4:56:02 to 1883, EST −5:00 on
+  1918-02-05).
 - `../edge-cases-1.1.0-20261116/tools/local-time-rule.mjs`, unchanged, for
   the rest of T3 (Samoa 2011-12-30 and Kwajalein 1993-08-21) and T1 and T2,
   to show the flag moved none of them. Host time zone data: tzdb 2026e.
@@ -39,8 +42,30 @@ Synthetic dates and places only.
 | the valid days either side of each switch (Rome, London), and the three chart-flag cases | pass, 7 | pass, 7 |
 | skipped dates with the country given (Rome 1582-10-05, -10, -14; London 1752-09-08 as Julian and as Gregorian) | noted, 5 | noted, 5 (unchanged: no flag where the country is given) |
 | skipped dates with no country (Rome 1582-10-10, London 1752-09-08) | silent, 2 | flagged, 2: `"calendar-unknown"` on the resolution and on the chart |
+| T3-o: dates that existed where written, no country (Gregorian 1752-09-08 in `Europe/Rome`, 1918-02-05 in `America/New_York`) | not run | pass, 2: no flag, no note |
+| T3-p: Gregorian 1752-09-08 in `America/New_York`, no country | not run | flagged, 1 |
+| T3-q: Gregorian 1752-09-08 in `Europe/London` with `US`, `IE` or `ZZ`, countries the table does not date | not run | flagged, 3 (the branch's first version let any country silence the check) |
 
 Every instant still matches the arithmetic; the flag changes no instant.
+Totals: pass 9, noted 5, flagged 6, no fail.
+
+T3-p is flagged on purpose. The reviewer listed Gregorian 1752-09-08 in
+`America/New_York` among dates that existed; the table's own source says
+otherwise for New York City: Great Britain took the Gregorian calendar on
+1752-09-14 after 1752-09-02 (tzdb 2025c, file `calendars`), and the British
+colonies in America changed with it, so Gregorian 1752-09-03 to 1752-09-13
+were never written there. Other places in the zone's area followed Spain or
+France and did write them. The zone names no tabled country, so the flag,
+"not known", is the honest answer; with `country: "GB"` the resolution
+carries the "old-style" note instead.
+
+Not covered: Greece's change of 1923. None of the table's three sources
+(tzdb 2025c's `calendars` and Grotefend's 1891 and 1898 works) dates it, so
+Greece has no row, and Gregorian 1923-02-20 in `Europe/Athens` is neither
+flagged nor noted, with or without `country: "GR"`
+(`src/geo/calendar-unknown.test.ts` pins this). Adding the row needs a
+primary source quoted in `src/fixtures/gregorian-adoption.json`, as every
+other row has.
 
 `results/local-time-rule.json`: pass, 23 of 23, as on 1.1.0.
 

@@ -443,13 +443,19 @@ const FALLBACK_FLAGS = ["de440-unavailable", "outside-de440-span"] as const;
 const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
 /**
  * The time-basis sets also take "calendar-unknown" (from the release after 1.1.0): a local date, given with no
- * country, that one of the Gregorian adoption table's changeovers skipped (src/geo/calendar.ts). The record
+ * country the table dates, that one of the Gregorian adoption table's changeovers skipped (src/geo/calendar.ts). The record
  * keeps no country, so the claim is refused only where its Gregorian date is outside every such day read in
  * either calendar: before 1582-10-05 (Italy's first skipped day, read as Gregorian) or after 1918-02-26 (Russia's
  * last, 1918-02-13, read as Julian). src/geo/calendar-unknown.test.ts writes and reads a record at each end.
  */
 const TIME_FLAGS_TIME_BASIS = [...TIME_FLAGS, "calendar-unknown"] as const;
 const CALENDAR_UNKNOWN_DATES = { from: "1582-10-05", to: "1918-02-26" } as const;
+/**
+ * The same days as UTC instants, a day wider at each end, since a local date lies within a day of its UTC one:
+ * from 1582-10-04T00:00Z up to, not including, 1918-02-28T00:00Z. A record with the flag is refused outside them,
+ * whether or not it keeps a local record (whose own date validateLocalRecord checks against the days above).
+ */
+const CALENDAR_UNKNOWN_INSTANTS = { from: "1582-10-04", to: "1918-02-28" } as const;
 const HOUSE_SYSTEMS = [
   "whole",
   "placidus",
@@ -1287,6 +1293,9 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   )
     fail("inconsistent_result");
   const inputFlags = flagList(receipt.inputFlags, timeBasis ? TIME_FLAGS_TIME_BASIS : TIME_FLAGS);
+  const instant = receipt.instant as string;
+  if (inputFlags.includes("calendar-unknown") && !(instant >= CALENDAR_UNKNOWN_INSTANTS.from && instant < CALENDAR_UNKNOWN_INSTANTS.to))
+    fail("inconsistent_result");
   const resultFlags = flagList(receipt.resultFlags, timeBasis ? FLAGS_TIME_BASIS : current ? FLAGS : FLAGS_RC7);
   const expected = [...inputFlags];
   if (!timeKnown) expected.push("no-time");

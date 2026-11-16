@@ -11,12 +11,24 @@
  * rule counts as a pass ("refuses or flags"), and a date that did exist and
  * carries it fails. Cases, arbiter and every other verdict are the first run's.
  *
+ * The review round added cases for the zone and the country (T3-o to T3-q):
+ * dates that existed where they were written, given with no country, must not
+ * carry the flag (Rome and New York), and a country the table does not date
+ * must not silence it (US, IE, ZZ). Whether a date existed there is read from
+ * the table's own sources: Italy took the Gregorian calendar in 1582, Great
+ * Britain (whose change the British colonies in America took with it) in 1752
+ * and Soviet Russia in 1918 (tzdb 2025c, file calendars).
+ *
  * The arbiter is calendar arithmetic written here (the Julian day number of a
  * Julian or a Gregorian date, by the usual integer formulas; no engine code)
- * and tzdb 2025c's local mean time for the zone, read from its `europe` file:
- *   Zone Europe/Rome   0:49:56 - LMT 1866 Dec 12
- *   Zone Europe/London -0:01:15 - LMT 1847 Dec  1
- * A date in the days a changeover skipped never existed there. ZOD-97's rule:
+ * and tzdb 2025c's local mean time for the zone, read from its `europe` and
+ * `northamerica` files:
+ *   Zone Europe/Rome       0:49:56 - LMT 1866 Dec 12
+ *   Zone Europe/London    -0:01:15 - LMT 1847 Dec  1
+ *   Zone America/New_York -4:56:02 - LMT 1883 Nov 18 17:00u
+ *                         -5:00    US  E%sT 1920
+ * (on 1918-02-05, before the US rules' first daylight saving time of
+ * 1918-03-31, that is EST, -5:00). A date in the days a changeover skipped never existed there. ZOD-97's rule:
  * the engine refuses or flags such a date, and resolves the valid neighbours
  * to the right instant. Verdicts: "pass", "noted" (a calendarNote, when the
  * caller names the country; no flag), "flagged" (the "calendar-unknown" flag,
@@ -44,7 +56,9 @@ const noonUtc = (number, offset) => new Date(((number - 2440588) * 86400 + 43200
 
 const ROME = 49 * 60 + 56;
 const LONDON = -75;
-// [id, zone, lmt, country, date, calendar, existed there?, what]
+const NEW_YORK = -(4 * 3600 + 56 * 60 + 2);
+const NEW_YORK_1918 = -5 * 3600;
+// [id, zone, the zone's offset that day (local mean time, or EST in New York in 1918), country, date, calendar, existed there?, what]
 const CASES = [
   ["T3-j", "Europe/Rome", ROME, "IT", "1582-10-04", "julian", true, "the last Julian day in Rome"],
   ["T3-k", "Europe/Rome", ROME, "IT", "1582-10-15", "gregorian", true, "the first Gregorian day in Rome, the next day"],
@@ -56,19 +70,27 @@ const CASES = [
   ["T3-m", "Europe/London", LONDON, "GB", "1752-09-14", "gregorian", true, "the first Gregorian day in Britain, the next day"],
   ["T3-n", "Europe/London", LONDON, "GB", "1752-09-08", "julian", false, "a date of the eleven days Britain skipped, read as Julian"],
   ["T3-n", "Europe/London", LONDON, "GB", "1752-09-08", "gregorian", false, "the same date read as Gregorian"],
-  ["T3-n", "Europe/London", LONDON, undefined, "1752-09-08", "gregorian", false, "the same, no country given"]
+  ["T3-n", "Europe/London", LONDON, undefined, "1752-09-08", "gregorian", false, "the same, no country given"],
+  ["T3-o", "Europe/Rome", ROME, undefined, "1752-09-08", "gregorian", true, "a date Britain skipped, in Rome, New Style since 1582, no country given"],
+  ["T3-o", "America/New_York", NEW_YORK_1918, undefined, "1918-02-05", "gregorian", true, "a date Russia skipped, in New York, New Style since 1752, no country given"],
+  ["T3-p", "America/New_York", NEW_YORK, undefined, "1752-09-08", "gregorian", false, "a date Britain skipped, in New York, which took Britain's change, no country given"],
+  ["T3-q", "Europe/London", LONDON, "US", "1752-09-08", "gregorian", false, "a date Britain skipped, in London, with a country the table does not date"],
+  ["T3-q", "Europe/London", LONDON, "IE", "1752-09-08", "gregorian", false, "the same with IE, also not in the table"],
+  ["T3-q", "Europe/London", LONDON, "ZZ", "1752-09-08", "gregorian", false, "the same with ZZ, no country at all"]
 ];
+/** A synthetic birthplace in each zone, for the chart's flags. */
+const PLACE = { "Europe/Rome": [41.9, 12.5], "Europe/London": [51.5, -0.12], "America/New_York": [40.7, -74.0] };
 
 const records = [];
 for (const [id, zone, lmt, country, date, calendar, existed, what] of CASES) {
   const record = { id, zone, country: country ?? null, date, calendar, existedThere: existed, what };
   const [y, m, d] = date.split("-").map(Number);
   const number = jdn(y, m, d, calendar);
-  record.arbiter = { jdn: number, utcOfLocalNoon: noonUtc(number, lmt), lmtSeconds: lmt };
+  record.arbiter = { jdn: number, utcOfLocalNoon: noonUtc(number, lmt), offsetSeconds: lmt };
   try {
     await geo.prepareLocalTime(date, zone);
     const resolved = geo.resolveLocalToUtc(date, "12:00", zone, { calendar, ...(country ? { country } : {}) });
-    const birth = geo.resolveLocalBirth({ date, time: "12:00", timeZone: zone, calendar, ...(country ? { country } : {}), latitude: 41.9, longitude: 12.5 });
+    const birth = geo.resolveLocalBirth({ date, time: "12:00", timeZone: zone, calendar, ...(country ? { country } : {}), latitude: PLACE[zone][0], longitude: PLACE[zone][1] });
     const chart = natalChart(birth.birth);
     record.engine = { utc: resolved.utc.toISOString(), gregorianDate: resolved.date, flags: resolved.flags, calendarNote: resolved.calendarNote ? { kind: resolved.calendarNote.kind, firstGregorian: resolved.calendarNote.adoption?.firstGregorian, lastJulian: resolved.calendarNote.adoption?.lastJulian } : null, chartFlags: chart.flags };
     const instant = resolved.utc.toISOString() === record.arbiter.utcOfLocalNoon;

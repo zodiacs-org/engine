@@ -95,9 +95,9 @@ export type HouseSystem =
   | "meridian";
 /**
  * `"delta-t-extrapolated"`: a result that moves with a ΔT extrapolated past the IERS table (docs/time.md).
- * `"calendar-unknown"`: a local date resolved with no country that falls in the days one of the Gregorian
- * adoption table's changeovers skipped, so whether it was in civil use where it was written is not known
- * (docs/time.md).
+ * `"calendar-unknown"`: a local date resolved with no country the Gregorian adoption table dates that falls in
+ * the days one of its changeovers skipped, where the zone does not rule that changeover out, so whether it was
+ * in civil use where it was written is not known (docs/time.md).
  */
 export type ChartFlag =
   | "dst-gap"

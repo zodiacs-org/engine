@@ -522,6 +522,9 @@ const skipped = resolveLocalToUtc("1752-09-08", "12:00", "Etc/UTC");
 assert.deepEqual(skipped.flags, ["calendar-unknown"]);
 assert(natalChart({utc: skipped.utc, flags: skipped.flags}).flags.includes("calendar-unknown"));
 assert.deepEqual(resolveLocalToUtc("1752-09-08", "12:00", "Etc/UTC", {country: "GB"}).flags, []);
+// A country the table does not date leaves it flagged; a receipt refuses the flag on an instant no changeover skipped.
+assert.deepEqual(resolveLocalToUtc("1752-09-08", "12:00", "Etc/UTC", {country: "ZZ"}).flags, ["calendar-unknown"]);
+assert.throws(() => createNatalEnvelope(natalChart({utc: "1990-05-03T12:00:00Z", flags: ["calendar-unknown"]})));
 assert.throws(() => resolveBirth({date: "2000-01-01", time: "12:00", timeZone: "UTC", calender: "julian"}), RangeError);
 const windowed = birthWindow({start: "2001-12-21T08:40:00Z", end: "2001-12-21T09:20:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(windowed.verification, "sampled at one-second resolution");
