@@ -1,0 +1,4 @@
+Running the check in a new Node process without NODE_OPTIONS=--use-openssl-ca.
+artifacts/zodiacs-engine-1.1.0.tgz is byte-identical to a rebuild of HEAD (d82d2410835b) on Node v22.23.4: sha256 4e53cda9bd6ccb5f5581c2a9af2f2ae4010af2599f411ac5220425e0932e41ac, 2726321 bytes.
+29 recorded archives (25 carried, 4 superseded) and their receipts hold only their recorded bytes across 396 commits, and each is bound to its source commit.
+EXIT 0

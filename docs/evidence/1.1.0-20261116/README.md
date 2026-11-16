@@ -58,3 +58,21 @@ EQUAL. So the code is rc.13's but for the version string.
 - Atlas: passed (`results/atlas.log`).
 - The archive-binding check needs full history and the carried archive; it
   runs in CI and on the carrier.
+
+## The archive and its carrier
+
+From a clean tree of the source commit `2496c28` (`git archive`, `npm ci`,
+`npm run build`, `npm pack --ignore-scripts`) on Node 22.23.4:
+`zodiacs-engine-1.1.0.tgz`, SHA-256
+`4e53cda9bd6ccb5f5581c2a9af2f2ae4010af2599f411ac5220425e0932e41ac`,
+2,726,321 bytes, 98 files, the same bytes as the pack of the working
+checkout. It was carried in `d82d241` after every CI job had passed on the
+source commit (CI run 43829378013 and its companion workflows, 28 check
+runs).
+
+`results/archive-binding.log`: `node scripts/verify-archive-binding.mjs` on
+the carrier, full history, `TMPDIR` outside the checkout. The carried
+archive is byte-identical to a rebuild of the carrier, and 29 recorded
+archives (25 carried, 4 superseded) hold only their recorded bytes across
+396 commits, each bound to its source commit. CI runs the check again, with
+`--rebuild-all`, on the carrier.
