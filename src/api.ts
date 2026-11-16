@@ -9,7 +9,7 @@ import {
   notingFallbacks
 } from "./ephemeris.js";
 import type { ChartDeclinations } from "./declination.js";
-import { POLAR_FALLBACK, isPolarUndefinedHouseSystem } from "./houses.js";
+import { POLAR_FALLBACK, isPolarUndefinedHouseSystem, meanObliquity } from "./houses.js";
 import { computeSaturnReturns } from "./returns.js";
 import { outsideReferenceSpan } from "./reference-span.js";
 import { normalizeLongitude } from "./signs.js";
@@ -96,17 +96,18 @@ export function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } 
     expected.push("polar-fallback");
   }
   // "polar-angles" is the chart's claim that its angles are inside the polar
-  // circle, which the engine sets on the true obliquity of date. A supplied
-  // chart carries no obliquity, so the claim is allowed where |latitude| >=
-  // 90 - e0 - 0.003 degrees, e0 the mean obliquity (IAU 2006, constant and
-  // linear terms: 90 - e0 is 66.560721 at J2000, growing 0.0130102 a century);
-  // the margin covers the nutation in obliquity, under 9.3". A chart from 1.1.0
-  // or earlier lacks the flag there; anywhere else the claim fails. The same
-  // test as a natal receipt's (src/receipt.ts).
+  // circle, which the engine sets where |latitude| >= 90 - (e0 + de): e0 the
+  // mean obliquity (meanObliquity, the whole IAU 2006 polynomial), de the
+  // nutation in obliquity, both at the chart's TT. A supplied chart carries no
+  // obliquity, so the claim is allowed where |latitude| >= 90 - e0 - 0.003
+  // degrees, e0 at the same TT; the margin covers de, under 10". A chart from
+  // 1.1.0 or earlier lacks the flag there; anywhere else the claim fails. The
+  // same test as a natal receipt's (src/receipt.ts).
+  const basis = timeBasis(+input.utc, input.timeScale, input.deltaT);
   if (
     hasHouses &&
     resultFlags.values.includes("polar-angles") &&
-    Math.abs(input.latitude!) >= 66.55772 + (input.utc.getTime() - 946_728_000_000) * 4.1227e-15
+    Math.abs(input.latitude!) >= 90 - meanObliquity(basis.ttDays / 36_525) - 0.003
   )
     expected.push("polar-angles");
   if (outsideReferenceSpan(input.utc)) expected.push("outside-reference-span");
@@ -115,7 +116,7 @@ export function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } 
   // from a release before the flag lacks it there. Any other flag fails below.
   if (
     resultFlags.values.length > expected.length &&
-    deltaTExtrapolated(timeBasis(+input.utc, input.timeScale, input.deltaT), hasHouses)
+    deltaTExtrapolated(basis, hasHouses)
   )
     expected.push("delta-t-extrapolated");
   // A fallback flag is allowed on a chart that names astronomy-engine, or, as a

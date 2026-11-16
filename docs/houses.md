@@ -140,13 +140,27 @@ a minute of the birth time. It is the same condition on which Placidus and
 Koch fall back to whole sign (`polar-fallback`), so a polar Placidus chart
 carries both. Just outside the circle, at 66° N, the ascendant moves quickly but without a
 turn, and no flag is set. `birthWindow` sets no `polar-angles`: its cells already show each turn
-as a change of sign. A supplied chart or natal receipt does not carry the
-obliquity, so it may carry the flag where |latitude| ≥ 90° − ε₀ − 0.003°, ε₀
-the mean obliquity of its instant: the margin covers the nutation in
-obliquity, under 9.3″ (`resolvedChart` in `src/api.ts`, and `src/receipt.ts`). It may lack the flag there
-(1.1.0 and earlier never set it); it is refused anywhere else, so a false
-claim is refused at 66° and at 66.55° on that day (`src/polar-angles.test.ts`). A birth input
-may echo it where the chart sets it.
+as a change of sign. The engine sets the flag where |latitude| ≥ 90° − (ε₀ + Δε),
+ε₀ the IAU 2006 mean obliquity (`meanObliquity` in `src/houses.ts`, all six
+terms of the polynomial, up to t⁵) and Δε the nutation in obliquity
+(IAU 2000B), both at the chart's TT. A supplied chart or natal receipt does
+not carry the obliquity, so it may carry the flag where
+|latitude| ≥ 90° − ε₀ − 0.003°, ε₀ from the same polynomial at its TT: for a
+supplied chart the TT of its input's instant, time scale and ΔT
+(`resolvedChart` in `src/api.ts`); for a receipt its instant on TT input and
+its instant plus its recorded ΔT on UTC or UT1 input, UT1 − UTC (under a
+second) left out (`src/receipt.ts`, which keeps its own copy of the
+polynomial, held to the same coefficients by a test). The 0.003° (10.8″)
+margin covers Δε, under 10″ at every day of the ephemeris span, 0001 to 3998
+(9.97″ at most). It may lack the flag there (1.1.0 and earlier never set
+it); it is refused anywhere else, so a false claim is refused at 66° and at
+66.55° on that day. A chart the engine flags at the very edge of the circle
+round-trips through `transits` and a natal receipt on both hemispheres at
+five instants from 2937 to 3995, and on a ΔT pinned 95 years from its
+instant, where a bound on ε₀'s constant and linear terms alone (2.0.0-rc.1)
+refused it; a claim 0.0005° outside the band is refused there
+(`src/polar-angles.test.ts`). A birth input may echo it where the chart sets
+it.
 
 A body exactly on a cusp can come out a rounding error below it: just under
 13 at the ascendant.
