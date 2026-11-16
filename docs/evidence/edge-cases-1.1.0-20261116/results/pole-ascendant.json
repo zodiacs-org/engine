@@ -1,0 +1,235 @@
+{
+ "what": "ZOD-97 T4: the ascendant every minute for a day at high latitudes",
+ "engineVersion": "1.1.0",
+ "node": "v22.23.4",
+ "start": "2021-06-21T00:00:00.000Z",
+ "polarFlag": "polar-angles",
+ "counts": {
+  "pass": 6,
+  "fail": 10
+ },
+ "records": [
+  {
+   "latitude": 60,
+   "charts": 1441,
+   "turns": 0,
+   "turnsAt": [],
+   "largestStepDegrees": 1.0967,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "pass"
+  },
+  {
+   "latitude": 66,
+   "charts": 1441,
+   "turns": 0,
+   "turnsAt": [],
+   "largestStepDegrees": 10.3518,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "pass"
+  },
+  {
+   "latitude": 66.5,
+   "charts": 1441,
+   "turns": 0,
+   "turnsAt": [],
+   "largestStepDegrees": 76.5945,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "pass"
+  },
+  {
+   "latitude": 67,
+   "charts": 1441,
+   "turns": 2,
+   "turnsAt": [
+    "2021-06-21T00:50:00.000Z",
+    "2021-06-21T23:12:00.000Z"
+   ],
+   "largestStepDegrees": 179.9992,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "fail"
+  },
+  {
+   "latitude": 70,
+   "charts": 1441,
+   "turns": 2,
+   "turnsAt": [
+    "2021-06-21T02:14:00.000Z",
+    "2021-06-21T21:48:00.000Z"
+   ],
+   "largestStepDegrees": 179.9998,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "fail"
+  },
+  {
+   "latitude": 78.22,
+   "charts": 1441,
+   "turns": 2,
+   "turnsAt": [
+    "2021-06-21T04:07:00.000Z",
+    "2021-06-21T19:55:00.000Z"
+   ],
+   "largestStepDegrees": 179.9999,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "fail"
+  },
+  {
+   "latitude": 89.99,
+   "charts": 1441,
+   "turns": 2,
+   "turnsAt": [
+    "2021-06-21T06:02:00.000Z",
+    "2021-06-21T18:00:00.000Z"
+   ],
+   "largestStepDegrees": 180,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "fail"
+  },
+  {
+   "latitude": 90,
+   "charts": 1441,
+   "turns": 2,
+   "turnsAt": [
+    "2021-06-21T06:02:00.000Z",
+    "2021-06-21T18:00:00.000Z"
+   ],
+   "largestStepDegrees": 180,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "fail"
+  },
+  {
+   "latitude": -60,
+   "charts": 1441,
+   "turns": 0,
+   "turnsAt": [],
+   "largestStepDegrees": 1.0967,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "pass"
+  },
+  {
+   "latitude": -66,
+   "charts": 1441,
+   "turns": 0,
+   "turnsAt": [],
+   "largestStepDegrees": 10.3498,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "pass"
+  },
+  {
+   "latitude": -66.5,
+   "charts": 1441,
+   "turns": 0,
+   "turnsAt": [],
+   "largestStepDegrees": 76.0526,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "pass"
+  },
+  {
+   "latitude": -67,
+   "charts": 1441,
+   "turns": 2,
+   "turnsAt": [
+    "2021-06-21T11:14:00.000Z",
+    "2021-06-21T12:48:00.000Z"
+   ],
+   "largestStepDegrees": 179.9993,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "fail"
+  },
+  {
+   "latitude": -70,
+   "charts": 1441,
+   "turns": 2,
+   "turnsAt": [
+    "2021-06-21T09:50:00.000Z",
+    "2021-06-21T14:12:00.000Z"
+   ],
+   "largestStepDegrees": 179.9998,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "fail"
+  },
+  {
+   "latitude": -78.22,
+   "charts": 1441,
+   "turns": 2,
+   "turnsAt": [
+    "2021-06-21T07:57:00.000Z",
+    "2021-06-21T16:05:00.000Z"
+   ],
+   "largestStepDegrees": 179.9999,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "fail"
+  },
+  {
+   "latitude": -89.99,
+   "charts": 1441,
+   "turns": 2,
+   "turnsAt": [
+    "2021-06-21T06:02:00.000Z",
+    "2021-06-21T18:00:00.000Z"
+   ],
+   "largestStepDegrees": 180,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "fail"
+  },
+  {
+   "latitude": -90,
+   "charts": 1441,
+   "turns": 2,
+   "turnsAt": [
+    "2021-06-21T06:02:00.000Z",
+    "2021-06-21T18:00:00.000Z"
+   ],
+   "largestStepDegrees": 180,
+   "chartsWithPolarFlag": 0,
+   "flagSets": [
+    []
+   ],
+   "verdict": "fail"
+  }
+ ]
+}

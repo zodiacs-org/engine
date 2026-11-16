@@ -1,0 +1,786 @@
+{
+ "what": "ZOD-97 T1 to T3: the repeated and the skipped wall time, docs/evidence/edge-cases-20261111/EDGE-CASES.md",
+ "node": "v22.23.3",
+ "hostTz": "2026c",
+ "dist": "dist",
+ "counts": {
+  "pass": 23
+ },
+ "records": [
+  {
+   "id": "T2/L3-TZ-0028",
+   "source": "fixture L3-TZ-0028 and the offset before the jump from tzdb's rules",
+   "zone": "America/New_York",
+   "date": "2021-03-14",
+   "time": "02:30",
+   "kind": "gap",
+   "expectedUtc": "2021-03-14T07:30:00.000Z",
+   "engine": {
+    "utc": "2021-03-14T07:30:00.000Z",
+    "offsetMinutes": -240,
+    "flags": [
+     "dst-gap"
+    ],
+    "jump": {
+     "kind": "gap",
+     "cause": "dst"
+    },
+    "transition": {
+     "at": "2021-03-14T07:00:00.000Z",
+     "offsetBeforeMinutes": -300,
+     "offsetAfterMinutes": -240,
+     "cause": "dst"
+    },
+    "gapShiftMinutes": 60,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1/L3-TZ-0029",
+   "source": "fixture L3-TZ-0029",
+   "zone": "America/New_York",
+   "date": "2021-11-07",
+   "time": "01:30",
+   "kind": "fold",
+   "expectedUtc": "2021-11-07T05:30:00.000Z",
+   "engine": {
+    "utc": "2021-11-07T05:30:00.000Z",
+    "offsetMinutes": -240,
+    "flags": [
+     "dst-fold"
+    ],
+    "jump": {
+     "kind": "fold",
+     "cause": "dst"
+    },
+    "transition": {
+     "at": "2021-11-07T06:00:00.000Z",
+     "offsetBeforeMinutes": -240,
+     "offsetAfterMinutes": -300,
+     "cause": "dst"
+    },
+    "gapShiftMinutes": 0,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1/L3-TZ-0030",
+   "source": "fixture L3-TZ-0030",
+   "zone": "Australia/Sydney",
+   "date": "2020-04-05",
+   "time": "02:30",
+   "kind": "fold",
+   "expectedUtc": "2020-04-04T15:30:00.000Z",
+   "engine": {
+    "utc": "2020-04-04T15:30:00.000Z",
+    "offsetMinutes": 660,
+    "flags": [
+     "dst-fold"
+    ],
+    "jump": {
+     "kind": "fold",
+     "cause": "dst"
+    },
+    "transition": {
+     "at": "2020-04-04T16:00:00.000Z",
+     "offsetBeforeMinutes": 660,
+     "offsetAfterMinutes": 600,
+     "cause": "dst"
+    },
+    "gapShiftMinutes": 0,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1/L3-TZ-0031",
+   "source": "fixture L3-TZ-0031",
+   "zone": "Australia/Lord_Howe",
+   "date": "2021-04-04",
+   "time": "01:45",
+   "kind": "fold",
+   "expectedUtc": "2021-04-03T14:45:00.000Z",
+   "engine": {
+    "utc": "2021-04-03T14:45:00.000Z",
+    "offsetMinutes": 660,
+    "flags": [
+     "dst-fold"
+    ],
+    "jump": {
+     "kind": "fold",
+     "cause": "dst"
+    },
+    "transition": {
+     "at": "2021-04-03T15:00:00.000Z",
+     "offsetBeforeMinutes": 660,
+     "offsetAfterMinutes": 630,
+     "cause": "dst"
+    },
+    "gapShiftMinutes": 0,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2/L3-TZ-0032",
+   "source": "fixture L3-TZ-0032 and the offset before the jump from tzdb's rules",
+   "zone": "Europe/London",
+   "date": "1941-05-04",
+   "time": "02:30",
+   "kind": "gap",
+   "expectedUtc": "1941-05-04T01:30:00.000Z",
+   "engine": {
+    "utc": "1941-05-04T01:30:00.000Z",
+    "offsetMinutes": 120,
+    "flags": [
+     "dst-gap"
+    ],
+    "jump": {
+     "kind": "gap",
+     "cause": "dst"
+    },
+    "transition": {
+     "at": "1941-05-04T01:00:00.000Z",
+     "offsetBeforeMinutes": 60,
+     "offsetAfterMinutes": 120,
+     "cause": "dst"
+    },
+    "gapShiftMinutes": 60,
+    "zoneSource": "tzdb",
+    "tzdbVersion": "2025c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1/L3-TZ-0033",
+   "source": "fixture L3-TZ-0033",
+   "zone": "Europe/London",
+   "date": "1941-08-10",
+   "time": "02:30",
+   "kind": "fold",
+   "expectedUtc": "1941-08-10T00:30:00.000Z",
+   "engine": {
+    "utc": "1941-08-10T00:30:00.000Z",
+    "offsetMinutes": 120,
+    "flags": [
+     "dst-fold"
+    ],
+    "jump": {
+     "kind": "fold",
+     "cause": "dst"
+    },
+    "transition": {
+     "at": "1941-08-10T01:00:00.000Z",
+     "offsetBeforeMinutes": 120,
+     "offsetAfterMinutes": 60,
+     "cause": "dst"
+    },
+    "gapShiftMinutes": 0,
+    "zoneSource": "tzdb",
+    "tzdbVersion": "2025c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2/L3-TZ-0034",
+   "source": "fixture L3-TZ-0034 and the offset before the jump from tzdb's rules",
+   "zone": "America/Caracas",
+   "date": "2016-05-01",
+   "time": "02:40",
+   "kind": "gap",
+   "expectedUtc": "2016-05-01T07:10:00.000Z",
+   "engine": {
+    "utc": "2016-05-01T07:10:00.000Z",
+    "offsetMinutes": -240,
+    "flags": [
+     "dst-gap"
+    ],
+    "jump": {
+     "kind": "gap",
+     "cause": "legal-change"
+    },
+    "transition": {
+     "at": "2016-05-01T07:00:00.000Z",
+     "offsetBeforeMinutes": -270,
+     "offsetAfterMinutes": -240,
+     "cause": "legal-change"
+    },
+    "gapShiftMinutes": 30,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2/L3-TZ-0035",
+   "source": "fixture L3-TZ-0035 and the offset before the jump from tzdb's rules",
+   "zone": "Pacific/Apia",
+   "date": "2011-12-30",
+   "time": "12:00",
+   "kind": "gap",
+   "expectedUtc": "2011-12-30T22:00:00.000Z",
+   "engine": {
+    "utc": "2011-12-30T22:00:00.000Z",
+    "offsetMinutes": 840,
+    "flags": [
+     "dst-gap"
+    ],
+    "jump": {
+     "kind": "gap",
+     "cause": "date-line"
+    },
+    "transition": {
+     "at": "2011-12-30T10:00:00.000Z",
+     "offsetBeforeMinutes": -600,
+     "offsetAfterMinutes": 840,
+     "cause": "date-line"
+    },
+    "gapShiftMinutes": 1440,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true,
+    "dateLineCause": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1/L3-TZ-0036",
+   "source": "fixture L3-TZ-0036",
+   "zone": "America/Sitka",
+   "date": "1867-10-19",
+   "time": "00:00",
+   "kind": "fold",
+   "expectedUtc": "1867-10-18T09:01:13.000Z",
+   "engine": {
+    "utc": "1867-10-18T09:01:13.000Z",
+    "offsetMinutes": 898.7833333333333,
+    "flags": [
+     "dst-fold",
+     "lmt"
+    ],
+    "jump": {
+     "kind": "fold",
+     "cause": "date-line"
+    },
+    "transition": {
+     "at": "1867-10-19T00:31:13.000Z",
+     "offsetBeforeMinutes": 898.7833333333333,
+     "offsetAfterMinutes": -541.2166666666667,
+     "cause": "date-line"
+    },
+    "gapShiftMinutes": 0,
+    "zoneSource": "tzdb",
+    "tzdbVersion": "2025c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1-f",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "America/New_York",
+   "date": "2021-11-07",
+   "time": "01:00",
+   "kind": "fold",
+   "expectedUtc": "2021-11-07T05:00:00.000Z",
+   "engine": {
+    "utc": "2021-11-07T05:00:00.000Z",
+    "offsetMinutes": -240,
+    "flags": [
+     "dst-fold"
+    ],
+    "jump": {
+     "kind": "fold",
+     "cause": "dst"
+    },
+    "transition": {
+     "at": "2021-11-07T06:00:00.000Z",
+     "offsetBeforeMinutes": -240,
+     "offsetAfterMinutes": -300,
+     "cause": "dst"
+    },
+    "gapShiftMinutes": 0,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1-g",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "America/New_York",
+   "date": "2021-11-07",
+   "time": "01:59",
+   "kind": "fold",
+   "expectedUtc": "2021-11-07T05:59:00.000Z",
+   "engine": {
+    "utc": "2021-11-07T05:59:00.000Z",
+    "offsetMinutes": -240,
+    "flags": [
+     "dst-fold"
+    ],
+    "jump": {
+     "kind": "fold",
+     "cause": "dst"
+    },
+    "transition": {
+     "at": "2021-11-07T06:00:00.000Z",
+     "offsetBeforeMinutes": -240,
+     "offsetAfterMinutes": -300,
+     "cause": "dst"
+    },
+    "gapShiftMinutes": 0,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1-h",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "America/New_York",
+   "date": "2021-11-07",
+   "time": "00:59",
+   "kind": null,
+   "expectedUtc": "2021-11-07T04:59:00.000Z",
+   "engine": {
+    "utc": "2021-11-07T04:59:00.000Z",
+    "offsetMinutes": -240,
+    "flags": [],
+    "jump": null,
+    "transition": null,
+    "gapShiftMinutes": 0,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T1-i",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "America/New_York",
+   "date": "2021-11-07",
+   "time": "02:00",
+   "kind": null,
+   "expectedUtc": "2021-11-07T07:00:00.000Z",
+   "engine": {
+    "utc": "2021-11-07T07:00:00.000Z",
+    "offsetMinutes": -300,
+    "flags": [],
+    "jump": null,
+    "transition": null,
+    "gapShiftMinutes": 0,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2-d",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "America/New_York",
+   "date": "2021-03-14",
+   "time": "02:00",
+   "kind": "gap",
+   "expectedUtc": "2021-03-14T07:00:00.000Z",
+   "engine": {
+    "utc": "2021-03-14T07:00:00.000Z",
+    "offsetMinutes": -240,
+    "flags": [
+     "dst-gap"
+    ],
+    "jump": {
+     "kind": "gap",
+     "cause": "dst"
+    },
+    "transition": {
+     "at": "2021-03-14T07:00:00.000Z",
+     "offsetBeforeMinutes": -300,
+     "offsetAfterMinutes": -240,
+     "cause": "dst"
+    },
+    "gapShiftMinutes": 60,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2-e",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "America/New_York",
+   "date": "2021-03-14",
+   "time": "02:59",
+   "kind": "gap",
+   "expectedUtc": "2021-03-14T07:59:00.000Z",
+   "engine": {
+    "utc": "2021-03-14T07:59:00.000Z",
+    "offsetMinutes": -240,
+    "flags": [
+     "dst-gap"
+    ],
+    "jump": {
+     "kind": "gap",
+     "cause": "dst"
+    },
+    "transition": {
+     "at": "2021-03-14T07:00:00.000Z",
+     "offsetBeforeMinutes": -300,
+     "offsetAfterMinutes": -240,
+     "cause": "dst"
+    },
+    "gapShiftMinutes": 60,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2-f",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "America/New_York",
+   "date": "2021-03-14",
+   "time": "01:59",
+   "kind": null,
+   "expectedUtc": "2021-03-14T06:59:00.000Z",
+   "engine": {
+    "utc": "2021-03-14T06:59:00.000Z",
+    "offsetMinutes": -300,
+    "flags": [],
+    "jump": null,
+    "transition": null,
+    "gapShiftMinutes": 0,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T2-g",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "America/New_York",
+   "date": "2021-03-14",
+   "time": "03:00",
+   "kind": null,
+   "expectedUtc": "2021-03-14T07:00:00.000Z",
+   "engine": {
+    "utc": "2021-03-14T07:00:00.000Z",
+    "offsetMinutes": -240,
+    "flags": [],
+    "jump": null,
+    "transition": null,
+    "gapShiftMinutes": 0,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-a",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "Pacific/Apia",
+   "date": "2011-12-30",
+   "time": "12:00",
+   "kind": "gap",
+   "expectedUtc": "2011-12-30T22:00:00.000Z",
+   "engine": {
+    "utc": "2011-12-30T22:00:00.000Z",
+    "offsetMinutes": 840,
+    "flags": [
+     "dst-gap"
+    ],
+    "jump": {
+     "kind": "gap",
+     "cause": "date-line"
+    },
+    "transition": {
+     "at": "2011-12-30T10:00:00.000Z",
+     "offsetBeforeMinutes": -600,
+     "offsetAfterMinutes": 840,
+     "cause": "date-line"
+    },
+    "gapShiftMinutes": 1440,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true,
+    "dateLineCause": true,
+    "shiftIsOneDay": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-b",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "Pacific/Apia",
+   "date": "2011-12-30",
+   "time": "00:00",
+   "kind": "gap",
+   "expectedUtc": "2011-12-30T10:00:00.000Z",
+   "engine": {
+    "utc": "2011-12-30T10:00:00.000Z",
+    "offsetMinutes": 840,
+    "flags": [
+     "dst-gap"
+    ],
+    "jump": {
+     "kind": "gap",
+     "cause": "date-line"
+    },
+    "transition": {
+     "at": "2011-12-30T10:00:00.000Z",
+     "offsetBeforeMinutes": -600,
+     "offsetAfterMinutes": 840,
+     "cause": "date-line"
+    },
+    "gapShiftMinutes": 1440,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true,
+    "dateLineCause": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-c",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "Pacific/Apia",
+   "date": "2011-12-30",
+   "time": "23:59",
+   "kind": "gap",
+   "expectedUtc": "2011-12-31T09:59:00.000Z",
+   "engine": {
+    "utc": "2011-12-31T09:59:00.000Z",
+    "offsetMinutes": 840,
+    "flags": [
+     "dst-gap"
+    ],
+    "jump": {
+     "kind": "gap",
+     "cause": "date-line"
+    },
+    "transition": {
+     "at": "2011-12-30T10:00:00.000Z",
+     "offsetBeforeMinutes": -600,
+     "offsetAfterMinutes": 840,
+     "cause": "date-line"
+    },
+    "gapShiftMinutes": 1440,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true,
+    "dateLineCause": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-d",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "Pacific/Apia",
+   "date": "2011-12-29",
+   "time": "23:59",
+   "kind": null,
+   "expectedUtc": "2011-12-30T09:59:00.000Z",
+   "engine": {
+    "utc": "2011-12-30T09:59:00.000Z",
+    "offsetMinutes": -600,
+    "flags": [],
+    "jump": null,
+    "transition": null,
+    "gapShiftMinutes": 0,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-e",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "Pacific/Apia",
+   "date": "2011-12-31",
+   "time": "00:00",
+   "kind": null,
+   "expectedUtc": "2011-12-30T10:00:00.000Z",
+   "engine": {
+    "utc": "2011-12-30T10:00:00.000Z",
+    "offsetMinutes": 840,
+    "flags": [],
+    "jump": null,
+    "transition": null,
+    "gapShiftMinutes": 0,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "id": "T3-f",
+   "source": "tzdb's rules, as ../EDGE-CASES.md states them",
+   "zone": "Pacific/Kwajalein",
+   "date": "1993-08-21",
+   "time": "12:00",
+   "kind": "gap",
+   "expectedUtc": "1993-08-22T00:00:00.000Z",
+   "engine": {
+    "utc": "1993-08-22T00:00:00.000Z",
+    "offsetMinutes": 720,
+    "flags": [
+     "dst-gap"
+    ],
+    "jump": {
+     "kind": "gap",
+     "cause": "date-line"
+    },
+    "transition": {
+     "at": "1993-08-21T12:00:00.000Z",
+     "offsetBeforeMinutes": -720,
+     "offsetAfterMinutes": 720,
+     "cause": "date-line"
+    },
+    "gapShiftMinutes": 1440,
+    "zoneSource": "intl",
+    "tzdbVersion": "2026c"
+   },
+   "checks": {
+    "instant": true,
+    "flag": true,
+    "jumpKind": true,
+    "policy": true,
+    "dateLineCause": true
+   },
+   "verdict": "pass"
+  }
+ ]
+}
