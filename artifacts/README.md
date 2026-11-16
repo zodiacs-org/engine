@@ -113,7 +113,8 @@ runs, so CI starts the check with node directly.
 | 1.1.0-rc.10 | `7fbdf3ade2a3350970e8e4195cda02ad596cbc2ca46c955ceae44a0ce7613246` | 2,716,319 | 98 | `cafc5dbd96d233cd730672a0a2827ccbbe82623d` | "Carry the packed 1.1.0-rc.10 tarball" | Draft candidate, reviewed in draft and superseded by 1.1.0-rc.11 on the same pull request; never tagged or published. Still this file |
 | 1.1.0-rc.11 | `d84f330216f21367f33a9c855a449af49659933987555f873611f9ab3d5b5e56` | 2,720,663 | 98 | `c766129a90e6c0e68f7d2db68204e1fc6fcce81a` | "Carry the packed 1.1.0-rc.11 tarball" | Draft candidate for 1.1.0, awaiting the owner's review |
 | 1.1.0-rc.12 | `4577e2ff924ab1a5f5f6ffc52f7ce595c0e08e4f2cd6cd58d64f7e7bdf020297` | 2,723,759 | 98 | `d35343a1f8ed4516fa23222712ee6473f9265546` | "Carry the packed 1.1.0-rc.12 tarball" | Draft candidate, reviewed in draft with no blocker and superseded by 1.1.0-rc.13 on the same pull request for its documentation; never tagged or published. Still this file |
-| 1.1.0-rc.13 | `8d7b2adb630e629b0673c3901fe383cf9b496429a0b98075581d4a8797767817` | 2,725,396 | 98 | `67a0e38264b363aea05aa1545e7f02ce34b5de8d` | "Carry the packed 1.1.0-rc.13 tarball" | Draft candidate for 1.1.0, awaiting the owner's review |
+| 1.1.0-rc.13 | `8d7b2adb630e629b0673c3901fe383cf9b496429a0b98075581d4a8797767817` | 2,725,396 | 98 | `67a0e38264b363aea05aa1545e7f02ce34b5de8d` | `7fd113e` | Candidate, merged; never tagged or published. 1.1.0 is its code with the version changed |
+| 1.1.0 | `4e53cda9bd6ccb5f5581c2a9af2f2ae4010af2599f411ac5220425e0932e41ac` | 2,726,321 | 98 | `2496c28f273e1e99526490e857332fae44473367` | "Carry the packed 1.1.0 tarball" | Release, under review |
 
 1.1.0-rc.9, 1.1.0-rc.10, 1.1.0-rc.11, 1.1.0-rc.12 and 1.1.0-rc.13 are five cuts of one draft, pull request 101.
 1.1.0-rc.9 was carried on 2026-11-14 and reviewed in draft; the owner then
@@ -148,6 +149,19 @@ took a new version, 1.1.0-rc.13, whose code is rc.12's but for the version
 string, and 1.1.0-rc.12's archive stays, unchanged, with its receipt and its
 entry; the check needed no exception. 1.1.0-rc.12 was never tagged or
 published and is not meant to be; 1.1.0-rc.13 is the candidate for 1.1.0.
+
+1.1.0 is a minor release: 1.1.0-rc.13, merged in pull request 101, with the
+version changed. It changes no code and no value of rc.13: its packed
+`dist/` is rc.13's but for the version string. The owner answered in
+writing, on 2026-11-16, the question `LICENSING.md` left open on the DE440
+pack. The archive is 2,726,321 bytes, 4,581,449 unpacked in 98 files, of
+which 1,261,897 are beside the pack, under the cap of 1,265,000. It was
+packed once, from a clean tree of its source commit (`git archive`)
+installed with `npm ci`, on Node 22.23.4, after every CI job had passed on
+the source commit and an independent review of the version commit had been
+acted on; the pack of the working checkout gave the same bytes. It is to be
+published with the dist-tag `latest`. The record is in
+`docs/evidence/1.1.0-20261116/`.
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
