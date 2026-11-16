@@ -5,8 +5,14 @@
  * Horizons response, copied so that its results are written here and not into
  * that folder. calc() must refuse outside the span; the root entry computes
  * there and must flag it, natalChart() on the chart and positions() on its
- * rows. The cases and the verdicts are that tool's, unchanged; each Y-i record
- * also says whether every row's flags equal the chart's.
+ * rows. The REFUSED cases and their verdicts are that tool's, unchanged. The
+ * Y-i verdict is judged on the rows alone, against the arbiter, not against
+ * natalChart(): "flagged" when the instant is outside the span and every row
+ * carries "outside-reference-span", "pass" when it is inside and no row
+ * carries it, "fail" otherwise. Y-i also runs three instants inside the span
+ * (its start, a minute before its end, and 2000-01-01T12:00Z) as controls, and
+ * each record still says whether every row's flags equal the chart's, for
+ * information.
  *
  *   npm run build
  *   node docs/evidence/positions-span-20261116/tools/span-edge.mjs
@@ -51,8 +57,12 @@ for (const [id, time, label] of REFUSED) {
     records.push(record);
   }
 }
-for (const iso of ["2200-01-01T00:00:00Z", "2250-01-01T00:00:00Z", "1799-12-31T23:59:00Z"]) {
-  const record = { test: "T5", id: "Y-i", instant: `${iso} through the root entry` };
+// The arbiter: REFERENCE_SPAN's published bounds, the start included and the end excluded, on UTC.
+const SPAN = { from: Date.parse("1800-01-01T00:00:00Z"), to: Date.parse("2200-01-01T00:00:00Z") };
+const outsideSpan = (iso) => !(Date.parse(iso) >= SPAN.from && Date.parse(iso) < SPAN.to);
+for (const iso of ["2200-01-01T00:00:00Z", "2250-01-01T00:00:00Z", "1799-12-31T23:59:00Z", "1800-01-01T00:00:00Z", "2199-12-31T23:59:00Z", "2000-01-01T12:00:00Z"]) {
+  const outside = outsideSpan(iso);
+  const record = { test: "T5", id: "Y-i", instant: `${iso} through the root entry`, arbiter: { outsideSpan: outside } };
   try {
     const chart = natalChart({ utc: new Date(iso) });
     const list = positions(new Date(iso));
@@ -62,9 +72,11 @@ for (const iso of ["2200-01-01T00:00:00Z", "2250-01-01T00:00:00Z", "1799-12-31T2
       positionsCarriesAFlag: "flags" in list || list.some((entry) => "flags" in entry || "flag" in entry),
       positionsEphemeris: [...new Set(list.map((entry) => entry.ephemeris))],
       positionsFlags: [...new Set(list.map((entry) => JSON.stringify(entry.flags ?? null)))].map((text) => JSON.parse(text)),
-      everyRowFlagsAsTheChart: list.every((entry) => JSON.stringify(entry.flags) === JSON.stringify(chart.flags))
+      everyRowFlagsAsTheChart: list.every((entry) => JSON.stringify(entry.flags ?? []) === JSON.stringify(chart.flags))
     };
-    record.verdict = chart.flags.includes("outside-reference-span") ? (record.engine.positionsCarriesAFlag ? "flagged" : "flagged-by-natalChart-only") : "fail";
+    const flagged = list.map((entry) => (entry.flags ?? []).includes("outside-reference-span"));
+    record.verdict =
+      list.length === 0 ? "fail" : outside ? (flagged.every(Boolean) ? "flagged" : "fail") : flagged.some(Boolean) ? "fail" : "pass";
   } catch (error) {
     Object.assign(record, { verdict: "refused", engine: { threw: String(error?.message ?? error) } });
   }
