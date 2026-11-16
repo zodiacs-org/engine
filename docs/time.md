@@ -389,7 +389,42 @@ is refused rather than ignored).
   and `"new-style"` when a Julian date falls on or after it, a Julian date
   late in 9999 that resolves into the Gregorian year 10000 among them. The
   note never changes the resolution. A country the table does not date gets
-  no note.
+  no note. Without a country the table dates (no `country`, or one it does
+  not date, such as `"US"`), a date that one of the table's changeovers
+  skipped, after a row's last Old Style day and before its first New Style
+  day (1582-10-05 to 1582-10-14 in Italy, 1752-09-03 to 1752-09-13 in Great
+  Britain), carries the flag `"calendar-unknown"`, in either calendar: such a
+  date was not in civil use in that country and may have been elsewhere, and
+  nothing given says which. The zone narrows the changeovers that can apply.
+  In the zone tzdb's `zone.tab` gives a tabled country for its capital
+  (`Europe/Rome` for Italy, `Europe/London` for Great Britain, 12 of the 18
+  rows), only that country's changeover applies, so Gregorian 1752-09-08 in
+  `Europe/Rome` is not flagged. The zone name is matched without regard to
+  case, and a link is not followed: `Europe/Vatican` takes every changeover,
+  as does `Europe/Bratislava`, a link to Prague whose region followed
+  Hungary's change. The capital zones of Belgium, the Netherlands,
+  Switzerland, Poland, Sweden and Finland are not narrowed, because their
+  rows' notes date days skipped within the zone that fall in another row's
+  skipped days and not in their own (Brabant on 1582-12-25 by Grotefend, the
+  Catholic cantons in January 1584, Silesia on 1584-01-23, Friesland and
+  Groningen on 1701-01-12; Sweden dropped Julian 1700-02-29, a day Denmark
+  skipped too, and Finland went with Sweden), so Gregorian 1701-01-05 in
+  `Europe/Amsterdam`, 1584-01-14 in `Europe/Zurich` or `Europe/Warsaw`, and
+  Julian 1700-02-29 in `Europe/Stockholm` or `Europe/Helsinki` are flagged. Russia's changeover of 1918,
+  the only one after 1800, applies only in a zone under `Europe/` or `Asia/`
+  or one that names no place (`Etc/UTC`, a name with no `/`), so 1918-02-05
+  in `America/New_York` is not flagged. Any other zone takes every
+  changeover: Gregorian 1752-09-08 in `America/New_York` is flagged, as the
+  British colonies there took Britain's change and places elsewhere in the
+  zone's area followed Spain's or France's. Greece's change of 1923 is not in
+  the table, so it is neither flagged nor noted. The flag never changes the
+  instant either; it rides on the birth into the chart's flags and the
+  receipt's `inputFlags`. A receipt refuses the flag on an instant more than
+  a day outside the skipped days, from 1582-10-04T00:00Z up to
+  1918-02-28T00:00Z, with or without a local record (from 2.0.0;
+  tests in `src/geo/calendar-unknown.test.ts`, which count each row's
+  skipped dates against the Julian calendar's lag behind the Gregorian, 10 to
+  13 days).
 - `fold`: `"earlier"` (default) or `"later"`: which instant a wall time the
   clock showed twice takes, its first pass or its second. `resolveLocalBirth`
   and `resolveBirth` take the same field. When clocks went back in New York
@@ -475,7 +510,7 @@ Paris, Galway and Bergen are in the tests with their values.
 | --- | --- |
 | `utc` | the instant |
 | `offsetMinutes` | minutes east at that instant; may be fractional |
-| `flags` | `"dst-gap"` or `"dst-fold"` for a gap or fold of any cause, and `"lmt"` when a local mean time clock read the wall time |
+| `flags` | `"dst-gap"` or `"dst-fold"` for a gap or fold of any cause, `"lmt"` when a local mean time clock read the wall time, and `"calendar-unknown"` for a skipped date given with no country the table dates (see Options) |
 | `date`, `writtenDate`, `calendar` | the Gregorian date resolved, and the date as written in its calendar |
 | `jump` | `{ kind: "gap" \| "fold", cause }`, or null |
 | `transition` | `{ at, offsetBeforeMinutes, offsetAfterMinutes, cause }`: the jump's, or the last change before the instant where the shipped history answered; null from 1970 without a jump |

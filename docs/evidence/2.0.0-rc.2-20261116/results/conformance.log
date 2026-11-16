@@ -1,0 +1,35 @@
+$ node --version
+v22.22.2
+$ node --test conformance/harness/selftest.mjs
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 227.244316
+exit 0
+$ node conformance/harness/validate.mjs --expect-total 500
+  time.local-mean-time: 5
+  time.tt-minus-utc: 10
+  time.delta-t: 15
+  calendar.to-jdn: 25
+  calendar.from-jdn: 10
+conformance: 500 vectors conform to SPEC.md
+exit 0
+$ node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs" --check conformance/results/zodiacs-engine.json
+zodiacs-engine 2.0.0-rc.2: 459 pass, 0 fail, 41 unsupported, 0 error (of 500)
+  L1: 240 pass, 0 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 69 pass, 0 fail, 41 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine.json
+exit 0
+$ node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs --ephemeris astronomy-engine" --check conformance/results/zodiacs-engine-astronomy-engine.json
+zodiacs-engine-astronomy-engine 2.0.0-rc.2: 267 pass, 192 fail, 41 unsupported, 0 error (of 500)
+  L1: 48 pass, 192 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 69 pass, 0 fail, 41 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine-astronomy-engine.json
+exit 0
+$ node conformance/harness/report.mjs --check
+conformance: RESULTS.md and results/summary.json are current
+exit 0

@@ -16,8 +16,20 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**1.1.0**, a minor release: 1.1.0-rc.13 with the version changed
-(CHANGELOG.md). It ships a sealed
+**2.0.0-rc.2**, the second candidate for 2.0.0, a major release
+(CHANGELOG.md). It is a draft for the owner's review and is not published to
+npm. It replaces 2.0.0-rc.1, a draft never published, whose check of a
+supplied chart's or receipt's `polar-angles` could refuse a chart the engine
+itself had flagged, from about the year 2936. Over 1.1.0 it refuses a birth given as a calendar date with no time,
+unless `timeKnown` is `false` (the breaking change, *Resolved instant
+inputs* below); flags a chart whose angles are inside the polar circle
+(`polar-angles`); flags a local date that a calendar changeover may have
+skipped, given with no country (`calendar-unknown`, [docs/time.md](docs/time.md));
+and gives each `positions()` row the flags `natalChart()` gives at the same
+instant.
+
+**1.1.0**, the release before it, a minor release: 1.1.0-rc.13 with the
+version changed (CHANGELOG.md). It ships a sealed
 pack of JPL's DE440 for 1790 to 2210 and computes on it by default: a plain
 `natalChart`, `positions`, `calc` or `birthWindow` call, with nothing opened
 or supplied, takes the Sun, the Moon, the planets and the true node from the
@@ -67,7 +79,7 @@ that bundles the root entry bundles the pack's 3,319,552 characters (see
 [docs/de440.md](docs/de440.md) and CHANGELOG.md). 1.1.0-rc.9 was
 1.1.0's first draft, superseded before review; 1.1.0-rc.10,
 1.1.0-rc.11 and 1.1.0-rc.12 were drafts on the same pull request, reviewed
-and replaced, and this release is 1.1.0-rc.13 with
+and replaced, and 1.1.0 is 1.1.0-rc.13 with
 the version changed;
 1.1.0-rc.8 was a draft
 that shipped the pack behind `withEphemeris` only, withdrawn, and its
@@ -100,11 +112,11 @@ Install it from npm:
 npm install @zodiacs/engine
 ```
 
-1.0.0, npm's `latest` before this release, has no `./conventions`, `./time`,
-`./lite`, `./de440` or DE440 pack, computes on astronomy-engine and writes no
-ids. Until this release is published, `artifacts/zodiacs-engine-1.1.0.tgz`
-in the repository, with its SHA-256 receipt, is the exact archive the Release
-workflow publishes.
+That installs npm's `latest`, 1.1.0, not this candidate:
+`artifacts/zodiacs-engine-2.0.0-rc.2.tgz` in the repository, with its
+SHA-256 receipt, is this candidate's exact archive. 1.0.0, npm's `latest`
+before 1.1.0, has no `./conventions`, `./time`, `./lite`, `./de440` or DE440
+pack, computes on astronomy-engine and writes no ids.
 
 The Release workflow publishes the archive carried in `artifacts/` as it is,
 with provenance (CONTRIBUTING.md, *Releases*). Before 1.0.0 npm carried
@@ -127,7 +139,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-2.0.0-rc.2.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -190,8 +202,8 @@ DE440 pack inside its years and astronomy-engine 2.1.19 elsewhere; where this
 document speaks of the ephemeris's accuracy or of its error limits without
 naming DE440, it speaks of astronomy-engine, the fallback and the ephemeris
 of what the pack does not give. See CHANGELOG.md for the release history and
-`docs/evidence/1.1.0-20261116/` for this release's checks
-(1.1.0-rc.13's are in `docs/evidence/1.1.0-rc.13-20261115/`, 1.1.0-rc.12's in
+`docs/evidence/2.0.0-rc.2-20261116/` for this candidate's checks
+(2.0.0-rc.1's are in `docs/evidence/2.0.0-rc.1-20261116/`, 1.1.0's in `docs/evidence/1.1.0-20261116/`, 1.1.0-rc.13's in `docs/evidence/1.1.0-rc.13-20261115/`, 1.1.0-rc.12's in
 `docs/evidence/1.1.0-rc.12-20261115/`, 1.1.0-rc.11's and 1.1.0-rc.10's in
 their own dated folders there, 1.1.0-rc.9's, its superseded draft's, are in
 `docs/evidence/1.1.0-rc.9-20261114/`)
@@ -286,7 +298,10 @@ for (const aspect of today.aspects) {
 - `transits(natal, date)` returns a sky snapshot and moving-to-natal aspects.
 - `synastry(a, b)` returns inter-chart aspects and element/modality balances.
 - `moonPhase(date)` returns elongation, illuminated fraction, and phase name.
-- `saturnReturn(birth)` returns exact-pass seasons through roughly age 92.
+- `saturnReturn(birth)` returns exact-pass seasons through roughly age 92. A
+  birth given as a calendar date with no time, `"YYYY-MM-DD"` or
+  `{ utc: "YYYY-MM-DD" }`, is refused with a `RangeError` (from 2.0.0); pass
+  `{ utc: "YYYY-MM-DD", timeKnown: false }` for a birth whose time is not known.
 - `findLongitudeCrossings(body, longitude, from, to)` returns the instants a
   body crosses a longitude, and `searchLongitudeCrossings` does the same under
   a sample budget. `@zodiacs/engine/crossings` provides the same solver for a
@@ -356,7 +371,9 @@ for (const aspect of today.aspects) {
 
 `@zodiacs/engine/calc` offers `calc`, `houses`, `events` and `chart` with one
 vocabulary: instants as ISO strings, Dates or `{ jd, scale: "utc" | "ut1" | "tt" }`
-on the engine's time basis, as `positions()` reads them;
+on the engine's time basis, as `positions()` reads them, except that `chart()`
+refuses a `time` given as a calendar date with no time (`"YYYY-MM-DD"`) with a
+`RangeError`, as a birth's `utc` is refused (from 2.0.0);
 eight frames (the ecliptic or the equator; true or mean of date, J2000.0 or
 the ICRS); geocentric, heliocentric, barycentric and topocentric centers;
 apparent, astrometric or geometric positions with distances and speeds; and
@@ -679,7 +696,10 @@ Placidus and Koch are undefined in polar regions, where |latitude| ≥ 90° − 
 with ε the true obliquity of date (about 66.56° today). There the engine falls
 back to whole-sign houses, exported as `POLAR_FALLBACK` (and as
 `PLACIDUS_POLAR_FALLBACK`, deprecated from 1.0, since Koch falls back too),
-and adds `polar-fallback` to the chart flags. Swiss
+and adds `polar-fallback` to the chart flags. From 2.0.0 every chart whose
+angles are inside the polar circle carries `polar-angles` too, in every house
+system, since the ascendant there turns half a circle twice a day
+(`docs/houses.md`). Swiss
 Ephemeris falls back to Porphyry instead. Every other system is defined at
 every latitude where the angles are. Inside the polar circle, where the
 ascendant is taken on the eastern half of the horizon, Regiomontanus, Campanus
@@ -743,24 +763,34 @@ arcminutes from Swiss's.
 
 ### Input flag compatibility
 
-Public birth inputs accept all nine `ChartFlag` values: the six below,
-`delta-t-extrapolated` (see Time) and the two fallback flags,
-`de440-unavailable` and `outside-de440-span`, each of which a caller may echo
-only where the calculation derives it. Supply an array with at
+Public birth inputs accept all eleven `ChartFlag` values. Four are caller
+assertions: `dst-gap`, `dst-fold`, `lmt` and `calendar-unknown`. The other
+seven are derived by the calculation, and a caller may echo each only where
+the calculation derives it: `no-time`, `polar-fallback`, `polar-angles`,
+`outside-reference-span`, `delta-t-extrapolated` (see Time) and the two
+fallback flags, `de440-unavailable` and `outside-de440-span`. Supply an array with at
 most 64 entries; entries must be known string values in ordinary data slots.
 Repeated values collapse in first-occurrence order. Unknown strings, sparse
 slots, accessor slots, non-array iterables and simultaneous `dst-gap`/`dst-fold`
 claims reject with a `RangeError` that does not include supplied flag values.
 
-`dst-gap`, `dst-fold` and `lmt` remain caller assertions: a UTC instant alone
-cannot verify a historical local-time resolution. The geo resolver sets
-`dst-gap` or `dst-fold` for a skipped or repeated wall time of any cause (the
-names are kept; its `jump.cause` gives the cause) and `lmt` when a local mean
-time clock read it. `no-time`,
-`polar-fallback` and `outside-reference-span` may be echoed for compatibility,
-but must agree with the calculation. Set `timeKnown: false` for unknown time; a flag never overrides that
-setting. A fallback assertion requires the actual requested Placidus calculation
-to produce whole-sign houses, which it does only inside the polar circle.
+`dst-gap`, `dst-fold`, `lmt` and `calendar-unknown` remain caller
+assertions: a UTC instant alone cannot verify a historical local-time
+resolution. The geo resolver sets `dst-gap` or `dst-fold` for a skipped or
+repeated wall time of any cause (the names are kept; its `jump.cause` gives
+the cause) and `lmt` when a local mean time clock read it; it and the birth
+resolvers set `calendar-unknown` on a local date, given with no country, that
+a calendar changeover may have skipped ([docs/time.md](docs/time.md)). A
+natal receipt refuses `calendar-unknown` on an instant before 1582-10-04 or
+from 1918-02-28 (UTC).
+`no-time`, `polar-fallback`, `polar-angles`, `outside-reference-span`,
+`delta-t-extrapolated`, `de440-unavailable` and `outside-de440-span` may be
+echoed for compatibility, but must agree with the calculation. Set
+`timeKnown: false` for unknown time; a flag never overrides that setting. A
+`polar-fallback` assertion requires the requested Placidus or Koch
+calculation to produce whole-sign houses, which it does only inside the polar
+circle, and a `polar-angles` assertion requires angles inside the polar
+circle.
 
 `natalChart` stores only distinct time-resolution assertions in `chart.input.flags`
 and derives result flags once. This is canonical semantic input, not a lossless
@@ -776,8 +806,12 @@ preserving numerical arrays and engine version. These checks happen at call
 time and do not freeze caller-owned objects.
 
 Ordinary Saturn-return inputs require no extra natal calculation. A raw birth
-input that explicitly asserts `polar-fallback` requires one natal calculation to
-check that assertion before the return scan. A supplied Chart instead receives
+input that explicitly asserts `polar-fallback` or `polar-angles` requires one
+natal calculation to check that assertion before the return scan. Its other
+derived echoes are checked against the input alone: `no-time` against
+`timeKnown: false` and `outside-reference-span` against the instant;
+`delta-t-extrapolated`, `de440-unavailable` and `outside-de440-span` are
+accepted there unchecked, since no chart is computed. A supplied Chart instead receives
 the consistency check above, without natal recomputation. Public birth and
 `resolveBirth` settings are validated once and the captured scalar values are
 used for calculation/resolution. Explicit null settings or local time are
@@ -1005,6 +1039,11 @@ string forms:
 
 - `YYYY-MM-DD`, interpreted as midnight UTC using the proleptic Gregorian
   calendar. This convenience does not infer a birthplace's local midnight.
+  As a birth (`BirthInput.utc`, `saturnReturn`'s birth in either form, and
+  calc `chart()`'s `time`) a calendar date with no time is refused with a
+  `RangeError` unless `timeKnown` is `false` (from 2.0.0; earlier releases
+  read it as midnight UTC); elsewhere it still reads as midnight UTC. Write
+  `YYYY-MM-DDT00:00:00Z` to ask for midnight UTC.
 - `YYYY-MM-DDTHH:mm[:ss[.sss]]Z`, or the same date-time with an explicit
   `+HH:mm` or `-HH:mm` offset. Fractional seconds, when supplied, have one to
   three digits. ISO expanded years use a sign and six digits, such as
@@ -1050,7 +1089,9 @@ latitude, which in reality stays within about 1.2″ of zero, comes out as
 Birth settings accept only a `houseSystem` from the thirteen above, a boolean
 `timeKnown` and a `timeScale` (see Time). Omitting them defaults to `"whole"`,
 `true` and `"utc"`; explicit `null` and other unsupported values throw
-`RangeError`, including when coordinates are absent. Latitude and longitude
+`RangeError`, including when coordinates are absent. `timeKnown: false` is
+what lets a birth be given as a calendar date with no time; with the default
+`true` such a date is refused (from 2.0.0). Latitude and longitude
 must be supplied together as finite numbers within `[-90, 90]` and
 `[-180, 180]` respectively.
 

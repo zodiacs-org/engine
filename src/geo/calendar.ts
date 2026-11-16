@@ -85,6 +85,23 @@ export const GREGORIAN_ADOPTION: readonly Readonly<GregorianAdoption>[] = /*#__P
   })
 );
 
+// For each row in the table's order, the zone tzdata 2025c's zone.tab gives its country for the region of its
+// present capital, all under Europe/, lower-cased. Six rows keep none ("-"): the notes of BE, CH, NL, PL, SE and
+// FI date days skipped in their capital's zone that fall in another row's skipped days and not in their own
+// (Grotefend's 1582-12-25 for Brabant; the Catholic cantons and Silesia in January 1584; Friesland and
+// Groningen in 1701; Sweden's dropped Julian 1700-02-29, Denmark's days too, which Finland shared "with
+// Sweden"), so in those zones every row applies. src/geo/calendar-unknown.test.ts checks the order against the
+// codes and that no other row's note has such a changeover.
+const ZONE_CITIES = "vienna - - prague berlin copenhagen madrid - paris london budapest rome - oslo - lisbon moscow -".split(" ");
+
+/**
+ * Internal: the row whose changeover alone applies in `timeZone`, the capital zone of a country above, matched
+ * without regard to case; undefined for any other zone, a tzdata link (Europe/Vatican) among them.
+ */
+export function zoneAdoption(timeZone: string): Readonly<GregorianAdoption> | undefined {
+  return /^europe\/[a-z]/i.test(timeZone) ? GREGORIAN_ADOPTION[ZONE_CITIES.indexOf(timeZone.slice(7).toLowerCase())] : undefined;
+}
+
 /** The row for a country, by ISO 3166-1 alpha-2 code or its name in tzdata's iso3166.tab. */
 export function gregorianAdoption(country: string): Readonly<GregorianAdoption> | undefined {
   return GREGORIAN_ADOPTION.find((row) => row.code === country || row.country === country);
@@ -105,9 +122,14 @@ export interface CalendarNote {
  */
 export function calendarNote(gregorianDate: string, calendar: CalendarName, country: string): CalendarNote | null {
   if (!parseCalendarDate(gregorianDate, "gregorian")) throw new RangeError("gregorianDate must be a valid Gregorian date, YYYY-MM-DD.");
+  checkCalendarCountry(calendar, country);
+  return noteFor(gregorianDate, calendar, country);
+}
+
+/** Internal: the checks of a calendar and a country that calendarNote and resolveLocalToUtc's options share. */
+export function checkCalendarCountry(calendar: unknown, country: unknown): void {
   if (calendar !== "gregorian" && calendar !== "julian") throw new RangeError('calendar must be "gregorian" or "julian".');
   if (typeof country !== "string" || !country.trim()) throw new RangeError("country must be a nonempty string.");
-  return noteFor(gregorianDate, calendar, country);
 }
 
 /** Internal: calendarNote for a date resolveLocalBirth has resolved, which may lie past the year 9999. */

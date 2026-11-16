@@ -93,13 +93,22 @@ export type HouseSystem =
   | "alcabitius"
   | "morinus"
   | "meridian";
-/** `"delta-t-extrapolated"`: a result that moves with a ΔT extrapolated past the IERS table (docs/time.md). */
+/**
+ * `"delta-t-extrapolated"`: a result that moves with a ΔT extrapolated past the IERS table (docs/time.md).
+ * `"calendar-unknown"`: a local date resolved with no country the Gregorian adoption table dates that falls in
+ * the days one of its changeovers skipped, where the zone does not rule that changeover out, so whether it was
+ * in civil use where it was written is not known (docs/time.md).
+ * `"polar-angles"`: the angles were computed inside the polar circle, |latitude| ≥ 90° − ε, where the ascendant
+ * turns half a circle twice a sidereal day and is 0° or 180° at the poles (docs/houses.md).
+ */
 export type ChartFlag =
   | "dst-gap"
   | "dst-fold"
   | "lmt"
+  | "calendar-unknown"
   | "no-time"
   | "polar-fallback"
+  | "polar-angles"
   | "outside-reference-span"
   | "delta-t-extrapolated"
   | EphemerisFallback;
@@ -148,7 +157,9 @@ export interface BirthInput {
   /**
    * The instant, on the scale `timeScale` names: UTC by default, and UT1 or
    * TT when `timeScale` says so. The field keeps its name on every scale,
-   * because receipts record it under that name (docs/time.md).
+   * because receipts record it under that name (docs/time.md). A calendar
+   * date string with no time, such as "1990-05-03", reads as 00:00 UTC and
+   * is refused with a RangeError unless `timeKnown` is false.
    */
   utc: DateInput;
   /** "utc" (default), "ut1" or "tt" (docs/time.md). */
@@ -208,7 +219,16 @@ export interface BodyPosition {
   ephemeris?: string;
   /** Present when `ephemeris` is astronomy-engine as a fallback from the shipped DE440 pack, and says why. */
   fallback?: EphemerisFallback;
+  /**
+   * On the rows of `positions()`, `transits()`' `positions` and `progressedBodies()`, from the release after
+   * 1.1.0: the flags a chart at the same instant carries, where there are any (a chart's own bodies leave them to
+   * the chart's `flags`): `"outside-reference-span"`, `"delta-t-extrapolated"`, then the fallback, as `fallback`.
+   */
+  flags?: InstantFlag[];
 }
+
+/** The flags an instant itself gives a result, whatever the place and birth settings; see `BodyPosition.flags`. */
+export type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 /** A chart point that is not a body; see `chartPoints`. */
 export type PointName =
@@ -396,7 +416,7 @@ export interface MoonPhase {
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "1.1.0";
+export const ENGINE_VERSION: string = "2.0.0-rc.2";
 
 /**
  * astronomy-engine, the ephemeris the engine computes on where the shipped

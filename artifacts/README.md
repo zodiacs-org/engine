@@ -2,8 +2,8 @@
 
 Each `zodiacs-engine-<version>.tgz` here is the exact `npm pack` output of one
 candidate, with its SHA-256 receipt beside it. Carrying an archive does not
-publish it; rc.14, rc.15, rc.16 and 1.0.0 were later published to npm, and
-npm's tarballs of them are these bytes.
+publish it; rc.14, rc.15, rc.16, 1.0.0 and 1.1.0 were later published to npm,
+and npm's tarballs of them are these bytes.
 Archives are immutable: once carried, an archive is never repacked, replaced or
 removed.
 
@@ -102,7 +102,7 @@ runs, so CI starts the check with node directly.
 | 0.1.1-rc.17 | `9cd24c788863424ef614aaadec580db5a0dfc529303d385274db48a092a5299a` | 273,123 | 70 | `aae419c05b77455b9e8f03ca11ee273b446f7d02` | `b080217` | Candidate, merged |
 | 1.0.0-rc.1 | `cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284` | 284,750 | 74 | `77a16c26889220f5481f41d16c4ca4e70a09250b` | `bb1736a` | Candidate, merged |
 | 1.0.0-rc.2 | `4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002` | 287,011 | 74 | `7fa964d2a77d09dbb819b5733b36e303fc7fc513` | `e790362` | Candidate, merged |
-| 1.0.0 | `c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6` | 288,063 | 74 | `ca2c8cefbaa1a9d6f5f78ee86713e813633942ca` | `38d3185` | Release, merged; on npm as `latest` |
+| 1.0.0 | `c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6` | 288,063 | 74 | `ca2c8cefbaa1a9d6f5f78ee86713e813633942ca` | `38d3185` | Release, merged; on npm, `latest` until 1.1.0 |
 | 1.1.0-rc.1 | `52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6` | 292,721 | 77 | `c41706266caf4dde7e03aaa18c08acd569d19a7e` | `6ec3464` | Candidate, merged |
 | 1.1.0-rc.2 | `c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c` | 318,004 | 90 | `806f76b43c0ee652016fe1b522c02d6f6e9c7ae5` | `59c6ea9` | Candidate, merged |
 | 1.1.0-rc.3 | `3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590` | 331,979 | 94 | `cc910b3775e279222e23af0b395bb6f2b51a3c3a` | `d2794d2` | Candidate, merged |
@@ -114,7 +114,9 @@ runs, so CI starts the check with node directly.
 | 1.1.0-rc.11 | `d84f330216f21367f33a9c855a449af49659933987555f873611f9ab3d5b5e56` | 2,720,663 | 98 | `c766129a90e6c0e68f7d2db68204e1fc6fcce81a` | "Carry the packed 1.1.0-rc.11 tarball" | Draft candidate, superseded by 1.1.0-rc.12 on the same pull request; never tagged or published. Still this file |
 | 1.1.0-rc.12 | `4577e2ff924ab1a5f5f6ffc52f7ce595c0e08e4f2cd6cd58d64f7e7bdf020297` | 2,723,759 | 98 | `d35343a1f8ed4516fa23222712ee6473f9265546` | "Carry the packed 1.1.0-rc.12 tarball" | Draft candidate, reviewed in draft with no blocker and superseded by 1.1.0-rc.13 on the same pull request for its documentation; never tagged or published. Still this file |
 | 1.1.0-rc.13 | `8d7b2adb630e629b0673c3901fe383cf9b496429a0b98075581d4a8797767817` | 2,725,396 | 98 | `67a0e38264b363aea05aa1545e7f02ce34b5de8d` | `7fd113e` | Candidate, merged; never tagged or published. 1.1.0 is its code with the version changed |
-| 1.1.0 | `4e53cda9bd6ccb5f5581c2a9af2f2ae4010af2599f411ac5220425e0932e41ac` | 2,726,321 | 98 | `2496c28f273e1e99526490e857332fae44473367` | "Carry the packed 1.1.0 tarball" | Release, merged (pull request 104); not yet published to npm, where `latest` is 1.0.0 (checked 2026-11-16) |
+| 1.1.0 | `4e53cda9bd6ccb5f5581c2a9af2f2ae4010af2599f411ac5220425e0932e41ac` | 2,726,321 | 98 | `2496c28f273e1e99526490e857332fae44473367` | "Carry the packed 1.1.0 tarball" | Release, merged (pull request 104); on npm as `latest`; npm's tarball is these bytes (its SHA-1, checked 2026-11-16) |
+| 2.0.0-rc.1 | `9a1c07ca898da77ec266543130645f3e2528a1aeef1ebd15b1b83e07d19e673a` | 2,732,244 | 98 | `5bbb4595a7bc26618a504de62805399e28d595d8` | "Carry the packed 2.0.0-rc.1 tarball" | Draft candidate for 2.0.0 (pull request 112), reviewed in draft with one blocker and superseded by 2.0.0-rc.2 on the same pull request; never tagged or published. Still this file |
+| 2.0.0-rc.2 | `e0621630b5a0f9dbb6465f4f077630f313217d7b06ee88ffa960696fec5eb1cc` | 2,734,988 | 98 | `05cd353af00e796e1fad65bf7085356c315b4b86` | "Carry the packed 2.0.0-rc.2 tarball" | Draft candidate for 2.0.0 (pull request 112), awaiting the owner's review; never tagged or published |
 
 1.1.0-rc.9, 1.1.0-rc.10, 1.1.0-rc.11, 1.1.0-rc.12 and 1.1.0-rc.13 are five cuts of one draft, pull request 101.
 1.1.0-rc.9 was carried on 2026-11-14 and reviewed in draft; the owner then
@@ -162,6 +164,44 @@ the source commit and an independent review of the version commit had been
 acted on; the pack of the working checkout gave the same bytes. It is to be
 published with the dist-tag `latest`. The record is in
 `docs/evidence/1.1.0-20261116/`.
+
+2.0.0-rc.1 is the first candidate for 2.0.0, a major release, cut as a
+draft for the owner's review on 1.1.0 (main at `12943c1`), with pull
+requests 109, 111, 110 and 105 merged into it with merge commits: a birth
+given as a calendar date with no time is refused unless `timeKnown` is
+`false` (the breaking change, held for 2.0.0 by the owner's decision of
+2026-11-11), and the `polar-angles` and `calendar-unknown` flags and the
+flags on `positions()` rows are added. The archive is 2,732,244 bytes,
+4,595,726 unpacked in 98 files, of which 1,276,174 are beside the pack,
+under the cap of 1,289,000, which it raises from 1,265,000, as it raises
+the budgets of `./techniques`, `./geo` and `./receipt`; the rises are for
+the owner to decide with the candidate (CHANGELOG.md). It was packed once,
+from a clean tree of its source commit (`git archive`) installed with
+`npm ci`, on Node 22.23.4 with npm 10.9.9; the pack of the working checkout
+gave the same bytes. It was carried after every gate workflow had passed on
+the source commit (CI run 43907668826, Conformance 43907668642 and Atlas
+43907668886). It is not to be published on npm until the
+owner approves it. The record is in `docs/evidence/2.0.0-rc.1-20261116/`.
+
+2.0.0-rc.1 and 2.0.0-rc.2 are two cuts of one draft, pull request 112.
+2.0.0-rc.1 was carried on 2026-11-16 and reviewed in draft; the review
+found one blocker: a supplied chart's or natal receipt's `polar-angles`
+claim was checked against the constant and linear terms of the mean
+obliquity alone, which from 2936 on refused some charts the engine itself
+had flagged. The fix (pull request 105, `522a0d6`) changes packed files, so
+by the rule above the new bytes took a new version, 2.0.0-rc.2, and
+2.0.0-rc.1's archive stays, unchanged, with its receipt and its entry; the
+check needed no exception. 2.0.0-rc.1 was never tagged or published and is
+not meant to be; 2.0.0-rc.2 became the candidate for 2.0.0. Its archive is
+2,734,988 bytes, 4,603,789 unpacked in 98 files, of which 1,284,237 are
+beside the pack, under the cap of 1,289,000; it raises no budget. It was
+packed once, from a clean tree of its source commit (`git archive`)
+installed with `npm ci`, on Node 22.23.4 with npm 10.9.9; the pack of the
+working checkout gave the same bytes. It was carried after every gate
+workflow had passed on the source commit (CI run 43920027679, Conformance
+43920027647 and Atlas 43920027649). It is not to be published on npm until
+the owner approves it. The record is in
+`docs/evidence/2.0.0-rc.2-20261116/`.
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same

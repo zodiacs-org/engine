@@ -160,7 +160,7 @@ const progressionYear: number = PROGRESSION_DAYS_PER_YEAR;
 void progressionAt; void progressionRows; void progressionYear;
 const places: ReturnType<typeof createGeoNamesClient> = createGeoNamesClient({baseUrl: "https://example.test/cities"});
 void places;
-const typedFlags: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"];
+const typedFlags: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback", "calendar-unknown", "polar-angles"];
 const echoed: BirthInput = {utc: "2000-02-29T08:30:00Z", timeKnown: false, flags: [typedFlags[3]]};
 const echoChart: Chart = natalChart(echoed);
 saturnReturn(echoed);
@@ -247,7 +247,7 @@ writeFileSync(
   join(directory, "consumer.mjs"),
   `
 import assert from "node:assert/strict";
-import { natalChart, positions, transits, synastry, moonPhase, progressedInstant, progressedBodies, PROGRESSION_DAYS_PER_YEAR, ENGINE_VERSION } from "@zodiacs/engine";
+import { natalChart, positions, transits, synastry, moonPhase, progressedInstant, progressedBodies, PROGRESSION_DAYS_PER_YEAR, ENGINE_VERSION, saturnReturn } from "@zodiacs/engine";
 import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticToEquatorial, declinationsForBodies, findDeclinationAspects } from "@zodiacs/engine";
 import { EPHEMERIS_SPAN, SUN_BOUND_LATITUDE } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
@@ -274,6 +274,7 @@ globalThis.fetch = () => { throw new Error("Calculation attempted a network requ
 const chart = natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(chart.houses.system, "whole");
 assert(chart.flags.includes("polar-fallback"));
+assert(chart.flags.includes("polar-angles"));
 assert(((chart.angles.asc-chart.angles.mc+360)%360) < 180);
 assert.equal(chart.houses.cusps[0], Math.floor(chart.angles.asc/30)*30);
 const sidereal = vedic.siderealChart(chart, "lahiri");
@@ -335,7 +336,7 @@ assert.equal(findDeclinationAspects([{body: "A", lon: -1e-20, lat: 0}, {body: "B
 // Outside astronomy-engine's tabulated years every calculation refuses at once.
 assert.deepEqual(EPHEMERIS_SPAN.daysFromJ2000, {from: -730000, to: 730000});
 assert.throws(() => positions("4000-01-01"), {name: "RangeError", message: /^The instant is outside the ephemeris span/});
-assert.throws(() => natalChart({utc: "0001-01-01"}), {name: "RangeError", message: /^The instant is outside the ephemeris span/});
+assert.throws(() => natalChart({utc: "0001-01-01T00:00:00Z"}), {name: "RangeError", message: /^The instant is outside the ephemeris span/});
 for (const label of [" Mars", "Mars\\u0000", "x".repeat(200)]) {
   assert.throws(() => declinationsForBodies([{body: label, lon: 0, lat: 0}], 23.4), RangeError);
   assert.throws(() => createAspectPolicy({bodies: [label]}), RangeError);
@@ -343,6 +344,11 @@ for (const label of [" Mars", "Mars\\u0000", "x".repeat(200)]) {
 assert.throws(() => progressedBodies(8.64e15, 8.64e15), RangeError);
 assert.throws(() => positions(-8.64e15), RangeError);
 assert.equal(transits(chart, "2026-09-07T12:00:00Z").positions.length, 12);
+// Outside REFERENCE_SPAN positions() flags each row as natalChart() flags the chart (from 2.0.0).
+const edgeRows = positions("2200-01-01T00:00:00Z");
+assert(edgeRows.every((row) => row.flags.includes("outside-reference-span")));
+assert.deepEqual(edgeRows[0].flags, natalChart({utc: "2200-01-01T00:00:00Z"}).flags);
+assert(positions("2000-01-01T12:00:00Z").every((row) => !("flags" in row)));
 assert(synastry(chart, {utc: "2000-01-01", timeKnown: false}).aspects.length > 0);
 assert(moonPhase("2024-04-08T18:21:00Z").illumination < 0.001);
 const unknown = natalChart(resolveBirth({date: "2000-02-29", timeZone: "UTC", timeKnown: false}));
@@ -352,6 +358,10 @@ assert(unknown.flags.includes("no-time"));
 assert.throws(() => natalChart({utc: "2023-02-29T12:00:00Z"}), RangeError);
 assert.throws(() => natalChart({utc: "2000-01-01T12:00:00"}), RangeError);
 assert.throws(() => natalChart({utc: "2000-01-01", houseSystem: "unsupported"}), RangeError);
+// A calendar date with no time is refused unless the birth time is declared unknown.
+assert.throws(() => natalChart({utc: "2000-01-01"}), {name: "RangeError", message: /calendar date with no time/});
+assert(natalChart({utc: "2000-01-01", timeKnown: false}).flags.includes("no-time"));
+assert.throws(() => saturnReturn("2000-01-01"), {name: "RangeError", message: /calendar date with no time/});
 for (const name of ["react", "@zodiacs/sdk"]) {
   assert.throws(() => import.meta.resolve(name), {code: "ERR_MODULE_NOT_FOUND"});
 }
@@ -432,7 +442,7 @@ assert.deepEqual(echoedUnknown.input.flags, ["lmt"]);
 assert.deepEqual(echoedUnknown.flags, ["lmt", "no-time"]);
 const echoedPolar = natalChart({...chart.input, flags: ["polar-fallback", "polar-fallback"]});
 assert.deepEqual(echoedPolar.input.flags, []);
-assert.deepEqual(echoedPolar.flags, ["polar-fallback"]);
+assert.deepEqual(echoedPolar.flags, ["polar-fallback", "polar-angles"]);
 for (const value of [echoedUnknown, echoedPolar]) {
   const parsedEcho = parseNatalEnvelope(serializeNatalEnvelope(createNatalEnvelope(value)));
   assert.equal(parsedEcho.ok, true);
@@ -454,14 +464,14 @@ let hooks = 0;
 const accessorFlags = ["lmt"];
 Object.defineProperty(accessorFlags, "0", {get() { hooks++; return "lmt"; }});
 for (const flags of [["PRIVATE_FLAG_SENTINEL"], ["dst-gap", "dst-fold"], ["no-time"], ["polar-fallback"], "lmt", new Set(["lmt"]), [null], Array(1), accessorFlags, Array(65).fill("lmt")]) {
-  assert.throws(() => natalChart({utc: "2000-01-01", flags}), (error) => error instanceof RangeError && !error.message.includes("PRIVATE_FLAG_SENTINEL"));
+  assert.throws(() => natalChart({utc: "2000-01-01T00:00:00Z", flags}), (error) => error instanceof RangeError && !error.message.includes("PRIVATE_FLAG_SENTINEL"));
 }
 assert.equal(hooks, 0);
 const iterableFlags = ["lmt"];
 iterableFlags[Symbol.iterator] = () => { throw new Error("Custom iterator called"); };
-assert.deepEqual(natalChart({utc: "2000-01-01", flags: iterableFlags}).flags, ["lmt"]);
+assert.deepEqual(natalChart({utc: "2000-01-01T00:00:00Z", flags: iterableFlags}).flags, ["lmt"]);
 let latitudeReads = 0;
-const captured = natalChart({utc: "2000-01-01", get latitude() { return ++latitudeReads === 1 ? 0 : 999; }, longitude: 0});
+const captured = natalChart({utc: "2000-01-01T00:00:00Z", get latitude() { return ++latitudeReads === 1 ? 0 : 999; }, longitude: 0});
 assert.equal(latitudeReads, 1);
 assert.equal(captured.input.latitude, 0);
 const originalFormatter = Intl.DateTimeFormat;
@@ -517,6 +527,14 @@ assert.deepEqual(birthplace.flags, ["lmt"]);
 assert.equal(julianToGregorian("1917-10-25"), "1917-11-07");
 assert.equal(resolveLocalToUtc("1917-10-25", "12:00", "Etc/GMT-3", {calendar: "julian"}).utc.toISOString(), "1917-11-07T09:00:00.000Z");
 assert.throws(() => resolveLocalToUtc("2000-01-01", "12:00", "UTC", {calender: "julian"}), RangeError);
+// A date a calendar changeover skipped, given with no country, is flagged; with the country, the note says it instead.
+const skipped = resolveLocalToUtc("1752-09-08", "12:00", "Etc/UTC");
+assert.deepEqual(skipped.flags, ["calendar-unknown"]);
+assert(natalChart({utc: skipped.utc, flags: skipped.flags}).flags.includes("calendar-unknown"));
+assert.deepEqual(resolveLocalToUtc("1752-09-08", "12:00", "Etc/UTC", {country: "GB"}).flags, []);
+// A country the table does not date leaves it flagged; a receipt refuses the flag on an instant no changeover skipped.
+assert.deepEqual(resolveLocalToUtc("1752-09-08", "12:00", "Etc/UTC", {country: "ZZ"}).flags, ["calendar-unknown"]);
+assert.throws(() => createNatalEnvelope(natalChart({utc: "1990-05-03T12:00:00Z", flags: ["calendar-unknown"]})));
 assert.throws(() => resolveBirth({date: "2000-01-01", time: "12:00", timeZone: "UTC", calender: "julian"}), RangeError);
 const windowed = birthWindow({start: "2001-12-21T08:40:00Z", end: "2001-12-21T09:20:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(windowed.verification, "sampled at one-second resolution");
@@ -780,6 +798,9 @@ for (const body of ["Sun", "Moon", "Pluto", "North Node"]) {
 const whole = chart({ time: birth.utc, place: { latitude: 51.5, longitude: -0.12 } });
 assert.deepEqual(whole.chart.flags, flags);
 assert.equal(whole.receipt.engine.ephemeris.name, name);
+// A calendar date with no time is refused by calc's chart() too, unless the birth time is declared unknown.
+assert.throws(() => chart({ time: "2000-01-01", place: { latitude: 51.5, longitude: -0.12 } }), { name: "RangeError", message: /calendar date with no time/ });
+assert(chart({ time: "2000-01-01", timeKnown: false }).chart.flags.includes("no-time"));
 const found = events({ kind: "longitude-crossing", body: "Sun", longitude: 30, from: "1990-01-01T00:00:00Z", to: "1991-01-01T00:00:00Z" });
 assert.deepEqual(found.flags, flags);
 assert.equal(found.receipt.engine.ephemeris.name, name);

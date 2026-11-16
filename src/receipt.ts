@@ -436,11 +436,29 @@ const BODIES = [
 ] as const;
 const FLAGS_RC7 = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"] as const;
 const FLAGS = [...FLAGS_RC7, "outside-reference-span"] as const;
-/** The time-basis sets also take "delta-t-extrapolated", whose condition the record's ΔT and time scale show. */
-const FLAGS_TIME_BASIS = [...FLAGS, "delta-t-extrapolated", "de440-unavailable", "outside-de440-span"] as const;
+/**
+ * The time-basis sets also take "delta-t-extrapolated", whose condition the record's ΔT and time scale show,
+ * "calendar-unknown" (below), and "polar-angles", the angles inside the polar circle (from 2.0.0).
+ */
+const FLAGS_TIME_BASIS = [...FLAGS, "delta-t-extrapolated", "de440-unavailable", "outside-de440-span", "calendar-unknown", "polar-angles"] as const;
 /** From 1.1.0-rc.10: the chart was to come from the shipped DE440 pack and came from astronomy-engine (src/types.ts, EphemerisFallback). */
 const FALLBACK_FLAGS = ["de440-unavailable", "outside-de440-span"] as const;
 const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
+/**
+ * The time-basis sets also take "calendar-unknown" (from 2.0.0): a local date, given with no
+ * country the table dates, that one of the Gregorian adoption table's changeovers skipped (src/geo/calendar.ts). The record
+ * keeps no country, so the claim is refused only where its Gregorian date is outside every such day read in
+ * either calendar: before 1582-10-05 (Italy's first skipped day, read as Gregorian) or after 1918-02-26 (Russia's
+ * last, 1918-02-13, read as Julian). src/geo/calendar-unknown.test.ts writes and reads a record at each end.
+ */
+const TIME_FLAGS_TIME_BASIS = [...TIME_FLAGS, "calendar-unknown"] as const;
+const CALENDAR_UNKNOWN_DATES = { from: "1582-10-05", to: "1918-02-26" } as const;
+/**
+ * The same days as UTC instants, a day wider at each end, since a local date lies within a day of its UTC one:
+ * from 1582-10-04T00:00Z up to, not including, 1918-02-28T00:00Z. A record with the flag is refused outside them,
+ * whether or not it keeps a local record (whose own date validateLocalRecord checks against the days above).
+ */
+const CALENDAR_UNKNOWN_INSTANTS = { from: "1582-10-04", to: "1918-02-28" } as const;
 const HOUSE_SYSTEMS = [
   "whole",
   "placidus",
@@ -695,6 +713,15 @@ const DELTA_T_SEGMENTS = [
   "extrapolated"
 ] as const;
 const J2000_MS = Date.UTC(2000, 0, 1, 12);
+
+/**
+ * Mean obliquity of the ecliptic (IAU 2006), in degrees, at `t` Julian
+ * centuries of TT from J2000: `meanObliquity` in src/houses.ts, term for term,
+ * kept here so that this entry does not load the houses code
+ * (src/polar-angles.test.ts holds the two to the same coefficients).
+ */
+const meanObliquity = (t: number): number =>
+  (84381.406 - 46.836769 * t - 0.0001831 * t * t + 0.0020034 * t ** 3 - 0.000000576 * t ** 4 - 0.0000000434 * t ** 5) / 3600;
 
 const IERS_SEGMENTS = ["observed", "predicted", "fallback"] as const;
 
@@ -1060,6 +1087,7 @@ function validateLocalRecord(
         (calendar === "gregorian" ? written : julianToGregorian(written)) !== date)) ||
     (form !== undefined && form !== "host" && version === null) ||
     flags.includes("lmt") !== lmt ||
+    (flags.includes("calendar-unknown") && !(date >= CALENDAR_UNKNOWN_DATES.from && date <= CALENDAR_UNKNOWN_DATES.to)) ||
     (local.transition === null && (gap || fold))
   )
     fail("invalid_context");
@@ -1276,7 +1304,10 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     Math.abs((receipt.coordinates as { latitude: number }).latitude) < 65
   )
     fail("inconsistent_result");
-  const inputFlags = flagList(receipt.inputFlags, TIME_FLAGS);
+  const inputFlags = flagList(receipt.inputFlags, timeBasis ? TIME_FLAGS_TIME_BASIS : TIME_FLAGS);
+  const instant = receipt.instant as string;
+  if (inputFlags.includes("calendar-unknown") && !(instant >= CALENDAR_UNKNOWN_INSTANTS.from && instant < CALENDAR_UNKNOWN_INSTANTS.to))
+    fail("inconsistent_result");
   const resultFlags = flagList(receipt.resultFlags, timeBasis ? FLAGS_TIME_BASIS : current ? FLAGS : FLAGS_RC7);
   const expected = [...inputFlags];
   if (!timeKnown) expected.push("no-time");
@@ -1303,6 +1334,25 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     (resultFlags.includes("delta-t-extrapolated") || compareVersions(engineVersion, "1.1.0-rc.9") > 0)
   )
     expected.push("delta-t-extrapolated");
+  // "polar-angles" is the record's claim that its angles are inside the polar
+  // circle. The record carries no obliquity, so the claim is allowed with angles
+  // where |latitude| >= 90 - e0 - 0.003 degrees, e0 the mean obliquity (the
+  // whole IAU 2006 polynomial) at the record's TT, its instant plus its ΔT on
+  // UTC or UT1 input (UT1 - UTC, under a second, left out), as src/api.ts
+  // allows it on a supplied chart, and refused anywhere else. Records from
+  // 1.1.0 and earlier lack it.
+  if (
+    resultFlags.includes("polar-angles") &&
+    result.angles &&
+    Math.abs((receipt.coordinates as { latitude: number }).latitude) >=
+      90 -
+        meanObliquity(
+          (Date.parse(receipt.instant as string) + (scale === "tt" ? 0 : (result.deltaT?.seconds ?? 0) * 1000) - J2000_MS) /
+            3_155_760_000_000
+        ) -
+        0.003
+  )
+    expected.push("polar-angles");
   // A fallback flag is the record's own claim about what computed it: allowed
   // where the record names astronomy-engine, refused on a DE440 record.
   if (!de440) for (const reason of FALLBACK_FLAGS) if (resultFlags.includes(reason)) expected.push(reason);

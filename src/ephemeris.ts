@@ -14,7 +14,7 @@ import { chartBodyDeclinations } from "./declination.js";
 import type { ChartDeclinations } from "./declination.js";
 import { deltaT } from "./deltat.js";
 import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
-import { computeAngles, computeHouses, eastPointOf, vertexOf } from "./houses.js";
+import { computeAngles, computeHouses, eastPointOf, insidePolarCircle, vertexOf } from "./houses.js";
 import { tilt } from "./nutation.js";
 import { hellenisticLots, meanApogee, meanNodeLongitude, sectOf } from "./points.js";
 import { EPHEMERIS_SPAN, outsideReferenceSpan } from "./reference-span.js";
@@ -28,6 +28,7 @@ import type {
   ChartInput,
   ChartPoints,
   EphemerisFallback,
+  InstantFlag,
   PointName,
   PointPosition,
   PositionSource,
@@ -541,8 +542,33 @@ function position(body: BodyName, lon: number, lat: number, speed: number, chose
   };
 }
 
+/**
+ * The positions at a UTC instant, as a chart's bodies; from 2.0.0, each row carries the flags
+ * a chart at that instant would (`instantFlags`), where there are any.
+ */
 export function computeBodies(date: Date): BodyPosition[] {
-  return evaluated(() => bodiesAt(date.getTime(), UTC_CLOCK));
+  return evaluated(() => {
+    const ms = date.getTime();
+    const basis = basisAt(ms, UTC_CLOCK);
+    const chosen = chosenAt(basis.ttDays);
+    const bodies = bodiesAt(ms, UTC_CLOCK, chosen);
+    const flags = instantFlags(date, basis, chosen, null);
+    return flags.length === 0 ? bodies : bodies.map((row) => ({ ...row, flags: [...flags] }));
+  });
+}
+
+/**
+ * The flags an instant gives a chart, in the chart's order: outside REFERENCE_SPAN, a ΔT extrapolated under the
+ * result (`angles` as deltaTExtrapolated's second argument), and the shipped pack's fallback. Shared by
+ * natalChart's charts and by computeBodies, so positions() flags what natalChart flags at the same instant.
+ */
+function instantFlags(utc: Date, basis: TimeBasis, chosen: Chosen, angles: unknown): InstantFlag[] {
+  const flags: InstantFlag[] = [];
+  if (outsideReferenceSpan(utc)) flags.push("outside-reference-span");
+  if (deltaTExtrapolated(basis, angles)) flags.push("delta-t-extrapolated");
+  // Last: the result was to come from the shipped DE440 pack and did not.
+  if (chosen.fallback !== null) flags.push(chosen.fallback);
+  return flags;
 }
 
 function bodiesAt(ms: number, clock: Clock, chosen: Chosen = chosenAt(basisAt(ms, clock).ttDays)): BodyPosition[] {
@@ -594,7 +620,7 @@ function chartAt(input: ChartInput): Chart {
   const clock = clockOf(input);
   const basis = timeBasis(ms, clock.scale, clock.pin);
   const chosen = chosenAt(basis.ttDays);
-  const { from, fallback } = chosen;
+  const { from } = chosen;
   const bodies = bodiesAt(ms, clock, chosen);
   let angles = null;
   let houses = null;
@@ -615,13 +641,11 @@ function chartAt(input: ChartInput): Chart {
     const result = computeHouses(input.houseSystem, angleInput, angles);
     houses = result.houses;
     if (result.fellBack) flags.push("polar-fallback");
+    if (insidePolarCircle(angleInput)) flags.push("polar-angles");
   } else if (!input.timeKnown) {
     flags.push("no-time");
   }
-  if (outsideReferenceSpan(input.utc)) flags.push("outside-reference-span");
-  deltaTExtrapolated(basis, angles) && flags.push("delta-t-extrapolated");
-  // Last: the chart was to come from the shipped DE440 pack and did not.
-  if (fallback !== null) flags.push(fallback);
+  flags.push(...instantFlags(input.utc, basis, chosen, angles));
 
   return {
     input,

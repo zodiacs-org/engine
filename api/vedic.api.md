@@ -384,7 +384,7 @@ declare function vimshottariDasha(moon: SiderealLongitude, options?: DashaOption
 declare function yoginiDasha(moon: SiderealLongitude, options?: CycleOptions): DashaResult;
 ```
 
-## Referenced, not exported here (21)
+## Referenced, not exported here (22)
 
 ```ts
 // exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
@@ -433,6 +433,7 @@ interface BodyPosition {
     degree: number;
     ephemeris?: string;
     fallback?: EphemerisFallback;
+    flags?: InstantFlag[];
 }
 
 // exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart)
@@ -453,7 +454,7 @@ interface Chart {
 }
 
 // exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
+type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 // exported by @zodiacs/engine (ChartInput)
 interface ChartInput {
@@ -501,6 +502,9 @@ interface Houses {
     system: HouseSystem;
     cusps: number[];
 }
+
+// exported by @zodiacs/engine (InstantFlag)
+type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 // exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
 interface LeapSeconds {

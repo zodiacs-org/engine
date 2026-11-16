@@ -284,7 +284,12 @@ const ENTRY_BUDGETS = {
   // 1.1.0-rc.6: 35,584, with the fold option of the local-time resolver, its
   // input check and its error message; raised from 35,500 to 35,600 with the
   // owner's approval of 2026-11-11; 0.04 per cent of headroom.
-  "./geo": 35_700,
+  // 2.0.0-rc.1: 36,178, 564 more than 1.1.0's 35,614, with the
+  // calendar-unknown flag's zone evidence (the capital-zone list and the
+  // narrowed check, pull request 110) and the polar-angles flag (pull
+  // request 105); raised from 35,700 to 36,500, the measurement and about
+  // one per cent, for the owner to decide with the candidate.
+  "./geo": 36_500,
   // Unreleased (feature-houses-extra): 13,606, one file that imports no other
   // module, the root's included, so that its graph cannot grow with the core
   // (docs/evidence/houses-extra-2026-09-29/).
@@ -330,14 +335,23 @@ const ENTRY_BUDGETS = {
   // convention ids: the chunk of ids it shares with ./conventions and the
   // codec's new set, its feature and its check of the ids; 5.51 per cent of
   // headroom.
-  "./receipt": 76_500,
+  // 2.0.0-rc.1: 76,623, with the receipt checks of the calendar-unknown
+  // and polar-angles flags (pull requests 110 and 105); raised from 76,500
+  // to 77,400, the measurement and about one per cent, for the owner to
+  // decide with the candidate.
+  "./receipt": 77_400,
   // Returns, composite and Davison charts, the void-of-course Moon, aspect
   // patterns, dignities and Moon-sign candidates, moved from Zodiacs.org:
   // 141,745 as first built, with the core's graph and the local-time chunk
   // it shares with ./geo (docs/evidence/techniques-2026-09-29/); 5.8 per
   // cent of headroom. rc.16: 152,472, raised from 150,000 for the nutation
   // in the ephemeris chunk; 4.93 per cent of headroom.
-  "./techniques": 203_800,
+  // 2.0.0-rc.1: 205,215, with the local-time chunk it shares with ./geo
+  // (pull request 110's zone evidence), the bare-date check (109), the
+  // positions() rows' flags (111) and the polar-angles flag (105); raised
+  // from 203,800 to 207,300, the measurement and about one per cent, for the
+  // owner to decide with the candidate.
+  "./techniques": 207_300,
   // New in 1.1.0-rc.2: the time basis and the frame of date with no
   // ephemeris (Zodiacs.org's finding F-53), and the time bands it re-exports.
   // 1.1.0-rc.2: 42,306 bytes in 7 files, dist/time.js and the six chunks it
@@ -597,7 +611,14 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // CHANGELOG entry and the README and LICENSING.md lines); the code is rc.13's
 // but for the version string. The maintainer approved the budgets and the
 // cap rc.12 raised with this release; 3,103 bytes (0.24 per cent) are left.
-const TOTAL_CAP = 1_265_000;
+//
+// 2.0.0-rc.1: 4,595,726 bytes in 98 files, of which 1,276,174 are not the
+// pack, 14,277 more than 1.1.0's 1,261,897: this candidate's CHANGELOG entry
+// and the README's lines, and the code and declarations of pull requests
+// 105, 109, 110 and 111. Raised from 1,265,000 to 1,289,000, the
+// measurement and about one per cent, for the owner to decide with the
+// candidate.
+const TOTAL_CAP = 1_289_000;
 const restBytes = report.unpackedSize - PACK_DATA_BYTES;
 assert(restBytes <= TOTAL_CAP, `package is unexpectedly large: ${restBytes} bytes unpacked beside the DE440 pack, over ${TOTAL_CAP}`);
 

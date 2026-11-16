@@ -1,0 +1,11 @@
+Node.js v22.22.2 for the conformance and atlas runs, from nodejs.org:
+https://nodejs.org/dist/v22.22.2/node-v22.22.2-linux-x64.tar.xz, downloaded into a new empty directory.
+
+Its line in https://nodejs.org/dist/v22.22.2/SHASUMS256.txt:
+88fd1ce767091fd8d4a99fdb2356e98c819f93f3b1f8663853a2dee9b438068a  node-v22.22.2-linux-x64.tar.xz
+
+sha256sum of the downloaded file:
+88fd1ce767091fd8d4a99fdb2356e98c819f93f3b1f8663853a2dee9b438068a  node-v22.22.2-linux-x64.tar.xz
+
+sha256sum -c against that line: node-v22.22.2-linux-x64.tar.xz: OK
+node --version: v22.22.2

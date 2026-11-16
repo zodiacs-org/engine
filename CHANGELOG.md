@@ -1,5 +1,229 @@
 # Engine changelog
 
+## 2.0.0-rc.2 (unreleased candidate)
+
+The second candidate for **2.0.0**, a major release, on 1.1.0 (main at
+`12943c1`). It is a draft for the owner's review and is not to be published
+on npm until the owner approves it. Checks:
+`docs/evidence/2.0.0-rc.2-20261116/`.
+
+2.0.0-rc.1 was a draft on this same pull request (112), reviewed in draft
+and not tagged or published: this candidate replaces it. Its review found a
+blocker in pull request 105's check of a supplied `polar-angles` claim. The
+fix changes `dist/`, and rc.1's archive is carried, so by the rule in
+`artifacts/README.md` the fixed package takes a new number; rc.1's archive
+stays, unchanged. rc.2 is rc.1 with pull request 105's fix merged into it
+and the changes below; everything rc.1's entry says holds for rc.2 except
+where this entry says otherwise.
+
+### Fixed
+
+- **A chart the engine flags `polar-angles` is no longer refused when passed
+  back in** (pull request 105, `522a0d6`). The engine sets the flag where
+  |latitude| ≥ 90° − (ε₀ + Δε), ε₀ the IAU 2006 mean obliquity
+  (`meanObliquity` in `src/houses.ts`, all six terms of its polynomial, up
+  to t⁵) and Δε the nutation in obliquity, both at the chart's TT. rc.1
+  allowed the flag on a supplied chart (`transits`, `synastry`,
+  `saturnReturn` and every timing, techniques and Vedic function that takes
+  a chart) and on a natal receipt where
+  |latitude| ≥ 66.55772° + 4.1227 × 10⁻¹⁵° for each millisecond from
+  J2000, ε₀'s constant and linear terms alone. The terms left out reach 16″
+  by 3999, so from 2936 on, at some phases of the nutation, a chart the
+  engine flagged at the edge of the circle was refused: `transits` threw
+  "chart flags must agree with its input and supplied house result", and its
+  natal receipt was refused as `inconsistent_result`, `createNatalEnvelope`
+  included. Both checks now allow the claim where
+  |latitude| ≥ 90° − ε₀ − 0.003°, ε₀ from the whole polynomial: a supplied
+  chart's at the TT of its input's instant, time scale and ΔT, a receipt's
+  at its instant on TT input or its instant plus its recorded ΔT on UTC or
+  UT1 input (UT1 − UTC, under a second, left out). The receipt entry keeps
+  its own copy of the polynomial, so as not to load the houses code, and a
+  test holds it to the same six coefficients. The 0.003° (10.8″) margin
+  covers Δε, which is under 10″ on every day of the ephemeris span, 0001 to
+  3998 (9.97″ at most); `docs/houses.md` gave it as under 9.3″, which was
+  wrong. Tests at 2937-03-18, 2955-09-23, 3197-09-19, 3991-10-06 and
+  3995-10-07, on both hemispheres, find by bisection the latitude at which
+  the engine starts to flag and show that chart round-tripping through
+  `transits` and a natal receipt, and a claim 0.0005° outside the allowed
+  band still refused; a ΔT pinned 95 years from its instant shows the TT is
+  the one read. They fail on rc.1 (`src/polar-angles.test.ts`,
+  `docs/houses.md`). A chart the engine flags is now accepted at every
+  instant of the ephemeris span. A claim on a chart it does not flag is held
+  to the polynomial too, which in the early centuries puts the bound up to
+  16″ further from the equator than rc.1's line, so a false claim rc.1 let
+  through in that sliver is now refused.
+
+### Client contract
+
+- The compute clients' contract (`clients/typescript/contracts/openapi.json`)
+  gains `"de440-unavailable"` and `"outside-de440-span"` in `ChartFlag` and
+  in the values of `BodyPosition.flags`. Both are real chart flags: the
+  ephemeris fallback flags (`EphemerisFallback`), part of the engine's
+  `ChartFlag` since 1.1.0-rc.10, which a chart computed on astronomy-engine
+  where the shipped DE440 pack was the default carries, and which a
+  `positions()` row carries as a chart at the same instant does (rc.1,
+  pull request 111). rc.1's contract named only the other two instant
+  flags. `provenance.json`'s subset hash and note and the generated
+  TypeScript and Python contracts follow. The engine's own types
+  (`InstantFlag`, `api/`) already had them.
+
+### Documentation
+
+- README.md: this candidate's paragraph, archive and evidence folder; under
+  *Input flag compatibility*, all eleven `ChartFlag` values, with
+  `calendar-unknown` among the four caller assertions (`dst-gap`,
+  `dst-fold`, `lmt`, `calendar-unknown`) and the seven flags a caller may
+  echo where the calculation derives them (`no-time`, `polar-fallback`,
+  `polar-angles`, `outside-reference-span`, `delta-t-extrapolated`,
+  `de440-unavailable`, `outside-de440-span`; rc.1's list named three);
+  `saturnReturn` runs one natal calculation for an asserted `polar-angles`
+  as for `polar-fallback`, and accepts the three flags it cannot check
+  without a chart unchecked.
+- LICENSING.md: the owner's acceptance of shipping the DE440 pack, recorded
+  for 1.1.0, covers 2.0.0, which ships the same sealed pack
+  (`src/de440/` is unchanged since 1.1.0).
+- rc.1's entry below: its `polar-angles` bullet gave the bound on a supplied
+  chart or receipt without saying which mean obliquity; it now points here.
+- Conformance: this engine's results (`conformance/results/`, `RESULTS.md`)
+  were regenerated with the harness on Node 22.22.2 and name 2.0.0-rc.2. No
+  verdict changes (459 pass, 0 fail, 41 unsupported; on astronomy-engine
+  48 of the 240 positions pass); the 10 polar vectors whose charts fall back
+  from Placidus or Koch (`L2-POL-0001` to `0003` and `0005` to `0011`) now
+  record `polar-angles` beside `polar-fallback`, in both runs.
+
+### Sizes and budgets
+
+- Measured on this candidate's build
+  (`docs/evidence/2.0.0-rc.2-20261116/results/package-contents.log`), every
+  import graph is inside its budget and no budget or cap is raised. The fix
+  adds 32 bytes to the root's graph and to every graph that shares its chunk
+  (the time basis read once for both of `resolvedChart`'s checks, and
+  `meanObliquity`), and 222 to `./receipt` (its copy of the polynomial):
+  the root is 151,563 bytes of 151,700 (137 left), `./timing` 170,866 of
+  171,200, `./receipt` 76,845 of 77,400 and `./techniques` 205,247 of
+  207,300. The package beside the pack is 1,284,237 bytes unpacked
+  in 98 files, of 1,289,000 (this entry and the README's lines).
+
+## 2.0.0-rc.1 (unreleased candidate)
+
+The first candidate for **2.0.0**, a major release, on 1.1.0 (main at
+`12943c1`). It is a draft for the owner's review and is not to be published
+on npm until the owner approves it. Checks:
+`docs/evidence/2.0.0-rc.1-20261116/`.
+
+It carries four pull requests, merged into it with merge commits: 109 (a
+bare birth date refused), 111 (`positions()` rows flagged), 110 (a skipped
+calendar-switch date flagged) and 105 (angles inside the polar circle
+flagged). The number is a major one because of 109: which input a function
+refuses is public (`docs/versioning.md`, *Documented behaviour*), the README
+documented a bare date as midnight UTC, and the owner decided on 2026-11-11
+to hold the refusal for 2.0.0 (1.1.0-rc.6, below). The other three add a
+flag value, a result field and the cases that carry them, which a minor
+release may do.
+
+### Breaking
+
+- **A birth given as a calendar date with no time is refused** unless the
+  birth time is declared unknown (pull request 109). In 1.x,
+  `natalChart({ utc: "1990-05-03" })` read the date as 00:00 UTC and returned
+  a chart marked `timeKnown: true`, with a rising sign and houses for a time
+  nobody gave. Now it throws a `RangeError`. With `timeKnown: false` the
+  same date is accepted, with the `no-time` flag and no angles or houses. A
+  full instant (`"1990-05-03T00:00:00Z"`, or with an offset), a `Date` and an
+  epoch number are read exactly as before. The refusal covers every root
+  function that takes a birth (`natalChart`, `transits`, `synastry`,
+  `chartPoints`, `chartDeclinations`, and through the resolved chart the
+  timing, techniques and Vedic functions that take one), `saturnReturn` in
+  both forms (`saturnReturn("1990-05-03")` and
+  `saturnReturn({ utc: "1990-05-03" })`), and calc's `chart()` given such a
+  `time` (as a string or `{ iso }`). What to do: write the instant out
+  (`"YYYY-MM-DDT00:00:00Z"`) or pass `timeKnown: false`. Not changed: a chart
+  already built, a receipt replay, `progressedInstant` and
+  `progressedBodies`, timing's `solarArc`, calc's `houses()` and
+  `resolveLocalBirth`, which still read a bare date as the README says.
+
+### Flags
+
+- **`polar-angles`** (pull request 105). Every chart whose angles are inside
+  the polar circle, |latitude| ≥ 90° − ε on the true obliquity of date,
+  carries the new `ChartFlag` value `"polar-angles"`, in every house system,
+  from `natalChart`, calc's `chart()` and `houses()`; there the ascendant
+  turns half a circle twice a sidereal day. 1.1.0 warned only for Placidus
+  and Koch (`polar-fallback`). A supplied chart or natal receipt may carry
+  the flag where |latitude| ≥ 90° − ε₀ − 0.003°, ε₀ the mean obliquity of
+  its instant, may lack it there, and is refused anywhere else
+  (`docs/houses.md`; `docs/evidence/polar-angles-20261116/`). In rc.1, ε₀
+  there was its constant and linear terms alone, which refused some charts
+  the engine flagged from 2936 on; 2.0.0-rc.2 corrects it (above).
+- **`calendar-unknown`** (pull request 110). `ChartFlag` and
+  `LocalTimeResolution["flags"]` gain `"calendar-unknown"`, a time flag a
+  caller may also assert. `resolveLocalToUtc` and the birth resolvers set it
+  when no country the Gregorian adoption table dates is given and the
+  written date, in either calendar, falls in the days one of the table's
+  changeovers skipped, for a changeover the zone does not rule out. The
+  capital zone of a tabled country follows that country's changeover alone,
+  for 12 of the 18 rows; the capital zones of the Netherlands, Switzerland,
+  Poland, Belgium, Sweden and Finland are not narrowed, since their rows'
+  notes date changeovers inside other rows' skipped days. Russia's change of
+  1918 applies only under `Europe/`, `Asia/` or a zone that names no place.
+  A country the table does not date no longer silences the flag. The flag
+  rides on the birth into the chart's flags and a receipt's `inputFlags`,
+  and a receipt refuses it on an instant outside 1582-10-04T00:00Z up to
+  1918-02-28T00:00Z, with or without a local record. The instant is never
+  changed. Greece is not in the table, since none of its three sources
+  dates its change of 1923, so a Greek date of 1923 is neither flagged nor
+  noted (`docs/time.md`; `docs/evidence/calendar-unknown-20261116/`).
+- **`positions()` rows carry flags** (pull request 111). Each row of
+  `positions()`, `transits().positions` and `progressedBodies()` carries
+  `flags`, the flags `natalChart()` with no place gives at the same instant,
+  in the same order (`"outside-reference-span"`, `"delta-t-extrapolated"`,
+  then the ephemeris fallback), from one shared function. A row has no
+  `flags` property where the chart has none, so rows inside the span on a
+  tabulated ΔT are as before. Besides the span's ends, rows after 2027-10-02,
+  where the time basis moves from the IERS table to the ΔT model, now carry
+  `["delta-t-extrapolated"]`, as `natalChart()` there already does; code
+  that deep-compares rows or expects a fixed key set sees the new key there.
+  The root exports `InstantFlag`, the subset of `ChartFlag` an instant alone
+  determines (`docs/de440.md`; `docs/evidence/positions-span-20261116/`).
+- **Code that switches exhaustively over `ChartFlag`** needs cases for
+  `"calendar-unknown"` and `"polar-angles"`.
+
+### Client contract
+
+- The compute clients' contract (`clients/typescript/contracts/openapi.json`,
+  ahead of the hosted API) gains `"calendar-unknown"` in `ChartFlag`,
+  `LocalResolution.flags` and `TimeResult.flags`, `"polar-angles"` in
+  `ChartFlag`, and an optional `flags` on `BodyPosition` with the values
+  `"outside-reference-span"` and `"delta-t-extrapolated"`, the instant flags
+  the contract's `ChartFlag` already names. `provenance.json` and the
+  generated TypeScript and Python contracts follow.
+
+### Sizes and budgets
+
+- Measured on this candidate's build with all four pull requests
+  (`docs/evidence/2.0.0-rc.1-20261116/results/package-contents.log`):
+  `./techniques` is 205,215 bytes, over its budget of 203,800 (the
+  zone evidence in the local-time chunk it shares with `./geo`, 109's check
+  and 111's flags): raised to 207,300. `./geo` is 36,178, over 35,700
+  (110's zone evidence and 105's flag): raised to 36,500. `./receipt` is
+  76,623, over 76,500 (the two flags' receipt checks): raised to
+  77,400. Each is the measurement and about one per cent. The package
+  beside the pack is 1,276,174 bytes unpacked in 98 files, over
+  the cap of 1,265,000 (the four changes' code and declarations, this entry
+  and the README's lines): raised to 1,289,000. None of these has the
+  owner's approval; they are for the owner to decide with the candidate
+  (`scripts/verify-package-contents.mjs`).
+
+### Documentation
+
+- README.md: this candidate's paragraph; the install section, which now
+  names npm's `latest`, 1.1.0, and this candidate's archive; *Resolved
+  instant inputs*, `saturnReturn`, *Uniform calculation API* and *Birth
+  settings* on the bare-date refusal; the polar paragraph on `polar-angles`;
+  the evidence folders.
+- `docs/calc.md`, `docs/de440.md`, `docs/houses.md` and `docs/time.md` name
+  2.0.0 where they said "the release after 1.1.0".
+
 ## 1.1.0 (2026-11-16)
 
 A minor release: 1.1.0-rc.13 with the version changed. Checks:

@@ -55,12 +55,13 @@ export function validateBirthSettings(birth: BirthSettings): BirthSettings {
 const DERIVED_FLAGS = [
   "no-time",
   "polar-fallback",
+  "polar-angles",
   "outside-reference-span",
   "delta-t-extrapolated",
   "de440-unavailable",
   "outside-de440-span"
 ] as const;
-const FLAGS: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", ...DERIVED_FLAGS];
+const FLAGS: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", "calendar-unknown", ...DERIVED_FLAGS];
 
 
 export interface FlagSnapshot {
