@@ -80,11 +80,11 @@
     }
   },
   "artifact": "/home/claude/scratch-pack/zodiacs-engine-1.1.0.tgz",
-  "sha256": "1b5a2cc19e98d17a2d6e05753f85360f94b219aed7c27dde26ce7e9c4c7422a8",
+  "sha256": "4e53cda9bd6ccb5f5581c2a9af2f2ae4010af2599f411ac5220425e0932e41ac",
   "runtime": "v22.23.4",
   "typescript": "5.9.3",
   "typeRoots": "none (types: [])",
-  "directory": "/home/claude/tmp-consumer/zodiacs-engine-consumer-SZKE4q",
+  "directory": "/home/claude/tmp-consumer/zodiacs-engine-consumer-sEy0kg",
   "types": "passed",
   "directoryRemoved": true
 }

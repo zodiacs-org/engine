@@ -62,7 +62,7 @@ geocentric place (other centers and corrections, the Earth) and the sky
 entry's rising and setting still compute on astronomy-engine whatever the
 default, so none is a fallback: a calc receipt names astronomy-engine, and
 the sky entry's results name no ephemeris ([docs/de440.md](docs/de440.md)). The pack makes the package about four times larger unpacked
-(4,580,765 bytes against 1.1.0-rc.7's 1,152,017), and an application
+(4,581,449 bytes against 1.1.0-rc.7's 1,152,017), and an application
 that bundles the root entry bundles the pack's 3,319,552 characters (see
 [docs/de440.md](docs/de440.md) and CHANGELOG.md). 1.1.0-rc.9 was
 1.1.0's first draft, superseded before review; 1.1.0-rc.10,

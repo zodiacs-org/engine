@@ -2,21 +2,21 @@
 
 Status: **GO for a package licensed `MIT AND CC-BY-4.0`**, subject to the
 repository operator having authority to publish the Zodiacs.org-authored
-TypeScript under the MIT license. The package ships a pack of series
-refitted from JPL's DE440, which the owner holds to be public data
-(2026-11-13); NAIF's rules permit redistributing its kernels unmodified but
-do not speak of data refitted from one, so shipping the pack rests on the
-owner's reading and not on a statement of JPL's or NAIF's, and the owner
-accepted shipping it on that reading in writing on 2026-11-16 (*DE440
-pack*). Three questions are left open for the owner, as they were at 1.0.0:
-no statement of terms was found for IERS EOP 20 C04, so whether its
-367 rows of 1972 that the repository carries, and the values the package
-derives from it (the UT1 table in 1972 and some of the ΔT table's values from
-1941), may be redistributed without other terms is not settled (*IERS
-data*); whether a commercial use of the 20 star values that the CDS supplies
-needs more than the attribution in `NOTICE` is not settled by the CDS's
-terms; and no terms were read for Reid and Brunthaler's two values (*Timing
-and Vedic values*).
+TypeScript under the MIT license. The package ships a pack of series refitted
+from JPL's DE440, which the owner holds to be public data (2026-11-13);
+NAIF's rules permit redistributing its kernels unmodified but do not speak of
+data refitted from one, so shipping the pack rests on the owner's reading and
+not on a statement of JPL's or NAIF's. On 2026-11-16 the owner answered, in
+writing, the question "Do you accept shipping the NASA DE440 data in 1.1.0?"
+with "Yes. I delegate these decisions to you." (*DE440 pack*). Three
+questions are left open for the owner, as they were at 1.0.0: no statement of
+terms was found for IERS EOP 20 C04, so whether its 367 rows of 1972 that the
+repository carries, and the values the package derives from it (the UT1 table
+in 1972 and some of the ΔT table's values from 1941), may be redistributed
+without other terms is not settled (*IERS data*); whether a commercial use of
+the 20 star values that the CDS supplies needs more than the attribution in
+`NOTICE` is not settled by the CDS's terms; and no terms were read for Reid
+and Brunthaler's two values (*Timing and Vedic values*).
 
 SPDX licence expression: `MIT AND CC-BY-4.0`. The code is MIT (`LICENSE`). The
 package's ΔT module, exported as `@zodiacs/engine/deltat`, carries 32 values
@@ -232,13 +232,15 @@ the planetary kernels has no readme for DE440 (its two `aareadme` files are
 for DE430, DE431 and DE432s), and its `de440_tech-comments.txt`, which a
 second session read in full on 2026-11-13, gives constants and the reference
 above and no terms (`docs/evidence/1.1.0-rc.8-20261113/breaker/README.md`).
-The owner's position, given on 2026-11-13, is that DE440 is JPL's public data.
-1.1.0-rc.3 shipped no pack while a question about redistributing one was
-with NAIF (`docs/de440.md` at 1.1.0-rc.3); no answer to it is
-recorded in this repository. Shipping the pack therefore rests on the
-owner's reading, which this file required to be settled, or accepted by the
-owner in writing, before a release carrying the pack is published. The owner
-accepted it in writing on 2026-11-16, before 1.1.0 was published.
+The owner's position, given on 2026-11-13, is that DE440 is JPL's public
+data. 1.1.0-rc.3 shipped no pack while a question about redistributing one
+was with NAIF (`docs/de440.md` at 1.1.0-rc.3); no answer to it is recorded in
+this repository. Shipping the pack therefore rests on the owner's reading,
+which this file required to be settled, or accepted by the owner in writing,
+before a release carrying the pack is published. On 2026-11-16, before 1.1.0
+was published, the owner answered the question "Do you accept shipping the
+NASA DE440 data in 1.1.0?" in writing with "Yes. I delegate these decisions
+to you."
 
 The rule behind the Sun's disc, from 1.1.0-rc.12, is NASA JPL's. The
 reduction bends no light from a planet farther than the Sun whose direction

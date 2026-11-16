@@ -9,10 +9,13 @@ A minor release: 1.1.0-rc.13 with the version changed. Checks:
   1.1.0-rc.13, are its history, and a caller moving from 1.0.0 reads them.
   The largest change: a plain call computes on a DE440 pack the package
   ships, for 1790 to 2210, in place of astronomy-engine, so positions inside
-  those years move by the difference between the two ephemerides, measured
-  at noon TT on each day from 1800 to 2199 at up to 29.19 arcseconds of
-  ecliptic longitude for the Sun, the Moon and the planets and 32.64 for the
-  true node (1.1.0-rc.10, below). `setDefaultEphemeris("astronomy-engine")`
+  those years move by the difference between the two ephemerides. Measured
+  on JPL's kernel at noon TT on each day from 1800 to 2199, the largest is
+  29.19 arcseconds of ecliptic longitude for the Sun, the Moon and the
+  planets (Pluto, still growing at the end of the span) and 32.64 for the
+  true node; 1790 to 1799 and 2200 to 2209 were not swept, so these are the
+  largest measured, not a bound for the pack's whole span (1.1.0-rc.10,
+  below). `setDefaultEphemeris("astronomy-engine")`
   gives 1.0.0's positions. On the pack a plain `natalChart` is within 1
   arcsecond of JPL Horizons (DE441) at all 240 position vectors of the
   conformance suite, 24 instants from 1851 to 2148
@@ -21,23 +24,28 @@ A minor release: 1.1.0-rc.13 with the version changed. Checks:
   `src/` is the version string (`ENGINE_VERSION`, the two tests and the
   fixture that hold it), and `dist/` is rc.13's but for that string
   (`docs/evidence/1.1.0-20261116/`).
-- **The DE440 pack, accepted by the owner.** `LICENSING.md` held shipping
-  the pack, which rests on the owner's reading that DE440 is JPL's public
-  data, as an open question to be accepted by the owner in writing before
-  publication. The owner accepted it in writing on 2026-11-16, and
-  `LICENSING.md` now says so. Its three other open questions (IERS EOP 20
-  C04, the CDS star values, Reid and Brunthaler's two values) are as they
-  were at 1.0.0. It also now names the versions in its note on the licence
-  field: 0.1.1-rc.8 to 0.1.1-rc.13 declared `MIT` alone, and 0.1.1-rc.14
-  corrected it.
+- **The DE440 pack, accepted by the owner.** `LICENSING.md` held shipping the
+  pack, which rests on the owner's reading that DE440 is JPL's public data,
+  as an open question to be accepted by the owner in writing before
+  publication. On 2026-11-16 the owner answered, in writing, the question "Do
+  you accept shipping the NASA DE440 data in 1.1.0?" with "Yes. I delegate
+  these decisions to you." `LICENSING.md` now records that answer. Its three
+  other open questions (IERS EOP 20 C04, the CDS star values, Reid and
+  Brunthaler's two values) are as they were at 1.0.0. It also now names the
+  versions in its note on the licence field: 0.1.1-rc.8 to 0.1.1-rc.13
+  declared `MIT` alone, and 0.1.1-rc.14 corrected it.
 - **The size budgets raised in 1.1.0-rc.12, approved.** rc.12 raised nine
   import-graph budgets by about one per cent and the package cap from
   1,245,000 to 1,265,000 bytes beside the pack, for the owner to decide with
-  the candidate. They were approved on 2026-11-16, under the owner's
-  delegation of the release's decisions, and stand as rc.12 set them.
+  the candidate. The maintainer approved them on 2026-11-16, after the
+  owner's written answer above delegated the release's decisions, and they
+  stand as rc.12 set them.
 - **README.md.** The version line; the install section, which named
   1.1.0-rc.10's archive, now gives `npm install @zodiacs/engine` and this
-  release's archive; the list of drafts; the evidence folders.
+  release's archive; the list of drafts; the unpacked size; the evidence
+  folders.
+- **Conformance results.** Run again on Node 22.22.2: the verdicts are
+  rc.13's, and the results now name 1.1.0.
 
 ## 1.1.0-rc.13 (unreleased candidate)
 

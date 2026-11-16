@@ -2,55 +2,55 @@ TAP version 13
 # Subtest: longitudes compare on the circle, in the rule unit
 ok 1 - longitudes compare on the circle, in the rule unit
   ---
-  duration_ms: 1.550181
+  duration_ms: 1.124999
   type: 'test'
   ...
 # Subtest: arrays compare element by element and report the worst residual
 ok 2 - arrays compare element by element and report the worst residual
   ---
-  duration_ms: 0.369406
+  duration_ms: 0.234505
   type: 'test'
   ...
 # Subtest: exact fields, missing fields and non-numbers fail
 ok 3 - exact fields, missing fields and non-numbers fail
   ---
-  duration_ms: 0.458405
+  duration_ms: 0.301756
   type: 'test'
   ...
 # Subtest: validation accepts a conforming file and names each problem in a bad one
 ok 4 - validation accepts a conforming file and names each problem in a bad one
   ---
-  duration_ms: 3.51287
+  duration_ms: 2.363018
   type: 'test'
   ...
 # Subtest: from 0.2.0 each vector names its kind and arbiter as registry ids, and 0.1.0 is as released
 ok 5 - from 0.2.0 each vector names its kind and arbiter as registry ids, and 0.1.0 is as released
   ---
-  duration_ms: 2.458589
+  duration_ms: 1.682369
   type: 'test'
   ...
 # Subtest: a release holds the vectors released before it, and nothing else differs
 ok 6 - a release holds the vectors released before it, and nothing else differs
   ---
-  duration_ms: 0.519147
+  duration_ms: 0.344186
   type: 'test'
   ...
 # Subtest: the committed vector files conform to SPEC.md, and this version holds 0.1.0's vectors
 ok 7 - the committed vector files conform to SPEC.md, and this version holds 0.1.0's vectors
   ---
-  duration_ms: 36.390012
+  duration_ms: 30.985197
   type: 'test'
   ...
 # Subtest: the protocol: a handshake, then one response per request, in order
 ok 8 - the protocol: a handshake, then one response per request, in order
   ---
-  duration_ms: 35.372024
+  duration_ms: 38.023935
   type: 'test'
   ...
 # Subtest: the protocol: a missing handshake or an answer out of order is refused
 ok 9 - the protocol: a missing handshake or an answer out of order is refused
   ---
-  duration_ms: 90.284026
+  duration_ms: 87.670959
   type: 'test'
   ...
 1..9
@@ -61,7 +61,7 @@ ok 9 - the protocol: a missing handshake or an answer out of order is refused
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 256.142601
+# duration_ms 227.869337
 0.1.0: 500 vectors as released; 0.2.0 holds each of them, with its convention ids
 L1 Positions: 240 vectors, 1 arbiter(s), sha256 4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8
   position.apparent.ecliptic-true-of-date: 240
