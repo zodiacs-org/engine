@@ -61,7 +61,7 @@ describe("the ephemeris span", () => {
       // 1,001 years of life after 3998-08-30 map to about 1,001 days later, past the end.
       ["progressedBodies", () => progressedBodies("3998-08-30", "+005000-01-01")],
       ["findLongitudeCrossings", () => findLongitudeCrossings("Sun", 0, new Date("3998-01-01"), new Date("3999-06-01"))],
-      ["saturnReturn", () => saturnReturn("3950-01-01T00:00:00Z")]
+      ["saturnReturn", () => saturnReturn("3950-01-01")]
     ];
     for (const [name, call] of calls) expect(call, name).toThrow(OUTSIDE);
   });

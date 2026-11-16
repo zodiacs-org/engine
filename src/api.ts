@@ -337,14 +337,16 @@ export function saturnReturn(birth: SaturnReturnSource): SaturnReturnResult {
       validated.flags?.values.includes("polar-fallback") ? computedBirth(validated).input : validated.input
     );
   } else {
-    // Refused as a birth object's bare date is; { utc, timeKnown: false } declares the time unknown.
-    noBareDate(birth, "birth");
     utc = dateFrom(birth, "birth");
   }
   // The search reads the ephemeris from birth to about age 92: every kind of fallback it met is reported,
   // and a search that met one is named astronomy-engine, the source of those positions (from 1.1.0-rc.12;
   // before, one that began inside the pack named jpl-de440 beside "outside-de440-span").
   const { value, fallbacks } = notingFallbacks(() => computeSaturnReturns(utc));
+  // A bare date in place of a birth is refused as a birth object's is ({ utc, timeKnown: false } declares the
+  // time unknown), after the date's own checks and the search's span, so those errors come first, as before.
+  // A chart or a birth object is not a string, so it passes.
+  noBareDate(birth, "birth");
   const ephemeris = fallbacks.length > 0 ? EPHEMERIS.name : ephemerisAt(utc.getTime()).ephemeris.name;
   return { ...value, ephemeris, flags: fallbacks };
 }

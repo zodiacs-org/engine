@@ -144,6 +144,12 @@ describe("public birth settings", () => {
     expect(() => saturnReturn("1990-05-03")).toThrow(RangeError);
     expect(() => saturnReturn("1990-05-03")).toThrow(/calendar date with no time.*timeKnown: false/);
     expect(() => saturnReturn("+001990-05-03")).toThrow(/calendar date with no time/);
+    // The date's own checks and the ephemeris span come first, with their own messages.
+    for (const invalid of ["hello", "1990-02-30"]) {
+      expect(() => saturnReturn(invalid), invalid).toThrow(RangeError);
+      expect(() => saturnReturn(invalid), invalid).not.toThrow(/calendar date with no time/);
+    }
+    expect(() => saturnReturn("3950-01-01")).toThrow(/^The instant is outside the ephemeris span/);
     expect(saturnReturn({ utc: "1990-05-03", timeKnown: false }).seasons).toEqual(saturnReturn("1990-05-03T00:00:00Z").seasons);
     expect(saturnReturn({ utc: "1990-05-03", timeKnown: false }).ephemeris).toBeTypeOf("string");
 
