@@ -1,0 +1,152 @@
+#!/usr/bin/env node
+/*
+ * ZOD-97, T3 (calendar-switch skipped days) and the flags a chart carries.
+ *
+ *   npm run build
+ *   node docs/evidence/calendar-unknown-20261116/tools/calendar-switch.mjs [OUT.json]
+ *
+ * The first run's tool (../../edge-cases-20261111/tools/calendar-switch.mjs),
+ * with one change, for the "calendar-unknown" flag: a date that never existed
+ * there and carries that flag on its resolution is "flagged", which ZOD-97's
+ * rule counts as a pass ("refuses or flags"), and a date that did exist and
+ * carries it fails. Cases, arbiter and every other verdict are the first run's.
+ *
+ * The review round added cases for the zone and the country (T3-o to T3-q):
+ * dates that existed where they were written, given with no country, must not
+ * carry the flag (Rome and New York), and a country the table does not date
+ * must not silence it (US, IE, ZZ). Whether a date existed there is read from
+ * the table's own sources: Italy took the Gregorian calendar in 1582, Great
+ * Britain (whose change the British colonies in America took with it) in 1752
+ * and Soviet Russia in 1918 (tzdb 2025c, file calendars).
+ *
+ * The arbiter is calendar arithmetic written here (the Julian day number of a
+ * Julian or a Gregorian date, by the usual integer formulas; no engine code)
+ * and tzdb 2025c's local mean time for the zone, read from its `europe` and
+ * `northamerica` files:
+ *   Zone Europe/Rome       0:49:56 - LMT 1866 Dec 12
+ *   Zone Europe/London    -0:01:15 - LMT 1847 Dec  1
+ *   Zone America/New_York -4:56:02 - LMT 1883 Nov 18 17:00u
+ *                         -5:00    US  E%sT 1920
+ * (on 1918-02-05, before the US rules' first daylight saving time of
+ * 1918-03-31, that is EST, -5:00). The second review round added T3-r: dates
+ * that a region inside a tabled capital's zone skipped by its row's own note
+ * (Friesland and Groningen 1701-01-12, the Catholic cantons 1584-01-22,
+ * Silesia 1584-01-23, Brabant 1582-12-25 by Grotefend; the third round
+ * added Julian 1700-02-29, which Sweden dropped and Finland with it, by the
+ * SE and FI notes, and which Denmark and Norway skipped), given with no
+ * country, which must carry the flag; their local mean time, from `europe`:
+ *   Zone Europe/Amsterdam  0:19:32 - LMT 1835
+ *   Zone Europe/Zurich     0:34:08 - LMT 1853 Jul 16
+ *   Zone Europe/Warsaw     1:24:00 - LMT 1880
+ *   Zone Europe/Brussels   0:17:30 - LMT 1880
+ *   Zone Europe/Stockholm  1:12:12 - LMT 1879
+ *   Zone Europe/Helsinki   1:39:49 - LMT 1878 May 31 A date in the days a changeover skipped never existed there. ZOD-97's rule:
+ * the engine refuses or flags such a date, and resolves the valid neighbours
+ * to the right instant. Verdicts: "pass", "noted" (a calendarNote, when the
+ * caller names the country; no flag), "flagged" (the "calendar-unknown" flag,
+ * when the caller names no country), "silent" (accepted with no signal).
+ */
+import { writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+
+const root = resolve(new URL("../../../../", import.meta.url).pathname);
+const distDir = process.env.ZODIACS_ENGINE_DIST ? resolve(process.env.ZODIACS_ENGINE_DIST) : resolve(root, "dist");
+const geo = await import(pathToFileURL(resolve(distDir, "geo.js")).href);
+const { natalChart } = await import(pathToFileURL(resolve(distDir, "index.js")).href);
+
+/** Julian day number of a calendar date (integer arithmetic; Meeus, Astronomical Algorithms, ch. 7, in integer form). */
+function jdn(year, month, day, calendar) {
+  const a = Math.floor((14 - month) / 12);
+  const y = year + 4800 - a;
+  const m = month + 12 * a - 3;
+  const days = day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4);
+  return calendar === "julian" ? days - 32083 : days - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+}
+/** UTC of local noon on a Julian day number, for a clock `offset` seconds east. JDN 2440588 is 1970-01-01. */
+const noonUtc = (number, offset) => new Date(((number - 2440588) * 86400 + 43200 - offset) * 1000).toISOString();
+
+const ROME = 49 * 60 + 56;
+const LONDON = -75;
+const NEW_YORK = -(4 * 3600 + 56 * 60 + 2);
+const NEW_YORK_1918 = -5 * 3600;
+const AMSTERDAM = 19 * 60 + 32;
+const ZURICH = 34 * 60 + 8;
+const WARSAW = 3600 + 24 * 60;
+const BRUSSELS = 17 * 60 + 30;
+const STOCKHOLM = 3600 + 12 * 60 + 12;
+const HELSINKI = 3600 + 39 * 60 + 49;
+// [id, zone, the zone's offset that day (local mean time, or EST in New York in 1918), country, date, calendar, existed there?, what]
+const CASES = [
+  ["T3-j", "Europe/Rome", ROME, "IT", "1582-10-04", "julian", true, "the last Julian day in Rome"],
+  ["T3-k", "Europe/Rome", ROME, "IT", "1582-10-15", "gregorian", true, "the first Gregorian day in Rome, the next day"],
+  ["T3-l", "Europe/Rome", ROME, "IT", "1582-10-10", "gregorian", false, "a Gregorian date inside the ten skipped days, country given"],
+  ["T3-l", "Europe/Rome", ROME, undefined, "1582-10-10", "gregorian", false, "the same date, no country given"],
+  ["T3-l", "Europe/Rome", ROME, "IT", "1582-10-05", "gregorian", false, "the first skipped date"],
+  ["T3-l", "Europe/Rome", ROME, "IT", "1582-10-14", "gregorian", false, "the last skipped date"],
+  ["T3-m", "Europe/London", LONDON, "GB", "1752-09-02", "julian", true, "the last Julian day in Britain"],
+  ["T3-m", "Europe/London", LONDON, "GB", "1752-09-14", "gregorian", true, "the first Gregorian day in Britain, the next day"],
+  ["T3-n", "Europe/London", LONDON, "GB", "1752-09-08", "julian", false, "a date of the eleven days Britain skipped, read as Julian"],
+  ["T3-n", "Europe/London", LONDON, "GB", "1752-09-08", "gregorian", false, "the same date read as Gregorian"],
+  ["T3-n", "Europe/London", LONDON, undefined, "1752-09-08", "gregorian", false, "the same, no country given"],
+  ["T3-o", "Europe/Rome", ROME, undefined, "1752-09-08", "gregorian", true, "a date Britain skipped, in Rome, New Style since 1582, no country given"],
+  ["T3-o", "America/New_York", NEW_YORK_1918, undefined, "1918-02-05", "gregorian", true, "a date Russia skipped, in New York, New Style since 1752, no country given"],
+  ["T3-p", "America/New_York", NEW_YORK, undefined, "1752-09-08", "gregorian", false, "a date Britain skipped, in New York, which took Britain's change, no country given"],
+  ["T3-q", "Europe/London", LONDON, "US", "1752-09-08", "gregorian", false, "a date Britain skipped, in London, with a country the table does not date"],
+  ["T3-q", "Europe/London", LONDON, "IE", "1752-09-08", "gregorian", false, "the same with IE, also not in the table"],
+  ["T3-q", "Europe/London", LONDON, "ZZ", "1752-09-08", "gregorian", false, "the same with ZZ, no country at all"],
+  ["T3-r", "Europe/Amsterdam", AMSTERDAM, undefined, "1701-01-05", "gregorian", false, "a date Friesland and Groningen skipped (the NL note), in Amsterdam's zone, no country given"],
+  ["T3-r", "Europe/Zurich", ZURICH, undefined, "1584-01-14", "gregorian", false, "a date the Catholic cantons skipped (the CH note), in Zurich's zone, no country given"],
+  ["T3-r", "Europe/Warsaw", WARSAW, undefined, "1584-01-14", "gregorian", false, "a date Silesia skipped (the PL note), in Warsaw's zone, no country given"],
+  ["T3-r", "Europe/Brussels", BRUSSELS, undefined, "1582-12-16", "gregorian", false, "a date Brabant skipped by Grotefend's dating (the BE note), in Brussels's zone, no country given"],
+  ["T3-r", "Europe/Stockholm", STOCKHOLM, undefined, "1700-02-29", "julian", false, "the Julian day Sweden dropped in 1700 (the SE note), in Stockholm's zone, no country given"],
+  ["T3-r", "Europe/Helsinki", HELSINKI, undefined, "1700-02-29", "julian", false, "the same day, which Finland dropped with Sweden (the FI note), in Helsinki's zone, no country given"]
+];
+/** A synthetic birthplace in each zone, for the chart's flags. */
+const PLACE = { "Europe/Rome": [41.9, 12.5], "Europe/London": [51.5, -0.12], "America/New_York": [40.7, -74.0], "Europe/Amsterdam": [52.37, 4.9], "Europe/Zurich": [47.37, 8.54], "Europe/Warsaw": [52.23, 21.01], "Europe/Brussels": [50.85, 4.35], "Europe/Stockholm": [59.33, 18.07], "Europe/Helsinki": [60.17, 24.94] };
+
+const records = [];
+for (const [id, zone, lmt, country, date, calendar, existed, what] of CASES) {
+  const record = { id, zone, country: country ?? null, date, calendar, existedThere: existed, what };
+  const [y, m, d] = date.split("-").map(Number);
+  const number = jdn(y, m, d, calendar);
+  record.arbiter = { jdn: number, utcOfLocalNoon: noonUtc(number, lmt), offsetSeconds: lmt };
+  try {
+    await geo.prepareLocalTime(date, zone);
+    const resolved = geo.resolveLocalToUtc(date, "12:00", zone, { calendar, ...(country ? { country } : {}) });
+    const birth = geo.resolveLocalBirth({ date, time: "12:00", timeZone: zone, calendar, ...(country ? { country } : {}), latitude: PLACE[zone][0], longitude: PLACE[zone][1] });
+    const chart = natalChart(birth.birth);
+    record.engine = { utc: resolved.utc.toISOString(), gregorianDate: resolved.date, flags: resolved.flags, calendarNote: resolved.calendarNote ? { kind: resolved.calendarNote.kind, firstGregorian: resolved.calendarNote.adoption?.firstGregorian, lastJulian: resolved.calendarNote.adoption?.lastJulian } : null, chartFlags: chart.flags };
+    const instant = resolved.utc.toISOString() === record.arbiter.utcOfLocalNoon;
+    record.instantMatchesArithmetic = instant;
+    const flagged = resolved.flags.includes("calendar-unknown");
+    record.verdict = !instant ? "fail" : existed ? (resolved.calendarNote || flagged ? "fail" : "pass") : resolved.calendarNote ? "noted" : flagged ? "flagged" : "silent";
+  } catch (error) {
+    record.engine = { threw: String(error?.message ?? error) };
+    record.verdict = existed ? "fail" : "refused";
+  }
+  records.push(record);
+  console.log(`${record.verdict.padEnd(8)} ${id} ${zone} ${calendar} ${date} country=${country ?? "-"} -> ${record.engine.utc ?? record.engine.threw} note=${JSON.stringify(record.engine.calendarNote ?? null)} chartFlags=${JSON.stringify(record.engine.chartFlags ?? null)}`);
+}
+
+// The flags a chart carries for the civil-time cases: is the ambiguity visible on the chart itself?
+for (const [id, zone, date, time, flag] of [["T1-a", "America/New_York", "2021-11-07", "01:30", "dst-fold"], ["T2-a", "America/New_York", "2021-03-14", "02:30", "dst-gap"], ["T3-a", "Pacific/Apia", "2011-12-30", "12:00", "dst-gap"]]) {
+  const record = { id: `${id}/chart`, zone, date, time, what: "the flag on the resolved birth and on the chart computed from it" };
+  try {
+    await geo.prepareLocalTime(date, zone);
+    const { birth, resolution } = geo.resolveLocalBirth({ date, time, timeZone: zone, latitude: 40, longitude: -74 });
+    const chart = natalChart(birth);
+    record.engine = { utc: birth.utc.toISOString(), birthFlags: birth.flags, chartFlags: chart.flags, chartInputFlags: chart.input.flags, jump: resolution.jump, gapShiftMinutes: resolution.localResolution.gapShiftMinutes };
+    record.verdict = birth.flags.includes(flag) && (chart.flags.includes(flag) || chart.input.flags?.includes(flag)) ? "pass" : "fail";
+  } catch (error) {
+    Object.assign(record, { verdict: "error", error: String(error?.message ?? error) });
+  }
+  records.push(record);
+  console.log(`${record.verdict.padEnd(8)} ${record.id} ${JSON.stringify(record.engine ?? record.error)}`);
+}
+
+const counts = records.reduce((all, record) => ({ ...all, [record.verdict]: (all[record.verdict] ?? 0) + 1 }), {});
+const text = `${JSON.stringify({ what: "ZOD-97 T3, calendar switch, and chart flags", node: process.version, counts, records }, null, 1)}\n`;
+if (process.argv[2]) writeFileSync(process.argv[2], text);
+console.log(JSON.stringify(counts));
+if (records.some((record) => record.verdict === "fail" || record.verdict === "error")) process.exit(1);

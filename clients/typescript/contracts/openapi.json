@@ -5230,7 +5230,8 @@
               "enum": [
                 "dst-gap",
                 "dst-fold",
-                "lmt"
+                "lmt",
+                "calendar-unknown"
               ]
             }
           },
@@ -5443,6 +5444,7 @@
           "dst-gap",
           "dst-fold",
           "lmt",
+          "calendar-unknown",
           "no-time",
           "polar-fallback",
           "outside-reference-span",
@@ -6578,6 +6580,7 @@
                 "dst-gap",
                 "dst-fold",
                 "lmt",
+                "calendar-unknown",
                 "outside-reference-span"
               ]
             },
