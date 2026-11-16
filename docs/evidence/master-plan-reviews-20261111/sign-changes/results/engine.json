@@ -1,0 +1,1247 @@
+{
+ "engine": "1.1.0-rc.3",
+ "ephemeris": {
+  "name": "astronomy-engine",
+  "version": "2.1.19"
+ },
+ "from": "1800-01-03T00:00:00.000Z",
+ "to": "2199-12-29T00:00:00.000Z",
+ "bodies": {
+  "Neptune": [
+   {
+    "boundary": 240,
+    "at": "1806-01-28T05:33:31.506Z",
+    "retrograde": false,
+    "jdTT": 2380714.7317999946,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 240,
+    "at": "1806-04-06T16:29:16.433Z",
+    "retrograde": true,
+    "jdTT": 2380783.1871803463,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 240,
+    "at": "1806-11-21T17:56:25.051Z",
+    "retrograde": false,
+    "jdTT": 2381012.2476944528,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 240,
+    "at": "1807-07-10T23:06:06.796Z",
+    "retrograde": true,
+    "jdTT": 2381243.4627589565,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 240,
+    "at": "1807-09-12T23:45:56.745Z",
+    "retrograde": false,
+    "jdTT": 2381307.4904199187,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 270,
+    "at": "1820-02-04T23:38:50.302Z",
+    "retrograde": false,
+    "jdTT": 2385835.485497262,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 270,
+    "at": "1820-06-02T03:30:30.857Z",
+    "retrograde": true,
+    "jdTT": 2385953.646382479,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 270,
+    "at": "1820-12-06T18:01:48.791Z",
+    "retrograde": false,
+    "jdTT": 2386141.2514494667,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 300,
+    "at": "1834-02-13T01:40:54.834Z",
+    "retrograde": false,
+    "jdTT": 2390957.5701805972,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 300,
+    "at": "1834-07-31T09:56:21.505Z",
+    "retrograde": true,
+    "jdTT": 2391125.914237487,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 300,
+    "at": "1834-12-17T04:55:12.210Z",
+    "retrograde": false,
+    "jdTT": 2391264.705100753,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 330,
+    "at": "1847-04-25T20:49:46.732Z",
+    "retrograde": false,
+    "jdTT": 2395777.3680007365,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 330,
+    "at": "1847-07-12T05:53:46.024Z",
+    "retrograde": true,
+    "jdTT": 2395854.745770949,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 330,
+    "at": "1848-02-17T20:30:31.653Z",
+    "retrograde": false,
+    "jdTT": 2396075.3546342785,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 330,
+    "at": "1848-10-16T03:46:53.966Z",
+    "retrograde": true,
+    "jdTT": 2396316.657672515,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 330,
+    "at": "1848-12-06T08:22:41.931Z",
+    "retrograde": false,
+    "jdTT": 2396367.8492003754,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "1861-04-13T18:38:38.639Z",
+    "retrograde": false,
+    "jdTT": 2400879.276940205,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "1861-10-01T08:11:16.173Z",
+    "retrograde": true,
+    "jdTT": 2401049.8412636323,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "1862-02-13T22:31:13.041Z",
+    "retrograde": false,
+    "jdTT": 2401185.4384496612,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "1874-06-08T15:13:27.290Z",
+    "retrograde": false,
+    "jdTT": 2405683.1343336226,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "1874-09-30T22:45:16.750Z",
+    "retrograde": true,
+    "jdTT": 2405797.4480988,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "1875-04-07T21:55:31.103Z",
+    "retrograde": false,
+    "jdTT": 2405986.4135399326,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "1887-08-16T07:05:43.141Z",
+    "retrograde": false,
+    "jdTT": 2410499.7955915127,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "1887-09-20T17:39:40.286Z",
+    "retrograde": true,
+    "jdTT": 2410535.235836436,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "1888-05-26T19:15:57.430Z",
+    "retrograde": false,
+    "jdTT": 2410784.302702695,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "1888-12-27T16:34:13.440Z",
+    "retrograde": true,
+    "jdTT": 2410999.1903886306,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "1889-03-22T02:45:11.447Z",
+    "retrograde": false,
+    "jdTT": 2411083.614671236,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "1901-07-19T23:29:41.401Z",
+    "retrograde": false,
+    "jdTT": 2415585.4789512446,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "1901-12-25T14:13:59.557Z",
+    "retrograde": true,
+    "jdTT": 2415744.0930572757,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "1902-05-21T12:50:58.326Z",
+    "retrograde": false,
+    "jdTT": 2415891.035410776,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "1914-09-23T16:51:12.217Z",
+    "retrograde": false,
+    "jdTT": 2420399.2024235097,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "1914-12-15T00:37:03.439Z",
+    "retrograde": true,
+    "jdTT": 2420481.525935958,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "1915-07-19T11:17:09.122Z",
+    "retrograde": false,
+    "jdTT": 2420697.9704535324,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "1916-03-19T23:28:42.930Z",
+    "retrograde": true,
+    "jdTT": 2420942.4784914176,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "1916-05-02T02:54:53.492Z",
+    "retrograde": false,
+    "jdTT": 2420985.6216705134,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 150,
+    "at": "1928-09-21T09:51:14.476Z",
+    "retrograde": false,
+    "jdTT": 2425510.910866338,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 150,
+    "at": "1929-02-19T14:13:10.479Z",
+    "retrograde": true,
+    "jdTT": 2425662.092764772,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 150,
+    "at": "1929-07-24T12:52:18.782Z",
+    "retrograde": false,
+    "jdTT": 2425817.036611043,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 180,
+    "at": "1942-10-03T16:52:11.919Z",
+    "retrograde": false,
+    "jdTT": 2430636.2032126593,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 180,
+    "at": "1943-04-17T11:00:36.130Z",
+    "retrograde": true,
+    "jdTT": 2430831.959051451,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 180,
+    "at": "1943-08-02T19:08:37.886Z",
+    "retrograde": false,
+    "jdTT": 2430939.2979623647,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 210,
+    "at": "1955-12-24T18:39:29.118Z",
+    "retrograde": false,
+    "jdTT": 2435466.277783126,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 210,
+    "at": "1956-03-11T22:13:54.622Z",
+    "retrograde": true,
+    "jdTT": 2435544.4266902274,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 210,
+    "at": "1956-10-19T11:19:46.862Z",
+    "retrograde": false,
+    "jdTT": 2435765.9724360625,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 210,
+    "at": "1957-06-15T14:44:12.002Z",
+    "retrograde": true,
+    "jdTT": 2436005.114397043,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 210,
+    "at": "1957-08-06T13:26:22.518Z",
+    "retrograde": false,
+    "jdTT": 2436057.060352896,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 240,
+    "at": "1970-01-04T23:40:16.978Z",
+    "retrograde": false,
+    "jdTT": 2440591.4867727873,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 240,
+    "at": "1970-05-02T21:04:22.327Z",
+    "retrograde": true,
+    "jdTT": 2440709.378505062,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 240,
+    "at": "1970-11-06T19:20:34.413Z",
+    "retrograde": false,
+    "jdTT": 2440897.3064286197,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 270,
+    "at": "1984-01-19T04:44:40.875Z",
+    "retrograde": false,
+    "jdTT": 2445718.6983224424,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 270,
+    "at": "1984-06-22T22:48:55.848Z",
+    "retrograde": true,
+    "jdTT": 2445874.4512735186,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 270,
+    "at": "1984-11-21T15:04:18.836Z",
+    "retrograde": false,
+    "jdTT": 2446026.1286229165,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 300,
+    "at": "1998-01-29T01:29:43.958Z",
+    "retrograde": false,
+    "jdTT": 2450842.563045625,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 300,
+    "at": "1998-08-23T02:39:27.509Z",
+    "retrograde": true,
+    "jdTT": 2451048.611466354,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 300,
+    "at": "1998-11-27T23:10:52.385Z",
+    "retrograde": false,
+    "jdTT": 2451145.466615382,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 330,
+    "at": "2011-04-04T10:09:14.685Z",
+    "retrograde": false,
+    "jdTT": 2455655.9238526504,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 330,
+    "at": "2011-08-05T07:18:15.656Z",
+    "retrograde": true,
+    "jdTT": 2455778.805113889,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 330,
+    "at": "2012-02-03T16:09:58.444Z",
+    "retrograde": false,
+    "jdTT": 2455961.1743591204,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 0,
+    "at": "2025-03-30T09:58:34.334Z",
+    "retrograde": false,
+    "jdTT": 2460764.916475903,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 0,
+    "at": "2025-10-22T13:18:57.787Z",
+    "retrograde": true,
+    "jdTT": 2460971.0556362383,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 0,
+    "at": "2026-01-26T14:31:41.082Z",
+    "retrograde": false,
+    "jdTT": 2461067.106137338,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 30,
+    "at": "2038-05-21T23:47:50.174Z",
+    "retrograde": false,
+    "jdTT": 2465565.4923682506,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "2038-10-21T12:59:41.282Z",
+    "retrograde": true,
+    "jdTT": 2465718.042265767,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "2039-03-23T20:11:05.440Z",
+    "retrograde": false,
+    "jdTT": 2465871.3418513616,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "2051-07-16T12:25:53.557Z",
+    "retrograde": false,
+    "jdTT": 2470369.018809553,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "2051-10-22T23:15:47.970Z",
+    "retrograde": true,
+    "jdTT": 2470467.470134059,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "2052-05-12T10:30:02.853Z",
+    "retrograde": false,
+    "jdTT": 2470669.938362454,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "2065-07-03T06:43:56.028Z",
+    "retrograde": false,
+    "jdTT": 2475469.781354679,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "2066-01-14T21:47:11.207Z",
+    "retrograde": true,
+    "jdTT": 2475665.4086144273,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "2066-05-01T21:09:28.429Z",
+    "retrograde": false,
+    "jdTT": 2475772.382425271,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "2078-09-01T07:10:24.564Z",
+    "retrograde": false,
+    "jdTT": 2480277.7997612194,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "2079-01-06T12:51:51.328Z",
+    "retrograde": true,
+    "jdTT": 2480405.0368771744,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "2079-07-03T04:01:13.582Z",
+    "retrograde": false,
+    "jdTT": 2480582.6683856323,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 150,
+    "at": "2092-09-04T12:09:02.932Z",
+    "retrograde": false,
+    "jdTT": 2485395.007178896,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 150,
+    "at": "2093-03-11T17:43:33.280Z",
+    "retrograde": true,
+    "jdTT": 2485583.2394758184,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 150,
+    "at": "2093-07-05T09:05:08.099Z",
+    "retrograde": false,
+    "jdTT": 2485698.8794629094,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 180,
+    "at": "2105-11-21T20:30:19.947Z",
+    "retrograde": false,
+    "jdTT": 2490220.3553277217,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 180,
+    "at": "2106-02-12T15:18:53.078Z",
+    "retrograde": true,
+    "jdTT": 2490303.13904519,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 180,
+    "at": "2106-09-18T04:28:08.923Z",
+    "retrograde": false,
+    "jdTT": 2490520.6871470325,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 180,
+    "at": "2107-05-19T02:57:39.280Z",
+    "retrograde": true,
+    "jdTT": 2490763.6243059547,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 180,
+    "at": "2107-07-04T01:46:33.945Z",
+    "retrograde": false,
+    "jdTT": 2490809.5749390344,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 210,
+    "at": "2119-12-03T14:17:33.480Z",
+    "retrograde": false,
+    "jdTT": 2495345.0965030766,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 210,
+    "at": "2120-04-04T19:11:42.100Z",
+    "retrograde": true,
+    "jdTT": 2495468.3007707517,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 210,
+    "at": "2120-10-04T18:35:49.378Z",
+    "retrograde": false,
+    "jdTT": 2495651.2758568404,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 240,
+    "at": "2133-12-19T09:32:30.275Z",
+    "retrograde": false,
+    "jdTT": 2500474.8986060573,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 240,
+    "at": "2134-05-23T06:52:50.700Z",
+    "retrograde": true,
+    "jdTT": 2500629.787733227,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 240,
+    "at": "2134-10-22T19:03:02.218Z",
+    "retrograde": false,
+    "jdTT": 2500782.2948128427,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 270,
+    "at": "2148-01-04T15:13:56.385Z",
+    "retrograde": false,
+    "jdTT": 2505604.1357815564,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 270,
+    "at": "2148-07-13T09:01:08.544Z",
+    "retrograde": true,
+    "jdTT": 2505794.87689725,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 270,
+    "at": "2148-11-04T20:41:40.014Z",
+    "retrograde": false,
+    "jdTT": 2505909.363374251,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 300,
+    "at": "2161-03-21T21:28:31.014Z",
+    "retrograde": false,
+    "jdTT": 2510429.3959790785,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 300,
+    "at": "2161-06-13T22:48:46.218Z",
+    "retrograde": true,
+    "jdTT": 2510513.4517120006,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 300,
+    "at": "2162-01-16T01:43:47.419Z",
+    "retrograde": false,
+    "jdTT": 2510729.57325728,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 300,
+    "at": "2162-09-21T15:02:57.612Z",
+    "retrograde": true,
+    "jdTT": 2510978.128240535,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 300,
+    "at": "2162-10-31T16:19:26.621Z",
+    "retrograde": false,
+    "jdTT": 2511018.1813547397,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 330,
+    "at": "2175-03-19T23:08:44.133Z",
+    "retrograde": false,
+    "jdTT": 2515540.465666432,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 330,
+    "at": "2175-08-24T04:51:44.362Z",
+    "retrograde": true,
+    "jdTT": 2515697.703866535,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 330,
+    "at": "2176-01-20T18:09:26.199Z",
+    "retrograde": false,
+    "jdTT": 2515847.2578258547,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "2188-05-23T22:51:11.619Z",
+    "retrograde": false,
+    "jdTT": 2520354.4535824773,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "2188-08-12T03:53:41.004Z",
+    "retrograde": true,
+    "jdTT": 2520434.6636465387,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "2189-03-17T19:32:04.955Z",
+    "retrograde": false,
+    "jdTT": 2520652.3153173644,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "2189-11-18T13:39:27.970Z",
+    "retrograde": true,
+    "jdTT": 2520898.0704502203,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "2190-01-01T12:21:26.703Z",
+    "retrograde": false,
+    "jdTT": 2520942.0162698524,
+    "deltaTModel": "zodiacs-deltat/1"
+   }
+  ],
+  "Pluto": [
+   {
+    "boundary": 0,
+    "at": "1822-04-16T10:22:24.888Z",
+    "retrograde": false,
+    "jdTT": 2386636.9324164293,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "1822-09-19T18:59:41.118Z",
+    "retrograde": true,
+    "jdTT": 2386793.2916295435,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "1823-03-03T06:28:26.174Z",
+    "retrograde": false,
+    "jdTT": 2386957.769925943,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "1851-05-20T08:00:11.097Z",
+    "retrograde": false,
+    "jdTT": 2397262.8335750233,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "1851-10-14T20:01:59.939Z",
+    "retrograde": true,
+    "jdTT": 2397410.3348362534,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "1852-04-07T10:19:50.388Z",
+    "retrograde": false,
+    "jdTT": 2397585.9305606754,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "1852-12-12T06:20:38.043Z",
+    "retrograde": true,
+    "jdTT": 2397834.764447529,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "1853-02-14T02:53:54.115Z",
+    "retrograde": false,
+    "jdTT": 2397898.620883965,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "1882-07-21T19:22:33.849Z",
+    "retrograde": false,
+    "jdTT": 2408648.3072891776,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "1882-10-09T11:06:19.722Z",
+    "retrograde": true,
+    "jdTT": 2408727.9626805927,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "1883-06-01T23:45:52.110Z",
+    "retrograde": false,
+    "jdTT": 2408963.490137208,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "1883-12-04T23:40:04.228Z",
+    "retrograde": true,
+    "jdTT": 2409149.4861099017,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "1884-04-19T22:51:56.650Z",
+    "retrograde": false,
+    "jdTT": 2409286.452688427,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "1912-09-10T14:25:58.124Z",
+    "retrograde": false,
+    "jdTT": 2419656.1015368896,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "1912-10-20T10:24:20.899Z",
+    "retrograde": true,
+    "jdTT": 2419695.9337465744,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "1913-07-09T21:46:13.123Z",
+    "retrograde": false,
+    "jdTT": 2419958.4072783175,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "1913-12-28T05:04:13.108Z",
+    "retrograde": true,
+    "jdTT": 2420129.711451526,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "1914-05-26T20:03:28.603Z",
+    "retrograde": false,
+    "jdTT": 2420279.335942098,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "1937-10-07T11:32:25.841Z",
+    "retrograde": false,
+    "jdTT": 2428813.9811329385,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "1937-11-25T09:49:26.407Z",
+    "retrograde": true,
+    "jdTT": 2428862.909611787,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "1938-08-03T17:41:49.964Z",
+    "retrograde": false,
+    "jdTT": 2429114.237662938,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "1939-02-07T13:17:23.813Z",
+    "retrograde": true,
+    "jdTT": 2429302.054027889,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "1939-06-14T04:29:28.092Z",
+    "retrograde": false,
+    "jdTT": 2429428.6874116254,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 150,
+    "at": "1956-10-20T05:50:29.903Z",
+    "retrograde": false,
+    "jdTT": 2435766.7437675637,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 150,
+    "at": "1957-01-15T03:08:41.576Z",
+    "retrograde": true,
+    "jdTT": 2435853.631403649,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 150,
+    "at": "1957-08-19T04:10:17.947Z",
+    "retrograde": false,
+    "jdTT": 2436069.6741890754,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 150,
+    "at": "1958-04-11T15:30:16.968Z",
+    "retrograde": true,
+    "jdTT": 2436305.146403655,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 150,
+    "at": "1958-06-10T18:19:15.022Z",
+    "retrograde": false,
+    "jdTT": 2436365.263743195,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 180,
+    "at": "1971-10-05T05:50:26.549Z",
+    "retrograde": false,
+    "jdTT": 2441229.743848644,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 180,
+    "at": "1972-04-17T08:28:05.067Z",
+    "retrograde": true,
+    "jdTT": 2441424.8533246643,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 180,
+    "at": "1972-07-30T11:04:24.664Z",
+    "retrograde": false,
+    "jdTT": 2441528.961896389,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 210,
+    "at": "1983-11-05T20:39:04.988Z",
+    "retrograde": false,
+    "jdTT": 2445644.3611015277,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 210,
+    "at": "1984-05-18T15:22:27.734Z",
+    "retrograde": true,
+    "jdTT": 2445839.141225903,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 210,
+    "at": "1984-08-28T04:03:27.365Z",
+    "retrograde": false,
+    "jdTT": 2445940.669693854,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 240,
+    "at": "1995-01-17T08:52:47.897Z",
+    "retrograde": false,
+    "jdTT": 2449734.870706956,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 240,
+    "at": "1995-04-21T03:20:37.620Z",
+    "retrograde": true,
+    "jdTT": 2449828.640032454,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 240,
+    "at": "1995-11-10T18:59:36.477Z",
+    "retrograde": false,
+    "jdTT": 2450032.292102558,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 270,
+    "at": "2008-01-26T02:40:27.545Z",
+    "retrograde": false,
+    "jdTT": 2454491.6121843634,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 270,
+    "at": "2008-06-14T05:08:53.001Z",
+    "retrograde": true,
+    "jdTT": 2454631.7152567706,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 270,
+    "at": "2008-11-27T01:05:53.754Z",
+    "retrograde": false,
+    "jdTT": 2454797.546515486,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 300,
+    "at": "2023-03-23T12:49:19.351Z",
+    "retrograde": false,
+    "jdTT": 2460027.0350524886,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 300,
+    "at": "2023-06-11T09:06:17.241Z",
+    "retrograde": true,
+    "jdTT": 2460106.880166956,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 300,
+    "at": "2024-01-21T01:09:32.607Z",
+    "retrograde": false,
+    "jdTT": 2460330.549094803,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 300,
+    "at": "2024-09-01T23:31:06.522Z",
+    "retrograde": true,
+    "jdTT": 2460555.480737338,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 300,
+    "at": "2024-11-19T21:03:35.562Z",
+    "retrograde": false,
+    "jdTT": 2460634.378295671,
+    "deltaTModel": "iers-utc/1"
+   },
+   {
+    "boundary": 330,
+    "at": "2043-03-09T01:57:07.432Z",
+    "retrograde": false,
+    "jdTT": 2467317.582156179,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 330,
+    "at": "2043-09-01T01:58:08.370Z",
+    "retrograde": true,
+    "jdTT": 2467493.582861958,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 330,
+    "at": "2044-01-19T10:49:49.726Z",
+    "retrograde": false,
+    "jdTT": 2467633.9520909963,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "2066-06-18T00:50:37.602Z",
+    "retrograde": false,
+    "jdTT": 2475819.536003841,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "2066-07-11T12:25:51.909Z",
+    "retrograde": true,
+    "jdTT": 2475843.0188084096,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "2067-04-08T23:44:22.656Z",
+    "retrograde": false,
+    "jdTT": 2476114.4899986526,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "2067-09-27T14:39:17.163Z",
+    "retrograde": true,
+    "jdTT": 2476286.1114635207,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 0,
+    "at": "2068-02-23T15:25:13.471Z",
+    "retrograde": false,
+    "jdTT": 2476435.1433658185,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "2095-06-09T07:54:16.416Z",
+    "retrograde": false,
+    "jdTT": 2486402.8302583364,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "2095-09-20T18:53:47.235Z",
+    "retrograde": true,
+    "jdTT": 2486506.2882546345,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "2096-04-23T01:24:24.039Z",
+    "retrograde": false,
+    "jdTT": 2486721.5595154236,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "2096-11-14T11:36:50.624Z",
+    "retrograde": true,
+    "jdTT": 2486926.9848245503,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 30,
+    "at": "2097-03-10T03:26:40.853Z",
+    "retrograde": false,
+    "jdTT": 2487042.644434494,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "2127-06-16T01:15:41.300Z",
+    "retrograde": false,
+    "jdTT": 2498096.5535671446,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "2127-11-18T00:50:23.904Z",
+    "retrograde": true,
+    "jdTT": 2498251.536006421,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "2128-05-04T18:21:33.660Z",
+    "retrograde": false,
+    "jdTT": 2498420.265982343,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "2129-01-17T01:46:48.235Z",
+    "retrograde": true,
+    "jdTT": 2498677.575181724,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 60,
+    "at": "2129-03-10T15:18:44.998Z",
+    "retrograde": false,
+    "jdTT": 2498730.1390337455,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "2157-08-14T22:02:35.037Z",
+    "retrograde": false,
+    "jdTT": 2509114.4196153744,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "2157-11-15T16:12:07.298Z",
+    "retrograde": true,
+    "jdTT": 2509207.1762402467,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "2158-06-26T16:21:43.575Z",
+    "retrograde": false,
+    "jdTT": 2509430.182913697,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "2159-01-12T10:06:15.378Z",
+    "retrograde": true,
+    "jdTT": 2509629.9221739005,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 90,
+    "at": "2159-05-12T07:28:05.426Z",
+    "retrograde": false,
+    "jdTT": 2509749.8123384374,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "2183-08-25T12:56:42.896Z",
+    "retrograde": false,
+    "jdTT": 2518621.0407133745,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "2184-01-09T16:56:27.994Z",
+    "retrograde": true,
+    "jdTT": 2518758.207210407,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "2184-07-06T10:50:54.707Z",
+    "retrograde": false,
+    "jdTT": 2518936.953356638,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "2185-03-31T06:58:56.545Z",
+    "retrograde": true,
+    "jdTT": 2519204.7922724052,
+    "deltaTModel": "zodiacs-deltat/1"
+   },
+   {
+    "boundary": 120,
+    "at": "2185-04-23T20:02:07.853Z",
+    "retrograde": false,
+    "jdTT": 2519228.336153779,
+    "deltaTModel": "zodiacs-deltat/1"
+   }
+  ]
+ }
+}
