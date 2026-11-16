@@ -153,6 +153,19 @@ const BIRTH_FIELDS: readonly (keyof BirthInput)[] = [
   "deltaT"
 ];
 
+/**
+ * A birth given as a calendar date with no time, such as "1990-05-03", is
+ * refused unless the time is declared unknown: read as 00:00 UTC, it would be
+ * a chart for a midnight nobody gave. `name` is the field in the message.
+ */
+function noBareDate(value: unknown, name: string): void {
+  if (typeof value === "string" && !value.includes("T")) {
+    throw new RangeError(
+      `${name} is a calendar date with no time. Give the birth instant with its UTC offset, such as 1990-05-03T08:30:00+02:00, or set timeKnown: false if the birth time is not known.`
+    );
+  }
+}
+
 function validateBirth(birth: BirthInput): ValidatedBirth {
   if (!birth || typeof birth !== "object" || Array.isArray(birth)) {
     throw new RangeError("birth must be an object containing a resolved utc instant.");
@@ -189,13 +202,7 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   }
   if (outsideReferenceSpan(utc)) possible.push("outside-reference-span");
   assertDerivedFlags(flags?.values ?? [], possible);
-  // A calendar date with no time reads as 00:00 UTC. Taken as a known birth
-  // time, that is a chart for midnight UTC that nobody asked for.
-  if (typeof suppliedUtc === "string" && !suppliedUtc.includes("T") && settings.timeKnown !== false) {
-    throw new RangeError(
-      "birth.utc is a calendar date with no time. Give the birth instant with its UTC offset, such as 1990-05-03T08:30:00+02:00, or set timeKnown: false if the birth time is not known."
-    );
-  }
+  if (settings.timeKnown !== false) noBareDate(suppliedUtc, "birth.utc");
   const input: ChartInput = {
     utc,
     houseSystem: settings.houseSystem ?? "whole",
@@ -330,12 +337,8 @@ export function saturnReturn(birth: SaturnReturnSource): SaturnReturnResult {
       validated.flags?.values.includes("polar-fallback") ? computedBirth(validated).input : validated.input
     );
   } else {
-    // A bare date in place of a birth is refused as a birth object's is: one rule for a birth given with no time.
-    if (typeof birth === "string" && !birth.includes("T")) {
-      throw new RangeError(
-        "birth is a calendar date with no time. Give the birth instant with its UTC offset, such as 1990-05-03T08:30:00+02:00, or pass { utc, timeKnown: false } if the birth time is not known."
-      );
-    }
+    // Refused as a birth object's bare date is; { utc, timeKnown: false } declares the time unknown.
+    noBareDate(birth, "birth");
     utc = dateFrom(birth, "birth");
   }
   // The search reads the ephemeris from birth to about age 92: every kind of fallback it met is reported,
