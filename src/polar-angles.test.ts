@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { natalChart, saturnReturn, transits } from "./api.js";
 import { chart as calcChart, houses as calcHouses } from "./calc.js";
+import { natalConventionIds } from "./convention-ids.js";
+import { HOUSE_SYSTEMS } from "./houses.js";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from "./receipt.js";
 import type { BirthInput, Chart } from "./types.js";
 
@@ -16,13 +18,23 @@ const arc = (from: number, to: number) => {
 
 describe('"polar-angles": the angles inside the polar circle', () => {
   it.each([67, 70, 78.22, 89.99, 90, -67, -70, -90])("flags every chart with angles at %s°", (latitude) => {
-    for (const houseSystem of ["whole", "equal", "porphyry", "placidus", "koch", "regiomontanus"] as const) {
+    for (const houseSystem of HOUSE_SYSTEMS) {
       expect(at(latitude, { houseSystem }).flags).toContain("polar-angles");
     }
   });
 
   it.each([0, 40, 60, 66, -66])("leaves a chart at %s° unflagged", (latitude) => {
     expect(at(latitude).flags).not.toContain("polar-angles");
+  });
+
+  it("sets the ascendant to 0° or 180° at either pole, through the day", () => {
+    const start = Date.parse(SOLSTICE);
+    for (const latitude of [90, -90]) {
+      for (let hour = 0; hour < 24; hour += 0.5) {
+        const chart = natalChart({ utc: new Date(start + hour * 3_600_000).toISOString(), latitude, longitude: 0, houseSystem: "whole" });
+        expect([0, 180]).toContain(chart.angles!.asc);
+      }
+    }
   });
 
   it("leaves a chart without a birth time unflagged, which has no angles", () => {
@@ -73,18 +85,31 @@ describe('"polar-angles": the angles inside the polar circle', () => {
     expect(() => transits(polar, "2026-01-01T00:00:00Z")).not.toThrow();
     const older = { ...polar, flags: polar.flags.filter((flag) => flag !== "polar-angles") };
     expect(() => transits(older, "2026-01-01T00:00:00Z")).not.toThrow();
-    const temperate = at(40);
-    expect(() => transits({ ...temperate, flags: [...temperate.flags, "polar-angles"] }, "2026-01-01T00:00:00Z")).toThrow(
-      RangeError
-    );
+    for (const latitude of [40, 65.5, 66, -66, 66.55]) {
+      const outside = at(latitude);
+      expect(outside.flags).not.toContain("polar-angles");
+      expect(() => transits({ ...outside, flags: [...outside.flags, "polar-angles"] }, "2026-01-01T00:00:00Z")).toThrow(
+        RangeError
+      );
+    }
   });
 
   it("round-trips in a natal receipt, and a receipt claiming it away from the pole is refused", () => {
     const envelope = createNatalEnvelope(at(78));
     expect(envelope.receipt.resultFlags).toContain("polar-angles");
     expect(parseNatalEnvelope(serializeNatalEnvelope(envelope))).toEqual({ ok: true, envelope });
-    const temperate = JSON.parse(serializeNatalEnvelope(createNatalEnvelope(at(40))));
-    temperate.receipt.resultFlags.push("polar-angles");
-    expect(parseNatalEnvelope(JSON.stringify(temperate))).toMatchObject({ ok: false, code: "inconsistent_result" });
+    for (const latitude of [40, 65.2, 66, -66, 66.55]) {
+      const outside = JSON.parse(serializeNatalEnvelope(createNatalEnvelope(at(latitude))));
+      outside.receipt.resultFlags.push("polar-angles");
+      // With the convention ids made consistent again, so that only the flag check can refuse it.
+      outside.receipt.conventionIds = natalConventionIds(outside);
+      expect(parseNatalEnvelope(JSON.stringify(outside))).toMatchObject({ ok: false, code: "inconsistent_result" });
+    }
+    // The control: the same edit inside the circle, where the flag holds, parses.
+    const inside = JSON.parse(serializeNatalEnvelope(createNatalEnvelope(at(70))));
+    inside.receipt.resultFlags = inside.receipt.resultFlags.filter((flag: string) => flag !== "polar-angles");
+    inside.receipt.resultFlags.push("polar-angles");
+    inside.receipt.conventionIds = natalConventionIds(inside);
+    expect(parseNatalEnvelope(JSON.stringify(inside))).toMatchObject({ ok: true });
   });
 });

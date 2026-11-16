@@ -130,7 +130,9 @@ From the release after 1.1.0, every chart with angles inside the polar circle,
 |latitude| ≥ 90° − ε on the true obliquity of date, carries the flag
 `polar-angles`, in every house system, from `natalChart`, `chart()` and
 `houses()`. There the ascendant does not move steadily: it turns half a circle
-twice a sidereal day, and at either pole it is 0° or 180°. At 70° N on
+twice a sidereal day, and at either pole it is 0° or 180° (checked every half
+hour of that day at ±90°; the README still puts exact poles outside the
+verified angle scope). At 70° N on
 2021-06-21 it makes those two turns, each between one minute and the next, and
 every chart of that day carries the flag (`src/polar-angles.test.ts`). The
 flag says the ascendant, and the houses that follow it, can change sign within
@@ -138,9 +140,12 @@ a minute of the birth time. It is the same condition on which Placidus and
 Koch fall back to whole sign (`polar-fallback`), so a polar Placidus chart
 carries both. Just outside the circle, at 66° N, the ascendant moves quickly but without a
 turn, and no flag is set. `birthWindow` sets no `polar-angles`: its cells already show each turn
-as a change of sign. A supplied chart or natal receipt may carry the flag with
-angles at 65° or more (the obliquity never reaches 25°) and may lack it there
-(1.1.0 and earlier never set it); it is refused anywhere else. A birth input
+as a change of sign. A supplied chart or natal receipt does not carry the
+obliquity, so it may carry the flag where |latitude| ≥ 90° − ε₀ − 0.003°, ε₀
+the mean obliquity of its instant: the margin covers the nutation in
+obliquity, under 9.3″ (`resolvedChart` in `src/api.ts`, and `src/receipt.ts`). It may lack the flag there
+(1.1.0 and earlier never set it); it is refused anywhere else, so a false
+claim is refused at 66° and at 66.55° on that day (`src/polar-angles.test.ts`). A birth input
 may echo it where the chart sets it.
 
 A body exactly on a cusp can come out a rounding error below it: just under

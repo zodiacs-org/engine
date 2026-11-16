@@ -96,10 +96,19 @@ export function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } 
     expected.push("polar-fallback");
   }
   // "polar-angles" is the chart's claim that its angles are inside the polar
-  // circle, |latitude| >= 90 - obliquity, which is never below 65 degrees: it
-  // is allowed with angles at 65 degrees or more, as a natal receipt allows it
-  // (a chart from 1.1.0 or earlier lacks it), and fails anywhere else.
-  if (hasHouses && resultFlags.values.includes("polar-angles") && Math.abs(input.latitude!) >= 65) expected.push("polar-angles");
+  // circle, which the engine sets on the true obliquity of date. A supplied
+  // chart carries no obliquity, so the claim is allowed where |latitude| >=
+  // 90 - e0 - 0.003 degrees, e0 the mean obliquity (IAU 2006, constant and
+  // linear terms: 90 - e0 is 66.560721 at J2000, growing 0.0130102 a century);
+  // the margin covers the nutation in obliquity, under 9.3". A chart from 1.1.0
+  // or earlier lacks the flag there; anywhere else the claim fails. The same
+  // test as a natal receipt's (src/receipt.ts).
+  if (
+    hasHouses &&
+    resultFlags.values.includes("polar-angles") &&
+    Math.abs(input.latitude!) >= 66.55772 + (input.utc.getTime() - 946_728_000_000) * 4.1227e-15
+  )
+    expected.push("polar-angles");
   if (outsideReferenceSpan(input.utc)) expected.push("outside-reference-span");
   // "delta-t-extrapolated" is allowed where the chart rests on an extrapolated
   // ΔT (on TT input, through its houses), as a natal receipt allows it; a chart

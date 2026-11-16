@@ -4,7 +4,7 @@
  * half a circle in a moment, and does the chart say so?
  *
  *   npm run build
- *   node docs/evidence/edge-cases-1.1.0-20261116/tools/pole-ascendant.mjs [OUT.json]
+ *   node docs/evidence/polar-angles-20261116/tools/pole-ascendant.mjs [OUT.json]
  *
  * For each latitude, the root's natalChart() every minute from
  * 2021-06-21T00:00Z for one day (1,441 charts, longitude 0, whole sign

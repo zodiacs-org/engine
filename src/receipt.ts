@@ -1307,13 +1307,15 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   )
     expected.push("delta-t-extrapolated");
   // "polar-angles" is the record's claim that its angles are inside the polar
-  // circle, |latitude| ≥ 90° − ε; the obliquity never reaches 25°, so it is
-  // allowed only with angles at 65° or more, and refused anywhere else. Records
-  // from 1.1.0 and earlier lack it.
+  // circle. The record carries no obliquity, so the claim is allowed with angles
+  // where |latitude| >= 90 - e0 - 0.003 degrees, e0 the mean obliquity at the
+  // instant, as src/api.ts allows it on a supplied chart, and refused anywhere
+  // else. Records from 1.1.0 and earlier lack it.
   if (
     resultFlags.includes("polar-angles") &&
     result.angles &&
-    Math.abs((receipt.coordinates as { latitude: number }).latitude) >= 65
+    Math.abs((receipt.coordinates as { latitude: number }).latitude) >=
+      66.55772 + (Date.parse(receipt.instant as string) - 946_728_000_000) * 4.1227e-15
   )
     expected.push("polar-angles");
   // A fallback flag is the record's own claim about what computed it: allowed
