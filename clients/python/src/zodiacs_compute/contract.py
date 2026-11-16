@@ -15,7 +15,7 @@ LocalResolution_localMeanTime_Option0 = TypedDict("LocalResolution_localMeanTime
 
 LocalResolution = TypedDict("LocalResolution", {"offsetMinutes": Required[float], "flags": Required[list[Literal["dst-gap", "dst-fold", "lmt", "calendar-unknown"]]], "localMeanTime": Required[Union["LocalResolution_localMeanTime_Option0", None]], "zoneHistory": Required[Literal["pinned", "runtime"]], "zoneUncertain": Required[bool]}, total=False)
 
-BodyPosition = TypedDict("BodyPosition", {"body": Required[Literal["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "North Node", "South Node"]], "lon": Required[float], "lat": Required[float], "speed": Required[float], "retrograde": Required[bool], "sign": Required[Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]], "degree": Required[float], "flags": NotRequired[list[Literal["outside-reference-span", "delta-t-extrapolated"]]]}, total=False)
+BodyPosition = TypedDict("BodyPosition", {"body": Required[Literal["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "North Node", "South Node"]], "lon": Required[float], "lat": Required[float], "speed": Required[float], "retrograde": Required[bool], "sign": Required[Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]], "degree": Required[float], "flags": NotRequired[list[Literal["outside-reference-span", "delta-t-extrapolated", "de440-unavailable", "outside-de440-span"]]]}, total=False)
 
 Angles = TypedDict("Angles", {"asc": Required[float], "mc": Required[float], "dsc": Required[float], "ic": Required[float]}, total=False)
 
@@ -170,7 +170,7 @@ Instant : TypeAlias = str
 Latitude : TypeAlias = float
 Longitude : TypeAlias = float
 HouseSystem : TypeAlias = Literal["whole", "placidus", "porphyry", "equal", "equal-mc", "vehlow", "koch", "regiomontanus", "campanus", "topocentric", "alcabitius", "morinus", "meridian"]
-ChartFlag : TypeAlias = Literal["dst-gap", "dst-fold", "lmt", "calendar-unknown", "no-time", "polar-fallback", "polar-angles", "outside-reference-span", "delta-t-extrapolated"]
+ChartFlag : TypeAlias = Literal["dst-gap", "dst-fold", "lmt", "calendar-unknown", "no-time", "polar-fallback", "polar-angles", "outside-reference-span", "delta-t-extrapolated", "de440-unavailable", "outside-de440-span"]
 SkyFactRequest : TypeAlias = Union["SignFact", "RetrogradeFact", "IngressFact", "PhaseFact"]
 SignFact : TypeAlias = Union["SignFact_Option1", "SignFact_Option2"]
 RetrogradeFact : TypeAlias = Union["RetrogradeFact_Option1", "RetrogradeFact_Option2"]

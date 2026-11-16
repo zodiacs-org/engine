@@ -16,9 +16,11 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**2.0.0-rc.1**, the first candidate for 2.0.0, a major release
+**2.0.0-rc.2**, the second candidate for 2.0.0, a major release
 (CHANGELOG.md). It is a draft for the owner's review and is not published to
-npm. Over 1.1.0 it refuses a birth given as a calendar date with no time,
+npm. It replaces 2.0.0-rc.1, a draft never published, whose check of a
+supplied chart's or receipt's `polar-angles` could refuse a chart the engine
+itself had flagged, from about the year 2936. Over 1.1.0 it refuses a birth given as a calendar date with no time,
 unless `timeKnown` is `false` (the breaking change, *Resolved instant
 inputs* below); flags a chart whose angles are inside the polar circle
 (`polar-angles`); flags a local date that a calendar changeover may have
@@ -111,7 +113,7 @@ npm install @zodiacs/engine
 ```
 
 That installs npm's `latest`, 1.1.0, not this candidate:
-`artifacts/zodiacs-engine-2.0.0-rc.1.tgz` in the repository, with its
+`artifacts/zodiacs-engine-2.0.0-rc.2.tgz` in the repository, with its
 SHA-256 receipt, is this candidate's exact archive. 1.0.0, npm's `latest`
 before 1.1.0, has no `./conventions`, `./time`, `./lite`, `./de440` or DE440
 pack, computes on astronomy-engine and writes no ids.
@@ -137,7 +139,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-2.0.0-rc.1.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-2.0.0-rc.2.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -200,8 +202,8 @@ DE440 pack inside its years and astronomy-engine 2.1.19 elsewhere; where this
 document speaks of the ephemeris's accuracy or of its error limits without
 naming DE440, it speaks of astronomy-engine, the fallback and the ephemeris
 of what the pack does not give. See CHANGELOG.md for the release history and
-`docs/evidence/2.0.0-rc.1-20261116/` for this candidate's checks
-(1.1.0's are in `docs/evidence/1.1.0-20261116/`, 1.1.0-rc.13's in `docs/evidence/1.1.0-rc.13-20261115/`, 1.1.0-rc.12's in
+`docs/evidence/2.0.0-rc.2-20261116/` for this candidate's checks
+(2.0.0-rc.1's are in `docs/evidence/2.0.0-rc.1-20261116/`, 1.1.0's in `docs/evidence/1.1.0-20261116/`, 1.1.0-rc.13's in `docs/evidence/1.1.0-rc.13-20261115/`, 1.1.0-rc.12's in
 `docs/evidence/1.1.0-rc.12-20261115/`, 1.1.0-rc.11's and 1.1.0-rc.10's in
 their own dated folders there, 1.1.0-rc.9's, its superseded draft's, are in
 `docs/evidence/1.1.0-rc.9-20261114/`)
@@ -761,24 +763,34 @@ arcminutes from Swiss's.
 
 ### Input flag compatibility
 
-Public birth inputs accept all nine `ChartFlag` values: the six below,
-`delta-t-extrapolated` (see Time) and the two fallback flags,
-`de440-unavailable` and `outside-de440-span`, each of which a caller may echo
-only where the calculation derives it. Supply an array with at
+Public birth inputs accept all eleven `ChartFlag` values. Four are caller
+assertions: `dst-gap`, `dst-fold`, `lmt` and `calendar-unknown`. The other
+seven are derived by the calculation, and a caller may echo each only where
+the calculation derives it: `no-time`, `polar-fallback`, `polar-angles`,
+`outside-reference-span`, `delta-t-extrapolated` (see Time) and the two
+fallback flags, `de440-unavailable` and `outside-de440-span`. Supply an array with at
 most 64 entries; entries must be known string values in ordinary data slots.
 Repeated values collapse in first-occurrence order. Unknown strings, sparse
 slots, accessor slots, non-array iterables and simultaneous `dst-gap`/`dst-fold`
 claims reject with a `RangeError` that does not include supplied flag values.
 
-`dst-gap`, `dst-fold` and `lmt` remain caller assertions: a UTC instant alone
-cannot verify a historical local-time resolution. The geo resolver sets
-`dst-gap` or `dst-fold` for a skipped or repeated wall time of any cause (the
-names are kept; its `jump.cause` gives the cause) and `lmt` when a local mean
-time clock read it. `no-time`,
-`polar-fallback` and `outside-reference-span` may be echoed for compatibility,
-but must agree with the calculation. Set `timeKnown: false` for unknown time; a flag never overrides that
-setting. A fallback assertion requires the actual requested Placidus calculation
-to produce whole-sign houses, which it does only inside the polar circle.
+`dst-gap`, `dst-fold`, `lmt` and `calendar-unknown` remain caller
+assertions: a UTC instant alone cannot verify a historical local-time
+resolution. The geo resolver sets `dst-gap` or `dst-fold` for a skipped or
+repeated wall time of any cause (the names are kept; its `jump.cause` gives
+the cause) and `lmt` when a local mean time clock read it; it and the birth
+resolvers set `calendar-unknown` on a local date, given with no country, that
+a calendar changeover may have skipped ([docs/time.md](docs/time.md)). A
+natal receipt refuses `calendar-unknown` on an instant before 1582-10-04 or
+from 1918-02-28 (UTC).
+`no-time`, `polar-fallback`, `polar-angles`, `outside-reference-span`,
+`delta-t-extrapolated`, `de440-unavailable` and `outside-de440-span` may be
+echoed for compatibility, but must agree with the calculation. Set
+`timeKnown: false` for unknown time; a flag never overrides that setting. A
+`polar-fallback` assertion requires the requested Placidus or Koch
+calculation to produce whole-sign houses, which it does only inside the polar
+circle, and a `polar-angles` assertion requires angles inside the polar
+circle.
 
 `natalChart` stores only distinct time-resolution assertions in `chart.input.flags`
 and derives result flags once. This is canonical semantic input, not a lossless
@@ -794,8 +806,12 @@ preserving numerical arrays and engine version. These checks happen at call
 time and do not freeze caller-owned objects.
 
 Ordinary Saturn-return inputs require no extra natal calculation. A raw birth
-input that explicitly asserts `polar-fallback` requires one natal calculation to
-check that assertion before the return scan. A supplied Chart instead receives
+input that explicitly asserts `polar-fallback` or `polar-angles` requires one
+natal calculation to check that assertion before the return scan. Its other
+derived echoes are checked against the input alone: `no-time` against
+`timeKnown: false` and `outside-reference-span` against the instant;
+`delta-t-extrapolated`, `de440-unavailable` and `outside-de440-span` are
+accepted there unchecked, since no chart is computed. A supplied Chart instead receives
 the consistency check above, without natal recomputation. Public birth and
 `resolveBirth` settings are validated once and the captured scalar values are
 used for calculation/resolution. Explicit null settings or local time are

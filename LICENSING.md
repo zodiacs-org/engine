@@ -241,6 +241,10 @@ before a release carrying the pack is published. On 2026-11-16, before 1.1.0
 was published, the owner answered the question "Do you accept shipping the
 NASA DE440 data in 1.1.0?" in writing with "Yes. I delegate these decisions
 to you."
+That acceptance, recorded as given for 1.1.0, covers 2.0.0 too, which ships
+the same sealed pack: it was given with "Yes. I delegate these decisions to
+you.", and under that delegation it is taken to extend to 2.0.0 and its
+candidates.
 
 The rule behind the Sun's disc, from 1.1.0-rc.12, is NASA JPL's. The
 reduction bends no light from a planet farther than the Sun whose direction

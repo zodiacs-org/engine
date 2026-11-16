@@ -10,7 +10,7 @@
     "name": "zodiacs-engine-astronomy-engine",
     "version": "0.3.0",
     "engine": "@zodiacs/engine on astronomy-engine",
-    "engineVersion": "1.1.0",
+    "engineVersion": "2.0.0-rc.2",
     "configuration": {
       "ephemeris": "astronomy-engine 2.1.19",
       "deltaTModel": "zodiacs-deltat/1",
@@ -5655,7 +5655,8 @@
       "verdict": "pass",
       "meta": {
         "flags": [
-          "polar-fallback"
+          "polar-fallback",
+          "polar-angles"
         ],
         "substituted": "whole"
       }
@@ -5666,6 +5667,7 @@
       "meta": {
         "flags": [
           "polar-fallback",
+          "polar-angles",
           "delta-t-extrapolated"
         ],
         "substituted": "whole"
@@ -5676,7 +5678,8 @@
       "verdict": "pass",
       "meta": {
         "flags": [
-          "polar-fallback"
+          "polar-fallback",
+          "polar-angles"
         ],
         "substituted": "whole"
       }
@@ -5687,6 +5690,7 @@
       "meta": {
         "flags": [
           "polar-fallback",
+          "polar-angles",
           "delta-t-extrapolated"
         ],
         "substituted": "whole"
@@ -5697,7 +5701,8 @@
       "verdict": "pass",
       "meta": {
         "flags": [
-          "polar-fallback"
+          "polar-fallback",
+          "polar-angles"
         ],
         "substituted": "whole"
       }
@@ -5708,6 +5713,7 @@
       "meta": {
         "flags": [
           "polar-fallback",
+          "polar-angles",
           "delta-t-extrapolated"
         ],
         "substituted": "whole"
@@ -5718,7 +5724,8 @@
       "verdict": "pass",
       "meta": {
         "flags": [
-          "polar-fallback"
+          "polar-fallback",
+          "polar-angles"
         ],
         "substituted": "whole"
       }
@@ -5729,6 +5736,7 @@
       "meta": {
         "flags": [
           "polar-fallback",
+          "polar-angles",
           "delta-t-extrapolated"
         ],
         "substituted": "whole"
@@ -5739,7 +5747,8 @@
       "verdict": "pass",
       "meta": {
         "flags": [
-          "polar-fallback"
+          "polar-fallback",
+          "polar-angles"
         ],
         "substituted": "whole"
       }
@@ -5750,6 +5759,7 @@
       "meta": {
         "flags": [
           "polar-fallback",
+          "polar-angles",
           "delta-t-extrapolated"
         ],
         "substituted": "whole"
