@@ -823,6 +823,13 @@ describe("typed refusals", () => {
     expect(refused(chart({ time: { jd: last, scale: "tt" } })).reason).toBe("out-of-range");
     expect(refused(houses({ time: "1700-01-01", place: { latitude: 0, longitude: 0 } })).reason).toBe("out-of-range");
     expect(refused(chart({ time: "2300-01-01" })).reason).toBe("out-of-range");
+    // Inside the span, a calendar date with no time is refused as natalChart() refuses it, unless the time is unknown.
+    for (const time of ["1990-05-03", { iso: "1990-05-03" }] as const) {
+      expect(() => chart({ time, place: { latitude: 40, longitude: -74 } })).toThrow(/calendar date with no time.*timeKnown: false/);
+      expect(() => chart({ time, timeKnown: true })).toThrow(RangeError);
+      const untimed = chart({ time, timeKnown: false });
+      expect(untimed.status === "ok" && untimed.chart.flags.includes("no-time") && untimed.chart.houses === null).toBe(true);
+    }
     expect(refused(events({ kind: "longitude-crossing", body: "Sun", longitude: 0, from: "2199-06-01", to: "2200-06-01" })).reason).toBe("out-of-range");
   });
 
