@@ -1,0 +1,291 @@
+{
+ "what": "ZOD-97 T5 at the span's edge, without Horizons",
+ "node": "v22.23.4",
+ "engineVersion": "1.1.0",
+ "counts": {
+  "pass": 15,
+  "flagged": 3
+ },
+ "records": [
+  {
+   "test": "T5",
+   "id": "Y-f",
+   "body": "Sun",
+   "instant": "2200-01-01 00:00 TT, the end, excluded",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-f",
+   "body": "Moon",
+   "instant": "2200-01-01 00:00 TT, the end, excluded",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-g",
+   "body": "Sun",
+   "instant": "2200-01-01 12:00 TT",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-g",
+   "body": "Moon",
+   "instant": "2200-01-01 12:00 TT",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-h",
+   "body": "Sun",
+   "instant": "1800-01-01 00:00 TT (its UT1 is before the start)",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-h",
+   "body": "Moon",
+   "instant": "1800-01-01 00:00 TT (its UT1 is before the start)",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-j",
+   "body": "Sun",
+   "instant": "UTC inside the span, TT past its end",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-j",
+   "body": "Moon",
+   "instant": "UTC inside the span, TT past its end",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-l",
+   "body": "Sun",
+   "instant": "the end by UTC",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-l",
+   "body": "Moon",
+   "instant": "the end by UTC",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-m",
+   "body": "Sun",
+   "instant": "a minute before the start by UTC",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-m",
+   "body": "Moon",
+   "instant": "a minute before the start by UTC",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-i",
+   "instant": "2200-01-01T00:00:00Z through the root entry",
+   "arbiter": {
+    "outsideSpan": true
+   },
+   "engine": {
+    "natalChartFlags": [
+     "outside-reference-span",
+     "delta-t-extrapolated"
+    ],
+    "positionsReturns": "12 positions",
+    "positionsCarriesAFlag": true,
+    "positionsEphemeris": [
+     "jpl-de440"
+    ],
+    "positionsFlags": [
+     [
+      "outside-reference-span",
+      "delta-t-extrapolated"
+     ]
+    ],
+    "everyRowFlagsAsTheChart": true
+   },
+   "verdict": "flagged"
+  },
+  {
+   "test": "T5",
+   "id": "Y-i",
+   "instant": "2250-01-01T00:00:00Z through the root entry",
+   "arbiter": {
+    "outsideSpan": true
+   },
+   "engine": {
+    "natalChartFlags": [
+     "outside-reference-span",
+     "delta-t-extrapolated",
+     "outside-de440-span"
+    ],
+    "positionsReturns": "12 positions",
+    "positionsCarriesAFlag": true,
+    "positionsEphemeris": [
+     "astronomy-engine"
+    ],
+    "positionsFlags": [
+     [
+      "outside-reference-span",
+      "delta-t-extrapolated",
+      "outside-de440-span"
+     ]
+    ],
+    "everyRowFlagsAsTheChart": true
+   },
+   "verdict": "flagged"
+  },
+  {
+   "test": "T5",
+   "id": "Y-i",
+   "instant": "1799-12-31T23:59:00Z through the root entry",
+   "arbiter": {
+    "outsideSpan": true
+   },
+   "engine": {
+    "natalChartFlags": [
+     "outside-reference-span"
+    ],
+    "positionsReturns": "12 positions",
+    "positionsCarriesAFlag": true,
+    "positionsEphemeris": [
+     "jpl-de440"
+    ],
+    "positionsFlags": [
+     [
+      "outside-reference-span"
+     ]
+    ],
+    "everyRowFlagsAsTheChart": true
+   },
+   "verdict": "flagged"
+  },
+  {
+   "test": "T5",
+   "id": "Y-i",
+   "instant": "1800-01-01T00:00:00Z through the root entry",
+   "arbiter": {
+    "outsideSpan": false
+   },
+   "engine": {
+    "natalChartFlags": [],
+    "positionsReturns": "12 positions",
+    "positionsCarriesAFlag": false,
+    "positionsEphemeris": [
+     "jpl-de440"
+    ],
+    "positionsFlags": [
+     null
+    ],
+    "everyRowFlagsAsTheChart": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-i",
+   "instant": "2199-12-31T23:59:00Z through the root entry",
+   "arbiter": {
+    "outsideSpan": false
+   },
+   "engine": {
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "positionsReturns": "12 positions",
+    "positionsCarriesAFlag": true,
+    "positionsEphemeris": [
+     "jpl-de440"
+    ],
+    "positionsFlags": [
+     [
+      "delta-t-extrapolated"
+     ]
+    ],
+    "everyRowFlagsAsTheChart": true
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-i",
+   "instant": "2000-01-01T12:00:00Z through the root entry",
+   "arbiter": {
+    "outsideSpan": false
+   },
+   "engine": {
+    "natalChartFlags": [],
+    "positionsReturns": "12 positions",
+    "positionsCarriesAFlag": false,
+    "positionsEphemeris": [
+     "jpl-de440"
+    ],
+    "positionsFlags": [
+     null
+    ],
+    "everyRowFlagsAsTheChart": true
+   },
+   "verdict": "pass"
+  }
+ ]
+}

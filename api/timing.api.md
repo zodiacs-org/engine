@@ -358,7 +358,7 @@ declare function zodiacalReleasing(natal: NatalSource, lot: ReleasingLot, from: 
 declare function zodiacalReleasingAt(natal: NatalSource, lot: ReleasingLot, date: DateInput, options?: ReleasingAtOptions): ReleasingAt;
 ```
 
-## Referenced, not exported here (24)
+## Referenced, not exported here (25)
 
 ```ts
 // exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
@@ -407,6 +407,7 @@ interface BodyPosition {
     degree: number;
     ephemeris?: string;
     fallback?: EphemerisFallback;
+    flags?: InstantFlag[];
 }
 
 // exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart)
@@ -471,6 +472,9 @@ interface Houses {
     system: HouseSystem;
     cusps: number[];
 }
+
+// exported by @zodiacs/engine (InstantFlag)
+type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 // exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
 interface LeapSeconds {

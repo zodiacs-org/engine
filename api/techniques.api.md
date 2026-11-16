@@ -411,7 +411,7 @@ declare function voidOfCourseAt(at: DateInput, options?: VoidOfCourseOptions): V
 declare function voidOfCourseWindows(from: DateInput, to: DateInput, options?: VoidOfCourseOptions): readonly VoidOfCourseWindow[];
 ```
 
-## Referenced, not exported here (23)
+## Referenced, not exported here (24)
 
 ```ts
 // exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
@@ -460,6 +460,7 @@ interface BodyPosition {
     degree: number;
     ephemeris?: string;
     fallback?: EphemerisFallback;
+    flags?: InstantFlag[];
 }
 
 // exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart)
@@ -524,6 +525,9 @@ interface Houses {
     system: HouseSystem;
     cusps: number[];
 }
+
+// exported by @zodiacs/engine (InstantFlag)
+type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 // exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
 interface LeapSeconds {

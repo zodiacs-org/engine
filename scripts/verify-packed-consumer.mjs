@@ -343,6 +343,11 @@ for (const label of [" Mars", "Mars\\u0000", "x".repeat(200)]) {
 assert.throws(() => progressedBodies(8.64e15, 8.64e15), RangeError);
 assert.throws(() => positions(-8.64e15), RangeError);
 assert.equal(transits(chart, "2026-09-07T12:00:00Z").positions.length, 12);
+// Outside REFERENCE_SPAN positions() flags each row as natalChart() flags the chart (from the release after 1.1.0).
+const edgeRows = positions("2200-01-01T00:00:00Z");
+assert(edgeRows.every((row) => row.flags.includes("outside-reference-span")));
+assert.deepEqual(edgeRows[0].flags, natalChart({utc: "2200-01-01T00:00:00Z"}).flags);
+assert(positions("2000-01-01T12:00:00Z").every((row) => !("flags" in row)));
 assert(synastry(chart, {utc: "2000-01-01", timeKnown: false}).aspects.length > 0);
 assert(moonPhase("2024-04-08T18:21:00Z").illumination < 0.001);
 const unknown = natalChart(resolveBirth({date: "2000-02-29", timeZone: "UTC", timeKnown: false}));
