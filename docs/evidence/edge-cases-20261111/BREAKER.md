@@ -295,8 +295,7 @@ compared; they remain so).
 - No era of the sweep was recomputed and no kernel was read.
 - The UTC cases of finding 1 are five instants; the polar scan is one day
   and one house system; the tz run takes five wall times per transition.
-- The scripts and Horizons responses of this session are kept at
-  `/workspace/runs/fable-jobs/job1/breaker-scratch/`, outside the
-  repository, because this session was allowed to commit this file only.
+- The scripts and Horizons responses of this session were kept in a
+  scratch folder outside the repository, because this session was allowed to commit this file only.
   A figure above is evidence in the repository's sense only once its script
   and response are committed; until then treat each as a lead to rerun.

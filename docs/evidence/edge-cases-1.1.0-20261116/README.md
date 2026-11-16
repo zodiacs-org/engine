@@ -23,7 +23,10 @@ Synthetic instants and places only; no person's birth data.
   Only the recorded tzdb version label changed, so the arbiter step was not
   repeated.
 - New: `tools/pole-ascendant.mjs`, the ascendant every minute of a day at 16
-  latitudes, for the part of T4 the first run did not test (below 90°).
+  latitudes, for the part of T4 the first run did not test (below 90°). This
+  minute scan is new: it was not in the pre-registered case list
+  (`../edge-cases-20261111/EDGE-CASES.md`), so its pass mark (no unflagged
+  half turn of the ascendant) is this run's own.
 
 ## Results
 
@@ -42,9 +45,13 @@ Horizons (was up to 29.69″), and the far-future clock difference is flagged.
 What did not: the calendar-switch silence (T3), the polar ascendant (T4) and
 `positions()` at the span's edge (T5).
 
-Pull request 105 (`polar-angles`) answers the T4 failures: on its branch the
-minute scan passes at all 16 latitudes, and the 4 degenerate cases at ±90°
-carry the flag. T3 and T5 have no fix yet.
+Pull request 105 (`polar-angles`) answers the T4 failures. On its branch the
+minute scan passes at all 16 latitudes (its own evidence folder,
+`docs/evidence/polar-angles-20261116/`). The 4 degenerate cases at ±90° were
+checked by rerunning `horizons-edge.mjs` on that branch's build: they carry
+the new flag. That rerun is not committed, and the tool's verdict does not
+look at that flag, so its pass or fail line is unchanged; read the flag in
+the output. T3 and T5 have no fix yet.
 
 The first run's review of the ZOD-65 sweep (S1 to S3, `SWEEP-REVIEW.md`) is
 about method and did not change with 1.1.0; it was not repeated.
@@ -69,4 +76,7 @@ node $E/tools/pole-ascendant.mjs $E/results/pole-ascendant.json
 ```
 
 `ZODIACS_ENGINE_DIST=<dir>` runs `pole-ascendant.mjs` on another build.
+Do not run `horizons-edge.mjs fetch` or `utc-after-2050.mjs fetch` from this
+folder: `fetch` writes into the first run's `horizons/` folder and would
+replace its committed responses.
 Nothing was merged, tagged, released or published.
