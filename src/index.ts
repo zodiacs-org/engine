@@ -166,6 +166,7 @@ export type {
   HouseNumber,
   Houses,
   HouseSystem,
+  InstantFlag,
   InterAspect,
   LeapSeconds,
   MinimalBody,

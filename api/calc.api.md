@@ -347,7 +347,7 @@ declare function events(request: EventsRequest): EventsResult | CalcRefusal;
 declare function houses(request: HousesRequest): HousesResult | CalcRefusal;
 ```
 
-## Referenced, not exported here (15)
+## Referenced, not exported here (16)
 
 ```ts
 // exported by @zodiacs/engine (Aspect)
@@ -382,6 +382,7 @@ interface BodyPosition {
     degree: number;
     ephemeris?: string;
     fallback?: EphemerisFallback;
+    flags?: InstantFlag[];
 }
 
 // exported by @zodiacs/engine (ChartInput)
@@ -418,6 +419,9 @@ interface Houses {
     system: HouseSystem;
     cusps: number[];
 }
+
+// exported by @zodiacs/engine (InstantFlag)
+type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 // exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
 interface LeapSeconds {

@@ -335,6 +335,11 @@ assert.equal(findDeclinationAspects([{body: "A", lon: -1e-20, lat: 0}, {body: "B
 // Outside astronomy-engine's tabulated years every calculation refuses at once.
 assert.deepEqual(EPHEMERIS_SPAN.daysFromJ2000, {from: -730000, to: 730000});
 assert.throws(() => positions("4000-01-01"), {name: "RangeError", message: /^The instant is outside the ephemeris span/});
+// Outside REFERENCE_SPAN positions() flags each row as natalChart() flags the chart (from the release after 1.1.0).
+const edgeRows = positions("2200-01-01T00:00:00Z");
+assert(edgeRows.every((row) => row.flags.includes("outside-reference-span")));
+assert.deepEqual(edgeRows[0].flags, natalChart({utc: "2200-01-01T00:00:00Z"}).flags);
+assert(positions("2000-01-01T12:00:00Z").every((row) => !("flags" in row)));
 assert.throws(() => natalChart({utc: "0001-01-01"}), {name: "RangeError", message: /^The instant is outside the ephemeris span/});
 for (const label of [" Mars", "Mars\\u0000", "x".repeat(200)]) {
   assert.throws(() => declinationsForBodies([{body: label, lon: 0, lat: 0}], 23.4), RangeError);

@@ -208,7 +208,16 @@ export interface BodyPosition {
   ephemeris?: string;
   /** Present when `ephemeris` is astronomy-engine as a fallback from the shipped DE440 pack, and says why. */
   fallback?: EphemerisFallback;
+  /**
+   * On the rows of `positions()`, `transits()`' `positions` and `progressedBodies()`, from the release after
+   * 1.1.0: the flags a chart at the same instant carries, where there are any (a chart's own bodies leave them to
+   * the chart's `flags`): `"outside-reference-span"`, `"delta-t-extrapolated"`, then the fallback, as `fallback`.
+   */
+  flags?: InstantFlag[];
 }
+
+/** The flags an instant itself gives a result, whatever the place and birth settings; see `BodyPosition.flags`. */
+export type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 /** A chart point that is not a body; see `chartPoints`. */
 export type PointName =
