@@ -110,7 +110,7 @@ below no `package.json` or `node_modules`. The package supports Node
 - Pull requests are merged with a merge commit, never squashed or rebased:
   `archives.json` records source commits, which a squash or rebase would
   rewrite.
-- Do not run the release workflow or publish to npm unless asked. It
+- Do not run the release workflow or publish to npm unless the owner asks. It
   publishes only a carried archive, from `main`.
 - Numbers in documentation need committed evidence. Every tolerance,
   agreement figure, count or size you write in `README.md`, `CHANGELOG.md`
@@ -190,15 +190,21 @@ rules live here once.
 - Commit as `admin@zodiacs.org` (name "Zodiacs Admin"). Never put a model
   name or a personal email address in a commit, a pull request, or a file.
 - Open pull requests as drafts. The owner has delegated merging: an agent
-  may mark its pull request ready for review and merge it (with a merge
+  may mark a pull request ready for review and merge it (with a merge
   commit, as above) only when every check on its latest commit passes and a
   separate reviewer session, not the one that wrote the change, has
-  reviewed that commit and signed off with no blockers. A check that fails
-  "as expected" is still failing: such a pull request waits. Never merge
-  with a failing or skipped test, and never push to `main`.
+  reviewed that commit and signed off with no blockers. Record the sign-off
+  on the pull request before merging. A check that fails "as expected" is
+  still failing: such a pull request waits.
+- Never merge with a failing or skipped test or check. A check that passes
+  but says it skipped work counts as skipped, including the archive-binding
+  check when it skips the rebuild of HEAD. A candidate merges only when its
+  latest commit carries its archive and that check rebuilt it. Never push to
+  `main`.
 - After each merge, report one line saying what went in.
-- Tags, GitHub releases, the release workflow and npm publishing stay with
-  the owner. Merging a candidate does not release it.
+- Tags, GitHub releases, the release workflow and publishing to any
+  registry (npm, PyPI, JSR) stay with the owner. Merging a candidate does
+  not release it.
 - Post nothing publicly: no npm publish, no release, no comments on other
   projects, no messages to people.
 - Never read, print or commit credentials, tokens or `.env` values.
