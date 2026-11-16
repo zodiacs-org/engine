@@ -110,8 +110,9 @@ below no `package.json` or `node_modules`. The package supports Node
 - Pull requests are merged with a merge commit, never squashed or rebased:
   `archives.json` records source commits, which a squash or rebase would
   rewrite.
-- Do not run the release workflow or publish to npm unless the owner asks. It
-  publishes only a carried archive, from `main`.
+- Do not run the release workflow or publish to any registry unless the
+  owner asks. The release workflow publishes only a carried archive, from
+  `main`.
 - Numbers in documentation need committed evidence. Every tolerance,
   agreement figure, count or size you write in `README.md`, `CHANGELOG.md`
   or `docs/` must be backed by a test that enforces it or by a committed
@@ -196,11 +197,15 @@ rules live here once.
   reviewed that commit and signed off with no blockers. Record the sign-off
   on the pull request before merging. A check that fails "as expected" is
   still failing: such a pull request waits.
-- Never merge with a failing or skipped test or check. A check that passes
-  but says it skipped work counts as skipped, including the archive-binding
-  check when it skips the rebuild of HEAD. A candidate merges only when its
-  latest commit carries its archive and that check rebuilt it. Never push to
-  `main`.
+- Never merge with a failing test or check. A check that passes but says it
+  skipped its work counts as failing, including the archive-binding check
+  when it skips the rebuild of HEAD. A candidate merges only when its latest
+  commit has its archive in its tree and that check rebuilt it. Tests that a
+  job skips by design do not block (the kernel tests outside the tier-B job,
+  which runs them with nothing skipped; tests that need `dist/` before the
+  Build step; the tzdata 2025c test on hosts without it). Any other skipped
+  test blocks, and so does skipping or disabling a test to get green. Never
+  push to `main`.
 - After each merge, report one line saying what went in.
 - Tags, GitHub releases, the release workflow and publishing to any
   registry (npm, PyPI, JSR) stay with the owner. Merging a candidate does
