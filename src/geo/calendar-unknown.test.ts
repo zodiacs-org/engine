@@ -36,7 +36,11 @@ beforeAll(async () => {
     ["1584-01-14", "Europe/Zurich"],
     ["1584-01-14", "Europe/Warsaw"],
     ["1582-12-16", "Europe/Brussels"],
-    ["1752-09-08", "Europe/Vatican"]
+    ["1752-09-08", "Europe/Vatican"],
+    ["1700-03-11", "Europe/Stockholm"],
+    ["1700-03-11", "Europe/Helsinki"],
+    ["1700-03-11", "Europe/Copenhagen"],
+    ["1700-03-11", "Europe/Oslo"]
   ] as const)
     await prepareLocalTime(date, zone);
 });
@@ -70,8 +74,8 @@ describe('"calendar-unknown"', () => {
     expect(GREGORIAN_ADOPTION.map((row) => row.code)).toEqual(Object.keys(capitals));
     // Russia's is the only changeover after 1800, the one kept to zones under Europe/ and Asia/.
     expect(GREGORIAN_ADOPTION.filter((row) => row.firstGregorian >= "1800").map((row) => row.code)).toEqual(["RU"]);
-    // Four capitals are not narrowed: their rows' notes date changeovers that the next test finds.
-    const wide = ["BE", "CH", "NL", "PL"];
+    // Six capitals are not narrowed: their rows' notes date skipped days in another row's (see the next tests).
+    const wide = ["BE", "CH", "FI", "NL", "PL", "SE"];
     for (const row of GREGORIAN_ADOPTION) {
       expect(zoneAdoption(`Europe/${capitals[row.code]}`), row.code).toBe(wide.includes(row.code) ? undefined : row);
       expect(zoneAdoption(`EUROPE/${capitals[row.code]!.toUpperCase()}`), row.code).toBe(wide.includes(row.code) ? undefined : row);
@@ -113,6 +117,10 @@ describe('"calendar-unknown"', () => {
       ["1582-12-16", "Europe/Brussels"]
     ] as const)
       expect(resolveLocalToUtc(date, "12:00", zone).flags, `${zone} ${date}`).toContain("calendar-unknown");
+    // Sweden dropped Julian 1700-02-29 (the SE note: from 1 March 1700 its dates ran one day ahead of the Julian),
+    // a day Denmark and Norway skipped too, and Finland went "with Sweden" (the FI note).
+    for (const zone of ["Europe/Stockholm", "Europe/Helsinki", "Europe/Copenhagen", "Europe/Oslo"])
+      expect(resolveLocalToUtc("1700-02-29", "12:00", zone, { calendar: "julian" }).flags, zone).toContain("calendar-unknown");
   });
 
   it("narrows no zone whose row's note dates a changeover with skipped days in another row's and not its own", () => {
@@ -139,7 +147,12 @@ describe('"calendar-unknown"', () => {
         }
       }
     });
-    expect(narrowed).toEqual(["AT", "CZ", "DE", "DK", "ES", "FI", "FR", "GB", "HU", "IT", "NO", "PT", "RU", "SE"]);
+    expect(narrowed).toEqual(["AT", "CZ", "DE", "DK", "ES", "FR", "GB", "HU", "IT", "NO", "PT", "RU"]);
+    // The check above reads only YYYY-MM-DD dates. A note that dates in words, as SE's does ("from 1 March 1700"),
+    // has to be read by hand, so a narrowed row may hold none but HU's, the Julian date of its own change.
+    const words = /\b(?:\d{1,2} )?(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept?|Oct|Nov|Dec)\.? \d{4}\b/g;
+    expect(GREGORIAN_ADOPTION.filter((row) => narrowed.includes(row.code)).flatMap((row) => (row.note.match(words) ?? []).map((date) => `${row.code} ${date}`))).toEqual(["HU 21 Oct 1587"]);
+    expect(GREGORIAN_ADOPTION.find((row) => row.code === "SE")!.note.match(words)).toEqual(["1 March 1700", "30 February 1712"]);
   });
 
   it("is silenced only by a country the table dates", () => {

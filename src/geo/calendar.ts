@@ -86,12 +86,13 @@ export const GREGORIAN_ADOPTION: readonly Readonly<GregorianAdoption>[] = /*#__P
 );
 
 // For each row in the table's order, the zone tzdata 2025c's zone.tab gives its country for the region of its
-// present capital, all under Europe/, lower-cased. Four rows keep none ("-"): the notes of BE, CH, NL and PL date
-// other changeovers in their capital's zone whose skipped days fall in another row's and not in their own
+// present capital, all under Europe/, lower-cased. Six rows keep none ("-"): the notes of BE, CH, NL, PL, SE and
+// FI date days skipped in their capital's zone that fall in another row's skipped days and not in their own
 // (Grotefend's 1582-12-25 for Brabant; the Catholic cantons and Silesia in January 1584; Friesland and
-// Groningen in 1701), so in those zones every row applies. src/geo/calendar-unknown.test.ts checks the order
-// against the codes and that no other row's note has such a changeover.
-const ZONE_CITIES = "vienna - - prague berlin copenhagen madrid helsinki paris london budapest rome - oslo - lisbon moscow stockholm".split(" ");
+// Groningen in 1701; Sweden's dropped Julian 1700-02-29, Denmark's days too, which Finland shared "with
+// Sweden"), so in those zones every row applies. src/geo/calendar-unknown.test.ts checks the order against the
+// codes and that no other row's note has such a changeover.
+const ZONE_CITIES = "vienna - - prague berlin copenhagen madrid - paris london budapest rome - oslo - lisbon moscow -".split(" ");
 
 /**
  * Internal: the row whose changeover alone applies in `timeZone`, the capital zone of a country above, matched

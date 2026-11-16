@@ -4,7 +4,7 @@
  "counts": {
   "pass": 9,
   "noted": 5,
-  "flagged": 10
+  "flagged": 12
  },
  "records": [
   {
@@ -635,6 +635,68 @@
    "engine": {
     "utc": "1582-12-16T11:42:30.000Z",
     "gregorianDate": "1582-12-16",
+    "flags": [
+     "lmt",
+     "calendar-unknown"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "calendar-unknown",
+     "outside-reference-span",
+     "outside-de440-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "flagged"
+  },
+  {
+   "id": "T3-r",
+   "zone": "Europe/Stockholm",
+   "country": null,
+   "date": "1700-02-29",
+   "calendar": "julian",
+   "existedThere": false,
+   "what": "the Julian day Sweden dropped in 1700 (the SE note), in Stockholm's zone, no country given",
+   "arbiter": {
+    "jdn": 2342042,
+    "utcOfLocalNoon": "1700-03-11T10:47:48.000Z",
+    "offsetSeconds": 4332
+   },
+   "engine": {
+    "utc": "1700-03-11T10:47:48.000Z",
+    "gregorianDate": "1700-03-11",
+    "flags": [
+     "lmt",
+     "calendar-unknown"
+    ],
+    "calendarNote": null,
+    "chartFlags": [
+     "lmt",
+     "calendar-unknown",
+     "outside-reference-span",
+     "outside-de440-span"
+    ]
+   },
+   "instantMatchesArithmetic": true,
+   "verdict": "flagged"
+  },
+  {
+   "id": "T3-r",
+   "zone": "Europe/Helsinki",
+   "country": null,
+   "date": "1700-02-29",
+   "calendar": "julian",
+   "existedThere": false,
+   "what": "the same day, which Finland dropped with Sweden (the FI note), in Helsinki's zone, no country given",
+   "arbiter": {
+    "jdn": 2342042,
+    "utcOfLocalNoon": "1700-03-11T10:20:11.000Z",
+    "offsetSeconds": 5989
+   },
+   "engine": {
+    "utc": "1700-03-11T10:20:11.000Z",
+    "gregorianDate": "1700-03-11",
     "flags": [
      "lmt",
      "calendar-unknown"

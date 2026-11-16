@@ -30,7 +30,8 @@ Synthetic dates and places only.
   `northamerica` file (local mean time −4:56:02 to 1883, EST −5:00 on
   1918-02-05). The second review round added T3-r, with the local mean time
   of Amsterdam (0:19:32), Zurich (0:34:08), Warsaw (1:24:00) and Brussels
-  (0:17:30) from tzdb 2025c's `europe` file.
+  (0:17:30) from tzdb 2025c's `europe` file, and the third round two more,
+  with Stockholm's (1:12:12) and Helsinki's (1:39:49).
 - `../edge-cases-1.1.0-20261116/tools/local-time-rule.mjs`, unchanged, for
   the rest of T3 (Samoa 2011-12-30 and Kwajalein 1993-08-21) and T1 and T2,
   to show the flag moved none of them. Host time zone data: tzdb 2026e.
@@ -47,10 +48,10 @@ Synthetic dates and places only.
 | T3-o: dates that existed where written, no country (Gregorian 1752-09-08 in `Europe/Rome`, 1918-02-05 in `America/New_York`) | not run | pass, 2: no flag, no note |
 | T3-p: Gregorian 1752-09-08 in `America/New_York`, no country | not run | flagged, 1 |
 | T3-q: Gregorian 1752-09-08 in `Europe/London` with `US`, `IE` or `ZZ`, countries the table does not date | not run | flagged, 3 (the branch's first version let any country silence the check) |
-| T3-r: dates a region inside a tabled capital's zone skipped by its row's note, no country (Gregorian 1701-01-05 in `Europe/Amsterdam`, 1584-01-14 in `Europe/Zurich` and `Europe/Warsaw`, 1582-12-16 in `Europe/Brussels`) | not run | flagged, 4 (the second version narrowed these zones to their row's own changeover and let them through) |
+| T3-r: dates a region inside a tabled capital's zone skipped by its row's note, no country (Gregorian 1701-01-05 in `Europe/Amsterdam`, 1584-01-14 in `Europe/Zurich` and `Europe/Warsaw`, 1582-12-16 in `Europe/Brussels`, Julian 1700-02-29 in `Europe/Stockholm` and `Europe/Helsinki`) | not run | flagged, 6 (earlier versions narrowed these zones to their row's own changeover and let them through) |
 
 Every instant still matches the arithmetic; the flag changes no instant.
-Totals: pass 9, noted 5, flagged 10, no fail.
+Totals: pass 9, noted 5, flagged 12, no fail.
 
 T3-p is flagged on purpose. The reviewer listed Gregorian 1752-09-08 in
 `America/New_York` among dates that existed; the table's own source says
@@ -63,15 +64,19 @@ France and did write them. The zone names no tabled country, so the flag,
 carries the "old-style" note instead.
 
 T3-r is flagged because a capital's zone covers more than its row. The
-notes of four rows date changeovers in regions of the capital's present zone
+notes of six rows date changeovers in regions of the capital's present zone
 whose skipped days fall in another row's and not in the row's own:
 Friesland and Groningen on 1701-01-12 (the Netherlands; Zurich's change),
 the Catholic cantons on 1584-01-22 (Switzerland) and Silesia on 1584-01-23
-(Poland; both inside Austria's and Bohemia's), and Brabant on 1582-12-25 by
-Grotefend (Belgium; inside France's). Those four zones take every
-changeover. The other rows' notes date no such changeover
-(`src/geo/calendar-unknown.test.ts` checks this from the notes), so their
-capitals keep their own row alone.
+(Poland; both inside Austria's and Bohemia's), Brabant on 1582-12-25 by
+Grotefend (Belgium; inside France's), and Julian 1700-02-29, which Sweden
+dropped (from 1 March 1700 its dates ran a day ahead of the Julian, the SE
+note) and Finland with it ("with Sweden", the FI note), a day Germany's
+Protestant states, Denmark and Norway also skipped. Those six zones take every changeover. The other
+rows' notes date no such changeover (`src/geo/calendar-unknown.test.ts`
+checks the notes' YYYY-MM-DD dates, and that no narrowed row's note dates in
+words but Hungary's, the Julian date of its own change), so their capitals
+keep their own row alone.
 
 Not covered: Greece's change of 1923. None of the table's three sources
 (tzdb 2025c's `calendars` and Grotefend's 1891 and 1898 works) dates it, so
