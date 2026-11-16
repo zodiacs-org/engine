@@ -453,7 +453,7 @@ interface Chart {
 }
 
 // exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
+type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 // exported by @zodiacs/engine (ChartInput)
 interface ChartInput {

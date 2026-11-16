@@ -126,6 +126,23 @@ which agrees with the root's cusps turning half a circle with the ascendant.
 There the Topocentric circles cross near the horizon, so a point on the
 horizon can lie on two of them.
 
+From the release after 1.1.0, every chart with angles inside the polar circle,
+|latitude| ≥ 90° − ε on the true obliquity of date, carries the flag
+`polar-angles`, in every house system, from `natalChart`, `chart()` and
+`houses()`. There the ascendant does not move steadily: it turns half a circle
+twice a sidereal day, and at either pole it is 0° or 180°. At 70° N on
+2021-06-21 it makes those two turns, each between one minute and the next, and
+every chart of that day carries the flag (`src/polar-angles.test.ts`). The
+flag says the ascendant, and the houses that follow it, can change sign within
+a minute of the birth time. It is the same condition on which Placidus and
+Koch fall back to whole sign (`polar-fallback`), so a polar Placidus chart
+carries both. Just outside the circle, at 66° N, the ascendant moves quickly but without a
+turn, and no flag is set. `birthWindow` sets no `polar-angles`: its cells already show each turn
+as a change of sign. A supplied chart or natal receipt may carry the flag with
+angles at 65° or more (the obliquity never reaches 25°) and may lack it there
+(1.1.0 and earlier never set it); it is refused anywhere else. A birth input
+may echo it where the chart sets it.
+
 A body exactly on a cusp can come out a rounding error below it: just under
 13 at the ascendant.
 

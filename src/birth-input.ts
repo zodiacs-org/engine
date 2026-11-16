@@ -55,6 +55,7 @@ export function validateBirthSettings(birth: BirthSettings): BirthSettings {
 const DERIVED_FLAGS = [
   "no-time",
   "polar-fallback",
+  "polar-angles",
   "outside-reference-span",
   "delta-t-extrapolated",
   "de440-unavailable",

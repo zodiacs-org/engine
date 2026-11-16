@@ -436,8 +436,11 @@ const BODIES = [
 ] as const;
 const FLAGS_RC7 = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"] as const;
 const FLAGS = [...FLAGS_RC7, "outside-reference-span"] as const;
-/** The time-basis sets also take "delta-t-extrapolated", whose condition the record's ΔT and time scale show. */
-const FLAGS_TIME_BASIS = [...FLAGS, "delta-t-extrapolated", "de440-unavailable", "outside-de440-span"] as const;
+/**
+ * The time-basis sets also take "delta-t-extrapolated", whose condition the record's ΔT and time scale show, and
+ * "polar-angles", the angles inside the polar circle (from the release after 1.1.0).
+ */
+const FLAGS_TIME_BASIS = [...FLAGS, "delta-t-extrapolated", "de440-unavailable", "outside-de440-span", "polar-angles"] as const;
 /** From 1.1.0-rc.10: the chart was to come from the shipped DE440 pack and came from astronomy-engine (src/types.ts, EphemerisFallback). */
 const FALLBACK_FLAGS = ["de440-unavailable", "outside-de440-span"] as const;
 const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
@@ -1303,6 +1306,16 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     (resultFlags.includes("delta-t-extrapolated") || compareVersions(engineVersion, "1.1.0-rc.9") > 0)
   )
     expected.push("delta-t-extrapolated");
+  // "polar-angles" is the record's claim that its angles are inside the polar
+  // circle, |latitude| ≥ 90° − ε; the obliquity never reaches 25°, so it is
+  // allowed only with angles at 65° or more, and refused anywhere else. Records
+  // from 1.1.0 and earlier lack it.
+  if (
+    resultFlags.includes("polar-angles") &&
+    result.angles &&
+    Math.abs((receipt.coordinates as { latitude: number }).latitude) >= 65
+  )
+    expected.push("polar-angles");
   // A fallback flag is the record's own claim about what computed it: allowed
   // where the record names astronomy-engine, refused on a DE440 record.
   if (!de440) for (const reason of FALLBACK_FLAGS) if (resultFlags.includes(reason)) expected.push(reason);

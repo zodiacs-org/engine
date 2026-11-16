@@ -93,13 +93,18 @@ export type HouseSystem =
   | "alcabitius"
   | "morinus"
   | "meridian";
-/** `"delta-t-extrapolated"`: a result that moves with a ΔT extrapolated past the IERS table (docs/time.md). */
+/**
+ * `"delta-t-extrapolated"`: a result that moves with a ΔT extrapolated past the IERS table (docs/time.md).
+ * `"polar-angles"`: the angles were computed inside the polar circle, |latitude| ≥ 90° − ε, where the ascendant
+ * turns half a circle twice a sidereal day and is 0° or 180° at the poles (docs/houses.md).
+ */
 export type ChartFlag =
   | "dst-gap"
   | "dst-fold"
   | "lmt"
   | "no-time"
   | "polar-fallback"
+  | "polar-angles"
   | "outside-reference-span"
   | "delta-t-extrapolated"
   | EphemerisFallback;

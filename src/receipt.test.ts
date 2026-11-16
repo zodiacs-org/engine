@@ -96,7 +96,7 @@ describe("Zodiacs draft natal receipt", () => {
       actual: "whole",
       absenceReason: null
     });
-    expect(captured.receipt.resultFlags).toEqual(["polar-fallback"]);
+    expect(captured.receipt.resultFlags).toEqual(["polar-fallback", "polar-angles"]);
     expect(captured.result).toEqual({
       bodies: recorded(original.bodies),
       angles: original.angles,
@@ -351,7 +351,7 @@ describe("Zodiacs draft natal receipt", () => {
       timeKnown: true,
       houses: { requested: "placidus", actual: "whole", absenceReason: null },
       inputFlags: [],
-      resultFlags: ["polar-fallback"]
+      resultFlags: ["polar-fallback", "polar-angles"]
     });
     const output = JSON.stringify(diagnostic);
     for (const privateValue of [

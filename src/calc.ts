@@ -34,7 +34,7 @@ import type { BodyLongitudeAt } from "./crossings.js";
 import { dateFrom } from "./date-input.js";
 import type { DeltaT } from "./deltat.js";
 import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
-import { computeAngles, computeHouses, eastPointOf, isPolarUndefinedHouseSystem, ramcOf, vertexOf } from "./houses.js";
+import { computeAngles, computeHouses, eastPointOf, insidePolarCircle, isPolarUndefinedHouseSystem, ramcOf, vertexOf } from "./houses.js";
 import type { AngleInput } from "./houses.js";
 import { tilt } from "./nutation.js";
 import { meanApogee, meanNodeLongitude } from "./points.js";
@@ -1316,6 +1316,7 @@ export function houses(request: HousesRequest): HousesResult | CalcRefusal {
     // On a ΔT extrapolated, each bound grows by the largest band it covers (docs/calc.md, "Bounds").
     const late = deltaTExtrapolated(used, 1);
     const flags: ChartFlag[] = fellBack ? ["polar-fallback"] : [];
+    if (insidePolarCircle(input)) flags.push("polar-angles");
     if (late) flags.push("delta-t-extrapolated");
     return {
       status: "ok",
@@ -1611,6 +1612,7 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
         : [];
     // Checked against the chart's own flags below.
     possible.push("delta-t-extrapolated", "de440-unavailable", "outside-de440-span");
+    if (timeKnown && place) possible.push("polar-angles");
     assertDerivedFlags(supplied ?? [], possible);
     const input: ChartInput = {
       utc,
