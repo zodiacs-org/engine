@@ -115,7 +115,8 @@ runs, so CI starts the check with node directly.
 | 1.1.0-rc.12 | `4577e2ff924ab1a5f5f6ffc52f7ce595c0e08e4f2cd6cd58d64f7e7bdf020297` | 2,723,759 | 98 | `d35343a1f8ed4516fa23222712ee6473f9265546` | "Carry the packed 1.1.0-rc.12 tarball" | Draft candidate, reviewed in draft with no blocker and superseded by 1.1.0-rc.13 on the same pull request for its documentation; never tagged or published. Still this file |
 | 1.1.0-rc.13 | `8d7b2adb630e629b0673c3901fe383cf9b496429a0b98075581d4a8797767817` | 2,725,396 | 98 | `67a0e38264b363aea05aa1545e7f02ce34b5de8d` | `7fd113e` | Candidate, merged; never tagged or published. 1.1.0 is its code with the version changed |
 | 1.1.0 | `4e53cda9bd6ccb5f5581c2a9af2f2ae4010af2599f411ac5220425e0932e41ac` | 2,726,321 | 98 | `2496c28f273e1e99526490e857332fae44473367` | "Carry the packed 1.1.0 tarball" | Release, merged (pull request 104); on npm as `latest`; npm's tarball is these bytes (its SHA-1, checked 2026-11-16) |
-| 2.0.0-rc.1 | `9a1c07ca898da77ec266543130645f3e2528a1aeef1ebd15b1b83e07d19e673a` | 2,732,244 | 98 | `5bbb4595a7bc26618a504de62805399e28d595d8` | "Carry the packed 2.0.0-rc.1 tarball" | Draft candidate for 2.0.0 (pull request 112), awaiting the owner's review; never tagged or published |
+| 2.0.0-rc.1 | `9a1c07ca898da77ec266543130645f3e2528a1aeef1ebd15b1b83e07d19e673a` | 2,732,244 | 98 | `5bbb4595a7bc26618a504de62805399e28d595d8` | "Carry the packed 2.0.0-rc.1 tarball" | Draft candidate for 2.0.0 (pull request 112), reviewed in draft with one blocker and superseded by 2.0.0-rc.2 on the same pull request; never tagged or published. Still this file |
+| 2.0.0-rc.2 | `e0621630b5a0f9dbb6465f4f077630f313217d7b06ee88ffa960696fec5eb1cc` | 2,734,988 | 98 | `05cd353af00e796e1fad65bf7085356c315b4b86` | "Carry the packed 2.0.0-rc.2 tarball" | Draft candidate for 2.0.0 (pull request 112), awaiting the owner's review; never tagged or published |
 
 1.1.0-rc.9, 1.1.0-rc.10, 1.1.0-rc.11, 1.1.0-rc.12 and 1.1.0-rc.13 are five cuts of one draft, pull request 101.
 1.1.0-rc.9 was carried on 2026-11-14 and reviewed in draft; the owner then
@@ -181,6 +182,26 @@ gave the same bytes. It was carried after every gate workflow had passed on
 the source commit (CI run 43907668826, Conformance 43907668642 and Atlas
 43907668886). It is not to be published on npm until the
 owner approves it. The record is in `docs/evidence/2.0.0-rc.1-20261116/`.
+
+2.0.0-rc.1 and 2.0.0-rc.2 are two cuts of one draft, pull request 112.
+2.0.0-rc.1 was carried on 2026-11-16 and reviewed in draft; the review
+found one blocker: a supplied chart's or natal receipt's `polar-angles`
+claim was checked against the constant and linear terms of the mean
+obliquity alone, which from 2936 on refused some charts the engine itself
+had flagged. The fix (pull request 105, `522a0d6`) changes packed files, so
+by the rule above the new bytes took a new version, 2.0.0-rc.2, and
+2.0.0-rc.1's archive stays, unchanged, with its receipt and its entry; the
+check needed no exception. 2.0.0-rc.1 was never tagged or published and is
+not meant to be; 2.0.0-rc.2 became the candidate for 2.0.0. Its archive is
+2,734,988 bytes, 4,603,789 unpacked in 98 files, of which 1,284,237 are
+beside the pack, under the cap of 1,289,000; it raises no budget. It was
+packed once, from a clean tree of its source commit (`git archive`)
+installed with `npm ci`, on Node 22.23.4 with npm 10.9.9; the pack of the
+working checkout gave the same bytes. It was carried after every gate
+workflow had passed on the source commit (CI run 43920027679, Conformance
+43920027647 and Atlas 43920027649). It is not to be published on npm until
+the owner approves it. The record is in
+`docs/evidence/2.0.0-rc.2-20261116/`.
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
