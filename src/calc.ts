@@ -1601,13 +1601,6 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
   // natalChart() takes a Date, so a Julian date is read to the nearest millisecond on its scale.
   const whole: TimeInput = { ...time, ms: Math.round(time.ms) };
   return inSpan(whole, (basis): ChartResult => {
-    // As natalChart(): a calendar date with no time reads as 00:00 UTC, a birth time nobody gave. Checked after
-    // the span, so an instant outside it is refused as before.
-    if ("iso" in time.record && !time.record.iso.includes("T") && settings.timeKnown !== false) {
-      throw new RangeError(
-        "time is a calendar date with no time. Give the birth instant with its UTC offset, such as 1990-05-03T08:30:00+02:00, or set timeKnown: false if the birth time is not known."
-      );
-    }
     const utc = new Date(whole.ms);
     const houseSystem = settings.houseSystem ?? "whole";
     const timeKnown = settings.timeKnown ?? true;
@@ -1620,6 +1613,13 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
     // Checked against the chart's own flags below.
     possible.push("delta-t-extrapolated", "de440-unavailable", "outside-de440-span");
     assertDerivedFlags(supplied ?? [], possible);
+    // As natalChart(): a calendar date with no time reads as 00:00 UTC, a birth time nobody gave. Checked after
+    // every other input check and after the span, so an instant outside it is refused as out-of-range first.
+    if ("iso" in time.record && !time.record.iso.includes("T") && settings.timeKnown !== false) {
+      throw new RangeError(
+        "time is a calendar date with no time. Give the birth instant with its UTC offset, such as 1990-05-03T08:30:00+02:00, or set timeKnown: false if the birth time is not known."
+      );
+    }
     const input: ChartInput = {
       utc,
       houseSystem,

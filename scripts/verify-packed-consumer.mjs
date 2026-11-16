@@ -247,7 +247,7 @@ writeFileSync(
   join(directory, "consumer.mjs"),
   `
 import assert from "node:assert/strict";
-import { natalChart, positions, transits, synastry, moonPhase, progressedInstant, progressedBodies, PROGRESSION_DAYS_PER_YEAR, ENGINE_VERSION } from "@zodiacs/engine";
+import { natalChart, positions, transits, synastry, moonPhase, progressedInstant, progressedBodies, PROGRESSION_DAYS_PER_YEAR, ENGINE_VERSION, saturnReturn } from "@zodiacs/engine";
 import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticToEquatorial, declinationsForBodies, findDeclinationAspects } from "@zodiacs/engine";
 import { EPHEMERIS_SPAN, SUN_BOUND_LATITUDE } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
@@ -355,6 +355,7 @@ assert.throws(() => natalChart({utc: "2000-01-01", houseSystem: "unsupported"}),
 // A calendar date with no time is refused unless the birth time is declared unknown.
 assert.throws(() => natalChart({utc: "2000-01-01"}), {name: "RangeError", message: /calendar date with no time/});
 assert(natalChart({utc: "2000-01-01", timeKnown: false}).flags.includes("no-time"));
+assert.throws(() => saturnReturn("2000-01-01"), {name: "RangeError", message: /calendar date with no time/});
 for (const name of ["react", "@zodiacs/sdk"]) {
   assert.throws(() => import.meta.resolve(name), {code: "ERR_MODULE_NOT_FOUND"});
 }

@@ -311,7 +311,12 @@ export function utcOf(input: ChartInput): Date {
   return new Date(Math.round(timeBasis(input.utc.getTime(), input.timeScale, input.deltaT).utcMs));
 }
 
-/** Natal Saturn and return seasons through approximately age 92. */
+/**
+ * Natal Saturn and return seasons through approximately age 92. A calendar
+ * date with no time, such as "1990-05-03", given in place of a birth or as a
+ * birth's `utc`, is refused with a RangeError unless the birth object sets
+ * `timeKnown: false`.
+ */
 export function saturnReturn(birth: SaturnReturnSource): SaturnReturnResult {
   let utc: Date;
   if (isChart(birth)) {
@@ -324,7 +329,15 @@ export function saturnReturn(birth: SaturnReturnSource): SaturnReturnResult {
     utc = utcOf(
       validated.flags?.values.includes("polar-fallback") ? computedBirth(validated).input : validated.input
     );
-  } else utc = dateFrom(birth, "birth");
+  } else {
+    // A bare date in place of a birth is refused as a birth object's is: one rule for a birth given with no time.
+    if (typeof birth === "string" && !birth.includes("T")) {
+      throw new RangeError(
+        "birth is a calendar date with no time. Give the birth instant with its UTC offset, such as 1990-05-03T08:30:00+02:00, or pass { utc, timeKnown: false } if the birth time is not known."
+      );
+    }
+    utc = dateFrom(birth, "birth");
+  }
   // The search reads the ephemeris from birth to about age 92: every kind of fallback it met is reported,
   // and a search that met one is named astronomy-engine, the source of those positions (from 1.1.0-rc.12;
   // before, one that began inside the pack named jpl-de440 beside "outside-de440-span").

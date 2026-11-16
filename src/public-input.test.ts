@@ -140,8 +140,11 @@ describe("public birth settings", () => {
     expect(() => chartPoints({ utc: "1990-05-03", latitude: 40, longitude: -74 })).toThrow(refusal);
     expect(() => natalChart({ utc: "+001990-05-03" })).toThrow(refusal);
     expect(() => natalChart({ utc: "1990-05-03", timeScale: "tt" })).toThrow(refusal);
-    // saturnReturn also takes a bare date in place of a birth, and reads it as a date: no houses are computed.
-    expect(saturnReturn("1990-05-03").flags).toEqual(saturnReturn("1990-05-03T00:00:00Z").flags);
+    // saturnReturn refuses a bare date given in place of a birth as it refuses one given as a birth's utc.
+    expect(() => saturnReturn("1990-05-03")).toThrow(RangeError);
+    expect(() => saturnReturn("1990-05-03")).toThrow(/calendar date with no time.*timeKnown: false/);
+    expect(() => saturnReturn("+001990-05-03")).toThrow(/calendar date with no time/);
+    expect(saturnReturn({ utc: "1990-05-03", timeKnown: false }).seasons).toEqual(saturnReturn("1990-05-03T00:00:00Z").seasons);
     expect(saturnReturn({ utc: "1990-05-03", timeKnown: false }).ephemeris).toBeTypeOf("string");
 
     const untimed = natalChart({ utc: "1990-05-03", timeKnown: false });

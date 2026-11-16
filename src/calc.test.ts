@@ -829,7 +829,12 @@ describe("typed refusals", () => {
       expect(() => chart({ time, timeKnown: true })).toThrow(RangeError);
       const untimed = chart({ time, timeKnown: false });
       expect(untimed.status === "ok" && untimed.chart.flags.includes("no-time") && untimed.chart.houses === null).toBe(true);
+      // The other input checks come first: a derived flag the chart cannot produce is refused for that flag.
+      expect(() => chart({ time, timeFlags: ["polar-fallback"] })).toThrow(/flags contradict/);
     }
+    // And the span: a bare date outside it is refused as out-of-range, not for its missing time.
+    expect(refused(chart({ time: "1700-01-01" })).reason).toBe("out-of-range");
+    expect(refused(chart({ time: { iso: "2300-01-01" } })).reason).toBe("out-of-range");
     expect(refused(events({ kind: "longitude-crossing", body: "Sun", longitude: 0, from: "2199-06-01", to: "2200-06-01" })).reason).toBe("out-of-range");
   });
 
