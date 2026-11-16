@@ -121,7 +121,16 @@ unknown body, frame or field, an invalid date, a latitude out of range) throws
   UTC, UT1 and TT the engine used. A Julian date near 2.46 million holds time
   to about 4 × 10⁻¹⁰ of a day (40 µs); `chart()` reads it to the nearest
   millisecond, because `natalChart()` takes a `Date`. An instant is computed
-  only when both its UT1 and its TT lie in the span (see Refusals).
+  only when both its UT1 and its TT lie in the span (see Refusals). One
+  exception, in `chart()` alone: a calendar date with no time, such as
+  `"1990-05-03"` or `{ iso: "1990-05-03" }`, is refused with a `RangeError`,
+  as `natalChart()` refuses one as a birth's `utc`, unless `timeKnown` is
+  false. Read as 00:00 UTC it would give angles and houses for a birth time
+  nobody gave. With `timeKnown: false` the date is read as 00:00 UTC and the
+  chart has the `no-time` flag and no angles or houses. The refusal comes
+  after every other input check and after the span, so a date outside the
+  span is refused as `out-of-range` first. `calc()`, `houses()` and
+  `events()` read a calendar date as 00:00 UTC, as `positions()` does.
 - **`place`** and the topocentric observer: `{ latitude, longitude }`,
   geodetic, east longitude positive, degrees; the observer also takes
   `height` in metres above astronomy-engine's ellipsoid (IERS 2003,

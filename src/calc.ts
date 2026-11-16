@@ -1520,6 +1520,7 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
 // ---------------------------------------------------------------- chart()
 
 export interface ChartRequest {
+  /** A calendar date with no time, such as "1990-05-03", is refused with a RangeError unless `timeKnown` is false. */
   readonly time: CalcTime;
   /** Without a place there are no angles or houses. */
   readonly place?: CalcLocation;
@@ -1612,6 +1613,13 @@ export function chart(request: ChartRequest): ChartResult | CalcRefusal {
     // Checked against the chart's own flags below.
     possible.push("delta-t-extrapolated", "de440-unavailable", "outside-de440-span");
     assertDerivedFlags(supplied ?? [], possible);
+    // As natalChart(): a calendar date with no time reads as 00:00 UTC, a birth time nobody gave. Checked after
+    // every other input check and after the span, so an instant outside it is refused as out-of-range first.
+    if ("iso" in time.record && !time.record.iso.includes("T") && settings.timeKnown !== false) {
+      throw new RangeError(
+        "time is a calendar date with no time. Give the birth instant with its UTC offset, such as 1990-05-03T08:30:00+02:00, or set timeKnown: false if the birth time is not known."
+      );
+    }
     const input: ChartInput = {
       utc,
       houseSystem,

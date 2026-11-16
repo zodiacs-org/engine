@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { moonPhase, natalChart, positions, progressedInstant, saturnReturn, synastry, transits } from "./index.js";
+import { chartPoints, moonPhase, natalChart, positions, progressedInstant, saturnReturn, synastry, transits } from "./index.js";
 import type { BirthInput, DateInput } from "./types.js";
 
 describe("public resolved-instant inputs", () => {
@@ -110,7 +110,7 @@ describe("public birth settings", () => {
   });
 
   it("preserves defaults, explicit house systems, and unknown birth time", () => {
-    expect(natalChart({ utc: "2024-02-29" }).input).toMatchObject({
+    expect(natalChart({ utc: "2024-02-29T00:00:00Z" }).input).toMatchObject({
       houseSystem: "whole",
       timeKnown: true
     });
@@ -127,6 +127,44 @@ describe("public birth settings", () => {
     expect(unknown.flags).toContain("no-time");
   });
 
+  it("refuses a calendar date with no time unless the birth time is declared unknown", () => {
+    const refusal = /calendar date with no time.*timeKnown: false/;
+    // Synthetic dates. A bare date reads as 00:00 UTC, which is not a birth time anyone gave.
+    expect(() => natalChart({ utc: "1990-05-03" })).toThrow(RangeError);
+    expect(() => natalChart({ utc: "1990-05-03" })).toThrow(refusal);
+    expect(() => natalChart({ utc: "1990-05-03", timeKnown: true })).toThrow(refusal);
+    expect(() => natalChart({ utc: "1990-05-03", latitude: 40, longitude: -74 })).toThrow(refusal);
+    expect(() => transits({ utc: "1990-05-03" }, "2024-02-29T00:00:00Z")).toThrow(refusal);
+    expect(() => synastry({ utc: "1990-05-03T08:30:00+02:00" }, { utc: "1991-07-09" })).toThrow(refusal);
+    expect(() => saturnReturn({ utc: "1990-05-03" })).toThrow(refusal);
+    expect(() => chartPoints({ utc: "1990-05-03", latitude: 40, longitude: -74 })).toThrow(refusal);
+    expect(() => natalChart({ utc: "+001990-05-03" })).toThrow(refusal);
+    expect(() => natalChart({ utc: "1990-05-03", timeScale: "tt" })).toThrow(refusal);
+    // saturnReturn refuses a bare date given in place of a birth as it refuses one given as a birth's utc.
+    expect(() => saturnReturn("1990-05-03")).toThrow(RangeError);
+    expect(() => saturnReturn("1990-05-03")).toThrow(/calendar date with no time.*timeKnown: false/);
+    expect(() => saturnReturn("+001990-05-03")).toThrow(/calendar date with no time/);
+    // The date's own checks and the ephemeris span come first, with their own messages.
+    for (const invalid of ["hello", "1990-02-30"]) {
+      expect(() => saturnReturn(invalid), invalid).toThrow(RangeError);
+      expect(() => saturnReturn(invalid), invalid).not.toThrow(/calendar date with no time/);
+    }
+    expect(() => saturnReturn("3950-01-01")).toThrow(/^The instant is outside the ephemeris span/);
+    expect(saturnReturn({ utc: "1990-05-03", timeKnown: false }).seasons).toEqual(saturnReturn("1990-05-03T00:00:00Z").seasons);
+    expect(saturnReturn({ utc: "1990-05-03", timeKnown: false }).ephemeris).toBeTypeOf("string");
+
+    const untimed = natalChart({ utc: "1990-05-03", timeKnown: false });
+    expect(untimed.input.timeKnown).toBe(false);
+    expect(untimed.input.utc.toISOString()).toBe("1990-05-03T00:00:00.000Z");
+    expect(untimed.flags).toContain("no-time");
+    expect(untimed.houses).toBeNull();
+
+    // A full instant, a Date and an epoch number say which instant is meant and are read as before.
+    for (const utc of ["1990-05-03T00:00:00Z", "1990-05-03T08:30:00+02:00", new Date("1990-05-03T00:00:00Z"), Date.UTC(1990, 4, 3)]) {
+      expect(natalChart({ utc }).input.timeKnown).toBe(true);
+    }
+  });
+
   it("validates birth settings even when Saturn returns do not use houses", () => {
     expect(() =>
       saturnReturn({ utc: "2024-02-29", timeKnown: "false" } as unknown as BirthInput)
@@ -141,7 +179,7 @@ describe("public birth settings", () => {
     ["synastry", (chart: ReturnType<typeof natalChart>) => synastry(chart, chart)],
     ["saturnReturn", (chart: ReturnType<typeof natalChart>) => saturnReturn(chart)]
   ])("validates the instant and settings when %s reuses a chart", (_label, calculate) => {
-    const chart = natalChart({ utc: "2024-02-29" });
+    const chart = natalChart({ utc: "2024-02-29T00:00:00Z" });
     chart.input.utc = new Date(NaN);
     expect(() => calculate(chart)).toThrow(RangeError);
     chart.input.utc = new Date("2024-02-29T00:00:00Z");
