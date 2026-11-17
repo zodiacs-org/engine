@@ -1,0 +1,770 @@
+{
+ "node": "v22.22.2",
+ "tz": "2025c",
+ "icu": "78.2",
+ "pinned": "2026f",
+ "baseline": "2021a",
+ "probes": 703,
+ "intlAgreesWith": {
+  "pinned": 635,
+  "baseline": 68,
+  "neither": 0
+ },
+ "disagreements": [
+  {
+   "name": "Africa/Casablanca",
+   "from": "2026-09-20T01:00:00Z",
+   "to": "2027-02-07T02:00:00Z",
+   "probe": "2026-11-29T01:30:00Z",
+   "intl": 3600,
+   "pinned": 0,
+   "baseline": 3600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Africa/Casablanca",
+   "from": "2027-03-14T02:00:00Z",
+   "to": "2028-01-23T02:00:00Z",
+   "probe": "2027-08-18T14:00:00Z",
+   "intl": 3600,
+   "pinned": 0,
+   "baseline": 3600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Africa/Casablanca",
+   "from": "2028-03-05T02:00:00Z",
+   "to": "2029-01-14T02:00:00Z",
+   "probe": "2028-08-09T14:00:00Z",
+   "intl": 3600,
+   "pinned": 0,
+   "baseline": 3600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Africa/Casablanca",
+   "from": "2029-02-18T02:00:00Z",
+   "to": null,
+   "probe": "2029-04-04T02:00:00Z",
+   "intl": 3600,
+   "pinned": 0,
+   "baseline": 3600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Africa/El_Aaiun",
+   "from": "2026-09-20T01:00:00Z",
+   "to": "2027-02-07T02:00:00Z",
+   "probe": "2026-11-29T01:30:00Z",
+   "intl": 3600,
+   "pinned": 0,
+   "baseline": 3600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Africa/El_Aaiun",
+   "from": "2027-03-14T02:00:00Z",
+   "to": "2028-01-23T02:00:00Z",
+   "probe": "2027-08-18T14:00:00Z",
+   "intl": 3600,
+   "pinned": 0,
+   "baseline": 3600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Africa/El_Aaiun",
+   "from": "2028-03-05T02:00:00Z",
+   "to": "2029-01-14T02:00:00Z",
+   "probe": "2028-08-09T14:00:00Z",
+   "intl": 3600,
+   "pinned": 0,
+   "baseline": 3600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Africa/El_Aaiun",
+   "from": "2029-02-18T02:00:00Z",
+   "to": null,
+   "probe": "2029-04-04T02:00:00Z",
+   "intl": 3600,
+   "pinned": 0,
+   "baseline": 3600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Bogota",
+   "from": "1992-05-02T05:00:00Z",
+   "to": "1992-05-03T05:00:00Z",
+   "probe": "1992-05-02T17:00:00Z",
+   "intl": -18000,
+   "pinned": -14400,
+   "baseline": -18000,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Edmonton",
+   "from": "2026-11-01T08:00:00Z",
+   "to": "2027-03-14T09:00:00Z",
+   "probe": "2027-01-06T20:30:00Z",
+   "intl": -25200,
+   "pinned": -21600,
+   "baseline": -25200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Edmonton",
+   "from": "2027-11-07T08:00:00Z",
+   "to": "2028-03-12T09:00:00Z",
+   "probe": "2028-01-09T08:30:00Z",
+   "intl": -25200,
+   "pinned": -21600,
+   "baseline": -25200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Edmonton",
+   "from": "2028-11-05T08:00:00Z",
+   "to": "2029-03-11T09:00:00Z",
+   "probe": "2029-01-07T08:30:00Z",
+   "intl": -25200,
+   "pinned": -21600,
+   "baseline": -25200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Havana",
+   "from": "2026-11-01T05:00:00Z",
+   "to": "2027-03-14T05:00:00Z",
+   "probe": "2027-01-06T17:00:00Z",
+   "intl": -18000,
+   "pinned": -14400,
+   "baseline": -18000,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Inuvik",
+   "from": "2026-11-01T08:00:00Z",
+   "to": "2027-03-14T09:00:00Z",
+   "probe": "2027-01-06T20:30:00Z",
+   "intl": -25200,
+   "pinned": -21600,
+   "baseline": -25200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Inuvik",
+   "from": "2027-11-07T08:00:00Z",
+   "to": "2028-03-12T09:00:00Z",
+   "probe": "2028-01-09T08:30:00Z",
+   "intl": -25200,
+   "pinned": -21600,
+   "baseline": -25200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Inuvik",
+   "from": "2028-11-05T08:00:00Z",
+   "to": "2029-03-11T09:00:00Z",
+   "probe": "2029-01-07T08:30:00Z",
+   "intl": -25200,
+   "pinned": -21600,
+   "baseline": -25200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Rainy_River",
+   "from": "2026-11-01T07:00:00Z",
+   "to": "2027-03-14T08:00:00Z",
+   "probe": "2027-01-06T19:30:00Z",
+   "intl": -21600,
+   "pinned": -18000,
+   "baseline": -21600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Rainy_River",
+   "from": "2027-11-07T07:00:00Z",
+   "to": "2028-03-12T08:00:00Z",
+   "probe": "2028-01-09T07:30:00Z",
+   "intl": -21600,
+   "pinned": -18000,
+   "baseline": -21600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Rainy_River",
+   "from": "2028-11-05T07:00:00Z",
+   "to": "2029-03-11T08:00:00Z",
+   "probe": "2029-01-07T07:30:00Z",
+   "intl": -21600,
+   "pinned": -18000,
+   "baseline": -21600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Vancouver",
+   "from": "2026-11-01T09:00:00Z",
+   "to": "2027-03-14T10:00:00Z",
+   "probe": "2027-01-06T21:30:00Z",
+   "intl": -28800,
+   "pinned": -25200,
+   "baseline": -28800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Vancouver",
+   "from": "2027-11-07T09:00:00Z",
+   "to": "2028-03-12T10:00:00Z",
+   "probe": "2028-01-09T09:30:00Z",
+   "intl": -28800,
+   "pinned": -25200,
+   "baseline": -28800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Vancouver",
+   "from": "2028-11-05T09:00:00Z",
+   "to": "2029-03-11T10:00:00Z",
+   "probe": "2029-01-07T09:30:00Z",
+   "intl": -28800,
+   "pinned": -25200,
+   "baseline": -28800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Winnipeg",
+   "from": "2026-11-01T07:00:00Z",
+   "to": "2027-03-14T08:00:00Z",
+   "probe": "2027-01-06T19:30:00Z",
+   "intl": -21600,
+   "pinned": -18000,
+   "baseline": -21600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Winnipeg",
+   "from": "2027-11-07T07:00:00Z",
+   "to": "2028-03-12T08:00:00Z",
+   "probe": "2028-01-09T07:30:00Z",
+   "intl": -21600,
+   "pinned": -18000,
+   "baseline": -21600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Winnipeg",
+   "from": "2028-11-05T07:00:00Z",
+   "to": "2029-03-11T08:00:00Z",
+   "probe": "2029-01-07T07:30:00Z",
+   "intl": -21600,
+   "pinned": -18000,
+   "baseline": -21600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Yellowknife",
+   "from": "2026-11-01T08:00:00Z",
+   "to": "2027-03-14T09:00:00Z",
+   "probe": "2027-01-06T20:30:00Z",
+   "intl": -25200,
+   "pinned": -21600,
+   "baseline": -25200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Yellowknife",
+   "from": "2027-11-07T08:00:00Z",
+   "to": "2028-03-12T09:00:00Z",
+   "probe": "2028-01-09T08:30:00Z",
+   "intl": -25200,
+   "pinned": -21600,
+   "baseline": -25200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "America/Yellowknife",
+   "from": "2028-11-05T08:00:00Z",
+   "to": "2029-03-11T09:00:00Z",
+   "probe": "2029-01-07T08:30:00Z",
+   "intl": -25200,
+   "pinned": -21600,
+   "baseline": -25200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Canada/Central",
+   "from": "2026-11-01T07:00:00Z",
+   "to": "2027-03-14T08:00:00Z",
+   "probe": "2027-01-06T19:30:00Z",
+   "intl": -21600,
+   "pinned": -18000,
+   "baseline": -21600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Canada/Central",
+   "from": "2027-11-07T07:00:00Z",
+   "to": "2028-03-12T08:00:00Z",
+   "probe": "2028-01-09T07:30:00Z",
+   "intl": -21600,
+   "pinned": -18000,
+   "baseline": -21600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Canada/Central",
+   "from": "2028-11-05T07:00:00Z",
+   "to": "2029-03-11T08:00:00Z",
+   "probe": "2029-01-07T07:30:00Z",
+   "intl": -21600,
+   "pinned": -18000,
+   "baseline": -21600,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Canada/Mountain",
+   "from": "2026-11-01T08:00:00Z",
+   "to": "2027-03-14T09:00:00Z",
+   "probe": "2027-01-06T20:30:00Z",
+   "intl": -25200,
+   "pinned": -21600,
+   "baseline": -25200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Canada/Mountain",
+   "from": "2027-11-07T08:00:00Z",
+   "to": "2028-03-12T09:00:00Z",
+   "probe": "2028-01-09T08:30:00Z",
+   "intl": -25200,
+   "pinned": -21600,
+   "baseline": -25200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Canada/Mountain",
+   "from": "2028-11-05T08:00:00Z",
+   "to": "2029-03-11T09:00:00Z",
+   "probe": "2029-01-07T08:30:00Z",
+   "intl": -25200,
+   "pinned": -21600,
+   "baseline": -25200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Canada/Pacific",
+   "from": "2026-11-01T09:00:00Z",
+   "to": "2027-03-14T10:00:00Z",
+   "probe": "2027-01-06T21:30:00Z",
+   "intl": -28800,
+   "pinned": -25200,
+   "baseline": -28800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Canada/Pacific",
+   "from": "2027-11-07T09:00:00Z",
+   "to": "2028-03-12T10:00:00Z",
+   "probe": "2028-01-09T09:30:00Z",
+   "intl": -28800,
+   "pinned": -25200,
+   "baseline": -28800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Canada/Pacific",
+   "from": "2028-11-05T09:00:00Z",
+   "to": "2029-03-11T10:00:00Z",
+   "probe": "2029-01-07T09:30:00Z",
+   "intl": -28800,
+   "pinned": -25200,
+   "baseline": -28800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Cuba",
+   "from": "2026-11-01T05:00:00Z",
+   "to": "2027-03-14T05:00:00Z",
+   "probe": "2027-01-06T17:00:00Z",
+   "intl": -18000,
+   "pinned": -14400,
+   "baseline": -18000,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2022-03-27T00:00:00Z",
+   "to": "2022-03-27T01:00:00Z",
+   "probe": "2022-03-27T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2022-10-30T00:00:00Z",
+   "to": "2022-10-30T01:00:00Z",
+   "probe": "2022-10-30T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2023-03-26T00:00:00Z",
+   "to": "2023-03-26T01:00:00Z",
+   "probe": "2023-03-26T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2023-10-29T00:00:00Z",
+   "to": "2023-10-29T01:00:00Z",
+   "probe": "2023-10-29T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2024-03-31T00:00:00Z",
+   "to": "2024-03-31T01:00:00Z",
+   "probe": "2024-03-31T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2024-10-27T00:00:00Z",
+   "to": "2024-10-27T01:00:00Z",
+   "probe": "2024-10-27T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2025-03-30T00:00:00Z",
+   "to": "2025-03-30T01:00:00Z",
+   "probe": "2025-03-30T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2025-10-26T00:00:00Z",
+   "to": "2025-10-26T01:00:00Z",
+   "probe": "2025-10-26T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2026-03-29T00:00:00Z",
+   "to": "2026-03-29T01:00:00Z",
+   "probe": "2026-03-29T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2026-10-25T00:00:00Z",
+   "to": "2026-10-25T01:00:00Z",
+   "probe": "2026-10-25T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2027-03-28T00:00:00Z",
+   "to": "2027-03-28T01:00:00Z",
+   "probe": "2027-03-28T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2027-10-31T00:00:00Z",
+   "to": "2027-10-31T01:00:00Z",
+   "probe": "2027-10-31T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2028-03-26T00:00:00Z",
+   "to": "2028-03-26T01:00:00Z",
+   "probe": "2028-03-26T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2028-10-29T00:00:00Z",
+   "to": "2028-10-29T01:00:00Z",
+   "probe": "2028-10-29T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Chisinau",
+   "from": "2029-03-25T00:00:00Z",
+   "to": "2029-03-25T01:00:00Z",
+   "probe": "2029-03-25T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2022-03-27T00:00:00Z",
+   "to": "2022-03-27T01:00:00Z",
+   "probe": "2022-03-27T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2022-10-30T00:00:00Z",
+   "to": "2022-10-30T01:00:00Z",
+   "probe": "2022-10-30T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2023-03-26T00:00:00Z",
+   "to": "2023-03-26T01:00:00Z",
+   "probe": "2023-03-26T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2023-10-29T00:00:00Z",
+   "to": "2023-10-29T01:00:00Z",
+   "probe": "2023-10-29T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2024-03-31T00:00:00Z",
+   "to": "2024-03-31T01:00:00Z",
+   "probe": "2024-03-31T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2024-10-27T00:00:00Z",
+   "to": "2024-10-27T01:00:00Z",
+   "probe": "2024-10-27T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2025-03-30T00:00:00Z",
+   "to": "2025-03-30T01:00:00Z",
+   "probe": "2025-03-30T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2025-10-26T00:00:00Z",
+   "to": "2025-10-26T01:00:00Z",
+   "probe": "2025-10-26T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2026-03-29T00:00:00Z",
+   "to": "2026-03-29T01:00:00Z",
+   "probe": "2026-03-29T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2026-10-25T00:00:00Z",
+   "to": "2026-10-25T01:00:00Z",
+   "probe": "2026-10-25T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2027-03-28T00:00:00Z",
+   "to": "2027-03-28T01:00:00Z",
+   "probe": "2027-03-28T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2027-10-31T00:00:00Z",
+   "to": "2027-10-31T01:00:00Z",
+   "probe": "2027-10-31T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2028-03-26T00:00:00Z",
+   "to": "2028-03-26T01:00:00Z",
+   "probe": "2028-03-26T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2028-10-29T00:00:00Z",
+   "to": "2028-10-29T01:00:00Z",
+   "probe": "2028-10-29T00:30:00Z",
+   "intl": 7200,
+   "pinned": 10800,
+   "baseline": 7200,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Europe/Tiraspol",
+   "from": "2029-03-25T00:00:00Z",
+   "to": "2029-03-25T01:00:00Z",
+   "probe": "2029-03-25T00:30:00Z",
+   "intl": 10800,
+   "pinned": 7200,
+   "baseline": 10800,
+   "verdict": "baseline"
+  }
+ ],
+ "engine": [
+  {
+   "date": "2026-12-15",
+   "time": "12:00",
+   "zone": "America/Havana",
+   "utc": "2026-12-15T17:00:00.000Z",
+   "offsetMinutes": -300,
+   "flags": [
+    "host-zone-data-differs"
+   ],
+   "zone_": {
+    "source": "intl",
+    "tzdbVersion": "2025c",
+    "dataForm": "host",
+    "abbreviation": null,
+    "dst": null,
+    "hostCheck": {
+     "status": "differs",
+     "probe": "2027-01-06T17:00:00.000Z",
+     "hostOffsetMinutes": -300,
+     "tzdbOffsetMinutes": -240,
+     "tzdbVersion": "2026f"
+    }
+   }
+  },
+  {
+   "date": "2027-01-15",
+   "time": "12:00",
+   "zone": "America/Vancouver",
+   "utc": "2027-01-15T20:00:00.000Z",
+   "offsetMinutes": -480,
+   "flags": [
+    "host-zone-data-differs"
+   ],
+   "zone_": {
+    "source": "intl",
+    "tzdbVersion": "2025c",
+    "dataForm": "host",
+    "abbreviation": null,
+    "dst": null,
+    "hostCheck": {
+     "status": "differs",
+     "probe": "2027-01-06T21:30:00.000Z",
+     "hostOffsetMinutes": -480,
+     "tzdbOffsetMinutes": -420,
+     "tzdbVersion": "2026f"
+    }
+   }
+  },
+  {
+   "date": "2024-03-31",
+   "time": "02:30",
+   "zone": "Europe/Chisinau",
+   "utc": "2024-03-31T00:30:00.000Z",
+   "offsetMinutes": 180,
+   "flags": [
+    "dst-gap",
+    "host-zone-data-differs"
+   ],
+   "zone_": {
+    "source": "intl",
+    "tzdbVersion": "2025c",
+    "dataForm": "host",
+    "abbreviation": null,
+    "dst": null,
+    "hostCheck": {
+     "status": "differs",
+     "probe": "2024-03-31T00:30:00.000Z",
+     "hostOffsetMinutes": 180,
+     "tzdbOffsetMinutes": 120,
+     "tzdbVersion": "2026f"
+    }
+   }
+  }
+ ]
+}

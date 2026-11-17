@@ -201,7 +201,7 @@ interface ChartDeclinations extends Declinations {
     flags: EphemerisFallback[];
 }
 
-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
+type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 interface ChartInput {
     utc: Date;

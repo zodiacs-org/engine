@@ -16,6 +16,7 @@ export {
   zoneOffsetAt
 } from "./geo/timezone.js";
 export type {
+  HostZoneCheck,
   LocalBirthInput,
   LocalBirthResolution,
   FoldChoice,

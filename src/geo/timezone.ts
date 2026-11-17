@@ -5,7 +5,8 @@ import { civilDateOf, julianDayNumber, parseCalendarDate } from "../civil-calend
 import type { CalendarName } from "../civil-calendar.js";
 import { GREGORIAN_ADOPTION, checkCalendarCountry, gregorianAdoption, noteFor, zoneAdoption } from "./calendar.js";
 import type { CalendarNote } from "./calendar.js";
-import { TZDB, laterCause, loadHistory, loadedHistory, transitionAt, typeIndexAt } from "./zone-history.js";
+import { TZDB, laterCause, loadHistory, loadedHistory, nameHash, transitionAt, typeIndexAt } from "./zone-history.js";
+import { HOST_PROBES, HOST_PROBES_TZDB } from "./host-probes-data.js";
 import type { TransitionCause, ZoneHistory } from "./zone-history.js";
 
 export type { TransitionCause };
@@ -51,9 +52,11 @@ export interface LocalTimeResolution {
    * A gap or fold of any cause ("dst-" names kept for compatibility; see `jump`), a local mean time clock, and
    * "calendar-unknown": no `country` the table dates, and a date that one of the adoption table's changeovers
    * skipped and the zone does not rule out, so whether it was in civil use where it was written is not known
-   * (docs/time.md).
+   * (docs/time.md). "host-zone-data-differs": the host's Intl answered, and at an instant within 36 hours of a
+   * span in which the time zone database changed between tzdata 2021a and the release `zone.hostCheck` names, it
+   * gave another offset than that release does; the instant returned is still the host's (docs/time.md).
    */
-  flags: ("dst-gap" | "dst-fold" | "lmt" | "calendar-unknown")[];
+  flags: ("dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs")[];
   /** The proleptic Gregorian date resolved. */
   date: string;
   writtenDate: string;
@@ -69,6 +72,8 @@ export interface LocalTimeResolution {
     dataForm: "main+backzone" | "main" | "host";
     abbreviation: string | null;
     dst: boolean | null;
+    /** Set where the host's Intl answered: whether its offset matches the pinned tzdb release (docs/time.md). */
+    hostCheck?: HostZoneCheck;
   };
   /** The host's offset where the shipped history answered, as a cross-check. */
   intlOffsetMinutes: number | null;
@@ -76,6 +81,29 @@ export interface LocalTimeResolution {
   /** For `createNatalEnvelope`'s `localResolution`. */
   localResolution: NatalLocalResolution;
 }
+
+/**
+ * How the host's time zone data compares with the pinned tzdb release near a wall time the host's Intl read.
+ * "unchecked": no span in which tzdata 2021a and the pinned release differ lies within 36 hours of the
+ * instant (or the instant is before 1970, or the zone is a fixed one). Otherwise the host was asked for its
+ * offset at `probe`, an instant inside each such span: "current" when it gave the pinned release's offset at
+ * every probe, "differs" when it did not at one (the chart is flagged "host-zone-data-differs"), and "newer"
+ * when it did not but the runtime names a tzdb release later than the pinned one (Node does; browsers do not),
+ * which may know a rule the pinned release does not, so nothing is flagged.
+ */
+export type HostZoneCheck =
+  | { status: "unchecked" }
+  | {
+      status: "current" | "differs" | "newer";
+      /** UTC, ISO 8601: the instant the host was asked about (the first that disagreed, else the first asked). */
+      probe: string;
+      /** The host's offset at `probe`, minutes east. */
+      hostOffsetMinutes: number;
+      /** The pinned release's offset at `probe`, minutes east. */
+      tzdbOffsetMinutes: number;
+      /** The pinned release, such as "2026f". */
+      tzdbVersion: string;
+    };
 
 export interface LocalBirthInput {
   /** YYYY-MM-DD, in `calendar`. */
@@ -157,6 +185,83 @@ function hostTzdbVersion(): string | null {
   return typeof tz === "string" && /^\d{4}[a-z]$/u.test(tz) ? tz : null;
 }
 
+/** The host as this module reads it: the real Intl and version, or a test's stand-in (setHostForTests). */
+interface Host {
+  offsetAt: (timeZone: string, utcMilliseconds: number) => number;
+  tzdbVersion: () => string | null;
+}
+const REAL_HOST: Host = { offsetAt, tzdbVersion: hostTzdbVersion };
+let host: Host = REAL_HOST;
+/** The host's answer at each probe, seconds east, by lower-cased zone name and probe instant. */
+const hostAnswers = new Map<string, number>();
+
+/**
+ * Tests only, not exported by any entry point: replace the host's Intl offset and tzdb version for every
+ * reading in this module; null restores the real host. Each call forgets the remembered probe answers.
+ * @internal
+ */
+export function setHostForTests(replacement: Partial<Host> | null): void {
+  host = replacement ? { ...REAL_HOST, ...replacement } : REAL_HOST;
+  hostAnswers.clear();
+}
+
+/** An open-ended span's probe is this long after its start, as scripts/build-host-zone-probes.mjs places it. */
+const OPEN_PROBE = 45 * DAY;
+/** HOST_PROBES decoded once: per name hash, [from, to (Infinity: open-ended), probe] ms and the offset s, flat. */
+let probeTable: Map<number, number[]> | null = null;
+
+function probeSpans(timeZone: string): readonly number[] | undefined {
+  if (!probeTable) {
+    probeTable = new Map();
+    for (const row of HOST_PROBES.split(";")) {
+      const [hashes = "", body = ""] = row.split(":");
+      const minutes = body.split(",").map((value) => parseInt(value, 36) * 60_000);
+      const spans: number[] = [];
+      let previous = 0;
+      for (let index = 0; index + 2 < minutes.length; index += 3) {
+        const from = previous + minutes[index]!;
+        const length = minutes[index + 1]!;
+        spans.push(from, length ? from + length : Infinity, from + (length ? Math.floor(length / 120_000) * 60_000 : OPEN_PROBE), minutes[index + 2]! / 1000);
+        previous = length ? from + length : from;
+      }
+      for (const hash of hashes.split(",")) probeTable.set(parseInt(hash, 36), spans);
+    }
+  }
+  return probeTable.get(nameHash(timeZone));
+}
+
+/**
+ * The host check of an instant the host's Intl answered: each span of the zone within PROBE of the instant has
+ * its probe asked once (remembered) and compared with the pinned offset.
+ */
+function checkHost(timeZone: string, utcMs: number): HostZoneCheck {
+  const spans = utcMs >= 0 && !FIXED_ZONE.test(timeZone) ? probeSpans(timeZone) : undefined;
+  let agreed: HostZoneCheck | null = null;
+  for (let index = 0; spans && index < spans.length; index += 4) {
+    if (utcMs < spans[index]! - PROBE || utcMs >= spans[index + 1]! + PROBE) continue;
+    const probe = spans[index + 2]!;
+    const pinned = spans[index + 3]!;
+    const key = `${timeZone.toLowerCase()}\n${probe}`;
+    let answer = hostAnswers.get(key);
+    if (answer === undefined) {
+      answer = Math.round(host.offsetAt(timeZone, probe) * 60);
+      hostAnswers.set(key, answer);
+    }
+    const version = host.tzdbVersion();
+    const status = answer === pinned ? "current" : version !== null && version > HOST_PROBES_TZDB ? "newer" : "differs";
+    const check: HostZoneCheck = {
+      status,
+      probe: new Date(probe).toISOString(),
+      hostOffsetMinutes: answer / 60,
+      tzdbOffsetMinutes: pinned / 60,
+      tzdbVersion: HOST_PROBES_TZDB
+    };
+    if (status !== "current") return check;
+    agreed ??= check;
+  }
+  return agreed ?? { status: "unchecked" };
+}
+
 /** Seconds east at a UTC instant, ms. */
 type Clock = (ms: number) => number;
 interface Reading {
@@ -210,7 +315,7 @@ function readClock(wallMs: number, clockAt: Clock, samples: readonly number[], f
 function zoneClock(timeZone: string, history: ZoneHistory | null): Clock {
   return (ms) => {
     const offset = history && ms < 0 ? history.offsets[history.types[typeIndexAt(history, ms)]!] : null;
-    return offset ?? Math.round(offsetAt(timeZone, ms) * 60);
+    return offset ?? Math.round(host.offsetAt(timeZone, ms) * 60);
   };
 }
 
@@ -368,7 +473,9 @@ export function resolveLocalToUtc(
         abbreviation: inEra ? null : history!.abbreviations[type]!,
         dst: !inEra && history!.dst[type]!
       }
-    : { source: "intl", tzdbVersion: hostTzdbVersion(), dataForm: "host", abbreviation: null, dst: null };
+    : { source: "intl", tzdbVersion: host.tzdbVersion(), dataForm: "host", abbreviation: null, dst: null, hostCheck: checkHost(timeZone, chosen.utcMs) };
+  // The host's answer is kept: one probe cannot carry a zone's rules, so the flag reports, it does not correct.
+  if (zone.hostCheck?.status === "differs") flags.push("host-zone-data-differs");
   const offsetMinutes = chosen.offset / 60;
   return {
     utc: new Date(chosen.utcMs),
@@ -381,7 +488,7 @@ export function resolveLocalToUtc(
     transition,
     localMeanTime,
     zone,
-    intlOffsetMinutes: shipped ? offsetAt(timeZone, chosen.utcMs) : null,
+    intlOffsetMinutes: shipped ? host.offsetAt(timeZone, chosen.utcMs) : null,
     calendarNote: country === undefined ? null : noteFor(gregorianDate, calendar, country),
     localResolution: {
       date: gregorianDate,
