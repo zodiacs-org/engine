@@ -215,6 +215,54 @@ their own dated folders there, 1.1.0-rc.9's, its superseded draft's, are in
 `docs/evidence/1.0.0-rc.1-20261006/`, rc.17's in
 `docs/evidence/rc17-20261005/`). Site adoption is reviewed separately.
 
+## Bundle size in a web page
+
+Measured on 17 November 2026 with esbuild 0.28.2, Rollup 4.67.4, Vite 8.3.5
+and webpack 5.112.2, each in production mode and minified, on 2.0.0-rc.2's
+archive, and for the core entry on a build of 2.0.0-rc.2 with that entry
+added; brotli is quality 11 (Node 22.22.2's zlib). The programs, the method
+and every number are in `docs/evidence/bundle-weight-20261117/`
+(`results.json`). Load times in a browser were not measured.
+
+- **The root entry.** A page that imports `natalChart` from
+  `@zodiacs/engine` carries the shipped DE440 pack: 3,415,068 to 3,417,703
+  bytes of script under the four bundlers (about 3.42 MB), 2,279,479 to
+  2,281,323 bytes with brotli (about 2.28 MB).
+  `setDefaultEphemeris("astronomy-engine")` does not make it smaller: the
+  pack stays in the bundle (3,415,229 to 3,417,864 bytes).
+- **`@zodiacs/engine/core`** exports the root's names and computes on
+  astronomy-engine, without the pack. The same page is then 75,937 to 79,084
+  bytes (about 76 to 79 KB), 28,537 to 30,163 bytes with brotli (about
+  29 to 30 KB). Its positions are less exact: on the conformance suite's 240
+  position tests (within 1″ of JPL's DE441), 48 pass, against 240 for the
+  root on the pack. Both figures are the root's in `conformance/RESULTS.md`:
+  the 48 from its run after `setDefaultEphemeris("astronomy-engine")`, which
+  the package's smoke test checks the core entry matches, test for test.
+  Every chart from it names astronomy-engine as its ephemeris, as the root's
+  does after `setDefaultEphemeris("astronomy-engine")`, and equals that
+  chart. The entry
+  is a copy of the root's code with its own settings: `setDefaultEphemeris`
+  in one entry does not change the other, an aspect policy made by one
+  entry's `createAspectPolicy` is refused by the other's, and a page that
+  imports both carries both.
+  `setDefaultEphemeris("de440")` in it still computes on astronomy-engine and
+  flags each result `"de440-unavailable"`; for DE440 positions, import the
+  root, or supply a pack through `@zodiacs/engine/de440` and the core entry's
+  `withEphemeris`.
+- **Loading the root when it is needed.** To keep DE440 positions and a
+  small first script, import the root on demand:
+
+  ```js
+  button.addEventListener("click", async () => {
+    const { natalChart } = await import("@zodiacs/engine");
+    show(natalChart(birth));
+  });
+  ```
+
+  All four bundlers put the pack in a file of its own: the page's first
+  script is 745 to 2,534 bytes, and the pack arrives on the click, in one
+  file of 3,414,614 to 3,444,935 bytes. The first chart waits for that file.
+
 ## Natal chart in 10 lines
 
 ```ts
@@ -366,6 +414,10 @@ for (const aspect of today.aspects) {
   `@zodiacs/engine/techniques`', with the same results; its sect part
   (`sectReading`, `orientality` and their constants) is new (see
   [docs/lite.md](docs/lite.md)).
+- `@zodiacs/engine/core`, new after 2.0.0-rc.2, exports every name the root
+  exports and computes on astronomy-engine, without the DE440 pack, for pages
+  where script size matters more than the pack's accuracy (see *Bundle size
+  in a web page*).
 
 ### Uniform calculation API
 
@@ -1185,8 +1237,8 @@ full provenance audit and the explicit Swiss Ephemeris exclusion.
 The package's licence expression is `MIT AND CC-BY-4.0`: the code is MIT
 ([LICENSE](LICENSE)), and the 32 values of Stephenson, Morrison & Hohenkerk's
 Table S15 in the package's ΔT module (`@zodiacs/engine/deltat`, which the build
-places in a shared chunk under `dist/` that `dist/deltat.js` re-exports) are
-CC BY 4.0, attributed in [NOTICE](NOTICE).
+places in a shared chunk under `dist/` that `dist/deltat.js` re-exports, and
+copies into `dist/core.js`) are CC BY 4.0, attributed in [NOTICE](NOTICE).
 
 The npm package contains no place database. It carries the DE440 pack
 (2,489,664 bytes), tzdb 2025c's zone
@@ -1206,7 +1258,7 @@ bundle boundary intact. They are not covered by semantic-versioning guarantees;
 third-party code must use the documented entry points: the root, `/calc`,
 `/geo`, `/houses`, `/sky`, `/techniques`, `/timing`, `/vedic`, `/window`,
 `/receipt`, `/conventions`, `/crossings`, `/deltat`, `/time`, `/lite`,
-`/de440` and `/de440/pack`.
+`/core`, `/de440` and `/de440/pack`.
 
 ## GeoNames request recovery
 

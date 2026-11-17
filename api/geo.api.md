@@ -186,7 +186,7 @@ declare function zoneOffsetAt(timeZone: string, utcMilliseconds: number): number
 ## Referenced, not exported here (8)
 
 ```ts
-// exported by @zodiacs/engine (BirthInput)
+// exported by @zodiacs/engine (BirthInput), @zodiacs/engine/core (BirthInput)
 interface BirthInput {
     utc: DateInput;
     timeScale?: TimeScaleName;
@@ -198,16 +198,16 @@ interface BirthInput {
     deltaT?: number;
 }
 
-// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
+// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag), @zodiacs/engine/core (ChartFlag)
 type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
-// exported by @zodiacs/engine (DateInput)
+// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
 type DateInput = Date | string | number;
 
-// exported by @zodiacs/engine (EphemerisFallback)
+// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback)
 type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
 
-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/core (HouseSystem), @zodiacs/engine/houses (HouseSystem)
 type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
 
 // exported by @zodiacs/engine/receipt (NatalLocalResolution)
@@ -241,6 +241,6 @@ interface NatalZoneTransition {
     cause: TransitionCause;
 }
 
-// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
+// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
 type TimeScaleName = "utc" | "ut1" | "tt";
 ```

@@ -21,6 +21,8 @@ const required = [
   "dist/calc.js",
   "dist/conventions.d.ts",
   "dist/conventions.js",
+  "dist/core.d.ts",
+  "dist/core.js",
   "dist/crossings.d.ts",
   "dist/de440.d.ts",
   "dist/de440.js",
@@ -79,7 +81,9 @@ for (const file of files) {
 // An entry's import graph is the JavaScript a plain `import` of it loads: its
 // file under dist/ and every chunk it imports, statically and transitively.
 // astronomy-engine, the one dependency, is not counted, and neither are
-// declarations, which no runtime loads. The root entry (".") is the core: a
+// declarations, which no runtime loads. The root entry (".") is the base
+// every other graph is compared with (the notes below, written before
+// @zodiacs/engine/core existed, call its graph "the core's"): a
 // consumer that imports only it loads only its graph, because the root
 // imports no subpath (scripts/module-resolution-smoke.mjs checks that it
 // reaches no timing, Vedic or geo module and no zone history).
@@ -271,6 +275,11 @@ const ENTRY_BUDGETS = {
   // own file and the chunk of ids it shares with ./receipt; 5.30 per cent of
   // headroom.
   "./conventions": 2_900,
+  // New with ZOD-292: the root's graph without the DE440 files, bundled on
+  // its own into one file by scripts/build-core.mjs. 108,411 bytes as
+  // measured on this build, as on the prototype measured in
+  // docs/evidence/bundle-weight-20261117/; 1.10 per cent of headroom.
+  "./core": 109_600,
   // rc.15: 9,410. 1.0.0-rc.1: 9,942, its options read as the shared reader
   // reads them; 0.58 per cent, not raised.
   "./crossings": 10_000,
@@ -637,10 +646,36 @@ for (const phrase of ["Table S15", "Creative Commons Attribution 4.0 Internation
   "shared chunk under dist/", "dist/deltat.js re-exports"]) {
   assert(notice.includes(phrase), `NOTICE must carry the ΔT attribution (${phrase})`);
 }
+// dist/core.js (@zodiacs/engine/core, from ZOD-292) is the root's graph
+// without the DE440 files, bundled on its own: it carries its own copy of
+// every other module of the root's graph, among them the ΔT model, the
+// nutation and the frame of date. The checks below of where those three are
+// look for the one shared chunk among the other files, and then for the
+// copy in dist/core.js, which NOTICE and LICENSING.md name for each of the
+// three.
+const CORE_FILE = "dist/core.js";
+const beside = files.filter((file) => file !== CORE_FILE);
+const coreText = read(CORE_FILE);
+assert(notice.includes("dist/core.js, the file of @zodiacs/engine/core, carries its own copy of the module, and so of the values"),
+  "NOTICE must say that dist/core.js carries a copy of the ΔT values");
+assert(prose("LICENSING.md").includes("`dist/deltat.js` re-exports, and a copy of it in `dist/core.js`"),
+  "LICENSING.md must say that dist/core.js carries a copy of the ΔT values");
+assert(notice.includes("dist/time.js import, and copied into dist/core.js, the file of @zodiacs/engine/core) reproduces"),
+  "NOTICE must say that dist/core.js carries a copy of the frame");
+assert(prose("LICENSING.md").includes("`dist/core.js`, the file of `@zodiacs/engine/core`, carries its own copy of `src/frame.ts`"),
+  "LICENSING.md must say that dist/core.js carries a copy of the frame");
+assert(notice.includes("dist/de440.js import, and copied into dist/core.js, the file of @zodiacs/engine/core) carries"),
+  "NOTICE must say that dist/core.js carries a copy of the nutation");
+assert(prose("LICENSING.md").includes("`./de440`. `dist/core.js`, the file of `@zodiacs/engine/core`, carries its own copy of them"),
+  "LICENSING.md must say that dist/core.js carries a copy of the nutation");
+assert(coreText.includes("\n// src/time-scale-data.ts\n"), "dist/core.js must carry its own copy of the IERS tables");
+assert(prose("LICENSING.md").includes("`@zodiacs/engine/time` under `dist/` carry, and so does `dist/core.js`, the file of `@zodiacs/engine/core`"),
+  "LICENSING.md must say that dist/core.js carries the IERS tables");
 // NOTICE, LICENSING.md and the README say where the values are: in one shared
 // chunk that dist/deltat.js re-exports, not in dist/deltat.js itself. Check the
 // build still puts them there, without naming the chunk's hashed file name.
-const holders = files.filter((file) => file.endsWith(".js") && read(file).includes('"zodiacs-deltat/1"'));
+const holders = beside.filter((file) => file.endsWith(".js") && read(file).includes('"zodiacs-deltat/1"'));
+assert(coreText.includes('"zodiacs-deltat/1"'), "dist/core.js must carry its own copy of the ΔT model");
 assert(holders.length === 1 && /^dist\/chunk-[^/]+\.js$/u.test(holders[0]),
   `the ΔT model must be in exactly one shared chunk under dist/, as NOTICE says; found it in ${holders.join(", ") || "no file"}`);
 assert(read("dist/deltat.js").includes(`./${holders[0].slice("dist/".length)}`), "dist/deltat.js must re-export the chunk that holds the ΔT model");
@@ -685,10 +720,12 @@ assert(prose("LICENSING.md").includes("shared chunk under `dist/` that `dist/geo
 // esbuild writes before the frame module's code, `// src/frame.ts`, for the
 // frame: each must be in exactly one shared chunk, and the frame's chunk
 // must hold or import the nutation's.
-const nutationHolders = files.filter((file) => file.endsWith(".js") && read(file).includes("-172064161,"));
+const nutationHolders = beside.filter((file) => file.endsWith(".js") && read(file).includes("-172064161,"));
+assert(coreText.includes("-172064161,"), "dist/core.js must carry its own copy of the nutation");
 assert(nutationHolders.length === 1 && /^dist\/chunk-[^/]+\.js$/u.test(nutationHolders[0]),
   `the nutation must be in exactly one shared chunk under dist/, as NOTICE says; found it in ${nutationHolders.join(", ") || "no file"}`);
-const frameHolders = files.filter((file) => file.endsWith(".js") && read(file).includes("\n// src/frame.ts\n"));
+const frameHolders = beside.filter((file) => file.endsWith(".js") && read(file).includes("\n// src/frame.ts\n"));
+assert(coreText.includes("\n// src/frame.ts\n"), "dist/core.js must carry its own copy of the frame");
 assert(frameHolders.length === 1 && /^dist\/chunk-[^/]+\.js$/u.test(frameHolders[0]),
   `the frame module must be in exactly one shared chunk under dist/, as NOTICE says; found its marker in ${frameHolders.join(", ") || "no file"}`);
 const nutationChunk = `./${nutationHolders[0].slice("dist/".length)}`;
@@ -736,11 +773,11 @@ for (const file of files) {
 // astronomy-engine's ESM is loaded as ESM by plain Node only from 20.19.0 and 22.7.0.
 assert.equal(manifest.engines?.node, "^20.19.0 || >=22.7.0", "package.json engines must name the Node versions that load astronomy-engine");
 
-/** Bytes an entry's graph holds beyond the core's: what importing it adds to an app that imports the root. */
-const beyondCore = (graph) =>
+/** Bytes an entry's graph holds beyond the root's: what importing it adds to an app that imports the root. */
+const beyondRoot = (graph) =>
   [...graph.sizes].filter(([file]) => !graphs["."].sizes.has(file)).reduce((sum, [, size]) => sum + size, 0);
 const budgets = Object.entries(graphs)
-  .map(([name, graph]) => `${name} ${graph.bytes} of ${ENTRY_BUDGETS[name]}` + (name === "." ? "" : ` (${beyondCore(graph)} beyond the core's)`))
+  .map(([name, graph]) => `${name} ${graph.bytes} of ${ENTRY_BUDGETS[name]}` + (name === "." ? "" : ` (${beyondRoot(graph)} beyond the root's)`))
   .join(", ");
 console.log(
   `@zodiacs/engine package contents passed (${files.length} files, ${report.unpackedSize} bytes unpacked: the DE440 pack ${PACK_DATA_BYTES}, the rest ${restBytes} of ${TOTAL_CAP}; ` +

@@ -419,6 +419,7 @@ for (const { label, path } of archives) {
       version: pkg.version,
       astronomyEngine: { dependency: pkg.dependencies?.["astronomy-engine"] ?? null, installed: TOOLS["astronomy-engine"] },
       packChunk,
+      hasCore: Boolean(pkg.exports?.["./core"]),
       apps: {},
       nodeImport: []
     };
@@ -481,6 +482,16 @@ for (const archive of results.archives) {
     for (const [bundler, value] of Object.entries(archive.apps[app] ?? {})) {
       if (!value.built) continue;
       check(`${archive.label} ${app} ${bundler}: no pack, largest file under 100,000 bytes raw`, !value.holdsPack && value.largest.raw < 100_000, `${value.largest.file} ${value.largest.raw}`);
+    }
+  }
+  // An archive with @zodiacs/engine/core (ZOD-292): app (a) against it must
+  // build under every bundler, carry no pack, and compute on astronomy-engine.
+  if (archive.hasCore) {
+    for (const bundler of Object.keys(archive.apps["a-core"] ?? {})) {
+      const value = archive.apps["a-core"][bundler];
+      check(`${archive.label} a-core ${bundler}: builds, holds no pack, and computes on astronomy-engine`,
+        value.built && !value.holdsPack && value.node.ran && value.node.reported?.ephemeris === "astronomy-engine",
+        value.built ? `${value.total.raw} raw, largest ${value.largest.file} ${value.largest.raw}, ephemeris ${value.node.reported?.ephemeris ?? value.node.error}` : value.error);
     }
   }
   const esbuildA = archive.apps.a?.esbuild;

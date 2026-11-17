@@ -1,6 +1,6 @@
-// App (a) against the prototype's pack-free entry, @zodiacs/engine/core
-// (docs/evidence/bundle-weight-*/prototype.patch). Only an archive built
-// with that patch has the entry.
+// App (a) against the pack-free entry, @zodiacs/engine/core (ZOD-292; first
+// measured as a prototype, docs/evidence/bundle-weight-20261117/prototype.patch).
+// Archives before it do not have the entry.
 import { natalChart } from "@zodiacs/engine/core";
 import { report } from "./report.js";
 

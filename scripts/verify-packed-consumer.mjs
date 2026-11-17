@@ -76,6 +76,10 @@ import { housePosition, coAscendants, houseSpeeds, SIDEREAL_TIME_RATE, SIDEREAL_
 import { planetaryReturns, type PlanetaryReturns } from "@zodiacs/engine/timing";
 import { prepareLocalTime, resolveLocalToUtc, julianToGregorian, TZDB, type LocalTimeResolution, type ZoneTransition, type TransitionCause, type CalendarName } from "@zodiacs/engine/geo";
 import { type TimeScale, type TimeScaleName, type LeapSeconds, type Ut1MinusUtc } from "@zodiacs/engine";
+import { natalChart as coreNatalChart, setDefaultEphemeris as coreSetDefault, type Chart as CoreChart } from "@zodiacs/engine/core";
+coreSetDefault("astronomy-engine");
+const fromCore: Chart = coreNatalChart({utc: "1990-06-15T12:30:00Z", timeScale: "tt", timeKnown: false}) satisfies CoreChart;
+void fromCore;
 const onTt: Chart = natalChart({utc: "1990-06-15T12:30:00Z", timeScale: "tt" satisfies TimeScaleName, timeKnown: false});
 const basis: TimeScale = onTt.timeScale;
 const leapSeconds: LeapSeconds | null = basis.leapSeconds;
@@ -270,6 +274,7 @@ import * as techniques from "@zodiacs/engine/techniques";
 import * as sky from "@zodiacs/engine/sky";
 import * as time from "@zodiacs/engine/time";
 import * as lite from "@zodiacs/engine/lite";
+import * as core from "@zodiacs/engine/core";
 globalThis.fetch = () => { throw new Error("Calculation attempted a network request"); };
 const chart = natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(chart.houses.system, "whole");
@@ -609,6 +614,15 @@ assert.deepEqual(lite.essentialDignities("Mars", 10, "day"), techniques.essentia
 assert.equal(lite.sectReading({convention: "ecliptic", ascendant: chart.angles.asc, sunLon: chart.bodies[0].lon}).sect, root.sectOf(chart.angles.asc, chart.bodies[0].lon));
 assert.equal(lite.sectReading({convention: "altitude", sunAltitude: 0, sunLon: 0}).sect, "day");
 assert.throws(() => lite.sectReading({sunAltitude: 1, sunLon: 0}), RangeError);
+// The core entry (ZOD-292): the root's names, on astronomy-engine by default,
+// with no DE440 pack to open; its charts are the root's on astronomy-engine,
+// each naming it, and are its own module copies' (not the root's settings).
+assert.deepEqual(Object.keys(core).sort(), Object.keys(root).sort());
+assert.equal(core.defaultEphemeris().name, "astronomy-engine");
+assert.equal(core.defaultEphemeris().de440.opened, false);
+assert.notEqual(core.natalChart, natalChart);
+assert.deepEqual(core.natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"}), chart);
+assert.deepEqual(core.natalChart({utc: "2000-01-01T12:00:00Z", timeKnown: false}).ephemeris, {...root.EPHEMERIS});
 // The sky entry: the Sun's rise at Greenwich on 2024-06-21, a Friday, begins
 // Venus's day; its hours follow the Chaldean order; the rise is where the
 // Sun's upper limb meets the standard refraction.

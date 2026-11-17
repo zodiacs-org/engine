@@ -23,7 +23,8 @@ package's ΔT module, exported as `@zodiacs/engine/deltat`, carries 32 values
 of Table S15 of Stephenson, Morrison & Hohenkerk 2016, which are CC BY 4.0
 (see *ΔT data* below), with their attribution in `NOTICE`. The build places
 that module in a shared chunk under `dist/`, which `dist/deltat.js`
-re-exports. Both licences apply to the package as distributed. From
+re-exports, and a copy of it in `dist/core.js`, the file of
+`@zodiacs/engine/core`. Both licences apply to the package as distributed. From
 0.1.1-rc.8, which added those values, to 0.1.1-rc.13, `package.json` declared
 `MIT` alone; 0.1.1-rc.14 corrected it.
 
@@ -123,6 +124,8 @@ equator of date, its sidereal time or its observer functions (`ObserverVector`,
 (`precession_rot`, from J2000.0) line for line, and `src/calc-reduce.ts` its
 observer on the ellipsoid (`terra`), under the same MIT notice, which `NOTICE`
 carries, and the nutation is the engine's own (*Nutation* below).
+`dist/core.js`, the file of `@zodiacs/engine/core`, carries its own copy of
+`src/frame.ts`, and so of `precession_rot`.
 
 Repository and dependency searches found no Swiss Ephemeris runtime import,
 package dependency, vendored source, or generated lookup table in this npm
@@ -284,7 +287,8 @@ terms. The build places them in a shared chunk under `dist/` that the
 ephemeris chunk, `dist/time.js` and `dist/de440.js` import, so the graphs of
 the root, `./calc`, `./de440`, `./internal`, `./sky`, `./techniques`,
 `./time`, `./timing`, `./vedic` and `./window` load them, and so does that
-of `./de440/pack`, which opens its pack with `./de440`;
+of `./de440/pack`, which opens its pack with `./de440`. `dist/core.js`, the
+file of `@zodiacs/engine/core`, carries its own copy of them.
 `@zodiacs/engine/de440` sums the same terms in the order the research
 runtime of zodiacs.org sums them. The model is D. D.
 McCarthy and B. J. Luzum, "An abridged model of the precession-nutation of
@@ -333,7 +337,8 @@ From 1970 conversion uses the host's `Intl`/ICU data.
 
 `src/time-scale-data.ts` holds the time basis's two IERS tables, which the
 import graphs of the root entry and of `@zodiacs/engine/time` under `dist/`
-carry. `scripts/build-time-scales.mjs`
+carry, and so does `dist/core.js`, the file of `@zodiacs/engine/core`.
+`scripts/build-time-scales.mjs`
 builds it from inputs committed in `scripts/time-scale-sources/` and checks
 each one's SHA-256:
 

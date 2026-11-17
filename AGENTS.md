@@ -27,7 +27,12 @@ and documentation CC BY 4.0, tools and schema MIT). Read `README.md`,
   runs the suite on astronomy-engine, the fallback, and says why. The lite entry is built
   apart: `npm run build` runs `scripts/build-lite.mjs` after tsup, which
   bundles each of its four parts into a file of its own that imports
-  nothing. Their guides are `docs/time.md`, `docs/timing-hellenistic.md`,
+  nothing. The core entry (`src/core.ts`, with `src/core/`) is built apart
+  too: `scripts/build-core.mjs` (with `scripts/core-entry.mjs`) bundles the
+  root's graph into `dist/core.js` on its own, with
+  `src/core/ephemeris-shipped.ts` in place of `src/ephemeris-shipped.ts`, so
+  that it computes on astronomy-engine and holds no DE440 pack; its guide is
+  the README's *Bundle size in a web page*. Their guides are `docs/time.md`, `docs/timing-hellenistic.md`,
   `docs/vedic.md`, `docs/techniques.md`, `docs/calc.md`, `docs/houses.md`,
   `docs/sky.md`, `docs/lite.md` and `docs/de440.md`, and the README's
   *Birth-time windows* for the window entry.
