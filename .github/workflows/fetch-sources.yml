@@ -5,8 +5,8 @@ name: Fetch public sources
 # the BIPM's resolutions) cannot be downloaded from where the work is done, so
 # this job downloads it here, from the official hosts only, and pushes the raw
 # files with a manifest of SHA-256 digests to a new side branch named
-# fetched/<label>-<run id>-<attempt>. That branch holds only the fetched/ folder. The
-# job changes no other branch, builds nothing, publishes nothing and is not a
+# fetched/<label>-<run id>-<attempt>. That branch holds only the fetched/
+# folder. The job changes no other branch, builds nothing, publishes nothing and is not a
 # check: it never runs on a push or a pull request.
 on:
   workflow_dispatch:
@@ -109,7 +109,7 @@ jobs:
             result="$(curl -g -sS -L --proto '=https' --proto-redir '=https' --max-redirs 5 \
               --retry 3 --retry-delay 5 --max-time 900 --max-filesize 90000000 \
               -A "zodiacs-engine source fetch (https://zodiacs.org; admin@zodiacs.org)" \
-              -o "$out/$name" -w '%{http_code} %{url_effective}' "$url" || true)"
+              -o "$out/$name.part" -w '%{http_code} %{url_effective}' "$url" || true)"
             status="${result%% *}"
             final="${result#* }"
             [[ "$status" =~ ^[0-9]{3}$ ]] || status=000
@@ -118,12 +118,13 @@ jobs:
             for prefix in "${allowed[@]}"; do
               case "$final" in "$prefix"*) final_ok=yes ;; esac
             done
-            if [ "$status" = 200 ] && [ "$final_ok" = yes ] && [ -s "$out/$name" ]; then
+            if [ "$status" = 200 ] && [ "$final_ok" = yes ] && [ -s "$out/$name.part" ]; then
+              mv "$out/$name.part" "$out/$name"
               bytes="$(stat -c %s "$out/$name")"
               sum="$(sha256sum "$out/$name" | cut -d' ' -f1)"
             else
               failed=$((failed + 1))
-              rm -f "$out/$name"
+              rm -f "$out/$name.part"
               name="-"; bytes="-"; sum="-"
               echo "failed ($status, ended at ${final}): $url" >&2
             fi
@@ -148,7 +149,7 @@ jobs:
             echo "the fetch stopped early; pushing what it fetched" >&2
             FAILED=incomplete
           fi
-          rm -f "$RUNNER_TEMP/out/fetched/.complete"
+          rm -f "$RUNNER_TEMP/out/fetched/.complete" "$RUNNER_TEMP"/out/fetched/*.part
           branch="fetched/$LABEL-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
           git config user.name "Zodiacs Admin"
           git config user.email admin@zodiacs.org
@@ -161,6 +162,6 @@ jobs:
           git push -q origin "HEAD:refs/heads/$branch"
           echo "Pushed $branch"
           if [ "${FAILED:-0}" != 0 ]; then
-            echo "$FAILED address(es) failed; see fetched/MANIFEST.tsv" >&2
+            echo "not every address was fetched ($FAILED); see fetched/MANIFEST.tsv" >&2
             exit 1
           fi
