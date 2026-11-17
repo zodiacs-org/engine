@@ -41,12 +41,12 @@ Adapter `zodiacs-engine` 0.3.0; results in [`results/zodiacs-engine.json`](resul
 | L2 | `houses.cusps` | 80 | 0 | 0 | 0 | cusps: 0.004″ / 0.009″ / 0.071″ |
 | **L2** | **all** | **150** | **0** | **0** | **0** | |
 | L3 | `time.zone-offset` | 45 | 0 | 0 | 0 | — |
-| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
+| L3 | `time.local-mean-time` | 5 | 0 | 0 | 0 | utc_offset_s: 0.00 s / 0.00 s / 0.00 s |
 | L3 | `time.tt-minus-utc` | 9 | 0 | 1 | 0 | tt_minus_utc_s: 0.00 s / 2.03e-8 s / 2.03e-8 s |
 | L3 | `time.delta-t` | 15 | 0 | 0 | 0 | delta_t_s: 0.000132 s / 0.000505 s / 0.000505 s |
-| L3 | `calendar.to-jdn` | 0 | 0 | 25 | 0 | — |
-| L3 | `calendar.from-jdn` | 0 | 0 | 10 | 0 | — |
-| **L3** | **all** | **69** | **0** | **41** | **0** | |
+| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | — |
+| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | — |
+| **L3** | **all** | **109** | **0** | **1** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
 | --- | ---: | ---: | ---: | ---: |
@@ -56,7 +56,8 @@ Adapter `zodiacs-engine` 0.3.0; results in [`results/zodiacs-engine.json`](resul
 - **The pack.** SHA-256 `51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7`, 2,489,664 bytes, refitted from NAIF's `de440.bsp` (SHA-256 `a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5`) for 1790 to 2210. It is in the repository and in the package, so continuous integration reruns this section. The angles, houses and time vectors of this run come from the same plain calls; they do not depend on the ephemeris, and their verdicts are those of the next section.
 - **Time zones (L3).** Before 1970 the engine reads the tzdb 2025c history with `backzone` that it ships, loaded with `prepareLocalTime`, so the 20 vectors tagged `backzone-history` pass; from 1970 it reads the host's `Intl` data. A repeated local time resolves to its earlier instant, and the transition the engine reports gives the offsets of both readings, so the five folds are answered. All 45 pass.
 - **TT − UTC and ΔT (L3).** From 1972 to 2027-10-02 the engine takes TAI − UTC from the IERS leap-second list updated 2026-07-06, and UT1 − UTC from IERS: the EOP 20 C04 series in 1972 and `finals2000A.all` of 2026-09-24 from 1973-01-02. The adapter reports TT − UTC as a chart's ΔT (TT − UT1) plus its UT1 − UTC. A leap second itself cannot be expressed as a JavaScript date, so that case is unsupported.
-- **Unsupported (L3).** Release 1.1.0-rc.2 converts dates between the Julian and Gregorian calendars and reads a birthplace's local mean time inside a zone's local mean time era, but has no public function for a Julian Day Number or for local mean time from a longitude alone, so the 35 calendar vectors and the 5 local mean time vectors are unsupported.
+- **Calendars and local mean time (L3).** The 35 calendar vectors are answered by `julianDayNumber` and `dateOfJulianDayNumber`, and the 5 local mean time vectors by `localMeanTimeOffset`, all from `@zodiacs/engine/geo`, with years, months and days in astronomical numbering as the vectors give them. All 40 pass. These functions are not in the released 2.0.0-rc.2, which this run names as `engineVersion`: the run is of a build of the unreleased source that adds them, whose `package.json` still says 2.0.0-rc.2, and the released archive reports these 40 vectors as unsupported. Regenerate this file when the next candidate is cut.
+- **Unsupported (L3).** One vector: the leap second instant above, which a JavaScript date cannot express.
 
 ## @zodiacs/engine on astronomy-engine 2.0.0-rc.2
 
@@ -80,12 +81,12 @@ Adapter `zodiacs-engine-astronomy-engine` 0.3.0; results in [`results/zodiacs-en
 | L2 | `houses.cusps` | 80 | 0 | 0 | 0 | cusps: 0.004″ / 0.009″ / 0.071″ |
 | **L2** | **all** | **150** | **0** | **0** | **0** | |
 | L3 | `time.zone-offset` | 45 | 0 | 0 | 0 | — |
-| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
+| L3 | `time.local-mean-time` | 5 | 0 | 0 | 0 | utc_offset_s: 0.00 s / 0.00 s / 0.00 s |
 | L3 | `time.tt-minus-utc` | 9 | 0 | 1 | 0 | tt_minus_utc_s: 0.00 s / 2.03e-8 s / 2.03e-8 s |
 | L3 | `time.delta-t` | 15 | 0 | 0 | 0 | delta_t_s: 0.000132 s / 0.000505 s / 0.000505 s |
-| L3 | `calendar.to-jdn` | 0 | 0 | 25 | 0 | — |
-| L3 | `calendar.from-jdn` | 0 | 0 | 10 | 0 | — |
-| **L3** | **all** | **69** | **0** | **41** | **0** | |
+| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | — |
+| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | — |
+| **L3** | **all** | **109** | **0** | **1** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
 | --- | ---: | ---: | ---: | ---: |
@@ -93,6 +94,7 @@ Adapter `zodiacs-engine-astronomy-engine` 0.3.0; results in [`results/zodiacs-en
 
 - **What this run is.** The same adapter and the same build as the section above, started with `--ephemeris astronomy-engine`, which calls `setDefaultEphemeris("astronomy-engine")` first: every request answered on astronomy-engine 2.1.19's series, the engine's fallback outside the DE440 pack's years and what every build before 1.1.0-rc.9 computed on. All 500 vectors are run, so that this file is also the baseline the offline CLI's consumer check holds the carried 1.0.0-rc.2 archive to; outside L1 its verdicts are the section above's.
 - **Positions (L1).** 48 pass and 192 fail at 1″. Against DE441 the positions differ by a median of 2.08″ in longitude. The largest differences are 18.8″ in longitude (Neptune) and 19.1″ in latitude (Saturn); the Sun is within 1.64″ and the Moon within 3.75″. These are the verdicts the engine's own section held until 1.1.0-rc.7.
+- **Calendars and local mean time (L3).** As in the section above, the 40 calendar and local mean time vectors pass through `julianDayNumber`, `dateOfJulianDayNumber` and `localMeanTimeOffset`, which the released 2.0.0-rc.2 named as `engineVersion` does not have; regenerate this file when the next candidate is cut. The carried 1.0.0-rc.2 archive has none of them and answers those 40 vectors as unsupported, so on them it no longer matches this file. The one unsupported vector is the leap second instant.
 
 ## Swiss Ephemeris 2.10.03
 

@@ -156,8 +156,9 @@ const handlers = {
     return { output: { status: 'ok', utc_offset_s: seconds(resolution.offsetMinutes) }, meta };
   },
 
-  'time.local-mean-time'() {
-    return { unsupported: "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone" };
+  'time.local-mean-time'(input) {
+    if (typeof geo.localMeanTimeOffset !== 'function') return { unsupported: 'this build has no localMeanTimeOffset' };
+    return { output: { utc_offset_s: geo.localMeanTimeOffset(input.lon) } };
   },
 
   'time.tt-minus-utc'(input) {
@@ -177,12 +178,18 @@ const handlers = {
     return { output: { delta_t_s: deltaT.seconds }, meta: { model: deltaT.model, segment: deltaT.segment } };
   },
 
-  'calendar.to-jdn'() {
-    return { unsupported: 'the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API' };
+  // Years, months and days in and out as the vectors give them, in
+  // astronomical year numbering (year 0 exists; -4712 is 4713 BC).
+  'calendar.to-jdn'(input) {
+    if (typeof geo.julianDayNumber !== 'function') return { unsupported: 'this build has no julianDayNumber' };
+    const { calendar, year, month, day } = input;
+    return { output: { jdn: geo.julianDayNumber({ year, month, day }, calendar) } };
   },
 
-  'calendar.from-jdn'() {
-    return { unsupported: 'the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API' };
+  'calendar.from-jdn'(input) {
+    if (typeof geo.dateOfJulianDayNumber !== 'function') return { unsupported: 'this build has no dateOfJulianDayNumber' };
+    const { year, month, day } = geo.dateOfJulianDayNumber(input.jdn, input.calendar);
+    return { output: { year, month, day } };
   },
 };
 
