@@ -198,8 +198,15 @@ evidence).
   instead of "intl" and `zone.dataForm` "main+backzone" instead of "host";
   before 1906-09-01T07:33:52Z the result also carries `"lmt"`, and with a
   longitude the birthplace's mean time answers (at 114.37 W, -7:37:29
-  instead of Edmonton's -7:33:52). Waits for the owner's acceptance with
-  the 1947 interval.
+  instead of Edmonton's -7:33:52). `transition` changes too, between
+  1935-01-01T00:00Z and 1942-02-09: the host's history held a
+  1935-01-01T00:00Z `"legal-change"` transition (-7:00 to -7:00, where
+  2025c's backzone zone began), and 2026f's has none, so a wall time there
+  now gives the 1923-09-30 `"dst"` transition (at 1938-06-01 12:00, main
+  gives 1935-01-01 `"legal-change"` and this branch 1923-09-30 `"dst"`).
+  It is not in `changes.json`: that file reads zdump of the shipped
+  history, and in 2025c the engine shipped no history for these years but
+  read the host. Waits for the owner's acceptance with the 1947 interval.
 - **Africa/Casablanca and Africa/El_Aaiun from 1970: `LATER_CAUSES`.** 2026c
   NEWS: "Morocco plans to move back to permanent UTC, without daylight
   saving time transitions, on 2026-09-20 at 02:00. This also affects
