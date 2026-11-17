@@ -7,7 +7,7 @@ import { offsetAt, prepareLocalTime, resolveLocalToUtc, zoneOffsetAt } from "./t
 /*
  * Step 1.12 of the engine brief, ported from the Zodiacs site's
  * src/lib/time/localToUtc-history.test.ts: before 1970 a zone's offsets come
- * from the tzdb 2025c history with backzone shipped in this package, not from
+ * from the tzdb 2026f history with backzone shipped in this package, not from
  * the host, whose default build gives many places another city's history.
  * Each case below differs from the host (Node's ICU, tzdb 2025c without
  * backzone), which the "host" column records; the resolver reports that
@@ -46,8 +46,8 @@ describe("the shipped zone history before 1970", () => {
       const resolved = resolveLocalToUtc(date, "12:00", zone, options);
       expect(resolved.utc.toISOString()).toBe(utc);
       expect(resolved.offsetMinutes).toBeCloseTo(offset, 9);
-      expect(resolved.zone).toMatchObject({ source: "tzdb", tzdbVersion: "2025c", dataForm: "main+backzone" });
-      expect(resolved.localResolution).toMatchObject({ tzdbVersion: "2025c", dataForm: "main+backzone" });
+      expect(resolved.zone).toMatchObject({ source: "tzdb", tzdbVersion: "2026f", dataForm: "main+backzone" });
+      expect(resolved.localResolution).toMatchObject({ tzdbVersion: "2026f", dataForm: "main+backzone" });
       // The host's reading at the same instant, as the cross-check.
       expect(resolved.intlOffsetMinutes).toBeCloseTo(offsetAt(zone, resolved.utc.getTime()), 12);
       if (HOST_IS_2025C) expect(resolved.intlOffsetMinutes).toBeCloseTo(host, 9);
@@ -171,8 +171,8 @@ describe("loading the shipped history", () => {
     vi.resetModules();
     let calls = 0;
     let fail = true;
-    vi.doMock("../tzdb/tzdb-2025c.js", async (importOriginal) => {
-      const original = await importOriginal<typeof import("../tzdb/tzdb-2025c.js")>();
+    vi.doMock("../tzdb/tzdb-2026f.js", async (importOriginal) => {
+      const original = await importOriginal<typeof import("../tzdb/tzdb-2026f.js")>();
       return {
         ...original,
         SHARD_LOADERS: original.SHARD_LOADERS.map((load) => () => {
@@ -188,14 +188,14 @@ describe("loading the shipped history", () => {
     await fresh.prepareLocalTime("1930-01-01", "Europe/Stockholm");
     expect(calls).toBe(2);
     expect(fresh.resolveLocalToUtc("1947-07-01", "12:00", "Europe/Stockholm").offsetMinutes).toBe(60);
-    vi.doUnmock("../tzdb/tzdb-2025c.js");
+    vi.doUnmock("../tzdb/tzdb-2026f.js");
     vi.resetModules();
   });
 
   it("raises no unhandled rejection when a caller stops waiting for a failed load", async () => {
     vi.resetModules();
-    vi.doMock("../tzdb/tzdb-2025c.js", async (importOriginal) => {
-      const original = await importOriginal<typeof import("../tzdb/tzdb-2025c.js")>();
+    vi.doMock("../tzdb/tzdb-2026f.js", async (importOriginal) => {
+      const original = await importOriginal<typeof import("../tzdb/tzdb-2026f.js")>();
       return { ...original, SHARD_LOADERS: original.SHARD_LOADERS.map(() => () => Promise.reject(new Error("offline"))) };
     });
     const unhandled: unknown[] = [];
@@ -211,7 +211,7 @@ describe("loading the shipped history", () => {
       await expect(fresh.prepareLocalTime("1947-07-01", "Europe/Oslo")).rejects.toThrow();
     } finally {
       process.off("unhandledRejection", listener);
-      vi.doUnmock("../tzdb/tzdb-2025c.js");
+      vi.doUnmock("../tzdb/tzdb-2026f.js");
       vi.resetModules();
     }
   });

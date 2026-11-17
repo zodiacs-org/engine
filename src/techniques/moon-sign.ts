@@ -18,7 +18,7 @@ const HOUR_MS = 3_600_000;
 
 /**
  * A date in every time zone runs from 00:00 at UTC+14 to 24:00 at UTC−12. In
- * tzdata 2025c every offset lies within these bounds, but in Alaska before
+ * tzdata 2026f every offset lies within these bounds, but in Alaska before
  * 1867-10-19 and in the Philippines and Micronesia before 1845.
  */
 export const EVERY_ZONE_OFFSETS = /*#__PURE__*/ Object.freeze({ earliestHours: 14, latestHours: -12 } as const);

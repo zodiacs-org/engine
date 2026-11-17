@@ -2,7 +2,7 @@ import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import { natalChart } from "../api.js";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from "../receipt.js";
-import { SHARD_LOADERS, TZDB } from "../tzdb/tzdb-2025c.js";
+import { SHARD_LOADERS, TZDB } from "../tzdb/tzdb-2026f.js";
 import type { ZoneShard } from "./zone-history.js";
 import { offsetAt, prepareLocalTime, resolveLocalBirth, resolveLocalToUtc } from "./timezone.js";
 
@@ -265,7 +265,7 @@ describe("the local mean time eras shipped", () => {
   });
 
   it("records its tzdb release and source digest", () => {
-    expect(TZDB.version).toBe("2025c");
+    expect(TZDB.version).toBe("2026f");
     expect(TZDB.sha256).toMatch(/^[0-9a-f]{64}$/);
     expect(TZDB.form).toBe("main+backzone");
     expect(zones.length).toBe(597);
@@ -273,7 +273,9 @@ describe("the local mean time eras shipped", () => {
 
   it("holds whole seconds, every era ending before 1953", () => {
     const eras = zones.filter((zone) => zone.e);
-    expect(eras.length).toBe(518);
+    // 519 from tzdata 2026f: America/Yellowknife now resolves to America/Edmonton, whose first line is local
+    // mean time; backzone's Yellowknife, commented out in 2026f, began at "-00" and had no such era (518 in 2025c).
+    expect(eras.length).toBe(519);
     for (const zone of eras) {
       for (const [until, offset] of zone.e!) {
         expect(Number.isInteger(until) && Number.isInteger(offset)).toBe(true);
@@ -295,7 +297,9 @@ describe("the local mean time eras shipped", () => {
     // A backzone Zone that replaces a main-data Link (to Puerto Rico).
     ["America/Kralendijk", "1912-02-12T04:35:47.000Z"],
     // An UNTIL in standard time ("0:00s"), not universal time.
-    ["Europe/Isle_of_Man", "1883-03-30T00:17:55.000Z"]
+    ["Europe/Isle_of_Man", "1883-03-30T00:17:55.000Z"],
+    // From tzdata 2026f, a backward Link (to Edmonton): zdump reads LMT -7:33:52 until 1906-09-01T07:33:52Z.
+    ["America/Yellowknife", "1906-09-01T07:33:52.000Z"]
   ])("ends %s at %s", (zone, iso) => {
     const shard = zones.find((candidate) => candidate.n === zone)!;
     expect(new Date(shard.e!.at(-1)![0] * 1000).toISOString()).toBe(iso);

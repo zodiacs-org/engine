@@ -392,7 +392,7 @@ for (const name of [
   assert.equal(typeof geo[name], "function", `missing geo export: ${name}`);
   assert.equal(name in engine, false, `geo leaked into the core entry: ${name}`);
 }
-assert.equal(geo.TZDB.version, "2025c");
+assert.equal(geo.TZDB.version, "2026f");
 assert.equal(geo.GREGORIAN_ADOPTION.length, 18);
 assert.deepEqual(geo.gregorianAdoption("NL"), {
   code: "NL", country: "Netherlands", region: "Holland", firstGregorian: "1583-01-01", lastJulian: "1582-12-21",
@@ -630,7 +630,7 @@ const lazy = outputsOf("geo").flatMap((file) =>
   [...readBuilt(file).matchAll(/\bimport\s*\(\s*["']([^"']+)["']\s*\)/gu)].map((match) => match[1])
 );
 assert.equal(lazy.length, 16, "the geo entry should load 16 zone-history shards lazily");
-assert(lazy.every((specifier) => /^\.\/tzdb-2025c-\d{2}-[A-Za-z0-9]+\.js$/u.test(specifier)));
+assert(lazy.every((specifier) => /^\.\/tzdb-2026f-\d{2}-[A-Za-z0-9]+\.js$/u.test(specifier)));
 for (const entry of ["geo", "techniques"]) {
   for (const file of outputsOf(entry)) assert(!/(?:^|\/)tzdb-[^/]*$/u.test(file), `zone-history shard in the static ${entry} graph`);
 }

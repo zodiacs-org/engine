@@ -127,7 +127,7 @@ function validateInstant(utcMilliseconds: number): void {
  * UTC offset for an IANA timezone at a UTC instant, minutes east, from the
  * host's Intl: a cross-check on the host's time-zone data. zoneOffsetAt is the
  * engine's own answer, the one its wall times use; the two agree from 1970
- * where the host has tzdata 2025c, and before 1970 they can differ, because
+ * where the host has tzdata 2026f, and before 1970 they can differ, because
  * Intl does not carry the history this package ships.
  */
 export function offsetAt(timeZone: string, utcMilliseconds: number): number {
@@ -268,7 +268,7 @@ const pad = (value: number, width = 2): string => String(value).padStart(width, 
  * Resolve a local wall time in an IANA zone to UTC: a repeated one takes the
  * earlier instant, or the later one with `options.fold` "later"; a skipped
  * one moves forward by the jump. Before 1970 the
- * shipped tzdb 2025c history answers, loaded by `prepareLocalTime` (a wall
+ * shipped tzdb 2026f history answers, loaded by `prepareLocalTime` (a wall
  * time before 1970-01-02 throws otherwise); from 1970, and in the fixed Etc
  * zones, the host's Intl.
  */
