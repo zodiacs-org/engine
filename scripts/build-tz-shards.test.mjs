@@ -1,6 +1,21 @@
-import { describe, expect, it } from "vitest";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { gzipSync } from "node:zlib";
+import { afterEach, describe, expect, it } from "vitest";
 
-import { causes, lineEnds } from "./build-tz-shards.mjs";
+import {
+  BACKWARD_ZONES,
+  TZDB_SHA256,
+  TZDB_VERSION,
+  causes,
+  lineEnds,
+  loadRelease,
+  parseTzdb,
+  pinnedSources,
+  withoutLinks,
+  zoneNames
+} from "./build-tz-shards.mjs";
 
 const at = (iso) => Date.parse(iso) / 1000;
 
@@ -56,5 +71,81 @@ describe("zone line ends on the wall clock", () => {
     };
     expect(new Date(lineEnds(summer, clock)[0] * 1000).toISOString()).toBe("2000-10-28T23:30:00.000Z");
     expect(causes(clock, summer)).toEqual(["d", "l"]);
+  });
+});
+
+/*
+ * Since tzdb 2026d `backward` holds four Zones (EST5EDT, CST6CDT, MST7MDT,
+ * PST8PDT) and a Rule set for them, beside its Links. The pinned build used
+ * to leave `backward` out (its Links collide with backzone's zones of the
+ * same names), so on 2026f the generator stopped with "CST6CDT (CST6CDT) did
+ * not compile". The pinned build now compiles `backward` without its Links.
+ */
+describe("the pinned build compiles backward's zones without its links", () => {
+  // A cut of tzdata 2026f's backward, the Link abbreviations zic accepts included.
+  const backward = [
+    "# Zone\tNAME\t\tSTDOFF\tRULES\tFORMAT\t[UNTIL]",
+    "Link\tEurope/Kyiv\t\tEurope/Uzhgorod",
+    "L Africa/Abidjan Africa/Accra",
+    "li America/Edmonton America/Yellowknife # a comment",
+    "Rule\tUSback\t1918\t1919\t-\tMar\tlastSun\t2:00\t1:00\tD",
+    "Rule\tUSback\t1918\t1919\t-\tOct\tlastSun\t2:00\t0\tS",
+    "Zone\tEST5EDT\t\t -5:00\tUSback\tE%sT",
+    "Zone\tPST8PDT\t\t -8:00\tUSback\tP%sT",
+    "\t# Linked names in a comment stay: Link X Y"
+  ].join("\n");
+
+  it("drops every Link line and keeps the Rule and Zone lines as written", () => {
+    const kept = withoutLinks(backward).split("\n");
+    expect(kept).toEqual([backward.split("\n")[0], ...backward.split("\n").slice(4)]);
+    const parsed = parseTzdb(kept.join("\n"));
+    expect([...parsed.zones.keys()]).toEqual(["EST5EDT", "PST8PDT"]);
+    expect(parsed.links.size).toBe(0);
+  });
+
+  it("compiles the main data without backward, backzone, and backward's zones", () => {
+    const files = new Map([
+      ["europe", "Zone Europe/Kyiv 2:02:04 - LMT 1880\n 2:00 - EET"],
+      ["backzone", "Zone Africa/Accra -0:00:52 - LMT 1915 Nov 2\n 0:00 - GMT"],
+      ["backward", backward]
+    ]);
+    const { files: sources, names } = pinnedSources(files);
+    expect(names).toEqual([
+      "africa", "antarctica", "asia", "australasia", "europe", "northamerica", "southamerica", "etcetera", "backzone", BACKWARD_ZONES
+    ]);
+    expect(names).not.toContain("backward");
+    expect(sources.get(BACKWARD_ZONES)).toBe(withoutLinks(backward));
+    // The original files are untouched.
+    expect(files.has(BACKWARD_ZONES)).toBe(false);
+  });
+
+  it("still resolves backward's links itself, and its zones as zones", () => {
+    const main = parseTzdb(["Zone Europe/Kyiv 2:02:04 - LMT 1880\n 2:00 - EET", backward].join("\n"));
+    const backzone = parseTzdb("Zone Africa/Accra -0:00:52 - LMT 1915 Nov 2\n 0:00 - GMT");
+    const { zoneOf } = zoneNames(main, backzone);
+    expect(zoneOf("EST5EDT")).toBe("EST5EDT");
+    expect(zoneOf("Europe/Uzhgorod")).toBe("Europe/Kyiv");
+    // Backzone's zone before backward's link.
+    expect(zoneOf("Africa/Accra")).toBe("Africa/Accra");
+  });
+});
+
+describe("the pinned release", () => {
+  const work = mkdtempSync(join(tmpdir(), "tz-shards-test-"));
+  afterEach(() => {
+    delete process.env.TZDATA_TARBALL;
+  });
+
+  it("is tzdata 2026f", () => {
+    expect(TZDB_VERSION).toBe("2026f");
+    expect(TZDB_SHA256).toBe("01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d");
+  });
+
+  it("refuses an archive whose digest is not the pinned one", async () => {
+    const archive = join(work, "tzdata.tar.gz");
+    writeFileSync(archive, gzipSync(Buffer.from("not tzdata")));
+    process.env.TZDATA_TARBALL = archive;
+    await expect(loadRelease(work)).rejects.toThrow(/has sha256 [0-9a-f]{64}, expected 01b4a91c/);
+    rmSync(work, { recursive: true, force: true });
   });
 });

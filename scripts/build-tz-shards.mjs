@@ -6,12 +6,14 @@
  * scripts/build-tz-history.mjs there), extended with each transition's kind:
  *
  * - zic compiles the data, so tzdb's rule semantics are never reimplemented.
- *   The pinned history is the main data files plus backzone, without
- *   `backward` (whose links would collide with backzone's zones); a name
- *   resolves to backzone's zone of that name first, then the main data's, then
- *   a link, backzone's before the main data's. The default build (the main
- *   files with `backward`, which is what browsers and Node carry) is compiled
- *   too, as the reference for 1970 on.
+ *   The pinned history is the main data files plus backzone, with
+ *   `backward`'s Zone and Rule lines but not its Link lines (whose names would
+ *   collide with backzone's zones; since tzdb 2026d `backward` also holds the
+ *   zones EST5EDT, CST6CDT, MST7MDT and PST8PDT); a name resolves to
+ *   backzone's zone of that name first, then the main data's, then a link,
+ *   backzone's before the main data's. The default build (the main files with
+ *   `backward`, which is what browsers and Node carry) is compiled too, as the
+ *   reference for 1970 on.
  * - Browsers' Intl answers from 1970 on. A name whose pinned history differs
  *   from the default build at any instant from 1970 on is "host-legal": its
  *   shard carries the default build's history instead, so the hand-over at
@@ -28,7 +30,7 @@
  *   offsets, exactly as zic reads them.
  *
  * Output (all generated; do not edit):
- * - src/tzdb/tzdb-2025c-NN.ts, NN = 00..15: the names whose 32-bit FNV-1a hash
+ * - src/tzdb/tzdb-<version>-NN.ts, NN = 00..15: the names whose 32-bit FNV-1a hash
  *   of the lower-cased name falls in bucket NN, each as
  *   { n: name, s: source zone, h?: 1 (host-legal), f: zone-clock LMT era end
  *   (Unix s) or null, e?: [[until, offset s], ...] birthplace era lines,
@@ -36,7 +38,7 @@
  *   t: transition instants before 1970 (Unix s, base-36, first absolute then
  *   differences, comma-separated), k: per transition its type (one base-36
  *   digit) and cause (d, l or x) }.
- * - src/tzdb/tzdb-2025c.ts: the release's identity, the 16 lazy loaders, and
+ * - src/tzdb/tzdb-<version>.ts: the release's identity, the 16 lazy loaders, and
  *   the default build's transitions from 1970 on whose cause is not daylight
  *   saving, keyed by the FNV-1a hash of the lower-cased name.
  *
@@ -56,11 +58,13 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
 
-export const TZDB_VERSION = "2025c";
+export const TZDB_VERSION = "2026f";
 export const TZDB_URL = `https://data.iana.org/time-zones/releases/tzdata${TZDB_VERSION}.tar.gz`;
-export const TZDB_SHA256 = "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957";
+export const TZDB_SHA256 = "01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d";
 export const MAIN_FILES = ["africa", "antarctica", "asia", "australasia", "europe", "northamerica", "southamerica", "etcetera", "backward"];
 export const BACKZONE = "backzone";
+/** The name the pinned build gives `backward` with its Link lines removed. */
+export const BACKWARD_ZONES = "backward.zones";
 export const BUCKETS = 16;
 /** Offsets from 1970-01-01T00:00:00Z on are the host's. */
 export const HISTORY_END = 0;
@@ -153,6 +157,26 @@ export function parseTzdb(text) {
     if (open && open.at(-1).length <= 3) open = null;
   }
   return { zones, links };
+}
+
+/**
+ * A tzdb data file without its Link lines, everything else as written. The
+ * pinned build compiles `backward` this way: its links would collide with
+ * backzone's zones of the same names, and the generator resolves links
+ * itself (zoneNames), but its Zone and Rule lines must compile.
+ */
+export function withoutLinks(text) {
+  return text
+    .split("\n")
+    .filter((line) => !/^l(?:i(?:nk?)?)?$/i.test(line.replace(/#.*/, "").trim().split(/\s+/)[0]))
+    .join("\n");
+}
+
+/** The files of the pinned build: the main data without `backward`, backzone, and `backward` without its links. */
+export function pinnedSources(files) {
+  const sources = new Map(files);
+  sources.set(BACKWARD_ZONES, withoutLinks(files.get("backward") ?? ""));
+  return { files: sources, names: MAIN_FILES.filter((file) => file !== "backward").concat(BACKZONE, BACKWARD_ZONES) };
 }
 
 /**
@@ -433,7 +457,8 @@ function history(tzif, lines) {
 
 export async function buildShards(root) {
   const { files, main, backzone } = await loadRelease(root);
-  const pinned = compile(files, MAIN_FILES.filter((file) => file !== "backward").concat(BACKZONE));
+  const pinnedBuild = pinnedSources(files);
+  const pinned = compile(pinnedBuild.files, pinnedBuild.names);
   const host = compile(files, MAIN_FILES);
   const { names, zoneOf } = zoneNames(main, backzone);
   const buckets = Array.from({ length: BUCKETS }, () => ({}));
