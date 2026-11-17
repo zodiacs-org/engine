@@ -1,0 +1,50 @@
+== the new and changed tests of this commit, run on the code of a2335d3 (the branch before the hold), Node 22.22.2 (tz 2025c)
+   × the zone held at tzdata 2025c > is America/Yellowknife, from tzdata 2025c's backzone lines, unchanged 10ms
+   × the zone held at tzdata 2025c > stops when the release defines the held name as a zone of its own 4ms
+   × the zone held at tzdata 2025c > stops when a held file's digest is not the pinned one 2ms
+   × the zone held at tzdata 2025c > is compiled beside backzone in the pinned build 4ms
+   × the zone held at tzdata 2025c > finds the first instant from 1970 at which two compiled zones' offsets differ 1ms
+   × America/Yellowknife, held at tzdata 2025c > ships origin/main's history for the name 70ms
+   × America/Yellowknife, held at tzdata 2025c > is at 1947-04-27T09:00:00Z on tzdata 2025c's offset, -25200 s 3ms
+   × America/Yellowknife, held at tzdata 2025c > is at 1947-06-01T00:00:00Z on tzdata 2025c's offset, -25200 s 0ms
+   × America/Yellowknife, held at tzdata 2025c > is at 1947-09-28T07:59:59Z on tzdata 2025c's offset, -25200 s 0ms
+   × America/Yellowknife, held at tzdata 2025c > resolves 1900-06-01 12:00 undefined as origin/main did 1ms
+   × America/Yellowknife, held at tzdata 2025c > resolves 1900-06-01 12:00 { longitude: -114.37 } as origin/main did 2ms
+   × America/Yellowknife, held at tzdata 2025c > resolves 1935-01-01 00:00 undefined as origin/main did 1ms
+   × America/Yellowknife, held at tzdata 2025c > resolves 1938-06-01 05:00 undefined as origin/main did 1ms
+   × America/Yellowknife, held at tzdata 2025c > resolves 1947-06-01 12:00 undefined as origin/main did 1ms
+   × America/Yellowknife, held at tzdata 2025c > resolves 1960-06-01 12:00 { longitude: -114.37 } as origin/main did 1ms
+   × the local mean time eras shipped > holds whole seconds, every era ending before 1953 7ms
+   × resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > covered every zone and every offset change it found 8ms
+ FAIL  scripts/build-tz-shards.test.mjs > the zone held at tzdata 2025c > is America/Yellowknife, from tzdata 2025c's backzone lines, unchanged
+TypeError: Cannot read properties of undefined (reading 'map')
+ FAIL  scripts/build-tz-shards.test.mjs > the zone held at tzdata 2025c > stops when the release defines the held name as a zone of its own
+AssertionError: expected [Function] to throw error matching /…/Yellowknife: tzdata 2026f defines it as a zone but got 'heldSource is n…'
+ FAIL  scripts/build-tz-shards.test.mjs > the zone held at tzdata 2025c > stops when a held file's digest is not the pinned one
+TypeError: Cannot read properties of undefined (reading '0')
+ FAIL  scripts/build-tz-shards.test.mjs > the zone held at tzdata 2025c > is compiled beside backzone in the pinned build
+AssertionError: expected [ Array(10) ] to deeply equal [ Array(11) ]
+ FAIL  scripts/build-tz-shards.test.mjs > the zone held at tzdata 2025c > finds the first instant from 1970 at which two compiled zones' offsets differ
+TypeError: firstDifferenceFrom is not a function
+ FAIL  src/geo/birthplace.test.ts > the local mean time eras shipped > holds whole seconds, every era ending before 1953
+AssertionError: expected 519 to be 518 // Object.is equality
+ FAIL  src/geo/roundtrip.test.ts > resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > covered every zone and every offset change it found
+AssertionError: expected 39841 to be 39839 // Object.is equality
+ FAIL  src/geo/tzdb-2026f.test.ts > America/Yellowknife, held at tzdata 2025c > ships origin/main's history for the name
+AssertionError: expected { n: 'America/Yellowknife', …(6) } to deeply equal { n: 'America/Yellowknife', …(5) }
+ FAIL  src/geo/tzdb-2026f.test.ts > America/Yellowknife, held at tzdata 2025c > is at 1947-04-27T09:00:00Z on tzdata 2025c's offset, -25200 s
+ FAIL  src/geo/tzdb-2026f.test.ts > America/Yellowknife, held at tzdata 2025c > is at 1947-06-01T00:00:00Z on tzdata 2025c's offset, -25200 s
+ FAIL  src/geo/tzdb-2026f.test.ts > America/Yellowknife, held at tzdata 2025c > is at 1947-09-28T07:59:59Z on tzdata 2025c's offset, -25200 s
+AssertionError: expected -21600 to be close to -25200, received difference is 3600, but expected 5e-7
+ FAIL  src/geo/tzdb-2026f.test.ts > America/Yellowknife, held at tzdata 2025c > resolves 1900-06-01 12:00 undefined as origin/main did
+AssertionError: expected [ 'lmt' ] to deeply equal []
+ FAIL  src/geo/tzdb-2026f.test.ts > America/Yellowknife, held at tzdata 2025c > resolves 1900-06-01 12:00 { longitude: -114.37 } as origin/main did
+AssertionError: expected '1900-06-01T19:37:29.000Z' to be '1900-06-01T19:33:52.000Z' // Object.is equality
+ FAIL  src/geo/tzdb-2026f.test.ts > America/Yellowknife, held at tzdata 2025c > resolves 1935-01-01 00:00 undefined as origin/main did
+ FAIL  src/geo/tzdb-2026f.test.ts > America/Yellowknife, held at tzdata 2025c > resolves 1938-06-01 05:00 undefined as origin/main did
+ FAIL  src/geo/tzdb-2026f.test.ts > America/Yellowknife, held at tzdata 2025c > resolves 1960-06-01 12:00 { longitude: -114.37 } as origin/main did
+AssertionError: expected { Object (at, offsetBeforeMinutes, ...) } to deeply equal { Object (at, offsetBeforeMinutes, ...) }
+ FAIL  src/geo/tzdb-2026f.test.ts > America/Yellowknife, held at tzdata 2025c > resolves 1947-06-01 12:00 undefined as origin/main did
+AssertionError: expected '1947-06-01T18:00:00.000Z' to be '1947-06-01T19:00:00.000Z' // Object.is equality
+ Test Files  4 failed (4)
+      Tests  17 failed | 89 passed (106)

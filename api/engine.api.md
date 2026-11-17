@@ -201,7 +201,7 @@ interface ChartDeclinations extends Declinations {
     flags: EphemerisFallback[];
 }
 
-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
+type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 interface ChartInput {
     utc: Date;
@@ -698,7 +698,7 @@ interface SynastryResult extends PairSummary {
 
 interface TimeScale {
     input: TimeScaleName;
-    basis: "iers" | "delta-t" | "pinned";
+    basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
     ut1MinusUtc: Ut1MinusUtc | null;
     leapSeconds: LeapSeconds | null;
 }
@@ -715,7 +715,7 @@ interface TransitResult {
 interface Ut1MinusUtc {
     seconds: number;
     sigma: number;
-    source: "observed" | "predicted" | "fallback";
+    source: "observed" | "predicted" | "fallback" | "model";
 }
 
 type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";

@@ -34,11 +34,13 @@ describe("the time bands", () => {
     const rows: [string, TimeScaleName, number | undefined, string, (d: number, u: number) => TimeBands, "d" | "u" | "du" | ""][] = [
       ["2000-06-01T12:00:00Z", "tt", undefined, "iers", (d) => ({ tt: 0, ut1: d }), "d"],
       ["1900-06-01T12:00:00Z", "tt", undefined, "delta-t", (d) => ({ tt: 0, ut1: d }), "d"],
-      ["2050-06-01T12:00:00Z", "tt", undefined, "delta-t", (d) => ({ tt: 0, ut1: d }), "du"],
+      // After the IERS table, the continuous-UTC rule (from 2.0.0-rc.3): the TT and UT1 input
+      // rows keep their bands; the UTC row's TT is exact and its UT1 carries d, which u then equals.
+      ["2050-06-01T12:00:00Z", "tt", undefined, "continuous-utc", (d) => ({ tt: 0, ut1: d }), "du"],
       ["2000-06-01T12:00:00Z", "tt", 64.5, "pinned", (d) => ({ tt: 0, ut1: d }), ""],
       ["2000-06-01T12:00:00Z", "ut1", undefined, "iers", (d) => ({ tt: d, ut1: 0 }), "du"],
       ["1900-06-01T12:00:00Z", "ut1", undefined, "delta-t", (d) => ({ tt: d, ut1: 0 }), "d"],
-      ["2050-06-01T12:00:00Z", "ut1", undefined, "delta-t", (d) => ({ tt: d, ut1: 0 }), "d"],
+      ["2050-06-01T12:00:00Z", "ut1", undefined, "continuous-utc", (d) => ({ tt: d, ut1: 0 }), "d"],
       ["2000-06-01T12:00:00Z", "ut1", 64.5, "pinned", (d) => ({ tt: d, ut1: 0 }), ""],
       ["2000-06-01T12:00:00Z", "utc", undefined, "iers", (_, u) => ({ tt: 0, ut1: u }), "du"],
       ["2027-08-01T00:00:00Z", "utc", undefined, "iers", (_, u) => ({ tt: 0, ut1: u }), "du"],
@@ -46,7 +48,7 @@ describe("the time bands", () => {
       ["1900-06-01T12:00:00Z", "utc", 64.5, "pinned", (_, u) => ({ tt: u, ut1: u }), ""],
       ["2050-06-01T12:00:00Z", "utc", 64.5, "pinned", (_, u) => ({ tt: u, ut1: u }), "u"],
       ["1900-06-01T12:00:00Z", "utc", undefined, "delta-t", (d, u) => ({ tt: Math.hypot(u, d), ut1: u }), "d"],
-      ["2050-06-01T12:00:00Z", "utc", undefined, "delta-t", (d, u) => ({ tt: Math.hypot(u, d), ut1: u }), "du"]
+      ["2050-06-01T12:00:00Z", "utc", undefined, "continuous-utc", (d) => ({ tt: 0, ut1: d }), "du"]
     ];
     for (const [iso, scale, pin, basisName, row, needs] of rows) {
       const basis = timeBasis(at(iso), scale, pin);
@@ -57,10 +59,13 @@ describe("the time bands", () => {
       if (needs.includes("u")) expect(u, label).toBeGreaterThan(0);
       expect(timeBands(basis), label).toEqual(row(d, u));
     }
-    // On the IERS basis d is u, so the TT input's UT1 band is the IERS band; after the table, u is the 0.9 s fallback.
+    // On the IERS basis d is u, so the TT input's UT1 band is the IERS band; after the table u is d too, the
+    // model's band, and a pin there still reads UT1 − UTC as 0 within the 0.9 s fallback.
     const iers = timeBasis(at("2000-06-01T12:00:00Z"));
     expect(dOf(iers)).toBe(uOf(iers));
-    expect(uOf(timeBasis(at("2050-06-01T12:00:00Z")))).toBe(0.9);
+    const later = timeBasis(at("2050-06-01T12:00:00Z"));
+    expect(uOf(later)).toBe(dOf(later));
+    expect(uOf(timeBasis(at("2050-06-01T12:00:00Z"), "utc", 64.5))).toBe(0.9);
   });
 
   it("step where the time basis steps, at each seam of T3, a millisecond either side", () => {
@@ -89,12 +94,12 @@ describe("the time bands", () => {
     const expiry = bands("2027-06-28T00:00:00Z");
     expect(timeBasis(at("2027-06-28T00:00:00Z")).timeScale.leapSeconds!.listed).toBe(false);
     expect(Math.abs(expiry[2]!.ut1 - expiry[0]!.ut1)).toBeLessThan(1e-9);
-    // The table's last instant, then UT1 − UTC within ±0.9 s and TT from the model: √(u² + d²).
+    // The table's last instant, then the continuous-UTC rule: TT still exact, and UT1 the model's, with its band.
     const [, tableEnd, after] = bands("2027-10-02T00:00:00Z");
     expect(tableEnd!.ut1).toBeCloseTo(0.0262, 12);
     const model = timeBasis(at("2027-10-02T00:00:00Z") + 1);
-    expect(after).toEqual({ tt: Math.hypot(0.9, dOf(model)), ut1: 0.9 });
-    expect(after!.tt).toBeCloseTo(0.90848, 5);
+    expect(after).toEqual({ tt: 0, ut1: dOf(model) });
+    expect(after!.ut1).toBeCloseTo(0.12384, 5);
   });
 
   it("are the same from a TimeBasis, a Chart, a calc instant and a natal result", () => {

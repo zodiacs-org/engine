@@ -1469,12 +1469,17 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
       return { status: "refused", reason: "sample-budget", detail: `The search needs more than ${maxSamples} evaluations.`, samples, maxSamples };
     }
     // The widest UTC band of an event on a ΔT extrapolated, seconds: the ephemeris fixes the event in TT, so its UTC
-    // moves with the band of TT − UTC (docs/calc.md, "Bounds").
+    // moves with the band of TT − UTC (docs/calc.md, "Bounds"). After the IERS table that band is 0 (TT is UTC +
+    // 69.184 s), and the event is still flagged: its UT1 carries the extrapolated ΔT.
     let late = 0;
+    let flagged = false;
     const events = found.crossings.map(({ at, retrograde }) => {
       const basis = timeBasis(at.getTime(), "utc");
       const utc = timeBands(basis).tt;
-      if (deltaTExtrapolated(basis)) late = Math.max(late, utc);
+      if (deltaTExtrapolated(basis)) {
+        flagged = true;
+        late = Math.max(late, utc);
+      }
       return {
         at: at.toISOString(),
         jdUt1: J2000_JD + basis.ut1Days,
@@ -1488,7 +1493,7 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
       kind,
       events,
       samples: found.samples,
-      flags: [...(late ? (["delta-t-extrapolated"] as const) : []), ...(chosen.fallback ? [chosen.fallback] : [])],
+      flags: [...(flagged ? (["delta-t-extrapolated"] as const) : []), ...(chosen.fallback ? [chosen.fallback] : [])],
       bounds: {
         timing: stretched(
           {
@@ -1508,7 +1513,7 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
         [
           ...positionIds(body, "ecliptic-true-of-date", "geocentric", "apparent", zodiac, chosen.from !== null),
           "search:scan-and-bisect",
-          ...(late ? ["bounds:plus-delta-t-band"] : [])
+          ...(flagged ? ["bounds:plus-delta-t-band"] : [])
         ],
         undefined,
         true,

@@ -156,7 +156,10 @@ interface ValidatedBirth {
   flags: FlagSnapshot | undefined;
 }
 
-/** The fields of `BirthInput`. Other keys are ignored, except a field's name in other letter case. */
+/**
+ * The fields of `BirthInput`. Other keys are ignored, except a field's name in
+ * other letter case and the near-miss names below.
+ */
 const BIRTH_FIELDS: readonly (keyof BirthInput)[] = [
   "utc",
   "timeScale",
@@ -166,6 +169,21 @@ const BIRTH_FIELDS: readonly (keyof BirthInput)[] = [
   "timeKnown",
   "flags",
   "deltaT"
+];
+
+/**
+ * Common names for a birth field that are not its name, refused in any letter
+ * case: `lat` and `lng`, ignored, would give a chart with no angles, silently.
+ * Ordinary column names (`date`, `time`, `dt`, `tz`, `timezone`) are left out,
+ * so a caller's own row can still be passed with its other keys ignored.
+ */
+const NEAR_MISS_KEYS: readonly [keyof BirthInput, readonly string[]][] = [
+  ["latitude", ["lat"]],
+  ["longitude", ["lng", "lon", "long"]],
+  ["houseSystem", ["house", "houses", "hsys", "housesystem"]],
+  ["timeScale", ["scale", "time_scale"]],
+  ["deltaT", ["delta_t"]],
+  ["timeKnown", ["time_known", "unknownTime"]]
 ];
 
 /**
@@ -195,6 +213,12 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   const flags = supplied === undefined ? undefined : snapshotFlags(supplied);
   const suppliedUtc: unknown = birth.utc;
   const utc = dateFrom(suppliedUtc as DateInput, "birth.utc");
+  // After utc, so an object with no instant (a chart read back from JSON has `houses`) keeps utc's message.
+  for (const key of Object.keys(birth)) {
+    const lower = key.toLowerCase();
+    const near = NEAR_MISS_KEYS.find(([real, names]) => real !== key && names.some((name) => name.toLowerCase() === lower));
+    if (near) throw new RangeError(`birth has no field "${key}"; use "${near[0]}".`);
+  }
   const pin = birth.deltaT;
   if (pin !== undefined && (typeof pin !== "number" || !Number.isFinite(pin) || Math.abs(pin) > 1e10)) {
     throw new RangeError("deltaT must be a finite number of seconds, at most 1e10 in size.");

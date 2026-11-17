@@ -407,16 +407,22 @@ function firstWhere(holds: (time: number) => boolean, from: number, to: number):
 /**
  * Whether two UTC instants lie in one piece of the time basis
  * (src/time-scale.ts), within which TT and UT1 run on continuously from the
- * instant: `elapsedDays` gives back the step it is handed exactly when they
- * do, and the TT between them where a step of the basis lies between them.
+ * instant: `elapsedDays` gives back the step it is handed exactly when TT
+ * does, and the TT between them where a step of the basis lies between them.
+ * TT − UTC runs on across the end of the IERS table (69.184 s on both sides),
+ * where UT1 − UTC steps by a few milliseconds from the table's last value to
+ * the ΔT model's, so a change of basis is a step too.
  */
-const onePiece = (a: number, b: number): boolean =>
-  Number.isNaN(elapsedDays(timeBasis(a, "utc"), timeBasis(b, "utc"), Number.NaN));
+const onePiece = (a: number, b: number): boolean => {
+  const [before, after] = [timeBasis(a, "utc"), timeBasis(b, "utc")];
+  return before.timeScale.basis === after.timeScale.basis && Number.isNaN(elapsedDays(before, after, Number.NaN));
+};
 
 /**
  * Where the time basis steps inside REFERENCE_SPAN: at the ΔT model's handover
  * from its spline to its knots (1941.0, 1940-12-31T18:00:00Z), at 1972-01-01,
- * at each leap second, and where the IERS UT1 table ends (2027-10-02). Every
+ * at each leap second, and where the IERS UT1 table ends (2027-10-02), where
+ * UT1 steps by 2 ms and TT runs on. Every
  * sample installs its own ΔT (src/ephemeris.ts), so TT, UT1 and every position
  * and angle computed from them step there together, and nowhere else. Each
  * step is found from the engine's own arithmetic and kept with a millisecond
