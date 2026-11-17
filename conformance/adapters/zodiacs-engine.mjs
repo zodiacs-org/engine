@@ -2,7 +2,8 @@
 /*
  * Conformance adapter for @zodiacs/engine, speaking the protocol in
  * ../SPEC.md. It answers from the engine's public entry points only
- * (`@zodiacs/engine` and `@zodiacs/engine/geo`) and computes nothing itself
+ * (`@zodiacs/engine`, or `@zodiacs/engine/core` with `--entry core`, and
+ * `@zodiacs/engine/geo`) and computes nothing itself
  * beyond unit conversions; a kind the engine has no function for is reported
  * as unsupported.
  *
@@ -30,6 +31,11 @@
  *   caller supplies: the adapter opens it with `@zodiacs/engine/de440`, which
  *   refuses it unless its SHA-256 is the one given, and computes inside the
  *   root's `withEphemeris`.
+ * - `--entry core` (an argument of this script) answers from
+ *   `@zodiacs/engine/core` (`core.js` in place of `index.js`), the entry that
+ *   carries no pack and computes on astronomy-engine; its verdicts are held
+ *   to `conformance/results/zodiacs-engine-astronomy-engine.json`. Not
+ *   together with a supplied pack.
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -37,7 +43,13 @@ import { createInterface } from 'node:readline';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const dist = resolve(process.env.ZODIACS_ENGINE_DIST ?? fileURLToPath(new URL('../../dist', import.meta.url)));
-const engine = await import(pathToFileURL(resolve(dist, 'index.js')).href);
+const entryArgument = process.argv.indexOf('--entry');
+const entry = entryArgument === -1 ? null : process.argv[entryArgument + 1];
+if (entry !== null && entry !== 'core') {
+  console.error('zodiacs-engine adapter: --entry takes core');
+  process.exit(2);
+}
+const engine = await import(pathToFileURL(resolve(dist, entry === 'core' ? 'core.js' : 'index.js')).href);
 const geo = await import(pathToFileURL(resolve(dist, 'geo.js')).href);
 
 const packPath = process.env.ZODIACS_ENGINE_DE440_PACK;
@@ -52,12 +64,17 @@ if ((asked !== null && asked !== 'astronomy-engine') || (asked && packPath)) {
   console.error('zodiacs-engine adapter: --ephemeris takes astronomy-engine, and not together with a supplied pack');
   process.exit(2);
 }
+if (entry === 'core' && packPath) {
+  console.error('zodiacs-engine adapter: --entry core does not take a supplied pack');
+  process.exit(2);
+}
 /**
  * Where the requests are answered from: "default" (a plain call: the shipped
  * DE440 pack inside its years), "supplied" (the caller's pack, for the
- * position requests) or "astronomy-engine".
+ * position requests), "astronomy-engine", or "core" (a plain call to
+ * `@zodiacs/engine/core`, which computes on astronomy-engine).
  */
-const mode = packPath ? 'supplied' : asked === 'astronomy-engine' || typeof engine.setDefaultEphemeris !== 'function' ? 'astronomy-engine' : 'default';
+const mode = packPath ? 'supplied' : entry === 'core' ? 'core' : asked === 'astronomy-engine' || typeof engine.setDefaultEphemeris !== 'function' ? 'astronomy-engine' : 'default';
 /** The caller's DE440 source for the position requests, or null. */
 let de440Source = null;
 if (mode === 'supplied') {
@@ -186,11 +203,12 @@ const handlers = {
   },
 };
 
-const NAMES = { default: 'zodiacs-engine', supplied: 'zodiacs-engine-de440', 'astronomy-engine': 'zodiacs-engine-astronomy-engine' };
+const NAMES = { default: 'zodiacs-engine', supplied: 'zodiacs-engine-de440', 'astronomy-engine': 'zodiacs-engine-astronomy-engine', core: 'zodiacs-engine-core' };
 const ENGINES = {
   default: '@zodiacs/engine',
   supplied: '@zodiacs/engine with a DE440 pack the caller supplies',
   'astronomy-engine': '@zodiacs/engine on astronomy-engine',
+  core: '@zodiacs/engine/core, on astronomy-engine',
 };
 /** What the default source is, from the engine's own report of it. */
 function defaultSourceText() {

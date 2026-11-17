@@ -414,7 +414,7 @@ declare function voidOfCourseWindows(from: DateInput, to: DateInput, options?: V
 ## Referenced, not exported here (24)
 
 ```ts
-// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
+// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/core (Angles), @zodiacs/engine/houses (Angles)
 interface Angles {
     asc: number;
     mc: number;
@@ -422,7 +422,7 @@ interface Angles {
     ic: number;
 }
 
-// exported by @zodiacs/engine (Aspect)
+// exported by @zodiacs/engine (Aspect), @zodiacs/engine/core (Aspect)
 interface Aspect {
     a: BodyName;
     b: BodyName;
@@ -431,10 +431,10 @@ interface Aspect {
     applying: boolean;
 }
 
-// exported by @zodiacs/engine (AspectType)
+// exported by @zodiacs/engine (AspectType), @zodiacs/engine/core (AspectType)
 type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
 
-// exported by @zodiacs/engine (BirthInput)
+// exported by @zodiacs/engine (BirthInput), @zodiacs/engine/core (BirthInput)
 interface BirthInput {
     utc: DateInput;
     timeScale?: TimeScaleName;
@@ -446,10 +446,10 @@ interface BirthInput {
     deltaT?: number;
 }
 
-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
+// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
 type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
 
-// exported by @zodiacs/engine (BodyPosition)
+// exported by @zodiacs/engine (BodyPosition), @zodiacs/engine/core (BodyPosition)
 interface BodyPosition {
     body: BodyName;
     lon: number;
@@ -463,7 +463,7 @@ interface BodyPosition {
     flags?: InstantFlag[];
 }
 
-// exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart)
+// exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart), @zodiacs/engine/core (Chart)
 interface Chart {
     input: ChartInput;
     bodies: BodyPosition[];
@@ -480,10 +480,10 @@ interface Chart {
     };
 }
 
-// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
+// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag), @zodiacs/engine/core (ChartFlag)
 type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
-// exported by @zodiacs/engine (ChartInput)
+// exported by @zodiacs/engine (ChartInput), @zodiacs/engine/core (ChartInput)
 interface ChartInput {
     utc: Date;
     timeScale?: Exclude<TimeScaleName, "utc">;
@@ -495,10 +495,10 @@ interface ChartInput {
     flags?: readonly ChartFlag[];
 }
 
-// exported by @zodiacs/engine (DateInput)
+// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
 type DateInput = Date | string | number;
 
-// exported by @zodiacs/engine (DeltaT), @zodiacs/engine/calc (DeltaT), @zodiacs/engine/deltat (DeltaT), @zodiacs/engine/time (DeltaT)
+// exported by @zodiacs/engine (DeltaT), @zodiacs/engine/calc (DeltaT), @zodiacs/engine/core (DeltaT), @zodiacs/engine/deltat (DeltaT), @zodiacs/engine/time (DeltaT)
 interface DeltaT {
     seconds: number;
     sigma: number | null;
@@ -508,40 +508,40 @@ interface DeltaT {
     segment: DeltaTSegment;
 }
 
-// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
+// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/core (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
 type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
 
-// exported by @zodiacs/engine (Element)
+// exported by @zodiacs/engine (Element), @zodiacs/engine/core (Element)
 type Element = "fire" | "earth" | "air" | "water";
 
-// exported by @zodiacs/engine (EphemerisFallback)
+// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback)
 type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
 
-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/core (HouseSystem), @zodiacs/engine/houses (HouseSystem)
 type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
 
-// exported by @zodiacs/engine (Houses)
+// exported by @zodiacs/engine (Houses), @zodiacs/engine/core (Houses)
 interface Houses {
     system: HouseSystem;
     cusps: number[];
 }
 
-// exported by @zodiacs/engine (InstantFlag)
+// exported by @zodiacs/engine (InstantFlag), @zodiacs/engine/core (InstantFlag)
 type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
-// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
+// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/core (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
 interface LeapSeconds {
     taiMinusUtc: number;
     listed: boolean;
 }
 
-// exported by @zodiacs/engine (NatalSource)
+// exported by @zodiacs/engine (NatalSource), @zodiacs/engine/core (NatalSource)
 type NatalSource = Chart | BirthInput;
 
-// exported by @zodiacs/engine (Sect)
+// exported by @zodiacs/engine (Sect), @zodiacs/engine/core (Sect)
 type Sect = "day" | "night";
 
-// exported by @zodiacs/engine (TimeScale), @zodiacs/engine/calc (TimeScale), @zodiacs/engine/time (TimeScale)
+// exported by @zodiacs/engine (TimeScale), @zodiacs/engine/calc (TimeScale), @zodiacs/engine/core (TimeScale), @zodiacs/engine/time (TimeScale)
 interface TimeScale {
     input: TimeScaleName;
     basis: "iers" | "delta-t" | "pinned";
@@ -549,16 +549,16 @@ interface TimeScale {
     leapSeconds: LeapSeconds | null;
 }
 
-// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
+// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
 type TimeScaleName = "utc" | "ut1" | "tt";
 
-// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
+// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/core (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
 interface Ut1MinusUtc {
     seconds: number;
     sigma: number;
     source: "observed" | "predicted" | "fallback";
 }
 
-// exported by @zodiacs/engine (ZodiacSign)
+// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
 type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
 ```

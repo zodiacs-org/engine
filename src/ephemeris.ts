@@ -9,10 +9,10 @@ import {
 } from "astronomy-engine";
 
 import { findAspects } from "./aspects.js";
-import { shippedDe440Source } from "./de440-pack.js";
 import { chartBodyDeclinations } from "./declination.js";
 import type { ChartDeclinations } from "./declination.js";
 import { deltaT } from "./deltat.js";
+import { INITIAL_DEFAULT_EPHEMERIS, shippedDe440Source } from "./ephemeris-shipped.js";
 import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
 import { computeAngles, computeHouses, eastPointOf, insidePolarCircle, vertexOf } from "./houses.js";
 import { tilt } from "./nutation.js";
@@ -56,7 +56,7 @@ let source: PositionSource | null = null;
 
 /** What a call outside `withEphemeris` computes on. */
 export type DefaultEphemerisName = "de440" | "astronomy-engine";
-let defaultName: DefaultEphemerisName = "de440";
+let defaultName: DefaultEphemerisName = INITIAL_DEFAULT_EPHEMERIS;
 
 /**
  * The default source keeps a day inside each end of the shipped pack, so

@@ -37,6 +37,10 @@
       "types": "./dist/conventions.d.ts",
       "import": "./dist/conventions.js"
     },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js"
+    },
     "./crossings": {
       "types": "./dist/crossings.d.ts",
       "import": "./dist/crossings.js"
@@ -118,7 +122,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/techniques.ts src/timing.ts src/vedic.ts src/internal.ts src/internal-math.ts src/calc.ts src/window.ts src/houses-extra.ts src/sky.ts src/conventions.ts src/time.ts src/de440.ts src/de440-pack.ts --format esm --dts --clean --splitting --metafile --tsconfig tsconfig.build.json && node scripts/build-lite.mjs",
+    "build": "tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/techniques.ts src/timing.ts src/vedic.ts src/internal.ts src/internal-math.ts src/calc.ts src/window.ts src/houses-extra.ts src/sky.ts src/conventions.ts src/time.ts src/de440.ts src/de440-pack.ts --format esm --dts --clean --splitting --metafile --tsconfig tsconfig.build.json && node scripts/build-lite.mjs && node scripts/build-core.mjs",
     "docs": "typedoc --options typedoc.json",
     "exports:smoke": "node scripts/module-resolution-smoke.mjs",
     "consumer:smoke": "node scripts/verify-packed-consumer.mjs",

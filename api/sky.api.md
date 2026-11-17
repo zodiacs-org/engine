@@ -116,10 +116,10 @@ declare function skyEventsOn(body: SkyBody, observer: Observer, date: string, op
 ## Referenced, not exported here (4)
 
 ```ts
-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
+// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
 type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
 
-// exported by @zodiacs/engine (DateInput)
+// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
 type DateInput = Date | string | number;
 
 // not exported by any entry point
