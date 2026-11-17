@@ -157,7 +157,7 @@ function validateInstant(utcMilliseconds: number): void {
  * UTC offset for an IANA timezone at a UTC instant, minutes east, from the
  * host's Intl: a cross-check on the host's time-zone data. zoneOffsetAt is the
  * engine's own answer, the one its wall times use; the two agree from 1970
- * where the host has tzdata 2025c, and before 1970 they can differ, because
+ * where the host has tzdata 2026f, and before 1970 they can differ, because
  * Intl does not carry the history this package ships.
  */
 export function offsetAt(timeZone: string, utcMilliseconds: number): number {

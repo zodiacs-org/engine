@@ -89,7 +89,7 @@ export function checkHost(timeZone: string, utcMs: number): HostZoneCheck {
  * Resolve a local wall time in an IANA zone to UTC: a repeated one takes the
  * earlier instant, or the later one with `options.fold` "later"; a skipped
  * one moves forward by the jump. Before 1970 the
- * shipped tzdb 2025c history answers, loaded by `prepareLocalTime` (a wall
+ * shipped tzdb 2026f history answers, loaded by `prepareLocalTime` (a wall
  * time before 1970-01-02 throws otherwise); from 1970, and in the fixed Etc
  * zones, the host's Intl, whose offset near the instant is checked against the
  * pinned tzdb release (`zone.hostCheck`, flag "host-zone-data-differs").

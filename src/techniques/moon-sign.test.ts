@@ -3,7 +3,7 @@ import { bodyLongitude } from "../ephemeris.js";
 import { loadHistory, loadedHistory } from "../geo/zone-history.js";
 import { prepareLocalTime, resolveLocalToUtc } from "../geo/timezone.js";
 import { SIGN_SLUGS, signIndexForLongitude } from "../signs.js";
-import { SHARD_LOADERS } from "../tzdb/tzdb-2025c.js";
+import { SHARD_LOADERS } from "../tzdb/tzdb-2026f.js";
 import { EVERY_ZONE_OFFSETS, MOON_SIGN_MAX_SPAN_DAYS, moonSignCandidates, moonSignsBetween } from "./moon-sign.js";
 
 const HOUR = 3_600_000;

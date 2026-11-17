@@ -79,7 +79,7 @@ describe("parity with the site's code", () => {
       expect(rows.map((row: { index: number }) => row.index), name).toEqual([1500 + 7 * 3 + 1]);
     }
     // M-P (before 1970): the site reads midnights on the host's Intl data, the
-    // package on its tzdata 2025c with backzone. Every disagreement is a
+    // package on its tzdata 2026f with backzone. Every disagreement is a
     // different midnight at one end or the other (G7).
     for (const row of byName("M-P").disagreements) {
       expect(Array.isArray(row.site) && Array.isArray(row.package)).toBe(true);

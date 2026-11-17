@@ -513,8 +513,8 @@ assert.equal(time.EPHEMERIS_SPAN, EPHEMERIS_SPAN);
 assert(Object.isFrozen(time.eclipticFrame(0).rows));
 assert.throws(() => time.timeBasis(Number.NaN), RangeError);
 assert.deepEqual(time.timeBands(leapChart), {tt: 0, ut1: leapChart.timeScale.ut1MinusUtc.sigma});
-// Wall times before 1970 read the packed tzdb 2025c history, loaded lazily.
-assert.equal(TZDB.version, "2025c");
+// Wall times before 1970 read the packed tzdb 2026f history, loaded lazily.
+assert.equal(TZDB.version, "2026f");
 assert.throws(() => resolveLocalToUtc("1947-07-01", "12:00", "Europe/Stockholm"), (error) => error instanceof ZoneHistoryNotLoadedError && /prepareLocalTime/.test(error.message));
 await prepareLocalTime("1947-07-01", "Europe/Stockholm");
 const stockholm = resolveLocalToUtc("1947-07-01", "12:00", "Europe/Stockholm");

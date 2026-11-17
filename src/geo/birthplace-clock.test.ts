@@ -2,7 +2,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 
 import { natalChart } from "../api.js";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from "../receipt.js";
-import { SHARD_LOADERS } from "../tzdb/tzdb-2025c.js";
+import { SHARD_LOADERS } from "../tzdb/tzdb-2026f.js";
 import type { ZoneShard } from "./zone-history.js";
 import { offsetAt, prepareLocalTime, resolveLocalBirth, resolveLocalToUtc } from "./timezone.js";
 
