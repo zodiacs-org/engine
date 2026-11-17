@@ -52,8 +52,9 @@ values in both):
 | time.tt-minus-utc | tt_minus_utc_s | 0 s | 9 of 9 |
 | time.delta-t | delta_t_s | 0 s | 15 of 15 |
 
-5.7e-14 degrees is one unit in the last place of a double between 256 and
-512 degrees. The five receipts (`createNatalEnvelope`, then
+The largest longitude difference, 5.7e-14 degrees at L1-POS-0065 (a
+longitude of 204.41 degrees), is 2 units in the last place of a double there
+(one unit is 2.84e-14 degrees between 128 and 256 degrees). The five receipts (`createNatalEnvelope`, then
 `serializeNatalEnvelope`, for the synthetic births in
 `tools/runtime-conformance/receipt-cases.mjs`) differ from Node's in Bun and
 Deno because positions, speeds and aspect orbs differ in their last digits
@@ -69,15 +70,19 @@ Playwright's browser downloads are refused. Their results files and
 summaries are in the artifact `runtime-conformance` of the workflow's runs on
 pull request 122; they are not committed here, because downloading the
 artifact from this workspace was refused (its storage host is not reachable
-from here). The workflow's gate, which passed, requires each browser's
-verdicts to equal Node's for every vector that does not read the host's zone
-data.
+from here). The workflow's gate passed in runs 44129574497 (commit ce880be)
+and 44133491970 (commit 1c0e18e) of the workflow `Runtime conformance`; it
+requires each browser's verdicts to equal Node's, except pass against fail on
+a zone vector that reads the host's zone data. Run 44131008306 (commit
+c9c5c81, reverted) shows the gate failing when one Chromium answer is moved
+by 2 arcseconds.
 
 ## What "to the bit" can and cannot claim
 
 The README's statements that positions equal earlier builds "to the bit"
-were measured on V8 in Node, and hold there: Node reproduces its committed
-values exactly. They do not carry over to other runtimes. In Bun 1.4.4 and
+were measured on V8 in Node, and hold there: Node 22.22.2 on x86-64
+reproduces its committed values exactly. Other Node versions are not covered
+by this run (the CHANGELOG records that Node 24.17.0 differs from Node 22.22.2 on x86-64 by at most 1.14e-13 over 1.0.0-rc.1's calc calls). They do not carry over to other runtimes. In Bun 1.4.4 and
 Deno 2.9.6 about a quarter of the numeric outputs differ from Node's in their
 last bits (at most 4.1e-10 arcsec here), because the ECMAScript specification
 leaves `Math.sin`, `cos`, `tan`, `atan2`, `exp` and `pow`

@@ -70,6 +70,18 @@ test('a zone vector from 1970 on that flips is host data and does not fail; one 
   }
 });
 
+test('a zone vector from 1970 on that turns into an error or unsupported fails the gate', () => {
+  const late = vectors.find((vector) => vector.kind === 'time.zone-offset' && dependsOnHostZoneData(vector));
+  for (const answer of [{ id: late.id, error: 'Could not read UTC offset for timezone' }, { id: late.id, unsupported: 'no longOffset' }]) {
+    const answers = clone(responses);
+    answers.set(late.id, answer);
+    const summary = compare(makeRun(answers, 'webkit'));
+    assert.equal(summary.gate.pass, false, JSON.stringify(answer));
+    assert.equal(summary.differsFromNode[0].id, late.id);
+    assert.equal(summary.differsFromNode[0].class, 'engine');
+  }
+});
+
 test("a results file swapped with another runtime's is caught by its runtime name", () => {
   const summary = compare(makeRun(clone(responses), 'firefox'), 'webkit');
   assert.equal(summary.gate.pass, false);

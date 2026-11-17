@@ -199,7 +199,7 @@
   },
   "gate": {
     "pass": true,
-    "rule": "fails when a verdict differs from Node's for a vector that does not depend on host zone data, or when the run is incomplete or names another runtime; differences in value and receipt digests are reported, not gated",
+    "rule": "fails when a verdict differs from Node's, except pass against fail on a vector that depends on host zone data, or when the run is incomplete or names another runtime; differences in value and receipt digests are reported, not gated",
     "problems": []
   }
 }

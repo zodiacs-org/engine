@@ -2,9 +2,9 @@ name: Runtime conformance
 
 # Runs the conformance suite's 500 requests through the engine in Node, Bun,
 # Deno, Chromium, Firefox and WebKit (tools/runtime-conformance/README.md).
-# Fails when a runtime's verdict differs from Node's for a vector that does
-# not depend on the host's time zone data; differences in value are reported,
-# not gated. It uploads its results as an artifact and pushes nothing.
+# Fails when a runtime's verdict differs from Node's, except pass against
+# fail on a zone vector that reads the host's time zone data; differences in
+# value are reported, not gated. It uploads its results as an artifact and pushes nothing.
 
 on:
   pull_request:
@@ -13,7 +13,13 @@ on:
     paths:
       - 'src/**'
       - 'conformance/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.base.json'
+      - 'tsconfig.build.json'
+      - 'scripts/build-lite.mjs'
       - 'tools/runtime-conformance/**'
+      - 'tools/runtime-conformance/package-lock.json'
       - '.github/workflows/runtime-conformance.yml'
   schedule:
     - cron: '23 3 * * 1'

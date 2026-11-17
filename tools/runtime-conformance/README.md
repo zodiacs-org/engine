@@ -28,7 +28,9 @@ node run-all.mjs --out <dir>
 
 `--runtimes node,bun,deno` runs a subset (Node always runs, as the
 reference). `.github/workflows/runtime-conformance.yml` runs all six on pull
-requests that touch `src/`, `conformance/` or this folder, and weekly.
+requests that touch `src/`, `conformance/`, the root `package.json` or
+lockfile, the build configuration (`tsconfig.base.json`,
+`tsconfig.build.json`, `scripts/build-lite.mjs`) or this folder, and weekly.
 
 ## How each runtime runs
 
@@ -66,9 +68,10 @@ results file; `adapter.runtime` names the runtime and its version),
   "not exposed" otherwise);
 - the verdict counts, in total and per level;
 - every vector whose verdict differs from Node's, with both outputs, the
-  expected value and the tolerance, classed as "host data" (a
-  `time.zone-offset` vector at a local time in 1970 or later, which the engine
-  answers from the host's `Intl` data) or "engine" (anything else);
+  expected value and the tolerance, classed as "host data" (pass against fail
+  on a `time.zone-offset` vector at a local time in 1970 or later, which the
+  engine answers from the host's `Intl` data) or "engine" (anything else,
+  including an error or an unsupported answer on such a vector);
 - for each kind and field, the largest absolute difference from Node's value,
   in degrees (with arcseconds) or seconds, the vector where it occurs, and how
   many values are bit-identical to Node's;
@@ -104,7 +107,9 @@ from Node.
 
 `node --test selftest.mjs` needs Node alone. It checks that one L1
 longitude moved by 2 arcseconds fails the gate, that a zone vector from 1970
-on is "host data" and one before 1970 is not, that a results file swapped
+on that flips between pass and fail is "host data" while one that turns
+into an error or an unsupported answer fails, that one before 1970 is never
+host data, that a results file swapped
 with another runtime's is caught by its runtime name, that a missing answer
 fails, and that the browser bundle, run in Node, answers all 500 requests
 exactly as the Node adapter does, tzdb shards included.

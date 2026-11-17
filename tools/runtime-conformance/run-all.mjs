@@ -5,8 +5,9 @@
  * (conformance/harness/run.mjs) and the same adapter code, and writes for
  * each runtime its results file, the adapter's own lines and a summary that
  * compares it with Node's run. Exits 1 when a runtime's verdict differs from
- * Node's for a vector that does not depend on host zone data, when a run is
- * incomplete, or when Node's verdicts differ from the committed results.
+ * Node's (other than pass against fail on a vector that depends on host zone
+ * data), when a run is incomplete, or when Node's verdicts differ from the
+ * committed results.
  *
  *   node run-all.mjs --out <dir> [--runtimes node,bun,deno,chromium,firefox,webkit]
  *

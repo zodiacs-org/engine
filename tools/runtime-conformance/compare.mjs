@@ -108,7 +108,10 @@ export function compareWithNode({ vectors, node, runtime, expected }) {
     const answer = runtime.raw.answers.get(vector.id);
     const nodeAnswer = node.raw.answers.get(vector.id);
     if (mine && theirs && mine.verdict !== theirs.verdict) {
-      const hostData = dependsOnHostZoneData(vector);
+      // Host zone data may move a judged answer between pass and fail; an
+      // error or an unsupported answer there is the engine's, and is gated.
+      const judged = (verdict) => verdict === 'pass' || verdict === 'fail';
+      const hostData = dependsOnHostZoneData(vector) && judged(mine.verdict) && judged(theirs.verdict);
       differs.push({
         id: vector.id,
         kind: vector.kind,
@@ -174,7 +177,7 @@ export function compareWithNode({ vectors, node, runtime, expected }) {
     receipts: { allSameAsNode: receipts.length === node.receipts.length && receipts.every((one) => one.sameAsNode), cases: receipts },
     gate: {
       pass: problems.length === 0,
-      rule: 'fails when a verdict differs from Node\'s for a vector that does not depend on host zone data, or when the run is incomplete or names another runtime; differences in value and receipt digests are reported, not gated',
+      rule: 'fails when a verdict differs from Node\'s, except pass against fail on a vector that depends on host zone data, or when the run is incomplete or names another runtime; differences in value and receipt digests are reported, not gated',
       problems,
     },
   };
