@@ -4,7 +4,7 @@ import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import { natalChart } from "../index.js";
 import { createNatalEnvelope, parseNatalEnvelope } from "../receipt.js";
 import { offsetAt, prepareLocalTime, resolveLocalBirth, resolveLocalToUtc } from "../geo.js";
-import { HOST_PROBES, HOST_PROBES_TZDB } from "./host-probes-data.js";
+import { HOST_PROBES, HOST_PROBES_TZDB, HOST_PROBES_UNTIL } from "./host-probes-data.js";
 import { setHostForTests } from "./timezone.js";
 import { nameHash } from "./zone-history.js";
 // @ts-expect-error: a plain .mjs script without declarations
@@ -21,6 +21,7 @@ type Row = [from: string, to: string | null, probe: string, pinned: number, base
 const SPELLED = JSON.parse(readFileSync(new URL("./host-probes-intervals.json", import.meta.url), "utf8")) as {
   pinned: { version: string };
   baseline: { version: string };
+  horizon: string;
   intervals: number;
   byName: Record<string, Row[]>;
 };
@@ -51,6 +52,7 @@ describe("the generated table", () => {
   it("is the pinned release against 2021a, and its two generated files agree", () => {
     expect(HOST_PROBES_TZDB).toBe(SPELLED.pinned.version);
     expect(SPELLED.baseline.version).toBe("2021a");
+    expect(new Date(HOST_PROBES_UNTIL).toISOString()).toBe(SPELLED.horizon.replace("Z", ".000Z"));
     const decoded = decodeTable(HOST_PROBES) as Map<number, [number, number | null, number][]>;
     let count = 0;
     for (const [name, rows] of Object.entries(SPELLED.byName)) {
@@ -125,6 +127,30 @@ describe("a wall time the host reads", () => {
     const current = resolveLocalToUtc("2024-03-31", "02:30", "Europe/Chisinau");
     expect(current.flags).toEqual([]);
     expect(current.utc.toISOString()).toBe("2024-03-31T00:30:00.000Z");
+  });
+
+  it("checks a span still open at the horizon only up to it: Casablanca 2030-01-20 12:00 (conformance L3-TZ-0045)", () => {
+    // tzdata 2021a and 2025c leave Morocco on +01 outside Ramadan and +00 in it; 2026f keeps +00 from 2026-09-20.
+    // The span open from 2029-02-18 holds to the horizon, 2029-10-27, but not past it: in Ramadan 2030 the old rules
+    // give +00 again. This host answers as 2021a inside the span and +00 after the horizon, as 2025c does then.
+    const stale = STALE();
+    setHostForTests({
+      offsetAt: (zone, ms) => (zone === "Africa/Casablanca" && ms >= HOST_PROBES_UNTIL ? 0 : stale.offsetAt(zone, ms)),
+      tzdbVersion: () => null
+    });
+    const ramadan = resolveLocalToUtc("2030-01-20", "12:00", "Africa/Casablanca");
+    expect(ramadan.utc.toISOString()).toBe("2030-01-20T12:00:00.000Z");
+    expect(ramadan.flags).toEqual([]);
+    expect(ramadan.zone.hostCheck).toEqual({ status: "unchecked" });
+    // Before the horizon, and within 36 hours after it, the span is checked as before.
+    for (const [date, utc] of [["2029-10-01", "2029-10-01T11:00:00.000Z"], ["2029-10-26", "2029-10-26T11:00:00.000Z"]] as const) {
+      const inside = resolveLocalToUtc(date, "12:00", "Africa/Casablanca");
+      expect(inside.utc.toISOString(), date).toBe(utc);
+      expect(inside.flags, date).toEqual(["host-zone-data-differs"]);
+      expect(inside.zone.hostCheck, date).toMatchObject({ status: "differs", probe: "2029-04-04T02:00:00.000Z", hostOffsetMinutes: 60, tzdbOffsetMinutes: 0 });
+    }
+    expect(resolveLocalToUtc("2029-10-28", "06:00", "Africa/Casablanca").flags).toEqual(["host-zone-data-differs"]);
+    expect(resolveLocalToUtc("2029-10-28", "12:00", "Africa/Casablanca").zone.hostCheck).toEqual({ status: "unchecked" });
   });
 
   it("flags a link name as its target", () => {
@@ -235,7 +261,7 @@ describe("every span (property)", () => {
     const handover: string[] = [];
     for (const [name, [fromText, toText]] of rows) {
       const from = Date.parse(fromText);
-      const to = toText === null ? from + 2 * 365 * 86_400_000 : Date.parse(toText);
+      const to = toText === null ? HOST_PROBES_UNTIL : Date.parse(toText);
       for (let draw = 0; draw < 20; draw += 1) {
         const instant = from + Math.floor((random() * (to - from)) / 60_000) * 60_000;
         for (const [which, flagged] of [["baseline", true], ["pinned", false]] as const) {

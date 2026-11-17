@@ -1,7 +1,11 @@
-# main at c80fde4 (src/geo.ts bundled alone with tsup), the same three wall times, real hosts
+# main at c80fde4 (src/geo.ts bundled alone with tsup), the same five wall times, real hosts
 2026e America/Havana 2026-12-15T17:00:00.000Z [] {"source":"intl","tzdbVersion":"2026e","dataForm":"host","abbreviation":null,"dst":null}
 2026e America/Vancouver 2027-01-15T19:00:00.000Z [] {"source":"intl","tzdbVersion":"2026e","dataForm":"host","abbreviation":null,"dst":null}
 2026e Europe/Chisinau 2024-03-31T00:30:00.000Z [] {"source":"intl","tzdbVersion":"2026e","dataForm":"host","abbreviation":null,"dst":null}
+2026e Africa/Casablanca 2030-01-20T12:00:00.000Z [] {"source":"intl","tzdbVersion":"2026e","dataForm":"host","abbreviation":null,"dst":null}
+2026e Asia/Tehran 1979-05-26T07:30:00.000Z [] {"source":"intl","tzdbVersion":"2026e","dataForm":"host","abbreviation":null,"dst":null}
 2025c America/Havana 2026-12-15T17:00:00.000Z [] {"source":"intl","tzdbVersion":"2025c","dataForm":"host","abbreviation":null,"dst":null}
 2025c America/Vancouver 2027-01-15T20:00:00.000Z [] {"source":"intl","tzdbVersion":"2025c","dataForm":"host","abbreviation":null,"dst":null}
 2025c Europe/Chisinau 2024-03-31T00:30:00.000Z ["dst-gap"] {"source":"intl","tzdbVersion":"2025c","dataForm":"host","abbreviation":null,"dst":null}
+2025c Africa/Casablanca 2030-01-20T12:00:00.000Z [] {"source":"intl","tzdbVersion":"2025c","dataForm":"host","abbreviation":null,"dst":null}
+2025c Asia/Tehran 1979-05-26T08:30:00.000Z [] {"source":"intl","tzdbVersion":"2025c","dataForm":"host","abbreviation":null,"dst":null}

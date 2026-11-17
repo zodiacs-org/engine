@@ -523,7 +523,8 @@ browsers and Node carry them) with `zic -b fat`, give different offsets, for
 every zone and link name both releases have: 703 spans in 77 names, each with
 the 2026f offset. 2021a is the baseline because five years is the oldest
 device data worth describing; 2029-10-27 is 2026f's release date plus three
-years, and a span still open there runs on without end.
+years. Nothing is compared past it, so a span still open there ends there
+for the check.
 `docs/evidence/host-zone-probes-20261117/` checks every span, probe and
 offset against `zdump -v -c 1970,2030` of both builds, to the second, and
 records what Node 22.22.2 (tzdb 2025c) and Node 22.23.4 (tzdb 2026e) say at
@@ -538,7 +539,7 @@ answer in `zone.hostCheck`:
 
 | `status` | Meaning |
 | --- | --- |
-| `"unchecked"` | no span is near: tzdata 2021a and 2026f agree within 36 hours of the instant, or the instant is before 1970, or the zone is a fixed one. Nothing else is set. |
+| `"unchecked"` | no span is near: tzdata 2021a and 2026f agree within 36 hours of the instant, or the instant is before 1970 or more than 36 hours after 2029-10-27, or the zone is a fixed one. Nothing else is set. |
 | `"current"` | the host gave 2026f's offset at every probe near the instant |
 | `"differs"` | the host gave another offset at a probe; the result and the chart carry `"host-zone-data-differs"` |
 | `"newer"` | it did, but the runtime names a tzdb release later than 2026f (`process.versions.tz`; Node does, browsers do not), which may know a rule 2026f does not, so nothing is flagged |
@@ -802,20 +803,26 @@ the values change.
   causes are tzdb 2025c's: a change that only a newer host knows is resolved
   with the host's offsets and reported as `"dst"`.
 - The host check (*Host time zone data*) sees only what changed between
-  tzdata 2021a and 2026f, up to 2029-10-27 (a span still open there runs on).
-  A host older than 2021a is flagged where it disagrees inside those spans,
-  not where only it is wrong; a rule changed after 2026f, a zone name 2021a
-  lacks (Europe/Kyiv, America/Ciudad_Juarez) and a seasonal change after
-  2029-10-27 are not checked. A browser with newer data than 2026f is flagged
-  where the two differ, since it names no release. One probe stands for its
-  span: a host that agrees there and not elsewhere in the span is not
-  flagged. A span still open at 2029-10-27 counts for every later date, so
-  a date where the two releases happen to agree is flagged on a host that
-  disagrees at the probe: Morocco from 2029-02-18, where tzdata 2026f keeps
-  +00:00 and 2021a +01:00 outside Ramadan and +00:00 in it, so
-  `Africa/Casablanca` 2030-01-20 12:00, in Ramadan, is flagged on a host with
-  tzdb 2025c (conformance vector L3-TZ-0045, whose verdict does not change). The table keys names by a 32-bit hash, unique among every name of
-  both builds.
+  tzdata 2021a and 2026f, from 1970-01-01 to 2029-10-27; an instant more
+  than 36 hours after that date is not checked, even in a span still open
+  there, since the older rules may agree again later (Morocco's: 2021a and
+  2025c give +00:00 in Ramadan 2030, as 2026f does, so `Africa/Casablanca`
+  2030-01-20 12:00, conformance vector L3-TZ-0045, is not flagged on a host
+  with tzdb 2025c). A rule changed after 2026f and a zone name 2021a lacks
+  (Europe/Kyiv, America/Ciudad_Juarez) are not checked either.
+- A host is flagged only where it disagrees with 2026f inside a span in
+  which 2021a does too. A host whose data is older than 2021a, or between
+  2021a and 2026f, can be wrong where 2021a and 2026f agree, and its check
+  then says `"current"`. Of the releases in between, 2025c (Node 22.22.2)
+  was compared: it has one such span, Asia/Tehran and its link Iran on
+  1979-05-26 (UTC 1979-05-25 20:30 to 1979-05-26 20:30), where 2025c gives
+  +03:30 and 2021a and 2026f +04:30, so 12:00 there is 08:30Z on such a host
+  and 07:30Z in 2026f, unflagged. Its other differences from 2026f are all
+  spans 2021a has too.
+- A browser with newer data than 2026f is flagged where the two differ,
+  since it names no release. One probe stands for its span: a host that
+  agrees there and not elsewhere in the span is not flagged. The table keys
+  names by a 32-bit hash, unique among every name of both builds.
 - The adoption table gives one date per present-day country, for the region
   its row names; the note gives the other regions the sources date, and some
   regions (Moravia, Zeeland, Drenthe) they do not date at all. It dates only

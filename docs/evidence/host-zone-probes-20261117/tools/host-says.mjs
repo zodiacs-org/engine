@@ -1,7 +1,7 @@
 /*
  * Records, as evidence only, what this Node's own Intl says at every probe of
  * src/geo/host-probes-intervals.json, and what the built engine (dist/geo.js)
- * gives for three wall times on this real host, unemulated.
+ * gives for five wall times on this real host, unemulated.
  *
  *   npm run build && node docs/evidence/host-zone-probes-20261117/tools/host-says.mjs > results/node-<version>.json
  *
@@ -35,7 +35,10 @@ const geo = await import(resolve("dist/geo.js"));
 const cases = [
   ["2026-12-15", "12:00", "America/Havana"],
   ["2027-01-15", "12:00", "America/Vancouver"],
-  ["2024-03-31", "02:30", "Europe/Chisinau"]
+  ["2024-03-31", "02:30", "Europe/Chisinau"],
+  // Past the horizon (conformance vector L3-TZ-0045), and a span only 2025c has, which the check does not see.
+  ["2030-01-20", "12:00", "Africa/Casablanca"],
+  ["1979-05-26", "12:00", "Asia/Tehran"]
 ].map(([date, time, zone]) => {
   const resolved = geo.resolveLocalToUtc(date, time, zone);
   return { date, time, zone, utc: resolved.utc.toISOString(), offsetMinutes: resolved.offsetMinutes, flags: resolved.flags, zone_: resolved.zone };

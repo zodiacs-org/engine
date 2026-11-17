@@ -8,7 +8,7 @@
  */
 import { dateFrom } from "../date-input.js";
 import { bodyLongitude } from "../ephemeris.js";
-import { resolveLocalToUtc } from "../geo/timezone.js";
+import { readLocalTime } from "../geo/local-clock.js";
 import { SIGN_SLUGS, signIndexForLongitude } from "../signs.js";
 import type { DateInput, DetailedResult, ZodiacSign } from "../types.js";
 import { DAY_MS, detailed, readOptions, techniqueFlags } from "./shared.js";
@@ -120,8 +120,10 @@ export function moonSignCandidates(date: string, options?: MoonSignOptions): Moo
     toT = noonT + (12 - EVERY_ZONE_OFFSETS.latestHours) * HOUR_MS - 1;
   } else {
     const local = read.longitude === undefined ? undefined : { longitude: read.longitude as number };
-    fromT = resolveLocalToUtc(isoDate(year, month, day), "00:00", timeZone, local).utc.getTime();
-    toT = resolveLocalToUtc(isoDate(year, month, day + 1), "00:00", timeZone, local).utc.getTime() - 1;
+    // Only the instants are kept, so the host check (and its table) is left out: readLocalTime is
+    // resolveLocalToUtc without it.
+    fromT = readLocalTime(isoDate(year, month, day), "00:00", timeZone, local).utc.getTime();
+    toT = readLocalTime(isoDate(year, month, day + 1), "00:00", timeZone, local).utc.getTime() - 1;
     if (toT < fromT) throw new RangeError("The date did not occur in that time zone.");
   }
   const signs = signsOver(fromT, toT);

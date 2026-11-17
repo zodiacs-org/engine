@@ -765,6 +765,46 @@
      "tzdbVersion": "2026f"
     }
    }
+  },
+  {
+   "date": "2030-01-20",
+   "time": "12:00",
+   "zone": "Africa/Casablanca",
+   "utc": "2030-01-20T12:00:00.000Z",
+   "offsetMinutes": 0,
+   "flags": [],
+   "zone_": {
+    "source": "intl",
+    "tzdbVersion": "2025c",
+    "dataForm": "host",
+    "abbreviation": null,
+    "dst": null,
+    "hostCheck": {
+     "status": "unchecked"
+    }
+   }
+  },
+  {
+   "date": "1979-05-26",
+   "time": "12:00",
+   "zone": "Asia/Tehran",
+   "utc": "1979-05-26T08:30:00.000Z",
+   "offsetMinutes": 210,
+   "flags": [],
+   "zone_": {
+    "source": "intl",
+    "tzdbVersion": "2025c",
+    "dataForm": "host",
+    "abbreviation": null,
+    "dst": null,
+    "hostCheck": {
+     "status": "current",
+     "probe": "1979-04-22T20:30:00.000Z",
+     "hostOffsetMinutes": 210,
+     "tzdbOffsetMinutes": 210,
+     "tzdbVersion": "2026f"
+    }
+   }
   }
  ]
 }

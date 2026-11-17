@@ -3,6 +3,9 @@
 /** The pinned release whose offsets the probes carry. */
 export const HOST_PROBES_TZDB = "2026f";
 
+/** Unix ms, 2029-10-27T00:00:00Z: where the comparison stops. An open-ended interval is checked up to here, not beyond. */
+export const HOST_PROBES_UNTIL = 1887753600000;
+
 /**
  * 703 intervals in 77 names from 1970-01-01 to 2029-10-27 in which tzdata 2021a and
  * 2026f give different offsets: rows joined by ";", each the names' FNV-1a hashes in base 36 joined by

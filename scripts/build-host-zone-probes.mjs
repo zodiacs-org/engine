@@ -27,7 +27,10 @@
  *   release's date plus three years, each maximal run of time in which the
  *   two offsets differ and neither changes is one interval: from, to
  *   (exclusive; null when the run reaches the horizon) and the pinned offset.
- *   An interval that reaches the horizon is open-ended.
+ *   An interval that reaches the horizon is open-ended. Past the horizon
+ *   nothing was compared, so the engine checks an open-ended interval only
+ *   up to it (HOST_PROBES_UNTIL): a zone whose old rules change again later
+ *   (Morocco's Ramadan offset) agrees there as often as not.
  * - The probe is derived, not stored: the interval's midpoint, rounded down
  *   to the minute, or from + 45 days when it is open-ended.
  * - Names are keyed by the 32-bit FNV-1a hash of the lower-cased name, the
@@ -35,7 +38,8 @@
  *   name of both builds. Names with the same intervals share one row.
  *
  * Output (all generated; do not edit):
- * - src/geo/host-probes-data.ts: HOST_PROBES, rows joined by ";": the
+ * - src/geo/host-probes-data.ts: HOST_PROBES_TZDB, HOST_PROBES_UNTIL (the
+ *   horizon, ms) and HOST_PROBES, rows joined by ";": the
  *   names' hashes in base 36 joined by ",", ":", then per interval three
  *   base-36 integers in minutes, joined by ",": the time from the previous
  *   interval's end (from 1970 for the first), the length (0 when open-ended)
@@ -245,6 +249,9 @@ export function buildFromCompiled(pinned, baseline) {
 
 /** The pinned release whose offsets the probes carry. */
 export const HOST_PROBES_TZDB = "${PINNED.version}";
+
+/** Unix ms, ${iso(HORIZON)}: where the comparison stops. An open-ended interval is checked up to here, not beyond. */
+export const HOST_PROBES_UNTIL = ${HORIZON * 1000};
 
 /**
  * ${intervals} intervals in ${byName.size} names from 1970-01-01 to ${iso(HORIZON).slice(0, 10)} in which tzdata ${BASELINE.version} and
