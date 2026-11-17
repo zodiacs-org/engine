@@ -53,7 +53,7 @@ if (options.mutate) {
   const file = readdirSync(copy).find((name) => /^tzdb-\d{4}[a-z]-\d{2}-/.test(name) && readFileSync(join(copy, name), "utf8").includes(`"${key}":{`));
   if (!file) throw new Error(`compare: no shard holds ${options.mutate}`);
   const text = readFileSync(join(copy, file), "utf8");
-  const next = text.replace(new RegExp(`("${key.replace(/[/+]/g, "\\$&")}":\\{[^}]*?"t":")(-?[0-9a-z]+)`), (_, head, first) => {
+  const next = text.replace(new RegExp(`("${key.replace(/[\\^$.*+?()[\]{}|/]/gu, "\\$&")}":\\{[^}]*?"t":")(-?[0-9a-z]+)`), (_, head, first) => {
     mutated = `${options.mutate}: first transition ${parseInt(first, 36)} -> ${parseInt(first, 36) + 3600}`;
     return head + (parseInt(first, 36) + 3600).toString(36);
   });
