@@ -5,7 +5,7 @@ name: Fetch public sources
 # the BIPM's resolutions) cannot be downloaded from where the work is done, so
 # this job downloads it here, from the official hosts only, and pushes the raw
 # files with a manifest of SHA-256 digests to a new side branch named
-# fetched/<label>-<run id>. That branch holds only the fetched/ folder. The
+# fetched/<label>-<run id>-<attempt>. That branch holds only the fetched/ folder. The
 # job changes no other branch, builds nothing, publishes nothing and is not a
 # check: it never runs on a push or a pull request.
 on:
@@ -25,8 +25,7 @@ on:
         default: "2"
         type: string
 
-permissions:
-  contents: write
+permissions: {}
 
 concurrency:
   group: fetch-sources
@@ -37,6 +36,8 @@ jobs:
     name: Download, digest and push to a side branch
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -44,6 +45,9 @@ jobs:
           persist-credentials: true
 
       - name: Fetch
+        # The step stops before the job does, so the push step below still
+        # runs and keeps whatever was fetched.
+        timeout-minutes: 50
         env:
           LABEL: ${{ inputs.label }}
           URLS: ${{ inputs.urls }}
@@ -88,7 +92,7 @@ jobs:
           out="$RUNNER_TEMP/out/fetched"
           mkdir -p "$out"
           manifest="$out/MANIFEST.tsv"
-          printf 'n\tfile\tbytes\tsha256\tretrieved_utc\thttp_status\turl\n' > "$manifest"
+          printf 'n\tfile\tbytes\tsha256\tretrieved_utc\thttp_status\turl\tfinal_url\n' > "$manifest"
           failed=0
           n=0
           for url in "${list[@]}"; do
@@ -99,32 +103,53 @@ jobs:
             [ -n "$base" ] || base=response
             name="$(printf '%03d' "$n")-$base"
             when="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-            status="$(curl -sS -L --proto '=https' --max-redirs 5 --retry 3 --retry-delay 5 \
-              --max-time 900 --max-filesize 90000000 \
+            # -g: no URL globbing, so one address is exactly one request.
+            # Redirects are followed, but the final address must itself be
+            # on an allowed host, or the file is thrown away.
+            result="$(curl -g -sS -L --proto '=https' --proto-redir '=https' --max-redirs 5 \
+              --retry 3 --retry-delay 5 --max-time 900 --max-filesize 90000000 \
               -A "zodiacs-engine source fetch (https://zodiacs.org; admin@zodiacs.org)" \
-              -o "$out/$name" -w '%{http_code}' "$url" || true)"
-            [ -n "$status" ] || status=000
-            if [ "$status" = 200 ] && [ -s "$out/$name" ]; then
+              -o "$out/$name" -w '%{http_code} %{url_effective}' "$url" || true)"
+            status="${result%% *}"
+            final="${result#* }"
+            [[ "$status" =~ ^[0-9]{3}$ ]] || status=000
+            [ "$final" != "$result" ] || final=-
+            final_ok=no
+            for prefix in "${allowed[@]}"; do
+              case "$final" in "$prefix"*) final_ok=yes ;; esac
+            done
+            if [ "$status" = 200 ] && [ "$final_ok" = yes ] && [ -s "$out/$name" ]; then
               bytes="$(stat -c %s "$out/$name")"
               sum="$(sha256sum "$out/$name" | cut -d' ' -f1)"
             else
               failed=$((failed + 1))
               rm -f "$out/$name"
               name="-"; bytes="-"; sum="-"
-              echo "failed ($status): $url" >&2
+              echo "failed ($status, ended at ${final}): $url" >&2
             fi
-            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$n" "$name" "$bytes" "$sum" "$when" "$status" "$url" >> "$manifest"
+            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$n" "$name" "$bytes" "$sum" "$when" "$status" "$url" "$final" >> "$manifest"
             sleep "$DELAY"
           done
+          echo "done" > "$out/.complete"
           echo "FAILED=$failed" >> "$GITHUB_ENV"
           cat "$manifest"
 
       - name: Push to a side branch
+        if: ${{ !cancelled() }}
         env:
           LABEL: ${{ inputs.label }}
         run: |
           set -euo pipefail
-          branch="fetched/$LABEL-$GITHUB_RUN_ID"
+          if [ ! -f "$RUNNER_TEMP/out/fetched/MANIFEST.tsv" ]; then
+            echo "nothing was fetched" >&2
+            exit 1
+          fi
+          if [ ! -f "$RUNNER_TEMP/out/fetched/.complete" ]; then
+            echo "the fetch stopped early; pushing what it fetched" >&2
+            FAILED=incomplete
+          fi
+          rm -f "$RUNNER_TEMP/out/fetched/.complete"
+          branch="fetched/$LABEL-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
           git config user.name "Zodiacs Admin"
           git config user.email admin@zodiacs.org
           git checkout --orphan "$branch"
