@@ -1,0 +1,167 @@
+name: Fetch public sources
+
+# A download job, run only by hand. Some evidence the engine's tickets need
+# (IANA tzdb releases, NASA JPL Horizons answers and kernels, IERS bulletins,
+# the BIPM's resolutions) cannot be downloaded from where the work is done, so
+# this job downloads it here, from the official hosts only, and pushes the raw
+# files with a manifest of SHA-256 digests to a new side branch named
+# fetched/<label>-<run id>-<attempt>. That branch holds only the fetched/
+# folder. The job changes no other branch, builds nothing, publishes nothing and is not a
+# check: it never runs on a push or a pull request.
+on:
+  workflow_dispatch:
+    inputs:
+      label:
+        description: "Short name for the side branch (a to z, 0 to 9 and hyphens, up to 40)"
+        required: true
+        type: string
+      urls:
+        description: "The addresses to fetch, separated by spaces or new lines, each on an allowed host"
+        required: true
+        type: string
+      delay_seconds:
+        description: "Pause between requests, so a service is asked one thing at a time"
+        required: false
+        default: "2"
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: fetch-sources
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    name: Download, digest and push to a side branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: true
+
+      - name: Fetch
+        # The step stops before the job does, so the push step below still
+        # runs and keeps whatever was fetched.
+        timeout-minutes: 50
+        env:
+          LABEL: ${{ inputs.label }}
+          URLS: ${{ inputs.urls }}
+          DELAY: ${{ inputs.delay_seconds }}
+        run: |
+          set -euo pipefail
+          if ! [[ "$LABEL" =~ ^[a-z0-9-]{1,40}$ ]]; then
+            echo "label must be a to z, 0 to 9 and hyphens, up to 40 characters" >&2
+            exit 1
+          fi
+          if ! [[ "$DELAY" =~ ^[0-9]{1,2}$ ]]; then
+            echo "delay_seconds must be a whole number from 0 to 99" >&2
+            exit 1
+          fi
+          # Address prefixes this job may fetch. Anything else is refused
+          # before any request is made.
+          allowed=(
+            "https://data.iana.org/time-zones/"
+            "https://ssd.jpl.nasa.gov/api/horizons.api?"
+            "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/"
+            "https://datacenter.iers.org/"
+            "https://hpiers.obspm.fr/"
+            "https://www.iers.org/"
+            "https://www.bipm.org/"
+            "https://codeload.github.com/eggert/tz/"
+          )
+          read -r -a list <<< "$(printf '%s' "$URLS" | tr '\n\r\t' '   ')"
+          if [ "${#list[@]}" -eq 0 ] || [ "${#list[@]}" -gt 300 ]; then
+            echo "give from 1 to 300 addresses" >&2
+            exit 1
+          fi
+          for url in "${list[@]}"; do
+            ok=no
+            for prefix in "${allowed[@]}"; do
+              case "$url" in "$prefix"*) ok=yes ;; esac
+            done
+            if [ "$ok" != yes ]; then
+              echo "refused, not on an allowed host: $url" >&2
+              exit 1
+            fi
+          done
+          out="$RUNNER_TEMP/out/fetched"
+          mkdir -p "$out"
+          manifest="$out/MANIFEST.tsv"
+          printf 'n\tfile\tbytes\tsha256\tretrieved_utc\thttp_status\turl\tfinal_url\n' > "$manifest"
+          failed=0
+          n=0
+          for url in "${list[@]}"; do
+            n=$((n + 1))
+            base="${url%%\?*}"
+            base="${base##*/}"
+            base="$(printf '%s' "$base" | tr -c 'A-Za-z0-9._-' '_' | cut -c1-60)"
+            [ -n "$base" ] || base=response
+            name="$(printf '%03d' "$n")-$base"
+            when="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            # -g: no URL globbing, so one address is exactly one request.
+            # Redirects are followed, but the final address must itself be
+            # on an allowed host, or the file is thrown away.
+            result="$(curl -g -sS -L --proto '=https' --proto-redir '=https' --max-redirs 5 \
+              --retry 3 --retry-delay 5 --max-time 900 --max-filesize 90000000 \
+              -A "zodiacs-engine source fetch (https://zodiacs.org; admin@zodiacs.org)" \
+              -o "$out/$name.part" -w '%{http_code} %{url_effective}' "$url" || true)"
+            status="${result%% *}"
+            final="${result#* }"
+            [[ "$status" =~ ^[0-9]{3}$ ]] || status=000
+            [ "$final" != "$result" ] || final=-
+            final_ok=no
+            for prefix in "${allowed[@]}"; do
+              case "$final" in "$prefix"*) final_ok=yes ;; esac
+            done
+            if [ "$status" = 200 ] && [ "$final_ok" = yes ] && [ -s "$out/$name.part" ]; then
+              mv "$out/$name.part" "$out/$name"
+              bytes="$(stat -c %s "$out/$name")"
+              sum="$(sha256sum "$out/$name" | cut -d' ' -f1)"
+            else
+              failed=$((failed + 1))
+              rm -f "$out/$name.part"
+              name="-"; bytes="-"; sum="-"
+              echo "failed ($status, ended at ${final}): $url" >&2
+            fi
+            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$n" "$name" "$bytes" "$sum" "$when" "$status" "$url" "$final" >> "$manifest"
+            sleep "$DELAY"
+          done
+          echo "done" > "$out/.complete"
+          echo "FAILED=$failed" >> "$GITHUB_ENV"
+          cat "$manifest"
+
+      - name: Push to a side branch
+        if: ${{ !cancelled() }}
+        env:
+          LABEL: ${{ inputs.label }}
+        run: |
+          set -euo pipefail
+          if [ ! -f "$RUNNER_TEMP/out/fetched/MANIFEST.tsv" ]; then
+            echo "nothing was fetched" >&2
+            exit 1
+          fi
+          if [ ! -f "$RUNNER_TEMP/out/fetched/.complete" ]; then
+            echo "the fetch stopped early; pushing what it fetched" >&2
+            FAILED=incomplete
+          fi
+          rm -f "$RUNNER_TEMP/out/fetched/.complete" "$RUNNER_TEMP"/out/fetched/*.part
+          branch="fetched/$LABEL-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          git config user.name "Zodiacs Admin"
+          git config user.email admin@zodiacs.org
+          git checkout --orphan "$branch"
+          git rm -rq --cached .
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -R "$RUNNER_TEMP/out/fetched" ./fetched
+          git add fetched
+          git commit -qm "Fetched public sources: $LABEL (run $GITHUB_RUN_ID)"
+          git push -q origin "HEAD:refs/heads/$branch"
+          echo "Pushed $branch"
+          if [ "${FAILED:-0}" != 0 ]; then
+            echo "not every address was fetched ($FAILED); see fetched/MANIFEST.tsv" >&2
+            exit 1
+          fi
