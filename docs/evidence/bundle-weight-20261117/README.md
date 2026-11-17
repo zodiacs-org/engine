@@ -352,5 +352,7 @@ node report.mjs ../../docs/evidence/bundle-weight-20261117/results.json
 git apply --check ../../docs/evidence/bundle-weight-20261117/prototype.patch
 ```
 
-Sizes come out the same on every run with the same tool versions; timings do
+Sizes come out the same on every run with the same tool versions, apart
+from an occasional one byte difference in a brotli size (seen once in a
+review rerun, 1.1.0 app e webpack e.js, 1,211 against 1,212); timings do
 not, and a rerun is compared by its medians and ranges.
