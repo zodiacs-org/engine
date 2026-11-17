@@ -1,0 +1,3757 @@
+{
+  "what": "Every event of the draft L4 vectors as the generator solved it from DE440s: the instant (seconds of TT from J2000.0, to 1 ms), the same solve bracketed at half hour steps (check a), the window, and the apparent geocentric longitudes of date (degrees, IAU 2006/2000A true ecliptic) an hour before, at and an hour after the instant, from which the tolerance is computed",
+  "kernel": {
+    "file": "de440s.bsp",
+    "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp",
+    "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2"
+  },
+  "events": [
+    {
+      "id": "L4-ING-0001",
+      "kind": "event.ingress",
+      "quantity": "Sun",
+      "tt_s": -4416312166.115,
+      "tt": "1860-01-20T18:37:13.885 TT",
+      "halfHourBracket_tt_s": -4416312166.115,
+      "after_tt_s": -4418020800.0,
+      "before_tt_s": -4400533948.0,
+      "nextOccurrence_tt_s": -4384755730.387,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9575882688,
+          300.0000000067,
+          300.042411446
+        ]
+      },
+      "motion": {
+        "value": 0.0424115886,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 24
+    },
+    {
+      "id": "L4-ING-0002",
+      "kind": "event.ingress",
+      "quantity": "Sun",
+      "tt_s": -2365108767.586,
+      "tt": "1925-01-20T13:20:32.414 TT",
+      "halfHourBracket_tt_s": -2365108767.586,
+      "after_tt_s": -2366798400.0,
+      "before_tt_s": -2349330200.0,
+      "nextOccurrence_tt_s": -2333551632.312,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9575847908,
+          299.9999999955,
+          300.0424150308
+        ]
+      },
+      "motion": {
+        "value": 0.04241512,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 24
+    },
+    {
+      "id": "L4-ING-0003",
+      "kind": "event.ingress",
+      "quantity": "Sun",
+      "tt_s": -313905450.028,
+      "tt": "1990-01-20T08:02:29.972 TT",
+      "halfHourBracket_tt_s": -313905450.028,
+      "after_tt_s": -315576000.0,
+      "before_tt_s": -298127084.0,
+      "nextOccurrence_tt_s": -282348717.202,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9575885051,
+          300.0000000076,
+          300.0424113473
+        ]
+      },
+      "motion": {
+        "value": 0.0424114211,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 24
+    },
+    {
+      "id": "L4-ING-0004",
+      "kind": "event.ingress",
+      "quantity": "Sun",
+      "tt_s": 822145565.255,
+      "tt": "2026-01-20T01:46:05.255 TT",
+      "halfHourBracket_tt_s": 822145565.255,
+      "after_tt_s": 820497600.0,
+      "before_tt_s": 837923913.0,
+      "nextOccurrence_tt_s": 853702260.1,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9575756543,
+          299.9999999959,
+          300.042423985
+        ]
+      },
+      "motion": {
+        "value": 0.04242416535,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 24
+    },
+    {
+      "id": "L4-ING-0005",
+      "kind": "event.ingress",
+      "quantity": "Sun",
+      "tt_s": 1895083185.08,
+      "tt": "2060-01-20T07:59:45.080 TT",
+      "halfHourBracket_tt_s": 1895083185.08,
+      "after_tt_s": 1893412800.0,
+      "before_tt_s": 1910861520.0,
+      "nextOccurrence_tt_s": 1926639855.617,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9576003989,
+          300.000000008,
+          300.0423993774
+        ]
+      },
+      "motion": {
+        "value": 0.04239948925,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 24
+    },
+    {
+      "id": "L4-ING-0006",
+      "kind": "event.ingress",
+      "quantity": "Sun",
+      "tt_s": 4419640265.134,
+      "tt": "2140-01-20T17:51:05.134 TT",
+      "halfHourBracket_tt_s": 4419640265.134,
+      "after_tt_s": 4417934400.0,
+      "before_tt_s": 4435418729.0,
+      "nextOccurrence_tt_s": 4451197193.19,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9575599206,
+          299.9999999984,
+          300.0424397651
+        ]
+      },
+      "motion": {
+        "value": 0.04243992225,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 24
+    },
+    {
+      "id": "L4-ING-0007",
+      "kind": "event.ingress",
+      "quantity": "Moon",
+      "tt_s": -4417844935.014,
+      "tt": "1860-01-03T00:51:04.986 TT",
+      "halfHourBracket_tt_s": -4417844935.014,
+      "after_tt_s": -4418020800.0,
+      "before_tt_s": -4416664151.0,
+      "nextOccurrence_tt_s": -4415483367.081,
+      "target_deg": 30.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          29.4716219774,
+          30.0000000266,
+          30.5290366534
+        ]
+      },
+      "motion": {
+        "value": 0.528707338,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-ING-0008",
+      "kind": "event.ingress",
+      "quantity": "Moon",
+      "tt_s": -2366787757.241,
+      "tt": "1925-01-01T02:57:22.759 TT",
+      "halfHourBracket_tt_s": -2366787757.241,
+      "after_tt_s": -2366798400.0,
+      "before_tt_s": -2365605090.0,
+      "nextOccurrence_tt_s": -2364422422.289,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          359.4519520343,
+          8.57e-08,
+          0.5473499376
+        ]
+      },
+      "motion": {
+        "value": 0.54769895165,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-ING-0009",
+      "kind": "event.ingress",
+      "quantity": "Moon",
+      "tt_s": -315553740.115,
+      "tt": "1990-01-01T06:10:59.885 TT",
+      "halfHourBracket_tt_s": -315553740.115,
+      "after_tt_s": -315576000.0,
+      "before_tt_s": -314375323.0,
+      "nextOccurrence_tt_s": -313196905.521,
+      "target_deg": 330.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          329.4409231681,
+          330.0000000974,
+          330.5594197584
+        ]
+      },
+      "motion": {
+        "value": 0.55924829515,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-ING-0010",
+      "kind": "event.ingress",
+      "quantity": "Moon",
+      "tt_s": 820631409.494,
+      "tt": "2026-01-02T13:10:09.494 TT",
+      "halfHourBracket_tt_s": 820631409.494,
+      "after_tt_s": 820497600.0,
+      "before_tt_s": 821814689.0,
+      "nextOccurrence_tt_s": 822997968.793,
+      "target_deg": 90.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          89.3735979131,
+          90.0000000009,
+          90.6262279801
+        ]
+      },
+      "motion": {
+        "value": 0.6263150335,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-ING-0011",
+      "kind": "event.ingress",
+      "quantity": "Moon",
+      "tt_s": 1893562764.247,
+      "tt": "2060-01-02T17:39:24.247 TT",
+      "halfHourBracket_tt_s": 1893562764.247,
+      "after_tt_s": 1893412800.0,
+      "before_tt_s": 1894746935.0,
+      "nextOccurrence_tt_s": 1895931104.992,
+      "target_deg": 270.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          269.4406230187,
+          269.9999999927,
+          270.5599804836
+        ]
+      },
+      "motion": {
+        "value": 0.55967873245,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-ING-0012",
+      "kind": "event.ingress",
+      "quantity": "Moon",
+      "tt_s": 4417961116.098,
+      "tt": "2140-01-01T07:25:16.098 TT",
+      "halfHourBracket_tt_s": 4417961116.098,
+      "after_tt_s": 4417934400.0,
+      "before_tt_s": 4419138663.0,
+      "nextOccurrence_tt_s": 4420316210.2,
+      "target_deg": 60.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          59.4055949935,
+          59.9999999143,
+          60.5942476832
+        ]
+      },
+      "motion": {
+        "value": 0.59432634485,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-ING-0013",
+      "kind": "event.ingress",
+      "quantity": "Mercury",
+      "tt_s": -4417031889.067,
+      "tt": "1860-01-12T10:41:50.933 TT",
+      "halfHourBracket_tt_s": -4417031889.067,
+      "after_tt_s": -4418020800.0,
+      "before_tt_s": -4401520583.0,
+      "nextOccurrence_tt_s": -4386009276.556,
+      "target_deg": 270.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          269.9454811173,
+          270.000000003,
+          270.0545572912
+        ]
+      },
+      "motion": {
+        "value": 0.05453808695,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 19
+    },
+    {
+      "id": "L4-ING-0014",
+      "kind": "event.ingress",
+      "quantity": "Mercury",
+      "tt_s": -2365649049.18,
+      "tt": "1925-01-14T07:15:50.820 TT",
+      "halfHourBracket_tt_s": -2365649049.18,
+      "after_tt_s": -2366798400.0,
+      "before_tt_s": -2350010291.0,
+      "nextOccurrence_tt_s": -2334371533.159,
+      "target_deg": 270.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          269.9670952562,
+          270.0000000015,
+          270.033030781
+        ]
+      },
+      "motion": {
+        "value": 0.0329677624,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 31
+    },
+    {
+      "id": "L4-ING-0015",
+      "kind": "event.ingress",
+      "quantity": "Mercury",
+      "tt_s": -311942871.953,
+      "tt": "1990-02-12T01:12:08.047 TT",
+      "halfHourBracket_tt_s": -311942871.953,
+      "after_tt_s": -315576000.0,
+      "before_tt_s": -296439201.0,
+      "nextOccurrence_tt_s": -280935530.394,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9438397779,
+          299.9999999964,
+          300.0561969712
+        ]
+      },
+      "motion": {
+        "value": 0.05617859665,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 18
+    },
+    {
+      "id": "L4-ING-0016",
+      "kind": "event.ingress",
+      "quantity": "Mercury",
+      "tt_s": 820573911.037,
+      "tt": "2026-01-01T21:11:51.037 TT",
+      "halfHourBracket_tt_s": 820573911.037,
+      "after_tt_s": 820497600.0,
+      "before_tt_s": 836034465.0,
+      "nextOccurrence_tt_s": 851495018.461,
+      "target_deg": 270.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          269.9362287454,
+          270.0000000011,
+          270.0637815046
+        ]
+      },
+      "motion": {
+        "value": 0.0637763796,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 16
+    },
+    {
+      "id": "L4-ING-0017",
+      "kind": "event.ingress",
+      "quantity": "Mercury",
+      "tt_s": 1894406376.778,
+      "tt": "2060-01-12T11:59:36.778 TT",
+      "halfHourBracket_tt_s": 1894406376.778,
+      "after_tt_s": 1893412800.0,
+      "before_tt_s": 1909875821.0,
+      "nextOccurrence_tt_s": 1925345264.581,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9304144883,
+          299.9999999968,
+          300.0695922096
+        ]
+      },
+      "motion": {
+        "value": 0.06958886065,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 15
+    },
+    {
+      "id": "L4-ING-0018",
+      "kind": "event.ingress",
+      "quantity": "Mercury",
+      "tt_s": 4418321080.509,
+      "tt": "2140-01-05T11:24:40.509 TT",
+      "halfHourBracket_tt_s": 4418321080.509,
+      "after_tt_s": 4417934400.0,
+      "before_tt_s": 4433940897.0,
+      "nextOccurrence_tt_s": 4449560713.329,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9358486087,
+          300.0000000085,
+          300.0641219983
+        ]
+      },
+      "motion": {
+        "value": 0.0641366948,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 16
+    },
+    {
+      "id": "L4-ING-0019",
+      "kind": "event.ingress",
+      "quantity": "Venus",
+      "tt_s": -4416154253.942,
+      "tt": "1860-01-22T14:29:06.058 TT",
+      "halfHourBracket_tt_s": -4416154253.942,
+      "after_tt_s": -4418020800.0,
+      "before_tt_s": -4398455688.0,
+      "nextOccurrence_tt_s": -4380757121.942,
+      "target_deg": 330.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          329.9484119389,
+          329.9999999971,
+          330.0515870687
+        ]
+      },
+      "motion": {
+        "value": 0.0515875649,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 20
+    },
+    {
+      "id": "L4-ING-0020",
+      "kind": "event.ingress",
+      "quantity": "Venus",
+      "tt_s": -2365594277.881,
+      "tt": "1925-01-14T22:28:42.119 TT",
+      "halfHourBracket_tt_s": -2365594277.881,
+      "after_tt_s": -2366798400.0,
+      "before_tt_s": -2352806899.0,
+      "nextOccurrence_tt_s": -2340019520.696,
+      "target_deg": 270.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          269.9480303889,
+          269.9999999971,
+          270.051969926
+        ]
+      },
+      "motion": {
+        "value": 0.05196976855,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 20
+    },
+    {
+      "id": "L4-ING-0021",
+      "kind": "event.ingress",
+      "quantity": "Venus",
+      "tt_s": -314224567.346,
+      "tt": "1990-01-16T15:23:52.654 TT",
+      "halfHourBracket_tt_s": -314224567.346,
+      "after_tt_s": -315576000.0,
+      "before_tt_s": -312232903.0,
+      "nextOccurrence_tt_s": -310241239.451,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          300.0252844782,
+          299.9999999962,
+          299.9747000921
+        ]
+      },
+      "motion": {
+        "value": -0.02529219305,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 40
+    },
+    {
+      "id": "L4-ING-0022",
+      "kind": "event.ingress",
+      "quantity": "Venus",
+      "tt_s": 821925873.136,
+      "tt": "2026-01-17T12:44:33.136 TT",
+      "halfHourBracket_tt_s": 821925873.136,
+      "after_tt_s": 820497600.0,
+      "before_tt_s": 839540339.0,
+      "nextOccurrence_tt_s": 857154805.592,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9476064655,
+          299.9999999967,
+          300.0523933405
+        ]
+      },
+      "motion": {
+        "value": 0.0523934375,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 20
+    },
+    {
+      "id": "L4-ING-0023",
+      "kind": "event.ingress",
+      "quantity": "Venus",
+      "tt_s": 1894318771.575,
+      "tt": "2060-01-11T11:39:31.575 TT",
+      "halfHourBracket_tt_s": 1894318771.575,
+      "after_tt_s": 1893412800.0,
+      "before_tt_s": 1911959896.0,
+      "nextOccurrence_tt_s": 1929601021.248,
+      "target_deg": 330.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          329.949817843,
+          329.9999999963,
+          330.0501798355
+        ]
+      },
+      "motion": {
+        "value": 0.05018099625,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 20
+    },
+    {
+      "id": "L4-ING-0024",
+      "kind": "event.ingress",
+      "quantity": "Venus",
+      "tt_s": 4418559129.036,
+      "tt": "2140-01-08T05:32:09.036 TT",
+      "halfHourBracket_tt_s": 4418559129.036,
+      "after_tt_s": 4417934400.0,
+      "before_tt_s": 4436149871.0,
+      "nextOccurrence_tt_s": 4453740613.008,
+      "target_deg": 330.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          329.9510463711,
+          330.0000000001,
+          330.0489501839
+        ]
+      },
+      "motion": {
+        "value": 0.0489519064,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 21
+    },
+    {
+      "id": "L4-ING-0025",
+      "kind": "event.ingress",
+      "quantity": "Mars",
+      "tt_s": -4415397251.455,
+      "tt": "1860-01-31T08:45:48.545 TT",
+      "halfHourBracket_tt_s": -4415397251.455,
+      "after_tt_s": -4418020800.0,
+      "before_tt_s": -4384901878.0,
+      "nextOccurrence_tt_s": -4354406504.283,
+      "target_deg": 240.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          239.974833944,
+          240.0000000022,
+          240.0251649425
+        ]
+      },
+      "motion": {
+        "value": 0.02516549925,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 40
+    },
+    {
+      "id": "L4-ING-0026",
+      "kind": "event.ingress",
+      "quantity": "Mars",
+      "tt_s": -2363737341.536,
+      "tt": "1925-02-05T10:17:38.464 TT",
+      "halfHourBracket_tt_s": -2363737341.536,
+      "after_tt_s": -2366798400.0,
+      "before_tt_s": -2340324833.0,
+      "nextOccurrence_tt_s": -2316912325.224,
+      "target_deg": 30.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          29.9732766035,
+          29.9999999951,
+          30.0267238214
+        ]
+      },
+      "motion": {
+        "value": 0.02672360895,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 38
+    },
+    {
+      "id": "L4-ING-0027",
+      "kind": "event.ingress",
+      "quantity": "Mars",
+      "tt_s": -313105717.052,
+      "tt": "1990-01-29T14:11:22.948 TT",
+      "halfHourBracket_tt_s": -313105717.052,
+      "after_tt_s": -315576000.0,
+      "before_tt_s": -282441631.0,
+      "nextOccurrence_tt_s": -251777545.017,
+      "target_deg": 270.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          269.9699995345,
+          269.9999999973,
+          270.0300013387
+        ]
+      },
+      "motion": {
+        "value": 0.0300009021,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 34
+    },
+    {
+      "id": "L4-ING-0028",
+      "kind": "event.ingress",
+      "quantity": "Mars",
+      "tt_s": 822431874.381,
+      "tt": "2026-01-23T09:17:54.381 TT",
+      "halfHourBracket_tt_s": 822431874.381,
+      "after_tt_s": 820497600.0,
+      "before_tt_s": 853116021.0,
+      "nextOccurrence_tt_s": 883800167.253,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9675272689,
+          299.9999999971,
+          300.0324734657
+        ]
+      },
+      "motion": {
+        "value": 0.0324730984,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 31
+    },
+    {
+      "id": "L4-ING-0029",
+      "kind": "event.ingress",
+      "quantity": "Mars",
+      "tt_s": 1896511111.446,
+      "tt": "2060-02-05T20:38:31.446 TT",
+      "halfHourBracket_tt_s": 1896511111.446,
+      "after_tt_s": 1893412800.0,
+      "before_tt_s": 1927162793.0,
+      "nextOccurrence_tt_s": 1957814474.421,
+      "target_deg": 330.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          329.9670417717,
+          329.9999999995,
+          330.0329580792
+        ]
+      },
+      "motion": {
+        "value": 0.03295815375,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 31
+    },
+    {
+      "id": "L4-ING-0030",
+      "kind": "event.ingress",
+      "quantity": "Mars",
+      "tt_s": 4436048362.25,
+      "tt": "2140-07-28T15:39:22.250 TT",
+      "halfHourBracket_tt_s": 4436048362.25,
+      "after_tt_s": 4417934400.0,
+      "before_tt_s": 4458752980.0,
+      "nextOccurrence_tt_s": 4481457597.266,
+      "target_deg": 210.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          209.977628799,
+          209.9999999997,
+          210.0223773697
+        ]
+      },
+      "motion": {
+        "value": 0.02237428535,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 45
+    },
+    {
+      "id": "L4-ING-0031",
+      "kind": "event.ingress",
+      "quantity": "Jupiter",
+      "tt_s": -4402399011.726,
+      "tt": "1860-06-29T19:23:08.274 TT",
+      "halfHourBracket_tt_s": -4402399011.726,
+      "after_tt_s": -4418020800.0,
+      "before_tt_s": -4213821745.0,
+      "nextOccurrence_tt_s": -4025244479.217,
+      "target_deg": 120.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          119.9911181658,
+          119.999999999,
+          120.0088827964
+        ]
+      },
+      "motion": {
+        "value": 0.0088823153,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 113
+    },
+    {
+      "id": "L4-ING-0032",
+      "kind": "event.ingress",
+      "quantity": "Jupiter",
+      "tt_s": -2334826749.875,
+      "tt": "1926-01-06T01:00:50.125 TT",
+      "halfHourBracket_tt_s": -2334826749.875,
+      "after_tt_s": -2366798400.0,
+      "before_tt_s": -2146210011.0,
+      "nextOccurrence_tt_s": -1957593271.886,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9903312187,
+          300.0000000003,
+          300.0096695879
+        ]
+      },
+      "motion": {
+        "value": 0.0096691846,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 104
+    },
+    {
+      "id": "L4-ING-0033",
+      "kind": "event.ingress",
+      "quantity": "Jupiter",
+      "tt_s": -295763355.071,
+      "tt": "1990-08-18T07:30:44.929 TT",
+      "halfHourBracket_tt_s": -295763355.071,
+      "after_tt_s": -315576000.0,
+      "before_tt_s": -107134438.0,
+      "nextOccurrence_tt_s": 81494479.555,
+      "target_deg": 120.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          119.9911406199,
+          119.9999999987,
+          120.0088581504
+        ]
+      },
+      "motion": {
+        "value": 0.00885876525,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 113
+    },
+    {
+      "id": "L4-ING-0034",
+      "kind": "event.ingress",
+      "quantity": "Jupiter",
+      "tt_s": 836070810.974,
+      "tt": "2026-06-30T05:53:30.974 TT",
+      "halfHourBracket_tt_s": 836070810.974,
+      "after_tt_s": 820497600.0,
+      "before_tt_s": 1024656012.0,
+      "nextOccurrence_tt_s": 1213241212.241,
+      "target_deg": 120.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          119.9910924914,
+          120.0000000005,
+          120.0089084437
+        ]
+      },
+      "motion": {
+        "value": 0.00890797615,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 113
+    },
+    {
+      "id": "L4-ING-0035",
+      "kind": "event.ingress",
+      "quantity": "Jupiter",
+      "tt_s": 1901541253.094,
+      "tt": "2060-04-04T01:54:13.094 TT",
+      "halfHourBracket_tt_s": 1901541253.094,
+      "after_tt_s": 1893412800.0,
+      "before_tt_s": 2079796276.0,
+      "nextOccurrence_tt_s": 2258051297.969,
+      "target_deg": 60.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          59.99173729,
+          59.9999999986,
+          60.0082649643
+        ]
+      },
+      "motion": {
+        "value": 0.00826383715,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 122
+    },
+    {
+      "id": "L4-ING-0036",
+      "kind": "event.ingress",
+      "quantity": "Jupiter",
+      "tt_s": 4423827729.558,
+      "tt": "2140-03-09T05:02:09.558 TT",
+      "halfHourBracket_tt_s": 4423827729.558,
+      "after_tt_s": 4417934400.0,
+      "before_tt_s": 4733553600.0,
+      "nextOccurrence_tt_s": null,
+      "target_deg": 330.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          329.9902772868,
+          330.0000000011,
+          330.0097218438
+        ]
+      },
+      "motion": {
+        "value": 0.0097222785,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 103
+    },
+    {
+      "id": "L4-ING-0037",
+      "kind": "event.ingress",
+      "quantity": "Saturn",
+      "tt_s": -4397441382.617,
+      "tt": "1860-08-26T04:30:17.383 TT",
+      "halfHourBracket_tt_s": -4397441382.617,
+      "after_tt_s": -4418020800.0,
+      "before_tt_s": -3938054312.0,
+      "nextOccurrence_tt_s": -3478667240.538,
+      "target_deg": 150.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          149.9947077816,
+          150.0000000002,
+          150.0052920797
+        ]
+      },
+      "motion": {
+        "value": 0.00529214905,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 189
+    },
+    {
+      "id": "L4-ING-0038",
+      "kind": "event.ingress",
+      "quantity": "Saturn",
+      "tt_s": -2306237141.684,
+      "tt": "1926-12-02T22:34:18.316 TT",
+      "halfHourBracket_tt_s": -2306237141.684,
+      "after_tt_s": -2366798400.0,
+      "before_tt_s": -1846898414.0,
+      "nextOccurrence_tt_s": -1387559685.598,
+      "target_deg": 240.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          239.9950824372,
+          240.0000000002,
+          240.0049172197
+        ]
+      },
+      "motion": {
+        "value": 0.00491739125,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 204
+    },
+    {
+      "id": "L4-ING-0039",
+      "kind": "event.ingress",
+      "quantity": "Saturn",
+      "tt_s": -280861668.639,
+      "tt": "1991-02-06T18:52:11.361 TT",
+      "halfHourBracket_tt_s": -280861668.639,
+      "after_tt_s": -315576000.0,
+      "before_tt_s": 178629956.0,
+      "nextOccurrence_tt_s": 638121579.81,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9951904383,
+          299.9999999998,
+          300.0048089477
+        ]
+      },
+      "motion": {
+        "value": 0.0048092547,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 208
+    },
+    {
+      "id": "L4-ING-0040",
+      "kind": "event.ingress",
+      "quantity": "Saturn",
+      "tt_s": 824299968.2,
+      "tt": "2026-02-14T00:12:48.200 TT",
+      "halfHourBracket_tt_s": 824299968.2,
+      "after_tt_s": 820497600.0,
+      "before_tt_s": 1283462530.0,
+      "nextOccurrence_tt_s": 1742625091.324,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          359.9954151764,
+          4e-10,
+          0.0045861483
+        ]
+      },
+      "motion": {
+        "value": 0.00458548595,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 219
+    },
+    {
+      "id": "L4-ING-0041",
+      "kind": "event.ingress",
+      "quantity": "Saturn",
+      "tt_s": 1901231495.771,
+      "tt": "2060-03-31T11:51:35.771 TT",
+      "halfHourBracket_tt_s": 1901231495.771,
+      "after_tt_s": 1893412800.0,
+      "before_tt_s": 2360747306.0,
+      "nextOccurrence_tt_s": 2820263115.547,
+      "target_deg": 60.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          59.9958222559,
+          59.9999999997,
+          60.004179585
+        ]
+      },
+      "motion": {
+        "value": 0.00417866455,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 240
+    },
+    {
+      "id": "L4-ING-0042",
+      "kind": "event.ingress",
+      "quantity": "Saturn",
+      "tt_s": 4452509823.12,
+      "tt": "2141-02-04T04:17:03.120 TT",
+      "halfHourBracket_tt_s": 4452509823.12,
+      "after_tt_s": 4417934400.0,
+      "before_tt_s": 4733553600.0,
+      "nextOccurrence_tt_s": null,
+      "target_deg": 330.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          329.9950589389,
+          329.9999999998,
+          330.0049416125
+        ]
+      },
+      "motion": {
+        "value": 0.0049413368,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 203
+    },
+    {
+      "id": "L4-ING-0043",
+      "kind": "event.ingress",
+      "quantity": "Uranus",
+      "tt_s": -4244865870.919,
+      "tt": "1865-06-27T02:35:29.081 TT",
+      "halfHourBracket_tt_s": -4244865870.919,
+      "after_tt_s": -4418020800.0,
+      "before_tt_s": -4234713343.0,
+      "nextOccurrence_tt_s": -4224560815.137,
+      "target_deg": 90.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          89.9975113248,
+          89.9999999997,
+          90.0024885354
+        ]
+      },
+      "motion": {
+        "value": 0.0024886053,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 402
+    },
+    {
+      "id": "L4-ING-0044",
+      "kind": "event.ingress",
+      "quantity": "Uranus",
+      "tt_s": -2295974257.896,
+      "tt": "1927-03-31T17:22:22.104 TT",
+      "halfHourBracket_tt_s": -2295974257.896,
+      "after_tt_s": -2366798400.0,
+      "before_tt_s": -2286568794.0,
+      "nextOccurrence_tt_s": -2277163330.068,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          359.9976459531,
+          359.9999999999,
+          0.0023538153
+        ]
+      },
+      "motion": {
+        "value": 0.0023539311,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 425
+    },
+    {
+      "id": "L4-ING-0045",
+      "kind": "event.ingress",
+      "quantity": "Uranus",
+      "tt_s": -149989662.196,
+      "tt": "1995-04-01T12:12:17.804 TT",
+      "halfHourBracket_tt_s": -149989662.196,
+      "after_tt_s": -315576000.0,
+      "before_tt_s": -147027754.0,
+      "nextOccurrence_tt_s": -144065846.611,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9988484746,
+          299.9999999999,
+          300.0011502135
+        ]
+      },
+      "motion": {
+        "value": 0.00115086945,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 869
+    },
+    {
+      "id": "L4-ING-0046",
+      "kind": "event.ingress",
+      "quantity": "Uranus",
+      "tt_s": 830436761.594,
+      "tt": "2026-04-26T00:52:41.594 TT",
+      "halfHourBracket_tt_s": 830436761.594,
+      "after_tt_s": 820497600.0,
+      "before_tt_s": 2142211234.0,
+      "nextOccurrence_tt_s": 3453985705.857,
+      "target_deg": 60.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          59.9977338844,
+          60.0000000001,
+          60.0022666067
+        ]
+      },
+      "motion": {
+        "value": 0.00226636115,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 442
+    },
+    {
+      "id": "L4-ING-0047",
+      "kind": "event.ingress",
+      "quantity": "Uranus",
+      "tt_s": 2052115040.121,
+      "tt": "2065-01-10T19:57:20.121 TT",
+      "halfHourBracket_tt_s": 2052115040.121,
+      "after_tt_s": 1893412800.0,
+      "before_tt_s": 2056890500.0,
+      "nextOccurrence_tt_s": 2061665959.337,
+      "target_deg": 240.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          239.998147152,
+          239.9999999998,
+          240.0018517115
+        ]
+      },
+      "motion": {
+        "value": 0.00185227975,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 540
+    },
+    {
+      "id": "L4-ING-0048",
+      "kind": "event.ingress",
+      "quantity": "Uranus",
+      "tt_s": 4482691282.832,
+      "tt": "2142-01-19T12:01:22.832 TT",
+      "halfHourBracket_tt_s": 4482691282.832,
+      "after_tt_s": 4417934400.0,
+      "before_tt_s": 4483964803.0,
+      "nextOccurrence_tt_s": 4485238322.379,
+      "target_deg": 210.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          209.9994265997,
+          210.0,
+          210.0005718096
+        ]
+      },
+      "motion": {
+        "value": 0.00057260495,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 1747
+    },
+    {
+      "id": "L4-ING-0049",
+      "kind": "event.ingress",
+      "quantity": "Neptune",
+      "tt_s": -4377512119.752,
+      "tt": "1861-04-13T20:24:40.248 TT",
+      "halfHourBracket_tt_s": -4377512119.752,
+      "after_tt_s": -4418020800.0,
+      "before_tt_s": -4370151149.0,
+      "nextOccurrence_tt_s": -4362790177.855,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          359.998527683,
+          1e-10,
+          0.0014719741
+        ]
+      },
+      "motion": {
+        "value": 0.00147214555,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 680
+    },
+    {
+      "id": "L4-ING-0050",
+      "kind": "event.ingress",
+      "quantity": "Neptune",
+      "tt_s": -2249337519.732,
+      "tt": "1928-09-21T12:01:20.268 TT",
+      "halfHourBracket_tt_s": -2249337519.732,
+      "after_tt_s": -2366798400.0,
+      "before_tt_s": -2242815315.0,
+      "nextOccurrence_tt_s": -2236293110.834,
+      "target_deg": 150.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          149.9986033985,
+          150.0000000001,
+          150.0013961941
+        ]
+      },
+      "motion": {
+        "value": 0.0013963978,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 717
+    },
+    {
+      "id": "L4-ING-0051",
+      "kind": "event.ingress",
+      "quantity": "Neptune",
+      "tt_s": -60685611.895,
+      "tt": "1998-01-29T02:53:08.105 TT",
+      "halfHourBracket_tt_s": -60685611.895,
+      "after_tt_s": -315576000.0,
+      "before_tt_s": -51791193.0,
+      "nextOccurrence_tt_s": -42896773.221,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9984315602,
+          300.0000000001,
+          300.0015682737
+        ]
+      },
+      "motion": {
+        "value": 0.00156835675,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 638
+    },
+    {
+      "id": "L4-ING-0052",
+      "kind": "event.ingress",
+      "quantity": "Neptune",
+      "tt_s": 822720947.634,
+      "tt": "2026-01-26T17:35:47.634 TT",
+      "halfHourBracket_tt_s": 822720947.634,
+      "after_tt_s": 820497600.0,
+      "before_tt_s": 4733553600.0,
+      "nextOccurrence_tt_s": null,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          359.9989411773,
+          360.0,
+          0.0010596116
+        ]
+      },
+      "motion": {
+        "value": 0.00105921715,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 945
+    },
+    {
+      "id": "L4-ING-0053",
+      "kind": "event.ingress",
+      "quantity": "Neptune",
+      "tt_s": 2067102680.403,
+      "tt": "2065-07-03T07:11:20.403 TT",
+      "halfHourBracket_tt_s": 2067102680.403,
+      "after_tt_s": 1893412800.0,
+      "before_tt_s": 2075551867.0,
+      "nextOccurrence_tt_s": 2084001053.632,
+      "target_deg": 90.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          89.9984713953,
+          90.0000000002,
+          90.0015284241
+        ]
+      },
+      "motion": {
+        "value": 0.0015285144,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 655
+    },
+    {
+      "id": "L4-ING-0054",
+      "kind": "event.ingress",
+      "quantity": "Neptune",
+      "tt_s": 4670698965.607,
+      "tt": "2148-01-04T12:22:45.607 TT",
+      "halfHourBracket_tt_s": 4670698965.607,
+      "after_tt_s": 4417934400.0,
+      "before_tt_s": 4678952211.0,
+      "nextOccurrence_tt_s": 4687205456.702,
+      "target_deg": 270.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          269.9984573387,
+          270.0000000002,
+          270.0015424551
+        ]
+      },
+      "motion": {
+        "value": 0.0015425582,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 649
+    },
+    {
+      "id": "L4-ING-0055",
+      "kind": "event.ingress",
+      "quantity": "Pluto",
+      "tt_s": -3706265318.816,
+      "tt": "1882-07-21T21:51:21.184 TT",
+      "halfHourBracket_tt_s": -3706265318.816,
+      "after_tt_s": -4418020800.0,
+      "before_tt_s": -3702833351.0,
+      "nextOccurrence_tt_s": -3699401382.613,
+      "target_deg": 60.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          59.999459485,
+          60.0,
+          60.0005400271
+        ]
+      },
+      "motion": {
+        "value": 0.00054027105,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 1851
+    },
+    {
+      "id": "L4-ING-0056",
+      "kind": "event.ingress",
+      "quantity": "Pluto",
+      "tt_s": -1963957519.555,
+      "tt": "1937-10-07T12:14:40.445 TT",
+      "halfHourBracket_tt_s": -1963957519.555,
+      "after_tt_s": -2366798400.0,
+      "before_tt_s": -1961846363.0,
+      "nextOccurrence_tt_s": -1959735205.984,
+      "target_deg": 120.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          119.9995689281,
+          120.0,
+          120.0004303873
+        ]
+      },
+      "motion": {
+        "value": 0.0004307296,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2322
+    },
+    {
+      "id": "L4-ING-0057",
+      "kind": "event.ingress",
+      "quantity": "Pluto",
+      "tt_s": -156393785.471,
+      "tt": "1995-01-17T09:16:54.529 TT",
+      "halfHourBracket_tt_s": -156393785.471,
+      "after_tt_s": -315576000.0,
+      "before_tt_s": -152344384.0,
+      "nextOccurrence_tt_s": -148294981.534,
+      "target_deg": 240.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          239.9989353654,
+          240.0000000002,
+          240.0010638043
+        ]
+      },
+      "motion": {
+        "value": 0.00106421945,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 940
+    },
+    {
+      "id": "L4-ING-0058",
+      "kind": "event.ingress",
+      "quantity": "Pluto",
+      "tt_s": 1362747760.045,
+      "tt": "2043-03-09T01:02:40.045 TT",
+      "halfHourBracket_tt_s": 1362747760.045,
+      "after_tt_s": 820497600.0,
+      "before_tt_s": 1370354893.0,
+      "nextOccurrence_tt_s": 1377962026.392,
+      "target_deg": 330.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          329.9988582167,
+          329.9999999998,
+          330.0011415346
+        ]
+      },
+      "motion": {
+        "value": 0.00114165895,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 876
+    },
+    {
+      "id": "L4-ING-0059",
+      "kind": "event.ingress",
+      "quantity": "Pluto",
+      "tt_s": 2097285929.328,
+      "tt": "2066-06-17T15:25:29.328 TT",
+      "halfHourBracket_tt_s": 2097285929.328,
+      "after_tt_s": 1893412800.0,
+      "before_tt_s": 2098334533.0,
+      "nextOccurrence_tt_s": 2099383136.988,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          359.9998091721,
+          0.0,
+          0.0001901918
+        ]
+      },
+      "motion": {
+        "value": 0.00019050985,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 5250
+    },
+    {
+      "id": "L4-STA-0001",
+      "kind": "event.station",
+      "quantity": "Mercury",
+      "tt_s": -4400018519.855,
+      "tt": "1860-07-27T08:38:00.145 TT",
+      "halfHourBracket_tt_s": -4400018519.855,
+      "after_tt_s": -4402296000.0,
+      "before_tt_s": -4398987240.0,
+      "nextOccurrence_tt_s": -4397955959.439,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          144.9594834663,
+          144.9595571688,
+          144.9594834663
+        ]
+      },
+      "motion": {
+        "value": -4.0946e-08,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 6989
+    },
+    {
+      "id": "L4-STA-0002",
+      "kind": "event.station",
+      "quantity": "Mercury",
+      "tt_s": -2347569127.418,
+      "tt": "1925-08-11T13:27:52.582 TT",
+      "halfHourBracket_tt_s": -2347569127.418,
+      "after_tt_s": -2351160000.0,
+      "before_tt_s": -2346555545.0,
+      "nextOccurrence_tt_s": -2345541962.231,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          159.4541712616,
+          159.4542488068,
+          159.4541712617
+        ]
+      },
+      "motion": {
+        "value": -4.3081e-08,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 6814
+    },
+    {
+      "id": "L4-STA-0003",
+      "kind": "event.station",
+      "quantity": "Mercury",
+      "tt_s": -295134657.575,
+      "tt": "1990-08-25T14:09:02.425 TT",
+      "halfHourBracket_tt_s": -295134657.575,
+      "after_tt_s": -299937600.0,
+      "before_tt_s": -294144726.0,
+      "nextOccurrence_tt_s": -293154794.696,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          173.5677427098,
+          173.5678251038,
+          173.5677427098
+        ]
+      },
+      "motion": {
+        "value": -4.5774e-08,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 6611
+    },
+    {
+      "id": "L4-STA-0004",
+      "kind": "event.station",
+      "quantity": "Mercury",
+      "tt_s": 838119539.782,
+      "tt": "2026-07-23T22:58:59.782 TT",
+      "halfHourBracket_tt_s": 838119539.782,
+      "after_tt_s": 836136000.0,
+      "before_tt_s": 842108785.0,
+      "nextOccurrence_tt_s": 846098029.807,
+      "target_deg": null,
+      "direction": "direct",
+      "samples": {
+        "lon": [
+          106.3166184224,
+          106.3165363492,
+          106.3166184225
+        ]
+      },
+      "motion": {
+        "value": 4.5596e-08,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 6623
+    },
+    {
+      "id": "L4-STA-0005",
+      "kind": "event.station",
+      "quantity": "Mercury",
+      "tt_s": 1909207851.65,
+      "tt": "2060-07-01T19:30:51.650 TT",
+      "halfHourBracket_tt_s": 1909207851.65,
+      "after_tt_s": 1909137600.0,
+      "before_tt_s": 1913317169.0,
+      "nextOccurrence_tt_s": 1917426486.492,
+      "target_deg": null,
+      "direction": "direct",
+      "samples": {
+        "lon": [
+          85.4977570301,
+          85.497687806,
+          85.4977570302
+        ]
+      },
+      "motion": {
+        "value": 3.8458e-08,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 7212
+    },
+    {
+      "id": "L4-STA-0006",
+      "kind": "event.station",
+      "quantity": "Mercury",
+      "tt_s": 4440442477.28,
+      "tt": "2140-09-17T12:14:37.280 TT",
+      "halfHourBracket_tt_s": 4440442477.28,
+      "after_tt_s": 4433659200.0,
+      "before_tt_s": 4441390151.0,
+      "nextOccurrence_tt_s": 4442337823.961,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          196.449011747,
+          196.4491033347,
+          196.449011747
+        ]
+      },
+      "motion": {
+        "value": -5.0882e-08,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 6270
+    },
+    {
+      "id": "L4-STA-0007",
+      "kind": "event.station",
+      "quantity": "Venus",
+      "tt_s": -4398867241.375,
+      "tt": "1860-08-09T16:25:58.625 TT",
+      "halfHourBracket_tt_s": -4398867241.375,
+      "after_tt_s": -4402296000.0,
+      "before_tt_s": -4375344198.0,
+      "nextOccurrence_tt_s": -4351821154.796,
+      "target_deg": null,
+      "direction": "direct",
+      "samples": {
+        "lon": [
+          108.2304249839,
+          108.230391149,
+          108.2304249839
+        ]
+      },
+      "motion": {
+        "value": 1.8797e-08,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 10315
+    },
+    {
+      "id": "L4-STA-0008",
+      "kind": "event.station",
+      "quantity": "Venus",
+      "tt_s": -2333800166.13,
+      "tt": "1926-01-17T22:10:33.870 TT",
+      "halfHourBracket_tt_s": -2333800166.13,
+      "after_tt_s": -2351160000.0,
+      "before_tt_s": -2332017062.0,
+      "nextOccurrence_tt_s": -2330233958.066,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          326.0766057492,
+          326.0766415404,
+          326.0766057492
+        ]
+      },
+      "motion": {
+        "value": -1.9884e-08,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 10030
+    },
+    {
+      "id": "L4-STA-0009",
+      "kind": "event.station",
+      "quantity": "Venus",
+      "tt_s": -265685038.54,
+      "tt": "1991-08-01T10:36:01.460 TT",
+      "halfHourBracket_tt_s": -265685038.54,
+      "after_tt_s": -299937600.0,
+      "before_tt_s": -263830423.0,
+      "nextOccurrence_tt_s": -261975808.401,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          157.3238150223,
+          157.3238483381,
+          157.3238150223
+        ]
+      },
+      "motion": {
+        "value": -1.8509e-08,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 10396
+    },
+    {
+      "id": "L4-STA-0010",
+      "kind": "event.station",
+      "quantity": "Venus",
+      "tt_s": 844283823.424,
+      "tt": "2026-10-03T07:17:03.424 TT",
+      "halfHourBracket_tt_s": 844283823.424,
+      "after_tt_s": 836136000.0,
+      "before_tt_s": 846085970.0,
+      "nextOccurrence_tt_s": 847888117.04,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          218.4911185307,
+          218.4911521477,
+          218.4911185307
+        ]
+      },
+      "motion": {
+        "value": -1.8676e-08,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 10349
+    },
+    {
+      "id": "L4-STA-0011",
+      "kind": "event.station",
+      "quantity": "Venus",
+      "tt_s": 1954416878.046,
+      "tt": "2061-12-07T01:34:38.046 TT",
+      "halfHourBracket_tt_s": 1954416878.046,
+      "after_tt_s": 1909137600.0,
+      "before_tt_s": 1956183533.0,
+      "nextOccurrence_tt_s": 1957950188.701,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          284.0429173409,
+          284.0429522473,
+          284.0429173409
+        ]
+      },
+      "motion": {
+        "value": -1.9392e-08,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 10156
+    },
+    {
+      "id": "L4-STA-0012",
+      "kind": "event.station",
+      "quantity": "Venus",
+      "tt_s": 4476866544.484,
+      "tt": "2141-11-13T02:02:24.484 TT",
+      "halfHourBracket_tt_s": 4476866544.484,
+      "after_tt_s": 4433659200.0,
+      "before_tt_s": 4478638347.0,
+      "nextOccurrence_tt_s": 4480410149.822,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          259.2461968145,
+          259.2462316033,
+          259.2461968144
+        ]
+      },
+      "motion": {
+        "value": -1.9327e-08,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 10173
+    },
+    {
+      "id": "L4-STA-0013",
+      "kind": "event.station",
+      "quantity": "Mars",
+      "tt_s": -4398095952.315,
+      "tt": "1860-08-18T14:40:47.685 TT",
+      "halfHourBracket_tt_s": -4398095952.315,
+      "after_tt_s": -4402296000.0,
+      "before_tt_s": -4365917089.0,
+      "nextOccurrence_tt_s": -4333738225.297,
+      "target_deg": null,
+      "direction": "direct",
+      "samples": {
+        "lon": [
+          289.3022157432,
+          289.302203551,
+          289.3022157433
+        ]
+      },
+      "motion": {
+        "value": 6.773e-09,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 17184
+    },
+    {
+      "id": "L4-STA-0014",
+      "kind": "event.station",
+      "quantity": "Mars",
+      "tt_s": -2311827419.333,
+      "tt": "1926-09-29T05:43:00.667 TT",
+      "halfHourBracket_tt_s": -2311827419.333,
+      "after_tt_s": -2351160000.0,
+      "before_tt_s": -2308852545.0,
+      "nextOccurrence_tt_s": -2305877670.352,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          49.4571202623,
+          49.4571332269,
+          49.4571202623
+        ]
+      },
+      "motion": {
+        "value": -7.203e-09,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 16664
+    },
+    {
+      "id": "L4-STA-0015",
+      "kind": "event.station",
+      "quantity": "Mars",
+      "tt_s": -290276971.198,
+      "tt": "1990-10-20T19:30:28.802 TT",
+      "halfHourBracket_tt_s": -290276971.198,
+      "after_tt_s": -299937600.0,
+      "before_tt_s": -287135374.0,
+      "nextOccurrence_tt_s": -283993776.216,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          74.563017527,
+          74.5630302358,
+          74.563017527
+        ]
+      },
+      "motion": {
+        "value": -7.06e-09,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 16831
+    },
+    {
+      "id": "L4-STA-0016",
+      "kind": "event.station",
+      "quantity": "Mars",
+      "tt_s": 852858020.186,
+      "tt": "2027-01-10T13:00:20.186 TT",
+      "halfHourBracket_tt_s": 852858020.186,
+      "after_tt_s": 836136000.0,
+      "before_tt_s": 856359293.0,
+      "nextOccurrence_tt_s": 859860565.902,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          160.4290009393,
+          160.4290119935,
+          160.4290009393
+        ]
+      },
+      "motion": {
+        "value": -6.141e-09,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 18047
+    },
+    {
+      "id": "L4-STA-0017",
+      "kind": "event.station",
+      "quantity": "Mars",
+      "tt_s": 1929609952.514,
+      "tt": "2061-02-22T22:45:52.514 TT",
+      "halfHourBracket_tt_s": 1929609952.514,
+      "after_tt_s": 1909137600.0,
+      "before_tt_s": 1933064040.0,
+      "nextOccurrence_tt_s": 1936518127.775,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          202.0703688493,
+          202.0703795045,
+          202.0703688493
+        ]
+      },
+      "motion": {
+        "value": -5.92e-09,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 18382
+    },
+    {
+      "id": "L4-STA-0018",
+      "kind": "event.station",
+      "quantity": "Mars",
+      "tt_s": 4489916185.431,
+      "tt": "2142-04-13T02:56:25.431 TT",
+      "halfHourBracket_tt_s": 4489916185.431,
+      "after_tt_s": 4433659200.0,
+      "before_tt_s": 4493134308.0,
+      "nextOccurrence_tt_s": 4496352430.006,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          244.9552441701,
+          244.9552547641,
+          244.9552441701
+        ]
+      },
+      "motion": {
+        "value": -5.886e-09,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 18435
+    },
+    {
+      "id": "L4-STA-0019",
+      "kind": "event.station",
+      "quantity": "Jupiter",
+      "tt_s": -4388059080.633,
+      "tt": "1860-12-12T18:41:59.367 TT",
+      "halfHourBracket_tt_s": -4388059080.633,
+      "after_tt_s": -4402296000.0,
+      "before_tt_s": -4382824825.0,
+      "nextOccurrence_tt_s": -4377590568.767,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          147.0277240321,
+          147.0277268875,
+          147.0277240321
+        ]
+      },
+      "motion": {
+        "value": -1.586e-09,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 35508
+    },
+    {
+      "id": "L4-STA-0020",
+      "kind": "event.station",
+      "quantity": "Jupiter",
+      "tt_s": -2345085749.405,
+      "tt": "1925-09-09T07:17:30.595 TT",
+      "halfHourBracket_tt_s": -2345085749.405,
+      "after_tt_s": -2351160000.0,
+      "before_tt_s": -2332987414.0,
+      "nextOccurrence_tt_s": -2320889078.957,
+      "target_deg": null,
+      "direction": "direct",
+      "samples": {
+        "lon": [
+          282.6843267533,
+          282.6843239722,
+          282.6843267533
+        ]
+      },
+      "motion": {
+        "value": 1.545e-09,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 35979
+    },
+    {
+      "id": "L4-STA-0021",
+      "kind": "event.station",
+      "quantity": "Jupiter",
+      "tt_s": -286786560.617,
+      "tt": "1990-11-30T05:03:59.383 TT",
+      "halfHourBracket_tt_s": -286786560.617,
+      "after_tt_s": -299937600.0,
+      "before_tt_s": -281587797.0,
+      "nextOccurrence_tt_s": -276389033.016,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          133.5960703643,
+          133.5960731915,
+          133.5960703643
+        ]
+      },
+      "motion": {
+        "value": -1.571e-09,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 35684
+    },
+    {
+      "id": "L4-STA-0022",
+      "kind": "event.station",
+      "quantity": "Jupiter",
+      "tt_s": 850395464.918,
+      "tt": "2026-12-13T00:57:44.918 TT",
+      "halfHourBracket_tt_s": 850395464.918,
+      "after_tt_s": 836136000.0,
+      "before_tt_s": 855624908.0,
+      "nextOccurrence_tt_s": 860854351.091,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          147.0246069677,
+          147.0246098243,
+          147.0246069677
+        ]
+      },
+      "motion": {
+        "value": -1.587e-09,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 35500
+    },
+    {
+      "id": "L4-STA-0023",
+      "kind": "event.station",
+      "quantity": "Jupiter",
+      "tt_s": 1919021620.652,
+      "tt": "2060-10-23T09:33:40.652 TT",
+      "halfHourBracket_tt_s": 1919021620.652,
+      "after_tt_s": 1909137600.0,
+      "before_tt_s": 1924143869.0,
+      "nextOccurrence_tt_s": 1929266118.165,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          95.9374482098,
+          95.9374511278,
+          95.9374482098
+        ]
+      },
+      "motion": {
+        "value": -1.621e-09,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 35125
+    },
+    {
+      "id": "L4-STA-0024",
+      "kind": "event.station",
+      "quantity": "Jupiter",
+      "tt_s": 4434117909.804,
+      "tt": "2140-07-06T07:25:09.804 TT",
+      "halfHourBracket_tt_s": 4434117909.804,
+      "after_tt_s": 4433659200.0,
+      "before_tt_s": 4439256669.0,
+      "nextOccurrence_tt_s": 4444395429.13,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          347.3706837004,
+          347.3706865217,
+          347.3706837004
+        ]
+      },
+      "motion": {
+        "value": -1.567e-09,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 35722
+    },
+    {
+      "id": "L4-STA-0025",
+      "kind": "event.station",
+      "quantity": "Saturn",
+      "tt_s": -4387445661.85,
+      "tt": "1860-12-19T21:05:38.150 TT",
+      "halfHourBracket_tt_s": -4387445661.85,
+      "after_tt_s": -4402296000.0,
+      "before_tt_s": -4381585004.0,
+      "nextOccurrence_tt_s": -4375724345.398,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          159.5329120997,
+          159.5329137122,
+          159.5329120997
+        ]
+      },
+      "motion": {
+        "value": -8.96e-10,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 47250
+    },
+    {
+      "id": "L4-STA-0026",
+      "kind": "event.station",
+      "quantity": "Saturn",
+      "tt_s": -2350219308.336,
+      "tt": "1925-07-11T21:18:11.664 TT",
+      "halfHourBracket_tt_s": -2350219308.336,
+      "after_tt_s": -2351160000.0,
+      "before_tt_s": -2339967245.0,
+      "nextOccurrence_tt_s": -2329715181.844,
+      "target_deg": null,
+      "direction": "direct",
+      "samples": {
+        "lon": [
+          217.6254427361,
+          217.6254413192,
+          217.6254427361
+        ]
+      },
+      "motion": {
+        "value": 7.87e-10,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 50406
+    },
+    {
+      "id": "L4-STA-0027",
+      "kind": "event.station",
+      "quantity": "Saturn",
+      "tt_s": -292661317.647,
+      "tt": "1990-09-23T05:11:22.353 TT",
+      "halfHourBracket_tt_s": -292661317.647,
+      "after_tt_s": -299937600.0,
+      "before_tt_s": -282468087.0,
+      "nextOccurrence_tt_s": -272274855.501,
+      "target_deg": null,
+      "direction": "direct",
+      "samples": {
+        "lon": [
+          288.7041721955,
+          288.7041707449,
+          288.7041721955
+        ]
+      },
+      "motion": {
+        "value": 8.06e-10,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 49817
+    },
+    {
+      "id": "L4-STA-0028",
+      "kind": "event.station",
+      "quantity": "Saturn",
+      "tt_s": 838367843.501,
+      "tt": "2026-07-26T19:57:23.501 TT",
+      "halfHourBracket_tt_s": 838367843.501,
+      "after_tt_s": 836136000.0,
+      "before_tt_s": 844292692.0,
+      "nextOccurrence_tt_s": 850217539.775,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          14.7499569773,
+          14.7499584575,
+          14.7499569773
+        ]
+      },
+      "motion": {
+        "value": -8.22e-10,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 49317
+    },
+    {
+      "id": "L4-STA-0029",
+      "kind": "event.station",
+      "quantity": "Saturn",
+      "tt_s": 1916895404.383,
+      "tt": "2060-09-28T18:56:44.383 TT",
+      "halfHourBracket_tt_s": 1916895404.383,
+      "after_tt_s": 1909137600.0,
+      "before_tt_s": 1922686074.0,
+      "nextOccurrence_tt_s": 1928476744.596,
+      "target_deg": null,
+      "direction": "retrograde",
+      "samples": {
+        "lon": [
+          77.4384099434,
+          77.4384115312,
+          77.4384099434
+        ]
+      },
+      "motion": {
+        "value": -8.82e-10,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 47617
+    },
+    {
+      "id": "L4-STA-0030",
+      "kind": "event.station",
+      "quantity": "Saturn",
+      "tt_s": 4443848881.496,
+      "tt": "2140-10-26T22:28:01.496 TT",
+      "halfHourBracket_tt_s": 4443848881.496,
+      "after_tt_s": 4433659200.0,
+      "before_tt_s": 4454120641.0,
+      "nextOccurrence_tt_s": 4464392401.398,
+      "target_deg": null,
+      "direction": "direct",
+      "samples": {
+        "lon": [
+          322.7995861001,
+          322.7995846074,
+          322.7995861001
+        ]
+      },
+      "motion": {
+        "value": 8.29e-10,
+        "unit": "arcsec/s^2 (acceleration)"
+      },
+      "tolerance_s": 49110
+    },
+    {
+      "id": "L4-LUN-0001",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -4410972259.376,
+      "tt": "1860-03-22T13:55:40.624 TT",
+      "halfHourBracket_tt_s": -4410972259.376,
+      "after_tt_s": -4412836800.0,
+      "before_tt_s": -4409690981.0,
+      "nextOccurrence_tt_s": -4408409703.357,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          1.6845852051,
+          2.1842029179,
+          2.6840300934
+        ],
+        "sun": [
+          2.1429021147,
+          2.1842028058,
+          2.2255025156
+        ],
+        "moonLatitude": 4.035736
+      },
+      "motion": {
+        "value": 0.4584222437,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-LUN-0002",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -4412272530.277,
+      "tt": "1860-03-07T12:44:29.723 TT",
+      "halfHourBracket_tt_s": -4412272530.277,
+      "after_tt_s": -4412836800.0,
+      "before_tt_s": -4411003048.0,
+      "nextOccurrence_tt_s": -4409733565.222,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          166.5732302461,
+          167.208773592,
+          167.8442447631
+        ],
+        "sun": [
+          347.1671578713,
+          347.2087735356,
+          347.2503882609
+        ],
+        "moonLatitude": -3.091896
+      },
+      "motion": {
+        "value": 0.5938920637,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0003",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -4395707410.165,
+      "tt": "1860-09-15T06:09:49.835 TT",
+      "halfHourBracket_tt_s": -4395707410.165,
+      "after_tt_s": -4396939200.0,
+      "before_tt_s": -4394439370.0,
+      "nextOccurrence_tt_s": -4393171329.262,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          171.9563339585,
+          172.5937967936,
+          173.231341435
+        ],
+        "sun": [
+          172.5531191341,
+          172.5937968192,
+          172.6344754249
+        ],
+        "moonLatitude": -4.014173
+      },
+      "motion": {
+        "value": 0.59682559285,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0004",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -4394427595.072,
+      "tt": "1860-09-30T01:40:04.928 TT",
+      "halfHourBracket_tt_s": -4394427595.072,
+      "after_tt_s": -4396939200.0,
+      "before_tt_s": -4393143895.0,
+      "nextOccurrence_tt_s": -4391860193.998,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          6.6139053194,
+          7.1093784517,
+          7.6049432595
+        ],
+        "sun": [
+          187.068391888,
+          187.1093784367,
+          187.1503659747
+        ],
+        "moonLatitude": 4.645274
+      },
+      "motion": {
+        "value": 0.4545319267,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-LUN-0005",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -2359663008.841,
+      "tt": "1925-03-24T14:03:11.159 TT",
+      "halfHourBracket_tt_s": -2359663008.841,
+      "after_tt_s": -2361700800.0,
+      "before_tt_s": -2358387858.0,
+      "nextOccurrence_tt_s": -2357112707.658,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          2.8531282009,
+          3.4244019311,
+          3.9952302853
+        ],
+        "sun": [
+          3.3831058277,
+          3.4244019136,
+          3.4656970129
+        ],
+        "moonLatitude": -3.966779
+      },
+      "motion": {
+        "value": 0.5297554496,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0006",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -2360871533.685,
+      "tt": "1925-03-10T14:21:06.315 TT",
+      "halfHourBracket_tt_s": -2360871533.685,
+      "after_tt_s": -2361700800.0,
+      "before_tt_s": -2359594977.0,
+      "nextOccurrence_tt_s": -2358318419.552,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          168.975268394,
+          169.5116779251,
+          170.0485493211
+        ],
+        "sun": [
+          349.4700898748,
+          349.5116778766,
+          349.5532649338
+        ],
+        "moonLatitude": 3.063223
+      },
+      "motion": {
+        "value": 0.49505293405,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-LUN-0007",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -2344319239.766,
+      "tt": "1925-09-18T04:12:40.234 TT",
+      "halfHourBracket_tt_s": -2344319239.766,
+      "after_tt_s": -2345803200.0,
+      "before_tt_s": -2343041440.0,
+      "nextOccurrence_tt_s": -2341763640.194,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          174.2003126461,
+          174.7211936735,
+          175.2424600646
+        ],
+        "sun": [
+          174.680494981,
+          174.721193673,
+          174.7618932901
+        ],
+        "moonLatitude": 3.984072
+      },
+      "motion": {
+        "value": 0.4803745547,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-LUN-0008",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -2345645207.896,
+      "tt": "1925-09-02T19:53:12.104 TT",
+      "halfHourBracket_tt_s": -2345645207.896,
+      "after_tt_s": -2345803200.0,
+      "before_tt_s": -2344375311.0,
+      "nextOccurrence_tt_s": -2343105414.305,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          339.1803055507,
+          339.7968109815,
+          340.4129983701
+        ],
+        "sun": [
+          159.7564669939,
+          159.7968109068,
+          159.8371556126
+        ],
+        "moonLatitude": -3.022993
+      },
+      "motion": {
+        "value": 0.57600210035,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0009",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -308247043.665,
+      "tt": "1990-03-26T19:49:16.335 TT",
+      "halfHourBracket_tt_s": -308247043.665,
+      "after_tt_s": -310478400.0,
+      "before_tt_s": -306978670.0,
+      "nextOccurrence_tt_s": -305710295.643,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          5.2705307013,
+          5.8891894333,
+          6.5082621521
+        ],
+        "sun": [
+          5.8479228941,
+          5.8891894366,
+          5.9304550087
+        ],
+        "moonLatitude": 3.946239
+      },
+      "motion": {
+        "value": 0.5775996681,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0010",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -309574832.825,
+      "tt": "1990-03-11T10:59:27.175 TT",
+      "halfHourBracket_tt_s": -309574832.825,
+      "after_tt_s": -310478400.0,
+      "before_tt_s": -308292633.0,
+      "nextOccurrence_tt_s": -307010434.135,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          170.0891527004,
+          170.6089064589,
+          171.1283501686
+        ],
+        "sun": [
+          350.5673180872,
+          350.6089065501,
+          350.6504940808
+        ],
+        "moonLatitude": -2.934662
+      },
+      "motion": {
+        "value": 0.4780107373,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-LUN-0011",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -293022761.747,
+      "tt": "1990-09-19T00:47:18.253 TT",
+      "halfHourBracket_tt_s": -293022761.747,
+      "after_tt_s": -294580800.0,
+      "before_tt_s": -291743252.0,
+      "nextOccurrence_tt_s": -290463741.523,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          175.3019809712,
+          175.8377741983,
+          176.3731844951
+        ],
+        "sun": [
+          175.7970756862,
+          175.8377741519,
+          175.878473542
+        ],
+        "moonLatitude": -3.890481
+      },
+      "motion": {
+        "value": 0.49490283405,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-LUN-0012",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -294228806.476,
+      "tt": "1990-09-05T01:46:33.524 TT",
+      "halfHourBracket_tt_s": -294228806.476,
+      "after_tt_s": -294580800.0,
+      "before_tt_s": -292957520.0,
+      "nextOccurrence_tt_s": -291686233.322,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          341.6866068389,
+          342.2581206327,
+          342.8301698039
+        ],
+        "sun": [
+          162.2177477638,
+          162.2581206001,
+          162.2984942439
+        ],
+        "moonLatitude": 2.998951
+      },
+      "motion": {
+        "value": 0.53140824245,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0013",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 827155477.911,
+      "tt": "2026-03-19T01:24:37.911 TT",
+      "halfHourBracket_tt_s": 827155477.911,
+      "after_tt_s": 825595200.0,
+      "before_tt_s": 828427128.0,
+      "nextOccurrence_tt_s": 829698777.422,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          357.8697527123,
+          358.4513850711,
+          359.0335339245
+        ],
+        "sun": [
+          358.4099315384,
+          358.4513851064,
+          358.4928377132
+        ],
+        "moonLatitude": 1.754496
+      },
+      "motion": {
+        "value": 0.5404375187,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0014",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 825809942.914,
+      "tt": "2026-03-03T11:39:02.914 TT",
+      "halfHourBracket_tt_s": 825809942.914,
+      "after_tt_s": 825595200.0,
+      "before_tt_s": 827088965.0,
+      "nextOccurrence_tt_s": 828367987.18,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          162.344041674,
+          162.8981476254,
+          163.4517886381
+        ],
+        "sun": [
+          342.8563819796,
+          342.898147636,
+          342.9399124099
+        ],
+        "moonLatitude": -0.361371
+      },
+      "motion": {
+        "value": 0.5121082669,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0015",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 842369289.11,
+      "tt": "2026-09-11T03:28:09.110 TT",
+      "halfHourBracket_tt_s": 842369289.11,
+      "after_tt_s": 841492800.0,
+      "before_tt_s": 843644382.0,
+      "nextOccurrence_tt_s": 844919474.253,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          167.8598803067,
+          168.4317901036,
+          169.0032373052
+        ],
+        "sun": [
+          168.3912659178,
+          168.4317900582,
+          168.4723150584
+        ],
+        "moonLatitude": -1.680576
+      },
+      "motion": {
+        "value": 0.53115392895,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0016",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 843713411.602,
+      "tt": "2026-09-26T16:50:11.602 TT",
+      "halfHourBracket_tt_s": 843713411.602,
+      "after_tt_s": 841492800.0,
+      "before_tt_s": 844986695.0,
+      "nextOccurrence_tt_s": 846259977.962,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          3.0555430578,
+          3.6197698462,
+          4.1845243429
+        ],
+        "sun": [
+          183.5789348633,
+          183.6197698062,
+          183.6606057108
+        ],
+        "moonLatitude": 2.91215
+      },
+      "motion": {
+        "value": 0.5236552188,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0017",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 1898741597.338,
+      "tt": "2060-03-02T16:13:17.338 TT",
+      "halfHourBracket_tt_s": 1898741597.338,
+      "after_tt_s": 1898596800.0,
+      "before_tt_s": 1900011377.0,
+      "nextOccurrence_tt_s": 1901281156.93,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          342.2108640611,
+          342.8392250505,
+          343.4678135768
+        ],
+        "sun": [
+          342.7974122797,
+          342.8392251574,
+          342.8810371481
+        ],
+        "moonLatitude": -4.262557
+      },
+      "motion": {
+        "value": 0.58666232365,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0018",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 1899992558.993,
+      "tt": "2060-03-17T03:42:38.993 TT",
+      "halfHourBracket_tt_s": 1899992558.993,
+      "after_tt_s": 1898596800.0,
+      "before_tt_s": 1901277182.0,
+      "nextOccurrence_tt_s": 1902561805.275,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          176.8128817962,
+          177.3086606931,
+          177.8042967994
+        ],
+        "sun": [
+          357.2671980333,
+          357.3086606455,
+          357.3501222998
+        ],
+        "moonLatitude": 3.414012
+      },
+      "motion": {
+        "value": 0.45424536835,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-LUN-0019",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 1916538914.244,
+      "tt": "2060-09-24T15:55:14.244 TT",
+      "halfHourBracket_tt_s": 1916538914.244,
+      "after_tt_s": 1914494400.0,
+      "before_tt_s": 1917823277.0,
+      "nextOccurrence_tt_s": 1919107640.002,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          181.8684207248,
+          182.3698567219,
+          182.8710485038
+        ],
+        "sun": [
+          182.329032888,
+          182.3698567923,
+          182.4106816497
+        ],
+        "moonLatitude": 2.370399
+      },
+      "motion": {
+        "value": 0.46048950865,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-LUN-0020",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 1915307134.617,
+      "tt": "2060-09-10T09:45:34.617 TT",
+      "halfHourBracket_tt_s": 1915307134.617,
+      "after_tt_s": 1914494400.0,
+      "before_tt_s": 1916576053.0,
+      "nextOccurrence_tt_s": 1917844971.954,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          347.8459167377,
+          348.4603809879,
+          349.0751791648
+        ],
+        "sun": [
+          168.4199014468,
+          168.4603808844,
+          168.5008611715
+        ],
+        "moonLatitude": -3.415565
+      },
+      "motion": {
+        "value": 0.5741513512,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0021",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 4424673753.433,
+      "tt": "2140-03-19T00:02:33.433 TT",
+      "halfHourBracket_tt_s": 4424673753.433,
+      "after_tt_s": 4423118400.0,
+      "before_tt_s": 4425942204.0,
+      "nextOccurrence_tt_s": 4427210654.844,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          358.1418120647,
+          358.7700546498,
+          359.3986242576
+        ],
+        "sun": [
+          358.7285606397,
+          358.770054725,
+          358.8115478573
+        ],
+        "moonLatitude": 4.558374
+      },
+      "motion": {
+        "value": 0.58691248765,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0022",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 4423354791.764,
+      "tt": "2140-03-03T17:39:51.764 TT",
+      "halfHourBracket_tt_s": 4423354791.764,
+      "after_tt_s": 4423118400.0,
+      "before_tt_s": 4424638480.0,
+      "nextOccurrence_tt_s": 4425922169.116,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          162.9996033225,
+          163.5111570574,
+          164.0224596865
+        ],
+        "sun": [
+          343.4693606402,
+          343.5111569533,
+          343.5529523999
+        ],
+        "moonLatitude": -3.803161
+      },
+      "motion": {
+        "value": 0.46963230215,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-LUN-0023",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 4439907109.158,
+      "tt": "2140-09-11T07:31:49.158 TT",
+      "halfHourBracket_tt_s": 4439907109.158,
+      "after_tt_s": 4439016000.0,
+      "before_tt_s": 4441187176.0,
+      "nextOccurrence_tt_s": 4442467243.397,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          168.4833779147,
+          169.0087640679,
+          169.5338056198
+        ],
+        "sun": [
+          168.9682685686,
+          169.0087640587,
+          169.0492604026
+        ],
+        "moonLatitude": -4.530041
+      },
+      "motion": {
+        "value": 0.48471793555,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-LUN-0024",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 4441236214.649,
+      "tt": "2140-09-26T16:43:34.649 TT",
+      "halfHourBracket_tt_s": 4441236214.649,
+      "after_tt_s": 4439016000.0,
+      "before_tt_s": 4442505362.0,
+      "nextOccurrence_tt_s": 4443774509.921,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          3.3989277927,
+          4.0153890749,
+          4.6322617411
+        ],
+        "sun": [
+          183.9745900002,
+          184.0153890804,
+          184.0561891195
+        ],
+        "moonLatitude": 4.939144
+      },
+      "motion": {
+        "value": 0.57586741455,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0025",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -4400775559.179,
+      "tt": "1860-07-18T14:20:40.821 TT",
+      "halfHourBracket_tt_s": -4400775559.179,
+      "after_tt_s": -4401086400.0,
+      "before_tt_s": -4399508361.0,
+      "nextOccurrence_tt_s": -4398241162.999,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          115.4877503625,
+          116.0899111736,
+          116.6924947332
+        ],
+        "sun": [
+          116.0501241365,
+          116.0899112653,
+          116.129698621
+        ],
+        "moonLatitude": 0.548455
+      },
+      "motion": {
+        "value": 0.5625849431,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0026",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": -2543352484.312,
+      "tt": "1919-05-29T13:11:55.688 TT",
+      "halfHourBracket_tt_s": -2543352484.312,
+      "after_tt_s": -2543659200.0,
+      "before_tt_s": -2542085861.0,
+      "nextOccurrence_tt_s": -2540819238.438,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          66.4782862132,
+          67.1054451435,
+          67.7323850682
+        ],
+        "sun": [
+          67.065464815,
+          67.1054450301,
+          67.1454247283
+        ],
+        "moonLatitude": -0.301394
+      },
+      "motion": {
+        "value": 0.58706947085,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0027",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 839828274.171,
+      "tt": "2026-08-12T17:37:54.171 TT",
+      "halfHourBracket_tt_s": 839828274.171,
+      "after_tt_s": 839505600.0,
+      "before_tt_s": 841098782.0,
+      "nextOccurrence_tt_s": 842369289.11,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          139.4314036279,
+          140.0329162749,
+          140.6339725613
+        ],
+        "sun": [
+          139.9929048928,
+          140.0329163295,
+          140.0729282925
+        ],
+        "moonLatitude": 0.896159
+      },
+      "motion": {
+        "value": 0.56127276685,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0028",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 1701690.502,
+      "tt": "2000-01-21T04:41:30.502 TT",
+      "halfHourBracket_tt_s": 1701690.502,
+      "after_tt_s": 1425600.0,
+      "before_tt_s": 2975677.0,
+      "nextOccurrence_tt_s": 4249664.204,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          119.8144246537,
+          120.4362086416,
+          121.0576645846
+        ],
+        "sun": [
+          300.3938194428,
+          300.4362087559,
+          300.4785977331
+        ],
+        "moonLatitude": -0.301011
+      },
+      "motion": {
+        "value": 0.5792308203,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-LUN-0029",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 585994890.288,
+      "tt": "2018-07-27T20:21:30.288 TT",
+      "halfHourBracket_tt_s": 585994890.288,
+      "after_tt_s": 585662400.0,
+      "before_tt_s": 587275765.0,
+      "nextOccurrence_tt_s": 588556639.651,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          304.2563615349,
+          304.7480673385,
+          305.2398125963
+        ],
+        "sun": [
+          124.7082628915,
+          124.7480673616,
+          124.7878721604
+        ],
+        "moonLatitude": 0.105653
+      },
+      "motion": {
+        "value": 0.45192089625,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-LUN-0030",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 795207348.377,
+      "tt": "2025-03-14T06:55:48.377 TT",
+      "halfHourBracket_tt_s": 795207348.377,
+      "after_tt_s": 794923200.0,
+      "before_tt_s": 796491577.0,
+      "nextOccurrence_tt_s": 797775804.804,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          173.4389125042,
+          173.9423061773,
+          174.4454613288
+        ],
+        "sun": [
+          353.9007815462,
+          353.9423061449,
+          353.9838297973
+        ],
+        "moonLatitude": 0.318776
+      },
+      "motion": {
+        "value": 0.46175028675,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-UTC-0001",
+      "kind": "event.ingress",
+      "quantity": "Sun",
+      "tt_s": 885259385.062,
+      "tt": "2028-01-20T13:23:05.062 TT",
+      "halfHourBracket_tt_s": 885259385.062,
+      "after_tt_s": 883569669.184,
+      "before_tt_s": 901037554.0,
+      "nextOccurrence_tt_s": 916815722.0,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9575830691,
+          300.0000000082,
+          300.0424168045
+        ]
+      },
+      "motion": {
+        "value": 0.0424168677,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 24
+    },
+    {
+      "id": "L4-UTC-0002",
+      "kind": "event.ingress",
+      "quantity": "Moon",
+      "tt_s": 883601635.474,
+      "tt": "2028-01-01T08:53:55.474 TT",
+      "halfHourBracket_tt_s": 883601635.474,
+      "after_tt_s": 883569669.184,
+      "before_tt_s": 884780066.0,
+      "nextOccurrence_tt_s": 885958497.093,
+      "target_deg": 330.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          329.5092442987,
+          329.9999999907,
+          330.4907608564
+        ]
+      },
+      "motion": {
+        "value": 0.49075827885,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-UTC-0003",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 885784420.229,
+      "tt": "2028-01-26T15:13:40.229 TT",
+      "halfHourBracket_tt_s": 885784420.229,
+      "after_tt_s": 883569669.184,
+      "before_tt_s": 887072167.0,
+      "nextOccurrence_tt_s": 888359914.525,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          305.6890187349,
+          306.1837364642,
+          306.6783268646
+        ],
+        "sun": [
+          306.1413601298,
+          306.1837364279,
+          306.226112307
+        ],
+        "moonLatitude": 0.352855
+      },
+      "motion": {
+        "value": 0.45227797625,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-UTC-0004",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 884534654.402,
+      "tt": "2028-01-12T04:04:14.402 TT",
+      "halfHourBracket_tt_s": 884534654.402,
+      "after_tt_s": 883569669.184,
+      "before_tt_s": 885807275.0,
+      "nextOccurrence_tt_s": 887079895.526,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          110.8354656603,
+          111.4587874884,
+          112.082392033
+        ],
+        "sun": [
+          291.4163474838,
+          291.4587874572,
+          291.5012272595
+        ],
+        "moonLatitude": 1.000574
+      },
+      "motion": {
+        "value": 0.5810232985,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-UTC-0005",
+      "kind": "event.ingress",
+      "quantity": "Sun",
+      "tt_s": 1106158525.871,
+      "tt": "2035-01-20T06:15:25.871 TT",
+      "halfHourBracket_tt_s": 1106158525.871,
+      "after_tt_s": 1104494469.184,
+      "before_tt_s": 1121937229.0,
+      "nextOccurrence_tt_s": 1137715932.547,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9575978126,
+          300.0000000053,
+          300.0424018037
+        ]
+      },
+      "motion": {
+        "value": 0.04240199555,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 24
+    },
+    {
+      "id": "L4-UTC-0006",
+      "kind": "event.ingress",
+      "quantity": "Moon",
+      "tt_s": 1104667246.339,
+      "tt": "2035-01-03T00:00:46.339 TT",
+      "halfHourBracket_tt_s": 1104667246.339,
+      "after_tt_s": 1104494469.184,
+      "before_tt_s": 1105847778.0,
+      "nextOccurrence_tt_s": 1107028309.86,
+      "target_deg": 210.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          209.5006706438,
+          209.9999999696,
+          210.499069261
+        ]
+      },
+      "motion": {
+        "value": 0.4991993086,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-UTC-0007",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 1105239857.348,
+      "tt": "2035-01-09T15:04:17.348 TT",
+      "halfHourBracket_tt_s": 1105239857.348,
+      "after_tt_s": 1104494469.184,
+      "before_tt_s": 1106523828.0,
+      "nextOccurrence_tt_s": 1107807799.52,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          288.6592122329,
+          289.1683178762,
+          289.6776611524
+        ],
+        "sun": [
+          289.125839551,
+          289.1683179325,
+          289.2107962074
+        ],
+        "moonLatitude": 4.25295
+      },
+      "motion": {
+        "value": 0.46674613155,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-UTC-0008",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 1106468267.193,
+      "tt": "2035-01-23T20:17:47.193 TT",
+      "halfHourBracket_tt_s": 1106468267.193,
+      "after_tt_s": 1104494469.184,
+      "before_tt_s": 1107743787.0,
+      "nextOccurrence_tt_s": 1109019306.56,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          123.0399330808,
+          123.6467777488,
+          124.253137542
+        ],
+        "sun": [
+          303.6044091716,
+          303.6467776989,
+          303.6891458503
+        ],
+        "moonLatitude": -3.424671
+      },
+      "motion": {
+        "value": 0.56423389125,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-UTC-0009",
+      "kind": "event.ingress",
+      "quantity": "Sun",
+      "tt_s": 1579512907.478,
+      "tt": "2050-01-19T21:35:07.478 TT",
+      "halfHourBracket_tt_s": 1579512907.478,
+      "after_tt_s": 1577880069.184,
+      "before_tt_s": 1595291257.0,
+      "nextOccurrence_tt_s": 1611069607.367,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9575740466,
+          299.9999999999,
+          300.0424257922
+        ]
+      },
+      "motion": {
+        "value": 0.0424258728,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 24
+    },
+    {
+      "id": "L4-UTC-0010",
+      "kind": "event.ingress",
+      "quantity": "Moon",
+      "tt_s": 1577953335.514,
+      "tt": "2050-01-01T20:22:15.514 TT",
+      "halfHourBracket_tt_s": 1577953335.514,
+      "after_tt_s": 1577880069.184,
+      "before_tt_s": 1579130916.0,
+      "nextOccurrence_tt_s": 1580308495.945,
+      "target_deg": 30.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          29.4489327696,
+          30.0000000408,
+          30.5505335971
+        ]
+      },
+      "motion": {
+        "value": 0.55080041375,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-UTC-0011",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 1579798692.335,
+      "tt": "2050-01-23T04:58:12.335 TT",
+      "halfHourBracket_tt_s": 1579798692.335,
+      "after_tt_s": 1577880069.184,
+      "before_tt_s": 1581069689.0,
+      "nextOccurrence_tt_s": 1582340684.915,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          302.7307833262,
+          303.3672502346,
+          304.0039287576
+        ],
+        "sun": [
+          303.3248451344,
+          303.3672503062,
+          303.4096551032
+        ],
+        "moonLatitude": 4.589896
+      },
+      "motion": {
+        "value": 0.5941677313,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-UTC-0012",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 1578490816.243,
+      "tt": "2050-01-08T01:40:16.243 TT",
+      "halfHourBracket_tt_s": 1578490816.243,
+      "after_tt_s": 1577880069.184,
+      "before_tt_s": 1579778070.0,
+      "nextOccurrence_tt_s": 1581065323.622,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          107.4485961658,
+          107.9511826798,
+          108.4535960294
+        ],
+        "sun": [
+          287.9087336538,
+          287.9511827096,
+          287.9936316779
+        ],
+        "moonLatitude": -3.841611
+      },
+      "motion": {
+        "value": 0.46005091975,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 3
+    },
+    {
+      "id": "L4-UTC-0013",
+      "kind": "event.ingress",
+      "quantity": "Sun",
+      "tt_s": 3157361339.801,
+      "tt": "2100-01-20T00:48:59.801 TT",
+      "halfHourBracket_tt_s": 3157361339.801,
+      "after_tt_s": 3155716869.184,
+      "before_tt_s": 3173139778.0,
+      "nextOccurrence_tt_s": 3188918215.299,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9575877291,
+          300.0000000014,
+          300.0424118966
+        ]
+      },
+      "motion": {
+        "value": 0.04241208375,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 24
+    },
+    {
+      "id": "L4-UTC-0014",
+      "kind": "event.ingress",
+      "quantity": "Moon",
+      "tt_s": 3155855818.365,
+      "tt": "2100-01-02T14:36:58.365 TT",
+      "halfHourBracket_tt_s": 3155855818.365,
+      "after_tt_s": 3155716869.184,
+      "before_tt_s": 3157033340.0,
+      "nextOccurrence_tt_s": 3158210862.258,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          179.4136909094,
+          179.9999999993,
+          180.5863523058
+        ]
+      },
+      "motion": {
+        "value": 0.5863306982,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-UTC-0015",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 3156541135.461,
+      "tt": "2100-01-10T12:58:55.461 TT",
+      "halfHourBracket_tt_s": 3156541135.461,
+      "after_tt_s": 3155716869.184,
+      "before_tt_s": 3157822711.0,
+      "nextOccurrence_tt_s": 3159104285.693,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          289.7744631283,
+          290.3286082856,
+          290.8822528004
+        ],
+        "sun": [
+          290.2861308737,
+          290.3286083203,
+          290.3710856412
+        ],
+        "moonLatitude": -4.335458
+      },
+      "motion": {
+        "value": 0.5114174523,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-UTC-0016",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 3157887171.486,
+      "tt": "2100-01-26T02:52:51.486 TT",
+      "halfHourBracket_tt_s": 3157887171.486,
+      "after_tt_s": 3155716869.184,
+      "before_tt_s": 3159161627.0,
+      "nextOccurrence_tt_s": 3160436082.677,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          125.6032690221,
+          126.1906681767,
+          126.7785001402
+        ],
+        "sun": [
+          306.1483145968,
+          306.1906681227,
+          306.2330212406
+        ],
+        "moonLatitude": 3.442388
+      },
+      "motion": {
+        "value": 0.54526223715,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-UTC-0017",
+      "kind": "event.ingress",
+      "quantity": "Sun",
+      "tt_s": 4419640265.134,
+      "tt": "2140-01-20T17:51:05.134 TT",
+      "halfHourBracket_tt_s": 4419640265.134,
+      "after_tt_s": 4417934469.184,
+      "before_tt_s": 4435418729.0,
+      "nextOccurrence_tt_s": 4451197193.19,
+      "target_deg": 300.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          299.9575599206,
+          299.9999999984,
+          300.0424397651
+        ]
+      },
+      "motion": {
+        "value": 0.04243992225,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 24
+    },
+    {
+      "id": "L4-UTC-0018",
+      "kind": "event.ingress",
+      "quantity": "Moon",
+      "tt_s": 4417961116.098,
+      "tt": "2140-01-01T07:25:16.098 TT",
+      "halfHourBracket_tt_s": 4417961116.098,
+      "after_tt_s": 4417934469.184,
+      "before_tt_s": 4419138663.0,
+      "nextOccurrence_tt_s": 4420316210.2,
+      "target_deg": 60.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          59.4055949935,
+          59.9999999143,
+          60.5942476832
+        ]
+      },
+      "motion": {
+        "value": 0.59432634485,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-UTC-0019",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 4419577565.883,
+      "tt": "2140-01-20T00:26:05.883 TT",
+      "halfHourBracket_tt_s": 4419577565.883,
+      "after_tt_s": 4417934469.184,
+      "before_tt_s": 4420853770.0,
+      "nextOccurrence_tt_s": 4422129974.341,
+      "target_deg": 0.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          298.6929781749,
+          299.2608017034,
+          299.8291168648
+        ],
+        "sun": [
+          299.2183566026,
+          299.2608017204,
+          299.3032465686
+        ],
+        "moonLatitude": 0.259409
+      },
+      "motion": {
+        "value": 0.52562436195,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-UTC-0020",
+      "kind": "event.lunation",
+      "quantity": "Moon - Sun",
+      "tt_s": 4418228531.71,
+      "tt": "2140-01-04T09:42:11.710 TT",
+      "halfHourBracket_tt_s": 4418228531.71,
+      "after_tt_s": 4417934469.184,
+      "before_tt_s": 4419508802.0,
+      "nextOccurrence_tt_s": 4420789073.239,
+      "target_deg": 180.0,
+      "direction": null,
+      "samples": {
+        "moon": [
+          102.7822460233,
+          103.3509319357,
+          103.9191098139
+        ],
+        "sun": [
+          283.3084794071,
+          283.3509319008,
+          283.3933844133
+        ],
+        "moonLatitude": 1.19267
+      },
+      "motion": {
+        "value": 0.5259793922,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 2
+    },
+    {
+      "id": "L4-ING-0061",
+      "kind": "event.ingress",
+      "quantity": "Sun",
+      "tt_s": 848604269.747,
+      "tt": "2026-11-22T07:24:29.747 TT",
+      "halfHourBracket_tt_s": 848604269.747,
+      "after_tt_s": 846763200.0,
+      "before_tt_s": 849355200.0,
+      "nextOccurrence_tt_s": null,
+      "target_deg": 240.0,
+      "direction": null,
+      "samples": {
+        "lon": [
+          239.9579286464,
+          239.9999999984,
+          240.042071999
+        ]
+      },
+      "motion": {
+        "value": 0.0420716763,
+        "unit": "arcsec/s (rate)"
+      },
+      "tolerance_s": 24
+    }
+  ],
+  "dropped": [
+    {
+      "id": "L4-ING-0060",
+      "what": "the first ingress of Pluto after 2140-01-01 TT",
+      "reason": "coverage: no event between 2140-01-01T00:00:00.000 TT and 2150-01-20T00:00:00.000 TT, the end of the search inside the kernel (which ends 2150-01-22)"
+    }
+  ]
+}
