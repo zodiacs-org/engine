@@ -1,0 +1,77 @@
+name: Runtime conformance
+
+# Runs the conformance suite's 500 requests through the engine in Node, Bun,
+# Deno, Chromium, Firefox and WebKit (tools/runtime-conformance/README.md).
+# Fails when a runtime's verdict differs from Node's for a vector that does
+# not depend on the host's time zone data; differences in value are reported,
+# not gated. It uploads its results as an artifact and pushes nothing.
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'conformance/**'
+      - 'tools/runtime-conformance/**'
+      - '.github/workflows/runtime-conformance.yml'
+  schedule:
+    - cron: '23 3 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  runtimes:
+    name: Conformance verdicts in Node, Bun, Deno, Chromium, Firefox and WebKit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      # Left empty. Set to <browser>:<vector id> only in a test run, to show
+      # that the job fails when one answer is moved by 2 arcseconds.
+      RUNTIME_CONFORMANCE_MUTATE: ''
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      # The Node the committed results were made with (conformance.yml).
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22.22.2
+          cache: npm
+
+      - name: Install the engine
+        run: npm ci
+
+      - name: Build the engine
+        run: npm run build
+
+      - name: Node's verdicts match the committed results
+        run: node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs" --check conformance/results/zodiacs-engine.json
+
+      # Bun, Deno, esbuild and Playwright at the versions the folder's lockfile pins.
+      - name: Install the runners
+        working-directory: tools/runtime-conformance
+        run: npm ci
+
+      - name: Install Playwright's browsers
+        working-directory: tools/runtime-conformance
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Self-test
+        run: node --test tools/runtime-conformance/selftest.mjs
+
+      - name: Run the suite in every runtime and compare with Node
+        run: node tools/runtime-conformance/run-all.mjs --out "$RUNNER_TEMP/runtime-conformance"
+
+      - name: Upload the results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime-conformance
+          path: ${{ runner.temp }}/runtime-conformance
+          retention-days: 90
+          if-no-files-found: warn
