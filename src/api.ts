@@ -207,15 +207,18 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   for (const key of Object.keys(birth)) {
     const field = BIRTH_FIELDS.find((name) => name !== key && name.toLowerCase() === key.toLowerCase());
     if (field) throw new RangeError(`birth has no field "${key}"; field names are case-sensitive: "${field}".`);
-    const lower = key.toLowerCase();
-    const near = NEAR_MISS_KEYS.find(([real, names]) => real !== key && names.some((name) => name.toLowerCase() === lower));
-    if (near) throw new RangeError(`birth has no field "${key}"; use "${near[0]}".`);
   }
   const settings = validateBirthSettings(birth);
   const supplied = birth.flags;
   const flags = supplied === undefined ? undefined : snapshotFlags(supplied);
   const suppliedUtc: unknown = birth.utc;
   const utc = dateFrom(suppliedUtc as DateInput, "birth.utc");
+  // After utc, so an object with no instant (a chart read back from JSON has `houses`) keeps utc's message.
+  for (const key of Object.keys(birth)) {
+    const lower = key.toLowerCase();
+    const near = NEAR_MISS_KEYS.find(([real, names]) => real !== key && names.some((name) => name.toLowerCase() === lower));
+    if (near) throw new RangeError(`birth has no field "${key}"; use "${near[0]}".`);
+  }
   const pin = birth.deltaT;
   if (pin !== undefined && (typeof pin !== "number" || !Number.isFinite(pin) || Math.abs(pin) > 1e10)) {
     throw new RangeError("deltaT must be a finite number of seconds, at most 1e10 in size.");

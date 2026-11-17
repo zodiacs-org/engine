@@ -292,6 +292,15 @@ describe("near-miss birth keys", () => {
     }
   });
 
+  it("keeps utc's message for a chart read back from JSON, as on main", () => {
+    // A stored chart has a top-level `houses` but no top-level utc: utc is checked first.
+    const stored = JSON.parse(JSON.stringify(natalChart({ utc, latitude: 51.5, longitude: -0.12 }))) as never;
+    const message =
+      "birth.utc must be a valid Date, finite epoch-millisecond timestamp, or ISO calendar date/date-time with an explicit UTC offset.";
+    expect(() => natalChart(stored)).toThrow(new RangeError(message));
+    expect(() => transits(stored, "2024-02-29T00:00:00Z")).toThrow(new RangeError(message));
+  });
+
   it("resolveBirth already refuses lat, as it refuses every unknown key", () => {
     expect(() =>
       resolveBirth({ date: "2000-01-01", time: "12:00", timeZone: "Europe/London", lat: 51.5, lng: -0.12 } as never)
