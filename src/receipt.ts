@@ -8,7 +8,7 @@ import { outsideReferenceSpan } from "./reference-span.js";
 import { compareVersions, isVersion } from "./semver.js";
 import { natalConventionIds } from "./convention-ids.js";
 import type { NatalConventionFields } from "./convention-ids.js";
-import { DELTA_T_IERS_MODEL, TIME_SCALE_NAMES, UT1_DATA, timeBasis } from "./time-scale.js";
+import { DELTA_T_IERS_MODEL, TIME_SCALE_NAMES, UT1_DATA, timeBasis, timeBasisBeforeContinuousUtc } from "./time-scale.js";
 import type { TimeScaleName } from "./time-scale.js";
 import { EPHEMERIS } from "./types.js";
 import type { AspectType, BirthInput, BodyName, Chart, ChartFlag, HouseSystem, ZodiacSign } from "./types.js";
@@ -221,6 +221,25 @@ const CONVENTIONS_DE440 = /*#__PURE__*/ (() => Object.freeze({
   positionFrame: "icrf-to-true-ecliptic-of-date;iau2006-precession-with-bias;iau2000b-nutation-p03;tdb-three-term"
 } as const))();
 /**
+ * The time basis of the continuous-UTC rule (docs/time.md): as the earlier
+ * sets' from 1972 to the end of the IERS table, then TT = UTC + 69.184 s with
+ * UT1 from the ΔT model, and the ΔT model read as UT1 before 1972. The record
+ * of a chart whose time basis is "continuous-utc" names it; every other record
+ * is unchanged.
+ */
+const CONTINUOUS_UTC_TIME_SCALE =
+  "tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972;in-result";
+/** The current set, for a chart whose time basis is "continuous-utc". */
+const CONVENTIONS_CONTINUOUS_UTC = /*#__PURE__*/ (() => Object.freeze({
+  ...CONVENTIONS,
+  timeScale: CONTINUOUS_UTC_TIME_SCALE
+} as const))();
+/** The DE440 set, for a chart whose time basis is "continuous-utc". */
+const CONVENTIONS_DE440_CONTINUOUS_UTC = /*#__PURE__*/ (() => Object.freeze({
+  ...CONVENTIONS_DE440,
+  timeScale: CONTINUOUS_UTC_TIME_SCALE
+} as const))();
+/**
  * A conventions set: what a receipt's numbers mean, as named ids, one for each
  * part of the calculation (`zodiac`, `nutation`, `angles` and so on). A
  * receipt carries exactly one of NATAL_RECEIPT_CONVENTION_SETS.
@@ -230,10 +249,12 @@ export type NatalConventionSet = Readonly<Record<string, string>>;
 /**
  * Every conventions set a receipt may carry: index 0 is the set this release
  * writes for a chart from astronomy-engine; then the earlier sets, newest
- * first; and last the set it writes for a chart from a DE440 pack (from
- * 1.1.0-rc.3), placed there so that no earlier set's index moved. The codec
- * reads every set here. A minor release may add a set at the front, so take a
- * set by its content, not by an index other than 0.
+ * first; then the set it writes for a chart from a DE440 pack (from
+ * 1.1.0-rc.3); and last the two it writes, one for each ephemeris, for a
+ * chart whose time basis is "continuous-utc", placed there so that no earlier
+ * set's index moved. The codec reads every set here. A minor release may add
+ * a set at the front, so take a set by its content, not by an index other
+ * than 0.
  */
 export const NATAL_RECEIPT_CONVENTION_SETS: readonly NatalConventionSet[] = /*#__PURE__*/ Object.freeze([
   CONVENTIONS,
@@ -242,7 +263,9 @@ export const NATAL_RECEIPT_CONVENTION_SETS: readonly NatalConventionSet[] = /*#_
   CONVENTIONS_RC8,
   CONVENTIONS_RC7,
   CONVENTIONS_RC3,
-  CONVENTIONS_DE440
+  CONVENTIONS_DE440,
+  CONVENTIONS_CONTINUOUS_UTC,
+  CONVENTIONS_DE440_CONTINUOUS_UTC
 ]);
 // The released versions that wrote each earlier set, with any build metadata:
 // exact lists, not ranges, so no other spelling passes them.
@@ -267,6 +290,18 @@ const NUTATION_RELEASE = "0.1.1-rc.16";
 const IDS_FEATURE = "convention-ids";
 /** The feature an envelope of the DE440 set also requires, so that an engine before 1.1.0-rc.3 refuses it. */
 const DE440_FEATURE = "ephemeris-jpl-de440";
+/**
+ * The feature an envelope of a continuous-UTC set also requires, so that an
+ * engine before the rule (1.1.0, 2.0.0-rc.2 and earlier) refuses it as
+ * `unsupported_feature` and never reads its time basis by the old rule.
+ */
+const CONTINUOUS_UTC_FEATURE = "time-basis-continuous-utc";
+/**
+ * The first engine version a continuous-UTC set is accepted from. The rule is
+ * built on 2.0.0-rc.2's tree, which this build still reports as its version;
+ * the candidate that ships the rule raises this to its own version.
+ */
+const CONTINUOUS_UTC_RELEASE = "2.0.0-rc.2";
 /** The ephemeris a DE440 receipt names; its version is the pack's SHA-256. */
 const DE440_EPHEMERIS = "jpl-de440";
 /** The release that first wrote the DE440 set. */
@@ -370,8 +405,10 @@ export interface NatalDeltaTRecord {
 /** How the instant became UT1 and TT, as a natal record holds it, from the time-basis conventions set on. */
 export interface NatalTimeScaleRecord {
   input: TimeScaleName;
-  basis: "iers" | "delta-t" | "pinned";
-  ut1MinusUtc: { seconds: number; sigma: number; source: "observed" | "predicted" | "fallback" } | null;
+  /** "continuous-utc" under the continuous-UTC sets only. */
+  basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
+  /** Source "model", with seconds within ±86,400 and sigma from 0 to 3,600, on the "continuous-utc" basis only. */
+  ut1MinusUtc: { seconds: number; sigma: number; source: "observed" | "predicted" | "fallback" | "model" } | null;
   leapSeconds: { taiMinusUtc: number; listed: boolean } | null;
 }
 
@@ -784,19 +821,34 @@ function same(actual: unknown, expected: unknown): boolean {
 /**
  * The time-basis set's `timeScale`: its shape, its agreement with the ΔT
  * beside it and, where that ΔT names one of this engine's tables, the basis
- * this engine gives at the instant.
+ * this engine gives at the instant: under a continuous-UTC set by that rule,
+ * and under any earlier set by the rule the engines that wrote it followed
+ * (`timeBasisBeforeContinuousUtc`), so that their records after the IERS
+ * table still verify. The "continuous-utc" basis appears under a
+ * continuous-UTC set and nowhere else.
  */
-function validateTimeScale(value: unknown, deltaT: RecordValue, instant: string, scale: TimeScaleName): void {
+function validateTimeScale(
+  value: unknown,
+  deltaT: RecordValue,
+  instant: string,
+  scale: TimeScaleName,
+  continuousUtc: boolean
+): void {
   const timeScale = record(value);
   fields(timeScale, TIME_SCALE_RECORD);
-  const basis = choice(timeScale.basis, ["iers", "delta-t", "pinned"] as const);
+  const basis = choice(timeScale.basis, ["iers", "continuous-utc", "delta-t", "pinned"] as const);
+  const continuous = basis === "continuous-utc";
   const { ut1MinusUtc, leapSeconds } = timeScale;
   if (ut1MinusUtc !== null) {
     const ut1 = record(ut1MinusUtc);
     fields(ut1, UT1_RECORD);
-    number(ut1.seconds, -1, 1);
-    number(ut1.sigma, 0, 1);
-    choice(ut1.source, IERS_SEGMENTS);
+    // On the continuous-UTC basis, UT1 − UTC is TT − UTC less the ΔT model's TT − UT1: within a day (the model's
+    // passes −3,600 s in 2957 and reaches −14,220 s at the end of EPHEMERIS_SPAN, 3998), with the model's band,
+    // under 1,201 s there.
+    number(ut1.seconds, continuous ? -86_400 : -1, continuous ? 86_400 : 1);
+    number(ut1.sigma, 0, continuous ? 3600 : 1);
+    if (choice(ut1.source, [...IERS_SEGMENTS, "model"] as const) === "model" ? !continuous : continuous)
+      fail("inconsistent_result");
   }
   if (leapSeconds !== null) {
     const leap = record(leapSeconds);
@@ -807,13 +859,14 @@ function validateTimeScale(value: unknown, deltaT: RecordValue, instant: string,
   const iers = deltaT.model === DELTA_T_IERS_MODEL;
   if (
     timeScale.input !== scale ||
+    continuous !== continuousUtc ||
     (basis === "pinned") !== (deltaT.model === "pinned") ||
     (basis === "iers") !== iers ||
-    (iers && (ut1MinusUtc === null || leapSeconds === null))
+    ((iers || continuous) && (ut1MinusUtc === null || leapSeconds === null))
   )
     fail("inconsistent_result");
   if (deltaT.tableDigest === UT1_DATA.digest || deltaT.tableDigest === DELTA_T_TABLE.digest) {
-    const expected = timeBasis(Date.parse(instant), scale);
+    const expected = (continuousUtc ? timeBasis : timeBasisBeforeContinuousUtc)(Date.parse(instant), scale);
     if (
       !same(deltaT, kept(expected.deltaT, DELTA_T_RECORD)) ||
       !same(timeScale, timeScaleKept(expected.timeScale))
@@ -826,7 +879,8 @@ function validateResult(
   value: unknown,
   instantaneousApplying: boolean,
   instant: string | null,
-  scale: TimeScaleName | null
+  scale: TimeScaleName | null,
+  continuousUtc: boolean
 ): NatalEnvelope["result"] {
   const result = record(value);
   fields(result, [
@@ -839,7 +893,7 @@ function validateResult(
   ]);
   if (instant !== null) {
     const deltaT = validateDeltaT(result.deltaT, instant, scale !== null);
-    if (scale !== null) validateTimeScale(result.timeScale, deltaT, instant, scale);
+    if (scale !== null) validateTimeScale(result.timeScale, deltaT, instant, scale, continuousUtc);
   }
   if (!Array.isArray(result.bodies) || result.bodies.length !== 12) fail("invalid_shape");
   const names = new Set<string>();
@@ -1207,7 +1261,8 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   if (envelope.schema !== NATAL_ENVELOPE_SCHEMA) fail("unsupported_version");
   fields(envelope, ["schema", "requiredFeatures", "receipt", "result"], ["extensions"]);
   const features = list(envelope.requiredFeatures);
-  if (features.some((feature) => feature !== IDS_FEATURE && feature !== DE440_FEATURE)) fail("unsupported_feature");
+  if (features.some((feature) => feature !== IDS_FEATURE && feature !== DE440_FEATURE && feature !== CONTINUOUS_UTC_FEATURE))
+    fail("unsupported_feature");
   const receipt = record(envelope.receipt);
   if (receipt.schema !== NATAL_RECEIPT_SCHEMA) fail("unsupported_version");
   fields(receipt, [
@@ -1250,15 +1305,20 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     if (timeKnown && Math.abs(coords.latitude as number) === 90) fail("unsupported_feature");
   }
   const conventions = conventionSet(receipt.conventions);
-  const de440 = conventions === CONVENTIONS_DE440;
+  const continuousUtc = conventions === CONVENTIONS_CONTINUOUS_UTC || conventions === CONVENTIONS_DE440_CONTINUOUS_UTC;
+  const de440 = conventions === CONVENTIONS_DE440 || conventions === CONVENTIONS_DE440_CONTINUOUS_UTC;
   // The sets from 1.1.0-rc.1 on carry convention ids.
-  const withIds = conventions === CONVENTIONS || de440;
+  const withIds = conventions === CONVENTIONS || de440 || continuousUtc;
   // The rc.8 set on records ΔT; the time-basis sets (rc.15 on) also the instant's scale and basis.
   const timeBasis = withIds || conventions === CONVENTIONS_RC16 || conventions === CONVENTIONS_RC15;
   const current = timeBasis || conventions === CONVENTIONS_RC8;
   if (timeBasis !== Object.hasOwn(receipt, "timeScale")) fail("invalid_shape");
   if (withIds !== Object.hasOwn(receipt, "conventionIds")) fail("invalid_shape");
-  const expectedFeatures = de440 ? [IDS_FEATURE, DE440_FEATURE] : withIds ? [IDS_FEATURE] : [];
+  const expectedFeatures = [
+    ...(withIds ? [IDS_FEATURE] : []),
+    ...(de440 ? [DE440_FEATURE] : []),
+    ...(continuousUtc ? [CONTINUOUS_UTC_FEATURE] : [])
+  ];
   if (features.length !== expectedFeatures.length || features.some((feature, index) => feature !== expectedFeatures[index]))
     fail("inconsistent_result");
   const scale = timeBasis ? choice(receipt.timeScale, TIME_SCALE_NAMES) : null;
@@ -1266,7 +1326,8 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     envelope.result,
     conventions !== CONVENTIONS_RC3,
     current ? (receipt.instant as string) : null,
-    scale
+    scale,
+    continuousUtc
   );
   const house = record(receipt.houses);
   fields(house, ["requested", "actual", "absenceReason"]);
@@ -1329,7 +1390,7 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   if (
     timeBasis &&
     (scale !== "tt" || result.houses) &&
-    result.timeScale?.basis === "delta-t" &&
+    (result.timeScale?.basis === "delta-t" || result.timeScale?.basis === "continuous-utc") &&
     result.deltaT?.segment === "extrapolated" &&
     (resultFlags.includes("delta-t-extrapolated") || compareVersions(engineVersion, "1.1.0-rc.9") > 0)
   )
@@ -1378,6 +1439,7 @@ function validateEnvelope(input: unknown): NatalEnvelope {
     ((conventions === CONVENTIONS || conventions === CONVENTIONS_RC16) &&
       before(engineVersion, NUTATION_RELEASE)) ||
     (de440 && before(engineVersion, DE440_RELEASE)) ||
+    (continuousUtc && before(engineVersion, CONTINUOUS_UTC_RELEASE)) ||
     (!HOUSE_SYSTEMS_BEFORE_RC9.includes(requested) && before(engineVersion, RC9_RELEASE)) ||
     (!HOUSE_SYSTEMS_BEFORE_RC10.includes(requested) && before(engineVersion, RC10_RELEASE))
   )
@@ -1467,6 +1529,8 @@ export function createNatalEnvelope(
       fields(record(supplied.provenance), [], ["source", "artifact", "runtime", "ephemeris"]);
     if ((input.latitude === undefined) !== (input.longitude === undefined)) fail("invalid_value");
     const houses = source.houses === null ? null : record(source.houses);
+    // A chart on the continuous-UTC rule is written under its own set, which earlier engines refuse.
+    const continuousUtc = record(source.timeScale).basis === "continuous-utc";
     const receipt = {
       schema: NATAL_RECEIPT_SCHEMA,
       instant: Date.prototype.toISOString.call(input.utc),
@@ -1499,7 +1563,15 @@ export function createNatalEnvelope(
         supplied.provenance === undefined
           ? null
           : { ...record(supplied.provenance), status: "claimed" },
-      conventions: { ...(de440 ? CONVENTIONS_DE440 : CONVENTIONS) },
+      conventions: {
+        ...(continuousUtc
+          ? de440
+            ? CONVENTIONS_DE440_CONTINUOUS_UTC
+            : CONVENTIONS_CONTINUOUS_UTC
+          : de440
+            ? CONVENTIONS_DE440
+            : CONVENTIONS)
+      },
       coverage: { ...COVERAGE }
     };
     // The fields the record's conventions set names, and only those.
@@ -1518,7 +1590,7 @@ export function createNatalEnvelope(
     } catch {}
     const envelope = {
       schema: NATAL_ENVELOPE_SCHEMA,
-      requiredFeatures: de440 ? [IDS_FEATURE, DE440_FEATURE] : [IDS_FEATURE],
+      requiredFeatures: [IDS_FEATURE, ...(de440 ? [DE440_FEATURE] : []), ...(continuousUtc ? [CONTINUOUS_UTC_FEATURE] : [])],
       receipt: { ...receipt, conventionIds },
       result,
       ...(supplied.extensions === undefined ? {} : { extensions: supplied.extensions })
@@ -1551,14 +1623,30 @@ export function serializeNatalEnvelope(envelope: NatalEnvelope): string {
   return guarded(() => encoded(checked(envelope)));
 }
 
-/** Replay the recorded request/instant, never a fallback house system or today's tzdb. */
+/**
+ * Replay the recorded request/instant, never a fallback house system or today's tzdb.
+ *
+ * A UTC instant after the IERS table that an engine before the continuous-UTC
+ * rule recorded (1.1.0, 2.0.0-rc.2 and earlier: basis "delta-t", UT1 − UTC
+ * "fallback") was read as UT1 by that engine, so it replays as that UT1
+ * instant: the bodies, angles, houses, aspects, ΔT and flags come back to the
+ * bit, and the replayed chart's time scale says it was read as UT1.
+ */
 export function natalReplayInput(envelope: NatalEnvelope): BirthInput {
   return guarded(() => {
     const { receipt, result } = checked(envelope);
+    const readAsUt1 =
+      (receipt.timeScale === undefined || receipt.timeScale === "utc") &&
+      result.timeScale?.basis === "delta-t" &&
+      result.timeScale.ut1MinusUtc?.source === "fallback";
     // A pinned ΔT and a scale other than UTC were part of the request, so the replay asks again.
     return {
       utc: receipt.instant,
-      ...(receipt.timeScale === undefined || receipt.timeScale === "utc" ? {} : { timeScale: receipt.timeScale }),
+      ...(readAsUt1
+        ? { timeScale: "ut1" as const }
+        : receipt.timeScale === undefined || receipt.timeScale === "utc"
+          ? {}
+          : { timeScale: receipt.timeScale }),
       houseSystem: receipt.houses.requested,
       timeKnown: receipt.timeKnown,
       flags: [...receipt.inputFlags],

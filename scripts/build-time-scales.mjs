@@ -90,6 +90,9 @@ const mjdOfNtp = (ntp) => ntp / 86400 + 15020;
 const msOfMjd = (mjd) => (mjd - 40587) * 86_400_000;
 const isoOfMjd = (mjd) => new Date(msOfMjd(mjd)).toISOString().slice(0, 10);
 
+/** MJD of 2017-01-01, the last change of TAI - UTC (to 37 s); IERS Bulletin C 72 and tzdb 2026f announce no later one. */
+export const LAST_LEAP_SECOND_MJD = 57_754;
+
 /** The list's leap seconds, update and expiry, after checking its own SHA-1 line. */
 export function parseLeapSeconds(text) {
   const rows = [];
@@ -182,6 +185,11 @@ function consecutive(rows, what) {
 export function build({ leapText, finals, c04 }) {
   const leap = parseLeapSeconds(leapText);
   const changes = leap.rows.map(([ntp, dtai]) => [mjdOfNtp(ntp), dtai]);
+  // The engine's continuous-UTC rule (src/time-scale.ts) carries the list's
+  // last TAI - UTC, 37 s from 2017-01-01, to every later instant: a leap
+  // second after it would make that rule false, so the build stops.
+  const late = changes.find(([mjd]) => mjd > LAST_LEAP_SECOND_MJD);
+  if (late) throw new Error(`time-scales: the leap-second list has a change on ${isoOfMjd(late[0])}, after 2017-01-01; the continuous-UTC rule assumes none`);
   const taiMinusUtc = (mjd) => {
     let value = null;
     for (const [from, dtai] of changes) if (mjd >= from) value = dtai;

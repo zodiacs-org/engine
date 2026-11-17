@@ -255,7 +255,7 @@ describe("the sidereal zodiac in calc()", () => {
         for (const body of ["Sun", "Moon", "Pluto", "Mean Node"] as const) {
           const given = ok(calc({ body, time: iso, zodiac }));
           const jdTt = given.receipt.instants[0]!.jdTt;
-          // Past the IERS table a UTC instant's bounds also widen by the ΔT band (calc-delta-t.test.ts): the
+          // Past the IERS table a UT1 instant's bounds also widen by the ΔT band (calc-delta-t.test.ts): the
           // addition is checked on the same TT, where nothing widens, and the widening on top of it.
           const late = given.flags.includes("delta-t-extrapolated");
           expect(late).toBe(iso.startsWith("2199"));
@@ -271,10 +271,15 @@ describe("the sidereal zodiac in calc()", () => {
           expect(sidereal.bounds.speed!.value).toBe(addBounds(tropical.bounds.speed!.value!, added.rate));
           expect(sidereal.bounds.distance).toEqual(tropical.bounds.distance);
           if (!late) continue;
+          // On UTC input after the IERS table TT is exact (the continuous-UTC rule), so nothing widens there; on
+          // UT1 input, the same UT1, TT carries the ΔT band.
+          expect(given.bounds.position).toEqual(sidereal.bounds.position);
+          const onUt1 = { jd: given.receipt.instants[0]!.jdUt1, scale: "ut1" as const };
+          const givenOnUt1 = ok(calc({ body, time: onUt1, zodiac }));
           // The sidereal widening is the tropical one, to the precession's share of the rate, on top of the addition.
-          const wide = ok(calc({ body, time: iso }));
+          const wide = ok(calc({ body, time: onUt1 }));
           for (const key of ["position", "speed"] as const) {
-            const grown = given.bounds[key]!;
+            const grown = givenOnUt1.bounds[key]!;
             expect(grown.label, `${body} ${key}`).toBe("estimated");
             expect(grown.basis.startsWith(`${sidereal.bounds[key]!.basis}; plus `), `${body} ${key}`).toBe(true);
             expect(grown.basis).toContain("ΔT extrapolated");

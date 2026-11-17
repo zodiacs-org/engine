@@ -1,0 +1,8 @@
+Each mutation of src/time-scale.ts, run against src/time-scale-continuous.test.ts,
+src/receipt-continuous-utc.test.ts and src/time-scale.test.ts (135 tests), on
+Node 22.22.2. The file was restored after each.
+
+M1  TT_MINUS_TAI_MS 32_184 -> 32_000              8 failed, 127 passed
+M2  TT - UTC without TAI - UTC (32.184 s alone)   9 failed, 126 passed
+M3  the rule from the table's last instant (>=)   8 failed, 127 passed
+Unmutated                                         0 failed, 135 passed

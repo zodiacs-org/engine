@@ -246,16 +246,15 @@ describe("the barycentric Sun's bounds", () => {
     expect(angle(r, first!.r) / 3600).toBeGreaterThan(2.66);
     expect(angle(r, first!.r) / 3600).toBeLessThan(2.67);
     expect(Math.abs(turned.dist! - norm(first!.r)) / norm(first!.r)).toBeGreaterThan(0.018);
-    // Given on UTC in 2130, the instant rests on an extrapolated ΔT, so its bounds also carry the TT band's
-    // widening (calc-delta-t.test.ts); on the same TT they are the barycentre's alone.
+    // Given on UTC in 2130, the instant rests on an extrapolated ΔT and is flagged, but its TT is UTC + 69.184 s
+    // exactly (the continuous-UTC rule), so its bounds are the barycentre's alone, as on the same TT
+    // (calc-delta-t.test.ts). Until 2.0.0-rc.2 they also carried the TT band's widening.
     expect(sun.flags).toEqual(["delta-t-extrapolated"]);
     const onTt = ok(calc({ body: "Sun", time: { jd: sun.receipt.instants[0]!.jdTt, scale: "tt" }, center: "barycentric", flags: { cartesian: true } }));
     const turnedOnTt = ok(calc({ body: "Sun", time: { jd: sun.receipt.instants[0]!.jdTt, scale: "tt" }, center: "barycentric", frame: "equatorial-icrs", flags: { cartesian: true } }));
     expect(onTt.bounds.position.value).toBe(turnedOnTt.bounds.position.value);
     expect([onTt.bounds.position.value, onTt.bounds.distance!.value, onTt.bounds.speed!.value]).toEqual([27_000, 0.15, 3_400]);
-    expect(sun.bounds.position.value).toBeGreaterThan(27_000);
-    expect(sun.bounds.distance!.value).toBeGreaterThan(0.15);
-    expect(sun.bounds.speed!.value).toBeGreaterThan(3_400);
+    expect([sun.bounds.position.value, sun.bounds.distance!.value, sun.bounds.speed!.value]).toEqual([27_000, 0.15, 3_400]);
     expect(ok(calc({ body: "Sun", time: "2130-03-05T00:00:00Z", center: "barycentric", flags: { speeds: false } })).bounds.speed).toBeNull();
   });
 

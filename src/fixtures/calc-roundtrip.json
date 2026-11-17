@@ -427,53 +427,53 @@
     "status": "ok",
     "body": "Venus",
     "frame": "equatorial-true-of-date",
-    "lon": 76.20062962322163,
-    "lat": 22.00071375765135,
-    "dist": 1.5722279056427058,
+    "lon": 76.20022017968859,
+    "lat": 22.000664744195895,
+    "dist": 1.572226674351511,
     "speeds": {
-     "lon": 1.305515382739486,
-     "lat": 0.15628131492562147,
-     "dist": 0.003925838139018367
+     "lon": 1.30552470557177,
+     "lat": 0.15627971314025046,
+     "dist": 0.003926163760326062
     },
     "cartesian": {
-     "x": 0.3477034884179995,
-     "y": 1.415662185691168,
-     "z": 0.5889850994954869,
-     "vx": -0.03177161159068076,
-     "vy": 0.009897347241882848,
-     "vz": 0.005446847880008487
+     "x": 0.34771345279580174,
+     "y": 1.4156590815440417,
+     "z": 0.5889833912166911,
+     "vx": -0.03177167974377504,
+     "vy": 0.00989794232975072,
+     "vz": 0.005446924256802266
     },
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 27.752502313,
+      "value": 24.029882471,
       "unit": "arcsec",
       "label": "estimated",
-      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 3.75 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 0.0299 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "distance": {
-      "value": 0.000085262,
+      "value": 0.000083145,
       "unit": "relative",
       "label": "estimated",
-      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 0.00000226 relative, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 1.45e-7 relative, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "speed": {
-      "value": 1.676402519,
+      "value": 1.588271138,
       "unit": "arcsec/day",
       "label": "estimated",
-      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 0.276 arcsec/day, ΔT extrapolated (docs/calc.md, \"Bounds\")",
+      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 0.188 arcsec/day, ΔT extrapolated (docs/calc.md, \"Bounds\")",
       "method": "central-difference",
       "stepDays": 0.001
      }
     },
     "band": {
      "time": {
-      "tt": 73.19496883507185,
-      "ut1": 0.9
+      "tt": 0,
+      "ut1": 73.18943493494542
      },
-     "lon": 4.014176416399812,
-     "lat": 0.5068774153322861,
-     "dist": 0.0000035561914993626048
+     "lon": 0.032229433339006,
+     "lat": 0.02988247015695255,
+     "dist": 2.2754746926323126e-7
     },
     "flags": [
      "delta-t-extrapolated"
@@ -505,11 +505,11 @@
      "instants": [
       {
        "utc": "2150-06-30T00:00:00.000Z",
-       "jdUt1": 2506511.5,
-       "jdTt": 2506511.5011143656,
+       "jdUt1": 2506511.4996863753,
+       "jdTt": 2506511.500800741,
        "deltaT": {
-        "seconds": 96.28118626170394,
-        "sigma": 73.18943545872682,
+        "seconds": 96.28118586220944,
+        "sigma": 73.18943493494542,
         "model": "zodiacs-deltat/1",
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
@@ -517,13 +517,16 @@
        },
        "timeScale": {
         "input": "utc",
-        "basis": "delta-t",
+        "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": 0,
-         "sigma": 0.9,
-         "source": "fallback"
+         "seconds": -27.097185546875,
+         "sigma": 73.18943493494542,
+         "source": "model"
         },
-        "leapSeconds": null
+        "leapSeconds": {
+         "taiMinusUtc": 37,
+         "listed": false
+        }
        }
       }
      ],
@@ -1024,7 +1027,7 @@
      },
      "instants": [
       {
-       "utc": "2049-12-31T23:58:48.549Z",
+       "utc": "2049-12-31T23:58:50.816Z",
        "jdUt1": 2469807.49917302,
        "jdTt": 2469807.5,
        "deltaT": {
@@ -1037,13 +1040,16 @@
        },
        "timeScale": {
         "input": "tt",
-        "basis": "delta-t",
+        "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": 0,
-         "sigma": 0.9,
-         "source": "fallback"
+         "seconds": -2.2670615234375,
+         "sigma": 11.890488150149935,
+         "source": "model"
         },
-        "leapSeconds": null
+        "leapSeconds": {
+         "taiMinusUtc": 37,
+         "listed": false
+        }
        }
       }
      ],
@@ -1082,12 +1088,12 @@
     "status": "ok",
     "body": "North Node",
     "frame": "equatorial-true-of-date",
-    "lon": 231.20980897064933,
-    "lat": -18.667050012427815,
+    "lon": 231.20981057722176,
+    "lat": -18.66705040390619,
     "dist": null,
     "speeds": {
-     "lon": -0.23140466838543716,
-     "lat": 0.05638775203015456,
+     "lon": -0.23140456009110721,
+     "lat": 0.056387723411631896,
      "dist": null
     },
     "cartesian": null,
@@ -1111,11 +1117,11 @@
     },
     "band": {
      "time": {
-      "tt": 1.5810889410189446,
-      "ut1": 0.9
+      "tt": 0,
+      "ut1": 1.299939313870871
      },
-     "lon": 0.015244640086848789,
-     "lat": 0.0037147521309914967,
+     "lon": 0,
+     "lat": 0,
      "dist": null
     },
     "flags": [
@@ -1142,11 +1148,11 @@
      "instants": [
       {
        "utc": "2031-08-17T05:00:00.000Z",
-       "jdUt1": 2463095.7083333335,
-       "jdTt": 2463095.709141011,
+       "jdUt1": 2463095.7083263965,
+       "jdTt": 2463095.709134074,
        "deltaT": {
-        "seconds": 69.78332743704144,
-        "sigma": 1.2999393214348152,
+        "seconds": 69.7833274349905,
+        "sigma": 1.299939313870871,
         "model": "zodiacs-deltat/1",
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
@@ -1154,13 +1160,16 @@
        },
        "timeScale": {
         "input": "utc",
-        "basis": "delta-t",
+        "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": 0,
-         "sigma": 0.9,
-         "source": "fallback"
+         "seconds": -0.599327392578125,
+         "sigma": 1.299939313870871,
+         "source": "model"
         },
-        "leapSeconds": null
+        "leapSeconds": {
+         "taiMinusUtc": 37,
+         "listed": false
+        }
        }
       }
      ],
@@ -1347,53 +1356,53 @@
     "status": "ok",
     "body": "Sun",
     "frame": "ecliptic-mean-of-date",
-    "lon": 280.0991978108896,
-    "lat": -0.0020350195502362714,
-    "dist": 0.9833430298216823,
+    "lon": 280.099084145547,
+    "lat": -0.0020351915032606064,
+    "dist": 0.9833430286184957,
     "speeds": {
-     "lon": 1.008026298961795,
-     "lat": 0.0015264008879840082,
-     "dist": 0.000010731464494817544
+     "lon": 1.008024795169149,
+     "lat": 0.0015234623096758038,
+     "dist": 0.000010608756373375883
     },
     "cartesian": {
-     "x": 0.1724320933644121,
-     "y": -0.968106753543748,
-     "z": -0.00003492617269301724,
-     "vx": 0.017034149892555805,
-     "vy": 0.003023096874499309,
-     "vz": 0.00002619658634461108
+     "x": 0.17243017258952253,
+     "y": -0.9681070944339263,
+     "z": -0.00003492912380670399,
+     "vx": 0.01703410894286772,
+     "vy": 0.003023179360794881,
+     "vz": 0.00002614615707274159
     },
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 5.209045099,
+      "value": 3.42767119,
       "unit": "arcsec",
       "label": "estimated",
-      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 1.81 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 0.0277 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "distance": {
-      "value": 0.000017143,
+      "value": 0.000017135,
       "unit": "relative",
       "label": "estimated",
-      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 1.42e-7 relative, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 1.34e-7 relative, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "speed": {
-      "value": 0.469758188,
+      "value": 0.414339215,
       "unit": "arcsec/day",
       "label": "estimated",
-      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 0.23 arcsec/day, ΔT extrapolated (docs/calc.md, \"Bounds\")",
+      "basis": "the geocentric bound for this correction; the Sun, Moon and Mars, compared topocentric on 32 instants, fall within it; plus 0.174 arcsec/day, ΔT extrapolated (docs/calc.md, \"Bounds\")",
       "method": "central-difference",
       "stepDays": 0.001
      }
     },
     "band": {
      "time": {
-      "tt": 42.39837277198139,
-      "ut1": 0.9
+      "tt": 0,
+      "ut1": 42.38881925397989
      },
-     "lon": 1.8090430575714473,
-     "lat": 0.03096147949133909,
-     "dist": 1.3988117491356334e-7
+     "lon": 0.02767118989361835,
+     "lat": 0.02767118987616161,
+     "dist": 1.3178720054685323e-7
     },
     "flags": [
      "delta-t-extrapolated"
@@ -1425,11 +1434,11 @@
      "instants": [
       {
        "utc": "2099-12-31T12:00:00.000Z",
-       "jdUt1": 2488069,
-       "jdTt": 2488069.0009135013,
+       "jdUt1": 2488068.9998872397,
+       "jdTt": 2488069.000800741,
        "deltaT": {
-        "seconds": 78.9264969856253,
-        "sigma": 42.3888194422998,
+        "seconds": 78.92649691369812,
+        "sigma": 42.38881925397989,
         "model": "zodiacs-deltat/1",
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
@@ -1437,13 +1446,16 @@
        },
        "timeScale": {
         "input": "utc",
-        "basis": "delta-t",
+        "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": 0,
-         "sigma": 0.9,
-         "source": "fallback"
+         "seconds": -9.7424970703125,
+         "sigma": 42.38881925397989,
+         "source": "model"
         },
-        "leapSeconds": null
+        "leapSeconds": {
+         "taiMinusUtc": 37,
+         "listed": false
+        }
        }
       }
      ],
@@ -1724,29 +1736,29 @@
     "status": "ok",
     "body": "Neptune",
     "frame": "ecliptic-j2000",
-    "lon": 355.23283421375487,
-    "lat": -1.2774178077558642,
-    "dist": 29.230001892491742,
+    "lon": 355.2328433365096,
+    "lat": -1.2774180599175144,
+    "dist": 29.2299944930069,
     "speeds": {
-     "lon": -0.01607341303611065,
-     "lat": 0.00044429035317428145,
-     "dist": 0.013037339094523759
+     "lon": -0.01607366900202578,
+     "lat": 0.00044428569068166723,
+     "dist": 0.013037224340095577
     },
     "cartesian": {
-     "x": 29.12164574140393,
-     "y": -2.4286074469319257,
-     "z": -0.6516331912569633,
-     "vx": 0.012312738029152115,
-     "vy": -0.009253253034469111,
-     "vz": -0.00006404257213432629
+     "x": 29.1216387531787,
+     "y": -2.4286021950904564,
+     "z": -0.6516331549087572,
+     "vx": 0.012312614439125014,
+     "vy": -0.009253369570805248,
+     "vz": -0.00006404250663116784
     },
     "ayanamsa": null,
     "bounds": {
      "position": {
-      "value": 0.068699601,
+      "value": 0.004,
       "unit": "arcsec",
       "label": "estimated",
-      "basis": "the bound measured in the true ecliptic of date (JPL Horizons, DE441, the conformance suite's L1 vectors; NAIF's de440.bsp every day from 1800 to 2199, which also covers this frame), on the shipped DE440 pack, reached in this frame with the engine's own nutation and precession; Horizons not compared in this frame; src/calc-bounds-de440.ts; plus 0.0647 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+      "basis": "the bound measured in the true ecliptic of date (JPL Horizons, DE441, the conformance suite's L1 vectors; NAIF's de440.bsp every day from 1800 to 2199, which also covers this frame), on the shipped DE440 pack, reached in this frame with the engine's own nutation and precession; Horizons not compared in this frame; src/calc-bounds-de440.ts"
      },
      "distance": {
       "value": null,
@@ -1765,12 +1777,12 @@
     },
     "band": {
      "time": {
-      "tt": 96.59324509039506,
-      "ut1": 0.9
+      "tt": 0,
+      "ut1": 96.58905121173512
      },
-     "lon": 0.06469096353484112,
-     "lat": 0.0017881436239775646,
-     "dist": 0.000014575450121341696
+     "lon": 0,
+     "lat": 0,
+     "dist": 0
     },
     "flags": [
      "delta-t-extrapolated"
@@ -1796,11 +1808,11 @@
      "instants": [
       {
        "utc": "2188-11-08T00:00:00.000Z",
-       "jdUt1": 2520522.5,
-       "jdTt": 2520522.5013683042,
+       "jdUt1": 2520522.4994324367,
+       "jdTt": 2520522.500800741,
        "deltaT": {
-        "seconds": 118.2214841265093,
-        "sigma": 96.58905215961656,
+        "seconds": 118.22148306223288,
+        "sigma": 96.58905121173512,
         "model": "zodiacs-deltat/1",
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
@@ -1808,13 +1820,16 @@
        },
        "timeScale": {
         "input": "utc",
-        "basis": "delta-t",
+        "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": 0,
-         "sigma": 0.9,
-         "source": "fallback"
+         "seconds": -49.0374833984375,
+         "sigma": 96.58905121173512,
+         "source": "model"
         },
-        "leapSeconds": null
+        "leapSeconds": {
+         "taiMinusUtc": 37,
+         "listed": false
+        }
        }
       }
      ],
@@ -2579,20 +2594,20 @@
     "status": "ok",
     "body": "Mean Node",
     "frame": "ecliptic-true-of-date",
-    "lon": 37.958306259282395,
+    "lon": 37.95830960809295,
     "lat": 0,
     "dist": null,
     "speeds": {
-     "lon": -0.05292371075782398,
+     "lon": -0.052923710345709196,
      "lat": 0,
      "dist": null
     },
     "cartesian": null,
     "ayanamsa": {
      "name": "true-chitra",
-     "mean": 24.921530979875,
-     "nutation": -0.003953882599845568,
-     "true": 24.917577097275156,
+     "mean": 24.921530981771127,
+     "nutation": -0.003953882774194498,
+     "true": 24.917577098996933,
      "subtracted": "true",
      "bound": {
       "value": 0.0013,
@@ -2603,27 +2618,27 @@
     },
     "bounds": {
      "position": {
-      "value": 0.067066145,
+      "value": 0.0036,
       "unit": "arcsec",
-      "label": "estimated",
-      "basis": "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05; plus 0.0635 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+      "label": "measured",
+      "basis": "largest difference from the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05"
      },
      "distance": null,
      "speed": {
-      "value": 0.001200682,
+      "value": 0.0012,
       "unit": "arcsec/day",
-      "label": "estimated",
-      "basis": "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.00039 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05; plus 6.82e-7 arcsec/day, ΔT extrapolated (docs/calc.md, \"Bounds\")",
+      "label": "measured",
+      "basis": "largest difference from the rate of the same definition evaluated with ERFA's fundamental arguments (faom03, faf03, fal03) and nut06a's nutation in longitude, taken over 0.0001 day either side, over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in the true ecliptic of date only: a check of the implementation, not of an ephemeris; docs/evidence/calc-api/rc16; plus the ayanamsa's, 0.00039 arcsec/day: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05",
       "method": "central-difference",
       "stepDays": 0.001
      }
     },
     "band": {
      "time": {
-      "tt": 28.780813991895876,
-      "ut1": 0.9
+      "tt": 0,
+      "ut1": 28.76673857002465
      },
-     "lon": 0.06346614479507628,
+     "lon": 0,
      "lat": 0,
      "dist": null
     },
@@ -2653,11 +2668,11 @@
      "instants": [
       {
        "utc": "2077-09-01T00:00:00.000Z",
-       "jdUt1": 2479912.5,
-       "jdTt": 2479912.500864017,
+       "jdUt1": 2479912.4999367236,
+       "jdTt": 2479912.500800741,
        "deltaT": {
-        "seconds": 74.65106215320853,
-        "sigma": 28.76673867570166,
+        "seconds": 74.6510621267588,
+        "sigma": 28.76673857002465,
         "model": "zodiacs-deltat/1",
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
@@ -2665,13 +2680,16 @@
        },
        "timeScale": {
         "input": "utc",
-        "basis": "delta-t",
+        "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": 0,
-         "sigma": 0.9,
-         "source": "fallback"
+         "seconds": -5.46706201171875,
+         "sigma": 28.76673857002465,
+         "source": "model"
         },
-        "leapSeconds": null
+        "leapSeconds": {
+         "taiMinusUtc": 37,
+         "listed": false
+        }
        }
       }
      ],
@@ -3217,37 +3235,37 @@
     "requested": "placidus",
     "system": "placidus",
     "cusps": [
-     60.6261450030832,
-     97.29185115249771,
-     136.91785559816333,
-     170.98852390230934,
-     197.61292927419947,
-     219.67577349778435,
-     240.62614500308325,
-     277.29185115249777,
-     316.9178555981633,
-     350.9885239023093,
-     17.612929274199537,
-     39.675773497784355
+     60.549690866341805,
+     97.19693015380797,
+     136.8168903932662,
+     170.89894180657478,
+     197.53544417007953,
+     219.60350502003308,
+     240.5496908663418,
+     277.19693015380795,
+     316.8168903932662,
+     350.89894180657484,
+     17.53544417007954,
+     39.6035050200331
     ],
     "angles": {
-     "asc": 60.6261450030832,
-     "mc": 350.9885239023093,
-     "dsc": 240.62614500308325,
-     "ic": 170.98852390230934
+     "asc": 60.549690866341805,
+     "mc": 350.89894180657484,
+     "dsc": 240.5496908663418,
+     "ic": 170.89894180657478
     },
-    "vertex": 282.0090950067896,
-    "eastPoint": 78.06464477895213,
-    "armc": 18.19068480449107,
-    "obliquity": 23.423405660773263,
+    "vertex": 281.9513833717504,
+    "eastPoint": 77.98664951180224,
+    "armc": 18.106988144718912,
+    "obliquity": 23.42340565951237,
     "flags": [
      "delta-t-extrapolated"
     ],
     "ayanamsa": {
      "name": "galactic-center",
-     "mean": 28.718890626551,
-     "nutation": -0.004231539451788194,
-     "true": 28.714659087099214,
+     "mean": 28.71889063910578,
+     "nutation": -0.004231531291066476,
+     "true": 28.714659107814715,
      "subtracted": "true",
      "bound": {
       "value": 0.0013,
@@ -3258,40 +3276,40 @@
     },
     "bounds": {
      "angles": {
-      "value": 14.509246774,
+      "value": 1014.20495762,
       "unit": "arcsec",
       "label": "estimated",
-      "basis": "largest difference over the conformance suite's L2 vectors of the ascendant, midheaven, Vertex and East Point, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05; plus 14.5 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+      "basis": "largest difference over the conformance suite's L2 vectors of the ascendant, midheaven, Vertex and East Point, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05; plus 1010 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      },
      "cusps": {
-      "value": 16.412923627,
+      "value": 1142.944309038,
       "unit": "arcsec",
       "label": "estimated",
-      "basis": "largest difference over the conformance suite's L2 cusp vectors, thirteen systems, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05; plus 16.3 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+      "basis": "largest difference over the conformance suite's L2 cusp vectors, thirteen systems, whose arbiter is ERFA with each system's definition; plus the ayanamsa's, 0.0013 arcsec: largest difference of the mean ayanamsa from ERFA's construction of the same definition; docs/evidence/calc-sidereal-2026-10-05; plus 1140 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
      }
     },
     "band": {
      "time": {
-      "tt": 62.9991515242699,
-      "ut1": 0.9
+      "tt": 0,
+      "ut1": 62.99272215100599
      },
-     "asc": 12.368822161818802,
-     "mc": 14.487946773402356,
-     "vertex": 9.33399369408658,
-     "eastPoint": 12.615938900016834,
+     "asc": 865.277608037994,
+     "mc": 1014.1836576196719,
+     "vertex": 653.3478968547322,
+     "eastPoint": 882.8743940955837,
      "cusps": [
-      12.368822161818802,
-      15.35726083193745,
-      16.331623626660573,
-      14.487946773497129,
-      12.531661755162807,
-      11.689359272261735,
-      12.368822161821488,
-      15.357260831821192,
-      16.3316236266552,
-      14.487946773402356,
-      12.531661755149377,
-      11.689359272269792
+      865.277608037994,
+      1074.2148448960559,
+      1142.8630090371455,
+      1014.1836576196719,
+      877.2227114270856,
+      818.0683990095071,
+      865.2776080315488,
+      1074.214844902501,
+      1142.8630090371455,
+      1014.1836576196719,
+      877.2227114270856,
+      818.0683990223977
      ]
     },
     "receipt": {
@@ -3312,11 +3330,11 @@
      "instants": [
       {
        "utc": "2133-10-11T12:13:14.000Z",
-       "jdUt1": 2500406.009189815,
-       "jdTt": 2500406.0102224117,
+       "jdUt1": 2500406.008957959,
+       "jdTt": 2500406.0099905557,
        "deltaT": {
-        "seconds": 89.21635329211125,
-        "sigma": 62.99272253822595,
+        "seconds": 89.21635305013095,
+        "sigma": 62.99272215100599,
         "model": "zodiacs-deltat/1",
         "table": "2026-09-24",
         "tableDigest": "6371988c510a1c6c",
@@ -3324,13 +3342,16 @@
        },
        "timeScale": {
         "input": "utc",
-        "basis": "delta-t",
+        "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": 0,
-         "sigma": 0.9,
-         "source": "fallback"
+         "seconds": -20.032353515625,
+         "sigma": 62.99272215100599,
+         "source": "model"
         },
-        "leapSeconds": null
+        "leapSeconds": {
+         "taiMinusUtc": 37,
+         "listed": false
+        }
        }
       }
      ],

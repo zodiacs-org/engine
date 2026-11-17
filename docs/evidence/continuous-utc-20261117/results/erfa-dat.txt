@@ -1,0 +1,7 @@
+pyerfa 2.0.1.5 ERFA 2.0.1
+2027-10-02 day fraction 0.0: TAI-UTC 37.0 s, TT-UTC 69.184 s
+2028-06-15 day fraction 0.5: TAI-UTC 37.0 s, TT-UTC 69.184 s
+2030-06-15 day fraction 0.5: TAI-UTC 37.0 s, TT-UTC 69.184 s
+2050-06-15 day fraction 0.5: TAI-UTC 37.0 s, TT-UTC 69.184 s
+2100-06-15 day fraction 0.5: TAI-UTC 37.0 s, TT-UTC 69.184 s
+2199-06-19 day fraction 0.5: TAI-UTC 37.0 s, TT-UTC 69.184 s

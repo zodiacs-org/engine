@@ -204,11 +204,11 @@ type NatalReference = "supplied-instant" | "utc-noon" | "local-noon";
 
 interface NatalTimeScaleRecord {
     input: TimeScaleName;
-    basis: "iers" | "delta-t" | "pinned";
+    basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
     ut1MinusUtc: {
         seconds: number;
         sigma: number;
-        source: "observed" | "predicted" | "fallback";
+        source: "observed" | "predicted" | "fallback" | "model";
     } | null;
     leapSeconds: {
         taiMinusUtc: number;
@@ -358,7 +358,7 @@ interface LeapSeconds {
 // exported by @zodiacs/engine (TimeScale), @zodiacs/engine/calc (TimeScale), @zodiacs/engine/time (TimeScale)
 interface TimeScale {
     input: TimeScaleName;
-    basis: "iers" | "delta-t" | "pinned";
+    basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
     ut1MinusUtc: Ut1MinusUtc | null;
     leapSeconds: LeapSeconds | null;
 }
@@ -373,7 +373,7 @@ type TransitionCause = "dst" | "legal-change" | "date-line";
 interface Ut1MinusUtc {
     seconds: number;
     sigma: number;
-    source: "observed" | "predicted" | "fallback";
+    source: "observed" | "predicted" | "fallback" | "model";
 }
 
 // exported by @zodiacs/engine (ZodiacSign)

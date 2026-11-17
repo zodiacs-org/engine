@@ -258,10 +258,14 @@ describe("the Sun and the out-of-bounds limit", () => {
   // rc.14 build flagged the chart's Sun at each instant below. It flagged no earlier solstice:
   // before 2000, wherever the latitude exceeds the limit its margin is negative (it reaches
   // −68.3″ in year 2), so no early solstice can test this.
+  // The instants are those the first rc.14 build was given, on UTC. Under the continuous-UTC rule
+  // (docs/time.md) each is read 1,075 s, 1,119 s and 12,991 s of TT earlier than until 2.0.0-rc.2,
+  // so the latitudes and margins pinned here moved (they were 3.605″, 3.658″ and 25.824″ for both);
+  // the Sun is still beyond SUN_BOUND_LATITUDE at each and still not flagged.
   it.each([
-    ["2591-06-20T20:25:27.709Z", 3.605, 3.605], // the earliest solstice the first build flagged
-    ["2600-06-21T00:50:56Z", 3.658, 3.658],
-    ["3902-06-20T13:31:29.226Z", 25.824, 25.824] // the June solstice of 3902
+    ["2591-06-20T20:25:27.709Z", 3.6063, 3.6044], // the earliest solstice the first build flagged
+    ["2600-06-21T00:50:56Z", 3.6595, 3.6574],
+    ["3902-06-20T13:31:29.226Z", 26.0020, 25.7187] // the June solstice of 3902, on the earlier rule
   ])("does not flag the chart's Sun at %s, whatever its latitude", (utc, latArcsec, marginArcsec) => {
     const result = chartDeclinations({utc, timeKnown: false});
     const sun = result.rows.find(row => row.body === "Sun")!;
