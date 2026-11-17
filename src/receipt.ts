@@ -297,12 +297,8 @@ const DE440_FEATURE = "ephemeris-jpl-de440";
  * `unsupported_feature` and never reads its time basis by the old rule.
  */
 const CONTINUOUS_UTC_FEATURE = "time-basis-continuous-utc";
-/**
- * The first engine version a continuous-UTC set is accepted from. The rule is
- * built on 2.0.0-rc.2's tree, which this build still reports as its version;
- * the candidate that ships the rule raises this to its own version.
- */
-const CONTINUOUS_UTC_RELEASE = "2.0.0-rc.2";
+/** The first engine version a continuous-UTC set is accepted from: 2.0.0-rc.3, the candidate that ships the rule. */
+const CONTINUOUS_UTC_RELEASE = "2.0.0-rc.3";
 /** The ephemeris a DE440 receipt names; its version is the pack's SHA-256. */
 const DE440_EPHEMERIS = "jpl-de440";
 /** The release that first wrote the DE440 set. */
@@ -499,7 +495,7 @@ const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
  * last, 1918-02-13, read as Julian). src/geo/calendar-unknown.test.ts writes and reads a record at each end.
  */
 /**
- * And "host-zone-data-differs" (after 2.0.0-rc.2): a local time from 1970 on that the host's Intl read, where the
+ * And "host-zone-data-differs" (from 2.0.0-rc.3): a local time from 1970 on that the host's Intl read, where the
  * host's offset near it differed from the pinned tzdb release's (src/geo/timezone.ts). The host answers only from
  * 1970, so the claim is refused on an instant before 1970-01-01T00:00Z, and on a local record whose `dataForm`
  * names the shipped history. Engines up to 2.0.0-rc.2 do not know the flag and refuse such a record.

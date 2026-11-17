@@ -224,8 +224,8 @@ export interface BodyPosition {
   /** Present when `ephemeris` is astronomy-engine as a fallback from the shipped DE440 pack, and says why. */
   fallback?: EphemerisFallback;
   /**
-   * On the rows of `positions()`, `transits()`' `positions` and `progressedBodies()`, from the release after
-   * 1.1.0: the flags a chart at the same instant carries, where there are any (a chart's own bodies leave them to
+   * On the rows of `positions()`, `transits()`' `positions` and `progressedBodies()`, from
+   * 2.0.0: the flags a chart at the same instant carries, where there are any (a chart's own bodies leave them to
    * the chart's `flags`): `"outside-reference-span"`, `"delta-t-extrapolated"`, then the fallback, as `fallback`.
    */
   flags?: InstantFlag[];
@@ -420,7 +420,7 @@ export interface MoonPhase {
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "2.0.0-rc.2";
+export const ENGINE_VERSION: string = "2.0.0-rc.3";
 
 /**
  * astronomy-engine, the ephemeris the engine computes on where the shipped

@@ -68,7 +68,7 @@ Any other value, including `null`, throws `RangeError`. A `ChartInput` carries
   of IERS on twelve dated values from 1962 to 2026 and within 0.084 s on every
   IERS day since 1962. It is used where UTC as a leap-second scale is not
   defined (before 1972) and after the UT1 table.
-- **The continuous-UTC rule** (from the release after 2.0.0-rc.2): after the
+- **The continuous-UTC rule** (from 2.0.0-rc.3): after the
   UT1 table UTC is taken to run on with no further leap second, so TAI − UTC
   stays 37 s and TT = UTC + 69.184 s exactly, and UT1 comes from TT through
   the ΔT model. The chart reports it as `basis` `"continuous-utc"`, with
@@ -634,15 +634,16 @@ records what Node 22.22.2 (tzdb 2025c) and Node 22.23.4 (tzdb 2026e) say at
 each probe.
 
 When the host's `Intl` answered (`zone.source` `"intl"`) and the instant,
-from 1970 on, lies within 36 hours of such a span of the zone (in a fixed
-zone, never), the engine asks the host for its offset at the span's probe,
+from 1970 on, lies within 36 hours of such a span of the zone (from 36
+hours before the span begins, inclusive, to 36 hours after it ends,
+exclusive; in a fixed zone, never), the engine asks the host for its offset at the span's probe,
 the span's midpoint rounded down to the minute (45 days in for a span with no
 end), once per zone and probe for the life of the module, and records the
 answer in `zone.hostCheck`:
 
 | `status` | Meaning |
 | --- | --- |
-| `"unchecked"` | no span is near: tzdata 2021a and 2026f agree within 36 hours of the instant, or the instant is before 1970 or more than 36 hours after 2029-10-27, or the zone is a fixed one. Nothing else is set. |
+| `"unchecked"` | no span is near: tzdata 2021a and 2026f agree within 36 hours of the instant, or the instant is before 1970 or 36 hours or more after 2029-10-27T00:00Z, or the zone is a fixed one. Nothing else is set. |
 | `"current"` | the host gave 2026f's offset at every probe near the instant |
 | `"differs"` | the host gave another offset at a probe; the result and the chart carry `"host-zone-data-differs"` |
 | `"newer"` | it did, but the runtime names a tzdb release later than 2026f (`process.versions.tz`; Node does, browsers do not), which may know a rule 2026f does not, so nothing is flagged |
@@ -784,7 +785,7 @@ the choice existed refuses a record with `"later"` as `unsupported_feature`,
 and this one refuses `"later"` under a conventions set older than rc.15's.
 
 A chart on the continuous-UTC rule (`timeScale.basis` `"continuous-utc"`)
-is written, from the release after 2.0.0-rc.2, under one of two sets of its
+is written, from 2.0.0-rc.3, under one of two sets of its
 own, `NATAL_RECEIPT_CONVENTION_SETS[7]` (astronomy-engine) and `[8]` (the
 DE440 pack), each the set it follows with `timeScale`
 `"tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972;in-result"`,
@@ -956,8 +957,8 @@ the values change.
   causes are tzdb 2026f's: a change that only a newer host knows is resolved
   with the host's offsets and reported as `"dst"`.
 - The host check (*Host time zone data*) sees only what changed between
-  tzdata 2021a and 2026f, from 1970-01-01 to 2029-10-27; an instant more
-  than 36 hours after that date is not checked, even in a span still open
+  tzdata 2021a and 2026f, from 1970-01-01 to 2029-10-27; an instant 36
+  hours or more after 2029-10-27T00:00Z is not checked, even in a span still open
   there, since the older rules may agree again later (Morocco's: 2021a and
   2025c give +00:00 in Ramadan 2030, as 2026f does, so `Africa/Casablanca`
   2030-01-20 12:00, conformance vector L3-TZ-0045, is not flagged on a host

@@ -215,10 +215,17 @@ Time zone, leap-second and UT1 data
 -----------------------------------
 
 @zodiacs/engine/geo ships zone histories before 1970 compiled from the IANA
-Time Zone Database 2025c with its backzone file (tzdata2025c.tar.gz, sha256
-4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957), which is in
-the public domain: https://www.iana.org/time-zones. From 1970 local time
-comes from the host runtime's Intl/ICU data.
+Time Zone Database 2026f with its backzone file (tzdata2026f.tar.gz, sha256
+01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d), except
+America/Yellowknife, compiled from the four backzone lines of the IANA Time
+Zone Database 2025c that define it (tzdata2025c.tar.gz, sha256
+4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957). Both are
+in the public domain: https://www.iana.org/time-zones. From 1970 local time
+comes from the host runtime's Intl/ICU data, which it checks against a table
+of the spans in which the IANA Time Zone Database 2021a (tzdata2021a.tar.gz,
+sha256 39e7d2ba08c68cbaefc8de3227aab0dec2521be8042cf56855f7dc3a9fb14e08) and
+2026f give different offsets, with 2026f's offsets, compiled from those two
+public-domain releases.
 
 The core carries TAI - UTC from the IERS leap-second list, leap-seconds.list,
 updated 2026-07-06 through IERS Bulletin C 72 and expiring 2027-06-28 (sha256

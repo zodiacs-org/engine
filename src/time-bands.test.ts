@@ -34,7 +34,7 @@ describe("the time bands", () => {
     const rows: [string, TimeScaleName, number | undefined, string, (d: number, u: number) => TimeBands, "d" | "u" | "du" | ""][] = [
       ["2000-06-01T12:00:00Z", "tt", undefined, "iers", (d) => ({ tt: 0, ut1: d }), "d"],
       ["1900-06-01T12:00:00Z", "tt", undefined, "delta-t", (d) => ({ tt: 0, ut1: d }), "d"],
-      // After the IERS table, the continuous-UTC rule (from the release after 2.0.0-rc.2): the TT and UT1 input
+      // After the IERS table, the continuous-UTC rule (from 2.0.0-rc.3): the TT and UT1 input
       // rows keep their bands; the UTC row's TT is exact and its UT1 carries d, which u then equals.
       ["2050-06-01T12:00:00Z", "tt", undefined, "continuous-utc", (d) => ({ tt: 0, ut1: d }), "du"],
       ["2000-06-01T12:00:00Z", "tt", 64.5, "pinned", (d) => ({ tt: 0, ut1: d }), ""],

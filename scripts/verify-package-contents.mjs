@@ -234,6 +234,41 @@ for (const file of files) {
 // ./vedic 187,100, ./window 151,500. None has the owner's approval: they are
 // for the owner to decide with the candidate. ./techniques (203,328 of
 // 203,800) and the other graphs grow inside their budgets or not at all.
+//
+// 2.0.0-rc.3 merges pull requests 114 (Julian Day Numbers and local mean
+// time in ./geo), 115 (near-miss birth keys refused), 117 (the host's time
+// zone data checked, with its 2021a to 2026f probe table in ./geo), 118
+// (tzdata 2026f's zone histories), 119 (the continuous-UTC rule) and 121
+// (the ./core entry). Measured on this build, twelve graphs are over their
+// budgets; old budget, 2.0.0-rc.2's measurement, this build's, new budget:
+//   .             151,700   151,563   154,173   154,200
+//   ./calc        204,100   203,138   205,334   205,400
+//   ./core        109,600         -   110,765   110,800
+//   ./geo          36,500    36,178    47,715    47,800
+//   ./internal    110,900   110,362   112,381   112,400
+//   ./receipt      77,400    76,845    81,110    81,200
+//   ./sky         138,600   137,816   139,835   139,900
+//   ./techniques  207,300   205,247   207,561   207,600
+//   ./time         42,600    42,530    44,485    44,500
+//   ./timing      171,200   170,866   173,476   173,500
+//   ./vedic       187,100   186,598   189,208   189,300
+//   ./window      151,500   150,577   152,731   152,800
+// The root's 2,610 bytes are 115's key list and check (565), 117's flag in
+// the shared flag lists (26), 119's continuous basis, its UT1 solve and the
+// receipts' choice of rule (1,910) and 121's split of the root's default
+// source into src/ephemeris-shipped.ts (109); every graph that loads the
+// root's chunks grows with it. ./geo grows by 11,537: 117's probe table and
+// host check and 114's day-number and mean-time functions (10,039 and 1,486
+// as each pull request measured itself on main). ./receipt by 4,265: 119's
+// two conventions sets, their feature and the old rule kept for old records
+// (3,926), and 117's checks of the flag (339). ./time by 1,955, 119's basis.
+// ./core is 121's entry, 108,411 as first measured, with 115's, 117's and
+// 119's code in the root's graph it copies. ./techniques grows by 2,314: the
+// root's growth and 114's calendar chunk, which it shares with ./geo, less
+// the local-time code 117's split of the wall-time reader took out of it.
+// Each new budget is the measurement rounded up to the next hundred bytes, to
+// fit it and no more: they are for the owner to decide with the candidate.
+// The other graphs are inside their budgets.
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -251,7 +286,7 @@ const ENTRY_BUDGETS = {
   // path in the ephemeris chunk, and, after the cut's reviews, the refusal of
   // the code that computes its own positions; raised to 109,000 under the
   // owner's delegation of 2026-11-04; 0.43 per cent of headroom.
-  ".": 151_700,
+  ".": 154_200,
   // New in rc.16 (feature-api): the uniform calculation API, its frames,
   // centers, corrections, bounds and receipts. 106,779 bytes as integrated on
   // rc.15's time basis, 34,449 of them beyond the core's graph; 7.69 per cent
@@ -270,7 +305,7 @@ const ENTRY_BUDGETS = {
   // (and the timeBands chunk it shares with ./time) and the chunks split out
   // for ./time (above); raised to 156,000, the ceiling approved under the
   // owner's delegation of 2026-11-03 (OQ3); 3.02 per cent of headroom.
-  "./calc": 204_100,
+  "./calc": 205_400,
   // New in 1.1.0-rc.1: the ids of the conventions registry. 2,754 bytes, its
   // own file and the chunk of ids it shares with ./receipt; 5.30 per cent of
   // headroom.
@@ -279,7 +314,7 @@ const ENTRY_BUDGETS = {
   // its own into one file by scripts/build-core.mjs. 108,411 bytes as
   // measured on this build, as on the prototype measured in
   // docs/evidence/bundle-weight-20261117/; 1.10 per cent of headroom.
-  "./core": 109_600,
+  "./core": 110_800,
   // rc.15: 9,410. 1.0.0-rc.1: 9,942, its options read as the shared reader
   // reads them; 0.58 per cent, not raised.
   "./crossings": 10_000,
@@ -298,7 +333,7 @@ const ENTRY_BUDGETS = {
   // narrowed check, pull request 110) and the polar-angles flag (pull
   // request 105); raised from 35,700 to 36,500, the measurement and about
   // one per cent, for the owner to decide with the candidate.
-  "./geo": 36_500,
+  "./geo": 47_800,
   // Unreleased (feature-houses-extra): 13,606, one file that imports no other
   // module, the root's included, so that its graph cannot grow with the core
   // (docs/evidence/houses-extra-2026-09-29/).
@@ -329,7 +364,7 @@ const ENTRY_BUDGETS = {
   // 1.1.0-rc.3: 68,758, with withEphemeris, the source's path and the
   // refusal in the ephemeris chunk; raised to 69,000 with the owner's
   // approval of 2026-11-10; 0.35 per cent of headroom.
-  "./internal": 110_900,
+  "./internal": 112_400,
   "./internal/math": 20_000, // rc.15: 18,165
   // New in 1.1.0-rc.2: declination parallels, the sect under a named
   // convention, composite midpoints and their aspects, and the dignities,
@@ -348,7 +383,7 @@ const ENTRY_BUDGETS = {
   // and polar-angles flags (pull requests 110 and 105); raised from 76,500
   // to 77,400, the measurement and about one per cent, for the owner to
   // decide with the candidate.
-  "./receipt": 77_400,
+  "./receipt": 81_200,
   // Returns, composite and Davison charts, the void-of-course Moon, aspect
   // patterns, dignities and Moon-sign candidates, moved from Zodiacs.org:
   // 141,745 as first built, with the core's graph and the local-time chunk
@@ -360,7 +395,7 @@ const ENTRY_BUDGETS = {
   // positions() rows' flags (111) and the polar-angles flag (105); raised
   // from 203,800 to 207,300, the measurement and about one per cent, for the
   // owner to decide with the candidate.
-  "./techniques": 207_300,
+  "./techniques": 207_600,
   // New in 1.1.0-rc.2: the time basis and the frame of date with no
   // ephemeris (Zodiacs.org's finding F-53), and the time bands it re-exports.
   // 1.1.0-rc.2: 42,306 bytes in 7 files, dist/time.js and the six chunks it
@@ -370,7 +405,7 @@ const ENTRY_BUDGETS = {
   // 1.1.0-rc.3: 42,472, the nutation chunk now also exporting its terms,
   // arguments and offsets to ./de440; raised to 42,600 with the owner's
   // approval of 2026-11-10; 0.30 per cent of headroom.
-  "./time": 42_600,
+  "./time": 44_500,
   // Rise, set, transit and planetary hours, 83,254 bytes as first built, of
   // which 15,902 are beyond the core's graph; it reaches the ephemeris chunk
   // for the engine's clock (onChartClock), and so the core modules that chunk
@@ -378,11 +413,11 @@ const ENTRY_BUDGETS = {
   // nutation in the ephemeris chunk and the frames of date the entry now
   // takes from it (src/equator.ts, shared with ./calc) in place of
   // astronomy-engine's; 5.31 per cent of headroom.
-  "./sky": 138_600,
+  "./sky": 139_900,
   // rc.15: 112,485, the core's graph included; as carried, 114,916. With
   // planetary returns 117,219. rc.16: 123,039, raised from 120,000 for the
   // nutation in the ephemeris chunk; 4.84 per cent of headroom.
-  "./timing": 171_200,
+  "./timing": 173_500,
   // rc.15: 114,106, the core's graph included; as carried, 116,779. rc.16:
   // 122,131, raised from 120,000 for the nutation in the ephemeris chunk
   // (the ayanamsas now use its frame); 4.80 per cent of headroom. rc.17:
@@ -397,7 +432,7 @@ const ENTRY_BUDGETS = {
   // growth (above) and the refusals in the ayanamsas and the varga timing;
   // raised to 144,500 under the owner's delegation of 2026-11-04; 0.59 per
   // cent of headroom.
-  "./vedic": 187_100,
+  "./vedic": 189_300,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
   // 33,971 of them beyond the core's graph; 8.17 per cent of headroom. With
@@ -406,7 +441,7 @@ const ENTRY_BUDGETS = {
   // withEphemeris and the source's path in the ephemeris chunk and
   // birthWindow's refusal inside it; raised to 107,000 with the owner's
   // approval of 2026-11-10; 0.20 per cent of headroom.
-  "./window": 151_500
+  "./window": 152_800
 };
 
 /** The dist/ files an entry loads statically, with their bytes. */
@@ -627,7 +662,17 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // 105, 109, 110 and 111. Raised from 1,265,000 to 1,289,000, the
 // measurement and about one per cent, for the owner to decide with the
 // candidate.
-const TOTAL_CAP = 1_289_000;
+//
+// 2.0.0-rc.3: 4,757,064 bytes in 100 files, of which 1,437,512 are not the
+// pack, 153,275 more than 2.0.0-rc.2's 1,284,237: dist/core.js and
+// dist/core.d.ts, the second copy of the root's code that pull request 121
+// adds as @zodiacs/engine/core, the code and declarations of pull requests
+// 114, 115, 117, 118 and 119 (117's probe table among them), this
+// candidate's CHANGELOG entry and the README's, NOTICE's and LICENSING.md's
+// lines. Raised from 1,289,000 to 1,438,000, the measurement rounded up to
+// the next 1,000 bytes; the owner approved raising the cap for the core
+// entry on 17 November 2026.
+const TOTAL_CAP = 1_438_000;
 const restBytes = report.unpackedSize - PACK_DATA_BYTES;
 assert(restBytes <= TOTAL_CAP, `package is unexpectedly large: ${restBytes} bytes unpacked beside the DE440 pack, over ${TOTAL_CAP}`);
 

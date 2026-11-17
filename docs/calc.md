@@ -454,7 +454,7 @@ TT carries the ΔT, so every result moves with it. On TT input (s = 0,
 u = σ) UT1 carries it, so only what turns with UT1 moves: a topocentric
 position, the houses and the angles; a geocentric, heliocentric or
 barycentric position on TT input keeps its bounds, with no flag. On UTC
-input, from the release after 2.0.0-rc.2, TT is UTC + 69.184 s (the
+input, from 2.0.0-rc.3, TT is UTC + 69.184 s (the
 continuous-UTC rule, time.md) and UT1 carries the ΔT, as on TT input
 (s = 0, u = σ): every result is still flagged, as before, but only what
 turns with UT1 widens. Up to 2.0.0-rc.2, UTC input after the table was

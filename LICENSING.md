@@ -328,10 +328,19 @@ which are CC BY 4.0. Downstream users who host or redistribute that data are
 instructed to retain `NOTICE`. The country names in the Gregorian adoption
 table come from tzdata, not from GeoNames (next section but one).
 
-Its zone histories before 1970 (`dist/tzdb-2025c-*.js`) are compiled by
-`scripts/build-tz-shards.mjs` from tzdata 2025c with backzone, which the tz
+Its zone histories before 1970 (`dist/tzdb-2026f-*.js`, from 2.0.0-rc.3;
+`dist/tzdb-2025c-*.js` through 2.0.0-rc.2) are compiled by
+`scripts/build-tz-shards.mjs` from tzdata 2026f with backzone, which the tz
 project places in the public domain; the script checks the archive's SHA-256.
-From 1970 conversion uses the host's `Intl`/ICU data.
+America/Yellowknife's history is compiled from tzdata 2025c's four backzone
+lines that define it, held there by the owner's decision and committed in
+`scripts/tzdb-held/yellowknife-2025c.zi`, whose SHA-256 the script also
+checks; that release is in the public domain too.
+From 1970 conversion uses the host's `Intl`/ICU data, which `./geo` checks
+against a table of the spans in which tzdata 2021a and 2026f give different
+offsets (`src/geo/host-probes-data.ts`), compiled by
+`scripts/build-host-zone-probes.mjs` from those two public-domain releases,
+whose SHA-256 it checks.
 
 ## Leap-second and UT1 data
 
@@ -435,7 +444,7 @@ under `dist/` that `dist/geo.js` and `dist/techniques.js` import. Its dates
 and names come from public-domain sources only:
 
 - the `calendars` file of tzdata 2025c (the archive whose SHA-256 the zone
-  histories pin), which says of itself "This file is in the public domain",
+  histories pinned through 2.0.0-rc.2), which says of itself "This file is in the public domain",
   and whose list quotes H. Grotefend, *Taschenbuch der Zeitrechnung des
   deutschen Mittelalters und der Neuzeit*, edited by O. Grotefend (Hannover:
   Hahnsche Buchhandlung, 1941), pp. 26–28;
