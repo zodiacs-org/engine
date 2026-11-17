@@ -1,0 +1,24 @@
+== origin/main c80fde4 (tzdata 2025c), built
+Europe/Uzhgorod 1885-06-01 12:00 {"longitude":22.3} 1885-06-01T10:30:48.000Z 89.2 ["lmt"] tzdb main null
+Europe/Uzhgorod 1885-06-01 12:00  1885-06-01T09:57:56.000Z 122.06666666666666 [] tzdb main KMT
+Europe/Zaporozhye 1879-12-31 23:50 {"longitude":35.17} 1879-12-31T21:29:19.000Z 140.68333333333334 ["dst-fold","lmt"] tzdb main null
+America/Yellowknife 1900-06-01 12:00 {"longitude":-114.37} 1900-06-01T19:33:52.000Z -453.8666666666667 [] intl host null
+America/Yellowknife 1900-06-01 12:00  1900-06-01T19:33:52.000Z -453.8666666666667 [] intl host null
+America/Yellowknife 1930-06-01 12:00  1930-06-01T19:00:00.000Z -420 [] intl host null
+America/Yellowknife 1947-06-01 12:00  1947-06-01T19:00:00.000Z -420 [] tzdb main+backzone MST
+EST5EDT 1943-06-01 12:00  1943-06-01T16:00:00.000Z -240 [] tzdb main+backzone EWT
+CST6CDT 1945-08-20 12:00  1945-08-20T17:00:00.000Z -300 [] tzdb main+backzone CPT
+Europe/Dublin 1925-09-27 12:00  1925-09-27T11:00:00.000Z 60 [] tzdb main+backzone IST
+America/Sao_Paulo 1965-03-31 12:00  1965-03-31T15:00:00.000Z -180 [] tzdb main+backzone -03
+== this branch (tzdata 2026f), built
+Europe/Uzhgorod 1885-06-01 12:00 {"longitude":22.3} 1885-06-01T09:57:56.000Z 122.06666666666666 [] tzdb main+backzone KMT
+Europe/Uzhgorod 1885-06-01 12:00  1885-06-01T09:57:56.000Z 122.06666666666666 [] tzdb main+backzone KMT
+Europe/Zaporozhye 1879-12-31 23:50 {"longitude":35.17} 1879-12-31T21:29:19.000Z 140.68333333333334 ["lmt"] tzdb main+backzone null
+America/Yellowknife 1900-06-01 12:00 {"longitude":-114.37} 1900-06-01T19:37:29.000Z -457.48333333333335 ["lmt"] tzdb main+backzone null
+America/Yellowknife 1900-06-01 12:00  1900-06-01T19:33:52.000Z -453.8666666666667 ["lmt"] tzdb main+backzone LMT
+America/Yellowknife 1930-06-01 12:00  1930-06-01T19:00:00.000Z -420 [] tzdb main+backzone MST
+America/Yellowknife 1947-06-01 12:00  1947-06-01T18:00:00.000Z -360 [] tzdb main+backzone MDT
+EST5EDT 1943-06-01 12:00  1943-06-01T16:00:00.000Z -240 [] tzdb main+backzone EDT
+CST6CDT 1945-08-20 12:00  1945-08-20T17:00:00.000Z -300 [] tzdb main+backzone CDT
+Europe/Dublin 1925-09-27 12:00  1925-09-27T12:00:00.000Z 0 [] tzdb main+backzone GMT
+America/Sao_Paulo 1965-03-31 12:00  1965-03-31T14:00:00.000Z -120 [] tzdb main+backzone -02

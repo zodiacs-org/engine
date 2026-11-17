@@ -322,36 +322,43 @@ twice (a fold) takes the earlier instant, or the later one with the option
 `fold: "later"`; one it skipped (a gap) moves forward by the jump.
 
 - **Before 1970** the zone's history is the one this package ships: tzdata
-  2025c compiled with its `backzone` file (`TZDB`: version, archive sha256,
+  2026f compiled with its `backzone` file (`TZDB`: version, archive sha256,
   form `"main+backzone"`), in 16 files that only the geo entry loads, lazily,
   one per call of `prepareLocalTime(date, timeZone)`. "With its backzone file"
-  means the main data files without `backward`, and all of `backzone`, as the
-  tzdb Makefile's `PACKRATDATA=backzone` with `PACKRATLIST` empty, not the
+  means the main data files, all of `backzone`, and `backward`'s Zone and Rule
+  lines without its Link lines (since tzdb 2026d `backward` holds the zones
+  EST5EDT, CST6CDT, MST7MDT and PST8PDT), as the tzdb Makefile's
+  `PACKRATDATA=backzone` with `PACKRATLIST` empty, not the
   `PACKRATLIST=zone.tab` form that Debian builds; each name is backzone's zone
   of that name, else the main data's, else a link, backzone's before
-  `backward`'s. Before 1970 that is the Makefile's own build of that form for
-  584 of the 597 names; for the other 13, links that backzone points at a zone
-  it adds (Iceland at Atlantic/Reykjavik, America/Virgin at America/St_Thomas,
-  and 11 more), the Makefile's `ziguard.awk` keeps `backward`'s target, and the
-  package follows backzone (`docs/evidence/rc15-20260929/backzone-divergence.json`).
+  `backward`'s. On tzdata 2025c, the release shipped through 2.0.0-rc.2, that
+  was the Makefile's own build of that form before 1970 for 584 of the 597
+  names; for the other 13, links that backzone points at a zone it adds
+  (Iceland at Atlantic/Reykjavik, America/Virgin at America/St_Thomas, and 11
+  more), the Makefile's `ziguard.awk` keeps `backward`'s target, and the
+  package follows backzone (`docs/evidence/rc15-20260929/backzone-divergence.json`;
+  not measured again on 2026f). What moved from 2025c to 2026f, interval by
+  interval and from zdump, is in `docs/evidence/tzdb-2026f-20261117/`.
   A wall time before 1970-01-02 in a zone whose history is not loaded throws;
   `prepareLocalTime` resolves at once for a date in 1971 or later and for the
   fixed zones (`UTC`, `Etc/GMT+5` and the like), loads the history for any
   earlier date, 1970's included, and a failed load rejects and is tried again
   next time.
 - **From 1970**, and in the fixed zones, the host's `Intl` answers, as it
-  always has. Sixteen names whose backzone history would disagree with the
+  always has. Fourteen names whose backzone history would disagree with the
   default build after 1970 carry the default build's history instead
   (`zone.dataForm` `"main"`), so the hand-over at 1970 cannot jump:
   America/Argentina/ComodRivadavia, America/Ensenada, America/Nipigon,
   America/Rainy_River, America/Rosario, Asia/Chongqing, Asia/Chungking,
   Asia/Harbin, Asia/Kashgar, Atlantic/Jan_Mayen, EET, Europe/Tiraspol,
-  Europe/Uzhgorod, Europe/Zaporozhye, Pacific/Enderbury and WET. Spans the
+  Pacific/Enderbury and WET (tzdata 2026f; on 2025c also Europe/Uzhgorod and
+  Europe/Zaporozhye, whose zones 2026f's backzone no longer has). Spans the
   history marks as having no local time (`-00`, the Antarctic stations before
   they were staffed) are read from `Intl`.
 - `Intl` is also the cross-check: where the shipped history answered,
-  `intlOffsetMinutes` is the host's offset at the same instant. Compared at
-  every instant before 1970-01-01T00:00Z with tzdata 2025c's default build,
+  `intlOffsetMinutes` is the host's offset at the same instant. For the
+  tzdata 2025c history shipped through 2.0.0-rc.2, compared at every instant
+  before 1970-01-01T00:00Z with tzdata 2025c's default build,
   which is what `Intl` carries on a host with tzdb 2025c and what rc.14 read,
   122 of the 597 names the package ships give another offset at some instant
   (all of them after 1850), for example Stockholm 1947-07-01 12:00, +1:00 in
@@ -692,8 +699,8 @@ then reports the pinned basis, not rc.14's model.
 
 ```sh
 # src/tzdb/: the zone histories and LATER_CAUSES (needs zic)
-node scripts/build-tz-shards.mjs            # downloads tzdata2025c.tar.gz into .cache/ once
-TZDATA_TARBALL=/path/tzdata2025c.tar.gz node scripts/build-tz-shards.mjs
+node scripts/build-tz-shards.mjs            # downloads tzdata2026f.tar.gz into .cache/ once
+TZDATA_TARBALL=/path/tzdata2026f.tar.gz node scripts/build-tz-shards.mjs
 node scripts/build-tz-shards.mjs --check
 
 # src/time-scale-data.ts, from the inputs committed in scripts/time-scale-sources/
@@ -703,8 +710,8 @@ IERS_FINALS=/path/finals2000A.all IERS_C04=/path/eopc04.1962-now node scripts/bu
 ```
 
 Both generators refuse inputs whose SHA-256 differs from the pinned one
-(tzdata2025c.tar.gz:
-`4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957`). The
+(tzdata2026f.tar.gz:
+`01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d`). The
 time-scale generator's inputs are committed because IERS replaces
 `finals2000A.all` and `eopc04.1962-now` every day: the leap-second list as
 IERS serves it, the header and the 367 rows of `eopc04.1962-now` it takes, and
@@ -733,7 +740,7 @@ the values change.
 - The shipped history is tzdb's best reconstruction; before about 1970 many
   records are uncertain, and tzdb's own comments say so.
 - From 1970 the offsets are the host's, whatever its tzdb release, but the
-  causes are tzdb 2025c's: a change that only a newer host knows is resolved
+  causes are tzdb 2026f's: a change that only a newer host knows is resolved
   with the host's offsets and reported as `"dst"`.
 - The adoption table gives one date per present-day country, for the region
   its row names; the note gives the other regions the sources date, and some

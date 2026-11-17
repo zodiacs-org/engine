@@ -1,0 +1,640 @@
+{
+  "description": "Every interval before 1970-01-01T00:00Z on which the UTC offset of the history this package ships for a zone name differs between tzdata 2025c and 2026f, from zdump -v -c 1800,1970 on zic-compiled data (oracle.mjs). Offsets in seconds east; intervals are [from, to) in UTC; from null means from the beginning of the zone's history.",
+  "releases": {
+    "from": "2025c",
+    "to": "2026f"
+  },
+  "hostLegal": {
+    "2025c": [
+      "America/Argentina/ComodRivadavia",
+      "America/Ensenada",
+      "America/Nipigon",
+      "America/Rainy_River",
+      "America/Rosario",
+      "Asia/Chongqing",
+      "Asia/Chungking",
+      "Asia/Harbin",
+      "Asia/Kashgar",
+      "Atlantic/Jan_Mayen",
+      "EET",
+      "Europe/Tiraspol",
+      "Europe/Uzhgorod",
+      "Europe/Zaporozhye",
+      "Pacific/Enderbury",
+      "WET"
+    ],
+    "2026f": [
+      "America/Argentina/ComodRivadavia",
+      "America/Ensenada",
+      "America/Nipigon",
+      "America/Rainy_River",
+      "America/Rosario",
+      "Asia/Chongqing",
+      "Asia/Chungking",
+      "Asia/Harbin",
+      "Asia/Kashgar",
+      "Atlantic/Jan_Mayen",
+      "EET",
+      "Europe/Tiraspol",
+      "Pacific/Enderbury",
+      "WET"
+    ]
+  },
+  "changedZones": 24,
+  "intervals": 45,
+  "unexplained": 1,
+  "zones": [
+    {
+      "zone": "America/Araguaina",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Bahia",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Belem",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Boa_Vista",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Campo_Grande",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Cuiaba",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Eirunepe",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T04:00:00.000Z",
+          "to": "1965-04-01T04:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T04:00:00.000Z",
+          "to": "1966-03-01T05:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Fortaleza",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Maceio",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Manaus",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Noronha",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T01:00:00.000Z",
+          "to": "1965-04-01T01:00:00.000Z",
+          "oldOffsetSeconds": -7200,
+          "newOffsetSeconds": -3600,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T01:00:00.000Z",
+          "to": "1966-03-01T02:00:00.000Z",
+          "oldOffsetSeconds": -7200,
+          "newOffsetSeconds": -3600,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Porto_Acre",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T04:00:00.000Z",
+          "to": "1965-04-01T04:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T04:00:00.000Z",
+          "to": "1966-03-01T05:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Porto_Velho",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Recife",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Rio_Branco",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T04:00:00.000Z",
+          "to": "1965-04-01T04:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T04:00:00.000Z",
+          "to": "1966-03-01T05:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Santarem",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Sao_Paulo",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Yellowknife",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "dataNote": "tzdata 2026f backzone comments out its Zone America/Yellowknife with the line \"# Commented out as too wrong to be useful.\"; the name is then backward's Link to America/Edmonton. No NEWS entry from 2026a to 2026f mentions it.",
+      "intervals": [
+        {
+          "from": "1947-04-27T09:00:00.000Z",
+          "to": "1947-09-28T08:00:00.000Z",
+          "oldOffsetSeconds": -25200,
+          "newOffsetSeconds": -21600,
+          "hours": 3695,
+          "release": null,
+          "news": "unexplained"
+        }
+      ]
+    },
+    {
+      "zone": "Brazil/Acre",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T04:00:00.000Z",
+          "to": "1965-04-01T04:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T04:00:00.000Z",
+          "to": "1966-03-01T05:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "Brazil/DeNoronha",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T01:00:00.000Z",
+          "to": "1965-04-01T01:00:00.000Z",
+          "oldOffsetSeconds": -7200,
+          "newOffsetSeconds": -3600,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T01:00:00.000Z",
+          "to": "1966-03-01T02:00:00.000Z",
+          "oldOffsetSeconds": -7200,
+          "newOffsetSeconds": -3600,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "Brazil/East",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "Brazil/West",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "Eire",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1925-09-20T02:00:00.000Z",
+          "to": "1925-10-04T02:00:00.000Z",
+          "oldOffsetSeconds": 3600,
+          "newOffsetSeconds": 0,
+          "hours": 336,
+          "release": "2026e",
+          "news": "In 1925 Ireland fell back on 09-20 not 10-04 (thanks to Stan Ulbrych)."
+        }
+      ]
+    },
+    {
+      "zone": "Europe/Dublin",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1925-09-20T02:00:00.000Z",
+          "to": "1925-10-04T02:00:00.000Z",
+          "oldOffsetSeconds": 3600,
+          "newOffsetSeconds": 0,
+          "hours": 336,
+          "release": "2026e",
+          "news": "In 1925 Ireland fell back on 09-20 not 10-04 (thanks to Stan Ulbrych)."
+        }
+      ]
+    }
+  ],
+  "defaultBuildOnly": [
+    {
+      "zone": "CST6CDT",
+      "intervals": 44
+    },
+    {
+      "zone": "EST5EDT",
+      "intervals": 44
+    },
+    {
+      "zone": "MST7MDT",
+      "intervals": 5
+    },
+    {
+      "zone": "PST8PDT",
+      "intervals": 19
+    }
+  ]
+}

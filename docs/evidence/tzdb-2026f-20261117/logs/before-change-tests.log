@@ -1,0 +1,38 @@
+   × the pinned build compiles backward's zones without its links > drops every Link line and keeps the Rule and Zone lines as written 9ms
+   × the pinned build compiles backward's zones without its links > compiles the main data without backward, backzone, and backward's zones 1ms
+   × the pinned release > is tzdata 2026f 11ms
+   × the pinned release > refuses an archive whose digest is not the pinned one 17ms
+   × the tzdata 2026f history before 1970 > is tzdata 2026f, pinned by its archive digest 16ms
+   × the tzdata 2026f history before 1970 > Europe/Dublin fell back on 1925-09-20 at 02:00 UTC 13ms
+   × the tzdata 2026f history before 1970 > Eire fell back on 1925-09-20 at 02:00 UTC 1ms
+   × the tzdata 2026f history before 1970 > repeats Dublin's 02:00 to 03:00 on 1925-09-20, and no longer on 1925-10-04 7ms
+   × the tzdata 2026f history before 1970 > ends Brazil's daylight saving on 1965-03-31 at 24:00 1ms
+   × the tzdata 2026f history before 1970 > ends it on 1966-03-01 at 01:00, so 00:00 to 01:00 is repeated 1ms
+   × the tzdata 2026f history before 1970 > reads EST5EDT on US federal rules with POSIX abbreviations 6ms
+   × the tzdata 2026f history before 1970 > reads America/Yellowknife as tzdata 2026f's link to America/Edmonton 1ms
+⎯⎯⎯⎯⎯⎯ Failed Tests 12 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  scripts/build-tz-shards.test.mjs > the pinned build compiles backward's zones without its links > drops every Link line and keeps the Rule and Zone lines as written
+TypeError: withoutLinks is not a function
+ FAIL  scripts/build-tz-shards.test.mjs > the pinned build compiles backward's zones without its links > compiles the main data without backward, backzone, and backward's zones
+TypeError: pinnedSources is not a function
+ FAIL  scripts/build-tz-shards.test.mjs > the pinned release > is tzdata 2026f
+AssertionError: expected '2025c' to be '2026f' // Object.is equality
+ FAIL  scripts/build-tz-shards.test.mjs > the pinned release > refuses an archive whose digest is not the pinned one
+AssertionError: expected [Function] to throw error matching /has sha256 [0-9a-f]{64}, expected 01b…/ but got 'tz-shards: TMP…'
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > is tzdata 2026f, pinned by its archive digest
+AssertionError: expected { version: '2025c', …(2) } to deeply equal { version: '2026f', …(2) }
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > Europe/Dublin fell back on 1925-09-20 at 02:00 UTC
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > Eire fell back on 1925-09-20 at 02:00 UTC
+AssertionError: expected '1925-09-27T11:00:00.000Z' to be '1925-09-27T12:00:00.000Z' // Object.is equality
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > repeats Dublin's 02:00 to 03:00 on 1925-09-20, and no longer on 1925-10-04
+AssertionError: expected [] to include 'dst-fold'
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > ends Brazil's daylight saving on 1965-03-31 at 24:00
+AssertionError: expected -180 to be -120 // Object.is equality
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > ends it on 1966-03-01 at 01:00, so 00:00 to 01:00 is repeated
+AssertionError: expected -180 to be -120 // Object.is equality
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > reads EST5EDT on US federal rules with POSIX abbreviations
+AssertionError: expected { source: 'tzdb', …(4) } to match object { source: 'tzdb', …(2) }
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > reads America/Yellowknife as tzdata 2026f's link to America/Edmonton
+AssertionError: expected -420 to be -360 // Object.is equality
+ Test Files  2 failed (2)
+      Tests  12 failed | 6 passed (18)
