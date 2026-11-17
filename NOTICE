@@ -10,7 +10,8 @@ retains the full MIT permission and warranty notice. Source and license metadata
 https://github.com/cosinekitty/astronomy
 
 The package's frame module (src/frame.ts, built into a shared chunk under
-dist/ that the ephemeris chunk and dist/time.js import) reproduces
+dist/ that the ephemeris chunk and dist/time.js import, and copied into
+dist/core.js, the file of @zodiacs/engine/core) reproduces
 astronomy-engine's precession function, precession_rot, and the calc entry's
 reduction module (src/calc-reduce.ts, built into dist/calc.js) its function
 for an observer on the Earth's ellipsoid, terra:
@@ -23,9 +24,10 @@ IAU 2000B nutation
 ------------------
 
 The package's nutation module (src/nutation.ts, built into a shared chunk
-under dist/ that the ephemeris chunk, dist/time.js and dist/de440.js import)
-carries the 77 luni-solar terms, fundamental arguments and fixed planetary
-offsets of the IAU 2000B nutation model,
+under dist/ that the ephemeris chunk, dist/time.js and dist/de440.js import,
+and copied into dist/core.js, the file of @zodiacs/engine/core) carries the
+77 luni-solar terms, fundamental arguments and fixed planetary offsets of the
+IAU 2000B nutation model,
 
   D. D. McCarthy and B. J. Luzum 2003, An abridged model of the
   precession-nutation of the celestial pole. Celestial Mechanics and Dynamical
@@ -175,7 +177,8 @@ exports as @zodiacs/engine/deltat, contains 32 values of Table S15, rounded
 to 0.01 s, and constants of equations (4.1) and (5.1) from the work below.
 The build places that module in a shared chunk under dist/, which
 dist/deltat.js re-exports, so the values are in that chunk rather than in
-dist/deltat.js itself.
+dist/deltat.js itself. dist/core.js, the file of @zodiacs/engine/core,
+carries its own copy of the module, and so of the values.
 
   Stephenson, F. R., Morrison, L. V. & Hohenkerk, C. Y. 2016, Measurement of
   the Earth's rotation: 720 BC to AD 2015. Proc. R. Soc. A 472: 20160404.

@@ -651,11 +651,23 @@ for (const phrase of ["Table S15", "Creative Commons Attribution 4.0 Internation
 // every other module of the root's graph, among them the ΔT model, the
 // nutation and the frame of date. The checks below of where those three are
 // look for the one shared chunk among the other files, and then for the
-// copy in dist/core.js. NOTICE and LICENSING.md do not name dist/core.js yet:
-// they are packed files, and change with the candidate that carries it.
+// copy in dist/core.js, which NOTICE and LICENSING.md name for each of the
+// three.
 const CORE_FILE = "dist/core.js";
 const beside = files.filter((file) => file !== CORE_FILE);
 const coreText = read(CORE_FILE);
+assert(notice.includes("dist/core.js, the file of @zodiacs/engine/core, carries its own copy of the module, and so of the values"),
+  "NOTICE must say that dist/core.js carries a copy of the ΔT values");
+assert(prose("LICENSING.md").includes("`dist/deltat.js` re-exports, and a copy of it in `dist/core.js`"),
+  "LICENSING.md must say that dist/core.js carries a copy of the ΔT values");
+assert(notice.includes("dist/time.js import, and copied into dist/core.js, the file of @zodiacs/engine/core) reproduces"),
+  "NOTICE must say that dist/core.js carries a copy of the frame");
+assert(prose("LICENSING.md").includes("`dist/core.js`, the file of `@zodiacs/engine/core`, carries its own copy of `src/frame.ts`"),
+  "LICENSING.md must say that dist/core.js carries a copy of the frame");
+assert(notice.includes("dist/de440.js import, and copied into dist/core.js, the file of @zodiacs/engine/core) carries"),
+  "NOTICE must say that dist/core.js carries a copy of the nutation");
+assert(prose("LICENSING.md").includes("`./de440`. `dist/core.js`, the file of `@zodiacs/engine/core`, carries its own copy of them"),
+  "LICENSING.md must say that dist/core.js carries a copy of the nutation");
 // NOTICE, LICENSING.md and the README say where the values are: in one shared
 // chunk that dist/deltat.js re-exports, not in dist/deltat.js itself. Check the
 // build still puts them there, without naming the chunk's hashed file name.

@@ -233,11 +233,14 @@ and every number are in `docs/evidence/bundle-weight-20261117/`
 - **`@zodiacs/engine/core`** exports the root's names and computes on
   astronomy-engine, without the pack. The same page is then 75,937 to 79,084
   bytes (about 76 to 79 KB), 28,537 to 30,163 bytes with brotli (about
-  29 KB). Its positions are less exact: on the conformance suite's 240
+  29 to 30 KB). Its positions are less exact: on the conformance suite's 240
   position tests (within 1″ of JPL's DE441), 48 pass, against 240 for the
-  root on the pack (`conformance/RESULTS.md`). Every chart from it names
-  astronomy-engine as its ephemeris, as the root's does after
-  `setDefaultEphemeris("astronomy-engine")`, and equals that chart. The entry
+  root on the pack. Both figures are the root's in `conformance/RESULTS.md`:
+  the 48 from its run after `setDefaultEphemeris("astronomy-engine")`, which
+  the package's smoke test checks the core entry matches, test for test.
+  Every chart from it names astronomy-engine as its ephemeris, as the root's
+  does after `setDefaultEphemeris("astronomy-engine")`, and equals that
+  chart. The entry
   is a copy of the root's code with its own settings: `setDefaultEphemeris`
   in one entry does not change the other, an aspect policy made by one
   entry's `createAspectPolicy` is refused by the other's, and a page that
@@ -1234,8 +1237,8 @@ full provenance audit and the explicit Swiss Ephemeris exclusion.
 The package's licence expression is `MIT AND CC-BY-4.0`: the code is MIT
 ([LICENSE](LICENSE)), and the 32 values of Stephenson, Morrison & Hohenkerk's
 Table S15 in the package's ΔT module (`@zodiacs/engine/deltat`, which the build
-places in a shared chunk under `dist/` that `dist/deltat.js` re-exports) are
-CC BY 4.0, attributed in [NOTICE](NOTICE).
+places in a shared chunk under `dist/` that `dist/deltat.js` re-exports, and
+copies into `dist/core.js`) are CC BY 4.0, attributed in [NOTICE](NOTICE).
 
 The npm package contains no place database. It carries the DE440 pack
 (2,489,664 bytes), tzdb 2025c's zone
