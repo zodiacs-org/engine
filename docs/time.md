@@ -441,7 +441,7 @@ is refused rather than ignored).
   written out from the tz database's rules).
 
 `julianToGregorian` and `gregorianToJulian` convert YYYY-MM-DD strings for
-years 0000–9999 (for other years, go through `julianDayNumber` and
+years 0000 to 9999 (for other years, go through `julianDayNumber` and
 `dateOfJulianDayNumber`, below); `gregorianAdoption(country)` returns a row of the table;
 `calendarNote(gregorianDate, calendar, country)` gives the note for a
 resolved date. From 1.0 `calendarNote` throws a `RangeError` for a date that
