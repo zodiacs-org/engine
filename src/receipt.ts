@@ -438,9 +438,18 @@ const FLAGS_RC7 = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"] as
 const FLAGS = [...FLAGS_RC7, "outside-reference-span"] as const;
 /**
  * The time-basis sets also take "delta-t-extrapolated", whose condition the record's ΔT and time scale show,
- * "calendar-unknown" (below), and "polar-angles", the angles inside the polar circle (from 2.0.0).
+ * "calendar-unknown" (below), "polar-angles", the angles inside the polar circle (from 2.0.0), and
+ * "host-zone-data-differs" (below).
  */
-const FLAGS_TIME_BASIS = [...FLAGS, "delta-t-extrapolated", "de440-unavailable", "outside-de440-span", "calendar-unknown", "polar-angles"] as const;
+const FLAGS_TIME_BASIS = [
+  ...FLAGS,
+  "delta-t-extrapolated",
+  "de440-unavailable",
+  "outside-de440-span",
+  "calendar-unknown",
+  "polar-angles",
+  "host-zone-data-differs"
+] as const;
 /** From 1.1.0-rc.10: the chart was to come from the shipped DE440 pack and came from astronomy-engine (src/types.ts, EphemerisFallback). */
 const FALLBACK_FLAGS = ["de440-unavailable", "outside-de440-span"] as const;
 const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
@@ -451,7 +460,14 @@ const TIME_FLAGS = ["dst-gap", "dst-fold", "lmt"] as const;
  * either calendar: before 1582-10-05 (Italy's first skipped day, read as Gregorian) or after 1918-02-26 (Russia's
  * last, 1918-02-13, read as Julian). src/geo/calendar-unknown.test.ts writes and reads a record at each end.
  */
-const TIME_FLAGS_TIME_BASIS = [...TIME_FLAGS, "calendar-unknown"] as const;
+/**
+ * And "host-zone-data-differs" (after 2.0.0-rc.2): a local time from 1970 on that the host's Intl read, where the
+ * host's offset near it differed from the pinned tzdb release's (src/geo/timezone.ts). The host answers only from
+ * 1970, so the claim is refused on an instant before 1970-01-01T00:00Z, and on a local record whose `dataForm`
+ * names the shipped history. Engines up to 2.0.0-rc.2 do not know the flag and refuse such a record.
+ */
+const TIME_FLAGS_TIME_BASIS = [...TIME_FLAGS, "calendar-unknown", "host-zone-data-differs"] as const;
+const HOST_ANSWERS_FROM = "1970-01-01T00:00:00.000Z";
 const CALENDAR_UNKNOWN_DATES = { from: "1582-10-05", to: "1918-02-26" } as const;
 /**
  * The same days as UTC instants, a day wider at each end, since a local date lies within a day of its UTC one:
@@ -1088,6 +1104,7 @@ function validateLocalRecord(
     (form !== undefined && form !== "host" && version === null) ||
     flags.includes("lmt") !== lmt ||
     (flags.includes("calendar-unknown") && !(date >= CALENDAR_UNKNOWN_DATES.from && date <= CALENDAR_UNKNOWN_DATES.to)) ||
+    (flags.includes("host-zone-data-differs") && form !== undefined && form !== "host") ||
     (local.transition === null && (gap || fold))
   )
     fail("invalid_context");
@@ -1308,6 +1325,7 @@ function validateEnvelope(input: unknown): NatalEnvelope {
   const instant = receipt.instant as string;
   if (inputFlags.includes("calendar-unknown") && !(instant >= CALENDAR_UNKNOWN_INSTANTS.from && instant < CALENDAR_UNKNOWN_INSTANTS.to))
     fail("inconsistent_result");
+  if (inputFlags.includes("host-zone-data-differs") && Date.parse(instant) < Date.parse(HOST_ANSWERS_FROM)) fail("inconsistent_result");
   const resultFlags = flagList(receipt.resultFlags, timeBasis ? FLAGS_TIME_BASIS : current ? FLAGS : FLAGS_RC7);
   const expected = [...inputFlags];
   if (!timeKnown) expected.push("no-time");

@@ -5231,7 +5231,8 @@
                 "dst-gap",
                 "dst-fold",
                 "lmt",
-                "calendar-unknown"
+                "calendar-unknown",
+                "host-zone-data-differs"
               ]
             }
           },
@@ -5457,6 +5458,7 @@
           "dst-fold",
           "lmt",
           "calendar-unknown",
+          "host-zone-data-differs",
           "no-time",
           "polar-fallback",
           "polar-angles",
@@ -6596,6 +6598,7 @@
                 "dst-fold",
                 "lmt",
                 "calendar-unknown",
+                "host-zone-data-differs",
                 "outside-reference-span"
               ]
             },
