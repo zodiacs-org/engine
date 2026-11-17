@@ -165,6 +165,10 @@ it. Applied on a scratch checkout of `04afaf4` (not pushed):
   root's code. Those are the work, and the owner's budget decision, that
   shipping option A would need.
 - The prototype archive is 2,767,260 bytes, 32,272 more than 2.0.0-rc.2's.
+- A naming point for whoever ships it: `scripts/verify-package-contents.mjs`
+  already says "the core's" for the root's import graph in what it prints,
+  so an entry called `./core` would want that wording changed, or another
+  name.
 
 ## Tables
 
