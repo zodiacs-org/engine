@@ -1,0 +1,93 @@
+{
+  "engine": "@zodiacs/engine@1.1.0",
+  "groups": {
+    "utc-1972-to-table-end": {
+      "cases": 2000,
+      "sha256": "c7d9177a727301f11009c52985c2846202a016134a2121ece38dac9aa5fc8989",
+      "first": {
+        "utcMs": 1604301446320,
+        "ut1Days": 7610.803774817502,
+        "ttDays": 7610.804577592593,
+        "deltaT": {
+          "seconds": 69.35976782226562,
+          "sigma": 0.000809,
+          "model": "iers-utc/1",
+          "table": "2026-09-24",
+          "tableDigest": "064d98b4a531053a",
+          "segment": "observed"
+        },
+        "timeScale": {
+          "input": "utc",
+          "basis": "iers",
+          "ut1MinusUtc": {
+            "seconds": -0.17576792561728638,
+            "sigma": 0.000809,
+            "source": "observed"
+          },
+          "leapSeconds": {
+            "taiMinusUtc": 37,
+            "listed": true
+          }
+        }
+      }
+    },
+    "edges-at-or-before-table-end": {
+      "cases": 8,
+      "sha256": "3254fe112c6eea3a5d60e9254760e203174f2978db624316cb4e51be7a60b30b",
+      "first": {
+        "utcMs": 63071999000,
+        "ut1Days": -10227.500011574075,
+        "ttDays": -10227.499522817721,
+        "deltaT": {
+          "seconds": 42.2285489054934,
+          "sigma": 0.03,
+          "model": "zodiacs-deltat/1",
+          "table": "2026-09-24",
+          "tableDigest": "6371988c510a1c6c",
+          "segment": "observed"
+        },
+        "timeScale": {
+          "input": "utc",
+          "basis": "delta-t",
+          "ut1MinusUtc": null,
+          "leapSeconds": null
+        }
+      }
+    },
+    "tt-and-ut1-after-table-end": {
+      "cases": 403,
+      "sha256": "8d9a528db9658ac4dfcb3815a2ef57ea368a7c653d4546542f44364ca8a7e7c0",
+      "first": [
+        51876.0487103754,
+        51876.04978131944
+      ]
+    },
+    "pinned": {
+      "cases": 9,
+      "sha256": "5b4727bc1fcb24cb8c3456408b0d6a833e6e59a99709a9f4735b1d0a8c1fb2bb",
+      "first": {
+        "utcMs": 645451200000,
+        "ut1Days": -3487.000000150463,
+        "ttDays": -3486.9991899652778,
+        "deltaT": {
+          "seconds": 70,
+          "sigma": null,
+          "model": "pinned",
+          "table": null,
+          "tableDigest": null,
+          "segment": "pinned"
+        },
+        "timeScale": {
+          "input": "utc",
+          "basis": "pinned",
+          "ut1MinusUtc": {
+            "seconds": -0.013000000000001677,
+            "sigma": 0.000846,
+            "source": "observed"
+          },
+          "leapSeconds": null
+        }
+      }
+    }
+  }
+}

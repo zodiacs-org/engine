@@ -600,21 +600,24 @@ describe("bands from the time basis", () => {
   it("take a cusp's rate on TT from the side that keeps Placidus or Koch, where TT moved the other way makes it fall back", () => {
     // Review 2 of 1.1.0-rc.2: 1e-9° inside the polar limit 90° − ε, ε the instant's true obliquity, TT moved by
     // 600 s one way moves ε past the latitude, and Placidus and Koch fall back to whole signs there though not at
-    // the instant; the central difference across that side gave cusp bands of thousands of arcseconds. On UTC
-    // input after the IERS table, so the TT band is tens of seconds. The rates by another road, from pins: ΔT at
-    // d0 and d0 ± 600 s on the instant's UT1 (TT moves, UT1 holds), and at d0 ± 1 s on its TT (UT1 moves, TT holds).
+    // the instant; the central difference across that side gave cusp bands of thousands of arcseconds. On UT1
+    // input after the IERS table, so the TT band is tens of seconds (the review's UTC instants, which 1.1.0 read as
+    // UT1; on UTC input the continuous-UTC rule now fixes TT). The rates by another road, from pins: ΔT at d0 and
+    // d0 ± 600 s on the instant's UT1 (TT moves, UT1 holds), and at d0 ± 1 s on its TT (UT1 moves, TT holds).
     const longitude = 33.3;
     let compared = 0;
+    const onUt1Scale = (iso: string) => ({ jd: 2_451_545 + (Date.parse(iso) - Date.UTC(2000, 0, 1, 12)) / 86_400_000, scale: "ut1" as const });
     // On the first instant TT 600 s earlier makes the systems fall back, on the second TT 600 s later.
-    for (const [time, fallsBack] of [["2121-08-30T03:33:00Z", [false, true]], ["2121-09-06T03:33:00Z", [true, false]]] as const) {
+    for (const [iso, fallsBack] of [["2121-08-30T03:33:00Z", [false, true]], ["2121-09-06T03:33:00Z", [true, false]]] as const) {
+      const time = onUt1Scale(iso);
       const epsilon = housesOk(houses({ time, place: { latitude: 10, longitude }, houseSystem: "placidus" })).obliquity;
       const place = { latitude: 90 - epsilon - 1e-9, longitude };
       for (const houseSystem of ["placidus", "koch"] as const) {
-        const label = `${time} ${houseSystem}`;
+        const label = `${iso} ${houseSystem}`;
         const result = housesOk(houses({ time, place, houseSystem }));
         expect(result.system, label).toBe(houseSystem);
         const { tt, ut1 } = result.band.time;
-        expect([tt > 10, ut1], label).toEqual([true, 0.9]);
+        expect([tt > 10, ut1], label).toEqual([true, 0]);
         const instant = result.receipt.instants[0]!;
         const d0 = instant.deltaT.seconds;
         const onUt1 = (pin: number) => housesOk(houses({ time: { jd: instant.jdUt1, scale: "ut1", deltaT: pin }, place, houseSystem }));
@@ -647,9 +650,10 @@ describe("bands from the time basis", () => {
         expect(housesOk(houses({ time, place, houseSystem, zodiac: { sidereal } })).band, `${houseSystem} ${sidereal}`).toEqual(tropical.band);
       }
     }
-    // After the table both carry a band, and the ayanamsa's rate on TT moves every sidereal angle and cusp.
+    // After the table, on UT1 input, both carry a TT band, and the ayanamsa's rate on TT moves every sidereal angle
+    // and cusp. (On UTC input there the continuous-UTC rule fixes TT, as on the IERS basis.)
     for (const houseSystem of ["whole", "placidus", "koch"] as const) {
-      const time = "2050-06-01T12:00:00Z";
+      const time = { jd: 2_469_959.0, scale: "ut1" as const };
       const tropical = housesOk(houses({ time, place, houseSystem }));
       const sidereal = housesOk(houses({ time, place, houseSystem, zodiac: { sidereal: "lahiri" } }));
       expect(sidereal.band.time).toEqual(tropical.band.time);
@@ -709,8 +713,9 @@ describe("bands from the time basis", () => {
         const d = basis.deltaT.sigma!;
         expect(d, event.at).toBeGreaterThan(0);
         expect(event.band.ut1, event.at).toBe(d);
-        if (year === 2020) expect(zero(event.band.utc), event.at).toBe(true);
-        else expect(event.band.utc, event.at).toBe(year === 1900 ? d : Math.hypot(0.9, d));
+        // TT − UTC is exact on the IERS basis and, after the table, on the continuous-UTC rule.
+        if (year !== 1900) expect(zero(event.band.utc), event.at).toBe(true);
+        else expect(event.band.utc, event.at).toBe(d);
       }
     }
     // UTC on the IERS basis: TT is exact, so the bodies have no band, and the angles have UT1's.
@@ -800,7 +805,7 @@ describe("typed refusals", () => {
     const outside = [
       "1799-12-31T23:59:59.999Z",
       CALC_SPAN.to,
-      "2199-12-31T23:59:59Z", // TT 126 s later, in 2200
+      "2199-12-31T23:59:59Z", // TT 69.184 s later, in 2200 (126 s up to 2.0.0-rc.2)
       { jd: 2378496.4, scale: "utc" },
       { jd: first, scale: "tt" }, // UT1 18.7 s earlier, in 1799
       { jd: last, scale: "tt" },

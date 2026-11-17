@@ -32,10 +32,21 @@ const angle = (a: [number, number, number], b: [number, number, number]): number
 };
 
 describe("a ΔT extrapolated, on the shipped DE440 pack", () => {
-  it("flags calc() on UTC and UT1 input and widens the pack's bound by the rate times the TT band", async () => {
+  it("flags calc() on UTC and UT1 input, and widens the pack's bound by the rate times the TT band on UT1 input", async () => {
     const { calc, bounds } = await onPack();
     for (const body of ["Moon", "Sun", "Mars"] as const) {
-      const result = calc.calc({ body, time: FAR });
+      // On UTC input after the IERS table TT is UTC + 69.184 s exactly (the continuous-UTC rule): the TT band is
+      // 0, and the pack's measured bound stands.
+      const onUtc = calc.calc({ body, time: FAR });
+      if (onUtc.status !== "ok") throw new Error(onUtc.reason);
+      expect(onUtc.receipt.engine.ephemeris.name).toBe("jpl-de440");
+      expect(onUtc.flags).toEqual([FLAG]);
+      expect(onUtc.band!.time.tt).toBe(0);
+      expect(onUtc.bounds.position.value).toBe(bounds.DE440_MEASURED[body]);
+      expect(onUtc.bounds.position.label).toBe("measured");
+      // On UT1 input, the same UT1, TT carries ΔT's band.
+      const jd = onUtc.receipt.instants[0]!.jdUt1;
+      const result = calc.calc({ body, time: { jd, scale: "ut1" } });
       if (result.status !== "ok") throw new Error(result.reason);
       expect(result.receipt.engine.ephemeris.name).toBe("jpl-de440");
       expect(result.flags).toEqual([FLAG]);
@@ -51,16 +62,12 @@ describe("a ΔT extrapolated, on the shipped DE440 pack", () => {
       // The pack's own place with ΔT moved by its sigma either way stays inside the widened bound.
       const sigma = used!.deltaT.sigma!;
       for (const shift of [-sigma, sigma]) {
-        const moved = calc.calc({ body, time: { iso: FAR, deltaT: used!.deltaT.seconds + shift } });
+        const moved = calc.calc({ body, time: { jd, scale: "ut1", deltaT: used!.deltaT.seconds + shift } });
         if (moved.status !== "ok") throw new Error(moved.reason);
         expect(moved.receipt.engine.ephemeris.name).toBe("jpl-de440");
         expect(angle(unit(moved.lon, moved.lat), unit(result.lon, result.lat))).toBeLessThanOrEqual(result.bounds.position.value!);
       }
     }
-    const ut1 = calc.calc({ body: "Moon", time: { jd: 2_524_183.0, scale: "ut1" } });
-    if (ut1.status !== "ok") throw new Error(ut1.reason);
-    expect(ut1.flags).toEqual([FLAG]);
-    expect(ut1.receipt.engine.ephemeris.name).toBe("jpl-de440");
   });
 
   it("leaves a present-day instant, TT input and a pinned ΔT alone, on the pack's measured bound", async () => {

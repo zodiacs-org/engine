@@ -111,8 +111,10 @@ unknown body, frame or field, an invalid date, a latitude out of range) throws
   time basis, as `positions()` and `natalChart()` read one
   ([time.md](time.md)): from 1972-01-01 to the end of the IERS UT1 table
   (2027-10-02), TT = UTC + (TAI − UTC) + 32.184 s from the IERS leap-second
-  list, and UT1 = UTC + (UT1 − UTC) from IERS; before and after, civil time
-  is read as UT1 and TT comes from the ΔT model (`zodiacs-deltat/1`). Or
+  list, and UT1 = UTC + (UT1 − UTC) from IERS; before 1972 civil time is
+  read as UT1 and TT comes from the ΔT model (`zodiacs-deltat/1`); after the
+  table (the continuous-UTC rule), TT = UTC + 69.184 s and UT1 = TT − ΔT from
+  the model. Or
   `{ jd, scale: "utc" | "ut1" | "tt" }`, a Julian date on a named time scale
   (the root entry's `TimeScaleName`; before 1.0.0 the names were in capitals),
   read on the same basis, or `{ iso }`. Any of the object forms takes
@@ -440,18 +442,23 @@ value, and refuses one above in some values and below in others
 The engine's TT and UT1 rest on a ΔT its model extrapolates, with no
 observation behind it, after the last day of the IERS UT1 table the release
 carries (time.md, *From an instant to UT1 and TT*; for this release, after
-2027-10-02T00:00Z), when ΔT is not pinned. Its 1-σ band `deltaT.sigma` grows
+2027-10-02T00:00Z, and on UTC input from 00:00:00.147Z, when UT1 passes it),
+when ΔT is not pinned. Its 1-σ band `deltaT.sigma` grows
 with the years ([time.md](time.md)), and no arbiter gives positions for such
 an instant. A result that moves with that ΔT is flagged
 `"delta-t-extrapolated"` and its bounds widen by how far each quantity moves,
 to first order, while TT and UT1 move by their bands, s and u seconds
 (`band.time`); its receipt names `bounds:plus-delta-t-band`, and a widened
-bound is labelled `estimated`, its `basis` adding the amount. On UTC or UT1
-input TT carries the ΔT, so every result moves with it. On TT input
-(s = 0, u = σ) UT1 carries it, so only what turns with UT1 moves: a
-topocentric position, the houses and the angles; a geocentric,
-heliocentric or barycentric position on TT input keeps its bounds, with no
-flag.
+bound is labelled `estimated`, its `basis` adding the amount. On UT1 input
+TT carries the ΔT, so every result moves with it. On TT input (s = 0,
+u = σ) UT1 carries it, so only what turns with UT1 moves: a topocentric
+position, the houses and the angles; a geocentric, heliocentric or
+barycentric position on TT input keeps its bounds, with no flag. On UTC
+input, from the release after 2.0.0-rc.2, TT is UTC + 69.184 s (the
+continuous-UTC rule, time.md) and UT1 carries the ΔT, as on TT input
+(s = 0, u = σ): every result is still flagged, as before, but only what
+turns with UT1 widens. Up to 2.0.0-rc.2, UTC input after the table was
+read as UT1 and TT carried the ΔT, so every result widened.
 
 - **`calc()`**: `flags` holds the flag (empty otherwise), and each bound
   grows by: the position's, (Ω + w) s + w u, with Ω the direction's angular
@@ -461,10 +468,13 @@ flag.
   and r′ come from samples 0.001 day (0.25 day for the true node) either
   side, as the speeds do, whether or not speeds were asked for; w and v
   bound a topocentric observer's turn, as in *Bands*, and are 0 for other
-  centers. On UTC input s is √(u² + σ²), with u = 0.9 s. For the Moon at
-  2199-06-15T12:00Z given on UTC, σ is over 100 s and the position bound
-  grows by between 50″ and 65″; for the topocentric Moon at the same TT
-  given on TT, by w σ alone (`src/calc-delta-t.test.ts`). In the sidereal
+  centers. On UTC input s is 0 and u is σ, as on TT input (up to
+  2.0.0-rc.2 s was √(0.9² + σ²) and u 0.9 s). For the Moon at
+  2199-06-15T12:00Z given on UTC, σ is over 100 s: its geocentric position
+  bound does not grow (it grew by between 50″ and 65″ up to 2.0.0-rc.2), and
+  the topocentric Moon's grows by w σ alone, as on TT input
+  (`src/calc-delta-t.test.ts`). On UT1 input s is σ and u 0, and the
+  geocentric Moon's bound grows by between 50″ and 65″. In the sidereal
   zodiac the widening comes on top of the ayanamsa's addition, from the
   sidereal rates.
 - **`houses()`**: `flags` holds the flag, on UTC, UT1 or TT input alike, and
@@ -475,6 +485,9 @@ flag.
 - **`events()`**: `flags` holds the flag where an event's UTC rests on that
   ΔT, and `bounds.timing` grows by the widest such event's `band.utc`: the
   ephemeris fixes an event in TT, so its UTC moves with the band of TT − UTC.
+  After the table that band is 0 on the continuous-UTC rule, UTC being
+  TT − 69.184 s, so the flag stays and the timing bound does not grow (up to
+  2.0.0-rc.2 it grew by about the ΔT band).
 - **`chart()`** and `natalChart()`: the chart's `flags` hold it on UTC or UT1
   input, and on TT input where the chart has houses. A chart has no bounds;
   `positions()` returns a bare list of bodies and carries none.
@@ -484,11 +497,14 @@ either: the true ΔT can be further off. It errs wide in two places, kept as
 they are. A topocentric place's observer turn is counted on both TT and UT1
 (w s + w u) although on UTC input it moves with UT1 alone, and w bounds the
 turn in any direction, so a topocentric widening can be several times the
-place's actual movement. And the time basis steps where the table ends
-(time.md): just before it TT comes from the leap seconds and nothing widens;
-just after it the bands are about 0.9 s at once, and within a sample step of
-the end the speed's Ω′, a second difference across that step, can come out
-large, so the bounds there jump wider than the movement. Before the IERS
+place's actual movement. And on UT1 and TT input the time basis steps where the table ends
+(time.md): just before it nothing widens, and just after it the bands are the
+model's σ at once. On UTC input the continuous-UTC rule keeps TT on the leap
+seconds across the end, so only UT1's band steps, from the table's 26.2 ms to
+the model's σ, and the positions' bounds do not jump. Up to 2.0.0-rc.2 the
+bands on UTC input were about 0.9 s at once after the end, and within a
+sample step of it the speed's Ω′, a second difference across that step, could
+come out large, so the bounds there jumped wider than the movement. Before the IERS
 table (before 1972) the model's ΔT is reconstructed from observations of the
 past, not extrapolated, so nothing is flagged or widened there; its band,
 which the model gives, is in `band`.
@@ -699,7 +715,9 @@ bands, so do not add `band` to `bounds`: that counts it twice.
 - **`events()`**: each event's `band` is `{ utc, ut1 }`, in seconds. The
   ephemeris fixes an event in TT, so its `jdTt` has no band, and only its
   clock labels move: `utc` is the band of TT − UTC at the event (0 on the
-  IERS basis, the ΔT band before 1972, √(u² + d²) after the table) and `ut1`
+  IERS basis and, after the table, on the continuous-UTC basis; the ΔT band
+  before 1972; √(u² + d²) on the `delta-t` basis after the table, up to
+  2.0.0-rc.2) and `ut1`
   that of TT − UT1, the ΔT band there. An event's band is computed from its
   own `at`, not from the window's instants that the receipt records. The
   receipt names `time-band:first-order` whether or not the search finds an
@@ -754,7 +772,9 @@ The checks run in that order: a request with both an epoch outside
 `EPHEMERIS_SPAN` and an instant outside `CALC_SPAN` is refused for its epoch.
 The span is checked on both time scales, so a
 ΔT pin cannot move the ephemeris outside it, and with the engine's ΔT the
-last instant computed is about 2199-12-31T23:57:53Z (UTC, read as UT1 there). `natalChart()`
+last instant computed on UTC input is 2199-12-31T23:58:50.815Z, whose TT is
+69.184 s later (up to 2.0.0-rc.2, 2199-12-31T23:57:53.752Z, read as UT1;
+`docs/evidence/continuous-utc-20261117/results/span-ends-*.json`). `natalChart()`
 still computes outside the span, with the `outside-reference-span` flag, as
 it always has, and so does `positions()`, whose rows carry the flag from
 2.0.0 (1.1.0's rows carried none). calc refuses instead
@@ -768,8 +788,8 @@ is no comparison to take one from.
 - `request`: the request as read, every default filled in, as JSON. Passing it
   back to the same function repeats the calculation.
 - `instants`: each instant used, `{ utc, jdUt1, jdTt, deltaT, timeScale }`:
-  its UTC to the millisecond (before 1972 and after the IERS table, the civil
-  time read as UT1), its UT1 and TT as Julian dates, the ΔT value with its
+  its UTC to the millisecond (before 1972, and up to 2.0.0-rc.2 after the IERS
+  table, the civil time read as UT1; after the table now TT − 69.184 s), its UT1 and TT as Julian dates, the ΔT value with its
   band and its source, and the time basis's record, as a chart's `timeScale`
   gives it.
 - `conventions`: ids from the vocabulary below; every receipt but that of
@@ -817,7 +837,7 @@ is no comparison to take one from.
 | `angles:gast-and-true-obliquity`, `sidereal-time:gast-iau2006-era` | the angles from the engine's apparent sidereal time (the Earth rotation angle, astronomy-engine's IAU 2006 polynomial, and the equation of the equinoxes: Δψ cos εA and the two largest IAU 2000 complementary terms) and the true obliquity |
 | `aspects:major`, `search:scan-and-bisect` | the chart's major aspects; the crossing search |
 | `bounds:plus-delta-t-band` | `calc()`'s, `houses()`'s or `events()`'s bounds widened for a ΔT extrapolated past the IERS table, by how far each quantity moves while TT and UT1 move by their bands (*Bounds*) |
-| `time-band:first-order` | the result carries bands from the time basis (*Bands*): each instant's TT and UT1 bands by the rule of [time.md](time.md)'s *The time bands*, after the IERS table on UTC input the root of the sum of the squares of the two recorded bands; propagated to first order, a position's rates times the TT band, with the observer's turn bounded for a topocentric one, an angle's or cusp's rates on UT1 and on TT times those bands, with whole-sign and fallback cusps 0, and an event's clock labels |
+| `time-band:first-order` | the result carries bands from the time basis (*Bands*): each instant's TT and UT1 bands by the rule of [time.md](time.md)'s *The time bands*, read from the instant's recorded basis: after the IERS table on UTC input, on the `continuous-utc` basis 0 for TT and the ΔT band for UT1, and on the `delta-t` basis that releases up to 2.0.0-rc.2 recorded there the root of the sum of the squares of the two recorded bands for TT; propagated to first order, a position's rates times the TT band, with the observer's turn bounded for a topocentric one, an angle's or cusp's rates on UT1 and on TT times those bands, with whole-sign and fallback cusps 0, and an event's clock labels |
 
 ## Swiss Ephemeris `calc_ut` flags
 

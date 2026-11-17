@@ -319,8 +319,12 @@ describe("UT1 − UTC from IERS: EOP 20 C04 in 1972, finals2000A.all of 2026-09-
       // The UT1 − UTC reported is the one used: UT1 = UTC + (UT1 − UTC).
       expect(Math.abs(J2000 + basis.ut1Days * DAY - basis.utcMs - basis.timeScale.ut1MinusUtc!.seconds * 1000)).toBeLessThan(1e-3);
     }
-    // Past the table's end on UT1, the model: no UT1 − UTC is used.
-    expect(timeBasis(Date.parse("2027-10-02T00:00:00.001Z"), "ut1").timeScale).toMatchObject({ basis: "delta-t", ut1MinusUtc: null });
+    // Past the table's end on UT1, the continuous-UTC rule: TT from the ΔT model, and UTC = TT − 69.184 s beside it.
+    expect(timeBasis(Date.parse("2027-10-02T00:00:00.001Z"), "ut1").timeScale).toMatchObject({
+      basis: "continuous-utc",
+      ut1MinusUtc: { source: "model" },
+      leapSeconds: { taiMinusUtc: 37, listed: false }
+    });
   });
 
   it("puts the UTC of UT1 and TT input on the IERS basis at most 0.148 s past the table's last day", () => {
@@ -368,7 +372,7 @@ describe("UT1 − UTC from IERS: EOP 20 C04 in 1972, finals2000A.all of 2026-09-
 describe("the time basis of a chart", () => {
   const place = { latitude: 51.5, longitude: -0.12, houseSystem: "placidus" as const };
 
-  it("reads civil time as UT1 and takes ΔT from the model before 1972 and after the table", () => {
+  it("reads civil time as UT1 and takes ΔT from the model before 1972, and after the table TT from UTC and UT1 from the model", () => {
     for (const iso of ["1880-06-15T12:00:00Z", "1971-12-31T23:59:59Z"]) {
       const basis = timeBasis(Date.parse(iso));
       expect(basis.timeScale).toEqual({ input: "utc", basis: "delta-t", ut1MinusUtc: null, leapSeconds: null });
@@ -377,10 +381,13 @@ describe("the time basis of a chart", () => {
     const later = timeBasis(Date.parse("2040-01-01T00:00:00Z"));
     expect(later.timeScale).toEqual({
       input: "utc",
-      basis: "delta-t",
-      ut1MinusUtc: { seconds: 0, sigma: 0.9, source: "fallback" },
-      leapSeconds: null
+      basis: "continuous-utc",
+      ut1MinusUtc: { seconds: 69.184 - later.deltaT.seconds, sigma: later.deltaT.sigma, source: "model" },
+      leapSeconds: { taiMinusUtc: 37, listed: false }
     });
+    // The same as UT1 less UTC read from the instants, to their rounding.
+    expect(later.timeScale.ut1MinusUtc!.seconds).toBeCloseTo((J2000 + later.ut1Days * DAY - Date.parse("2040-01-01T00:00:00Z")) / 1000, 5);
+    expect((later.ttDays * DAY + J2000 - later.utcMs) / 1000).toBeCloseTo(69.184, 6);
     expect(later.deltaT.segment).toBe("extrapolated");
   });
 

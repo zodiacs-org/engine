@@ -1,0 +1,49 @@
+{
+  "record": "results/continuous-utc-record.json, written by make-receipt.mjs on this tree",
+  "verdicts": [
+    {
+      "engine": "@zodiacs/engine@1.1.0",
+      "record": {
+        "engine": "2.0.0-rc.2",
+        "requiredFeatures": [
+          "convention-ids",
+          "ephemeris-jpl-de440",
+          "time-basis-continuous-utc"
+        ],
+        "basis": "continuous-utc"
+      },
+      "ok": false,
+      "code": "unsupported_feature",
+      "archive": "artifacts/zodiacs-engine-1.1.0.tgz (sha256 4e53cda9bd6ccb5f5581c2a9af2f2ae4010af2599f411ac5220425e0932e41ac)"
+    },
+    {
+      "engine": "@zodiacs/engine@2.0.0-rc.2",
+      "record": {
+        "engine": "2.0.0-rc.2",
+        "requiredFeatures": [
+          "convention-ids",
+          "ephemeris-jpl-de440",
+          "time-basis-continuous-utc"
+        ],
+        "basis": "continuous-utc"
+      },
+      "ok": false,
+      "code": "unsupported_feature",
+      "archive": "artifacts/zodiacs-engine-2.0.0-rc.2.tgz (sha256 e0621630b5a0f9dbb6465f4f077630f313217d7b06ee88ffa960696fec5eb1cc)"
+    },
+    {
+      "engine": "this tree, built (package.json still reads 2.0.0-rc.2)",
+      "record": {
+        "engine": "2.0.0-rc.2",
+        "requiredFeatures": [
+          "convention-ids",
+          "ephemeris-jpl-de440",
+          "time-basis-continuous-utc"
+        ],
+        "basis": "continuous-utc"
+      },
+      "ok": true,
+      "code": null
+    }
+  ]
+}
