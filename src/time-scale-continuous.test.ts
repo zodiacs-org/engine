@@ -117,6 +117,43 @@ describe("the continuous-UTC rule after the IERS table", () => {
     }
   });
 
+  it("holds 32.184 s + TAI − UTC − (UT1 − UTC) = ΔT within 1e-12 s on all three scales, from the table to the span's far end", () => {
+    // EPHEMERIS_SPAN ends at 3998-09-03T12:00 TT; on UTC input that is 69.184 s earlier, and on UT1 input
+    // about 1,200 s earlier still. Milliseconds since 1970 round to about 8 µs there, so UT1 − UTC is taken
+    // from ΔT, not from the two instants' difference.
+    const lastTt = Date.UTC(3998, 8, 3, 12);
+    const last = { tt: lastTt, utc: lastTt - 69_184, ut1: lastTt - timeBasis(lastTt, "tt").deltaT.seconds * 1000 };
+    for (const scale of ["utc", "ut1", "tt"] as const) {
+      const at = [...instantsBetween(3, 3000, TABLE_END + 1, Math.floor(last[scale])), Math.floor(last[scale]), Date.UTC(2528, 0, 1), Date.UTC(3500, 0, 1)];
+      let worst = 0;
+      let continuous = 0;
+      for (const ms of at) {
+        const basis = timeBasis(ms, scale);
+        const { ut1MinusUtc, leapSeconds } = basis.timeScale;
+        if (basis.timeScale.basis !== "continuous-utc") continue;
+        continuous += 1;
+        worst = Math.max(worst, Math.abs(32.184 + leapSeconds!.taiMinusUtc - ut1MinusUtc!.seconds - basis.deltaT.seconds));
+      }
+      expect(continuous, scale).toBeGreaterThan(2990);
+      expect(worst, scale).toBeLessThan(1e-12);
+      expect((timeBasis(Math.floor(last[scale]), scale).ttDays - (lastTt - J2000) / DAY) * DAY, scale).toBeLessThanOrEqual(0);
+    }
+  });
+
+  it("reads the model's predicted segment, unflagged, for the 146 ms after the table on UTC input, whose UT1 is still on its last day", () => {
+    // UT1 − UTC is −0.146 s there, so UT1 passes the table's end, where the model's extrapolation begins,
+    // only at 00:00:00.147Z on UTC. TT and UT1 input are past it from the first millisecond.
+    for (const [offset, segment] of [[1, "predicted"], [146, "predicted"], [147, "extrapolated"]] as const) {
+      const basis = timeBasis(UT1_TO_MS + offset);
+      expect(basis.timeScale.basis).toBe("continuous-utc");
+      expect(basis.deltaT.segment, String(offset)).toBe(segment);
+      expect(J2000 + basis.ut1Days * DAY > UT1_TO_MS, String(offset)).toBe(segment === "extrapolated");
+      const chart = natalChart({ utc: new Date(UT1_TO_MS + offset), latitude: 10, longitude: 10 });
+      expect(chart.flags.includes("delta-t-extrapolated"), String(offset)).toBe(segment === "extrapolated");
+    }
+    expect(timeBasis(UT1_TO_MS + 1, "ut1").deltaT.segment).toBe("extrapolated");
+  });
+
   it("hands over from the table to the model with UT1 − UTC moving by under 0.01 s, and TT − UTC not at all", () => {
     const [last, first] = [timeBasis(UT1_TO_MS), timeBasis(UT1_TO_MS + 1)];
     expect(last.timeScale.basis).toBe("iers");
@@ -218,7 +255,7 @@ describe("charts on the continuous-UTC rule, on the shipped DE440 pack", () => {
 
   it("put the Moon and the Sun within 1″ of Horizons on UTC input at 2028, 2030, 2050, 2100 and 2199", () => {
     // Horizons prints its IAU 1976/80 ecliptic of date; the engine's is IAU 2006/2000A. The raw values are
-    // compared, unrotated: about 0.49″ of the 0.51″ at 2199 is that frame difference. 1″ fails any clock
+    // compared, unrotated, so part of the residual is that frame difference (not separated). 1″ fails any clock
     // error over about 1 s, the Moon moving about 0.55″ a second.
     for (const [file, body] of [["horizons-moon-301.txt", "Moon"], ["horizons-sun-10.txt", "Sun"]] as const) {
       for (const [ms, , lon] of horizons(file)) {

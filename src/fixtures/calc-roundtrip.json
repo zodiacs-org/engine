@@ -519,7 +519,7 @@
         "input": "utc",
         "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": -27.097185546875,
+         "seconds": -27.097185862209443,
          "sigma": 73.18943493494542,
          "source": "model"
         },
@@ -1042,7 +1042,7 @@
         "input": "tt",
         "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": -2.2670615234375,
+         "seconds": -2.267061344953561,
          "sigma": 11.890488150149935,
          "source": "model"
         },
@@ -1162,7 +1162,7 @@
         "input": "utc",
         "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": -0.599327392578125,
+         "seconds": -0.5993274349904993,
          "sigma": 1.299939313870871,
          "source": "model"
         },
@@ -1448,7 +1448,7 @@
         "input": "utc",
         "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": -9.7424970703125,
+         "seconds": -9.742496913698119,
          "sigma": 42.38881925397989,
          "source": "model"
         },
@@ -1822,7 +1822,7 @@
         "input": "utc",
         "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": -49.0374833984375,
+         "seconds": -49.03748306223288,
          "sigma": 96.58905121173512,
          "source": "model"
         },
@@ -2682,7 +2682,7 @@
         "input": "utc",
         "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": -5.46706201171875,
+         "seconds": -5.467062126758805,
          "sigma": 28.76673857002465,
          "source": "model"
         },
@@ -3344,7 +3344,7 @@
         "input": "utc",
         "basis": "continuous-utc",
         "ut1MinusUtc": {
-         "seconds": -20.032353515625,
+         "seconds": -20.03235305013095,
          "sigma": 62.99272215100599,
          "source": "model"
         },

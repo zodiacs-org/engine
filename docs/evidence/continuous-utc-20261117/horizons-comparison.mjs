@@ -9,8 +9,8 @@
  * The chart is natalChart({ utc, latitude: 0, longitude: 0 }) on the
  * package's default source (the shipped DE440 pack). Horizons prints the
  * IAU 1976/80 ecliptic of date, the engine the IAU 2006/2000A one; the raw
- * values are compared unrotated, so a few tenths of an arcsecond at 2199 are
- * that frame difference (about 0.49 arcsec of the Moon's 0.51 there).
+ * values are compared unrotated, and the share of the residual that is the
+ * frame difference is not separated here.
  * TDB - TT is under 2 ms, below what is compared here.
  */
 import { readFileSync } from "node:fs";

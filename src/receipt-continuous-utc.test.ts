@@ -29,7 +29,7 @@ import {
   serializeNatalEnvelope
 } from "./receipt.js";
 import type { NatalEnvelope } from "./receipt.js";
-import { timeBasisBeforeContinuousUtc } from "./time-scale.js";
+import { timeBasis, timeBasisBeforeContinuousUtc } from "./time-scale.js";
 
 const FIXTURES = {
   "1.1.0": "5ca2dde3a14e5de5f797c62df5ae0d861e1c0afaa749f675c08432930cd2c32d",
@@ -94,6 +94,42 @@ describe.each(Object.keys(FIXTURES) as (keyof typeof FIXTURES)[])("a %s record a
     // A record of the replay is a new record, under the continuous-UTC set, and replays to itself.
     const again = parsed(serializeNatalEnvelope(createNatalEnvelope(replay)));
     expect(natalReplayInput(again)).toMatchObject({ timeScale: "ut1" });
+  });
+});
+
+describe("a 0.1.1-rc.14 record after the IERS table, under the rc.8 set", () => {
+  // Written by the carried rc.14 archive (docs/evidence/continuous-utc-20261117/make-receipt.mjs), which read
+  // every instant as UT1 and had no time scale in its result.
+  const json = () => readFileSync(new URL("./fixtures/receipt-0.1.1-rc.14-after-table.json", import.meta.url), "utf8");
+
+  it("replays as the UT1 instant that engine read, so that the continuous-UTC rule does not move it", () => {
+    expect(createHash("sha256").update(json()).digest("hex")).toBe("1667adc5dcb8640bc6e5b7f8418ab1cfdc9baff6b444bd14eca2367e2b0f59f0");
+    const envelope = parsed(json());
+    expect(envelope.receipt.engine.version).toBe("0.1.1-rc.14");
+    expect(envelope.receipt.conventions.deltaT).toBe("tt-minus-ut1;ut1-read-as-utc;value-in-result");
+    expect(envelope.result.timeScale).toBeUndefined();
+    const request = natalReplayInput(envelope);
+    expect(request).toMatchObject({ utc: "2030-06-15T12:00:00.000Z", timeScale: "ut1" });
+    setDefaultEphemeris("astronomy-engine");
+    try {
+      // The same UT1 and the same model ΔT, so the same TT: what moves is the nutation since rc.16 (docs/time.md).
+      const replay = natalChart(request);
+      expect(Math.abs(replay.deltaT.seconds - envelope.result.deltaT!.seconds)).toBeLessThan(1e-6);
+      const moon = (bodies: readonly { body: string; lon: number }[]) => bodies.find((row) => row.body === "Moon")!.lon;
+      expect(Math.abs(moon(replay.bodies) - moon(envelope.result.bodies)) * 3600).toBeLessThan(1);
+      // Read on UTC its TT would be 0.47 s earlier, about 0.26″ of the Moon's motion, on top.
+      const ms = Date.parse(request.utc as string);
+      expect((timeBasis(ms, "ut1").ttDays - timeBasis(ms, "utc").ttDays) * 86_400).toBeCloseTo(69.654 - 69.184, 3);
+    } finally {
+      setDefaultEphemeris("de440");
+    }
+  });
+
+  it("leaves a record of the same set inside the table on UTC, as it replayed before", () => {
+    // src/fixtures/receipt-rc14-1973.json, the carried rc.14 archive's (src/replay-time-basis.test.ts).
+    const inside = parsed(readFileSync(new URL("./fixtures/receipt-rc14-1973.json", import.meta.url), "utf8"));
+    expect(inside.result.timeScale).toBeUndefined();
+    expect(natalReplayInput(inside)).not.toHaveProperty("timeScale");
   });
 });
 

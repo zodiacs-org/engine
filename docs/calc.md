@@ -442,7 +442,8 @@ value, and refuses one above in some values and below in others
 The engine's TT and UT1 rest on a ΔT its model extrapolates, with no
 observation behind it, after the last day of the IERS UT1 table the release
 carries (time.md, *From an instant to UT1 and TT*; for this release, after
-2027-10-02T00:00Z), when ΔT is not pinned. Its 1-σ band `deltaT.sigma` grows
+2027-10-02T00:00Z, and on UTC input from 00:00:00.147Z, when UT1 passes it),
+when ΔT is not pinned. Its 1-σ band `deltaT.sigma` grows
 with the years ([time.md](time.md)), and no arbiter gives positions for such
 an instant. A result that moves with that ΔT is flagged
 `"delta-t-extrapolated"` and its bounds widen by how far each quantity moves,
@@ -772,7 +773,8 @@ The checks run in that order: a request with both an epoch outside
 The span is checked on both time scales, so a
 ΔT pin cannot move the ephemeris outside it, and with the engine's ΔT the
 last instant computed on UTC input is 2199-12-31T23:58:50.815Z, whose TT is
-69.184 s later (up to 2.0.0-rc.2, about 2199-12-31T23:57:53Z, read as UT1). `natalChart()`
+69.184 s later (up to 2.0.0-rc.2, 2199-12-31T23:57:53.752Z, read as UT1;
+`docs/evidence/continuous-utc-20261117/results/span-ends-*.json`). `natalChart()`
 still computes outside the span, with the `outside-reference-span` flag, as
 it always has, and so does `positions()`, whose rows carry the flag from
 2.0.0 (1.1.0's rows carried none). calc refuses instead

@@ -382,9 +382,11 @@ describe("the time basis of a chart", () => {
     expect(later.timeScale).toEqual({
       input: "utc",
       basis: "continuous-utc",
-      ut1MinusUtc: { seconds: (J2000 + later.ut1Days * DAY - Date.parse("2040-01-01T00:00:00Z")) / 1000, sigma: later.deltaT.sigma, source: "model" },
+      ut1MinusUtc: { seconds: 69.184 - later.deltaT.seconds, sigma: later.deltaT.sigma, source: "model" },
       leapSeconds: { taiMinusUtc: 37, listed: false }
     });
+    // The same as UT1 less UTC read from the instants, to their rounding.
+    expect(later.timeScale.ut1MinusUtc!.seconds).toBeCloseTo((J2000 + later.ut1Days * DAY - Date.parse("2040-01-01T00:00:00Z")) / 1000, 5);
     expect((later.ttDays * DAY + J2000 - later.utcMs) / 1000).toBeCloseTo(69.184, 6);
     expect(later.deltaT.segment).toBe("extrapolated");
   });

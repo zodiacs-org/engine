@@ -42,8 +42,8 @@ further authority.
 `horizons-comparison.mjs` on the carried 1.1.0 and 2.0.0-rc.2 archives and on
 this tree (`results/horizons-*.json`), on the DE440 pack, UTC input at
 0° N 0° E. Longitudes are compared raw: Horizons prints the IAU 1976/80
-ecliptic of date and the engine the IAU 2006/2000A one, about 0.49″ of the
-Moon's 0.51″ at 2199.
+ecliptic of date and the engine the IAU 2006/2000A one. How much of the
+residual after the change is that frame difference is not separated here.
 
 | UTC | TT − UTC before | after | Moon − Horizons before | after | Sun − Horizons before | after |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -73,9 +73,24 @@ measured on this tree:
   model's UT1 − UTC is −2.307 s at 2050-06-15, passes −3,600 s in 2957, and
   its band reaches 1,200 s by 3998.
 - `natalChart()` refuses a UTC instant whose TT leaves `EPHEMERIS_SPAN`; the
-  last one accepted moves from 3998-09-03T02:01:40.661Z to
-  3998-09-03T05:58:50.249Z. `calc()`'s last UTC instant moves from about
-  2199-12-31T23:57:53Z to 2199-12-31T23:58:50.815Z.
+  last one accepted moves from 3998-09-03T02:01:41.309Z to
+  3998-09-03T05:58:50.816Z. `calc()`'s last UTC instant computed moves from
+  2199-12-31T23:57:53.752Z to 2199-12-31T23:58:50.815Z. Both are bisected to
+  the millisecond by `span-ends.mjs` (`results/span-ends-1.1.0.json`,
+  `span-ends-2.0.0-rc.2.json`, `span-ends-this-tree.json`, whose `engine`
+  field is this tree's package version); origin/main (`373ceda`) gives the
+  same as 2.0.0-rc.2.
+- On UTC input UT1 − UTC is now 69.184 s − ΔT, so 32.184 s + TAI − UTC −
+  (UT1 − UTC) = ΔT holds within 1e-12 s on UTC, UT1 and TT over the whole
+  span (worst measured about 6e-14 s). Taken as the difference of the two
+  rounded millisecond instants, as first written here, it was off by up to
+  3.9e-6 s from 2528 on. `src/time-scale-continuous.test.ts` checks it at
+  3,000 instants up to the span's last ones.
+- ΔT's segment is keyed on UT1. On UTC input from 2027-10-02T00:00:00.001Z
+  to .146Z UT1 is still on or before the table's end, so the segment is
+  `"predicted"` and the chart is not flagged; from .147Z it is
+  `"extrapolated"` and flagged `"delta-t-extrapolated"`. docs/time.md says
+  so; `src/time-scale-continuous.test.ts` pins both sides.
 - `calc()` on UTC input: the band of TT is 0 and that of UT1 the ΔT band, so
   a geocentric position's bound no longer widens (the Moon at
   2199-06-15T12:00Z: its measured 12″, where 2.0.0-rc.2 added 50″ to 65″),
@@ -87,18 +102,40 @@ measured on this tree:
   tree's as `unsupported_feature` (`parse-on-engine.mjs`,
   `results/new-receipt-on-earlier-engines.json`, on
   `results/continuous-utc-record.json` that `make-receipt.mjs` wrote on this
-  tree). Their own records after the table still verify here and replay to
-  the bit (`src/fixtures/receipt-1.1.0-after-table.json`, sha256
+  tree). Their own records after the table still verify here and replay as
+  the UT1 instant their engine read, to the same positions, angles and cusps
+  (`src/fixtures/receipt-1.1.0-after-table.json`, sha256
   `5ca2dde3a14e5de5f797c62df5ae0d861e1c0afaa749f675c08432930cd2c32d`, and
   `receipt-2.0.0-rc.2-after-table.json`,
   `a7d26844903fa3177740746b5837cc2dc66570335eed983634d2832949543871`, written
-  by `make-receipt.mjs` on the archives).
+  by `make-receipt.mjs` on the archives). Records of 0.1.1-rc.8 to rc.14
+  and older (no time scale in the result) replay the same way after the
+  table, so the rule does not move them (their TT would be 0.47 s earlier at
+  2030 on UTC): `src/fixtures/receipt-0.1.1-rc.14-after-table.json`, sha256
+  `1667adc5dcb8640bc6e5b7f8418ab1cfdc9baff6b444bd14eca2367e2b0f59f0`,
+  written by `make-receipt.mjs` on the carried 0.1.1-rc.14 archive.
+- Speeds within six hours of the table's end. A speed is the change over
+  samples 0.002 day apart (the true node's 0.5 day), so where one sample lies
+  on the other side of 2027-10-02T00:00Z it is read on the other rule. This
+  moves speeds only, inside the table as well as after it.
+  `speeds-near-table-end.mjs` compares every minute over the twelve hours and
+  every 100 ms within 100 s of the end, at 48.2° N 16.37° E, with the
+  archives (`results/near-table-end-*.json`): on the DE440 pack the Moon's
+  speed moves by up to 3.5e-7 °/day and the true node's by 8.0e-9; on
+  astronomy-engine the Moon's by 3.6e-7 and the true node's by 3.8e-6
+  (1.6e-6 inside the table); every other body's by under 7e-8. Longitudes,
+  latitudes, angles and cusps are the same to the bit, and outside the six
+  hours so is every speed. `src/time-scale-near-end.test.ts` holds 18 of
+  those instants, the largest changes among them, to 4e-7 °/day (the nodes
+  4e-6), from `src/fixtures/near-table-end-2.0.0-rc.2.json`
+  (`make-near-end-reference.mjs` on the 2.0.0-rc.2 archive).
 - Types: `TimeScale.basis` gains `"continuous-utc"` and `Ut1MinusUtc.source`
   gains `"model"`, in every entry that exports them (api/).
 - Solar returns over 300 years from 24 births stay within 266 minutes of the
   mean tropical year (268 before), `docs/timing-hellenistic.md`.
 
-Inside the table, before 1972 and with a pinned ΔT nothing changes, and the
+Inside the table (but for those speeds), before 1972 and with a pinned ΔT
+nothing changes, and the
 conformance suite's verdicts do not change (459 pass, 41 unsupported): its
 time vectors end in 2026, and its later instants are given on TT.
 
@@ -123,14 +160,16 @@ time vectors end in 2026, and its later instants are given on TT.
 ## Checks
 
 - `results/mutations.txt`: changing 32.184 s, dropping TAI − UTC, or starting
-  the rule at the table's last instant each fails 8 or 9 of the 135 tests in
-  the three time-basis files.
+  the rule at the table's last instant each fails 11 to 14 of the 144 tests in
+  the five time-basis files; taking UT1 − UTC from the rounded milliseconds
+  fails 2, and dropping the basis comparison from the window's `onePiece`
+  fails 1 (`src/window-table-end.test.ts`).
 - Package sizes (`npm run package:contents`, measured, budgets not raised):
-  the root graph 153,207 bytes of 151,700; `./calc` 204,933 of 204,100;
-  `./internal` 112,006 of 110,900; `./receipt` 80,356 of 77,400; `./sky`
-  139,460 of 138,600; `./time` 44,219 of 42,600; `./timing` 172,510 of
-  171,200; `./vedic` 188,242 of 187,100; `./window` 152,330 of 151,500; the
-  package without the DE440 pack 1,289,319 bytes of 1,289,000.
+  the root graph 153,473 bytes of 151,700; `./calc` 205,199 of 204,100;
+  `./internal` 112,272 of 110,900; `./receipt` 80,771 of 77,400; `./sky`
+  139,726 of 138,600; `./time` 44,485 of 42,600; `./timing` 172,776 of
+  171,200; `./vedic` 188,508 of 187,100; `./window` 152,596 of 151,500; the
+  package without the DE440 pack 1,290,106 bytes of 1,289,000.
 
 ## Reproducing
 
@@ -144,5 +183,12 @@ node parse-on-engine.mjs "$DIR/1.1.0/package" results/continuous-utc-record.json
 # this tree, after npm run build, from the repository root
 node docs/evidence/continuous-utc-20261117/make-receipt.mjs . > docs/evidence/continuous-utc-20261117/results/continuous-utc-record.json
 node docs/evidence/continuous-utc-20261117/horizons-comparison.mjs . > docs/evidence/continuous-utc-20261117/results/horizons-this-tree.json
+node docs/evidence/continuous-utc-20261117/span-ends.mjs . > docs/evidence/continuous-utc-20261117/results/span-ends-this-tree.json
+# the archives again, for the span ends and the speeds near the table's end
+node span-ends.mjs "$DIR/1.1.0/package" > results/span-ends-1.1.0.json
+node speeds-near-table-end.mjs "$DIR/1.1.0/package" ../../.. > results/near-table-end-1.1.0.json
+node speeds-near-table-end.mjs "$DIR/1.1.0/package" ../../.. astronomy-engine > results/near-table-end-1.1.0-astronomy-engine.json
+node make-near-end-reference.mjs "$DIR/2.0.0-rc.2/package" > ../../../src/fixtures/near-table-end-2.0.0-rc.2.json
+node make-receipt.mjs "$DIR/0.1.1-rc.14/package" > ../../../src/fixtures/receipt-0.1.1-rc.14-after-table.json
 python3 -I erfa-dat.py > results/erfa-dat.txt
 ```

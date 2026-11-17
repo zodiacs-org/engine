@@ -281,7 +281,9 @@ function basisOf(ms: number, scale: TimeScaleName, pin: number | undefined, cont
         timeScale: {
           input: scale,
           basis: "continuous-utc",
-          ut1MinusUtc: { seconds: (ut1Ms - ms) / 1000, sigma: deltaT.sigma!, source: "model" },
+          // From ΔT rather than from UT1 − UTC in milliseconds, so that 32.184 s + TAI − UTC − (UT1 − UTC)
+          // is ΔT to the rounding of seconds; the milliseconds since 1970 round to 8 µs at the far end.
+          ut1MinusUtc: { seconds: ttMinusUtcMs / 1000 - deltaT.seconds, sigma: deltaT.sigma!, source: "model" },
           leapSeconds
         }
       };
@@ -291,7 +293,7 @@ function basisOf(ms: number, scale: TimeScaleName, pin: number | undefined, cont
     if (scale === "tt") for (let round = 0; round < 4; round += 1) ut1Ms = ms - modelDeltaT(ut1Ms).seconds * 1000;
     const deltaT = modelDeltaT(ut1Ms);
     const utcMs = (scale === "tt" ? ms : ut1Ms + deltaT.seconds * 1000) - ttMinusUtcMs;
-    return record(utcMs, ut1Ms, deltaT, "continuous-utc", { seconds: (ut1Ms - utcMs) / 1000, sigma: deltaT.sigma!, source: "model" }, leapSeconds);
+    return record(utcMs, ut1Ms, deltaT, "continuous-utc", { seconds: ttMinusUtcMs / 1000 - deltaT.seconds, sigma: deltaT.sigma!, source: "model" }, leapSeconds);
   }
   if (utc < LEAP_SECONDS_FROM || utc > UT1_TO_MS) {
     // Civil time read as UT1; for TT input, TT = UT1 + ΔT(UT1) by fixed-point steps.

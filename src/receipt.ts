@@ -10,6 +10,7 @@ import { natalConventionIds } from "./convention-ids.js";
 import type { NatalConventionFields } from "./convention-ids.js";
 import { DELTA_T_IERS_MODEL, TIME_SCALE_NAMES, UT1_DATA, timeBasis, timeBasisBeforeContinuousUtc } from "./time-scale.js";
 import type { TimeScaleName } from "./time-scale.js";
+import { UT1_TO_MS } from "./time-scale-data.js";
 import { EPHEMERIS } from "./types.js";
 import type { AspectType, BirthInput, BodyName, Chart, ChartFlag, HouseSystem, ZodiacSign } from "./types.js";
 import type { DeltaTSegment } from "./deltat.js";
@@ -1629,16 +1630,22 @@ export function serializeNatalEnvelope(envelope: NatalEnvelope): string {
  * A UTC instant after the IERS table that an engine before the continuous-UTC
  * rule recorded (1.1.0, 2.0.0-rc.2 and earlier: basis "delta-t", UT1 − UTC
  * "fallback") was read as UT1 by that engine, so it replays as that UT1
- * instant: the bodies, angles, houses, aspects, ΔT and flags come back to the
- * bit, and the replayed chart's time scale says it was read as UT1.
+ * instant: the bodies, angles, houses, aspects, ΔT and flags come back, the
+ * speeds within six hours of the table's end within 4e-6 degrees a day
+ * (docs/time.md, "Receipts"), and the replayed chart's time scale says it
+ * was read as UT1. A record under a set before rc.15's (0.1.1-rc.14 and
+ * earlier, no time scale in its result) read every instant as UT1; after the
+ * table it replays as UT1 for the same reason, so that this rule does not move
+ * it. Inside the table such a record replays on UTC, as before.
  */
 export function natalReplayInput(envelope: NatalEnvelope): BirthInput {
   return guarded(() => {
     const { receipt, result } = checked(envelope);
+    const onUtc = receipt.timeScale === undefined || receipt.timeScale === "utc";
     const readAsUt1 =
-      (receipt.timeScale === undefined || receipt.timeScale === "utc") &&
-      result.timeScale?.basis === "delta-t" &&
-      result.timeScale.ut1MinusUtc?.source === "fallback";
+      onUtc &&
+      ((result.timeScale?.basis === "delta-t" && result.timeScale.ut1MinusUtc?.source === "fallback") ||
+        (result.timeScale === undefined && result.deltaT?.model !== "pinned" && Date.parse(receipt.instant) > UT1_TO_MS));
     // A pinned ΔT and a scale other than UTC were part of the request, so the replay asks again.
     return {
       utc: receipt.instant,

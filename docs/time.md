@@ -87,8 +87,9 @@ Any other value, including `null`, throws `RangeError`. A `ChartInput` carries
   taken as 0 ± 0.9 s, and TT = UT1 + ΔT(model): TT − UTC was 69.418 s at
   2028-06-15T12:00Z, 69.654 s at 2030, 71.491 s at 2050, 79.033 s at 2100
   and 125.844 s at 2199-06-19, and on the DE440 pack the Moon was 28.26″ from
-  Horizons at 2199-06-19, where it is now 0.51″ (most of that the two
-  ecliptics of date). Charts given on TT or UT1, and pinned charts, keep
+  Horizons at 2199-06-19, where it is now 0.51″, compared raw on two
+  different ecliptics of date (Horizons' IAU 1976/80, the engine's IAU
+  2006/2000A; the share of each is not separated). Charts given on TT or UT1, and pinned charts, keep
   their TT and UT1 to the bit; their recorded UTC and time scale change.
 - **A pin**, `deltaT` in seconds, fixes ΔT = TT − UT1. UT1 still comes from
   the instant (for UTC from 1972, with UT1 − UTC from the table; after it,
@@ -152,13 +153,21 @@ input after the table gave `"fallback"` and UT1 input there null.
 `leapSeconds` is `{ taiMinusUtc, listed }` where TT came from the leap
 seconds, the continuous-UTC rule included, and null otherwise. Where both are
 given, 32.184 s + `taiMinusUtc` − `ut1MinusUtc.seconds` is `deltaT.seconds`,
-inside a leap second too (on the continuous-UTC rule within 1e-6 s, the
-rounding of a Julian date).
+inside a leap second too; on the continuous-UTC rule within 1e-12 s on UTC,
+UT1 and TT input from the table's end to the far end of `EPHEMERIS_SPAN`,
+because `ut1MinusUtc.seconds` is taken as 69.184 s − ΔT there, not from the
+two instants in milliseconds since 1970, which round to about 8 µs by 3998
+(`src/time-scale-continuous.test.ts`).
 
 After the table, with no pinned ΔT, the engine's ΔT is one its model
 extrapolates (`basis` `"continuous-utc"`, `segment` `"extrapolated"`), and
 nothing measures how far that is from the ΔT the date will have. A chart then
-holds `"delta-t-extrapolated"` in its `flags`. On UT1 input TT carries that
+holds `"delta-t-extrapolated"` in its `flags`. The model's segments are read
+at the instant's UT1, so on UTC input from 2027-10-02T00:00:00.001Z to
+00:00:00.146Z, where UT1 (UTC − 0.146 s) is still on the table's last day,
+the segment is `"predicted"` and the chart is not flagged; from
+00:00:00.147Z it is `"extrapolated"` and flagged. On UT1 and TT input UT1 is
+past the end from its first millisecond. On UT1 input TT carries that
 ΔT, so the bodies can be off by about `deltaT.sigma` seconds times each
 one's rate, on top of the ephemeris's own error. On TT input UT1 carries it
 instead: the bodies stay put, but the houses and angles turn with UT1, so a
@@ -684,7 +693,32 @@ UTC read as UT1 with UT1 − UTC 0 ± 0.9 s, still verifies, and
 instant its engine read, which this engine reads to the same TT and UT1, and
 so to the same chart to the bit (`src/receipt-continuous-utc.test.ts`, on
 `src/fixtures/receipt-1.1.0-after-table.json` and
-`receipt-2.0.0-rc.2-after-table.json`, which the carried archives wrote).
+`receipt-2.0.0-rc.2-after-table.json`, which the carried archives wrote),
+except for the speeds of a chart within six hours of the table's end.
+
+A speed is the change over samples 0.002 day apart (the true node's
+0.5 day). Within six hours of 2027-10-02T00:00Z one sample can lie on the
+other side of the end, where the rule changed, so a speed moves by a
+second-order amount: inside the table, a record of 1.1.0 or 2.0.0-rc.2
+replayed on UTC, and after it, one replayed as UT1. Longitudes, latitudes,
+angles and cusps do not move. Measured every minute over the twelve hours
+and every 100 ms within 100 s of the end, at 48.2° N: on the DE440 pack the
+Moon's speed by up to 3.5e-7 °/day and the true node's by 8.0e-9; on
+astronomy-engine the Moon's by 3.6e-7 and the true node's by 3.8e-6; every
+other body's by under 7e-8
+([`evidence/continuous-utc-20261117/results/near-table-end-2.0.0-rc.2.json`](evidence/continuous-utc-20261117/results/near-table-end-2.0.0-rc.2.json)
+and `-astronomy-engine.json`; 1.1.0 the same).
+`src/time-scale-near-end.test.ts` holds the archive's charts at 18 instants
+there to 4e-7 °/day (the nodes to 4e-6) and, outside the six hours, to the
+bit.
+
+A record under the rc.8 set or an older one (0.1.1-rc.14 and earlier, whose
+result has no time scale) read every instant as UT1. After the table it now
+replays as a UT1 request too, so that the continuous-UTC rule does not move
+it (its TT would be 0.47 s earlier at 2030 on UTC); inside the table it
+replays on UTC, as below
+(`src/fixtures/receipt-0.1.1-rc.14-after-table.json`, which the carried
+rc.14 archive wrote).
 
 Receipts under rc.15's set, under the rc.8 set (0.1.1-rc.8 to rc.14), which
 read the instant as UT1, and under the older sets stay readable, each
