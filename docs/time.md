@@ -441,7 +441,8 @@ is refused rather than ignored).
   written out from the tz database's rules).
 
 `julianToGregorian` and `gregorianToJulian` convert YYYY-MM-DD strings for
-years 0000–9999; `gregorianAdoption(country)` returns a row of the table;
+years 0000 to 9999 (for other years, go through `julianDayNumber` and
+`dateOfJulianDayNumber`, below); `gregorianAdoption(country)` returns a row of the table;
 `calendarNote(gregorianDate, calendar, country)` gives the note for a
 resolved date. From 1.0 `calendarNote` throws a `RangeError` for a date that
 is not a valid Gregorian YYYY-MM-DD, a calendar other than `"gregorian"` and
@@ -503,6 +504,42 @@ legal clock applies.
 Buffalo, 1870-06-15 12:00 in America/New_York at 78.88° W, is 17:15:31 UTC
 (−5:15:31), where New York's own LMT would give 16:56:02. Brest, Omaha, Porto,
 Paris, Galway and Bergen are in the tests with their values.
+
+### Julian Day Numbers and mean time from a longitude
+
+```ts
+import { dateOfJulianDayNumber, julianDayNumber, localMeanTimeOffset } from "@zodiacs/engine/geo";
+
+julianDayNumber({ year: 2000, month: 1, day: 1 }); // 2451545
+julianDayNumber({ year: -4712, month: 1, day: 1 }, "julian"); // 0
+dateOfJulianDayNumber(2299161, "julian"); // { year: 1582, month: 10, day: 5 }
+localMeanTimeOffset(-0.125); // -30
+```
+
+- `julianDayNumber(date, calendar?)` gives the Julian Day Number of a civil
+  date, the integer day that begins at noon UT on it. `date` is
+  `{ year, month, day }` in astronomical years (year 0 exists; -4712 is
+  4713 BC); `calendar` is `"gregorian"` (the default, proleptic before
+  1582-10-15) or `"julian"`. It throws a `RangeError` unless the three are
+  integers, the year is between -100000 and 100000, and the date exists in
+  that calendar (1900-02-29 is Julian only).
+- `dateOfJulianDayNumber(jdn, calendar?)` is the inverse. It throws a
+  `RangeError` unless `jdn` is an integer within those years of that
+  calendar.
+- `localMeanTimeOffset(longitude)` is a longitude's mean time in seconds east
+  of Greenwich, `longitude × 240`, not rounded (the birthplace clock above
+  rounds it to the second). It throws a `RangeError` unless the longitude is
+  a finite number from -180 to 180.
+
+Both day-number functions use the arithmetic `julianToGregorian` uses.
+`src/geo/day-number.test.ts` checks them on 10,000 random dates per calendar
+from year -4712 to 9999 against a second implementation written in the test
+from J. Meeus, *Astronomical Algorithms* (2nd ed., 1998), chapter 7, and
+`scripts/verify-jdn.py` checks the underlying arithmetic on every day from
+Julian Day Number 0 to Julian 3000-12-31 against E. G. Richards's algorithm.
+Over the whole span of years -100000 to 100000 the tests check only that the
+two functions invert each other (5,000 random dates per calendar) and that
+consecutive days differ by one in sampled years at both ends.
 
 ### The result
 

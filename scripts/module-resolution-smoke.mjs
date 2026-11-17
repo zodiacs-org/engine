@@ -387,7 +387,10 @@ for (const name of [
   "calendarNote",
   "gregorianAdoption",
   "julianToGregorian",
-  "gregorianToJulian"
+  "gregorianToJulian",
+  "julianDayNumber",
+  "dateOfJulianDayNumber",
+  "localMeanTimeOffset"
 ]) {
   assert.equal(typeof geo[name], "function", `missing geo export: ${name}`);
   assert.equal(name in engine, false, `geo leaked into the core entry: ${name}`);

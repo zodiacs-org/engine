@@ -24,9 +24,9 @@
   "summary": {
     "total": {
       "count": 500,
-      "pass": 267,
+      "pass": 307,
       "fail": 192,
-      "unsupported": 41,
+      "unsupported": 1,
       "error": 0
     },
     "byLevel": {
@@ -46,9 +46,9 @@
       },
       "L3": {
         "count": 110,
-        "pass": 69,
+        "pass": 109,
         "fail": 0,
-        "unsupported": 41,
+        "unsupported": 1,
         "error": 0
       }
     },
@@ -147,10 +147,19 @@
       },
       "time.local-mean-time": {
         "count": 5,
-        "pass": 0,
+        "pass": 5,
         "fail": 0,
-        "unsupported": 5,
-        "error": 0
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "utc_offset_s": {
+            "unit": "s",
+            "n": 5,
+            "median": 0,
+            "p95": 0,
+            "max": 0
+          }
+        }
       },
       "time.tt-minus-utc": {
         "count": 10,
@@ -186,16 +195,16 @@
       },
       "calendar.to-jdn": {
         "count": 25,
-        "pass": 0,
+        "pass": 25,
         "fail": 0,
-        "unsupported": 25,
+        "unsupported": 0,
         "error": 0
       },
       "calendar.from-jdn": {
         "count": 10,
-        "pass": 0,
+        "pass": 10,
         "fail": 0,
-        "unsupported": 10,
+        "unsupported": 0,
         "error": 0
       }
     },
@@ -6230,28 +6239,38 @@
     },
     {
       "id": "L3-LMT-0001",
-      "verdict": "unsupported",
-      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
+      "verdict": "pass",
+      "residual": {
+        "utc_offset_s": 0
+      }
     },
     {
       "id": "L3-LMT-0002",
-      "verdict": "unsupported",
-      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
+      "verdict": "pass",
+      "residual": {
+        "utc_offset_s": 0
+      }
     },
     {
       "id": "L3-LMT-0003",
-      "verdict": "unsupported",
-      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
+      "verdict": "pass",
+      "residual": {
+        "utc_offset_s": 0
+      }
     },
     {
       "id": "L3-LMT-0004",
-      "verdict": "unsupported",
-      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
+      "verdict": "pass",
+      "residual": {
+        "utc_offset_s": 0
+      }
     },
     {
       "id": "L3-LMT-0005",
-      "verdict": "unsupported",
-      "detail": "the engine reads a birthplace's local mean time only inside a zone's local mean time era (resolveLocalToUtc with a longitude); it has no function for local mean time from a longitude alone"
+      "verdict": "pass",
+      "residual": {
+        "utc_offset_s": 0
+      }
     },
     {
       "id": "L3-TTU-0001",
@@ -6560,178 +6579,143 @@
     },
     {
       "id": "L3-JDN-0001",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0002",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0003",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0004",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0005",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0006",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0007",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0008",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0009",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0010",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0011",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0012",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0013",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0014",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0015",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0016",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0017",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0018",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0019",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0020",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0021",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0022",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0023",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0024",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-JDN-0025",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-CAL-0001",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-CAL-0002",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-CAL-0003",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-CAL-0004",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-CAL-0005",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-CAL-0006",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-CAL-0007",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-CAL-0008",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-CAL-0009",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     },
     {
       "id": "L3-CAL-0010",
-      "verdict": "unsupported",
-      "detail": "the engine converts dates between the Julian and Gregorian calendars (julianToGregorian, gregorianToJulian) but has no Julian Day Number in its public API"
+      "verdict": "pass"
     }
   ]
 }
