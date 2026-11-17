@@ -668,6 +668,9 @@ assert(notice.includes("dist/de440.js import, and copied into dist/core.js, the 
   "NOTICE must say that dist/core.js carries a copy of the nutation");
 assert(prose("LICENSING.md").includes("`./de440`. `dist/core.js`, the file of `@zodiacs/engine/core`, carries its own copy of them"),
   "LICENSING.md must say that dist/core.js carries a copy of the nutation");
+assert(coreText.includes("\n// src/time-scale-data.ts\n"), "dist/core.js must carry its own copy of the IERS tables");
+assert(prose("LICENSING.md").includes("`@zodiacs/engine/time` under `dist/` carry, and so does `dist/core.js`, the file of `@zodiacs/engine/core`"),
+  "LICENSING.md must say that dist/core.js carries the IERS tables");
 // NOTICE, LICENSING.md and the README say where the values are: in one shared
 // chunk that dist/deltat.js re-exports, not in dist/deltat.js itself. Check the
 // build still puts them there, without naming the chunk's hashed file name.

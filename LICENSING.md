@@ -337,7 +337,8 @@ From 1970 conversion uses the host's `Intl`/ICU data.
 
 `src/time-scale-data.ts` holds the time basis's two IERS tables, which the
 import graphs of the root entry and of `@zodiacs/engine/time` under `dist/`
-carry. `scripts/build-time-scales.mjs`
+carry, and so does `dist/core.js`, the file of `@zodiacs/engine/core`.
+`scripts/build-time-scales.mjs`
 builds it from inputs committed in `scripts/time-scale-sources/` and checks
 each one's SHA-256:
 
