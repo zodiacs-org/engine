@@ -1,0 +1,7 @@
+$ npm run package:contents
+
+> @zodiacs/engine@2.0.0-rc.3 package:contents
+> node scripts/verify-package-contents.mjs
+
+@zodiacs/engine package contents passed (100 files, 4757064 bytes unpacked: the DE440 pack 3319552, the rest 1437512 of 1438000; import graphs: . 154173 of 154200, ./calc 205334 of 205400 (79651 beyond the root's), ./conventions 2754 of 2900 (2754 beyond the root's), ./core 110765 of 110800 (110765 beyond the root's), ./crossings 9942 of 10000 (173 beyond the root's), ./deltat 5232 of 5500 (161 beyond the root's), ./geo 47715 of 47800 (44692 beyond the root's), ./houses 13678 of 15000 (13678 beyond the root's), ./internal 112381 of 112400 (949 beyond the root's), ./internal/math 19282 of 20000 (1363 beyond the root's), ./lite 28930 of 29000 (28930 beyond the root's), ./receipt 81110 of 81200 (53263 beyond the root's), ./sky 139835 of 139900 (17175 beyond the root's), ./techniques 207561 of 207600 (67622 beyond the root's), ./time 44485 of 44500 (3040 beyond the root's), ./de440 54046 of 54600 (377 beyond the root's), ./de440/pack 55266 of 55800 (325 beyond the root's), ./timing 173476 of 173500 (32865 beyond the root's), ./vedic 189208 of 189300 (49269 beyond the root's), ./window 152731 of 152800 (36817 beyond the root's); zone histories 188964 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
+exit 0

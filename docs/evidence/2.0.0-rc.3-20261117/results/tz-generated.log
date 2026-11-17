@@ -1,0 +1,6 @@
+$ TZDATA_TARBALL=<fetched>/003-tzdata2026f.tar.gz node scripts/build-tz-shards.mjs --check
+tz-shards: src/tzdb/ matches tzdb 2026f (597 names)
+exit 0
+$ TZDATA_2026F_TARBALL=<fetched>/003-tzdata2026f.tar.gz TZDATA_2021A_TARBALL=<fetched>/006-tzdata2021a.tar.gz node scripts/build-host-zone-probes.mjs --check
+host-probes: match tzdata 2026f against 2021a (703 intervals in 77 names, table 7169 bytes)
+exit 0

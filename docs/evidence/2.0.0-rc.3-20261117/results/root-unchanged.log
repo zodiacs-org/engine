@@ -1,0 +1,16 @@
+$ node --version
+v22.22.2
+$ npx vitest run scripts/root-unchanged.test.mjs
+
+ RUN  v2.1.9 <checkout>
+
+ ✓ scripts/root-unchanged.test.mjs (3 tests) 4395ms
+   ✓ the root entry against the carried archive of 2.0.0-rc.3 > computes from this checkout's source exactly what the archive computes 846ms
+   ✓ the root entry against the carried archive of 2.0.0-rc.3 > computes from this checkout's build exactly what the archive computes 1273ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  18:14:07
+   Duration  4.74s (transform 1.89s, setup 27ms, collect 28ms, tests 4.39s, environment 0ms, prepare 70ms)
+
+exit 0
