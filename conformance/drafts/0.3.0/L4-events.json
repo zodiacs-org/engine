@@ -7,7 +7,7 @@
   "arbiters": {
     "l4-de440s-events": {
       "name": "NASA JPL DE440s reduced to apparent geocentric longitudes in the IAU 2006/2000A true ecliptic and equinox of date, with event instants solved by bisection",
-      "source": "The NAIF kernel de440s.bsp (https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp, SHA-256 c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2), not committed; ERFA through pyerfa; jplephem. The reduction is that of arbiters/l1/validate.py (light time, deflection by the Sun, annual aberration, pnm06a, true obliquity), with Mars to Pluto as their system barycentres (NAIF 4 to 9). Cross-check: JPL Horizons (DE441), observer quantity 31, requests in sources/l4/horizons-requests.txt.",
+      "source": "The NAIF kernel de440s.bsp (https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp, SHA-256 c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2), not committed; ERFA through pyerfa; jplephem. The reduction is that of arbiters/l1/validate.py (light time, deflection by the Sun, annual aberration, pnm06a, true obliquity), with Mars to Pluto as their system barycentres (NAIF 4 to 9). Cross-check (b): the JPL Horizons API (version 1.2, ephemeris DE441, EOP file eop.261116.p270212), observer quantity 31 for the geocentre in TT, retrieved 2026-11-17 as recorded in sources/l4/horizons-provenance.tsv, over all events from 1860 to 2149; the requests are in sources/l4/horizons-requests.txt and the responses in sources/l4/horizons/.",
       "inputs": [
         {
           "path": "sources/l4/horizons-requests.txt",
@@ -15,7 +15,67 @@
         },
         {
           "path": "sources/l4/solutions.json",
-          "sha256": "a274a5315bee4b9e05f6e1011ba906d89a5f4bfc1a70cba426c489031471bbc1"
+          "sha256": "ef49ef772fa4045c00983199579715c7d4b1f56cd06d5162cc2e86a1e9440abf"
+        },
+        {
+          "path": "sources/l4/horizons-provenance.tsv",
+          "sha256": "64e9d2b7d3782cc7da795a89f04ac8d1954e0f4c3aedd6b43326f151ade36dac"
+        },
+        {
+          "path": "sources/l4/horizons/request-01.txt",
+          "sha256": "38a1d6e66a9e37b7f5d3bdfcaa388dd9f8065bf92928e48a4b71f738dc6148db"
+        },
+        {
+          "path": "sources/l4/horizons/request-02.txt",
+          "sha256": "d288f67f96b9a7e5e9ec6e228e75b71f067126e8aa7873e096ed4da4b814fd3d"
+        },
+        {
+          "path": "sources/l4/horizons/request-03.txt",
+          "sha256": "5e0c1d98c0638a0c9abdfce6f497bc09c86ebca7d999ea153cd4f43f040a1baf"
+        },
+        {
+          "path": "sources/l4/horizons/request-04.txt",
+          "sha256": "c6401632fec88e324d47b45347952da6e9630f694178bf92b3b94a1f66fb8222"
+        },
+        {
+          "path": "sources/l4/horizons/request-05.txt",
+          "sha256": "3eb16a28ff5b83442e112288e9cfd4d55e1cb3d33b5d535b78ffdd45181dba6c"
+        },
+        {
+          "path": "sources/l4/horizons/request-06.txt",
+          "sha256": "fb59a77ea3475ffb2bddf0e7569fba2623706b2d7a1a6e33571794bcbbd86b08"
+        },
+        {
+          "path": "sources/l4/horizons/request-07a.txt",
+          "sha256": "d8f8dd114ba85b9977038ef17a268274a0af7602f07b0725ba70a3590542d3e9"
+        },
+        {
+          "path": "sources/l4/horizons/request-07b.txt",
+          "sha256": "1b3296f305f12ba9532632c598d57549032974f5fd15fe49ae90250b98462363"
+        },
+        {
+          "path": "sources/l4/horizons/request-08.txt",
+          "sha256": "ce646b08729c45a2e3a5a65375c7fb4b4da88e640aa0c42f54d703e31081156b"
+        },
+        {
+          "path": "sources/l4/horizons/request-09.txt",
+          "sha256": "f5cc0d6225ff29fd305c800573561959e7f5dd49352c8658afa727da7ad4c3bf"
+        },
+        {
+          "path": "sources/l4/horizons/request-10.txt",
+          "sha256": "ec203594b65f73990bc89876ec38c593a53e5e0c1c14db4719dea8095415b48f"
+        },
+        {
+          "path": "sources/l4/horizons/request-11a.txt",
+          "sha256": "a243cd74e7b9716d6a061050cbf935f5f5c9d4b17e2fba546b8401b12ed07e08"
+        },
+        {
+          "path": "sources/l4/horizons/request-11b.txt",
+          "sha256": "e447373da36a13e1b60320c9d2080ab0a32c9e93bc14ef0ba08dfdeb54f9c707"
+        },
+        {
+          "path": "sources/l4/horizons/request-12.txt",
+          "sha256": "e7dd0f4ad49da9cbec6a7a1a84e45553a65c62e6376c28ba994b05982e76b74f"
         },
         {
           "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp",
@@ -24,7 +84,7 @@
       ],
       "method": "For each event of DESIGN.md the generator samples the quantity (a body's longitude, the Moon's longitude minus the Sun's, or the longitude's rate as a central difference over an hour either side) at 1 hour steps from the window's start, after a daily table has shown where to look, and solves the first crossing by bisection to 1 ms. The window ends midway to the next time the same thing happens (or at 2150-01-01 TT), and holds exactly one event. Tolerance: for an ingress or a lunation, max(1 s, 1 arcsec / |rate|) rounded up to a whole second, the rate from the longitudes an hour either side; for a station, max(60 s, sqrt(2 x 1 arcsec / |acceleration|)) rounded up, the acceleration from the longitudes an hour before, at and an hour after. Every solved instant, its window and those longitudes are in sources/l4/solutions.json.",
       "generator": "arbiters/l4/build.py",
-      "uncertainty": "Tolerances by kind: event.ingress: 2 s to 5250 s; event.lunation: 2 s to 3 s; event.station: 6270 s to 50406 s. Check (a): every solve repeated with half hour brackets agrees within 0.000 s, at most 0.0000 of its tolerance (limit 0.1). The array reduction agrees with validate.py's apparent() at every solved instant within 0.004172 mas. Property: at t - tolerance and t + tolerance every ingress lies on opposite sides of its target, at most 1.498 arcsec from it (limit 1.5). Vector L4-ING-0061 solves -0.0002 s from the independent de440.bsp reduction in docs/evidence/1.1.0-rc.11-20261115/breaker/results/ingress-ref.json (limit 1 s). Check (b), JPL Horizons (DE441), is pending: none of the 140 events has its Horizons answers yet. The 12 requests are listed in sources/l4/horizons-requests.txt; until their responses are committed under sources/l4/horizons/ with their SHA-256 in sources/l4/SHA256SUMS, no vector is confirmed by Horizons."
+      "uncertainty": "Tolerances by kind: event.ingress: 2 s to 5250 s; event.lunation: 2 s to 3 s; event.station: 6270 s to 50406 s. Check (a): every solve repeated with half hour brackets agrees within 0.000 s, at most 0.0000 of its tolerance (limit 0.1). The array reduction agrees with validate.py's apparent() at every solved instant within 0.004172 mas. Property: at t - tolerance and t + tolerance every ingress lies on opposite sides of its target, at most 1.498 arcsec from it (limit 1.5). Vector L4-ING-0061 solves -0.0002 s from the independent de440.bsp reduction in docs/evidence/1.1.0-rc.11-20261115/breaker/results/ingress-ref.json (limit 1 s). Check (b), against the JPL Horizons API (version 1.2, ephemeris DE441, EOP file eop.261116.p270212), observer quantity 31 for the geocentre in TT, retrieved 2026-11-17 as recorded in sources/l4/horizons-provenance.tsv: 140 of 140 events checked, 0 failed and were dropped, 0 pending. For the 110 ingresses and lunations, Horizons' longitude at the solved instant differs from the target by a median of 0.047 arcsec; the worst is L4-ING-0049 (the first ingress of Neptune after 1860-01-01 TT) at -0.359 arcsec (limit 0.45). The difference grows with distance from J2000 (1860 to 1899: -0.359 to +0.011; 1900 to 1959: -0.158 to +0.002; 1960 to 2029: -0.057 to +0.003; 2030 to 2149: -0.012 to +0.343 arcsec), as the IAU 1976/1980 frame Horizons gives for quantity 31 parts from the IAU 2006/2000A frame of the arbiter. For the 30 stations, the station implied by Horizons' longitudes an hour either side of the solved instant lies at most 62 s from it; the largest share of a tolerance is L4-STA-0030 (the first station of Saturn after 2140-07-01 TT), +62 s against 49110 s (0.0013). Every event's own figure is in sources/l4/solutions.json under \"horizons\"."
     }
   },
   "dropped": [

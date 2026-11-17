@@ -29,7 +29,12 @@
         "value": 0.0424115886,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 24
+      "tolerance_s": 24,
+      "horizons": {
+        "pass": true,
+        "value": -0.3571,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0002",
@@ -54,7 +59,12 @@
         "value": 0.04241512,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 24
+      "tolerance_s": 24,
+      "horizons": {
+        "pass": true,
+        "value": -0.1559,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0003",
@@ -79,7 +89,12 @@
         "value": 0.0424114211,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 24
+      "tolerance_s": 24,
+      "horizons": {
+        "pass": true,
+        "value": -0.0479,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0004",
@@ -104,7 +119,12 @@
         "value": 0.04242416535,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 24
+      "tolerance_s": 24,
+      "horizons": {
+        "pass": true,
+        "value": -0.0464,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0005",
@@ -129,7 +149,12 @@
         "value": 0.04239948925,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 24
+      "tolerance_s": 24,
+      "horizons": {
+        "pass": true,
+        "value": 0.0612,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0006",
@@ -154,7 +179,12 @@
         "value": 0.04243992225,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 24
+      "tolerance_s": 24,
+      "horizons": {
+        "pass": true,
+        "value": 0.3035,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0007",
@@ -179,7 +209,12 @@
         "value": 0.528707338,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": -0.3452,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0008",
@@ -204,7 +239,12 @@
         "value": 0.54769895165,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": -0.1573,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0009",
@@ -229,7 +269,12 @@
         "value": 0.55924829515,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": -0.0468,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0010",
@@ -254,7 +299,12 @@
         "value": 0.6263150335,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": -0.0436,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0011",
@@ -279,7 +329,12 @@
         "value": 0.55967873245,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.067,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0012",
@@ -304,7 +359,12 @@
         "value": 0.59432634485,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.3157,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0013",
@@ -329,7 +389,12 @@
         "value": 0.05453808695,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 19
+      "tolerance_s": 19,
+      "horizons": {
+        "pass": true,
+        "value": -0.3575,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0014",
@@ -354,7 +419,12 @@
         "value": 0.0329677624,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 31
+      "tolerance_s": 31,
+      "horizons": {
+        "pass": true,
+        "value": -0.1577,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0015",
@@ -379,7 +449,12 @@
         "value": 0.05617859665,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 18
+      "tolerance_s": 18,
+      "horizons": {
+        "pass": true,
+        "value": -0.0482,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0016",
@@ -404,7 +479,12 @@
         "value": 0.0637763796,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 16
+      "tolerance_s": 16,
+      "horizons": {
+        "pass": true,
+        "value": -0.0464,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0017",
@@ -429,7 +509,12 @@
         "value": 0.06958886065,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 15
+      "tolerance_s": 15,
+      "horizons": {
+        "pass": true,
+        "value": 0.0623,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0018",
@@ -454,7 +539,12 @@
         "value": 0.0641366948,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 16
+      "tolerance_s": 16,
+      "horizons": {
+        "pass": true,
+        "value": 0.3031,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0019",
@@ -479,7 +569,12 @@
         "value": 0.0515875649,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 20
+      "tolerance_s": 20,
+      "horizons": {
+        "pass": true,
+        "value": -0.3582,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0020",
@@ -504,7 +599,12 @@
         "value": 0.05196976855,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 20
+      "tolerance_s": 20,
+      "horizons": {
+        "pass": true,
+        "value": -0.157,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0021",
@@ -529,7 +629,12 @@
         "value": -0.02529219305,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 40
+      "tolerance_s": 40,
+      "horizons": {
+        "pass": true,
+        "value": -0.0479,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0022",
@@ -554,7 +659,12 @@
         "value": 0.0523934375,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 20
+      "tolerance_s": 20,
+      "horizons": {
+        "pass": true,
+        "value": -0.0464,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0023",
@@ -579,7 +689,12 @@
         "value": 0.05018099625,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 20
+      "tolerance_s": 20,
+      "horizons": {
+        "pass": true,
+        "value": 0.0616,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0024",
@@ -604,7 +719,12 @@
         "value": 0.0489519064,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 21
+      "tolerance_s": 21,
+      "horizons": {
+        "pass": true,
+        "value": 0.3024,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0025",
@@ -629,7 +749,12 @@
         "value": 0.02516549925,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 40
+      "tolerance_s": 40,
+      "horizons": {
+        "pass": true,
+        "value": -0.3578,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0026",
@@ -654,7 +779,12 @@
         "value": 0.02672360895,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 38
+      "tolerance_s": 38,
+      "horizons": {
+        "pass": true,
+        "value": -0.1555,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0027",
@@ -679,7 +809,12 @@
         "value": 0.0300009021,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 34
+      "tolerance_s": 34,
+      "horizons": {
+        "pass": true,
+        "value": -0.0479,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0028",
@@ -704,7 +839,12 @@
         "value": 0.0324730984,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 31
+      "tolerance_s": 31,
+      "horizons": {
+        "pass": true,
+        "value": -0.0464,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0029",
@@ -729,7 +869,12 @@
         "value": 0.03295815375,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 31
+      "tolerance_s": 31,
+      "horizons": {
+        "pass": true,
+        "value": 0.0608,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0030",
@@ -754,7 +899,12 @@
         "value": 0.02237428535,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 45
+      "tolerance_s": 45,
+      "horizons": {
+        "pass": true,
+        "value": 0.3114,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0031",
@@ -779,7 +929,12 @@
         "value": 0.0088823153,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 113
+      "tolerance_s": 113,
+      "horizons": {
+        "pass": true,
+        "value": -0.3539,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0032",
@@ -804,7 +959,12 @@
         "value": 0.0096691846,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 104
+      "tolerance_s": 104,
+      "horizons": {
+        "pass": true,
+        "value": -0.153,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0033",
@@ -829,7 +989,12 @@
         "value": 0.00885876525,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 113
+      "tolerance_s": 113,
+      "horizons": {
+        "pass": true,
+        "value": -0.049,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0034",
@@ -854,7 +1019,12 @@
         "value": 0.00890797615,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 113
+      "tolerance_s": 113,
+      "horizons": {
+        "pass": true,
+        "value": -0.0464,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0035",
@@ -879,7 +1049,12 @@
         "value": 0.00826383715,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 122
+      "tolerance_s": 122,
+      "horizons": {
+        "pass": true,
+        "value": 0.0594,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0036",
@@ -904,7 +1079,12 @@
         "value": 0.0097222785,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 103
+      "tolerance_s": 103,
+      "horizons": {
+        "pass": true,
+        "value": 0.302,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0037",
@@ -929,7 +1109,12 @@
         "value": 0.00529214905,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 189
+      "tolerance_s": 189,
+      "horizons": {
+        "pass": true,
+        "value": -0.3478,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0038",
@@ -954,7 +1139,12 @@
         "value": 0.00491739125,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 204
+      "tolerance_s": 204,
+      "horizons": {
+        "pass": true,
+        "value": -0.1505,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0039",
@@ -979,7 +1169,12 @@
         "value": 0.0048092547,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 208
+      "tolerance_s": 208,
+      "horizons": {
+        "pass": true,
+        "value": -0.0482,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0040",
@@ -1004,7 +1199,12 @@
         "value": 0.00458548595,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 219
+      "tolerance_s": 219,
+      "horizons": {
+        "pass": true,
+        "value": -0.0479,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0041",
@@ -1029,7 +1229,12 @@
         "value": 0.00417866455,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 240
+      "tolerance_s": 240,
+      "horizons": {
+        "pass": true,
+        "value": 0.0572,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0042",
@@ -1054,7 +1259,12 @@
         "value": 0.0049413368,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 203
+      "tolerance_s": 203,
+      "horizons": {
+        "pass": true,
+        "value": 0.306,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0043",
@@ -1079,7 +1289,12 @@
         "value": 0.0024886053,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 402
+      "tolerance_s": 402,
+      "horizons": {
+        "pass": true,
+        "value": -0.3352,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0044",
@@ -1104,7 +1319,12 @@
         "value": 0.0023539311,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 425
+      "tolerance_s": 425,
+      "horizons": {
+        "pass": true,
+        "value": -0.1548,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0045",
@@ -1129,7 +1349,12 @@
         "value": 0.00115086945,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 869
+      "tolerance_s": 869,
+      "horizons": {
+        "pass": true,
+        "value": -0.0486,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0046",
@@ -1154,7 +1379,12 @@
         "value": 0.00226636115,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 442
+      "tolerance_s": 442,
+      "horizons": {
+        "pass": true,
+        "value": -0.0464,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0047",
@@ -1179,7 +1409,12 @@
         "value": 0.00185227975,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 540
+      "tolerance_s": 540,
+      "horizons": {
+        "pass": true,
+        "value": 0.0684,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0048",
@@ -1204,7 +1439,12 @@
         "value": 0.00057260495,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 1747
+      "tolerance_s": 1747,
+      "horizons": {
+        "pass": true,
+        "value": 0.3092,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0049",
@@ -1229,7 +1469,12 @@
         "value": 0.00147214555,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 680
+      "tolerance_s": 680,
+      "horizons": {
+        "pass": true,
+        "value": -0.3589,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0050",
@@ -1254,7 +1499,12 @@
         "value": 0.0013963978,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 717
+      "tolerance_s": 717,
+      "horizons": {
+        "pass": true,
+        "value": -0.1411,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0051",
@@ -1279,7 +1529,12 @@
         "value": 0.00156835675,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 638
+      "tolerance_s": 638,
+      "horizons": {
+        "pass": true,
+        "value": -0.049,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0052",
@@ -1304,7 +1559,12 @@
         "value": 0.00105921715,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 945
+      "tolerance_s": 945,
+      "horizons": {
+        "pass": true,
+        "value": -0.0475,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0053",
@@ -1329,7 +1589,12 @@
         "value": 0.0015285144,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 655
+      "tolerance_s": 655,
+      "horizons": {
+        "pass": true,
+        "value": 0.0731,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0054",
@@ -1354,7 +1619,12 @@
         "value": 0.0015425582,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 649
+      "tolerance_s": 649,
+      "horizons": {
+        "pass": true,
+        "value": 0.3434,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0055",
@@ -1379,7 +1649,12 @@
         "value": 0.00054027105,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 1851
+      "tolerance_s": 1851,
+      "horizons": {
+        "pass": true,
+        "value": -0.2956,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0056",
@@ -1404,7 +1679,12 @@
         "value": 0.0004307296,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2322
+      "tolerance_s": 2322,
+      "horizons": {
+        "pass": true,
+        "value": -0.1249,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0057",
@@ -1429,7 +1709,12 @@
         "value": 0.00106421945,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 940
+      "tolerance_s": 940,
+      "horizons": {
+        "pass": true,
+        "value": -0.0572,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0058",
@@ -1454,7 +1739,12 @@
         "value": 0.00114165895,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 876
+      "tolerance_s": 876,
+      "horizons": {
+        "pass": true,
+        "value": 0.0011,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0059",
@@ -1479,7 +1769,12 @@
         "value": 0.00019050985,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 5250
+      "tolerance_s": 5250,
+      "horizons": {
+        "pass": true,
+        "value": 0.0637,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-STA-0001",
@@ -1504,7 +1799,12 @@
         "value": -4.0946e-08,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 6989
+      "tolerance_s": 6989,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0002",
@@ -1529,7 +1829,12 @@
         "value": -4.3081e-08,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 6814
+      "tolerance_s": 6814,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0003",
@@ -1554,7 +1859,12 @@
         "value": -4.5774e-08,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 6611
+      "tolerance_s": 6611,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0004",
@@ -1579,7 +1889,12 @@
         "value": 4.5596e-08,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 6623
+      "tolerance_s": 6623,
+      "horizons": {
+        "pass": true,
+        "value": 0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0005",
@@ -1604,7 +1919,12 @@
         "value": 3.8458e-08,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 7212
+      "tolerance_s": 7212,
+      "horizons": {
+        "pass": true,
+        "value": 0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0006",
@@ -1629,7 +1949,12 @@
         "value": -5.0882e-08,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 6270
+      "tolerance_s": 6270,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0007",
@@ -1654,7 +1979,12 @@
         "value": 1.8797e-08,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 10315
+      "tolerance_s": 10315,
+      "horizons": {
+        "pass": true,
+        "value": 0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0008",
@@ -1679,7 +2009,12 @@
         "value": -1.9884e-08,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 10030
+      "tolerance_s": 10030,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0009",
@@ -1704,7 +2039,12 @@
         "value": -1.8509e-08,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 10396
+      "tolerance_s": 10396,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0010",
@@ -1729,7 +2069,12 @@
         "value": -1.8676e-08,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 10349
+      "tolerance_s": 10349,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0011",
@@ -1754,7 +2099,12 @@
         "value": -1.9392e-08,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 10156
+      "tolerance_s": 10156,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0012",
@@ -1779,7 +2129,12 @@
         "value": -1.9327e-08,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 10173
+      "tolerance_s": 10173,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0013",
@@ -1804,7 +2159,12 @@
         "value": 6.773e-09,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 17184
+      "tolerance_s": 17184,
+      "horizons": {
+        "pass": true,
+        "value": -7.4,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0014",
@@ -1829,7 +2189,12 @@
         "value": -7.203e-09,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 16664
+      "tolerance_s": 16664,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0015",
@@ -1854,7 +2219,12 @@
         "value": -7.06e-09,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 16831
+      "tolerance_s": 16831,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0016",
@@ -1879,7 +2249,12 @@
         "value": -6.141e-09,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 18047
+      "tolerance_s": 18047,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0017",
@@ -1904,7 +2279,12 @@
         "value": -5.92e-09,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 18382
+      "tolerance_s": 18382,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0018",
@@ -1929,7 +2309,12 @@
         "value": -5.886e-09,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 18435
+      "tolerance_s": 18435,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0019",
@@ -1954,7 +2339,12 @@
         "value": -1.586e-09,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 35508
+      "tolerance_s": 35508,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0020",
@@ -1979,7 +2369,12 @@
         "value": 1.545e-09,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 35979
+      "tolerance_s": 35979,
+      "horizons": {
+        "pass": true,
+        "value": 0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0021",
@@ -2004,7 +2399,12 @@
         "value": -1.571e-09,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 35684
+      "tolerance_s": 35684,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0022",
@@ -2029,7 +2429,12 @@
         "value": -1.587e-09,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 35500
+      "tolerance_s": 35500,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0023",
@@ -2054,7 +2459,12 @@
         "value": -1.621e-09,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 35125
+      "tolerance_s": 35125,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0024",
@@ -2079,7 +2489,12 @@
         "value": -1.567e-09,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 35722
+      "tolerance_s": 35722,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0025",
@@ -2104,7 +2519,12 @@
         "value": -8.96e-10,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 47250
+      "tolerance_s": 47250,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0026",
@@ -2129,7 +2549,12 @@
         "value": 7.87e-10,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 50406
+      "tolerance_s": 50406,
+      "horizons": {
+        "pass": true,
+        "value": 0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0027",
@@ -2154,7 +2579,12 @@
         "value": 8.06e-10,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 49817
+      "tolerance_s": 49817,
+      "horizons": {
+        "pass": true,
+        "value": 0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0028",
@@ -2179,7 +2609,12 @@
         "value": -8.22e-10,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 49317
+      "tolerance_s": 49317,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0029",
@@ -2204,7 +2639,12 @@
         "value": -8.82e-10,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 47617
+      "tolerance_s": 47617,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-STA-0030",
@@ -2229,7 +2669,12 @@
         "value": 8.29e-10,
         "unit": "arcsec/s^2 (acceleration)"
       },
-      "tolerance_s": 49110
+      "tolerance_s": 49110,
+      "horizons": {
+        "pass": true,
+        "value": 62.1,
+        "unit": "s (Horizons station minus solved instant)"
+      }
     },
     {
       "id": "L4-LUN-0001",
@@ -2260,7 +2705,12 @@
         "value": 0.4584222437,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": 0.0104,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0002",
@@ -2291,7 +2741,12 @@
         "value": 0.5938920637,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0108,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0003",
@@ -2322,7 +2777,12 @@
         "value": 0.59682559285,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0112,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0004",
@@ -2353,7 +2813,12 @@
         "value": 0.4545319267,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": 0.0101,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0005",
@@ -2384,7 +2849,12 @@
         "value": 0.5297554496,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": -0.0014,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0006",
@@ -2415,7 +2885,12 @@
         "value": 0.49505293405,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": -0.0007,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0007",
@@ -2446,7 +2921,12 @@
         "value": 0.4803745547,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": -0.0018,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0008",
@@ -2477,7 +2957,12 @@
         "value": 0.57600210035,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0009",
@@ -2508,7 +2993,12 @@
         "value": 0.5775996681,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0029,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0010",
@@ -2539,7 +3029,12 @@
         "value": 0.4780107373,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": 0.0014,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0011",
@@ -2570,7 +3065,12 @@
         "value": 0.49490283405,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": 0.0029,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0012",
@@ -2601,7 +3101,12 @@
         "value": 0.53140824245,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0014,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0013",
@@ -2632,7 +3137,12 @@
         "value": 0.5404375187,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0022,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0014",
@@ -2663,7 +3173,12 @@
         "value": 0.5121082669,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0014,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0015",
@@ -2694,7 +3209,12 @@
         "value": 0.53115392895,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0022,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0016",
@@ -2725,7 +3245,12 @@
         "value": 0.5236552188,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0032,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0017",
@@ -2756,7 +3281,12 @@
         "value": 0.58666232365,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0011,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0018",
@@ -2787,7 +3317,12 @@
         "value": 0.45424536835,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": 0.0011,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0019",
@@ -2818,7 +3353,12 @@
         "value": 0.46048950865,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": 0.0011,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0020",
@@ -2849,7 +3389,12 @@
         "value": 0.5741513512,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0018,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0021",
@@ -2880,7 +3425,12 @@
         "value": 0.58691248765,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0115,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0022",
@@ -2911,7 +3461,12 @@
         "value": 0.46963230215,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": 0.0097,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0023",
@@ -2942,7 +3497,12 @@
         "value": 0.48471793555,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": 0.0101,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0024",
@@ -2973,7 +3533,12 @@
         "value": 0.57586741455,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0119,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0025",
@@ -3004,7 +3569,12 @@
         "value": 0.5625849431,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0079,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0026",
@@ -3035,7 +3605,12 @@
         "value": 0.58706947085,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0018,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0027",
@@ -3066,7 +3641,12 @@
         "value": 0.56127276685,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0011,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0028",
@@ -3097,7 +3677,12 @@
         "value": 0.5792308203,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": -0.0,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0029",
@@ -3128,7 +3713,12 @@
         "value": 0.45192089625,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": 0.0007,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-LUN-0030",
@@ -3159,7 +3749,12 @@
         "value": 0.46175028675,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": 0.0011,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0001",
@@ -3184,7 +3779,12 @@
         "value": 0.0424168677,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 24
+      "tolerance_s": 24,
+      "horizons": {
+        "pass": true,
+        "value": -0.0436,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0002",
@@ -3209,7 +3809,12 @@
         "value": 0.49075827885,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": -0.0425,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0003",
@@ -3240,7 +3845,12 @@
         "value": 0.45227797625,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": 0.0014,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0004",
@@ -3271,7 +3881,12 @@
         "value": 0.5810232985,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0018,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0005",
@@ -3296,7 +3911,12 @@
         "value": 0.04240199555,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 24
+      "tolerance_s": 24,
+      "horizons": {
+        "pass": true,
+        "value": -0.0101,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0006",
@@ -3321,7 +3941,12 @@
         "value": 0.4991993086,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": -0.0115,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0007",
@@ -3352,7 +3977,12 @@
         "value": 0.46674613155,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": 0.0007,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0008",
@@ -3383,7 +4013,12 @@
         "value": 0.56423389125,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0022,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0009",
@@ -3408,7 +4043,12 @@
         "value": 0.0424258728,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 24
+      "tolerance_s": 24,
+      "horizons": {
+        "pass": true,
+        "value": 0.0252,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0010",
@@ -3433,7 +4073,12 @@
         "value": 0.55080041375,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0292,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0011",
@@ -3464,7 +4109,12 @@
         "value": 0.5941677313,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0029,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0012",
@@ -3495,7 +4145,12 @@
         "value": 0.46005091975,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 3
+      "tolerance_s": 3,
+      "horizons": {
+        "pass": true,
+        "value": 0.0014,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0013",
@@ -3520,7 +4175,12 @@
         "value": 0.04241208375,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 24
+      "tolerance_s": 24,
+      "horizons": {
+        "pass": true,
+        "value": 0.1807,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0014",
@@ -3545,7 +4205,12 @@
         "value": 0.5863306982,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.1865,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0015",
@@ -3576,7 +4241,12 @@
         "value": 0.5114174523,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0061,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0016",
@@ -3607,7 +4277,12 @@
         "value": 0.54526223715,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0061,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0017",
@@ -3632,7 +4307,12 @@
         "value": 0.04243992225,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 24
+      "tolerance_s": 24,
+      "horizons": {
+        "pass": true,
+        "value": 0.3035,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0018",
@@ -3657,7 +4337,12 @@
         "value": 0.59432634485,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.3157,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0019",
@@ -3688,7 +4373,12 @@
         "value": 0.52562436195,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.0086,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-UTC-0020",
@@ -3719,7 +4409,12 @@
         "value": 0.5259793922,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 2
+      "tolerance_s": 2,
+      "horizons": {
+        "pass": true,
+        "value": 0.009,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     },
     {
       "id": "L4-ING-0061",
@@ -3744,7 +4439,12 @@
         "value": 0.0420716763,
         "unit": "arcsec/s (rate)"
       },
-      "tolerance_s": 24
+      "tolerance_s": 24,
+      "horizons": {
+        "pass": true,
+        "value": -0.0468,
+        "unit": "arcsec (Horizons longitude at the solved instant minus the target)"
+      }
     }
   ],
   "dropped": [

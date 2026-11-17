@@ -56,19 +56,36 @@ minutes; `--check` takes as long. `--check` first checks every file in
 `L4-events.json`, `solutions.json`, `horizons-requests.txt` and `SHA256SUMS`
 in memory and compares them byte for byte.
 
-## The Horizons cross-check (check b): waiting on answers
+## The Horizons cross-check (check b)
 
 `sources/l4/horizons-requests.txt` lists the JPL Horizons requests the
 cross-check needs, one URL a line: observer quantity 31 at each solved
 instant and an hour either side, batched per target with TLIST (for a
-lunation, both the Moon and the Sun). No answer has been fetched yet, so the
-cross-check is recorded as pending in the vector file, not as passed.
+lunation, both the Moon and the Sun). The list is made from every solved
+event before check (b) drops any, so it stays the list that was sent.
 
-To complete it, the repository's download job fetches each URL, one at a
-time, with a User-Agent that names the project and its contact address, and
-records each response's SHA-256 and retrieval time. Each response is then
-committed verbatim as `sources/l4/horizons/NN.txt` (NN the line number of its
-URL), `build.py --kernel …` is rerun (it reads every file there without the
-network, lists it in `SHA256SUMS`, checks every event and drops any that
-fails, with its reason), and the digests in `SHA256SUMS` are compared with the
-ones the download job recorded.
+The repository's download job fetched them on 2026-11-17 (Horizons API 1.2,
+DE441, EOP file eop.261116.p270212). Its answers are committed verbatim in
+`sources/l4/horizons/`: `request-NN.txt` answers line NN of the request list,
+and where a request failed (07 and 11 returned HTTP 502) it was fetched again
+in two halves, `request-NNa.txt` and `request-NNb.txt`, whose TLISTs join to
+give that line's TLIST exactly. `sources/l4/horizons-provenance.tsv` records,
+for each fetch, the URL, size, SHA-256, retrieval time (UTC), HTTP status and
+the job that fetched it, copied from the job's manifests; the failed fetches
+are listed too.
+
+`build.py` reads these files without the network and treats them as data:
+each banner must name DE441, the geocentre, no refraction and TT, and every
+row must parse. Before checking any event it compares each saved response
+with its provenance row (digest and size) and each request line with the
+responses that answer it, and stops if anything differs. It then checks every
+event, drops any that fails with its reason, keeps each event's own figure
+under `horizons` in `solutions.json`, and states the agreement in the vector
+file's `uncertainty`. Every file in `sources/l4/` is listed in `SHA256SUMS`.
+
+Horizons gives quantity 31 in the IAU 1976/1980 frame, while the arbiter uses
+IAU 2006/2000A, so the two part slowly away from J2000; the limit of 0.45
+arcsec for an ingress or a lunation allows for that over 1860 to 2149. For a
+station the check is the station Horizons' own longitudes imply (rate over
+acceleration, from the three samples), which must lie within the vector's
+tolerance.

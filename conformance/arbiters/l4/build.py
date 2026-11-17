@@ -23,6 +23,7 @@ import math
 import os
 import platform
 import re
+import statistics
 import sys
 import urllib.parse
 import warnings
@@ -42,6 +43,7 @@ OUT = os.path.join(DRAFT, 'L4-events.json')
 SOURCES = os.path.join(ROOT, 'sources', 'l4')
 SOLUTIONS = os.path.join(SOURCES, 'solutions.json')
 REQUESTS = os.path.join(SOURCES, 'horizons-requests.txt')
+PROVENANCE = os.path.join(SOURCES, 'horizons-provenance.tsv')
 SUMS = os.path.join(SOURCES, 'SHA256SUMS')
 RESPONSES = os.path.join(SOURCES, 'horizons')
 INGRESS_REF = os.path.normpath(os.path.join(
@@ -470,6 +472,8 @@ def parse_horizons(text):
     target = re.search(r'Target body name: .*?\((-?\d+)\)', text)
     if not target:
         raise ValueError('no target in the banner')
+    if '{source: DE441}' not in target.group(0) + text.split(target.group(0), 1)[1].split('\n', 1)[0]:
+        raise ValueError('the target is not from DE441')
     for need in ('Center body name: Earth (399)', 'Atmos refraction: NO (AIRLESS)', 'Date__(TT)__'):
         if need not in text:
             raise ValueError(f'the banner lacks "{need}"')
@@ -485,6 +489,65 @@ def parse_horizons(text):
         tt_s = seconds(int(y), MONTHS[mon], int(d)) + int(hh) * HOUR + int(mm) * 60 + float(ss)
         rows.append((tt_s, float(lon), float(lat)))
     return target.group(1), rows
+
+
+def read_request_lines():
+    with open(REQUESTS, encoding='ascii') as f:
+        return f.read().split()
+
+
+def _tlist(url):
+    return urllib.parse.unquote(url.split('TLIST=', 1)[1].split('&', 1)[0]).strip("'").split()
+
+
+def _without_tlist(url):
+    head, rest = url.split('TLIST=', 1)
+    return head + rest.split('&', 1)[1]
+
+
+def requested_instants(urls):
+    """(Horizons id, JD text) for every instant the requests ask for."""
+    out = []
+    for url in urls:
+        hid = urllib.parse.unquote(url.split('COMMAND=', 1)[1].split('&', 1)[0]).strip("'")
+        out.extend((hid, jd) for jd in _tlist(url))
+    return out
+
+
+def check_provenance(urls):
+    """Problems with sources/l4/horizons-provenance.tsv: every saved response must be listed there with the
+    digest and size the download job recorded, and the responses of each request (whole, or split into parts that
+    were fetched apart) must ask exactly what that line of horizons-requests.txt asks."""
+    problems = []
+    if not os.path.exists(PROVENANCE):
+        return [f'{os.path.relpath(PROVENANCE, ROOT)} is missing']
+    with open(PROVENANCE, encoding='ascii') as f:
+        rows = [line.rstrip('\n').split('\t') for line in f][1:]
+    listed, parts = set(), {}
+    for name, request, size, digest, retrieved, status, url, _ in rows:
+        n = int(request[:2])
+        if not 1 <= n <= len(urls):
+            problems.append(f'{request}: no such request')
+            continue
+        if _without_tlist(url) != _without_tlist(urls[n - 1]):
+            problems.append(f'{request}: the URL asks something other than request {n}')
+        if status != '200':
+            continue
+        listed.add(name)
+        path = os.path.join(SOURCES, name)
+        if not os.path.exists(path):
+            problems.append(f'{name}: missing')
+        elif sha256_file(path) != digest or os.path.getsize(path) != int(size):
+            problems.append(f'{name}: does not match the digest and size recorded at retrieval')
+        parts.setdefault(n, []).append((request, _tlist(url)))
+    for n, url in enumerate(urls, 1):
+        got = [jd for _, tl in sorted(parts.get(n, [])) for jd in tl]
+        if got != _tlist(url):
+            problems.append(f'request {n}: the saved responses do not answer its TLIST exactly')
+    on_disk = {f'horizons/{name}' for name in os.listdir(RESPONSES)} if os.path.isdir(RESPONSES) else set()
+    for name in sorted(on_disk - listed):
+        problems.append(f'{name}: not recorded in horizons-provenance.tsv')
+    return problems
 
 
 def read_responses():
@@ -625,15 +688,22 @@ def build(sky):
                                                               f'the tolerance {tol} s'})
             continue
         if 'eclipse' in extra:
-            (y, m, d), _ = extra['eclipse']
-            days = (ev['t'] - seconds(y, m, d)) / DAY
-            lat = smp['moonLatitude']
-            if not (-3.0 <= math.floor(days) <= 3.0) or abs(lat) >= ECLIPSE_LATITUDE_LIMIT:
-                dropped.append({'id': vid, 'what': what, 'reason': f'eclipse check: {days:+.2f} days from the listed '
-                                                                  f'date, Moon latitude {lat:+.4f} deg'})
+            reason = eclipse_check(ev['t'], extra['eclipse'][0], smp['moonLatitude'])
+            if reason:
+                dropped.append({'id': vid, 'what': what, 'reason': reason})
                 continue
         records.append(record)
     return builder, records, dropped
+
+
+def eclipse_check(t, date, lat):
+    """None when a lunation at t (seconds of TT) lies within 3 days of the listed date, measured from its 00:00 TT,
+    with the Moon's ecliptic latitude under 1.6 degrees; otherwise the reason it fails."""
+    days = (t - seconds(*date)) / DAY
+    if abs(days) > 3.0 or abs(lat) >= ECLIPSE_LATITUDE_LIMIT:
+        return f'eclipse check: {days:+.4f} days from the listed date (limit 3), Moon latitude {lat:+.4f} deg ' \
+               f'(limit {ECLIPSE_LATITUDE_LIMIT})'
+    return None
 
 
 def describe(kind, name, extra, target):
@@ -711,6 +781,7 @@ def solutions_doc(records, dropped):
             'motion': {'value': round(r['motion'], 12),
                        'unit': 'arcsec/s^2 (acceleration)' if r['kind'] == 'event.station' else 'arcsec/s (rate)'},
             'tolerance_s': r['tolerance'],
+            'horizons': r.get('horizons'),
         } for r in records],
         'dropped': dropped,
     }
@@ -742,6 +813,42 @@ def scalar_check(sky, records):
     return worst
 
 
+HORIZONS_REFERENCE = ('the JPL Horizons API (version 1.2, ephemeris DE441, EOP file eop.261116.p270212), observer '
+                      'quantity 31 for the geocentre in TT, retrieved 2026-11-17 as recorded in '
+                      'sources/l4/horizons-provenance.tsv')
+
+
+def horizons_summary(xc):
+    """The agreement figures of check (b), each taken from the per-event values kept in solutions.json."""
+    if not xc['level'] and not xc['station']:
+        return ''
+    parts = []
+    if xc['level']:
+        level = sorted(xc['level'], key=lambda rm: abs(rm[1]))
+        worst_r, worst = level[-1]
+        mags = [abs(m) for _, m in level]
+        eras = []
+        for lo, hi in ((1860, 1900), (1900, 1960), (1960, 2030), (2030, 2150)):
+            vals = [m for r, m in level if lo <= int(iso(r['tt_s'])[:4]) < hi]
+            if vals:
+                eras.append(f'{lo} to {hi - 1}: {min(vals):+.3f} to {max(vals):+.3f}')
+        parts.append(
+            f'For the {len(level)} ingresses and lunations, Horizons\' longitude at the solved instant differs from '
+            f'the target by a median of {statistics.median(mags):.3f} arcsec; the worst is {worst_r["id"]} '
+            f'({worst_r["what"]}) at {worst:+.3f} arcsec (limit {TOLERANCE_HORIZONS}). The difference grows with '
+            f'distance from J2000 ({"; ".join(eras)} arcsec), as the IAU 1976/1980 frame Horizons gives for quantity '
+            '31 parts from the IAU 2006/2000A frame of the arbiter.')
+    if xc['station']:
+        station = sorted(xc['station'], key=lambda rm: abs(rm[1]) / rm[0]['tolerance'])
+        worst_r, worst = station[-1]
+        parts.append(
+            f'For the {len(station)} stations, the station implied by Horizons\' longitudes an hour either side '
+            f'of the solved instant lies at most {max(abs(m) for _, m in station):.0f} s from it; the largest share of a '
+            f'tolerance is {worst_r["id"]} ({worst_r["what"]}), {worst:+.0f} s against {worst_r["tolerance"]} s '
+            f'({abs(worst) / worst_r["tolerance"]:.4f}).')
+    return ' '.join(parts) + ' Every event\'s own figure is in sources/l4/solutions.json under "horizons".'
+
+
 def document(records, dropped, checks, inputs):
     by_kind = {}
     for r in records:
@@ -756,10 +863,8 @@ def document(records, dropped, checks, inputs):
             'vector is confirmed by Horizons.')
     else:
         horizons_text = (
-            f'Check (b), JPL Horizons (DE441): {xc["checked"]} of {xc["needed"]} events checked against the saved '
-            f'responses, {xc["failed"]} failed and were dropped; the largest longitude difference at an ingress or '
-            f'lunation was {xc["worstArcsec"]:.3f} arcsec (limit {TOLERANCE_HORIZONS}), the largest station shift '
-            f'{xc["worstStationS"]:.0f} s; {xc["needed"] - xc["checked"]} events are still pending.')
+            f'Check (b), against {HORIZONS_REFERENCE}: {xc["checked"]} of {xc["needed"]} events checked, '
+            f'{xc["failed"]} failed and were dropped, {xc["needed"] - xc["checked"]} pending. ' + xc['summary'])
     return {
         'suite': 'zodiacs-conformance',
         'suiteVersion': '0.3.0-draft',
@@ -776,8 +881,9 @@ def document(records, dropped, checks, inputs):
                 'source': f'The NAIF kernel de440s.bsp ({KERNEL_URL}, SHA-256 {KERNEL_SHA256}), not committed; ERFA '
                           'through pyerfa; jplephem. The reduction is that of arbiters/l1/validate.py (light time, '
                           'deflection by the Sun, annual aberration, pnm06a, true obliquity), with Mars to Pluto as '
-                          'their system barycentres (NAIF 4 to 9). Cross-check: JPL Horizons (DE441), observer '
-                          'quantity 31, requests in sources/l4/horizons-requests.txt.',
+                          'their system barycentres (NAIF 4 to 9). Cross-check (b): ' + HORIZONS_REFERENCE + ', over '
+                          'all events from 1860 to 2149; the requests are in sources/l4/horizons-requests.txt and '
+                          'the responses in sources/l4/horizons/.',
                 'inputs': inputs,
                 'method': (
                     'For each event of DESIGN.md the generator samples the quantity (a body\'s longitude, the Moon\'s '
@@ -826,9 +932,15 @@ def run(kernel_path):
     ref_diff = vref['tt_s'] - ref_t
     if abs(ref_diff) > 1.0:
         raise SystemExit(f'{vref["id"]} solves {ref_diff:+.3f} s from ingress-ref.json')
-    # Horizons cross-check from saved responses, if any.
+    # Horizons cross-check from saved responses, if any. The requests are those of every solved event, before
+    # check (b) drops any, so that they stay the ones that were sent.
+    urls = horizons_requests(records)
     responses = read_responses()
-    xc = {'needed': len(records), 'checked': 0, 'failed': 0, 'worstArcsec': 0.0, 'worstStationS': 0.0}
+    if responses:
+        problems = check_provenance(urls)
+        if problems:
+            raise SystemExit('the saved Horizons responses do not match their record:\n  ' + '\n  '.join(problems))
+    xc = {'needed': len(records), 'checked': 0, 'failed': 0, 'requests': len(urls), 'level': [], 'station': []}
     kept = []
     for r in records:
         result = cross_check(r, responses)
@@ -837,10 +949,10 @@ def run(kernel_path):
             continue
         ok, measure, text = result
         xc['checked'] += 1
-        if r['kind'] == 'event.station':
-            xc['worstStationS'] = max(xc['worstStationS'], abs(measure))
-        else:
-            xc['worstArcsec'] = max(xc['worstArcsec'], abs(measure))
+        r['horizons'] = {'pass': ok, 'value': round(measure, 4 if r['kind'] != 'event.station' else 1),
+                         'unit': 's (Horizons station minus solved instant)' if r['kind'] == 'event.station'
+                         else 'arcsec (Horizons longitude at the solved instant minus the target)'}
+        xc['station' if r['kind'] == 'event.station' else 'level'].append((r, measure))
         if ok:
             kept.append(r)
         else:
@@ -848,8 +960,9 @@ def run(kernel_path):
             dropped.append({'id': r['id'], 'what': r['what'], 'reason': f'check (b): {text}'})
     records = kept
     dropped.sort(key=lambda d: d['id'])
-    urls = horizons_requests(records)
-    xc['requests'] = len(urls)
+    xc['summary'] = horizons_summary(xc)
+    xc['levelWorstArcsec'] = max((abs(m) for _, m in xc.pop('level')), default=None)
+    xc['stationWorstS'] = max((abs(m) for _, m in xc.pop('station')), default=None)
     checks = {
         'halfHourWorstS': max(abs(r['t_half'] - r['tt_s']) for r in records),
         'halfHourWorstRatio': max(abs(r['t_half'] - r['tt_s']) / r['tolerance'] for r in records),
@@ -862,14 +975,14 @@ def run(kernel_path):
     files['solutions.json'] = (json.dumps(solutions_doc(records, dropped), indent=2, ensure_ascii=True) + '\n').encode()
     files['horizons-requests.txt'] = ('\n'.join(urls) + '\n').encode()
     inputs = [{'path': f'sources/l4/{name}', 'sha256': sha256_bytes(data)} for name, data in sorted(files.items())]
-    inputs += [{'path': f'sources/l4/horizons/{name}', 'sha256': sha256_file(os.path.join(RESPONSES, name))}
-               for name in (sorted(os.listdir(RESPONSES)) if os.path.isdir(RESPONSES) else [])]
+    inputs += [{'path': f'sources/l4/{name}', 'sha256': sha256_file(os.path.join(SOURCES, name))}
+               for name in source_files() if name not in files]
     inputs.append({'url': KERNEL_URL, 'sha256': KERNEL_SHA256})
     doc = document(records, dropped, checks, inputs)
     out = (json.dumps(doc, indent=2, ensure_ascii=True) + '\n').encode()
     sums = dict(files)
     for name in source_files():
-        if name.startswith('horizons/'):
+        if name not in files:
             with open(os.path.join(SOURCES, name), 'rb') as f:
                 sums[name] = f.read()
     sums_text = ''.join(f'{sha256_bytes(data)}  {name}\n' for name, data in sorted(sums.items())).encode()

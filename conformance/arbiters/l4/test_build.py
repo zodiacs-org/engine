@@ -134,5 +134,38 @@ class Rules(unittest.TestCase):
                 self.assertIn(part, url)
 
 
+class Eclipse(unittest.TestCase):
+    """The eclipse check holds the lunation to within 3 days of the listed date (00:00 TT), no more."""
+
+    START = build.seconds(2018, 7, 27)
+
+    def check(self, days, lat=0.1):
+        return build.eclipse_check(self.START + days * build.DAY, (2018, 7, 27), lat)
+
+    def test_inside(self):
+        for days in (0.0, 0.85, 3.0, -3.0):
+            self.assertIsNone(self.check(days), days)
+
+    def test_beyond_three_days(self):
+        for days in (3.001, 3.5, 3.99, -3.001, -3.5):
+            self.assertIsNotNone(self.check(days), days)
+
+    def test_latitude(self):
+        self.assertIsNotNone(self.check(0.5, lat=build.ECLIPSE_LATITUDE_LIMIT))
+        self.assertIsNotNone(self.check(0.5, lat=-1.7))
+        self.assertIsNone(self.check(0.5, lat=1.59))
+
+
+class Provenance(unittest.TestCase):
+    def test_every_response_is_recorded_and_matches(self):
+        self.assertEqual(build.check_provenance(build.read_request_lines()), [])
+
+    def test_every_requested_instant_is_answered(self):
+        table = build.read_responses()
+        missing = [(hid, jd) for hid, jd in build.requested_instants(build.read_request_lines())
+                   if build.horizons_lookup(table, hid, (float(jd) - build.MJD0 - build.J2000_MJD) * build.DAY) is None]
+        self.assertEqual(missing, [])
+
+
 if __name__ == '__main__':
     unittest.main()
