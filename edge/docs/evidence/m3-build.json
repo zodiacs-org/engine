@@ -1,0 +1,185 @@
+{
+  "schema": "edge-bundle-report/1",
+  "scope": "Root API, synthetic workloads and Worker handler builds; target runtimes are untested.",
+  "engineVersion": "1.0.0",
+  "ephemeris": {
+    "name": "astronomy-engine",
+    "version": "2.1.19"
+  },
+  "toolchain": {
+    "node": "v22.22.2",
+    "esbuild": "0.27.7"
+  },
+  "fileLimitExclusiveBytes": 2000000,
+  "builds": [
+    {
+      "target": "workers",
+      "sourceDigest": "f69614b38a8dea10b867c8a829fdfe3fc65b1574a215d6b4cc3cc42e305c7498",
+      "outputs": [
+        {
+          "path": "ASTRONOMY-LICENSE.txt",
+          "bytes": 1291,
+          "sha256": "31e913dcab32e6e5d0aa1b5f32ab350a6ab91b273f7f38d4de83b54ee644de41"
+        },
+        {
+          "path": "LICENSE",
+          "bytes": 1068,
+          "sha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df"
+        },
+        {
+          "path": "LICENSING.md",
+          "bytes": 26184,
+          "sha256": "0bb05bc7302dfcf9362cb294e9f738235cfa33892625a2376502c263485eb303"
+        },
+        {
+          "path": "NOTICE",
+          "bytes": 10121,
+          "sha256": "15b724304a7bebadaed4f6e01631314dab7b5b92b3b84dc3a59864fb6e555cce"
+        },
+        {
+          "path": "engine.mjs",
+          "bytes": 174490,
+          "sha256": "bcfa260de3a71ec72beaec7a2528d27bab86480c2f9c3f513ec4d5b509ffe297"
+        },
+        {
+          "path": "metafile.json",
+          "bytes": 19197,
+          "sha256": "af97896cfc919b9821c7d41970a375824c70e0d66a5d667caadedd8a76094323"
+        },
+        {
+          "path": "worker.mjs",
+          "bytes": 133582,
+          "sha256": "cffd7e22b7ff8d24056d1593d5ed30e94eb94b956f1fc85d83deafc3b8b33cad"
+        },
+        {
+          "path": "workloads.mjs",
+          "bytes": 138739,
+          "sha256": "0cf65553ed5fec887bc66dc24fc3f633fe4a40f448db3004eca642d074d146d9"
+        }
+      ]
+    },
+    {
+      "target": "deno",
+      "sourceDigest": "0bca6443b377c90b826ef1e4e5308dfce55f8d8e6694088f8bf5dc8b5dedcd7d",
+      "outputs": [
+        {
+          "path": "ASTRONOMY-LICENSE.txt",
+          "bytes": 1291,
+          "sha256": "31e913dcab32e6e5d0aa1b5f32ab350a6ab91b273f7f38d4de83b54ee644de41"
+        },
+        {
+          "path": "LICENSE",
+          "bytes": 1068,
+          "sha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df"
+        },
+        {
+          "path": "LICENSING.md",
+          "bytes": 26184,
+          "sha256": "0bb05bc7302dfcf9362cb294e9f738235cfa33892625a2376502c263485eb303"
+        },
+        {
+          "path": "NOTICE",
+          "bytes": 10121,
+          "sha256": "15b724304a7bebadaed4f6e01631314dab7b5b92b3b84dc3a59864fb6e555cce"
+        },
+        {
+          "path": "engine.mjs",
+          "bytes": 174490,
+          "sha256": "bcfa260de3a71ec72beaec7a2528d27bab86480c2f9c3f513ec4d5b509ffe297"
+        },
+        {
+          "path": "metafile.json",
+          "bytes": 17172,
+          "sha256": "fa5a2935184110d6f8eb1ed6412416cc45385db929ce0ca233c000dc50b64761"
+        },
+        {
+          "path": "workloads.mjs",
+          "bytes": 138739,
+          "sha256": "0cf65553ed5fec887bc66dc24fc3f633fe4a40f448db3004eca642d074d146d9"
+        }
+      ]
+    },
+    {
+      "target": "bun",
+      "sourceDigest": "0bca6443b377c90b826ef1e4e5308dfce55f8d8e6694088f8bf5dc8b5dedcd7d",
+      "outputs": [
+        {
+          "path": "ASTRONOMY-LICENSE.txt",
+          "bytes": 1291,
+          "sha256": "31e913dcab32e6e5d0aa1b5f32ab350a6ab91b273f7f38d4de83b54ee644de41"
+        },
+        {
+          "path": "LICENSE",
+          "bytes": 1068,
+          "sha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df"
+        },
+        {
+          "path": "LICENSING.md",
+          "bytes": 26184,
+          "sha256": "0bb05bc7302dfcf9362cb294e9f738235cfa33892625a2376502c263485eb303"
+        },
+        {
+          "path": "NOTICE",
+          "bytes": 10121,
+          "sha256": "15b724304a7bebadaed4f6e01631314dab7b5b92b3b84dc3a59864fb6e555cce"
+        },
+        {
+          "path": "engine.mjs",
+          "bytes": 174490,
+          "sha256": "bcfa260de3a71ec72beaec7a2528d27bab86480c2f9c3f513ec4d5b509ffe297"
+        },
+        {
+          "path": "metafile.json",
+          "bytes": 17170,
+          "sha256": "02278b9f37c5621a128950b5781790c1075dd69fabf1357360e9fdc3b7335e31"
+        },
+        {
+          "path": "workloads.mjs",
+          "bytes": 138739,
+          "sha256": "0cf65553ed5fec887bc66dc24fc3f633fe4a40f448db3004eca642d074d146d9"
+        }
+      ]
+    },
+    {
+      "target": "browser",
+      "sourceDigest": "0bca6443b377c90b826ef1e4e5308dfce55f8d8e6694088f8bf5dc8b5dedcd7d",
+      "outputs": [
+        {
+          "path": "ASTRONOMY-LICENSE.txt",
+          "bytes": 1291,
+          "sha256": "31e913dcab32e6e5d0aa1b5f32ab350a6ab91b273f7f38d4de83b54ee644de41"
+        },
+        {
+          "path": "LICENSE",
+          "bytes": 1068,
+          "sha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df"
+        },
+        {
+          "path": "LICENSING.md",
+          "bytes": 26184,
+          "sha256": "0bb05bc7302dfcf9362cb294e9f738235cfa33892625a2376502c263485eb303"
+        },
+        {
+          "path": "NOTICE",
+          "bytes": 10121,
+          "sha256": "15b724304a7bebadaed4f6e01631314dab7b5b92b3b84dc3a59864fb6e555cce"
+        },
+        {
+          "path": "engine.mjs",
+          "bytes": 174490,
+          "sha256": "bcfa260de3a71ec72beaec7a2528d27bab86480c2f9c3f513ec4d5b509ffe297"
+        },
+        {
+          "path": "metafile.json",
+          "bytes": 17178,
+          "sha256": "48ff3df9219d88da31e67c9964d0c9564efcd0ce306f598fde4149014b02d56b"
+        },
+        {
+          "path": "workloads.mjs",
+          "bytes": 138739,
+          "sha256": "0cf65553ed5fec887bc66dc24fc3f633fe4a40f448db3004eca642d074d146d9"
+        }
+      ]
+    }
+  ]
+}

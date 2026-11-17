@@ -1,0 +1,1951 @@
+{
+  "schema": "edge-kernel-profile/1",
+  "startedAt": "2026-10-13T11:05:11.157Z",
+  "completedAt": "2026-10-13T11:05:15.104Z",
+  "protocol": {
+    "method": "node:inspector CPU Profiler",
+    "durationMsPerWorkload": 1000,
+    "warmupMsPerWorkload": 250,
+    "samplingIntervalUs": 1000,
+    "measured": "complete workload calls plus checksum consumption and wall-clock loop checks",
+    "counts": "self counts partition all samples; inclusive counts deduplicate recursion and overlap between functions",
+    "locations": "source module from esbuild section markers; bundleLine is an emitted bundle line",
+    "limits": "sampling is approximate, includes profiler and runtime overhead, and is not a benchmark speedup measurement"
+  },
+  "provenance": {
+    "machine": {
+      "label": "local-linux-x64",
+      "platform": "linux",
+      "arch": "x64",
+      "release": "6.12.94+",
+      "cpuModels": [
+        "Intel(R) Xeon(R) Processor"
+      ],
+      "logicalCpuCount": 8,
+      "availableParallelism": 8
+    },
+    "runtime": {
+      "name": "node",
+      "node": "22.23.3",
+      "v8": "12.4.254.21-node.57"
+    },
+    "engineVersion": "1.0.0",
+    "ephemeris": {
+      "name": "astronomy-engine",
+      "version": "2.1.19"
+    },
+    "toolchain": {
+      "node": "v22.23.3",
+      "esbuild": "0.27.7"
+    },
+    "sourceDigest": "60b6ae364a1cc79f525f711289a8d669d106e97ad8bb3a292634239d5e178c3d",
+    "sources": [
+      {
+        "path": "../package.json",
+        "bytes": 3840,
+        "sha256": "3cb7206ba19ee61b271fff43686516b758b5fe3483c2061f1282bd95bacff7f2"
+      },
+      {
+        "path": "../src/api.ts",
+        "bytes": 10860,
+        "sha256": "3b597fc7c7e2b828470546862d4484b086a8090bb578eb0785880a9d692ef516"
+      },
+      {
+        "path": "../src/aspects.ts",
+        "bytes": 4920,
+        "sha256": "5cfbf1ffe3889f1c038b798d5bd74674de17bd9f0571adb4be08141cdd49f740"
+      },
+      {
+        "path": "../src/birth-input.ts",
+        "bytes": 3806,
+        "sha256": "9303df6556f84faf72e4c799f04d00692015dfade4f3c4e26d8d797f01f35928"
+      },
+      {
+        "path": "../src/body-label.ts",
+        "bytes": 1168,
+        "sha256": "bce12273949cd9810f4ab00c0f05c1aba14cf4ee46533ca3aba0588525006b1e"
+      },
+      {
+        "path": "../src/configured-aspects.ts",
+        "bytes": 16160,
+        "sha256": "c56349ba454e7cb3005f25eb3b740dd063cfeb3b9115e0d11512d8989ff19be4"
+      },
+      {
+        "path": "../src/crossings.ts",
+        "bytes": 17301,
+        "sha256": "4d33898d572d453de7c70d076b60018068854739f865080959cb800e4542d182"
+      },
+      {
+        "path": "../src/date-input.ts",
+        "bytes": 2014,
+        "sha256": "f9db8865bf143d6334eb93d9618f50aa6a81ba32273b0a103d2a83e3c8014675"
+      },
+      {
+        "path": "../src/declination.ts",
+        "bytes": 15894,
+        "sha256": "a7476e6e4c9af69c0eceaab499feacb8540c4975e5f65813c8cb4485b102ec61"
+      },
+      {
+        "path": "../src/deltat.ts",
+        "bytes": 10438,
+        "sha256": "2ce7e227bdf0e75bc2401793b8b09ed4113d80d8845376fbec7d0129c12f8b27"
+      },
+      {
+        "path": "../src/ephemeris.ts",
+        "bytes": 16367,
+        "sha256": "b530dbd0463b886fe1b8e99a095dc9cf9ef0cf614b6854e78ad206a27913cc7e"
+      },
+      {
+        "path": "../src/exact.ts",
+        "bytes": 4372,
+        "sha256": "f89a335657aa1139370511d315abcf8d6080ab857e0a37d249faf9de6a5eb25e"
+      },
+      {
+        "path": "../src/frame.ts",
+        "bytes": 4393,
+        "sha256": "98d0bee44839b23d3ec64dac470e31ab8e366c6907d325a4259f8f37285a7c50"
+      },
+      {
+        "path": "../src/houses.ts",
+        "bytes": 19663,
+        "sha256": "e97ea80f5f225fadf0bfcb051f0afcce820678f31ff1013cc0ebce3035cc8ceb"
+      },
+      {
+        "path": "../src/index.ts",
+        "bytes": 3747,
+        "sha256": "a7b8430da0e398e27743eb9ed7bfe8976e370e5fca002dc728308f5b98134644"
+      },
+      {
+        "path": "../src/nutation.ts",
+        "bytes": 8359,
+        "sha256": "c11af594d4e8ad64e0a7ff1097505063c70812d2da84e14a6c0280d4841e62b0"
+      },
+      {
+        "path": "../src/points.ts",
+        "bytes": 6583,
+        "sha256": "707e59ecdca3874e7c2830c2f7630628dd83b4ae13a97957ec3c623d5ebdf838"
+      },
+      {
+        "path": "../src/progressions.ts",
+        "bytes": 1986,
+        "sha256": "5d92c812e26d7a3fc3859260f20801a851b1b0ec01862ec47a953e956f36dcd0"
+      },
+      {
+        "path": "../src/reference-span.ts",
+        "bytes": 2068,
+        "sha256": "5bce5a05494448a5740027c078527ab4fb7b0c02f71ff83465c01fd085a4d996"
+      },
+      {
+        "path": "../src/returns.ts",
+        "bytes": 4306,
+        "sha256": "a6d4246f25e8f27ef25165d249a47fb88c1fd8214f5217aa0333a6debfada263"
+      },
+      {
+        "path": "../src/signs.ts",
+        "bytes": 3607,
+        "sha256": "c8d16ee8bb05a0eb0b41dd6d5912bd43f9c6a93d6dee857cb4530e1dc8a4a590"
+      },
+      {
+        "path": "../src/synastry.ts",
+        "bytes": 2469,
+        "sha256": "5671b43c9647a7164d171d9113ae4ab375b7f2a18cba53fac481e4c7a0522d29"
+      },
+      {
+        "path": "../src/time-scale-data.ts",
+        "bytes": 7338,
+        "sha256": "44c6b80db298e55a050b59cb75975ba2059abb775b16b849022ee5a5849280a0"
+      },
+      {
+        "path": "../src/time-scale.ts",
+        "bytes": 12443,
+        "sha256": "6358ab9f119f55e367b7a8cb601c0ed2a6fa0a1b083a8e48b2aa59cd96c7b9d6"
+      },
+      {
+        "path": "../src/types.ts",
+        "bytes": 8021,
+        "sha256": "36df3203e30792faff1ad5671e26ff5c03789c3dd6adee7d9ec357e2335b2353"
+      },
+      {
+        "path": "node_modules/astronomy-engine/esm/astronomy.js",
+        "bytes": 412025,
+        "sha256": "068f1445ed0c636c94818fe6d20d7d125120e605e0bab9fc4675c3d531be5ad7"
+      },
+      {
+        "path": "package-lock.json",
+        "bytes": 46278,
+        "sha256": "fceddd5b17fbcfcb9ccbd5f543cdc4ff54471313695872517b1c1f0ce7ebef3c"
+      },
+      {
+        "path": "package.json",
+        "bytes": 1165,
+        "sha256": "57a73a33a1ee555a918001829cf2889f06c52be8ea1e523b99733256b7a99959"
+      },
+      {
+        "path": "scripts/benchmark-workloads.mjs",
+        "bytes": 2533,
+        "sha256": "9fb81fc75daa7b2554986847fa7d733b995dd81c01c38640d72d49a857d88d26"
+      },
+      {
+        "path": "scripts/build-reference.mjs",
+        "bytes": 2194,
+        "sha256": "6fe4710e9aeb10d37b8a4aa4811f503098503ebf2a78f50e370c63f92c353ee4"
+      },
+      {
+        "path": "scripts/build-support.mjs",
+        "bytes": 2129,
+        "sha256": "be6212996da8658581d0eaeb664023580500ce4c92d8690c16f0c5abde2929c6"
+      },
+      {
+        "path": "scripts/profile-kernels.mjs",
+        "bytes": 11375,
+        "sha256": "ed050141918abf539ce1303ed2f3d03bed15b4b5bbcc7205b3fbe6a7f84406c2"
+      },
+      {
+        "path": "src/exact.ts",
+        "bytes": 10332,
+        "sha256": "d3c8db867a5fc55051ca9d70177f90efe5408ef93ea7060b2d601b7a598cc974"
+      },
+      {
+        "path": "src/workloads.ts",
+        "bytes": 2724,
+        "sha256": "cd6ad2a37b7eee43eede2a6b5183ececd810c8216c69fdd5e3e19c5fc6bcb5c8"
+      },
+      {
+        "path": "tsconfig.json",
+        "bytes": 479,
+        "sha256": "c0dc6bb4d2c4d15d63a7c4243835a445777b7f45ca2aaeace39cd30ac9c4037d"
+      }
+    ],
+    "bundle": {
+      "path": ".generated/reference/workloads.mjs",
+      "bytes": 142897,
+      "sha256": "5b1b7312bf0001133af06c6b4d5d699cad30d2b57f7af64f8ff175885a490c9f"
+    }
+  },
+  "workloadSet": [
+    {
+      "id": "chart",
+      "unit": "one chartWorkload call, including every CHART_CASES input",
+      "inputs": [
+        {
+          "id": "whole-utc",
+          "input": {
+            "utc": "2000-03-20T12:34:56Z",
+            "latitude": 35.25,
+            "longitude": -110.75,
+            "houseSystem": "whole"
+          }
+        },
+        {
+          "id": "southern-placidus",
+          "input": {
+            "utc": "1987-08-14T03:21:00Z",
+            "latitude": -33.5,
+            "longitude": 151.25,
+            "houseSystem": "placidus"
+          }
+        },
+        {
+          "id": "polar-koch",
+          "input": {
+            "utc": "2024-12-03T07:08:09Z",
+            "latitude": 78,
+            "longitude": 16,
+            "houseSystem": "koch"
+          }
+        },
+        {
+          "id": "untimed",
+          "input": {
+            "utc": "2001-02-03T08:30:00Z",
+            "timeKnown": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "houses",
+      "unit": "one housesWorkload call, including every HOUSE_CASES and HOUSE_SYSTEMS pair",
+      "inputs": {
+        "cases": [
+          {
+            "id": "north",
+            "input": {
+              "gastHours": 8.25,
+              "latitude": 35.25,
+              "longitude": -110.75,
+              "obliquity": 23.44
+            }
+          },
+          {
+            "id": "south",
+            "input": {
+              "gastHours": 19.5,
+              "latitude": -33.5,
+              "longitude": 151.25,
+              "obliquity": 23.44
+            }
+          },
+          {
+            "id": "polar",
+            "input": {
+              "gastHours": 2.5,
+              "latitude": 78,
+              "longitude": 16,
+              "obliquity": 23.44
+            }
+          }
+        ],
+        "systems": [
+          "whole",
+          "placidus",
+          "porphyry",
+          "equal",
+          "equal-mc",
+          "vehlow",
+          "koch",
+          "regiomontanus",
+          "campanus",
+          "topocentric",
+          "alcabitius",
+          "morinus",
+          "meridian"
+        ]
+      }
+    },
+    {
+      "id": "transit-scan",
+      "unit": "one transitScanWorkload call over the complete TRANSIT_CASE interval",
+      "inputs": {
+        "body": "Sun",
+        "longitude": 0,
+        "from": "2000-03-01T00:00:00Z",
+        "to": "2000-04-01T00:00:00Z",
+        "options": {
+          "stepDays": 1,
+          "maxSamples": 1024
+        }
+      }
+    }
+  ],
+  "exactResultSha256": "d88ccb3e93309cdf3e3f761d46c3660a280f60c56966bdc45d4ba17671643370",
+  "results": [
+    {
+      "id": "chart",
+      "warmup": {
+        "iterations": 80,
+        "elapsedNs": 251872890,
+        "checksum": 725348.1111130026
+      },
+      "measured": {
+        "iterations": 392,
+        "elapsedNs": 1001648758,
+        "checksum": 3554205.7444537445
+      },
+      "totalSamples": 912,
+      "profileDurationUs": 1042453,
+      "selfSamplesByCategory": {
+        "runtime-and-profiler": 2,
+        "ephemeris": 613,
+        "garbage-collection": 52,
+        "engine": 243,
+        "profile-driver": 2
+      },
+      "functions": [
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "VsopFormula",
+          "bundleLine": 1362,
+          "category": "ephemeris",
+          "selfSamples": 340,
+          "inclusiveSamples": 340
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "VsopDeriv",
+          "bundleLine": 1377,
+          "category": "ephemeris",
+          "selfSamples": 114,
+          "inclusiveSamples": 114
+        },
+        {
+          "source": "../src/nutation.ts",
+          "function": "nutation",
+          "bundleLine": 2701,
+          "category": "engine",
+          "selfSamples": 89,
+          "inclusiveSamples": 89
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "AddSol",
+          "bundleLine": 1108,
+          "category": "ephemeris",
+          "selfSamples": 58,
+          "inclusiveSamples": 58
+        },
+        {
+          "source": "(runtime)",
+          "function": "(garbage collector)",
+          "bundleLine": null,
+          "category": "garbage-collection",
+          "selfSamples": 52,
+          "inclusiveSamples": 52
+        },
+        {
+          "source": "../src/time-scale.ts",
+          "function": "taiMinusUtcAt",
+          "bundleLine": 2913,
+          "category": "engine",
+          "selfSamples": 42,
+          "inclusiveSamples": 42
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "CalcMoon",
+          "bundleLine": 993,
+          "category": "ephemeris",
+          "selfSamples": 13,
+          "inclusiveSamples": 98
+        },
+        {
+          "source": "../src/time-scale.ts",
+          "function": "timeBasis",
+          "bundleLine": 2968,
+          "category": "engine",
+          "selfSamples": 13,
+          "inclusiveSamples": 52
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "meanObliquity",
+          "bundleLine": 2398,
+          "category": "engine",
+          "selfSamples": 13,
+          "inclusiveSamples": 13
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "_AstroTime",
+          "bundleLine": 895,
+          "category": "ephemeris",
+          "selfSamples": 12,
+          "inclusiveSamples": 12
+        },
+        {
+          "source": "../src/aspects.ts",
+          "function": "findAspects",
+          "bundleLine": 1957,
+          "category": "engine",
+          "selfSamples": 11,
+          "inclusiveSamples": 15
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "ArrayGet2",
+          "bundleLine": 1011,
+          "category": "ephemeris",
+          "selfSamples": 11,
+          "inclusiveSamples": 11
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "VsopSphereToRect",
+          "bundleLine": 1405,
+          "category": "ephemeris",
+          "selfSamples": 8,
+          "inclusiveSamples": 8
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "CalcVsop",
+          "bundleLine": 1415,
+          "category": "ephemeris",
+          "selfSamples": 7,
+          "inclusiveSamples": 254
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "HelioVector",
+          "bundleLine": 1747,
+          "category": "ephemeris",
+          "selfSamples": 6,
+          "inclusiveSamples": 483
+        },
+        {
+          "source": "../src/time-scale.ts",
+          "function": "pieceOf",
+          "bundleLine": 3021,
+          "category": "engine",
+          "selfSamples": 6,
+          "inclusiveSamples": 14
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "ADDN",
+          "bundleLine": 1219,
+          "category": "ephemeris",
+          "selfSamples": 6,
+          "inclusiveSamples": 6
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "DeclareArray2",
+          "bundleLine": 1004,
+          "category": "ephemeris",
+          "selfSamples": 5,
+          "inclusiveSamples": 6
+        },
+        {
+          "source": "../src/time-scale.ts",
+          "function": "ut1Sigma",
+          "bundleLine": 2941,
+          "category": "engine",
+          "selfSamples": 5,
+          "inclusiveSamples": 5
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "chartAt",
+          "bundleLine": 3177,
+          "category": "engine",
+          "selfSamples": 4,
+          "inclusiveSamples": 838
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "planetOfDate",
+          "bundleLine": 3090,
+          "category": "engine",
+          "selfSamples": 4,
+          "inclusiveSamples": 585
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "CorrectLightTravel",
+          "bundleLine": 1777,
+          "category": "ephemeris",
+          "selfSamples": 4,
+          "inclusiveSamples": 497
+        },
+        {
+          "source": "../src/frame.ts",
+          "function": "eclipticFrame",
+          "bundleLine": 2758,
+          "category": "engine",
+          "selfSamples": 4,
+          "inclusiveSamples": 101
+        },
+        {
+          "source": "../src/frame.ts",
+          "function": "eclipticOfDate",
+          "bundleLine": 2815,
+          "category": "engine",
+          "selfSamples": 4,
+          "inclusiveSamples": 90
+        },
+        {
+          "source": "../src/aspects.ts",
+          "function": "matchAspect",
+          "bundleLine": 1944,
+          "category": "engine",
+          "selfSamples": 4,
+          "inclusiveSamples": 4
+        },
+        {
+          "source": "../src/date-input.ts",
+          "function": "validIsoInput",
+          "bundleLine": 3444,
+          "category": "engine",
+          "selfSamples": 4,
+          "inclusiveSamples": 4
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "GeoMoon",
+          "bundleLine": 1334,
+          "category": "ephemeris",
+          "selfSamples": 3,
+          "inclusiveSamples": 104
+        },
+        {
+          "source": "../src/time-scale.ts",
+          "function": "elapsedDays",
+          "bundleLine": 3029,
+          "category": "engine",
+          "selfSamples": 3,
+          "inclusiveSamples": 17
+        },
+        {
+          "source": "../src/api.ts",
+          "function": "validateBirth",
+          "bundleLine": 3574,
+          "category": "engine",
+          "selfSamples": 3,
+          "inclusiveSamples": 10
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "AddDays",
+          "bundleLine": 964,
+          "category": "ephemeris",
+          "selfSamples": 3,
+          "inclusiveSamples": 10
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "eclipticLongitudeOfRightAscension",
+          "bundleLine": 2403,
+          "category": "engine",
+          "selfSamples": 3,
+          "inclusiveSamples": 3
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "wholeSignCusps",
+          "bundleLine": 2454,
+          "category": "engine",
+          "selfSamples": 3,
+          "inclusiveSamples": 3
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "Length",
+          "bundleLine": 1307,
+          "category": "ephemeris",
+          "selfSamples": 3,
+          "inclusiveSamples": 3
+        },
+        {
+          "source": "../src/api.ts",
+          "function": "natalChart",
+          "bundleLine": 3617,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 856
+        },
+        {
+          "source": "../src/api.ts",
+          "function": "computedBirth",
+          "bundleLine": 3612,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 844
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "computeChart",
+          "bundleLine": 3174,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 842
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "bodiesAt",
+          "bundleLine": 3152,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 798
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "CalcPluto",
+          "bundleLine": 1709,
+          "category": "ephemeris",
+          "selfSamples": 2,
+          "inclusiveSamples": 223
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "major_bodies_t",
+          "bundleLine": 1597,
+          "category": "ephemeris",
+          "selfSamples": 2,
+          "inclusiveSamples": 219
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "AdjustBarycenterPosVel",
+          "bundleLine": 1584,
+          "category": "ephemeris",
+          "selfSamples": 2,
+          "inclusiveSamples": 217
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "trueNodeLongitude",
+          "bundleLine": 3098,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 85
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "placidusCusps",
+          "bundleLine": 2458,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 8
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "MakeTime",
+          "bundleLine": 968,
+          "category": "ephemeris",
+          "selfSamples": 2,
+          "inclusiveSamples": 7
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "iterate",
+          "bundleLine": 2462,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 6
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "AddThe",
+          "bundleLine": 1034,
+          "category": "ephemeris",
+          "selfSamples": 2,
+          "inclusiveSamples": 4
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "computeAngles",
+          "bundleLine": 2437,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 3
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "declinationOfLongitude",
+          "bundleLine": 2408,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "(anonymous)",
+          "bundleLine": 1093,
+          "category": "ephemeris",
+          "selfSamples": 2,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "ArraySet2",
+          "bundleLine": 1015,
+          "category": "ephemeris",
+          "selfSamples": 2,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "scripts/profile-kernels.mjs",
+          "function": "profileKernels",
+          "bundleLine": null,
+          "category": "profile-driver",
+          "selfSamples": 1,
+          "inclusiveSamples": 860
+        },
+        {
+          "source": "scripts/profile-kernels.mjs",
+          "function": "exercise",
+          "bundleLine": null,
+          "category": "profile-driver",
+          "selfSamples": 1,
+          "inclusiveSamples": 857
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "evaluated",
+          "bundleLine": 3057,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 840
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "(anonymous)",
+          "bundleLine": 3175,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 839
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "speedAt",
+          "bundleLine": 3137,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 504
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "BackdatePosition",
+          "bundleLine": 1809,
+          "category": "ephemeris",
+          "selfSamples": 1,
+          "inclusiveSamples": 498
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "longitudeOn",
+          "bundleLine": 3112,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 456
+        },
+        {
+          "source": "../src/nutation.ts",
+          "function": "tilt",
+          "bundleLine": 2740,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 103
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "basisAt",
+          "bundleLine": 3055,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 52
+        },
+        {
+          "source": "../src/date-input.ts",
+          "function": "dateFrom",
+          "bundleLine": 3456,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 5
+        },
+        {
+          "source": "node:inspector",
+          "function": "post",
+          "bundleLine": null,
+          "category": "runtime-and-profiler",
+          "selfSamples": 1,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "../src/api.ts",
+          "function": "(anonymous)",
+          "bundleLine": 3579,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "../src/birth-input.ts",
+          "function": "validateBirthSettings",
+          "bundleLine": 3498,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "../src/signs.ts",
+          "function": "signForLongitude",
+          "bundleLine": 2366,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "(runtime)",
+          "function": "dispatch",
+          "bundleLine": null,
+          "category": "runtime-and-profiler",
+          "selfSamples": 1,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "DeclareArray1",
+          "bundleLine": 996,
+          "category": "ephemeris",
+          "selfSamples": 1,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "GetSegment",
+          "bundleLine": 1674,
+          "category": "ephemeris",
+          "selfSamples": 1,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "GetStar",
+          "bundleLine": 133,
+          "category": "ephemeris",
+          "selfSamples": 1,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "mean",
+          "bundleLine": 1560,
+          "category": "ephemeris",
+          "selfSamples": 1,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "Sine",
+          "bundleLine": 1037,
+          "category": "ephemeris",
+          "selfSamples": 1,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "(runtime)",
+          "function": "(root)",
+          "bundleLine": null,
+          "category": "runtime-and-profiler",
+          "selfSamples": 0,
+          "inclusiveSamples": 912
+        },
+        {
+          "source": "src/workloads.ts",
+          "function": "(anonymous)",
+          "bundleLine": 3755,
+          "category": "workload",
+          "selfSamples": 0,
+          "inclusiveSamples": 856
+        },
+        {
+          "source": "src/workloads.ts",
+          "function": "chartWorkload",
+          "bundleLine": 3754,
+          "category": "workload",
+          "selfSamples": 0,
+          "inclusiveSamples": 856
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "centralDifference",
+          "bundleLine": 3128,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 503
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "GeoVector",
+          "bundleLine": 1832,
+          "category": "ephemeris",
+          "selfSamples": 0,
+          "inclusiveSamples": 499
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "(anonymous)",
+          "bundleLine": 1830,
+          "category": "ephemeris",
+          "selfSamples": 0,
+          "inclusiveSamples": 483
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "Position",
+          "bundleLine": 1800,
+          "category": "ephemeris",
+          "selfSamples": 0,
+          "inclusiveSamples": 483
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "(anonymous)",
+          "bundleLine": 3139,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 456
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "CalcVsopPosVel",
+          "bundleLine": 1423,
+          "category": "ephemeris",
+          "selfSamples": 0,
+          "inclusiveSamples": 215
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "GeoMoonState",
+          "bundleLine": 1347,
+          "category": "ephemeris",
+          "selfSamples": 0,
+          "inclusiveSamples": 67
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "moonOfDate",
+          "bundleLine": 3094,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 47
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "timeAt",
+          "bundleLine": 3056,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 24
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "computeHouses",
+          "bundleLine": 2635,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 10
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "timeOf",
+          "bundleLine": 3041,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 7
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "SI",
+          "bundleLine": 1025,
+          "category": "ephemeris",
+          "selfSamples": 0,
+          "inclusiveSamples": 7
+        },
+        {
+          "source": "../src/time-scale.ts",
+          "function": "tableUt1MinusUtc",
+          "bundleLine": 2956,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 5
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "gastHours",
+          "bundleLine": 3067,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "polar",
+          "bundleLine": 2641,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "CO",
+          "bundleLine": 1022,
+          "category": "ephemeris",
+          "selfSamples": 0,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "scripts/profile-kernels.mjs",
+          "function": "(anonymous)",
+          "bundleLine": null,
+          "category": "profile-driver",
+          "selfSamples": 0,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "scripts/profile-kernels.mjs",
+          "function": "post",
+          "bundleLine": null,
+          "category": "profile-driver",
+          "selfSamples": 0,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "position",
+          "bundleLine": 3141,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "SetCO",
+          "bundleLine": 1028,
+          "category": "ephemeris",
+          "selfSamples": 0,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "UserDefinedStar",
+          "bundleLine": 137,
+          "category": "ephemeris",
+          "selfSamples": 0,
+          "inclusiveSamples": 1
+        }
+      ]
+    },
+    {
+      "id": "houses",
+      "warmup": {
+        "iterations": 3246,
+        "elapsedNs": 250025953,
+        "checksum": 302318571.0544303
+      },
+      "measured": {
+        "iterations": 13314,
+        "elapsedNs": 1000066475,
+        "checksum": 1240009074.250998
+      },
+      "totalSamples": 893,
+      "profileDurationUs": 1043003,
+      "selfSamplesByCategory": {
+        "runtime-and-profiler": 3,
+        "engine": 751,
+        "result-consumption": 86,
+        "workload": 40,
+        "garbage-collection": 11,
+        "profile-driver": 2
+      },
+      "functions": [
+        {
+          "source": "../src/houses.ts",
+          "function": "iterate",
+          "bundleLine": 2462,
+          "category": "engine",
+          "selfSamples": 136,
+          "inclusiveSamples": 247
+        },
+        {
+          "source": "scripts/benchmark-workloads.mjs",
+          "function": "consume",
+          "bundleLine": null,
+          "category": "result-consumption",
+          "selfSamples": 86,
+          "inclusiveSamples": 86
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "eclipticLongitudeOfRightAscension",
+          "bundleLine": 2403,
+          "category": "engine",
+          "selfSamples": 76,
+          "inclusiveSamples": 76
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "obliqueLongitude",
+          "bundleLine": 2411,
+          "category": "engine",
+          "selfSamples": 55,
+          "inclusiveSamples": 59
+        },
+        {
+          "source": "../src/signs.ts",
+          "function": "normalizeLongitude",
+          "bundleLine": 2359,
+          "category": "engine",
+          "selfSamples": 54,
+          "inclusiveSamples": 54
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "equatorialCusps",
+          "bundleLine": 2619,
+          "category": "engine",
+          "selfSamples": 49,
+          "inclusiveSamples": 130
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "circleCusps",
+          "bundleLine": 2557,
+          "category": "engine",
+          "selfSamples": 46,
+          "inclusiveSamples": 110
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "(anonymous)",
+          "bundleLine": 2630,
+          "category": "engine",
+          "selfSamples": 41,
+          "inclusiveSamples": 41
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "equalMcCusps",
+          "bundleLine": 2543,
+          "category": "engine",
+          "selfSamples": 38,
+          "inclusiveSamples": 50
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "declinationOfLongitude",
+          "bundleLine": 2408,
+          "category": "engine",
+          "selfSamples": 37,
+          "inclusiveSamples": 37
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "equalCusps",
+          "bundleLine": 2540,
+          "category": "engine",
+          "selfSamples": 34,
+          "inclusiveSamples": 46
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "wholeSignCusps",
+          "bundleLine": 2454,
+          "category": "engine",
+          "selfSamples": 34,
+          "inclusiveSamples": 46
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "vehlowCusps",
+          "bundleLine": 2546,
+          "category": "engine",
+          "selfSamples": 29,
+          "inclusiveSamples": 41
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "(anonymous)",
+          "bundleLine": 2624,
+          "category": "engine",
+          "selfSamples": 18,
+          "inclusiveSamples": 37
+        },
+        {
+          "source": "src/workloads.ts",
+          "function": "housesWorkload",
+          "bundleLine": 3757,
+          "category": "workload",
+          "selfSamples": 16,
+          "inclusiveSamples": 791
+        },
+        {
+          "source": "src/workloads.ts",
+          "function": "(anonymous)",
+          "bundleLine": 3758,
+          "category": "workload",
+          "selfSamples": 15,
+          "inclusiveSamples": 775
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "(anonymous)",
+          "bundleLine": 2541,
+          "category": "engine",
+          "selfSamples": 12,
+          "inclusiveSamples": 12
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "(anonymous)",
+          "bundleLine": 2456,
+          "category": "engine",
+          "selfSamples": 12,
+          "inclusiveSamples": 12
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "(anonymous)",
+          "bundleLine": 2547,
+          "category": "engine",
+          "selfSamples": 12,
+          "inclusiveSamples": 12
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "(anonymous)",
+          "bundleLine": 2544,
+          "category": "engine",
+          "selfSamples": 12,
+          "inclusiveSamples": 12
+        },
+        {
+          "source": "(runtime)",
+          "function": "(garbage collector)",
+          "bundleLine": null,
+          "category": "garbage-collection",
+          "selfSamples": 11,
+          "inclusiveSamples": 11
+        },
+        {
+          "source": "src/workloads.ts",
+          "function": "(anonymous)",
+          "bundleLine": 3760,
+          "category": "workload",
+          "selfSamples": 9,
+          "inclusiveSamples": 751
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "porphyryCusps",
+          "bundleLine": 2518,
+          "category": "engine",
+          "selfSamples": 9,
+          "inclusiveSamples": 9
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "quadrantCusps",
+          "bundleLine": 2418,
+          "category": "engine",
+          "selfSamples": 8,
+          "inclusiveSamples": 56
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "campanusCusps",
+          "bundleLine": 2578,
+          "category": "engine",
+          "selfSamples": 8,
+          "inclusiveSamples": 34
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "alcabitiusCusps",
+          "bundleLine": 2603,
+          "category": "engine",
+          "selfSamples": 7,
+          "inclusiveSamples": 23
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "kochCusps",
+          "bundleLine": 2549,
+          "category": "engine",
+          "selfSamples": 6,
+          "inclusiveSamples": 23
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "computeAngles",
+          "bundleLine": 2437,
+          "category": "engine",
+          "selfSamples": 4,
+          "inclusiveSamples": 5
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "(anonymous)",
+          "bundleLine": 2621,
+          "category": "engine",
+          "selfSamples": 3,
+          "inclusiveSamples": 81
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "regiomontanusCusps",
+          "bundleLine": 2567,
+          "category": "engine",
+          "selfSamples": 3,
+          "inclusiveSamples": 49
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "morinusCusps",
+          "bundleLine": 2626,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 74
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "topocentricCusps",
+          "bundleLine": 2592,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 40
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "as",
+          "bundleLine": 2636,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "(runtime)",
+          "function": "hrtimeBigInt",
+          "bundleLine": null,
+          "category": "runtime-and-profiler",
+          "selfSamples": 2,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "scripts/profile-kernels.mjs",
+          "function": "profileKernels",
+          "bundleLine": null,
+          "category": "profile-driver",
+          "selfSamples": 1,
+          "inclusiveSamples": 882
+        },
+        {
+          "source": "scripts/profile-kernels.mjs",
+          "function": "exercise",
+          "bundleLine": null,
+          "category": "profile-driver",
+          "selfSamples": 1,
+          "inclusiveSamples": 880
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "computeHouses",
+          "bundleLine": 2635,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 742
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "polar",
+          "bundleLine": 2641,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 18
+        },
+        {
+          "source": "node:inspector",
+          "function": "post",
+          "bundleLine": null,
+          "category": "runtime-and-profiler",
+          "selfSamples": 1,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "(runtime)",
+          "function": "(root)",
+          "bundleLine": null,
+          "category": "runtime-and-profiler",
+          "selfSamples": 0,
+          "inclusiveSamples": 893
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "placidusCusps",
+          "bundleLine": 2458,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 246
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "meridianCusps",
+          "bundleLine": 2623,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 58
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "(anonymous)",
+          "bundleLine": 2560,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 21
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "at",
+          "bundleLine": 2609,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 7
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "at",
+          "bundleLine": 2554,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 5
+        },
+        {
+          "source": "node:internal/process/per_thread",
+          "function": "hrtimeBigInt",
+          "bundleLine": null,
+          "category": "runtime-and-profiler",
+          "selfSamples": 0,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "ramcOf",
+          "bundleLine": 2434,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "scripts/profile-kernels.mjs",
+          "function": "(anonymous)",
+          "bundleLine": null,
+          "category": "profile-driver",
+          "selfSamples": 0,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "scripts/profile-kernels.mjs",
+          "function": "post",
+          "bundleLine": null,
+          "category": "profile-driver",
+          "selfSamples": 0,
+          "inclusiveSamples": 1
+        }
+      ]
+    },
+    {
+      "id": "transit-scan",
+      "warmup": {
+        "iterations": 500,
+        "elapsedNs": 250173252,
+        "checksum": 476768884943.50366
+      },
+      "measured": {
+        "iterations": 1840,
+        "elapsedNs": 1000085782,
+        "checksum": 1754509496592.0386
+      },
+      "totalSamples": 868,
+      "profileDurationUs": 1052374,
+      "selfSamplesByCategory": {
+        "runtime-and-profiler": 2,
+        "ephemeris": 425,
+        "engine": 416,
+        "garbage-collection": 24,
+        "profile-driver": 1
+      },
+      "functions": [
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "VsopFormula",
+          "bundleLine": 1362,
+          "category": "ephemeris",
+          "selfSamples": 322,
+          "inclusiveSamples": 322
+        },
+        {
+          "source": "../src/nutation.ts",
+          "function": "nutation",
+          "bundleLine": 2701,
+          "category": "engine",
+          "selfSamples": 199,
+          "inclusiveSamples": 199
+        },
+        {
+          "source": "../src/time-scale.ts",
+          "function": "taiMinusUtcAt",
+          "bundleLine": 2913,
+          "category": "engine",
+          "selfSamples": 67,
+          "inclusiveSamples": 67
+        },
+        {
+          "source": "../src/time-scale.ts",
+          "function": "timeBasis",
+          "bundleLine": 2968,
+          "category": "engine",
+          "selfSamples": 57,
+          "inclusiveSamples": 138
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "_AstroTime",
+          "bundleLine": 895,
+          "category": "ephemeris",
+          "selfSamples": 33,
+          "inclusiveSamples": 33
+        },
+        {
+          "source": "(runtime)",
+          "function": "(garbage collector)",
+          "bundleLine": null,
+          "category": "garbage-collection",
+          "selfSamples": 24,
+          "inclusiveSamples": 24
+        },
+        {
+          "source": "../src/houses.ts",
+          "function": "meanObliquity",
+          "bundleLine": 2398,
+          "category": "engine",
+          "selfSamples": 21,
+          "inclusiveSamples": 21
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "HelioVector",
+          "bundleLine": 1747,
+          "category": "ephemeris",
+          "selfSamples": 18,
+          "inclusiveSamples": 347
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "Length",
+          "bundleLine": 1307,
+          "category": "ephemeris",
+          "selfSamples": 16,
+          "inclusiveSamples": 16
+        },
+        {
+          "source": "../src/frame.ts",
+          "function": "eclipticOfDate",
+          "bundleLine": 2815,
+          "category": "engine",
+          "selfSamples": 15,
+          "inclusiveSamples": 247
+        },
+        {
+          "source": "../src/time-scale.ts",
+          "function": "ut1Sigma",
+          "bundleLine": 2941,
+          "category": "engine",
+          "selfSamples": 14,
+          "inclusiveSamples": 14
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "CorrectLightTravel",
+          "bundleLine": 1777,
+          "category": "ephemeris",
+          "selfSamples": 11,
+          "inclusiveSamples": 406
+        },
+        {
+          "source": "../src/frame.ts",
+          "function": "eclipticFrame",
+          "bundleLine": 2758,
+          "category": "engine",
+          "selfSamples": 10,
+          "inclusiveSamples": 231
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "VsopSphereToRect",
+          "bundleLine": 1405,
+          "category": "ephemeris",
+          "selfSamples": 8,
+          "inclusiveSamples": 8
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "planetOfDate",
+          "bundleLine": 3090,
+          "category": "engine",
+          "selfSamples": 7,
+          "inclusiveSamples": 665
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "BackdatePosition",
+          "bundleLine": 1809,
+          "category": "ephemeris",
+          "selfSamples": 6,
+          "inclusiveSamples": 412
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "AddDays",
+          "bundleLine": 964,
+          "category": "ephemeris",
+          "selfSamples": 6,
+          "inclusiveSamples": 29
+        },
+        {
+          "source": "../src/crossings.ts",
+          "function": "run",
+          "bundleLine": 3397,
+          "category": "engine",
+          "selfSamples": 4,
+          "inclusiveSamples": 835
+        },
+        {
+          "source": "../src/crossings.ts",
+          "function": "solve",
+          "bundleLine": 3281,
+          "category": "engine",
+          "selfSamples": 4,
+          "inclusiveSamples": 831
+        },
+        {
+          "source": "../src/crossings.ts",
+          "function": "searchLongitudeCrossingsWith",
+          "bundleLine": 3426,
+          "category": "engine",
+          "selfSamples": 3,
+          "inclusiveSamples": 838
+        },
+        {
+          "source": "../src/crossings.ts",
+          "function": "sample2",
+          "bundleLine": 3409,
+          "category": "engine",
+          "selfSamples": 3,
+          "inclusiveSamples": 825
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "bodyLongitude",
+          "bundleLine": 3123,
+          "category": "engine",
+          "selfSamples": 3,
+          "inclusiveSamples": 822
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "MakeTime",
+          "bundleLine": 968,
+          "category": "ephemeris",
+          "selfSamples": 3,
+          "inclusiveSamples": 13
+        },
+        {
+          "source": "../src/date-input.ts",
+          "function": "dateFrom",
+          "bundleLine": 3456,
+          "category": "engine",
+          "selfSamples": 3,
+          "inclusiveSamples": 3
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "Position",
+          "bundleLine": 1800,
+          "category": "ephemeris",
+          "selfSamples": 2,
+          "inclusiveSamples": 350
+        },
+        {
+          "source": "../src/nutation.ts",
+          "function": "tilt",
+          "bundleLine": 2740,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 221
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "basisAt",
+          "bundleLine": 3055,
+          "category": "engine",
+          "selfSamples": 2,
+          "inclusiveSamples": 140
+        },
+        {
+          "source": "scripts/profile-kernels.mjs",
+          "function": "exercise",
+          "bundleLine": null,
+          "category": "profile-driver",
+          "selfSamples": 1,
+          "inclusiveSamples": 842
+        },
+        {
+          "source": "../src/crossings.ts",
+          "function": "bisect",
+          "bundleLine": 3291,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 329
+        },
+        {
+          "source": "node:inspector",
+          "function": "post",
+          "bundleLine": null,
+          "category": "runtime-and-profiler",
+          "selfSamples": 1,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "../src/crossings.ts",
+          "function": "edgeCell",
+          "bundleLine": 3352,
+          "category": "engine",
+          "selfSamples": 1,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "(runtime)",
+          "function": "dispatch",
+          "bundleLine": null,
+          "category": "runtime-and-profiler",
+          "selfSamples": 1,
+          "inclusiveSamples": 1
+        },
+        {
+          "source": "(runtime)",
+          "function": "(root)",
+          "bundleLine": null,
+          "category": "runtime-and-profiler",
+          "selfSamples": 0,
+          "inclusiveSamples": 868
+        },
+        {
+          "source": "scripts/profile-kernels.mjs",
+          "function": "profileKernels",
+          "bundleLine": null,
+          "category": "profile-driver",
+          "selfSamples": 0,
+          "inclusiveSamples": 844
+        },
+        {
+          "source": "../src/returns.ts",
+          "function": "searchLongitudeCrossings",
+          "bundleLine": 3478,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 841
+        },
+        {
+          "source": "src/workloads.ts",
+          "function": "transitScanWorkload",
+          "bundleLine": 3768,
+          "category": "workload",
+          "selfSamples": 0,
+          "inclusiveSamples": 841
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "(anonymous)",
+          "bundleLine": 3124,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 819
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "evaluated",
+          "bundleLine": 3057,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 819
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "longitudeAt",
+          "bundleLine": 3109,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 819
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "longitudeOn",
+          "bundleLine": 3112,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 679
+        },
+        {
+          "source": "../src/crossings.ts",
+          "function": "sampleAt",
+          "bundleLine": 3284,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 497
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "GeoVector",
+          "bundleLine": 1832,
+          "category": "ephemeris",
+          "selfSamples": 0,
+          "inclusiveSamples": 411
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "(anonymous)",
+          "bundleLine": 1830,
+          "category": "ephemeris",
+          "selfSamples": 0,
+          "inclusiveSamples": 350
+        },
+        {
+          "source": "../src/crossings.ts",
+          "function": "signChange",
+          "bundleLine": 3333,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 329
+        },
+        {
+          "source": "node_modules/astronomy-engine/esm/astronomy.js",
+          "function": "CalcVsop",
+          "bundleLine": 1415,
+          "category": "ephemeris",
+          "selfSamples": 0,
+          "inclusiveSamples": 329
+        },
+        {
+          "source": "../src/crossings.ts",
+          "function": "offsetAt",
+          "bundleLine": 3283,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 328
+        },
+        {
+          "source": "../src/time-scale.ts",
+          "function": "tableUt1MinusUtc",
+          "bundleLine": 2956,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 14
+        },
+        {
+          "source": "../src/ephemeris.ts",
+          "function": "timeOf",
+          "bundleLine": 3041,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 13
+        },
+        {
+          "source": "../src/returns.ts",
+          "function": "windowEnd",
+          "bundleLine": 3475,
+          "category": "engine",
+          "selfSamples": 0,
+          "inclusiveSamples": 3
+        },
+        {
+          "source": "scripts/profile-kernels.mjs",
+          "function": "(anonymous)",
+          "bundleLine": null,
+          "category": "profile-driver",
+          "selfSamples": 0,
+          "inclusiveSamples": 2
+        },
+        {
+          "source": "scripts/profile-kernels.mjs",
+          "function": "post",
+          "bundleLine": null,
+          "category": "profile-driver",
+          "selfSamples": 0,
+          "inclusiveSamples": 2
+        }
+      ]
+    }
+  ]
+}
