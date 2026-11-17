@@ -1,5 +1,5 @@
 {
-  "description": "Every interval before 1970-01-01T00:00Z on which the UTC offset of the history this package ships for a zone name differs between tzdata 2025c and 2026f, from zdump -v on zic-compiled data (oracle.mjs). Offsets in seconds east; intervals are [from, to) in UTC; from null means from the beginning of the zone's history. transitionsOnly, eraEnds and fromHistoryEnd list what moves without such an offset change; rows are 'UTC offset isdst abbreviation' (transitionsOnly) or 'UTC offsetBefore offsetAfter' (fromHistoryEnd).",
+  "description": "Every interval before 1970-01-01T00:00Z on which the UTC offset of the history this package ships for a zone name differs between tzdata 2025c and 2026f as released, from zdump -v on zic-compiled data (oracle.mjs). Entries with ownerDecision 'held back' do not ship: the package holds America/Yellowknife at tzdata 2025c by the owner's decision ('held', 'shipped'). Offsets in seconds east; intervals are [from, to) in UTC; from null means from the beginning of the zone's history. transitionsOnly, eraEnds and fromHistoryEnd list what moves without such an offset change; rows are 'UTC offset isdst abbreviation' (transitionsOnly) or 'UTC offsetBefore offsetAfter' (fromHistoryEnd).",
   "releases": {
     "from": "2025c",
     "to": "2026f"
@@ -43,7 +43,24 @@
   "changedZones": 24,
   "intervals": 45,
   "unexplained": 0,
-  "awaitingOwner": 2,
+  "awaitingOwner": 0,
+  "heldBack": 2,
+  "shipped": {
+    "description": "What the package ships: tzdata 2026f with America/Yellowknife held at tzdata 2025c by the owner's decision. Names and intervals whose shipped offsets before 1970 move, the held name's excluded; every other name ships exactly 2026f's history (the held and 2026f builds compared name by name).",
+    "changedZones": 23,
+    "intervals": 44,
+    "otherNamesIdenticalTo2026f": 596
+  },
+  "held": [
+    {
+      "zone": "America/Yellowknife",
+      "heldAt": "2025c",
+      "file": "scripts/tzdb-held/yellowknife-2025c.zi",
+      "ownerDecision": "held back",
+      "firstDifferenceFromDefault": "2026-11-01T08:00:00.000Z",
+      "shipped": "tzdata 2025c's history: 0 offset differences, 0 transition differences before 1970, the same local mean time era (none) and the same data form as tzdata 2025c"
+    }
+  ],
   "zones": [
     {
       "zone": "America/Araguaina",
@@ -491,7 +508,8 @@
             "tzdata 2026f backzone line 931: \"#Zone America/Yellowknife 0\t-\t-00\t1935 # Yellowknife founded?\"",
             "tzdata 2026f backward line 283: \"Link\tAmerica/Edmonton\tAmerica/Yellowknife\""
           ],
-          "ownerAcceptance": "pending"
+          "ownerDecision": "held back",
+          "ownerDecisionNote": "Held back by the owner's decision (ZOD-282): no tzdb NEWS entry or other official announcement explains this data change, so the package ships tzdata 2025c's backzone lines 929 to 932 for this name (scripts/tzdb-held/yellowknife-2025c.zi) and the name answers as on tzdata 2025c."
         }
       ]
     },
@@ -741,7 +759,8 @@
         "tzdata 2026f backzone line 931: \"#Zone America/Yellowknife 0\t-\t-00\t1935 # Yellowknife founded?\"",
         "tzdata 2026f backward line 283: \"Link\tAmerica/Edmonton\tAmerica/Yellowknife\""
       ],
-      "ownerAcceptance": "pending"
+      "ownerDecision": "held back",
+      "ownerDecisionNote": "Held back by the owner's decision (ZOD-282): no tzdb NEWS entry or other official announcement explains this data change, so the package ships tzdata 2025c's backzone lines 929 to 932 for this name (scripts/tzdb-held/yellowknife-2025c.zi) and the name answers as on tzdata 2025c."
     },
     {
       "zone": "Europe/Uzhgorod",

@@ -8,7 +8,8 @@ import { prepareLocalTime, resolveLocalToUtc, zoneOffsetAt } from "./timezone.js
  * value below is zdump's reading of zic-compiled tzdata 2026f with backzone
  * (docs/evidence/tzdb-2026f-20261117/oracle.mjs), never this engine's output;
  * the comment on each case quotes the zdump line it rests on. Wall times are
- * synthetic.
+ * synthetic. America/Yellowknife, held at tzdata 2025c, has its own block at
+ * the end.
  */
 const ZONES = [
   "Europe/Dublin",
@@ -18,7 +19,6 @@ const ZONES = [
   "Pacific/Majuro",
   "Asia/Kolkata",
   "Europe/London",
-  "America/Yellowknife",
   "CST6CDT",
   "MST7MDT",
   "PST8PDT",
@@ -167,10 +167,75 @@ describe("the tzdata 2026f history before 1970", () => {
     expect(resolveLocalToUtc("1947-04-13", "12:00", "Europe/London").offsetMinutes).toBe(120);
   });
 
-  it("reads America/Yellowknife as tzdata 2026f's link to America/Edmonton", () => {
-    // America/Yellowknife  Sun Apr 27 09:00:00 1947 UT = Sun Apr 27 03:00:00 1947 MDT isdst=1 gmtoff=-21600
-    const summer = resolveLocalToUtc("1947-06-01", "12:00", "America/Yellowknife");
-    expect(summer.offsetMinutes).toBe(-360);
-    expect(summer.utc.toISOString()).toBe("1947-06-01T18:00:00.000Z");
+});
+
+/*
+ * America/Yellowknife is held at tzdata 2025c by the owner's decision (ZOD-282). tzdata 2026f's backzone comments its
+ * zone out (lines 930 to 933), with no NEWS entry or other official announcement behind the change, which would move
+ * 1947-04-27T09:00Z to 1947-09-28T08:00Z from -7:00 to -6:00 and change the zone's source, data form, local mean time
+ * and transitions before 1935. The package compiles tzdata 2025c's backzone lines 929 to 932 for the name instead
+ * (scripts/tzdb-held/yellowknife-2025c.zi), so it answers as on origin/main (2.0.0-rc.2, tzdata 2025c) at every
+ * instant. Offsets: zdump of tzdata 2025c with backzone (the same lines); before 1935 that zone is "-00", read from
+ * Intl. The other fields are origin/main's output at 373ceda, a regression record, not accuracy evidence; only
+ * tzdbVersion, which names the package's pinned release, reads 2026f where main read 2025c.
+ */
+describe("America/Yellowknife, held at tzdata 2025c", () => {
+  const ZONE = "America/Yellowknife";
+  beforeAll(() => prepareLocalTime("1900-01-01", ZONE));
+
+  // The shard entry origin/main shipped (src/tzdb/tzdb-2025c-*.ts at 373ceda), unchanged.
+  it("ships origin/main's history for the name", async () => {
+    const { SHARD_LOADERS } = await import("../tzdb/tzdb-2026f.js");
+    const buckets = await Promise.all(SHARD_LOADERS.map((load) => load()));
+    const entry = buckets.map((bucket) => bucket.default["america/yellowknife"]).find(Boolean);
+    expect(entry).toEqual({
+      n: "America/Yellowknife",
+      s: "America/Yellowknife",
+      f: null,
+      y: [
+        [null, 0, "-00"],
+        [-25200, 0, "MST"],
+        [-21600, 1, "MWT"],
+        [-21600, 1, "MPT"]
+      ],
+      t: "-i9m2o0,3pk3o0,1tz5k0,2dvo0",
+      k: "1l2d3l1d"
+    });
+  });
+
+  it.each([
+    // "-00" until 1935 (Thu Jan  1 00:00:00 -2147481748 UT = ... -00), so Intl (Edmonton): LMT gmtoff=-27232 until 1906.
+    ["1900-01-01T00:00:00Z", -27232],
+    // Tue Jan  1 00:00:00 1935 UT = Mon Dec 31 17:00:00 1934 MST isdst=0 gmtoff=-25200
+    ["1935-01-01T00:00:00Z", -25200],
+    ["1938-06-01T12:00:00Z", -25200],
+    // Sun Sep 30 08:00:00 1945 UT = Sun Sep 30 01:00:00 1945 MST isdst=0 gmtoff=-25200, and no change until 1970.
+    ["1947-04-27T09:00:00Z", -25200],
+    ["1947-06-01T00:00:00Z", -25200],
+    ["1947-09-28T07:59:59Z", -25200],
+    ["1960-01-01T00:00:00Z", -25200]
+  ] as const)("is at %s on tzdata 2025c's offset, %i s", (iso, seconds) => {
+    expect(zoneOffsetAt(ZONE, Date.parse(iso)) * 60).toBeCloseTo(seconds, 6);
+  });
+
+  const host = { source: "intl", dataForm: "host", abbreviation: null, dst: null };
+  const mst = { source: "tzdb", tzdbVersion: TZDB.version, dataForm: "main+backzone", abbreviation: "MST", dst: false };
+  const legal1935 = { at: "1935-01-01T00:00:00.000Z", offsetBeforeMinutes: -420, offsetAfterMinutes: -420, cause: "legal-change" };
+  const fall1945 = { at: "1945-09-30T08:00:00.000Z", offsetBeforeMinutes: -360, offsetAfterMinutes: -420, cause: "dst" };
+  it.each([
+    ["1900-06-01", "12:00", undefined, "1900-06-01T19:33:52.000Z", host, null],
+    ["1900-06-01", "12:00", { longitude: -114.37 }, "1900-06-01T19:33:52.000Z", host, null],
+    ["1935-01-01", "00:00", undefined, "1935-01-01T07:00:00.000Z", mst, legal1935],
+    ["1938-06-01", "05:00", undefined, "1938-06-01T12:00:00.000Z", mst, legal1935],
+    ["1947-06-01", "12:00", undefined, "1947-06-01T19:00:00.000Z", mst, fall1945],
+    ["1960-06-01", "12:00", { longitude: -114.37 }, "1960-06-01T19:00:00.000Z", mst, fall1945]
+  ] as const)("resolves %s %s %o as origin/main did", (date, time, options, utc, zone, transition) => {
+    const resolved = resolveLocalToUtc(date, time, ZONE, options);
+    expect(resolved.utc.toISOString()).toBe(utc);
+    expect(resolved.flags).toEqual([]);
+    expect(resolved.localMeanTime).toBeNull();
+    expect(resolved.zone).toMatchObject(zone);
+    expect(resolved.transition).toEqual(transition);
+    expect(resolved.localResolution.clock).toBe("legal");
   });
 });

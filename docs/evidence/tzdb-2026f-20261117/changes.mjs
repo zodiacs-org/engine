@@ -13,8 +13,13 @@
  *
  * Each interval carries its cause: the NEWS sentence that explains it,
  * quoted verbatim from the release's NEWS file, or, where no NEWS entry
- * mentions it, the data-file lines that cause it, marked as waiting for the
- * owner's acceptance; anything else is "unexplained". Names whose default
+ * mentions it, the data-file lines that cause it; anything else is
+ * "unexplained". The one data change no NEWS entry explains, America/
+ * Yellowknife's, is listed with ownerDecision "held back": the owner held
+ * it back (ZOD-282), and the package ships that name's tzdata 2025c history
+ * (held.mjs). "held" checks this from the "held" dumps: the held name's
+ * shipped history equals 2025c's, and every other name's equals 2026f's.
+ * Names whose default
  * builds differ without the shipped history changing are listed apart, under
  * "defaultBuildOnly": they matter only to a host's Intl.
  *
@@ -37,6 +42,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { HELD, heldNames } from "./held.mjs";
 import { offsetDifferences, readZdump, shipped } from "./zdump-read.mjs";
 
 const [dumps, newsPath, outPath] = process.argv.slice(2);
@@ -81,7 +87,9 @@ const EXPLANATIONS = [
       "tzdata 2026f backward line 283: \"Link\tAmerica/Edmonton\tAmerica/Yellowknife\""
     ],
     cause: "backzone's Yellowknife zone is commented out, so the name follows backward's link to America/Edmonton, which kept summer time in 1947",
-    ownerAcceptance: "pending",
+    ownerDecision: "held back",
+    ownerDecisionNote:
+      "Held back by the owner's decision (ZOD-282): no tzdb NEWS entry or other official announcement explains this data change, so the package ships tzdata 2025c's backzone lines 929 to 932 for this name (scripts/tzdb-held/yellowknife-2025c.zi) and the name answers as on tzdata 2025c.",
     covers: (zone, d) => zone === "America/Yellowknife" && d.from >= at("1947-04-27T00:00:00Z") && d.to <= at("1947-09-29T00:00:00Z")
   }
 ];
@@ -140,6 +148,7 @@ const defaultBuildOnly = [];
 const hostLegal = { "2025c": [], "2026f": [] };
 let unexplained = 0;
 let awaitingOwner = 0;
+let heldBack = 0;
 for (const name of names) {
   const old = shipped(before.pinned, before.host, name);
   const now = shipped(after.pinned, after.host, name);
@@ -158,6 +167,7 @@ for (const name of names) {
   const intervals = differences.map((d) => {
     const explanation = EXPLANATIONS.find((e) => e.covers(name, d));
     if (!explanation) unexplained += 1;
+    else if (explanation.ownerDecision) heldBack += 1;
     else if (explanation.ownerAcceptance) awaitingOwner += 1;
     return {
       from: iso(d.from),
@@ -169,6 +179,7 @@ for (const name of names) {
       news: explanation ? explanation.news : "unexplained",
       ...(explanation?.newsNote ? { newsNote: explanation.newsNote } : {}),
       ...(explanation?.source ? { cause: explanation.cause, source: explanation.source } : {}),
+      ...(explanation?.ownerDecision ? { ownerDecision: explanation.ownerDecision, ownerDecisionNote: explanation.ownerDecisionNote } : {}),
       ...(explanation?.ownerAcceptance ? { ownerAcceptance: explanation.ownerAcceptance } : {})
     };
   });
@@ -217,6 +228,7 @@ for (const name of names) {
   if (JSON.stringify(old) === JSON.stringify(now)) continue;
   const source = name === "America/Yellowknife" ? EXPLANATIONS.at(-1) : ["Europe/Uzhgorod", "Europe/Zaporozhye"].includes(name) ? UKRAINE : null;
   if (!source) unexplained += 1;
+  else if (source.ownerDecision) heldBack += 1;
   else if (source.ownerAcceptance) awaitingOwner += 1;
   eraEnds.push({
     zone: name,
@@ -227,9 +239,49 @@ for (const name of names) {
     ...(source?.newsRelease ? { newsRelease: source.newsRelease } : {}),
     ...(source?.newsNote ? { newsNote: source.newsNote } : {}),
     ...(source ? { source: source.source } : {}),
+    ...(source?.ownerDecision ? { ownerDecision: source.ownerDecision, ownerDecisionNote: source.ownerDecisionNote } : {}),
     ...(source?.ownerAcceptance ? { ownerAcceptance: source.ownerAcceptance } : {})
   });
 }
+
+/*
+ * What ships: the "held" build (2026f's pinned build with the held zone).
+ * The held name's shipped history must equal 2025c's (offsets, transitions,
+ * abbreviations and era, before 1970), and every other name's must equal
+ * 2026f's; anything else stops the script.
+ */
+const heldBuild = read("2026f", "held");
+const heldOf = (name) => HELD.find((zone) => zone.name === name) ?? null;
+const held = [];
+let othersIdentical = 0;
+for (const name of names) {
+  const shippedNow = shipped(heldBuild, after.host, name, heldOf(name));
+  if (heldNames.has(name)) {
+    const old = shipped(before.pinned, before.host, name);
+    const offsets = offsetDifferences(old.clock, shippedNow.clock, HISTORY_END).length;
+    const a = rows(old.clock);
+    const b = rows(shippedNow.clock);
+    const transitions = [...a].filter((row) => !b.has(row)).length + [...b].filter((row) => !a.has(row)).length;
+    const sameEra = JSON.stringify(era(before.pinned.get(name))) === JSON.stringify(era(heldBuild.get(name)));
+    const sameForm = old.form === shippedNow.form && old.hostLegal === shippedNow.hostLegal;
+    if (offsets || transitions || !sameEra || !sameForm) throw new Error(`changes: held ${name} does not ship tzdata 2025c's history`);
+    const zone = heldOf(name);
+    held.push({
+      zone: name,
+      heldAt: zone.release,
+      file: "scripts/tzdb-held/yellowknife-2025c.zi",
+      ownerDecision: "held back",
+      firstDifferenceFromDefault: iso(zone.firstDifferenceFromDefault),
+      shipped: "tzdata 2025c's history: 0 offset differences, 0 transition differences before 1970, the same local mean time era (none) and the same data form as tzdata 2025c"
+    });
+    continue;
+  }
+  const pure = shipped(after.pinned, after.host, name);
+  if (JSON.stringify(pure) !== JSON.stringify(shippedNow)) throw new Error(`changes: ${name} differs between the held and the 2026f builds`);
+  othersIdentical += 1;
+}
+const shippedIntervals = zones.reduce((sum, zone) => sum + (heldNames.has(zone.zone) ? 0 : zone.intervals?.length ?? 0), 0);
+const shippedZones = zones.filter((zone) => zone.intervals && !heldNames.has(zone.zone)).length;
 
 /** The default build's changes of standard offset from 1970 on. */
 const standardChanges = (clock) => {
@@ -257,13 +309,22 @@ for (const name of names) {
 
 const result = {
   description:
-    "Every interval before 1970-01-01T00:00Z on which the UTC offset of the history this package ships for a zone name differs between tzdata 2025c and 2026f, from zdump -v on zic-compiled data (oracle.mjs). Offsets in seconds east; intervals are [from, to) in UTC; from null means from the beginning of the zone's history. transitionsOnly, eraEnds and fromHistoryEnd list what moves without such an offset change; rows are 'UTC offset isdst abbreviation' (transitionsOnly) or 'UTC offsetBefore offsetAfter' (fromHistoryEnd).",
+    "Every interval before 1970-01-01T00:00Z on which the UTC offset of the history this package ships for a zone name differs between tzdata 2025c and 2026f as released, from zdump -v on zic-compiled data (oracle.mjs). Entries with ownerDecision 'held back' do not ship: the package holds America/Yellowknife at tzdata 2025c by the owner's decision ('held', 'shipped'). Offsets in seconds east; intervals are [from, to) in UTC; from null means from the beginning of the zone's history. transitionsOnly, eraEnds and fromHistoryEnd list what moves without such an offset change; rows are 'UTC offset isdst abbreviation' (transitionsOnly) or 'UTC offsetBefore offsetAfter' (fromHistoryEnd).",
   releases: { from: "2025c", to: "2026f" },
   hostLegal,
   changedZones: zones.filter((zone) => zone.intervals).length,
   intervals: zones.reduce((sum, zone) => sum + (zone.intervals?.length ?? 0), 0),
   unexplained,
   awaitingOwner,
+  heldBack,
+  shipped: {
+    description:
+      "What the package ships: tzdata 2026f with America/Yellowknife held at tzdata 2025c by the owner's decision. Names and intervals whose shipped offsets before 1970 move, the held name's excluded; every other name ships exactly 2026f's history (the held and 2026f builds compared name by name).",
+    changedZones: shippedZones,
+    intervals: shippedIntervals,
+    otherNamesIdenticalTo2026f: othersIdentical
+  },
+  held,
   zones,
   defaultBuildOnly,
   transitionsOnly,
@@ -273,7 +334,8 @@ const result = {
 const text = JSON.stringify(result, null, 2) + "\n";
 if (outPath) writeFileSync(outPath, text);
 console.log(
-  `changes: ${result.changedZones} names, ${result.intervals} intervals, ${unexplained} unexplained, ${awaitingOwner} awaiting the owner; ` +
+  `changes: ${result.changedZones} names, ${result.intervals} intervals, ${unexplained} unexplained, ${awaitingOwner} awaiting the owner, ${heldBack} held back by the owner's decision; ` +
+    `shipped: ${shippedZones} names, ${shippedIntervals} intervals, held ${held.map((z) => `${z.zone} at ${z.heldAt}`).join(", ") || "none"} (2025c's history), ${othersIdentical} other names identical to 2026f; ` +
     `transitions only: ${transitionsOnly.map((z) => z.zone).join(", ") || "none"}; ` +
     `era ends: ${eraEnds.map((z) => z.zone).join(", ") || "none"}; ` +
     `from 1970: ${fromHistoryEnd.map((z) => z.zone).join(", ") || "none"}; ` +

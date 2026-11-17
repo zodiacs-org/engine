@@ -1,14 +1,19 @@
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
 import { afterEach, describe, expect, it } from "vitest";
 
 import {
   BACKWARD_ZONES,
+  HELD,
+  HELD_ZONES,
   TZDB_SHA256,
   TZDB_VERSION,
   causes,
+  firstDifferenceFrom,
+  heldSource,
   lineEnds,
   loadRelease,
   parseTzdb,
@@ -147,5 +152,61 @@ describe("the pinned release", () => {
     process.env.TZDATA_TARBALL = archive;
     await expect(loadRelease(work)).rejects.toThrow(/has sha256 [0-9a-f]{64}, expected 01b4a91c/);
     rmSync(work, { recursive: true, force: true });
+  });
+});
+
+/*
+ * America/Yellowknife is held at tzdata 2025c by the owner's decision
+ * (ZOD-282): 2026f's backzone comments its zone out with no NEWS entry or
+ * other official announcement behind the change. The pinned build compiles
+ * 2025c's backzone lines for it, from a committed file whose digest is pinned.
+ */
+describe("the zone held at tzdata 2025c", () => {
+  const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+  const empty = { main: parseTzdb(""), backzone: parseTzdb("") };
+
+  it("is America/Yellowknife, from tzdata 2025c's backzone lines, unchanged", () => {
+    expect(HELD_ZONES.map(({ name, release }) => [name, release])).toEqual([["America/Yellowknife", "2025c"]]);
+    const parsed = parseTzdb(heldSource(root, empty));
+    expect([...parsed.zones.keys()]).toEqual(["America/Yellowknife"]);
+    // tzdata 2025c backzone lines 930 to 932.
+    expect(parsed.zones.get("America/Yellowknife")).toEqual([
+      ["0", "-", "-00", "1935"],
+      ["-7:00", "NT_YK", "M%sT", "1980"],
+      ["-7:00", "Canada", "M%sT"]
+    ]);
+    expect(parsed.links.size).toBe(0);
+  });
+
+  it("stops when the release defines the held name as a zone of its own", () => {
+    const release = { main: parseTzdb(""), backzone: parseTzdb("Zone America/Yellowknife -7:00 - MST") };
+    expect(() => heldSource(root, release)).toThrow(/held zone America\/Yellowknife: tzdata 2026f defines it as a zone/);
+  });
+
+  it("stops when a held file's digest is not the pinned one", () => {
+    const work = mkdtempSync(join(tmpdir(), "tz-held-test-"));
+    try {
+      writeFileSync(join(work, "held.zi"), "Zone America/Yellowknife 0 - -00 1936\n -7:00 - MST\n");
+      const held = [{ ...HELD_ZONES[0], file: "held.zi" }];
+      expect(() => heldSource(work, empty, held)).toThrow(/has sha256 [0-9a-f]{64}, expected 90aedc77/);
+    } finally {
+      rmSync(work, { recursive: true, force: true });
+    }
+  });
+
+  it("is compiled beside backzone in the pinned build", () => {
+    const files = new Map([["backzone", ""], ["backward", ""], [HELD, "Zone America/Yellowknife 0 - -00 1935\n -7:00 - MST"]]);
+    expect(pinnedSources(files).names).toEqual([
+      "africa", "antarctica", "asia", "australasia", "europe", "northamerica", "southamerica", "etcetera", "backzone", HELD, BACKWARD_ZONES
+    ]);
+    expect(pinnedSources(new Map([["backzone", ""], ["backward", ""]])).names).not.toContain(HELD);
+  });
+
+  it("finds the first instant from 1970 at which two compiled zones' offsets differ", () => {
+    const mst = { t: [], typeOf: [], offsets: [-25200], isdst: [0], designations: ["MST"] };
+    const alberta = { t: [at("2026-11-01T08:00:00Z")], typeOf: [1], offsets: [-25200, -21600], isdst: [0, 0], designations: ["MST", "CST"] };
+    expect(firstDifferenceFrom(mst, alberta)).toBe(at("2026-11-01T08:00:00Z"));
+    expect(HELD_ZONES[0].firstDifferenceFromDefault).toBe(at("2026-11-01T08:00:00Z"));
+    expect(firstDifferenceFrom(mst, mst)).toBeNull();
   });
 });

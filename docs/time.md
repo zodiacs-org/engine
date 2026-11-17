@@ -339,6 +339,14 @@ twice (a fold) takes the earlier instant, or the later one with the option
   package follows backzone (`docs/evidence/rc15-20260929/backzone-divergence.json`;
   not measured again on 2026f). What moved from 2025c to 2026f, interval by
   interval and from zdump, is in `docs/evidence/tzdb-2026f-20261117/`.
+  One name is held back by the owner's decision: tzdata 2026f's `backzone`
+  comments out America/Yellowknife's zone, with no tzdb NEWS entry or other
+  official announcement behind the change, so the package compiles tzdata
+  2025c's `backzone` lines for that zone
+  (`scripts/tzdb-held/yellowknife-2025c.zi`, unchanged) beside 2026f, and
+  America/Yellowknife answers as it did on 2025c at every instant (its
+  `zone.tzdbVersion` still names the pinned release, 2026f). Every other name
+  takes 2026f.
   A wall time before 1970-01-02 in a zone whose history is not loaded throws;
   `prepareLocalTime` resolves at once for a date in 1971 or later and for the
   fixed zones (`UTC`, `Etc/GMT+5` and the like), loads the history for any

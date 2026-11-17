@@ -12,7 +12,12 @@
  *   define, so that zic itself resolves each name as the generator does
  *   (backzone's zone, then the main data's zone, then a link);
  * - "default": the main data files with `backward`, tzdb's default build,
- *   which Intl carries.
+ *   which Intl carries;
+ * - "held", for a release that does not define the held zone itself (2026f):
+ *   the pinned build with the zone the owner held at tzdata 2025c
+ *   (scripts/tzdb-held/yellowknife-2025c.zi, held.mjs) compiled beside
+ *   backzone, as the generator compiles it. Before compiling, the held lines
+ *   are checked byte for byte against tzdata 2025c's own backzone.
  *
  * For every compiled name it writes `zdump -v -c 1800,1970` (the history
  * before 1970) and `zdump -v -c 1970,2038` (used only to tell which names the
@@ -30,6 +35,8 @@ import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSyn
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import { HELD, checkVerbatim } from "./held.mjs";
 
 const MAIN = ["africa", "antarctica", "asia", "australasia", "europe", "northamerica", "southamerica", "etcetera"];
 
@@ -68,15 +75,17 @@ export function compileForm(data, form, work, zic) {
   if (form === "default") {
     inputs.push(join(data, "backward"));
   } else {
-    const taken = new Set([...MAIN, "backzone"].flatMap((file) => [...defined(readFileSync(join(data, file), "utf8"))]));
+    const held = form === "held" ? HELD.map((zone) => zone.file) : [];
+    const taken = new Set([...MAIN.map((file) => join(data, file)), join(data, "backzone"), ...held].flatMap((file) => [...defined(readFileSync(file, "utf8"))]));
+    inputs.push(...held);
     const kept = readFileSync(join(data, "backward"), "utf8")
       .split("\n")
       .filter((line) => {
         const fields = fieldsOf(line);
         return !isLink(fields) || !taken.has(fields[2]);
       });
-    writeFileSync(join(work, "backward.pinned"), kept.join("\n"));
-    inputs.push(join(data, "backzone"), join(work, "backward.pinned"));
+    writeFileSync(join(work, `backward.${form}`), kept.join("\n"));
+    inputs.push(join(data, "backzone"), join(work, `backward.${form}`));
   }
   execFileSync(zic, ["-d", out, ...inputs], { stdio: ["ignore", "ignore", "pipe"] });
   const names = [];
@@ -117,6 +126,18 @@ export function extract(tarball, work) {
   return { data, version: readFileSync(join(data, "version"), "utf8").trim() };
 }
 
+/** True when the release's own main data or backzone defines a held name as a zone. */
+function definesHeld(data) {
+  return [...MAIN, "backzone"].some((file) =>
+    readFileSync(join(data, file), "utf8")
+      .split("\n")
+      .some((line) => {
+        const fields = fieldsOf(line);
+        return isZone(fields) && HELD.some((zone) => zone.name === fields[1]);
+      })
+  );
+}
+
 function main() {
   const { tzdata, zic, zdump: zdumpPath, out } = args();
   mkdirSync(out, { recursive: true });
@@ -126,7 +147,13 @@ function main() {
     try {
       const { data, version } = extract(tarball, work);
       console.log(`tzdata ${version}: ${tarball} sha256 ${sha(readFileSync(tarball))}`);
-      for (const form of ["pinned", "default"]) {
+      const backzone = readFileSync(join(data, "backzone"), "utf8");
+      for (const zone of HELD.filter((held) => held.release === version)) {
+        const { from, to } = checkVerbatim(zone, backzone);
+        console.log(`  held ${zone.name}: ${zone.file.split("/").slice(-3).join("/")} sha256 ${sha(readFileSync(zone.file))}, its zone lines are tzdata ${version} backzone lines ${from} to ${to}, byte for byte`);
+      }
+      const forms = definesHeld(data) ? ["pinned", "default"] : ["pinned", "default", "held"];
+      for (const form of forms) {
         const tree = compileForm(data, form, work, zic);
         for (const [label, window] of [["1800-1970", "1800,1970"], ["1970-2038", "1970,2038"]]) {
           const text = dump(zdumpPath, tree, window);

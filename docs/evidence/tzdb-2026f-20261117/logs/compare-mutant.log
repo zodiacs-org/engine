@@ -1,8 +1,8 @@
 compare: mutant Europe/Dublin: first transition -2821649679 -> -2821646079 in tzdb-2026f-06-O4LQW2N6.js
-compare: 597 names, 19205 instants at transitions before 1970 compared, 25 in "-00" spans read from the host, 93 mismatches
+compare: 597 names, 19176 instants at transitions before 1970 compared, 26 in "-00" spans read from the host, 93 mismatches
 compare: host-legal by the dumps 14, labelled "main" by the engine 14, differing 0
 compare: host-legal names: America/Argentina/ComodRivadavia, America/Ensenada, America/Nipigon, America/Rainy_River, America/Rosario, Asia/Chongqing, Asia/Chungking, Asia/Harbin, Asia/Kashgar, Atlantic/Jan_Mayen, EET, Europe/Tiraspol, Pacific/Enderbury, WET
-compare: property, 5000 pairs (seed 0x282): 4868 compared with Python zoneinfo, 132 in "-00" spans, 0 mismatches
+compare: property, 5000 pairs (seed 0x282): 4860 compared with Python zoneinfo, 140 in "-00" spans, 0 mismatches
   Europe/Dublin 1916-05-21T02:25:22.000Z: zdump 2079 s, engine -1521 s
   Europe/Dublin 1916-10-01T02:25:22.000Z: zdump 0 s, engine 2079 s
   Europe/Dublin 1917-04-08T02:00:01.000Z: zdump 3600 s, engine 0 s

@@ -273,9 +273,9 @@ describe("the local mean time eras shipped", () => {
 
   it("holds whole seconds, every era ending before 1953", () => {
     const eras = zones.filter((zone) => zone.e);
-    // 519 from tzdata 2026f: America/Yellowknife now resolves to America/Edmonton, whose first line is local
-    // mean time; backzone's Yellowknife, commented out in 2026f, began at "-00" and had no such era (518 in 2025c).
-    expect(eras.length).toBe(519);
+    // 518, as on tzdata 2025c: America/Yellowknife, held at 2025c by the owner's decision (scripts/tzdb-held/),
+    // begins at "-00" and has no local mean time era.
+    expect(eras.length).toBe(518);
     for (const zone of eras) {
       for (const [until, offset] of zone.e!) {
         expect(Number.isInteger(until) && Number.isInteger(offset)).toBe(true);
@@ -297,9 +297,7 @@ describe("the local mean time eras shipped", () => {
     // A backzone Zone that replaces a main-data Link (to Puerto Rico).
     ["America/Kralendijk", "1912-02-12T04:35:47.000Z"],
     // An UNTIL in standard time ("0:00s"), not universal time.
-    ["Europe/Isle_of_Man", "1883-03-30T00:17:55.000Z"],
-    // From tzdata 2026f, a backward Link (to Edmonton): zdump reads LMT -7:33:52 until 1906-09-01T07:33:52Z.
-    ["America/Yellowknife", "1906-09-01T07:33:52.000Z"]
+    ["Europe/Isle_of_Man", "1883-03-30T00:17:55.000Z"]
   ])("ends %s at %s", (zone, iso) => {
     const shard = zones.find((candidate) => candidate.n === zone)!;
     expect(new Date(shard.e!.at(-1)![0] * 1000).toISOString()).toBe(iso);

@@ -10,6 +10,14 @@ only expectation. Nothing here takes an expected value from the engine, its
 shards or the generator. A clock offset is a legal fact with no measurement
 error, so every comparison is exact, in seconds.
 
+**America/Yellowknife is held at tzdata 2025c by the owner's decision.**
+2026f's one data change for that name, which comments out its `backzone`
+zone, is held back because no tzdb NEWS entry or other official
+announcement explains it. The generator compiles tzdata 2025c's `backzone`
+lines 929 to 932 for that zone, byte for byte, from a committed file,
+`scripts/tzdb-held/yellowknife-2025c.zi` (below), and the name answers as on
+`main` (tzdata 2025c) at every instant. Every other name takes 2026f.
+
 ## Sources
 
 Downloaded by the repository's fetch job to the side branch
@@ -34,12 +42,24 @@ them is committed here.
 - tzdata2025c.tar.gz has the digest `scripts/build-tz-shards.mjs` pinned
   before this change, and the 2025c generator reproduces the committed
   2025c shards from it (`--check` passed on `main` at `c80fde4`).
+- The held file, `scripts/tzdb-held/yellowknife-2025c.zi` (SHA-256
+  `90aedc77e2431ca917137a36a7870a9a9d4f39131da63ad7973f504b65b0575a`, pinned
+  in the generator as `HELD_ZONES`): a header of `##` lines saying why and
+  where from, then tzdata 2025c's `backzone` lines 929 to 932, from
+  tzdata2025c.tar.gz above (`https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz`,
+  SHA-256 `4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957`,
+  retrieved 2026-11-17T14:46:55Z, `fetched/MANIFEST.tsv` row 5).
+  `oracle.mjs` checks that those lines stand byte for byte, as one block, at
+  lines 929 to 932 of 2025c's `backzone` (`logs/oracle.log`).
 
 ## Tools
 
 - zic and zdump built from tzcode2026f.tar.gz (`make zic zdump`,
   `zic (tzcode) 2026f`), as the conformance suite's L3 arbiter builds its
-  own from tzcode.
+  own from tzcode. The rerun for the hold used zic and zdump built that way
+  (`zic` SHA-256 `250561b5d70161c3a1a9a0342269188a0a948756d8696704787dc2e08f092d09`,
+  `zdump` `0e76ef57890345cfbd6ed60ed28a1324331f68be774761cce015bf6ae3e16d20`)
+  and reproduced all eight earlier dump digests below.
 - The generator calls the `zic` on `PATH`; here that was the Ubuntu one
   (`zic (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39`). Both zics give byte-identical
   zdump output for all eight dumps below, and the generator writes
@@ -59,11 +79,13 @@ node docs/evidence/tzdb-2026f-20261117/compare.mjs --dumps DUMPS --zic ZIC \
   --tzdata tzdata2026f.tar.gz --geo dist/geo.js [--mutate Europe/Dublin]
 ```
 
-`oracle.mjs` compiles each release twice with the generator's zic call
+`oracle.mjs` compiles each release with the generator's zic call
 (`zic -d DIR FILES`, no `-b`): "pinned" (the main data, `backzone`, and
 `backward`'s Zone and Rule lines with those of its links whose names neither
-defines, so zic resolves each name as the generator does) and "default"
-(the main data with `backward`, what `Intl` carries). It runs
+defines, so zic resolves each name as the generator does), "default" (the
+main data with `backward`, what `Intl` carries) and, for 2026f, which no
+longer defines the zone, "held": the pinned build with the held file
+compiled beside `backzone`, which is what the package ships. It runs
 `zdump -v -c 1800,1970` and `zdump -v -c 1970,2038` on every compiled name.
 The dumps are not committed; their digests (`logs/oracle.log`, identical on
 two runs and with either zic):
@@ -78,6 +100,8 @@ two runs and with either zic):
 | 2025c default 1970-2038 | 597 | 67024 | `719a0af7de1edcd12e25665975e1144a65d9208981dec52c6cb677a565465d09` |
 | 2026f pinned 1970-2038 | 598 | 66026 | `bcc546659c52e47ca5957be565657c11fd38078c70f70066ac9f7f95f6907f53` |
 | 2026f default 1970-2038 | 597 | 66524 | `ba20a75733d51395a3ce44f4443ef75d9413ff8423da33288e728b62a5334bdd` |
+| 2026f held 1800-1970 | 598 | 24282 | `829f0b5e379cb4cb322c76185b7466b26e5158103fa8da43e7218cd810ebc220` |
+| 2026f held 1970-2038 | 598 | 66068 | `07e558587f6aea104dfa652325ce5d4722af25ffe92c56b94b54e5b386a18821` |
 
 The pinned build's 598th name is Asia/Hanoi, a backzone zone the default
 build lacks; the package leaves it out, as before.
@@ -92,19 +116,28 @@ marks `-00` read from the default build, as the engine reads them from
 16 the committed 2025c shards mark) and 14 for 2026f (Europe/Uzhgorod and
 Europe/Zaporozhye leave the list, because 2026f's `backzone` no longer has
 their zones). Every change below carries its cause; `changes.json` has 0
-unexplained and 2 entries waiting for the owner's acceptance (America/Yellowknife's
-1947 interval and its era, both from one data change).
+unexplained, 0 waiting for the owner, and 2 entries held back by the owner's
+decision (America/Yellowknife's 1947 interval and its era, both from one data
+change; `ownerDecision` "held back").
+
+The lists compare 2025c with 2026f as released. What ships is checked from
+the "held" dumps (`held` and `shipped` in `changes.json`): America/Yellowknife
+ships exactly 2025c's history before 1970 (0 offset differences, 0 transition
+differences, the same era, none, and the same data form), and each of the
+596 other names ships exactly 2026f's. So 23 names change offset before 1970
+in 44 intervals, not 24 in 45.
 
 ### Offsets before 1970
 
-24 names change offset before 1970, in 45 intervals, all after 1920:
+In 2026f as released, 24 names change offset before 1970, in 45 intervals,
+all after 1920; the last row is held back and does not ship:
 
 | names | interval (UTC) | was | now | hours | cause |
 | --- | --- | --- | --- | --- | --- |
 | Europe/Dublin, Eire | 1925-09-20T02:00Z to 1925-10-04T02:00Z | +1:00 | +0:00 | 336 | 2026e NEWS: "In 1925 Ireland fell back on 09-20 not 10-04 (thanks to Stan Ulbrych)." |
 | 21 Brazilian names (below) | 1965-03-31 local 00:00 to 24:00 | standard | daylight saving, one hour east | 24 each | 2026f NEWS: "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00." |
 | the same 21 | 1966-03-01 local 00:00 to 01:00 | standard | daylight saving, one hour east | 1 each | the same sentence |
-| America/Yellowknife | 1947-04-27T09:00Z to 1947-09-28T08:00Z | -7:00 | -6:00 | 3695 | data only, no NEWS entry (below); waits for the owner's acceptance |
+| America/Yellowknife | 1947-04-27T09:00Z to 1947-09-28T08:00Z | -7:00 | -6:00 | 3695 | data only, no NEWS entry (below); held back by the owner's decision, does not ship |
 
 The 21 Brazilian names: America/Araguaina, Bahia, Belem, Boa_Vista,
 Campo_Grande, Cuiaba, Eirunepe, Fortaleza, Maceio, Manaus, Noronha,
@@ -112,7 +145,7 @@ Porto_Acre, Porto_Velho, Recife, Rio_Branco, Santarem and Sao_Paulo, and
 Brazil/Acre, DeNoronha, East and West. Each interval in UTC is in
 `changes.json`.
 
-**America/Yellowknife: a data change with no NEWS entry.** tzdata 2025c's
+**America/Yellowknife: a data change with no NEWS entry, held back.** tzdata 2025c's
 `backzone` line 930 reads `Zone America/Yellowknife 0 - -00 1935 #
 Yellowknife founded?`. In 2026f's `backzone`, line 930 reads "# Commented
 out as too wrong to be useful." and line 931 reads "#Zone
@@ -121,9 +154,21 @@ too. With no zone of that name, the name follows `backward` line 283, `Link
 America/Edmonton America/Yellowknife`, in the pinned build as in the
 default one, and Edmonton kept summer time in 1947. No NEWS entry from 2026a
 to 2026f mentions Yellowknife. The fetched sources hold only 2025c and
-2026f, so they do not show which release made the change. Under the
-ticket's rule this interval, and the era change below that comes from the
-same lines, wait for the owner's acceptance.
+2026f, so they do not show which release made the change. The owner's
+decision (ZOD-282): ship 2026f except this change, because no tzdb NEWS
+entry or other official announcement explains it. The generator compiles
+2025c's lines 929 to 932 for the name (`HELD_ZONES`,
+`scripts/tzdb-held/yellowknife-2025c.zi`), so this interval, and the era,
+source, data form and transition changes below that come from the same
+lines, do not ship.
+
+Those lines also run past 1970, where the host answers: they keep Mountain
+time with rule Canada, while 2026f's default build (Edmonton) models
+Alberta's move to permanent -06 at 2026-11-01T08:00Z (2026c NEWS: "Alberta
+moved to permanent -06 on 2026-06-18"). That is the first instant from 1970
+at which the two differ (the generator and `zdump-read.mjs` both check it),
+and the name stays off the host-legal list, as on 2025c; its answers from
+1970 come from `Intl` either way.
 
 EST5EDT, CST6CDT, MST7MDT and PST8PDT change offsets in the default build
 (44, 44, 5 and 19 intervals, explained by 2026d's NEWS), but not in the
@@ -137,9 +182,10 @@ the same offsets as 2026f's `backward` zones. They are listed under
 `eraEnds`, `fromHistoryEnd` in `changes.json`), and they match, name for
 name and instant for instant, the differences between the 2025c and 2026f
 shards and `LATER_CAUSES`. The engine's results before and after are in
-`logs/before-after-probe.log` (`before-after-probe.mjs`, run on hosts with
-tz 2025c and 2026e; engine output, a regression record, not accuracy
-evidence).
+`logs/before-after-probe.log` (`before-after-probe.mjs`, main at 373ceda
+and this branch with the hold, run on hosts with tz 2025c and 2026e; engine
+output, a regression record, not accuracy evidence). Its America/Yellowknife
+lines are the same on both.
 
 - **EST5EDT, CST6CDT, MST7MDT, PST8PDT: abbreviations and one transition,
   1942 to 1945.** 2026d NEWS: "The backward-compatibility names EST5EDT,
@@ -191,8 +237,8 @@ evidence).
     time instead of Kyiv's, and the fold at the era's end moves with it: at
     35.17 E, 1879-12-31 23:50 was a `"dst-fold"` with `transition` at
     21:39:20Z and is now a plain `"lmt"` reading with no `transition`.
-- **America/Yellowknife before 1935.** From the same data change as its
-  1947 interval: 2025c's backzone zone began at "-00", so the engine read
+- **America/Yellowknife before 1935 (held back, does not ship).** From the
+  same data change as its 1947 interval, in 2026f as released: 2025c's backzone zone began at "-00", so the engine read
   the host (Edmonton's history); 2026f ships Edmonton's history itself.
   The offsets are the same, but before 1935 `zone.source` is "tzdb"
   instead of "intl" and `zone.dataForm` "main+backzone" instead of "host";
@@ -209,8 +255,9 @@ evidence).
   branch 1923-09-30 `"dst"`). `changes.json` does not list it because the
   offset the engine reports is the same on both sides. From 1947-09-28 to
   1970, `transition` likewise gives 1947-09-28 instead of 1945-09-30, from
-  the 1947 interval above. Waits for the owner's acceptance with the 1947
-  interval.
+  the 1947 interval above. Held back with the 1947 interval: the package
+  gives main's answers here (`src/geo/tzdb-2026f.test.ts`, "America/Yellowknife,
+  held at tzdata 2025c").
 - **Africa/Casablanca and Africa/El_Aaiun from 1970: `LATER_CAUSES`.** 2026c
   NEWS: "Morocco plans to move back to permanent UTC, without daylight
   saving time transitions, on 2026-09-20 at 02:00. This also affects
@@ -225,18 +272,20 @@ evidence).
 
 ## The engine against the oracle (`logs/compare.log`)
 
-On this branch's build (Node 22.22.2):
+On this branch's build (Node 22.22.2), against the "held" build, which is
+what the package ships:
 
 - Every transition before 1970 of all 597 names, 1 s before and 1 s after:
-  19,205 instants compared with zdump, 0 mismatches. 25 instants fall in
+  19,176 instants compared with zdump, 0 mismatches. 26 instants fall in
   "-00" spans, which the engine reads from the host by design; they are
-  counted, not compared.
+  counted, not compared. (Against 2026f as released, before the hold, the
+  figures were 19,205 and 25.)
 - The host-legal marking: 14 names by the dumps, the same 14 labelled
   `dataForm` "main" by the engine, recomputed by the generator (not carried
   over).
 - Property check: 5,000 (name, instant from 1800 to 1970) pairs from a
-  fixed seed (0x282), against Python's `zoneinfo` on the compiled 2026f
-  trees: 4,868 compared, 0 mismatches, 132 in "-00" spans.
+  fixed seed (0x282), against Python's `zoneinfo` on the compiled held and
+  default trees: 4,860 compared, 0 mismatches, 140 in "-00" spans.
 - Mutation (`logs/compare-mutant.log`): moving Europe/Dublin's first
   transition in its built shard by 3600 s makes the comparison fail (93
   mismatches, exit 1). Shard instants are stored as differences, so the move
@@ -247,10 +296,19 @@ On this branch's build (Node 22.22.2):
   (CST6CDT) did not compile".
 
 `transition-count.mjs` (`logs/transition-count.log`) counts, from the dumps,
-the offset changes from 1850 to 2037 of the shipped history before 1970 and
-tzdb 2025c's default build after (a host whose `Intl` is 2025c): 39,839 with
-the 2025c history, as rc.15 recorded, and 39,841 with 2026f (Yellowknife's
-1947 summer). `src/geo/roundtrip.test.ts` expects the latter.
+the offset changes from 1850 to 2037 of a history before 1970 and tzdb
+2025c's default build after (a host whose `Intl` is 2025c): 39,839 with the
+2025c history, as rc.15 recorded; 39,841 with 2026f as released
+(Yellowknife's 1947 summer); and 39,839 with what ships, 2026f with
+Yellowknife held. The engine's own scan, `src/geo/roundtrip.test.ts` on Node
+22.22.2 (tz 2025c), found 39,839 on this build, and the test expects it.
+
+Tests that fail on the branch before the hold (a2335d3) and pass after:
+`logs/before-hold-tests.log`, 17 tests. Each sample instant of
+"America/Yellowknife, held at tzdata 2025c" in `src/geo/tzdb-2026f.test.ts`
+(1900, 1935-01-01, 1938-06-01T12:00Z, 1947-06-01 and 1960) has a failing
+test there: at 1900, 1935 and 1938 the offset was already 2025c's but the
+source, data form, flags or transition were not.
 
 ## Not moved
 

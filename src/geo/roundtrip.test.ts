@@ -39,9 +39,10 @@ describe("resolveLocalToUtc on the shipped zone clock, around every offset chang
     expect(zones.length).toBeGreaterThan(590);
     expect(totals.transitions).toBeGreaterThan(30_000);
     expect(totals.tested).toBeGreaterThan(200_000);
-    // zdump's count for the 597 names, the tzdata 2026f history before 1970 and Intl (tzdb 2025c) after
-    // (docs/evidence/tzdb-2026f-20261117/README.md; 39,839 with the 2025c history, rc15-20260929/README.md).
-    if (HOST_IS_2025C) expect(totals.transitions).toBe(39_841);
+    // zdump's count for the 597 names, the shipped history before 1970 (tzdata 2026f with America/Yellowknife
+    // held at 2025c) and Intl (tzdb 2025c) after (docs/evidence/tzdb-2026f-20261117/README.md): 39,839, as with
+    // the 2025c history (rc15-20260929/README.md); 2026f as released, Yellowknife's 1947 summer included, gives 39,841.
+    if (HOST_IS_2025C) expect(totals.transitions).toBe(39_839);
   });
 
   it.each([

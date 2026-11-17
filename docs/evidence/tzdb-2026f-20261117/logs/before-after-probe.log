@@ -1,4 +1,4 @@
-== origin/main c80fde4 (tzdata 2025c), built
+== origin/main 373ceda (tzdata 2025c), built
 host tz 2025c
 Europe/Uzhgorod 1885-06-01 12:00 {"longitude":22.3} 1885-06-01T10:30:48.000Z 89.2 ["lmt"] tzdb main null null
 Europe/Uzhgorod 1885-06-01 12:00  1885-06-01T09:57:56.000Z 122.06666666666666 [] tzdb main KMT {"at":"1879-12-31T21:57:56.000Z","offsetBeforeMinutes":122.06666666666666,"offsetAfterMinutes":122.06666666666666,"cause":"legal-change"}
@@ -17,16 +17,16 @@ Europe/Dublin 1925-09-27 12:00  1925-09-27T11:00:00.000Z 60 [] tzdb main+backzon
 America/Sao_Paulo 1965-03-31 12:00  1965-03-31T15:00:00.000Z -180 [] tzdb main+backzone -03 {"at":"1965-03-31T02:00:00.000Z","offsetBeforeMinutes":-120,"offsetAfterMinutes":-180,"cause":"dst"}
 Africa/Casablanca 2026-09-20 01:30  2026-09-20T00:30:00.000Z 60 [] intl host null null
 Africa/El_Aaiun 2026-09-20 01:30  2026-09-20T00:30:00.000Z 60 [] intl host null null
-== this branch (tzdata 2026f), built
+== this branch (tzdata 2026f, America/Yellowknife held at 2025c), built
 host tz 2025c
 Europe/Uzhgorod 1885-06-01 12:00 {"longitude":22.3} 1885-06-01T09:57:56.000Z 122.06666666666666 [] tzdb main+backzone KMT {"at":"1879-12-31T21:57:56.000Z","offsetBeforeMinutes":122.06666666666666,"offsetAfterMinutes":122.06666666666666,"cause":"legal-change"}
 Europe/Uzhgorod 1885-06-01 12:00  1885-06-01T09:57:56.000Z 122.06666666666666 [] tzdb main+backzone KMT {"at":"1879-12-31T21:57:56.000Z","offsetBeforeMinutes":122.06666666666666,"offsetAfterMinutes":122.06666666666666,"cause":"legal-change"}
 Europe/Zaporozhye 1879-12-31 23:50 {"longitude":35.17} 1879-12-31T21:29:19.000Z 140.68333333333334 ["lmt"] tzdb main+backzone null null
 Europe/Zaporozhye 1885-06-01 12:00  1885-06-01T09:57:56.000Z 122.06666666666666 [] tzdb main+backzone KMT {"at":"1879-12-31T21:57:56.000Z","offsetBeforeMinutes":122.06666666666666,"offsetAfterMinutes":122.06666666666666,"cause":"legal-change"}
-America/Yellowknife 1900-06-01 12:00 {"longitude":-114.37} 1900-06-01T19:37:29.000Z -457.48333333333335 ["lmt"] tzdb main+backzone null null
-America/Yellowknife 1900-06-01 12:00  1900-06-01T19:33:52.000Z -453.8666666666667 ["lmt"] tzdb main+backzone LMT null
-America/Yellowknife 1930-06-01 12:00  1930-06-01T19:00:00.000Z -420 [] tzdb main+backzone MST {"at":"1923-09-30T08:00:00.000Z","offsetBeforeMinutes":-360,"offsetAfterMinutes":-420,"cause":"dst"}
-America/Yellowknife 1947-06-01 12:00  1947-06-01T18:00:00.000Z -360 [] tzdb main+backzone MDT {"at":"1947-04-27T09:00:00.000Z","offsetBeforeMinutes":-420,"offsetAfterMinutes":-360,"cause":"dst"}
+America/Yellowknife 1900-06-01 12:00 {"longitude":-114.37} 1900-06-01T19:33:52.000Z -453.8666666666667 [] intl host null null
+America/Yellowknife 1900-06-01 12:00  1900-06-01T19:33:52.000Z -453.8666666666667 [] intl host null null
+America/Yellowknife 1930-06-01 12:00  1930-06-01T19:00:00.000Z -420 [] intl host null null
+America/Yellowknife 1947-06-01 12:00  1947-06-01T19:00:00.000Z -420 [] tzdb main+backzone MST {"at":"1945-09-30T08:00:00.000Z","offsetBeforeMinutes":-360,"offsetAfterMinutes":-420,"cause":"dst"}
 EST5EDT 1943-06-01 12:00  1943-06-01T16:00:00.000Z -240 [] tzdb main+backzone EDT {"at":"1942-02-09T07:00:00.000Z","offsetBeforeMinutes":-300,"offsetAfterMinutes":-240,"cause":"dst"}
 EST5EDT 1945-08-20 20:00  1945-08-21T00:00:00.000Z -240 [] tzdb main+backzone EDT {"at":"1942-02-09T07:00:00.000Z","offsetBeforeMinutes":-300,"offsetAfterMinutes":-240,"cause":"dst"}
 CST6CDT 1945-08-20 20:00  1945-08-21T01:00:00.000Z -300 [] tzdb main+backzone CDT {"at":"1942-02-09T08:00:00.000Z","offsetBeforeMinutes":-360,"offsetAfterMinutes":-300,"cause":"dst"}
@@ -36,7 +36,7 @@ Europe/Dublin 1925-09-27 12:00  1925-09-27T12:00:00.000Z 0 [] tzdb main+backzone
 America/Sao_Paulo 1965-03-31 12:00  1965-03-31T14:00:00.000Z -120 [] tzdb main+backzone -02 {"at":"1965-01-31T03:00:00.000Z","offsetBeforeMinutes":-180,"offsetAfterMinutes":-120,"cause":"dst"}
 Africa/Casablanca 2026-09-20 01:30  2026-09-20T00:30:00.000Z 60 [] intl host null null
 Africa/El_Aaiun 2026-09-20 01:30  2026-09-20T00:30:00.000Z 60 [] intl host null null
-== origin/main c80fde4 (tzdata 2025c), built
+== origin/main 373ceda (tzdata 2025c), built
 host tz 2026e
 Europe/Uzhgorod 1885-06-01 12:00 {"longitude":22.3} 1885-06-01T10:30:48.000Z 89.2 ["lmt"] tzdb main null null
 Europe/Uzhgorod 1885-06-01 12:00  1885-06-01T09:57:56.000Z 122.06666666666666 [] tzdb main KMT {"at":"1879-12-31T21:57:56.000Z","offsetBeforeMinutes":122.06666666666666,"offsetAfterMinutes":122.06666666666666,"cause":"legal-change"}
@@ -55,16 +55,16 @@ Europe/Dublin 1925-09-27 12:00  1925-09-27T11:00:00.000Z 60 [] tzdb main+backzon
 America/Sao_Paulo 1965-03-31 12:00  1965-03-31T15:00:00.000Z -180 [] tzdb main+backzone -03 {"at":"1965-03-31T02:00:00.000Z","offsetBeforeMinutes":-120,"offsetAfterMinutes":-180,"cause":"dst"}
 Africa/Casablanca 2026-09-20 01:30  2026-09-20T00:30:00.000Z 60 ["dst-fold"] intl host null {"at":"2026-09-20T01:00:00.000Z","offsetBeforeMinutes":60,"offsetAfterMinutes":0,"cause":"dst"}
 Africa/El_Aaiun 2026-09-20 01:30  2026-09-20T00:30:00.000Z 60 ["dst-fold"] intl host null {"at":"2026-09-20T01:00:00.000Z","offsetBeforeMinutes":60,"offsetAfterMinutes":0,"cause":"dst"}
-== this branch (tzdata 2026f), built
+== this branch (tzdata 2026f, America/Yellowknife held at 2025c), built
 host tz 2026e
 Europe/Uzhgorod 1885-06-01 12:00 {"longitude":22.3} 1885-06-01T09:57:56.000Z 122.06666666666666 [] tzdb main+backzone KMT {"at":"1879-12-31T21:57:56.000Z","offsetBeforeMinutes":122.06666666666666,"offsetAfterMinutes":122.06666666666666,"cause":"legal-change"}
 Europe/Uzhgorod 1885-06-01 12:00  1885-06-01T09:57:56.000Z 122.06666666666666 [] tzdb main+backzone KMT {"at":"1879-12-31T21:57:56.000Z","offsetBeforeMinutes":122.06666666666666,"offsetAfterMinutes":122.06666666666666,"cause":"legal-change"}
 Europe/Zaporozhye 1879-12-31 23:50 {"longitude":35.17} 1879-12-31T21:29:19.000Z 140.68333333333334 ["lmt"] tzdb main+backzone null null
 Europe/Zaporozhye 1885-06-01 12:00  1885-06-01T09:57:56.000Z 122.06666666666666 [] tzdb main+backzone KMT {"at":"1879-12-31T21:57:56.000Z","offsetBeforeMinutes":122.06666666666666,"offsetAfterMinutes":122.06666666666666,"cause":"legal-change"}
-America/Yellowknife 1900-06-01 12:00 {"longitude":-114.37} 1900-06-01T19:37:29.000Z -457.48333333333335 ["lmt"] tzdb main+backzone null null
-America/Yellowknife 1900-06-01 12:00  1900-06-01T19:33:52.000Z -453.8666666666667 ["lmt"] tzdb main+backzone LMT null
-America/Yellowknife 1930-06-01 12:00  1930-06-01T19:00:00.000Z -420 [] tzdb main+backzone MST {"at":"1923-09-30T08:00:00.000Z","offsetBeforeMinutes":-360,"offsetAfterMinutes":-420,"cause":"dst"}
-America/Yellowknife 1947-06-01 12:00  1947-06-01T18:00:00.000Z -360 [] tzdb main+backzone MDT {"at":"1947-04-27T09:00:00.000Z","offsetBeforeMinutes":-420,"offsetAfterMinutes":-360,"cause":"dst"}
+America/Yellowknife 1900-06-01 12:00 {"longitude":-114.37} 1900-06-01T19:33:52.000Z -453.8666666666667 [] intl host null null
+America/Yellowknife 1900-06-01 12:00  1900-06-01T19:33:52.000Z -453.8666666666667 [] intl host null null
+America/Yellowknife 1930-06-01 12:00  1930-06-01T19:00:00.000Z -420 [] intl host null null
+America/Yellowknife 1947-06-01 12:00  1947-06-01T19:00:00.000Z -420 [] tzdb main+backzone MST {"at":"1945-09-30T08:00:00.000Z","offsetBeforeMinutes":-360,"offsetAfterMinutes":-420,"cause":"dst"}
 EST5EDT 1943-06-01 12:00  1943-06-01T16:00:00.000Z -240 [] tzdb main+backzone EDT {"at":"1942-02-09T07:00:00.000Z","offsetBeforeMinutes":-300,"offsetAfterMinutes":-240,"cause":"dst"}
 EST5EDT 1945-08-20 20:00  1945-08-21T00:00:00.000Z -240 [] tzdb main+backzone EDT {"at":"1942-02-09T07:00:00.000Z","offsetBeforeMinutes":-300,"offsetAfterMinutes":-240,"cause":"dst"}
 CST6CDT 1945-08-20 20:00  1945-08-21T01:00:00.000Z -300 [] tzdb main+backzone CDT {"at":"1942-02-09T08:00:00.000Z","offsetBeforeMinutes":-360,"offsetAfterMinutes":-300,"cause":"dst"}

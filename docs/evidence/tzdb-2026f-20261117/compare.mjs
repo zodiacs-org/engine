@@ -1,12 +1,14 @@
 /*
- * The built engine against the outside oracle, tzdata 2026f compiled by zic.
+ * The built engine against the outside oracle, tzdata 2026f compiled by zic,
+ * with America/Yellowknife held at tzdata 2025c by the owner's decision: the
+ * oracle's "held" build (held.mjs), which is what the package ships.
  * The only expectations are zdump's text and a second, independent TZif
  * reader (Python's zoneinfo on the same compiled tree); nothing is taken from
  * the engine, its shards or the generator.
  *
  * 1. Every transition before 1970 of every name: zoneOffsetAt(name, t - 1 s)
  *    and zoneOffsetAt(name, t + 1 s) against zdump's offsets on either side,
- *    from the pinned build's dump, or the default build's for the names
+ *    from the held build's dump, or the default build's for the names
  *    host-legal by the dumps (their pinned and default builds differ from
  *    1970 on). Spans zdump marks "-00" are read from the host by design and
  *    are counted, not compared.
@@ -28,6 +30,7 @@ import { tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
+import { HELD } from "./held.mjs";
 import { compileForm, extract } from "./oracle.mjs";
 import { readZdump, shipped, stateAt } from "./zdump-read.mjs";
 
@@ -41,7 +44,7 @@ const read = (form) =>
     readFileSync(join(options.dumps, `2026f-${form}-1800-1970.zdump`), "utf8") +
       readFileSync(join(options.dumps, `2026f-${form}-1970-2038.zdump`), "utf8")
   );
-const pinned = read("pinned");
+const pinned = read("held");
 const host = read("default");
 
 let geoPath = resolve(options.geo);
@@ -65,7 +68,7 @@ if (options.mutate) {
 const geo = await import(pathToFileURL(geoPath).href);
 
 const names = [...host.keys()].sort();
-const marks = new Map(names.map((name) => [name, shipped(pinned, host, name)]));
+const marks = new Map(names.map((name) => [name, shipped(pinned, host, name, HELD.find((zone) => zone.name === name) ?? null)]));
 const mismatches = [];
 let compared = 0;
 let fromHost = 0;
@@ -115,7 +118,7 @@ let propertySkipped = 0;
 try {
   const { data, version } = extract(resolve(options.tzdata), work);
   if (version !== "2026f") throw new Error(`compare: --tzdata is ${version}`);
-  const trees = { pinned: compileForm(data, "pinned", work, resolve(options.zic)), main: compileForm(data, "default", work, resolve(options.zic)) };
+  const trees = { pinned: compileForm(data, "held", work, resolve(options.zic)), main: compileForm(data, "default", work, resolve(options.zic)) };
   const request = pairs.map(([name, s]) => [marks.get(name).form === "main" ? trees.main.dir : trees.pinned.dir, name, s]);
   writeFileSync(join(work, "pairs.json"), JSON.stringify(request));
   const script = [

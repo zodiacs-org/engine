@@ -79,14 +79,15 @@ export function offsetDifferences(before, after, end) {
   return out;
 }
 
+/** The first instant from `start` on at which two clocks differ in offset, or null. */
+export function firstDifferenceFrom(a, b, start) {
+  const cuts = [...new Set([start, ...[...a.changes, ...b.changes].map((change) => change.t).filter((t) => t > start)])].sort((x, y) => x - y);
+  return cuts.find((t) => stateAt(a, t).offset !== stateAt(b, t).offset) ?? null;
+}
+
 /** True when two clocks differ in offset at any instant from `start` on. */
 export function differFrom(a, b, start) {
-  const cuts = [start, ...[...a.changes, ...b.changes].map((change) => change.t).filter((t) => t > start)];
-  return cuts.some((t) => {
-    const x = stateAt(a, t);
-    const y = stateAt(b, t);
-    return x.offset !== y.offset;
-  });
+  return firstDifferenceFrom(a, b, start) !== null;
 }
 
 /**
@@ -95,12 +96,21 @@ export function differFrom(a, b, start) {
  * from 1970 on (host-legal); "-00" spans (no local time) read from the
  * default build, as the engine reads them from the host's Intl. Null for a
  * name the default build lacks (the package leaves it out).
+ *
+ * `held`, for a zone the owner held at an earlier release (held.mjs): its
+ * pinned clock must first differ from the default build at exactly
+ * `held.firstDifferenceFromDefault`, and it is then not host-legal.
  */
-export function shipped(pinned, host, name) {
+export function shipped(pinned, host, name, held = null) {
   const p = pinned.get(name);
   const d = host.get(name);
   if (!d) return null;
-  const hostLegal = !p || differFrom(p, d, 0);
+  let hostLegal = !p || differFrom(p, d, 0);
+  if (held && p) {
+    const first = firstDifferenceFrom(p, d, 0);
+    if (first !== held.firstDifferenceFromDefault) throw new Error(`zdump-read: held ${name} first differs from the default build at ${first}, expected ${held.firstDifferenceFromDefault}`);
+    hostLegal = false;
+  }
   if (hostLegal) return { form: "main", clock: d, hostLegal: !!p };
   if (![p.initial, ...p.changes].some((piece) => piece.abbr === "-00")) return { form: "main+backzone", clock: p, hostLegal: false };
   const cuts = [...new Set([...p.changes, ...d.changes].map((c) => c.t))].sort((a, b) => a - b);
