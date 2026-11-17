@@ -11,10 +11,24 @@
  * - spans the dump marks "-00" (no local time) read from the same release's
  *   default build, as the engine reads them from the host's Intl.
  *
- * Each interval carries the NEWS sentence that explains it, quoted verbatim
- * from the release's NEWS file, or "unexplained". Names whose default builds
- * differ without the shipped history changing are listed apart, under
+ * Each interval carries its cause: the NEWS sentence that explains it,
+ * quoted verbatim from the release's NEWS file, or, where no NEWS entry
+ * mentions it, the data-file lines that cause it, marked as waiting for the
+ * owner's acceptance; anything else is "unexplained". Names whose default
+ * builds differ without the shipped history changing are listed apart, under
  * "defaultBuildOnly": they matter only to a host's Intl.
+ *
+ * Three more lists cover what an offset comparison cannot see, each read
+ * from the same dumps:
+ *
+ * - "transitionsOnly": names whose shipped offsets before 1970 do not move
+ *   but whose transitions do (an abbreviation, the daylight-saving flag, or
+ *   a transition that changes neither offset);
+ * - "eraEnds": names whose local mean time era (the pinned build's first
+ *   change away from "LMT") ends at another instant or offset;
+ * - "fromHistoryEnd": names whose default build from 1970 on gains or loses a
+ *   change of standard offset (offset moves, daylight saving off on both
+ *   sides), the transitions the generator records in LATER_CAUSES.
  *
  *   node docs/evidence/tzdb-2026f-20261117/changes.mjs DUMPS NEWS [changes.json]
  *
@@ -33,7 +47,7 @@ const HISTORY_END = 0;
 const at = (iso) => Date.parse(iso) / 1000;
 const iso = (s) => (s === -Infinity ? null : new Date(s * 1000).toISOString());
 
-/** The explanations, each a NEWS sentence (checked verbatim below) and the intervals it covers. */
+/** The explanations, each a NEWS sentence (checked verbatim below) or data-file lines, and the intervals it covers. */
 const EXPLANATIONS = [
   {
     release: "2026e",
@@ -55,20 +69,63 @@ const EXPLANATIONS = [
       "The backward-compatibility names EST5EDT, CST6CDT, MST7MDT, and PST8PDT now conform better to POSIX." +
       " [...] This change affects only timestamps before 1966-10-30 at 01:00 standard time.",
     covers: (zone, d) => ["EST5EDT", "CST6CDT", "MST7MDT", "PST8PDT"].includes(zone) && d.to <= at("1966-10-30T09:00:00Z")
+  },
+  {
+    release: "2026f",
+    news: null,
+    newsNote: "No NEWS entry of 2026a to 2026f mentions America/Yellowknife.",
+    source: [
+      "tzdata 2025c backzone line 930: \"Zone America/Yellowknife 0\t-\t-00\t1935 # Yellowknife founded?\"",
+      "tzdata 2026f backzone line 930: \"# Commented out as too wrong to be useful.\"",
+      "tzdata 2026f backzone line 931: \"#Zone America/Yellowknife 0\t-\t-00\t1935 # Yellowknife founded?\"",
+      "tzdata 2026f backward line 283: \"Link\tAmerica/Edmonton\tAmerica/Yellowknife\""
+    ],
+    cause: "backzone's Yellowknife zone is commented out, so the name follows backward's link to America/Edmonton, which kept summer time in 1947",
+    ownerAcceptance: "pending",
+    covers: (zone, d) => zone === "America/Yellowknife" && d.from >= at("1947-04-27T00:00:00Z") && d.to <= at("1947-09-29T00:00:00Z")
   }
 ];
-for (const { news: sentence } of EXPLANATIONS) {
+
+/** Uzhgorod and Zaporozhye: their backzone zones are gone, so each name is backward's link to Europe/Kyiv. */
+const UKRAINE = {
+  release: "2026f",
+  news: "Move Europe/Uzhgorod and Europe/Zaporozhye to 'backzone'; backward-compatibility links still work, albeit with different timestamps before October 1991.",
+  newsRelease: "2022d",
+  newsNote: "The 2022d entry is the only NEWS entry that mentions either name; none of 2026a to 2026f mentions their removal from backzone.",
+  source: [
+    "tzdata 2025c backzone line 1588: \"Zone Europe/Uzhgorod\t1:29:12 -\tLMT\t1890 Oct\" (deleted with the rest of its zone in 2026f)",
+    "tzdata 2025c backzone line 1631: \"Zone Europe/Zaporozhye\t2:20:40 -\tLMT\t1880\" (deleted with the rest of its zone in 2026f)",
+    "tzdata 2026f backward lines 295 and 296: \"Link\tEurope/Kyiv\t\tEurope/Uzhgorod\", \"Link\tEurope/Kyiv\t\tEurope/Zaporozhye\""
+  ]
+};
+
+/** The four POSIX-style names: 2026d moved them to backward with federal rules and POSIX abbreviations. */
+const POSIX = {
+  release: "2026d",
+  news:
+    "The backward-compatibility names EST5EDT, CST6CDT, MST7MDT, and PST8PDT now conform better to POSIX. For example, EST5EDT now always uses the abbreviation \"EST\" for standard time (now always 5 hours behind UT) and \"EDT\" for daylight saving time, whereas it formerly had different UT offsets before standard time was introduced and sometimes used abbreviations like \"LMT\", \"EWT\" and \"EPT\", all contrary to POSIX.",
+  source: [
+    "tzdata 2025c backzone lines 1840 to 1845: \"Zone\tEST5EDT\t\t -5:00\tUS\tE%sT\" and the same for CST6CDT, MST7MDT and PST8PDT, under rule US",
+    "tzdata 2025c northamerica line 180: \"Rule\tUS\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tP # Peace\" (War time W becomes Peace time P: a transition with no offset change)",
+    "tzdata 2026f backward lines 372 to 375: the same four zones under rule USback",
+    "tzdata 2026f backward line 335: \"# To conform to POSIX, this copy uses D instead of W for War and P for Peace.\"",
+    "tzdata 2026f backward line 340: \"Rule\tUSback\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tD # Peace\" (D before and after, so zic records no transition)"
+  ]
+};
+
+/** Morocco and Western Sahara go to permanent +00 on 2026-09-20. */
+const MOROCCO = {
+  release: "2026c",
+  news:
+    "Morocco plans to move back to permanent UTC, without daylight saving time transitions, on 2026-09-20 at 02:00. This also affects Western Sahara."
+};
+
+for (const { news: sentence } of [...EXPLANATIONS, UKRAINE, POSIX, MOROCCO]) {
+  if (sentence === null) continue;
   for (const part of sentence.split(" [...] ")) {
     if (!news.includes(part)) throw new Error(`changes: not verbatim in NEWS: ${part}`);
   }
 }
-
-/** What tzdb's own data files say where NEWS is silent: quoted for the reader, never counted as an explanation. */
-const DATA_NOTES = {
-  "America/Yellowknife":
-    "tzdata 2026f backzone comments out its Zone America/Yellowknife with the line \"# Commented out as too wrong to be useful.\"; " +
-    "the name is then backward's Link to America/Edmonton. No NEWS entry from 2026a to 2026f mentions it."
-};
 
 const read = (release, form) =>
   readZdump(
@@ -82,6 +139,7 @@ const zones = [];
 const defaultBuildOnly = [];
 const hostLegal = { "2025c": [], "2026f": [] };
 let unexplained = 0;
+let awaitingOwner = 0;
 for (const name of names) {
   const old = shipped(before.pinned, before.host, name);
   const now = shipped(after.pinned, after.host, name);
@@ -100,6 +158,7 @@ for (const name of names) {
   const intervals = differences.map((d) => {
     const explanation = EXPLANATIONS.find((e) => e.covers(name, d));
     if (!explanation) unexplained += 1;
+    else if (explanation.ownerAcceptance) awaitingOwner += 1;
     return {
       from: iso(d.from),
       to: iso(d.to),
@@ -107,27 +166,117 @@ for (const name of names) {
       newOffsetSeconds: d.newOffset,
       hours: d.from === -Infinity ? null : (d.to - d.from) / 3600,
       release: explanation ? explanation.release : null,
-      news: explanation ? explanation.news : "unexplained"
+      news: explanation ? explanation.news : "unexplained",
+      ...(explanation?.newsNote ? { newsNote: explanation.newsNote } : {}),
+      ...(explanation?.source ? { cause: explanation.cause, source: explanation.source } : {}),
+      ...(explanation?.ownerAcceptance ? { ownerAcceptance: explanation.ownerAcceptance } : {})
     };
   });
-  zones.push({ zone: name, form2025c: old.form, form2026f: now.form, ...(DATA_NOTES[name] ? { dataNote: DATA_NOTES[name] } : {}), intervals });
+  zones.push({ zone: name, form2025c: old.form, form2026f: now.form, intervals });
+}
+
+/** One clock's changes before 1970 as comparable rows. */
+const rows = (clock) =>
+  new Set(clock.changes.filter((c) => c.t < HISTORY_END).map((c) => `${iso(c.t)} ${c.offset} ${c.isdst} ${c.abbr}`));
+const transitionsOnly = [];
+for (const name of names) {
+  const old = shipped(before.pinned, before.host, name);
+  const now = shipped(after.pinned, after.host, name);
+  if (!old || !now || offsetDifferences(old.clock, now.clock, HISTORY_END).length) continue;
+  const a = rows(old.clock);
+  const b = rows(now.clock);
+  const removed = [...a].filter((row) => !b.has(row));
+  const added = [...b].filter((row) => !a.has(row));
+  if (!removed.length && !added.length) continue;
+  const source = ["EST5EDT", "CST6CDT", "MST7MDT", "PST8PDT"].includes(name) ? POSIX : null;
+  if (!source) unexplained += 1;
+  transitionsOnly.push({
+    zone: name,
+    removed,
+    added,
+    release: source ? source.release : null,
+    news: source ? source.news : "unexplained",
+    ...(source ? { source: source.source } : {})
+  });
+}
+
+/** The pinned build's local mean time era: [end, offset], or null without one. */
+const era = (clock) => {
+  let previous = clock.initial;
+  for (const change of clock.changes) {
+    if (previous.abbr === "LMT" && change.abbr !== "LMT") return [change.t, previous.offset];
+    previous = change;
+  }
+  return null;
+};
+const eraEnds = [];
+for (const name of names) {
+  if (!before.host.has(name) || !after.host.has(name)) continue;
+  const old = before.pinned.has(name) ? era(before.pinned.get(name)) : null;
+  const now = after.pinned.has(name) ? era(after.pinned.get(name)) : null;
+  if (JSON.stringify(old) === JSON.stringify(now)) continue;
+  const source = name === "America/Yellowknife" ? EXPLANATIONS.at(-1) : ["Europe/Uzhgorod", "Europe/Zaporozhye"].includes(name) ? UKRAINE : null;
+  if (!source) unexplained += 1;
+  else if (source.ownerAcceptance) awaitingOwner += 1;
+  eraEnds.push({
+    zone: name,
+    era2025c: old && { end: iso(old[0]), offsetSeconds: old[1] },
+    era2026f: now && { end: iso(now[0]), offsetSeconds: now[1] },
+    release: source ? source.release : null,
+    news: source ? source.news : "unexplained",
+    ...(source?.newsRelease ? { newsRelease: source.newsRelease } : {}),
+    ...(source?.newsNote ? { newsNote: source.newsNote } : {}),
+    ...(source ? { source: source.source } : {}),
+    ...(source?.ownerAcceptance ? { ownerAcceptance: source.ownerAcceptance } : {})
+  });
+}
+
+/** The default build's changes of standard offset from 1970 on. */
+const standardChanges = (clock) => {
+  const out = [];
+  let previous = clock.initial;
+  for (const change of clock.changes) {
+    if (change.t >= HISTORY_END && change.offset !== previous.offset && change.isdst === 0 && previous.isdst === 0) {
+      out.push(`${iso(change.t)} ${previous.offset} ${change.offset}`);
+    }
+    previous = change;
+  }
+  return new Set(out);
+};
+const fromHistoryEnd = [];
+for (const name of names) {
+  const a = before.host.has(name) ? standardChanges(before.host.get(name)) : new Set();
+  const b = after.host.has(name) ? standardChanges(after.host.get(name)) : new Set();
+  const removed = [...a].filter((row) => !b.has(row));
+  const added = [...b].filter((row) => !a.has(row));
+  if (!removed.length && !added.length) continue;
+  const source = ["Africa/Casablanca", "Africa/El_Aaiun"].includes(name) ? MOROCCO : null;
+  if (!source) unexplained += 1;
+  fromHistoryEnd.push({ zone: name, removed, added, release: source ? source.release : null, news: source ? source.news : "unexplained" });
 }
 
 const result = {
   description:
-    "Every interval before 1970-01-01T00:00Z on which the UTC offset of the history this package ships for a zone name differs between tzdata 2025c and 2026f, from zdump -v -c 1800,1970 on zic-compiled data (oracle.mjs). Offsets in seconds east; intervals are [from, to) in UTC; from null means from the beginning of the zone's history.",
+    "Every interval before 1970-01-01T00:00Z on which the UTC offset of the history this package ships for a zone name differs between tzdata 2025c and 2026f, from zdump -v on zic-compiled data (oracle.mjs). Offsets in seconds east; intervals are [from, to) in UTC; from null means from the beginning of the zone's history. transitionsOnly, eraEnds and fromHistoryEnd list what moves without such an offset change; rows are 'UTC offset isdst abbreviation' (transitionsOnly) or 'UTC offsetBefore offsetAfter' (fromHistoryEnd).",
   releases: { from: "2025c", to: "2026f" },
   hostLegal,
   changedZones: zones.filter((zone) => zone.intervals).length,
   intervals: zones.reduce((sum, zone) => sum + (zone.intervals?.length ?? 0), 0),
   unexplained,
+  awaitingOwner,
   zones,
-  defaultBuildOnly
+  defaultBuildOnly,
+  transitionsOnly,
+  eraEnds,
+  fromHistoryEnd
 };
 const text = JSON.stringify(result, null, 2) + "\n";
 if (outPath) writeFileSync(outPath, text);
 console.log(
-  `changes: ${result.changedZones} names, ${result.intervals} intervals, ${unexplained} unexplained; ` +
+  `changes: ${result.changedZones} names, ${result.intervals} intervals, ${unexplained} unexplained, ${awaitingOwner} awaiting the owner; ` +
+    `transitions only: ${transitionsOnly.map((z) => z.zone).join(", ") || "none"}; ` +
+    `era ends: ${eraEnds.map((z) => z.zone).join(", ") || "none"}; ` +
+    `from 1970: ${fromHistoryEnd.map((z) => z.zone).join(", ") || "none"}; ` +
     `host-legal ${hostLegal["2025c"].length} (2025c), ${hostLegal["2026f"].length} (2026f); ` +
     `default build only: ${defaultBuildOnly.map((z) => z.zone).join(", ") || "none"}`
 );

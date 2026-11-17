@@ -91,16 +91,20 @@ marks `-00` read from the default build, as the engine reads them from
 `Intl`. The host-legal names come out of the dumps: 16 for 2025c (the same
 16 the committed 2025c shards mark) and 14 for 2026f (Europe/Uzhgorod and
 Europe/Zaporozhye leave the list, because 2026f's `backzone` no longer has
-their zones).
+their zones). Every change below carries its cause; `changes.json` has 0
+unexplained and 2 entries waiting for the owner's acceptance (America/Yellowknife's
+1947 interval and its era, both from one data change).
+
+### Offsets before 1970
 
 24 names change offset before 1970, in 45 intervals, all after 1920:
 
-| names | interval (UTC) | was | now | hours | NEWS |
+| names | interval (UTC) | was | now | hours | cause |
 | --- | --- | --- | --- | --- | --- |
-| Europe/Dublin, Eire | 1925-09-20T02:00Z to 1925-10-04T02:00Z | +1:00 | +0:00 | 336 | 2026e: "In 1925 Ireland fell back on 09-20 not 10-04 (thanks to Stan Ulbrych)." |
-| 21 Brazilian names (below) | 1965-03-31 local 00:00 to 24:00 | standard | daylight saving, one hour east | 24 each | 2026f: "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00." |
+| Europe/Dublin, Eire | 1925-09-20T02:00Z to 1925-10-04T02:00Z | +1:00 | +0:00 | 336 | 2026e NEWS: "In 1925 Ireland fell back on 09-20 not 10-04 (thanks to Stan Ulbrych)." |
+| 21 Brazilian names (below) | 1965-03-31 local 00:00 to 24:00 | standard | daylight saving, one hour east | 24 each | 2026f NEWS: "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00." |
 | the same 21 | 1966-03-01 local 00:00 to 01:00 | standard | daylight saving, one hour east | 1 each | the same sentence |
-| America/Yellowknife | 1947-04-27T09:00Z to 1947-09-28T08:00Z | -7:00 | -6:00 | 3695 | **unexplained** |
+| America/Yellowknife | 1947-04-27T09:00Z to 1947-09-28T08:00Z | -7:00 | -6:00 | 3695 | data only, no NEWS entry (below); waits for the owner's acceptance |
 
 The 21 Brazilian names: America/Araguaina, Bahia, Belem, Boa_Vista,
 Campo_Grande, Cuiaba, Eirunepe, Fortaleza, Maceio, Manaus, Noronha,
@@ -108,44 +112,105 @@ Porto_Acre, Porto_Velho, Recife, Rio_Branco, Santarem and Sao_Paulo, and
 Brazil/Acre, DeNoronha, East and West. Each interval in UTC is in
 `changes.json`.
 
-**Unexplained: America/Yellowknife.** No NEWS entry of 2026a to 2026f
-mentions it. tzdata 2026f's `backzone` comments its Zone out with the line
-"# Commented out as too wrong to be useful.", so the name falls to
-`backward`'s `Link America/Edmonton America/Yellowknife`. Under the ticket's
-rule this interval blocks the change until it is explained or accepted.
+**America/Yellowknife: a data change with no NEWS entry.** tzdata 2025c's
+`backzone` line 930 reads `Zone America/Yellowknife 0 - -00 1935 #
+Yellowknife founded?`. In 2026f's `backzone`, line 930 reads "# Commented
+out as too wrong to be useful." and line 931 reads "#Zone
+America/Yellowknife 0 - -00 1935", with the rest of the zone commented out
+too. With no zone of that name, the name follows `backward` line 283, `Link
+America/Edmonton America/Yellowknife`, in the pinned build as in the
+default one, and Edmonton kept summer time in 1947. No NEWS entry from 2026a
+to 2026f mentions Yellowknife. The fetched sources hold only 2025c and
+2026f, so they do not show which release made the change. Under the
+ticket's rule this interval, and the era change below that comes from the
+same lines, wait for the owner's acceptance.
 
-EST5EDT, CST6CDT, MST7MDT and PST8PDT change in the default build (44, 44, 5
-and 19 intervals, explained by 2026d's NEWS), but not in the shipped history:
-2025c shipped backzone's federal-rules zones, which give the same offsets as
-2026f's `backward` zones. They are listed under `defaultBuildOnly`.
+EST5EDT, CST6CDT, MST7MDT and PST8PDT change offsets in the default build
+(44, 44, 5 and 19 intervals, explained by 2026d's NEWS), but not in the
+shipped history: 2025c shipped backzone's federal-rules zones, which give
+the same offsets as 2026f's `backward` zones. They are listed under
+`defaultBuildOnly`. Their transitions do change; see the next section.
 
-### Changes the zdump comparison cannot see
+### Changes an offset comparison cannot see
 
-These change published results without changing any zone offset zdump
-reports. They come from the zone lines, so they are recorded here from the
-data files and from the engine before and after
-(`before-after-probe.mjs`, `logs/before-after-probe.log`; engine output, a
-regression record, not accuracy evidence):
+`changes.mjs` reads these from the same dumps (`transitionsOnly`,
+`eraEnds`, `fromHistoryEnd` in `changes.json`), and they match, name for
+name and instant for instant, the differences between the 2025c and 2026f
+shards and `LATER_CAUSES`. The engine's results before and after are in
+`logs/before-after-probe.log` (`before-after-probe.mjs`, run on hosts with
+tz 2025c and 2026e; engine output, a regression record, not accuracy
+evidence).
 
-- **Abbreviations, 1942 to 1945**: EST5EDT, CST6CDT, MST7MDT and PST8PDT now
-  say "EDT", "CDT", "MDT", "PDT" where 2025c said "EWT"/"EPT" and the like
-  (2026d NEWS: "EST5EDT now always uses the abbreviation "EST" for standard
-  time ... and "EDT" for daylight saving time"). Offsets unchanged. `zone.abbreviation` changes.
-- **Europe/Uzhgorod, with a longitude**: 2025c ended the birthplace's local
-  mean time era at backzone's 1890-09-30T22:30:48Z; 2026f has no Uzhgorod
-  zone, so the era is Kyiv's, ending 1879-12-31T21:57:56Z. A birth from 1880
-  to September 1890 given with a longitude now reads Kyiv mean time,
-  +2:02:04, instead of the birthplace's own mean time (at 22.3 E, +1:29:12):
-  32 min 52 s. `zone.dataForm` changes from "main" to "main+backzone".
-  Without a longitude the offset does not move.
-- **Europe/Zaporozhye, with a longitude**: the era's end moves 1116 s later,
-  from 1879-12-31T21:39:20Z to 21:57:56Z; `dataForm` as above.
-- **America/Yellowknife before 1935**: 2025c's backzone zone began at "-00",
-  so the engine read the host (Edmonton's history); 2026f ships Edmonton's
-  history itself. The offsets are the same, but before 1906-09-01T07:33:52Z
-  the result now carries `"lmt"`, `zone.source` is "tzdb", and with a
+- **EST5EDT, CST6CDT, MST7MDT, PST8PDT: abbreviations and one transition,
+  1942 to 1945.** 2026d NEWS: "The backward-compatibility names EST5EDT,
+  CST6CDT, MST7MDT, and PST8PDT now conform better to POSIX. For example,
+  EST5EDT now always uses the abbreviation "EST" for standard time (now
+  always 5 hours behind UT) and "EDT" for daylight saving time, whereas it
+  formerly had different UT offsets before standard time was introduced and
+  sometimes used abbreviations like "LMT", "EWT" and "EPT", all contrary to
+  POSIX." In the data: 2025c's `backzone` zones (lines 1840 to 1845) follow
+  rule US, whose `northamerica` line 180 (`Rule US 1945 only - Aug 14
+  23:00u 1:00 P # Peace`) turns War time into Peace time with no change of
+  offset; 2026f's `backward` zones (lines 372 to 375) follow rule USback,
+  whose line 340 writes the same rule with letter D ("this copy uses D
+  instead of W for War and P for Peace", line 335), so zic records no
+  transition there. For each of the four names:
+  - From 1942-02-09 to 1945-09-30, `zone.abbreviation` is EDT, CDT, MDT or
+    PDT where it was EWT/EPT, CWT/CPT, MWT/MPT or PWT/PPT.
+  - The 1945-08-14T23:00Z transition (offset unchanged, cause
+    "legal-change") is gone. From then until the fall back on 1945-09-30
+    (06:00Z, 07:00Z, 08:00Z and 09:00Z for EST5EDT, CST6CDT, MST7MDT and
+    PST8PDT), `transition` was that one and is now the 1942-02-09 spring
+    forward (07:00Z, 08:00Z, 09:00Z, 10:00Z), with `offsetBeforeMinutes`
+    one hour behind `offsetAfterMinutes` and cause "dst".
+  - Offsets are unchanged.
+- **Europe/Uzhgorod and Europe/Zaporozhye: no backzone zone, so Kyiv's.**
+  tzdata 2025c's `backzone` line 1588, `Zone Europe/Uzhgorod 1:29:12 - LMT
+  1890 Oct`, and line 1631, `Zone Europe/Zaporozhye 2:20:40 - LMT 1880`,
+  are deleted in 2026f with the rest of both zones, so each name follows
+  `backward` lines 295 and 296, `Link Europe/Kyiv Europe/Uzhgorod` and
+  `Link Europe/Kyiv Europe/Zaporozhye`. The only NEWS entry that mentions
+  either name is 2022d's: "Move Europe/Uzhgorod and Europe/Zaporozhye to
+  'backzone'; backward-compatibility links still work, albeit with
+  different timestamps before October 1991." No entry from 2026a to 2026f
+  mentions their removal from `backzone`. The results that change:
+  - Both names, every wall time before 1970, with or without a longitude:
+    `zone.dataForm` changes from "main" to "main+backzone", because the
+    names are no longer host-legal. Without a longitude the offsets do not
+    move: in 2025c the shipped history of both was already Kyiv's.
+  - Uzhgorod, with a longitude: the birthplace's mean time era ended at
+    backzone's 1890-09-30T22:30:48Z (era offset +1:29:12) and now ends at
+    Kyiv's 1879-12-31T21:57:56Z (+2:02:04). A birth from then to September
+    1890 given with a longitude now reads Kyiv mean time, +2:02:04, instead
+    of the birthplace's own mean time (at 22.3 E, +1:29:12): 32 min 52 s
+    earlier in UTC, with no `"lmt"` flag. The jump at the era's end moves
+    from 1890 to 1880 with it.
+  - Zaporozhye, with a longitude: the era's end moves 1116 s later, from
+    1879-12-31T21:39:20Z (era offset +2:20:40) to 21:57:56Z (+2:02:04).
+    Between the two instants the result now reads the birthplace's own mean
+    time instead of Kyiv's, and the fold at the era's end moves with it: at
+    35.17 E, 1879-12-31 23:50 was a `"dst-fold"` with `transition` at
+    21:39:20Z and is now a plain `"lmt"` reading with no `transition`.
+- **America/Yellowknife before 1935.** From the same data change as its
+  1947 interval: 2025c's backzone zone began at "-00", so the engine read
+  the host (Edmonton's history); 2026f ships Edmonton's history itself.
+  The offsets are the same, but before 1935 `zone.source` is "tzdb"
+  instead of "intl" and `zone.dataForm` "main+backzone" instead of "host";
+  before 1906-09-01T07:33:52Z the result also carries `"lmt"`, and with a
   longitude the birthplace's mean time answers (at 114.37 W, -7:37:29
-  instead of Edmonton's -7:33:52).
+  instead of Edmonton's -7:33:52). Waits for the owner's acceptance with
+  the 1947 interval.
+- **Africa/Casablanca and Africa/El_Aaiun from 1970: `LATER_CAUSES`.** 2026c
+  NEWS: "Morocco plans to move back to permanent UTC, without daylight
+  saving time transitions, on 2026-09-20 at 02:00. This also affects
+  Western Sahara." 2026f's default build has a change of standard offset
+  at 2026-09-20T01:00Z (+01 to +00, daylight saving off on both sides), so
+  the generator adds that instant to both names' `LATER_CAUSES` rows. On a
+  host whose tz data has the change (2026c or later), a wall time at that
+  instant reads `transition.cause` "legal-change" where it read "dst"
+  (and `jump.cause`, which repeats it) (the log shows 2026-09-20 01:30, a fold, on a 2026e
+  host). On a host with older data the instant is not a transition and
+  nothing changes. Offsets from 1970 on are the host's in both cases.
 
 ## The engine against the oracle (`logs/compare.log`)
 

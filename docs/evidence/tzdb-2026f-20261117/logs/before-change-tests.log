@@ -1,16 +1,24 @@
-   × the pinned build compiles backward's zones without its links > drops every Link line and keeps the Rule and Zone lines as written 9ms
+   × the pinned build compiles backward's zones without its links > drops every Link line and keeps the Rule and Zone lines as written 12ms
    × the pinned build compiles backward's zones without its links > compiles the main data without backward, backzone, and backward's zones 1ms
-   × the pinned release > is tzdata 2026f 11ms
-   × the pinned release > refuses an archive whose digest is not the pinned one 17ms
-   × the tzdata 2026f history before 1970 > is tzdata 2026f, pinned by its archive digest 16ms
-   × the tzdata 2026f history before 1970 > Europe/Dublin fell back on 1925-09-20 at 02:00 UTC 13ms
-   × the tzdata 2026f history before 1970 > Eire fell back on 1925-09-20 at 02:00 UTC 1ms
-   × the tzdata 2026f history before 1970 > repeats Dublin's 02:00 to 03:00 on 1925-09-20, and no longer on 1925-10-04 7ms
-   × the tzdata 2026f history before 1970 > ends Brazil's daylight saving on 1965-03-31 at 24:00 1ms
-   × the tzdata 2026f history before 1970 > ends it on 1966-03-01 at 01:00, so 00:00 to 01:00 is repeated 1ms
-   × the tzdata 2026f history before 1970 > reads EST5EDT on US federal rules with POSIX abbreviations 6ms
+   × the pinned release > is tzdata 2026f 10ms
+   × the pinned release > refuses an archive whose digest is not the pinned one 13ms
+   × the tzdata 2026f history before 1970 > is tzdata 2026f, pinned by its archive digest 11ms
+   × the tzdata 2026f history before 1970 > Europe/Dublin fell back on 1925-09-20 at 02:00 UTC 3ms
+   × the tzdata 2026f history before 1970 > Eire fell back on 1925-09-20 at 02:00 UTC 11ms
+   × the tzdata 2026f history before 1970 > repeats Dublin's 02:00 to 03:00 on 1925-09-20, and no longer on 1925-10-04 2ms
+   × the tzdata 2026f history before 1970 > ends Brazil's daylight saving on 1965-03-31 at 24:00 10ms
+   × the tzdata 2026f history before 1970 > ends it on 1966-03-01 at 01:00, so 00:00 to 01:00 is repeated 2ms
+   × the tzdata 2026f history before 1970 > reads EST5EDT on US federal rules with POSIX abbreviations 2ms
+   × the tzdata 2026f history before 1970 > EST5EDT has no Peace time transition: 1945-08-20 still follows the 1942 change 17ms
+   × the tzdata 2026f history before 1970 > CST6CDT has no Peace time transition: 1945-08-20 still follows the 1942 change 14ms
+   × the tzdata 2026f history before 1970 > MST7MDT has no Peace time transition: 1945-08-20 still follows the 1942 change 1ms
+   × the tzdata 2026f history before 1970 > PST8PDT has no Peace time transition: 1945-08-20 still follows the 1942 change 11ms
+   × the tzdata 2026f history before 1970 > reads Europe/Uzhgorod as Kyiv: Kyiv mean time from 1880, with or without a longitude 2ms
+   × the tzdata 2026f history before 1970 > ends Europe/Zaporozhye's local mean time with Kyiv's, at 1879-12-31T21:57:56Z 27ms
+   × the tzdata 2026f history before 1970 > records Africa/Casablanca's 2026-09-20 move to +00 as a legal change 10ms
+   × the tzdata 2026f history before 1970 > records Africa/El_Aaiun's 2026-09-20 move to +00 as a legal change 1ms
    × the tzdata 2026f history before 1970 > reads America/Yellowknife as tzdata 2026f's link to America/Edmonton 1ms
-⎯⎯⎯⎯⎯⎯ Failed Tests 12 ⎯⎯⎯⎯⎯⎯⎯
+⎯⎯⎯⎯⎯⎯ Failed Tests 20 ⎯⎯⎯⎯⎯⎯⎯
  FAIL  scripts/build-tz-shards.test.mjs > the pinned build compiles backward's zones without its links > drops every Link line and keeps the Rule and Zone lines as written
 TypeError: withoutLinks is not a function
  FAIL  scripts/build-tz-shards.test.mjs > the pinned build compiles backward's zones without its links > compiles the main data without backward, backzone, and backward's zones
@@ -32,7 +40,19 @@ AssertionError: expected -180 to be -120 // Object.is equality
 AssertionError: expected -180 to be -120 // Object.is equality
  FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > reads EST5EDT on US federal rules with POSIX abbreviations
 AssertionError: expected { source: 'tzdb', …(4) } to match object { source: 'tzdb', …(2) }
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > EST5EDT has no Peace time transition: 1945-08-20 still follows the 1942 change
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > CST6CDT has no Peace time transition: 1945-08-20 still follows the 1942 change
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > MST7MDT has no Peace time transition: 1945-08-20 still follows the 1942 change
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > PST8PDT has no Peace time transition: 1945-08-20 still follows the 1942 change
+AssertionError: expected { Object (at, offsetBeforeMinutes, ...) } to deeply equal { Object (at, offsetBeforeMinutes, ...) }
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > reads Europe/Uzhgorod as Kyiv: Kyiv mean time from 1880, with or without a longitude
+AssertionError: expected { source: 'tzdb', …(4) } to match object { source: 'tzdb', …(2) }
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > ends Europe/Zaporozhye's local mean time with Kyiv's, at 1879-12-31T21:57:56Z
+AssertionError: expected [ 'dst-fold', 'lmt' ] to deeply equal [ 'lmt' ]
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > records Africa/Casablanca's 2026-09-20 move to +00 as a legal change
+ FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > records Africa/El_Aaiun's 2026-09-20 move to +00 as a legal change
+AssertionError: expected 'dst' to be 'legal-change' // Object.is equality
  FAIL  src/geo/tzdb-2026f.test.ts > the tzdata 2026f history before 1970 > reads America/Yellowknife as tzdata 2026f's link to America/Edmonton
 AssertionError: expected -420 to be -360 // Object.is equality
  Test Files  2 failed (2)
-      Tests  12 failed | 6 passed (18)
+      Tests  20 failed | 6 passed (26)

@@ -1,5 +1,5 @@
 {
-  "description": "Every interval before 1970-01-01T00:00Z on which the UTC offset of the history this package ships for a zone name differs between tzdata 2025c and 2026f, from zdump -v -c 1800,1970 on zic-compiled data (oracle.mjs). Offsets in seconds east; intervals are [from, to) in UTC; from null means from the beginning of the zone's history.",
+  "description": "Every interval before 1970-01-01T00:00Z on which the UTC offset of the history this package ships for a zone name differs between tzdata 2025c and 2026f, from zdump -v on zic-compiled data (oracle.mjs). Offsets in seconds east; intervals are [from, to) in UTC; from null means from the beginning of the zone's history. transitionsOnly, eraEnds and fromHistoryEnd list what moves without such an offset change; rows are 'UTC offset isdst abbreviation' (transitionsOnly) or 'UTC offsetBefore offsetAfter' (fromHistoryEnd).",
   "releases": {
     "from": "2025c",
     "to": "2026f"
@@ -42,7 +42,8 @@
   },
   "changedZones": 24,
   "intervals": 45,
-  "unexplained": 1,
+  "unexplained": 0,
+  "awaitingOwner": 2,
   "zones": [
     {
       "zone": "America/Araguaina",
@@ -473,7 +474,6 @@
       "zone": "America/Yellowknife",
       "form2025c": "main+backzone",
       "form2026f": "main+backzone",
-      "dataNote": "tzdata 2026f backzone comments out its Zone America/Yellowknife with the line \"# Commented out as too wrong to be useful.\"; the name is then backward's Link to America/Edmonton. No NEWS entry from 2026a to 2026f mentions it.",
       "intervals": [
         {
           "from": "1947-04-27T09:00:00.000Z",
@@ -481,8 +481,17 @@
           "oldOffsetSeconds": -25200,
           "newOffsetSeconds": -21600,
           "hours": 3695,
-          "release": null,
-          "news": "unexplained"
+          "release": "2026f",
+          "news": null,
+          "newsNote": "No NEWS entry of 2026a to 2026f mentions America/Yellowknife.",
+          "cause": "backzone's Yellowknife zone is commented out, so the name follows backward's link to America/Edmonton, which kept summer time in 1947",
+          "source": [
+            "tzdata 2025c backzone line 930: \"Zone America/Yellowknife 0\t-\t-00\t1935 # Yellowknife founded?\"",
+            "tzdata 2026f backzone line 930: \"# Commented out as too wrong to be useful.\"",
+            "tzdata 2026f backzone line 931: \"#Zone America/Yellowknife 0\t-\t-00\t1935 # Yellowknife founded?\"",
+            "tzdata 2026f backward line 283: \"Link\tAmerica/Edmonton\tAmerica/Yellowknife\""
+          ],
+          "ownerAcceptance": "pending"
         }
       ]
     },
@@ -635,6 +644,164 @@
     {
       "zone": "PST8PDT",
       "intervals": 19
+    }
+  ],
+  "transitionsOnly": [
+    {
+      "zone": "CST6CDT",
+      "removed": [
+        "1942-02-09T08:00:00.000Z -18000 1 CWT",
+        "1945-08-14T23:00:00.000Z -18000 1 CPT"
+      ],
+      "added": [
+        "1942-02-09T08:00:00.000Z -18000 1 CDT"
+      ],
+      "release": "2026d",
+      "news": "The backward-compatibility names EST5EDT, CST6CDT, MST7MDT, and PST8PDT now conform better to POSIX. For example, EST5EDT now always uses the abbreviation \"EST\" for standard time (now always 5 hours behind UT) and \"EDT\" for daylight saving time, whereas it formerly had different UT offsets before standard time was introduced and sometimes used abbreviations like \"LMT\", \"EWT\" and \"EPT\", all contrary to POSIX.",
+      "source": [
+        "tzdata 2025c backzone lines 1840 to 1845: \"Zone\tEST5EDT\t\t -5:00\tUS\tE%sT\" and the same for CST6CDT, MST7MDT and PST8PDT, under rule US",
+        "tzdata 2025c northamerica line 180: \"Rule\tUS\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tP # Peace\" (War time W becomes Peace time P: a transition with no offset change)",
+        "tzdata 2026f backward lines 372 to 375: the same four zones under rule USback",
+        "tzdata 2026f backward line 335: \"# To conform to POSIX, this copy uses D instead of W for War and P for Peace.\"",
+        "tzdata 2026f backward line 340: \"Rule\tUSback\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tD # Peace\" (D before and after, so zic records no transition)"
+      ]
+    },
+    {
+      "zone": "EST5EDT",
+      "removed": [
+        "1942-02-09T07:00:00.000Z -14400 1 EWT",
+        "1945-08-14T23:00:00.000Z -14400 1 EPT"
+      ],
+      "added": [
+        "1942-02-09T07:00:00.000Z -14400 1 EDT"
+      ],
+      "release": "2026d",
+      "news": "The backward-compatibility names EST5EDT, CST6CDT, MST7MDT, and PST8PDT now conform better to POSIX. For example, EST5EDT now always uses the abbreviation \"EST\" for standard time (now always 5 hours behind UT) and \"EDT\" for daylight saving time, whereas it formerly had different UT offsets before standard time was introduced and sometimes used abbreviations like \"LMT\", \"EWT\" and \"EPT\", all contrary to POSIX.",
+      "source": [
+        "tzdata 2025c backzone lines 1840 to 1845: \"Zone\tEST5EDT\t\t -5:00\tUS\tE%sT\" and the same for CST6CDT, MST7MDT and PST8PDT, under rule US",
+        "tzdata 2025c northamerica line 180: \"Rule\tUS\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tP # Peace\" (War time W becomes Peace time P: a transition with no offset change)",
+        "tzdata 2026f backward lines 372 to 375: the same four zones under rule USback",
+        "tzdata 2026f backward line 335: \"# To conform to POSIX, this copy uses D instead of W for War and P for Peace.\"",
+        "tzdata 2026f backward line 340: \"Rule\tUSback\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tD # Peace\" (D before and after, so zic records no transition)"
+      ]
+    },
+    {
+      "zone": "MST7MDT",
+      "removed": [
+        "1942-02-09T09:00:00.000Z -21600 1 MWT",
+        "1945-08-14T23:00:00.000Z -21600 1 MPT"
+      ],
+      "added": [
+        "1942-02-09T09:00:00.000Z -21600 1 MDT"
+      ],
+      "release": "2026d",
+      "news": "The backward-compatibility names EST5EDT, CST6CDT, MST7MDT, and PST8PDT now conform better to POSIX. For example, EST5EDT now always uses the abbreviation \"EST\" for standard time (now always 5 hours behind UT) and \"EDT\" for daylight saving time, whereas it formerly had different UT offsets before standard time was introduced and sometimes used abbreviations like \"LMT\", \"EWT\" and \"EPT\", all contrary to POSIX.",
+      "source": [
+        "tzdata 2025c backzone lines 1840 to 1845: \"Zone\tEST5EDT\t\t -5:00\tUS\tE%sT\" and the same for CST6CDT, MST7MDT and PST8PDT, under rule US",
+        "tzdata 2025c northamerica line 180: \"Rule\tUS\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tP # Peace\" (War time W becomes Peace time P: a transition with no offset change)",
+        "tzdata 2026f backward lines 372 to 375: the same four zones under rule USback",
+        "tzdata 2026f backward line 335: \"# To conform to POSIX, this copy uses D instead of W for War and P for Peace.\"",
+        "tzdata 2026f backward line 340: \"Rule\tUSback\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tD # Peace\" (D before and after, so zic records no transition)"
+      ]
+    },
+    {
+      "zone": "PST8PDT",
+      "removed": [
+        "1942-02-09T10:00:00.000Z -25200 1 PWT",
+        "1945-08-14T23:00:00.000Z -25200 1 PPT"
+      ],
+      "added": [
+        "1942-02-09T10:00:00.000Z -25200 1 PDT"
+      ],
+      "release": "2026d",
+      "news": "The backward-compatibility names EST5EDT, CST6CDT, MST7MDT, and PST8PDT now conform better to POSIX. For example, EST5EDT now always uses the abbreviation \"EST\" for standard time (now always 5 hours behind UT) and \"EDT\" for daylight saving time, whereas it formerly had different UT offsets before standard time was introduced and sometimes used abbreviations like \"LMT\", \"EWT\" and \"EPT\", all contrary to POSIX.",
+      "source": [
+        "tzdata 2025c backzone lines 1840 to 1845: \"Zone\tEST5EDT\t\t -5:00\tUS\tE%sT\" and the same for CST6CDT, MST7MDT and PST8PDT, under rule US",
+        "tzdata 2025c northamerica line 180: \"Rule\tUS\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tP # Peace\" (War time W becomes Peace time P: a transition with no offset change)",
+        "tzdata 2026f backward lines 372 to 375: the same four zones under rule USback",
+        "tzdata 2026f backward line 335: \"# To conform to POSIX, this copy uses D instead of W for War and P for Peace.\"",
+        "tzdata 2026f backward line 340: \"Rule\tUSback\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tD # Peace\" (D before and after, so zic records no transition)"
+      ]
+    }
+  ],
+  "eraEnds": [
+    {
+      "zone": "America/Yellowknife",
+      "era2025c": null,
+      "era2026f": {
+        "end": "1906-09-01T07:33:52.000Z",
+        "offsetSeconds": -27232
+      },
+      "release": "2026f",
+      "news": null,
+      "newsNote": "No NEWS entry of 2026a to 2026f mentions America/Yellowknife.",
+      "source": [
+        "tzdata 2025c backzone line 930: \"Zone America/Yellowknife 0\t-\t-00\t1935 # Yellowknife founded?\"",
+        "tzdata 2026f backzone line 930: \"# Commented out as too wrong to be useful.\"",
+        "tzdata 2026f backzone line 931: \"#Zone America/Yellowknife 0\t-\t-00\t1935 # Yellowknife founded?\"",
+        "tzdata 2026f backward line 283: \"Link\tAmerica/Edmonton\tAmerica/Yellowknife\""
+      ],
+      "ownerAcceptance": "pending"
+    },
+    {
+      "zone": "Europe/Uzhgorod",
+      "era2025c": {
+        "end": "1890-09-30T22:30:48.000Z",
+        "offsetSeconds": 5352
+      },
+      "era2026f": {
+        "end": "1879-12-31T21:57:56.000Z",
+        "offsetSeconds": 7324
+      },
+      "release": "2026f",
+      "news": "Move Europe/Uzhgorod and Europe/Zaporozhye to 'backzone'; backward-compatibility links still work, albeit with different timestamps before October 1991.",
+      "newsRelease": "2022d",
+      "newsNote": "The 2022d entry is the only NEWS entry that mentions either name; none of 2026a to 2026f mentions their removal from backzone.",
+      "source": [
+        "tzdata 2025c backzone line 1588: \"Zone Europe/Uzhgorod\t1:29:12 -\tLMT\t1890 Oct\" (deleted with the rest of its zone in 2026f)",
+        "tzdata 2025c backzone line 1631: \"Zone Europe/Zaporozhye\t2:20:40 -\tLMT\t1880\" (deleted with the rest of its zone in 2026f)",
+        "tzdata 2026f backward lines 295 and 296: \"Link\tEurope/Kyiv\t\tEurope/Uzhgorod\", \"Link\tEurope/Kyiv\t\tEurope/Zaporozhye\""
+      ]
+    },
+    {
+      "zone": "Europe/Zaporozhye",
+      "era2025c": {
+        "end": "1879-12-31T21:39:20.000Z",
+        "offsetSeconds": 8440
+      },
+      "era2026f": {
+        "end": "1879-12-31T21:57:56.000Z",
+        "offsetSeconds": 7324
+      },
+      "release": "2026f",
+      "news": "Move Europe/Uzhgorod and Europe/Zaporozhye to 'backzone'; backward-compatibility links still work, albeit with different timestamps before October 1991.",
+      "newsRelease": "2022d",
+      "newsNote": "The 2022d entry is the only NEWS entry that mentions either name; none of 2026a to 2026f mentions their removal from backzone.",
+      "source": [
+        "tzdata 2025c backzone line 1588: \"Zone Europe/Uzhgorod\t1:29:12 -\tLMT\t1890 Oct\" (deleted with the rest of its zone in 2026f)",
+        "tzdata 2025c backzone line 1631: \"Zone Europe/Zaporozhye\t2:20:40 -\tLMT\t1880\" (deleted with the rest of its zone in 2026f)",
+        "tzdata 2026f backward lines 295 and 296: \"Link\tEurope/Kyiv\t\tEurope/Uzhgorod\", \"Link\tEurope/Kyiv\t\tEurope/Zaporozhye\""
+      ]
+    }
+  ],
+  "fromHistoryEnd": [
+    {
+      "zone": "Africa/Casablanca",
+      "removed": [],
+      "added": [
+        "2026-09-20T01:00:00.000Z 3600 0"
+      ],
+      "release": "2026c",
+      "news": "Morocco plans to move back to permanent UTC, without daylight saving time transitions, on 2026-09-20 at 02:00. This also affects Western Sahara."
+    },
+    {
+      "zone": "Africa/El_Aaiun",
+      "removed": [],
+      "added": [
+        "2026-09-20T01:00:00.000Z 3600 0"
+      ],
+      "release": "2026c",
+      "news": "Morocco plans to move back to permanent UTC, without daylight saving time transitions, on 2026-09-20 at 02:00. This also affects Western Sahara."
     }
   ]
 }

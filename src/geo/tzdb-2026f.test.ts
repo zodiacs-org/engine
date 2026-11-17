@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from "vitest";
 
-import { TZDB } from "./zone-history.js";
+import { TZDB, laterCause } from "./zone-history.js";
 import { prepareLocalTime, resolveLocalToUtc, zoneOffsetAt } from "./timezone.js";
 
 /*
@@ -18,7 +18,12 @@ const ZONES = [
   "Pacific/Majuro",
   "Asia/Kolkata",
   "Europe/London",
-  "America/Yellowknife"
+  "America/Yellowknife",
+  "CST6CDT",
+  "MST7MDT",
+  "PST8PDT",
+  "Europe/Uzhgorod",
+  "Europe/Zaporozhye"
 ];
 
 describe("the tzdata 2026f history before 1970", () => {
@@ -98,6 +103,59 @@ describe("the tzdata 2026f history before 1970", () => {
     const early = resolveLocalToUtc("1900-01-01", "12:00", "EST5EDT");
     expect(early.utc.toISOString()).toBe("1900-01-01T17:00:00.000Z");
     expect(early.zone).toMatchObject({ source: "tzdb", abbreviation: "EST", dst: false });
+  });
+
+  // 2026d: the four names now use US federal rules with POSIX abbreviations; backward's USback rule
+  // writes 1945's Peace line with letter D, so zic records no transition on 1945-08-14 at 23:00 UTC.
+  it.each([
+    // EST5EDT  Mon Feb  9 07:00:00 1942 UT = Mon Feb  9 03:00:00 1942 EDT isdst=1 gmtoff=-14400
+    // EST5EDT  Sun Sep 30 06:00:00 1945 UT = Sun Sep 30 01:00:00 1945 EST isdst=0 gmtoff=-18000
+    ["EST5EDT", "1942-02-09T07:00:00.000Z", -300, "EDT"],
+    // CST6CDT  Mon Feb  9 08:00:00 1942 UT = Mon Feb  9 03:00:00 1942 CDT isdst=1 gmtoff=-18000
+    // CST6CDT  Sun Sep 30 07:00:00 1945 UT = Sun Sep 30 01:00:00 1945 CST isdst=0 gmtoff=-21600
+    ["CST6CDT", "1942-02-09T08:00:00.000Z", -360, "CDT"],
+    // MST7MDT  Mon Feb  9 09:00:00 1942 UT = Mon Feb  9 03:00:00 1942 MDT isdst=1 gmtoff=-21600
+    // MST7MDT  Sun Sep 30 08:00:00 1945 UT = Sun Sep 30 01:00:00 1945 MST isdst=0 gmtoff=-25200
+    ["MST7MDT", "1942-02-09T09:00:00.000Z", -420, "MDT"],
+    // PST8PDT  Mon Feb  9 10:00:00 1942 UT = Mon Feb  9 03:00:00 1942 PDT isdst=1 gmtoff=-25200
+    // PST8PDT  Sun Sep 30 09:00:00 1945 UT = Sun Sep 30 01:00:00 1945 PST isdst=0 gmtoff=-28800
+    ["PST8PDT", "1942-02-09T10:00:00.000Z", -480, "PDT"]
+  ] as const)("%s has no Peace time transition: 1945-08-20 still follows the 1942 change", (zone, at, standard, abbreviation) => {
+    const resolved = resolveLocalToUtc("1945-08-20", "20:00", zone);
+    expect(resolved.offsetMinutes).toBe(standard + 60);
+    expect(resolved.transition).toEqual({ at, offsetBeforeMinutes: standard, offsetAfterMinutes: standard + 60, cause: "dst" });
+    expect(resolved.zone).toMatchObject({ source: "tzdb", abbreviation, dst: true });
+    expect(resolveLocalToUtc("1945-09-29", "20:00", zone).transition?.at).toBe(at);
+  });
+
+  // 2026f's backzone has no Uzhgorod or Zaporozhye zone (2025c backzone lines 1588 and 1631 are gone),
+  // so both names are backward's links to Europe/Kyiv, whose pinned and default builds agree.
+  // Europe/Uzhgorod  Wed Dec 31 21:57:56 1879 UT = Thu Jan  1 00:00:00 1880 KMT isdst=0 gmtoff=7324
+  it("reads Europe/Uzhgorod as Kyiv: Kyiv mean time from 1880, with or without a longitude", () => {
+    const plain = resolveLocalToUtc("1885-06-01", "12:00", "Europe/Uzhgorod");
+    expect(plain.utc.toISOString()).toBe("1885-06-01T09:57:56.000Z");
+    expect(plain.zone).toMatchObject({ source: "tzdb", dataForm: "main+backzone", abbreviation: "KMT" });
+    const placed = resolveLocalToUtc("1885-06-01", "12:00", "Europe/Uzhgorod", { longitude: 22.3 });
+    expect(placed.utc.toISOString()).toBe("1885-06-01T09:57:56.000Z");
+    expect(placed.flags).not.toContain("lmt");
+    expect(placed.zone.dataForm).toBe("main+backzone");
+  });
+
+  // Europe/Zaporozhye  Wed Dec 31 21:57:55 1879 UT = Wed Dec 31 23:59:59 1879 LMT isdst=0 gmtoff=7324
+  it("ends Europe/Zaporozhye's local mean time with Kyiv's, at 1879-12-31T21:57:56Z", () => {
+    const placed = resolveLocalToUtc("1879-12-31", "23:50", "Europe/Zaporozhye", { longitude: 35.17 });
+    // The birthplace's own mean time, 35.17 degrees east: 4 minutes a degree.
+    expect(placed.offsetMinutes).toBeCloseTo(35.17 * 4, 1);
+    expect(placed.flags).toEqual(["lmt"]);
+    expect(placed.zone.dataForm).toBe("main+backzone");
+  });
+
+  // 2026c: "Morocco plans to move back to permanent UTC, without daylight saving time transitions, on 2026-09-20 at 02:00."
+  // Africa/Casablanca  Sun Sep 20 01:00:00 2026 UT = Sun Sep 20 01:00:00 2026 +00 isdst=0 gmtoff=0 (default build)
+  it.each(["Africa/Casablanca", "Africa/El_Aaiun"])("records %s's 2026-09-20 move to +00 as a legal change", (zone) => {
+    expect(laterCause(zone, Date.parse("2026-09-20T01:00:00Z"))).toBe("legal-change");
+    // Its Ramadan changes stay daylight saving: Sun Feb 15 02:00:00 2026 UT = +00 isdst=1.
+    expect(laterCause(zone, Date.parse("2026-02-15T02:00:00Z"))).toBe("dst");
   });
 
   it("leaves the cases the ticket names unchanged", () => {
