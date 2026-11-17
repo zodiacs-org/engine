@@ -29,7 +29,7 @@ jobs:
     env:
       # Left empty. Set to <browser>:<vector id> only in a test run, to show
       # that the job fails when one answer is moved by 2 arcseconds.
-      RUNTIME_CONFORMANCE_MUTATE: 'chromium:L1-POS-0001'
+      RUNTIME_CONFORMANCE_MUTATE: ''
     steps:
       - name: Checkout
         uses: actions/checkout@v5
