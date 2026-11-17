@@ -471,7 +471,8 @@ describe("the time basis of a chart", () => {
   it("still ignores other keys, as before", () => {
     const birth = { utc: "2020-01-01T00:00:00Z", latitude: 51.5, longitude: -0.12 };
     const chart = natalChart(birth);
-    for (const extra of [{ name: "A" }, { time_scale: "tt" }, { place: { city: "B" } }]) {
+    // `time_scale` was ignored here until 2.0.0; it is now refused as a near-miss name (src/public-input.test.ts).
+    for (const extra of [{ name: "A" }, { tz: "Europe/London" }, { place: { city: "B" } }]) {
       expect(natalChart({ ...birth, ...extra } as never).angles).toEqual(chart.angles);
     }
   });
