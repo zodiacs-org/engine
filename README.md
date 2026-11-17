@@ -238,8 +238,10 @@ and every number are in `docs/evidence/bundle-weight-20261117/`
   root on the pack (`conformance/RESULTS.md`). Every chart from it names
   astronomy-engine as its ephemeris, as the root's does after
   `setDefaultEphemeris("astronomy-engine")`, and equals that chart. The entry
-  keeps its own settings, so `setDefaultEphemeris` in one entry does not
-  change the other, and a page that imports both carries both.
+  is a copy of the root's code with its own settings: `setDefaultEphemeris`
+  in one entry does not change the other, an aspect policy made by one
+  entry's `createAspectPolicy` is refused by the other's, and a page that
+  imports both carries both.
   `setDefaultEphemeris("de440")` in it still computes on astronomy-engine and
   flags each result `"de440-unavailable"`; for DE440 positions, import the
   root, or supply a pack through `@zodiacs/engine/de440` and the core entry's

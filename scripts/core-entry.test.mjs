@@ -8,7 +8,8 @@
 // the root's after setDefaultEphemeris("astronomy-engine"), each naming
 // astronomy-engine; after setDefaultEphemeris("de440") the root's results when
 // its pack cannot be opened ("de440-unavailable"); and inside withEphemeris
-// with a pack the caller supplies, the root's on that pack. The bundle's own
+// with a pack the caller supplies, the root's on that pack; and settings and
+// aspect policies of its own, apart from the root's. The bundle's own
 // checks are tried on broken builds too. The export smoke test checks the
 // built dist/core.js, and its conformance verdicts.
 import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
@@ -95,6 +96,21 @@ describe("@zodiacs/engine/core, loaded as an application loads it", () => {
   it("exports every name the root exports, each of the same kind", async () => {
     const root = await freshRoot();
     expect(Object.keys(core).sort().map((name) => [name, typeof core[name]])).toEqual(Object.keys(root).sort().map((name) => [name, typeof root[name]]));
+  });
+
+  it("keeps its own settings and its own policies, apart from the root's", async () => {
+    const root = await freshRoot();
+    root.setDefaultEphemeris("de440");
+    expect(core.defaultEphemeris().name).toBe("astronomy-engine");
+    core.setDefaultEphemeris("de440");
+    expect(root.defaultEphemeris().name).toBe("de440");
+    root.setDefaultEphemeris("astronomy-engine");
+    expect(core.defaultEphemeris().name).toBe("de440");
+    core.setDefaultEphemeris("astronomy-engine");
+    const bodies = core.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false }).bodies;
+    expect(() => core.findConfiguredAspects(bodies, root.createAspectPolicy({}))).toThrow(/createAspectPolicy/);
+    expect(() => root.findConfiguredAspects(bodies, core.createAspectPolicy({}))).toThrow(/createAspectPolicy/);
+    expect(core.findConfiguredAspects(bodies, core.createAspectPolicy({}))).toEqual(root.findConfiguredAspects(bodies, root.createAspectPolicy({})));
   });
 
   it("computes on astronomy-engine by default and has no pack to open", () => {
