@@ -86,8 +86,9 @@ at its UTC instant, as `saturnReturn` reads one; a chart's pinned ΔT is not
 applied to the returns. The solver looks for return *n* within three days of
 `birth + n × 365.2422 days`. For 24 births from 1800 to 1992, spread through
 the year, the first 110 returns fell within 108 minutes of that estimate and
-the first 300 within 268 minutes; `src/timing/solar-years.test.ts` repeats
-the measurement. A year turns at the return, which can differ from the
+the first 300 within 266 minutes (268 on the time basis before the
+continuous-UTC rule, which reads returns after 2027-10-02 as UTC + 69.184 s of
+TT); `src/timing/solar-years.test.ts` repeats the measurement. A year turns at the return, which can differ from the
 calendar birthday by a day.
 
 ## Profections

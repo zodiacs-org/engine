@@ -98,6 +98,9 @@ export type HouseSystem =
  * `"calendar-unknown"`: a local date resolved with no country the Gregorian adoption table dates that falls in
  * the days one of its changeovers skipped, where the zone does not rule that changeover out, so whether it was
  * in civil use where it was written is not known (docs/time.md).
+ * `"host-zone-data-differs"`: a local time from 1970 on that the host's Intl read, near a span in which the time
+ * zone database changed since tzdata 2021a, where the host gave another offset than the pinned tzdb release; the
+ * instant is still the host's, and a device with other time zone data may give another one (docs/time.md).
  * `"polar-angles"`: the angles were computed inside the polar circle, |latitude| ≥ 90° − ε, where the ascendant
  * turns half a circle twice a sidereal day and is 0° or 180° at the poles (docs/houses.md).
  */
@@ -106,6 +109,7 @@ export type ChartFlag =
   | "dst-fold"
   | "lmt"
   | "calendar-unknown"
+  | "host-zone-data-differs"
   | "no-time"
   | "polar-fallback"
   | "polar-angles"
@@ -220,8 +224,8 @@ export interface BodyPosition {
   /** Present when `ephemeris` is astronomy-engine as a fallback from the shipped DE440 pack, and says why. */
   fallback?: EphemerisFallback;
   /**
-   * On the rows of `positions()`, `transits()`' `positions` and `progressedBodies()`, from the release after
-   * 1.1.0: the flags a chart at the same instant carries, where there are any (a chart's own bodies leave them to
+   * On the rows of `positions()`, `transits()`' `positions` and `progressedBodies()`, from
+   * 2.0.0: the flags a chart at the same instant carries, where there are any (a chart's own bodies leave them to
    * the chart's `flags`): `"outside-reference-span"`, `"delta-t-extrapolated"`, then the fallback, as `fallback`.
    */
   flags?: InstantFlag[];
@@ -416,7 +420,7 @@ export interface MoonPhase {
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "2.0.0-rc.2";
+export const ENGINE_VERSION: string = "2.0.0-rc.3";
 
 /**
  * astronomy-engine, the ephemeris the engine computes on where the shipped

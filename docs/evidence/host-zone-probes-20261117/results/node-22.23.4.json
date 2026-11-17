@@ -1,0 +1,145 @@
+{
+ "node": "v22.23.4",
+ "tz": "2026e",
+ "icu": "78.3",
+ "pinned": "2026f",
+ "baseline": "2021a",
+ "probes": 703,
+ "intlAgreesWith": {
+  "pinned": 701,
+  "baseline": 2,
+  "neither": 0
+ },
+ "disagreements": [
+  {
+   "name": "America/Havana",
+   "from": "2026-11-01T05:00:00Z",
+   "to": "2027-03-14T05:00:00Z",
+   "probe": "2027-01-06T17:00:00Z",
+   "intl": -18000,
+   "pinned": -14400,
+   "baseline": -18000,
+   "verdict": "baseline"
+  },
+  {
+   "name": "Cuba",
+   "from": "2026-11-01T05:00:00Z",
+   "to": "2027-03-14T05:00:00Z",
+   "probe": "2027-01-06T17:00:00Z",
+   "intl": -18000,
+   "pinned": -14400,
+   "baseline": -18000,
+   "verdict": "baseline"
+  }
+ ],
+ "engine": [
+  {
+   "date": "2026-12-15",
+   "time": "12:00",
+   "zone": "America/Havana",
+   "utc": "2026-12-15T17:00:00.000Z",
+   "offsetMinutes": -300,
+   "flags": [
+    "host-zone-data-differs"
+   ],
+   "zone_": {
+    "source": "intl",
+    "tzdbVersion": "2026e",
+    "dataForm": "host",
+    "abbreviation": null,
+    "dst": null,
+    "hostCheck": {
+     "status": "differs",
+     "probe": "2027-01-06T17:00:00.000Z",
+     "hostOffsetMinutes": -300,
+     "tzdbOffsetMinutes": -240,
+     "tzdbVersion": "2026f"
+    }
+   }
+  },
+  {
+   "date": "2027-01-15",
+   "time": "12:00",
+   "zone": "America/Vancouver",
+   "utc": "2027-01-15T19:00:00.000Z",
+   "offsetMinutes": -420,
+   "flags": [],
+   "zone_": {
+    "source": "intl",
+    "tzdbVersion": "2026e",
+    "dataForm": "host",
+    "abbreviation": null,
+    "dst": null,
+    "hostCheck": {
+     "status": "current",
+     "probe": "2027-01-06T21:30:00.000Z",
+     "hostOffsetMinutes": -420,
+     "tzdbOffsetMinutes": -420,
+     "tzdbVersion": "2026f"
+    }
+   }
+  },
+  {
+   "date": "2024-03-31",
+   "time": "02:30",
+   "zone": "Europe/Chisinau",
+   "utc": "2024-03-31T00:30:00.000Z",
+   "offsetMinutes": 120,
+   "flags": [],
+   "zone_": {
+    "source": "intl",
+    "tzdbVersion": "2026e",
+    "dataForm": "host",
+    "abbreviation": null,
+    "dst": null,
+    "hostCheck": {
+     "status": "current",
+     "probe": "2024-03-31T00:30:00.000Z",
+     "hostOffsetMinutes": 120,
+     "tzdbOffsetMinutes": 120,
+     "tzdbVersion": "2026f"
+    }
+   }
+  },
+  {
+   "date": "2030-01-20",
+   "time": "12:00",
+   "zone": "Africa/Casablanca",
+   "utc": "2030-01-20T12:00:00.000Z",
+   "offsetMinutes": 0,
+   "flags": [],
+   "zone_": {
+    "source": "intl",
+    "tzdbVersion": "2026e",
+    "dataForm": "host",
+    "abbreviation": null,
+    "dst": null,
+    "hostCheck": {
+     "status": "unchecked"
+    }
+   }
+  },
+  {
+   "date": "1979-05-26",
+   "time": "12:00",
+   "zone": "Asia/Tehran",
+   "utc": "1979-05-26T07:30:00.000Z",
+   "offsetMinutes": 270,
+   "flags": [],
+   "zone_": {
+    "source": "intl",
+    "tzdbVersion": "2026e",
+    "dataForm": "host",
+    "abbreviation": null,
+    "dst": null,
+    "hostCheck": {
+     "status": "current",
+     "probe": "1979-04-22T20:30:00.000Z",
+     "hostOffsetMinutes": 210,
+     "tzdbOffsetMinutes": 210,
+     "tzdbVersion": "2026f"
+    }
+   }
+  }
+ ]
+}

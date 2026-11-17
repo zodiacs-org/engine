@@ -8,9 +8,14 @@
 //   predictions assume), and UT1 = TAI + (UT1 − TAI) from IERS: EOP 20 C04 in
 //   1972, finals2000A.all of 2026-09-24 from 1973-01-02, observed then
 //   predicted.
+// - After the table, "continuous-utc": no leap second follows the list's last
+//   (IERS Bulletin C 72 and tzdb 2026f, docs/time.md), so UTC keeps TAI − UTC
+//   at 37 s and TT = UTC + 69.184 s exactly. What is not known is UT1: it
+//   comes from that TT through the ΔT model, UT1 = TT − ΔT(UT1), solved by
+//   fixed-point steps. On TT or UT1 input the TT and the UT1 are the model's
+//   as before, and the UTC beside them is TT − 69.184 s.
 // - Before 1972 UTC as now is not defined: civil time is read as UT1, and
-//   TT = UT1 + ΔT from the model (src/deltat.ts). After the table the same,
-//   with UT1 − UTC taken as 0 within ±0.9 s.
+//   TT = UT1 + ΔT from the model (src/deltat.ts).
 // - A caller's ΔT (TT − UT1) replaces the rest: UT1 comes from the instant as
 //   above, and TT = UT1 + ΔT.
 import { DELTA_T_MODEL, deltaTAt } from "./deltat.js";
@@ -39,11 +44,16 @@ export const TIME_SCALE_NAMES: readonly TimeScaleName[] = /*#__PURE__*/ Object.f
  */
 export const DELTA_T_IERS_MODEL = "iers-utc/1";
 
-/** UT1 − UTC as used: IERS observed or predicted, or 0 within 0.9 s outside the table. */
+/**
+ * UT1 − UTC as used: IERS observed or predicted inside the table; after it,
+ * "model", TT − UTC (69.184 s) less the ΔT model's TT − UT1, with the model's
+ * band. "fallback", 0 within 0.9 s, is what engines before the continuous-UTC
+ * rule recorded after the table; a pin still reads it there.
+ */
 export interface Ut1MinusUtc {
   seconds: number;
   sigma: number;
-  source: "observed" | "predicted" | "fallback";
+  source: "observed" | "predicted" | "fallback" | "model";
 }
 
 /** TAI − UTC, s; `listed` is false after the list expires and its last value is carried. */
@@ -52,10 +62,15 @@ export interface LeapSeconds {
   listed: boolean;
 }
 
-/** How an instant became UT1 and TT: "iers" (leap seconds, IERS UT1 − UTC), "delta-t" (read as UT1, the ΔT model) or "pinned". */
+/**
+ * How an instant became UT1 and TT: "iers" (leap seconds, IERS UT1 − UTC),
+ * "continuous-utc" (after the IERS table: TT = UTC + 69.184 s, UT1 from the ΔT
+ * model), "delta-t" (before 1972: read as UT1, the ΔT model) or "pinned".
+ * Engines before the continuous-UTC rule recorded "delta-t" after the table too.
+ */
 export interface TimeScale {
   input: TimeScaleName;
-  basis: "iers" | "delta-t" | "pinned";
+  basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
   /** Null before 1972. */
   ut1MinusUtc: Ut1MinusUtc | null;
   /** Null where TT did not come from the leap seconds. */
@@ -82,7 +97,11 @@ const J2000_MS = Date.UTC(2000, 0, 1, 12);
 const MJD_UNIX = 40_587;
 /** 1972-01-01T00:00:00Z, the first day of the leap-second list. */
 export const LEAP_SECONDS_FROM = Date.UTC(1972, 0, 1);
-/** The leap-second rule keeps |UT1 − UTC| below 0.9 s. */
+/**
+ * The band, s, of the UT1 − UTC that engines before the continuous-UTC rule
+ * took as 0 after the table, from the leap-second rule's |UT1 − UTC| < 0.9 s.
+ * A pinned chart after the table still reads UT1 − UTC so.
+ */
 export const UT1_FALLBACK_BAND = 0.9;
 /** The generator's 90 characters: "#" to "~" without backslash and backquote. */
 const ALPHABET = "#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}~";
@@ -175,7 +194,7 @@ const fallback = (): Ut1MinusUtc => ({ seconds: 0, sigma: UT1_FALLBACK_BAND, sou
  * table's value, band and source, carried linearly past its first or last day
  * for the fraction of a second a UT1 or TT instant inside it can reach there.
  */
-function tableUt1MinusUtc(utcMs: number, taiMinusUtc: number): Ut1MinusUtc {
+function tableUt1MinusUtc(utcMs: number, taiMinusUtc: number): Ut1MinusUtc & { source: "observed" | "predicted" } {
   return {
     seconds: ut1MinusTai(utcMs) + taiMinusUtc,
     sigma: ut1Sigma(utcMs),
@@ -183,7 +202,11 @@ function tableUt1MinusUtc(utcMs: number, taiMinusUtc: number): Ut1MinusUtc {
   };
 }
 
-/** UT1 − UTC at a UTC instant: from the table, or 0 within ±0.9 s outside it. */
+/**
+ * UT1 − UTC at a UTC instant as the table reads it: from the table, or 0
+ * within ±0.9 s outside it. A pin reads it so; unpinned, `timeBasis` takes
+ * the ΔT model's after the table.
+ */
 export function ut1MinusUtcAt(utcMs: number): Ut1MinusUtc {
   if (utcMs < UT1_FROM_MS || utcMs > UT1_TO_MS) return fallback();
   return tableUt1MinusUtc(utcMs, taiMinusUtcAt(utcMs));
@@ -191,11 +214,29 @@ export function ut1MinusUtcAt(utcMs: number): Ut1MinusUtc {
 
 const modelDeltaT = (ut1Ms: number): DeltaT => deltaTAt((ut1Ms - J2000_MS) / DAY);
 
+/** TT − TAI, ms. */
+const TT_MINUS_TAI_MS = 32_184;
+
 /**
  * UT1 and TT for an instant on `scale`, with the record a chart carries. A
  * pin is a caller's ΔT (TT − UT1) in seconds.
  */
 export function timeBasis(ms: number, scale: TimeScaleName = "utc", pin?: number): TimeBasis {
+  return basisOf(ms, scale, pin, true);
+}
+
+/**
+ * The time basis as engines before the continuous-UTC rule gave it (1.1.0,
+ * 2.0.0-rc.1, 2.0.0-rc.2): after the IERS table, civil time read as UT1 with
+ * UT1 − UTC taken as 0 within ±0.9 s, and TT = UT1 + ΔT from the model. The
+ * receipt codec checks and replays the records those engines wrote with it.
+ * Everywhere else it is `timeBasis`, to the bit. Not exported from any entry.
+ */
+export function timeBasisBeforeContinuousUtc(ms: number, scale: TimeScaleName = "utc", pin?: number): TimeBasis {
+  return basisOf(ms, scale, pin, false);
+}
+
+function basisOf(ms: number, scale: TimeScaleName, pin: number | undefined, continuous: boolean): TimeBasis {
   const record = (
     utcMs: number,
     ut1Ms: number,
@@ -220,6 +261,40 @@ export function timeBasis(ms: number, scale: TimeScaleName = "utc", pin?: number
     return record(ms, ms + (ut1MinusUtc?.seconds ?? 0) * 1000, deltaT, "pinned", ut1MinusUtc, null);
   }
   const utc = scale === "tt" ? ms - modelDeltaT(ms).seconds * 1000 : ms;
+  if (continuous && utc > UT1_TO_MS) {
+    // After the table UTC runs on with the last TAI − UTC: TT = UTC + 69.184 s.
+    const taiMinusUtc = taiMinusUtcAt(utc);
+    const ttMinusUtcMs = taiMinusUtc * 1000 + TT_MINUS_TAI_MS;
+    const leapSeconds: LeapSeconds = { taiMinusUtc, listed: false };
+    if (scale === "utc") {
+      // UT1 = TT − ΔT(UT1), by the TT branch's four fixed-point steps; TT is
+      // taken from the instant itself, so it carries no rounding of the solve.
+      const ttMs = ms + ttMinusUtcMs;
+      let ut1Ms = ttMs;
+      for (let round = 0; round < 4; round += 1) ut1Ms = ttMs - modelDeltaT(ut1Ms).seconds * 1000;
+      const deltaT = modelDeltaT(ut1Ms);
+      return {
+        utcMs: ms,
+        ut1Days: (ut1Ms - J2000_MS) / DAY,
+        ttDays: (ttMs - J2000_MS) / DAY,
+        deltaT,
+        timeScale: {
+          input: scale,
+          basis: "continuous-utc",
+          // From ΔT rather than from UT1 − UTC in milliseconds, so that 32.184 s + TAI − UTC − (UT1 − UTC)
+          // is ΔT to the rounding of seconds; the milliseconds since 1970 round to 8 µs at the far end.
+          ut1MinusUtc: { seconds: ttMinusUtcMs / 1000 - deltaT.seconds, sigma: deltaT.sigma!, source: "model" },
+          leapSeconds
+        }
+      };
+    }
+    // TT or UT1 input: the TT and the UT1 of the ΔT model, as before; the UTC is TT − 69.184 s.
+    let ut1Ms = ms;
+    if (scale === "tt") for (let round = 0; round < 4; round += 1) ut1Ms = ms - modelDeltaT(ut1Ms).seconds * 1000;
+    const deltaT = modelDeltaT(ut1Ms);
+    const utcMs = (scale === "tt" ? ms : ut1Ms + deltaT.seconds * 1000) - ttMinusUtcMs;
+    return record(utcMs, ut1Ms, deltaT, "continuous-utc", { seconds: ttMinusUtcMs / 1000 - deltaT.seconds, sigma: deltaT.sigma!, source: "model" }, leapSeconds);
+  }
   if (utc < LEAP_SECONDS_FROM || utc > UT1_TO_MS) {
     // Civil time read as UT1; for TT input, TT = UT1 + ΔT(UT1) by fixed-point steps.
     let ut1Ms = ms;
@@ -267,14 +342,17 @@ const MODEL_KNOTS_FROM = (1941 - 2000) * 365.25;
 /**
  * Which piece of the time basis a record lies in: within one piece TT − (the
  * input instant) is continuous, and between two it can step. It steps at a
- * leap second on UTC input, where the basis changes (1972-01-01 and the table's
- * last day), where UT1 − UTC moves between the table and its fallback, and
- * where the ΔT model hands over from its spline to its knots. On TT input it
- * never steps.
+ * leap second on UTC input, where the basis changes (1972-01-01, and on UT1
+ * input the table's last day), where UT1 − UTC moves between the table and
+ * its fallback under a pin, and where the ΔT model hands over from its spline
+ * to its knots. On UTC input the IERS basis and the continuous-UTC rule after
+ * it are one piece for each TAI − UTC, since TT − UTC is (TAI − UTC) + 32.184 s
+ * on both. On TT input it never steps.
  */
 function pieceOf({ timeScale, deltaT, utcMs, ut1Days }: TimeBasis): string {
   const { input, basis, ut1MinusUtc } = timeScale;
   if (input === "tt") return "";
+  if (input === "utc" && (basis === "iers" || basis === "continuous-utc")) return `tai-utc ${taiMinusUtcAt(utcMs)}`;
   const model = deltaT.model === DELTA_T_MODEL ? (ut1Days < MODEL_KNOTS_FROM ? "spline" : "knots") : deltaT.model;
   if (input === "ut1") return `${basis} ${model}`;
   const reading = ut1MinusUtc === null ? "as-ut1" : ut1MinusUtc.source === "fallback" ? "fallback" : taiMinusUtcAt(utcMs);

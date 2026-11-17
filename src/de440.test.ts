@@ -237,7 +237,8 @@ describe("a DE440 chart's receipt", () => {
     const envelope = createNatalEnvelope(withEphemeris(source, () => natalChart(birth)));
     expect(envelope.requiredFeatures).toEqual(["convention-ids", "ephemeris-jpl-de440"]);
     expect(envelope.receipt.engine.ephemeris).toEqual({ name: "jpl-de440", version: DIGEST });
-    expect(envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[NATAL_RECEIPT_CONVENTION_SETS.length - 1]);
+    // A chart inside the IERS table: the DE440 set on the table's time basis (the continuous-UTC DE440 set follows it).
+    expect(envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[6]);
     expect(envelope.receipt.conventionIds).toContain(`ephemeris:jpl-de440@${DIGEST}`);
     const parsed = parseNatalEnvelope(serializeNatalEnvelope(envelope));
     expect(parsed.ok).toBe(true);

@@ -1,5 +1,6 @@
 // A ΔT the model extrapolates past the IERS table (src/deltat.ts), which no
-// arbiter checks: a clock time's TT carries it, and on TT input so does UT1.
+// arbiter checks: a UT1 instant's TT carries it, and the UT1 of a TT instant
+// or, under the continuous-UTC rule, of a UTC one.
 // calc(), houses() and events() flag it and widen their bounds by how far the
 // result moves while TT and UT1 move by their bands; natalChart() and chart()
 // flag it; natal receipts carry the flag, and from engines after 1.1.0-rc.7
@@ -13,7 +14,8 @@ import { addBounds } from "./calc-ayanamsa.js";
 import { chart, calc, events, houses } from "./calc.js";
 import type { CalcPosition } from "./calc.js";
 import { natalConventionIds } from "./conventions.js";
-import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from "./receipt.js";
+import { NATAL_RECEIPT_CONVENTION_SETS, createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from "./receipt.js";
+import { timeBasisBeforeContinuousUtc } from "./time-scale.js";
 
 const FLAG = "delta-t-extrapolated";
 const FAR = "2199-06-15T12:00:00Z";
@@ -30,17 +32,34 @@ function withOwnIds(envelope: any): void {
 }
 
 describe("calc() at a clock time past the IERS predictions", () => {
-  it("flags the Moon at 2199-06-15T12:00Z given on UTC, and widens its bounds by its rate times the TT band", () => {
+  it("flags the Moon at 2199-06-15T12:00Z given on UTC, whose TT the continuous-UTC rule fixes, and keeps its bounds", () => {
+    // Until 2.0.0-rc.2 the engine read this instant as UT1 and took TT = UT1 + ΔT, so TT carried the ΔT band,
+    // √(0.9² + σ²) s, and the bounds grew by the Moon's rate times it, about 57″. After the IERS table TT is
+    // UTC + 69.184 s exactly (docs/time.md): the TT band is 0, a geocentric position moves with TT alone, and
+    // the bounds are the measured ones. The flag stays, for what turns with UT1.
     const moon = ok(calc({ body: "Moon", time: FAR }));
     const [used] = moon.receipt.instants;
     expect(used!.deltaT.segment).toBe("extrapolated");
     expect(used!.deltaT.sigma!).toBeGreaterThan(100);
     expect(moon.flags).toEqual([FLAG]);
+    expect(moon.band!.time).toEqual({ tt: 0, ut1: used!.deltaT.sigma });
+    expect(moon.bounds.position).toEqual({ value: POSITION, unit: "arcsec", label: "measured", basis: SWEPT_BASIS });
+    expect(moon.bounds.distance!.value).toBe(DISTANCE);
+    expect(moon.bounds.speed).toMatchObject({ value: SPEED, label: "measured" });
+    // The receipt names the rule, which adds nothing here, before the band's, which stays last.
+    expect(moon.receipt.conventions).toContain("bounds:plus-delta-t-band");
+    expect(moon.receipt.conventions.at(-1)).toBe("time-band:first-order");
+  });
+
+  it("widens its bounds on UT1 input by its rate times the TT band, which there carries ΔT's", () => {
+    const moon = ok(calc({ body: "Moon", time: { jd: 2_524_183.0, scale: "ut1" } }));
+    const [used] = moon.receipt.instants;
+    expect(moon.flags).toEqual([FLAG]);
     // The rate of the direction from the result's own speeds, degrees a day, as an independent check of the samples.
     const cos = Math.cos((moon.lat * Math.PI) / 180);
     const omega = Math.hypot(moon.speeds!.lon * cos, moon.speeds!.lat);
     const tt = moon.band!.time.tt;
-    expect(tt).toBeCloseTo(Math.hypot(0.9, used!.deltaT.sigma!), 9);
+    expect(tt).toBe(used!.deltaT.sigma);
     const extra = (omega / 24) * tt;
     // The Moon moves about 0.55″ a second of time, and the band is about 103 s.
     expect(extra).toBeGreaterThan(50);
@@ -55,9 +74,7 @@ describe("calc() at a clock time past the IERS predictions", () => {
     expect(distance!.value!).toBeGreaterThan(DISTANCE!);
     expect(speed!.label).toBe("estimated");
     expect(speed!.value!).toBeGreaterThan(SPEED!);
-    // The receipt names the rule, before the band's, which stays last.
     expect(moon.receipt.conventions).toContain("bounds:plus-delta-t-band");
-    expect(moon.receipt.conventions.at(-1)).toBe("time-band:first-order");
   });
 
   it("widens the position bound without speeds too, and flags UT1 input", () => {
@@ -143,7 +160,7 @@ describe("houses() and events() on a ΔT extrapolated", () => {
     expect([now.bounds.angles.value, now.bounds.angles.label, now.bounds.cusps.value]).toEqual([0.02, "measured", 0.08]);
   });
 
-  it("events() flags an event on it, and widens the timing bound by the widest such UTC band", () => {
+  it("events() flags an event on it, whose UTC the continuous-UTC rule fixes from its TT, so the timing bound stays the bracket", () => {
     const request = { kind: "longitude-crossing", body: "Sun", longitude: 90 } as const;
     const far = events({ ...request, from: "2199-01-01T00:00:00Z", to: "2199-12-31T00:00:00Z" });
     const now = events({ ...request, from: "2024-01-01T00:00:00Z", to: "2024-12-31T00:00:00Z" });
@@ -153,10 +170,12 @@ describe("houses() and events() on a ΔT extrapolated", () => {
     expect(now.bounds.timing).toMatchObject({ value: bracket, label: "estimated" });
     expect(far.flags).toEqual([FLAG]);
     expect(far.events).toHaveLength(1);
-    const utc = far.events[0]!.band.utc;
-    expect(utc).toBeGreaterThan(100);
-    expect(far.bounds.timing.value).toBe(addBounds(bracket, utc));
-    expect(far.bounds.timing.basis).toContain("ΔT extrapolated");
+    // An event is fixed in TT, and TT − UTC is 69.184 s exactly after the IERS table: its UTC has no band, its UT1
+    // the ΔT model's (until 2.0.0-rc.2 its UTC carried √(0.9² + σ²) s, and the bound grew by it).
+    const { utc, ut1 } = far.events[0]!.band;
+    expect(utc).toBe(0);
+    expect(ut1).toBeGreaterThan(100);
+    expect(far.bounds.timing).toEqual(now.bounds.timing);
     expect(far.receipt.conventions).toContain("bounds:plus-delta-t-band");
   });
 });
@@ -196,21 +215,29 @@ describe("natalChart() and chart() at a clock time past the IERS predictions", (
     expect(parsed.ok).toBe(true);
     if (!parsed.ok) return;
     expect(parsed.envelope.receipt.resultFlags).toEqual([FLAG]);
-    // A record written before the flag existed stays readable.
-    const before = JSON.parse(json);
-    before.receipt.resultFlags = [];
-    before.receipt.engine.version = "1.1.0-rc.9";
-    withOwnIds(before);
-    expect(parseNatalEnvelope(JSON.stringify(before)).ok).toBe(true);
+    // A record written before the flag existed stays readable. Such an engine read the instant as UT1 (the time
+    // basis before the continuous-UTC rule), and wrote its record under the set before it.
+    const old = timeBasisBeforeContinuousUtc(Date.parse(FAR));
+    const asBefore = (version: string, flags: string[]) => {
+      const record = JSON.parse(json);
+      record.receipt.conventions = { ...NATAL_RECEIPT_CONVENTION_SETS[0] };
+      record.requiredFeatures = ["convention-ids"];
+      record.result.deltaT = { ...old.deltaT };
+      record.result.timeScale = { ...old.timeScale };
+      record.receipt.resultFlags = flags;
+      record.receipt.engine.version = version;
+      withOwnIds(record);
+      return JSON.stringify(record);
+    };
+    expect(parseNatalEnvelope(asBefore("1.1.0-rc.9", [])).ok).toBe(true);
     // From 1.1.0-rc.10, which sets it, a record that lacks it there is refused.
-    const later = JSON.parse(json);
-    later.receipt.resultFlags = [];
-    later.receipt.engine.version = "1.1.0-rc.10";
-    withOwnIds(later);
-    expect(parseNatalEnvelope(JSON.stringify(later))).toMatchObject({ ok: false, code: "inconsistent_result" });
-    later.receipt.resultFlags = [FLAG];
-    withOwnIds(later);
-    expect(parseNatalEnvelope(JSON.stringify(later)).ok).toBe(true);
+    expect(parseNatalEnvelope(asBefore("1.1.0-rc.10", []))).toMatchObject({ ok: false, code: "inconsistent_result" });
+    expect(parseNatalEnvelope(asBefore("1.1.0-rc.10", [FLAG])).ok).toBe(true);
+    // A record under the continuous-UTC set must carry it, and cannot name an engine before the rule.
+    const current = JSON.parse(json);
+    current.receipt.resultFlags = [];
+    withOwnIds(current);
+    expect(parseNatalEnvelope(JSON.stringify(current))).toMatchObject({ ok: false, code: "inconsistent_result" });
     // On TT input it belongs with houses.
     const tt = parseNatalEnvelope(serializeNatalEnvelope(createNatalEnvelope(natalChart(birth(FAR, { timeScale: "tt" })))));
     expect(tt.ok && tt.envelope.receipt.resultFlags).toEqual([FLAG]);

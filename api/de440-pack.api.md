@@ -32,7 +32,7 @@ declare function shippedDe440Source(): De440Source;
 ## Referenced, not exported here (7)
 
 ```ts
-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
+// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
 type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
 
 // exported by @zodiacs/engine/de440 (DE440_EPHEMERIS_NAME)
@@ -63,7 +63,7 @@ interface De440Source extends PositionSource {
     };
 }
 
-// exported by @zodiacs/engine (PositionSource)
+// exported by @zodiacs/engine (PositionSource), @zodiacs/engine/core (PositionSource)
 interface PositionSource {
     readonly ephemeris: {
         readonly name: string;
@@ -96,6 +96,6 @@ declare const REDUCED_BODIES: readonly [
 // exported by @zodiacs/engine/de440 (ReducedBody)
 type ReducedBody = (typeof REDUCED_BODIES)[number];
 
-// exported by @zodiacs/engine (SourceBody)
+// exported by @zodiacs/engine (SourceBody), @zodiacs/engine/core (SourceBody)
 type SourceBody = Exclude<BodyName, "North Node" | "South Node">;
 ```

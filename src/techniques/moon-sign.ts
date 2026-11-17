@@ -8,7 +8,7 @@
  */
 import { dateFrom } from "../date-input.js";
 import { bodyLongitude } from "../ephemeris.js";
-import { resolveLocalToUtc } from "../geo/timezone.js";
+import { readLocalTime } from "../geo/local-clock.js";
 import { SIGN_SLUGS, signIndexForLongitude } from "../signs.js";
 import type { DateInput, DetailedResult, ZodiacSign } from "../types.js";
 import { DAY_MS, detailed, readOptions, techniqueFlags } from "./shared.js";
@@ -18,7 +18,7 @@ const HOUR_MS = 3_600_000;
 
 /**
  * A date in every time zone runs from 00:00 at UTC+14 to 24:00 at UTC−12. In
- * tzdata 2025c every offset lies within these bounds, but in Alaska before
+ * tzdata 2026f every offset lies within these bounds, but in Alaska before
  * 1867-10-19 and in the Philippines and Micronesia before 1845.
  */
 export const EVERY_ZONE_OFFSETS = /*#__PURE__*/ Object.freeze({ earliestHours: 14, latestHours: -12 } as const);
@@ -120,8 +120,10 @@ export function moonSignCandidates(date: string, options?: MoonSignOptions): Moo
     toT = noonT + (12 - EVERY_ZONE_OFFSETS.latestHours) * HOUR_MS - 1;
   } else {
     const local = read.longitude === undefined ? undefined : { longitude: read.longitude as number };
-    fromT = resolveLocalToUtc(isoDate(year, month, day), "00:00", timeZone, local).utc.getTime();
-    toT = resolveLocalToUtc(isoDate(year, month, day + 1), "00:00", timeZone, local).utc.getTime() - 1;
+    // Only the instants are kept, so the host check (and its table) is left out: readLocalTime is
+    // resolveLocalToUtc without it.
+    fromT = readLocalTime(isoDate(year, month, day), "00:00", timeZone, local).utc.getTime();
+    toT = readLocalTime(isoDate(year, month, day + 1), "00:00", timeZone, local).utc.getTime() - 1;
     if (toT < fromT) throw new RangeError("The date did not occur in that time zone.");
   }
   const signs = signsOver(fromT, toT);

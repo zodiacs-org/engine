@@ -117,6 +117,7 @@ runs, so CI starts the check with node directly.
 | 1.1.0 | `4e53cda9bd6ccb5f5581c2a9af2f2ae4010af2599f411ac5220425e0932e41ac` | 2,726,321 | 98 | `2496c28f273e1e99526490e857332fae44473367` | "Carry the packed 1.1.0 tarball" | Release, merged (pull request 104); on npm as `latest`; npm's tarball is these bytes (its SHA-1, checked 2026-11-16) |
 | 2.0.0-rc.1 | `9a1c07ca898da77ec266543130645f3e2528a1aeef1ebd15b1b83e07d19e673a` | 2,732,244 | 98 | `5bbb4595a7bc26618a504de62805399e28d595d8` | "Carry the packed 2.0.0-rc.1 tarball" | Draft candidate for 2.0.0 (pull request 112), reviewed in draft with one blocker and superseded by 2.0.0-rc.2 on the same pull request; never tagged or published. Still this file |
 | 2.0.0-rc.2 | `e0621630b5a0f9dbb6465f4f077630f313217d7b06ee88ffa960696fec5eb1cc` | 2,734,988 | 98 | `05cd353af00e796e1fad65bf7085356c315b4b86` | "Carry the packed 2.0.0-rc.2 tarball" | Draft candidate for 2.0.0 (pull request 112), awaiting the owner's review; never tagged or published |
+| 2.0.0-rc.3 | `d465137931f5d28910443ca7ef01610606e9f708704364c61811d2936dc4ec55` | 2,781,676 | 100 | `0d41826f592d95a094e9234730dd594de5411e47` | "Carry the packed 2.0.0-rc.3 tarball" | Draft candidate for 2.0.0, awaiting the owner's review; never tagged or published |
 
 1.1.0-rc.9, 1.1.0-rc.10, 1.1.0-rc.11, 1.1.0-rc.12 and 1.1.0-rc.13 are five cuts of one draft, pull request 101.
 1.1.0-rc.9 was carried on 2026-11-14 and reviewed in draft; the owner then
@@ -202,6 +203,25 @@ workflow had passed on the source commit (CI run 43920027679, Conformance
 43920027647 and Atlas 43920027649). It is not to be published on npm until
 the owner approves it. The record is in
 `docs/evidence/2.0.0-rc.2-20261116/`.
+
+2.0.0-rc.3 is the third candidate for 2.0.0, cut from main at `373ceda`,
+where pull request 112 merged 2.0.0-rc.2. 2.0.0-rc.2 was never tagged or
+published; its archive, receipt and entry stay, unchanged, and its row above
+is as it was carried. rc.3 merges six signed-off pull requests, 114, 115,
+117, 118, 119 and 121, which change packed files, so by the rule above the
+new bytes take a new version. Its archive is 2,781,676 bytes, 4,757,064
+unpacked in 100 files, of which 1,437,512 are beside the pack, under the cap
+of 1,438,000, which this candidate raises from 1,289,000 (the owner approved
+raising the cap for the core entry on 17 November 2026); it also raises
+twelve entry budgets to their measurements (CHANGELOG.md). It was packed
+once, from a clean tree of its source commit (`git archive`) installed with
+`npm ci`, on Node 22.23.4 with npm 10.9.9; the pack of the working checkout
+gave the same bytes. It was carried before the gate workflows ran on the
+source commit: `scripts/root-unchanged.test.mjs` compares the root with the
+carried archive of the version in `package.json`, so the unit tests can pass
+only once this archive is carried. It is not to be published on npm until
+the owner approves it. The record is in
+`docs/evidence/2.0.0-rc.3-20261117/`.
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same

@@ -1,5 +1,173 @@
 # Engine changelog
 
+## 2.0.0-rc.3 (unreleased candidate)
+
+The third candidate for **2.0.0**, a major release, on 2.0.0-rc.2 (main at
+`373ceda`, where pull request 112 merged rc.2). It is a draft for the
+owner's review and is not to be published on npm until the owner approves
+it. Checks: `docs/evidence/2.0.0-rc.3-20261117/`.
+
+rc.2's archive is carried and its version was never tagged or published;
+these changes reach `dist/`, so by the rule in `artifacts/README.md` the
+package takes a new number and rc.2's archive stays, unchanged. rc.3 is
+rc.2 with six pull requests merged into it, each with a merge commit, in
+this order: 114, 115, 117, 118, 119 and 121. The owner chose this set on
+17 November 2026 ("Yes, minus Yellowknife"): pull request 118 ships with
+America/Yellowknife held at tzdata 2025c, and pull requests 120 and 122 are
+not in it. Everything rc.1's and rc.2's entries say holds for rc.3 except
+where this entry says otherwise.
+
+### Breaking
+
+- **Birth input refuses common near-miss names for a field** (pull
+  request 115). Birth input now refuses, with a `RangeError` that names the
+  field to use, these common names for a field, in any letter case: `lat`
+  (use `latitude`); `lng`, `lon`, `long` (`longitude`); `house`, `houses`,
+  `hsys`, `housesystem` (`houseSystem`); `scale`, `time_scale`
+  (`timeScale`); `delta_t` (`deltaT`); `time_known`, `unknownTime`
+  (`timeKnown`). They were ignored, so `{ utc, lat, lng }` gave a chart with
+  no angles and no error. Other unknown keys are still ignored. A call that
+  returned a chart before now throws.
+
+### Added
+
+- **Julian Day Numbers and local mean time** (pull request 114). Added:
+  `julianDayNumber`, `dateOfJulianDayNumber` and `localMeanTimeOffset` in
+  `@zodiacs/engine/geo`, the Julian Day Number of a Julian or proleptic
+  Gregorian date and its inverse for years -100000 to 100000, and a
+  longitude's local mean time in seconds east of Greenwich; the conformance
+  suite's 35 calendar vectors and 5 local mean time vectors now pass. The
+  `./geo` budget rises to fit them.
+- **`host-zone-data-differs`** (pull request 117, ZOD-283). From 1970 on a
+  wall time is read on the device's own time zone data; `resolveLocalToUtc`
+  and the birth resolvers now ask that data for its offset at one instant
+  inside each nearby span in which tzdata 2021a and 2026f differ (703 spans
+  in 77 names, from 1970 to 2029-10-27, and not past it), and where it
+  disagrees with 2026f the result, the birth, the chart and a receipt carry
+  the new `ChartFlag` value `"host-zone-data-differs"` and `zone.hostCheck`
+  gives both offsets; the instant is still the device's, so code that
+  switches exhaustively over `ChartFlag` needs a case for it
+  (`docs/time.md`, *Host time zone data*;
+  `docs/evidence/host-zone-probes-20261117/`). A span is checked from 36
+  hours before it begins, inclusive, to 36 hours after it ends, exclusive,
+  so an instant exactly 36 hours past the end, or 36 hours or more after
+  2029-10-27T00:00Z, is not checked; `docs/time.md` said "more than" 36
+  hours, and now follows the code (the review's note on pull request 117).
+- **`@zodiacs/engine/core`** (pull request 121, ZOD-292). Adds
+  `@zodiacs/engine/core`, the root's functions computed on astronomy-engine
+  without the DE440 pack: a page that uses `natalChart` from it bundles
+  77,042 to 80,192 bytes instead of 3,416,191 to 3,418,817
+  (`docs/evidence/2.0.0-rc.3-20261117/results/bundle-weight/`, measured on
+  this candidate's archive; pull request 121 measured 75,937 to 79,084 and
+  3,415,068 to 3,417,703, `docs/evidence/bundle-weight-20261117/`), and its
+  positions pass 48 of the 240 L1 position tests where the root's pass 240;
+  the root is unchanged. Raises the package's total cap for the entry's
+  second copy of the root's code, with the owner's approval of 17 Nov 2026
+  (*Sizes and budgets*, below).
+
+### Changed
+
+- **UTC after the IERS UT1 table** (pull request 119, ZOD-281). After the
+  IERS UT1 table (2027-10-02), UTC is read on the continuous-UTC rule:
+  TT = UTC + 69.184 s, UT1 from the ΔT model; time basis `continuous-utc`,
+  UT1 − UTC source `model`, new natal conventions sets requiring
+  `time-basis-continuous-utc`. Results move for every unpinned UTC instant
+  after 2027-10-02 (positions, angles, houses, returns, windows). Records
+  with the new sets are refused by 1.1.0 and 2.0.0-rc.2 as
+  `unsupported_feature`; `CONTINUOUS_UTC_RELEASE` in `src/receipt.ts`, the
+  first engine version a continuous-UTC set is accepted from, is
+  `2.0.0-rc.3`, this candidate. On UTC input after the table calc's
+  geocentric bounds and `events()`' timing bound no longer widen (on the DE440
+  pack the Moon at 2199 is 0.51″ from JPL Horizons, was 28.26″). The last UTC instant
+  `natalChart` accepts moves from 3998-09-03T02:01:41.309Z to
+  3998-09-03T05:58:50.816Z, and calc's from 2199-12-31T23:57:53.752Z to
+  2199-12-31T23:58:50.815Z, measured again on this candidate's archive
+  (`docs/evidence/2.0.0-rc.3-20261117/results/span-ends.json`). Speeds
+  within 6 hours of 2027-10-02 move by up to 3.6e-7 °/day (the
+  astronomy-engine node 3.8e-6) against rc.2, and the 146 ms after the table
+  on UTC input read the predicted ΔT segment, unflagged
+  (`docs/evidence/continuous-utc-20261117/`).
+- **Zone histories from tzdata 2026f** (pull request 118). The zone history
+  shipped for wall times before 1970 is now tzdata 2026f, not 2025c, except
+  America/Yellowknife, held at tzdata 2025c by the owner's decision because
+  no tzdb NEWS entry or other official announcement explains 2026f's change
+  to it. Offsets change in 23 zone names: Europe/Dublin and Eire read +0:00,
+  not +1:00, from 1925-09-20T02:00Z to 1925-10-04T02:00Z (336 hours); 21
+  Brazilian names keep daylight saving one hour longer on 1965-03-31 (24
+  hours) and 1966-03-01 (1 hour). EST5EDT, CST6CDT, MST7MDT and PST8PDT name
+  1942 to 1945 summer time EDT, CDT, MDT and PDT and no longer record a
+  transition on 1945-08-14; Europe/Uzhgorod and Europe/Zaporozhye follow
+  Kyiv's local mean time era and report dataForm main+backzone; Morocco's
+  and Western Sahara's 2026-09-20 move to +00 reads as a legal change on
+  hosts that know it (`docs/evidence/tzdb-2026f-20261117/`).
+  America/Yellowknife's results before 1970 equal rc.2's, but its
+  `tzdbVersion` field reads `2026f`, as every zone's does, though its data
+  is tzdata 2025c's (`scripts/tzdb-held/`).
+
+### Documentation
+
+- README.md: this candidate's paragraph, archive and evidence folder; the
+  three new `geo` functions; *Birth settings* on the refused near-miss
+  names; *Input flag compatibility*, all twelve `ChartFlag` values, with
+  `host-zone-data-differs` among the five caller assertions; the time basis
+  after 2027-10-02, the window seam there (TT runs on, UT1 steps about
+  2 ms), the bands and the span's ends; the zone histories on tzdata 2026f
+  with America/Yellowknife held, and the host check; *Bundle size in a web
+  page*, measured again on this candidate's archive.
+- NOTICE and LICENSING.md: the zone histories are tzdata 2026f's, with
+  America/Yellowknife from tzdata 2025c, and the host-probe table compares
+  tzdata 2021a with 2026f; each with its archive's SHA-256.
+- `docs/time.md`: the host check's 36-hour window, inclusive at its start and
+  exclusive at its end, as above. `docs/calc.md`, `docs/time.md` and
+  `src/types.ts` name 2.0.0-rc.3 or 2.0.0 where they said "the release
+  after 2.0.0-rc.2" or "the release after 1.1.0".
+- Conformance: this engine's results (`conformance/results/`, `RESULTS.md`)
+  were regenerated with the harness on Node 22.22.2 and name 2.0.0-rc.3 and
+  tzdb 2026f. Default source: 499 pass, 0 fail, 1 unsupported (the leap
+  second instant, which a JavaScript date cannot express); on
+  astronomy-engine 307 pass, 192 fail, 1 unsupported, 48 of the 240
+  positions passing. No verdict differs from the pull requests' own runs.
+- The offline CLI consumer check (`tools/cli/`) held the carried 1.0.0-rc.2
+  archive's verdicts to this engine's astronomy-engine results, which now
+  pass the 40 vectors that archive cannot answer. It now reads its own
+  pinned baseline, `tools/cli/baselines/engine-1.0.0-rc.2-node-22.22.2.json`,
+  the 500 verdicts of that file at `373ceda` (267 pass, 192 fail, 41
+  unsupported), as pull request 114 asked the candidate to settle.
+
+### Sizes and budgets
+
+- Measured on this candidate's build
+  (`docs/evidence/2.0.0-rc.3-20261117/results/package-contents.log`), twelve
+  import graphs were over their budgets. Each budget is raised to the
+  measurement, rounded up to the next 100 bytes, and no further (old budget,
+  rc.2's measurement, this candidate's, new budget):
+
+  | Entry | Old budget | rc.2 | rc.3 | New budget | Why |
+  | --- | ---: | ---: | ---: | ---: | --- |
+  | `.` | 151,700 | 151,563 | 154,173 | 154,200 | 115 (565), 117 (26), 119 (1,910), 121 (109) |
+  | `./calc` | 204,100 | 203,138 | 205,334 | 205,400 | 119 (2,061), 117 (26), 121 (109) |
+  | `./core` | 109,600 | (none) | 110,765 | 110,800 | 121's entry, now with 115, 117 and 119 |
+  | `./geo` | 36,500 | 36,178 | 47,715 | 47,800 | 117's probe table and check, 114's functions |
+  | `./internal` | 110,900 | 110,362 | 112,381 | 112,400 | 119 (1,910), 121 (109) |
+  | `./receipt` | 77,400 | 76,845 | 81,110 | 81,200 | 119's conventions sets (3,926), 117's flag (339) |
+  | `./sky` | 138,600 | 137,816 | 139,835 | 139,900 | 119 (1,910), 121 (109) |
+  | `./techniques` | 207,300 | 205,247 | 207,561 | 207,600 | 119, 114, 115 and 121; 117 moved the probe table out (−1,393) |
+  | `./time` | 42,600 | 42,530 | 44,485 | 44,500 | 119 (1,955) |
+  | `./timing` | 171,200 | 170,866 | 173,476 | 173,500 | 119 (1,910), 115 (565), 121 (109), 117 (26) |
+  | `./vedic` | 187,100 | 186,598 | 189,208 | 189,300 | 119 (1,910), 115 (565), 121 (109), 117 (26) |
+  | `./window` | 151,500 | 150,577 | 152,731 | 152,800 | 119 (2,019), 121 (109), 117 (26) |
+
+  Every other graph is inside its budget, unchanged; the zone histories are
+  188,964 bytes of their 200,000. The package beside the pack is
+  1,437,512 bytes unpacked in 100 files, over the cap of 1,289,000:
+  the second copy of the root's code in `dist/core.js` and its declarations
+  (pull request 121), the other five pull requests' code and declarations,
+  this entry and the README's, NOTICE's and LICENSING.md's lines. Raised to
+  1,438,000, the measurement rounded up to the next 1,000 bytes; the owner
+  approved raising the cap for the core entry on 17 November 2026. The
+  entry budgets are for the owner to decide with the candidate
+  (`scripts/verify-package-contents.mjs`).
+
 ## 2.0.0-rc.2 (unreleased candidate)
 
 The second candidate for **2.0.0**, a major release, on 1.1.0 (main at

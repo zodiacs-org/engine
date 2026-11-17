@@ -1,0 +1,168 @@
+{
+ "earlier": "1.1.0",
+ "source": "the package default, the DE440 pack",
+ "instants": "every minute from 2027-10-01T18:00Z to 2027-10-02T06:00Z, every 100 ms within 100 s of 2027-10-02T00:00Z, and 00:00:00.001Z",
+ "place": {
+  "latitude": 48.2,
+  "longitude": 16.37,
+  "houseSystem": "placidus"
+ },
+ "at-or-before-table-end": {
+  "Sun lon (deg)": 0,
+  "Sun lat (deg)": 0,
+  "Sun speed (deg/day)": {
+   "value": -1.8197683360199335e-9,
+   "at": "2027-10-01T23:59:57.700Z"
+  },
+  "Moon lon (deg)": 0,
+  "Moon lat (deg)": 0,
+  "Moon speed (deg/day)": {
+   "value": 3.4988166675020693e-7,
+   "at": "2027-10-01T23:59:59.400Z"
+  },
+  "Mercury lon (deg)": 0,
+  "Mercury lat (deg)": 0,
+  "Mercury speed (deg/day)": {
+   "value": 6.643410110918069e-8,
+   "at": "2027-10-01T23:59:50.500Z"
+  },
+  "Venus lon (deg)": 0,
+  "Venus lat (deg)": 0,
+  "Venus speed (deg/day)": {
+   "value": -1.8269621371302946e-9,
+   "at": "2027-10-01T23:58:38.200Z"
+  },
+  "Mars lon (deg)": 0,
+  "Mars lat (deg)": 0,
+  "Mars speed (deg/day)": {
+   "value": -2.080668970450006e-9,
+   "at": "2027-10-01T23:59:54.000Z"
+  },
+  "Jupiter lon (deg)": 0,
+  "Jupiter lat (deg)": 0,
+  "Jupiter speed (deg/day)": {
+   "value": 7.324916229123346e-10,
+   "at": "2027-10-01T23:59:40.800Z"
+  },
+  "Saturn lon (deg)": 0,
+  "Saturn lat (deg)": 0,
+  "Saturn speed (deg/day)": {
+   "value": 6.778761302284053e-10,
+   "at": "2027-10-01T23:58:41.400Z"
+  },
+  "Uranus lon (deg)": 0,
+  "Uranus lat (deg)": 0,
+  "Uranus speed (deg/day)": {
+   "value": 7.06556554583293e-10,
+   "at": "2027-10-01T23:59:24.300Z"
+  },
+  "Neptune lon (deg)": 0,
+  "Neptune lat (deg)": 0,
+  "Neptune speed (deg/day)": {
+   "value": -6.72976466220554e-11,
+   "at": "2027-10-01T23:58:57.000Z"
+  },
+  "Pluto lon (deg)": 0,
+  "Pluto lat (deg)": 0,
+  "Pluto speed (deg/day)": {
+   "value": -4.199245829533682e-10,
+   "at": "2027-10-01T23:58:59.900Z"
+  },
+  "North Node lon (deg)": 0,
+  "North Node lat (deg)": 0,
+  "North Node speed (deg/day)": {
+   "value": -6.56757756511972e-9,
+   "at": "2027-10-01T23:59:59.800Z"
+  },
+  "South Node lon (deg)": 0,
+  "South Node lat (deg)": 0,
+  "South Node speed (deg/day)": {
+   "value": -6.56757756511972e-9,
+   "at": "2027-10-01T23:59:59.800Z"
+  },
+  "angle asc (deg)": 0,
+  "angle mc (deg)": 0,
+  "angle dsc (deg)": 0,
+  "angle ic (deg)": 0,
+  "cusps (deg)": 0
+ },
+ "after-table-end": {
+  "Sun lon (deg)": 0,
+  "Sun lat (deg)": 0,
+  "Sun speed (deg/day)": {
+   "value": 1.1143708178451561e-9,
+   "at": "2027-10-02T00:00:30.000Z"
+  },
+  "Moon lon (deg)": 0,
+  "Moon lat (deg)": 0,
+  "Moon speed (deg/day)": {
+   "value": -3.4747748678398693e-7,
+   "at": "2027-10-02T00:00:55.500Z"
+  },
+  "Mercury lon (deg)": 0,
+  "Mercury lat (deg)": 0,
+  "Mercury speed (deg/day)": {
+   "value": -6.714351630243698e-8,
+   "at": "2027-10-02T00:01:13.300Z"
+  },
+  "Venus lon (deg)": 0,
+  "Venus lat (deg)": 0,
+  "Venus speed (deg/day)": {
+   "value": 9.906098163980914e-10,
+   "at": "2027-10-02T00:00:21.100Z"
+  },
+  "Mars lon (deg)": 0,
+  "Mars lat (deg)": 0,
+  "Mars speed (deg/day)": {
+   "value": 1.7421635245540301e-9,
+   "at": "2027-10-02T00:00:21.100Z"
+  },
+  "Jupiter lon (deg)": 0,
+  "Jupiter lat (deg)": 0,
+  "Jupiter speed (deg/day)": {
+   "value": -7.038723215391229e-10,
+   "at": "2027-10-02T00:01:11.300Z"
+  },
+  "Saturn lon (deg)": 0,
+  "Saturn lat (deg)": 0,
+  "Saturn speed (deg/day)": {
+   "value": -6.195997048763502e-10,
+   "at": "2027-10-02T00:01:05.000Z"
+  },
+  "Uranus lon (deg)": 0,
+  "Uranus lat (deg)": 0,
+  "Uranus speed (deg/day)": {
+   "value": -7.087935256083755e-10,
+   "at": "2027-10-02T00:01:16.800Z"
+  },
+  "Neptune lon (deg)": 0,
+  "Neptune lat (deg)": 0,
+  "Neptune speed (deg/day)": {
+   "value": 6.5451762065738e-11,
+   "at": "2027-10-02T00:01:09.300Z"
+  },
+  "Pluto lon (deg)": 0,
+  "Pluto lat (deg)": 0,
+  "Pluto speed (deg/day)": {
+   "value": 4.288139418204273e-10,
+   "at": "2027-10-02T00:01:13.300Z"
+  },
+  "North Node lon (deg)": 0,
+  "North Node lat (deg)": 0,
+  "North Node speed (deg/day)": {
+   "value": 7.960797548944853e-9,
+   "at": "2027-10-02T06:00:00.000Z"
+  },
+  "South Node lon (deg)": 0,
+  "South Node lat (deg)": 0,
+  "South Node speed (deg/day)": {
+   "value": 7.960797548944853e-9,
+   "at": "2027-10-02T06:00:00.000Z"
+  },
+  "angle asc (deg)": 0,
+  "angle mc (deg)": 0,
+  "angle dsc (deg)": 0,
+  "angle ic (deg)": 0,
+  "cusps (deg)": 0
+ }
+}

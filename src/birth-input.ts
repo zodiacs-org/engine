@@ -61,7 +61,7 @@ const DERIVED_FLAGS = [
   "de440-unavailable",
   "outside-de440-span"
 ] as const;
-const FLAGS: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", "calendar-unknown", ...DERIVED_FLAGS];
+const FLAGS: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", "calendar-unknown", "host-zone-data-differs", ...DERIVED_FLAGS];
 
 
 export interface FlagSnapshot {

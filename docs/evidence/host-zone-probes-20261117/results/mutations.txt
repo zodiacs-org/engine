@@ -1,0 +1,39 @@
+# Mutations, 2026-11-17 (Node 22.23.4, tzdb 2026e)
+
+## 1. America/Havana's stored 2026f offset moved by +3600 s in the shipped table (copy), then tools/zdump-check.mjs --table <copy>
+zdump-check: tzdata 2026f (sha256 01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d) against 2021a (sha256 39e7d2ba08c68cbaefc8de3227aab0dec2521be8042cf56855f7dc3a9fb14e08); zic -b fat; zdump (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39
+zdump-check: 1 difference(s):
+  America/Havana: shipped table [[1793509200,1805000400,-10800]] != zdump [[1793509200,1805000400,-14400]]
+exit 1
+
+## 2. The same in the spelled-out intervals (copy), then tools/zdump-check.mjs --intervals <copy>
+zdump-check: tzdata 2026f (sha256 01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d) against 2021a (sha256 39e7d2ba08c68cbaefc8de3227aab0dec2521be8042cf56855f7dc3a9fb14e08); zic -b fat; zdump (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39
+zdump-check: 2 difference(s):
+  America/Havana: intervals [["2026-11-01T05:00:00Z","2027-03-14T05:00:00Z",-10800,-18000]] != zdump [["2026-11-01T05:00:00Z","2027-03-14T05:00:00Z",-14400,-18000]]
+  America/Havana #0: zdump gives -14400 at the probe, stored -10800
+exit 1
+
+## 3. src/geo/timezone.ts without the 36 hour margin (a span counts only when the instant is inside it), then vitest run src/geo/host-zone-check.test.ts
+   × a wall time the host reads > is checked within 36 hours of a span: Havana's first hour of 2026-11-01, before the span starts
+   × a wall time the host reads > checks a span still open at the horizon only up to it: Casablanca 2030-01-20 12:00 (conformance L3-TZ-0045)
+   × every span (property) > flags 20 instants inside each span on a 2021a host and none on a pinned host
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  3 failed | 15 passed (18)
+
+## 4. src/geo/timezone.ts with the comparison inverted (answer !== pinned is "current"), same tests
+   × a wall time the host reads > is flagged where the host answers as tzdata 2021a, and keeps the host's instant
+   × a wall time the host reads > is not flagged where the host answers as the pinned release
+   × a wall time the host reads > is checked within 36 hours of a span: Havana's first hour of 2026-11-01, before the span starts
+   × a wall time the host reads > probes inside a span one hour long: Chisinau, where 2026a moved the change from 00:00Z to 01:00Z
+   × a wall time the host reads > checks a span still open at the horizon only up to it: Casablanca 2030-01-20 12:00 (conformance L3-TZ-0045)
+   × a wall time the host reads > flags a link name as its target
+   × a wall time the host reads > is not flagged where a runtime names a release later than the pinned one, which may know a newer rule
+   × a chart from a flagged birth > carries the flag through natalChart and a receipt that round-trips
+   × every span (property) > flags 20 instants inside each span on a 2021a host and none on a pinned host
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  9 failed | 9 passed (18)
+
+## 5. src/geo/timezone.ts with a span still open at the horizon checked without end (Infinity for HOST_PROBES_UNTIL), same tests
+   × a wall time the host reads > checks a span still open at the horizon only up to it: Casablanca 2030-01-20 12:00 (conformance L3-TZ-0045)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 17 passed (18)
