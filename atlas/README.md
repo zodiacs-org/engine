@@ -172,8 +172,11 @@ conformance recipe (`conformance/arbiters/l3/README.md`) and run
 `node atlas/tools/compare-tzdb.mjs` rewrites `tzdb/differences.json` and
 `TZDB-DIFFERENCES.md`.
 
-The [2026f rerun record](../docs/evidence/tzdb-2026f-20261118/REPORT.md)
-documents the 2025c source and extract paths pinned by these tools.
+The committed extract and comparison are tzdata 2025c's and have not yet
+been republished on 2026f, the release the package now ships. On 2026f the
+atlas zones give the same initial offset and the same transitions up to 1920
+as on 2025c; the script and its output are in
+[`docs/evidence/tzdb-2026f-20261118/`](../docs/evidence/tzdb-2026f-20261118/REPORT.md).
 
 ## How to cite
 

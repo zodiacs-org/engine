@@ -386,10 +386,11 @@ twice (a fold) takes the earlier instant, or the later one with the option
   pinned build's offsets before 1970 matched the Makefile's own build of that
   form for 584 of the 597 names. For the other 13, `ziguard.awk` kept
   `backward`'s link target and the pinned build followed backzone's, such as
-  Iceland at Atlantic/Reykjavik and America/Virgin at America/St_Thomas.
-  See the [2025c evidence](evidence/rc15-20260929/backzone-divergence.json)
-  and the [2026f rerun record](evidence/tzdb-2026f-20261118/REPORT.md).
-  What moved from 2025c to 2026f, interval by interval and from zdump, is in
+  Iceland at Atlantic/Reykjavik and America/Virgin at America/St_Thomas
+  ([2025c evidence](evidence/rc15-20260929/backzone-divergence.json)). This
+  figure has not been measured on 2026f, because the Makefile's build runs
+  the archive's `ziguard.awk`; the
+  [2026f record](evidence/tzdb-2026f-20261118/REPORT.md) says so. What moved from 2025c to 2026f, interval by interval and from zdump, is in
   `docs/evidence/tzdb-2026f-20261117/`.
   One name is held back by the owner's decision: tzdata 2026f's `backzone`
   comments out America/Yellowknife's zone, with no tzdb NEWS entry or other
@@ -442,6 +443,11 @@ twice (a fold) takes the earlier instant, or the later one with the option
   EST5EDT, PST8PDT, America/Montreal, Europe/Belfast and Iceland, and 4 of its
   98 do not change (America/Tijuana, Antarctica/DumontDUrville,
   Antarctica/McMurdo and Antarctica/Syowa).
+  These figures are tzdata 2025c's and have not yet been republished on
+  2026f, the release the package now ships. The same comparison on 2026f,
+  with America/Yellowknife held at 2025c, is recorded with its script and
+  output in
+  [`docs/evidence/tzdb-2026f-20261118/`](evidence/tzdb-2026f-20261118/REPORT.md).
 
 ### Options
 
