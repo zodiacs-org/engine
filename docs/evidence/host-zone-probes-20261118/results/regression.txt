@@ -1,0 +1,19 @@
+Origin main at 709bc81 with the regression test, Node 22.22.2
+   × a wall time the host reads > flags Asia/Tehran at noon on 1979-05-26 on a 2025c host 46ms
+     → expected { status: 'current', …(4) } to deeply equal { status: 'differs', …(4) }
+   × a wall time the host reads > flags Iran at noon on 1979-05-26 on a 2025c host 2ms
+     → expected { status: 'current', …(4) } to deeply equal { status: 'differs', …(4) }
+      Tests  2 failed | 18 skipped (20)
+
+Generated with both baselines, Node 22.22.2
+ ✓ scripts/build-host-zone-probes.test.mjs (7 tests) 2170ms
+ ✓ src/geo/host-zone-check.test.ts (20 tests) 1227ms
+      Tests  27 passed (27)
+
+Mutation removes 2025c from BASELINES and invokes the generator, Node 22.22.2
+host-probes: 703 intervals in 77 names, table 7169 bytes -> src/geo/host-probes-data.ts
+   × a wall time the host reads > flags Asia/Tehran at noon on 1979-05-26 on a 2025c host 32ms
+     → expected { status: 'current', …(4) } to deeply equal { status: 'differs', …(4) }
+   × a wall time the host reads > flags Iran at noon on 1979-05-26 on a 2025c host 2ms
+     → expected { status: 'current', …(4) } to deeply equal { status: 'differs', …(4) }
+      Tests  2 failed | 18 skipped (20)

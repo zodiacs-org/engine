@@ -1,0 +1,1 @@
+host-probes: match tzdata 2026f against 2021a, 2025c (705 intervals in 77 names, table 7178 bytes)
