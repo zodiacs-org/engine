@@ -231,7 +231,7 @@ const handlers = {
       to: jdOf(onTt ? input.before_tt_s : input.before_utc_s),
     });
     if (result.status !== 'ok') return { error: `events() refused: ${result.reason ?? result.status}` };
-    const meta = { events: result.events.length, samples: result.samples, ...(result.flags.length ? { flags: result.flags } : {}) };
+    const meta = { events: result.events.length, samples: result.samples, ...(result.flags?.length ? { flags: result.flags } : {}) };
     if (result.events.length !== 1) return { error: `events() found ${result.events.length} crossings in the window`, meta };
     const [event] = result.events;
     const output = onTt
