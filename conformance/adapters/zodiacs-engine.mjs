@@ -3,7 +3,8 @@
  * Conformance adapter for @zodiacs/engine, speaking the protocol in
  * ../SPEC.md. It answers from the engine's public entry points only
  * (`@zodiacs/engine`, or `@zodiacs/engine/core` with `--entry core`, and
- * `@zodiacs/engine/geo`) and computes nothing itself
+ * `@zodiacs/engine/geo`, and `@zodiacs/engine/calc` for the draft level L4
+ * only) and computes nothing itself
  * beyond unit conversions; a kind the engine has no function for is reported
  * as unsupported.
  *
@@ -88,6 +89,11 @@ const UNIX_EPOCH_JD = 2440587.5;
 const J2000_JD = 2451545.0;
 const DAY_MS = 86_400_000;
 const SYSTEMS = { 'whole-sign': 'whole' };
+/** 2000-01-01T12:00:00Z as JavaScript milliseconds: the origin of the draft L4's `utc_s`. */
+const J2000_UNIX_MS = Date.UTC(2000, 0, 1, 12);
+/** The calc entry, loaded only when a draft L4 request needs it. */
+let calcModule = null;
+const calcEntry = async () => (calcModule ??= await import(pathToFileURL(resolve(dist, 'calc.js')).href));
 
 /** A Julian date as the nearest JavaScript millisecond. */
 const dateOfJd = (jd) => new Date(Math.round((jd - UNIX_EPOCH_JD) * DAY_MS));
@@ -207,6 +213,39 @@ const handlers = {
     if (typeof geo.dateOfJulianDayNumber !== 'function') return { unsupported: 'this build has no dateOfJulianDayNumber' };
     const { year, month, day } = geo.dateOfJulianDayNumber(input.jdn, input.calendar);
     return { output: { year, month, day } };
+  },
+
+  // The draft level L4 (drafts/0.3.0/DESIGN.md), which the released harness
+  // never sends. Instants are seconds from J2000.0 on TT (`*_tt_s`) or on
+  // UTC (`*_utc_s`); the window is (after, before].
+  async 'event.ingress'(input) {
+    const onTt = 'after_tt_s' in input;
+    const scale = onTt ? 'tt' : 'utc';
+    const jdOf = (s) => ({ jd: J2000_JD + s / 86_400, scale });
+    const calc = await calcEntry();
+    const result = calc.events({
+      kind: 'longitude-crossing',
+      body: input.body,
+      longitude: input.longitude_deg,
+      from: jdOf(onTt ? input.after_tt_s : input.after_utc_s),
+      to: jdOf(onTt ? input.before_tt_s : input.before_utc_s),
+    });
+    if (result.status !== 'ok') return { error: `events() refused: ${result.reason ?? result.status}` };
+    const meta = { events: result.events.length, samples: result.samples, ...(result.flags.length ? { flags: result.flags } : {}) };
+    if (result.events.length !== 1) return { error: `events() found ${result.events.length} crossings in the window`, meta };
+    const [event] = result.events;
+    const output = onTt
+      ? { tt_s: (event.jdTt - J2000_JD) * 86_400 }
+      : { utc_s: (Date.parse(event.at) - J2000_UNIX_MS) / 1000 };
+    return { output, meta: { ...meta, at: event.at, retrograde: event.retrograde } };
+  },
+
+  'event.station'() {
+    return { unsupported: 'the engine has no station search in its public API: positions() and natalChart() give a body\'s speed and retrograde flag at an instant, and events() searches longitude crossings only' };
+  },
+
+  'event.lunation'() {
+    return { unsupported: 'the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body\'s longitude crossings only' };
   },
 };
 
