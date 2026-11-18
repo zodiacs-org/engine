@@ -1,0 +1,32 @@
+Build from separate tzcode extraction, with version.h and tzdir.h in work/bin:
+  cc -O2 -Iwork/bin work/tzcode/zic.c -o work/bin/zic
+  cc -O2 -Iwork/bin work/tzcode/{zdump,localtime,strftime}.c -o work/bin/zdump
+zic (tzcode) 2026f
+zdump (tzcode) 2026f
+02fcc36a0e960b6350d85d773bec96a9d9e59bb4a312e9ecf2261032ef8f95cc  work/bin/zic
+ac5a0662056bfcba5924845c3dbb3d9a50d043be45f60312faa4512354264128  work/bin/zdump
+
+Original divergence script with TZDATA_TARBALL set to the verified 2026f archive, ZIC set to work/bin/zic, and an awk guard on PATH:
+Stopped before executing archive-supplied ziguard.awk
+node:internal/errors:985
+  const err = new Error(message);
+              ^
+
+Error: Command failed: awk -v DATAFORM=main -v PACKRATDATA=backzone -v PACKRATLIST= -f ziguard.awk africa antarctica asia australasia europe northamerica southamerica etcetera factory backward backzone
+Stopped before executing archive-supplied ziguard.awk
+
+
+Current shard generator with the verified archive and built zic on PATH:
+file://REPO/scripts/build-tz-shards.mjs:564
+        throw new Error(`tz-shards: held zone ${held.name}: first differs from the default build at ${first}, expected ${held.firstDifferenceFromDefault}`);
+              ^
+
+Error: tz-shards: held zone America/Yellowknife: first differs from the default build at 1194163200, expected 1793520000
+    at buildShards (file://REPO/scripts/build-tz-shards.mjs:564:15)
+    at async main (file://REPO/scripts/build-tz-shards.mjs:652:29)
+    at async file://REPO/scripts/build-tz-shards.mjs:680:13
+
+Node.js v24.19.0
+
+Atlas baseline comparison:
+compare-tzdb: 108 differences, each matched by exactly one explanation; files current

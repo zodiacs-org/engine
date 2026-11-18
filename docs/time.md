@@ -388,7 +388,8 @@ twice (a fold) takes the earlier instant, or the later one with the option
   (Iceland at Atlantic/Reykjavik, America/Virgin at America/St_Thomas, and 11
   more), the Makefile's `ziguard.awk` keeps `backward`'s target, and the
   package follows backzone (`docs/evidence/rc15-20260929/backzone-divergence.json`;
-  not measured again on 2026f). What moved from 2025c to 2026f, interval by
+  the [2026f rerun record](evidence/tzdb-2026f-20261118/README.md) explains
+  why this figure still cites 2025c). What moved from 2025c to 2026f, interval by
   interval and from zdump, is in `docs/evidence/tzdb-2026f-20261117/`.
   One name is held back by the owner's decision: tzdata 2026f's `backzone`
   comments out America/Yellowknife's zone, with no tzdb NEWS entry or other
@@ -432,7 +433,8 @@ twice (a fold) takes the earlier instant, or the later one with the option
   for 136 names; 15 of those ship the default build's history (above), and
   America/Pangnirtung differs where the default build has no local time
   (`-00`) and backzone has one. `docs/evidence/rc15-20260929/backzone-divergence.mjs`
-  computes the lists from zic's output. The audit's list of 98 zones
+  computes the lists from zic's output. The [2026f rerun record](evidence/tzdb-2026f-20261118/README.md)
+  documents where that script stopped. The audit's list of 98 zones
   (`src/fixtures/tzdb-divergence-98.json`), which the tests and the
   conformance suite use, compared Debian's 2025b build (backzone restricted to
   zone.tab) with ICU: 28 of the 122 names are not on it, among them CET,
