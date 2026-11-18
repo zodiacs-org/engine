@@ -18,24 +18,45 @@ const HOST_IS_2025C = (globalThis as { process?: { versions?: { tz?: string } } 
  */
 describe("resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037", () => {
   let zones: string[] = [];
-  const totals = { transitions: 0, tested: 0 };
   beforeAll(async () => {
     zones = await scanZones(geo, SHARD_LOADERS);
   }, 120_000);
 
   const GROUPS = 12;
-  it.each(Array.from({ length: GROUPS }, (_, group) => group + 1))("round-trips zone group %i of 12", (group) => {
-    const failures: string[] = [];
-    for (const zone of zones.filter((_, index) => index % GROUPS === group - 1)) {
-      const result = scanZone(geo, zone, SCOPES.default);
-      totals.transitions += result.transitions;
-      totals.tested += result.tested;
-      failures.push(...result.failures);
+  const GROUP_TIMEOUT = 300_000;
+  type GroupScan = { transitions: number; tested: number; failures: string[] };
+  /*
+   * Each group is scanned once, by whichever test asks for it first, and kept. The coverage test asks for all
+   * twelve, so its totals cover every zone whatever order the tests run in (vitest --sequence.shuffle), and no
+   * group is scanned twice.
+   */
+  const scans = new Map<number, GroupScan>();
+  function scanGroup(group: number): GroupScan {
+    let scan = scans.get(group);
+    if (!scan) {
+      scan = { transitions: 0, tested: 0, failures: [] };
+      for (const zone of zones.filter((_, index) => index % GROUPS === group - 1)) {
+        const result = scanZone(geo, zone, SCOPES.default);
+        scan.transitions += result.transitions;
+        scan.tested += result.tested;
+        scan.failures.push(...result.failures);
+      }
+      scans.set(group, scan);
     }
-    expect(failures.slice(0, 10)).toEqual([]);
-  }, 300_000);
+    return scan;
+  }
+
+  it.each(Array.from({ length: GROUPS }, (_, group) => group + 1))("round-trips zone group %i of 12", (group) => {
+    expect(scanGroup(group).failures.slice(0, 10)).toEqual([]);
+  }, GROUP_TIMEOUT);
 
   it("covered every zone and every offset change it found", () => {
+    const totals = { transitions: 0, tested: 0 };
+    for (let group = 1; group <= GROUPS; group += 1) {
+      const scan = scanGroup(group);
+      totals.transitions += scan.transitions;
+      totals.tested += scan.tested;
+    }
     expect(zones.length).toBeGreaterThan(590);
     expect(totals.transitions).toBeGreaterThan(30_000);
     expect(totals.tested).toBeGreaterThan(200_000);
@@ -43,7 +64,7 @@ describe("resolveLocalToUtc on the shipped zone clock, around every offset chang
     // held at 2025c) and Intl (tzdb 2025c) after (docs/evidence/tzdb-2026f-20261117/README.md): 39,839, as with
     // the 2025c history (rc15-20260929/README.md); 2026f as released, Yellowknife's 1947 summer included, gives 39,841.
     if (HOST_IS_2025C) expect(totals.transitions).toBe(39_839);
-  });
+  }, GROUPS * GROUP_TIMEOUT);
 
   it.each([
     // [zone, the excursion's first change, its last] from zic 2025c; rc.15's two-week step missed all five.
