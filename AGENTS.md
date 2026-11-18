@@ -83,7 +83,7 @@ node scripts/verify-packed-consumer.mjs DIR/zodiacs-engine-<version>.tgz
 
 # conformance.yml (Node 22.22.2, after the build)
 node --test conformance/harness/selftest.mjs
-node conformance/harness/validate.mjs --expect-total 500
+node conformance/harness/validate.mjs --expect-total 640
 node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs" \
   --check conformance/results/zodiacs-engine.json
 node conformance/harness/report.mjs --check
