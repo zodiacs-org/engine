@@ -1,14 +1,14 @@
 import { beforeAll, describe, expect, it } from "vitest";
 
 import { SCOPES, scanZone, scanZones } from "../../scripts/roundtrip-scan-lib.mjs";
-import { SHARD_LOADERS } from "../tzdb/tzdb-2025c.js";
+import { SHARD_LOADERS } from "../tzdb/tzdb-2026f.js";
 import * as geo from "./timezone.js";
 
 const HOST_IS_2025C = (globalThis as { process?: { versions?: { tz?: string } } }).process?.versions?.tz === "2025c";
 
 /*
  * The audit's all-zone round-trip scan against the shipped zone clock (tzdb
- * 2025c with backzone before 1970, Intl after): every offset change of every
+ * 2026f with backzone before 1970, Intl after): every offset change of every
  * zone from 1850 to the end of 2037, found on a three-day step, shorter than
  * the shortest-lived offset of that span (3.99 days, Freetown in 1939), with
  * the minute before, at and after each edge of every gap or fold and its
@@ -39,7 +39,9 @@ describe("resolveLocalToUtc on the shipped zone clock, around every offset chang
     expect(zones.length).toBeGreaterThan(590);
     expect(totals.transitions).toBeGreaterThan(30_000);
     expect(totals.tested).toBeGreaterThan(200_000);
-    // zic 2025c's own count for the 597 names (docs/evidence/rc15-20260929/README.md), where Intl is tzdb 2025c.
+    // zdump's count for the 597 names, the shipped history before 1970 (tzdata 2026f with America/Yellowknife
+    // held at 2025c) and Intl (tzdb 2025c) after (docs/evidence/tzdb-2026f-20261117/README.md): 39,839, as with
+    // the 2025c history (rc15-20260929/README.md); 2026f as released, Yellowknife's 1947 summer included, gives 39,841.
     if (HOST_IS_2025C) expect(totals.transitions).toBe(39_839);
   });
 

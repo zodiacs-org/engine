@@ -6,12 +6,14 @@
  * scripts/build-tz-history.mjs there), extended with each transition's kind:
  *
  * - zic compiles the data, so tzdb's rule semantics are never reimplemented.
- *   The pinned history is the main data files plus backzone, without
- *   `backward` (whose links would collide with backzone's zones); a name
- *   resolves to backzone's zone of that name first, then the main data's, then
- *   a link, backzone's before the main data's. The default build (the main
- *   files with `backward`, which is what browsers and Node carry) is compiled
- *   too, as the reference for 1970 on.
+ *   The pinned history is the main data files plus backzone, with
+ *   `backward`'s Zone and Rule lines but not its Link lines (whose names would
+ *   collide with backzone's zones; since tzdb 2026d `backward` also holds the
+ *   zones EST5EDT, CST6CDT, MST7MDT and PST8PDT); a name resolves to
+ *   backzone's zone of that name first, then the main data's, then a link,
+ *   backzone's before the main data's. The default build (the main files with
+ *   `backward`, which is what browsers and Node carry) is compiled too, as the
+ *   reference for 1970 on.
  * - Browsers' Intl answers from 1970 on. A name whose pinned history differs
  *   from the default build at any instant from 1970 on is "host-legal": its
  *   shard carries the default build's history instead, so the hand-over at
@@ -28,7 +30,7 @@
  *   offsets, exactly as zic reads them.
  *
  * Output (all generated; do not edit):
- * - src/tzdb/tzdb-2025c-NN.ts, NN = 00..15: the names whose 32-bit FNV-1a hash
+ * - src/tzdb/tzdb-<version>-NN.ts, NN = 00..15: the names whose 32-bit FNV-1a hash
  *   of the lower-cased name falls in bucket NN, each as
  *   { n: name, s: source zone, h?: 1 (host-legal), f: zone-clock LMT era end
  *   (Unix s) or null, e?: [[until, offset s], ...] birthplace era lines,
@@ -36,7 +38,7 @@
  *   t: transition instants before 1970 (Unix s, base-36, first absolute then
  *   differences, comma-separated), k: per transition its type (one base-36
  *   digit) and cause (d, l or x) }.
- * - src/tzdb/tzdb-2025c.ts: the release's identity, the 16 lazy loaders, and
+ * - src/tzdb/tzdb-<version>.ts: the release's identity, the 16 lazy loaders, and
  *   the default build's transitions from 1970 on whose cause is not daylight
  *   saving, keyed by the FNV-1a hash of the lower-cased name.
  *
@@ -56,11 +58,40 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
 
-export const TZDB_VERSION = "2025c";
+export const TZDB_VERSION = "2026f";
 export const TZDB_URL = `https://data.iana.org/time-zones/releases/tzdata${TZDB_VERSION}.tar.gz`;
-export const TZDB_SHA256 = "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957";
+export const TZDB_SHA256 = "01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d";
 export const MAIN_FILES = ["africa", "antarctica", "asia", "australasia", "europe", "northamerica", "southamerica", "etcetera", "backward"];
 export const BACKZONE = "backzone";
+/**
+ * Zones held at an earlier release by the owner's decision: the name, the
+ * committed file of that release's lines (relative to the repository root),
+ * its SHA-256, and the release it comes from. The 2026f data change for
+ * America/Yellowknife is held back because no tzdb NEWS entry or other
+ * official announcement explains it; scripts/tzdb-held/yellowknife-2025c.zi
+ * records where its lines come from.
+ */
+export const HELD_ZONES = Object.freeze([
+  Object.freeze({
+    name: "America/Yellowknife",
+    file: "scripts/tzdb-held/yellowknife-2025c.zi",
+    sha256: "90aedc77e2431ca917137a36a7870a9a9d4f39131da63ad7973f504b65b0575a",
+    release: "2025c",
+    // From 1970 the host answers, so a held zone's lines after 1970 are not
+    // shipped; they only decide whether the name is host-legal. The held
+    // 2025c lines and tzdata 2026f's default build (America/Edmonton) give the
+    // same offset at every instant from 1970 until 2026-11-01T08:00Z, where
+    // 2026f models Alberta's move to permanent -06 (2026c NEWS: "Alberta moved
+    // to permanent -06 on 2026-06-18"), a change the 2025c lines predate. The
+    // generator checks that the first difference is exactly this instant and
+    // keeps the name off the host-legal list, as tzdata 2025c's build did.
+    firstDifferenceFromDefault: Date.UTC(2026, 10, 1, 8) / 1000
+  })
+]);
+/** The name the pinned build gives the held zones' lines. */
+export const HELD = "held.zi";
+/** The name the pinned build gives `backward` with its Link lines removed. */
+export const BACKWARD_ZONES = "backward.zones";
 export const BUCKETS = 16;
 /** Offsets from 1970-01-01T00:00:00Z on are the host's. */
 export const HISTORY_END = 0;
@@ -153,6 +184,55 @@ export function parseTzdb(text) {
     if (open && open.at(-1).length <= 3) open = null;
   }
   return { zones, links };
+}
+
+/**
+ * A tzdb data file without its Link lines, everything else as written. The
+ * pinned build compiles `backward` this way: its links would collide with
+ * backzone's zones of the same names, and the generator resolves links
+ * itself (zoneNames), but its Zone and Rule lines must compile.
+ */
+export function withoutLinks(text) {
+  return text
+    .split("\n")
+    .filter((line) => !/^l(?:i(?:nk?)?)?$/i.test(line.replace(/#.*/, "").trim().split(/\s+/)[0]))
+    .join("\n");
+}
+
+/**
+ * The files of the pinned build: the main data without `backward`, backzone,
+ * the held zones' lines when there are any, and `backward` without its links.
+ */
+export function pinnedSources(files) {
+  const sources = new Map(files);
+  sources.set(BACKWARD_ZONES, withoutLinks(files.get("backward") ?? ""));
+  const held = files.has(HELD) ? [HELD] : [];
+  return { files: sources, names: MAIN_FILES.filter((file) => file !== "backward").concat(BACKZONE, ...held, BACKWARD_ZONES) };
+}
+
+/**
+ * The held zones' lines as one zic source, each file checked against its
+ * pinned SHA-256 and required to define exactly its own zone and nothing
+ * else, and none of them a name the release itself defines as a zone. Each
+ * check stops the build, so a change of either side is looked at again.
+ */
+export function heldSource(root, release, held = HELD_ZONES) {
+  const texts = [];
+  for (const { name, file, sha256 } of held) {
+    const bytes = readFileSync(resolve(root, file));
+    const digest = createHash("sha256").update(bytes).digest("hex");
+    if (digest !== sha256) throw new Error(`tz-shards: held zone ${name}: ${file} has sha256 ${digest}, expected ${sha256}`);
+    const text = bytes.toString("utf8");
+    const parsed = parseTzdb(text);
+    if (parsed.zones.size !== 1 || !parsed.zones.has(name) || parsed.links.size !== 0) {
+      throw new Error(`tz-shards: held zone ${name}: ${file} must define that zone and nothing else`);
+    }
+    if (release.main.zones.has(name) || release.backzone.zones.has(name)) {
+      throw new Error(`tz-shards: held zone ${name}: tzdata ${TZDB_VERSION} defines it as a zone; look at the hold again`);
+    }
+    texts.push(text);
+  }
+  return texts.join("\n");
 }
 
 /**
@@ -249,6 +329,11 @@ export async function loadRelease(root) {
     for (const [name, target] of parsed.links) main.links.set(name, target);
   }
   const backzone = parseTzdb(files.get(BACKZONE) ?? "");
+  const held = heldSource(root, { main, backzone });
+  if (held) {
+    files.set(HELD, held);
+    for (const [name, lines] of parseTzdb(held).zones) backzone.zones.set(name, lines);
+  }
   return { files, main, backzone };
 }
 
@@ -383,6 +468,12 @@ function historyFrom({ t, typeOf, offsets }) {
   return JSON.stringify([[HISTORY_END, at], ...changes].filter(([, offset], index, all) => index === 0 || offset !== all[index - 1][1]));
 }
 
+/** The first instant from HISTORY_END on at which two compiled zones give different offsets, or null. */
+export function firstDifferenceFrom(a, b) {
+  const cuts = [...new Set([HISTORY_END, ...a.t, ...b.t])].filter((s) => s >= HISTORY_END).sort((x, y) => x - y);
+  return cuts.find((s) => a.offsets[typeAt(a, s)] !== b.offsets[typeAt(b, s)]) ?? null;
+}
+
 /** 32-bit FNV-1a of the lower-cased name: the shard and cause-table key. */
 export function nameHash(name) {
   const key = name.toLowerCase();
@@ -433,7 +524,8 @@ function history(tzif, lines) {
 
 export async function buildShards(root) {
   const { files, main, backzone } = await loadRelease(root);
-  const pinned = compile(files, MAIN_FILES.filter((file) => file !== "backward").concat(BACKZONE));
+  const pinnedBuild = pinnedSources(files);
+  const pinned = compile(pinnedBuild.files, pinnedBuild.names);
   const host = compile(files, MAIN_FILES);
   const { names, zoneOf } = zoneNames(main, backzone);
   const buckets = Array.from({ length: BUCKETS }, () => ({}));
@@ -464,7 +556,15 @@ export async function buildShards(root) {
     }
     const hostSource = mainZoneOf(main, name);
     const hostLines = main.zones.get(hostSource);
-    const hostLegal = historyFrom(tzif) !== historyFrom(hostTzif);
+    const held = HELD_ZONES.find((zone) => zone.name === source);
+    let hostLegal = historyFrom(tzif) !== historyFrom(hostTzif);
+    if (held) {
+      const first = firstDifferenceFrom(tzif, hostTzif);
+      if (first !== held.firstDifferenceFromDefault) {
+        throw new Error(`tz-shards: held zone ${held.name}: first differs from the default build at ${first}, expected ${held.firstDifferenceFromDefault}`);
+      }
+      hostLegal = false;
+    }
     const era = lmtEraLines(lines);
     const zoneEra = lmtEraLines(hostLegal ? hostLines : lines);
     const entry = {
@@ -499,8 +599,9 @@ export async function buildShards(root) {
   }
   later.sort((a, b) => a[0] - b[0]);
   const output = new Map();
+  const heldNote = HELD_ZONES.map(({ name, release }) => `, ${name} held at tzdata ${release} by the owner's decision (scripts/tzdb-held/)`).join("");
   const header = (what) =>
-    `// Generated by scripts/build-tz-shards.mjs from tzdata ${TZDB_VERSION} (sha256 ${TZDB_SHA256}) with backzone: ${what}. Do not edit.\n`;
+    `// Generated by scripts/build-tz-shards.mjs from tzdata ${TZDB_VERSION} (sha256 ${TZDB_SHA256}) with backzone${heldNote}: ${what}. Do not edit.\n`;
   buckets.forEach((zones, bucket) => {
     const nn = String(bucket).padStart(2, "0");
     const json = JSON.stringify(Object.fromEntries(Object.entries(zones).sort(([a], [b]) => (a < b ? -1 : 1))));
@@ -572,6 +673,7 @@ async function main() {
     `${stats.transitions} transitions before 1970 (${stats.dst} dst, ${stats.legal} legal, ${stats.dateLine} date line), ` +
     `${output.size} files, ${bytes} bytes -> src/tzdb/`);
   console.log(`tz-shards: not in the default build, left out: ${stats.notInDefaultBuild.join(", ") || "none"}`);
+  console.log(`tz-shards: held at an earlier release: ${HELD_ZONES.map(({ name, release }) => `${name} (${release})`).join(", ") || "none"}`);
 }
 
 const direct = process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url));

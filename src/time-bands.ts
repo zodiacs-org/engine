@@ -25,9 +25,10 @@ const isBand = (value: unknown): value is number => typeof value === "number" &&
  * band (`deltaT.sigma`, 0 for a pin) and u the UT1 − UTC band
  * (`timeScale.ut1MinusUtc.sigma`, 0 where there is none), the bands are
  * `{ tt: 0, ut1: d }` on TT input, `{ tt: d, ut1: 0 }` on UT1 input, and on
- * UTC input `{ tt: 0, ut1: u }` on the IERS basis, `{ tt: u, ut1: u }` with a
- * pin, and `{ tt: √(u² + d²), ut1: u }` on the ΔT model, where u is 0 before
- * 1972. It reads those fields only and recomputes no σ. Throws RangeError for
+ * UTC input `{ tt: 0, ut1: u }` on the IERS basis, `{ tt: 0, ut1: d }` on the
+ * continuous-UTC rule after the IERS table (TT is UTC + 69.184 s exactly, and
+ * UT1 carries the model's band), `{ tt: u, ut1: u }` with a pin, and
+ * `{ tt: √(u² + d²), ut1: u }` on the ΔT model, where u is 0 before 1972. It reads those fields only and recomputes no σ. Throws RangeError for
  * a record without a `deltaT` or a `timeScale`, or with a scale, a basis or a
  * band it does not know.
  */
@@ -36,10 +37,11 @@ export function timeBands(record: { readonly deltaT: DeltaT; readonly timeScale:
   const { input, basis, ut1MinusUtc } = Object(timeScale) as Partial<TimeScale>;
   const d = deltaT?.sigma === null ? 0 : deltaT?.sigma;
   const u = ut1MinusUtc === null ? 0 : ut1MinusUtc?.sigma;
-  if (!isBand(d) || !isBand(u) || !["utc", "ut1", "tt"].includes(input!) || !["iers", "delta-t", "pinned"].includes(basis!)) {
+  if (!isBand(d) || !isBand(u) || !["utc", "ut1", "tt"].includes(input!) || !["iers", "continuous-utc", "delta-t", "pinned"].includes(basis!)) {
     throw new RangeError("timeBands takes the deltaT and timeScale that a time basis, a chart or a calc instant records.");
   }
   if (input === "tt") return { tt: 0, ut1: d };
   if (input === "ut1") return { tt: d, ut1: 0 };
+  if (basis === "continuous-utc") return { tt: 0, ut1: d };
   return { tt: basis === "iers" ? 0 : basis === "pinned" ? u : Math.hypot(u, d), ut1: u };
 }

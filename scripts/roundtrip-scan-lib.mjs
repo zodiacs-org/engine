@@ -1,7 +1,7 @@
 /*
  * The engine audit's all-zone round-trip scan (finding time-9; the Zodiacs
  * site's localToUtc-roundtrip.test.ts), run against the zone clock this
- * package ships: the tzdb 2025c history with backzone before 1970, the host's
+ * package ships: the tzdb 2026f history with backzone before 1970, the host's
  * Intl after. For every zone it finds every offset change of that clock from
  * 1850 on, resolves wall minutes around each with resolveLocalToUtc, and
  * compares with a brute-force reading: every offset in force near the change
@@ -17,7 +17,8 @@ export const SCOPES = {
   // at and after each edge of every gap or fold, and its midpoint. A step finds
   // a change whose offset lasts at least that long; the shortest in this span
   // lasts 3.99 days (Freetown, 1939-09-01 to 09-05), so the scan finds every
-  // one of zic's 39,839 (rc.15's first cut stepped two weeks and missed 10).
+  // one of zic's 39,839 on a host with tzdb 2025c (the shipped history, 2026f with America/Yellowknife held at
+  // 2025c, gives the same count as the 2025c history; rc.15's first cut stepped two weeks and missed 10).
   default: { end: Date.UTC(2038, 0, 1), stepDays: 3, deltas: [-1, 0, 1], dense: false },
   // The audit's: to 2100, a daily step, wider sampling.
   full: { end: Date.UTC(2101, 0, 1), stepDays: 1, deltas: [-120, -60, -30, -2, -1, 0, 1, 2, 30, 60, 120], dense: true }

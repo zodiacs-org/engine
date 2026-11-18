@@ -9,10 +9,10 @@ import {
 } from "astronomy-engine";
 
 import { findAspects } from "./aspects.js";
-import { shippedDe440Source } from "./de440-pack.js";
 import { chartBodyDeclinations } from "./declination.js";
 import type { ChartDeclinations } from "./declination.js";
 import { deltaT } from "./deltat.js";
+import { INITIAL_DEFAULT_EPHEMERIS, shippedDe440Source } from "./ephemeris-shipped.js";
 import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
 import { computeAngles, computeHouses, eastPointOf, insidePolarCircle, vertexOf } from "./houses.js";
 import { tilt } from "./nutation.js";
@@ -56,7 +56,7 @@ let source: PositionSource | null = null;
 
 /** What a call outside `withEphemeris` computes on. */
 export type DefaultEphemerisName = "de440" | "astronomy-engine";
-let defaultName: DefaultEphemerisName = "de440";
+let defaultName: DefaultEphemerisName = INITIAL_DEFAULT_EPHEMERIS;
 
 /**
  * The default source keeps a day inside each end of the shipped pack, so
@@ -663,14 +663,17 @@ function chartAt(input: ChartInput): Chart {
 
 /**
  * Whether a result rests on a ΔT the model extrapolates past the end of the
- * IERS table (src/deltat.ts; no pinned ΔT): one on UTC or UT1 input, whose TT
- * carries it, or with `ut1` one that turns with UT1 (houses, angles, a
- * topocentric place), on TT input too, whose UT1 then carries it. The flag
- * `"delta-t-extrapolated"` and the widened bounds follow it (docs/time.md).
- * Only that segment starts with "e".
+ * IERS table (src/deltat.ts; no pinned ΔT): one on UTC or UT1 input, or with
+ * `ut1` one that turns with UT1 (houses, angles, a topocentric place), on TT
+ * input too. On UT1 input the TT carries the extrapolated ΔT; on TT input the
+ * UT1 does; on UTC input after the table (the continuous-UTC rule) the TT is
+ * exact and only the UT1 carries it. The flag `"delta-t-extrapolated"` and the
+ * widened bounds follow it, on the "delta-t" basis that engines before the
+ * rule recorded and on "continuous-utc" alike (docs/time.md). Only that
+ * segment starts with "e".
  */
 export const deltaTExtrapolated = ({ deltaT: d, timeScale: t }: Pick<TimeBasis, "deltaT" | "timeScale">, ut1?: unknown): boolean =>
-  (ut1 || t.input != "tt") && t.basis == "delta-t" && /^e/.test(d.segment);
+  (ut1 || t.input != "tt") && (t.basis == "delta-t" || t.basis == "continuous-utc") && /^e/.test(d.segment);
 
 /** The mean node and the mean apogee at an instant's time basis, on the chart's clock. */
 function meanLunarPoints(basis: TimeBasis): { node: number; apogee: { lon: number; lat: number } } {

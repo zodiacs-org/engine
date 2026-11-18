@@ -1,0 +1,73 @@
+{
+ "returns.json:RSI": {
+  "cases": 300,
+  "changed": 197,
+  "unexplained": 0,
+  "maxShiftMs": 55052,
+  "maxShiftOfInstantAtOrBeforeTableEndMs": 26162
+ },
+ "returns.json:RSM": {
+  "cases": 300,
+  "changed": 183,
+  "unexplained": 0,
+  "maxShiftMs": 55356,
+  "maxShiftOfInstantAtOrBeforeTableEndMs": 24976
+ },
+ "returns.json:RSC": {
+  "cases": 60,
+  "changed": 41,
+  "unexplained": 0,
+  "maxShiftMs": 55619,
+  "maxShiftOfInstantAtOrBeforeTableEndMs": 26805
+ },
+ "returns.json:RLI": {
+  "cases": 300,
+  "changed": 203,
+  "unexplained": 0,
+  "maxShiftMs": 56844,
+  "maxShiftOfInstantAtOrBeforeTableEndMs": 26287
+ },
+ "returns.json:RLC": {
+  "cases": 60,
+  "changed": 52,
+  "unexplained": 0,
+  "maxShiftMs": 53558,
+  "maxShiftOfInstantAtOrBeforeTableEndMs": 0
+ },
+ "returns.json:RE": {
+  "cases": 40,
+  "changed": 4,
+  "unexplained": 0,
+  "maxShiftMs": 56988,
+  "maxShiftOfInstantAtOrBeforeTableEndMs": 15027
+ },
+ "void-of-course.json:VW": {
+  "cases": 20,
+  "changed": 7,
+  "unexplained": 0,
+  "maxShiftMs": 56208,
+  "maxShiftOfInstantAtOrBeforeTableEndMs": 0
+ },
+ "void-of-course.json:VS": {
+  "cases": 40,
+  "changed": 14,
+  "unexplained": 0,
+  "maxShiftMs": 54927,
+  "maxShiftOfInstantAtOrBeforeTableEndMs": 0
+ },
+ "moon-sign.json:MA": "same (not a list)",
+ "moon-sign.json:MZ": {
+  "cases": 1542,
+  "changed": 1,
+  "unexplained": 0,
+  "maxShiftMs": 0,
+  "maxShiftOfInstantAtOrBeforeTableEndMs": 0
+ },
+ "moon-sign.json:MP": {
+  "cases": 500,
+  "changed": 0,
+  "unexplained": 0,
+  "maxShiftMs": 0,
+  "maxShiftOfInstantAtOrBeforeTableEndMs": 0
+ }
+}

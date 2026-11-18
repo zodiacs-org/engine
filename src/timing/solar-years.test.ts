@@ -22,7 +22,8 @@ describe("solar-return years", () => {
       }
     }
     expect(within110.toFixed(0)).toBe("108");
-    expect(within300.toFixed(0)).toBe("268");
+    // 268 until 2.0.0-rc.2: returns after the IERS table are now read on the continuous-UTC rule (docs/time.md).
+    expect(within300.toFixed(0)).toBe("266");
     expect(within300).toBeLessThan((3 * 24 * 60) / 10);
   });
 });

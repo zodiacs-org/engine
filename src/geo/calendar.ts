@@ -1,6 +1,6 @@
 // When each country took the New Style, and what that says about a date.
 // Conversions live in ../civil-calendar.ts.
-import { civilDateOf, format, julianDayNumber, parseCalendarDate } from "../civil-calendar.js";
+import { civilDateOf, format, julianDayNumber as dayNumber, parseCalendarDate } from "../civil-calendar.js";
 import type { CalendarName } from "../civil-calendar.js";
 
 export type { CalendarName } from "../civil-calendar.js";
@@ -72,7 +72,7 @@ const SOURCE_KEYS: Readonly<Record<string, GregorianAdoptionSource>> = { t: "tzd
 export const GREGORIAN_ADOPTION: readonly Readonly<GregorianAdoption>[] = /*#__PURE__*/ Object.freeze(
   /*#__PURE__*/ ROWS.split("\n").map((line) => {
     const [code, country, region, firstGregorian, sources, note] = line.split("|") as [string, string, string, string, string, string];
-    const day = julianDayNumber(parseCalendarDate(firstGregorian, "gregorian")!, "gregorian");
+    const day = dayNumber(parseCalendarDate(firstGregorian, "gregorian")!, "gregorian");
     return Object.freeze({
       code,
       country,
@@ -128,7 +128,7 @@ export function calendarNote(gregorianDate: string, calendar: CalendarName, coun
 
 /** Internal: the checks of a calendar and a country that calendarNote and resolveLocalToUtc's options share. */
 export function checkCalendarCountry(calendar: unknown, country: unknown): void {
-  if (calendar !== "gregorian" && calendar !== "julian") throw new RangeError('calendar must be "gregorian" or "julian".');
+  checkCalendar(calendar);
   if (typeof country !== "string" || !country.trim()) throw new RangeError("country must be a nonempty string.");
 }
 
@@ -140,4 +140,45 @@ export function noteFor(gregorianDate: string, calendar: CalendarName, country: 
   // A year past 9999 has five digits, and its date sorts as text before every adoption's.
   if (gregorianDate.length > 10 || gregorianDate >= adoption.firstGregorian) return julian ? { kind: "new-style", adoption } : null;
   return julian ? null : { kind: "old-style", adoption };
+}
+
+function checkCalendar(calendar: unknown): void {
+  if (calendar !== "gregorian" && calendar !== "julian") throw new RangeError('calendar must be "gregorian" or "julian".');
+}
+
+/**
+ * The Julian Day Number of a civil date in `calendar` (default "gregorian"):
+ * the integer day that begins at noon UT on that date. Years are astronomical
+ * (year 0 exists; -4712 is 4713 BC). Throws a RangeError unless year, month
+ * and day are integers, the year is between -100000 and 100000, and the date
+ * exists in that calendar.
+ */
+export function julianDayNumber(date: { year: number; month: number; day: number }, calendar: CalendarName = "gregorian"): number {
+  checkCalendar(calendar);
+  const { year, month, day } = (date ?? {}) as Record<string, unknown>;
+  if (![year, month, day].every(Number.isInteger) || Math.abs(year as number) > 100000) {
+    throw new RangeError("date must be { year, month, day } in integers, the year between -100000 and 100000.");
+  }
+  const jdn = dayNumber({ year, month, day } as { year: number; month: number; day: number }, calendar);
+  const back = civilDateOf(jdn, calendar);
+  if (back.year !== year || back.month !== month || back.day !== day) throw new RangeError(`date does not exist in the ${calendar} calendar.`);
+  return jdn;
+}
+
+/**
+ * The civil date in `calendar` (default "gregorian") of a Julian Day Number,
+ * as `{ year, month, day }` with astronomical years. Throws a RangeError
+ * unless `jdn` is an integer that falls in the years -100000 to 100000 of
+ * that calendar.
+ */
+export function dateOfJulianDayNumber(jdn: number, calendar: CalendarName = "gregorian"): { year: number; month: number; day: number } {
+  checkCalendar(calendar);
+  if (
+    !Number.isSafeInteger(jdn) ||
+    jdn < dayNumber({ year: -100000, month: 1, day: 1 }, calendar) ||
+    jdn > dayNumber({ year: 100000, month: 12, day: 31 }, calendar)
+  ) {
+    throw new RangeError("jdn must be an integer within the years -100000 to 100000.");
+  }
+  return civilDateOf(jdn, calendar);
 }

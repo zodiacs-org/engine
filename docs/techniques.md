@@ -345,7 +345,7 @@ the signs from its sign at the start, forward, to its sign at the end.
   only when the Moon held one sign the whole date in every time zone. This is
   the rule the site uses for a card without a birth time.
 
-In the zone histories the package ships (tzdata 2025c with backzone), every
+In the zone histories the package ships (tzdata 2026f with backzone), every
 offset lies within UTC−12:00 to UTC+14:00 except in 16 zone names: those of
 Alaska until 1867-10-19, when Alaska kept the Asian side's date, and those of
 the Philippines, Guam, Palau and Micronesia until 1844-12-31, when they kept
@@ -354,7 +354,7 @@ begin earlier or end later than the span above.
 
 **Differences from the site.** The site answers for a date a zone skipped;
 the package refuses it. Before 1970 the site reads a date's midnights on the
-host's `Intl` data, the package on its own tzdata 2025c with backzone; they
+host's `Intl` data, the package on its own tzdata 2026f with backzone; they
 differ where the two histories do, and the corpus has 7 such dates, all in
 Stockholm before 1900, where the midnights differ by 6 min 46 s or 18 min 44 s
 and the signs agree. The site's labels and share rules (`moonLabel`,

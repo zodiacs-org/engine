@@ -5,9 +5,11 @@ import { fileURLToPath } from "node:url";
 
 import { LITE_NAMES, LITE_PARTS, checkLiteEntry, checkLiteNames, declaredNames } from "./lite-entry.mjs";
 import { UNMARKED_SOURCE, assertNoBreaches, checkBuild } from "./pure-tables.mjs";
-import { OPT_IN_SOURCE, checkRootIsolation, readModuleList, staticGraph } from "./root-isolation.mjs";
+import { CORE_BANNED_SOURCES, CORE_OWN_SOURCES } from "./core-entry.mjs";
+import { OPT_IN_SOURCE, checkRootIsolation, readCoreModuleList, readModuleList, staticGraph } from "./root-isolation.mjs";
 
 const engine = await import("@zodiacs/engine");
+const core = await import("@zodiacs/engine/core");
 const calc = await import("@zodiacs/engine/calc");
 const crossings = await import("@zodiacs/engine/crossings");
 const deltat = await import("@zodiacs/engine/deltat");
@@ -387,12 +389,15 @@ for (const name of [
   "calendarNote",
   "gregorianAdoption",
   "julianToGregorian",
-  "gregorianToJulian"
+  "gregorianToJulian",
+  "julianDayNumber",
+  "dateOfJulianDayNumber",
+  "localMeanTimeOffset"
 ]) {
   assert.equal(typeof geo[name], "function", `missing geo export: ${name}`);
   assert.equal(name in engine, false, `geo leaked into the core entry: ${name}`);
 }
-assert.equal(geo.TZDB.version, "2025c");
+assert.equal(geo.TZDB.version, "2026f");
 assert.equal(geo.GREGORIAN_ADOPTION.length, 18);
 assert.deepEqual(geo.gregorianAdoption("NL"), {
   code: "NL", country: "Netherlands", region: "Holland", firstGregorian: "1583-01-01", lastJulian: "1582-12-21",
@@ -444,7 +449,7 @@ assert.equal("computeChart" in internalMath, false, "ephemeris leaked into inter
 
 // The optional codec must remain a browser-safe data boundary, and the
 // crossing solver must stay free of the ephemeris. Inspect the controlled ESM
-// build graph, including shared chunks, without importing the core graph as
+// build graph, including shared chunks, without importing the root's graph as
 // evidence that each entry is isolated.
 function checkSelfContained(entry, allowed = []) {
   const visited = new Set();
@@ -516,8 +521,9 @@ assert.deepEqual(engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: fal
   assert.deepEqual(chosen.ephemeris, { ...engine.EPHEMERIS }, 'after setDefaultEphemeris("astronomy-engine") a plain chart names astronomy-engine');
   assert(!chosen.flags.includes("de440-unavailable") && chosen.bodies.every((row) => !("fallback" in row)), "the caller's own choice is not flagged as a fallback");
 }
-// The core entry reaches no zone history and loads nothing lazily; its one
-// dependency is the ephemeris.
+// The root entry reaches no zone history and loads nothing lazily; its one
+// dependency is the ephemeris. (Until ZOD-292 these checks called the root
+// "the core"; @zodiacs/engine/core is now an entry of its own.)
 checkSelfContained("index", ["astronomy-engine"]);
 
 // The root imports no subpath: no module of an opt-in entry (timing, Vedic,
@@ -585,6 +591,54 @@ const liteGraph = checkLiteEntry({ metafile, files: builtFiles, read: readBuilt 
   }
 }
 
+// The core entry (ZOD-292): dist/core.js, built on its own
+// (scripts/build-core.mjs), exports the root's names, imports astronomy-engine
+// and nothing else, and holds the root's graph but the DE440 files: the pack
+// (src/de440-pack.ts, src/de440/pack-data.ts), the root's default source and
+// opener (src/ephemeris-shipped.ts) and the pack's reader (src/de440.ts and
+// src/de440/), which only the pack's opener loads; and its own two modules in
+// their place. Read both ways from its own module list
+// (dist/metafile-core.json). Its charts name astronomy-engine and equal the
+// root's after setDefaultEphemeris("astronomy-engine"), and its verdicts on
+// the conformance suite's 240 position vectors are those committed for the
+// engine on astronomy-engine (48 pass).
+{
+  assert.deepEqual(Object.keys(core).sort(), Object.keys(engine).sort(), "the core entry exports other names than the root");
+  checkSelfContained("core", ["astronomy-engine"]);
+  const coreList = readCoreModuleList(distUrl);
+  const graph = staticGraph({ metafile: coreList, read: readBuilt, entryOutput: "dist/core.js", entrySource: "src/core.ts" });
+  assert.deepEqual(graph.outputs, ["dist/core.js"], "the core entry loads another file");
+  const de440Files = /^src\/(?:de440(?:\/|[.-][^/]*$)|ephemeris-shipped\.[^/]*$)/u;
+  for (const banned of CORE_BANNED_SOURCES) assert(de440Files.test(banned), `${banned} is not one of the DE440 files`);
+  const expected = (reading, own) => [...reading.filter((source) => !de440Files.test(source)), ...own].sort();
+  assert.deepEqual(graph.sources, expected(root.sources, CORE_OWN_SOURCES), "the core entry's source graph is not the root's without the DE440 files");
+  assert.deepEqual(graph.held, expected(root.held, CORE_OWN_SOURCES), "dist/core.js holds other modules than the root's without the DE440 files");
+  // src/core.ts only re-exports, so it leaves no code to mark.
+  assert.deepEqual(graph.marked, expected(root.marked, ["src/core/ephemeris-shipped.ts"]), "dist/core.js marks other modules than the root's without the DE440 files");
+  for (const source of graph.sources) {
+    assert(!OPT_IN_SOURCE.test(source) || CORE_OWN_SOURCES.includes(source), `the core entry reaches ${source}, an opt-in entry's module`);
+  }
+  assert.equal(core.defaultEphemeris().name, "astronomy-engine", "the core entry's default source is astronomy-engine");
+  assert.equal(core.defaultEphemeris().de440.opened, false, "the core entry opens no pack");
+  engine.setDefaultEphemeris("astronomy-engine");
+  for (const birth of [
+    { utc: "2000-01-01T12:00:00Z", timeKnown: false },
+    { utc: "1987-06-15T03:21:00Z", latitude: 51.5, longitude: -0.1, houseSystem: "placidus" },
+    { utc: "1700-01-01T12:00:00Z", latitude: -33.9, longitude: 18.4 }
+  ]) {
+    const chart = core.natalChart(birth);
+    assert.deepEqual(chart.ephemeris, { ...engine.EPHEMERIS }, "a chart from the core entry names astronomy-engine");
+    assert(!chart.flags.includes("de440-unavailable") && !chart.flags.includes("outside-de440-span"), "a chart from the core entry is not flagged as a fallback");
+    assert.deepEqual(chart, engine.natalChart(birth), `the core entry's chart at ${birth.utc} differs from the root's on astronomy-engine`);
+  }
+  const conformance = spawnSync(process.execPath, [
+    "conformance/harness/run.mjs", "--adapter", `"${process.execPath}" conformance/adapters/zodiacs-engine.mjs --entry core`,
+    "--levels", "L1", "--check", "conformance/results/zodiacs-engine-astronomy-engine.json"
+  ], { cwd: fileURLToPath(new URL("..", import.meta.url)), encoding: "utf8" });
+  assert.equal(conformance.status, 0, `the core entry's L1 verdicts differ from those committed for the engine on astronomy-engine: ${conformance.stderr}`);
+  assert.match(conformance.stdout, /^ {2}L1: 48 pass, 192 fail, 0 unsupported, 0 error \(of 240\)$/mu, "the core entry does not pass 48 of the 240 position vectors");
+}
+
 // The build keeps what lets a bundler leave out a table nothing reads
 // (scripts/pure-tables.mjs), module by module as the markers above attribute
 // its code.
@@ -596,7 +650,9 @@ const exportsMap = JSON.parse(readFileSync(new URL("../package.json", import.met
 for (const [subpath, target] of Object.entries(exportsMap)) {
   if (subpath === "./calc" || subpath === "./vedic") continue;
   const entry = /^\.\/dist\/([a-z0-9-]+)\.js$/u.exec(target.import)[1];
-  const graph = staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
+  // The core entry's graph is in its own module list (readCoreModuleList).
+  const list = subpath === "./core" ? readCoreModuleList(distUrl) : metafile;
+  const graph = staticGraph({ metafile: list, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
   for (const source of new Set([...graph.sources, ...graph.held, ...graph.marked])) {
     assert(!UNMARKED_SOURCE.test(source), `${subpath} reaches ${source}, which the table check leaves out because only ./calc and ./vedic reach it`);
   }
@@ -630,7 +686,7 @@ const lazy = outputsOf("geo").flatMap((file) =>
   [...readBuilt(file).matchAll(/\bimport\s*\(\s*["']([^"']+)["']\s*\)/gu)].map((match) => match[1])
 );
 assert.equal(lazy.length, 16, "the geo entry should load 16 zone-history shards lazily");
-assert(lazy.every((specifier) => /^\.\/tzdb-2025c-\d{2}-[A-Za-z0-9]+\.js$/u.test(specifier)));
+assert(lazy.every((specifier) => /^\.\/tzdb-2026f-\d{2}-[A-Za-z0-9]+\.js$/u.test(specifier)));
 for (const entry of ["geo", "techniques"]) {
   for (const file of outputsOf(entry)) assert(!/(?:^|\/)tzdb-[^/]*$/u.test(file), `zone-history shard in the static ${entry} graph`);
 }
@@ -638,7 +694,8 @@ console.log(
   "@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat, time and lite graphs have no external imports, " +
     `the lite entry holds its ${liteGraph.sources.length} pinned source modules in ${liteGraph.outputs.length} files that import nothing ` +
     "and loads where astronomy-engine cannot, " +
-    `the core graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
+    `the root's graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
     `${root.outputs.length} files) reaches no module of an opt-in entry and no zone history, ` +
+    "the core entry holds the root's graph without the DE440 files and gives the root's results on astronomy-engine, " +
     "the geo entry loads its 16 shards lazily, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic"
 );

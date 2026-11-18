@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 
 import { chartDeclinations, natalChart } from "./api.js";
 import { DELTA_T_TABLE, deltaT } from "./deltat.js";
-import { UT1_DATA } from "./time-scale.js";
+import { UT1_DATA, timeBasis } from "./time-scale.js";
 import { bodyLongitude, gastHours, onChartClock, setDefaultEphemeris } from "./ephemeris.js";
 import { houseOf } from "./houses.js";
 import { findLongitudeCrossings } from "./returns.js";
@@ -343,9 +343,13 @@ describe("the steps of the time basis", () => {
   ];
   it.each(steps)("reports a switch at %s, where the angles step, and agrees with natalChart around it", (_, at) => {
     const { longitude, jump } = straddling(at);
-    // The step is many times the ascendant's motion in one millisecond.
+    // The step is the ascendant's motion over the UT1 that passes in that millisecond, not 1 ms of it: a second
+    // more at the leap second, 44 ms back in 1972, and at the end of the table, where UT1 − UTC goes from the
+    // table's last value to the ΔT model's under the continuous-UTC rule, 3 ms.
     const motion = ((ascendant(at - 1, longitude) - ascendant(at - 2, longitude) + 540) % 360) - 180;
-    expect(Math.abs(jump)).toBeGreaterThan(10 * Math.abs(motion));
+    const ut1Elapsed = (timeBasis(at, "utc").ut1Days - timeBasis(at - 1, "utc").ut1Days) * DAY;
+    expect(Math.abs(ut1Elapsed - 1)).toBeGreaterThan(1.5);
+    expect(Math.abs(jump / motion / ut1Elapsed - 1)).toBeLessThan(0.05);
     const place: Place = { latitude, longitude, houseSystem: "equal" };
     const window = partition(at - 1_000, 2_000, place);
     expect(window.flags).toEqual([]);

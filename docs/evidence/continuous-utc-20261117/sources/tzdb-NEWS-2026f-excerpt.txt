@@ -1,0 +1,20 @@
+# Lines 3-7, 20-28 and 47-49 of tzdb NEWS as served on 2026-11-17 (release 2026f).
+# URL https://data.iana.org/time-zones/tzdb/NEWS, retrieved 2026-11-17T14:46:45Z, HTTP 200,
+# whole file 264,231 bytes, sha256 1b22446d6ac1690fec6fde2ad8283b40ca20ea2ed9607da386a1ecfeb3c13a1d.
+Release 2026f - 2026-10-27 23:16:49 -0700
+
+  Briefly:
+    Cuba will not fall back 2026-11-01; stays on -04 through 2027-11-07.
+    No more leap seconds, and leap second tables no longer expire.
+
+  Changes to code
+
+    zic now ignores Expires lines, as leap second tables in TZif files
+    no longer expire now that there are no more leap seconds;
+    see Internet RFC 9636 §3.2.  (Thanks to Garrett Wollman for the
+    heads-up re no more leap seconds.)
+
+    localtime.c no longer supports 49 leap seconds, as 27 now suffice.
+  Changes to documentation and commentary
+
+    Documentation and commentary now reflect leap seconds’ demise.
