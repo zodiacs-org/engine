@@ -122,6 +122,34 @@ Line numbers below are those of `README.md`, `CHANGELOG.md` and
     - `artifacts/README.md`, line 120, the 2.0.0-rc.3 status cell: "Draft
       candidate for 2.0.0, awaiting the owner's review; never tagged or
       published". Published on npm under `next`; not tagged.
+18. **2.0.0-rc.3, the host check's baseline and span count.** Pull request
+    128 adds tzdata 2025c (sha256
+    `4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957`) as a
+    second baseline beside 2021a. 2025c gives one span that 2021a does not:
+    `Asia/Tehran` and its link `Iran`, 1979-05-25T20:30Z to 1979-05-26T20:30Z,
+    where 2025c gives +03:30 and 2021a and 2026f give +04:30. The table now
+    has 705 spans in 77 names, and a host on tzdb 2025c is flagged there
+    ([the updated evidence](evidence/host-zone-probes-20261118/README.md)).
+    These lines name 2021a alone; each was true of 2.0.0-rc.3 when written.
+    Line numbers in `NOTICE` and `LICENSING.md` are also at `709bc81`. At the
+    next cut:
+    - `README.md`, lines 1245 to 1246: "near a span in which tzdata 2021a and
+      2026f give different offsets". It should read: near a span in which
+      tzdata 2021a or 2025c gives a different offset from 2026f.
+    - `README.md`, lines 1304 to 1305: "a table of where tzdb 2021a's offsets
+      from 1970 differ from 2026f's". It should name 2021a and 2025c.
+    - `CHANGELOG.md`, 2.0.0-rc.3, lines 44 to 45: "each nearby span in which
+      tzdata 2021a and 2026f differ (703 spans in 77 names". The rc.3 entry
+      stays as written; the next candidate's entry should say that the table
+      compares 2021a and 2025c with 2026f, that it has 705 spans in 77 names,
+      and that a 2025c host is now flagged at Tehran and Iran on 1979-05-26.
+    - `CHANGELOG.md`, 2.0.0-rc.3, line 119: "the host-probe table compares
+      tzdata 2021a with 2026f". The next candidate's entry should say that
+      `NOTICE` and `LICENSING.md` now name 2025c as a baseline too.
+    - `NOTICE`, lines 224 to 228, and `LICENSING.md`, lines 339 to 342: the
+      table is said to be compiled from 2021a and 2026f, "those two
+      public-domain releases". Each should add tzdata 2025c and its SHA-256
+      as a baseline of the table.
 
 ## Not a correction, for the record
 

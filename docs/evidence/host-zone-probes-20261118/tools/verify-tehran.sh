@@ -28,7 +28,7 @@ for version in 2026f 2021a 2025c; do
   done
 done
 
-node --input-type=module - "${1:?Pass the origin/main commit used for E3}" <<'JS'
+node --input-type=module - "${1:?Pass the origin/main commit to compare with}" <<'JS'
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
@@ -48,5 +48,5 @@ for (const name of ["Asia/Tehran", "Iran"]) {
 }
 assert.deepEqual(before.byName, after.byName);
 console.log(`${base}: ${before.intervals} intervals in ${before.names} names`);
-console.log(`E3: ${after.intervals} intervals in ${after.names} names, with every previous interval preserved`);
+console.log(`This branch: ${after.intervals} intervals in ${after.names} names, with every previous interval preserved`);
 JS

@@ -53,4 +53,4 @@ Sat May 26 20:30:00 1979 UT = Sun May 27 01:00:00 1979 +0430 isdst=1 gmtoff=1620
 Asia/Tehran: ["1979-05-25T20:30:00Z","1979-05-26T20:30:00Z","1979-05-26T08:30:00Z",16200,12600]
 Iran: ["1979-05-25T20:30:00Z","1979-05-26T20:30:00Z","1979-05-26T08:30:00Z",16200,12600]
 709bc81: 703 intervals in 77 names
-E3: 705 intervals in 77 names, with every previous interval preserved
+This branch: 705 intervals in 77 names, with every previous interval preserved
