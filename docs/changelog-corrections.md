@@ -8,8 +8,8 @@ packed. It holds the corrections in the meantime, and the next candidate's
 `### Corrections` section should carry them into the changelog.
 
 Each entry names the line as it stands, what the evidence shows, and where the
-evidence is. For entries 1 to 14, line numbers are those of `CHANGELOG.md` at 1.1.0 (`322f855`);
-the audit counted them before 1.1.0's entries, 719 lines earlier. The
+evidence is. In entries 1 to 8, line numbers are those of `CHANGELOG.md` at
+1.1.0 (`322f855`); the audit counted them before 1.1.0's entries, 719 lines earlier. The
 lines themselves are left as written. Source: the changelog
 evidence audit of 12 and 13 November 2026,
 `docs/evidence/changelog-audit-20261112/` (ZOD-152).
@@ -92,10 +92,10 @@ changed because their archives hold them.
     (`npm view @zodiacs/engine versions`, 2026-11-16). Corrected in the file
     on 2026-11-16.
 
-## Corrections for the next candidate
+## 2.0.0-rc.3
 
-Line numbers below are those of `README.md` and `CHANGELOG.md` at the head
-of `main`, commit `709bc813e2ee9de948ef0dcd008c76bf086fe7d4`.
+Line numbers below are those of `README.md`, `CHANGELOG.md` and
+`artifacts/README.md` at `709bc81`.
 
 15. **`README.md`, 2.0.0-rc.3, lines 20 to 21: "is a draft for the owner's
     review and is not published to npm".** It was published to npm on
@@ -110,6 +110,18 @@ of `main`, commit `709bc813e2ee9de948ef0dcd008c76bf086fe7d4`.
     credits pull request 121 with 109 bytes on `.`, `./calc`, `./internal`,
     `./sky`, `./timing`, `./vedic` and `./window`. See
     [the table rows and pull request evidence](evidence/changelog-corrections-20261118/records.md#source-lines-and-import-graph-attribution).
+17. **2.0.0-rc.3, other statements that it is unpublished.** It was
+    published to npm on 2026-11-17 under `next`, with 1.1.0 still under
+    `latest`; it has no git tag and no GitHub release
+    ([the publication evidence](evidence/changelog-corrections-20261118/records.md#publication)).
+    True when written.
+    - `CHANGELOG.md`, line 3, the heading "2.0.0-rc.3 (unreleased
+      candidate)", and lines 6 to 7: "It is a draft for the owner's review
+      and is not to be published on npm until the owner approves it." The
+      owner approved the test publication on 2026-11-17.
+    - `artifacts/README.md`, line 120, the 2.0.0-rc.3 status cell: "Draft
+      candidate for 2.0.0, awaiting the owner's review; never tagged or
+      published". Published on npm under `next`; not tagged.
 
 ## Not a correction, for the record
 
@@ -117,3 +129,6 @@ of `main`, commit `709bc813e2ee9de948ef0dcd008c76bf086fe7d4`.
 release. Draft release notes and the commands to create both are in
 `docs/releases/`. Nothing has been tagged or released for 1.0.0 (the only
 tag and GitHub release are `v0.1.1-rc.15`'s, item 11 above).
+
+2.0.0-rc.3 was published to npm on 2026-11-17 under `next` without a git tag
+or a GitHub release.

@@ -6,7 +6,7 @@ Main at inspection: `709bc813e2ee9de948ef0dcd008c76bf086fe7d4`.
 
 Registry: https://registry.npmjs.org/@zodiacs/engine
 
-The following commands used the public npm registry and fresh local caches.
+The following commands used the public npm registry.
 Timestamps are UTC. The output shown is standard output.
 
 ```text
@@ -23,7 +23,9 @@ $ npm view @zodiacs/engine time --json | node -e 'let s="";process.stdin.on("dat
 
 [The release.yml run](https://github.com/zodiacs-org/engine/actions/runs/44171616606)
 started on 2026-11-17 at 20:39:35 UTC on the commit above. The run, the
-carried archive verification job and the Publish to npm job all succeeded.
+carried archive verification job (134351933738) and the Publish to npm job
+(134354853663, 20:49:48 to 20:50:03 UTC) all succeeded. The registry's
+publish time above is about 2.5 minutes after that job ended.
 
 ## Source lines and import-graph attribution
 
