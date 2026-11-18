@@ -11,13 +11,14 @@ import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
 
 export const SUITE = 'zodiacs-conformance';
-export const SUITE_VERSION = '0.2.0';
+export const SUITE_VERSION = '0.3.0';
 export const SUITE_DIR = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 /**
  * Each release's vector files. A released file never changes. 0.2.0 releases
  * 0.1.0's vectors again, each naming its kind and its arbiter as ids of the
- * Zodiacs conventions registry (`conventionIds`, SPEC.md).
+ * Zodiacs conventions registry (`conventionIds`, SPEC.md). 0.3.0 releases
+ * them once more and adds L4, event times.
  */
 export const RELEASES = Object.freeze({
   '0.1.0': Object.freeze({
@@ -29,6 +30,12 @@ export const RELEASES = Object.freeze({
     L1: 'vectors/0.2.0/L1-positions.json',
     L2: 'vectors/0.2.0/L2-houses-angles.json',
     L3: 'vectors/0.2.0/L3-time-calendars.json',
+  }),
+  '0.3.0': Object.freeze({
+    L1: 'vectors/0.3.0/L1-positions.json',
+    L2: 'vectors/0.3.0/L2-houses-angles.json',
+    L3: 'vectors/0.3.0/L3-time-calendars.json',
+    L4: 'vectors/0.3.0/L4-events.json',
   }),
 });
 /** This version's files, which the harness runs. */
@@ -45,9 +52,20 @@ export const RELEASE_DIGESTS = Object.freeze({
     L2: 'fc5321b9061b9860bfb9af5254e5813be1c4bc3c858df6f623ea1617b76b88e5',
     L3: '51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66',
   }),
+  '0.3.0': Object.freeze({
+    L1: '5ead022c18c56b44fb129f423b16ea26525240289156564c40a99ff4a5924e2b',
+    L2: '23f8c47eeff926a64f97ce29bb0d0d73dd364d2f92952b8ed3b2a944a3a683c3',
+    L3: 'b8b981d8ef15e8d45e356323676863d7a6ee7763e68ac056d3618e44d2a42a11',
+    L4: '4c153d887f993536549432213e81648e9d0b4fc940eb1f116c4aa732dba6e25f',
+  }),
 });
 
-/** The v0 kinds: the level each belongs to, its input keys, and the allowed shapes of `expected`. */
+/**
+ * The kinds: the level each belongs to, its input keys, and the allowed shapes
+ * of `expected`. An event kind (L4) lists instead its `shapes`, each a set of
+ * input keys with the expected keys that go with it: an instant on TT or on
+ * UTC, never both.
+ */
 export const KINDS = Object.freeze({
   'position.apparent.ecliptic-true-of-date': {
     level: 'L1', input: ['body', 'jd_tt'], optional: [], expected: [['lon', 'lat']],
@@ -80,7 +98,27 @@ export const KINDS = Object.freeze({
   'calendar.from-jdn': {
     level: 'L3', input: ['calendar', 'jdn'], optional: [], expected: [['year', 'month', 'day']],
   },
+  'event.ingress': {
+    level: 'L4',
+    shapes: [
+      { input: ['body', 'longitude_deg', 'after_tt_s', 'before_tt_s'], expected: ['tt_s'] },
+      { input: ['body', 'longitude_deg', 'after_utc_s', 'before_utc_s'], expected: ['utc_s'] },
+    ],
+  },
+  'event.station': {
+    level: 'L4',
+    shapes: [{ input: ['body', 'after_tt_s', 'before_tt_s'], expected: ['tt_s', 'direction'] }],
+  },
+  'event.lunation': {
+    level: 'L4',
+    shapes: [
+      { input: ['phase_deg', 'after_tt_s', 'before_tt_s'], expected: ['tt_s'] },
+      { input: ['phase_deg', 'after_utc_s', 'before_utc_s'], expected: ['utc_s'] },
+    ],
+  },
 });
+/** The directions of a station (SPEC.md). */
+export const DIRECTIONS = Object.freeze(['retrograde', 'direct']);
 
 export const BODIES = Object.freeze(['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto']);
 export const SYSTEMS = Object.freeze([
@@ -177,10 +215,16 @@ export function validateLevel({ level, file, version = SUITE_VERSION }, root = S
     }
     if (kind.level !== level) problems.push(`${at}: kind ${vector.kind} belongs to ${kind.level}`);
     const inputKeys = Object.keys(vector.input ?? {});
-    for (const key of kind.input) if (!inputKeys.includes(key)) problems.push(`${at}: input.${key} is required`);
-    for (const key of inputKeys) if (!kind.input.includes(key) && !kind.optional.includes(key)) problems.push(`${at}: unexpected input.${key}`);
     const expectedKeys = Object.keys(vector.expected ?? {});
-    if (!kind.expected.some((shape) => sameKeys(expectedKeys, shape))) problems.push(`${at}: expected has keys ${expectedKeys.join(', ')}`);
+    if (kind.shapes) {
+      if (!kind.shapes.some((shape) => sameKeys(inputKeys, shape.input) && sameKeys(expectedKeys, shape.expected))) {
+        problems.push(`${at}: input ${inputKeys.join(', ')} with expected ${expectedKeys.join(', ')} is not a shape of ${vector.kind}`);
+      } else problems.push(...validateEvent(vector, at));
+    } else {
+      for (const key of kind.input) if (!inputKeys.includes(key)) problems.push(`${at}: input.${key} is required`);
+      for (const key of inputKeys) if (!kind.input.includes(key) && !kind.optional.includes(key)) problems.push(`${at}: unexpected input.${key}`);
+      if (!kind.expected.some((shape) => sameKeys(expectedKeys, shape))) problems.push(`${at}: expected has keys ${expectedKeys.join(', ')}`);
+    }
     if (!vector.tolerance || typeof vector.tolerance !== 'object') problems.push(`${at}: tolerance is required`);
     for (const [key, rule] of Object.entries(vector.tolerance ?? {})) {
       if (!expectedKeys.includes(key)) problems.push(`${at}: tolerance for ${key}, which is not expected`);
@@ -201,6 +245,47 @@ export function validateLevel({ level, file, version = SUITE_VERSION }, root = S
     if (Array.isArray(vector.expected?.cusps) && vector.expected.cusps.length !== 12) problems.push(`${at}: cusps must have 12 entries`);
   }
   for (const id of Object.keys(arbiters)) if (!used.has(id)) problems.push(`${where}: arbiter ${id} is not used by any vector`);
+  if (file.dropped !== undefined) {
+    if (!Array.isArray(file.dropped)) problems.push(`${where}: dropped must be an array`);
+    for (const entry of Array.isArray(file.dropped) ? file.dropped : []) {
+      if (!['id', 'what', 'reason'].every((key) => typeof entry?.[key] === 'string' && entry[key].trim()) || Object.keys(entry).length !== 3) problems.push(`${where}: each dropped entry is { id, what, reason }`);
+      else if (!new RegExp(`^${level}-[A-Z]+-\\d{4}$`, 'u').test(entry.id)) problems.push(`${where}: dropped id ${entry.id} must be ${level}-<TAG>-<4 digits>`);
+      else if (ids.has(entry.id)) problems.push(`${where}: ${entry.id} is both a vector and dropped`);
+    }
+  }
+  for (const key of Object.keys(file)) {
+    if (!['suite', 'suiteVersion', 'level', 'title', 'arbiters', 'dropped', 'vectors'].includes(key)) problems.push(`${where}: unknown key ${key}`);
+  }
+  return problems;
+}
+
+/**
+ * Problems with an event vector (L4) beyond its shape: a tolerance in whole
+ * seconds for its instant, an exact direction, a body, longitude and phase the
+ * kinds allow, the instant inside its window (after, before], and a UTC
+ * instant tagged utc-input.
+ */
+function validateEvent(vector, at) {
+  const problems = [];
+  const { input, expected, tolerance = {} } = vector;
+  const scale = 'utc_s' in expected ? 'utc' : 'tt';
+  for (const key of Object.keys(expected)) {
+    const rule = tolerance[key];
+    if (key === 'direction') {
+      if (JSON.stringify(rule) !== '{"exact":true}') problems.push(`${at}: direction is compared exactly`);
+      if (!DIRECTIONS.includes(expected.direction)) problems.push(`${at}: direction is ${DIRECTIONS.join(' or ')}`);
+    } else if (!(rule && rule.unit === 's' && Number.isInteger(rule.abs) && rule.abs >= 1 && Object.keys(rule).length === 2)) {
+      problems.push(`${at}: ${key} needs a tolerance { "abs": whole seconds >= 1, "unit": "s" }`);
+    }
+  }
+  if ('body' in input && !BODIES.includes(input.body)) problems.push(`${at}: unknown body ${input.body}`);
+  if ('longitude_deg' in input && !(Number.isInteger(input.longitude_deg) && input.longitude_deg % 30 === 0 && input.longitude_deg >= 0 && input.longitude_deg < 360)) problems.push(`${at}: longitude_deg is a multiple of 30 in [0, 360)`);
+  if ('phase_deg' in input && ![0, 180].includes(input.phase_deg)) problems.push(`${at}: phase_deg is 0 or 180`);
+  const after = input[`after_${scale}_s`];
+  const before = input[`before_${scale}_s`];
+  const instant = expected[`${scale}_s`];
+  if (![after, before, instant].every((value) => typeof value === 'number' && Number.isFinite(value)) || !(after < instant && instant <= before)) problems.push(`${at}: the expected instant is not in the window (after, before]`);
+  if ((scale === 'utc') !== (vector.tags ?? []).includes('utc-input')) problems.push(`${at}: a vector is tagged utc-input exactly when its instant is UTC`);
   return problems;
 }
 

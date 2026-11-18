@@ -38,7 +38,7 @@ jobs:
         run: node --test conformance/harness/selftest.mjs
 
       - name: Vectors conform to SPEC.md
-        run: node conformance/harness/validate.mjs --expect-total 500
+        run: node conformance/harness/validate.mjs --expect-total 640
 
       - name: This engine's verdicts match the committed results
         run: node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs" --check conformance/results/zodiacs-engine.json
@@ -52,6 +52,13 @@ jobs:
   generators:
     name: Conformance vectors rebuild from their sources
     runs-on: ubuntu-latest
+    # L4 solves its events on NAIF's de440s.bsp, fetched from NAIF, checked by
+    # its SHA-256 and cached by it, as the tier-B job in ci.yml does with
+    # de440.bsp; it is never committed or uploaded. A failed download is not
+    # a failure of the vectors: re-run the job.
+    env:
+      KERNEL_URL: https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp
+      KERNEL_SHA256: c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -63,7 +70,7 @@ jobs:
 
       # The versions the committed vector files were generated with.
       - name: Install the arbiters' libraries
-        run: python -m pip install pyerfa==2.0.1.5 numpy==2.4.6
+        run: python -m pip install pyerfa==2.0.1.5 numpy==2.4.6 jplephem==2.24
 
       - name: L1 positions
         run: python conformance/arbiters/l1/build.py
@@ -74,6 +81,40 @@ jobs:
       # Downloads tzdata and tzcode 2025c from IANA and checks their digests.
       - name: L3 time and calendars
         run: python conformance/arbiters/l3/build.py
+
+      - name: L4 sources match their recorded digests
+        run: python conformance/arbiters/l4/build.py --verify-sources
+
+      - name: L4 generator self-test
+        run: python conformance/arbiters/l4/test_build.py
+
+      - name: Restore the kernel
+        id: kernel
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/kernels/de440s.bsp
+          key: de440s-bsp-c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2
+
+      - name: Fetch the kernel from NAIF
+        if: steps.kernel.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/kernels"
+          curl -sS --fail --retry 4 --retry-delay 15 -o "$RUNNER_TEMP/kernels/de440s.bsp" "$KERNEL_URL"
+
+      - name: Check the kernel's digest
+        run: echo "$KERNEL_SHA256  $RUNNER_TEMP/kernels/de440s.bsp" | sha256sum -c -
+
+      - name: Save the kernel
+        if: steps.kernel.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/kernels/de440s.bsp
+          key: de440s-bsp-c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2
+
+      # Rebuilds L4-events.json and its recorded solutions in memory, about
+      # five minutes, and compares them byte for byte with the committed files.
+      - name: L4 event times
+        run: python conformance/arbiters/l4/build.py --kernel "$RUNNER_TEMP/kernels/de440s.bsp" --check
 
       - name: The rebuilt files are byte-identical to the committed ones
         run: |

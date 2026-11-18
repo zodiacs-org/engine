@@ -3,8 +3,9 @@
 """Arbiter and vector generator for level L2 (houses and angles), suite v0.
 
     python3 conformance/arbiters/l2/build.py           # writes conformance/vectors/L2-houses-angles.json,
-                                                       # and 0.2.0's vectors/0.2.0/L2-houses-angles.json
-                                                       # with the convention ids (../release.py)
+                                                       # and 0.2.0's and 0.3.0's L2-houses-angles.json
+                                                       # in vectors/0.2.0/ and vectors/0.3.0/, with the
+                                                       # convention ids (../release.py)
     python3 conformance/arbiters/l2/build.py --report  # also prints the diagnostics quoted in README.md
 
 Requirements: Python 3.11 and pyerfa 2.0.1.5 (ERFA 2.0.1). Nothing else: no
@@ -1911,8 +1912,8 @@ def build(report: bool = False):
         f.write(text)
     digest = hashlib.sha256(text.encode('utf-8')).hexdigest()
     print('wrote %s (%d vectors) sha256 %s' % (OUTPUT, len(vectors), digest), file=sys.stderr)
-    print('wrote %s, with the convention ids: sha256 %s' % release.write_with_ids(doc, os.path.basename(OUTPUT), ensure_ascii=False),
-          file=sys.stderr)
+    for written in release.write_with_ids(doc, os.path.basename(OUTPUT), ensure_ascii=False):
+        print('wrote %s, with the convention ids: sha256 %s' % written, file=sys.stderr)
     if report:
         print_report(rows, ck, summ, vectors)
     return doc

@@ -5,7 +5,7 @@
  * which never change, with each file this version releases again checked
  * against the one released before it.
  *
- *   node conformance/harness/validate.mjs [--expect-total 500]
+ *   node conformance/harness/validate.mjs [--expect-total 640]
  */
 import { KINDS, LEVEL_FILES, RELEASES, RELEASE_DIGESTS, SUITE_VERSION, compareRelease, readSuite, validateLevel } from './lib.mjs';
 

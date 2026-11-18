@@ -1,10 +1,11 @@
 {
   "suite": "zodiacs-conformance",
-  "suiteVersion": "0.2.0",
+  "suiteVersion": "0.3.0",
   "vectors": {
-    "vectors/0.2.0/L1-positions.json": "4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8",
-    "vectors/0.2.0/L2-houses-angles.json": "fc5321b9061b9860bfb9af5254e5813be1c4bc3c858df6f623ea1617b76b88e5",
-    "vectors/0.2.0/L3-time-calendars.json": "51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66"
+    "vectors/0.3.0/L1-positions.json": "5ead022c18c56b44fb129f423b16ea26525240289156564c40a99ff4a5924e2b",
+    "vectors/0.3.0/L2-houses-angles.json": "23f8c47eeff926a64f97ce29bb0d0d73dd364d2f92952b8ed3b2a944a3a683c3",
+    "vectors/0.3.0/L3-time-calendars.json": "b8b981d8ef15e8d45e356323676863d7a6ee7763e68ac056d3618e44d2a42a11",
+    "vectors/0.3.0/L4-events.json": "4c153d887f993536549432213e81648e9d0b4fc940eb1f116c4aa732dba6e25f"
   },
   "adapter": {
     "name": "zodiacs-engine",
@@ -23,10 +24,10 @@
   "values": "residuals",
   "summary": {
     "total": {
-      "count": 500,
-      "pass": 499,
+      "count": 640,
+      "pass": 569,
       "fail": 0,
-      "unsupported": 1,
+      "unsupported": 71,
       "error": 0
     },
     "byLevel": {
@@ -49,6 +50,13 @@
         "pass": 109,
         "fail": 0,
         "unsupported": 1,
+        "error": 0
+      },
+      "L4": {
+        "count": 140,
+        "pass": 70,
+        "fail": 0,
+        "unsupported": 70,
         "error": 0
       }
     },
@@ -206,12 +214,70 @@
         "fail": 0,
         "unsupported": 0,
         "error": 0
+      },
+      "event.ingress": {
+        "count": 70,
+        "pass": 70,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "tt_s": {
+            "unit": "s",
+            "n": 60,
+            "median": 0.0304888338,
+            "p95": 0.691758156,
+            "max": 1.53385973
+          },
+          "utc_s": {
+            "unit": "s",
+            "n": 10,
+            "median": 0.0110000372,
+            "p95": 0.0249998569,
+            "max": 0.0249998569
+          }
+        }
+      },
+      "event.station": {
+        "count": 30,
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 30,
+        "error": 0
+      },
+      "event.lunation": {
+        "count": 40,
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 40,
+        "error": 0
       }
     },
     "byTag": {
       "backzone-history": {
         "count": 20,
         "pass": 20,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0
+      },
+      "eclipse": {
+        "count": 6,
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 6,
+        "error": 0
+      },
+      "utc-input": {
+        "count": 20,
+        "pass": 10,
+        "fail": 0,
+        "unsupported": 10,
+        "error": 0
+      },
+      "cross-check": {
+        "count": 1,
+        "pass": 1,
         "fail": 0,
         "unsupported": 0,
         "error": 0
@@ -6716,6 +6782,1356 @@
     {
       "id": "L3-CAL-0010",
       "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0001",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00250053406
+      },
+      "meta": {
+        "events": 1,
+        "samples": 66,
+        "at": "1860-01-20T18:37:04.854Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0002",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0733671188
+      },
+      "meta": {
+        "events": 1,
+        "samples": 66,
+        "at": "1925-01-20T13:20:08.683Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0003",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0160149932
+      },
+      "meta": {
+        "events": 1,
+        "samples": 66,
+        "at": "1990-01-20T08:01:32.804Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0004",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00498259068
+      },
+      "meta": {
+        "events": 1,
+        "samples": 66,
+        "at": "2026-01-20T01:44:56.076Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0005",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0139989853
+      },
+      "meta": {
+        "events": 1,
+        "samples": 66,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-01-20T07:58:35.910Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0006",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0019903183
+      },
+      "meta": {
+        "events": 1,
+        "samples": 66,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-01-20T17:49:55.948Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0007",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00916385651
+      },
+      "meta": {
+        "events": 1,
+        "samples": 29,
+        "at": "1860-01-03T00:50:55.956Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0008",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00725221634
+      },
+      "meta": {
+        "events": 1,
+        "samples": 28,
+        "at": "1925-01-01T02:56:58.976Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0009",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0159871578
+      },
+      "meta": {
+        "events": 1,
+        "samples": 28,
+        "at": "1990-01-01T06:10:02.717Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0010",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0169835091
+      },
+      "meta": {
+        "events": 1,
+        "samples": 29,
+        "at": "2026-01-02T13:09:00.327Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0011",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00701713562
+      },
+      "meta": {
+        "events": 1,
+        "samples": 29,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-01-02T17:38:15.070Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0012",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0159921646
+      },
+      "meta": {
+        "events": 1,
+        "samples": 28,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-01-01T07:24:06.930Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0013",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.015873909
+      },
+      "meta": {
+        "events": 1,
+        "samples": 64,
+        "at": "1860-01-12T10:41:41.881Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0014",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.042863369
+      },
+      "meta": {
+        "events": 1,
+        "samples": 65,
+        "at": "1925-01-14T07:15:27.063Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0015",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.00698727369
+      },
+      "meta": {
+        "events": 1,
+        "samples": 71,
+        "at": "1990-02-12T01:11:10.856Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0016",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00601518154
+      },
+      "meta": {
+        "events": 1,
+        "samples": 61,
+        "at": "2026-01-01T21:10:41.859Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0017",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00100326538
+      },
+      "meta": {
+        "events": 1,
+        "samples": 64,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-01-12T11:58:27.595Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0018",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0140190125
+      },
+      "meta": {
+        "events": 1,
+        "samples": 109,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-01-05T11:23:31.311Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0019",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0130214691
+      },
+      "meta": {
+        "events": 1,
+        "samples": 71,
+        "at": "1860-01-22T14:28:57.012Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0020",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0363206863
+      },
+      "meta": {
+        "events": 1,
+        "samples": 58,
+        "at": "1925-01-14T22:28:18.355Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0021",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0269838572
+      },
+      "meta": {
+        "events": 1,
+        "samples": 33,
+        "at": "1990-01-16T15:22:55.497Z",
+        "retrograde": true
+      }
+    },
+    {
+      "id": "L4-ING-0022",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.00300371647
+      },
+      "meta": {
+        "events": 1,
+        "samples": 70,
+        "at": "2026-01-17T12:43:23.949Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0023",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.00800704956
+      },
+      "meta": {
+        "events": 1,
+        "samples": 68,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-01-11T11:38:22.383Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0024",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0110044479
+      },
+      "meta": {
+        "events": 1,
+        "samples": 68,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-01-08T05:30:59.841Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0025",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.00865745544
+      },
+      "meta": {
+        "events": 1,
+        "samples": 102,
+        "at": "1860-01-31T08:45:39.506Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0026",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0517497063
+      },
+      "meta": {
+        "events": 1,
+        "samples": 87,
+        "at": "1925-02-05T10:17:14.700Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0027",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0329799652
+      },
+      "meta": {
+        "events": 1,
+        "samples": 102,
+        "at": "1990-01-29T14:10:25.797Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0028",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0140173435
+      },
+      "meta": {
+        "events": 1,
+        "samples": 101,
+        "at": "2026-01-23T09:16:45.211Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0029",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.00899672508
+      },
+      "meta": {
+        "events": 1,
+        "samples": 104,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-02-05T20:37:22.253Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0030",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.013004303
+      },
+      "meta": {
+        "events": 1,
+        "samples": 120,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-07-28T15:38:13.053Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0031",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.017993927
+      },
+      "meta": {
+        "events": 1,
+        "samples": 498,
+        "at": "1860-06-29T19:22:59.292Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0032",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0374183655
+      },
+      "meta": {
+        "events": 1,
+        "samples": 536,
+        "at": "1926-01-06T01:00:26.135Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0033",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.132996559
+      },
+      "meta": {
+        "events": 1,
+        "samples": 508,
+        "at": "1990-08-18T07:29:47.878Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0034",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0140141249
+      },
+      "meta": {
+        "events": 1,
+        "samples": 498,
+        "at": "2026-06-30T05:52:21.776Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0035",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0619883537
+      },
+      "meta": {
+        "events": 1,
+        "samples": 457,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-04-04T01:53:03.972Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0036",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0980167389
+      },
+      "meta": {
+        "events": 1,
+        "samples": 756,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-03-09T05:01:00.276Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0037",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0784473419
+      },
+      "meta": {
+        "events": 1,
+        "samples": 1137,
+        "at": "1860-08-26T04:30:08.310Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0038",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.140172005
+      },
+      "meta": {
+        "events": 1,
+        "samples": 1229,
+        "at": "1926-12-02T22:33:54.269Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0039",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0789853334
+      },
+      "meta": {
+        "events": 1,
+        "samples": 1169,
+        "at": "1991-02-06T18:51:13.256Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0040",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0969846249
+      },
+      "meta": {
+        "events": 1,
+        "samples": 1097,
+        "at": "2026-02-14T00:11:38.919Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0041",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.11101222
+      },
+      "meta": {
+        "events": 1,
+        "samples": 1107,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-03-31T11:50:26.476Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0042",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0930137634
+      },
+      "meta": {
+        "events": 1,
+        "samples": 756,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2141-02-04T04:15:53.843Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0043",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.475356579
+      },
+      "meta": {
+        "events": 1,
+        "samples": 450,
+        "at": "1865-06-27T02:35:21.680Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0044",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.309331417
+      },
+      "meta": {
+        "events": 1,
+        "samples": 211,
+        "at": "1927-03-31T17:21:58.180Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0045",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0279977024
+      },
+      "meta": {
+        "events": 1,
+        "samples": 416,
+        "at": "1995-04-01T12:11:16.592Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0046",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0479941368
+      },
+      "meta": {
+        "events": 1,
+        "samples": 3085,
+        "at": "2026-04-26T00:51:32.458Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0047",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0979905128
+      },
+      "meta": {
+        "events": 1,
+        "samples": 404,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2065-01-10T19:56:10.839Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0048",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.12100029
+      },
+      "meta": {
+        "events": 1,
+        "samples": 179,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2142-01-19T12:00:13.769Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0049",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.691758156
+      },
+      "meta": {
+        "events": 1,
+        "samples": 136,
+        "at": "1861-04-13T20:24:31.945Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0050",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.17839241
+      },
+      "meta": {
+        "events": 1,
+        "samples": 312,
+        "at": "1928-09-21T12:00:55.714Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0051",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.00399295241
+      },
+      "meta": {
+        "events": 1,
+        "samples": 636,
+        "at": "1998-01-29T02:52:04.917Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0052",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.182991147
+      },
+      "meta": {
+        "events": 1,
+        "samples": 9083,
+        "at": "2026-01-26T17:34:38.267Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0053",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0470073223
+      },
+      "meta": {
+        "events": 1,
+        "samples": 447,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2065-07-03T07:10:11.266Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0054",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.836000443
+      },
+      "meta": {
+        "events": 1,
+        "samples": 630,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2148-01-04T12:21:37.259Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0055",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 1.53385973
+      },
+      "meta": {
+        "events": 1,
+        "samples": 1681,
+        "at": "1882-07-21T21:51:26.782Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0056",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.664885998
+      },
+      "meta": {
+        "events": 1,
+        "samples": 963,
+        "at": "1937-10-07T12:14:17.065Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0057",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.364992231
+      },
+      "meta": {
+        "events": 1,
+        "samples": 403,
+        "at": "1995-01-17T09:15:53.710Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0058",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.382994652
+      },
+      "meta": {
+        "events": 1,
+        "samples": 1298,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2043-03-09T01:01:30.478Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-ING-0059",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.925981045
+      },
+      "meta": {
+        "events": 1,
+        "samples": 501,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2066-06-17T15:24:21.070Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-STA-0001",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0002",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0003",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0004",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0005",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0006",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0007",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0008",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0009",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0010",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0011",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0012",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0013",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0014",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0015",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0016",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0017",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0018",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0019",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0020",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0021",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0022",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0023",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0024",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0025",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0026",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0027",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0028",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0029",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-STA-0030",
+      "verdict": "unsupported",
+      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0001",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0002",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0003",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0004",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0005",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0006",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0007",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0008",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0009",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0010",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0011",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0012",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0013",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0014",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0015",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0016",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0017",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0018",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0019",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0020",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0021",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0022",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0023",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0024",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0025",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0026",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0027",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0028",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0029",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-LUN-0030",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-UTC-0001",
+      "verdict": "pass",
+      "residual": {
+        "utc_s": -0.00499999523
+      },
+      "meta": {
+        "events": 1,
+        "samples": 66,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2028-01-20T13:21:55.873Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-UTC-0002",
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0.00999999046
+      },
+      "meta": {
+        "events": 1,
+        "samples": 28,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2028-01-01T08:52:46.300Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-UTC-0003",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-UTC-0004",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-UTC-0005",
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0.0249998569
+      },
+      "meta": {
+        "events": 1,
+        "samples": 66,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2035-01-20T06:14:16.712Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-UTC-0006",
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0.0199999809
+      },
+      "meta": {
+        "events": 1,
+        "samples": 29,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2035-01-02T23:59:37.175Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-UTC-0007",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-UTC-0008",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-UTC-0009",
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0.00200009346
+      },
+      "meta": {
+        "events": 1,
+        "samples": 66,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2050-01-19T21:33:58.296Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-UTC-0010",
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0.0240001678
+      },
+      "meta": {
+        "events": 1,
+        "samples": 28,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2050-01-01T20:21:06.354Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-UTC-0011",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-UTC-0012",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-UTC-0013",
+      "verdict": "pass",
+      "residual": {
+        "utc_s": -0.013999939
+      },
+      "meta": {
+        "events": 1,
+        "samples": 66,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2100-01-20T00:47:50.603Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-UTC-0014",
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0
+      },
+      "meta": {
+        "events": 1,
+        "samples": 29,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2100-01-02T14:35:49.181Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-UTC-0015",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-UTC-0016",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-UTC-0017",
+      "verdict": "pass",
+      "residual": {
+        "utc_s": -0.00599956512
+      },
+      "meta": {
+        "events": 1,
+        "samples": 66,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-01-20T17:49:55.944Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-UTC-0018",
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0.0120000839
+      },
+      "meta": {
+        "events": 1,
+        "samples": 28,
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-01-01T07:24:06.926Z",
+        "retrograde": false
+      }
+    },
+    {
+      "id": "L4-UTC-0019",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-UTC-0020",
+      "verdict": "unsupported",
+      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+    },
+    {
+      "id": "L4-ING-0061",
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0139946938
+      },
+      "meta": {
+        "events": 1,
+        "samples": 31,
+        "at": "2026-11-22T07:23:20.577Z",
+        "retrograde": false
+      }
     }
   ]
 }

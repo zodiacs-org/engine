@@ -1,9 +1,8 @@
 {
   "suite": "zodiacs-conformance",
-  "suiteVersion": "0.3.0-draft",
+  "suiteVersion": "0.3.0",
   "level": "L4",
-  "title": "Event times (draft)",
-  "draft": "A draft level, not part of any released suite version: the harness does not run it, and releasing it is the owner's decision. Design: drafts/0.3.0/DESIGN.md. Instants are seconds from J2000.0 (tt_s: of TT from JD 2451545.0 TT; utc_s: of UTC from 2000-01-01T12:00:00 UTC, counted on the UTC calendar). In the UTC set, UTC is TT - 69.184 s (TAI - UTC = 37 s, as from 2017-01-01, plus 32.184 s).",
+  "title": "Event times",
   "arbiters": {
     "l4-de440s-events": {
       "name": "NASA JPL DE440s reduced to apparent geocentric longitudes in the IAU 2006/2000A true ecliptic and equinox of date, with event instants solved by bisection",
@@ -15,7 +14,7 @@
         },
         {
           "path": "sources/l4/solutions.json",
-          "sha256": "ef49ef772fa4045c00983199579715c7d4b1f56cd06d5162cc2e86a1e9440abf"
+          "sha256": "7f105a2dfc6aebf2e6bcadf7cfcc2e15cf42a911b70de7bae97ee066dd6efac1"
         },
         {
           "path": "sources/l4/horizons-provenance.tsv",
@@ -82,7 +81,7 @@
           "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2"
         }
       ],
-      "method": "For each event of DESIGN.md the generator samples the quantity (a body's longitude, the Moon's longitude minus the Sun's, or the longitude's rate as a central difference over an hour either side) at 1 hour steps from the window's start, after a daily table has shown where to look, and solves the first crossing by bisection to 1 ms. The window ends midway to the next time the same thing happens (or at 2150-01-01 TT), and holds exactly one event. Tolerance: for an ingress or a lunation, max(1 s, 1 arcsec / |rate|) rounded up to a whole second, the rate from the longitudes an hour either side; for a station, max(60 s, sqrt(2 x 1 arcsec / |acceleration|)) rounded up, the acceleration from the longitudes an hour before, at and an hour after. Every solved instant, its window and those longitudes are in sources/l4/solutions.json.",
+      "method": "For each event of drafts/0.3.0/DESIGN.md the generator samples the quantity (a body's longitude, the Moon's longitude minus the Sun's, or the longitude's rate as a central difference over an hour either side) at 1 hour steps from the window's start, after a daily table has shown where to look, and solves the first crossing by bisection to 1 ms. The window ends midway to the next time the same thing happens (or at 2150-01-01 TT), and holds exactly one event. Tolerance: for an ingress or a lunation, max(1 s, 1 arcsec / |rate|) rounded up to a whole second, the rate from the longitudes an hour either side; for a station, max(60 s, sqrt(2 x 1 arcsec / |acceleration|)) rounded up, the acceleration from the longitudes an hour before, at and an hour after. Every solved instant, its window and those longitudes are in sources/l4/solutions.json. Instants are seconds from J2000.0 (tt_s: of TT from JD 2451545.0 TT; utc_s: of UTC from 2000-01-01T12:00:00 UTC, counted on the UTC calendar). In the UTC set, UTC is TT - 69.184 s (TAI - UTC = 37 s, as from 2017-01-01, plus 32.184 s), the set's stated convention.",
       "generator": "arbiters/l4/build.py",
       "uncertainty": "Tolerances by kind: event.ingress: 2 s to 5250 s; event.lunation: 2 s to 3 s; event.station: 6270 s to 50406 s. Check (a): every solve repeated with half hour brackets agrees within 0.000 s, at most 0.0000 of its tolerance (limit 0.1). The array reduction agrees with validate.py's apparent() at every solved instant within 0.004172 mas. Property: at t - tolerance and t + tolerance every ingress lies on opposite sides of its target, at most 1.498 arcsec from it (limit 1.5). Vector L4-ING-0061 solves -0.0002 s from the independent de440.bsp reduction in docs/evidence/1.1.0-rc.11-20261115/breaker/results/ingress-ref.json (limit 1 s). Check (b), against the JPL Horizons API (version 1.2, ephemeris DE441, EOP file eop.261116.p270212), observer quantity 31 for the geocentre in TT, retrieved 2026-11-17 as recorded in sources/l4/horizons-provenance.tsv: 140 of 140 events checked, 0 failed and were dropped, 0 pending. For the 110 ingresses and lunations, Horizons' longitude at the solved instant differs from the target by a median of 0.047 arcsec; the worst is L4-ING-0049 (the first ingress of Neptune after 1860-01-01 TT) at -0.359 arcsec (limit 0.45). The difference grows with distance from J2000 (1860 to 1899: -0.359 to +0.011; 1900 to 1959: -0.158 to +0.002; 1960 to 2029: -0.057 to +0.003; 2030 to 2149: -0.012 to +0.343 arcsec), as the IAU 1976/1980 frame Horizons gives for quantity 31 parts from the IAU 2006/2000A frame of the arbiter. For the 30 stations, the station implied by Horizons' longitudes an hour either side of the solved instant lies at most 62 s from it; the largest share of a tolerance is L4-STA-0030 (the first station of Saturn after 2140-07-01 TT), +62 s against 49110 s (0.0013). Every event's own figure is in sources/l4/solutions.json under \"horizons\"."
     }
@@ -114,6 +113,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Sun after 1860-01-01 TT: Sun enters Aquarius (300 deg, direct) at 1860-01-20T18:37:13.885 TT."
     },
     {
@@ -135,6 +138,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Sun after 1925-01-01 TT: Sun enters Aquarius (300 deg, direct) at 1925-01-20T13:20:32.414 TT."
     },
     {
@@ -156,6 +163,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Sun after 1990-01-01 TT: Sun enters Aquarius (300 deg, direct) at 1990-01-20T08:02:29.972 TT."
     },
     {
@@ -177,6 +188,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Sun after 2026-01-01 TT: Sun enters Aquarius (300 deg, direct) at 2026-01-20T01:46:05.255 TT."
     },
     {
@@ -198,6 +213,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Sun after 2060-01-01 TT: Sun enters Aquarius (300 deg, direct) at 2060-01-20T07:59:45.080 TT."
     },
     {
@@ -219,6 +238,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Sun after 2140-01-01 TT: Sun enters Aquarius (300 deg, direct) at 2140-01-20T17:51:05.134 TT."
     },
     {
@@ -240,6 +263,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Moon after 1860-01-01 TT: Moon enters Taurus (30 deg, direct) at 1860-01-03T00:51:04.986 TT."
     },
     {
@@ -261,6 +288,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Moon after 1925-01-01 TT: Moon enters Aries (0 deg, direct) at 1925-01-01T02:57:22.759 TT."
     },
     {
@@ -282,6 +313,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Moon after 1990-01-01 TT: Moon enters Pisces (330 deg, direct) at 1990-01-01T06:10:59.885 TT."
     },
     {
@@ -303,6 +338,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Moon after 2026-01-01 TT: Moon enters Cancer (90 deg, direct) at 2026-01-02T13:10:09.494 TT."
     },
     {
@@ -324,6 +363,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Moon after 2060-01-01 TT: Moon enters Capricorn (270 deg, direct) at 2060-01-02T17:39:24.247 TT."
     },
     {
@@ -345,6 +388,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Moon after 2140-01-01 TT: Moon enters Gemini (60 deg, direct) at 2140-01-01T07:25:16.098 TT."
     },
     {
@@ -366,6 +413,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Mercury after 1860-01-01 TT: Mercury enters Capricorn (270 deg, direct) at 1860-01-12T10:41:50.933 TT."
     },
     {
@@ -387,6 +438,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Mercury after 1925-01-01 TT: Mercury enters Capricorn (270 deg, direct) at 1925-01-14T07:15:50.820 TT."
     },
     {
@@ -408,6 +463,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Mercury after 1990-01-01 TT: Mercury enters Aquarius (300 deg, direct) at 1990-02-12T01:12:08.047 TT."
     },
     {
@@ -429,6 +488,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Mercury after 2026-01-01 TT: Mercury enters Capricorn (270 deg, direct) at 2026-01-01T21:11:51.037 TT."
     },
     {
@@ -450,6 +513,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Mercury after 2060-01-01 TT: Mercury enters Aquarius (300 deg, direct) at 2060-01-12T11:59:36.778 TT."
     },
     {
@@ -471,6 +538,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Mercury after 2140-01-01 TT: Mercury enters Aquarius (300 deg, direct) at 2140-01-05T11:24:40.509 TT."
     },
     {
@@ -492,6 +563,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Venus after 1860-01-01 TT: Venus enters Pisces (330 deg, direct) at 1860-01-22T14:29:06.058 TT."
     },
     {
@@ -513,6 +588,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Venus after 1925-01-01 TT: Venus enters Capricorn (270 deg, direct) at 1925-01-14T22:28:42.119 TT."
     },
     {
@@ -534,6 +613,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Venus after 1990-01-01 TT: Venus enters Capricorn (300 deg, retrograde) at 1990-01-16T15:23:52.654 TT."
     },
     {
@@ -555,6 +638,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Venus after 2026-01-01 TT: Venus enters Aquarius (300 deg, direct) at 2026-01-17T12:44:33.136 TT."
     },
     {
@@ -576,6 +663,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Venus after 2060-01-01 TT: Venus enters Pisces (330 deg, direct) at 2060-01-11T11:39:31.575 TT."
     },
     {
@@ -597,6 +688,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Venus after 2140-01-01 TT: Venus enters Pisces (330 deg, direct) at 2140-01-08T05:32:09.036 TT."
     },
     {
@@ -618,6 +713,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Mars after 1860-01-01 TT: Mars enters Sagittarius (240 deg, direct) at 1860-01-31T08:45:48.545 TT."
     },
     {
@@ -639,6 +738,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Mars after 1925-01-01 TT: Mars enters Taurus (30 deg, direct) at 1925-02-05T10:17:38.464 TT."
     },
     {
@@ -660,6 +763,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Mars after 1990-01-01 TT: Mars enters Capricorn (270 deg, direct) at 1990-01-29T14:11:22.948 TT."
     },
     {
@@ -681,6 +788,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Mars after 2026-01-01 TT: Mars enters Aquarius (300 deg, direct) at 2026-01-23T09:17:54.381 TT."
     },
     {
@@ -702,6 +813,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Mars after 2060-01-01 TT: Mars enters Pisces (330 deg, direct) at 2060-02-05T20:38:31.446 TT."
     },
     {
@@ -723,6 +838,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Mars after 2140-01-01 TT: Mars enters Scorpio (210 deg, direct) at 2140-07-28T15:39:22.250 TT."
     },
     {
@@ -744,6 +863,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Jupiter after 1860-01-01 TT: Jupiter enters Leo (120 deg, direct) at 1860-06-29T19:23:08.274 TT."
     },
     {
@@ -765,6 +888,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Jupiter after 1925-01-01 TT: Jupiter enters Aquarius (300 deg, direct) at 1926-01-06T01:00:50.125 TT."
     },
     {
@@ -786,6 +913,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Jupiter after 1990-01-01 TT: Jupiter enters Leo (120 deg, direct) at 1990-08-18T07:30:44.929 TT."
     },
     {
@@ -807,6 +938,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Jupiter after 2026-01-01 TT: Jupiter enters Leo (120 deg, direct) at 2026-06-30T05:53:30.974 TT."
     },
     {
@@ -828,6 +963,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Jupiter after 2060-01-01 TT: Jupiter enters Gemini (60 deg, direct) at 2060-04-04T01:54:13.094 TT."
     },
     {
@@ -849,6 +988,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Jupiter after 2140-01-01 TT: Jupiter enters Pisces (330 deg, direct) at 2140-03-09T05:02:09.558 TT."
     },
     {
@@ -870,6 +1013,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Saturn after 1860-01-01 TT: Saturn enters Virgo (150 deg, direct) at 1860-08-26T04:30:17.383 TT."
     },
     {
@@ -891,6 +1038,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Saturn after 1925-01-01 TT: Saturn enters Sagittarius (240 deg, direct) at 1926-12-02T22:34:18.316 TT."
     },
     {
@@ -912,6 +1063,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Saturn after 1990-01-01 TT: Saturn enters Aquarius (300 deg, direct) at 1991-02-06T18:52:11.361 TT."
     },
     {
@@ -933,6 +1088,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Saturn after 2026-01-01 TT: Saturn enters Aries (0 deg, direct) at 2026-02-14T00:12:48.200 TT."
     },
     {
@@ -954,6 +1113,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Saturn after 2060-01-01 TT: Saturn enters Gemini (60 deg, direct) at 2060-03-31T11:51:35.771 TT."
     },
     {
@@ -975,6 +1138,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Saturn after 2140-01-01 TT: Saturn enters Pisces (330 deg, direct) at 2141-02-04T04:17:03.120 TT."
     },
     {
@@ -996,6 +1163,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Uranus after 1860-01-01 TT: Uranus enters Cancer (90 deg, direct) at 1865-06-27T02:35:29.081 TT."
     },
     {
@@ -1017,6 +1188,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Uranus after 1925-01-01 TT: Uranus enters Aries (0 deg, direct) at 1927-03-31T17:22:22.104 TT."
     },
     {
@@ -1038,6 +1213,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Uranus after 1990-01-01 TT: Uranus enters Aquarius (300 deg, direct) at 1995-04-01T12:12:17.804 TT."
     },
     {
@@ -1059,6 +1238,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Uranus after 2026-01-01 TT: Uranus enters Gemini (60 deg, direct) at 2026-04-26T00:52:41.594 TT."
     },
     {
@@ -1080,6 +1263,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Uranus after 2060-01-01 TT: Uranus enters Sagittarius (240 deg, direct) at 2065-01-10T19:57:20.121 TT."
     },
     {
@@ -1101,6 +1288,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Uranus after 2140-01-01 TT: Uranus enters Scorpio (210 deg, direct) at 2142-01-19T12:01:22.832 TT."
     },
     {
@@ -1122,6 +1313,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Neptune after 1860-01-01 TT: Neptune enters Aries (0 deg, direct) at 1861-04-13T20:24:40.248 TT."
     },
     {
@@ -1143,6 +1338,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Neptune after 1925-01-01 TT: Neptune enters Virgo (150 deg, direct) at 1928-09-21T12:01:20.268 TT."
     },
     {
@@ -1164,6 +1363,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Neptune after 1990-01-01 TT: Neptune enters Aquarius (300 deg, direct) at 1998-01-29T02:53:08.105 TT."
     },
     {
@@ -1185,6 +1388,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Neptune after 2026-01-01 TT: Neptune enters Aries (0 deg, direct) at 2026-01-26T17:35:47.634 TT."
     },
     {
@@ -1206,6 +1413,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Neptune after 2060-01-01 TT: Neptune enters Cancer (90 deg, direct) at 2065-07-03T07:11:20.403 TT."
     },
     {
@@ -1227,6 +1438,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Neptune after 2140-01-01 TT: Neptune enters Capricorn (270 deg, direct) at 2148-01-04T12:22:45.607 TT."
     },
     {
@@ -1248,6 +1463,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Pluto after 1860-01-01 TT: Pluto enters Gemini (60 deg, direct) at 1882-07-21T21:51:21.184 TT."
     },
     {
@@ -1269,6 +1488,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Pluto after 1925-01-01 TT: Pluto enters Leo (120 deg, direct) at 1937-10-07T12:14:40.445 TT."
     },
     {
@@ -1290,6 +1513,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Pluto after 1990-01-01 TT: Pluto enters Sagittarius (240 deg, direct) at 1995-01-17T09:16:54.529 TT."
     },
     {
@@ -1311,6 +1538,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Pluto after 2026-01-01 TT: Pluto enters Pisces (330 deg, direct) at 2043-03-09T01:02:40.045 TT."
     },
     {
@@ -1332,6 +1563,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Pluto after 2060-01-01 TT: Pluto enters Aries (0 deg, direct) at 2066-06-17T15:25:29.328 TT."
     },
     {
@@ -1356,6 +1591,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Mercury after 1860-07-01 TT: Mercury stations retrograde at 1860-07-27T08:38:00.145 TT."
     },
     {
@@ -1380,6 +1619,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Mercury after 1925-07-01 TT: Mercury stations retrograde at 1925-08-11T13:27:52.582 TT."
     },
     {
@@ -1404,6 +1647,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Mercury after 1990-07-01 TT: Mercury stations retrograde at 1990-08-25T14:09:02.425 TT."
     },
     {
@@ -1428,6 +1675,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Mercury after 2026-07-01 TT: Mercury stations direct at 2026-07-23T22:58:59.782 TT."
     },
     {
@@ -1452,6 +1703,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Mercury after 2060-07-01 TT: Mercury stations direct at 2060-07-01T19:30:51.650 TT."
     },
     {
@@ -1476,6 +1731,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Mercury after 2140-07-01 TT: Mercury stations retrograde at 2140-09-17T12:14:37.280 TT."
     },
     {
@@ -1500,6 +1759,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Venus after 1860-07-01 TT: Venus stations direct at 1860-08-09T16:25:58.625 TT."
     },
     {
@@ -1524,6 +1787,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Venus after 1925-07-01 TT: Venus stations retrograde at 1926-01-17T22:10:33.870 TT."
     },
     {
@@ -1548,6 +1815,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Venus after 1990-07-01 TT: Venus stations retrograde at 1991-08-01T10:36:01.460 TT."
     },
     {
@@ -1572,6 +1843,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Venus after 2026-07-01 TT: Venus stations retrograde at 2026-10-03T07:17:03.424 TT."
     },
     {
@@ -1596,6 +1871,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Venus after 2060-07-01 TT: Venus stations retrograde at 2061-12-07T01:34:38.046 TT."
     },
     {
@@ -1620,6 +1899,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Venus after 2140-07-01 TT: Venus stations retrograde at 2141-11-13T02:02:24.484 TT."
     },
     {
@@ -1644,6 +1927,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Mars after 1860-07-01 TT: Mars stations direct at 1860-08-18T14:40:47.685 TT."
     },
     {
@@ -1668,6 +1955,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Mars after 1925-07-01 TT: Mars stations retrograde at 1926-09-29T05:43:00.667 TT."
     },
     {
@@ -1692,6 +1983,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Mars after 1990-07-01 TT: Mars stations retrograde at 1990-10-20T19:30:28.802 TT."
     },
     {
@@ -1716,6 +2011,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Mars after 2026-07-01 TT: Mars stations retrograde at 2027-01-10T13:00:20.186 TT."
     },
     {
@@ -1740,6 +2039,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Mars after 2060-07-01 TT: Mars stations retrograde at 2061-02-22T22:45:52.514 TT."
     },
     {
@@ -1764,6 +2067,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Mars after 2140-07-01 TT: Mars stations retrograde at 2142-04-13T02:56:25.431 TT."
     },
     {
@@ -1788,6 +2095,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Jupiter after 1860-07-01 TT: Jupiter stations retrograde at 1860-12-12T18:41:59.367 TT."
     },
     {
@@ -1812,6 +2123,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Jupiter after 1925-07-01 TT: Jupiter stations direct at 1925-09-09T07:17:30.595 TT."
     },
     {
@@ -1836,6 +2151,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Jupiter after 1990-07-01 TT: Jupiter stations retrograde at 1990-11-30T05:03:59.383 TT."
     },
     {
@@ -1860,6 +2179,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Jupiter after 2026-07-01 TT: Jupiter stations retrograde at 2026-12-13T00:57:44.918 TT."
     },
     {
@@ -1884,6 +2207,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Jupiter after 2060-07-01 TT: Jupiter stations retrograde at 2060-10-23T09:33:40.652 TT."
     },
     {
@@ -1908,6 +2235,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Jupiter after 2140-07-01 TT: Jupiter stations retrograde at 2140-07-06T07:25:09.804 TT."
     },
     {
@@ -1932,6 +2263,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Saturn after 1860-07-01 TT: Saturn stations retrograde at 1860-12-19T21:05:38.150 TT."
     },
     {
@@ -1956,6 +2291,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Saturn after 1925-07-01 TT: Saturn stations direct at 1925-07-11T21:18:11.664 TT."
     },
     {
@@ -1980,6 +2319,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Saturn after 1990-07-01 TT: Saturn stations direct at 1990-09-23T05:11:22.353 TT."
     },
     {
@@ -2004,6 +2347,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Saturn after 2026-07-01 TT: Saturn stations retrograde at 2026-07-26T19:57:23.501 TT."
     },
     {
@@ -2028,6 +2375,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Saturn after 2060-07-01 TT: Saturn stations retrograde at 2060-09-28T18:56:44.383 TT."
     },
     {
@@ -2052,6 +2403,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.station"
+      ],
       "note": "the first station of Saturn after 2140-07-01 TT: Saturn stations direct at 2140-10-26T22:28:01.496 TT."
     },
     {
@@ -2072,6 +2427,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 1860-03-01 TT: at 1860-03-22T13:55:40.624 TT."
     },
     {
@@ -2092,6 +2451,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 1860-03-01 TT: at 1860-03-07T12:44:29.723 TT."
     },
     {
@@ -2112,6 +2475,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 1860-09-01 TT: at 1860-09-15T06:09:49.835 TT."
     },
     {
@@ -2132,6 +2499,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 1860-09-01 TT: at 1860-09-30T01:40:04.928 TT."
     },
     {
@@ -2152,6 +2523,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 1925-03-01 TT: at 1925-03-24T14:03:11.159 TT."
     },
     {
@@ -2172,6 +2547,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 1925-03-01 TT: at 1925-03-10T14:21:06.315 TT."
     },
     {
@@ -2192,6 +2571,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 1925-09-01 TT: at 1925-09-18T04:12:40.234 TT."
     },
     {
@@ -2212,6 +2595,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 1925-09-01 TT: at 1925-09-02T19:53:12.104 TT."
     },
     {
@@ -2232,6 +2619,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 1990-03-01 TT: at 1990-03-26T19:49:16.335 TT."
     },
     {
@@ -2252,6 +2643,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 1990-03-01 TT: at 1990-03-11T10:59:27.175 TT."
     },
     {
@@ -2272,6 +2667,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 1990-09-01 TT: at 1990-09-19T00:47:18.253 TT."
     },
     {
@@ -2292,6 +2691,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 1990-09-01 TT: at 1990-09-05T01:46:33.524 TT."
     },
     {
@@ -2312,6 +2715,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 2026-03-01 TT: at 2026-03-19T01:24:37.911 TT."
     },
     {
@@ -2332,6 +2739,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 2026-03-01 TT: at 2026-03-03T11:39:02.914 TT."
     },
     {
@@ -2352,6 +2763,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 2026-09-01 TT: at 2026-09-11T03:28:09.110 TT."
     },
     {
@@ -2372,6 +2787,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 2026-09-01 TT: at 2026-09-26T16:50:11.602 TT."
     },
     {
@@ -2392,6 +2811,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 2060-03-01 TT: at 2060-03-02T16:13:17.338 TT."
     },
     {
@@ -2412,6 +2835,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 2060-03-01 TT: at 2060-03-17T03:42:38.993 TT."
     },
     {
@@ -2432,6 +2859,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 2060-09-01 TT: at 2060-09-24T15:55:14.244 TT."
     },
     {
@@ -2452,6 +2883,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 2060-09-01 TT: at 2060-09-10T09:45:34.617 TT."
     },
     {
@@ -2472,6 +2907,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 2140-03-01 TT: at 2140-03-19T00:02:33.433 TT."
     },
     {
@@ -2492,6 +2931,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 2140-03-01 TT: at 2140-03-03T17:39:51.764 TT."
     },
     {
@@ -2512,6 +2955,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 2140-09-01 TT: at 2140-09-11T07:31:49.158 TT."
     },
     {
@@ -2532,6 +2979,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 2140-09-01 TT: at 2140-09-26T16:43:34.649 TT."
     },
     {
@@ -2552,6 +3003,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the new Moon of the total solar eclipse of 1860-07-18 (Espenak and Meeus, Five Millennium Canon of Solar Eclipses: -1999 to +3000, NASA/TP-2006-214141 (2006)): at 1860-07-18T14:20:40.821 TT.",
       "tags": [
         "eclipse"
@@ -2575,6 +3030,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the new Moon of the total solar eclipse of 1919-05-29 (Espenak and Meeus, Five Millennium Canon of Solar Eclipses: -1999 to +3000, NASA/TP-2006-214141 (2006)): at 1919-05-29T13:11:55.688 TT.",
       "tags": [
         "eclipse"
@@ -2598,6 +3057,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the new Moon of the total solar eclipse of 2026-08-12 (Espenak and Meeus, Five Millennium Canon of Solar Eclipses: -1999 to +3000, NASA/TP-2006-214141 (2006)): at 2026-08-12T17:37:54.171 TT.",
       "tags": [
         "eclipse"
@@ -2621,6 +3084,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the full Moon of the total lunar eclipse of 2000-01-21 (Espenak and Meeus, Five Millennium Canon of Lunar Eclipses: -1999 to +3000, NASA/TP-2009-214172 (2009)): at 2000-01-21T04:41:30.502 TT.",
       "tags": [
         "eclipse"
@@ -2644,6 +3111,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the full Moon of the total lunar eclipse of 2018-07-27 (Espenak and Meeus, Five Millennium Canon of Lunar Eclipses: -1999 to +3000, NASA/TP-2009-214172 (2009)): at 2018-07-27T20:21:30.288 TT.",
       "tags": [
         "eclipse"
@@ -2667,6 +3138,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the full Moon of the total lunar eclipse of 2025-03-14 (Espenak and Meeus, Five Millennium Canon of Lunar Eclipses: -1999 to +3000, NASA/TP-2009-214172 (2009)): at 2025-03-14T06:55:48.377 TT.",
       "tags": [
         "eclipse"
@@ -2691,6 +3166,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Sun after 2028-01-01 UTC: Sun enters Aquarius (300 deg, direct) at 2028-01-20T13:21:55.878 UTC.",
       "tags": [
         "utc-input"
@@ -2715,6 +3194,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Moon after 2028-01-01 UTC: Moon enters Pisces (330 deg, direct) at 2028-01-01T08:52:46.290 UTC.",
       "tags": [
         "utc-input"
@@ -2738,6 +3221,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 2028-01-01 UTC: at 2028-01-26T15:12:31.045 UTC.",
       "tags": [
         "utc-input"
@@ -2761,6 +3248,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 2028-01-01 UTC: at 2028-01-12T04:03:05.218 UTC.",
       "tags": [
         "utc-input"
@@ -2785,6 +3276,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Sun after 2035-01-01 UTC: Sun enters Aquarius (300 deg, direct) at 2035-01-20T06:14:16.687 UTC.",
       "tags": [
         "utc-input"
@@ -2809,6 +3304,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Moon after 2035-01-01 UTC: Moon enters Scorpio (210 deg, direct) at 2035-01-02T23:59:37.155 UTC.",
       "tags": [
         "utc-input"
@@ -2832,6 +3331,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 2035-01-01 UTC: at 2035-01-09T15:03:08.164 UTC.",
       "tags": [
         "utc-input"
@@ -2855,6 +3358,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 2035-01-01 UTC: at 2035-01-23T20:16:38.009 UTC.",
       "tags": [
         "utc-input"
@@ -2879,6 +3386,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Sun after 2050-01-01 UTC: Sun enters Aquarius (300 deg, direct) at 2050-01-19T21:33:58.294 UTC.",
       "tags": [
         "utc-input"
@@ -2903,6 +3414,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Moon after 2050-01-01 UTC: Moon enters Taurus (30 deg, direct) at 2050-01-01T20:21:06.330 UTC.",
       "tags": [
         "utc-input"
@@ -2926,6 +3441,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 2050-01-01 UTC: at 2050-01-23T04:57:03.151 UTC.",
       "tags": [
         "utc-input"
@@ -2949,6 +3468,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 2050-01-01 UTC: at 2050-01-08T01:39:07.059 UTC.",
       "tags": [
         "utc-input"
@@ -2973,6 +3496,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Sun after 2100-01-01 UTC: Sun enters Aquarius (300 deg, direct) at 2100-01-20T00:47:50.617 UTC.",
       "tags": [
         "utc-input"
@@ -2997,6 +3524,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Moon after 2100-01-01 UTC: Moon enters Libra (180 deg, direct) at 2100-01-02T14:35:49.181 UTC.",
       "tags": [
         "utc-input"
@@ -3020,6 +3551,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 2100-01-01 UTC: at 2100-01-10T12:57:46.277 UTC.",
       "tags": [
         "utc-input"
@@ -3043,6 +3578,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 2100-01-01 UTC: at 2100-01-26T02:51:42.302 UTC.",
       "tags": [
         "utc-input"
@@ -3067,6 +3606,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Sun after 2140-01-01 UTC: Sun enters Aquarius (300 deg, direct) at 2140-01-20T17:49:55.950 UTC.",
       "tags": [
         "utc-input"
@@ -3091,6 +3634,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the first ingress of Moon after 2140-01-01 UTC: Moon enters Gemini (60 deg, direct) at 2140-01-01T07:24:06.914 UTC.",
       "tags": [
         "utc-input"
@@ -3114,6 +3661,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first new Moon after 2140-01-01 UTC: at 2140-01-20T00:24:56.699 UTC.",
       "tags": [
         "utc-input"
@@ -3137,6 +3688,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.lunation"
+      ],
       "note": "the first full Moon after 2140-01-01 UTC: at 2140-01-04T09:41:02.526 UTC.",
       "tags": [
         "utc-input"
@@ -3161,6 +3716,10 @@
         }
       },
       "arbiter": "l4-de440s-events",
+      "conventionIds": [
+        "arbiter:l4-de440s-events",
+        "kind:event.ingress"
+      ],
       "note": "the Sun's ingress into Sagittarius in November 2026 (cross-check with ingress-ref.json): Sun enters Sagittarius (240 deg, direct) at 2026-11-22T07:24:29.747 TT.",
       "tags": [
         "cross-check"

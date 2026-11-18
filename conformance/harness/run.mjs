@@ -3,7 +3,7 @@
  * Run an adapter over the suite and write, or check, a results file.
  *
  *   node conformance/harness/run.mjs --adapter "<command>" --out conformance/results/<name>.json
- *       [--levels L1,L2,L3] [--values residuals|none]
+ *       [--levels L1,L2,L3,L4] [--values residuals|none]
  *   node conformance/harness/run.mjs --adapter "<command>" --check conformance/results/<name>.json
  *
  * --values none writes verdicts and summary statistics only, with no
@@ -26,7 +26,7 @@ const check = option('check');
 const values = option('values', 'residuals');
 const levels = option('levels', Object.keys(LEVEL_FILES).join(',')).split(',');
 if (!command || (!out && !check) || !['residuals', 'none'].includes(values)) {
-  console.error('usage: run.mjs --adapter "<command>" (--out <file> | --check <file>) [--levels L1,L2,L3] [--values residuals|none]');
+  console.error('usage: run.mjs --adapter "<command>" (--out <file> | --check <file>) [--levels L1,L2,L3,L4] [--values residuals|none]');
   process.exit(2);
 }
 
