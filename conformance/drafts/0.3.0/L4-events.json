@@ -1,0 +1,3170 @@
+{
+  "suite": "zodiacs-conformance",
+  "suiteVersion": "0.3.0-draft",
+  "level": "L4",
+  "title": "Event times (draft)",
+  "draft": "A draft level, not part of any released suite version: the harness does not run it, and releasing it is the owner's decision. Design: drafts/0.3.0/DESIGN.md. Instants are seconds from J2000.0 (tt_s: of TT from JD 2451545.0 TT; utc_s: of UTC from 2000-01-01T12:00:00 UTC, counted on the UTC calendar). In the UTC set, UTC is TT - 69.184 s (TAI - UTC = 37 s, as from 2017-01-01, plus 32.184 s).",
+  "arbiters": {
+    "l4-de440s-events": {
+      "name": "NASA JPL DE440s reduced to apparent geocentric longitudes in the IAU 2006/2000A true ecliptic and equinox of date, with event instants solved by bisection",
+      "source": "The NAIF kernel de440s.bsp (https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp, SHA-256 c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2), not committed; ERFA through pyerfa; jplephem. The reduction is that of arbiters/l1/validate.py (light time, deflection by the Sun, annual aberration, pnm06a, true obliquity), with Mars to Pluto as their system barycentres (NAIF 4 to 9). Cross-check (b): the JPL Horizons API (version 1.2, ephemeris DE441, EOP file eop.261116.p270212), observer quantity 31 for the geocentre in TT, retrieved 2026-11-17 as recorded in sources/l4/horizons-provenance.tsv, over all events from 1860 to 2149; the requests are in sources/l4/horizons-requests.txt and the responses in sources/l4/horizons/.",
+      "inputs": [
+        {
+          "path": "sources/l4/horizons-requests.txt",
+          "sha256": "6138397425cbda160eb0f4577f07bb7dc09d5aa8d80a7520669220824c436a0a"
+        },
+        {
+          "path": "sources/l4/solutions.json",
+          "sha256": "ef49ef772fa4045c00983199579715c7d4b1f56cd06d5162cc2e86a1e9440abf"
+        },
+        {
+          "path": "sources/l4/horizons-provenance.tsv",
+          "sha256": "64e9d2b7d3782cc7da795a89f04ac8d1954e0f4c3aedd6b43326f151ade36dac"
+        },
+        {
+          "path": "sources/l4/horizons/request-01.txt",
+          "sha256": "38a1d6e66a9e37b7f5d3bdfcaa388dd9f8065bf92928e48a4b71f738dc6148db"
+        },
+        {
+          "path": "sources/l4/horizons/request-02.txt",
+          "sha256": "d288f67f96b9a7e5e9ec6e228e75b71f067126e8aa7873e096ed4da4b814fd3d"
+        },
+        {
+          "path": "sources/l4/horizons/request-03.txt",
+          "sha256": "5e0c1d98c0638a0c9abdfce6f497bc09c86ebca7d999ea153cd4f43f040a1baf"
+        },
+        {
+          "path": "sources/l4/horizons/request-04.txt",
+          "sha256": "c6401632fec88e324d47b45347952da6e9630f694178bf92b3b94a1f66fb8222"
+        },
+        {
+          "path": "sources/l4/horizons/request-05.txt",
+          "sha256": "3eb16a28ff5b83442e112288e9cfd4d55e1cb3d33b5d535b78ffdd45181dba6c"
+        },
+        {
+          "path": "sources/l4/horizons/request-06.txt",
+          "sha256": "fb59a77ea3475ffb2bddf0e7569fba2623706b2d7a1a6e33571794bcbbd86b08"
+        },
+        {
+          "path": "sources/l4/horizons/request-07a.txt",
+          "sha256": "d8f8dd114ba85b9977038ef17a268274a0af7602f07b0725ba70a3590542d3e9"
+        },
+        {
+          "path": "sources/l4/horizons/request-07b.txt",
+          "sha256": "1b3296f305f12ba9532632c598d57549032974f5fd15fe49ae90250b98462363"
+        },
+        {
+          "path": "sources/l4/horizons/request-08.txt",
+          "sha256": "ce646b08729c45a2e3a5a65375c7fb4b4da88e640aa0c42f54d703e31081156b"
+        },
+        {
+          "path": "sources/l4/horizons/request-09.txt",
+          "sha256": "f5cc0d6225ff29fd305c800573561959e7f5dd49352c8658afa727da7ad4c3bf"
+        },
+        {
+          "path": "sources/l4/horizons/request-10.txt",
+          "sha256": "ec203594b65f73990bc89876ec38c593a53e5e0c1c14db4719dea8095415b48f"
+        },
+        {
+          "path": "sources/l4/horizons/request-11a.txt",
+          "sha256": "a243cd74e7b9716d6a061050cbf935f5f5c9d4b17e2fba546b8401b12ed07e08"
+        },
+        {
+          "path": "sources/l4/horizons/request-11b.txt",
+          "sha256": "e447373da36a13e1b60320c9d2080ab0a32c9e93bc14ef0ba08dfdeb54f9c707"
+        },
+        {
+          "path": "sources/l4/horizons/request-12.txt",
+          "sha256": "e7dd0f4ad49da9cbec6a7a1a84e45553a65c62e6376c28ba994b05982e76b74f"
+        },
+        {
+          "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp",
+          "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2"
+        }
+      ],
+      "method": "For each event of DESIGN.md the generator samples the quantity (a body's longitude, the Moon's longitude minus the Sun's, or the longitude's rate as a central difference over an hour either side) at 1 hour steps from the window's start, after a daily table has shown where to look, and solves the first crossing by bisection to 1 ms. The window ends midway to the next time the same thing happens (or at 2150-01-01 TT), and holds exactly one event. Tolerance: for an ingress or a lunation, max(1 s, 1 arcsec / |rate|) rounded up to a whole second, the rate from the longitudes an hour either side; for a station, max(60 s, sqrt(2 x 1 arcsec / |acceleration|)) rounded up, the acceleration from the longitudes an hour before, at and an hour after. Every solved instant, its window and those longitudes are in sources/l4/solutions.json.",
+      "generator": "arbiters/l4/build.py",
+      "uncertainty": "Tolerances by kind: event.ingress: 2 s to 5250 s; event.lunation: 2 s to 3 s; event.station: 6270 s to 50406 s. Check (a): every solve repeated with half hour brackets agrees within 0.000 s, at most 0.0000 of its tolerance (limit 0.1). The array reduction agrees with validate.py's apparent() at every solved instant within 0.004172 mas. Property: at t - tolerance and t + tolerance every ingress lies on opposite sides of its target, at most 1.498 arcsec from it (limit 1.5). Vector L4-ING-0061 solves -0.0002 s from the independent de440.bsp reduction in docs/evidence/1.1.0-rc.11-20261115/breaker/results/ingress-ref.json (limit 1 s). Check (b), against the JPL Horizons API (version 1.2, ephemeris DE441, EOP file eop.261116.p270212), observer quantity 31 for the geocentre in TT, retrieved 2026-11-17 as recorded in sources/l4/horizons-provenance.tsv: 140 of 140 events checked, 0 failed and were dropped, 0 pending. For the 110 ingresses and lunations, Horizons' longitude at the solved instant differs from the target by a median of 0.047 arcsec; the worst is L4-ING-0049 (the first ingress of Neptune after 1860-01-01 TT) at -0.359 arcsec (limit 0.45). The difference grows with distance from J2000 (1860 to 1899: -0.359 to +0.011; 1900 to 1959: -0.158 to +0.002; 1960 to 2029: -0.057 to +0.003; 2030 to 2149: -0.012 to +0.343 arcsec), as the IAU 1976/1980 frame Horizons gives for quantity 31 parts from the IAU 2006/2000A frame of the arbiter. For the 30 stations, the station implied by Horizons' longitudes an hour either side of the solved instant lies at most 62 s from it; the largest share of a tolerance is L4-STA-0030 (the first station of Saturn after 2140-07-01 TT), +62 s against 49110 s (0.0013). Every event's own figure is in sources/l4/solutions.json under \"horizons\"."
+    }
+  },
+  "dropped": [
+    {
+      "id": "L4-ING-0060",
+      "what": "the first ingress of Pluto after 2140-01-01 TT",
+      "reason": "coverage: no event between 2140-01-01T00:00:00.000 TT and 2150-01-20T00:00:00.000 TT, the end of the search inside the kernel (which ends 2150-01-22)"
+    }
+  ],
+  "vectors": [
+    {
+      "id": "L4-ING-0001",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Sun",
+        "longitude_deg": 300,
+        "after_tt_s": -4418020800.0,
+        "before_tt_s": -4400533948.0
+      },
+      "expected": {
+        "tt_s": -4416312166.115
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 24,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Sun after 1860-01-01 TT: Sun enters Aquarius (300 deg, direct) at 1860-01-20T18:37:13.885 TT."
+    },
+    {
+      "id": "L4-ING-0002",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Sun",
+        "longitude_deg": 300,
+        "after_tt_s": -2366798400.0,
+        "before_tt_s": -2349330200.0
+      },
+      "expected": {
+        "tt_s": -2365108767.586
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 24,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Sun after 1925-01-01 TT: Sun enters Aquarius (300 deg, direct) at 1925-01-20T13:20:32.414 TT."
+    },
+    {
+      "id": "L4-ING-0003",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Sun",
+        "longitude_deg": 300,
+        "after_tt_s": -315576000.0,
+        "before_tt_s": -298127084.0
+      },
+      "expected": {
+        "tt_s": -313905450.028
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 24,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Sun after 1990-01-01 TT: Sun enters Aquarius (300 deg, direct) at 1990-01-20T08:02:29.972 TT."
+    },
+    {
+      "id": "L4-ING-0004",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Sun",
+        "longitude_deg": 300,
+        "after_tt_s": 820497600.0,
+        "before_tt_s": 837923913.0
+      },
+      "expected": {
+        "tt_s": 822145565.255
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 24,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Sun after 2026-01-01 TT: Sun enters Aquarius (300 deg, direct) at 2026-01-20T01:46:05.255 TT."
+    },
+    {
+      "id": "L4-ING-0005",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Sun",
+        "longitude_deg": 300,
+        "after_tt_s": 1893412800.0,
+        "before_tt_s": 1910861520.0
+      },
+      "expected": {
+        "tt_s": 1895083185.08
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 24,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Sun after 2060-01-01 TT: Sun enters Aquarius (300 deg, direct) at 2060-01-20T07:59:45.080 TT."
+    },
+    {
+      "id": "L4-ING-0006",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Sun",
+        "longitude_deg": 300,
+        "after_tt_s": 4417934400.0,
+        "before_tt_s": 4435418729.0
+      },
+      "expected": {
+        "tt_s": 4419640265.134
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 24,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Sun after 2140-01-01 TT: Sun enters Aquarius (300 deg, direct) at 2140-01-20T17:51:05.134 TT."
+    },
+    {
+      "id": "L4-ING-0007",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Moon",
+        "longitude_deg": 30,
+        "after_tt_s": -4418020800.0,
+        "before_tt_s": -4416664151.0
+      },
+      "expected": {
+        "tt_s": -4417844935.014
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Moon after 1860-01-01 TT: Moon enters Taurus (30 deg, direct) at 1860-01-03T00:51:04.986 TT."
+    },
+    {
+      "id": "L4-ING-0008",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Moon",
+        "longitude_deg": 0,
+        "after_tt_s": -2366798400.0,
+        "before_tt_s": -2365605090.0
+      },
+      "expected": {
+        "tt_s": -2366787757.241
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Moon after 1925-01-01 TT: Moon enters Aries (0 deg, direct) at 1925-01-01T02:57:22.759 TT."
+    },
+    {
+      "id": "L4-ING-0009",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Moon",
+        "longitude_deg": 330,
+        "after_tt_s": -315576000.0,
+        "before_tt_s": -314375323.0
+      },
+      "expected": {
+        "tt_s": -315553740.115
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Moon after 1990-01-01 TT: Moon enters Pisces (330 deg, direct) at 1990-01-01T06:10:59.885 TT."
+    },
+    {
+      "id": "L4-ING-0010",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Moon",
+        "longitude_deg": 90,
+        "after_tt_s": 820497600.0,
+        "before_tt_s": 821814689.0
+      },
+      "expected": {
+        "tt_s": 820631409.494
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Moon after 2026-01-01 TT: Moon enters Cancer (90 deg, direct) at 2026-01-02T13:10:09.494 TT."
+    },
+    {
+      "id": "L4-ING-0011",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Moon",
+        "longitude_deg": 270,
+        "after_tt_s": 1893412800.0,
+        "before_tt_s": 1894746935.0
+      },
+      "expected": {
+        "tt_s": 1893562764.247
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Moon after 2060-01-01 TT: Moon enters Capricorn (270 deg, direct) at 2060-01-02T17:39:24.247 TT."
+    },
+    {
+      "id": "L4-ING-0012",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Moon",
+        "longitude_deg": 60,
+        "after_tt_s": 4417934400.0,
+        "before_tt_s": 4419138663.0
+      },
+      "expected": {
+        "tt_s": 4417961116.098
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Moon after 2140-01-01 TT: Moon enters Gemini (60 deg, direct) at 2140-01-01T07:25:16.098 TT."
+    },
+    {
+      "id": "L4-ING-0013",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Mercury",
+        "longitude_deg": 270,
+        "after_tt_s": -4418020800.0,
+        "before_tt_s": -4401520583.0
+      },
+      "expected": {
+        "tt_s": -4417031889.067
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 19,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Mercury after 1860-01-01 TT: Mercury enters Capricorn (270 deg, direct) at 1860-01-12T10:41:50.933 TT."
+    },
+    {
+      "id": "L4-ING-0014",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Mercury",
+        "longitude_deg": 270,
+        "after_tt_s": -2366798400.0,
+        "before_tt_s": -2350010291.0
+      },
+      "expected": {
+        "tt_s": -2365649049.18
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 31,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Mercury after 1925-01-01 TT: Mercury enters Capricorn (270 deg, direct) at 1925-01-14T07:15:50.820 TT."
+    },
+    {
+      "id": "L4-ING-0015",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Mercury",
+        "longitude_deg": 300,
+        "after_tt_s": -315576000.0,
+        "before_tt_s": -296439201.0
+      },
+      "expected": {
+        "tt_s": -311942871.953
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 18,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Mercury after 1990-01-01 TT: Mercury enters Aquarius (300 deg, direct) at 1990-02-12T01:12:08.047 TT."
+    },
+    {
+      "id": "L4-ING-0016",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Mercury",
+        "longitude_deg": 270,
+        "after_tt_s": 820497600.0,
+        "before_tt_s": 836034465.0
+      },
+      "expected": {
+        "tt_s": 820573911.037
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 16,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Mercury after 2026-01-01 TT: Mercury enters Capricorn (270 deg, direct) at 2026-01-01T21:11:51.037 TT."
+    },
+    {
+      "id": "L4-ING-0017",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Mercury",
+        "longitude_deg": 300,
+        "after_tt_s": 1893412800.0,
+        "before_tt_s": 1909875821.0
+      },
+      "expected": {
+        "tt_s": 1894406376.778
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 15,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Mercury after 2060-01-01 TT: Mercury enters Aquarius (300 deg, direct) at 2060-01-12T11:59:36.778 TT."
+    },
+    {
+      "id": "L4-ING-0018",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Mercury",
+        "longitude_deg": 300,
+        "after_tt_s": 4417934400.0,
+        "before_tt_s": 4433940897.0
+      },
+      "expected": {
+        "tt_s": 4418321080.509
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 16,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Mercury after 2140-01-01 TT: Mercury enters Aquarius (300 deg, direct) at 2140-01-05T11:24:40.509 TT."
+    },
+    {
+      "id": "L4-ING-0019",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Venus",
+        "longitude_deg": 330,
+        "after_tt_s": -4418020800.0,
+        "before_tt_s": -4398455688.0
+      },
+      "expected": {
+        "tt_s": -4416154253.942
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 20,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Venus after 1860-01-01 TT: Venus enters Pisces (330 deg, direct) at 1860-01-22T14:29:06.058 TT."
+    },
+    {
+      "id": "L4-ING-0020",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Venus",
+        "longitude_deg": 270,
+        "after_tt_s": -2366798400.0,
+        "before_tt_s": -2352806899.0
+      },
+      "expected": {
+        "tt_s": -2365594277.881
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 20,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Venus after 1925-01-01 TT: Venus enters Capricorn (270 deg, direct) at 1925-01-14T22:28:42.119 TT."
+    },
+    {
+      "id": "L4-ING-0021",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Venus",
+        "longitude_deg": 300,
+        "after_tt_s": -315576000.0,
+        "before_tt_s": -312232903.0
+      },
+      "expected": {
+        "tt_s": -314224567.346
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 40,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Venus after 1990-01-01 TT: Venus enters Capricorn (300 deg, retrograde) at 1990-01-16T15:23:52.654 TT."
+    },
+    {
+      "id": "L4-ING-0022",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Venus",
+        "longitude_deg": 300,
+        "after_tt_s": 820497600.0,
+        "before_tt_s": 839540339.0
+      },
+      "expected": {
+        "tt_s": 821925873.136
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 20,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Venus after 2026-01-01 TT: Venus enters Aquarius (300 deg, direct) at 2026-01-17T12:44:33.136 TT."
+    },
+    {
+      "id": "L4-ING-0023",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Venus",
+        "longitude_deg": 330,
+        "after_tt_s": 1893412800.0,
+        "before_tt_s": 1911959896.0
+      },
+      "expected": {
+        "tt_s": 1894318771.575
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 20,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Venus after 2060-01-01 TT: Venus enters Pisces (330 deg, direct) at 2060-01-11T11:39:31.575 TT."
+    },
+    {
+      "id": "L4-ING-0024",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Venus",
+        "longitude_deg": 330,
+        "after_tt_s": 4417934400.0,
+        "before_tt_s": 4436149871.0
+      },
+      "expected": {
+        "tt_s": 4418559129.036
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 21,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Venus after 2140-01-01 TT: Venus enters Pisces (330 deg, direct) at 2140-01-08T05:32:09.036 TT."
+    },
+    {
+      "id": "L4-ING-0025",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Mars",
+        "longitude_deg": 240,
+        "after_tt_s": -4418020800.0,
+        "before_tt_s": -4384901878.0
+      },
+      "expected": {
+        "tt_s": -4415397251.455
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 40,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Mars after 1860-01-01 TT: Mars enters Sagittarius (240 deg, direct) at 1860-01-31T08:45:48.545 TT."
+    },
+    {
+      "id": "L4-ING-0026",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Mars",
+        "longitude_deg": 30,
+        "after_tt_s": -2366798400.0,
+        "before_tt_s": -2340324833.0
+      },
+      "expected": {
+        "tt_s": -2363737341.536
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 38,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Mars after 1925-01-01 TT: Mars enters Taurus (30 deg, direct) at 1925-02-05T10:17:38.464 TT."
+    },
+    {
+      "id": "L4-ING-0027",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Mars",
+        "longitude_deg": 270,
+        "after_tt_s": -315576000.0,
+        "before_tt_s": -282441631.0
+      },
+      "expected": {
+        "tt_s": -313105717.052
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 34,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Mars after 1990-01-01 TT: Mars enters Capricorn (270 deg, direct) at 1990-01-29T14:11:22.948 TT."
+    },
+    {
+      "id": "L4-ING-0028",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Mars",
+        "longitude_deg": 300,
+        "after_tt_s": 820497600.0,
+        "before_tt_s": 853116021.0
+      },
+      "expected": {
+        "tt_s": 822431874.381
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 31,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Mars after 2026-01-01 TT: Mars enters Aquarius (300 deg, direct) at 2026-01-23T09:17:54.381 TT."
+    },
+    {
+      "id": "L4-ING-0029",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Mars",
+        "longitude_deg": 330,
+        "after_tt_s": 1893412800.0,
+        "before_tt_s": 1927162793.0
+      },
+      "expected": {
+        "tt_s": 1896511111.446
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 31,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Mars after 2060-01-01 TT: Mars enters Pisces (330 deg, direct) at 2060-02-05T20:38:31.446 TT."
+    },
+    {
+      "id": "L4-ING-0030",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Mars",
+        "longitude_deg": 210,
+        "after_tt_s": 4417934400.0,
+        "before_tt_s": 4458752980.0
+      },
+      "expected": {
+        "tt_s": 4436048362.25
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 45,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Mars after 2140-01-01 TT: Mars enters Scorpio (210 deg, direct) at 2140-07-28T15:39:22.250 TT."
+    },
+    {
+      "id": "L4-ING-0031",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Jupiter",
+        "longitude_deg": 120,
+        "after_tt_s": -4418020800.0,
+        "before_tt_s": -4213821745.0
+      },
+      "expected": {
+        "tt_s": -4402399011.726
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 113,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Jupiter after 1860-01-01 TT: Jupiter enters Leo (120 deg, direct) at 1860-06-29T19:23:08.274 TT."
+    },
+    {
+      "id": "L4-ING-0032",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Jupiter",
+        "longitude_deg": 300,
+        "after_tt_s": -2366798400.0,
+        "before_tt_s": -2146210011.0
+      },
+      "expected": {
+        "tt_s": -2334826749.875
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 104,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Jupiter after 1925-01-01 TT: Jupiter enters Aquarius (300 deg, direct) at 1926-01-06T01:00:50.125 TT."
+    },
+    {
+      "id": "L4-ING-0033",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Jupiter",
+        "longitude_deg": 120,
+        "after_tt_s": -315576000.0,
+        "before_tt_s": -107134438.0
+      },
+      "expected": {
+        "tt_s": -295763355.071
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 113,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Jupiter after 1990-01-01 TT: Jupiter enters Leo (120 deg, direct) at 1990-08-18T07:30:44.929 TT."
+    },
+    {
+      "id": "L4-ING-0034",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Jupiter",
+        "longitude_deg": 120,
+        "after_tt_s": 820497600.0,
+        "before_tt_s": 1024656012.0
+      },
+      "expected": {
+        "tt_s": 836070810.974
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 113,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Jupiter after 2026-01-01 TT: Jupiter enters Leo (120 deg, direct) at 2026-06-30T05:53:30.974 TT."
+    },
+    {
+      "id": "L4-ING-0035",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Jupiter",
+        "longitude_deg": 60,
+        "after_tt_s": 1893412800.0,
+        "before_tt_s": 2079796276.0
+      },
+      "expected": {
+        "tt_s": 1901541253.094
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 122,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Jupiter after 2060-01-01 TT: Jupiter enters Gemini (60 deg, direct) at 2060-04-04T01:54:13.094 TT."
+    },
+    {
+      "id": "L4-ING-0036",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Jupiter",
+        "longitude_deg": 330,
+        "after_tt_s": 4417934400.0,
+        "before_tt_s": 4733553600.0
+      },
+      "expected": {
+        "tt_s": 4423827729.558
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 103,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Jupiter after 2140-01-01 TT: Jupiter enters Pisces (330 deg, direct) at 2140-03-09T05:02:09.558 TT."
+    },
+    {
+      "id": "L4-ING-0037",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Saturn",
+        "longitude_deg": 150,
+        "after_tt_s": -4418020800.0,
+        "before_tt_s": -3938054312.0
+      },
+      "expected": {
+        "tt_s": -4397441382.617
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 189,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Saturn after 1860-01-01 TT: Saturn enters Virgo (150 deg, direct) at 1860-08-26T04:30:17.383 TT."
+    },
+    {
+      "id": "L4-ING-0038",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Saturn",
+        "longitude_deg": 240,
+        "after_tt_s": -2366798400.0,
+        "before_tt_s": -1846898414.0
+      },
+      "expected": {
+        "tt_s": -2306237141.684
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 204,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Saturn after 1925-01-01 TT: Saturn enters Sagittarius (240 deg, direct) at 1926-12-02T22:34:18.316 TT."
+    },
+    {
+      "id": "L4-ING-0039",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Saturn",
+        "longitude_deg": 300,
+        "after_tt_s": -315576000.0,
+        "before_tt_s": 178629956.0
+      },
+      "expected": {
+        "tt_s": -280861668.639
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 208,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Saturn after 1990-01-01 TT: Saturn enters Aquarius (300 deg, direct) at 1991-02-06T18:52:11.361 TT."
+    },
+    {
+      "id": "L4-ING-0040",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Saturn",
+        "longitude_deg": 0,
+        "after_tt_s": 820497600.0,
+        "before_tt_s": 1283462530.0
+      },
+      "expected": {
+        "tt_s": 824299968.2
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 219,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Saturn after 2026-01-01 TT: Saturn enters Aries (0 deg, direct) at 2026-02-14T00:12:48.200 TT."
+    },
+    {
+      "id": "L4-ING-0041",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Saturn",
+        "longitude_deg": 60,
+        "after_tt_s": 1893412800.0,
+        "before_tt_s": 2360747306.0
+      },
+      "expected": {
+        "tt_s": 1901231495.771
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 240,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Saturn after 2060-01-01 TT: Saturn enters Gemini (60 deg, direct) at 2060-03-31T11:51:35.771 TT."
+    },
+    {
+      "id": "L4-ING-0042",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Saturn",
+        "longitude_deg": 330,
+        "after_tt_s": 4417934400.0,
+        "before_tt_s": 4733553600.0
+      },
+      "expected": {
+        "tt_s": 4452509823.12
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 203,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Saturn after 2140-01-01 TT: Saturn enters Pisces (330 deg, direct) at 2141-02-04T04:17:03.120 TT."
+    },
+    {
+      "id": "L4-ING-0043",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Uranus",
+        "longitude_deg": 90,
+        "after_tt_s": -4418020800.0,
+        "before_tt_s": -4234713343.0
+      },
+      "expected": {
+        "tt_s": -4244865870.919
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 402,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Uranus after 1860-01-01 TT: Uranus enters Cancer (90 deg, direct) at 1865-06-27T02:35:29.081 TT."
+    },
+    {
+      "id": "L4-ING-0044",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Uranus",
+        "longitude_deg": 0,
+        "after_tt_s": -2366798400.0,
+        "before_tt_s": -2286568794.0
+      },
+      "expected": {
+        "tt_s": -2295974257.896
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 425,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Uranus after 1925-01-01 TT: Uranus enters Aries (0 deg, direct) at 1927-03-31T17:22:22.104 TT."
+    },
+    {
+      "id": "L4-ING-0045",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Uranus",
+        "longitude_deg": 300,
+        "after_tt_s": -315576000.0,
+        "before_tt_s": -147027754.0
+      },
+      "expected": {
+        "tt_s": -149989662.196
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 869,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Uranus after 1990-01-01 TT: Uranus enters Aquarius (300 deg, direct) at 1995-04-01T12:12:17.804 TT."
+    },
+    {
+      "id": "L4-ING-0046",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Uranus",
+        "longitude_deg": 60,
+        "after_tt_s": 820497600.0,
+        "before_tt_s": 2142211234.0
+      },
+      "expected": {
+        "tt_s": 830436761.594
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 442,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Uranus after 2026-01-01 TT: Uranus enters Gemini (60 deg, direct) at 2026-04-26T00:52:41.594 TT."
+    },
+    {
+      "id": "L4-ING-0047",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Uranus",
+        "longitude_deg": 240,
+        "after_tt_s": 1893412800.0,
+        "before_tt_s": 2056890500.0
+      },
+      "expected": {
+        "tt_s": 2052115040.121
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 540,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Uranus after 2060-01-01 TT: Uranus enters Sagittarius (240 deg, direct) at 2065-01-10T19:57:20.121 TT."
+    },
+    {
+      "id": "L4-ING-0048",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Uranus",
+        "longitude_deg": 210,
+        "after_tt_s": 4417934400.0,
+        "before_tt_s": 4483964803.0
+      },
+      "expected": {
+        "tt_s": 4482691282.832
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 1747,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Uranus after 2140-01-01 TT: Uranus enters Scorpio (210 deg, direct) at 2142-01-19T12:01:22.832 TT."
+    },
+    {
+      "id": "L4-ING-0049",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Neptune",
+        "longitude_deg": 0,
+        "after_tt_s": -4418020800.0,
+        "before_tt_s": -4370151149.0
+      },
+      "expected": {
+        "tt_s": -4377512119.752
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 680,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Neptune after 1860-01-01 TT: Neptune enters Aries (0 deg, direct) at 1861-04-13T20:24:40.248 TT."
+    },
+    {
+      "id": "L4-ING-0050",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Neptune",
+        "longitude_deg": 150,
+        "after_tt_s": -2366798400.0,
+        "before_tt_s": -2242815315.0
+      },
+      "expected": {
+        "tt_s": -2249337519.732
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 717,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Neptune after 1925-01-01 TT: Neptune enters Virgo (150 deg, direct) at 1928-09-21T12:01:20.268 TT."
+    },
+    {
+      "id": "L4-ING-0051",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Neptune",
+        "longitude_deg": 300,
+        "after_tt_s": -315576000.0,
+        "before_tt_s": -51791193.0
+      },
+      "expected": {
+        "tt_s": -60685611.895
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 638,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Neptune after 1990-01-01 TT: Neptune enters Aquarius (300 deg, direct) at 1998-01-29T02:53:08.105 TT."
+    },
+    {
+      "id": "L4-ING-0052",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Neptune",
+        "longitude_deg": 0,
+        "after_tt_s": 820497600.0,
+        "before_tt_s": 4733553600.0
+      },
+      "expected": {
+        "tt_s": 822720947.634
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 945,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Neptune after 2026-01-01 TT: Neptune enters Aries (0 deg, direct) at 2026-01-26T17:35:47.634 TT."
+    },
+    {
+      "id": "L4-ING-0053",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Neptune",
+        "longitude_deg": 90,
+        "after_tt_s": 1893412800.0,
+        "before_tt_s": 2075551867.0
+      },
+      "expected": {
+        "tt_s": 2067102680.403
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 655,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Neptune after 2060-01-01 TT: Neptune enters Cancer (90 deg, direct) at 2065-07-03T07:11:20.403 TT."
+    },
+    {
+      "id": "L4-ING-0054",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Neptune",
+        "longitude_deg": 270,
+        "after_tt_s": 4417934400.0,
+        "before_tt_s": 4678952211.0
+      },
+      "expected": {
+        "tt_s": 4670698965.607
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 649,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Neptune after 2140-01-01 TT: Neptune enters Capricorn (270 deg, direct) at 2148-01-04T12:22:45.607 TT."
+    },
+    {
+      "id": "L4-ING-0055",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Pluto",
+        "longitude_deg": 60,
+        "after_tt_s": -4418020800.0,
+        "before_tt_s": -3702833351.0
+      },
+      "expected": {
+        "tt_s": -3706265318.816
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 1851,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Pluto after 1860-01-01 TT: Pluto enters Gemini (60 deg, direct) at 1882-07-21T21:51:21.184 TT."
+    },
+    {
+      "id": "L4-ING-0056",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Pluto",
+        "longitude_deg": 120,
+        "after_tt_s": -2366798400.0,
+        "before_tt_s": -1961846363.0
+      },
+      "expected": {
+        "tt_s": -1963957519.555
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2322,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Pluto after 1925-01-01 TT: Pluto enters Leo (120 deg, direct) at 1937-10-07T12:14:40.445 TT."
+    },
+    {
+      "id": "L4-ING-0057",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Pluto",
+        "longitude_deg": 240,
+        "after_tt_s": -315576000.0,
+        "before_tt_s": -152344384.0
+      },
+      "expected": {
+        "tt_s": -156393785.471
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 940,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Pluto after 1990-01-01 TT: Pluto enters Sagittarius (240 deg, direct) at 1995-01-17T09:16:54.529 TT."
+    },
+    {
+      "id": "L4-ING-0058",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Pluto",
+        "longitude_deg": 330,
+        "after_tt_s": 820497600.0,
+        "before_tt_s": 1370354893.0
+      },
+      "expected": {
+        "tt_s": 1362747760.045
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 876,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Pluto after 2026-01-01 TT: Pluto enters Pisces (330 deg, direct) at 2043-03-09T01:02:40.045 TT."
+    },
+    {
+      "id": "L4-ING-0059",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Pluto",
+        "longitude_deg": 0,
+        "after_tt_s": 1893412800.0,
+        "before_tt_s": 2098334533.0
+      },
+      "expected": {
+        "tt_s": 2097285929.328
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 5250,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Pluto after 2060-01-01 TT: Pluto enters Aries (0 deg, direct) at 2066-06-17T15:25:29.328 TT."
+    },
+    {
+      "id": "L4-STA-0001",
+      "kind": "event.station",
+      "input": {
+        "body": "Mercury",
+        "after_tt_s": -4402296000.0,
+        "before_tt_s": -4398987240.0
+      },
+      "expected": {
+        "tt_s": -4400018519.855,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 6989,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Mercury after 1860-07-01 TT: Mercury stations retrograde at 1860-07-27T08:38:00.145 TT."
+    },
+    {
+      "id": "L4-STA-0002",
+      "kind": "event.station",
+      "input": {
+        "body": "Mercury",
+        "after_tt_s": -2351160000.0,
+        "before_tt_s": -2346555545.0
+      },
+      "expected": {
+        "tt_s": -2347569127.418,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 6814,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Mercury after 1925-07-01 TT: Mercury stations retrograde at 1925-08-11T13:27:52.582 TT."
+    },
+    {
+      "id": "L4-STA-0003",
+      "kind": "event.station",
+      "input": {
+        "body": "Mercury",
+        "after_tt_s": -299937600.0,
+        "before_tt_s": -294144726.0
+      },
+      "expected": {
+        "tt_s": -295134657.575,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 6611,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Mercury after 1990-07-01 TT: Mercury stations retrograde at 1990-08-25T14:09:02.425 TT."
+    },
+    {
+      "id": "L4-STA-0004",
+      "kind": "event.station",
+      "input": {
+        "body": "Mercury",
+        "after_tt_s": 836136000.0,
+        "before_tt_s": 842108785.0
+      },
+      "expected": {
+        "tt_s": 838119539.782,
+        "direction": "direct"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 6623,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Mercury after 2026-07-01 TT: Mercury stations direct at 2026-07-23T22:58:59.782 TT."
+    },
+    {
+      "id": "L4-STA-0005",
+      "kind": "event.station",
+      "input": {
+        "body": "Mercury",
+        "after_tt_s": 1909137600.0,
+        "before_tt_s": 1913317169.0
+      },
+      "expected": {
+        "tt_s": 1909207851.65,
+        "direction": "direct"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 7212,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Mercury after 2060-07-01 TT: Mercury stations direct at 2060-07-01T19:30:51.650 TT."
+    },
+    {
+      "id": "L4-STA-0006",
+      "kind": "event.station",
+      "input": {
+        "body": "Mercury",
+        "after_tt_s": 4433659200.0,
+        "before_tt_s": 4441390151.0
+      },
+      "expected": {
+        "tt_s": 4440442477.28,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 6270,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Mercury after 2140-07-01 TT: Mercury stations retrograde at 2140-09-17T12:14:37.280 TT."
+    },
+    {
+      "id": "L4-STA-0007",
+      "kind": "event.station",
+      "input": {
+        "body": "Venus",
+        "after_tt_s": -4402296000.0,
+        "before_tt_s": -4375344198.0
+      },
+      "expected": {
+        "tt_s": -4398867241.375,
+        "direction": "direct"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 10315,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Venus after 1860-07-01 TT: Venus stations direct at 1860-08-09T16:25:58.625 TT."
+    },
+    {
+      "id": "L4-STA-0008",
+      "kind": "event.station",
+      "input": {
+        "body": "Venus",
+        "after_tt_s": -2351160000.0,
+        "before_tt_s": -2332017062.0
+      },
+      "expected": {
+        "tt_s": -2333800166.13,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 10030,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Venus after 1925-07-01 TT: Venus stations retrograde at 1926-01-17T22:10:33.870 TT."
+    },
+    {
+      "id": "L4-STA-0009",
+      "kind": "event.station",
+      "input": {
+        "body": "Venus",
+        "after_tt_s": -299937600.0,
+        "before_tt_s": -263830423.0
+      },
+      "expected": {
+        "tt_s": -265685038.54,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 10396,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Venus after 1990-07-01 TT: Venus stations retrograde at 1991-08-01T10:36:01.460 TT."
+    },
+    {
+      "id": "L4-STA-0010",
+      "kind": "event.station",
+      "input": {
+        "body": "Venus",
+        "after_tt_s": 836136000.0,
+        "before_tt_s": 846085970.0
+      },
+      "expected": {
+        "tt_s": 844283823.424,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 10349,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Venus after 2026-07-01 TT: Venus stations retrograde at 2026-10-03T07:17:03.424 TT."
+    },
+    {
+      "id": "L4-STA-0011",
+      "kind": "event.station",
+      "input": {
+        "body": "Venus",
+        "after_tt_s": 1909137600.0,
+        "before_tt_s": 1956183533.0
+      },
+      "expected": {
+        "tt_s": 1954416878.046,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 10156,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Venus after 2060-07-01 TT: Venus stations retrograde at 2061-12-07T01:34:38.046 TT."
+    },
+    {
+      "id": "L4-STA-0012",
+      "kind": "event.station",
+      "input": {
+        "body": "Venus",
+        "after_tt_s": 4433659200.0,
+        "before_tt_s": 4478638347.0
+      },
+      "expected": {
+        "tt_s": 4476866544.484,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 10173,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Venus after 2140-07-01 TT: Venus stations retrograde at 2141-11-13T02:02:24.484 TT."
+    },
+    {
+      "id": "L4-STA-0013",
+      "kind": "event.station",
+      "input": {
+        "body": "Mars",
+        "after_tt_s": -4402296000.0,
+        "before_tt_s": -4365917089.0
+      },
+      "expected": {
+        "tt_s": -4398095952.315,
+        "direction": "direct"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 17184,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Mars after 1860-07-01 TT: Mars stations direct at 1860-08-18T14:40:47.685 TT."
+    },
+    {
+      "id": "L4-STA-0014",
+      "kind": "event.station",
+      "input": {
+        "body": "Mars",
+        "after_tt_s": -2351160000.0,
+        "before_tt_s": -2308852545.0
+      },
+      "expected": {
+        "tt_s": -2311827419.333,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 16664,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Mars after 1925-07-01 TT: Mars stations retrograde at 1926-09-29T05:43:00.667 TT."
+    },
+    {
+      "id": "L4-STA-0015",
+      "kind": "event.station",
+      "input": {
+        "body": "Mars",
+        "after_tt_s": -299937600.0,
+        "before_tt_s": -287135374.0
+      },
+      "expected": {
+        "tt_s": -290276971.198,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 16831,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Mars after 1990-07-01 TT: Mars stations retrograde at 1990-10-20T19:30:28.802 TT."
+    },
+    {
+      "id": "L4-STA-0016",
+      "kind": "event.station",
+      "input": {
+        "body": "Mars",
+        "after_tt_s": 836136000.0,
+        "before_tt_s": 856359293.0
+      },
+      "expected": {
+        "tt_s": 852858020.186,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 18047,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Mars after 2026-07-01 TT: Mars stations retrograde at 2027-01-10T13:00:20.186 TT."
+    },
+    {
+      "id": "L4-STA-0017",
+      "kind": "event.station",
+      "input": {
+        "body": "Mars",
+        "after_tt_s": 1909137600.0,
+        "before_tt_s": 1933064040.0
+      },
+      "expected": {
+        "tt_s": 1929609952.514,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 18382,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Mars after 2060-07-01 TT: Mars stations retrograde at 2061-02-22T22:45:52.514 TT."
+    },
+    {
+      "id": "L4-STA-0018",
+      "kind": "event.station",
+      "input": {
+        "body": "Mars",
+        "after_tt_s": 4433659200.0,
+        "before_tt_s": 4493134308.0
+      },
+      "expected": {
+        "tt_s": 4489916185.431,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 18435,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Mars after 2140-07-01 TT: Mars stations retrograde at 2142-04-13T02:56:25.431 TT."
+    },
+    {
+      "id": "L4-STA-0019",
+      "kind": "event.station",
+      "input": {
+        "body": "Jupiter",
+        "after_tt_s": -4402296000.0,
+        "before_tt_s": -4382824825.0
+      },
+      "expected": {
+        "tt_s": -4388059080.633,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 35508,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Jupiter after 1860-07-01 TT: Jupiter stations retrograde at 1860-12-12T18:41:59.367 TT."
+    },
+    {
+      "id": "L4-STA-0020",
+      "kind": "event.station",
+      "input": {
+        "body": "Jupiter",
+        "after_tt_s": -2351160000.0,
+        "before_tt_s": -2332987414.0
+      },
+      "expected": {
+        "tt_s": -2345085749.405,
+        "direction": "direct"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 35979,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Jupiter after 1925-07-01 TT: Jupiter stations direct at 1925-09-09T07:17:30.595 TT."
+    },
+    {
+      "id": "L4-STA-0021",
+      "kind": "event.station",
+      "input": {
+        "body": "Jupiter",
+        "after_tt_s": -299937600.0,
+        "before_tt_s": -281587797.0
+      },
+      "expected": {
+        "tt_s": -286786560.617,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 35684,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Jupiter after 1990-07-01 TT: Jupiter stations retrograde at 1990-11-30T05:03:59.383 TT."
+    },
+    {
+      "id": "L4-STA-0022",
+      "kind": "event.station",
+      "input": {
+        "body": "Jupiter",
+        "after_tt_s": 836136000.0,
+        "before_tt_s": 855624908.0
+      },
+      "expected": {
+        "tt_s": 850395464.918,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 35500,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Jupiter after 2026-07-01 TT: Jupiter stations retrograde at 2026-12-13T00:57:44.918 TT."
+    },
+    {
+      "id": "L4-STA-0023",
+      "kind": "event.station",
+      "input": {
+        "body": "Jupiter",
+        "after_tt_s": 1909137600.0,
+        "before_tt_s": 1924143869.0
+      },
+      "expected": {
+        "tt_s": 1919021620.652,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 35125,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Jupiter after 2060-07-01 TT: Jupiter stations retrograde at 2060-10-23T09:33:40.652 TT."
+    },
+    {
+      "id": "L4-STA-0024",
+      "kind": "event.station",
+      "input": {
+        "body": "Jupiter",
+        "after_tt_s": 4433659200.0,
+        "before_tt_s": 4439256669.0
+      },
+      "expected": {
+        "tt_s": 4434117909.804,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 35722,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Jupiter after 2140-07-01 TT: Jupiter stations retrograde at 2140-07-06T07:25:09.804 TT."
+    },
+    {
+      "id": "L4-STA-0025",
+      "kind": "event.station",
+      "input": {
+        "body": "Saturn",
+        "after_tt_s": -4402296000.0,
+        "before_tt_s": -4381585004.0
+      },
+      "expected": {
+        "tt_s": -4387445661.85,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 47250,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Saturn after 1860-07-01 TT: Saturn stations retrograde at 1860-12-19T21:05:38.150 TT."
+    },
+    {
+      "id": "L4-STA-0026",
+      "kind": "event.station",
+      "input": {
+        "body": "Saturn",
+        "after_tt_s": -2351160000.0,
+        "before_tt_s": -2339967245.0
+      },
+      "expected": {
+        "tt_s": -2350219308.336,
+        "direction": "direct"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 50406,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Saturn after 1925-07-01 TT: Saturn stations direct at 1925-07-11T21:18:11.664 TT."
+    },
+    {
+      "id": "L4-STA-0027",
+      "kind": "event.station",
+      "input": {
+        "body": "Saturn",
+        "after_tt_s": -299937600.0,
+        "before_tt_s": -282468087.0
+      },
+      "expected": {
+        "tt_s": -292661317.647,
+        "direction": "direct"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 49817,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Saturn after 1990-07-01 TT: Saturn stations direct at 1990-09-23T05:11:22.353 TT."
+    },
+    {
+      "id": "L4-STA-0028",
+      "kind": "event.station",
+      "input": {
+        "body": "Saturn",
+        "after_tt_s": 836136000.0,
+        "before_tt_s": 844292692.0
+      },
+      "expected": {
+        "tt_s": 838367843.501,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 49317,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Saturn after 2026-07-01 TT: Saturn stations retrograde at 2026-07-26T19:57:23.501 TT."
+    },
+    {
+      "id": "L4-STA-0029",
+      "kind": "event.station",
+      "input": {
+        "body": "Saturn",
+        "after_tt_s": 1909137600.0,
+        "before_tt_s": 1922686074.0
+      },
+      "expected": {
+        "tt_s": 1916895404.383,
+        "direction": "retrograde"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 47617,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Saturn after 2060-07-01 TT: Saturn stations retrograde at 2060-09-28T18:56:44.383 TT."
+    },
+    {
+      "id": "L4-STA-0030",
+      "kind": "event.station",
+      "input": {
+        "body": "Saturn",
+        "after_tt_s": 4433659200.0,
+        "before_tt_s": 4454120641.0
+      },
+      "expected": {
+        "tt_s": 4443848881.496,
+        "direction": "direct"
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 49110,
+          "unit": "s"
+        },
+        "direction": {
+          "exact": true
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first station of Saturn after 2140-07-01 TT: Saturn stations direct at 2140-10-26T22:28:01.496 TT."
+    },
+    {
+      "id": "L4-LUN-0001",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": -4412836800.0,
+        "before_tt_s": -4409690981.0
+      },
+      "expected": {
+        "tt_s": -4410972259.376
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 1860-03-01 TT: at 1860-03-22T13:55:40.624 TT."
+    },
+    {
+      "id": "L4-LUN-0002",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": -4412836800.0,
+        "before_tt_s": -4411003048.0
+      },
+      "expected": {
+        "tt_s": -4412272530.277
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 1860-03-01 TT: at 1860-03-07T12:44:29.723 TT."
+    },
+    {
+      "id": "L4-LUN-0003",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": -4396939200.0,
+        "before_tt_s": -4394439370.0
+      },
+      "expected": {
+        "tt_s": -4395707410.165
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 1860-09-01 TT: at 1860-09-15T06:09:49.835 TT."
+    },
+    {
+      "id": "L4-LUN-0004",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": -4396939200.0,
+        "before_tt_s": -4393143895.0
+      },
+      "expected": {
+        "tt_s": -4394427595.072
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 1860-09-01 TT: at 1860-09-30T01:40:04.928 TT."
+    },
+    {
+      "id": "L4-LUN-0005",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": -2361700800.0,
+        "before_tt_s": -2358387858.0
+      },
+      "expected": {
+        "tt_s": -2359663008.841
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 1925-03-01 TT: at 1925-03-24T14:03:11.159 TT."
+    },
+    {
+      "id": "L4-LUN-0006",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": -2361700800.0,
+        "before_tt_s": -2359594977.0
+      },
+      "expected": {
+        "tt_s": -2360871533.685
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 1925-03-01 TT: at 1925-03-10T14:21:06.315 TT."
+    },
+    {
+      "id": "L4-LUN-0007",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": -2345803200.0,
+        "before_tt_s": -2343041440.0
+      },
+      "expected": {
+        "tt_s": -2344319239.766
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 1925-09-01 TT: at 1925-09-18T04:12:40.234 TT."
+    },
+    {
+      "id": "L4-LUN-0008",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": -2345803200.0,
+        "before_tt_s": -2344375311.0
+      },
+      "expected": {
+        "tt_s": -2345645207.896
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 1925-09-01 TT: at 1925-09-02T19:53:12.104 TT."
+    },
+    {
+      "id": "L4-LUN-0009",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": -310478400.0,
+        "before_tt_s": -306978670.0
+      },
+      "expected": {
+        "tt_s": -308247043.665
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 1990-03-01 TT: at 1990-03-26T19:49:16.335 TT."
+    },
+    {
+      "id": "L4-LUN-0010",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": -310478400.0,
+        "before_tt_s": -308292633.0
+      },
+      "expected": {
+        "tt_s": -309574832.825
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 1990-03-01 TT: at 1990-03-11T10:59:27.175 TT."
+    },
+    {
+      "id": "L4-LUN-0011",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": -294580800.0,
+        "before_tt_s": -291743252.0
+      },
+      "expected": {
+        "tt_s": -293022761.747
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 1990-09-01 TT: at 1990-09-19T00:47:18.253 TT."
+    },
+    {
+      "id": "L4-LUN-0012",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": -294580800.0,
+        "before_tt_s": -292957520.0
+      },
+      "expected": {
+        "tt_s": -294228806.476
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 1990-09-01 TT: at 1990-09-05T01:46:33.524 TT."
+    },
+    {
+      "id": "L4-LUN-0013",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": 825595200.0,
+        "before_tt_s": 828427128.0
+      },
+      "expected": {
+        "tt_s": 827155477.911
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 2026-03-01 TT: at 2026-03-19T01:24:37.911 TT."
+    },
+    {
+      "id": "L4-LUN-0014",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": 825595200.0,
+        "before_tt_s": 827088965.0
+      },
+      "expected": {
+        "tt_s": 825809942.914
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 2026-03-01 TT: at 2026-03-03T11:39:02.914 TT."
+    },
+    {
+      "id": "L4-LUN-0015",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": 841492800.0,
+        "before_tt_s": 843644382.0
+      },
+      "expected": {
+        "tt_s": 842369289.11
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 2026-09-01 TT: at 2026-09-11T03:28:09.110 TT."
+    },
+    {
+      "id": "L4-LUN-0016",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": 841492800.0,
+        "before_tt_s": 844986695.0
+      },
+      "expected": {
+        "tt_s": 843713411.602
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 2026-09-01 TT: at 2026-09-26T16:50:11.602 TT."
+    },
+    {
+      "id": "L4-LUN-0017",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": 1898596800.0,
+        "before_tt_s": 1900011377.0
+      },
+      "expected": {
+        "tt_s": 1898741597.338
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 2060-03-01 TT: at 2060-03-02T16:13:17.338 TT."
+    },
+    {
+      "id": "L4-LUN-0018",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": 1898596800.0,
+        "before_tt_s": 1901277182.0
+      },
+      "expected": {
+        "tt_s": 1899992558.993
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 2060-03-01 TT: at 2060-03-17T03:42:38.993 TT."
+    },
+    {
+      "id": "L4-LUN-0019",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": 1914494400.0,
+        "before_tt_s": 1917823277.0
+      },
+      "expected": {
+        "tt_s": 1916538914.244
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 2060-09-01 TT: at 2060-09-24T15:55:14.244 TT."
+    },
+    {
+      "id": "L4-LUN-0020",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": 1914494400.0,
+        "before_tt_s": 1916576053.0
+      },
+      "expected": {
+        "tt_s": 1915307134.617
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 2060-09-01 TT: at 2060-09-10T09:45:34.617 TT."
+    },
+    {
+      "id": "L4-LUN-0021",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": 4423118400.0,
+        "before_tt_s": 4425942204.0
+      },
+      "expected": {
+        "tt_s": 4424673753.433
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 2140-03-01 TT: at 2140-03-19T00:02:33.433 TT."
+    },
+    {
+      "id": "L4-LUN-0022",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": 4423118400.0,
+        "before_tt_s": 4424638480.0
+      },
+      "expected": {
+        "tt_s": 4423354791.764
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 2140-03-01 TT: at 2140-03-03T17:39:51.764 TT."
+    },
+    {
+      "id": "L4-LUN-0023",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": 4439016000.0,
+        "before_tt_s": 4441187176.0
+      },
+      "expected": {
+        "tt_s": 4439907109.158
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 2140-09-01 TT: at 2140-09-11T07:31:49.158 TT."
+    },
+    {
+      "id": "L4-LUN-0024",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": 4439016000.0,
+        "before_tt_s": 4442505362.0
+      },
+      "expected": {
+        "tt_s": 4441236214.649
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 2140-09-01 TT: at 2140-09-26T16:43:34.649 TT."
+    },
+    {
+      "id": "L4-LUN-0025",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": -4401086400.0,
+        "before_tt_s": -4399508361.0
+      },
+      "expected": {
+        "tt_s": -4400775559.179
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the new Moon of the total solar eclipse of 1860-07-18 (Espenak and Meeus, Five Millennium Canon of Solar Eclipses: -1999 to +3000, NASA/TP-2006-214141 (2006)): at 1860-07-18T14:20:40.821 TT.",
+      "tags": [
+        "eclipse"
+      ]
+    },
+    {
+      "id": "L4-LUN-0026",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": -2543659200.0,
+        "before_tt_s": -2542085861.0
+      },
+      "expected": {
+        "tt_s": -2543352484.312
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the new Moon of the total solar eclipse of 1919-05-29 (Espenak and Meeus, Five Millennium Canon of Solar Eclipses: -1999 to +3000, NASA/TP-2006-214141 (2006)): at 1919-05-29T13:11:55.688 TT.",
+      "tags": [
+        "eclipse"
+      ]
+    },
+    {
+      "id": "L4-LUN-0027",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_tt_s": 839505600.0,
+        "before_tt_s": 841098782.0
+      },
+      "expected": {
+        "tt_s": 839828274.171
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the new Moon of the total solar eclipse of 2026-08-12 (Espenak and Meeus, Five Millennium Canon of Solar Eclipses: -1999 to +3000, NASA/TP-2006-214141 (2006)): at 2026-08-12T17:37:54.171 TT.",
+      "tags": [
+        "eclipse"
+      ]
+    },
+    {
+      "id": "L4-LUN-0028",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": 1425600.0,
+        "before_tt_s": 2975677.0
+      },
+      "expected": {
+        "tt_s": 1701690.502
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the full Moon of the total lunar eclipse of 2000-01-21 (Espenak and Meeus, Five Millennium Canon of Lunar Eclipses: -1999 to +3000, NASA/TP-2009-214172 (2009)): at 2000-01-21T04:41:30.502 TT.",
+      "tags": [
+        "eclipse"
+      ]
+    },
+    {
+      "id": "L4-LUN-0029",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": 585662400.0,
+        "before_tt_s": 587275765.0
+      },
+      "expected": {
+        "tt_s": 585994890.288
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the full Moon of the total lunar eclipse of 2018-07-27 (Espenak and Meeus, Five Millennium Canon of Lunar Eclipses: -1999 to +3000, NASA/TP-2009-214172 (2009)): at 2018-07-27T20:21:30.288 TT.",
+      "tags": [
+        "eclipse"
+      ]
+    },
+    {
+      "id": "L4-LUN-0030",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_tt_s": 794923200.0,
+        "before_tt_s": 796491577.0
+      },
+      "expected": {
+        "tt_s": 795207348.377
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the full Moon of the total lunar eclipse of 2025-03-14 (Espenak and Meeus, Five Millennium Canon of Lunar Eclipses: -1999 to +3000, NASA/TP-2009-214172 (2009)): at 2025-03-14T06:55:48.377 TT.",
+      "tags": [
+        "eclipse"
+      ]
+    },
+    {
+      "id": "L4-UTC-0001",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Sun",
+        "longitude_deg": 300,
+        "after_utc_s": 883569600.0,
+        "before_utc_s": 901037484.816
+      },
+      "expected": {
+        "utc_s": 885259315.878
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 24,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Sun after 2028-01-01 UTC: Sun enters Aquarius (300 deg, direct) at 2028-01-20T13:21:55.878 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0002",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Moon",
+        "longitude_deg": 330,
+        "after_utc_s": 883569600.0,
+        "before_utc_s": 884779996.816
+      },
+      "expected": {
+        "utc_s": 883601566.29
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Moon after 2028-01-01 UTC: Moon enters Pisces (330 deg, direct) at 2028-01-01T08:52:46.290 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0003",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_utc_s": 883569600.0,
+        "before_utc_s": 887072097.816
+      },
+      "expected": {
+        "utc_s": 885784351.045
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 2028-01-01 UTC: at 2028-01-26T15:12:31.045 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0004",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_utc_s": 883569600.0,
+        "before_utc_s": 885807205.816
+      },
+      "expected": {
+        "utc_s": 884534585.218
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 2028-01-01 UTC: at 2028-01-12T04:03:05.218 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0005",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Sun",
+        "longitude_deg": 300,
+        "after_utc_s": 1104494400.0,
+        "before_utc_s": 1121937159.816
+      },
+      "expected": {
+        "utc_s": 1106158456.687
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 24,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Sun after 2035-01-01 UTC: Sun enters Aquarius (300 deg, direct) at 2035-01-20T06:14:16.687 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0006",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Moon",
+        "longitude_deg": 210,
+        "after_utc_s": 1104494400.0,
+        "before_utc_s": 1105847708.816
+      },
+      "expected": {
+        "utc_s": 1104667177.155
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Moon after 2035-01-01 UTC: Moon enters Scorpio (210 deg, direct) at 2035-01-02T23:59:37.155 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0007",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_utc_s": 1104494400.0,
+        "before_utc_s": 1106523758.816
+      },
+      "expected": {
+        "utc_s": 1105239788.164
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 2035-01-01 UTC: at 2035-01-09T15:03:08.164 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0008",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_utc_s": 1104494400.0,
+        "before_utc_s": 1107743717.816
+      },
+      "expected": {
+        "utc_s": 1106468198.009
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 2035-01-01 UTC: at 2035-01-23T20:16:38.009 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0009",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Sun",
+        "longitude_deg": 300,
+        "after_utc_s": 1577880000.0,
+        "before_utc_s": 1595291187.816
+      },
+      "expected": {
+        "utc_s": 1579512838.294
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 24,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Sun after 2050-01-01 UTC: Sun enters Aquarius (300 deg, direct) at 2050-01-19T21:33:58.294 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0010",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Moon",
+        "longitude_deg": 30,
+        "after_utc_s": 1577880000.0,
+        "before_utc_s": 1579130846.816
+      },
+      "expected": {
+        "utc_s": 1577953266.33
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Moon after 2050-01-01 UTC: Moon enters Taurus (30 deg, direct) at 2050-01-01T20:21:06.330 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0011",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_utc_s": 1577880000.0,
+        "before_utc_s": 1581069619.816
+      },
+      "expected": {
+        "utc_s": 1579798623.151
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 2050-01-01 UTC: at 2050-01-23T04:57:03.151 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0012",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_utc_s": 1577880000.0,
+        "before_utc_s": 1579778000.816
+      },
+      "expected": {
+        "utc_s": 1578490747.059
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 3,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 2050-01-01 UTC: at 2050-01-08T01:39:07.059 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0013",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Sun",
+        "longitude_deg": 300,
+        "after_utc_s": 3155716800.0,
+        "before_utc_s": 3173139708.816
+      },
+      "expected": {
+        "utc_s": 3157361270.617
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 24,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Sun after 2100-01-01 UTC: Sun enters Aquarius (300 deg, direct) at 2100-01-20T00:47:50.617 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0014",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Moon",
+        "longitude_deg": 180,
+        "after_utc_s": 3155716800.0,
+        "before_utc_s": 3157033270.816
+      },
+      "expected": {
+        "utc_s": 3155855749.181
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Moon after 2100-01-01 UTC: Moon enters Libra (180 deg, direct) at 2100-01-02T14:35:49.181 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0015",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_utc_s": 3155716800.0,
+        "before_utc_s": 3157822641.816
+      },
+      "expected": {
+        "utc_s": 3156541066.277
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 2100-01-01 UTC: at 2100-01-10T12:57:46.277 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0016",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_utc_s": 3155716800.0,
+        "before_utc_s": 3159161557.816
+      },
+      "expected": {
+        "utc_s": 3157887102.302
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 2100-01-01 UTC: at 2100-01-26T02:51:42.302 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0017",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Sun",
+        "longitude_deg": 300,
+        "after_utc_s": 4417934400.0,
+        "before_utc_s": 4435418659.816
+      },
+      "expected": {
+        "utc_s": 4419640195.95
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 24,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Sun after 2140-01-01 UTC: Sun enters Aquarius (300 deg, direct) at 2140-01-20T17:49:55.950 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0018",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Moon",
+        "longitude_deg": 60,
+        "after_utc_s": 4417934400.0,
+        "before_utc_s": 4419138593.816
+      },
+      "expected": {
+        "utc_s": 4417961046.914
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first ingress of Moon after 2140-01-01 UTC: Moon enters Gemini (60 deg, direct) at 2140-01-01T07:24:06.914 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0019",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 0,
+        "after_utc_s": 4417934400.0,
+        "before_utc_s": 4420853700.816
+      },
+      "expected": {
+        "utc_s": 4419577496.699
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first new Moon after 2140-01-01 UTC: at 2140-01-20T00:24:56.699 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-UTC-0020",
+      "kind": "event.lunation",
+      "input": {
+        "phase_deg": 180,
+        "after_utc_s": 4417934400.0,
+        "before_utc_s": 4419508732.816
+      },
+      "expected": {
+        "utc_s": 4418228462.526
+      },
+      "tolerance": {
+        "utc_s": {
+          "abs": 2,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the first full Moon after 2140-01-01 UTC: at 2140-01-04T09:41:02.526 UTC.",
+      "tags": [
+        "utc-input"
+      ]
+    },
+    {
+      "id": "L4-ING-0061",
+      "kind": "event.ingress",
+      "input": {
+        "body": "Sun",
+        "longitude_deg": 240,
+        "after_tt_s": 846763200.0,
+        "before_tt_s": 849355200.0
+      },
+      "expected": {
+        "tt_s": 848604269.747
+      },
+      "tolerance": {
+        "tt_s": {
+          "abs": 24,
+          "unit": "s"
+        }
+      },
+      "arbiter": "l4-de440s-events",
+      "note": "the Sun's ingress into Sagittarius in November 2026 (cross-check with ingress-ref.json): Sun enters Sagittarius (240 deg, direct) at 2026-11-22T07:24:29.747 TT.",
+      "tags": [
+        "cross-check"
+      ]
+    }
+  ]
+}
