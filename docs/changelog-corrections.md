@@ -9,8 +9,8 @@ packed. It holds the corrections in the meantime, and the next candidate's
 
 Each entry names the line as it stands, what the evidence shows, and where the
 evidence is. In entries 1 to 8, line numbers are those of `CHANGELOG.md` at
-1.1.0 (`322f855`); the audit counted them before 1.1.0's entries, 719 lines earlier. The
-lines themselves are left as written. Source: the changelog
+1.1.0 (`322f855`); the audit counted them before 1.1.0's entries, 719
+lines earlier. The lines themselves are left as written. Source: the changelog
 evidence audit of 12 and 13 November 2026,
 `docs/evidence/changelog-audit-20261112/` (ZOD-152).
 
@@ -99,7 +99,7 @@ Line numbers below are those of `README.md`, `CHANGELOG.md` and
 
 15. **`README.md`, 2.0.0-rc.3, lines 20 to 21: "is a draft for the owner's
     review and is not published to npm".** It was published to npm on
-    17 November 2026 UTC under `next`, with 1.1.0 still under `latest`.
+    2026-11-17 under `next`, with 1.1.0 still under `latest`.
     The registry output, checksum and successful release workflow run are
     recorded in [the publication evidence](evidence/changelog-corrections-20261118/records.md#publication).
     True when written.
@@ -116,9 +116,9 @@ Line numbers below are those of `README.md`, `CHANGELOG.md` and
     ([the publication evidence](evidence/changelog-corrections-20261118/records.md#publication)).
     True when written.
     - `CHANGELOG.md`, line 3, the heading "2.0.0-rc.3 (unreleased
-      candidate)", and lines 6 to 7: "It is a draft for the owner's review
-      and is not to be published on npm until the owner approves it." The
-      owner approved the test publication on 2026-11-17.
+      candidate)", and lines 6 to 8: "It is a draft for the owner's
+      review". The rest of that sentence, "and is not to be published on
+      npm until the owner approves it", is not corrected.
     - `artifacts/README.md`, line 120, the 2.0.0-rc.3 status cell: "Draft
       candidate for 2.0.0, awaiting the owner's review; never tagged or
       published". Published on npm under `next`; not tagged.
