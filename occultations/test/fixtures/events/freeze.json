@@ -1,0 +1,39 @@
+{
+  "schema": "occultations-event-reference-freeze/1",
+  "frozen": "2026-10-15",
+  "baselineCommit": "06b08520b3fc6a519bd0f6af3b0f37afeb63cd21",
+  "astronomicalComparisonsPerformed": false,
+  "files": {
+    "EVENTS.md": "b4b4aa84667d7360e9d4a0b518d69625d6c8e7991d033bb42dcffa1b075e795d",
+    "NOTICE.txt": "da066e28ca18e597f11d1adb4d2d799eaf799b763cb9a4703cd2b2ef1a0255c2",
+    "development.json": "9016fc0f71519fd065d37a6e29aa5b531158929b08aec76eb84c700127cf6d32",
+    "held-out.json": "ac5f07cdb24d2a0b191866d41f4a555a8a5f1d9a842fc9ee78deb4cb716e9d23",
+    "sources.json": "9ce23aa08f4bbec93cdb2d08e4d57b521a0ace4dc6ca6344b8de3b5273d719a4"
+  },
+  "caseIds": {
+    "development": [
+      "jupiter-saturn-ra-2020",
+      "jupiter-saturn-ecliptic-2020",
+      "moon-mars-ra-2024-jan",
+      "moon-mars-ecliptic-2024-jan",
+      "jupiter-saturn-appulse-2020",
+      "usno-ae1923-aldebaran-jan27-boston",
+      "naoj-contacts-202408",
+      "naoj-map-202408"
+    ],
+    "held-out": [
+      "mars-jupiter-ra-2024",
+      "mars-jupiter-ecliptic-2024",
+      "venus-jupiter-ra-2022",
+      "venus-jupiter-ecliptic-2022",
+      "moon-mars-ra-2024-nov",
+      "moon-mars-ecliptic-2024-nov",
+      "venus-jupiter-appulse-2022",
+      "mars-jupiter-appulse-2024",
+      "usno-ae1923-aldebaran-apr19-washington",
+      "usno-ae1923-aldebaran-apr19-washington-station247",
+      "naoj-contacts-202503",
+      "naoj-map-202503"
+    ]
+  }
+}

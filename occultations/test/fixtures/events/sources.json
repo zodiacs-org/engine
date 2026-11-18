@@ -1,0 +1,979 @@
+{
+  "schema": "occultations-event-source-register/1",
+  "retrieved": "2026-10-15",
+  "sources": [
+    {
+      "id": "naoj-rights-main",
+      "url": "https://www.nao.ac.jp/terms/copyright.html",
+      "retrieved": "2026-10-15",
+      "kind": "documentation-or-published-table",
+      "encoding": "utf-8",
+      "verification": {
+        "url": "https://www.nao.ac.jp/terms/copyright.html",
+        "bytes": 30583,
+        "sha256": "a3aef7d289d5bc11be28f44d002c319d2e1c70df1aa0798ecb4548a84b204a86"
+      }
+    },
+    {
+      "id": "naoj-rights-eco",
+      "url": "https://eco.mtk.nao.ac.jp/koyomi/site/",
+      "retrieved": "2026-10-15",
+      "kind": "documentation-or-published-table",
+      "encoding": "cp932",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/koyomi/site/",
+        "bytes": 3021,
+        "sha256": "b61f0b7d89452dffe75363b7fb64128848a462dc4f5c2f36fbfa29d257796b89"
+      }
+    },
+    {
+      "id": "naoj-de440",
+      "url": "https://eco.mtk.nao.ac.jp/koyomi/topics/html/topics2026_1.html",
+      "retrieved": "2026-10-15",
+      "kind": "documentation-or-published-table",
+      "encoding": "cp932",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/koyomi/topics/html/topics2026_1.html",
+        "bytes": 9174,
+        "sha256": "9b41f22c7545de29189f6ee3eee48259f9a2bb73691b65a4a2415378a89cb08a"
+      }
+    },
+    {
+      "id": "naoj-cande",
+      "url": "https://eco.mtk.nao.ac.jp/koyomi/cande/",
+      "retrieved": "2026-10-15",
+      "kind": "documentation-or-published-table",
+      "encoding": "euc-jp",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/koyomi/cande/",
+        "bytes": 6309,
+        "sha256": "78e62ea758aa2a0bff94871dd9c5de91db623be05682047fec952d3cdf6d8e54"
+      }
+    },
+    {
+      "id": "naoj-2009",
+      "url": "https://eco.mtk.nao.ac.jp/koyomi/topics/html/topics2009_4.html",
+      "retrieved": "2026-10-15",
+      "kind": "documentation-or-published-table",
+      "encoding": "cp932",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/koyomi/topics/html/topics2009_4.html",
+        "bytes": 6057,
+        "sha256": "0840aca6966a1e6393b22a75a8dd02c45b3a014371cea9dcf60ff7c505ab55de"
+      }
+    },
+    {
+      "id": "naoj-jupiter-saturn-minimum",
+      "url": "https://www.nao.ac.jp/astro/sky/2020/12-topics02.html",
+      "retrieved": "2026-10-15",
+      "kind": "publication",
+      "encoding": "utf-8",
+      "verification": {
+        "url": "https://www.nao.ac.jp/astro/sky/2020/12-topics02.html",
+        "bytes": 21744,
+        "sha256": "26d3d73e2863b6cea456c0137374e0b39b0f0f2833d0b15ce79cc796a2ee4045"
+      }
+    },
+    {
+      "id": "naoj-venus-jupiter-minimum",
+      "url": "https://www.nao.ac.jp/astro/sky/2022/05-topics01.html",
+      "retrieved": "2026-10-15",
+      "kind": "publication",
+      "encoding": "utf-8",
+      "verification": {
+        "url": "https://www.nao.ac.jp/astro/sky/2022/05-topics01.html",
+        "bytes": 21127,
+        "sha256": "dab077ecda5b183313f24bebb4566dca93c79d697eb43c665ba2b43c94acf4eb"
+      }
+    },
+    {
+      "id": "naoj-mars-jupiter-minimum",
+      "url": "https://www.nao.ac.jp/astro/sky/2024/08-topics04.html",
+      "retrieved": "2026-10-15",
+      "kind": "publication",
+      "encoding": "utf-8",
+      "verification": {
+        "url": "https://www.nao.ac.jp/astro/sky/2024/08-topics04.html",
+        "bytes": 25738,
+        "sha256": "851b6b989a0cbdcf96fc2bb16f0aac68900d1c436d89572b4b755da35d297a73"
+      }
+    },
+    {
+      "id": "naoj-jupiter-saturn-ra",
+      "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2020&lst=-99&body1=5&body0=6&coord=0",
+      "retrieved": "2026-10-15",
+      "kind": "documentation-or-published-table",
+      "encoding": "euc-jp",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2020&lst=-99&body1=5&body0=6&coord=0",
+        "bytes": 8060,
+        "sha256": "f40062294a475d483c38b134f03b52be679fb6dbee31921187324f7cb09c9bcc",
+        "normalization": "naoj-conjunction-illustration-v1",
+        "normalizedBytes": 8053,
+        "normalizedSha256": "48d936492a1b4453299c86d7d377e0c4b60df2be1009237a9c6913b512fcfae8"
+      }
+    },
+    {
+      "id": "naoj-jupiter-saturn-ecliptic",
+      "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2020&lst=-99&body1=5&body0=6&coord=1",
+      "retrieved": "2026-10-15",
+      "kind": "documentation-or-published-table",
+      "encoding": "euc-jp",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2020&lst=-99&body1=5&body0=6&coord=1",
+        "bytes": 8060,
+        "sha256": "95d0161c09754af2e802a591eea876f16b95075c0fade3af2ebde09059463352",
+        "normalization": "naoj-conjunction-illustration-v1",
+        "normalizedBytes": 8053,
+        "normalizedSha256": "9ef673c0d7bb5e4769269ad22cf50791baf3e80611ff75583964a3e0c0928f53"
+      }
+    },
+    {
+      "id": "naoj-mars-jupiter-ra",
+      "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2024&lst=-99&body1=4&body0=5&coord=0",
+      "retrieved": "2026-10-15",
+      "kind": "documentation-or-published-table",
+      "encoding": "euc-jp",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2024&lst=-99&body1=4&body0=5&coord=0",
+        "bytes": 8188,
+        "sha256": "55fd7fa390d0ea1fa266539d755d34eec349340732e60d51e5ea56360d302f21",
+        "normalization": "naoj-conjunction-illustration-v1",
+        "normalizedBytes": 8181,
+        "normalizedSha256": "ae89dc1cb0d95ddd49192b4c6fb12e3aaf3ac252be055b4c957e921d0d888193"
+      }
+    },
+    {
+      "id": "naoj-mars-jupiter-ecliptic",
+      "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2024&lst=-99&body1=4&body0=5&coord=1",
+      "retrieved": "2026-10-15",
+      "kind": "documentation-or-published-table",
+      "encoding": "euc-jp",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2024&lst=-99&body1=4&body0=5&coord=1",
+        "bytes": 8187,
+        "sha256": "5a84db4aa63dd7b8c4db04fe9ed1514b7eb90f66d1f091611abb111d526613ea",
+        "normalization": "naoj-conjunction-illustration-v1",
+        "normalizedBytes": 8180,
+        "normalizedSha256": "c4aac56207d1637672216253081c8333a45b1044970d8946b5ab54229b961579"
+      }
+    },
+    {
+      "id": "naoj-venus-jupiter-ra",
+      "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2022&lst=-99&body1=2&body0=5&coord=0",
+      "retrieved": "2026-10-15",
+      "kind": "documentation-or-published-table",
+      "encoding": "euc-jp",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2022&lst=-99&body1=2&body0=5&coord=0",
+        "bytes": 8443,
+        "sha256": "3b1ed9f70913f762b59d2f6c5117c83a02e11408314f26f2d4db0dc66bb2abc0",
+        "normalization": "naoj-conjunction-illustration-v1",
+        "normalizedBytes": 8436,
+        "normalizedSha256": "d8a214bc8dbfce3a2e85a7039ffa748345adaba08f01d98b345ea5695a355b0d"
+      }
+    },
+    {
+      "id": "naoj-venus-jupiter-ecliptic",
+      "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2022&lst=-99&body1=2&body0=5&coord=1",
+      "retrieved": "2026-10-15",
+      "kind": "documentation-or-published-table",
+      "encoding": "euc-jp",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2022&lst=-99&body1=2&body0=5&coord=1",
+        "bytes": 8440,
+        "sha256": "b005f128ec2a45870d5b519131c9c6f78602f071e9457d7415ac8e845a5b3396",
+        "normalization": "naoj-conjunction-illustration-v1",
+        "normalizedBytes": 8433,
+        "normalizedSha256": "9c41e1b4cee4f00e3af1fddd4c1d8f120ede7559c8dc228b4291a0f85bf9b53a"
+      }
+    },
+    {
+      "id": "naoj-moon-mars-ra",
+      "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2024&lst=-99&body1=10&body0=4&coord=0",
+      "retrieved": "2026-10-15",
+      "kind": "documentation-or-published-table",
+      "encoding": "euc-jp",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2024&lst=-99&body1=10&body0=4&coord=0",
+        "bytes": 13871,
+        "sha256": "4618a1ff4c9f4766e3e81e3af7703602041a8b5137579f8ebe86883056b82014",
+        "normalization": "naoj-conjunction-illustration-v1",
+        "normalizedBytes": 13864,
+        "normalizedSha256": "28e305152a68c0f104913f62c0d499a989239922bdad04a297817848d871f2cc"
+      }
+    },
+    {
+      "id": "naoj-moon-mars-ecliptic",
+      "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2024&lst=-99&body1=10&body0=4&coord=1",
+      "retrieved": "2026-10-15",
+      "kind": "documentation-or-published-table",
+      "encoding": "euc-jp",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/cande/configurations.cgi?year=2024&lst=-99&body1=10&body0=4&coord=1",
+        "bytes": 13834,
+        "sha256": "91460b92286c2ff85c0632b4f5886709e9b621069edc96f5c6685d984a98c68e",
+        "normalization": "naoj-conjunction-illustration-v1",
+        "normalizedBytes": 13827,
+        "normalizedSha256": "e33fbba932c2f3d2e5936ba896405d651c49b7ed320ee8bee71ec0e3c2fdb770"
+      }
+    },
+    {
+      "id": "usno-american-ephemeris-1923",
+      "url": "https://archive.org/details/in.ernet.dli.2015.515803",
+      "retrieved": "2026-10-15",
+      "title": "The American Ephemeris and Nautical Almanac for the Year 1923",
+      "author": "Nautical Almanac Office, United States Naval Observatory",
+      "publicationYear": 1921,
+      "rights": "United States federal government publication, printed in 1921. Title page and preface identify USNO / Government Printing Office and credit the US Nautical Almanac Office with occultation computations. No Swiss Ephemeris lineage is possible for this publication. Internet Archive metadata does not supply a rights license; public-domain status rests on publication authorship and date.",
+      "lineage": {
+        "moon": "Brown Tables of the Motion of the Moon (manuscript), p. vii",
+        "venus": "Newcomb tables, Astronomical Papers of the American Ephemeris vol. VI, p. vii",
+        "uranus": "Newcomb tables, Astronomical Papers of the American Ephemeris vol. VII, parts 3 and 4, p. vii",
+        "stars": "Catalogue of Zodiacal Stars, Astronomical Papers of the American Ephemeris vol. VIII, part 3, p. x",
+        "geometry": "Bessel method, modified by Chauvenet, p. x"
+      },
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/2015.515803.The-American_djvu.txt",
+        "bytes": 3628924,
+        "sha256": "3b2cabe832ff7b96a518bc617ebef9c28c54cf615d3ff4c63887bbfc50e6c4c5"
+      }
+    },
+    {
+      "id": "usno1923-page-title",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n7_w1200.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page title, Internet Archive leaf 7",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n7_w1200.jpg",
+        "bytes": 233861,
+        "sha256": "d33563e888857eaa049e86728ef5e31e0a82a7ab72c41893a6363c320a0bc930"
+      }
+    },
+    {
+      "id": "usno1923-page-iv",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n10_w1200.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page iv, Internet Archive leaf 10",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n10_w1200.jpg",
+        "bytes": 710029,
+        "sha256": "5201ed90d4935c728d25f3aaca2a434016acd8a7e7423e8fdfabd7fedfb4bd61"
+      }
+    },
+    {
+      "id": "usno1923-page-vii",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n13_w1200.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page vii, Internet Archive leaf 13",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n13_w1200.jpg",
+        "bytes": 518236,
+        "sha256": "413d97eb76b46ff6a72c021820b1598aa6c61acb139827eef119fc9eeb31e197"
+      }
+    },
+    {
+      "id": "usno1923-page-x",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n16_w1200.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page x, Internet Archive leaf 16",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n16_w1200.jpg",
+        "bytes": 714367,
+        "sha256": "765a2cae44acc771e2a100b89a6c2a2a5ebda5f2c34ce624777b6e79ec1731a1"
+      }
+    },
+    {
+      "id": "usno1923-page-xvi",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n22_w1200.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page xvi, Internet Archive leaf 22",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n22_w1200.jpg",
+        "bytes": 560158,
+        "sha256": "e0c7ab05d41adba9d34cb857e45997101654e3c5617c6e73d293ce591a49a74d"
+      }
+    },
+    {
+      "id": "usno1923-page-608",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n638_w1200.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page 608, Internet Archive leaf 638",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n638_w1200.jpg",
+        "bytes": 760090,
+        "sha256": "2fdfae13048db21d7f88516fff42fdcf684fc2f0eee1f7e0c08fe267f4b78b59"
+      }
+    },
+    {
+      "id": "usno1923-page-610",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n640.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page 610, Internet Archive leaf 640",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n640.jpg",
+        "bytes": 1537746,
+        "sha256": "2dd655317a93ba431be58beb1094e2b6e1657b930112b205a3f30690d7bf0f2e"
+      }
+    },
+    {
+      "id": "usno1923-page-682",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n712.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page 682, Internet Archive leaf 712",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n712.jpg",
+        "bytes": 1495355,
+        "sha256": "ee1955b1e6cd69ffa03f4d8afca7910188a59e36a456d40e48cbcf9f97c85c48"
+      }
+    },
+    {
+      "id": "usno1923-page-683",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n713_w1200.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page 683, Internet Archive leaf 713",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n713_w1200.jpg",
+        "bytes": 559576,
+        "sha256": "e42638c48e166dea7b3239e864f8ad6971971a7ba3cded9d5101abbbf012214b"
+      }
+    },
+    {
+      "id": "usno1923-page-746",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n776_w1200.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page 746, Internet Archive leaf 776",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n776_w1200.jpg",
+        "bytes": 838279,
+        "sha256": "22a7b675da3bfd565b923f5c09aaf74d0d7a5385175abdf7b2abe144af3cf170"
+      }
+    },
+    {
+      "id": "usno1923-page-763",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n793_w1200.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page 763, Internet Archive leaf 793",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n793_w1200.jpg",
+        "bytes": 822236,
+        "sha256": "b1976abe19d3bc90be62b68b8ffd1b2a20128544bfd46b71ec02397d96a7b879"
+      }
+    },
+    {
+      "id": "usno1923-page-765",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n795_w1200.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page 765, Internet Archive leaf 795",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n795_w1200.jpg",
+        "bytes": 607482,
+        "sha256": "38ad2c1870b99d43dd7d691f471f46a7751adacb5849678ccc7d3d42bf9d21c1"
+      }
+    },
+    {
+      "id": "usno1923-page-766",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n796_w1200.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page 766, Internet Archive leaf 796",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n796_w1200.jpg",
+        "bytes": 445479,
+        "sha256": "ca43e4ad0918d6044d0f69c3f0799250888434c80bc828d0cb1ab62ac7cc6c84"
+      }
+    },
+    {
+      "id": "usno1923-page-767",
+      "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n797_w1200.jpg",
+      "retrieved": "2026-10-15",
+      "locator": "printed page 767, Internet Archive leaf 797",
+      "visuallyVerified": true,
+      "verification": {
+        "url": "https://archive.org/download/in.ernet.dli.2015.515803/page/n797_w1200.jpg",
+        "bytes": 656723,
+        "sha256": "999be7bb27d730c547c7d43c30ec43066818ee2075d1274ce73de5c5a3a411ac"
+      }
+    },
+    {
+      "id": "naoj-occultation-doc-0",
+      "url": "https://eco.mtk.nao.ac.jp/koyomi/site/index.html.en",
+      "retrieved": "2026-10-15",
+      "kind": "documentation",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/koyomi/site/index.html.en",
+        "bytes": 3151,
+        "sha256": "c162bd0db6e4c2b1d1ced56e3063ba3a330d9c01e0073715d4e6c8b8ff7e6ae4"
+      }
+    },
+    {
+      "id": "naoj-occultation-doc-2",
+      "url": "https://eco.mtk.nao.ac.jp/koyomi/faq/occultation.html.en",
+      "retrieved": "2026-10-15",
+      "kind": "documentation",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/koyomi/faq/occultation.html.en",
+        "bytes": 4569,
+        "sha256": "d0f79c81a5a4da4866fd65d29160571a13b18f2722eaa75c19d765ffa1846020"
+      }
+    },
+    {
+      "id": "naoj-occultation-doc-3",
+      "url": "https://eco.mtk.nao.ac.jp/koyomi/faq/time.html.en",
+      "retrieved": "2026-10-15",
+      "kind": "documentation",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/koyomi/faq/time.html.en",
+        "bytes": 2180,
+        "sha256": "22bde08f105b6cba6cf0a8a4bf871c00ee6ba459768a1a2d0b2087e01738a8d2"
+      }
+    },
+    {
+      "id": "naoj-occultation-doc-4",
+      "url": "https://eco.mtk.nao.ac.jp/koyomi/faq/glossary.html.en",
+      "retrieved": "2026-10-15",
+      "kind": "documentation",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/koyomi/faq/glossary.html.en",
+        "bytes": 5937,
+        "sha256": "ed271be6d9934a7dbbf7bcf01368fa362b36c5f461269cddccd4f33fe0f7e604"
+      }
+    },
+    {
+      "id": "naoj-occultation-doc-6",
+      "url": "https://eco.mtk.nao.ac.jp/koyomi/topics/html/topics2016_1.html",
+      "retrieved": "2026-10-15",
+      "kind": "documentation",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/koyomi/topics/html/topics2016_1.html",
+        "bytes": 9310,
+        "sha256": "311880d63e514cfe2f30d61690d1778f860370e174db99b2a8947c1fbd6ac540"
+      }
+    },
+    {
+      "id": "naoj-map-202408",
+      "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202408&lst=0&btn02=Go&dtm=99&dt=69",
+      "retrieved": "2026-10-15",
+      "kind": "published-map-coordinate-data",
+      "lastRetrievedDataUrl": "https://eco.mtk.nao.ac.jp/koyomi/koyomix/work/gmaps_299249883875984.js",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/koyomi/koyomix/work/gmaps_299249883875984.js",
+        "queryUrl": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202408&lst=0&btn02=Go&dtm=99&dt=69",
+        "mode": "naoj-map",
+        "bytes": 61148,
+        "sha256": "82a84bde59bab51d7c0c3fc3d99cf4071227023371cc7db7670acd4d971fddb0"
+      }
+    },
+    {
+      "id": "naoj-contacts-202408",
+      "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202408&choice=1&choice0=1&anywhere=1&lat=-20&lon=0&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+      "retrieved": "2026-10-15",
+      "kind": "published-local-prediction",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202408&choice=1&choice0=1&anywhere=1&lat=-20&lon=0&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+        "bytes": 11602,
+        "sha256": "ca4192d2c8d75ec976eb5a7a12cc151369db2a459ce3aaf61ba20397c9849dfb",
+        "normalization": "naoj-contact-illustration-v1",
+        "normalizedBytes": 11595,
+        "normalizedSha256": "9e969fd074fa7257510ac0d39f01f73b0c9d43dab4bff85e381617b9215dcdda",
+        "normalizationReceipt": {
+          "retrieved": "2026-10-15",
+          "bytes": 11602,
+          "sha256": "f9b4df5bdbf2fde637fc73b1f543029f9bbcad6e20292ea14a6718df69118c6a",
+          "note": "Separate audit fetch; every retained contact row was checked against this response. The earlier raw receipt above is preserved."
+        }
+      }
+    },
+    {
+      "id": "naoj-map-202503",
+      "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202503&btn02=Go&dtm=99&dt=69",
+      "retrieved": "2026-10-15",
+      "kind": "published-map-coordinate-data",
+      "lastRetrievedDataUrl": "https://eco.mtk.nao.ac.jp/koyomi/koyomix/work/gmaps_419509137952306.js",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/koyomi/koyomix/work/gmaps_419509137952306.js",
+        "queryUrl": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202503&btn02=Go&dtm=99&dt=69",
+        "mode": "naoj-map",
+        "bytes": 61757,
+        "sha256": "c731facb238e14e3680ee93eacd263ba032a457a433f1dc5bf50148cf26ae48b"
+      }
+    },
+    {
+      "id": "naoj-contacts-202503",
+      "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202503&choice=1&choice0=1&anywhere=1&lat=40&lon=-75&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+      "retrieved": "2026-10-15",
+      "kind": "published-local-prediction",
+      "verification": {
+        "url": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202503&choice=1&choice0=1&anywhere=1&lat=40&lon=-75&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+        "bytes": 11597,
+        "sha256": "cf9e64906c74170668af7eb81c55187ff26c7b318bc83ef97c5d71cee6123c57",
+        "normalization": "naoj-contact-illustration-v1",
+        "normalizedBytes": 11590,
+        "normalizedSha256": "d6b2678133d9f9fdf71314b490b97e839785daa23a67b653b29dcbb295989cae",
+        "normalizationReceipt": {
+          "retrieved": "2026-10-15",
+          "bytes": 11597,
+          "sha256": "ac0c96928bf416e8dbb663c2762ed741266cf9ee543b4ce053cac5c3be645832",
+          "note": "Separate audit fetch; every retained contact row was checked against this response. The earlier raw receipt above is preserved."
+        }
+      }
+    }
+  ],
+  "rights": {
+    "eco": {
+      "sourceId": "naoj-rights-eco",
+      "status": "permitted-with-attribution",
+      "scope": "Data results only; no source code or images copied.",
+      "excerpt": "各ページの内容は、ご自由に利用ください。ご利用にあたり、届出の必要はございません。",
+      "translation": "Contents of each page may be freely used; no notification is necessary.",
+      "credit": "National Astronomical Observatory of Japan (NAOJ), Calendar and Ephemeris Office"
+    },
+    "main": {
+      "sourceId": "naoj-rights-main",
+      "status": "permitted-in-specified-scope-with-credit",
+      "scope": "Factual numerical excerpts for astronomical scientific research and application/publication information dissemination. No source code, portraits, third-party images, or resale of originals.",
+      "excerpts": [
+        "学術研究、教育活動、学習活動（学習塾、予備校等を含む）のための利用",
+        "ウェブサイト、ソーシャルネットワーク、アプリにおける情報発信（ページ内の広告の有無は問いません）"
+      ],
+      "credit": "National Astronomical Observatory of Japan (NAOJ)"
+    }
+  },
+  "lineage": {
+    "webEphemeris": {
+      "sourceIds": [
+        "naoj-cande",
+        "naoj-de440",
+        "naoj-2009"
+      ],
+      "status": "official-JPL-DE-lineage",
+      "description": "The Calendar and Ephemeris Office says the web edition uses its latest theory. Its 2026 revision adopts JPL DE440; earlier 2016-2025 editions use DE430. The 2009 revision adopts IAU 2006 precession/nutation. Thus newly queried 2026 web tables use the latest DE-series implementation, not the printed almanac of the event year. No Swiss-derived source is invoked.",
+      "excerpt": "令和8年版からは，その後継にあたるDE440を採用することとしたので，ここに整理する．"
+    },
+    "outreach": {
+      "sourceIds": [
+        "naoj-de440"
+      ],
+      "status": "institutional-lineage-only-no-per-page-version",
+      "description": "The outreach pages are NAOJ primary predictions and link its ephemeris services, but they do not name an ephemeris version or executable. DE430 was the institutional almanac model at publication. Treat exact outreach reduction/version as unknown, not as a measured DE430 software receipt."
+    }
+  },
+  "outlineCurveEvidence": {
+    "interpretation": "Curve meanings inferred from north/south ordering and separately queried NAOJ local contact descriptions. Never inferred from workbench calculations.",
+    "supportRows": [
+      {
+        "query": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202408&choice=1&choice0=1&anywhere=1&lat=12.672899&lon=-0.096225&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+        "sha256": "3d1c6f24b52e196fa8a9b9e5f9da6df915f2d9cac23f7415ea2f9637dc9f57d4",
+        "bytes": 8656,
+        "rows": [],
+        "curveArray": "points4",
+        "curveIndexZeroBased": 184,
+        "interpretation": "Inconclusive: no contact rows at a rounded node. Outer north is supported by the separate points4[21] query."
+      },
+      {
+        "query": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202408&choice=1&choice0=1&anywhere=1&lat=-35.189525&lon=-0.110448&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+        "sha256": "ae26decd41935c8898e4ab30221b720e95536880ed7eee8248673d4497cdd2ff",
+        "bytes": 11023,
+        "rows": [
+          " 2024-05-31    8:22:54     129     145     343      67    53.0   316.2     984       8     992   Disappearance starts ",
+          " 2024-05-31    8:29:51     139     144     356      67    51.9   314.0     984       8     975   Disappearance ends ",
+          " 2024-05-31    8:29:51     139     144     356      67    51.9   314.0     984       8     975   Reappearance starts ",
+          " 2024-05-31    8:29:53     139     144     356      67    51.9   313.9     984       8     975   Least angular distance ",
+          " 2024-05-31    8:36:46     150     142       8      67    50.9   311.8     984       8     992   Reappearance ends "
+        ],
+        "curveArray": "points2",
+        "curveIndexZeroBased": 82,
+        "interpretation": "Inner south: simultaneous end of disappearance and start of reappearance."
+      },
+      {
+        "query": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202408&choice=1&choice0=1&anywhere=1&lat=12.481758&lon=0.131508&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+        "sha256": "343f5231c22aaf9070175f598ccce061d379b672685736e553d46fa365cf72d7",
+        "bytes": 11020,
+        "rows": [
+          " 2024-05-31    9:42:19     330      67     263      67    41.8   249.4     982       8     990   Disappearance starts ",
+          " 2024-05-31    9:48:51     320      68     252      67    40.4   250.3     982       8     973   Disappearance ends ",
+          " 2024-05-31    9:48:51     320      68     252      67    40.4   250.3     982       8     973   Reappearance starts ",
+          " 2024-05-31    9:48:54     320      68     252      67    40.4   250.3     982       8     973   Least angular distance ",
+          " 2024-05-31    9:55:19     309      68     241      67    38.9   251.1     981       8     990   Reappearance ends "
+        ],
+        "curveArray": "points1",
+        "curveIndexZeroBased": 183,
+        "interpretation": "Inner north: simultaneous end of disappearance and start of reappearance."
+      },
+      {
+        "query": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202408&choice=1&choice0=1&anywhere=1&lat=-35.766109&lon=-0.134621&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+        "sha256": "8cfe8463b666571642906de2faf86be551aa317f4335047e774285b990ce69fb",
+        "bytes": 10404,
+        "rows": [
+          " 2024-05-31    8:28:51     139     145     355      67    51.7   314.8     984       8     992   Disappearance starts ",
+          " 2024-05-31    8:28:51     139     145     355      67    51.7   314.8     984       8     992   Reappearance ends ",
+          " 2024-05-31    8:28:53     139     145     355      67    51.7   314.8     984       8     992   Least angular distance "
+        ],
+        "curveArray": "points3",
+        "curveIndexZeroBased": 81,
+        "interpretation": "Outer south: simultaneous external contacts."
+      }
+    ],
+    "curveVerification": [
+      {
+        "eventId": "202408",
+        "curveArray": "points4",
+        "curveIndexZeroBased": 21,
+        "queryUrl": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202408&choice=1&choice0=1&anywhere=1&lat=-30.298858&lon=-59.742296&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+        "sourceBytes": 10406,
+        "sourceSha256": "6000cf7c4e81f7ad2f31afebee345fba96151434b5d72602a0e7dd3d019995ec",
+        "rows": [
+          [
+            "2024-05-31",
+            "7:05:48",
+            "327",
+            "-122",
+            "89",
+            "67",
+            "33.7",
+            "76.5",
+            "980",
+            "8",
+            "988",
+            "Least angular distance"
+          ],
+          [
+            "2024-05-31",
+            "7:05:51",
+            "327",
+            "-122",
+            "89",
+            "67",
+            "33.7",
+            "76.5",
+            "980",
+            "8",
+            "988",
+            "Disappearance starts"
+          ],
+          [
+            "2024-05-31",
+            "7:05:51",
+            "327",
+            "-122",
+            "89",
+            "67",
+            "33.7",
+            "76.5",
+            "980",
+            "8",
+            "988",
+            "Reappearance ends"
+          ]
+        ]
+      },
+      {
+        "eventId": "202408",
+        "curveArray": "points4",
+        "curveIndexZeroBased": 132,
+        "queryUrl": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202408&choice=1&choice0=1&anywhere=1&lat=-4.350886&lon=-20.108668&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+        "sourceBytes": 8658,
+        "sourceSha256": "55db335cd6a20dd17249e2fac2437d23ee9943c09630e85901d7f9d61b706f2a",
+        "rows": []
+      },
+      {
+        "eventId": "202503",
+        "curveArray": "points1",
+        "curveIndexZeroBased": 55,
+        "queryUrl": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202503&choice=1&choice0=1&anywhere=1&lat=58.14129&lon=-59.967817&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+        "sourceBytes": 10818,
+        "sourceSha256": "798bfe39313952ef8c82006eb4dafc3da9f43eef5623abdb9a8a52aa21731318",
+        "rows": [
+          [
+            "2025-01-14",
+            "3:14:47",
+            "26",
+            "-16",
+            "41",
+            "46",
+            "54.4",
+            "152.5",
+            "951",
+            "7",
+            "958",
+            "Disappearance starts"
+          ],
+          [
+            "2025-01-14",
+            "3:20:50",
+            "16",
+            "-14",
+            "30",
+            "46",
+            "54.7",
+            "154.7",
+            "951",
+            "7",
+            "944",
+            "Least angular distance"
+          ],
+          [
+            "2025-01-14",
+            "3:20:51",
+            "16",
+            "-14",
+            "30",
+            "46",
+            "54.7",
+            "154.7",
+            "951",
+            "7",
+            "944",
+            "Disappearance ends"
+          ],
+          [
+            "2025-01-14",
+            "3:20:51",
+            "16",
+            "-14",
+            "30",
+            "46",
+            "54.7",
+            "154.7",
+            "951",
+            "7",
+            "944",
+            "Reappearance starts"
+          ],
+          [
+            "2025-01-14",
+            "3:26:55",
+            "6",
+            "-13",
+            "19",
+            "47",
+            "55.0",
+            "156.9",
+            "951",
+            "7",
+            "958",
+            "Reappearance ends"
+          ]
+        ]
+      },
+      {
+        "eventId": "202503",
+        "curveArray": "points2",
+        "curveIndexZeroBased": 87,
+        "queryUrl": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202503&choice=1&choice0=1&anywhere=1&lat=25.077384&lon=-59.92378&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+        "sourceBytes": 11016,
+        "sourceSha256": "d6c8cfe0e61d86bd26611ce6b2d16a5418d8c5926bb34891e066772eba26177b",
+        "rows": [
+          [
+            "2025-01-14",
+            "3:22:57",
+            "189",
+            "-87",
+            "276",
+            "43",
+            "76.1",
+            "86.2",
+            "953",
+            "7",
+            "961",
+            "Disappearance starts"
+          ],
+          [
+            "2025-01-14",
+            "3:30:50",
+            "199",
+            "-88",
+            "286",
+            "44",
+            "77.9",
+            "86.6",
+            "953",
+            "7",
+            "946",
+            "Least angular distance"
+          ],
+          [
+            "2025-01-14",
+            "3:30:50",
+            "199",
+            "-88",
+            "287",
+            "44",
+            "77.9",
+            "86.6",
+            "953",
+            "7",
+            "946",
+            "Disappearance ends"
+          ],
+          [
+            "2025-01-14",
+            "3:30:52",
+            "199",
+            "-88",
+            "287",
+            "44",
+            "77.9",
+            "86.6",
+            "953",
+            "7",
+            "946",
+            "Reappearance starts"
+          ],
+          [
+            "2025-01-14",
+            "3:38:46",
+            "209",
+            "-88",
+            "297",
+            "44",
+            "79.6",
+            "87.1",
+            "953",
+            "7",
+            "961",
+            "Reappearance ends"
+          ]
+        ]
+      },
+      {
+        "eventId": "202503",
+        "curveArray": "points3",
+        "curveIndexZeroBased": 87,
+        "queryUrl": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202503&choice=1&choice0=1&anywhere=1&lat=24.842668&lon=-59.984803&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+        "sourceBytes": 10398,
+        "sourceSha256": "68018cc0cc2a769a174cb2c0a7d960415411c2551aaef415c49d8134a751d0fb",
+        "rows": [
+          [
+            "2025-01-14",
+            "3:30:50",
+            "199",
+            "-89",
+            "288",
+            "44",
+            "77.8",
+            "85.5",
+            "953",
+            "7",
+            "961",
+            "Least angular distance"
+          ],
+          [
+            "2025-01-14",
+            "3:30:50",
+            "199",
+            "-89",
+            "288",
+            "44",
+            "77.8",
+            "85.5",
+            "953",
+            "7",
+            "961",
+            "Disappearance starts"
+          ],
+          [
+            "2025-01-14",
+            "3:30:52",
+            "199",
+            "-89",
+            "288",
+            "44",
+            "77.8",
+            "85.5",
+            "953",
+            "7",
+            "961",
+            "Reappearance ends"
+          ]
+        ]
+      },
+      {
+        "eventId": "202503",
+        "curveArray": "points4",
+        "curveIndexZeroBased": 54,
+        "queryUrl": "https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/occuly_p_en.cgi?eclid=202503&choice=1&choice0=1&anywhere=1&lat=58.423606&lon=-59.979847&hgt=0&lst=0&lsti=0&btn01=Go&dtm=99&dt=69",
+        "sourceBytes": 10398,
+        "sourceSha256": "bdc59f2522c3e05ff5d835a50158327ed9f64478d053d62eb0eb537ed1ed3032",
+        "rows": [
+          [
+            "2025-01-14",
+            "3:20:50",
+            "16",
+            "-14",
+            "30",
+            "46",
+            "54.5",
+            "154.8",
+            "951",
+            "7",
+            "958",
+            "Least angular distance"
+          ],
+          [
+            "2025-01-14",
+            "3:20:51",
+            "16",
+            "-14",
+            "30",
+            "46",
+            "54.5",
+            "154.8",
+            "951",
+            "7",
+            "958",
+            "Disappearance starts"
+          ],
+          [
+            "2025-01-14",
+            "3:20:51",
+            "16",
+            "-14",
+            "30",
+            "46",
+            "54.5",
+            "154.8",
+            "951",
+            "7",
+            "958",
+            "Reappearance ends"
+          ]
+        ]
+      }
+    ]
+  },
+  "rejectedLeads": [
+    {
+      "url": "https://www.imcce.fr/mentions-legales",
+      "reason": "Published precise RA/ecliptic/appulse values exist at newsletter /archives/174 and conjonctions.pdf, but broad data redistribution and commercial/professional use require permission; no fixture adopted."
+    },
+    {
+      "url": "https://eclipse.gsfc.nasa.gov/SKYCAL/SKYCAL.html",
+      "reason": "Data reproduction permitted with credit, but coordinate/minimum convention and ephemeris lineage absent. Raw 2020 Jupiter-Saturn event JD2459205.8992 falls a day later than other primary event notices, so not a precision fixture."
+    },
+    {
+      "url": "https://occultations.org/sw/occult/occult4.htm",
+      "reason": "Occult dissemination restrictions not adopted as unrestricted fixtures. IOTA data remain leads; no numerical rows retained."
+    },
+    {
+      "url": "https://www.nao.ac.jp/astro/sky/2024/11-topics04.html",
+      "reason": "Moon-Mars outreach appulse excluded: observer coordinates absent, lunar parallax prevents strict geocentric timing comparison."
+    },
+    {
+      "url": "https://archive.org/details/in.ernet.dli.2015.515803",
+      "reason": "Historical planetary immersion/emersion excluded because planet centre versus disk-contact semantics are not established."
+    }
+  ]
+}

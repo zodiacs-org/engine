@@ -1,0 +1,23 @@
+{
+  "schema": "zodiacs.occultations.sao-acquisition.v1",
+  "catalogue": "SAO/ADC1989-May1991/HEASARC",
+  "retrievedAt": "2026-10-15",
+  "descriptionUrl": "https://heasarc.gsfc.nasa.gov/W3Browse/star-catalog/sao.html",
+  "url": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=text%2Fplain&MAXREC=10000&QUERY=SELECT+name%2Cra%2Cdec%2Cvmag%2Cproper_motion_ra_fk5%2Cproper_motion_dec_fk5%2Cref_vmag%2Cremarks%2Cref_source_cat%2Cref_proper_motion+FROM+sao+WHERE+vmag+%3C%3D+4.5+OR+name+IN+%28%27SAO+98967%27%2C%27SAO+157923%27%2C%27SAO+184415%27%2C%27SAO+94027%27%2C%27SAO+76126%27%2C%27SAO+76131%27%2C%27SAO+76140%27%2C%27SAO+76155%27%2C%27SAO+76159%27%2C%27SAO+76164%27%2C%27SAO+76172%27%2C%27SAO+76199%27%2C%27SAO+76228%27%2C%27SAO+76229%27%29+ORDER+BY+name",
+  "query": "SELECT name,ra,dec,vmag,proper_motion_ra_fk5,proper_motion_dec_fk5,ref_vmag,remarks,ref_source_cat,ref_proper_motion FROM sao WHERE vmag <= 4.5 OR name IN ('SAO 98967','SAO 157923','SAO 184415','SAO 94027','SAO 76126','SAO 76131','SAO 76140','SAO 76155','SAO 76159','SAO 76164','SAO 76172','SAO 76199','SAO 76228','SAO 76229') ORDER BY name",
+  "sha256": "3cbfa6ef01e7a6e0e0f58e7b13b758766bc9b75559c37d48ed85caaec42d8a3c",
+  "bytes": 117902,
+  "rows": 872,
+  "columns": [
+    "name",
+    "ra",
+    "dec",
+    "vmag",
+    "proper_motion_ra_fk5",
+    "proper_motion_dec_fk5",
+    "ref_vmag",
+    "remarks",
+    "ref_source_cat",
+    "ref_proper_motion"
+  ]
+}
