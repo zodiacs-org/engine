@@ -172,6 +172,9 @@ conformance recipe (`conformance/arbiters/l3/README.md`) and run
 `node atlas/tools/compare-tzdb.mjs` rewrites `tzdb/differences.json` and
 `TZDB-DIFFERENCES.md`.
 
+The [2026f rerun record](../docs/evidence/tzdb-2026f-20261118/REPORT.md)
+documents the 2025c source and extract paths pinned by these tools.
+
 ## How to cite
 
 > Zodiacs.org historical time atlas, version 0.1.0 (2026-09-28),

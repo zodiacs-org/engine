@@ -382,14 +382,15 @@ twice (a fold) takes the earlier instant, or the later one with the option
   `PACKRATDATA=backzone` with `PACKRATLIST` empty, not the
   `PACKRATLIST=zone.tab` form that Debian builds; each name is backzone's zone
   of that name, else the main data's, else a link, backzone's before
-  `backward`'s. On tzdata 2025c, the release shipped through 2.0.0-rc.2, that
-  was the Makefile's own build of that form before 1970 for 584 of the 597
-  names; for the other 13, links that backzone points at a zone it adds
-  (Iceland at Atlantic/Reykjavik, America/Virgin at America/St_Thomas, and 11
-  more), the Makefile's `ziguard.awk` keeps `backward`'s target, and the
-  package follows backzone (`docs/evidence/rc15-20260929/backzone-divergence.json`;
-  not measured again on 2026f). What moved from 2025c to 2026f, interval by
-  interval and from zdump, is in `docs/evidence/tzdb-2026f-20261117/`.
+  `backward`'s. On tzdata 2025c, the release shipped through 2.0.0-rc.2, the
+  pinned build's offsets before 1970 matched the Makefile's own build of that
+  form for 584 of the 597 names. For the other 13, `ziguard.awk` kept
+  `backward`'s link target and the pinned build followed backzone's, such as
+  Iceland at Atlantic/Reykjavik and America/Virgin at America/St_Thomas.
+  See the [2025c evidence](evidence/rc15-20260929/backzone-divergence.json)
+  and the [2026f rerun record](evidence/tzdb-2026f-20261118/REPORT.md).
+  What moved from 2025c to 2026f, interval by interval and from zdump, is in
+  `docs/evidence/tzdb-2026f-20261117/`.
   One name is held back by the owner's decision: tzdata 2026f's `backzone`
   comments out America/Yellowknife's zone, with no tzdb NEWS entry or other
   official announcement behind the change, so the package compiles tzdata
@@ -426,12 +427,14 @@ twice (a fold) takes the earlier instant, or the later one with the option
   tzdata 2025c history shipped through 2.0.0-rc.2, compared at every instant
   before 1970-01-01T00:00Z with tzdata 2025c's default build,
   which is what `Intl` carries on a host with tzdb 2025c and what rc.14 read,
-  122 of the 597 names the package ships give another offset at some instant
-  (all of them after 1850), for example Stockholm 1947-07-01 12:00, +1:00 in
-  the shipped history and +2:00 in the default build. The two builds differ
-  for 136 names; 15 of those ship the default build's history (above), and
-  America/Pangnirtung differs where the default build has no local time
-  (`-00`) and backzone has one. `docs/evidence/rc15-20260929/backzone-divergence.mjs`
+  122 of the 597 shipped names gave another offset at some instant. Each of
+  those names also differed at an instant from 1850 onward. For example,
+  Stockholm 1947-07-01 12:00 was +1:00 in the shipped history and +2:00 in
+  the default build. The two builds differed for 136 names. The package
+  shipped the default build's history for 15 of those names.
+  America/Pangnirtung differed where the default build had no local time
+  (`-00`) and backzone had one. The
+  [comparison script](evidence/rc15-20260929/backzone-divergence.mjs)
   computes the lists from zic's output. The audit's list of 98 zones
   (`src/fixtures/tzdb-divergence-98.json`), which the tests and the
   conformance suite use, compared Debian's 2025b build (backzone restricted to
