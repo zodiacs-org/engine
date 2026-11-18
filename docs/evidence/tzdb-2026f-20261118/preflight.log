@@ -1,0 +1,39 @@
+Archive SHA-256 checks against fetched/MANIFEST.tsv
+003-tzdata2026f.tar.gz: OK
+004-tzcode2026f.tar.gz: OK
+
+Shipped shard preflight
+v22.22.2
+zic (tzcode) 2026f
+zdump (tzcode) 2026f
+90aedc77e2431ca917137a36a7870a9a9d4f39131da63ad7973f504b65b0575a  scripts/tzdb-held/yellowknife-2025c.zi
+31eb32641e52dbc5fc313ccf049b7f7fecc9a6208eccac9d99bd32bd3881c005  zic (fat default)
+tz-shards: src/tzdb/ matches tzdb 2026f (597 names)
+5389cb545b132770757454415be47e7bd7ba0b6cbe8676504c925bf88313ca2e  zic
+82d931e56b1e9a0c9e5472796dd93e3857db3a4f32e515fbc7ebe82ec0bbc14c  zdump
+Slim tzcode 2026f zic, exit 1: tz-shards: held zone America/Yellowknife: first differs from the default build at 1194163200, expected 1793520000
+
+Legacy divergence script preflight
+America/Yellowknife absent from the legacy pinned build
+CST6CDT absent from the legacy pinned build
+EST5EDT absent from the legacy pinned build
+MST7MDT absent from the legacy pinned build
+PST8PDT absent from the legacy pinned build
+Exit status with awk excluded from PATH: 1
+Error: spawnSync awk ENOENT
+No divergence JSON produced.
+
+Atlas checks on the committed tzdb 2025c extract
+atlas 0.1.0: 21 places, 14 jurisdictions, 59 rules, 66 citations
+  rules by flag: documented 27, inferred 26, uncertain 6
+  citations by type: decree 5, law 9, ministerial-decision 1, municipal-notice 1, newspaper-report 45, parliamentary-debate 3, railway-notice 2
+  excerpts taken from: page-image 66
+  excerpts checked against (citations): ocr matches 24, ocr partial 5, page-image matches 16, search-service matches 29, search-service partial 8
+  258 boundaries and 2735 round trips checked
+  tzdb comparison current, every difference matched by exactly one explanation
+atlas: all checks passed
+compare-tzdb: 108 differences, each matched by exactly one explanation; files current
+# tests 26
+# pass 26
+# fail 0
+# skipped 0
