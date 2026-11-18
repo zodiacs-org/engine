@@ -8,7 +8,7 @@ packed. It holds the corrections in the meantime, and the next candidate's
 `### Corrections` section should carry them into the changelog.
 
 Each entry names the line as it stands, what the evidence shows, and where the
-evidence is. Line numbers are those of `CHANGELOG.md` at 1.1.0 (`322f855`);
+evidence is. For entries 1 to 14, line numbers are those of `CHANGELOG.md` at 1.1.0 (`322f855`);
 the audit counted them before 1.1.0's entries, 719 lines earlier. The
 lines themselves are left as written. Source: the changelog
 evidence audit of 12 and 13 November 2026,
@@ -91,6 +91,25 @@ changed because their archives hold them.
     `322f855`; npm's versions are 0.1.1-rc.14 to 0.1.1-rc.16 and 1.0.0
     (`npm view @zodiacs/engine versions`, 2026-11-16). Corrected in the file
     on 2026-11-16.
+
+## Corrections for the next candidate
+
+Line numbers below are those of `README.md` and `CHANGELOG.md` at the head
+of `main`, commit `709bc813e2ee9de948ef0dcd008c76bf086fe7d4`.
+
+15. **`README.md`, 2.0.0-rc.3, lines 20 to 21: "is a draft for the owner's
+    review and is not published to npm".** It was published to npm on
+    17 November 2026 UTC under `next`, with 1.1.0 still under `latest`.
+    The registry output, checksum and successful release workflow run are
+    recorded in [the publication evidence](evidence/changelog-corrections-20261118/records.md#publication).
+    True when written.
+16. **`CHANGELOG.md`, 2.0.0-rc.3, pull request 121 (`@zodiacs/engine/core`),
+    line 64: "the root is unchanged".** The root's results, names and types
+    are unchanged. Its import graph grows by 109 bytes because the shared
+    ephemeris chunk grows by that amount. The same entry's size table
+    credits pull request 121 with 109 bytes on `.`, `./calc`, `./internal`,
+    `./sky`, `./timing`, `./vedic` and `./window`. See
+    [the table rows and pull request evidence](evidence/changelog-corrections-20261118/records.md#source-lines-and-import-graph-attribution).
 
 ## Not a correction, for the record
 
