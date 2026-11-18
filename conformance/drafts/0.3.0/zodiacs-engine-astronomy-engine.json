@@ -9,12 +9,12 @@
     "name": "zodiacs-engine-astronomy-engine",
     "version": "0.3.0",
     "engine": "@zodiacs/engine on astronomy-engine",
-    "engineVersion": "2.0.0-rc.2",
+    "engineVersion": "2.0.0-rc.3",
     "configuration": {
       "ephemeris": "astronomy-engine 2.1.19",
       "deltaTModel": "zodiacs-deltat/1",
       "timeBasis": "from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise",
-      "timeZones": "before 1970 the shipped tzdb 2025c history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
+      "timeZones": "before 1970 the shipped tzdb 2026f history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
       "positions": "natalChart with timeScale \"tt\", outside withEphemeris: the requested instant is read as TT",
       "angles": "natalChart with timeScale \"ut1\": the requested instant is read as UT1"
     }
@@ -23,16 +23,16 @@
   "summary": {
     "total": {
       "count": 140,
-      "pass": 31,
-      "fail": 39,
+      "pass": 34,
+      "fail": 36,
       "unsupported": 70,
       "error": 0
     },
     "byKind": {
       "event.ingress": {
         "count": 70,
-        "pass": 31,
-        "fail": 39,
+        "pass": 34,
+        "fail": 36,
         "unsupported": 0,
         "error": 0,
         "residuals": {
@@ -40,15 +40,15 @@
             "unit": "s",
             "n": 60,
             "median": 56.1980832,
-            "max": 33981.4099,
-            "maxOfTolerance": 15.9721579
+            "max": 33981.407,
+            "maxOfTolerance": 15.9721448
           },
           "utc_s": {
             "unit": "s",
             "n": 10,
-            "median": 6.64550007,
-            "max": 28.915,
-            "maxOfTolerance": 11.0014996
+            "median": 1.41650009,
+            "max": 29.868,
+            "maxOfTolerance": 1.2445
           }
         }
       },
@@ -77,8 +77,8 @@
       },
       "utc-input": {
         "count": 20,
-        "pass": 6,
-        "fail": 4,
+        "pass": 9,
+        "fail": 1,
         "unsupported": 10,
         "error": 0
       },
@@ -148,7 +148,7 @@
       "id": "L4-ING-0005",
       "verdict": "pass",
       "residual": {
-        "tt_s": -3.24999452
+        "tt_s": -3.25598931
       },
       "meta": {
         "events": 1,
@@ -156,7 +156,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2060-01-20T07:58:29.418Z",
+        "at": "2060-01-20T07:58:32.640Z",
         "retrograde": false
       }
     },
@@ -164,7 +164,7 @@
       "id": "L4-ING-0006",
       "verdict": "pass",
       "residual": {
-        "tt_s": -4.89739704
+        "tt_s": -4.89498234
       },
       "meta": {
         "events": 1,
@@ -172,7 +172,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2140-01-20T17:49:28.532Z",
+        "at": "2140-01-20T17:49:51.055Z",
         "retrograde": false
       }
     },
@@ -232,7 +232,7 @@
       "id": "L4-ING-0011",
       "verdict": "fail",
       "residual": {
-        "tt_s": -3.44301438
+        "tt_s": -3.44397998
       },
       "meta": {
         "events": 1,
@@ -240,7 +240,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2060-01-02T17:38:08.397Z",
+        "at": "2060-01-02T17:38:11.619Z",
         "retrograde": false
       }
     },
@@ -248,7 +248,7 @@
       "id": "L4-ING-0012",
       "verdict": "pass",
       "residual": {
-        "tt_s": 0.480685234
+        "tt_s": 0.505991936
       },
       "meta": {
         "events": 1,
@@ -256,7 +256,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2140-01-01T07:23:44.896Z",
+        "at": "2140-01-01T07:24:07.420Z",
         "retrograde": false
       }
     },
@@ -316,7 +316,7 @@
       "id": "L4-ING-0017",
       "verdict": "pass",
       "residual": {
-        "tt_s": -6.09821916
+        "tt_s": -6.07601047
       },
       "meta": {
         "events": 1,
@@ -324,7 +324,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2060-01-12T11:58:18.270Z",
+        "at": "2060-01-12T11:58:21.518Z",
         "retrograde": false
       }
     },
@@ -332,7 +332,7 @@
       "id": "L4-ING-0018",
       "verdict": "pass",
       "residual": {
-        "tt_s": 0.712389946
+        "tt_s": 0.706998825
       },
       "meta": {
         "events": 1,
@@ -340,7 +340,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2140-01-05T11:23:09.534Z",
+        "at": "2140-01-05T11:23:32.032Z",
         "retrograde": false
       }
     },
@@ -400,7 +400,7 @@
       "id": "L4-ING-0023",
       "verdict": "fail",
       "residual": {
-        "tt_s": -26.0884931
+        "tt_s": -26.0919936
       },
       "meta": {
         "events": 1,
@@ -408,7 +408,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2060-01-11T11:37:53.077Z",
+        "at": "2060-01-11T11:37:56.299Z",
         "retrograde": false
       }
     },
@@ -416,7 +416,7 @@
       "id": "L4-ING-0024",
       "verdict": "pass",
       "residual": {
-        "tt_s": -13.082509
+        "tt_s": -13.0660133
       },
       "meta": {
         "events": 1,
@@ -424,7 +424,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2140-01-08T05:30:24.263Z",
+        "at": "2140-01-08T05:30:46.786Z",
         "retrograde": false
       }
     },
@@ -484,7 +484,7 @@
       "id": "L4-ING-0029",
       "verdict": "pass",
       "residual": {
-        "tt_s": -3.6032238
+        "tt_s": -3.61400652
       },
       "meta": {
         "events": 1,
@@ -492,7 +492,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2060-02-05T20:37:15.426Z",
+        "at": "2060-02-05T20:37:18.648Z",
         "retrograde": false
       }
     },
@@ -500,7 +500,7 @@
       "id": "L4-ING-0030",
       "verdict": "fail",
       "residual": {
-        "tt_s": -65.5395451
+        "tt_s": -65.5450163
       },
       "meta": {
         "events": 1,
@@ -508,7 +508,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2140-07-28T15:36:44.791Z",
+        "at": "2140-07-28T15:37:07.521Z",
         "retrograde": false
       }
     },
@@ -568,7 +568,7 @@
       "id": "L4-ING-0035",
       "verdict": "fail",
       "residual": {
-        "tt_s": 124.380485
+        "tt_s": 124.378997
       },
       "meta": {
         "events": 1,
@@ -576,7 +576,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2060-04-04T01:55:05.041Z",
+        "at": "2060-04-04T01:55:08.289Z",
         "retrograde": false
       }
     },
@@ -584,7 +584,7 @@
       "id": "L4-ING-0036",
       "verdict": "fail",
       "residual": {
-        "tt_s": -382.061707
+        "tt_s": -382.061988
       },
       "meta": {
         "events": 1,
@@ -592,7 +592,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2140-03-09T04:54:15.737Z",
+        "at": "2140-03-09T04:54:38.312Z",
         "retrograde": false
       }
     },
@@ -652,7 +652,7 @@
       "id": "L4-ING-0041",
       "verdict": "fail",
       "residual": {
-        "tt_s": -365.439548
+        "tt_s": -365.440996
       },
       "meta": {
         "events": 1,
@@ -660,7 +660,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2060-03-31T11:44:17.899Z",
+        "at": "2060-03-31T11:44:21.146Z",
         "retrograde": false
       }
     },
@@ -668,7 +668,7 @@
       "id": "L4-ING-0042",
       "verdict": "fail",
       "residual": {
-        "tt_s": -472.779647
+        "tt_s": -472.770997
       },
       "meta": {
         "events": 1,
@@ -676,7 +676,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2141-02-04T04:07:38.204Z",
+        "at": "2141-02-04T04:08:01.165Z",
         "retrograde": false
       }
     },
@@ -736,7 +736,7 @@
       "id": "L4-ING-0047",
       "verdict": "pass",
       "residual": {
-        "tt_s": -388.073235
+        "tt_s": -388.061004
       },
       "meta": {
         "events": 1,
@@ -744,7 +744,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2065-01-10T19:49:39.087Z",
+        "at": "2065-01-10T19:49:42.876Z",
         "retrograde": false
       }
     },
@@ -752,7 +752,7 @@
       "id": "L4-ING-0048",
       "verdict": "fail",
       "residual": {
-        "tt_s": -10198.4385
+        "tt_s": -10198.444
       },
       "meta": {
         "events": 1,
@@ -760,7 +760,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2142-01-19T09:09:51.856Z",
+        "at": "2142-01-19T09:10:15.204Z",
         "retrograde": false
       }
     },
@@ -820,7 +820,7 @@
       "id": "L4-ING-0053",
       "verdict": "fail",
       "residual": {
-        "tt_s": -1571.35775
+        "tt_s": -1571.34998
       },
       "meta": {
         "events": 1,
@@ -828,7 +828,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2065-07-03T06:43:56.029Z",
+        "at": "2065-07-03T06:43:59.869Z",
         "retrograde": false
       }
     },
@@ -836,7 +836,7 @@
       "id": "L4-ING-0054",
       "verdict": "fail",
       "residual": {
-        "tt_s": 10365.9305
+        "tt_s": 10365.922
       },
       "meta": {
         "events": 1,
@@ -844,7 +844,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2148-01-04T15:13:56.396Z",
+        "at": "2148-01-04T15:14:22.345Z",
         "retrograde": false
       }
     },
@@ -891,7 +891,7 @@
       "id": "L4-ING-0058",
       "verdict": "fail",
       "residual": {
-        "tt_s": 3338.26287
+        "tt_s": 3338.259
       },
       "meta": {
         "events": 1,
@@ -899,7 +899,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2043-03-09T01:57:07.446Z",
+        "at": "2043-03-09T01:57:09.120Z",
         "retrograde": false
       }
     },
@@ -907,7 +907,7 @@
       "id": "L4-ING-0059",
       "verdict": "fail",
       "residual": {
-        "tt_s": 33981.4099
+        "tt_s": 33981.407
       },
       "meta": {
         "events": 1,
@@ -915,7 +915,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2066-06-18T00:50:37.608Z",
+        "at": "2066-06-18T00:50:41.551Z",
         "retrograde": false
       }
     },
@@ -1223,7 +1223,7 @@
       "id": "L4-UTC-0001",
       "verdict": "pass",
       "residual": {
-        "utc_s": -3.32599998
+        "utc_s": -3.14600003
       },
       "meta": {
         "events": 1,
@@ -1231,7 +1231,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2028-01-20T13:21:52.552Z",
+        "at": "2028-01-20T13:21:52.732Z",
         "retrograde": false
       }
     },
@@ -1239,7 +1239,7 @@
       "id": "L4-UTC-0002",
       "verdict": "pass",
       "residual": {
-        "utc_s": 0.937000036
+        "utc_s": 1.11800003
       },
       "meta": {
         "events": 1,
@@ -1247,7 +1247,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2028-01-01T08:52:47.227Z",
+        "at": "2028-01-01T08:52:47.408Z",
         "retrograde": false
       }
     },
@@ -1265,7 +1265,7 @@
       "id": "L4-UTC-0005",
       "verdict": "fail",
       "residual": {
-        "utc_s": 28.915
+        "utc_s": 29.868
       },
       "meta": {
         "events": 1,
@@ -1273,7 +1273,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2035-01-20T06:14:45.602Z",
+        "at": "2035-01-20T06:14:46.555Z",
         "retrograde": false
       }
     },
@@ -1281,7 +1281,7 @@
       "id": "L4-UTC-0006",
       "verdict": "pass",
       "residual": {
-        "utc_s": -1.03500009
+        "utc_s": -0.0829999447
       },
       "meta": {
         "events": 1,
@@ -1289,7 +1289,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2035-01-02T23:59:36.120Z",
+        "at": "2035-01-02T23:59:37.072Z",
         "retrograde": false
       }
     },
@@ -1307,7 +1307,7 @@
       "id": "L4-UTC-0009",
       "verdict": "pass",
       "residual": {
-        "utc_s": -0.898999929
+        "utc_s": 1.3670001
       },
       "meta": {
         "events": 1,
@@ -1315,7 +1315,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2050-01-19T21:33:57.395Z",
+        "at": "2050-01-19T21:33:59.661Z",
         "retrograde": false
       }
     },
@@ -1323,7 +1323,7 @@
       "id": "L4-UTC-0010",
       "verdict": "pass",
       "residual": {
-        "utc_s": -0.799999952
+        "utc_s": 1.46600008
       },
       "meta": {
         "events": 1,
@@ -1331,7 +1331,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2050-01-01T20:21:05.530Z",
+        "at": "2050-01-01T20:21:07.796Z",
         "retrograde": false
       }
     },
@@ -1349,7 +1349,7 @@
       "id": "L4-UTC-0013",
       "verdict": "pass",
       "residual": {
-        "utc_s": -13.789
+        "utc_s": -4.05600023
       },
       "meta": {
         "events": 1,
@@ -1357,15 +1357,15 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2100-01-20T00:47:36.828Z",
+        "at": "2100-01-20T00:47:46.561Z",
         "retrograde": false
       }
     },
     {
       "id": "L4-UTC-0014",
-      "verdict": "fail",
+      "verdict": "pass",
       "residual": {
-        "utc_s": -9.96500015
+        "utc_s": -0.206000328
       },
       "meta": {
         "events": 1,
@@ -1373,7 +1373,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2100-01-02T14:35:39.216Z",
+        "at": "2100-01-02T14:35:48.975Z",
         "retrograde": false
       }
     },
@@ -1389,9 +1389,9 @@
     },
     {
       "id": "L4-UTC-0017",
-      "verdict": "fail",
+      "verdict": "pass",
       "residual": {
-        "utc_s": -27.4289999
+        "utc_s": -4.89900017
       },
       "meta": {
         "events": 1,
@@ -1399,15 +1399,15 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2140-01-20T17:49:28.521Z",
+        "at": "2140-01-20T17:49:51.051Z",
         "retrograde": false
       }
     },
     {
       "id": "L4-UTC-0018",
-      "verdict": "fail",
+      "verdict": "pass",
       "residual": {
-        "utc_s": -22.0029993
+        "utc_s": 0.502000809
       },
       "meta": {
         "events": 1,
@@ -1415,7 +1415,7 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2140-01-01T07:23:44.911Z",
+        "at": "2140-01-01T07:24:07.416Z",
         "retrograde": false
       }
     },
