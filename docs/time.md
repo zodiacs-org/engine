@@ -972,12 +972,13 @@ the values change.
   2030-01-20 12:00, conformance vector L3-TZ-0045, is not flagged on a host
   with tzdb 2025c). A rule changed after 2026f is not checked either,
   outside the table's spans.
-- A zone name that 2021a lacks (Europe/Kyiv, America/Ciudad_Juarez) is
-  compared only against 2025c, which gives 2026f's offsets for both from
-  1970 to 2029-10-27, so neither name has a span. The table is looked up by
-  the name as given, not by the zone a link points to, so `Europe/Kyiv` does
-  not take the spans of its old name `Europe/Kiev`, and a host whose release
-  came between 2021a and 2025c is not checked under either new name.
+- A zone name that 2021a lacks (Europe/Kyiv, America/Ciudad_Juarez,
+  Pacific/Kanton, America/Coyhaique) is compared only against 2025c, which
+  gives 2026f's offsets for all four from 1970 to 2029-10-27, so none of
+  them has a span. The table is looked up by the name as given, not by the
+  zone a link points to, so `Europe/Kyiv` does not take the spans of its old
+  name `Europe/Kiev`, and a host whose release came between 2021a and 2025c
+  is not checked under any of these names.
 - A host using another tzdb release can disagree with 2026f outside the
   spans covered by these baselines. The check can then return `"unchecked"`
   or `"current"`.

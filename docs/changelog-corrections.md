@@ -143,7 +143,7 @@ Line numbers below are those of `README.md`, `CHANGELOG.md` and
       stays as written; the next candidate's entry should say that the table
       compares 2021a and 2025c with 2026f, that it has 705 spans in 77 names,
       and that a 2025c host is now flagged at Tehran and Iran on 1979-05-26.
-    - `CHANGELOG.md`, 2.0.0-rc.3, line 119: "the host-probe table compares
+    - `CHANGELOG.md`, 2.0.0-rc.3, lines 118 to 119: "the host-probe table compares
       tzdata 2021a with 2026f". The next candidate's entry should say that
       `NOTICE` and `LICENSING.md` now name 2025c as a baseline too.
     - `NOTICE`, lines 224 to 228, and `LICENSING.md`, lines 339 to 342: the
