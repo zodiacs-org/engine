@@ -9,16 +9,15 @@
  * browser that has not updated its time zone data gives last year's rules,
  * and nothing in Intl says which release it carries (browsers expose no
  * version). So the engine carries, for each zone and link name whose offsets
- * from 1970 on differ between an old baseline release and the pinned release,
+ * from 1970 on differ between a baseline release and the pinned release,
  * the intervals that differ and the pinned offset in each. When a wall time
  * resolves on the host inside such an interval, the engine asks the host for
  * the offset at one instant inside it (the probe) and compares (docs/time.md,
  * "Host time zone data").
  *
  * - The pinned release is the newest tzdata on the day the table was built.
- *   The baseline is tzdata 2021a: five years is the oldest device data worth
- *   describing. A host older than that still differs where 2021a does, and
- *   is flagged there; where it differs and 2021a does not, it is not.
+ *   The baselines are tzdata 2021a, the older device data we compare, and
+ *   2025c, which adds differences that 2021a does not cover.
  * - zic compiles each release's default build (the main data files with
  *   `backward` and `etcetera`, no `backzone`), which is what browsers and
  *   Node carry, with `-b fat`, so every transition up to 2037 is written out
@@ -35,7 +34,7 @@
  *   to the minute, or from + 45 days when it is open-ended.
  * - Names are keyed by the 32-bit FNV-1a hash of the lower-cased name, the
  *   hash src/geo/zone-history.ts uses; the hash is checked unique among every
- *   name of both builds. Names with the same intervals share one row.
+ *   name in the builds. Names with the same intervals share one row.
  *
  * Output (all generated; do not edit):
  * - src/geo/host-probes-data.ts: HOST_PROBES_TZDB, HOST_PROBES_UNTIL (the
@@ -46,13 +45,14 @@
  *   and the pinned offset east.
  * - src/geo/host-probes-intervals.json: per name, each interval as ISO
  *   instants with its probe, the pinned offset and the baseline offset, in
- *   seconds.
+ *   seconds, with the baseline version when it is not 2021a.
  *
  *   node scripts/build-host-zone-probes.mjs          rebuild both files
  *   node scripts/build-host-zone-probes.mjs --check  exit 1 if either differs
  *
  * Each release is read from TZDATA_<VERSION>_TARBALL (TZDATA_2026F_TARBALL,
- * TZDATA_2021A_TARBALL) when set, otherwise downloaded once into .cache/
+ * TZDATA_2021A_TARBALL, TZDATA_2025C_TARBALL) when set, otherwise downloaded
+ * once into .cache/
  * (gitignored); either way its SHA-256 must match. Needs zic (libc-bin on
  * Debian and Ubuntu, or tzcode).
  */
@@ -78,6 +78,16 @@ export const BASELINE = Object.freeze({
   version: "2021a",
   sha256: "39e7d2ba08c68cbaefc8de3227aab0dec2521be8042cf56855f7dc3a9fb14e08"
 });
+/** The intermediate baseline, retrieved by the source fetch job. */
+export const INTERMEDIATE = Object.freeze({
+  version: "2025c",
+  url: "https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz",
+  sha256: "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957",
+  retrieved: "2026-11-17T14:46:55Z"
+});
+const BASELINES = [BASELINE, INTERMEDIATE];
+const baselineVersions = BASELINES.map(({ version }) => version).join(" and ");
+
 /** Unix seconds: 1970-01-01T00:00:00Z, where the host starts to answer. */
 export const START = 0;
 /** Unix seconds: the pinned release's date plus three years. */
@@ -97,8 +107,9 @@ export async function loadRelease(root, release) {
     try {
       await access(archive);
     } catch {
-      console.log(`downloading ${releaseUrl(release.version)} ...`);
-      const response = await fetch(releaseUrl(release.version));
+      const url = release.url ?? releaseUrl(release.version);
+      console.log(`downloading ${url} ...`);
+      const response = await fetch(url);
       if (!response.ok) throw new Error(`host-probes: download failed (${response.status})`);
       await writeFile(archive, Buffer.from(await response.arrayBuffer()));
     }
@@ -224,10 +235,10 @@ export function decodeTable(text) {
 
 const iso = (s) => new Date(s * 1000).toISOString().replace(".000Z", "Z");
 
-/** Both outputs from two compiled builds. */
-export function buildFromCompiled(pinned, baseline) {
+/** Both outputs from the pinned build and the compiled baselines in priority order. */
+export function buildFromCompiled(pinned, baselines) {
   const hashes = new Map();
-  for (const name of new Set([...pinned.keys(), ...baseline.keys()])) {
+  for (const name of new Set([...pinned.keys(), ...baselines.flatMap(([, zones]) => [...zones.keys()])])) {
     const hash = nameHash(name);
     if (hashes.has(hash) && hashes.get(hash).toLowerCase() !== name.toLowerCase()) {
       throw new Error(`host-probes: ${name} and ${hashes.get(hash)} share a hash`);
@@ -237,15 +248,29 @@ export function buildFromCompiled(pinned, baseline) {
   const byName = new Map();
   const spelled = {};
   for (const name of [...pinned.keys()].sort()) {
-    if (!baseline.has(name)) continue;
-    const found = differences(pinned.get(name), baseline.get(name));
+    const found = [];
+    for (const [release, zones] of baselines) {
+      if (!zones.has(name)) continue;
+      for (const [from, to, p, b] of differences(pinned.get(name), zones.get(name))) {
+        if (found.some(([start, end, offset]) => start === from && end === to && offset === p)) continue;
+        // Keep the old probe positions. A partly overlapping span needs an explicit choice of probes.
+        if (found.some(([start, end]) => from < (end ?? HORIZON) && start < (to ?? HORIZON))) {
+          throw new Error(`host-probes: overlapping baseline spans for ${name} at ${iso(from)}`);
+        }
+        found.push([from, to, p, b, release.version]);
+      }
+    }
     if (!found.length) continue;
+    found.sort(([a], [b]) => a - b);
     byName.set(name, found.map(([from, to, p]) => [from, to, p]));
-    spelled[name] = found.map(([from, to, p, b]) => [iso(from), to === null ? null : iso(to), iso(probeOf(from, to)), p, b]);
+    spelled[name] = found.map(([from, to, p, b, version]) => [
+      iso(from), to === null ? null : iso(to), iso(probeOf(from, to)), p, b,
+      ...(version === BASELINE.version ? [] : [version])
+    ]);
   }
   const table = encodeTable(byName);
   const intervals = [...byName.values()].reduce((sum, list) => sum + list.length, 0);
-  const data = `// Generated by scripts/build-host-zone-probes.mjs from tzdata ${PINNED.version} (sha256 ${PINNED.sha256}) against tzdata ${BASELINE.version} (sha256 ${BASELINE.sha256}), default builds. Do not edit.
+  const data = `// Generated by scripts/build-host-zone-probes.mjs from tzdata ${PINNED.version} (sha256 ${PINNED.sha256}) against ${BASELINES.map(({ version, sha256 }) => `tzdata ${version} (sha256 ${sha256})`).join(" and ")}, default builds. Do not edit.
 
 /** The pinned release whose offsets the probes carry. */
 export const HOST_PROBES_TZDB = "${PINNED.version}";
@@ -254,8 +279,8 @@ export const HOST_PROBES_TZDB = "${PINNED.version}";
 export const HOST_PROBES_UNTIL = ${HORIZON * 1000};
 
 /**
- * ${intervals} intervals in ${byName.size} names from 1970-01-01 to ${iso(HORIZON).slice(0, 10)} in which tzdata ${BASELINE.version} and
- * ${PINNED.version} give different offsets: rows joined by ";", each the names' FNV-1a hashes in base 36 joined by
+ * ${intervals} intervals in ${byName.size} names from 1970-01-01 to ${iso(HORIZON).slice(0, 10)} in which tzdata ${baselineVersions}
+ * differ from ${PINNED.version}: rows joined by ";", each the names' FNV-1a hashes in base 36 joined by
  * ",", then ":", then per interval three base-36 integers in minutes joined by ",": the time from the previous
  * interval's end (from 1970 for the first), the length (0: open-ended) and the ${PINNED.version} offset east.
  */
@@ -264,10 +289,10 @@ export const HOST_PROBES = "${table}";
   const head = JSON.stringify({
     generator: "scripts/build-host-zone-probes.mjs",
     pinned: { ...PINNED, url: releaseUrl(PINNED.version) },
-    baseline: { ...BASELINE, url: releaseUrl(BASELINE.version) },
+    baselines: BASELINES.map((release) => ({ ...release, url: release.url ?? releaseUrl(release.version) })),
     from: iso(START),
     horizon: iso(HORIZON),
-    columns: ["from", "to (exclusive; null: reaches the horizon)", "probe", "pinned offset (s east)", "baseline offset (s east)"],
+    columns: ["from", "to (exclusive; null: reaches the horizon)", "probe", "pinned offset (s east)", "baseline offset (s east)", "baseline version (omitted for 2021a)"],
     names: byName.size,
     intervals
   });
@@ -278,8 +303,11 @@ export const HOST_PROBES = "${table}";
 
 export async function build(root) {
   const pinned = compileDefault(await loadRelease(root, PINNED));
-  const baseline = compileDefault(await loadRelease(root, BASELINE));
-  return buildFromCompiled(pinned, baseline);
+  const baselines = [];
+  for (const release of BASELINES) {
+    baselines.push([release, compileDefault(await loadRelease(root, release))]);
+  }
+  return buildFromCompiled(pinned, baselines);
 }
 
 async function main() {
@@ -289,10 +317,10 @@ async function main() {
   if (process.argv.includes("--check")) {
     const stale = Object.entries(targets).filter(([key, file]) => !existsSync(file) || readFileSync(file, "utf8") !== built[key]);
     if (stale.length) {
-      console.error(`host-probes: ${stale.map(([, file]) => file).join(", ")} differ from tzdata ${PINNED.version} against ${BASELINE.version}; run node scripts/build-host-zone-probes.mjs`);
+      console.error(`host-probes: ${stale.map(([, file]) => file).join(", ")} differ from tzdata ${PINNED.version} against ${baselineVersions}; run node scripts/build-host-zone-probes.mjs`);
       process.exit(1);
     }
-    console.log(`host-probes: match tzdata ${PINNED.version} against ${BASELINE.version} (${built.intervals} intervals in ${built.names} names, table ${built.table.length} bytes)`);
+    console.log(`host-probes: match tzdata ${PINNED.version} against ${baselineVersions} (${built.intervals} intervals in ${built.names} names, table ${built.table.length} bytes)`);
     return;
   }
   writeFileSync(targets.data, built.data);

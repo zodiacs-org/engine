@@ -1,0 +1,16 @@
+Final regression on origin/main (709bc81), with only the test copied in
+FAIL  src/geo/host-zone-check.test.ts > a wall time the host reads > flags the tzdata 2025c reading of Asia/Tehran on 1979-05-26
+FAIL  src/geo/host-zone-check.test.ts > a wall time the host reads > flags the tzdata 2025c reading of Iran on 1979-05-26
+Test Files  1 failed (1)
+Tests  2 failed | 18 skipped (20)
+
+Mutation: remove 2025c from BASELINES and regenerate
+host-probes: 703 intervals in 77 names, table 7169 bytes -> src/geo/host-probes-data.ts
+FAIL  src/geo/host-zone-check.test.ts > a wall time the host reads > flags the tzdata 2025c reading of Asia/Tehran on 1979-05-26
+FAIL  src/geo/host-zone-check.test.ts > a wall time the host reads > flags the tzdata 2025c reading of Iran on 1979-05-26
+Test Files  1 failed (1)
+Tests  2 failed | 18 skipped (20)
+
+Branch with both baselines restored
+Test Files  2 passed (2)
+Tests  27 passed (27)

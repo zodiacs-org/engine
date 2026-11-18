@@ -11,16 +11,14 @@ import { nameHash } from "./zone-history.js";
 import { decodeTable } from "../../scripts/build-host-zone-probes.mjs";
 
 // ZOD-283: a wall time from 1970 on is read on the host's Intl, which may carry older time zone data than the
-// pinned tzdb release. Near a span in which tzdata 2021a and the pinned release differ, the host is asked for its
-// offset at one probe, and a host that disagrees flags the chart "host-zone-data-differs". The two hosts below
-// answer as the zic-compiled default builds of 2021a and of the pinned release inside every span (the generator's
-// spelled-out intervals, which docs/evidence/host-zone-probes-20261117/ checks against zdump), and as this
-// machine's Intl elsewhere, where the two releases agree. Synthetic births.
+// pinned tzdb release. The host is asked for its offset near a span where the pinned release differs from a
+// baseline. The 2021a and pinned hosts below use the generated intervals checked against zdump in
+// docs/evidence/host-zone-probes-20261117/. The Tehran regression simulates 2025c separately. Synthetic births.
 
-type Row = [from: string, to: string | null, probe: string, pinned: number, baseline: number];
+type Row = [from: string, to: string | null, probe: string, pinned: number, baseline: number, version?: string];
 const SPELLED = JSON.parse(readFileSync(new URL("./host-probes-intervals.json", import.meta.url), "utf8")) as {
   pinned: { version: string };
-  baseline: { version: string };
+  baselines: { version: string }[];
   horizon: string;
   intervals: number;
   byName: Record<string, Row[]>;
@@ -28,7 +26,12 @@ const SPELLED = JSON.parse(readFileSync(new URL("./host-probes-intervals.json", 
 const SPANS = new Map(
   Object.entries(SPELLED.byName).map(([name, rows]) => [
     name.toLowerCase(),
-    rows.map(([from, to, , pinned, baseline]) => ({ from: Date.parse(from), to: to === null ? Infinity : Date.parse(to), pinned, baseline }))
+    rows.map(([from, to, , pinned, baseline, version]) => ({
+      from: Date.parse(from),
+      to: to === null ? Infinity : Date.parse(to),
+      pinned,
+      baseline: version === undefined ? baseline : pinned
+    }))
   ])
 );
 
@@ -49,9 +52,9 @@ const CURRENT = () => emulate("pinned");
 afterEach(() => setHostForTests(null));
 
 describe("the generated table", () => {
-  it("is the pinned release against 2021a, and its two generated files agree", () => {
+  it("is the pinned release against both baselines, and its two generated files agree", () => {
     expect(HOST_PROBES_TZDB).toBe(SPELLED.pinned.version);
-    expect(SPELLED.baseline.version).toBe("2021a");
+    expect(SPELLED.baselines.map(({ version }) => version)).toEqual(["2021a", "2025c"]);
     expect(new Date(HOST_PROBES_UNTIL).toISOString()).toBe(SPELLED.horizon.replace("Z", ".000Z"));
     const decoded = decodeTable(HOST_PROBES) as Map<number, [number, number | null, number][]>;
     let count = 0;
@@ -87,6 +90,25 @@ describe("a wall time the host reads", () => {
       probe: "2027-01-06T17:00:00.000Z",
       hostOffsetMinutes: -300,
       tzdbOffsetMinutes: -240,
+      tzdbVersion: HOST_PROBES_TZDB
+    });
+  });
+
+  it.each(["Asia/Tehran", "Iran"])("flags the tzdata 2025c reading of %s on 1979-05-26", (zone) => {
+    const to = Date.parse("1979-05-26T20:30:00Z");
+    setHostForTests({
+      offsetAt: (_name, ms) => (ms < to ? 210 : 270),
+      tzdbVersion: () => "2025c"
+    });
+
+    const resolved = resolveLocalToUtc("1979-05-26", "12:00", zone);
+    expect(resolved.utc.toISOString()).toBe("1979-05-26T08:30:00.000Z");
+    expect(resolved.flags).toEqual(["host-zone-data-differs"]);
+    expect(resolved.zone.hostCheck).toEqual({
+      status: "differs",
+      probe: "1979-05-26T08:30:00.000Z",
+      hostOffsetMinutes: 210,
+      tzdbOffsetMinutes: 270,
       tzdbVersion: HOST_PROBES_TZDB
     });
   });

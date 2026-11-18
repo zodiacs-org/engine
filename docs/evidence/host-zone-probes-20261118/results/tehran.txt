@@ -1,0 +1,91 @@
+zdump (Debian GLIBC 2.41-12+deb13u3) 2.41
+2021a
+Asia/Tehran  -9223372036854775808 (gmtime failed) = -9223372036854775808 (localtime failed)
+Asia/Tehran  -67768040609753145 (gmtime failed) = -67768040609753145 (localtime failed)
+Asia/Tehran  -67768040609753144 (gmtime failed) = Thu Jan  1 00:00:00 -2147481748 LMT isdst=0 gmtoff=12344
+Asia/Tehran  -67768040609740801 (gmtime failed) = Thu Jan  1 03:25:43 -2147481748 LMT isdst=0 gmtoff=12344
+Asia/Tehran  Thu Jan  1 00:00:00 -2147481748 UT = Thu Jan  1 03:25:44 -2147481748 LMT isdst=0 gmtoff=12344
+Asia/Tehran  Tue Mar 20 20:29:59 1979 UT = Tue Mar 20 23:59:59 1979 +0330 isdst=0 gmtoff=12600
+Asia/Tehran  Tue Mar 20 20:30:00 1979 UT = Wed Mar 21 01:00:00 1979 +0430 isdst=1 gmtoff=16200
+Asia/Tehran  Tue Sep 18 19:29:59 1979 UT = Tue Sep 18 23:59:59 1979 +0430 isdst=1 gmtoff=16200
+Asia/Tehran  Tue Sep 18 19:30:00 1979 UT = Tue Sep 18 23:00:00 1979 +0330 isdst=0 gmtoff=12600
+Asia/Tehran  Wed Dec 31 20:29:59 2147485547 UT = Wed Dec 31 23:59:59 2147485547 +0330 isdst=0 gmtoff=12600
+Asia/Tehran  Wed Dec 31 20:30:00 2147485547 UT = 67768036191664200 (localtime failed)
+Asia/Tehran  Wed Dec 31 23:59:59 2147485547 UT = 67768036191676799 (localtime failed)
+Asia/Tehran  67768036191676800 (gmtime failed) = 67768036191676800 (localtime failed)
+Asia/Tehran  9223372036854775807 (gmtime failed) = 9223372036854775807 (localtime failed)
+Iran         -9223372036854775808 (gmtime failed) = -9223372036854775808 (localtime failed)
+Iran         -67768040609753145 (gmtime failed) = -67768040609753145 (localtime failed)
+Iran         -67768040609753144 (gmtime failed) = Thu Jan  1 00:00:00 -2147481748 LMT isdst=0 gmtoff=12344
+Iran         -67768040609740801 (gmtime failed) = Thu Jan  1 03:25:43 -2147481748 LMT isdst=0 gmtoff=12344
+Iran         Thu Jan  1 00:00:00 -2147481748 UT = Thu Jan  1 03:25:44 -2147481748 LMT isdst=0 gmtoff=12344
+Iran         Tue Mar 20 20:29:59 1979 UT = Tue Mar 20 23:59:59 1979 +0330 isdst=0 gmtoff=12600
+Iran         Tue Mar 20 20:30:00 1979 UT = Wed Mar 21 01:00:00 1979 +0430 isdst=1 gmtoff=16200
+Iran         Tue Sep 18 19:29:59 1979 UT = Tue Sep 18 23:59:59 1979 +0430 isdst=1 gmtoff=16200
+Iran         Tue Sep 18 19:30:00 1979 UT = Tue Sep 18 23:00:00 1979 +0330 isdst=0 gmtoff=12600
+Iran         Wed Dec 31 20:29:59 2147485547 UT = Wed Dec 31 23:59:59 2147485547 +0330 isdst=0 gmtoff=12600
+Iran         Wed Dec 31 20:30:00 2147485547 UT = 67768036191664200 (localtime failed)
+Iran         Wed Dec 31 23:59:59 2147485547 UT = 67768036191676799 (localtime failed)
+Iran         67768036191676800 (gmtime failed) = 67768036191676800 (localtime failed)
+Iran         9223372036854775807 (gmtime failed) = 9223372036854775807 (localtime failed)
+2025c
+Asia/Tehran  -9223372036854775808 (gmtime failed) = -9223372036854775808 (localtime failed)
+Asia/Tehran  -67768040609753145 (gmtime failed) = -67768040609753145 (localtime failed)
+Asia/Tehran  -67768040609753144 (gmtime failed) = Thu Jan  1 00:00:00 -2147481748 LMT isdst=0 gmtoff=12344
+Asia/Tehran  -67768040609740801 (gmtime failed) = Thu Jan  1 03:25:43 -2147481748 LMT isdst=0 gmtoff=12344
+Asia/Tehran  Thu Jan  1 00:00:00 -2147481748 UT = Thu Jan  1 03:25:44 -2147481748 LMT isdst=0 gmtoff=12344
+Asia/Tehran  Sat May 26 20:29:59 1979 UT = Sat May 26 23:59:59 1979 +0330 isdst=0 gmtoff=12600
+Asia/Tehran  Sat May 26 20:30:00 1979 UT = Sun May 27 01:00:00 1979 +0430 isdst=1 gmtoff=16200
+Asia/Tehran  Tue Sep 18 19:29:59 1979 UT = Tue Sep 18 23:59:59 1979 +0430 isdst=1 gmtoff=16200
+Asia/Tehran  Tue Sep 18 19:30:00 1979 UT = Tue Sep 18 23:00:00 1979 +0330 isdst=0 gmtoff=12600
+Asia/Tehran  Wed Dec 31 20:29:59 2147485547 UT = Wed Dec 31 23:59:59 2147485547 +0330 isdst=0 gmtoff=12600
+Asia/Tehran  Wed Dec 31 20:30:00 2147485547 UT = 67768036191664200 (localtime failed)
+Asia/Tehran  Wed Dec 31 23:59:59 2147485547 UT = 67768036191676799 (localtime failed)
+Asia/Tehran  67768036191676800 (gmtime failed) = 67768036191676800 (localtime failed)
+Asia/Tehran  9223372036854775807 (gmtime failed) = 9223372036854775807 (localtime failed)
+Iran         -9223372036854775808 (gmtime failed) = -9223372036854775808 (localtime failed)
+Iran         -67768040609753145 (gmtime failed) = -67768040609753145 (localtime failed)
+Iran         -67768040609753144 (gmtime failed) = Thu Jan  1 00:00:00 -2147481748 LMT isdst=0 gmtoff=12344
+Iran         -67768040609740801 (gmtime failed) = Thu Jan  1 03:25:43 -2147481748 LMT isdst=0 gmtoff=12344
+Iran         Thu Jan  1 00:00:00 -2147481748 UT = Thu Jan  1 03:25:44 -2147481748 LMT isdst=0 gmtoff=12344
+Iran         Sat May 26 20:29:59 1979 UT = Sat May 26 23:59:59 1979 +0330 isdst=0 gmtoff=12600
+Iran         Sat May 26 20:30:00 1979 UT = Sun May 27 01:00:00 1979 +0430 isdst=1 gmtoff=16200
+Iran         Tue Sep 18 19:29:59 1979 UT = Tue Sep 18 23:59:59 1979 +0430 isdst=1 gmtoff=16200
+Iran         Tue Sep 18 19:30:00 1979 UT = Tue Sep 18 23:00:00 1979 +0330 isdst=0 gmtoff=12600
+Iran         Wed Dec 31 20:29:59 2147485547 UT = Wed Dec 31 23:59:59 2147485547 +0330 isdst=0 gmtoff=12600
+Iran         Wed Dec 31 20:30:00 2147485547 UT = 67768036191664200 (localtime failed)
+Iran         Wed Dec 31 23:59:59 2147485547 UT = 67768036191676799 (localtime failed)
+Iran         67768036191676800 (gmtime failed) = 67768036191676800 (localtime failed)
+Iran         9223372036854775807 (gmtime failed) = 9223372036854775807 (localtime failed)
+2026f
+Asia/Tehran  -9223372036854775808 (gmtime failed) = -9223372036854775808 (localtime failed)
+Asia/Tehran  -67768040609753145 (gmtime failed) = -67768040609753145 (localtime failed)
+Asia/Tehran  -67768040609753144 (gmtime failed) = Thu Jan  1 00:00:00 -2147481748 LMT isdst=0 gmtoff=12344
+Asia/Tehran  -67768040609740801 (gmtime failed) = Thu Jan  1 03:25:43 -2147481748 LMT isdst=0 gmtoff=12344
+Asia/Tehran  Thu Jan  1 00:00:00 -2147481748 UT = Thu Jan  1 03:25:44 -2147481748 LMT isdst=0 gmtoff=12344
+Asia/Tehran  Fri May 25 20:29:59 1979 UT = Fri May 25 23:59:59 1979 +0330 isdst=0 gmtoff=12600
+Asia/Tehran  Fri May 25 20:30:00 1979 UT = Sat May 26 01:00:00 1979 +0430 isdst=1 gmtoff=16200
+Asia/Tehran  Tue Sep 18 19:29:59 1979 UT = Tue Sep 18 23:59:59 1979 +0430 isdst=1 gmtoff=16200
+Asia/Tehran  Tue Sep 18 19:30:00 1979 UT = Tue Sep 18 23:00:00 1979 +0330 isdst=0 gmtoff=12600
+Asia/Tehran  Wed Dec 31 20:29:59 2147485547 UT = Wed Dec 31 23:59:59 2147485547 +0330 isdst=0 gmtoff=12600
+Asia/Tehran  Wed Dec 31 20:30:00 2147485547 UT = 67768036191664200 (localtime failed)
+Asia/Tehran  Wed Dec 31 23:59:59 2147485547 UT = 67768036191676799 (localtime failed)
+Asia/Tehran  67768036191676800 (gmtime failed) = 67768036191676800 (localtime failed)
+Asia/Tehran  9223372036854775807 (gmtime failed) = 9223372036854775807 (localtime failed)
+Iran         -9223372036854775808 (gmtime failed) = -9223372036854775808 (localtime failed)
+Iran         -67768040609753145 (gmtime failed) = -67768040609753145 (localtime failed)
+Iran         -67768040609753144 (gmtime failed) = Thu Jan  1 00:00:00 -2147481748 LMT isdst=0 gmtoff=12344
+Iran         -67768040609740801 (gmtime failed) = Thu Jan  1 03:25:43 -2147481748 LMT isdst=0 gmtoff=12344
+Iran         Thu Jan  1 00:00:00 -2147481748 UT = Thu Jan  1 03:25:44 -2147481748 LMT isdst=0 gmtoff=12344
+Iran         Fri May 25 20:29:59 1979 UT = Fri May 25 23:59:59 1979 +0330 isdst=0 gmtoff=12600
+Iran         Fri May 25 20:30:00 1979 UT = Sat May 26 01:00:00 1979 +0430 isdst=1 gmtoff=16200
+Iran         Tue Sep 18 19:29:59 1979 UT = Tue Sep 18 23:59:59 1979 +0430 isdst=1 gmtoff=16200
+Iran         Tue Sep 18 19:30:00 1979 UT = Tue Sep 18 23:00:00 1979 +0330 isdst=0 gmtoff=12600
+Iran         Wed Dec 31 20:29:59 2147485547 UT = Wed Dec 31 23:59:59 2147485547 +0330 isdst=0 gmtoff=12600
+Iran         Wed Dec 31 20:30:00 2147485547 UT = 67768036191664200 (localtime failed)
+Iran         Wed Dec 31 23:59:59 2147485547 UT = 67768036191676799 (localtime failed)
+Iran         67768036191676800 (gmtime failed) = 67768036191676800 (localtime failed)
+Iran         9223372036854775807 (gmtime failed) = 9223372036854775807 (localtime failed)
+Node v22.22.2, tzdb 2025c
+{"zone":"Asia/Tehran","utc":"1979-05-26T08:30:00.000Z","flags":["host-zone-data-differs"],"hostCheck":{"status":"differs","probe":"1979-05-26T08:30:00.000Z","hostOffsetMinutes":210,"tzdbOffsetMinutes":270,"tzdbVersion":"2026f"}}
+{"zone":"Iran","utc":"1979-05-26T08:30:00.000Z","flags":["host-zone-data-differs"],"hostCheck":{"status":"differs","probe":"1979-05-26T08:30:00.000Z","hostOffsetMinutes":210,"tzdbOffsetMinutes":270,"tzdbVersion":"2026f"}}
