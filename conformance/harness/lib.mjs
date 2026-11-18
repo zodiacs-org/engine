@@ -38,6 +38,14 @@ export const RELEASES = Object.freeze({
     L4: 'vectors/0.3.0/L4-events.json',
   }),
 });
+/** The part of a vector id after its level: a tag of capitals and four digits. */
+const ID_AFTER_LEVEL = /^[A-Z]+-\d{4}$/u;
+
+/** Whether `id` is `<level>-<TAG>-<4 digits>`, built without a regular expression made from `level`. */
+function isLevelId(id, level) {
+  return typeof id === 'string' && id.startsWith(`${level}-`) && ID_AFTER_LEVEL.test(id.slice(level.length + 1));
+}
+
 /** This version's files, which the harness runs. */
 export const LEVEL_FILES = RELEASES[SUITE_VERSION];
 /** Each released file's SHA-256, fixed when it was released; validate.mjs checks them. */
@@ -205,7 +213,7 @@ export function validateLevel({ level, file, version = SUITE_VERSION }, root = S
   const used = new Set();
   for (const [index, vector] of (file.vectors ?? []).entries()) {
     const at = `${where} vector ${vector.id ?? `#${index}`}`;
-    if (typeof vector.id !== 'string' || !new RegExp(`^${level}-[A-Z]+-\\d{4}$`, 'u').test(vector.id)) problems.push(`${at}: id must be ${level}-<TAG>-<4 digits>`);
+    if (!isLevelId(vector.id, level)) problems.push(`${at}: id must be ${level}-<TAG>-<4 digits>`);
     if (ids.has(vector.id)) problems.push(`${at}: duplicate id`);
     ids.add(vector.id);
     const kind = KINDS[vector.kind];
@@ -249,7 +257,7 @@ export function validateLevel({ level, file, version = SUITE_VERSION }, root = S
     if (!Array.isArray(file.dropped)) problems.push(`${where}: dropped must be an array`);
     for (const entry of Array.isArray(file.dropped) ? file.dropped : []) {
       if (!['id', 'what', 'reason'].every((key) => typeof entry?.[key] === 'string' && entry[key].trim()) || Object.keys(entry).length !== 3) problems.push(`${where}: each dropped entry is { id, what, reason }`);
-      else if (!new RegExp(`^${level}-[A-Z]+-\\d{4}$`, 'u').test(entry.id)) problems.push(`${where}: dropped id ${entry.id} must be ${level}-<TAG>-<4 digits>`);
+      else if (!isLevelId(entry.id, level)) problems.push(`${where}: dropped id ${entry.id} must be ${level}-<TAG>-<4 digits>`);
       else if (ids.has(entry.id)) problems.push(`${where}: ${entry.id} is both a vector and dropped`);
     }
   }
