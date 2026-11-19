@@ -1,0 +1,1994 @@
+diff --git a/api/calc.api.md b/api/calc.api.md
+index cb3778a..6df9bfc 100644
+--- a/api/calc.api.md
++++ b/api/calc.api.md
+@@ -231,7 +231,7 @@ interface Chart {
+     };
+ }
+ 
+-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
+ 
+ interface ChartRequest {
+     readonly time: CalcTime;
+@@ -333,7 +333,7 @@ interface TimeBands {
+ 
+ interface TimeScale {
+     input: TimeScaleName;
+-    basis: "iers" | "delta-t" | "pinned";
++    basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
+     ut1MinusUtc: Ut1MinusUtc | null;
+     leapSeconds: LeapSeconds | null;
+ }
+@@ -347,10 +347,10 @@ declare function events(request: EventsRequest): EventsResult | CalcRefusal;
+ declare function houses(request: HousesRequest): HousesResult | CalcRefusal;
+ ```
+ 
+-## Referenced, not exported here (15)
++## Referenced, not exported here (16)
+ 
+ ```ts
+-// exported by @zodiacs/engine (Aspect)
++// exported by @zodiacs/engine (Aspect), @zodiacs/engine/core (Aspect)
+ interface Aspect {
+     a: BodyName;
+     b: BodyName;
+@@ -359,7 +359,7 @@ interface Aspect {
+     applying: boolean;
+ }
+ 
+-// exported by @zodiacs/engine (AspectType)
++// exported by @zodiacs/engine (AspectType), @zodiacs/engine/core (AspectType)
+ type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
+ 
+ // exported by @zodiacs/engine/vedic (AyanamsaName)
+@@ -368,10 +368,10 @@ type AyanamsaName = "lahiri" | "fagan-bradley" | "krishnamurti" | "raman" | "yuk
+ // exported by @zodiacs/engine/vedic (AyanamsaPrecessionModel)
+ type AyanamsaPrecessionModel = "engine" | "newcomb" | "iau1976";
+ 
+-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+-// exported by @zodiacs/engine (BodyPosition)
++// exported by @zodiacs/engine (BodyPosition), @zodiacs/engine/core (BodyPosition)
+ interface BodyPosition {
+     body: BodyName;
+     lon: number;
+@@ -382,9 +382,10 @@ interface BodyPosition {
+     degree: number;
+     ephemeris?: string;
+     fallback?: EphemerisFallback;
++    flags?: InstantFlag[];
+ }
+ 
+-// exported by @zodiacs/engine (ChartInput)
++// exported by @zodiacs/engine (ChartInput), @zodiacs/engine/core (ChartInput)
+ interface ChartInput {
+     utc: Date;
+     timeScale?: Exclude<TimeScaleName, "utc">;
+@@ -396,10 +397,10 @@ interface ChartInput {
+     flags?: readonly ChartFlag[];
+ }
+ 
+-// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
++// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/core (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
+ type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
+ 
+-// exported by @zodiacs/engine (EPHEMERIS_SPAN), @zodiacs/engine/time (EPHEMERIS_SPAN)
++// exported by @zodiacs/engine (EPHEMERIS_SPAN), @zodiacs/engine/core (EPHEMERIS_SPAN), @zodiacs/engine/time (EPHEMERIS_SPAN)
+ declare const EPHEMERIS_SPAN: Readonly<{
+     readonly timeScale: "TT";
+     readonly daysFromJ2000: Readonly<{
+@@ -410,31 +411,34 @@ declare const EPHEMERIS_SPAN: Readonly<{
+     readonly toTT: "3998-09-03T12:00:00";
+ }>;
+ 
+-// exported by @zodiacs/engine (EphemerisFallback)
++// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback)
+ type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
+ 
+-// exported by @zodiacs/engine (Houses)
++// exported by @zodiacs/engine (Houses), @zodiacs/engine/core (Houses)
+ interface Houses {
+     system: HouseSystem;
+     cusps: number[];
+ }
+ 
+-// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
++// exported by @zodiacs/engine (InstantFlag), @zodiacs/engine/core (InstantFlag)
++type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++
++// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/core (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
+ interface LeapSeconds {
+     taiMinusUtc: number;
+     listed: boolean;
+ }
+ 
+-// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
++// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
+ type TimeScaleName = "utc" | "ut1" | "tt";
+ 
+-// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
++// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/core (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
+ interface Ut1MinusUtc {
+     seconds: number;
+     sigma: number;
+-    source: "observed" | "predicted" | "fallback";
++    source: "observed" | "predicted" | "fallback" | "model";
+ }
+ 
+-// exported by @zodiacs/engine (ZodiacSign)
++// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
+ type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
+ ```
+diff --git a/api/core.api.md b/api/core.api.md
+new file mode 100644
+index 0000000..c98aafa
+--- /dev/null
++++ b/api/core.api.md
+@@ -0,0 +1,886 @@
++# @zodiacs/engine/core
++
++The public declarations of `@zodiacs/engine/core`, as `dist/core.d.ts` gives them,
++without comments. Generated by `scripts/api-report.mjs`; do not edit.
++`npm run api:check` fails when the build declares anything else. Within a
++major version these declarations change only as `docs/versioning.md` allows.
++
++## Exported (173)
++
++```ts
++declare const ASPECTS: readonly [
++    Readonly<{
++        readonly type: "conjunction";
++        readonly angle: 0;
++        readonly orb: 8;
++        readonly luminaryOrb: 10;
++    }>,
++    Readonly<{
++        readonly type: "sextile";
++        readonly angle: 60;
++        readonly orb: 4;
++        readonly luminaryOrb: 5;
++    }>,
++    Readonly<{
++        readonly type: "square";
++        readonly angle: 90;
++        readonly orb: 7;
++        readonly luminaryOrb: 8;
++    }>,
++    Readonly<{
++        readonly type: "trine";
++        readonly angle: 120;
++        readonly orb: 7;
++        readonly luminaryOrb: 8;
++    }>,
++    Readonly<{
++        readonly type: "opposition";
++        readonly angle: 180;
++        readonly orb: 8;
++        readonly luminaryOrb: 10;
++    }>
++];
++
++declare const ASPECT_BODIES: ReadonlySet<string>;
++
++declare const ASPECT_POLICY_SCHEMA: "zodiacs.aspect-policy.v1";
++
++declare const ASPECT_TYPES: readonly [
++    "conjunction",
++    "sextile",
++    "square",
++    "trine",
++    "opposition"
++];
++
++interface AngleInput {
++    gastHours: number;
++    latitude: number;
++    longitude: number;
++    obliquity: number;
++}
++
++interface Angles {
++    asc: number;
++    mc: number;
++    dsc: number;
++    ic: number;
++}
++
++interface Aspect {
++    a: BodyName;
++    b: BodyName;
++    type: AspectType;
++    orb: number;
++    applying: boolean;
++}
++
++interface AspectDefinition {
++    readonly type: AspectType;
++    readonly angle: number;
++    readonly orb: number;
++    readonly luminaryOrb: number;
++}
++
++type AspectMotion = "applying" | "separating" | "stationary";
++
++type AspectOrbInput = number | AspectOrbLimits;
++
++interface AspectOrbLimits {
++    readonly applying: number;
++    readonly separating: number;
++    readonly stationary: number;
++}
++
++interface AspectPolicy {
++    readonly schema: typeof ASPECT_POLICY_SCHEMA;
++    readonly aspects: readonly ResolvedAspectRule[];
++    readonly bodies: readonly string[];
++    readonly bodyOrbs: Readonly<Record<string, AspectOrbLimits>>;
++    readonly stationaryRelativeSpeed: number;
++    readonly conventions: {
++        readonly coordinates: "ecliptic-longitude-degrees-[0,360)";
++        readonly speed: "longitude-degrees-per-day;same-time-basis";
++        readonly motion: "instantaneous-orb-rate;right-derivative-at-circular-corners;exact-separating-unless-stationary";
++        readonly orb: "inclusive;luminary-replaces-rule;minimum-of-rule-and-both-body-caps";
++        readonly matching: "one-per-pair;smallest-absolute-orb;definition-order-on-tie";
++        readonly ordering: "ascending-orb;input-pair-order-on-tie";
++        readonly arithmetic: "exact-binary64;reported-orb-rounded-half-even";
++    };
++}
++
++interface AspectPolicyInput {
++    readonly aspects?: readonly AspectRuleInput[];
++    readonly bodies?: readonly string[];
++    readonly bodyOrbs?: Readonly<Record<string, AspectOrbInput>>;
++    readonly stationaryRelativeSpeed?: number;
++}
++
++interface AspectPosition {
++    readonly body: string;
++    readonly lon: number;
++    readonly speed: number;
++}
++
++interface AspectRuleInput {
++    readonly type: string;
++    readonly angle?: number;
++    readonly orb: AspectOrbInput;
++    readonly luminaryOrb?: AspectOrbInput;
++}
++
++type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
++
++interface BirthInput {
++    utc: DateInput;
++    timeScale?: TimeScaleName;
++    latitude?: number;
++    longitude?: number;
++    houseSystem?: HouseSystem;
++    timeKnown?: boolean;
++    flags?: readonly ChartFlag[];
++    deltaT?: number;
++}
++
++type BodyLongitudeAt<B extends string = BodyName> = (body: B, date: Date) => number;
++
++type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
++
++interface BodyPosition {
++    body: BodyName;
++    lon: number;
++    lat: number;
++    speed: number;
++    retrograde: boolean;
++    sign: ZodiacSign;
++    degree: number;
++    ephemeris?: string;
++    fallback?: EphemerisFallback;
++    flags?: InstantFlag[];
++}
++
++declare const CONFIGURED_ASPECTS_SCHEMA: "zodiacs.configured-aspects.v1";
++
++declare const CONFIGURED_ASPECT_ANGLES: Readonly<{
++    readonly conjunction: 0;
++    readonly semisextile: 30;
++    readonly semisquare: 45;
++    readonly sextile: 60;
++    readonly quintile: 72;
++    readonly square: 90;
++    readonly trine: 120;
++    readonly sesquiquadrate: 135;
++    readonly biquintile: 144;
++    readonly quincunx: 150;
++    readonly opposition: 180;
++}>;
++
++interface Chart {
++    input: ChartInput;
++    bodies: BodyPosition[];
++    angles: Angles | null;
++    houses: Houses | null;
++    aspects: Aspect[];
++    flags: ChartFlag[];
++    deltaT: DeltaT;
++    timeScale: TimeScale;
++    engineVersion: string;
++    ephemeris?: {
++        readonly name: string;
++        readonly version: string;
++    };
++}
++
++interface ChartDeclinations extends Declinations {
++    utc: string;
++    deltaT: DeltaT;
++    ephemeris: {
++        readonly name: string;
++        readonly version: string;
++    } | null;
++    flags: EphemerisFallback[];
++}
++
++type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++
++interface ChartInput {
++    utc: Date;
++    timeScale?: Exclude<TimeScaleName, "utc">;
++    deltaT?: number;
++    latitude?: number;
++    longitude?: number;
++    houseSystem: HouseSystem;
++    timeKnown: boolean;
++    flags?: readonly ChartFlag[];
++}
++
++interface ChartPoints {
++    sect: Sect | null;
++    points: PointPosition[];
++    ephemeris: {
++        readonly name: string;
++        readonly version: string;
++    } | null;
++    flags: EphemerisFallback[];
++}
++
++interface ConfiguredAspect {
++    readonly a: string;
++    readonly b: string;
++    readonly type: string;
++    readonly angle: number;
++    readonly orb: number;
++    readonly maximumOrb: number;
++    readonly motion: AspectMotion;
++    readonly applying: boolean;
++}
++
++/** @deprecated */
++type ConfiguredAspectMotion = AspectMotion;
++
++interface ConfiguredAspectResult {
++    readonly schema: typeof CONFIGURED_ASPECTS_SCHEMA;
++    readonly policy: AspectPolicy;
++    readonly aspects: readonly ConfiguredAspect[];
++}
++
++interface CrossingSearchOptions {
++    readonly stepDays?: number | undefined;
++    readonly maxSamples?: number | undefined;
++}
++
++type CrossingSearchResult = {
++    status: "complete";
++    crossings: LongitudeCrossing[];
++    samples: number;
++    flags?: ("de440-unavailable" | "outside-de440-span")[];
++} | {
++    status: "refused";
++    reason: "sample-budget";
++    samples: number;
++    maxSamples: number;
++    crossings: [
++    ];
++};
++
++/** @deprecated */
++declare const DECLINATION_ORB = 1;
++
++/** @deprecated */
++declare const DECLINATION_ORB_LUMINARY = 1.5;
++
++declare const DEFAULT_ASPECT_POLICY: AspectPolicy;
++
++declare const DEFAULT_DECLINATION_ORB_POLICY: Readonly<DeclinationOrbPolicy>;
++
++declare const DELTA_T_IERS_MODEL = "iers-utc/1";
++
++declare const DELTA_T_MODEL = "zodiacs-deltat/1";
++
++declare const DELTA_T_TABLE: DeltaTTable;
++
++type DateInput = Date | string | number;
++
++interface DeclinationAspect {
++    a: string;
++    b: string;
++    type: DeclinationAspectType;
++    orb: number;
++    maximumOrb: number;
++    decA: number;
++    decB: number;
++    separation: number;
++}
++
++type DeclinationAspectType = "parallel" | "contraparallel";
++
++interface DeclinationBody {
++    body: string;
++    lon: number;
++    lat: number;
++}
++
++interface DeclinationOrbPolicy {
++    orb: number;
++    luminaryOrb: number;
++}
++
++interface DeclinationRow extends DeclinationBody, EquatorialCoordinates {
++    outOfBounds: boolean;
++    boundMarginArcsec: number;
++}
++
++interface Declinations {
++    trueObliquity: number;
++    rows: DeclinationRow[];
++    aspects: DeclinationAspect[];
++    orbPolicy: DeclinationOrbPolicy;
++    convention: "true-equator-and-equinox-of-date; full-ecliptic-longitude-and-latitude";
++    receiptScope: "not-included-in-natal-receipt";
++}
++
++interface DefaultEphemeris {
++    readonly name: DefaultEphemerisName;
++    readonly de440: {
++        readonly opened: boolean;
++        readonly version: string | null;
++        readonly fromTtDays: number | null;
++        readonly toTtDays: number | null;
++        readonly error: string | null;
++    };
++}
++
++type DefaultEphemerisName = "de440" | "astronomy-engine";
++
++interface DeltaT {
++    seconds: number;
++    sigma: number | null;
++    model: "zodiacs-deltat/1" | "iers-utc/1" | "pinned";
++    table: string | null;
++    tableDigest: string | null;
++    segment: DeltaTSegment;
++}
++
++type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
++
++interface DeltaTTable {
++    readonly version: string;
++    readonly digest: string;
++    readonly from: number;
++    readonly observedTo: number;
++    readonly predictedTo: number;
++    readonly knots: readonly number[];
++}
++
++declare const ELEMENTS: readonly [
++    "fire",
++    "earth",
++    "air",
++    "water"
++];
++
++declare const ENGINE_VERSION: string;
++
++declare const EPHEMERIS: Readonly<{
++    name: "astronomy-engine";
++    version: string;
++}>;
++
++declare const EPHEMERIS_SPAN: Readonly<{
++    readonly timeScale: "TT";
++    readonly daysFromJ2000: Readonly<{
++        readonly from: -730000;
++        readonly to: 730000;
++    }>;
++    readonly fromTT: "0001-04-30T12:00:00";
++    readonly toTT: "3998-09-03T12:00:00";
++}>;
++
++type Element = "fire" | "earth" | "air" | "water";
++
++type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
++
++interface EquatorialCoordinates {
++    ra: number | null;
++    dec: number;
++    raDefined: boolean;
++}
++
++declare const HOUSE_SYSTEMS: readonly [
++    "whole",
++    "placidus",
++    "porphyry",
++    "equal",
++    "equal-mc",
++    "vehlow",
++    "koch",
++    "regiomontanus",
++    "campanus",
++    "topocentric",
++    "alcabitius",
++    "morinus",
++    "meridian"
++];
++
++type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
++
++type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
++
++interface Houses {
++    system: HouseSystem;
++    cusps: number[];
++}
++
++type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++
++interface InterAspect {
++    a: string;
++    aLon: number;
++    b: string;
++    bLon: number;
++    type: AspectType;
++    orb: number;
++}
++
++declare const LOTS: readonly [
++    "Lot of Fortune",
++    "Lot of Spirit",
++    "Lot of Eros",
++    "Lot of Necessity",
++    "Lot of Courage",
++    "Lot of Victory",
++    "Lot of Nemesis"
++];
++
++interface LeapSeconds {
++    taiMinusUtc: number;
++    listed: boolean;
++}
++
++interface LongitudeCrossing {
++    at: Date;
++    retrograde: boolean;
++}
++
++interface LotInputs {
++    ascendant: number;
++    sun: number;
++    moon: number;
++    mercury: number;
++    venus: number;
++    mars: number;
++    jupiter: number;
++    saturn: number;
++}
++
++/** @experimental */
++declare const MEAN_LUNAR_INCLINATION = 5.1453964;
++
++declare const MODALITIES: readonly [
++    "cardinal",
++    "fixed",
++    "mutable"
++];
++
++interface MinimalBody {
++    body: string;
++    lon: number;
++}
++
++type Modality = "cardinal" | "fixed" | "mutable";
++
++interface MoonPhase {
++    at: Date;
++    angle: number;
++    illumination: number;
++    name: MoonPhaseName;
++    waxing: boolean;
++    ephemeris?: string;
++    fallback?: EphemerisFallback;
++}
++
++type MoonPhaseName = "New Moon" | "Waxing Crescent" | "First Quarter" | "Waxing Gibbous" | "Full Moon" | "Waning Gibbous" | "Last Quarter" | "Waning Crescent";
++
++type NatalSource = Chart | BirthInput;
++
++/** @deprecated */
++declare const PLACIDUS_POLAR_FALLBACK: "whole";
++
++declare const POLAR_FALLBACK: "whole";
++
++declare const POLAR_UNDEFINED_HOUSE_SYSTEMS: readonly [
++    "placidus",
++    "koch"
++];
++
++declare const PROGRESSION_DAYS_PER_YEAR = 365.2422;
++
++interface PairSummary {
++    aspects: InterAspect[];
++    top: InterAspect[];
++    counts: Record<AspectType, number>;
++    easeful: number;
++    charged: number;
++    elements: {
++        a: Record<Element, number>;
++        b: Record<Element, number>;
++    };
++    modalities: {
++        a: Record<Modality, number>;
++        b: Record<Modality, number>;
++    };
++}
++
++type PointName = "Mean Node" | "Mean South Node" | "Black Moon Lilith" | "Vertex" | "East Point" | "Lot of Fortune" | "Lot of Spirit" | "Lot of Eros" | "Lot of Necessity" | "Lot of Courage" | "Lot of Victory" | "Lot of Nemesis";
++
++interface PointPosition {
++    point: PointName;
++    lon: number;
++    lat: number;
++    speed: number | null;
++    sign: ZodiacSign;
++    degree: number;
++}
++
++type Polarity = "day" | "night";
++
++interface PositionSource {
++    readonly ephemeris: {
++        readonly name: string;
++        readonly version: string;
++    };
++    place(body: SourceBody, ttDays: number, behind?: boolean): {
++        lon: number;
++        lat: number;
++        dist?: number;
++        behindDisc?: boolean;
++    };
++    trueNode(ttDays: number): number;
++    steps?(fromTtDays: number, toTtDays: number): number[];
++}
++
++declare const RA_POLE_TOLERANCE: number;
++
++declare const REFERENCE_SPAN: Readonly<{
++    readonly from: "1800-01-01T00:00:00.000Z";
++    readonly to: "2200-01-01T00:00:00.000Z";
++}>;
++
++interface ResolvedAspectRule {
++    readonly type: string;
++    readonly angle: number;
++    readonly orb: AspectOrbLimits;
++    readonly luminaryOrb?: AspectOrbLimits;
++}
++
++interface ReturnSeason {
++    index: number;
++    crossings: LongitudeCrossing[];
++    first: Date;
++    last: Date;
++}
++
++declare const SIGNS: readonly [
++    Readonly<{
++        readonly slug: "aries";
++        readonly name: "Aries";
++        readonly element: "fire";
++        readonly modality: "cardinal";
++        readonly polarity: "day";
++        readonly naturalHouse: 1;
++    }>,
++    Readonly<{
++        readonly slug: "taurus";
++        readonly name: "Taurus";
++        readonly element: "earth";
++        readonly modality: "fixed";
++        readonly polarity: "night";
++        readonly naturalHouse: 2;
++    }>,
++    Readonly<{
++        readonly slug: "gemini";
++        readonly name: "Gemini";
++        readonly element: "air";
++        readonly modality: "mutable";
++        readonly polarity: "day";
++        readonly naturalHouse: 3;
++    }>,
++    Readonly<{
++        readonly slug: "cancer";
++        readonly name: "Cancer";
++        readonly element: "water";
++        readonly modality: "cardinal";
++        readonly polarity: "night";
++        readonly naturalHouse: 4;
++    }>,
++    Readonly<{
++        readonly slug: "leo";
++        readonly name: "Leo";
++        readonly element: "fire";
++        readonly modality: "fixed";
++        readonly polarity: "day";
++        readonly naturalHouse: 5;
++    }>,
++    Readonly<{
++        readonly slug: "virgo";
++        readonly name: "Virgo";
++        readonly element: "earth";
++        readonly modality: "mutable";
++        readonly polarity: "night";
++        readonly naturalHouse: 6;
++    }>,
++    Readonly<{
++        readonly slug: "libra";
++        readonly name: "Libra";
++        readonly element: "air";
++        readonly modality: "cardinal";
++        readonly polarity: "day";
++        readonly naturalHouse: 7;
++    }>,
++    Readonly<{
++        readonly slug: "scorpio";
++        readonly name: "Scorpio";
++        readonly element: "water";
++        readonly modality: "fixed";
++        readonly polarity: "night";
++        readonly naturalHouse: 8;
++    }>,
++    Readonly<{
++        readonly slug: "sagittarius";
++        readonly name: "Sagittarius";
++        readonly element: "fire";
++        readonly modality: "mutable";
++        readonly polarity: "day";
++        readonly naturalHouse: 9;
++    }>,
++    Readonly<{
++        readonly slug: "capricorn";
++        readonly name: "Capricorn";
++        readonly element: "earth";
++        readonly modality: "cardinal";
++        readonly polarity: "night";
++        readonly naturalHouse: 10;
++    }>,
++    Readonly<{
++        readonly slug: "aquarius";
++        readonly name: "Aquarius";
++        readonly element: "air";
++        readonly modality: "fixed";
++        readonly polarity: "day";
++        readonly naturalHouse: 11;
++    }>,
++    Readonly<{
++        readonly slug: "pisces";
++        readonly name: "Pisces";
++        readonly element: "water";
++        readonly modality: "mutable";
++        readonly polarity: "night";
++        readonly naturalHouse: 12;
++    }>
++];
++
++/** @deprecated */
++declare const SIGN_NAMES: readonly ZodiacSign[];
++
++declare const SIGN_SLUGS: readonly ZodiacSign[];
++
++declare const STATIONARY_RELATIVE_SPEED = 1e-9;
++
++declare const SUN_BOUND_LATITUDE = 0.001;
++
++interface SaturnReturnResult {
++    natalLon: number;
++    natalRetrograde: boolean;
++    seasons: ReturnSeason[];
++    ephemeris?: string;
++    flags?: EphemerisFallback[];
++}
++
++type SaturnReturnSource = NatalSource | DateInput;
++
++type Sect = "day" | "night";
++
++interface SignDefinition {
++    readonly slug: ZodiacSign;
++    readonly name: string;
++    readonly element: Element;
++    readonly modality: Modality;
++    readonly polarity: Polarity;
++    readonly naturalHouse: HouseNumber;
++}
++
++type SourceBody = Exclude<BodyName, "North Node" | "South Node">;
++
++interface SynastryResult extends PairSummary {
++    a: Chart;
++    b: Chart;
++}
++
++interface TimeScale {
++    input: TimeScaleName;
++    basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
++    ut1MinusUtc: Ut1MinusUtc | null;
++    leapSeconds: LeapSeconds | null;
++}
++
++type TimeScaleName = "utc" | "ut1" | "tt";
++
++interface TransitResult {
++    natal: Chart;
++    at: Date;
++    positions: BodyPosition[];
++    aspects: InterAspect[];
++}
++
++interface Ut1MinusUtc {
++    seconds: number;
++    sigma: number;
++    source: "observed" | "predicted" | "fallback" | "model";
++}
++
++type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
++
++declare function alcabitiusCusps(input: AngleInput, angles: Angles): number[];
++
++declare function antiscion(longitude: number): number;
++
++declare function aspectMotion(a: {
++    lon: number;
++    speed: number;
++}, b: {
++    lon: number;
++    speed: number;
++}, angle: number): AspectMotion;
++
++declare function campanusCusps(input: AngleInput, angles: Angles): number[];
++
++declare function chartDeclinations(natal: NatalSource): ChartDeclinations;
++
++declare function chartPoints(natal: NatalSource): ChartPoints;
++
++declare function computeAngles(input: AngleInput): Angles;
++
++declare function computeHouses(system: HouseSystem, input: AngleInput, angles: Angles): {
++    houses: Houses;
++    fellBack: boolean;
++    fallbackSystem: HouseSystem | null;
++};
++
++declare function contraAntiscion(longitude: number): number;
++
++declare function createAspectPolicy(input?: AspectPolicyInput): AspectPolicy;
++
++declare function declinationOf(lon: number, lat: number, trueObliquity: number): number;
++
++declare function declinationOrb(a: string, b: string, policy?: Readonly<DeclinationOrbPolicy>): number;
++
++declare function declinationsForBodies(bodies: readonly DeclinationBody[], trueObliquity: number, policy?: Readonly<DeclinationOrbPolicy>): Declinations;
++
++declare function defaultEphemeris(): DefaultEphemeris;
++
++declare function degreeInSign(lon: number): number;
++
++declare function deltaT(ut: number): number;
++
++declare function deltaTAt(ut: number): DeltaT;
++
++declare function eastPointOf(input: AngleInput): number;
++
++declare function eclipticToEquatorial(longitudeDeg: number, latitudeDeg: number, trueObliquityDeg: number): EquatorialCoordinates;
++
++declare function elementBalance(bodies: readonly MinimalBody[]): Record<Element, number>;
++
++declare function equalCusps(angles: Angles): number[];
++
++declare function equalMcCusps(angles: Angles): number[];
++
++declare function findAspects(bodies: readonly BodyPosition[]): Aspect[];
++
++declare function findConfiguredAspects(positions: readonly AspectPosition[], policy: AspectPolicy): ConfiguredAspectResult;
++
++declare function findDeclinationAspects(bodies: readonly DeclinationBody[], trueObliquity: number, policy?: Readonly<DeclinationOrbPolicy>): DeclinationAspect[];
++
++declare function findInterAspects(first: readonly MinimalBody[], second: readonly MinimalBody[]): InterAspect[];
++
++declare function findLongitudeCrossings(body: BodyName, targetLongitude: number, from: DateInput, to: DateInput, stepDays?: number): LongitudeCrossing[];
++
++declare function findLongitudeCrossingsWith<B extends string = BodyName>(longitudeAt: BodyLongitudeAt<B>, body: B, targetLongitude: number, from: Date, to: Date, stepDays?: number): LongitudeCrossing[];
++
++declare function groupIntoSeasons(crossings: readonly LongitudeCrossing[], gapDays?: number): ReturnSeason[];
++
++declare function hellenisticLots(inputs: LotInputs, sect: Sect): {
++    point: (typeof LOTS)[number];
++    lon: number;
++}[];
++
++declare function houseOf(longitude: number, cusps: readonly number[]): HouseNumber;
++
++declare function isPolarUndefinedHouseSystem(system: HouseSystem): boolean;
++
++declare function kochCusps(input: AngleInput, angles: Angles): number[] | null;
++
++/** @experimental */
++declare function lunarMeanArguments(centuries: number): {
++    l: number;
++    F: number;
++    node: number;
++};
++
++declare function matchAspect(aBody: string, aLongitude: number, bBody: string, bLongitude: number): {
++    definition: AspectDefinition;
++    orb: number;
++} | null;
++
++/** @experimental */
++declare function meanApogee(centuries: number, nutation: number): {
++    lon: number;
++    lat: number;
++};
++
++/** @experimental */
++declare function meanNodeLongitude(centuries: number, nutation: number): number;
++
++declare function meanObliquity(julianCenturies: number): number;
++
++declare function meridianCusps(input: AngleInput): number[];
++
++declare function midpoint(first: number, second: number): number;
++
++declare function modalityBalance(bodies: readonly MinimalBody[]): Record<Modality, number>;
++
++declare function moonPhase(date: DateInput): MoonPhase;
++
++declare function morinusCusps(input: AngleInput): number[];
++
++declare function natalChart(birth: BirthInput): Chart;
++
++declare function normalizeLongitude(lon: number): number;
++
++declare function outsideReferenceSpan(utc: Date): boolean;
++
++declare function placidusCusps(input: AngleInput, angles: Angles): number[] | null;
++
++declare function porphyryCusps(angles: Angles): number[];
++
++declare function positions(date: DateInput): BodyPosition[];
++
++declare function progressedBodies(birthUtc: DateInput, target: DateInput): BodyPosition[];
++
++declare function progressedInstant(birthUtc: DateInput, target: DateInput): Date;
++
++declare function ramcOf(input: Pick<AngleInput, "gastHours" | "longitude">): number;
++
++declare function regiomontanusCusps(input: AngleInput, angles: Angles): number[];
++
++declare function saturnReturn(birth: SaturnReturnSource): SaturnReturnResult;
++
++declare function searchLongitudeCrossings(body: BodyName, targetLongitude: number, from: DateInput, to: DateInput, options?: CrossingSearchOptions): CrossingSearchResult;
++
++declare function searchLongitudeCrossingsWith<B extends string = BodyName>(longitudeAt: BodyLongitudeAt<B>, body: B, targetLongitude: number, from: Date, to: Date, options?: CrossingSearchOptions): CrossingSearchResult;
++
++declare function sectOf(ascendant: number, sun: number): Sect;
++
++declare function separation(a: number, b: number): number;
++
++declare function setDefaultEphemeris(name: DefaultEphemerisName): void;
++
++declare function signForLongitude(lon: number): SignDefinition;
++
++declare function signIndexForLongitude(lon: number): number;
++
++declare function summarizePair(first: readonly MinimalBody[], second: readonly MinimalBody[], topCount?: number): PairSummary;
++
++declare function synastry(first: NatalSource, second: NatalSource): SynastryResult;
++
++declare function topocentricCusps(input: AngleInput, angles: Angles): number[];
++
++declare function transits(natal: NatalSource, date: DateInput): TransitResult;
++
++declare function vehlowCusps(angles: Angles): number[];
++
++declare function vertexOf(input: AngleInput, angles: Angles): number;
++
++declare function wholeSignCusps(ascendant: number): number[];
++
++declare function withEphemeris<T>(positionSource: PositionSource, run: () => T): T;
++```
+diff --git a/api/de440-pack.api.md b/api/de440-pack.api.md
+index 16420c4..e58746c 100644
+--- a/api/de440-pack.api.md
++++ b/api/de440-pack.api.md
+@@ -32,7 +32,7 @@ declare function shippedDe440Source(): De440Source;
+ ## Referenced, not exported here (7)
+ 
+ ```ts
+-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+ // exported by @zodiacs/engine/de440 (DE440_EPHEMERIS_NAME)
+@@ -63,7 +63,7 @@ interface De440Source extends PositionSource {
+     };
+ }
+ 
+-// exported by @zodiacs/engine (PositionSource)
++// exported by @zodiacs/engine (PositionSource), @zodiacs/engine/core (PositionSource)
+ interface PositionSource {
+     readonly ephemeris: {
+         readonly name: string;
+@@ -96,6 +96,6 @@ declare const REDUCED_BODIES: readonly [
+ // exported by @zodiacs/engine/de440 (ReducedBody)
+ type ReducedBody = (typeof REDUCED_BODIES)[number];
+ 
+-// exported by @zodiacs/engine (SourceBody)
++// exported by @zodiacs/engine (SourceBody), @zodiacs/engine/core (SourceBody)
+ type SourceBody = Exclude<BodyName, "North Node" | "South Node">;
+ ```
+diff --git a/api/de440.api.md b/api/de440.api.md
+index c909818..0abc837 100644
+--- a/api/de440.api.md
++++ b/api/de440.api.md
+@@ -77,10 +77,10 @@ declare function openDe440PackSync(bytes: Uint8Array, options: De440OpenOptions)
+ ## Referenced, not exported here (3)
+ 
+ ```ts
+-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+-// exported by @zodiacs/engine (PositionSource)
++// exported by @zodiacs/engine (PositionSource), @zodiacs/engine/core (PositionSource)
+ interface PositionSource {
+     readonly ephemeris: {
+         readonly name: string;
+@@ -96,6 +96,6 @@ interface PositionSource {
+     steps?(fromTtDays: number, toTtDays: number): number[];
+ }
+ 
+-// exported by @zodiacs/engine (SourceBody)
++// exported by @zodiacs/engine (SourceBody), @zodiacs/engine/core (SourceBody)
+ type SourceBody = Exclude<BodyName, "North Node" | "South Node">;
+ ```
+diff --git a/api/engine.api.md b/api/engine.api.md
+index 3cc12ad..689d928 100644
+--- a/api/engine.api.md
++++ b/api/engine.api.md
+@@ -5,7 +5,7 @@ without comments. Generated by `scripts/api-report.mjs`; do not edit.
+ `npm run api:check` fails when the build declares anything else. Within a
+ major version these declarations change only as `docs/versioning.md` allows.
+ 
+-## Exported (172)
++## Exported (173)
+ 
+ ```ts
+ declare const ASPECTS: readonly [
+@@ -156,6 +156,7 @@ interface BodyPosition {
+     degree: number;
+     ephemeris?: string;
+     fallback?: EphemerisFallback;
++    flags?: InstantFlag[];
+ }
+ 
+ declare const CONFIGURED_ASPECTS_SCHEMA: "zodiacs.configured-aspects.v1";
+@@ -200,7 +201,7 @@ interface ChartDeclinations extends Declinations {
+     flags: EphemerisFallback[];
+ }
+ 
+-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
+ 
+ interface ChartInput {
+     utc: Date;
+@@ -410,6 +411,8 @@ interface Houses {
+     cusps: number[];
+ }
+ 
++type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++
+ interface InterAspect {
+     a: string;
+     aLon: number;
+@@ -695,7 +698,7 @@ interface SynastryResult extends PairSummary {
+ 
+ interface TimeScale {
+     input: TimeScaleName;
+-    basis: "iers" | "delta-t" | "pinned";
++    basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
+     ut1MinusUtc: Ut1MinusUtc | null;
+     leapSeconds: LeapSeconds | null;
+ }
+@@ -712,7 +715,7 @@ interface TransitResult {
+ interface Ut1MinusUtc {
+     seconds: number;
+     sigma: number;
+-    source: "observed" | "predicted" | "fallback";
++    source: "observed" | "predicted" | "fallback" | "model";
+ }
+ 
+ type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
+diff --git a/api/geo.api.md b/api/geo.api.md
+index 3aa0b18..31a98ef 100644
+--- a/api/geo.api.md
++++ b/api/geo.api.md
+@@ -5,7 +5,7 @@ without comments. Generated by `scripts/api-report.mjs`; do not edit.
+ `npm run api:check` fails when the build declares anything else. Within a
+ major version these declarations change only as `docs/versioning.md` allows.
+ 
+-## Exported (30)
++## Exported (34)
+ 
+ ```ts
+ type CalendarName = "gregorian" | "julian";
+@@ -61,6 +61,16 @@ interface GregorianAdoption {
+ 
+ type GregorianAdoptionSource = "tzdb" | "grotefend-1891" | "grotefend-1898";
+ 
++type HostZoneCheck = {
++    status: "unchecked";
++} | {
++    status: "current" | "differs" | "newer";
++    probe: string;
++    hostOffsetMinutes: number;
++    tzdbOffsetMinutes: number;
++    tzdbVersion: string;
++};
++
+ interface LocalBirthInput {
+     date: string;
+     time?: string;
+@@ -90,7 +100,7 @@ interface LocalTimeOptions {
+ interface LocalTimeResolution {
+     utc: Date;
+     offsetMinutes: number;
+-    flags: ("dst-gap" | "dst-fold" | "lmt")[];
++    flags: ("dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs")[];
+     date: string;
+     writtenDate: string;
+     calendar: CalendarName;
+@@ -109,6 +119,7 @@ interface LocalTimeResolution {
+         dataForm: "main+backzone" | "main" | "host";
+         abbreviation: string | null;
+         dst: boolean | null;
++        hostCheck?: HostZoneCheck;
+     };
+     intlOffsetMinutes: number | null;
+     calendarNote: CalendarNote | null;
+@@ -139,12 +150,26 @@ declare function calendarNote(gregorianDate: string, calendar: CalendarName, cou
+ 
+ declare function createGeoNamesClient(options: GeoNamesClientOptions): GeoNamesClient;
+ 
++declare function dateOfJulianDayNumber(jdn: number, calendar?: CalendarName): {
++    year: number;
++    month: number;
++    day: number;
++};
++
+ declare function gregorianAdoption(country: string): Readonly<GregorianAdoption> | undefined;
+ 
+ declare function gregorianToJulian(value: string): string | null;
+ 
++declare function julianDayNumber(date: {
++    year: number;
++    month: number;
++    day: number;
++}, calendar?: CalendarName): number;
++
+ declare function julianToGregorian(value: string): string | null;
+ 
++declare function localMeanTimeOffset(longitude: number): number;
++
+ declare function offsetAt(timeZone: string, utcMilliseconds: number): number;
+ 
+ declare function prepareLocalTime(date: string, timeZone: string): Promise<void>;
+@@ -161,7 +186,7 @@ declare function zoneOffsetAt(timeZone: string, utcMilliseconds: number): number
+ ## Referenced, not exported here (8)
+ 
+ ```ts
+-// exported by @zodiacs/engine (BirthInput)
++// exported by @zodiacs/engine (BirthInput), @zodiacs/engine/core (BirthInput)
+ interface BirthInput {
+     utc: DateInput;
+     timeScale?: TimeScaleName;
+@@ -173,16 +198,16 @@ interface BirthInput {
+     deltaT?: number;
+ }
+ 
+-// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
+-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag), @zodiacs/engine/core (ChartFlag)
++type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
+ 
+-// exported by @zodiacs/engine (DateInput)
++// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
+ type DateInput = Date | string | number;
+ 
+-// exported by @zodiacs/engine (EphemerisFallback)
++// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback)
+ type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
+ 
+-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
++// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/core (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+ type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
+ 
+ // exported by @zodiacs/engine/receipt (NatalLocalResolution)
+@@ -216,6 +241,6 @@ interface NatalZoneTransition {
+     cause: TransitionCause;
+ }
+ 
+-// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
++// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
+ type TimeScaleName = "utc" | "ut1" | "tt";
+ ```
+diff --git a/api/lite.api.md b/api/lite.api.md
+index 3f34aec..3a4e5fc 100644
+--- a/api/lite.api.md
++++ b/api/lite.api.md
+@@ -229,18 +229,18 @@ declare function sectReading(input: SectInput): SectReading;
+ ## Referenced, not exported here (5)
+ 
+ ```ts
+-// exported by @zodiacs/engine (AspectType)
++// exported by @zodiacs/engine (AspectType), @zodiacs/engine/core (AspectType)
+ type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
+ 
+-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+-// exported by @zodiacs/engine (Element)
++// exported by @zodiacs/engine (Element), @zodiacs/engine/core (Element)
+ type Element = "fire" | "earth" | "air" | "water";
+ 
+-// exported by @zodiacs/engine (Sect)
++// exported by @zodiacs/engine (Sect), @zodiacs/engine/core (Sect)
+ type Sect = "day" | "night";
+ 
+-// exported by @zodiacs/engine (ZodiacSign)
++// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
+ type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
+ ```
+diff --git a/api/receipt.api.md b/api/receipt.api.md
+index a0e4844..ff6c3d2 100644
+--- a/api/receipt.api.md
++++ b/api/receipt.api.md
+@@ -204,11 +204,11 @@ type NatalReference = "supplied-instant" | "utc-noon" | "local-noon";
+ 
+ interface NatalTimeScaleRecord {
+     input: TimeScaleName;
+-    basis: "iers" | "delta-t" | "pinned";
++    basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
+     ut1MinusUtc: {
+         seconds: number;
+         sigma: number;
+-        source: "observed" | "predicted" | "fallback";
++        source: "observed" | "predicted" | "fallback" | "model";
+     } | null;
+     leapSeconds: {
+         taiMinusUtc: number;
+@@ -234,10 +234,10 @@ declare function redactNatalEnvelope(envelope: NatalEnvelope): NatalDiagnostic;
+ declare function serializeNatalEnvelope(envelope: NatalEnvelope): string;
+ ```
+ 
+-## Referenced, not exported here (21)
++## Referenced, not exported here (22)
+ 
+ ```ts
+-// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
++// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/core (Angles), @zodiacs/engine/houses (Angles)
+ interface Angles {
+     asc: number;
+     mc: number;
+@@ -245,7 +245,7 @@ interface Angles {
+     ic: number;
+ }
+ 
+-// exported by @zodiacs/engine (Aspect)
++// exported by @zodiacs/engine (Aspect), @zodiacs/engine/core (Aspect)
+ interface Aspect {
+     a: BodyName;
+     b: BodyName;
+@@ -254,10 +254,10 @@ interface Aspect {
+     applying: boolean;
+ }
+ 
+-// exported by @zodiacs/engine (AspectType)
++// exported by @zodiacs/engine (AspectType), @zodiacs/engine/core (AspectType)
+ type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
+ 
+-// exported by @zodiacs/engine (BirthInput)
++// exported by @zodiacs/engine (BirthInput), @zodiacs/engine/core (BirthInput)
+ interface BirthInput {
+     utc: DateInput;
+     timeScale?: TimeScaleName;
+@@ -269,10 +269,10 @@ interface BirthInput {
+     deltaT?: number;
+ }
+ 
+-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+-// exported by @zodiacs/engine (BodyPosition)
++// exported by @zodiacs/engine (BodyPosition), @zodiacs/engine/core (BodyPosition)
+ interface BodyPosition {
+     body: BodyName;
+     lon: number;
+@@ -283,9 +283,10 @@ interface BodyPosition {
+     degree: number;
+     ephemeris?: string;
+     fallback?: EphemerisFallback;
++    flags?: InstantFlag[];
+ }
+ 
+-// exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart)
++// exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart), @zodiacs/engine/core (Chart)
+ interface Chart {
+     input: ChartInput;
+     bodies: BodyPosition[];
+@@ -302,10 +303,10 @@ interface Chart {
+     };
+ }
+ 
+-// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
+-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag), @zodiacs/engine/core (ChartFlag)
++type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
+ 
+-// exported by @zodiacs/engine (ChartInput)
++// exported by @zodiacs/engine (ChartInput), @zodiacs/engine/core (ChartInput)
+ interface ChartInput {
+     utc: Date;
+     timeScale?: Exclude<TimeScaleName, "utc">;
+@@ -317,10 +318,10 @@ interface ChartInput {
+     flags?: readonly ChartFlag[];
+ }
+ 
+-// exported by @zodiacs/engine (DateInput)
++// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
+ type DateInput = Date | string | number;
+ 
+-// exported by @zodiacs/engine (DeltaT), @zodiacs/engine/calc (DeltaT), @zodiacs/engine/deltat (DeltaT), @zodiacs/engine/time (DeltaT)
++// exported by @zodiacs/engine (DeltaT), @zodiacs/engine/calc (DeltaT), @zodiacs/engine/core (DeltaT), @zodiacs/engine/deltat (DeltaT), @zodiacs/engine/time (DeltaT)
+ interface DeltaT {
+     seconds: number;
+     sigma: number | null;
+@@ -330,48 +331,51 @@ interface DeltaT {
+     segment: DeltaTSegment;
+ }
+ 
+-// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
++// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/core (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
+ type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
+ 
+-// exported by @zodiacs/engine (EphemerisFallback)
++// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback)
+ type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
+ 
+-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
++// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/core (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+ type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
+ 
+-// exported by @zodiacs/engine (Houses)
++// exported by @zodiacs/engine (Houses), @zodiacs/engine/core (Houses)
+ interface Houses {
+     system: HouseSystem;
+     cusps: number[];
+ }
+ 
+-// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
++// exported by @zodiacs/engine (InstantFlag), @zodiacs/engine/core (InstantFlag)
++type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++
++// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/core (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
+ interface LeapSeconds {
+     taiMinusUtc: number;
+     listed: boolean;
+ }
+ 
+-// exported by @zodiacs/engine (TimeScale), @zodiacs/engine/calc (TimeScale), @zodiacs/engine/time (TimeScale)
++// exported by @zodiacs/engine (TimeScale), @zodiacs/engine/calc (TimeScale), @zodiacs/engine/core (TimeScale), @zodiacs/engine/time (TimeScale)
+ interface TimeScale {
+     input: TimeScaleName;
+-    basis: "iers" | "delta-t" | "pinned";
++    basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
+     ut1MinusUtc: Ut1MinusUtc | null;
+     leapSeconds: LeapSeconds | null;
+ }
+ 
+-// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
++// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
+ type TimeScaleName = "utc" | "ut1" | "tt";
+ 
+ // exported by @zodiacs/engine/geo (TransitionCause)
+ type TransitionCause = "dst" | "legal-change" | "date-line";
+ 
+-// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
++// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/core (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
+ interface Ut1MinusUtc {
+     seconds: number;
+     sigma: number;
+-    source: "observed" | "predicted" | "fallback";
++    source: "observed" | "predicted" | "fallback" | "model";
+ }
+ 
+-// exported by @zodiacs/engine (ZodiacSign)
++// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
+ type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
+ ```
+diff --git a/api/sky.api.md b/api/sky.api.md
+index 6d874e2..de95f8c 100644
+--- a/api/sky.api.md
++++ b/api/sky.api.md
+@@ -116,10 +116,10 @@ declare function skyEventsOn(body: SkyBody, observer: Observer, date: string, op
+ ## Referenced, not exported here (4)
+ 
+ ```ts
+-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+-// exported by @zodiacs/engine (DateInput)
++// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
+ type DateInput = Date | string | number;
+ 
+ // not exported by any entry point
+diff --git a/api/techniques.api.md b/api/techniques.api.md
+index 6dcaf0d..f306e40 100644
+--- a/api/techniques.api.md
++++ b/api/techniques.api.md
+@@ -411,10 +411,10 @@ declare function voidOfCourseAt(at: DateInput, options?: VoidOfCourseOptions): V
+ declare function voidOfCourseWindows(from: DateInput, to: DateInput, options?: VoidOfCourseOptions): readonly VoidOfCourseWindow[];
+ ```
+ 
+-## Referenced, not exported here (23)
++## Referenced, not exported here (24)
+ 
+ ```ts
+-// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
++// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/core (Angles), @zodiacs/engine/houses (Angles)
+ interface Angles {
+     asc: number;
+     mc: number;
+@@ -422,7 +422,7 @@ interface Angles {
+     ic: number;
+ }
+ 
+-// exported by @zodiacs/engine (Aspect)
++// exported by @zodiacs/engine (Aspect), @zodiacs/engine/core (Aspect)
+ interface Aspect {
+     a: BodyName;
+     b: BodyName;
+@@ -431,10 +431,10 @@ interface Aspect {
+     applying: boolean;
+ }
+ 
+-// exported by @zodiacs/engine (AspectType)
++// exported by @zodiacs/engine (AspectType), @zodiacs/engine/core (AspectType)
+ type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
+ 
+-// exported by @zodiacs/engine (BirthInput)
++// exported by @zodiacs/engine (BirthInput), @zodiacs/engine/core (BirthInput)
+ interface BirthInput {
+     utc: DateInput;
+     timeScale?: TimeScaleName;
+@@ -446,10 +446,10 @@ interface BirthInput {
+     deltaT?: number;
+ }
+ 
+-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+-// exported by @zodiacs/engine (BodyPosition)
++// exported by @zodiacs/engine (BodyPosition), @zodiacs/engine/core (BodyPosition)
+ interface BodyPosition {
+     body: BodyName;
+     lon: number;
+@@ -460,9 +460,10 @@ interface BodyPosition {
+     degree: number;
+     ephemeris?: string;
+     fallback?: EphemerisFallback;
++    flags?: InstantFlag[];
+ }
+ 
+-// exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart)
++// exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart), @zodiacs/engine/core (Chart)
+ interface Chart {
+     input: ChartInput;
+     bodies: BodyPosition[];
+@@ -479,10 +480,10 @@ interface Chart {
+     };
+ }
+ 
+-// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
+-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag), @zodiacs/engine/core (ChartFlag)
++type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
+ 
+-// exported by @zodiacs/engine (ChartInput)
++// exported by @zodiacs/engine (ChartInput), @zodiacs/engine/core (ChartInput)
+ interface ChartInput {
+     utc: Date;
+     timeScale?: Exclude<TimeScaleName, "utc">;
+@@ -494,10 +495,10 @@ interface ChartInput {
+     flags?: readonly ChartFlag[];
+ }
+ 
+-// exported by @zodiacs/engine (DateInput)
++// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
+ type DateInput = Date | string | number;
+ 
+-// exported by @zodiacs/engine (DeltaT), @zodiacs/engine/calc (DeltaT), @zodiacs/engine/deltat (DeltaT), @zodiacs/engine/time (DeltaT)
++// exported by @zodiacs/engine (DeltaT), @zodiacs/engine/calc (DeltaT), @zodiacs/engine/core (DeltaT), @zodiacs/engine/deltat (DeltaT), @zodiacs/engine/time (DeltaT)
+ interface DeltaT {
+     seconds: number;
+     sigma: number | null;
+@@ -507,54 +508,57 @@ interface DeltaT {
+     segment: DeltaTSegment;
+ }
+ 
+-// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
++// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/core (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
+ type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
+ 
+-// exported by @zodiacs/engine (Element)
++// exported by @zodiacs/engine (Element), @zodiacs/engine/core (Element)
+ type Element = "fire" | "earth" | "air" | "water";
+ 
+-// exported by @zodiacs/engine (EphemerisFallback)
++// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback)
+ type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
+ 
+-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
++// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/core (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+ type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
+ 
+-// exported by @zodiacs/engine (Houses)
++// exported by @zodiacs/engine (Houses), @zodiacs/engine/core (Houses)
+ interface Houses {
+     system: HouseSystem;
+     cusps: number[];
+ }
+ 
+-// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
++// exported by @zodiacs/engine (InstantFlag), @zodiacs/engine/core (InstantFlag)
++type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++
++// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/core (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
+ interface LeapSeconds {
+     taiMinusUtc: number;
+     listed: boolean;
+ }
+ 
+-// exported by @zodiacs/engine (NatalSource)
++// exported by @zodiacs/engine (NatalSource), @zodiacs/engine/core (NatalSource)
+ type NatalSource = Chart | BirthInput;
+ 
+-// exported by @zodiacs/engine (Sect)
++// exported by @zodiacs/engine (Sect), @zodiacs/engine/core (Sect)
+ type Sect = "day" | "night";
+ 
+-// exported by @zodiacs/engine (TimeScale), @zodiacs/engine/calc (TimeScale), @zodiacs/engine/time (TimeScale)
++// exported by @zodiacs/engine (TimeScale), @zodiacs/engine/calc (TimeScale), @zodiacs/engine/core (TimeScale), @zodiacs/engine/time (TimeScale)
+ interface TimeScale {
+     input: TimeScaleName;
+-    basis: "iers" | "delta-t" | "pinned";
++    basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
+     ut1MinusUtc: Ut1MinusUtc | null;
+     leapSeconds: LeapSeconds | null;
+ }
+ 
+-// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
++// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
+ type TimeScaleName = "utc" | "ut1" | "tt";
+ 
+-// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
++// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/core (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
+ interface Ut1MinusUtc {
+     seconds: number;
+     sigma: number;
+-    source: "observed" | "predicted" | "fallback";
++    source: "observed" | "predicted" | "fallback" | "model";
+ }
+ 
+-// exported by @zodiacs/engine (ZodiacSign)
++// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
+ type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
+ ```
+diff --git a/api/time.api.md b/api/time.api.md
+index 3aa69db..ea94bdb 100644
+--- a/api/time.api.md
++++ b/api/time.api.md
+@@ -67,7 +67,7 @@ interface TimeBasis {
+ 
+ interface TimeScale {
+     input: TimeScaleName;
+-    basis: "iers" | "delta-t" | "pinned";
++    basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
+     ut1MinusUtc: Ut1MinusUtc | null;
+     leapSeconds: LeapSeconds | null;
+ }
+@@ -77,7 +77,7 @@ type TimeScaleName = "utc" | "ut1" | "tt";
+ interface Ut1MinusUtc {
+     seconds: number;
+     sigma: number;
+-    source: "observed" | "predicted" | "fallback";
++    source: "observed" | "predicted" | "fallback" | "model";
+ }
+ 
+ declare function eclipticFrame(tt: number): EclipticFrame;
+diff --git a/api/timing.api.md b/api/timing.api.md
+index 91a382b..065c700 100644
+--- a/api/timing.api.md
++++ b/api/timing.api.md
+@@ -358,10 +358,10 @@ declare function zodiacalReleasing(natal: NatalSource, lot: ReleasingLot, from:
+ declare function zodiacalReleasingAt(natal: NatalSource, lot: ReleasingLot, date: DateInput, options?: ReleasingAtOptions): ReleasingAt;
+ ```
+ 
+-## Referenced, not exported here (24)
++## Referenced, not exported here (25)
+ 
+ ```ts
+-// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
++// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/core (Angles), @zodiacs/engine/houses (Angles)
+ interface Angles {
+     asc: number;
+     mc: number;
+@@ -369,7 +369,7 @@ interface Angles {
+     ic: number;
+ }
+ 
+-// exported by @zodiacs/engine (Aspect)
++// exported by @zodiacs/engine (Aspect), @zodiacs/engine/core (Aspect)
+ interface Aspect {
+     a: BodyName;
+     b: BodyName;
+@@ -378,10 +378,10 @@ interface Aspect {
+     applying: boolean;
+ }
+ 
+-// exported by @zodiacs/engine (AspectType)
++// exported by @zodiacs/engine (AspectType), @zodiacs/engine/core (AspectType)
+ type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
+ 
+-// exported by @zodiacs/engine (BirthInput)
++// exported by @zodiacs/engine (BirthInput), @zodiacs/engine/core (BirthInput)
+ interface BirthInput {
+     utc: DateInput;
+     timeScale?: TimeScaleName;
+@@ -393,10 +393,10 @@ interface BirthInput {
+     deltaT?: number;
+ }
+ 
+-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+-// exported by @zodiacs/engine (BodyPosition)
++// exported by @zodiacs/engine (BodyPosition), @zodiacs/engine/core (BodyPosition)
+ interface BodyPosition {
+     body: BodyName;
+     lon: number;
+@@ -407,9 +407,10 @@ interface BodyPosition {
+     degree: number;
+     ephemeris?: string;
+     fallback?: EphemerisFallback;
++    flags?: InstantFlag[];
+ }
+ 
+-// exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart)
++// exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart), @zodiacs/engine/core (Chart)
+ interface Chart {
+     input: ChartInput;
+     bodies: BodyPosition[];
+@@ -426,10 +427,10 @@ interface Chart {
+     };
+ }
+ 
+-// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
+-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag), @zodiacs/engine/core (ChartFlag)
++type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
+ 
+-// exported by @zodiacs/engine (ChartInput)
++// exported by @zodiacs/engine (ChartInput), @zodiacs/engine/core (ChartInput)
+ interface ChartInput {
+     utc: Date;
+     timeScale?: Exclude<TimeScaleName, "utc">;
+@@ -441,10 +442,10 @@ interface ChartInput {
+     flags?: readonly ChartFlag[];
+ }
+ 
+-// exported by @zodiacs/engine (DateInput)
++// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
+ type DateInput = Date | string | number;
+ 
+-// exported by @zodiacs/engine (DeltaT), @zodiacs/engine/calc (DeltaT), @zodiacs/engine/deltat (DeltaT), @zodiacs/engine/time (DeltaT)
++// exported by @zodiacs/engine (DeltaT), @zodiacs/engine/calc (DeltaT), @zodiacs/engine/core (DeltaT), @zodiacs/engine/deltat (DeltaT), @zodiacs/engine/time (DeltaT)
+ interface DeltaT {
+     seconds: number;
+     sigma: number | null;
+@@ -454,57 +455,60 @@ interface DeltaT {
+     segment: DeltaTSegment;
+ }
+ 
+-// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
++// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/core (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
+ type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
+ 
+-// exported by @zodiacs/engine (EphemerisFallback)
++// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback)
+ type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
+ 
+-// exported by @zodiacs/engine (HouseNumber)
++// exported by @zodiacs/engine (HouseNumber), @zodiacs/engine/core (HouseNumber)
+ type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+ 
+-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
++// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/core (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+ type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
+ 
+-// exported by @zodiacs/engine (Houses)
++// exported by @zodiacs/engine (Houses), @zodiacs/engine/core (Houses)
+ interface Houses {
+     system: HouseSystem;
+     cusps: number[];
+ }
+ 
+-// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
++// exported by @zodiacs/engine (InstantFlag), @zodiacs/engine/core (InstantFlag)
++type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++
++// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/core (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
+ interface LeapSeconds {
+     taiMinusUtc: number;
+     listed: boolean;
+ }
+ 
+-// exported by @zodiacs/engine (NatalSource)
++// exported by @zodiacs/engine (NatalSource), @zodiacs/engine/core (NatalSource)
+ type NatalSource = Chart | BirthInput;
+ 
+-// exported by @zodiacs/engine (PointName)
++// exported by @zodiacs/engine (PointName), @zodiacs/engine/core (PointName)
+ type PointName = "Mean Node" | "Mean South Node" | "Black Moon Lilith" | "Vertex" | "East Point" | "Lot of Fortune" | "Lot of Spirit" | "Lot of Eros" | "Lot of Necessity" | "Lot of Courage" | "Lot of Victory" | "Lot of Nemesis";
+ 
+-// exported by @zodiacs/engine (Sect)
++// exported by @zodiacs/engine (Sect), @zodiacs/engine/core (Sect)
+ type Sect = "day" | "night";
+ 
+-// exported by @zodiacs/engine (TimeScale), @zodiacs/engine/calc (TimeScale), @zodiacs/engine/time (TimeScale)
++// exported by @zodiacs/engine (TimeScale), @zodiacs/engine/calc (TimeScale), @zodiacs/engine/core (TimeScale), @zodiacs/engine/time (TimeScale)
+ interface TimeScale {
+     input: TimeScaleName;
+-    basis: "iers" | "delta-t" | "pinned";
++    basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
+     ut1MinusUtc: Ut1MinusUtc | null;
+     leapSeconds: LeapSeconds | null;
+ }
+ 
+-// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
++// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
+ type TimeScaleName = "utc" | "ut1" | "tt";
+ 
+-// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
++// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/core (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
+ interface Ut1MinusUtc {
+     seconds: number;
+     sigma: number;
+-    source: "observed" | "predicted" | "fallback";
++    source: "observed" | "predicted" | "fallback" | "model";
+ }
+ 
+-// exported by @zodiacs/engine (ZodiacSign)
++// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
+ type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
+ ```
+diff --git a/api/vedic.api.md b/api/vedic.api.md
+index 53b1e08..1e0102f 100644
+--- a/api/vedic.api.md
++++ b/api/vedic.api.md
+@@ -384,10 +384,10 @@ declare function vimshottariDasha(moon: SiderealLongitude, options?: DashaOption
+ declare function yoginiDasha(moon: SiderealLongitude, options?: CycleOptions): DashaResult;
+ ```
+ 
+-## Referenced, not exported here (21)
++## Referenced, not exported here (22)
+ 
+ ```ts
+-// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/houses (Angles)
++// exported by @zodiacs/engine (Angles), @zodiacs/engine/calc (Angles), @zodiacs/engine/core (Angles), @zodiacs/engine/houses (Angles)
+ interface Angles {
+     asc: number;
+     mc: number;
+@@ -395,7 +395,7 @@ interface Angles {
+     ic: number;
+ }
+ 
+-// exported by @zodiacs/engine (Aspect)
++// exported by @zodiacs/engine (Aspect), @zodiacs/engine/core (Aspect)
+ interface Aspect {
+     a: BodyName;
+     b: BodyName;
+@@ -404,10 +404,10 @@ interface Aspect {
+     applying: boolean;
+ }
+ 
+-// exported by @zodiacs/engine (AspectType)
++// exported by @zodiacs/engine (AspectType), @zodiacs/engine/core (AspectType)
+ type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
+ 
+-// exported by @zodiacs/engine (BirthInput)
++// exported by @zodiacs/engine (BirthInput), @zodiacs/engine/core (BirthInput)
+ interface BirthInput {
+     utc: DateInput;
+     timeScale?: TimeScaleName;
+@@ -419,10 +419,10 @@ interface BirthInput {
+     deltaT?: number;
+ }
+ 
+-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+-// exported by @zodiacs/engine (BodyPosition)
++// exported by @zodiacs/engine (BodyPosition), @zodiacs/engine/core (BodyPosition)
+ interface BodyPosition {
+     body: BodyName;
+     lon: number;
+@@ -433,9 +433,10 @@ interface BodyPosition {
+     degree: number;
+     ephemeris?: string;
+     fallback?: EphemerisFallback;
++    flags?: InstantFlag[];
+ }
+ 
+-// exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart)
++// exported by @zodiacs/engine (Chart), @zodiacs/engine/calc (Chart), @zodiacs/engine/core (Chart)
+ interface Chart {
+     input: ChartInput;
+     bodies: BodyPosition[];
+@@ -452,10 +453,10 @@ interface Chart {
+     };
+ }
+ 
+-// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag)
+-type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "no-time" | "polar-fallback" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++// exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag), @zodiacs/engine/core (ChartFlag)
++type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
+ 
+-// exported by @zodiacs/engine (ChartInput)
++// exported by @zodiacs/engine (ChartInput), @zodiacs/engine/core (ChartInput)
+ interface ChartInput {
+     utc: Date;
+     timeScale?: Exclude<TimeScaleName, "utc">;
+@@ -467,7 +468,7 @@ interface ChartInput {
+     flags?: readonly ChartFlag[];
+ }
+ 
+-// exported by @zodiacs/engine (DateInput)
++// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
+ type DateInput = Date | string | number;
+ 
+ // not exported by any entry point
+@@ -477,7 +478,7 @@ interface Definition {
+     readonly source: string;
+ }
+ 
+-// exported by @zodiacs/engine (DeltaT), @zodiacs/engine/calc (DeltaT), @zodiacs/engine/deltat (DeltaT), @zodiacs/engine/time (DeltaT)
++// exported by @zodiacs/engine (DeltaT), @zodiacs/engine/calc (DeltaT), @zodiacs/engine/core (DeltaT), @zodiacs/engine/deltat (DeltaT), @zodiacs/engine/time (DeltaT)
+ interface DeltaT {
+     seconds: number;
+     sigma: number | null;
+@@ -487,45 +488,48 @@ interface DeltaT {
+     segment: DeltaTSegment;
+ }
+ 
+-// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
++// exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/core (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
+ type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
+ 
+-// exported by @zodiacs/engine (EphemerisFallback)
++// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback)
+ type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
+ 
+-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
++// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/core (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+ type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
+ 
+-// exported by @zodiacs/engine (Houses)
++// exported by @zodiacs/engine (Houses), @zodiacs/engine/core (Houses)
+ interface Houses {
+     system: HouseSystem;
+     cusps: number[];
+ }
+ 
+-// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
++// exported by @zodiacs/engine (InstantFlag), @zodiacs/engine/core (InstantFlag)
++type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
++
++// exported by @zodiacs/engine (LeapSeconds), @zodiacs/engine/core (LeapSeconds), @zodiacs/engine/time (LeapSeconds)
+ interface LeapSeconds {
+     taiMinusUtc: number;
+     listed: boolean;
+ }
+ 
+-// exported by @zodiacs/engine (TimeScale), @zodiacs/engine/calc (TimeScale), @zodiacs/engine/time (TimeScale)
++// exported by @zodiacs/engine (TimeScale), @zodiacs/engine/calc (TimeScale), @zodiacs/engine/core (TimeScale), @zodiacs/engine/time (TimeScale)
+ interface TimeScale {
+     input: TimeScaleName;
+-    basis: "iers" | "delta-t" | "pinned";
++    basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
+     ut1MinusUtc: Ut1MinusUtc | null;
+     leapSeconds: LeapSeconds | null;
+ }
+ 
+-// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
++// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
+ type TimeScaleName = "utc" | "ut1" | "tt";
+ 
+-// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
++// exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/core (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
+ interface Ut1MinusUtc {
+     seconds: number;
+     sigma: number;
+-    source: "observed" | "predicted" | "fallback";
++    source: "observed" | "predicted" | "fallback" | "model";
+ }
+ 
+-// exported by @zodiacs/engine (ZodiacSign)
++// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
+ type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
+ ```
+diff --git a/api/window.api.md b/api/window.api.md
+index 349adf8..4c18326 100644
+--- a/api/window.api.md
++++ b/api/window.api.md
+@@ -138,21 +138,21 @@ declare function birthWindow(input: BirthWindowInput): BirthWindow;
+ ## Referenced, not exported here (6)
+ 
+ ```ts
+-// exported by @zodiacs/engine (AspectType)
++// exported by @zodiacs/engine (AspectType), @zodiacs/engine/core (AspectType)
+ type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
+ 
+-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
++// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
+ type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
+ 
+-// exported by @zodiacs/engine (DateInput)
++// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
+ type DateInput = Date | string | number;
+ 
+-// exported by @zodiacs/engine (HouseNumber)
++// exported by @zodiacs/engine (HouseNumber), @zodiacs/engine/core (HouseNumber)
+ type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+ 
+-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
++// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/core (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+ type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
+ 
+-// exported by @zodiacs/engine (ZodiacSign)
++// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
+ type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
+ ```
