@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7.0.1
 
       # The zone vectors read the host's Intl time zone data, so the Node
       # version (and with it ICU and tzdata) is pinned to the one the
@@ -61,7 +61,7 @@ jobs:
       KERNEL_SHA256: c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7.0.1
 
       - name: Setup Python
         uses: actions/setup-python@v5
