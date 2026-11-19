@@ -24,7 +24,7 @@ jobs:
           sparse-checkout: |
             /tools/solar-terms/
             /artifacts/zodiacs-engine-1.0.0-rc.2.tgz
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
           node-version: ${{ matrix.node }}
       - name: Source protocol and finite-budget controls
