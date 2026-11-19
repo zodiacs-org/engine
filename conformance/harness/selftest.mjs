@@ -4,7 +4,9 @@
  */
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { RELEASES, RELEASE_DIGESTS, SUITE_VERSION, compareField, compareRelease, conventionIds, judge, readSuite, runAdapter, summarize, validateLevel } from './lib.mjs';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { KINDS, RELEASES, RELEASE_DIGESTS, SUITE_DIR, SUITE_VERSION, compareField, compareRelease, conventionIds, judge, readLevel, readSuite, runAdapter, summarize, validateLevel } from './lib.mjs';
 
 const arcsec = { abs: 1, unit: 'arcsec', wrap: 360 };
 
@@ -122,17 +124,90 @@ test('a release holds the vectors released before it, and nothing else differs',
   assert.ok(compareRelease(grown, fixture()).some((problem) => problem.includes('2 vectors where 1 were released')));
 });
 
-test('the committed vector files conform to SPEC.md, and this version holds 0.1.0\'s vectors', () => {
-  assert.equal(SUITE_VERSION, '0.2.0');
+test('the committed vector files conform to SPEC.md, and this version holds each earlier release\'s vectors', () => {
+  assert.equal(SUITE_VERSION, '0.3.0');
   const current = readSuite();
-  const released = readSuite(undefined, undefined, '0.1.0');
-  assert.equal(current.length, 3);
-  assert.equal(released.length, 3);
-  for (const level of [...current, ...released]) assert.deepEqual(validateLevel(level), [], `${level.version} ${level.level}`);
-  current.forEach((level, index) => assert.deepEqual(compareRelease(level, released[index]), [], level.level));
-  assert.deepEqual(Object.keys(RELEASES), ['0.1.0', '0.2.0']);
+  assert.deepEqual(current.map((level) => level.level), ['L1', 'L2', 'L3', 'L4']);
+  assert.deepEqual(Object.keys(RELEASES), ['0.1.0', '0.2.0', '0.3.0']);
   assert.deepEqual(Object.keys(RELEASE_DIGESTS), Object.keys(RELEASES));
-  for (const level of [...current, ...released]) assert.equal(level.digest, RELEASE_DIGESTS[level.version][level.level], `${level.version} ${level.level}`);
+  for (const version of ['0.1.0', '0.2.0']) {
+    const released = readSuite(undefined, undefined, version);
+    assert.equal(released.length, 3);
+    for (const level of released) assert.deepEqual(validateLevel(level), [], `${version} ${level.level}`);
+    released.forEach((level) => assert.deepEqual(compareRelease(current.find((entry) => entry.level === level.level), level), [], `${version} ${level.level}`));
+  }
+  for (const level of current) assert.deepEqual(validateLevel(level), [], `${level.version} ${level.level}`);
+  for (const version of Object.keys(RELEASES)) {
+    for (const level of readSuite(undefined, undefined, version)) assert.equal(level.digest, RELEASE_DIGESTS[version][level.level], `${version} ${level.level}`);
+  }
+});
+
+test('0.3.0 changes no released vector: its L1 to L3 files are 0.2.0\'s but for the suite version', () => {
+  for (const level of ['L1', 'L2', 'L3']) {
+    const then = readFileSync(resolve(SUITE_DIR, RELEASES['0.2.0'][level]), 'utf8');
+    const now = readFileSync(resolve(SUITE_DIR, RELEASES['0.3.0'][level]), 'utf8');
+    assert.equal(now, then.replace('"suiteVersion": "0.2.0"', '"suiteVersion": "0.3.0"'), level);
+  }
+});
+
+// Read when a test runs, so that a harness without L4 fails those tests and still runs the others.
+let level4;
+const l4 = () => (level4 ??= readLevel('L4'));
+const event = (kind) => l4().file.vectors.find((vector) => vector.kind === kind);
+
+test('L4\'s event kinds: each shape, window, tolerance and direction is checked', () => {
+  for (const kind of ['event.ingress', 'event.station', 'event.lunation']) assert.equal(KINDS[kind].level, 'L4');
+  const ingress = event('event.ingress');
+  const broken = (change, base = ingress) => validateLevel({ ...l4(), file: { ...l4().file, dropped: [], vectors: [change(structuredClone(base))] } });
+  assert.deepEqual(broken((v) => v), []);
+  assert.ok(broken((v) => { v.input.after_tt_s = v.expected.tt_s; return v; }).some((p) => p.includes('window')));
+  assert.ok(broken((v) => { v.input.before_tt_s = v.expected.tt_s - 1; return v; }).some((p) => p.includes('window')));
+  assert.ok(broken((v) => { v.tolerance.tt_s = { abs: 0.5, unit: 's' }; return v; }).some((p) => p.includes('whole seconds')));
+  assert.ok(broken((v) => { v.tolerance.tt_s = { abs: 2, unit: 'arcsec' }; return v; }).some((p) => p.includes('whole seconds')));
+  assert.ok(broken((v) => { v.input.longitude_deg = 45; return v; }).some((p) => p.includes('multiple of 30')));
+  assert.ok(broken((v) => { v.input.body = 'Ceres'; return v; }).some((p) => p.includes('unknown body')));
+  assert.ok(broken((v) => { delete v.input.body; return v; }).some((p) => p.includes('not a shape')));
+  assert.ok(broken((v) => { v.expected = { utc_s: v.expected.tt_s }; v.tolerance = { utc_s: v.tolerance.tt_s }; return v; }).some((p) => p.includes('not a shape')));
+  assert.ok(broken((v) => { v.tags = ['utc-input']; return v; }).some((p) => p.includes('utc-input')));
+  assert.ok(broken((v) => { v.input.phase_deg = 90; return v; }, event('event.lunation')).some((p) => p.includes('phase_deg')));
+  assert.ok(broken((v) => { v.expected.direction = 'stationary'; return v; }, event('event.station')).some((p) => p.includes('direction')));
+  assert.ok(broken((v) => { v.tolerance.direction = { abs: 1, unit: 's' }; return v; }, event('event.station')).some((p) => p.includes('exactly')));
+  const listed = (dropped) => validateLevel({ ...l4(), file: { ...l4().file, dropped } });
+  assert.ok(listed([{ id: ingress.id, what: 'x', reason: 'y' }]).some((p) => p.includes('both a vector and dropped')));
+  assert.ok(listed([{ id: 'L4-ING-9999', what: 'x' }]).some((p) => p.includes('{ id, what, reason }')));
+  assert.ok(validateLevel({ ...l4(), file: { ...l4().file, draft: 'x' } }).some((p) => p.includes('unknown key draft')));
+});
+
+test('an L4 instant moved by twice its tolerance fails against the engine\'s committed answer', () => {
+  const results = JSON.parse(readFileSync(resolve(SUITE_DIR, 'results/zodiacs-engine.json'), 'utf8')).results;
+  const byId = new Map(l4().file.vectors.map((vector) => [vector.id, vector]));
+  const passing = results.filter((result) => byId.has(result.id) && result.verdict === 'pass');
+  assert.ok(passing.length > 0);
+  for (const result of passing) {
+    const vector = byId.get(result.id);
+    const [field] = Object.keys(result.residual);
+    const answer = vector.expected[field] + result.residual[field];
+    assert.equal(judge(vector, { output: { [field]: answer } }).verdict, 'pass', vector.id);
+    for (const sign of [1, -1]) {
+      const moved = { ...vector, expected: { ...vector.expected, [field]: vector.expected[field] + sign * 2 * vector.tolerance[field].abs } };
+      assert.equal(judge(moved, { output: { [field]: answer } }).verdict, 'fail', `${vector.id} moved by ${sign * 2} tolerances`);
+    }
+  }
+});
+
+// Runs the engine's adapter, so it needs `npm run build` first, as the conformance workflow does.
+test('the engine\'s adapter: an ingress on TT and on UTC within tolerance, no answer for an empty window, stations and lunations unsupported', async () => {
+  const byId = new Map(l4().file.vectors.map((vector) => [vector.id, vector]));
+  const tt = byId.get('L4-ING-0061');
+  const utc = byId.get('L4-UTC-0001');
+  const empty = { ...structuredClone(tt), id: 'L4-ING-EMPTY' };
+  empty.input.before_tt_s = tt.expected.tt_s - 2 * tt.tolerance.tt_s.abs;
+  const asked = [tt, utc, event('event.station'), event('event.lunation'), empty];
+  const { responses } = await runAdapter('node conformance/adapters/zodiacs-engine.mjs', asked, { cwd: resolve(SUITE_DIR, '..') });
+  assert.deepEqual(asked.slice(0, 4).map((vector) => judge(vector, responses.get(vector.id)).verdict), ['pass', 'pass', 'unsupported', 'unsupported']);
+  const none = judge(empty, responses.get(empty.id));
+  assert.equal(none.verdict, 'error');
+  assert.match(none.detail, /found 0 crossings/u);
 });
 
 const vectors = [

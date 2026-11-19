@@ -1,15 +1,16 @@
 {
-  "note": "The verdicts the carried @zodiacs/engine 1.0.0-rc.2 archive gives on Node 22.22.2 through conformance/adapters/zodiacs-engine.mjs --ephemeris astronomy-engine: the baseline tools/cli/scripts/verify-consumer.mjs holds that archive to. Taken, id and verdict only, from conformance/results/zodiacs-engine-astronomy-engine.json at 373ceda, against which the Offline CLI consumer workflow passed on main. Pinned at the 2.0.0-rc.3 cut, whose regenerated results pass 40 calendar and local mean time vectors that 1.0.0-rc.2 has no function for.",
+  "note": "The verdicts the carried @zodiacs/engine 1.0.0-rc.2 archive gives on Node 22.22.2 through conformance/adapters/zodiacs-engine.mjs --ephemeris astronomy-engine: the baseline tools/cli/scripts/verify-consumer.mjs holds that archive to. Taken, id and verdict only, from conformance/results/zodiacs-engine-astronomy-engine.json at 373ceda, against which the Offline CLI consumer workflow passed on main. Pinned at the 2.0.0-rc.3 cut, whose regenerated results pass 40 calendar and local mean time vectors that 1.0.0-rc.2 has no function for. From suite 0.3.0 it holds the same 500 verdicts for 0.3.0's L1 to L3 files, which differ from 0.2.0's only in their suite version, and the 140 of L4, added with that release: the verdicts the archive gave through the same adapter on Node 22.22.2 in this check's own conformance run, id and verdict only (25 of the 60 TT ingresses and 6 of the 10 UTC ingresses pass, 39 fail, and the 70 stations and lunations are unsupported). The 1.0.0-rc.2 archive answers no L4 vector with an error.",
   "source": {
     "file": "conformance/results/zodiacs-engine-astronomy-engine.json",
     "commit": "373cedaeb73f051e126279fc4b5a07d4efee9eec"
   },
   "suite": "zodiacs-conformance",
-  "suiteVersion": "0.2.0",
+  "suiteVersion": "0.3.0",
   "vectors": {
-    "vectors/0.2.0/L1-positions.json": "4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8",
-    "vectors/0.2.0/L2-houses-angles.json": "fc5321b9061b9860bfb9af5254e5813be1c4bc3c858df6f623ea1617b76b88e5",
-    "vectors/0.2.0/L3-time-calendars.json": "51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66"
+    "vectors/0.3.0/L1-positions.json": "5ead022c18c56b44fb129f423b16ea26525240289156564c40a99ff4a5924e2b",
+    "vectors/0.3.0/L2-houses-angles.json": "23f8c47eeff926a64f97ce29bb0d0d73dd364d2f92952b8ed3b2a944a3a683c3",
+    "vectors/0.3.0/L3-time-calendars.json": "b8b981d8ef15e8d45e356323676863d7a6ee7763e68ac056d3618e44d2a42a11",
+    "vectors/0.3.0/L4-events.json": "4c153d887f993536549432213e81648e9d0b4fc940eb1f116c4aa732dba6e25f"
   },
   "results": [
     {
@@ -2011,6 +2012,566 @@
     {
       "id": "L3-CAL-0010",
       "verdict": "unsupported"
+    },
+    {
+      "id": "L4-ING-0001",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0002",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0003",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0004",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0005",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0006",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0007",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0008",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0009",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0010",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0011",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0012",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0013",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0014",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0015",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0016",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0017",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0018",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0019",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0020",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0021",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0022",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0023",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0024",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0025",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0026",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0027",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0028",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0029",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0030",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0031",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0032",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0033",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0034",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0035",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0036",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0037",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0038",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0039",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0040",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0041",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0042",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0043",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0044",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0045",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0046",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0047",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-ING-0048",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0049",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0050",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0051",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0052",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0053",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0054",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0055",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0056",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0057",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0058",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-ING-0059",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-STA-0001",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0002",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0003",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0004",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0005",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0006",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0007",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0008",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0009",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0010",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0011",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0012",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0013",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0014",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0015",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0016",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0017",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0018",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0019",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0020",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0021",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0022",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0023",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0024",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0025",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0026",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0027",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0028",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0029",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-STA-0030",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0001",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0002",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0003",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0004",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0005",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0006",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0007",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0008",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0009",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0010",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0011",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0012",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0013",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0014",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0015",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0016",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0017",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0018",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0019",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0020",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0021",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0022",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0023",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0024",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0025",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0026",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0027",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0028",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0029",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-LUN-0030",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-UTC-0001",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-UTC-0002",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-UTC-0003",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-UTC-0004",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-UTC-0005",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-UTC-0006",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-UTC-0007",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-UTC-0008",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-UTC-0009",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-UTC-0010",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-UTC-0011",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-UTC-0012",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-UTC-0013",
+      "verdict": "pass"
+    },
+    {
+      "id": "L4-UTC-0014",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-UTC-0015",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-UTC-0016",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-UTC-0017",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-UTC-0018",
+      "verdict": "fail"
+    },
+    {
+      "id": "L4-UTC-0019",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-UTC-0020",
+      "verdict": "unsupported"
+    },
+    {
+      "id": "L4-ING-0061",
+      "verdict": "pass"
     }
   ]
 }

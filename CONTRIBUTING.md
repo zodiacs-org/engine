@@ -75,7 +75,7 @@ list and a workflow disagree, the workflow is right.
 npm ci
 npm run build
 node --test conformance/harness/selftest.mjs
-node conformance/harness/validate.mjs --expect-total 500
+node conformance/harness/validate.mjs --expect-total 640
 node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs" \
   --check conformance/results/zodiacs-engine.json
 node conformance/harness/report.mjs --check

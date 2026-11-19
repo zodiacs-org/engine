@@ -29,18 +29,23 @@ Each release has one file per level, and a released file never changes:
 | --- | --- |
 | 0.1.0 | `vectors/L1-positions.json`, `vectors/L2-houses-angles.json`, `vectors/L3-time-calendars.json` |
 | 0.2.0 | the same names under `vectors/0.2.0/` |
+| 0.3.0 | the same names under `vectors/0.3.0/`, and `vectors/0.3.0/L4-events.json` |
 
 0.2.0 holds 0.1.0's vectors unchanged, each with its `conventionIds`; nothing
-else in a file differs but `suiteVersion`. The generators write both from one
-document (`arbiters/release.py`); `harness/validate.mjs` checks both, the
-identity, and each file's SHA-256 against the one it was released with
-(`RELEASE_DIGESTS` in `harness/lib.mjs`); and the harness runs the latest.
-Each file:
+else in a file differs but `suiteVersion`. 0.3.0 holds 0.2.0's three files
+with nothing changed but `suiteVersion`, and adds level L4, event times
+(`drafts/0.3.0/DESIGN.md`, fixed before any engine ran), whose vectors carry
+their `conventionIds` from the start. The generators of L1 to L3 write every
+release from one document (`arbiters/release.py`), and L4's generator
+(`arbiters/l4/build.py`) writes its file; `harness/validate.mjs` checks every
+release, the identities, and each file's SHA-256 against the one it was
+released with (`RELEASE_DIGESTS` in `harness/lib.mjs`); and the harness runs
+the latest. Each file:
 
 ```json
 {
   "suite": "zodiacs-conformance",
-  "suiteVersion": "0.2.0",
+  "suiteVersion": "0.3.0",
   "level": "L1",
   "title": "Positions",
   "arbiters": {
@@ -53,9 +58,15 @@ Each file:
       "uncertainty": "the arbiter's own uncertainty, and how it was measured"
     }
   },
+  "dropped": [ /* optional, see below */ ],
   "vectors": [ /* see below */ ]
 }
 ```
+
+`dropped`, where present, lists the vectors the design called for that the
+generator dropped by one of the design's stated rules, each as
+`{ "id": "…", "what": "the event, in words", "reason": "the rule it failed" }`.
+A dropped id is not a vector of the file and is not used again.
 
 An input with a `path` is a file committed under `conformance/`, and
 `harness/validate.mjs` checks its digest. An input with a `url` is a
@@ -117,6 +128,18 @@ Each key of `tolerance` names a key of `expected`.
 Every key of `expected` has a `tolerance` entry; the validator refuses a
 vector without one.
 
+L4's tolerances follow one rule, from `drafts/0.3.0/DESIGN.md`: the time
+the quantity takes to move 1″ at that event, in whole seconds, from the
+arbiter's samples one hour either side of the solved instant t.
+
+- Ingress and lunation: `max(1 s, 1″ / |rate|)`, rounded up to a whole
+  second, with rate = (L(t + 1 h) − L(t − 1 h)) / 7200 s in arcseconds per
+  second. For a lunation, L is the Moon's longitude minus the Sun's.
+- Station: `max(60 s, sqrt(2 × 1″ / |acceleration|))`, rounded up to a
+  whole second, with acceleration = (L(t + 1 h) − 2 L(t) + L(t − 1 h)) /
+  (3600 s)², the time the longitude takes to leave its turning value by 1″.
+- A station's `direction` is compared exactly.
+
 ### Status results
 
 Where the correct answer is that no value exists, `expected` is
@@ -128,7 +151,7 @@ which. An engine passes by refusing the system or by reporting that it
 substituted another. Time zone vectors use `status` values `ok`, `ambiguous`
 (the local time occurs twice) and `nonexistent` (it is skipped).
 
-## Kinds in v0
+## Kinds
 
 | kind | input | expected |
 | --- | --- | --- |
@@ -142,12 +165,18 @@ substituted another. Time zone vectors use `status` values `ok`, `ambiguous`
 | `time.delta-t` | `jd_ut1` | `delta_t_s` (TT − UT1) |
 | `calendar.to-jdn` | `calendar`, `year`, `month`, `day` | `jdn` |
 | `calendar.from-jdn` | `calendar`, `jdn` | `year`, `month`, `day` |
+| `event.ingress` | `body`, `longitude_deg`, and `after_tt_s`, `before_tt_s` or `after_utc_s`, `before_utc_s` | `tt_s` or `utc_s`, on the scale of the window |
+| `event.station` | `body`, `after_tt_s`, `before_tt_s` | `tt_s`, `direction` |
+| `event.lunation` | `phase_deg`, and `after_tt_s`, `before_tt_s` or `after_utc_s`, `before_utc_s` | `tt_s` or `utc_s`, on the scale of the window |
 
 `body` is one of `Sun`, `Moon`, `Mercury`, `Venus`, `Mars`, `Jupiter`,
 `Saturn`, `Uranus`, `Neptune`, `Pluto`. `system` is one of `placidus`,
 `koch`, `regiomontanus`, `campanus`, `porphyry`, `alcabitius`, `equal`,
 `whole-sign`, `morinus`, `meridian`, `topocentric`, `vehlow`, `equal-mc`.
-`calendar` is `gregorian` or `julian` (both proleptic).
+`calendar` is `gregorian` or `julian` (both proleptic). In L4,
+`longitude_deg` is a multiple of 30 in [0, 360), `phase_deg` is 0 (new Moon)
+or 180 (full Moon), and `direction` is `retrograde` or `direct`. The L4
+vectors that take their window in UTC carry the tag `utc-input`.
 
 Some vectors carry optional extra input keys: `jd_tt` beside `jd_ut1` in
 L2, and `utc` beside `jd_ut1` in `time.delta-t`. They record what the
@@ -171,6 +200,23 @@ Definitions:
   civil day, the Julian date at its noon.
 - **ΔT.** `delta_t_s` is TT − UT1 in seconds. `tt_minus_utc_s` is TT − UTC,
   which is 32.184 s plus TAI − UTC.
+- **Event instants.** `tt_s` is seconds of TT from 2000-01-01T12:00:00 TT,
+  that is (JD(TT) − 2451545.0) × 86400. `utc_s` is seconds of UTC from
+  2000-01-01T12:00:00 UTC, counted the same way on the UTC calendar, a day
+  being 86400 s; no leap second falls inside any L4 window. For the L4
+  vectors in UTC, the UTC instant is the TT instant minus 69.184 s
+  (TAI − UTC of 37 s, as from 2017-01-01, plus TT − TAI of 32.184 s): that
+  is how `utc_s` is defined for them, not a prediction of leap seconds.
+- **Event windows.** The window is (`after`, `before`], open at `after` and
+  closed at `before`, and holds exactly one event of the vector's kind.
+- **Ingress.** The instant in the window at which the body's longitude (as
+  in **Positions**, the ecliptic longitude of date) equals `longitude_deg`,
+  in either direction of motion.
+- **Station.** The instant in the window at which the rate of the body's
+  longitude is zero: `retrograde` when the rate turns from positive to
+  negative, `direct` when it turns from negative to positive.
+- **Lunation.** The instant in the window at which the Moon's longitude
+  minus the Sun's, reduced to [0, 360), equals `phase_deg`.
 
 ## Adapter protocol
 
