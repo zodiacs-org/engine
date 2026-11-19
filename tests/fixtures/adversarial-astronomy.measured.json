@@ -1,0 +1,115 @@
+{
+ "schema": "zodiacs.adversarial-astronomy.measured.v1",
+ "about": "Written by tests/adversarial-astronomy.spec.ts with ADVERSARIAL_WRITE=1; do not edit by hand.",
+ "measured": {
+  "anglesAndCusps": {
+   "angleVectors": 60,
+   "ascMaxArcsec": 0.0189602,
+   "cuspMaxArcsec": 0.0711574,
+   "cuspMaxArcsec alcabitius": 0.00621837,
+   "cuspMaxArcsec campanus": 0.0711574,
+   "cuspMaxArcsec equal": 0.0067811,
+   "cuspMaxArcsec equal-mc": 0.00656128,
+   "cuspMaxArcsec koch": 0.00898451,
+   "cuspMaxArcsec meridian": 0.00695766,
+   "cuspMaxArcsec morinus": 0.00600537,
+   "cuspMaxArcsec placidus": 0.00618242,
+   "cuspMaxArcsec porphyry": 0.00660752,
+   "cuspMaxArcsec regiomontanus": 0.0120303,
+   "cuspMaxArcsec topocentric": 0.0412557,
+   "cuspMaxArcsec vehlow": 0.00665893,
+   "cuspMaxArcsec whole": 0,
+   "cuspVectors": 70,
+   "mcMaxArcsec": 0.00814549,
+   "undefinedCuspVectors": 10
+  },
+  "cases": {
+   "total": 230
+  },
+  "extremeYears": {
+   "sunAgainstMeeusLowAccuracyMaxArcsec": 15.2556
+  },
+  "ingress": {
+   "againstDe440BspSeconds INGRESS-2026-240": 0.01,
+   "againstMeeusLowAccuracyMaxArcsec": 22.4174,
+   "astronomyEngineMinusDe440MaxSeconds": 42.743,
+   "cases": 28,
+   "searchResidualMaxArcsec": 0.0010206
+  },
+  "polar": {
+   "boundaryDegrees 1850-06-21T12:00:00Z": 66.5433,
+   "boundaryDegrees 2000-06-21T12:00:00Z": 66.562,
+   "boundaryDegrees 2099-12-21T03:00:00Z": 66.5714,
+   "boundaryMinusFormulaMaxArcsec": 0.0386585,
+   "sweepCharts": 26208,
+   "sweepFallbacks": 2304
+  },
+  "positionsAstronomyEngine": {
+   "allBodiesMaxArcsec": 19.0281,
+   "Jupiter latMaxArcsec": 6.63424,
+   "Jupiter lonMaxArcsec": 7.82214,
+   "Mars latMaxArcsec": 5.2729,
+   "Mars lonMaxArcsec": 4.43968,
+   "Mercury latMaxArcsec": 6.14801,
+   "Mercury lonMaxArcsec": 7.97331,
+   "Moon latMaxArcsec": 1.71942,
+   "Moon lonMaxArcsec": 3.74082,
+   "Neptune latMaxArcsec": 9.71331,
+   "Neptune lonMaxArcsec": 18.7745,
+   "Pluto latMaxArcsec": 3.51637,
+   "Pluto lonMaxArcsec": 14.2683,
+   "Saturn latMaxArcsec": 19.0281,
+   "Saturn lonMaxArcsec": 10.2168,
+   "Sun latMaxArcsec": 1.63345,
+   "Sun lonMaxArcsec": 1.30579,
+   "Uranus latMaxArcsec": 16.4162,
+   "Uranus lonMaxArcsec": 12.0435,
+   "vectors": 240,
+   "vectorsWithinOneArcsec": 48,
+   "Venus latMaxArcsec": 5.20458,
+   "Venus lonMaxArcsec": 12.5946
+  },
+  "positionsDe440": {
+   "allBodiesMaxArcsec": 0.0126473,
+   "Jupiter latMaxArcsec": 0.000184539,
+   "Jupiter lonMaxArcsec": 0.00377147,
+   "Mars latMaxArcsec": 0.000213829,
+   "Mars lonMaxArcsec": 0.00338379,
+   "Mercury latMaxArcsec": 0.00023986,
+   "Mercury lonMaxArcsec": 0.00365659,
+   "Moon latMaxArcsec": 0.00101056,
+   "Moon lonMaxArcsec": 0.0126473,
+   "Neptune latMaxArcsec": 0.000169728,
+   "Neptune lonMaxArcsec": 0.00342922,
+   "Pluto latMaxArcsec": 0.000176951,
+   "Pluto lonMaxArcsec": 0.00361464,
+   "Saturn latMaxArcsec": 0.000171886,
+   "Saturn lonMaxArcsec": 0.00344536,
+   "Sun latMaxArcsec": 0.000194849,
+   "Sun lonMaxArcsec": 0.0036,
+   "Uranus latMaxArcsec": 0.000172062,
+   "Uranus lonMaxArcsec": 0.00375663,
+   "vectors": 240,
+   "vectorsWithinOneArcsec": 240,
+   "Venus latMaxArcsec": 0.000207606,
+   "Venus lonMaxArcsec": 0.00374449
+  },
+  "timeZones": {
+   "ambiguous": 15,
+   "cases": 71,
+   "heldToHostIntl": 40,
+   "intlWithoutBackzone TZ-NL-01": "tz database 1172 s, this host's Intl 0 s",
+   "intlWithoutBackzone TZ-NL-02": "tz database 4772 s, this host's Intl 3600 s",
+   "intlWithoutBackzone TZ-NL-03": "tz database 4772 s, this host's Intl 3600 s",
+   "intlWithoutBackzone TZ-NL-04": "tz database 4800 s, this host's Intl 3600 s",
+   "intlWithoutBackzone TZ-NL-05": "tz database 4800 s, this host's Intl 3600 s",
+   "intlWithoutBackzone TZ-NL-06": "tz database 1200 s, this host's Intl 0 s",
+   "intlWithoutBackzone TZ-NL-07": "tz database 7200 s, this host's Intl 3600 s",
+   "intlWithoutBackzone TZ-NL-08": "tz database 7200 s, this host's Intl 7200 s",
+   "nonexistent": 17
+  },
+  "unknownTime": {
+   "moonAgainst24TermSeriesMaxDegrees": 0.0323928
+  }
+ }
+}

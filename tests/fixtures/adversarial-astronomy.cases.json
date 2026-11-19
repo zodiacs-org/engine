@@ -1,0 +1,3508 @@
+{
+ "schema": "zodiacs.adversarial-astronomy.cases.v1",
+ "about": "Hostile edge cases for tests/adversarial-astronomy.spec.ts. Written by tests/fixtures/build-adversarial-cases.py; do not edit by hand. All birth data is synthetic.",
+ "timeZoneReference": {
+  "source": "The host's compiled IANA tz database (zic, with backzone), read with CPython zoneinfo; each expected offset was also typed by hand from the zone's published history, and the generator stops if the two differ.",
+  "tzdb": "2026f"
+ },
+ "counts": {
+  "timezone": 71,
+  "polar": 28,
+  "polar-boundary": 3,
+  "ingress": 28,
+  "leap-day": 12,
+  "unknown-time": 13,
+  "extreme-year": 13,
+  "malformed": 62
+ },
+ "total": 230,
+ "cases": [
+  {
+   "id": "TZ-US-01",
+   "category": "timezone",
+   "input": {
+    "zone": "America/New_York",
+    "date": "1942-02-09",
+    "time": "01:59"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -18000,
+    "utc": "1942-02-09T06:59:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "last minute of Eastern Standard Time before War Time"
+  },
+  {
+   "id": "TZ-US-02",
+   "category": "timezone",
+   "input": {
+    "zone": "America/New_York",
+    "date": "1942-02-09",
+    "time": "02:30"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": -18000,
+    "utc": "1942-02-09T07:30:00Z",
+    "otherOffsetSeconds": -14400
+   },
+   "intlCarriesHistory": true,
+   "note": "inside the hour War Time skipped"
+  },
+  {
+   "id": "TZ-US-03",
+   "category": "timezone",
+   "input": {
+    "zone": "America/New_York",
+    "date": "1942-02-09",
+    "time": "03:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -14400,
+    "utc": "1942-02-09T07:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "first minute of Eastern War Time"
+  },
+  {
+   "id": "TZ-US-04",
+   "category": "timezone",
+   "input": {
+    "zone": "America/New_York",
+    "date": "1943-01-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -14400,
+    "utc": "1943-01-15T16:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "War Time in January: an hour ahead in winter"
+  },
+  {
+   "id": "TZ-US-05",
+   "category": "timezone",
+   "input": {
+    "zone": "America/New_York",
+    "date": "1945-08-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -14400,
+    "utc": "1945-08-15T16:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Eastern Peace Time, the same offset under a new name"
+  },
+  {
+   "id": "TZ-US-06",
+   "category": "timezone",
+   "input": {
+    "zone": "America/New_York",
+    "date": "1945-09-30",
+    "time": "01:30"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": -14400,
+    "utc": "1945-09-30T05:30:00Z",
+    "otherOffsetSeconds": -18000,
+    "laterUtc": "1945-09-30T06:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "the hour repeated when War Time ended"
+  },
+  {
+   "id": "TZ-US-07",
+   "category": "timezone",
+   "input": {
+    "zone": "America/New_York",
+    "date": "1945-09-30",
+    "time": "02:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -18000,
+    "utc": "1945-09-30T07:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "first minute after War Time"
+  },
+  {
+   "id": "TZ-US-08",
+   "category": "timezone",
+   "input": {
+    "zone": "America/Chicago",
+    "date": "1943-07-04",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -18000,
+    "utc": "1943-07-04T17:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Central War Time"
+  },
+  {
+   "id": "TZ-US-09",
+   "category": "timezone",
+   "input": {
+    "zone": "America/Los_Angeles",
+    "date": "1944-12-25",
+    "time": "08:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -25200,
+    "utc": "1944-12-25T15:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Pacific War Time in December"
+  },
+  {
+   "id": "TZ-US-10",
+   "category": "timezone",
+   "input": {
+    "zone": "America/Phoenix",
+    "date": "1943-02-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -21600,
+    "utc": "1943-02-15T18:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Arizona on Mountain War Time"
+  },
+  {
+   "id": "TZ-US-11",
+   "category": "timezone",
+   "input": {
+    "zone": "America/Phoenix",
+    "date": "1944-02-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -25200,
+    "utc": "1944-02-15T19:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Arizona left War Time on 1944-01-01, before the rest of the country"
+  },
+  {
+   "id": "TZ-US-12",
+   "category": "timezone",
+   "input": {
+    "zone": "Pacific/Honolulu",
+    "date": "1943-06-01",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -34200,
+    "utc": "1943-06-01T21:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Hawaiian War Time, -09:30"
+  },
+  {
+   "id": "TZ-US-13",
+   "category": "timezone",
+   "input": {
+    "zone": "Pacific/Honolulu",
+    "date": "1947-06-08",
+    "time": "02:15"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": -37800,
+    "utc": "1947-06-08T12:45:00Z",
+    "otherOffsetSeconds": -36000
+   },
+   "intlCarriesHistory": true,
+   "note": "Hawaii moved from -10:30 to -10:00: a half hour skipped"
+  },
+  {
+   "id": "TZ-US-14",
+   "category": "timezone",
+   "input": {
+    "zone": "America/New_York",
+    "date": "1850-01-01",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -17762,
+    "utc": "1850-01-01T16:56:02Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "local mean time before standard time, -04:56:02"
+  },
+  {
+   "id": "TZ-US-15",
+   "category": "timezone",
+   "input": {
+    "zone": "America/New_York",
+    "date": "1883-11-18",
+    "time": "12:01"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": -17762,
+    "utc": "1883-11-18T16:57:02Z",
+    "otherOffsetSeconds": -18000,
+    "laterUtc": "1883-11-18T17:01:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "the day of two noons: 3 min 58 s repeated when standard time began"
+  },
+  {
+   "id": "TZ-US-16",
+   "category": "timezone",
+   "input": {
+    "zone": "America/Sitka",
+    "date": "1867-10-18",
+    "time": "16:00"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": 53927,
+    "utc": "1867-10-18T01:01:13Z",
+    "otherOffsetSeconds": -32473,
+    "laterUtc": "1867-10-19T01:01:13Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Alaska's transfer: the date line moved and a whole day repeated"
+  },
+  {
+   "id": "TZ-US-17",
+   "category": "timezone",
+   "input": {
+    "zone": "America/New_York",
+    "date": "2021-03-14",
+    "time": "02:30"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": -18000,
+    "utc": "2021-03-14T07:30:00Z",
+    "otherOffsetSeconds": -14400
+   },
+   "intlCarriesHistory": true,
+   "note": "a modern skipped hour"
+  },
+  {
+   "id": "TZ-US-18",
+   "category": "timezone",
+   "input": {
+    "zone": "America/New_York",
+    "date": "2021-11-07",
+    "time": "01:30"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": -14400,
+    "utc": "2021-11-07T05:30:00Z",
+    "otherOffsetSeconds": -18000,
+    "laterUtc": "2021-11-07T06:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "a modern repeated hour"
+  },
+  {
+   "id": "TZ-US-19",
+   "category": "timezone",
+   "input": {
+    "zone": "America/New_York",
+    "date": "1990-06-15",
+    "time": "14:30"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -14400,
+    "utc": "1990-06-15T18:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "the sprint's synthetic fixture"
+  },
+  {
+   "id": "TZ-US-20",
+   "category": "timezone",
+   "input": {
+    "zone": "America/St_Johns",
+    "date": "1988-10-29",
+    "time": "23:00"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": -5400,
+    "utc": "1988-10-30T00:30:00Z",
+    "otherOffsetSeconds": -12600,
+    "laterUtc": "1988-10-30T02:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Newfoundland's double daylight time of 1988: two hours repeated, across midnight"
+  },
+  {
+   "id": "TZ-UK-01",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/London",
+    "date": "1940-02-25",
+    "time": "02:30"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": 0,
+    "utc": "1940-02-25T02:30:00Z",
+    "otherOffsetSeconds": 3600
+   },
+   "intlCarriesHistory": true,
+   "note": "summer time began in February 1940 and was kept through the winter"
+  },
+  {
+   "id": "TZ-UK-02",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/London",
+    "date": "1940-12-25",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 3600,
+    "utc": "1940-12-25T11:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "summer time at Christmas 1940"
+  },
+  {
+   "id": "TZ-UK-03",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/London",
+    "date": "1941-05-04",
+    "time": "02:30"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": 3600,
+    "utc": "1941-05-04T01:30:00Z",
+    "otherOffsetSeconds": 7200
+   },
+   "intlCarriesHistory": true,
+   "note": "the hour skipped when Double Summer Time began"
+  },
+  {
+   "id": "TZ-UK-04",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/London",
+    "date": "1941-07-01",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 7200,
+    "utc": "1941-07-01T10:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Double Summer Time"
+  },
+  {
+   "id": "TZ-UK-05",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/London",
+    "date": "1941-08-10",
+    "time": "02:30"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": 7200,
+    "utc": "1941-08-10T00:30:00Z",
+    "otherOffsetSeconds": 3600,
+    "laterUtc": "1941-08-10T01:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "the hour repeated when Double Summer Time ended"
+  },
+  {
+   "id": "TZ-UK-06",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/London",
+    "date": "1942-01-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 3600,
+    "utc": "1942-01-15T11:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "single summer time in January 1942"
+  },
+  {
+   "id": "TZ-UK-07",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/London",
+    "date": "1945-07-14",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 7200,
+    "utc": "1945-07-14T10:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "the last full day of Double Summer Time in 1945"
+  },
+  {
+   "id": "TZ-UK-08",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/London",
+    "date": "1945-07-16",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 3600,
+    "utc": "1945-07-16T11:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "the day after it ended"
+  },
+  {
+   "id": "TZ-UK-09",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/London",
+    "date": "1947-06-01",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 7200,
+    "utc": "1947-06-01T10:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Double Summer Time returned in 1947"
+  },
+  {
+   "id": "TZ-UK-10",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/London",
+    "date": "1969-01-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 3600,
+    "utc": "1969-01-15T11:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "British Standard Time, an hour ahead in winter"
+  },
+  {
+   "id": "TZ-UK-11",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/London",
+    "date": "1970-01-01",
+    "time": "00:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 3600,
+    "utc": "1969-12-31T23:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "the Unix epoch was 01:00 in London"
+  },
+  {
+   "id": "TZ-UK-12",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/Dublin",
+    "date": "1916-10-01",
+    "time": "02:30"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": 2079,
+    "utc": "1916-10-01T01:55:21Z",
+    "otherOffsetSeconds": 0,
+    "laterUtc": "1916-10-01T02:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Dublin Mean Time ended: 34 min 39 s repeated"
+  },
+  {
+   "id": "TZ-NL-01",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/Amsterdam",
+    "date": "1936-12-01",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 1172,
+    "utc": "1936-12-01T11:40:28Z"
+   },
+   "intlCarriesHistory": false,
+   "note": "Amsterdam Time, +00:19:32"
+  },
+  {
+   "id": "TZ-NL-02",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/Amsterdam",
+    "date": "1937-06-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 4772,
+    "utc": "1937-06-15T10:40:28Z"
+   },
+   "intlCarriesHistory": false,
+   "note": "Amsterdam summer time, +01:19:32"
+  },
+  {
+   "id": "TZ-NL-03",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/Amsterdam",
+    "date": "1937-06-30",
+    "time": "23:59"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 4772,
+    "utc": "1937-06-30T22:39:28Z"
+   },
+   "intlCarriesHistory": false,
+   "note": "the last minute of Amsterdam Time"
+  },
+  {
+   "id": "TZ-NL-04",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/Amsterdam",
+    "date": "1937-07-01",
+    "time": "00:00"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": 4772,
+    "utc": "1937-06-30T22:40:28Z",
+    "otherOffsetSeconds": 4800
+   },
+   "intlCarriesHistory": false,
+   "note": "28 seconds skipped when the zone became +00:20 (in summer time, +01:20)"
+  },
+  {
+   "id": "TZ-NL-05",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/Amsterdam",
+    "date": "1937-07-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 4800,
+    "utc": "1937-07-15T10:40:00Z"
+   },
+   "intlCarriesHistory": false,
+   "note": "the +00:20 zone in summer time, +01:20"
+  },
+  {
+   "id": "TZ-NL-06",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/Amsterdam",
+    "date": "1937-12-01",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 1200,
+    "utc": "1937-12-01T11:40:00Z"
+   },
+   "intlCarriesHistory": false,
+   "note": "the +00:20 zone"
+  },
+  {
+   "id": "TZ-NL-07",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/Amsterdam",
+    "date": "1940-05-16",
+    "time": "00:30"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": 1200,
+    "utc": "1940-05-16T00:10:00Z",
+    "otherOffsetSeconds": 7200
+   },
+   "intlCarriesHistory": false,
+   "note": "the occupation put the clocks on German summer time: 1 h 40 min skipped"
+  },
+  {
+   "id": "TZ-NL-08",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/Amsterdam",
+    "date": "1940-06-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 7200,
+    "utc": "1940-06-15T10:00:00Z"
+   },
+   "intlCarriesHistory": false,
+   "note": "German summer time in the Netherlands"
+  },
+  {
+   "id": "TZ-IN-01",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Kolkata",
+    "date": "1860-01-01",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 21200,
+    "utc": "1860-01-01T06:06:40Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Howrah mean time, +05:53:20"
+  },
+  {
+   "id": "TZ-IN-02",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Kolkata",
+    "date": "1900-06-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 19270,
+    "utc": "1900-06-15T06:38:50Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Madras time, +05:21:10"
+  },
+  {
+   "id": "TZ-IN-03",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Kolkata",
+    "date": "1941-06-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 19800,
+    "utc": "1941-06-15T06:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "before the wartime advance"
+  },
+  {
+   "id": "TZ-IN-04",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Kolkata",
+    "date": "1941-12-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 23400,
+    "utc": "1941-12-15T05:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "the first wartime advance, +06:30"
+  },
+  {
+   "id": "TZ-IN-05",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Kolkata",
+    "date": "1942-07-01",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 19800,
+    "utc": "1942-07-01T06:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "between the two advances"
+  },
+  {
+   "id": "TZ-IN-06",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Kolkata",
+    "date": "1943-06-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 23400,
+    "utc": "1943-06-15T05:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "the second wartime advance, +06:30"
+  },
+  {
+   "id": "TZ-IN-07",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Kolkata",
+    "date": "1945-10-14",
+    "time": "23:30"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": 23400,
+    "utc": "1945-10-14T17:00:00Z",
+    "otherOffsetSeconds": 19800,
+    "laterUtc": "1945-10-14T18:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "the hour repeated when the advance ended"
+  },
+  {
+   "id": "TZ-IN-08",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Kolkata",
+    "date": "1945-10-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 19800,
+    "utc": "1945-10-15T06:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "back on +05:30"
+  },
+  {
+   "id": "TZ-DL-01",
+   "category": "timezone",
+   "input": {
+    "zone": "Pacific/Apia",
+    "date": "1892-07-04",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": 45184,
+    "utc": "1892-07-03T23:26:56Z",
+    "otherOffsetSeconds": -41216,
+    "laterUtc": "1892-07-04T23:26:56Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Samoa had two 4ths of July in 1892"
+  },
+  {
+   "id": "TZ-DL-02",
+   "category": "timezone",
+   "input": {
+    "zone": "Pacific/Apia",
+    "date": "2011-12-29",
+    "time": "23:59"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -36000,
+    "utc": "2011-12-30T09:59:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "the last minute before Samoa crossed the date line"
+  },
+  {
+   "id": "TZ-DL-03",
+   "category": "timezone",
+   "input": {
+    "zone": "Pacific/Apia",
+    "date": "2011-12-30",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": -36000,
+    "utc": "2011-12-30T22:00:00Z",
+    "otherOffsetSeconds": 50400
+   },
+   "intlCarriesHistory": true,
+   "note": "30 December 2011 did not happen in Samoa"
+  },
+  {
+   "id": "TZ-DL-04",
+   "category": "timezone",
+   "input": {
+    "zone": "Pacific/Apia",
+    "date": "2011-12-31",
+    "time": "00:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 50400,
+    "utc": "2011-12-30T10:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "the first minute after it"
+  },
+  {
+   "id": "TZ-DL-05",
+   "category": "timezone",
+   "input": {
+    "zone": "Pacific/Kiritimati",
+    "date": "1994-12-31",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": -36000,
+    "utc": "1994-12-31T22:00:00Z",
+    "otherOffsetSeconds": 50400
+   },
+   "intlCarriesHistory": true,
+   "note": "the Line Islands skipped 31 December 1994"
+  },
+  {
+   "id": "TZ-DL-06",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Manila",
+    "date": "1844-12-31",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": -57368,
+    "utc": "1845-01-01T03:56:08Z",
+    "otherOffsetSeconds": 29032
+   },
+   "intlCarriesHistory": true,
+   "note": "the Philippines skipped 31 December 1844"
+  },
+  {
+   "id": "TZ-XX-01",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/Paris",
+    "date": "1911-03-10",
+    "time": "23:55"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": 561,
+    "utc": "1911-03-10T23:45:39Z",
+    "otherOffsetSeconds": 0,
+    "laterUtc": "1911-03-10T23:55:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Paris Mean Time ended: 9 min 21 s repeated"
+  },
+  {
+   "id": "TZ-XX-02",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/Paris",
+    "date": "1911-03-11",
+    "time": "00:05"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 0,
+    "utc": "1911-03-11T00:05:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "just after it"
+  },
+  {
+   "id": "TZ-XX-03",
+   "category": "timezone",
+   "input": {
+    "zone": "Africa/Monrovia",
+    "date": "1971-06-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": -2670,
+    "utc": "1971-06-15T12:44:30Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Monrovia Mean Time, -00:44:30, in use until 1972"
+  },
+  {
+   "id": "TZ-XX-04",
+   "category": "timezone",
+   "input": {
+    "zone": "Africa/Monrovia",
+    "date": "1972-01-07",
+    "time": "00:20"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": -2670,
+    "utc": "1972-01-07T01:04:30Z",
+    "otherOffsetSeconds": 0
+   },
+   "intlCarriesHistory": true,
+   "note": "44 min 30 s skipped when Liberia adopted UTC"
+  },
+  {
+   "id": "TZ-XX-05",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Kathmandu",
+    "date": "1986-01-01",
+    "time": "00:07"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": 19800,
+    "utc": "1985-12-31T18:37:00Z",
+    "otherOffsetSeconds": 20700
+   },
+   "intlCarriesHistory": true,
+   "note": "a quarter hour skipped: +05:30 to +05:45"
+  },
+  {
+   "id": "TZ-XX-06",
+   "category": "timezone",
+   "input": {
+    "zone": "America/Caracas",
+    "date": "2007-12-09",
+    "time": "02:45"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": -14400,
+    "utc": "2007-12-09T06:45:00Z",
+    "otherOffsetSeconds": -16200,
+    "laterUtc": "2007-12-09T07:15:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "a half hour repeated: -04:00 to -04:30"
+  },
+  {
+   "id": "TZ-XX-07",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Pyongyang",
+    "date": "2015-08-14",
+    "time": "23:45"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": 32400,
+    "utc": "2015-08-14T14:45:00Z",
+    "otherOffsetSeconds": 30600,
+    "laterUtc": "2015-08-14T15:15:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "a half hour repeated, across midnight"
+  },
+  {
+   "id": "TZ-XX-08",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Pyongyang",
+    "date": "2018-05-04",
+    "time": "23:45"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": 30600,
+    "utc": "2018-05-04T15:15:00Z",
+    "otherOffsetSeconds": 32400
+   },
+   "intlCarriesHistory": true,
+   "note": "and skipped again in 2018"
+  },
+  {
+   "id": "TZ-XX-09",
+   "category": "timezone",
+   "input": {
+    "zone": "Antarctica/Troll",
+    "date": "2021-03-28",
+    "time": "02:30"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": 0,
+    "utc": "2021-03-28T02:30:00Z",
+    "otherOffsetSeconds": 7200
+   },
+   "intlCarriesHistory": true,
+   "note": "a two hour jump"
+  },
+  {
+   "id": "TZ-XX-10",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Almaty",
+    "date": "2024-02-29",
+    "time": "23:30"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": 21600,
+    "utc": "2024-02-29T17:30:00Z",
+    "otherOffsetSeconds": 18000,
+    "laterUtc": "2024-02-29T18:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "an hour repeated on a leap day"
+  },
+  {
+   "id": "TZ-XX-11",
+   "category": "timezone",
+   "input": {
+    "zone": "Australia/Lord_Howe",
+    "date": "2020-10-04",
+    "time": "02:15"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": 37800,
+    "utc": "2020-10-03T15:45:00Z",
+    "otherOffsetSeconds": 39600
+   },
+   "intlCarriesHistory": true,
+   "note": "a half hour of daylight saving: skipped"
+  },
+  {
+   "id": "TZ-XX-12",
+   "category": "timezone",
+   "input": {
+    "zone": "Australia/Lord_Howe",
+    "date": "2020-04-05",
+    "time": "01:45"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": 39600,
+    "utc": "2020-04-04T14:45:00Z",
+    "otherOffsetSeconds": 37800,
+    "laterUtc": "2020-04-04T15:15:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "and repeated"
+  },
+  {
+   "id": "TZ-XX-13",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/Moscow",
+    "date": "2011-03-27",
+    "time": "02:30"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": 10800,
+    "utc": "2011-03-26T23:30:00Z",
+    "otherOffsetSeconds": 14400
+   },
+   "intlCarriesHistory": true,
+   "note": "the last spring change before permanent summer time"
+  },
+  {
+   "id": "TZ-XX-14",
+   "category": "timezone",
+   "input": {
+    "zone": "Europe/Moscow",
+    "date": "2014-10-26",
+    "time": "01:30"
+   },
+   "expected": {
+    "status": "ambiguous",
+    "offsetSeconds": 14400,
+    "utc": "2014-10-25T21:30:00Z",
+    "otherOffsetSeconds": 10800,
+    "laterUtc": "2014-10-25T22:30:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "the hour repeated when Russia went back"
+  },
+  {
+   "id": "TZ-XX-15",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Singapore",
+    "date": "1981-12-31",
+    "time": "23:45"
+   },
+   "expected": {
+    "status": "nonexistent",
+    "offsetSeconds": 27000,
+    "utc": "1981-12-31T16:15:00Z",
+    "otherOffsetSeconds": 28800
+   },
+   "intlCarriesHistory": true,
+   "note": "a half hour skipped at the end of 1981"
+  },
+  {
+   "id": "TZ-XX-16",
+   "category": "timezone",
+   "input": {
+    "zone": "Asia/Tehran",
+    "date": "2023-03-22",
+    "time": "00:30"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 12600,
+    "utc": "2023-03-21T21:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "Iran stopped changing its clocks after 2022"
+  },
+  {
+   "id": "TZ-XX-17",
+   "category": "timezone",
+   "input": {
+    "zone": "Etc/GMT-14",
+    "date": "1990-06-15",
+    "time": "12:00"
+   },
+   "expected": {
+    "status": "ok",
+    "offsetSeconds": 50400,
+    "utc": "1990-06-14T22:00:00Z"
+   },
+   "intlCarriesHistory": true,
+   "note": "a fixed zone at the far edge"
+  },
+  {
+   "id": "POLAR-01-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 66.5,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "computed"
+   },
+   "note": "just outside the polar circle of 2000 (90 deg less the obliquity is about 66.562)"
+  },
+  {
+   "id": "POLAR-01-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 66.5,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": "just outside the polar circle of 2000 (90 deg less the obliquity is about 66.562)"
+  },
+  {
+   "id": "POLAR-02-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 66.6,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "fallback"
+   },
+   "note": "just inside it"
+  },
+  {
+   "id": "POLAR-02-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 66.6,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": "just inside it"
+  },
+  {
+   "id": "POLAR-03-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 67.5,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "fallback"
+   },
+   "note": ""
+  },
+  {
+   "id": "POLAR-03-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 67.5,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": ""
+  },
+  {
+   "id": "POLAR-04-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 69.6492,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "fallback"
+   },
+   "note": "the latitude of Tromso"
+  },
+  {
+   "id": "POLAR-04-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 69.6492,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": "the latitude of Tromso"
+  },
+  {
+   "id": "POLAR-05-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 71.17,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "fallback"
+   },
+   "note": "the latitude of the North Cape"
+  },
+  {
+   "id": "POLAR-05-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 71.17,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": "the latitude of the North Cape"
+  },
+  {
+   "id": "POLAR-06-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 78.2232,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "fallback"
+   },
+   "note": "the latitude of Longyearbyen"
+  },
+  {
+   "id": "POLAR-06-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 78.2232,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": "the latitude of Longyearbyen"
+  },
+  {
+   "id": "POLAR-07-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 82.5,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "fallback"
+   },
+   "note": "the latitude of Alert"
+  },
+  {
+   "id": "POLAR-07-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 82.5,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": "the latitude of Alert"
+  },
+  {
+   "id": "POLAR-08-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 85.0,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "fallback"
+   },
+   "note": ""
+  },
+  {
+   "id": "POLAR-08-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 85.0,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": ""
+  },
+  {
+   "id": "POLAR-09-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 89.0,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "fallback"
+   },
+   "note": ""
+  },
+  {
+   "id": "POLAR-09-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 89.0,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": ""
+  },
+  {
+   "id": "POLAR-10-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 89.9999,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "fallback"
+   },
+   "note": "eleven metres from the pole"
+  },
+  {
+   "id": "POLAR-10-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 89.9999,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": "eleven metres from the pole"
+  },
+  {
+   "id": "POLAR-11-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 90.0,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "fallback"
+   },
+   "note": "the North Pole"
+  },
+  {
+   "id": "POLAR-11-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": 90.0,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": "the North Pole"
+  },
+  {
+   "id": "POLAR-12-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": -66.6,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "fallback"
+   },
+   "note": "just inside the Antarctic circle"
+  },
+  {
+   "id": "POLAR-12-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": -66.6,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": "just inside the Antarctic circle"
+  },
+  {
+   "id": "POLAR-13-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": -77.85,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "fallback"
+   },
+   "note": "the latitude of McMurdo"
+  },
+  {
+   "id": "POLAR-13-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": -77.85,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": "the latitude of McMurdo"
+  },
+  {
+   "id": "POLAR-14-placidus",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": -90.0,
+    "longitude": 25,
+    "houseSystem": "placidus"
+   },
+   "expected": {
+    "houses": "fallback"
+   },
+   "note": "the South Pole"
+  },
+  {
+   "id": "POLAR-14-whole",
+   "category": "polar",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "latitude": -90.0,
+    "longitude": 25,
+    "houseSystem": "whole"
+   },
+   "expected": {
+    "houses": "whole"
+   },
+   "note": "the South Pole"
+  },
+  {
+   "id": "POLAR-BOUNDARY-01",
+   "category": "polar-boundary",
+   "input": {
+    "utc": "1850-06-21T12:00:00Z",
+    "longitude": 25
+   },
+   "expected": {
+    "boundary": "90 degrees less the true obliquity of date"
+   },
+   "note": "where the Placidus fallback begins"
+  },
+  {
+   "id": "POLAR-BOUNDARY-02",
+   "category": "polar-boundary",
+   "input": {
+    "utc": "2000-06-21T12:00:00Z",
+    "longitude": 25
+   },
+   "expected": {
+    "boundary": "90 degrees less the true obliquity of date"
+   },
+   "note": "where the Placidus fallback begins"
+  },
+  {
+   "id": "POLAR-BOUNDARY-03",
+   "category": "polar-boundary",
+   "input": {
+    "utc": "2099-12-21T03:00:00Z",
+    "longitude": 25
+   },
+   "expected": {
+    "boundary": "90 degrees less the true obliquity of date"
+   },
+   "note": "where the Placidus fallback begins"
+  },
+  {
+   "id": "INGRESS-2026-000",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 0,
+    "from": "2026-03-14T00:00:00Z",
+    "to": "2026-03-26T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 0 degrees in 2026"
+  },
+  {
+   "id": "INGRESS-2026-030",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 30,
+    "from": "2026-04-14T00:00:00Z",
+    "to": "2026-04-26T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 30 degrees in 2026"
+  },
+  {
+   "id": "INGRESS-2026-060",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 60,
+    "from": "2026-05-15T00:00:00Z",
+    "to": "2026-05-27T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 60 degrees in 2026"
+  },
+  {
+   "id": "INGRESS-2026-090",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 90,
+    "from": "2026-06-15T00:00:00Z",
+    "to": "2026-06-27T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 90 degrees in 2026"
+  },
+  {
+   "id": "INGRESS-2026-120",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 120,
+    "from": "2026-07-17T00:00:00Z",
+    "to": "2026-07-29T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 120 degrees in 2026"
+  },
+  {
+   "id": "INGRESS-2026-150",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 150,
+    "from": "2026-08-17T00:00:00Z",
+    "to": "2026-08-29T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 150 degrees in 2026"
+  },
+  {
+   "id": "INGRESS-2026-180",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 180,
+    "from": "2026-09-17T00:00:00Z",
+    "to": "2026-09-29T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 180 degrees in 2026"
+  },
+  {
+   "id": "INGRESS-2026-210",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 210,
+    "from": "2026-10-17T00:00:00Z",
+    "to": "2026-10-29T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 210 degrees in 2026"
+  },
+  {
+   "id": "INGRESS-2026-240",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 240,
+    "from": "2026-11-16T00:00:00Z",
+    "to": "2026-11-28T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1,
+    "referenceUtc": "2026-11-22T07:23:20.563195Z",
+    "reference": "NAIF de440.bsp, docs/evidence/1.1.0-rc.11-20261115/breaker/results/ingress-ref.json"
+   },
+   "note": "the Sun reaches 240 degrees in 2026"
+  },
+  {
+   "id": "INGRESS-2026-270",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 270,
+    "from": "2026-12-16T00:00:00Z",
+    "to": "2026-12-28T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 270 degrees in 2026"
+  },
+  {
+   "id": "INGRESS-2026-300",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 300,
+    "from": "2026-01-14T00:00:00Z",
+    "to": "2026-01-26T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 300 degrees in 2026"
+  },
+  {
+   "id": "INGRESS-2026-330",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 330,
+    "from": "2026-02-13T00:00:00Z",
+    "to": "2026-02-25T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 330 degrees in 2026"
+  },
+  {
+   "id": "INGRESS-1850-000",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 0,
+    "from": "1850-03-14T00:00:00Z",
+    "to": "1850-03-26T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 0 degrees in 1850"
+  },
+  {
+   "id": "INGRESS-1850-090",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 90,
+    "from": "1850-06-15T00:00:00Z",
+    "to": "1850-06-27T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 90 degrees in 1850"
+  },
+  {
+   "id": "INGRESS-1850-180",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 180,
+    "from": "1850-09-17T00:00:00Z",
+    "to": "1850-09-29T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 180 degrees in 1850"
+  },
+  {
+   "id": "INGRESS-1850-270",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 270,
+    "from": "1850-12-16T00:00:00Z",
+    "to": "1850-12-28T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 270 degrees in 1850"
+  },
+  {
+   "id": "INGRESS-1900-000",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 0,
+    "from": "1900-03-14T00:00:00Z",
+    "to": "1900-03-26T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 0 degrees in 1900"
+  },
+  {
+   "id": "INGRESS-1900-090",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 90,
+    "from": "1900-06-15T00:00:00Z",
+    "to": "1900-06-27T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 90 degrees in 1900"
+  },
+  {
+   "id": "INGRESS-1900-180",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 180,
+    "from": "1900-09-17T00:00:00Z",
+    "to": "1900-09-29T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 180 degrees in 1900"
+  },
+  {
+   "id": "INGRESS-1900-270",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 270,
+    "from": "1900-12-16T00:00:00Z",
+    "to": "1900-12-28T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 270 degrees in 1900"
+  },
+  {
+   "id": "INGRESS-2000-000",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 0,
+    "from": "2000-03-14T00:00:00Z",
+    "to": "2000-03-26T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 0 degrees in 2000"
+  },
+  {
+   "id": "INGRESS-2000-090",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 90,
+    "from": "2000-06-15T00:00:00Z",
+    "to": "2000-06-27T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 90 degrees in 2000"
+  },
+  {
+   "id": "INGRESS-2000-180",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 180,
+    "from": "2000-09-17T00:00:00Z",
+    "to": "2000-09-29T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 180 degrees in 2000"
+  },
+  {
+   "id": "INGRESS-2000-270",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 270,
+    "from": "2000-12-16T00:00:00Z",
+    "to": "2000-12-28T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 270 degrees in 2000"
+  },
+  {
+   "id": "INGRESS-2099-000",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 0,
+    "from": "2099-03-14T00:00:00Z",
+    "to": "2099-03-26T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 0 degrees in 2099"
+  },
+  {
+   "id": "INGRESS-2099-090",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 90,
+    "from": "2099-06-15T00:00:00Z",
+    "to": "2099-06-27T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 90 degrees in 2099"
+  },
+  {
+   "id": "INGRESS-2099-180",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 180,
+    "from": "2099-09-17T00:00:00Z",
+    "to": "2099-09-29T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 180 degrees in 2099"
+  },
+  {
+   "id": "INGRESS-2099-270",
+   "category": "ingress",
+   "input": {
+    "body": "Sun",
+    "longitude": 270,
+    "from": "2099-12-16T00:00:00Z",
+    "to": "2099-12-28T00:00:00Z"
+   },
+   "expected": {
+    "crossings": 1
+   },
+   "note": "the Sun reaches 270 degrees in 2099"
+  },
+  {
+   "id": "LEAP-01",
+   "category": "leap-day",
+   "input": {
+    "form": "utc",
+    "value": {
+     "utc": "2000-02-29T12:00:00Z"
+    }
+   },
+   "expected": {
+    "result": "ok"
+   },
+   "note": "2000 is a leap year (divisible by 400)"
+  },
+  {
+   "id": "LEAP-02",
+   "category": "leap-day",
+   "input": {
+    "form": "utc",
+    "value": {
+     "utc": "1900-02-29T12:00:00Z"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "1900 is not a leap year"
+  },
+  {
+   "id": "LEAP-03",
+   "category": "leap-day",
+   "input": {
+    "form": "utc",
+    "value": {
+     "utc": "2100-02-29T12:00:00Z"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "2100 is not a leap year"
+  },
+  {
+   "id": "LEAP-04",
+   "category": "leap-day",
+   "input": {
+    "form": "utc",
+    "value": {
+     "utc": "1904-02-29T12:00:00Z"
+    }
+   },
+   "expected": {
+    "result": "ok"
+   },
+   "note": "1904 is a leap year"
+  },
+  {
+   "id": "LEAP-05",
+   "category": "leap-day",
+   "input": {
+    "form": "utc",
+    "value": {
+     "utc": "2096-02-29T12:00:00Z"
+    }
+   },
+   "expected": {
+    "result": "ok"
+   },
+   "note": "2096 is a leap year"
+  },
+  {
+   "id": "LEAP-06",
+   "category": "leap-day",
+   "input": {
+    "form": "utc",
+    "value": {
+     "utc": "1899-02-29T12:00:00Z"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "1899 is not a leap year"
+  },
+  {
+   "id": "LEAP-07",
+   "category": "leap-day",
+   "input": {
+    "form": "utc",
+    "value": {
+     "utc": "2000-02-30T12:00:00Z"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "no 30 February"
+  },
+  {
+   "id": "LEAP-08",
+   "category": "leap-day",
+   "input": {
+    "form": "local",
+    "value": {
+     "date": "1900-02-29",
+     "time": "12:00",
+     "timeZone": "Europe/Moscow"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "no 29 February 1900 in the Gregorian calendar"
+  },
+  {
+   "id": "LEAP-09",
+   "category": "leap-day",
+   "input": {
+    "form": "local",
+    "value": {
+     "date": "1900-02-29",
+     "time": "12:00",
+     "timeZone": "Europe/Moscow",
+     "calendar": "julian"
+    }
+   },
+   "expected": {
+    "result": "ok",
+    "utc": "1900-03-13T09:29:43Z"
+   },
+   "note": "29 February 1900 did exist in the Julian calendar Russia kept: it is 13 March 1900 Gregorian"
+  },
+  {
+   "id": "LEAP-10",
+   "category": "leap-day",
+   "input": {
+    "form": "local",
+    "value": {
+     "date": "2100-02-29",
+     "time": "12:00",
+     "timeZone": "UTC"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "no 29 February 2100"
+  },
+  {
+   "id": "LEAP-11",
+   "category": "leap-day",
+   "input": {
+    "form": "local",
+    "value": {
+     "date": "2000-02-29",
+     "time": "23:59",
+     "timeZone": "America/New_York"
+    }
+   },
+   "expected": {
+    "result": "ok",
+    "utc": "2000-03-01T04:59:00Z"
+   },
+   "note": "the last minute of a leap day, already 1 March in UTC"
+  },
+  {
+   "id": "LEAP-12",
+   "category": "leap-day",
+   "input": {
+    "form": "local",
+    "value": {
+     "date": "2024-02-29",
+     "time": "12:00",
+     "timeZone": "Asia/Tokyo"
+    }
+   },
+   "expected": {
+    "result": "ok",
+    "utc": "2024-02-29T03:00:00Z"
+   },
+   "note": "an ordinary leap day"
+  },
+  {
+   "id": "NOTIME-01",
+   "category": "unknown-time",
+   "input": {
+    "date": "1990-06-16",
+    "timeZone": "America/New_York",
+    "latitude": 40.7128,
+    "longitude": -74.006
+   },
+   "expected": {
+    "moonSigns": 2,
+    "sunSigns": 1
+   },
+   "note": "the Moon enters Aries in the morning"
+  },
+  {
+   "id": "NOTIME-02",
+   "category": "unknown-time",
+   "input": {
+    "date": "2026-11-20",
+    "timeZone": "Asia/Kolkata",
+    "latitude": 19.076,
+    "longitude": 72.8777
+   },
+   "expected": {
+    "moonSigns": 2,
+    "sunSigns": 1
+   },
+   "note": "the Moon enters Aries before noon"
+  },
+  {
+   "id": "NOTIME-03",
+   "category": "unknown-time",
+   "input": {
+    "date": "2000-09-14",
+    "timeZone": "Europe/London",
+    "latitude": 51.5074,
+    "longitude": -0.1278
+   },
+   "expected": {
+    "moonSigns": 2,
+    "sunSigns": 1
+   },
+   "note": "the Moon enters Aries at 13:00 local"
+  },
+  {
+   "id": "NOTIME-04",
+   "category": "unknown-time",
+   "input": {
+    "date": "1944-06-14",
+    "timeZone": "Europe/London",
+    "latitude": 51.5074,
+    "longitude": -0.1278
+   },
+   "expected": {
+    "moonSigns": 2,
+    "sunSigns": 1
+   },
+   "note": "under Double Summer Time, read from the pre-1970 zone history"
+  },
+  {
+   "id": "NOTIME-05",
+   "category": "unknown-time",
+   "input": {
+    "date": "1900-06-20",
+    "timeZone": "Asia/Kolkata",
+    "latitude": 13.0827,
+    "longitude": 80.2707
+   },
+   "expected": {
+    "moonSigns": 2,
+    "sunSigns": 1
+   },
+   "note": "under Madras time, +05:21:10"
+  },
+  {
+   "id": "NOTIME-06",
+   "category": "unknown-time",
+   "input": {
+    "date": "1850-06-04",
+    "timeZone": "America/New_York",
+    "latitude": 40.7128,
+    "longitude": -74.006
+   },
+   "expected": {
+    "moonSigns": 2,
+    "sunSigns": 1
+   },
+   "note": "under local mean time, in 1850"
+  },
+  {
+   "id": "NOTIME-07",
+   "category": "unknown-time",
+   "input": {
+    "date": "2099-07-09",
+    "timeZone": "Asia/Tokyo",
+    "latitude": 35.6762,
+    "longitude": 139.6503
+   },
+   "expected": {
+    "moonSigns": 2,
+    "sunSigns": 1
+   },
+   "note": "in 2099"
+  },
+  {
+   "id": "NOTIME-08",
+   "category": "unknown-time",
+   "input": {
+    "date": "2026-08-30",
+    "timeZone": "Australia/Sydney",
+    "latitude": -33.8688,
+    "longitude": 151.2093
+   },
+   "expected": {
+    "moonSigns": 2,
+    "sunSigns": 1
+   },
+   "note": "in the southern hemisphere"
+  },
+  {
+   "id": "NOTIME-09",
+   "category": "unknown-time",
+   "input": {
+    "date": "2026-05-13",
+    "timeZone": "Arctic/Longyearbyen",
+    "latitude": 78.2232,
+    "longitude": 15.6267
+   },
+   "expected": {
+    "moonSigns": 2,
+    "sunSigns": 1
+   },
+   "note": "inside the polar circle, two hours after local midnight"
+  },
+  {
+   "id": "NOTIME-10",
+   "category": "unknown-time",
+   "input": {
+    "date": "1990-06-15",
+    "timeZone": "America/New_York",
+    "latitude": 40.7128,
+    "longitude": -74.006
+   },
+   "expected": {
+    "moonSigns": 1,
+    "sunSigns": 1
+   },
+   "note": "control: the Moon stays in Pisces all day"
+  },
+  {
+   "id": "NOTIME-11",
+   "category": "unknown-time",
+   "input": {
+    "date": "2026-11-21",
+    "timeZone": "Asia/Kolkata",
+    "latitude": 19.076,
+    "longitude": 72.8777
+   },
+   "expected": {
+    "moonSigns": 1,
+    "sunSigns": 1
+   },
+   "note": "control: the day after the Moon entered Aries"
+  },
+  {
+   "id": "NOTIME-12",
+   "category": "unknown-time",
+   "input": {
+    "date": "2026-11-22",
+    "timeZone": "America/New_York",
+    "latitude": 40.7128,
+    "longitude": -74.006
+   },
+   "expected": {
+    "moonSigns": null,
+    "sunSigns": 2
+   },
+   "note": "the Sun enters Sagittarius at 02:23 local: the Sun sign itself depends on the time"
+  },
+  {
+   "id": "NOTIME-13",
+   "category": "unknown-time",
+   "input": {
+    "date": "2026-03-20",
+    "timeZone": "Europe/London",
+    "latitude": 51.5074,
+    "longitude": -0.1278
+   },
+   "expected": {
+    "moonSigns": null,
+    "sunSigns": 2
+   },
+   "note": "the March equinox falls in the afternoon"
+  },
+  {
+   "id": "YEAR-01",
+   "category": "extreme-year",
+   "input": {
+    "utc": "1850-01-01T00:00:00Z"
+   },
+   "expected": {
+    "ephemeris": "jpl-de440",
+    "flags": []
+   },
+   "note": ""
+  },
+  {
+   "id": "YEAR-02",
+   "category": "extreme-year",
+   "input": {
+    "utc": "1850-06-15T12:00:00Z"
+   },
+   "expected": {
+    "ephemeris": "jpl-de440",
+    "flags": []
+   },
+   "note": ""
+  },
+  {
+   "id": "YEAR-03",
+   "category": "extreme-year",
+   "input": {
+    "utc": "1900-01-01T00:00:00Z"
+   },
+   "expected": {
+    "ephemeris": "jpl-de440",
+    "flags": []
+   },
+   "note": ""
+  },
+  {
+   "id": "YEAR-04",
+   "category": "extreme-year",
+   "input": {
+    "utc": "1900-03-01T00:00:00Z"
+   },
+   "expected": {
+    "ephemeris": "jpl-de440",
+    "flags": []
+   },
+   "note": ""
+  },
+  {
+   "id": "YEAR-05",
+   "category": "extreme-year",
+   "input": {
+    "utc": "1900-12-31T23:59:59Z"
+   },
+   "expected": {
+    "ephemeris": "jpl-de440",
+    "flags": []
+   },
+   "note": ""
+  },
+  {
+   "id": "YEAR-06",
+   "category": "extreme-year",
+   "input": {
+    "utc": "2099-01-01T00:00:00Z"
+   },
+   "expected": {
+    "ephemeris": "jpl-de440",
+    "flags": []
+   },
+   "note": ""
+  },
+  {
+   "id": "YEAR-07",
+   "category": "extreme-year",
+   "input": {
+    "utc": "2099-12-31T23:59:59Z"
+   },
+   "expected": {
+    "ephemeris": "jpl-de440",
+    "flags": []
+   },
+   "note": ""
+  },
+  {
+   "id": "YEAR-08",
+   "category": "extreme-year",
+   "input": {
+    "utc": "1790-01-03T00:00:00Z"
+   },
+   "expected": {
+    "ephemeris": "jpl-de440",
+    "flags": []
+   },
+   "note": ""
+  },
+  {
+   "id": "YEAR-09",
+   "category": "extreme-year",
+   "input": {
+    "utc": "2209-12-30T00:00:00Z"
+   },
+   "expected": {
+    "ephemeris": "jpl-de440",
+    "flags": []
+   },
+   "note": ""
+  },
+  {
+   "id": "YEAR-10",
+   "category": "extreme-year",
+   "input": {
+    "utc": "1790-01-01T00:00:00Z"
+   },
+   "expected": {
+    "ephemeris": "astronomy-engine",
+    "flags": [
+     "outside-de440-span"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "YEAR-11",
+   "category": "extreme-year",
+   "input": {
+    "utc": "2210-01-02T00:00:00Z"
+   },
+   "expected": {
+    "ephemeris": "astronomy-engine",
+    "flags": [
+     "outside-de440-span"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "YEAR-12",
+   "category": "extreme-year",
+   "input": {
+    "utc": "1700-01-01T00:00:00Z"
+   },
+   "expected": {
+    "ephemeris": "astronomy-engine",
+    "flags": [
+     "outside-de440-span",
+     "outside-reference-span"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "YEAR-13",
+   "category": "extreme-year",
+   "input": {
+    "utc": "0002-01-01T00:00:00Z"
+   },
+   "expected": {
+    "ephemeris": "astronomy-engine",
+    "flags": [
+     "outside-de440-span",
+     "outside-reference-span"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "BAD-01",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {}
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "an empty object"
+  },
+  {
+   "id": "BAD-02",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": null
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "null"
+  },
+  {
+   "id": "BAD-03",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": "1990-06-15"
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "a string in place of the birth"
+  },
+  {
+   "id": "BAD-04",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": []
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "an array"
+  },
+  {
+   "id": "BAD-05",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "garbage"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "not a date"
+  },
+  {
+   "id": "BAD-06",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-02-30T00:00:00Z"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "30 February"
+  },
+  {
+   "id": "BAD-07",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-13-01T00:00:00Z"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "month 13"
+  },
+  {
+   "id": "BAD-08",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T25:00:00Z"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "hour 25"
+  },
+  {
+   "id": "BAD-09",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T12:00:60Z"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "second 60 on a day with no leap second"
+  },
+  {
+   "id": "BAD-10",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T12:00:00"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "no UTC offset: the engine does not guess a zone"
+  },
+  {
+   "id": "BAD-11",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "a date with no time and no timeKnown: false"
+  },
+  {
+   "id": "BAD-12",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T12:00:00+25:00"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "an offset of 25 hours"
+  },
+  {
+   "id": "BAD-13",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "15/06/1990 14:30"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "a day-first date"
+  },
+  {
+   "id": "BAD-14",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": null
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "utc null"
+  },
+  {
+   "id": "BAD-15",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "__NaN__"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "utc NaN"
+  },
+  {
+   "id": "BAD-16",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "__Infinity__"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "utc Infinity"
+  },
+  {
+   "id": "BAD-17",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": [
+      "1990-06-15T12:00:00Z"
+     ]
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "utc in an array"
+  },
+  {
+   "id": "BAD-18",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": 91,
+     "longitude": 0
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "latitude 91"
+  },
+  {
+   "id": "BAD-19",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": -90.0001,
+     "longitude": 0
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "latitude just past the South Pole"
+  },
+  {
+   "id": "BAD-20",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": 0,
+     "longitude": 181
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "longitude 181"
+  },
+  {
+   "id": "BAD-21",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": 0,
+     "longitude": -180.0001
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "longitude just past -180"
+  },
+  {
+   "id": "BAD-22",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": "__NaN__",
+     "longitude": 0
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "latitude NaN"
+  },
+  {
+   "id": "BAD-23",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": 0,
+     "longitude": "__NaN__"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "longitude NaN"
+  },
+  {
+   "id": "BAD-24",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": "__Infinity__",
+     "longitude": 0
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "latitude Infinity"
+  },
+  {
+   "id": "BAD-25",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": "40.7128",
+     "longitude": "-74.006"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "coordinates as strings"
+  },
+  {
+   "id": "BAD-26",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": 40.7128
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "a latitude with no longitude"
+  },
+  {
+   "id": "BAD-27",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "lat": 40.7128,
+     "lng": -74.006
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "lat and lng, which earlier releases ignored"
+  },
+  {
+   "id": "BAD-28",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": 40.7128,
+     "longitude": -74.006,
+     "houseSystem": "PLACIDUS"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "a house system in capitals"
+  },
+  {
+   "id": "BAD-29",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": 40.7128,
+     "longitude": -74.006,
+     "houseSystem": "placidus "
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "a house system with a trailing space"
+  },
+  {
+   "id": "BAD-30",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": 40.7128,
+     "longitude": -74.006,
+     "houseSystem": null
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "house system null"
+  },
+  {
+   "id": "BAD-31",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "timeKnown": "false"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "timeKnown as the string \"false\", which is truthy"
+  },
+  {
+   "id": "BAD-32",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "timeKnown": 0
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "timeKnown 0"
+  },
+  {
+   "id": "BAD-33",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": 40.7128,
+     "longitude": -74.006,
+     "flags": [
+      "no-time"
+     ]
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "a no-time flag on a chart with a time"
+  },
+  {
+   "id": "BAD-34",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "flags": [
+      "bogus"
+     ]
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "an unknown flag"
+  },
+  {
+   "id": "BAD-35",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "deltaT": "__NaN__"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "deltaT NaN"
+  },
+  {
+   "id": "BAD-36",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "timeScale": "tai"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "an unknown time scale"
+  },
+  {
+   "id": "BAD-37",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "0001-01-01T00:00:00Z"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "before the ephemeris begins"
+  },
+  {
+   "id": "BAD-38",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "3999-01-01T00:00:00Z"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "after the ephemeris ends"
+  },
+  {
+   "id": "BAD-39",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": 8640000000000000.0
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "the largest JavaScript date"
+  },
+  {
+   "id": "BAD-40",
+   "category": "malformed",
+   "input": {
+    "function": "positions",
+    "argument": "garbage"
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "positions of a string that is not a date"
+  },
+  {
+   "id": "BAD-41",
+   "category": "malformed",
+   "input": {
+    "function": "positions",
+    "argument": null
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "positions of null"
+  },
+  {
+   "id": "BAD-42",
+   "category": "malformed",
+   "input": {
+    "function": "positions",
+    "argument": "__NaN__"
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "positions of NaN"
+  },
+  {
+   "id": "BAD-43",
+   "category": "malformed",
+   "input": {
+    "function": "resolveLocalToUtc",
+    "argument": [
+     "1990-6-15",
+     "12:00",
+     "UTC"
+    ]
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "a date without zero padding"
+  },
+  {
+   "id": "BAD-44",
+   "category": "malformed",
+   "input": {
+    "function": "resolveLocalToUtc",
+    "argument": [
+     "1990-06-15",
+     "24:00",
+     "UTC"
+    ]
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "24:00"
+  },
+  {
+   "id": "BAD-45",
+   "category": "malformed",
+   "input": {
+    "function": "resolveLocalToUtc",
+    "argument": [
+     "1990-06-15",
+     "12:60",
+     "UTC"
+    ]
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "minute 60"
+  },
+  {
+   "id": "BAD-46",
+   "category": "malformed",
+   "input": {
+    "function": "resolveLocalToUtc",
+    "argument": [
+     "1990-06-31",
+     "12:00",
+     "UTC"
+    ]
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "31 June"
+  },
+  {
+   "id": "BAD-47",
+   "category": "malformed",
+   "input": {
+    "function": "resolveLocalToUtc",
+    "argument": [
+     "1990-06-15",
+     "12:00",
+     "Mars/Phobos"
+    ]
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "a zone that does not exist"
+  },
+  {
+   "id": "BAD-48",
+   "category": "malformed",
+   "input": {
+    "function": "resolveLocalToUtc",
+    "argument": [
+     "1990-06-15",
+     "12:00",
+     ""
+    ]
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "an empty zone"
+  },
+  {
+   "id": "BAD-49",
+   "category": "malformed",
+   "input": {
+    "function": "resolveLocalToUtc",
+    "argument": [
+     "1990-06-15",
+     "12:00",
+     "UTC+5"
+    ]
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "UTC+5 is not an IANA zone"
+  },
+  {
+   "id": "BAD-50",
+   "category": "malformed",
+   "input": {
+    "function": "resolveLocalToUtc",
+    "argument": [
+     "1990-06-15",
+     "1230",
+     "UTC"
+    ]
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "a time with no colon"
+  },
+  {
+   "id": "BAD-51",
+   "category": "malformed",
+   "input": {
+    "function": "resolveBirth",
+    "argument": {
+     "date": "1990-06-15",
+     "time": "14:30",
+     "timeZone": "America/New_York",
+     "latitude": 95,
+     "longitude": -74.006
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "a local birth at latitude 95"
+  },
+  {
+   "id": "BAD-52",
+   "category": "malformed",
+   "input": {
+    "function": "resolveBirth",
+    "argument": {
+     "date": "1990-06-15",
+     "time": null,
+     "timeZone": "America/New_York"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "time null"
+  },
+  {
+   "id": "BAD-53",
+   "category": "malformed",
+   "input": {
+    "function": "resolveBirth",
+    "argument": {
+     "date": "1990-06-15",
+     "time": "14:30",
+     "timezone": "America/New_York"
+    }
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "timezone in lower case"
+  },
+  {
+   "id": "BAD-54",
+   "category": "malformed",
+   "input": {
+    "function": "searchLongitudeCrossings",
+    "argument": [
+     "Sun",
+     "__NaN__",
+     "2026-03-01T00:00:00Z",
+     "2026-04-01T00:00:00Z"
+    ]
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "a target longitude of NaN"
+  },
+  {
+   "id": "BAD-55",
+   "category": "malformed",
+   "input": {
+    "function": "searchLongitudeCrossings",
+    "argument": [
+     "Sun",
+     0,
+     "2026-04-01T00:00:00Z",
+     "2026-03-01T00:00:00Z"
+    ]
+   },
+   "expected": {
+    "result": "RangeError"
+   },
+   "note": "a window that ends before it begins"
+  },
+  {
+   "id": "BAD-56",
+   "category": "malformed",
+   "input": {
+    "function": "searchLongitudeCrossings",
+    "argument": [
+     "Vulcan",
+     0,
+     "2026-03-01T00:00:00Z",
+     "2026-04-01T00:00:00Z"
+    ]
+   },
+   "expected": {
+    "result": "Error"
+   },
+   "note": "a body that does not exist: refused, though with the DE440 reader's own error and not a RangeError (BENCHMARK_AUDIT.md, known limits)"
+  },
+  {
+   "id": "BAD-57",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": 12345
+    }
+   },
+   "expected": {
+    "result": "ok"
+   },
+   "note": "a number is read as epoch milliseconds, as documented"
+  },
+  {
+   "id": "BAD-58",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T12:00Z"
+    }
+   },
+   "expected": {
+    "result": "ok"
+   },
+   "note": "ISO 8601 without seconds"
+  },
+  {
+   "id": "BAD-59",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": 0,
+     "longitude": 180
+    }
+   },
+   "expected": {
+    "result": "ok"
+   },
+   "note": "longitude 180 exactly"
+  },
+  {
+   "id": "BAD-60",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": 0,
+     "longitude": -180
+    }
+   },
+   "expected": {
+    "result": "ok"
+   },
+   "note": "longitude -180 exactly"
+  },
+  {
+   "id": "BAD-61",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": -0.0,
+     "longitude": -0.0
+    }
+   },
+   "expected": {
+    "result": "ok"
+   },
+   "note": "negative zero"
+  },
+  {
+   "id": "BAD-62",
+   "category": "malformed",
+   "input": {
+    "function": "natalChart",
+    "argument": {
+     "utc": "1990-06-15T18:30:00Z",
+     "latitude": 40.7128,
+     "longitude": -74.006,
+     "timeKnown": false,
+     "houseSystem": "placidus"
+    }
+   },
+   "expected": {
+    "result": "ok"
+   },
+   "note": "coordinates and a house system with timeKnown: false: still no houses"
+  }
+ ]
+}
