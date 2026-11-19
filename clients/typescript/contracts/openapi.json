@@ -5524,6 +5524,7 @@
           "basis": {
             "enum": [
               "iers",
+              "continuous-utc",
               "delta-t"
             ]
           },
@@ -5547,7 +5548,8 @@
                     "enum": [
                       "observed",
                       "predicted",
-                      "fallback"
+                      "fallback",
+                      "model"
                     ]
                   }
                 },

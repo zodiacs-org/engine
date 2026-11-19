@@ -56,6 +56,8 @@ backend version and cite envelope; it does not perform full JSON Schema
 validation. The server owns request validation and compute budgets. TypedDicts
 describe JSON lists; length, numeric bounds and string patterns are runtime
 server constraints.
+Validation against the older contract rejects responses that use
+`continuous-utc` or `model` in the time scale.
 
 ## Source and checks
 
