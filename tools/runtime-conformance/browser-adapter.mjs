@@ -6,7 +6,7 @@
  * else, opens it in Chromium, Firefox or WebKit through Playwright, and
  * passes each request line to the page and each answer back, in order.
  *
- *   node browser-adapter.mjs <chromium|firefox|webkit> [--receipts <file>]
+ *   node browser-adapter.mjs <chromium|firefox|webkit> [--entry core] [--receipts <file>]
  *
  * --receipts writes the page's five synthetic receipts (receipt-cases.mjs)
  * to a file after the last answer.
@@ -29,8 +29,10 @@ import * as playwright from 'playwright';
 
 const BROWSERS = ['chromium', 'firefox', 'webkit'];
 const name = process.argv[2];
-if (!BROWSERS.includes(name)) {
-  console.error(`usage: browser-adapter.mjs <${BROWSERS.join('|')}> [--receipts <file>]`);
+const entryIndex = process.argv.indexOf('--entry');
+const entry = entryIndex === -1 ? 'root' : process.argv[entryIndex + 1];
+if (!BROWSERS.includes(name) || !['root', 'core'].includes(entry)) {
+  console.error(`usage: browser-adapter.mjs <${BROWSERS.join('|')}> [--entry core] [--receipts <file>]`);
   process.exit(2);
 }
 const receiptsIndex = process.argv.indexOf('--receipts');
@@ -58,7 +60,7 @@ async function serve(assets) {
 }
 
 const playwrightVersion = createRequire(import.meta.url)('playwright/package.json').version;
-const assets = await bundlePage();
+const assets = await bundlePage({ entry });
 const host = await serve(assets);
 let browser;
 try {

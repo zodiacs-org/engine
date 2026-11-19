@@ -4,7 +4,8 @@
  * after `npm run build` at the repository root.
  */
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { test } from 'node:test';
@@ -121,5 +122,55 @@ test('the browser bundle answers every request as the Node adapter does, tzdb sh
     assert.equal(page.receipts().length, 5);
   } finally {
     rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('the core browser bundle uses the same entry and handlers as the native core adapter', async () => {
+  const { adapter: coreAdapter, responses: coreResponses } = await runAdapter(
+    `${JSON.stringify(process.execPath)} conformance/adapters/zodiacs-engine.mjs --entry core`, vectors, { cwd: root },
+  );
+  const assets = await bundlePage({ entry: 'core' });
+  const dir = mkdtempSync(join(tmpdir(), 'runtime-conformance-core-bundle-'));
+  try {
+    for (const [path, asset] of assets) if (path !== '/') writeFileSync(join(dir, path.slice(1)), asset.body);
+    await import(pathToFileURL(join(dir, 'page-entry.js')).href);
+    const page = globalThis.runtimeConformance;
+    const header = page.header();
+    for (const field of ['name', 'version', 'engine', 'engineVersion']) assert.equal(header[field], coreAdapter[field], field);
+    assert.equal(header.configuration.ephemeris, coreAdapter.configuration.ephemeris);
+    for (const vector of vectors) {
+      const answer = await page.answer({ id: vector.id, kind: vector.kind, input: vector.input });
+      assert.deepEqual(answer, coreResponses.get(vector.id), vector.id);
+    }
+    assert.equal(page.receipts().length, 5);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('the runner writes root and core separately and accepts matching core verdicts', (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'runtime-conformance-entries-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const run = spawnSync(process.execPath, [resolve(here, 'run-all.mjs'), '--out', dir, '--runtimes', 'node'], { cwd: root, encoding: 'utf8' });
+  assert.equal(run.status, 0, run.stderr);
+  for (const [entry, path] of [['root', dir], ['core', join(dir, 'core')]]) {
+    assert.ok(existsSync(join(path, 'node', 'responses.jsonl')), `${entry} responses`);
+    const results = JSON.parse(readFileSync(join(path, 'node', 'results.json'), 'utf8'));
+    const matrix = JSON.parse(readFileSync(join(path, 'matrix.json'), 'utf8'));
+    const summary = JSON.parse(readFileSync(join(path, 'node', 'summary.json'), 'utf8'));
+    assert.equal(matrix.entry, entry);
+    assert.equal(results.adapter.name, entry === 'core' ? 'zodiacs-engine-core' : 'zodiacs-engine');
+    assert.equal(matrix.gate.pass, true);
+    if (entry === 'core') {
+      const baselinePath = resolve(root, 'docs/evidence/runtime-conformance-20261119/core/node/results.json');
+      const baseline = JSON.parse(readFileSync(baselinePath, 'utf8'));
+      const minimum = baseline.summary.byLevel.L1.pass;
+      const passes = results.summary.byLevel.L1.pass;
+      assert.ok(passes >= minimum, `core L1 arbiter passes fell from ${minimum} to ${passes}`);
+    }
+    const agreement = { run: vectors.length, agreeing: vectors.length - results.summary.total.unsupported, disagreeing: 0, unsupported: results.summary.total.unsupported };
+    assert.deepEqual(summary.agreement, agreement);
+    assert.deepEqual(matrix.runtimes.node.agreement, agreement);
+    assert.deepEqual(summary.differsFromNode, []);
   }
 });

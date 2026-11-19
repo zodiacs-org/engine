@@ -4,8 +4,8 @@
  * UTC, so no host time zone data is read. Invented inputs, not anyone's
  * birth data.
  *
- * This module imports nothing: the caller passes the engine's root entry
- * point and its receipt entry point, so that it runs the same in Node, Bun,
+ * This module imports nothing: the caller passes the selected engine entry
+ * and the receipt entry, so that it runs the same in Node, Bun,
  * Deno and a browser page.
  */
 export const RECEIPT_BIRTHS = Object.freeze([

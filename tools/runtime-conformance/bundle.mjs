@@ -21,7 +21,7 @@ export const pathToFileURL = absent('pathToFileURL');
 `;
 
 /** The page's assets by URL path: '/' (an empty page), '/page-entry.js' and its chunks. */
-export async function bundlePage({ warnings = [] } = {}) {
+export async function bundlePage({ entry = 'root', warnings = [] } = {}) {
   const result = await build({
     absWorkingDir: here,
     entryPoints: { 'page-entry': resolve(here, 'page-entry.mjs') },
@@ -30,6 +30,8 @@ export async function bundlePage({ warnings = [] } = {}) {
     format: 'esm',
     platform: 'browser',
     target: 'es2022',
+    alias: { '@zodiacs/engine': resolve(here, entry === 'core' ? '../../dist/core.js' : '../../dist/index.js') },
+    define: { __RUNTIME_CONFORMANCE_ENTRY__: JSON.stringify(entry) },
     outdir: resolve(here, '.bundle'),
     write: false,
     logLevel: 'silent',

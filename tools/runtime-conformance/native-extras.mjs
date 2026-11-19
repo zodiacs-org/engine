@@ -12,7 +12,13 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { receiptTexts } from './receipt-cases.mjs';
 
 const dist = resolve(process.env.ZODIACS_ENGINE_DIST ?? fileURLToPath(new URL('../../dist', import.meta.url)));
-const engine = await import(pathToFileURL(resolve(dist, 'index.js')).href);
+const entryIndex = process.argv.indexOf('--entry');
+const entry = entryIndex === -1 ? 'root' : process.argv[entryIndex + 1];
+if (!['root', 'core'].includes(entry)) {
+  console.error('usage: native-extras.mjs [--entry core]');
+  process.exit(2);
+}
+const engine = await import(pathToFileURL(resolve(dist, entry === 'core' ? 'core.js' : 'index.js')).href);
 const receipt = await import(pathToFileURL(resolve(dist, 'receipt.js')).href);
 
 /** The runtime, from its own globals: Bun and Deno also define process.versions.node, so they are asked first. */
