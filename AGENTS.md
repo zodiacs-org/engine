@@ -195,33 +195,34 @@ rules live here once.
 
 - Commit as `admin@zodiacs.org` (name "Zodiacs Admin"). Never put a model
   name or a personal email address in a commit, a pull request, or a file.
-- Open pull requests as drafts. The owner has delegated merging: an agent
-  may mark a pull request ready for review and merge it (with a merge
-  commit, as above) only when every check on its latest commit passes and a
-  separate reviewer session, not the one that wrote the change, has
-  reviewed that commit and signed off with no blockers. Record the sign-off
-  on the pull request before merging. A check that fails "as expected" is
-  still failing: such a pull request waits.
-- Never merge with a failing test or check. A check that passes but says it
-  skipped its work counts as failing, including the archive-binding check
-  when it skips the rebuild of HEAD. A candidate merges only when its latest
+- Open pull requests as drafts. One merge rule holds: an agent marks a pull
+  request ready and merges it only within a lane Dias has approved, and only
+  when all of these hold on its head commit. Every required check passes,
+  re-read just before merging. An independent Codex review, from a session
+  that did not write the change, has returned READY on that exact commit
+  and is recorded on the pull request. No review thread is unresolved. The
+  merge is pinned to that commit (`gh pr merge --merge --match-head-commit
+  <sha>`) and uses a merge commit, as above. Anything else waits for Dias.
+  Never push to `main`.
+- A check that fails "as expected" is still failing, and so is a check that
+  passes but says it skipped its work, including the archive-binding check
+  when it skips the rebuild of HEAD. A candidate merges only when its head
   commit has its archive in its tree and that check rebuilt it. Tests that a
   job skips by design do not block (the kernel tests outside the tier-B job,
   which runs them with nothing skipped; tests that need `dist/` before the
   Build step; the tzdata 2025c test on hosts without it). Any other skipped
-  test blocks, and so does skipping or disabling a test to get green. Never
-  push to `main`. Never force-push or rewrite history that is already
-  pushed.
+  test blocks, and so does skipping or disabling a test to get green.
 - After each merge, report one line saying what went in.
-- Tags, GitHub releases, the release workflow and publishing to any
-  registry (npm, PyPI, JSR) stay with the owner. Merging a candidate does
-  not release it.
-- Post nothing publicly: no npm publish, no release, no comments on other
-  projects, no messages to people. Anything public waits for Dias's yes.
+- In any lane, never create or push a tag, make a GitHub release, run the
+  release workflow, or publish to npm or any other registry without Dias's
+  yes; the same holds for environment variables and feature flags, secrets,
+  and spending over $5. Merging a candidate does not release it. Never
+  force-push or rewrite history that is already pushed, and never spend on
+  the OpenAI API (no OpenAI API calls or keys in scripts or tools).
+- Post nothing publicly: no comments on other projects, no messages to
+  people. Anything public waits for Dias's yes.
 - Never read, print, log or commit credentials, tokens or `.env` values,
   and never write them into a brief, a log, a status file or a pull request.
-- Spend nothing without Dias's yes, and never spend on the OpenAI API (no
-  OpenAI API calls or keys in scripts or tools).
 - Never modify the `market-lens-paper` repository or its files.
 - Never log birth data or put it in a URL, in examples as anywhere else.
   If documentation mentions children, children means under 13, and nothing
