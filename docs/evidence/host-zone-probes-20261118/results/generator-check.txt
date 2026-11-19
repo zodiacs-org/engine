@@ -1,1 +1,15 @@
 host-probes: match tzdata 2026f against 2021a, 2025c (705 intervals in 77 names, table 7178 bytes)
+
+$ node docs/evidence/host-zone-probes-20261118/tools/check-probes.mjs
+zic (Debian GLIBC 2.41-12+deb13u4) 2.41
+date (GNU coreutils) 9.7
+2026f: sha256 01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d, 597 names
+2021a: sha256 39e7d2ba08c68cbaefc8de3227aab0dec2521be8042cf56855f7dc3a9fb14e08, 593 names
+2025c: sha256 4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957, 597 names
+705 spans in 77 names checked at their probes: 0 failures
+names in 2026f and not in 2021a: America/Ciudad_Juarez, America/Coyhaique, Europe/Kyiv, Pacific/Kanton
+  America/Ciudad_Juarez: 0 spans
+  America/Coyhaique: 0 spans
+  Europe/Kyiv: 0 spans
+  Pacific/Kanton: 0 spans
+names in 2026f and not in 2025c: none

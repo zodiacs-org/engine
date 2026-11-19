@@ -24,6 +24,11 @@ archive's digest was checked before extraction into its own empty directory.
   pointing to the verified archives. Both generated files match. The table
   now has 705 intervals across 77 names, with a shared probe at
   1979-05-26T08:30Z for Tehran and Iran. [Generator result](results/generator-check.txt)
+- Run `node docs/evidence/host-zone-probes-20261118/tools/check-probes.mjs`
+  with the same tarball variables. It checks the offsets at every probe
+  against the compiled releases using GNU `date`, including the offset in
+  the first baseline that differs. It also lists the names absent from each
+  baseline and how many spans they have. [Probe check](results/generator-check.txt)
 - Run `bash docs/evidence/host-zone-probes-20261118/tools/verify-tehran.sh 709bc81`
   with the same tarball variables. The script compiles each default build
   using `zic -b fat`, records `zdump` transitions and reads the compiled
