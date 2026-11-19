@@ -3,7 +3,7 @@
  * Conformance adapter for @zodiacs/engine, speaking the protocol in
  * ../SPEC.md. It answers from the engine's public entry points only
  * (`@zodiacs/engine`, or `@zodiacs/engine/core` with `--entry core`, and
- * `@zodiacs/engine/geo`, and `@zodiacs/engine/calc` for the draft level L4
+ * `@zodiacs/engine/geo`, and `@zodiacs/engine/calc` for level L4
  * only) and computes nothing itself
  * beyond unit conversions; a kind the engine has no function for is reported
  * as unsupported.
@@ -47,7 +47,7 @@ const UNIX_EPOCH_JD = 2440587.5;
 const J2000_JD = 2451545.0;
 const DAY_MS = 86_400_000;
 const SYSTEMS = { 'whole-sign': 'whole' };
-/** 2000-01-01T12:00:00Z as JavaScript milliseconds: the origin of the draft L4's `utc_s`. */
+/** 2000-01-01T12:00:00Z as JavaScript milliseconds: the origin of L4's `utc_s`. */
 const J2000_UNIX_MS = Date.UTC(2000, 0, 1, 12);
 
 /** A Julian date as the nearest JavaScript millisecond. */
@@ -65,7 +65,7 @@ const flagsMeta = (chart) => (chart.flags.length ? { meta: { flags: chart.flags 
  * The request handlers, one per kind, over the engine's root entry point, or
  * its core entry point with `--entry core` (`engine`), and its geo entry point
  * (`geo`); `de440Source` is the caller's DE440 source for the position
- * requests, or null; `calcEntry` loads `@zodiacs/engine/calc` for the draft
+ * requests, or null; `calcEntry` loads `@zodiacs/engine/calc` for
  * level L4, or is null, and the L4 kinds are then unsupported. Exported so that another
  * host, such as a browser page in tools/runtime-conformance, answers the same
  * requests with the same code; run as a script, this file answers with it.
@@ -180,8 +180,8 @@ export function createHandlers({ engine, geo, de440Source = null, calcEntry = nu
       return { output: { year, month, day } };
     },
 
-    // The draft level L4 (drafts/0.3.0/DESIGN.md), which the released harness
-    // never sends. Instants are seconds from J2000.0 on TT (`*_tt_s`) or on
+    // Level L4, event times, released in suite 0.3.0 (drafts/0.3.0/DESIGN.md
+    // records its design). Instants are seconds from J2000.0 on TT (`*_tt_s`) or on
     // UTC (`*_utc_s`); the window is (after, before].
     async 'event.ingress'(input) {
       const onTt = 'after_tt_s' in input;
@@ -197,7 +197,7 @@ export function createHandlers({ engine, geo, de440Source = null, calcEntry = nu
         to: jdOf(onTt ? input.before_tt_s : input.before_utc_s),
       });
       if (result.status !== 'ok') return { error: `events() refused: ${result.reason ?? result.status}` };
-      const meta = { events: result.events.length, samples: result.samples, ...(result.flags.length ? { flags: result.flags } : {}) };
+      const meta = { events: result.events.length, samples: result.samples, ...(result.flags?.length ? { flags: result.flags } : {}) };
       if (result.events.length !== 1) return { error: `events() found ${result.events.length} crossings in the window`, meta };
       const [event] = result.events;
       const output = onTt
@@ -284,7 +284,7 @@ if (runAsScript()) {
     engine.setDefaultEphemeris('astronomy-engine');
   }
 
-  /** The calc entry, loaded only when a draft L4 request needs it. */
+  /** The calc entry, loaded only when an L4 request needs it. */
   let calcModule = null;
   const calcEntry = async () => (calcModule ??= await import(pathToFileURL(resolve(dist, 'calc.js')).href));
   const handlers = createHandlers({ engine, geo, de440Source, calcEntry });

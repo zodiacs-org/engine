@@ -1,7 +1,8 @@
 # Runtime conformance
 
-This private folder runs the conformance suite's 500 requests
-(`conformance/vectors/0.2.0/`) through `@zodiacs/engine` in six JavaScript
+This private folder runs the conformance suite's requests (640 from suite
+0.3.0, `conformance/vectors/0.3.0/`; the evidence of 17 November ran 0.2.0's
+500) through `@zodiacs/engine` in six JavaScript
 runtimes: Node, Bun, Deno, Chromium, Firefox and WebKit. Every run goes
 through the unchanged harness (`conformance/harness/run.mjs`) and the same
 adapter code (`conformance/adapters/zodiacs-engine.mjs`), so every verdict is
@@ -111,5 +112,5 @@ on that flips between pass and fail is "host data" while one that turns
 into an error or an unsupported answer fails, that one before 1970 is never
 host data, that a results file swapped
 with another runtime's is caught by its runtime name, that a missing answer
-fails, and that the browser bundle, run in Node, answers all 500 requests
+fails, and that the browser bundle, run in Node, answers every request
 exactly as the Node adapter does, tzdb shards included.

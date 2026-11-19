@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
- * Runs the conformance suite's 500 requests through @zodiacs/engine in Node,
+ * Runs the conformance suite's requests through @zodiacs/engine in Node,
  * Bun, Deno, Chromium, Firefox and WebKit, each through the unchanged harness
  * (conformance/harness/run.mjs) and the same adapter code, and writes for
  * each runtime its results file, the adapter's own lines and a summary that
@@ -145,14 +145,14 @@ for (const name of RUNTIMES.filter((one) => !selected.includes(one))) matrix.run
 matrix.gate = { pass: failures.length === 0, failures };
 writeFileSync(resolve(outDir, 'matrix.json'), `${JSON.stringify(matrix, null, 2)}\n`);
 
-console.log('\nruntime   version          L1       L2       L3 (pass/unsupported)  differs  identical outputs  receipts');
+console.log('\nruntime   version          L1       L2       L3 (pass/unsupported)  L4 (pass/unsupported)  differs  identical outputs  receipts');
 for (const [name, row] of Object.entries(matrix.runtimes)) {
   if (row.notRun || row.error) {
     console.log(`${name.padEnd(9)} ${row.notRun ? 'not run' : `error: ${row.error.split('\n')[0]}`}`);
     continue;
   }
   const level = (id) => `${row.verdicts[id].pass}/${row.verdicts[id].count}`;
-  console.log(`${name.padEnd(9)} ${String(row.runtime?.version).padEnd(16)} ${level('L1').padEnd(8)} ${level('L2').padEnd(8)} ${`${row.verdicts.L3.pass}/${row.verdicts.L3.unsupported}`.padEnd(22)} ${String(row.differsFromNode.length).padEnd(8)} ${row.outputsIdenticalToNode.padEnd(18)} ${row.receiptsSameAsNode ? 'same' : 'differ'}`);
+  console.log(`${name.padEnd(9)} ${String(row.runtime?.version).padEnd(16)} ${level('L1').padEnd(8)} ${level('L2').padEnd(8)} ${`${row.verdicts.L3.pass}/${row.verdicts.L3.unsupported}`.padEnd(22)} ${(row.verdicts.L4 ? `${row.verdicts.L4.pass}/${row.verdicts.L4.unsupported}` : '-').padEnd(22)} ${String(row.differsFromNode.length).padEnd(8)} ${row.outputsIdenticalToNode.padEnd(18)} ${row.receiptsSameAsNode ? 'same' : 'differ'}`);
 }
 if (failures.length) {
   console.error(`\nruntime conformance: ${failures.length} problem(s):\n  ${failures.join('\n  ')}`);

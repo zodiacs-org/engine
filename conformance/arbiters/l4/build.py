@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Build the draft L4 vectors (event times) from NASA's DE440s kernel. Never imports or calls the engine.
+"""Build the L4 vectors (event times) of suite 0.3.0 from NASA's DE440s kernel. Never imports or calls the engine.
 
     python3 conformance/arbiters/l4/build.py --kernel path/to/de440s.bsp            # write
     python3 conformance/arbiters/l4/build.py --kernel path/to/de440s.bsp --check    # rebuild in memory, compare
     python3 conformance/arbiters/l4/build.py --verify-sources                       # digests of sources/l4 only
 
-Design: drafts/0.3.0/DESIGN.md (committed before this file). Writes drafts/0.3.0/L4-events.json and, under
+Design: drafts/0.3.0/DESIGN.md (committed before this file). Writes vectors/0.3.0/L4-events.json and, under
 sources/l4/, solutions.json (every solved event with the longitudes an hour either side), horizons-requests.txt
 (the Horizons cross-check requests, one URL a line) and SHA256SUMS. Reads, without the network, any Horizons
 responses saved as sources/l4/horizons/*.txt and cross-checks every event against them.
@@ -37,9 +37,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, '..', '..'))  # conformance/
 sys.path.insert(0, os.path.join(ROOT, 'arbiters', 'l1'))
 import validate as l1  # noqa: E402  (the L1 check's reduction, reused unchanged for the scalar comparison)
+sys.path.insert(0, os.path.join(ROOT, 'arbiters'))
+import release  # noqa: E402  conformance/arbiters/release.py: the suite version and the convention ids
 
-DRAFT = os.path.join(ROOT, 'drafts', '0.3.0')
-OUT = os.path.join(DRAFT, 'L4-events.json')
+DESIGN = 'drafts/0.3.0/DESIGN.md'   # the design, under conformance/, committed before this generator
+OUT = release.path_with_ids('L4-events.json', '0.3.0')
 SOURCES = os.path.join(ROOT, 'sources', 'l4')
 SOLUTIONS = os.path.join(SOURCES, 'solutions.json')
 REQUESTS = os.path.join(SOURCES, 'horizons-requests.txt')
@@ -753,7 +755,9 @@ def vector(record):
     else:
         note = f'{record["what"]}: at {when}.'
     out = {'id': record['id'], 'kind': record['kind'], 'input': inp, 'expected': expected, 'tolerance': tol,
-           'arbiter': ARBITER, 'note': note}
+           'arbiter': ARBITER}
+    out['conventionIds'] = release.convention_ids(out)
+    out['note'] = note
     tags = []
     if utc:
         tags.append('utc-input')
@@ -768,7 +772,7 @@ def vector(record):
 
 def solutions_doc(records, dropped):
     return {
-        'what': 'Every event of the draft L4 vectors as the generator solved it from DE440s: the instant (seconds of '
+        'what': 'Every event of the L4 vectors as the generator solved it from DE440s: the instant (seconds of '
                 'TT from J2000.0, to 1 ms), the same solve bracketed at half hour steps (check a), the window, and '
                 'the apparent geocentric longitudes of date (degrees, IAU 2006/2000A true ecliptic) an hour before, '
                 'at and an hour after the instant, from which the tolerance is computed',
@@ -867,13 +871,9 @@ def document(records, dropped, checks, inputs):
             f'{xc["failed"]} failed and were dropped, {xc["needed"] - xc["checked"]} pending. ' + xc['summary'])
     return {
         'suite': 'zodiacs-conformance',
-        'suiteVersion': '0.3.0-draft',
+        'suiteVersion': '0.3.0',
         'level': 'L4',
-        'title': 'Event times (draft)',
-        'draft': 'A draft level, not part of any released suite version: the harness does not run it, and releasing '
-                 'it is the owner\'s decision. Design: drafts/0.3.0/DESIGN.md. Instants are seconds from J2000.0 '
-                 '(tt_s: of TT from JD 2451545.0 TT; utc_s: of UTC from 2000-01-01T12:00:00 UTC, counted on the UTC '
-                 'calendar). In the UTC set, UTC is TT - 69.184 s (TAI - UTC = 37 s, as from 2017-01-01, plus 32.184 s).',
+        'title': 'Event times',
         'arbiters': {
             ARBITER: {
                 'name': 'NASA JPL DE440s reduced to apparent geocentric longitudes in the IAU 2006/2000A true '
@@ -886,7 +886,7 @@ def document(records, dropped, checks, inputs):
                           'the responses in sources/l4/horizons/.',
                 'inputs': inputs,
                 'method': (
-                    'For each event of DESIGN.md the generator samples the quantity (a body\'s longitude, the Moon\'s '
+                    f'For each event of {DESIGN} the generator samples the quantity (a body\'s longitude, the Moon\'s '
                     'longitude minus the Sun\'s, or the longitude\'s rate as a central difference over an hour either '
                     'side) at 1 hour steps from the window\'s start, after a daily table has shown where to look, and '
                     'solves the first crossing by bisection to 1 ms. The window ends midway to the next time the same '
@@ -894,7 +894,10 @@ def document(records, dropped, checks, inputs):
                     'lunation, max(1 s, 1 arcsec / |rate|) rounded up to a whole second, the rate from the longitudes '
                     'an hour either side; for a station, max(60 s, sqrt(2 x 1 arcsec / |acceleration|)) rounded up, '
                     'the acceleration from the longitudes an hour before, at and an hour after. Every solved instant, '
-                    'its window and those longitudes are in sources/l4/solutions.json.'),
+                    'its window and those longitudes are in sources/l4/solutions.json. Instants are seconds from '
+                    'J2000.0 (tt_s: of TT from JD 2451545.0 TT; utc_s: of UTC from 2000-01-01T12:00:00 UTC, counted on '
+                    'the UTC calendar). In the UTC set, UTC is TT - 69.184 s (TAI - UTC = 37 s, as from 2017-01-01, '
+                    'plus 32.184 s), the set\'s stated convention.'),
                 'generator': 'arbiters/l4/build.py',
                 'uncertainty': (
                     f'Tolerances by kind: {tol_text}. Check (a): every solve repeated with half hour brackets agrees '

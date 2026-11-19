@@ -6,11 +6,12 @@
  */
 import * as engine from '../../dist/index.js';
 import * as geo from '../../dist/geo.js';
+import * as calc from '../../dist/calc.js';
 import * as receipt from '../../dist/receipt.js';
 import { createHandlers, defaultSourceText } from '../../conformance/adapters/zodiacs-engine.mjs';
 import { receiptTexts } from './receipt-cases.mjs';
 
-const handlers = createHandlers({ engine, geo });
+const handlers = createHandlers({ engine, geo, calcEntry: async () => calc });
 
 globalThis.runtimeConformance = Object.freeze({
   /** The adapter's first line, as the Node adapter writes it in its default mode, with the browser's facts for the host's. */

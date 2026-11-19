@@ -86,7 +86,7 @@ export function compareWithNode({ vectors, node, runtime, expected }) {
   if (!reported) problems.push(`the results file does not name its runtime (adapter.runtime)`);
   else if (reported.name !== expected) problems.push(`the results file names runtime ${reported.name}, not ${expected}`);
 
-  // Every request id answered exactly once (500 of 500), in both files.
+  // Every request id answered exactly once (every one of the suite's), in both files.
   const ids = vectors.map((vector) => vector.id);
   const resultIds = runtime.results.results.map((entry) => entry.id);
   if (resultIds.length !== ids.length || new Set(resultIds).size !== ids.length || resultIds.some((id, index) => id !== ids[index])) {

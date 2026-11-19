@@ -1,10 +1,12 @@
-# L4 arbiter (draft): event times from DE440s
+# L4 arbiter: event times from DE440s
 
-The expected instants of the draft level L4, `drafts/0.3.0/L4-events.json`
-(ingresses, stations and new and full Moons), are solved by `build.py` from
-NASA's `de440s.bsp` kernel. The design, with the instant list and the
+The expected instants of level L4, `vectors/0.3.0/L4-events.json` (suite
+0.3.0: ingresses, stations and new and full Moons), are solved by `build.py`
+from NASA's `de440s.bsp` kernel. The design, with the instant list and the
 tolerance rule, is `drafts/0.3.0/DESIGN.md`, committed before this
-generator. The level is a draft: the released harness does not run it.
+generator and kept unchanged; SPEC.md gives the kinds and the tolerance rule
+as released. Each vector names its kind and its arbiter as ids of the
+conventions registry (`conventionIds`, from `../release.py`).
 
 ## What `build.py` does
 
@@ -51,7 +53,8 @@ The kernel is not committed. Get it from
 `c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2` (the digest
 `validate.py` pins). The committed files were built with Python 3.13.18,
 numpy 2.4.6, pyerfa 2.0.1.5 (ERFA 2.0.1) and jplephem 2.24, in about five
-minutes; `--check` takes as long. `--check` first checks every file in
+minutes; `--check` takes as long, and with Python 3.11 (3.11.18 here), which the
+conformance workflow uses, it rebuilds them byte for byte. `--check` first checks every file in
 `sources/l4/` against `SHA256SUMS` (one changed byte fails it), then rebuilds
 `L4-events.json`, `solutions.json`, `horizons-requests.txt` and `SHA256SUMS`
 in memory and compares them byte for byte.

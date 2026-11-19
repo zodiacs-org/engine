@@ -1,5 +1,5 @@
 {
-  "what": "Every event of the draft L4 vectors as the generator solved it from DE440s: the instant (seconds of TT from J2000.0, to 1 ms), the same solve bracketed at half hour steps (check a), the window, and the apparent geocentric longitudes of date (degrees, IAU 2006/2000A true ecliptic) an hour before, at and an hour after the instant, from which the tolerance is computed",
+  "what": "Every event of the L4 vectors as the generator solved it from DE440s: the instant (seconds of TT from J2000.0, to 1 ms), the same solve bracketed at half hour steps (check a), the window, and the apparent geocentric longitudes of date (degrees, IAU 2006/2000A true ecliptic) an hour before, at and an hour after the instant, from which the tolerance is computed",
   "kernel": {
     "file": "de440s.bsp",
     "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp",

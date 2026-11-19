@@ -39,7 +39,7 @@ test('Node against itself: every verdict and value the same, gate passes', () =>
   assert.equal(summary.gate.pass, true, summary.gate.problems.join('; '));
   assert.equal(summary.differsFromNode.length, 0);
   assert.equal(summary.outputsIdenticalToNode.identical, summary.outputsIdenticalToNode.compared);
-  assert.equal(summary.requests.answered, 500);
+  assert.equal(summary.requests.answered, vectors.length);
   assert.equal(summary.receipts.allSameAsNode, true);
 });
 
@@ -94,7 +94,7 @@ test('every request answered exactly once: a missing answer fails', () => {
   const run = makeRun(answers, 'webkit');
   const summary = compare(run);
   assert.equal(summary.gate.pass, false);
-  assert.ok(summary.gate.problems.some((problem) => /answered 499 distinct ids/u.test(problem)));
+  assert.ok(summary.gate.problems.some((problem) => problem.includes(`answered ${vectors.length - 1} distinct ids`)));
 });
 
 test('differences wrap at 360 degrees and take the largest cusp', () => {

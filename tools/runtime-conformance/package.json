@@ -1,7 +1,7 @@
 {
   "name": "@zodiacs/runtime-conformance",
   "private": true,
-  "description": "Runs the conformance suite's 500 requests through the engine in Node, Bun, Deno, Chromium, Firefox and WebKit, and compares each runtime's verdicts and values with Node's.",
+  "description": "Runs the conformance suite's requests through the engine in Node, Bun, Deno, Chromium, Firefox and WebKit, and compares each runtime's verdicts and values with Node's.",
   "type": "module",
   "license": "MIT",
   "engines": {
