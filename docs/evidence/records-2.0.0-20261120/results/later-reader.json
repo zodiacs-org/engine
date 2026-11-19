@@ -1,0 +1,2806 @@
+{
+  "reader": {
+    "engine": "2.0.0-rc.3",
+    "entry": "dist/receipt.js",
+    "node": "v24.22.1"
+  },
+  "inputs": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E"
+  ],
+  "archives": [
+    {
+      "version": "0.1.1-rc.7",
+      "status": "carried",
+      "sha256": "49b2b03f50fea8a625d443d4fd0f6d03ffc22831e54009fd09c49d07c8698f90",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 4854,
+          "sha256": "7920058dede91ef0ed9443a692a80421a56ea7632132100c8b7168339bd52f3c",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.7",
+          "conventionSet": 4,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4244,
+          "sha256": "a865fc90d5f62c71998e1d71885dece5ddf0b92ab34ef20a0bf1bab00d6b7f74",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.7",
+          "conventionSet": 4,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "writer-unsupported",
+          "reason": "HouseSystem declares no \"koch\""
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 4677,
+          "sha256": "f39b698a53804d113ffee3785f2d4651e41776251ef70f7a26509dd6b36117b0",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.7",
+          "conventionSet": 4,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 4481,
+          "sha256": "b6899f624f612152cb79ecb1a2346a48bbf29afe8a130e0930a2a27b664e6b11",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.7",
+          "conventionSet": 4,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "0.1.1-rc.8",
+      "status": "carried",
+      "sha256": "3b934376fa53983cbdd7eb1a6ecf0eb0d50fbc49df01bc610b20c63bd5d12be6",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 5157,
+          "sha256": "46542b0a104e9b065858952e14990a8cee86232e8a8b1f1dd8b8497616da0b3b",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.8",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4556,
+          "sha256": "1aade3ab8ba5caece33b3d2faa1448e68b8f4334a105e4c1e608e57e94621231",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.8",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "writer-unsupported",
+          "reason": "HouseSystem declares no \"koch\""
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 4990,
+          "sha256": "36d861cdbbb6c93d8f087522806e1cd03cf61064bf8dd43e7f7aeb8649e7fad1",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.8",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 4793,
+          "sha256": "805a5ab561558047c92678f797691d8beccdcabe2611288cb8ba0c484e036b46",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.8",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "0.1.1-rc.9",
+      "status": "carried",
+      "sha256": "bb5592302b1fa542cc745a9410b5a77faf49bbf4e205347ab771810efc300a20",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 5157,
+          "sha256": "0dbb594b0761ff23f88b04d33d1059c7c6f1c6cb438903f9144cea7034254a03",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.9",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4556,
+          "sha256": "eec1aac17853cce080054695b658fb123e5d001239ed76234e2921cb6d507ebb",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.9",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 5080,
+          "sha256": "6e05d360aa875b316d2504dcb22faa797b5cb42994fb6654997713906f871fbb",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.9",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 4990,
+          "sha256": "c61840d35a27e2a6dcf6b8edb577b836654ff8b0526d6ae0216d3f27be32dec9",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.9",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 4793,
+          "sha256": "cc4346244a1926177676a1d61ec32907d990a4936fcc86ecf54066db6a9fa7dd",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.9",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "0.1.1-rc.10",
+      "status": "carried",
+      "sha256": "a377cdc8c12e25ff7de4fe95ddf77a4cdee8d2da97071b0f8454e340b374565c",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 5158,
+          "sha256": "b41c848464cf2b5008fd1315967fc606789b64e813095877d637f04950aafa30",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.10",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4557,
+          "sha256": "c94ea08694e7927800b85a4625f964a42bd5a51af5a4980fba96aeeee30d5da3",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.10",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 5081,
+          "sha256": "7c01e449adfa1cd7ed04a3d2446ae26fc2bdb912b2c4ddfd7ba0ea77f6ec4347",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.10",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 4991,
+          "sha256": "b412a041567a02c8815b23aa26063578c2c0ec4935d10a461c4fcf114e4843f6",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.10",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 4794,
+          "sha256": "d6540c2ebaebcbec89473b2cb7dbd99ec94c7d5991ff4f4c010a9777f78f2963",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.10",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "0.1.1-rc.11",
+      "status": "carried",
+      "sha256": "d88e0ff8db91e1183789763ad32feb2dac61716e35ad7676a943f7a1ad377862",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 5158,
+          "sha256": "e08be4bd074f1c517152b17e1667a74a1d1026d074d3e9136b163b26a840379e",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.11",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4557,
+          "sha256": "76ab4934a05a3c43748de83c03bd465b9e702df5e2934eb1e57695689d14289c",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.11",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 5081,
+          "sha256": "0bb6bfd320e95d2c46d0ee5ed7b9950f6eea1371851d4ddef860f4ba7448b09a",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.11",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 4991,
+          "sha256": "d69a369063d774173ac3e1e9522b7fc44bd515afe46ee1638cd6368ebdea6ebb",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.11",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 4794,
+          "sha256": "be3f4e8195c76c5a4227187012d34c3e736719fbf9ec8d83b61ac1f805a1dc68",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.11",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "0.1.1-rc.12",
+      "status": "carried",
+      "sha256": "c4cf150fe8fb0b37f5769993c2e63275b2e5ef47b97d8a118aff3be00ebaf7f0",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 5158,
+          "sha256": "9c1a8abd74ed269fc87276fa59fe20775ac6c729e2d3ee2dd2db1988ddbc1058",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.12",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4557,
+          "sha256": "4fb6954c5d5dba4089a02f0b37fdb475ddd5905ddbfa914211ca40e42a6c61c8",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.12",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 5081,
+          "sha256": "9efac9d8bffdee6847ee8813d2885e229fd805721a96d8a49c3147457520a3f5",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.12",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 4991,
+          "sha256": "6aff60d7d3fcf4d2f90a180827a2fabfe7799cd4710efbfde65b337d04601586",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.12",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 4794,
+          "sha256": "3826c2cf533b65ddf6eb4327edce49dc13a20b72aca42445c39234a3bd87862a",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.12",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "0.1.1-rc.13",
+      "status": "carried",
+      "sha256": "12db9dce0f2c7551924b41caa5609f57bf31dfb9051a72901b94cdae29d3b840",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 5158,
+          "sha256": "0608b4831ba1672efdeff95b01eba58bbff3f3dc44395d31677c7c9b287ac44c",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.13",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4557,
+          "sha256": "0b5aa06085edbf4fd70ea5a0c9fee1dcccd79f1e3791d6deeec927c82c28262b",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.13",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 5081,
+          "sha256": "bd3930530b0dba4616ff2921865d7adf0fd7faa6442bab209d6ebd67851bafff",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.13",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 4991,
+          "sha256": "fa19cec14e91b2969b79a56f9aa7f98f4cfe0bc1114cef11d2e1df89a1b91191",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.13",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 4794,
+          "sha256": "0dbf9e6d60e8dd7aa321749012d2aeea508e1e0fc488e2ba96249060afd93696",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.13",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "0.1.1-rc.14",
+      "status": "carried",
+      "sha256": "adc9805e22cd2468fa3340a864d9c53b36ff91e8f1592fdb35d8da8b69f4476e",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 5158,
+          "sha256": "cfe435256603267269934d52d31cf3b422722aa971bba6cc34a8bdc7cf6226d6",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.14",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4557,
+          "sha256": "044d24a1a39e35d7afdf836d107f70d972f2454b4127bb9fe9daf98c610b246f",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.14",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 5081,
+          "sha256": "e2a4ffc7d441c9b356702298223ec92a042f064b1e1d48fb2e41a255e68bfe83",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.14",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 4991,
+          "sha256": "9f55a0864cb73183815928373ddab95a2768dcf4ae65d087aff39a4d1246f986",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.14",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 4794,
+          "sha256": "d569a326eef7ef4983e1f080abac34f9598cd0c973a19682be9e758e7547dc9f",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.14",
+          "conventionSet": 3,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": null,
+          "ut1Source": null,
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "0.1.1-rc.15",
+      "status": "carried",
+      "sha256": "24eeb597b0157598c0faa26bb615c0cb5dfaaeac0393d62c73fbd37c5da4d348",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 5526,
+          "sha256": "c2d2f864844483ed112b7e66322cca2e3dae1b18d9fbbefbb4818b1f79132838",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.15",
+          "conventionSet": 2,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4903,
+          "sha256": "6fe300378f616bf10d0280638ea2b779b699047f4d7286c1fcf66b3c62b64ab3",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.15",
+          "conventionSet": 2,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 5396,
+          "sha256": "96b54c71fe0a1768c444d4c5e9c95906c6756e5df64b61b60d5586f86a139441",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.15",
+          "conventionSet": 2,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 5359,
+          "sha256": "9b52a3ec5876f45536821c2f01a236a4b4818f8a48aed906e413ca8a1bb929c0",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.15",
+          "conventionSet": 2,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 5146,
+          "sha256": "1c86aa604d9d7dc5b294fb1a661e3277511d3762b8ce333536a8a7b0413969fe",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.15",
+          "conventionSet": 2,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "0.1.1-rc.16",
+      "status": "carried",
+      "sha256": "43a72d30e483d8ff22024e403c4bd0d86d81bb6e1d0ad138f857cd001ab015d8",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 5591,
+          "sha256": "05fb408b3134ba54b65c048d933191cb8eb093dbdcab58b41eb78c8852eddb84",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.16",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4971,
+          "sha256": "b40cc76bd551bfeeb6f78c3e00ceb4ec9bc8eee1e5e3cff9f38989f60bba203c",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.16",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 5457,
+          "sha256": "1bde5b129fb122c099ffd970c501fdcf74bc711b27fce5e4e1c24387e4d7e01e",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.16",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 5418,
+          "sha256": "625604dd4cd09b4d13f80d5c0df8cce3d0ff623eca4ba8e8a1a41a2416f61b26",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.16",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 5214,
+          "sha256": "68cbf0be5188a76998db71b099cd6c286acc0e1eb5a4147388ef9181608ab4e8",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.16",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "0.1.1-rc.17",
+      "status": "carried",
+      "sha256": "9cd24c788863424ef614aaadec580db5a0dfc529303d385274db48a092a5299a",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 5591,
+          "sha256": "6c1e188318ce30a8269b223ff4b626b5c1e2d196897a0d1c235be415fd1bfad6",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.17",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4971,
+          "sha256": "933a0e65b08a9712105a3b2aa7a181c785c78f1be68ca1de5d2b7bdb659a9b1c",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.17",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 5457,
+          "sha256": "eaa30487a934e1c3ebe17967f20f2d94b6f3748de82c74b8beccd570c61b93dd",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.17",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 5418,
+          "sha256": "bb3e9ad3276c45c15435d516cac99f1ab693ba32db2a25ef7c11f8ed492d1b7e",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.17",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 5214,
+          "sha256": "4f5d1e816466cce867e821370ed89efc48b3d5302b6180a688887c15fb4b8bfc",
+          "read": "ok",
+          "engineVersion": "0.1.1-rc.17",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.0.0-rc.1",
+      "status": "carried",
+      "sha256": "cf1417d40bc2e1726857b17388415a3b588bd53ddd79848c78f8da2675657284",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 5590,
+          "sha256": "e2b69f8c80c4d5c2b1ce56acb4cf5600cc0c9669990d494032d058f7c9db8cae",
+          "read": "ok",
+          "engineVersion": "1.0.0-rc.1",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4970,
+          "sha256": "f50d2098e329d915d31129dfa4d7707ddeee35ea0713ce1fa07b5022964032cb",
+          "read": "ok",
+          "engineVersion": "1.0.0-rc.1",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 5456,
+          "sha256": "63f5220737f963f2c5b15d286a9d8f128de76d2ef3a4518c6566a12fa978bdeb",
+          "read": "ok",
+          "engineVersion": "1.0.0-rc.1",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 5417,
+          "sha256": "69109130c64bbb58df80f35497338ca7020705e6a89351f0954b0be1f02c18d7",
+          "read": "ok",
+          "engineVersion": "1.0.0-rc.1",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 5213,
+          "sha256": "0ec1ef26509e0bc12309158891640c465bd4500d4e1b1d5033dbf3f1cdc59eb7",
+          "read": "ok",
+          "engineVersion": "1.0.0-rc.1",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.0.0-rc.2",
+      "status": "carried",
+      "sha256": "4cd834b2dca085cd5732ecad6edbd82b61d7625d9a0647900c160a0747810002",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 5590,
+          "sha256": "028e00422f3c0bc6abda9a15e4e240cccfce79486b6f0e8b87a46ede38b9cff6",
+          "read": "ok",
+          "engineVersion": "1.0.0-rc.2",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4970,
+          "sha256": "fec4dcddcffe6c9e6a1f8195041d9df723737e16706b8bbd7fd32ac1d9e7748e",
+          "read": "ok",
+          "engineVersion": "1.0.0-rc.2",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 5456,
+          "sha256": "7e77543fb206988a8023ba0ad514c0f480a4e96783a4c6606e8fe0d0bb93c31b",
+          "read": "ok",
+          "engineVersion": "1.0.0-rc.2",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 5417,
+          "sha256": "86882c6c7863508e18acbe6e495188ecd0540b7e0a1839651603ae30348d43cc",
+          "read": "ok",
+          "engineVersion": "1.0.0-rc.2",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 5213,
+          "sha256": "9722b3ade239fa3a979ed1777a4b1889afb27c886b4b9849a941cbc281ef0f35",
+          "read": "ok",
+          "engineVersion": "1.0.0-rc.2",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.0.0",
+      "status": "carried",
+      "sha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 5585,
+          "sha256": "8356c70db47a582339c5cf2e9de61dc56de8371b51b3b5191b7ddc126ce1ee43",
+          "read": "ok",
+          "engineVersion": "1.0.0",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 4965,
+          "sha256": "9b68ec0298cb1b9df30f743140091b33524aab7969b43fabe8b89b3d548fb7d0",
+          "read": "ok",
+          "engineVersion": "1.0.0",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 5451,
+          "sha256": "5cb0107895ab4872e68274a000ccdf14f00b86e7df9150fafa39eb93c64ee113",
+          "read": "ok",
+          "engineVersion": "1.0.0",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 5412,
+          "sha256": "efd80bcc15935fb4ba2d022985648698774c304c639e5b11c2c410d11a3c0adb",
+          "read": "ok",
+          "engineVersion": "1.0.0",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 5208,
+          "sha256": "d9d0a50c3d859dcc2a1e24a346a58a41befee27fe85cba9eab49733b9c9df9fa",
+          "read": "ok",
+          "engineVersion": "1.0.0",
+          "conventionSet": 1,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.1.0-rc.1",
+      "status": "carried",
+      "sha256": "52352d3f8fde4a262483e4a5a6217e02d814aa53269b49c0333325e6c0d6a7b6",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 6976,
+          "sha256": "3df08fee66a8665ff3635de670f6366eff3afe32091c7fbeeeb564a9b427e050",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.1",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6353,
+          "sha256": "7a7c348f0f4892af8bb6324bee75e95c1fce37f1d06158fb2083ef2333682254",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.1",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 6851,
+          "sha256": "e9f50aa37f4fa7e16f0eaf557c8f54f4660ba9bf8047937b67823f4b37680916",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.1",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 6839,
+          "sha256": "7f2c5463055e6574910433ca94568efa16ef9c3b92494d92cecf7e2be88e3b56",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.1",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 6640,
+          "sha256": "874ee11860a3e78dad31885644578575bebd1d37dd401fd9ff4b5945e7bb7e71",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.1",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.1.0-rc.2",
+      "status": "carried",
+      "sha256": "c5aef0e3f20a19cf7ffabc99112cf592045199d6803814cf4ef6ea013615351c",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 6976,
+          "sha256": "a56aecfb1e1e0ec7d4bd95eaa0ebcc1858424cec516383434fe90bf9c6ccfd10",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.2",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6353,
+          "sha256": "09b77824e1988b87ee81c301e4504ad1bf10b6242086cff2973e521be73e5e39",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.2",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 6851,
+          "sha256": "0c303e1e466ecac4eceeacdd0b0731ec46493fc682c1c8895369b0463399a286",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.2",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 6839,
+          "sha256": "55f96e456de9a7e5813700966b882441efeb898c0481b740a2717102aeb6ef0c",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.2",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 6640,
+          "sha256": "6df2c81d49d297de11b9f9f50bf32c19c7dd321460e807740805ab554b513712",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.2",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.1.0-rc.3",
+      "status": "carried",
+      "sha256": "3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 6976,
+          "sha256": "2c6b47e8729a0681aece8075bda4355faa6082c76ec60e9389d801e643314e0f",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.3",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6353,
+          "sha256": "6137b694caa5a2e97834c93572b8387f81875eb8779807ef4da4071b1c63a8b2",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.3",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 6851,
+          "sha256": "034a0ca2528ad1bba5c5a4f94193455d22f5efaed9e205221bc25ae12ab0440d",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.3",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 6839,
+          "sha256": "b6ffe29b4aefc3281fd10c8c626bc98f67f62c3c19c5b75402ecf7406002af21",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.3",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 6640,
+          "sha256": "440a8e7f5c7593687bc5c2b333a414985c7baa8b7390e50fec5ef17bbd0d6498",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.3",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.1.0-rc.6",
+      "status": "carried",
+      "sha256": "648714ca7485c7381f338286b84a211752ddd425035f50f6e24267e80de6abde",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 6976,
+          "sha256": "88054ccbcf308b417abe5fbd9f41b7f0a2cbac18c2ec3c1bc9ae4766f4739fc0",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.6",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6353,
+          "sha256": "a42744c73e4e1b63a6abb97b5b9af24d9c0d930a4cd5e2c84cb2d6718f03592d",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.6",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 6851,
+          "sha256": "bed4fc415255c2a3bbb2598b7fe91596e9196bbc11a94f85ea24b76203b2e59e",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.6",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 6839,
+          "sha256": "a65abfd4d3e2fb4b3b01094dca4c90c7ec9ad3e15af87a296078120d17fc3c32",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.6",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 6640,
+          "sha256": "843055bbba6fae8f08c42a6f329f056c6d6b256a14b0349b7636641741e4d928",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.6",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.1.0-rc.7",
+      "status": "carried",
+      "sha256": "71348be1f8dc2772945cc86c72af475091d105da9e7ff5b4411c517adc9fc80a",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 6976,
+          "sha256": "359028c5498895edebe6da9f1a1c979608e9b75229075b1141be2b07bed51e05",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.7",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6353,
+          "sha256": "3465e6be8914bb7a6cfda88eb525f60687a64a9b5c335682bd3b07711523241a",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.7",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 6851,
+          "sha256": "c0bb7a4c7acdb2f654507466e3275faad815824f9cd22ba7b0d21e38e4740ef0",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.7",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 6839,
+          "sha256": "ee316454a7a29cfc8794176450af2ed2ebef9216bd1d889d01e7df0462f9b9de",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.7",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 6640,
+          "sha256": "420c83ef1f3a71232f27ff9e25fac259738e026baea879836ee70c7432e2aaad",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.7",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.1.0-rc.8",
+      "status": "superseded",
+      "run": "no archive"
+    },
+    {
+      "version": "1.1.0-rc.9",
+      "status": "carried",
+      "sha256": "f1801f0a35ef643a89c73ecd280e1e41142ae36e12c3690433536f9c3368396a",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 7508,
+          "sha256": "adcfa6e39699f23499e90b612ffd9dddbcaeada863fbe3e0a948f7f49a08501c",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.9",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6884,
+          "sha256": "791dd9ddc67aacb6c011d0bcf437ef65513799ae095603e4cae5af997285d817",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.9",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 7376,
+          "sha256": "e57ff212076605ee7523155be6434da0b99b74f5f29d5232a4d302bf8ee0faf9",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.9",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 7371,
+          "sha256": "61dd1a218ec61b9d7f91d76cb92fa13d67c847945438005ed9a2726f480030d7",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.9",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 7162,
+          "sha256": "73c1e8dc31ecab61715194d60a45c45170ffd9159ad9a1be65ab475b6ddd9fc0",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.9",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.1.0-rc.10",
+      "status": "carried",
+      "sha256": "7fbdf3ade2a3350970e8e4195cda02ad596cbc2ca46c955ceae44a0ce7613246",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 7509,
+          "sha256": "c3efed56a321de9ea0484ac6d836942abb319752739e56a97899b77aa082deb7",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.10",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6885,
+          "sha256": "cd797c3f86d63250cac4ea374d952a466efb8db1751c56cf05a78ba68f26f01d",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.10",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 7427,
+          "sha256": "13f3e7073ce1aff2211420f3de9ca69ff5329cdbd0d786aed47a2c56e8b42eba",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.10",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "delta-t-extrapolated"
+          ],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 7372,
+          "sha256": "ffd7b6825e37b338e0c6ff89f7ce8995df7626d3f1439ba19ee27ac99b74dd5a",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.10",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 7163,
+          "sha256": "ade2d44f6d024600ec18517d9c5d1f5355f65f46018887be1439f08fecd26eab",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.10",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.1.0-rc.11",
+      "status": "carried",
+      "sha256": "d84f330216f21367f33a9c855a449af49659933987555f873611f9ab3d5b5e56",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 7509,
+          "sha256": "5913ec92da7fc233db105259563265b2c1f89b79a66e8158e7f2a765d7657242",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.11",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6885,
+          "sha256": "aa22cc8389c51f945b405cea0318e7669ebb5c5386400604d8c4e4c93ceff1e5",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.11",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 7427,
+          "sha256": "f3c61692a69e782e8c1c168a2912f88f4ab6cad425337fd61d2f0b143d32770e",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.11",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "delta-t-extrapolated"
+          ],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 7372,
+          "sha256": "5c4f8a6c7544b9039281a1814bb14c4d5e10c030c8386e8fdb1aa0687b0a06bf",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.11",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 7163,
+          "sha256": "f81478f6d59052552e451a1bbbe541c79843beeab04ed853666be232bdae3081",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.11",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.1.0-rc.12",
+      "status": "carried",
+      "sha256": "4577e2ff924ab1a5f5f6ffc52f7ce595c0e08e4f2cd6cd58d64f7e7bdf020297",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 7509,
+          "sha256": "9a19dccb3ec6030e54ae0f850a0a9a1e350a7e9e837eb159e6784deb89b4a376",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.12",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6885,
+          "sha256": "23aaaedbaf51e36255adea4d8401a565b15ca3afaa2daf9090726c9b1250a0c8",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.12",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 7427,
+          "sha256": "4be38b6d71039fd59c8bd2cd11d94ae99f325233802f600ccb787c47df6971cf",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.12",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "delta-t-extrapolated"
+          ],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 7372,
+          "sha256": "cbd1c302896f883b3f4131c55a8dcd4e2707fbc1c4d64fd9774254fbbf09578e",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.12",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 7163,
+          "sha256": "2b5da387629279889dd70c241ef33eed71cd5fcd8638ccec423950456b90ef5b",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.12",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.1.0-rc.13",
+      "status": "carried",
+      "sha256": "8d7b2adb630e629b0673c3901fe383cf9b496429a0b98075581d4a8797767817",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 7509,
+          "sha256": "b02268b5092f45a8db8e27d566d6e76cce08f606bc4b2ebf6356f3ac65fb7787",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.13",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6885,
+          "sha256": "95b7cfab1b19986b1e83f78f0b6d3dfaebd1359ab9eb08ac784d5e155f8330f7",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.13",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 7427,
+          "sha256": "7eb9ea60b3da6d9b47d95fb23663018a1c58229f59b5ac082eb2ee41777202b1",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.13",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "delta-t-extrapolated"
+          ],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 7372,
+          "sha256": "1d1017824fe0ffc0fe325d47efd77dd223859ebed2191a87929d80365e5f4422",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.13",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 7163,
+          "sha256": "ba095aa28f9cca4f801dedf54c5f52c68f6a6521242aa58745d983800205c512",
+          "read": "ok",
+          "engineVersion": "1.1.0-rc.13",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "1.1.0",
+      "status": "carried",
+      "sha256": "4e53cda9bd6ccb5f5581c2a9af2f2ae4010af2599f411ac5220425e0932e41ac",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 7503,
+          "sha256": "595a798999aa81848c92ec2e5947aaa1a9b7b30b121799c9630b846e2d571aad",
+          "read": "ok",
+          "engineVersion": "1.1.0",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6879,
+          "sha256": "a555a0c23dbbad7c786a108a0fa057c3bbb76e931c80805d9f879f12bab93829",
+          "read": "ok",
+          "engineVersion": "1.1.0",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 7421,
+          "sha256": "815c0497ffb5ad6b141c5e5395c1324390d5cfcd6ffcdcd37c51406b27e3dca3",
+          "read": "ok",
+          "engineVersion": "1.1.0",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "delta-t-extrapolated"
+          ],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 7366,
+          "sha256": "ac2917e70a5c41f8ca9ba882729d278c08f2a3dbb616e987a66404bf1990caa0",
+          "read": "ok",
+          "engineVersion": "1.1.0",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "polar-fallback"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 7157,
+          "sha256": "ae4241b67cc14fd58b2bb12ab2fb72f836eb752e97dd2b2a9ceb1cd6af438e44",
+          "read": "ok",
+          "engineVersion": "1.1.0",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "2.0.0-rc.1",
+      "status": "carried",
+      "sha256": "9a1c07ca898da77ec266543130645f3e2528a1aeef1ebd15b1b83e07d19e673a",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 7508,
+          "sha256": "cc10a6d2c56821ba7064f3a9506020cb95ea993144c6bf52f908bcd3499edcff",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.1",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6884,
+          "sha256": "f2be1f8bf58951c1217c475a60e0142d71a8d8559d9bc8fb8a4ea10d64a2d2b4",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.1",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 7426,
+          "sha256": "1bd780ed07bc597260c059c50cb4c1be717083030b6972ad44aad3401ae178be",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.1",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "delta-t-extrapolated"
+          ],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 7406,
+          "sha256": "90a7a9c11efe0f043f2c5d02f8b1df5f18785f8e8847911fce414d120d81894d",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.1",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "polar-fallback",
+            "polar-angles"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 7162,
+          "sha256": "4ac217149f25613366c9d465d6d4b7f32544f0667c2d2fba69d5ce53c384041c",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.1",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "2.0.0-rc.2",
+      "status": "carried",
+      "sha256": "e0621630b5a0f9dbb6465f4f077630f313217d7b06ee88ffa960696fec5eb1cc",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 7508,
+          "sha256": "0c3d656f4f881ec6cdcadbd6e0085770c208b0874982985948c029b47eebef51",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.2",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6884,
+          "sha256": "8963b042ba6c4784f106d56a681a48141efc0c29dd1e31433ffe9d21417291de",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.2",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 7426,
+          "sha256": "ac46c3d6a5ff42679aff27da813ac06100a0b3dbe6bf8b23c98b1c4bebd66096",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.2",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "delta-t-extrapolated"
+          ],
+          "houses": "koch",
+          "timeBasis": "delta-t",
+          "ut1Source": "fallback",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 7406,
+          "sha256": "2810e1bfaffe40e54c7e2a56257384a3920fb3076cf02c88cf65bdc561e60edd",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.2",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "polar-fallback",
+            "polar-angles"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 7162,
+          "sha256": "00ceafdb131ed68c661117073621f6798a57143b3613c0e159ccece391c59efd",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.2",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "2.0.0-rc.3",
+      "status": "carried",
+      "sha256": "d465137931f5d28910443ca7ef01610606e9f708704364c61811d2936dc4ec55",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 7508,
+          "sha256": "ecc19f27326fbce00f82e64bdad48a43fa9debe499446eb8db992fbe72205e97",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.3",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6884,
+          "sha256": "33aa0df909a249923eb12809f2b0d5059b7da126578a9b3525aa8eaf8f93f967",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.3",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 7636,
+          "sha256": "6d8ee8841bccfcddc0b8c2452a18137863680082c7a2c936bbb14cc2c8240d26",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.3",
+          "conventionSet": 8,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440",
+            "time-basis-continuous-utc"
+          ],
+          "resultFlags": [
+            "delta-t-extrapolated"
+          ],
+          "houses": "koch",
+          "timeBasis": "continuous-utc",
+          "ut1Source": "model",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 7406,
+          "sha256": "8d34110f4108ebc4bdc22a9b008765daacf9a78022d442097a711979c8e875ec",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.3",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "polar-fallback",
+            "polar-angles"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 7162,
+          "sha256": "dc0e543bfdf7cfd78a3ff4cd88b3c6d06ac2328b7fd40611ffaf7d9ba9ddf38d",
+          "read": "ok",
+          "engineVersion": "2.0.0-rc.3",
+          "conventionSet": 6,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    }
+  ]
+}
