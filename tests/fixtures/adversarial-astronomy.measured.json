@@ -37,10 +37,13 @@
    "searchResidualMaxArcsec": 0.0010206
   },
   "polar": {
+   "anglesComparedWithTextbook": 66,
+   "ascAgainstTextbookMaxArcsec": 0.353632,
    "boundaryDegrees 1850-06-21T12:00:00Z": 66.5433,
    "boundaryDegrees 2000-06-21T12:00:00Z": 66.562,
    "boundaryDegrees 2099-12-21T03:00:00Z": 66.5714,
    "boundaryMinusFormulaMaxArcsec": 0.0386585,
+   "mcAgainstTextbookMaxArcsec": 0.528921,
    "sweepCharts": 26208,
    "sweepFallbacks": 2304
   },

@@ -124,6 +124,32 @@ function trueObliquity(date: Date): number {
   return (meanArcsec + nutation) / 3600;
 }
 
+/**
+ * The ascendant and the midheaven, degrees, from the textbook formulas (Meeus, chapters 12, 13 and 22): Greenwich
+ * mean sidereal time from the UT1 instant, the equation of the equinoxes from the four leading terms of the nutation
+ * in longitude, and the ascendant as the point where the ecliptic meets the horizon east of the meridian. Coarse by
+ * construction: the nutation series here is good to about half an arcsecond.
+ */
+function textbookAngles(ut1: Date, latitude: number, longitude: number): { asc: number; mc: number } {
+  const t = centuries(ut1);
+  const node = (125.04452 - 1934.136261 * t) * RAD;
+  const sun = (280.4665 + 36000.7698 * t) * RAD;
+  const moon = (218.3165 + 481267.8813 * t) * RAD;
+  const nutationLongitude = (-17.2 * Math.sin(node) - 1.32 * Math.sin(2 * sun) - 0.23 * Math.sin(2 * moon) + 0.21 * Math.sin(2 * node)) / 3600;
+  const obliquity = trueObliquity(ut1) * RAD;
+  const meanSidereal = 280.46061837 + 360.98564736629 * (t * 36525) + 0.000387933 * t * t - (t * t * t) / 38710000;
+  const ramc = mod360(meanSidereal + nutationLongitude * Math.cos(obliquity) + longitude) * RAD;
+  const mc = mod360(Math.atan2(Math.sin(ramc), Math.cos(ramc) * Math.cos(obliquity)) / RAD);
+  // The ecliptic meets the horizon at two opposite points; this is one of them.
+  let asc = mod360(Math.atan2(Math.cos(ramc), -(Math.sin(ramc) * Math.cos(obliquity) + Math.tan(latitude * RAD) * Math.sin(obliquity))) / RAD);
+  // Outside the polar circles it is always the one east of the meridian. Inside them each point spends half the
+  // sidereal day in the west, and the ascendant is by convention the eastern one (docs/houses.md): take that one,
+  // judged here by the point's own hour angle.
+  const rightAscension = Math.atan2(Math.sin(asc * RAD) * Math.cos(obliquity), Math.cos(asc * RAD));
+  if (wrapDifference(ramc / RAD, rightAscension / RAD) > 0) asc = mod360(asc + 180);
+  return { asc, mc };
+}
+
 /** Julian Day Number of a calendar date at noon: Meeus, chapter 7. */
 function julianDayNumber(year: number, month: number, day: number, calendar: "gregorian" | "julian"): number {
   const y = month <= 2 ? year - 1 : year;
@@ -337,6 +363,41 @@ describe("polar latitudes, Placidus beside whole sign", () => {
     expect(firstLatitudeWith("polar-fallback", "koch", 1), id).toBe(boundary);
     expect(firstLatitudeWith("polar-fallback", "placidus", -1), id).toBe(boundary);
     expect(firstLatitudeWith("polar-angles", "whole", 1), id).toBe(boundary);
+  });
+
+  it("puts the ascendant and the midheaven inside the polar circle where the textbook formulas do", () => {
+    // The stored angle vectors stop at 66 degrees of latitude, so this is the only outside check on polar angles.
+    const latitudes = [...new Set(polar.map((entry) => entry.input.latitude as number))].filter((latitude) => Math.abs(latitude) > 66.5 && Math.abs(latitude) < 90);
+    const instants = [...casesOf("polar-boundary").map((entry) => entry.input.utc as string), "1912-09-09T09:09:00Z", "2026-11-20T05:17:00Z", "1975-03-03T21:41:00Z"];
+    expect(new Set(instants).size).toBe(6);
+    let compared = 0;
+    for (const latitude of latitudes) {
+      for (const utc of instants) {
+        // Read as UT1, so that the comparison does not hang on the engine's UTC to UT1 table.
+        const chart = natalChart({ utc, timeScale: "ut1", latitude, longitude: 25, houseSystem: "whole" });
+        const textbook = textbookAngles(new Date(utc), latitude, 25);
+        const asc = arcsec(wrapDifference(chart.angles!.asc, textbook.asc));
+        const mc = arcsec(wrapDifference(chart.angles!.mc, textbook.mc));
+        largest("polar", "ascAgainstTextbookMaxArcsec", asc);
+        largest("polar", "mcAgainstTextbookMaxArcsec", mc);
+        compared += 1;
+        expect(mc, `midheaven at ${latitude}, ${utc}`).toBeLessThan(2);
+        expect(asc, `ascendant at ${latitude}, ${utc}: ${chart.angles!.asc} against ${textbook.asc}`).toBeLessThan(2);
+      }
+    }
+    note("polar", "anglesComparedWithTextbook", compared);
+    expect(compared).toBe(66);
+  });
+
+  it("at a pole itself gives degenerate Regiomontanus cusps, flagged (a known limit, pinned here, not accuracy evidence)", () => {
+    // At 90 degrees the horizon is the equator and has no north or south point for the house circles to pass through.
+    for (const latitude of [90, -90]) {
+      const chart = natalChart({ utc: "2000-06-21T12:00:00Z", latitude, longitude: 25, houseSystem: "regiomontanus" });
+      expectSane(chart, `pole ${latitude}`);
+      expect(chart.flags).toContain("polar-angles");
+      expect(chart.houses!.system).toBe("regiomontanus");
+      expect(new Set(chart.houses!.cusps.map((cusp) => cusp.toFixed(6))).size, "several cusps coincide").toBeLessThan(12);
+    }
   });
 
   it("returns no NaN from any house system at any latitude: a sweep of 26,208 charts", () => {
@@ -616,6 +677,15 @@ describe("no hidden state", () => {
   });
 });
 
+describe("a field the birth does not have", () => {
+  it("is ignored unless it is a listed near-miss name: a timeZone beside utc changes nothing (a known limit, pinned here)", () => {
+    const plain = natalChart({ utc: "1990-06-15T14:30:00Z", latitude: 40.7128, longitude: -74.006 });
+    const withZone = natalChart({ utc: "1990-06-15T14:30:00Z", latitude: 40.7128, longitude: -74.006, timeZone: "America/New_York" } as never);
+    expect(JSON.stringify(withZone)).toBe(JSON.stringify(plain));
+    expect(withZone.input.utc.toISOString()).toBe("1990-06-15T14:30:00.000Z");
+  });
+});
+
 describe("measured against the stored references", () => {
   interface PositionVector { id: string; input: { body: string; jd_tt: number }; expected: { lon: number; lat: number } }
   interface AngleVector {
@@ -652,19 +722,18 @@ describe("measured against the stored references", () => {
     }
   });
 
-  it("angles and house cusps, against the vectors of L2, with the polar ones apart", () => {
+  it("angles and house cusps, against the vectors of L2 (latitudes to 66 degrees; beyond, only the cusps that do not exist)", () => {
     const chartAt = (vector: AngleVector, houseSystem: HouseSystem) =>
       natalChart({ utc: dateOfJd(vector.input.jd_ut1), timeScale: "ut1", latitude: vector.input.lat, longitude: vector.input.lon, houseSystem });
     let cuspVectors = 0;
     let undefinedVectors = 0;
     let angleVectors = 0;
     for (const vector of l2) {
-      const polar = Math.abs(vector.input.lat) >= 66.5 ? "Polar" : "";
       if (vector.kind === "angles.asc-mc") {
         const chart = chartAt(vector, "porphyry");
         angleVectors += 1;
-        largest("anglesAndCusps", `ascMaxArcsec${polar}`, arcsec(wrapDifference(chart.angles!.asc, vector.expected.asc!)));
-        largest("anglesAndCusps", `mcMaxArcsec${polar}`, arcsec(wrapDifference(chart.angles!.mc, vector.expected.mc!)));
+        largest("anglesAndCusps", "ascMaxArcsec", arcsec(wrapDifference(chart.angles!.asc, vector.expected.asc!)));
+        largest("anglesAndCusps", "mcMaxArcsec", arcsec(wrapDifference(chart.angles!.mc, vector.expected.mc!)));
       } else if (vector.kind === "houses.cusps") {
         const system = (vector.input.system === "whole-sign" ? "whole" : vector.input.system) as HouseSystem;
         const chart = chartAt(vector, system);
@@ -679,7 +748,7 @@ describe("measured against the stored references", () => {
           expect(chart.flags, vector.id).not.toContain("polar-fallback");
           vector.expected.cusps!.forEach((cusp, index) => {
             const error = arcsec(wrapDifference(chart.houses!.cusps[index]!, cusp));
-            largest("anglesAndCusps", `cuspMaxArcsec${polar}`, error);
+            largest("anglesAndCusps", "cuspMaxArcsec", error);
             largest("anglesAndCusps", `cuspMaxArcsec ${system}`, error);
           });
         }

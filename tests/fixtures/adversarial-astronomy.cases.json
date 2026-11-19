@@ -2467,7 +2467,9 @@
    },
    "expected": {
     "ephemeris": "jpl-de440",
-    "flags": []
+    "flags": [
+     "delta-t-extrapolated"
+    ]
    },
    "note": ""
   },
@@ -2479,7 +2481,9 @@
    },
    "expected": {
     "ephemeris": "jpl-de440",
-    "flags": []
+    "flags": [
+     "delta-t-extrapolated"
+    ]
    },
    "note": ""
   },
