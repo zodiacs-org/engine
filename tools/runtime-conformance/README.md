@@ -1,14 +1,14 @@
 # Runtime conformance
 
-This private folder runs the conformance suite's requests (640 from suite
-0.3.0, `conformance/vectors/0.3.0/`; the evidence of 17 November ran 0.2.0's
-500) through `@zodiacs/engine` in six JavaScript
-runtimes: Node, Bun, Deno, Chromium, Firefox and WebKit. Every run goes
-through the unchanged harness (`conformance/harness/run.mjs`) and the same
-adapter code (`conformance/adapters/zodiacs-engine.mjs`), so every verdict is
-judged against the vectors' own arbiters with the suite's tolerances. Node's
-values are used only to measure how far another runtime's values are from
-them; they are never the pass mark.
+This private folder runs the conformance suite's requests through the root
+entry (`@zodiacs/engine`) and the core entry (`@zodiacs/engine/core`) in Node,
+Bun, Deno, Chromium, Firefox and WebKit. Every run uses the conformance
+harness (`conformance/harness/run.mjs`) and the same request handlers
+(`conformance/adapters/zodiacs-engine.mjs`). The harness judges each response
+against the vector's arbiter and tolerance. The runtime gate compares the
+resulting verdicts with Node's for that entry. Matching failures count as
+agreement, including positions where core's astronomy-engine result falls
+outside the arbiter's tolerance.
 
 Nothing here is packed: the folder has its own `package.json` and lockfile,
 which pin Bun, Deno, esbuild and Playwright, and the root `package.json` and
@@ -27,9 +27,11 @@ node --test selftest.mjs
 node run-all.mjs --out <dir>
 ```
 
-`--runtimes node,bun,deno` runs a subset (Node always runs, as the
-reference). `.github/workflows/runtime-conformance.yml` runs all six on pull
-requests that touch `src/`, `conformance/`, the root `package.json` or
+`run-all.mjs` runs both entries by default. Use `--entry root` or
+`--entry core` for a single entry. `--runtimes node,bun,deno` selects a subset.
+Node always runs as the reference for each selected entry. The
+`.github/workflows/runtime-conformance.yml` workflow runs all supported
+runtimes on pull requests that touch `src/`, `conformance/`, the root `package.json` or
 lockfile, the build configuration (`tsconfig.base.json`,
 `tsconfig.build.json`, `scripts/build-lite.mjs`) or this folder, and weekly.
 
@@ -37,13 +39,15 @@ lockfile, the build configuration (`tsconfig.base.json`,
 
 - Node, Bun and Deno run the adapter itself, as the harness's adapter
   command: `node`, `bun` and `deno run -A` on
-  `conformance/adapters/zodiacs-engine.mjs`. Bun and Deno are the npm
-  packages `bun` and `deno` at the versions the lockfile pins.
+  `conformance/adapters/zodiacs-engine.mjs`, with `--entry core` for core.
+  Bun and Deno are the npm packages `bun` and `deno` at the versions the
+  lockfile pins.
 - Chromium, Firefox and WebKit run `browser-adapter.mjs`, which speaks the
   same adapter protocol on its standard input and output. It bundles
-  `page-entry.mjs` with esbuild (`bundle.mjs`): the built engine in `dist/`
-  and the adapter's own `createHandlers`, with each tzdb shard the engine
-  loads by dynamic import kept as a chunk of its own. A loopback server
+  `page-entry.mjs` with esbuild (`bundle.mjs`), resolving the chart entry to
+  `dist/index.js` for root or `dist/core.js` for core. Both use the adapter's
+  `createHandlers`, with each dynamically imported tzdb shard kept as a
+  chunk of its own. A loopback server
   serves only those bundled files, Playwright opens the page in the browser
   and refuses every other request, and each request is answered in the page.
   WebKit here is Playwright's WebKit build on Linux, not Safari on a phone or
@@ -55,19 +59,26 @@ lockfile, the build configuration (`tsconfig.base.json`,
   from inside that runtime; the browser adapter reports its own.
 - `native-extras.mjs` (in Node, Bun and Deno) and the browser page also
   compute draft natal receipts (`createNatalEnvelope`, then
-  `serializeNatalEnvelope`) for the five synthetic births in
-  `receipt-cases.mjs`, whose SHA-256 digests are compared with Node's.
+  `serializeNatalEnvelope`) for the synthetic births in `receipt-cases.mjs`,
+  using the selected entry for the chart. The run compares their SHA-256
+  digests with Node's for that entry.
+- Both entries follow the adapter's existing routing for the shared `/geo`
+  and `/calc` functions, including `/calc` for event ingresses.
 
 ## What a run writes, and when it fails
 
-For each runtime, `<dir>/<runtime>/` holds `results.json` (the harness's
-results file; `adapter.runtime` names the runtime and its version),
+For each runtime, `<dir>/<runtime>/` for root and `<dir>/core/<runtime>/`
+for core hold `results.json` (the harness's results file, with the runtime
+and version in `adapter.runtime`),
 `responses.jsonl` (every line the adapter wrote) and `summary.json`:
 
 - the runtime's name and version, its JavaScript engine, and the `Intl` time
   zone data version where the runtime exposes it (`process.versions.tz`;
   "not exposed" otherwise);
-- the verdict counts, in total and per level;
+- the arbiter verdict counts, in total and per level;
+- vectors answered, matching supported verdicts, differing verdicts, and
+  unsupported vectors. A support difference also appears among differing
+  verdicts;
 - every vector whose verdict differs from Node's, with both outputs, the
   expected value and the tolerance, classed as "host data" (pass against fail
   on a `time.zone-offset` vector at a local time in 1970 or later, which the
@@ -79,11 +90,12 @@ results file; `adapter.runtime` names the runtime and its version),
 - the receipt digests and whether each equals Node's;
 - the gate: whether the run passes, and why not.
 
-`<dir>/matrix.json` collects every summary's headline. `run-all.mjs` exits 1
-when Node's verdicts differ from `conformance/results/zodiacs-engine.json`,
-when a runtime's verdict differs from Node's for a vector that is not "host
-data", when a runtime does not answer every request exactly once, or when a
-results file names another runtime than its folder's. No threshold is applied
+`<dir>/matrix.json` and `<dir>/core/matrix.json` collect the summaries for
+root and core. `run-all.mjs` exits 1 when the root Node verdicts differ from
+`conformance/results/zodiacs-engine.json`, when a runtime's verdict differs
+from the same entry's Node verdict for a vector outside the host zone data
+exception, when a runtime fails to answer each request exactly once, or when
+a results file names a different runtime or entry. No threshold is applied
 to the differences in value, and different receipt digests are reported, not
 gated: the ECMAScript specification leaves `Math.sin`, `cos`, `tan`, `atan2`,
 `exp` and `pow` implementation-approximated, so runtimes may differ in the
@@ -112,5 +124,7 @@ on that flips between pass and fail is "host data" while one that turns
 into an error or an unsupported answer fails, that one before 1970 is never
 host data, that a results file swapped
 with another runtime's is caught by its runtime name, that a missing answer
-fails, and that the browser bundle, run in Node, answers every request
-exactly as the Node adapter does, tzdb shards included.
+fails, and that each browser bundle, run in Node, answers every request
+exactly as the matching Node adapter does, tzdb shards included. It also
+checks that one invocation writes both entries and accepts core verdicts
+that agree with the core Node run.

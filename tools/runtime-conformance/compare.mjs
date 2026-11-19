@@ -79,12 +79,19 @@ const valueUnit = (rule) => {
  * vectors: the suite's vectors in order. node and runtime: { results (the
  * harness's results file), raw (readRaw of the adapter's lines), receipts
  * (the runtime's receipt texts) }. expected: the runtime this run should be.
+ * entry: the entry that both adapters must report.
  */
-export function compareWithNode({ vectors, node, runtime, expected }) {
+export function compareWithNode({ vectors, node, runtime, expected, entry = 'root' }) {
   const problems = [];
   const reported = runtime.results.adapter?.runtime ?? null;
   if (!reported) problems.push(`the results file does not name its runtime (adapter.runtime)`);
   else if (reported.name !== expected) problems.push(`the results file names runtime ${reported.name}, not ${expected}`);
+
+  const expectedAdapter = entry === 'core' ? 'zodiacs-engine-core' : 'zodiacs-engine';
+  const adapterName = runtime.results.adapter?.name;
+  if (adapterName !== expectedAdapter) problems.push(`the results file names adapter ${adapterName}, expected ${expectedAdapter}`);
+  const nodeAdapter = node.results.adapter?.name;
+  if (runtime !== node && nodeAdapter !== expectedAdapter) problems.push(`the Node reference names adapter ${nodeAdapter}, expected ${expectedAdapter}`);
 
   // Every request id answered exactly once (every one of the suite's), in both files.
   const ids = vectors.map((vector) => vector.id);
@@ -100,6 +107,7 @@ export function compareWithNode({ vectors, node, runtime, expected }) {
   const verdicts = new Map(runtime.results.results.map((entry) => [entry.id, entry]));
   const differs = [];
   const largest = {};
+  let agreeing = 0;
   let identicalOutputs = 0;
   let comparedOutputs = 0;
   for (const vector of vectors) {
@@ -127,6 +135,7 @@ export function compareWithNode({ vectors, node, runtime, expected }) {
         ...(mine.detail ? { detail: mine.detail } : {}),
       });
     }
+    if (mine && mine.verdict === theirs?.verdict && mine.verdict !== 'unsupported') agreeing += 1;
     if (!answer?.output || !nodeAnswer?.output) continue;
     comparedOutputs += 1;
     if (JSON.stringify(answer.output) === JSON.stringify(nodeAnswer.output)) identicalOutputs += 1;
@@ -171,13 +180,14 @@ export function compareWithNode({ vectors, node, runtime, expected }) {
     vectors: runtime.results.vectors,
     verdicts: { total, byLevel },
     requests: { suite: ids.length, answered: runtime.raw.answers.size, repeated: runtime.raw.repeated },
+    agreement: { run: runtime.raw.answers.size, agreeing, disagreeing: differs.length, unsupported: total.unsupported },
     differsFromNode: differs,
     largestDifferenceFromNode: largest,
     outputsIdenticalToNode: { identical: identicalOutputs, compared: comparedOutputs },
     receipts: { allSameAsNode: receipts.length === node.receipts.length && receipts.every((one) => one.sameAsNode), cases: receipts },
     gate: {
       pass: problems.length === 0,
-      rule: 'fails when a verdict differs from Node\'s, except pass against fail on a vector that depends on host zone data, or when the run is incomplete or names another runtime; differences in value and receipt digests are reported, not gated',
+      rule: 'fails when a verdict differs from Node\'s, except pass against fail on a vector that depends on host zone data, or when the run is incomplete or names another runtime or entry; differences in value and receipt digests are reported, not gated',
       problems,
     },
   };
