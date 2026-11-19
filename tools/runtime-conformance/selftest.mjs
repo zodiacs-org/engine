@@ -125,7 +125,6 @@ test('the browser bundle answers every request as the Node adapter does, tzdb sh
   }
 });
 
-
 test('the core browser bundle uses the same entry and handlers as the native core adapter', async () => {
   const { adapter: coreAdapter, responses: coreResponses } = await runAdapter(
     `${JSON.stringify(process.execPath)} conformance/adapters/zodiacs-engine.mjs --entry core`, vectors, { cwd: root },
@@ -162,7 +161,13 @@ test('the runner writes root and core separately and accepts matching core verdi
     assert.equal(matrix.entry, entry);
     assert.equal(results.adapter.name, entry === 'core' ? 'zodiacs-engine-core' : 'zodiacs-engine');
     assert.equal(matrix.gate.pass, true);
-    if (entry === 'core') assert.ok(results.summary.byLevel.L1.fail > 0, 'core keeps its arbiter failures');
+    if (entry === 'core') {
+      const baselinePath = resolve(root, 'docs/evidence/runtime-conformance-20261119/core/node/results.json');
+      const baseline = JSON.parse(readFileSync(baselinePath, 'utf8'));
+      const minimum = baseline.summary.byLevel.L1.pass;
+      const passes = results.summary.byLevel.L1.pass;
+      assert.ok(passes >= minimum, `core L1 arbiter passes fell from ${minimum} to ${passes}`);
+    }
     const agreement = { run: vectors.length, agreeing: vectors.length - results.summary.total.unsupported, disagreeing: 0, unsupported: results.summary.total.unsupported };
     assert.deepEqual(summary.agreement, agreement);
     assert.deepEqual(matrix.runtimes.node.agreement, agreement);

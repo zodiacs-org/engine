@@ -10,22 +10,26 @@ and core entries each have their own Node reference.
 Run counts include unsupported responses. Agreeing counts matching
 verdicts for supported vectors, including matching failures against
 an arbiter. The disagreeing column lists all differing verdicts by
-vector ID when there are any.
+vector ID when there are any. Output identity compares the serialized output
+values for the supported vectors against Node on the same entry. Receipt
+agreement requires every synthetic receipt digest to match Node's for that
+entry. Arbiter pass counts vectors whose results meet their arbiters'
+expected values within the stated tolerances.
 
-| Entry | Runtime | Version | Run | Agreeing | Disagreeing | Unsupported |
-| --- | --- | --- | ---: | ---: | --- | ---: |
-| root | Node | 22.22.2 | 640 | 569 | 0 | 71 |
-| root | Bun | 1.4.4 | 640 | 569 | 0 | 71 |
-| root | Deno | 2.9.6 | 640 | 569 | 0 | 71 |
-| root | Chromium | 156.0.8078.4 | 640 | 569 | 0 | 71 |
-| root | Firefox | 157.0 | 640 | 569 | 0 | 71 |
-| root | WebKit | 27.2 | 640 | 569 | 0 | 71 |
-| core | Node | 22.22.2 | 640 | 569 | 0 | 71 |
-| core | Bun | 1.4.4 | 640 | 569 | 0 | 71 |
-| core | Deno | 2.9.6 | 640 | 569 | 0 | 71 |
-| core | Chromium | 156.0.8078.4 | 640 | 569 | 0 | 71 |
-| core | Firefox | 157.0 | 640 | 569 | 0 | 71 |
-| core | WebKit | 27.2 | 640 | 569 | 0 | 71 |
+| Entry | Runtime | Version | Run | Agreeing | Disagreeing | Unsupported | Outputs identical to Node | Receipts same as Node | Arbiter pass |
+| --- | --- | --- | ---: | ---: | --- | ---: | ---: | --- | ---: |
+| root | Node | 22.22.2 | 640 | 569 | 0 | 71 | 569 of 569 | Yes | 569 |
+| root | Bun | 1.4.4 | 640 | 569 | 0 | 71 | 458 of 569 | No | 569 |
+| root | Deno | 2.9.6 | 640 | 569 | 0 | 71 | 458 of 569 | No | 569 |
+| root | Chromium | 156.0.8078.4 | 640 | 569 | 0 | 71 | 458 of 569 | No | 569 |
+| root | Firefox | 157.0 | 640 | 569 | 0 | 71 | 569 of 569 | Yes | 569 |
+| root | WebKit | 27.2 | 640 | 569 | 0 | 71 | 458 of 569 | No | 569 |
+| core | Node | 22.22.2 | 640 | 569 | 0 | 71 | 569 of 569 | Yes | 377 |
+| core | Bun | 1.4.4 | 640 | 569 | 0 | 71 | 468 of 569 | No | 377 |
+| core | Deno | 2.9.6 | 640 | 569 | 0 | 71 | 485 of 569 | No | 377 |
+| core | Chromium | 156.0.8078.4 | 640 | 569 | 0 | 71 | 485 of 569 | No | 377 |
+| core | Firefox | 157.0 | 640 | 569 | 0 | 71 | 540 of 569 | No | 377 |
+| core | WebKit | 27.2 | 640 | 569 | 0 | 71 | 468 of 569 | No | 377 |
 
 The root Node verdicts match the committed root results. Core passes 48 of
 240 L1 position vectors against the arbiter. Each runtime matches Node on
