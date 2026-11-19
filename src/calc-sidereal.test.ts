@@ -253,9 +253,16 @@ describe("the sidereal zodiac in calc()", () => {
     for (const iso of INSTANTS) {
       for (const { zodiac, definition } of ZODIACS) {
         for (const body of ["Sun", "Moon", "Pluto", "Mean Node"] as const) {
-          const tropical = ok(calc({ body, time: iso }));
-          const sidereal = ok(calc({ body, time: iso, zodiac }));
-          const at = AstroTime.FromTerrestrialTime(sidereal.receipt.instants[0]!.jdTt - 2_451_545);
+          const given = ok(calc({ body, time: iso, zodiac }));
+          const jdTt = given.receipt.instants[0]!.jdTt;
+          // Past the IERS table a UT1 instant's bounds also widen by the ΔT band (calc-delta-t.test.ts): the
+          // addition is checked on the same TT, where nothing widens, and the widening on top of it.
+          const late = given.flags.includes("delta-t-extrapolated");
+          expect(late).toBe(iso.startsWith("2199"));
+          const time = late ? { jd: jdTt, scale: "tt" as const } : iso;
+          const tropical = ok(calc({ body, time }));
+          const sidereal = ok(calc({ body, time, zodiac }));
+          const at = AstroTime.FromTerrestrialTime(jdTt - 2_451_545);
           const added = ayanamsaBound(definition, ayanamsaAt(definition, at).elongation);
           expect(sidereal.ayanamsa!.bound).toEqual({ value: added.position, unit: "arcsec", label: "measured", basis: AYANAMSA_BASIS });
           expect(sidereal.bounds.position.value).toBe(addBounds(tropical.bounds.position.value!, added.position));
@@ -263,6 +270,24 @@ describe("the sidereal zodiac in calc()", () => {
           expect(sidereal.bounds.position.basis).toContain(AYANAMSA_BASIS);
           expect(sidereal.bounds.speed!.value).toBe(addBounds(tropical.bounds.speed!.value!, added.rate));
           expect(sidereal.bounds.distance).toEqual(tropical.bounds.distance);
+          if (!late) continue;
+          // On UTC input after the IERS table TT is exact (the continuous-UTC rule), so nothing widens there; on
+          // UT1 input, the same UT1, TT carries the ΔT band.
+          expect(given.bounds.position).toEqual(sidereal.bounds.position);
+          const onUt1 = { jd: given.receipt.instants[0]!.jdUt1, scale: "ut1" as const };
+          const givenOnUt1 = ok(calc({ body, time: onUt1, zodiac }));
+          // The sidereal widening is the tropical one, to the precession's share of the rate, on top of the addition.
+          const wide = ok(calc({ body, time: onUt1 }));
+          for (const key of ["position", "speed"] as const) {
+            const grown = givenOnUt1.bounds[key]!;
+            expect(grown.label, `${body} ${key}`).toBe("estimated");
+            expect(grown.basis.startsWith(`${sidereal.bounds[key]!.basis}; plus `), `${body} ${key}`).toBe(true);
+            expect(grown.basis).toContain("ΔT extrapolated");
+            const extra = grown.value! - sidereal.bounds[key]!.value!;
+            const tropicalExtra = wide.bounds[key]!.value! - tropical.bounds[key]!.value!;
+            expect(extra, `${body} ${key}`).toBeGreaterThan(0);
+            expect(Math.abs(extra - tropicalExtra), `${body} ${key}`).toBeLessThan(0.01 * tropicalExtra + 1e-4);
+          }
         }
       }
     }
@@ -287,14 +312,14 @@ describe("the sidereal zodiac in calc()", () => {
       expect(elongation, time).toBeLessThan(to);
       expect(result.ayanamsa!.bound.value).toBe(position);
       expect(result.bounds.position.value).toBe(addBounds(ok(calc({ body: "Moon", time })).bounds.position.value!, position));
-      expect(result.bounds.speed!.value).toBe(addBounds(1.1, rate));
+      expect(result.bounds.speed!.value).toBe(addBounds(ok(calc({ body: "Moon", time })).bounds.speed!.value!, rate));
       const housesResult = ok(houses({ time, place: PLACE, zodiac })) as HousesResult;
       expect(housesResult.ayanamsa!.bound.value).toBe(position);
       expect(housesResult.bounds.angles.value).toBe(addBounds(0.02, position));
     }
     const lahiri = ok(calc({ body: "Moon", time: "2000-07-31T15:30:00Z", zodiac: { sidereal: "lahiri" } }));
     expect(lahiri.ayanamsa!.bound.value).toBe(4.6e-7);
-    expect(lahiri.bounds.speed!.value).toBe(addBounds(1.1, 1.6e-7));
+    expect(lahiri.bounds.speed!.value).toBe(addBounds(ok(calc({ body: "Moon", time: "2000-07-31T15:30:00Z" })).bounds.speed!.value!, 1.6e-7));
   });
 
   it("put each band's edge in the band beyond it", () => {
@@ -504,8 +529,13 @@ describe("the sidereal zodiac in houses()", () => {
           name: definition.name, mean: value.mean, nutation: value.nutation, true: value.true, subtracted: "true"
         });
         const added = ayanamsaBound(definition, ayanamsaAt(definition, AstroTime.FromTerrestrialTime(sidereal.receipt.instants[0]!.jdTt - 2_451_545)).elongation).position;
-        expect(sidereal.bounds.angles.value).toBe(addBounds(0.02, added));
-        expect(sidereal.bounds.cusps.value).toBe(addBounds(0.08, added));
+        // On a ΔT extrapolated (2199) each bound also grows by the largest band it covers (calc-delta-t.test.ts).
+        const late = sidereal.flags.includes("delta-t-extrapolated");
+        expect(late).toBe(iso.startsWith("2199"));
+        const { asc, mc, vertex, eastPoint, cusps } = sidereal.band;
+        const grown = (value: number, extra: number) => (late ? addBounds(value, extra) : value);
+        expect(sidereal.bounds.angles.value).toBe(grown(addBounds(0.02, added), Math.max(asc, mc, vertex, eastPoint)));
+        expect(sidereal.bounds.cusps.value).toBe(grown(addBounds(0.08, added), Math.max(...cusps)));
         expect(sidereal.receipt.conventions[0]).toBe("zodiac:sidereal");
         expect(sidereal.receipt.conventions[1]).toMatch(/^ayanamsa:/);
         expect(JSON.parse(JSON.stringify(houses(sidereal.receipt.request)))).toEqual(JSON.parse(JSON.stringify(sidereal)));

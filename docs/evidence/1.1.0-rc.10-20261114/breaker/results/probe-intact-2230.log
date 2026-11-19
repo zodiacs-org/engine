@@ -1,0 +1,60 @@
+# intact: year 2230; default {"name":"de440","de440":{"opened":true,"version":"51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7","fromTtDays":-76699.5,"toTtDays":76699.5,"error":null}}
+SAYS NOTHING                                     defaultEphemeris [object] {"name":"de440","de440":{"opened":true,"version":"51428874d9a47213abc0ff42cbcec65f338624ea
+outside-de440-span names-AE                      natalChart [object] flags=[outside-reference-span,delta-t-extrapolated,outside-de440-span] 
+outside-de440-span names-AE                      natalChart_noTime [object] flags=[no-time,outside-reference-span,delta-t-extrapolated,outside-de440-span] 
+outside-de440-span names-AE                      positions [array[12]] 
+outside-de440-span names-AE                      transits [object] 
+outside-de440-span names-AE                      synastry [object] 
+outside-de440-span names-AE                      progressedBodies [array[12]] 
+outside-de440-span names-AE                      moonPhase [object] 
+outside-de440-span names-AE                      saturnReturn [object] flags=[outside-de440-span] 
+outside-de440-span                               searchLongitudeCrossings [object] status=complete flags=[outside-de440-span] 
+SAYS NOTHING                                     findLongitudeCrossings [array[1]] [{"at":"2230-04-20T10:42:24.476Z","retrograde":false}]
+SAYS NOTHING                                     chartPoints [object] {"sect":"day","points":[{"point":"Mean Node","lon":351.12245022957904,"lat":0,"speed":-0.0
+SAYS NOTHING                                     chartDeclinations [object] {"trueObliquity":23.411937176894657,"rows":[{"body":"Sun","lon":25.008324647388406,"lat":0
+SAYS NOTHING                                     internal.bodyLongitude [number] 39.3722317236805
+SAYS NOTHING                                     internal.longitudeSpeed [number] 14.325234260553543
+outside-de440-span names-AE                      internal.computeBodies [array[12]] 
+outside-de440-span names-AE                      internal.computeChart [object] flags=[no-time,outside-reference-span,delta-t-extrapolated,outside-de440-span] 
+outside-de440-span names-AE                      receipt.createNatalEnvelope [object] 
+SAYS NOTHING                                     calc.calc Sun [object] status=refused:out-of-range {"status":"refused","reason":"out-of-range","detail":"The instant's UT1 or TT is outside 1
+SAYS NOTHING                                     calc.calc Moon equatorial [object] status=refused:out-of-range {"status":"refused","reason":"out-of-range","detail":"The instant's UT1 or TT is outside 1
+SAYS NOTHING                                     calc.calc NNode [object] status=refused:out-of-range {"status":"refused","reason":"out-of-range","detail":"The instant's UT1 or TT is outside 1
+SAYS NOTHING                                     calc.calc Mars helio [object] status=refused:out-of-range {"status":"refused","reason":"out-of-range","detail":"The instant's UT1 or TT is outside 1
+SAYS NOTHING                                     calc.calc Mars topo [object] status=refused:out-of-range {"status":"refused","reason":"out-of-range","detail":"The instant's UT1 or TT is outside 1
+SAYS NOTHING                                     calc.calc Mars ecliptic-j2000 [object] status=refused:out-of-range {"status":"refused","reason":"out-of-range","detail":"The instant's UT1 or TT is outside 1
+SAYS NOTHING                                     calc.chart [object] status=refused:out-of-range {"status":"refused","reason":"out-of-range","detail":"The instant's UT1 or TT is outside 1
+SAYS NOTHING                                     calc.events [object] status=refused:out-of-range {"status":"refused","reason":"out-of-range","detail":"The instant's UT1 or TT is outside 1
+SAYS NOTHING                                     calc.houses [object] status=refused:out-of-range {"status":"refused","reason":"out-of-range","detail":"The instant's UT1 or TT is outside 1
+THREW   window.birthWindow: RangeError: The window must lie inside REFERENCE_SPAN, 1800 to 2200.
+outside-de440-span names-AE                      tech.solarReturn [object] flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span names-AE                      tech.lunarReturn [object] flags=[outside-reference-span,outside-de440-span] 
+SAYS NOTHING                                     tech.solarReturnInstant [Date] "2260-04-14T14:49:03.606Z"
+SAYS NOTHING                                     tech.mostRecentSolarReturnInstant [Date] "2259-04-15T08:54:22.819Z"
+SAYS NOTHING                                     tech.lunarReturnInstant [Date] "2260-03-15T11:19:33.935Z"
+SAYS NOTHING                                     tech.moonAspects [array[27]] [{"at":"2230-04-15T19:55:35.646Z","body":"Saturn","aspect":"sextile","moonLon":46.21496135
+SAYS NOTHING                                     tech.moonIngresses [array[4]] [{"at":"2230-04-16T18:46:37.865Z","sign":"gemini"},{"at":"2230-04-18T20:21:45.113Z","sign"
+outside-de440-span                               tech.moonSignCandidates [object] flags=[outside-reference-span,outside-de440-span] 
+SAYS NOTHING                                     tech.moonSignsBetween [array[5]] ["taurus","gemini","cancer","leo","virgo"]
+SAYS NOTHING                                     tech.voidOfCourseAt [object] {"at":"2230-04-15T08:30:00.000Z","isVoid":false,"current":null,"next":{"from":"2230-04-16T
+SAYS NOTHING                                     tech.voidOfCourseWindows [array[4]] [{"from":"2230-04-16T18:01:51.434Z","to":"2230-04-16T18:46:37.865Z","lastAspect":{"at":"22
+SAYS NOTHING                                     tech.compositeChart [object] {"bodies":[{"body":"Sun","lon":302.6687644643677},{"body":"Moon","lon":335.55824147898574}
+outside-de440-span names-AE                      tech.davisonChart [object] flags=[outside-reference-span,outside-de440-span] 
+SAYS NOTHING                                     tech.chartAspectPatterns [object] {"points":[{"body":"Sun","lon":25.008324647388406},{"body":"Moon","lon":39.3722317236805},
+outside-de440-span                               timing.profectionAt [object] flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span                               timing.profectionYear [object] flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span                               timing.firdaria [object] flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span                               timing.firdariaAt [object] flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span                               timing.planetaryReturns [object] status=complete flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span                               timing.solarArc [object] flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span                               timing.solarArcDirections [object] flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span                               timing.zodiacalReleasing [object] flags=[outside-reference-span,outside-de440-span] 
+outside-de440-span                               timing.zodiacalReleasingAt [object] flags=[outside-reference-span,outside-de440-span] 
+SAYS NOTHING                                     sky.skyEvents Sun [object] status=complete flags=[outside-reference-span] {"body":"Sun","observer":{"latitude":51.5,"longitude":-0.12,"height":0},"from":"2230-04-15
+SAYS NOTHING                                     sky.skyEventsOn Moon [object] status=complete flags=[outside-reference-span] {"body":"Moon","observer":{"latitude":51.5,"longitude":-0.12,"height":0},"from":"2230-04-1
+SAYS NOTHING                                     sky.planetaryHours [object] status=complete flags=[outside-reference-span] {"date":"2230-04-15","utcOffsetMinutes":-0.48,"weekday":4,"ruler":"Jupiter","conventions":
+SAYS NOTHING                                     sky.planetaryHourAt [object] {"day":{"date":"2230-04-15","utcOffsetMinutes":-0.48,"weekday":4,"ruler":"Jupiter","conven
+SAYS NOTHING                                     vedic.ayanamsa lahiri [object] flags=[outside-reference-span] {"ayanamsa":"lahiri","utc":"2230-04-15T08:30:00.000Z","timeScale":{"input":"utc","basis":"
+outside-de440-span                               vedic.siderealChart [object] flags=[outside-reference-span,delta-t-extrapolated,outside-de440-span] 
+outside-de440-span                               vedic.vargaSensitivity [object] flags=[outside-reference-span,delta-t-extrapolated,outside-de440-span] 
+SAYS NOTHING                                     vedic.vimshottariDasha(sidereal moon) [object] {"system":"vimshottari","yearLength":"julian","yearDays":365.25,"birth":"2230-04-15T08:30:

@@ -5,10 +5,13 @@
 // review defeated it by renaming src/timing/rulers.ts to rulers.mts, which the
 // root then imported unseen. These cases fail on such builds whichever reading
 // sees them first, and the last one runs the check on this checkout's build.
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { describe, expect, it } from "vitest";
 
-import { OPT_IN_SOURCE, checkRootIsolation, mergeModuleLists, readModuleList, sourceMarkers, staticGraph } from "./root-isolation.mjs";
+import { OPT_IN_SOURCE, checkRootIsolation, mergeModuleLists, readCoreModuleList, readModuleList, sourceMarkers, staticGraph } from "./root-isolation.mjs";
 
 /** A build: output files with their source modules, and the source import graph. */
 function build({ chunkModules = ["src/api.ts", "src/ephemeris.ts"], markers, rootImports = [], extraFiles = {} } = {}) {
@@ -165,6 +168,46 @@ describe("the root entry's isolation check", () => {
     expect(() => mergeModuleLists(tsup, { ...lite, outputs: { "dist/index.js": tsup.outputs["dist/index.js"] } })).toThrow(/dist\/index\.js is in two/);
     expect(() => mergeModuleLists(tsup, { ...lite, inputs: { "src/api.ts": { imports: [] } } })).toThrow(/disagree on src\/api\.ts/);
     expect(() => mergeModuleLists(tsup, undefined)).toThrow(/not an esbuild metafile/);
+  });
+
+  it("names the core entry's file and directory, and not files whose names only begin as theirs", () => {
+    for (const path of ["src/core.ts", "src/core.mts", "src/core/ephemeris-shipped.ts"]) expect(OPT_IN_SOURCE.test(path), path).toBe(true);
+    for (const path of ["src/ephemeris-shipped.ts", "src/cores.ts", "src/core-x.ts", "src/corex/a.ts", "src/score.ts"]) expect(OPT_IN_SOURCE.test(path), path).toBe(false);
+    const bypass = build({ chunkModules: ["src/api.ts", "src/ephemeris.ts", "src/core/ephemeris-shipped.ts"], rootImports: ["src/core/ephemeris-shipped.ts"] });
+    expect(() => checkRootIsolation(bypass)).toThrow(/the root entry reaches src\/core\/ephemeris-shipped\.ts/);
+  });
+
+  it("takes dist/core.js from the core build's list, and that list's sources apart", () => {
+    const tsup = build().metafile;
+    tsup.inputs["src/ephemeris.ts"] = { imports: [{ path: "src/ephemeris-shipped.ts", kind: "import-statement" }] };
+    const lite = { inputs: { "src/lite.ts": { imports: [] } }, outputs: { "dist/lite.js": { bytes: 1, inputs: { "src/lite.ts": {} }, imports: [] } } };
+    // The core build's src/ephemeris.ts imports the core's stand-in: merged, the two lists would disagree on it.
+    const core = {
+      inputs: {
+        "src/core.ts": { imports: [{ path: "src/ephemeris.ts", kind: "import-statement" }] },
+        "src/ephemeris.ts": { imports: [{ path: "src/core/ephemeris-shipped.ts", kind: "import-statement" }] },
+        "src/core/ephemeris-shipped.ts": { imports: [] }
+      },
+      outputs: { "dist/core.js": { bytes: 2, inputs: { "src/core.ts": {}, "src/ephemeris.ts": {}, "src/core/ephemeris-shipped.ts": {} }, imports: [{ path: "astronomy-engine", kind: "import-statement", external: true }] } }
+    };
+    expect(() => mergeModuleLists(tsup, lite, core)).toThrow(/disagree on src\/ephemeris\.ts/);
+    const dir = mkdtempSync(join(tmpdir(), "module-lists-"));
+    try {
+      const dist = pathToFileURL(`${dir}/`);
+      writeFileSync(join(dir, "metafile-esm.json"), JSON.stringify(tsup));
+      writeFileSync(join(dir, "metafile-lite.json"), JSON.stringify(lite));
+      expect(() => readModuleList(dist)).toThrow(/dist\/metafile-core\.json is missing/);
+      writeFileSync(join(dir, "metafile-core.json"), JSON.stringify(core));
+      const merged = readModuleList(dist);
+      expect(merged.outputs["dist/core.js"]).toEqual(core.outputs["dist/core.js"]);
+      expect(merged.inputs["src/ephemeris.ts"]).toEqual(tsup.inputs["src/ephemeris.ts"]);
+      expect(Object.keys(merged.inputs)).not.toContain("src/core.ts");
+      expect(readCoreModuleList(dist)).toEqual(core);
+      writeFileSync(join(dir, "metafile-core.json"), JSON.stringify({ ...core, outputs: { ...core.outputs, "dist/other.js": core.outputs["dist/core.js"] } }));
+      expect(() => readCoreModuleList(dist)).toThrow(/describe dist\/core\.js and nothing else/);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 
   it.runIf(["metafile-esm.json", "metafile-lite.json"].every((name) => existsSync(new URL(`../dist/${name}`, import.meta.url))))("passes this checkout's build", () => {

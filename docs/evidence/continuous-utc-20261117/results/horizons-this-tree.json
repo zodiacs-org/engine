@@ -1,0 +1,150 @@
+{
+  "engine": "@zodiacs/engine@2.0.0-rc.2",
+  "instants": [
+    {
+      "utc": "2028-06-15T12:00:00.000Z",
+      "basis": "continuous-utc",
+      "ephemeris": "jpl-de440",
+      "flags": [
+        "delta-t-extrapolated"
+      ],
+      "ttMinusUtc": 69.184,
+      "horizonsTdbMinusUt": 69.184513,
+      "deltaT": 69.41828120458989,
+      "deltaTSigma": 0.27215952776052876,
+      "ut1MinusUtc": {
+        "seconds": -0.234281204589891,
+        "sigma": 0.27215952776052876,
+        "source": "model"
+      },
+      "Moon": {
+        "lon": 358.35130584239073,
+        "lat": 4.731719838734208,
+        "lonMinusHorizonsArcsec": 0.04,
+        "latMinusHorizonsArcsec": -0.022
+      },
+      "Sun": {
+        "lon": 84.90621281395156,
+        "lat": 0.00011076583768877517,
+        "lonMinusHorizonsArcsec": 0.044,
+        "latMinusHorizonsArcsec": 0.032
+      }
+    },
+    {
+      "utc": "2030-06-15T12:00:00.000Z",
+      "basis": "continuous-utc",
+      "ephemeris": "jpl-de440",
+      "flags": [
+        "delta-t-extrapolated"
+      ],
+      "ttMinusUtc": 69.184,
+      "horizonsTdbMinusUt": 69.184538,
+      "deltaT": 69.65398577022731,
+      "deltaTSigma": 0.862668073867532,
+      "ut1MinusUtc": {
+        "seconds": -0.4699857702273107,
+        "sigma": 0.862668073867532,
+        "source": "model"
+      },
+      "Moon": {
+        "lon": 260.5145404156046,
+        "lat": 0.3842876285405096,
+        "lonMinusHorizonsArcsec": 0.035,
+        "latMinusHorizonsArcsec": -0.03
+      },
+      "Sun": {
+        "lon": 84.45152034903279,
+        "lat": -0.00000920051500125757,
+        "lonMinusHorizonsArcsec": 0.037,
+        "latMinusHorizonsArcsec": 0.032
+      }
+    },
+    {
+      "utc": "2050-06-15T12:00:00.000Z",
+      "basis": "continuous-utc",
+      "ephemeris": "jpl-de440",
+      "flags": [
+        "delta-t-extrapolated"
+      ],
+      "ttMinusUtc": 69.184,
+      "horizonsTdbMinusUt": 69.184541,
+      "deltaT": 71.49125985166852,
+      "deltaTSigma": 12.166889212896002,
+      "ut1MinusUtc": {
+        "seconds": -2.307259851668519,
+        "sigma": 12.166889212896002,
+        "source": "model"
+      },
+      "Moon": {
+        "lon": 37.40287437891648,
+        "lat": 1.1906917424261847,
+        "lonMinusHorizonsArcsec": -0.03,
+        "latMinusHorizonsArcsec": 0.003
+      },
+      "Sun": {
+        "lon": 84.60504294376886,
+        "lat": 0.00008007226689515244,
+        "lonMinusHorizonsArcsec": -0.026,
+        "latMinusHorizonsArcsec": 0.031
+      }
+    },
+    {
+      "utc": "2100-06-15T12:00:00.000Z",
+      "basis": "continuous-utc",
+      "ephemeris": "jpl-de440",
+      "flags": [
+        "delta-t-extrapolated"
+      ],
+      "ttMinusUtc": 69.184,
+      "horizonsTdbMinusUt": 69.184557,
+      "deltaT": 79.03279197205023,
+      "deltaTSigma": 42.666054022630114,
+      "ut1MinusUtc": {
+        "seconds": -9.848791972050236,
+        "sigma": 42.666054022630114,
+        "source": "model"
+      },
+      "Moon": {
+        "lon": 175.76105925091085,
+        "lat": -1.2439753394130708,
+        "lonMinusHorizonsArcsec": -0.186,
+        "latMinusHorizonsArcsec": 0.024
+      },
+      "Sun": {
+        "lon": 84.52759041509313,
+        "lat": -0.00015739041110961291,
+        "lonMinusHorizonsArcsec": -0.18,
+        "latMinusHorizonsArcsec": 0.028
+      }
+    },
+    {
+      "utc": "2199-06-19T12:00:00.000Z",
+      "basis": "continuous-utc",
+      "ephemeris": "jpl-de440",
+      "flags": [
+        "delta-t-extrapolated"
+      ],
+      "ttMinusUtc": 69.184,
+      "horizonsTdbMinusUt": 69.184532,
+      "deltaT": 125.84368064992546,
+      "deltaTSigma": 103.06148090697376,
+      "ut1MinusUtc": {
+        "seconds": -56.65968064992546,
+        "sigma": 103.06148090697376,
+        "source": "model"
+      },
+      "Moon": {
+        "lon": 43.840612418976725,
+        "lat": 0.45457299828223996,
+        "lonMinusHorizonsArcsec": -0.51,
+        "latMinusHorizonsArcsec": 0.002
+      },
+      "Sun": {
+        "lon": 88.42619600863792,
+        "lat": 0.00011146105937058802,
+        "lonMinusHorizonsArcsec": -0.498,
+        "latMinusHorizonsArcsec": 0.023
+      }
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+@zodiacs/engine 1.1.0-rc.7, build a8da905615183cf83618eec3f94154e1d6c6f49187a84f62f5dede8e097d3a29, commit ca3ae0ff197e0b4e7bfc68bf88c3d0afbeb360f8, run 43055363587 attempt 1, 146,097 instants
+row: largest found / limit quoted, for position (arcsec), distance (relative) and rate (arcsec/day)
+geocentric/apparent/Jupiter: position 16.8076 / 17 arcsec; distance 7.88739e-05 / 7.9e-05 relative; rate 0.109058 / 0.11 arcsec/day
+geocentric/apparent/Mars: position 22.9118 / 23 arcsec; distance 8.69775e-05 / 8.7e-05 relative; rate 0.738109 / 0.74 arcsec/day
+geocentric/apparent/Mercury: position 16.9101 / 17 arcsec; distance 7.75415e-05 / 7.8e-05 relative; rate 3.52772 / 3.6 arcsec/day
+geocentric/apparent/Moon: position 11.875 / 12 arcsec; distance 0.000140771 / 0.00015 relative; rate 2.8584 / 2.9 arcsec/day
+geocentric/apparent/Neptune: position 21.2794 / 22 arcsec; distance 4.6548e-05 / 4.7e-05 relative; rate 0.0189158 / 0.019 arcsec/day
+geocentric/apparent/North Node: position 32.639 / 33 arcsec; distance not measured; rate not measured
+geocentric/apparent/Pluto: position 29.8591 / 30 arcsec; distance 6.29344e-05 / 6.3e-05 relative; rate 0.0170906 / 0.018 arcsec/day
+geocentric/apparent/Saturn: position 23.2102 / 24 arcsec; distance 7.68957e-05 / 7.7e-05 relative; rate 0.059683 / 0.06 arcsec/day
+geocentric/apparent/South Node: position 32.639 / 33 arcsec; distance not measured; rate not measured
+geocentric/apparent/Sun: position 3.332 / 3.4 arcsec; distance 1.6136e-05 / 1.7e-05 relative; rate 0.239041 / 0.24 arcsec/day
+geocentric/apparent/Uranus: position 19.6414 / 20 arcsec; distance 5.50682e-05 / 5.6e-05 relative; rate 0.0293393 / 0.03 arcsec/day
+geocentric/apparent/Venus: position 23.3123 / 24 arcsec; distance 8.22116e-05 / 8.3e-05 relative; rate 1.34185 / 1.4 arcsec/day
+geocentric/astrometric/Jupiter: position 16.8073 / 17 arcsec; distance 7.88739e-05 / 7.9e-05 relative; rate 0.109138 / 0.11 arcsec/day
+geocentric/astrometric/Mars: position 22.9113 / 23 arcsec; distance 8.69775e-05 / 8.7e-05 relative; rate 0.738114 / 0.74 arcsec/day
+geocentric/astrometric/Mercury: position 16.9092 / 17 arcsec; distance 7.75415e-05 / 7.8e-05 relative; rate 3.52759 / 3.6 arcsec/day
+geocentric/astrometric/Moon: position 11.1154 / 12 arcsec; distance 4.71067e-05 / 4.8e-05 relative; rate 2.85194 / 2.9 arcsec/day
+geocentric/astrometric/Neptune: position 21.2769 / 22 arcsec; distance 4.6548e-05 / 4.7e-05 relative; rate 0.0185549 / 0.019 arcsec/day
+geocentric/astrometric/Pluto: position 29.8349 / 30 arcsec; distance 6.29344e-05 / 6.3e-05 relative; rate 0.0171616 / 0.018 arcsec/day
+geocentric/astrometric/Saturn: position 23.2104 / 24 arcsec; distance 7.68957e-05 / 7.7e-05 relative; rate 0.0596239 / 0.06 arcsec/day
+geocentric/astrometric/Sun: position 3.33217 / 3.4 arcsec; distance 1.6136e-05 / 1.7e-05 relative; rate 0.23907 / 0.24 arcsec/day
+geocentric/astrometric/Uranus: position 19.6419 / 20 arcsec; distance 5.50682e-05 / 5.6e-05 relative; rate 0.0296087 / 0.03 arcsec/day
+geocentric/astrometric/Venus: position 23.3135 / 24 arcsec; distance 8.22116e-05 / 8.3e-05 relative; rate 1.34184 / 1.4 arcsec/day
+geocentric/geometric/Jupiter: position 16.8076 / 17 arcsec; distance 7.8874e-05 / 7.9e-05 relative; rate 0.109128 / 0.11 arcsec/day
+geocentric/geometric/Mars: position 22.9118 / 23 arcsec; distance 8.69783e-05 / 8.7e-05 relative; rate 0.738044 / 0.74 arcsec/day
+geocentric/geometric/Mercury: position 16.909 / 17 arcsec; distance 7.75284e-05 / 7.8e-05 relative; rate 3.5281 / 3.6 arcsec/day
+geocentric/geometric/Moon: position 11.1159 / 12 arcsec; distance 4.71001e-05 / 4.8e-05 relative; rate 2.8517 / 2.9 arcsec/day
+geocentric/geometric/Neptune: position 21.2769 / 22 arcsec; distance 4.65482e-05 / 4.7e-05 relative; rate 0.018555 / 0.019 arcsec/day
+geocentric/geometric/Pluto: position 29.835 / 30 arcsec; distance 6.29346e-05 / 6.3e-05 relative; rate 0.0171624 / 0.018 arcsec/day
+geocentric/geometric/Saturn: position 23.2102 / 24 arcsec; distance 7.68961e-05 / 7.7e-05 relative; rate 0.0596176 / 0.06 arcsec/day
+geocentric/geometric/Sun: position 3.3321 / 3.4 arcsec; distance 1.61363e-05 / 1.7e-05 relative; rate 0.239078 / 0.24 arcsec/day
+geocentric/geometric/Uranus: position 19.6419 / 20 arcsec; distance 5.50683e-05 / 5.6e-05 relative; rate 0.0296087 / 0.03 arcsec/day
+geocentric/geometric/Venus: position 23.3121 / 24 arcsec; distance 8.22054e-05 / 8.3e-05 relative; rate 1.34097 / 1.4 arcsec/day
+apparent ecliptic longitude of date, largest difference (arcsec): Sun 2.38165, Moon 11.9166, Mercury 14.1183, Venus 22.9137, Mars 14.3181, Jupiter 10.6368, Saturn 13.0944, Uranus 12.0816, Neptune 19.7091, Pluto 29.1881, North Node 32.6373, South Node 32.6373
+era-1800.json: engine values 361d136f29ea4a599991dabb3b4277433b3761350fe2838353547bf0e1ed7487, the same bytes as the committed sweep's (1.1.0-rc.3)
+era-1850.json: engine values 1a6b4ed395d4b067d21991315d276422b42029825fec0ab8ec5d74e1a1d827e4, the same bytes as the committed sweep's (1.1.0-rc.3)
+era-1900.json: engine values 25efcb100ccdbe7ad5f52629eaf217f2d281a0e65f2e2310a476c0741c2c12a5, the same bytes as the committed sweep's (1.1.0-rc.3)
+era-1950.json: engine values 0fee6c9ccefdffb5c2028ea5df777016aa2475c5a33bb2bd44ec915ac48b00db, the same bytes as the committed sweep's (1.1.0-rc.3)
+era-2000.json: engine values e6bb4ab9b93cae38552df6cce8b4c3f16bf45ac0ffd9a28eb183e301b32d8ab3, the same bytes as the committed sweep's (1.1.0-rc.3)
+era-2050.json: engine values 3d339aa5e62217ccbe7039377677a1be9113f58e3d106c1f77ff5694fd692a23, the same bytes as the committed sweep's (1.1.0-rc.3)
+era-2100.json: engine values a6592423ec4e182ed666f45e7db45be82c930e5555f7b81997167edddb7422f0, the same bytes as the committed sweep's (1.1.0-rc.3)
+era-2150.json: engine values 28803db6dfadc6c1caebe0dc9a974b37355fdfcee6ba0e28f3e97b404a94c55c, the same bytes as the committed sweep's (1.1.0-rc.3)
+every largest difference of the 32 rows is within the limit src/calc-bounds.ts quotes

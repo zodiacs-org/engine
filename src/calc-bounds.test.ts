@@ -3,15 +3,21 @@ import { readFileSync } from "node:fs";
 import { AstroTime, BaryState, Body, HelioVector } from "astronomy-engine";
 import { describe, expect, it } from "vitest";
 
-import { MEAN_POINTS_BASIS, MEAN_POINTS_SPEED_BASIS, MEASURED, MEASURED_BASIS } from "./calc-bounds.js";
+import { MEAN_POINTS_BASIS, MEAN_POINTS_SPEED_BASIS, MEASURED, MEASURED_BASIS, SWEPT, SWEPT_BASIS } from "./calc-bounds.js";
 import { BARYCENTRE_ERROR } from "./calc-reduce.js";
 import { calc } from "./calc.js";
 import type { CalcPosition } from "./calc.js";
 
 const evidence = (path: string) => readFileSync(new URL(`../docs/evidence/calc-api/${path}`, import.meta.url), "utf8");
+type Summary = { bounds: Record<string, [number, number | null, number | null]> };
 // The comparison rerun on 0.1.1-rc.16's build, after the engine took the full
 // IAU 2000B nutation; the first run, on astronomy-engine's, stays in results/.
-const summary = JSON.parse(evidence("rc16/summary.json")) as { bounds: Record<string, [number, number | null, number | null]> };
+const summary = JSON.parse(evidence("rc16/summary.json")) as Summary;
+// The dense DE440 sweep (from 1.1.0-rc.7): the geocentric rows it measured replace the 32 instants' values.
+const sweep = JSON.parse(
+  readFileSync(new URL("../docs/evidence/de440-sweep-20261111/results/summary.json", import.meta.url), "utf8")
+) as Summary & { corpus: { n: number } };
+const MEAN = ["Mean Node", "Mean South Node", "Black Moon Lilith"];
 
 const time = "2011-02-03T04:05:06Z";
 const ok = (result: ReturnType<typeof calc>): CalcPosition => {
@@ -20,20 +26,59 @@ const ok = (result: ReturnType<typeof calc>): CalcPosition => {
 };
 
 describe("the measured bounds", () => {
-  it("are the committed comparison's, by the preregistered rule, but for the barycentric Sun", () => {
+  it("are the committed comparisons', by the preregistered rule, the sweep's where it measured, but for the barycentric Sun", () => {
     const flat = Object.fromEntries(
       Object.entries(MEASURED).flatMap(([group, rows]) => Object.entries(rows).map(([body, row]) => [`${group}/${body}`, row]))
     );
     const derived = ["apparent", "astrometric", "geometric"].map((correction) => `barycentric/${correction}/Sun`);
-    expect(flat).toEqual(Object.fromEntries(Object.entries(summary.bounds).filter(([key]) => !derived.includes(key))));
+    // A row the sweep measured takes its values, but a value it did not measure (the nodes' distance and rate), which stays.
+    const merged = Object.fromEntries(
+      Object.entries(summary.bounds)
+        .filter(([key]) => !derived.includes(key))
+        .map(([key, old]) => {
+          const swept = sweep.bounds[key];
+          return [key, swept ? old.map((value, k) => swept[k] ?? value) : old];
+        })
+    );
+    // A topocentric row the geocentric row of the same correction and body covers, value by value, is left out.
+    const expected = Object.fromEntries(
+      Object.entries(merged).filter(([key, row]) => {
+        if (!key.startsWith("topocentric/")) return true;
+        const geocentric = merged[key.replace("topocentric/", "geocentric/")]!;
+        return !row.every((value, k) => geocentric[k] !== null && (value === null || geocentric[k]! >= value));
+      })
+    );
+    expect(flat).toEqual(expected);
     for (const key of derived) expect(summary.bounds[key]).toBeDefined();
-    expect(MEASURED_BASIS).toContain("docs/evidence/calc-api");
+    for (const key of Object.keys(sweep.bounds)) expect(summary.bounds[key], key).toBeDefined();
+    // SWEPT names the groups the sweep measured: every row in them but the mean points', and no other row.
+    const swept = Object.keys(expected).filter((key) => SWEPT.includes(key.slice(0, key.lastIndexOf("/"))) && !MEAN.includes(key.slice(key.lastIndexOf("/") + 1)));
+    expect(swept.sort()).toEqual(Object.keys(sweep.bounds).sort());
+    expect(swept).toHaveLength(32);
+    expect(Object.keys(expected).length - swept.length - MEAN.length).toBe(60);
+    expect(MEASURED_BASIS).toContain("docs/evidence/calc-api/rc16");
+    expect(MEASURED_BASIS).toContain("32 instants");
+    expect(SWEPT_BASIS).toContain("docs/evidence/de440-sweep-20261111");
+    expect(SWEPT_BASIS).toContain(`${sweep.corpus.n.toLocaleString("en-US")} days`);
+  });
+
+  it("name for each row the comparison it comes from", () => {
+    for (const [group, rows] of Object.entries(MEASURED)) {
+      const [center, correction] = group.split("/") as [string, string];
+      for (const body of Object.keys(rows)) {
+        const where = center === "topocentric" ? { topocentric: { latitude: 10, longitude: 20 } } : (center as "geocentric");
+        const result = ok(calc({ body: body as "Sun", time, center: where, flags: { correction: correction as "apparent" } }));
+        const want = MEAN.includes(body) ? MEAN_POINTS_BASIS : SWEPT.includes(group) ? SWEPT_BASIS : MEASURED_BASIS;
+        expect(result.bounds.position, group + " " + body).toMatchObject({ label: "measured", basis: want });
+        if (result.bounds.distance) expect(result.bounds.distance.basis, group + " " + body).toBe(want);
+      }
+    }
   });
 
   it("reach calc() results, labelled measured", () => {
     const mars = ok(calc({ body: "Mars", time }));
     const [position, distance, speed] = MEASURED["geocentric/apparent"]!["Mars"]!;
-    expect(mars.bounds.position).toEqual({ value: position, unit: "arcsec", label: "measured", basis: MEASURED_BASIS });
+    expect(mars.bounds.position).toEqual({ value: position, unit: "arcsec", label: "measured", basis: SWEPT_BASIS });
     expect(mars.bounds.distance!.value).toBe(distance);
     expect(mars.bounds.speed).toMatchObject({ value: speed, label: "measured", method: "central-difference", stepDays: 0.001 });
     const earth = ok(calc({ body: "Earth", time, center: "heliocentric", frame: "ecliptic-j2000", flags: { correction: "geometric" } }));
@@ -44,14 +89,32 @@ describe("the measured bounds", () => {
   it("give a topocentric body not compared its geocentric bound, as an estimate", () => {
     const site = { topocentric: { latitude: 10, longitude: 20 } };
     for (const correction of ["apparent", "astrometric", "geometric"] as const) {
-      expect(MEASURED[`topocentric/${correction}`]!["Jupiter"]).toBeUndefined();
+      expect(MEASURED[`topocentric/${correction}`]?.["Jupiter"]).toBeUndefined();
       const jupiter = ok(calc({ body: "Jupiter", time, center: site, flags: { correction } }));
       expect(jupiter.bounds.position.value).toBe(MEASURED[`geocentric/${correction}`]!["Jupiter"]![0]);
       expect(jupiter.bounds.position.label).toBe("estimated");
       expect(jupiter.bounds.position.basis).toContain("geocentric bound");
-      const moon = ok(calc({ body: "Moon", time, center: site, flags: { correction } }));
-      expect(moon.bounds.position).toMatchObject({ value: MEASURED[`topocentric/${correction}`]!["Moon"]![0], label: "measured" });
     }
+  });
+
+  it("give the topocentric Sun, Moon and Mars the geocentric bound, as an estimate, which covers their own comparison", () => {
+    const site = { topocentric: { latitude: 10, longitude: 20 } };
+    let checked = 0;
+    for (const correction of ["apparent", "astrometric", "geometric"] as const) {
+      expect(MEASURED[`topocentric/${correction}`]).toBeUndefined();
+      for (const body of ["Sun", "Moon", "Mars"] as const) {
+        const geocentric = MEASURED[`geocentric/${correction}`]![body]!;
+        const own = summary.bounds[`topocentric/${correction}/${body}`]!;
+        own.forEach((value, k) => expect(geocentric[k]!, `${correction} ${body} ${k}`).toBeGreaterThanOrEqual(value!));
+        const result = ok(calc({ body, time, center: site, flags: { correction } }));
+        expect(result.bounds.position).toMatchObject({ value: geocentric[0], label: "estimated" });
+        expect(result.bounds.position.basis).toContain("geocentric bound");
+        expect(result.bounds.distance).toMatchObject({ value: geocentric[1], label: "estimated" });
+        expect(result.bounds.speed).toMatchObject({ value: geocentric[2], label: "estimated" });
+        checked += 1;
+      }
+    }
+    expect(checked).toBe(9);
   });
 
   it("cover the lunar points, which have no distance", () => {
@@ -90,7 +153,7 @@ describe("the measured bounds", () => {
       }
     }
     const node = ok(calc({ body: "North Node", time }));
-    expect(node.bounds.position).toEqual({ value: MEASURED["geocentric/apparent"]!["North Node"]![0], unit: "arcsec", label: "measured", basis: MEASURED_BASIS });
+    expect(node.bounds.position).toEqual({ value: MEASURED["geocentric/apparent"]!["North Node"]![0], unit: "arcsec", label: "measured", basis: SWEPT_BASIS });
   });
 });
 
@@ -183,7 +246,14 @@ describe("the barycentric Sun's bounds", () => {
     expect(angle(r, first!.r) / 3600).toBeGreaterThan(2.66);
     expect(angle(r, first!.r) / 3600).toBeLessThan(2.67);
     expect(Math.abs(turned.dist! - norm(first!.r)) / norm(first!.r)).toBeGreaterThan(0.018);
-    expect(sun.bounds.position.value).toBe(turned.bounds.position.value);
+    // Given on UTC in 2130, the instant rests on an extrapolated ΔT and is flagged, but its TT is UTC + 69.184 s
+    // exactly (the continuous-UTC rule), so its bounds are the barycentre's alone, as on the same TT
+    // (calc-delta-t.test.ts). Until 2.0.0-rc.2 they also carried the TT band's widening.
+    expect(sun.flags).toEqual(["delta-t-extrapolated"]);
+    const onTt = ok(calc({ body: "Sun", time: { jd: sun.receipt.instants[0]!.jdTt, scale: "tt" }, center: "barycentric", flags: { cartesian: true } }));
+    const turnedOnTt = ok(calc({ body: "Sun", time: { jd: sun.receipt.instants[0]!.jdTt, scale: "tt" }, center: "barycentric", frame: "equatorial-icrs", flags: { cartesian: true } }));
+    expect(onTt.bounds.position.value).toBe(turnedOnTt.bounds.position.value);
+    expect([onTt.bounds.position.value, onTt.bounds.distance!.value, onTt.bounds.speed!.value]).toEqual([27_000, 0.15, 3_400]);
     expect([sun.bounds.position.value, sun.bounds.distance!.value, sun.bounds.speed!.value]).toEqual([27_000, 0.15, 3_400]);
     expect(ok(calc({ body: "Sun", time: "2130-03-05T00:00:00Z", center: "barycentric", flags: { speeds: false } })).bounds.speed).toBeNull();
   });

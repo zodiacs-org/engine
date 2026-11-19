@@ -1,0 +1,17 @@
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 208.91643
+  calendar.to-jdn: 25
+  calendar.from-jdn: 10
+conformance: 500 vectors conform to SPEC.md
+zodiacs-engine 2.0.0-rc.1: 459 pass, 0 fail, 41 unsupported, 0 error (of 500)
+  L1: 240 pass, 0 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 69 pass, 0 fail, 41 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine.json
+conformance: RESULTS.md and results/summary.json are current

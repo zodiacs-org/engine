@@ -5230,7 +5230,9 @@
               "enum": [
                 "dst-gap",
                 "dst-fold",
-                "lmt"
+                "lmt",
+                "calendar-unknown",
+                "host-zone-data-differs"
               ]
             }
           },
@@ -5332,6 +5334,18 @@
             "type": "number",
             "minimum": 0,
             "exclusiveMaximum": 30
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "outside-reference-span",
+                "delta-t-extrapolated",
+                "de440-unavailable",
+                "outside-de440-span"
+              ]
+            },
+            "description": "The flags the instant alone gives the row, as a chart at that instant carries them; absent where there are none."
           }
         }
       },
@@ -5443,9 +5457,15 @@
           "dst-gap",
           "dst-fold",
           "lmt",
+          "calendar-unknown",
+          "host-zone-data-differs",
           "no-time",
           "polar-fallback",
-          "outside-reference-span"
+          "polar-angles",
+          "outside-reference-span",
+          "delta-t-extrapolated",
+          "de440-unavailable",
+          "outside-de440-span"
         ]
       },
       "DeltaT": {
@@ -6577,6 +6597,8 @@
                 "dst-gap",
                 "dst-fold",
                 "lmt",
+                "calendar-unknown",
+                "host-zone-data-differs",
                 "outside-reference-span"
               ]
             },

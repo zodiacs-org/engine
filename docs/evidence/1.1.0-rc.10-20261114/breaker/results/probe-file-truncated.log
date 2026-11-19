@@ -1,0 +1,5 @@
+mode file-truncated: the chunk file that holds the pack cut to half its length.
+The import of @zodiacs/engine fails before anything is computed:
+SyntaxError: Invalid or unexpected token
+exit 1
+(Node prints the file's one long line with the error, 1.6 MB; it is left out here.)

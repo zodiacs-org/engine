@@ -16,8 +16,8 @@ import { findLongitudeCrossingsWith } from "../crossings.js";
 import { dateFrom } from "../date-input.js";
 import { bodyLongitude } from "../ephemeris.js";
 import { HOUSE_SYSTEMS } from "../houses.js";
-import type { Chart, DateInput, HouseSystem } from "../types.js";
-import { DAY_MS, dateAt, finiteDegrees, oneOf, placeOf, readOptions, techniqueFlags } from "./shared.js";
+import type { Chart, DateInput, DetailedResult, HouseSystem } from "../types.js";
+import { DAY_MS, dateAt, detailed, finiteDegrees, oneOf, placeOf, readOptions, techniqueFlags } from "./shared.js";
 import type { GeoPlace, TechniqueFlag } from "./shared.js";
 
 // The searches' parameters. A minor release may tune them, within what each
@@ -85,38 +85,54 @@ const SELECTIONS: readonly SolarReturnSelection[] = ["nearest", "most-recent"];
  * crossing solver at 1-day steps over ±200 days; a tie goes to the earlier.
  */
 export function solarReturnInstant(natalSunLongitude: number, near: DateInput): Date {
+  return solarReturnSearch(natalSunLongitude, near).value;
+}
+
+/**
+ * `solarReturnInstant`'s instant as `value`, with the ephemeris the Sun's
+ * longitudes came from and the flags that say why that is astronomy-engine
+ * where the shipped DE440 pack was the default (`DetailedResult`), over the
+ * whole window searched.
+ */
+export function solarReturnInstantDetailed(natalSunLongitude: number, near: DateInput): DetailedResult<Date, TechniqueFlag> {
+  const { value, from, to } = solarReturnSearch(natalSunLongitude, near);
+  return detailed(value, [from, to]);
+}
+
+function solarReturnSearch(natalSunLongitude: number, near: DateInput): { value: Date; from: number; to: number } {
   const target = finiteDegrees(natalSunLongitude, "natalSunLongitude");
   const center = dateFrom(near, "near").getTime();
-  const crossings = findLongitudeCrossingsWith(
-    bodyLongitude,
-    "Sun",
-    target,
-    dateAt(center - SOLAR_RETURN_WINDOW_DAYS * DAY_MS, "The solar return window"),
-    dateAt(center + SOLAR_RETURN_WINDOW_DAYS * DAY_MS, "The solar return window"),
-    SOLAR_RETURN_STEP_DAYS
-  );
+  const lower = dateAt(center - SOLAR_RETURN_WINDOW_DAYS * DAY_MS, "The solar return window");
+  const upper = dateAt(center + SOLAR_RETURN_WINDOW_DAYS * DAY_MS, "The solar return window");
+  const crossings = findLongitudeCrossingsWith(bodyLongitude, "Sun", target, lower, upper, SOLAR_RETURN_STEP_DAYS);
   const first = crossings[0];
   if (first === undefined) throw new RangeError("No solar return found in the scan window.");
   const closest = crossings.reduce((best, crossing) =>
     Math.abs(crossing.at.getTime() - center) < Math.abs(best.at.getTime() - center) ? crossing : best, first);
-  return new Date(closest.at.getTime());
+  return { value: new Date(closest.at.getTime()), from: lower.getTime(), to: upper.getTime() };
 }
 
 /** The latest instant at or before `at` when the apparent Sun is at `natalSunLongitude`, within 370 days. */
 export function mostRecentSolarReturnInstant(natalSunLongitude: number, at: DateInput): Date {
+  return mostRecentSolarReturnSearch(natalSunLongitude, at).value;
+}
+
+/** `mostRecentSolarReturnInstant`'s instant as `value`, labelled as `solarReturnInstantDetailed`'s is. */
+export function mostRecentSolarReturnInstantDetailed(natalSunLongitude: number, at: DateInput): DetailedResult<Date, TechniqueFlag> {
+  const { value, from, to } = mostRecentSolarReturnSearch(natalSunLongitude, at);
+  return detailed(value, [from, to]);
+}
+
+function mostRecentSolarReturnSearch(natalSunLongitude: number, at: DateInput): { value: Date; from: number; to: number } {
   const target = finiteDegrees(natalSunLongitude, "natalSunLongitude");
   const end = dateFrom(at, "at").getTime();
-  const crossings = findLongitudeCrossingsWith(
-    bodyLongitude,
-    "Sun",
-    target,
-    dateAt(end - SOLAR_RETURN_LOOKBACK_DAYS * DAY_MS, "The solar return window"),
-    new Date(end),
-    SOLAR_RETURN_STEP_DAYS
-  ).filter((crossing) => crossing.at.getTime() <= end);
+  const lower = dateAt(end - SOLAR_RETURN_LOOKBACK_DAYS * DAY_MS, "The solar return window");
+  const crossings = findLongitudeCrossingsWith(bodyLongitude, "Sun", target, lower, new Date(end), SOLAR_RETURN_STEP_DAYS).filter(
+    (crossing) => crossing.at.getTime() <= end
+  );
   const last = crossings[crossings.length - 1];
   if (last === undefined) throw new RangeError("No previous solar return found in the scan window.");
-  return new Date(last.at.getTime());
+  return { value: new Date(last.at.getTime()), from: lower.getTime(), to: end };
 }
 
 function moonLongitude(date: Date): number {
@@ -130,6 +146,16 @@ function moonLongitude(date: Date): number {
  * `natalMoonLongitude`: the crossing solver at 6-hour steps.
  */
 export function lunarReturnInstant(natalMoonLongitude: number, after: DateInput): Date {
+  return lunarReturnSearch(natalMoonLongitude, after).value;
+}
+
+/** `lunarReturnInstant`'s instant as `value`, labelled over the 40 days searched as `solarReturnInstantDetailed`'s is. */
+export function lunarReturnInstantDetailed(natalMoonLongitude: number, after: DateInput): DetailedResult<Date, TechniqueFlag> {
+  const { value, from, to } = lunarReturnSearch(natalMoonLongitude, after);
+  return detailed(value, [from, to]);
+}
+
+function lunarReturnSearch(natalMoonLongitude: number, after: DateInput): { value: Date; from: number; to: number } {
   const longitude = finiteDegrees(natalMoonLongitude, "natalMoonLongitude");
   const start = dateFrom(after, "after").getTime();
   const upper = start + LUNAR_RETURN_HORIZON_DAYS * DAY_MS;
@@ -152,7 +178,7 @@ export function lunarReturnInstant(natalMoonLongitude: number, after: DateInput)
     .sort((a, b) => a - b);
   const first = instants[0];
   if (first === undefined) throw new RangeError("No lunar return was found in the 40-day scan.");
-  return new Date(first);
+  return { value: new Date(first), from: start, to: upper };
 }
 
 function setup(natal: NatalSource, body: "Sun" | "Moon", options: Readonly<Record<string, unknown>>) {

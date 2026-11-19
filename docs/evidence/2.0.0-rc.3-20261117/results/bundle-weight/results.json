@@ -1,0 +1,1588 @@
+{
+  "generatedAt": "2026-11-17T18:09:26.669Z",
+  "tools": {
+    "node": "v22.22.2",
+    "machine": "linux x64, 4 x Intel(R) Xeon(R) Processor @ 2.10GHz",
+    "esbuild": "0.28.2",
+    "rollup": "4.67.4",
+    "@rollup/plugin-node-resolve": "16.0.3",
+    "@rollup/plugin-terser": "1.0.2",
+    "vite": "8.3.5",
+    "webpack": "5.112.2",
+    "playwright-core": "1.64.1",
+    "astronomy-engine": "2.1.19",
+    "gzip": "gzip 1.12 (gzip -9 -n)",
+    "brotli": "Node v22.22.2 zlib brotli, quality 11, window 24 bits, size hint set (no brotli program on PATH)"
+  },
+  "method": {
+    "apps": {
+      "a": "apps/a-root.js",
+      "b": "apps/b-root-astronomy-engine.js",
+      "c": "apps/c-lite.js",
+      "d": "apps/d-time.js",
+      "e": "apps/e-dynamic.js",
+      "a-namespace": "apps/a-namespace.js",
+      "a-core": "apps/a-core.js"
+    },
+    "bundlers": {
+      "esbuild": "bundle, splitting, format esm, platform browser, target es2022, minify",
+      "rollup": "@rollup/plugin-node-resolve (browser: true), @rollup/plugin-terser, format es",
+      "vite": "vite build (production mode, its default minifier), one HTML page per app as input, target es2022; production build only, dev-mode dependency pre-bundling is out of scope",
+      "webpack": "mode production (its default terser minifier), target web and es2022, ES module output (experiments.outputModule)"
+    },
+    "sizes": "raw: the file's bytes; gzip: the gzip program at -9 -n; brotli: see tools.brotli. Totals add every JavaScript file the bundler wrote.",
+    "browser": {
+      "cpuThrottlingRate": 4,
+      "network": {
+        "preset": "Fast 4G (DevTools)",
+        "offline": false,
+        "latency": 165,
+        "downloadThroughput": 1012500,
+        "uploadThroughput": 168750
+      },
+      "cache": "cold: a new browser context and the cache disabled on every run"
+    },
+    "nodeRuns": 10,
+    "browserRuns": 10
+  },
+  "archives": [
+    {
+      "label": "2.0.0-rc.3",
+      "archive": "zodiacs-engine-2.0.0-rc.3.tgz",
+      "sha256": "d465137931f5d28910443ca7ef01610606e9f708704364c61811d2936dc4ec55",
+      "bytes": 2781676,
+      "version": "2.0.0-rc.3",
+      "astronomyEngine": {
+        "dependency": "2.1.19",
+        "installed": "2.1.19"
+      },
+      "packChunk": {
+        "file": "dist/chunk-UXY4RU57.js",
+        "base64Characters": 3319552,
+        "raw": 3320824,
+        "gzip": 2394383,
+        "brotli": 2243066
+      },
+      "hasCore": true,
+      "apps": {
+        "a": {
+          "esbuild": {
+            "built": true,
+            "entry": {
+              "file": "a.js",
+              "raw": 3418817,
+              "gzip": 2440383,
+              "brotli": 2281947,
+              "holdsPack": true
+            },
+            "files": [
+              {
+                "file": "a.js",
+                "raw": 3418817,
+                "gzip": 2440383,
+                "brotli": 2281947,
+                "holdsPack": true
+              }
+            ],
+            "total": {
+              "raw": 3418817,
+              "gzip": 2440383,
+              "brotli": 2281947
+            },
+            "largest": {
+              "file": "a.js",
+              "raw": 3418817
+            },
+            "holdsPack": true,
+            "packModuleBytesInOutput": {
+              "a.js": 3320151
+            },
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "jpl-de440",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "rollup": {
+            "built": true,
+            "entry": {
+              "file": "a.js",
+              "raw": 3417321,
+              "gzip": 2437292,
+              "brotli": 2280271,
+              "holdsPack": true
+            },
+            "files": [
+              {
+                "file": "a.js",
+                "raw": 3417321,
+                "gzip": 2437292,
+                "brotli": 2280271,
+                "holdsPack": true
+              }
+            ],
+            "total": {
+              "raw": 3417321,
+              "gzip": 2437292,
+              "brotli": 2280271
+            },
+            "largest": {
+              "file": "a.js",
+              "raw": 3417321
+            },
+            "holdsPack": true,
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "jpl-de440",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "vite": {
+            "built": true,
+            "entry": {
+              "file": "assets/a-DLIZKkZ9.js",
+              "raw": 3416191,
+              "gzip": 2438771,
+              "brotli": 2280100,
+              "holdsPack": true
+            },
+            "files": [
+              {
+                "file": "assets/a-DLIZKkZ9.js",
+                "raw": 3416191,
+                "gzip": 2438771,
+                "brotli": 2280100,
+                "holdsPack": true
+              }
+            ],
+            "total": {
+              "raw": 3416191,
+              "gzip": 2438771,
+              "brotli": 2280100
+            },
+            "largest": {
+              "file": "assets/a-DLIZKkZ9.js",
+              "raw": 3416191
+            },
+            "holdsPack": true,
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "jpl-de440",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "webpack": {
+            "built": true,
+            "entry": {
+              "file": "a.js",
+              "raw": 3416259,
+              "gzip": 2436723,
+              "brotli": 2279842,
+              "holdsPack": true
+            },
+            "files": [
+              {
+                "file": "a.js",
+                "raw": 3416259,
+                "gzip": 2436723,
+                "brotli": 2279842,
+                "holdsPack": true
+              }
+            ],
+            "total": {
+              "raw": 3416259,
+              "gzip": 2436723,
+              "brotli": 2279842
+            },
+            "largest": {
+              "file": "a.js",
+              "raw": 3416259
+            },
+            "holdsPack": true,
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "jpl-de440",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          }
+        },
+        "b": {
+          "esbuild": {
+            "built": true,
+            "entry": {
+              "file": "b.js",
+              "raw": 3418978,
+              "gzip": 2440436,
+              "brotli": 2281633,
+              "holdsPack": true
+            },
+            "files": [
+              {
+                "file": "b.js",
+                "raw": 3418978,
+                "gzip": 2440436,
+                "brotli": 2281633,
+                "holdsPack": true
+              }
+            ],
+            "total": {
+              "raw": 3418978,
+              "gzip": 2440436,
+              "brotli": 2281633
+            },
+            "largest": {
+              "file": "b.js",
+              "raw": 3418978
+            },
+            "holdsPack": true,
+            "packModuleBytesInOutput": {
+              "b.js": 3320151
+            },
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "astronomy-engine",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "rollup": {
+            "built": true,
+            "entry": {
+              "file": "b.js",
+              "raw": 3417417,
+              "gzip": 2437330,
+              "brotli": 2280330,
+              "holdsPack": true
+            },
+            "files": [
+              {
+                "file": "b.js",
+                "raw": 3417417,
+                "gzip": 2437330,
+                "brotli": 2280330,
+                "holdsPack": true
+              }
+            ],
+            "total": {
+              "raw": 3417417,
+              "gzip": 2437330,
+              "brotli": 2280330
+            },
+            "largest": {
+              "file": "b.js",
+              "raw": 3417417
+            },
+            "holdsPack": true,
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "astronomy-engine",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "vite": {
+            "built": true,
+            "entry": {
+              "file": "assets/b-C4ZVJc5P.js",
+              "raw": 3416352,
+              "gzip": 2438837,
+              "brotli": 2280206,
+              "holdsPack": true
+            },
+            "files": [
+              {
+                "file": "assets/b-C4ZVJc5P.js",
+                "raw": 3416352,
+                "gzip": 2438837,
+                "brotli": 2280206,
+                "holdsPack": true
+              }
+            ],
+            "total": {
+              "raw": 3416352,
+              "gzip": 2438837,
+              "brotli": 2280206
+            },
+            "largest": {
+              "file": "assets/b-C4ZVJc5P.js",
+              "raw": 3416352
+            },
+            "holdsPack": true,
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "astronomy-engine",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "webpack": {
+            "built": true,
+            "entry": {
+              "file": "b.js",
+              "raw": 3416351,
+              "gzip": 2436757,
+              "brotli": 2279929,
+              "holdsPack": true
+            },
+            "files": [
+              {
+                "file": "b.js",
+                "raw": 3416351,
+                "gzip": 2436757,
+                "brotli": 2279929,
+                "holdsPack": true
+              }
+            ],
+            "total": {
+              "raw": 3416351,
+              "gzip": 2436757,
+              "brotli": 2279929
+            },
+            "largest": {
+              "file": "b.js",
+              "raw": 3416351
+            },
+            "holdsPack": true,
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "astronomy-engine",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          }
+        },
+        "c": {
+          "esbuild": {
+            "built": true,
+            "entry": {
+              "file": "c.js",
+              "raw": 4872,
+              "gzip": 2176,
+              "brotli": 1984,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "c.js",
+                "raw": 4872,
+                "gzip": 2176,
+                "brotli": 1984,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 4872,
+              "gzip": 2176,
+              "brotli": 1984
+            },
+            "largest": {
+              "file": "c.js",
+              "raw": 4872
+            },
+            "holdsPack": false,
+            "node": {
+              "ran": true,
+              "reported": {
+                "aspects": 0
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "rollup": {
+            "built": true,
+            "entry": {
+              "file": "c.js",
+              "raw": 4779,
+              "gzip": 2114,
+              "brotli": 1904,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "c.js",
+                "raw": 4779,
+                "gzip": 2114,
+                "brotli": 1904,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 4779,
+              "gzip": 2114,
+              "brotli": 1904
+            },
+            "largest": {
+              "file": "c.js",
+              "raw": 4779
+            },
+            "holdsPack": false,
+            "node": {
+              "ran": true,
+              "reported": {
+                "aspects": 0
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "vite": {
+            "built": true,
+            "entry": {
+              "file": "assets/c-keBUYN8C.js",
+              "raw": 4768,
+              "gzip": 2104,
+              "brotli": 1910,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "assets/c-keBUYN8C.js",
+                "raw": 4768,
+                "gzip": 2104,
+                "brotli": 1910,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 4768,
+              "gzip": 2104,
+              "brotli": 1910
+            },
+            "largest": {
+              "file": "assets/c-keBUYN8C.js",
+              "raw": 4768
+            },
+            "holdsPack": false,
+            "node": {
+              "ran": true,
+              "reported": {
+                "aspects": 0
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "webpack": {
+            "built": true,
+            "entry": {
+              "file": "c.js",
+              "raw": 4873,
+              "gzip": 2131,
+              "brotli": 1915,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "c.js",
+                "raw": 4873,
+                "gzip": 2131,
+                "brotli": 1915,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 4873,
+              "gzip": 2131,
+              "brotli": 1915
+            },
+            "largest": {
+              "file": "c.js",
+              "raw": 4873
+            },
+            "holdsPack": false,
+            "node": {
+              "ran": true,
+              "reported": {
+                "aspects": 0
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          }
+        },
+        "d": {
+          "esbuild": {
+            "built": true,
+            "entry": {
+              "file": "d.js",
+              "raw": 11478,
+              "gzip": 6626,
+              "brotli": 5786,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "d.js",
+                "raw": 11478,
+                "gzip": 6626,
+                "brotli": 5786,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 11478,
+              "gzip": 6626,
+              "brotli": 5786
+            },
+            "largest": {
+              "file": "d.js",
+              "raw": 11478
+            },
+            "holdsPack": false,
+            "node": {
+              "ran": true,
+              "reported": {
+                "keys": 5
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "rollup": {
+            "built": true,
+            "entry": {
+              "file": "d.js",
+              "raw": 10847,
+              "gzip": 6255,
+              "brotli": 5485,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "d.js",
+                "raw": 10847,
+                "gzip": 6255,
+                "brotli": 5485,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 10847,
+              "gzip": 6255,
+              "brotli": 5485
+            },
+            "largest": {
+              "file": "d.js",
+              "raw": 10847
+            },
+            "holdsPack": false,
+            "node": {
+              "ran": true,
+              "reported": {
+                "keys": 5
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "vite": {
+            "built": true,
+            "entry": {
+              "file": "assets/d-KKCMcvLc.js",
+              "raw": 11372,
+              "gzip": 6534,
+              "brotli": 5700,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "assets/d-KKCMcvLc.js",
+                "raw": 11372,
+                "gzip": 6534,
+                "brotli": 5700,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 11372,
+              "gzip": 6534,
+              "brotli": 5700
+            },
+            "largest": {
+              "file": "assets/d-KKCMcvLc.js",
+              "raw": 11372
+            },
+            "holdsPack": false,
+            "node": {
+              "ran": true,
+              "reported": {
+                "keys": 5
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "webpack": {
+            "built": true,
+            "entry": {
+              "file": "d.js",
+              "raw": 11226,
+              "gzip": 6403,
+              "brotli": 5607,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "d.js",
+                "raw": 11226,
+                "gzip": 6403,
+                "brotli": 5607,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 11226,
+              "gzip": 6403,
+              "brotli": 5607
+            },
+            "largest": {
+              "file": "d.js",
+              "raw": 11226
+            },
+            "holdsPack": false,
+            "node": {
+              "ran": true,
+              "reported": {
+                "keys": 5
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          }
+        },
+        "e": {
+          "esbuild": {
+            "built": true,
+            "entry": {
+              "file": "e.js",
+              "raw": 745,
+              "gzip": 459,
+              "brotli": 376,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "chunk-VPZ646JP.js",
+                "raw": 3446051,
+                "gzip": 2450306,
+                "brotli": 2291200,
+                "holdsPack": true
+              },
+              {
+                "file": "e.js",
+                "raw": 745,
+                "gzip": 459,
+                "brotli": 376,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 3446796,
+              "gzip": 2450765,
+              "brotli": 2291576
+            },
+            "largest": {
+              "file": "chunk-VPZ646JP.js",
+              "raw": 3446051
+            },
+            "holdsPack": true,
+            "packModuleBytesInOutput": {
+              "chunk-VPZ646JP.js": 3320151
+            },
+            "split": "split: the pack is in a chunk loaded on click",
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "jpl-de440",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "rollup": {
+            "built": true,
+            "entry": {
+              "file": "e.js",
+              "raw": 777,
+              "gzip": 462,
+              "brotli": 377,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "chunk-DnNqQiED.js",
+                "raw": 3417816,
+                "gzip": 2439255,
+                "brotli": 2280186,
+                "holdsPack": true
+              },
+              {
+                "file": "e.js",
+                "raw": 777,
+                "gzip": 462,
+                "brotli": 377,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 3418593,
+              "gzip": 2439717,
+              "brotli": 2280563
+            },
+            "largest": {
+              "file": "chunk-DnNqQiED.js",
+              "raw": 3417816
+            },
+            "holdsPack": true,
+            "split": "split: the pack is in a chunk loaded on click",
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "jpl-de440",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "vite": {
+            "built": true,
+            "entry": {
+              "file": "assets/e-CtsvBzwq.js",
+              "raw": 2455,
+              "gzip": 1218,
+              "brotli": 1039,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "assets/dist-DlS7956E.js",
+                "raw": 3415737,
+                "gzip": 2438544,
+                "brotli": 2279911,
+                "holdsPack": true
+              },
+              {
+                "file": "assets/e-CtsvBzwq.js",
+                "raw": 2455,
+                "gzip": 1218,
+                "brotli": 1039,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 3418192,
+              "gzip": 2439762,
+              "brotli": 2280950
+            },
+            "largest": {
+              "file": "assets/dist-DlS7956E.js",
+              "raw": 3415737
+            },
+            "holdsPack": true,
+            "split": "split: the pack is in a chunk loaded on click",
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "jpl-de440",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "webpack": {
+            "built": true,
+            "entry": {
+              "file": "e.js",
+              "raw": 2534,
+              "gzip": 1336,
+              "brotli": 1208,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "chunk-01587a83c141c647a34a.js",
+                "raw": 3415946,
+                "gzip": 2438169,
+                "brotli": 2279545,
+                "holdsPack": true
+              },
+              {
+                "file": "e.js",
+                "raw": 2534,
+                "gzip": 1336,
+                "brotli": 1208,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 3418480,
+              "gzip": 2439505,
+              "brotli": 2280753
+            },
+            "largest": {
+              "file": "chunk-01587a83c141c647a34a.js",
+              "raw": 3415946
+            },
+            "holdsPack": true,
+            "split": "split: the pack is in a chunk loaded on click",
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "jpl-de440",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          }
+        },
+        "a-namespace": {
+          "esbuild": {
+            "built": true,
+            "entry": {
+              "file": "a-namespace.js",
+              "raw": 3418827,
+              "gzip": 2440388,
+              "brotli": 2281951,
+              "holdsPack": true
+            },
+            "files": [
+              {
+                "file": "a-namespace.js",
+                "raw": 3418827,
+                "gzip": 2440388,
+                "brotli": 2281951,
+                "holdsPack": true
+              }
+            ],
+            "total": {
+              "raw": 3418827,
+              "gzip": 2440388,
+              "brotli": 2281951
+            },
+            "largest": {
+              "file": "a-namespace.js",
+              "raw": 3418827
+            },
+            "holdsPack": true,
+            "packModuleBytesInOutput": {
+              "a-namespace.js": 3320151
+            },
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "jpl-de440",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "rollup": {
+            "built": true,
+            "entry": {
+              "file": "a-namespace.js",
+              "raw": 3417331,
+              "gzip": 2437298,
+              "brotli": 2280303,
+              "holdsPack": true
+            },
+            "files": [
+              {
+                "file": "a-namespace.js",
+                "raw": 3417331,
+                "gzip": 2437298,
+                "brotli": 2280303,
+                "holdsPack": true
+              }
+            ],
+            "total": {
+              "raw": 3417331,
+              "gzip": 2437298,
+              "brotli": 2280303
+            },
+            "largest": {
+              "file": "a-namespace.js",
+              "raw": 3417331
+            },
+            "holdsPack": true,
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "jpl-de440",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "vite": {
+            "built": true,
+            "entry": {
+              "file": "assets/a-namespace-h34sNo0J.js",
+              "raw": 3416201,
+              "gzip": 2438777,
+              "brotli": 2280133,
+              "holdsPack": true
+            },
+            "files": [
+              {
+                "file": "assets/a-namespace-h34sNo0J.js",
+                "raw": 3416201,
+                "gzip": 2438777,
+                "brotli": 2280133,
+                "holdsPack": true
+              }
+            ],
+            "total": {
+              "raw": 3416201,
+              "gzip": 2438777,
+              "brotli": 2280133
+            },
+            "largest": {
+              "file": "assets/a-namespace-h34sNo0J.js",
+              "raw": 3416201
+            },
+            "holdsPack": true,
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "jpl-de440",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "webpack": {
+            "built": true,
+            "entry": {
+              "file": "a-namespace.js",
+              "raw": 3416279,
+              "gzip": 2436739,
+              "brotli": 2280236,
+              "holdsPack": true
+            },
+            "files": [
+              {
+                "file": "a-namespace.js",
+                "raw": 3416279,
+                "gzip": 2436739,
+                "brotli": 2280236,
+                "holdsPack": true
+              }
+            ],
+            "total": {
+              "raw": 3416279,
+              "gzip": 2436739,
+              "brotli": 2280236
+            },
+            "largest": {
+              "file": "a-namespace.js",
+              "raw": 3416279
+            },
+            "holdsPack": true,
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "jpl-de440",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          }
+        },
+        "a-core": {
+          "esbuild": {
+            "built": true,
+            "entry": {
+              "file": "a-core.js",
+              "raw": 80192,
+              "gzip": 36161,
+              "brotli": 30554,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "a-core.js",
+                "raw": 80192,
+                "gzip": 36161,
+                "brotli": 30554,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 80192,
+              "gzip": 36161,
+              "brotli": 30554
+            },
+            "largest": {
+              "file": "a-core.js",
+              "raw": 80192
+            },
+            "holdsPack": false,
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "astronomy-engine",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "rollup": {
+            "built": true,
+            "entry": {
+              "file": "a-core.js",
+              "raw": 78068,
+              "gzip": 34863,
+              "brotli": 29204,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "a-core.js",
+                "raw": 78068,
+                "gzip": 34863,
+                "brotli": 29204,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 78068,
+              "gzip": 34863,
+              "brotli": 29204
+            },
+            "largest": {
+              "file": "a-core.js",
+              "raw": 78068
+            },
+            "holdsPack": false,
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "astronomy-engine",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "vite": {
+            "built": true,
+            "entry": {
+              "file": "assets/a-core-BInqhuEX.js",
+              "raw": 77647,
+              "gzip": 34558,
+              "brotli": 29278,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "assets/a-core-BInqhuEX.js",
+                "raw": 77647,
+                "gzip": 34558,
+                "brotli": 29278,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 77647,
+              "gzip": 34558,
+              "brotli": 29278
+            },
+            "largest": {
+              "file": "assets/a-core-BInqhuEX.js",
+              "raw": 77647
+            },
+            "holdsPack": false,
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "astronomy-engine",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          },
+          "webpack": {
+            "built": true,
+            "entry": {
+              "file": "a-core.js",
+              "raw": 77042,
+              "gzip": 34187,
+              "brotli": 28800,
+              "holdsPack": false
+            },
+            "files": [
+              {
+                "file": "a-core.js",
+                "raw": 77042,
+                "gzip": 34187,
+                "brotli": 28800,
+                "holdsPack": false
+              }
+            ],
+            "total": {
+              "raw": 77042,
+              "gzip": 34187,
+              "brotli": 28800
+            },
+            "largest": {
+              "file": "a-core.js",
+              "raw": 77042
+            },
+            "holdsPack": false,
+            "node": {
+              "ran": true,
+              "reported": {
+                "bodies": 12,
+                "ephemeris": "astronomy-engine",
+                "flags": []
+              }
+            },
+            "browser": {
+              "measured": false,
+              "reason": "Playwright's Chromium download is blocked by this workspace's network policy and no other Chromium is installed"
+            }
+          }
+        }
+      },
+      "nodeImport": [
+        {
+          "specifier": "@zodiacs/engine",
+          "command": "node --input-type=module -e \"await import(specifier); natalChart(...)\", a new process each run",
+          "importMs": {
+            "samples": 10,
+            "median": 55.75,
+            "min": 42.9,
+            "max": 78.53,
+            "all": [
+              55.08,
+              63.04,
+              42.9,
+              65.29,
+              56.42,
+              78.53,
+              61.14,
+              53.31,
+              45.48,
+              51.89
+            ]
+          },
+          "firstChartMs": {
+            "samples": 10,
+            "median": 94.81,
+            "min": 71.46,
+            "max": 117.07,
+            "all": [
+              117.07,
+              95.39,
+              93.42,
+              94.23,
+              99.72,
+              108.58,
+              97.09,
+              71.46,
+              78.8,
+              90.85
+            ]
+          },
+          "processMs": {
+            "samples": 10,
+            "median": 217.67,
+            "min": 170.83,
+            "max": 250.58,
+            "all": [
+              232.86,
+              216.61,
+              199.98,
+              221.84,
+              220.11,
+              250.58,
+              218.73,
+              170.83,
+              181.7,
+              204.26
+            ]
+          },
+          "ephemeris": "jpl-de440"
+        },
+        {
+          "specifier": "@zodiacs/engine/core",
+          "command": "node --input-type=module -e \"await import(specifier); natalChart(...)\", a new process each run",
+          "importMs": {
+            "samples": 10,
+            "median": 15.59,
+            "min": 14.22,
+            "max": 19.7,
+            "all": [
+              15.61,
+              15.38,
+              14.22,
+              19.7,
+              19.16,
+              16.67,
+              14.89,
+              17.27,
+              14.99,
+              15.58
+            ]
+          },
+          "firstChartMs": {
+            "samples": 10,
+            "median": 61.06,
+            "min": 52.85,
+            "max": 68.5,
+            "all": [
+              61.57,
+              59.1,
+              56.99,
+              63.3,
+              52.85,
+              62.8,
+              66,
+              59.62,
+              60.55,
+              68.5
+            ]
+          },
+          "processMs": {
+            "samples": 10,
+            "median": 130.92,
+            "min": 117.33,
+            "max": 141.56,
+            "all": [
+              127.15,
+              120.98,
+              117.33,
+              134.68,
+              138.37,
+              139.18,
+              141.56,
+              124.64,
+              122.35,
+              140.48
+            ]
+          },
+          "ephemeris": "astronomy-engine"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "2.0.0-rc.3 a esbuild: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 a rollup: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 a vite: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 a webpack: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 b esbuild: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 b rollup: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 b vite: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 b webpack: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 c esbuild: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 c rollup: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 c vite: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 c webpack: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 d esbuild: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 d rollup: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 d vite: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 d webpack: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 e esbuild: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 e rollup: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 e vite: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 e webpack: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 a-namespace esbuild: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 a-namespace rollup: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 a-namespace vite: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 a-namespace webpack: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 a-core esbuild: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 a-core rollup: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 a-core vite: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 a-core webpack: brotli <= gzip <= raw for every file",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "2.0.0-rc.3 c esbuild: no pack, largest file under 100,000 bytes raw",
+      "pass": true,
+      "detail": "c.js 4872"
+    },
+    {
+      "name": "2.0.0-rc.3 c rollup: no pack, largest file under 100,000 bytes raw",
+      "pass": true,
+      "detail": "c.js 4779"
+    },
+    {
+      "name": "2.0.0-rc.3 c vite: no pack, largest file under 100,000 bytes raw",
+      "pass": true,
+      "detail": "assets/c-keBUYN8C.js 4768"
+    },
+    {
+      "name": "2.0.0-rc.3 c webpack: no pack, largest file under 100,000 bytes raw",
+      "pass": true,
+      "detail": "c.js 4873"
+    },
+    {
+      "name": "2.0.0-rc.3 d esbuild: no pack, largest file under 100,000 bytes raw",
+      "pass": true,
+      "detail": "d.js 11478"
+    },
+    {
+      "name": "2.0.0-rc.3 d rollup: no pack, largest file under 100,000 bytes raw",
+      "pass": true,
+      "detail": "d.js 10847"
+    },
+    {
+      "name": "2.0.0-rc.3 d vite: no pack, largest file under 100,000 bytes raw",
+      "pass": true,
+      "detail": "assets/d-KKCMcvLc.js 11372"
+    },
+    {
+      "name": "2.0.0-rc.3 d webpack: no pack, largest file under 100,000 bytes raw",
+      "pass": true,
+      "detail": "d.js 11226"
+    },
+    {
+      "name": "2.0.0-rc.3 a-core esbuild: builds, holds no pack, and computes on astronomy-engine",
+      "pass": true,
+      "detail": "80192 raw, largest a-core.js 80192, ephemeris astronomy-engine"
+    },
+    {
+      "name": "2.0.0-rc.3 a-core rollup: builds, holds no pack, and computes on astronomy-engine",
+      "pass": true,
+      "detail": "78068 raw, largest a-core.js 78068, ephemeris astronomy-engine"
+    },
+    {
+      "name": "2.0.0-rc.3 a-core vite: builds, holds no pack, and computes on astronomy-engine",
+      "pass": true,
+      "detail": "77647 raw, largest assets/a-core-BInqhuEX.js 77647, ephemeris astronomy-engine"
+    },
+    {
+      "name": "2.0.0-rc.3 a-core webpack: builds, holds no pack, and computes on astronomy-engine",
+      "pass": true,
+      "detail": "77042 raw, largest a-core.js 77042, ephemeris astronomy-engine"
+    },
+    {
+      "name": "2.0.0-rc.3 a esbuild: the pack chunk's bytes in the output within 1 per cent of the archive's dist/chunk-UXY4RU57.js (3320824)",
+      "pass": true,
+      "detail": "3320151 bytes, 0.020 per cent off"
+    }
+  ]
+}

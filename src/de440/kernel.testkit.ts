@@ -122,6 +122,11 @@ export class KernelSource implements StateSource {
     return out;
   }
 
+  /** The kernel's own records are not this test kit's concern: none reported. */
+  boundaries(): number[] {
+    return [];
+  }
+
   lunar(et: number, emb: Float64Array, moon: Float64Array, earth: Float64Array): void {
     for (const [t, c, out] of [[3, 0, emb], [301, 3, moon], [399, 3, earth]] as const) {
       out.fill(0);

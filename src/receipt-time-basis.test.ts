@@ -150,7 +150,7 @@ describe("a receipt written by 0.1.1-rc.14 (the rc.8 conventions set)", () => {
     // Replayed today, the chart's own receipt is of the current set, under this version.
     const today = createNatalEnvelope(chart);
     expect(today.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[0]);
-    expect(today.receipt.engine.version).toBe("1.1.0-rc.3");
+    expect(today.receipt.engine.version).toBe("2.0.0-rc.3");
     expect(verdict(today)).toBe("ok");
   });
 
@@ -229,19 +229,20 @@ describe("a receipt of the current conventions set", () => {
     }
   });
 
-  it("records the model before 1972, and after the IERS table the fallback band", () => {
+  it("records the model before 1972, and after the IERS table the continuous-UTC rule", () => {
     const early = envelopeOf({ utc: "1960-03-01T12:00:00Z" });
     expect(early.result.timeScale).toEqual({ input: "utc", basis: "delta-t", ut1MinusUtc: null, leapSeconds: null });
     expect(early.result.deltaT).toMatchObject({ model: "zodiacs-deltat/1" });
     expect(verdict(early)).toBe("ok");
     expect(verdict(early, (copy) => (copy.result.deltaT.seconds += 1e-6))).toBe("inconsistent_result");
     const late = envelopeOf({ utc: "2030-03-01T12:00:00Z" });
-    expect(late.result.timeScale).toEqual({
+    expect(late.result.timeScale).toMatchObject({
       input: "utc",
-      basis: "delta-t",
-      ut1MinusUtc: { seconds: 0, sigma: 0.9, source: "fallback" },
-      leapSeconds: null
+      basis: "continuous-utc",
+      ut1MinusUtc: { sigma: late.result.deltaT!.sigma, source: "model" },
+      leapSeconds: { taiMinusUtc: 37, listed: false }
     });
+    expect(late.result.timeScale!.ut1MinusUtc!.seconds).toBeCloseTo(69.184 - late.result.deltaT!.seconds, 3);
     expect(verdict(late)).toBe("ok");
     expect(verdict(late, (copy) => (copy.result.timeScale.ut1MinusUtc = null))).toBe("inconsistent_result");
   });

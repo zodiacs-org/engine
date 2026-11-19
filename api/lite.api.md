@@ -229,18 +229,18 @@ declare function sectReading(input: SectInput): SectReading;
 ## Referenced, not exported here (5)
 
 ```ts
-// exported by @zodiacs/engine (AspectType)
+// exported by @zodiacs/engine (AspectType), @zodiacs/engine/core (AspectType)
 type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
 
-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
+// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
 type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
 
-// exported by @zodiacs/engine (Element)
+// exported by @zodiacs/engine (Element), @zodiacs/engine/core (Element)
 type Element = "fire" | "earth" | "air" | "water";
 
-// exported by @zodiacs/engine (Sect)
+// exported by @zodiacs/engine (Sect), @zodiacs/engine/core (Sect)
 type Sect = "day" | "night";
 
-// exported by @zodiacs/engine (ZodiacSign)
+// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
 type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
 ```

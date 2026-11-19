@@ -45,7 +45,7 @@ await writeFile(resolve(consumer, 'package.json'), JSON.stringify({
 node([npmCli, 'install', '--ignore-scripts', '--no-audit', '--no-fund', '--save-exact',
   engineArchive, archive], consumer);
 node([resolve(packageRoot, 'scripts/verify-consumer.mjs'), consumer,
-  resolve(packageRoot, 'scripts/no-network.mjs'), resolve(repo, 'conformance/results/zodiacs-engine.json'),
+  resolve(packageRoot, 'scripts/no-network.mjs'), resolve(packageRoot, 'baselines/engine-1.0.0-rc.2-node-22.22.2.json'),
   resolve(repo, 'conformance/adapters/zodiacs-engine.mjs'), resolve(repo, 'conformance/harness/lib.mjs'), npmCli]);
 const reportPath = resolve(consumer, 'cli-consumer-report.json');
 const report = JSON.parse(await readFile(reportPath, 'utf8'));

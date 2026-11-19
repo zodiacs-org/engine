@@ -30,7 +30,7 @@ Any other value, including `null`, throws `RangeError`. A `ChartInput` carries
 | --- | --- | --- | --- | --- |
 | before 1972-01-01 | UT1 + ΔT(model) | the instant read as UT1 | `"delta-t"` | `"zodiacs-deltat/1"` |
 | 1972-01-01 to 2027-10-02 | UTC + (TAI − UTC) + 32.184 s | UTC + (UT1 − UTC) | `"iers"` | `"iers-utc/1"` |
-| after 2027-10-02 | UT1 + ΔT(model) | the instant read as UT1, UT1 − UTC taken as 0 ± 0.9 s | `"delta-t"` | `"zodiacs-deltat/1"` |
+| after 2027-10-02 | UTC + 37 s + 32.184 s, exactly UTC + 69.184 s | TT − ΔT(model), UT1 solving UT1 = TT − ΔT(UT1) | `"continuous-utc"` | `"zodiacs-deltat/1"` |
 | any, with `deltaT` pinned | UT1 + the pin | as above | `"pinned"` | `"pinned"` |
 
 - **TAI − UTC** comes from the IERS leap-second list, `leap-seconds.list` as
@@ -68,12 +68,37 @@ Any other value, including `null`, throws `RangeError`. A `ChartInput` carries
   of IERS on twelve dated values from 1962 to 2026 and within 0.084 s on every
   IERS day since 1962. It is used where UTC as a leap-second scale is not
   defined (before 1972) and after the UT1 table.
+- **The continuous-UTC rule** (from 2.0.0-rc.3): after the
+  UT1 table UTC is taken to run on with no further leap second, so TAI − UTC
+  stays 37 s and TT = UTC + 69.184 s exactly, and UT1 comes from TT through
+  the ΔT model. The chart reports it as `basis` `"continuous-utc"`, with
+  `ut1MinusUtc` the model's UT1 − UTC (`source` `"model"`, `sigma` the
+  model's ΔT band) and `leapSeconds` `{ taiMinusUtc: 37, listed: false }`.
+  The sources committed for it
+  ([`evidence/continuous-utc-20261117/`](evidence/continuous-utc-20261117/README.md)):
+  IERS Bulletin C 72 (6 July 2026: no leap second at the end of December
+  2026, UTC − TAI = −37 s until further notice); tzdb 2026f's NEWS (released
+  2026-10-27: "No more leap seconds, and leap second tables no longer
+  expire"); and JPL Horizons, whose TDB − UT, which it reckons on UTC after
+  1962, is 69.1845 s at five instants from 2028 to 2199. The rule assumes the
+  list holds no leap second after 2017-01-01, and the time-scale generator
+  refuses a list that does (`scripts/build-time-scales.mjs`). Up to
+  2.0.0-rc.2, and in 1.1.0, UTC after the table was read as UT1, UT1 − UTC
+  taken as 0 ± 0.9 s, and TT = UT1 + ΔT(model): TT − UTC was 69.418 s at
+  2028-06-15T12:00Z, 69.654 s at 2030, 71.491 s at 2050, 79.033 s at 2100
+  and 125.844 s at 2199-06-19, and on the DE440 pack the Moon was 28.26″ from
+  Horizons at 2199-06-19, where it is now 0.51″, compared raw on two
+  different ecliptics of date (Horizons' IAU 1976/80, the engine's IAU
+  2006/2000A; the share of each is not separated). Charts given on TT or UT1, and pinned charts, keep
+  their TT and UT1 to the bit; their recorded UTC and time scale change.
 - **A pin**, `deltaT` in seconds, fixes ΔT = TT − UT1. UT1 still comes from
-  the instant (for UTC from 1972, with UT1 − UTC from the table).
+  the instant (for UTC from 1972, with UT1 − UTC from the table; after it,
+  with UTC read as UT1 within 0.9 s, the rule before continuous UTC).
 
 For `"tt"` input the steps run backwards: TT → TAI = TT − 32.184 s → UT1 =
 TAI + (UT1 − TAI); UTC is TAI − (TAI − UTC) with the TAI − UTC in force at
-that TAI. Before 1972 and after the table, UT1 solves TT = UT1 + ΔT(UT1). For
+that TAI. Before 1972 and after the table, UT1 solves TT = UT1 + ΔT(UT1), and
+after the table UTC is TT − 69.184 s. For
 `"ut1"` input, TAI is found from UT1 − TAI, then UTC, and TT follows. Inside a
 leap second, 23:59:60 on UTC, the old TAI − UTC and UT1 − UTC are still in
 force; JavaScript has no timestamp for that reading, and the engine uses the
@@ -95,7 +120,9 @@ speed, is taken on the same scale and pin. A speed is the change of longitude
 between its samples divided by the time between them: 0.002 day (the true
 node's, 0.5 day) on the input's scale, or their TT interval where a leap second
 or a step of the time basis lies between them: at 1972-01-01, at the table's
-last day, where UT1 − UTC moves between the table and its fallback, and where
+last day, where UT1 − UTC moves from the table to the model (by under 0.01 s
+on UTC input: from −0.148 s to −0.146 s; up to 2.0.0-rc.2, to its 0 ± 0.9 s
+fallback), and where
 the ΔT model hands over from its spline to its knots at 1941.0, where it steps
 13.95 ms. rc.15's first cut divided by 0.002 day there too: its speeds were
 1.005787 times this rate within 86.4 s of a leap second, 0.9997422 times it at
@@ -118,12 +145,47 @@ the ΔT model hands over from its spline to its knots at 1941.0, where it steps
 
 `chart.timeScale` is `{ input, basis, ut1MinusUtc, leapSeconds }`:
 `ut1MinusUtc` is `{ seconds, sigma, source }` with `source` `"observed"`,
-`"predicted"` or, for UTC or TT input after the table, `"fallback"`
-(0 ± 0.9 s), and is null before 1972, for UT1 input after the table and with a
-pin on UT1 or TT input; `leapSeconds` is `{ taiMinusUtc, listed }` where TT
-came from the leap seconds, and null otherwise. Where both are given,
-32.184 s + `taiMinusUtc` − `ut1MinusUtc.seconds` is `deltaT.seconds`, inside a
-leap second too.
+`"predicted"`, `"model"` after the table on the continuous-UTC rule (the
+model's UT1 − UTC, with the ΔT band; UTC, UT1 or TT input), or
+`"fallback"` (0 ± 0.9 s) for a pin on UTC input after the table, and is null
+before 1972 and with a pin on UT1 or TT input. Up to 2.0.0-rc.2 UTC or TT
+input after the table gave `"fallback"` and UT1 input there null.
+`leapSeconds` is `{ taiMinusUtc, listed }` where TT came from the leap
+seconds, the continuous-UTC rule included, and null otherwise. Where both are
+given, 32.184 s + `taiMinusUtc` − `ut1MinusUtc.seconds` is `deltaT.seconds`,
+inside a leap second too; on the continuous-UTC rule within 1e-12 s on UTC,
+UT1 and TT input from the table's end to the far end of `EPHEMERIS_SPAN`,
+because `ut1MinusUtc.seconds` is taken as 69.184 s − ΔT there, not from the
+two instants in milliseconds since 1970, which round to about 8 µs by 3998
+(`src/time-scale-continuous.test.ts`).
+
+After the table, with no pinned ΔT, the engine's ΔT is one its model
+extrapolates (`basis` `"continuous-utc"`, `segment` `"extrapolated"`), and
+nothing measures how far that is from the ΔT the date will have. A chart then
+holds `"delta-t-extrapolated"` in its `flags`. The model's segments are read
+at the instant's UT1, so on UTC input from 2027-10-02T00:00:00.001Z to
+00:00:00.146Z, where UT1 (UTC − 0.146 s) is still on the table's last day,
+the segment is `"predicted"` and the chart is not flagged; from
+00:00:00.147Z it is `"extrapolated"` and flagged. On UT1 and TT input UT1 is
+past the end from its first millisecond. On UT1 input TT carries that
+ΔT, so the bodies can be off by about `deltaT.sigma` seconds times each
+one's rate, on top of the ephemeris's own error. On TT input UT1 carries it
+instead: the bodies stay put, but the houses and angles turn with UT1, so a
+chart given on TT carries the flag where it has houses, and not without them.
+On UTC input, on the continuous-UTC rule, UT1 carries it too, as on TT input,
+and TT rests only on the rule's assumption of no further leap second; the
+flag is still set on every such chart, as before, so that a record and a
+caller that test for it keep seeing it, but it now qualifies the houses, the
+angles and what else turns with UT1. Up to 2.0.0-rc.2 TT carried the ΔT on
+UTC input too.
+A caller may echo the flag only where the chart derives it. `calc()`,
+`houses()` and `events()` flag their results and widen their bounds by the
+same rule (calc.md, *Bounds*). Natal receipts of the time-basis sets carry
+the flag where the record's ΔT, time scale and houses show it; one written by
+an engine from 1.1.0-rc.10, the first to set it, without it there is refused,
+and one written earlier is still read without it. Before 1972 the model's ΔT is reconstructed
+from observations of the past, not extrapolated, so no chart is flagged
+there.
 
 astronomy-engine keeps one ΔT function for its whole module. The engine
 installs a constant ΔT for each sample and restores its model,
@@ -152,7 +214,8 @@ none:
 | `ut1` | any | d | 0 |
 | `utc` | `iers`, from 1972-01-01 to 2027-10-02 | 0 | u |
 | `utc` | `pinned` | u | u |
-| `utc` | `delta-t` | √(u² + d²) | u |
+| `utc` | `continuous-utc`, after 2027-10-02 | 0 | d |
+| `utc` | `delta-t`, after 2027-10-02 up to 2.0.0-rc.2 | √(u² + d²) | u |
 
 On TT input the instant is TT, and UT1 = TT − ΔT; on UT1 input TT = UT1 +
 ΔT. On UTC input on the IERS basis, which a pin replaces, TT comes from the
@@ -163,10 +226,13 @@ not yet announced. So its band is 0, and UT1 carries the band of UT1 − UTC
 pin on TT or UT1 input gives 0 for both, and a pin on UTC input gives both
 the band of UT1 − UTC, which UT1 takes from UTC. On the ΔT model before 1972
 u is 0: civil time is read as UT1 by definition, and TT carries d. After the
-table UT1 − UTC is 0 within ±0.9 s, so UT1 carries the 0.9 s, and TT both
-bands, combined as the root of the sum of their squares.
+table, on the continuous-UTC rule, TT comes from the leap seconds as on the
+IERS basis, so its band is 0, and UT1 = TT − ΔT carries d (there u is d). Up
+to 2.0.0-rc.2 UT1 − UTC was 0 within ±0.9 s there, so UT1 carried the 0.9 s,
+and TT both bands, combined as the root of the sum of their squares; a
+record of that basis still gives those bands.
 
-So on UTC input from 1972-01-01 to 2027-10-02 without a pinned ΔT the band of
+So on UTC input from 1972-01-01 on without a pinned ΔT the band of
 TT, which moves the planets, is 0, and the time basis's band falls on UT1,
 which turns the Earth. `@zodiacs/engine/calc` carries the two bands into its
 positions, angles, cusps and events, to first order ([calc.md](calc.md),
@@ -178,8 +244,9 @@ observed 0.03 s; at 1972-01-01, where the band of TT falls from 0.03 s to 0
 and that of UT1 rises from 0 to 2.69 ms (C04's 1.9 ms plus the table's
 0.79 ms); after 2026-09-24, the last observed day, where the predictions'
 formal errors take over; and after 2027-10-02, the table's last day, where
-the band of UT1 becomes 0.9 s and that of TT √(0.81 s² + d²), 0.908 s a
-millisecond later. The IERS formal error taken also changes at the start of
+the band of UT1 becomes the model's d, 0.124 s a millisecond later, and that
+of TT stays 0 (up to 2.0.0-rc.2 the band of UT1 became 0.9 s and that of TT
+√(0.81 s² + d²), 0.908 s). The IERS formal error taken also changes at the start of
 each year (*What a chart reports*). The step of ΔT itself at 1941.0 leaves its
 σ unchanged, and no band is added for a leap second not yet announced after
 the leap-second list expires on 2027-06-28.
@@ -201,8 +268,9 @@ smaller than the errors those predictions turn out to have; on the ΔT model
 0.03 s where observed and a band that grows with the years since the last
 observation after it, and before 1956 a band built from measured indicators,
 before 1620 an estimate rather than a calibrated 1-σ (zodiacs.org's
-`docs/platform/evidence/deltat-2026-09-25/`); after the table, the ±0.9 s
-range taken as a 1-σ. It leaves out the input time's own uncertainty and how
+`docs/platform/evidence/deltat-2026-09-25/`); after the table, the model's
+extrapolated band (up to 2.0.0-rc.2 on UTC input, the ±0.9 s range taken as
+a 1-σ). It leaves out the input time's own uncertainty and how
 far a civil time before 1972 was from UT1. `timeBands` reads the two bands,
 the scale and the basis only, and recomputes no σ, so a record read back
 gives the bands the engine gave. Root charts and natal envelopes carry no
@@ -301,47 +369,73 @@ const resolved = resolveLocalToUtc("1883-11-18", "12:02", "America/New_York", { 
 
 `resolveLocalToUtc(date, time, timeZone, options?)` reads `time` (HH:MM) on
 `date` (YYYY-MM-DD) in the IANA zone `timeZone`. A wall time the clock showed
-twice (a fold) takes the earlier instant; one it skipped (a gap) moves forward
-by the jump.
+twice (a fold) takes the earlier instant, or the later one with the option
+`fold: "later"`; one it skipped (a gap) moves forward by the jump.
 
 - **Before 1970** the zone's history is the one this package ships: tzdata
-  2025c compiled with its `backzone` file (`TZDB`: version, archive sha256,
+  2026f compiled with its `backzone` file (`TZDB`: version, archive sha256,
   form `"main+backzone"`), in 16 files that only the geo entry loads, lazily,
   one per call of `prepareLocalTime(date, timeZone)`. "With its backzone file"
-  means the main data files without `backward`, and all of `backzone`, as the
-  tzdb Makefile's `PACKRATDATA=backzone` with `PACKRATLIST` empty, not the
+  means the main data files, all of `backzone`, and `backward`'s Zone and Rule
+  lines without its Link lines (since tzdb 2026d `backward` holds the zones
+  EST5EDT, CST6CDT, MST7MDT and PST8PDT), as the tzdb Makefile's
+  `PACKRATDATA=backzone` with `PACKRATLIST` empty, not the
   `PACKRATLIST=zone.tab` form that Debian builds; each name is backzone's zone
   of that name, else the main data's, else a link, backzone's before
-  `backward`'s. Before 1970 that is the Makefile's own build of that form for
-  584 of the 597 names; for the other 13, links that backzone points at a zone
-  it adds (Iceland at Atlantic/Reykjavik, America/Virgin at America/St_Thomas,
-  and 11 more), the Makefile's `ziguard.awk` keeps `backward`'s target, and the
-  package follows backzone (`docs/evidence/rc15-20260929/backzone-divergence.json`).
+  `backward`'s. On tzdata 2025c, the release shipped through 2.0.0-rc.2, the
+  pinned build's offsets before 1970 matched the Makefile's own build of that
+  form for 584 of the 597 names. For the other 13, `ziguard.awk` kept
+  `backward`'s link target and the pinned build followed backzone's, such as
+  Iceland at Atlantic/Reykjavik and America/Virgin at America/St_Thomas
+  ([2025c evidence](evidence/rc15-20260929/backzone-divergence.json)). This
+  figure has not been measured on 2026f, because the Makefile's build runs
+  the archive's `ziguard.awk`; the
+  [2026f record](evidence/tzdb-2026f-20261118/REPORT.md) says so. What moved from 2025c to 2026f, interval by interval and from zdump, is in
+  `docs/evidence/tzdb-2026f-20261117/`.
+  One name is held back by the owner's decision: tzdata 2026f's `backzone`
+  comments out America/Yellowknife's zone, with no tzdb NEWS entry or other
+  official announcement behind the change, so the package compiles tzdata
+  2025c's `backzone` lines for that zone
+  (`scripts/tzdb-held/yellowknife-2025c.zi`, unchanged) beside 2026f, and
+  America/Yellowknife answers as it did on 2025c at every instant (its
+  `zone.tzdbVersion` still names the pinned release, 2026f). Every other name
+  takes 2026f.
   A wall time before 1970-01-02 in a zone whose history is not loaded throws;
   `prepareLocalTime` resolves at once for a date in 1971 or later and for the
   fixed zones (`UTC`, `Etc/GMT+5` and the like), loads the history for any
   earlier date, 1970's included, and a failed load rejects and is tried again
   next time.
 - **From 1970**, and in the fixed zones, the host's `Intl` answers, as it
-  always has. Sixteen names whose backzone history would disagree with the
+  always has. Fourteen names whose backzone history would disagree with the
   default build after 1970 carry the default build's history instead
   (`zone.dataForm` `"main"`), so the hand-over at 1970 cannot jump:
   America/Argentina/ComodRivadavia, America/Ensenada, America/Nipigon,
   America/Rainy_River, America/Rosario, Asia/Chongqing, Asia/Chungking,
   Asia/Harbin, Asia/Kashgar, Atlantic/Jan_Mayen, EET, Europe/Tiraspol,
-  Europe/Uzhgorod, Europe/Zaporozhye, Pacific/Enderbury and WET. Spans the
+  Pacific/Enderbury and WET (tzdata 2026f; on 2025c also Europe/Uzhgorod and
+  Europe/Zaporozhye, whose zones 2026f's backzone no longer has). Spans the
   history marks as having no local time (`-00`, the Antarctic stations before
   they were staffed) are read from `Intl`.
+- **The host's data is checked, not trusted blindly.** A host that has not
+  updated its time zone data gives last year's rules from 1970 on, so two
+  machines can resolve the same birth an hour apart. Near a span in which the
+  rules changed since tzdata 2021a, the engine asks the host for its offset at
+  one instant inside the span and compares it with the pinned tzdb release;
+  a host that disagrees flags the result `"host-zone-data-differs"`
+  (*Host time zone data*, below).
 - `Intl` is also the cross-check: where the shipped history answered,
-  `intlOffsetMinutes` is the host's offset at the same instant. Compared at
-  every instant before 1970-01-01T00:00Z with tzdata 2025c's default build,
+  `intlOffsetMinutes` is the host's offset at the same instant. For the
+  tzdata 2025c history shipped through 2.0.0-rc.2, compared at every instant
+  before 1970-01-01T00:00Z with tzdata 2025c's default build,
   which is what `Intl` carries on a host with tzdb 2025c and what rc.14 read,
-  122 of the 597 names the package ships give another offset at some instant
-  (all of them after 1850), for example Stockholm 1947-07-01 12:00, +1:00 in
-  the shipped history and +2:00 in the default build. The two builds differ
-  for 136 names; 15 of those ship the default build's history (above), and
-  America/Pangnirtung differs where the default build has no local time
-  (`-00`) and backzone has one. `docs/evidence/rc15-20260929/backzone-divergence.mjs`
+  122 of the 597 shipped names gave another offset at some instant. Each of
+  those names also differed at an instant from 1850 onward. For example,
+  Stockholm 1947-07-01 12:00 was +1:00 in the shipped history and +2:00 in
+  the default build. The two builds differed for 136 names. The package
+  shipped the default build's history for 15 of those names.
+  America/Pangnirtung differed where the default build had no local time
+  (`-00`) and backzone had one. The
+  [comparison script](evidence/rc15-20260929/backzone-divergence.mjs)
   computes the lists from zic's output. The audit's list of 98 zones
   (`src/fixtures/tzdb-divergence-98.json`), which the tests and the
   conformance suite use, compared Debian's 2025b build (backzone restricted to
@@ -349,10 +443,15 @@ by the jump.
   EST5EDT, PST8PDT, America/Montreal, Europe/Belfast and Iceland, and 4 of its
   98 do not change (America/Tijuana, Antarctica/DumontDUrville,
   Antarctica/McMurdo and Antarctica/Syowa).
+  These figures are tzdata 2025c's and have not yet been republished on
+  2026f, the release the package now ships. The same comparison on 2026f,
+  with America/Yellowknife held at 2025c, is recorded with its script and
+  output in
+  [`docs/evidence/tzdb-2026f-20261118/`](evidence/tzdb-2026f-20261118/REPORT.md).
 
 ### Options
 
-`options` is `{ longitude?, calendar?, country? }`. Any other key, or a value
+`options` is `{ longitude?, calendar?, country?, fold? }`. Any other key, or a value
 of the wrong kind, throws `RangeError`, as does any unknown key of
 `resolveLocalBirth`'s and `resolveBirth`'s input (so a misspelled `calender`
 is refused rather than ignored).
@@ -372,10 +471,60 @@ is refused rather than ignored).
   and `"new-style"` when a Julian date falls on or after it, a Julian date
   late in 9999 that resolves into the Gregorian year 10000 among them. The
   note never changes the resolution. A country the table does not date gets
-  no note.
+  no note. Without a country the table dates (no `country`, or one it does
+  not date, such as `"US"`), a date that one of the table's changeovers
+  skipped, after a row's last Old Style day and before its first New Style
+  day (1582-10-05 to 1582-10-14 in Italy, 1752-09-03 to 1752-09-13 in Great
+  Britain), carries the flag `"calendar-unknown"`, in either calendar: such a
+  date was not in civil use in that country and may have been elsewhere, and
+  nothing given says which. The zone narrows the changeovers that can apply.
+  In the zone tzdb's `zone.tab` gives a tabled country for its capital
+  (`Europe/Rome` for Italy, `Europe/London` for Great Britain, 12 of the 18
+  rows), only that country's changeover applies, so Gregorian 1752-09-08 in
+  `Europe/Rome` is not flagged. The zone name is matched without regard to
+  case, and a link is not followed: `Europe/Vatican` takes every changeover,
+  as does `Europe/Bratislava`, a link to Prague whose region followed
+  Hungary's change. The capital zones of Belgium, the Netherlands,
+  Switzerland, Poland, Sweden and Finland are not narrowed, because their
+  rows' notes date days skipped within the zone that fall in another row's
+  skipped days and not in their own (Brabant on 1582-12-25 by Grotefend, the
+  Catholic cantons in January 1584, Silesia on 1584-01-23, Friesland and
+  Groningen on 1701-01-12; Sweden dropped Julian 1700-02-29, a day Denmark
+  skipped too, and Finland went with Sweden), so Gregorian 1701-01-05 in
+  `Europe/Amsterdam`, 1584-01-14 in `Europe/Zurich` or `Europe/Warsaw`, and
+  Julian 1700-02-29 in `Europe/Stockholm` or `Europe/Helsinki` are flagged. Russia's changeover of 1918,
+  the only one after 1800, applies only in a zone under `Europe/` or `Asia/`
+  or one that names no place (`Etc/UTC`, a name with no `/`), so 1918-02-05
+  in `America/New_York` is not flagged. Any other zone takes every
+  changeover: Gregorian 1752-09-08 in `America/New_York` is flagged, as the
+  British colonies there took Britain's change and places elsewhere in the
+  zone's area followed Spain's or France's. Greece's change of 1923 is not in
+  the table, so it is neither flagged nor noted. The flag never changes the
+  instant either; it rides on the birth into the chart's flags and the
+  receipt's `inputFlags`. A receipt refuses the flag on an instant more than
+  a day outside the skipped days, from 1582-10-04T00:00Z up to
+  1918-02-28T00:00Z, with or without a local record (from 2.0.0;
+  tests in `src/geo/calendar-unknown.test.ts`, which count each row's
+  skipped dates against the Julian calendar's lag behind the Gregorian, 10 to
+  13 days).
+- `fold`: `"earlier"` (default) or `"later"`: which instant a wall time the
+  clock showed twice takes, its first pass or its second. `resolveLocalBirth`
+  and `resolveBirth` take the same field. When clocks went back in New York
+  on 2021-11-07, 01:30 happened at 05:30 UTC (daylight time, −4:00) and again
+  at 06:30 UTC (standard time, −5:00): the default gives the first, and
+  `fold: "later"` the second. Both carry the `dst-fold` flag and the same
+  `jump` and `transition`, so a form can ask which pass a birth was in when
+  it sees the flag, and resolve again with the answer. The option changes
+  nothing for a wall time the clock showed once, and a skipped one moves
+  forward by the jump whichever value is given. `localResolution.policy.fold`
+  records the pass taken: `"later"` only where it was asked for and the clock
+  showed the time twice, `"earlier"` for every other time, whichever value
+  was given (tests in `src/geo/fold-choice.test.ts`, with the instants
+  written out from the tz database's rules).
 
 `julianToGregorian` and `gregorianToJulian` convert YYYY-MM-DD strings for
-years 0000–9999; `gregorianAdoption(country)` returns a row of the table;
+years 0000 to 9999 (for other years, go through `julianDayNumber` and
+`dateOfJulianDayNumber`, below); `gregorianAdoption(country)` returns a row of the table;
 `calendarNote(gregorianDate, calendar, country)` gives the note for a
 resolved date. From 1.0 `calendarNote` throws a `RangeError` for a date that
 is not a valid Gregorian YYYY-MM-DD, a calendar other than `"gregorian"` and
@@ -438,18 +587,107 @@ Buffalo, 1870-06-15 12:00 in America/New_York at 78.88° W, is 17:15:31 UTC
 (−5:15:31), where New York's own LMT would give 16:56:02. Brest, Omaha, Porto,
 Paris, Galway and Bergen are in the tests with their values.
 
+### Julian Day Numbers and mean time from a longitude
+
+```ts
+import { dateOfJulianDayNumber, julianDayNumber, localMeanTimeOffset } from "@zodiacs/engine/geo";
+
+julianDayNumber({ year: 2000, month: 1, day: 1 }); // 2451545
+julianDayNumber({ year: -4712, month: 1, day: 1 }, "julian"); // 0
+dateOfJulianDayNumber(2299161, "julian"); // { year: 1582, month: 10, day: 5 }
+localMeanTimeOffset(-0.125); // -30
+```
+
+- `julianDayNumber(date, calendar?)` gives the Julian Day Number of a civil
+  date, the integer day that begins at noon UT on it. `date` is
+  `{ year, month, day }` in astronomical years (year 0 exists; -4712 is
+  4713 BC); `calendar` is `"gregorian"` (the default, proleptic before
+  1582-10-15) or `"julian"`. It throws a `RangeError` unless the three are
+  integers, the year is between -100000 and 100000, and the date exists in
+  that calendar (1900-02-29 is Julian only).
+- `dateOfJulianDayNumber(jdn, calendar?)` is the inverse. It throws a
+  `RangeError` unless `jdn` is an integer within those years of that
+  calendar.
+- `localMeanTimeOffset(longitude)` is a longitude's mean time in seconds east
+  of Greenwich, `longitude × 240`, not rounded (the birthplace clock above
+  rounds it to the second). It throws a `RangeError` unless the longitude is
+  a finite number from -180 to 180.
+
+Both day-number functions use the arithmetic `julianToGregorian` uses.
+`src/geo/day-number.test.ts` checks them on 10,000 random dates per calendar
+from year -4712 to 9999 against a second implementation written in the test
+from J. Meeus, *Astronomical Algorithms* (2nd ed., 1998), chapter 7, and
+`scripts/verify-jdn.py` checks the underlying arithmetic on every day from
+Julian Day Number 0 to Julian 3000-12-31 against E. G. Richards's algorithm.
+Over the whole span of years -100000 to 100000 the tests check only that the
+two functions invert each other (5,000 random dates per calendar) and that
+consecutive days differ by one in sampled years at both ends.
+
+### Host time zone data
+
+From 1970 on, `Intl` reads the wall time, and `Intl` gives whatever rules the
+device's time zone data carries; browsers do not say which release that is.
+The geo entry carries a table (`src/geo/host-probes-data.ts`, generated by
+`scripts/build-host-zone-probes.mjs`) of every span from 1970-01-01 to
+2029-10-27 in which tzdata 2021a and tzdata 2026f, each compiled as its
+default build (the main data files with `backward` and `etcetera`, as
+browsers and Node carry them) with `zic -b fat`, give different offsets, for
+every zone and link name both releases have: 703 spans in 77 names, each with
+the 2026f offset. 2021a is the baseline because five years is the oldest
+device data worth describing; 2029-10-27 is 2026f's release date plus three
+years. Nothing is compared past it, so a span still open there ends there
+for the check.
+`docs/evidence/host-zone-probes-20261117/` checks every span, probe and
+offset against `zdump -v -c 1970,2030` of both builds, to the second, and
+records what Node 22.22.2 (tzdb 2025c) and Node 22.23.4 (tzdb 2026e) say at
+each probe.
+
+When the host's `Intl` answered (`zone.source` `"intl"`) and the instant,
+from 1970 on, lies within 36 hours of such a span of the zone (from 36
+hours before the span begins, inclusive, to 36 hours after it ends,
+exclusive; in a fixed zone, never), the engine asks the host for its offset at the span's probe,
+the span's midpoint rounded down to the minute (45 days in for a span with no
+end), once per zone and probe for the life of the module, and records the
+answer in `zone.hostCheck`:
+
+| `status` | Meaning |
+| --- | --- |
+| `"unchecked"` | no span is near: tzdata 2021a and 2026f agree within 36 hours of the instant, or the instant is before 1970 or 36 hours or more after 2029-10-27T00:00Z, or the zone is a fixed one. Nothing else is set. |
+| `"current"` | the host gave 2026f's offset at every probe near the instant |
+| `"differs"` | the host gave another offset at a probe; the result and the chart carry `"host-zone-data-differs"` |
+| `"newer"` | it did, but the runtime names a tzdb release later than 2026f (`process.versions.tz`; Node does, browsers do not), which may know a rule 2026f does not, so nothing is flagged |
+
+Except for `"unchecked"`, `hostCheck` also gives `probe` (ISO 8601, the
+first probe that disagreed, else the first asked), `hostOffsetMinutes`,
+`tzdbOffsetMinutes` (2026f's offset there) and `tzdbVersion` (`"2026f"`). The
+flag says the host's data *differs*, not that it is stale: in a browser the
+engine cannot tell which side is newer.
+
+The flag reports; it does not correct. The instant returned is still the
+host's, because one probe does not carry a zone's whole rules. On a host
+with 2021a's or any older data for Cuba, `resolveLocalToUtc("2026-12-15",
+"12:00", "America/Havana")` gives 17:00Z, offset −5:00, flagged, where tzdata
+2026f gives −4:00, 16:00Z; Node 22.23.4, whose tzdb is 2026e, is such a host
+(`docs/evidence/host-zone-probes-20261117/results/node-22.23.4.json`). A
+caller who sees the flag should ask the person to update the device (its
+operating system or browser), or pass the UTC instant, if they know it,
+instead of the wall time. The flag rides on the birth into the chart's flags
+and a receipt's `inputFlags`, as `"lmt"` does, and a caller may assert it; a
+receipt refuses it on an instant before 1970-01-01T00:00Z and on a local
+record whose `dataForm` names the shipped history.
+
 ### The result
 
 | Field | Meaning |
 | --- | --- |
 | `utc` | the instant |
 | `offsetMinutes` | minutes east at that instant; may be fractional |
-| `flags` | `"dst-gap"` or `"dst-fold"` for a gap or fold of any cause, and `"lmt"` when a local mean time clock read the wall time |
+| `flags` | `"dst-gap"` or `"dst-fold"` for a gap or fold of any cause, `"lmt"` when a local mean time clock read the wall time, `"calendar-unknown"` for a skipped date given with no country the table dates (see Options), and `"host-zone-data-differs"` where the host's offset near the instant differs from tzdata 2026f's (*Host time zone data*) |
 | `date`, `writtenDate`, `calendar` | the Gregorian date resolved, and the date as written in its calendar |
 | `jump` | `{ kind: "gap" \| "fold", cause }`, or null |
 | `transition` | `{ at, offsetBeforeMinutes, offsetAfterMinutes, cause }`: the jump's, or the last change before the instant where the shipped history answered; null from 1970 without a jump |
 | `localMeanTime` | see above |
-| `zone` | `{ source: "tzdb" \| "intl", tzdbVersion, dataForm: "main+backzone" \| "main" \| "host", abbreviation, dst }`; `tzdbVersion` is the host's (Node reports it) when `Intl` answered |
+| `zone` | `{ source: "tzdb" \| "intl", tzdbVersion, dataForm: "main+backzone" \| "main" \| "host", abbreviation, dst, hostCheck? }`; `tzdbVersion` is the host's (Node reports it) when `Intl` answered; `hostCheck` is set only then (*Host time zone data*) |
 | `intlOffsetMinutes` | the host's offset, where the shipped history answered |
 | `calendarNote` | see Options |
 | `localResolution` | the record for a receipt (below) |
@@ -546,6 +784,62 @@ must convert to the resolved date, a gap's transition must account for the
 shift, a date-line cause needs a change of 12 hours or more, and a birthplace
 mean time must equal `longitude × 240` seconds at the instant (or just before
 a gap out of it). A local resolution requires `receipt.timeScale` `"utc"`.
+Its `policy` is `{ fold: "earlier" | "later", gap: "shift-forward" }`: with
+`"earlier"` a fold's instant must fall before its transition, on the offset
+the clock left, and with `"later"` at or after it, within the repeated span,
+on the offset the clock took. A record with `"later"` and no `dst-fold` flag
+is refused as `invalid_context`: only a repeated time has a second pass, and
+the resolver writes `"earlier"` for every other time. An engine from before
+the choice existed refuses a record with `"later"` as `unsupported_feature`,
+and this one refuses `"later"` under a conventions set older than rc.15's.
+
+A chart on the continuous-UTC rule (`timeScale.basis` `"continuous-utc"`)
+is written, from 2.0.0-rc.3, under one of two sets of its
+own, `NATAL_RECEIPT_CONVENTION_SETS[7]` (astronomy-engine) and `[8]` (the
+DE440 pack), each the set it follows with `timeScale`
+`"tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972;in-result"`,
+and its envelope requires the feature `"time-basis-continuous-utc"`. 1.1.0
+and 2.0.0-rc.2 refuse such a record as `unsupported_feature`
+([`evidence/continuous-utc-20261117/results/new-receipt-on-earlier-engines.json`](evidence/continuous-utc-20261117/results/new-receipt-on-earlier-engines.json)).
+Every other chart, inside the table, before 1972 or pinned, keeps the earlier
+sets. Under the new sets the codec takes `ut1MinusUtc.source` `"model"` only
+on that basis, bounds `ut1MinusUtc.seconds` to ±86,400 s and its band to
+3,600 s (the model's UT1 − UTC passes −3,600 s in 2957, and its band reaches
+1,200 s), and recomputes the record on this rule; it refuses one that names an
+engine before the rule (the version in `CONTINUOUS_UTC_RELEASE`, set when a
+candidate is cut). Under the earlier sets it recomputes a record on the rule
+before it, so a record that 1.1.0 or 2.0.0-rc.2 wrote after the table, its
+UTC read as UT1 with UT1 − UTC 0 ± 0.9 s, still verifies, and
+`natalReplayInput` replays it as a UT1 request (`timeScale: "ut1"`): the
+instant its engine read, which this engine reads to the same TT and UT1, and
+so to the same chart to the bit (`src/receipt-continuous-utc.test.ts`, on
+`src/fixtures/receipt-1.1.0-after-table.json` and
+`receipt-2.0.0-rc.2-after-table.json`, which the carried archives wrote),
+except for the speeds of a chart within six hours of the table's end.
+
+A speed is the change over samples 0.002 day apart (the true node's
+0.5 day). Within six hours of 2027-10-02T00:00Z one sample can lie on the
+other side of the end, where the rule changed, so a speed moves by a
+second-order amount: inside the table, a record of 1.1.0 or 2.0.0-rc.2
+replayed on UTC, and after it, one replayed as UT1. Longitudes, latitudes,
+angles and cusps do not move. Measured every minute over the twelve hours
+and every 100 ms within 100 s of the end, at 48.2° N: on the DE440 pack the
+Moon's speed by up to 3.5e-7 °/day and the true node's by 8.0e-9; on
+astronomy-engine the Moon's by 3.6e-7 and the true node's by 3.8e-6; every
+other body's by under 7e-8
+([`evidence/continuous-utc-20261117/results/near-table-end-2.0.0-rc.2.json`](evidence/continuous-utc-20261117/results/near-table-end-2.0.0-rc.2.json)
+and `-astronomy-engine.json`; 1.1.0 the same).
+`src/time-scale-near-end.test.ts` holds the archive's charts at 18 instants
+there to 4e-7 °/day (the nodes to 4e-6) and, outside the six hours, to the
+bit.
+
+A record under the rc.8 set or an older one (0.1.1-rc.14 and earlier, whose
+result has no time scale) read every instant as UT1. After the table it now
+replays as a UT1 request too, so that the continuous-UTC rule does not move
+it (its TT would be 0.47 s earlier at 2030 on UTC); inside the table it
+replays on UTC, as below
+(`src/fixtures/receipt-0.1.1-rc.14-after-table.json`, which the carried
+rc.14 archive wrote).
 
 Receipts under rc.15's set, under the rc.8 set (0.1.1-rc.8 to rc.14), which
 read the instant as UT1, and under the older sets stay readable, each
@@ -581,7 +875,8 @@ nutation changed, rc.15 moved them by up to 12.85″, 12.94″, 20.07″, 40.55�
 a sign's edge changes sign: an rc.14 receipt of 1973-01-05T06:56:44Z at
 59.33° N 18.07° E records Sagittarius 29.99765° and replays to Capricorn
 (`src/replay-time-basis.test.ts`). Before 1972 and after 2027-10-02, where
-both engines read the instant as UT1 on the model, only the nutation moves
+both engines read the instant as UT1 on the model (after 2027-10-02, up to
+2.0.0-rc.2), only the nutation moves
 them: over 7,896 synthetic charts from 1850 to 2150 at four places up to
 60.17° N, every longitude by up to 0.2635″, the ascendant and cusps by up to
 0.8003″ and the midheaven by up to 0.2576″
@@ -618,9 +913,13 @@ then reports the pinned basis, not rc.14's model.
 
 ```sh
 # src/tzdb/: the zone histories and LATER_CAUSES (needs zic)
-node scripts/build-tz-shards.mjs            # downloads tzdata2025c.tar.gz into .cache/ once
-TZDATA_TARBALL=/path/tzdata2025c.tar.gz node scripts/build-tz-shards.mjs
+node scripts/build-tz-shards.mjs            # downloads tzdata2026f.tar.gz into .cache/ once
+TZDATA_TARBALL=/path/tzdata2026f.tar.gz node scripts/build-tz-shards.mjs
 node scripts/build-tz-shards.mjs --check
+
+# src/geo/host-probes-data.ts and src/geo/host-probes-intervals.json (needs zic)
+TZDATA_2026F_TARBALL=/path/tzdata2026f.tar.gz TZDATA_2021A_TARBALL=/path/tzdata2021a.tar.gz \
+  node scripts/build-host-zone-probes.mjs [--check]   # or download both into .cache/ once
 
 # src/time-scale-data.ts, from the inputs committed in scripts/time-scale-sources/
 node scripts/build-time-scales.mjs [--check]
@@ -628,9 +927,11 @@ node scripts/build-time-scales.mjs [--check]
 IERS_FINALS=/path/finals2000A.all IERS_C04=/path/eopc04.1962-now node scripts/build-time-scales.mjs [--check]
 ```
 
-Both generators refuse inputs whose SHA-256 differs from the pinned one
-(tzdata2025c.tar.gz:
-`4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957`). The
+The generators refuse inputs whose SHA-256 differs from the pinned one
+(tzdata2026f.tar.gz:
+`01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d`;
+tzdata2021a.tar.gz, which only the host-probe generator reads:
+`39e7d2ba08c68cbaefc8de3227aab0dec2521be8042cf56855f7dc3a9fb14e08`). The
 time-scale generator's inputs are committed because IERS replaces
 `finals2000A.all` and `eopc04.1962-now` every day: the leap-second list as
 IERS serves it, the header and the 367 rows of `eopc04.1962-now` it takes, and
@@ -647,7 +948,10 @@ the values change.
 
 - The leap-second list expires 2027-06-28 and the UT1 table ends 2027-10-02;
   predictions widen `sigma` toward the end (26.2 ms on the last day). After the
-  table, UT1 − UTC is 0 ± 0.9 s and TT comes from the model.
+  table, TT is UTC + 69.184 s on the continuous-UTC rule, which holds only
+  while no leap second is added after 2017-01-01, and UT1 comes from the
+  extrapolated ΔT model, whose band reaches 1,200 s within `EPHEMERIS_SPAN`.
+  UT1 − UTC then passes −3,600 s in 2957; a natal record bounds it to a day.
 - Known limitation: the ΔT model `zodiacs-deltat/1` steps back 13.95 ms at
   1941.0 (1940-12-31T18:00 UT1), where its spline hands over to its knots
   (review finding F-47), and this candidate keeps the step. Removing it would
@@ -659,8 +963,29 @@ the values change.
 - The shipped history is tzdb's best reconstruction; before about 1970 many
   records are uncertain, and tzdb's own comments say so.
 - From 1970 the offsets are the host's, whatever its tzdb release, but the
-  causes are tzdb 2025c's: a change that only a newer host knows is resolved
+  causes are tzdb 2026f's: a change that only a newer host knows is resolved
   with the host's offsets and reported as `"dst"`.
+- The host check (*Host time zone data*) sees only what changed between
+  tzdata 2021a and 2026f, from 1970-01-01 to 2029-10-27; an instant 36
+  hours or more after 2029-10-27T00:00Z is not checked, even in a span still open
+  there, since the older rules may agree again later (Morocco's: 2021a and
+  2025c give +00:00 in Ramadan 2030, as 2026f does, so `Africa/Casablanca`
+  2030-01-20 12:00, conformance vector L3-TZ-0045, is not flagged on a host
+  with tzdb 2025c). A rule changed after 2026f and a zone name 2021a lacks
+  (Europe/Kyiv, America/Ciudad_Juarez) are not checked either.
+- A host is flagged only where it disagrees with 2026f inside a span in
+  which 2021a does too. A host whose data is older than 2021a, or between
+  2021a and 2026f, can be wrong where 2021a and 2026f agree, and its check
+  then says `"current"`. Of the releases in between, 2025c (Node 22.22.2)
+  was compared: it has one such span, Asia/Tehran and its link Iran on
+  1979-05-26 (UTC 1979-05-25 20:30 to 1979-05-26 20:30), where 2025c gives
+  +03:30 and 2021a and 2026f +04:30, so 12:00 there is 08:30Z on such a host
+  and 07:30Z in 2026f, unflagged. Its other differences from 2026f are all
+  spans 2021a has too.
+- A browser with newer data than 2026f is flagged where the two differ,
+  since it names no release. One probe stands for its span: a host that
+  agrees there and not elsewhere in the span is not flagged. The table keys
+  names by a 32-bit hash, unique among every name of both builds.
 - The adoption table gives one date per present-day country, for the region
   its row names; the note gives the other regions the sources date, and some
   regions (Moravia, Zeeland, Drenthe) they do not date at all. It dates only

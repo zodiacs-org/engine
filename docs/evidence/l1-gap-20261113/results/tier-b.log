@@ -1,0 +1,11 @@
+# node v22.23.3; tier B on the kernel fetched for this work (SHA-256 a4ce9bf9...c4b5)
+$ PRECISION_KERNEL=<de440.bsp> npx vitest run src/de440-kernel.test.ts
+ ✓ src/de440-kernel.test.ts (3 tests) 761ms
+   ✓ de440 on the raw kernel (tier B) > rule (viii): every place within 1e-6 arcsecond of the ERFA chain's, 2,000 rows 337ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  16:04:58
+   Duration  1.15s (transform 136ms, setup 0ms, collect 142ms, tests 761ms, environment 0ms, prepare 51ms)
+
+exit 0

@@ -129,7 +129,8 @@ function fixtures() {
     {id: 'false-polar-echo', input: {utc: '2000-01-01', latitude: 0, longitude: 0, flags: ['polar-fallback']}},
     {id: 'delta-t-too-large', input: {utc: '2000-01-01', deltaT: 1e11}},
   ];
-  const edges = [{id: 'exact-geographic-pole', input: {utc: '2000-01-01', latitude: 90, longitude: 0}}];
+  // The instant rc.10 read the bare date 2000-01-01 as; a bare date with a known time is refused from the version after 1.1.0.
+  const edges = [{id: 'exact-geographic-pole', input: {utc: '2000-01-01T00:00:00Z', latitude: 90, longitude: 0}}];
   return {schema: 'zodiacs.rc10-compatibility-fixtures.v1', charts, invalid, edges};
 }
 function materialize(test) {

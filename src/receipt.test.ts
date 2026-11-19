@@ -57,6 +57,8 @@ function withOwnIds(envelope: any): void {
   }
 }
 
+/** A chart's bodies as a record keeps them: the computed fields, without each row's ephemeris label, which the receipt names once. */
+const recorded = (bodies: Chart["bodies"]) => bodies.map(({ ephemeris: _named, fallback: _why, ...row }) => row);
 function imported(value: unknown) {
   return parseNatalEnvelope(JSON.stringify(value));
 }
@@ -94,9 +96,9 @@ describe("Zodiacs draft natal receipt", () => {
       actual: "whole",
       absenceReason: null
     });
-    expect(captured.receipt.resultFlags).toEqual(["polar-fallback"]);
+    expect(captured.receipt.resultFlags).toEqual(["polar-fallback", "polar-angles"]);
     expect(captured.result).toEqual({
-      bodies: original.bodies,
+      bodies: recorded(original.bodies),
       angles: original.angles,
       houses: original.houses,
       aspects: original.aspects,
@@ -132,7 +134,7 @@ describe("Zodiacs draft natal receipt", () => {
         const captured = createNatalEnvelope(original);
         const parsed = parseNatalEnvelope(serializeNatalEnvelope(captured));
         expect(parsed).toEqual({ ok: true, envelope: captured });
-        expect(captured.result.bodies).toEqual(original.bodies);
+        expect(captured.result.bodies).toEqual(recorded(original.bodies));
         expect(captured.result.aspects).toEqual(original.aspects);
       }
     }
@@ -249,8 +251,9 @@ describe("Zodiacs draft natal receipt", () => {
     });
   });
 
-  it("retains date-only UTC-midnight input if supplied, and rejects mismatched/malformed source strings", () => {
-    const captured = envelope({ utc: "2000-02-29" }, { sourceInstant: "2000-02-29" });
+  it("retains date-only UTC-midnight input if supplied with an unknown time, and rejects mismatched/malformed source strings", () => {
+    expect(() => envelope({ utc: "2000-02-29" }, { sourceInstant: "2000-02-29" })).toThrow(/calendar date with no time/);
+    const captured = envelope({ utc: "2000-02-29", timeKnown: false }, { sourceInstant: "2000-02-29" });
     expect(captured.receipt.instant).toBe("2000-02-29T00:00:00.000Z");
     expect(captured.receipt.sourceInstant).toBe("2000-02-29");
     for (const sourceInstant of [
@@ -349,7 +352,7 @@ describe("Zodiacs draft natal receipt", () => {
       timeKnown: true,
       houses: { requested: "placidus", actual: "whole", absenceReason: null },
       inputFlags: [],
-      resultFlags: ["polar-fallback"]
+      resultFlags: ["polar-fallback", "polar-angles"]
     });
     const output = JSON.stringify(diagnostic);
     for (const privateValue of [

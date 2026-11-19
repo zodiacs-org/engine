@@ -1,0 +1,915 @@
+{
+  "engine": "@zodiacs/engine 1.1.0-rc.3",
+  "node": "v22.22.2",
+  "vectors": {
+    "path": "conformance/vectors/L1-positions.json",
+    "sha256": "853486bd33ddf2c136581803aec7df4b069c00f63678861537b2c0b86127366c",
+    "count": 240
+  },
+  "bounds": {
+    "path": "src/calc-bounds.ts",
+    "sha256": "a1e54167cc75cc2dc3c1713b4c78b582f6d26eee445dd6e020f8eeac218c6ab5",
+    "rows": "geocentric/apparent",
+    "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16",
+    "arcsec": {
+      "Sun": 3,
+      "Moon": 8.3,
+      "Mercury": 9.3,
+      "Venus": 11,
+      "Mars": 6.6,
+      "Jupiter": 13,
+      "Saturn": 18,
+      "Uranus": 20,
+      "Neptune": 21,
+      "Pluto": 25
+    }
+  },
+  "pack": {
+    "sha256": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
+    "bytes": 2489664
+  },
+  "timeScale": "TT on both sides; no ΔT enters",
+  "limits": {
+    "suite": "|Δlon| ≤ 1″ on the circle and |Δlat| ≤ 1″",
+    "lon30": "|Δlon| ≤ 30″, longitude only",
+    "receipt": "whole-angle separation ≤ the body's geocentric/apparent row of src/calc-bounds.ts (measured on the default source)"
+  },
+  "sources": {
+    "default": {
+      "ephemeris": "astronomy-engine 2.1.19",
+      "all": {
+        "cases": 240,
+        "suitePass": 48,
+        "lon30Pass": 240,
+        "receiptPass": 237,
+        "largestLon": {
+          "arcsec": 18.774482,
+          "id": "L1-POS-0209"
+        },
+        "largestLat": {
+          "arcsec": 19.028119,
+          "id": "L1-POS-0237"
+        },
+        "largestAngle": {
+          "arcsec": 19.038426,
+          "id": "L1-POS-0237"
+        },
+        "suiteFailures": [
+          "L1-POS-0002",
+          "L1-POS-0003",
+          "L1-POS-0004",
+          "L1-POS-0005",
+          "L1-POS-0006",
+          "L1-POS-0007",
+          "L1-POS-0008",
+          "L1-POS-0009",
+          "L1-POS-0010",
+          "L1-POS-0012",
+          "L1-POS-0013",
+          "L1-POS-0014",
+          "L1-POS-0015",
+          "L1-POS-0016",
+          "L1-POS-0017",
+          "L1-POS-0018",
+          "L1-POS-0019",
+          "L1-POS-0020",
+          "L1-POS-0022",
+          "L1-POS-0023",
+          "L1-POS-0024",
+          "L1-POS-0025",
+          "L1-POS-0026",
+          "L1-POS-0027",
+          "L1-POS-0028",
+          "L1-POS-0029",
+          "L1-POS-0030",
+          "L1-POS-0031",
+          "L1-POS-0032",
+          "L1-POS-0033",
+          "L1-POS-0034",
+          "L1-POS-0035",
+          "L1-POS-0037",
+          "L1-POS-0038",
+          "L1-POS-0039",
+          "L1-POS-0040",
+          "L1-POS-0042",
+          "L1-POS-0044",
+          "L1-POS-0046",
+          "L1-POS-0047",
+          "L1-POS-0048",
+          "L1-POS-0049",
+          "L1-POS-0050",
+          "L1-POS-0051",
+          "L1-POS-0052",
+          "L1-POS-0053",
+          "L1-POS-0054",
+          "L1-POS-0056",
+          "L1-POS-0057",
+          "L1-POS-0059",
+          "L1-POS-0060",
+          "L1-POS-0061",
+          "L1-POS-0062",
+          "L1-POS-0063",
+          "L1-POS-0064",
+          "L1-POS-0065",
+          "L1-POS-0066",
+          "L1-POS-0067",
+          "L1-POS-0068",
+          "L1-POS-0069",
+          "L1-POS-0070",
+          "L1-POS-0073",
+          "L1-POS-0075",
+          "L1-POS-0076",
+          "L1-POS-0077",
+          "L1-POS-0078",
+          "L1-POS-0079",
+          "L1-POS-0080",
+          "L1-POS-0083",
+          "L1-POS-0084",
+          "L1-POS-0086",
+          "L1-POS-0087",
+          "L1-POS-0088",
+          "L1-POS-0089",
+          "L1-POS-0090",
+          "L1-POS-0093",
+          "L1-POS-0094",
+          "L1-POS-0095",
+          "L1-POS-0096",
+          "L1-POS-0097",
+          "L1-POS-0098",
+          "L1-POS-0099",
+          "L1-POS-0100",
+          "L1-POS-0103",
+          "L1-POS-0104",
+          "L1-POS-0106",
+          "L1-POS-0107",
+          "L1-POS-0108",
+          "L1-POS-0109",
+          "L1-POS-0110",
+          "L1-POS-0111",
+          "L1-POS-0113",
+          "L1-POS-0114",
+          "L1-POS-0115",
+          "L1-POS-0116",
+          "L1-POS-0117",
+          "L1-POS-0118",
+          "L1-POS-0119",
+          "L1-POS-0120",
+          "L1-POS-0121",
+          "L1-POS-0123",
+          "L1-POS-0124",
+          "L1-POS-0125",
+          "L1-POS-0126",
+          "L1-POS-0128",
+          "L1-POS-0129",
+          "L1-POS-0133",
+          "L1-POS-0134",
+          "L1-POS-0135",
+          "L1-POS-0136",
+          "L1-POS-0137",
+          "L1-POS-0138",
+          "L1-POS-0139",
+          "L1-POS-0143",
+          "L1-POS-0144",
+          "L1-POS-0145",
+          "L1-POS-0146",
+          "L1-POS-0147",
+          "L1-POS-0148",
+          "L1-POS-0149",
+          "L1-POS-0153",
+          "L1-POS-0154",
+          "L1-POS-0156",
+          "L1-POS-0157",
+          "L1-POS-0158",
+          "L1-POS-0159",
+          "L1-POS-0161",
+          "L1-POS-0163",
+          "L1-POS-0164",
+          "L1-POS-0165",
+          "L1-POS-0166",
+          "L1-POS-0167",
+          "L1-POS-0168",
+          "L1-POS-0169",
+          "L1-POS-0170",
+          "L1-POS-0173",
+          "L1-POS-0174",
+          "L1-POS-0175",
+          "L1-POS-0176",
+          "L1-POS-0177",
+          "L1-POS-0178",
+          "L1-POS-0179",
+          "L1-POS-0180",
+          "L1-POS-0183",
+          "L1-POS-0184",
+          "L1-POS-0185",
+          "L1-POS-0186",
+          "L1-POS-0187",
+          "L1-POS-0188",
+          "L1-POS-0189",
+          "L1-POS-0190",
+          "L1-POS-0192",
+          "L1-POS-0194",
+          "L1-POS-0195",
+          "L1-POS-0196",
+          "L1-POS-0197",
+          "L1-POS-0198",
+          "L1-POS-0199",
+          "L1-POS-0200",
+          "L1-POS-0201",
+          "L1-POS-0202",
+          "L1-POS-0203",
+          "L1-POS-0204",
+          "L1-POS-0205",
+          "L1-POS-0207",
+          "L1-POS-0209",
+          "L1-POS-0210",
+          "L1-POS-0211",
+          "L1-POS-0213",
+          "L1-POS-0215",
+          "L1-POS-0216",
+          "L1-POS-0217",
+          "L1-POS-0218",
+          "L1-POS-0219",
+          "L1-POS-0220",
+          "L1-POS-0221",
+          "L1-POS-0222",
+          "L1-POS-0223",
+          "L1-POS-0225",
+          "L1-POS-0226",
+          "L1-POS-0227",
+          "L1-POS-0228",
+          "L1-POS-0229",
+          "L1-POS-0230",
+          "L1-POS-0232",
+          "L1-POS-0233",
+          "L1-POS-0235",
+          "L1-POS-0236",
+          "L1-POS-0237",
+          "L1-POS-0238",
+          "L1-POS-0239",
+          "L1-POS-0240"
+        ],
+        "lon30Failures": [],
+        "receiptFailures": [
+          "L1-POS-0117",
+          "L1-POS-0164",
+          "L1-POS-0237"
+        ]
+      },
+      "byBody": {
+        "Sun": {
+          "cases": 24,
+          "suitePass": 15,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 1.305787,
+            "id": "L1-POS-0161"
+          },
+          "largestLat": {
+            "arcsec": 1.633448,
+            "id": "L1-POS-0201"
+          },
+          "largestAngle": {
+            "arcsec": 1.730497,
+            "id": "L1-POS-0201"
+          },
+          "suiteFailures": [
+            "L1-POS-0031",
+            "L1-POS-0051",
+            "L1-POS-0061",
+            "L1-POS-0111",
+            "L1-POS-0121",
+            "L1-POS-0161",
+            "L1-POS-0201",
+            "L1-POS-0211",
+            "L1-POS-0221"
+          ],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Moon": {
+          "cases": 24,
+          "suitePass": 13,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 3.740825,
+            "id": "L1-POS-0002"
+          },
+          "largestLat": {
+            "arcsec": 1.719418,
+            "id": "L1-POS-0232"
+          },
+          "largestAngle": {
+            "arcsec": 3.742021,
+            "id": "L1-POS-0002"
+          },
+          "suiteFailures": [
+            "L1-POS-0002",
+            "L1-POS-0012",
+            "L1-POS-0022",
+            "L1-POS-0032",
+            "L1-POS-0042",
+            "L1-POS-0052",
+            "L1-POS-0062",
+            "L1-POS-0192",
+            "L1-POS-0202",
+            "L1-POS-0222",
+            "L1-POS-0232"
+          ],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Mercury": {
+          "cases": 24,
+          "suitePass": 2,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 7.973315,
+            "id": "L1-POS-0113"
+          },
+          "largestLat": {
+            "arcsec": 6.14801,
+            "id": "L1-POS-0223"
+          },
+          "largestAngle": {
+            "arcsec": 7.99368,
+            "id": "L1-POS-0113"
+          },
+          "suiteFailures": [
+            "L1-POS-0003",
+            "L1-POS-0013",
+            "L1-POS-0023",
+            "L1-POS-0033",
+            "L1-POS-0053",
+            "L1-POS-0063",
+            "L1-POS-0073",
+            "L1-POS-0083",
+            "L1-POS-0093",
+            "L1-POS-0103",
+            "L1-POS-0113",
+            "L1-POS-0123",
+            "L1-POS-0133",
+            "L1-POS-0143",
+            "L1-POS-0153",
+            "L1-POS-0163",
+            "L1-POS-0173",
+            "L1-POS-0183",
+            "L1-POS-0203",
+            "L1-POS-0213",
+            "L1-POS-0223",
+            "L1-POS-0233"
+          ],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Venus": {
+          "cases": 24,
+          "suitePass": 4,
+          "lon30Pass": 24,
+          "receiptPass": 23,
+          "largestLon": {
+            "arcsec": 12.594598,
+            "id": "L1-POS-0164"
+          },
+          "largestLat": {
+            "arcsec": 5.204579,
+            "id": "L1-POS-0144"
+          },
+          "largestAngle": {
+            "arcsec": 13.014717,
+            "id": "L1-POS-0164"
+          },
+          "suiteFailures": [
+            "L1-POS-0004",
+            "L1-POS-0014",
+            "L1-POS-0024",
+            "L1-POS-0034",
+            "L1-POS-0044",
+            "L1-POS-0054",
+            "L1-POS-0064",
+            "L1-POS-0084",
+            "L1-POS-0094",
+            "L1-POS-0104",
+            "L1-POS-0114",
+            "L1-POS-0124",
+            "L1-POS-0134",
+            "L1-POS-0144",
+            "L1-POS-0154",
+            "L1-POS-0164",
+            "L1-POS-0174",
+            "L1-POS-0184",
+            "L1-POS-0194",
+            "L1-POS-0204"
+          ],
+          "lon30Failures": [],
+          "receiptFailures": [
+            "L1-POS-0164"
+          ]
+        },
+        "Mars": {
+          "cases": 24,
+          "suitePass": 5,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 4.439684,
+            "id": "L1-POS-0195"
+          },
+          "largestLat": {
+            "arcsec": 5.2729,
+            "id": "L1-POS-0035"
+          },
+          "largestAngle": {
+            "arcsec": 5.861,
+            "id": "L1-POS-0035"
+          },
+          "suiteFailures": [
+            "L1-POS-0005",
+            "L1-POS-0015",
+            "L1-POS-0025",
+            "L1-POS-0035",
+            "L1-POS-0065",
+            "L1-POS-0075",
+            "L1-POS-0095",
+            "L1-POS-0115",
+            "L1-POS-0125",
+            "L1-POS-0135",
+            "L1-POS-0145",
+            "L1-POS-0165",
+            "L1-POS-0175",
+            "L1-POS-0185",
+            "L1-POS-0195",
+            "L1-POS-0205",
+            "L1-POS-0215",
+            "L1-POS-0225",
+            "L1-POS-0235"
+          ],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Jupiter": {
+          "cases": 24,
+          "suitePass": 2,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 7.822136,
+            "id": "L1-POS-0186"
+          },
+          "largestLat": {
+            "arcsec": 6.634243,
+            "id": "L1-POS-0216"
+          },
+          "largestAngle": {
+            "arcsec": 9.437577,
+            "id": "L1-POS-0186"
+          },
+          "suiteFailures": [
+            "L1-POS-0006",
+            "L1-POS-0016",
+            "L1-POS-0026",
+            "L1-POS-0046",
+            "L1-POS-0056",
+            "L1-POS-0066",
+            "L1-POS-0076",
+            "L1-POS-0086",
+            "L1-POS-0096",
+            "L1-POS-0106",
+            "L1-POS-0116",
+            "L1-POS-0126",
+            "L1-POS-0136",
+            "L1-POS-0146",
+            "L1-POS-0156",
+            "L1-POS-0166",
+            "L1-POS-0176",
+            "L1-POS-0186",
+            "L1-POS-0196",
+            "L1-POS-0216",
+            "L1-POS-0226",
+            "L1-POS-0236"
+          ],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Saturn": {
+          "cases": 24,
+          "suitePass": 1,
+          "lon30Pass": 24,
+          "receiptPass": 22,
+          "largestLon": {
+            "arcsec": 10.216756,
+            "id": "L1-POS-0167"
+          },
+          "largestLat": {
+            "arcsec": 19.028119,
+            "id": "L1-POS-0237"
+          },
+          "largestAngle": {
+            "arcsec": 19.038426,
+            "id": "L1-POS-0237"
+          },
+          "suiteFailures": [
+            "L1-POS-0007",
+            "L1-POS-0017",
+            "L1-POS-0027",
+            "L1-POS-0037",
+            "L1-POS-0047",
+            "L1-POS-0057",
+            "L1-POS-0067",
+            "L1-POS-0077",
+            "L1-POS-0087",
+            "L1-POS-0097",
+            "L1-POS-0107",
+            "L1-POS-0117",
+            "L1-POS-0137",
+            "L1-POS-0147",
+            "L1-POS-0157",
+            "L1-POS-0167",
+            "L1-POS-0177",
+            "L1-POS-0187",
+            "L1-POS-0197",
+            "L1-POS-0207",
+            "L1-POS-0217",
+            "L1-POS-0227",
+            "L1-POS-0237"
+          ],
+          "lon30Failures": [],
+          "receiptFailures": [
+            "L1-POS-0117",
+            "L1-POS-0237"
+          ]
+        },
+        "Uranus": {
+          "cases": 24,
+          "suitePass": 2,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 12.043477,
+            "id": "L1-POS-0128"
+          },
+          "largestLat": {
+            "arcsec": 16.416173,
+            "id": "L1-POS-0178"
+          },
+          "largestAngle": {
+            "arcsec": 17.891074,
+            "id": "L1-POS-0178"
+          },
+          "suiteFailures": [
+            "L1-POS-0008",
+            "L1-POS-0018",
+            "L1-POS-0028",
+            "L1-POS-0038",
+            "L1-POS-0048",
+            "L1-POS-0068",
+            "L1-POS-0078",
+            "L1-POS-0088",
+            "L1-POS-0098",
+            "L1-POS-0108",
+            "L1-POS-0118",
+            "L1-POS-0128",
+            "L1-POS-0138",
+            "L1-POS-0148",
+            "L1-POS-0158",
+            "L1-POS-0168",
+            "L1-POS-0178",
+            "L1-POS-0188",
+            "L1-POS-0198",
+            "L1-POS-0218",
+            "L1-POS-0228",
+            "L1-POS-0238"
+          ],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Neptune": {
+          "cases": 24,
+          "suitePass": 0,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 18.774482,
+            "id": "L1-POS-0209"
+          },
+          "largestLat": {
+            "arcsec": 9.713313,
+            "id": "L1-POS-0169"
+          },
+          "largestAngle": {
+            "arcsec": 18.8033,
+            "id": "L1-POS-0209"
+          },
+          "suiteFailures": [
+            "L1-POS-0009",
+            "L1-POS-0019",
+            "L1-POS-0029",
+            "L1-POS-0039",
+            "L1-POS-0049",
+            "L1-POS-0059",
+            "L1-POS-0069",
+            "L1-POS-0079",
+            "L1-POS-0089",
+            "L1-POS-0099",
+            "L1-POS-0109",
+            "L1-POS-0119",
+            "L1-POS-0129",
+            "L1-POS-0139",
+            "L1-POS-0149",
+            "L1-POS-0159",
+            "L1-POS-0169",
+            "L1-POS-0179",
+            "L1-POS-0189",
+            "L1-POS-0199",
+            "L1-POS-0209",
+            "L1-POS-0219",
+            "L1-POS-0229",
+            "L1-POS-0239"
+          ],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Pluto": {
+          "cases": 24,
+          "suitePass": 4,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 14.268252,
+            "id": "L1-POS-0240"
+          },
+          "largestLat": {
+            "arcsec": 3.516372,
+            "id": "L1-POS-0240"
+          },
+          "largestAngle": {
+            "arcsec": 14.505452,
+            "id": "L1-POS-0240"
+          },
+          "suiteFailures": [
+            "L1-POS-0010",
+            "L1-POS-0020",
+            "L1-POS-0030",
+            "L1-POS-0040",
+            "L1-POS-0050",
+            "L1-POS-0060",
+            "L1-POS-0070",
+            "L1-POS-0080",
+            "L1-POS-0090",
+            "L1-POS-0100",
+            "L1-POS-0110",
+            "L1-POS-0120",
+            "L1-POS-0170",
+            "L1-POS-0180",
+            "L1-POS-0190",
+            "L1-POS-0200",
+            "L1-POS-0210",
+            "L1-POS-0220",
+            "L1-POS-0230",
+            "L1-POS-0240"
+          ],
+          "lon30Failures": [],
+          "receiptFailures": []
+        }
+      }
+    },
+    "de440": {
+      "ephemeris": "jpl-de440 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
+      "all": {
+        "cases": 240,
+        "suitePass": 240,
+        "lon30Pass": 240,
+        "receiptPass": 240,
+        "largestLon": {
+          "arcsec": 0.012647,
+          "id": "L1-POS-0002"
+        },
+        "largestLat": {
+          "arcsec": 0.001011,
+          "id": "L1-POS-0222"
+        },
+        "largestAngle": {
+          "arcsec": 0.012681,
+          "id": "L1-POS-0002"
+        },
+        "suiteFailures": [],
+        "lon30Failures": [],
+        "receiptFailures": []
+      },
+      "byBody": {
+        "Sun": {
+          "cases": 24,
+          "suitePass": 24,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 0.0036,
+            "id": "L1-POS-0011"
+          },
+          "largestLat": {
+            "arcsec": 0.000195,
+            "id": "L1-POS-0081"
+          },
+          "largestAngle": {
+            "arcsec": 0.0036,
+            "id": "L1-POS-0011"
+          },
+          "suiteFailures": [],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Moon": {
+          "cases": 24,
+          "suitePass": 24,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 0.012647,
+            "id": "L1-POS-0002"
+          },
+          "largestLat": {
+            "arcsec": 0.001011,
+            "id": "L1-POS-0222"
+          },
+          "largestAngle": {
+            "arcsec": 0.012681,
+            "id": "L1-POS-0002"
+          },
+          "suiteFailures": [],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Mercury": {
+          "cases": 24,
+          "suitePass": 24,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 0.003657,
+            "id": "L1-POS-0013"
+          },
+          "largestLat": {
+            "arcsec": 0.00024,
+            "id": "L1-POS-0223"
+          },
+          "largestAngle": {
+            "arcsec": 0.003656,
+            "id": "L1-POS-0013"
+          },
+          "suiteFailures": [],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Venus": {
+          "cases": 24,
+          "suitePass": 24,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 0.003744,
+            "id": "L1-POS-0014"
+          },
+          "largestLat": {
+            "arcsec": 0.000208,
+            "id": "L1-POS-0054"
+          },
+          "largestAngle": {
+            "arcsec": 0.003736,
+            "id": "L1-POS-0014"
+          },
+          "suiteFailures": [],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Mars": {
+          "cases": 24,
+          "suitePass": 24,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 0.003384,
+            "id": "L1-POS-0015"
+          },
+          "largestLat": {
+            "arcsec": 0.000214,
+            "id": "L1-POS-0035"
+          },
+          "largestAngle": {
+            "arcsec": 0.003383,
+            "id": "L1-POS-0015"
+          },
+          "suiteFailures": [],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Jupiter": {
+          "cases": 24,
+          "suitePass": 24,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 0.003771,
+            "id": "L1-POS-0016"
+          },
+          "largestLat": {
+            "arcsec": 0.000185,
+            "id": "L1-POS-0116"
+          },
+          "largestAngle": {
+            "arcsec": 0.003773,
+            "id": "L1-POS-0016"
+          },
+          "suiteFailures": [],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Saturn": {
+          "cases": 24,
+          "suitePass": 24,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 0.003445,
+            "id": "L1-POS-0017"
+          },
+          "largestLat": {
+            "arcsec": 0.000172,
+            "id": "L1-POS-0137"
+          },
+          "largestAngle": {
+            "arcsec": 0.003446,
+            "id": "L1-POS-0017"
+          },
+          "suiteFailures": [],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Uranus": {
+          "cases": 24,
+          "suitePass": 24,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 0.003757,
+            "id": "L1-POS-0018"
+          },
+          "largestLat": {
+            "arcsec": 0.000172,
+            "id": "L1-POS-0168"
+          },
+          "largestAngle": {
+            "arcsec": 0.003759,
+            "id": "L1-POS-0018"
+          },
+          "suiteFailures": [],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Neptune": {
+          "cases": 24,
+          "suitePass": 24,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 0.003429,
+            "id": "L1-POS-0019"
+          },
+          "largestLat": {
+            "arcsec": 0.00017,
+            "id": "L1-POS-0019"
+          },
+          "largestAngle": {
+            "arcsec": 0.003432,
+            "id": "L1-POS-0019"
+          },
+          "suiteFailures": [],
+          "lon30Failures": [],
+          "receiptFailures": []
+        },
+        "Pluto": {
+          "cases": 24,
+          "suitePass": 24,
+          "lon30Pass": 24,
+          "receiptPass": 24,
+          "largestLon": {
+            "arcsec": 0.003615,
+            "id": "L1-POS-0020"
+          },
+          "largestLat": {
+            "arcsec": 0.000177,
+            "id": "L1-POS-0090"
+          },
+          "largestAngle": {
+            "arcsec": 0.003477,
+            "id": "L1-POS-0020"
+          },
+          "suiteFailures": [],
+          "lon30Failures": [],
+          "receiptFailures": []
+        }
+      }
+    }
+  }
+}

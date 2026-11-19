@@ -1,0 +1,74 @@
+node v22.23.3; commit e0c4e1cf511857c4c65c71168c0f15f349f0e0d8; 0 modified tracked paths
+=== npm run typecheck
+
+> @zodiacs/engine@1.1.0-rc.3 typecheck
+> tsc -p tsconfig.typecheck.json --pretty false
+
+=== exit 0: npm run typecheck
+=== npm test
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 7 of 12 3008ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 8 of 12 3072ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 9 of 12 3062ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 10 of 12 3328ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 11 of 12 3378ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 12 of 12 3355ms
+
+ Test Files  99 passed | 1 skipped (100)
+      Tests  4173 passed | 4 skipped (4177)
+   Start at  16:03:24
+   Duration  63.41s (transform 3.83s, setup 0ms, collect 16.07s, tests 198.52s, environment 18ms, prepare 5.57s)
+
+=== exit 0: npm test
+=== npm run build
+DTS dist/time-scale-DIFNa0gz.d.ts     1.92 KB
+DTS dist/zone-history-CKimvqoW.d.ts   11.69 KB
+DTS dist/api-Cg9u5VA1.d.ts            10.73 KB
+DTS dist/internal-math-BHGvc0-8.d.ts  6.02 KB
+DTS dist/internal-CYQ7u-zJ.d.ts       1.07 KB
+lite: dist/lite.js 146 bytes
+lite: dist/lite-declinations.js 9665 bytes
+lite: dist/lite-sect.js 3439 bytes
+lite: dist/lite-composite.js 3783 bytes
+lite: dist/lite-dignities.js 11897 bytes
+lite: dist/lite.d.ts 5135 bytes
+lite: dist/metafile-lite.json 5357 bytes
+=== exit 0: npm run build
+=== npm run exports:smoke
+
+> @zodiacs/engine@1.1.0-rc.3 exports:smoke
+> node scripts/module-resolution-smoke.mjs
+
+@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat, time and lite graphs have no external imports, the lite entry holds its 16 pinned source modules in 5 files that import nothing and loads where astronomy-engine cannot, the core graph (24 source modules in the build's module list, 23 marked in 14 files) reaches no module of an opt-in entry and no zone history, the geo entry loads its 16 shards lazily, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic
+=== exit 0: npm run exports:smoke
+=== npm run api:check
+
+> @zodiacs/engine@1.1.0-rc.3 api:check
+> node scripts/api-report.mjs --check
+
+api-report: 16 entry points match api/
+=== exit 0: npm run api:check
+=== npm run package:contents
+
+> @zodiacs/engine@1.1.0-rc.3 package:contents
+> node scripts/verify-package-contents.mjs
+
+@zodiacs/engine package contents passed (94 files, 1142818 bytes unpacked of 1145000; import graphs: . 108531 of 109000, ./calc 153922 of 156000 (71402 beyond the core's), ./conventions 2754 of 2900 (2754 beyond the core's), ./crossings 9942 of 10000 (173 beyond the core's), ./deltat 5232 of 5500 (161 beyond the core's), ./geo 35439 of 35500 (32510 beyond the core's), ./houses 13678 of 15000 (13678 beyond the core's), ./internal 68758 of 69000 (395 beyond the core's), ./internal/math 19224 of 20000 (1363 beyond the core's), ./lite 28930 of 29000 (28930 beyond the core's), ./receipt 74455 of 76500 (48485 beyond the core's), ./sky 96706 of 97000 (17115 beyond the core's), ./techniques 158382 of 160000 (63939 beyond the core's), ./time 42472 of 42600 (2962 beyond the core's), ./de440 45793 of 48000 (26845 beyond the core's), ./timing 127865 of 129000 (32750 beyond the core's), ./vedic 143652 of 144500 (49209 beyond the core's), ./window 106786 of 107000 (34035 beyond the core's); zone histories 189144 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
+=== exit 0: npm run package:contents
+=== npm run pack:dry-run
+npm notice 4.6kB package.json
+npm notice Tarball Details
+npm notice name: @zodiacs/engine
+npm notice version: 1.1.0-rc.3
+npm notice filename: zodiacs-engine-1.1.0-rc.3.tgz
+npm notice package size: 332.0 kB
+npm notice unpacked size: 1.1 MB
+npm notice shasum: 304dc522ff1ef73ec9cc83ddb164cc5402dfcb01
+npm notice integrity: sha512-xAEGQov54qPXc[...]XenLDy8n6YbCQ==
+npm notice total files: 94
+npm notice
+zodiacs-engine-1.1.0-rc.3.tgz
+=== exit 0: npm run pack:dry-run
+=== node scripts/verify-archive-binding.mjs
+artifacts/zodiacs-engine-1.1.0-rc.3.tgz is byte-identical to a rebuild of HEAD (e0c4e1cf5118) on Node v22.23.3: sha256 3272dcd30264a153c6a89412bb6bc2ba3b6f72b7e9284f95e29b44d73bdff590, 331979 bytes.
+18 recorded archives (17 carried, 1 superseded) and their receipts hold only their recorded bytes across 343 commits, and each is bound to its source commit.
+=== exit 0: node scripts/verify-archive-binding.mjs

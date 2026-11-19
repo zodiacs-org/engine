@@ -1,0 +1,7359 @@
+{
+ "what": "ZOD-97 P1, P2, T4, T5: docs/evidence/edge-cases-20261111/",
+ "node": "v22.23.3",
+ "engineVersion": "1.1.0-rc.3",
+ "horizons": [
+  {
+   "file": "horizons/ecl-TT-10.txt",
+   "sha256": "f3254b9612e0af2deec7a1534595d33ebfa6eeb6b6f07e11a00e0833a4e8b904",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:57:07.517Z"
+  },
+  {
+   "file": "horizons/ecl-UT-10.txt",
+   "sha256": "a576e49a69dedd5c0f16ad81b6ea26825fd7f0b80dc78e897243898e5baf52ee",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:57:09.950Z"
+  },
+  {
+   "file": "horizons/ecl-TT-301.txt",
+   "sha256": "97a5d1d6140260cbac0876e3c37dda8d68cd6b00adc2529cea154191d5e7d70c",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:57:12.200Z"
+  },
+  {
+   "file": "horizons/ecl-UT-301.txt",
+   "sha256": "b4d2197400729d4b10d59841105556d969a57009cb8172860ce70553b1ff529b",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:57:15.003Z"
+  },
+  {
+   "file": "horizons/ecl-TT-199.txt",
+   "sha256": "d7f52e71be2b9eefd43ef966f019747f6b9bafb17a2ae3a21ef8b31c5c90fa10",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:57:30.869Z"
+  },
+  {
+   "file": "horizons/ecl-UT-199.txt",
+   "sha256": "06ad5d13efa1c675086ebd3f7b744a722a1ef1a2eed444a5ad7eaac9e6fd0200",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:57:46.569Z"
+  },
+  {
+   "file": "horizons/ecl-TT-299.txt",
+   "sha256": "d1c7dbc1c58224a0afa4c729652efada6a68d9409fb25e17e0b4fd06812eb6fa",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:57:49.369Z"
+  },
+  {
+   "file": "horizons/ecl-UT-299.txt",
+   "sha256": "786126cc15d2d1ae3b7774d267da0c8e3fe7bc6164908ec86afa3a93bd4c4e5e",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:58:22.985Z"
+  },
+  {
+   "file": "horizons/ecl-TT-4.txt",
+   "sha256": "756e75b8a5964bd9ac3bcc07e8dc9d623f5526b87098511a904b779f6af8036f",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:58:25.587Z"
+  },
+  {
+   "file": "horizons/ecl-UT-4.txt",
+   "sha256": "13ca665b3aa67ca056f7df8d7ce4a550bc1169ce1f47f9d5bdb01b82a24eda89",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:58:28.194Z"
+  },
+  {
+   "file": "horizons/ecl-TT-5.txt",
+   "sha256": "fd3673ce9e1ea2db00ccbd4add9158b394ac8863fc54e89ccdad60d0e0806bf7",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:58:30.774Z"
+  },
+  {
+   "file": "horizons/ecl-UT-5.txt",
+   "sha256": "1e7a8f33a0be76910c323654ce65c9f8f659b22c4012bc01010f34127c617b05",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:58:33.579Z"
+  },
+  {
+   "file": "horizons/ecl-TT-6.txt",
+   "sha256": "adb81c79fb9d6a10614acafc28ef221f2a79a311ad2218fd73f1f649082a631a",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:58:36.422Z"
+  },
+  {
+   "file": "horizons/ecl-UT-6.txt",
+   "sha256": "8bc63c2291d7c5f32cfa19a731eef90109f081a0d87a1bd10c4c79e9ad7ad54b",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:58:38.932Z"
+  },
+  {
+   "file": "horizons/ecl-TT-7.txt",
+   "sha256": "dc01d04e4b43cba643ce62d670182e9fad64beecb9cd4a268f8f8642dd2cc3c6",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:58:41.523Z"
+  },
+  {
+   "file": "horizons/ecl-UT-7.txt",
+   "sha256": "16a3b76f5992417f387528f51d022f466acd38464cff06ed520f9d3acf220c86",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:58:44.212Z"
+  },
+  {
+   "file": "horizons/ecl-TT-8.txt",
+   "sha256": "5daed46756ace80eddcd5794cdeb44a22f6657c613dee8dcd57e8e05bd8df414",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:58:47.006Z"
+  },
+  {
+   "file": "horizons/ecl-UT-8.txt",
+   "sha256": "b0b1d7bc44bfd885a314e3419e336822a1bad50bf49dfdd6e1fcf413dfb46740",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:58:49.447Z"
+  },
+  {
+   "file": "horizons/ecl-TT-9.txt",
+   "sha256": "65b4dee92fd6016721bbc718ea7eb81ea264e867a8054ed99fdb9aa7fe248529",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:58:52.292Z"
+  },
+  {
+   "file": "horizons/ecl-UT-9.txt",
+   "sha256": "b59ac58fc2c406c7ba5b97d9c8a5fb0238cb233562682579c9e7bf5da3235971",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:58:54.910Z"
+  },
+  {
+   "file": "horizons/sun-elevation-78N-june.txt",
+   "sha256": "8b87694a01235e19872d48de5920f32ea499540400cf40ee5f817566d6aba51e",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:59:10.359Z"
+  },
+  {
+   "file": "horizons/sun-elevation-78N-december.txt",
+   "sha256": "e1c11d8ae357e2ec1d4ed15a334d790ad660988e7e6f48e44d5a80063423ea53",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:59:12.776Z"
+  },
+  {
+   "file": "horizons/sun-elevation-90N-june.txt",
+   "sha256": "8177b7f80a059666db159458d4b9e2bbe99eb999ff79de0c8f677834ca202281",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:59:28.634Z"
+  },
+  {
+   "file": "horizons/sun-elevation-90S-june.txt",
+   "sha256": "58e9f358a1dce8c598122d4b58d532d97c6245fccb7f53d40b98f49b367ab179",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-11T14:59:31.777Z"
+  }
+ ],
+ "limitsArcsec": {
+  "everyBody": 30,
+  "sun": 10
+ },
+ "counts": {
+  "P1/T5": {
+   "pass": 60
+  },
+  "P1": {
+   "pass": 30
+  },
+  "P1/T4": {
+   "pass": 30
+  },
+  "T5": {
+   "pass": 12,
+   "flagged-by-natalChart-only": 3
+  },
+  "T4": {
+   "pass": 130,
+   "degenerate-unflagged": 4
+  }
+ },
+ "largestLongitudeDifferenceArcsec": {
+  "Sun": {
+   "arcsec": 0.5509907920895785,
+   "id": "Y-a",
+   "instant": "2050-01-01 00:00 TT"
+  },
+  "Moon": {
+   "arcsec": 2.932050925483054,
+   "id": "Y-d",
+   "instant": "2199-12-31 12:00 TT, the ZOD-65 sweep's last instant"
+  },
+  "Mercury": {
+   "arcsec": 6.203664415170351,
+   "id": "T4-78N",
+   "instant": "2021-06-21T12:00:00Z (78.22 N, 15.63 E)"
+  },
+  "Venus": {
+   "arcsec": 7.504558225764413,
+   "id": "Y-c",
+   "instant": "2150-01-01 00:00 TT"
+  },
+  "Mars": {
+   "arcsec": 3.129455696489458,
+   "id": "Y-e",
+   "instant": "2199-12-31 23:45:36 TT, just inside the end"
+  },
+  "Jupiter": {
+   "arcsec": 4.357752260239067,
+   "id": "T4-78N",
+   "instant": "2021-06-21T12:00:00Z (78.22 N, 15.63 E)"
+  },
+  "Saturn": {
+   "arcsec": 4.666664093338113,
+   "id": "Y-b",
+   "instant": "2100-01-01 00:00 TT"
+  },
+  "Uranus": {
+   "arcsec": 8.278172893642477,
+   "id": "Y-c",
+   "instant": "2150-01-01 00:00 TT"
+  },
+  "Neptune": {
+   "arcsec": 16.221227854930476,
+   "id": "T3-a",
+   "instant": "2011-12-30T22:00:00Z (Pacific/Apia 2011-12-30 12:00, moved forward a day)"
+  },
+  "Pluto": {
+   "arcsec": 29.68750643231033,
+   "id": "Y-e",
+   "instant": "2199-12-31 23:45:36 TT, just inside the end"
+  }
+ },
+ "records": [
+  {
+   "test": "P1/T5",
+   "id": "Y-a",
+   "body": "Sun",
+   "instant": "2050-01-01 00:00 TT",
+   "jdTt": 2469807.5,
+   "file": "horizons/ecl-TT-10.txt",
+   "horizons": {
+    "jd": 2469807.5,
+    "lon": 280.7475664,
+    "lat": 0.0001128
+   },
+   "engine": {
+    "lon": 280.74741334700224,
+    "lat": 0.0001080258028778243
+   },
+   "lonDifferenceArcsec": -0.5509907920895785,
+   "latDifferenceArcsec": -0.017187109639832512,
+   "limitArcsec": 10,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-a",
+   "body": "Moon",
+   "instant": "2050-01-01 00:00 TT",
+   "jdTt": 2469807.5,
+   "file": "horizons/ecl-TT-301.txt",
+   "horizons": {
+    "jd": 2469807.5,
+    "lon": 18.6647916,
+    "lat": 3.3919518
+   },
+   "engine": {
+    "lon": 18.66462439207845,
+    "lat": 3.391793163834205
+   },
+   "lonDifferenceArcsec": -0.6019485175784212,
+   "latDifferenceArcsec": -0.5710901968621229,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-a",
+   "body": "Mercury",
+   "instant": "2050-01-01 00:00 TT",
+   "jdTt": 2469807.5,
+   "file": "horizons/ecl-TT-199.txt",
+   "horizons": {
+    "jd": 2469807.5,
+    "lon": 270.0602551,
+    "lat": 3.1357087
+   },
+   "engine": {
+    "lon": 270.06077194252725,
+    "lat": 3.136273701844839
+   },
+   "lonDifferenceArcsec": 1.8606330982947838,
+   "latDifferenceArcsec": 2.03400664141995,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-a",
+   "body": "Venus",
+   "instant": "2050-01-01 00:00 TT",
+   "jdTt": 2469807.5,
+   "file": "horizons/ecl-TT-299.txt",
+   "horizons": {
+    "jd": 2469807.5,
+    "lon": 281.2470305,
+    "lat": -0.6060336
+   },
+   "engine": {
+    "lon": 281.24723872004404,
+    "lat": -0.6062818308262763
+   },
+   "lonDifferenceArcsec": 0.7495921583540621,
+   "latDifferenceArcsec": -0.8936309745948279,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-a",
+   "body": "Mars",
+   "instant": "2050-01-01 00:00 TT",
+   "jdTt": 2469807.5,
+   "file": "horizons/ecl-TT-4.txt",
+   "horizons": {
+    "jd": 2469807.5,
+    "lon": 227.7141851,
+    "lat": 0.7726841
+   },
+   "engine": {
+    "lon": 227.71402389479985,
+    "lat": 0.7727100701724933
+   },
+   "lonDifferenceArcsec": -0.580338720465079,
+   "latDifferenceArcsec": 0.09349262097582134,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-a",
+   "body": "Jupiter",
+   "instant": "2050-01-01 00:00 TT",
+   "jdTt": 2469807.5,
+   "file": "horizons/ecl-TT-5.txt",
+   "horizons": {
+    "jd": 2469807.5,
+    "lon": 121.6916441,
+    "lat": 0.4580687
+   },
+   "engine": {
+    "lon": 121.69165214947185,
+    "lat": 0.4595667635433742
+   },
+   "lonDifferenceArcsec": 0.028978098589504953,
+   "latDifferenceArcsec": 5.393028756147222,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-a",
+   "body": "Saturn",
+   "instant": "2050-01-01 00:00 TT",
+   "jdTt": 2469807.5,
+   "file": "horizons/ecl-TT-6.txt",
+   "horizons": {
+    "jd": 2469807.5,
+    "lon": 297.5741803,
+    "lat": -0.2035783
+   },
+   "engine": {
+    "lon": 297.57312582631243,
+    "lat": -0.20502349610179577
+   },
+   "lonDifferenceArcsec": -3.796105275523587,
+   "latDifferenceArcsec": -5.202705966464793,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-a",
+   "body": "Uranus",
+   "instant": "2050-01-01 00:00 TT",
+   "jdTt": 2469807.5,
+   "file": "horizons/ecl-TT-7.txt",
+   "horizons": {
+    "jd": 2469807.5,
+    "lon": 170.7325277,
+    "lat": 0.786725
+   },
+   "engine": {
+    "lon": 170.73358974497523,
+    "lat": 0.7862740617352436
+   },
+   "lonDifferenceArcsec": 3.823361910872336,
+   "latDifferenceArcsec": -1.6233777531230231,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-a",
+   "body": "Neptune",
+   "instant": "2050-01-01 00:00 TT",
+   "jdTt": 2469807.5,
+   "file": "horizons/ecl-TT-8.txt",
+   "horizons": {
+    "jd": 2469807.5,
+    "lon": 53.6034447,
+    "lat": -1.7627926
+   },
+   "engine": {
+    "lon": 53.602682806254506,
+    "lat": -1.7629996687361695
+   },
+   "lonDifferenceArcsec": -2.7428174836131802,
+   "latDifferenceArcsec": -0.7454474502101682,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-a",
+   "body": "Pluto",
+   "instant": "2050-01-01 00:00 TT",
+   "jdTt": 2469807.5,
+   "file": "horizons/ecl-TT-9.txt",
+   "horizons": {
+    "jd": 2469807.5,
+    "lon": 337.533039,
+    "lat": -12.6913705
+   },
+   "engine": {
+    "lon": 337.53175870965856,
+    "lat": -12.690994131657604
+   },
+   "lonDifferenceArcsec": -4.609045228880859,
+   "latDifferenceArcsec": 1.354926032625059,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-k",
+   "body": "Sun",
+   "instant": "2075-06-15 00:00 TT",
+   "jdTt": 2479103.5,
+   "file": "horizons/ecl-TT-10.txt",
+   "horizons": {
+    "jd": 2479103.5,
+    "lon": 84.0821434,
+    "lat": -0.0000937
+   },
+   "engine": {
+    "lon": 84.08223779411964,
+    "lat": 0.00015694439515582807
+   },
+   "lonDifferenceArcsec": 0.33981883066189766,
+   "latDifferenceArcsec": 0.902319822560981,
+   "limitArcsec": 10,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-k",
+   "body": "Moon",
+   "instant": "2075-06-15 00:00 TT",
+   "jdTt": 2479103.5,
+   "file": "horizons/ecl-TT-301.txt",
+   "horizons": {
+    "jd": 2479103.5,
+    "lon": 99.1241466,
+    "lat": -0.4995886
+   },
+   "engine": {
+    "lon": 99.12392259214215,
+    "lat": -0.4995227827041565
+   },
+   "lonDifferenceArcsec": -0.8064282885243301,
+   "latDifferenceArcsec": 0.2369422650365438,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-k",
+   "body": "Mercury",
+   "instant": "2075-06-15 00:00 TT",
+   "jdTt": 2479103.5,
+   "file": "horizons/ecl-TT-199.txt",
+   "horizons": {
+    "jd": 2479103.5,
+    "lon": 61.1746129,
+    "lat": -2.9852505
+   },
+   "engine": {
+    "lon": 61.17526111281683,
+    "lat": -2.985746167034973
+   },
+   "lonDifferenceArcsec": 2.333566140578114,
+   "latDifferenceArcsec": -1.7844013259042057,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-k",
+   "body": "Venus",
+   "instant": "2075-06-15 00:00 TT",
+   "jdTt": 2479103.5,
+   "file": "horizons/ecl-TT-299.txt",
+   "horizons": {
+    "jd": 2479103.5,
+    "lon": 71.888915,
+    "lat": -0.5640974
+   },
+   "engine": {
+    "lon": 71.88913824189837,
+    "lat": -0.5643570348460074
+   },
+   "lonDifferenceArcsec": 0.8036708339204779,
+   "latDifferenceArcsec": -0.9346854456267817,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-k",
+   "body": "Mars",
+   "instant": "2075-06-15 00:00 TT",
+   "jdTt": 2479103.5,
+   "file": "horizons/ecl-TT-4.txt",
+   "horizons": {
+    "jd": 2479103.5,
+    "lon": 62.6108827,
+    "lat": -0.0445179
+   },
+   "engine": {
+    "lon": 62.610807976119986,
+    "lat": -0.044904594742765314
+   },
+   "lonDifferenceArcsec": -0.2690059682208812,
+   "latDifferenceArcsec": -1.392101073955132,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-k",
+   "body": "Jupiter",
+   "instant": "2075-06-15 00:00 TT",
+   "jdTt": 2479103.5,
+   "file": "horizons/ecl-TT-5.txt",
+   "horizons": {
+    "jd": 2479103.5,
+    "lon": 157.4966407,
+    "lat": 1.1498103
+   },
+   "engine": {
+    "lon": 157.49773277078145,
+    "lat": 1.1492401840513604
+   },
+   "lonDifferenceArcsec": 3.9314548130278126,
+   "latDifferenceArcsec": -2.0524174151023367,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-k",
+   "body": "Saturn",
+   "instant": "2075-06-15 00:00 TT",
+   "jdTt": 2479103.5,
+   "file": "horizons/ecl-TT-6.txt",
+   "horizons": {
+    "jd": 2479103.5,
+    "lon": 254.5449833,
+    "lat": 1.7291561
+   },
+   "engine": {
+    "lon": 254.54621459540334,
+    "lat": 1.7287599626240815
+   },
+   "lonDifferenceArcsec": 4.432663452189445,
+   "latDifferenceArcsec": -1.426094553306534,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-k",
+   "body": "Uranus",
+   "instant": "2075-06-15 00:00 TT",
+   "jdTt": 2479103.5,
+   "file": "horizons/ecl-TT-7.txt",
+   "horizons": {
+    "jd": 2479103.5,
+    "lon": 283.7475509,
+    "lat": -0.3862757
+   },
+   "engine": {
+    "lon": 283.74693538394564,
+    "lat": -0.3880652861840249
+   },
+   "lonDifferenceArcsec": -2.2158577957725356,
+   "latDifferenceArcsec": -6.442510262489698,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-k",
+   "body": "Neptune",
+   "instant": "2075-06-15 00:00 TT",
+   "jdTt": 2479103.5,
+   "file": "horizons/ecl-TT-8.txt",
+   "horizons": {
+    "jd": 2479103.5,
+    "lon": 110.7968911,
+    "lat": -0.611829
+   },
+   "engine": {
+    "lon": 110.79993695762124,
+    "lat": -0.6131717724013659
+   },
+   "lonDifferenceArcsec": 10.965087436534304,
+   "latDifferenceArcsec": -4.833980644917357,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-k",
+   "body": "Pluto",
+   "instant": "2075-06-15 00:00 TT",
+   "jdTt": 2479103.5,
+   "file": "horizons/ecl-TT-9.txt",
+   "horizons": {
+    "jd": 2479103.5,
+    "lon": 9.8509215,
+    "lat": -16.6453742
+   },
+   "engine": {
+    "lon": 9.849184031386358,
+    "lat": -16.64521428607762
+   },
+   "lonDifferenceArcsec": -6.254887009208687,
+   "latDifferenceArcsec": 0.5756901205600684,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-b",
+   "body": "Sun",
+   "instant": "2100-01-01 00:00 TT",
+   "jdTt": 2488069.5,
+   "file": "horizons/ecl-TT-10.txt",
+   "horizons": {
+    "jd": 2488069.5,
+    "lon": 280.6033767,
+    "lat": 0.0000877
+   },
+   "engine": {
+    "lon": 280.6032973517252,
+    "lat": 0.0002255462699806379
+   },
+   "lonDifferenceArcsec": -0.2856537891602784,
+   "latDifferenceArcsec": 0.4962465719302964,
+   "limitArcsec": 10,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-b",
+   "body": "Moon",
+   "instant": "2100-01-01 00:00 TT",
+   "jdTt": 2488069.5,
+   "file": "horizons/ecl-TT-301.txt",
+   "horizons": {
+    "jd": 2488069.5,
+    "lon": 157.4003875,
+    "lat": 1.092718
+   },
+   "engine": {
+    "lon": 157.40057975176683,
+    "lat": 1.092411113548287
+   },
+   "lonDifferenceArcsec": 0.6921063607023825,
+   "latDifferenceArcsec": -1.1047912261670234,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-b",
+   "body": "Mercury",
+   "instant": "2100-01-01 00:00 TT",
+   "jdTt": 2488069.5,
+   "file": "horizons/ecl-TT-199.txt",
+   "horizons": {
+    "jd": 2488069.5,
+    "lon": 288.0044725,
+    "lat": -2.1126595
+   },
+   "engine": {
+    "lon": 288.0045301155438,
+    "lat": -2.1121472449087113
+   },
+   "lonDifferenceArcsec": 0.2074159573567158,
+   "latDifferenceArcsec": 1.8441183286389773,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-b",
+   "body": "Venus",
+   "instant": "2100-01-01 00:00 TT",
+   "jdTt": 2488069.5,
+   "file": "horizons/ecl-TT-299.txt",
+   "horizons": {
+    "jd": 2488069.5,
+    "lon": 320.0695221,
+    "lat": -1.8524244
+   },
+   "engine": {
+    "lon": 320.06983619046423,
+    "lat": -1.852614688085955
+   },
+   "lonDifferenceArcsec": 1.1307256713280367,
+   "latDifferenceArcsec": -0.6850371094380137,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-b",
+   "body": "Mars",
+   "instant": "2100-01-01 00:00 TT",
+   "jdTt": 2488069.5,
+   "file": "horizons/ecl-TT-4.txt",
+   "horizons": {
+    "jd": 2488069.5,
+    "lon": 29.5250338,
+    "lat": 0.9517484
+   },
+   "engine": {
+    "lon": 29.525813492701786,
+    "lat": 0.9504141571040017
+   },
+   "lonDifferenceArcsec": 2.8068937265743443,
+   "latDifferenceArcsec": -4.8032744255941395,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-b",
+   "body": "Jupiter",
+   "instant": "2100-01-01 00:00 TT",
+   "jdTt": 2488069.5,
+   "file": "horizons/ecl-TT-5.txt",
+   "horizons": {
+    "jd": 2488069.5,
+    "lon": 201.206243,
+    "lat": 1.2766024
+   },
+   "engine": {
+    "lon": 201.2064352271212,
+    "lat": 1.2761928882959852
+   },
+   "lonDifferenceArcsec": 0.6920176365383668,
+   "latDifferenceArcsec": -1.4742421344533518,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-b",
+   "body": "Saturn",
+   "instant": "2100-01-01 00:00 TT",
+   "jdTt": 2488069.5,
+   "file": "horizons/ecl-TT-6.txt",
+   "horizons": {
+    "jd": 2488069.5,
+    "lon": 205.6316229,
+    "lat": 2.4222157
+   },
+   "engine": {
+    "lon": 205.63032660441849,
+    "lat": 2.426243260264768
+   },
+   "lonDifferenceArcsec": -4.666664093338113,
+   "latDifferenceArcsec": 14.499216953163696,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-b",
+   "body": "Uranus",
+   "instant": "2100-01-01 00:00 TT",
+   "jdTt": 2488069.5,
+   "file": "horizons/ecl-TT-7.txt",
+   "horizons": {
+    "jd": 2488069.5,
+    "lon": 17.7412219,
+    "lat": -0.6294656
+   },
+   "engine": {
+    "lon": 17.74184356134026,
+    "lat": -0.6300228693729403
+   },
+   "lonDifferenceArcsec": 2.2379808248388144,
+   "latDifferenceArcsec": -2.00616974258514,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-b",
+   "body": "Neptune",
+   "instant": "2100-01-01 00:00 TT",
+   "jdTt": 2488069.5,
+   "file": "horizons/ecl-TT-8.txt",
+   "horizons": {
+    "jd": 2488069.5,
+    "lon": 167.2905556,
+    "lat": 0.9638828
+   },
+   "engine": {
+    "lon": 167.29465196040792,
+    "lat": 0.9646974870578819
+   },
+   "lonDifferenceArcsec": 14.74689746828517,
+   "latDifferenceArcsec": 2.9328734083748476,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-b",
+   "body": "Pluto",
+   "instant": "2100-01-01 00:00 TT",
+   "jdTt": 2488069.5,
+   "file": "horizons/ecl-TT-9.txt",
+   "horizons": {
+    "jd": 2488069.5,
+    "lon": 32.4030338,
+    "lat": -16.9212164
+   },
+   "engine": {
+    "lon": 32.40076297619271,
+    "lat": -16.921335394121794
+   },
+   "lonDifferenceArcsec": -8.174965706257353,
+   "latDifferenceArcsec": -0.4283788384626064,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-c",
+   "body": "Sun",
+   "instant": "2150-01-01 00:00 TT",
+   "jdTt": 2506331.5,
+   "file": "horizons/ecl-TT-10.txt",
+   "horizons": {
+    "jd": 2506331.5,
+    "lon": 280.4614111,
+    "lat": 0.0000159
+   },
+   "engine": {
+    "lon": 280.4613370701297,
+    "lat": 0.0003531606722470439
+   },
+   "lonDifferenceArcsec": -0.26650753325156984,
+   "latDifferenceArcsec": 1.214138420089358,
+   "limitArcsec": 10,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-c",
+   "body": "Moon",
+   "instant": "2150-01-01 00:00 TT",
+   "jdTt": 2506331.5,
+   "file": "horizons/ecl-TT-301.txt",
+   "horizons": {
+    "jd": 2506331.5,
+    "lon": 302.2151262,
+    "lat": -1.6909412
+   },
+   "engine": {
+    "lon": 302.2153744954452,
+    "lat": -1.6912317653580686
+   },
+   "lonDifferenceArcsec": 0.893863602732381,
+   "latDifferenceArcsec": -1.0460352890473423,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-c",
+   "body": "Mercury",
+   "instant": "2150-01-01 00:00 TT",
+   "jdTt": 2506331.5,
+   "file": "horizons/ecl-TT-199.txt",
+   "horizons": {
+    "jd": 2506331.5,
+    "lon": 259.4665203,
+    "lat": 1.2415114
+   },
+   "engine": {
+    "lon": 259.46690843893305,
+    "lat": 1.2414212834763652
+   },
+   "lonDifferenceArcsec": 1.3973001587146427,
+   "latDifferenceArcsec": -0.32441948508559193,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-c",
+   "body": "Venus",
+   "instant": "2150-01-01 00:00 TT",
+   "jdTt": 2506331.5,
+   "file": "horizons/ecl-TT-299.txt",
+   "horizons": {
+    "jd": 2506331.5,
+    "lon": 243.4907076,
+    "lat": 4.2180894
+   },
+   "engine": {
+    "lon": 243.49279219950716,
+    "lat": 4.219512458629232
+   },
+   "lonDifferenceArcsec": 7.504558225764413,
+   "latDifferenceArcsec": 5.1230110652355165,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-c",
+   "body": "Mars",
+   "instant": "2150-01-01 00:00 TT",
+   "jdTt": 2506331.5,
+   "file": "horizons/ecl-TT-4.txt",
+   "horizons": {
+    "jd": 2506331.5,
+    "lon": 266.2655478,
+    "lat": -0.5027601
+   },
+   "engine": {
+    "lon": 266.2656526056872,
+    "lat": -0.5021187578271327
+   },
+   "lonDifferenceArcsec": 0.37730047397417366,
+   "latDifferenceArcsec": 2.3088318223225546,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-c",
+   "body": "Jupiter",
+   "instant": "2150-01-01 00:00 TT",
+   "jdTt": 2506331.5,
+   "file": "horizons/ecl-TT-5.txt",
+   "horizons": {
+    "jd": 2506331.5,
+    "lon": 265.9913131,
+    "lat": 0.3520969
+   },
+   "engine": {
+    "lon": 265.9908744734145,
+    "lat": 0.35418559750573586
+   },
+   "lonDifferenceArcsec": -1.579055707770749,
+   "latDifferenceArcsec": 7.519311020649133,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-c",
+   "body": "Saturn",
+   "instant": "2150-01-01 00:00 TT",
+   "jdTt": 2506331.5,
+   "file": "horizons/ecl-TT-6.txt",
+   "horizons": {
+    "jd": 2506331.5,
+    "lon": 82.9555575,
+    "lat": -1.3921886
+   },
+   "engine": {
+    "lon": 82.95607541798631,
+    "lat": -1.3873144207623127
+   },
+   "lonDifferenceArcsec": 1.8645047509380674,
+   "latDifferenceArcsec": 17.547045255674654,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-c",
+   "body": "Uranus",
+   "instant": "2150-01-01 00:00 TT",
+   "jdTt": 2506331.5,
+   "file": "horizons/ecl-TT-7.txt",
+   "horizons": {
+    "jd": 2506331.5,
+    "lon": 244.9310474,
+    "lat": 0.1481998
+   },
+   "engine": {
+    "lon": 244.9333468924704,
+    "lat": 0.15223144772568376
+   },
+   "lonDifferenceArcsec": 8.278172893642477,
+   "latDifferenceArcsec": 14.513931812461545,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-c",
+   "body": "Neptune",
+   "instant": "2150-01-01 00:00 TT",
+   "jdTt": 2506331.5,
+   "file": "horizons/ecl-TT-8.txt",
+   "horizons": {
+    "jd": 2506331.5,
+    "lon": 274.1000359,
+    "lat": 1.0829846
+   },
+   "engine": {
+    "lon": 274.0961322294821,
+    "lat": 1.0830077150220472
+   },
+   "lonDifferenceArcsec": -14.053213864644931,
+   "latDifferenceArcsec": 0.0832140793695757,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-c",
+   "body": "Pluto",
+   "instant": "2150-01-01 00:00 TT",
+   "jdTt": 2506331.5,
+   "file": "horizons/ecl-TT-9.txt",
+   "horizons": {
+    "jd": 2506331.5,
+    "lon": 80.8001548,
+    "lat": -9.236791
+   },
+   "engine": {
+    "lon": 80.79604559906164,
+    "lat": -9.237783221007785
+   },
+   "lonDifferenceArcsec": -14.79312337819465,
+   "latDifferenceArcsec": -3.571995628024638,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-d",
+   "body": "Sun",
+   "instant": "2199-12-31 12:00 TT, the ZOD-65 sweep's last instant",
+   "jdTt": 2524593,
+   "file": "horizons/ecl-TT-10.txt",
+   "horizons": {
+    "jd": 2524593,
+    "lon": 279.8162047,
+    "lat": -0.0002059
+   },
+   "engine": {
+    "lon": 279.81612732354404,
+    "lat": 0.0004871864290542785
+   },
+   "lonDifferenceArcsec": -0.27855524131155107,
+   "latDifferenceArcsec": 2.495111144595403,
+   "limitArcsec": 10,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-d",
+   "body": "Moon",
+   "instant": "2199-12-31 12:00 TT, the ZOD-65 sweep's last instant",
+   "jdTt": 2524593,
+   "file": "horizons/ecl-TT-301.txt",
+   "horizons": {
+    "jd": 2524593,
+    "lon": 90.4963631,
+    "lat": -3.9917437
+   },
+   "engine": {
+    "lon": 90.49717755859047,
+    "lat": -3.992127333385038
+   },
+   "lonDifferenceArcsec": 2.932050925483054,
+   "latDifferenceArcsec": -1.381080186136785,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-d",
+   "body": "Mercury",
+   "instant": "2199-12-31 12:00 TT, the ZOD-65 sweep's last instant",
+   "jdTt": 2524593,
+   "file": "horizons/ecl-TT-199.txt",
+   "horizons": {
+    "jd": 2524593,
+    "lon": 299.3090639,
+    "lat": -1.4813054
+   },
+   "engine": {
+    "lon": 299.3081600664281,
+    "lat": -1.4821181902392027
+   },
+   "lonDifferenceArcsec": -3.2538008588289813,
+   "latDifferenceArcsec": -2.9260448611291956,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-d",
+   "body": "Venus",
+   "instant": "2199-12-31 12:00 TT, the ZOD-65 sweep's last instant",
+   "jdTt": 2524593,
+   "file": "horizons/ecl-TT-299.txt",
+   "horizons": {
+    "jd": 2524593,
+    "lon": 254.1474862,
+    "lat": 1.0846706
+   },
+   "engine": {
+    "lon": 254.14710504176458,
+    "lat": 1.08544701203373
+   },
+   "lonDifferenceArcsec": -1.3721696475386125,
+   "latDifferenceArcsec": 2.795083321428482,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-d",
+   "body": "Mars",
+   "instant": "2199-12-31 12:00 TT, the ZOD-65 sweep's last instant",
+   "jdTt": 2524593,
+   "file": "horizons/ecl-TT-4.txt",
+   "horizons": {
+    "jd": 2524593,
+    "lon": 153.2719647,
+    "lat": 3.4204996
+   },
+   "engine": {
+    "lon": 153.27280869946662,
+    "lat": 3.422540611344
+   },
+   "lonDifferenceArcsec": 3.038398079797844,
+   "latDifferenceArcsec": 7.347640838400515,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-d",
+   "body": "Jupiter",
+   "instant": "2199-12-31 12:00 TT, the ZOD-65 sweep's last instant",
+   "jdTt": 2524593,
+   "file": "horizons/ecl-TT-5.txt",
+   "horizons": {
+    "jd": 2524593,
+    "lon": 334.2571141,
+    "lat": -1.0254595
+   },
+   "engine": {
+    "lon": 334.25724442035784,
+    "lat": -1.0261270382071155
+   },
+   "lonDifferenceArcsec": 0.46915328812247026,
+   "latDifferenceArcsec": -2.403137545615852,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-d",
+   "body": "Saturn",
+   "instant": "2199-12-31 12:00 TT, the ZOD-65 sweep's last instant",
+   "jdTt": 2524593,
+   "file": "horizons/ecl-TT-6.txt",
+   "horizons": {
+    "jd": 2524593,
+    "lon": 328.0058883,
+    "lat": -1.4009855
+   },
+   "engine": {
+    "lon": 328.00679784984305,
+    "lat": -1.4016706968147796
+   },
+   "lonDifferenceArcsec": 3.274379435060837,
+   "latDifferenceArcsec": -2.466708533206674,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-d",
+   "body": "Uranus",
+   "instant": "2199-12-31 12:00 TT, the ZOD-65 sweep's last instant",
+   "jdTt": 2524593,
+   "file": "horizons/ecl-TT-7.txt",
+   "horizons": {
+    "jd": 2524593,
+    "lon": 87.0133545,
+    "lat": 0.1794954
+   },
+   "engine": {
+    "lon": 87.01227743049446,
+    "lat": 0.18230158661991233
+   },
+   "lonDifferenceArcsec": -3.8774502198975824,
+   "latDifferenceArcsec": 10.102271831684394,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-d",
+   "body": "Neptune",
+   "instant": "2199-12-31 12:00 TT, the ZOD-65 sweep's last instant",
+   "jdTt": 2524593,
+   "file": "horizons/ecl-TT-8.txt",
+   "horizons": {
+    "jd": 2524593,
+    "lon": 22.2989517,
+    "lat": -1.6605427
+   },
+   "engine": {
+    "lon": 22.300258247626687,
+    "lat": -1.6580735201152759
+   },
+   "lonDifferenceArcsec": 4.70357145595699,
+   "latDifferenceArcsec": 8.889047585006615,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-d",
+   "body": "Pluto",
+   "instant": "2199-12-31 12:00 TT, the ZOD-65 sweep's last instant",
+   "jdTt": 2524593,
+   "file": "horizons/ecl-TT-9.txt",
+   "horizons": {
+    "jd": 2524593,
+    "lon": 144.759352,
+    "lat": 9.1001544
+   },
+   "engine": {
+    "lon": 144.75110634682778,
+    "lat": 9.097995157875946
+   },
+   "lonDifferenceArcsec": -29.684351420110033,
+   "latDifferenceArcsec": -7.773271646590985,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-e",
+   "body": "Sun",
+   "instant": "2199-12-31 23:45:36 TT, just inside the end",
+   "jdTt": 2524593.49,
+   "file": "horizons/ecl-TT-10.txt",
+   "horizons": {
+    "jd": 2524593.49,
+    "lon": 280.3153088,
+    "lat": -0.000216
+   },
+   "engine": {
+    "lon": 280.31522264388866,
+    "lat": 0.000488966484793723
+   },
+   "lonDifferenceArcsec": -0.31016200091471546,
+   "latDifferenceArcsec": 2.537879345257403,
+   "limitArcsec": 10,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-e",
+   "body": "Moon",
+   "instant": "2199-12-31 23:45:36 TT, just inside the end",
+   "jdTt": 2524593.49,
+   "file": "horizons/ecl-TT-301.txt",
+   "horizons": {
+    "jd": 2524593.49,
+    "lon": 96.3770466,
+    "lat": -4.2875811
+   },
+   "engine": {
+    "lon": 96.37783391313269,
+    "lat": -4.287935410922504
+   },
+   "lonDifferenceArcsec": 2.8343272777874517,
+   "latDifferenceArcsec": -1.27551932101575,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-e",
+   "body": "Mercury",
+   "instant": "2199-12-31 23:45:36 TT, just inside the end",
+   "jdTt": 2524593.49,
+   "file": "horizons/ecl-TT-199.txt",
+   "horizons": {
+    "jd": 2524593.49,
+    "lon": 299.863815,
+    "lat": -1.407212
+   },
+   "engine": {
+    "lon": 299.8626047308275,
+    "lat": -1.407963978604658
+   },
+   "lonDifferenceArcsec": -4.356969020909673,
+   "latDifferenceArcsec": -2.707122976769316,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-e",
+   "body": "Venus",
+   "instant": "2199-12-31 23:45:36 TT, just inside the end",
+   "jdTt": 2524593.49,
+   "file": "horizons/ecl-TT-299.txt",
+   "horizons": {
+    "jd": 2524593.49,
+    "lon": 254.7583212,
+    "lat": 1.0656729
+   },
+   "engine": {
+    "lon": 254.7579372591705,
+    "lat": 1.0664543229467658
+   },
+   "lonDifferenceArcsec": -1.3821869864841574,
+   "latDifferenceArcsec": 2.8131226083567107,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-e",
+   "body": "Mars",
+   "instant": "2199-12-31 23:45:36 TT, just inside the end",
+   "jdTt": 2524593.49,
+   "file": "horizons/ecl-TT-4.txt",
+   "horizons": {
+    "jd": 2524593.49,
+    "lon": 153.2876728,
+    "lat": 3.4393243
+   },
+   "engine": {
+    "lon": 153.28854209324902,
+    "lat": 3.4413939254906585
+   },
+   "lonDifferenceArcsec": 3.129455696489458,
+   "latDifferenceArcsec": 7.45065176637052,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-e",
+   "body": "Jupiter",
+   "instant": "2199-12-31 23:45:36 TT, just inside the end",
+   "jdTt": 2524593.49,
+   "file": "horizons/ecl-TT-5.txt",
+   "horizons": {
+    "jd": 2524593.49,
+    "lon": 334.3489063,
+    "lat": -1.0247188
+   },
+   "engine": {
+    "lon": 334.34903405417896,
+    "lat": -1.0253822699679627
+   },
+   "lonDifferenceArcsec": 0.4599150442118116,
+   "latDifferenceArcsec": -2.3884918846654557,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-e",
+   "body": "Saturn",
+   "instant": "2199-12-31 23:45:36 TT, just inside the end",
+   "jdTt": 2524593.49,
+   "file": "horizons/ecl-TT-6.txt",
+   "horizons": {
+    "jd": 2524593.49,
+    "lon": 328.0518505,
+    "lat": -1.4006632
+   },
+   "engine": {
+    "lon": 328.0527601212692,
+    "lat": -1.4013454428034677
+   },
+   "lonDifferenceArcsec": 3.2746365691764368,
+   "latDifferenceArcsec": -2.456074092483451,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-e",
+   "body": "Uranus",
+   "instant": "2199-12-31 23:45:36 TT, just inside the end",
+   "jdTt": 2524593.49,
+   "file": "horizons/ecl-TT-7.txt",
+   "horizons": {
+    "jd": 2524593.49,
+    "lon": 86.9931112,
+    "lat": 0.1795565
+   },
+   "engine": {
+    "lon": 86.99203349505183,
+    "lat": 0.18236373983802112
+   },
+   "lonDifferenceArcsec": -3.879737813167594,
+   "latDifferenceArcsec": 10.10606341687601,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-e",
+   "body": "Neptune",
+   "instant": "2199-12-31 23:45:36 TT, just inside the end",
+   "jdTt": 2524593.49,
+   "file": "horizons/ecl-TT-8.txt",
+   "horizons": {
+    "jd": 2524593.49,
+    "lon": 22.2984604,
+    "lat": -1.6601076
+   },
+   "engine": {
+    "lon": 22.29976610899712,
+    "lat": -1.6576389357001506
+   },
+   "lonDifferenceArcsec": 4.700552389385848,
+   "latDifferenceArcsec": 8.887191479457357,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1/T5",
+   "id": "Y-e",
+   "body": "Pluto",
+   "instant": "2199-12-31 23:45:36 TT, just inside the end",
+   "jdTt": 2524593.49,
+   "file": "horizons/ecl-TT-9.txt",
+   "horizons": {
+    "jd": 2524593.49,
+    "lon": 144.7516308,
+    "lat": 9.1022994
+   },
+   "engine": {
+    "lon": 144.7433842704354,
+    "lat": 9.100139831887155
+   },
+   "lonDifferenceArcsec": -29.68750643231033,
+   "latDifferenceArcsec": -7.774445206240443,
+   "limitArcsec": 30,
+   "verdict": "pass"
+  },
+  {
+   "test": "P1",
+   "id": "T1-a",
+   "body": "Sun",
+   "instant": "2021-11-07T05:30:00Z (America/New_York 2021-11-07 01:30, the first pass)",
+   "file": "horizons/ecl-UT-10.txt",
+   "horizons": {
+    "jd": 2459525.729166667,
+    "lon": 225.0217627,
+    "lat": -0.0001298
+   },
+   "engine": {
+    "lon": 225.02168718507818,
+    "lat": 0.000036422039895246074
+   },
+   "lonDifferenceArcsec": -0.2718537185955938,
+   "latDifferenceArcsec": 0.5983993436228859,
+   "limitArcsec": 10,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T1-a",
+   "body": "Moon",
+   "instant": "2021-11-07T05:30:00Z (America/New_York 2021-11-07 01:30, the first pass)",
+   "file": "horizons/ecl-UT-301.txt",
+   "horizons": {
+    "jd": 2459525.729166667,
+    "lon": 257.9087492,
+    "lat": -1.4739227
+   },
+   "engine": {
+    "lon": 257.90879597334515,
+    "lat": -1.4739626192965662
+   },
+   "lonDifferenceArcsec": 0.16838404258123774,
+   "latDifferenceArcsec": -0.14370946763877512,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T1-a",
+   "body": "Mercury",
+   "instant": "2021-11-07T05:30:00Z (America/New_York 2021-11-07 01:30, the first pass)",
+   "file": "horizons/ecl-UT-199.txt",
+   "horizons": {
+    "jd": 2459525.729166667,
+    "lon": 212.0532299,
+    "lat": 1.662267
+   },
+   "engine": {
+    "lon": 212.05321323501198,
+    "lat": 1.6624834735101601
+   },
+   "lonDifferenceArcsec": -0.05999395693834231,
+   "latDifferenceArcsec": 0.779304636576672,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T1-a",
+   "body": "Venus",
+   "instant": "2021-11-07T05:30:00Z (America/New_York 2021-11-07 01:30, the first pass)",
+   "file": "horizons/ecl-UT-299.txt",
+   "horizons": {
+    "jd": 2459525.729166667,
+    "lon": 271.6822873,
+    "lat": -3.8137886
+   },
+   "engine": {
+    "lon": 271.6819789019208,
+    "lat": -3.8132678364660677
+   },
+   "lonDifferenceArcsec": -1.1102330849098507,
+   "latDifferenceArcsec": 1.8747487221565606,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T1-a",
+   "body": "Mars",
+   "instant": "2021-11-07T05:30:00Z (America/New_York 2021-11-07 01:30, the first pass)",
+   "file": "horizons/ecl-UT-4.txt",
+   "horizons": {
+    "jd": 2459525.729166667,
+    "lon": 215.1391623,
+    "lat": 0.4071196
+   },
+   "engine": {
+    "lon": 215.13913816435155,
+    "lat": 0.40743261087339117
+   },
+   "lonDifferenceArcsec": -0.08688833445376076,
+   "latDifferenceArcsec": 1.1268391442081027,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T1-a",
+   "body": "Jupiter",
+   "instant": "2021-11-07T05:30:00Z (America/New_York 2021-11-07 01:30, the first pass)",
+   "file": "horizons/ecl-UT-5.txt",
+   "horizons": {
+    "jd": 2459525.729166667,
+    "lon": 322.99307,
+    "lat": -1.1004674
+   },
+   "engine": {
+    "lon": 322.992031762507,
+    "lat": -1.1001782399210116
+   },
+   "lonDifferenceArcsec": -3.7376549749751575,
+   "latDifferenceArcsec": 1.0409762843585746,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T1-a",
+   "body": "Saturn",
+   "instant": "2021-11-07T05:30:00Z (America/New_York 2021-11-07 01:30, the first pass)",
+   "file": "horizons/ecl-UT-6.txt",
+   "horizons": {
+    "jd": 2459525.729166667,
+    "lon": 307.4917589,
+    "lat": -0.816501
+   },
+   "engine": {
+    "lon": 307.49249016026914,
+    "lat": -0.8195720168410582
+   },
+   "lonDifferenceArcsec": 2.6325369689857325,
+   "latDifferenceArcsec": -11.055660627809338,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T1-a",
+   "body": "Uranus",
+   "instant": "2021-11-07T05:30:00Z (America/New_York 2021-11-07 01:30, the first pass)",
+   "file": "horizons/ecl-UT-7.txt",
+   "horizons": {
+    "jd": 2459525.729166667,
+    "lon": 42.691546,
+    "lat": -0.4226977
+   },
+   "engine": {
+    "lon": 42.69267732211853,
+    "lat": -0.42248392262950374
+   },
+   "lonDifferenceArcsec": 4.072759626433253,
+   "latDifferenceArcsec": 0.7695985337865752,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T1-a",
+   "body": "Neptune",
+   "instant": "2021-11-07T05:30:00Z (America/New_York 2021-11-07 01:30, the first pass)",
+   "file": "horizons/ecl-UT-8.txt",
+   "horizons": {
+    "jd": 2459525.729166667,
+    "lon": 350.5667069,
+    "lat": -1.1618124
+   },
+   "engine": {
+    "lon": 350.57081967970123,
+    "lat": -1.1590966950319397
+   },
+   "lonDifferenceArcsec": 14.806006924482062,
+   "latDifferenceArcsec": 9.776537885017422,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T1-a",
+   "body": "Pluto",
+   "instant": "2021-11-07T05:30:00Z (America/New_York 2021-11-07 01:30, the first pass)",
+   "file": "horizons/ecl-UT-9.txt",
+   "horizons": {
+    "jd": 2459525.729166667,
+    "lon": 294.5565056,
+    "lat": -1.6777842
+   },
+   "engine": {
+    "lon": 294.55628083611737,
+    "lat": -1.6777004756154619
+   },
+   "lonDifferenceArcsec": -0.809149977612833,
+   "latDifferenceArcsec": 0.30140778433747073,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T2-a",
+   "body": "Sun",
+   "instant": "2021-03-14T07:30:00Z (America/New_York 2021-03-14 02:30, moved forward)",
+   "file": "horizons/ecl-UT-10.txt",
+   "horizons": {
+    "jd": 2459287.8125,
+    "lon": 353.9385071,
+    "lat": -0.000078
+   },
+   "engine": {
+    "lon": 353.93854841470363,
+    "lat": 0.00005773327291636781
+   },
+   "lonDifferenceArcsec": 0.14873293293931056,
+   "latDifferenceArcsec": 0.4886397824989241,
+   "limitArcsec": 10,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T2-a",
+   "body": "Moon",
+   "instant": "2021-03-14T07:30:00Z (America/New_York 2021-03-14 02:30, moved forward)",
+   "file": "horizons/ecl-UT-301.txt",
+   "horizons": {
+    "jd": 2459287.8125,
+    "lon": 4.0006672,
+    "lat": -4.7122093
+   },
+   "engine": {
+    "lon": 4.000699429361248,
+    "lat": -4.712187106869241
+   },
+   "lonDifferenceArcsec": 0.1160257006631582,
+   "latDifferenceArcsec": 0.07989527073206659,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T2-a",
+   "body": "Mercury",
+   "instant": "2021-03-14T07:30:00Z (America/New_York 2021-03-14 02:30, moved forward)",
+   "file": "horizons/ecl-UT-199.txt",
+   "horizons": {
+    "jd": 2459287.8125,
+    "lon": 327.8812841,
+    "lat": -1.5377312
+   },
+   "engine": {
+    "lon": 327.88057113282014,
+    "lat": -1.5373249324191656
+   },
+   "lonDifferenceArcsec": -2.566681847565633,
+   "latDifferenceArcsec": 1.4625632910042263,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T2-a",
+   "body": "Venus",
+   "instant": "2021-03-14T07:30:00Z (America/New_York 2021-03-14 02:30, moved forward)",
+   "file": "horizons/ecl-UT-299.txt",
+   "horizons": {
+    "jd": 2459287.8125,
+    "lon": 350.9280781,
+    "lat": -1.4369931
+   },
+   "engine": {
+    "lon": 350.92776102479917,
+    "lat": -1.4366500801052664
+   },
+   "lonDifferenceArcsec": -1.1414707231779175,
+   "latDifferenceArcsec": 1.2348716210410338,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T2-a",
+   "body": "Mars",
+   "instant": "2021-03-14T07:30:00Z (America/New_York 2021-03-14 02:30, moved forward)",
+   "file": "horizons/ecl-UT-4.txt",
+   "horizons": {
+    "jd": 2459287.8125,
+    "lon": 65.9398925,
+    "lat": 1.4706254
+   },
+   "engine": {
+    "lon": 65.94025308300661,
+    "lat": 1.4705227193982309
+   },
+   "lonDifferenceArcsec": 1.2980988236449775,
+   "latDifferenceArcsec": -0.36965016636916204,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T2-a",
+   "body": "Jupiter",
+   "instant": "2021-03-14T07:30:00Z (America/New_York 2021-03-14 02:30, moved forward)",
+   "file": "horizons/ecl-UT-5.txt",
+   "horizons": {
+    "jd": 2459287.8125,
+    "lon": 319.5718361,
+    "lat": -0.6062986
+   },
+   "engine": {
+    "lon": 319.57118523684255,
+    "lat": -0.6059505828399154
+   },
+   "lonDifferenceArcsec": -2.3431073669598845,
+   "latDifferenceArcsec": 1.2528617763045258,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T2-a",
+   "body": "Saturn",
+   "instant": "2021-03-14T07:30:00Z (America/New_York 2021-03-14 02:30, moved forward)",
+   "file": "horizons/ecl-UT-6.txt",
+   "horizons": {
+    "jd": 2459287.8125,
+    "lon": 309.8249911,
+    "lat": -0.4842715
+   },
+   "engine": {
+    "lon": 309.82513214963285,
+    "lat": -0.4869931927688297
+   },
+   "lonDifferenceArcsec": 0.5077786785477656,
+   "latDifferenceArcsec": -9.79809396778679,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T2-a",
+   "body": "Uranus",
+   "instant": "2021-03-14T07:30:00Z (America/New_York 2021-03-14 02:30, moved forward)",
+   "file": "horizons/ecl-UT-7.txt",
+   "horizons": {
+    "jd": 2459287.8125,
+    "lon": 38.1454784,
+    "lat": -0.4166281
+   },
+   "engine": {
+    "lon": 38.14651268605576,
+    "lat": -0.4165924648590698
+   },
+   "lonDifferenceArcsec": 3.7234298007206235,
+   "latDifferenceArcsec": 0.12828650734868496,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T2-a",
+   "body": "Neptune",
+   "instant": "2021-03-14T07:30:00Z (America/New_York 2021-03-14 02:30, moved forward)",
+   "file": "horizons/ecl-UT-8.txt",
+   "horizons": {
+    "jd": 2459287.8125,
+    "lon": 350.7581927,
+    "lat": -1.0691351
+   },
+   "engine": {
+    "lon": 350.7622210563959,
+    "lat": -1.0665725723293102
+   },
+   "lonDifferenceArcsec": 14.502083025263346,
+   "latDifferenceArcsec": 9.225099614483145,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T2-a",
+   "body": "Pluto",
+   "instant": "2021-03-14T07:30:00Z (America/New_York 2021-03-14 02:30, moved forward)",
+   "file": "horizons/ecl-UT-9.txt",
+   "horizons": {
+    "jd": 2459287.8125,
+    "lon": 296.3364237,
+    "lat": -1.3174199
+   },
+   "engine": {
+    "lon": 296.336148650733,
+    "lat": -1.317346220934747
+   },
+   "lonDifferenceArcsec": -0.9901773611090903,
+   "latDifferenceArcsec": 0.26524463491046646,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T3-a",
+   "body": "Sun",
+   "instant": "2011-12-30T22:00:00Z (Pacific/Apia 2011-12-30 12:00, moved forward a day)",
+   "file": "horizons/ecl-UT-10.txt",
+   "horizons": {
+    "jd": 2455926.416666667,
+    "lon": 278.8541002,
+    "lat": 0.0002768
+   },
+   "engine": {
+    "lon": 278.853985708765,
+    "lat": 0.000025398031554806043
+   },
+   "lonDifferenceArcsec": -0.4121684462916164,
+   "latDifferenceArcsec": -0.9050470864026982,
+   "limitArcsec": 10,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T3-a",
+   "body": "Moon",
+   "instant": "2011-12-30T22:00:00Z (Pacific/Apia 2011-12-30 12:00, moved forward a day)",
+   "file": "horizons/ecl-UT-301.txt",
+   "horizons": {
+    "jd": 2455926.416666667,
+    "lon": 354.0304741,
+    "lat": 5.1652724
+   },
+   "engine": {
+    "lon": 354.03071686808704,
+    "lat": 5.165318274465726
+   },
+   "lonDifferenceArcsec": 0.8739651131691062,
+   "latDifferenceArcsec": 0.16514807661245356,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T3-a",
+   "body": "Mercury",
+   "instant": "2011-12-30T22:00:00Z (Pacific/Apia 2011-12-30 12:00, moved forward a day)",
+   "file": "horizons/ecl-UT-199.txt",
+   "horizons": {
+    "jd": 2455926.416666667,
+    "lon": 258.3983124,
+    "lat": 1.0677143
+   },
+   "engine": {
+    "lon": 258.3983650677478,
+    "lat": 1.067114473648653
+   },
+   "lonDifferenceArcsec": 0.18960389211315487,
+   "latDifferenceArcsec": -2.1593748648489175,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T3-a",
+   "body": "Venus",
+   "instant": "2011-12-30T22:00:00Z (Pacific/Apia 2011-12-30 12:00, moved forward a day)",
+   "file": "horizons/ecl-UT-299.txt",
+   "horizons": {
+    "jd": 2455926.416666667,
+    "lon": 312.4927035,
+    "lat": -1.8394857
+   },
+   "engine": {
+    "lon": 312.49288503326426,
+    "lat": -1.8394951006787337
+   },
+   "lonDifferenceArcsec": 0.6535197513130697,
+   "latDifferenceArcsec": -0.033842443441223224,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T3-a",
+   "body": "Mars",
+   "instant": "2011-12-30T22:00:00Z (Pacific/Apia 2011-12-30 12:00, moved forward a day)",
+   "file": "horizons/ecl-UT-4.txt",
+   "horizons": {
+    "jd": 2455926.416666667,
+    "lon": 169.8467461,
+    "lat": 2.9114227
+   },
+   "engine": {
+    "lon": 169.84664721440322,
+    "lat": 2.9111041838509557
+   },
+   "lonDifferenceArcsec": -0.3559881484761718,
+   "latDifferenceArcsec": -1.1466581365599637,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T3-a",
+   "body": "Jupiter",
+   "instant": "2011-12-30T22:00:00Z (Pacific/Apia 2011-12-30 12:00, moved forward a day)",
+   "file": "horizons/ecl-UT-5.txt",
+   "horizons": {
+    "jd": 2455926.416666667,
+    "lon": 30.4080369,
+    "lat": -1.2352209
+   },
+   "engine": {
+    "lon": 30.408152277910006,
+    "lat": -1.2354596216160822
+   },
+   "lonDifferenceArcsec": 0.41536047597219294,
+   "latDifferenceArcsec": -0.8593978178958572,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T3-a",
+   "body": "Saturn",
+   "instant": "2011-12-30T22:00:00Z (Pacific/Apia 2011-12-30 12:00, moved forward a day)",
+   "file": "horizons/ecl-UT-6.txt",
+   "horizons": {
+    "jd": 2455926.416666667,
+    "lon": 208.2204059,
+    "lat": 2.4161402
+   },
+   "engine": {
+    "lon": 208.21999589901375,
+    "lat": 2.411822871311152
+   },
+   "lonDifferenceArcsec": -1.4760035503968538,
+   "latDifferenceArcsec": -15.542383279852956,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T3-a",
+   "body": "Uranus",
+   "instant": "2011-12-30T22:00:00Z (Pacific/Apia 2011-12-30 12:00, moved forward a day)",
+   "file": "horizons/ecl-UT-7.txt",
+   "horizons": {
+    "jd": 2455926.416666667,
+    "lon": 0.8240724,
+    "lat": -0.7238052
+   },
+   "engine": {
+    "lon": 0.8234084757065148,
+    "lat": -0.723236819042831
+   },
+   "lonDifferenceArcsec": -2.390127456465052,
+   "latDifferenceArcsec": 2.0461714458085645,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T3-a",
+   "body": "Neptune",
+   "instant": "2011-12-30T22:00:00Z (Pacific/Apia 2011-12-30 12:00, moved forward a day)",
+   "file": "horizons/ecl-UT-8.txt",
+   "horizons": {
+    "jd": 2455926.416666667,
+    "lon": 328.8595353,
+    "lat": -0.5465299
+   },
+   "engine": {
+    "lon": 328.86404119662643,
+    "lat": -0.5440274682662487
+   },
+   "lonDifferenceArcsec": 16.221227854930476,
+   "latDifferenceArcsec": 9.008754241504713,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1",
+   "id": "T3-a",
+   "body": "Pluto",
+   "instant": "2011-12-30T22:00:00Z (Pacific/Apia 2011-12-30 12:00, moved forward a day)",
+   "file": "horizons/ecl-UT-9.txt",
+   "horizons": {
+    "jd": 2455926.416666667,
+    "lon": 277.2848847,
+    "lat": 3.9184359
+   },
+   "engine": {
+    "lon": 277.2848191972024,
+    "lat": 3.918382004565235
+   },
+   "lonDifferenceArcsec": -0.2358100713991007,
+   "latDifferenceArcsec": -0.1940235651535005,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": []
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-78N",
+   "body": "Sun",
+   "instant": "2021-06-21T12:00:00Z (78.22 N, 15.63 E)",
+   "file": "horizons/ecl-UT-10.txt",
+   "horizons": {
+    "jd": 2459387,
+    "lon": 90.336412,
+    "lat": 0.0001411
+   },
+   "engine": {
+    "lon": 90.33646887356241,
+    "lat": 0.00004564688172688393
+   },
+   "lonDifferenceArcsec": 0.20474482489589718,
+   "latDifferenceArcsec": -0.3436312257832178,
+   "limitArcsec": 10,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-78N",
+   "body": "Moon",
+   "instant": "2021-06-21T12:00:00Z (78.22 N, 15.63 E)",
+   "file": "horizons/ecl-UT-301.txt",
+   "horizons": {
+    "jd": 2459387,
+    "lon": 224.6076209,
+    "lat": 2.3201603
+   },
+   "engine": {
+    "lon": 224.60768853019593,
+    "lat": 2.3200516136202447
+   },
+   "lonDifferenceArcsec": 0.2434687051390938,
+   "latDifferenceArcsec": -0.3912709671189063,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-78N",
+   "body": "Mercury",
+   "instant": "2021-06-21T12:00:00Z (78.22 N, 15.63 E)",
+   "file": "horizons/ecl-UT-199.txt",
+   "horizons": {
+    "jd": 2459387,
+    "lon": 76.202862,
+    "lat": -4.4758201
+   },
+   "engine": {
+    "lon": 76.20458524011525,
+    "lat": -4.476101594714181
+   },
+   "lonDifferenceArcsec": 6.203664415170351,
+   "latDifferenceArcsec": -1.0133809710513475,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-78N",
+   "body": "Venus",
+   "instant": "2021-06-21T12:00:00Z (78.22 N, 15.63 E)",
+   "file": "horizons/ecl-UT-299.txt",
+   "horizons": {
+    "jd": 2459387,
+    "lon": 113.0959391,
+    "lat": 1.4852374
+   },
+   "engine": {
+    "lon": 113.09618861194656,
+    "lat": 1.4850057853139782
+   },
+   "lonDifferenceArcsec": 0.8982430075775483,
+   "latDifferenceArcsec": -0.8338128696782299,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-78N",
+   "body": "Mars",
+   "instant": "2021-06-21T12:00:00Z (78.22 N, 15.63 E)",
+   "file": "horizons/ecl-UT-4.txt",
+   "horizons": {
+    "jd": 2459387,
+    "lon": 126.1297703,
+    "lat": 1.2833584
+   },
+   "engine": {
+    "lon": 126.12993933869177,
+    "lat": 1.283303560327642
+   },
+   "lonDifferenceArcsec": 0.6085392903059983,
+   "latDifferenceArcsec": -0.19742282048911264,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-78N",
+   "body": "Jupiter",
+   "instant": "2021-06-21T12:00:00Z (78.22 N, 15.63 E)",
+   "file": "horizons/ecl-UT-5.txt",
+   "horizons": {
+    "jd": 2459387,
+    "lon": 332.1831751,
+    "lat": -0.9662796
+   },
+   "engine": {
+    "lon": 332.18196461326113,
+    "lat": -0.9659673880412216
+   },
+   "lonDifferenceArcsec": -4.357752260239067,
+   "latDifferenceArcsec": 1.123963051602228,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-78N",
+   "body": "Saturn",
+   "instant": "2021-06-21T12:00:00Z (78.22 N, 15.63 E)",
+   "file": "horizons/ecl-UT-6.txt",
+   "horizons": {
+    "jd": 2459387,
+    "lon": 312.8531071,
+    "lat": -0.7003586
+   },
+   "engine": {
+    "lon": 312.8534283991298,
+    "lat": -0.7036619126329252
+   },
+   "lonDifferenceArcsec": 1.156676867412898,
+   "latDifferenceArcsec": -11.891925478530574,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-78N",
+   "body": "Uranus",
+   "instant": "2021-06-21T12:00:00Z (78.22 N, 15.63 E)",
+   "file": "horizons/ecl-UT-7.txt",
+   "horizons": {
+    "jd": 2459387,
+    "lon": 43.4110198,
+    "lat": -0.4050401
+   },
+   "engine": {
+    "lon": 43.41213762797247,
+    "lat": -0.4049504902805668
+   },
+   "lonDifferenceArcsec": 4.0241807010261255,
+   "latDifferenceArcsec": 0.32259498995961255,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-78N",
+   "body": "Neptune",
+   "instant": "2021-06-21T12:00:00Z (78.22 N, 15.63 E)",
+   "file": "horizons/ecl-UT-8.txt",
+   "horizons": {
+    "jd": 2459387,
+    "lon": 353.1948146,
+    "lat": -1.1242644
+   },
+   "engine": {
+    "lon": 353.1988565982469,
+    "lat": -1.1216094228727256
+   },
+   "lonDifferenceArcsec": 14.551193689112552,
+   "latDifferenceArcsec": 9.557917658187698,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-78N",
+   "body": "Pluto",
+   "instant": "2021-06-21T12:00:00Z (78.22 N, 15.63 E)",
+   "file": "horizons/ecl-UT-9.txt",
+   "horizons": {
+    "jd": 2459387,
+    "lon": 296.1687253,
+    "lat": -1.5274318
+   },
+   "engine": {
+    "lon": 296.16844610149417,
+    "lat": -1.5273566897923436
+   },
+   "lonDifferenceArcsec": -1.0051146210116713,
+   "latDifferenceArcsec": 0.27039674756297316,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90N",
+   "body": "Sun",
+   "instant": "2021-12-21T12:00:00Z (90 N)",
+   "file": "horizons/ecl-UT-10.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 269.8308069,
+    "lat": 0.000056
+   },
+   "engine": {
+    "lon": 269.83089830594344,
+    "lat": 0.000044258756136213235
+   },
+   "lonDifferenceArcsec": 0.32906139626902586,
+   "latDifferenceArcsec": -0.04226847790963235,
+   "limitArcsec": 10,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90N",
+   "body": "Moon",
+   "instant": "2021-12-21T12:00:00Z (90 N)",
+   "file": "horizons/ecl-UT-301.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 115.0224777,
+    "lat": 4.1990141
+   },
+   "engine": {
+    "lon": 115.02216175528298,
+    "lat": 4.199001923367815
+   },
+   "lonDifferenceArcsec": -1.13740098136077,
+   "latDifferenceArcsec": -0.043835875866804486,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90N",
+   "body": "Mercury",
+   "instant": "2021-12-21T12:00:00Z (90 N)",
+   "file": "horizons/ecl-UT-199.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 282.1958776,
+    "lat": -2.2110218
+   },
+   "engine": {
+    "lon": 282.1955342783882,
+    "lat": -2.2110513546528727
+   },
+   "lonDifferenceArcsec": -1.2359578025098017,
+   "latDifferenceArcsec": -0.10639675034127549,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90N",
+   "body": "Venus",
+   "instant": "2021-12-21T12:00:00Z (90 N)",
+   "file": "horizons/ecl-UT-299.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 296.4030302,
+    "lat": 0.2600483
+   },
+   "engine": {
+    "lon": 296.40278724420597,
+    "lat": 0.26056093817773424
+   },
+   "lonDifferenceArcsec": -0.8746408582737786,
+   "latDifferenceArcsec": 1.8454974398432133,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90N",
+   "body": "Mars",
+   "instant": "2021-12-21T12:00:00Z (90 N)",
+   "file": "horizons/ecl-UT-4.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 245.6715273,
+    "lat": -0.0188006
+   },
+   "engine": {
+    "lon": 245.67161312896172,
+    "lat": -0.01846933558050601
+   },
+   "lonDifferenceArcsec": 0.30898426207386365,
+   "latDifferenceArcsec": 1.192551910178362,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90N",
+   "body": "Jupiter",
+   "instant": "2021-12-21T12:00:00Z (90 N)",
+   "file": "horizons/ecl-UT-5.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 328.586411,
+    "lat": -1.0111056
+   },
+   "engine": {
+    "lon": 328.58540924369197,
+    "lat": -1.0108935897471039
+   },
+   "lonDifferenceArcsec": -3.6063227089016436,
+   "latDifferenceArcsec": 0.7632369104262793,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90N",
+   "body": "Saturn",
+   "instant": "2021-12-21T12:00:00Z (90 N)",
+   "file": "horizons/ecl-UT-6.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 310.8084926,
+    "lat": -0.8193181
+   },
+   "engine": {
+    "lon": 310.80907828951996,
+    "lat": -0.8222226176806058
+   },
+   "lonDifferenceArcsec": 2.1084822719785734,
+   "latDifferenceArcsec": -10.456263650180642,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90N",
+   "body": "Uranus",
+   "instant": "2021-12-21T12:00:00Z (90 N)",
+   "file": "horizons/ecl-UT-7.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 41.1539415,
+    "lat": -0.4096037
+   },
+   "engine": {
+    "lon": 41.154954023053506,
+    "lat": -0.40937010925352607
+   },
+   "lonDifferenceArcsec": 3.6450829927161976,
+   "latDifferenceArcsec": 0.8409266873061982,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90N",
+   "body": "Neptune",
+   "instant": "2021-12-21T12:00:00Z (90 N)",
+   "file": "horizons/ecl-UT-8.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 350.518117,
+    "lat": -1.1398839
+   },
+   "engine": {
+    "lon": 350.5220909723959,
+    "lat": -1.137236341969641
+   },
+   "lonDifferenceArcsec": 14.306300625230506,
+   "latDifferenceArcsec": 9.531208909292754,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90N",
+   "body": "Pluto",
+   "instant": "2021-12-21T12:00:00Z (90 N)",
+   "file": "horizons/ecl-UT-9.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 295.6059873,
+    "lat": -1.7158358
+   },
+   "engine": {
+    "lon": 295.6057411362642,
+    "lat": -1.7157568353630186
+   },
+   "lonDifferenceArcsec": -0.8861894485562516,
+   "latDifferenceArcsec": 0.2842726931331363,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90S",
+   "body": "Sun",
+   "instant": "2021-12-21T12:00:00Z (90 S)",
+   "file": "horizons/ecl-UT-10.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 269.8308069,
+    "lat": 0.000056
+   },
+   "engine": {
+    "lon": 269.83089830594344,
+    "lat": 0.000044258756136213235
+   },
+   "lonDifferenceArcsec": 0.32906139626902586,
+   "latDifferenceArcsec": -0.04226847790963235,
+   "limitArcsec": 10,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90S",
+   "body": "Moon",
+   "instant": "2021-12-21T12:00:00Z (90 S)",
+   "file": "horizons/ecl-UT-301.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 115.0224777,
+    "lat": 4.1990141
+   },
+   "engine": {
+    "lon": 115.02216175528298,
+    "lat": 4.199001923367815
+   },
+   "lonDifferenceArcsec": -1.13740098136077,
+   "latDifferenceArcsec": -0.043835875866804486,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90S",
+   "body": "Mercury",
+   "instant": "2021-12-21T12:00:00Z (90 S)",
+   "file": "horizons/ecl-UT-199.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 282.1958776,
+    "lat": -2.2110218
+   },
+   "engine": {
+    "lon": 282.1955342783882,
+    "lat": -2.2110513546528727
+   },
+   "lonDifferenceArcsec": -1.2359578025098017,
+   "latDifferenceArcsec": -0.10639675034127549,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90S",
+   "body": "Venus",
+   "instant": "2021-12-21T12:00:00Z (90 S)",
+   "file": "horizons/ecl-UT-299.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 296.4030302,
+    "lat": 0.2600483
+   },
+   "engine": {
+    "lon": 296.40278724420597,
+    "lat": 0.26056093817773424
+   },
+   "lonDifferenceArcsec": -0.8746408582737786,
+   "latDifferenceArcsec": 1.8454974398432133,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90S",
+   "body": "Mars",
+   "instant": "2021-12-21T12:00:00Z (90 S)",
+   "file": "horizons/ecl-UT-4.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 245.6715273,
+    "lat": -0.0188006
+   },
+   "engine": {
+    "lon": 245.67161312896172,
+    "lat": -0.01846933558050601
+   },
+   "lonDifferenceArcsec": 0.30898426207386365,
+   "latDifferenceArcsec": 1.192551910178362,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90S",
+   "body": "Jupiter",
+   "instant": "2021-12-21T12:00:00Z (90 S)",
+   "file": "horizons/ecl-UT-5.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 328.586411,
+    "lat": -1.0111056
+   },
+   "engine": {
+    "lon": 328.58540924369197,
+    "lat": -1.0108935897471039
+   },
+   "lonDifferenceArcsec": -3.6063227089016436,
+   "latDifferenceArcsec": 0.7632369104262793,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90S",
+   "body": "Saturn",
+   "instant": "2021-12-21T12:00:00Z (90 S)",
+   "file": "horizons/ecl-UT-6.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 310.8084926,
+    "lat": -0.8193181
+   },
+   "engine": {
+    "lon": 310.80907828951996,
+    "lat": -0.8222226176806058
+   },
+   "lonDifferenceArcsec": 2.1084822719785734,
+   "latDifferenceArcsec": -10.456263650180642,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90S",
+   "body": "Uranus",
+   "instant": "2021-12-21T12:00:00Z (90 S)",
+   "file": "horizons/ecl-UT-7.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 41.1539415,
+    "lat": -0.4096037
+   },
+   "engine": {
+    "lon": 41.154954023053506,
+    "lat": -0.40937010925352607
+   },
+   "lonDifferenceArcsec": 3.6450829927161976,
+   "latDifferenceArcsec": 0.8409266873061982,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90S",
+   "body": "Neptune",
+   "instant": "2021-12-21T12:00:00Z (90 S)",
+   "file": "horizons/ecl-UT-8.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 350.518117,
+    "lat": -1.1398839
+   },
+   "engine": {
+    "lon": 350.5220909723959,
+    "lat": -1.137236341969641
+   },
+   "lonDifferenceArcsec": 14.306300625230506,
+   "latDifferenceArcsec": 9.531208909292754,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "P1/T4",
+   "id": "T4-90S",
+   "body": "Pluto",
+   "instant": "2021-12-21T12:00:00Z (90 S)",
+   "file": "horizons/ecl-UT-9.txt",
+   "horizons": {
+    "jd": 2459570,
+    "lon": 295.6059873,
+    "lat": -1.7158358
+   },
+   "engine": {
+    "lon": 295.6057411362642,
+    "lat": -1.7157568353630186
+   },
+   "lonDifferenceArcsec": -0.8861894485562516,
+   "latDifferenceArcsec": 0.2842726931331363,
+   "limitArcsec": 30,
+   "verdict": "pass",
+   "chartFlags": [
+    "polar-fallback"
+   ]
+  },
+  {
+   "test": "T5",
+   "id": "Y-f",
+   "body": "Sun",
+   "instant": "2200-01-01 00:00 TT, the end, excluded",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-f",
+   "body": "Moon",
+   "instant": "2200-01-01 00:00 TT, the end, excluded",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-g",
+   "body": "Sun",
+   "instant": "2200-01-01 12:00 TT",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-g",
+   "body": "Moon",
+   "instant": "2200-01-01 12:00 TT",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-h",
+   "body": "Sun",
+   "instant": "1800-01-01 00:00 TT (its UT1 is before the start)",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-h",
+   "body": "Moon",
+   "instant": "1800-01-01 00:00 TT (its UT1 is before the start)",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-j",
+   "body": "Sun",
+   "instant": "UTC inside the span, TT past its end",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-j",
+   "body": "Moon",
+   "instant": "UTC inside the span, TT past its end",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-l",
+   "body": "Sun",
+   "instant": "the end by UTC",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-l",
+   "body": "Moon",
+   "instant": "the end by UTC",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-m",
+   "body": "Sun",
+   "instant": "a minute before the start by UTC",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-m",
+   "body": "Moon",
+   "instant": "a minute before the start by UTC",
+   "engine": {
+    "status": "refused",
+    "reason": "out-of-range"
+   },
+   "verdict": "pass"
+  },
+  {
+   "test": "T5",
+   "id": "Y-i",
+   "instant": "2200-01-01T00:00:00Z through the root entry",
+   "engine": {
+    "natalChartFlags": [
+     "outside-reference-span"
+    ],
+    "positionsReturns": "12 positions",
+    "positionsCarriesAFlag": false
+   },
+   "verdict": "flagged-by-natalChart-only"
+  },
+  {
+   "test": "T5",
+   "id": "Y-i",
+   "instant": "2250-01-01T00:00:00Z through the root entry",
+   "engine": {
+    "natalChartFlags": [
+     "outside-reference-span"
+    ],
+    "positionsReturns": "12 positions",
+    "positionsCarriesAFlag": false
+   },
+   "verdict": "flagged-by-natalChart-only"
+  },
+  {
+   "test": "T5",
+   "id": "Y-i",
+   "instant": "1799-12-31T23:59:00Z through the root entry",
+   "engine": {
+    "natalChartFlags": [
+     "outside-reference-span"
+    ],
+    "positionsReturns": "12 positions",
+    "positionsCarriesAFlag": false
+   },
+   "verdict": "flagged-by-natalChart-only"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "whole",
+   "latitude": 66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.56804707378888,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "placidus",
+   "latitude": 66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "placidus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.56804707378888,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.56804707378888,
+     209.71013665959137,
+     239.4214476629906,
+     284.30571146991224,
+     324.0903447690217,
+     350.45136545812113,
+     8.568047073788875,
+     29.7101366595914,
+     59.4214476629906,
+     104.3057114699123,
+     144.09034476902173,
+     170.45136545812113
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "porphyry",
+   "latitude": 66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "porphyry",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.56804707378888,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.56804707378888,
+     220.48060187249666,
+     252.39315667120445,
+     284.30571146991224,
+     312.39315667120445,
+     340.48060187249666,
+     8.568047073788875,
+     40.48060187249666,
+     72.39315667120445,
+     104.3057114699123,
+     132.39315667120445,
+     160.48060187249666
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal",
+   "latitude": 66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.56804707378888,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.56804707378888,
+     218.56804707378888,
+     248.56804707378888,
+     278.5680470737889,
+     308.5680470737889,
+     338.5680470737889,
+     8.568047073788875,
+     38.568047073788875,
+     68.56804707378888,
+     98.56804707378888,
+     128.56804707378888,
+     158.56804707378888
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal-mc",
+   "latitude": 66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal-mc",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.56804707378888,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.3057114699123,
+     224.3057114699123,
+     254.3057114699123,
+     284.3057114699123,
+     314.3057114699123,
+     344.3057114699123,
+     14.305711469912296,
+     44.305711469912296,
+     74.3057114699123,
+     104.3057114699123,
+     134.3057114699123,
+     164.30571146991224
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "vehlow",
+   "latitude": 66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "vehlow",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.56804707378888,
+    "mc": 104.3057114699123,
+    "cusps": [
+     173.56804707378888,
+     203.56804707378888,
+     233.56804707378888,
+     263.5680470737889,
+     293.5680470737889,
+     323.5680470737889,
+     353.5680470737889,
+     23.568047073788875,
+     53.568047073788875,
+     83.56804707378888,
+     113.56804707378888,
+     143.56804707378888
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "koch",
+   "latitude": 66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "koch",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.56804707378888,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.56804707378888,
+     217.25971336358202,
+     244.36661736605618,
+     284.30571146991224,
+     311.2864347869597,
+     339.303485585659,
+     8.568047073788875,
+     37.25971336358202,
+     64.36661736605618,
+     104.3057114699123,
+     131.28643478695977,
+     159.30348558565902
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "regiomontanus",
+   "latitude": 66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "regiomontanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.56804707378888,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.56804707378888,
+     206.74146493095998,
+     235.08381145142653,
+     284.30571146991224,
+     327.5440612777455,
+     351.45160248726154,
+     8.568047073788875,
+     26.741464930959978,
+     55.083811451426584,
+     104.3057114699123,
+     147.54406127774553,
+     171.45160248726154
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "campanus",
+   "latitude": 66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "campanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.56804707378888,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.56804707378888,
+     228.86170458981132,
+     260.50396995467827,
+     284.30571146991224,
+     306.3622562341774,
+     332.6470126874824,
+     8.568047073788875,
+     48.86170458981127,
+     80.50396995467827,
+     104.3057114699123,
+     126.36225623417738,
+     152.6470126874824
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "topocentric",
+   "latitude": 66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "topocentric",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.56804707378888,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.56804707378888,
+     209.95580405361557,
+     241.44221350646728,
+     284.30571146991224,
+     323.6692377369234,
+     350.4436097326478,
+     8.568047073788875,
+     29.955804053615623,
+     61.44221350646728,
+     104.3057114699123,
+     143.66923773692338,
+     170.44360973264781
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "alcabitius",
+   "latitude": 66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "alcabitius",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.56804707378888,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.56804707378888,
+     222.8735498272722,
+     254.310738182666,
+     284.30571146991224,
+     310.52821167436116,
+     338.814610452505,
+     8.568047073788875,
+     42.8735498272722,
+     74.31073818266606,
+     104.3057114699123,
+     130.52821167436116,
+     158.814610452505
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "morinus",
+   "latitude": 66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "morinus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.56804707378888,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.30571146991227,
+     223.0671173173689,
+     254.2931771970815,
+     286.852925739859,
+     317.993736187697,
+     346.6816954735642,
+     14.305711469912296,
+     43.06711731736897,
+     74.29317719708149,
+     106.85292573985896,
+     137.99373618769698,
+     166.68169547356422
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "meridian",
+   "latitude": 66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "meridian",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.56804707378888,
+    "mc": 104.3057114699123,
+    "cusps": [
+     196.852925739859,
+     227.99373618769698,
+     256.6816954735642,
+     284.30571146991224,
+     313.0671173173689,
+     344.2931771970815,
+     16.852925739859018,
+     47.99373618769698,
+     76.68169547356422,
+     104.30571146991224,
+     133.0671173173689,
+     164.2931771970815
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "whole",
+   "latitude": 67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.36547870575873,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "placidus",
+   "latitude": 67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 188.36547870575873,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "porphyry",
+   "latitude": 67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "porphyry",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.36547870575873,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.36547870575873,
+     220.34555629380986,
+     252.3256338818611,
+     284.30571146991224,
+     312.3256338818611,
+     340.34555629381,
+     8.365478705758733,
+     40.345556293809864,
+     72.32563388186111,
+     104.3057114699123,
+     132.3256338818611,
+     160.34555629380998
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal",
+   "latitude": 67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.36547870575873,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.36547870575873,
+     218.36547870575873,
+     248.36547870575873,
+     278.36547870575873,
+     308.36547870575873,
+     338.36547870575873,
+     8.365478705758733,
+     38.36547870575873,
+     68.36547870575873,
+     98.36547870575873,
+     128.36547870575873,
+     158.36547870575873
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal-mc",
+   "latitude": 67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal-mc",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.36547870575873,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.3057114699123,
+     224.3057114699123,
+     254.3057114699123,
+     284.3057114699123,
+     314.3057114699123,
+     344.3057114699123,
+     14.305711469912296,
+     44.305711469912296,
+     74.3057114699123,
+     104.3057114699123,
+     134.3057114699123,
+     164.30571146991224
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "vehlow",
+   "latitude": 67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "vehlow",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.36547870575873,
+    "mc": 104.3057114699123,
+    "cusps": [
+     173.36547870575873,
+     203.36547870575873,
+     233.36547870575873,
+     263.36547870575873,
+     293.36547870575873,
+     323.36547870575873,
+     353.36547870575873,
+     23.365478705758733,
+     53.36547870575873,
+     83.36547870575873,
+     113.36547870575873,
+     143.36547870575873
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "koch",
+   "latitude": 67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 188.36547870575873,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "regiomontanus",
+   "latitude": 67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "regiomontanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.36547870575873,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.36547870575873,
+     206.13942241063705,
+     234.22407159508077,
+     284.30571146991224,
+     328.0513238167704,
+     351.63910632979355,
+     8.365478705758733,
+     26.13942241063711,
+     54.22407159508077,
+     104.3057114699123,
+     148.05132381677038,
+     171.63910632979355
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "campanus",
+   "latitude": 67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "campanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.36547870575873,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.36547870575873,
+     229.2393750795071,
+     260.83943969485665,
+     284.30571146991224,
+     306.01542690585256,
+     332.1107979078578,
+     8.365478705758733,
+     49.23937507950711,
+     80.83943969485665,
+     104.3057114699123,
+     126.01542690585256,
+     152.11079790785777
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "topocentric",
+   "latitude": 67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "topocentric",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.36547870575873,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.36547870575873,
+     209.38303359173074,
+     240.7817747654526,
+     284.30571146991224,
+     324.08310422503246,
+     350.62422370396666,
+     8.365478705758733,
+     29.383033591730737,
+     60.78177476545261,
+     104.3057114699123,
+     144.08310422503246,
+     170.62422370396666
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "alcabitius",
+   "latitude": 67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "alcabitius",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.36547870575873,
+    "mc": 104.3057114699123,
+    "cusps": [
+     188.36547870575873,
+     222.74794005906233,
+     254.25291525536625,
+     284.30571146991224,
+     310.4666548338366,
+     338.6819166611639,
+     8.365478705758733,
+     42.74794005906227,
+     74.25291525536625,
+     104.3057114699123,
+     130.46665483383663,
+     158.68191666116388
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "morinus",
+   "latitude": 67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "morinus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.36547870575873,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.30571146991227,
+     223.0671173173689,
+     254.2931771970815,
+     286.852925739859,
+     317.993736187697,
+     346.6816954735642,
+     14.305711469912296,
+     43.06711731736897,
+     74.29317719708149,
+     106.85292573985896,
+     137.99373618769698,
+     166.68169547356422
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "meridian",
+   "latitude": 67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "meridian",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 188.36547870575873,
+    "mc": 104.3057114699123,
+    "cusps": [
+     196.852925739859,
+     227.99373618769698,
+     256.6816954735642,
+     284.30571146991224,
+     313.0671173173689,
+     344.2931771970815,
+     16.852925739859018,
+     47.99373618769698,
+     76.68169547356422,
+     104.30571146991224,
+     133.0671173173689,
+     164.2931771970815
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "whole",
+   "latitude": 78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 185.48007420927084,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "placidus",
+   "latitude": 78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 185.48007420927084,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "porphyry",
+   "latitude": 78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "porphyry",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 185.48007420927084,
+    "mc": 104.3057114699123,
+    "cusps": [
+     185.48007420927084,
+     218.4219532961513,
+     251.36383238303176,
+     284.30571146991224,
+     311.3638323830319,
+     338.4219532961513,
+     5.480074209270811,
+     38.42195329615129,
+     71.36383238303176,
+     104.3057114699123,
+     131.36383238303182,
+     158.4219532961513
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal",
+   "latitude": 78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 185.48007420927084,
+    "mc": 104.3057114699123,
+    "cusps": [
+     185.4800742092708,
+     215.4800742092708,
+     245.4800742092708,
+     275.4800742092708,
+     305.4800742092708,
+     335.4800742092708,
+     5.480074209270811,
+     35.48007420927081,
+     65.48007420927081,
+     95.48007420927081,
+     125.48007420927081,
+     155.4800742092708
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal-mc",
+   "latitude": 78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal-mc",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 185.48007420927084,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.3057114699123,
+     224.3057114699123,
+     254.3057114699123,
+     284.3057114699123,
+     314.3057114699123,
+     344.3057114699123,
+     14.305711469912296,
+     44.305711469912296,
+     74.3057114699123,
+     104.3057114699123,
+     134.3057114699123,
+     164.30571146991224
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "vehlow",
+   "latitude": 78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "vehlow",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 185.48007420927084,
+    "mc": 104.3057114699123,
+    "cusps": [
+     170.4800742092708,
+     200.4800742092708,
+     230.4800742092708,
+     260.4800742092708,
+     290.4800742092708,
+     320.4800742092708,
+     350.4800742092708,
+     20.48007420927081,
+     50.48007420927081,
+     80.48007420927081,
+     110.48007420927081,
+     140.4800742092708
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "koch",
+   "latitude": 78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 185.48007420927084,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "regiomontanus",
+   "latitude": 78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "regiomontanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 185.48007420927084,
+    "mc": 104.3057114699123,
+    "cusps": [
+     185.4800742092708,
+     197.27761375422006,
+     219.3044530932276,
+     284.30571146991224,
+     336.465161241225,
+     354.38272240169476,
+     5.480074209270811,
+     17.277613754220056,
+     39.30445309322761,
+     104.3057114699123,
+     156.46516124122502,
+     174.38272240169476
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "campanus",
+   "latitude": 78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "campanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 185.48007420927084,
+    "mc": 104.3057114699123,
+    "cusps": [
+     185.4800742092708,
+     234.9869434238002,
+     265.2143143181481,
+     284.30571146991224,
+     301.66094225451866,
+     324.82386328351174,
+     5.480074209270811,
+     54.9869434238002,
+     85.21431431814813,
+     104.3057114699123,
+     121.66094225451872,
+     144.82386328351174
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "topocentric",
+   "latitude": 78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "topocentric",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 185.48007420927084,
+    "mc": 104.3057114699123,
+    "cusps": [
+     185.4800742092708,
+     200.4464012998303,
+     228.22598409828709,
+     284.30571146991224,
+     331.50627023473044,
+     353.40194328967755,
+     5.480074209270811,
+     20.446401299830313,
+     48.225984098287086,
+     104.3057114699123,
+     151.50627023473044,
+     173.40194328967755
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "alcabitius",
+   "latitude": 78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "alcabitius",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 185.48007420927084,
+    "mc": 104.3057114699123,
+    "cusps": [
+     185.4800742092708,
+     220.9556359777157,
+     253.429565147439,
+     284.30571146991224,
+     309.59202743103583,
+     336.797612146323,
+     5.480074209270811,
+     40.95563597771576,
+     73.42956514743906,
+     104.3057114699123,
+     129.5920274310359,
+     156.797612146323
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "morinus",
+   "latitude": 78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "morinus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 185.48007420927084,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.30571146991227,
+     223.0671173173689,
+     254.2931771970815,
+     286.852925739859,
+     317.993736187697,
+     346.6816954735642,
+     14.305711469912296,
+     43.06711731736897,
+     74.29317719708149,
+     106.85292573985896,
+     137.99373618769698,
+     166.68169547356422
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "meridian",
+   "latitude": 78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "meridian",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 185.48007420927084,
+    "mc": 104.3057114699123,
+    "cusps": [
+     196.852925739859,
+     227.99373618769698,
+     256.6816954735642,
+     284.30571146991224,
+     313.0671173173689,
+     344.2931771970815,
+     16.852925739859018,
+     47.99373618769698,
+     76.68169547356422,
+     104.30571146991224,
+     133.0671173173689,
+     164.2931771970815
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "whole",
+   "latitude": 89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180.00672993548397,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "placidus",
+   "latitude": 89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 180.00672993548397,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "porphyry",
+   "latitude": 89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "porphyry",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180.00672993548397,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180.00672993548397,
+     214.7730571136267,
+     249.53938429176947,
+     284.30571146991224,
+     309.53938429176947,
+     334.7730571136267,
+     0.006729935483974714,
+     34.77305711362669,
+     69.53938429176947,
+     104.3057114699123,
+     129.53938429176952,
+     154.7730571136267
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal",
+   "latitude": 89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180.00672993548397,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180.00672993548392,
+     210.00672993548392,
+     240.00672993548392,
+     270.0067299354839,
+     300.0067299354839,
+     330.0067299354839,
+     0.006729935483974714,
+     30.006729935483975,
+     60.006729935483975,
+     90.00672993548397,
+     120.00672993548397,
+     150.00672993548397
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal-mc",
+   "latitude": 89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal-mc",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180.00672993548397,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.3057114699123,
+     224.3057114699123,
+     254.3057114699123,
+     284.3057114699123,
+     314.3057114699123,
+     344.3057114699123,
+     14.305711469912296,
+     44.305711469912296,
+     74.3057114699123,
+     104.3057114699123,
+     134.3057114699123,
+     164.30571146991224
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "vehlow",
+   "latitude": 89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "vehlow",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180.00672993548397,
+    "mc": 104.3057114699123,
+    "cusps": [
+     165.00672993548392,
+     195.00672993548392,
+     225.00672993548392,
+     255.00672993548392,
+     285.0067299354839,
+     315.0067299354839,
+     345.0067299354839,
+     15.006729935483975,
+     45.006729935483975,
+     75.00672993548397,
+     105.00672993548397,
+     135.00672993548397
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "koch",
+   "latitude": 89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 180.00672993548397,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "regiomontanus",
+   "latitude": 89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "regiomontanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180.00672993548397,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180.00672993548392,
+     180.0207112942054,
+     180.04867922309916,
+     284.30571146991224,
+     359.96479629830844,
+     359.99275031570096,
+     0.006729935483974714,
+     0.02071129420539819,
+     0.04867922309915684,
+     104.3057114699123,
+     179.96479629830844,
+     179.99275031570096
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "campanus",
+   "latitude": 89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "campanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180.00672993548397,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180.00672993548392,
+     245.28516647162655,
+     270.9491812280165,
+     284.30571146991224,
+     296.2641015924504,
+     314.13900771400574,
+     0.006729935483974714,
+     65.28516647162661,
+     90.94918122801653,
+     104.3057114699123,
+     116.2641015924504,
+     134.13900771400574
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "topocentric",
+   "latitude": 89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "topocentric",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180.00672993548397,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180.00672993548392,
+     180.02690214061306,
+     180.0730114704205,
+     284.30571146991224,
+     359.94720961461326,
+     359.99058365084454,
+     0.006729935483974714,
+     0.02690214061306051,
+     0.0730114704205107,
+     104.3057114699123,
+     179.94720961461326,
+     179.99058365084454
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "alcabitius",
+   "latitude": 89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "alcabitius",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180.00672993548397,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180.00672993548392,
+     217.53619752645045,
+     251.86730689292278,
+     284.30571146991224,
+     307.9422480038853,
+     333.2500589997145,
+     0.006729935483974714,
+     37.53619752645045,
+     71.86730689292278,
+     104.3057114699123,
+     127.94224800388531,
+     153.2500589997145
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "morinus",
+   "latitude": 89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "morinus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180.00672993548397,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.30571146991227,
+     223.0671173173689,
+     254.2931771970815,
+     286.852925739859,
+     317.993736187697,
+     346.6816954735642,
+     14.305711469912296,
+     43.06711731736897,
+     74.29317719708149,
+     106.85292573985896,
+     137.99373618769698,
+     166.68169547356422
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "meridian",
+   "latitude": 89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "meridian",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180.00672993548397,
+    "mc": 104.3057114699123,
+    "cusps": [
+     196.852925739859,
+     227.99373618769698,
+     256.6816954735642,
+     284.30571146991224,
+     313.0671173173689,
+     344.2931771970815,
+     16.852925739859018,
+     47.99373618769698,
+     76.68169547356422,
+     104.30571146991224,
+     133.0671173173689,
+     164.2931771970815
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "whole",
+   "latitude": 90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "placidus",
+   "latitude": 90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "porphyry",
+   "latitude": 90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "porphyry",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     214.76857048997078,
+     249.53714097994157,
+     284.30571146991224,
+     309.53714097994157,
+     334.7685704899708,
+     0,
+     34.768570489970784,
+     69.53714097994157,
+     104.3057114699123,
+     129.53714097994157,
+     154.76857048997078
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal",
+   "latitude": 90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal-mc",
+   "latitude": 90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal-mc",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.3057114699123,
+     224.3057114699123,
+     254.3057114699123,
+     284.3057114699123,
+     314.3057114699123,
+     344.3057114699123,
+     14.305711469912296,
+     44.305711469912296,
+     74.3057114699123,
+     104.3057114699123,
+     134.3057114699123,
+     164.30571146991224
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "vehlow",
+   "latitude": 90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "vehlow",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     165,
+     195,
+     225,
+     255,
+     285,
+     315,
+     345,
+     15,
+     45,
+     75,
+     105,
+     135
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "koch",
+   "latitude": 90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "regiomontanus",
+   "latitude": 90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "regiomontanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     180,
+     180,
+     284.30571146991224,
+     0,
+     0,
+     0,
+     0,
+     0,
+     104.3057114699123,
+     180,
+     180
+    ],
+    "distinctCusps": 4
+   },
+   "degenerate": true,
+   "verdict": "degenerate-unflagged"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "campanus",
+   "latitude": 90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "campanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     245.29645213870094,
+     270.9545033040133,
+     284.30571146991224,
+     296.2592048809022,
+     314.1284157287283,
+     0,
+     65.29645213870094,
+     90.95450330401331,
+     104.3057114699123,
+     116.25920488090213,
+     134.12841572872833
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "topocentric",
+   "latitude": 90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "topocentric",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     180,
+     180,
+     284.30571146991224,
+     0,
+     0,
+     0,
+     0,
+     0,
+     104.3057114699123,
+     180,
+     180
+    ],
+    "distinctCusps": 4
+   },
+   "degenerate": true,
+   "verdict": "degenerate-unflagged"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "alcabitius",
+   "latitude": 90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "alcabitius",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     261.4247594295425,
+     272.8442501876891,
+     284.30571146991224,
+     331.059141965541,
+     22.34869835778545,
+     0,
+     81.42475942954246,
+     92.84425018768906,
+     104.3057114699123,
+     151.05914196554102,
+     202.34869835778545
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "morinus",
+   "latitude": 90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "morinus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.30571146991227,
+     223.0671173173689,
+     254.2931771970815,
+     286.852925739859,
+     317.993736187697,
+     346.6816954735642,
+     14.305711469912296,
+     43.06711731736897,
+     74.29317719708149,
+     106.85292573985896,
+     137.99373618769698,
+     166.68169547356422
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "meridian",
+   "latitude": 90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "meridian",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     196.852925739859,
+     227.99373618769698,
+     256.6816954735642,
+     284.30571146991224,
+     313.0671173173689,
+     344.2931771970815,
+     16.852925739859018,
+     47.99373618769698,
+     76.68169547356422,
+     104.30571146991224,
+     133.0671173173689,
+     164.2931771970815
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "whole",
+   "latitude": -66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 272.001796113644,
+    "mc": 104.3057114699123,
+    "cusps": [
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150,
+     180,
+     210,
+     240
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "placidus",
+   "latitude": -66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "placidus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 272.001796113644,
+    "mc": 104.3057114699123,
+    "cusps": [
+     272.001796113644,
+     275.4329959871076,
+     279.2181002997824,
+     284.30571146991224,
+     293.0107990797561,
+     316.72475940403046,
+     92.00179611364399,
+     95.43299598710757,
+     99.2181002997824,
+     104.3057114699123,
+     113.01079907975611,
+     136.7247594040304
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "porphyry",
+   "latitude": -66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "porphyry",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 272.001796113644,
+    "mc": 104.3057114699123,
+    "cusps": [
+     272.001796113644,
+     276.10310123240015,
+     280.2044063511562,
+     284.30571146991224,
+     340.2044063511562,
+     36.103101232400036,
+     92.00179611364399,
+     96.10310123240015,
+     100.2044063511562,
+     104.3057114699123,
+     160.2044063511562,
+     216.10310123240004
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal",
+   "latitude": -66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 272.001796113644,
+    "mc": 104.3057114699123,
+    "cusps": [
+     272.001796113644,
+     302.001796113644,
+     332.001796113644,
+     2.001796113643991,
+     32.00179611364399,
+     62.00179611364399,
+     92.00179611364399,
+     122.00179611364399,
+     152.001796113644,
+     182.001796113644,
+     212.001796113644,
+     242.001796113644
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal-mc",
+   "latitude": -66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal-mc",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 272.001796113644,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.3057114699123,
+     224.3057114699123,
+     254.3057114699123,
+     284.3057114699123,
+     314.3057114699123,
+     344.3057114699123,
+     14.305711469912296,
+     44.305711469912296,
+     74.3057114699123,
+     104.3057114699123,
+     134.3057114699123,
+     164.30571146991224
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "vehlow",
+   "latitude": -66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "vehlow",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 272.001796113644,
+    "mc": 104.3057114699123,
+    "cusps": [
+     257.001796113644,
+     287.001796113644,
+     317.001796113644,
+     347.001796113644,
+     17.00179611364399,
+     47.00179611364399,
+     77.00179611364399,
+     107.00179611364399,
+     137.001796113644,
+     167.001796113644,
+     197.001796113644,
+     227.001796113644
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "koch",
+   "latitude": -66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "koch",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 272.001796113644,
+    "mc": 104.3057114699123,
+    "cusps": [
+     272.001796113644,
+     276.6759386056202,
+     280.64053810409564,
+     284.30571146991224,
+     56.284421201838654,
+     84.98205094577202,
+     92.00179611364399,
+     96.67593860562022,
+     100.64053810409564,
+     104.3057114699123,
+     236.28442120183865,
+     264.982050945772
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "regiomontanus",
+   "latitude": -66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "regiomontanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 272.001796113644,
+    "mc": 104.3057114699123,
+    "cusps": [
+     272.0017961136439,
+     280.3978263660184,
+     282.6572106450642,
+     284.30571146991224,
+     286.54471010445513,
+     294.6676652783858,
+     92.00179611364393,
+     100.39782636601842,
+     102.65721064506425,
+     104.3057114699123,
+     106.54471010445513,
+     114.66766527838581
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "campanus",
+   "latitude": -66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "campanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 272.001796113644,
+    "mc": 104.3057114699123,
+    "cusps": [
+     272.0017961136439,
+     282.3512119861192,
+     283.5780973059268,
+     284.30571146991224,
+     285.1292169502915,
+     287.14915117664134,
+     92.00179611364393,
+     102.35121198611921,
+     103.57809730592686,
+     104.3057114699123,
+     105.1292169502915,
+     107.14915117664134
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "topocentric",
+   "latitude": -66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "topocentric",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 272.001796113644,
+    "mc": 104.3057114699123,
+    "cusps": [
+     272.0017961136439,
+     266.2203242606636,
+     274.05021882741096,
+     284.30571146991224,
+     297.00388437176434,
+     319.53091197742856,
+     92.00179611364393,
+     86.22032426066357,
+     94.05021882741096,
+     104.3057114699123,
+     117.0038843717644,
+     139.53091197742856
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "alcabitius",
+   "latitude": -66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "alcabitius",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 272.001796113644,
+    "mc": 104.3057114699123,
+    "cusps": [
+     272.001796113644,
+     276.08902634198625,
+     280.18780396649163,
+     284.30571146991224,
+     339.5171523067937,
+     39.020947229357375,
+     92.00179611364399,
+     96.08902634198625,
+     100.18780396649169,
+     104.3057114699123,
+     159.51715230679372,
+     219.02094722935738
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "morinus",
+   "latitude": -66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "morinus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 272.001796113644,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.30571146991227,
+     223.0671173173689,
+     254.2931771970815,
+     286.852925739859,
+     317.993736187697,
+     346.6816954735642,
+     14.305711469912296,
+     43.06711731736897,
+     74.29317719708149,
+     106.85292573985896,
+     137.99373618769698,
+     166.68169547356422
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "meridian",
+   "latitude": -66,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "meridian",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 272.001796113644,
+    "mc": 104.3057114699123,
+    "cusps": [
+     196.852925739859,
+     227.99373618769698,
+     256.6816954735642,
+     284.30571146991224,
+     313.0671173173689,
+     344.2931771970815,
+     16.852925739859018,
+     47.99373618769698,
+     76.68169547356422,
+     104.30571146991224,
+     133.0671173173689,
+     164.2931771970815
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "whole",
+   "latitude": -67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 281.203217598454,
+    "mc": 104.3057114699123,
+    "cusps": [
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150,
+     180,
+     210,
+     240
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "placidus",
+   "latitude": -67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 281.203217598454,
+    "mc": 104.3057114699123,
+    "cusps": [
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150,
+     180,
+     210,
+     240
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "porphyry",
+   "latitude": -67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "porphyry",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 281.203217598454,
+    "mc": 104.3057114699123,
+    "cusps": [
+     281.203217598454,
+     282.2373822222735,
+     283.27154684609286,
+     284.30571146991224,
+     343.27154684609286,
+     42.23738222227337,
+     101.20321759845399,
+     102.23738222227348,
+     103.27154684609286,
+     104.3057114699123,
+     163.27154684609286,
+     222.23738222227337
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal",
+   "latitude": -67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 281.203217598454,
+    "mc": 104.3057114699123,
+    "cusps": [
+     281.203217598454,
+     311.203217598454,
+     341.203217598454,
+     11.203217598453989,
+     41.20321759845399,
+     71.20321759845399,
+     101.20321759845399,
+     131.203217598454,
+     161.203217598454,
+     191.203217598454,
+     221.203217598454,
+     251.203217598454
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal-mc",
+   "latitude": -67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal-mc",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 281.203217598454,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.3057114699123,
+     224.3057114699123,
+     254.3057114699123,
+     284.3057114699123,
+     314.3057114699123,
+     344.3057114699123,
+     14.305711469912296,
+     44.305711469912296,
+     74.3057114699123,
+     104.3057114699123,
+     134.3057114699123,
+     164.30571146991224
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "vehlow",
+   "latitude": -67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "vehlow",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 281.203217598454,
+    "mc": 104.3057114699123,
+    "cusps": [
+     266.203217598454,
+     296.203217598454,
+     326.203217598454,
+     356.203217598454,
+     26.20321759845399,
+     56.20321759845399,
+     86.20321759845399,
+     116.20321759845399,
+     146.203217598454,
+     176.203217598454,
+     206.203217598454,
+     236.203217598454
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "koch",
+   "latitude": -67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 281.203217598454,
+    "mc": 104.3057114699123,
+    "cusps": [
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150,
+     180,
+     210,
+     240
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "regiomontanus",
+   "latitude": -67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "regiomontanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 281.203217598454,
+    "mc": 104.3057114699123,
+    "cusps": [
+     281.203217598454,
+     283.305966930271,
+     283.88135197922577,
+     284.30571146991224,
+     284.8896543421863,
+     287.111339645465,
+     101.20321759845399,
+     103.30596693027098,
+     103.88135197922577,
+     104.3057114699123,
+     104.88965434218625,
+     107.11133964546508
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "campanus",
+   "latitude": -67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "campanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 281.203217598454,
+    "mc": 104.3057114699123,
+    "cusps": [
+     281.203217598454,
+     283.8197183527177,
+     284.12483989531995,
+     284.30571146991224,
+     284.5104292051178,
+     285.0130990083369,
+     101.20321759845399,
+     103.8197183527177,
+     104.12483989531995,
+     104.3057114699123,
+     104.51042920511776,
+     105.01309900833684
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "topocentric",
+   "latitude": -67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "topocentric",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 281.203217598454,
+    "mc": 104.3057114699123,
+    "cusps": [
+     281.203217598454,
+     268.55298670795867,
+     274.9064679188908,
+     284.30571146991224,
+     296.05061357662714,
+     316.5486955460858,
+     101.20321759845399,
+     88.55298670795867,
+     94.90646791889083,
+     104.3057114699123,
+     116.05061357662714,
+     136.54869554608587
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "alcabitius",
+   "latitude": -67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "alcabitius",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 281.203217598454,
+    "mc": 104.3057114699123,
+    "cusps": [
+     281.203217598454,
+     282.23590502872173,
+     283.2700311879395,
+     284.30571146991224,
+     343.0910505573097,
+     45.76430896071611,
+     101.20321759845399,
+     102.23590502872173,
+     103.27003118793948,
+     104.3057114699123,
+     163.0910505573097,
+     225.7643089607161
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "morinus",
+   "latitude": -67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "morinus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 281.203217598454,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.30571146991227,
+     223.0671173173689,
+     254.2931771970815,
+     286.852925739859,
+     317.993736187697,
+     346.6816954735642,
+     14.305711469912296,
+     43.06711731736897,
+     74.29317719708149,
+     106.85292573985896,
+     137.99373618769698,
+     166.68169547356422
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "meridian",
+   "latitude": -67,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "meridian",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 281.203217598454,
+    "mc": 104.3057114699123,
+    "cusps": [
+     196.852925739859,
+     227.99373618769698,
+     256.6816954735642,
+     284.30571146991224,
+     313.0671173173689,
+     344.2931771970815,
+     16.852925739859018,
+     47.99373618769698,
+     76.68169547356422,
+     104.30571146991224,
+     133.0671173173689,
+     164.2931771970815
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "whole",
+   "latitude": -78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 165.33440224359254,
+    "mc": 104.3057114699123,
+    "cusps": [
+     150,
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "placidus",
+   "latitude": -78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 165.33440224359254,
+    "mc": 104.3057114699123,
+    "cusps": [
+     150,
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "porphyry",
+   "latitude": -78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "porphyry",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 165.33440224359254,
+    "mc": 104.3057114699123,
+    "cusps": [
+     165.33440224359254,
+     204.9915053190324,
+     244.64860839447238,
+     284.30571146991224,
+     304.6486083944724,
+     324.9915053190325,
+     345.33440224359254,
+     24.9915053190324,
+     64.64860839447238,
+     104.3057114699123,
+     124.64860839447238,
+     144.99150531903246
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal",
+   "latitude": -78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 165.33440224359254,
+    "mc": 104.3057114699123,
+    "cusps": [
+     165.33440224359254,
+     195.33440224359254,
+     225.33440224359254,
+     255.33440224359254,
+     285.33440224359254,
+     315.33440224359254,
+     345.33440224359254,
+     15.334402243592535,
+     45.334402243592535,
+     75.33440224359254,
+     105.33440224359254,
+     135.33440224359254
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal-mc",
+   "latitude": -78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal-mc",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 165.33440224359254,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.3057114699123,
+     224.3057114699123,
+     254.3057114699123,
+     284.3057114699123,
+     314.3057114699123,
+     344.3057114699123,
+     14.305711469912296,
+     44.305711469912296,
+     74.3057114699123,
+     104.3057114699123,
+     134.3057114699123,
+     164.30571146991224
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "vehlow",
+   "latitude": -78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "vehlow",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 165.33440224359254,
+    "mc": 104.3057114699123,
+    "cusps": [
+     150.33440224359254,
+     180.33440224359254,
+     210.33440224359254,
+     240.33440224359254,
+     270.33440224359254,
+     300.33440224359254,
+     330.33440224359254,
+     0.33440224359253534,
+     30.334402243592535,
+     60.334402243592535,
+     90.33440224359254,
+     120.33440224359254
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "koch",
+   "latitude": -78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 165.33440224359254,
+    "mc": 104.3057114699123,
+    "cusps": [
+     150,
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "regiomontanus",
+   "latitude": -78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "regiomontanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 165.33440224359254,
+    "mc": 104.3057114699123,
+    "cusps": [
+     165.33440224359265,
+     144.72866787512032,
+     126.80063511914284,
+     104.30571146991224,
+     66.89648818379976,
+     18.12359257418143,
+     345.33440224359265,
+     324.7286678751203,
+     306.80063511914284,
+     284.30571146991224,
+     246.89648818379976,
+     198.12359257418143
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "campanus",
+   "latitude": -78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "campanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 165.33440224359254,
+    "mc": 104.3057114699123,
+    "cusps": [
+     165.33440224359265,
+     119.86077489592208,
+     110.20976427821995,
+     104.30571146991224,
+     97.64464182419158,
+     82.38645144951613,
+     345.33440224359265,
+     299.8607748959221,
+     290.20976427821995,
+     284.30571146991224,
+     277.6446418241916,
+     262.38645144951613
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "topocentric",
+   "latitude": -78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "topocentric",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 165.33440224359254,
+    "mc": 104.3057114699123,
+    "cusps": [
+     165.33440224359265,
+     131.3821180741561,
+     112.77426188343316,
+     104.30571146991224,
+     91.5559686790549,
+     33.11122622412495,
+     345.33440224359265,
+     311.3821180741561,
+     292.77426188343316,
+     284.30571146991224,
+     271.5559686790549,
+     213.11122622412495
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "alcabitius",
+   "latitude": -78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "alcabitius",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 165.33440224359254,
+    "mc": 104.3057114699123,
+    "cusps": [
+     165.33440224359254,
+     208.180079460147,
+     247.6429326044365,
+     284.30571146991224,
+     303.54607663469665,
+     323.85958372021355,
+     345.33440224359254,
+     28.180079460147,
+     67.64293260443651,
+     104.3057114699123,
+     123.54607663469659,
+     143.85958372021355
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "morinus",
+   "latitude": -78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "morinus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 165.33440224359254,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.30571146991227,
+     223.0671173173689,
+     254.2931771970815,
+     286.852925739859,
+     317.993736187697,
+     346.6816954735642,
+     14.305711469912296,
+     43.06711731736897,
+     74.29317719708149,
+     106.85292573985896,
+     137.99373618769698,
+     166.68169547356422
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "meridian",
+   "latitude": -78.22,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "meridian",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 165.33440224359254,
+    "mc": 104.3057114699123,
+    "cusps": [
+     196.852925739859,
+     227.99373618769698,
+     256.6816954735642,
+     284.30571146991224,
+     313.0671173173689,
+     344.2931771970815,
+     16.852925739859018,
+     47.99373618769698,
+     76.68169547356422,
+     104.30571146991224,
+     133.0671173173689,
+     164.2931771970815
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "whole",
+   "latitude": -89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 179.9932648414018,
+    "mc": 104.3057114699123,
+    "cusps": [
+     150,
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "placidus",
+   "latitude": -89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 179.9932648414018,
+    "mc": 104.3057114699123,
+    "cusps": [
+     150,
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "porphyry",
+   "latitude": -89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "porphyry",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 179.9932648414018,
+    "mc": 104.3057114699123,
+    "cusps": [
+     179.9932648414018,
+     214.76408038423858,
+     249.53489592707547,
+     284.30571146991224,
+     309.53489592707547,
+     334.7640803842387,
+     359.9932648414018,
+     34.76408038423858,
+     69.53489592707547,
+     104.3057114699123,
+     129.53489592707547,
+     154.7640803842387
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal",
+   "latitude": -89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 179.9932648414018,
+    "mc": 104.3057114699123,
+    "cusps": [
+     179.9932648414018,
+     209.9932648414018,
+     239.9932648414018,
+     269.9932648414018,
+     299.9932648414018,
+     329.9932648414018,
+     359.9932648414018,
+     29.99326484140181,
+     59.99326484140181,
+     89.99326484140181,
+     119.99326484140181,
+     149.9932648414018
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal-mc",
+   "latitude": -89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal-mc",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 179.9932648414018,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.3057114699123,
+     224.3057114699123,
+     254.3057114699123,
+     284.3057114699123,
+     314.3057114699123,
+     344.3057114699123,
+     14.305711469912296,
+     44.305711469912296,
+     74.3057114699123,
+     104.3057114699123,
+     134.3057114699123,
+     164.30571146991224
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "vehlow",
+   "latitude": -89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "vehlow",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 179.9932648414018,
+    "mc": 104.3057114699123,
+    "cusps": [
+     164.9932648414018,
+     194.9932648414018,
+     224.9932648414018,
+     254.9932648414018,
+     284.9932648414018,
+     314.9932648414018,
+     344.9932648414018,
+     14.99326484140181,
+     44.99326484140181,
+     74.99326484140181,
+     104.99326484140181,
+     134.9932648414018
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "koch",
+   "latitude": -89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 179.9932648414018,
+    "mc": 104.3057114699123,
+    "cusps": [
+     150,
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "regiomontanus",
+   "latitude": -89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "regiomontanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 179.9932648414018,
+    "mc": 104.3057114699123,
+    "cusps": [
+     179.9932648414018,
+     179.97927521189115,
+     179.95130118765678,
+     104.30571146991224,
+     0.035244183400891416,
+     0.007256214052631549,
+     359.9932648414018,
+     359.97927521189115,
+     359.9513011876568,
+     284.30571146991224,
+     180.0352441834009,
+     180.00725621405263
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "campanus",
+   "latitude": -89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "campanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 179.9932648414018,
+    "mc": 104.3057114699123,
+    "cusps": [
+     179.9932648414018,
+     134.11782108081638,
+     116.25430769612683,
+     104.30571146991224,
+     90.95982607752956,
+     65.30774277873923,
+     359.9932648414018,
+     314.1178210808164,
+     296.25430769612683,
+     284.30571146991224,
+     270.95982607752956,
+     245.30774277873923
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "topocentric",
+   "latitude": -89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "topocentric",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 179.9932648414018,
+    "mc": 104.3057114699123,
+    "cusps": [
+     179.9932648414018,
+     179.97307508842528,
+     179.926944453818,
+     104.30571146991224,
+     0.05288146922748638,
+     0.009427368116234902,
+     359.9932648414018,
+     359.9730750884253,
+     359.926944453818,
+     284.30571146991224,
+     180.0528814692275,
+     180.00942736811623
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "alcabitius",
+   "latitude": -89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "alcabitius",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 179.9932648414018,
+    "mc": 104.3057114699123,
+    "cusps": [
+     179.9932648414018,
+     217.52774784664393,
+     251.8634598011048,
+     284.30571146991224,
+     307.93820127822676,
+     333.2413700563893,
+     359.9932648414018,
+     37.52774784664388,
+     71.8634598011048,
+     104.3057114699123,
+     127.93820127822676,
+     153.24137005638931
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "morinus",
+   "latitude": -89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "morinus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 179.9932648414018,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.30571146991227,
+     223.0671173173689,
+     254.2931771970815,
+     286.852925739859,
+     317.993736187697,
+     346.6816954735642,
+     14.305711469912296,
+     43.06711731736897,
+     74.29317719708149,
+     106.85292573985896,
+     137.99373618769698,
+     166.68169547356422
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "meridian",
+   "latitude": -89.99,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "meridian",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 179.9932648414018,
+    "mc": 104.3057114699123,
+    "cusps": [
+     196.852925739859,
+     227.99373618769698,
+     256.6816954735642,
+     284.30571146991224,
+     313.0671173173689,
+     344.2931771970815,
+     16.852925739859018,
+     47.99373618769698,
+     76.68169547356422,
+     104.30571146991224,
+     133.0671173173689,
+     164.2931771970815
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "whole",
+   "latitude": -90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "placidus",
+   "latitude": -90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "porphyry",
+   "latitude": -90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "porphyry",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     214.76857048997078,
+     249.53714097994157,
+     284.30571146991224,
+     309.53714097994157,
+     334.7685704899708,
+     0,
+     34.768570489970784,
+     69.53714097994157,
+     104.3057114699123,
+     129.53714097994157,
+     154.76857048997078
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal",
+   "latitude": -90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "equal-mc",
+   "latitude": -90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "equal-mc",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.3057114699123,
+     224.3057114699123,
+     254.3057114699123,
+     284.3057114699123,
+     314.3057114699123,
+     344.3057114699123,
+     14.305711469912296,
+     44.305711469912296,
+     74.3057114699123,
+     104.3057114699123,
+     134.3057114699123,
+     164.30571146991224
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "vehlow",
+   "latitude": -90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "vehlow",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     165,
+     195,
+     225,
+     255,
+     285,
+     315,
+     345,
+     15,
+     45,
+     75,
+     105,
+     135
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "koch",
+   "latitude": -90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "whole",
+    "flags": [
+     "polar-fallback"
+    ],
+    "chartFlags": [
+     "polar-fallback"
+    ],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     210,
+     240,
+     270,
+     300,
+     330,
+     0,
+     30,
+     60,
+     90,
+     120,
+     150
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "regiomontanus",
+   "latitude": -90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "regiomontanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     180,
+     180,
+     104.30571146991224,
+     0,
+     0,
+     0,
+     0,
+     0,
+     284.30571146991224,
+     180,
+     180
+    ],
+    "distinctCusps": 4
+   },
+   "degenerate": true,
+   "verdict": "degenerate-unflagged"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "campanus",
+   "latitude": -90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "campanus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     134.12841572872833,
+     116.25920488090219,
+     104.30571146991224,
+     90.95450330401331,
+     65.29645213870094,
+     0,
+     314.1284157287283,
+     296.2592048809022,
+     284.30571146991224,
+     270.9545033040133,
+     245.29645213870094
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "topocentric",
+   "latitude": -90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "topocentric",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     180,
+     180,
+     104.30571146991224,
+     0,
+     0,
+     0,
+     0,
+     0,
+     284.30571146991224,
+     180,
+     180
+    ],
+    "distinctCusps": 4
+   },
+   "degenerate": true,
+   "verdict": "degenerate-unflagged"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "alcabitius",
+   "latitude": -90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "alcabitius",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     180,
+     191.30999451668765,
+     240.14032800864743,
+     284.30571146991224,
+     295.97200813887355,
+     307.98266364255414,
+     0,
+     11.309994516687652,
+     60.14032800864743,
+     104.3057114699123,
+     115.97200813887355,
+     127.9826636425542
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "morinus",
+   "latitude": -90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "morinus",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     194.30571146991227,
+     223.0671173173689,
+     254.2931771970815,
+     286.852925739859,
+     317.993736187697,
+     346.6816954735642,
+     14.305711469912296,
+     43.06711731736897,
+     74.29317719708149,
+     106.85292573985896,
+     137.99373618769698,
+     166.68169547356422
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-houses",
+   "houseSystem": "meridian",
+   "latitude": -90,
+   "instant": "2021-06-21T12:00:00Z",
+   "engine": {
+    "status": "ok",
+    "system": "meridian",
+    "flags": [],
+    "chartFlags": [],
+    "asc": 180,
+    "mc": 104.3057114699123,
+    "cusps": [
+     196.852925739859,
+     227.99373618769698,
+     256.6816954735642,
+     284.30571146991224,
+     313.0671173173689,
+     344.2931771970815,
+     16.852925739859018,
+     47.99373618769698,
+     76.68169547356422,
+     104.30571146991224,
+     133.0671173173689,
+     164.2931771970815
+    ],
+    "distinctCusps": 12
+   },
+   "degenerate": false,
+   "verdict": "pass"
+  },
+  {
+   "test": "T4",
+   "id": "T4-f/78N-june",
+   "site": {
+    "latitude": 78.22,
+    "longitude": 15.63
+   },
+   "date": "2021-06-21",
+   "file": "horizons/sun-elevation-78N-june.txt",
+   "horizons": {
+    "samples": 49,
+    "minElevationDeg": 11.652786,
+    "maxElevationDeg": 35.215044095
+   },
+   "engine": {
+    "flags": [
+     "never-sets"
+    ],
+    "events": [
+     "lower-transit",
+     "upper-transit"
+    ]
+   },
+   "expected": "never-sets",
+   "verdict": "pass",
+   "arbiterSays": "never-sets"
+  },
+  {
+   "test": "T4",
+   "id": "T4-f/78N-december",
+   "site": {
+    "latitude": 78.22,
+    "longitude": 15.63
+   },
+   "date": "2021-12-21",
+   "file": "horizons/sun-elevation-78N-december.txt",
+   "horizons": {
+    "samples": 49,
+    "minElevationDeg": -35.217020922,
+    "maxElevationDeg": -11.661743647
+   },
+   "engine": {
+    "flags": [
+     "never-rises"
+    ],
+    "events": [
+     "upper-transit",
+     "lower-transit"
+    ]
+   },
+   "expected": "never-rises",
+   "verdict": "pass",
+   "arbiterSays": "never-rises"
+  },
+  {
+   "test": "T4",
+   "id": "T4-f/90N-june",
+   "site": {
+    "latitude": 90,
+    "longitude": 0
+   },
+   "date": "2021-06-21",
+   "file": "horizons/sun-elevation-90N-june.txt",
+   "horizons": {
+    "samples": 49,
+    "minElevationDeg": 23.432660949,
+    "maxElevationDeg": 23.435206755
+   },
+   "engine": {
+    "flags": [
+     "never-sets"
+    ],
+    "events": [
+     "lower-transit",
+     "upper-transit"
+    ]
+   },
+   "expected": "never-sets",
+   "verdict": "pass",
+   "arbiterSays": "never-sets"
+  },
+  {
+   "test": "T4",
+   "id": "T4-f/90S-june",
+   "site": {
+    "latitude": -90,
+    "longitude": 0
+   },
+   "date": "2021-06-21",
+   "file": "horizons/sun-elevation-90S-june.txt",
+   "horizons": {
+    "samples": 49,
+    "minElevationDeg": -23.439602912,
+    "maxElevationDeg": -23.437056977
+   },
+   "engine": {
+    "flags": [
+     "never-rises"
+    ],
+    "events": [
+     "lower-transit",
+     "upper-transit"
+    ]
+   },
+   "expected": "never-rises",
+   "verdict": "pass",
+   "arbiterSays": "never-rises"
+  }
+ ]
+}

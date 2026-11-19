@@ -1,0 +1,13 @@
+engine 1.1.0-rc.12, dist a8eac44de1dd0706d2dad0f4a0302c7fb9ebb18789cde9be8feeacc57ea6d673, 146097 instants, against a4ce9bf9b328…
+Sun      largest 0.003932" (equatorial-true-of-date, JD 2521806.0 TT) bound 0.004" ok
+Moon     largest 0.004422" (equatorial-true-of-date, JD 2524389.0 TT) bound 0.013" ok
+Mercury  largest 0.003934" (ecliptic-true-of-date, JD 2521806.0 TT) bound 0.004" ok
+Venus    largest 0.003911" (equatorial-true-of-date, JD 2521806.0 TT) bound 0.004" ok
+Mars     largest 0.003948" (equatorial-true-of-date, JD 2379286.0 TT) bound 0.004" ok
+Jupiter  largest 0.003922" (equatorial-true-of-date, JD 2379286.0 TT) bound 0.004" ok
+Saturn   largest 0.003898" (equatorial-true-of-date, JD 2521806.0 TT) bound 0.0039" ok
+Uranus   largest 0.003923" (equatorial-true-of-date, JD 2521806.0 TT) bound 0.004" ok
+Neptune  largest 0.003916" (equatorial-true-of-date, JD 2379286.0 TT) bound 0.004" ok
+Pluto    largest 0.003933" (equatorial-true-of-date, JD 2379286.0 TT) bound 0.004" ok
+North Node largest 0.565547" from the osculating node (not quoted: calc() gives null on the pack)
+all 10 bodies within src/calc-bounds-de440.ts

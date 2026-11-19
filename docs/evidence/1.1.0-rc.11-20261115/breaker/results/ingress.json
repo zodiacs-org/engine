@@ -1,0 +1,268 @@
+{
+ "defaultPath": {
+  "default": "de440",
+  "rows": [
+   {
+    "fn": "positions() bisected to 1 ms",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "jpl-de440",
+    "fallback": null
+   },
+   {
+    "fn": "natalChart() bisected to 1 ms",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "jpl-de440",
+    "flags": [
+     "no-time"
+    ]
+   },
+   {
+    "fn": "calc() bisected to 1 ms",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "jpl-de440",
+    "flags": []
+   },
+   {
+    "fn": "calc chart() bisected to 1 ms",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "jpl-de440",
+    "flags": []
+   },
+   {
+    "fn": "internal bodyLongitude bisected to 1 ms (label from bodyLongitudeDetailed)",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "jpl-de440",
+    "flags": []
+   },
+   {
+    "fn": "findLongitudeCrossings",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "(a bare list: no label)",
+    "crossings": 1
+   },
+   {
+    "fn": "searchLongitudeCrossings",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "(flags only)",
+    "flags": [],
+    "status": "complete"
+   },
+   {
+    "fn": "searchLongitudeCrossings, stepDays 0.25",
+    "utc": "2026-11-22T07:23:20.564Z",
+    "names": "(flags only)",
+    "flags": []
+   },
+   {
+    "fn": "crossings entry: findLongitudeCrossingsWith(internal bodyLongitude)",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "(caller's longitudes: no label)"
+   },
+   {
+    "fn": "calc events longitude-crossing",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "jpl-de440",
+    "flags": [],
+    "status": "ok",
+    "keys": [
+     "at",
+     "jdUt1",
+     "jdTt",
+     "retrograde",
+     "band"
+    ]
+   },
+   {
+    "fn": "techniques solarReturnInstantDetailed(240, near)",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "jpl-de440",
+    "flags": [],
+    "plain": "2026-11-22T07:23:20.568Z"
+   },
+   {
+    "fn": "techniques mostRecentSolarReturnInstantDetailed(240, 2026-12-01)",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "jpl-de440",
+    "flags": []
+   },
+   {
+    "fn": "techniques solarReturn(chart with the Sun at 240°, 2026-11-20)",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "jpl-de440",
+    "flags": [],
+    "natalSunLon": 240.00000004429654,
+    "natalAt": "2025-11-22T01:35:34.554Z",
+    "secondsFor240": -0.003783708541341921
+   },
+   {
+    "fn": "timing planetaryReturns(same chart, Sun)",
+    "utc": "2026-11-22T07:23:20.568Z",
+    "names": "(flags only)",
+    "flags": [],
+    "status": "complete",
+    "natalSunLon": 240.00000004429654
+   },
+   {
+    "fn": "window birthWindow 07:00 to 08:00 (Sun's sign change)",
+    "utc": "null",
+    "names": "jpl-de440",
+    "flags": [],
+    "keys": [
+     "schema",
+     "verification",
+     "start",
+     "end",
+     "latitude",
+     "longitude",
+     "houseSystem",
+     "rounding",
+     "cells",
+     "switches",
+     "unresolved",
+     "flags",
+     "engineVersion",
+     "ephemeris"
+    ]
+   }
+  ]
+ },
+ "afterChoosingAstronomyEngine": {
+  "default": "astronomy-engine",
+  "rows": [
+   {
+    "fn": "positions() bisected to 1 ms",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "astronomy-engine",
+    "fallback": null
+   },
+   {
+    "fn": "natalChart() bisected to 1 ms",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "astronomy-engine",
+    "flags": [
+     "no-time"
+    ]
+   },
+   {
+    "fn": "calc() bisected to 1 ms",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "astronomy-engine",
+    "flags": []
+   },
+   {
+    "fn": "calc chart() bisected to 1 ms",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "astronomy-engine",
+    "flags": []
+   },
+   {
+    "fn": "internal bodyLongitude bisected to 1 ms (label from bodyLongitudeDetailed)",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "astronomy-engine",
+    "flags": []
+   },
+   {
+    "fn": "findLongitudeCrossings",
+    "utc": "2026-11-22T07:23:38.242Z",
+    "names": "(a bare list: no label)",
+    "crossings": 1
+   },
+   {
+    "fn": "searchLongitudeCrossings",
+    "utc": "2026-11-22T07:23:38.242Z",
+    "names": "(flags only)",
+    "flags": [],
+    "status": "complete"
+   },
+   {
+    "fn": "searchLongitudeCrossings, stepDays 0.25",
+    "utc": "2026-11-22T07:23:38.235Z",
+    "names": "(flags only)",
+    "flags": []
+   },
+   {
+    "fn": "crossings entry: findLongitudeCrossingsWith(internal bodyLongitude)",
+    "utc": "2026-11-22T07:23:38.242Z",
+    "names": "(caller's longitudes: no label)"
+   },
+   {
+    "fn": "calc events longitude-crossing",
+    "utc": "2026-11-22T07:23:38.242Z",
+    "names": "astronomy-engine",
+    "flags": [],
+    "status": "ok",
+    "keys": [
+     "at",
+     "jdUt1",
+     "jdTt",
+     "retrograde",
+     "band"
+    ]
+   },
+   {
+    "fn": "techniques solarReturnInstantDetailed(240, near)",
+    "utc": "2026-11-22T07:23:38.237Z",
+    "names": "astronomy-engine",
+    "flags": [],
+    "plain": "2026-11-22T07:23:38.237Z"
+   },
+   {
+    "fn": "techniques mostRecentSolarReturnInstantDetailed(240, 2026-12-01)",
+    "utc": "2026-11-22T07:23:38.237Z",
+    "names": "astronomy-engine",
+    "flags": []
+   },
+   {
+    "fn": "techniques solarReturn(chart with the Sun at 240°, 2026-11-20)",
+    "utc": "2026-11-22T07:23:38.242Z",
+    "names": "astronomy-engine",
+    "flags": [],
+    "natalSunLon": 240.0000000445932,
+    "natalAt": "2025-11-22T01:35:51.806Z",
+    "secondsFor240": -0.003809049050864596
+   },
+   {
+    "fn": "timing planetaryReturns(same chart, Sun)",
+    "utc": "2026-11-22T07:23:38.242Z",
+    "names": "(flags only)",
+    "flags": [],
+    "status": "complete",
+    "natalSunLon": 240.0000000445932
+   },
+   {
+    "fn": "window birthWindow 07:00 to 08:00 (Sun's sign change)",
+    "utc": "null",
+    "names": "astronomy-engine",
+    "flags": [],
+    "keys": [
+     "schema",
+     "verification",
+     "start",
+     "end",
+     "latitude",
+     "longitude",
+     "houseSystem",
+     "rounding",
+     "cells",
+     "switches",
+     "unresolved",
+     "flags",
+     "engineVersion",
+     "ephemeris"
+    ]
+   }
+  ]
+ },
+ "calcOnAstronomyEngineByDesign": [
+  {
+   "correction": "astrometric",
+   "utc": "2026-11-22T07:15:25.465Z",
+   "names": "astronomy-engine"
+  },
+  {
+   "correction": "geometric",
+   "utc": "2026-11-22T07:15:25.368Z",
+   "names": "astronomy-engine"
+  }
+ ]
+}

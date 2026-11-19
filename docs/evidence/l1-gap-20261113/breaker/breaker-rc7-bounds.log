@@ -1,0 +1,4 @@
+origin/admin/engine-1.1.0-rc.7 at 406240c1975cbc6eb5a132315d6760d472f3ebd4: src/calc-bounds.ts geocentric/apparent, first figure (arcseconds)
+Jupiter 17, Mars 23, Mercury 17, Moon 12, Neptune 22, Pluto 30, Saturn 24, Sun 3.4, Uranus 20, Venus 24
+default source, whole angle within that bound: 240 of 240
+smallest margin: L1-POS-0201 Sun 1.7305 against 3.4

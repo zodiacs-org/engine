@@ -16,8 +16,10 @@ export {
   zoneOffsetAt
 } from "./geo/timezone.js";
 export type {
+  HostZoneCheck,
   LocalBirthInput,
   LocalBirthResolution,
+  FoldChoice,
   LocalTimeOptions,
   LocalTimeResolution,
   TransitionCause,
@@ -30,8 +32,12 @@ export {
   GREGORIAN_ADOPTION,
   GREGORIAN_ADOPTION_SOURCES,
   calendarNote,
+  dateOfJulianDayNumber,
   gregorianAdoption,
   gregorianToJulian,
+  julianDayNumber,
   julianToGregorian
 } from "./geo/calendar.js";
 export type { CalendarName, CalendarNote, GregorianAdoption, GregorianAdoptionSource } from "./geo/calendar.js";
+
+export { localMeanTimeOffset } from "./geo/mean-time.js";

@@ -11,7 +11,7 @@ import { resolve } from 'node:path';
 import { KINDS, LEVEL_FILES, RELEASES, SUITE, SUITE_DIR, SUITE_VERSION, readSuite } from './lib.mjs';
 
 const RESULTS_DIR = resolve(SUITE_DIR, 'results');
-const RUN_ORDER = ['zodiacs-engine.json', 'pyswisseph.json'];
+const RUN_ORDER = ['zodiacs-engine.json', 'zodiacs-engine-astronomy-engine.json', 'pyswisseph.json'];
 const SYMBOL = { arcsec: '″', deg: '°', s: ' s' };
 
 function describeRule(rule) {
@@ -22,14 +22,35 @@ function describeRule(rule) {
 
 const describeTolerance = (tolerance) => Object.entries(tolerance).map(([field, rule]) => `${field} ${describeRule(rule)}`).join('; ');
 
+/**
+ * A kind's tolerances, one description per shape of rule. Where the vectors of
+ * one shape differ only in a rule's size, as each event vector's tolerance is
+ * its own (L4), the size is given as a range, smallest to largest.
+ */
+function describeTolerances(vectors) {
+  const shapes = new Map();
+  for (const vector of vectors) {
+    const key = JSON.stringify(Object.entries(vector.tolerance).map(([field, rule]) => [field, { ...rule, abs: undefined }]));
+    if (!shapes.has(key)) shapes.set(key, []);
+    shapes.get(key).push(vector.tolerance);
+  }
+  return [...shapes.values()].map((tolerances) => Object.keys(tolerances[0]).map((field) => {
+    const rules = tolerances.map((tolerance) => tolerance[field]);
+    const sizes = rules.map((rule) => rule.abs).filter((abs) => abs !== undefined);
+    const low = Math.min(...sizes);
+    const high = Math.max(...sizes);
+    if (!sizes.length || low === high) return `${field} ${describeRule(rules[0])}`;
+    return `${field} ${describeRule({ ...rules[0], abs: low })} to ${describeRule({ ...rules[0], abs: high })}`;
+  }).join('; ')).join(', or ');
+}
+
 function levels(suite) {
   return suite.map(({ level, file, digest }) => {
     const kinds = [];
     for (const kind of Object.keys(KINDS).filter((name) => KINDS[name].level === level)) {
       const vectors = file.vectors.filter((vector) => vector.kind === kind);
       if (!vectors.length) continue;
-      const tolerances = [...new Set(vectors.map((vector) => describeTolerance(vector.tolerance)))];
-      kinds.push({ kind, count: vectors.length, tolerance: tolerances.join(', or ') });
+      kinds.push({ kind, count: vectors.length, tolerance: describeTolerances(vectors) });
     }
     return {
       level,
@@ -95,9 +116,15 @@ function markdown(summary) {
       ? new Map(readSuite(undefined, undefined, run.suiteVersion).map((level) => [RELEASES[run.suiteVersion][level.level], level.digest]))
       : new Map();
     const files = stale.map(([file]) => `\`${file}\``).join(', ');
+    // The levels of this version that the run's files do not hold.
+    const levelOf = new Map(Object.entries(RELEASES[run.suiteVersion] ?? {}).map(([level, file]) => [file, level]));
+    const missing = summary.levels.map((level) => level.level).filter((level) => !Object.keys(run.vectors).some((file) => (levelOf.get(file) ?? summary.levels.find((entry) => entry.file === file)?.level) === level));
+    const without = missing.length ? ` They do not cover ${missing.join(', ')}.` : '';
     if (stale.length && stale.every(([file, digest]) => released.get(file) === digest)) {
-      out.push(`**These results were computed on suite ${run.suiteVersion}'s files, ${files}, which hold this version's vectors without their convention ids.**`);
-    } else if (stale.length) out.push(`**These results were computed on an earlier version of ${stale.map(([file]) => file).join(', ')}.**`);
+      const ids = run.suiteVersion === '0.1.0' ? 'without their convention ids' : 'with the same convention ids';
+      out.push(`**These results were computed on suite ${run.suiteVersion}'s files, ${files}, which hold this version's ${levelOf.size === summary.levels.length ? '' : `${[...levelOf.values()].join(', ')} `}vectors ${ids}.${without}**`);
+    } else if (stale.length) out.push(`**These results were computed on an earlier version of ${stale.map(([file]) => file).join(', ')}.${without}**`);
+    else if (without) out.push(`**${without.trim()}**`);
     out.push('');
     out.push('| configuration | |');
     out.push('| --- | --- |');

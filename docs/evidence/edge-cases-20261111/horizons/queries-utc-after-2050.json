@@ -1,0 +1,395 @@
+{
+ "api": "https://ssd.jpl.nasa.gov/api/horizons.api",
+ "queries": [
+  {
+   "file": "horizons/utc-after-2050-10.txt",
+   "body": "Sun",
+   "target": "10",
+   "center": "500@399",
+   "quantities": "30,31",
+   "timeScale": "UT",
+   "instants": [
+    "2051-06-15T00:00:00Z",
+    "2075-06-15T00:00:00Z",
+    "2100-01-01T00:00:00Z",
+    "2150-01-01T00:00:00Z",
+    "2199-06-15T12:00:00Z"
+   ],
+   "ephemeris": [
+    "DE441"
+   ],
+   "params": {
+    "format": "text",
+    "COMMAND": "'10'",
+    "OBJ_DATA": "'NO'",
+    "MAKE_EPHEM": "'YES'",
+    "EPHEM_TYPE": "'OBSERVER'",
+    "CENTER": "'500@399'",
+    "QUANTITIES": "'30,31'",
+    "APPARENT": "'AIRLESS'",
+    "ANG_FORMAT": "'DEG'",
+    "EXTRA_PREC": "'YES'",
+    "CSV_FORMAT": "'YES'",
+    "CAL_FORMAT": "'JD'",
+    "TLIST": "'2470337.500000000 2479103.500000000 2488069.500000000 2506331.500000000 2524394.000000000'",
+    "TLIST_TYPE": "'JD'",
+    "TIME_TYPE": "'UT'"
+   },
+   "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%2710%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2730%2C31%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&CAL_FORMAT=%27JD%27&TLIST=%272470337.500000000+2479103.500000000+2488069.500000000+2506331.500000000+2524394.000000000%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+   "askedAt": "2026-11-13T04:08:11.496Z",
+   "sha256": "089402c891bc41881f0670fa9c500293218ad42ba8172ea203a5f9baae9611e5",
+   "bytes": 6149
+  },
+  {
+   "file": "horizons/utc-after-2050-301.txt",
+   "body": "Moon",
+   "target": "301",
+   "center": "500@399",
+   "quantities": "30,31",
+   "timeScale": "UT",
+   "instants": [
+    "2051-06-15T00:00:00Z",
+    "2075-06-15T00:00:00Z",
+    "2100-01-01T00:00:00Z",
+    "2150-01-01T00:00:00Z",
+    "2199-06-15T12:00:00Z"
+   ],
+   "ephemeris": [
+    "DE441"
+   ],
+   "params": {
+    "format": "text",
+    "COMMAND": "'301'",
+    "OBJ_DATA": "'NO'",
+    "MAKE_EPHEM": "'YES'",
+    "EPHEM_TYPE": "'OBSERVER'",
+    "CENTER": "'500@399'",
+    "QUANTITIES": "'30,31'",
+    "APPARENT": "'AIRLESS'",
+    "ANG_FORMAT": "'DEG'",
+    "EXTRA_PREC": "'YES'",
+    "CSV_FORMAT": "'YES'",
+    "CAL_FORMAT": "'JD'",
+    "TLIST": "'2470337.500000000 2479103.500000000 2488069.500000000 2506331.500000000 2524394.000000000'",
+    "TLIST_TYPE": "'JD'",
+    "TIME_TYPE": "'UT'"
+   },
+   "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%27301%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2730%2C31%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&CAL_FORMAT=%27JD%27&TLIST=%272470337.500000000+2479103.500000000+2488069.500000000+2506331.500000000+2524394.000000000%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+   "askedAt": "2026-11-13T04:08:14.878Z",
+   "sha256": "62f83178b1c94bf7bf17274ee0596c19d0e4bf73f23058431380758019e1583b",
+   "bytes": 6151
+  },
+  {
+   "file": "horizons/utc-after-2050-199.txt",
+   "body": "Mercury",
+   "target": "199",
+   "center": "500@399",
+   "quantities": "30,31",
+   "timeScale": "UT",
+   "instants": [
+    "2051-06-15T00:00:00Z",
+    "2075-06-15T00:00:00Z",
+    "2100-01-01T00:00:00Z",
+    "2150-01-01T00:00:00Z",
+    "2199-06-15T12:00:00Z"
+   ],
+   "ephemeris": [
+    "DE441"
+   ],
+   "params": {
+    "format": "text",
+    "COMMAND": "'199'",
+    "OBJ_DATA": "'NO'",
+    "MAKE_EPHEM": "'YES'",
+    "EPHEM_TYPE": "'OBSERVER'",
+    "CENTER": "'500@399'",
+    "QUANTITIES": "'30,31'",
+    "APPARENT": "'AIRLESS'",
+    "ANG_FORMAT": "'DEG'",
+    "EXTRA_PREC": "'YES'",
+    "CSV_FORMAT": "'YES'",
+    "CAL_FORMAT": "'JD'",
+    "TLIST": "'2470337.500000000 2479103.500000000 2488069.500000000 2506331.500000000 2524394.000000000'",
+    "TLIST_TYPE": "'JD'",
+    "TIME_TYPE": "'UT'"
+   },
+   "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%27199%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2730%2C31%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&CAL_FORMAT=%27JD%27&TLIST=%272470337.500000000+2479103.500000000+2488069.500000000+2506331.500000000+2524394.000000000%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+   "askedAt": "2026-11-13T04:08:18.257Z",
+   "sha256": "2837b8c050033846a11acbe912aa01d3a2a074aaa6426614efc52955116d8169",
+   "bytes": 6149
+  },
+  {
+   "file": "horizons/utc-after-2050-299.txt",
+   "body": "Venus",
+   "target": "299",
+   "center": "500@399",
+   "quantities": "30,31",
+   "timeScale": "UT",
+   "instants": [
+    "2051-06-15T00:00:00Z",
+    "2075-06-15T00:00:00Z",
+    "2100-01-01T00:00:00Z",
+    "2150-01-01T00:00:00Z",
+    "2199-06-15T12:00:00Z"
+   ],
+   "ephemeris": [
+    "DE441"
+   ],
+   "params": {
+    "format": "text",
+    "COMMAND": "'299'",
+    "OBJ_DATA": "'NO'",
+    "MAKE_EPHEM": "'YES'",
+    "EPHEM_TYPE": "'OBSERVER'",
+    "CENTER": "'500@399'",
+    "QUANTITIES": "'30,31'",
+    "APPARENT": "'AIRLESS'",
+    "ANG_FORMAT": "'DEG'",
+    "EXTRA_PREC": "'YES'",
+    "CSV_FORMAT": "'YES'",
+    "CAL_FORMAT": "'JD'",
+    "TLIST": "'2470337.500000000 2479103.500000000 2488069.500000000 2506331.500000000 2524394.000000000'",
+    "TLIST_TYPE": "'JD'",
+    "TIME_TYPE": "'UT'"
+   },
+   "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%27299%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2730%2C31%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&CAL_FORMAT=%27JD%27&TLIST=%272470337.500000000+2479103.500000000+2488069.500000000+2506331.500000000+2524394.000000000%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+   "askedAt": "2026-11-13T04:08:21.482Z",
+   "sha256": "07182b3bb39154993eb63ae829e0fd2521724ccc207e7ccce88711bde62032b8",
+   "bytes": 6149
+  },
+  {
+   "file": "horizons/utc-after-2050-4.txt",
+   "body": "Mars",
+   "target": "4",
+   "center": "500@399",
+   "quantities": "30,31",
+   "timeScale": "UT",
+   "instants": [
+    "2051-06-15T00:00:00Z",
+    "2075-06-15T00:00:00Z",
+    "2100-01-01T00:00:00Z",
+    "2150-01-01T00:00:00Z",
+    "2199-06-15T12:00:00Z"
+   ],
+   "ephemeris": [
+    "DE441"
+   ],
+   "params": {
+    "format": "text",
+    "COMMAND": "'4'",
+    "OBJ_DATA": "'NO'",
+    "MAKE_EPHEM": "'YES'",
+    "EPHEM_TYPE": "'OBSERVER'",
+    "CENTER": "'500@399'",
+    "QUANTITIES": "'30,31'",
+    "APPARENT": "'AIRLESS'",
+    "ANG_FORMAT": "'DEG'",
+    "EXTRA_PREC": "'YES'",
+    "CSV_FORMAT": "'YES'",
+    "CAL_FORMAT": "'JD'",
+    "TLIST": "'2470337.500000000 2479103.500000000 2488069.500000000 2506331.500000000 2524394.000000000'",
+    "TLIST_TYPE": "'JD'",
+    "TIME_TYPE": "'UT'"
+   },
+   "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%274%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2730%2C31%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&CAL_FORMAT=%27JD%27&TLIST=%272470337.500000000+2479103.500000000+2488069.500000000+2506331.500000000+2524394.000000000%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+   "askedAt": "2026-11-13T04:08:24.896Z",
+   "sha256": "7028bd40ac5f48f20b662ccbf7e411032e705c536e13790b443f9ed22ce26b82",
+   "bytes": 6101
+  },
+  {
+   "file": "horizons/utc-after-2050-5.txt",
+   "body": "Jupiter",
+   "target": "5",
+   "center": "500@399",
+   "quantities": "30,31",
+   "timeScale": "UT",
+   "instants": [
+    "2051-06-15T00:00:00Z",
+    "2075-06-15T00:00:00Z",
+    "2100-01-01T00:00:00Z",
+    "2150-01-01T00:00:00Z",
+    "2199-06-15T12:00:00Z"
+   ],
+   "ephemeris": [
+    "DE441"
+   ],
+   "params": {
+    "format": "text",
+    "COMMAND": "'5'",
+    "OBJ_DATA": "'NO'",
+    "MAKE_EPHEM": "'YES'",
+    "EPHEM_TYPE": "'OBSERVER'",
+    "CENTER": "'500@399'",
+    "QUANTITIES": "'30,31'",
+    "APPARENT": "'AIRLESS'",
+    "ANG_FORMAT": "'DEG'",
+    "EXTRA_PREC": "'YES'",
+    "CSV_FORMAT": "'YES'",
+    "CAL_FORMAT": "'JD'",
+    "TLIST": "'2470337.500000000 2479103.500000000 2488069.500000000 2506331.500000000 2524394.000000000'",
+    "TLIST_TYPE": "'JD'",
+    "TIME_TYPE": "'UT'"
+   },
+   "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%275%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2730%2C31%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&CAL_FORMAT=%27JD%27&TLIST=%272470337.500000000+2479103.500000000+2488069.500000000+2506331.500000000+2524394.000000000%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+   "askedAt": "2026-11-13T04:08:46.765Z",
+   "sha256": "fd4c40d0c12c16923022e84309245a87e9747fb5ca78bbd82375582527a43edc",
+   "bytes": 6101
+  },
+  {
+   "file": "horizons/utc-after-2050-6.txt",
+   "body": "Saturn",
+   "target": "6",
+   "center": "500@399",
+   "quantities": "30,31",
+   "timeScale": "UT",
+   "instants": [
+    "2051-06-15T00:00:00Z",
+    "2075-06-15T00:00:00Z",
+    "2100-01-01T00:00:00Z",
+    "2150-01-01T00:00:00Z",
+    "2199-06-15T12:00:00Z"
+   ],
+   "ephemeris": [
+    "DE441"
+   ],
+   "params": {
+    "format": "text",
+    "COMMAND": "'6'",
+    "OBJ_DATA": "'NO'",
+    "MAKE_EPHEM": "'YES'",
+    "EPHEM_TYPE": "'OBSERVER'",
+    "CENTER": "'500@399'",
+    "QUANTITIES": "'30,31'",
+    "APPARENT": "'AIRLESS'",
+    "ANG_FORMAT": "'DEG'",
+    "EXTRA_PREC": "'YES'",
+    "CSV_FORMAT": "'YES'",
+    "CAL_FORMAT": "'JD'",
+    "TLIST": "'2470337.500000000 2479103.500000000 2488069.500000000 2506331.500000000 2524394.000000000'",
+    "TLIST_TYPE": "'JD'",
+    "TIME_TYPE": "'UT'"
+   },
+   "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%276%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2730%2C31%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&CAL_FORMAT=%27JD%27&TLIST=%272470337.500000000+2479103.500000000+2488069.500000000+2506331.500000000+2524394.000000000%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+   "askedAt": "2026-11-13T04:09:07.979Z",
+   "sha256": "20eef4b4e728cda6eff387c9d6b6d34fd26f81e6fbf1663b98bd2c06b65d179a",
+   "bytes": 6101
+  },
+  {
+   "file": "horizons/utc-after-2050-7.txt",
+   "body": "Uranus",
+   "target": "7",
+   "center": "500@399",
+   "quantities": "30,31",
+   "timeScale": "UT",
+   "instants": [
+    "2051-06-15T00:00:00Z",
+    "2075-06-15T00:00:00Z",
+    "2100-01-01T00:00:00Z",
+    "2150-01-01T00:00:00Z",
+    "2199-06-15T12:00:00Z"
+   ],
+   "ephemeris": [
+    "DE441"
+   ],
+   "params": {
+    "format": "text",
+    "COMMAND": "'7'",
+    "OBJ_DATA": "'NO'",
+    "MAKE_EPHEM": "'YES'",
+    "EPHEM_TYPE": "'OBSERVER'",
+    "CENTER": "'500@399'",
+    "QUANTITIES": "'30,31'",
+    "APPARENT": "'AIRLESS'",
+    "ANG_FORMAT": "'DEG'",
+    "EXTRA_PREC": "'YES'",
+    "CSV_FORMAT": "'YES'",
+    "CAL_FORMAT": "'JD'",
+    "TLIST": "'2470337.500000000 2479103.500000000 2488069.500000000 2506331.500000000 2524394.000000000'",
+    "TLIST_TYPE": "'JD'",
+    "TIME_TYPE": "'UT'"
+   },
+   "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%277%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2730%2C31%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&CAL_FORMAT=%27JD%27&TLIST=%272470337.500000000+2479103.500000000+2488069.500000000+2506331.500000000+2524394.000000000%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+   "askedAt": "2026-11-13T04:09:29.440Z",
+   "sha256": "cab050915d70b6a2697a4c2ee9390bf2004c3709fae7f744b4c4d8cb2dfd0ba9",
+   "bytes": 6101
+  },
+  {
+   "file": "horizons/utc-after-2050-8.txt",
+   "body": "Neptune",
+   "target": "8",
+   "center": "500@399",
+   "quantities": "30,31",
+   "timeScale": "UT",
+   "instants": [
+    "2051-06-15T00:00:00Z",
+    "2075-06-15T00:00:00Z",
+    "2100-01-01T00:00:00Z",
+    "2150-01-01T00:00:00Z",
+    "2199-06-15T12:00:00Z"
+   ],
+   "ephemeris": [
+    "DE441"
+   ],
+   "params": {
+    "format": "text",
+    "COMMAND": "'8'",
+    "OBJ_DATA": "'NO'",
+    "MAKE_EPHEM": "'YES'",
+    "EPHEM_TYPE": "'OBSERVER'",
+    "CENTER": "'500@399'",
+    "QUANTITIES": "'30,31'",
+    "APPARENT": "'AIRLESS'",
+    "ANG_FORMAT": "'DEG'",
+    "EXTRA_PREC": "'YES'",
+    "CSV_FORMAT": "'YES'",
+    "CAL_FORMAT": "'JD'",
+    "TLIST": "'2470337.500000000 2479103.500000000 2488069.500000000 2506331.500000000 2524394.000000000'",
+    "TLIST_TYPE": "'JD'",
+    "TIME_TYPE": "'UT'"
+   },
+   "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%278%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2730%2C31%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&CAL_FORMAT=%27JD%27&TLIST=%272470337.500000000+2479103.500000000+2488069.500000000+2506331.500000000+2524394.000000000%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+   "askedAt": "2026-11-13T04:09:32.814Z",
+   "sha256": "86ff59176080e5cdaa468e8e781f2787db22accf1cad92c1dead81a6776ebea6",
+   "bytes": 6101
+  },
+  {
+   "file": "horizons/utc-after-2050-9.txt",
+   "body": "Pluto",
+   "target": "9",
+   "center": "500@399",
+   "quantities": "30,31",
+   "timeScale": "UT",
+   "instants": [
+    "2051-06-15T00:00:00Z",
+    "2075-06-15T00:00:00Z",
+    "2100-01-01T00:00:00Z",
+    "2150-01-01T00:00:00Z",
+    "2199-06-15T12:00:00Z"
+   ],
+   "ephemeris": [
+    "DE441"
+   ],
+   "params": {
+    "format": "text",
+    "COMMAND": "'9'",
+    "OBJ_DATA": "'NO'",
+    "MAKE_EPHEM": "'YES'",
+    "EPHEM_TYPE": "'OBSERVER'",
+    "CENTER": "'500@399'",
+    "QUANTITIES": "'30,31'",
+    "APPARENT": "'AIRLESS'",
+    "ANG_FORMAT": "'DEG'",
+    "EXTRA_PREC": "'YES'",
+    "CSV_FORMAT": "'YES'",
+    "CAL_FORMAT": "'JD'",
+    "TLIST": "'2470337.500000000 2479103.500000000 2488069.500000000 2506331.500000000 2524394.000000000'",
+    "TLIST_TYPE": "'JD'",
+    "TIME_TYPE": "'UT'"
+   },
+   "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=text&COMMAND=%279%27&OBJ_DATA=%27NO%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27OBSERVER%27&CENTER=%27500%40399%27&QUANTITIES=%2730%2C31%27&APPARENT=%27AIRLESS%27&ANG_FORMAT=%27DEG%27&EXTRA_PREC=%27YES%27&CSV_FORMAT=%27YES%27&CAL_FORMAT=%27JD%27&TLIST=%272470337.500000000+2479103.500000000+2488069.500000000+2506331.500000000+2524394.000000000%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27UT%27",
+   "askedAt": "2026-11-13T04:09:36.116Z",
+   "sha256": "1711aaf305cd3ebda0a3b412213193c0a42a609548e5f25770dc83a28fb8fa2a",
+   "bytes": 6101
+  }
+ ]
+}

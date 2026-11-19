@@ -5,7 +5,8 @@ compute outside the package:
 
 - **Solar and lunar returns**: `solarReturnInstant`,
   `mostRecentSolarReturnInstant`, `lunarReturnInstant`, `solarReturn`,
-  `lunarReturn`.
+  `lunarReturn`, and the three instants' detailed forms
+  (`solarReturnInstantDetailed` and so on; *Which ephemeris*, below).
 - **Composite and Davison charts**: `compositeMidpoints`, `compositeAspects`,
   `compositeChart`, `davisonChart`, `davisonPlace`.
 - **The void-of-course Moon**: `moonIngresses`, `moonAspects`,
@@ -16,7 +17,7 @@ compute outside the package:
   `hasClassicalDignities`, `dignityRulersAt`, `essentialDignities`,
   `mutualReceptions`, and the tables they read.
 - **Moon signs for an unknown birth time**: `moonSignCandidates`,
-  `moonSignsBetween`.
+  `moonSignsBetween`, `moonSignsBetweenDetailed`.
 
 The root entry point does not import this one, so code that does not use
 these techniques does not carry them. The functions take explicit inputs,
@@ -96,11 +97,17 @@ to the minute. For the 20 of 1850, 1900, 1950, 2000 and 2022,
 `solarReturnInstant` is within 42.27 s of the published minute; the gate was
 120 s. Inverting the 24 JPL Horizons longitudes of the Sun and the 24 of the
 Moon in the conformance suite's L1 vectors (1851 to 2148) gives the vectors'
-instants within 32.05 s for the Sun and 6.81 s for the Moon, compared in TT;
-the gates were 60 s and 15 s. Those are 0.1.1-rc.16's figures, on the
-engine's full IAU 2000B nutation; on astronomy-engine's five-term nutation,
-which the engine used up to rc.15, they were 45.35 s, 33.23 s and 6.87 s
-(`docs/evidence/techniques-2026-09-29/rc16/`).
+instants within 32.05 s for the Sun and 6.81 s for the Moon on the original
+24 instants each, compared in TT; the gates were 60 s and 15 s. Those are
+0.1.1-rc.16's figures, on the engine's full IAU 2000B nutation; on
+astronomy-engine's five-term nutation, which the engine used up to rc.15,
+they were 45.35 s, 33.23 s and 6.87 s
+(`docs/evidence/techniques-2026-09-29/rc16/`). A broader sample of
+1.1.0-rc.3 against JPL DE421 from 1900 to 2050
+(`docs/evidence/broad-sample-2026-11-13/`) puts the Sun's sign changes within
+50.3 s (1,812 of them; 42.8 s from 2026 to 2030) and the Moon's within 7.64 s
+(4,169), so the Sun and the Moon still pass the preregistered gates of 60 s
+and 15 s.
 
 **Differences from the site.** The site clips its searches to 1800–2200 and
 refuses a return it cannot find inside; it limits a lunar return's date to
@@ -338,7 +345,7 @@ the signs from its sign at the start, forward, to its sign at the end.
   only when the Moon held one sign the whole date in every time zone. This is
   the rule the site uses for a card without a birth time.
 
-In the zone histories the package ships (tzdata 2025c with backzone), every
+In the zone histories the package ships (tzdata 2026f with backzone), every
 offset lies within UTC−12:00 to UTC+14:00 except in 16 zone names: those of
 Alaska until 1867-10-19, when Alaska kept the Asian side's date, and those of
 the Philippines, Guam, Palau and Micronesia until 1844-12-31, when they kept
@@ -347,11 +354,68 @@ begin earlier or end later than the span above.
 
 **Differences from the site.** The site answers for a date a zone skipped;
 the package refuses it. Before 1970 the site reads a date's midnights on the
-host's `Intl` data, the package on its own tzdata 2025c with backzone; they
+host's `Intl` data, the package on its own tzdata 2026f with backzone; they
 differ where the two histories do, and the corpus has 7 such dates, all in
 Stockholm before 1900, where the midnights differ by 6 min 46 s or 18 min 44 s
 and the signs agree. The site's labels and share rules (`moonLabel`,
 `moonIsUncertain`) are presentation and are not moved.
+
+## Which ephemeris
+
+The functions here read the root entry's positions, so they compute where it
+does: on the shipped DE440 pack by default, and on astronomy-engine outside
+1790-01-02 to 2209-12-31, if the pack cannot be opened, or after
+`setDefaultEphemeris("astronomy-engine")` ([de440.md](de440.md), *The default
+source*). A result says which, and never falls back silently (from
+1.1.0-rc.11; in 1.1.0-rc.10 the functions in this section's lists said
+nothing):
+
+- `ephemeris`: `{ name: "jpl-de440", version }` (the version is the pack's
+  SHA-256) where every position behind the result was the pack's, and
+  `{ name: "astronomy-engine", version: "2.1.19" }` where any was
+  astronomy-engine's.
+- `flags`: `"de440-unavailable"` (the pack could not be opened) or
+  `"outside-de440-span"` (a position was read outside it) where
+  astronomy-engine stood in for the pack, after `"outside-reference-span"`
+  when the ephemeris was read outside 1800 to 2200. The caller's own choice
+  of astronomy-engine is named and not flagged.
+
+Where the label is:
+
+- On the object: `solarReturn`, `lunarReturn` and `davisonChart` (`flags`,
+  and the chart's own `ephemeris` and `flags`); `voidOfCourseAt` (over every
+  position its windows read); `compositeChart` and `chartAspectPatterns`
+  (from the charts: their `ephemeris` when the charts name one and the same,
+  otherwise `null`, as for a supplied chart from a release before
+  1.1.0-rc.10, which names none; and each flag either chart carries).
+- On each element: `moonIngresses`, `moonAspects` and `voidOfCourseWindows`
+  (a window's `lastAspect` too). An element is labelled by the positions it
+  was found from, within one coarse step of it (six hours for an ingress,
+  three for an aspect; a window from its first ingress to its last), so a
+  list that runs past an end of the pack labels the elements before the end
+  `jpl-de440` and those after it astronomy-engine, flagged.
+- In a detailed form, for the functions that return a bare value, which
+  cannot carry a label: `solarReturnInstant`, `mostRecentSolarReturnInstant`,
+  `lunarReturnInstant` (a `Date`) and `moonSignsBetween` (a list of signs).
+  Each plain function is unchanged; its sibling `solarReturnInstantDetailed`,
+  `mostRecentSolarReturnInstantDetailed`, `lunarReturnInstantDetailed` or
+  `moonSignsBetweenDetailed` takes the same arguments and returns
+  `{ value, ephemeris, flags }` (`DetailedResult`), `value` being what the
+  plain function returns, labelled over the whole window it searched. Use
+  the detailed form where it matters which ephemeris computed the value.
+- `moonSignCandidates` has `flags` as before.
+
+`src/ephemeris-fallback-techniques.test.ts` holds each of these with the
+pack whole, damaged, and outside its years (1750 and 2230).
+
+```ts
+import { solarReturnInstantDetailed } from "@zodiacs/engine/techniques";
+
+const found = solarReturnInstantDetailed(25, "2031-05-01");
+found.value;     // the Date solarReturnInstant(25, "2031-05-01") returns
+found.ephemeris; // { name: "jpl-de440", version: "5142…" }
+found.flags;     // []
+```
 
 ## Errors and flags
 
@@ -361,9 +425,9 @@ non-finite number; an invalid date; an inverted or overlong window; a place
 out of range; and the refusals named above. astronomy-engine's own failures
 far from the present pass through as the root entry's do.
 
-`flags` is `["outside-reference-span"]` on a return, a Davison chart and a
-Moon-sign result when the ephemeris was read outside 1800–2200, and empty
-otherwise; the result is still computed.
+`flags` has `"outside-reference-span"` on a result when the ephemeris was
+read outside 1800–2200, and the fallback flags of *Which ephemeris*; the
+result is still computed.
 
 ## Not included
 

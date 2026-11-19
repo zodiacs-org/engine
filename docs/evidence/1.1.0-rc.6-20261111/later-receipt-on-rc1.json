@@ -1,0 +1,102 @@
+{
+ "candidate": "1.1.0-rc.6",
+ "reader": "1.1.0-rc.1",
+ "node": "v22.22.2",
+ "times": {
+  "repeated": {
+   "date": "2021-11-07",
+   "time": "01:30",
+   "earlier": {
+    "asked": "earlier",
+    "instant": "2021-11-07T05:30:00.000Z",
+    "inputFlags": [
+     "dst-fold"
+    ],
+    "policy": {
+     "fold": "earlier",
+     "gap": "shift-forward"
+    },
+    "candidateReads": true,
+    "readerReadsAsWritten": "ok",
+    "readerReadsUnderItsOwnVersion": "ok"
+   },
+   "later": {
+    "asked": "later",
+    "instant": "2021-11-07T06:30:00.000Z",
+    "inputFlags": [
+     "dst-fold"
+    ],
+    "policy": {
+     "fold": "later",
+     "gap": "shift-forward"
+    },
+    "candidateReads": true,
+    "readerReadsAsWritten": "unsupported_feature",
+    "readerReadsUnderItsOwnVersion": "unsupported_feature"
+   },
+   "sameReceiptWhicheverPassIsAsked": false
+  },
+  "ordinary": {
+   "date": "2021-06-15",
+   "time": "12:00",
+   "earlier": {
+    "asked": "earlier",
+    "instant": "2021-06-15T16:00:00.000Z",
+    "inputFlags": [],
+    "policy": {
+     "fold": "earlier",
+     "gap": "shift-forward"
+    },
+    "candidateReads": true,
+    "readerReadsAsWritten": "ok",
+    "readerReadsUnderItsOwnVersion": "ok"
+   },
+   "later": {
+    "asked": "later",
+    "instant": "2021-06-15T16:00:00.000Z",
+    "inputFlags": [],
+    "policy": {
+     "fold": "earlier",
+     "gap": "shift-forward"
+    },
+    "candidateReads": true,
+    "readerReadsAsWritten": "ok",
+    "readerReadsUnderItsOwnVersion": "ok"
+   },
+   "sameReceiptWhicheverPassIsAsked": true
+  },
+  "skipped": {
+   "date": "2021-03-14",
+   "time": "02:30",
+   "earlier": {
+    "asked": "earlier",
+    "instant": "2021-03-14T07:30:00.000Z",
+    "inputFlags": [
+     "dst-gap"
+    ],
+    "policy": {
+     "fold": "earlier",
+     "gap": "shift-forward"
+    },
+    "candidateReads": true,
+    "readerReadsAsWritten": "ok",
+    "readerReadsUnderItsOwnVersion": "ok"
+   },
+   "later": {
+    "asked": "later",
+    "instant": "2021-03-14T07:30:00.000Z",
+    "inputFlags": [
+     "dst-gap"
+    ],
+    "policy": {
+     "fold": "earlier",
+     "gap": "shift-forward"
+    },
+    "candidateReads": true,
+    "readerReadsAsWritten": "ok",
+    "readerReadsUnderItsOwnVersion": "ok"
+   },
+   "sameReceiptWhicheverPassIsAsked": true
+  }
+ }
+}

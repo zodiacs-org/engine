@@ -1,0 +1,15 @@
+captured 2026-11-11T19:00:15Z
+95f00e928ee2c36d962f6a4220e490ca8cc3f906	refs/heads/admin/engine-1.1.0-rc.4
+a09110e51dfba1cfc8e06e522d73c57d147b7f0b	refs/heads/admin/engine-1.1.0-rc.5
+ce4ba826cbb1a74206c679ff9fb0bb10da60d4ca	refs/heads/admin/engine-1.1.0-rc.6
+406240c1975cbc6eb5a132315d6760d472f3ebd4	refs/heads/admin/engine-1.1.0-rc.7
+ac2b453a70f17cb46c6ae569cf8caadff84232a6	refs/heads/admin/zod-64-engine-phase-1-clear-output-no-millisecond
+255b615b03fd7e6530f7d33e63fd331aed297e29	refs/heads/admin/zod-65-engine-phase-1-replace-receipt-error-limits
+3ea3e98d7678e9af267de05e08642c4ba2fabac3	refs/heads/admin/zod-66-engine-phase-2-next-let-a-birth-in-the-repeated
+31994a325faec41451a6ac4c95739bbedfdba8e5	refs/heads/audit/fable-job1-edge-cases
+ee3638fcba4b51122324b8d125505b3683be204c	refs/heads/audit/fable-job2-master-plan-reviews
+9c3499ee562d4efbbd6901855436fdb969027514	refs/heads/claude/record-1.0.0-publication
+7051e6931e9beae337b63b4c2f7ed889fad6c16d	refs/heads/claude/release-1.0.0
+bc0b5a769ad2cfb17e1f853b94d94eb271fdd56d	refs/heads/main
+9f7c88258f64dc9c20d7e4fdd42d7878b227d62d	refs/heads/rc7-phase1
+93ebae9fa54597aeaafbb346873f7f51e3cc6cb6	refs/tags/v0.1.1-rc.15

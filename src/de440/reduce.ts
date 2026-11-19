@@ -5,12 +5,28 @@
  * operation for operation. Light-time by iteration (at most 12 steps, to
  * 1e-11 s); light deflection by the Sun in the eraLd form, with the Sun at
  * reception for the observer's direction and at emission for the source's,
- * and a limiter of 1e-14; relativistic annual aberration (eraAb without its
+ * and a limiter of 1e-14, except for a body behind the Sun's disc, whose
+ * light is not bent (from 1.1.0-rc.12; below); relativistic annual aberration (eraAb without its
  * gravitational term) with the Earth's velocity from the Chebyshev
  * derivative; frame bias, IAU 2006 precession, IAU 2000B nutation with the
  * P03 adjustment, and the true obliquity. TT is turned into TDB by the
  * runtime's three-term form. Mars to Pluto are planetary-system
  * barycentres.
+ *
+ * Behind the disc (from 1.1.0-rc.12): where the body is farther than the
+ * Sun and its light-time-corrected geometric direction is within the Sun's
+ * apparent radius of the Sun's (asin(R / d), R = 695,700 km, the Sun's
+ * radius JPL Horizons gives, d the Sun's distance at its own light time),
+ * no deflection is applied. That is what JPL Horizons does: its apparent
+ * places of Mercury in 1954, Uranus in 2029 and Jupiter in 2032 are the
+ * kernel's with the deflection outside the disc and without it inside, to
+ * the change at the limb (docs/evidence/1.1.0-rc.12-20261115/near-sun/).
+ * Through 1.1.0-rc.11 the deflection was applied inside the disc too, where
+ * it grows without limit towards the centre (308 arcseconds for Mercury on
+ * 1954-05-08); ERFA's eraLdsun tapers it to nothing within about 0.08
+ * degrees, which leaves up to 5.8 arcseconds from Horizons inside the disc.
+ * At the limb the place therefore steps by the deflection there, at most
+ * 1.7512 arcseconds (4GM/c^2R for a source at infinity).
  *
  * The geocentric Moon is formed as MoonRelEMB(t - tau) - EarthRelEMB(t) +
  * [EMB(t - tau) - EMB(t)], the bracket as -v tau + a tau^2 / 2 from the
@@ -33,6 +49,9 @@ const SRS = 1.97412574336e-8;
 const LIGHT_TIME_ITERATIONS = 12;
 const LIGHT_TIME_TOLERANCE_SEC = 1e-11;
 const DEFLECTION_LIMIT = 1e-14;
+/** The Sun's radius, km, as JPL Horizons gives it (IAU 2015 nominal): the edge of the disc behind which light is not bent. */
+export const SUN_RADIUS_KM = 695700;
+const NEAR_DISC_COS = Math.cos((Math.PI / 180) / 3);
 /** Half the step of the central difference that gives the barycentre's acceleration, seconds. */
 const ACCELERATION_STEP_SEC = 60;
 
@@ -86,6 +105,8 @@ export interface ApparentPlace {
   /** Kilometres, along the light-time-corrected geometric direction. */
   readonly distKm: number;
   readonly lightTimeSec: number;
+  /** Whether the body is behind the Sun's disc, so that its light was not bent (from 1.1.0-rc.12). */
+  readonly behindDisc: boolean;
 }
 
 interface LunarBasis {
@@ -141,8 +162,14 @@ export class Reducer {
     ];
   }
 
-  /** The apparent place of `body` at `ttDays` (TT days past J2000). */
-  apparent(body: ReducedBody, ttDays: number): ApparentPlace {
+  /**
+   * The apparent place of `body` at `ttDays` (TT days past J2000). `behind`,
+   * when given, is taken as whether the body is behind the Sun's disc instead
+   * of deciding it at `ttDays`: a speed's two samples take the decision of the
+   * instant the speed is for, so that it is the rate of the place on that
+   * instant's side of the step at the limb, not the step.
+   */
+  apparent(body: ReducedBody, ttDays: number, behind?: boolean): ApparentPlace {
     if (!REDUCED_BODIES.includes(body)) fail("unknown-body", `${String(body)} is not a body this reduction places`);
     if (!Number.isFinite(ttDays)) fail("bad-instant", "ttDays must be a finite number");
     const jdTt = ttDays + 2451545.0;
@@ -172,10 +199,11 @@ export class Reducer {
     }
     const distKm = norm(geo);
 
-    // Gravitational light deflection by the Sun (eraLd form).
+    // Gravitational light deflection by the Sun (eraLd form), except behind the Sun's disc.
     let p = unit(geo);
-    if (body !== "Sun") {
-      const sunAtRecv = this.pos("Sun", et, this.c);
+    const sunAtRecv = body === "Sun" ? null : this.pos("Sun", et, this.c);
+    const behindDisc = sunAtRecv !== null && (behind ?? this.behindDisc(p, distKm, et, observer, sunAtRecv));
+    if (sunAtRecv !== null && !behindDisc) {
       const eVec = sub(observer, sunAtRecv);
       const emAu = norm(eVec) / AU_KM;
       const e = unit(eVec);
@@ -202,7 +230,59 @@ export class Reducer {
 
     const { matrix, epsTrue } = npbMatrix(t);
     const { lon, lat } = eclipticLonLatDeg(equToEcl(apply(matrix, p), epsTrue));
-    return { lon, lat, distKm, lightTimeSec: tau };
+    return { lon, lat, distKm, lightTimeSec: tau, behindDisc };
+  }
+
+  /**
+   * Whether a body at geometric direction `p` (a unit vector) and distance
+   * `distKm` from the observer at `observer` is behind the Sun's disc at
+   * `et`: farther than the Sun, and within its apparent radius of the Sun's
+   * direction, the Sun taken at its own light time.
+   */
+  private behindDisc(p: Vec3, distKm: number, et: number, observer: Vec3, sunAtRecv: Vec3): boolean {
+    const near = sub(sunAtRecv, observer);
+    // Farther than a third of a degree (the disc is under 0.28 degrees across at most), it is not behind.
+    if (!(distKm > norm(near)) || dot(p, unit(near)) < NEAR_DISC_COS) return false;
+    const sun = sub(this.pos("Sun", et - (norm(near) / AU_KM) * LIGHT_TIME_AU, this.c), observer);
+    const d = norm(sun);
+    if (!(distKm > d)) return false;
+    // The angle between p and the Sun's direction, from the cross and dot products (exact near zero).
+    const s = unit(sun);
+    const apart = Math.atan2(norm(cross(p, s)), dot(p, s));
+    return apart < Math.asin(SUN_RADIUS_KM / d);
+  }
+
+  /**
+   * The instants in [fromTtDays, toTtDays] (TT days past J2000) at which a
+   * place this reduction gives, or the true node, may step by more than
+   * rounding, in ascending order: where one of its reads passes a record
+   * boundary of the pack. For each boundary B (TDB) of any stored series
+   * these are B itself (the observer, the Sun at reception, the node), B - 60 s
+   * and B + 60 s (the two reads the barycentre's acceleration is differenced
+   * from), and for each body the instant whose light left it at B (its own
+   * state, and the Sun's at emission). The list is one for every body: a
+   * superset for each. Between two neighbours of it every read stays inside
+   * one record of every series, so each place is a smooth function of time.
+   */
+  steps(fromTtDays: number, toTtDays: number): number[] {
+    if (!Number.isFinite(fromTtDays) || !Number.isFinite(toTtDays)) fail("bad-instant", "ttDays must be a finite number");
+    const coverage = { from: etOf(fromTtDays), to: etOf(toTtDays) };
+    // A day back covers the longest light time, under seven hours for Pluto.
+    const instants: number[] = [];
+    const ttOf = (et: number): number => (et - tdbMinusTt(et / DAY + 2451545.0)) / DAY;
+    for (const boundary of this.backend.boundaries(coverage.from - DAY, coverage.to + 2 * ACCELERATION_STEP_SEC)) {
+      instants.push(boundary, boundary - ACCELERATION_STEP_SEC, boundary + ACCELERATION_STEP_SEC);
+      for (const body of REDUCED_BODIES) {
+        // t with t - tau(t) = boundary: tau changes by under 1e-3 of the change of t, so four rounds reach rounding.
+        let at = boundary;
+        for (let round = 0; round < 4; round += 1) {
+          if (!this.backend.covers(at) || !this.backend.covers(at - DAY)) break;
+          at = boundary + this.apparent(body, ttOf(at)).lightTimeSec;
+        }
+        instants.push(at);
+      }
+    }
+    return [...new Set(instants.map(ttOf))].filter((tt) => tt >= fromTtDays && tt <= toTtDays).sort((x, y) => x - y);
   }
 
   /**

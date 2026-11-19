@@ -176,11 +176,14 @@ describe("withEphemeris", () => {
     expect(positions(instant)).toEqual(outside);
   });
 
-  it("names the source in a chart computed inside it, and nothing outside it", async () => {
+  it("names the source in a chart computed inside it, and the default source's outside it", async () => {
     const source = await open();
     const birth = { utc: instant, latitude: 10, longitude: 20 };
     expect(withEphemeris(source, () => natalChart(birth)).ephemeris).toEqual({ name: "jpl-de440", version: DIGEST });
-    expect(Object.hasOwn(natalChart(birth), "ephemeris")).toBe(false);
+    // The suite's default is astronomy-engine (src/test-setup.ts), by choice: named, and no fallback flagged.
+    const outside = natalChart(birth);
+    expect(outside.ephemeris).toEqual({ name: "astronomy-engine", version: "2.1.19" });
+    expect(outside.flags).toEqual([]);
   });
 
   it("gives moonPhase the source's Sun and Moon", async () => {
@@ -234,7 +237,8 @@ describe("a DE440 chart's receipt", () => {
     const envelope = createNatalEnvelope(withEphemeris(source, () => natalChart(birth)));
     expect(envelope.requiredFeatures).toEqual(["convention-ids", "ephemeris-jpl-de440"]);
     expect(envelope.receipt.engine.ephemeris).toEqual({ name: "jpl-de440", version: DIGEST });
-    expect(envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[NATAL_RECEIPT_CONVENTION_SETS.length - 1]);
+    // A chart inside the IERS table: the DE440 set on the table's time basis (the continuous-UTC DE440 set follows it).
+    expect(envelope.receipt.conventions).toEqual(NATAL_RECEIPT_CONVENTION_SETS[6]);
     expect(envelope.receipt.conventionIds).toContain(`ephemeris:jpl-de440@${DIGEST}`);
     const parsed = parseNatalEnvelope(serializeNatalEnvelope(envelope));
     expect(parsed.ok).toBe(true);

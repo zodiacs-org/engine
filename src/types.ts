@@ -63,8 +63,20 @@ export type SourceBody = Exclude<BodyName, "North Node" | "South Node">;
  */
 export interface PositionSource {
   readonly ephemeris: { readonly name: string; readonly version: string };
-  place(body: SourceBody, ttDays: number): { lon: number; lat: number };
+  /**
+   * `dist`, where a source gives it: the distance along the light path, au. The shipped DE440 pack's source gives it,
+   * and from 1.1.0-rc.12 `behindDisc`: whether the body is behind the Sun's disc, where its reduction bends no light
+   * and so its place steps at the limb. A source that gives `behindDisc` takes `behind`, when given, as that decision
+   * instead of making it at `ttDays`; the engine passes a speed's middle instant's decision to its two samples.
+   */
+  place(body: SourceBody, ttDays: number, behind?: boolean): { lon: number; lat: number; dist?: number; behindDisc?: boolean };
   trueNode(ttDays: number): number;
+  /**
+   * Optional: the instants in [fromTtDays, toTtDays], ascending, at which a
+   * place or the node may step by more than rounding (a DE440 pack's record
+   * boundaries). A source without it is taken to be smooth.
+   */
+  steps?(fromTtDays: number, toTtDays: number): number[];
 }
 
 export type HouseSystem =
@@ -81,13 +93,65 @@ export type HouseSystem =
   | "alcabitius"
   | "morinus"
   | "meridian";
+/**
+ * `"delta-t-extrapolated"`: a result that moves with a ΔT extrapolated past the IERS table (docs/time.md).
+ * `"calendar-unknown"`: a local date resolved with no country the Gregorian adoption table dates that falls in
+ * the days one of its changeovers skipped, where the zone does not rule that changeover out, so whether it was
+ * in civil use where it was written is not known (docs/time.md).
+ * `"host-zone-data-differs"`: a local time from 1970 on that the host's Intl read, near a span in which the time
+ * zone database changed since tzdata 2021a, where the host gave another offset than the pinned tzdb release; the
+ * instant is still the host's, and a device with other time zone data may give another one (docs/time.md).
+ * `"polar-angles"`: the angles were computed inside the polar circle, |latitude| ≥ 90° − ε, where the ascendant
+ * turns half a circle twice a sidereal day and is 0° or 180° at the poles (docs/houses.md).
+ */
 export type ChartFlag =
   | "dst-gap"
   | "dst-fold"
   | "lmt"
+  | "calendar-unknown"
+  | "host-zone-data-differs"
   | "no-time"
   | "polar-fallback"
-  | "outside-reference-span";
+  | "polar-angles"
+  | "outside-reference-span"
+  | "delta-t-extrapolated"
+  | EphemerisFallback;
+
+/**
+ * Why a result that would have come from the shipped DE440 pack, the default
+ * source, came from astronomy-engine instead; the result carries it as a flag
+ * and names astronomy-engine as its ephemeris, so the fallback is never
+ * silent. `"de440-unavailable"`: the pack could not be opened, because its
+ * bytes are missing, are not the sealed pack's (their SHA-256 differs) or
+ * cannot be decoded; `defaultEphemeris().de440.error` says which.
+ * `"outside-de440-span"`: an instant the result was computed at is outside
+ * the pack's coverage less a day at each end (`defaultEphemeris()` gives the
+ * ends; 1790-01-02 to 2209-12-31 at least). Neither is set after
+ * `setDefaultEphemeris("astronomy-engine")`, the caller's own choice, where
+ * the result still names astronomy-engine, nor inside `withEphemeris`.
+ */
+export type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
+
+/**
+ * A bare value (a Date, a longitude, a list of signs) with the label it
+ * cannot carry itself: the ephemeris its positions came from and the flags
+ * that say why that is astronomy-engine where the shipped DE440 pack was the
+ * default. What each `…Detailed` function of the techniques and internal
+ * entries returns, beside the plain function, which returns `value` alone
+ * and is unchanged.
+ */
+export interface DetailedResult<T, F extends string = EphemerisFallback> {
+  /** What the plain function returns, the same value. */
+  readonly value: T;
+  /** `{ name: "jpl-de440", version }` on the pack; astronomy-engine's name and version where any position was its. */
+  readonly ephemeris: { readonly name: string; readonly version: string };
+  /**
+   * `"de440-unavailable"` or `"outside-de440-span"` on a fallback, none on the pack or after the caller chose
+   * astronomy-engine; in the techniques entry also `"outside-reference-span"`, first, where a position was read
+   * outside 1800 to 2200.
+   */
+  readonly flags: readonly F[];
+}
 
 /**
  * A resolved birth instant. Use `resolveBirth` from `@zodiacs/engine/geo`
@@ -97,7 +161,9 @@ export interface BirthInput {
   /**
    * The instant, on the scale `timeScale` names: UTC by default, and UT1 or
    * TT when `timeScale` says so. The field keeps its name on every scale,
-   * because receipts record it under that name (docs/time.md).
+   * because receipts record it under that name (docs/time.md). A calendar
+   * date string with no time, such as "1990-05-03", reads as 00:00 UTC and
+   * is refused with a RangeError unless `timeKnown` is false.
    */
   utc: DateInput;
   /** "utc" (default), "ut1" or "tt" (docs/time.md). */
@@ -149,7 +215,24 @@ export interface BodyPosition {
   sign: ZodiacSign;
   /** Longitude inside `sign`, degrees in [0, 30). */
   degree: number;
+  /**
+   * The ephemeris this position came from, on every position the engine
+   * computes from 1.1.0-rc.10: `"jpl-de440"`, `"astronomy-engine"`, or the
+   * name of the source `withEphemeris` ran the call with.
+   */
+  ephemeris?: string;
+  /** Present when `ephemeris` is astronomy-engine as a fallback from the shipped DE440 pack, and says why. */
+  fallback?: EphemerisFallback;
+  /**
+   * On the rows of `positions()`, `transits()`' `positions` and `progressedBodies()`, from
+   * 2.0.0: the flags a chart at the same instant carries, where there are any (a chart's own bodies leave them to
+   * the chart's `flags`): `"outside-reference-span"`, `"delta-t-extrapolated"`, then the fallback, as `fallback`.
+   */
+  flags?: InstantFlag[];
 }
+
+/** The flags an instant itself gives a result, whatever the place and birth settings; see `BodyPosition.flags`. */
+export type InstantFlag = "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
 /** A chart point that is not a body; see `chartPoints`. */
 export type PointName =
@@ -194,6 +277,21 @@ export interface ChartPoints {
    * Vertex, the East Point and the seven lots only when the chart has angles.
    */
   points: PointPosition[];
+  /**
+   * From 1.1.0-rc.12: the ephemeris of the chart the points were derived
+   * from, its own `ephemeris` (`"jpl-de440"` on the shipped pack,
+   * astronomy-engine's name and version where the chart was computed on
+   * it); null for a supplied chart that names none (one from 1.1.0-rc.9 or
+   * earlier).
+   */
+  ephemeris: { readonly name: string; readonly version: string } | null;
+  /**
+   * From 1.1.0-rc.12: the chart's fallback flags (`EphemerisFallback`),
+   * `"de440-unavailable"` or `"outside-de440-span"` where its bodies are
+   * astronomy-engine's as a fallback from the shipped pack; none on the pack,
+   * after the caller chose astronomy-engine, or inside `withEphemeris`.
+   */
+  flags: EphemerisFallback[];
 }
 
 export interface Angles {
@@ -240,8 +338,14 @@ export interface Chart {
   timeScale: TimeScale;
   engineVersion: string;
   /**
-   * The ephemeris the bodies came from, when it was not astronomy-engine: the
-   * source `withEphemeris` ran the chart with. Absent for astronomy-engine.
+   * The ephemeris the bodies came from, on every chart from 1.1.0-rc.10:
+   * `"jpl-de440"` with the pack's SHA-256 for the shipped DE440 pack, the
+   * default source inside its years (`defaultEphemeris`); `"astronomy-engine"`
+   * with its version where the chart was computed on it, whether by the
+   * caller's choice (`setDefaultEphemeris`) or as a fallback, which `flags`
+   * then says (`"de440-unavailable"`, `"outside-de440-span"`); or the name
+   * of the source `withEphemeris` ran the chart with. Optional in the type
+   * because a chart from 1.1.0-rc.9 or earlier lacks it on astronomy-engine.
    */
   ephemeris?: { readonly name: string; readonly version: string };
 }
@@ -309,13 +413,22 @@ export interface MoonPhase {
   illumination: number;
   name: MoonPhaseName;
   waxing: boolean;
+  /** The ephemeris the Sun and the Moon came from, as a BodyPosition names it; set by the engine from 1.1.0-rc.10. */
+  ephemeris?: string;
+  /** Present when `ephemeris` is astronomy-engine as a fallback from the shipped DE440 pack, and says why. */
+  fallback?: EphemerisFallback;
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "1.1.0-rc.3";
+export const ENGINE_VERSION: string = "2.0.0-rc.3";
 
 /**
- * The ephemeris underneath every position. The dependency is pinned to this
- * exact version, so receipts can name it without asking the caller.
+ * astronomy-engine, the ephemeris the engine computes on where the shipped
+ * DE440 pack is not the source: outside the pack's years, after
+ * `setDefaultEphemeris("astronomy-engine")`, and in the entries that compute
+ * on it themselves (calc, window, the sky entry's rising and setting). The
+ * dependency is pinned to this exact version, so receipts can name it
+ * without asking the caller. Until 1.1.0-rc.7 it was underneath every
+ * position.
  */
 export const EPHEMERIS = /*#__PURE__*/ Object.freeze({ name: "astronomy-engine" as const, version: "2.1.19" as string });

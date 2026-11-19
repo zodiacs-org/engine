@@ -110,7 +110,12 @@ describe("public birth flag boundary", () => {
     {
       name: "polar fallback echo",
       changes: { latitude: 78, houseSystem: "placidus", flags: ["polar-fallback"] },
-      expected: ["polar-fallback"]
+      expected: ["polar-fallback", "polar-angles"]
+    },
+    {
+      name: "polar angles echo",
+      changes: { latitude: 78, flags: ["polar-angles"] },
+      expected: ["polar-angles"]
     },
     {
       name: "duplicate compatible claims",
@@ -134,7 +139,7 @@ describe("public birth flag boundary", () => {
       const before = structuredClone(supplied);
       const chart = natalChart(supplied);
       const timeFlags = expected.filter(
-        (flag) => flag !== "no-time" && flag !== "polar-fallback"
+        (flag) => flag !== "no-time" && flag !== "polar-fallback" && flag !== "polar-angles"
       ) as ChartFlag[];
       const control = natalChart({ ...supplied, flags: timeFlags });
       expect(chart.input.flags).toEqual(timeFlags);

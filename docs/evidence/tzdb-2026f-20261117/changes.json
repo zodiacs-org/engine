@@ -1,0 +1,826 @@
+{
+  "description": "Every interval before 1970-01-01T00:00Z on which the UTC offset of the history this package ships for a zone name differs between tzdata 2025c and 2026f as released, from zdump -v on zic-compiled data (oracle.mjs). Entries with ownerDecision 'held back' do not ship: the package holds America/Yellowknife at tzdata 2025c by the owner's decision ('held', 'shipped'). Offsets in seconds east; intervals are [from, to) in UTC; from null means from the beginning of the zone's history. transitionsOnly, eraEnds and fromHistoryEnd list what moves without such an offset change; rows are 'UTC offset isdst abbreviation' (transitionsOnly) or 'UTC offsetBefore offsetAfter' (fromHistoryEnd).",
+  "releases": {
+    "from": "2025c",
+    "to": "2026f"
+  },
+  "hostLegal": {
+    "2025c": [
+      "America/Argentina/ComodRivadavia",
+      "America/Ensenada",
+      "America/Nipigon",
+      "America/Rainy_River",
+      "America/Rosario",
+      "Asia/Chongqing",
+      "Asia/Chungking",
+      "Asia/Harbin",
+      "Asia/Kashgar",
+      "Atlantic/Jan_Mayen",
+      "EET",
+      "Europe/Tiraspol",
+      "Europe/Uzhgorod",
+      "Europe/Zaporozhye",
+      "Pacific/Enderbury",
+      "WET"
+    ],
+    "2026f": [
+      "America/Argentina/ComodRivadavia",
+      "America/Ensenada",
+      "America/Nipigon",
+      "America/Rainy_River",
+      "America/Rosario",
+      "Asia/Chongqing",
+      "Asia/Chungking",
+      "Asia/Harbin",
+      "Asia/Kashgar",
+      "Atlantic/Jan_Mayen",
+      "EET",
+      "Europe/Tiraspol",
+      "Pacific/Enderbury",
+      "WET"
+    ]
+  },
+  "changedZones": 24,
+  "intervals": 45,
+  "unexplained": 0,
+  "awaitingOwner": 0,
+  "heldBack": 2,
+  "shipped": {
+    "description": "What the package ships: tzdata 2026f with America/Yellowknife held at tzdata 2025c by the owner's decision. Names and intervals whose shipped offsets before 1970 move, the held name's excluded; every other name ships exactly 2026f's history (the held and 2026f builds compared name by name).",
+    "changedZones": 23,
+    "intervals": 44,
+    "otherNamesIdenticalTo2026f": 596
+  },
+  "held": [
+    {
+      "zone": "America/Yellowknife",
+      "heldAt": "2025c",
+      "file": "scripts/tzdb-held/yellowknife-2025c.zi",
+      "ownerDecision": "held back",
+      "firstDifferenceFromDefault": "2026-11-01T08:00:00.000Z",
+      "shipped": "tzdata 2025c's history: 0 offset differences, 0 transition differences before 1970, the same local mean time era (none) and the same data form as tzdata 2025c"
+    }
+  ],
+  "zones": [
+    {
+      "zone": "America/Araguaina",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Bahia",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Belem",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Boa_Vista",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Campo_Grande",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Cuiaba",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Eirunepe",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T04:00:00.000Z",
+          "to": "1965-04-01T04:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T04:00:00.000Z",
+          "to": "1966-03-01T05:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Fortaleza",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Maceio",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Manaus",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Noronha",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T01:00:00.000Z",
+          "to": "1965-04-01T01:00:00.000Z",
+          "oldOffsetSeconds": -7200,
+          "newOffsetSeconds": -3600,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T01:00:00.000Z",
+          "to": "1966-03-01T02:00:00.000Z",
+          "oldOffsetSeconds": -7200,
+          "newOffsetSeconds": -3600,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Porto_Acre",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T04:00:00.000Z",
+          "to": "1965-04-01T04:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T04:00:00.000Z",
+          "to": "1966-03-01T05:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Porto_Velho",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Recife",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Rio_Branco",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T04:00:00.000Z",
+          "to": "1965-04-01T04:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T04:00:00.000Z",
+          "to": "1966-03-01T05:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Santarem",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Sao_Paulo",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "America/Yellowknife",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1947-04-27T09:00:00.000Z",
+          "to": "1947-09-28T08:00:00.000Z",
+          "oldOffsetSeconds": -25200,
+          "newOffsetSeconds": -21600,
+          "hours": 3695,
+          "release": "2026f",
+          "news": null,
+          "newsNote": "No NEWS entry of 2026a to 2026f mentions America/Yellowknife.",
+          "cause": "backzone's Yellowknife zone is commented out, so the name follows backward's link to America/Edmonton, which kept summer time in 1947",
+          "source": [
+            "tzdata 2025c backzone line 930: \"Zone America/Yellowknife 0\t-\t-00\t1935 # Yellowknife founded?\"",
+            "tzdata 2026f backzone line 930: \"# Commented out as too wrong to be useful.\"",
+            "tzdata 2026f backzone line 931: \"#Zone America/Yellowknife 0\t-\t-00\t1935 # Yellowknife founded?\"",
+            "tzdata 2026f backward line 283: \"Link\tAmerica/Edmonton\tAmerica/Yellowknife\""
+          ],
+          "ownerDecision": "held back",
+          "ownerDecisionNote": "Held back by the owner's decision (ZOD-282): no tzdb NEWS entry or other official announcement explains this data change, so the package ships tzdata 2025c's backzone lines 929 to 932 for this name (scripts/tzdb-held/yellowknife-2025c.zi) and the name answers as on tzdata 2025c."
+        }
+      ]
+    },
+    {
+      "zone": "Brazil/Acre",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T04:00:00.000Z",
+          "to": "1965-04-01T04:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T04:00:00.000Z",
+          "to": "1966-03-01T05:00:00.000Z",
+          "oldOffsetSeconds": -18000,
+          "newOffsetSeconds": -14400,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "Brazil/DeNoronha",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T01:00:00.000Z",
+          "to": "1965-04-01T01:00:00.000Z",
+          "oldOffsetSeconds": -7200,
+          "newOffsetSeconds": -3600,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T01:00:00.000Z",
+          "to": "1966-03-01T02:00:00.000Z",
+          "oldOffsetSeconds": -7200,
+          "newOffsetSeconds": -3600,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "Brazil/East",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T02:00:00.000Z",
+          "to": "1965-04-01T02:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T02:00:00.000Z",
+          "to": "1966-03-01T03:00:00.000Z",
+          "oldOffsetSeconds": -10800,
+          "newOffsetSeconds": -7200,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "Brazil/West",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1965-03-31T03:00:00.000Z",
+          "to": "1965-04-01T03:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 24,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        },
+        {
+          "from": "1966-03-01T03:00:00.000Z",
+          "to": "1966-03-01T04:00:00.000Z",
+          "oldOffsetSeconds": -14400,
+          "newOffsetSeconds": -10800,
+          "hours": 1,
+          "release": "2026f",
+          "news": "In 1965 Brazil ended DST on 03-31 at 24:00 not 00:00, and in 1966 it ended DST on 03-01 at 01:00 not 00:00. (Thanks to Daniel Dias Rodrigues.)"
+        }
+      ]
+    },
+    {
+      "zone": "Eire",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1925-09-20T02:00:00.000Z",
+          "to": "1925-10-04T02:00:00.000Z",
+          "oldOffsetSeconds": 3600,
+          "newOffsetSeconds": 0,
+          "hours": 336,
+          "release": "2026e",
+          "news": "In 1925 Ireland fell back on 09-20 not 10-04 (thanks to Stan Ulbrych)."
+        }
+      ]
+    },
+    {
+      "zone": "Europe/Dublin",
+      "form2025c": "main+backzone",
+      "form2026f": "main+backzone",
+      "intervals": [
+        {
+          "from": "1925-09-20T02:00:00.000Z",
+          "to": "1925-10-04T02:00:00.000Z",
+          "oldOffsetSeconds": 3600,
+          "newOffsetSeconds": 0,
+          "hours": 336,
+          "release": "2026e",
+          "news": "In 1925 Ireland fell back on 09-20 not 10-04 (thanks to Stan Ulbrych)."
+        }
+      ]
+    }
+  ],
+  "defaultBuildOnly": [
+    {
+      "zone": "CST6CDT",
+      "intervals": 44
+    },
+    {
+      "zone": "EST5EDT",
+      "intervals": 44
+    },
+    {
+      "zone": "MST7MDT",
+      "intervals": 5
+    },
+    {
+      "zone": "PST8PDT",
+      "intervals": 19
+    }
+  ],
+  "transitionsOnly": [
+    {
+      "zone": "CST6CDT",
+      "removed": [
+        "1942-02-09T08:00:00.000Z -18000 1 CWT",
+        "1945-08-14T23:00:00.000Z -18000 1 CPT"
+      ],
+      "added": [
+        "1942-02-09T08:00:00.000Z -18000 1 CDT"
+      ],
+      "release": "2026d",
+      "news": "The backward-compatibility names EST5EDT, CST6CDT, MST7MDT, and PST8PDT now conform better to POSIX. For example, EST5EDT now always uses the abbreviation \"EST\" for standard time (now always 5 hours behind UT) and \"EDT\" for daylight saving time, whereas it formerly had different UT offsets before standard time was introduced and sometimes used abbreviations like \"LMT\", \"EWT\" and \"EPT\", all contrary to POSIX.",
+      "source": [
+        "tzdata 2025c backzone lines 1840 to 1845: \"Zone\tEST5EDT\t\t -5:00\tUS\tE%sT\" and the same for CST6CDT, MST7MDT and PST8PDT, under rule US",
+        "tzdata 2025c northamerica line 180: \"Rule\tUS\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tP # Peace\" (War time W becomes Peace time P: a transition with no offset change)",
+        "tzdata 2026f backward lines 372 to 375: the same four zones under rule USback",
+        "tzdata 2026f backward line 335: \"# To conform to POSIX, this copy uses D instead of W for War and P for Peace.\"",
+        "tzdata 2026f backward line 340: \"Rule\tUSback\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tD # Peace\" (D before and after, so zic records no transition)"
+      ]
+    },
+    {
+      "zone": "EST5EDT",
+      "removed": [
+        "1942-02-09T07:00:00.000Z -14400 1 EWT",
+        "1945-08-14T23:00:00.000Z -14400 1 EPT"
+      ],
+      "added": [
+        "1942-02-09T07:00:00.000Z -14400 1 EDT"
+      ],
+      "release": "2026d",
+      "news": "The backward-compatibility names EST5EDT, CST6CDT, MST7MDT, and PST8PDT now conform better to POSIX. For example, EST5EDT now always uses the abbreviation \"EST\" for standard time (now always 5 hours behind UT) and \"EDT\" for daylight saving time, whereas it formerly had different UT offsets before standard time was introduced and sometimes used abbreviations like \"LMT\", \"EWT\" and \"EPT\", all contrary to POSIX.",
+      "source": [
+        "tzdata 2025c backzone lines 1840 to 1845: \"Zone\tEST5EDT\t\t -5:00\tUS\tE%sT\" and the same for CST6CDT, MST7MDT and PST8PDT, under rule US",
+        "tzdata 2025c northamerica line 180: \"Rule\tUS\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tP # Peace\" (War time W becomes Peace time P: a transition with no offset change)",
+        "tzdata 2026f backward lines 372 to 375: the same four zones under rule USback",
+        "tzdata 2026f backward line 335: \"# To conform to POSIX, this copy uses D instead of W for War and P for Peace.\"",
+        "tzdata 2026f backward line 340: \"Rule\tUSback\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tD # Peace\" (D before and after, so zic records no transition)"
+      ]
+    },
+    {
+      "zone": "MST7MDT",
+      "removed": [
+        "1942-02-09T09:00:00.000Z -21600 1 MWT",
+        "1945-08-14T23:00:00.000Z -21600 1 MPT"
+      ],
+      "added": [
+        "1942-02-09T09:00:00.000Z -21600 1 MDT"
+      ],
+      "release": "2026d",
+      "news": "The backward-compatibility names EST5EDT, CST6CDT, MST7MDT, and PST8PDT now conform better to POSIX. For example, EST5EDT now always uses the abbreviation \"EST\" for standard time (now always 5 hours behind UT) and \"EDT\" for daylight saving time, whereas it formerly had different UT offsets before standard time was introduced and sometimes used abbreviations like \"LMT\", \"EWT\" and \"EPT\", all contrary to POSIX.",
+      "source": [
+        "tzdata 2025c backzone lines 1840 to 1845: \"Zone\tEST5EDT\t\t -5:00\tUS\tE%sT\" and the same for CST6CDT, MST7MDT and PST8PDT, under rule US",
+        "tzdata 2025c northamerica line 180: \"Rule\tUS\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tP # Peace\" (War time W becomes Peace time P: a transition with no offset change)",
+        "tzdata 2026f backward lines 372 to 375: the same four zones under rule USback",
+        "tzdata 2026f backward line 335: \"# To conform to POSIX, this copy uses D instead of W for War and P for Peace.\"",
+        "tzdata 2026f backward line 340: \"Rule\tUSback\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tD # Peace\" (D before and after, so zic records no transition)"
+      ]
+    },
+    {
+      "zone": "PST8PDT",
+      "removed": [
+        "1942-02-09T10:00:00.000Z -25200 1 PWT",
+        "1945-08-14T23:00:00.000Z -25200 1 PPT"
+      ],
+      "added": [
+        "1942-02-09T10:00:00.000Z -25200 1 PDT"
+      ],
+      "release": "2026d",
+      "news": "The backward-compatibility names EST5EDT, CST6CDT, MST7MDT, and PST8PDT now conform better to POSIX. For example, EST5EDT now always uses the abbreviation \"EST\" for standard time (now always 5 hours behind UT) and \"EDT\" for daylight saving time, whereas it formerly had different UT offsets before standard time was introduced and sometimes used abbreviations like \"LMT\", \"EWT\" and \"EPT\", all contrary to POSIX.",
+      "source": [
+        "tzdata 2025c backzone lines 1840 to 1845: \"Zone\tEST5EDT\t\t -5:00\tUS\tE%sT\" and the same for CST6CDT, MST7MDT and PST8PDT, under rule US",
+        "tzdata 2025c northamerica line 180: \"Rule\tUS\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tP # Peace\" (War time W becomes Peace time P: a transition with no offset change)",
+        "tzdata 2026f backward lines 372 to 375: the same four zones under rule USback",
+        "tzdata 2026f backward line 335: \"# To conform to POSIX, this copy uses D instead of W for War and P for Peace.\"",
+        "tzdata 2026f backward line 340: \"Rule\tUSback\t1945\tonly\t-\tAug\t14\t23:00u\t1:00\tD # Peace\" (D before and after, so zic records no transition)"
+      ]
+    }
+  ],
+  "eraEnds": [
+    {
+      "zone": "America/Yellowknife",
+      "era2025c": null,
+      "era2026f": {
+        "end": "1906-09-01T07:33:52.000Z",
+        "offsetSeconds": -27232
+      },
+      "release": "2026f",
+      "news": null,
+      "newsNote": "No NEWS entry of 2026a to 2026f mentions America/Yellowknife.",
+      "source": [
+        "tzdata 2025c backzone line 930: \"Zone America/Yellowknife 0\t-\t-00\t1935 # Yellowknife founded?\"",
+        "tzdata 2026f backzone line 930: \"# Commented out as too wrong to be useful.\"",
+        "tzdata 2026f backzone line 931: \"#Zone America/Yellowknife 0\t-\t-00\t1935 # Yellowknife founded?\"",
+        "tzdata 2026f backward line 283: \"Link\tAmerica/Edmonton\tAmerica/Yellowknife\""
+      ],
+      "ownerDecision": "held back",
+      "ownerDecisionNote": "Held back by the owner's decision (ZOD-282): no tzdb NEWS entry or other official announcement explains this data change, so the package ships tzdata 2025c's backzone lines 929 to 932 for this name (scripts/tzdb-held/yellowknife-2025c.zi) and the name answers as on tzdata 2025c."
+    },
+    {
+      "zone": "Europe/Uzhgorod",
+      "era2025c": {
+        "end": "1890-09-30T22:30:48.000Z",
+        "offsetSeconds": 5352
+      },
+      "era2026f": {
+        "end": "1879-12-31T21:57:56.000Z",
+        "offsetSeconds": 7324
+      },
+      "release": "2026f",
+      "news": "Move Europe/Uzhgorod and Europe/Zaporozhye to 'backzone'; backward-compatibility links still work, albeit with different timestamps before October 1991.",
+      "newsRelease": "2022d",
+      "newsNote": "The 2022d entry is the only NEWS entry that mentions either name; none of 2026a to 2026f mentions their removal from backzone.",
+      "source": [
+        "tzdata 2025c backzone line 1588: \"Zone Europe/Uzhgorod\t1:29:12 -\tLMT\t1890 Oct\" (deleted with the rest of its zone in 2026f)",
+        "tzdata 2025c backzone line 1631: \"Zone Europe/Zaporozhye\t2:20:40 -\tLMT\t1880\" (deleted with the rest of its zone in 2026f)",
+        "tzdata 2026f backward lines 295 and 296: \"Link\tEurope/Kyiv\t\tEurope/Uzhgorod\", \"Link\tEurope/Kyiv\t\tEurope/Zaporozhye\""
+      ]
+    },
+    {
+      "zone": "Europe/Zaporozhye",
+      "era2025c": {
+        "end": "1879-12-31T21:39:20.000Z",
+        "offsetSeconds": 8440
+      },
+      "era2026f": {
+        "end": "1879-12-31T21:57:56.000Z",
+        "offsetSeconds": 7324
+      },
+      "release": "2026f",
+      "news": "Move Europe/Uzhgorod and Europe/Zaporozhye to 'backzone'; backward-compatibility links still work, albeit with different timestamps before October 1991.",
+      "newsRelease": "2022d",
+      "newsNote": "The 2022d entry is the only NEWS entry that mentions either name; none of 2026a to 2026f mentions their removal from backzone.",
+      "source": [
+        "tzdata 2025c backzone line 1588: \"Zone Europe/Uzhgorod\t1:29:12 -\tLMT\t1890 Oct\" (deleted with the rest of its zone in 2026f)",
+        "tzdata 2025c backzone line 1631: \"Zone Europe/Zaporozhye\t2:20:40 -\tLMT\t1880\" (deleted with the rest of its zone in 2026f)",
+        "tzdata 2026f backward lines 295 and 296: \"Link\tEurope/Kyiv\t\tEurope/Uzhgorod\", \"Link\tEurope/Kyiv\t\tEurope/Zaporozhye\""
+      ]
+    }
+  ],
+  "fromHistoryEnd": [
+    {
+      "zone": "Africa/Casablanca",
+      "removed": [],
+      "added": [
+        "2026-09-20T01:00:00.000Z 3600 0"
+      ],
+      "release": "2026c",
+      "news": "Morocco plans to move back to permanent UTC, without daylight saving time transitions, on 2026-09-20 at 02:00. This also affects Western Sahara."
+    },
+    {
+      "zone": "Africa/El_Aaiun",
+      "removed": [],
+      "added": [
+        "2026-09-20T01:00:00.000Z 3600 0"
+      ],
+      "release": "2026c",
+      "news": "Morocco plans to move back to permanent UTC, without daylight saving time transitions, on 2026-09-20 at 02:00. This also affects Western Sahara."
+    }
+  ]
+}

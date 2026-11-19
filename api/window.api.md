@@ -30,6 +30,10 @@ interface BirthWindow {
     readonly unresolved: readonly WindowUnresolved[];
     readonly flags: readonly BirthWindowFlag[];
     readonly engineVersion: string;
+    readonly ephemeris: {
+        readonly name: string;
+        readonly version: string;
+    };
 }
 
 interface BirthWindowCell {
@@ -41,7 +45,7 @@ interface BirthWindowCell {
     readonly features: WindowFeatures;
 }
 
-type BirthWindowFlag = "polar-fallback" | "bound-exceeded" | "node-unresolved";
+type BirthWindowFlag = "polar-fallback" | "bound-exceeded" | "node-unresolved" | "de440-unavailable";
 
 interface BirthWindowInput {
     readonly start?: DateInput;
@@ -134,21 +138,21 @@ declare function birthWindow(input: BirthWindowInput): BirthWindow;
 ## Referenced, not exported here (6)
 
 ```ts
-// exported by @zodiacs/engine (AspectType)
+// exported by @zodiacs/engine (AspectType), @zodiacs/engine/core (AspectType)
 type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
 
-// exported by @zodiacs/engine (BodyName), @zodiacs/engine/crossings (BodyName)
+// exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
 type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
 
-// exported by @zodiacs/engine (DateInput)
+// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
 type DateInput = Date | string | number;
 
-// exported by @zodiacs/engine (HouseNumber)
+// exported by @zodiacs/engine (HouseNumber), @zodiacs/engine/core (HouseNumber)
 type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
-// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/houses (HouseSystem)
+// exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/core (HouseSystem), @zodiacs/engine/houses (HouseSystem)
 type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
 
-// exported by @zodiacs/engine (ZodiacSign)
+// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
 type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
 ```

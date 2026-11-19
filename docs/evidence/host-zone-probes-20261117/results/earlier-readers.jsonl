@@ -1,0 +1,2 @@
+{"host_tz":"2026e","inputFlags":["host-zone-data-differs"],"branch":true,"2.0.0-rc.2":{"ok":false,"code":"invalid_value"}}
+{"host_tz":"2026e","inputFlags":["host-zone-data-differs"],"branch":true,"1.1.0":{"ok":false,"code":"invalid_value"}}

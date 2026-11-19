@@ -1,0 +1,81 @@
+{
+ "packSpanTtDays": {
+  "opened": true,
+  "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
+  "fromTtDays": -76699.5,
+  "toTtDays": 76699.5,
+  "error": null
+ },
+ "rows": 806,
+ "suspicious": 0,
+ "threw": 0,
+ "listsAcrossTheEnds": [
+  {
+   "fn": "moonIngresses across the low end",
+   "input": "1789-12-20T00:00:00.000Z to 1790-01-13T00:00:00.000Z",
+   "elements": 10,
+   "labels": {
+    "astronomy-engine+outside-de440-span": 5,
+    "jpl-de440": 5
+   },
+   "elementsLabelledAgainstTheirOwnInstant": 0,
+   "suspicious": false
+  },
+  {
+   "fn": "moonAspects across the low end",
+   "input": "1789-12-20T00:00:00.000Z to 1790-01-13T00:00:00.000Z",
+   "elements": 64,
+   "labels": {
+    "astronomy-engine+outside-de440-span": 35,
+    "jpl-de440": 29
+   },
+   "elementsLabelledAgainstTheirOwnInstant": 0,
+   "suspicious": false
+  },
+  {
+   "fn": "voidOfCourseWindows across the low end",
+   "input": "1789-12-20T00:00:00.000Z to 1790-01-13T00:00:00.000Z",
+   "elements": 10,
+   "labels": {
+    "astronomy-engine+outside-de440-span": 6,
+    "jpl-de440": 4
+   },
+   "elementsLabelledAgainstTheirOwnInstant": 1,
+   "suspicious": false
+  },
+  {
+   "fn": "moonIngresses across the high end",
+   "input": "2209-12-20T00:00:00.000Z to 2210-01-13T00:00:00.000Z",
+   "elements": 11,
+   "labels": {
+    "jpl-de440": 5,
+    "astronomy-engine+outside-de440-span": 6
+   },
+   "elementsLabelledAgainstTheirOwnInstant": 0,
+   "suspicious": false
+  },
+  {
+   "fn": "moonAspects across the high end",
+   "input": "2209-12-20T00:00:00.000Z to 2210-01-13T00:00:00.000Z",
+   "elements": 63,
+   "labels": {
+    "jpl-de440": 27,
+    "astronomy-engine+outside-de440-span": 36
+   },
+   "elementsLabelledAgainstTheirOwnInstant": 0,
+   "suspicious": false
+  },
+  {
+   "fn": "voidOfCourseWindows across the high end",
+   "input": "2209-12-20T00:00:00.000Z to 2210-01-13T00:00:00.000Z",
+   "elements": 11,
+   "labels": {
+    "jpl-de440": 5,
+    "astronomy-engine+outside-de440-span": 6
+   },
+   "elementsLabelledAgainstTheirOwnInstant": 0,
+   "suspicious": false
+  }
+ ],
+ "note": "806 rows in all; the per-row detail is written by tools/edges.mjs"
+}

@@ -1,0 +1,102 @@
+[
+ {
+  "body": "Mercury",
+  "jdTt": 2434871.460627,
+  "horizons": {
+   "ra": 45.334816866,
+   "dec": 17.14285895,
+   "sunObserverTargetDeg": 0.0004
+  },
+  "pack": {
+   "ephemeris": "jpl-de440",
+   "flags": [],
+   "ra": 45.33174794764682,
+   "dec": 17.22833820844023,
+   "quotedBoundArcsec": 0.0037,
+   "boundLabel": "estimated",
+   "angleFromHorizonsArcsec": 307.9062901740058
+  },
+  "astronomyEngine": {
+   "ephemeris": "astronomy-engine",
+   "ra": 45.33492422290226,
+   "dec": 17.14303557795842,
+   "quotedBoundArcsec": 17,
+   "angleFromHorizonsArcsec": 0.7353310602909067
+  }
+ },
+ {
+  "body": "Uranus",
+  "jdTt": 2462292.1837037,
+  "horizons": {
+   "ra": 72.999725284,
+   "dec": 22.518152748,
+   "sunObserverTargetDeg": 0.0022
+  },
+  "pack": {
+   "ephemeris": "jpl-de440",
+   "flags": [],
+   "ra": 72.99121293552025,
+   "dec": 22.571872677984082,
+   "quotedBoundArcsec": 0.0038,
+   "boundLabel": "estimated",
+   "angleFromHorizonsArcsec": 195.45179233869592
+  },
+  "astronomyEngine": {
+   "ephemeris": "astronomy-engine",
+   "ra": 72.99924345264753,
+   "dec": 22.520626474770534,
+   "quotedBoundArcsec": 20,
+   "angleFromHorizonsArcsec": 9.048419895321398
+  }
+ },
+ {
+  "body": "Neptune",
+  "jdTt": 2392770.1159471,
+  "horizons": {
+   "ra": 312.550963972,
+   "dec": -17.734488801,
+   "sunObserverTargetDeg": 0.003
+  },
+  "pack": {
+   "ephemeris": "jpl-de440",
+   "flags": [],
+   "ra": 312.56361756376305,
+   "dec": -17.775773257516626,
+   "quotedBoundArcsec": 0.0035,
+   "boundLabel": "estimated",
+   "angleFromHorizonsArcsec": 154.82637410774694
+  },
+  "astronomyEngine": {
+   "ephemeris": "astronomy-engine",
+   "ra": 312.55544314734414,
+   "dec": -17.731726370345715,
+   "quotedBoundArcsec": 22,
+   "angleFromHorizonsArcsec": 18.297340297895314
+  }
+ },
+ {
+  "body": "Jupiter",
+  "jdTt": 2463232.8208694,
+  "horizons": {
+   "ra": 281.344768133,
+   "dec": -23.01654546,
+   "sunObserverTargetDeg": 0.0071
+  },
+  "pack": {
+   "ephemeris": "jpl-de440",
+   "flags": [],
+   "ra": 281.34312725645856,
+   "dec": -23.00099249149058,
+   "quotedBoundArcsec": 0.0038,
+   "boundLabel": "estimated",
+   "angleFromHorizonsArcsec": 56.25406886805833
+  },
+  "astronomyEngine": {
+   "ephemeris": "astronomy-engine",
+   "ra": 281.344847007182,
+   "dec": -23.01462791665927,
+   "quotedBoundArcsec": 17,
+   "angleFromHorizonsArcsec": 6.908101334681124
+  }
+ }
+]

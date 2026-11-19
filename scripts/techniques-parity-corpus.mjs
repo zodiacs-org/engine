@@ -338,7 +338,10 @@ export function chartProjection(chart) {
     angles: chart.angles && [chart.angles.asc, chart.angles.mc, chart.angles.dsc, chart.angles.ic],
     houses: chart.houses && [chart.houses.system, ...chart.houses.cusps],
     aspects: chart.aspects.map((row) => [row.a, row.b, row.type, row.orb, row.applying]),
-    flags: [...chart.flags],
+    // "delta-t-extrapolated" came after the site's outputs were generated (on
+    // 0.1.1-rc.15, which never gives it), so the projection leaves it out: a
+    // difference by design, which src/birth-input.ts and its tests cover.
+    flags: chart.flags.filter((flag) => flag !== "delta-t-extrapolated"),
     deltaT: chart.deltaT ? chart.deltaT.seconds : null
   };
 }

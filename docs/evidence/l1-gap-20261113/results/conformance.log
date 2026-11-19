@@ -1,0 +1,51 @@
+# node v22.22.2
+=== node --test conformance/harness/selftest.mjs
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 183.917678
+=== exit 0: node --test conformance/harness/selftest.mjs
+=== node conformance/harness/validate.mjs --expect-total 500
+L3 Time and calendars: 110 vectors, 5 arbiter(s), sha256 51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66
+  time.zone-offset: 45
+  time.local-mean-time: 5
+  time.tt-minus-utc: 10
+  time.delta-t: 15
+  calendar.to-jdn: 25
+  calendar.from-jdn: 10
+conformance: 500 vectors conform to SPEC.md
+=== exit 0: node conformance/harness/validate.mjs --expect-total 500
+=== node conformance/harness/run.mjs --adapter 'node conformance/adapters/zodiacs-engine.mjs' --check conformance/results/zodiacs-engine.json
+zodiacs-engine 1.1.0-rc.3: 267 pass, 192 fail, 41 unsupported, 0 error (of 500)
+  L1: 48 pass, 192 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 69 pass, 0 fail, 41 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine.json
+=== exit 0: node conformance/harness/run.mjs --adapter 'node conformance/adapters/zodiacs-engine.mjs' --check conformance/results/zodiacs-engine.json
+=== node conformance/harness/report.mjs --check
+conformance: RESULTS.md and results/summary.json are current
+=== exit 0: node conformance/harness/report.mjs --check
+=== node atlas/tools/check.mjs
+atlas 0.1.0: 21 places, 14 jurisdictions, 59 rules, 66 citations
+  rules by flag: documented 27, inferred 26, uncertain 6
+  citations by type: decree 5, law 9, ministerial-decision 1, municipal-notice 1, newspaper-report 45, parliamentary-debate 3, railway-notice 2
+  excerpts taken from: page-image 66
+  excerpts checked against (citations): ocr matches 24, ocr partial 5, page-image matches 16, search-service matches 29, search-service partial 8
+  258 boundaries and 2735 round trips checked
+  tzdb comparison current, every difference matched by exactly one explanation
+atlas: all checks passed
+=== exit 0: node atlas/tools/check.mjs
+=== node --test atlas/tools/selftest.mjs
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 756.930206
+=== exit 0: node --test atlas/tools/selftest.mjs

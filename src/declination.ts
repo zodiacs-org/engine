@@ -2,6 +2,7 @@
 
 import { checkedBodyLabel } from "./body-label.js";
 import type { DeltaT } from "./deltat.js";
+import type { EphemerisFallback } from "./types.js";
 import { absolute, compareExact, exactSum, negated, roundedValue, signOf } from "./exact.js";
 import type { ExactSum } from "./exact.js";
 
@@ -131,6 +132,18 @@ export interface ChartDeclinations extends Declinations {
   utc: string;
   /** The evaluated provider Delta-T used to obtain true obliquity. */
   deltaT: DeltaT;
+  /**
+   * From 1.1.0-rc.12: the ephemeris of the chart the rows were derived from,
+   * its own `ephemeris`; null for a supplied chart that names none (one from
+   * 1.1.0-rc.9 or earlier).
+   */
+  ephemeris: { readonly name: string; readonly version: string } | null;
+  /**
+   * From 1.1.0-rc.12: the chart's fallback flags (`EphemerisFallback`): where
+   * its bodies are astronomy-engine's as a fallback from the shipped pack,
+   * the rows are too, and say so here.
+   */
+  flags: EphemerisFallback[];
 }
 
 function finite(value: number, label: string): void {

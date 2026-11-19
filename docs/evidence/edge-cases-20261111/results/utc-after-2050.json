@@ -1,0 +1,2747 @@
+{
+ "what": "ZOD-97 P1 and T5 on UTC input after 2050: reported, not judged (Horizons is not a reference for future UT)",
+ "node": "v22.23.3",
+ "engineVersion": "1.1.0-rc.3",
+ "horizons": [
+  {
+   "file": "horizons/utc-after-2050-10.txt",
+   "sha256": "089402c891bc41881f0670fa9c500293218ad42ba8172ea203a5f9baae9611e5",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:08:11.496Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-301.txt",
+   "sha256": "62f83178b1c94bf7bf17274ee0596c19d0e4bf73f23058431380758019e1583b",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:08:14.878Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-199.txt",
+   "sha256": "2837b8c050033846a11acbe912aa01d3a2a074aaa6426614efc52955116d8169",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:08:18.257Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-299.txt",
+   "sha256": "07182b3bb39154993eb63ae829e0fd2521724ccc207e7ccce88711bde62032b8",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:08:21.482Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-4.txt",
+   "sha256": "7028bd40ac5f48f20b662ccbf7e411032e705c536e13790b443f9ed22ce26b82",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:08:24.896Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-5.txt",
+   "sha256": "fd4c40d0c12c16923022e84309245a87e9747fb5ca78bbd82375582527a43edc",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:08:46.765Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-6.txt",
+   "sha256": "20eef4b4e728cda6eff387c9d6b6d34fd26f81e6fbf1663b98bd2c06b65d179a",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:09:07.979Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-7.txt",
+   "sha256": "cab050915d70b6a2697a4c2ee9390bf2004c3709fae7f744b4c4d8cb2dfd0ba9",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:09:29.440Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-8.txt",
+   "sha256": "86ff59176080e5cdaa468e8e781f2787db22accf1cad92c1dead81a6776ebea6",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:09:32.814Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-9.txt",
+   "sha256": "1711aaf305cd3ebda0a3b412213193c0a42a609548e5f25770dc83a28fb8fa2a",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:09:36.116Z"
+  }
+ ],
+ "comparisons": 50,
+ "over30Arcsec": [
+  {
+   "body": "Moon",
+   "utc": "2199-06-15T12:00:00Z",
+   "lonDifferenceArcsec": 36.234510312397106
+  }
+ ],
+ "records": [
+  {
+   "body": "Sun",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-10.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 83.9014463,
+    "lat": -0.0001819
+   },
+   "engine": {
+    "lon": 83.9016965943049,
+    "lat": 0.00010861960278171854,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.5098531330651535,
+     "lat": 1.8791313342213314e-7,
+     "dist": 1.3589859149186713e-8
+    },
+    "positionBound": {
+     "value": 3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 83.9016965943049,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.9010594977098663,
+   "natalChartLonDifferenceArcsec": 0.9010594977098663,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Sun",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-10.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 84.0829088,
+    "lat": -0.0000936
+   },
+   "engine": {
+    "lon": 84.08305994536585,
+    "lat": 0.00015694388186369122,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 1.0923878314734317,
+     "lat": 6.82012245773156e-7,
+     "dist": 3.078050145168827e-8
+    },
+    "positionBound": {
+     "value": 3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 84.08305994536585,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.5441233171040949,
+   "natalChartLonDifferenceArcsec": 0.5441233171040949,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Sun",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-10.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 280.6041927,
+    "lat": 0.0000877
+   },
+   "engine": {
+    "lon": 280.604228135977,
+    "lat": 0.0002255472416611156,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 1.800050562243964,
+     "lat": 0.0000018791652337024371,
+     "dist": 7.013475787473489e-9
+    },
+    "positionBound": {
+     "value": 3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 280.604228135977,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.12756951718984055,
+   "natalChartLonDifferenceArcsec": 0.12756951718984055,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Sun",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-10.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 280.4622275,
+    "lat": 0.0000159
+   },
+   "engine": {
+    "lon": 280.4624703850433,
+    "lat": 0.00035316312383328264,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 3.09626613122923,
+     "lat": 0.00000669783098762968,
+     "dist": 2.3483868423763775e-8
+    },
+    "positionBound": {
+     "value": 3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 280.4624703850433,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.8743861556467891,
+   "natalChartLonDifferenceArcsec": 0.8743861556467891,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Sun",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-10.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 84.6042997,
+    "lat": 0.0002255
+   },
+   "engine": {
+    "lon": 84.60445378282992,
+    "lat": 0.0003964382725710361,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 4.10391982836617,
+     "lat": 0.000015626868703881455,
+     "dist": 1.345279902324356e-7
+    },
+    "positionBound": {
+     "value": 3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 84.60445378282992,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.5546981876705104,
+   "natalChartLonDifferenceArcsec": 0.5546981876705104,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Moon",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-301.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 160.0902729,
+    "lat": -3.9927837
+   },
+   "engine": {
+    "lon": 160.0904440992033,
+    "lat": -3.9927593985298375,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 6.491562393532877,
+     "lat": 0.36578117700873525,
+     "dist": 3.5122883102395467e-9
+    },
+    "positionBound": {
+     "value": 8.3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 160.0904440992033,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.6163171320622496,
+   "natalChartLonDifferenceArcsec": 0.6163171320622496,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Moon",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-301.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 99.1335778,
+    "lat": -0.4987241
+   },
+   "engine": {
+    "lon": 99.1340540389752,
+    "lat": -0.49859407759706836,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 13.461597455465219,
+     "lat": 1.233976628513774,
+     "dist": 4.88312481163234e-10
+    },
+    "positionBound": {
+     "value": 8.3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 99.1340540389752,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 1.7144603104497946,
+   "natalChartLonDifferenceArcsec": 1.7144603104497946,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Moon",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-301.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 157.4116076,
+    "lat": 1.0917477
+   },
+   "engine": {
+    "lon": 157.41337950858428,
+    "lat": 1.0913042461960656,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 24.75358669099451,
+     "lat": 2.1406380296011074,
+     "dist": 3.8911142821951134e-9
+    },
+    "positionBound": {
+     "value": 8.3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 157.41337950858428,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 6.378870903336065,
+   "natalChartLonDifferenceArcsec": 6.378870903336065,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Moon",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-301.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 302.2249809,
+    "lat": -1.6918062
+   },
+   "engine": {
+    "lon": 302.22905636035483,
+    "lat": -1.6924326984374354,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 37.37974930367715,
+     "lat": 3.28089436287237,
+     "dist": 1.627050527544934e-8
+    },
+    "positionBound": {
+     "value": 8.3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 302.22905636035483,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 14.671657277631311,
+   "natalChartLonDifferenceArcsec": 14.671657277631311,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Moon",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-301.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 352.9914827,
+    "lat": 4.309098
+   },
+   "engine": {
+    "lon": 353.00154784175345,
+    "lat": 4.30843244766526,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 57.543106819790786,
+     "lat": 2.932327093718969,
+     "dist": 4.419744819006195e-8
+    },
+    "positionBound": {
+     "value": 8.3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 353.00154784175345,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 36.234510312397106,
+   "natalChartLonDifferenceArcsec": 36.234510312397106,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": true
+  },
+  {
+   "body": "Mercury",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-199.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 96.1668867,
+    "lat": 1.8763877
+   },
+   "engine": {
+    "lon": 96.16744038020607,
+    "lat": 1.8768113662418757,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 1.06845017713893,
+     "lat": 0.028777572681268758,
+     "dist": 0.0000019097665228469934
+    },
+    "positionBound": {
+     "value": 9.3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 96.16744038020607,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 1.993248741791831,
+   "natalChartLonDifferenceArcsec": 1.993248741791831,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Mercury",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-199.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 61.1756073,
+    "lat": -2.9851395
+   },
+   "engine": {
+    "lon": 61.17632920255335,
+    "lat": -2.985626921696866,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 1.4191916543449965,
+     "lat": 0.15844497416139436,
+     "dist": 0.000006309082816253251
+    },
+    "positionBound": {
+     "value": 9.3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 61.17632920255335,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 2.5988491919633816,
+   "natalChartLonDifferenceArcsec": 2.5988491919633816,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Mercury",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-199.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 288.0057722,
+    "lat": -2.1126781
+   },
+   "engine": {
+    "lon": 288.0060126811461,
+    "lat": -2.1121685576672395,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 2.8671472550010546,
+     "lat": 0.04121181172147888,
+     "dist": 0.00000439919853312925
+    },
+    "positionBound": {
+     "value": 9.3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 288.0060126811461,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.865732125885188,
+   "natalChartLonDifferenceArcsec": 0.865732125885188,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Mercury",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-199.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 259.4675368,
+    "lat": 1.2413992
+   },
+   "engine": {
+    "lon": 259.46831914179415,
+    "lat": 1.2412652909939388,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 3.8541499595046433,
+     "lat": 0.42617841553637087,
+     "dist": 0.000014920781931311842
+    },
+    "positionBound": {
+     "value": 9.3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 259.46831914179415,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 2.816430458733521,
+   "natalChartLonDifferenceArcsec": 2.816430458733521,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Mercury",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-199.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 69.1343249,
+    "lat": -4.2453344
+   },
+   "engine": {
+    "lon": 69.13432879045678,
+    "lat": -4.243787570507573,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 0.18149282801371938,
+     "lat": 0.19684629803846468,
+     "dist": 0.000013721885269964715
+    },
+    "positionBound": {
+     "value": 9.3,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 69.13432879045678,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.014005644516146276,
+   "natalChartLonDifferenceArcsec": 0.014005644516146276,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Venus",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-299.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 69.8941924,
+    "lat": -0.6729344
+   },
+   "engine": {
+    "lon": 69.8946296957788,
+    "lat": -0.6731603860104458,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.6520249081412174,
+     "lat": 0.02025214975014451,
+     "dist": 4.0877227646611956e-7
+    },
+    "positionBound": {
+     "value": 11,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 69.8946296957788,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 1.5742648034574813,
+   "natalChartLonDifferenceArcsec": 1.5742648034574813,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Venus",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-299.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 71.8898948,
+    "lat": -0.5640665
+   },
+   "engine": {
+    "lon": 71.89019073175263,
+    "lat": -0.5643238382547028,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 1.3984376524405686,
+     "lat": 0.04410828670251105,
+     "dist": 7.655531509700667e-7
+    },
+    "positionBound": {
+     "value": 11,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 71.89019073175263,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 1.0653543093212647,
+   "natalChartLonDifferenceArcsec": 1.0653543093212647,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Venus",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-299.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 320.0704853,
+    "lat": -1.8524067
+   },
+   "engine": {
+    "lon": 320.0709349139507,
+    "lat": -1.8525944620822166,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 2.1248284134538324,
+     "lat": 0.03911654784920719,
+     "dist": 0.0000031212949331945688
+    },
+    "positionBound": {
+     "value": 11,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 320.0709349139507,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 1.6186102223400667,
+   "natalChartLonDifferenceArcsec": 1.6186102223400667,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Venus",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-299.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 243.4910091,
+    "lat": 4.2181434
+   },
+   "engine": {
+    "lon": 243.49321062704246,
+    "lat": 4.21958750787275,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 1.1432144974965786,
+     "lat": 0.20502658162489837,
+     "dist": 0.000005310131899865258
+    },
+    "positionBound": {
+     "value": 11,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 243.49321062704246,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 7.925497352698585,
+   "natalChartLonDifferenceArcsec": 7.925497352698585,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Venus",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-299.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 98.218071,
+    "lat": -0.0736591
+   },
+   "engine": {
+    "lon": 98.21794212392047,
+    "lat": -0.07499949888180511,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 2.0598686585535275,
+     "lat": 0.9783479159402947,
+     "dist": 0.000003134354074838311
+    },
+    "positionBound": {
+     "value": 11,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 98.21794212392047,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.4639538863557391,
+   "natalChartLonDifferenceArcsec": -0.4639538863557391,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Mars",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-4.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 112.2831757,
+    "lat": 1.2129133
+   },
+   "engine": {
+    "lon": 112.28322209585849,
+    "lat": 1.2131733735548322,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.3384116620749594,
+     "lat": 0.00011428142940304602,
+     "dist": 7.328832586079322e-7
+    },
+    "positionBound": {
+     "value": 6.6,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 112.28322209585849,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.16702509051356174,
+   "natalChartLonDifferenceArcsec": 0.16702509051356174,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Mars",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-4.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 62.6114549,
+    "lat": -0.0445089
+   },
+   "engine": {
+    "lon": 62.6114224704819,
+    "lat": -0.04489493369153785,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 0.816474869530893,
+     "lat": 0.012836594142434744,
+     "dist": 3.980789337232054e-7
+    },
+    "positionBound": {
+     "value": 6.6,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 62.6114224704819,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.11674626521198661,
+   "natalChartLonDifferenceArcsec": -0.11674626521198661,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Mars",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-4.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 29.5253596,
+    "lat": 0.9517639
+   },
+   "engine": {
+    "lon": 29.526184954778387,
+    "lat": 0.9504319307930211,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 0.7183775106044342,
+     "lat": 0.034372241021706815,
+     "dist": 0.000004394092761412798
+    },
+    "positionBound": {
+     "value": 6.6,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 29.526184954778387,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 2.971277202186684,
+   "natalChartLonDifferenceArcsec": 2.971277202186684,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Mars",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-4.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 266.2661377,
+    "lat": -0.5027681
+   },
+   "engine": {
+    "lon": 266.26647133604627,
+    "lat": -0.5021298224761275,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 2.2368085066550147,
+     "lat": 0.030229087884687537,
+     "dist": 0.0000027875180832907644
+    },
+    "positionBound": {
+     "value": 6.6,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 266.26647133604627,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 1.2010897663458309,
+   "natalChartLonDifferenceArcsec": 1.2010897663458309,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Mars",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-4.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 46.4952503,
+    "lat": -0.6509379
+   },
+   "engine": {
+    "lon": 46.49563913043687,
+    "lat": -0.6512082910914345,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 3.1557970468074443,
+     "lat": 0.04378924221239479,
+     "dist": 0.000003504963297270242
+    },
+    "positionBound": {
+     "value": 6.6,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 46.49563913043687,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 1.3997895724969567,
+   "natalChartLonDifferenceArcsec": 1.3997895724969567,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Jupiter",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-5.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 149.9331102,
+    "lat": 1.0488792
+   },
+   "engine": {
+    "lon": 149.9337846127886,
+    "lat": 1.0478821639242457,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.07459364454227455,
+     "lat": 0.0009345783179789938,
+     "dist": 0.0000021456922231527915
+    },
+    "positionBound": {
+     "value": 13,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 149.9337846127886,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 2.427886039004079,
+   "natalChartLonDifferenceArcsec": 2.427886039004079,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Jupiter",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-5.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 157.4967377,
+    "lat": 1.1498083
+   },
+   "engine": {
+    "lon": 157.49783687048125,
+    "lat": 1.1492381293593907,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 0.1383177639726536,
+     "lat": 0.0027300461201550776,
+     "dist": 0.000004804367515103423
+    },
+    "positionBound": {
+     "value": 13,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 157.49783687048125,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 3.9570137323607923,
+   "natalChartLonDifferenceArcsec": 3.9570137323607923,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Jupiter",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-5.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 201.2063283,
+    "lat": 1.2766053
+   },
+   "engine": {
+    "lon": 201.20653234925769,
+    "lat": 1.276196251695867,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 0.1878232062176086,
+     "lat": 0.00650452778035497,
+     "dist": 0.000007792146839426304
+    },
+    "positionBound": {
+     "value": 13,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 201.20653234925769,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.7345773277847911,
+   "natalChartLonDifferenceArcsec": 0.7345773277847911,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Jupiter",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-5.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 265.9914924,
+    "lat": 0.3520959
+   },
+   "engine": {
+    "lon": 265.99112326199986,
+    "lat": 0.35418422918004927,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 0.6797006561095807,
+     "lat": 0.0037383095440378616,
+     "dist": 0.0000037040665521413787
+    },
+    "positionBound": {
+     "value": 13,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 265.99112326199986,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -1.3288968008055235,
+   "natalChartLonDifferenceArcsec": -1.3288968008055235,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Jupiter",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-5.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 336.7419058,
+    "lat": -0.9607717
+   },
+   "engine": {
+    "lon": 336.7423084570499,
+    "lat": -0.9619923951356029,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 0.13894331295720835,
+     "lat": 0.01990368124687277,
+     "dist": 0.000017822190215984856
+    },
+    "positionBound": {
+     "value": 13,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 336.7423084570499,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 1.449565379652995,
+   "natalChartLonDifferenceArcsec": 1.449565379652995,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Saturn",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-6.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 320.4098207,
+    "lat": -0.9659412
+   },
+   "engine": {
+    "lon": 320.4090314561361,
+    "lat": -0.9680115951284102,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.01283996563647243,
+     "lat": 0.0014738463768063394,
+     "dist": 0.0000020625831997237554
+    },
+    "positionBound": {
+     "value": 18,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 320.4090314561361,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -2.841277910010831,
+   "natalChartLonDifferenceArcsec": -2.841277910010831,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Saturn",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-6.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 254.5449254,
+    "lat": 1.7291548
+   },
+   "engine": {
+    "lon": 254.54615223113072,
+    "lat": 1.7287585552773512,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 0.08286290212236407,
+     "lat": 0.0018699616174697113,
+     "dist": 8.64213469403141e-7
+    },
+    "positionBound": {
+     "value": 18,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 254.54615223113072,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 4.416592070447223,
+   "natalChartLonDifferenceArcsec": 4.416592070447223,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Saturn",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-6.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 205.6316695,
+    "lat": 2.422219
+   },
+   "engine": {
+    "lon": 205.63037958068927,
+    "lat": 2.4262470295309706,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 0.10244996321420322,
+     "lat": 0.007289436382572691,
+     "dist": 0.000007873909841083499
+    },
+    "positionBound": {
+     "value": 18,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 205.63037958068927,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -4.643709518495598,
+   "natalChartLonDifferenceArcsec": -4.643709518495598,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Saturn",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-6.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 82.9554962,
+    "lat": -1.3921866
+   },
+   "engine": {
+    "lon": 82.95599017556634,
+    "lat": -1.3873117149965644,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 0.2328847715414357,
+     "lat": 0.007392354860557885,
+     "dist": 0.0000042568806571543534
+    },
+    "positionBound": {
+     "value": 18,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 82.95599017556634,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 1.7783120387321105,
+   "natalChartLonDifferenceArcsec": 1.7783120387321105,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Saturn",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-6.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 331.4626499,
+    "lat": -1.3249792
+   },
+   "engine": {
+    "lon": 331.4634481493846,
+    "lat": -1.3264086384024083,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 0.030088796147781222,
+     "lat": 0.014360075878284195,
+     "dist": 0.000018299493023970742
+    },
+    "positionBound": {
+     "value": 18,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 331.4634481493846,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 2.8736977846165246,
+   "natalChartLonDifferenceArcsec": 2.8736977846165246,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Uranus",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-7.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 171.5215965,
+    "lat": 0.7595353
+   },
+   "engine": {
+    "lon": 171.52234754343465,
+    "lat": 0.7590900740218698,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.007871341736201805,
+     "lat": 0.0003863669515314482,
+     "dist": 0.0000024763751738381837
+    },
+    "positionBound": {
+     "value": 20,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 171.52234754343465,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 2.7037563647809293,
+   "natalChartLonDifferenceArcsec": 2.7037563647809293,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Uranus",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-7.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 283.7475212,
+    "lat": -0.386276
+   },
+   "engine": {
+    "lon": 283.7469033656142,
+    "lat": -0.3880655132420075,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 0.04254274336098577,
+     "lat": 0.000301687910784608,
+     "dist": 0.0000017592197646632341
+    },
+    "positionBound": {
+     "value": 20,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 283.7469033656142,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -2.224203788955492,
+   "natalChartLonDifferenceArcsec": -2.224203788955492,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Uranus",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-7.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 17.7412256,
+    "lat": -0.6294651
+   },
+   "engine": {
+    "lon": 17.74184771239095,
+    "lat": -0.6300222924217854,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 0.008028435449036928,
+     "lat": 0.0011157702010736376,
+     "dist": 0.000008381484515348678
+    },
+    "positionBound": {
+     "value": 20,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 17.74184771239095,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 2.2396046073936304,
+   "natalChartLonDifferenceArcsec": 2.2396046073936304,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Uranus",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-7.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 244.9310902,
+    "lat": 0.1481998
+   },
+   "engine": {
+    "lon": 244.93340611839585,
+    "lat": 0.15223136176694008,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 0.16180702261758675,
+     "lat": 0.0002348401500175735,
+     "dist": 0.00000834896775976759
+    },
+    "positionBound": {
+     "value": 20,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 244.93340611839585,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 8.337306225166685,
+   "natalChartLonDifferenceArcsec": 8.337306225166685,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Uranus",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-7.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 85.2632597,
+    "lat": 0.1323345
+   },
+   "engine": {
+    "lon": 85.26219266163298,
+    "lat": 0.13453868269798605,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 0.25512548162513465,
+     "lat": 0.0006348894407588572,
+     "dist": 1.4738017176255726e-7
+    },
+    "positionBound": {
+     "value": 20,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 85.26219266163298,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -3.841338121037552,
+   "natalChartLonDifferenceArcsec": -3.841338121037552,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Neptune",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-8.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 59.0460879,
+    "lat": -1.6472968
+   },
+   "engine": {
+    "lon": 59.04554874387594,
+    "lat": -1.6475749299177838,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.01851469729827916,
+     "lat": 0.00017216974789393709,
+     "dist": 0.0000010356573313955415
+    },
+    "positionBound": {
+     "value": 21,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 59.04554874387594,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -1.9409620467286004,
+   "natalChartLonDifferenceArcsec": -1.9409620467286004,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Neptune",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-8.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 110.7969184,
+    "lat": -0.6118287
+   },
+   "engine": {
+    "lon": 110.79996610441015,
+    "lat": -0.6131714959265644,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 0.03872729124374389,
+     "lat": 0.0003673480808381497,
+     "dist": 0.0000024362579432246034
+    },
+    "positionBound": {
+     "value": 21,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 110.79996610441015,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 10.971735876591993,
+   "natalChartLonDifferenceArcsec": 10.971735876591993,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Neptune",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-8.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 167.29055,
+    "lat": 0.9638833
+   },
+   "engine": {
+    "lon": 167.29464539357946,
+    "lat": 0.9646981016155014,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 0.012700090468484007,
+     "lat": 0.001188494954752893,
+     "dist": 0.000007820729098250942
+    },
+    "positionBound": {
+     "value": 21,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 167.29464539357946,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 14.743416886267369,
+   "natalChartLonDifferenceArcsec": 14.743416886267369,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Neptune",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-8.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 274.1000662,
+    "lat": 1.0829845
+   },
+   "engine": {
+    "lon": 274.09617415369047,
+    "lat": 1.083007637941171,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 0.11453866779463943,
+     "lat": 0.00021057126674656738,
+     "dist": 0.0000016666249607408556
+    },
+    "positionBound": {
+     "value": 21,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 274.09617415369047,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -14.011366714566975,
+   "natalChartLonDifferenceArcsec": -14.011366714566975,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Neptune",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-8.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 24.6103185,
+    "lat": -1.6080027
+   },
+   "engine": {
+    "lon": 24.611645816510986,
+    "lat": -1.6055443884106164,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 0.09566572605691784,
+     "lat": 0.0035768114246248375,
+     "dist": 0.00001731549709595627
+    },
+    "positionBound": {
+     "value": 21,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 24.611645816510986,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 4.778339439326373,
+   "natalChartLonDifferenceArcsec": 4.778339439326373,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Pluto",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-9.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 341.9699225,
+    "lat": -13.2783885
+   },
+   "engine": {
+    "lon": 341.9684703611097,
+    "lat": -13.278003482934219,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.0006699053551632154,
+     "lat": 0.0031479540473837,
+     "dist": 0.0000022915261178240646
+    },
+    "positionBound": {
+     "value": 25,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 341.9684703611097,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -5.227700004979852,
+   "natalChartLonDifferenceArcsec": -5.227700004979852,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Pluto",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-9.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 9.8509289,
+    "lat": -16.6453789
+   },
+   "engine": {
+    "lon": 9.849191820170233,
+    "lat": -16.64521934841137,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 0.010348743092756296,
+     "lat": 0.006726310984627524,
+     "dist": 0.000004805519595345868
+    },
+    "positionBound": {
+     "value": 25,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 9.849191820170233,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -6.253487387311907,
+   "natalChartLonDifferenceArcsec": -6.253487387311907,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Pluto",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-9.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 32.4030295,
+    "lat": -16.9212119
+   },
+   "engine": {
+    "lon": 32.40075802097306,
+    "lat": -16.921330184138288,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 0.009582662416574758,
+     "lat": 0.010075654555635166,
+     "dist": 0.000007679414950934011
+    },
+    "positionBound": {
+     "value": 25,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 32.40075802097306,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -8.177324497000882,
+   "natalChartLonDifferenceArcsec": -8.177324497000882,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Pluto",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-9.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 80.8001404,
+    "lat": -9.2367895
+   },
+   "engine": {
+    "lon": 80.79602546557066,
+    "lat": -9.237781133979372,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 0.055005368118975384,
+     "lat": 0.005701952382947442,
+     "dist": 0.000004582560786191796
+    },
+    "positionBound": {
+     "value": 25,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 80.79602546557066,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -14.813763945721803,
+   "natalChartLonDifferenceArcsec": -14.813763945721803,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Pluto",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-9.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 141.344687,
+    "lat": 8.5575786
+   },
+   "engine": {
+    "lon": 141.33694212750243,
+    "lat": 8.555438059779389,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 0.08148712031774415,
+     "lat": 0.00921902233920952,
+     "dist": 0.00001586256725394566
+    },
+    "positionBound": {
+     "value": 25,
+     "unit": "arcsec",
+     "label": "measured",
+     "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+    },
+    "natalChartLon": 141.33694212750243,
+    "natalChartFlags": [],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -27.88154099134772,
+   "natalChartLonDifferenceArcsec": -27.88154099134772,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  }
+ ]
+}

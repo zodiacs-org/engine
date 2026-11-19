@@ -1,0 +1,140 @@
+API VERSION: 1.2
+API SOURCE: NASA/JPL Horizons API
+
+
+
+*******************************************************************************
+Ephemeris / API_USER Tue Nov 17 08:32:25 2026 Pasadena, USA      / Horizons    
+*******************************************************************************
+Target body name: Mars Barycenter (4)             {source: DE441}
+Center body name: Earth (399)                     {source: DE441}
+Center-site name: GEOCENTRIC
+*******************************************************************************
+Start time      : A.D. 1860-Jan-31 07:45:48.5450 TT      
+Stop  time      : A.D. 2142-Apr-13 03:56:25.4310 TT      
+Step-size       : DISCRETE TIME-LIST
+*******************************************************************************
+Target pole/equ : undefined
+Target radii    : undefined                                                    
+Center geodetic : 0.0, 0.0, -6378.137             {E-lon(deg),Lat(deg),Alt(km)}
+Center cylindric: 0.0, 0.0, 0.0                   {E-lon(deg),Dxy(km),Dz(km)}
+Center pole/equ : ITRF93                          {East-longitude positive}
+Center radii    : 6378.137, 6378.137, 6356.752 km {Equator_a, b, pole_c}       
+Target primary  : Sun
+Vis. interferer : MOON (R_eq= 1737.400) km        {source: DE441}
+Rel. light bend : Sun                             {source: DE441}
+Rel. lght bnd GM: 1.3271E+11 km^3/s^2                                          
+Atmos refraction: NO (AIRLESS)
+RA format       : DEG
+Time format     : CAL 
+Calendar mode   : Mixed Julian/Gregorian
+EOP file        : eop.261116.p270212                                           
+EOP coverage    : DATA-BASED 1962-JAN-20 TO 2026-NOV-16. PREDICTS-> 2027-FEB-11
+Units conversion: 1 au= 149597870.700 km, c= 299792.458 km/s, 1 day= 86400.0 s 
+Table cut-offs 1: Elevation (-90.0deg=NO ),Airmass (>38.000=NO), Daylight (NO )
+Table cut-offs 2: Solar elongation (  0.0,180.0=NO ),Local Hour Angle( 0.0=NO )
+Table cut-offs 3: RA/DEC angular rate (     0.0=NO )                           
+Table format    : Comma Separated Values (spreadsheet)
+*******************************************************************************
+ Date__(TT)__HR:MN:SC.fff, , ,    ObsEcLon,   ObsEcLat,
+*******************************************************
+$$SOE
+ 1860-Jan-31 07:45:48.545, , , 239.9747345,  0.7386199,
+ 1860-Jan-31 08:45:48.545, , , 239.9999006,  0.7382129,
+ 1860-Jan-31 09:45:48.545, , , 240.0250655,  0.7378057,
+ 1860-Aug-18 13:40:47.685, , , 289.3021193, -5.8564787,
+ 1860-Aug-18 14:40:47.685, , , 289.3021072, -5.8547385,
+ 1860-Aug-18 15:40:47.685, , , 289.3021194, -5.8529960,
+ 1925-Feb-05 09:17:38.464, , ,  29.9732334,  0.6438353,
+ 1925-Feb-05 10:17:38.464, , ,  29.9999568,  0.6443820,
+ 1925-Feb-05 11:17:38.464, , ,  30.0266806,  0.6449283,
+ 1926-Sep-29 04:43:00.667, , ,  49.4570799, -2.4705595,
+ 1926-Sep-29 05:43:00.667, , ,  49.4570929, -2.4693952,
+ 1926-Sep-29 06:43:00.667, , ,  49.4570799, -2.4682290,
+ 1990-Jan-29 13:11:22.948, , , 269.9699862, -0.3615497,
+ 1990-Jan-29 14:11:22.948, , , 269.9999867, -0.3620659,
+ 1990-Jan-29 15:11:22.948, , , 270.0299880, -0.3625823,
+ 1990-Oct-20 18:30:28.802, , ,  74.5630039, -0.4057931,
+ 1990-Oct-20 19:30:28.802, , ,  74.5630167, -0.4040431,
+ 1990-Oct-20 20:30:28.802, , ,  74.5630039, -0.4022919,
+ 2026-Jan-23 08:17:54.381, , , 299.9675144, -1.0094346,
+ 2026-Jan-23 09:17:54.381, , , 299.9999871, -1.0096119,
+ 2026-Jan-23 10:17:54.381, , , 300.0324605, -1.0097890,
+ 2027-Jan-10 12:00:20.186, , , 160.4289876,  3.6059248,
+ 2027-Jan-10 13:00:20.186, , , 160.4289986,  3.6073877,
+ 2027-Jan-10 14:00:20.186, , , 160.4289876,  3.6088505,
+ 2060-Feb-05 19:38:31.446, , , 329.9670587, -1.0379851,
+ 2060-Feb-05 20:38:31.446, , , 330.0000169, -1.0377865,
+ 2060-Feb-05 21:38:31.446, , , 330.0329750, -1.0375878,
+ 2061-Feb-22 21:45:52.514, , , 202.0703854,  3.0303014,
+ 2061-Feb-22 22:45:52.514, , , 202.0703960,  3.0307537,
+ 2061-Feb-22 23:45:52.514, , , 202.0703854,  3.0312053,
+ 2140-Jul-28 14:39:22.250, , , 209.9777153, -0.8397551,
+ 2140-Jul-28 15:39:22.250, , , 210.0000865, -0.8403676,
+ 2140-Jul-28 16:39:22.250, , , 210.0224639, -0.8409796,
+ 2142-Apr-13 01:56:25.431, , , 244.9553294,  0.7923134,
+ 2142-Apr-13 02:56:25.431, , , 244.9553400,  0.7911572,
+ 2142-Apr-13 03:56:25.431, , , 244.9553294,  0.7899997,
+$$EOE
+*******************************************************************************
+Column meaning:
+ 
+TIME
+
+  Terrestrial Time ("TT") output was requested. This continuous timescale
+is the relativistic proper time of a clock at rest on the Earth's geoid (at
+"mean sea level"), but defined for a specified gravitational time dilation,
+so a coordinate time. It is appropriate for observations and measurements
+from the surface of the Earth.
+
+  TT runs at a uniform rate of one SI second per second and is independent of
+irregularities in Earth's rotation. It is a theoretical ideal, approximated
+(with a constant offset of 32.184 seconds) by the measured International Atomic
+Time (TAI) after 1955.  TT is the relativistic successor to the now deprecated
+non-relativistic Ephemeris Time (ET).
+
+  The TT scale requested here is a time-scale conversion from internal
+Barycentric Dynamical Time (TDB) and differs periodically from TDB with an
+amplitude less than 2 ms for several thousand years centered on present.
+The time-scale conversion for Earth is used regardless of observer location
+within the solar system, although clock rates may differ due to the local
+gravity field.
+
+  Any 'b' symbol in the 1st-column denotes a B.C. date. First-column blank
+(" ") denotes an A.D. date.
+ 
+CALENDAR SYSTEM
+
+  Mixed calendar mode was active such that calendar dates after AD 1582-Oct-15
+(if any) are in the modern Gregorian system. Dates prior to 1582-Oct-5 (if any)
+are in the Julian calendar system, which is automatically extended for dates
+prior to its adoption on 45-Jan-1 BC.  The Julian calendar is useful for
+matching historical dates. The Gregorian calendar more accurately corresponds
+to the Earth's orbital motion and seasons. A "Gregorian-only" calendar mode is
+available if such physical events are the primary interest.
+
+  NOTE: "n.a." in output means quantity "not available" at the print-time.
+ 
+ 'ObsEcLon,   ObsEcLat,' =
+   Observer-centered IAU76/80 ecliptic-of-date longitude and latitude of the
+target centers' apparent position, with light-time, gravitational deflection of
+light, and stellar aberrations.  Units: DEGREES
+
+Computations by ...
+
+    Solar System Dynamics Group, Horizons On-Line Ephemeris System
+    4800 Oak Grove Drive, Jet Propulsion Laboratory
+    Pasadena, CA  91109   USA
+
+    General site: https://ssd.jpl.nasa.gov/
+    Mailing list: https://ssd.jpl.nasa.gov/email_list.html
+    System news : https://ssd.jpl.nasa.gov/horizons/news.html
+    User Guide  : https://ssd.jpl.nasa.gov/horizons/manual.html
+    Connect     : browser        https://ssd.jpl.nasa.gov/horizons/app.html#/x
+                  API            https://ssd-api.jpl.nasa.gov/doc/horizons.html
+                  command-line   telnet ssd.jpl.nasa.gov 6775
+                  e-mail/batch   https://ssd.jpl.nasa.gov/ftp/ssd/horizons_batch.txt
+                  scripts        https://ssd.jpl.nasa.gov/ftp/ssd/SCRIPTS
+    Inquiries   : Jon.D.Giorgini@jpl.nasa.gov
+
+*******************************************************************************
