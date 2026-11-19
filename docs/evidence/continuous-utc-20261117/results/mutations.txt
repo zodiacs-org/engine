@@ -1,0 +1,12 @@
+Each mutation, run against src/time-scale-continuous.test.ts,
+src/receipt-continuous-utc.test.ts, src/time-scale.test.ts,
+src/time-scale-near-end.test.ts and src/window-table-end.test.ts (144 tests),
+on Node 22.22.2. The file was restored after each.
+
+M1  src/time-scale.ts: TT_MINUS_TAI_MS 32_184 -> 32_000           13 failed, 131 passed
+M2  src/time-scale.ts: TT - UTC without TAI - UTC (32.184 s)       14 failed, 130 passed
+M3  src/time-scale.ts: the rule from the table's last instant (>=) 11 failed, 133 passed
+M4  src/time-scale.ts: UT1 - UTC as the difference of the rounded
+    millisecond instants (the formula before this fix)             2 failed, 142 passed
+M5  src/window.ts: onePiece without the basis comparison            1 failed, 143 passed
+Unmutated                                                          0 failed, 144 passed

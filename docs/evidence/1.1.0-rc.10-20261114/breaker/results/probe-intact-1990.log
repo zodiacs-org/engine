@@ -1,0 +1,60 @@
+# intact: year 1990; default {"name":"de440","de440":{"opened":true,"version":"51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7","fromTtDays":-76699.5,"toTtDays":76699.5,"error":null}}
+SAYS NOTHING                                     defaultEphemeris [object] {"name":"de440","de440":{"opened":true,"version":"51428874d9a47213abc0ff42cbcec65f338624ea
+names-DE440                                      natalChart [object] flags=[] 
+names-DE440                                      natalChart_noTime [object] flags=[no-time] 
+names-DE440                                      positions [array[12]] 
+names-DE440                                      transits [object] 
+names-DE440                                      synastry [object] 
+names-DE440                                      progressedBodies [array[12]] 
+names-DE440                                      moonPhase [object] 
+names-DE440                                      saturnReturn [object] flags=[] 
+SAYS NOTHING                                     searchLongitudeCrossings [object] status=complete flags=[] {"status":"complete","crossings":[{"at":"1990-04-20T08:26:31.917Z","retrograde":false}],"s
+SAYS NOTHING                                     findLongitudeCrossings [array[1]] [{"at":"1990-04-20T08:26:31.917Z","retrograde":false}]
+SAYS NOTHING                                     chartPoints [object] {"sect":"day","points":[{"point":"Mean Node","lon":312.9353998700801,"lat":0,"speed":-0.05
+SAYS NOTHING                                     chartDeclinations [object] {"trueObliquity":23.442361874798056,"rows":[{"body":"Sun","lon":25.113854838728432,"lat":-
+SAYS NOTHING                                     internal.bodyLongitude [number] 262.1403664864322
+SAYS NOTHING                                     internal.longitudeSpeed [number] 11.94387879417036
+names-DE440                                      internal.computeBodies [array[12]] 
+names-DE440                                      internal.computeChart [object] flags=[no-time] 
+names-DE440                                      receipt.createNatalEnvelope [object] 
+names-DE440                                      calc.calc Sun [object] status=ok flags=[] 
+names-DE440                                      calc.calc Moon equatorial [object] status=ok flags=[] 
+names-DE440                                      calc.calc NNode [object] status=ok flags=[] 
+names-AE                                         calc.calc Mars helio [object] status=ok flags=[] 
+names-AE                                         calc.calc Mars topo [object] status=ok flags=[] 
+names-DE440                                      calc.calc Mars ecliptic-j2000 [object] status=ok flags=[] 
+names-DE440                                      calc.chart [object] status=ok 
+names-DE440                                      calc.events [object] status=ok flags=[] 
+names-AE                                         calc.houses [object] status=ok flags=[] 
+names-DE440                                      window.birthWindow [object] flags=[] 
+names-DE440                                      tech.solarReturn [object] flags=[] 
+names-DE440                                      tech.lunarReturn [object] flags=[] 
+SAYS NOTHING                                     tech.solarReturnInstant [Date] "2020-04-14T12:04:02.243Z"
+SAYS NOTHING                                     tech.mostRecentSolarReturnInstant [Date] "2019-04-15T06:10:14.031Z"
+SAYS NOTHING                                     tech.lunarReturnInstant [Date] "2020-03-26T03:31:09.346Z"
+SAYS NOTHING                                     tech.moonAspects [array[25]] [{"at":"1990-04-15T14:59:59.201Z","body":"Sun","aspect":"trine","moonLon":265.378943256306
+SAYS NOTHING                                     tech.moonIngresses [array[5]] [{"at":"1990-04-16T00:14:36.559Z","sign":"capricorn"},{"at":"1990-04-18T10:52:33.880Z","si
+SAYS NOTHING                                     tech.moonSignCandidates [object] flags=[] {"date":"1990-04-15","timeZone":null,"from":"1990-04-14T10:00:00.000Z","to":"1990-04-16T11
+SAYS NOTHING                                     tech.moonSignsBetween [array[6]] ["sagittarius","capricorn","aquarius","pisces","aries","taurus"]
+SAYS NOTHING                                     tech.voidOfCourseAt [object] {"at":"1990-04-15T08:30:00.000Z","isVoid":false,"current":null,"next":{"from":"1990-04-15T
+SAYS NOTHING                                     tech.voidOfCourseWindows [array[5]] [{"from":"1990-04-15T16:24:23.786Z","to":"1990-04-16T00:14:36.559Z","lastAspect":{"at":"19
+SAYS NOTHING                                     tech.compositeChart [object] {"bodies":[{"body":"Sun","lon":302.80618084610205},{"body":"Moon","lon":203.37258389314673
+names-DE440                                      tech.davisonChart [object] flags=[] 
+SAYS NOTHING                                     tech.chartAspectPatterns [object] {"points":[{"body":"Sun","lon":25.113854838728457},{"body":"Moon","lon":262.1403664864322}
+SAYS NOTHING                                     timing.profectionAt [object] flags=[] {"at":"2020-03-01T00:00:00.000Z","origin":{"point":"Ascendant","lon":93.28900664719379,"si
+SAYS NOTHING                                     timing.profectionYear [object] flags=[] {"age":30,"sign":"capricorn","ruler":"Saturn","house":7,"start":"2020-04-14T14:51:27.442Z"
+SAYS NOTHING                                     timing.firdaria [object] flags=[] {"birth":"1990-04-15T08:30:00.000Z","sect":"day","periods":[{"lord":"Sun","years":10,"cycl
+SAYS NOTHING                                     timing.firdariaAt [object] flags=[] {"at":"2020-03-01T00:00:00.000Z","sect":"day","age":29.87783820383205,"period":{"lord":"Me
+SAYS NOTHING                                     timing.planetaryReturns [object] status=complete flags=[] {"body":"Jupiter","natalLongitude":94.52618244402044,"from":"1990-04-15T08:30:00.000Z","to
+SAYS NOTHING                                     timing.solarArc [object] flags=[] {"birth":"1990-04-15T08:30:00.000Z","target":"2020-03-01T00:00:00.000Z","progressed":"1990
+SAYS NOTHING                                     timing.solarArcDirections [object] flags=[] {"arc":{"birth":"1990-04-15T08:30:00.000Z","target":"2020-03-01T00:00:00.000Z","progressed
+SAYS NOTHING                                     timing.zodiacalReleasing [object] flags=[] {"origin":{"point":"Lot of Fortune","lon":330.3155182948975,"sign":"pisces"},"birth":"1990
+SAYS NOTHING                                     timing.zodiacalReleasingAt [object] flags=[] {"origin":{"point":"Lot of Fortune","lon":330.3155182948975,"sign":"pisces"},"birth":"1990
+SAYS NOTHING                                     sky.skyEvents Sun [object] status=complete flags=[] {"body":"Sun","observer":{"latitude":51.5,"longitude":-0.12,"height":0},"from":"1990-04-15
+SAYS NOTHING                                     sky.skyEventsOn Moon [object] status=complete flags=[] {"body":"Moon","observer":{"latitude":51.5,"longitude":-0.12,"height":0},"from":"1990-04-1
+SAYS NOTHING                                     sky.planetaryHours [object] status=complete flags=[] {"date":"1990-04-15","utcOffsetMinutes":-0.48,"weekday":0,"ruler":"Sun","conventions":{"li
+SAYS NOTHING                                     sky.planetaryHourAt [object] {"day":{"date":"1990-04-15","utcOffsetMinutes":-0.48,"weekday":0,"ruler":"Sun","convention
+SAYS NOTHING                                     vedic.ayanamsa lahiri [object] flags=[] {"ayanamsa":"lahiri","utc":"1990-04-15T08:30:00.000Z","timeScale":{"input":"utc","basis":"
+SAYS NOTHING                                     vedic.siderealChart [object] flags=[] {"ayanamsa":"lahiri","ayanamsaValue":{"ayanamsa":"lahiri","utc":"1990-04-15T08:30:00.000Z"
+SAYS NOTHING                                     vedic.vargaSensitivity [object] flags=[] {"ayanamsa":"lahiri","utc":"1990-04-15T08:30:00.000Z","timeScale":{"input":"utc","basis":"
+SAYS NOTHING                                     vedic.vimshottariDasha(sidereal moon) [object] {"system":"vimshottari","yearLength":"julian","yearDays":365.25,"birth":"1990-04-15T08:30:

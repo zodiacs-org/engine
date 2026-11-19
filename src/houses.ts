@@ -40,6 +40,17 @@ export const POLAR_FALLBACK = "whole" as const satisfies HouseSystem;
  */
 export const PLACIDUS_POLAR_FALLBACK = POLAR_FALLBACK;
 
+/**
+ * Whether a place is inside the polar circle at an obliquity, |latitude| ≥
+ * 90° − ε: there part of the ecliptic never rises or sets, Placidus and Koch
+ * are undefined, and the ascendant, taken east of the meridian, turns half a
+ * circle twice a sidereal day, when the ecliptic passes through the horizon.
+ * At ±90° the horizon is the celestial equator, and the ascendant is 0° or
+ * 180°. A chart with angles there carries the flag `polar-angles`.
+ */
+export const insidePolarCircle = (input: Pick<AngleInput, "latitude" | "obliquity">): boolean =>
+  Math.abs(input.latitude) >= 90 - input.obliquity;
+
 /** Whether `system` is one that falls back inside the polar circle. */
 export function isPolarUndefinedHouseSystem(system: HouseSystem): boolean {
   return (POLAR_UNDEFINED_HOUSE_SYSTEMS as readonly HouseSystem[]).includes(system);
@@ -175,7 +186,7 @@ export function wholeSignCusps(ascendant: number): number[] {
  * asin near ±1: up to 6.5e-7° one unit in the last place below it.
  */
 export function placidusCusps(input: AngleInput, angles: Angles): number[] | null {
-  if (Math.abs(input.latitude) >= 90 - input.obliquity) return null;
+  if (insidePolarCircle(input)) return null;
 
   const ramc = ramcOf(input);
   const phi = input.latitude * DEG;
@@ -297,7 +308,7 @@ export function vehlowCusps(angles: Angles): number[] {
  * that semi-arc is undefined for part of the ecliptic.
  */
 export function kochCusps(input: AngleInput, angles: Angles): number[] | null {
-  if (Math.abs(input.latitude) >= 90 - input.obliquity) return null;
+  if (insidePolarCircle(input)) return null;
   const ramc = ramcOf(input);
   const argument =
     Math.tan(input.latitude * DEG) * Math.tan(declinationOfLongitude(angles.mc, input.obliquity) * DEG);

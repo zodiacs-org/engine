@@ -1,0 +1,4 @@
+zdump-check: 593 names in both default builds; zdump finds 703 intervals in 77 names from 1970-01-01T00:00:00Z to 2029-10-27T00:00:00Z
+zdump-check: tzdata 2026f (sha256 01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d) against 2021a (sha256 39e7d2ba08c68cbaefc8de3227aab0dec2521be8042cf56855f7dc3a9fb14e08); zic -b fat; zdump (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39
+zdump-check: every interval, probe and pinned offset matches zdump, to the second
+exit 0

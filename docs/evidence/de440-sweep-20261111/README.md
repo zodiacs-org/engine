@@ -115,6 +115,17 @@ numbers. All 32 rows would change and no value would fall. The other 75 rows
 (heliocentric, barycentric, topocentric, the mean points) were not swept and
 would stay.
 
+After 1.1.0-rc.7, `tools/write_bounds.py` also compares the 9 topocentric
+rows (the Sun, the Moon and Mars, each correction), value by value, with the
+geocentric row of the same correction and body as it writes it: a
+topocentric place is the geocentric one moved by the parallax, so the
+geocentric differences carry over. Where the geocentric row is at or above a
+topocentric row in every value, the tool leaves that row out, and calc.ts
+gives the geocentric bound, labelled estimated, as for every other
+topocentric body; it keeps a row at or above the geocentric one in every
+value, and refuses one in between. All 9 rows are left out.
+`src/calc-bounds.test.ts` checks it.
+
 ## Pass conditions
 
 - P1, the kernel: passed. Job 130581408068 restored `de440.bsp` under the

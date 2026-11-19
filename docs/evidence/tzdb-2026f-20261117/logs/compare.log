@@ -1,0 +1,4 @@
+compare: 597 names, 19176 instants at transitions before 1970 compared, 26 in "-00" spans read from the host, 0 mismatches
+compare: host-legal by the dumps 14, labelled "main" by the engine 14, differing 0
+compare: host-legal names: America/Argentina/ComodRivadavia, America/Ensenada, America/Nipigon, America/Rainy_River, America/Rosario, Asia/Chongqing, Asia/Chungking, Asia/Harbin, Asia/Kashgar, Atlantic/Jan_Mayen, EET, Europe/Tiraspol, Pacific/Enderbury, WET
+compare: property, 5000 pairs (seed 0x282): 4860 compared with Python zoneinfo, 140 in "-00" spans, 0 mismatches

@@ -1,0 +1,31 @@
+PASS  Moon: far UTC instant is on the pack and flagged: jpl-de440 ["delta-t-extrapolated"] segment extrapolated sigma 103.05480164626967
+PASS  Moon: bound = the pack's bound + rate x TT band: now 0.013 (measured), far 57.4689, extra 57.4559, band 103.06 s; basis "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instant"
+PASS  Moon: bounds:plus-delta-t-band named
+PASS  Moon: the place at ΔT ± σ moves less than the widening: moved 57.4536 arcsec, widening 57.4559
+PASS  Moon: present day, TT input and pinned ΔT unflagged with the pack's own bound: []0.013 []0.013 []0.013
+PASS  Moon: distance and speed bounds on the pack: distance null, speed null (now: null, null)
+PASS  Sun: far UTC instant is on the pack and flagged: jpl-de440 ["delta-t-extrapolated"] segment extrapolated sigma 103.05480164626967
+PASS  Sun: bound = the pack's bound + rate x TT band: now 0.0037 (measured), far 4.1077, extra 4.1040, band 103.06 s; basis "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instant"
+PASS  Sun: bounds:plus-delta-t-band named
+PASS  Sun: the place at ΔT ± σ moves less than the widening: moved 4.1038 arcsec, widening 4.1040
+PASS  Sun: present day, TT input and pinned ΔT unflagged with the pack's own bound: []0.0037 []0.0037 []0.0037
+PASS  Sun: distance and speed bounds on the pack: distance null, speed null (now: null, null)
+PASS  Mercury: far UTC instant is on the pack and flagged: jpl-de440 ["delta-t-extrapolated"] segment extrapolated sigma 103.05480164626967
+PASS  Mercury: bound = the pack's bound + rate x TT band: now 0.0037 (measured), far 0.2714, extra 0.2677, band 103.06 s; basis "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instant"
+PASS  Mercury: bounds:plus-delta-t-band named
+PASS  Mercury: the place at ΔT ± σ moves less than the widening: moved 0.2677 arcsec, widening 0.2677
+PASS  Mercury: present day, TT input and pinned ΔT unflagged with the pack's own bound: []0.0037 []0.0037 []0.0037
+PASS  Mercury: distance and speed bounds on the pack: distance null, speed null (now: null, null)
+PASS  Pluto: far UTC instant is on the pack and flagged: jpl-de440 ["delta-t-extrapolated"] segment extrapolated sigma 103.05480164626967
+PASS  Pluto: bound = the pack's bound + rate x TT band: now 0.0035 (measured), far 0.0846, extra 0.0811, band 103.06 s; basis "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instant"
+PASS  Pluto: bounds:plus-delta-t-band named
+PASS  Pluto: the place at ΔT ± σ moves less than the widening: moved 0.0811 arcsec, widening 0.0811
+PASS  Pluto: present day, TT input and pinned ΔT unflagged with the pack's own bound: []0.0035 []0.0035 []0.0035
+PASS  Pluto: distance and speed bounds on the pack: distance null, speed null (now: null, null)
+PASS  UT1 input flagged, on the pack: ["delta-t-extrapolated"]
+PASS  topocentric on TT input flagged (astronomy-engine by design): astronomy-engine ["delta-t-extrapolated"]
+PASS  natalChart: UTC far flagged; TT without houses not; TT with houses flagged; present day not; all on the pack: ["delta-t-extrapolated"] ["no-time"] ["delta-t-extrapolated"] []
+PASS  chart(): flagged, on the pack: ["delta-t-extrapolated"]
+PASS  houses(): flagged: ["delta-t-extrapolated"]
+PASS  events(): flagged far, not now; timing bound wider far; on the pack: far ["delta-t-extrapolated"] timing 103.093911254; now [] timing 0.02574920654296875
+30 pass, 0 fail

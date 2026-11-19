@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 
@@ -76,6 +76,10 @@ import { housePosition, coAscendants, houseSpeeds, SIDEREAL_TIME_RATE, SIDEREAL_
 import { planetaryReturns, type PlanetaryReturns } from "@zodiacs/engine/timing";
 import { prepareLocalTime, resolveLocalToUtc, julianToGregorian, TZDB, type LocalTimeResolution, type ZoneTransition, type TransitionCause, type CalendarName } from "@zodiacs/engine/geo";
 import { type TimeScale, type TimeScaleName, type LeapSeconds, type Ut1MinusUtc } from "@zodiacs/engine";
+import { natalChart as coreNatalChart, setDefaultEphemeris as coreSetDefault, type Chart as CoreChart } from "@zodiacs/engine/core";
+coreSetDefault("astronomy-engine");
+const fromCore: Chart = coreNatalChart({utc: "1990-06-15T12:30:00Z", timeScale: "tt", timeKnown: false}) satisfies CoreChart;
+void fromCore;
 const onTt: Chart = natalChart({utc: "1990-06-15T12:30:00Z", timeScale: "tt" satisfies TimeScaleName, timeKnown: false});
 const basis: TimeScale = onTt.timeScale;
 const leapSeconds: LeapSeconds | null = basis.leapSeconds;
@@ -160,7 +164,7 @@ const progressionYear: number = PROGRESSION_DAYS_PER_YEAR;
 void progressionAt; void progressionRows; void progressionYear;
 const places: ReturnType<typeof createGeoNamesClient> = createGeoNamesClient({baseUrl: "https://example.test/cities"});
 void places;
-const typedFlags: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback"];
+const typedFlags: readonly ChartFlag[] = ["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback", "calendar-unknown", "polar-angles"];
 const echoed: BirthInput = {utc: "2000-02-29T08:30:00Z", timeKnown: false, flags: [typedFlags[3]]};
 const echoChart: Chart = natalChart(echoed);
 saturnReturn(echoed);
@@ -224,6 +228,11 @@ const opening: Promise<De440Source> = openDe440Pack(new Uint8Array(0), { expectD
 const asSource = (source: De440Source): PositionSource => source;
 const inside: number = withEphemeris({ ephemeris: { name: "x", version: "0" }, place: () => ({ lon: 0, lat: 0 }), trueNode: () => 0 }, () => 1);
 const errorCode = (error: unknown): De440ErrorCode | null => (error instanceof De440Error ? error.code : null);
+import { DE440_PACK, de440PackBytes, openShippedDe440Pack, type De440PackDescription } from "@zodiacs/engine/de440/pack";
+const shippedPack: De440PackDescription = DE440_PACK;
+const shippedBytes: () => Uint8Array = de440PackBytes;
+const shippedSource: () => Promise<De440Source> = openShippedDe440Pack;
+void shippedPack; void shippedBytes; void shippedSource;
 void opening.catch(() => {}); void asSource; void inside; void errorCode; void REDUCED_BODIES;
 `
 );
@@ -242,7 +251,7 @@ writeFileSync(
   join(directory, "consumer.mjs"),
   `
 import assert from "node:assert/strict";
-import { natalChart, positions, transits, synastry, moonPhase, progressedInstant, progressedBodies, PROGRESSION_DAYS_PER_YEAR, ENGINE_VERSION } from "@zodiacs/engine";
+import { natalChart, positions, transits, synastry, moonPhase, progressedInstant, progressedBodies, PROGRESSION_DAYS_PER_YEAR, ENGINE_VERSION, saturnReturn } from "@zodiacs/engine";
 import { chartDeclinations, createAspectPolicy, findConfiguredAspects, eclipticToEquatorial, declinationsForBodies, findDeclinationAspects } from "@zodiacs/engine";
 import { EPHEMERIS_SPAN, SUN_BOUND_LATITUDE } from "@zodiacs/engine";
 import { resolveBirth, createGeoNamesClient } from "@zodiacs/engine/geo";
@@ -255,16 +264,22 @@ import * as vedic from "@zodiacs/engine/vedic";
 import * as houses from "@zodiacs/engine/houses";
 import { planetaryReturns } from "@zodiacs/engine/timing";
 import * as root from "@zodiacs/engine";
+// The checks below pin values written on astronomy-engine, the engine's
+// fallback, and are run on it; the default source, the shipped DE440 pack,
+// is checked in its own block at the end, which sets it.
+root.setDefaultEphemeris("astronomy-engine");
 import { calc } from "@zodiacs/engine/calc";
 import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError } from "@zodiacs/engine/window";
 import * as techniques from "@zodiacs/engine/techniques";
 import * as sky from "@zodiacs/engine/sky";
 import * as time from "@zodiacs/engine/time";
 import * as lite from "@zodiacs/engine/lite";
+import * as core from "@zodiacs/engine/core";
 globalThis.fetch = () => { throw new Error("Calculation attempted a network request"); };
 const chart = natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(chart.houses.system, "whole");
 assert(chart.flags.includes("polar-fallback"));
+assert(chart.flags.includes("polar-angles"));
 assert(((chart.angles.asc-chart.angles.mc+360)%360) < 180);
 assert.equal(chart.houses.cusps[0], Math.floor(chart.angles.asc/30)*30);
 const sidereal = vedic.siderealChart(chart, "lahiri");
@@ -326,7 +341,7 @@ assert.equal(findDeclinationAspects([{body: "A", lon: -1e-20, lat: 0}, {body: "B
 // Outside astronomy-engine's tabulated years every calculation refuses at once.
 assert.deepEqual(EPHEMERIS_SPAN.daysFromJ2000, {from: -730000, to: 730000});
 assert.throws(() => positions("4000-01-01"), {name: "RangeError", message: /^The instant is outside the ephemeris span/});
-assert.throws(() => natalChart({utc: "0001-01-01"}), {name: "RangeError", message: /^The instant is outside the ephemeris span/});
+assert.throws(() => natalChart({utc: "0001-01-01T00:00:00Z"}), {name: "RangeError", message: /^The instant is outside the ephemeris span/});
 for (const label of [" Mars", "Mars\\u0000", "x".repeat(200)]) {
   assert.throws(() => declinationsForBodies([{body: label, lon: 0, lat: 0}], 23.4), RangeError);
   assert.throws(() => createAspectPolicy({bodies: [label]}), RangeError);
@@ -334,6 +349,11 @@ for (const label of [" Mars", "Mars\\u0000", "x".repeat(200)]) {
 assert.throws(() => progressedBodies(8.64e15, 8.64e15), RangeError);
 assert.throws(() => positions(-8.64e15), RangeError);
 assert.equal(transits(chart, "2026-09-07T12:00:00Z").positions.length, 12);
+// Outside REFERENCE_SPAN positions() flags each row as natalChart() flags the chart (from 2.0.0).
+const edgeRows = positions("2200-01-01T00:00:00Z");
+assert(edgeRows.every((row) => row.flags.includes("outside-reference-span")));
+assert.deepEqual(edgeRows[0].flags, natalChart({utc: "2200-01-01T00:00:00Z"}).flags);
+assert(positions("2000-01-01T12:00:00Z").every((row) => !("flags" in row)));
 assert(synastry(chart, {utc: "2000-01-01", timeKnown: false}).aspects.length > 0);
 assert(moonPhase("2024-04-08T18:21:00Z").illumination < 0.001);
 const unknown = natalChart(resolveBirth({date: "2000-02-29", timeZone: "UTC", timeKnown: false}));
@@ -343,6 +363,10 @@ assert(unknown.flags.includes("no-time"));
 assert.throws(() => natalChart({utc: "2023-02-29T12:00:00Z"}), RangeError);
 assert.throws(() => natalChart({utc: "2000-01-01T12:00:00"}), RangeError);
 assert.throws(() => natalChart({utc: "2000-01-01", houseSystem: "unsupported"}), RangeError);
+// A calendar date with no time is refused unless the birth time is declared unknown.
+assert.throws(() => natalChart({utc: "2000-01-01"}), {name: "RangeError", message: /calendar date with no time/});
+assert(natalChart({utc: "2000-01-01", timeKnown: false}).flags.includes("no-time"));
+assert.throws(() => saturnReturn("2000-01-01"), {name: "RangeError", message: /calendar date with no time/});
 for (const name of ["react", "@zodiacs/sdk"]) {
   assert.throws(() => import.meta.resolve(name), {code: "ERR_MODULE_NOT_FOUND"});
 }
@@ -423,7 +447,7 @@ assert.deepEqual(echoedUnknown.input.flags, ["lmt"]);
 assert.deepEqual(echoedUnknown.flags, ["lmt", "no-time"]);
 const echoedPolar = natalChart({...chart.input, flags: ["polar-fallback", "polar-fallback"]});
 assert.deepEqual(echoedPolar.input.flags, []);
-assert.deepEqual(echoedPolar.flags, ["polar-fallback"]);
+assert.deepEqual(echoedPolar.flags, ["polar-fallback", "polar-angles"]);
 for (const value of [echoedUnknown, echoedPolar]) {
   const parsedEcho = parseNatalEnvelope(serializeNatalEnvelope(createNatalEnvelope(value)));
   assert.equal(parsedEcho.ok, true);
@@ -445,14 +469,14 @@ let hooks = 0;
 const accessorFlags = ["lmt"];
 Object.defineProperty(accessorFlags, "0", {get() { hooks++; return "lmt"; }});
 for (const flags of [["PRIVATE_FLAG_SENTINEL"], ["dst-gap", "dst-fold"], ["no-time"], ["polar-fallback"], "lmt", new Set(["lmt"]), [null], Array(1), accessorFlags, Array(65).fill("lmt")]) {
-  assert.throws(() => natalChart({utc: "2000-01-01", flags}), (error) => error instanceof RangeError && !error.message.includes("PRIVATE_FLAG_SENTINEL"));
+  assert.throws(() => natalChart({utc: "2000-01-01T00:00:00Z", flags}), (error) => error instanceof RangeError && !error.message.includes("PRIVATE_FLAG_SENTINEL"));
 }
 assert.equal(hooks, 0);
 const iterableFlags = ["lmt"];
 iterableFlags[Symbol.iterator] = () => { throw new Error("Custom iterator called"); };
-assert.deepEqual(natalChart({utc: "2000-01-01", flags: iterableFlags}).flags, ["lmt"]);
+assert.deepEqual(natalChart({utc: "2000-01-01T00:00:00Z", flags: iterableFlags}).flags, ["lmt"]);
 let latitudeReads = 0;
-const captured = natalChart({utc: "2000-01-01", get latitude() { return ++latitudeReads === 1 ? 0 : 999; }, longitude: 0});
+const captured = natalChart({utc: "2000-01-01T00:00:00Z", get latitude() { return ++latitudeReads === 1 ? 0 : 999; }, longitude: 0});
 assert.equal(latitudeReads, 1);
 assert.equal(captured.input.latitude, 0);
 const originalFormatter = Intl.DateTimeFormat;
@@ -494,8 +518,8 @@ assert.equal(time.EPHEMERIS_SPAN, EPHEMERIS_SPAN);
 assert(Object.isFrozen(time.eclipticFrame(0).rows));
 assert.throws(() => time.timeBasis(Number.NaN), RangeError);
 assert.deepEqual(time.timeBands(leapChart), {tt: 0, ut1: leapChart.timeScale.ut1MinusUtc.sigma});
-// Wall times before 1970 read the packed tzdb 2025c history, loaded lazily.
-assert.equal(TZDB.version, "2025c");
+// Wall times before 1970 read the packed tzdb 2026f history, loaded lazily.
+assert.equal(TZDB.version, "2026f");
 assert.throws(() => resolveLocalToUtc("1947-07-01", "12:00", "Europe/Stockholm"), (error) => error instanceof ZoneHistoryNotLoadedError && /prepareLocalTime/.test(error.message));
 await prepareLocalTime("1947-07-01", "Europe/Stockholm");
 const stockholm = resolveLocalToUtc("1947-07-01", "12:00", "Europe/Stockholm");
@@ -508,6 +532,14 @@ assert.deepEqual(birthplace.flags, ["lmt"]);
 assert.equal(julianToGregorian("1917-10-25"), "1917-11-07");
 assert.equal(resolveLocalToUtc("1917-10-25", "12:00", "Etc/GMT-3", {calendar: "julian"}).utc.toISOString(), "1917-11-07T09:00:00.000Z");
 assert.throws(() => resolveLocalToUtc("2000-01-01", "12:00", "UTC", {calender: "julian"}), RangeError);
+// A date a calendar changeover skipped, given with no country, is flagged; with the country, the note says it instead.
+const skipped = resolveLocalToUtc("1752-09-08", "12:00", "Etc/UTC");
+assert.deepEqual(skipped.flags, ["calendar-unknown"]);
+assert(natalChart({utc: skipped.utc, flags: skipped.flags}).flags.includes("calendar-unknown"));
+assert.deepEqual(resolveLocalToUtc("1752-09-08", "12:00", "Etc/UTC", {country: "GB"}).flags, []);
+// A country the table does not date leaves it flagged; a receipt refuses the flag on an instant no changeover skipped.
+assert.deepEqual(resolveLocalToUtc("1752-09-08", "12:00", "Etc/UTC", {country: "ZZ"}).flags, ["calendar-unknown"]);
+assert.throws(() => createNatalEnvelope(natalChart({utc: "1990-05-03T12:00:00Z", flags: ["calendar-unknown"]})));
 assert.throws(() => resolveBirth({date: "2000-01-01", time: "12:00", timeZone: "UTC", calender: "julian"}), RangeError);
 const windowed = birthWindow({start: "2001-12-21T08:40:00Z", end: "2001-12-21T09:20:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"});
 assert.equal(windowed.verification, "sampled at one-second resolution");
@@ -582,6 +614,15 @@ assert.deepEqual(lite.essentialDignities("Mars", 10, "day"), techniques.essentia
 assert.equal(lite.sectReading({convention: "ecliptic", ascendant: chart.angles.asc, sunLon: chart.bodies[0].lon}).sect, root.sectOf(chart.angles.asc, chart.bodies[0].lon));
 assert.equal(lite.sectReading({convention: "altitude", sunAltitude: 0, sunLon: 0}).sect, "day");
 assert.throws(() => lite.sectReading({sunAltitude: 1, sunLon: 0}), RangeError);
+// The core entry (ZOD-292): the root's names, on astronomy-engine by default,
+// with no DE440 pack to open; its charts are the root's on astronomy-engine,
+// each naming it, and are its own module copies' (not the root's settings).
+assert.deepEqual(Object.keys(core).sort(), Object.keys(root).sort());
+assert.equal(core.defaultEphemeris().name, "astronomy-engine");
+assert.equal(core.defaultEphemeris().de440.opened, false);
+assert.notEqual(core.natalChart, natalChart);
+assert.deepEqual(core.natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"}), chart);
+assert.deepEqual(core.natalChart({utc: "2000-01-01T12:00:00Z", timeKnown: false}).ephemeris, {...root.EPHEMERIS});
 // The sky entry: the Sun's rise at Greenwich on 2024-06-21, a Friday, begins
 // Venus's day; its hours follow the Chaldean order; the rise is where the
 // Sun's upper limb meets the standard refraction.
@@ -652,12 +693,178 @@ assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-
   assert.equal(rows.find((row) => row.body === "North Node").lon, 20);
   assert.notEqual(positions("2000-01-01T12:00:00Z").find((row) => row.body === "Sun").lon, 10);
 }
-console.log(JSON.stringify({version: ENGINE_VERSION, de440: "passed", birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", liteEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
+{
+  // The shipped DE440 pack: the sealed bytes docs/de440.md names, opened with no
+  // file and no digest from the caller, and a chart from it inside the root's
+  // switch. The Sun is held to the conformance suite's vector L1-POS-0001
+  // (JPL Horizons, DE441, in the IAU 2006/2000A true ecliptic of date), 1″.
+  const shipped = await import("@zodiacs/engine/de440/pack");
+  const { createHash } = await import("node:crypto");
+  const bytes = shipped.de440PackBytes();
+  assert.equal(bytes.byteLength, 2489664);
+  assert.equal(createHash("sha256").update(bytes).digest("hex"), "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7");
+  assert.equal(shipped.DE440_PACK.sha256, "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7");
+  const source = await shipped.openShippedDe440Pack();
+  assert.deepEqual(source.ephemeris, { name: "jpl-de440", version: shipped.DE440_PACK.sha256 });
+  const instant = new Date(Math.round((2397195.6924745925 - 2440587.5) * 86400000));
+  const chart = root.withEphemeris(source, () => natalChart({ utc: instant, timeScale: "tt", timeKnown: false }));
+  assert.deepEqual(chart.ephemeris, source.ephemeris);
+  const sun = chart.bodies.find((row) => row.body === "Sun");
+  assert(Math.abs(sun.lon - 353.0330254813) * 3600 <= 1 && Math.abs(sun.lat - -0.0000304792) * 3600 <= 1, "the shipped pack's Sun is not within 1 arcsecond of Horizons");
+  // The default source (1.1.0-rc.9): a plain call, with nothing opened by the
+  // caller, is on the shipped pack, names it, and gives the same Sun; after
+  // setDefaultEphemeris("astronomy-engine") it is on astronomy-engine and
+  // names no ephemeris, as it is outside the pack's years under either setting.
+  const plainInput = { utc: instant, timeScale: "tt", timeKnown: false };
+  root.setDefaultEphemeris("de440");
+  assert.deepEqual(root.defaultEphemeris().de440.version, shipped.DE440_PACK.sha256);
+  const plain = natalChart(plainInput);
+  assert.deepEqual(plain.ephemeris, source.ephemeris);
+  assert.deepEqual(plain.bodies, chart.bodies);
+  // Never a silent fallback (1.1.0-rc.10): outside the pack's years the chart
+  // names astronomy-engine and is flagged; calc() and birthWindow() are on the
+  // pack with natalChart(); the caller's own choice is named and not flagged.
+  assert.deepEqual(plain.flags, ["no-time"]);
+  const outside = natalChart({ utc: "1700-06-01T00:00:00Z", timeKnown: false });
+  assert.deepEqual(outside.ephemeris, { ...root.EPHEMERIS });
+  assert.equal(outside.flags.at(-1), "outside-de440-span");
+  assert(outside.bodies.every((row) => row.ephemeris === "astronomy-engine" && row.fallback === "outside-de440-span"));
+  const calcEntry = await import("@zodiacs/engine/calc");
+  const windowEntry = await import("@zodiacs/engine/window");
+  // The same instant given the same way, so that the two read one Date: calc()'s Sun is natalChart()'s to the bit.
+  const sunOnPack = calcEntry.calc({ body: "Sun", time: "1990-04-15T08:30:00Z" });
+  const sunOfChart = natalChart({ utc: "1990-04-15T08:30:00Z", timeKnown: false }).bodies.find((row) => row.body === "Sun");
+  assert.deepEqual([sunOnPack.lon, sunOnPack.lat, sunOnPack.speeds.lon], [sunOfChart.lon, sunOfChart.lat, sunOfChart.speed]);
+  assert.deepEqual(sunOnPack.receipt.engine.ephemeris, source.ephemeris);
+  assert.deepEqual(sunOnPack.flags, []);
+  const windowOnPack = windowEntry.birthWindow({ start: "1990-04-15T08:00:00Z", end: "1990-04-15T08:10:00Z", latitude: 51.5, longitude: -0.12 });
+  assert.deepEqual(windowOnPack.ephemeris, source.ephemeris);
+  assert.deepEqual(windowOnPack.flags, []);
+  root.setDefaultEphemeris("astronomy-engine");
+  assert.equal(root.defaultEphemeris().name, "astronomy-engine");
+  const chosen = natalChart(plainInput);
+  assert.deepEqual(chosen.ephemeris, { ...root.EPHEMERIS });
+  assert.deepEqual(chosen.flags, ["no-time"]);
+  assert(chosen.bodies.every((row) => row.ephemeris === "astronomy-engine" && !("fallback" in row)));
+}
+console.log(JSON.stringify({version: ENGINE_VERSION, de440: "passed", de440Pack: "passed", birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", liteEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());
+
+// Never a silent fallback, on the installed package itself (1.1.0-rc.10). The
+// pack is base64 text in one file under dist/. That text is taken away
+// (missing), changed in one character (damaged: the SHA-256 is wrong), cut
+// short (damaged) and replaced by text that is not base64 (undecodable); each
+// time a new process must find every result flagged "de440-unavailable" and
+// naming astronomy-engine, and nothing naming DE440. The file is restored, and
+// a last process must find the pack whole again and nothing flagged.
+const distDirectory = join(directory, "node_modules/@zodiacs/engine/dist");
+const packText = /"([A-Za-z0-9+/=]{3000000,})"/u;
+const holders = readdirSync(distDirectory).filter((name) => name.endsWith(".js") && packText.test(readFileSync(join(distDirectory, name), "utf8")));
+assert.equal(holders.length, 1, "exactly one installed file holds the pack's text");
+const holder = join(distDirectory, holders[0]);
+const whole = readFileSync(holder, "utf8");
+const text = whole.match(packText)[1];
+writeFileSync(
+  join(directory, "fallback.mjs"),
+  `
+import assert from "node:assert/strict";
+import * as root from "@zodiacs/engine";
+import { calc, chart, events } from "@zodiacs/engine/calc";
+import { birthWindow } from "@zodiacs/engine/window";
+import * as techniques from "@zodiacs/engine/techniques";
+import { bodyLongitude, bodyLongitudeDetailed } from "@zodiacs/engine/internal";
+import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from "@zodiacs/engine/receipt";
+const expectUnavailable = process.argv[2] === "unavailable";
+const flags = expectUnavailable ? ["de440-unavailable"] : [];
+const name = expectUnavailable ? "astronomy-engine" : "jpl-de440";
+const birth = { utc: "1990-04-15T08:30:00Z", latitude: 51.5, longitude: -0.12 };
+assert.equal(root.defaultEphemeris().name, "de440");
+const status = root.defaultEphemeris().de440;
+assert.equal(status.opened, !expectUnavailable);
+assert.equal(typeof status.error, expectUnavailable ? "string" : "object");
+const natal = root.natalChart(birth);
+assert.deepEqual(natal.flags, flags);
+assert.equal(natal.ephemeris.name, name);
+assert(natal.bodies.every((row) => row.ephemeris === name && row.fallback === flags[0]));
+assert.equal(JSON.stringify(natal).includes("jpl-de440"), !expectUnavailable);
+const envelope = createNatalEnvelope(natal);
+assert.deepEqual(envelope.receipt.resultFlags, flags);
+assert.equal(envelope.receipt.engine.ephemeris.name, name);
+assert.equal(parseNatalEnvelope(serializeNatalEnvelope(envelope)).ok, true);
+assert(root.positions(birth.utc).every((row) => row.ephemeris === name && row.fallback === flags[0]));
+assert.equal(root.moonPhase(birth.utc).ephemeris, name);
+assert.equal(root.moonPhase(birth.utc).fallback, flags[0]);
+assert.deepEqual(root.saturnReturn(birth.utc).flags, flags);
+assert.equal(root.saturnReturn(birth.utc).ephemeris, name);
+// chartPoints and chartDeclinations of a birth, and of the chart (1.1.0-rc.12): the chart's label, carried.
+for (const derived of [root.chartPoints(birth), root.chartDeclinations(birth), root.chartPoints(natal), root.chartDeclinations(natal)]) {
+  assert.deepEqual(derived.flags, flags);
+  assert.equal(derived.ephemeris.name, name);
+}
+assert.deepEqual(root.searchLongitudeCrossings("Sun", 30, "1990-01-01T00:00:00Z", "1991-01-01T00:00:00Z").flags, flags);
+for (const body of ["Sun", "Moon", "Pluto", "North Node"]) {
+  const position = calc({ body, time: birth.utc });
+  assert.deepEqual(position.flags, flags);
+  assert.equal(position.receipt.engine.ephemeris.name, name);
+}
+const whole = chart({ time: birth.utc, place: { latitude: 51.5, longitude: -0.12 } });
+assert.deepEqual(whole.chart.flags, flags);
+assert.equal(whole.receipt.engine.ephemeris.name, name);
+// A calendar date with no time is refused by calc's chart() too, unless the birth time is declared unknown.
+assert.throws(() => chart({ time: "2000-01-01", place: { latitude: 51.5, longitude: -0.12 } }), { name: "RangeError", message: /calendar date with no time/ });
+assert(chart({ time: "2000-01-01", timeKnown: false }).chart.flags.includes("no-time"));
+const found = events({ kind: "longitude-crossing", body: "Sun", longitude: 30, from: "1990-01-01T00:00:00Z", to: "1991-01-01T00:00:00Z" });
+assert.deepEqual(found.flags, flags);
+assert.equal(found.receipt.engine.ephemeris.name, name);
+const window = birthWindow({ start: "1990-04-15T08:00:00Z", end: "1990-04-15T08:10:00Z", latitude: 51.5, longitude: -0.12 });
+assert.deepEqual(window.flags, flags);
+assert.equal(window.ephemeris.name, name);
+// The techniques entry (1.1.0-rc.11): a Date through its detailed form, objects, and a list's elements.
+const returned = techniques.solarReturnInstantDetailed(25, "2024-03-01T00:00:00Z");
+assert.equal(returned.value.getTime(), techniques.solarReturnInstant(25, "2024-03-01T00:00:00Z").getTime());
+assert.deepEqual(returned.flags, flags);
+assert.equal(returned.ephemeris.name, name);
+for (const labelled of [
+  techniques.voidOfCourseAt("2024-03-01T00:00:00Z"),
+  techniques.compositeChart(birth, { utc: "1992-07-01T12:00:00Z" }),
+  techniques.chartAspectPatterns(birth),
+  ...techniques.moonIngresses("2024-03-01T00:00:00Z", "2024-03-06T00:00:00Z")
+]) {
+  assert.deepEqual(labelled.flags, flags);
+  assert.equal(labelled.ephemeris.name, name);
+}
+const longitude = bodyLongitudeDetailed("Mars", new Date(birth.utc));
+assert.equal(longitude.value, bodyLongitude("Mars", new Date(birth.utc)));
+assert.deepEqual(longitude.flags, flags);
+assert.equal(longitude.ephemeris.name, name);
+console.log(JSON.stringify({ expected: process.argv[2], error: status.error, natalFlags: natal.flags, ephemeris: natal.ephemeris.name }));
+`
+);
+const middle = Math.floor(text.length / 2);
+const fallbackCases = {
+  missing: "",
+  "damaged-one-character": text.slice(0, middle) + (text[middle] === "A" ? "B" : "A") + text.slice(middle + 1),
+  "damaged-cut-short": text.slice(0, 4 * Math.floor(text.length / 8)),
+  undecodable: "not base64 !!"
+};
+const fallback = {};
+try {
+  for (const [label, replacement] of Object.entries(fallbackCases)) {
+    writeFileSync(holder, whole.replace(text, replacement));
+    fallback[label] = JSON.parse(run(process.execPath, ["fallback.mjs", "unavailable"]).trim());
+    assert.deepEqual(fallback[label].natalFlags, ["de440-unavailable"]);
+  }
+} finally {
+  writeFileSync(holder, whole);
+}
+fallback.restored = JSON.parse(run(process.execPath, ["fallback.mjs", "whole"]).trim());
+assert.deepEqual(fallback.restored.natalFlags, []);
+
 report = {
   ...result,
+  fallback,
   artifact,
   sha256: createHash("sha256").update(readFileSync(artifact)).digest("hex"),
   runtime: process.version,

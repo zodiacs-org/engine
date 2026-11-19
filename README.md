@@ -16,8 +16,84 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**1.1.0-rc.7**, the next candidate for 1.1.0 after 1.1.0-rc.6, not
-published. The error limits `@zodiacs/engine/calc` quotes for geocentric
+**2.0.0-rc.3**, the third candidate for 2.0.0, a major release
+(CHANGELOG.md). It is a draft for the owner's review and is not published to
+npm. Over 2.0.0-rc.2, a candidate never tagged or published, it refuses
+common near-miss names for a birth field, such as `lat`, `lng`, `houses` and
+`scale`, which were ignored (a breaking change, *Birth settings* below);
+reads UTC after the IERS UT1 table, which ends on 2027-10-02, on the
+continuous-UTC rule, TT = UTC + 69.184 s (*Time*); reads wall times before
+1970 on tzdata 2026f's zone histories, America/Yellowknife held at tzdata
+2025c by the owner's decision; flags a wall time where the device's time
+zone data differs from tzdata 2026f (`host-zone-data-differs`); adds Julian
+Day Numbers and local mean time from a longitude to `@zodiacs/engine/geo`;
+and adds `@zodiacs/engine/core`, the root's functions without the DE440
+pack (*Bundle size in a web page*). Over 1.1.0, as 2.0.0-rc.1 and rc.2 did,
+it refuses a birth given as a calendar date with no time,
+unless `timeKnown` is `false` (the breaking change, *Resolved instant
+inputs* below); flags a chart whose angles are inside the polar circle
+(`polar-angles`); flags a local date that a calendar changeover may have
+skipped, given with no country (`calendar-unknown`, [docs/time.md](docs/time.md));
+and gives each `positions()` row the flags `natalChart()` gives at the same
+instant.
+
+**1.1.0**, the release before it, a minor release: 1.1.0-rc.13 with the
+version changed (CHANGELOG.md). It ships a sealed
+pack of JPL's DE440 for 1790 to 2210 and computes on it by default: a plain
+`natalChart`, `positions`, `calc` or `birthWindow` call, with nothing opened
+or supplied, takes the Sun, the Moon, the planets and the true node from the
+pack, and the result names it (`chart.ephemeris`). On that default the Sun,
+the Moon and the planets are within 1″ of JPL Horizons (DE441) at all 240
+position vectors of the repository's conformance suite, 24 instants from 1851
+to 2148, the largest difference 0.0127″ (`src/de440-default.test.ts`); on
+astronomy-engine, which every release through 1.1.0-rc.7 computed on, 48 of
+the 240 are. **Positions change against those releases**, by the difference
+between the two ephemerides. At one instant a day (noon TT) from 1800 to
+2199 the largest is 29.19″ of ecliptic longitude for the Sun, the Moon and
+the planets (Pluto, on 2199-12-31) and 32.64″ for the true node
+(CHANGELOG.md has each body's). That is the largest at those instants, not a
+limit: near the Sun a planet moves more, because the pack bends its light by
+the Sun and astronomy-engine does not (at most 1.7512″, at the Sun's limb). From
+1.1.0-rc.12 the pack bends no light from a planet behind the Sun's disc, as
+NASA JPL's Horizons system does not, a convention this package follows
+from Horizons and credits to NASA JPL (`NOTICE`): at every passage behind the disc from 1800 to 2199
+(393 passages, 3,490 instants inside the disc) the pack's place is within
+0.0023″ of Horizons's, taken relative to the Sun, where the formula of
+1.1.0-rc.10 and rc.11, which bent the light there too, is up to 333.48″ from it
+(Mercury; reduced from `de440.bsp`)
+([docs/de440.md](docs/de440.md), *Behind the Sun's disc*;
+`docs/evidence/1.1.0-rc.12-20261115/near-sun/`).
+**No fallback is silent**: outside 1790-01-02 to 2209-12-31, or if the pack
+cannot be opened, the engine computes on astronomy-engine, and the result
+says so with a flag (`"outside-de440-span"`, `"de440-unavailable"`) and by
+naming astronomy-engine as its ephemeris. A function that returns a bare
+value (a `Date`, a number, a list) cannot carry that label, so it has a
+labelled form beside it: `searchLongitudeCrossings` for
+`findLongitudeCrossings`, and from 1.1.0-rc.11 `solarReturnInstantDetailed`,
+`mostRecentSolarReturnInstantDetailed`, `lunarReturnInstantDetailed` and
+`moonSignsBetweenDetailed` in `@zodiacs/engine/techniques`, which return
+`{ value, ephemeris, flags }` ([docs/de440.md](docs/de440.md)). From
+1.1.0-rc.12 `chartPoints` and `chartDeclinations` carry their chart's
+`ephemeris` and fallback `flags` too, given a birth or a chart.
+`setDefaultEphemeris("astronomy-engine")` gives earlier releases' positions
+everywhere, named and not flagged. From 1.1.0-rc.10 `@zodiacs/engine/calc`
+(`calc`, `chart`, `events`) and `birthWindow` compute on the pack too, so
+they agree with `natalChart`; what `calc()` gives beyond the apparent
+geocentric place (other centers and corrections, the Earth) and the sky
+entry's rising and setting still compute on astronomy-engine whatever the
+default, so none is a fallback: a calc receipt names astronomy-engine, and
+the sky entry's results name no ephemeris ([docs/de440.md](docs/de440.md)). The pack makes the package about four times larger unpacked
+(4,581,449 bytes against 1.1.0-rc.7's 1,152,017), and an application
+that bundles the root entry bundles the pack's 3,319,552 characters (see
+[docs/de440.md](docs/de440.md) and CHANGELOG.md). 1.1.0-rc.9 was
+1.1.0's first draft, superseded before review; 1.1.0-rc.10,
+1.1.0-rc.11 and 1.1.0-rc.12 were drafts on the same pull request, reviewed
+and replaced, and 1.1.0 is 1.1.0-rc.13 with
+the version changed;
+1.1.0-rc.8 was a draft
+that shipped the pack behind `withEphemeris` only, withdrawn, and its
+number is not used again. From 1.1.0-rc.7 the error limits
+`@zodiacs/engine/calc` quotes for geocentric
 positions come from DE440 on every day from 1800 through 2199 (CHANGELOG.md).
 From 1.1.0-rc.6 a birth in an hour the clock showed twice can take the
 later pass (`fold: "later"` in `@zodiacs/engine/geo`; see
@@ -25,8 +101,9 @@ later pass (`fold: "later"` in `@zodiacs/engine/geo`; see
 1.1.0-rc.4 and 1.1.0-rc.5 were drafts that were not merged (CHANGELOG.md).
 1.1.0-rc.3 added
 `@zodiacs/engine/de440`, positions from JPL's DE440 through a pack the caller
-supplies, which the root's `withEphemeris` puts in place of astronomy-engine,
-for sixteen public entry points (see [docs/de440.md](docs/de440.md)). Over
+supplies, which the root's `withEphemeris` puts in place of the default
+source; with `@zodiacs/engine/de440/pack` there are seventeen public entry
+points (see [docs/de440.md](docs/de440.md)). Over
 1.0.0, natal receipts name their conventions as ids of the Zodiacs
 conventions registry, which a new entry, `@zodiacs/engine/conventions`,
 gives (from 1.1.0-rc.1; see *Draft natal receipts*). 1.1.0-rc.2 added two
@@ -37,16 +114,18 @@ sign changes; and corrections of statements that said more than their
 evidence (CHANGELOG.md). The package follows Semantic Versioning:
 [docs/versioning.md](docs/versioning.md) says what is public, how a number
 may change, which records stay readable and how something public is
-deprecated, and `api/` holds each public entry point's declarations. npm
-carries 1.0.0, the first stable release, under `latest`: `npm install
-@zodiacs/engine` installs it, without `./conventions`, `./time`, `./lite` or
-`./de440`, and writing no ids. This candidate is not published there. Install
-the exact candidate tarball, `artifacts/zodiacs-engine-1.1.0-rc.7.tgz` in the
-repository, retaining its SHA-256 receipt:
+deprecated, and `api/` holds each public entry point's declarations.
+Install it from npm:
 
 ```sh
-npm install ./zodiacs-engine-1.1.0-rc.7.tgz
+npm install @zodiacs/engine
 ```
+
+That installs npm's `latest`, 1.1.0, not this candidate:
+`artifacts/zodiacs-engine-2.0.0-rc.3.tgz` in the repository, with its
+SHA-256 receipt, is this candidate's exact archive. 1.0.0, npm's `latest`
+before 1.1.0, has no `./conventions`, `./time`, `./lite`, `./de440` or DE440
+pack, computes on astronomy-engine and writes no ids.
 
 The Release workflow publishes the archive carried in `artifacts/` as it is,
 with provenance (CONTRIBUTING.md, *Releases*). Before 1.0.0 npm carried
@@ -69,7 +148,7 @@ themselves and are not affected.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-1.1.0-rc.7.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-2.0.0-rc.3.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -127,15 +206,74 @@ gained a conventions set that names the nutation; rc.15's receipts stay
 readable. As in rc.15, a chart's instant is read on a time basis: from 1972
 to 2027-10-02 as UTC, with TT from the leap seconds and UT1 from IERS
 UT1 − UTC, and otherwise as UT1 with the ΔT model, or on UT1 or TT when
-`timeScale` says so (see Time). The ephemeris is still astronomy-engine
-2.1.19. See CHANGELOG.md for the release history and
-`docs/evidence/de440-20261110/` for this candidate's checks
-(1.1.0-rc.2's are in `docs/evidence/1.1.0-rc.2-20261102/`, 1.1.0-rc.1's in
+`timeScale` says so (see Time); from 2.0.0-rc.3, a UTC instant after that
+IERS table is read on the continuous-UTC rule instead, TT = UTC + 69.184 s
+with UT1 from the ΔT model. From 1.1.0-rc.9 the ephemeris is the shipped
+DE440 pack inside its years and astronomy-engine 2.1.19 elsewhere; where this
+document speaks of the ephemeris's accuracy or of its error limits without
+naming DE440, it speaks of astronomy-engine, the fallback and the ephemeris
+of what the pack does not give. See CHANGELOG.md for the release history and
+`docs/evidence/2.0.0-rc.3-20261117/` for this candidate's checks
+(2.0.0-rc.2's are in `docs/evidence/2.0.0-rc.2-20261116/`, 2.0.0-rc.1's in `docs/evidence/2.0.0-rc.1-20261116/`, 1.1.0's in `docs/evidence/1.1.0-20261116/`, 1.1.0-rc.13's in `docs/evidence/1.1.0-rc.13-20261115/`, 1.1.0-rc.12's in
+`docs/evidence/1.1.0-rc.12-20261115/`, 1.1.0-rc.11's and 1.1.0-rc.10's in
+their own dated folders there, 1.1.0-rc.9's, its superseded draft's, are in
+`docs/evidence/1.1.0-rc.9-20261114/`)
+(1.1.0-rc.3's are in `docs/evidence/de440-20261110/`, 1.1.0-rc.2's in
+`docs/evidence/1.1.0-rc.2-20261102/`, 1.1.0-rc.1's in
 `docs/evidence/1.1.0-rc.1-20261026/`, 1.0.0's in
 `docs/evidence/1.0.0-20261011/`, 1.0.0-rc.2's in
 `docs/evidence/1.0.0-rc.2-20261006/`, 1.0.0-rc.1's in
 `docs/evidence/1.0.0-rc.1-20261006/`, rc.17's in
 `docs/evidence/rc17-20261005/`). Site adoption is reviewed separately.
+
+## Bundle size in a web page
+
+Measured on 17 November 2026 with esbuild 0.28.2, Rollup 4.67.4, Vite 8.3.5
+and webpack 5.112.2, each in production mode and minified, on 2.0.0-rc.3's
+archive; brotli is quality 11 (Node 22.22.2's zlib). The programs and the
+method are in `tools/bundle-weight/` and `docs/evidence/bundle-weight-20261117/`;
+every number here is in
+`docs/evidence/2.0.0-rc.3-20261117/results/bundle-weight/results.json`. Load
+times in a browser were not measured.
+
+- **The root entry.** A page that imports `natalChart` from
+  `@zodiacs/engine` carries the shipped DE440 pack: 3,416,191 to 3,418,817
+  bytes of script under the four bundlers (about 3.42 MB), 2,279,842 to
+  2,281,947 bytes with brotli (about 2.28 MB).
+  `setDefaultEphemeris("astronomy-engine")` does not make it smaller: the
+  pack stays in the bundle (3,416,351 to 3,418,978 bytes).
+- **`@zodiacs/engine/core`** exports the root's names and computes on
+  astronomy-engine, without the pack. The same page is then 77,042 to 80,192
+  bytes (about 77 to 80 KB), 28,800 to 30,554 bytes with brotli (about
+  29 to 31 KB). Its positions are less exact: on the conformance suite's 240
+  position tests (within 1″ of JPL's DE441), 48 pass, against 240 for the
+  root on the pack. Both figures are the root's in `conformance/RESULTS.md`:
+  the 48 from its run after `setDefaultEphemeris("astronomy-engine")`, which
+  the package's smoke test checks the core entry matches, test for test.
+  Every chart from it names astronomy-engine as its ephemeris, as the root's
+  does after `setDefaultEphemeris("astronomy-engine")`, and equals that
+  chart. The entry
+  is a copy of the root's code with its own settings: `setDefaultEphemeris`
+  in one entry does not change the other, an aspect policy made by one
+  entry's `createAspectPolicy` is refused by the other's, and a page that
+  imports both carries both.
+  `setDefaultEphemeris("de440")` in it still computes on astronomy-engine and
+  flags each result `"de440-unavailable"`; for DE440 positions, import the
+  root, or supply a pack through `@zodiacs/engine/de440` and the core entry's
+  `withEphemeris`.
+- **Loading the root when it is needed.** To keep DE440 positions and a
+  small first script, import the root on demand:
+
+  ```js
+  button.addEventListener("click", async () => {
+    const { natalChart } = await import("@zodiacs/engine");
+    show(natalChart(birth));
+  });
+  ```
+
+  All four bundlers put the pack in a file of its own: the page's first
+  script is 745 to 2,534 bytes, and the pack arrives on the click, in one
+  file of 3,415,737 to 3,446,051 bytes. The first chart waits for that file.
 
 ## Natal chart in 10 lines
 
@@ -220,13 +358,18 @@ for (const aspect of today.aspects) {
 - `transits(natal, date)` returns a sky snapshot and moving-to-natal aspects.
 - `synastry(a, b)` returns inter-chart aspects and element/modality balances.
 - `moonPhase(date)` returns elongation, illuminated fraction, and phase name.
-- `saturnReturn(birth)` returns exact-pass seasons through roughly age 92.
+- `saturnReturn(birth)` returns exact-pass seasons through roughly age 92. A
+  birth given as a calendar date with no time, `"YYYY-MM-DD"` or
+  `{ utc: "YYYY-MM-DD" }`, is refused with a `RangeError` (from 2.0.0); pass
+  `{ utc: "YYYY-MM-DD", timeKnown: false }` for a birth whose time is not known.
 - `findLongitudeCrossings(body, longitude, from, to)` returns the instants a
   body crosses a longitude, and `searchLongitudeCrossings` does the same under
   a sample budget. `@zodiacs/engine/crossings` provides the same solver for a
   longitude function of your own, without the ephemeris.
 - `@zodiacs/engine/geo` provides IANA local-time resolution, Julian calendar
-  dates and a client for a separately hosted, sharded GeoNames index.
+  dates, Julian Day Numbers and a longitude's local mean time
+  (`julianDayNumber`, `dateOfJulianDayNumber`, `localMeanTimeOffset`, new in
+  2.0.0-rc.3) and a client for a separately hosted, sharded GeoNames index.
 - `@zodiacs/engine/techniques` provides solar and lunar returns, composite and
   Davison charts, the void-of-course Moon, aspect patterns, essential
   dignities and the Moon signs possible over a date (see `docs/techniques.md`).
@@ -260,10 +403,23 @@ for (const aspect of today.aspects) {
   pack of Chebyshev series refitted from DE440 that the caller supplies and
   checks it against the SHA-256 it is given, and the root's
   `withEphemeris(source, fn)` runs `fn` with the root's body positions taken
-  from it; charts name it, and so do their receipts. The calc entry, the sky
-  entry's rising and setting and the vedic entry's star-anchored ayanamsas
-  and varga timing refuse inside it. The entry fetches nothing and ships no
-  pack (see [docs/de440.md](docs/de440.md)).
+  from it; charts name it, and so do their receipts. The calc entry, the
+  window entry, the sky entry's rising and setting and the vedic entry's
+  star-anchored ayanamsas and varga timing refuse inside it. The entry fetches nothing; the pack is
+  the caller's, or the one the next entry ships (see
+  [docs/de440.md](docs/de440.md)).
+- `@zodiacs/engine/de440/pack`, new in 1.1.0-rc.9, gives out the pack the
+  package ships and the root computes on by default:
+  `de440-1790-2210.v2.zeph`, 2,489,664 bytes, refitted from NAIF's
+  `de440.bsp` for 1790 to 2210, as base64 text in one file that this entry
+  and the root share. `shippedDe440Source()` opens it, checked against its
+  SHA-256, and gives the source (`openShippedDe440Pack()` gives the same one
+  as a promise); `de440PackBytes()` gives the bytes and `DE440_PACK`
+  describes them. It fetches nothing. A plain root call needs none of this:
+  the root's `defaultEphemeris()` says what it computes on, and
+  `setDefaultEphemeris("astronomy-engine")` puts it back on astronomy-engine.
+  The `withEphemeris` callback must be synchronous (see
+  [docs/de440.md](docs/de440.md)).
 - `@zodiacs/engine/lite`, new in 1.1.0-rc.2, gives declination parallels and
   out-of-bounds flags, a chart's sect under a named convention
   (`sectReading`), composite midpoints and their aspects, and the essential
@@ -272,20 +428,35 @@ for (const aspect of today.aspects) {
   `@zodiacs/engine/techniques`', with the same results; its sect part
   (`sectReading`, `orientality` and their constants) is new (see
   [docs/lite.md](docs/lite.md)).
+- `@zodiacs/engine/core`, new in 2.0.0-rc.3, exports every name the root
+  exports and computes on astronomy-engine, without the DE440 pack, for pages
+  where script size matters more than the pack's accuracy (see *Bundle size
+  in a web page*).
 
 ### Uniform calculation API
 
 `@zodiacs/engine/calc` offers `calc`, `houses`, `events` and `chart` with one
 vocabulary: instants as ISO strings, Dates or `{ jd, scale: "utc" | "ut1" | "tt" }`
-on the engine's time basis, as `positions()` reads them;
+on the engine's time basis, as `positions()` reads them, except that `chart()`
+refuses a `time` given as a calendar date with no time (`"YYYY-MM-DD"`) with a
+`RangeError`, as a birth's `utc` is refused (from 2.0.0);
 eight frames (the ecliptic or the equator; true or mean of date, J2000.0 or
 the ICRS); geocentric, heliocentric, barycentric and topocentric centers;
 apparent, astrometric or geometric positions with distances and speeds; and
 the tropical or the sidereal zodiac, with any ayanamsa of
 `@zodiacs/engine/vedic` or a caller's own (Swiss Ephemeris's `SE_SIDM_USER`).
-Results carry bounds and a receipt of convention ids. A measured bound is the
-largest difference found, rounded up: for the geocentric Sun, Moon, planets
-and true nodes, from JPL's DE440 at noon TT on each of the 146,097 days from
+Results carry bounds and a receipt of convention ids, which names the
+ephemeris. The apparent geocentric place of the Sun, the Moon and Mercury to
+Pluto, and the true nodes, come from the shipped DE440 pack, as
+`natalChart()`'s do (to the bit, with every default); every other center
+and correction, and the Earth, from astronomy-engine
+([docs/calc.md](docs/calc.md), *Which ephemeris*). A measured bound is the
+largest difference found, rounded up. For a position from the pack: from JPL
+Horizons at the conformance suite's 240 L1 vectors (the Moon 0.013″, the Sun
+and the planets under 0.004″, in the true ecliptic of date), with no bound
+for its distance, its speed or the true node, which no arbiter has checked
+on the pack. For a position from astronomy-engine: for the geocentric Sun,
+Moon, planets and true nodes, from JPL's DE440 at noon TT on each of the 146,097 days from
 1800-01-01 to 2199-12-31; for every other center and body, from JPL Horizons
 on 32 instants from 1802 to 2188 (for the mean nodes and Black Moon Lilith,
 from their definitions evaluated with ERFA on the same instants). Its
@@ -306,7 +477,11 @@ bound on its first-order movement, not that movement. On UTC input from
 (exactly to 2027-06-28, when the shipped list expires; after it the list's
 last value is carried), so every geocentric, heliocentric and barycentric
 position's band is 0 there, and the band falls on the angles and cusps,
-topocentric positions and each event's UT1 (docs/calc.md, *Bands*).
+topocentric positions and each event's UT1 (docs/calc.md, *Bands*). From
+2.0.0-rc.3 the same holds on UTC input after 2027-10-02, where TT is
+UTC + 69.184 s on the continuous-UTC rule: a result there is still flagged
+`delta-t-extrapolated`, but only what turns with UT1 widens its bounds (up
+to 2.0.0-rc.2 every result widened there; docs/calc.md, *Bounds*).
 Root charts and natal envelopes carry none. What this version does not compute
 comes back as a typed refusal, such as gravitational deflection, or an
 instant whose UT1 or TT is outside 1800 to 2200: there calc has no
@@ -318,9 +493,13 @@ mapping and the measured accuracy, is
 [docs/calc.md](https://github.com/zodiacs-org/engine/blob/main/docs/calc.md).
 
 Returned longitudes use degrees in `[0, 360)` and positions include sign and degree
-annotations. Charts use the tropical ecliptic of date. Planetary positions are
-geocentric and corrected for light time and aberration, but not for the Sun's
-gravitational deflection; the Moon's series carries neither correction. The
+annotations. Charts use the tropical ecliptic of date. Positions are
+geocentric. On the shipped DE440 pack, the default, each body's place is
+corrected for light time, the Sun's light deflection (from 1.1.0-rc.12 none
+for a planet behind the Sun's disc, as JPL Horizons) and aberration; on
+astronomy-engine planetary positions are corrected for light time and
+aberration, not for the deflection, and the Moon's series carries neither
+correction. The
 chart functions do not calculate topocentric parallax; `@zodiacs/engine/calc`
 gives topocentric positions (`center: { topocentric }`), and
 `@zodiacs/engine/sky` finds rise and set for a topocentric observer.
@@ -587,7 +766,10 @@ Placidus and Koch are undefined in polar regions, where |latitude| ≥ 90° − 
 with ε the true obliquity of date (about 66.56° today). There the engine falls
 back to whole-sign houses, exported as `POLAR_FALLBACK` (and as
 `PLACIDUS_POLAR_FALLBACK`, deprecated from 1.0, since Koch falls back too),
-and adds `polar-fallback` to the chart flags. Swiss
+and adds `polar-fallback` to the chart flags. From 2.0.0 every chart whose
+angles are inside the polar circle carries `polar-angles` too, in every house
+system, since the ascendant there turns half a circle twice a day
+(`docs/houses.md`). Swiss
 Ephemeris falls back to Porphyry instead. Every other system is defined at
 every latitude where the angles are. Inside the polar circle, where the
 ascendant is taken on the eastern half of the horizon, Regiomontanus, Campanus
@@ -651,21 +833,40 @@ arcminutes from Swiss's.
 
 ### Input flag compatibility
 
-Public birth inputs accept all six `ChartFlag` values. Supply an array with at
+Public birth inputs accept all twelve `ChartFlag` values. Five are caller
+assertions: `dst-gap`, `dst-fold`, `lmt`, `calendar-unknown` and
+`host-zone-data-differs` (from 2.0.0-rc.3). The other
+seven are derived by the calculation, and a caller may echo each only where
+the calculation derives it: `no-time`, `polar-fallback`, `polar-angles`,
+`outside-reference-span`, `delta-t-extrapolated` (see Time) and the two
+fallback flags, `de440-unavailable` and `outside-de440-span`. Supply an array with at
 most 64 entries; entries must be known string values in ordinary data slots.
 Repeated values collapse in first-occurrence order. Unknown strings, sparse
 slots, accessor slots, non-array iterables and simultaneous `dst-gap`/`dst-fold`
 claims reject with a `RangeError` that does not include supplied flag values.
 
-`dst-gap`, `dst-fold` and `lmt` remain caller assertions: a UTC instant alone
-cannot verify a historical local-time resolution. The geo resolver sets
-`dst-gap` or `dst-fold` for a skipped or repeated wall time of any cause (the
-names are kept; its `jump.cause` gives the cause) and `lmt` when a local mean
-time clock read it. `no-time`,
-`polar-fallback` and `outside-reference-span` may be echoed for compatibility,
-but must agree with the calculation. Set `timeKnown: false` for unknown time; a flag never overrides that
-setting. A fallback assertion requires the actual requested Placidus calculation
-to produce whole-sign houses, which it does only inside the polar circle.
+`dst-gap`, `dst-fold`, `lmt`, `calendar-unknown` and
+`host-zone-data-differs` remain caller assertions: a UTC instant alone
+cannot verify a historical local-time resolution. The geo resolver sets `dst-gap` or `dst-fold` for a skipped or
+repeated wall time of any cause (the names are kept; its `jump.cause` gives
+the cause) and `lmt` when a local mean time clock read it; it and the birth
+resolvers set `calendar-unknown` on a local date, given with no country, that
+a calendar changeover may have skipped ([docs/time.md](docs/time.md)). A
+natal receipt refuses `calendar-unknown` on an instant before 1582-10-04 or
+from 1918-02-28 (UTC). The geo resolver and the birth resolvers set
+`host-zone-data-differs` on a wall time from 1970 on that the host's `Intl`
+read where the host's time zone data differs from tzdata 2026f nearby
+([docs/time.md](docs/time.md), *Host time zone data*); a natal receipt
+refuses it on an instant before 1970-01-01T00:00Z and on a local record whose
+data form names the shipped history.
+`no-time`, `polar-fallback`, `polar-angles`, `outside-reference-span`,
+`delta-t-extrapolated`, `de440-unavailable` and `outside-de440-span` may be
+echoed for compatibility, but must agree with the calculation. Set
+`timeKnown: false` for unknown time; a flag never overrides that setting. A
+`polar-fallback` assertion requires the requested Placidus or Koch
+calculation to produce whole-sign houses, which it does only inside the polar
+circle, and a `polar-angles` assertion requires angles inside the polar
+circle.
 
 `natalChart` stores only distinct time-resolution assertions in `chart.input.flags`
 and derives result flags once. This is canonical semantic input, not a lossless
@@ -681,8 +882,12 @@ preserving numerical arrays and engine version. These checks happen at call
 time and do not freeze caller-owned objects.
 
 Ordinary Saturn-return inputs require no extra natal calculation. A raw birth
-input that explicitly asserts `polar-fallback` requires one natal calculation to
-check that assertion before the return scan. A supplied Chart instead receives
+input that explicitly asserts `polar-fallback` or `polar-angles` requires one
+natal calculation to check that assertion before the return scan. Its other
+derived echoes are checked against the input alone: `no-time` against
+`timeKnown: false` and `outside-reference-span` against the instant;
+`delta-t-extrapolated`, `de440-unavailable` and `outside-de440-span` are
+accepted there unchecked, since no chart is computed. A supplied Chart instead receives
 the consistency check above, without natal recomputation. Public birth and
 `resolveBirth` settings are validated once and the captured scalar values are
 used for calculation/resolution. Explicit null settings or local time are
@@ -822,7 +1027,9 @@ UT1 run on continuously. The time basis steps at the ΔT model's seam,
 1940-12-31T18:00:00Z, where ΔT steps from
 24.834 s to 24.820 s; at 1972-01-01, where the leap seconds begin; at each
 leap second, where TT and UT1 step by a second; and where the IERS UT1 table
-ends, 2027-10-02. Each sample installs its own ΔT, so every position and
+ends, 2027-10-02. From 2.0.0-rc.3, on UTC input TT runs on there (the
+continuous-UTC rule, see Time), and the seam is the change of basis, where
+UT1 steps by about 2 ms ([docs/time.md](docs/time.md)). Each sample installs its own ΔT, so every position and
 angle steps there together: the search finds each step inside the window
 from the engine's own arithmetic, splits at its millisecond and compares
 both sides. Within 1e-8° of the Placidus
@@ -859,6 +1066,30 @@ and none extra, and natalChart confirmed every switch at its millisecond
 (`docs/evidence/birth-window/RESULTS.md`); on rc.16's build, after the time
 basis and the nutation, again (`docs/evidence/birth-window/rc16/`).
 
+**On the shipped DE440 pack** (from 1.1.0-rc.10). A window is computed on
+the source a plain `natalChart` uses, which inside `REFERENCE_SPAN` is the
+pack, and says so: `result.ephemeris` names it, or names astronomy-engine,
+with the flag `de440-unavailable` when that is a fallback. Everything this
+section measures above was measured on astronomy-engine, where the search is
+unchanged. On the pack three things differ. The true node comes from the
+pack's own velocity and does not jitter: over 3,000 consecutive milliseconds
+at each of 29,220 epochs it stays within 4.5e-12° of a quadratic, so an
+ingress does not flicker. The pack's positions step where a read passes
+from one of its Chebyshev records to the next: the true node by up to
+1.11″, more than J, the Moon by up to 0.0011″; the search takes each such
+instant, a few in 48 hours, as a seam, like a step of the time basis. And
+near the Sun the pack bends a planet's light, by at most 1.7512″ outside the
+Sun's disc and, from 1.1.0-rc.12, not at all behind it, so within a degree
+of the Sun the search takes that deflection as a displacement of at most
+1.8″, as it takes the node's jitter. The rate scan on the pack holds every
+bound with its margin, bound over largest rate plus what its grid can miss
+1.634 to 2.057 (`docs/evidence/1.1.0-rc.12-20261115/window/`). Through
+1.1.0-rc.11 the pack bent light behind the disc too, Neptune's place moved
+at 1.85 times its bound behind the Sun on 1920-08-04, and the search raised
+its bounds there and compared single milliseconds within 0.01° of the Sun's
+centre; from 1.1.0-rc.12 it does neither, and `src/window-de440.test.ts`
+holds a window across each limb and the centre of a passage to natalChart.
+
 In one thread, a 10-minute window takes about 2 ms, two hours about 20 ms and
 a whole day about 0.23 s (medians, Node.js 22; `timing.json`). A window over a
 node ingress takes from seconds to a few minutes, as the node is compared at
@@ -886,6 +1117,11 @@ string forms:
 
 - `YYYY-MM-DD`, interpreted as midnight UTC using the proleptic Gregorian
   calendar. This convenience does not infer a birthplace's local midnight.
+  As a birth (`BirthInput.utc`, `saturnReturn`'s birth in either form, and
+  calc `chart()`'s `time`) a calendar date with no time is refused with a
+  `RangeError` unless `timeKnown` is `false` (from 2.0.0; earlier releases
+  read it as midnight UTC); elsewhere it still reads as midnight UTC. Write
+  `YYYY-MM-DDT00:00:00Z` to ask for midnight UTC.
 - `YYYY-MM-DDTHH:mm[:ss[.sss]]Z`, or the same date-time with an explicit
   `+HH:mm` or `-HH:mm` offset. Fractional seconds, when supplied, have one to
   three digits. ISO expanded years use a sign and six digits, such as
@@ -920,7 +1156,12 @@ Terrestrial Time, and it covers the speed samples ±0.001 day around the
 instant (±0.25 day for the true nodes), so an instant must lie six hours
 inside. On the model ΔT clock every instant from 0001-05-01T00:00Z to
 3998-09-02T00:00Z qualifies; a pinned `deltaT` moves TT and is checked as
-given. astronomy-engine reports any other failure by throwing a string, which
+given. On UTC input with the engine's ΔT the last instant `natalChart`
+accepts is 3998-09-03T05:58:50.816Z, and the last calc computes is
+2199-12-31T23:58:50.815Z (from 2.0.0-rc.3, on the continuous-UTC rule; up to
+2.0.0-rc.2 they were 3998-09-03T02:01:41.309Z and
+2199-12-31T23:57:53.752Z), measured to the millisecond on this candidate's
+build (`docs/evidence/2.0.0-rc.3-20261117/results/span-ends.json`). astronomy-engine reports any other failure by throwing a string, which
 reaches the caller as a `RangeError` whose `cause` is the original value.
 
 Inside the span, results are computed but not verified: accuracy was compared
@@ -931,9 +1172,19 @@ latitude, which in reality stays within about 1.2″ of zero, comes out as
 Birth settings accept only a `houseSystem` from the thirteen above, a boolean
 `timeKnown` and a `timeScale` (see Time). Omitting them defaults to `"whole"`,
 `true` and `"utc"`; explicit `null` and other unsupported values throw
-`RangeError`, including when coordinates are absent. Latitude and longitude
+`RangeError`, including when coordinates are absent. `timeKnown: false` is
+what lets a birth be given as a calendar date with no time; with the default
+`true` such a date is refused (from 2.0.0). Latitude and longitude
 must be supplied together as finite numbers within `[-90, 90]` and
-`[-180, 180]` respectively.
+`[-180, 180]` respectively. From 2.0.0-rc.3 a birth refuses these common
+names for a field, in any letter case, with a `RangeError` that names the
+field to use: `lat` (`latitude`); `lng`, `lon`, `long` (`longitude`);
+`house`, `houses`, `hsys`, `housesystem` (`houseSystem`); `scale`,
+`time_scale` (`timeScale`); `delta_t` (`deltaT`); `time_known`,
+`unknownTime` (`timeKnown`). Up to 2.0.0-rc.2 they were ignored, so
+`{ utc, lat, lng }` gave a chart with no angles and no error. Other unknown
+keys, such as a database row's `id`, `name` or `timezone`, are still
+ignored.
 
 ## Time
 
@@ -947,11 +1198,21 @@ planets on Terrestrial Time (TT). `utc` is on UTC unless `timeScale` says
   the EOP 20 C04 series in 1972, then `finals2000A.all` of 2026-09-24,
   observed then predicted. ΔT = TT − UT1 is then reported with
   `model: "iers-utc/1"`.
-- Before 1972 and after that table the instant is read as UT1, and TT = UT1 +
+- Before 1972 the instant is read as UT1, and TT = UT1 +
   ΔT from the engine's model `zodiacs-deltat/1`: Stephenson, Morrison &
   Hohenkerk 2016 (CC BY 4.0) up to 1941, then USNO and IERS observations,
-  Bulletin A's predictions and a damped extrapolation, with a 1-σ band. After
-  the table UT1 − UTC is taken as 0 within ±0.9 s.
+  Bulletin A's predictions and a damped extrapolation, with a 1-σ band.
+- After that table, from 2.0.0-rc.3, UTC is read on the continuous-UTC rule:
+  it runs on with no further leap second, TAI − UTC stays 37 s, so
+  TT = UTC + 69.184 s exactly, and UT1 = TT − ΔT from the model; the chart
+  reports `basis: "continuous-utc"` and UT1 − UTC with `source: "model"`. A
+  UTC birth time after 2027-10-02 therefore gives TT = UTC + 69.184 s, and
+  only UT1 rests on the extrapolated ΔT. Up to 2.0.0-rc.2 the instant was
+  read there as UT1, UT1 − UTC taken as 0 within ±0.9 s, and TT = UT1 + ΔT,
+  so TT − UTC drifted with the model (71.491 s in 2050; docs/time.md). A
+  natal receipt of an after-table UTC birth names a conventions set that
+  requires the feature `time-basis-continuous-utc`, which 1.1.0 and
+  2.0.0-rc.2 refuse.
 - `deltaT` (seconds) in a birth input pins ΔT; the chart reports
   `model: "pinned"`.
 
@@ -969,13 +1230,23 @@ engine used: on UTC input from 1972-01-01 to 2027-10-02 without a pinned ΔT,
 TT comes from the leap seconds (exactly to 2027-06-28, when the shipped list
 expires; after it the list's last value is carried, with no band for a leap
 second not yet announced), so its band is 0, and UT1 carries the band of
-UT1 − UTC; with a pin, TT is UT1 plus the pin and takes UT1's band
+UT1 − UTC; after 2027-10-02, on the continuous-UTC rule (from 2.0.0-rc.3),
+TT's band is still 0 and UT1 carries the ΔT model's; with a pin, TT is UT1 plus the pin and takes UT1's band
 ([docs/time.md](docs/time.md), *The time bands*).
 
-`@zodiacs/engine/geo` reads wall times before 1970 on the tzdb 2025c history
-with backzone, shipped as 16 lazily imported chunks: `prepareLocalTime(date,
-timeZone)` loads the one a zone needs, and a wall time before 1970 throws until
-it has. From 1970 the host's Intl answers. A `longitude` reads a time in a
+`@zodiacs/engine/geo` reads wall times before 1970 on the tzdb 2026f history
+with backzone (2025c's through 2.0.0-rc.2), shipped as 16 lazily imported
+chunks: `prepareLocalTime(date, timeZone)` loads the one a zone needs, and a
+wall time before 1970 throws until it has. America/Yellowknife is held at
+tzdata 2025c's history by the owner's decision, because tzdata 2026f's
+change to it has no NEWS entry; before 1970 its results equal 2.0.0-rc.2's,
+but for the `tzdbVersion` they name, "2026f", the package's pinned release,
+though the zone's data is 2025c's. From 1970 the host's Intl answers, and from
+2.0.0-rc.3, near a span in which tzdata 2021a and 2026f give different
+offsets, the engine asks the host for its offset there and flags the result
+`host-zone-data-differs` where it differs from 2026f's
+([docs/time.md](docs/time.md), *Host time zone data*); the instant stays the
+host's. A `longitude` reads a time in a
 zone's local mean time era on the birthplace's own mean time; `calendar:
 "julian"` takes an Old Style date, and `country` adds a note from the country's
 Gregorian adoption. A wall time the clock showed twice takes its first pass,
@@ -1012,7 +1283,12 @@ sidereal angle.
 
 ## Accuracy and licensing
 
-The ephemeris is powered by the MIT-licensed `astronomy-engine`. Tests compare
+By default the positions come from a sealed pack refitted from the Jet
+Propulsion Laboratory's DE440 planetary and lunar ephemeris (Park, Folkner,
+Williams and Boggs 2021), which [NOTICE](NOTICE) credits and cites; the pack
+is Zodiacs.org's work, and JPL has not reviewed or endorsed it. Outside the
+pack's years, and for what its reduction does not give, the ephemeris is the
+MIT-licensed `astronomy-engine`. Tests compare
 modern and historical positions with public JPL Horizons vectors and exercise
 astronomical and geometric invariants. See [LICENSING.md](LICENSING.md) for the
 full provenance audit and the explicit Swiss Ephemeris exclusion.
@@ -1020,16 +1296,18 @@ full provenance audit and the explicit Swiss Ephemeris exclusion.
 The package's licence expression is `MIT AND CC-BY-4.0`: the code is MIT
 ([LICENSE](LICENSE)), and the 32 values of Stephenson, Morrison & Hohenkerk's
 Table S15 in the package's ΔT module (`@zodiacs/engine/deltat`, which the build
-places in a shared chunk under `dist/` that `dist/deltat.js` re-exports) are
-CC BY 4.0, attributed in [NOTICE](NOTICE).
+places in a shared chunk under `dist/` that `dist/deltat.js` re-exports, and
+copies into `dist/core.js`) are CC BY 4.0, attributed in [NOTICE](NOTICE).
 
-The npm package contains no place database. It carries tzdb 2025c's zone
-histories before 1970, the IERS leap-second list, an IERS UT1 − UTC table, a
-table of Gregorian adoption dates from public-domain sources, 22 catalogue
-values for the stars of the Vedic ayanamsas, and the IAU 2000B nutation series
-from NOVAS C 3.1, a US Government work; [NOTICE](NOTICE) records their sources
-and the GeoNames attribution, and downstream users should retain it.
-[LICENSING.md](LICENSING.md) gives the terms of each.
+The npm package contains no place database. It carries the DE440 pack
+(2,489,664 bytes), tzdb 2026f's zone histories before 1970
+(America/Yellowknife's from tzdb 2025c), a table of where tzdb 2021a's offsets
+from 1970 differ from 2026f's, the IERS leap-second list, an IERS UT1 − UTC
+table, a table of Gregorian adoption dates from public-domain sources, 22
+catalogue values for the stars of the Vedic ayanamsas, and the IAU 2000B
+nutation series from NOVAS C 3.1, a US Government work; [NOTICE](NOTICE)
+records their sources and the GeoNames attribution, and downstream users
+should retain it. [LICENSING.md](LICENSING.md) gives the terms of each.
 
 ## Internal site entry points
 
@@ -1039,7 +1317,8 @@ package implementation while keeping its scanner-oriented functions and lazy
 bundle boundary intact. They are not covered by semantic-versioning guarantees;
 third-party code must use the documented entry points: the root, `/calc`,
 `/geo`, `/houses`, `/sky`, `/techniques`, `/timing`, `/vedic`, `/window`,
-`/receipt`, `/conventions`, `/crossings`, `/deltat`, `/time` and `/lite`.
+`/receipt`, `/conventions`, `/crossings`, `/deltat`, `/time`, `/lite`,
+`/core`, `/de440` and `/de440/pack`.
 
 ## GeoNames request recovery
 

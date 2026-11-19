@@ -2,24 +2,31 @@
 
 Status: **GO for a package licensed `MIT AND CC-BY-4.0`**, subject to the
 repository operator having authority to publish the Zodiacs.org-authored
-TypeScript under the MIT license, and with three questions left open for the
-owner: no statement of terms was found for IERS EOP 20 C04, so whether its
-367 rows of 1972 that the repository carries, and the values the package
-derives from it (the UT1 table in 1972 and some of the ΔT table's values from
-1941), may be redistributed without other terms is not settled (*IERS
-data*); whether a commercial use of the 20 star values that the CDS supplies
-needs more than the attribution in `NOTICE` is not settled by the CDS's
-terms; and no terms were read for Reid and Brunthaler's two values (*Timing
-and Vedic values*).
+TypeScript under the MIT license. The package ships a pack of series refitted
+from JPL's DE440, which the owner holds to be public data (2026-11-13);
+NAIF's rules permit redistributing its kernels unmodified but do not speak of
+data refitted from one, so shipping the pack rests on the owner's reading and
+not on a statement of JPL's or NAIF's. On 2026-11-16 the owner answered, in
+writing, the question "Do you accept shipping the NASA DE440 data in 1.1.0?"
+with "Yes. I delegate these decisions to you." (*DE440 pack*). Three
+questions are left open for the owner, as they were at 1.0.0: no statement of
+terms was found for IERS EOP 20 C04, so whether its 367 rows of 1972 that the
+repository carries, and the values the package derives from it (the UT1 table
+in 1972 and some of the ΔT table's values from 1941), may be redistributed
+without other terms is not settled (*IERS data*); whether a commercial use of
+the 20 star values that the CDS supplies needs more than the attribution in
+`NOTICE` is not settled by the CDS's terms; and no terms were read for Reid
+and Brunthaler's two values (*Timing and Vedic values*).
 
 SPDX licence expression: `MIT AND CC-BY-4.0`. The code is MIT (`LICENSE`). The
 package's ΔT module, exported as `@zodiacs/engine/deltat`, carries 32 values
 of Table S15 of Stephenson, Morrison & Hohenkerk 2016, which are CC BY 4.0
 (see *ΔT data* below), with their attribution in `NOTICE`. The build places
 that module in a shared chunk under `dist/`, which `dist/deltat.js`
-re-exports. Both licences apply to the package as distributed. From
-0.1.1-rc.8, which added those values, to rc.13, `package.json` declared `MIT`
-alone; rc.14 corrects it.
+re-exports, and a copy of it in `dist/core.js`, the file of
+`@zodiacs/engine/core`. Both licences apply to the package as distributed. From
+0.1.1-rc.8, which added those values, to 0.1.1-rc.13, `package.json` declared
+`MIT` alone; 0.1.1-rc.14 corrected it.
 
 ## Provenance chain
 
@@ -84,7 +91,11 @@ license as it is. The runtime's own nutation table, which its `NOTICE.md`
 gives as ERFA's (BSD 3-Clause), was not taken: the port sums the engine's
 table, arguments and offsets (*Nutation* below), which equal the runtime's
 term for term and double for double. `src/de440/kernel.testkit.ts`, a reader
-of `de440.bsp` for the tests, is not packed.
+of `de440.bsp` for the tests, is not packed. `src/de440-pack.ts`, added in
+1.1.0-rc.9 and built into a shared chunk under `dist/`, and
+`src/de440/sha256.ts`, a SHA-256 written for this package from FIPS 180-4,
+are this package's own code;
+the pack it carries is the subject of *DE440 pack* below.
 
 The site repository's `LICENSE` at both commits reserves all rights in its
 contents but the parts it names (the engine, whose code it states is MIT, its
@@ -113,6 +124,8 @@ equator of date, its sidereal time or its observer functions (`ObserverVector`,
 (`precession_rot`, from J2000.0) line for line, and `src/calc-reduce.ts` its
 observer on the ellipsoid (`terra`), under the same MIT notice, which `NOTICE`
 carries, and the nutation is the engine's own (*Nutation* below).
+`dist/core.js`, the file of `@zodiacs/engine/core`, carries its own copy of
+`src/frame.ts`, and so of `precession_rot`.
 
 Repository and dependency searches found no Swiss Ephemeris runtime import,
 package dependency, vendored source, or generated lookup table in this npm
@@ -159,6 +172,96 @@ port or translation of Swiss Ephemeris code. This licensing decision must be
 revisited before accepting any Swiss Ephemeris source, binary, table, or
 generated fixture into the package.
 
+## DE440 pack
+
+From 1.1.0-rc.9 the package carries a sealed DE440 pack, and its root entry
+computes on it by default (`docs/de440.md`, *The default source*).
+`scripts/build-de440-pack.mjs` writes it, as base64 text, into
+`src/de440/pack-data.ts`, which the build places in one shared chunk under
+`dist/` that the root's ephemeris chunk and `dist/de440-pack.js`, the file of
+`@zodiacs/engine/de440/pack`, import, and in no other file
+(`scripts/verify-package-contents.mjs` checks that, and the pack's digest).
+The withdrawn draft 1.1.0-rc.8 carried the same pack behind that entry
+alone.
+The pack is `de440-1790-2210.v2.zeph`, 2,489,664 bytes, SHA-256
+`51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7`: Chebyshev
+series for the Sun, the Moon, the Earth-Moon barycentre, Mercury, Venus and
+the barycentres of the systems of Mars to Pluto, from 1790 to 2210, which
+zodiacs.org's pack compiler 2.0.0 (part of its research runtime, MIT, above)
+refits body by body from NAIF's SPICE kernel `de440.bsp` (SHA-256
+`a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5`, 119,799,808
+bytes, fetched 2026-11-13 from
+https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440.bsp)
+and quantises (`docs/de440.md`, *The pack*). The kernel is in neither the
+repository nor the package. The ephemeris is the Jet Propulsion Laboratory's:
+R. S. Park, W. M. Folkner, J. G. Williams and D. H. Boggs, "The JPL Planetary
+and Lunar Ephemerides DE440 and DE441", The Astronomical Journal 161, 105
+(2021), which `NOTICE` cites.
+
+The pack holds values derived from DE440, not DE440's own coefficients: the
+compiler fits new series on records of its own and stores their coefficients
+quantised, so no record of the kernel is in it.
+
+What the providers state, read 2026-11-13:
+
+- **NAIF, "Rules Regarding Use of SPICE"**
+  (https://naif.jpl.nasa.gov/naif/rules.html; the page as served, 23,487
+  bytes, SHA-256
+  `ae85f851646e7c4f0a762db852907bc090a2ab50c815eb2a6cd8639e96b7e047`):
+  "Redistribution of SPICE kernels distributed by NAIF is permitted as long
+  as they have not been modified. If a kernel distributed by NAIF has been
+  modified in any way, any embedded or otherwise allied attribution of the
+  original kernel producer must be replaced with the name and institution of
+  whomever has made the last modification." And, of commercial use: "No fees
+  or licensing are required. Acknowledgement of the use of NASA's SPICE
+  system is encouraged."
+- **JPL Solar System Dynamics, "JPL Planetary and Lunar Ephemerides"**
+  (https://ssd.jpl.nasa.gov/planets/eph_export.html; the page as served,
+  29,979 bytes, SHA-256
+  `ce7db9fc032a395318911b6b07cb2f12717f2849dc9938cbd207cb662f4d1687`) names
+  DE440 and the paper above and where the files are. It states no licence
+  and no terms of redistribution.
+
+What follows from those statements, and what does not. The package does not
+redistribute a kernel, so the permission for unmodified kernels is not what
+it relies on. The pack is data that Zodiacs.org made from a kernel, and the
+rule for a modified kernel, read onto it, asks that the attribution name
+whoever made the last modification: `NOTICE` and `docs/de440.md` say that
+Zodiacs.org made the pack, name JPL's ephemeris as its source, and say that
+JPL and NAIF have not reviewed it. NAIF's rules speak of SPICE kernels; they
+do not speak of data refitted from one, and no statement of JPL's on
+redistributing DE440 or data derived from it was found. NAIF's directory of
+the planetary kernels has no readme for DE440 (its two `aareadme` files are
+for DE430, DE431 and DE432s), and its `de440_tech-comments.txt`, which a
+second session read in full on 2026-11-13, gives constants and the reference
+above and no terms (`docs/evidence/1.1.0-rc.8-20261113/breaker/README.md`).
+The owner's position, given on 2026-11-13, is that DE440 is JPL's public
+data. 1.1.0-rc.3 shipped no pack while a question about redistributing one
+was with NAIF (`docs/de440.md` at 1.1.0-rc.3); no answer to it is recorded in
+this repository. Shipping the pack therefore rests on the owner's reading,
+which this file required to be settled, or accepted by the owner in writing,
+before a release carrying the pack is published. On 2026-11-16, before 1.1.0
+was published, the owner answered the question "Do you accept shipping the
+NASA DE440 data in 1.1.0?" in writing with "Yes. I delegate these decisions
+to you."
+That acceptance, recorded as given for 1.1.0, covers 2.0.0 too, which ships
+the same sealed pack: it was given with "Yes. I delegate these decisions to
+you.", and under that delegation it is taken to extend to 2.0.0 and its
+candidates.
+
+The rule behind the Sun's disc, from 1.1.0-rc.12, is NASA JPL's. The
+reduction bends no light from a planet farther than the Sun whose direction
+is within the Sun's apparent radius of the Sun's, with the Sun's radius
+taken as 695,700 km, because NASA JPL's Horizons system does so and gives
+that radius (`docs/de440.md`, *Behind the Sun's disc*). `NOTICE` credits
+NASA JPL for the convention. It is a convention and a published constant,
+not data: no Horizons response is in the package. The Horizons responses it
+was measured against are public responses kept in the repository only
+(`docs/evidence/1.1.0-rc.12-20261115/near-sun/`).
+
+The pack does not change the SPDX expression: no licence is asserted for it
+that its providers do not state, as for the IERS data below.
+
 ## ΔT data
 
 `src/deltat.ts` ships 32 values of Table S15 of Stephenson, Morrison &
@@ -183,7 +286,9 @@ of its five fundamental arguments and its two fixed offsets for the planetary
 terms. The build places them in a shared chunk under `dist/` that the
 ephemeris chunk, `dist/time.js` and `dist/de440.js` import, so the graphs of
 the root, `./calc`, `./de440`, `./internal`, `./sky`, `./techniques`,
-`./time`, `./timing`, `./vedic` and `./window` load them;
+`./time`, `./timing`, `./vedic` and `./window` load them, and so does that
+of `./de440/pack`, which opens its pack with `./de440`. `dist/core.js`, the
+file of `@zodiacs/engine/core`, carries its own copy of them.
 `@zodiacs/engine/de440` sums the same terms in the order the research
 runtime of zodiacs.org sums them. The model is D. D.
 McCarthy and B. J. Luzum, "An abridged model of the precession-nutation of
@@ -223,16 +328,26 @@ which are CC BY 4.0. Downstream users who host or redistribute that data are
 instructed to retain `NOTICE`. The country names in the Gregorian adoption
 table come from tzdata, not from GeoNames (next section but one).
 
-Its zone histories before 1970 (`dist/tzdb-2025c-*.js`) are compiled by
-`scripts/build-tz-shards.mjs` from tzdata 2025c with backzone, which the tz
+Its zone histories before 1970 (`dist/tzdb-2026f-*.js`, from 2.0.0-rc.3;
+`dist/tzdb-2025c-*.js` through 2.0.0-rc.2) are compiled by
+`scripts/build-tz-shards.mjs` from tzdata 2026f with backzone, which the tz
 project places in the public domain; the script checks the archive's SHA-256.
-From 1970 conversion uses the host's `Intl`/ICU data.
+America/Yellowknife's history is compiled from tzdata 2025c's four backzone
+lines that define it, held there by the owner's decision and committed in
+`scripts/tzdb-held/yellowknife-2025c.zi`, whose SHA-256 the script also
+checks; that release is in the public domain too.
+From 1970 conversion uses the host's `Intl`/ICU data, which `./geo` checks
+against a table of the spans in which tzdata 2021a and 2026f give different
+offsets (`src/geo/host-probes-data.ts`), compiled by
+`scripts/build-host-zone-probes.mjs` from those two public-domain releases,
+whose SHA-256 it checks.
 
 ## Leap-second and UT1 data
 
 `src/time-scale-data.ts` holds the time basis's two IERS tables, which the
 import graphs of the root entry and of `@zodiacs/engine/time` under `dist/`
-carry. `scripts/build-time-scales.mjs`
+carry, and so does `dist/core.js`, the file of `@zodiacs/engine/core`.
+`scripts/build-time-scales.mjs`
 builds it from inputs committed in `scripts/time-scale-sources/` and checks
 each one's SHA-256:
 
@@ -329,7 +444,7 @@ under `dist/` that `dist/geo.js` and `dist/techniques.js` import. Its dates
 and names come from public-domain sources only:
 
 - the `calendars` file of tzdata 2025c (the archive whose SHA-256 the zone
-  histories pin), which says of itself "This file is in the public domain",
+  histories pinned through 2.0.0-rc.2), which says of itself "This file is in the public domain",
   and whose list quotes H. Grotefend, *Taschenbuch der Zeitrechnung des
   deutschen Mittelalters und der Neuzeit*, edited by O. Grotefend (Hannover:
   Hahnsche Buchhandlung, 1941), pp. 26–28;

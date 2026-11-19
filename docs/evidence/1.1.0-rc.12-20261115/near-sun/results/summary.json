@@ -1,0 +1,2105 @@
+{
+ "what": "calc() on the shipped DE440 pack (passages.json) against JPL Horizons (horizons.json) at every passage of a\nplanet behind the Sun from 1800 to 2200, and four reductions of NAIF's de440.bsp against Horizons at the same\ninstants, which say what Horizons does with the Sun's light deflection behind the disc.",
+ "engine": {
+  "name": "@zodiacs/engine",
+  "version": "1.1.0-rc.11",
+  "ephemeris": {
+   "name": "jpl-de440",
+   "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+  }
+ },
+ "kernel": "de440.bsp",
+ "software": {
+  "pyerfa": "2.0.1.5",
+  "numpy": "2.4.6"
+ },
+ "horizonsQueries": 340,
+ "summary": {
+  "Jupiter": {
+   "passages": 66,
+   "passagesBehindTheDisc": 56,
+   "inside": {
+    "n": 502,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.002208,
+      "body": "Jupiter",
+      "jdTt": 2523863.230823,
+      "separationArcsec": 927.936
+     },
+     "fromHorizons": {
+      "max": 0.519927,
+      "body": "Jupiter",
+      "jdTt": 2378681.752227,
+      "separationArcsec": 820.696
+     },
+     "fromTheKernel": {
+      "max": 0.003238,
+      "body": "Jupiter",
+      "jdTt": 2378681.718497,
+      "separationArcsec": 902.225
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.002204,
+      "body": "Jupiter",
+      "jdTt": 2523863.230823,
+      "separationArcsec": 927.936
+     },
+     "fromHorizons": {
+      "max": 0.5169,
+      "body": "Jupiter",
+      "jdTt": 2378682.359363,
+      "separationArcsec": 902.238
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 5.381467,
+      "body": "Jupiter",
+      "jdTt": 2495553.937155,
+      "separationArcsec": 256.462
+     },
+     "fromHorizons": {
+      "max": 5.41299,
+      "body": "Jupiter",
+      "jdTt": 2495553.937155,
+      "separationArcsec": 256.462
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 56.261005,
+      "body": "Jupiter",
+      "jdTt": 2463232.820716,
+      "separationArcsec": 25.544
+     },
+     "fromHorizons": {
+      "max": 56.262641,
+      "body": "Jupiter",
+      "jdTt": 2463232.820716,
+      "separationArcsec": 25.544
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.002204,
+      "body": "Jupiter",
+      "jdTt": 2523863.230823,
+      "separationArcsec": 927.936
+     },
+     "fromHorizons": {
+      "max": 0.5169,
+      "body": "Jupiter",
+      "jdTt": 2378682.359363,
+      "separationArcsec": 902.238
+     }
+    },
+    "largestBoundQuoted": 0.004
+   },
+   "limb": {
+    "n": 2,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 8.4e-05,
+      "body": "Jupiter",
+      "jdTt": 2450070.338262,
+      "separationArcsec": 972.822
+     },
+     "fromHorizons": {
+      "max": 0.048785,
+      "body": "Jupiter",
+      "jdTt": 2450070.474232,
+      "separationArcsec": 972.823
+     },
+     "fromTheKernel": {
+      "max": 0.000597,
+      "body": "Jupiter",
+      "jdTt": 2450070.474232,
+      "separationArcsec": 972.823
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.000112,
+      "body": "Jupiter",
+      "jdTt": 2450070.338262,
+      "separationArcsec": 972.822
+     },
+     "fromHorizons": {
+      "max": 0.048205,
+      "body": "Jupiter",
+      "jdTt": 2450070.474232,
+      "separationArcsec": 972.823
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 1.478997,
+      "body": "Jupiter",
+      "jdTt": 2450070.474232,
+      "separationArcsec": 972.823
+     },
+     "fromHorizons": {
+      "max": 1.49058,
+      "body": "Jupiter",
+      "jdTt": 2450070.338262,
+      "separationArcsec": 972.822
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 1.478997,
+      "body": "Jupiter",
+      "jdTt": 2450070.474232,
+      "separationArcsec": 972.823
+     },
+     "fromHorizons": {
+      "max": 1.49058,
+      "body": "Jupiter",
+      "jdTt": 2450070.338262,
+      "separationArcsec": 972.822
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.000112,
+      "body": "Jupiter",
+      "jdTt": 2450070.338262,
+      "separationArcsec": 972.822
+     },
+     "fromHorizons": {
+      "max": 0.048205,
+      "body": "Jupiter",
+      "jdTt": 2450070.474232,
+      "separationArcsec": 972.823
+     }
+    },
+    "largestBoundQuoted": 1.8
+   },
+   "outside": {
+    "n": 486,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.004613,
+      "body": "Jupiter",
+      "jdTt": 2523863.58709,
+      "separationArcsec": 1932.485
+     },
+     "fromHorizons": {
+      "max": 0.519941,
+      "body": "Jupiter",
+      "jdTt": 2378681.364334,
+      "separationArcsec": 1798.316
+     },
+     "fromTheKernel": {
+      "max": 0.003275,
+      "body": "Jupiter",
+      "jdTt": 2378681.364334,
+      "separationArcsec": 1798.316
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.004605,
+      "body": "Jupiter",
+      "jdTt": 2523863.58709,
+      "separationArcsec": 1932.485
+     },
+     "fromHorizons": {
+      "max": 0.517007,
+      "body": "Jupiter",
+      "jdTt": 2378682.713526,
+      "separationArcsec": 1798.378
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 0.004605,
+      "body": "Jupiter",
+      "jdTt": 2523863.58709,
+      "separationArcsec": 1932.485
+     },
+     "fromHorizons": {
+      "max": 0.517007,
+      "body": "Jupiter",
+      "jdTt": 2378682.713526,
+      "separationArcsec": 1798.378
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 0.004605,
+      "body": "Jupiter",
+      "jdTt": 2523863.58709,
+      "separationArcsec": 1932.485
+     },
+     "fromHorizons": {
+      "max": 0.517007,
+      "body": "Jupiter",
+      "jdTt": 2378682.713526,
+      "separationArcsec": 1798.378
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 1.472567,
+      "body": "Jupiter",
+      "jdTt": 2450070.481389,
+      "separationArcsec": 978.546
+     },
+     "fromHorizons": {
+      "max": 1.884778,
+      "body": "Jupiter",
+      "jdTt": 2523862.552219,
+      "separationArcsec": 1024.296
+     }
+    },
+    "largestBoundQuoted": 0.004
+   }
+  },
+  "Mars": {
+   "passages": 31,
+   "passagesBehindTheDisc": 27,
+   "inside": {
+    "n": 239,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.002098,
+      "body": "Mars",
+      "jdTt": 2523444.141595,
+      "separationArcsec": 927.66
+     },
+     "fromHorizons": {
+      "max": 0.491827,
+      "body": "Mars",
+      "jdTt": 2523443.405129,
+      "separationArcsec": 412.407
+     },
+     "fromTheKernel": {
+      "max": 0.002648,
+      "body": "Mars",
+      "jdTt": 2385392.533923,
+      "separationArcsec": 563.062
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.002096,
+      "body": "Mars",
+      "jdTt": 2523444.141595,
+      "separationArcsec": 927.66
+     },
+     "fromHorizons": {
+      "max": 0.492082,
+      "body": "Mars",
+      "jdTt": 2523443.637697,
+      "separationArcsec": 488.84
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 5.407128,
+      "body": "Mars",
+      "jdTt": 2450946.316518,
+      "separationArcsec": 160.979
+     },
+     "fromHorizons": {
+      "max": 5.396555,
+      "body": "Mars",
+      "jdTt": 2450946.316518,
+      "separationArcsec": 160.979
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 27.692347,
+      "body": "Mars",
+      "jdTt": 2402551.904511,
+      "separationArcsec": 37.39
+     },
+     "fromHorizons": {
+      "max": 27.706089,
+      "body": "Mars",
+      "jdTt": 2402551.904511,
+      "separationArcsec": 37.39
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.002096,
+      "body": "Mars",
+      "jdTt": 2523444.141595,
+      "separationArcsec": 927.66
+     },
+     "fromHorizons": {
+      "max": 0.492082,
+      "body": "Mars",
+      "jdTt": 2523443.637697,
+      "separationArcsec": 488.84
+     }
+    },
+    "largestBoundQuoted": 0.004
+   },
+   "limb": {
+    "n": 4,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.000146,
+      "body": "Mars",
+      "jdTt": 2443107.73283,
+      "separationArcsec": 969.141
+     },
+     "fromHorizons": {
+      "max": 0.057243,
+      "body": "Mars",
+      "jdTt": 2436871.763778,
+      "separationArcsec": 963.928
+     },
+     "fromTheKernel": {
+      "max": 0.000899,
+      "body": "Mars",
+      "jdTt": 2436871.433082,
+      "separationArcsec": 963.931
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.000138,
+      "body": "Mars",
+      "jdTt": 2436871.433082,
+      "separationArcsec": 963.931
+     },
+     "fromHorizons": {
+      "max": 0.057979,
+      "body": "Mars",
+      "jdTt": 2436871.763778,
+      "separationArcsec": 963.928
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 1.078355,
+      "body": "Mars",
+      "jdTt": 2436871.763778,
+      "separationArcsec": 963.928
+     },
+     "fromHorizons": {
+      "max": 1.107415,
+      "body": "Mars",
+      "jdTt": 2436871.433082,
+      "separationArcsec": 963.931
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 1.078355,
+      "body": "Mars",
+      "jdTt": 2436871.763778,
+      "separationArcsec": 963.928
+     },
+     "fromHorizons": {
+      "max": 1.107415,
+      "body": "Mars",
+      "jdTt": 2436871.433082,
+      "separationArcsec": 963.931
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.000138,
+      "body": "Mars",
+      "jdTt": 2436871.433082,
+      "separationArcsec": 963.931
+     },
+     "fromHorizons": {
+      "max": 0.057979,
+      "body": "Mars",
+      "jdTt": 2436871.763778,
+      "separationArcsec": 963.928
+     }
+    },
+    "largestBoundQuoted": 1.8
+   },
+   "outside": {
+    "n": 222,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.004265,
+      "body": "Mars",
+      "jdTt": 2523444.955585,
+      "separationArcsec": 1797.325
+     },
+     "fromHorizons": {
+      "max": 0.49169,
+      "body": "Mars",
+      "jdTt": 2523442.59114,
+      "separationArcsec": 1008.331
+     },
+     "fromTheKernel": {
+      "max": 0.002541,
+      "body": "Mars",
+      "jdTt": 2385393.308275,
+      "separationArcsec": 1004.331
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.004267,
+      "body": "Mars",
+      "jdTt": 2523444.955585,
+      "separationArcsec": 1797.325
+     },
+     "fromHorizons": {
+      "max": 0.492034,
+      "body": "Mars",
+      "jdTt": 2523444.219118,
+      "separationArcsec": 1007.765
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 0.004267,
+      "body": "Mars",
+      "jdTt": 2523444.955585,
+      "separationArcsec": 1797.325
+     },
+     "fromHorizons": {
+      "max": 0.492034,
+      "body": "Mars",
+      "jdTt": 2523444.219118,
+      "separationArcsec": 1007.765
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 0.004267,
+      "body": "Mars",
+      "jdTt": 2523444.955585,
+      "separationArcsec": 1797.325
+     },
+     "fromHorizons": {
+      "max": 0.492034,
+      "body": "Mars",
+      "jdTt": 2523444.219118,
+      "separationArcsec": 1007.765
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 1.073791,
+      "body": "Mars",
+      "jdTt": 2436871.781183,
+      "separationArcsec": 969.099
+     },
+     "fromHorizons": {
+      "max": 1.47234,
+      "body": "Mars",
+      "jdTt": 2523442.59114,
+      "separationArcsec": 1008.331
+     }
+    },
+    "largestBoundQuoted": 0.004
+   }
+  },
+  "Mercury": {
+   "passages": 129,
+   "passagesBehindTheDisc": 114,
+   "inside": {
+    "n": 1007,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.002239,
+      "body": "Mercury",
+      "jdTt": 2380632.539011,
+      "separationArcsec": 923.362
+     },
+     "fromHorizons": {
+      "max": 0.520545,
+      "body": "Mercury",
+      "jdTt": 2379714.33822,
+      "separationArcsec": 912.286
+     },
+     "fromTheKernel": {
+      "max": 0.002583,
+      "body": "Mercury",
+      "jdTt": 2518882.645204,
+      "separationArcsec": 906.47
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.002239,
+      "body": "Mercury",
+      "jdTt": 2380632.539011,
+      "separationArcsec": 923.362
+     },
+     "fromHorizons": {
+      "max": 0.518868,
+      "body": "Mercury",
+      "jdTt": 2379713.95995,
+      "separationArcsec": 911.149
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 5.189075,
+      "body": "Mercury",
+      "jdTt": 2464643.572823,
+      "separationArcsec": 102.569
+     },
+     "fromHorizons": {
+      "max": 5.169755,
+      "body": "Mercury",
+      "jdTt": 2464643.572823,
+      "separationArcsec": 102.569
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 333.476101,
+      "body": "Mercury",
+      "jdTt": 2434871.460514,
+      "separationArcsec": 1.184
+     },
+     "fromHorizons": {
+      "max": 333.447726,
+      "body": "Mercury",
+      "jdTt": 2434871.460514,
+      "separationArcsec": 1.184
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.002239,
+      "body": "Mercury",
+      "jdTt": 2380632.539011,
+      "separationArcsec": 923.362
+     },
+     "fromHorizons": {
+      "max": 0.518868,
+      "body": "Mercury",
+      "jdTt": 2379713.95995,
+      "separationArcsec": 911.149
+     }
+    },
+    "largestBoundQuoted": 0.004
+   },
+   "limb": {
+    "n": 27,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.000485,
+      "body": "Mercury",
+      "jdTt": 2511931.080488,
+      "separationArcsec": 949.893
+     },
+     "fromHorizons": {
+      "max": 0.420668,
+      "body": "Mercury",
+      "jdTt": 2516332.4328,
+      "separationArcsec": 945.863
+     },
+     "fromTheKernel": {
+      "max": 0.001191,
+      "body": "Mercury",
+      "jdTt": 2511931.080488,
+      "separationArcsec": 949.893
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.000489,
+      "body": "Mercury",
+      "jdTt": 2516332.334506,
+      "separationArcsec": 945.851
+     },
+     "fromHorizons": {
+      "max": 0.420727,
+      "body": "Mercury",
+      "jdTt": 2516332.334506,
+      "separationArcsec": 945.851
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 0.555266,
+      "body": "Mercury",
+      "jdTt": 2474146.3793,
+      "separationArcsec": 968.298
+     },
+     "fromHorizons": {
+      "max": 0.687268,
+      "body": "Mercury",
+      "jdTt": 2404734.083334,
+      "separationArcsec": 967.041
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 0.555266,
+      "body": "Mercury",
+      "jdTt": 2474146.3793,
+      "separationArcsec": 968.298
+     },
+     "fromHorizons": {
+      "max": 0.687268,
+      "body": "Mercury",
+      "jdTt": 2404734.083334,
+      "separationArcsec": 967.041
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.553812,
+      "body": "Mercury",
+      "jdTt": 2474146.390078,
+      "separationArcsec": 971.428
+     },
+     "fromHorizons": {
+      "max": 0.598596,
+      "body": "Mercury",
+      "jdTt": 2404734.013389,
+      "separationArcsec": 969.614
+     }
+    },
+    "largestBoundQuoted": 1.8
+   },
+   "outside": {
+    "n": 901,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.004569,
+      "body": "Mercury",
+      "jdTt": 2380632.975804,
+      "separationArcsec": 1856.583
+     },
+     "fromHorizons": {
+      "max": 0.520576,
+      "body": "Mercury",
+      "jdTt": 2379714.547264,
+      "separationArcsec": 1776.456
+     },
+     "fromTheKernel": {
+      "max": 0.002615,
+      "body": "Mercury",
+      "jdTt": 2518882.863942,
+      "separationArcsec": 1849.959
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.004571,
+      "body": "Mercury",
+      "jdTt": 2380632.975804,
+      "separationArcsec": 1856.583
+     },
+     "fromHorizons": {
+      "max": 0.518887,
+      "body": "Mercury",
+      "jdTt": 2379713.750906,
+      "separationArcsec": 1771.003
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 0.004571,
+      "body": "Mercury",
+      "jdTt": 2380632.975804,
+      "separationArcsec": 1856.583
+     },
+     "fromHorizons": {
+      "max": 0.518887,
+      "body": "Mercury",
+      "jdTt": 2379713.750906,
+      "separationArcsec": 1771.003
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 0.004571,
+      "body": "Mercury",
+      "jdTt": 2380632.975804,
+      "separationArcsec": 1856.583
+     },
+     "fromHorizons": {
+      "max": 0.518887,
+      "body": "Mercury",
+      "jdTt": 2379713.750906,
+      "separationArcsec": 1771.003
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.551586,
+      "body": "Mercury",
+      "jdTt": 2474146.403552,
+      "separationArcsec": 975.395
+     },
+     "fromHorizons": {
+      "max": 0.999129,
+      "body": "Mercury",
+      "jdTt": 2380631.707025,
+      "separationArcsec": 1015.038
+     }
+    },
+    "largestBoundQuoted": 0.004
+   }
+  },
+  "Neptune": {
+   "passages": 47,
+   "passagesBehindTheDisc": 42,
+   "inside": {
+    "n": 372,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.001869,
+      "body": "Neptune",
+      "jdTt": 2392769.852926,
+      "separationArcsec": 924.819
+     },
+     "fromHorizons": {
+      "max": 0.420578,
+      "body": "Neptune",
+      "jdTt": 2392035.059147,
+      "separationArcsec": 936.729
+     },
+     "fromTheKernel": {
+      "max": 0.00305,
+      "body": "Neptune",
+      "jdTt": 2393504.953855,
+      "separationArcsec": 488.755
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.001861,
+      "body": "Neptune",
+      "jdTt": 2392769.852926,
+      "separationArcsec": 924.819
+     },
+     "fromHorizons": {
+      "max": 0.419725,
+      "body": "Neptune",
+      "jdTt": 2392035.520803,
+      "separationArcsec": 936.691
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 5.753025,
+      "body": "Neptune",
+      "jdTt": 2422908.034509,
+      "separationArcsec": 277.987
+     },
+     "fromHorizons": {
+      "max": 6.06456,
+      "body": "Neptune",
+      "jdTt": 2392770.032906,
+      "separationArcsec": 292.214
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 154.785719,
+      "body": "Neptune",
+      "jdTt": 2392770.115973,
+      "separationArcsec": 10.664
+     },
+     "fromHorizons": {
+      "max": 154.828109,
+      "body": "Neptune",
+      "jdTt": 2392770.115973,
+      "separationArcsec": 10.664
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.001861,
+      "body": "Neptune",
+      "jdTt": 2392769.852926,
+      "separationArcsec": 924.819
+     },
+     "fromHorizons": {
+      "max": 0.419725,
+      "body": "Neptune",
+      "jdTt": 2392035.520803,
+      "separationArcsec": 936.691
+     }
+    },
+    "largestBoundQuoted": 0.004
+   },
+   "limb": {
+    "n": 8,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.000429,
+      "body": "Neptune",
+      "jdTt": 2511468.608672,
+      "separationArcsec": 973.125
+     },
+     "fromHorizons": {
+      "max": 0.4084,
+      "body": "Neptune",
+      "jdTt": 2394239.786671,
+      "separationArcsec": 971.336
+     },
+     "fromTheKernel": {
+      "max": 0.002567,
+      "body": "Neptune",
+      "jdTt": 2511468.515984,
+      "separationArcsec": 973.125
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.00045,
+      "body": "Neptune",
+      "jdTt": 2511468.608672,
+      "separationArcsec": 973.125
+     },
+     "fromHorizons": {
+      "max": 0.408077,
+      "body": "Neptune",
+      "jdTt": 2394239.786671,
+      "separationArcsec": 971.336
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 1.699302,
+      "body": "Neptune",
+      "jdTt": 2394239.79018,
+      "separationArcsec": 969.932
+     },
+     "fromHorizons": {
+      "max": 1.826954,
+      "body": "Neptune",
+      "jdTt": 2394239.786671,
+      "separationArcsec": 971.336
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 1.699302,
+      "body": "Neptune",
+      "jdTt": 2394239.79018,
+      "separationArcsec": 969.932
+     },
+     "fromHorizons": {
+      "max": 1.826954,
+      "body": "Neptune",
+      "jdTt": 2394239.786671,
+      "separationArcsec": 971.336
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 1.694128,
+      "body": "Neptune",
+      "jdTt": 2394239.783162,
+      "separationArcsec": 974.588
+     },
+     "fromHorizons": {
+      "max": 1.758921,
+      "body": "Neptune",
+      "jdTt": 2394239.856858,
+      "separationArcsec": 974.588
+     }
+    },
+    "largestBoundQuoted": 1.8
+   },
+   "outside": {
+    "n": 325,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.003934,
+      "body": "Neptune",
+      "jdTt": 2392769.56219,
+      "separationArcsec": 1947.817
+     },
+     "fromHorizons": {
+      "max": 0.420591,
+      "body": "Neptune",
+      "jdTt": 2392034.804022,
+      "separationArcsec": 1774.094
+     },
+     "fromTheKernel": {
+      "max": 0.003029,
+      "body": "Neptune",
+      "jdTt": 2393505.205412,
+      "separationArcsec": 1011.006
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.003916,
+      "body": "Neptune",
+      "jdTt": 2392769.56219,
+      "separationArcsec": 1947.817
+     },
+     "fromHorizons": {
+      "max": 0.419761,
+      "body": "Neptune",
+      "jdTt": 2392035.775928,
+      "separationArcsec": 1773.919
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 0.003916,
+      "body": "Neptune",
+      "jdTt": 2392769.56219,
+      "separationArcsec": 1947.817
+     },
+     "fromHorizons": {
+      "max": 0.419761,
+      "body": "Neptune",
+      "jdTt": 2392035.775928,
+      "separationArcsec": 1773.919
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 0.003916,
+      "body": "Neptune",
+      "jdTt": 2392769.56219,
+      "separationArcsec": 1947.817
+     },
+     "fromHorizons": {
+      "max": 0.419761,
+      "body": "Neptune",
+      "jdTt": 2392035.775928,
+      "separationArcsec": 1773.919
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 1.6931,
+      "body": "Neptune",
+      "jdTt": 2511468.511105,
+      "separationArcsec": 977.857
+     },
+     "fromHorizons": {
+      "max": 2.034332,
+      "body": "Neptune",
+      "jdTt": 2392402.982247,
+      "separationArcsec": 1021.33
+     }
+    },
+    "largestBoundQuoted": 0.004
+   }
+  },
+  "Pluto": {
+   "passages": 3,
+   "passagesBehindTheDisc": 3,
+   "inside": {
+    "n": 27,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.00188,
+      "body": "Pluto",
+      "jdTt": 2516753.56911,
+      "separationArcsec": 896.806
+     },
+     "fromHorizons": {
+      "max": 0.430915,
+      "body": "Pluto",
+      "jdTt": 2516753.56911,
+      "separationArcsec": 896.806
+     },
+     "fromTheKernel": {
+      "max": 0.001524,
+      "body": "Pluto",
+      "jdTt": 2516753.56911,
+      "separationArcsec": 896.806
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.001877,
+      "body": "Pluto",
+      "jdTt": 2516753.56911,
+      "separationArcsec": 896.806
+     },
+     "fromHorizons": {
+      "max": 0.430296,
+      "body": "Pluto",
+      "jdTt": 2516753.034302,
+      "separationArcsec": 896.786
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 5.499066,
+      "body": "Pluto",
+      "jdTt": 2516753.217263,
+      "separationArcsec": 293.262
+     },
+     "fromHorizons": {
+      "max": 5.921546,
+      "body": "Pluto",
+      "jdTt": 2516753.386149,
+      "separationArcsec": 293.266
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 20.087004,
+      "body": "Pluto",
+      "jdTt": 2516753.301706,
+      "separationArcsec": 80.284
+     },
+     "fromHorizons": {
+      "max": 20.126457,
+      "body": "Pluto",
+      "jdTt": 2516753.301706,
+      "separationArcsec": 80.284
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.001877,
+      "body": "Pluto",
+      "jdTt": 2516753.56911,
+      "separationArcsec": 896.806
+     },
+     "fromHorizons": {
+      "max": 0.430296,
+      "body": "Pluto",
+      "jdTt": 2516753.034302,
+      "separationArcsec": 896.786
+     }
+    },
+    "largestBoundQuoted": 0.004
+   },
+   "limb": {
+    "n": 0,
+    "engine": {
+     "relativeToTheSun": null,
+     "fromHorizons": null,
+     "fromTheKernel": null
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": null,
+     "fromHorizons": null
+    },
+    "ldsun": {
+     "relativeToTheSun": null,
+     "fromHorizons": null
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": null,
+     "fromHorizons": null
+    },
+    "no-deflection": {
+     "relativeToTheSun": null,
+     "fromHorizons": null
+    },
+    "largestBoundQuoted": null
+   },
+   "outside": {
+    "n": 18,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.003945,
+      "body": "Pluto",
+      "jdTt": 2516753.864661,
+      "separationArcsec": 1883.018
+     },
+     "fromHorizons": {
+      "max": 0.430953,
+      "body": "Pluto",
+      "jdTt": 2516753.864661,
+      "separationArcsec": 1883.018
+     },
+     "fromTheKernel": {
+      "max": 0.001604,
+      "body": "Pluto",
+      "jdTt": 2516753.864661,
+      "separationArcsec": 1883.018
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.003937,
+      "body": "Pluto",
+      "jdTt": 2516753.864661,
+      "separationArcsec": 1883.018
+     },
+     "fromHorizons": {
+      "max": 0.430405,
+      "body": "Pluto",
+      "jdTt": 2516752.738751,
+      "separationArcsec": 1882.937
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 0.003937,
+      "body": "Pluto",
+      "jdTt": 2516753.864661,
+      "separationArcsec": 1883.018
+     },
+     "fromHorizons": {
+      "max": 0.430405,
+      "body": "Pluto",
+      "jdTt": 2516752.738751,
+      "separationArcsec": 1882.937
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 0.003937,
+      "body": "Pluto",
+      "jdTt": 2516753.864661,
+      "separationArcsec": 1883.018
+     },
+     "fromHorizons": {
+      "max": 0.430405,
+      "body": "Pluto",
+      "jdTt": 2516752.738751,
+      "separationArcsec": 1882.937
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 1.635453,
+      "body": "Pluto",
+      "jdTt": 2458495.244457,
+      "separationArcsec": 1016.435
+     },
+     "fromHorizons": {
+      "max": 2.054024,
+      "body": "Pluto",
+      "jdTt": 2516753.006155,
+      "separationArcsec": 992.089
+     }
+    },
+    "largestBoundQuoted": 0.004
+   }
+  },
+  "Saturn": {
+   "passages": 33,
+   "passagesBehindTheDisc": 28,
+   "inside": {
+    "n": 252,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.002125,
+      "body": "Saturn",
+      "jdTt": 2383621.24295,
+      "separationArcsec": 926.639
+     },
+     "fromHorizons": {
+      "max": 0.485647,
+      "body": "Saturn",
+      "jdTt": 2523515.892955,
+      "separationArcsec": 940.747
+     },
+     "fromTheKernel": {
+      "max": 0.001978,
+      "body": "Saturn",
+      "jdTt": 2399505.522258,
+      "separationArcsec": 918.965
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.002128,
+      "body": "Saturn",
+      "jdTt": 2383621.24295,
+      "separationArcsec": 926.639
+     },
+     "fromHorizons": {
+      "max": 0.485944,
+      "body": "Saturn",
+      "jdTt": 2523515.892955,
+      "separationArcsec": 940.747
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 5.270972,
+      "body": "Saturn",
+      "jdTt": 2388920.046888,
+      "separationArcsec": 236.202
+     },
+     "fromHorizons": {
+      "max": 5.692751,
+      "body": "Saturn",
+      "jdTt": 2383620.867287,
+      "separationArcsec": 297.048
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 28.900199,
+      "body": "Saturn",
+      "jdTt": 2383620.957446,
+      "separationArcsec": 53.814
+     },
+     "fromHorizons": {
+      "max": 28.857688,
+      "body": "Saturn",
+      "jdTt": 2383620.957446,
+      "separationArcsec": 53.814
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.002128,
+      "body": "Saturn",
+      "jdTt": 2383621.24295,
+      "separationArcsec": 926.639
+     },
+     "fromHorizons": {
+      "max": 0.485944,
+      "body": "Saturn",
+      "jdTt": 2523515.892955,
+      "separationArcsec": 940.747
+     }
+    },
+    "largestBoundQuoted": 0.0039
+   },
+   "limb": {
+    "n": 0,
+    "engine": {
+     "relativeToTheSun": null,
+     "fromHorizons": null,
+     "fromTheKernel": null
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": null,
+     "fromHorizons": null
+    },
+    "ldsun": {
+     "relativeToTheSun": null,
+     "fromHorizons": null
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": null,
+     "fromHorizons": null
+    },
+    "no-deflection": {
+     "relativeToTheSun": null,
+     "fromHorizons": null
+    },
+    "largestBoundQuoted": null
+   },
+   "outside": {
+    "n": 243,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.004461,
+      "body": "Saturn",
+      "jdTt": 2383621.558507,
+      "separationArcsec": 1949.051
+     },
+     "fromHorizons": {
+      "max": 0.485774,
+      "body": "Saturn",
+      "jdTt": 2523515.627008,
+      "separationArcsec": 1724.691
+     },
+     "fromTheKernel": {
+      "max": 0.001995,
+      "body": "Saturn",
+      "jdTt": 2399505.279432,
+      "separationArcsec": 1517.437
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.004467,
+      "body": "Saturn",
+      "jdTt": 2383621.558507,
+      "separationArcsec": 1949.051
+     },
+     "fromHorizons": {
+      "max": 0.485997,
+      "body": "Saturn",
+      "jdTt": 2523515.627008,
+      "separationArcsec": 1724.691
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 0.004467,
+      "body": "Saturn",
+      "jdTt": 2383621.558507,
+      "separationArcsec": 1949.051
+     },
+     "fromHorizons": {
+      "max": 0.485997,
+      "body": "Saturn",
+      "jdTt": 2523515.627008,
+      "separationArcsec": 1724.691
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 0.004467,
+      "body": "Saturn",
+      "jdTt": 2383621.558507,
+      "separationArcsec": 1949.051
+     },
+     "fromHorizons": {
+      "max": 0.485997,
+      "body": "Saturn",
+      "jdTt": 2523515.627008,
+      "separationArcsec": 1724.691
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 1.572584,
+      "body": "Saturn",
+      "jdTt": 2394584.438697,
+      "separationArcsec": 989.935
+     },
+     "fromHorizons": {
+      "max": 1.992524,
+      "body": "Saturn",
+      "jdTt": 2383621.273003,
+      "separationArcsec": 1025.385
+     }
+    },
+    "largestBoundQuoted": 0.0039
+   }
+  },
+  "Uranus": {
+   "passages": 108,
+   "passagesBehindTheDisc": 95,
+   "inside": {
+    "n": 845,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.002126,
+      "body": "Uranus",
+      "jdTt": 2523654.903843,
+      "separationArcsec": 898.737
+     },
+     "fromHorizons": {
+      "max": 0.500814,
+      "body": "Uranus",
+      "jdTt": 2524394.976052,
+      "separationArcsec": 909.56
+     },
+     "fromTheKernel": {
+      "max": 0.003641,
+      "body": "Uranus",
+      "jdTt": 2521806.832932,
+      "separationArcsec": 943.189
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.002126,
+      "body": "Uranus",
+      "jdTt": 2523654.903843,
+      "separationArcsec": 898.737
+     },
+     "fromHorizons": {
+      "max": 0.498374,
+      "body": "Uranus",
+      "jdTt": 2524394.976052,
+      "separationArcsec": 909.56
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 5.761255,
+      "body": "Uranus",
+      "jdTt": 2384307.701883,
+      "separationArcsec": 273.5
+     },
+     "fromHorizons": {
+      "max": 5.85734,
+      "body": "Uranus",
+      "jdTt": 2384677.225743,
+      "separationArcsec": 299.688
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 195.548872,
+      "body": "Uranus",
+      "jdTt": 2462292.183631,
+      "separationArcsec": 8.043
+     },
+     "fromHorizons": {
+      "max": 195.535977,
+      "body": "Uranus",
+      "jdTt": 2462292.183631,
+      "separationArcsec": 8.043
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.002126,
+      "body": "Uranus",
+      "jdTt": 2523654.903843,
+      "separationArcsec": 898.737
+     },
+     "fromHorizons": {
+      "max": 0.498374,
+      "body": "Uranus",
+      "jdTt": 2524394.976052,
+      "separationArcsec": 909.56
+     }
+    },
+    "largestBoundQuoted": 0.004
+   },
+   "limb": {
+    "n": 15,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.000498,
+      "body": "Uranus",
+      "jdTt": 2505554.917411,
+      "separationArcsec": 967.51
+     },
+     "fromHorizons": {
+      "max": 0.34802,
+      "body": "Uranus",
+      "jdTt": 2505554.809593,
+      "separationArcsec": 967.509
+     },
+     "fromTheKernel": {
+      "max": 0.00115,
+      "body": "Uranus",
+      "jdTt": 2402778.523343,
+      "separationArcsec": 946.054
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.000496,
+      "body": "Uranus",
+      "jdTt": 2505554.917411,
+      "separationArcsec": 967.51
+     },
+     "fromHorizons": {
+      "max": 0.347468,
+      "body": "Uranus",
+      "jdTt": 2505554.809593,
+      "separationArcsec": 967.509
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 1.669625,
+      "body": "Uranus",
+      "jdTt": 2447887.731375,
+      "separationArcsec": 973.597
+     },
+     "fromHorizons": {
+      "max": 1.802855,
+      "body": "Uranus",
+      "jdTt": 2505554.917411,
+      "separationArcsec": 967.51
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 1.669625,
+      "body": "Uranus",
+      "jdTt": 2447887.731375,
+      "separationArcsec": 973.597
+     },
+     "fromHorizons": {
+      "max": 1.802855,
+      "body": "Uranus",
+      "jdTt": 2505554.917411,
+      "separationArcsec": 967.51
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 1.665492,
+      "body": "Uranus",
+      "jdTt": 2447887.792647,
+      "separationArcsec": 977.68
+     },
+     "fromHorizons": {
+      "max": 1.71721,
+      "body": "Uranus",
+      "jdTt": 2402778.523343,
+      "separationArcsec": 946.054
+     }
+    },
+    "largestBoundQuoted": 1.8
+   },
+   "outside": {
+    "n": 760,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.004452,
+      "body": "Uranus",
+      "jdTt": 2523654.598012,
+      "separationArcsec": 1887.332
+     },
+     "fromHorizons": {
+      "max": 0.500814,
+      "body": "Uranus",
+      "jdTt": 2524395.241588,
+      "separationArcsec": 1700.705
+     },
+     "fromTheKernel": {
+      "max": 0.003715,
+      "body": "Uranus",
+      "jdTt": 2521437.495676,
+      "separationArcsec": 1122.841
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.004454,
+      "body": "Uranus",
+      "jdTt": 2523654.598012,
+      "separationArcsec": 1887.332
+     },
+     "fromHorizons": {
+      "max": 0.498385,
+      "body": "Uranus",
+      "jdTt": 2524395.241588,
+      "separationArcsec": 1700.705
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 0.004454,
+      "body": "Uranus",
+      "jdTt": 2523654.598012,
+      "separationArcsec": 1887.332
+     },
+     "fromHorizons": {
+      "max": 0.498385,
+      "body": "Uranus",
+      "jdTt": 2524395.241588,
+      "separationArcsec": 1700.705
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 0.004454,
+      "body": "Uranus",
+      "jdTt": 2523654.598012,
+      "separationArcsec": 1887.332
+     },
+     "fromHorizons": {
+      "max": 0.498385,
+      "body": "Uranus",
+      "jdTt": 2524395.241588,
+      "separationArcsec": 1700.705
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 1.661823,
+      "body": "Uranus",
+      "jdTt": 2460443.868643,
+      "separationArcsec": 952.9
+     },
+     "fromHorizons": {
+      "max": 2.076851,
+      "body": "Uranus",
+      "jdTt": 2524024.636853,
+      "separationArcsec": 989.94
+     }
+    },
+    "largestBoundQuoted": 0.004
+   }
+  },
+  "Venus": {
+   "passages": 31,
+   "passagesBehindTheDisc": 28,
+   "inside": {
+    "n": 246,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.001547,
+      "body": "Venus",
+      "jdTt": 2401484.34562,
+      "separationArcsec": 930.424
+     },
+     "fromHorizons": {
+      "max": 0.514341,
+      "body": "Venus",
+      "jdTt": 2380468.83199,
+      "separationArcsec": 931.953
+     },
+     "fromTheKernel": {
+      "max": 0.001895,
+      "body": "Venus",
+      "jdTt": 2501919.242029,
+      "separationArcsec": 660.948
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.001549,
+      "body": "Venus",
+      "jdTt": 2401484.34562,
+      "separationArcsec": 930.424
+     },
+     "fromHorizons": {
+      "max": 0.513351,
+      "body": "Venus",
+      "jdTt": 2380468.83199,
+      "separationArcsec": 931.953
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 3.999139,
+      "body": "Venus",
+      "jdTt": 2454626.654907,
+      "separationArcsec": 171.733
+     },
+     "fromHorizons": {
+      "max": 3.999783,
+      "body": "Venus",
+      "jdTt": 2407324.297312,
+      "separationArcsec": 182.95
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 35.197785,
+      "body": "Venus",
+      "jdTt": 2457546.413003,
+      "separationArcsec": 19.523
+     },
+     "fromHorizons": {
+      "max": 35.20962,
+      "body": "Venus",
+      "jdTt": 2457546.413003,
+      "separationArcsec": 19.523
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.001549,
+      "body": "Venus",
+      "jdTt": 2401484.34562,
+      "separationArcsec": 930.424
+     },
+     "fromHorizons": {
+      "max": 0.513351,
+      "body": "Venus",
+      "jdTt": 2380468.83199,
+      "separationArcsec": 931.953
+     }
+    },
+    "largestBoundQuoted": 0.004
+   },
+   "limb": {
+    "n": 10,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.000131,
+      "body": "Venus",
+      "jdTt": 2481482.747193,
+      "separationArcsec": 976.185
+     },
+     "fromHorizons": {
+      "max": 0.123769,
+      "body": "Venus",
+      "jdTt": 2481482.747193,
+      "separationArcsec": 976.185
+     },
+     "fromTheKernel": {
+      "max": 0.001469,
+      "body": "Venus",
+      "jdTt": 2481482.747193,
+      "separationArcsec": 976.185
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.000133,
+      "body": "Venus",
+      "jdTt": 2481482.747193,
+      "separationArcsec": 976.185
+     },
+     "fromHorizons": {
+      "max": 0.125115,
+      "body": "Venus",
+      "jdTt": 2481482.747193,
+      "separationArcsec": 976.185
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 0.745196,
+      "body": "Venus",
+      "jdTt": 2481482.97637,
+      "separationArcsec": 973.254
+     },
+     "fromHorizons": {
+      "max": 0.773012,
+      "body": "Venus",
+      "jdTt": 2481482.759255,
+      "separationArcsec": 974.291
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 0.745196,
+      "body": "Venus",
+      "jdTt": 2481482.97637,
+      "separationArcsec": 973.254
+     },
+     "fromHorizons": {
+      "max": 0.773012,
+      "body": "Venus",
+      "jdTt": 2481482.759255,
+      "separationArcsec": 974.291
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.743532,
+      "body": "Venus",
+      "jdTt": 2481483.000493,
+      "separationArcsec": 976.184
+     },
+     "fromHorizons": {
+      "max": 0.7622,
+      "body": "Venus",
+      "jdTt": 2481483.000493,
+      "separationArcsec": 976.184
+     }
+    },
+    "largestBoundQuoted": 1.8
+   },
+   "outside": {
+    "n": 209,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.003196,
+      "body": "Venus",
+      "jdTt": 2401483.236071,
+      "separationArcsec": 1887.114
+     },
+     "fromHorizons": {
+      "max": 0.514483,
+      "body": "Venus",
+      "jdTt": 2380468.277129,
+      "separationArcsec": 1305.865
+     },
+     "fromTheKernel": {
+      "max": 0.002024,
+      "body": "Venus",
+      "jdTt": 2392727.367436,
+      "separationArcsec": 1052.931
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.003203,
+      "body": "Venus",
+      "jdTt": 2401483.236071,
+      "separationArcsec": 1887.114
+     },
+     "fromHorizons": {
+      "max": 0.513554,
+      "body": "Venus",
+      "jdTt": 2380468.277129,
+      "separationArcsec": 1305.865
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 0.003203,
+      "body": "Venus",
+      "jdTt": 2401483.236071,
+      "separationArcsec": 1887.114
+     },
+     "fromHorizons": {
+      "max": 0.513554,
+      "body": "Venus",
+      "jdTt": 2380468.277129,
+      "separationArcsec": 1305.865
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 0.003203,
+      "body": "Venus",
+      "jdTt": 2401483.236071,
+      "separationArcsec": 1887.114
+     },
+     "fromHorizons": {
+      "max": 0.513554,
+      "body": "Venus",
+      "jdTt": 2380468.277129,
+      "separationArcsec": 1305.865
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.740976,
+      "body": "Venus",
+      "jdTt": 2481483.030648,
+      "separationArcsec": 979.551
+     },
+     "fromHorizons": {
+      "max": 1.065237,
+      "body": "Venus",
+      "jdTt": 2380468.779146,
+      "separationArcsec": 961.184
+     }
+    },
+    "largestBoundQuoted": 0.004
+   }
+  },
+  "all": {
+   "passages": 448,
+   "passagesBehindTheDisc": 393,
+   "inside": {
+    "n": 3490,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.002239,
+      "body": "Mercury",
+      "jdTt": 2380632.539011,
+      "separationArcsec": 923.362
+     },
+     "fromHorizons": {
+      "max": 0.520545,
+      "body": "Mercury",
+      "jdTt": 2379714.33822,
+      "separationArcsec": 912.286
+     },
+     "fromTheKernel": {
+      "max": 0.003641,
+      "body": "Uranus",
+      "jdTt": 2521806.832932,
+      "separationArcsec": 943.189
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.002239,
+      "body": "Mercury",
+      "jdTt": 2380632.539011,
+      "separationArcsec": 923.362
+     },
+     "fromHorizons": {
+      "max": 0.518868,
+      "body": "Mercury",
+      "jdTt": 2379713.95995,
+      "separationArcsec": 911.149
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 5.761255,
+      "body": "Uranus",
+      "jdTt": 2384307.701883,
+      "separationArcsec": 273.5
+     },
+     "fromHorizons": {
+      "max": 6.06456,
+      "body": "Neptune",
+      "jdTt": 2392770.032906,
+      "separationArcsec": 292.214
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 333.476101,
+      "body": "Mercury",
+      "jdTt": 2434871.460514,
+      "separationArcsec": 1.184
+     },
+     "fromHorizons": {
+      "max": 333.447726,
+      "body": "Mercury",
+      "jdTt": 2434871.460514,
+      "separationArcsec": 1.184
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 0.002239,
+      "body": "Mercury",
+      "jdTt": 2380632.539011,
+      "separationArcsec": 923.362
+     },
+     "fromHorizons": {
+      "max": 0.518868,
+      "body": "Mercury",
+      "jdTt": 2379713.95995,
+      "separationArcsec": 911.149
+     }
+    },
+    "largestBoundQuoted": 0.004
+   },
+   "limb": {
+    "n": 66,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.000498,
+      "body": "Uranus",
+      "jdTt": 2505554.917411,
+      "separationArcsec": 967.51
+     },
+     "fromHorizons": {
+      "max": 0.420668,
+      "body": "Mercury",
+      "jdTt": 2516332.4328,
+      "separationArcsec": 945.863
+     },
+     "fromTheKernel": {
+      "max": 0.002567,
+      "body": "Neptune",
+      "jdTt": 2511468.515984,
+      "separationArcsec": 973.125
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.000496,
+      "body": "Uranus",
+      "jdTt": 2505554.917411,
+      "separationArcsec": 967.51
+     },
+     "fromHorizons": {
+      "max": 0.420727,
+      "body": "Mercury",
+      "jdTt": 2516332.334506,
+      "separationArcsec": 945.851
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 1.699302,
+      "body": "Neptune",
+      "jdTt": 2394239.79018,
+      "separationArcsec": 969.932
+     },
+     "fromHorizons": {
+      "max": 1.826954,
+      "body": "Neptune",
+      "jdTt": 2394239.786671,
+      "separationArcsec": 971.336
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 1.699302,
+      "body": "Neptune",
+      "jdTt": 2394239.79018,
+      "separationArcsec": 969.932
+     },
+     "fromHorizons": {
+      "max": 1.826954,
+      "body": "Neptune",
+      "jdTt": 2394239.786671,
+      "separationArcsec": 971.336
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 1.694128,
+      "body": "Neptune",
+      "jdTt": 2394239.783162,
+      "separationArcsec": 974.588
+     },
+     "fromHorizons": {
+      "max": 1.758921,
+      "body": "Neptune",
+      "jdTt": 2394239.856858,
+      "separationArcsec": 974.588
+     }
+    },
+    "largestBoundQuoted": 1.8
+   },
+   "outside": {
+    "n": 3164,
+    "engine": {
+     "relativeToTheSun": {
+      "max": 0.004613,
+      "body": "Jupiter",
+      "jdTt": 2523863.58709,
+      "separationArcsec": 1932.485
+     },
+     "fromHorizons": {
+      "max": 0.520576,
+      "body": "Mercury",
+      "jdTt": 2379714.547264,
+      "separationArcsec": 1776.456
+     },
+     "fromTheKernel": {
+      "max": 0.003715,
+      "body": "Uranus",
+      "jdTt": 2521437.495676,
+      "separationArcsec": 1122.841
+     }
+    },
+    "behind-disc-none": {
+     "relativeToTheSun": {
+      "max": 0.004605,
+      "body": "Jupiter",
+      "jdTt": 2523863.58709,
+      "separationArcsec": 1932.485
+     },
+     "fromHorizons": {
+      "max": 0.518887,
+      "body": "Mercury",
+      "jdTt": 2379713.750906,
+      "separationArcsec": 1771.003
+     }
+    },
+    "ldsun": {
+     "relativeToTheSun": {
+      "max": 0.004605,
+      "body": "Jupiter",
+      "jdTt": 2523863.58709,
+      "separationArcsec": 1932.485
+     },
+     "fromHorizons": {
+      "max": 0.518887,
+      "body": "Mercury",
+      "jdTt": 2379713.750906,
+      "separationArcsec": 1771.003
+     }
+    },
+    "limiter-1e-14": {
+     "relativeToTheSun": {
+      "max": 0.004605,
+      "body": "Jupiter",
+      "jdTt": 2523863.58709,
+      "separationArcsec": 1932.485
+     },
+     "fromHorizons": {
+      "max": 0.518887,
+      "body": "Mercury",
+      "jdTt": 2379713.750906,
+      "separationArcsec": 1771.003
+     }
+    },
+    "no-deflection": {
+     "relativeToTheSun": {
+      "max": 1.6931,
+      "body": "Neptune",
+      "jdTt": 2511468.511105,
+      "separationArcsec": 977.857
+     },
+     "fromHorizons": {
+      "max": 2.076851,
+      "body": "Uranus",
+      "jdTt": 2524024.636853,
+      "separationArcsec": 989.94
+     }
+    },
+    "largestBoundQuoted": 0.004
+   }
+  }
+ }
+}

@@ -2,7 +2,7 @@
 
 Test vectors for the numbers an astrology program computes, each with an
 independent arbiter and a stated tolerance, and a harness that runs any
-engine against them through a small adapter. Version 0.2.0 covers three
+engine against them through a small adapter. Version 0.3.0 covers four
 levels:
 
 | level | what it checks | vectors |
@@ -10,9 +10,10 @@ levels:
 | L1 | apparent geocentric positions of the Sun, Moon and planets | 240 |
 | L2 | ascendant, midheaven, vertex, east point and house cusps in thirteen systems | 150 |
 | L3 | time zones and local mean time, TT − UTC, ΔT, and Julian and Gregorian calendar dates | 110 |
+| L4 | event times: ingresses into a sign, stations, and new and full Moons | 140 |
 
-Later levels are planned for events and completeness (L4), sidereal and
-Vedic techniques (L5), and Hellenistic and timing techniques (L6).
+Later levels are planned for sidereal and Vedic techniques (L5), and
+Hellenistic and timing techniques (L6).
 
 ## Versions
 
@@ -23,6 +24,12 @@ Vedic techniques (L5), and Hellenistic and timing techniques (L6).
   such as `kind:houses.cusps` and `arbiter:l2-houses-semi-arc`, in
   `vectors/0.2.0/`. No vector's input, expected value, tolerance or arbiter
   changes, and the harness checks that. 0.1.0's files stay as released.
+- **0.3.0**: 0.2.0's 500 vectors again, in `vectors/0.3.0/`, with nothing
+  changed but the suite version, and the new level L4, event times: 140
+  vectors in `vectors/0.3.0/L4-events.json`, 640 in all. Its design,
+  instants and tolerance rule were committed before any engine ran
+  ([drafts/0.3.0/DESIGN.md](drafts/0.3.0/DESIGN.md)). 0.1.0's and 0.2.0's
+  files stay as released.
 
 The harness runs the latest version.
 
@@ -37,11 +44,14 @@ Results for this repository's engine and for Swiss Ephemeris are in
   the published definition of each house system for angles and cusps, the
   IANA time zone database (2025c, with its `backzone` file) compiled by
   `zic`, the IERS's leap-second table and Earth-rotation series, and exact
-  calendar arithmetic implemented twice.
+  calendar arithmetic implemented twice. L4's arbiter, from 0.3.0, solves
+  each event on positions reduced from NASA's DE440s kernel as L1's check
+  reduces them, and is cross-checked against JPL Horizons.
 - Every vector names its tolerance, fixed before any engine was run against
   it: 1″ for positions, angles and cusps; 0.1 s for ΔT, a size at which ΔT
   moves the Moon by about 0.05″; exact for time zone offsets and calendar
-  dates.
+  dates. An event's tolerance is the time its quantity takes to move 1″
+  there, at least 1 s, and at least 60 s for a station.
 - No vector uses Swiss Ephemeris as its arbiter. Swiss Ephemeris is measured
   by the suite like any other engine.
 - A released vector never changes. A vector found to be wrong is withdrawn
@@ -89,12 +99,12 @@ SE_EPHE_PATH=/path/to/ephe node conformance/harness/run.mjs \
   --adapter "python3 conformance/adapters/pyswisseph.py" \
   --out conformance/results/pyswisseph.json --values none
 
-# this engine's positions from a DE440 pack you supply (docs/de440.md);
-# the adapter refuses the pack unless its SHA-256 is the one given
-ZODIACS_ENGINE_DE440_PACK=/path/to/de440-1790-2210.v2.zeph \
-ZODIACS_ENGINE_DE440_SHA256=<the pack's SHA-256> node conformance/harness/run.mjs \
-  --adapter "node conformance/adapters/zodiacs-engine.mjs" \
-  --levels L1 --out conformance/results/zodiacs-engine-de440.json
+# this engine on astronomy-engine, its fallback and what every build before
+# 1.1.0-rc.9 computed on (the run above is a plain call, which computes on
+# the DE440 pack the package ships; docs/de440.md). All 640 vectors
+node conformance/harness/run.mjs \
+  --adapter "node conformance/adapters/zodiacs-engine.mjs --ephemeris astronomy-engine" \
+  --out conformance/results/zodiacs-engine-astronomy-engine.json
 
 node conformance/harness/report.mjs   # rewrites RESULTS.md
 ```
@@ -104,8 +114,8 @@ summary statistics, but no per-vector values. Swiss Ephemeris output is not
 redistributed here.
 
 `node conformance/harness/validate.mjs` checks the vector files of every
-release against SPEC.md and the arbiters' input digests, and that 0.2.0 holds
-0.1.0's vectors. In continuous integration the suite
+release against SPEC.md and the arbiters' input digests, that 0.2.0 holds
+0.1.0's vectors, and that 0.3.0 holds 0.2.0's files. In continuous integration the suite
 runs against this engine on every change, and the build fails if any vector's
 verdict differs from the committed results.
 

@@ -1,0 +1,5 @@
+$ node scripts/verify-archive-binding.mjs
+Running the check in a new Node process without NODE_OPTIONS=--use-openssl-ca.
+artifacts/zodiacs-engine-2.0.0-rc.2.tgz is byte-identical to a rebuild of HEAD (e3b206188766) on Node v22.23.4: sha256 e0621630b5a0f9dbb6465f4f077630f313217d7b06ee88ffa960696fec5eb1cc, 2734988 bytes.
+31 recorded archives (27 carried, 4 superseded) and their receipts hold only their recorded bytes across 440 commits, and each is bound to its source commit.
+exit 0

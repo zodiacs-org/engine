@@ -1,0 +1,158 @@
+node v22.22.2, npm 10.9.7; commit 5ea3efaae1b34b7ef987e612c925bef65d99bf5a; 0 modified tracked paths
+=== npm run typecheck
+
+> @zodiacs/engine@1.1.0-rc.10 typecheck
+> tsc -p tsconfig.typecheck.json --pretty false
+
+=== exit 0: npm run typecheck
+=== npm test
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 7 of 12 2737ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 8 of 12 2867ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 9 of 12 2723ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 10 of 12 3114ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 11 of 12 2937ms
+   ✓ resolveLocalToUtc on the shipped zone clock, around every offset change, 1850-2037 > round-trips zone group 12 of 12 2861ms
+
+ Test Files  108 passed | 1 skipped (109)
+      Tests  4285 passed | 3 skipped (4288)
+   Start at  23:48:53
+   Duration  60.14s (transform 3.61s, setup 631ms, collect 22.22s, tests 187.12s, environment 14ms, prepare 4.86s)
+
+=== exit 0: npm test
+=== npm run build
+DTS dist/time-scale-DIFNa0gz.d.ts     1.92 KB
+DTS dist/zone-history-DgZ5Ua3q.d.ts   12.00 KB
+DTS dist/api-vnaf78Xb.d.ts            11.46 KB
+DTS dist/internal-math-bDLCdufV.d.ts  6.02 KB
+DTS dist/internal-CvlwFTr6.d.ts       3.13 KB
+lite: dist/lite.js 146 bytes
+lite: dist/lite-declinations.js 9665 bytes
+lite: dist/lite-sect.js 3439 bytes
+lite: dist/lite-composite.js 3783 bytes
+lite: dist/lite-dignities.js 11897 bytes
+lite: dist/lite.d.ts 5135 bytes
+lite: dist/metafile-lite.json 5357 bytes
+=== exit 0: npm run build
+=== npm run exports:smoke
+
+> @zodiacs/engine@1.1.0-rc.10 exports:smoke
+> node scripts/module-resolution-smoke.mjs
+
+@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat, time and lite graphs have no external imports, the lite entry holds its 16 pinned source modules in 5 files that import nothing and loads where astronomy-engine cannot, the core graph (32 source modules in the build's module list, 31 marked in 16 files) reaches no module of an opt-in entry and no zone history, the geo entry loads its 16 shards lazily, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic
+=== exit 0: npm run exports:smoke
+=== npm run api:check
+
+> @zodiacs/engine@1.1.0-rc.10 api:check
+> node scripts/api-report.mjs --check
+
+api-report: 17 entry points match api/
+=== exit 0: npm run api:check
+=== npm run package:contents
+
+> @zodiacs/engine@1.1.0-rc.10 package:contents
+> node scripts/verify-package-contents.mjs
+
+@zodiacs/engine package contents passed (98 files, 4540059 bytes unpacked: the DE440 pack 3319552, the rest 1220507 of 1225000; import graphs: . 147832 of 149400, ./calc 197802 of 199900 (77059 beyond the core's), ./conventions 2754 of 2900 (2754 beyond the core's), ./crossings 9942 of 10000 (173 beyond the core's), ./deltat 5232 of 5500 (161 beyond the core's), ./geo 35614 of 35700 (32655 beyond the core's), ./houses 13678 of 15000 (13678 beyond the core's), ./internal 107011 of 108200 (455 beyond the core's), ./internal/math 19225 of 20000 (1363 beyond the core's), ./lite 28930 of 29000 (28930 beyond the core's), ./receipt 75814 of 76500 (49843 beyond the core's), ./sky 134959 of 136400 (17175 beyond the core's), ./techniques 197811 of 199900 (64213 beyond the core's), ./time 42472 of 42600 (2962 beyond the core's), ./de440 52616 of 53200 (377 beyond the core's), ./de440/pack 53836 of 54400 (325 beyond the core's), ./timing 167135 of 168900 (32865 beyond the core's), ./vedic 182867 of 184800 (49269 beyond the core's), ./window 147950 of 149500 (36976 beyond the core's); zone histories 189144 of 200000 in 16 files; license MIT AND CC-BY-4.0; node ^20.19.0 || >=22.7.0)
+=== exit 0: npm run package:contents
+=== npm run pack:dry-run
+npm notice 4.7kB package.json
+npm notice Tarball Details
+npm notice name: @zodiacs/engine
+npm notice version: 1.1.0-rc.10
+npm notice filename: zodiacs-engine-1.1.0-rc.10.tgz
+npm notice package size: 2.7 MB
+npm notice unpacked size: 4.5 MB
+npm notice shasum: 18848dcd1475c4f4b6e67a02ba36a3c55f221a79
+npm notice integrity: sha512-4hk2qoUjHUC16[...]9ZJgb5/y5+nkg==
+npm notice total files: 98
+npm notice
+zodiacs-engine-1.1.0-rc.10.tgz
+=== exit 0: npm run pack:dry-run
+=== node scripts/build-de440-pack.mjs --check
+src/de440/pack-data.ts holds de440-1790-2210.v2.zeph: 2489664 bytes, sha256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7
+=== exit 0: node scripts/build-de440-pack.mjs --check
+=== node scripts/verify-archive-binding.mjs
+artifacts/zodiacs-engine-1.1.0-rc.10.tgz is byte-identical to a rebuild of HEAD (5ea3efaae1b3) on Node v22.22.2: sha256 7fbdf3ade2a3350970e8e4195cda02ad596cbc2ca46c955ceae44a0ce7613246, 2716319 bytes.
+25 recorded archives (21 carried, 4 superseded) and their receipts hold only their recorded bytes across 378 commits, and each is bound to its source commit.
+=== exit 0: node scripts/verify-archive-binding.mjs
+=== node --test conformance/harness/selftest.mjs
+  duration_ms: 61.03144
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 172.599787
+=== exit 0: node --test conformance/harness/selftest.mjs
+=== node conformance/harness/validate.mjs --expect-total 500
+L2 Houses and angles: 150 vectors, 5 arbiter(s), sha256 fc5321b9061b9860bfb9af5254e5813be1c4bc3c858df6f623ea1617b76b88e5
+  angles.asc-mc: 60
+  angles.vertex-east-point: 10
+  houses.cusps: 80
+L3 Time and calendars: 110 vectors, 5 arbiter(s), sha256 51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66
+  time.zone-offset: 45
+  time.local-mean-time: 5
+  time.tt-minus-utc: 10
+  time.delta-t: 15
+  calendar.to-jdn: 25
+  calendar.from-jdn: 10
+conformance: 500 vectors conform to SPEC.md
+=== exit 0: node conformance/harness/validate.mjs --expect-total 500
+=== node conformance/harness/run.mjs --adapter node conformance/adapters/zodiacs-engine.mjs --check conformance/results/zodiacs-engine.json
+zodiacs-engine 1.1.0-rc.10: 459 pass, 0 fail, 41 unsupported, 0 error (of 500)
+  L1: 240 pass, 0 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 69 pass, 0 fail, 41 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine.json
+=== exit 0: node conformance/harness/run.mjs --adapter node conformance/adapters/zodiacs-engine.mjs --check conformance/results/zodiacs-engine.json
+=== node conformance/harness/run.mjs --adapter node conformance/adapters/zodiacs-engine.mjs --ephemeris astronomy-engine --check conformance/results/zodiacs-engine-astronomy-engine.json
+zodiacs-engine-astronomy-engine 1.1.0-rc.10: 267 pass, 192 fail, 41 unsupported, 0 error (of 500)
+  L1: 48 pass, 192 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 69 pass, 0 fail, 41 unsupported, 0 error (of 110)
+conformance: every verdict matches conformance/results/zodiacs-engine-astronomy-engine.json
+=== exit 0: node conformance/harness/run.mjs --adapter node conformance/adapters/zodiacs-engine.mjs --ephemeris astronomy-engine --check conformance/results/zodiacs-engine-astronomy-engine.json
+=== node conformance/harness/report.mjs --check
+conformance: RESULTS.md and results/summary.json are current
+=== exit 0: node conformance/harness/report.mjs --check
+=== node atlas/tools/check.mjs
+atlas 0.1.0: 21 places, 14 jurisdictions, 59 rules, 66 citations
+  rules by flag: documented 27, inferred 26, uncertain 6
+  citations by type: decree 5, law 9, ministerial-decision 1, municipal-notice 1, newspaper-report 45, parliamentary-debate 3, railway-notice 2
+  excerpts taken from: page-image 66
+  excerpts checked against (citations): ocr matches 24, ocr partial 5, page-image matches 16, search-service matches 29, search-service partial 8
+  258 boundaries and 2735 round trips checked
+  tzdb comparison current, every difference matched by exactly one explanation
+atlas: all checks passed
+=== exit 0: node atlas/tools/check.mjs
+=== node --test atlas/tools/selftest.mjs
+  duration_ms: 0.397668
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 746.517011
+=== exit 0: node --test atlas/tools/selftest.mjs
+=== node tools/cli/scripts/preserve-checkout-bytes.mjs
+CLI checkout byte receipt: {"schema":"zodiacs.cli-checkout-bytes.v1","checkedFiles":73,"method":"Only tracked tools/cli/, conformance/ and root LICENSE, restored from HEAD Git blobs without text conversion","changed":[]}
+=== exit 0: node tools/cli/scripts/preserve-checkout-bytes.mjs
+=== node tools/cli/scripts/prepare-consumer.mjs
+CLI suite bundle: 500 vectors, 37 source files
+
+added 3 packages in 285ms
+CLI consumer: 29 checks passed; conformance {"count":500,"pass":267,"fail":192,"unsupported":41,"error":0}
+PROGRAMME_FILE {"path":"docs/evidence/offline-cli-20261009/producer-local/linux-node22.json","size":8219,"sha256":"a43baac3ca328334357a8c6e31bd646ac3104846fc8832952fff22ef38fa72d6","base64":"ewogICJzY2hlbWEiOiAiem9kaWFjcy5vZmZsaW5lLWNsaS1jb25zdW1lci52MSIsCiAgInByb2R1Y2VyIjogewogICAgIm5vZGUiOiAidjIyLjIyLjIiLAogICAgIm9zIjogImxpbnV4IiwKICAgICJhcmNoaXRlY3R1cmUiOiAieDY0IgogIH0sCiAgInByaXZhdGVQYWNrYWdlIjogdHJ1ZSwKICAicHVibGljYXRpb24iOiAibm90LXBlcmZvcm1lZCIsCiAgImNoZWNrcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAic3ltbGlua2VkIHBhY2thZ2UgZW50cnkgcnVucyBvbiBldmVyeSBwbGF0Zm9ybSIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJpbnN0YWxsZWQgem9kaWFjcyBjb21tYW5kIGxhdW5jaGVzIHRocm91Z2ggb2ZmbGluZSBucG0gZXhlYyIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJjaGFydCB1c2VzIGluc3RhbGxlZCBlbmdpbmUgd2l0aCBubyBuZXR3b3JrIiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogImNoYXJ0IHJlY2VpcHQgcmVwbGF5cyIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJjaGFydCBjaGFuZ2VkIG51bWJlciByZWZ1c2VzIHZlcmlmaWNhdGlvbiIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJjaGFydCB0ZXh0IGtlZXBzIHJlY2VpcHQiLAogICAgICAicGFzc2VkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAiY2hhcnQgU1ZHIGNvbnRhaW5zIGZ1bGwgZXNjYXBlZCByZWNlaXB0IiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogInBvc2l0aW9ucyB1c2VzIGluc3RhbGxlZCBlbmdpbmUgd2l0aCBubyBuZXR3b3JrIiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogInBvc2l0aW9ucyByZWNlaXB0IHJlcGxheXMiLAogICAgICAicGFzc2VkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAicG9zaXRpb25zIGNoYW5nZWQgbnVtYmVyIHJlZnVzZXMgdmVyaWZpY2F0aW9uIiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogInBvc2l0aW9ucyB0ZXh0IGtlZXBzIHJlY2VpcHQiLAogICAgICAicGFzc2VkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAicG9zaXRpb25zIFNWRyBjb250YWlucyBmdWxsIGVzY2FwZWQgcmVjZWlwdCIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJldmVudHMgdXNlcyBpbnN0YWxsZWQgZW5naW5lIHdpdGggbm8gb
+PROGRAMME_FILE_FINAL {"path":"docs/evidence/offline-cli-20261009/producer-local/linux-node22.json","size":13856,"sha256":"bf8d43b1bac72b2f554e223855019ca23f0f4954552f9ede00d9833bdf62a1aa","base64":"ewogICJzY2hlbWEiOiAiem9kaWFjcy5vZmZsaW5lLWNsaS1jb25zdW1lci52MSIsCiAgInByb2R1Y2VyIjogewogICAgIm5vZGUiOiAidjIyLjIyLjIiLAogICAgIm9zIjogImxpbnV4IiwKICAgICJhcmNoaXRlY3R1cmUiOiAieDY0IgogIH0sCiAgInByaXZhdGVQYWNrYWdlIjogdHJ1ZSwKICAicHVibGljYXRpb24iOiAibm90LXBlcmZvcm1lZCIsCiAgImNoZWNrcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAic3ltbGlua2VkIHBhY2thZ2UgZW50cnkgcnVucyBvbiBldmVyeSBwbGF0Zm9ybSIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJpbnN0YWxsZWQgem9kaWFjcyBjb21tYW5kIGxhdW5jaGVzIHRocm91Z2ggb2ZmbGluZSBucG0gZXhlYyIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJjaGFydCB1c2VzIGluc3RhbGxlZCBlbmdpbmUgd2l0aCBubyBuZXR3b3JrIiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogImNoYXJ0IHJlY2VpcHQgcmVwbGF5cyIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJjaGFydCBjaGFuZ2VkIG51bWJlciByZWZ1c2VzIHZlcmlmaWNhdGlvbiIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJjaGFydCB0ZXh0IGtlZXBzIHJlY2VpcHQiLAogICAgICAicGFzc2VkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAiY2hhcnQgU1ZHIGNvbnRhaW5zIGZ1bGwgZXNjYXBlZCByZWNlaXB0IiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogInBvc2l0aW9ucyB1c2VzIGluc3RhbGxlZCBlbmdpbmUgd2l0aCBubyBuZXR3b3JrIiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogInBvc2l0aW9ucyByZWNlaXB0IHJlcGxheXMiLAogICAgICAicGFzc2VkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAicG9zaXRpb25zIGNoYW5nZWQgbnVtYmVyIHJlZnVzZXMgdmVyaWZpY2F0aW9uIiwKICAgICAgInBhc3NlZCI6IHRydWUKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogInBvc2l0aW9ucyB0ZXh0IGtlZXBzIHJlY2VpcHQiLAogICAgICAicGFzc2VkIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAicG9zaXRpb25zIFNWRyBjb250YWlucyBmdWxsIGVzY2FwZWQgcmVjZWlwdCIsCiAgICAgICJwYXNzZWQiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJldmVudHMgdXNlcyBpbnN0YWxsZWQgZW5naW5lIHdpdG
+=== exit 0: node tools/cli/scripts/prepare-consumer.mjs
+exit 0

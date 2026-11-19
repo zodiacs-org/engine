@@ -1,6 +1,15 @@
-import { computeBodies, computeChart, computeChartDeclinations, computePoints, bodyLongitude } from "./ephemeris.js";
+import {
+  computeBodies,
+  computeChart,
+  computeChartDeclinations,
+  computePoints,
+  bodyLongitude,
+  deltaTExtrapolated,
+  ephemerisAt,
+  notingFallbacks
+} from "./ephemeris.js";
 import type { ChartDeclinations } from "./declination.js";
-import { POLAR_FALLBACK, isPolarUndefinedHouseSystem } from "./houses.js";
+import { POLAR_FALLBACK, isPolarUndefinedHouseSystem, meanObliquity } from "./houses.js";
 import { computeSaturnReturns } from "./returns.js";
 import { outsideReferenceSpan } from "./reference-span.js";
 import { normalizeLongitude } from "./signs.js";
@@ -28,6 +37,7 @@ import type {
   TransitResult
 } from "./types.js";
 import type { SaturnReturnResult } from "./returns.js";
+import { EPHEMERIS } from "./types.js";
 
 export type NatalSource = Chart | BirthInput;
 export type SaturnReturnSource = NatalSource | DateInput;
@@ -85,7 +95,35 @@ export function resolvedChart(source: NatalSource): { chart: Chart; utc: Date } 
   if (isPolarUndefinedHouseSystem(input.houseSystem) && actualHouseSystem === POLAR_FALLBACK) {
     expected.push("polar-fallback");
   }
+  // "polar-angles" is the chart's claim that its angles are inside the polar
+  // circle, which the engine sets where |latitude| >= 90 - (e0 + de): e0 the
+  // mean obliquity (meanObliquity, the whole IAU 2006 polynomial), de the
+  // nutation in obliquity, both at the chart's TT. A supplied chart carries no
+  // obliquity, so the claim is allowed where |latitude| >= 90 - e0 - 0.003
+  // degrees, e0 at the same TT; the margin covers de, under 10". A chart from
+  // 1.1.0 or earlier lacks the flag there; anywhere else the claim fails. The
+  // same test as a natal receipt's (src/receipt.ts).
+  const basis = timeBasis(+input.utc, input.timeScale, input.deltaT);
+  if (
+    hasHouses &&
+    resultFlags.values.includes("polar-angles") &&
+    Math.abs(input.latitude!) >= 90 - meanObliquity(basis.ttDays / 36_525) - 0.003
+  )
+    expected.push("polar-angles");
   if (outsideReferenceSpan(input.utc)) expected.push("outside-reference-span");
+  // "delta-t-extrapolated" is allowed where the chart rests on an extrapolated
+  // ΔT (on TT input, through its houses), as a natal receipt allows it; a chart
+  // from a release before the flag lacks it there. Any other flag fails below.
+  if (
+    resultFlags.values.length > expected.length &&
+    deltaTExtrapolated(basis, hasHouses)
+  )
+    expected.push("delta-t-extrapolated");
+  // A fallback flag is allowed on a chart that names astronomy-engine, or, as a
+  // chart from before 1.1.0-rc.10, names nothing: the chart's own claim about
+  // what computed it, which nothing here recomputes.
+  if (source.ephemeris === undefined || source.ephemeris?.name === "astronomy-engine")
+    for (const reason of ["de440-unavailable", "outside-de440-span"] as const) if (resultFlags.values.includes(reason)) expected.push(reason);
   assertDerivedFlags(inputFlags?.values ?? [], expected);
   if (
     resultFlags.values.length !== expected.length ||
@@ -118,7 +156,10 @@ interface ValidatedBirth {
   flags: FlagSnapshot | undefined;
 }
 
-/** The fields of `BirthInput`. Other keys are ignored, except a field's name in other letter case. */
+/**
+ * The fields of `BirthInput`. Other keys are ignored, except a field's name in
+ * other letter case and the near-miss names below.
+ */
 const BIRTH_FIELDS: readonly (keyof BirthInput)[] = [
   "utc",
   "timeScale",
@@ -129,6 +170,34 @@ const BIRTH_FIELDS: readonly (keyof BirthInput)[] = [
   "flags",
   "deltaT"
 ];
+
+/**
+ * Common names for a birth field that are not its name, refused in any letter
+ * case: `lat` and `lng`, ignored, would give a chart with no angles, silently.
+ * Ordinary column names (`date`, `time`, `dt`, `tz`, `timezone`) are left out,
+ * so a caller's own row can still be passed with its other keys ignored.
+ */
+const NEAR_MISS_KEYS: readonly [keyof BirthInput, readonly string[]][] = [
+  ["latitude", ["lat"]],
+  ["longitude", ["lng", "lon", "long"]],
+  ["houseSystem", ["house", "houses", "hsys", "housesystem"]],
+  ["timeScale", ["scale", "time_scale"]],
+  ["deltaT", ["delta_t"]],
+  ["timeKnown", ["time_known", "unknownTime"]]
+];
+
+/**
+ * A birth given as a calendar date with no time, such as "1990-05-03", is
+ * refused unless the time is declared unknown: read as 00:00 UTC, it would be
+ * a chart for a midnight nobody gave. `name` is the field in the message.
+ */
+function noBareDate(value: unknown, name: string): void {
+  if (typeof value === "string" && !value.includes("T")) {
+    throw new RangeError(
+      `${name} is a calendar date with no time. Give the birth instant with its UTC offset, such as 1990-05-03T08:30:00+02:00, or set timeKnown: false if the birth time is not known.`
+    );
+  }
+}
 
 function validateBirth(birth: BirthInput): ValidatedBirth {
   if (!birth || typeof birth !== "object" || Array.isArray(birth)) {
@@ -142,7 +211,14 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   const settings = validateBirthSettings(birth);
   const supplied = birth.flags;
   const flags = supplied === undefined ? undefined : snapshotFlags(supplied);
-  const utc = dateFrom(birth.utc, "birth.utc");
+  const suppliedUtc: unknown = birth.utc;
+  const utc = dateFrom(suppliedUtc as DateInput, "birth.utc");
+  // After utc, so an object with no instant (a chart read back from JSON has `houses`) keeps utc's message.
+  for (const key of Object.keys(birth)) {
+    const lower = key.toLowerCase();
+    const near = NEAR_MISS_KEYS.find(([real, names]) => real !== key && names.some((name) => name.toLowerCase() === lower));
+    if (near) throw new RangeError(`birth has no field "${key}"; use "${near[0]}".`);
+  }
   const pin = birth.deltaT;
   if (pin !== undefined && (typeof pin !== "number" || !Number.isFinite(pin) || Math.abs(pin) > 1e10)) {
     throw new RangeError("deltaT must be a finite number of seconds, at most 1e10 in size.");
@@ -151,17 +227,19 @@ function validateBirth(birth: BirthInput): ValidatedBirth {
   if (scale !== undefined && !TIME_SCALE_NAMES.includes(scale as never)) {
     throw new RangeError('timeScale must be "utc", "ut1" or "tt".');
   }
-  const possible: ChartFlag[] = [];
+  // "delta-t-extrapolated" is checked against the chart's own flags once computed
+  // (computedBirth), and against a supplied chart's instant in resolvedChart.
+  // So are the two fallback flags, which depend on the source the chart is computed on.
+  const possible: ChartFlag[] = ["delta-t-extrapolated", "de440-unavailable", "outside-de440-span"];
   if (settings.timeKnown === false) possible.push("no-time");
-  else if (
-    settings.houseSystem !== undefined &&
-    isPolarUndefinedHouseSystem(settings.houseSystem) &&
-    settings.latitude !== undefined
-  ) {
-    possible.push("polar-fallback");
+  else if (settings.latitude !== undefined) {
+    // "polar-angles" too is checked against the chart's own flags once computed.
+    possible.push("polar-angles");
+    if (settings.houseSystem !== undefined && isPolarUndefinedHouseSystem(settings.houseSystem)) possible.push("polar-fallback");
   }
   if (outsideReferenceSpan(utc)) possible.push("outside-reference-span");
   assertDerivedFlags(flags?.values ?? [], possible);
+  if (settings.timeKnown !== false) noBareDate(suppliedUtc, "birth.utc");
   const input: ChartInput = {
     utc,
     houseSystem: settings.houseSystem ?? "whole",
@@ -253,12 +331,15 @@ function phaseName(angle: number): MoonPhaseName {
 export function moonPhase(date: DateInput): MoonPhase {
   const at = dateFrom(date, "date");
   const angle = normalizeLongitude(bodyLongitude("Moon", at) - bodyLongitude("Sun", at));
+  const { ephemeris, fallback } = ephemerisAt(at.getTime());
   return {
     at,
     angle,
     illumination: (1 - Math.cos((angle * Math.PI) / 180)) / 2,
     name: phaseName(angle),
-    waxing: angle < 180
+    waxing: angle < 180,
+    ephemeris: ephemeris.name,
+    ...(fallback !== null && { fallback })
   };
 }
 
@@ -274,7 +355,12 @@ export function utcOf(input: ChartInput): Date {
   return new Date(Math.round(timeBasis(input.utc.getTime(), input.timeScale, input.deltaT).utcMs));
 }
 
-/** Natal Saturn and return seasons through approximately age 92. */
+/**
+ * Natal Saturn and return seasons through approximately age 92. A calendar
+ * date with no time, such as "1990-05-03", given in place of a birth or as a
+ * birth's `utc`, is refused with a RangeError unless the birth object sets
+ * `timeKnown: false`.
+ */
 export function saturnReturn(birth: SaturnReturnSource): SaturnReturnResult {
   let utc: Date;
   if (isChart(birth)) {
@@ -282,11 +368,22 @@ export function saturnReturn(birth: SaturnReturnSource): SaturnReturnResult {
     utc = utcOf(chart.input);
   } else if (isBirth(birth)) {
     const validated = validateBirth(birth);
-    // Only an explicit compatibility assertion needs a natal calculation to
-    // establish actual Placidus fallback. Ordinary return inputs remain date-only.
+    // Only an explicit compatibility assertion ("polar-fallback" or "polar-angles")
+    // needs a natal calculation to establish it. Ordinary return inputs remain date-only.
     utc = utcOf(
-      validated.flags?.values.includes("polar-fallback") ? computedBirth(validated).input : validated.input
+      validated.flags?.values.some((flag) => flag === "polar-fallback" || flag === "polar-angles") ? computedBirth(validated).input : validated.input
     );
-  } else utc = dateFrom(birth, "birth");
-  return computeSaturnReturns(utc);
+  } else {
+    utc = dateFrom(birth, "birth");
+  }
+  // The search reads the ephemeris from birth to about age 92: every kind of fallback it met is reported,
+  // and a search that met one is named astronomy-engine, the source of those positions (from 1.1.0-rc.12;
+  // before, one that began inside the pack named jpl-de440 beside "outside-de440-span").
+  const { value, fallbacks } = notingFallbacks(() => computeSaturnReturns(utc));
+  // A bare date in place of a birth is refused as a birth object's is ({ utc, timeKnown: false } declares the
+  // time unknown), after the date's own checks and the search's span, so those errors come first, as before.
+  // A chart or a birth object is not a string, so it passes.
+  noBareDate(birth, "birth");
+  const ephemeris = fallbacks.length > 0 ? EPHEMERIS.name : ephemerisAt(utc.getTime()).ephemeris.name;
+  return { ...value, ephemeris, flags: fallbacks };
 }

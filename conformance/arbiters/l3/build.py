@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Generate vectors/L3-time-calendars.json: level L3 (time and calendars) of the
-zodiacs-conformance suite, v0.  The format is fixed by conformance/SPEC.md.  Suite
-0.2.0's vectors/0.2.0/L3-time-calendars.json, the same vectors with their convention
-ids, is written from the same text (../release.py); --check compares both.
+zodiacs-conformance suite, v0.  The format is fixed by conformance/SPEC.md.  Suites
+0.2.0's and 0.3.0's L3-time-calendars.json, in vectors/0.2.0/ and vectors/0.3.0/, the same
+vectors with their convention ids, are written from the same text (../release.py); --check
+compares all three.
 
 Every expected value comes from an arbiter outside any astrology engine:
 
@@ -1605,21 +1606,24 @@ def main():
         die("pass both --zic and --zdump, or neither")
     text = build(args)
     out = Path(args.out)
-    # 0.2.0's file: the same vectors with their convention ids, in 0.2.0/ beside --out
-    # (vectors/0.2.0/ for the default --out).
-    ids_text = release.dumps(release.with_ids(json.loads(text)), ensure_ascii=False)
-    ids_out = out.parent / release.VERSION / out.name
+    # 0.2.0's and 0.3.0's files: the same vectors with their convention ids, in 0.2.0/ and 0.3.0/
+    # beside --out (vectors/0.2.0/ and vectors/0.3.0/ for the default --out).
+    released = [(out.parent / version / out.name, release.dumps(release.with_ids(json.loads(text), version), ensure_ascii=False))
+                for version in release.VERSIONS]
     if args.check:
         same = out.is_file() and out.read_text(encoding="utf-8") == text
-        same_ids = ids_out.is_file() and ids_out.read_text(encoding="utf-8") == ids_text
         log("check: %s is %s" % (out, "up to date" if same else "DIFFERENT"))
-        log("check: %s is %s" % (ids_out, "up to date" if same_ids else "DIFFERENT"))
-        sys.exit(0 if same and same_ids else 1)
+        for ids_out, ids_text in released:
+            same_ids = ids_out.is_file() and ids_out.read_text(encoding="utf-8") == ids_text
+            log("check: %s is %s" % (ids_out, "up to date" if same_ids else "DIFFERENT"))
+            same = same and same_ids
+        sys.exit(0 if same else 1)
     out.write_text(text, encoding="utf-8")
     log("wrote %s (sha256 %s)" % (out, sha256_bytes(text.encode())))
-    ids_out.parent.mkdir(parents=True, exist_ok=True)
-    ids_out.write_text(ids_text, encoding="utf-8")
-    log("wrote %s, with the convention ids (sha256 %s)" % (ids_out, sha256_bytes(ids_text.encode())))
+    for ids_out, ids_text in released:
+        ids_out.parent.mkdir(parents=True, exist_ok=True)
+        ids_out.write_text(ids_text, encoding="utf-8")
+        log("wrote %s, with the convention ids (sha256 %s)" % (ids_out, sha256_bytes(ids_text.encode())))
 
 
 if __name__ == "__main__":

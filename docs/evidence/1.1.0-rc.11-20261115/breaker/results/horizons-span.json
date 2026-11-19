@@ -1,0 +1,2993 @@
+{
+ "Mercury": {
+  "samples": 97,
+  "stepMinutes": 15,
+  "quotedBoundArcsec": 0.0037,
+  "boundLabelInTheTrueEclipticOfDate": "measured",
+  "worst": {
+   "jdTt": 2434871.460627,
+   "sunObserverTargetDeg": 0.0004,
+   "packFromHorizonsArcsec": 307.9062901740058,
+   "packEclipticFromHorizonsArcsec": 307.9342241355196,
+   "packLonDifferenceArcsec": 75.93894652814015,
+   "astronomyEngineFromHorizonsArcsec": 0.7353310602909067,
+   "quoted": 0.0037,
+   "label": "measured"
+  },
+  "samplesWherePackIsFartherThan": {
+   "0.1 arcsec": 41,
+   "1 arcsec": 18,
+   "5 arcsec": 3,
+   "30 arcsec": 1
+  },
+  "hoursFartherThan1Arcsec": 4.5,
+  "samplesWherePackIsFartherThanAstronomyEngine": 24,
+  "packOutsideTheDisc": 0.08912186620632288,
+  "rows": [
+   {
+    "jdTt": 2434870.960627,
+    "sunObserverTargetDeg": 0.6064,
+    "packFromHorizonsArcsec": 0.08912186620632288,
+    "packEclipticFromHorizonsArcsec": 0.08863536477519625,
+    "packLonDifferenceArcsec": 0.08775560399953974,
+    "astronomyEngineFromHorizonsArcsec": 0.6025610781574774,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434870.971043667,
+    "sunObserverTargetDeg": 0.5938,
+    "packFromHorizonsArcsec": 0.08911816422949462,
+    "packEclipticFromHorizonsArcsec": 0.08872429909480893,
+    "packLonDifferenceArcsec": 0.08786477378635027,
+    "astronomyEngineFromHorizonsArcsec": 0.6119510517985808,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434870.981460333,
+    "sunObserverTargetDeg": 0.5812,
+    "packFromHorizonsArcsec": 0.08911071950679009,
+    "packEclipticFromHorizonsArcsec": 0.08870147461362096,
+    "packLonDifferenceArcsec": 0.08784753440522763,
+    "astronomyEngineFromHorizonsArcsec": 0.6214859554782498,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434870.991877,
+    "sunObserverTargetDeg": 0.5686,
+    "packFromHorizonsArcsec": 0.08910671210780931,
+    "packEclipticFromHorizonsArcsec": 0.08855468150688953,
+    "packLonDifferenceArcsec": 0.08769238406785007,
+    "astronomyEngineFromHorizonsArcsec": 0.6311836699726798,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.002293667,
+    "sunObserverTargetDeg": 0.556,
+    "packFromHorizonsArcsec": 0.08910455079147063,
+    "packEclipticFromHorizonsArcsec": 0.08860567742977538,
+    "packLonDifferenceArcsec": 0.08772502028477902,
+    "astronomyEngineFromHorizonsArcsec": 0.6410489280590531,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.012710333,
+    "sunObserverTargetDeg": 0.5434,
+    "packFromHorizonsArcsec": 0.08909546040621527,
+    "packEclipticFromHorizonsArcsec": 0.08841148986646934,
+    "packLonDifferenceArcsec": 0.08755000344535802,
+    "astronomyEngineFromHorizonsArcsec": 0.6510888572648892,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.023127,
+    "sunObserverTargetDeg": 0.5307,
+    "packFromHorizonsArcsec": 0.0890938976628332,
+    "packEclipticFromHorizonsArcsec": 0.08841399773728549,
+    "packLonDifferenceArcsec": 0.08751232744543813,
+    "astronomyEngineFromHorizonsArcsec": 0.6613303643238098,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.033543667,
+    "sunObserverTargetDeg": 0.5181,
+    "packFromHorizonsArcsec": 0.08909159415845565,
+    "packEclipticFromHorizonsArcsec": 0.08847315330112744,
+    "packLonDifferenceArcsec": 0.08757393156884064,
+    "astronomyEngineFromHorizonsArcsec": 0.6717796761427715,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.043960333,
+    "sunObserverTargetDeg": 0.5055,
+    "packFromHorizonsArcsec": 0.08908235451431618,
+    "packEclipticFromHorizonsArcsec": 0.08859924650575889,
+    "packLonDifferenceArcsec": 0.08769495389060467,
+    "astronomyEngineFromHorizonsArcsec": 0.6824479449419898,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.054377,
+    "sunObserverTargetDeg": 0.4929,
+    "packFromHorizonsArcsec": 0.08907994301934706,
+    "packEclipticFromHorizonsArcsec": 0.08836464298289466,
+    "packLonDifferenceArcsec": 0.08749572571105091,
+    "astronomyEngineFromHorizonsArcsec": 0.6933676201631873,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.064793667,
+    "sunObserverTargetDeg": 0.4803,
+    "packFromHorizonsArcsec": 0.08907756476691793,
+    "packEclipticFromHorizonsArcsec": 0.08853941321154633,
+    "packLonDifferenceArcsec": 0.0876526125921373,
+    "astronomyEngineFromHorizonsArcsec": 0.7045491591660052,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.075210333,
+    "sunObserverTargetDeg": 0.4677,
+    "packFromHorizonsArcsec": 0.08906741955412416,
+    "packEclipticFromHorizonsArcsec": 0.08867001811860689,
+    "packLonDifferenceArcsec": 0.08775974133641284,
+    "astronomyEngineFromHorizonsArcsec": 0.71601214396651,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.085627,
+    "sunObserverTargetDeg": 0.455,
+    "packFromHorizonsArcsec": 0.08906630369445764,
+    "packEclipticFromHorizonsArcsec": 0.08867763849279088,
+    "packLonDifferenceArcsec": 0.08779032750680926,
+    "astronomyEngineFromHorizonsArcsec": 0.7277925793619896,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.096043667,
+    "sunObserverTargetDeg": 0.4424,
+    "packFromHorizonsArcsec": 0.08906063710477378,
+    "packEclipticFromHorizonsArcsec": 0.08861236428797062,
+    "packLonDifferenceArcsec": 0.08769289811425551,
+    "astronomyEngineFromHorizonsArcsec": 0.7399075327673634,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.106460333,
+    "sunObserverTargetDeg": 0.4298,
+    "packFromHorizonsArcsec": 0.08905098880493793,
+    "packEclipticFromHorizonsArcsec": 0.0886722041110249,
+    "packLonDifferenceArcsec": 0.08777248935984971,
+    "astronomyEngineFromHorizonsArcsec": 0.7523872816374102,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.116877,
+    "sunObserverTargetDeg": 0.4172,
+    "packFromHorizonsArcsec": 0.08904830923335948,
+    "packEclipticFromHorizonsArcsec": 0.0885142935541483,
+    "packLonDifferenceArcsec": 0.08763188989178161,
+    "astronomyEngineFromHorizonsArcsec": 0.7652767298859486,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.127293667,
+    "sunObserverTargetDeg": 0.4046,
+    "packFromHorizonsArcsec": 0.08904922129749775,
+    "packEclipticFromHorizonsArcsec": 0.08848155617810209,
+    "packLonDifferenceArcsec": 0.08756768074817955,
+    "astronomyEngineFromHorizonsArcsec": 0.7786148180252599,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.137710333,
+    "sunObserverTargetDeg": 0.3919,
+    "packFromHorizonsArcsec": 0.08903712396557387,
+    "packEclipticFromHorizonsArcsec": 0.08840188037374287,
+    "packLonDifferenceArcsec": 0.08751101654524973,
+    "astronomyEngineFromHorizonsArcsec": 0.7924279409962032,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.148127,
+    "sunObserverTargetDeg": 0.3793,
+    "packFromHorizonsArcsec": 0.08903612950977517,
+    "packEclipticFromHorizonsArcsec": 0.08867987048196806,
+    "packLonDifferenceArcsec": 0.08776868885433942,
+    "astronomyEngineFromHorizonsArcsec": 0.8067876998848398,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.158543667,
+    "sunObserverTargetDeg": 0.3667,
+    "packFromHorizonsArcsec": 0.08903198916546111,
+    "packEclipticFromHorizonsArcsec": 0.08846848221857849,
+    "packLonDifferenceArcsec": 0.08753845704632113,
+    "astronomyEngineFromHorizonsArcsec": 0.8217413948575965,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.168960333,
+    "sunObserverTargetDeg": 0.354,
+    "packFromHorizonsArcsec": 0.08902270315668828,
+    "packEclipticFromHorizonsArcsec": 0.08838806573120336,
+    "packLonDifferenceArcsec": 0.08744944884711003,
+    "astronomyEngineFromHorizonsArcsec": 0.8373496253985772,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.179377,
+    "sunObserverTargetDeg": 0.3414,
+    "packFromHorizonsArcsec": 0.08901886085774764,
+    "packEclipticFromHorizonsArcsec": 0.08871423058063223,
+    "packLonDifferenceArcsec": 0.08778251285548322,
+    "astronomyEngineFromHorizonsArcsec": 0.8537010365267249,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.189793667,
+    "sunObserverTargetDeg": 0.3288,
+    "packFromHorizonsArcsec": 0.08901853192187906,
+    "packEclipticFromHorizonsArcsec": 0.08862030698808893,
+    "packLonDifferenceArcsec": 0.08770467534304771,
+    "astronomyEngineFromHorizonsArcsec": 0.8708766650221578,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.200210333,
+    "sunObserverTargetDeg": 0.3162,
+    "packFromHorizonsArcsec": 0.08900766357390769,
+    "packEclipticFromHorizonsArcsec": 0.08838523005831553,
+    "packLonDifferenceArcsec": 0.08744836140976986,
+    "astronomyEngineFromHorizonsArcsec": 0.8889722982920661,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.210627,
+    "sunObserverTargetDeg": 0.3035,
+    "packFromHorizonsArcsec": 0.08900662109998603,
+    "packEclipticFromHorizonsArcsec": 0.0885446058447996,
+    "packLonDifferenceArcsec": 0.08761034578128601,
+    "astronomyEngineFromHorizonsArcsec": 0.9081183544673457,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.221043667,
+    "sunObserverTargetDeg": 0.2909,
+    "packFromHorizonsArcsec": 0.0890032680531547,
+    "packEclipticFromHorizonsArcsec": 0.08857400516576519,
+    "packLonDifferenceArcsec": 0.08766425639805675,
+    "astronomyEngineFromHorizonsArcsec": 0.9284488153452604,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.231460333,
+    "sunObserverTargetDeg": 0.2783,
+    "packFromHorizonsArcsec": 0.08899456429400546,
+    "packEclipticFromHorizonsArcsec": 0.08833043967705638,
+    "packLonDifferenceArcsec": 0.08741754973016214,
+    "astronomyEngineFromHorizonsArcsec": 0.9501215973716804,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.241877,
+    "sunObserverTargetDeg": 0.2656,
+    "packFromHorizonsArcsec": 0.0889908376259153,
+    "packEclipticFromHorizonsArcsec": 0.08867724883428736,
+    "packLonDifferenceArcsec": 0.08774723273745622,
+    "astronomyEngineFromHorizonsArcsec": 0.973348951152592,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.252293667,
+    "sunObserverTargetDeg": 0.2529,
+    "packFromHorizonsArcsec": 0.35124292947343766,
+    "packEclipticFromHorizonsArcsec": 0.34610309567880726,
+    "packLonDifferenceArcsec": -0.34253230401191104,
+    "astronomyEngineFromHorizonsArcsec": 0.6233046648194348,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.262710333,
+    "sunObserverTargetDeg": 0.2402,
+    "packFromHorizonsArcsec": 0.3740052357844039,
+    "packEclipticFromHorizonsArcsec": 0.36875073747032966,
+    "packLonDifferenceArcsec": -0.36493753677859786,
+    "astronomyEngineFromHorizonsArcsec": 0.6289794519527687,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.273127,
+    "sunObserverTargetDeg": 0.2276,
+    "packFromHorizonsArcsec": 0.3993016880226534,
+    "packEclipticFromHorizonsArcsec": 0.39425466827495925,
+    "packLonDifferenceArcsec": -0.390228559354,
+    "astronomyEngineFromHorizonsArcsec": 0.6346520983038793,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.283543667,
+    "sunObserverTargetDeg": 0.2149,
+    "packFromHorizonsArcsec": 0.427582125399782,
+    "packEclipticFromHorizonsArcsec": 0.42247666628028613,
+    "packLonDifferenceArcsec": -0.4181519472695072,
+    "astronomyEngineFromHorizonsArcsec": 0.6403201199657014,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.293960333,
+    "sunObserverTargetDeg": 0.2023,
+    "packFromHorizonsArcsec": 0.4594209665674288,
+    "packEclipticFromHorizonsArcsec": 0.45430512919319305,
+    "packLonDifferenceArcsec": -0.44964531871301006,
+    "astronomyEngineFromHorizonsArcsec": 0.6459700132625433,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.304377,
+    "sunObserverTargetDeg": 0.1897,
+    "packFromHorizonsArcsec": 0.495507564818606,
+    "packEclipticFromHorizonsArcsec": 0.49045128726488924,
+    "packLonDifferenceArcsec": -0.4854126078498666,
+    "astronomyEngineFromHorizonsArcsec": 0.6516204033836407,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.314793667,
+    "sunObserverTargetDeg": 0.177,
+    "packFromHorizonsArcsec": 0.5367653666025191,
+    "packEclipticFromHorizonsArcsec": 0.5317996839296981,
+    "packLonDifferenceArcsec": -0.5263805138838507,
+    "astronomyEngineFromHorizonsArcsec": 0.6572642075160751,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.325210333,
+    "sunObserverTargetDeg": 0.1644,
+    "packFromHorizonsArcsec": 0.5843932600715709,
+    "packEclipticFromHorizonsArcsec": 0.5796702524052509,
+    "packLonDifferenceArcsec": -0.5737543995110173,
+    "astronomyEngineFromHorizonsArcsec": 0.6628924255831193,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.335627,
+    "sunObserverTargetDeg": 0.1517,
+    "packFromHorizonsArcsec": 0.6399706680609588,
+    "packEclipticFromHorizonsArcsec": 0.6351976090093655,
+    "packLonDifferenceArcsec": -0.6287523283845076,
+    "astronomyEngineFromHorizonsArcsec": 0.6685174984415315,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.346043667,
+    "sunObserverTargetDeg": 0.1391,
+    "packFromHorizonsArcsec": 0.7056738876592361,
+    "packEclipticFromHorizonsArcsec": 0.7009843992215488,
+    "packLonDifferenceArcsec": -0.6939084993518918,
+    "astronomyEngineFromHorizonsArcsec": 0.6741352511470003,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.356460333,
+    "sunObserverTargetDeg": 0.1264,
+    "packFromHorizonsArcsec": 0.7845533029368252,
+    "packEclipticFromHorizonsArcsec": 0.7797896780840049,
+    "packLonDifferenceArcsec": -0.7718987662428844,
+    "astronomyEngineFromHorizonsArcsec": 0.6797368431927667,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.366877,
+    "sunObserverTargetDeg": 0.1138,
+    "packFromHorizonsArcsec": 0.8809829002612557,
+    "packEclipticFromHorizonsArcsec": 0.8766200467375352,
+    "packLonDifferenceArcsec": -0.8677986092152423,
+    "astronomyEngineFromHorizonsArcsec": 0.6853409964232647,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.377293667,
+    "sunObserverTargetDeg": 0.1011,
+    "packFromHorizonsArcsec": 1.0015724015599525,
+    "packEclipticFromHorizonsArcsec": 0.9970752738623523,
+    "packLonDifferenceArcsec": -0.9870862093521282,
+    "astronomyEngineFromHorizonsArcsec": 0.6909308261887315,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.387710333,
+    "sunObserverTargetDeg": 0.0885,
+    "packFromHorizonsArcsec": 1.1566913020197123,
+    "packEclipticFromHorizonsArcsec": 1.1522600806346819,
+    "packLonDifferenceArcsec": -1.1407820687963977,
+    "astronomyEngineFromHorizonsArcsec": 0.6965083870644126,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.398127,
+    "sunObserverTargetDeg": 0.0758,
+    "packFromHorizonsArcsec": 1.3636174557270198,
+    "packEclipticFromHorizonsArcsec": 1.3594185865993862,
+    "packLonDifferenceArcsec": -1.346032608535097,
+    "astronomyEngineFromHorizonsArcsec": 0.7020845890890196,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.408543667,
+    "sunObserverTargetDeg": 0.0632,
+    "packFromHorizonsArcsec": 1.6535131239893612,
+    "packEclipticFromHorizonsArcsec": 1.649119121850143,
+    "packLonDifferenceArcsec": -1.6330411743638251,
+    "astronomyEngineFromHorizonsArcsec": 0.707648924588157,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.418960333,
+    "sunObserverTargetDeg": 0.0505,
+    "packFromHorizonsArcsec": 2.0887739177199776,
+    "packEclipticFromHorizonsArcsec": 2.0847498407852334,
+    "packLonDifferenceArcsec": -2.064820213945495,
+    "astronomyEngineFromHorizonsArcsec": 0.7132016700971955,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.429377,
+    "sunObserverTargetDeg": 0.0378,
+    "packFromHorizonsArcsec": 2.815254490608226,
+    "packEclipticFromHorizonsArcsec": 2.811174031685932,
+    "packLonDifferenceArcsec": -2.78512922277514,
+    "astronomyEngineFromHorizonsArcsec": 0.7187491767716911,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.439793667,
+    "sunObserverTargetDeg": 0.0252,
+    "packFromHorizonsArcsec": 4.272082939384765,
+    "packEclipticFromHorizonsArcsec": 4.268283944150596,
+    "packLonDifferenceArcsec": -4.23121107978659,
+    "astronomyEngineFromHorizonsArcsec": 0.7242869260905773,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.450210333,
+    "sunObserverTargetDeg": 0.0125,
+    "packFromHorizonsArcsec": 8.672664116193454,
+    "packEclipticFromHorizonsArcsec": 8.669288451905244,
+    "packLonDifferenceArcsec": -8.608290036454491,
+    "astronomyEngineFromHorizonsArcsec": 0.7298088626159116,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.460627,
+    "sunObserverTargetDeg": 0.0004,
+    "packFromHorizonsArcsec": 307.9062901740058,
+    "packEclipticFromHorizonsArcsec": 307.9342241355196,
+    "packLonDifferenceArcsec": 75.93894652814015,
+    "astronomyEngineFromHorizonsArcsec": 0.7353310602909067,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.471043667,
+    "sunObserverTargetDeg": 0.0128,
+    "packFromHorizonsArcsec": 8.65206408341593,
+    "packEclipticFromHorizonsArcsec": 8.656913743452295,
+    "packLonDifferenceArcsec": 8.531018167832372,
+    "astronomyEngineFromHorizonsArcsec": 0.740840883141205,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.481460333,
+    "sunObserverTargetDeg": 0.0255,
+    "packFromHorizonsArcsec": 4.391836859358767,
+    "packEclipticFromHorizonsArcsec": 4.396368870128341,
+    "packLonDifferenceArcsec": 4.341607387868862,
+    "astronomyEngineFromHorizonsArcsec": 0.7463370552396155,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.491877,
+    "sunObserverTargetDeg": 0.0381,
+    "packFromHorizonsArcsec": 2.961014219453933,
+    "packEclipticFromHorizonsArcsec": 2.965168849768195,
+    "packLonDifferenceArcsec": 2.9301548084276874,
+    "astronomyEngineFromHorizonsArcsec": 0.7518274049151953,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.502293667,
+    "sunObserverTargetDeg": 0.0508,
+    "packFromHorizonsArcsec": 2.2436327391471442,
+    "packEclipticFromHorizonsArcsec": 2.2477485238410515,
+    "packLonDifferenceArcsec": 2.2219594639864226,
+    "astronomyEngineFromHorizonsArcsec": 0.7573093490769837,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.512710333,
+    "sunObserverTargetDeg": 0.0635,
+    "packFromHorizonsArcsec": 1.812578024097469,
+    "packEclipticFromHorizonsArcsec": 1.8166994201852733,
+    "packLonDifferenceArcsec": 1.7962000801162503,
+    "astronomyEngineFromHorizonsArcsec": 0.762774851275637,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.523127,
+    "sunObserverTargetDeg": 0.0761,
+    "packFromHorizonsArcsec": 1.5249620916247393,
+    "packEclipticFromHorizonsArcsec": 1.5291035712106325,
+    "packLonDifferenceArcsec": 1.5120018162178894,
+    "astronomyEngineFromHorizonsArcsec": 0.7682380073296072,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.533543667,
+    "sunObserverTargetDeg": 0.0888,
+    "packFromHorizonsArcsec": 1.3194057131561816,
+    "packEclipticFromHorizonsArcsec": 1.32345051858244,
+    "packLonDifferenceArcsec": 1.3087909479509108,
+    "astronomyEngineFromHorizonsArcsec": 0.7736899736024264,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.543960333,
+    "sunObserverTargetDeg": 0.1015,
+    "packFromHorizonsArcsec": 1.1651690467249738,
+    "packEclipticFromHorizonsArcsec": 1.1690915752854925,
+    "packLonDifferenceArcsec": 1.15621148597711,
+    "astronomyEngineFromHorizonsArcsec": 0.7791257359704186,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.554377,
+    "sunObserverTargetDeg": 0.1141,
+    "packFromHorizonsArcsec": 1.0451798047621816,
+    "packEclipticFromHorizonsArcsec": 1.0489343071623247,
+    "packLonDifferenceArcsec": 1.0373878757491184,
+    "astronomyEngineFromHorizonsArcsec": 0.7845580971333606,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.564793667,
+    "sunObserverTargetDeg": 0.1268,
+    "packFromHorizonsArcsec": 0.9491672860940631,
+    "packEclipticFromHorizonsArcsec": 0.9529429473889133,
+    "packLonDifferenceArcsec": 0.9425222978279635,
+    "astronomyEngineFromHorizonsArcsec": 0.7899776655640361,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.575210333,
+    "sunObserverTargetDeg": 0.1395,
+    "packFromHorizonsArcsec": 0.8705941612092587,
+    "packEclipticFromHorizonsArcsec": 0.8743102532211,
+    "packLonDifferenceArcsec": 0.8647771590403863,
+    "astronomyEngineFromHorizonsArcsec": 0.7953829153164358,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.585627,
+    "sunObserverTargetDeg": 0.1521,
+    "packFromHorizonsArcsec": 0.805116219075294,
+    "packEclipticFromHorizonsArcsec": 0.8090323529114875,
+    "packLonDifferenceArcsec": 0.8002055079487036,
+    "astronomyEngineFromHorizonsArcsec": 0.8007848662133261,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.596043667,
+    "sunObserverTargetDeg": 0.1648,
+    "packFromHorizonsArcsec": 0.7497087842347017,
+    "packEclipticFromHorizonsArcsec": 0.7533021804859046,
+    "packLonDifferenceArcsec": 0.7450818141023774,
+    "astronomyEngineFromHorizonsArcsec": 0.8061759273347162,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.606460333,
+    "sunObserverTargetDeg": 0.1775,
+    "packFromHorizonsArcsec": 0.7022100531929423,
+    "packEclipticFromHorizonsArcsec": 0.7060076377150407,
+    "packLonDifferenceArcsec": 0.6983316226978786,
+    "astronomyEngineFromHorizonsArcsec": 0.8115513687012037,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.616877,
+    "sunObserverTargetDeg": 0.1902,
+    "packFromHorizonsArcsec": 0.6610453075947585,
+    "packEclipticFromHorizonsArcsec": 0.6645497859445607,
+    "packLonDifferenceArcsec": 0.6573101956746541,
+    "astronomyEngineFromHorizonsArcsec": 0.8169186324828244,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.627293667,
+    "sunObserverTargetDeg": 0.2028,
+    "packFromHorizonsArcsec": 0.6250288242464196,
+    "packEclipticFromHorizonsArcsec": 0.6287333745030783,
+    "packLonDifferenceArcsec": 0.6219012820110947,
+    "astronomyEngineFromHorizonsArcsec": 0.8222767727281229,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.637710333,
+    "sunObserverTargetDeg": 0.2155,
+    "packFromHorizonsArcsec": 0.5932457483498038,
+    "packEclipticFromHorizonsArcsec": 0.5969677892214911,
+    "packLonDifferenceArcsec": 0.5904644405291037,
+    "astronomyEngineFromHorizonsArcsec": 0.8276222129648665,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.648127,
+    "sunObserverTargetDeg": 0.2282,
+    "packFromHorizonsArcsec": 0.5649973756034015,
+    "packEclipticFromHorizonsArcsec": 0.5684920113536589,
+    "packLonDifferenceArcsec": 0.5623001960884721,
+    "astronomyEngineFromHorizonsArcsec": 0.832958089500791,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.658543667,
+    "sunObserverTargetDeg": 0.2409,
+    "packFromHorizonsArcsec": 0.5397252814496633,
+    "packEclipticFromHorizonsArcsec": 0.5430808310055916,
+    "packLonDifferenceArcsec": 0.5371941070279718,
+    "astronomyEngineFromHorizonsArcsec": 0.8382846518651383,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.668960333,
+    "sunObserverTargetDeg": 0.2535,
+    "packFromHorizonsArcsec": 0.5169733505627295,
+    "packEclipticFromHorizonsArcsec": 0.5203172350619794,
+    "packLonDifferenceArcsec": 0.5146818101820827,
+    "astronomyEngineFromHorizonsArcsec": 0.8435921972468301,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.679377,
+    "sunObserverTargetDeg": 0.2663,
+    "packFromHorizonsArcsec": 0.08878356751306578,
+    "packEclipticFromHorizonsArcsec": 0.08826456522968032,
+    "packLonDifferenceArcsec": 0.08724466561034205,
+    "astronomyEngineFromHorizonsArcsec": 0.5424813128178674,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.689793667,
+    "sunObserverTargetDeg": 0.279,
+    "packFromHorizonsArcsec": 0.08877864319868332,
+    "packEclipticFromHorizonsArcsec": 0.0882818627861466,
+    "packLonDifferenceArcsec": 0.0872472161972837,
+    "astronomyEngineFromHorizonsArcsec": 0.5574839777244806,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.700210333,
+    "sunObserverTargetDeg": 0.2917,
+    "packFromHorizonsArcsec": 0.0887709920785785,
+    "packEclipticFromHorizonsArcsec": 0.0885190245267762,
+    "packLonDifferenceArcsec": 0.08746459275243978,
+    "astronomyEngineFromHorizonsArcsec": 0.5720911978202392,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.710627,
+    "sunObserverTargetDeg": 0.3044,
+    "packFromHorizonsArcsec": 0.08876696154551103,
+    "packEclipticFromHorizonsArcsec": 0.08835952714434778,
+    "packLonDifferenceArcsec": 0.0873340327416372,
+    "astronomyEngineFromHorizonsArcsec": 0.5862776540911493,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.721043667,
+    "sunObserverTargetDeg": 0.317,
+    "packFromHorizonsArcsec": 0.08876467053510563,
+    "packEclipticFromHorizonsArcsec": 0.08843019347960923,
+    "packLonDifferenceArcsec": 0.08738316059861972,
+    "astronomyEngineFromHorizonsArcsec": 0.6000354200581208,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.731460333,
+    "sunObserverTargetDeg": 0.3297,
+    "packFromHorizonsArcsec": 0.0887576336341112,
+    "packEclipticFromHorizonsArcsec": 0.08850738037815453,
+    "packLonDifferenceArcsec": 0.08744535571167944,
+    "astronomyEngineFromHorizonsArcsec": 0.6133612818952621,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.741877,
+    "sunObserverTargetDeg": 0.3424,
+    "packFromHorizonsArcsec": 0.08875291762202675,
+    "packEclipticFromHorizonsArcsec": 0.08846568703184877,
+    "packLonDifferenceArcsec": 0.08739723998587579,
+    "astronomyEngineFromHorizonsArcsec": 0.6262729497128835,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.752293667,
+    "sunObserverTargetDeg": 0.3551,
+    "packFromHorizonsArcsec": 0.08875255321687793,
+    "packEclipticFromHorizonsArcsec": 0.08853109730545644,
+    "packLonDifferenceArcsec": 0.08747089677854092,
+    "astronomyEngineFromHorizonsArcsec": 0.6387877180629764,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.762710333,
+    "sunObserverTargetDeg": 0.3678,
+    "packFromHorizonsArcsec": 0.08874036362621553,
+    "packEclipticFromHorizonsArcsec": 0.08823290301778793,
+    "packLonDifferenceArcsec": 0.08719271950212715,
+    "astronomyEngineFromHorizonsArcsec": 0.6509144358811702,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.773127,
+    "sunObserverTargetDeg": 0.3804,
+    "packFromHorizonsArcsec": 0.08873927588329747,
+    "packEclipticFromHorizonsArcsec": 0.08825665601430352,
+    "packLonDifferenceArcsec": 0.08720293453734485,
+    "astronomyEngineFromHorizonsArcsec": 0.6626857460118563,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.783543667,
+    "sunObserverTargetDeg": 0.3931,
+    "packFromHorizonsArcsec": 0.08873690706717369,
+    "packEclipticFromHorizonsArcsec": 0.08845441087768484,
+    "packLonDifferenceArcsec": 0.08741018937143963,
+    "astronomyEngineFromHorizonsArcsec": 0.674118287322185,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.793960333,
+    "sunObserverTargetDeg": 0.4058,
+    "packFromHorizonsArcsec": 0.08872722766778939,
+    "packEclipticFromHorizonsArcsec": 0.08844151040768011,
+    "packLonDifferenceArcsec": 0.08737134776310995,
+    "astronomyEngineFromHorizonsArcsec": 0.685220854038406,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.804377,
+    "sunObserverTargetDeg": 0.4185,
+    "packFromHorizonsArcsec": 0.08872660920177552,
+    "packEclipticFromHorizonsArcsec": 0.0884630662404469,
+    "packLonDifferenceArcsec": 0.08739237619010964,
+    "astronomyEngineFromHorizonsArcsec": 0.6960298656723752,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.814793667,
+    "sunObserverTargetDeg": 0.4312,
+    "packFromHorizonsArcsec": 0.08872445725297033,
+    "packEclipticFromHorizonsArcsec": 0.08844840006162973,
+    "packLonDifferenceArcsec": 0.08740364387449517,
+    "astronomyEngineFromHorizonsArcsec": 0.7065525580396765,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.825210333,
+    "sunObserverTargetDeg": 0.4439,
+    "packFromHorizonsArcsec": 0.08871544277740077,
+    "packEclipticFromHorizonsArcsec": 0.08838752487458842,
+    "packLonDifferenceArcsec": 0.08734065395401558,
+    "astronomyEngineFromHorizonsArcsec": 0.7168022767424119,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.835627,
+    "sunObserverTargetDeg": 0.4566,
+    "packFromHorizonsArcsec": 0.08871293768101375,
+    "packEclipticFromHorizonsArcsec": 0.08824153311097334,
+    "packLonDifferenceArcsec": 0.08716530560377578,
+    "astronomyEngineFromHorizonsArcsec": 0.7268079057581532,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.846043667,
+    "sunObserverTargetDeg": 0.4693,
+    "packFromHorizonsArcsec": 0.08870836786855638,
+    "packEclipticFromHorizonsArcsec": 0.08825352409701952,
+    "packLonDifferenceArcsec": 0.08718161388969747,
+    "astronomyEngineFromHorizonsArcsec": 0.736573130915654,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.856460333,
+    "sunObserverTargetDeg": 0.482,
+    "packFromHorizonsArcsec": 0.08870087012317918,
+    "packEclipticFromHorizonsArcsec": 0.08842584108878183,
+    "packLonDifferenceArcsec": 0.0873369369401189,
+    "astronomyEngineFromHorizonsArcsec": 0.7461143790391233,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.866877,
+    "sunObserverTargetDeg": 0.4946,
+    "packFromHorizonsArcsec": 0.08869915507481031,
+    "packEclipticFromHorizonsArcsec": 0.08831807649129592,
+    "packLonDifferenceArcsec": 0.08724340095795924,
+    "astronomyEngineFromHorizonsArcsec": 0.7554531801657931,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.877293667,
+    "sunObserverTargetDeg": 0.5073,
+    "packFromHorizonsArcsec": 0.08869601873104904,
+    "packEclipticFromHorizonsArcsec": 0.08829418979728065,
+    "packLonDifferenceArcsec": 0.08721402132323419,
+    "astronomyEngineFromHorizonsArcsec": 0.7645910775291648,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.887710333,
+    "sunObserverTargetDeg": 0.52,
+    "packFromHorizonsArcsec": 0.08868734299614736,
+    "packEclipticFromHorizonsArcsec": 0.08830866163940661,
+    "packLonDifferenceArcsec": 0.0872038946909015,
+    "astronomyEngineFromHorizonsArcsec": 0.7735397627915541,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.898127,
+    "sunObserverTargetDeg": 0.5327,
+    "packFromHorizonsArcsec": 0.08868428084422655,
+    "packEclipticFromHorizonsArcsec": 0.08828328419523315,
+    "packLonDifferenceArcsec": 0.08719207980902866,
+    "astronomyEngineFromHorizonsArcsec": 0.782316055351547,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.908543667,
+    "sunObserverTargetDeg": 0.5454,
+    "packFromHorizonsArcsec": 0.08868258528557912,
+    "packEclipticFromHorizonsArcsec": 0.08823280128821728,
+    "packLonDifferenceArcsec": 0.08713751926734403,
+    "astronomyEngineFromHorizonsArcsec": 0.7909284315775877,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.918960333,
+    "sunObserverTargetDeg": 0.5581,
+    "packFromHorizonsArcsec": 0.08867532081219462,
+    "packEclipticFromHorizonsArcsec": 0.08847256492301621,
+    "packLonDifferenceArcsec": 0.0873607013545552,
+    "astronomyEngineFromHorizonsArcsec": 0.7993779778639879,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.929377,
+    "sunObserverTargetDeg": 0.5708,
+    "packFromHorizonsArcsec": 0.08867164706208822,
+    "packEclipticFromHorizonsArcsec": 0.08821791153024408,
+    "packLonDifferenceArcsec": 0.0871253888362844,
+    "astronomyEngineFromHorizonsArcsec": 0.8076830019497894,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.939793667,
+    "sunObserverTargetDeg": 0.5835,
+    "packFromHorizonsArcsec": 0.08867089752617256,
+    "packEclipticFromHorizonsArcsec": 0.08819902847301371,
+    "packLonDifferenceArcsec": 0.08711469085938006,
+    "astronomyEngineFromHorizonsArcsec": 0.81585036597578,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.950210333,
+    "sunObserverTargetDeg": 0.5962,
+    "packFromHorizonsArcsec": 0.08866246351885858,
+    "packEclipticFromHorizonsArcsec": 0.08837936886705992,
+    "packLonDifferenceArcsec": 0.08729281530577282,
+    "astronomyEngineFromHorizonsArcsec": 0.8238758115660517,
+    "quoted": 0.0037,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2434871.960627,
+    "sunObserverTargetDeg": 0.6089,
+    "packFromHorizonsArcsec": 0.08866206481094707,
+    "packEclipticFromHorizonsArcsec": 0.08838984267051432,
+    "packLonDifferenceArcsec": 0.08728684606467141,
+    "astronomyEngineFromHorizonsArcsec": 0.831780735302249,
+    "quoted": 0.0037,
+    "label": "measured"
+   }
+  ]
+ },
+ "Jupiter": {
+  "samples": 97,
+  "stepMinutes": 15,
+  "quotedBoundArcsec": 0.0038,
+  "boundLabelInTheTrueEclipticOfDate": "measured",
+  "worst": {
+   "jdTt": 2463232.820869401,
+   "sunObserverTargetDeg": 0.0071,
+   "packFromHorizonsArcsec": 56.25406872823819,
+   "packEclipticFromHorizonsArcsec": 56.21540222466,
+   "packLonDifferenceArcsec": -1.0408380995613697,
+   "astronomyEngineFromHorizonsArcsec": 6.9081014191832155,
+   "quoted": 0.0038,
+   "label": "measured"
+  },
+  "samplesWherePackIsFartherThan": {
+   "0.1 arcsec": 67,
+   "1 arcsec": 67,
+   "5 arcsec": 19,
+   "30 arcsec": 3
+  },
+  "hoursFartherThan1Arcsec": 16.75,
+  "samplesWherePackIsFartherThanAstronomyEngine": 14,
+  "packOutsideTheDisc": 0.029541618523407018,
+  "rows": [
+   {
+    "jdTt": 2463232.320869401,
+    "sunObserverTargetDeg": 0.394,
+    "packFromHorizonsArcsec": 0.029478878718368372,
+    "packEclipticFromHorizonsArcsec": 0.04715085179747215,
+    "packLonDifferenceArcsec": 0.029394080411293544,
+    "astronomyEngineFromHorizonsArcsec": 6.844015386334731,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.331286067,
+    "sunObserverTargetDeg": 0.3858,
+    "packFromHorizonsArcsec": 0.02948106199968703,
+    "packEclipticFromHorizonsArcsec": 0.04711351968040372,
+    "packLonDifferenceArcsec": 0.029487149004125968,
+    "astronomyEngineFromHorizonsArcsec": 6.843900124597769,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.341702734,
+    "sunObserverTargetDeg": 0.3776,
+    "packFromHorizonsArcsec": 0.02948255746563151,
+    "packEclipticFromHorizonsArcsec": 0.047235289433554144,
+    "packLonDifferenceArcsec": 0.029452635044435738,
+    "astronomyEngineFromHorizonsArcsec": 6.84383634755626,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.352119401,
+    "sunObserverTargetDeg": 0.3694,
+    "packFromHorizonsArcsec": 0.029483989164944994,
+    "packEclipticFromHorizonsArcsec": 0.0472702223423709,
+    "packLonDifferenceArcsec": 0.02935204893219634,
+    "astronomyEngineFromHorizonsArcsec": 6.843826171167694,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.362536067,
+    "sunObserverTargetDeg": 0.3612,
+    "packFromHorizonsArcsec": 0.02948659875016806,
+    "packEclipticFromHorizonsArcsec": 0.04697362675968662,
+    "packLonDifferenceArcsec": 0.029252567856019596,
+    "astronomyEngineFromHorizonsArcsec": 6.8438845119611065,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.372952734,
+    "sunObserverTargetDeg": 0.353,
+    "packFromHorizonsArcsec": 0.02948796326553351,
+    "packEclipticFromHorizonsArcsec": 0.047176736749204945,
+    "packLonDifferenceArcsec": 0.029590015174107975,
+    "astronomyEngineFromHorizonsArcsec": 6.8440109932174025,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.383369401,
+    "sunObserverTargetDeg": 0.3448,
+    "packFromHorizonsArcsec": 0.02948964750089229,
+    "packEclipticFromHorizonsArcsec": 0.047249562009756337,
+    "packLonDifferenceArcsec": 0.029364959846134298,
+    "astronomyEngineFromHorizonsArcsec": 6.844225361548925,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.393786067,
+    "sunObserverTargetDeg": 0.3366,
+    "packFromHorizonsArcsec": 0.029492112040515165,
+    "packEclipticFromHorizonsArcsec": 0.047128542626102346,
+    "packLonDifferenceArcsec": 0.029385884727162193,
+    "astronomyEngineFromHorizonsArcsec": 6.844532305867591,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.404202734,
+    "sunObserverTargetDeg": 0.3285,
+    "packFromHorizonsArcsec": 0.029495485299091344,
+    "packEclipticFromHorizonsArcsec": 0.047207715467483514,
+    "packLonDifferenceArcsec": 0.029392536634986755,
+    "astronomyEngineFromHorizonsArcsec": 6.84495107593068,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.414619401,
+    "sunObserverTargetDeg": 0.3203,
+    "packFromHorizonsArcsec": 0.02949633171998277,
+    "packEclipticFromHorizonsArcsec": 0.04726495915760622,
+    "packLonDifferenceArcsec": 0.02949238360088202,
+    "astronomyEngineFromHorizonsArcsec": 6.845494355767755,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.425036067,
+    "sunObserverTargetDeg": 0.3121,
+    "packFromHorizonsArcsec": 0.029496578761854922,
+    "packEclipticFromHorizonsArcsec": 0.047141601202190665,
+    "packLonDifferenceArcsec": 0.0294442686936236,
+    "astronomyEngineFromHorizonsArcsec": 6.846182379470827,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.435452734,
+    "sunObserverTargetDeg": 0.3039,
+    "packFromHorizonsArcsec": 0.02949984457068882,
+    "packEclipticFromHorizonsArcsec": 0.047193043494739795,
+    "packLonDifferenceArcsec": 0.02938228803941456,
+    "astronomyEngineFromHorizonsArcsec": 6.84703703651418,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.445869401,
+    "sunObserverTargetDeg": 0.2957,
+    "packFromHorizonsArcsec": 0.029501501608110926,
+    "packEclipticFromHorizonsArcsec": 0.04721827647053866,
+    "packLonDifferenceArcsec": 0.029452895341819385,
+    "astronomyEngineFromHorizonsArcsec": 6.8480803545537166,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.456286067,
+    "sunObserverTargetDeg": 0.2875,
+    "packFromHorizonsArcsec": 0.029504465863494686,
+    "packEclipticFromHorizonsArcsec": 0.04708237963595147,
+    "packLonDifferenceArcsec": 0.029459344659699127,
+    "astronomyEngineFromHorizonsArcsec": 6.849344313646516,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.466702734,
+    "sunObserverTargetDeg": 0.2793,
+    "packFromHorizonsArcsec": 0.02950559551071443,
+    "packEclipticFromHorizonsArcsec": 0.047167706580558834,
+    "packLonDifferenceArcsec": 0.029586474965981324,
+    "astronomyEngineFromHorizonsArcsec": 6.850859926711298,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.477119401,
+    "sunObserverTargetDeg": 0.2707,
+    "packFromHorizonsArcsec": 1.5041895687754145,
+    "packEclipticFromHorizonsArcsec": 1.503526779943089,
+    "packLonDifferenceArcsec": 1.5035189614536648,
+    "astronomyEngineFromHorizonsArcsec": 6.908251041825329,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.487536067,
+    "sunObserverTargetDeg": 0.2625,
+    "packFromHorizonsArcsec": 1.5502634844725567,
+    "packEclipticFromHorizonsArcsec": 1.5495448237591887,
+    "packLonDifferenceArcsec": 1.5495270753035584,
+    "astronomyEngineFromHorizonsArcsec": 6.908254741276388,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.497952734,
+    "sunObserverTargetDeg": 0.2543,
+    "packFromHorizonsArcsec": 1.5993068105225219,
+    "packEclipticFromHorizonsArcsec": 1.5985459096226844,
+    "packLonDifferenceArcsec": 1.5985131688466936,
+    "astronomyEngineFromHorizonsArcsec": 6.90825587881305,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.508369401,
+    "sunObserverTargetDeg": 0.2461,
+    "packFromHorizonsArcsec": 1.651619082149433,
+    "packEclipticFromHorizonsArcsec": 1.6508228319022262,
+    "packLonDifferenceArcsec": 1.6507719105902652,
+    "astronomyEngineFromHorizonsArcsec": 6.908258090974639,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.518786067,
+    "sunObserverTargetDeg": 0.2379,
+    "packFromHorizonsArcsec": 1.7075366195980142,
+    "packEclipticFromHorizonsArcsec": 1.706717190527676,
+    "packLonDifferenceArcsec": 1.7066385766611347,
+    "astronomyEngineFromHorizonsArcsec": 6.908257689540695,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.529202734,
+    "sunObserverTargetDeg": 0.2297,
+    "packFromHorizonsArcsec": 1.7674437237191372,
+    "packEclipticFromHorizonsArcsec": 1.766613669707871,
+    "packLonDifferenceArcsec": 1.7664986171439523,
+    "astronomyEngineFromHorizonsArcsec": 6.90825830858781,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.539619401,
+    "sunObserverTargetDeg": 0.2215,
+    "packFromHorizonsArcsec": 1.8317851816084016,
+    "packEclipticFromHorizonsArcsec": 1.8309538682477788,
+    "packLonDifferenceArcsec": 1.8307917721358535,
+    "astronomyEngineFromHorizonsArcsec": 6.9082563887947765,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.550036067,
+    "sunObserverTargetDeg": 0.2133,
+    "packFromHorizonsArcsec": 1.9010679778398287,
+    "packEclipticFromHorizonsArcsec": 1.9002473227205454,
+    "packLonDifferenceArcsec": 1.9000252544174145,
+    "astronomyEngineFromHorizonsArcsec": 6.908255310119371,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.560452734,
+    "sunObserverTargetDeg": 0.2051,
+    "packFromHorizonsArcsec": 1.9758891630966127,
+    "packEclipticFromHorizonsArcsec": 1.974727445964981,
+    "packLonDifferenceArcsec": 1.9744294959309627,
+    "astronomyEngineFromHorizonsArcsec": 6.908255364816483,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.570869401,
+    "sunObserverTargetDeg": 0.1969,
+    "packFromHorizonsArcsec": 2.0569386392031173,
+    "packEclipticFromHorizonsArcsec": 2.0558035779570516,
+    "packLonDifferenceArcsec": 2.0554102138703456,
+    "astronomyEngineFromHorizonsArcsec": 6.908256463240777,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.581286067,
+    "sunObserverTargetDeg": 0.1887,
+    "packFromHorizonsArcsec": 2.1450223919122235,
+    "packEclipticFromHorizonsArcsec": 2.143924908444206,
+    "packLonDifferenceArcsec": 2.1434117931676155,
+    "astronomyEngineFromHorizonsArcsec": 6.908254790408433,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.591702734,
+    "sunObserverTargetDeg": 0.1805,
+    "packFromHorizonsArcsec": 2.241102705599517,
+    "packEclipticFromHorizonsArcsec": 2.2396899053023747,
+    "packLonDifferenceArcsec": 2.2390264357454726,
+    "astronomyEngineFromHorizonsArcsec": 6.908250637890239,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.602119401,
+    "sunObserverTargetDeg": 0.1723,
+    "packFromHorizonsArcsec": 2.346318458043871,
+    "packEclipticFromHorizonsArcsec": 2.3449560649223815,
+    "packLonDifferenceArcsec": 2.3441037730663083,
+    "astronomyEngineFromHorizonsArcsec": 6.908247514177425,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.612536067,
+    "sunObserverTargetDeg": 0.1641,
+    "packFromHorizonsArcsec": 2.4620351542334586,
+    "packEclipticFromHorizonsArcsec": 2.4607280486147096,
+    "packLonDifferenceArcsec": 2.459637727770314,
+    "astronomyEngineFromHorizonsArcsec": 6.908245328618799,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.622952734,
+    "sunObserverTargetDeg": 0.1559,
+    "packFromHorizonsArcsec": 2.589903451931957,
+    "packEclipticFromHorizonsArcsec": 2.588299320346251,
+    "packLonDifferenceArcsec": 2.5869073050216684,
+    "astronomyEngineFromHorizonsArcsec": 6.908240521425095,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.633369401,
+    "sunObserverTargetDeg": 0.1477,
+    "packFromHorizonsArcsec": 2.7319447924163134,
+    "packEclipticFromHorizonsArcsec": 2.7304058744118755,
+    "packLonDifferenceArcsec": 2.7286294680379797,
+    "astronomyEngineFromHorizonsArcsec": 6.908236727552382,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.643786067,
+    "sunObserverTargetDeg": 0.1395,
+    "packFromHorizonsArcsec": 2.89064949257308,
+    "packEclipticFromHorizonsArcsec": 2.888816769889303,
+    "packLonDifferenceArcsec": 2.8865461011264415,
+    "astronomyEngineFromHorizonsArcsec": 6.90823385685562,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.654202734,
+    "sunObserverTargetDeg": 0.1313,
+    "packFromHorizonsArcsec": 3.069129034370815,
+    "packEclipticFromHorizonsArcsec": 3.067345678430096,
+    "packLonDifferenceArcsec": 3.0644495231172186,
+    "astronomyEngineFromHorizonsArcsec": 6.908228476154162,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.664619401,
+    "sunObserverTargetDeg": 0.1231,
+    "packFromHorizonsArcsec": 3.2713176123471626,
+    "packEclipticFromHorizonsArcsec": 3.26923405207723,
+    "packLonDifferenceArcsec": 3.2654970831572427,
+    "astronomyEngineFromHorizonsArcsec": 6.9082240939749795,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.675036067,
+    "sunObserverTargetDeg": 0.115,
+    "packFromHorizonsArcsec": 3.5022615196807476,
+    "packEclipticFromHorizonsArcsec": 3.4998734966887843,
+    "packLonDifferenceArcsec": 3.495016348779245,
+    "astronomyEngineFromHorizonsArcsec": 6.908220492650814,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.685452734,
+    "sunObserverTargetDeg": 0.1068,
+    "packFromHorizonsArcsec": 3.7685594327792793,
+    "packEclipticFromHorizonsArcsec": 3.7662115548235042,
+    "packLonDifferenceArcsec": 3.759837646930464,
+    "astronomyEngineFromHorizonsArcsec": 6.908214493224909,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.695869401,
+    "sunObserverTargetDeg": 0.0986,
+    "packFromHorizonsArcsec": 4.078969954696347,
+    "packEclipticFromHorizonsArcsec": 4.076288554174048,
+    "packLonDifferenceArcsec": 4.067818393014022,
+    "astronomyEngineFromHorizonsArcsec": 6.9082057526842595,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.706286067,
+    "sunObserverTargetDeg": 0.0904,
+    "packFromHorizonsArcsec": 4.445415544360855,
+    "packEclipticFromHorizonsArcsec": 4.442370715812479,
+    "packLonDifferenceArcsec": 4.430935281789061,
+    "astronomyEngineFromHorizonsArcsec": 6.908201628432542,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.716702734,
+    "sunObserverTargetDeg": 0.0822,
+    "packFromHorizonsArcsec": 4.884503652787787,
+    "packEclipticFromHorizonsArcsec": 4.881420679993911,
+    "packLonDifferenceArcsec": 4.865671240304437,
+    "astronomyEngineFromHorizonsArcsec": 6.9081948379414495,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.727119401,
+    "sunObserverTargetDeg": 0.0741,
+    "packFromHorizonsArcsec": 5.420107319840223,
+    "packEclipticFromHorizonsArcsec": 5.416570794024217,
+    "packLonDifferenceArcsec": 5.394321789663081,
+    "astronomyEngineFromHorizonsArcsec": 6.908185543772541,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.737536067,
+    "sunObserverTargetDeg": 0.0659,
+    "packFromHorizonsArcsec": 6.087761381803952,
+    "packEclipticFromHorizonsArcsec": 6.083693466796812,
+    "packLonDifferenceArcsec": 6.05122849901818,
+    "astronomyEngineFromHorizonsArcsec": 6.908177127479326,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.747952734,
+    "sunObserverTargetDeg": 0.0577,
+    "packFromHorizonsArcsec": 6.942735855698457,
+    "packEclipticFromHorizonsArcsec": 6.938024317381652,
+    "packLonDifferenceArcsec": 6.888618417269754,
+    "astronomyEngineFromHorizonsArcsec": 6.908169627048051,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.758369401,
+    "sunObserverTargetDeg": 0.0496,
+    "packFromHorizonsArcsec": 8.075769575979548,
+    "packEclipticFromHorizonsArcsec": 8.070234674906311,
+    "packLonDifferenceArcsec": 7.990725425497658,
+    "astronomyEngineFromHorizonsArcsec": 6.908159607111054,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.768786067,
+    "sunObserverTargetDeg": 0.0415,
+    "packFromHorizonsArcsec": 9.646385828683325,
+    "packEclipticFromHorizonsArcsec": 9.639681106292674,
+    "packLonDifferenceArcsec": 9.501576393722644,
+    "astronomyEngineFromHorizonsArcsec": 6.908150449444024,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.779202734,
+    "sunObserverTargetDeg": 0.0335,
+    "packFromHorizonsArcsec": 11.961303478214305,
+    "packEclipticFromHorizonsArcsec": 11.952976937957766,
+    "packLonDifferenceArcsec": 11.684955521241136,
+    "astronomyEngineFromHorizonsArcsec": 6.908142444538479,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.789619401,
+    "sunObserverTargetDeg": 0.0255,
+    "packFromHorizonsArcsec": 15.684878395101714,
+    "packEclipticFromHorizonsArcsec": 15.673979039474304,
+    "packLonDifferenceArcsec": 15.058274294278817,
+    "astronomyEngineFromHorizonsArcsec": 6.90813165318132,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.800036067,
+    "sunObserverTargetDeg": 0.0178,
+    "packFromHorizonsArcsec": 22.49819617061547,
+    "packEclipticFromHorizonsArcsec": 22.482615295576768,
+    "packLonDifferenceArcsec": 20.61174290292911,
+    "astronomyEngineFromHorizonsArcsec": 6.908121709027317,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.810452734,
+    "sunObserverTargetDeg": 0.0108,
+    "packFromHorizonsArcsec": 37.13875520398774,
+    "packEclipticFromHorizonsArcsec": 37.11313457915951,
+    "packLonDifferenceArcsec": 27.873413944689673,
+    "astronomyEngineFromHorizonsArcsec": 6.908112902199958,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.820869401,
+    "sunObserverTargetDeg": 0.0071,
+    "packFromHorizonsArcsec": 56.25406872823819,
+    "packEclipticFromHorizonsArcsec": 56.21540222466,
+    "packLonDifferenceArcsec": -1.0408380995613697,
+    "astronomyEngineFromHorizonsArcsec": 6.9081014191832155,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.831286067,
+    "sunObserverTargetDeg": 0.0109,
+    "packFromHorizonsArcsec": 36.47433039001927,
+    "packEclipticFromHorizonsArcsec": 36.44931947812776,
+    "packLonDifferenceArcsec": -27.793336484864994,
+    "astronomyEngineFromHorizonsArcsec": 6.908087296215343,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.841702734,
+    "sunObserverTargetDeg": 0.018,
+    "packFromHorizonsArcsec": 22.16711713458325,
+    "packEclipticFromHorizonsArcsec": 22.15191603850335,
+    "packLonDifferenceArcsec": -20.381807354260673,
+    "astronomyEngineFromHorizonsArcsec": 6.908077766719888,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.852119401,
+    "sunObserverTargetDeg": 0.0257,
+    "packFromHorizonsArcsec": 15.486975168980383,
+    "packEclipticFromHorizonsArcsec": 15.476318379301043,
+    "packLonDifferenceArcsec": -14.892217344277014,
+    "astronomyEngineFromHorizonsArcsec": 6.9080655460206035,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.862536067,
+    "sunObserverTargetDeg": 0.0337,
+    "packFromHorizonsArcsec": 11.820025171862689,
+    "packEclipticFromHorizonsArcsec": 11.812105101734534,
+    "packLonDifferenceArcsec": -11.558424669601663,
+    "astronomyEngineFromHorizonsArcsec": 6.908050544498015,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.872952734,
+    "sunObserverTargetDeg": 0.0417,
+    "packFromHorizonsArcsec": 9.533419485074678,
+    "packEclipticFromHorizonsArcsec": 9.52701693390104,
+    "packLonDifferenceArcsec": -9.396897977285334,
+    "astronomyEngineFromHorizonsArcsec": 6.908036648711613,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.883369401,
+    "sunObserverTargetDeg": 0.0499,
+    "packFromHorizonsArcsec": 7.978781666561468,
+    "packEclipticFromHorizonsArcsec": 7.973374856949885,
+    "packLonDifferenceArcsec": -7.898960933607668,
+    "astronomyEngineFromHorizonsArcsec": 6.9080236438014415,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.893786067,
+    "sunObserverTargetDeg": 0.058,
+    "packFromHorizonsArcsec": 6.855595006084699,
+    "packEclipticFromHorizonsArcsec": 6.850874837303858,
+    "packLonDifferenceArcsec": -6.804969485801848,
+    "astronomyEngineFromHorizonsArcsec": 6.908011565106968,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.904202734,
+    "sunObserverTargetDeg": 0.0661,
+    "packFromHorizonsArcsec": 6.007097457495865,
+    "packEclipticFromHorizonsArcsec": 6.003218962347029,
+    "packLonDifferenceArcsec": -5.973298163553409,
+    "astronomyEngineFromHorizonsArcsec": 6.907996854002546,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.914619401,
+    "sunObserverTargetDeg": 0.0743,
+    "packFromHorizonsArcsec": 5.343924756996903,
+    "packEclipticFromHorizonsArcsec": 5.340392344887187,
+    "packLonDifferenceArcsec": -5.3200657862817025,
+    "astronomyEngineFromHorizonsArcsec": 6.907979546083831,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.925036067,
+    "sunObserverTargetDeg": 0.0825,
+    "packFromHorizonsArcsec": 4.8115503579292875,
+    "packEclipticFromHorizonsArcsec": 4.808260589289549,
+    "packLonDifferenceArcsec": -4.794006845668264,
+    "astronomyEngineFromHorizonsArcsec": 6.90796662150475,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.935452734,
+    "sunObserverTargetDeg": 0.0906,
+    "packFromHorizonsArcsec": 4.3748583353820925,
+    "packEclipticFromHorizonsArcsec": 4.372094801782169,
+    "packLonDifferenceArcsec": -4.361850793566191,
+    "astronomyEngineFromHorizonsArcsec": 6.9079511738257615,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.945869401,
+    "sunObserverTargetDeg": 0.0988,
+    "packFromHorizonsArcsec": 4.010245868781922,
+    "packEclipticFromHorizonsArcsec": 4.007587076529306,
+    "packLonDifferenceArcsec": -4.000080789865024,
+    "astronomyEngineFromHorizonsArcsec": 6.9079329887052365,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.956286067,
+    "sunObserverTargetDeg": 0.107,
+    "packFromHorizonsArcsec": 3.7012627009843313,
+    "packEclipticFromHorizonsArcsec": 3.6990005697840513,
+    "packLonDifferenceArcsec": -3.6934371185907366,
+    "astronomyEngineFromHorizonsArcsec": 6.9079156987177335,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.966702734,
+    "sunObserverTargetDeg": 0.1152,
+    "packFromHorizonsArcsec": 3.436101084087083,
+    "packEclipticFromHorizonsArcsec": 3.4338584426389027,
+    "packLonDifferenceArcsec": -3.4296744834591664,
+    "astronomyEngineFromHorizonsArcsec": 6.907899467193924,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.977119401,
+    "sunObserverTargetDeg": 0.1234,
+    "packFromHorizonsArcsec": 3.206073795732142,
+    "packEclipticFromHorizonsArcsec": 3.2041732507001397,
+    "packLonDifferenceArcsec": -3.200999873024557,
+    "astronomyEngineFromHorizonsArcsec": 6.907884080693926,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.987536067,
+    "sunObserverTargetDeg": 0.1316,
+    "packFromHorizonsArcsec": 3.004639688746253,
+    "packEclipticFromHorizonsArcsec": 3.0026924528088275,
+    "packLonDifferenceArcsec": -3.0002707098901737,
+    "astronomyEngineFromHorizonsArcsec": 6.90786597514247,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463232.997952734,
+    "sunObserverTargetDeg": 0.1398,
+    "packFromHorizonsArcsec": 2.826787668536927,
+    "packEclipticFromHorizonsArcsec": 2.8251244642142073,
+    "packLonDifferenceArcsec": -2.8232696939085145,
+    "astronomyEngineFromHorizonsArcsec": 6.907845192142397,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.008369401,
+    "sunObserverTargetDeg": 0.148,
+    "packFromHorizonsArcsec": 2.6686046762186404,
+    "packEclipticFromHorizonsArcsec": 2.6672061264042046,
+    "packLonDifferenceArcsec": -2.665783498559904,
+    "astronomyEngineFromHorizonsArcsec": 6.907829083072572,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.018786067,
+    "sunObserverTargetDeg": 0.1562,
+    "packFromHorizonsArcsec": 2.5270084382301063,
+    "packEclipticFromHorizonsArcsec": 2.525490636684419,
+    "packLonDifferenceArcsec": -2.5244001142255,
+    "astronomyEngineFromHorizonsArcsec": 6.907810116171915,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.029202734,
+    "sunObserverTargetDeg": 0.1644,
+    "packFromHorizonsArcsec": 2.3995218327832117,
+    "packEclipticFromHorizonsArcsec": 2.3982222321563467,
+    "packLonDifferenceArcsec": -2.3973889304215845,
+    "astronomyEngineFromHorizonsArcsec": 6.907788455790823,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.039619401,
+    "sunObserverTargetDeg": 0.1726,
+    "packFromHorizonsArcsec": 2.2841322131595954,
+    "packEclipticFromHorizonsArcsec": 2.283028283207992,
+    "packLonDifferenceArcsec": -2.2824034943369043,
+    "astronomyEngineFromHorizonsArcsec": 6.907771453521286,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.050036067,
+    "sunObserverTargetDeg": 0.1808,
+    "packFromHorizonsArcsec": 2.179200425822233,
+    "packEclipticFromHorizonsArcsec": 2.1779251257563557,
+    "packLonDifferenceArcsec": -2.17745536192524,
+    "astronomyEngineFromHorizonsArcsec": 6.907751701296817,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.060452734,
+    "sunObserverTargetDeg": 0.1889,
+    "packFromHorizonsArcsec": 2.0833692732796747,
+    "packEclipticFromHorizonsArcsec": 2.0822635525109576,
+    "packLonDifferenceArcsec": -2.0819147244310443,
+    "astronomyEngineFromHorizonsArcsec": 6.9077292394612995,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.070869401,
+    "sunObserverTargetDeg": 0.1971,
+    "packFromHorizonsArcsec": 1.9955026910334432,
+    "packEclipticFromHorizonsArcsec": 1.9945518443747494,
+    "packLonDifferenceArcsec": -1.9942971152886457,
+    "astronomyEngineFromHorizonsArcsec": 6.907707699660091,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.081286067,
+    "sunObserverTargetDeg": 0.2053,
+    "packFromHorizonsArcsec": 1.9146487320309291,
+    "packEclipticFromHorizonsArcsec": 1.9138387245148274,
+    "packLonDifferenceArcsec": -1.913656857323076,
+    "astronomyEngineFromHorizonsArcsec": 6.907686991126886,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.091702734,
+    "sunObserverTargetDeg": 0.2135,
+    "packFromHorizonsArcsec": 1.8399993213455703,
+    "packEclipticFromHorizonsArcsec": 1.8393165187592078,
+    "packLonDifferenceArcsec": -1.8391905823591514,
+    "astronomyEngineFromHorizonsArcsec": 6.9076636811820356,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.102119401,
+    "sunObserverTargetDeg": 0.2217,
+    "packFromHorizonsArcsec": 1.7708675416913167,
+    "packEclipticFromHorizonsArcsec": 1.7699389655312991,
+    "packLonDifferenceArcsec": -1.7698553589980293,
+    "astronomyEngineFromHorizonsArcsec": 6.907641276645546,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.112536067,
+    "sunObserverTargetDeg": 0.2299,
+    "packFromHorizonsArcsec": 1.7066645531849642,
+    "packEclipticFromHorizonsArcsec": 1.7058348208289185,
+    "packLonDifferenceArcsec": -1.7057853828191583,
+    "astronomyEngineFromHorizonsArcsec": 6.907619688113676,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.122952734,
+    "sunObserverTargetDeg": 0.2381,
+    "packFromHorizonsArcsec": 1.646880456872995,
+    "packEclipticFromHorizonsArcsec": 1.6461406000028895,
+    "packLonDifferenceArcsec": -1.646113002425409,
+    "astronomyEngineFromHorizonsArcsec": 6.907595481736856,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.133369401,
+    "sunObserverTargetDeg": 0.2463,
+    "packFromHorizonsArcsec": 1.5910749807756608,
+    "packEclipticFromHorizonsArcsec": 1.5904130504276581,
+    "packLonDifferenceArcsec": -1.5904000726550294,
+    "astronomyEngineFromHorizonsArcsec": 6.90757216516855,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.143786067,
+    "sunObserverTargetDeg": 0.2545,
+    "packFromHorizonsArcsec": 1.5388647666349715,
+    "packEclipticFromHorizonsArcsec": 1.5382690848176275,
+    "packLonDifferenceArcsec": -1.538264822374913,
+    "astronomyEngineFromHorizonsArcsec": 6.907549648933057,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.154202734,
+    "sunObserverTargetDeg": 0.2628,
+    "packFromHorizonsArcsec": 1.4899122262039206,
+    "packEclipticFromHorizonsArcsec": 1.4893711630546018,
+    "packLonDifferenceArcsec": -1.489370773833798,
+    "astronomyEngineFromHorizonsArcsec": 6.907524498326346,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.164619401,
+    "sunObserverTargetDeg": 0.271,
+    "packFromHorizonsArcsec": 1.4439224038431944,
+    "packEclipticFromHorizonsArcsec": 1.443424718969588,
+    "packLonDifferenceArcsec": -1.4434242194965918,
+    "astronomyEngineFromHorizonsArcsec": 6.90750022176996,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.175036067,
+    "sunObserverTargetDeg": 0.2796,
+    "packFromHorizonsArcsec": 0.02954178292566029,
+    "packEclipticFromHorizonsArcsec": 0.04708641098312415,
+    "packLonDifferenceArcsec": 0.029394019020401174,
+    "astronomyEngineFromHorizonsArcsec": 7.182006072898365,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.185452734,
+    "sunObserverTargetDeg": 0.2877,
+    "packFromHorizonsArcsec": 0.029540688790532767,
+    "packEclipticFromHorizonsArcsec": 0.04724799446554533,
+    "packLonDifferenceArcsec": 0.029515852929762332,
+    "astronomyEngineFromHorizonsArcsec": 7.1712942786223275,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.195869401,
+    "sunObserverTargetDeg": 0.2959,
+    "packFromHorizonsArcsec": 0.029541618523407018,
+    "packEclipticFromHorizonsArcsec": 0.047224024167532574,
+    "packLonDifferenceArcsec": 0.029545335291913943,
+    "astronomyEngineFromHorizonsArcsec": 7.161320436740215,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.206286067,
+    "sunObserverTargetDeg": 0.3041,
+    "packFromHorizonsArcsec": 0.02953910281315347,
+    "packEclipticFromHorizonsArcsec": 0.0474228779474031,
+    "packLonDifferenceArcsec": 0.02966444303638127,
+    "astronomyEngineFromHorizonsArcsec": 7.15201617844257,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.216702734,
+    "sunObserverTargetDeg": 0.3123,
+    "packFromHorizonsArcsec": 0.029539528409451725,
+    "packEclipticFromHorizonsArcsec": 0.04722933662988348,
+    "packLonDifferenceArcsec": 0.029318301949388115,
+    "astronomyEngineFromHorizonsArcsec": 7.143318417009143,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.227119401,
+    "sunObserverTargetDeg": 0.3205,
+    "packFromHorizonsArcsec": 0.02953691977630416,
+    "packEclipticFromHorizonsArcsec": 0.04719326096396158,
+    "packLonDifferenceArcsec": 0.029372961944318376,
+    "astronomyEngineFromHorizonsArcsec": 7.135169042618918,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.237536067,
+    "sunObserverTargetDeg": 0.3287,
+    "packFromHorizonsArcsec": 0.02953753915804173,
+    "packEclipticFromHorizonsArcsec": 0.0474632523867761,
+    "packLonDifferenceArcsec": 0.029599833624160965,
+    "astronomyEngineFromHorizonsArcsec": 7.12752275789117,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.247952734,
+    "sunObserverTargetDeg": 0.3369,
+    "packFromHorizonsArcsec": 0.02953392454421823,
+    "packEclipticFromHorizonsArcsec": 0.04711071816480063,
+    "packLonDifferenceArcsec": 0.02939978239737684,
+    "astronomyEngineFromHorizonsArcsec": 7.120337344322323,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.258369401,
+    "sunObserverTargetDeg": 0.3451,
+    "packFromHorizonsArcsec": 0.029533087403237894,
+    "packEclipticFromHorizonsArcsec": 0.04722173930803438,
+    "packLonDifferenceArcsec": 0.029600005927932216,
+    "astronomyEngineFromHorizonsArcsec": 7.113568176498999,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.268786067,
+    "sunObserverTargetDeg": 0.3533,
+    "packFromHorizonsArcsec": 0.02953407715370077,
+    "packEclipticFromHorizonsArcsec": 0.04741297371220183,
+    "packLonDifferenceArcsec": 0.029577670284197666,
+    "astronomyEngineFromHorizonsArcsec": 7.107186999611019,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.279202734,
+    "sunObserverTargetDeg": 0.3615,
+    "packFromHorizonsArcsec": 0.029531743620613924,
+    "packEclipticFromHorizonsArcsec": 0.047184826226622484,
+    "packLonDifferenceArcsec": 0.029423388423310826,
+    "astronomyEngineFromHorizonsArcsec": 7.1011618550831885,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.289619401,
+    "sunObserverTargetDeg": 0.3697,
+    "packFromHorizonsArcsec": 0.02952995094271086,
+    "packEclipticFromHorizonsArcsec": 0.047379314974949176,
+    "packLonDifferenceArcsec": 0.029577530312963063,
+    "astronomyEngineFromHorizonsArcsec": 7.0954622541624035,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.300036067,
+    "sunObserverTargetDeg": 0.3779,
+    "packFromHorizonsArcsec": 0.029529353141699244,
+    "packEclipticFromHorizonsArcsec": 0.04731630913017801,
+    "packLonDifferenceArcsec": 0.029393421073109494,
+    "astronomyEngineFromHorizonsArcsec": 7.090063368268849,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.310452734,
+    "sunObserverTargetDeg": 0.3861,
+    "packFromHorizonsArcsec": 0.029527175503510143,
+    "packEclipticFromHorizonsArcsec": 0.04726742469066577,
+    "packLonDifferenceArcsec": 0.029300420010258676,
+    "astronomyEngineFromHorizonsArcsec": 7.084945868862324,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2463233.3208694,
+    "sunObserverTargetDeg": 0.3943,
+    "packFromHorizonsArcsec": 0.029527342002978525,
+    "packEclipticFromHorizonsArcsec": 0.04727326843371505,
+    "packLonDifferenceArcsec": 0.02935912157226994,
+    "astronomyEngineFromHorizonsArcsec": 7.080086787047228,
+    "quoted": 0.0038,
+    "label": "measured"
+   }
+  ]
+ },
+ "Uranus": {
+  "samples": 97,
+  "stepMinutes": 15,
+  "quotedBoundArcsec": 0.0038,
+  "boundLabelInTheTrueEclipticOfDate": "measured",
+  "worst": {
+   "jdTt": 2462292.1837037,
+   "sunObserverTargetDeg": 0.0022,
+   "packFromHorizonsArcsec": 195.45179233869592,
+   "packEclipticFromHorizonsArcsec": 195.49142832963267,
+   "packLonDifferenceArcsec": -5.616656072743353,
+   "astronomyEngineFromHorizonsArcsec": 9.048419895321398,
+   "quoted": 0.0038,
+   "label": "measured"
+  },
+  "samplesWherePackIsFartherThan": {
+   "0.1 arcsec": 57,
+   "1 arcsec": 57,
+   "5 arcsec": 19,
+   "30 arcsec": 3
+  },
+  "hoursFartherThan1Arcsec": 14.25,
+  "samplesWherePackIsFartherThanAstronomyEngine": 11,
+  "packOutsideTheDisc": 0.044099412499549136,
+  "rows": [
+   {
+    "jdTt": 2462291.6837037,
+    "sunObserverTargetDeg": 0.4495,
+    "packFromHorizonsArcsec": 0.0440255120335874,
+    "packEclipticFromHorizonsArcsec": 0.05016616304556576,
+    "packLonDifferenceArcsec": 0.042266553009540075,
+    "astronomyEngineFromHorizonsArcsec": 9.153726202159548,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.694120367,
+    "sunObserverTargetDeg": 0.4401,
+    "packFromHorizonsArcsec": 0.04402894143869861,
+    "packEclipticFromHorizonsArcsec": 0.04973098493347722,
+    "packLonDifferenceArcsec": 0.04193606782791903,
+    "astronomyEngineFromHorizonsArcsec": 9.157026784141271,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.704537034,
+    "sunObserverTargetDeg": 0.4308,
+    "packFromHorizonsArcsec": 0.044029193878899316,
+    "packEclipticFromHorizonsArcsec": 0.049954469760750256,
+    "packLonDifferenceArcsec": 0.04214855725876987,
+    "astronomyEngineFromHorizonsArcsec": 9.160513969719732,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.7149537,
+    "sunObserverTargetDeg": 0.4214,
+    "packFromHorizonsArcsec": 0.04402874170286172,
+    "packEclipticFromHorizonsArcsec": 0.05008692365166353,
+    "packLonDifferenceArcsec": 0.042243790903739864,
+    "astronomyEngineFromHorizonsArcsec": 9.164203310338005,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.725370367,
+    "sunObserverTargetDeg": 0.4121,
+    "packFromHorizonsArcsec": 0.04402926182759256,
+    "packEclipticFromHorizonsArcsec": 0.049881701316053004,
+    "packLonDifferenceArcsec": 0.04192759342913632,
+    "astronomyEngineFromHorizonsArcsec": 9.168112996757447,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.735787034,
+    "sunObserverTargetDeg": 0.4027,
+    "packFromHorizonsArcsec": 0.04403237861353907,
+    "packEclipticFromHorizonsArcsec": 0.04981149287956539,
+    "packLonDifferenceArcsec": 0.041991277066699695,
+    "astronomyEngineFromHorizonsArcsec": 9.172257315589624,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.7462037,
+    "sunObserverTargetDeg": 0.3934,
+    "packFromHorizonsArcsec": 0.04403180282886288,
+    "packEclipticFromHorizonsArcsec": 0.05002844924055132,
+    "packLonDifferenceArcsec": 0.042152966761932475,
+    "astronomyEngineFromHorizonsArcsec": 9.176662455674082,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.756620367,
+    "sunObserverTargetDeg": 0.384,
+    "packFromHorizonsArcsec": 0.04403298404815898,
+    "packEclipticFromHorizonsArcsec": 0.049915200623059965,
+    "packLonDifferenceArcsec": 0.042139033485000255,
+    "astronomyEngineFromHorizonsArcsec": 9.181351374078954,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.767037034,
+    "sunObserverTargetDeg": 0.3747,
+    "packFromHorizonsArcsec": 0.04403323729485325,
+    "packEclipticFromHorizonsArcsec": 0.049939531559554204,
+    "packLonDifferenceArcsec": 0.04204384772492631,
+    "astronomyEngineFromHorizonsArcsec": 9.186350072528437,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.7774537,
+    "sunObserverTargetDeg": 0.3653,
+    "packFromHorizonsArcsec": 0.044033174817892345,
+    "packEclipticFromHorizonsArcsec": 0.04980324901101245,
+    "packLonDifferenceArcsec": 0.041971481368818786,
+    "astronomyEngineFromHorizonsArcsec": 9.191684839667031,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.787870367,
+    "sunObserverTargetDeg": 0.356,
+    "packFromHorizonsArcsec": 0.044033925812027926,
+    "packEclipticFromHorizonsArcsec": 0.0499931979297354,
+    "packLonDifferenceArcsec": 0.04203758503535937,
+    "astronomyEngineFromHorizonsArcsec": 9.197390270020072,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.798287034,
+    "sunObserverTargetDeg": 0.3466,
+    "packFromHorizonsArcsec": 0.04403476788037886,
+    "packEclipticFromHorizonsArcsec": 0.04992674185329685,
+    "packLonDifferenceArcsec": 0.042009673052234575,
+    "astronomyEngineFromHorizonsArcsec": 9.20350739812446,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.8087037,
+    "sunObserverTargetDeg": 0.3373,
+    "packFromHorizonsArcsec": 0.044036620904975066,
+    "packEclipticFromHorizonsArcsec": 0.049919545775082994,
+    "packLonDifferenceArcsec": 0.04202944951430254,
+    "astronomyEngineFromHorizonsArcsec": 9.210077171686551,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.819120367,
+    "sunObserverTargetDeg": 0.3279,
+    "packFromHorizonsArcsec": 0.0440373577538139,
+    "packEclipticFromHorizonsArcsec": 0.05010743339448285,
+    "packLonDifferenceArcsec": 0.04225544494147471,
+    "astronomyEngineFromHorizonsArcsec": 9.21714636360486,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.829537034,
+    "sunObserverTargetDeg": 0.3186,
+    "packFromHorizonsArcsec": 0.044038153958982494,
+    "packEclipticFromHorizonsArcsec": 0.05003490053508275,
+    "packLonDifferenceArcsec": 0.04214418909214146,
+    "astronomyEngineFromHorizonsArcsec": 9.224773165365304,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.8399537,
+    "sunObserverTargetDeg": 0.3092,
+    "packFromHorizonsArcsec": 0.044039494824124864,
+    "packEclipticFromHorizonsArcsec": 0.05017510829296756,
+    "packLonDifferenceArcsec": 0.04225364004923904,
+    "astronomyEngineFromHorizonsArcsec": 9.233017280159828,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.850370367,
+    "sunObserverTargetDeg": 0.2999,
+    "packFromHorizonsArcsec": 0.04403906055858935,
+    "packEclipticFromHorizonsArcsec": 0.04991904530934148,
+    "packLonDifferenceArcsec": 0.04208713035041001,
+    "astronomyEngineFromHorizonsArcsec": 9.241955455619566,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.860787034,
+    "sunObserverTargetDeg": 0.2905,
+    "packFromHorizonsArcsec": 0.04404019242332552,
+    "packEclipticFromHorizonsArcsec": 0.05017367202212073,
+    "packLonDifferenceArcsec": 0.0422561546201905,
+    "astronomyEngineFromHorizonsArcsec": 9.25166810809833,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.8712037,
+    "sunObserverTargetDeg": 0.2812,
+    "packFromHorizonsArcsec": 0.044041972715820145,
+    "packEclipticFromHorizonsArcsec": 0.04988622661465962,
+    "packLonDifferenceArcsec": 0.04196576874164748,
+    "astronomyEngineFromHorizonsArcsec": 9.262255120036809,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.881620367,
+    "sunObserverTargetDeg": 0.2718,
+    "packFromHorizonsArcsec": 0.044043276645072786,
+    "packEclipticFromHorizonsArcsec": 0.05013610987650247,
+    "packLonDifferenceArcsec": 0.04226098035360337,
+    "astronomyEngineFromHorizonsArcsec": 9.273831750039966,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.892037034,
+    "sunObserverTargetDeg": 0.262,
+    "packFromHorizonsArcsec": 1.709607380585611,
+    "packEclipticFromHorizonsArcsec": 1.710078182681882,
+    "packLonDifferenceArcsec": 1.7095925635658205,
+    "astronomyEngineFromHorizonsArcsec": 9.047606732342379,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.9024537,
+    "sunObserverTargetDeg": 0.2527,
+    "packFromHorizonsArcsec": 1.771373043597767,
+    "packEclipticFromHorizonsArcsec": 1.7717649790920944,
+    "packLonDifferenceArcsec": 1.7712662485791952,
+    "astronomyEngineFromHorizonsArcsec": 9.047633734443158,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.912870367,
+    "sunObserverTargetDeg": 0.2433,
+    "packFromHorizonsArcsec": 1.8378925720277708,
+    "packEclipticFromHorizonsArcsec": 1.838558821108127,
+    "packLonDifferenceArcsec": 1.8380538997007534,
+    "astronomyEngineFromHorizonsArcsec": 9.047660147366061,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.923287034,
+    "sunObserverTargetDeg": 0.2339,
+    "packFromHorizonsArcsec": 1.90973273340135,
+    "packEclipticFromHorizonsArcsec": 1.9103187009259994,
+    "packLonDifferenceArcsec": 1.909805398190656,
+    "astronomyEngineFromHorizonsArcsec": 9.04768657296571,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.9337037,
+    "sunObserverTargetDeg": 0.2246,
+    "packFromHorizonsArcsec": 1.9875623811176297,
+    "packEclipticFromHorizonsArcsec": 1.9880780605694524,
+    "packLonDifferenceArcsec": 1.9875456232512079,
+    "astronomyEngineFromHorizonsArcsec": 9.04771597764037,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.944120367,
+    "sunObserverTargetDeg": 0.2152,
+    "packFromHorizonsArcsec": 2.072158815655652,
+    "packEclipticFromHorizonsArcsec": 2.0726018414786718,
+    "packLonDifferenceArcsec": 2.0720557224194636,
+    "astronomyEngineFromHorizonsArcsec": 9.047741842164015,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.954537034,
+    "sunObserverTargetDeg": 0.2059,
+    "packFromHorizonsArcsec": 2.1644490638129925,
+    "packEclipticFromHorizonsArcsec": 2.1648296998447396,
+    "packLonDifferenceArcsec": 2.164258150742171,
+    "astronomyEngineFromHorizonsArcsec": 9.047770676043134,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.9649537,
+    "sunObserverTargetDeg": 0.1965,
+    "packFromHorizonsArcsec": 2.265528091090945,
+    "packEclipticFromHorizonsArcsec": 2.26620392408918,
+    "packLonDifferenceArcsec": 2.265611068378348,
+    "astronomyEngineFromHorizonsArcsec": 9.047799538235164,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.975370367,
+    "sunObserverTargetDeg": 0.1871,
+    "packFromHorizonsArcsec": 2.376717862225187,
+    "packEclipticFromHorizonsArcsec": 2.377332351857678,
+    "packLonDifferenceArcsec": 2.3767128646341007,
+    "astronomyEngineFromHorizonsArcsec": 9.047824274084256,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.985787034,
+    "sunObserverTargetDeg": 0.1778,
+    "packFromHorizonsArcsec": 2.499612069302494,
+    "packEclipticFromHorizonsArcsec": 2.5001795540203893,
+    "packLonDifferenceArcsec": 2.4995186884098075,
+    "astronomyEngineFromHorizonsArcsec": 9.047852571662583,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462291.9962037,
+    "sunObserverTargetDeg": 0.1684,
+    "packFromHorizonsArcsec": 2.6361648702273253,
+    "packEclipticFromHorizonsArcsec": 2.636680277327238,
+    "packLonDifferenceArcsec": 2.6359780684742873,
+    "astronomyEngineFromHorizonsArcsec": 9.04788385470377,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.006620367,
+    "sunObserverTargetDeg": 0.1591,
+    "packFromHorizonsArcsec": 2.788785914824372,
+    "packEclipticFromHorizonsArcsec": 2.7892621615029562,
+    "packLonDifferenceArcsec": 2.78849971496129,
+    "astronomyEngineFromHorizonsArcsec": 9.047911014905704,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.017037034,
+    "sunObserverTargetDeg": 0.1497,
+    "packFromHorizonsArcsec": 2.9604847566079164,
+    "packEclipticFromHorizonsArcsec": 2.961281399551292,
+    "packLonDifferenceArcsec": 2.9604534488498757,
+    "astronomyEngineFromHorizonsArcsec": 9.047938197023784,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.0274537,
+    "sunObserverTargetDeg": 0.1403,
+    "packFromHorizonsArcsec": 3.1550808495582583,
+    "packEclipticFromHorizonsArcsec": 3.1558429504964747,
+    "packLonDifferenceArcsec": 3.1549312367587845,
+    "astronomyEngineFromHorizonsArcsec": 9.047968368191103,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.037870367,
+    "sunObserverTargetDeg": 0.131,
+    "packFromHorizonsArcsec": 3.3774768922349008,
+    "packEclipticFromHorizonsArcsec": 3.378222972152337,
+    "packLonDifferenceArcsec": 3.3771940391488897,
+    "astronomyEngineFromHorizonsArcsec": 9.047998552208217,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.048287034,
+    "sunObserverTargetDeg": 0.1216,
+    "packFromHorizonsArcsec": 3.634090761212447,
+    "packEclipticFromHorizonsArcsec": 3.634820270684222,
+    "packLonDifferenceArcsec": 3.6336486189611605,
+    "astronomyEngineFromHorizonsArcsec": 9.04802462979034,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.0587037,
+    "sunObserverTargetDeg": 0.1123,
+    "packFromHorizonsArcsec": 3.9334729594066005,
+    "packEclipticFromHorizonsArcsec": 3.9342075357171304,
+    "packLonDifferenceArcsec": 3.9328349711468036,
+    "astronomyEngineFromHorizonsArcsec": 9.048054289179023,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.069120367,
+    "sunObserverTargetDeg": 0.1029,
+    "packFromHorizonsArcsec": 4.287288903306021,
+    "packEclipticFromHorizonsArcsec": 4.2880310649607924,
+    "packLonDifferenceArcsec": 4.286395007511601,
+    "astronomyEngineFromHorizonsArcsec": 9.048083376293786,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.079537034,
+    "sunObserverTargetDeg": 0.0936,
+    "packFromHorizonsArcsec": 4.711863470415331,
+    "packEclipticFromHorizonsArcsec": 4.712987443391263,
+    "packLonDifferenceArcsec": 4.7109785740758525,
+    "astronomyEngineFromHorizonsArcsec": 9.048115456695685,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.0899537,
+    "sunObserverTargetDeg": 0.0842,
+    "packFromHorizonsArcsec": 5.230767093421075,
+    "packEclipticFromHorizonsArcsec": 5.231947538502751,
+    "packLonDifferenceArcsec": 5.22937990290302,
+    "astronomyEngineFromHorizonsArcsec": 9.048144017699979,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.100370367,
+    "sunObserverTargetDeg": 0.0748,
+    "packFromHorizonsArcsec": 5.879355737829216,
+    "packEclipticFromHorizonsArcsec": 5.880608252794125,
+    "packLonDifferenceArcsec": 5.8771985988187225,
+    "astronomyEngineFromHorizonsArcsec": 9.048175563122266,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.110787034,
+    "sunObserverTargetDeg": 0.0655,
+    "packFromHorizonsArcsec": 6.713149790284437,
+    "packEclipticFromHorizonsArcsec": 6.7145157712512615,
+    "packLonDifferenceArcsec": 6.709736526363486,
+    "astronomyEngineFromHorizonsArcsec": 9.048203599421406,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.1212037,
+    "sunObserverTargetDeg": 0.0561,
+    "packFromHorizonsArcsec": 7.824623879890292,
+    "packEclipticFromHorizonsArcsec": 7.826174063306444,
+    "packLonDifferenceArcsec": 7.818979417515948,
+    "astronomyEngineFromHorizonsArcsec": 9.048234636855263,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.131620367,
+    "sunObserverTargetDeg": 0.0468,
+    "packFromHorizonsArcsec": 9.380012705665793,
+    "packEclipticFromHorizonsArcsec": 9.381822965543945,
+    "packLonDifferenceArcsec": 9.369976968810079,
+    "astronomyEngineFromHorizonsArcsec": 9.04826511056409,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.142037034,
+    "sunObserverTargetDeg": 0.0374,
+    "packFromHorizonsArcsec": 11.711020507472442,
+    "packEclipticFromHorizonsArcsec": 11.713271858363772,
+    "packLonDifferenceArcsec": 11.691022966488163,
+    "astronomyEngineFromHorizonsArcsec": 9.048295622546862,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.1524537,
+    "sunObserverTargetDeg": 0.0281,
+    "packFromHorizonsArcsec": 15.588063081730061,
+    "packEclipticFromHorizonsArcsec": 15.591046111984989,
+    "packLonDifferenceArcsec": 15.540006839000853,
+    "astronomyEngineFromHorizonsArcsec": 9.04832500843018,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.162870367,
+    "sunObserverTargetDeg": 0.0188,
+    "packFromHorizonsArcsec": 23.295941935261222,
+    "packEclipticFromHorizonsArcsec": 23.30079137707555,
+    "packLonDifferenceArcsec": 23.13329928992971,
+    "astronomyEngineFromHorizonsArcsec": 9.048358556114945,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.173287034,
+    "sunObserverTargetDeg": 0.0096,
+    "packFromHorizonsArcsec": 45.74354528641975,
+    "packEclipticFromHorizonsArcsec": 45.752945663862924,
+    "packLonDifferenceArcsec": 44.48352118074581,
+    "astronomyEngineFromHorizonsArcsec": 9.048387425946622,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.1837037,
+    "sunObserverTargetDeg": 0.0022,
+    "packFromHorizonsArcsec": 195.45179233869592,
+    "packEclipticFromHorizonsArcsec": 195.49142832963267,
+    "packLonDifferenceArcsec": -5.616656072743353,
+    "astronomyEngineFromHorizonsArcsec": 9.048419895321398,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.194120367,
+    "sunObserverTargetDeg": 0.0097,
+    "packFromHorizonsArcsec": 45.06427375795674,
+    "packEclipticFromHorizonsArcsec": 45.07344758717666,
+    "packLonDifferenceArcsec": -43.84788466923055,
+    "astronomyEngineFromHorizonsArcsec": 9.048451810575251,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.204537034,
+    "sunObserverTargetDeg": 0.0189,
+    "packFromHorizonsArcsec": 23.053336247580738,
+    "packEclipticFromHorizonsArcsec": 23.05804142154134,
+    "packLonDifferenceArcsec": -22.892442685406422,
+    "astronomyEngineFromHorizonsArcsec": 9.04848318507506,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.2149537,
+    "sunObserverTargetDeg": 0.0282,
+    "packFromHorizonsArcsec": 15.432535876446362,
+    "packEclipticFromHorizonsArcsec": 15.435714017820109,
+    "packLonDifferenceArcsec": -15.384700187723865,
+    "astronomyEngineFromHorizonsArcsec": 9.04851462117927,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.225370367,
+    "sunObserverTargetDeg": 0.0376,
+    "packFromHorizonsArcsec": 11.58646255557304,
+    "packEclipticFromHorizonsArcsec": 11.58890763241838,
+    "packLonDifferenceArcsec": -11.566495521083198,
+    "astronomyEngineFromHorizonsArcsec": 9.048545508272092,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.235787034,
+    "sunObserverTargetDeg": 0.0469,
+    "packFromHorizonsArcsec": 9.269873125351433,
+    "packEclipticFromHorizonsArcsec": 9.271870714032962,
+    "packLonDifferenceArcsec": -9.259860118208962,
+    "astronomyEngineFromHorizonsArcsec": 9.048575859905725,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.2462037,
+    "sunObserverTargetDeg": 0.0563,
+    "packFromHorizonsArcsec": 7.722343581841713,
+    "packEclipticFromHorizonsArcsec": 7.7240641112998105,
+    "packLonDifferenceArcsec": -7.716726452099465,
+    "astronomyEngineFromHorizonsArcsec": 9.04860982152277,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.256620367,
+    "sunObserverTargetDeg": 0.0656,
+    "packFromHorizonsArcsec": 6.615614887424183,
+    "packEclipticFromHorizonsArcsec": 6.617130884808234,
+    "packLonDifferenceArcsec": -6.612229212805687,
+    "astronomyEngineFromHorizonsArcsec": 9.048643239639269,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.267037034,
+    "sunObserverTargetDeg": 0.075,
+    "packFromHorizonsArcsec": 5.78490228823708,
+    "packEclipticFromHorizonsArcsec": 5.786269939905446,
+    "packLonDifferenceArcsec": -5.782766235142844,
+    "astronomyEngineFromHorizonsArcsec": 9.04867258478152,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.2774537,
+    "sunObserverTargetDeg": 0.0843,
+    "packFromHorizonsArcsec": 5.138428810182364,
+    "packEclipticFromHorizonsArcsec": 5.139697675714939,
+    "packLonDifferenceArcsec": -5.137046825757352,
+    "astronomyEngineFromHorizonsArcsec": 9.04870849976391,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.287870367,
+    "sunObserverTargetDeg": 0.0937,
+    "packFromHorizonsArcsec": 4.621036357162076,
+    "packEclipticFromHorizonsArcsec": 4.62221969489704,
+    "packLonDifferenceArcsec": -4.620135860295704,
+    "astronomyEngineFromHorizonsArcsec": 9.048740333939097,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.298287034,
+    "sunObserverTargetDeg": 0.103,
+    "packFromHorizonsArcsec": 4.197585119787781,
+    "packEclipticFromHorizonsArcsec": 4.1987085875538,
+    "packLonDifferenceArcsec": -4.197003496256002,
+    "astronomyEngineFromHorizonsArcsec": 9.048772232755283,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.3087037,
+    "sunObserverTargetDeg": 0.1124,
+    "packFromHorizonsArcsec": 3.8446220396620205,
+    "packEclipticFromHorizonsArcsec": 3.8453292290302734,
+    "packLonDifferenceArcsec": -3.8439014670530014,
+    "astronomyEngineFromHorizonsArcsec": 9.048807164368993,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.319120367,
+    "sunObserverTargetDeg": 0.1218,
+    "packFromHorizonsArcsec": 3.5459018803065874,
+    "packEclipticFromHorizonsArcsec": 3.546562773922877,
+    "packLonDifferenceArcsec": -3.5453388324185653,
+    "astronomyEngineFromHorizonsArcsec": 9.048838021186612,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.329537034,
+    "sunObserverTargetDeg": 0.1311,
+    "packFromHorizonsArcsec": 3.289813963723047,
+    "packEclipticFromHorizonsArcsec": 3.290446148221797,
+    "packLonDifferenceArcsec": -3.2893666405470867,
+    "astronomyEngineFromHorizonsArcsec": 9.048871903048306,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.3399537,
+    "sunObserverTargetDeg": 0.1405,
+    "packFromHorizonsArcsec": 3.067844326112374,
+    "packEclipticFromHorizonsArcsec": 3.068441298295067,
+    "packLonDifferenceArcsec": -3.0674803710098786,
+    "astronomyEngineFromHorizonsArcsec": 9.04890586941798,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.350370367,
+    "sunObserverTargetDeg": 0.1498,
+    "packFromHorizonsArcsec": 2.87359525221379,
+    "packEclipticFromHorizonsArcsec": 2.874174098865733,
+    "packLonDifferenceArcsec": -2.8732973825754016,
+    "astronomyEngineFromHorizonsArcsec": 9.04893872150572,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.360787034,
+    "sunObserverTargetDeg": 0.1592,
+    "packFromHorizonsArcsec": 2.7021851456708657,
+    "packEclipticFromHorizonsArcsec": 2.702737433611979,
+    "packLonDifferenceArcsec": -2.7019350832233613,
+    "astronomyEngineFromHorizonsArcsec": 9.048971650710484,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.3712037,
+    "sunObserverTargetDeg": 0.1685,
+    "packFromHorizonsArcsec": 2.549807455683691,
+    "packEclipticFromHorizonsArcsec": 2.5503366547490223,
+    "packLonDifferenceArcsec": -2.5495944416434213,
+    "astronomyEngineFromHorizonsArcsec": 9.049007625297113,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.381620367,
+    "sunObserverTargetDeg": 0.1779,
+    "packFromHorizonsArcsec": 2.413459469565182,
+    "packEclipticFromHorizonsArcsec": 2.4139762815775665,
+    "packLonDifferenceArcsec": -2.4132746362283797,
+    "astronomyEngineFromHorizonsArcsec": 9.049039537684234,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.392037034,
+    "sunObserverTargetDeg": 0.1873,
+    "packFromHorizonsArcsec": 2.2907377319610696,
+    "packEclipticFromHorizonsArcsec": 2.291235778464088,
+    "packLonDifferenceArcsec": -2.2905748791345104,
+    "astronomyEngineFromHorizonsArcsec": 9.049074488176633,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.4024537,
+    "sunObserverTargetDeg": 0.1966,
+    "packFromHorizonsArcsec": 2.179700636791221,
+    "packEclipticFromHorizonsArcsec": 2.180186794143478,
+    "packLonDifferenceArcsec": -2.1795512347125623,
+    "astronomyEngineFromHorizonsArcsec": 9.049109536143222,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.412870367,
+    "sunObserverTargetDeg": 0.206,
+    "packFromHorizonsArcsec": 2.0787491600496635,
+    "packEclipticFromHorizonsArcsec": 2.0792192482460603,
+    "packLonDifferenceArcsec": -2.0786122897789028,
+    "astronomyEngineFromHorizonsArcsec": 9.049143483417929,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.423287034,
+    "sunObserverTargetDeg": 0.2153,
+    "packFromHorizonsArcsec": 1.9865744269039025,
+    "packEclipticFromHorizonsArcsec": 1.9870264436696357,
+    "packLonDifferenceArcsec": -1.9864437042087957,
+    "astronomyEngineFromHorizonsArcsec": 9.049181064190552,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.4337037,
+    "sunObserverTargetDeg": 0.2247,
+    "packFromHorizonsArcsec": 1.9020779480772947,
+    "packEclipticFromHorizonsArcsec": 1.9025209358811859,
+    "packLonDifferenceArcsec": -1.9019500500235154,
+    "astronomyEngineFromHorizonsArcsec": 9.049214617767634,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.444120367,
+    "sunObserverTargetDeg": 0.2341,
+    "packFromHorizonsArcsec": 1.8243376149651502,
+    "packEclipticFromHorizonsArcsec": 1.8247636975941768,
+    "packLonDifferenceArcsec": -1.824210452787156,
+    "astronomyEngineFromHorizonsArcsec": 9.049251209179229,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.454537034,
+    "sunObserverTargetDeg": 0.2434,
+    "packFromHorizonsArcsec": 1.7525751675100731,
+    "packEclipticFromHorizonsArcsec": 1.752993189184175,
+    "packLonDifferenceArcsec": -1.7524461657558277,
+    "astronomyEngineFromHorizonsArcsec": 9.049283766411982,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.4649537,
+    "sunObserverTargetDeg": 0.2528,
+    "packFromHorizonsArcsec": 1.686126110787772,
+    "packEclipticFromHorizonsArcsec": 1.6865277381033161,
+    "packLonDifferenceArcsec": -1.685993765386229,
+    "astronomyEngineFromHorizonsArcsec": 9.04931938993204,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.475370367,
+    "sunObserverTargetDeg": 0.2621,
+    "packFromHorizonsArcsec": 1.6244213661682712,
+    "packEclipticFromHorizonsArcsec": 1.6248158005661832,
+    "packLonDifferenceArcsec": -1.6242839645201457,
+    "astronomyEngineFromHorizonsArcsec": 9.049354515635525,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.485787034,
+    "sunObserverTargetDeg": 0.2719,
+    "packFromHorizonsArcsec": 0.044088725402169134,
+    "packEclipticFromHorizonsArcsec": 0.04981807017758958,
+    "packLonDifferenceArcsec": 0.042013489928649506,
+    "astronomyEngineFromHorizonsArcsec": 9.080012836510157,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.4962037,
+    "sunObserverTargetDeg": 0.2813,
+    "packFromHorizonsArcsec": 0.04409033665460377,
+    "packEclipticFromHorizonsArcsec": 0.050144237436792014,
+    "packLonDifferenceArcsec": 0.04236349373059056,
+    "astronomyEngineFromHorizonsArcsec": 9.074855737457684,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.506620367,
+    "sunObserverTargetDeg": 0.2906,
+    "packFromHorizonsArcsec": 0.04409006951558976,
+    "packEclipticFromHorizonsArcsec": 0.05002830691751249,
+    "packLonDifferenceArcsec": 0.042136722322538844,
+    "astronomyEngineFromHorizonsArcsec": 9.070291874443077,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.517037034,
+    "sunObserverTargetDeg": 0.3,
+    "packFromHorizonsArcsec": 0.04409100223421015,
+    "packEclipticFromHorizonsArcsec": 0.049848311879580595,
+    "packLonDifferenceArcsec": 0.04201698184260749,
+    "astronomyEngineFromHorizonsArcsec": 9.066244907484787,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.5274537,
+    "sunObserverTargetDeg": 0.3093,
+    "packFromHorizonsArcsec": 0.04409157293479603,
+    "packEclipticFromHorizonsArcsec": 0.050226691498448196,
+    "packLonDifferenceArcsec": 0.04228882030474779,
+    "astronomyEngineFromHorizonsArcsec": 9.062644082115908,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.537870367,
+    "sunObserverTargetDeg": 0.3187,
+    "packFromHorizonsArcsec": 0.04409311678208461,
+    "packEclipticFromHorizonsArcsec": 0.05007380741208143,
+    "packLonDifferenceArcsec": 0.04212390431348467,
+    "astronomyEngineFromHorizonsArcsec": 9.059433239362447,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.548287034,
+    "sunObserverTargetDeg": 0.328,
+    "packFromHorizonsArcsec": 0.04409416267730969,
+    "packEclipticFromHorizonsArcsec": 0.050070653183775335,
+    "packLonDifferenceArcsec": 0.042104589510927326,
+    "astronomyEngineFromHorizonsArcsec": 9.056565795907337,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.5587037,
+    "sunObserverTargetDeg": 0.3374,
+    "packFromHorizonsArcsec": 0.044094876901822774,
+    "packEclipticFromHorizonsArcsec": 0.04988332473477085,
+    "packLonDifferenceArcsec": 0.04206850926493644,
+    "astronomyEngineFromHorizonsArcsec": 9.054003609390927,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.569120367,
+    "sunObserverTargetDeg": 0.3467,
+    "packFromHorizonsArcsec": 0.044092967728005444,
+    "packEclipticFromHorizonsArcsec": 0.05004647565204025,
+    "packLonDifferenceArcsec": 0.04219251968606841,
+    "astronomyEngineFromHorizonsArcsec": 9.051705566768478,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.579537034,
+    "sunObserverTargetDeg": 0.3561,
+    "packFromHorizonsArcsec": 0.04409516266740232,
+    "packEclipticFromHorizonsArcsec": 0.05019336824889712,
+    "packLonDifferenceArcsec": 0.04227430340506544,
+    "astronomyEngineFromHorizonsArcsec": 9.049644171804598,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.5899537,
+    "sunObserverTargetDeg": 0.3654,
+    "packFromHorizonsArcsec": 0.044096453770221165,
+    "packEclipticFromHorizonsArcsec": 0.04994403576751709,
+    "packLonDifferenceArcsec": 0.04209535386507923,
+    "astronomyEngineFromHorizonsArcsec": 9.047791533364268,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.600370367,
+    "sunObserverTargetDeg": 0.3748,
+    "packFromHorizonsArcsec": 0.044094448649443535,
+    "packEclipticFromHorizonsArcsec": 0.05009579419000089,
+    "packLonDifferenceArcsec": 0.04214359851175686,
+    "astronomyEngineFromHorizonsArcsec": 9.046125611906085,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.610787034,
+    "sunObserverTargetDeg": 0.3841,
+    "packFromHorizonsArcsec": 0.04409707745373804,
+    "packEclipticFromHorizonsArcsec": 0.05005239441611258,
+    "packLonDifferenceArcsec": 0.04217392479404225,
+    "astronomyEngineFromHorizonsArcsec": 9.044625669928198,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.6212037,
+    "sunObserverTargetDeg": 0.3935,
+    "packFromHorizonsArcsec": 0.04409841071560932,
+    "packEclipticFromHorizonsArcsec": 0.05009462794441514,
+    "packLonDifferenceArcsec": 0.042290258079447085,
+    "astronomyEngineFromHorizonsArcsec": 9.043273222814678,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.631620367,
+    "sunObserverTargetDeg": 0.4028,
+    "packFromHorizonsArcsec": 0.044098836671749714,
+    "packEclipticFromHorizonsArcsec": 0.049997411335867076,
+    "packLonDifferenceArcsec": 0.04222744128128397,
+    "astronomyEngineFromHorizonsArcsec": 9.042057995941763,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.642037034,
+    "sunObserverTargetDeg": 0.4122,
+    "packFromHorizonsArcsec": 0.044098336370117015,
+    "packEclipticFromHorizonsArcsec": 0.05002560707705408,
+    "packLonDifferenceArcsec": 0.042071129428222775,
+    "astronomyEngineFromHorizonsArcsec": 9.040960096322097,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.6524537,
+    "sunObserverTargetDeg": 0.4215,
+    "packFromHorizonsArcsec": 0.044098071457802236,
+    "packEclipticFromHorizonsArcsec": 0.05015975611134081,
+    "packLonDifferenceArcsec": 0.04225934735586634,
+    "astronomyEngineFromHorizonsArcsec": 9.039967608567302,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.662870367,
+    "sunObserverTargetDeg": 0.4309,
+    "packFromHorizonsArcsec": 0.04409848715189615,
+    "packEclipticFromHorizonsArcsec": 0.05004708693935491,
+    "packLonDifferenceArcsec": 0.04214391528876149,
+    "astronomyEngineFromHorizonsArcsec": 9.039076608313923,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.673287034,
+    "sunObserverTargetDeg": 0.4402,
+    "packFromHorizonsArcsec": 0.04409940962182383,
+    "packEclipticFromHorizonsArcsec": 0.05004480414220437,
+    "packLonDifferenceArcsec": 0.04214997661620146,
+    "astronomyEngineFromHorizonsArcsec": 9.038269597816848,
+    "quoted": 0.0038,
+    "label": "measured"
+   },
+   {
+    "jdTt": 2462292.6837037,
+    "sunObserverTargetDeg": 0.4496,
+    "packFromHorizonsArcsec": 0.044099412499549136,
+    "packEclipticFromHorizonsArcsec": 0.05020262017105719,
+    "packLonDifferenceArcsec": 0.04233722825119912,
+    "astronomyEngineFromHorizonsArcsec": 9.037543935134687,
+    "quoted": 0.0038,
+    "label": "measured"
+   }
+  ]
+ }
+}

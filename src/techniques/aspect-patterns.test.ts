@@ -138,7 +138,8 @@ describe("chartAspectPatterns", () => {
       chart.bodies.map((row) => ({ body: row.body, lon: row.lon })),
       chart.aspects.map((row) => ({ a: row.a, b: row.b, type: row.type, orb: row.orb }))
     );
-    expect(chartAspectPatterns(chart)).toEqual(direct);
+    // The patterns are aspectPatterns' on the chart's rows; from 1.1.0-rc.11 the result also carries the chart's label.
+    expect(chartAspectPatterns(chart)).toEqual({ ...direct, ephemeris: chart.ephemeris, flags: [] });
     expect(direct.points.map((p) => p.body)).toEqual(["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]);
   });
 });

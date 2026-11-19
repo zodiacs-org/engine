@@ -8,121 +8,24 @@ import { describe, expect, it } from "vitest";
 
 import { chartDeclinations, natalChart } from "./api.js";
 import { DELTA_T_TABLE, deltaT } from "./deltat.js";
-import { UT1_DATA } from "./time-scale.js";
-import { bodyLongitude, gastHours, onChartClock } from "./ephemeris.js";
+import { UT1_DATA, timeBasis } from "./time-scale.js";
+import { bodyLongitude, gastHours, onChartClock, setDefaultEphemeris } from "./ephemeris.js";
 import { houseOf } from "./houses.js";
 import { findLongitudeCrossings } from "./returns.js";
 import { signForLongitude } from "./signs.js";
 import type { HouseSystem } from "./types.js";
 import { MAX_WINDOW_MS, WINDOW_RATE_BOUNDS, WINDOW_VERIFICATION, WindowBudgetError, birthWindow } from "./window.js";
-import type { BirthWindow, BirthWindowCell } from "./window.js";
+import type { BirthWindow } from "./window.js";
+import { chartFeatures, cellAt, cellFeatures, disagreementsEverySecond, expectExact, partition, unconfirmedSwitches } from "./window.testkit.js";
+import type { Place } from "./window.testkit.js";
+
+// This file partitions windows while it is collected, before the suite's setup hook, and its node-jitter cases are
+// astronomy-engine's; src/window-de440.test.ts holds a window to natalChart on the package's default source.
+setDefaultEphemeris("astronomy-engine");
 
 const DAY = 86_400_000;
 const DEG = Math.PI / 180;
 const RAD = 180 / Math.PI;
-const PHYSICAL = ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"];
-
-interface Place {
-  latitude: number;
-  longitude: number;
-  houseSystem: HouseSystem;
-}
-
-type Features = Record<string, string | number | null>;
-
-/** natalChart's features at an instant. */
-function chartFeatures(time: number, place: Place): Features {
-  const chart = natalChart({ utc: new Date(time), ...place });
-  const features: Features = {};
-  for (const body of chart.bodies) {
-    features[`sign:${body.body}`] = body.sign;
-    features[`house:${body.body}`] = houseOf(body.lon, chart.houses!.cusps);
-  }
-  features.ascendant = signForLongitude(chart.angles!.asc).slug;
-  features.midheaven = signForLongitude(chart.angles!.mc).slug;
-  const aspects = new Map(chart.aspects.map((aspect) => [`${aspect.a}|${aspect.b}`, aspect.type]));
-  for (let i = 0; i < PHYSICAL.length; i += 1) {
-    for (let j = i + 1; j < PHYSICAL.length; j += 1) {
-      features[`aspect:${PHYSICAL[i]}|${PHYSICAL[j]}`] = aspects.get(`${PHYSICAL[i]}|${PHYSICAL[j]}`) ?? null;
-    }
-  }
-  features["house-system"] = chart.houses!.system;
-  return features;
-}
-
-function cellFeatures(cell: BirthWindowCell): Features {
-  const features: Features = {};
-  for (const [body, sign] of Object.entries(cell.features.signs)) features[`sign:${body}`] = sign;
-  for (const [body, house] of Object.entries(cell.features.houses)) features[`house:${body}`] = house;
-  features.ascendant = cell.features.ascendant;
-  features.midheaven = cell.features.midheaven;
-  const aspects = new Map(cell.features.aspects.map((aspect) => [`${aspect.a}|${aspect.b}`, aspect.type]));
-  for (let i = 0; i < PHYSICAL.length; i += 1) {
-    for (let j = i + 1; j < PHYSICAL.length; j += 1) {
-      features[`aspect:${PHYSICAL[i]}|${PHYSICAL[j]}`] = aspects.get(`${PHYSICAL[i]}|${PHYSICAL[j]}`) ?? null;
-    }
-  }
-  features["house-system"] = cell.features.houseSystem;
-  return features;
-}
-
-function componentOf(change: BirthWindow["switches"][number]["changes"][number]): string {
-  if (change.feature === "sign" || change.feature === "house") return `${change.feature}:${change.body}`;
-  if (change.feature === "aspect") return `aspect:${change.a}|${change.b}`;
-  return change.feature;
-}
-
-function cellAt(window: BirthWindow, time: number): BirthWindowCell {
-  const cell = window.cells.find((candidate) => candidate.start.getTime() <= time && time < candidate.end.getTime());
-  if (!cell) throw new Error(`no cell holds ${new Date(time).toISOString()}`);
-  return cell;
-}
-
-/** Disagreements between the partition and natalChart at every whole second from the start, and at end − 1 ms. */
-function disagreementsEverySecond(window: BirthWindow, place: Place, step = 1000): string[] {
-  const start = window.start.getTime();
-  const end = window.end.getTime();
-  const times: number[] = [];
-  for (let time = start; time < end; time += step) times.push(time);
-  if (times.at(-1) !== end - 1) times.push(end - 1);
-  const found: string[] = [];
-  for (const time of times) {
-    const expected = chartFeatures(time, place);
-    const actual = cellFeatures(cellAt(window, time));
-    for (const key of Object.keys(expected)) {
-      if (expected[key] !== actual[key]) found.push(`${new Date(time).toISOString()} ${key}: ${String(expected[key])} ≠ ${String(actual[key])}`);
-    }
-  }
-  return found;
-}
-
-/** Switches whose millisecond natalChart does not confirm: exactly the listed changes, from and to. */
-function unconfirmedSwitches(window: BirthWindow, place: Place): string[] {
-  const found: string[] = [];
-  for (const entry of window.switches) {
-    const at = entry.at.getTime();
-    const before = chartFeatures(at - 1, place);
-    const after = chartFeatures(at, place);
-    const listed = new Map(entry.changes.map((change) => [componentOf(change), change]));
-    for (const key of Object.keys(before)) {
-      const change = listed.get(key);
-      const ok = change ? before[key] === change.from && after[key] === change.to : before[key] === after[key];
-      if (!ok) found.push(`${entry.at.toISOString()} ${key}: ${String(before[key])} → ${String(after[key])}`);
-    }
-  }
-  return found;
-}
-
-function partition(start: number, milliseconds: number, place: Place): BirthWindow {
-  return birthWindow({ start: new Date(start), end: new Date(start + milliseconds), ...place });
-}
-
-function expectExact(window: BirthWindow, place: Place, step = 1000): void {
-  expect(window.flags).not.toContain("bound-exceeded");
-  expect(disagreementsEverySecond(window, place, step)).toEqual([]);
-  expect(unconfirmedSwitches(window, place)).toEqual([]);
-}
-
 describe("birthWindow against natalChart", () => {
   const cases: [string, number, number, Place][] = [
     ["mid-latitude Placidus", Date.UTC(1990, 5, 15, 12, 20, 0, 250), 600_000, { latitude: 51.5, longitude: -0.12, houseSystem: "placidus" }],
@@ -440,9 +343,13 @@ describe("the steps of the time basis", () => {
   ];
   it.each(steps)("reports a switch at %s, where the angles step, and agrees with natalChart around it", (_, at) => {
     const { longitude, jump } = straddling(at);
-    // The step is many times the ascendant's motion in one millisecond.
+    // The step is the ascendant's motion over the UT1 that passes in that millisecond, not 1 ms of it: a second
+    // more at the leap second, 44 ms back in 1972, and at the end of the table, where UT1 − UTC goes from the
+    // table's last value to the ΔT model's under the continuous-UTC rule, 3 ms.
     const motion = ((ascendant(at - 1, longitude) - ascendant(at - 2, longitude) + 540) % 360) - 180;
-    expect(Math.abs(jump)).toBeGreaterThan(10 * Math.abs(motion));
+    const ut1Elapsed = (timeBasis(at, "utc").ut1Days - timeBasis(at - 1, "utc").ut1Days) * DAY;
+    expect(Math.abs(ut1Elapsed - 1)).toBeGreaterThan(1.5);
+    expect(Math.abs(jump / motion / ut1Elapsed - 1)).toBeLessThan(0.05);
     const place: Place = { latitude, longitude, houseSystem: "equal" };
     const window = partition(at - 1_000, 2_000, place);
     expect(window.flags).toEqual([]);

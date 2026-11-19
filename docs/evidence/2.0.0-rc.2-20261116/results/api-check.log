@@ -1,0 +1,7 @@
+$ npm run api:check
+
+> @zodiacs/engine@2.0.0-rc.2 api:check
+> node scripts/api-report.mjs --check
+
+api-report: 17 entry points match api/
+exit 0

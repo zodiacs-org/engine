@@ -1,0 +1,26 @@
+## America/Yellowknife, held at tzdata 2025c by the owner's decision (ZOD-282, 2026-11-17).
+##
+## tzdata 2026f's backzone comments this zone out ("Commented out as too wrong
+## to be useful.", lines 930 to 933), so the name would follow backward's link
+## to America/Edmonton and move before 1970: 1947-04-27T09:00Z to
+## 1947-09-28T08:00Z from -7:00 to -6:00, and the zone's source, data form,
+## local mean time era and transitions before 1935. No tzdb NEWS entry, and no
+## other official announcement, explains that change, so the owner held it
+## back: scripts/build-tz-shards.mjs compiles the lines below, unchanged, into
+## the pinned build beside tzdata 2026f, and America/Yellowknife answers as it
+## did on tzdata 2025c. Every other name takes 2026f.
+##
+## The lines after this header are tzdata 2025c's backzone lines 929 to 932,
+## byte for byte, from
+##   https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz
+##   sha256 4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957
+##   retrieved 2026-11-17T14:46:55Z (fetched/MANIFEST.tsv, row 5, on branch
+##   fetched/engine-sources-1-44102962737-1).
+## Lines starting with "##" are this header; zic reads them as comments.
+## The generator pins this file's SHA-256 and stops if the tzdata release it
+## builds defines America/Yellowknife as a zone of its own, so the hold is
+## looked at again whenever tzdb changes the name.
+# Yellowknife, Northwest Territories
+Zone America/Yellowknife 0	-	-00	1935 # Yellowknife founded?
+			-7:00	NT_YK	M%sT	1980
+			-7:00	Canada	M%sT

@@ -2,7 +2,7 @@ import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import { natalChart } from "../api.js";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from "../receipt.js";
-import { SHARD_LOADERS, TZDB } from "../tzdb/tzdb-2025c.js";
+import { SHARD_LOADERS, TZDB } from "../tzdb/tzdb-2026f.js";
 import type { ZoneShard } from "./zone-history.js";
 import { offsetAt, prepareLocalTime, resolveLocalBirth, resolveLocalToUtc } from "./timezone.js";
 
@@ -265,7 +265,7 @@ describe("the local mean time eras shipped", () => {
   });
 
   it("records its tzdb release and source digest", () => {
-    expect(TZDB.version).toBe("2025c");
+    expect(TZDB.version).toBe("2026f");
     expect(TZDB.sha256).toMatch(/^[0-9a-f]{64}$/);
     expect(TZDB.form).toBe("main+backzone");
     expect(zones.length).toBe(597);
@@ -273,6 +273,8 @@ describe("the local mean time eras shipped", () => {
 
   it("holds whole seconds, every era ending before 1953", () => {
     const eras = zones.filter((zone) => zone.e);
+    // 518, as on tzdata 2025c: America/Yellowknife, held at 2025c by the owner's decision (scripts/tzdb-held/),
+    // begins at "-00" and has no local mean time era.
     expect(eras.length).toBe(518);
     for (const zone of eras) {
       for (const [until, offset] of zone.e!) {

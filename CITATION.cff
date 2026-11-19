@@ -1,7 +1,10 @@
-# version, date-released and doi are left out on purpose. No DOI has been
-# minted, and a version here would go stale with every release candidate;
-# cite the version or commit you used, as the message says. Add them when a
-# release is archived with a DOI.
+# version, date-released and doi are left out on purpose: a version here would
+# go stale with every release candidate, so cite the version or commit you
+# used, as the message says. One DOI exists, for the tagged source of the
+# candidate 0.1.1-rc.15, minted by Zenodo on 2026-10-01:
+# 10.5281/zenodo.23080134 (concept DOI 10.5281/zenodo.23080133). No stable
+# release has a DOI. Add the three fields when a stable release is archived
+# with one. (Corrected 2026-11-13: this comment said no DOI had been minted.)
 #
 # license lists the two licences of the package as distributed, matching
 # package.json's SPDX expression "MIT AND CC-BY-4.0": the code is MIT, and

@@ -19,12 +19,20 @@ and documentation CC BY 4.0, tools and schema MIT). Read `README.md`,
   entry), `src/equator.ts` (shared by calc and sky),
   `src/first-millisecond.ts` (the sky entry's), `src/time.ts` and
   `src/time-bands.ts` (the time entry's), `src/lite.ts` and
-  `src/sect.ts` (the lite entry's), and `src/de440.ts` with `src/de440/`
-  (the DE440 entry's); `OPT_IN_SOURCE` in
-  `scripts/root-isolation.mjs` names them all. The lite entry is built
+  `src/sect.ts` (the lite entry's); `OPT_IN_SOURCE` in
+  `scripts/root-isolation.mjs` names them all. `src/de440.ts` with
+  `src/de440/` (the DE440 entry's) and `src/de440-pack.ts` (the entry that
+  gives out the shipped pack) are also the root's from 1.1.0-rc.9, which
+  computes on that pack by default (`docs/de440.md`); `src/test-setup.ts`
+  runs the suite on astronomy-engine, the fallback, and says why. The lite entry is built
   apart: `npm run build` runs `scripts/build-lite.mjs` after tsup, which
   bundles each of its four parts into a file of its own that imports
-  nothing. Their guides are `docs/time.md`, `docs/timing-hellenistic.md`,
+  nothing. The core entry (`src/core.ts`, with `src/core/`) is built apart
+  too: `scripts/build-core.mjs` (with `scripts/core-entry.mjs`) bundles the
+  root's graph into `dist/core.js` on its own, with
+  `src/core/ephemeris-shipped.ts` in place of `src/ephemeris-shipped.ts`, so
+  that it computes on astronomy-engine and holds no DE440 pack; its guide is
+  the README's *Bundle size in a web page*. Their guides are `docs/time.md`, `docs/timing-hellenistic.md`,
   `docs/vedic.md`, `docs/techniques.md`, `docs/calc.md`, `docs/houses.md`,
   `docs/sky.md`, `docs/lite.md` and `docs/de440.md`, and the README's
   *Birth-time windows* for the window entry.
@@ -32,7 +40,9 @@ and documentation CC BY 4.0, tools and schema MIT). Read `README.md`,
   contents and size budgets, packed consumer, archive binding, release
   archive check, compatibility checks), and the generators of the time data:
   `scripts/build-tz-shards.mjs` writes `src/tzdb/` and
-  `scripts/build-time-scales.mjs` writes `src/time-scale-data.ts`. Regenerate
+  `scripts/build-time-scales.mjs` writes `src/time-scale-data.ts`; and the
+  writer of the shipped DE440 pack, `scripts/build-de440-pack.mjs`, which
+  writes `src/de440/pack-data.ts` from the sealed pack. Regenerate
   those files; never edit them by hand.
 - Release candidates: `artifacts/` (packed archives, SHA-256 receipts,
   `archives.json`), `CHANGELOG.md`, and each candidate's evidence in
@@ -73,7 +83,7 @@ node scripts/verify-packed-consumer.mjs DIR/zodiacs-engine-<version>.tgz
 
 # conformance.yml (Node 22.22.2, after the build)
 node --test conformance/harness/selftest.mjs
-node conformance/harness/validate.mjs --expect-total 500
+node conformance/harness/validate.mjs --expect-total 640
 node conformance/harness/run.mjs --adapter "node conformance/adapters/zodiacs-engine.mjs" \
   --check conformance/results/zodiacs-engine.json
 node conformance/harness/report.mjs --check
@@ -105,8 +115,9 @@ below no `package.json` or `node_modules`. The package supports Node
 - Pull requests are merged with a merge commit, never squashed or rebased:
   `archives.json` records source commits, which a squash or rebase would
   rewrite.
-- Do not run the release workflow or publish to npm unless asked. It
-  publishes only a carried archive, from `main`.
+- Do not run the release workflow or publish to any registry unless the
+  owner asks. The release workflow publishes only a carried archive, from
+  `main`.
 - Numbers in documentation need committed evidence. Every tolerance,
   agreement figure, count or size you write in `README.md`, `CHANGELOG.md`
   or `docs/` must be backed by a test that enforces it or by a committed
@@ -150,8 +161,23 @@ below no `package.json` or `node_modules`. The package supports Node
   effects, and keep `@zodiacs/engine/crossings`, `@zodiacs/engine/deltat`,
   `@zodiacs/engine/time` and `@zodiacs/engine/lite` free of the ephemeris.
   The root must not import `@zodiacs/engine/timing`, `/vedic`, `/geo`,
-  `/calc`, `/window`, `/techniques`, `/houses`, `/sky`, `/time`, `/lite` or
-  `/de440`, which are opt-in; `npm run exports:smoke` checks it.
+  `/calc`, `/window`, `/techniques`, `/houses`, `/sky`, `/time` or `/lite`,
+  which are opt-in; `npm run exports:smoke` checks it. From 1.1.0-rc.9 the
+  root computes on the shipped DE440 pack by default, so it imports the
+  DE440 files and the pack. The pack is held once, in one shared chunk, and
+  only the graphs `npm run package:contents` names may load it; that check
+  also holds the pack's digest.
+- Never a silent fallback. From 1.1.0-rc.10 the calc and window entries
+  follow the default source too, and a result that astronomy-engine computed
+  where the pack was the default says so itself: it names astronomy-engine
+  and carries `"de440-unavailable"` or `"outside-de440-span"`
+  (`EphemerisFallback`; `docs/de440.md`, *The default source*). A new
+  function that reads positions must do the same, and one that returns a
+  bare value (a `Date`, a number, a list) needs a labelled form beside it,
+  as the techniques entry's `…Detailed` functions are (from 1.1.0-rc.11);
+  `src/ephemeris-fallback.test.ts`, `src/ephemeris-fallback-techniques.test.ts`,
+  `src/ephemeris-fallback-root.test.ts` (from 1.1.0-rc.12) and the
+  packed-consumer check hold it.
 - Every entry point in `package.json` `exports` has a budget for its import
   graph in `scripts/verify-package-contents.mjs`, the zone histories have
   their own (200,000 bytes, 16 files) and the package a total cap. Add a
@@ -169,10 +195,27 @@ rules live here once.
 
 - Commit as `admin@zodiacs.org` (name "Zodiacs Admin"). Never put a model
   name or a personal email address in a commit, a pull request, or a file.
-- Open draft pull requests only. Never merge (the merge-commit rule above is
-  for the owner, who decides every merge), never mark a pull request ready
-  for review, and never push to `main`. Never force-push or rewrite history
-  that is already pushed.
+- Open pull requests as drafts. The owner has delegated merging: an agent
+  may mark a pull request ready for review and merge it (with a merge
+  commit, as above) only when every check on its latest commit passes and a
+  separate reviewer session, not the one that wrote the change, has
+  reviewed that commit and signed off with no blockers. Record the sign-off
+  on the pull request before merging. A check that fails "as expected" is
+  still failing: such a pull request waits.
+- Never merge with a failing test or check. A check that passes but says it
+  skipped its work counts as failing, including the archive-binding check
+  when it skips the rebuild of HEAD. A candidate merges only when its latest
+  commit has its archive in its tree and that check rebuilt it. Tests that a
+  job skips by design do not block (the kernel tests outside the tier-B job,
+  which runs them with nothing skipped; tests that need `dist/` before the
+  Build step; the tzdata 2025c test on hosts without it). Any other skipped
+  test blocks, and so does skipping or disabling a test to get green. Never
+  push to `main`. Never force-push or rewrite history that is already
+  pushed.
+- After each merge, report one line saying what went in.
+- Tags, GitHub releases, the release workflow and publishing to any
+  registry (npm, PyPI, JSR) stay with the owner. Merging a candidate does
+  not release it.
 - Post nothing publicly: no npm publish, no release, no comments on other
   projects, no messages to people. Anything public waits for Dias's yes.
 - Never read, print, log or commit credentials, tokens or `.env` values,

@@ -1,12 +1,12 @@
 {
   "suite": "zodiacs-conformance",
-  "suiteVersion": "0.2.0",
+  "suiteVersion": "0.3.0",
   "levels": [
     {
       "level": "L1",
       "title": "Positions",
-      "file": "vectors/0.2.0/L1-positions.json",
-      "sha256": "4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8",
+      "file": "vectors/0.3.0/L1-positions.json",
+      "sha256": "5ead022c18c56b44fb129f423b16ea26525240289156564c40a99ff4a5924e2b",
       "count": 240,
       "kinds": [
         {
@@ -27,8 +27,8 @@
     {
       "level": "L2",
       "title": "Houses and angles",
-      "file": "vectors/0.2.0/L2-houses-angles.json",
-      "sha256": "fc5321b9061b9860bfb9af5254e5813be1c4bc3c858df6f623ea1617b76b88e5",
+      "file": "vectors/0.3.0/L2-houses-angles.json",
+      "sha256": "23f8c47eeff926a64f97ce29bb0d0d73dd364d2f92952b8ed3b2a944a3a683c3",
       "count": 150,
       "kinds": [
         {
@@ -83,8 +83,8 @@
     {
       "level": "L3",
       "title": "Time and calendars",
-      "file": "vectors/0.2.0/L3-time-calendars.json",
-      "sha256": "51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66",
+      "file": "vectors/0.3.0/L3-time-calendars.json",
+      "sha256": "b8b981d8ef15e8d45e356323676863d7a6ee7763e68ac056d3618e44d2a42a11",
       "count": 110,
       "kinds": [
         {
@@ -150,6 +150,38 @@
           "uncertainty": "None: exact integer arithmetic, with independent published algorithms agreeing on every vector and on the dense range."
         }
       ]
+    },
+    {
+      "level": "L4",
+      "title": "Event times",
+      "file": "vectors/0.3.0/L4-events.json",
+      "sha256": "4c153d887f993536549432213e81648e9d0b4fc940eb1f116c4aa732dba6e25f",
+      "count": 140,
+      "kinds": [
+        {
+          "kind": "event.ingress",
+          "count": 70,
+          "tolerance": "tt_s ±2 s to ±5250 s, or utc_s ±2 s to ±24 s"
+        },
+        {
+          "kind": "event.station",
+          "count": 30,
+          "tolerance": "tt_s ±6270 s to ±50406 s; direction exact"
+        },
+        {
+          "kind": "event.lunation",
+          "count": 40,
+          "tolerance": "tt_s ±2 s to ±3 s, or utc_s ±2 s to ±3 s"
+        }
+      ],
+      "arbiters": [
+        {
+          "id": "l4-de440s-events",
+          "name": "NASA JPL DE440s reduced to apparent geocentric longitudes in the IAU 2006/2000A true ecliptic and equinox of date, with event instants solved by bisection",
+          "source": "The NAIF kernel de440s.bsp (https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp, SHA-256 c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2), not committed; ERFA through pyerfa; jplephem. The reduction is that of arbiters/l1/validate.py (light time, deflection by the Sun, annual aberration, pnm06a, true obliquity), with Mars to Pluto as their system barycentres (NAIF 4 to 9). Cross-check (b): the JPL Horizons API (version 1.2, ephemeris DE441, EOP file eop.261116.p270212), observer quantity 31 for the geocentre in TT, retrieved 2026-11-17 as recorded in sources/l4/horizons-provenance.tsv, over all events from 1860 to 2149; the requests are in sources/l4/horizons-requests.txt and the responses in sources/l4/horizons/.",
+          "uncertainty": "Tolerances by kind: event.ingress: 2 s to 5250 s; event.lunation: 2 s to 3 s; event.station: 6270 s to 50406 s. Check (a): every solve repeated with half hour brackets agrees within 0.000 s, at most 0.0000 of its tolerance (limit 0.1). The array reduction agrees with validate.py's apparent() at every solved instant within 0.004172 mas. Property: at t - tolerance and t + tolerance every ingress lies on opposite sides of its target, at most 1.498 arcsec from it (limit 1.5). Vector L4-ING-0061 solves -0.0002 s from the independent de440.bsp reduction in docs/evidence/1.1.0-rc.11-20261115/breaker/results/ingress-ref.json (limit 1 s). Check (b), against the JPL Horizons API (version 1.2, ephemeris DE441, EOP file eop.261116.p270212), observer quantity 31 for the geocentre in TT, retrieved 2026-11-17 as recorded in sources/l4/horizons-provenance.tsv: 140 of 140 events checked, 0 failed and were dropped, 0 pending. For the 110 ingresses and lunations, Horizons' longitude at the solved instant differs from the target by a median of 0.047 arcsec; the worst is L4-ING-0049 (the first ingress of Neptune after 1860-01-01 TT) at -0.359 arcsec (limit 0.45). The difference grows with distance from J2000 (1860 to 1899: -0.359 to +0.011; 1900 to 1959: -0.158 to +0.002; 1960 to 2029: -0.057 to +0.003; 2030 to 2149: -0.012 to +0.343 arcsec), as the IAU 1976/1980 frame Horizons gives for quantity 31 parts from the IAU 2006/2000A frame of the arbiter. For the 30 stations, the station implied by Horizons' longitudes an hour either side of the solved instant lies at most 62 s from it; the largest share of a tolerance is L4-STA-0030 (the first station of Saturn after 2140-07-01 TT), +62 s against 49110 s (0.0013). Every event's own figure is in sources/l4/solutions.json under \"horizons\"."
+        }
+      ]
     }
   ],
   "runs": [
@@ -157,31 +189,320 @@
       "file": "results/zodiacs-engine.json",
       "adapter": {
         "name": "zodiacs-engine",
-        "version": "0.2.0",
+        "version": "0.3.0",
         "engine": "@zodiacs/engine",
-        "engineVersion": "1.1.0-rc.7",
+        "engineVersion": "2.0.0-rc.3",
+        "configuration": {
+          "ephemeris": "the default source: jpl-de440 from the sealed pack the package ships, SHA-256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7, for instants from -76699.5 to 76699.5 days of TT from J2000.0; astronomy-engine 2.1.19 outside them",
+          "deltaTModel": "zodiacs-deltat/1",
+          "timeBasis": "from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise",
+          "timeZones": "before 1970 the shipped tzdb 2026f history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
+          "positions": "a plain natalChart with timeScale \"tt\", outside withEphemeris: the requested instant is read as TT; from the shipped pack, Mars to Pluto are system barycentres, as the vectors are",
+          "angles": "natalChart with timeScale \"ut1\": the requested instant is read as UT1"
+        }
+      },
+      "suiteVersion": "0.3.0",
+      "values": "residuals",
+      "vectors": {
+        "vectors/0.3.0/L1-positions.json": "5ead022c18c56b44fb129f423b16ea26525240289156564c40a99ff4a5924e2b",
+        "vectors/0.3.0/L2-houses-angles.json": "23f8c47eeff926a64f97ce29bb0d0d73dd364d2f92952b8ed3b2a944a3a683c3",
+        "vectors/0.3.0/L3-time-calendars.json": "b8b981d8ef15e8d45e356323676863d7a6ee7763e68ac056d3618e44d2a42a11",
+        "vectors/0.3.0/L4-events.json": "4c153d887f993536549432213e81648e9d0b4fc940eb1f116c4aa732dba6e25f"
+      },
+      "summary": {
+        "total": {
+          "count": 640,
+          "pass": 569,
+          "fail": 0,
+          "unsupported": 71,
+          "error": 0
+        },
+        "byLevel": {
+          "L1": {
+            "count": 240,
+            "pass": 240,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0
+          },
+          "L2": {
+            "count": 150,
+            "pass": 150,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0
+          },
+          "L3": {
+            "count": 110,
+            "pass": 109,
+            "fail": 0,
+            "unsupported": 1,
+            "error": 0
+          },
+          "L4": {
+            "count": 140,
+            "pass": 70,
+            "fail": 0,
+            "unsupported": 70,
+            "error": 0
+          }
+        },
+        "byKind": {
+          "position.apparent.ecliptic-true-of-date": {
+            "count": 240,
+            "pass": 240,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0,
+            "residuals": {
+              "lon": {
+                "unit": "arcsec",
+                "n": 240,
+                "median": 0.00174547803,
+                "p95": 0.00377147396,
+                "max": 0.012647263
+              },
+              "lat": {
+                "unit": "arcsec",
+                "n": 240,
+                "median": 0.0000815158131,
+                "p95": 0.000218228824,
+                "max": 0.00101056084
+              }
+            }
+          },
+          "angles.asc-mc": {
+            "count": 60,
+            "pass": 60,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0,
+            "residuals": {
+              "asc": {
+                "unit": "arcsec",
+                "n": 60,
+                "median": 0.00339286018,
+                "p95": 0.00579574655,
+                "max": 0.0189601719
+              },
+              "mc": {
+                "unit": "arcsec",
+                "n": 60,
+                "median": 0.00438274993,
+                "p95": 0.00643026337,
+                "max": 0.0081454935
+              }
+            }
+          },
+          "angles.vertex-east-point": {
+            "count": 10,
+            "pass": 10,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0,
+            "residuals": {
+              "vertex": {
+                "unit": "arcsec",
+                "n": 10,
+                "median": 0.00289897902,
+                "p95": 0.013370956,
+                "max": 0.013370956
+              },
+              "east_point": {
+                "unit": "arcsec",
+                "n": 10,
+                "median": 0.00346328309,
+                "p95": 0.00679320316,
+                "max": 0.00679320316
+              }
+            }
+          },
+          "houses.cusps": {
+            "count": 80,
+            "pass": 80,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0,
+            "residuals": {
+              "cusps": {
+                "unit": "arcsec",
+                "n": 70,
+                "median": 0.00389697157,
+                "p95": 0.00933804084,
+                "max": 0.0711573788
+              }
+            }
+          },
+          "time.zone-offset": {
+            "count": 45,
+            "pass": 45,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0
+          },
+          "time.local-mean-time": {
+            "count": 5,
+            "pass": 5,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0,
+            "residuals": {
+              "utc_offset_s": {
+                "unit": "s",
+                "n": 5,
+                "median": 0,
+                "p95": 0,
+                "max": 0
+              }
+            }
+          },
+          "time.tt-minus-utc": {
+            "count": 10,
+            "pass": 9,
+            "fail": 0,
+            "unsupported": 1,
+            "error": 0,
+            "residuals": {
+              "tt_minus_utc_s": {
+                "unit": "s",
+                "n": 9,
+                "median": 0,
+                "p95": 2.03450554e-8,
+                "max": 2.03450554e-8
+              }
+            }
+          },
+          "time.delta-t": {
+            "count": 15,
+            "pass": 15,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0,
+            "residuals": {
+              "delta_t_s": {
+                "unit": "s",
+                "n": 15,
+                "median": 0.0001318,
+                "p95": 0.000505451953,
+                "max": 0.000505451953
+              }
+            }
+          },
+          "calendar.to-jdn": {
+            "count": 25,
+            "pass": 25,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0
+          },
+          "calendar.from-jdn": {
+            "count": 10,
+            "pass": 10,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0
+          },
+          "event.ingress": {
+            "count": 70,
+            "pass": 70,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0,
+            "residuals": {
+              "tt_s": {
+                "unit": "s",
+                "n": 60,
+                "median": 0.0304888338,
+                "p95": 0.691758156,
+                "max": 1.53385973
+              },
+              "utc_s": {
+                "unit": "s",
+                "n": 10,
+                "median": 0.0110000372,
+                "p95": 0.0249998569,
+                "max": 0.0249998569
+              }
+            }
+          },
+          "event.station": {
+            "count": 30,
+            "pass": 0,
+            "fail": 0,
+            "unsupported": 30,
+            "error": 0
+          },
+          "event.lunation": {
+            "count": 40,
+            "pass": 0,
+            "fail": 0,
+            "unsupported": 40,
+            "error": 0
+          }
+        },
+        "byTag": {
+          "backzone-history": {
+            "count": 20,
+            "pass": 20,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0
+          },
+          "eclipse": {
+            "count": 6,
+            "pass": 0,
+            "fail": 0,
+            "unsupported": 6,
+            "error": 0
+          },
+          "utc-input": {
+            "count": 20,
+            "pass": 10,
+            "fail": 0,
+            "unsupported": 10,
+            "error": 0
+          },
+          "cross-check": {
+            "count": 1,
+            "pass": 1,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0
+          }
+        }
+      },
+      "notes": "- **Positions (L1).** From 1.1.0-rc.9 a plain call computes on the sealed DE440 pack the package ships (`docs/de440.md`), and this run answers the 240 position requests with a plain `natalChart`, outside `withEphemeris`: nothing is opened by the adapter, nothing is supplied to it and nothing is fetched. All 240 pass. Against DE441 the largest differences are 0.0127″ in longitude and 0.0011″ in latitude, both the Moon's (L1-POS-0002 in 1851 and L1-POS-0222 in 2125); the other nine bodies are within 0.0038″ in longitude and 0.0003″ in latitude. The arbiter's own check against DE440s (`arbiters/l1/README.md`) puts the lunar difference between DE440 and DE441 at up to 12.63 mas in 1851. Mars to Pluto are system barycentres on both sides. Outside the pack's years (1790 to 2210), and after `setDefaultEphemeris(\"astronomy-engine\")`, the engine computes on astronomy-engine: the next section runs it that way, and 48 of the 240 pass.\n- **The pack.** SHA-256 `51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7`, 2,489,664 bytes, refitted from NAIF's `de440.bsp` (SHA-256 `a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5`) for 1790 to 2210. It is in the repository and in the package, so continuous integration reruns this section. The angles, houses and time vectors of this run come from the same plain calls; they do not depend on the ephemeris, and their verdicts are those of the next section.\n- **Time zones (L3).** Before 1970 the engine reads the tzdb 2026f history with `backzone` that it ships (from 2.0.0-rc.3; America/Yellowknife held at tzdata 2025c by the owner's decision), loaded with `prepareLocalTime`, so the 20 vectors tagged `backzone-history` pass; from 1970 it reads the host's `Intl` data. A repeated local time resolves to its earlier instant, and the transition the engine reports gives the offsets of both readings, so the five folds are answered. All 45 pass.\n- **TT − UTC and ΔT (L3).** From 1972 to 2027-10-02 the engine takes TAI − UTC from the IERS leap-second list updated 2026-07-06, and UT1 − UTC from IERS: the EOP 20 C04 series in 1972 and `finals2000A.all` of 2026-09-24 from 1973-01-02. The adapter reports TT − UTC as a chart's ΔT (TT − UT1) plus its UT1 − UTC. A leap second itself cannot be expressed as a JavaScript date, so that case is unsupported.\n- **Calendars and local mean time (L3).** The 35 calendar vectors are answered by `julianDayNumber` and `dateOfJulianDayNumber`, and the 5 local mean time vectors by `localMeanTimeOffset`, all from `@zodiacs/engine/geo`, with years, months and days in astronomical numbering as the vectors give them. All 40 pass. They are new in 2.0.0-rc.3; earlier releases report these 40 vectors as unsupported.\n- **Unsupported (L3).** One vector: the leap second instant above, which a JavaScript date cannot express.\n- **Event times (L4).** New in suite 0.3.0. The 70 ingresses are answered by `events()` of `@zodiacs/engine/calc`, its longitude crossing search, on the window each vector gives (TT, or UTC for the 10 tagged `utc-input`); in this run it computes on the DE440 pack. All 70 pass; the largest residual is 1.53 s on TT, and no residual is more than 0.012 of its vector's tolerance. The 30 stations and 40 lunations are unsupported: the engine's public API has no station or lunation search (`events()` searches one body's longitude crossings), and the adapter says so for each. The design dropped one instant, L4-ING-0060, Pluto's first ingress after 2140-01-01, which falls after the end of the kernel's coverage; it is listed in `vectors/0.3.0/L4-events.json`."
+    },
+    {
+      "file": "results/zodiacs-engine-astronomy-engine.json",
+      "adapter": {
+        "name": "zodiacs-engine-astronomy-engine",
+        "version": "0.3.0",
+        "engine": "@zodiacs/engine on astronomy-engine",
+        "engineVersion": "2.0.0-rc.3",
         "configuration": {
           "ephemeris": "astronomy-engine 2.1.19",
           "deltaTModel": "zodiacs-deltat/1",
           "timeBasis": "from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise",
-          "timeZones": "before 1970 the shipped tzdb 2025c history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
-          "positions": "natalChart with timeScale \"tt\": the requested instant is read as TT",
+          "timeZones": "before 1970 the shipped tzdb 2026f history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
+          "positions": "natalChart with timeScale \"tt\", outside withEphemeris: the requested instant is read as TT",
           "angles": "natalChart with timeScale \"ut1\": the requested instant is read as UT1"
         }
       },
-      "suiteVersion": "0.2.0",
+      "suiteVersion": "0.3.0",
       "values": "residuals",
       "vectors": {
-        "vectors/0.2.0/L1-positions.json": "4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8",
-        "vectors/0.2.0/L2-houses-angles.json": "fc5321b9061b9860bfb9af5254e5813be1c4bc3c858df6f623ea1617b76b88e5",
-        "vectors/0.2.0/L3-time-calendars.json": "51a367f9a2e0de7394101204f2e6a6408d1401fbefffb96cc2120d373136be66"
+        "vectors/0.3.0/L1-positions.json": "5ead022c18c56b44fb129f423b16ea26525240289156564c40a99ff4a5924e2b",
+        "vectors/0.3.0/L2-houses-angles.json": "23f8c47eeff926a64f97ce29bb0d0d73dd364d2f92952b8ed3b2a944a3a683c3",
+        "vectors/0.3.0/L3-time-calendars.json": "b8b981d8ef15e8d45e356323676863d7a6ee7763e68ac056d3618e44d2a42a11",
+        "vectors/0.3.0/L4-events.json": "4c153d887f993536549432213e81648e9d0b4fc940eb1f116c4aa732dba6e25f"
       },
       "summary": {
         "total": {
-          "count": 500,
-          "pass": 267,
-          "fail": 192,
-          "unsupported": 41,
+          "count": 640,
+          "pass": 341,
+          "fail": 228,
+          "unsupported": 71,
           "error": 0
         },
         "byLevel": {
@@ -201,9 +522,16 @@
           },
           "L3": {
             "count": 110,
-            "pass": 69,
+            "pass": 109,
             "fail": 0,
-            "unsupported": 41,
+            "unsupported": 1,
+            "error": 0
+          },
+          "L4": {
+            "count": 140,
+            "pass": 34,
+            "fail": 36,
+            "unsupported": 70,
             "error": 0
           }
         },
@@ -302,10 +630,19 @@
           },
           "time.local-mean-time": {
             "count": 5,
-            "pass": 0,
+            "pass": 5,
             "fail": 0,
-            "unsupported": 5,
-            "error": 0
+            "unsupported": 0,
+            "error": 0,
+            "residuals": {
+              "utc_offset_s": {
+                "unit": "s",
+                "n": 5,
+                "median": 0,
+                "p95": 0,
+                "max": 0
+              }
+            }
           },
           "time.tt-minus-utc": {
             "count": 10,
@@ -341,16 +678,53 @@
           },
           "calendar.to-jdn": {
             "count": 25,
-            "pass": 0,
+            "pass": 25,
             "fail": 0,
-            "unsupported": 25,
+            "unsupported": 0,
             "error": 0
           },
           "calendar.from-jdn": {
             "count": 10,
+            "pass": 10,
+            "fail": 0,
+            "unsupported": 0,
+            "error": 0
+          },
+          "event.ingress": {
+            "count": 70,
+            "pass": 34,
+            "fail": 36,
+            "unsupported": 0,
+            "error": 0,
+            "residuals": {
+              "tt_s": {
+                "unit": "s",
+                "n": 60,
+                "median": 56.1980832,
+                "p95": 10198.444,
+                "max": 33981.407
+              },
+              "utc_s": {
+                "unit": "s",
+                "n": 10,
+                "median": 1.41650009,
+                "p95": 29.868,
+                "max": 29.868
+              }
+            }
+          },
+          "event.station": {
+            "count": 30,
             "pass": 0,
             "fail": 0,
-            "unsupported": 10,
+            "unsupported": 30,
+            "error": 0
+          },
+          "event.lunation": {
+            "count": 40,
+            "pass": 0,
+            "fail": 0,
+            "unsupported": 40,
             "error": 0
           }
         },
@@ -361,77 +735,31 @@
             "fail": 0,
             "unsupported": 0,
             "error": 0
-          }
-        }
-      },
-      "notes": "- **Positions (L1).** The engine computes positions with astronomy-engine 2.1.19's series. Against DE441 they differ by a median of 2.08″ in longitude. The largest differences are 18.8″ in longitude (Neptune) and 19.0″ in latitude (Saturn); the Sun is within 1.64″ and the Moon within 3.75″. Since the engine took the full IAU 2000B nutation in place of astronomy-engine's five terms, L1-POS-0041 (the Sun in 1908, 1.076″ off in longitude before) passes. Run on a DE440 pack through `withEphemeris`, the same build passes all 240 (the next section); the engine as installed does not carry a pack, so this section is unchanged.\n- **Time zones (L3).** Before 1970 the engine reads the tzdb 2025c history with `backzone` that it ships, loaded with `prepareLocalTime`, so the 20 vectors tagged `backzone-history` pass; from 1970 it reads the host's `Intl` data. A repeated local time resolves to its earlier instant, and the transition the engine reports gives the offsets of both readings, so the five folds are answered. All 45 pass.\n- **TT − UTC and ΔT (L3).** From 1972 to 2027-10-02 the engine takes TAI − UTC from the IERS leap-second list updated 2026-07-06, and UT1 − UTC from IERS: the EOP 20 C04 series in 1972 and `finals2000A.all` of 2026-09-24 from 1973-01-02. The adapter reports TT − UTC as a chart's ΔT (TT − UT1) plus its UT1 − UTC. A leap second itself cannot be expressed as a JavaScript date, so that case is unsupported.\n- **Unsupported (L3).** Release 1.1.0-rc.2 converts dates between the Julian and Gregorian calendars and reads a birthplace's local mean time inside a zone's local mean time era, but has no public function for a Julian Day Number or for local mean time from a longitude alone, so the 35 calendar vectors and the 5 local mean time vectors are unsupported."
-    },
-    {
-      "file": "results/zodiacs-engine-de440.json",
-      "adapter": {
-        "name": "zodiacs-engine-de440",
-        "version": "0.2.0",
-        "engine": "@zodiacs/engine with a DE440 pack",
-        "engineVersion": "1.1.0-rc.7",
-        "configuration": {
-          "ephemeris": "positions from jpl-de440, a sealed pack with SHA-256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7, through withEphemeris (@zodiacs/engine/de440); astronomy-engine 2.1.19 is not used for them",
-          "deltaTModel": "zodiacs-deltat/1",
-          "timeBasis": "from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise",
-          "timeZones": "before 1970 the shipped tzdb 2025c history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
-          "positions": "natalChart with timeScale \"tt\" inside withEphemeris: the requested instant is read as TT; Mars to Pluto are system barycentres, as the vectors are",
-          "angles": "natalChart with timeScale \"ut1\": the requested instant is read as UT1"
-        }
-      },
-      "suiteVersion": "0.2.0",
-      "values": "residuals",
-      "vectors": {
-        "vectors/0.2.0/L1-positions.json": "4e45a5267d806a38624c6cc1eb29dd66229e5ec908fd87de9e1ec69459bb84b8"
-      },
-      "summary": {
-        "total": {
-          "count": 240,
-          "pass": 240,
-          "fail": 0,
-          "unsupported": 0,
-          "error": 0
-        },
-        "byLevel": {
-          "L1": {
-            "count": 240,
-            "pass": 240,
+          },
+          "eclipse": {
+            "count": 6,
+            "pass": 0,
+            "fail": 0,
+            "unsupported": 6,
+            "error": 0
+          },
+          "utc-input": {
+            "count": 20,
+            "pass": 9,
+            "fail": 1,
+            "unsupported": 10,
+            "error": 0
+          },
+          "cross-check": {
+            "count": 1,
+            "pass": 1,
             "fail": 0,
             "unsupported": 0,
             "error": 0
           }
-        },
-        "byKind": {
-          "position.apparent.ecliptic-true-of-date": {
-            "count": 240,
-            "pass": 240,
-            "fail": 0,
-            "unsupported": 0,
-            "error": 0,
-            "residuals": {
-              "lon": {
-                "unit": "arcsec",
-                "n": 240,
-                "median": 0.00174547803,
-                "p95": 0.00377147396,
-                "max": 0.012647263
-              },
-              "lat": {
-                "unit": "arcsec",
-                "n": 240,
-                "median": 0.0000815158131,
-                "p95": 0.000218228824,
-                "max": 0.00101056084
-              }
-            }
-          }
-        },
-        "byTag": {}
+        }
       },
-      "notes": "- **What this run is.** The same adapter and the same build as the section above, with the 240 position requests answered from a DE440 pack the caller supplies: `natalChart` inside the root's `withEphemeris`, on a source opened with `@zodiacs/engine/de440`. Only L1 was run; the angles, houses and time vectors do not depend on the ephemeris. The engine as installed still computes positions with astronomy-engine, and its results are the section above.\n- **Positions (L1).** All 240 pass. Against DE441 the largest differences are 0.0127″ in longitude and 0.0011″ in latitude, both the Moon's (L1-POS-0002 in 1851 and L1-POS-0222 in 2125). The other nine bodies are within 0.0038″ in longitude and 0.0003″ in latitude. The arbiter's own check against DE440s (`arbiters/l1/README.md`) puts the lunar difference between DE440 and DE441 at up to 12.63 mas in 1851.\n- **The pack.** Sealed pack with SHA-256 `51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7` (2,489,664 bytes), compiled for this run from NAIF's `de440.bsp` (SHA-256 `a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5`) as `docs/de440.md` describes. No pack or kernel is in this repository, so continuous integration does not rerun this section. To rerun it, see `docs/evidence/l1-gap-20261113/README.md`."
+      "notes": "- **What this run is.** The same adapter and the same build as the section above, started with `--ephemeris astronomy-engine`, which calls `setDefaultEphemeris(\"astronomy-engine\")` first: every request answered on astronomy-engine 2.1.19's series, the engine's fallback outside the DE440 pack's years and what every build before 1.1.0-rc.9 computed on. All 640 vectors are run; outside L1 and L4 its verdicts are the section above's. Up to 2.0.0-rc.2 this file was also the baseline the offline CLI's consumer check held the carried 1.0.0-rc.2 archive to; from 2.0.0-rc.3 that check has its own pinned baseline, `tools/cli/baselines/engine-1.0.0-rc.2-node-22.22.2.json`, the verdicts this file held at `373ceda`.\n- **Positions (L1).** 48 pass and 192 fail at 1″. Against DE441 the positions differ by a median of 2.08″ in longitude. The largest differences are 18.8″ in longitude (Neptune) and 19.1″ in latitude (Saturn); the Sun is within 1.64″ and the Moon within 3.75″. These are the verdicts the engine's own section held until 1.1.0-rc.7.\n- **Calendars and local mean time (L3).** As in the section above, the 40 calendar and local mean time vectors pass through `julianDayNumber`, `dateOfJulianDayNumber` and `localMeanTimeOffset`, new in 2.0.0-rc.3. The carried 1.0.0-rc.2 archive has none of them and answers those 40 vectors as unsupported, so on them it differs from this file and matches its pinned baseline. The one unsupported vector is the leap second instant.\n- **Event times (L4).** The 70 ingresses go through the same `events()` search, here on astronomy-engine's positions: 34 pass and 36 fail, among them one of the 10 in UTC (L4-UTC-0005). The failures follow the positions of L1: a slow body takes long to move the difference, so Neptune's ingress of 2148 (L4-ING-0054) is 10,366 s late, 16 times its tolerance of 649 s. Stations and lunations are unsupported, as in the section above."
     },
     {
       "file": "results/pyswisseph.json",

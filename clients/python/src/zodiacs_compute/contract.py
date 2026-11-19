@@ -13,9 +13,9 @@ ChartResult = TypedDict("ChartResult", {"instant": Required[str], "local": Requi
 
 LocalResolution_localMeanTime_Option0 = TypedDict("LocalResolution_localMeanTime_Option0", {"longitude": Required[float], "zoneOffsetMinutes": Required[float]}, total=False)
 
-LocalResolution = TypedDict("LocalResolution", {"offsetMinutes": Required[float], "flags": Required[list[Literal["dst-gap", "dst-fold", "lmt"]]], "localMeanTime": Required[Union["LocalResolution_localMeanTime_Option0", None]], "zoneHistory": Required[Literal["pinned", "runtime"]], "zoneUncertain": Required[bool]}, total=False)
+LocalResolution = TypedDict("LocalResolution", {"offsetMinutes": Required[float], "flags": Required[list[Literal["dst-gap", "dst-fold", "lmt", "calendar-unknown", "host-zone-data-differs"]]], "localMeanTime": Required[Union["LocalResolution_localMeanTime_Option0", None]], "zoneHistory": Required[Literal["pinned", "runtime"]], "zoneUncertain": Required[bool]}, total=False)
 
-BodyPosition = TypedDict("BodyPosition", {"body": Required[Literal["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "North Node", "South Node"]], "lon": Required[float], "lat": Required[float], "speed": Required[float], "retrograde": Required[bool], "sign": Required[Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]], "degree": Required[float]}, total=False)
+BodyPosition = TypedDict("BodyPosition", {"body": Required[Literal["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "North Node", "South Node"]], "lon": Required[float], "lat": Required[float], "speed": Required[float], "retrograde": Required[bool], "sign": Required[Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]], "degree": Required[float], "flags": NotRequired[list[Literal["outside-reference-span", "delta-t-extrapolated", "de440-unavailable", "outside-de440-span"]]]}, total=False)
 
 Angles = TypedDict("Angles", {"asc": Required[float], "mc": Required[float], "dsc": Required[float], "ic": Required[float]}, total=False)
 
@@ -93,7 +93,7 @@ TimeResponse = TypedDict("TimeResponse", {"schema": Required[Literal["zodiacs.co
 
 TimeResult_localMeanTime_Option0 = TypedDict("TimeResult_localMeanTime_Option0", {"longitude": Required[float], "zoneOffsetMinutes": Required[float]}, total=False)
 
-TimeResult = TypedDict("TimeResult", {"utc": Required[str], "offsetMinutes": Required[float], "flags": Required[list[Literal["dst-gap", "dst-fold", "lmt", "outside-reference-span"]]], "localMeanTime": Required[Union["TimeResult_localMeanTime_Option0", None]], "zoneHistory": Required[Literal["pinned", "runtime"]], "zoneUncertain": Required[bool], "tt": Required[str], "deltaT": Required["DeltaT"], "timeScale": Required["TimeScale"]}, total=False)
+TimeResult = TypedDict("TimeResult", {"utc": Required[str], "offsetMinutes": Required[float], "flags": Required[list[Literal["dst-gap", "dst-fold", "lmt", "calendar-unknown", "host-zone-data-differs", "outside-reference-span"]]], "localMeanTime": Required[Union["TimeResult_localMeanTime_Option0", None]], "zoneHistory": Required[Literal["pinned", "runtime"]], "zoneUncertain": Required[bool], "tt": Required[str], "deltaT": Required["DeltaT"], "timeScale": Required["TimeScale"]}, total=False)
 
 SignFact_Option1 = TypedDict("SignFact_Option1", {"kind": Required[Literal["sign"]], "body": Required[Literal["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]], "sign": Required[Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]], "instant": Required["Instant"]}, total=False)
 
@@ -137,7 +137,7 @@ SkyFactEcho = TypedDict("SkyFactEcho", {"kind": Required[Literal["sign", "retrog
 
 ZoneEdge_localMeanTime_Option0 = TypedDict("ZoneEdge_localMeanTime_Option0", {"longitude": Required[float], "zoneOffsetMinutes": Required[float]}, total=False)
 
-ZoneEdge = TypedDict("ZoneEdge", {"offsetMinutes": Required[float], "flags": Required[list[Literal["dst-gap", "dst-fold", "lmt"]]], "localMeanTime": Required[Union["ZoneEdge_localMeanTime_Option0", None]], "zoneHistory": Required[Literal["pinned", "runtime"]], "zoneUncertain": Required[bool], "utc": Required[str]}, total=False)
+ZoneEdge = TypedDict("ZoneEdge", {"offsetMinutes": Required[float], "flags": Required[list[Literal["dst-gap", "dst-fold", "lmt", "calendar-unknown", "host-zone-data-differs"]]], "localMeanTime": Required[Union["ZoneEdge_localMeanTime_Option0", None]], "zoneHistory": Required[Literal["pinned", "runtime"]], "zoneUncertain": Required[bool], "utc": Required[str]}, total=False)
 
 BodyState = TypedDict("BodyState", {"lon": Required[float], "sign": Required[Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]], "degree": Required[float], "speed": Required[float], "retrograde": Required[bool]}, total=False)
 
@@ -170,7 +170,7 @@ Instant : TypeAlias = str
 Latitude : TypeAlias = float
 Longitude : TypeAlias = float
 HouseSystem : TypeAlias = Literal["whole", "placidus", "porphyry", "equal", "equal-mc", "vehlow", "koch", "regiomontanus", "campanus", "topocentric", "alcabitius", "morinus", "meridian"]
-ChartFlag : TypeAlias = Literal["dst-gap", "dst-fold", "lmt", "no-time", "polar-fallback", "outside-reference-span"]
+ChartFlag : TypeAlias = Literal["dst-gap", "dst-fold", "lmt", "calendar-unknown", "host-zone-data-differs", "no-time", "polar-fallback", "polar-angles", "outside-reference-span", "delta-t-extrapolated", "de440-unavailable", "outside-de440-span"]
 SkyFactRequest : TypeAlias = Union["SignFact", "RetrogradeFact", "IngressFact", "PhaseFact"]
 SignFact : TypeAlias = Union["SignFact_Option1", "SignFact_Option2"]
 RetrogradeFact : TypeAlias = Union["RetrogradeFact_Option1", "RetrogradeFact_Option2"]

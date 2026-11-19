@@ -1,0 +1,192 @@
+diff --git a/package.json b/package.json
+index 05f815d..970a175 100644
+--- a/package.json
++++ b/package.json
+@@ -37,6 +37,10 @@
+       "types": "./dist/conventions.d.ts",
+       "import": "./dist/conventions.js"
+     },
++    "./core": {
++      "types": "./dist/core.d.ts",
++      "import": "./dist/core.js"
++    },
+     "./crossings": {
+       "types": "./dist/crossings.d.ts",
+       "import": "./dist/crossings.js"
+@@ -118,7 +122,7 @@
+     "access": "public"
+   },
+   "scripts": {
+-    "build": "tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/techniques.ts src/timing.ts src/vedic.ts src/internal.ts src/internal-math.ts src/calc.ts src/window.ts src/houses-extra.ts src/sky.ts src/conventions.ts src/time.ts src/de440.ts src/de440-pack.ts --format esm --dts --clean --splitting --metafile --tsconfig tsconfig.build.json && node scripts/build-lite.mjs",
++    "build": "tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/techniques.ts src/timing.ts src/vedic.ts src/internal.ts src/internal-math.ts src/calc.ts src/window.ts src/houses-extra.ts src/sky.ts src/conventions.ts src/time.ts src/de440.ts src/de440-pack.ts --format esm --dts --clean --splitting --metafile --tsconfig tsconfig.build.json && node scripts/build-lite.mjs && node scripts/build-core.mjs",
+     "docs": "typedoc --options typedoc.json",
+     "exports:smoke": "node scripts/module-resolution-smoke.mjs",
+     "consumer:smoke": "node scripts/verify-packed-consumer.mjs",
+diff --git a/scripts/build-core.mjs b/scripts/build-core.mjs
+new file mode 100644
+index 0000000..1fe30c8
+--- /dev/null
++++ b/scripts/build-core.mjs
+@@ -0,0 +1,59 @@
++// The build of @zodiacs/engine/core (prototype), which `npm run build` runs
++// after tsup and scripts/build-lite.mjs.
++//
++// The core entry exports what the root exports and computes on
++// astronomy-engine, without the shipped DE440 pack. tsup builds the root with
++// code splitting, and the root's ephemeris module imports the pack, so the
++// core entry takes no part in that build: esbuild, the version tsup runs,
++// bundles src/core.ts on its own into dist/core.js, with
++// src/core/ephemeris-shipped.ts in place of src/ephemeris-shipped.ts (the
++// module that names the default source and opens the pack), and
++// astronomy-engine left as an import of the package's dependency. It writes
++// dist/core.js (unminified, as the lite parts are), dist/core.d.ts (the
++// root's declarations, by re-export) and dist/metafile-core.json (not
++// packed), and checks that no module of the pack is in the bundle.
++import assert from "node:assert/strict";
++import { readFileSync, writeFileSync } from "node:fs";
++import { fileURLToPath } from "node:url";
++import { build } from "esbuild";
++
++const ROOT = fileURLToPath(new URL("..", import.meta.url));
++const at = (path) => new URL(`../${path}`, import.meta.url);
++const target = JSON.parse(readFileSync(at("tsconfig.base.json"), "utf8")).compilerOptions.target.toLowerCase();
++
++let swapped = 0;
++const result = await build({
++  absWorkingDir: ROOT,
++  entryPoints: { core: "src/core.ts" },
++  bundle: true,
++  splitting: false,
++  format: "esm",
++  platform: "neutral",
++  target,
++  tsconfig: "tsconfig.build.json",
++  external: ["astronomy-engine"],
++  metafile: true,
++  minify: false,
++  outdir: "dist",
++  write: true,
++  logLevel: "warning",
++  plugins: [{
++    name: "core-ephemeris",
++    setup(builder) {
++      builder.onResolve({ filter: /^\.\/ephemeris-shipped\.js$/ }, () => {
++        swapped += 1;
++        return { path: fileURLToPath(at("src/core/ephemeris-shipped.ts")) };
++      });
++    }
++  }]
++});
++assert.equal(swapped, 1, "src/ephemeris.ts must import ./ephemeris-shipped.js once, and nothing else may");
++const inputs = Object.keys(result.metafile.inputs);
++for (const banned of ["src/de440-pack.ts", "src/de440/pack-data.ts", "src/ephemeris-shipped.ts"]) {
++  assert(!inputs.includes(banned), `dist/core.js must not hold ${banned}`);
++}
++assert.deepEqual(result.metafile.outputs["dist/core.js"].imports.map((entry) => entry.path), ["astronomy-engine"],
++  "dist/core.js may import astronomy-engine and nothing else");
++writeFileSync(at("dist/core.d.ts"), 'export * from "./index.js";\n');
++writeFileSync(at("dist/metafile-core.json"), JSON.stringify(result.metafile, null, 2) + "\n");
++console.log(`core: dist/core.js ${Buffer.byteLength(readFileSync(at("dist/core.js")))} bytes`);
+diff --git a/scripts/verify-package-contents.mjs b/scripts/verify-package-contents.mjs
+index 9a5fa7c..e242e8a 100644
+--- a/scripts/verify-package-contents.mjs
++++ b/scripts/verify-package-contents.mjs
+@@ -273,6 +273,10 @@ const ENTRY_BUDGETS = {
+   "./conventions": 2_900,
+   // rc.15: 9,410. 1.0.0-rc.1: 9,942, its options read as the shared reader
+   // reads them; 0.58 per cent, not raised.
++  // Prototype (docs/evidence/bundle-weight-*): the root's code, bundled on
++  // its own by scripts/build-core.mjs without the DE440 pack. 108,411 bytes
++  // as measured; one per cent of headroom.
++  "./core": 109_600,
+   "./crossings": 10_000,
+   "./deltat": 5_500, // rc.15: 4,968
+   // rc.15: 31,672, the zone histories not included (below). With ./techniques
+diff --git a/src/core.ts b/src/core.ts
+new file mode 100644
+index 0000000..e4a3ad3
+--- /dev/null
++++ b/src/core.ts
+@@ -0,0 +1,11 @@
++/**
++ * `@zodiacs/engine/core` (prototype, docs/evidence/bundle-weight-*): every
++ * name the root exports, computed on astronomy-engine, without the shipped
++ * DE440 pack. A chart from it names astronomy-engine (`chart.ephemeris`) as
++ * the root's does after `setDefaultEphemeris("astronomy-engine")`.
++ * `scripts/build-core.mjs` bundles it into `dist/core.js` on its own, with
++ * `src/core/ephemeris-shipped.ts` in place of `src/ephemeris-shipped.ts`, so
++ * its module state (the default source, `withEphemeris`) is its own and not
++ * the root's.
++ */
++export * from "./index.js";
+diff --git a/src/core/ephemeris-shipped.ts b/src/core/ephemeris-shipped.ts
+new file mode 100644
+index 0000000..d3c1be6
+--- /dev/null
++++ b/src/core/ephemeris-shipped.ts
+@@ -0,0 +1,20 @@
++/**
++ * The core entry's stand-in for `src/ephemeris-shipped.ts`
++ * (`scripts/build-core.mjs` swaps it in): the default source is
++ * astronomy-engine, and there is no shipped pack to open, so
++ * `setDefaultEphemeris("de440")` in the core entry computes on
++ * astronomy-engine and labels every result `"de440-unavailable"`, as the
++ * root does when its pack cannot be opened. A caller who wants DE440 in the
++ * core entry supplies a pack through `@zodiacs/engine/de440` and
++ * `withEphemeris`.
++ */
++import type { De440Source } from "../de440.js";
++import type { DefaultEphemerisName } from "../ephemeris.js";
++
++/** The core entry's default source: astronomy-engine. */
++export const INITIAL_DEFAULT_EPHEMERIS: DefaultEphemerisName = "astronomy-engine";
++
++/** Always throws: `@zodiacs/engine/core` carries no DE440 pack. */
++export function shippedDe440Source(): De440Source {
++  throw new Error("@zodiacs/engine/core carries no DE440 pack; supply one through @zodiacs/engine/de440 and withEphemeris, or import @zodiacs/engine");
++}
+diff --git a/src/ephemeris-shipped.ts b/src/ephemeris-shipped.ts
+new file mode 100644
+index 0000000..5b76179
+--- /dev/null
++++ b/src/ephemeris-shipped.ts
+@@ -0,0 +1,14 @@
++/**
++ * What the root's default source is and how it opens the shipped DE440 pack:
++ * `src/ephemeris.ts` reads both from here, so that the core build
++ * (`scripts/build-core.mjs`) can put `src/core/ephemeris-shipped.ts` in this
++ * module's place and leave the pack out of `@zodiacs/engine/core`. The
++ * package's own build (tsup) uses this file, so the root and every other
++ * entry are as before.
++ */
++import type { DefaultEphemerisName } from "./ephemeris.js";
++
++export { shippedDe440Source } from "./de440-pack.js";
++
++/** The root's default source: the shipped DE440 pack. */
++export const INITIAL_DEFAULT_EPHEMERIS: DefaultEphemerisName = "de440";
+diff --git a/src/ephemeris.ts b/src/ephemeris.ts
+index 66ba08b..f09bd4d 100644
+--- a/src/ephemeris.ts
++++ b/src/ephemeris.ts
+@@ -9,10 +9,10 @@ import {
+ } from "astronomy-engine";
+ 
+ import { findAspects } from "./aspects.js";
+-import { shippedDe440Source } from "./de440-pack.js";
+ import { chartBodyDeclinations } from "./declination.js";
+ import type { ChartDeclinations } from "./declination.js";
+ import { deltaT } from "./deltat.js";
++import { INITIAL_DEFAULT_EPHEMERIS, shippedDe440Source } from "./ephemeris-shipped.js";
+ import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
+ import { computeAngles, computeHouses, eastPointOf, insidePolarCircle, vertexOf } from "./houses.js";
+ import { tilt } from "./nutation.js";
+@@ -56,7 +56,7 @@ let source: PositionSource | null = null;
+ 
+ /** What a call outside `withEphemeris` computes on. */
+ export type DefaultEphemerisName = "de440" | "astronomy-engine";
+-let defaultName: DefaultEphemerisName = "de440";
++let defaultName: DefaultEphemerisName = INITIAL_DEFAULT_EPHEMERIS;
+ 
+ /**
+  * The default source keeps a day inside each end of the shipped pack, so

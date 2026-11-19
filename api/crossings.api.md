@@ -21,6 +21,7 @@ type CrossingSearchResult = {
     status: "complete";
     crossings: LongitudeCrossing[];
     samples: number;
+    flags?: ("de440-unavailable" | "outside-de440-span")[];
 } | {
     status: "refused";
     reason: "sample-budget";

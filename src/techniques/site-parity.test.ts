@@ -6,7 +6,10 @@
  * runs on the engine it is given, so they were generated again on this tree's
  * packed build when the engine took the full IAU 2000B nutation, which moves
  * the site's returns and void-of-course windows as it moves the package's
- * (docs/evidence/rc16-20260930). Every corpus must agree exactly, except where the
+ * (docs/evidence/rc16-20260930), and again when the continuous-UTC rule moved
+ * every instant after 2027-10-02 (returns, void-of-course and Moon signs:
+ * docs/evidence/continuous-utc-20261117, on astronomy-engine as this suite
+ * runs, through its site-parity-default.mjs). Every corpus must agree exactly, except where the
  * preregistration (docs/evidence/techniques-2026-09-29/PREREGISTRATION.md)
  * records a difference by design; those cases are pinned here one by one.
  */
@@ -79,7 +82,7 @@ describe("parity with the site's code", () => {
       expect(rows.map((row: { index: number }) => row.index), name).toEqual([1500 + 7 * 3 + 1]);
     }
     // M-P (before 1970): the site reads midnights on the host's Intl data, the
-    // package on its tzdata 2025c with backzone. Every disagreement is a
+    // package on its tzdata 2026f with backzone. Every disagreement is a
     // different midnight at one end or the other (G7).
     for (const row of byName("M-P").disagreements) {
       expect(Array.isArray(row.site) && Array.isArray(row.package)).toBe(true);

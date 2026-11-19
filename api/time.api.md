@@ -67,7 +67,7 @@ interface TimeBasis {
 
 interface TimeScale {
     input: TimeScaleName;
-    basis: "iers" | "delta-t" | "pinned";
+    basis: "iers" | "continuous-utc" | "delta-t" | "pinned";
     ut1MinusUtc: Ut1MinusUtc | null;
     leapSeconds: LeapSeconds | null;
 }
@@ -77,7 +77,7 @@ type TimeScaleName = "utc" | "ut1" | "tt";
 interface Ut1MinusUtc {
     seconds: number;
     sigma: number;
-    source: "observed" | "predicted" | "fallback";
+    source: "observed" | "predicted" | "fallback" | "model";
 }
 
 declare function eclipticFrame(tt: number): EclipticFrame;

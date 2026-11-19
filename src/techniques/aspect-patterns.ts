@@ -10,6 +10,8 @@ import { resolvedChart } from "../api.js";
 import type { NatalSource } from "../api.js";
 import { ASPECTS, matchAspect } from "../aspects.js";
 import type { AspectType } from "../types.js";
+import { labelOfCharts } from "./shared.js";
+import type { TechniqueFlag } from "./shared.js";
 
 export const PATTERN_BODIES = /*#__PURE__*/ Object.freeze([
   "Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"
@@ -66,6 +68,17 @@ export interface AspectPatterns {
   readonly points: readonly { readonly body: PatternBody; readonly lon: number }[];
   /** Every pattern, sorted by id. */
   readonly patterns: readonly AspectPattern[];
+}
+
+/** `chartAspectPatterns`'s result: the patterns, and the chart's label (from 1.1.0-rc.11). */
+export interface ChartAspectPatterns extends AspectPatterns {
+  /**
+   * The chart's `ephemeris`: `{ name: "jpl-de440", version }` on the shipped DE440 pack, astronomy-engine's name
+   * and version otherwise; null where a supplied chart from an earlier release names none.
+   */
+  readonly ephemeris: { readonly name: string; readonly version: string } | null;
+  /** The flags among `"outside-reference-span"`, `"de440-unavailable"` and `"outside-de440-span"` the chart carries, in that order. */
+  readonly flags: readonly TechniqueFlag[];
 }
 
 const rank = (body: string): number => (PATTERN_BODIES as readonly string[]).indexOf(body);
@@ -228,12 +241,13 @@ export function aspectPatterns(points: readonly PatternPoint[], aspects: readonl
 }
 
 /** The aspect patterns of a chart or birth, from its own bodies and aspects. */
-export function chartAspectPatterns(natal: NatalSource): AspectPatterns {
+export function chartAspectPatterns(natal: NatalSource): ChartAspectPatterns {
   const { chart } = resolvedChart(natal);
-  return aspectPatterns(
+  const found = aspectPatterns(
     chart.bodies.map((row) => ({ body: row.body, lon: row.lon })),
     chart.aspects.map((row) => ({ a: row.a, b: row.b, type: row.type, orb: row.orb }))
   );
+  return Object.freeze({ ...found, ...labelOfCharts([chart]) });
 }
 
 const KIND_ORDER: readonly PatternKind[] = ["grand-cross", "kite", "grand-trine", "t-square"];

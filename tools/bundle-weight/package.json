@@ -1,0 +1,24 @@
+{
+  "name": "@zodiacs/bundle-weight",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Measures what a packed @zodiacs/engine archive costs a browser bundle under esbuild, Rollup, Vite and webpack. Never published.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.7.0"
+  },
+  "scripts": {
+    "measure": "node measure.mjs"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "16.0.3",
+    "@rollup/plugin-terser": "1.0.2",
+    "astronomy-engine": "2.1.19",
+    "esbuild": "0.28.2",
+    "playwright-core": "1.64.1",
+    "rollup": "4.67.4",
+    "vite": "8.3.5",
+    "webpack": "5.112.2"
+  }
+}

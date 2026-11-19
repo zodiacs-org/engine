@@ -21,7 +21,7 @@ import { HOUSE_SYSTEMS } from "../houses.js";
 import type { Chart, HouseSystem } from "../types.js";
 import { compositeAspects, compositeMidpoints } from "./composite.js";
 import type { CompositeChart } from "./composite.js";
-import { oneOf, placeOf, readOptions, techniqueFlags } from "./shared.js";
+import { labelOfCharts, oneOf, placeOf, readOptions, techniqueFlags } from "./shared.js";
 import type { GeoPlace, TechniqueFlag } from "./shared.js";
 
 export { compositeAspects, compositeMidpoints } from "./composite.js";
@@ -29,8 +29,10 @@ export type { CompositeAspect, CompositeChart, CompositePosition } from "./compo
 
 /** The composite of two charts or births: every body's midpoint and their aspects. No angles or houses. */
 export function compositeChart(first: NatalSource, second: NatalSource): CompositeChart {
-  const bodies = compositeMidpoints(resolvedChart(first).chart.bodies, resolvedChart(second).chart.bodies);
-  return Object.freeze({ bodies, aspects: compositeAspects(bodies) });
+  const a = resolvedChart(first).chart;
+  const b = resolvedChart(second).chart;
+  const bodies = compositeMidpoints(a.bodies, b.bodies);
+  return Object.freeze({ bodies, aspects: compositeAspects(bodies), ...labelOfCharts([a, b]) });
 }
 
 /**

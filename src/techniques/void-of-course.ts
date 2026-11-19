@@ -11,7 +11,8 @@ import { dateFrom } from "../date-input.js";
 import { bodyLongitude } from "../ephemeris.js";
 import { SIGN_SLUGS } from "../signs.js";
 import type { AspectType, DateInput, ZodiacSign } from "../types.js";
-import { DAY_MS, oneOf, readOptions } from "./shared.js";
+import { DAY_MS, labelOver, oneOf, readOptions } from "./shared.js";
+import type { TechniqueEphemeris, TechniqueFlag } from "./shared.js";
 
 /** A body whose aspect to the Moon can end a void period. */
 export type VoidBody = "Sun" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto";
@@ -46,6 +47,16 @@ const OFFSETS: readonly [AspectType, number][] = [
 export interface MoonIngress {
   readonly at: Date;
   readonly sign: ZodiacSign;
+  /**
+   * The ephemeris the Moon's and the bodies' longitudes behind it came from: `{ name: "jpl-de440", version }` on
+   * the shipped DE440 pack, astronomy-engine's name and version otherwise. From 1.1.0-rc.11.
+   */
+  readonly ephemeris: TechniqueEphemeris;
+  /**
+   * `"de440-unavailable"` or `"outside-de440-span"` where those longitudes were astronomy-engine's as a fallback
+   * from the pack, `"outside-reference-span"` where one was read outside 1800 to 2200; none otherwise. From 1.1.0-rc.11.
+   */
+  readonly flags: readonly TechniqueFlag[];
 }
 
 export interface MoonAspect {
@@ -54,6 +65,16 @@ export interface MoonAspect {
   readonly aspect: AspectType;
   /** The Moon's longitude at `at`, degrees. */
   readonly moonLon: number;
+  /**
+   * The ephemeris the Moon's and the bodies' longitudes behind it came from: `{ name: "jpl-de440", version }` on
+   * the shipped DE440 pack, astronomy-engine's name and version otherwise. From 1.1.0-rc.11.
+   */
+  readonly ephemeris: TechniqueEphemeris;
+  /**
+   * `"de440-unavailable"` or `"outside-de440-span"` where those longitudes were astronomy-engine's as a fallback
+   * from the pack, `"outside-reference-span"` where one was read outside 1800 to 2200; none otherwise. From 1.1.0-rc.11.
+   */
+  readonly flags: readonly TechniqueFlag[];
 }
 
 export interface VoidOfCourseWindow {
@@ -64,6 +85,16 @@ export interface VoidOfCourseWindow {
   readonly lastAspect: MoonAspect | null;
   readonly sign: ZodiacSign;
   readonly nextSign: ZodiacSign;
+  /**
+   * The ephemeris the Moon's and the bodies' longitudes behind it came from: `{ name: "jpl-de440", version }` on
+   * the shipped DE440 pack, astronomy-engine's name and version otherwise. From 1.1.0-rc.11.
+   */
+  readonly ephemeris: TechniqueEphemeris;
+  /**
+   * `"de440-unavailable"` or `"outside-de440-span"` where those longitudes were astronomy-engine's as a fallback
+   * from the pack, `"outside-reference-span"` where one was read outside 1800 to 2200; none otherwise. From 1.1.0-rc.11.
+   */
+  readonly flags: readonly TechniqueFlag[];
 }
 
 export interface VoidOfCourseStatus {
@@ -73,6 +104,16 @@ export interface VoidOfCourseStatus {
   readonly current: VoidOfCourseWindow | null;
   /** The next period to begin after `at`. */
   readonly next: VoidOfCourseWindow | null;
+  /**
+   * The ephemeris the Moon's and the bodies' longitudes behind it came from: `{ name: "jpl-de440", version }` on
+   * the shipped DE440 pack, astronomy-engine's name and version otherwise. From 1.1.0-rc.11.
+   */
+  readonly ephemeris: TechniqueEphemeris;
+  /**
+   * `"de440-unavailable"` or `"outside-de440-span"` where those longitudes were astronomy-engine's as a fallback
+   * from the pack, `"outside-reference-span"` where one was read outside 1800 to 2200; none otherwise. From 1.1.0-rc.11.
+   */
+  readonly flags: readonly TechniqueFlag[];
 }
 
 export interface VoidOfCourseOptions {
@@ -101,6 +142,13 @@ function delta(a: number, b: number): number {
   const d = (((b - a) % 360) + 360) % 360;
   return d > 180 ? d - 360 : d;
 }
+
+/** The coarse steps of the two scans, milliseconds: a result found in one read positions within a step of it. */
+const INGRESS_STEP_MS = DAY_MS / 4;
+const ASPECT_STEP_MS = DAY_MS / 8;
+
+/** The label of positions read within `half` of `at`, inside the scan [fromT, toT] (`labelOver`). */
+const around = (at: number, half: number, fromT: number, toT: number) => labelOver([Math.max(fromT, at - half), Math.min(toT, at + half)]);
 
 function ingresses(fromT: number, toT: number): { at: Date; signIndex: number }[] {
   const out: { at: Date; signIndex: number }[] = [];
@@ -131,7 +179,7 @@ function aspects(fromT: number, toT: number, bodies: readonly VoidBody[]): MoonA
       const cur = delta((bodyLons.get(body) ?? 0) + offset, moonLon);
       const before = prev[i]!;
       if (cur === 0 && before !== 0 && Math.abs(before) < 90) {
-        out.push({ at: new Date(t), body, aspect: type, moonLon });
+        out.push({ at: new Date(t), body, aspect: type, moonLon, ...around(t, ASPECT_STEP_MS, fromT, toT) });
       } else if (before !== 0 && cur !== 0 && Math.sign(cur) !== Math.sign(before) && Math.abs(cur) < 90 && Math.abs(before) < 90) {
         let lo = prevT;
         let hi = t;
@@ -142,7 +190,7 @@ function aspects(fromT: number, toT: number, bodies: readonly VoidBody[]): MoonA
           else lo = mid;
         }
         const at = new Date(hi);
-        out.push({ at, body, aspect: type, moonLon: bodyLongitude("Moon", at) });
+        out.push({ at, body, aspect: type, moonLon: bodyLongitude("Moon", at), ...around(hi, ASPECT_STEP_MS, fromT, toT) });
       }
       prev[i] = cur;
     });
@@ -153,7 +201,8 @@ function aspects(fromT: number, toT: number, bodies: readonly VoidBody[]): MoonA
 
 function windows(fromT: number, toT: number, bodies: readonly VoidBody[]): VoidOfCourseWindow[] {
   // The Moon spends under three days in a sign: four days back finds the entry into it.
-  const list = ingresses(fromT - 4 * DAY_MS, toT);
+  const scanFrom = fromT - 4 * DAY_MS;
+  const list = ingresses(scanFrom, toT);
   const out: VoidOfCourseWindow[] = [];
   for (let i = 1; i < list.length; i += 1) {
     const entered = list[i - 1]!;
@@ -168,7 +217,9 @@ function windows(fromT: number, toT: number, bodies: readonly VoidBody[]): VoidO
         to: new Date(end),
         lastAspect: lastAspect && Object.freeze(lastAspect),
         sign: SIGN_SLUGS[entered.signIndex]!,
-        nextSign: SIGN_SLUGS[leaving.signIndex]!
+        nextSign: SIGN_SLUGS[leaving.signIndex]!,
+        // Its two ingresses and every aspect scanned between them.
+        ...labelOver([Math.max(scanFrom, entered.at.getTime() - INGRESS_STEP_MS), Math.min(toT, end + INGRESS_STEP_MS)])
       })
     );
   }
@@ -177,7 +228,12 @@ function windows(fromT: number, toT: number, bodies: readonly VoidBody[]): VoidO
 
 /** Every entry of the apparent Moon into a sign in (from, to], in time order (6-hour steps). */
 export function moonIngresses(from: DateInput, to: DateInput): readonly MoonIngress[] {
-  return Object.freeze(ingresses(...span(from, to)).map((row) => Object.freeze({ at: row.at, sign: SIGN_SLUGS[row.signIndex]! })));
+  const [fromT, toT] = span(from, to);
+  return Object.freeze(
+    ingresses(fromT, toT).map((row) =>
+      Object.freeze({ at: row.at, sign: SIGN_SLUGS[row.signIndex]!, ...around(row.at.getTime(), INGRESS_STEP_MS, fromT, toT) })
+    )
+  );
 }
 
 /** Every exact Ptolemaic aspect of the Moon to the chosen bodies in (from, to]: 3-hour samples, 26 bisections. */
@@ -196,7 +252,15 @@ export function voidOfCourseWindows(from: DateInput, to: DateInput, options?: Vo
 export function voidOfCourseAt(at: DateInput, options?: VoidOfCourseOptions): VoidOfCourseStatus {
   const bodies = bodiesOf(options);
   const t = dateFrom(at, "at").getTime();
-  const list = windows(t - 3 * DAY_MS, t + 6 * DAY_MS, bodies);
+  const [fromT, toT] = [t - 3 * DAY_MS, t + 6 * DAY_MS];
+  const list = windows(fromT, toT, bodies);
   const current = list.find((window) => window.from.getTime() <= t && t < window.to.getTime()) ?? null;
-  return Object.freeze({ at: new Date(t), isVoid: current !== null, current, next: list.find((window) => window.from.getTime() > t) ?? null });
+  return Object.freeze({
+    at: new Date(t),
+    isVoid: current !== null,
+    current,
+    next: list.find((window) => window.from.getTime() > t) ?? null,
+    // Every position the windows read: from four days before their scan to its end.
+    ...labelOver([fromT - 4 * DAY_MS, toT])
+  });
 }

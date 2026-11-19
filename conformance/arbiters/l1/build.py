@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build vectors/L1-positions.json: the L1 (positions) vectors of the conformance suite.
-Suite 0.2.0's vectors/0.2.0/L1-positions.json, the same vectors with their convention
-ids, is written from the same document (../release.py).
+Suites 0.2.0's and 0.3.0's vectors/0.2.0/ and vectors/0.3.0/L1-positions.json, the same vectors
+with their convention ids, are written from the same document (../release.py).
 
 The arbiter is NASA JPL Horizons (DE441): apparent geocentric ecliptic longitude
 and latitude of date (QUANTITIES=31, airless, TT) for ten bodies at 24 instants,
@@ -404,7 +404,8 @@ def main():
         f.write(text)
     print(f"wrote {os.path.relpath(OUT, ROOT)}: {len(doc['vectors'])} vectors, "
           f"sha256 {hashlib.sha256(text.encode('ascii')).hexdigest()}")
-    print('wrote %s, with the convention ids: sha256 %s' % release.write_with_ids(doc, os.path.basename(OUT), ensure_ascii=True))
+    for written in release.write_with_ids(doc, os.path.basename(OUT), ensure_ascii=True):
+        print('wrote %s, with the convention ids: sha256 %s' % written)
     print(f'printed TT against the TLIST value: at most {worst_time * 1000:.3f} ms')
     print(f"frame-term self-check: largest disagreement {self_check['disagreementArcsec']:.6f} arcsec "
           f"at {self_check['worstId']}")

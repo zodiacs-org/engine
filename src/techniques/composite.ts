@@ -30,6 +30,17 @@ export interface CompositeAspect {
 export interface CompositeChart {
   readonly bodies: readonly CompositePosition[];
   readonly aspects: readonly CompositeAspect[];
+  /**
+   * The ephemeris both charts name (`chart.ephemeris`): `{ name: "jpl-de440", version }` on the shipped DE440
+   * pack, astronomy-engine's name and version otherwise; null where the two do not name one and the same, or a
+   * supplied chart from an earlier release names none. Set by `compositeChart` from 1.1.0-rc.11.
+   */
+  readonly ephemeris: { readonly name: string; readonly version: string } | null;
+  /**
+   * The flags among `"outside-reference-span"`, `"de440-unavailable"` and `"outside-de440-span"` that either
+   * chart carries, in that order. Set by `compositeChart` from 1.1.0-rc.11.
+   */
+  readonly flags: readonly ("outside-reference-span" | "de440-unavailable" | "outside-de440-span")[];
 }
 
 function positions(list: unknown, label: string): { body: BodyName; lon: number }[] {

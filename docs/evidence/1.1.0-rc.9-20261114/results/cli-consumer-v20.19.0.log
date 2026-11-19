@@ -1,0 +1,10 @@
+CLI checkout byte receipt: {"schema":"zodiacs.cli-checkout-bytes.v1","checkedFiles":73,"method":"Only tracked tools/cli/, conformance/ and root LICENSE, restored from HEAD Git blobs without text conversion","changed":[]}
+CLI suite bundle: 500 vectors, 37 source files
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: '@zodiacs/cli@0.0.0',
+npm warn EBADENGINE   required: { node: '^22.22.2 || >=24.0.0' },
+npm warn EBADENGINE   current: { node: 'v20.19.0', npm: '10.8.2' }
+npm warn EBADENGINE }
+
+added 3 packages in 363ms
+CLI consumer: 29 checks passed; conformance {"count":500,"pass":267,"fail":192,"unsupported":41,"error":0}

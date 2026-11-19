@@ -22,17 +22,81 @@ if (mars.status === "ok") {
 ```
 
 With every default, `calc({ body, time })` is the position `positions()` and
-`natalChart()` give, to the bit: the same longitude, latitude and speed. Every
-result is a function of its request alone: nothing depends on what was
-computed before it.
+`natalChart()` give, to the bit: the same longitude, latitude and speed, from
+the same ephemeris (*Which ephemeris* below). Every result is a function of
+its request and of the default source alone (`setDefaultEphemeris` in the
+root entry): nothing depends on what was computed before it.
+
+## Which ephemeris
+
+From 1.1.0-rc.10 the calc entry follows the root's default source
+([de440.md](de440.md), *The default source*), so that every function gives
+one position for one instant. In 1.1.0-rc.9 it stayed on astronomy-engine,
+and a default `calc()` was as much as 29.19″ from `positions()` at one
+instant a day (noon TT) from 1800 to 2199, and more for a planet passing
+behind the Sun.
+
+| request | computed on |
+| --- | --- |
+| `calc()`: the Sun, the Moon, Mercury to Pluto, geocentric and apparent (the defaults), in any frame | the shipped DE440 pack |
+| `calc()`: the true node and its opposite point | the shipped DE440 pack |
+| `chart()` | as `natalChart()`: the shipped DE440 pack |
+| `events()` | as `searchLongitudeCrossings()`: the shipped DE440 pack |
+| `calc()`: a heliocentric, barycentric or topocentric center; an astrometric or geometric correction; the Earth | astronomy-engine |
+| `calc()`: the mean node, the mean south node, Black Moon Lilith | no ephemeris: their own series |
+| `houses()` | no ephemeris |
+
+The entry computes only inside `CALC_SPAN`, 1800 to 2200, which the pack
+covers, so no request leaves the pack's years.
+
+**A position from the pack** is the pack's apparent place as
+`natalChart()` takes it: light time by iteration, the Sun's light deflection
+(from 1.1.0-rc.12 none for a planet behind the Sun's disc, as JPL Horizons),
+relativistic annual aberration, Mars to Pluto as planetary-system
+barycentres, and the Moon from the ephemeris with light time, in the true
+ecliptic of date ([de440.md](de440.md), *The reduction*). In any other frame
+the same direction is turned from the true ecliptic of date with the engine's
+own nutation and precession, as a node is. `dist` is the light path. Speeds
+are central differences, as `positions()` takes them.
+
+**What stays on astronomy-engine**, and why. The pack's reduction makes the
+apparent geocentric place and nothing else. The other centers and
+corrections are defined by astronomy-engine's own steps (its barycentre of
+the Sun and the giant planets, planet centres, no light deflection, a
+backdated observer), and every bound they quote was measured on
+astronomy-engine. Moving them needs a second reduction and new comparisons
+with an arbiter, which this candidate does not have. `natalChart()` gives
+none of them, so none of them disagrees with it; but a topocentric or
+geometric position of a body and its default position rest on two
+ephemerides, up to the limits under *Bounds* apart, beyond the parallax or
+the correction itself. The receipt of each says which it used.
+
+**The result says which.** `receipt.engine.ephemeris` is
+`{ name: "jpl-de440", version: <the pack's SHA-256> }` or
+`{ name: "astronomy-engine", version: "2.1.19" }`, and the conventions hold
+`ephemeris:<name>@<version>`. **No fallback is silent:** if the pack cannot
+be opened (its bytes are missing, their SHA-256 is wrong, or they cannot be
+decoded), a position the pack would have given is astronomy-engine's, its
+receipt names astronomy-engine, and its `flags` hold `"de440-unavailable"`;
+`chart()`'s chart and `events()`'s result carry the same flag.
+After `setDefaultEphemeris("astronomy-engine")`, the caller's own choice,
+the receipt names astronomy-engine and nothing is flagged. A request the
+pack never gives is not a fallback and is not flagged.
+
+In the sidereal zodiac the ayanamsa is the same on either ephemeris, but for
+a star-anchored one, whose star is placed with astronomy-engine's Earth and
+Sun ([vedic.md](vedic.md)), whatever the position came from.
+
+The calc entry refuses inside `withEphemeris`, as before: a caller's source
+gives no distance and has no measured bounds.
 
 ## The four functions
 
 | function | takes | gives |
 | --- | --- | --- |
-| `calc` | `{ body, time, frame?, center?, zodiac?, flags? }` | `{ lon, lat, dist, speeds, cartesian, ayanamsa, bounds, band, receipt }` |
+| `calc` | `{ body, time, frame?, center?, zodiac?, flags? }` | `{ lon, lat, dist, speeds, cartesian, ayanamsa, bounds, band, flags, receipt }` |
 | `houses` | `{ time, place, houseSystem?, zodiac? }` | angles, Vertex, East Point, ARMC, obliquity and the cusps, with `ayanamsa`, `bounds`, `band` and a receipt, as `natalChart()` computes them |
-| `events` | `{ kind: "longitude-crossing", body, longitude, from, to, zodiac?, stepDays?, maxSamples? }` | every instant in (from, to] the body sits on the longitude, from the engine's crossing search, each with its `band` |
+| `events` | `{ kind: "longitude-crossing", body, longitude, from, to, zodiac?, stepDays?, maxSamples? }` | every instant in (from, to] the body sits on the longitude, from the engine's crossing search, each with its `band`, and `flags`, `bounds` and a receipt |
 | `chart` | `{ time, place?, houseSystem?, timeKnown?, timeFlags?, zodiac? }` | the chart `natalChart()` gives, with its sidereal longitudes in the sidereal zodiac, its `band` and a receipt |
 
 Each returns `status: "ok"` or a typed refusal (below). Malformed input (an
@@ -47,8 +111,10 @@ unknown body, frame or field, an invalid date, a latitude out of range) throws
   time basis, as `positions()` and `natalChart()` read one
   ([time.md](time.md)): from 1972-01-01 to the end of the IERS UT1 table
   (2027-10-02), TT = UTC + (TAI − UTC) + 32.184 s from the IERS leap-second
-  list, and UT1 = UTC + (UT1 − UTC) from IERS; before and after, civil time
-  is read as UT1 and TT comes from the ΔT model (`zodiacs-deltat/1`). Or
+  list, and UT1 = UTC + (UT1 − UTC) from IERS; before 1972 civil time is
+  read as UT1 and TT comes from the ΔT model (`zodiacs-deltat/1`); after the
+  table (the continuous-UTC rule), TT = UTC + 69.184 s and UT1 = TT − ΔT from
+  the model. Or
   `{ jd, scale: "utc" | "ut1" | "tt" }`, a Julian date on a named time scale
   (the root entry's `TimeScaleName`; before 1.0.0 the names were in capitals),
   read on the same basis, or `{ iso }`. Any of the object forms takes
@@ -57,7 +123,16 @@ unknown body, frame or field, an invalid date, a latitude out of range) throws
   UTC, UT1 and TT the engine used. A Julian date near 2.46 million holds time
   to about 4 × 10⁻¹⁰ of a day (40 µs); `chart()` reads it to the nearest
   millisecond, because `natalChart()` takes a `Date`. An instant is computed
-  only when both its UT1 and its TT lie in the span (see Refusals).
+  only when both its UT1 and its TT lie in the span (see Refusals). One
+  exception, in `chart()` alone: a calendar date with no time, such as
+  `"1990-05-03"` or `{ iso: "1990-05-03" }`, is refused with a `RangeError`,
+  as `natalChart()` refuses one as a birth's `utc`, unless `timeKnown` is
+  false. Read as 00:00 UTC it would give angles and houses for a birth time
+  nobody gave. With `timeKnown: false` the date is read as 00:00 UTC and the
+  chart has the `no-time` flag and no angles or houses. The refusal comes
+  after every other input check and after the span, so a date outside the
+  span is refused as `out-of-range` first. `calc()`, `houses()` and
+  `events()` read a calendar date as 00:00 UTC, as `positions()` does.
 - **`place`** and the topocentric observer: `{ latitude, longitude }`,
   geodetic, east longitude positive, degrees; the observer also takes
   `height` in metres above astronomy-engine's ellipsoid (IERS 2003,
@@ -73,7 +148,11 @@ unknown body, frame or field, an invalid date, a latitude out of range) throws
 - **`flags`**: `correction` (`"apparent"`, `"astrometric"` or `"geometric"`,
   default apparent), `speeds` (default true), `cartesian` (default false),
   `units` (`"degrees"` or `"radians"`, default degrees) and `deflection`
-  (default false; true is refused).
+  (default false; true is refused). `deflection` is not a switch: the
+  pack's apparent place has the Sun's light deflection (outside the Sun's
+  disc) whatever it says, and astronomy-engine's places have none. A
+  receipt echoes the request as given, `false` included; its conventions
+  say what was applied, `deflection:sun-outside-disc` or `deflection:none`.
 
 **Bodies**: the Sun, the Moon, Mercury to Pluto, the Earth (heliocentric and
 barycentric only), the true lunar nodes (`"North Node"`, `"South Node"`), the
@@ -116,7 +195,10 @@ The precession is astronomy-engine's (IAU 2006, the angles of Capitaine et al.
 nutation the engine's own IAU 2000B (McCarthy and Luzum 2003): all 77 of its
 luni-solar terms and its two fixed planetary offsets (`src/nutation.ts`; the
 README's *Nutation*). They are the precession and nutation of `positions()`
-and `natalChart()`, so the default frame is `positions()` to the bit. Its Δψ
+and `natalChart()` on astronomy-engine, so there the default frame is
+`positions()` to the bit. (A place from the DE440 pack reaches the true
+ecliptic of date by the pack's own chain, with the P03 adjustment of the
+nutation; *Which ephemeris*.) Its Δψ
 and Δε equal ERFA's `nut00b` within 10⁻¹⁰″ from 1800 to 2200
 (`docs/evidence/nutation-2026-09-29`), and IAU 2000B's Δψ is at most 0.00394″
 from IAU 2006/2000A's (ERFA's `nut06a`) there, sampled every 0.1 day of TT
@@ -210,7 +292,7 @@ Center differ ([vedic.md](vedic.md), *Agreement with Swiss Ephemeris*).
 
 | `correction` | what it is |
 | --- | --- |
-| `apparent` | light time and aberration: the observer is backdated with the target, as astronomy-engine's `GeoVector` does, which adds the observer's aberration to first order, annual and for a topocentric observer diurnal too. No gravitational deflection. |
+| `apparent` | on astronomy-engine: light time and aberration: the observer is backdated with the target, as astronomy-engine's `GeoVector` does, which adds the observer's aberration to first order, annual and for a topocentric observer diurnal too, and no gravitational deflection. A geocentric apparent place from the DE440 pack, the default, is the pack's instead: light time, the Sun's light deflection (none behind the Sun's disc) and relativistic annual aberration (*Which ephemeris*). |
 | `astrometric` | light time only: the target when its light left, from where the observer is when it arrives, on barycentric positions. |
 | `geometric` | where the target is at the instant, from where the observer is at the instant. |
 
@@ -287,7 +369,36 @@ direction and the arbiter's, arcseconds), `bounds.distance` (relative) and
 `bounds.speed` (arcseconds a day), each labelled `measured` or `estimated`;
 none is proven. Each one's `basis` says which comparison it rests on.
 
-From 1.1.0-rc.7 the geocentric Sun, Moon, Mercury to Pluto (with each of the
+**A position from the shipped DE440 pack** (*Which ephemeris*) quotes none
+of the bounds below, which were measured on astronomy-engine. Its
+`bounds.position` is the largest angle from JPL Horizons's apparent
+geocentric place (DE441) at the conformance suite's 240 L1 vectors, 24 TT
+instants a body from 1851 to 2148, in the true ecliptic of date, and from
+1.1.0-rc.12 the largest angle from NAIF's `de440.bsp` at noon TT of each of
+the 146,097 days from 1800-01-01 to 2199-12-31 in all eight frames (the
+dense sweep run on the pack, *Measured against DE440 every day*), the
+larger of the two, rounded up to two significant figures: the Moon 0.013″
+(Horizons; DE440 and DE441 differ in the Moon), Saturn 0.0039″, every other
+body 0.0040″ (`src/calc-bounds-de440.ts`; `src/calc-bounds-de440.test.ts`
+recomputes the L1 rows from the vectors and reads the sweep's committed
+summary). In 1.1.0-rc.10 and rc.11 the table held the 24 instants alone,
+0.0034″ to 0.0038″ for the Sun and the planets; the sweep found up to
+0.00395″, the engine's IAU 2000B nutation against ERFA's 2000A in the frames
+of date. It is labelled `measured` in the true ecliptic of date and
+`estimated` in the seven other frames, where Horizons was not compared.
+Within 3″ of the Sun's limb a planet's bound is 1.8″, `estimated`
+(`DE440_AT_LIMB`): the pack bends no light behind the Sun's disc, as JPL
+Horizons does not, so the place steps at the limb by the deflection there,
+at most 1.7512″, and the two edges differ by 0.06″ to 0.17″
+([de440.md](de440.md), *Behind the Sun's disc*). Its `bounds.distance` and
+`bounds.speed`, and every bound of the true node and its opposite point,
+have `value: null` and the basis "not compared with an independent
+ephemeris". The ΔT widening below applies to a position from the pack as to
+any other.
+
+**On astronomy-engine** (the other centers and corrections, and every
+position where astronomy-engine stands in for the pack): from 1.1.0-rc.7
+the geocentric Sun, Moon, Mercury to Pluto (with each of the
 three corrections) and the true node and its opposite point take the largest
 differences from JPL's DE440 (NAIF's `de440.bsp`) found at noon TT on each of
 the 146,097 days from 1800-01-01 to 2199-12-31, in every frame, rounded up to
@@ -296,8 +407,8 @@ two significant figures by the same rule: 32 rows,
 held the 32 instants' values, and the engine was found beyond ten of the
 eleven apparent position limits on other days.
 
-Every other row (heliocentric, barycentric and topocentric positions, and the
-mean points) keeps the measured values that follow, 72 rows. They are the
+Every other row (heliocentric and barycentric positions, and the mean points)
+keeps the measured values that follow, 63 rows. They are the
 largest differences from NASA JPL
 Horizons (DE441) over a preregistered corpus of 32 instants from 1802 to 2188,
 by center, correction and body, in every frame, rounded up to two
@@ -315,13 +426,88 @@ first run's, and the rate bounds of the outer planets and the position and
 rate bounds of the mean node and Lilith, which carried the five-term
 nutation's error, are smaller. Topocentric
 positions were compared for the Sun, the Moon and Mars, in all three
-corrections; another topocentric body takes its geocentric bound for the
-same correction, labelled `estimated`. The sweep did not take topocentric
-places, and the topocentric Sun, Moon and Mars keep position bounds (3.0″,
-7.8″ and 6.6″) below the geocentric ones it found (3.4″, 12″ and 23″). A
-topocentric place is the geocentric one moved by the parallax, so the
-geocentric differences carry over and those three bounds are probably too
-small until topocentric places are swept too.
+corrections, on the same 32 instants. The sweep did not take topocentric
+places, and a topocentric place is the geocentric one moved by the parallax,
+so the geocentric differences carry over. Every topocentric body therefore
+takes its geocentric bound for the same correction, labelled `estimated`:
+the Sun, the Moon and Mars too, since the geocentric row is at or above each
+value of their own 32 instants' rows (9 rows), so their position bounds are
+3.4″, 12″ and 23″ in place of the 32 instants' 3.0″, 7.8″ and 6.6″, and
+`src/calc-bounds.ts` leaves those rows out. Its generator,
+`docs/evidence/de440-sweep-20261111/tools/write_bounds.py`, keeps a
+topocentric row only where it is at or above the geocentric one in every
+value, and refuses one above in some values and below in others
+(`calc-bounds.test.ts` checks each value against both summaries).
+
+The engine's TT and UT1 rest on a ΔT its model extrapolates, with no
+observation behind it, after the last day of the IERS UT1 table the release
+carries (time.md, *From an instant to UT1 and TT*; for this release, after
+2027-10-02T00:00Z, and on UTC input from 00:00:00.147Z, when UT1 passes it),
+when ΔT is not pinned. Its 1-σ band `deltaT.sigma` grows
+with the years ([time.md](time.md)), and no arbiter gives positions for such
+an instant. A result that moves with that ΔT is flagged
+`"delta-t-extrapolated"` and its bounds widen by how far each quantity moves,
+to first order, while TT and UT1 move by their bands, s and u seconds
+(`band.time`); its receipt names `bounds:plus-delta-t-band`, and a widened
+bound is labelled `estimated`, its `basis` adding the amount. On UT1 input
+TT carries the ΔT, so every result moves with it. On TT input (s = 0,
+u = σ) UT1 carries it, so only what turns with UT1 moves: a topocentric
+position, the houses and the angles; a geocentric, heliocentric or
+barycentric position on TT input keeps its bounds, with no flag. On UTC
+input, from 2.0.0-rc.3, TT is UTC + 69.184 s (the
+continuous-UTC rule, time.md) and UT1 carries the ΔT, as on TT input
+(s = 0, u = σ): every result is still flagged, as before, but only what
+turns with UT1 widens. Up to 2.0.0-rc.2, UTC input after the table was
+read as UT1 and TT carried the ΔT, so every result widened.
+
+- **`calc()`**: `flags` holds the flag (empty otherwise), and each bound
+  grows by: the position's, (Ω + w) s + w u, with Ω the direction's angular
+  rate √((λ′ cos β)² + β′²) in arcseconds a second; the speed's,
+  (Ω′ + w ω⊕) s + w ω⊕ u, with Ω′ the change of that rate and ω⊕ the
+  Earth's rotation; the distance's, (|r′| / r + v / r) s + (v / r) u. Ω, Ω′
+  and r′ come from samples 0.001 day (0.25 day for the true node) either
+  side, as the speeds do, whether or not speeds were asked for; w and v
+  bound a topocentric observer's turn, as in *Bands*, and are 0 for other
+  centers. On UTC input s is 0 and u is σ, as on TT input (up to
+  2.0.0-rc.2 s was √(0.9² + σ²) and u 0.9 s). For the Moon at
+  2199-06-15T12:00Z given on UTC, σ is over 100 s: its geocentric position
+  bound does not grow (it grew by between 50″ and 65″ up to 2.0.0-rc.2), and
+  the topocentric Moon's grows by w σ alone, as on TT input
+  (`src/calc-delta-t.test.ts`). On UT1 input s is σ and u 0, and the
+  geocentric Moon's bound grows by between 50″ and 65″. In the sidereal
+  zodiac the widening comes on top of the ayanamsa's addition, from the
+  sidereal rates.
+- **`houses()`**: `flags` holds the flag, on UTC, UT1 or TT input alike, and
+  `bounds.angles` grows by the largest of the ascendant's, midheaven's,
+  Vertex's and East Point's bands, `bounds.cusps` by the largest cusp band
+  (*Bands*). On TT input the ascendant's band is its rate on UT1 times σ:
+  over 15 arcminutes at 41.5° N in 2199 (`src/calc-delta-t.test.ts`).
+- **`events()`**: `flags` holds the flag where an event's UTC rests on that
+  ΔT, and `bounds.timing` grows by the widest such event's `band.utc`: the
+  ephemeris fixes an event in TT, so its UTC moves with the band of TT − UTC.
+  After the table that band is 0 on the continuous-UTC rule, UTC being
+  TT − 69.184 s, so the flag stays and the timing bound does not grow (up to
+  2.0.0-rc.2 it grew by about the ΔT band).
+- **`chart()`** and `natalChart()`: the chart's `flags` hold it on UTC or UT1
+  input, and on TT input where the chart has houses. A chart has no bounds;
+  `positions()` returns a bare list of bodies and carries none.
+
+The widening is first order and uses a 1-σ band, so it is not a limit
+either: the true ΔT can be further off. It errs wide in two places, kept as
+they are. A topocentric place's observer turn is counted on both TT and UT1
+(w s + w u) although on UTC input it moves with UT1 alone, and w bounds the
+turn in any direction, so a topocentric widening can be several times the
+place's actual movement. And on UT1 and TT input the time basis steps where the table ends
+(time.md): just before it nothing widens, and just after it the bands are the
+model's σ at once. On UTC input the continuous-UTC rule keeps TT on the leap
+seconds across the end, so only UT1's band steps, from the table's 26.2 ms to
+the model's σ, and the positions' bounds do not jump. Up to 2.0.0-rc.2 the
+bands on UTC input were about 0.9 s at once after the end, and within a
+sample step of it the speed's Ω′, a second difference across that step, could
+come out large, so the bounds there jumped wider than the movement. Before the IERS
+table (before 1972) the model's ΔT is reconstructed from observations of the
+past, not extrapolated, so nothing is flagged or widened there; its band,
+which the model gives, is in `band`.
 
 A broader sample on 2026-11-13 compared the geocentric apparent positions in
 the true ecliptic of date with JPL DE421 at 1,711 instants per body from 1900
@@ -457,7 +643,9 @@ uncertainty, how far a civil time before 1972 was from UT1, and terms of the
 second order, and it is as good as the σ it comes from (time.md says what each
 is). It is kept apart from `bounds`, whose values are the largest differences
 from an arbiter, labelled measured or estimated; `events()`'s `bounds.timing`
-stays the bisection bracket.
+is the bisection bracket. For a result flagged `"delta-t-extrapolated"`
+(*Bounds*), though, `bounds` already include the time term, widened by these
+bands, so do not add `band` to `bounds`: that counts it twice.
 
 - **`calc()`**: `band` is `{ time, lon, lat, dist }`, and null without
   speeds. A geocentric, heliocentric or barycentric position, a node and
@@ -527,7 +715,9 @@ stays the bisection bracket.
 - **`events()`**: each event's `band` is `{ utc, ut1 }`, in seconds. The
   ephemeris fixes an event in TT, so its `jdTt` has no band, and only its
   clock labels move: `utc` is the band of TT − UTC at the event (0 on the
-  IERS basis, the ΔT band before 1972, √(u² + d²) after the table) and `ut1`
+  IERS basis and, after the table, on the continuous-UTC basis; the ΔT band
+  before 1972; √(u² + d²) on the `delta-t` basis after the table, up to
+  2.0.0-rc.2) and `ut1`
   that of TT − UT1, the ΔT band there. An event's band is computed from its
   own `at`, not from the window's instants that the receipt records. The
   receipt names `time-band:first-order` whether or not the search finds an
@@ -582,9 +772,12 @@ The checks run in that order: a request with both an epoch outside
 `EPHEMERIS_SPAN` and an instant outside `CALC_SPAN` is refused for its epoch.
 The span is checked on both time scales, so a
 ΔT pin cannot move the ephemeris outside it, and with the engine's ΔT the
-last instant computed is about 2199-12-31T23:57:53Z (UTC, read as UT1 there). `positions()` and
-`natalChart()` still compute outside the span, with the
-`outside-reference-span` flag, as they always have. calc refuses instead
+last instant computed on UTC input is 2199-12-31T23:58:50.815Z, whose TT is
+69.184 s later (up to 2.0.0-rc.2, 2199-12-31T23:57:53.752Z, read as UT1;
+`docs/evidence/continuous-utc-20261117/results/span-ends-*.json`). `natalChart()`
+still computes outside the span, with the `outside-reference-span` flag, as
+it always has, and so does `positions()`, whose rows carry the flag from
+2.0.0 (1.1.0's rows carried none). calc refuses instead
 because every result it returns carries a bound, and outside the span there
 is no comparison to take one from.
 
@@ -595,13 +788,16 @@ is no comparison to take one from.
 - `request`: the request as read, every default filled in, as JSON. Passing it
   back to the same function repeats the calculation.
 - `instants`: each instant used, `{ utc, jdUt1, jdTt, deltaT, timeScale }`:
-  its UTC to the millisecond (before 1972 and after the IERS table, the civil
-  time read as UT1), its UT1 and TT as Julian dates, the ΔT value with its
+  its UTC to the millisecond (before 1972, and up to 2.0.0-rc.2 after the IERS
+  table, the civil time read as UT1; after the table now TT − 69.184 s), its UT1 and TT as Julian dates, the ΔT value with its
   band and its source, and the time basis's record, as a chart's `timeScale`
   gives it.
 - `conventions`: ids from the vocabulary below; every receipt but that of
   `calc()` without speeds names `time-band:first-order` last, `events()`'s
-  even when it finds no event.
+  even when it finds no event. A `calc()`, `houses()` or `events()` receipt
+  whose bounds were widened for an extrapolated ΔT names
+  `bounds:plus-delta-t-band` (*Bounds*). No codec parses a calc receipt; a
+  reader repeats its request, which gives the flag again.
 - `engine`: the package version and the ephemeris.
 
 ### Convention ids
@@ -616,6 +812,13 @@ is no comparison to take one from.
 | `center:geocentric`, `center:heliocentric`, `center:barycentric`, `center:topocentric` | the origin |
 | `correction:apparent`, `correction:astrometric`, `correction:geometric` | as above; `correction:not-applicable` for the nodes and Lilith |
 | `light-time:newtonian` | astronomy-engine's light-time solution, iterated until successive light times agree to 10⁻⁹ day |
+| `light-time:iterated` | on the DE440 pack: light time by iteration on the pack's states, at most 12 steps, to 10⁻¹¹ s |
+| `deflection:sun-outside-disc` | on the DE440 pack, from 1.1.0-rc.12: the Sun's gravitational light deflection (the form of ERFA's `eraLd`), none for a planet behind the Sun's disc, as JPL Horizons; 1.1.0-rc.10 and rc.11 wrote `deflection:sun`, the deflection behind the disc too |
+| `aberration:relativistic-annual` | on the DE440 pack: relativistic annual aberration from the Earth's barycentric velocity |
+| `target:system-barycentre` | on the DE440 pack: Mars to Pluto are planetary-system barycentres, not planet centres |
+| `place:icrf-to-true-ecliptic-of-date`, `frame-bias:iau2006-fukushima-williams`, `nutation:iau2000b-p03`, `time:tdb-three-term` | on the DE440 pack: the place is carried from the ICRF to the true ecliptic of date by the IAU 2006 Fukushima-Williams angles, frame bias included, and IAU 2000B nutation with the P03 adjustment, at a TDB formed from TT by three terms ([de440.md](de440.md), *The reduction*) |
+| `frame-turn:from-true-ecliptic-of-date` | on the DE440 pack, in a frame other than the true ecliptic of date: the pack's place of date, turned into the frame with the engine's own nutation and precession |
+| `ephemeris:jpl-de440@<SHA-256>` | the shipped DE440 pack, named by its digest |
 | `aberration:backdated-observer` | first-order aberration from backdating the observer with the target |
 | `deflection:none` | no gravitational light deflection |
 | `moon:series-at-instant` | the engine's Moon: astronomy-engine's lunar series at the instant, without light time or aberration |
@@ -633,7 +836,8 @@ is no comparison to take one from.
 | `house:<system>`, `polar-fallback:whole` | the house system asked for, and whole sign where Placidus or Koch is undefined |
 | `angles:gast-and-true-obliquity`, `sidereal-time:gast-iau2006-era` | the angles from the engine's apparent sidereal time (the Earth rotation angle, astronomy-engine's IAU 2006 polynomial, and the equation of the equinoxes: Δψ cos εA and the two largest IAU 2000 complementary terms) and the true obliquity |
 | `aspects:major`, `search:scan-and-bisect` | the chart's major aspects; the crossing search |
-| `time-band:first-order` | the result carries bands from the time basis (*Bands*): each instant's TT and UT1 bands by the rule of [time.md](time.md)'s *The time bands*, after the IERS table on UTC input the root of the sum of the squares of the two recorded bands; propagated to first order, a position's rates times the TT band, with the observer's turn bounded for a topocentric one, an angle's or cusp's rates on UT1 and on TT times those bands, with whole-sign and fallback cusps 0, and an event's clock labels |
+| `bounds:plus-delta-t-band` | `calc()`'s, `houses()`'s or `events()`'s bounds widened for a ΔT extrapolated past the IERS table, by how far each quantity moves while TT and UT1 move by their bands (*Bounds*) |
+| `time-band:first-order` | the result carries bands from the time basis (*Bands*): each instant's TT and UT1 bands by the rule of [time.md](time.md)'s *The time bands*, read from the instant's recorded basis: after the IERS table on UTC input, on the `continuous-utc` basis 0 for TT and the ΔT band for UT1, and on the `delta-t` basis that releases up to 2.0.0-rc.2 recorded there the root of the sum of the squares of the two recorded bands for TT; propagated to first order, a position's rates times the TT band, with the observer's turn bounded for a topocentric one, an angle's or cusp's rates on UT1 and on TT times those bands, with whole-sign and fallback cusps 0, and an event's clock labels |
 
 ## Swiss Ephemeris `calc_ut` flags
 
@@ -649,7 +853,7 @@ uses no Swiss Ephemeris code, data or output.
 | `SEFLG_TOPOCTR` (with `swe_set_topo`) | topocentric | `center: { topocentric: { latitude, longitude, height } }` | supported |
 | `SEFLG_TRUEPOS` | geometric position | `flags.correction: "geometric"` | supported |
 | `SEFLG_NOABERR` | no aberration | `flags.correction: "astrometric"` | supported; there is never deflection here |
-| `SEFLG_NOGDEFL` | no gravitational deflection | always so; `flags.deflection: true` | supported as the only behaviour; deflection is refused (`not-in-this-version`) |
+| `SEFLG_NOGDEFL` | no gravitational deflection | on astronomy-engine always so (`setDefaultEphemeris("astronomy-engine")`, or another correction); on the DE440 pack, the default, the apparent place has the Sun's deflection and no flag removes it | partly: astronomy-engine's places have none; `flags.deflection` asks for deflection and `true` is refused (`not-in-this-version`) |
 | `SEFLG_ASTROMETRIC` | `NOABERR` and `NOGDEFL` | `flags.correction: "astrometric"` | supported |
 | `SEFLG_NONUT` | mean equinox of date | `frame: "ecliptic-mean-of-date"` or `"equatorial-mean-of-date"` | supported |
 | `SEFLG_J2000` | J2000.0 | `frame: "ecliptic-j2000"` or `"equatorial-j2000"` | supported |
@@ -683,8 +887,11 @@ from 1800-01-01 to 2199-12-31, geocentric, in all eight frames, for the Sun,
 the Moon, Mercury to Pluto (Mars to Pluto as system barycentres, on both
 sides) with each correction, and the true node and its opposite point. The
 reference is formed from the kernel with ERFA, as the Horizons comparison
-turns Horizons's vectors; apparent places leave out the Sun's light
-deflection, as the engine does. It ran in GitHub Actions (`PLAN.md`,
+turns Horizons's vectors; astronomy-engine's apparent places are compared
+with a place without the Sun's light deflection, as astronomy-engine
+computes them (a run on the pack, from 1.1.0-rc.11, with the deflection,
+and from 1.1.0-rc.12 none behind the Sun's disc, as Horizons; below). It
+ran in GitHub Actions (`PLAN.md`,
 `README.md`, `results/`). The largest differences, apparent places, in
 arcseconds, and the position bound each gives, beside the 32 instants':
 
@@ -716,6 +923,31 @@ resolution, receipts, the version and the bounds, none of which a geocentric
 position reads, and the sweep's workflow, run again on 1.1.0-rc.7's build,
 checks every largest difference against the bounds the build quotes
 (`docs/evidence/1.1.0-rc.7-20261111/`).
+
+These rows are the bounds of astronomy-engine's results: on the shipped
+DE440 pack, from 1.1.0-rc.10 the default, `calc()` quotes
+`src/calc-bounds-de440.ts` instead (*Which ephemeris*). The sweep's engine
+side ran `calc()` at its default, so on 1.1.0-rc.10 it measured the pack's
+apparent places against these limits and against an arbiter without the
+light deflection the pack applies, and the workflow failed (run
+43618467433). From 1.1.0-rc.11 it names the source (`engine_sweep.mjs
+--ephemeris`) and the workflow sweeps astronomy-engine; run so on
+1.1.0-rc.10's head, the engine's values are the same bytes as 1.1.0-rc.3's
+in all eight eras and every row is within its limit
+(`docs/evidence/1.1.0-rc.11-20261115/sweep/`).
+
+From 1.1.0-rc.12 the workflow sweeps the pack too, `calc()`'s default
+(`engine_sweep.mjs --ephemeris de440`), against the kernel's apparent place
+with the Sun's light deflection (`erfa.ld` with `erfa.ldsun`'s limiter, and
+none for a planet behind the Sun's disc, as Horizons), and its job *Sweep
+results on the DE440 pack* holds every body's largest angle over all
+instants and frames to `src/calc-bounds-de440.ts` (`tools/check_pack.py`);
+it runs when the reduction or either table changes. On this build, at the
+146,097 instants: the Moon 0.0045″ and every other body 0.0040″, rounded
+up (0.004422″, and 0.003898″ to 0.003948″), near the Sun too, where 1.1.0-rc.11 was up to
+17.308″ (`docs/evidence/1.1.0-rc.12-20261115/sweep-pack/`). The pack's
+bounds take these, rounded up, where they are above the 24 Horizons
+instants' (*Bounds*).
 
 ## Measured against JPL Horizons and ERFA
 

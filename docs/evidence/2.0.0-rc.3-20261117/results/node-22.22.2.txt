@@ -1,0 +1,11 @@
+Node.js v22.22.2 for the conformance, atlas, test and offline CLI runs, from nodejs.org:
+https://nodejs.org/dist/v22.22.2/node-v22.22.2-linux-x64.tar.xz, the same binary 2.0.0-rc.2's record names, in its own directory.
+
+Its line in https://nodejs.org/dist/v22.22.2/SHASUMS256.txt:
+88fd1ce767091fd8d4a99fdb2356e98c819f93f3b1f8663853a2dee9b438068a  node-v22.22.2-linux-x64.tar.xz
+
+sha256sum of the file:
+88fd1ce767091fd8d4a99fdb2356e98c819f93f3b1f8663853a2dee9b438068a  node-v22.22.2-linux-x64.tar.xz
+
+sha256sum -c against that line: node-v22.22.2-linux-x64.tar.xz: OK
+node --version: v22.22.2

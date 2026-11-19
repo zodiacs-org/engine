@@ -1,0 +1,2847 @@
+{
+ "what": "ZOD-97 P1 and T5 on UTC input after 2050: reported, not judged (Horizons is not a reference for future UT)",
+ "node": "v22.23.4",
+ "engineVersion": "1.1.0",
+ "horizons": [
+  {
+   "file": "horizons/utc-after-2050-10.txt",
+   "sha256": "089402c891bc41881f0670fa9c500293218ad42ba8172ea203a5f9baae9611e5",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:08:11.496Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-301.txt",
+   "sha256": "62f83178b1c94bf7bf17274ee0596c19d0e4bf73f23058431380758019e1583b",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:08:14.878Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-199.txt",
+   "sha256": "2837b8c050033846a11acbe912aa01d3a2a074aaa6426614efc52955116d8169",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:08:18.257Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-299.txt",
+   "sha256": "07182b3bb39154993eb63ae829e0fd2521724ccc207e7ccce88711bde62032b8",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:08:21.482Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-4.txt",
+   "sha256": "7028bd40ac5f48f20b662ccbf7e411032e705c536e13790b443f9ed22ce26b82",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:08:24.896Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-5.txt",
+   "sha256": "fd4c40d0c12c16923022e84309245a87e9747fb5ca78bbd82375582527a43edc",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:08:46.765Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-6.txt",
+   "sha256": "20eef4b4e728cda6eff387c9d6b6d34fd26f81e6fbf1663b98bd2c06b65d179a",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:09:07.979Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-7.txt",
+   "sha256": "cab050915d70b6a2697a4c2ee9390bf2004c3709fae7f744b4c4d8cb2dfd0ba9",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:09:29.440Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-8.txt",
+   "sha256": "86ff59176080e5cdaa468e8e781f2787db22accf1cad92c1dead81a6776ebea6",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:09:32.814Z"
+  },
+  {
+   "file": "horizons/utc-after-2050-9.txt",
+   "sha256": "1711aaf305cd3ebda0a3b412213193c0a42a609548e5f25770dc83a28fb8fa2a",
+   "ephemeris": [
+    "DE441"
+   ],
+   "askedAt": "2026-11-13T04:09:36.116Z"
+  }
+ ],
+ "comparisons": 50,
+ "over30Arcsec": [
+  {
+   "body": "Moon",
+   "utc": "2199-06-15T12:00:00Z",
+   "lonDifferenceArcsec": 31.119916797479164
+  }
+ ],
+ "records": [
+  {
+   "body": "Sun",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-10.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 83.9014463,
+    "lat": -0.0001819
+   },
+   "engine": {
+    "lon": 83.90146385032514,
+    "lat": -0.00017343730432018155,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.5098483543768451,
+     "lat": 0.000011199940080241524,
+     "dist": 1.3598753041331165e-8
+    },
+    "positionBound": {
+     "value": 0.513848355,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.51 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 83.90146385032514,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.06318117029877612,
+   "natalChartLonDifferenceArcsec": 0.06318117029877612,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Sun",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-10.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 84.0829088,
+    "lat": -0.0000936
+   },
+   "engine": {
+    "lon": 84.08293358290474,
+    "lat": -0.00008553417098990257,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 1.092362946132113,
+     "lat": 0.000040537845461973545,
+     "dist": 3.0793369902607e-8
+    },
+    "positionBound": {
+     "value": 1.096362947,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 1.09 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 84.08293358290474,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.0892184572876431,
+   "natalChartLonDifferenceArcsec": 0.0892184572876431,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Sun",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-10.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 280.6041927,
+    "lat": 0.0000877
+   },
+   "engine": {
+    "lon": 280.60425799089336,
+    "lat": 0.00007843078635483818,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 1.800008821295738,
+     "lat": 0.00006880699491893889,
+     "dist": 6.976644165960278e-9
+    },
+    "positionBound": {
+     "value": 1.804008823,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 1.8 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 280.60425799089336,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.2350472163016093,
+   "natalChartLonDifferenceArcsec": 0.2350472163016093,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Sun",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-10.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 280.4622275,
+    "lat": 0.0000159
+   },
+   "engine": {
+    "lon": 280.4624474167987,
+    "lat": 0.000007463645100118468,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 3.096259717594064,
+     "lat": 0.00010237287757953125,
+     "dist": 2.3505543489894864e-8
+    },
+    "positionBound": {
+     "value": 3.10025972,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 3.1 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 280.4624474167987,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.7917004751107015,
+   "natalChartLonDifferenceArcsec": 0.7917004751107015,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Sun",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-10.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 84.6042997,
+    "lat": 0.0002255
+   },
+   "engine": {
+    "lon": 84.60478816814853,
+    "lat": 0.00023130818341880724,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 4.103988519089667,
+     "lat": 0.00008417737868951073,
+     "dist": 1.3454993031508809e-7
+    },
+    "positionBound": {
+     "value": 4.10798852,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 4.1 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 84.60478816814853,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 1.7584853347671014,
+   "natalChartLonDifferenceArcsec": 1.7584853347671014,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Moon",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-301.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 160.0902729,
+    "lat": -3.9927837
+   },
+   "engine": {
+    "lon": 160.0906002943758,
+    "lat": -3.9927562161946657,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 6.491666666153962,
+     "lat": 0.36576369372874207,
+     "dist": 3.515147229521528e-9
+    },
+    "positionBound": {
+     "value": 6.499231555,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 6.49 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 160.0906002943758,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 1.1786197526816977,
+   "natalChartLonDifferenceArcsec": 1.1786197526816977,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Moon",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-301.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 99.1335778,
+    "lat": -0.4987241
+   },
+   "engine": {
+    "lon": 99.13424495272692,
+    "lat": -0.49865049239270515,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 13.461357605547127,
+     "lat": 1.2339435201431457,
+     "dist": 4.712021371753496e-10
+    },
+    "positionBound": {
+     "value": 13.530286716,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 13.5 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 99.13424495272692,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 2.401749816908705,
+   "natalChartLonDifferenceArcsec": 2.401749816908705,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Moon",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-301.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 157.4116076,
+    "lat": 1.0917477
+   },
+   "engine": {
+    "lon": 157.41313647022756,
+    "lat": 1.091619767223483,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 24.753926135260343,
+     "lat": 2.1406960450567403,
+     "dist": 3.9054543926859765e-9
+    },
+    "positionBound": {
+     "value": 24.854840502,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 24.8 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 157.41313647022756,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 5.503932819010515,
+   "natalChartLonDifferenceArcsec": 5.503932819010515,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Moon",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-301.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 302.2249809,
+    "lat": -1.6918062
+   },
+   "engine": {
+    "lon": 302.22870855285987,
+    "lat": -1.6921513313278118,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 37.37953820912711,
+     "lat": 3.280868567615709,
+     "dist": 1.6222733290432827e-8
+    },
+    "positionBound": {
+     "value": 37.520007583,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 37.5 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 302.22870855285987,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 13.419550295566296,
+   "natalChartLonDifferenceArcsec": 13.419550295566296,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Moon",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-301.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 352.9914827,
+    "lat": 4.309098
+   },
+   "engine": {
+    "lon": 353.00012712133264,
+    "lat": 4.308643779879754,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 57.543632926039216,
+     "lat": 2.9318459090325795,
+     "dist": 4.419451402835341e-8
+    },
+    "positionBound": {
+     "value": 57.468855308,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 57.5 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 353.00012712133264,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 31.119916797479164,
+   "natalChartLonDifferenceArcsec": 31.119916797479164,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": true
+  },
+  {
+   "body": "Mercury",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-199.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 96.1668867,
+    "lat": 1.8763877
+   },
+   "engine": {
+    "lon": 96.16693310409165,
+    "lat": 1.8763988169843056,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 1.0683635106775955,
+     "lat": 0.028867590073506075,
+     "dist": 0.000001910006893271807
+    },
+    "positionBound": {
+     "value": 1.072180787,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 1.07 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 96.16693310409165,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.1670547300363978,
+   "natalChartLonDifferenceArcsec": 0.1670547300363978,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Mercury",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-199.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 61.1756073,
+    "lat": -2.9851395
+   },
+   "engine": {
+    "lon": 61.17564949197677,
+    "lat": -2.985126427848699,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 1.4191946130438018,
+     "lat": 0.15842645266326344,
+     "dist": 0.000006309351244678218
+    },
+    "positionBound": {
+     "value": 1.430096086,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 1.43 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 61.17564949197677,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.15189111618383322,
+   "natalChartLonDifferenceArcsec": 0.15189111618383322,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Mercury",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-199.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 288.0057722,
+    "lat": -2.1126781
+   },
+   "engine": {
+    "lon": 288.0059054097504,
+    "lat": -2.1126904576503773,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 2.867015016911466,
+     "lat": 0.04104665498280843,
+     "dist": 0.000004399367499652383
+    },
+    "positionBound": {
+     "value": 2.869360187,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 2.87 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 288.0059054097504,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.4795551014467492,
+   "natalChartLonDifferenceArcsec": 0.4795551014467492,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Mercury",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-199.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 259.4675368,
+    "lat": 1.2413992
+   },
+   "engine": {
+    "lon": 259.46783462414766,
+    "lat": 1.2413492923562972,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 3.8552194369883943,
+     "lat": 0.42579510223197614,
+     "dist": 0.000014920679128140517
+    },
+    "positionBound": {
+     "value": 3.881762617,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 3.88 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 259.46783462414766,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 1.072166931544416,
+   "natalChartLonDifferenceArcsec": 1.072166931544416,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Mercury",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-199.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 69.1343249,
+    "lat": -4.2453344
+   },
+   "engine": {
+    "lon": 69.13415952025872,
+    "lat": -4.245360588270683,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 0.18189851437923976,
+     "lat": 0.19682904073772062,
+     "dist": 0.000013726186134607092
+    },
+    "positionBound": {
+     "value": 0.271670358,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.268 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 69.13415952025872,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.5953670684903045,
+   "natalChartLonDifferenceArcsec": -0.5953670684903045,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Venus",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-299.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 69.8941924,
+    "lat": -0.6729344
+   },
+   "engine": {
+    "lon": 69.89421745369684,
+    "lat": -0.672926792432726,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.6520187495087623,
+     "lat": 0.020255824930333764,
+     "dist": 4.0876893947096714e-7
+    },
+    "positionBound": {
+     "value": 0.656288364,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.652 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 69.89421745369684,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.09019330864248332,
+   "natalChartLonDifferenceArcsec": 0.09019330864248332,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Venus",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-299.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 71.8898948,
+    "lat": -0.5640665
+   },
+   "engine": {
+    "lon": 71.88993557196302,
+    "lat": -0.5640576456270721,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 1.3984193956474542,
+     "lat": 0.044120993399002384,
+     "dist": 7.65561397799853e-7
+    },
+    "positionBound": {
+     "value": 1.403047514,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 1.4 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 71.88993557196302,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.14677906710858224,
+   "natalChartLonDifferenceArcsec": 0.14677906710858224,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Venus",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-299.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 320.0704853,
+    "lat": -1.8524067
+   },
+   "engine": {
+    "lon": 320.0705713533262,
+    "lat": -1.852413955300309,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 2.124794902900836,
+     "lat": 0.03912635248986806,
+     "dist": 0.000003121425964505782
+    },
+    "positionBound": {
+     "value": 2.1280449,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 2.12 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 320.0705713533262,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.30979197426859173,
+   "natalChartLonDifferenceArcsec": 0.30979197426859173,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Venus",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-299.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 243.4910091,
+    "lat": 4.2181434
+   },
+   "engine": {
+    "lon": 243.49102973413903,
+    "lat": 4.218160341357828,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 1.1433522787332127,
+     "lat": 0.20492622135746255,
+     "dist": 0.000005310207070367958
+    },
+    "positionBound": {
+     "value": 1.162523473,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 1.16 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 243.49102973413903,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.07428290036841645,
+   "natalChartLonDifferenceArcsec": 0.07428290036841645,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Venus",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-299.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 98.218071,
+    "lat": -0.0736591
+   },
+   "engine": {
+    "lon": 98.21761837688604,
+    "lat": -0.0738012024627185,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 2.0596106980145388,
+     "lat": 0.9779469228987284,
+     "dist": 0.000003134264099178457
+    },
+    "positionBound": {
+     "value": 2.283993284,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 2.28 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 98.21761837688604,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -1.6294432100949052,
+   "natalChartLonDifferenceArcsec": -1.6294432100949052,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Mars",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-4.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 112.2831757,
+    "lat": 1.2129133
+   },
+   "engine": {
+    "lon": 112.2831842600281,
+    "lat": 1.2129239444920628,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.338408877172676,
+     "lat": 0.00010927044533272576,
+     "dist": 7.329156379391634e-7
+    },
+    "positionBound": {
+     "value": 0.342333069,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.338 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 112.2831842600281,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.030816101389063988,
+   "natalChartLonDifferenceArcsec": 0.030816101389063988,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Mars",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-4.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 62.6114549,
+    "lat": -0.0445089
+   },
+   "engine": {
+    "lon": 62.611465269268294,
+    "lat": -0.0445031435782433,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 0.816467378175895,
+     "lat": 0.012854109620304194,
+     "dist": 3.981173631907775e-7
+    },
+    "positionBound": {
+     "value": 0.820568311,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.817 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 62.611465269268294,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.037329365659388714,
+   "natalChartLonDifferenceArcsec": 0.037329365659388714,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Mars",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-4.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 29.5253596,
+    "lat": 0.9517639
+   },
+   "engine": {
+    "lon": 29.525355585888413,
+    "lat": 0.9517651840326125,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 0.7183853122626369,
+     "lat": 0.03430511993022701,
+     "dist": 0.000004393947014119068
+    },
+    "positionBound": {
+     "value": 0.723104934,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.719 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 29.525355585888413,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.01445080174562463,
+   "natalChartLonDifferenceArcsec": -0.01445080174562463,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Mars",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-4.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 266.2661377,
+    "lat": -0.5027681
+   },
+   "engine": {
+    "lon": 266.26626954746473,
+    "lat": -0.5027782399586465,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 2.236822122842958,
+     "lat": 0.030254184143121875,
+     "dist": 0.000002787681971850609
+    },
+    "positionBound": {
+     "value": 2.240940603,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 2.24 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 266.26626954746473,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 0.474650872820348,
+   "natalChartLonDifferenceArcsec": 0.474650872820348,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Mars",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-4.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 46.4952503,
+    "lat": -0.6509379
+   },
+   "engine": {
+    "lon": 46.49559415794877,
+    "lat": -0.6509307009767441,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 3.1557659360322923,
+     "lat": 0.04376526052537593,
+     "dist": 0.000003505038271104758
+    },
+    "positionBound": {
+     "value": 3.159865763,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 3.16 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 46.49559415794877,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": 1.2378886156511726,
+   "natalChartLonDifferenceArcsec": 1.2378886156511726,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Jupiter",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-5.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 149.9331102,
+    "lat": 1.0488792
+   },
+   "engine": {
+    "lon": 149.93310518120083,
+    "lat": 1.0488887175690869,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.07459433605378699,
+     "lat": 0.0009338263855538383,
+     "dist": 0.0000021456724247684024
+    },
+    "positionBound": {
+     "value": 0.078587683,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.0746 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 149.93310518120083,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.01806767686503008,
+   "natalChartLonDifferenceArcsec": -0.01806767686503008,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Jupiter",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-5.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 157.4967377,
+    "lat": 1.1498083
+   },
+   "engine": {
+    "lon": 157.49671292688154,
+    "lat": 1.1498168801654216,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 0.13831625095954578,
+     "lat": 0.002727924550838193,
+     "dist": 0.0000048042857671946164
+    },
+    "positionBound": {
+     "value": 0.142315304,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.138 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 157.49671292688154,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.08918322628233,
+   "natalChartLonDifferenceArcsec": -0.08918322628233,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Jupiter",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-5.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 201.2063283,
+    "lat": 1.2766053
+   },
+   "engine": {
+    "lon": 201.2062908188733,
+    "lat": 1.2766080736164398,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 0.1878255298706186,
+     "lat": 0.0064859785836558536,
+     "dist": 0.000007792157362326446
+    },
+    "positionBound": {
+     "value": 0.191890891,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.188 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 201.2062908188733,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.13493205610757286,
+   "natalChartLonDifferenceArcsec": -0.13493205610757286,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Jupiter",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-5.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 265.9914924,
+    "lat": 0.3520959
+   },
+   "engine": {
+    "lon": 265.99146493893613,
+    "lat": 0.3520885263846348,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 0.679699214666723,
+     "lat": 0.003762262367136814,
+     "dist": 0.0000037038445290109937
+    },
+    "positionBound": {
+     "value": 0.683696794,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.68 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 265.99146493893613,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.0988598298135912,
+   "natalChartLonDifferenceArcsec": -0.0988598298135912,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Jupiter",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-5.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 336.7419058,
+    "lat": -0.9607717
+   },
+   "engine": {
+    "lon": 336.7417889147737,
+    "lat": -0.9607827650573101,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 0.13892970225910167,
+     "lat": 0.019902444059338206,
+     "dist": 0.000017822658427347007
+    },
+    "positionBound": {
+     "value": 0.144328695,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.14 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 336.7417889147737,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.42078681490238523,
+   "natalChartLonDifferenceArcsec": -0.42078681490238523,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Saturn",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-6.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 320.4098207,
+    "lat": -0.9659412
+   },
+   "engine": {
+    "lon": 320.40981117013337,
+    "lat": -0.9659515654407123,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.012839456832877452,
+     "lat": 0.0014715063458336493,
+     "dist": 0.000002062608397033176
+    },
+    "positionBound": {
+     "value": 0.016821693,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.0129 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 320.40981117013337,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.03430752012718585,
+   "natalChartLonDifferenceArcsec": -0.03430752012718585,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Saturn",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-6.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 254.5449254,
+    "lat": 1.7291548
+   },
+   "engine": {
+    "lon": 254.5448892597792,
+    "lat": 1.7291478497909647,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 0.08285742066983715,
+     "lat": 0.0018660884145272143,
+     "dist": 8.641070469531082e-7
+    },
+    "positionBound": {
+     "value": 0.086740712,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.0828 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 254.5448892597792,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.13010479488002602,
+   "natalChartLonDifferenceArcsec": -0.13010479488002602,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Saturn",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-6.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 205.6316695,
+    "lat": 2.422219
+   },
+   "engine": {
+    "lon": 205.6316267594404,
+    "lat": 2.4222210535036335,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 0.10245190350814991,
+     "lat": 0.007271346072885924,
+     "dist": 0.00000787351183416761
+    },
+    "positionBound": {
+     "value": 0.106518306,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.103 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 205.6316267594404,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.1538660145342874,
+   "natalChartLonDifferenceArcsec": -0.1538660145342874,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Saturn",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-6.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 82.9554962,
+    "lat": -1.3921866
+   },
+   "engine": {
+    "lon": 82.95537546718896,
+    "lat": -1.3921791923846698,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 0.2328872194822572,
+     "lat": 0.007394338249280035,
+     "dist": 0.000004256873172719225
+    },
+    "positionBound": {
+     "value": 0.236835868,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.233 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 82.95537546718896,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.43463811985020584,
+   "natalChartLonDifferenceArcsec": -0.43463811985020584,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Saturn",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-6.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 331.4626499,
+    "lat": -1.3249792
+   },
+   "engine": {
+    "lon": 331.46250719075647,
+    "lat": -1.3249896866625654,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 0.030109722896658607,
+     "lat": 0.014370302155377296,
+     "dist": 0.000018299751831529696
+    },
+    "positionBound": {
+     "value": 0.037255903,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.0334 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 331.46250719075647,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.5137532766184449,
+   "natalChartLonDifferenceArcsec": -0.5137532766184449,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Uranus",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-7.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 171.5215965,
+    "lat": 0.7595353
+   },
+   "engine": {
+    "lon": 171.5215880474992,
+    "lat": 0.7595423837056776,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.007871155858404736,
+     "lat": 0.0003860880859285549,
+     "dist": 0.000002476334886791677
+    },
+    "positionBound": {
+     "value": 0.011879929,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.00788 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 171.5215880474992,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.03042900275431748,
+   "natalChartLonDifferenceArcsec": -0.03042900275431748,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Uranus",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-7.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 283.7475212,
+    "lat": -0.386276
+   },
+   "engine": {
+    "lon": 283.7474869152987,
+    "lat": -0.38628583402001787,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 0.04254149811452346,
+     "lat": 0.000297341340030915,
+     "dist": 0.000001759157805705756
+    },
+    "positionBound": {
+     "value": 0.046541571,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.0425 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 283.7474869152987,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.12342492473180755,
+   "natalChartLonDifferenceArcsec": -0.12342492473180755,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Uranus",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-7.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 17.7412256,
+    "lat": -0.6294651
+   },
+   "engine": {
+    "lon": 17.741176591372092,
+    "lat": -0.6294679867386758,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 0.00802941916546501,
+     "lat": 0.001112674260858959,
+     "dist": 0.000008381377379036198
+    },
+    "positionBound": {
+     "value": 0.012105667,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.00811 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 17.741176591372092,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.17643106048126356,
+   "natalChartLonDifferenceArcsec": -0.17643106048126356,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Uranus",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-7.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 244.9310902,
+    "lat": 0.1481998
+   },
+   "engine": {
+    "lon": 244.9310096712107,
+    "lat": 0.14819546956566537,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 0.16180328572575137,
+     "lat": 0.0002455756717235161,
+     "dist": 0.000008349538752928589
+    },
+    "positionBound": {
+     "value": 0.165802931,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.162 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 244.9310096712107,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.2899036416238232,
+   "natalChartLonDifferenceArcsec": -0.2899036416238232,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Uranus",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-7.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 85.2632597,
+    "lat": 0.1323345
+   },
+   "engine": {
+    "lon": 85.26316062561648,
+    "lat": 0.1323405108536416,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 0.2560806644265648,
+     "lat": 0.0010251421439703666,
+     "dist": 1.4774554078333594e-7
+    },
+    "positionBound": {
+     "value": 0.260082034,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.256 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 85.26316062561648,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.356667780852149,
+   "natalChartLonDifferenceArcsec": -0.356667780852149,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Neptune",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-8.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 59.0460879,
+    "lat": -1.6472968
+   },
+   "engine": {
+    "lon": 59.046080194714854,
+    "lat": -1.6472919638583439,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.018514734999371247,
+     "lat": 0.00017170061696800454,
+     "dist": 0.0000010356122275454937
+    },
+    "positionBound": {
+     "value": 0.02250788,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.0185 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 59.046080194714854,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.02773902656372229,
+   "natalChartLonDifferenceArcsec": -0.02773902656372229,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Neptune",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-8.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 110.7969184,
+    "lat": -0.6118287
+   },
+   "engine": {
+    "lon": 110.79688836218097,
+    "lat": -0.6118184822254544,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 0.03872747915628818,
+     "lat": 0.0003679492465280174,
+     "dist": 0.000002435977952622249
+    },
+    "positionBound": {
+     "value": 0.04272702,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.0387 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 110.79688836218097,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.10813614835569751,
+   "natalChartLonDifferenceArcsec": -0.10813614835569751,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Neptune",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-8.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 167.29055,
+    "lat": 0.9638833
+   },
+   "engine": {
+    "lon": 167.29049965063865,
+    "lat": 0.963890860318223,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 0.012704716685989728,
+     "lat": 0.0011855143048887992,
+     "dist": 0.000007820266799348508
+    },
+    "positionBound": {
+     "value": 0.016758119,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.0128 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 167.29049965063865,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.18125770084225223,
+   "natalChartLonDifferenceArcsec": -0.18125770084225223,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Neptune",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-8.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 274.1000662,
+    "lat": 1.0829845
+   },
+   "engine": {
+    "lon": 274.09998094645704,
+    "lat": 1.0829766443502902,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 0.11454509481006893,
+     "lat": 0.00021858613472498277,
+     "dist": 0.0000016655053273123194
+    },
+    "positionBound": {
+     "value": 0.118524843,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.115 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 274.09998094645704,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.3069127545131778,
+   "natalChartLonDifferenceArcsec": -0.3069127545131778,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Neptune",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-8.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 24.6103185,
+    "lat": -1.6080027
+   },
+   "engine": {
+    "lon": 24.610195178495932,
+    "lat": -1.608005974324992,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 0.09566707915101881,
+     "lat": 0.003582880446944334,
+     "dist": 0.000017316030816491958
+    },
+    "positionBound": {
+     "value": 0.099696501,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.0957 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 24.610195178495932,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.44395741488187923,
+   "natalChartLonDifferenceArcsec": -0.44395741488187923,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  },
+  {
+   "body": "Pluto",
+   "utc": "2051-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-9.txt",
+   "horizons": {
+    "jdUt": 2470337.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 341.9699225,
+    "lat": -13.2783885
+   },
+   "engine": {
+    "lon": 341.96991511361455,
+    "lat": -13.278396942625019,
+    "ttMinusUt1Seconds": 71.58058136701584,
+    "receiptDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 12.807298421379997,
+      "ut1": 0.9
+     },
+     "lon": 0.0006695046308128123,
+     "lat": 0.003147872648591146,
+     "dist": 0.000002291520490803255
+    },
+    "positionBound": {
+     "value": 0.007214607,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.00321 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 341.96991511361455,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 71.58056911941435,
+     "sigma": 12.775636690759587,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.02659098781805369,
+   "natalChartLonDifferenceArcsec": -0.02659098781805369,
+   "clockDifferenceSeconds": 2.396021367015834,
+   "over30": false
+  },
+  {
+   "body": "Pluto",
+   "utc": "2075-06-15T00:00:00Z",
+   "file": "horizons/utc-after-2050-9.txt",
+   "horizons": {
+    "jdUt": 2479103.5,
+    "tdbMinusUtSeconds": 69.18456,
+    "lon": 9.8509289,
+    "lat": -16.6453789
+   },
+   "engine": {
+    "lon": 9.850900209850323,
+    "lat": -16.645383447412645,
+    "ttMinusUt1Seconds": 74.32065904140472,
+    "receiptDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 27.43040530432832,
+      "ut1": 0.9
+     },
+     "lon": 0.010349600166101867,
+     "lat": 0.00672542691088299,
+     "dist": 0.000004805367777176558
+    },
+    "positionBound": {
+     "value": 0.015981513,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.012 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 9.850900209850323,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 74.32065931558915,
+     "sigma": 27.415636690759584,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.10328453909096424,
+   "natalChartLonDifferenceArcsec": -0.10328453909096424,
+   "clockDifferenceSeconds": 5.136099041404719,
+   "over30": false
+  },
+  {
+   "body": "Pluto",
+   "utc": "2100-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-9.txt",
+   "horizons": {
+    "jdUt": 2488069.5,
+    "tdbMinusUtSeconds": 69.183912,
+    "lon": 32.4030295,
+    "lat": -16.9212119
+   },
+   "engine": {
+    "lon": 32.402982352317785,
+    "lat": -16.92121161911393,
+    "ttMinusUt1Seconds": 78.92682999372482,
+    "receiptDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 42.39920762832027,
+      "ut1": 0.9
+     },
+     "lon": 0.009584063880152382,
+     "lat": 0.010074240143960822,
+     "dist": 0.00000767924247352673
+    },
+    "positionBound": {
+     "value": 0.017622161,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.0136 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 32.402982352317785,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 78.9268159271033,
+     "sigma": 42.389654486789716,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.16973165575109306,
+   "natalChartLonDifferenceArcsec": -0.16973165575109306,
+   "clockDifferenceSeconds": 9.742917993724816,
+   "over30": false
+  },
+  {
+   "body": "Pluto",
+   "utc": "2150-01-01T00:00:00Z",
+   "file": "horizons/utc-after-2050-9.txt",
+   "horizons": {
+    "jdUt": 2506331.5,
+    "tdbMinusUtSeconds": 69.183856,
+    "lon": 80.8001404,
+    "lat": -9.2367895
+   },
+   "engine": {
+    "lon": 80.80003881164818,
+    "lat": -9.236782503803255,
+    "ttMinusUt1Seconds": 96.05254679918289,
+    "receiptDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 72.89437563826294,
+      "ut1": 0.9
+     },
+     "lon": 0.05500803010085364,
+     "lat": 0.005698824606035062,
+     "dist": 0.000004581604028399077
+    },
+    "positionBound": {
+     "value": 0.058593022,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.0546 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 80.80003881164818,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 96.0525383839741,
+     "sigma": 72.88881944229979,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.3657180663140025,
+   "natalChartLonDifferenceArcsec": -0.3657180663140025,
+   "clockDifferenceSeconds": 26.868690799182886,
+   "over30": false
+  },
+  {
+   "body": "Pluto",
+   "utc": "2199-06-15T12:00:00Z",
+   "file": "horizons/utc-after-2050-9.txt",
+   "horizons": {
+    "jdUt": 2524394,
+    "tdbMinusUtSeconds": 69.184638,
+    "lon": 141.344687,
+    "lat": 8.5575786
+   },
+   "engine": {
+    "lon": 141.34456150102278,
+    "lat": 8.55758586541396,
+    "ttMinusUt1Seconds": 125.83544701337814,
+    "receiptDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    },
+    "band": {
+     "time": {
+      "tt": 103.05873151922638,
+      "ut1": 0.9
+     },
+     "lon": 0.08148109520912084,
+     "lat": 0.009226527210483193,
+     "dist": 0.00001586419577632893
+    },
+    "positionBound": {
+     "value": 0.085100495,
+     "unit": "arcsec",
+     "label": "estimated",
+     "basis": "largest angle from JPL Horizons's apparent geocentric place (DE441) at the conformance suite's L1 vectors, 24 TT instants a body from 1851 to 2148, in the true ecliptic of date, and from NAIF's de440.bsp at noon TT every day from 1800 to 2199 in all eight frames, the larger, on the shipped DE440 pack; src/calc-bounds-de440.ts; plus 0.0811 arcsec, ΔT extrapolated (docs/calc.md, \"Bounds\")"
+    },
+    "natalChartLon": 141.34456150102278,
+    "natalChartFlags": [
+     "delta-t-extrapolated"
+    ],
+    "natalChartDeltaT": {
+     "seconds": 125.8354436713874,
+     "sigma": 103.05480164626967,
+     "model": "zodiacs-deltat/1",
+     "table": "2026-09-24",
+     "tableDigest": "6371988c510a1c6c",
+     "segment": "extrapolated"
+    }
+   },
+   "lonDifferenceArcsec": -0.4517963180660445,
+   "natalChartLonDifferenceArcsec": -0.4517963180660445,
+   "clockDifferenceSeconds": 56.65080901337814,
+   "over30": false
+  }
+ ]
+}
