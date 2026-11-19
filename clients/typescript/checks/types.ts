@@ -28,3 +28,22 @@ client.skyFact({ kind: "sign", body: "Moon", sign: "aries", instant: "2000-01-01
 client.skyFact({ kind: "retrograde", body: "Mercury", instant: "2000-01-01T12:00:00Z", zone: "Europe/Paris" });
 // @ts-expect-error Sign facts require an instant or a date.
 client.skyFact({ kind: "sign", body: "Moon", sign: "aries" });
+
+// Time scale of the synthetic 2030 UTC response in client.mjs.
+const in2030: ComputeSchemas["TimeScale"] = {
+  input: "utc",
+  basis: "continuous-utc",
+  ut1MinusUtc: { seconds: -0.4182962955020031, sigma: 0.710146195012318, source: "model" },
+  leapSeconds: { taiMinusUtc: 37, listed: false },
+};
+const misspelt: ComputeSchemas["TimeScale"] = {
+  ...in2030,
+  // @ts-expect-error The engine writes "continuous-utc".
+  basis: "continuous",
+};
+const misnamed: ComputeSchemas["TimeScale"] = {
+  ...in2030,
+  // @ts-expect-error The engine writes "model".
+  ut1MinusUtc: { seconds: -0.418, sigma: 0.71, source: "modelled" },
+};
+void [misspelt, misnamed];
