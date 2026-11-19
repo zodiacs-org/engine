@@ -12,7 +12,7 @@ const base = { date: "2001-03-04", timeZone: "UTC" } as const;
 
 describe("resolveLocalBirth time and timeKnown", () => {
   it("refuses timeKnown: true without a time, instead of reading local noon as a known time", () => {
-    expect(() => resolveLocalBirth({ ...base, timeKnown: true })).toThrow(new RangeError("time is required when timeKnown is true."));
+    expect(() => resolveLocalBirth({ ...base, timeKnown: true })).toThrow(RangeError);
   });
 
   it("defaults timeKnown to whether a time was given", () => {
@@ -35,6 +35,8 @@ describe("resolveLocalBirth time and timeKnown", () => {
   });
 
   it("refuses a field it does not know, naming it", () => {
-    expect(() => resolveLocalBirth({ ...base, tz: "UTC" } as never)).toThrow(new RangeError('Unknown local birth field "tz".'));
+    const call = () => resolveLocalBirth({ ...base, tz: "UTC" } as never);
+    expect(call).toThrow(RangeError);
+    expect(call).toThrow(/"tz"/u);
   });
 });

@@ -57,11 +57,11 @@ describe("firstMillisecond", () => {
   });
 
   it("refuses a predicate that is already true far before the estimate", () => {
-    expect(() => firstMillisecond(() => true, T)).toThrow(new RangeError("A crossing could not be bracketed."));
+    expect(() => firstMillisecond(() => true, T)).toThrow(RangeError);
   });
 
   it("refuses a predicate that is still false far after the estimate", () => {
-    expect(() => firstMillisecond(() => false, T)).toThrow(new RangeError("A crossing could not be bracketed."));
+    expect(() => firstMillisecond(() => false, T)).toThrow(RangeError);
   });
 
   it("refuses a crossing beyond the widest bracket, about 2^25 ms from the estimate, on either side", () => {

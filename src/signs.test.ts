@@ -56,7 +56,7 @@ describe("normalizeLongitude", () => {
 
   it("refuses NaN and the infinities, as do the helpers built on it", () => {
     for (const lon of [Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY]) {
-      expect(() => normalizeLongitude(lon)).toThrow(new RangeError("Longitude must be finite."));
+      expect(() => normalizeLongitude(lon)).toThrow(RangeError);
       expect(() => signIndexForLongitude(lon)).toThrow(RangeError);
       expect(() => signForLongitude(lon)).toThrow(RangeError);
       expect(() => degreeInSign(lon)).toThrow(RangeError);

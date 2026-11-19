@@ -354,7 +354,7 @@ describe("parsePack refuses a quantised layout it cannot decode", () => {
     for (const w of [6, 7, 9, -1]) {
       expectRefusal(quantised((l) => (l.widths[0] = w)), "bad-header", new RegExp(`field width ${w} is not supported`, "u"));
     }
-    for (const w of [0, 1, 2]) expect(refusal(quantised((l) => (l.widths[0] = w)))).toBe("parsed");
+    for (const w of [0, 1, 2, 3, 4, 5, 8]) expect(refusal(quantised((l) => (l.widths[0] = w))), String(w)).toBe("parsed");
   });
 
   it("refuses a field offset that is not a safe count, and a field that ends past the stride", () => {
