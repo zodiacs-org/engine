@@ -90,9 +90,12 @@ say. The check found no defect in the engine.
 
 ### Positions against JPL Horizons (DE441), 240 vectors, 1851 to 2148
 
-Largest absolute difference in arcseconds, per body, over its 24 instants.
+On `2.0.0-rc.3`, the test selected each ephemeris in turn. The table shows
+the largest absolute difference in arcseconds for each body across its 24
+sampled instants. The measurements are recorded in
+`tests/fixtures/adversarial-astronomy.measured.json`.
 
-| Body | Default source (shipped DE440 pack): longitude | latitude | astronomy-engine (the fallback, and the core entry): longitude | latitude |
+| Body | Default source (shipped DE440 pack): longitude | latitude | astronomy-engine: longitude | latitude |
 | --- | --- | --- | --- | --- |
 | Sun | 0.0036 | 0.0002 | 1.31 | 1.64 |
 | Moon | 0.0127 | 0.0011 | 3.75 | 1.72 |
@@ -142,7 +145,11 @@ cusps do not exist, the engine returns whole-sign houses under the name
   both hemispheres, 48 instants) returned no NaN and no value outside
   [0°, 360°). 2,304 of them fell back, all Placidus or Koch.
 
-### The Sun's ingresses, 28 of them
+### The Sun's ingresses, 28 cases from 1850 to 2099
+
+These measurements are from `2.0.0-rc.3` and are recorded in
+`tests/fixtures/adversarial-astronomy.measured.json`. The ephemeris comparison
+uses the same ingress search with each source selected in turn.
 
 | Measurement | Value |
 | --- | --- |
@@ -154,8 +161,9 @@ cusps do not exist, the engine returns whole-sign houses under the name
 At each of the 28 instants the Sun's sign differs one second before and one
 second after, and a chart for the minute before and one for the minute after
 carry different Sun signs. Hourly over each 12-day window the Sun's longitude
-only increased. Derived, not measured: the Sun's 0.0036″ against Horizons
-corresponds to at most 0.1 s of ingress time at the Sun's slowest motion.
+only increased. Dividing the Sun's largest longitude difference of 0.0036″
+in the 1851 to 2148 Horizons sample on `2.0.0-rc.3` by the Sun's slowest
+motion gives a time equivalent of at most 0.1 s by arithmetic.
 
 ### Time zones, 71 wall times
 
@@ -213,8 +221,7 @@ Each is a case in the fixture.
    only "finite and in range". Their accuracy there is not measured here.
 2. **One ingress has a reference.** The other 27 are held by the search's own
    residual, by invariants and by a formula good to 36″ (by arithmetic, about
-   15 minutes of time). The 0.1 s figure for them is derived from the Sun's
-   position error, not measured.
+   15 minutes of time).
 3. **The ascendant inside a polar circle is a convention.** The engine takes
    the point east of the meridian, which jumps by 180° twice a sidereal day;
    the continuous textbook branch is the other common choice. The chart says
@@ -242,14 +249,16 @@ Each is a case in the fixture.
 8. **After 2027-10-02 there is no measured UT1.** A chart there carries
    `delta-t-extrapolated` (both 2099 cases do). How far the angles of such a
    chart can be off is not measured here.
-9. **astronomy-engine is not the default's equal.** Outside 1790 to 2209, in
-   `@zodiacs/engine/core`, and after `setDefaultEphemeris("astronomy-engine")`,
-   positions are the right-hand columns above and an ingress can be up to
-   42.8 s from DE440's. The result always names its ephemeris.
-10. **Other builds are other builds.** npm's `latest` was 1.1.0 on
-    2026-11-20 (observed; no test holds it); this audit ran on 2.0.0-rc.3. The hosted MCP server at zodiacs.org is a separate
-    bundle: on 2026-11-20 its receipt named `@zodiacs/engine` 1.1.0-rc.2 on
-    astronomy-engine 2.1.19 (observed in its output; no test in this
-    repository holds it), so the astronomy-engine columns describe it, not
-    the DE440 ones. The site repository's
-    `tests/adversarial-astronomy-mcp.spec.ts` runs hostile cases against it.
+9. **Ephemeris comparisons cover sampled dates.** On `2.0.0-rc.3`, the
+   astronomy-engine position differences above are from the 1851 to 2148
+   sample, and the solar ingress differences are from the 1850 to 2099
+   cases. The measurements are in
+   `tests/fixtures/adversarial-astronomy.measured.json`. The boundary cases
+   above identify astronomy-engine as the fallback at the tested dates
+   outside the pack's span.
+10. **Hosted build.** Observed on 2026-11-20, npm's `latest` was `1.1.0` and
+    the hosted MCP server's receipt at zodiacs.org named `@zodiacs/engine`
+    `1.1.0-rc.2` with astronomy-engine `2.1.19`. The position and ingress
+    measurements above are for the audited `2.0.0-rc.3` source. The site
+    repository's `tests/adversarial-astronomy-mcp.spec.ts` runs hostile cases
+    against the hosted server.
