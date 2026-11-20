@@ -146,6 +146,11 @@ loads it with a harmless `MODULE_TYPELESS_PACKAGE_JSON` warning, which 22.22.2
 no longer prints. Bundlers resolve the dependency's `import` condition
 themselves and are not affected.
 
+The package is ES modules only and has no CommonJS build. `require()` of
+`@zodiacs/engine` or of any of its entry points throws an `Error` with code
+`ERR_ZODIACS_ESM_ONLY` whose message says to use `import`; from CommonJS,
+load it with `await import("@zodiacs/engine")`.
+
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
 `npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-2.0.0-rc.3.tgz`.
@@ -568,8 +573,9 @@ unrounded result. See `docs/evidence/rc12-20260928/sources.md`.
 ### Configurable aspects
 
 ```ts
-import { createAspectPolicy, findConfiguredAspects } from "@zodiacs/engine";
+import { createAspectPolicy, findConfiguredAspects, natalChart } from "@zodiacs/engine";
 
+const chart = natalChart({ utc: "1990-06-15T12:30:00Z" });
 const policy = createAspectPolicy({
   aspects: [
     { type: "conjunction", orb: 8, luminaryOrb: 10 },
@@ -647,8 +653,9 @@ boundary decisions can differ from the configured API's at roundoff scale.
 ### Declinations and parallels
 
 ```ts
-import { chartDeclinations, findDeclinationAspects } from "@zodiacs/engine";
+import { chartDeclinations, findDeclinationAspects, natalChart } from "@zodiacs/engine";
 
+const chart = natalChart({ utc: "1990-06-15T12:30:00Z" });
 const equatorial = chartDeclinations(chart);
 console.log(equatorial.utc, equatorial.deltaT, equatorial.trueObliquity);
 console.log(equatorial.rows); // lon, lat, ra, dec, outOfBounds, boundMarginArcsec

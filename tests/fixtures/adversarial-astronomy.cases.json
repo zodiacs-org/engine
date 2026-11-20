@@ -3410,9 +3410,9 @@
     ]
    },
    "expected": {
-    "result": "Error"
+    "result": "RangeError"
    },
-   "note": "a body that does not exist: refused, though with the DE440 reader's own error and not a RangeError (BENCHMARK_AUDIT.md, known limits)"
+   "note": "a body that does not exist: a RangeError on every source (on 2.0.0-rc.3 the DE440 reader's own De440Error; BENCHMARK_AUDIT.md, known limits)"
   },
   {
    "id": "BAD-57",

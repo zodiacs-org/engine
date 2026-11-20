@@ -459,7 +459,20 @@ function longitudeAt(body: BodyName, ms: number, clock: Clock): number {
   return longitudeOn(body, basis, sourceAt(basis.ttDays));
 }
 
+/**
+ * Refuse a name that is not a BodyName with a RangeError, before any source
+ * is asked: whichever source would compute it (astronomy-engine, the shipped
+ * DE440 pack or a caller's), a caller's bad input is the same error. A DE440
+ * source's De440Error is left for failures of the pack itself.
+ */
+function knownBody(body: BodyName): void {
+  if (body !== "Moon" && body !== "North Node" && body !== "South Node" && !PLANETS.some((p) => p.name === body)) {
+    throw new RangeError(`Unknown body: ${String(body)}`);
+  }
+}
+
 function longitudeOn(body: BodyName, basis: TimeBasis, from: PositionSource | null, behind?: boolean): number {
+  knownBody(body);
   if (from) return sourceLongitude(from, body, basis.ttDays, behind);
   const time = timeOf(basis);
   if (body === "Moon") return moonOfDate(time).lon;
@@ -467,9 +480,7 @@ function longitudeOn(body: BodyName, basis: TimeBasis, from: PositionSource | nu
   if (body === "South Node") {
     return normalizeLongitude(trueNodeLongitude(time) + 180);
   }
-  const planet = PLANETS.find((candidate) => candidate.name === body);
-  if (!planet) throw new RangeError(`Unknown body: ${body}`);
-  return planetOfDate(planet.body, time).lon;
+  return planetOfDate(PLANETS.find((p) => p.name === body)!.body, time).lon;
 }
 
 /** Apparent longitude at a UTC instant, on the engine's time basis. */
@@ -522,6 +533,7 @@ function speedAt(
   from: PositionSource | null = sourceAt(basisAt(ms, clock).ttDays),
   behind?: boolean
 ): number {
+  knownBody(body);
   const node = body === "North Node" || body === "South Node";
   const stepDays = node ? NODE_SPEED_STEP_DAYS : SPEED_STEP_DAYS;
   const side = from && !node && behind === undefined ? from.place(body as SourceBody, basisAt(ms, clock).ttDays).behindDisc : behind;

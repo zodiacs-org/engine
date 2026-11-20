@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readdirSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 
 import { LITE_NAMES, LITE_PARTS, checkLiteEntry, checkLiteNames, declaredNames } from "./lite-entry.mjs";
@@ -690,6 +691,19 @@ assert(lazy.every((specifier) => /^\.\/tzdb-2026f-\d{2}-[A-Za-z0-9]+\.js$/u.test
 for (const entry of ["geo", "techniques"]) {
   for (const file of outputsOf(entry)) assert(!/(?:^|\/)tzdb-[^/]*$/u.test(file), `zone-history shard in the static ${entry} graph`);
 }
+
+// The package is ES modules only: require() of every entry point, by the
+// package's own name, throws the one error dist/esm-only.cjs throws
+// (scripts/build-esm-only.mjs), not Node's ERR_PACKAGE_PATH_NOT_EXPORTED,
+// while import() of the same name above loaded the entry.
+assert.equal(readFileSync(new URL("../dist/esm-only.cjs", import.meta.url), "utf8"),
+  readFileSync(new URL("../src/esm-only.cjs", import.meta.url), "utf8"), "dist/esm-only.cjs is not src/esm-only.cjs");
+const requireHere = createRequire(import.meta.url);
+for (const subpath of Object.keys(exportsMap)) {
+  const name = subpath === "." ? "@zodiacs/engine" : `@zodiacs/engine/${subpath.slice(2)}`;
+  assert.throws(() => requireHere(name), (error) => error instanceof Error && error.code === "ERR_ZODIACS_ESM_ONLY" &&
+    error.message.startsWith("@zodiacs/engine is ESM-only: require() cannot load it"), `require("${name}") must throw ERR_ZODIACS_ESM_ONLY`);
+}
 console.log(
   "@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat, time and lite graphs have no external imports, " +
     `the lite entry holds its ${liteGraph.sources.length} pinned source modules in ${liteGraph.outputs.length} files that import nothing ` +
@@ -697,5 +711,5 @@ console.log(
     `the root's graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
     `${root.outputs.length} files) reaches no module of an opt-in entry and no zone history, ` +
     "the core entry holds the root's graph without the DE440 files and gives the root's results on astronomy-engine, " +
-    "the geo entry loads its 16 shards lazily, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic"
+    "the geo entry loads its 16 shards lazily, require() of every entry point throws ERR_ZODIACS_ESM_ONLY, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic"
 );
