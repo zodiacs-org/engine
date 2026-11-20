@@ -1,13 +1,16 @@
 import asyncio
 import copy
+from datetime import datetime, timedelta
 import json
 from pathlib import Path
 import time
+import typing
 import unittest
 import httpx
 from zodiacs_compute import (
     AsyncComputeClient, ComputeClient, ComputeHttpError, ComputeProtocolError,
-    ComputeTimeoutError, ComputeTransportError)
+    ComputeTimeoutError, ComputeTransportError, contract)
+from types_positive import AT_TABLE_END, CONTINUOUS_UTC
 FIXTURES = json.loads(Path(__file__).with_name("fixtures.json").read_text())
 SAMPLE = FIXTURES["operations"]["positions"]
 def client(handler, **options):
@@ -196,6 +199,34 @@ class RuntimeChecks(unittest.IsolatedAsyncioTestCase):
     async def test_sync_facade_refuses_active_loop_before_creating_coroutine(self):
         with self.assertRaisesRegex(RuntimeError, "Use AsyncComputeClient"):
             ComputeClient().positions(SAMPLE["request"])
+
+def time_scale_literals_match(scale):
+    hints = typing.get_type_hints(contract.TimeScale)
+    ut1 = scale["ut1MinusUtc"]
+    source_hint = typing.get_type_hints(contract.TimeScale_ut1MinusUtc_Option0)["source"]
+    return (
+        scale["input"] in typing.get_args(hints["input"])
+        and scale["basis"] in typing.get_args(hints["basis"])
+        and (ut1 is None or ut1["source"] in typing.get_args(source_hint))
+    )
+
+class ContinuousUtcChecks(unittest.TestCase):
+    def test_2030_answer_is_in_the_contract_and_returned_whole(self):
+        tt = datetime.fromisoformat(CONTINUOUS_UTC["tt"] + "Z")
+        utc = datetime.fromisoformat(CONTINUOUS_UTC["utc"])
+        self.assertEqual(tt - utc, timedelta(milliseconds=69_184))
+        self.assertTrue(time_scale_literals_match(CONTINUOUS_UTC["timeScale"]))
+        self.assertTrue(time_scale_literals_match(AT_TABLE_END))
+        response = {**FIXTURES["operations"]["time"]["response"], "result": CONTINUOUS_UTC}
+        c = ComputeClient(transport_factory=lambda: httpx.MockTransport(lambda _: httpx.Response(200, json=response)))
+        self.assertEqual(c.time({"local": {"date": "2030-01-01", "time": "00:00", "zone": "UTC"}}), response)
+
+    def test_misspelt_values_are_outside_the_contract(self):
+        scale = CONTINUOUS_UTC["timeScale"]
+        self.assertFalse(time_scale_literals_match({**scale, "basis": "continuous"}))
+        ut1 = scale["ut1MinusUtc"]
+        assert ut1 is not None
+        self.assertFalse(time_scale_literals_match({**scale, "ut1MinusUtc": {**ut1, "source": "modelled"}}))
 
 class SyncChecks(unittest.TestCase):
     def test_sync_methods_preserve_each_endpoint(self):

@@ -162,3 +162,57 @@ test("cancellation during request serialization sends no request", async () => {
   await assert.rejects(client.positions(request, { signal: controller.signal }), (error) => error === reason);
   assert.equal(calls, 0);
 });
+
+const timeScale = contract.components.schemas.TimeScale.properties;
+function timeScaleLiteralsMatch(scale) {
+  return timeScale.input.const === scale.input && timeScale.basis.enum.includes(scale.basis)
+    && (scale.ut1MinusUtc === null || timeScale.ut1MinusUtc.anyOf[0].properties.source.enum.includes(scale.ut1MinusUtc.source));
+}
+// TABLE_END in scripts/continuous-utc-instants.mjs is 2027-10-02T00:00:00.000Z.
+// That UTC instant keeps the iers basis. The synthetic 2030 result uses
+// continuous UTC and puts TT 69.184 s ahead of UTC.
+const atTableEnd = {
+  input: "utc",
+  basis: "iers",
+  ut1MinusUtc: { seconds: -0.148, sigma: 0.0262, source: "predicted" },
+  leapSeconds: { taiMinusUtc: 37, listed: false },
+};
+const in2030 = {
+  utc: "2030-01-01T00:00:00.000Z",
+  offsetMinutes: 0,
+  flags: [],
+  localMeanTime: null,
+  zoneHistory: "runtime",
+  zoneUncertain: false,
+  tt: "2030-01-01T00:01:09.184",
+  deltaT: {
+    seconds: 69.602296295502,
+    sigma: 0.710146195012318,
+    model: "zodiacs-deltat/1",
+    table: "2026-09-24",
+    tableDigest: "6371988c510a1c6c",
+    segment: "extrapolated",
+  },
+  timeScale: {
+    input: "utc",
+    basis: "continuous-utc",
+    ut1MinusUtc: { seconds: -0.4182962955020031, sigma: 0.710146195012318, source: "model" },
+    leapSeconds: { taiMinusUtc: 37, listed: false },
+  },
+};
+test("time: a 2030 answer on the continuous-UTC basis is in the contract and returned whole", async () => {
+  assert.equal(Date.parse(in2030.tt + "Z") - Date.parse(in2030.utc), 69_184);
+  assert.ok(timeScaleLiteralsMatch(atTableEnd));
+  assert.ok(timeScaleLiteralsMatch(in2030.timeScale));
+  const deltaT = contract.components.schemas.DeltaT.properties;
+  assert.ok(deltaT.model.enum.includes(in2030.deltaT.model));
+  assert.ok(deltaT.segment.enum.includes(in2030.deltaT.segment));
+  const response = { ...fixtures.time.response, result: in2030 };
+  const client = createComputeClient({ fetch: async () => json(response) });
+  assert.deepEqual(await client.time({ local: { date: "2030-01-01", time: "00:00", zone: "UTC" } }), response);
+});
+test("time: misspelt continuous-UTC values are outside the contract", () => {
+  const scale = in2030.timeScale;
+  assert.equal(timeScaleLiteralsMatch({ ...scale, basis: "continuous" }), false);
+  assert.equal(timeScaleLiteralsMatch({ ...scale, ut1MinusUtc: { ...scale.ut1MinusUtc, source: "modelled" } }), false);
+});

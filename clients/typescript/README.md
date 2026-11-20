@@ -54,6 +54,8 @@ Generated TypeScript types describe the structural contract. Numeric ranges,
 array budgets, calendar validity and other JSON Schema constraints remain
 server checks. The transport checks the response envelope and schema identity;
 it is not a complete runtime JSON Schema validator.
+Validation against the older contract rejects responses that use
+`continuous-utc` or `model` in the time scale.
 
 ## Checks
 

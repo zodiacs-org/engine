@@ -25,11 +25,11 @@ Aspect = TypedDict("Aspect", {"a": Required[Literal["Sun", "Moon", "Mercury", "V
 
 DeltaT = TypedDict("DeltaT", {"seconds": Required[float], "sigma": Required[float], "model": Required[Literal["iers-utc/1", "zodiacs-deltat/1"]], "table": Required[str], "tableDigest": Required[str], "segment": Required[Literal["long-term", "reconstructed", "observed", "predicted", "extrapolated"]]}, total=False)
 
-TimeScale_ut1MinusUtc_Option0 = TypedDict("TimeScale_ut1MinusUtc_Option0", {"seconds": Required[float], "sigma": Required[float], "source": Required[Literal["observed", "predicted", "fallback"]]}, total=False)
+TimeScale_ut1MinusUtc_Option0 = TypedDict("TimeScale_ut1MinusUtc_Option0", {"seconds": Required[float], "sigma": Required[float], "source": Required[Literal["observed", "predicted", "fallback", "model"]]}, total=False)
 
 TimeScale_leapSeconds_Option0 = TypedDict("TimeScale_leapSeconds_Option0", {"taiMinusUtc": Required[float], "listed": Required[bool]}, total=False)
 
-TimeScale = TypedDict("TimeScale", {"input": Required[Literal["utc"]], "basis": Required[Literal["iers", "delta-t"]], "ut1MinusUtc": Required[Union["TimeScale_ut1MinusUtc_Option0", None]], "leapSeconds": Required[Union["TimeScale_leapSeconds_Option0", None]]}, total=False)
+TimeScale = TypedDict("TimeScale", {"input": Required[Literal["utc"]], "basis": Required[Literal["iers", "continuous-utc", "delta-t"]], "ut1MinusUtc": Required[Union["TimeScale_ut1MinusUtc_Option0", None]], "leapSeconds": Required[Union["TimeScale_leapSeconds_Option0", None]]}, total=False)
 
 CalculationReceipt_coordinates_Option0 = TypedDict("CalculationReceipt_coordinates_Option0", {"latitude": Required[float], "longitude": Required[float]}, total=False)
 
