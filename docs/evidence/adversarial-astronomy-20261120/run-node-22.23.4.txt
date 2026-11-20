@@ -1,0 +1,7 @@
+# Run record: tests/adversarial-astronomy.spec.ts, 2026-11-20T00:41Z, Linux x86_64
+# command: npx vitest run tests/adversarial-astronomy.spec.ts
+# process.versions: {"node":"22.23.4","icu":"78.3","tz":"2026e","unicode":"17.0","v8":"12.4.254.21-node.57"}
+ ✓ tests/adversarial-astronomy.spec.ts (250 tests) 11600ms
+ Test Files  1 passed (1)
+      Tests  250 passed (250)
+   Duration  12.95s (transform 993ms, setup 20ms, collect 1.13s, tests 11.60s, environment 0ms, prepare 44ms)

@@ -7,11 +7,27 @@ file under `src/` is changed). It is the record of one adversarial check,
 claims: what was thrown at the engine, what it was compared with, what was
 measured, and where it stops.
 
-Every figure below was measured by that file on this build, is committed in
+Every measured tolerance and count in the tables and sections below was
+measured by that file on this build, is committed in
 `tests/fixtures/adversarial-astronomy.measured.json`, and is held by the test:
 a run whose figures differ from the committed ones by more than a part in
-10,000 fails. Figures are rounded up, never down. Nothing here is taken from
+10,000 (or by more than a millionth where the value is smaller than 0.01)
+fails, and so does a run that measures a figure the committed file lacks.
+Measured figures are rounded up, never down. Nothing here is taken from
 another build, and nothing was compared with Swiss Ephemeris.
+
+Three kinds of figure here are not measurements, and each is marked where it
+appears:
+
+- the test's own limits (it fails above 0.1″ for positions, above 1″ for
+  angles and cusps, above 36″ for the low-accuracy Sun and above 0.3° for the
+  coarse Moon series);
+- figures worked out by arithmetic from a measured one (marked "by
+  arithmetic" or "derived");
+- what was observed on 20 November 2026 and is held by no test in this
+  repository: run times, tool versions and the notes on other builds. The two
+  run records, each with its `process.versions`, are in
+  `docs/evidence/adversarial-astronomy-20261120/`.
 
 ## Reproduce it
 
@@ -20,9 +36,11 @@ npm ci
 npm test -- tests/adversarial-astronomy.spec.ts
 ```
 
-248 tests, about 12 seconds, no network. Measured here on Node 22.23.3 and on
-Node 24.22.1 (ICU 78.3, tzdata 2026c and 2026e): 248 passed, 0 failed, 0
-skipped on both.
+250 tests, no network. Run records (observed, not held by a test): on Node
+22.23.3 (ICU 78.3, tzdata 2026c) and on Node 22.23.4 (ICU 78.3, tzdata 2026e),
+250 passed, 0 failed, 0 skipped on both, in 13.4 s and 13.0 s
+(`docs/evidence/adversarial-astronomy-20261120/run-node-22.23.3.txt` and
+`run-node-22.23.4.txt`).
 
 ```sh
 # Rewrite the measured file after a deliberate change:
@@ -31,11 +49,10 @@ ADVERSARIAL_WRITE=1 npm test -- tests/adversarial-astronomy.spec.ts
 python3 -I tests/fixtures/build-adversarial-cases.py
 ```
 
-The whole suite (`npm test`) on the same machine, Node 22.23.3: 4,747 passed,
-8 skipped, 24 failed. All 24 are `scripts/verify-archive-binding.test.mjs`,
-which refuses this machine because a `/node_modules` directory lies above
-every temporary directory; they do not read this branch's files. CI is the
-authority on that check.
+The whole suite (`npm test`) is CI's to report, and no total is quoted here.
+On this machine `scripts/verify-archive-binding.test.mjs` cannot run, because
+a `/node_modules` directory lies above every temporary directory; that check
+does not read this branch's files.
 
 ## What the references are
 
@@ -47,7 +64,7 @@ No expected value comes from the engine's own output.
 | Angles and cusps | `conformance/vectors/L2-houses-angles.json`: ERFA sidereal time and obliquity with separately implemented house constructions | 60 angle vectors and 80 cusp vectors, 1803 to 2194, latitudes 66° S to 66° N with cusps, and 70°, 75°, 80° N, 72°, 78° S where Placidus and Koch do not exist |
 | One ingress | NAIF `de440.bsp`, reduced independently (`docs/evidence/1.1.0-rc.11-20261115/breaker/results/ingress-ref.json`) | the Sun at 240° on 2026-11-22 |
 | Time zones | The IANA tz database, release 2026f, as zic compiled it with backzone, read with CPython `zoneinfo`; each of the 71 expected offsets was also typed by hand from the zone's history, and the generator stops where the two differ | 1844 to 2024 |
-| Time zones, second witness | The host's `Intl` at run time, for wall times before 1970, where the engine reads its own shipped history and not `Intl` | 40 of the 48 cases before 1970 |
+| Time zones, second witness | The host's `Intl` at run time, for readings whose instant falls before 1970, where the engine reads its own shipped history and not `Intl` | 40 of the 48 such readings |
 | Coarse cross-checks | Series written out in the test file from Meeus, *Astronomical Algorithms*, 2nd ed.: the low-accuracy Sun (stated accuracy 0.01°), the 24 largest terms of the Moon's longitude, the IAU 2006 mean obliquity with four nutation terms, sidereal time and the ascendant and midheaven formulas, Julian Day Numbers | 1850 to 2099 |
 | Invariants | every number finite and in range; the Sun's longitude increasing; whole-sign cusps at 0° of each sign from the ascendant's; opposite cusps 180° apart; the sign of a body equal to its longitude's | every chart computed |
 
@@ -129,9 +146,9 @@ cusps do not exist, the engine returns whole-sign houses under the name
 
 | Measurement | Value |
 | --- | --- |
-| The search's residual (the Sun's longitude at the returned instant, less the target) | at most 0.0011″, which the Sun covers in under 0.03 s |
+| The search's residual (the Sun's longitude at the returned instant, less the target) | at most 0.0011″ (by arithmetic, the Sun covers that in under 0.03 s) |
 | Against `de440.bsp`, the one stored reference (2026-11-22T07:23:20.563Z) | 0.010 s |
-| Against Meeus's low-accuracy Sun at the returned instants | at most 22.5″, inside that formula's 36″ |
+| Against Meeus's low-accuracy Sun at the returned instants | at most 22.5″ (the test's limit is that formula's stated 0.01°, 36″) |
 | The same search on astronomy-engine, less the default source | at most 42.8 s |
 
 At each of the 28 instants the Sun's sign differs one second before and one
@@ -145,7 +162,8 @@ corresponds to at most 0.1 s of ingress time at the Sun's slowest motion.
 All 71 resolve to the tz database's instant to the second, with the status
 (ordinary, did not exist, happened twice) it gives; a skipped time carries
 `dst-gap`, a repeated one `dst-fold` and gives the later reading on request.
-For 40 of the 48 wall times before 1970 the host's `Intl` gives the same
+The engine read 48 of the 71 on its own shipped history: those whose instant
+falls before 1970. For 40 of those 48 the host's `Intl` gives the same
 offset. The other 8 are Europe/Amsterdam from 1936 to 1940, which the test
 reports and does not hold: on 7 of them Node's ICU, which reads Amsterdam as
 Brussels, differs (3600 s where the tz database has 4772 s on 1937-06-15, 0 s
@@ -164,7 +182,8 @@ local date.
 ### Extreme years and malformed input
 
 1850, 1900 and 2099 compute on the pack; the Sun is within 15.3″ of the
-low-accuracy formula and the Moon within 0.3° of the coarse series. 2099
+low-accuracy formula (the test's limit is 36″) and the Moon within 0.0195° of
+the coarse series (the test's limit is 0.3°). 2099
 carries `delta-t-extrapolated`. Of the 62 malformed cases, 55 throw a
 `RangeError` whose message names the problem, 1 throws another `Error` (see
 the limits), and 6 are accepted by design and compute sanely.
@@ -193,9 +212,9 @@ Each is a case in the fixture.
    0.5″) and, for the cusps of the eleven systems that stay defined there,
    only "finite and in range". Their accuracy there is not measured here.
 2. **One ingress has a reference.** The other 27 are held by the search's own
-   residual, by invariants and by a formula good to 36″ (about 15 minutes of
-   time). The 0.1 s figure for them is derived from the Sun's position error,
-   not measured.
+   residual, by invariants and by a formula good to 36″ (by arithmetic, about
+   15 minutes of time). The 0.1 s figure for them is derived from the Sun's
+   position error, not measured.
 3. **The ascendant inside a polar circle is a convention.** The engine takes
    the point east of the meridian, which jumps by 180° twice a sidereal day;
    the continuous textbook branch is the other common choice. The chart says
@@ -219,7 +238,7 @@ Each is a case in the fixture.
 7. **From 1970 the zone rules are the host's.** The engine reads `Intl` there
    and flags a host whose data differs from its pinned release at a probe
    (`host-zone-data-differs`). This audit ran on two hosts (tzdata 2026c and
-   2026e); it does not show behaviour on an old one.
+   2026e, the run records above); it does not show behaviour on an old one.
 8. **After 2027-10-02 there is no measured UT1.** A chart there carries
    `delta-t-extrapolated` (both 2099 cases do). How far the angles of such a
    chart can be off is not measured here.
@@ -227,8 +246,8 @@ Each is a case in the fixture.
    `@zodiacs/engine/core`, and after `setDefaultEphemeris("astronomy-engine")`,
    positions are the right-hand columns above and an ingress can be up to
    42.8 s from DE440's. The result always names its ephemeris.
-10. **Other builds are other builds.** npm's `latest` is 1.1.0; this audit
-    ran on 2.0.0-rc.3. The hosted MCP server at zodiacs.org is a separate
+10. **Other builds are other builds.** npm's `latest` was 1.1.0 on
+    2026-11-20 (observed; no test holds it); this audit ran on 2.0.0-rc.3. The hosted MCP server at zodiacs.org is a separate
     bundle: on 2026-11-20 its receipt named `@zodiacs/engine` 1.1.0-rc.2 on
     astronomy-engine 2.1.19 (observed in its output; no test in this
     repository holds it), so the astronomy-engine columns describe it, not

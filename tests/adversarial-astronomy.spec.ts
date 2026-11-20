@@ -245,11 +245,24 @@ describe("the case list", () => {
     expect(new Set(FIXTURE.cases.map((entry) => entry.id)).size).toBe(FIXTURE.total);
     note("cases", "total", FIXTURE.total);
   });
+
+  it("holds the stated number of cases in each category, so a renamed category cannot drop its cases unseen", () => {
+    const tally: Record<string, number> = {};
+    for (const entry of FIXTURE.cases) tally[entry.category] = (tally[entry.category] ?? 0) + 1;
+    expect(tally).toEqual(FIXTURE.counts);
+    // The numbers BENCHMARK_AUDIT.md prints in "The 230 cases".
+    expect(tally).toEqual({ timezone: 71, polar: 28, "polar-boundary": 3, ingress: 28, "leap-day": 12, "unknown-time": 13, "extreme-year": 13, malformed: 62 });
+    for (const [category, count] of Object.entries(tally)) {
+      expect(casesOf(category), category).toHaveLength(count);
+      note("cases", `category ${category}`, count);
+    }
+  });
 });
 
 describe("historical time zones, against the tz database and the host's Intl", () => {
   const zoneCases = casesOf("timezone");
   let intlCompared = 0;
+  let readOnShippedHistory = 0;
 
   it.each(zoneCases.map((entry) => [entry.id, entry] as const))("%s", async (id, entry) => {
     const { zone, date, time } = entry.input as { zone: string; date: string; time: string };
@@ -277,6 +290,7 @@ describe("historical time zones, against the tz database and the host's Intl", (
 
     // Before 1970 the engine reads its own shipped history, so the host's Intl is a second, independent witness.
     if (read.zone.source === "tzdb") {
+      readOnShippedHistory += 1;
       const host = intlOffsetSeconds(zone, read.utc.getTime());
       if (entry.intlCarriesHistory) {
         expect(host, `${id} host Intl offset`).toBe(inForce);
@@ -299,6 +313,7 @@ describe("historical time zones, against the tz database and the host's Intl", (
     note("timeZones", "nonexistent", zoneCases.filter((entry) => entry.expected.status === "nonexistent").length);
     note("timeZones", "ambiguous", zoneCases.filter((entry) => entry.expected.status === "ambiguous").length);
     note("timeZones", "heldToHostIntl", intlCompared);
+    note("timeZones", "readOnShippedHistory", readOnShippedHistory);
     expect(intlCompared).toBeGreaterThan(30);
   });
 
@@ -614,7 +629,9 @@ describe("extreme years", () => {
       const coarse = arcsec(wrapDifference(sun.lon, meeusSun(new Date(utc))));
       largest("extremeYears", "sunAgainstMeeusLowAccuracyMaxArcsec", coarse);
       expect(coarse, `${id}: Meeus's low-accuracy Sun`).toBeLessThan(36);
-      expect(Math.abs(wrapDifference(chart.bodies.find((body) => body.body === "Moon")!.lon, meeusMoon(new Date(utc)))), id).toBeLessThan(0.3);
+      const moon = Math.abs(wrapDifference(chart.bodies.find((body) => body.body === "Moon")!.lon, meeusMoon(new Date(utc))));
+      largest("extremeYears", "moonAgainstCoarseSeriesMaxDegrees", moon);
+      expect(moon, `${id}: the coarse Moon series`).toBeLessThan(0.3);
     }
   });
 });
@@ -637,11 +654,14 @@ describe("malformed input", () => {
     throw new Error(`no function ${name}`);
   };
 
+  const outcomes = { refusedWithRangeError: 0, refusedWithAnotherError: 0, acceptedAndSane: 0 };
+
   it.each(casesOf("malformed").map((entry) => [entry.id, entry] as const))("%s", (id, entry) => {
     const { function: name, argument } = entry.input as { function: string; argument: unknown };
     const run = () => call(name, revive(argument));
     if (entry.expected.result === "ok") {
       const result = run();
+      outcomes.acceptedAndSane += 1;
       everyNumberFinite(result, id);
       if (name === "natalChart") expectSane(result as NatalChart, id);
       if (id === "BAD-62") {
@@ -660,6 +680,13 @@ describe("malformed input", () => {
     expect(thrown, `${id} (${entry.note}) was accepted`).toBeInstanceOf(entry.expected.result === "RangeError" ? RangeError : Error);
     expect((thrown as Error).message.length, id).toBeGreaterThan(10);
     expect((thrown as Error).message, id).not.toMatch(/undefined|NaN|\[object/u);
+    if (thrown instanceof RangeError) outcomes.refusedWithRangeError += 1;
+    else outcomes.refusedWithAnotherError += 1;
+  });
+
+  it("counts the outcomes", () => {
+    for (const [key, count] of Object.entries(outcomes)) note("malformed", key, count);
+    expect(outcomes.refusedWithRangeError + outcomes.refusedWithAnotherError + outcomes.acceptedAndSane).toBe(casesOf("malformed").length);
   });
 });
 
@@ -774,6 +801,9 @@ describe("the measured file", () => {
     expect(existsSync(MEASURED_PATH), "run once with ADVERSARIAL_WRITE=1").toBe(true);
     const committed = (json("./fixtures/adversarial-astronomy.measured.json") as unknown as { measured: typeof measured }).measured;
     expect(Object.keys(rounded).sort()).toEqual(Object.keys(committed).sort());
+    // The same keys in each section, so a figure measured here and missing from the committed file fails too.
+    const held = (values: Record<string, unknown>) => Object.keys(values).filter((key) => !key.startsWith("intlWithoutBackzone")).sort();
+    for (const section of Object.keys(committed)) expect(held(rounded[section]!), `${section}: keys measured against keys committed`).toEqual(held(committed[section]!));
     for (const [section, values] of Object.entries(committed)) {
       for (const [key, value] of Object.entries(values)) {
         const now = rounded[section]![key];

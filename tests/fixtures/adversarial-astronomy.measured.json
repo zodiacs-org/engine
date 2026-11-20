@@ -24,9 +24,18 @@
    "undefinedCuspVectors": 10
   },
   "cases": {
+   "category extreme-year": 13,
+   "category ingress": 28,
+   "category leap-day": 12,
+   "category malformed": 62,
+   "category polar": 28,
+   "category polar-boundary": 3,
+   "category timezone": 71,
+   "category unknown-time": 13,
    "total": 230
   },
   "extremeYears": {
+   "moonAgainstCoarseSeriesMaxDegrees": 0.0194302,
    "sunAgainstMeeusLowAccuracyMaxArcsec": 15.2556
   },
   "ingress": {
@@ -35,6 +44,11 @@
    "astronomyEngineMinusDe440MaxSeconds": 42.743,
    "cases": 28,
    "searchResidualMaxArcsec": 0.0010206
+  },
+  "malformed": {
+   "acceptedAndSane": 6,
+   "refusedWithAnotherError": 1,
+   "refusedWithRangeError": 55
   },
   "polar": {
    "anglesComparedWithTextbook": 66,
@@ -109,7 +123,8 @@
    "intlWithoutBackzone TZ-NL-06": "tz database 1200 s, this host's Intl 0 s",
    "intlWithoutBackzone TZ-NL-07": "tz database 7200 s, this host's Intl 3600 s",
    "intlWithoutBackzone TZ-NL-08": "tz database 7200 s, this host's Intl 7200 s",
-   "nonexistent": 17
+   "nonexistent": 17,
+   "readOnShippedHistory": 48
   },
   "unknownTime": {
    "moonAgainst24TermSeriesMaxDegrees": 0.0323928
