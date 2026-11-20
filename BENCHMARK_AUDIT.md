@@ -25,7 +25,7 @@ appears:
 - figures worked out by arithmetic from a measured one (marked "by
   arithmetic" or "derived");
 - what was observed on 20 November 2026 and is held by no test in this
-  repository: run times, tool versions and the notes on other builds. The two
+  repository: run times, tool versions and the notes on other builds. The three
   run records, each with its `process.versions`, are in
   `docs/evidence/adversarial-astronomy-20261120/`.
 
@@ -37,10 +37,10 @@ npm test -- tests/adversarial-astronomy.spec.ts
 ```
 
 250 tests, no network. Run records (observed, not held by a test): on Node
-22.23.3 (ICU 78.3, tzdata 2026c) and on Node 22.23.4 (ICU 78.3, tzdata 2026e),
-250 passed, 0 failed, 0 skipped on both, in 13.4 s and 13.0 s
-(`docs/evidence/adversarial-astronomy-20261120/run-node-22.23.3.txt` and
-`run-node-22.23.4.txt`).
+22.23.3 (ICU 78.3, tzdata 2026c), Node 22.23.4 and Node 24.22.1 (both ICU
+78.3, tzdata 2026e), 250 passed, 0 failed, 0 skipped on each, in 13.4 s,
+13.0 s and 13.7 s (`run-node-22.23.3.txt`, `run-node-22.23.4.txt` and
+`run-node-24.22.1.txt` in `docs/evidence/adversarial-astronomy-20261120/`).
 
 ```sh
 # Rewrite the measured file after a deliberate change:
@@ -237,8 +237,8 @@ Each is a case in the fixture.
    Fixing it changes `dist/`, so it waits for the next candidate.
 7. **From 1970 the zone rules are the host's.** The engine reads `Intl` there
    and flags a host whose data differs from its pinned release at a probe
-   (`host-zone-data-differs`). This audit ran on two hosts (tzdata 2026c and
-   2026e, the run records above); it does not show behaviour on an old one.
+   (`host-zone-data-differs`). This audit ran on tzdata 2026c and 2026e (the
+   run records above); it does not show behaviour on an old one.
 8. **After 2027-10-02 there is no measured UT1.** A chart there carries
    `delta-t-extrapolated` (both 2099 cases do). How far the angles of such a
    chart can be off is not measured here.
