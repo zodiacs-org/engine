@@ -1,5 +1,110 @@
 # Engine changelog
 
+## 2.0.0-rc.4 (unreleased candidate)
+
+The fourth candidate for **2.0.0**, a major release, on 2.0.0-rc.3 (main at
+`900455f`, after pull request 139), with three fixes. It is not to be
+published on npm until the owner approves it. Checks:
+`docs/evidence/2.0.0-rc.4-20261120/`.
+
+rc.3's archive is carried, and npm has carried rc.3 under `next` since
+2026-11-17 (not tagged); these fixes reach `dist/` and the packed README, so
+by the rule in `artifacts/README.md` the package takes a new number and
+rc.3's archive stays, unchanged. The owner approved the fixes and this
+candidate on 20 November 2026. Everything rc.1's, rc.2's and rc.3's entries
+say holds for rc.4 except where this entry says otherwise.
+
+### Changed
+
+- `require()` of `@zodiacs/engine` or of any of its entry points throws an
+  `Error` with code `ERR_ZODIACS_ESM_ONLY`, whose message says to use
+  `import`, or `await import("@zodiacs/engine")` from CommonJS. Up to rc.3
+  Node threw its own `ERR_PACKAGE_PATH_NOT_EXPORTED` ("No "exports" main
+  defined"). Each of the 20 entries in `exports` gains a `"require"`
+  condition, after `"import"`, that points at `dist/esm-only.cjs`, a file
+  that throws that error and does nothing else; `files` packs it. There is
+  still no CommonJS build and no `"default"` condition. A tool that resolves
+  with the `require` condition (Jest in CommonJS mode, a bundler compiling
+  `require()` calls) now gets this error in place of Node's: both fail, and
+  this one says what to do. Held by `scripts/esm-only.test.mjs`, the export
+  smoke test and the packed-consumer check, which requires every entry point
+  from CommonJS and loads the package with `import()` from CommonJS.
+- A name that is not a body is a `RangeError` on the default source. The
+  root refuses it with `RangeError("Unknown body: <name>")` before any
+  source is asked, in `searchLongitudeCrossings` and
+  `findLongitudeCrossings`, and in `./internal`'s `bodyLongitude`,
+  `longitudeSpeed` and their `...Detailed` forms, whether the source is the
+  shipped DE440 pack, astronomy-engine or a caller's pack given with
+  `withEphemeris`. Up to rc.3, on the default source, the DE440 reader's
+  `De440Error` (code `unknown-body`) reached the caller, which a caller that
+  catches only `RangeError` did not catch; nothing was computed either way.
+  `@zodiacs/engine/de440`'s own source keeps `De440Error` for a body it does
+  not place. Held by `src/ephemeris-unknown-body.test.ts`; the adversarial
+  case BAD-56 now expects `RangeError`.
+
+### Documentation
+
+- README.md: the *Configurable aspects* and *Declinations and parallels*
+  examples import `natalChart` and build their own chart, so they run as
+  pasted; `src/readme-snippets.test.ts` runs both. The install notes say
+  what `require()` does. This candidate's paragraph, archive and evidence
+  folder. The span's ends were measured again on this build with
+  `docs/evidence/continuous-utc-20261117/span-ends.mjs` and are the same to
+  the millisecond as on rc.3 (natalChart's last UTC
+  3998-09-03T05:58:50.816Z, calc's 2199-12-31T23:58:50.815Z;
+  `docs/evidence/2.0.0-rc.4-20261120/results/span-ends.json`).
+- The README's bundle sizes are rc.3's, measured on rc.3's archive, and say
+  so; they were not measured again for this candidate.
+
+### Corrections
+
+Carried from `docs/changelog-corrections.md` (items 15 to 17). The entries
+they correct are left as written.
+
+- 2.0.0-rc.3, the heading "unreleased candidate" and "It is a draft for the
+  owner's review": rc.3 was published to npm on 2026-11-17 under `next`,
+  with 1.1.0 still under `latest`; it has no git tag and no GitHub release
+  (`docs/evidence/changelog-corrections-20261118/records.md`). True when
+  written. The rest of that sentence, "and is not to be published on npm
+  until the owner approves it", stands. The README's rc.3 paragraph said
+  the same ("is a draft for the owner's review and is not published to
+  npm"); this candidate's paragraph replaces it.
+- 2.0.0-rc.3, pull request 121 (`@zodiacs/engine/core`): "the root is
+  unchanged". The root's results, names and types are unchanged; its import
+  graph grew by 109 bytes because the shared ephemeris chunk grew by that
+  amount, as the same entry's size table says for `.`, `./calc`,
+  `./internal`, `./sky`, `./timing`, `./vedic` and `./window`.
+
+### Sizes and budgets
+
+- Measured on this candidate's build
+  (`docs/evidence/2.0.0-rc.4-20261120/results/package-contents.log`), nine
+  import graphs were over their budgets, each by the 143 bytes the body
+  check adds to every graph that holds `src/ephemeris.ts`; the root had 27
+  bytes to spare. Each budget is raised to the measurement, rounded up to
+  the next 100 bytes, and no further (old budget, rc.3's measurement, this
+  candidate's, new budget):
+
+  | Entry | Old budget | rc.3 | rc.4 | New budget | Why |
+  | --- | ---: | ---: | ---: | ---: | --- |
+  | `.` | 154,200 | 154,173 | 154,316 | 154,400 | the body check (143) |
+  | `./calc` | 205,400 | 205,334 | 205,477 | 205,500 | the body check (143) |
+  | `./core` | 110,800 | 110,765 | 110,908 | 111,000 | the body check (143) |
+  | `./internal` | 112,400 | 112,381 | 112,524 | 112,600 | the body check (143) |
+  | `./sky` | 139,900 | 139,835 | 139,978 | 140,000 | the body check (143) |
+  | `./techniques` | 207,600 | 207,561 | 207,704 | 207,800 | the body check (143) |
+  | `./timing` | 173,500 | 173,476 | 173,619 | 173,700 | the body check (143) |
+  | `./vedic` | 189,300 | 189,208 | 189,351 | 189,400 | the body check (143) |
+  | `./window` | 152,800 | 152,731 | 152,874 | 152,900 | the body check (143) |
+
+  Every other graph is inside its budget, unchanged. The package beside the
+  pack is 1,446,177 bytes unpacked in 101 files, over the cap of 1,438,000:
+  the body check, `dist/esm-only.cjs`, the 20 `"require"` conditions in
+  `package.json`, this entry and the README's lines. Raised to 1,446,200,
+  the measurement rounded up to the next 100 bytes. The budgets and the cap
+  are for the owner to decide with the candidate
+  (`scripts/verify-package-contents.mjs`).
+
 ## 2.0.0-rc.3 (unreleased candidate)
 
 The third candidate for **2.0.0**, a major release, on 2.0.0-rc.2 (main at

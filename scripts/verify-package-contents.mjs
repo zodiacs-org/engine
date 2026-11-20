@@ -269,6 +269,24 @@ for (const file of files) {
 // Each new budget is the measurement rounded up to the next hundred bytes, to
 // fit it and no more: they are for the owner to decide with the candidate.
 // The other graphs are inside their budgets.
+//
+// 2.0.0-rc.4 refuses a name that is not a body with a RangeError before any
+// source is asked (src/ephemeris.ts, knownBody): 143 bytes in every graph
+// that holds src/ephemeris.ts. The root had 27 bytes to spare, so nine
+// graphs are over their budgets; old budget, 2.0.0-rc.3's measurement, this
+// build's, new budget:
+//   .             154,200   154,173   154,316   154,400
+//   ./calc        205,400   205,334   205,477   205,500
+//   ./core        110,800   110,765   110,908   111,000
+//   ./internal    112,400   112,381   112,524   112,600
+//   ./sky         139,900   139,835   139,978   140,000
+//   ./techniques  207,600   207,561   207,704   207,800
+//   ./timing      173,500   173,476   173,619   173,700
+//   ./vedic       189,300   189,208   189,351   189,400
+//   ./window      152,800   152,731   152,874   152,900
+// Each new budget is the measurement rounded up to the next hundred bytes, to
+// fit it and no more, for the owner to decide with the candidate. The other
+// graphs are inside their budgets, unchanged.
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -286,7 +304,7 @@ const ENTRY_BUDGETS = {
   // path in the ephemeris chunk, and, after the cut's reviews, the refusal of
   // the code that computes its own positions; raised to 109,000 under the
   // owner's delegation of 2026-11-04; 0.43 per cent of headroom.
-  ".": 154_200,
+  ".": 154_400,
   // New in rc.16 (feature-api): the uniform calculation API, its frames,
   // centers, corrections, bounds and receipts. 106,779 bytes as integrated on
   // rc.15's time basis, 34,449 of them beyond the core's graph; 7.69 per cent
@@ -305,7 +323,7 @@ const ENTRY_BUDGETS = {
   // (and the timeBands chunk it shares with ./time) and the chunks split out
   // for ./time (above); raised to 156,000, the ceiling approved under the
   // owner's delegation of 2026-11-03 (OQ3); 3.02 per cent of headroom.
-  "./calc": 205_400,
+  "./calc": 205_500,
   // New in 1.1.0-rc.1: the ids of the conventions registry. 2,754 bytes, its
   // own file and the chunk of ids it shares with ./receipt; 5.30 per cent of
   // headroom.
@@ -314,7 +332,7 @@ const ENTRY_BUDGETS = {
   // its own into one file by scripts/build-core.mjs. 108,411 bytes as
   // measured on this build, as on the prototype measured in
   // docs/evidence/bundle-weight-20261117/; 1.10 per cent of headroom.
-  "./core": 110_800,
+  "./core": 111_000,
   // rc.15: 9,410. 1.0.0-rc.1: 9,942, its options read as the shared reader
   // reads them; 0.58 per cent, not raised.
   "./crossings": 10_000,
@@ -364,7 +382,7 @@ const ENTRY_BUDGETS = {
   // 1.1.0-rc.3: 68,758, with withEphemeris, the source's path and the
   // refusal in the ephemeris chunk; raised to 69,000 with the owner's
   // approval of 2026-11-10; 0.35 per cent of headroom.
-  "./internal": 112_400,
+  "./internal": 112_600,
   "./internal/math": 20_000, // rc.15: 18,165
   // New in 1.1.0-rc.2: declination parallels, the sect under a named
   // convention, composite midpoints and their aspects, and the dignities,
@@ -395,7 +413,7 @@ const ENTRY_BUDGETS = {
   // positions() rows' flags (111) and the polar-angles flag (105); raised
   // from 203,800 to 207,300, the measurement and about one per cent, for the
   // owner to decide with the candidate.
-  "./techniques": 207_600,
+  "./techniques": 207_800,
   // New in 1.1.0-rc.2: the time basis and the frame of date with no
   // ephemeris (Zodiacs.org's finding F-53), and the time bands it re-exports.
   // 1.1.0-rc.2: 42,306 bytes in 7 files, dist/time.js and the six chunks it
@@ -413,11 +431,11 @@ const ENTRY_BUDGETS = {
   // nutation in the ephemeris chunk and the frames of date the entry now
   // takes from it (src/equator.ts, shared with ./calc) in place of
   // astronomy-engine's; 5.31 per cent of headroom.
-  "./sky": 139_900,
+  "./sky": 140_000,
   // rc.15: 112,485, the core's graph included; as carried, 114,916. With
   // planetary returns 117,219. rc.16: 123,039, raised from 120,000 for the
   // nutation in the ephemeris chunk; 4.84 per cent of headroom.
-  "./timing": 173_500,
+  "./timing": 173_700,
   // rc.15: 114,106, the core's graph included; as carried, 116,779. rc.16:
   // 122,131, raised from 120,000 for the nutation in the ephemeris chunk
   // (the ayanamsas now use its frame); 4.80 per cent of headroom. rc.17:
@@ -432,7 +450,7 @@ const ENTRY_BUDGETS = {
   // growth (above) and the refusals in the ayanamsas and the varga timing;
   // raised to 144,500 under the owner's delegation of 2026-11-04; 0.59 per
   // cent of headroom.
-  "./vedic": 189_300,
+  "./vedic": 189_400,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
   // 33,971 of them beyond the core's graph; 8.17 per cent of headroom. With
@@ -441,7 +459,7 @@ const ENTRY_BUDGETS = {
   // withEphemeris and the source's path in the ephemeris chunk and
   // birthWindow's refusal inside it; raised to 107,000 with the owner's
   // approval of 2026-11-10; 0.20 per cent of headroom.
-  "./window": 152_800
+  "./window": 152_900
 };
 
 /** The dist/ files an entry loads statically, with their bytes. */
@@ -672,7 +690,15 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // lines. Raised from 1,289,000 to 1,438,000, the measurement rounded up to
 // the next 1,000 bytes; the owner approved raising the cap for the core
 // entry on 17 November 2026.
-const TOTAL_CAP = 1_438_000;
+//
+// 2.0.0-rc.4: 4,765,729 bytes in 101 files, of which 1,446,177 are not the
+// pack, 8,665 more than 2.0.0-rc.3's 1,437,512: the body check (143 bytes in
+// each copy of the root's ephemeris code), dist/esm-only.cjs and the 20
+// "require" conditions in package.json, this candidate's CHANGELOG entry
+// and the README's lines. Raised from 1,438,000 to 1,446,200, the
+// measurement rounded up to the next 100 bytes, for the owner to decide
+// with the candidate.
+const TOTAL_CAP = 1_446_200;
 const restBytes = report.unpackedSize - PACK_DATA_BYTES;
 assert(restBytes <= TOTAL_CAP, `package is unexpectedly large: ${restBytes} bytes unpacked beside the DE440 pack, over ${TOTAL_CAP}`);
 

@@ -244,7 +244,7 @@ Each is a case in the fixture.
    `2.0.0-rc.3`, on the default source, `searchLongitudeCrossings("Vulcan", …)`
    throws the DE440 reader's `De440Error`, not a `RangeError` (case BAD-56).
    Nothing is computed; a caller that catches only `RangeError` will not
-   catch it. Fixed after `2.0.0-rc.3` and not yet in a candidate: the root
+   catch it. Fixed in `2.0.0-rc.4`, a candidate not yet published: the root
    refuses a name that is not a body with `RangeError("Unknown body: …")`
    before any source is asked, and case BAD-56 now expects that.
 7. **From 1970 the zone rules are the host's.** The engine reads `Intl` there
