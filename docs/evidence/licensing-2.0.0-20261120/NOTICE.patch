@@ -1,0 +1,36 @@
+diff --git a/NOTICE b/NOTICE
+index c33759e..eb4a728 100644
+--- a/NOTICE
++++ b/NOTICE
+@@ -222,10 +222,16 @@ Zone Database 2025c that define it (tzdata2025c.tar.gz, sha256
+ 4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957). Both are
+ in the public domain: https://www.iana.org/time-zones. From 1970 local time
+ comes from the host runtime's Intl/ICU data, which it checks against a table
+-of the spans in which the IANA Time Zone Database 2021a (tzdata2021a.tar.gz,
+-sha256 39e7d2ba08c68cbaefc8de3227aab0dec2521be8042cf56855f7dc3a9fb14e08) and
+-2026f give different offsets, with 2026f's offsets, compiled from those two
+-public-domain releases.
++of the spans in which tzdata 2021a or 2025c gives a different offset from
++2026f. The table gives 2026f's offsets and is compiled from these
++public-domain IANA Time Zone Database releases:
++
++  tzdata2021a.tar.gz (SHA-256
++  39e7d2ba08c68cbaefc8de3227aab0dec2521be8042cf56855f7dc3a9fb14e08)
++  tzdata2025c.tar.gz (SHA-256
++  4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957)
++  tzdata2026f.tar.gz (SHA-256
++  01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d)
+
+ The core carries TAI - UTC from the IERS leap-second list, leap-seconds.list,
+ updated 2026-07-06 through IERS Bulletin C 72 and expiring 2027-06-28 (sha256
+@@ -280,7 +286,9 @@ Astronomical Observatory, France:
+
+   F. van Leeuwen 2007, A&A 474, 653 (VizieR I/311, Hipparcos, the New
+   Reduction): the positions, proper motions and parallaxes of Spica,
+-  zeta Psc A and delta Cnc.
++  zeta Psc A and delta Cnc. The European Space Agency's Hipparcos mission
++  supplied the underlying observations.
++  Credit: ESA
+   G. A. Gontcharov 2006, Astronomy Letters 32, 759 (VizieR III/252, Pulkovo
+   radial velocities): the radial velocity of zeta Psc A.
+   B. Famaey et al. 2005, A&A 430, 165 (VizieR J/A+A/430/165,
