@@ -1,7 +1,11 @@
 # Natal records across the 2.0.0 major
 
-The 2.0.0-rc.3 build read all 138 natal envelopes written by the 28
-carried archives from 0.1.1-rc.7 through 2.0.0-rc.3. The codec preserved
+The 2.0.0-rc.4 build read all 143 natal envelopes written by the 29
+carried archives from 0.1.1-rc.7 through 2.0.0-rc.4. (The 2.0.0-rc.3 build
+first read the 138 written by the 28 archives through 2.0.0-rc.3; when
+2.0.0-rc.4 was carried on 20 November 2026 the runner was run again with
+the 2.0.0-rc.4 build, and only the reader's version and 2.0.0-rc.4's row
+and fixture were added.) The codec preserved
 each writer's engine version and conventions set. Every decoded replay
 request was accepted by `natalChart`. This checks record compatibility and
 replay input validity. Recomputed positions may differ from stored positions
@@ -53,11 +57,12 @@ checks each writer's TypeScript declarations before running an input.
 | 2.0.0-rc.1 | A, B, C, D, E | A, B, C, D, E | None |
 | 2.0.0-rc.2 | A, B, C, D, E | A, B, C, D, E | None |
 | 2.0.0-rc.3 | A, B, C, D, E | A, B, C, D, E | None |
+| 2.0.0-rc.4 | A, B, C, D, E | A, B, C, D, E | None |
 
 For C, writers before 0.1.1-rc.15 omit the time basis. From 0.1.1-rc.15
 through 2.0.0-rc.2 the record carries the `delta-t` basis and the
-`fallback` source for UT1 minus UTC. The 2.0.0-rc.3 record carries
-`continuous-utc` and `model`. For D, 1.1.0 records `polar-fallback`.
+`fallback` source for UT1 minus UTC. The 2.0.0-rc.3 and 2.0.0-rc.4 records
+carry `continuous-utc` and `model`. For D, 1.1.0 records `polar-fallback`.
 From 2.0.0-rc.1 it also records `polar-angles`. The
 [results](results/later-reader.json) identify each decoded conventions set
 by its index in the reader's `NATAL_RECEIPT_CONVENTION_SETS`.
