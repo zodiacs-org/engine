@@ -6,7 +6,7 @@ The executable is `zodiacs`. Commands are `chart`, `positions`, `events`, `verif
 
 ```sh
 # In a fresh review consumer, install the supplied, hash-verified engine archive
-# and private CLI archive. Do not replace the candidate with npm's older latest.
+# and private CLI archive. The engine archive is the CLI's pinned review baseline.
 npm install --ignore-scripts /absolute/path/zodiacs-engine-1.0.0-rc.2.tgz /absolute/path/zodiacs-cli-0.0.0.tgz
 
 # A file contains the request; input values do not travel in shell arguments.

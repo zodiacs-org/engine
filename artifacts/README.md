@@ -117,7 +117,7 @@ runs, so CI starts the check with node directly.
 | 1.1.0 | `4e53cda9bd6ccb5f5581c2a9af2f2ae4010af2599f411ac5220425e0932e41ac` | 2,726,321 | 98 | `2496c28f273e1e99526490e857332fae44473367` | "Carry the packed 1.1.0 tarball" | Release, merged (pull request 104); on npm as `latest`; npm's tarball is these bytes (its SHA-1, checked 2026-11-16) |
 | 2.0.0-rc.1 | `9a1c07ca898da77ec266543130645f3e2528a1aeef1ebd15b1b83e07d19e673a` | 2,732,244 | 98 | `5bbb4595a7bc26618a504de62805399e28d595d8` | "Carry the packed 2.0.0-rc.1 tarball" | Draft candidate for 2.0.0 (pull request 112), reviewed in draft with one blocker and superseded by 2.0.0-rc.2 on the same pull request; never tagged or published. Still this file |
 | 2.0.0-rc.2 | `e0621630b5a0f9dbb6465f4f077630f313217d7b06ee88ffa960696fec5eb1cc` | 2,734,988 | 98 | `05cd353af00e796e1fad65bf7085356c315b4b86` | "Carry the packed 2.0.0-rc.2 tarball" | Draft candidate for 2.0.0 (pull request 112), awaiting the owner's review; never tagged or published |
-| 2.0.0-rc.3 | `d465137931f5d28910443ca7ef01610606e9f708704364c61811d2936dc4ec55` | 2,781,676 | 100 | `0d41826f592d95a094e9234730dd594de5411e47` | "Carry the packed 2.0.0-rc.3 tarball" | Draft candidate for 2.0.0, awaiting the owner's review; never tagged or published |
+| 2.0.0-rc.3 | `d465137931f5d28910443ca7ef01610606e9f708704364c61811d2936dc4ec55` | 2,781,676 | 100 | `0d41826f592d95a094e9234730dd594de5411e47` | "Carry the packed 2.0.0-rc.3 tarball" | Candidate, merged (pull request 123); on npm under `next` since 2026-11-17; not tagged |
 
 1.1.0-rc.9, 1.1.0-rc.10, 1.1.0-rc.11, 1.1.0-rc.12 and 1.1.0-rc.13 are five cuts of one draft, pull request 101.
 1.1.0-rc.9 was carried on 2026-11-14 and reviewed in draft; the owner then
