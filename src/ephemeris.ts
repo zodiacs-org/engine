@@ -463,16 +463,19 @@ function longitudeAt(body: BodyName, ms: number, clock: Clock): number {
  * Refuse a name that is not a BodyName with a RangeError, before any source
  * is asked: whichever source would compute it (astronomy-engine, the shipped
  * DE440 pack or a caller's), a caller's bad input is the same error. A DE440
- * source's De440Error is left for failures of the pack itself.
+ * source's De440Error is left for failures of the pack itself. The root's
+ * crossing searches call it before they search, so a window that asks no
+ * longitude (a zero-length one, or one refused for its sample budget) still
+ * refuses the name.
  */
-function knownBody(body: BodyName): void {
+export function assertKnownBody(body: BodyName): void {
   if (body !== "Moon" && body !== "North Node" && body !== "South Node" && !PLANETS.some((p) => p.name === body)) {
     throw new RangeError(`Unknown body: ${String(body)}`);
   }
 }
 
 function longitudeOn(body: BodyName, basis: TimeBasis, from: PositionSource | null, behind?: boolean): number {
-  knownBody(body);
+  assertKnownBody(body);
   if (from) return sourceLongitude(from, body, basis.ttDays, behind);
   const time = timeOf(basis);
   if (body === "Moon") return moonOfDate(time).lon;
@@ -533,7 +536,7 @@ function speedAt(
   from: PositionSource | null = sourceAt(basisAt(ms, clock).ttDays),
   behind?: boolean
 ): number {
-  knownBody(body);
+  assertKnownBody(body);
   const node = body === "North Node" || body === "South Node";
   const stepDays = node ? NODE_SPEED_STEP_DAYS : SPEED_STEP_DAYS;
   const side = from && !node && behind === undefined ? from.place(body as SourceBody, basisAt(ms, clock).ttDays).behindDisc : behind;

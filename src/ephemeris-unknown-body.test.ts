@@ -27,6 +27,10 @@ const CHIRON = "Chiron" as BodyName;
 const calls: [string, () => unknown][] = [
   ["searchLongitudeCrossings", () => searchLongitudeCrossings(CHIRON, 10, FROM, TO)],
   ["findLongitudeCrossings", () => findLongitudeCrossings(CHIRON, 10, FROM, TO)],
+  // A window that asks no longitude still refuses the name: zero length, or refused for its sample budget.
+  ["searchLongitudeCrossings, zero-length window", () => searchLongitudeCrossings(CHIRON, 10, FROM, FROM)],
+  ["findLongitudeCrossings, zero-length window", () => findLongitudeCrossings(CHIRON, 10, FROM, FROM)],
+  ["searchLongitudeCrossings, maxSamples 1", () => searchLongitudeCrossings(CHIRON, 10, FROM, TO, { maxSamples: 1 })],
   ["bodyLongitude", () => bodyLongitude(CHIRON, AT)],
   ["longitudeSpeed", () => longitudeSpeed(CHIRON, AT)],
   ["bodyLongitudeDetailed", () => bodyLongitudeDetailed(CHIRON, AT)],
@@ -49,6 +53,13 @@ function expectUnknownBody(call: () => unknown): void {
   expect((error as RangeError).message).toBe("Unknown body: Chiron");
 }
 
+/** The same windows on a known body: they do not throw, and the budget is still refused rather than thrown. */
+function expectKnownBodyWindows(): void {
+  expect(searchLongitudeCrossings("Sun", 10, FROM, FROM)).toMatchObject({ status: "complete", crossings: [], samples: 0 });
+  expect(findLongitudeCrossings("Sun", 10, FROM, FROM)).toEqual([]);
+  expect(searchLongitudeCrossings("Sun", 10, FROM, TO, { maxSamples: 1 })).toMatchObject({ status: "refused", reason: "sample-budget", crossings: [] });
+}
+
 describe("an unknown body on the shipped DE440 pack, the package's default", () => {
   beforeAll(() => setDefaultEphemeris("de440"));
   afterAll(() => setDefaultEphemeris("astronomy-engine"));
@@ -63,18 +74,24 @@ describe("an unknown body on the shipped DE440 pack, the package's default", () 
       expect(result.flags).toEqual([]);
     }
   });
+
+  it("does not throw for a known body on a zero-length window or over budget", expectKnownBodyWindows);
 });
 
 describe("an unknown body on astronomy-engine", () => {
   beforeAll(() => setDefaultEphemeris("astronomy-engine"));
 
   it.each(calls)("%s throws RangeError", (_name, call) => expectUnknownBody(call));
+
+  it("does not throw for a known body on a zero-length window or over budget", expectKnownBodyWindows);
 });
 
 describe("an unknown body on a caller's DE440 source, inside withEphemeris", () => {
   const source = shippedDe440Source();
 
   it.each(calls)("%s throws RangeError, not De440Error", (_name, call) => expectUnknownBody(() => withEphemeris(source, call)));
+
+  it("does not throw for a known body on a zero-length window or over budget", () => withEphemeris(source, expectKnownBodyWindows));
 
   it("leaves the DE440 entry's own refusal of the body a De440Error", () => {
     const error = thrownBy(() => source.place(CHIRON as never, 7457));
