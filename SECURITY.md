@@ -54,6 +54,4 @@ if this package is affected.
 
 ## Supported versions
 
-Only the latest release candidate is supported, and fixes ship in a new
-candidate. Earlier candidates are not patched: their archives in
-`artifacts/` are immutable.
+The latest 2.x release is supported, and fixes ship in a new release. 1.1.x receives security fixes until six months after 2.0.0 was published on npm. Release candidates are not supported once the release they led to is out. Archives in `artifacts/` are immutable.

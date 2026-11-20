@@ -9,10 +9,10 @@ the release it leads to.
 
 ## What is public
 
-- **The entry points.** The seventeen that `package.json` exports and the
+- **The entry points.** The eighteen that `package.json` exports and the
   README documents: the root, `./calc`, `./conventions` (from 1.1.0-rc.1),
-  `./crossings`, `./de440` (from 1.1.0-rc.3), `./de440/pack` (from
-  1.1.0-rc.9), `./deltat`, `./geo`,
+  `./core` (from 2.0.0-rc.3), `./crossings`, `./de440` (from 1.1.0-rc.3),
+  `./de440/pack` (from 1.1.0-rc.9), `./deltat`, `./geo`,
   `./houses`, `./lite` (from 1.1.0-rc.2), `./receipt`, `./sky`,
   `./techniques`, `./time` (from 1.1.0-rc.2), `./timing`, `./vedic` and
   `./window`. `./internal` and
@@ -94,8 +94,8 @@ A declaration whose documentation comment carries `@experimental`, which
 `api/` shows above it, is outside this promise: a minor release may change or
 remove it, and the CHANGELOG says so. A declaration leaves the experimental
 tier by losing the tag in a minor release, and from then on it is public like
-any other. 1.0 marks as experimental the parts whose conventions are still
-being settled; each entry point's guide says which.
+any other. In 2.x, the tag marks parts whose conventions are still being
+settled. Each entry point's guide says which.
 
 ## Numbers
 
@@ -122,14 +122,19 @@ new rule beside the old one.
 
 ## Records
 
-Each 1.x release's receipt codec reads every record that it and every
-earlier 1.x release writes, and every record that 1.0.0 reads: from the first
-receipts of 0.1.1-rc.3, each under the conventions its engine recorded. A
-minor release may start to write a new set of conventions or a new schema
-version; every later 1.x release reads both, and an earlier one refuses the
-new record, as it refuses any it does not know (`unsupported_feature`,
-`unsupported_version`). No 1.x release stops reading a set or a version that
-an earlier 1.x release wrote.
+Each 1.x release's receipt codec read every record that it and every
+earlier 1.x release wrote, and every record that 1.0.0 read: from the first
+receipts of 0.1.1-rc.3, each under the conventions its engine recorded. When
+a minor release started writing a new set of conventions or a new schema
+version, later 1.x releases could read both. Earlier releases refused the
+new record (`unsupported_feature`, `unsupported_version`). No 1.x release
+stopped reading a set or a version that an earlier 1.x release wrote.
+
+Each 2.x release reads every record that a 1.x release reads and every
+record a 2.x release before it writes. The 2.0.0-rc.3 codec read every
+envelope tested from the carried archives spanning 0.1.1-rc.7 through
+2.0.0-rc.3. The withdrawn 1.1.0-rc.8 had no archive to run. See the
+[records compatibility evidence](evidence/records-2.0.0-20261120/README.md).
 
 From 1.1.0-rc.1 every new set also makes its envelopes require a feature
 (`requiredFeatures`) named for it. Every release reads an envelope's features
@@ -146,6 +151,10 @@ later than the release that wrote the record. A set is therefore accepted
 from the release whose computation it describes, with no upper bound:
 1.1.0-rc.1's set, which describes rc.16's computation with the record's ids,
 is accepted from 0.1.1-rc.16, as rc.16's set is.
+
+A continuous-UTC set is accepted from engine 2.0.0-rc.3
+(`CONTINUOUS_UTC_RELEASE`). Earlier readers refuse a continuous-UTC envelope
+as `unsupported_feature` because it requires `time-basis-continuous-utc`.
 
 A schema id is a permanent, opaque name. `NATAL_ENVELOPE_SCHEMA`,
 `NATAL_RECEIPT_SCHEMA` and `NATAL_DIAGNOSTIC_SCHEMA` keep the `draft-v1` they
@@ -187,6 +196,12 @@ When something public is to go, it is deprecated first:
    release.
 3. It is removed only in a major release, and only after those twelve months.
 
+2.0.0 keeps `SIGN_NAMES`, `ConfiguredAspectMotion`, `PLACIDUS_POLAR_FALLBACK`,
+`DECLINATION_ORB`, `DECLINATION_ORB_LUMINARY`, `SIDEREAL_RATE` and
+`./techniques`'s `PlanetaryReturn` because twelve months have yet to elapse
+since they were deprecated in 1.0.0, published on 2026-10-11. See the
+[1.0.0 changelog](../CHANGELOG.md#100--2026-10-11).
+
 Two exceptions. A result that is wrong is fixed, not deprecated: a fix is a
 patch. And a security fix may change behaviour in a patch release when
 nothing less would close the hole; the CHANGELOG says so.
@@ -199,6 +214,6 @@ Dropping a line after Node.js ends its maintenance is a minor release,
 announced in the CHANGELOG; dropping one that Node.js still maintains waits
 for a major release. Node.js 20, which the `engines` field names, reached
 its end of life on 2026-04-30, so this promise does not cover it: the package
-runs and is tested on 20.19.0, and a 1.x minor release may drop the line. The
+runs and is tested on 20.19.0, and a 2.x minor release may drop the line. The
 one dependency, astronomy-engine, is pinned to an exact version, and a
 release that moves it says what moved with it.

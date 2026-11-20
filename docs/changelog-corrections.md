@@ -72,15 +72,15 @@ changed because their archives hold them.
 11. **`CITATION.cff`: "No DOI has been minted".** One was, on 2026-10-01, for
     the tagged source of 0.1.1-rc.15. Corrected in the file on 2026-11-13.
 12. **`SECURITY.md`, line 57: "Only the latest release candidate is
-    supported".** Written before 1.0.0. npm's `latest` is the stable 1.0.0
-    since 2026-10-11. Nothing newer is published: 1.1.0 was merged on
-    2026-11-16 (pull request 104) and is not on npm (checked 2026-11-16).
-    Which versions are supported now is the owner's decision; the file is not
-    changed here.
+    supported".** Written before 1.0.0. When checked on 2026-11-16, npm's
+    `latest` was 1.0.0, published on 2026-10-11. 1.1.0 had merged on
+    2026-11-16 (pull request 104) and was not yet on npm.
+    The owner decides which versions are supported. Corrected in the file on
+    2026-11-20.
 13. **`tools/cli/README.md`, line 9: "Do not replace the candidate with npm's
-    older latest."** Written when npm's `latest` was 0.1.1-rc.15. It is now
-    1.0.0, which is newer than the 1.0.0-rc.2 archive the instructions
-    install. The file is not changed here.
+    older latest."** Written when npm's `latest` was 0.1.1-rc.15. At the time
+    of the audit it was 1.0.0, newer than the 1.0.0-rc.2 archive the instructions
+    install. Corrected in the file on 2026-11-20.
 14. **`artifacts/README.md`, four status cells left from before 1.1.0.**
     1.1.0-rc.6 "Draft candidate, awaiting the owner's review": merged in
     pull request 91. 1.1.0-rc.7 "awaiting the
@@ -121,7 +121,8 @@ Line numbers below are those of `README.md`, `CHANGELOG.md` and
       npm until the owner approves it", is not corrected.
     - `artifacts/README.md`, line 120, the 2.0.0-rc.3 status cell: "Draft
       candidate for 2.0.0, awaiting the owner's review; never tagged or
-      published". Published on npm under `next`; not tagged.
+      published". Published on npm under `next`; not tagged. Corrected in
+      the file on 2026-11-20.
 
 ## Not a correction, for the record
 
