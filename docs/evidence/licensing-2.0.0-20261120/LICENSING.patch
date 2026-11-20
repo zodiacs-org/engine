@@ -1,8 +1,8 @@
 diff --git a/LICENSING.md b/LICENSING.md
-index 9923d62..cdfa99f 100644
+index 9923d62..2a871b1 100644
 --- a/LICENSING.md
 +++ b/LICENSING.md
-@@ -8,15 +8,17 @@ NAIF's rules permit redistributing its kernels unmodified but do not speak of
+@@ -8,15 +8,20 @@ NAIF's rules permit redistributing its kernels unmodified but do not speak of
  data refitted from one, so shipping the pack rests on the owner's reading and
  not on a statement of JPL's or NAIF's. On 2026-11-16 the owner answered, in
  writing, the question "Do you accept shipping the NASA DE440 data in 1.1.0?"
@@ -23,13 +23,16 @@ index 9923d62..cdfa99f 100644
 +supplies unresolved, and no terms were read for the two values from Reid
 +and Brunthaler. The fourth question is whether ESA's non-commercial
 +terms reach the 15 values from the Hipparcos new reduction through VizieR
-+(*Timing and Vedic values*). On 2026-11-20, before 2.0.0-rc.4 was packed, the
-+owner accepted shipping 2.0.0 with these questions open, answering
-+"Re-accept the licence questions and add Hipparcos as a 4th."
++(*Timing and Vedic values*). On 2026-11-20 at 10:37 Asia/Bangkok, the owner
++answered "Re-accept the licence questions and add Hipparcos as a 4th."
++The decision record gives the superseding answer at 11:16 Asia/Bangkok:
++"ship 2.0.0 with the open licence questions NOTED, not settled and NOT
++recorded as re-accepted: IERS, CDS, Reid and Brunthaler, plus ESA's
++non-commercial Hipparcos terms noted as a fourth."
 
  SPDX licence expression: `MIT AND CC-BY-4.0`. The code is MIT (`LICENSE`). The
  package's ΔT module, exported as `@zodiacs/engine/deltat`, carries 32 values
-@@ -337,10 +339,17 @@ lines that define it, held there by the owner's decision and committed in
+@@ -337,10 +342,17 @@ lines that define it, held there by the owner's decision and committed in
  `scripts/tzdb-held/yellowknife-2025c.zi`, whose SHA-256 the script also
  checks; that release is in the public domain too.
  From 1970 conversion uses the host's `Intl`/ICU data, which `./geo` checks
@@ -51,7 +54,7 @@ index 9923d62..cdfa99f 100644
 
  ## Leap-second and UT1 data
 
-@@ -501,6 +510,19 @@ for them were read. The attribution in `NOTICE` meets the CDS citation terms;
+@@ -501,6 +513,19 @@ for them were read. The attribution in `NOTICE` meets the CDS citation terms;
  whether a commercial use needs more than attribution is not settled by these
  sources.
 

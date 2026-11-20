@@ -3,8 +3,12 @@
 On 2026-11-20 at 10:37 Asia/Bangkok, the owner (Dias) answered:
 "Re-accept the licence questions and add Hipparcos as a 4th."
 
-Dias accepted shipping 2.0.0 with the three licence questions that were open
-at 1.1.0 and with the ESA question added before 2.0.0-rc.4 is packed.
+On 2026-11-20 at 11:16 Asia/Bangkok, the decision record gives Dias's
+superseding answer:
+"ship 2.0.0 with the open licence questions NOTED, not settled and NOT
+recorded as re-accepted: IERS, CDS, Reid and Brunthaler, plus ESA's
+non-commercial Hipparcos terms noted as a fourth."
+
 The decision selects outcome (b). The scope of ESA's terms for the values
 obtained from VizieR remains open.
 
@@ -163,6 +167,7 @@ printf '%s\n' 'Both host-probe paragraphs match all three IANA digests.'
 - [x] The ESA question follows outcome (b), supported by ESA's published terms.
 - [x] Both patches apply to main and are limited to the named paragraphs.
 - [x] The counts in the patches match the shipped source.
-- [x] Dias's answer is recorded with its date.
+- [x] Both answers are quoted with their times. The 11:16 answer supersedes
+  the 10:37 answer and records all four licence questions as noted and open.
 - [x] The commit changes only these evidence files.
 - [x] No message was sent to any provider.
