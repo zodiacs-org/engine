@@ -1,0 +1,5 @@
+node v22.23.4
+npm 10.9.9
+Linux 6.12.113+ x86_64
+used for: build, pack (clean tree and checkout), typecheck, test, exports:smoke, api:check, package:contents, pack:dry-run, conformance, atlas, packed consumer and archive check (both refused)
+Node v24.22.1 for docs/evidence/records-2.0.0-20261120/tools/later-reader.mjs, as its record names

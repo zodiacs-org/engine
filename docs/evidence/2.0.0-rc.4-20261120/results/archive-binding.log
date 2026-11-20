@@ -1,0 +1,2 @@
+::error file=scripts/verify-archive-binding.mjs::/node_modules lies at or above the temporary directory $TMPDIR (TMPDIR), where a rebuild would find it; set TMPDIR to a directory with no node_modules or package.json above it.
+1 archive binding failure.
