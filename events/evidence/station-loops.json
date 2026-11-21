@@ -1,0 +1,38 @@
+{
+  "source": "NASA JPL Horizons DE441",
+  "sourceFixtureSha256": "83f035c78c077202a55946cb8ba09d4f73e006e06262e92c7451e21b83d89979",
+  "reference": "references/loop-cases.json",
+  "clock": "tt",
+  "toleranceMs": 600000,
+  "rounding": "Maximum absolute timing error rounded up to whole seconds; match by window and unique direction.",
+  "scope": "Only the declared Venus source windows and invented fixed longitudes; no full-span completeness or timing bound.",
+  "parentVersion": "1.0.0",
+  "cases": [
+    {
+      "id": "venus-retrograde-turn-2023",
+      "start": "2023-07-22",
+      "end": "2023-07-24",
+      "expectedPasses": 2,
+      "legacyFound": 0,
+      "stationAwareFound": 2,
+      "missingOrAmbiguousDirections": 0,
+      "unmatchedPasses": 0,
+      "timingOutsideThreshold": 2,
+      "allDatesWithinThreshold": false,
+      "maxAbsoluteTimingErrorSecondsRoundedUp": 2595
+    },
+    {
+      "id": "venus-direct-turn-2023",
+      "start": "2023-09-03",
+      "end": "2023-09-05",
+      "expectedPasses": 2,
+      "legacyFound": 0,
+      "stationAwareFound": 2,
+      "missingOrAmbiguousDirections": 0,
+      "unmatchedPasses": 0,
+      "timingOutsideThreshold": 2,
+      "allDatesWithinThreshold": false,
+      "maxAbsoluteTimingErrorSecondsRoundedUp": 967
+    }
+  ]
+}

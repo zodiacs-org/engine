@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "clock": "tt",
+  "toleranceMs": 180000,
+  "options": { "stepMs": 3600000, "derivativeStepMs": 60000 },
+  "radiusKm": { "sun": 696000, "moon": 1737.4, "earth": 6378.137 },
+  "auKm": 149597870.7,
+  "cases": [
+    { "kind": "solar", "catalogNumber": "09546", "date": "2017-08-21", "catalogType": "T", "classification": "central" },
+    { "kind": "solar", "catalogNumber": "09559", "date": "2023-04-20", "catalogType": "H", "classification": "central" },
+    { "kind": "solar", "catalogNumber": "09560", "date": "2023-10-14", "catalogType": "A", "classification": "central" },
+    { "kind": "solar", "catalogNumber": "09561", "date": "2024-04-08", "catalogType": "T", "classification": "central" },
+    { "kind": "solar", "catalogNumber": "09563", "date": "2025-03-29", "catalogType": "P", "classification": "partial" },
+    { "kind": "lunar", "catalogNumber": "09701", "date": "2022-11-08", "catalogType": "T+", "classification": "total" },
+    { "kind": "lunar", "catalogNumber": "09702", "date": "2023-05-05", "catalogType": "N", "classification": "penumbral" },
+    { "kind": "lunar", "catalogNumber": "09703", "date": "2023-10-28", "catalogType": "P", "classification": "partial" },
+    { "kind": "lunar", "catalogNumber": "09706", "date": "2025-03-14", "catalogType": "T", "classification": "total" }
+  ]
+}
