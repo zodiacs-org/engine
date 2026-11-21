@@ -1,24 +1,28 @@
-# Draft: git tags and GitHub releases for 1.0.0 and 1.1.0
+# Draft: git tags and GitHub releases for 1.0.0, 1.1.0 and 2.0.0
 
 **Status: a draft, nothing here has been run.** The owner approved preparing
 the 1.0.0 draft on 13 November 2026 (ZOD-152). Creating tags and releases is
 a separate step for the owner.
 
-Both versions were published to npm by the Release workflow. The repository
-has one tag and one GitHub release, both named `v0.1.1-rc.15`.
+1.0.0 and 1.1.0 were published to npm by the Release workflow; 2.0.0 is
+carried on `main` and awaits npm publication (see
+[PUBLISH-2.0.0.md](PUBLISH-2.0.0.md)). The repository has one tag and one
+GitHub release, both named `v0.1.1-rc.15`.
 
 ## Files
 
 - [1.0.0 release notes draft](v1.0.0-release-notes-DRAFT.md)
 - [1.1.0 release notes draft](v1.1.0-release-notes-DRAFT.md)
+- [2.0.0 release notes draft](v2.0.0-release-notes-DRAFT.md)
+- [2.0.0 npm publish runbook](PUBLISH-2.0.0.md)
 
 ## Before tagging or publishing a GitHub release
 
 1. **A published GitHub release mints a permanent Zenodo DOI.** The Zenodo
    integration is on for this repository: publishing `v0.1.1-rc.15` created
-   record 23080134 within seconds. Publishing `v1.0.0` or `v1.1.0` will
-   create a new version under the concept DOI 10.5281/zenodo.23080133, from
-   `.zenodo.json` at the tagged commit. It cannot be withdrawn. A release
+   record 23080134 within seconds. Publishing `v1.0.0`, `v1.1.0` or `v2.0.0`
+   will create a new version under the concept DOI 10.5281/zenodo.23080133,
+   from `.zenodo.json` at the tagged commit. It cannot be withdrawn. A release
    saved as a **draft** does not do this.
 2. **No workflow runs on a tag or a release.** Release, JSR and PyPI
    publishing start only by hand (`workflow_dispatch`). The tag publishes
@@ -27,18 +31,20 @@ has one tag and one GitHub release, both named `v0.1.1-rc.15`.
    tag name already exists on `origin`, stop. The first check lists the
    remote tags.
 4. **`.zenodo.json` gives the licence as MIT alone.** It says
-   `"license": "mit"` at both tag targets. Zenodo records one licence in
-   that field, so the DOI record for either release would list MIT alone.
-   The package as distributed is `MIT AND CC-BY-4.0` (`LICENSING.md`).
+   `"license": "mit"` at all three tag targets. Zenodo records one licence in
+   that field, so the DOI record for any of these releases would list MIT
+   alone. The package as distributed is `MIT AND CC-BY-4.0` (`LICENSING.md`).
    `CITATION.cff` explains why both licences apply. The owner can review
    this field before publishing. The release metadata comes from the
    tagged commit.
 
 ## Order
 
-Tag `v1.0.0` before `v1.1.0`, with the checks for each version first. Read
-each draft release on GitHub before deciding whether to publish it. If
-you don't want a DOI, stop after the tag or draft-release step.
+Publish 2.0.0 to npm first ([PUBLISH-2.0.0.md](PUBLISH-2.0.0.md)). Then tag
+`v1.0.0`, `v1.1.0` and `v2.0.0` in version order, running the read-only
+checks for each version first. Create each GitHub release as a draft and read
+it on GitHub before deciding whether to publish it. If you don't want a DOI,
+stop after the tag or draft-release step.
 
 Run the commands from a checkout of `main` that holds this directory.
 `--notes-file` reads from the working tree.
@@ -187,3 +193,101 @@ gh release edit v1.1.0 --repo zodiacs-org/engine --draft=false --latest
 
 If you publish it, record the release ID, publication time and DOI, then
 update `version`, `date-released` and `doi` in `CITATION.cff` on `main`.
+
+## v2.0.0
+
+2.0.0 was merged to `main` on 2026-11-21 at
+`01432be354d219dbc2d5609e05a9dd0bcfd313e0`, the merge commit for pull request
+143 (`ZOD-345`). Its archive `artifacts/zodiacs-engine-2.0.0.tgz` (2,788,540
+bytes, 101 files) was packed from source commit
+`174437a534f4bf92ce5d5d1c99df0774d8855f13` and carried in commit
+`fbcde2cbdb962baa1d0e5d60f6e45cc0b76c7e4f`.
+
+`package.json` at the target reads `2.0.0`, and the carried tarball matches
+the SHA-256 recorded in `artifacts/archives.json`
+(`6087d455276ba633eb0a2370c0a5f740ddd5b257c59b821f501c9b06d228a3e2`, SHA-1
+`7364fedd67a01f9005d280b1b0c4c32183fb4968`). If you prefer to tag the exact
+commit that the Release workflow ran from after publishing, check
+`gh run view <run-id> --repo zodiacs-org/engine --json headSha` and confirm
+`package.json` reads `2.0.0` and the carried archive hashes to the same
+SHA-256 there.
+
+The release body in [v2.0.0-release-notes-DRAFT.md](v2.0.0-release-notes-DRAFT.md)
+starts with a three-line preface, followed by the 77-line changelog entry
+(including the final blank line) copied verbatim from the target commit, and
+one closing line pointing to `docs/migrating-to-2.md` at that commit. Run
+this comparison in Bash. A match produces no output.
+
+```sh
+diff <(sed -n '/^## 2\.0\.0 (cut 2026-11-21)$/,/^## 2\.0\.0-rc\.6 /p' <(git show 01432be354d219dbc2d5609e05a9dd0bcfd313e0:CHANGELOG.md) | sed '$d') \
+     <(sed -n '/^## 2\.0\.0 (cut 2026-11-21)$/,/^Migration guide for callers moving from 1\.1\.0:/p' docs/releases/v2.0.0-release-notes-DRAFT.md | sed '$d')
+```
+
+### Recommended order
+
+1. Publish 2.0.0 to npm first using [PUBLISH-2.0.0.md](PUBLISH-2.0.0.md)
+   (`version: 2.0.0`, `tag: latest`).
+2. Run the read-only checks below.
+3. Create and push the `v2.0.0` tag (Step 1).
+4. Create the draft GitHub release (Step 2) and read it on GitHub.
+5. Publish the GitHub release (Step 3) only if you want a Zenodo DOI minted
+   (note item 4 at the top of this file regarding `.zenodo.json`).
+
+### Commands
+
+Check the target (read only):
+
+```sh
+git ls-remote origin 'refs/tags/*'             # stop if v2.0.0 exists
+git fetch origin
+git cat-file -t 01432be354d219dbc2d5609e05a9dd0bcfd313e0        # commit
+git show -s --format='%H %s' 01432be354d219dbc2d5609e05a9dd0bcfd313e0
+# 01432be354d219dbc2d5609e05a9dd0bcfd313e0 Merge pull request #143 from zodiacs-org/admin/engine-2.0.0
+git merge-base --is-ancestor 01432be354d219dbc2d5609e05a9dd0bcfd313e0 origin/main && echo ancestor
+git show 01432be354d219dbc2d5609e05a9dd0bcfd313e0:package.json | grep '"version"'   # "version": "2.0.0",
+git show 01432be354d219dbc2d5609e05a9dd0bcfd313e0:artifacts/zodiacs-engine-2.0.0.tgz | sha256sum
+# 6087d455276ba633eb0a2370c0a5f740ddd5b257c59b821f501c9b06d228a3e2
+git show 01432be354d219dbc2d5609e05a9dd0bcfd313e0:artifacts/zodiacs-engine-2.0.0.tgz | sha1sum
+# 7364fedd67a01f9005d280b1b0c4c32183fb4968
+# After publishing to npm via PUBLISH-2.0.0.md:
+npm view @zodiacs/engine@2.0.0 dist.shasum    # 7364fedd67a01f9005d280b1b0c4c32183fb4968
+```
+
+Step 1, the tag (lightweight, as `v0.1.1-rc.15` is):
+
+```sh
+git tag v2.0.0 01432be354d219dbc2d5609e05a9dd0bcfd313e0
+git push origin v2.0.0
+```
+
+Step 2, the release, saved as a draft so that it can be read on GitHub first
+(no Zenodo record is made by a draft):
+
+```sh
+gh release create v2.0.0 \
+  --repo zodiacs-org/engine \
+  --verify-tag \
+  --draft \
+  --title "2.0.0" \
+  --notes-file docs/releases/v2.0.0-release-notes-DRAFT.md
+```
+
+Step 3, publish the release only if you want the Zenodo DOI:
+
+```sh
+gh release edit v2.0.0 --repo zodiacs-org/engine --draft=false --latest
+```
+
+To undo before Step 3: `gh release delete v2.0.0 --repo zodiacs-org/engine`
+and `git push origin :refs/tags/v2.0.0`. After Step 3 the DOI stays.
+
+### Follow-up edits if the v2.0.0 GitHub release is published
+
+Publishing the `v2.0.0` GitHub release makes two repository edits due on
+`main`:
+
+1. `CITATION.cff`: add `version: "2.0.0"`, `date-released` (ISO date) and
+   `doi` (the minted Zenodo DOI).
+2. `docs/changelog-corrections.md`: add a "Not a correction, for the record"
+   paragraph noting the `v2.0.0` tag, GitHub release ID, publication date and
+   Zenodo DOI.
