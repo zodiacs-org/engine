@@ -84,6 +84,23 @@ export function createHandlers({ engine, geo, de440Source = null, calcEntry = nu
     });
   }
 
+  async function timedEvent(input, method, selection) {
+    const calc = typeof calcEntry === 'function' ? await calcEntry() : null;
+    if (typeof calc?.[method] !== 'function') return { unsupported: `this build or host has no ${method}` };
+    const scale = 'after_tt_s' in input ? 'tt' : 'utc';
+    const endpoint = (key) => ({ jd: J2000_JD + input[`${key}_${scale}_s`] / 86_400, scale });
+    const result = calc[method]({ ...selection, from: endpoint('after'), to: endpoint('before') });
+    if (result.status !== 'ok') return { error: `${method} refused: ${result.reason}` };
+    const meta = { events: result.events.length, samples: result.samples, ephemeris: result.ephemeris, flags: result.flags };
+    if (result.events.length !== 1) return { error: `${method} found ${result.events.length} events in the window`, meta };
+    const [event] = result.events;
+    const output = scale === 'tt'
+      ? { tt_s: (event.jdTt - J2000_JD) * 86_400 }
+      : { utc_s: (Date.parse(event.at) - J2000_UNIX_MS) / 1000 };
+    if (method === 'searchStations') output.direction = event.direction;
+    return { output, meta: { ...meta, at: event.at, timingSeconds: event.bounds.timing.value } };
+  }
+
   return {
     'position.apparent.ecliptic-true-of-date'(input) {
       // The instant is given as TT, and the engine reads it on that scale.
@@ -206,12 +223,12 @@ export function createHandlers({ engine, geo, de440Source = null, calcEntry = nu
       return { output, meta: { ...meta, at: event.at, retrograde: event.retrograde } };
     },
 
-    'event.station'() {
-      return { unsupported: 'the engine has no station search in its public API: positions() and natalChart() give a body\'s speed and retrograde flag at an instant, and events() searches longitude crossings only' };
+    'event.station'(input) {
+      return timedEvent(input, 'searchStations', { body: input.body });
     },
 
-    'event.lunation'() {
-      return { unsupported: 'the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body\'s longitude crossings only' };
+    'event.lunation'(input) {
+      return timedEvent(input, 'searchLunations', { phaseDegrees: input.phase_deg });
     },
   };
 }

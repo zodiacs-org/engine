@@ -1,7 +1,6 @@
 /**
  * `@zodiacs/engine/calc`: one calculation API over the engine's positions,
- * houses, longitude crossings and charts, in the tropical or the sidereal
- * zodiac. The four functions share one vocabulary for instants, places,
+ * houses, event searches and charts. The functions share one vocabulary for instants, places,
  * frames, centers and the zodiac; each result carries a receipt that names its
  * conventions by id; positions carry bounds, and every result carries bands
  * from the time basis; and what this version does not compute comes back as a
@@ -31,6 +30,7 @@ import { ANGVEL, BARYCENTRE_ERROR, EARTH_EQUATORIAL_RADIUS_KM, geometricState, l
 import type { Center } from "./calc-reduce.js";
 import { searchLongitudeCrossingsWith } from "./crossings.js";
 import type { BodyLongitudeAt } from "./crossings.js";
+import { HOUR_MS, principal, scanEventRoots } from "./calc-event-roots.js";
 import { dateFrom } from "./date-input.js";
 import type { DeltaT } from "./deltat.js";
 import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
@@ -45,7 +45,7 @@ import type { TimeBands } from "./time-bands.js";
 import { TIME_SCALE_NAMES, elapsedDays, timeBasis } from "./time-scale.js";
 import type { TimeBasis, TimeScale, TimeScaleName } from "./time-scale.js";
 import { ENGINE_VERSION, EPHEMERIS } from "./types.js";
-import type { Angles, BodyName, Chart, ChartFlag, ChartInput, HouseSystem, PositionSource, SourceBody } from "./types.js";
+import type { Angles, BodyName, Chart, ChartFlag, ChartInput, EphemerisFallback, HouseSystem, PositionSource, SourceBody } from "./types.js";
 import { addBounds, ayanamsaBound } from "./calc-ayanamsa.js";
 import { AYANAMSAS, ayanamsaAt, isUserAyanamsaName, userAyanamsa } from "./vedic/ayanamsa.js";
 import type { AyanamsaDefinition, AyanamsaName, AyanamsaPrecessionModel } from "./vedic/ayanamsa.js";
@@ -1131,7 +1131,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
       },
       band,
       // Last, a position the pack gives that astronomy-engine gave instead says why.
-      flags: [...(extrapolated ? (["delta-t-extrapolated"] as const) : []), ...(chosen?.fallback ? [chosen.fallback] : [])],
+      flags: calcFlags(extrapolated, chosen?.fallback),
       receipt: receipt(
         { body, time: time.record, frame, center: centerRecord, zodiac: zodiac.record, flags },
         [instant(basis)],
@@ -1413,6 +1413,23 @@ export interface EventsResult {
   readonly receipt: CalcReceipt<EventsRequest>;
 }
 
+/** The TT of a refined root may be known directly, before its conversion to UTC. */
+function eventTime(basis: TimeBasis, utcBasis = basis, ttDays = basis.ttDays) {
+  return {
+    at: new Date(Math.round(basis.utcMs)).toISOString(),
+    jdUt1: J2000_JD + basis.ut1Days,
+    jdTt: J2000_JD + ttDays,
+    band: { utc: timeBands(utcBasis).tt, ut1: basis.deltaT.sigma ?? 0 }
+  };
+}
+
+function calcFlags(extrapolated: boolean, fallback?: EphemerisFallback | null): ChartFlag[] {
+  const flags: ChartFlag[] = [];
+  if (extrapolated) flags.push("delta-t-extrapolated");
+  if (fallback) flags.push(fallback);
+  return flags;
+}
+
 /**
  * Every instant in (from, to] when `body` sits on `longitude`: the engine's
  * crossing search (searchLongitudeCrossings) on its apparent geocentric
@@ -1475,25 +1492,19 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
     let flagged = false;
     const events = found.crossings.map(({ at, retrograde }) => {
       const basis = timeBasis(at.getTime(), "utc");
-      const utc = timeBands(basis).tt;
+      const time = eventTime(basis);
       if (deltaTExtrapolated(basis)) {
         flagged = true;
-        late = Math.max(late, utc);
+        late = Math.max(late, time.band.utc);
       }
-      return {
-        at: at.toISOString(),
-        jdUt1: J2000_JD + basis.ut1Days,
-        jdTt: J2000_JD + basis.ttDays,
-        retrograde,
-        band: { utc, ut1: basis.deltaT.sigma ?? 0 }
-      };
+      return { ...time, retrograde };
     });
     return {
       status: "ok",
       kind,
       events,
       samples: found.samples,
-      flags: [...(flagged ? (["delta-t-extrapolated"] as const) : []), ...(chosen.fallback ? [chosen.fallback] : [])],
+      flags: calcFlags(flagged, chosen.fallback),
       bounds: {
         timing: stretched(
           {
@@ -1521,6 +1532,158 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
       )
     };
   }
+}
+
+// ---------------------------------------------------------------- station and lunation searches
+
+const STATION_BODIES = ["Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"] as const;
+export type StationBody = (typeof STATION_BODIES)[number];
+export type LunationAngle = 0 | 90 | 180 | 270;
+
+interface SearchWindow {
+  /** Both endpoints are read on the calc time basis and rounded to TT milliseconds. The interval is (from, to]. */
+  readonly from: CalcTime;
+  readonly to: CalcTime;
+  /** Budget of scalar evaluations, including the two timing probes per event. Defaults to Infinity. */
+  readonly maxSamples?: number;
+}
+export interface StationSearchRequest extends SearchWindow {
+  readonly body: StationBody;
+}
+export interface LunationSearchRequest extends SearchWindow {
+  /** Moon minus Sun apparent longitude. New, first quarter, full and last quarter respectively. */
+  readonly phaseDegrees: LunationAngle;
+}
+
+interface TimedEvent {
+  /** UTC calendar label on the engine's time basis, rounded to milliseconds. */
+  readonly at: string;
+  readonly jdTt: number;
+  readonly jdUt1: number;
+  readonly band: CalcEvent["band"];
+  readonly ephemeris: CalcReceipt<unknown>["engine"]["ephemeris"];
+  readonly flags: readonly ChartFlag[];
+  /** Width of the numerical TT bracket, seconds. */
+  readonly bracketSeconds: number;
+  /** Estimated TT timing resolution for the local angular allowance, including the bracket. */
+  readonly bounds: { readonly timing: CalcBound };
+  readonly angularAllowanceArcsec: number;
+}
+export interface StationEvent extends TimedEvent {
+  readonly body: StationBody;
+  /** Sense of motion after the station. */
+  readonly direction: "direct" | "retrograde";
+  readonly curvatureDegPerDay2: number;
+}
+export interface LunationEvent extends TimedEvent {
+  readonly phaseDegrees: LunationAngle;
+  readonly relativeSpeedDegPerDay: number;
+}
+export interface TimedSearchResult<Request, Event> {
+  readonly status: "ok";
+  readonly events: readonly Event[];
+  readonly samples: number;
+  readonly ephemeris: TimedEvent["ephemeris"];
+  readonly flags: readonly ChartFlag[];
+  readonly receipt: CalcReceipt<Request>;
+}
+
+type SearchPlace = Pick<ReturnType<PositionSource["place"]>, "lon" | "lat" | "behindDisc">;
+
+/** Bind every sample, including the derivative stencil, to a single source on TT. */
+function placeReader(source: PositionSource | null, body: SourceBody): (ttMs: number, behind?: boolean) => SearchPlace {
+  if (source) return (ttMs, behind) => source.place(body, (ttMs - J2000_MS) / DAY_MS, behind);
+  const evaluate = evaluator(body, "ecliptic-true-of-date", { kind: "geocentric" }, "apparent");
+  return (ttMs) => onChartClock(ttMs, "tt", undefined, evaluate);
+}
+
+function searchTimed<S extends { body: StationBody } | { phaseDegrees: LunationAngle }, E extends TimedEvent>(
+  request: SearchWindow, selection: S,
+  makeEvent: (common: TimedEvent, slope: number, rising: boolean) => E
+): TimedSearchResult<SearchWindow & S, E> | CalcRefusal {
+  const from = readTime(request.from, "from");
+  const to = readTime(request.to, "to");
+  const max = request.maxSamples === undefined ? Infinity : request.maxSamples;
+  if (max !== Infinity && (!Number.isSafeInteger(max) || max < 1)) throw new RangeError("maxSamples must be a positive safe integer or Infinity.");
+  if (from.pin !== undefined || to.pin !== undefined) return refuse("unsupported-combination", "Event searches require the engine's time basis.");
+  const start = resolve(from);
+  const end = resolve(to);
+  if (!start || !end) return outOfRange();
+  const ttMs = (basis: TimeBasis) => Math.round(J2000_MS + basis.ttDays * DAY_MS);
+  const chosen = ephemerisAt(from.ms, from.scale);
+  const phase = "phaseDegrees" in selection;
+  const body = "body" in selection ? selection.body : "Moon";
+  const bodies: readonly SourceBody[] = phase ? ["Moon", "Sun"] : [body];
+  const primary = placeReader(chosen.from, body);
+  const solar = placeReader(chosen.from, "Sun");
+  const quantity = (ms: number) => {
+    const here = primary(ms);
+    if (phase) return principal(here.lon - solar(ms).lon - selection.phaseDegrees);
+    // Hold the central decision about light deflection at the solar limb on both samples.
+    return principal(primary(ms + HOUR_MS, here.behindDisc).lon - primary(ms - HOUR_MS, here.behindDisc).lon) * 12;
+  };
+  const scan = scanEventRoots(ttMs(start), ttMs(end), phase, quantity, max);
+  if (scan.status === "refused") return scan;
+  const flags = new Set(calcFlags(false, chosen.fallback));
+  const angularError = (target: SourceBody, latitude: number, ms: number) => {
+    const measured = chosen.from
+      ? (atLimb(chosen.from, target, (ms - J2000_MS) / DAY_MS) ? DE440_AT_LIMB : DE440_MEASURED[target]!)
+      : MEASURED["geocentric/apparent"]![target]![0];
+    return measured / Math.cos(latitude * DEG);
+  };
+  const events = scan.roots.map(({ ttMs: ms, slope, rising }) => {
+    const basis = timeBasis(ms, "tt");
+    const utcBasis = timeBasis(basis.utcMs, "utc");
+    const eventFlags = calcFlags(deltaTExtrapolated(utcBasis, true), chosen.fallback);
+    for (const flag of eventFlags) flags.add(flag);
+    let error = angularError(body, primary(ms).lat, ms);
+    if (phase) error += angularError("Sun", solar(ms).lat, ms);
+    const allowance = Math.max(1, error);
+    const scale = allowance / (Math.abs(slope) * 3600);
+    const seconds = 86_400 * (phase ? scale : Math.sqrt(2 * scale));
+    const timing: CalcBound = {
+      value: Number.isFinite(seconds) ? 0.001 + seconds : null,
+      unit: "s", label: "estimated",
+      basis: phase ? "local longitude allowance divided by phase rate, plus TT bracket"
+        : "local quadratic longitude excursion at the station, plus TT bracket"
+    };
+    return makeEvent({
+      ...eventTime(basis, utcBasis, (ms - J2000_MS) / DAY_MS),
+      ephemeris: chosen.ephemeris, flags: eventFlags, bracketSeconds: 0.001,
+      angularAllowanceArcsec: allowance, bounds: { timing }
+    }, slope, rising);
+  });
+  // A stored receipt must replay after JSON serialization (JSON maps Infinity to null).
+  const recorded = { ...selection, from: from.record, to: to.record, ...(max === Infinity ? {} : { maxSamples: max }) };
+  const conventions = new Set(bodies.flatMap((target) =>
+    positionIds(target, "ecliptic-true-of-date", "geocentric", "apparent", TROPICAL, chosen.from !== null)));
+  conventions.add("search:scan-and-bisect");
+  conventions.add(phase ? "event:moon-minus-sun" : "event:station-central-difference-1h");
+  return {
+    status: "ok", events, samples: scan.samples, ephemeris: chosen.ephemeris, flags: [...flags],
+    receipt: receipt(recorded, [instant(start), instant(end)], [...conventions], undefined, true, chosen.ephemeris)
+  };
+}
+
+/** Find every detected reversal of a planet's apparent geocentric longitude in (from, to]. */
+export function searchStations(request: StationSearchRequest): TimedSearchResult<StationSearchRequest, StationEvent> | CalcRefusal {
+  refuseUnderSource("@zodiacs/engine/calc");
+  const asked = fields(request, "station request", ["from", "to", "body", "maxSamples"]);
+  const body = oneOf(asked.body, STATION_BODIES, "body");
+  return searchTimed(request, { body }, (event, curvatureDegPerDay2, rising) => ({
+    ...event, body, direction: rising ? "direct" : "retrograde", curvatureDegPerDay2
+  }));
+}
+
+/** Find the requested lunar phase in (from, to] on the apparent geocentric true ecliptic of date. */
+export function searchLunations(request: LunationSearchRequest): TimedSearchResult<LunationSearchRequest, LunationEvent> | CalcRefusal {
+  refuseUnderSource("@zodiacs/engine/calc");
+  fields(request, "lunation request", ["from", "to", "phaseDegrees", "maxSamples"]);
+  const phaseDegrees = request.phaseDegrees;
+  if (![0, 90, 180, 270].includes(phaseDegrees)) throw new RangeError("phaseDegrees must be 0, 90, 180 or 270.");
+  return searchTimed(request, { phaseDegrees }, (event, relativeSpeedDegPerDay) => ({
+    ...event, phaseDegrees, relativeSpeedDegPerDay
+  }));
 }
 
 // ---------------------------------------------------------------- chart()
