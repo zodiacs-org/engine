@@ -1,0 +1,43 @@
+{
+  "writer": "2.0.0",
+  "node": "v22.22.2",
+  "inputA": {
+    "2.0.0-rc.3": {
+      "reader": "2.0.0-rc.3",
+      "ok": true,
+      "engineVersion": "2.0.0",
+      "timeBasis": "iers"
+    },
+    "2.0.0-rc.6": {
+      "reader": "2.0.0-rc.6",
+      "ok": true,
+      "engineVersion": "2.0.0",
+      "timeBasis": "iers"
+    },
+    "1.1.0": {
+      "reader": "1.1.0",
+      "ok": true,
+      "engineVersion": "2.0.0",
+      "timeBasis": "iers"
+    }
+  },
+  "inputC": {
+    "2.0.0-rc.3": {
+      "reader": "2.0.0-rc.3",
+      "ok": true,
+      "engineVersion": "2.0.0",
+      "timeBasis": "continuous-utc"
+    },
+    "2.0.0-rc.6": {
+      "reader": "2.0.0-rc.6",
+      "ok": true,
+      "engineVersion": "2.0.0",
+      "timeBasis": "continuous-utc"
+    },
+    "1.1.0": {
+      "reader": "1.1.0",
+      "ok": false,
+      "code": "unsupported_feature"
+    }
+  }
+}

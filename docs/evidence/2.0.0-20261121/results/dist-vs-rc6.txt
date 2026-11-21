@@ -1,0 +1,6 @@
+files: rc.6=95, 2.0.0=95
+verdict: EQUAL
+files containing version string (normalized): ['chunk-SCBK24HR.js', 'core.js']
+only in rc.6: []
+only in 2.0.0: []
+mutation test (appending comment to copy of dist/index.js): detected diff=[('index.js', 8)]

@@ -1,0 +1,231 @@
+
+> @zodiacs/engine@2.0.0 pack:dry-run
+> npm pack --dry-run
+
+
+> @zodiacs/engine@2.0.0 prepack
+> npm run build
+
+
+> @zodiacs/engine@2.0.0 build
+> tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/techniques.ts src/timing.ts src/vedic.ts src/internal.ts src/internal-math.ts src/calc.ts src/window.ts src/houses-extra.ts src/sky.ts src/conventions.ts src/time.ts src/de440.ts src/de440-pack.ts --format esm --dts --clean --splitting --metafile --tsconfig tsconfig.build.json && node scripts/build-lite.mjs && node scripts/build-core.mjs && node scripts/build-esm-only.mjs
+
+CLI Building entry: src/calc.ts, src/conventions.ts, src/crossings.ts, src/de440-pack.ts, src/de440.ts, src/deltat.ts, src/geo.ts, src/houses-extra.ts, src/index.ts, src/internal-math.ts, src/internal.ts, src/receipt.ts, src/sky.ts, src/techniques.ts, src/time.ts, src/timing.ts, src/vedic.ts, src/window.ts
+CLI Using tsconfig: tsconfig.build.json
+CLI tsup v8.5.1
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+ESM dist/tzdb-2026f-15-5TA3B2WI.js 11.23 KB
+ESM dist/tzdb-2026f-14-4FQNGNZM.js 9.96 KB
+ESM dist/tzdb-2026f-07-2FDJ5OJ7.js 15.17 KB
+ESM dist/tzdb-2026f-08-OKEWSMIX.js 12.15 KB
+ESM dist/tzdb-2026f-09-5GB7FKLF.js 10.01 KB
+ESM dist/tzdb-2026f-06-O4LQW2N6.js 10.24 KB
+ESM dist/tzdb-2026f-12-YK3CZCIY.js 11.95 KB
+ESM dist/tzdb-2026f-10-GXHCIASR.js 8.99 KB
+ESM dist/tzdb-2026f-11-66EMKXFG.js 13.91 KB
+ESM dist/window.js                 35.95 KB
+ESM dist/tzdb-2026f-00-RAB4YONA.js 11.28 KB
+ESM dist/tzdb-2026f-02-SOLHCLDL.js 16.33 KB
+ESM dist/tzdb-2026f-01-SWR7EW5U.js 10.63 KB
+ESM dist/index.js                  13.24 KB
+ESM dist/tzdb-2026f-05-EOKCMY5O.js 12.36 KB
+ESM dist/tzdb-2026f-04-XTKMZPKX.js 11.82 KB
+ESM dist/tzdb-2026f-13-UNZD3QIH.js 9.97 KB
+ESM dist/tzdb-2026f-03-LYLMCVL7.js 8.52 KB
+ESM dist/internal.js               949.00 B
+ESM dist/internal-math.js          1.33 KB
+ESM dist/receipt.js                47.70 KB
+ESM dist/sky.js                    15.01 KB
+ESM dist/techniques.js             38.85 KB
+ESM dist/time.js                   2.09 KB
+ESM dist/vedic.js                  29.33 KB
+ESM dist/chunk-A3U2ZS2W.js         508.00 B
+ESM dist/timing.js                 30.63 KB
+ESM dist/chunk-ZPHWUFTZ.js         13.99 KB
+ESM dist/chunk-ZL74QHBE.js         672.00 B
+ESM dist/chunk-PSZAKTDL.js         17.81 KB
+ESM dist/chunk-LWZS7HI3.js         1.27 KB
+ESM dist/chunk-47ERTK5X.js         989.00 B
+ESM dist/calc.js                   56.84 KB
+ESM dist/chunk-CPALRSPC.js         1.42 KB
+ESM dist/chunk-XO7MHH32.js         900.00 B
+ESM dist/chunk-EEW7746S.js         2.22 KB
+ESM dist/chunk-X5ANRWDK.js         30.30 KB
+ESM dist/chunk-M65JXRFN.js         14.73 KB
+ESM dist/chunk-SCBK24HR.js         3.12 KB
+ESM dist/chunk-OVXQQEXL.js         1.97 KB
+ESM dist/crossings.js              173.00 B
+ESM dist/chunk-TSS2SZWQ.js         9.54 KB
+ESM dist/de440-pack.js             325.00 B
+ESM dist/conventions.js            736.00 B
+ESM dist/de440.js                  377.00 B
+ESM dist/chunk-SCRO6HWB.js         11.42 KB
+ESM dist/chunk-RMBWKZI2.js         2.95 KB
+ESM dist/chunk-BHJXUY67.js         4.95 KB
+ESM dist/chunk-CV53HA7R.js         4.19 KB
+ESM dist/chunk-HNVGWN3S.js         33.85 KB
+ESM dist/deltat.js                 161.00 B
+ESM dist/geo.js                    17.43 KB
+ESM dist/chunk-KFTJMMG7.js         2.34 KB
+ESM dist/chunk-4RCOOAGI.js         2.95 KB
+ESM dist/houses-extra.js           13.36 KB
+ESM dist/chunk-JY2LU4VC.js         23.88 KB
+ESM dist/chunk-UXY4RU57.js         3.17 MB
+ESM ⚡️ Build success in 1199ms
+DTS Build start
+DTS ⚡️ Build success in 2732ms
+DTS dist/de440-pack.d.ts              1.96 KB
+DTS dist/houses-extra.d.ts            4.60 KB
+DTS dist/internal.d.ts                929.00 B
+DTS dist/crossings.d.ts               5.06 KB
+DTS dist/window.d.ts                  8.54 KB
+DTS dist/deltat.d.ts                  4.92 KB
+DTS dist/calc.d.ts                    21.88 KB
+DTS dist/conventions.d.ts             2.92 KB
+DTS dist/sky.d.ts                     7.82 KB
+DTS dist/de440.d.ts                   5.60 KB
+DTS dist/time.d.ts                    3.77 KB
+DTS dist/index.d.ts                   15.44 KB
+DTS dist/timing.d.ts                  23.34 KB
+DTS dist/geo.d.ts                     13.34 KB
+DTS dist/vedic.d.ts                   20.55 KB
+DTS dist/techniques.d.ts              27.06 KB
+DTS dist/receipt.d.ts                 944.00 B
+DTS dist/internal-math.d.ts           1.11 KB
+DTS dist/houses-CAiYEICK.d.ts         7.44 KB
+DTS dist/ephemeris-Bnmowcsk.d.ts      3.30 KB
+DTS dist/time-bands-BCmfa8FR.d.ts     1.81 KB
+DTS dist/reference-span-CILpclrz.d.ts 1.97 KB
+DTS dist/rulers-CFGiWJza.d.ts         835.00 B
+DTS dist/ayanamsa-C4-pYjzm.d.ts       6.30 KB
+DTS dist/types-CkuiCcsV.d.ts          16.27 KB
+DTS dist/time-scale-9vmKQPCn.d.ts     2.34 KB
+DTS dist/zone-history-2UYUKA43.d.ts   13.04 KB
+DTS dist/api-G8RVGizH.d.ts            12.42 KB
+DTS dist/internal-math-rq6do9IR.d.ts  6.02 KB
+lite: dist/lite.js 146 bytes
+lite: dist/lite-declinations.js 9665 bytes
+lite: dist/lite-sect.js 3439 bytes
+lite: dist/lite-composite.js 3783 bytes
+lite: dist/lite-dignities.js 11897 bytes
+lite: dist/lite.d.ts 5135 bytes
+lite: dist/metafile-lite.json 5357 bytes
+core: dist/core.js 110971 bytes
+esm-only: dist/esm-only.cjs
+npm notice
+npm notice 📦  @zodiacs/engine@2.0.0
+npm notice Tarball Contents
+npm notice 226.8kB CHANGELOG.md
+npm notice 1.1kB LICENSE
+npm notice 37.6kB LICENSING.md
+npm notice 14.6kB NOTICE
+npm notice 90.2kB README.md
+npm notice 12.7kB dist/api-G8RVGizH.d.ts
+npm notice 6.5kB dist/ayanamsa-C4-pYjzm.d.ts
+npm notice 22.4kB dist/calc.d.ts
+npm notice 58.2kB dist/calc.js
+npm notice 3.0kB dist/chunk-4RCOOAGI.js
+npm notice 989B dist/chunk-47ERTK5X.js
+npm notice 508B dist/chunk-A3U2ZS2W.js
+npm notice 5.1kB dist/chunk-BHJXUY67.js
+npm notice 1.5kB dist/chunk-CPALRSPC.js
+npm notice 4.3kB dist/chunk-CV53HA7R.js
+npm notice 2.3kB dist/chunk-EEW7746S.js
+npm notice 34.7kB dist/chunk-HNVGWN3S.js
+npm notice 24.5kB dist/chunk-JY2LU4VC.js
+npm notice 2.4kB dist/chunk-KFTJMMG7.js
+npm notice 1.3kB dist/chunk-LWZS7HI3.js
+npm notice 15.1kB dist/chunk-M65JXRFN.js
+npm notice 2.0kB dist/chunk-OVXQQEXL.js
+npm notice 18.2kB dist/chunk-PSZAKTDL.js
+npm notice 3.0kB dist/chunk-RMBWKZI2.js
+npm notice 3.2kB dist/chunk-SCBK24HR.js
+npm notice 11.7kB dist/chunk-SCRO6HWB.js
+npm notice 9.8kB dist/chunk-TSS2SZWQ.js
+npm notice 3.3MB dist/chunk-UXY4RU57.js
+npm notice 31.0kB dist/chunk-X5ANRWDK.js
+npm notice 900B dist/chunk-XO7MHH32.js
+npm notice 672B dist/chunk-ZL74QHBE.js
+npm notice 14.3kB dist/chunk-ZPHWUFTZ.js
+npm notice 3.0kB dist/conventions.d.ts
+npm notice 736B dist/conventions.js
+npm notice 1.1kB dist/core.d.ts
+npm notice 111.0kB dist/core.js
+npm notice 5.2kB dist/crossings.d.ts
+npm notice 173B dist/crossings.js
+npm notice 2.0kB dist/de440-pack.d.ts
+npm notice 325B dist/de440-pack.js
+npm notice 5.7kB dist/de440.d.ts
+npm notice 377B dist/de440.js
+npm notice 5.1kB dist/deltat.d.ts
+npm notice 161B dist/deltat.js
+npm notice 3.4kB dist/ephemeris-Bnmowcsk.d.ts
+npm notice 359B dist/esm-only.cjs
+npm notice 13.7kB dist/geo.d.ts
+npm notice 17.9kB dist/geo.js
+npm notice 7.7kB dist/houses-CAiYEICK.d.ts
+npm notice 4.7kB dist/houses-extra.d.ts
+npm notice 13.7kB dist/houses-extra.js
+npm notice 15.8kB dist/index.d.ts
+npm notice 13.6kB dist/index.js
+npm notice 6.2kB dist/internal-math-rq6do9IR.d.ts
+npm notice 1.1kB dist/internal-math.d.ts
+npm notice 1.4kB dist/internal-math.js
+npm notice 929B dist/internal.d.ts
+npm notice 949B dist/internal.js
+npm notice 3.8kB dist/lite-composite.js
+npm notice 9.7kB dist/lite-declinations.js
+npm notice 11.9kB dist/lite-dignities.js
+npm notice 3.4kB dist/lite-sect.js
+npm notice 5.1kB dist/lite.d.ts
+npm notice 146B dist/lite.js
+npm notice 944B dist/receipt.d.ts
+npm notice 48.8kB dist/receipt.js
+npm notice 2.0kB dist/reference-span-CILpclrz.d.ts
+npm notice 835B dist/rulers-CFGiWJza.d.ts
+npm notice 8.0kB dist/sky.d.ts
+npm notice 15.4kB dist/sky.js
+npm notice 27.7kB dist/techniques.d.ts
+npm notice 39.8kB dist/techniques.js
+npm notice 1.9kB dist/time-bands-BCmfa8FR.d.ts
+npm notice 2.4kB dist/time-scale-9vmKQPCn.d.ts
+npm notice 3.9kB dist/time.d.ts
+npm notice 2.1kB dist/time.js
+npm notice 23.9kB dist/timing.d.ts
+npm notice 31.4kB dist/timing.js
+npm notice 16.7kB dist/types-CkuiCcsV.d.ts
+npm notice 11.6kB dist/tzdb-2026f-00-RAB4YONA.js
+npm notice 10.9kB dist/tzdb-2026f-01-SWR7EW5U.js
+npm notice 16.7kB dist/tzdb-2026f-02-SOLHCLDL.js
+npm notice 8.7kB dist/tzdb-2026f-03-LYLMCVL7.js
+npm notice 12.1kB dist/tzdb-2026f-04-XTKMZPKX.js
+npm notice 12.7kB dist/tzdb-2026f-05-EOKCMY5O.js
+npm notice 10.5kB dist/tzdb-2026f-06-O4LQW2N6.js
+npm notice 15.5kB dist/tzdb-2026f-07-2FDJ5OJ7.js
+npm notice 12.4kB dist/tzdb-2026f-08-OKEWSMIX.js
+npm notice 10.3kB dist/tzdb-2026f-09-5GB7FKLF.js
+npm notice 9.2kB dist/tzdb-2026f-10-GXHCIASR.js
+npm notice 14.2kB dist/tzdb-2026f-11-66EMKXFG.js
+npm notice 12.2kB dist/tzdb-2026f-12-YK3CZCIY.js
+npm notice 10.2kB dist/tzdb-2026f-13-UNZD3QIH.js
+npm notice 10.2kB dist/tzdb-2026f-14-4FQNGNZM.js
+npm notice 11.5kB dist/tzdb-2026f-15-5TA3B2WI.js
+npm notice 21.1kB dist/vedic.d.ts
+npm notice 30.0kB dist/vedic.js
+npm notice 8.7kB dist/window.d.ts
+npm notice 36.8kB dist/window.js
+npm notice 13.4kB dist/zone-history-2UYUKA43.d.ts
+npm notice 5.8kB package.json
+npm notice Tarball Details
+npm notice name: @zodiacs/engine
+npm notice version: 2.0.0
+npm notice filename: zodiacs-engine-2.0.0.tgz
+npm notice package size: 2.8 MB
+npm notice unpacked size: 4.8 MB
+npm notice shasum: 862ef0f70d8d908a4dc4eced8eaa6cb7c0dae83c
+npm notice integrity: sha512-Qg1ihzA2u3ut9[...]6vKrCfUWgIfkQ==
+npm notice total files: 101
+npm notice
+zodiacs-engine-2.0.0.tgz
