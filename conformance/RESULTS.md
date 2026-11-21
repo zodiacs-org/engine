@@ -22,7 +22,7 @@ Suite 0.3.0: 640 vectors (L1 240, L2 150, L3 110, L4 140). Each vector names its
 | L4 | `event.station` | 30 | tt_s ±6270 s to ±50406 s; direction exact |
 | L4 | `event.lunation` | 40 | tt_s ±2 s to ±3 s, or utc_s ±2 s to ±3 s |
 
-## @zodiacs/engine 2.0.0-rc.3
+## @zodiacs/engine 2.0.0-rc.6
 
 Adapter `zodiacs-engine` 0.3.0; results in [`results/zodiacs-engine.json`](results/zodiacs-engine.json).
 
@@ -70,7 +70,7 @@ Adapter `zodiacs-engine` 0.3.0; results in [`results/zodiacs-engine.json`](resul
 - **Unsupported (L3).** One vector: the leap second instant above, which a JavaScript date cannot express.
 - **Event times (L4).** New in suite 0.3.0. The 70 ingresses are answered by `events()` of `@zodiacs/engine/calc`, its longitude crossing search, on the window each vector gives (TT, or UTC for the 10 tagged `utc-input`); in this run it computes on the DE440 pack. All 70 pass; the largest residual is 1.53 s on TT, and no residual is more than 0.012 of its vector's tolerance. The 30 stations and 40 lunations are unsupported: the engine's public API has no station or lunation search (`events()` searches one body's longitude crossings), and the adapter says so for each. The design dropped one instant, L4-ING-0060, Pluto's first ingress after 2140-01-01, which falls after the end of the kernel's coverage; it is listed in `vectors/0.3.0/L4-events.json`.
 
-## @zodiacs/engine on astronomy-engine 2.0.0-rc.3
+## @zodiacs/engine on astronomy-engine 2.0.0-rc.6
 
 Adapter `zodiacs-engine-astronomy-engine` 0.3.0; results in [`results/zodiacs-engine-astronomy-engine.json`](results/zodiacs-engine-astronomy-engine.json).
 

@@ -1,0 +1,4 @@
+n	file	bytes	sha256	retrieved_utc	http_status	url	final_url
+3	003-tzdata2026f.tar.gz	483310	01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d	2026-11-17T14:46:48Z	200	https://data.iana.org/time-zones/releases/tzdata2026f.tar.gz	https://data.iana.org/time-zones/releases/tzdata2026f.tar.gz
+5	005-tzdata2025c.tar.gz	469363	4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957	2026-11-17T14:46:55Z	200	https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz	https://data.iana.org/time-zones/releases/tzdata2025c.tar.gz
+6	006-tzdata2021a.tar.gz	411892	39e7d2ba08c68cbaefc8de3227aab0dec2521be8042cf56855f7dc3a9fb14e08	2026-11-17T14:46:58Z	200	https://data.iana.org/time-zones/releases/tzdata2021a.tar.gz	https://data.iana.org/time-zones/releases/tzdata2021a.tar.gz

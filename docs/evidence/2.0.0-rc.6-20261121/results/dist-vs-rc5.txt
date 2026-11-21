@@ -1,0 +1,3 @@
+rc.5 dist files: 95, rc.6 dist files: 95
+only in rc.5: [('geo.js', 17823)]
+only in rc.6: [('geo.js', 17832)]

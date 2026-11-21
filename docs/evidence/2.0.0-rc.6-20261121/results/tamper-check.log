@@ -1,0 +1,3 @@
+exit=1
+stdout=
+stderr=release archive: zodiacs-engine-2.0.0-rc.6.tgz has SHA-256 59ea2eb8dbf98f37c30331d446fc86140a616f5424edd13c65135346e6aea052; the manifest records 59217e2b12126f424554811b21d1902e9b4f9b2014e2fbf9ca1f06f2bf587631
