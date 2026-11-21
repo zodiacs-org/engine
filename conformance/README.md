@@ -33,8 +33,7 @@ Hellenistic and timing techniques (L6).
 
 The harness runs the latest version.
 
-Results for this repository's engine and for Swiss Ephemeris are in
-[RESULTS.md](RESULTS.md).
+Measured results for each engine are in [RESULTS.md](RESULTS.md).
 
 ## The rules
 
@@ -84,7 +83,8 @@ Two conventions deserve a note:
 
 An adapter is a program that reads one JSON request per line on standard
 input and writes one JSON response per line; [SPEC.md](SPEC.md) gives the
-format. Two adapters are included:
+format. To run and submit another engine, see [SUBMITTING.md](SUBMITTING.md).
+The following commands reproduce the runs for this engine and Swiss Ephemeris.
 
 ```bash
 # this repository's engine

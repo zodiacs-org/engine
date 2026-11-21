@@ -9,7 +9,7 @@
   },
   "adapter": {
     "name": "astronomia",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "engine": "astronomia",
     "engineVersion": "4.3.0",
     "configuration": {
@@ -219,14 +219,14 @@
     {
       "id": "L1-POS-0002",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0003",
       "verdict": "pass",
       "residual": {
         "lon": -0.417322749,
-        "lat": 0.0589396532
+        "lat": 0.0589396531
       }
     },
     {
@@ -280,7 +280,7 @@
     {
       "id": "L1-POS-0010",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0011",
@@ -293,7 +293,7 @@
     {
       "id": "L1-POS-0012",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0013",
@@ -354,7 +354,7 @@
     {
       "id": "L1-POS-0020",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0021",
@@ -367,7 +367,7 @@
     {
       "id": "L1-POS-0022",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0023",
@@ -428,7 +428,7 @@
     {
       "id": "L1-POS-0030",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0031",
@@ -441,7 +441,7 @@
     {
       "id": "L1-POS-0032",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0033",
@@ -502,7 +502,7 @@
     {
       "id": "L1-POS-0040",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0041",
@@ -515,7 +515,7 @@
     {
       "id": "L1-POS-0042",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0043",
@@ -576,7 +576,7 @@
     {
       "id": "L1-POS-0050",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0051",
@@ -589,7 +589,7 @@
     {
       "id": "L1-POS-0052",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0053",
@@ -650,7 +650,7 @@
     {
       "id": "L1-POS-0060",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0061",
@@ -663,7 +663,7 @@
     {
       "id": "L1-POS-0062",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0063",
@@ -724,7 +724,7 @@
     {
       "id": "L1-POS-0070",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0071",
@@ -737,7 +737,7 @@
     {
       "id": "L1-POS-0072",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0073",
@@ -798,7 +798,7 @@
     {
       "id": "L1-POS-0080",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0081",
@@ -811,7 +811,7 @@
     {
       "id": "L1-POS-0082",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0083",
@@ -872,7 +872,7 @@
     {
       "id": "L1-POS-0090",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0091",
@@ -885,7 +885,7 @@
     {
       "id": "L1-POS-0092",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0093",
@@ -946,7 +946,7 @@
     {
       "id": "L1-POS-0100",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0101",
@@ -959,7 +959,7 @@
     {
       "id": "L1-POS-0102",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0103",
@@ -1020,7 +1020,7 @@
     {
       "id": "L1-POS-0110",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0111",
@@ -1033,7 +1033,7 @@
     {
       "id": "L1-POS-0112",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0113",
@@ -1094,7 +1094,7 @@
     {
       "id": "L1-POS-0120",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0121",
@@ -1107,7 +1107,7 @@
     {
       "id": "L1-POS-0122",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0123",
@@ -1168,7 +1168,7 @@
     {
       "id": "L1-POS-0130",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0131",
@@ -1181,7 +1181,7 @@
     {
       "id": "L1-POS-0132",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0133",
@@ -1242,7 +1242,7 @@
     {
       "id": "L1-POS-0140",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0141",
@@ -1255,7 +1255,7 @@
     {
       "id": "L1-POS-0142",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0143",
@@ -1316,7 +1316,7 @@
     {
       "id": "L1-POS-0150",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0151",
@@ -1329,7 +1329,7 @@
     {
       "id": "L1-POS-0152",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0153",
@@ -1390,7 +1390,7 @@
     {
       "id": "L1-POS-0160",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0161",
@@ -1403,7 +1403,7 @@
     {
       "id": "L1-POS-0162",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0163",
@@ -1464,7 +1464,7 @@
     {
       "id": "L1-POS-0170",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0171",
@@ -1477,7 +1477,7 @@
     {
       "id": "L1-POS-0172",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0173",
@@ -1538,7 +1538,7 @@
     {
       "id": "L1-POS-0180",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0181",
@@ -1551,7 +1551,7 @@
     {
       "id": "L1-POS-0182",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0183",
@@ -1612,7 +1612,7 @@
     {
       "id": "L1-POS-0190",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0191",
@@ -1625,7 +1625,7 @@
     {
       "id": "L1-POS-0192",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0193",
@@ -1686,7 +1686,7 @@
     {
       "id": "L1-POS-0200",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0201",
@@ -1699,7 +1699,7 @@
     {
       "id": "L1-POS-0202",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0203",
@@ -1760,7 +1760,7 @@
     {
       "id": "L1-POS-0210",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0211",
@@ -1773,7 +1773,7 @@
     {
       "id": "L1-POS-0212",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0213",
@@ -1834,7 +1834,7 @@
     {
       "id": "L1-POS-0220",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0221",
@@ -1847,7 +1847,7 @@
     {
       "id": "L1-POS-0222",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0223",
@@ -1908,7 +1908,7 @@
     {
       "id": "L1-POS-0230",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L1-POS-0231",
@@ -1921,7 +1921,7 @@
     {
       "id": "L1-POS-0232",
       "verdict": "unsupported",
-      "detail": "astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function"
+      "detail": "moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position."
     },
     {
       "id": "L1-POS-0233",
@@ -1982,7 +1982,7 @@
     {
       "id": "L1-POS-0240",
       "verdict": "unsupported",
-      "detail": "astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function"
+      "detail": "pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position."
     },
     {
       "id": "L2-ASC-0001",
@@ -3282,297 +3282,297 @@
     {
       "id": "L4-ING-0001",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0002",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0003",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0004",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0005",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0006",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0007",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0008",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0009",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0010",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0011",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0012",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0013",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0014",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0015",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0016",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0017",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0018",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0019",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0020",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0021",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0022",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0023",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0024",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0025",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0026",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0027",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0028",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0029",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0030",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0031",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0032",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0033",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0034",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0035",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0036",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0037",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0038",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0039",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0040",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0041",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0042",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0043",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0044",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0045",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0046",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0047",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0048",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0049",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0050",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0051",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0052",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0053",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0054",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0055",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0056",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0057",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0058",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-ING-0059",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-STA-0001",
@@ -3727,257 +3727,257 @@
     {
       "id": "L4-LUN-0001",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0002",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0003",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0004",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0005",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0006",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0007",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0008",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0009",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0010",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0011",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0012",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0013",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0014",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0015",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0016",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0017",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0018",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0019",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0020",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0021",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0022",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0023",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0024",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0025",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0026",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0027",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0028",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0029",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-LUN-0030",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-UTC-0001",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-UTC-0002",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-UTC-0003",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-UTC-0004",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-UTC-0005",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-UTC-0006",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-UTC-0007",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-UTC-0008",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-UTC-0009",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-UTC-0010",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-UTC-0011",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-UTC-0012",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-UTC-0013",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-UTC-0014",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-UTC-0015",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-UTC-0016",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-UTC-0017",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-UTC-0018",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     },
     {
       "id": "L4-UTC-0019",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-UTC-0020",
       "verdict": "unsupported",
-      "detail": "astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window"
+      "detail": "moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation."
     },
     {
       "id": "L4-ING-0061",
       "verdict": "unsupported",
-      "detail": "astronomia has no zodiac sign ingress search function"
+      "detail": "This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search."
     }
   ]
 }

@@ -21,7 +21,8 @@ _HERE = os.path.abspath(os.path.dirname(__file__))
 sys.path = [p for p in sys.path if os.path.abspath(p or '.') != _HERE]
 
 import skyfield
-from skyfield.api import Loader
+from skyfield.api import Loader, load_file
+from skyfield.errors import EphemerisRangeError
 from skyfield.framelib import ecliptic_frame
 
 BSP_PATH = os.environ.get('SKYFIELD_BSP', 'de440s.bsp')
@@ -30,8 +31,8 @@ EXPECTED_DE440S_SHA256 = 'c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a7612
 BODIES = {
     'Sun': 'sun',
     'Moon': 'moon',
-    'Mercury': 'mercury barycenter',
-    'Venus': 'venus barycenter',
+    'Mercury': 'mercury',
+    'Venus': 'venus',
     'Mars': 'mars barycenter',
     'Jupiter': 'jupiter barycenter',
     'Saturn': 'saturn barycenter',
@@ -55,15 +56,22 @@ def main():
         sys.stderr.write(f'skyfield adapter: BSP file not found at {bsp_abs}\n')
         sys.exit(2)
     bsp_digest = file_sha256(bsp_abs)
+    if bsp_digest != EXPECTED_DE440S_SHA256:
+        sys.exit(f'skyfield adapter: de440s.bsp SHA-256 mismatch (got {bsp_digest})')
     loader = Loader(os.path.dirname(bsp_abs), verbose=False)
-    eph = loader(os.path.basename(bsp_abs))
+    eph = load_file(bsp_abs)
     ts = loader.timescale(builtin=True)
     earth = eph['earth']
     targets = {name: eph[key] for name, key in BODIES.items()}
 
     def position(inp):
+        if inp['body'] not in targets:
+            return {'unsupported': f"no DE440s target for {inp['body']}"}
         t = ts.tt_jd(inp['jd_tt'])
-        apparent = earth.at(t).observe(targets[inp['body']]).apparent()
+        try:
+            apparent = earth.at(t).observe(targets[inp['body']]).apparent()
+        except EphemerisRangeError as error:
+            return {'unsupported': str(error)}
         lat, lon, _ = apparent.frame_latlon(ecliptic_frame)
         return {'output': {'lon': lon.degrees % 360.0, 'lat': lat.degrees}}
 
@@ -86,16 +94,15 @@ def main():
     handshake = {
         'adapter': {
             'name': 'skyfield',
-            'version': '0.1.0',
+            'version': '0.1.1',
             'engine': 'Skyfield',
             'engineVersion': skyfield.__version__,
             'configuration': {
                 'licence': 'MIT',
                 'ephemeris': os.path.basename(bsp_abs),
                 'ephemerisSha256': bsp_digest,
-                'matchesPinnedDe440s': bsp_digest == EXPECTED_DE440S_SHA256,
                 'frame': 'skyfield.framelib.ecliptic_frame (apparent geocentric true ecliptic and equinox of date)',
-                'bodies': 'Sun, Moon, Mercury/Venus barycentres (equal to planet centres), Mars to Pluto barycentres',
+                'bodies': 'Sun, Moon, Mercury and Venus centres, Mars to Pluto system barycentres',
             },
         }
     }
@@ -111,8 +118,7 @@ def main():
             response = handler(request['input']) if handler else {'unsupported': f"unknown kind {request['kind']}"}
         except Exception as error:  # noqa: BLE001 - report failures per SPEC.md
             response = {'error': f'{type(error).__name__}: {error}'}
-        sys.stdout.write(json.dumps({'id': request['id'], **response}) + '\n')
-    sys.stdout.flush()
+        print(json.dumps({'id': request['id'], **response}), flush=True)
 
 
 if __name__ == '__main__':
