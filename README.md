@@ -16,32 +16,38 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**2.0.0-rc.5**, the fifth candidate for 2.0.0, a major release
-(CHANGELOG.md). It is not to be published on npm until the owner approves
-it. Over 2.0.0-rc.4, `searchLongitudeCrossings` and `findLongitudeCrossings`
-refuse a name that is not a body before they search, so a zero-length
-window or a search over its sample budget throws `RangeError` instead of
-returning empty. As 2.0.0-rc.4 did over 2.0.0-rc.3, which npm has carried
-under `next` since 2026-11-17 (not tagged), `require()` of the package or
-of any of its entry points throws an `Error` with code `ERR_ZODIACS_ESM_ONLY`
-that says to use `import`, where Node threw `ERR_PACKAGE_PATH_NOT_EXPORTED`;
-the root refuses a name that is not a body with a
-`RangeError` on every source, where on the default source the DE440
-reader's `De440Error` reached the caller; and the README's examples of
-configurable aspects and of declinations build their own chart, so they run
-as pasted. As 2.0.0-rc.3 did over 2.0.0-rc.2, a candidate never tagged or
-published, it refuses common near-miss names for a birth field, such as `lat`, `lng`, `houses` and
-`scale`, which were ignored (a breaking change, *Birth settings* below);
-reads UTC after the IERS UT1 table, which ends on 2027-10-02, on the
-continuous-UTC rule, TT = UTC + 69.184 s (*Time*); reads wall times before
-1970 on tzdata 2026f's zone histories, America/Yellowknife held at tzdata
-2025c by the owner's decision; flags a wall time where the device's time
-zone data differs from tzdata 2026f (`host-zone-data-differs`); adds Julian
-Day Numbers and local mean time from a longitude to `@zodiacs/engine/geo`;
-and adds `@zodiacs/engine/core`, the root's functions without the DE440
-pack (*Bundle size in a web page*). Over 1.1.0, as 2.0.0-rc.1 and rc.2 did,
-it refuses a birth given as a calendar date with no time,
-unless `timeKnown` is `false` (the breaking change, *Resolved instant
+**2.0.0-rc.6**, the sixth candidate for 2.0.0, a major release
+(CHANGELOG.md). A candidate is published only by the owner;
+`artifacts/README.md` in the repository records what happened to it. Callers
+moving from 1.1.0 should read [docs/migrating-to-2.md](docs/migrating-to-2.md).
+Over 2.0.0-rc.5, it adds tzdata 2025c beside 2021a as a baseline of the host
+time zone probe table (705 spans in 77 names, flagging a tzdata 2025c host at
+`Asia/Tehran` and `Iran` on 1979-05-26), updates `LICENSING.md` and `NOTICE`
+for that baseline and the four open licence questions noted for 2.0.0, carries
+correction 18, and updates the README for 2.x. As 2.0.0-rc.5 did over
+2.0.0-rc.4, `searchLongitudeCrossings` and `findLongitudeCrossings` refuse a
+name that is not a body before they search, so a zero-length window or a
+search over its sample budget throws `RangeError` instead of returning empty.
+As 2.0.0-rc.4 did over 2.0.0-rc.3, which npm has carried under `next` since
+2026-11-17 (not tagged), `require()` of the package or of any of its entry
+points throws an `Error` with code `ERR_ZODIACS_ESM_ONLY` that says to use
+`import`, where Node threw `ERR_PACKAGE_PATH_NOT_EXPORTED`; the root refuses
+a name that is not a body with a `RangeError` on every source, where on the
+default source the DE440 reader's `De440Error` reached the caller; and the
+README's examples of configurable aspects and of declinations build their own
+chart, so they run as pasted. As 2.0.0-rc.3 did over 2.0.0-rc.2, a candidate
+never tagged or published, it refuses common near-miss names for a birth field,
+such as `lat`, `lng`, `houses` and `scale`, which were ignored (a breaking
+change, *Birth settings* below); reads UTC after the IERS UT1 table, which ends
+on 2027-10-02, on the continuous-UTC rule, TT = UTC + 69.184 s (*Time*); reads
+wall times before 1970 on tzdata 2026f's zone histories, America/Yellowknife
+held at tzdata 2025c by the owner's decision; flags a wall time where the
+device's time zone data differs from tzdata 2026f (`host-zone-data-differs`);
+adds Julian Day Numbers and local mean time from a longitude to
+`@zodiacs/engine/geo`; and adds `@zodiacs/engine/core`, the root's functions
+without the DE440 pack (*Bundle size in a web page*). Over 1.1.0, as
+2.0.0-rc.1 and rc.2 did, it refuses a birth given as a calendar date with no
+time, unless `timeKnown` is `false` (the breaking change, *Resolved instant
 inputs* below); flags a chart whose angles are inside the polar circle
 (`polar-angles`); flags a local date that a calendar changeover may have
 skipped, given with no country (`calendar-unknown`, [docs/time.md](docs/time.md));
@@ -113,8 +119,9 @@ later pass (`fold: "later"` in `@zodiacs/engine/geo`; see
 1.1.0-rc.3 added
 `@zodiacs/engine/de440`, positions from JPL's DE440 through a pack the caller
 supplies, which the root's `withEphemeris` puts in place of the default
-source; with `@zodiacs/engine/de440/pack` there are seventeen public entry
-points (see [docs/de440.md](docs/de440.md)). Over
+source; with `@zodiacs/engine/de440/pack` and 2.0.0-rc.3's
+`@zodiacs/engine/core` there are eighteen public entry points (see
+[docs/de440.md](docs/de440.md)). Over
 1.0.0, natal receipts name their conventions as ids of the Zodiacs
 conventions registry, which a new entry, `@zodiacs/engine/conventions`,
 gives (from 1.1.0-rc.1; see *Draft natal receipts*). 1.1.0-rc.2 added two
@@ -132,9 +139,10 @@ Install it from npm:
 npm install @zodiacs/engine
 ```
 
-That installs npm's `latest`, 1.1.0, not this candidate:
-`artifacts/zodiacs-engine-2.0.0-rc.5.tgz` in the repository, with its
-SHA-256 receipt, is this candidate's exact archive. 1.0.0, npm's `latest`
+As of 2026-11-21, that installs npm's `latest`, 1.1.0 (npm's `next` is
+2.0.0-rc.3), not this candidate: `artifacts/zodiacs-engine-2.0.0-rc.6.tgz` in
+the repository, with its SHA-256 receipt, is this candidate's exact archive.
+1.0.0, npm's `latest`
 before 1.1.0, has no `./conventions`, `./time`, `./lite`, `./de440` or DE440
 pack, computes on astronomy-engine and writes no ids.
 
@@ -148,7 +156,7 @@ until 1.0.0, reads 0.1.1-rc.16's too.
 The package runs in browsers through a bundler, and in Node.js 20.19.0 or a
 later 20.x, or 22.7.0 or later (`"engines": { "node": "^20.19.0 || >=22.7.0" }`).
 Node.js 20 reached its end of life on 2026-04-30: the package is still tested
-there, but a 1.x minor release may drop it (docs/versioning.md, *Runtimes*).
+there, but a 2.x minor release may drop it (docs/versioning.md, *Runtimes*).
 Its dependency, astronomy-engine 2.1.19, ships ES modules in a package that does
 not declare `"type": "module"`. Earlier Node versions load that file as
 CommonJS, so a plain Node import of this package fails there with "Named export
@@ -157,6 +165,18 @@ loads it with a harmless `MODULE_TYPELESS_PACKAGE_JSON` warning, which 22.22.2
 no longer prints. Bundlers resolve the dependency's `import` condition
 themselves and are not affected.
 
+In the six-runtime conformance check on 2.0.0-rc.3
+(`docs/evidence/runtime-conformance-20261119/`, suite 0.3.0; pending this
+candidate's Linux x64 CI rerun before packing), all 569 supported verdicts on
+both the root and `@zodiacs/engine/core` agreed with Node 22.22.2 in Bun
+1.4.4, Deno 2.9.6, Chromium 156.0.8078.4, Firefox 157.0 and WebKit 27.2 (with
+71 unsupported vectors: 1 leap-second instant, 30 stations and 40 lunations).
+Outputs are not identical to the last bit across all runtimes (on the root,
+458 of 569 were bit-identical to Node in Bun, Deno, Chromium and WebKit, and
+569 of 569 in Firefox; on core, 468 in Bun and WebKit, 485 in Deno and
+Chromium, and 540 in Firefox), and synthetic receipt digests differ from
+Node's where outputs differ.
+
 The package is ES modules only and has no CommonJS build. `require()` of
 `@zodiacs/engine` or of any of its entry points throws an `Error` with code
 `ERR_ZODIACS_ESM_ONLY` whose message says to use `import`; from CommonJS,
@@ -164,7 +184,7 @@ load it with `await import("@zodiacs/engine")`.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-2.0.0-rc.5.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-2.0.0-rc.6.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -1262,8 +1282,9 @@ tzdata 2025c's history by the owner's decision, because tzdata 2026f's
 change to it has no NEWS entry; before 1970 its results equal 2.0.0-rc.2's,
 but for the `tzdbVersion` they name, "2026f", the package's pinned release,
 though the zone's data is 2025c's. From 1970 the host's Intl answers, and from
-2.0.0-rc.3, near a span in which tzdata 2021a and 2026f give different
-offsets, the engine asks the host for its offset there and flags the result
+2.0.0-rc.3 (with 2025c added in 2.0.0-rc.6), near a span in which tzdata 2021a
+or 2025c gives a different offset from 2026f, the engine asks the host for its
+offset there and flags the result
 `host-zone-data-differs` where it differs from 2026f's
 ([docs/time.md](docs/time.md), *Host time zone data*); the instant stays the
 host's. A `longitude` reads a time in a
@@ -1321,8 +1342,9 @@ copies into `dist/core.js`) are CC BY 4.0, attributed in [NOTICE](NOTICE).
 
 The npm package contains no place database. It carries the DE440 pack
 (2,489,664 bytes), tzdb 2026f's zone histories before 1970
-(America/Yellowknife's from tzdb 2025c), a table of where tzdb 2021a's offsets
-from 1970 differ from 2026f's, the IERS leap-second list, an IERS UT1 − UTC
+(America/Yellowknife's from tzdb 2025c), a table of where tzdb 2021a's and
+2025c's offsets from 1970 differ from 2026f's, the IERS leap-second list, an
+IERS UT1 − UTC
 table, a table of Gregorian adoption dates from public-domain sources, 22
 catalogue values for the stars of the Vedic ayanamsas, and the IAU 2000B
 nutation series from NOVAS C 3.1, a US Government work; [NOTICE](NOTICE)

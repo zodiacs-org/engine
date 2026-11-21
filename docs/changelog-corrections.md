@@ -157,6 +157,10 @@ names. The 2.0.0-rc.3 entry itself is left as written.
       public-domain releases". Each should add tzdata 2025c and its SHA-256
       as a baseline of the table.
 
+Item 18 is carried into 2.0.0-rc.6's `### Corrections` in `CHANGELOG.md`, and
+the `README.md`, `NOTICE` and `LICENSING.md` lines it names are updated in
+2.0.0-rc.6. The 2.0.0-rc.3 entry itself is left as written.
+
 ## Not a correction, for the record
 
 1.0.0 was published to npm on 2026-10-11 without a git tag or a GitHub

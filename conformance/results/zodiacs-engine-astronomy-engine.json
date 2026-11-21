@@ -11,7 +11,7 @@
     "name": "zodiacs-engine-astronomy-engine",
     "version": "0.3.0",
     "engine": "@zodiacs/engine on astronomy-engine",
-    "engineVersion": "2.0.0-rc.3",
+    "engineVersion": "2.0.0-rc.6",
     "configuration": {
       "ephemeris": "astronomy-engine 2.1.19",
       "deltaTModel": "zodiacs-deltat/1",
@@ -2143,7 +2143,7 @@
       "verdict": "fail",
       "residual": {
         "lon": 3.04169726,
-        "lat": 0.257339117
+        "lat": 0.257339116
       },
       "meta": {
         "flags": [

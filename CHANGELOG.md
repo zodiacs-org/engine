@@ -1,5 +1,110 @@
 # Engine changelog
 
+## 2.0.0-rc.6 (candidate, cut 2026-11-21)
+
+The sixth candidate for **2.0.0**, a major release, on 2.0.0-rc.5 (main at
+`ed8be41`, after pull request 140), merging pull request 128 (`f8a7e7e`) with
+a merge commit. A candidate is published only by the owner;
+`artifacts/README.md` in the repository records what happened to it. Callers
+moving from 1.1.0 should read `docs/migrating-to-2.md`. Everything earlier
+2.0.0 candidate entries say holds for rc.6 except where this entry says
+otherwise.
+
+### Fixed
+
+- **Host time zone probe table (pull request 128, ZOD-340).** Adds IANA
+  tzdata 2025c (SHA-256
+  `4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957`) as a
+  second baseline beside tzdata 2021a when comparing against tzdata 2026f.
+  The compiled probe table in `src/geo/host-probes-data.ts` now holds 705
+  spans across 77 zone names (up from 703 spans in 77 names, +9 bytes in
+  `dist/geo.js`), adding the 1979-05-25T20:30Z to 1979-05-26T20:30Z span for
+  `Asia/Tehran` and its link `Iran`, where tzdata 2025c gives UTC+03:30 and
+  both 2021a and 2026f give UTC+04:30. A host on tzdata 2025c (including Node
+  22.22.2, ICU 78.2) is now flagged `host-zone-data-differs` at 1979-05-26
+  12:00 in both names instead of passing unchecked. Held by
+  `src/geo/host-zone-check.test.ts` and
+  `docs/evidence/host-zone-probes-20261118/`.
+
+### Documentation
+
+- `LICENSING.md` and `NOTICE` (ZOD-341, pull requests 138 and 139): name
+  tzdata 2021a, 2025c and 2026f with their SHA-256 digests as the probe
+  table's sources; credit ESA (`Credit: ESA`) for the Hipparcos observations
+  behind VizieR I/311; and record the owner's 2026-11-20 11:16 Asia/Bangkok
+  decision to ship 2.0.0 with the four open licence questions noted (IERS EOP
+  20 C04, CDS commercial use, Reid and Brunthaler, and ESA's non-commercial
+  Hipparcos terms as a fourth).
+- `README.md`: updates the public entry-point count to eighteen (with
+  `@zodiacs/engine/core`), updates the Node 20 line from "a 1.x minor release"
+  to "a 2.x minor release", updates the host-probe descriptions to name both
+  tzdata 2021a and 2025c, points callers moving from 1.1.0 to
+  `docs/migrating-to-2.md`, and adds a summary of six-runtime conformance.
+  The span ends were measured again on this build (`span-ends.mjs`:
+  `natalChart` last UTC 3998-09-03T05:58:50.816Z, `calc` last UTC
+  2199-12-31T23:58:50.815Z). Bundle sizes remain 2.0.0-rc.3's and say so.
+- Unpacked repository documentation updated before this cut (not packed):
+  `docs/migrating-to-2.md` with per-break tests in `src/migration-2.0.test.ts`
+  (ZOD-338, pull request 133), `docs/versioning.md`, `SECURITY.md`,
+  `artifacts/README.md` and `tools/cli/README.md` for 2.x (ZOD-342, pull
+  request 137), records-across-the-major evidence in
+  `docs/evidence/records-2.0.0-20261120/` (ZOD-337, pull request 132), and
+  draft v1.1.0 release notes and tag commands in `docs/releases/` (ZOD-343
+  Part A, pull request 135).
+
+### Conformance
+
+- Regenerated on this build with Node 22.22.2 against conformance suite 0.3.0
+  (640 vectors; `conformance/RESULTS.md`,
+  `conformance/results/zodiacs-engine.json`,
+  `conformance/results/zodiacs-engine-astronomy-engine.json`):
+  - Default source (shipped DE440 pack): **569 pass, 0 fail, 71 unsupported,
+    0 error** (L1 240/240, L2 150/150, L3 109/110 with 1 unsupported, L4
+    70/140 with 70 unsupported). Every verdict matches `main`.
+  - Fallback source (`astronomy-engine` 2.1.19): **341 pass, 228 fail, 71
+    unsupported, 0 error** (L1 48 pass / 192 fail, L2 150/150, L3 109/110
+    with 1 unsupported, L4 34 pass / 36 fail / 70 unsupported). Every verdict
+    matches `main`.
+  - The 71 unsupported vectors are 1 leap-second instant in L3 (not
+    expressible as a JavaScript Date), 30 station vectors in L4 and 40
+    lunation vectors in L4: the engine has no public station or lunation
+    search API.
+
+### Runtimes
+
+- Pending this candidate's six-runtime Linux x64 CI rerun before the archive
+  is packed; the prior six-runtime run on 2.0.0-rc.3
+  (`docs/evidence/runtime-conformance-20261119/`) showed 569 of 569 supported
+  verdicts agreeing with Node 22.22.2 on both root and core across Bun 1.4.4,
+  Deno 2.9.6, Chromium 156.0.8078.4, Firefox 157.0 and WebKit 27.2, with
+  non-identical last-bit outputs and differing synthetic receipt digests in
+  the runtimes where outputs differ from Node.
+
+### Corrections
+
+Carried from `docs/changelog-corrections.md` (item 18; items 15 to 17 were
+carried into 2.0.0-rc.4's `### Corrections`). The 2.0.0-rc.3 entry is left as
+written.
+
+- 2.0.0-rc.3, `CHANGELOG.md` lines 44 to 45 ("each nearby span in which
+  tzdata 2021a and 2026f differ (703 spans in 77 names)") and lines 118 to
+  119 ("the host-probe table compares tzdata 2021a with 2026f"): pull request
+  128 adds tzdata 2025c beside 2021a (705 spans in 77 names), flagging a
+  2025c host at `Asia/Tehran` and `Iran` on 1979-05-26
+  (`docs/evidence/host-zone-probes-20261118/README.md`). `README.md`,
+  `NOTICE` and `LICENSING.md` are updated in this candidate.
+
+### Sizes and budgets
+
+- Measured on this candidate's build (`npm run package:contents`): all 20
+  entry-point import graphs remain inside their 2.0.0-rc.5 budgets (`./geo`
+  grew by 9 bytes for pull request 128's Tehran probe). The package beside
+  the DE440 pack is 1,458,765 bytes unpacked in 101 files, over the 2.0.0-rc.5
+  cap of 1,450,000 because of this entry, the README updates, `LICENSING.md`,
+  `NOTICE` and the 9-byte probe addition. Cap raised to 1,459,000 (the
+  measurement rounded up to the next 1,000 bytes), for the owner to decide
+  with this candidate (`scripts/verify-package-contents.mjs`).
+
 ## 2.0.0-rc.5 (unreleased candidate)
 
 The fifth candidate for **2.0.0**, a major release, on 2.0.0-rc.4 (pull

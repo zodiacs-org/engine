@@ -8,15 +8,20 @@ NAIF's rules permit redistributing its kernels unmodified but do not speak of
 data refitted from one, so shipping the pack rests on the owner's reading and
 not on a statement of JPL's or NAIF's. On 2026-11-16 the owner answered, in
 writing, the question "Do you accept shipping the NASA DE440 data in 1.1.0?"
-with "Yes. I delegate these decisions to you." (*DE440 pack*). Three
-questions are left open for the owner, as they were at 1.0.0: no statement of
-terms was found for IERS EOP 20 C04, so whether its 367 rows of 1972 that the
-repository carries, and the values the package derives from it (the UT1 table
-in 1972 and some of the ΔT table's values from 1941), may be redistributed
-without other terms is not settled (*IERS data*); whether a commercial use of
-the 20 star values that the CDS supplies needs more than the attribution in
-`NOTICE` is not settled by the CDS's terms; and no terms were read for Reid
-and Brunthaler's two values (*Timing and Vedic values*).
+with "Yes. I delegate these decisions to you." (*DE440 pack*). Four
+questions are left open for the owner. As they were at 1.1.0, the terms for
+IERS EOP 20 C04 redistribution remain unconfirmed for both the 367 rows the
+repository carries and the values the package derives from them (*IERS
+data*), the CDS's terms leave commercial use of the 20 star values it
+supplies unresolved, and no terms were read for the two values from Reid
+and Brunthaler. The fourth question is whether ESA's non-commercial
+terms reach the 15 values from the Hipparcos new reduction through VizieR
+(*Timing and Vedic values*). On 2026-11-20 at 10:37 Asia/Bangkok, the owner
+answered "Re-accept the licence questions and add Hipparcos as a 4th."
+The decision record gives the superseding answer at 11:16 Asia/Bangkok:
+"ship 2.0.0 with the open licence questions NOTED, not settled and NOT
+recorded as re-accepted: IERS, CDS, Reid and Brunthaler, plus ESA's
+non-commercial Hipparcos terms noted as a fourth."
 
 SPDX licence expression: `MIT AND CC-BY-4.0`. The code is MIT (`LICENSE`). The
 package's ΔT module, exported as `@zodiacs/engine/deltat`, carries 32 values
@@ -337,10 +342,17 @@ lines that define it, held there by the owner's decision and committed in
 `scripts/tzdb-held/yellowknife-2025c.zi`, whose SHA-256 the script also
 checks; that release is in the public domain too.
 From 1970 conversion uses the host's `Intl`/ICU data, which `./geo` checks
-against a table of the spans in which tzdata 2021a and 2026f give different
-offsets (`src/geo/host-probes-data.ts`), compiled by
-`scripts/build-host-zone-probes.mjs` from those two public-domain releases,
-whose SHA-256 it checks.
+against a table of the spans in which tzdata 2021a or 2025c gives a different
+offset from 2026f (`src/geo/host-probes-data.ts`).
+`scripts/build-host-zone-probes.mjs` compiles the table from these
+public-domain releases and checks their SHA-256 digests:
+
+- `tzdata2021a.tar.gz` (SHA-256
+  `39e7d2ba08c68cbaefc8de3227aab0dec2521be8042cf56855f7dc3a9fb14e08`)
+- `tzdata2025c.tar.gz` (SHA-256
+  `4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957`)
+- `tzdata2026f.tar.gz` (SHA-256
+  `01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d`)
 
 ## Leap-second and UT1 data
 
@@ -500,6 +512,19 @@ Brunthaler's article (ApJ 616, 872, 2004, table 2), not from CDS, and no terms
 for them were read. The attribution in `NOTICE` meets the CDS citation terms;
 whether a commercial use needs more than attribution is not settled by these
 sources.
+
+ESA distributes its 1997 Hipparcos and Tycho Catalogues under CC BY-NC 3.0
+IGO. The package takes its Hipparcos values from F. van Leeuwen's 2007 new
+reduction (VizieR I/311). ESA hosts a copy of that VizieR catalogue in its
+legacy archive and distributes data hosted in its Space Science Archives
+under CC BY-NC 3.0 IGO. Those archive terms call for authorisation before
+commercial use and give the Hipparcos credit line as "Credit: ESA".
+Whether those terms reach the 15 individual values obtained through VizieR
+is open. `NOTICE` credits ESA as the origin of the mission data.
+ESA pages read 2026-11-20:
+<https://www.cosmos.esa.int/web/hipparcos/catalogues>,
+<https://www.cosmos.esa.int/web/hipparcos/hipparcos-2> and
+<https://www.cosmos.esa.int/web/esdc/terms-and-conditions#TC1>.
 
 ## Calculation entry values
 
