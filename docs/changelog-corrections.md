@@ -170,3 +170,9 @@ tag and GitHub release are `v0.1.1-rc.15`'s, item 11 above).
 
 2.0.0-rc.3 was published to npm on 2026-11-17 under `next` without a git tag
 or a GitHub release.
+
+2.0.0 was published to npm on 2026-11-21 (`2026-11-21T14:48:09.646Z`, Release
+workflow run 44915599923 from commit `b70645c3b8b1bd47f81e4b427b15c11b6c569bd0`)
+under `latest` with Sigstore provenance (transparency log index `4033328100`),
+verified in `docs/evidence/2.0.0-published-20261121/`, without a git tag or a
+GitHub release yet (drafts in `docs/releases/`).

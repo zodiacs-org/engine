@@ -54,4 +54,4 @@ if this package is affected.
 
 ## Supported versions
 
-The latest 2.x release is supported, and fixes ship in a new release. 1.1.x receives security fixes until six months after 2.0.0 was published on npm. Release candidates are not supported once the release they led to is out. Archives in `artifacts/` are immutable.
+The latest 2.x release is supported, and fixes ship in a new release. 1.1.x receives security fixes until 2027-05-21 (six months after 2.0.0 was published on npm on 2026-11-21). Release candidates are not supported once the release they led to is out. Archives in `artifacts/` are immutable.

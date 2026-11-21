@@ -4,10 +4,10 @@
 the 1.0.0 draft on 13 November 2026 (ZOD-152). Creating tags and releases is
 a separate step for the owner.
 
-1.0.0 and 1.1.0 were published to npm by the Release workflow; 2.0.0 is
-carried on `main` and awaits npm publication (see
-[PUBLISH-2.0.0.md](PUBLISH-2.0.0.md)). The repository has one tag and one
-GitHub release, both named `v0.1.1-rc.15`.
+1.0.0, 1.1.0 and 2.0.0 were published to npm by the Release workflow (2.0.0
+on 2026-11-21 as `latest`, Release run 44915599923; verified in
+`docs/evidence/2.0.0-published-20261121/`). The repository has one tag and
+one GitHub release, both named `v0.1.1-rc.15`.
 
 ## Files
 
@@ -198,19 +198,23 @@ update `version`, `date-released` and `doi` in `CITATION.cff` on `main`.
 
 2.0.0 was merged to `main` on 2026-11-21 at
 `01432be354d219dbc2d5609e05a9dd0bcfd313e0`, the merge commit for pull request
-143 (`ZOD-345`). Its archive `artifacts/zodiacs-engine-2.0.0.tgz` (2,788,540
-bytes, 101 files) was packed from source commit
-`174437a534f4bf92ce5d5d1c99df0774d8855f13` and carried in commit
-`fbcde2cbdb962baa1d0e5d60f6e45cc0b76c7e4f`.
+143 (`ZOD-345`), and published to npm on 2026-11-21 (`2026-11-21T14:48:09.646Z`,
+`latest`) by [Release run 44915599923](https://github.com/zodiacs-org/engine/actions/runs/44915599923)
+from commit `b70645c3b8b1bd47f81e4b427b15c11b6c569bd0` (verified in
+`docs/evidence/2.0.0-published-20261121/`). Its archive
+`artifacts/zodiacs-engine-2.0.0.tgz` (2,788,540 bytes, 101 files) was packed
+from source commit `174437a534f4bf92ce5d5d1c99df0774d8855f13` and carried in
+commit `fbcde2cbdb962baa1d0e5d60f6e45cc0b76c7e4f`.
 
-`package.json` at the target reads `2.0.0`, and the carried tarball matches
-the SHA-256 recorded in `artifacts/archives.json`
+`package.json` at both `01432be354d219dbc2d5609e05a9dd0bcfd313e0` and
+`b70645c3b8b1bd47f81e4b427b15c11b6c569bd0` reads `2.0.0`, and the carried
+tarball matches npm's bytes and the SHA-256 recorded in
+`artifacts/archives.json`
 (`6087d455276ba633eb0a2370c0a5f740ddd5b257c59b821f501c9b06d228a3e2`, SHA-1
 `7364fedd67a01f9005d280b1b0c4c32183fb4968`). If you prefer to tag the exact
-commit that the Release workflow ran from after publishing, check
-`gh run view <run-id> --repo zodiacs-org/engine --json headSha` and confirm
-`package.json` reads `2.0.0` and the carried archive hashes to the same
-SHA-256 there.
+publishing commit `b70645c3b8b1bd47f81e4b427b15c11b6c569bd0` instead of the
+PR 143 merge commit `01432be354d219dbc2d5609e05a9dd0bcfd313e0`, both carry
+identical `package.json`, `CHANGELOG.md` and `artifacts/zodiacs-engine-2.0.0.tgz`.
 
 The release body in [v2.0.0-release-notes-DRAFT.md](v2.0.0-release-notes-DRAFT.md)
 starts with a three-line preface, followed by the 77-line changelog entry
