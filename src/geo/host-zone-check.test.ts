@@ -5,22 +5,21 @@ import { natalChart } from "../index.js";
 import { createNatalEnvelope, parseNatalEnvelope } from "../receipt.js";
 import { offsetAt, prepareLocalTime, resolveLocalBirth, resolveLocalToUtc } from "../geo.js";
 import { HOST_PROBES, HOST_PROBES_TZDB, HOST_PROBES_UNTIL } from "./host-probes-data.js";
-import { setHostForTests } from "./timezone.js";
+import { checkHost, setHostForTests } from "./timezone.js";
 import { nameHash } from "./zone-history.js";
 // @ts-expect-error: a plain .mjs script without declarations
 import { decodeTable } from "../../scripts/build-host-zone-probes.mjs";
 
 // ZOD-283: a wall time from 1970 on is read on the host's Intl, which may carry older time zone data than the
-// pinned tzdb release. Near a span in which tzdata 2021a and the pinned release differ, the host is asked for its
-// offset at one probe, and a host that disagrees flags the chart "host-zone-data-differs". The two hosts below
-// answer as the zic-compiled default builds of 2021a and of the pinned release inside every span (the generator's
-// spelled-out intervals, which docs/evidence/host-zone-probes-20261117/ checks against zdump), and as this
-// machine's Intl elsewhere, where the two releases agree. Synthetic births.
+// pinned tzdb release. Near a span in which a baseline differs from the pinned release, the host is asked for
+// its offset at one probe, and a host that disagrees flags the chart "host-zone-data-differs". The table-driven
+// hosts answer with the pinned offset or the first differing baseline's offset inside each span, and with this
+// machine's Intl elsewhere. Synthetic births.
 
 type Row = [from: string, to: string | null, probe: string, pinned: number, baseline: number];
 const SPELLED = JSON.parse(readFileSync(new URL("./host-probes-intervals.json", import.meta.url), "utf8")) as {
   pinned: { version: string };
-  baseline: { version: string };
+  baselines: { version: string }[];
   horizon: string;
   intervals: number;
   byName: Record<string, Row[]>;
@@ -49,9 +48,9 @@ const CURRENT = () => emulate("pinned");
 afterEach(() => setHostForTests(null));
 
 describe("the generated table", () => {
-  it("is the pinned release against 2021a, and its two generated files agree", () => {
+  it("is the pinned release against 2021a and 2025c, and its two generated files agree", () => {
     expect(HOST_PROBES_TZDB).toBe(SPELLED.pinned.version);
-    expect(SPELLED.baseline.version).toBe("2021a");
+    expect(SPELLED.baselines.map(({ version }) => version)).toEqual(["2021a", "2025c"]);
     expect(new Date(HOST_PROBES_UNTIL).toISOString()).toBe(SPELLED.horizon.replace("Z", ".000Z"));
     const decoded = decodeTable(HOST_PROBES) as Map<number, [number, number | null, number][]>;
     let count = 0;
@@ -75,6 +74,83 @@ describe("the generated table", () => {
 });
 
 describe("a wall time the host reads", () => {
+  // In the compiled releases, the 1979 spring change to +04:30 comes a day
+  // later in 2025c than in 2026f. See the transition offsets in
+  // docs/evidence/host-zone-probes-20261118/results/tehran-offsets.txt.
+  function tehran1979(dstFrom: string, version: "2025c" | "2026f") {
+    const transition = Date.parse(dstFrom);
+    return {
+      offsetAt: (_zone: string, ms: number) => (ms < transition ? 210 : 270),
+      tzdbVersion: () => version
+    };
+  }
+
+  it.each(["Asia/Tehran", "Iran"])("flags %s at noon on 1979-05-26 on a 2025c host", (timeZone) => {
+    setHostForTests(tehran1979("1979-05-26T20:30:00Z", "2025c"));
+    const { birth, resolution: resolved } = resolveLocalBirth({ date: "1979-05-26", time: "12:00", timeZone });
+    expect(resolved.utc.toISOString()).toBe("1979-05-26T08:30:00.000Z");
+    expect(resolved.zone.hostCheck).toEqual({
+      status: "differs",
+      probe: "1979-05-26T08:30:00.000Z",
+      hostOffsetMinutes: 210,
+      tzdbOffsetMinutes: 270,
+      tzdbVersion: "2026f"
+    });
+    expect(resolved.flags).toEqual(["host-zone-data-differs"]);
+    expect(natalChart(birth).flags).toContain("host-zone-data-differs");
+  });
+
+  it.each(["Asia/Tehran", "Iran"])("does not flag %s at noon on 1979-05-26 on a 2026f host", (timeZone) => {
+    setHostForTests(tehran1979("1979-05-25T20:30:00Z", "2026f"));
+    const resolved = resolveLocalToUtc("1979-05-26", "12:00", timeZone);
+    expect(resolved.utc.toISOString()).toBe("1979-05-26T07:30:00.000Z");
+    expect(resolved.zone.hostCheck).toMatchObject({ status: "current" });
+    expect(resolved.flags).toEqual([]);
+  });
+
+  it.each(["Asia/Tehran", "Iran"])("checks %s's 1979-05-25 span from 36 hours before it, inclusive, to 36 hours after it, exclusive", (timeZone) => {
+    // The span is 1979-05-25T20:30Z to 1979-05-26T20:30Z, so its window is 1979-05-24T08:30Z to 1979-05-28T08:30Z.
+    // Before the window only the earlier span (to 1979-05-25T20:30Z) is checked, and a 2025c host agrees there.
+    setHostForTests(tehran1979("1979-05-26T20:30:00Z", "2025c"));
+    const before = resolveLocalToUtc("1979-05-24", "11:59", timeZone);
+    expect(before.utc.toISOString()).toBe("1979-05-24T08:29:00.000Z");
+    expect(before.zone.hostCheck).toMatchObject({ status: "current", probe: "1979-04-22T20:30:00.000Z" });
+    expect(before.flags).toEqual([]);
+    const insideWindow = [
+      ["1979-05-24", "12:00", "1979-05-24T08:30:00.000Z"],
+      ["1979-05-28", "12:59", "1979-05-28T08:29:00.000Z"]
+    ] as const;
+    for (const [date, time, utc] of insideWindow) {
+      const inside = resolveLocalToUtc(date, time, timeZone);
+      expect(inside.utc.toISOString(), utc).toBe(utc);
+      expect(inside.zone.hostCheck, utc).toMatchObject({ status: "differs", probe: "1979-05-26T08:30:00.000Z", hostOffsetMinutes: 210, tzdbOffsetMinutes: 270 });
+      expect(inside.flags, utc).toEqual(["host-zone-data-differs"]);
+    }
+    const after = resolveLocalToUtc("1979-05-28", "13:00", timeZone);
+    expect(after.utc.toISOString()).toBe("1979-05-28T08:30:00.000Z");
+    expect(after.zone.hostCheck).toEqual({ status: "unchecked" });
+    expect(after.flags).toEqual([]);
+  });
+
+  it("leaves the four names absent from 2021a unchecked and looks up Kiev and Kyiv separately", () => {
+    // 2025c gives 2026f's offsets for all four from 1970 to the horizon, and 2021a has none of them.
+    const names = ["Europe/Kyiv", "America/Ciudad_Juarez", "Pacific/Kanton", "America/Coyhaique"];
+    // A fixed offset different from the pinned offset at Kiev's probe.
+    setHostForTests({ offsetAt: () => 0, tzdbVersion: () => null });
+    for (const name of names) {
+      expect(SPELLED.byName[name], name).toBeUndefined();
+      expect(checkHost(name, Date.parse("2023-01-15T12:00:00Z")), name).toEqual({ status: "unchecked" });
+    }
+    for (const name of ["Europe/Kyiv", "America/Ciudad_Juarez"]) {
+      const resolved = resolveLocalToUtc("2023-01-15", "12:00", name);
+      expect(resolved.zone.hostCheck, name).toEqual({ status: "unchecked" });
+      expect(resolved.flags, name).toEqual([]);
+    }
+    // Within 36 hours of Europe/Kiev's span of 1992-09-26T21:00Z to 1992-09-27T00:00Z.
+    expect(resolveLocalToUtc("1992-09-26", "12:00", "Europe/Kiev").zone.hostCheck?.status).toBe("differs");
+    expect(resolveLocalToUtc("1992-09-26", "12:00", "Europe/Kyiv").zone.hostCheck).toEqual({ status: "unchecked" });
+  });
+
   it("is flagged where the host answers as tzdata 2021a, and keeps the host's instant", () => {
     setHostForTests(STALE());
     const resolved = resolveLocalToUtc("2026-12-15", "12:00", "America/Havana");
@@ -252,7 +328,7 @@ describe("every span (property)", () => {
   const random = () => ((seed = (Math.imul(seed, 1_103_515_245) + 12_345) >>> 0) / 2 ** 32);
   const pad = (value: number, width = 2) => String(value).padStart(width, "0");
 
-  it("flags 20 instants inside each span on a 2021a host and none on a pinned host", async () => {
+  it("flags 20 instants inside each span on a disagreeing host and none on a pinned host", async () => {
     await prepareLocalTime("1970-01-01", "America/Mazatlan");
     const rows = Object.entries(SPELLED.byName).flatMap(([name, list]) => list.map((row) => [name, row] as const));
     expect(rows.length).toBe(SPELLED.intervals);
