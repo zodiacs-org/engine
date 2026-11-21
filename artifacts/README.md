@@ -119,7 +119,8 @@ runs, so CI starts the check with node directly.
 | 2.0.0-rc.2 | `e0621630b5a0f9dbb6465f4f077630f313217d7b06ee88ffa960696fec5eb1cc` | 2,734,988 | 98 | `05cd353af00e796e1fad65bf7085356c315b4b86` | "Carry the packed 2.0.0-rc.2 tarball" | Draft candidate for 2.0.0 (pull request 112), awaiting the owner's review; never tagged or published |
 | 2.0.0-rc.3 | `d465137931f5d28910443ca7ef01610606e9f708704364c61811d2936dc4ec55` | 2,781,676 | 100 | `0d41826f592d95a094e9234730dd594de5411e47` | "Carry the packed 2.0.0-rc.3 tarball" | Candidate, merged (pull request 123); on npm under `next` since 2026-11-17; not tagged |
 | 2.0.0-rc.4 | `6e334f19cf2db7acc8c834b307f37cb67733979e1c43672d914d68eefe7a2e4d` | 2,784,281 | 101 | `4c2bd2c7a3296dc6112deb45965efc27bdbe7376` | "Carry the packed 2.0.0-rc.4 tarball" | Draft candidate for 2.0.0, awaiting the owner's review; never tagged or published |
-| 2.0.0-rc.5 | `3daef1a25e53da10b5d46b00ba1d2f4ed9a46d75f0f1088700cfd80b2c058a1e` | 2,784,777 | 101 | `235eb1645fe56eedd353a778e4ea0669c4f1f20e` | "Carry the packed 2.0.0-rc.5 tarball" | Draft candidate for 2.0.0, awaiting the owner's review; never tagged or published |
+| 2.0.0-rc.5 | `3daef1a25e53da10b5d46b00ba1d2f4ed9a46d75f0f1088700cfd80b2c058a1e` | 2,784,777 | 101 | `235eb1645fe56eedd353a778e4ea0669c4f1f20e` | "Carry the packed 2.0.0-rc.5 tarball" | Candidate, merged (pull request 140); never tagged or published |
+| 2.0.0-rc.6 | `59217e2b12126f424554811b21d1902e9b4f9b2014e2fbf9ca1f06f2bf587631` | 2,788,419 | 101 | `1a2e176b1daf2f4d5100877f0e855c248ab25a76` | "Carry the packed 2.0.0-rc.6 tarball" | Candidate for 2.0.0 (pull request 142), awaiting the owner's review; never tagged or published |
 
 1.1.0-rc.9, 1.1.0-rc.10, 1.1.0-rc.11, 1.1.0-rc.12 and 1.1.0-rc.13 are five cuts of one draft, pull request 101.
 1.1.0-rc.9 was carried on 2026-11-14 and reviewed in draft; the owner then
@@ -243,7 +244,20 @@ the pack of the working checkout gave the same bytes. As with 2.0.0-rc.3,
 it was carried before the gate workflows ran on the source commit, since
 `scripts/root-unchanged.test.mjs` can pass only once the archive of the
 version in `package.json` is carried. It is not to be published on npm
-until the owner approves it. The record is in
+until the owner approves it.
+
+2.0.0-rc.6 is the sixth candidate for 2.0.0, cut on main at `ed8be41`
+(2.0.0-rc.5, pull request 140) with pull request 128 (`f8a7e7e`, the Tehran
+1979 host time zone probe) merged by merge commit, ZOD-341's `LICENSING.md`
+and `NOTICE` updates, correction 18, and the 2.x README lines. Its source
+commit is `1a2e176b1daf2f4d5100877f0e855c248ab25a76`. 2.0.0-rc.5's archive,
+receipt, entry and row stay, unchanged. Its archive is 2,788,419 bytes,
+4,778,514 unpacked in 101 files, of which 1,458,962 are beside the pack,
+under the cap of 1,459,000, which this candidate raises from 1,450,000; no
+entry budget is raised (CHANGELOG.md). It was packed once, from a clean tree
+of its source commit (`git archive`) installed with `npm ci`, on Node 22.22.2
+with npm 10.9.7. It is not to be published on npm until the owner approves
+it. The record is in `docs/evidence/2.0.0-rc.6-20261121/`. The record is in
 `docs/evidence/2.0.0-rc.4-20261120/`.
 
 2.0.0-rc.5 is the fifth candidate for 2.0.0, cut on pull request 140 with
