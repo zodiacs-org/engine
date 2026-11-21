@@ -1,4 +1,15 @@
 {
+  "calcEntryBytes": 65285,
+  "calcDeclarationBytes": 25204,
+  "calcEntryInputs": {
+    "src/calc.ts": 46699,
+    "src/calc-bounds.ts": 3823,
+    "src/calc-bounds-de440.ts": 1283,
+    "src/calc-frames.ts": 2822,
+    "src/calc-reduce.ts": 4259,
+    "src/calc-event-roots.ts": 1913,
+    "src/calc-ayanamsa.ts": 2732
+  },
   "calcCodeBytes": 212570,
   "calcGraphBytes": 3532122,
   "packBase64Bytes": 3319552,

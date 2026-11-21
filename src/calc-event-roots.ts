@@ -1,4 +1,6 @@
 /** Scalar searches on the integer TT millisecond grid. */
+import { sampleCrossings } from "./search-samples.js";
+
 const DAY_MS = 86_400_000;
 export const HOUR_MS = DAY_MS / 24;
 
@@ -27,23 +29,9 @@ export function scanEventRoots(
   from: number, to: number, phase: boolean, valueAt: (ttMs: number) => number, maxSamples: number
 ): Scan {
   if (from > to) throw new RangeError("The search window must have from <= to.");
-  const roots: Root[] = [];
-  let samples = 0;
-  const refused = () => ({
-    status: "refused", reason: "sample-budget", samples, maxSamples, detail: "The search exceeds maxSamples."
-  } as const);
-  if (from === to) return { status: "ok", samples, roots };
-  if (1 + Math.ceil((to - from) / DAY_MS) > maxSamples) return refused();
-  const exhausted = Symbol();
-  const sample = (ms: number) => {
-    if (samples === maxSamples) throw exhausted;
-    samples++;
-    const value = valueAt(ms);
-    if (!Number.isFinite(value)) throw new RangeError("Non-finite event search sample.");
-    return value;
-  };
-
-  try {
+  const count = from === to ? 0 : 1 + Math.ceil((to - from) / DAY_MS);
+  const scan = sampleCrossings(count, maxSamples, valueAt, "Non-finite event search sample.", (sample) => {
+    const roots: Root[] = [];
     let left = from;
     let before = sample(from);
     while (left < to) {
@@ -71,9 +59,10 @@ export function scanEventRoots(
       left = right;
       before = after;
     }
-  } catch (error) {
-    if (error === exhausted) return refused();
-    throw error;
+    return roots;
+  });
+  if (scan.status === "refused") {
+    return { status: "refused", reason: scan.reason, samples: scan.samples, maxSamples, detail: "The search exceeds maxSamples." };
   }
-  return { status: "ok", samples, roots };
+  return { status: "ok", samples: scan.samples, roots: scan.crossings };
 }

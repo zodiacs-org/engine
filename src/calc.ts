@@ -45,7 +45,7 @@ import type { TimeBands } from "./time-bands.js";
 import { TIME_SCALE_NAMES, elapsedDays, timeBasis } from "./time-scale.js";
 import type { TimeBasis, TimeScale, TimeScaleName } from "./time-scale.js";
 import { ENGINE_VERSION, EPHEMERIS } from "./types.js";
-import type { Angles, BodyName, Chart, ChartFlag, ChartInput, HouseSystem, PositionSource, SourceBody } from "./types.js";
+import type { Angles, BodyName, Chart, ChartFlag, ChartInput, EphemerisFallback, HouseSystem, PositionSource, SourceBody } from "./types.js";
 import { addBounds, ayanamsaBound } from "./calc-ayanamsa.js";
 import { AYANAMSAS, ayanamsaAt, isUserAyanamsaName, userAyanamsa } from "./vedic/ayanamsa.js";
 import type { AyanamsaDefinition, AyanamsaName, AyanamsaPrecessionModel } from "./vedic/ayanamsa.js";
@@ -1131,7 +1131,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
       },
       band,
       // Last, a position the pack gives that astronomy-engine gave instead says why.
-      flags: [...(extrapolated ? (["delta-t-extrapolated"] as const) : []), ...(chosen?.fallback ? [chosen.fallback] : [])],
+      flags: calcFlags(extrapolated, chosen?.fallback),
       receipt: receipt(
         { body, time: time.record, frame, center: centerRecord, zodiac: zodiac.record, flags },
         [instant(basis)],
@@ -1413,6 +1413,23 @@ export interface EventsResult {
   readonly receipt: CalcReceipt<EventsRequest>;
 }
 
+/** The TT of a refined root may be known directly, before its conversion to UTC. */
+function eventTime(basis: TimeBasis, utcBasis = basis, ttDays = basis.ttDays) {
+  return {
+    at: new Date(Math.round(basis.utcMs)).toISOString(),
+    jdUt1: J2000_JD + basis.ut1Days,
+    jdTt: J2000_JD + ttDays,
+    band: { utc: timeBands(utcBasis).tt, ut1: basis.deltaT.sigma ?? 0 }
+  };
+}
+
+function calcFlags(extrapolated: boolean, fallback?: EphemerisFallback | null): ChartFlag[] {
+  const flags: ChartFlag[] = [];
+  if (extrapolated) flags.push("delta-t-extrapolated");
+  if (fallback) flags.push(fallback);
+  return flags;
+}
+
 /**
  * Every instant in (from, to] when `body` sits on `longitude`: the engine's
  * crossing search (searchLongitudeCrossings) on its apparent geocentric
@@ -1475,25 +1492,19 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
     let flagged = false;
     const events = found.crossings.map(({ at, retrograde }) => {
       const basis = timeBasis(at.getTime(), "utc");
-      const utc = timeBands(basis).tt;
+      const time = eventTime(basis);
       if (deltaTExtrapolated(basis)) {
         flagged = true;
-        late = Math.max(late, utc);
+        late = Math.max(late, time.band.utc);
       }
-      return {
-        at: at.toISOString(),
-        jdUt1: J2000_JD + basis.ut1Days,
-        jdTt: J2000_JD + basis.ttDays,
-        retrograde,
-        band: { utc, ut1: basis.deltaT.sigma ?? 0 }
-      };
+      return { ...time, retrograde };
     });
     return {
       status: "ok",
       kind,
       events,
       samples: found.samples,
-      flags: [...(flagged ? (["delta-t-extrapolated"] as const) : []), ...(chosen.fallback ? [chosen.fallback] : [])],
+      flags: calcFlags(flagged, chosen.fallback),
       bounds: {
         timing: stretched(
           {
@@ -1613,8 +1624,7 @@ function searchTimed<S extends { body: StationBody } | { phaseDegrees: LunationA
   };
   const scan = scanEventRoots(ttMs(start), ttMs(end), phase, quantity, max);
   if (scan.status === "refused") return scan;
-  const sourceFlags = chosen.fallback ? [chosen.fallback] : [];
-  const flags = new Set<ChartFlag>(sourceFlags);
+  const flags = new Set(calcFlags(false, chosen.fallback));
   const angularError = (target: SourceBody, latitude: number, ms: number) => {
     const measured = chosen.from
       ? (atLimb(chosen.from, target, (ms - J2000_MS) / DAY_MS) ? DE440_AT_LIMB : DE440_MEASURED[target]!)
@@ -1624,11 +1634,8 @@ function searchTimed<S extends { body: StationBody } | { phaseDegrees: LunationA
   const events = scan.roots.map(({ ttMs: ms, slope, rising }) => {
     const basis = timeBasis(ms, "tt");
     const utcBasis = timeBasis(basis.utcMs, "utc");
-    const eventFlags: ChartFlag[] = [...sourceFlags];
-    if (deltaTExtrapolated(utcBasis, true)) {
-      eventFlags.unshift("delta-t-extrapolated");
-      flags.add("delta-t-extrapolated");
-    }
+    const eventFlags = calcFlags(deltaTExtrapolated(utcBasis, true), chosen.fallback);
+    for (const flag of eventFlags) flags.add(flag);
     let error = angularError(body, primary(ms).lat, ms);
     if (phase) error += angularError("Sun", solar(ms).lat, ms);
     const allowance = Math.max(1, error);
@@ -1641,8 +1648,7 @@ function searchTimed<S extends { body: StationBody } | { phaseDegrees: LunationA
         : "local quadratic longitude excursion at the station, plus TT bracket"
     };
     return makeEvent({
-      at: new Date(Math.round(basis.utcMs)).toISOString(), jdTt: J2000_JD + (ms - J2000_MS) / DAY_MS,
-      jdUt1: J2000_JD + basis.ut1Days, band: { utc: timeBands(utcBasis).tt, ut1: basis.deltaT.sigma ?? 0 },
+      ...eventTime(basis, utcBasis, (ms - J2000_MS) / DAY_MS),
       ephemeris: chosen.ephemeris, flags: eventFlags, bracketSeconds: 0.001,
       angularAllowanceArcsec: allowance, bounds: { timing }
     }, slope, rising);
