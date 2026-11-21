@@ -47,8 +47,8 @@
   },
   "malformed": {
    "acceptedAndSane": 6,
-   "refusedWithAnotherError": 1,
-   "refusedWithRangeError": 55
+   "refusedWithAnotherError": 0,
+   "refusedWithRangeError": 56
   },
   "polar": {
    "anglesComparedWithTextbook": 66,

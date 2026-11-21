@@ -4,6 +4,8 @@ import { computeSaturnReturns, findLongitudeCrossings, searchLongitudeCrossings 
 
 vi.mock("./ephemeris.js", () => ({
   SPEED_STEP_DAYS: 0.001,
+  // These tests name known bodies only, so the body check passes.
+  assertKnownBody: vi.fn(),
   bodyLongitude: vi.fn(),
   // A mocked ephemeris falls back from nothing.
   notingFallbacks: <T>(run: () => T) => ({ value: run(), fallbacks: [] }),

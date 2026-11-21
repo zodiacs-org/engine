@@ -1,0 +1,4 @@
+require refused with ERR_ZODIACS_ESM_ONLY: 20 of 20
+version 2.0.0-rc.4 ENGINE_VERSION 2.0.0-rc.4 bodies 12 source de440
+unknown body: RangeError Unknown body: Vulcan
+import() from CommonJS ok: function

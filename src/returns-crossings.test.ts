@@ -3,6 +3,8 @@ import { bodyLongitude } from "./ephemeris.js";
 import { findLongitudeCrossings } from "./returns.js";
 
 vi.mock("./ephemeris.js", () => ({ bodyLongitude: vi.fn(),
+  // These tests name known bodies only, so the body check passes.
+  assertKnownBody: vi.fn(),
   // A mocked ephemeris falls back from nothing.
   notingFallbacks: <T>(run: () => T) => ({ value: run(), fallbacks: [] }) }));
 

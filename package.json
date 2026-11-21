@@ -1,6 +1,6 @@
 {
   "name": "@zodiacs/engine",
-  "version": "2.0.0-rc.3",
+  "version": "2.0.0-rc.5",
   "description": "Browser-first astrology calculations used by Zodiacs.org: tropical charts; one calculation API with bounds and receipts in ./calc; birth-time windows in ./window; returns, relationship charts, the void-of-course Moon, patterns and dignities in ./techniques; house positions and cusp speeds in ./houses; rise, set, transit and planetary hours in ./sky; Hellenistic timing techniques and planetary returns in ./timing; the time basis and the frame of date, without the ephemeris, in ./time; declination parallels, sect, composite midpoints and dignities, without the ephemeris, in ./lite; positions from JPL's DE440 by default, from a pack it ships (./de440/pack), or from a caller's pack in ./de440; the root's functions on astronomy-engine, without the DE440 pack, in ./core; and the sidereal zodiac and Jyotish techniques in ./vedic.",
   "license": "MIT AND CC-BY-4.0",
   "keywords": [
@@ -27,88 +27,109 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./calc": {
       "types": "./dist/calc.d.ts",
-      "import": "./dist/calc.js"
+      "import": "./dist/calc.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./conventions": {
       "types": "./dist/conventions.d.ts",
-      "import": "./dist/conventions.js"
+      "import": "./dist/conventions.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./core": {
       "types": "./dist/core.d.ts",
-      "import": "./dist/core.js"
+      "import": "./dist/core.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./crossings": {
       "types": "./dist/crossings.d.ts",
-      "import": "./dist/crossings.js"
+      "import": "./dist/crossings.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./deltat": {
       "types": "./dist/deltat.d.ts",
-      "import": "./dist/deltat.js"
+      "import": "./dist/deltat.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./geo": {
       "types": "./dist/geo.d.ts",
-      "import": "./dist/geo.js"
+      "import": "./dist/geo.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./houses": {
       "types": "./dist/houses-extra.d.ts",
-      "import": "./dist/houses-extra.js"
+      "import": "./dist/houses-extra.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./internal": {
       "types": "./dist/internal.d.ts",
-      "import": "./dist/internal.js"
+      "import": "./dist/internal.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./internal/math": {
       "types": "./dist/internal-math.d.ts",
-      "import": "./dist/internal-math.js"
+      "import": "./dist/internal-math.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./lite": {
       "types": "./dist/lite.d.ts",
-      "import": "./dist/lite.js"
+      "import": "./dist/lite.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./receipt": {
       "types": "./dist/receipt.d.ts",
-      "import": "./dist/receipt.js"
+      "import": "./dist/receipt.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./sky": {
       "types": "./dist/sky.d.ts",
-      "import": "./dist/sky.js"
+      "import": "./dist/sky.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./techniques": {
       "types": "./dist/techniques.d.ts",
-      "import": "./dist/techniques.js"
+      "import": "./dist/techniques.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./time": {
       "types": "./dist/time.d.ts",
-      "import": "./dist/time.js"
+      "import": "./dist/time.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./de440": {
       "types": "./dist/de440.d.ts",
-      "import": "./dist/de440.js"
+      "import": "./dist/de440.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./de440/pack": {
       "types": "./dist/de440-pack.d.ts",
-      "import": "./dist/de440-pack.js"
+      "import": "./dist/de440-pack.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./timing": {
       "types": "./dist/timing.d.ts",
-      "import": "./dist/timing.js"
+      "import": "./dist/timing.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./vedic": {
       "types": "./dist/vedic.d.ts",
-      "import": "./dist/vedic.js"
+      "import": "./dist/vedic.js",
+      "require": "./dist/esm-only.cjs"
     },
     "./window": {
       "types": "./dist/window.d.ts",
-      "import": "./dist/window.js"
+      "import": "./dist/window.js",
+      "require": "./dist/esm-only.cjs"
     }
   },
   "files": [
     "dist/*.d.ts",
     "dist/*.js",
+    "dist/esm-only.cjs",
     "README.md",
     "CHANGELOG.md",
     "LICENSE",
@@ -122,7 +143,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/techniques.ts src/timing.ts src/vedic.ts src/internal.ts src/internal-math.ts src/calc.ts src/window.ts src/houses-extra.ts src/sky.ts src/conventions.ts src/time.ts src/de440.ts src/de440-pack.ts --format esm --dts --clean --splitting --metafile --tsconfig tsconfig.build.json && node scripts/build-lite.mjs && node scripts/build-core.mjs",
+    "build": "tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/techniques.ts src/timing.ts src/vedic.ts src/internal.ts src/internal-math.ts src/calc.ts src/window.ts src/houses-extra.ts src/sky.ts src/conventions.ts src/time.ts src/de440.ts src/de440-pack.ts --format esm --dts --clean --splitting --metafile --tsconfig tsconfig.build.json && node scripts/build-lite.mjs && node scripts/build-core.mjs && node scripts/build-esm-only.mjs",
     "docs": "typedoc --options typedoc.json",
     "exports:smoke": "node scripts/module-resolution-smoke.mjs",
     "consumer:smoke": "node scripts/verify-packed-consumer.mjs",

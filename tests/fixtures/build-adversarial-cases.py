@@ -284,8 +284,8 @@ BAD = [
     ("BAD-53", "resolveBirth", {"date": "1990-06-15", "time": "14:30", "timezone": "America/New_York"}, "RangeError", "timezone in lower case"),
     ("BAD-54", "searchLongitudeCrossings", ["Sun", NAN, "2026-03-01T00:00:00Z", "2026-04-01T00:00:00Z"], "RangeError", "a target longitude of NaN"),
     ("BAD-55", "searchLongitudeCrossings", ["Sun", 0, "2026-04-01T00:00:00Z", "2026-03-01T00:00:00Z"], "RangeError", "a window that ends before it begins"),
-    ("BAD-56", "searchLongitudeCrossings", ["Vulcan", 0, "2026-03-01T00:00:00Z", "2026-04-01T00:00:00Z"], "Error",
-     "a body that does not exist: refused, though with the DE440 reader's own error and not a RangeError (BENCHMARK_AUDIT.md, known limits)"),
+    ("BAD-56", "searchLongitudeCrossings", ["Vulcan", 0, "2026-03-01T00:00:00Z", "2026-04-01T00:00:00Z"], "RangeError",
+     "a body that does not exist: a RangeError on every source (on 2.0.0-rc.3 the DE440 reader's own De440Error; BENCHMARK_AUDIT.md, known limits)"),
     # Unusual inputs the engine accepts, and must compute sanely.
     ("BAD-57", "natalChart", {"utc": 12345}, "ok", "a number is read as epoch milliseconds, as documented"),
     ("BAD-58", "natalChart", {"utc": "1990-06-15T12:00Z"}, "ok", "ISO 8601 without seconds"),

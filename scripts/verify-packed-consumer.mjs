@@ -862,8 +862,31 @@ try {
 fallback.restored = JSON.parse(run(process.execPath, ["fallback.mjs", "whole"]).trim());
 assert.deepEqual(fallback.restored.natalFlags, []);
 
+// A CommonJS consumer: require() of every entry point throws the package's
+// own ERR_ZODIACS_ESM_ONLY with the message that says to use import
+// (scripts/build-esm-only.mjs), and import() from the same file loads it.
+writeFileSync(
+  join(directory, "require.cjs"),
+  `
+const assert = require("node:assert/strict");
+const entries = ${JSON.stringify(Object.keys(installed.exports).map((subpath) => (subpath === "." ? "@zodiacs/engine" : `@zodiacs/engine/${subpath.slice(2)}`)))};
+const message = '@zodiacs/engine is ESM-only: require() cannot load it or any of its entry points. ' +
+  'Use import { natalChart } from "@zodiacs/engine", or from CommonJS await import("@zodiacs/engine").';
+for (const name of entries) {
+  assert.throws(() => require(name), (error) => error instanceof Error && error.code === "ERR_ZODIACS_ESM_ONLY" && error.message === message, name);
+}
+import("@zodiacs/engine").then((engine) => {
+  assert.equal(typeof engine.natalChart, "function");
+  console.log(JSON.stringify({ entries: entries.length, code: "ERR_ZODIACS_ESM_ONLY", dynamicImport: "loaded" }));
+});
+`
+);
+const requireCheck = JSON.parse(run(process.execPath, ["require.cjs"]).trim());
+assert.equal(requireCheck.entries, Object.keys(manifest.exports).length);
+
 report = {
   ...result,
+  require: requireCheck,
   fallback,
   artifact,
   sha256: createHash("sha256").update(readFileSync(artifact)).digest("hex"),

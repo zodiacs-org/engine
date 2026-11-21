@@ -1,7 +1,7 @@
 import { findLongitudeCrossingsWith, searchLongitudeCrossingsWith } from "./crossings.js";
 import type { CrossingSearchOptions, CrossingSearchResult, LongitudeCrossing } from "./crossings.js";
 import { dateFrom } from "./date-input.js";
-import { SPEED_STEP_DAYS, bodyLongitude, longitudeSpeed, notingFallbacks } from "./ephemeris.js";
+import { SPEED_STEP_DAYS, assertKnownBody, bodyLongitude, longitudeSpeed, notingFallbacks } from "./ephemeris.js";
 import type { BodyName, DateInput, EphemerisFallback } from "./types.js";
 
 const DAY = 86_400_000;
@@ -62,6 +62,7 @@ export function findLongitudeCrossings(
   to: DateInput,
   stepDays = 5
 ): LongitudeCrossing[] {
+  assertKnownBody(body);
   return findLongitudeCrossingsWith(bodyLongitude, body, targetLongitude, windowEnd(from, "start"), windowEnd(to, "end"), stepDays);
 }
 
@@ -81,6 +82,8 @@ export function searchLongitudeCrossings(
   to: DateInput,
   options?: CrossingSearchOptions
 ): CrossingSearchResult {
+  // An unknown name throws even where the search would ask no longitude: a zero-length window, or one over budget.
+  assertKnownBody(body);
   const { value, fallbacks } = notingFallbacks(() =>
     searchLongitudeCrossingsWith(bodyLongitude, body, targetLongitude, windowEnd(from, "start"), windowEnd(to, "end"), options)
   );

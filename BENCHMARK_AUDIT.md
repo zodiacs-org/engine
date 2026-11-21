@@ -192,9 +192,12 @@ local date.
 1850, 1900 and 2099 compute on the pack; the Sun is within 15.3″ of the
 low-accuracy formula (the test's limit is 36″) and the Moon within 0.0195° of
 the coarse series (the test's limit is 0.3°). 2099
-carries `delta-t-extrapolated`. Of the 62 malformed cases, 55 throw a
-`RangeError` whose message names the problem, 1 throws another `Error` (see
-the limits), and 6 are accepted by design and compute sanely.
+carries `delta-t-extrapolated`. Of the 62 malformed cases, 56 throw a
+`RangeError` whose message names the problem and 6 are accepted by design and
+compute sanely. On `2.0.0-rc.3` it was 55 and 1 that threw another `Error`
+(see the limits, item 6); the fix after it changes that case alone. The
+measured file was written again with the fix on 20 November 2026, and no
+other figure in it changed.
 
 ## Exact boundaries
 
@@ -237,11 +240,13 @@ Each is a case in the fixture.
    as UTC and ignores `timeZone` (pinned by a test here). `utc` must already
    be the resolved instant; `resolveBirth` from `@zodiacs/engine/geo` is what
    reads a wall time.
-6. **An unknown body name is refused with the wrong error class.** On the
-   default source `searchLongitudeCrossings("Vulcan", …)` throws the DE440
-   reader's `De440Error`, not a `RangeError` (case BAD-56). Nothing is
-   computed; a caller that catches only `RangeError` will not catch it.
-   Fixing it changes `dist/`, so it waits for the next candidate.
+6. **An unknown body name was refused with the wrong error class.** On
+   `2.0.0-rc.3`, on the default source, `searchLongitudeCrossings("Vulcan", …)`
+   throws the DE440 reader's `De440Error`, not a `RangeError` (case BAD-56).
+   Nothing is computed; a caller that catches only `RangeError` will not
+   catch it. Fixed in `2.0.0-rc.4`, a candidate not yet published: the root
+   refuses a name that is not a body with `RangeError("Unknown body: …")`
+   before any source is asked, and case BAD-56 now expects that.
 7. **From 1970 the zone rules are the host's.** The engine reads `Intl` there
    and flags a host whose data differs from its pinned release at a probe
    (`host-zone-data-differs`). This audit ran on tzdata 2026c and 2026e (the

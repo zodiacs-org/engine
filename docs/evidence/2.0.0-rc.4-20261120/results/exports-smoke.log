@@ -1,0 +1,5 @@
+
+> @zodiacs/engine@2.0.0-rc.4 exports:smoke
+> node scripts/module-resolution-smoke.mjs
+
+@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat, time and lite graphs have no external imports, the lite entry holds its 16 pinned source modules in 5 files that import nothing and loads where astronomy-engine cannot, the root's graph (33 source modules in the build's module list, 32 marked in 16 files) reaches no module of an opt-in entry and no zone history, the core entry holds the root's graph without the DE440 files and gives the root's results on astronomy-engine, the geo entry loads its 16 shards lazily, require() of every entry point throws ERR_ZODIACS_ESM_ONLY, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic

@@ -124,6 +124,10 @@ Line numbers below are those of `README.md`, `CHANGELOG.md` and
       published". Published on npm under `next`; not tagged. Corrected in
       the file on 2026-11-20.
 
+Items 15 to 17 are carried into 2.0.0-rc.4's `### Corrections` in
+`CHANGELOG.md`, and 2.0.0-rc.4's README paragraph replaces the one item 15
+names. The 2.0.0-rc.3 entry itself is left as written.
+
 ## Not a correction, for the record
 
 1.0.0 was published to npm on 2026-10-11 without a git tag or a GitHub
