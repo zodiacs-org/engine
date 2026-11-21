@@ -119,6 +119,7 @@ runs, so CI starts the check with node directly.
 | 2.0.0-rc.2 | `e0621630b5a0f9dbb6465f4f077630f313217d7b06ee88ffa960696fec5eb1cc` | 2,734,988 | 98 | `05cd353af00e796e1fad65bf7085356c315b4b86` | "Carry the packed 2.0.0-rc.2 tarball" | Draft candidate for 2.0.0 (pull request 112), awaiting the owner's review; never tagged or published |
 | 2.0.0-rc.3 | `d465137931f5d28910443ca7ef01610606e9f708704364c61811d2936dc4ec55` | 2,781,676 | 100 | `0d41826f592d95a094e9234730dd594de5411e47` | "Carry the packed 2.0.0-rc.3 tarball" | Candidate, merged (pull request 123); on npm under `next` since 2026-11-17; not tagged |
 | 2.0.0-rc.4 | `6e334f19cf2db7acc8c834b307f37cb67733979e1c43672d914d68eefe7a2e4d` | 2,784,281 | 101 | `4c2bd2c7a3296dc6112deb45965efc27bdbe7376` | "Carry the packed 2.0.0-rc.4 tarball" | Draft candidate for 2.0.0, awaiting the owner's review; never tagged or published |
+| 2.0.0-rc.5 | `3daef1a25e53da10b5d46b00ba1d2f4ed9a46d75f0f1088700cfd80b2c058a1e` | 2,784,777 | 101 | `235eb1645fe56eedd353a778e4ea0669c4f1f20e` | "Carry the packed 2.0.0-rc.5 tarball" | Draft candidate for 2.0.0, awaiting the owner's review; never tagged or published |
 
 1.1.0-rc.9, 1.1.0-rc.10, 1.1.0-rc.11, 1.1.0-rc.12 and 1.1.0-rc.13 are five cuts of one draft, pull request 101.
 1.1.0-rc.9 was carried on 2026-11-14 and reviewed in draft; the owner then
@@ -244,6 +245,24 @@ it was carried before the gate workflows ran on the source commit, since
 version in `package.json` is carried. It is not to be published on npm
 until the owner approves it. The record is in
 `docs/evidence/2.0.0-rc.4-20261120/`.
+
+2.0.0-rc.5 is the fifth candidate for 2.0.0, cut on pull request 140 with
+the unknown-body crossing fix `11960941d` on 2.0.0-rc.4. Its source
+commit is `235eb1645fe56eedd353a778e4ea0669c4f1f20e`. The root's
+`searchLongitudeCrossings` and `findLongitudeCrossings` now refuse a name
+that is not a body before they search. 2.0.0-rc.4's archive, receipt,
+entry and row stay, unchanged. The fix changes packed files, so by the
+rule above the new bytes take a new version. Its archive is 2,784,777
+bytes, 4,769,467 unpacked in 101 files, of which 1,449,915 are beside the
+pack, under the cap of 1,450,000, which this candidate raises from
+1,446,200; it also raises seven entry budgets to their measurements
+(CHANGELOG.md). It was packed once, from a clean tree of its source
+commit (`git archive`) installed with `npm ci`, on Node 22.23.3 with npm
+10.9.9; the pack of the working checkout gave the same bytes. As with
+2.0.0-rc.4, it was carried before the gate workflows ran on the source
+commit, since `scripts/root-unchanged.test.mjs` can pass only once the
+archive of the version in `package.json` is carried. It is not to be
+published on npm until the owner approves it.
 
 The two rc.11 rows are the one breach of the rule: the review repair in
 `be3585b` replaced the archive first packed at `00bdae79` under the same
