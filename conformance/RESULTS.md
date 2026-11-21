@@ -154,3 +154,133 @@ Adapter `pyswisseph` 0.1.0; results in [`results/pyswisseph.json`](results/pyswi
 - **Flags.** Every position request returned `SEFLG_SWIEPH`: Swiss read its `.se1` files rather than falling back to its Moshier theory.
 - **Unsupported.** Swiss Ephemeris has no time zone database and no function for local mean time from a longitude.
 
+## astronomia 4.3.0
+
+Adapter `astronomia` 0.1.0; results in [`results/astronomia.json`](results/astronomia.json).
+
+| configuration | |
+| --- | --- |
+| licence | MIT |
+| planetaryTheory | VSOP87B (default astronomia/data planet series) via solar.apparentVSOP87 and elliptic.position + Equatorial.toEcliptic at true obliquity |
+| deltaT | deltat.deltaT (Espenak/Meeus polynomials and shipped IERS table) |
+| calendar | julian.CalendarGregorianToJD / CalendarJulianToJD and JDToCalendarGregorian / JDToCalendarJulian |
+
+| level | kind | pass | fail | unsupported | error | residual median / 95th percentile / max |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| L1 | `position.apparent.ecliptic-true-of-date` | 176 | 16 | 48 | 0 | lon: 0.238″ / 1.512″ / 2.782″<br>lat: 0.047″ / 0.110″ / 0.345″ |
+| **L1** | **all** | **176** | **16** | **48** | **0** | |
+| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | — |
+| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | — |
+| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | — |
+| **L2** | **all** | **0** | **0** | **150** | **0** | |
+| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | — |
+| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
+| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | — |
+| L3 | `time.delta-t` | 15 | 0 | 0 | 0 | delta_t_s: 5.20e-9 s / 0.0341 s / 0.0341 s |
+| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | — |
+| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | — |
+| **L3** | **all** | **50** | **0** | **60** | **0** | |
+| L4 | `event.ingress` | 0 | 0 | 70 | 0 | — |
+| L4 | `event.station` | 0 | 0 | 30 | 0 | — |
+| L4 | `event.lunation` | 0 | 0 | 40 | 0 | — |
+| **L4** | **all** | **0** | **0** | **140** | **0** | |
+
+| vectors tagged | pass | fail | unsupported | error |
+| --- | ---: | ---: | ---: | ---: |
+| `backzone-history` | 0 | 0 | 20 | 0 |
+| `eclipse` | 0 | 0 | 6 | 0 |
+| `utc-input` | 0 | 0 | 20 | 0 |
+| `cross-check` | 0 | 0 | 1 | 0 |
+
+- **Engine and licence.** `astronomia` `4.3.0` (MIT licence; `conformance/adapters/astronomia/package.json`), using its default VSOP87B planetary datasets (`data.earth`, `data.mercury` through `data.neptune`).
+- **Positions (L1).** The Sun is computed with `solar.apparentVSOP87(earth, jd_tt)` (VSOP87, FK5 frame, nutation and aberration). Mercury through Neptune are computed with `elliptic.position(planet, earth, jd_tt)` (light-time, aberration, FK5 and nutation), then converted back from equatorial to ecliptic of date using astronomia's own `Equatorial.prototype.toEcliptic(eps)` with true obliquity `eps = nutation.meanObliquity(jd_tt) + dEps`. Of the 192 vectors answered, **176 pass and 16 fail** (median `0.238″` lon, `0.047″` lat; max `2.782″` lon, `0.345″` lat). All 144 vectors for the Sun, Mercury, Venus, Mars, Jupiter and Saturn pass; the 16 failures are Uranus (5) and Neptune (11) at epochs far from J2000 where VSOP87B drifts past 1″ relative to DE441.
+- **Unsupported bodies (L1).** The Moon (24 vectors, including `L1-POS-0002` in 1851) and Pluto (24 vectors) are reported as `unsupported` rather than converted outside astronomia's public API: `moonposition.position` returns mean equinox of date without nutation (and `elp.Moon` returns J2000 inertial coordinates), and `pluto.astrometric` returns J2000 astrometric coordinates only.
+- **Time and calendars (L3).** `time.delta-t` is answered with `deltat.deltaT(new julian.Calendar().fromJD(jd_ut1).toYear())` (**15 of 15 pass**). `calendar.to-jdn` and `calendar.from-jdn` are answered with `julian.CalendarGregorianToJD`, `julian.CalendarJulianToJD`, `julian.JDToCalendarGregorian` and `julian.JDToCalendarJulian` (**35 of 35 pass**). Total L3: **50 pass, 0 fail, 60 unsupported**.
+- **Not answered (L2, L3 time zones and TT minus UTC, L4).** Reported as `unsupported`: astronomia has no astrology house or angle functions, no time zone database or leap-second table, and no sign ingress, station or window-bounded lunation search API.
+
+## PyEphem 4.2.1
+
+Adapter `pyephem` 0.1.0; results in [`results/pyephem.json`](results/pyephem.json).
+
+| configuration | |
+| --- | --- |
+| licence | MIT |
+| theory | Built-in XEphem/libastro VSOP87 planetary theory and lunar theory |
+| conversion | body.compute(d_ut, epoch=d_ut) -> ephem.Ecliptic(ephem.Equatorial(body.g_ra, body.g_dec, epoch=d_ut), epoch=d_ut) |
+
+| level | kind | pass | fail | unsupported | error | residual median / 95th percentile / max |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| L1 | `position.apparent.ecliptic-true-of-date` | 36 | 204 | 0 | 0 | lon: 0.415″ / 3.986″ / 25.889″<br>lat: 3.285″ / 8.258″ / 11.423″ |
+| **L1** | **all** | **36** | **204** | **0** | **0** | |
+| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | — |
+| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | — |
+| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | — |
+| **L2** | **all** | **0** | **0** | **150** | **0** | |
+| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | — |
+| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
+| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | — |
+| L3 | `time.delta-t` | 13 | 2 | 0 | 0 | delta_t_s: 0.00594 s / 2.31 s / 2.31 s |
+| L3 | `calendar.to-jdn` | 0 | 0 | 25 | 0 | — |
+| L3 | `calendar.from-jdn` | 0 | 0 | 10 | 0 | — |
+| **L3** | **all** | **13** | **2** | **95** | **0** | |
+| L4 | `event.ingress` | 0 | 0 | 70 | 0 | — |
+| L4 | `event.station` | 0 | 0 | 30 | 0 | — |
+| L4 | `event.lunation` | 0 | 0 | 40 | 0 | — |
+| **L4** | **all** | **0** | **0** | **140** | **0** | |
+
+| vectors tagged | pass | fail | unsupported | error |
+| --- | ---: | ---: | ---: | ---: |
+| `backzone-history` | 0 | 0 | 20 | 0 |
+| `eclipse` | 0 | 0 | 6 | 0 |
+| `utc-input` | 0 | 0 | 20 | 0 |
+| `cross-check` | 0 | 0 | 1 | 0 |
+
+- **Engine and licence.** PyEphem `4.2.1` (`ephem`, MIT licence; `conformance/adapters/requirements-pyephem.txt`), computing from its built-in XEphem/libastro VSOP87 planetary theory and lunar theory.
+- **Positions (L1).** Converts `jd_tt` to a PyEphem UT date using two fixed-point steps with `ephem.delta_t`, calls `body.compute(d_ut, epoch=d_ut)`, and transforms PyEphem's apparent geocentric equatorial coordinates (`body.g_ra`, `body.g_dec`) to ecliptic of date using PyEphem's own `ephem.Ecliptic(ephem.Equatorial(body.g_ra, body.g_dec, epoch=d_ut), epoch=d_ut)`. Of all 240 vectors answered, **36 pass and 204 fail** (median `0.415″` lon, `3.285″` lat; max `25.889″` lon, `11.423″` lat). On `L1-POS-0002` (the Moon in 1851), PyEphem gives residual `+0.133″` in longitude and `-3.673″` in latitude (`fail`). Most failures are in ecliptic latitude because `ephem.Ecliptic` converts using mean rather than true obliquity of date, and outer-planet and Pluto positions diverge further from DE441 away from J2000.
+- **Delta T (L3).** `time.delta-t` is answered with `ephem.delta_t(ephem.Date(jd_ut1 - 2415020.0))`: **13 of 15 pass and 2 fail** (`L3-DT-0014` on 2019-07-01 by `+0.209 s`, and `L3-DT-0015` on 2023-01-01 by `+2.312 s`, where the built-in polynomial predates recent Earth rotation observations).
+- **Not answered (L2, L3 zones/calendars/TT minus UTC, L4).** Reported as `unsupported`: PyEphem has no astrology house or angle functions, no time zone database, no leap-second TT minus UTC function, no integer proleptic Gregorian/Julian JDN calendar function, and no TT-window event search API.
+
+## Skyfield 1.55
+
+Adapter `skyfield` 0.1.0; results in [`results/skyfield.json`](results/skyfield.json).
+
+| configuration | |
+| --- | --- |
+| licence | MIT |
+| ephemeris | de440s.bsp |
+| ephemerisSha256 | c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2 |
+| matchesPinnedDe440s |  |
+| frame | skyfield.framelib.ecliptic_frame (apparent geocentric true ecliptic and equinox of date) |
+| bodies | Sun, Moon, Mercury/Venus barycentres (equal to planet centres), Mars to Pluto barycentres |
+
+| level | kind | pass | fail | unsupported | error | residual median / 95th percentile / max |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| L1 | `position.apparent.ecliptic-true-of-date` | 240 | 0 | 0 | 0 | lon: 0.001″ / 0.003″ / 0.013″<br>lat: 0.000″ / 0.000″ / 0.001″ |
+| **L1** | **all** | **240** | **0** | **0** | **0** | |
+| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | — |
+| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | — |
+| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | — |
+| **L2** | **all** | **0** | **0** | **150** | **0** | |
+| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | — |
+| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
+| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | — |
+| L3 | `time.delta-t` | 0 | 0 | 15 | 0 | — |
+| L3 | `calendar.to-jdn` | 0 | 0 | 25 | 0 | — |
+| L3 | `calendar.from-jdn` | 0 | 0 | 10 | 0 | — |
+| **L3** | **all** | **0** | **0** | **110** | **0** | |
+| L4 | `event.ingress` | 0 | 0 | 70 | 0 | — |
+| L4 | `event.station` | 0 | 0 | 30 | 0 | — |
+| L4 | `event.lunation` | 0 | 0 | 40 | 0 | — |
+| **L4** | **all** | **0** | **0** | **140** | **0** | |
+
+| vectors tagged | pass | fail | unsupported | error |
+| --- | ---: | ---: | ---: | ---: |
+| `backzone-history` | 0 | 0 | 20 | 0 |
+| `eclipse` | 0 | 0 | 6 | 0 |
+| `utc-input` | 0 | 0 | 20 | 0 |
+| `cross-check` | 0 | 0 | 1 | 0 |
+
+- **Engine and licence.** Skyfield `1.55` (MIT licence; `conformance/adapters/requirements-skyfield.txt`), running on NAIF's `de440s.bsp` kernel (SHA-256 `c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2`, the same digest pinned by `conformance/arbiters/l1/validate.py`; downloaded outside the repository, not committed).
+- **Positions (L1).** Answers all 240 vectors using Skyfield's public `earth.at(t).observe(target).apparent().frame_latlon(ecliptic_frame)`, where `ecliptic_frame` is Skyfield's apparent geocentric true ecliptic and equinox of date, with `ts = loader.timescale(builtin=True)` and `ts.tt_jd(jd_tt)`. Mars through Pluto use planetary system barycentres as the vectors specify (and Mercury and Venus use their barycentres, which equal their planet centres in `de440s.bsp`). All **240 of 240 pass** (0 fail, 0 error). Against JPL Horizons (DE441), longitude residuals have median `0.001″` (`1.28 mas`), p95 `0.003″`, and max `0.013″` (`-0.01256″` longitude, `-0.00094″` latitude on `L1-POS-0002`, the Moon in 1851). The kernel spans 1550 to 2650, covering every instant through 2148.
+- **Not answered (L2, L3, L4).** All 400 vectors in L2, L3 and L4 are reported as `unsupported`: Skyfield has no astrology house or angle functions and no time zone database, and this adapter is scoped to L1 positions.
+
