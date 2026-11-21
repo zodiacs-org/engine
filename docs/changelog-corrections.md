@@ -174,5 +174,15 @@ or a GitHub release.
 2.0.0 was published to npm on 2026-11-21 (`2026-11-21T14:48:09.646Z`, Release
 workflow run 44915599923 from commit `b70645c3b8b1bd47f81e4b427b15c11b6c569bd0`)
 under `latest` with Sigstore provenance (transparency log index `4033328100`),
-verified in `docs/evidence/2.0.0-published-20261121/`, without a git tag or a
-GitHub release yet (drafts in `docs/releases/`).
+verified in `docs/evidence/2.0.0-published-20261121/`.
+
+Later on 2026-11-21, lightweight git tags and GitHub releases were published
+in version order under the owner's delegation, minting permanent Zenodo DOIs
+under concept DOI `10.5281/zenodo.23080133` (recorded in
+`docs/evidence/2.0.0-published-20261121/github-releases-and-zenodo.json`):
+`v1.0.0` (`f8992a4c`, GitHub release 453839576, `2026-11-21T16:57:21Z`, DOI
+`10.5281/zenodo.24423316`), `v1.1.0` (`322f8551`, GitHub release 453839591,
+`2026-11-21T16:57:38Z`, DOI `10.5281/zenodo.24423325`), and `v2.0.0`
+(`01432be3`, GitHub release 453839610, `2026-11-21T16:57:54Z`, marked Latest,
+DOI `10.5281/zenodo.24423330`). `CITATION.cff` now cites 2.0.0 with its
+release date and DOI.

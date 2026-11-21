@@ -1,13 +1,22 @@
-# Draft: git tags and GitHub releases for 1.0.0, 1.1.0 and 2.0.0
+# Git tags and GitHub releases for 1.0.0, 1.1.0 and 2.0.0
 
-**Status: a draft, nothing here has been run.** The owner approved preparing
-the 1.0.0 draft on 13 November 2026 (ZOD-152). Creating tags and releases is
-a separate step for the owner.
+**Status: published on 2026-11-21.** All three lightweight git tags (`v1.0.0`,
+`v1.1.0`, `v2.0.0`) and GitHub releases were published in version order on
+2026-11-21 under the owner's delegation, minting permanent Zenodo DOIs under
+concept DOI `10.5281/zenodo.23080133` (evidence:
+`docs/evidence/2.0.0-published-20261121/github-releases-and-zenodo.json`).
+
+| Tag | Target commit | GitHub release ID | Published (UTC) | Zenodo DOI |
+| --- | --- | ---: | --- | --- |
+| `v1.0.0` | `f8992a4c1dfedd9e69c0783e2c185e22580460f7` | `453839576` | `2026-11-21T16:57:21Z` | `10.5281/zenodo.24423316` |
+| `v1.1.0` | `322f8551bb6c4d37e8e6be8faa9bbaa14eee4081` | `453839591` | `2026-11-21T16:57:38Z` | `10.5281/zenodo.24423325` |
+| `v2.0.0` | `01432be354d219dbc2d5609e05a9dd0bcfd313e0` | `453839610` | `2026-11-21T16:57:54Z` (Latest) | `10.5281/zenodo.24423330` |
 
 1.0.0, 1.1.0 and 2.0.0 were published to npm by the Release workflow (2.0.0
 on 2026-11-21 as `latest`, Release run 44915599923; verified in
-`docs/evidence/2.0.0-published-20261121/`). The repository has one tag and
-one GitHub release, both named `v0.1.1-rc.15`.
+`docs/evidence/2.0.0-published-20261121/`). The historical pre-release
+`v0.1.1-rc.15` (DOI `10.5281/zenodo.23080134`) remains intact. The sections
+below record the release notes files and exact commands used.
 
 ## Files
 

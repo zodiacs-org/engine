@@ -58,6 +58,14 @@ against `artifacts/zodiacs-engine-2.0.0-rc.6.sha256` (`59217e2b...`) and
 - `digests.log`: dist-tags, SHA-256 / SHA-1 / SHA-512 comparisons and mutation checks
 - `packed-consumer.log`: `verify-packed-consumer.mjs` run on npm's tarball
 - `audit-signatures.log`: `npm audit signatures` output
+- `github-releases-and-zenodo.json`: snapshot of remote tags, GitHub releases (`v1.0.0`, `v1.1.0`, `v2.0.0`) and Zenodo DOI records minted under concept DOI `10.5281/zenodo.23080133`
 
-No git tag, GitHub release or dist-tag change was performed during this
-verification.
+## Git tags, GitHub releases and Zenodo DOIs
+
+Later on 2026-11-21, lightweight git tags and GitHub releases for `v1.0.0`,
+`v1.1.0` and `v2.0.0` were published in version order under the owner's
+delegation (`github-releases-and-zenodo.json`):
+
+- `v1.0.0` (`f8992a4c`): GitHub release `453839576`, DOI `10.5281/zenodo.24423316`
+- `v1.1.0` (`322f8551`): GitHub release `453839591`, DOI `10.5281/zenodo.24423325`
+- `v2.0.0` (`01432be3`): GitHub release `453839610` (Latest), DOI `10.5281/zenodo.24423330`

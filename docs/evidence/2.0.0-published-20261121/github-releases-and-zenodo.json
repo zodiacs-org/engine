@@ -1,0 +1,94 @@
+{
+  "recorded_at": "2026-11-21T16:59Z",
+  "tags": {
+    "v0.1.1-rc.15": "93ebae9fa54597aeaafbb346873f7f51e3cc6cb6",
+    "v1.0.0": "f8992a4c1dfedd9e69c0783e2c185e22580460f7",
+    "v1.1.0": "322f8551bb6c4d37e8e6be8faa9bbaa14eee4081",
+    "v2.0.0": "01432be354d219dbc2d5609e05a9dd0bcfd313e0"
+  },
+  "github_releases": [
+    {
+      "id": 453839610,
+      "tag_name": "v2.0.0",
+      "name": "2.0.0",
+      "target_commitish": "main",
+      "draft": false,
+      "prerelease": false,
+      "published_at": "2026-11-21T16:57:54Z",
+      "html_url": "https://github.com/zodiacs-org/engine/releases/tag/v2.0.0"
+    },
+    {
+      "id": 453839591,
+      "tag_name": "v1.1.0",
+      "name": "1.1.0",
+      "target_commitish": "main",
+      "draft": false,
+      "prerelease": false,
+      "published_at": "2026-11-21T16:57:38Z",
+      "html_url": "https://github.com/zodiacs-org/engine/releases/tag/v1.1.0"
+    },
+    {
+      "id": 453839576,
+      "tag_name": "v1.0.0",
+      "name": "1.0.0",
+      "target_commitish": "main",
+      "draft": false,
+      "prerelease": false,
+      "published_at": "2026-11-21T16:57:21Z",
+      "html_url": "https://github.com/zodiacs-org/engine/releases/tag/v1.0.0"
+    },
+    {
+      "id": 400849502,
+      "tag_name": "v0.1.1-rc.15",
+      "name": "0.1.1-rc.15",
+      "target_commitish": "93ebae9fa54597aeaafbb346873f7f51e3cc6cb6",
+      "draft": false,
+      "prerelease": true,
+      "published_at": "2026-10-01T10:13:53Z",
+      "html_url": "https://github.com/zodiacs-org/engine/releases/tag/v0.1.1-rc.15"
+    }
+  ],
+  "zenodo_concept_doi": "10.5281/zenodo.23080133",
+  "zenodo_versions": [
+    {
+      "id": 24423330,
+      "doi": "10.5281/zenodo.24423330",
+      "conceptdoi": "10.5281/zenodo.23080133",
+      "version": "v2.0.0",
+      "created": "2026-11-21T16:58:03.212181+00:00",
+      "publication_date": "2026-11-21",
+      "license": "mit-license",
+      "html": "https://zenodo.org/records/24423330"
+    },
+    {
+      "id": 24423325,
+      "doi": "10.5281/zenodo.24423325",
+      "conceptdoi": "10.5281/zenodo.23080133",
+      "version": "v1.1.0",
+      "created": "2026-11-21T16:57:45.837029+00:00",
+      "publication_date": "2026-11-21",
+      "license": "mit-license",
+      "html": "https://zenodo.org/records/24423325"
+    },
+    {
+      "id": 24423316,
+      "doi": "10.5281/zenodo.24423316",
+      "conceptdoi": "10.5281/zenodo.23080133",
+      "version": "v1.0.0",
+      "created": "2026-11-21T16:57:27.012991+00:00",
+      "publication_date": "2026-11-21",
+      "license": "mit-license",
+      "html": "https://zenodo.org/records/24423316"
+    },
+    {
+      "id": 23080134,
+      "doi": "10.5281/zenodo.23080134",
+      "conceptdoi": "10.5281/zenodo.23080133",
+      "version": "v0.1.1-rc.15",
+      "created": "2026-10-01T10:13:57.901413+00:00",
+      "publication_date": "2026-10-01",
+      "license": "mit-license",
+      "html": "https://zenodo.org/records/23080134"
+    }
+  ]
+}
