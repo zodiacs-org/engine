@@ -16,43 +16,29 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**2.0.0-rc.6**, the sixth candidate for 2.0.0, a major release
-(CHANGELOG.md). A candidate is published only by the owner;
-`artifacts/README.md` in the repository records what happened to it. Callers
-moving from 1.1.0 should read [docs/migrating-to-2.md](docs/migrating-to-2.md).
-Over 2.0.0-rc.5, it adds tzdata 2025c beside 2021a as a baseline of the host
-time zone probe table (705 spans in 77 names, flagging a tzdata 2025c host at
-`Asia/Tehran` and `Iran` on 1979-05-26), updates `LICENSING.md` and `NOTICE`
-for that baseline and the four open licence questions noted for 2.0.0, carries
-correction 18, and updates the README for 2.x. As 2.0.0-rc.5 did over
-2.0.0-rc.4, `searchLongitudeCrossings` and `findLongitudeCrossings` refuse a
-name that is not a body before they search, so a zero-length window or a
-search over its sample budget throws `RangeError` instead of returning empty.
-As 2.0.0-rc.4 did over 2.0.0-rc.3, which npm has carried under `next` since
-2026-11-17 (not tagged), `require()` of the package or of any of its entry
-points throws an `Error` with code `ERR_ZODIACS_ESM_ONLY` that says to use
-`import`, where Node threw `ERR_PACKAGE_PATH_NOT_EXPORTED`; the root refuses
-a name that is not a body with a `RangeError` on every source, where on the
-default source the DE440 reader's `De440Error` reached the caller; and the
-README's examples of configurable aspects and of declinations build their own
-chart, so they run as pasted. As 2.0.0-rc.3 did over 2.0.0-rc.2, a candidate
-never tagged or published, it refuses common near-miss names for a birth field,
-such as `lat`, `lng`, `houses` and `scale`, which were ignored (a breaking
-change, *Birth settings* below); reads UTC after the IERS UT1 table, which ends
-on 2027-10-02, on the continuous-UTC rule, TT = UTC + 69.184 s (*Time*); reads
-wall times before 1970 on tzdata 2026f's zone histories, America/Yellowknife
-held at tzdata 2025c by the owner's decision; flags a wall time where the
-device's time zone data differs from tzdata 2026f (`host-zone-data-differs`);
-adds Julian Day Numbers and local mean time from a longitude to
-`@zodiacs/engine/geo`; and adds `@zodiacs/engine/core`, the root's functions
-without the DE440 pack (*Bundle size in a web page*). Over 1.1.0, as
-2.0.0-rc.1 and rc.2 did, it refuses a birth given as a calendar date with no
-time, unless `timeKnown` is `false` (the breaking change, *Resolved instant
-inputs* below); flags a chart whose angles are inside the polar circle
-(`polar-angles`); flags a local date that a calendar changeover may have
-skipped, given with no country (`calendar-unknown`, [docs/time.md](docs/time.md));
-and gives each `positions()` row the flags `natalChart()` gives at the same
-instant.
+**2.0.0**, a major release: 2.0.0-rc.6 with the version changed
+(CHANGELOG.md). Callers moving from 1.1.0 should read
+[docs/migrating-to-2.md](docs/migrating-to-2.md). Over 1.1.0 (through
+candidates 2.0.0-rc.1 to 2.0.0-rc.6), it refuses a birth given as a calendar
+date with no time unless `timeKnown` is `false` (*Resolved instant inputs*
+below); refuses common near-miss names for a birth field, such as `lat`,
+`lng`, `houses` and `scale`, which were ignored (*Birth settings* below);
+reads UTC after the IERS UT1 table, which ends on 2027-10-02, on the
+continuous-UTC rule, TT = UTC + 69.184 s (*Time*); reads wall times before
+1970 on tzdata 2026f's zone histories, America/Yellowknife held at tzdata
+2025c by the owner's decision; flags a wall time where the device's time zone
+data differs from tzdata 2026f (`host-zone-data-differs`, probing both
+tzdata 2021a and 2025c baselines across 705 spans in 77 names), flags a chart
+whose angles are inside the polar circle (`polar-angles`), flags a local date
+that a calendar changeover may have skipped when given with no country
+(`calendar-unknown`, [docs/time.md](docs/time.md)), and gives each
+`positions()` row the flags `natalChart()` gives at the same instant; adds
+`@zodiacs/engine/core`, the root's functions without the DE440 pack (*Bundle
+size in a web page*), and adds Julian Day Numbers and local mean time from a
+longitude to `@zodiacs/engine/geo`; throws `ERR_ZODIACS_ESM_ONLY` on
+`require()` of any entry point; and throws `RangeError` for an unknown body
+name on every source including root crossing searches. Nothing deprecated is
+removed.
 
 **1.1.0**, the release before it, a minor release: 1.1.0-rc.13 with the
 version changed (CHANGELOG.md). It ships a sealed
@@ -139,10 +125,9 @@ Install it from npm:
 npm install @zodiacs/engine
 ```
 
-As of 2026-11-21, that installs npm's `latest`, 1.1.0 (npm's `next` is
-2.0.0-rc.3), not this candidate: `artifacts/zodiacs-engine-2.0.0-rc.6.tgz` in
-the repository, with its SHA-256 receipt, is this candidate's exact archive.
-1.0.0, npm's `latest`
+`artifacts/zodiacs-engine-2.0.0.tgz` in the repository, with its SHA-256
+receipt, is this release's exact archive (`artifacts/README.md` records its
+publication status). 1.1.0 is the previous release; 1.0.0, npm's `latest`
 before 1.1.0, has no `./conventions`, `./time`, `./lite`, `./de440` or DE440
 pack, computes on astronomy-engine and writes no ids.
 
@@ -165,8 +150,8 @@ loads it with a harmless `MODULE_TYPELESS_PACKAGE_JSON` warning, which 22.22.2
 no longer prints. Bundlers resolve the dependency's `import` condition
 themselves and are not affected.
 
-In the six-runtime conformance check on 2.0.0-rc.6
-(`docs/evidence/runtime-conformance-20261121/`, suite 0.3.0), all 569
+In the six-runtime conformance check on 2.0.0
+(`docs/evidence/runtime-conformance-2.0.0-20261121/`, suite 0.3.0), all 569
 supported verdicts on both the root and `@zodiacs/engine/core` agreed with
 Node 22.22.2 in Bun 1.4.4, Deno 2.9.6, Chromium 156.0.8078.4, Firefox 157.0
 and WebKit 27.2 (with 71 unsupported vectors: 1 leap-second instant, 30
@@ -183,12 +168,13 @@ load it with `await import("@zodiacs/engine")`.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-2.0.0-rc.6.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-2.0.0.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
 directory, which must have no `node_modules` above it (set `TMPDIR` if
-needed). A packed candidate is not a published release.
+needed). A carried archive is published only by the owner via the Release
+workflow.
 
 `artifacts/archives.json` records every carried archive: its digest, size, file
 count and the commit it was packed from. On the history it is given, CI checks

@@ -1,0 +1,40 @@
+{
+  "node": "v22.22.2",
+  "generator": "docs/evidence/2.0.0-20261121/verify-equivalence.mjs",
+  "seed": 20261121,
+  "prng": "lcg-1664525-1013904223-mod-2^32",
+  "span": "1800-01-01T00:00:00.000Z to 2199-12-31T23:59:59.000Z",
+  "instantsCompared": 1000,
+  "instantsBitIdentical": 1000,
+  "mismatches": [],
+  "boundaryInputs": {
+    "latitude": 51.4779,
+    "longitude": 0
+  },
+  "boundaryChecks": [
+    {
+      "utc": "2027-10-01T23:59:59.000Z",
+      "timeBasis": "iers",
+      "ut1Source": "predicted",
+      "equalToRc6ExcludingVersion": true
+    },
+    {
+      "utc": "2027-10-02T00:00:00.000Z",
+      "timeBasis": "iers",
+      "ut1Source": "predicted",
+      "equalToRc6ExcludingVersion": true
+    },
+    {
+      "utc": "2027-10-02T23:59:59.000Z",
+      "timeBasis": "continuous-utc",
+      "ut1Source": "model",
+      "equalToRc6ExcludingVersion": true
+    },
+    {
+      "utc": "2027-10-03T00:00:00.000Z",
+      "timeBasis": "continuous-utc",
+      "ut1Source": "model",
+      "equalToRc6ExcludingVersion": true
+    }
+  ]
+}

@@ -727,7 +727,13 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // this candidate's CHANGELOG entry and the README's 2.x lines. Raised from
 // 1,450,000 to 1,459,000, the measurement rounded up to the next 1,000 bytes,
 // for the owner to decide with the candidate.
-const TOTAL_CAP = 1_459_000;
+//
+// 2.0.0: 4,782,240 bytes in 101 files, of which 1,462,688 are not the pack,
+// 3,726 more than 2.0.0-rc.6's 1,458,962: the 2.0.0 CHANGELOG entry less the
+// shorter version string and trimmed README lead paragraph. Raised from
+// 1,459,000 to 1,463,000, the measurement rounded up to the next 1,000 bytes,
+// approved under the owner's delegation of 2026-11-21 15:06 Asia/Bangkok.
+const TOTAL_CAP = 1_463_000;
 const restBytes = report.unpackedSize - PACK_DATA_BYTES;
 assert(restBytes <= TOTAL_CAP, `package is unexpectedly large: ${restBytes} bytes unpacked beside the DE440 pack, over ${TOTAL_CAP}`);
 

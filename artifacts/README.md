@@ -120,7 +120,8 @@ runs, so CI starts the check with node directly.
 | 2.0.0-rc.3 | `d465137931f5d28910443ca7ef01610606e9f708704364c61811d2936dc4ec55` | 2,781,676 | 100 | `0d41826f592d95a094e9234730dd594de5411e47` | "Carry the packed 2.0.0-rc.3 tarball" | Candidate, merged (pull request 123); on npm under `next` since 2026-11-17; not tagged |
 | 2.0.0-rc.4 | `6e334f19cf2db7acc8c834b307f37cb67733979e1c43672d914d68eefe7a2e4d` | 2,784,281 | 101 | `4c2bd2c7a3296dc6112deb45965efc27bdbe7376` | "Carry the packed 2.0.0-rc.4 tarball" | Draft candidate for 2.0.0, awaiting the owner's review; never tagged or published |
 | 2.0.0-rc.5 | `3daef1a25e53da10b5d46b00ba1d2f4ed9a46d75f0f1088700cfd80b2c058a1e` | 2,784,777 | 101 | `235eb1645fe56eedd353a778e4ea0669c4f1f20e` | "Carry the packed 2.0.0-rc.5 tarball" | Candidate, merged (pull request 140); never tagged or published |
-| 2.0.0-rc.6 | `59217e2b12126f424554811b21d1902e9b4f9b2014e2fbf9ca1f06f2bf587631` | 2,788,419 | 101 | `1a2e176b1daf2f4d5100877f0e855c248ab25a76` | "Carry the packed 2.0.0-rc.6 tarball" | Candidate for 2.0.0 (pull request 142), awaiting the owner's review; never tagged or published |
+| 2.0.0-rc.6 | `59217e2b12126f424554811b21d1902e9b4f9b2014e2fbf9ca1f06f2bf587631` | 2,788,419 | 101 | `1a2e176b1daf2f4d5100877f0e855c248ab25a76` | "Carry the packed 2.0.0-rc.6 tarball" | Candidate, merged (pull request 142); never tagged or published. 2.0.0 is its code with the version changed |
+| 2.0.0 | `6087d455276ba633eb0a2370c0a5f740ddd5b257c59b821f501c9b06d228a3e2` | 2,788,540 | 101 | `174437a534f4bf92ce5d5d1c99df0774d8855f13` | "Carry the packed 2.0.0 tarball" | Release (pull request 143), awaiting publication by the owner; not yet tagged or published |
 
 1.1.0-rc.9, 1.1.0-rc.10, 1.1.0-rc.11, 1.1.0-rc.12 and 1.1.0-rc.13 are five cuts of one draft, pull request 101.
 1.1.0-rc.9 was carried on 2026-11-14 and reviewed in draft; the owner then
