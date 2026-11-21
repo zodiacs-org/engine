@@ -1,0 +1,8 @@
+{
+  "name": "zodiacs-conformance-adapter-astronomia",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "astronomia": "4.3.0"
+  }
+}
