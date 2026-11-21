@@ -1,6 +1,7 @@
 {
   "writer": "2.0.0",
   "node": "v22.22.2",
+  "generator": "docs/evidence/2.0.0-20261121/verify-equivalence.mjs",
   "inputA": {
     "2.0.0-rc.3": {
       "reader": "2.0.0-rc.3",

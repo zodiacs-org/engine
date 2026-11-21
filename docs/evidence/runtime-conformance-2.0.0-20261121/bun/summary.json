@@ -1,0 +1,269 @@
+{
+  "runtime": {
+    "name": "bun",
+    "version": "1.4.4",
+    "revision": "38afee6c84fcf48c0edb2466aa4b27d287a59c30",
+    "engine": "JavaScriptCore",
+    "engineVersion": "d6375c72affe0f70222cdcb45012b10f0bf3a9d5",
+    "intlTzdb": "not exposed",
+    "icu": "78.3",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "engineVersion": "2.0.0",
+  "adapter": {
+    "name": "zodiacs-engine",
+    "version": "0.3.0"
+  },
+  "vectors": {
+    "vectors/0.3.0/L1-positions.json": "5ead022c18c56b44fb129f423b16ea26525240289156564c40a99ff4a5924e2b",
+    "vectors/0.3.0/L2-houses-angles.json": "23f8c47eeff926a64f97ce29bb0d0d73dd364d2f92952b8ed3b2a944a3a683c3",
+    "vectors/0.3.0/L3-time-calendars.json": "b8b981d8ef15e8d45e356323676863d7a6ee7763e68ac056d3618e44d2a42a11",
+    "vectors/0.3.0/L4-events.json": "4c153d887f993536549432213e81648e9d0b4fc940eb1f116c4aa732dba6e25f"
+  },
+  "verdicts": {
+    "total": {
+      "count": 640,
+      "pass": 569,
+      "fail": 0,
+      "unsupported": 71,
+      "error": 0
+    },
+    "byLevel": {
+      "L1": {
+        "count": 240,
+        "pass": 240,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0
+      },
+      "L2": {
+        "count": 150,
+        "pass": 150,
+        "fail": 0,
+        "unsupported": 0,
+        "error": 0
+      },
+      "L3": {
+        "count": 110,
+        "pass": 109,
+        "fail": 0,
+        "unsupported": 1,
+        "error": 0
+      },
+      "L4": {
+        "count": 140,
+        "pass": 70,
+        "fail": 0,
+        "unsupported": 70,
+        "error": 0
+      }
+    }
+  },
+  "requests": {
+    "suite": 640,
+    "answered": 640,
+    "repeated": []
+  },
+  "agreement": {
+    "run": 640,
+    "agreeing": 569,
+    "disagreeing": 0,
+    "unsupported": 71
+  },
+  "differsFromNode": [],
+  "largestDifferenceFromNode": {
+    "position.apparent.ecliptic-true-of-date": {
+      "lon": {
+        "unit": "deg",
+        "compared": 240,
+        "identical": 215,
+        "maxAbs": 5.684341886080802e-14,
+        "at": "L1-POS-0065",
+        "maxAbsArcsec": 2.0463630789890885e-10
+      },
+      "lat": {
+        "unit": "deg",
+        "compared": 240,
+        "identical": 168,
+        "maxAbs": 6.439293542825908e-15,
+        "at": "L1-POS-0156",
+        "maxAbsArcsec": 2.318145675417327e-11
+      }
+    },
+    "angles.asc-mc": {
+      "asc": {
+        "unit": "deg",
+        "compared": 60,
+        "identical": 59,
+        "maxAbs": 5.684341886080802e-14,
+        "at": "L2-ASC-0053",
+        "maxAbsArcsec": 2.0463630789890885e-10
+      },
+      "mc": {
+        "unit": "deg",
+        "compared": 60,
+        "identical": 54,
+        "maxAbs": 5.684341886080802e-14,
+        "at": "L2-ASC-0003",
+        "maxAbsArcsec": 2.0463630789890885e-10
+      }
+    },
+    "angles.vertex-east-point": {
+      "vertex": {
+        "unit": "deg",
+        "compared": 10,
+        "identical": 10,
+        "maxAbs": 0,
+        "at": "L2-VTX-0001",
+        "maxAbsArcsec": 0
+      },
+      "east_point": {
+        "unit": "deg",
+        "compared": 10,
+        "identical": 9,
+        "maxAbs": 5.684341886080802e-14,
+        "at": "L2-VTX-0005",
+        "maxAbsArcsec": 2.0463630789890885e-10
+      }
+    },
+    "houses.cusps": {
+      "cusps": {
+        "unit": "deg",
+        "compared": 70,
+        "identical": 52,
+        "maxAbs": 1.1368683772161603e-13,
+        "at": "L2-CSP-0022",
+        "maxAbsArcsec": 4.092726157978177e-10
+      },
+      "status": {
+        "unit": "exact",
+        "compared": 10,
+        "identical": 10
+      }
+    },
+    "time.zone-offset": {
+      "status": {
+        "unit": "exact",
+        "compared": 45,
+        "identical": 45
+      },
+      "utc_offset_s": {
+        "unit": "exact",
+        "compared": 36,
+        "identical": 36
+      },
+      "utc_offsets_s": {
+        "unit": "exact",
+        "compared": 5,
+        "identical": 5
+      }
+    },
+    "time.local-mean-time": {
+      "utc_offset_s": {
+        "unit": "s",
+        "compared": 5,
+        "identical": 5,
+        "maxAbs": 0,
+        "at": "L3-LMT-0001"
+      }
+    },
+    "time.tt-minus-utc": {
+      "tt_minus_utc_s": {
+        "unit": "s",
+        "compared": 9,
+        "identical": 9,
+        "maxAbs": 0,
+        "at": "L3-TTU-0001"
+      }
+    },
+    "time.delta-t": {
+      "delta_t_s": {
+        "unit": "s",
+        "compared": 15,
+        "identical": 15,
+        "maxAbs": 0,
+        "at": "L3-DT-0001"
+      }
+    },
+    "calendar.to-jdn": {
+      "jdn": {
+        "unit": "exact",
+        "compared": 25,
+        "identical": 25
+      }
+    },
+    "calendar.from-jdn": {
+      "year": {
+        "unit": "exact",
+        "compared": 10,
+        "identical": 10
+      },
+      "month": {
+        "unit": "exact",
+        "compared": 10,
+        "identical": 10
+      },
+      "day": {
+        "unit": "exact",
+        "compared": 10,
+        "identical": 10
+      }
+    },
+    "event.ingress": {
+      "tt_s": {
+        "unit": "s",
+        "compared": 60,
+        "identical": 60,
+        "maxAbs": 0,
+        "at": "L4-ING-0001"
+      },
+      "utc_s": {
+        "unit": "s",
+        "compared": 10,
+        "identical": 10,
+        "maxAbs": 0,
+        "at": "L4-UTC-0001"
+      }
+    }
+  },
+  "outputsIdenticalToNode": {
+    "identical": 458,
+    "compared": 569
+  },
+  "receipts": {
+    "allSameAsNode": false,
+    "cases": [
+      {
+        "id": "R1",
+        "sha256": "0af2c52c0f1ce6c76ae0a21e7fcf9512919d7b8bd191b46e82b7ebebbc72f529",
+        "sameAsNode": false
+      },
+      {
+        "id": "R2",
+        "sha256": "440e71f84170101ee9f0087c2c07961811d1d104fb7e86bfdef9504abbbe7b96",
+        "sameAsNode": false
+      },
+      {
+        "id": "R3",
+        "sha256": "5ff4a9e244420c5fa4414caa9d4c8d501114433957f414eabdbe7f8d73d81531",
+        "sameAsNode": false
+      },
+      {
+        "id": "R4",
+        "sha256": "d0d9ecc19438348d92c3bfd2d10ac1c58d602b6e4979c4a170c7456acf146c74",
+        "sameAsNode": false
+      },
+      {
+        "id": "R5",
+        "sha256": "2b1eaefeba6ea7c7ef355245af3d15f333c519d0c3d7e1c7f46bd76a32684b3b",
+        "sameAsNode": false
+      }
+    ]
+  },
+  "gate": {
+    "pass": true,
+    "rule": "fails when a verdict differs from Node's, except pass against fail on a vector that depends on host zone data, or when the run is incomplete or names another runtime or entry; differences in value and receipt digests are reported, not gated",
+    "problems": []
+  }
+}
