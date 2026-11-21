@@ -9,30 +9,30 @@
   },
   "adapter": {
     "name": "pyephem",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "engine": "PyEphem",
     "engineVersion": "4.2.1",
     "configuration": {
       "licence": "MIT",
       "theory": "Built-in XEphem/libastro VSOP87 planetary theory and lunar theory",
-      "conversion": "body.compute(d_ut, epoch=d_ut) -> ephem.Ecliptic(ephem.Equatorial(body.g_ra, body.g_dec, epoch=d_ut), epoch=d_ut)"
+      "deltaT": "ephem.delta_t at the input UT1 Julian date"
     }
   },
   "values": "residuals",
   "summary": {
     "total": {
       "count": 640,
-      "pass": 49,
-      "fail": 206,
-      "unsupported": 385,
+      "pass": 13,
+      "fail": 2,
+      "unsupported": 625,
       "error": 0
     },
     "byLevel": {
       "L1": {
         "count": 240,
-        "pass": 36,
-        "fail": 204,
-        "unsupported": 0,
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 240,
         "error": 0
       },
       "L2": {
@@ -60,26 +60,10 @@
     "byKind": {
       "position.apparent.ecliptic-true-of-date": {
         "count": 240,
-        "pass": 36,
-        "fail": 204,
-        "unsupported": 0,
-        "error": 0,
-        "residuals": {
-          "lon": {
-            "unit": "arcsec",
-            "n": 240,
-            "median": 0.415134795,
-            "p95": 3.98642093,
-            "max": 25.8890328
-          },
-          "lat": {
-            "unit": "arcsec",
-            "n": 240,
-            "median": 3.28518413,
-            "p95": 8.2576686,
-            "max": 11.4228075
-          }
-        }
+        "pass": 0,
+        "fail": 0,
+        "unsupported": 240,
+        "error": 0
       },
       "angles.asc-mc": {
         "count": 60,
@@ -209,1923 +193,1203 @@
   "results": [
     {
       "id": "L1-POS-0001",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.307029624,
-        "lat": 0.636112868
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0002",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.133462713,
-        "lat": -3.67326771
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0003",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.60038792,
-        "lat": 1.86219965
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0004",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.63470151,
-        "lat": 3.60900888
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0005",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.435296405,
-        "lat": 2.54472386
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0006",
-      "verdict": "fail",
-      "residual": {
-        "lon": -1.07543709,
-        "lat": 1.53363885
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0007",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.760021487,
-        "lat": -1.51968747
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0008",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.649257532,
-        "lat": -2.11771105
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0009",
-      "verdict": "fail",
-      "residual": {
-        "lon": -1.50724486,
-        "lat": 1.88565174
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0010",
-      "verdict": "fail",
-      "residual": {
-        "lon": 5.64727502,
-        "lat": -1.52808826
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0011",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.279194735,
-        "lat": 5.86767423
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0012",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.230428957,
-        "lat": -1.86540002
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0013",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.156151298,
-        "lat": 7.75207569
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0014",
-      "verdict": "fail",
-      "residual": {
-        "lon": -1.02933495,
-        "lat": 9.08994609
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0015",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.0383050246,
-        "lat": -8.2576686
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0016",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.957448088,
-        "lat": 8.31176903
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0017",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.576358072,
-        "lat": 6.38703706
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0018",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.45406083,
-        "lat": -9.14771785
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0019",
-      "verdict": "fail",
-      "residual": {
-        "lon": -1.70959464,
-        "lat": -1.56845717
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0020",
-      "verdict": "fail",
-      "residual": {
-        "lon": 2.22023245,
-        "lat": -5.40949768
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0021",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.716675741,
-        "lat": -4.70351525
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0022",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.391650601,
-        "lat": 0.531991354
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0023",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.442299239,
-        "lat": -5.32330437
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0024",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.844150158,
-        "lat": -2.21455891
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0025",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.862510428,
-        "lat": -1.73375179
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0026",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.789724678,
-        "lat": -5.21075112
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0027",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.945471567,
-        "lat": -4.29595661
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0028",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.740422116,
-        "lat": -1.33516367
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0029",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.913327815,
-        "lat": -3.87900592
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0030",
-      "verdict": "fail",
-      "residual": {
-        "lon": 1.53119785,
-        "lat": -3.45663914
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0031",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.0119967057,
-        "lat": -5.9374847
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0032",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.437804298,
-        "lat": 1.04605019
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0033",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.156918651,
-        "lat": -4.95432543
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0034",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.0556633071,
-        "lat": -2.717309
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0035",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.271583274,
-        "lat": 5.94842479
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0036",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.726737813,
-        "lat": 2.0830948
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0037",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.164628595,
-        "lat": -5.33736501
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0038",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.231463606,
-        "lat": -5.29986344
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0039",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.869291249,
-        "lat": 6.21094039
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0040",
-      "verdict": "fail",
-      "residual": {
-        "lon": 1.2770923,
-        "lat": 7.05054083
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0041",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.538672006,
-        "lat": -1.36091506
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0042",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.0171037564,
-        "lat": -1.46966734
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0043",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.534009031,
-        "lat": -1.45253896
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0044",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.474513207,
-        "lat": -1.42824008
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0045",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.564840238,
-        "lat": -1.47550772
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0046",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.295065281,
-        "lat": -1.20408008
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0047",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.66674464,
-        "lat": -0.171191525
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0048",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.203305352,
-        "lat": 1.49654078
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0049",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.453535304,
-        "lat": -1.45824411
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0050",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.352359083,
-        "lat": -0.642331732
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0051",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.0628229068,
-        "lat": 5.48840844
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0052",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.290700359,
-        "lat": -2.37558931
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0053",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.0580965433,
-        "lat": 5.39260177
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0054",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.291222475,
-        "lat": 2.41578964
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0055",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.21324142,
-        "lat": 0.027063644
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0056",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.227435896,
-        "lat": -3.9674065
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0057",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.193359896,
-        "lat": -1.89267321
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0058",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.570561818,
-        "lat": 3.14824895
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0059",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.206055678,
-        "lat": -4.46151573
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0060",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.0798343165,
-        "lat": -5.06279177
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0061",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.457367263,
-        "lat": 4.56726884
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0062",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.13251158,
-        "lat": 7.74708546
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0063",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.515812666,
-        "lat": 6.33296217
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0064",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.377810679,
-        "lat": 0.545283175
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0065",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.712530073,
-        "lat": -3.34466886
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0066",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.389006446,
-        "lat": 0.571509128
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0067",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.0978345229,
-        "lat": -5.83189035
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0068",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.17260286,
-        "lat": 3.60401214
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0069",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.463570796,
-        "lat": 2.65275457
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0070",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.124866202,
-        "lat": 7.76204613
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0071",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.0675671108,
-        "lat": -0.332404429
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0072",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.0418003109,
-        "lat": -0.87590785
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0073",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.225878741,
-        "lat": -0.167097066
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0074",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.108008422,
-        "lat": -0.273697681
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0075",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.330536758,
-        "lat": 0.916186191
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0076",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.412722032,
-        "lat": -0.510729966
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0077",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.176608494,
-        "lat": 0.875407118
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0078",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.278526808,
-        "lat": 0.843980092
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0079",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.463021844,
-        "lat": -0.253543147
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0080",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.0464195724,
-        "lat": 1.15344472
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0081",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.149489389,
-        "lat": 1.17939714
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0082",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.534514334,
-        "lat": 3.49762255
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0083",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.281892642,
-        "lat": -0.385688287
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0084",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.114001075,
-        "lat": 5.17585729
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0085",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.302299548,
-        "lat": 0.704067109
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0086",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.201056896,
-        "lat": 1.20027482
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0087",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.355430047,
-        "lat": 5.89883339
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0088",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.0302217657,
-        "lat": -4.84991402
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0089",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.41665041,
-        "lat": 3.1672277
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0090",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.793791532,
-        "lat": -2.77328182
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0091",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.435402326,
-        "lat": 7.72199774
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0092",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.173479417,
-        "lat": -1.23473431
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0093",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.291256448,
-        "lat": 7.87725653
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0094",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.123438159,
-        "lat": 8.58214547
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0095",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.080849998,
-        "lat": -7.39809012
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0096",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.0693508122,
-        "lat": -0.218011436
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0097",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.157983614,
-        "lat": 5.45983141
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0098",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.132209312,
-        "lat": -0.140242023
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0099",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.237430297,
-        "lat": -7.39525978
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0100",
-      "verdict": "fail",
-      "residual": {
-        "lon": 2.2429825,
-        "lat": 1.16369457
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0101",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.106304334,
-        "lat": 1.69340553
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0102",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.011995938,
-        "lat": 2.74582511
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0103",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.235750738,
-        "lat": 2.58850791
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0104",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.91373027,
-        "lat": -3.0588379
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0105",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.0204797876,
-        "lat": 4.97201257
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0106",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.203637019,
-        "lat": -6.31651809
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0107",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.0490229152,
-        "lat": -5.86296448
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0108",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.199724633,
-        "lat": 5.16058982
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0109",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.211924603,
-        "lat": 7.48226837
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0110",
-      "verdict": "fail",
-      "residual": {
-        "lon": -2.90930879,
-        "lat": 1.5685309
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0111",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.246002003,
-        "lat": -6.69479068
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0112",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.0319864033,
-        "lat": 2.62329967
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0113",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.257638084,
-        "lat": -6.62433508
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0114",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.53964158,
-        "lat": -4.98832448
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0115",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.569049055,
-        "lat": -5.63324935
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0116",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.0256288082,
-        "lat": -2.41102129
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0117",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.329421715,
-        "lat": -8.06805175
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0118",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.36514494,
-        "lat": -8.41971844
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0119",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.333176569,
-        "lat": -8.57723286
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0120",
-      "verdict": "fail",
-      "residual": {
-        "lon": 1.00835693,
-        "lat": -5.5773504
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0121",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.296094485,
-        "lat": -4.10975755
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0122",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.0708083169,
-        "lat": -4.17050998
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0123",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.113006782,
-        "lat": -5.29096145
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0124",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.27502399,
-        "lat": -2.71892293
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0125",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.472902109,
-        "lat": 4.57684311
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0126",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.330342709,
-        "lat": -3.41861895
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0127",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.219859877,
-        "lat": -4.49786252
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0128",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.492603732,
-        "lat": 4.47226574
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0129",
-      "verdict": "fail",
-      "residual": {
-        "lon": 1.03086469,
-        "lat": 5.25645174
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0130",
-      "verdict": "fail",
-      "residual": {
-        "lon": -3.98642093,
-        "lat": 5.99274201
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0131",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.202916218,
-        "lat": 2.48476757
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0132",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.414766525,
-        "lat": 2.8503822
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0133",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.821764081,
-        "lat": 0.345381806
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0134",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.109686907,
-        "lat": 2.2205772
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0135",
-      "verdict": "fail",
-      "residual": {
-        "lon": 1.73136369,
-        "lat": -2.61668506
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0136",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.0627609318,
-        "lat": 2.78445161
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0137",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.353751587,
-        "lat": 5.63704667
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0138",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.400952745,
-        "lat": -2.74908261
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0139",
-      "verdict": "fail",
-      "residual": {
-        "lon": 1.0029687,
-        "lat": -4.27326889
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0140",
-      "verdict": "fail",
-      "residual": {
-        "lon": -4.23675292,
-        "lat": -5.04782952
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0141",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.290384429,
-        "lat": -3.55078233
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0142",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.0464637182,
-        "lat": -3.57585323
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0143",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.328630095,
-        "lat": -3.24115086
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0144",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.680915358,
-        "lat": -4.23265484
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0145",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.231622488,
-        "lat": -1.47565488
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0146",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.146473527,
-        "lat": -3.31798841
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0147",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.52953137,
-        "lat": 1.64989237
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0148",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.731571846,
-        "lat": -0.494339871
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0149",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.814092326,
-        "lat": 1.95130157
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0150",
-      "verdict": "fail",
-      "residual": {
-        "lon": -6.2581975,
-        "lat": 5.34674007
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0151",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.380039346,
-        "lat": -1.2698048
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0152",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.0718384047,
-        "lat": -0.0617151816
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0153",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.382396474,
-        "lat": -1.28799728
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0154",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.399996518,
-        "lat": -1.21204041
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0155",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.824257925,
-        "lat": 0.946342592
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0156",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.434982205,
-        "lat": -1.04700231
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0157",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.457223187,
-        "lat": -1.07602758
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0158",
-      "verdict": "fail",
-      "residual": {
-        "lon": -1.149758,
-        "lat": 0.746898268
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0159",
-      "verdict": "fail",
-      "residual": {
-        "lon": 1.25365198,
-        "lat": -0.155171812
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0160",
-      "verdict": "fail",
-      "residual": {
-        "lon": -7.29512584,
-        "lat": 0.681793552
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0161",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.0236945016,
-        "lat": -0.030673958
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0162",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.160742931,
-        "lat": -6.16067969
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0163",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.173002223,
-        "lat": -2.75688743
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0164",
-      "verdict": "fail",
-      "residual": {
-        "lon": -1.05854884,
-        "lat": -5.20987697
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0165",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.290911804,
-        "lat": 7.44912099
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0166",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.501204147,
-        "lat": 5.49038589
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0167",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.863529995,
-        "lat": 1.75305929
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0168",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.799347718,
-        "lat": 7.51506359
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0169",
-      "verdict": "fail",
-      "residual": {
-        "lon": 1.79281367,
-        "lat": 0.53878727
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0170",
-      "verdict": "fail",
-      "residual": {
-        "lon": -8.72226748,
-        "lat": -4.7471779
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0171",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.472049288,
-        "lat": 2.92193024
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0172",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.0019539725,
-        "lat": -3.36189344
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0173",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.451392615,
-        "lat": 3.25237986
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0174",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.413013862,
-        "lat": 3.20765754
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0175",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.231306654,
-        "lat": -2.75833409
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0176",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.0551495736,
-        "lat": -3.11820082
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0177",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.0626000476,
-        "lat": -0.842787681
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0178",
-      "verdict": "fail",
-      "residual": {
-        "lon": -1.58646303,
-        "lat": -3.22144777
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0179",
-      "verdict": "fail",
-      "residual": {
-        "lon": 1.65057426,
-        "lat": -1.38000321
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0180",
-      "verdict": "fail",
-      "residual": {
-        "lon": -10.5231806,
-        "lat": 4.50874519
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0181",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.193792728,
-        "lat": -6.51211025
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0182",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.456309885,
-        "lat": 3.98869424
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0183",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.511912748,
-        "lat": -5.44230166
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0184",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.0719084206,
-        "lat": -5.7533084
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0185",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.154998823,
-        "lat": -4.8932388
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0186",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.820216509,
-        "lat": 6.72017654
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0187",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.0948556939,
-        "lat": -0.906293344
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0188",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.462504209,
-        "lat": 1.22014169
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0189",
-      "verdict": "fail",
-      "residual": {
-        "lon": 1.50003355,
-        "lat": -6.15634763
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0190",
-      "verdict": "fail",
-      "residual": {
-        "lon": -15.1731164,
-        "lat": 3.68695302
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0191",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.415503064,
-        "lat": 5.43125561
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0192",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.373235897,
-        "lat": 8.30667504
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0193",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.61223985,
-        "lat": 7.95153028
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0194",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.562327497,
-        "lat": -1.4834612
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0195",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.274585423,
-        "lat": -8.38930003
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0196",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.586773518,
-        "lat": -8.19630893
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0197",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.550358897,
-        "lat": 5.20291735
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0198",
-      "verdict": "fail",
-      "residual": {
-        "lon": 1.35847834,
-        "lat": 9.18284595
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0199",
-      "verdict": "fail",
-      "residual": {
-        "lon": 2.47589566,
-        "lat": -8.82223973
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0200",
-      "verdict": "fail",
-      "residual": {
-        "lon": -18.6721482,
-        "lat": 0.747412563
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0201",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.259871026,
-        "lat": -1.51460067
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0202",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.579314467,
-        "lat": -3.61941558
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0203",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.229707451,
-        "lat": -1.98528008
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0204",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.106374853,
-        "lat": -0.191514543
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0205",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.0237293455,
-        "lat": 1.69363178
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0206",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.536471396,
-        "lat": 1.52231524
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0207",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.620194518,
-        "lat": -4.53621837
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0208",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.835929776,
-        "lat": 2.78627616
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0209",
-      "verdict": "fail",
-      "residual": {
-        "lon": 2.59731697,
-        "lat": -4.49622065
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0210",
-      "verdict": "fail",
-      "residual": {
-        "lon": -18.770404,
-        "lat": -2.39489968
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0211",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.157526639,
-        "lat": -0.19388909
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0212",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.0755167376,
-        "lat": -0.761446166
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0213",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.156413428,
-        "lat": -0.112841614
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0214",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.0190437621,
-        "lat": 0.314417084
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0215",
-      "verdict": "pass",
-      "residual": {
-        "lon": -0.193217988,
-        "lat": 0.302326524
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0216",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.898161525,
-        "lat": 0.653003248
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0217",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.582449737,
-        "lat": 0.909006481
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0218",
-      "verdict": "pass",
-      "residual": {
-        "lon": 0.356370579,
-        "lat": -0.679776006
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0219",
-      "verdict": "fail",
-      "residual": {
-        "lon": 2.34939194,
-        "lat": -0.165168447
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0220",
-      "verdict": "fail",
-      "residual": {
-        "lon": -19.2899044,
-        "lat": -1.96723164
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0221",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.694895308,
-        "lat": 3.89771337
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0222",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.00637366542,
-        "lat": -5.45743233
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0223",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.717066004,
-        "lat": 2.20802381
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0224",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.482058766,
-        "lat": 4.11394504
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0225",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.335167749,
-        "lat": 3.52382116
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0226",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.651778504,
-        "lat": 5.49264727
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0227",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.854308758,
-        "lat": -3.51140966
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0228",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.610415358,
-        "lat": -5.22516444
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0229",
-      "verdict": "fail",
-      "residual": {
-        "lon": 2.45066461,
-        "lat": 4.17136926
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0230",
-      "verdict": "fail",
-      "residual": {
-        "lon": -22.020786,
-        "lat": -8.33759217
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0231",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.738911095,
-        "lat": 5.51083087
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0232",
-      "verdict": "fail",
-      "residual": {
-        "lon": -0.10453805,
-        "lat": -1.85794226
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0233",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.976000111,
-        "lat": 5.49398071
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0234",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.716173656,
-        "lat": 5.55111228
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0235",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.678630993,
-        "lat": -4.71208339
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0236",
-      "verdict": "fail",
-      "residual": {
-        "lon": 1.21589137,
-        "lat": 4.78916322
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0237",
-      "verdict": "fail",
-      "residual": {
-        "lon": 0.824587733,
-        "lat": -5.11021966
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0238",
-      "verdict": "fail",
-      "residual": {
-        "lon": 2.45567274,
-        "lat": 4.83436902
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0239",
-      "verdict": "fail",
-      "residual": {
-        "lon": 3.60373555,
-        "lat": 5.46812278
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L1-POS-0240",
-      "verdict": "fail",
-      "residual": {
-        "lon": -25.8890328,
-        "lat": -11.4228075
-      }
+      "verdict": "unsupported",
+      "detail": "ephem.Ecliptic uses mean obliquity. L1 requires true obliquity of date."
     },
     {
       "id": "L2-ASC-0001",
@@ -3905,152 +3169,152 @@
     {
       "id": "L4-LUN-0001",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0002",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0003",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0004",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0005",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0006",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0007",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0008",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0009",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0010",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0011",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0012",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0013",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0014",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0015",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0016",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0017",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0018",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0019",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0020",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0021",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0022",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0023",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0024",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0025",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0026",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0027",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0028",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0029",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-LUN-0030",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-UTC-0001",
@@ -4065,12 +3329,12 @@
     {
       "id": "L4-UTC-0003",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-UTC-0004",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-UTC-0005",
@@ -4085,12 +3349,12 @@
     {
       "id": "L4-UTC-0007",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-UTC-0008",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-UTC-0009",
@@ -4105,12 +3369,12 @@
     {
       "id": "L4-UTC-0011",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-UTC-0012",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-UTC-0013",
@@ -4125,12 +3389,12 @@
     {
       "id": "L4-UTC-0015",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-UTC-0016",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-UTC-0017",
@@ -4145,12 +3409,12 @@
     {
       "id": "L4-UTC-0019",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-UTC-0020",
       "verdict": "unsupported",
-      "detail": "PyEphem next_new_moon / next_full_moon return UT dates rather than TT instants"
+      "detail": "PyEphem computes lunar phases using the same mean-obliquity ecliptic conversion. L4 specifies true-of-date longitudes."
     },
     {
       "id": "L4-ING-0061",
