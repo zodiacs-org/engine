@@ -1,0 +1,36 @@
+{
+  "node": "22.22.2",
+  "tz": "2025c",
+  "icu": "78.2",
+  "wall": "1979-05-26T12:00",
+  "resolutions": [
+    {
+      "timeZone": "Asia/Tehran",
+      "utc": "1979-05-26T08:30:00.000Z",
+      "flags": [
+        "host-zone-data-differs"
+      ],
+      "hostCheck": {
+        "status": "differs",
+        "probe": "1979-05-26T08:30:00.000Z",
+        "hostOffsetMinutes": 210,
+        "tzdbOffsetMinutes": 270,
+        "tzdbVersion": "2026f"
+      }
+    },
+    {
+      "timeZone": "Iran",
+      "utc": "1979-05-26T08:30:00.000Z",
+      "flags": [
+        "host-zone-data-differs"
+      ],
+      "hostCheck": {
+        "status": "differs",
+        "probe": "1979-05-26T08:30:00.000Z",
+        "hostOffsetMinutes": 210,
+        "tzdbOffsetMinutes": 270,
+        "tzdbVersion": "2026f"
+      }
+    }
+  ]
+}
