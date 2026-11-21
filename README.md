@@ -165,17 +165,16 @@ loads it with a harmless `MODULE_TYPELESS_PACKAGE_JSON` warning, which 22.22.2
 no longer prints. Bundlers resolve the dependency's `import` condition
 themselves and are not affected.
 
-In the six-runtime conformance check on 2.0.0-rc.3
-(`docs/evidence/runtime-conformance-20261119/`, suite 0.3.0; pending this
-candidate's Linux x64 CI rerun before packing), all 569 supported verdicts on
-both the root and `@zodiacs/engine/core` agreed with Node 22.22.2 in Bun
-1.4.4, Deno 2.9.6, Chromium 156.0.8078.4, Firefox 157.0 and WebKit 27.2 (with
-71 unsupported vectors: 1 leap-second instant, 30 stations and 40 lunations).
-Outputs are not identical to the last bit across all runtimes (on the root,
-458 of 569 were bit-identical to Node in Bun, Deno, Chromium and WebKit, and
-569 of 569 in Firefox; on core, 468 in Bun and WebKit, 485 in Deno and
-Chromium, and 540 in Firefox), and synthetic receipt digests differ from
-Node's where outputs differ.
+In the six-runtime conformance check on 2.0.0-rc.6
+(`docs/evidence/runtime-conformance-20261121/`, suite 0.3.0), all 569
+supported verdicts on both the root and `@zodiacs/engine/core` agreed with
+Node 22.22.2 in Bun 1.4.4, Deno 2.9.6, Chromium 156.0.8078.4, Firefox 157.0
+and WebKit 27.2 (with 71 unsupported vectors: 1 leap-second instant, 30
+stations and 40 lunations). Outputs are not identical to the last bit across
+all runtimes (on the root, 458 of 569 were bit-identical to Node in Bun, Deno,
+Chromium and WebKit, and 569 of 569 in Firefox; on core, 468 in Bun and
+WebKit, 485 in Deno and Chromium, and 540 in Firefox), and synthetic receipt
+digests differ from Node's where outputs differ.
 
 The package is ES modules only and has no CommonJS build. `require()` of
 `@zodiacs/engine` or of any of its entry points throws an `Error` with code

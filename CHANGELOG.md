@@ -72,13 +72,15 @@ otherwise.
 
 ### Runtimes
 
-- Pending this candidate's six-runtime Linux x64 CI rerun before the archive
-  is packed; the prior six-runtime run on 2.0.0-rc.3
-  (`docs/evidence/runtime-conformance-20261119/`) showed 569 of 569 supported
-  verdicts agreeing with Node 22.22.2 on both root and core across Bun 1.4.4,
-  Deno 2.9.6, Chromium 156.0.8078.4, Firefox 157.0 and WebKit 27.2, with
-  non-identical last-bit outputs and differing synthetic receipt digests in
-  the runtimes where outputs differ from Node.
+- Measured on this candidate's build across six runtimes on Linux x64
+  (`docs/evidence/runtime-conformance-20261121/`, suite 0.3.0): all 569
+  supported verdicts on both root and `@zodiacs/engine/core` agreed with Node
+  22.22.2 in Bun 1.4.4, Deno 2.9.6, Chromium 156.0.8078.4, Firefox 157.0 and
+  WebKit 27.2 (71 unsupported: 1 leap second, 30 stations, 40 lunations).
+  Outputs are not bit-identical in every runtime (root: 458 of 569 identical
+  to Node in Bun, Deno, Chromium and WebKit, 569 of 569 in Firefox; core: 468
+  in Bun and WebKit, 485 in Deno and Chromium, 540 in Firefox), and synthetic
+  receipt digests differ from Node's where outputs differ.
 
 ### Corrections
 
@@ -96,14 +98,16 @@ written.
 
 ### Sizes and budgets
 
-- Measured on this candidate's build (`npm run package:contents`): all 20
+- Measured on this candidate's build
+  (`docs/evidence/2.0.0-rc.6-20261121/results/package-contents.log`): all 20
   entry-point import graphs remain inside their 2.0.0-rc.5 budgets (`./geo`
-  grew by 9 bytes for pull request 128's Tehran probe). The package beside
-  the DE440 pack is 1,458,765 bytes unpacked in 101 files, over the 2.0.0-rc.5
-  cap of 1,450,000 because of this entry, the README updates, `LICENSING.md`,
-  `NOTICE` and the 9-byte probe addition. Cap raised to 1,459,000 (the
-  measurement rounded up to the next 1,000 bytes), for the owner to decide
-  with this candidate (`scripts/verify-package-contents.mjs`).
+  grew by 9 bytes, from 47,715 to 47,724 of 47,800, for pull request 128's
+  Tehran probe). The package beside the DE440 pack is 1,458,962 bytes
+  unpacked in 101 files, over the 2.0.0-rc.5 cap of 1,450,000 because of this
+  entry, the README updates, `LICENSING.md`, `NOTICE` and the 9-byte probe
+  addition. Cap raised to 1,459,000 (the measurement rounded up to the next
+  1,000 bytes), for the owner to decide with this candidate
+  (`scripts/verify-package-contents.mjs`).
 
 ## 2.0.0-rc.5 (unreleased candidate)
 
