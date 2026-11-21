@@ -8,8 +8,8 @@ Any engine can be measured against the same vectors through a small adapter
 
 | Engine | Licence | Runtime | L1 positions within 1″ of JPL DE441 | Lon median / max | Bundle or ephemeris footprint |
 | --- | --- | --- | --- | --- | --- |
-| `@zodiacs/engine` 2.0.0 (DE440 default) | MIT AND CC-BY-4.0 | JS/TS (browser, Node, Deno, Bun) | 240 / 240 | 0.002″ / 0.013″ | about 3.42 MB minified (about 2.28 MB brotli); zero runtime network calls |
-| `@zodiacs/engine/core` 2.0.0 (`astronomy-engine`) | MIT AND CC-BY-4.0 | JS/TS (browser, Node, Deno, Bun) | 48 / 240 | 2.083″ / 18.774″ | 77 to 80 KB minified (29 to 31 KB brotli); lazy DE440 pack optional |
+| `@zodiacs/engine` 2.0.0 (DE440 default) | MIT AND CC-BY-4.0 | JS/TS (browser, Node, Deno, Bun) | 240 / 240 | 0.002″ / 0.013″ | about 3.42 MB minified, about 2.28 MB brotli (measured on `2.0.0-rc.3`); zero runtime network calls |
+| `@zodiacs/engine/core` 2.0.0 (`astronomy-engine`) | MIT AND CC-BY-4.0 | JS/TS (browser, Node, Deno, Bun) | 48 / 240 | 2.083″ / 18.774″ | 77 to 80 KB minified, 29 to 31 KB brotli (measured on `2.0.0-rc.3`); lazy DE440 pack optional |
 | Swiss Ephemeris 2.10.03 | AGPL-3.0 or commercial | C (native bindings) | 240 / 240 | 0.001″ / 0.005″ | Native C library plus external `.se1` ephemeris files |
 | Skyfield 1.55 (`de440s.bsp`) | MIT | Python + NumPy | 240 / 240 | 0.001″ / 0.013″ | Python package plus external JPL BSP file (`de440s.bsp`) |
 | astronomia 4.3.0 (VSOP87B) | MIT | JS (Node, browser) | 176 / 192 answered (48 unsupported) | 0.238″ / 2.782″ | JS package with VSOP87B planet tables |
@@ -17,9 +17,14 @@ Any engine can be measured against the same vectors through a small adapter
 
 ## Notes
 
-- `@zodiacs/engine` bundle figures were measured across esbuild 0.28.2, Rollup 4.67.4,
-  Vite 8.3.5 and webpack 5.112.2 in production mode (see *Bundle size in a web page*
-  in [README.md](../README.md) and `docs/evidence/bundle-weight-20261117/`).
+- `@zodiacs/engine` bundle figures were measured on the `2.0.0-rc.3` archive across
+  esbuild 0.28.2, Rollup 4.67.4, Vite 8.3.5 and webpack 5.112.2 in production mode
+  (recorded in `docs/evidence/2.0.0-rc.3-20261117/results/bundle-weight/results.json`;
+  see *Bundle size in a web page* in [README.md](../README.md)). The final `2.0.0`
+  archive was not re-measured by `tools/bundle-weight/`.
+- `@zodiacs/engine` conformance accuracy figures (240/240 for DE440 default and
+  48/240 for `astronomy-engine` fallback) were measured on `2.0.0` in
+  [conformance/RESULTS.md](../conformance/RESULTS.md).
 - Swiss Ephemeris results in the conformance suite are published as verdicts and
   summary statistics only.
 - `astronomia` 4.3.0 answers 8 planets via VSOP87B and marks Moon and Pluto
