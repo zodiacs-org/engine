@@ -1,0 +1,235 @@
+{
+  "_id": "@zodiacs/engine@2.0.0",
+  "_rev": "9-13f5a493abe0ce0faf02d1f6593c3665",
+  "name": "@zodiacs/engine",
+  "dist-tags": {
+    "latest": "2.0.0",
+    "next": "2.0.0-rc.3"
+  },
+  "versions": [
+    "0.1.1-rc.14",
+    "0.1.1-rc.15",
+    "0.1.1-rc.16",
+    "1.0.0",
+    "1.1.0",
+    "2.0.0-rc.2",
+    "2.0.0-rc.3",
+    "2.0.0"
+  ],
+  "time": {
+    "created": "2026-09-30T11:45:35.912Z",
+    "modified": "2026-11-21T14:48:09.975Z",
+    "0.1.1-rc.14": "2026-09-30T11:45:36.308Z",
+    "0.1.1-rc.15": "2026-09-30T11:53:41.415Z",
+    "0.1.1-rc.16": "2026-10-01T12:02:05.117Z",
+    "1.0.0": "2026-10-11T13:54:56.087Z",
+    "1.1.0": "2026-11-16T12:23:54.960Z",
+    "2.0.0-rc.2": "2026-11-17T05:52:55.195Z",
+    "2.0.0-rc.3": "2026-11-17T20:52:39.950Z",
+    "2.0.0": "2026-11-21T14:48:09.646Z"
+  },
+  "bugs": {
+    "url": "https://github.com/zodiacs-org/engine/issues"
+  },
+  "license": "MIT AND CC-BY-4.0",
+  "homepage": "https://github.com/zodiacs-org/engine#readme",
+  "keywords": [
+    "astrology",
+    "ephemeris",
+    "natal-chart",
+    "synastry",
+    "transits",
+    "typescript",
+    "zodiac"
+  ],
+  "repository": {
+    "url": "git+https://github.com/zodiacs-org/engine.git",
+    "type": "git"
+  },
+  "description": "Browser-first astrology calculations used by Zodiacs.org: tropical charts; one calculation API with bounds and receipts in ./calc; birth-time windows in ./window; returns, relationship charts, the void-of-course Moon, patterns and dignities in ./technique",
+  "maintainers": [
+    "zodiacs <admin@zodiacs.org>"
+  ],
+  "readmeFilename": "README.md",
+  "_contentLength": 104504,
+  "dist": {
+    "shasum": "7364fedd67a01f9005d280b1b0c4c32183fb4968",
+    "tarball": "https://registry.npmjs.org/@zodiacs/engine/-/engine-2.0.0.tgz",
+    "fileCount": 101,
+    "integrity": "sha512-CL7FCs8VsoiUu5CYVhWPvp1ZXnv7veuTDa1u19SxJKnGcuh8Tw7s0vFewKzRB+MdQwdRlGnT3fVyl8PmHgnmWw==",
+    "signatures": [
+      {
+        "sig": "MEUCIQD6eMCWyKP2VUemGyirWo4inZOsWayKB45nAc1b7Yvt5AIgXGafRRqk7S2000BGYPWwcU8SowJ+SJx4RbJ5lDCv8g4=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEQCIB5VJrhuNsOSfGDbGnfAetQS741sr7UWmAJT4ni0BDAZAiByp9D2NaXeGJSv1DkqszZ35Qlm14E6ApuvK0zUyI/A0g=="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@zodiacs%2fengine@2.0.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 4782240
+  },
+  "main": "./dist/index.js",
+  "type": "module",
+  "_from": "file:/home/runner/work/engine/engine/artifacts/zodiacs-engine-2.0.0.tgz",
+  "types": "./dist/index.d.ts",
+  "engines": {
+    "node": "^20.19.0 || >=22.7.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./geo": {
+      "types": "./dist/geo.d.ts",
+      "import": "./dist/geo.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./sky": {
+      "types": "./dist/sky.d.ts",
+      "import": "./dist/sky.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./calc": {
+      "types": "./dist/calc.d.ts",
+      "import": "./dist/calc.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./lite": {
+      "types": "./dist/lite.d.ts",
+      "import": "./dist/lite.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./time": {
+      "types": "./dist/time.d.ts",
+      "import": "./dist/time.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./de440": {
+      "types": "./dist/de440.d.ts",
+      "import": "./dist/de440.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./vedic": {
+      "types": "./dist/vedic.d.ts",
+      "import": "./dist/vedic.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./deltat": {
+      "types": "./dist/deltat.d.ts",
+      "import": "./dist/deltat.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./houses": {
+      "types": "./dist/houses-extra.d.ts",
+      "import": "./dist/houses-extra.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./timing": {
+      "types": "./dist/timing.d.ts",
+      "import": "./dist/timing.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./window": {
+      "types": "./dist/window.d.ts",
+      "import": "./dist/window.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./receipt": {
+      "types": "./dist/receipt.d.ts",
+      "import": "./dist/receipt.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./internal": {
+      "types": "./dist/internal.d.ts",
+      "import": "./dist/internal.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./crossings": {
+      "types": "./dist/crossings.d.ts",
+      "import": "./dist/crossings.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./de440/pack": {
+      "types": "./dist/de440-pack.d.ts",
+      "import": "./dist/de440-pack.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./techniques": {
+      "types": "./dist/techniques.d.ts",
+      "import": "./dist/techniques.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./conventions": {
+      "types": "./dist/conventions.d.ts",
+      "import": "./dist/conventions.js",
+      "require": "./dist/esm-only.cjs"
+    },
+    "./internal/math": {
+      "types": "./dist/internal-math.d.ts",
+      "import": "./dist/internal-math.js",
+      "require": "./dist/esm-only.cjs"
+    }
+  },
+  "scripts": {
+    "docs": "typedoc --options typedoc.json",
+    "test": "vitest run",
+    "build": "tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/techniques.ts src/timing.ts src/vedic.ts src/internal.ts src/internal-math.ts src/calc.ts src/window.ts src/houses-extra.ts src/sky.ts src/conventions.ts src/time.ts src/de440.ts src/de440-pack.ts --format esm --dts --clean --splitting --metafile --tsconfig tsconfig.build.json && node scripts/build-lite.mjs && node scripts/build-core.mjs && node scripts/build-esm-only.mjs",
+    "prepack": "npm run build",
+    "api:check": "node scripts/api-report.mjs --check",
+    "typecheck": "tsc -p tsconfig.typecheck.json --pretty false",
+    "api:report": "node scripts/api-report.mjs",
+    "pack:dry-run": "npm pack --dry-run",
+    "exports:smoke": "node scripts/module-resolution-smoke.mjs",
+    "consumer:smoke": "node scripts/verify-packed-consumer.mjs",
+    "archive:binding": "node scripts/verify-archive-binding.mjs",
+    "package:contents": "node scripts/verify-package-contents.mjs"
+  },
+  "version": "2.0.0",
+  "_npmUser": {
+    "name": "GitHub Actions",
+    "email": "npm-oidc-no-reply@github.com",
+    "trustedPublisher": {
+      "id": "github",
+      "oidcConfigId": "3f77e4c9-63c6-4b32-9783-153add53aa31"
+    }
+  },
+  "_resolved": "/home/runner/work/engine/engine/artifacts/zodiacs-engine-2.0.0.tgz",
+  "_integrity": "sha512-CL7FCs8VsoiUu5CYVhWPvp1ZXnv7veuTDa1u19SxJKnGcuh8Tw7s0vFewKzRB+MdQwdRlGnT3fVyl8PmHgnmWw==",
+  "_npmVersion": "11.19.1",
+  "directories": {},
+  "sideEffects": false,
+  "_nodeVersion": "24.22.3",
+  "dependencies": {
+    "astronomy-engine": "2.1.19"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "_hasShrinkwrap": false,
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "vitest": "^2.1.9",
+    "esbuild": "0.27.7",
+    "typedoc": "^0.28.20",
+    "typescript": "^5.9.3",
+    "@types/node": "^22.19.19"
+  },
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages-npm-production",
+    "tmp": "tmp/engine_2.0.0_1795272489496_0.23756042223676277"
+  }
+}

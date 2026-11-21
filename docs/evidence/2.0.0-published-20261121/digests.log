@@ -1,0 +1,15 @@
+# npm view @zodiacs/engine dist-tags (2026-11-21T14:49Z)
+{ latest: '2.0.0', next: '2.0.0-rc.3' }
+
+# Downloaded tarball from npm pack @zodiacs/engine@2.0.0
+size: 2788540 bytes (101 files, 4782240 bytes unpacked)
+sha256: 6087d455276ba633eb0a2370c0a5f740ddd5b257c59b821f501c9b06d228a3e2  zodiacs-engine-2.0.0.tgz
+sha1:   7364fedd67a01f9005d280b1b0c4c32183fb4968  zodiacs-engine-2.0.0.tgz
+sha512: sha512-CL7FCs8VsoiUu5CYVhWPvp1ZXnv7veuTDa1u19SxJKnGcuh8Tw7s0vFewKzRB+MdQwdRlGnT3fVyl8PmHgnmWw==
+
+# Receipt check against artifacts/zodiacs-engine-2.0.0.sha256
+zodiacs-engine-2.0.0.tgz: OK
+
+# Mutation check against earlier receipts (confirming digest comparison fails on mismatch)
+matches artifacts/zodiacs-engine-2.0.0-rc.6.sha256 (59217e2b12126f424554811b21d1902e9b4f9b2014e2fbf9ca1f06f2bf587631): false
+matches artifacts/zodiacs-engine-2.0.0-rc.4.sha256 (6e334f19cf2db7acc8c834b307f37cb67733979e1c43672d914d68eefe7a2e4d): false
