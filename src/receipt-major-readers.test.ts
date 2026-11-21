@@ -174,6 +174,7 @@ describe.each(["de440", "astronomy-engine"] as const)("the engine version a cont
   const C = { utc: "2030-01-01T00:00:00Z", latitude: 51.4779, longitude: 0, houseSystem: "koch" } as const;
   const cases = [
     ["2.0.0", "ok"],
+    ["2.0.0-rc.5", "ok"],
     ["2.0.0-rc.4", "ok"],
     ["2.0.0-rc.2", "inconsistent_result"]
   ] as const;

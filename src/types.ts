@@ -420,7 +420,7 @@ export interface MoonPhase {
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "2.0.0-rc.4";
+export const ENGINE_VERSION: string = "2.0.0-rc.5";
 
 /**
  * astronomy-engine, the ephemeris the engine computes on where the shipped

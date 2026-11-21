@@ -1,5 +1,65 @@
 # Engine changelog
 
+## 2.0.0-rc.5 (unreleased candidate)
+
+The fifth candidate for **2.0.0**, a major release, on 2.0.0-rc.4 (pull
+request 140, after the rc.4 source commit `4c2bd2c` and the unknown-body
+crossing fix `11960941d`). It is not to be published on npm until the
+owner approves it.
+
+rc.4's archive is carried; the crossing fix reaches `dist/`, so by the
+rule in `artifacts/README.md` the package takes a new number and rc.4's
+archive stays, unchanged. The owner approved this candidate on 21 November
+2026. Everything rc.4's entry says holds for rc.5 except where this entry
+says otherwise.
+
+### Changed
+
+- `searchLongitudeCrossings` and `findLongitudeCrossings` refuse a name
+  that is not a body with `RangeError("Unknown body: <name>")` before
+  they search, by calling `assertKnownBody` (exported from
+  `src/ephemeris.ts`, the check `longitudeOn` and `speedAt` already run).
+  Up to rc.4, the wrappers refused the name only when the solver asked a
+  longitude, so a zero-length window returned an empty result and a
+  search over its sample budget returned the refusal. A known body on
+  those same windows is unchanged: a zero-length window is complete and
+  empty, and a search over its sample budget is refused for
+  `sample-budget`. The DE440 entry's own unknown-body stays a
+  `De440Error`. Held by `src/ephemeris-unknown-body.test.ts`. The source
+  commit of the fix is `11960941d`.
+
+### Documentation
+
+- README.md: this candidate's paragraph, archive and install path. The
+  span's ends and the README's bundle sizes were not measured again;
+  they remain rc.4's and rc.3's respectively, and say so.
+
+### Sizes and budgets
+
+- Measured on this candidate's build, seven import graphs were over their
+  budgets, each by the crossing-search body check (`assertKnownBody` in
+  the root wrappers, and its export). Each budget is raised to the
+  measurement, rounded up to the next 100 bytes, and no further (old
+  budget, rc.4's measurement, this candidate's, new budget):
+
+  | Entry | Old budget | rc.4 | rc.5 | New budget | Why |
+  | --- | ---: | ---: | ---: | ---: | --- |
+  | `.` | 154,400 | 154,316 | 154,422 | 154,500 | the crossing-search body check (106) |
+  | `./calc` | 205,500 | 205,477 | 205,514 | 205,600 | the crossing-search body check (37) |
+  | `./sky` | 140,000 | 139,978 | 140,015 | 140,100 | the crossing-search body check (37) |
+  | `./techniques` | 207,800 | 207,704 | 207,810 | 207,900 | the crossing-search body check (106) |
+  | `./timing` | 173,700 | 173,619 | 173,725 | 173,800 | the crossing-search body check (106) |
+  | `./vedic` | 189,400 | 189,351 | 189,457 | 189,500 | the crossing-search body check (106) |
+  | `./window` | 152,900 | 152,874 | 152,911 | 153,000 | the crossing-search body check (37) |
+
+  Every other graph is inside its budget, unchanged (`./internal`
+  112,561 of 112,600; `./core` 110,976 of 111,000). The package beside
+  the pack is 1,449,915 bytes unpacked in 101 files, over the cap of
+  1,446,200: the body check, this entry and the README's lines. Raised
+  to 1,450,000, the measurement rounded up to the next 100 bytes. The
+  budgets and the cap are for the owner to decide with the candidate
+  (`scripts/verify-package-contents.mjs`).
+
 ## 2.0.0-rc.4 (unreleased candidate)
 
 The fourth candidate for **2.0.0**, a major release, on 2.0.0-rc.3 (main at

@@ -16,12 +16,16 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
-**2.0.0-rc.4**, the fourth candidate for 2.0.0, a major release
+**2.0.0-rc.5**, the fifth candidate for 2.0.0, a major release
 (CHANGELOG.md). It is not to be published on npm until the owner approves
-it. Over 2.0.0-rc.3, which npm has carried under `next` since 2026-11-17
-(not tagged), `require()` of the package or of any of its entry points
-throws an `Error` with code `ERR_ZODIACS_ESM_ONLY` that says to use
-`import`, where Node threw `ERR_PACKAGE_PATH_NOT_EXPORTED`; the root refuses a name that is not a body with a
+it. Over 2.0.0-rc.4, `searchLongitudeCrossings` and `findLongitudeCrossings`
+refuse a name that is not a body before they search, so a zero-length
+window or a search over its sample budget throws `RangeError` instead of
+returning empty. As 2.0.0-rc.4 did over 2.0.0-rc.3, which npm has carried
+under `next` since 2026-11-17 (not tagged), `require()` of the package or
+of any of its entry points throws an `Error` with code `ERR_ZODIACS_ESM_ONLY`
+that says to use `import`, where Node threw `ERR_PACKAGE_PATH_NOT_EXPORTED`;
+the root refuses a name that is not a body with a
 `RangeError` on every source, where on the default source the DE440
 reader's `De440Error` reached the caller; and the README's examples of
 configurable aspects and of declinations build their own chart, so they run
@@ -129,7 +133,7 @@ npm install @zodiacs/engine
 ```
 
 That installs npm's `latest`, 1.1.0, not this candidate:
-`artifacts/zodiacs-engine-2.0.0-rc.4.tgz` in the repository, with its
+`artifacts/zodiacs-engine-2.0.0-rc.5.tgz` in the repository, with its
 SHA-256 receipt, is this candidate's exact archive. 1.0.0, npm's `latest`
 before 1.1.0, has no `./conventions`, `./time`, `./lite`, `./de440` or DE440
 pack, computes on astronomy-engine and writes no ids.
@@ -160,7 +164,7 @@ load it with `await import("@zodiacs/engine")`.
 
 From a source checkout, run `npm ci` and `npm run build`, then
 `npm pack --ignore-scripts`. Test the packed file in a clean consumer using
-`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-2.0.0-rc.4.tgz`.
+`npm run consumer:smoke -- /absolute/path/to/zodiacs-engine-2.0.0-rc.5.tgz`.
 The smoke check
 downloads the artifact's public dependencies and TypeScript 5.9.3; its output
 records the artifact hash and runtime, and it removes its temporary consumer
@@ -225,7 +229,7 @@ DE440 pack inside its years and astronomy-engine 2.1.19 elsewhere; where this
 document speaks of the ephemeris's accuracy or of its error limits without
 naming DE440, it speaks of astronomy-engine, the fallback and the ephemeris
 of what the pack does not give. See CHANGELOG.md for the release history and
-`docs/evidence/2.0.0-rc.4-20261120/` for this candidate's checks
+`docs/evidence/2.0.0-rc.4-20261120/` for 2.0.0-rc.4's checks (this candidate's package, archive-binding and packed-consumer gates run in CI)
 (2.0.0-rc.3's are in `docs/evidence/2.0.0-rc.3-20261117/`, 2.0.0-rc.2's in `docs/evidence/2.0.0-rc.2-20261116/`, 2.0.0-rc.1's in `docs/evidence/2.0.0-rc.1-20261116/`, 1.1.0's in `docs/evidence/1.1.0-20261116/`, 1.1.0-rc.13's in `docs/evidence/1.1.0-rc.13-20261115/`, 1.1.0-rc.12's in
 `docs/evidence/1.1.0-rc.12-20261115/`, 1.1.0-rc.11's and 1.1.0-rc.10's in
 their own dated folders there, 1.1.0-rc.9's, its superseded draft's, are in
@@ -1174,9 +1178,10 @@ given. On UTC input with the engine's ΔT the last instant `natalChart`
 accepts is 3998-09-03T05:58:50.816Z, and the last calc computes is
 2199-12-31T23:58:50.815Z (from 2.0.0-rc.3, on the continuous-UTC rule; up to
 2.0.0-rc.2 they were 3998-09-03T02:01:41.309Z and
-2199-12-31T23:57:53.752Z), measured to the millisecond on this candidate's
+2199-12-31T23:57:53.752Z), measured to the millisecond on 2.0.0-rc.4's
 build (`docs/evidence/2.0.0-rc.4-20261120/results/span-ends.json`; the same
-on 2.0.0-rc.3's, `docs/evidence/2.0.0-rc.3-20261117/results/span-ends.json`). astronomy-engine reports any other failure by throwing a string, which
+on 2.0.0-rc.3's, `docs/evidence/2.0.0-rc.3-20261117/results/span-ends.json`);
+they were not measured again for this candidate. astronomy-engine reports any other failure by throwing a string, which
 reaches the caller as a `RangeError` whose `cause` is the original value.
 
 Inside the span, results are computed but not verified: accuracy was compared
