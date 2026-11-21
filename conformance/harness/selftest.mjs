@@ -187,24 +187,31 @@ test('an L4 instant moved by twice its tolerance fails against the engine\'s com
     const vector = byId.get(result.id);
     const [field] = Object.keys(result.residual);
     const answer = vector.expected[field] + result.residual[field];
-    assert.equal(judge(vector, { output: { [field]: answer } }).verdict, 'pass', vector.id);
+    // A passing result matched every exact field, including the station's direction.
+    const output = { ...vector.expected, [field]: answer };
+    assert.equal(judge(vector, { output }).verdict, 'pass', vector.id);
+    if (vector.kind === 'event.station') {
+      const opposite = output.direction === 'direct' ? 'retrograde' : 'direct';
+      assert.equal(judge(vector, { output: { ...output, direction: opposite } }).verdict, 'fail', vector.id);
+    }
     for (const sign of [1, -1]) {
       const moved = { ...vector, expected: { ...vector.expected, [field]: vector.expected[field] + sign * 2 * vector.tolerance[field].abs } };
-      assert.equal(judge(moved, { output: { [field]: answer } }).verdict, 'fail', `${vector.id} moved by ${sign * 2} tolerances`);
+      assert.equal(judge(moved, { output }).verdict, 'fail', `${vector.id} moved by ${sign * 2} tolerances`);
     }
   }
 });
 
 // Runs the engine's adapter, so it needs `npm run build` first, as the conformance workflow does.
-test('the engine\'s adapter: an ingress on TT and on UTC within tolerance, no answer for an empty window, stations and lunations unsupported', async () => {
+test('the engine\'s adapter: ingresses, stations and lunations within tolerance, and no answer for an empty window', async () => {
   const byId = new Map(l4().file.vectors.map((vector) => [vector.id, vector]));
   const tt = byId.get('L4-ING-0061');
   const utc = byId.get('L4-UTC-0001');
   const empty = { ...structuredClone(tt), id: 'L4-ING-EMPTY' };
   empty.input.before_tt_s = tt.expected.tt_s - 2 * tt.tolerance.tt_s.abs;
-  const asked = [tt, utc, event('event.station'), event('event.lunation'), empty];
+  const measured = [tt, utc, event('event.station'), event('event.lunation'), byId.get('L4-UTC-0003')];
+  const asked = [...measured, empty];
   const { responses } = await runAdapter('node conformance/adapters/zodiacs-engine.mjs', asked, { cwd: resolve(SUITE_DIR, '..') });
-  assert.deepEqual(asked.slice(0, 4).map((vector) => judge(vector, responses.get(vector.id)).verdict), ['pass', 'pass', 'unsupported', 'unsupported']);
+  for (const vector of measured) assert.equal(judge(vector, responses.get(vector.id)).verdict, 'pass', vector.id);
   const none = judge(empty, responses.get(empty.id));
   assert.equal(none.verdict, 'error');
   assert.match(none.detail, /found 0 crossings/u);
