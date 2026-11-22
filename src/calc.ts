@@ -1610,8 +1610,14 @@ function searchTimed<S extends { body: StationBody } | { phaseDegrees: LunationA
   const end = resolve(to);
   if (!start || !end) return outOfRange();
   const ttMs = (basis: TimeBasis) => Math.round(J2000_MS + basis.ttDays * DAY_MS);
-  const chosen = ephemerisAt(from.ms, from.scale);
+  const first = ttMs(start);
+  const last = ttMs(end);
   const phase = "phaseDegrees" in selection;
+  // A phase confirmation reaches one hour beyond a root. A station's speed
+  // stencil reaches another hour. Empty searches only label their instant.
+  const padding = first === last ? 0 : phase ? HOUR_MS : 2 * HOUR_MS;
+  let chosen = ephemerisAt(first - padding, "tt");
+  if (chosen.from && first !== last) chosen = ephemerisAt(last + padding, "tt");
   const body = "body" in selection ? selection.body : "Moon";
   const bodies: readonly SourceBody[] = phase ? ["Moon", "Sun"] : [body];
   const primary = placeReader(chosen.from, body);
@@ -1622,7 +1628,7 @@ function searchTimed<S extends { body: StationBody } | { phaseDegrees: LunationA
     // Hold the central decision about light deflection at the solar limb on both samples.
     return principal(primary(ms + HOUR_MS, here.behindDisc).lon - primary(ms - HOUR_MS, here.behindDisc).lon) * 12;
   };
-  const scan = scanEventRoots(ttMs(start), ttMs(end), phase, quantity, max);
+  const scan = scanEventRoots(first, last, phase, quantity, max);
   if (scan.status === "refused") return scan;
   const flags = new Set(calcFlags(false, chosen.fallback));
   const angularError = (target: SourceBody, latitude: number, ms: number) => {
