@@ -186,7 +186,7 @@ first breaker review as much as in the fix round.
 | S5 (two published rules) | Review 4, D8, D4 and the summary table | Yes, except F4. The mistaken size comparison is withdrawn. The reading of section 2 is marked as a reading. |
 | S6 (lists C and D) | `05-disagreements.md` | Yes, with F5. |
 | S7 (addresses) | Reviews 1, 3 and 4 | Yes. Opened today: the IERS data centre page ("EOP 20u24 C04" is on it), GeoNames's export page (the sentence is on it), both CfA ReadMe files (neither contains the word licence or copyright), Crossref's record (one licence entry, for text mining). The methodology page's sentence is now quoted whole and matches the page, including "The other 20 measurements are the far-future cases". OpenAlex is marked as one reading with no address. |
-| S8 (Horizons) | `sign-changes/README.md`; Review 1, A10 | Yes. The caution is called the session's own, the 176 and the 12 requests are both said not to meet the policy, and the digests are called a record and not a check. No rerun was made. |
+| S8 (Horizons) | `sign-changes/README.md`; Review 1, A10 | Yes. Both readers describe how their request headers fell short of the policy and explain the limits of the recorded digests. No rerun was made. |
 
 ### N2. The commit and the pull request
 

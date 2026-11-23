@@ -16,7 +16,7 @@ still holds), or a **note**.
 | Test | Builder | After this review |
 | --- | --- | --- |
 | R1 | Pass, one weakness | **Pass.** The weakness is removed: the helper passes' quotations were fetched again here and all were found (N1). Five small sourcing gaps (S7). |
-| R2 | Pass | **Pass.** The A1 and A2 tables match the committed files and pull request 92's README figure for figure. The sign-change measurement was reproduced and checked a second way (N2). |
+| R2 | Pass | **Pass.** The A1 and A2 tables match the committed files and pull request 92's README figure for figure. The second reader reproduced the engine crossing file and the Horizons comparison summary (N2). |
 | R3 | Pass | **Pass, with two corrections.** The live results reproduce. One relayed time was not checked and does not match the live tool (S1). The state of the bare-date fix is out of date (B1). |
 | R4 | Pass, two partial rows | **Pass, with two corrections** (S3, S4). Every quoted term was found on the provider's page. |
 | R5 | Pass | **Pass, with one gap** (S5). The review used the connector directory records (N5). |
@@ -209,12 +209,9 @@ in neither A, B, C nor D of `05-disagreements.md`:
   pull request 975 puts a note in link titles and says a proper field
   needs a change to published definitions; the list does not say whether
   that meets the issue.
-- ZOD-64: "'New Moon' at 17 degrees past new". Review 2, B14, reports 12°
-  at one instant and leaves "ZOD-64 says 17°" unresolved. On the build of
-  `main` the label changes from "New Moon" to "Waxing Crescent" at about
-  22.5° (stepped here every 15 minutes from the review's instant: the
-  change falls at 22.59°), so 17° is inside the range and the issue's
-  figure is consistent.
+- ZOD-64's example falls within the historical "New Moon" range. On the
+  waxing side, the implementation switched to "Waxing Crescent" at 22.5°.
+  [src/api.ts:241-244 at bc0b5a76](https://github.com/zodiacs-org/engine/blob/bc0b5a769ad2cfb17e1f853b94d94eb271fdd56d/src/api.ts#L241-L244).
 
 The confirmed ones belong in C and the unchecked ones in D.
 
@@ -256,8 +253,9 @@ details to outside services") is not in the job's brief; it is a caution
 of the session's own, and a reasonable one. The outcome is still 176
 requests outside the policy.
 
-The 12 requests of this review (N2) sent an application-specific name and
-no contact, for the same reason. They do not meet the policy either.
+For the spot checks in N2, this reader sent an application-specific
+name and no contact, for the same reason. Those requests also fell short
+of the policy.
 
 A rerun under the project's name and contact is the owner's call. Until
 then the figures stand on requests JPL's policy does not cover.
@@ -311,20 +309,11 @@ two paragraphs.
   gives a file identical byte for byte to `results/engine.json`.
   `tools/summarise.py` on `results/horizons.json` gives `summary.md`
   exactly.
-- Seven records were asked of Horizons again with the same parameters
-  (three days either side, ten minutes, `QUANTITIES='31'`,
-  `TIME_TYPE='TT'`): Neptune 1848-10-16 (−9.5055 h), 1916-03-19 (−8.0597),
-  2026-01-26 (+3.0617); Pluto 1971-10-05 (+0.4659), 2066-07-11 (+9.6292),
-  2185-03-31 (+31.5404), 2185-04-23 (−31.3707). Each agrees with the
-  committed record to the last figure shown.
-- The README's stated limit is that it starts from the engine's crossings
-  and would not see one that only Horizons has. Checked here the other way
-  round: one row a day from Horizons for each body, JD 2378498.5 to
-  2524592.5 TT (four requests, 146,095 rows a body), counting crossings of
-  the twelve boundaries. Horizons has 103 for Neptune and 73 for Pluto,
-  the engine's counts. So at one-day resolution there is no sign change on
-  Horizons that the engine lacks.
-- In the separate scan, Pluto approached the Aries boundary on
+- The reader also spot-checked selected crossings against Horizons. The
+  committed comparison starts with the engine's list and matches all 176
+  of its crossings to Horizons. It cannot establish whether Horizons
+  had crossings the engine missed. [Committed summary](sign-changes/results/summary.md).
+- The reader reported that Pluto approached the Aries boundary on
   1823-12-15 without crossing it in either Horizons or the engine.
   This directory contains no raw output for that near miss.
 - "On the years the site's table covers, this check agrees": the site's

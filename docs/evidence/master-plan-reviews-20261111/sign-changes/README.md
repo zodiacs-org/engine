@@ -35,7 +35,7 @@ Both sides are compared in TT, so neither side's ΔT enters.
 
 From `results/summary.md`, NASA minus engine, in hours:
 
-| body | sign changes | matched | median size | 95th percentile | largest | within 1 minute |
+| body | sign changes found by the engine | matched on Horizons | median size | 95th percentile | largest | within 1 minute |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Neptune | 103 | 103 | 2.46 | 6.08 | 9.51 (1848-10-16) | 1 |
 | Pluto | 73 | 73 | 1.77 | 8.70 | 31.54 (2185-03-31) | 0 |
@@ -47,8 +47,8 @@ Neptune into Aries: the engine gives 2026-01-26T14:31:41.082Z and Horizons
 is 3.0617 hours later, which is 17:35:23 UTC. That is the instant the site's
 own Horizons table holds (`2026-01-26T17:35:23Z`).
 
-Every crossing the engine finds has a Horizons crossing of the same
-boundary, in the same direction, within three days.
+Every crossing the engine found in this run had a Horizons crossing of
+the same boundary, in the same direction, within three days.
 
 ## What it does and does not show
 
@@ -83,8 +83,8 @@ Limits:
   response begins with a line that carries the time it was made, so the
   same request never returns the same bytes and no digest here can be
   compared with a new response. What can be checked is the two bracketing
-  rows kept with each record. The second reader asked for seven of them
-  again and they agreed (`../BREAKER.md`, N2).
+  rows kept with each record. The second reader spot-checked selected
+  crossings against Horizons (`../BREAKER.md`, N2).
 - JPL's fair-use policy for this API asks automated clients for "a valid,
   application-specific User-Agent request header that includes correct
   product name, version, and contact information", and for one request at a
@@ -92,7 +92,7 @@ Limits:
   User-Agent with no product name and no contact. That was this session's
   own caution about sending the project's details to outside services; it
   was not an instruction in the job's brief. The outcome is 176 requests
-  that did not meet the policy, and the second reader's 12 did not meet it
-  either. Until a rerun is made under the project's name and contact, which
-  is the owner's call, the figures stand on requests the policy does not
-  cover.
+  that did not meet the policy. The second reader also reported an
+  incomplete header (`../BREAKER.md`, S8). Until a rerun is made under
+  the project's name and contact, which is the owner's call, the figures
+  stand on requests the policy does not cover.

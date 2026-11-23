@@ -158,10 +158,14 @@ Run in this job: `npm ci` and `npm run build` on `bc0b5a7` (Node v22.23.3),
 to produce the `dist/` that `sign-changes/tools/engine_ingresses.mjs` and
 two one-line checks (Review 2, B11 and B14) call; and
 `sign-changes/tools/horizons_check.py`. No test suite, no conformance run
-and no sweep was run. The 176 matched crossings can be checked against
-`sign-changes/results/horizons.json`. In a separate scan, the second
-reader reported that Pluto approached the Aries boundary on 1823-12-15
-without crossing it in either Horizons or the engine. On 13 November the
-reviewer described the live connector responses as substantially larger
-than the plan's quoted "3 KB per result". This directory contains neither
-the raw near-miss observations nor the raw connector responses.
+and no sweep was run. All 176 Neptune and Pluto crossings found by the
+engine matched a crossing on Horizons. The comparison cannot establish
+whether the engine missed any other crossings.
+[Summary](sign-changes/results/summary.md) and [matched records](sign-changes/results/horizons.json).
+
+The second reader reported that Pluto approached the Aries boundary on
+1823-12-15 without crossing it in either Horizons or the engine. On
+13 November the reviewer described the live connector responses as
+substantially larger than the plan's quoted "3 KB per result". This
+directory contains neither the raw near-miss observations nor the raw
+connector responses.

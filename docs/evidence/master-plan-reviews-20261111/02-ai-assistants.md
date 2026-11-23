@@ -249,19 +249,16 @@ learn that `get_natal_chart` exists. The master plan lists this (Phase 4).
 
 ### B14. The Moon's phase label (ZOD-64)
 
-Engine, `main` build: `moonPhase(new Date("2026-11-10T08:35:46Z"))` returns
-`"angle":12.04...,"name":"New Moon","waxing":true`. The label "New Moon" is
-given 12° past new. ZOD-64 says 17°. The engine already returns `waxing`;
-the connector's `get_sky` returned only `"moonPhase":{"name":"Waxing
-Crescent","angle":26.127...}` with no times of the last or next new Moon.
+On the waxing side, the historical `phaseName` function returned "New
+Moon" below 22.5° and switched to "Waxing Crescent" at that cutoff. This
+explains why the label still read "New Moon" in ZOD-64's example.
+[src/api.ts:241-244 at bc0b5a76](https://github.com/zodiacs-org/engine/blob/bc0b5a769ad2cfb17e1f853b94d94eb271fdd56d/src/api.ts#L241-L244).
 
-Fix round. The two figures agree. The second reader stepped the same build
-every 15 minutes from this instant and found the label change from "New
-Moon" to "Waxing Crescent" at about 22.59° (`BREAKER.md`, S6), so 17° is
-inside the range where the label reads "New Moon". ZOD-64's comment of
-07:06 UTC on 2026-11-11 adds that the last and next new and full Moon times
-"are written but not switched on, because they need a change to a published
-tool definition".
+The engine returned a `waxing` field. The connector's `get_sky` gave a
+phase name and an angle, with no times of the last or next new Moon.
+ZOD-64's comment of 07:06 UTC on 2026-11-11 adds that the last and next
+new and full Moon times "are written but not switched on, because they
+need a change to a published tool definition".
 
 ### B15. What the live developer pages tell an assistant
 

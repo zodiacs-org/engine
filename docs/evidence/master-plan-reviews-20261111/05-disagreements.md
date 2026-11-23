@@ -185,11 +185,12 @@ minute of JPL Horizons. Checked by: Horizons." *"Not yet verified":* "The
 *Found:* (Fix round. The earlier wording quoted the line without its first
 sentence and concluded that "the plan should say" it is for the DE440 path
 only. The plan does say so: "on the precise path". That part of the item
-was a misreading and is withdrawn.) What stands: on the default path, none
-of Pluto's 73 sign changes and one of Neptune's 103 is within a minute of
-Horizons (Review 1, A10), so the line can only ever be met on the precise
-path, as the plan has it. And even there a line
-in minutes is badly posed for the slow planets. Pluto's two worst cases are
+was a misreading and is withdrawn.) Of the crossings the historical
+default path found, none of the 73 for Pluto and only one of the 103 for
+Neptune fell within a minute of its Horizons match (Review 1, A10).
+These results rule out the proposed target on that path. The plan assigns
+it to the precise path. Even there, a target in minutes is badly posed
+for the slow planets. Pluto's two worst cases are
 either side of a station near a boundary, where a few milliarcseconds move
 the crossing by minutes and a little more can add or remove a crossing. The
 pack's own error (up to 0.0005″ for Pluto), the IAU 2000B nutation (up to
@@ -417,7 +418,7 @@ So that the list is not read as a rejection of the plan:
 - "Neptune into Aries mismatch (connector says 14:31 UTC, methodology page says 17:35)": confirmed live.
 - "version 0.6.6": the live server reports it.
 - "A licence record that says go for MIT plus CC-BY-4.0, with open questions listed": `LICENSING.md:3-13`.
-- "fix the 'New Moon' label": the engine returns "New Moon" at 12° past new (Review 2, B14). ZOD-64's "17 degrees past new" is consistent: the second reader found the label changes at about 22.59° on the same build (`BREAKER.md`, S6).
+- The plan calls for a change to the "New Moon" label. The historical engine switched from "New Moon" to "Waxing Crescent" at 22.5° on the waxing side. [src/api.ts:241-244 at bc0b5a76](https://github.com/zodiacs-org/engine/blob/bc0b5a769ad2cfb17e1f853b94d94eb271fdd56d/src/api.ts#L241-L244).
 - "13 house systems": `README.md:551`, "`houseSystem` takes one of thirteen systems".
 - "the third candidate for 1.1.0 is in the repo with 16 public entry points": `CHANGELOG.md:5-7`, "with sixteen public entry points"; `package.json` has 18 export keys, two of them under `./internal`. (True of `main` when the plan was written. A later candidate is in draft, pull request 91.)
 - "1.1.0 is unpublished. The changelog says it waits for your approval": `CHANGELOG.md:7-8`, "It is not to be published on npm until the owner approves it."

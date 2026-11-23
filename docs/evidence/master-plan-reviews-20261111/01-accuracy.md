@@ -362,7 +362,7 @@ engine (`1.1.0-rc.3`, default `astronomy-engine`) finds from 1800 to 2200,
 it found the same sign change on JPL Horizons (DE441) and compared the two
 in TT.
 
-| Body | Sign changes | Median difference | Largest | Where |
+| Body | Sign changes found by the engine | Median difference | Largest | Where |
 | --- | ---: | ---: | ---: | --- |
 | Neptune | 103 | 2.46 h | 9.51 h | 1848-10-16 |
 | Pluto | 73 | 1.77 h | 31.54 h | 2185-03-31 |
@@ -378,23 +378,24 @@ in TT.
   minute of Horizons on the default path.
 - Pluto's largest are a pair either side of a station near a boundary
   (+31.54 and −31.37 hours, 23 days apart in 2185). A station on a boundary
-  can turn arcseconds into days, or remove a crossing. No crossing was
-  missing here.
+  can turn arcseconds into days, or remove a crossing. Both engine
+  crossings in this pair had a match on Horizons.
 
 Two things follow for any sentence. The 30″ of A2 is 31 hours for Pluto at
 the wrong moment, so "within 30 arcseconds" and "the date a planet changes
 sign" must never appear as if one supported the other. And the live
 connector prints these times to the millisecond (Review 2, B10).
 
-Fix round. The measurement has now had a second reader (`BREAKER.md`, N2):
-the engine file was reproduced byte for byte, seven records were asked of
-Horizons again and agreed, and a scan of one Horizons row a day found the
-same counts of sign changes as the engine (103 and 73), so Horizons has
-none that the engine lacks at that resolution. That reader's scripts and
-responses are in the job folder and are not committed, and they have had no
-third reader. Two cautions stand, both in `sign-changes/README.md`: the
-requests did not carry the User-Agent that JPL's fair-use policy asks for,
-and the digests kept with each record cannot be checked against anything.
+Fix round. The second reader reproduced the engine file byte for byte
+and regenerated the summary from the committed Horizons records
+(`BREAKER.md`, N2). All 176 crossings found by the engine had a match on
+Horizons. Because the comparison starts with the engine's list, it cannot
+establish whether Horizons had additional crossings.
+[Committed comparison](sign-changes/results/summary.md).
+
+`sign-changes/README.md` records two limits. The requests did not carry
+the User-Agent that JPL's fair-use policy asks for, and the response
+digests cannot be checked against the original responses.
 
 The second reader reported that Pluto approached the Aries boundary on
 1823-12-15 without crossing it in either Horizons or the engine. This
@@ -409,5 +410,5 @@ directory contains no raw output for that near miss.
   found in either repository or in the sweep.
 - Whether production serves the site's `main`. The connector's own answer
   (version 0.6.6, engine 1.1.0-rc.2) is what was observed.
-- A second reader checked parts of A10. That reader's separate Horizons
-  scan has no committed output here for a third reader to check.
+- Crossings the engine might have missed. A10 checks matches for the
+  crossings the engine found.
