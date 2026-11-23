@@ -43,16 +43,16 @@ Adapter `zodiacs-engine` 0.3.0; results in [`results/zodiacs-engine.json`](resul
 | L2 | `angles.vertex-east-point` | 10 | 0 | 0 | 0 | vertex: 0.003″ / 0.013″ / 0.013″<br>east_point: 0.003″ / 0.007″ / 0.007″ |
 | L2 | `houses.cusps` | 80 | 0 | 0 | 0 | cusps: 0.004″ / 0.009″ / 0.071″ |
 | **L2** | **all** | **150** | **0** | **0** | **0** | |
-| L3 | `time.zone-offset` | 45 | 0 | 0 | 0 | — |
+| L3 | `time.zone-offset` | 45 | 0 | 0 | 0 | - |
 | L3 | `time.local-mean-time` | 5 | 0 | 0 | 0 | utc_offset_s: 0.00 s / 0.00 s / 0.00 s |
 | L3 | `time.tt-minus-utc` | 9 | 0 | 1 | 0 | tt_minus_utc_s: 0.00 s / 2.03e-8 s / 2.03e-8 s |
 | L3 | `time.delta-t` | 15 | 0 | 0 | 0 | delta_t_s: 0.000132 s / 0.000505 s / 0.000505 s |
-| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | — |
-| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | — |
+| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | - |
+| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | - |
 | **L3** | **all** | **109** | **0** | **1** | **0** | |
 | L4 | `event.ingress` | 70 | 0 | 0 | 0 | tt_s: 0.0305 s / 0.692 s / 1.53 s<br>utc_s: 0.0110 s / 0.0250 s / 0.0250 s |
-| L4 | `event.station` | 0 | 0 | 30 | 0 | — |
-| L4 | `event.lunation` | 0 | 0 | 40 | 0 | — |
+| L4 | `event.station` | 0 | 0 | 30 | 0 | - |
+| L4 | `event.lunation` | 0 | 0 | 40 | 0 | - |
 | **L4** | **all** | **70** | **0** | **70** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
@@ -91,16 +91,16 @@ Adapter `zodiacs-engine-astronomy-engine` 0.3.0; results in [`results/zodiacs-en
 | L2 | `angles.vertex-east-point` | 10 | 0 | 0 | 0 | vertex: 0.003″ / 0.013″ / 0.013″<br>east_point: 0.003″ / 0.007″ / 0.007″ |
 | L2 | `houses.cusps` | 80 | 0 | 0 | 0 | cusps: 0.004″ / 0.009″ / 0.071″ |
 | **L2** | **all** | **150** | **0** | **0** | **0** | |
-| L3 | `time.zone-offset` | 45 | 0 | 0 | 0 | — |
+| L3 | `time.zone-offset` | 45 | 0 | 0 | 0 | - |
 | L3 | `time.local-mean-time` | 5 | 0 | 0 | 0 | utc_offset_s: 0.00 s / 0.00 s / 0.00 s |
 | L3 | `time.tt-minus-utc` | 9 | 0 | 1 | 0 | tt_minus_utc_s: 0.00 s / 2.03e-8 s / 2.03e-8 s |
 | L3 | `time.delta-t` | 15 | 0 | 0 | 0 | delta_t_s: 0.000132 s / 0.000505 s / 0.000505 s |
-| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | — |
-| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | — |
+| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | - |
+| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | - |
 | **L3** | **all** | **109** | **0** | **1** | **0** | |
 | L4 | `event.ingress` | 34 | 36 | 0 | 0 | tt_s: 56.2 s / 1.02e+4 s / 3.40e+4 s<br>utc_s: 1.42 s / 29.9 s / 29.9 s |
-| L4 | `event.station` | 0 | 0 | 30 | 0 | — |
-| L4 | `event.lunation` | 0 | 0 | 40 | 0 | — |
+| L4 | `event.station` | 0 | 0 | 30 | 0 | - |
+| L4 | `event.lunation` | 0 | 0 | 40 | 0 | - |
 | **L4** | **all** | **34** | **36** | **70** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
@@ -135,12 +135,12 @@ Adapter `pyswisseph` 0.1.0; results in [`results/pyswisseph.json`](results/pyswi
 | L2 | `angles.vertex-east-point` | 6 | 4 | 0 | 0 | vertex: 0.024″ / 2.952″ / 2.952″<br>east_point: 0.026″ / 2.040″ / 2.040″ |
 | L2 | `houses.cusps` | 56 | 24 | 0 | 0 | cusps: 0.001″ / 2.855″ / 15.652″ |
 | **L2** | **all** | **103** | **47** | **0** | **0** | |
-| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | — |
-| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
+| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | - |
+| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | - |
 | L3 | `time.tt-minus-utc` | 10 | 0 | 0 | 0 | tt_minus_utc_s: 0.00000729 s / 0.0000196 s / 0.0000196 s |
 | L3 | `time.delta-t` | 15 | 0 | 0 | 0 | delta_t_s: 0.00166 s / 0.0513 s / 0.0513 s |
-| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | — |
-| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | — |
+| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | - |
+| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | - |
 | **L3** | **all** | **60** | **0** | **50** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
@@ -169,20 +169,20 @@ Adapter `astronomia` 0.1.1; results in [`results/astronomia.json`](results/astro
 | --- | --- | ---: | ---: | ---: | ---: | --- |
 | L1 | `position.apparent.ecliptic-true-of-date` | 176 | 16 | 48 | 0 | lon: 0.238″ / 1.512″ / 2.782″<br>lat: 0.047″ / 0.110″ / 0.345″ |
 | **L1** | **all** | **176** | **16** | **48** | **0** | |
-| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | — |
-| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | — |
-| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | — |
+| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | - |
+| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | - |
+| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | - |
 | **L2** | **all** | **0** | **0** | **150** | **0** | |
-| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | — |
-| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
-| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | — |
+| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | - |
+| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | - |
+| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | - |
 | L3 | `time.delta-t` | 15 | 0 | 0 | 0 | delta_t_s: 5.20e-9 s / 0.0341 s / 0.0341 s |
-| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | — |
-| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | — |
+| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | - |
+| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | - |
 | **L3** | **all** | **50** | **0** | **60** | **0** | |
-| L4 | `event.ingress` | 0 | 0 | 70 | 0 | — |
-| L4 | `event.station` | 0 | 0 | 30 | 0 | — |
-| L4 | `event.lunation` | 0 | 0 | 40 | 0 | — |
+| L4 | `event.ingress` | 0 | 0 | 70 | 0 | - |
+| L4 | `event.station` | 0 | 0 | 30 | 0 | - |
+| L4 | `event.lunation` | 0 | 0 | 40 | 0 | - |
 | **L4** | **all** | **0** | **0** | **140** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
@@ -221,22 +221,22 @@ Adapter `pyephem` 0.1.1; results in [`results/pyephem.json`](results/pyephem.jso
 
 | level | kind | pass | fail | unsupported | error | residual median / 95th percentile / max |
 | --- | --- | ---: | ---: | ---: | ---: | --- |
-| L1 | `position.apparent.ecliptic-true-of-date` | 0 | 0 | 240 | 0 | — |
+| L1 | `position.apparent.ecliptic-true-of-date` | 0 | 0 | 240 | 0 | - |
 | **L1** | **all** | **0** | **0** | **240** | **0** | |
-| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | — |
-| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | — |
-| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | — |
+| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | - |
+| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | - |
+| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | - |
 | **L2** | **all** | **0** | **0** | **150** | **0** | |
-| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | — |
-| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
-| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | — |
+| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | - |
+| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | - |
+| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | - |
 | L3 | `time.delta-t` | 13 | 2 | 0 | 0 | delta_t_s: 0.00594 s / 2.31 s / 2.31 s |
-| L3 | `calendar.to-jdn` | 0 | 0 | 25 | 0 | — |
-| L3 | `calendar.from-jdn` | 0 | 0 | 10 | 0 | — |
+| L3 | `calendar.to-jdn` | 0 | 0 | 25 | 0 | - |
+| L3 | `calendar.from-jdn` | 0 | 0 | 10 | 0 | - |
 | **L3** | **all** | **13** | **2** | **95** | **0** | |
-| L4 | `event.ingress` | 0 | 0 | 70 | 0 | — |
-| L4 | `event.station` | 0 | 0 | 30 | 0 | — |
-| L4 | `event.lunation` | 0 | 0 | 40 | 0 | — |
+| L4 | `event.ingress` | 0 | 0 | 70 | 0 | - |
+| L4 | `event.station` | 0 | 0 | 30 | 0 | - |
+| L4 | `event.lunation` | 0 | 0 | 40 | 0 | - |
 | **L4** | **all** | **0** | **0** | **140** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
@@ -278,20 +278,20 @@ Adapter `skyfield` 0.1.1; results in [`results/skyfield.json`](results/skyfield.
 | --- | --- | ---: | ---: | ---: | ---: | --- |
 | L1 | `position.apparent.ecliptic-true-of-date` | 240 | 0 | 0 | 0 | lon: 0.001″ / 0.003″ / 0.013″<br>lat: 0.000″ / 0.000″ / 0.001″ |
 | **L1** | **all** | **240** | **0** | **0** | **0** | |
-| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | — |
-| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | — |
-| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | — |
+| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | - |
+| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | - |
+| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | - |
 | **L2** | **all** | **0** | **0** | **150** | **0** | |
-| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | — |
-| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
-| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | — |
-| L3 | `time.delta-t` | 0 | 0 | 15 | 0 | — |
-| L3 | `calendar.to-jdn` | 0 | 0 | 25 | 0 | — |
-| L3 | `calendar.from-jdn` | 0 | 0 | 10 | 0 | — |
+| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | - |
+| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | - |
+| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | - |
+| L3 | `time.delta-t` | 0 | 0 | 15 | 0 | - |
+| L3 | `calendar.to-jdn` | 0 | 0 | 25 | 0 | - |
+| L3 | `calendar.from-jdn` | 0 | 0 | 10 | 0 | - |
 | **L3** | **all** | **0** | **0** | **110** | **0** | |
-| L4 | `event.ingress` | 0 | 0 | 70 | 0 | — |
-| L4 | `event.station` | 0 | 0 | 30 | 0 | — |
-| L4 | `event.lunation` | 0 | 0 | 40 | 0 | — |
+| L4 | `event.ingress` | 0 | 0 | 70 | 0 | - |
+| L4 | `event.station` | 0 | 0 | 30 | 0 | - |
+| L4 | `event.lunation` | 0 | 0 | 40 | 0 | - |
 | **L4** | **all** | **0** | **0** | **140** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
