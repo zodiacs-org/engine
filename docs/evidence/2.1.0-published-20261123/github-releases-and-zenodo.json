@@ -1,0 +1,12 @@
+{
+  "tag": "v2.1.0",
+  "target_commit": "566f858dde594439d5f78724f1d2e2df595da2c6",
+  "github_release_id": 455617544,
+  "github_release_url": "https://github.com/zodiacs-org/engine/releases/tag/v2.1.0",
+  "published_at": "2026-11-23T15:32:37Z",
+  "zenodo_record_id": 24470679,
+  "zenodo_doi": "10.5281/zenodo.24470679",
+  "zenodo_concept_doi": "10.5281/zenodo.23080133",
+  "zenodo_version": "v2.1.0",
+  "zenodo_created": "2026-11-23T15:32:48.583530+00:00"
+}

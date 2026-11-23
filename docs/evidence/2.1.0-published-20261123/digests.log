@@ -1,0 +1,6 @@
+# npm pack @zodiacs/engine@2.1.0 vs artifacts/zodiacs-engine-2.1.0.tgz (2026-11-23)
+272bf36f705d033a19a5ad87e0e17113d6e53f96a02331cddefe7b41597b4afc  zodiacs-engine-2.1.0.tgz
+6e1e9ff0b67b09c1f02e7f217b7325049e62bb70  zodiacs-engine-2.1.0.tgz
+272bf36f705d033a19a5ad87e0e17113d6e53f96a02331cddefe7b41597b4afc  artifacts/zodiacs-engine-2.1.0.tgz
+6e1e9ff0b67b09c1f02e7f217b7325049e62bb70  artifacts/zodiacs-engine-2.1.0.tgz
+cmp: byte-for-byte identical
