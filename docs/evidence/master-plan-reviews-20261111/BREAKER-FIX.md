@@ -54,9 +54,10 @@ The folder's README says the comments were missed and when they were read.
 
 ## Should-fix
 
-### F1. One line of Review 1 still says the sign-change check has had no second reader
+### F1. The fix round contradicted its account of the second reader
 
-`01-accuracy.md:414`, under "Not checked": "A10's comparison is this job's
+At `b93d017`, the "Not checked" section of `01-accuracy.md:414` said
+"A10's comparison is this job's
 own and has had no second reader." Twenty lines above it the fix round
 says the opposite, correctly: "The measurement has now had a second reader
 (`BREAKER.md`, N2)". `sign-changes/README.md` was corrected; this line was
@@ -114,12 +115,17 @@ either text. That is the open call, and it stays open.
 
 ### F4. "Every result carries a receipt" is not true of the natal chart tool
 
-Review 4, D8 (fix round): "each result this review received carried a full
-receipt", and "Observed: every result carries a receipt with a SHA-256
-digest, engine and ephemeris versions and convention identifiers."
+At the reviewed commit (`b93d017`), Review 4, D8 said "each result this
+review received carried a full receipt", and "Observed: every result
+carries a receipt with a SHA-256 digest, engine and ephemeris versions
+and convention identifiers."
 
-Called here on 2026-11-13, `get_natal_chart` with `{"birthDate":"1990-05-03"}`
-(the call Review 2, B11, also made) returned 14,809 bytes with the keys
+The response sizes reported here on 13 November are unverified because
+this directory contains no raw connector responses. The reader recorded
+14,809 bytes for the date-only `get_natal_chart` call from Review 2, B11
+and 150,468 bytes for `tools/list`.
+
+The `get_natal_chart` result for `{"birthDate":"1990-05-03"}` had the keys
 `schema`, `ok`, `tool`, `data` and `links`, and no receipt, no digest and
 no engine version anywhere in the text or the structured content.
 `get_sky` with no arguments, called a minute later, has a receipt at
@@ -138,9 +144,9 @@ Repair: say which tools' results carried a receipt, and that the natal
 chart result for a date alone did not. One call each; a chart with a time
 and place was not tried here.
 
-The other new observations in that entry do hold on today's `tools/list`
-(150,468 bytes, 19 tools): the zone input is named `zone`, `birthZone` and
-`currentZone`, and all seven time inputs carry the pattern for `HH:MM`
+The 13 November `tools/list` also confirms the other observations in that
+entry. Among the 19 tools, the zone inputs are named `zone`, `birthZone`
+and `currentZone`. All seven time inputs carry the pattern for `HH:MM`
 with no seconds.
 
 ### F5. Three plan statements are still in none of the four lists
@@ -175,7 +181,7 @@ first breaker review as much as in the fix round.
 | Item | Applied | Holds |
 | --- | --- | --- |
 | S1 (the relayed time) | Review 2, B9 and "Not checked" | Yes. Three tools and three values, the relayed 14:30:44 marked as never seen live, `search_sky_events` marked as not offered. `tools/list` today has the same 19 names and no `search_sky_events`. |
-| S2 (the plan's own words) | Items 6 and 9; Review 1, A10 | Yes. Both plan sentences are quoted whole and match the plan. The misreading is withdrawn in so many words. The 1823 case is carried with its figures (13.3 / 0.375 is 35.5, "about 35 times"). |
+| S2 (the plan's own words) | Items 6 and 9; Review 1, A10 | Yes. Both plan sentences are quoted whole and match the plan. The misreading is withdrawn in so many words. The reported 1823 distances give a ratio of about 35 (13.3 / 0.375). The distances are unverified because this directory contains no raw output for the near miss. |
 | S3 (the CDS's A&A rule) | Review 3, the table and new C13; item 14 | Yes. Both archive addresses open today; each sentence is on the page the review now gives for it, and "Updated at: 7 January 2026" is on the `/legals/` copy. The A&A sentence reads as quoted. `LICENSING.md` is unchanged. |
 | S4 (ESA's wording) | Review 3, C9; item 14 | Yes in the review files. The pull request body still has the short form (the builder says so). The address added for the new reduction opens and has the quoted sentence and no licence statement. |
 | S5 (two published rules) | Review 4, D8, D4 and the summary table | Yes, except F4. The mistaken size comparison is withdrawn. The reading of section 2 is marked as a reading. |

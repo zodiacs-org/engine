@@ -1,10 +1,8 @@
 # Review 4: connector listing
 
-This is about listing the Zodiacs connector (its remote MCP server) in an AI
-assistant's connector directory. It is not about `LISTINGS.md` at the root of
-the site repository, which is a different document: its first lines read
-"Listings & Distribution Playbook ... token profiles, verified lists,
-aggregator listings, and search indexing". That file plays no part here.
+This review covers the Zodiacs remote MCP server and its listings in AI
+assistant directories. The site repository's root `LISTINGS.md` is a
+distribution playbook for an unrelated product.
 
 Redone on 2026-11-11 in two passes. The first pass had the engine repository
 and the connector's tool definitions as a session showed them. The second
@@ -14,10 +12,10 @@ pass, which this text now reflects, opened:
   `tools/list`, at 14:53 UTC on 2026-11-11 (server `zodiacs`, version 0.6.6,
   19 tools), and five tool calls with synthetic input;
 - the site repository at `47fee79f`: the server's source under
-  `src/ai-tools/`, the listing records under
-  `docs/platform/zodiacs-ai/` and `docs/platform/zodiacs-ai/claude-directory/`,
-  `integrations/chatgpt/`, and the site's open pull requests 968, 970, 971,
-  972, 974 and 975 (read with `gh`, not changed);
+  `src/ai-tools/`, the listing records under `docs/platform/zodiacs-ai/`
+  (including the Anthropic record in `docs/platform/zodiacs-ai/claude-directory/`),
+  the OpenAI integration in `integrations/chatgpt/`, and open pull requests
+  968, 970, 971, 972, 974 and 975 (read with `gh`, not changed);
 - the directories' published rules, fetched the same day (addresses in
   *The rules read*, below);
 - the live pages `https://zodiacs.org/privacy/` ("Last updated: 7 November
@@ -33,7 +31,7 @@ The first pass found one sentence about a submission, in an unmerged draft
 of the engine repository, and said the record was missing. The record is in
 the site repository.
 
-**Claude directory** (`docs/platform/zodiacs-ai/claude-directory/LISTING.md`
+**Anthropic directory** (`docs/platform/zodiacs-ai/claude-directory/LISTING.md`
 in the site repository):
 
 - Submitted 7 October 2026 as server 0.4.0 with six tools (`:214-216`,
@@ -70,13 +68,12 @@ What the reviewers have been *told* is another matter (D1).
 
 Fetched on 2026-11-11, all with status 200:
 
-- Anthropic Software Directory Policy,
-  `https://support.claude.com/en/articles/13145358-anthropic-software-directory-policy`
+- [Anthropic Software Directory Policy](https://support.claude.com/en/articles/13145358-anthropic-software-directory-policy)
   ("Updated over 2 weeks ago"; the older MCP Directory Policy and the
   Connectors Directory FAQ now redirect to it or to the developer pages).
-- Anthropic's submission guide and review criteria,
-  `https://claude.com/docs/connectors/building/submission.md` and
-  `.../review-criteria.md`, with `.../index.md` for limits.
+- [Anthropic's submission guide](https://claude.com/docs/connectors/building/submission.md)
+  and [review criteria](https://claude.com/docs/connectors/building/review-criteria.md),
+  with [the connector guide](https://claude.com/docs/connectors/building/index.md) for limits.
 - OpenAI's "Plugin guidelines",
   `https://developers.openai.com/plugins/plugin-guidelines`, to which the
   former Apps SDK submission guidelines now redirect, and
@@ -106,8 +103,8 @@ guessed they might be missing. They are present.
 
 ### D1. What the reviewers were told no longer matches the server
 
-- The description saved in the Claude portal: "the last recorded listing
-  description is the 0.5.1 wording of 28 October" (site pull request 968).
+- Site pull request 968 says of the Anthropic portal, "the last recorded
+  listing description is the 0.5.1 wording of 28 October".
   The record itself says "The directory text already submitted still says
   Zodiacs makes no personal predictions ... That portal copy has not been
   resubmitted" (`LISTING.md:48-51`). The server now gives forecasts, scores
@@ -176,11 +173,11 @@ deployed server is one staging review that predates the tools concerned.
 
 ### D4. Descriptions that direct the assistant
 
-Rule, Anthropic review criteria: "Describe what the tool does, and don't
-tell Claude how to behave." Rejected if they "Instruct Claude to call
-external software or tools the user didn't request" or "promote products
-and services". OpenAI: "Do not insert unrelated content, attempt to redirect
-the interaction".
+Anthropic's review criteria say "Describe what the tool does, and don't
+tell Claude how to behave." They reject descriptions that "Instruct Claude
+to call external software or tools the user didn't request" or "promote
+products and services". OpenAI's guidelines say "Do not insert unrelated
+content, attempt to redirect the interaction".
 
 In the live `tools/list` and instructions today:
 
@@ -276,16 +273,16 @@ Two things sit beside it:
   and 19 in prose, because of "the thirteen names its published schema
   allows" (`src/ai-tools/tools.ts:404`). Rule: descriptions and results
   "must precisely match actual functionality".
-- **Tokens.** Anthropic's policy: "We do not generally allow cryptocurrency
-  software in our directory." The connector has no such function. The
-  site's footer says "Zodiacs.org also operates Astrofolio, the Zodiac token
-  collection", and the terms page has a section on digital-asset risks.
-  Every tool result links to that site.
-- **Links that count visits.** Results link to zodiacs.org with
-  `?ref=assistant` or `?ref=chatgpt`. The privacy page discloses it. Rule:
-  not "primarily ... an advertising or promotional vehicle" (Anthropic
-  4C). Results also carry sign-up and invite links (pull request 971).
-- **Support.** The Claude listing gives `admin@zodiacs.org`; the OpenAI
+- **Site footer.** Tool results link to the site, whose footer mentions an
+  unrelated product also covered by the site's terms. Section 4A of
+  Anthropic's policy restricts directory listings for that kind of product.
+  The connector offers no tools for it.
+- **Links that count visits.** Results link to zodiacs.org with a `ref`
+  query parameter that identifies the assistant. The privacy page
+  discloses it. Anthropic's section 4C bars software that is "primarily
+  ... an advertising or promotional vehicle". Results also carry sign-up
+  and invite links (pull request 971).
+- **Support.** The Anthropic listing gives `admin@zodiacs.org`. The OpenAI
   package gives `https://zodiacs.org/about/` as `supportURL`, and
   `integrations/chatgpt/README.md:85` gives a third address. OpenAI asks
   for an "HTTPS customer support page".
@@ -293,29 +290,30 @@ Two things sit beside it:
   `https://zodiacs.org/mcp/engine` beside `/mcp`
   (`bot/astrologer-hosted-tools:bots/astrologer/template/LISTING.md:27`),
   with other tool names. It was not probed here.
-- **Size, and two published rules not set against the server before**
-  (fix round, `BREAKER.md` S5). The earlier wording set the 150,468 bytes
-  of the live `tools/list` response against Anthropic's limit of about
-  150,000 characters for a tool *result*. Those are different things; no
-  tool result seen came near that limit. The rules the size bears on are
-  these.
+- **Response size and identifiers** (fix round, `BREAKER.md`, S5). The
+  second reader reported 150,468 bytes for `tools/list` and 9,089 to 15,277
+  bytes for three event and capability results. These sizes and the sizes
+  reported on 13 November (`BREAKER-FIX.md`, F4) are unverified because
+  this directory contains no raw connector responses. Anthropic's limit of
+  about 150,000 characters applies to an individual tool result. The
+  `tools/list` response contains tool definitions.
   - Anthropic's policy, 5B: "MCP servers must be frugal with their use of
     tokens ... When possible, users should be given options to exclude
-    unnecessary text in the response." Observed: `tools/list` is 150,468
-    bytes, every tool carries an `outputSchema`, the portal noted "some
-    items were left out to fit its size limits", and each result this
-    review received carried a full receipt (conventions, coverage and about
-    25 convention identifiers) beside its answer. The second reader
-    measured three results at 9,089 to 15,277 bytes. The server gives no
-    option to leave the receipt out. The plan lists "short conventions
-    instead of 3 KB per result".
+    unnecessary text in the response." Each tool had an `outputSchema`, and
+    the portal noted "some items were left out to fit its size limits".
+    The three event and capability results carried receipts with
+    conventions and coverage. The server offered no option to omit them.
+    The plan lists "short conventions instead of 3 KB per result".
   - OpenAI's guidelines: "Do not include diagnostic, telemetry, or internal
     identifiers ... such as session IDs, trace IDs, request IDs,
     timestamps, or logging metadata ... unless they are strictly required
-    to fulfill the user's query." Observed: every result carries a receipt
-    with a SHA-256 digest, engine and ephemeris versions and convention
-    identifiers. Whether a receipt is "strictly required" is the
-    reviewer's call. It is the product's provenance, and the server's own
+    to fulfill the user's query." Those three receipts contained a SHA-256
+    digest, engine and ephemeris versions and convention identifiers. On
+    13 November, `get_sky` also returned a receipt at
+    `data.calculation.receipt`. The date-only `get_natal_chart` result
+    contained no receipt, digest or engine version (`BREAKER-FIX.md`, F4).
+    Whether a receipt is "strictly required" is the reviewer's call.
+    It is the product's provenance, and the server's own
     instructions say to mention such details "only if the person asks".
 
 ### What ZOD-62 means for the listing
@@ -336,8 +334,8 @@ with the resubmission, not after it.
 | Fail on plain reading | Descriptions direct the assistant (D4) | Fix drafted: site PR 971 |
 | Mismatch | Portal description and notes against the live server (D1) | Draft note in site PR 968, not sent |
 | Thin evidence | Storage claim on production (D3) | One staging log review, 2026-10-02 |
-| Open | Coordinates in schemas, capabilities count, token footer, support address (D7, D8) | No record of a decision |
-| Open | Token frugality and receipts in every result (D8, Anthropic 5B; OpenAI's rule on identifiers) | No record of a decision |
+| Open | Coordinates in schemas, capabilities count, unrelated product in the site footer, support address (D7, D8) | No record of a decision |
+| Open | Response length and identifiers in receipts (D8, Anthropic 5B and OpenAI's rule on identifiers) | No record of a decision |
 
 ## Not checked
 

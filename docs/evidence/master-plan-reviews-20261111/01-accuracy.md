@@ -358,8 +358,9 @@ Horizons table instead (8 hours 8 minutes and 9 hours 37 minutes, 1900 to
 
 This job re-checked them (`sign-changes/` in this folder: method, tools,
 results and limits). For every sign change of Neptune and Pluto that the
-engine of `main` finds from 1800 to 2200, it found the same sign change on
-JPL Horizons (DE441) and compared the two in TT:
+engine (`1.1.0-rc.3`, default `astronomy-engine`) finds from 1800 to 2200,
+it found the same sign change on JPL Horizons (DE441) and compared the two
+in TT.
 
 | Body | Sign changes | Median difference | Largest | Where |
 | --- | ---: | ---: | ---: | --- |
@@ -395,12 +396,11 @@ third reader. Two cautions stand, both in `sign-changes/README.md`: the
 requests did not carry the User-Agent that JPL's fair-use policy asks for,
 and the digests kept with each record cannot be checked against anything.
 
-The second reader also found the clearest case of the last point above. On
-1823-12-15, by Horizons, Pluto turns direct 0.375″ inside Aries with no
-crossing; the engine's Pluto on those days comes no closer than 13.3″ to
-the boundary. Neither source has a sign change there, so nothing is
-missing, and the margin on the sky is about 35 times smaller than the
-engine's error at that date.
+The second reader reported a near miss for Pluto on 1823-12-15, with no
+crossing in either source. The reported closest approaches to the Aries
+boundary were 0.375″ on Horizons and 13.3″ on the engine, a ratio of about
+35. These figures are unverified because this directory contains no raw
+output for the near miss.
 
 ## Not checked
 
@@ -411,4 +411,5 @@ engine's error at that date.
   found in either repository or in the sweep.
 - Whether production serves the site's `main`. The connector's own answer
   (version 0.6.6, engine 1.1.0-rc.2) is what was observed.
-- A10's comparison is this job's own and has had no second reader.
+- A second reader checked parts of A10. That reader's separate Horizons
+  scan has no committed output here for a third reader to check.

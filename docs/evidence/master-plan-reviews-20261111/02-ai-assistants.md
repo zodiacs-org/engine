@@ -224,11 +224,11 @@ the progressions should also refuse a bare date".
 
 ### B12. Under 13 and "the chart for right now" (ZOD-62): confirmed live
 
-`get_natal_chart` with `birthDate` 2026-11-11 was refused: "Zodiacs is not
-directed at children under 13, so it makes no card, chart or reading from a
-birth date less than 13 years ago, or a birthday card for a day in those
-years." The site's code applies the refusal to every tool before it runs
-(`src/ai-tools/server.ts:127-129` in the site repository), on any
+`get_natal_chart` refused a synthetic date in the under-13 window. It said
+"Zodiacs is not directed at children under 13, so it makes no card, chart
+or reading from a birth date less than 13 years ago, or a birthday card
+for a day in those years." The site's code applies the refusal to every
+tool before it runs (`src/ai-tools/server.ts:127-129` in the site repository), on any
 `birthDate`. `get_sky` does answer for the present instant, with positions
 and the Moon's phase and no houses or angles. So ZOD-62's description holds:
 there is no way to ask the connector for a chart of a moment with houses,

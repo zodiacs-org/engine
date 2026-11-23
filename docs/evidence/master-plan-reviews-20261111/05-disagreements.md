@@ -76,9 +76,10 @@ to 9.4 h, Pluto up to 29 h off on the default path".
 
 *Found:* the review behind both figures was not found, and site pull request
 975 declined to use them for want of evidence. This job measured it (Review
-1, A10): against JPL Horizons, over every sign change the engine finds from
-1800 to 2200, Neptune is off by up to 9.51 hours (1848) and Pluto by up to
-31.54 hours (2185). So the plan's figures are about right and slightly low.
+1, A10). Over every sign change that `1.1.0-rc.3` found from 1800 to 2200,
+the largest differences from JPL Horizons were 9.51 hours for Neptune
+(1848) and about 31.54 hours for Pluto (2185). The plan's figures are
+about right and slightly low.
 They are the figures of a 400-year span; over 1900 to 2099 the largest are
 about 8 and 9.6 hours, which is what the site's table gives. The
 disagreement is with stating them as known when no evidence was committed,
@@ -193,10 +194,11 @@ either side of a station near a boundary, where a few milliarcseconds move
 the crossing by minutes and a little more can add or remove a crossing. The
 pack's own error (up to 0.0005″ for Pluto), the IAU 2000B nutation (up to
 0.0023″ from IAU 2000A) and the difference between DE440 and Horizons's
-DE441 are all of that size. The second reader found the sharpest case: on
-1823-12-15, by Horizons, Pluto turns direct 0.375″ inside Aries without
-crossing (`BREAKER.md`, N2). A reference that differs by half an arcsecond
-there has a pair of sign changes that Horizons does not.
+DE441 are all of that size. The second reader reported that Pluto turned
+direct 0.375″ inside Aries on Horizons on 1823-12-15, without crossing
+(`BREAKER.md`, N2). That figure is unverified because this directory
+contains no raw output for the near miss. At that distance, shifting the
+longitude half an arcsecond toward the boundary could add two sign changes.
 
 *Instead:* define the test in longitude at Horizons's instant (for example
 within a stated number of milliarcseconds), which is well posed at every
@@ -319,10 +321,11 @@ record the contact.
 *Plan, Phase 6:* "decide what to do with the site repo history that holds
 about 44,000 Swiss-generated values."
 
-*Found:* the figure matches the site's record (44,071 tokens removed from
-the tree, history not rewritten). The plan does not mention four other
-places where Swiss Ephemeris is the yardstick, each of which matters more
-to a reader than the history does:
+*Found:* the site's record counts "44,071 distinctive numbers and
+timestamps that left" and says the history was not rewritten (Review 3,
+C12). The plan does not mention four other places where Swiss Ephemeris
+is the yardstick, each of which matters more to a reader than the history
+does:
 
 - the live methodology page's section "Agreement with Swiss Ephemeris",
   with figures to 0.1″ (Review 1, A8);
@@ -409,9 +412,9 @@ So that the list is not read as a rejection of the plan:
 - "41 of 110 time and calendar tests are 'unsupported'": `conformance/RESULTS.md`, 69 pass and 41 unsupported.
 - "rules taken from the visitor's device after 1970": every live receipt carries `host-intl-from-1970`.
 - "the npm version trap": `npm view @zodiacs/engine dist-tags` on 2026-11-11 gave `latest: 1.0.0, next: 0.1.1-rc.16`.
-- "@zodiacs/sdk, which is the token registry": its npm description is "Official read-only TypeScript SDK for the canonical Zodiacs.org registry ...".
+- The plan identifies `@zodiacs/sdk` as a client for a separate registry. Its npm description reads "Official read-only TypeScript SDK for the canonical Zodiacs.org registry ...".
 - "13 tools listed, 19 exist": confirmed live (Review 2, B13).
-- "tool descriptions that instruct Claude": confirmed against the directory's rule (Review 4, D4).
+- Several tool descriptions direct the assistant. Review 4, D4 checks the examples against Anthropic's directory criteria.
 - "Neptune into Aries mismatch (connector says 14:31 UTC, methodology page says 17:35)": confirmed live.
 - "version 0.6.6": the live server reports it.
 - "A licence record that says go for MIT plus CC-BY-4.0, with open questions listed": `LICENSING.md:3-13`.
@@ -443,15 +446,16 @@ none of the lists. None was checked, and each says what a check would need:
 
 - Phase 4: "one house default everywhere, one name for the zone setting,
   one chart output shape ... tropical or sidereal stated up front". Not
-  checked. It could be, against the live `tools/list` and results. What
-  was seen in passing: the connector's `get_natal_chart` returned
-  `"houseSystem":null` for a chart with no time, and its receipts carry
-  `"zodiac":"tropical"`; tools name the zone input `zone`, `birthZone` and
-  `currentZone`. That is not a check of the statement.
-- Phase 4: "short conventions instead of 3 KB per result". Not measured by
-  this review. The second reader measured three results at 9,089 to 15,277
-  bytes each (`BREAKER.md`, S5); the share that is conventions was not
-  measured.
+  checked across tools. The date-only `get_natal_chart` result contained
+  `"houseSystem":null`, had no receipt and stated neither tropical nor
+  sidereal. The `get_sky` result did include a receipt (`BREAKER-FIX.md`,
+  F4). The tool list named three zone inputs, `zone`, `birthZone` and
+  `currentZone`.
+- Phase 4: "short conventions instead of 3 KB per result". The second
+  reader reported 9,089 to 15,277 bytes for three complete results
+  (`BREAKER.md`, S5). These sizes are unverified because this directory
+  contains no raw responses. Neither reader measured the share taken by
+  conventions.
 - Phase 4: "the sky fact checker's description". Not checked against what
   the tool does beyond the one call in Review 2, B9.
 - Phase 2: "Accept seconds in birth times." Not checked. The connector's

@@ -19,7 +19,7 @@ still holds), or a **note**.
 | R2 | Pass | **Pass.** The A1 and A2 tables match the committed files and pull request 92's README figure for figure. The sign-change measurement was reproduced and checked a second way (N2). |
 | R3 | Pass | **Pass, with two corrections.** The live results reproduce. One relayed time was not checked and does not match the live tool (S1). The state of the bare-date fix is out of date (B1). |
 | R4 | Pass, two partial rows | **Pass, with two corrections** (S3, S4). Every quoted term was found on the provider's page. |
-| R5 | Pass | **Pass, with one gap** (S5). No confusion with the token playbook (N5). |
+| R5 | Pass | **Pass, with one gap** (S5). The review used the connector directory records (N5). |
 | R6 | Pass | **Does not pass as written.** One decision recorded in Linear on the day of the review is missing and two items rest on the state it replaced (B1). One item misreads the plan (S2). Several plan statements are in none of the four lists (S6). |
 | R7 | Pass | **Pass** (N6). |
 
@@ -111,8 +111,7 @@ measured results." Items 6 and 9 argue against both targets without
 quoting that the plan itself marks them as proposals.
 
 The second half of item 9 stands (a line in minutes is badly posed near a
-station), and this review found a case that supports it (N2, the 1823
-station).
+station). N2 records an unverified near miss at the 1823 station.
 
 ### S3. The CDS's own rule for one of the three catalogues was not quoted (R4)
 
@@ -159,19 +158,21 @@ non-commercial.
 
 ### S5. Two published rules were not set against the server (R5)
 
-Both pages were fetched again here and both rules are on them.
+Both pages were fetched again here and both rules are on them. The
+connector byte counts below are unverified because this directory
+contains no raw responses.
 
 - Anthropic's policy, 5B: "MCP servers must be frugal with their use of
   tokens ... When possible, users should be given options to exclude
-  unnecessary text in the response." Observed here: the `tools/list`
-  response is 150,468 bytes (the review's figure, confirmed), every tool
-  carries an `outputSchema`, and the three event and capability results
-  called were 9,089 to 15,277 bytes, each with a full receipt. The plan
-  itself lists "short conventions instead of 3 KB per result".
+  unnecessary text in the response." This reader recorded 150,468 bytes
+  for `tools/list` and 9,089 to 15,277 bytes for three event and capability
+  results. Every tool had an `outputSchema`, and each of those three
+  results carried a full receipt. The plan itself lists "short conventions
+  instead of 3 KB per result".
 - OpenAI's guidelines: "Do not include diagnostic, telemetry, or internal
   identifiers ... such as session IDs, trace IDs, request IDs, timestamps,
   or logging metadata ... unless they are strictly required to fulfill the
-  user's query." Every result seen carries a receipt with a SHA-256
+  user's query." Those three receipts each carried a SHA-256
   digest, engine and ephemeris versions and convention identifiers.
 
 Review 4's D8, "Result size", sets the 150,468 bytes of `tools/list`
@@ -294,9 +295,8 @@ between 15:30 and 15:40 UTC, and the quoted words found on the page:
   `LICENSE`, the licence files of astronomy-engine and ERFA, and USNO's
   NOVAS page.
 - Directory rules: the sections of Anthropic's policy that Review 4 cites
-  (1D, 1E, 2B, 3A, 3C, 3E, 3H, 4C, 5C, 5E and 5F) and its sentence on
-  cryptocurrency software (in 4A); the submission guide and
-  review criteria; the limit of about 150,000 characters; OpenAI's
+  (1D, 1E, 2B, 3A, 3C, 3E, 3H, 4A, 4C, 5C, 5E and 5F), the submission
+  guide and review criteria, the limit of about 150,000 characters, OpenAI's
   guidelines on annotations, age, location fields and unrelated content,
   and "New tools remain unavailable until approved".
 
@@ -326,14 +326,13 @@ two paragraphs.
   the twelve boundaries. Horizons has 103 for Neptune and 73 for Pluto,
   the engine's counts. So at one-day resolution there is no sign change on
   Horizons that the engine lacks.
-- The same scan looked for near misses: a closest approach under 120″ to a
-  boundary with no crossing within 40 days. There is one. On 1823-12-15
-  Pluto turns direct 0.375″ inside Aries by Horizons (ten-minute rows over
-  16 days, no crossing). The engine's Pluto on the same days comes no
-  closer than 13.3″. Neither has a crossing, so nothing is missing, but
-  the margin on the sky is 35 times smaller than the engine's error there.
-  It is the clearest case for item 9's point and Review 1, A10, should
-  carry it.
+- The same scan looked for approaches within 120″ of a boundary with no
+  crossing within 40 days. The reader reported one near miss. On
+  1823-12-15 Pluto reportedly turned direct 0.375″ inside Aries on
+  Horizons (ten-minute rows over 16 days), while the engine came within
+  13.3″. Neither showed a crossing. The figures and their ratio of about
+  35 are unverified because this directory contains no raw output for
+  the near miss.
 - "On the years the site's table covers, this check agrees": the site's
   table gives 34,562 s (9.60 h) as its largest ingress correction; this
   check's is 9.63 h (Pluto, 2066-07-11). They differ by under two minutes.
@@ -361,7 +360,7 @@ four hints; `get_capabilities` names engine 1.1.0-rc.2 and astronomy-engine
 2.1.19, lists 13 tools in `tools` and 19 in `coverage.tools`;
 `get_upcoming_events` gives `2026-01-26T14:31:41.087Z` and
 `26/01/2026, 14:31:41 GMT+0`; `check_sky_fact` gives `.084` and "depends";
-`get_natal_chart` refuses a birth date of 2026-11-11 in the words quoted,
+`get_natal_chart` refuses a synthetic date in the under-13 window,
 and for 1990-05-03 alone returns `timeKnown: false` and
 `"basis":"utc-noon"`. No tool description contains "NASA", "JPL",
 "precise", "Swiss" or an arcsecond figure (D6 holds). Five tools take
@@ -372,12 +371,11 @@ the two developer pages read as quoted, and `/how-we-calculate/` is 404.
 
 ### N5. No confusion between the two "listings" documents
 
-`LISTINGS.md` at the root of the site repository begins "Listings &
-Distribution Playbook ... token profiles, verified lists, aggregator
-listings". Review 4 sets it aside in its first paragraph and works from
-`docs/platform/zodiacs-ai/claude-directory/LISTING.md` and
-`RESUBMISSION-0.6.0.md`. The passages it quotes from those two files, from
-`src/ai-tools/tools.ts:404`, `server.ts:127-129`,
+`LISTINGS.md` at the root of the site repository covers distribution for
+an unrelated product. Review 4 uses the Anthropic listing record
+(`docs/platform/zodiacs-ai/claude-directory/LISTING.md`) and the OpenAI
+record (`RESUBMISSION-0.6.0.md`). The passages it quotes from those two
+files, from `src/ai-tools/tools.ts:404`, `server.ts:127-129`,
 `scripts/build-ai-people.mjs` and `docs/platform/programme/STATUS.md:1512`
 were opened here and read as quoted. Site pull requests 943, 968, 970,
 971, 972, 974 and 975 are all still open drafts.

@@ -1,9 +1,10 @@
 # The four reviews behind the engine master plan, redone (ZOD-98)
 
 Written on 2026-11-11 on this job's audit branch, from `origin/main` at
-`bc0b5a7`. These files are a review record. They change no code, no packed
-file and no existing document, and they propose no sentence for
-publication.
+`bc0b5a7`. These files preserve the historical review of 11 to 13 November
+2026. They change no code, no packed file and no existing document, and
+they propose no sentence for publication. See the [23 November update](#historical-context-as-of-23-november-2026)
+for the released engine and the live connector.
 
 | File | What it is |
 | --- | --- |
@@ -37,7 +38,31 @@ The reviews were written in two passes on the same day.
   files changed. No source was re-measured, nothing was sent to any
   provider, and no licence file was touched.
 
-The reviews cite this repository at `bc0b5a7`. The branch has since been
+## Historical context as of 23 November 2026
+
+`@zodiacs/engine` 2.0.0 shipped on npm on 21 November 2026. Its default
+DE440 source passes 240/240 L1 position vectors. The 48 passes and 192
+failures reported in these reviews describe the `astronomy-engine` fallback.
+The Neptune and Pluto ingress measurements cover 1800 to 2200 on
+`1.1.0-rc.3`, when `astronomy-engine` was the default.
+[npm publication record][publication], [2.0.0 conformance results][results]
+and [ingress method and results](sign-changes/README.md).
+
+In 2.0.0, bare natal dates require `timeKnown: false`. The release licence
+record leaves open whether ESA's terms cover the Hipparcos values obtained
+through VizieR. [2.0.0 migration guide][migration] and [licence record][licensing].
+
+The live connector changed independently after 13 November. On 23 November
+the independent reviewer saw the Neptune ingress displayed as 14:32 UTC.
+The calculation still included milliseconds.
+[Independent review on pull request 94](https://github.com/zodiacs-org/engine/pull/94#issuecomment-7095587970).
+
+[publication]: https://github.com/zodiacs-org/engine/blob/a70ed0514deca37bb417d00164c379dda9087d09/docs/evidence/2.0.0-published-20261121/README.md
+[results]: https://github.com/zodiacs-org/engine/blob/a70ed0514deca37bb417d00164c379dda9087d09/conformance/RESULTS.md
+[migration]: https://github.com/zodiacs-org/engine/blob/a70ed0514deca37bb417d00164c379dda9087d09/docs/migrating-to-2.md
+[licensing]: https://github.com/zodiacs-org/engine/blob/a70ed0514deca37bb417d00164c379dda9087d09/LICENSING.md
+
+The reviews cite this repository at `bc0b5a7`. The branch was later
 rebased onto `main` at `8da3a4e`, which changed `docs/calc.md` and
 `docs/techniques.md` (pull requests 97 and 98, about how the measured
 bounds are labelled). Line numbers given for `docs/calc.md` are those of
@@ -86,12 +111,12 @@ Its pull requests 943, 968, 970, 971, 972, 974 and 975 were read with `gh`.
 
 - `POST https://zodiacs.org/mcp`: `initialize` and `tools/list` (server
   `zodiacs` 0.6.6, 19 tools).
-- Six tool calls through the connector, all with synthetic input:
-  `get_capabilities`; `get_upcoming_events` (Neptune, ingress, 2026-01-20 to
-  2026-02-01); `check_sky_fact` (ingress, Neptune, aries, 2026-01-26);
-  `get_natal_chart` with `birthDate` 2026-11-11 (refused); `get_natal_chart`
-  with `birthDate` 1990-05-03 and nothing else; `get_sky` (Sun, Moon,
-  Neptune, zone Asia/Bangkok).
+- Six tool calls used synthetic input. They included `get_capabilities`,
+  `get_upcoming_events` (Neptune ingress, 2026-01-20 to 2026-02-01),
+  `check_sky_fact` (Neptune ingress, `aries`, 2026-01-26) and `get_sky`
+  (Sun, Moon, Neptune, zone Asia/Bangkok). Of two `get_natal_chart` calls,
+  one triggered the under-13 refusal. The other supplied only
+  `birthDate` 1990-05-03.
 - Pages: `https://zodiacs.org/methodology/`, `/privacy/`, `/terms/`,
   `/developers/ai/`, `/developers/mcp/` (all 200), `/how-we-calculate/`
   (404).
@@ -133,5 +158,7 @@ Run in this job: `npm ci` and `npm run build` on `bc0b5a7` (Node v22.23.3),
 to produce the `dist/` that `sign-changes/tools/engine_ingresses.mjs` and
 two one-line checks (Review 2, B11 and B14) call; and
 `sign-changes/tools/horizons_check.py`. No test suite, no conformance run
-and no sweep was run. Every figure in these files that this job did not
-measure is copied from a committed file or a fetched page named beside it.
+and no sweep was run. The 176 matched crossings can be checked against
+`sign-changes/results/horizons.json`. The reported 1823 near-miss figures
+and connector response sizes, including those from 13 November, are
+unverified. This directory contains no raw output for either set of figures.
