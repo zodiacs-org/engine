@@ -212,9 +212,9 @@
       "summary": {
         "total": {
           "count": 640,
-          "pass": 569,
+          "pass": 639,
           "fail": 0,
-          "unsupported": 71,
+          "unsupported": 1,
           "error": 0
         },
         "byLevel": {
@@ -241,9 +241,9 @@
           },
           "L4": {
             "count": 140,
-            "pass": 70,
+            "pass": 140,
             "fail": 0,
-            "unsupported": 70,
+            "unsupported": 0,
             "error": 0
           }
         },
@@ -427,17 +427,42 @@
           },
           "event.station": {
             "count": 30,
-            "pass": 0,
+            "pass": 30,
             "fail": 0,
-            "unsupported": 30,
-            "error": 0
+            "unsupported": 0,
+            "error": 0,
+            "residuals": {
+              "tt_s": {
+                "unit": "s",
+                "n": 30,
+                "median": 0.205497264,
+                "p95": 3.37400794,
+                "max": 16.1550074
+              }
+            }
           },
           "event.lunation": {
             "count": 40,
-            "pass": 0,
+            "pass": 40,
             "fail": 0,
-            "unsupported": 40,
-            "error": 0
+            "unsupported": 0,
+            "error": 0,
+            "residuals": {
+              "tt_s": {
+                "unit": "s",
+                "n": 30,
+                "median": 0.0000114440918,
+                "p95": 0.00101947784,
+                "max": 0.00199959078
+              },
+              "utc_s": {
+                "unit": "s",
+                "n": 10,
+                "median": 0.000499725342,
+                "p95": 0.000999927521,
+                "max": 0.000999927521
+              }
+            }
           }
         },
         "byTag": {
@@ -450,16 +475,16 @@
           },
           "eclipse": {
             "count": 6,
-            "pass": 0,
+            "pass": 6,
             "fail": 0,
-            "unsupported": 6,
+            "unsupported": 0,
             "error": 0
           },
           "utc-input": {
             "count": 20,
-            "pass": 10,
+            "pass": 20,
             "fail": 0,
-            "unsupported": 10,
+            "unsupported": 0,
             "error": 0
           },
           "cross-check": {
@@ -471,7 +496,7 @@
           }
         }
       },
-      "notes": "- **Positions (L1).** From 1.1.0-rc.9 a plain call computes on the sealed DE440 pack the package ships (`docs/de440.md`), and this run answers the 240 position requests with a plain `natalChart`, outside `withEphemeris`: nothing is opened by the adapter, nothing is supplied to it and nothing is fetched. All 240 pass. Against DE441 the largest differences are 0.0127″ in longitude and 0.0011″ in latitude, both the Moon's (L1-POS-0002 in 1851 and L1-POS-0222 in 2125); the other nine bodies are within 0.0038″ in longitude and 0.0003″ in latitude. The arbiter's own check against DE440s (`arbiters/l1/README.md`) puts the lunar difference between DE440 and DE441 at up to 12.63 mas in 1851. Mars to Pluto are system barycentres on both sides. Outside the pack's years (1790 to 2210), and after `setDefaultEphemeris(\"astronomy-engine\")`, the engine computes on astronomy-engine: the next section runs it that way, and 48 of the 240 pass.\n- **The pack.** SHA-256 `51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7`, 2,489,664 bytes, refitted from NAIF's `de440.bsp` (SHA-256 `a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5`) for 1790 to 2210. It is in the repository and in the package, so continuous integration reruns this section. The angles, houses and time vectors of this run come from the same plain calls; they do not depend on the ephemeris, and their verdicts are those of the next section.\n- **Time zones (L3).** Before 1970 the engine reads the tzdb 2026f history with `backzone` that it ships (from 2.0.0-rc.3; America/Yellowknife held at tzdata 2025c by the owner's decision), loaded with `prepareLocalTime`, so the 20 vectors tagged `backzone-history` pass; from 1970 it reads the host's `Intl` data. A repeated local time resolves to its earlier instant, and the transition the engine reports gives the offsets of both readings, so the five folds are answered. All 45 pass.\n- **TT − UTC and ΔT (L3).** From 1972 to 2027-10-02 the engine takes TAI − UTC from the IERS leap-second list updated 2026-07-06, and UT1 − UTC from IERS: the EOP 20 C04 series in 1972 and `finals2000A.all` of 2026-09-24 from 1973-01-02. The adapter reports TT − UTC as a chart's ΔT (TT − UT1) plus its UT1 − UTC. A leap second itself cannot be expressed as a JavaScript date, so that case is unsupported.\n- **Calendars and local mean time (L3).** The 35 calendar vectors are answered by `julianDayNumber` and `dateOfJulianDayNumber`, and the 5 local mean time vectors by `localMeanTimeOffset`, all from `@zodiacs/engine/geo`, with years, months and days in astronomical numbering as the vectors give them. All 40 pass. They are new in 2.0.0-rc.3; earlier releases report these 40 vectors as unsupported.\n- **Unsupported (L3).** One vector: the leap second instant above, which a JavaScript date cannot express.\n- **Event times (L4).** New in suite 0.3.0. The 70 ingresses are answered by `events()` of `@zodiacs/engine/calc`, its longitude crossing search, on the window each vector gives (TT, or UTC for the 10 tagged `utc-input`); in this run it computes on the DE440 pack. All 70 pass; the largest residual is 1.53 s on TT, and no residual is more than 0.012 of its vector's tolerance. The 30 stations and 40 lunations are unsupported: the engine's public API has no station or lunation search (`events()` searches one body's longitude crossings), and the adapter says so for each. The design dropped one instant, L4-ING-0060, Pluto's first ingress after 2140-01-01, which falls after the end of the kernel's coverage; it is listed in `vectors/0.3.0/L4-events.json`."
+      "notes": "- **Positions (L1).** From 1.1.0-rc.9 a plain call computes on the sealed DE440 pack the package ships (`docs/de440.md`), and this run answers the 240 position requests with a plain `natalChart`, outside `withEphemeris`: nothing is opened by the adapter, nothing is supplied to it and nothing is fetched. All 240 pass. Against DE441 the largest differences are 0.0127″ in longitude and 0.0011″ in latitude, both the Moon's (L1-POS-0002 in 1851 and L1-POS-0222 in 2125); the other nine bodies are within 0.0038″ in longitude and 0.0003″ in latitude. The arbiter's own check against DE440s (`arbiters/l1/README.md`) puts the lunar difference between DE440 and DE441 at up to 12.63 mas in 1851. Mars to Pluto are system barycentres on both sides. Outside the pack's years (1790 to 2210), and after `setDefaultEphemeris(\"astronomy-engine\")`, the engine computes on astronomy-engine: the next section runs it that way, and 48 of the 240 pass.\n- **The pack.** SHA-256 `51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7`, 2,489,664 bytes, refitted from NAIF's `de440.bsp` (SHA-256 `a4ce9bf9b3282becc9f4b2ac3cebe03a2ae7599981aabd7265fd8482fff7c4b5`) for 1790 to 2210. It is in the repository and in the package, so continuous integration reruns this section. The angles, houses and time vectors of this run come from the same plain calls; they do not depend on the ephemeris, and their verdicts are those of the next section.\n- **Time zones (L3).** Before 1970 the engine reads the tzdb 2026f history with `backzone` that it ships (from 2.0.0-rc.3; America/Yellowknife held at tzdata 2025c by the owner's decision), loaded with `prepareLocalTime`, so the 20 vectors tagged `backzone-history` pass; from 1970 it reads the host's `Intl` data. A repeated local time resolves to its earlier instant, and the transition the engine reports gives the offsets of both readings, so the five folds are answered. All 45 pass.\n- **TT − UTC and ΔT (L3).** From 1972 to 2027-10-02 the engine takes TAI − UTC from the IERS leap-second list updated 2026-07-06, and UT1 − UTC from IERS: the EOP 20 C04 series in 1972 and `finals2000A.all` of 2026-09-24 from 1973-01-02. The adapter reports TT − UTC as a chart's ΔT (TT − UT1) plus its UT1 − UTC. A leap second itself cannot be expressed as a JavaScript date, so that case is unsupported.\n- **Calendars and local mean time (L3).** The 35 calendar vectors are answered by `julianDayNumber` and `dateOfJulianDayNumber`, and the 5 local mean time vectors by `localMeanTimeOffset`, all from `@zodiacs/engine/geo`, with years, months and days in astronomical numbering as the vectors give them. All 40 pass. They are new in 2.0.0-rc.3; earlier releases report these 40 vectors as unsupported.\n- **Unsupported (L3).** One vector: the leap second instant above, which a JavaScript date cannot express.\n- **Event times (L4).** New in suite 0.3.0. The 70 ingresses are answered by `events()` of `@zodiacs/engine/calc`, its longitude crossing search, on the window each vector gives (TT, or UTC for the 10 tagged `utc-input`); in this run it computes on the DE440 pack. All 70 pass; the largest residual is 1.53 s on TT, and no residual is more than 0.012 of its vector's tolerance. The 2.1.0 prototype adds `searchStations()` and `searchLunations()`. On the shipped pack all 30 stations meet their time tolerance and match direction, and all 40 lunations meet their time tolerance. The largest station residual is +16.155007362365723 s (L4-STA-0030, tolerance 49,110 s). The largest lunation residual is +0.001999590778723359 s (L4-LUN-0028, tolerance 2 s). These results measure the draft build, which still reports package version 2.0.0. The released 2.0.0 archive skips these 70 requests. The signed residuals for both sources and all 70 tolerances are in `docs/evidence/station-lunation-search/residuals.csv`. The design dropped one instant, L4-ING-0060, Pluto's first ingress after 2140-01-01, which falls after the end of the kernel's coverage; it is listed in `vectors/0.3.0/L4-events.json`."
     },
     {
       "file": "results/zodiacs-engine-astronomy-engine.json",
@@ -500,9 +525,9 @@
       "summary": {
         "total": {
           "count": 640,
-          "pass": 341,
-          "fail": 228,
-          "unsupported": 71,
+          "pass": 392,
+          "fail": 247,
+          "unsupported": 1,
           "error": 0
         },
         "byLevel": {
@@ -529,9 +554,9 @@
           },
           "L4": {
             "count": 140,
-            "pass": 34,
-            "fail": 36,
-            "unsupported": 70,
+            "pass": 85,
+            "fail": 55,
+            "unsupported": 0,
             "error": 0
           }
         },
@@ -715,17 +740,42 @@
           },
           "event.station": {
             "count": 30,
-            "pass": 0,
+            "pass": 30,
             "fail": 0,
-            "unsupported": 30,
-            "error": 0
+            "unsupported": 0,
+            "error": 0,
+            "residuals": {
+              "tt_s": {
+                "unit": "s",
+                "n": 30,
+                "median": 102.158495,
+                "p95": 317.170995,
+                "max": 430.278018
+              }
+            }
           },
           "event.lunation": {
             "count": 40,
-            "pass": 0,
-            "fail": 0,
-            "unsupported": 40,
-            "error": 0
+            "pass": 21,
+            "fail": 19,
+            "unsupported": 0,
+            "error": 0,
+            "residuals": {
+              "tt_s": {
+                "unit": "s",
+                "n": 30,
+                "median": 2.95149803,
+                "p95": 10.5970087,
+                "max": 10.7299843
+              },
+              "utc_s": {
+                "unit": "s",
+                "n": 10,
+                "median": 0.823500156,
+                "p95": 2.27700043,
+                "max": 2.27700043
+              }
+            }
           }
         },
         "byTag": {
@@ -738,16 +788,16 @@
           },
           "eclipse": {
             "count": 6,
-            "pass": 0,
-            "fail": 0,
-            "unsupported": 6,
+            "pass": 3,
+            "fail": 3,
+            "unsupported": 0,
             "error": 0
           },
           "utc-input": {
             "count": 20,
-            "pass": 9,
-            "fail": 1,
-            "unsupported": 10,
+            "pass": 18,
+            "fail": 2,
+            "unsupported": 0,
             "error": 0
           },
           "cross-check": {
@@ -759,7 +809,7 @@
           }
         }
       },
-      "notes": "- **What this run is.** The same adapter and the same build as the section above, started with `--ephemeris astronomy-engine`, which calls `setDefaultEphemeris(\"astronomy-engine\")` first: every request answered on astronomy-engine 2.1.19's series, the engine's fallback outside the DE440 pack's years and what every build before 1.1.0-rc.9 computed on. All 640 vectors are run; outside L1 and L4 its verdicts are the section above's. Up to 2.0.0-rc.2 this file was also the baseline the offline CLI's consumer check held the carried 1.0.0-rc.2 archive to; from 2.0.0-rc.3 that check has its own pinned baseline, `tools/cli/baselines/engine-1.0.0-rc.2-node-22.22.2.json`, the verdicts this file held at `373ceda`.\n- **Positions (L1).** 48 pass and 192 fail at 1″. Against DE441 the positions differ by a median of 2.08″ in longitude. The largest differences are 18.8″ in longitude (Neptune) and 19.1″ in latitude (Saturn); the Sun is within 1.64″ and the Moon within 3.75″. These are the verdicts the engine's own section held until 1.1.0-rc.7.\n- **Calendars and local mean time (L3).** As in the section above, the 40 calendar and local mean time vectors pass through `julianDayNumber`, `dateOfJulianDayNumber` and `localMeanTimeOffset`, new in 2.0.0-rc.3. The carried 1.0.0-rc.2 archive has none of them and answers those 40 vectors as unsupported, so on them it differs from this file and matches its pinned baseline. The one unsupported vector is the leap second instant.\n- **Event times (L4).** The 70 ingresses go through the same `events()` search, here on astronomy-engine's positions: 34 pass and 36 fail, among them one of the 10 in UTC (L4-UTC-0005). The failures follow the positions of L1: a slow body takes long to move the difference, so Neptune's ingress of 2148 (L4-ING-0054) is 10,366 s late, 16 times its tolerance of 649 s. Stations and lunations are unsupported, as in the section above."
+      "notes": "- **What this run is.** The same adapter and the same build as the section above, started with `--ephemeris astronomy-engine`, which calls `setDefaultEphemeris(\"astronomy-engine\")` first: every request answered on astronomy-engine 2.1.19's series, the engine's fallback outside the DE440 pack's years and what every build before 1.1.0-rc.9 computed on. All 640 vectors are run; outside L1 and L4 its verdicts are the section above's. Up to 2.0.0-rc.2 this file was also the baseline the offline CLI's consumer check held the carried 1.0.0-rc.2 archive to; from 2.0.0-rc.3 that check has its own pinned baseline, `tools/cli/baselines/engine-1.0.0-rc.2-node-22.22.2.json`, the verdicts this file held at `373ceda`.\n- **Positions (L1).** 48 pass and 192 fail at 1″. Against DE441 the positions differ by a median of 2.08″ in longitude. The largest differences are 18.8″ in longitude (Neptune) and 19.1″ in latitude (Saturn); the Sun is within 1.64″ and the Moon within 3.75″. These are the verdicts the engine's own section held until 1.1.0-rc.7.\n- **Calendars and local mean time (L3).** As in the section above, the 40 calendar and local mean time vectors pass through `julianDayNumber`, `dateOfJulianDayNumber` and `localMeanTimeOffset`, new in 2.0.0-rc.3. The carried 1.0.0-rc.2 archive has none of them and answers those 40 vectors as unsupported, so on them it differs from this file and matches its pinned baseline. The one unsupported vector is the leap second instant.\n- **Event times (L4).** The 70 ingresses go through the same `events()` search, here on astronomy-engine's positions: 34 pass and 36 fail, among them one of the 10 in UTC (L4-UTC-0005). The failures follow the positions of L1: a slow body takes long to move the difference, so Neptune's ingress of 2148 (L4-ING-0054) is 10,366 s late, 16 times its tolerance of 649 s. On the prototype all 30 stations pass, including exact direction. The largest time residual is +430.2780179977417 s (L4-STA-0014, tolerance 16,664 s). Of 40 lunations, 21 pass and 19 fail. The largest absolute residual is 10.729984283447266 s early (L4-LUN-0001, tolerance 3 s), and the largest fraction of tolerance is 5.29850435256958 (L4-LUN-0002, tolerance 2 s)."
     },
     {
       "file": "results/pyswisseph.json",

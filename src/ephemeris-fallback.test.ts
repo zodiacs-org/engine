@@ -131,6 +131,13 @@ describe.each(UNAVAILABLE)("the shipped DE440 pack %s", (_, text, why) => {
     if (found.status !== "ok") throw new Error(found.reason);
     expect(found.flags).toEqual(["de440-unavailable"]);
     expect(found.receipt.engine.ephemeris).toEqual(ASTRONOMY_ENGINE);
+    const window = { from: "2024-04-01", to: "2024-05-01" };
+    for (const result of [calc.searchStations({ ...window, body: "Mercury" }), calc.searchLunations({ ...window, phaseDegrees: 0 })]) {
+      if (result.status !== "ok") throw new Error(result.reason);
+      expect(result).toMatchObject({ ephemeris: ASTRONOMY_ENGINE, flags: ["de440-unavailable"] });
+      expect(result.events.length).toBeGreaterThan(0);
+      for (const event of result.events) expect(event).toMatchObject({ ephemeris: ASTRONOMY_ENGINE, flags: ["de440-unavailable"] });
+    }
     // What the pack never gives is astronomy-engine's by design, and is not flagged as a fallback.
     const helio = calc.calc({ body: "Mars", time: BIRTH.utc, center: "heliocentric" });
     if (helio.status !== "ok") throw new Error(helio.reason);

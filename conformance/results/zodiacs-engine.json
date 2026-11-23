@@ -25,9 +25,9 @@
   "summary": {
     "total": {
       "count": 640,
-      "pass": 569,
+      "pass": 639,
       "fail": 0,
-      "unsupported": 71,
+      "unsupported": 1,
       "error": 0
     },
     "byLevel": {
@@ -54,9 +54,9 @@
       },
       "L4": {
         "count": 140,
-        "pass": 70,
+        "pass": 140,
         "fail": 0,
-        "unsupported": 70,
+        "unsupported": 0,
         "error": 0
       }
     },
@@ -240,17 +240,42 @@
       },
       "event.station": {
         "count": 30,
-        "pass": 0,
+        "pass": 30,
         "fail": 0,
-        "unsupported": 30,
-        "error": 0
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "tt_s": {
+            "unit": "s",
+            "n": 30,
+            "median": 0.205497264,
+            "p95": 3.37400794,
+            "max": 16.1550074
+          }
+        }
       },
       "event.lunation": {
         "count": 40,
-        "pass": 0,
+        "pass": 40,
         "fail": 0,
-        "unsupported": 40,
-        "error": 0
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "tt_s": {
+            "unit": "s",
+            "n": 30,
+            "median": 0.0000114440918,
+            "p95": 0.00101947784,
+            "max": 0.00199959078
+          },
+          "utc_s": {
+            "unit": "s",
+            "n": 10,
+            "median": 0.000499725342,
+            "p95": 0.000999927521,
+            "max": 0.000999927521
+          }
+        }
       }
     },
     "byTag": {
@@ -263,16 +288,16 @@
       },
       "eclipse": {
         "count": 6,
-        "pass": 0,
+        "pass": 6,
         "fail": 0,
-        "unsupported": 6,
+        "unsupported": 0,
         "error": 0
       },
       "utc-input": {
         "count": 20,
-        "pass": 10,
+        "pass": 20,
         "fail": 0,
-        "unsupported": 10,
+        "unsupported": 0,
         "error": 0
       },
       "cross-check": {
@@ -2874,7 +2899,7 @@
       "verdict": "pass",
       "residual": {
         "lon": -0.00120888715,
-        "lat": 0.00000224326158
+        "lat": 0.00000224324879
       },
       "meta": {
         "flags": [
@@ -2890,8 +2915,8 @@
       "id": "L1-POS-0154",
       "verdict": "pass",
       "residual": {
-        "lon": -0.00152397027,
-        "lat": 0.00004472064
+        "lon": -0.00152397038,
+        "lat": 0.0000447206288
       },
       "meta": {
         "flags": [
@@ -2908,7 +2933,7 @@
       "verdict": "pass",
       "residual": {
         "lon": -0.00147623077,
-        "lat": 0.000182759392
+        "lat": 0.000182759398
       },
       "meta": {
         "flags": [
@@ -2925,7 +2950,7 @@
       "verdict": "pass",
       "residual": {
         "lon": -0.00118324376,
-        "lat": 0.000128119422
+        "lat": 0.000128119399
       },
       "meta": {
         "flags": [
@@ -2942,7 +2967,7 @@
       "verdict": "pass",
       "residual": {
         "lon": -0.00153221415,
-        "lat": 0.0000195631889
+        "lat": 0.0000195631773
       },
       "meta": {
         "flags": [
@@ -2959,7 +2984,7 @@
       "verdict": "pass",
       "residual": {
         "lon": -0.00150330183,
-        "lat": 0.0000161800261
+        "lat": 0.0000161800319
       },
       "meta": {
         "flags": [
@@ -2976,7 +3001,7 @@
       "verdict": "pass",
       "residual": {
         "lon": -0.0013984217,
-        "lat": -0.0000313863751
+        "lat": -0.0000313863783
       },
       "meta": {
         "flags": [
@@ -2992,8 +3017,8 @@
       "id": "L1-POS-0160",
       "verdict": "pass",
       "residual": {
-        "lon": -0.00137458076,
-        "lat": -0.000108165073
+        "lon": -0.00137458096,
+        "lat": -0.000108165084
       },
       "meta": {
         "flags": [
@@ -6792,6 +6817,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-01-20T18:37:04.854Z",
         "retrograde": false
       }
@@ -6805,6 +6834,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1925-01-20T13:20:08.683Z",
         "retrograde": false
       }
@@ -6818,6 +6851,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1990-01-20T08:01:32.804Z",
         "retrograde": false
       }
@@ -6831,6 +6868,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-01-20T01:44:56.076Z",
         "retrograde": false
       }
@@ -6844,6 +6885,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6860,6 +6905,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6876,6 +6925,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-01-03T00:50:55.956Z",
         "retrograde": false
       }
@@ -6889,6 +6942,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1925-01-01T02:56:58.976Z",
         "retrograde": false
       }
@@ -6902,6 +6959,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1990-01-01T06:10:02.717Z",
         "retrograde": false
       }
@@ -6915,6 +6976,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-01-02T13:09:00.327Z",
         "retrograde": false
       }
@@ -6928,6 +6993,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6944,6 +7013,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6960,6 +7033,10 @@
       "meta": {
         "events": 1,
         "samples": 64,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-01-12T10:41:41.881Z",
         "retrograde": false
       }
@@ -6973,6 +7050,10 @@
       "meta": {
         "events": 1,
         "samples": 65,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1925-01-14T07:15:27.063Z",
         "retrograde": false
       }
@@ -6986,6 +7067,10 @@
       "meta": {
         "events": 1,
         "samples": 71,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1990-02-12T01:11:10.856Z",
         "retrograde": false
       }
@@ -6999,6 +7084,10 @@
       "meta": {
         "events": 1,
         "samples": 61,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-01-01T21:10:41.859Z",
         "retrograde": false
       }
@@ -7012,6 +7101,10 @@
       "meta": {
         "events": 1,
         "samples": 64,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7028,6 +7121,10 @@
       "meta": {
         "events": 1,
         "samples": 109,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7044,6 +7141,10 @@
       "meta": {
         "events": 1,
         "samples": 71,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-01-22T14:28:57.012Z",
         "retrograde": false
       }
@@ -7057,6 +7158,10 @@
       "meta": {
         "events": 1,
         "samples": 58,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1925-01-14T22:28:18.355Z",
         "retrograde": false
       }
@@ -7070,6 +7175,10 @@
       "meta": {
         "events": 1,
         "samples": 33,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1990-01-16T15:22:55.497Z",
         "retrograde": true
       }
@@ -7083,6 +7192,10 @@
       "meta": {
         "events": 1,
         "samples": 70,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-01-17T12:43:23.949Z",
         "retrograde": false
       }
@@ -7096,6 +7209,10 @@
       "meta": {
         "events": 1,
         "samples": 68,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7112,6 +7229,10 @@
       "meta": {
         "events": 1,
         "samples": 68,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7128,6 +7249,10 @@
       "meta": {
         "events": 1,
         "samples": 102,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-01-31T08:45:39.506Z",
         "retrograde": false
       }
@@ -7141,6 +7266,10 @@
       "meta": {
         "events": 1,
         "samples": 87,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1925-02-05T10:17:14.700Z",
         "retrograde": false
       }
@@ -7154,6 +7283,10 @@
       "meta": {
         "events": 1,
         "samples": 102,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1990-01-29T14:10:25.797Z",
         "retrograde": false
       }
@@ -7167,6 +7300,10 @@
       "meta": {
         "events": 1,
         "samples": 101,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-01-23T09:16:45.211Z",
         "retrograde": false
       }
@@ -7180,6 +7317,10 @@
       "meta": {
         "events": 1,
         "samples": 104,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7196,6 +7337,10 @@
       "meta": {
         "events": 1,
         "samples": 120,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7212,6 +7357,10 @@
       "meta": {
         "events": 1,
         "samples": 498,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-06-29T19:22:59.292Z",
         "retrograde": false
       }
@@ -7225,6 +7374,10 @@
       "meta": {
         "events": 1,
         "samples": 536,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1926-01-06T01:00:26.135Z",
         "retrograde": false
       }
@@ -7238,6 +7391,10 @@
       "meta": {
         "events": 1,
         "samples": 508,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1990-08-18T07:29:47.878Z",
         "retrograde": false
       }
@@ -7251,6 +7408,10 @@
       "meta": {
         "events": 1,
         "samples": 498,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-06-30T05:52:21.776Z",
         "retrograde": false
       }
@@ -7264,6 +7425,10 @@
       "meta": {
         "events": 1,
         "samples": 457,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7280,6 +7445,10 @@
       "meta": {
         "events": 1,
         "samples": 756,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7296,6 +7465,10 @@
       "meta": {
         "events": 1,
         "samples": 1137,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-08-26T04:30:08.310Z",
         "retrograde": false
       }
@@ -7309,6 +7482,10 @@
       "meta": {
         "events": 1,
         "samples": 1229,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1926-12-02T22:33:54.269Z",
         "retrograde": false
       }
@@ -7322,6 +7499,10 @@
       "meta": {
         "events": 1,
         "samples": 1169,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1991-02-06T18:51:13.256Z",
         "retrograde": false
       }
@@ -7335,6 +7516,10 @@
       "meta": {
         "events": 1,
         "samples": 1097,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-02-14T00:11:38.919Z",
         "retrograde": false
       }
@@ -7348,6 +7533,10 @@
       "meta": {
         "events": 1,
         "samples": 1107,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7364,6 +7553,10 @@
       "meta": {
         "events": 1,
         "samples": 756,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7380,6 +7573,10 @@
       "meta": {
         "events": 1,
         "samples": 450,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1865-06-27T02:35:21.680Z",
         "retrograde": false
       }
@@ -7393,6 +7590,10 @@
       "meta": {
         "events": 1,
         "samples": 211,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1927-03-31T17:21:58.180Z",
         "retrograde": false
       }
@@ -7406,6 +7607,10 @@
       "meta": {
         "events": 1,
         "samples": 416,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1995-04-01T12:11:16.592Z",
         "retrograde": false
       }
@@ -7419,6 +7624,10 @@
       "meta": {
         "events": 1,
         "samples": 3085,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-04-26T00:51:32.458Z",
         "retrograde": false
       }
@@ -7432,6 +7641,10 @@
       "meta": {
         "events": 1,
         "samples": 404,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7448,6 +7661,10 @@
       "meta": {
         "events": 1,
         "samples": 179,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7464,6 +7681,10 @@
       "meta": {
         "events": 1,
         "samples": 136,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1861-04-13T20:24:31.945Z",
         "retrograde": false
       }
@@ -7477,6 +7698,10 @@
       "meta": {
         "events": 1,
         "samples": 312,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1928-09-21T12:00:55.714Z",
         "retrograde": false
       }
@@ -7490,6 +7715,10 @@
       "meta": {
         "events": 1,
         "samples": 636,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1998-01-29T02:52:04.917Z",
         "retrograde": false
       }
@@ -7503,6 +7732,10 @@
       "meta": {
         "events": 1,
         "samples": 9083,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-01-26T17:34:38.267Z",
         "retrograde": false
       }
@@ -7516,6 +7749,10 @@
       "meta": {
         "events": 1,
         "samples": 447,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7532,6 +7769,10 @@
       "meta": {
         "events": 1,
         "samples": 630,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7548,6 +7789,10 @@
       "meta": {
         "events": 1,
         "samples": 1681,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1882-07-21T21:51:26.782Z",
         "retrograde": false
       }
@@ -7561,6 +7806,10 @@
       "meta": {
         "events": 1,
         "samples": 963,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1937-10-07T12:14:17.065Z",
         "retrograde": false
       }
@@ -7574,6 +7823,10 @@
       "meta": {
         "events": 1,
         "samples": 403,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1995-01-17T09:15:53.710Z",
         "retrograde": false
       }
@@ -7587,6 +7840,10 @@
       "meta": {
         "events": 1,
         "samples": 1298,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7603,6 +7860,10 @@
       "meta": {
         "events": 1,
         "samples": 501,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7612,303 +7873,1119 @@
     },
     {
       "id": "L4-STA-0001",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0399932861
+      },
+      "meta": {
+        "events": 1,
+        "samples": 69,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1860-07-27T08:37:51.108Z",
+        "timingSeconds": 6988.927776499015
+      }
     },
     {
       "id": "L4-STA-0002",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0419802666
+      },
+      "meta": {
+        "events": 1,
+        "samples": 84,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1925-08-11T13:27:28.599Z",
+        "timingSeconds": 6813.565693119933
+      }
     },
     {
       "id": "L4-STA-0003",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0379868746
+      },
+      "meta": {
+        "events": 1,
+        "samples": 97,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1990-08-25T14:08:05.203Z",
+        "timingSeconds": 6610.038480787479
+      }
     },
     {
       "id": "L4-STA-0004",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.00998413563
+      },
+      "meta": {
+        "events": 1,
+        "samples": 99,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "2026-07-23T22:57:50.588Z",
+        "timingSeconds": 6622.9430770375875
+      }
     },
     {
       "id": "L4-STA-0005",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.124010086
+      },
+      "meta": {
+        "events": 1,
+        "samples": 79,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-07-01T19:29:42.590Z",
+        "timingSeconds": 7211.459751026303
+      }
     },
     {
       "id": "L4-STA-0006",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0649900436
+      },
+      "meta": {
+        "events": 1,
+        "samples": 120,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-09-17T12:13:28.161Z",
+        "timingSeconds": 6269.50236125025
+      }
     },
     {
       "id": "L4-STA-0007",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.136986732
+      },
+      "meta": {
+        "events": 1,
+        "samples": 341,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1860-08-09T16:25:49.492Z",
+        "timingSeconds": 10315.00140471581
+      }
     },
     {
       "id": "L4-STA-0008",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0209870338
+      },
+      "meta": {
+        "events": 1,
+        "samples": 251,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1926-01-17T22:10:09.815Z",
+        "timingSeconds": 10029.136909846577
+      }
     },
     {
       "id": "L4-STA-0009",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0959974825
+      },
+      "meta": {
+        "events": 1,
+        "samples": 448,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1991-08-01T10:35:03.180Z",
+        "timingSeconds": 10395.047288988586
+      }
     },
     {
       "id": "L4-STA-0010",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.296993971
+      },
+      "meta": {
+        "events": 1,
+        "samples": 146,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "2026-10-03T07:15:53.943Z",
+        "timingSeconds": 10348.37511536986
+      }
     },
     {
       "id": "L4-STA-0011",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0949831009
+      },
+      "meta": {
+        "events": 1,
+        "samples": 575,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2061-12-07T01:33:28.767Z",
+        "timingSeconds": 10155.4425816746
+      }
     },
     {
       "id": "L4-STA-0012",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.185997009
+      },
+      "meta": {
+        "events": 1,
+        "samples": 551,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2141-11-13T02:01:15.114Z",
+        "timingSeconds": 10172.589325698216
+      }
     },
     {
       "id": "L4-STA-0013",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.22499752
+      },
+      "meta": {
+        "events": 1,
+        "samples": 452,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1860-08-18T14:40:38.465Z",
+        "timingSeconds": 17183.478776662643
+      }
     },
     {
       "id": "L4-STA-0014",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.350988388
+      },
+      "meta": {
+        "events": 1,
+        "samples": 520,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1926-09-29T05:42:36.156Z",
+        "timingSeconds": 16663.79675891004
+      }
     },
     {
       "id": "L4-STA-0015",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00299364328
+      },
+      "meta": {
+        "events": 1,
+        "samples": 178,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1990-10-20T19:29:31.621Z",
+        "timingSeconds": 16830.553542112717
+      }
     },
     {
       "id": "L4-STA-0016",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.123995185
+      },
+      "meta": {
+        "events": 1,
+        "samples": 265,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "2027-01-10T12:59:11.126Z",
+        "timingSeconds": 18046.20904589416
+      }
     },
     {
       "id": "L4-STA-0017",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.432993889
+      },
+      "meta": {
+        "events": 1,
+        "samples": 307,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2061-02-22T22:44:43.763Z",
+        "timingSeconds": 18381.014388206007
+      }
     },
     {
       "id": "L4-STA-0018",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.701004982
+      },
+      "meta": {
+        "events": 1,
+        "samples": 719,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2142-04-13T02:55:15.546Z",
+        "timingSeconds": 18434.06455247148
+      }
     },
     {
       "id": "L4-STA-0019",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 1.06901741
+      },
+      "meta": {
+        "events": 1,
+        "samples": 255,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1860-12-12T18:41:51.445Z",
+        "timingSeconds": 35507.73812838948
+      }
     },
     {
       "id": "L4-STA-0020",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 1.76499987
+      },
+      "meta": {
+        "events": 1,
+        "samples": 240,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1925-09-09T07:17:08.402Z",
+        "timingSeconds": 35979.0617516683
+      }
     },
     {
       "id": "L4-STA-0021",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0460104346
+      },
+      "meta": {
+        "events": 1,
+        "samples": 243,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1990-11-30T05:03:02.245Z",
+        "timingSeconds": 35683.7254705657
+      }
     },
     {
       "id": "L4-STA-0022",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.872012496
+      },
+      "meta": {
+        "events": 1,
+        "samples": 255,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "2026-12-13T00:56:36.606Z",
+        "timingSeconds": 35499.56975002358
+      }
     },
     {
       "id": "L4-STA-0023",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 2.21998906
+      },
+      "meta": {
+        "events": 1,
+        "samples": 203,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-10-23T09:32:33.688Z",
+        "timingSeconds": 35124.58264880157
+      }
     },
     {
       "id": "L4-STA-0024",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 1.68700409
+      },
+      "meta": {
+        "events": 1,
+        "samples": 94,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-07-06T07:24:02.307Z",
+        "timingSeconds": 35721.39721968345
+      }
     },
     {
       "id": "L4-STA-0025",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 1.79601383
+      },
+      "meta": {
+        "events": 1,
+        "samples": 269,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1860-12-19T21:05:30.955Z",
+        "timingSeconds": 47250.007322508885
+      }
     },
     {
       "id": "L4-STA-0026",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -2.24798203
+      },
+      "meta": {
+        "events": 1,
+        "samples": 160,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1925-07-11T21:17:45.495Z",
+        "timingSeconds": 50406.646621018466
+      }
     },
     {
       "id": "L4-STA-0027",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.05200243
+      },
+      "meta": {
+        "events": 1,
+        "samples": 232,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1990-09-23T05:10:25.221Z",
+        "timingSeconds": 49816.340728549454
+      }
     },
     {
       "id": "L4-STA-0028",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 1.41101933
+      },
+      "meta": {
+        "events": 1,
+        "samples": 124,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "2026-07-26T19:56:15.728Z",
+        "timingSeconds": 49315.622978002175
+      }
     },
     {
       "id": "L4-STA-0029",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -3.37400794
+      },
+      "meta": {
+        "events": 1,
+        "samples": 186,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-09-28T18:55:31.825Z",
+        "timingSeconds": 47616.78557795545
+      }
     },
     {
       "id": "L4-STA-0030",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 16.1550074
+      },
+      "meta": {
+        "events": 1,
+        "samples": 267,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-10-26T22:27:08.467Z",
+        "timingSeconds": 49108.99029448026
+      }
     },
     {
       "id": "L4-LUN-0001",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.00000858306885
+      },
+      "meta": {
+        "events": 1,
+        "samples": 67,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1860-03-22T13:55:31.607Z",
+        "timingSeconds": 2.1823950235658045
+      }
     },
     {
       "id": "L4-LUN-0002",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.00000286102295
+      },
+      "meta": {
+        "events": 1,
+        "samples": 52,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1860-03-07T12:44:20.702Z",
+        "timingSeconds": 1.684807665053232
+      }
     },
     {
       "id": "L4-LUN-0003",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.000018119812
+      },
+      "meta": {
+        "events": 1,
+        "samples": 59,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1860-09-15T06:09:40.842Z",
+        "timingSeconds": 1.6765313737948424
+      }
     },
     {
       "id": "L4-LUN-0004",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0
+      },
+      "meta": {
+        "events": 1,
+        "samples": 74,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1860-09-30T01:39:55.935Z",
+        "timingSeconds": 2.2010654888078505
+      }
     },
     {
       "id": "L4-LUN-0005",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.000990390778
+      },
+      "meta": {
+        "events": 1,
+        "samples": 68,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1925-03-24T14:02:47.311Z",
+        "timingSeconds": 1.8886634457380922
+      }
     },
     {
       "id": "L4-LUN-0006",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0000114440918
+      },
+      "meta": {
+        "events": 1,
+        "samples": 54,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1925-03-10T14:20:42.476Z",
+        "timingSeconds": 2.0209860039027876
+      }
     },
     {
       "id": "L4-LUN-0007",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00000381469727
+      },
+      "meta": {
+        "events": 1,
+        "samples": 62,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1925-09-18T04:12:16.270Z",
+        "timingSeconds": 2.0827089479072307
+      }
     },
     {
       "id": "L4-LUN-0008",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.000981807709
+      },
+      "meta": {
+        "events": 1,
+        "samples": 46,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1925-09-02T19:52:48.151Z",
+        "timingSeconds": 1.7371048007374181
+      }
     },
     {
       "id": "L4-LUN-0009",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.000993132591
+      },
+      "meta": {
+        "events": 1,
+        "samples": 70,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1990-03-26T19:48:19.152Z",
+        "timingSeconds": 1.7323029295717176
+      }
     },
     {
       "id": "L4-LUN-0010",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0010111928
+      },
+      "meta": {
+        "events": 1,
+        "samples": 56,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1990-03-11T10:58:29.992Z",
+        "timingSeconds": 2.093003117916775
+      }
     },
     {
       "id": "L4-LUN-0011",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00000184774399
+      },
+      "meta": {
+        "events": 1,
+        "samples": 62,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1990-09-19T00:46:21.069Z",
+        "timingSeconds": 2.0215986655910996
+      }
     },
     {
       "id": "L4-LUN-0012",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00000154972076
+      },
+      "meta": {
+        "events": 1,
+        "samples": 48,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1990-09-05T01:45:36.340Z",
+        "timingSeconds": 1.882792433626848
+      }
     },
     {
       "id": "L4-LUN-0013",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.000986337662
+      },
+      "meta": {
+        "events": 1,
+        "samples": 62,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "2026-03-19T01:23:28.728Z",
+        "timingSeconds": 1.851352663710738
+      }
     },
     {
       "id": "L4-LUN-0014",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00100588799
+      },
+      "meta": {
+        "events": 1,
+        "samples": 48,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "2026-03-03T11:37:53.731Z",
+        "timingSeconds": 1.953712082848188
+      }
     },
     {
       "id": "L4-LUN-0015",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00000941753387
+      },
+      "meta": {
+        "events": 1,
+        "samples": 55,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "2026-09-11T03:26:59.926Z",
+        "timingSeconds": 1.8836934169691397
+      }
     },
     {
       "id": "L4-LUN-0016",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.00000214576721
+      },
+      "meta": {
+        "events": 1,
+        "samples": 70,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "2026-09-26T16:49:02.418Z",
+        "timingSeconds": 1.9106534581592667
+      }
     },
     {
       "id": "L4-LUN-0017",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00101304054
+      },
+      "meta": {
+        "events": 1,
+        "samples": 46,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-03-02T16:12:08.155Z",
+        "timingSeconds": 1.705558080321604
+      }
     },
     {
       "id": "L4-LUN-0018",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0010061264
+      },
+      "meta": {
+        "events": 1,
+        "samples": 61,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-03-17T03:41:29.808Z",
+        "timingSeconds": 2.202453362679832
+      }
     },
     {
       "id": "L4-LUN-0019",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.000988483429
+      },
+      "meta": {
+        "events": 1,
+        "samples": 69,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-09-24T15:54:05.061Z",
+        "timingSeconds": 2.1726021134057016
+      }
     },
     {
       "id": "L4-LUN-0020",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.00000810623169
+      },
+      "meta": {
+        "events": 1,
+        "samples": 54,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-09-10T09:44:25.433Z",
+        "timingSeconds": 1.7427010251732562
+      }
     },
     {
       "id": "L4-LUN-0021",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00000476837158
+      },
+      "meta": {
+        "events": 1,
+        "samples": 63,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-03-19T00:01:24.249Z",
+        "timingSeconds": 1.7048315422358582
+      }
     },
     {
       "id": "L4-LUN-0022",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.00101947784
+      },
+      "meta": {
+        "events": 1,
+        "samples": 48,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-03-03T17:38:42.579Z",
+        "timingSeconds": 2.1303254562101284
+      }
     },
     {
       "id": "L4-LUN-0023",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00000762939453
+      },
+      "meta": {
+        "events": 1,
+        "samples": 56,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-09-11T07:30:39.974Z",
+        "timingSeconds": 2.064055478875311
+      }
     },
     {
       "id": "L4-LUN-0024",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0000114440918
+      },
+      "meta": {
+        "events": 1,
+        "samples": 70,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-09-26T16:42:25.465Z",
+        "timingSeconds": 1.737510826946136
+      }
     },
     {
       "id": "L4-LUN-0025",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0010099411
+      },
+      "meta": {
+        "events": 1,
+        "samples": 48,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1860-07-18T14:20:31.824Z",
+        "timingSeconds": 1.778509358230433
+      }
     },
     {
       "id": "L4-LUN-0026",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.00000238418579
+      },
+      "meta": {
+        "events": 1,
+        "samples": 49,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "1919-05-29T13:11:34.439Z",
+        "timingSeconds": 1.7043759345123186
+      }
     },
     {
       "id": "L4-LUN-0027",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0000185966492
+      },
+      "meta": {
+        "events": 1,
+        "samples": 48,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "2026-08-12T17:36:44.987Z",
+        "timingSeconds": 1.782664939995612
+      }
     },
     {
       "id": "L4-LUN-0028",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00199959078
+      },
+      "meta": {
+        "events": 1,
+        "samples": 48,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "2000-01-21T04:40:26.320Z",
+        "timingSeconds": 1.7274274820612276
+      }
     },
     {
       "id": "L4-LUN-0029",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.00000584125519
+      },
+      "meta": {
+        "events": 1,
+        "samples": 48,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "2018-07-27T20:20:21.104Z",
+        "timingSeconds": 2.2137765062376236
+      }
     },
     {
       "id": "L4-LUN-0030",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.0000102519989
+      },
+      "meta": {
+        "events": 1,
+        "samples": 49,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [],
+        "at": "2025-03-14T06:54:39.193Z",
+        "timingSeconds": 2.1666727176213434
+      }
     },
     {
       "id": "L4-UTC-0001",
@@ -7919,6 +8996,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7935,6 +9016,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7944,13 +9029,43 @@
     },
     {
       "id": "L4-UTC-0003",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0
+      },
+      "meta": {
+        "events": 1,
+        "samples": 71,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2028-01-26T15:12:31.045Z",
+        "timingSeconds": 2.212029609880708
+      }
     },
     {
       "id": "L4-UTC-0004",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0
+      },
+      "meta": {
+        "events": 1,
+        "samples": 56,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2028-01-12T04:03:05.218Z",
+        "timingSeconds": 1.7221013899300435
+      }
     },
     {
       "id": "L4-UTC-0005",
@@ -7961,6 +9076,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7977,6 +9096,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7986,13 +9109,43 @@
     },
     {
       "id": "L4-UTC-0007",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0.000999927521
+      },
+      "meta": {
+        "events": 1,
+        "samples": 53,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2035-01-09T15:03:08.165Z",
+        "timingSeconds": 2.1434922887734484
+      }
     },
     {
       "id": "L4-UTC-0008",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0.000999927521
+      },
+      "meta": {
+        "events": 1,
+        "samples": 67,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2035-01-23T20:16:38.010Z",
+        "timingSeconds": 1.7733146710061578
+      }
     },
     {
       "id": "L4-UTC-0009",
@@ -8003,6 +9156,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8019,6 +9176,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8028,13 +9189,43 @@
     },
     {
       "id": "L4-UTC-0011",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": -0.000999927521
+      },
+      "meta": {
+        "events": 1,
+        "samples": 67,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2050-01-23T04:57:03.150Z",
+        "timingSeconds": 1.684026403988148
+      }
     },
     {
       "id": "L4-UTC-0012",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0.000999927521
+      },
+      "meta": {
+        "events": 1,
+        "samples": 52,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2050-01-08T01:39:07.060Z",
+        "timingSeconds": 2.1746723652710442
+      }
     },
     {
       "id": "L4-UTC-0013",
@@ -8045,6 +9236,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8061,6 +9256,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8070,13 +9269,43 @@
     },
     {
       "id": "L4-UTC-0015",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0
+      },
+      "meta": {
+        "events": 1,
+        "samples": 54,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2100-01-10T12:57:46.277Z",
+        "timingSeconds": 1.9563497761616133
+      }
     },
     {
       "id": "L4-UTC-0016",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0
+      },
+      "meta": {
+        "events": 1,
+        "samples": 70,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2100-01-26T02:51:42.302Z",
+        "timingSeconds": 1.8349799402890086
+      }
     },
     {
       "id": "L4-UTC-0017",
@@ -8087,6 +9316,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8103,6 +9336,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8112,13 +9349,43 @@
     },
     {
       "id": "L4-UTC-0019",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0.000999450684
+      },
+      "meta": {
+        "events": 1,
+        "samples": 64,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-01-20T00:24:56.700Z",
+        "timingSeconds": 1.9034993317364661
+      }
     },
     {
       "id": "L4-UTC-0020",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 0
+      },
+      "meta": {
+        "events": 1,
+        "samples": 49,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-01-04T09:41:02.526Z",
+        "timingSeconds": 1.9022151987370588
+      }
     },
     {
       "id": "L4-ING-0061",
@@ -8129,6 +9396,10 @@
       "meta": {
         "events": 1,
         "samples": 31,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-11-22T07:23:20.577Z",
         "retrograde": false
       }
