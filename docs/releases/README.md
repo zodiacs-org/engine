@@ -1,19 +1,22 @@
-# Git tags and GitHub releases for 1.0.0, 1.1.0 and 2.0.0
+# Git tags and GitHub releases for 1.0.0, 1.1.0, 2.0.0 and 2.1.0
 
-**Status: published on 2026-11-21.** All three lightweight git tags (`v1.0.0`,
-`v1.1.0`, `v2.0.0`) and GitHub releases were published in version order on
-2026-11-21 under the owner's delegation, minting permanent Zenodo DOIs under
-concept DOI `10.5281/zenodo.23080133` (evidence:
+**Status: published through `v2.1.0` on 2026-11-23.** Lightweight git tags (`v1.0.0`,
+`v1.1.0`, `v2.0.0`, `v2.1.0`) and GitHub releases were published in version order
+under the owner's delegation, minting permanent Zenodo DOIs under concept DOI
+`10.5281/zenodo.23080133` (2.0.0 evidence:
 `docs/evidence/2.0.0-published-20261121/github-releases-and-zenodo.json`).
 
 | Tag | Target commit | GitHub release ID | Published (UTC) | Zenodo DOI |
 | --- | --- | ---: | --- | --- |
 | `v1.0.0` | `f8992a4c1dfedd9e69c0783e2c185e22580460f7` | `453839576` | `2026-11-21T16:57:21Z` | `10.5281/zenodo.24423316` |
 | `v1.1.0` | `322f8551bb6c4d37e8e6be8faa9bbaa14eee4081` | `453839591` | `2026-11-21T16:57:38Z` | `10.5281/zenodo.24423325` |
-| `v2.0.0` | `01432be354d219dbc2d5609e05a9dd0bcfd313e0` | `453839610` | `2026-11-21T16:57:54Z` (Latest) | `10.5281/zenodo.24423330` |
+| `v2.0.0` | `01432be354d219dbc2d5609e05a9dd0bcfd313e0` | `453839610` | `2026-11-21T16:57:54Z` | `10.5281/zenodo.24423330` |
+| `v2.1.0` | `566f858dde594439d5f78724f1d2e2df595da2c6` | `455617544` | `2026-11-23T15:32:37Z` (Latest) | `10.5281/zenodo.24470679` |
 
-1.0.0, 1.1.0 and 2.0.0 were published to npm by the Release workflow (2.0.0
-on 2026-11-21 as `latest`, Release run 44915599923; verified in
+1.0.0, 1.1.0, 2.0.0 and 2.1.0 were published to npm by the Release workflow
+(2.1.0 on 2026-11-23 as `latest`, Release run 45205449248, Sigstore log index
+`4053381011`, SHA-256 `272bf36f705d033a19a5ad87e0e17113d6e53f96a02331cddefe7b41597b4afc`;
+2.0.0 on 2026-11-21, Release run 44915599923, verified in
 `docs/evidence/2.0.0-published-20261121/`). The historical pre-release
 `v0.1.1-rc.15` (DOI `10.5281/zenodo.23080134`) remains intact. The sections
 below record the release notes files and exact commands used.
@@ -23,6 +26,7 @@ below record the release notes files and exact commands used.
 - [1.0.0 release notes draft](v1.0.0-release-notes-DRAFT.md)
 - [1.1.0 release notes draft](v1.1.0-release-notes-DRAFT.md)
 - [2.0.0 release notes draft](v2.0.0-release-notes-DRAFT.md)
+- [2.1.0 release notes draft](v2.1.0-release-notes-DRAFT.md)
 - [2.0.0 npm publish runbook](PUBLISH-2.0.0.md)
 
 ## Before tagging or publishing a GitHub release

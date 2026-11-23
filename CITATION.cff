@@ -4,6 +4,7 @@
 # - v1.0.0 (2026-11-21): 10.5281/zenodo.24423316
 # - v1.1.0 (2026-11-21): 10.5281/zenodo.24423325
 # - v2.0.0 (2026-11-21): 10.5281/zenodo.24423330
+# - v2.1.0 (2026-11-23): 10.5281/zenodo.24470679
 #
 # license lists the two licences of the package as distributed, matching
 # package.json's SPDX expression "MIT AND CC-BY-4.0": the code is MIT, and
@@ -16,9 +17,9 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below, with the version or commit you used. The time atlas in atlas/ has its own citation in atlas/README.md."
 type: software
 title: "Zodiacs Engine (@zodiacs/engine)"
-version: "2.0.0"
-date-released: "2026-11-21"
-doi: "10.5281/zenodo.24423330"
+version: "2.1.0"
+date-released: "2026-11-23"
+doi: "10.5281/zenodo.24470679"
 abstract: >-
   TypeScript astrology calculations for browsers and Node.js: tropical
   planetary positions, natal charts with houses and aspects, transits,
