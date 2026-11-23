@@ -123,6 +123,7 @@ runs, so CI starts the check with node directly.
 | 2.0.0-rc.6 | `59217e2b12126f424554811b21d1902e9b4f9b2014e2fbf9ca1f06f2bf587631` | 2,788,419 | 101 | `1a2e176b1daf2f4d5100877f0e855c248ab25a76` | "Carry the packed 2.0.0-rc.6 tarball" | Candidate, merged (pull request 142); never tagged or published. 2.0.0 is its code with the version changed |
 | 2.0.0 | `6087d455276ba633eb0a2370c0a5f740ddd5b257c59b821f501c9b06d228a3e2` | 2,788,540 | 101 | `174437a534f4bf92ce5d5d1c99df0774d8855f13` | "Carry the packed 2.0.0 tarball" | Release, merged (pull request 143); on npm as `latest` since 2026-11-21; npm's tarball is these bytes (its SHA-256 and SHA-1, checked 2026-11-21, `docs/evidence/2.0.0-published-20261121/`); tagged `v2.0.0` (DOI `10.5281/zenodo.24423330`) |
 | 2.1.0-rc.1 | `3f6eb0e0148634630a497950ef2e5eca7faf3e44b0398044fa690a6d2aeef894` | 2,790,624 | 101 | `05db3f3c5ca72aa5039040335ae5d8b7c4f60754` | "Carry the packed 2.1.0-rc.1 tarball" | Draft candidate for ZOD-347 |
+| 2.1.0 | `272bf36f705d033a19a5ad87e0e17113d6e53f96a02331cddefe7b41597b4afc` | 2,790,732 | 101 | `92825deeeb5c74c5f56b37d5d612c3439347087e` | "Carry the packed 2.1.0 tarball" | Final cut for ZOD-347, awaiting review |
 
 1.1.0-rc.9, 1.1.0-rc.10, 1.1.0-rc.11, 1.1.0-rc.12 and 1.1.0-rc.13 are five cuts of one draft, pull request 101.
 1.1.0-rc.9 was carried on 2026-11-14 and reviewed in draft; the owner then
