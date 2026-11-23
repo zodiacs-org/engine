@@ -1,8 +1,9 @@
 # `@zodiacs/engine/calc`
 
-One calculation API over the engine's positions, houses, longitude crossings
-and charts, in the tropical or the sidereal zodiac. It is a separate entry
-point, so the root entry (`@zodiacs/engine`) loads none of it.
+One calculation API over positions, houses, longitude crossings and charts
+in the tropical or sidereal zodiac, plus tropical stations and lunations.
+It is a separate entry point, so the root entry (`@zodiacs/engine`) loads
+none of it.
 
 ```ts
 import { calc, houses, events, chart } from "@zodiacs/engine/calc";
@@ -42,6 +43,7 @@ behind the Sun.
 | `calc()`: the true node and its opposite point | the shipped DE440 pack |
 | `chart()` | as `natalChart()`: the shipped DE440 pack |
 | `events()` | as `searchLongitudeCrossings()`: the shipped DE440 pack |
+| `searchStations()`, `searchLunations()` | the default ephemeris over the whole window, including its probes |
 | `calc()`: a heliocentric, barycentric or topocentric center; an astrometric or geometric correction; the Earth | astronomy-engine |
 | `calc()`: the mean node, the mean south node, Black Moon Lilith | no ephemeris: their own series |
 | `houses()` | no ephemeris |
@@ -90,13 +92,15 @@ Sun ([vedic.md](vedic.md)), whatever the position came from.
 The calc entry refuses inside `withEphemeris`, as before: a caller's source
 gives no distance and has no measured bounds.
 
-## The four functions
+## Functions
 
 | function | takes | gives |
 | --- | --- | --- |
 | `calc` | `{ body, time, frame?, center?, zodiac?, flags? }` | `{ lon, lat, dist, speeds, cartesian, ayanamsa, bounds, band, flags, receipt }` |
 | `houses` | `{ time, place, houseSystem?, zodiac? }` | angles, Vertex, East Point, ARMC, obliquity and the cusps, with `ayanamsa`, `bounds`, `band` and a receipt, as `natalChart()` computes them |
 | `events` | `{ kind: "longitude-crossing", body, longitude, from, to, zodiac?, stepDays?, maxSamples? }` | every instant in (from, to] the body sits on the longitude, from the engine's crossing search, each with its `band`, and `flags`, `bounds` and a receipt |
+| `searchStations` | `{ from, to, body, maxSamples? }` | TT instants of reversals, outgoing direction and signed longitude curvature |
+| `searchLunations` | `{ from, to, phaseDegrees, maxSamples? }` | TT instants of the requested phase and the Moon's longitude speed relative to the Sun |
 | `chart` | `{ time, place?, houseSystem?, timeKnown?, timeFlags?, zodiac? }` | the chart `natalChart()` gives, with its sidereal longitudes in the sidereal zodiac, its `band` and a receipt |
 
 Each returns `status: "ok"` or a typed refusal (below). Malformed input (an
@@ -104,6 +108,48 @@ unknown body, frame or field, an invalid date, a latitude out of range) throws
 `RangeError`. `houses()` and `chart()` take a place without a height
 (`CalcLocation`), and refuse one; a topocentric center takes a height
 (`CalcPlace`).
+
+## Station and lunation search
+
+In 2.1.0-rc.1, `searchStations()` finds when Mercury through Pluto turn
+direct or retrograde in apparent geocentric tropical longitude.
+`searchLunations()` finds one Moon minus Sun longitude angle per call.
+Use 0 for new Moon, 90 for first quarter, 180 for full Moon and 270 for
+last quarter, in degrees. `events()` keeps its 2.0.0 longitude-crossing
+request, result and signature.
+
+Both round `from` and `to` to the nearest TT millisecond. A search includes
+its right endpoint and excludes its left. To continue from an event, pass
+`{ jd: event.jdTt, scale: "tt" }` as the next `from`. Adjacent windows
+partition the events only when the whole window and both pieces use the
+same ephemeris name and version. Each call chooses one source for its
+entire window and the probes on either side. A source change can shift a
+root across the cut. A zero-length window succeeds with zero samples.
+
+`maxSamples` accepts a positive safe integer or `Infinity` (the default).
+The budget counts scalar evaluations during the scan, refinement and
+confirmation. A `sample-budget` refusal reports the count and limit.
+Retry the whole window with a larger budget. The search result and each event name the ephemeris and carry its flags.
+An empty result also names its source.
+An unreadable pack sets `de440-unavailable`. A padded window outside pack
+coverage sets `outside-de440-span`. Both use astronomy-engine. Selecting
+astronomy-engine explicitly leaves the fallback flag clear.
+
+Each event gives `jdTt`, `jdUt1` and the calendar label `at`. Its
+`band.utc` and `band.ut1` are one-sigma clock uncertainties in seconds.
+`delta-t-extrapolated` flags an extrapolated time basis. The numerical TT
+bracket is 0.001 s. The estimated `bounds.timing` in seconds adds that
+bracket to the time implied by the local angular allowance, using longitude
+curvature at a station or relative angular speed at a lunation. Shallow
+stations have wider estimates. [Timing formulas and tests](proposals/2.1.0-station-lunation-search.md#root-and-uncertainty-calculation)
+
+The independent DE440s L4 vectors cover 30 Mercury through Saturn stations
+and 40 new or full Moons. The shipped pack passes all 70. Astronomy-engine
+passes all 30 stations and 21 lunations. L4 has no quarter or outer-planet
+station vectors. Separate DE440s checks cover both April 2024 quarters at
+2 s and six Uranus, Neptune and Pluto stations in 2024. Two-second quarter
+timing and station timing beyond Saturn remain unverified across the full
+calc span. [L4 results](../conformance/RESULTS.md) and [additional reference cases](evidence/station-lunation-search/reference-residuals.csv)
 
 ## The input vocabulary
 
@@ -751,9 +797,8 @@ instant's from the receipt's instant, a position's from the result's own
 speeds, distance and latitude, an angle's by repeating the request (with ΔT
 pinned at the recorded value ± 600 s on the instant's UT1 for its rate on TT,
 and at the recorded value too where one side falls back), and an event's from
-its `at`. Every receipt of the four functions names
-`time-band:first-order`, last, but `calc()`'s without speeds, whose result
-has no band; `events()` names it even when it finds no event.
+its `at`. Receipts with clock bands name `time-band:first-order` last.
+All three searches include it even when they find no events.
 
 ## Refusals
 
@@ -763,10 +808,10 @@ A refusal is `{ status: "refused", reason, detail }`, the `status` and
 | `reason` | when | extra fields |
 | --- | --- | --- |
 | `not-in-this-version` | gravitational deflection | |
-| `unsupported-combination` | the Sun heliocentric; the Earth geocentric or topocentric; a node or Lilith with a center other than geocentric, or with `cartesian`; the sidereal zodiac in a frame other than the two ecliptics of date; crossings of a body `positions()` does not give; a pinned ΔT for a crossing search | |
+| `unsupported-combination` | the Sun heliocentric; the Earth geocentric or topocentric; a node or Lilith with a center other than geocentric, or with `cartesian`; the sidereal zodiac in a frame other than the two ecliptics of date; crossings of a body `positions()` does not give; a pinned ΔT for any event search | |
 | `epoch-out-of-range` | a caller's ayanamsa carried by precession from an epoch whose TT is outside `EPHEMERIS_SPAN`, 0001-04-30T12:00 to 3998-09-03T12:00 TT (the span includes its ends) | `epochSpan`, the root's `EPHEMERIS_SPAN` |
 | `out-of-range` | an instant whose UT1 or TT is outside `CALC_SPAN`, 1800-01-01T00:00Z up to 2200-01-01T00:00Z, where the positions have been compared with an independent ephemeris | `span` |
-| `sample-budget` | a crossing search that needs more evaluations than `maxSamples` | `samples`, `maxSamples` |
+| `sample-budget` | an event search that needs more evaluations than `maxSamples` | `samples`, `maxSamples` |
 
 The checks run in that order: a request with both an epoch outside
 `EPHEMERIS_SPAN` and an instant outside `CALC_SPAN` is refused for its epoch.

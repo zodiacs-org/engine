@@ -18,7 +18,7 @@
 import { readFileSync } from "node:fs";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { calc } from "./calc.js";
+import { calc, searchStations } from "./calc.js";
 import type { CalcBody } from "./calc.js";
 import { DE440_AT_LIMB, DE440_MEASURED } from "./calc-bounds-de440.js";
 import { positions, setDefaultEphemeris } from "./index.js";
@@ -66,6 +66,18 @@ describe("a planet's speed where its place steps at the Sun's limb", () => {
   const closest = Date.UTC(1920, 7, 3, 23, 28);
   const neptune = (ms: number) => positions(new Date(ms)).find((row) => row.body === "Neptune")!;
   const moved = (a: number, b: number) => Math.abs(((neptune(b).lon - neptune(a).lon + 540) % 360) - 180);
+
+  it("finds no Neptune station across either solar limb on daily and hourly scans", () => {
+    const hour = 3_600_000;
+    const start = closest - 12 * hour;
+    const stop = closest + 12 * hour;
+    const check = (from: number, to: number) => {
+      expect(searchStations({ body: "Neptune", from: new Date(from), to: new Date(to) }))
+        .toMatchObject({ status: "ok", events: [], ephemeris: { name: "jpl-de440" } });
+    };
+    check(start, stop);
+    for (let from = start; from < stop; from += hour) check(from, from + hour);
+  });
 
   it("is the place's own rate on either side of the step, in positions() and calc(), never the step over the samples", () => {
     let found: number | null = null;

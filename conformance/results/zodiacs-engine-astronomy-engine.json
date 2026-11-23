@@ -11,7 +11,7 @@
     "name": "zodiacs-engine-astronomy-engine",
     "version": "0.3.0",
     "engine": "@zodiacs/engine on astronomy-engine",
-    "engineVersion": "2.0.0",
+    "engineVersion": "2.1.0-rc.1",
     "configuration": {
       "ephemeris": "astronomy-engine 2.1.19",
       "deltaTModel": "zodiacs-deltat/1",
@@ -25,9 +25,9 @@
   "summary": {
     "total": {
       "count": 640,
-      "pass": 341,
-      "fail": 228,
-      "unsupported": 71,
+      "pass": 392,
+      "fail": 247,
+      "unsupported": 1,
       "error": 0
     },
     "byLevel": {
@@ -54,9 +54,9 @@
       },
       "L4": {
         "count": 140,
-        "pass": 34,
-        "fail": 36,
-        "unsupported": 70,
+        "pass": 85,
+        "fail": 55,
+        "unsupported": 0,
         "error": 0
       }
     },
@@ -240,17 +240,42 @@
       },
       "event.station": {
         "count": 30,
-        "pass": 0,
+        "pass": 30,
         "fail": 0,
-        "unsupported": 30,
-        "error": 0
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "tt_s": {
+            "unit": "s",
+            "n": 30,
+            "median": 102.158495,
+            "p95": 317.170995,
+            "max": 430.278018
+          }
+        }
       },
       "event.lunation": {
         "count": 40,
-        "pass": 0,
-        "fail": 0,
-        "unsupported": 40,
-        "error": 0
+        "pass": 21,
+        "fail": 19,
+        "unsupported": 0,
+        "error": 0,
+        "residuals": {
+          "tt_s": {
+            "unit": "s",
+            "n": 30,
+            "median": 2.95149803,
+            "p95": 10.5970087,
+            "max": 10.7299843
+          },
+          "utc_s": {
+            "unit": "s",
+            "n": 10,
+            "median": 0.823500156,
+            "p95": 2.27700043,
+            "max": 2.27700043
+          }
+        }
       }
     },
     "byTag": {
@@ -263,16 +288,16 @@
       },
       "eclipse": {
         "count": 6,
-        "pass": 0,
-        "fail": 0,
-        "unsupported": 6,
+        "pass": 3,
+        "fail": 3,
+        "unsupported": 0,
         "error": 0
       },
       "utc-input": {
         "count": 20,
-        "pass": 9,
-        "fail": 1,
-        "unsupported": 10,
+        "pass": 18,
+        "fail": 2,
+        "unsupported": 0,
         "error": 0
       },
       "cross-check": {
@@ -2143,7 +2168,7 @@
       "verdict": "fail",
       "residual": {
         "lon": 3.04169726,
-        "lat": 0.257339116
+        "lat": 0.257339117
       },
       "meta": {
         "flags": [
@@ -6792,6 +6817,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-01-20T18:37:01.789Z",
         "retrograde": false
       }
@@ -6805,6 +6834,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1925-01-20T13:19:47.800Z",
         "retrograde": false
       }
@@ -6818,6 +6851,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1990-01-20T08:01:24.719Z",
         "retrograde": false
       }
@@ -6831,6 +6868,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-01-20T01:44:40.189Z",
         "retrograde": false
       }
@@ -6844,6 +6885,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6860,6 +6905,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6876,6 +6925,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-01-03T00:50:49.106Z",
         "retrograde": false
       }
@@ -6889,6 +6942,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1925-01-01T02:56:56.555Z",
         "retrograde": false
       }
@@ -6902,6 +6959,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1990-01-01T06:10:03.309Z",
         "retrograde": false
       }
@@ -6915,6 +6976,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-01-02T13:09:00.764Z",
         "retrograde": false
       }
@@ -6928,6 +6993,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6944,6 +7013,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6960,6 +7033,10 @@
       "meta": {
         "events": 1,
         "samples": 64,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-01-12T10:41:54.678Z",
         "retrograde": false
       }
@@ -6973,6 +7050,10 @@
       "meta": {
         "events": 1,
         "samples": 65,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1925-01-14T07:14:27.403Z",
         "retrograde": false
       }
@@ -6986,6 +7067,10 @@
       "meta": {
         "events": 1,
         "samples": 71,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1990-02-12T01:10:34.704Z",
         "retrograde": false
       }
@@ -6999,6 +7084,10 @@
       "meta": {
         "events": 1,
         "samples": 61,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-01-01T21:11:14.586Z",
         "retrograde": false
       }
@@ -7012,6 +7101,10 @@
       "meta": {
         "events": 1,
         "samples": 64,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7028,6 +7121,10 @@
       "meta": {
         "events": 1,
         "samples": 109,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7044,6 +7141,10 @@
       "meta": {
         "events": 1,
         "samples": 71,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-01-22T14:28:56.189Z",
         "retrograde": false
       }
@@ -7057,6 +7158,10 @@
       "meta": {
         "events": 1,
         "samples": 58,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1925-01-14T22:27:56.906Z",
         "retrograde": false
       }
@@ -7070,6 +7175,10 @@
       "meta": {
         "events": 1,
         "samples": 33,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1990-01-16T15:26:37.842Z",
         "retrograde": true
       }
@@ -7083,6 +7192,10 @@
       "meta": {
         "events": 1,
         "samples": 70,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-01-17T12:42:51.196Z",
         "retrograde": false
       }
@@ -7096,6 +7209,10 @@
       "meta": {
         "events": 1,
         "samples": 68,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7112,6 +7229,10 @@
       "meta": {
         "events": 1,
         "samples": 68,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7128,6 +7249,10 @@
       "meta": {
         "events": 1,
         "samples": 102,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-01-31T08:46:31.726Z",
         "retrograde": false
       }
@@ -7141,6 +7266,10 @@
       "meta": {
         "events": 1,
         "samples": 87,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1925-02-05T10:15:07.834Z",
         "retrograde": false
       }
@@ -7154,6 +7283,10 @@
       "meta": {
         "events": 1,
         "samples": 102,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1990-01-29T14:09:53.301Z",
         "retrograde": false
       }
@@ -7167,6 +7300,10 @@
       "meta": {
         "events": 1,
         "samples": 101,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-01-23T09:16:24.818Z",
         "retrograde": false
       }
@@ -7180,6 +7317,10 @@
       "meta": {
         "events": 1,
         "samples": 104,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7196,6 +7337,10 @@
       "meta": {
         "events": 1,
         "samples": 120,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7212,6 +7357,10 @@
       "meta": {
         "events": 1,
         "samples": 498,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-06-29T19:23:52.053Z",
         "retrograde": false
       }
@@ -7225,6 +7374,10 @@
       "meta": {
         "events": 1,
         "samples": 536,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1926-01-06T01:04:50.940Z",
         "retrograde": false
       }
@@ -7238,6 +7391,10 @@
       "meta": {
         "events": 1,
         "samples": 508,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1990-08-18T07:31:10.327Z",
         "retrograde": false
       }
@@ -7251,6 +7408,10 @@
       "meta": {
         "events": 1,
         "samples": 498,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-06-30T05:56:23.973Z",
         "retrograde": false
       }
@@ -7264,6 +7425,10 @@
       "meta": {
         "events": 1,
         "samples": 457,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7280,6 +7445,10 @@
       "meta": {
         "events": 1,
         "samples": 756,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7296,6 +7465,10 @@
       "meta": {
         "events": 1,
         "samples": 1137,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-08-26T04:29:47.273Z",
         "retrograde": false
       }
@@ -7309,6 +7482,10 @@
       "meta": {
         "events": 1,
         "samples": 1229,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1926-12-02T22:17:43.344Z",
         "retrograde": false
       }
@@ -7322,6 +7499,10 @@
       "meta": {
         "events": 1,
         "samples": 1169,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1991-02-06T18:50:38.777Z",
         "retrograde": false
       }
@@ -7335,6 +7516,10 @@
       "meta": {
         "events": 1,
         "samples": 1097,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-02-14T00:39:45.106Z",
         "retrograde": false
       }
@@ -7348,6 +7533,10 @@
       "meta": {
         "events": 1,
         "samples": 1107,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7364,6 +7553,10 @@
       "meta": {
         "events": 1,
         "samples": 756,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7380,6 +7573,10 @@
       "meta": {
         "events": 1,
         "samples": 450,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1865-06-27T02:41:57.960Z",
         "retrograde": false
       }
@@ -7393,6 +7590,10 @@
       "meta": {
         "events": 1,
         "samples": 211,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1927-03-31T17:26:26.281Z",
         "retrograde": false
       }
@@ -7406,6 +7607,10 @@
       "meta": {
         "events": 1,
         "samples": 416,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1995-04-01T14:02:47.394Z",
         "retrograde": false
       }
@@ -7419,6 +7624,10 @@
       "meta": {
         "events": 1,
         "samples": 3085,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-04-26T01:00:44.572Z",
         "retrograde": false
       }
@@ -7432,6 +7641,10 @@
       "meta": {
         "events": 1,
         "samples": 404,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7448,6 +7661,10 @@
       "meta": {
         "events": 1,
         "samples": 179,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7464,6 +7681,10 @@
       "meta": {
         "events": 1,
         "samples": 136,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1861-04-13T18:38:38.663Z",
         "retrograde": false
       }
@@ -7477,6 +7698,10 @@
       "meta": {
         "events": 1,
         "samples": 312,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1928-09-21T09:51:14.484Z",
         "retrograde": false
       }
@@ -7490,6 +7715,10 @@
       "meta": {
         "events": 1,
         "samples": 636,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1998-01-29T01:29:43.979Z",
         "retrograde": false
       }
@@ -7503,6 +7732,10 @@
       "meta": {
         "events": 1,
         "samples": 9083,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-01-26T14:31:41.097Z",
         "retrograde": false
       }
@@ -7516,6 +7749,10 @@
       "meta": {
         "events": 1,
         "samples": 447,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7532,6 +7769,10 @@
       "meta": {
         "events": 1,
         "samples": 630,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7548,6 +7789,10 @@
       "meta": {
         "events": 1,
         "samples": 1681,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1882-07-21T19:22:33.868Z",
         "retrograde": false
       }
@@ -7561,6 +7806,10 @@
       "meta": {
         "events": 1,
         "samples": 963,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1937-10-07T11:32:25.848Z",
         "retrograde": false
       }
@@ -7574,6 +7823,10 @@
       "meta": {
         "events": 1,
         "samples": 403,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1995-01-17T08:52:47.913Z",
         "retrograde": false
       }
@@ -7587,6 +7840,10 @@
       "meta": {
         "events": 1,
         "samples": 1298,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7603,6 +7860,10 @@
       "meta": {
         "events": 1,
         "samples": 501,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7612,303 +7873,1119 @@
     },
     {
       "id": "L4-STA-0001",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 161.576993
+      },
+      "meta": {
+        "events": 1,
+        "samples": 68,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1860-07-27T08:40:32.725Z",
+        "timingSeconds": 28861.784411598066
+      }
     },
     {
       "id": "L4-STA-0002",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 199.322016
+      },
+      "meta": {
+        "events": 1,
+        "samples": 84,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1925-08-11T13:30:47.963Z",
+        "timingSeconds": 28118.171259939423
+      }
     },
     {
       "id": "L4-STA-0003",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -16.4659806
+      },
+      "meta": {
+        "events": 1,
+        "samples": 97,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1990-08-25T14:07:48.775Z",
+        "timingSeconds": 27267.78703074031
+      }
     },
     {
       "id": "L4-STA-0004",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -57.1809877
+      },
+      "meta": {
+        "events": 1,
+        "samples": 100,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "2026-07-23T22:56:53.417Z",
+        "timingSeconds": 27373.53938235455
+      }
     },
     {
       "id": "L4-STA-0005",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 177.606009
+      },
+      "meta": {
+        "events": 1,
+        "samples": 79,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-07-01T19:32:40.072Z",
+        "timingSeconds": 29744.21711847795
+      }
     },
     {
       "id": "L4-STA-0006",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -3.1409874
+      },
+      "meta": {
+        "events": 1,
+        "samples": 119,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-09-17T12:13:24.955Z",
+        "timingSeconds": 25882.386284393557
+      }
     },
     {
       "id": "L4-STA-0007",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -204.533987
+      },
+      "meta": {
+        "events": 1,
+        "samples": 342,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1860-08-09T16:22:25.095Z",
+        "timingSeconds": 50704.399166549745
+      }
     },
     {
       "id": "L4-STA-0008",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 91.831985
+      },
+      "meta": {
+        "events": 1,
+        "samples": 251,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1926-01-17T22:11:41.668Z",
+        "timingSeconds": 49208.333414233566
+      }
     },
     {
       "id": "L4-STA-0009",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -30.2749929
+      },
+      "meta": {
+        "events": 1,
+        "samples": 447,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1991-08-01T10:34:33.001Z",
+        "timingSeconds": 51012.74009541604
+      }
     },
     {
       "id": "L4-STA-0010",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -317.170995
+      },
+      "meta": {
+        "events": 1,
+        "samples": 146,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "2026-10-03T07:10:37.069Z",
+        "timingSeconds": 50885.95376930794
+      }
     },
     {
       "id": "L4-STA-0011",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -189.254005
+      },
+      "meta": {
+        "events": 1,
+        "samples": 575,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2061-12-07T01:30:19.608Z",
+        "timingSeconds": 49783.91163557162
+      }
     },
     {
       "id": "L4-STA-0012",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 240.618008
+      },
+      "meta": {
+        "events": 1,
+        "samples": 551,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2141-11-13T02:05:15.918Z",
+        "timingSeconds": 49943.23894565664
+      }
     },
     {
       "id": "L4-STA-0013",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -152.033991
+      },
+      "meta": {
+        "events": 1,
+        "samples": 452,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1860-08-18T14:38:06.656Z",
+        "timingSeconds": 82685.9125561306
+      }
     },
     {
       "id": "L4-STA-0014",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 430.278018
+      },
+      "meta": {
+        "events": 1,
+        "samples": 519,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1926-09-29T05:49:46.785Z",
+        "timingSeconds": 79942.0697249217
+      }
     },
     {
       "id": "L4-STA-0015",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -316.997983
+      },
+      "meta": {
+        "events": 1,
+        "samples": 178,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1990-10-20T19:24:14.620Z",
+        "timingSeconds": 80714.24120090122
+      }
     },
     {
       "id": "L4-STA-0016",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 111.569981
+      },
+      "meta": {
+        "events": 1,
+        "samples": 265,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "2027-01-10T13:01:02.572Z",
+        "timingSeconds": 86649.68842214487
+      }
     },
     {
       "id": "L4-STA-0017",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 124.37
+      },
+      "meta": {
+        "events": 1,
+        "samples": 306,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2061-02-22T22:46:47.700Z",
+        "timingSeconds": 88214.15592530605
+      }
     },
     {
       "id": "L4-STA-0018",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 92.7470093
+      },
+      "meta": {
+        "events": 1,
+        "samples": 718,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2142-04-13T02:56:48.994Z",
+        "timingSeconds": 88415.62292630918
+      }
     },
     {
       "id": "L4-STA-0019",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 27.2619953
+      },
+      "meta": {
+        "events": 1,
+        "samples": 255,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1860-12-12T18:42:17.638Z",
+        "timingSeconds": 146399.30399748773
+      }
     },
     {
       "id": "L4-STA-0020",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -81.6120172
+      },
+      "meta": {
+        "events": 1,
+        "samples": 240,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1925-09-09T07:15:45.025Z",
+        "timingSeconds": 148360.85274794654
+      }
     },
     {
       "id": "L4-STA-0021",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 56.3829811
+      },
+      "meta": {
+        "events": 1,
+        "samples": 242,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1990-11-30T05:03:58.582Z",
+        "timingSeconds": 147102.59199741005
+      }
     },
     {
       "id": "L4-STA-0022",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 50.7889817
+      },
+      "meta": {
+        "events": 1,
+        "samples": 256,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "2026-12-13T00:57:26.523Z",
+        "timingSeconds": 146390.8575723994
+      }
     },
     {
       "id": "L4-STA-0023",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -76.7889969
+      },
+      "meta": {
+        "events": 1,
+        "samples": 204,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-10-23T09:31:14.679Z",
+        "timingSeconds": 144809.55142440114
+      }
     },
     {
       "id": "L4-STA-0024",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 19.4239826
+      },
+      "meta": {
+        "events": 1,
+        "samples": 95,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-07-06T07:24:20.044Z",
+        "timingSeconds": 147300.20169684023
+      }
     },
     {
       "id": "L4-STA-0025",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 44.9100027
+      },
+      "meta": {
+        "events": 1,
+        "samples": 270,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1860-12-19T21:06:14.069Z",
+        "timingSeconds": 231547.41851679198
+      }
     },
     {
       "id": "L4-STA-0026",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -231.598015
+      },
+      "meta": {
+        "events": 1,
+        "samples": 160,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1925-07-11T21:13:56.145Z",
+        "timingSeconds": 247080.66587698943
+      }
     },
     {
       "id": "L4-STA-0027",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 7.18199795
+      },
+      "meta": {
+        "events": 1,
+        "samples": 232,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1990-09-23T05:10:32.351Z",
+        "timingSeconds": 244047.27389119758
+      }
     },
     {
       "id": "L4-STA-0028",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -180.323984
+      },
+      "meta": {
+        "events": 1,
+        "samples": 125,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "2026-07-26T19:53:13.993Z",
+        "timingSeconds": 241723.02025200517
+      }
     },
     {
       "id": "L4-STA-0029",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 202.164004
+      },
+      "meta": {
+        "events": 1,
+        "samples": 186,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-09-28T18:58:57.363Z",
+        "timingSeconds": 233347.90933972658
+      }
     },
     {
       "id": "L4-STA-0030",
-      "verdict": "unsupported",
-      "detail": "the engine has no station search in its public API: positions() and natalChart() give a body's speed and retrograde flag at an instant, and events() searches longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 4.08901024
+      },
+      "meta": {
+        "events": 1,
+        "samples": 266,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-10-26T22:26:56.401Z",
+        "timingSeconds": 240576.90761172655
+      }
     },
     {
       "id": "L4-LUN-0001",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -10.7299843
+      },
+      "meta": {
+        "events": 1,
+        "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1860-03-22T13:55:20.877Z",
+        "timingSeconds": 33.65999444613579
+      }
     },
     {
       "id": "L4-LUN-0002",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -10.5970087
+      },
+      "meta": {
+        "events": 1,
+        "samples": 52,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1860-03-07T12:44:10.105Z",
+        "timingSeconds": 25.96100275549989
+      }
     },
     {
       "id": "L4-LUN-0003",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -8.38999462
+      },
+      "meta": {
+        "events": 1,
+        "samples": 58,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1860-09-15T06:09:32.452Z",
+        "timingSeconds": 25.85386292389331
+      }
     },
     {
       "id": "L4-LUN-0004",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -9.40300655
+      },
+      "meta": {
+        "events": 1,
+        "samples": 74,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1860-09-30T01:39:46.532Z",
+        "timingSeconds": 33.96904071957841
+      }
     },
     {
       "id": "L4-LUN-0005",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -1.89499617
+      },
+      "meta": {
+        "events": 1,
+        "samples": 68,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1925-03-24T14:02:45.415Z",
+        "timingSeconds": 29.125439839737865
+      }
     },
     {
       "id": "L4-LUN-0006",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -3.02801466
+      },
+      "meta": {
+        "events": 1,
+        "samples": 55,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1925-03-10T14:20:39.448Z",
+        "timingSeconds": 31.143386911412033
+      }
     },
     {
       "id": "L4-LUN-0007",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -4.40500116
+      },
+      "meta": {
+        "events": 1,
+        "samples": 61,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1925-09-18T04:12:11.865Z",
+        "timingSeconds": 32.12012867172604
+      }
     },
     {
       "id": "L4-LUN-0008",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -1.3539896
+      },
+      "meta": {
+        "events": 1,
+        "samples": 46,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1925-09-02T19:52:46.796Z",
+        "timingSeconds": 26.76587392207246
+      }
     },
     {
       "id": "L4-LUN-0009",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 1.46201921
+      },
+      "meta": {
+        "events": 1,
+        "samples": 70,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1990-03-26T19:48:20.613Z",
+        "timingSeconds": 26.71228457906386
+      }
     },
     {
       "id": "L4-LUN-0010",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 1.13099903
+      },
+      "meta": {
+        "events": 1,
+        "samples": 55,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1990-03-11T10:58:31.122Z",
+        "timingSeconds": 32.25079868739936
+      }
     },
     {
       "id": "L4-LUN-0011",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -1.60598421
+      },
+      "meta": {
+        "events": 1,
+        "samples": 62,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1990-09-19T00:46:19.463Z",
+        "timingSeconds": 31.174285067873136
+      }
     },
     {
       "id": "L4-LUN-0012",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -2.32800835
+      },
+      "meta": {
+        "events": 1,
+        "samples": 49,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1990-09-05T01:45:34.012Z",
+        "timingSeconds": 29.011698362673755
+      }
     },
     {
       "id": "L4-LUN-0013",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": 5.10001326
+      },
+      "meta": {
+        "events": 1,
+        "samples": 63,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "2026-03-19T01:23:33.827Z",
+        "timingSeconds": 28.50705898673854
+      }
     },
     {
       "id": "L4-LUN-0014",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": 3.91999495
+      },
+      "meta": {
+        "events": 1,
+        "samples": 48,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "2026-03-03T11:37:57.650Z",
+        "timingSeconds": 30.073355434633882
+      }
     },
     {
       "id": "L4-LUN-0015",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -3.49600875
+      },
+      "meta": {
+        "events": 1,
+        "samples": 55,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "2026-09-11T03:26:56.430Z",
+        "timingSeconds": 29.004667123420433
+      }
     },
     {
       "id": "L4-LUN-0016",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -2.8749814
+      },
+      "meta": {
+        "events": 1,
+        "samples": 71,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "2026-09-26T16:48:59.543Z",
+        "timingSeconds": 29.43940841696714
+      }
     },
     {
       "id": "L4-LUN-0017",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.405985117
+      },
+      "meta": {
+        "events": 1,
+        "samples": 47,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-03-02T16:12:07.748Z",
+        "timingSeconds": 26.308058723399977
+      }
     },
     {
       "id": "L4-LUN-0018",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 0.525002003
+      },
+      "meta": {
+        "events": 1,
+        "samples": 61,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-03-17T03:41:30.334Z",
+        "timingSeconds": 33.95033343104691
+      }
     },
     {
       "id": "L4-LUN-0019",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.0120067596
+      },
+      "meta": {
+        "events": 1,
+        "samples": 68,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-09-24T15:54:05.048Z",
+        "timingSeconds": 33.466114995478726
+      }
     },
     {
       "id": "L4-LUN-0020",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.706984997
+      },
+      "meta": {
+        "events": 1,
+        "samples": 54,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2060-09-10T09:44:24.726Z",
+        "timingSeconds": 26.86019833605352
+      }
     },
     {
       "id": "L4-LUN-0021",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -5.83098412
+      },
+      "meta": {
+        "events": 1,
+        "samples": 63,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-03-19T00:01:18.418Z",
+        "timingSeconds": 26.304911554858833
+      }
     },
     {
       "id": "L4-LUN-0022",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -4.81499386
+      },
+      "meta": {
+        "events": 1,
+        "samples": 48,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-03-03T17:38:37.765Z",
+        "timingSeconds": 32.84888842901634
+      }
     },
     {
       "id": "L4-LUN-0023",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -4.11998558
+      },
+      "meta": {
+        "events": 1,
+        "samples": 56,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-09-11T07:30:35.854Z",
+        "timingSeconds": 31.849533400147262
+      }
     },
     {
       "id": "L4-LUN-0024",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -3.7950201
+      },
+      "meta": {
+        "events": 1,
+        "samples": 70,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-09-26T16:42:21.670Z",
+        "timingSeconds": 26.821298728893172
+      }
     },
     {
       "id": "L4-LUN-0025",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -8.35698128
+      },
+      "meta": {
+        "events": 1,
+        "samples": 48,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1860-07-18T14:20:23.466Z",
+        "timingSeconds": 27.375617420148313
+      }
     },
     {
       "id": "L4-LUN-0026",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.19899559
+      },
+      "meta": {
+        "events": 1,
+        "samples": 48,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "1919-05-29T13:11:34.240Z",
+        "timingSeconds": 26.23321456319754
+      }
     },
     {
       "id": "L4-LUN-0027",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -3.44200361
+      },
+      "meta": {
+        "events": 1,
+        "samples": 48,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "2026-08-12T17:36:41.545Z",
+        "timingSeconds": 27.441496366292334
+      }
     },
     {
       "id": "L4-LUN-0028",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "tt_s": -2.55698874
+      },
+      "meta": {
+        "events": 1,
+        "samples": 47,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "2000-01-21T04:40:23.761Z",
+        "timingSeconds": 26.588390694487206
+      }
     },
     {
       "id": "L4-LUN-0029",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": -0.984016299
+      },
+      "meta": {
+        "events": 1,
+        "samples": 49,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "2018-07-27T20:20:20.120Z",
+        "timingSeconds": 34.07772757013119
+      }
     },
     {
       "id": "L4-LUN-0030",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "tt_s": 1.24699605
+      },
+      "meta": {
+        "events": 1,
+        "samples": 49,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [],
+        "at": "2025-03-14T06:54:40.440Z",
+        "timingSeconds": 33.35259484885141
+      }
     },
     {
       "id": "L4-UTC-0001",
@@ -7919,6 +8996,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7935,6 +9016,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7944,13 +9029,43 @@
     },
     {
       "id": "L4-UTC-0003",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": -0.013999939
+      },
+      "meta": {
+        "events": 1,
+        "samples": 70,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2028-01-26T15:12:31.031Z",
+        "timingSeconds": 34.051429352566174
+      }
     },
     {
       "id": "L4-UTC-0004",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": 1.32299995
+      },
+      "meta": {
+        "events": 1,
+        "samples": 55,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2028-01-12T04:03:06.541Z",
+        "timingSeconds": 26.50918815421553
+      }
     },
     {
       "id": "L4-UTC-0005",
@@ -7961,6 +9076,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7977,6 +9096,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7986,13 +9109,43 @@
     },
     {
       "id": "L4-UTC-0007",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": -0.0940001011
+      },
+      "meta": {
+        "events": 1,
+        "samples": 54,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2035-01-09T15:03:08.070Z",
+        "timingSeconds": 33.06679789616921
+      }
     },
     {
       "id": "L4-UTC-0008",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": -0.423000097
+      },
+      "meta": {
+        "events": 1,
+        "samples": 68,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2035-01-23T20:16:37.586Z",
+        "timingSeconds": 27.33272126166685
+      }
     },
     {
       "id": "L4-UTC-0009",
@@ -8003,6 +9156,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8019,6 +9176,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8028,13 +9189,43 @@
     },
     {
       "id": "L4-UTC-0011",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": -0.210999966
+      },
+      "meta": {
+        "events": 1,
+        "samples": 67,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2050-01-23T04:57:02.940Z",
+        "timingSeconds": 25.985058230881954
+      }
     },
     {
       "id": "L4-UTC-0012",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": -0.768000126
+      },
+      "meta": {
+        "events": 1,
+        "samples": 52,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2050-01-08T01:39:06.291Z",
+        "timingSeconds": 33.53432910837069
+      }
     },
     {
       "id": "L4-UTC-0013",
@@ -8045,6 +9236,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8061,6 +9256,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8070,13 +9269,43 @@
     },
     {
       "id": "L4-UTC-0015",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": -0.879000187
+      },
+      "meta": {
+        "events": 1,
+        "samples": 55,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2100-01-10T12:57:45.398Z",
+        "timingSeconds": 30.180744067567666
+      }
     },
     {
       "id": "L4-UTC-0016",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": -1.46899986
+      },
+      "meta": {
+        "events": 1,
+        "samples": 69,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2100-01-26T02:51:40.833Z",
+        "timingSeconds": 28.284098517704297
+      }
     },
     {
       "id": "L4-UTC-0017",
@@ -8087,6 +9316,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8103,6 +9336,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8112,13 +9349,43 @@
     },
     {
       "id": "L4-UTC-0019",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "fail",
+      "residual": {
+        "utc_s": -2.27700043
+      },
+      "meta": {
+        "events": 1,
+        "samples": 63,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-01-20T00:24:54.422Z",
+        "timingSeconds": 29.30017178927538
+      }
     },
     {
       "id": "L4-UTC-0020",
-      "verdict": "unsupported",
-      "detail": "the engine has no lunation search in its public API: moonPhase() gives the phase at an instant, and events() searches one body's longitude crossings only"
+      "verdict": "pass",
+      "residual": {
+        "utc_s": -1.05799961
+      },
+      "meta": {
+        "events": 1,
+        "samples": 48,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
+        "flags": [
+          "delta-t-extrapolated"
+        ],
+        "at": "2140-01-04T09:41:01.468Z",
+        "timingSeconds": 29.284689475534076
+      }
     },
     {
       "id": "L4-ING-0061",
@@ -8129,6 +9396,10 @@
       "meta": {
         "events": 1,
         "samples": 31,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-11-22T07:23:38.241Z",
         "retrograde": false
       }

@@ -111,7 +111,12 @@ const gregorian: string | null = julianToGregorian("1917-10-25");
 const tzdbVersion: string = TZDB.version;
 void cause; void gregorian; void tzdbVersion;
 
-import { calc, houses, events, chart as calcChart, type CalcRequest, type CalcPosition, type CalcRefusal, type CalcUserAyanamsa, type CalcAyanamsaValue, type CalcSiderealChart, type CalcTimeBand } from "@zodiacs/engine/calc";
+import { calc, houses, events, searchStations, searchLunations, chart as calcChart, type CalcRequest, type CalcPosition, type CalcRefusal, type CalcUserAyanamsa, type CalcAyanamsaValue, type CalcSiderealChart, type CalcTimeBand } from "@zodiacs/engine/calc";
+const april = { from: "2024-04-01", to: "2024-05-01" };
+const stations = searchStations({ ...april, body: "Mercury" });
+if (stations.status === "ok") { const motion: "direct" | "retrograde" = stations.events[0]!.direction; void motion; }
+const lunations = searchLunations({ ...april, phaseDegrees: 90 });
+if (lunations.status === "ok") { const phase: 0 | 90 | 180 | 270 = lunations.events[0]!.phaseDegrees; void phase; }
 const calcRequest: CalcRequest = {body: "Mars", time: {jd: 2451545, scale: "tt"}, frame: "equatorial-icrs", center: {topocentric: {latitude: 0, longitude: 0}}, flags: {correction: "astrometric", cartesian: true}};
 const calcResult: CalcPosition | CalcRefusal = calc(calcRequest);
 if (calcResult.status === "ok") { const replayed: CalcRequest = calcResult.receipt.request; const band: CalcTimeBand | null = calcResult.band; const ttBand: number | undefined = band?.time.tt; void replayed; void ttBand; } else { const reason: string = calcResult.reason; void reason; }
@@ -771,7 +776,7 @@ writeFileSync(
   `
 import assert from "node:assert/strict";
 import * as root from "@zodiacs/engine";
-import { calc, chart, events } from "@zodiacs/engine/calc";
+import { calc, chart, events, searchStations, searchLunations } from "@zodiacs/engine/calc";
 import { birthWindow } from "@zodiacs/engine/window";
 import * as techniques from "@zodiacs/engine/techniques";
 import { bodyLongitude, bodyLongitudeDetailed } from "@zodiacs/engine/internal";
@@ -818,6 +823,21 @@ assert(chart({ time: "2000-01-01", timeKnown: false }).chart.flags.includes("no-
 const found = events({ kind: "longitude-crossing", body: "Sun", longitude: 30, from: "1990-01-01T00:00:00Z", to: "1991-01-01T00:00:00Z" });
 assert.deepEqual(found.flags, flags);
 assert.equal(found.receipt.engine.ephemeris.name, name);
+const april = { from: "2024-04-01", to: "2024-05-01" };
+const stations = searchStations({ ...april, body: "Mercury" });
+const lunations = searchLunations({ ...april, phaseDegrees: 90 });
+for (const search of [stations, lunations]) {
+  assert.equal(search.status, "ok");
+  assert.equal(search.ephemeris.name, name);
+  assert.deepEqual(search.receipt.engine.ephemeris, natal.ephemeris);
+  assert.deepEqual(search.flags, flags);
+  for (const event of search.events) {
+    assert.deepEqual(event.ephemeris, search.receipt.engine.ephemeris);
+    assert.deepEqual(event.flags, flags);
+  }
+}
+assert.deepEqual(stations.events.map(event => event.direction), ["retrograde", "direct"]);
+assert.deepEqual(lunations.events.map(event => event.phaseDegrees), [90]);
 const window = birthWindow({ start: "1990-04-15T08:00:00Z", end: "1990-04-15T08:10:00Z", latitude: 51.5, longitude: -0.12 });
 assert.deepEqual(window.flags, flags);
 assert.equal(window.ephemeris.name, name);

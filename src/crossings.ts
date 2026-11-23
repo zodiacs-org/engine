@@ -8,6 +8,7 @@
  * without the ephemeris, for scans that bring their own.
  */
 import type { BodyName } from "./types.js";
+import { sampleCrossings } from "./search-samples.js";
 
 export type { BodyName } from "./types.js";
 
@@ -81,9 +82,6 @@ interface Sample {
   offset: number;
 }
 
-/** Thrown inside a search when it reaches its budget; never escapes it. */
-class SampleBudgetReached {}
-
 /** Signed shortest angular distance from `from` to `to`, degrees in (-180, 180]. */
 function signedDelta(from: number, to: number): number {
   const difference = (((to - from) % 360) + 360) % 360;
@@ -115,8 +113,7 @@ function reachOf(before: Sample, middle: Sample, after: Sample): number {
 }
 
 function windowTime(date: Date, label: string): number {
-  if (!(date instanceof Date)) throw new RangeError(`${label} must be a valid Date.`);
-  const milliseconds = Date.prototype.getTime.call(date);
+  const milliseconds = date instanceof Date ? Date.prototype.getTime.call(date) : NaN;
   if (!Number.isFinite(milliseconds)) throw new RangeError(`${label} must be a valid Date.`);
   return milliseconds;
 }
@@ -132,7 +129,7 @@ function validWindow(targetLongitude: number, from: Date, to: Date, stepDays: nu
   const toTime = windowTime(to, "Crossing window end");
   if (fromTime > toTime) throw new RangeError("Crossing window must have from <= to.");
   if (!Number.isFinite(targetLongitude)) throw new RangeError("targetLongitude must be finite.");
-  if (typeof stepDays !== "number" || !Number.isFinite(stepDays) || stepDays <= 0) {
+  if (!Number.isFinite(stepDays) || stepDays <= 0) {
     throw new RangeError("stepDays must be positive.");
   }
   const step = stepDays * DAY;
@@ -142,11 +139,8 @@ function validWindow(targetLongitude: number, from: Date, to: Date, stepDays: nu
   return { fromTime, toTime, step };
 }
 
-function validBudget(maxSamples: number | undefined): number {
-  if (maxSamples === undefined || maxSamples === Number.POSITIVE_INFINITY) {
-    return Number.POSITIVE_INFINITY;
-  }
-  if (!Number.isInteger(maxSamples) || maxSamples < 1) {
+function validBudget(maxSamples = Infinity): number {
+  if (maxSamples !== Infinity && (!Number.isInteger(maxSamples) || maxSamples < 1)) {
     throw new RangeError("maxSamples must be a positive integer or Infinity.");
   }
   return maxSamples;
@@ -329,35 +323,12 @@ function run<B extends string>(
   window: Window,
   maxSamples: number
 ): CrossingSearchResult {
-  const refused = (samples: number): CrossingSearchResult => ({
-    status: "refused",
-    reason: "sample-budget",
-    samples,
-    maxSamples,
-    crossings: []
-  });
-  if (window.toTime === window.fromTime) return { status: "complete", crossings: [], samples: 0 };
-  // The coarse scan's size is known before any sampling; refinements are not.
-  const count = coarseSampleCount(window);
-  if (count > maxSamples) return refused(0);
-
-  let samples = 0;
-  const sample = (time: number): number => {
-    if (samples >= maxSamples) throw new SampleBudgetReached();
-    samples += 1;
-    const longitude = longitudeAt(body, new Date(time));
-    if (!Number.isFinite(longitude)) {
-      throw new RangeError("Ephemeris returned a non-finite longitude.");
-    }
-    return longitude;
-  };
-  try {
-    const crossings = solve(sample, targetLongitude, window, count);
-    return { status: "complete", crossings, samples };
-  } catch (error) {
-    if (error instanceof SampleBudgetReached) return refused(samples);
-    throw error;
-  }
+  const count = window.toTime === window.fromTime ? 0 : coarseSampleCount(window);
+  return sampleCrossings(
+    count, maxSamples, (time) => longitudeAt(body, new Date(time)),
+    "Ephemeris returned a non-finite longitude.",
+    (sample) => solve(sample, targetLongitude, window, count)
+  );
 }
 
 /**

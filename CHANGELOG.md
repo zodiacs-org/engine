@@ -1,5 +1,16 @@
 # Engine changelog
 
+## 2.1.0-rc.1
+
+`@zodiacs/engine/calc` adds `searchStations()` and `searchLunations()`.
+`events()` keeps its 2.0.0 contract. Chain rounded (from, to] TT windows
+on the same ephemeris name and version. Exhausting `maxSamples` refuses
+the whole search. Events report source and fallback flags, UTC and UT1
+clock bands, and a local TT timing estimate. In L4, DE440 passes all 30
+stations and 40 new or full Moons. Astronomy-engine passes 30 and 21.
+Two-second quarter timing and stations beyond Saturn lack span-wide
+verification. [Guide and evidence](docs/calc.md#station-and-lunation-search)
+
 ## 2.0.0 (cut 2026-11-21)
 
 A major release: 2.0.0-rc.6 with the version changed, cut on 2026-11-21.

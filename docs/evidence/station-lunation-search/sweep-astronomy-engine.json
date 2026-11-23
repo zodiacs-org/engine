@@ -1,0 +1,287 @@
+{
+  "source": "astronomy-engine",
+  "from": {
+    "jd": 2378496.5,
+    "scale": "ut1"
+  },
+  "to": {
+    "jd": 2524593.4999999884,
+    "scale": "tt"
+  },
+  "stepHours": 12,
+  "firstCutHourTt": 6,
+  "rows": [
+    {
+      "selection": "Mercury",
+      "daily": 2521,
+      "subdaily": 2521,
+      "matched": 2521,
+      "missedByDaily": 0,
+      "extraDaily": 0,
+      "duplicateDaily": 0,
+      "duplicateSubdaily": 0,
+      "directionDifferences": 0,
+      "maxDifferenceMs": 0,
+      "shallowest": [
+        {
+          "at": "2160-06-06T03:47:04.836Z",
+          "direction": "direct",
+          "shiftMs": 261,
+          "oneHourDegPerDay2": 0.07376096701773349,
+          "halfHourDegPerDay2": 0.07376124067377532
+        },
+        {
+          "at": "2178-06-16T20:09:19.343Z",
+          "direction": "retrograde",
+          "shiftMs": -250,
+          "oneHourDegPerDay2": -0.07506850505615148,
+          "halfHourDegPerDay2": -0.07506880555229145
+        }
+      ]
+    },
+    {
+      "selection": "Venus",
+      "daily": 500,
+      "subdaily": 500,
+      "matched": 500,
+      "missedByDaily": 0,
+      "extraDaily": 0,
+      "duplicateDaily": 0,
+      "duplicateSubdaily": 0,
+      "directionDifferences": 0,
+      "maxDifferenceMs": 0,
+      "shallowest": [
+        {
+          "at": "2175-07-22T23:14:40.184Z",
+          "direction": "direct",
+          "shiftMs": -285,
+          "oneHourDegPerDay2": 0.03834504772839864,
+          "halfHourDegPerDay2": 0.038345052729710005
+        },
+        {
+          "at": "1983-08-03T19:46:13.533Z",
+          "direction": "retrograde",
+          "shiftMs": 278,
+          "oneHourDegPerDay2": -0.03823598292001407,
+          "halfHourDegPerDay2": -0.038236026171944104
+        }
+      ]
+    },
+    {
+      "selection": "Mars",
+      "daily": 374,
+      "subdaily": 374,
+      "matched": 374,
+      "missedByDaily": 0,
+      "extraDaily": 0,
+      "duplicateDaily": 0,
+      "duplicateSubdaily": 0,
+      "directionDifferences": 0,
+      "maxDifferenceMs": 0,
+      "shallowest": [
+        {
+          "at": "1916-03-21T14:48:59.655Z",
+          "direction": "direct",
+          "shiftMs": -227,
+          "oneHourDegPerDay2": 0.012169641316177149,
+          "halfHourDegPerDay2": 0.012169642421213211
+        },
+        {
+          "at": "2125-03-14T11:54:57.364Z",
+          "direction": "retrograde",
+          "shiftMs": 194,
+          "oneHourDegPerDay2": -0.01210404078483407,
+          "halfHourDegPerDay2": -0.01210402654214704
+        }
+      ]
+    },
+    {
+      "selection": "Jupiter",
+      "daily": 733,
+      "subdaily": 733,
+      "matched": 733,
+      "missedByDaily": 0,
+      "extraDaily": 0,
+      "duplicateDaily": 0,
+      "duplicateSubdaily": 0,
+      "directionDifferences": 0,
+      "maxDifferenceMs": 0,
+      "shallowest": [
+        {
+          "at": "2041-06-18T06:14:54.224Z",
+          "direction": "direct",
+          "shiftMs": -1,
+          "oneHourDegPerDay2": 0.002967332801745215,
+          "halfHourDegPerDay2": 0.0029673305671167327
+        },
+        {
+          "at": "1841-04-06T00:27:42.485Z",
+          "direction": "retrograde",
+          "shiftMs": -17,
+          "oneHourDegPerDay2": -0.003108790719124954,
+          "halfHourDegPerDay2": -0.003108790719124954
+        }
+      ]
+    },
+    {
+      "selection": "Saturn",
+      "daily": 773,
+      "subdaily": 773,
+      "matched": 773,
+      "missedByDaily": 0,
+      "extraDaily": 0,
+      "duplicateDaily": 0,
+      "duplicateSubdaily": 0,
+      "directionDifferences": 0,
+      "maxDifferenceMs": 0,
+      "shallowest": [
+        {
+          "at": "2163-08-13T10:11:14.471Z",
+          "direction": "direct",
+          "shiftMs": 2,
+          "oneHourDegPerDay2": 0.0015933420281726285,
+          "halfHourDegPerDay2": 0.0015933396789478138
+        },
+        {
+          "at": "1873-05-12T08:38:29.928Z",
+          "direction": "retrograde",
+          "shiftMs": -28,
+          "oneHourDegPerDay2": -0.0016052546279752278,
+          "halfHourDegPerDay2": -0.0016052531464083586
+        }
+      ]
+    },
+    {
+      "selection": "Uranus",
+      "daily": 791,
+      "subdaily": 791,
+      "matched": 791,
+      "missedByDaily": 0,
+      "extraDaily": 0,
+      "duplicateDaily": 0,
+      "duplicateSubdaily": 0,
+      "directionDifferences": 0,
+      "maxDifferenceMs": 0,
+      "shallowest": [
+        {
+          "at": "1909-09-27T01:28:29.545Z",
+          "direction": "direct",
+          "shiftMs": 42,
+          "oneHourDegPerDay2": 0.00082557384212123,
+          "halfHourDegPerDay2": 0.0008255712964455597
+        },
+        {
+          "at": "2011-07-10T00:31:37.127Z",
+          "direction": "retrograde",
+          "shiftMs": -34,
+          "oneHourDegPerDay2": -0.0007881151495894301,
+          "halfHourDegPerDay2": -0.0007881134552008007
+        }
+      ]
+    },
+    {
+      "selection": "Neptune",
+      "daily": 795,
+      "subdaily": 795,
+      "matched": 795,
+      "missedByDaily": 0,
+      "extraDaily": 0,
+      "duplicateDaily": 0,
+      "duplicateSubdaily": 0,
+      "directionDifferences": 0,
+      "maxDifferenceMs": 0,
+      "shallowest": [
+        {
+          "at": "2118-07-05T14:10:56.208Z",
+          "direction": "direct",
+          "shiftMs": 96,
+          "oneHourDegPerDay2": 0.0005137580810696818,
+          "halfHourDegPerDay2": 0.0005137561656738399
+        },
+        {
+          "at": "2003-05-16T00:52:56.167Z",
+          "direction": "retrograde",
+          "shiftMs": 64,
+          "oneHourDegPerDay2": -0.0005198306962483912,
+          "halfHourDegPerDay2": -0.0005198275939619634
+        }
+      ]
+    },
+    {
+      "selection": "Pluto",
+      "daily": 797,
+      "subdaily": 797,
+      "matched": 797,
+      "missedByDaily": 0,
+      "extraDaily": 0,
+      "duplicateDaily": 0,
+      "duplicateSubdaily": 0,
+      "directionDifferences": 0,
+      "maxDifferenceMs": 0,
+      "shallowest": [
+        {
+          "at": "1859-01-19T13:39:27.441Z",
+          "direction": "direct",
+          "shiftMs": -110,
+          "oneHourDegPerDay2": 0.0003437983041294501,
+          "halfHourDegPerDay2": 0.0003437949562794529
+        },
+        {
+          "at": "2118-08-22T12:57:20.594Z",
+          "direction": "retrograde",
+          "shiftMs": -139,
+          "oneHourDegPerDay2": -0.0003290315762569662,
+          "halfHourDegPerDay2": -0.00032902944803936407
+        }
+      ]
+    },
+    {
+      "selection": 0,
+      "daily": 4947,
+      "subdaily": 4947,
+      "matched": 4947,
+      "missedByDaily": 0,
+      "extraDaily": 0,
+      "duplicateDaily": 0,
+      "duplicateSubdaily": 0,
+      "directionDifferences": 0,
+      "maxDifferenceMs": 0
+    },
+    {
+      "selection": 90,
+      "daily": 4948,
+      "subdaily": 4948,
+      "matched": 4948,
+      "missedByDaily": 0,
+      "extraDaily": 0,
+      "duplicateDaily": 0,
+      "duplicateSubdaily": 0,
+      "directionDifferences": 0,
+      "maxDifferenceMs": 0
+    },
+    {
+      "selection": 180,
+      "daily": 4947,
+      "subdaily": 4947,
+      "matched": 4947,
+      "missedByDaily": 0,
+      "extraDaily": 0,
+      "duplicateDaily": 0,
+      "duplicateSubdaily": 0,
+      "directionDifferences": 0,
+      "maxDifferenceMs": 0
+    },
+    {
+      "selection": 270,
+      "daily": 4947,
+      "subdaily": 4947,
+      "matched": 4947,
+      "missedByDaily": 0,
+      "extraDaily": 0,
+      "duplicateDaily": 0,
+      "duplicateSubdaily": 0,
+      "directionDifferences": 0,
+      "maxDifferenceMs": 0
+    }
+  ]
+}

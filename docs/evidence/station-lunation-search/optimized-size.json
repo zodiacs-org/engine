@@ -1,0 +1,19 @@
+{
+  "calcEntryBytes": 53865,
+  "calcDeclarationBytes": 25412,
+  "calcEntryInputs": {
+    "src/calc.ts": 37619,
+    "src/calc-bounds.ts": 3523,
+    "src/calc-bounds-de440.ts": 1283,
+    "src/calc-frames.ts": 2504,
+    "src/calc-reduce.ts": 3167,
+    "src/calc-event-roots.ts": 1435,
+    "src/calc-ayanamsa.ts": 2561
+  },
+  "calcCodeBytes": 201066,
+  "calcGraphBytes": 3520618,
+  "packBase64Bytes": 3319552,
+  "unpackedBytes": 4780669,
+  "unpackedBesidePackBytes": 1461117,
+  "packedFiles": 101
+}
