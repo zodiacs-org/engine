@@ -396,11 +396,9 @@ third reader. Two cautions stand, both in `sign-changes/README.md`: the
 requests did not carry the User-Agent that JPL's fair-use policy asks for,
 and the digests kept with each record cannot be checked against anything.
 
-The second reader reported a near miss for Pluto on 1823-12-15, with no
-crossing in either source. The reported closest approaches to the Aries
-boundary were 0.375″ on Horizons and 13.3″ on the engine, a ratio of about
-35. These figures are unverified because this directory contains no raw
-output for the near miss.
+The second reader reported that Pluto approached the Aries boundary on
+1823-12-15 without crossing it in either Horizons or the engine. This
+directory contains no raw output for that near miss.
 
 ## Not checked
 

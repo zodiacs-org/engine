@@ -120,18 +120,17 @@ review received carried a full receipt", and "Observed: every result
 carries a receipt with a SHA-256 digest, engine and ephemeris versions
 and convention identifiers."
 
-The response sizes reported here on 13 November are unverified because
-this directory contains no raw connector responses. The reader recorded
-14,809 bytes for the date-only `get_natal_chart` call from Review 2, B11
-and 150,468 bytes for `tools/list`.
+The live responses seen on 13 November were substantially larger than
+the plan's quoted "3 KB per result". This directory contains no raw
+connector responses from that check.
 
 The `get_natal_chart` result for `{"birthDate":"1990-05-03"}` had the keys
 `schema`, `ok`, `tool`, `data` and `links`, and no receipt, no digest and
 no engine version anywhere in the text or the structured content.
 `get_sky` with no arguments, called a minute later, has a receipt at
 `data.calculation.receipt` and two digests. `BREAKER.md`, S5, said "every
-result seen", and that reader saw three event and capability results; the
-fix round widened it.
+result seen". That reader was describing the sampled event and capability
+results. The fix round widened the claim.
 
 The same call bears on list D of the disagreements. The new entry on Phase
 4 says that `get_natal_chart` returned `"houseSystem":null` (true today)
@@ -181,7 +180,7 @@ first breaker review as much as in the fix round.
 | Item | Applied | Holds |
 | --- | --- | --- |
 | S1 (the relayed time) | Review 2, B9 and "Not checked" | Yes. Three tools and three values, the relayed 14:30:44 marked as never seen live, `search_sky_events` marked as not offered. `tools/list` today has the same 19 names and no `search_sky_events`. |
-| S2 (the plan's own words) | Items 6 and 9; Review 1, A10 | Yes. Both plan sentences are quoted whole and match the plan. The misreading is withdrawn in so many words. The reported 1823 distances give a ratio of about 35 (13.3 / 0.375). The distances are unverified because this directory contains no raw output for the near miss. |
+| S2 (the plan's own words) | Items 6 and 9; Review 1, A10 | Yes. Both plan sentences are quoted whole and match the plan. The misreading is withdrawn in so many words. The second reader reported that Pluto approached the Aries boundary on 1823-12-15 without crossing it in either source. This directory contains no raw output for that near miss. |
 | S3 (the CDS's A&A rule) | Review 3, the table and new C13; item 14 | Yes. Both archive addresses open today; each sentence is on the page the review now gives for it, and "Updated at: 7 January 2026" is on the `/legals/` copy. The A&A sentence reads as quoted. `LICENSING.md` is unchanged. |
 | S4 (ESA's wording) | Review 3, C9; item 14 | Yes in the review files. The pull request body still has the short form (the builder says so). The address added for the new reduction opens and has the quoted sentence and no licence statement. |
 | S5 (two published rules) | Review 4, D8, D4 and the summary table | Yes, except F4. The mistaken size comparison is withdrawn. The reading of section 2 is marked as a reading. |

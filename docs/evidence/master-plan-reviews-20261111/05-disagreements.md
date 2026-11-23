@@ -194,11 +194,10 @@ either side of a station near a boundary, where a few milliarcseconds move
 the crossing by minutes and a little more can add or remove a crossing. The
 pack's own error (up to 0.0005″ for Pluto), the IAU 2000B nutation (up to
 0.0023″ from IAU 2000A) and the difference between DE440 and Horizons's
-DE441 are all of that size. The second reader reported that Pluto turned
-direct 0.375″ inside Aries on Horizons on 1823-12-15, without crossing
-(`BREAKER.md`, N2). That figure is unverified because this directory
-contains no raw output for the near miss. At that distance, shifting the
-longitude half an arcsecond toward the boundary could add two sign changes.
+DE441 are all of that size. The second reader reported that Pluto
+approached the Aries boundary on 1823-12-15 without crossing it in either
+Horizons or the engine. The raw output for that near miss is absent from
+this directory (`BREAKER.md`, N2).
 
 *Instead:* define the test in longitude at Horizons's instant (for example
 within a stated number of milliarcseconds), which is well posed at every
@@ -452,10 +451,10 @@ none of the lists. None was checked, and each says what a check would need:
   F4). The tool list named three zone inputs, `zone`, `birthZone` and
   `currentZone`.
 - Phase 4: "short conventions instead of 3 KB per result". The second
-  reader reported 9,089 to 15,277 bytes for three complete results
-  (`BREAKER.md`, S5). These sizes are unverified because this directory
-  contains no raw responses. Neither reader measured the share taken by
-  conventions.
+  reader described the sampled live responses as substantially larger
+  than the size quoted in the plan (`BREAKER.md`, S5). The observation
+  covers whole responses. Neither reader measured the conventions
+  separately, and this directory contains no raw responses.
 - Phase 4: "the sky fact checker's description". Not checked against what
   the tool does beyond the one call in Review 2, B9.
 - Phase 2: "Accept seconds in birth times." Not checked. The connector's

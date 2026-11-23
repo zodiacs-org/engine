@@ -159,25 +159,23 @@ non-commercial.
 ### S5. Two published rules were not set against the server (R5)
 
 Both pages were fetched again here and both rules are on them. The
-connector byte counts below are unverified because this directory
-contains no raw responses.
+sampled live responses were substantially larger than the plan's quoted
+"3 KB per result". This directory contains no raw connector responses.
 
 - Anthropic's policy, 5B: "MCP servers must be frugal with their use of
   tokens ... When possible, users should be given options to exclude
-  unnecessary text in the response." This reader recorded 150,468 bytes
-  for `tools/list` and 9,089 to 15,277 bytes for three event and capability
-  results. Every tool had an `outputSchema`, and each of those three
-  results carried a full receipt. The plan itself lists "short conventions
-  instead of 3 KB per result".
+  unnecessary text in the response." Every tool in `tools/list` had an
+  `outputSchema`. The sampled event and capability results carried full
+  receipts.
 - OpenAI's guidelines: "Do not include diagnostic, telemetry, or internal
   identifiers ... such as session IDs, trace IDs, request IDs, timestamps,
   or logging metadata ... unless they are strictly required to fulfill the
-  user's query." Those three receipts each carried a SHA-256
+  user's query." Those receipts each carried a SHA-256
   digest, engine and ephemeris versions and convention identifiers.
 
-Review 4's D8, "Result size", sets the 150,468 bytes of `tools/list`
-against Anthropic's limit of about 150,000 characters for a tool
-*result*. Those are different things. 5B is the rule the size bears on.
+Review 4's D8, "Result size", compared the tool definitions in `tools/list`
+with Anthropic's character limit for an individual tool result. Section 5B
+addresses response length.
 
 D4 says of the rule on directing the assistant that "whether it reaches
 the server's `instructions` is not stated". Section 2 of the policy
@@ -326,13 +324,9 @@ two paragraphs.
   the twelve boundaries. Horizons has 103 for Neptune and 73 for Pluto,
   the engine's counts. So at one-day resolution there is no sign change on
   Horizons that the engine lacks.
-- The same scan looked for approaches within 120″ of a boundary with no
-  crossing within 40 days. The reader reported one near miss. On
-  1823-12-15 Pluto reportedly turned direct 0.375″ inside Aries on
-  Horizons (ten-minute rows over 16 days), while the engine came within
-  13.3″. Neither showed a crossing. The figures and their ratio of about
-  35 are unverified because this directory contains no raw output for
-  the near miss.
+- In the separate scan, Pluto approached the Aries boundary on
+  1823-12-15 without crossing it in either Horizons or the engine.
+  This directory contains no raw output for that near miss.
 - "On the years the site's table covers, this check agrees": the site's
   table gives 34,562 s (9.60 h) as its largest ingress correction; this
   check's is 9.63 h (Pluto, 2066-07-11). They differ by under two minutes.

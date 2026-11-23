@@ -159,6 +159,9 @@ to produce the `dist/` that `sign-changes/tools/engine_ingresses.mjs` and
 two one-line checks (Review 2, B11 and B14) call; and
 `sign-changes/tools/horizons_check.py`. No test suite, no conformance run
 and no sweep was run. The 176 matched crossings can be checked against
-`sign-changes/results/horizons.json`. The reported 1823 near-miss figures
-and connector response sizes, including those from 13 November, are
-unverified. This directory contains no raw output for either set of figures.
+`sign-changes/results/horizons.json`. In a separate scan, the second
+reader reported that Pluto approached the Aries boundary on 1823-12-15
+without crossing it in either Horizons or the engine. On 13 November the
+reviewer described the live connector responses as substantially larger
+than the plan's quoted "3 KB per result". This directory contains neither
+the raw near-miss observations nor the raw connector responses.

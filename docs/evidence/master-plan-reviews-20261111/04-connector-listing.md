@@ -291,23 +291,22 @@ Two things sit beside it:
   (`bot/astrologer-hosted-tools:bots/astrologer/template/LISTING.md:27`),
   with other tool names. It was not probed here.
 - **Response size and identifiers** (fix round, `BREAKER.md`, S5). The
-  second reader reported 150,468 bytes for `tools/list` and 9,089 to 15,277
-  bytes for three event and capability results. These sizes and the sizes
-  reported on 13 November (`BREAKER-FIX.md`, F4) are unverified because
-  this directory contains no raw connector responses. Anthropic's limit of
-  about 150,000 characters applies to an individual tool result. The
-  `tools/list` response contains tool definitions.
+  reviewers described the sampled live responses as substantially larger
+  than the plan's quoted "3 KB per result". They compared whole responses
+  and did not measure the conventions separately. This directory contains
+  no raw connector responses from the 13 November check (`BREAKER-FIX.md`,
+  F4). Anthropic's character limit applies to an individual tool result.
+  The `tools/list` response contains tool definitions.
   - Anthropic's policy, 5B: "MCP servers must be frugal with their use of
     tokens ... When possible, users should be given options to exclude
     unnecessary text in the response." Each tool had an `outputSchema`, and
     the portal noted "some items were left out to fit its size limits".
-    The three event and capability results carried receipts with
+    The sampled event and capability results carried receipts with
     conventions and coverage. The server offered no option to omit them.
-    The plan lists "short conventions instead of 3 KB per result".
   - OpenAI's guidelines: "Do not include diagnostic, telemetry, or internal
     identifiers ... such as session IDs, trace IDs, request IDs,
     timestamps, or logging metadata ... unless they are strictly required
-    to fulfill the user's query." Those three receipts contained a SHA-256
+    to fulfill the user's query." Those receipts contained a SHA-256
     digest, engine and ephemeris versions and convention identifiers. On
     13 November, `get_sky` also returned a receipt at
     `data.calculation.receipt`. The date-only `get_natal_chart` result
