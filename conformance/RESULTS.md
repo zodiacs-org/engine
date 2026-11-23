@@ -43,16 +43,16 @@ Adapter `zodiacs-engine` 0.3.0; results in [`results/zodiacs-engine.json`](resul
 | L2 | `angles.vertex-east-point` | 10 | 0 | 0 | 0 | vertex: 0.003″ / 0.013″ / 0.013″<br>east_point: 0.003″ / 0.007″ / 0.007″ |
 | L2 | `houses.cusps` | 80 | 0 | 0 | 0 | cusps: 0.004″ / 0.009″ / 0.071″ |
 | **L2** | **all** | **150** | **0** | **0** | **0** | |
-| L3 | `time.zone-offset` | 45 | 0 | 0 | 0 | — |
+| L3 | `time.zone-offset` | 45 | 0 | 0 | 0 | - |
 | L3 | `time.local-mean-time` | 5 | 0 | 0 | 0 | utc_offset_s: 0.00 s / 0.00 s / 0.00 s |
 | L3 | `time.tt-minus-utc` | 9 | 0 | 1 | 0 | tt_minus_utc_s: 0.00 s / 2.03e-8 s / 2.03e-8 s |
 | L3 | `time.delta-t` | 15 | 0 | 0 | 0 | delta_t_s: 0.000132 s / 0.000505 s / 0.000505 s |
-| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | — |
-| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | — |
+| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | - |
+| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | - |
 | **L3** | **all** | **109** | **0** | **1** | **0** | |
 | L4 | `event.ingress` | 70 | 0 | 0 | 0 | tt_s: 0.0305 s / 0.692 s / 1.53 s<br>utc_s: 0.0110 s / 0.0250 s / 0.0250 s |
-| L4 | `event.station` | 0 | 0 | 30 | 0 | — |
-| L4 | `event.lunation` | 0 | 0 | 40 | 0 | — |
+| L4 | `event.station` | 0 | 0 | 30 | 0 | - |
+| L4 | `event.lunation` | 0 | 0 | 40 | 0 | - |
 | **L4** | **all** | **70** | **0** | **70** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
@@ -91,16 +91,16 @@ Adapter `zodiacs-engine-astronomy-engine` 0.3.0; results in [`results/zodiacs-en
 | L2 | `angles.vertex-east-point` | 10 | 0 | 0 | 0 | vertex: 0.003″ / 0.013″ / 0.013″<br>east_point: 0.003″ / 0.007″ / 0.007″ |
 | L2 | `houses.cusps` | 80 | 0 | 0 | 0 | cusps: 0.004″ / 0.009″ / 0.071″ |
 | **L2** | **all** | **150** | **0** | **0** | **0** | |
-| L3 | `time.zone-offset` | 45 | 0 | 0 | 0 | — |
+| L3 | `time.zone-offset` | 45 | 0 | 0 | 0 | - |
 | L3 | `time.local-mean-time` | 5 | 0 | 0 | 0 | utc_offset_s: 0.00 s / 0.00 s / 0.00 s |
 | L3 | `time.tt-minus-utc` | 9 | 0 | 1 | 0 | tt_minus_utc_s: 0.00 s / 2.03e-8 s / 2.03e-8 s |
 | L3 | `time.delta-t` | 15 | 0 | 0 | 0 | delta_t_s: 0.000132 s / 0.000505 s / 0.000505 s |
-| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | — |
-| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | — |
+| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | - |
+| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | - |
 | **L3** | **all** | **109** | **0** | **1** | **0** | |
 | L4 | `event.ingress` | 34 | 36 | 0 | 0 | tt_s: 56.2 s / 1.02e+4 s / 3.40e+4 s<br>utc_s: 1.42 s / 29.9 s / 29.9 s |
-| L4 | `event.station` | 0 | 0 | 30 | 0 | — |
-| L4 | `event.lunation` | 0 | 0 | 40 | 0 | — |
+| L4 | `event.station` | 0 | 0 | 30 | 0 | - |
+| L4 | `event.lunation` | 0 | 0 | 40 | 0 | - |
 | **L4** | **all** | **34** | **36** | **70** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
@@ -135,12 +135,12 @@ Adapter `pyswisseph` 0.1.0; results in [`results/pyswisseph.json`](results/pyswi
 | L2 | `angles.vertex-east-point` | 6 | 4 | 0 | 0 | vertex: 0.024″ / 2.952″ / 2.952″<br>east_point: 0.026″ / 2.040″ / 2.040″ |
 | L2 | `houses.cusps` | 56 | 24 | 0 | 0 | cusps: 0.001″ / 2.855″ / 15.652″ |
 | **L2** | **all** | **103** | **47** | **0** | **0** | |
-| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | — |
-| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
+| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | - |
+| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | - |
 | L3 | `time.tt-minus-utc` | 10 | 0 | 0 | 0 | tt_minus_utc_s: 0.00000729 s / 0.0000196 s / 0.0000196 s |
 | L3 | `time.delta-t` | 15 | 0 | 0 | 0 | delta_t_s: 0.00166 s / 0.0513 s / 0.0513 s |
-| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | — |
-| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | — |
+| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | - |
+| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | - |
 | **L3** | **all** | **60** | **0** | **50** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
@@ -156,7 +156,7 @@ Adapter `pyswisseph` 0.1.0; results in [`results/pyswisseph.json`](results/pyswi
 
 ## astronomia 4.3.0
 
-Adapter `astronomia` 0.1.0; results in [`results/astronomia.json`](results/astronomia.json).
+Adapter `astronomia` 0.1.1; results in [`results/astronomia.json`](results/astronomia.json).
 
 | configuration | |
 | --- | --- |
@@ -169,20 +169,20 @@ Adapter `astronomia` 0.1.0; results in [`results/astronomia.json`](results/astro
 | --- | --- | ---: | ---: | ---: | ---: | --- |
 | L1 | `position.apparent.ecliptic-true-of-date` | 176 | 16 | 48 | 0 | lon: 0.238″ / 1.512″ / 2.782″<br>lat: 0.047″ / 0.110″ / 0.345″ |
 | **L1** | **all** | **176** | **16** | **48** | **0** | |
-| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | — |
-| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | — |
-| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | — |
+| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | - |
+| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | - |
+| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | - |
 | **L2** | **all** | **0** | **0** | **150** | **0** | |
-| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | — |
-| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
-| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | — |
+| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | - |
+| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | - |
+| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | - |
 | L3 | `time.delta-t` | 15 | 0 | 0 | 0 | delta_t_s: 5.20e-9 s / 0.0341 s / 0.0341 s |
-| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | — |
-| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | — |
+| L3 | `calendar.to-jdn` | 25 | 0 | 0 | 0 | - |
+| L3 | `calendar.from-jdn` | 10 | 0 | 0 | 0 | - |
 | **L3** | **all** | **50** | **0** | **60** | **0** | |
-| L4 | `event.ingress` | 0 | 0 | 70 | 0 | — |
-| L4 | `event.station` | 0 | 0 | 30 | 0 | — |
-| L4 | `event.lunation` | 0 | 0 | 40 | 0 | — |
+| L4 | `event.ingress` | 0 | 0 | 70 | 0 | - |
+| L4 | `event.station` | 0 | 0 | 30 | 0 | - |
+| L4 | `event.lunation` | 0 | 0 | 40 | 0 | - |
 | **L4** | **all** | **0** | **0** | **140** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
@@ -192,40 +192,51 @@ Adapter `astronomia` 0.1.0; results in [`results/astronomia.json`](results/astro
 | `utc-input` | 0 | 0 | 20 | 0 |
 | `cross-check` | 0 | 0 | 1 | 0 |
 
-- **Engine and licence.** `astronomia` `4.3.0` (MIT licence; `conformance/adapters/astronomia/package.json`), using its default VSOP87B planetary datasets (`data.earth`, `data.mercury` through `data.neptune`).
-- **Positions (L1).** The Sun is computed with `solar.apparentVSOP87(earth, jd_tt)` (VSOP87, FK5 frame, nutation and aberration). Mercury through Neptune are computed with `elliptic.position(planet, earth, jd_tt)` (light-time, aberration, FK5 and nutation), then converted back from equatorial to ecliptic of date using astronomia's own `Equatorial.prototype.toEcliptic(eps)` with true obliquity `eps = nutation.meanObliquity(jd_tt) + dEps`. Of the 192 vectors answered, **176 pass and 16 fail** (median `0.238″` lon, `0.047″` lat; max `2.782″` lon, `0.345″` lat). All 144 vectors for the Sun, Mercury, Venus, Mars, Jupiter and Saturn pass; the 16 failures are Uranus (5) and Neptune (11) at epochs far from J2000 where VSOP87B drifts past 1″ relative to DE441.
-- **Unsupported bodies (L1).** The Moon (24 vectors, including `L1-POS-0002` in 1851) and Pluto (24 vectors) are reported as `unsupported` rather than converted outside astronomia's public API: `moonposition.position` returns mean equinox of date without nutation (and `elp.Moon` returns J2000 inertial coordinates), and `pluto.astrometric` returns J2000 astrometric coordinates only.
-- **Time and calendars (L3).** `time.delta-t` is answered with `deltat.deltaT(new julian.Calendar().fromJD(jd_ut1).toYear())` (**15 of 15 pass**). `calendar.to-jdn` and `calendar.from-jdn` are answered with `julian.CalendarGregorianToJD`, `julian.CalendarJulianToJD`, `julian.JDToCalendarGregorian` and `julian.JDToCalendarJulian` (**35 of 35 pass**). Total L3: **50 pass, 0 fail, 60 unsupported**.
-- **Not answered (L2, L3 time zones and TT minus UTC, L4).** Reported as `unsupported`: astronomia has no astrology house or angle functions, no time zone database or leap-second table, and no sign ingress, station or window-bounded lunation search API.
+astronomia 4.3.0 uses the VSOP87B series exported by `astronomia/data`.
+[Engine licence (MIT)](https://github.com/commenthol/astronomia/blob/v4.3.0/LICENSE).
+
+For L1 the adapter calls `solar.apparentVSOP87` for the Sun and
+`elliptic.position` for Mercury through Neptune. The latter returns apparent
+equatorial coordinates. The engine's `Equatorial.toEcliptic` converts them
+using its true obliquity of date (`moon.Moon.ε`). Of 192 positions answered,
+176 pass. Five Uranus and 11 Neptune positions exceed 1 arcsecond.
+The lunar position routine gives the mean equinox of date and Pluto's
+astrometric routine gives J2000. Those 48 inputs are unsupported, including
+the Moon in 1851 (`L1-POS-0002`).
+
+For L3, `deltat.deltaT` takes the decimal year from `julian.Calendar`.
+The Gregorian and Julian calendar functions convert civil noon to JDN and
+back in the requested proleptic calendar. All 15 Delta T and 35 calendar
+vectors pass. The adapter measures positions and time/calendar conversions.
 
 ## PyEphem 4.2.1
 
-Adapter `pyephem` 0.1.0; results in [`results/pyephem.json`](results/pyephem.json).
+Adapter `pyephem` 0.1.1; results in [`results/pyephem.json`](results/pyephem.json).
 
 | configuration | |
 | --- | --- |
 | licence | MIT |
 | theory | Built-in XEphem/libastro VSOP87 planetary theory and lunar theory |
-| conversion | body.compute(d_ut, epoch=d_ut) -> ephem.Ecliptic(ephem.Equatorial(body.g_ra, body.g_dec, epoch=d_ut), epoch=d_ut) |
+| deltaT | ephem.delta_t at the input UT1 Julian date |
 
 | level | kind | pass | fail | unsupported | error | residual median / 95th percentile / max |
 | --- | --- | ---: | ---: | ---: | ---: | --- |
-| L1 | `position.apparent.ecliptic-true-of-date` | 36 | 204 | 0 | 0 | lon: 0.415″ / 3.986″ / 25.889″<br>lat: 3.285″ / 8.258″ / 11.423″ |
-| **L1** | **all** | **36** | **204** | **0** | **0** | |
-| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | — |
-| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | — |
-| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | — |
+| L1 | `position.apparent.ecliptic-true-of-date` | 0 | 0 | 240 | 0 | - |
+| **L1** | **all** | **0** | **0** | **240** | **0** | |
+| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | - |
+| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | - |
+| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | - |
 | **L2** | **all** | **0** | **0** | **150** | **0** | |
-| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | — |
-| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
-| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | — |
+| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | - |
+| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | - |
+| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | - |
 | L3 | `time.delta-t` | 13 | 2 | 0 | 0 | delta_t_s: 0.00594 s / 2.31 s / 2.31 s |
-| L3 | `calendar.to-jdn` | 0 | 0 | 25 | 0 | — |
-| L3 | `calendar.from-jdn` | 0 | 0 | 10 | 0 | — |
+| L3 | `calendar.to-jdn` | 0 | 0 | 25 | 0 | - |
+| L3 | `calendar.from-jdn` | 0 | 0 | 10 | 0 | - |
 | **L3** | **all** | **13** | **2** | **95** | **0** | |
-| L4 | `event.ingress` | 0 | 0 | 70 | 0 | — |
-| L4 | `event.station` | 0 | 0 | 30 | 0 | — |
-| L4 | `event.lunation` | 0 | 0 | 40 | 0 | — |
+| L4 | `event.ingress` | 0 | 0 | 70 | 0 | - |
+| L4 | `event.station` | 0 | 0 | 30 | 0 | - |
+| L4 | `event.lunation` | 0 | 0 | 40 | 0 | - |
 | **L4** | **all** | **0** | **0** | **140** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
@@ -235,42 +246,52 @@ Adapter `pyephem` 0.1.0; results in [`results/pyephem.json`](results/pyephem.jso
 | `utc-input` | 0 | 0 | 20 | 0 |
 | `cross-check` | 0 | 0 | 1 | 0 |
 
-- **Engine and licence.** PyEphem `4.2.1` (`ephem`, MIT licence; `conformance/adapters/requirements-pyephem.txt`), computing from its built-in XEphem/libastro VSOP87 planetary theory and lunar theory.
-- **Positions (L1).** Converts `jd_tt` to a PyEphem UT date using two fixed-point steps with `ephem.delta_t`, calls `body.compute(d_ut, epoch=d_ut)`, and transforms PyEphem's apparent geocentric equatorial coordinates (`body.g_ra`, `body.g_dec`) to ecliptic of date using PyEphem's own `ephem.Ecliptic(ephem.Equatorial(body.g_ra, body.g_dec, epoch=d_ut), epoch=d_ut)`. Of all 240 vectors answered, **36 pass and 204 fail** (median `0.415″` lon, `3.285″` lat; max `25.889″` lon, `11.423″` lat). On `L1-POS-0002` (the Moon in 1851), PyEphem gives residual `+0.133″` in longitude and `-3.673″` in latitude (`fail`). Most failures are in ecliptic latitude because `ephem.Ecliptic` converts using mean rather than true obliquity of date, and outer-planet and Pluto positions diverge further from DE441 away from J2000.
-- **Delta T (L3).** `time.delta-t` is answered with `ephem.delta_t(ephem.Date(jd_ut1 - 2415020.0))`: **13 of 15 pass and 2 fail** (`L3-DT-0014` on 2019-07-01 by `+0.209 s`, and `L3-DT-0015` on 2023-01-01 by `+2.312 s`, where the built-in polynomial predates recent Earth rotation observations).
-- **Not answered (L2, L3 zones/calendars/TT minus UTC, L4).** Reported as `unsupported`: PyEphem has no astrology house or angle functions, no time zone database, no leap-second TT minus UTC function, no integer proleptic Gregorian/Julian JDN calendar function, and no TT-window event search API.
+PyEphem 4.2.1 (Python package `ephem`) includes XEphem/libastro's built-in
+planetary and lunar theories, including VSOP87. [Engine licence (MIT)](https://github.com/brandon-rhodes/pyephem/blob/4.2.1/LICENSE).
+
+For L1, PyEphem supplies apparent geocentric right ascension and declination.
+Its public `Ecliptic` conversion uses mean obliquity. Every L1 vector requires
+true obliquity of date, including the Moon in 1851 (`L1-POS-0002`).
+These positions are `unsupported`. PyEphem's new and full Moon searches use
+the same conversion for the longitudes that define a lunation.
+[Coordinate conversion](https://github.com/brandon-rhodes/pyephem/blob/4.2.1/libastro/eq_ecl.c)
+and [Moon phase calculation](https://github.com/brandon-rhodes/pyephem/blob/4.2.1/ephem/__init__.py#L229-L245).
+
+For L3, `ephem.delta_t` reads the supplied UT1 Julian date in PyEphem's
+day count. Of 15 measurements, 13 pass and two exceed the 0.1 s tolerance.
+The 2019 and 2023 residuals are +0.209 s and +2.312 s. The other kinds lack
+a matching public function or calendar convention.
 
 ## Skyfield 1.55
 
-Adapter `skyfield` 0.1.0; results in [`results/skyfield.json`](results/skyfield.json).
+Adapter `skyfield` 0.1.1; results in [`results/skyfield.json`](results/skyfield.json).
 
 | configuration | |
 | --- | --- |
 | licence | MIT |
 | ephemeris | de440s.bsp |
 | ephemerisSha256 | c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2 |
-| matchesPinnedDe440s |  |
 | frame | skyfield.framelib.ecliptic_frame (apparent geocentric true ecliptic and equinox of date) |
-| bodies | Sun, Moon, Mercury/Venus barycentres (equal to planet centres), Mars to Pluto barycentres |
+| bodies | Sun, Moon, Mercury and Venus centres, Mars to Pluto system barycentres |
 
 | level | kind | pass | fail | unsupported | error | residual median / 95th percentile / max |
 | --- | --- | ---: | ---: | ---: | ---: | --- |
 | L1 | `position.apparent.ecliptic-true-of-date` | 240 | 0 | 0 | 0 | lon: 0.001″ / 0.003″ / 0.013″<br>lat: 0.000″ / 0.000″ / 0.001″ |
 | **L1** | **all** | **240** | **0** | **0** | **0** | |
-| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | — |
-| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | — |
-| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | — |
+| L2 | `angles.asc-mc` | 0 | 0 | 60 | 0 | - |
+| L2 | `angles.vertex-east-point` | 0 | 0 | 10 | 0 | - |
+| L2 | `houses.cusps` | 0 | 0 | 80 | 0 | - |
 | **L2** | **all** | **0** | **0** | **150** | **0** | |
-| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | — |
-| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | — |
-| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | — |
-| L3 | `time.delta-t` | 0 | 0 | 15 | 0 | — |
-| L3 | `calendar.to-jdn` | 0 | 0 | 25 | 0 | — |
-| L3 | `calendar.from-jdn` | 0 | 0 | 10 | 0 | — |
+| L3 | `time.zone-offset` | 0 | 0 | 45 | 0 | - |
+| L3 | `time.local-mean-time` | 0 | 0 | 5 | 0 | - |
+| L3 | `time.tt-minus-utc` | 0 | 0 | 10 | 0 | - |
+| L3 | `time.delta-t` | 0 | 0 | 15 | 0 | - |
+| L3 | `calendar.to-jdn` | 0 | 0 | 25 | 0 | - |
+| L3 | `calendar.from-jdn` | 0 | 0 | 10 | 0 | - |
 | **L3** | **all** | **0** | **0** | **110** | **0** | |
-| L4 | `event.ingress` | 0 | 0 | 70 | 0 | — |
-| L4 | `event.station` | 0 | 0 | 30 | 0 | — |
-| L4 | `event.lunation` | 0 | 0 | 40 | 0 | — |
+| L4 | `event.ingress` | 0 | 0 | 70 | 0 | - |
+| L4 | `event.station` | 0 | 0 | 30 | 0 | - |
+| L4 | `event.lunation` | 0 | 0 | 40 | 0 | - |
 | **L4** | **all** | **0** | **0** | **140** | **0** | |
 
 | vectors tagged | pass | fail | unsupported | error |
@@ -280,7 +301,14 @@ Adapter `skyfield` 0.1.0; results in [`results/skyfield.json`](results/skyfield.
 | `utc-input` | 0 | 0 | 20 | 0 |
 | `cross-check` | 0 | 0 | 1 | 0 |
 
-- **Engine and licence.** Skyfield `1.55` (MIT licence; `conformance/adapters/requirements-skyfield.txt`), running on NAIF's `de440s.bsp` kernel (SHA-256 `c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2`, the same digest pinned by `conformance/arbiters/l1/validate.py`; downloaded outside the repository, not committed).
-- **Positions (L1).** Answers all 240 vectors using Skyfield's public `earth.at(t).observe(target).apparent().frame_latlon(ecliptic_frame)`, where `ecliptic_frame` is Skyfield's apparent geocentric true ecliptic and equinox of date, with `ts = loader.timescale(builtin=True)` and `ts.tt_jd(jd_tt)`. Mars through Pluto use planetary system barycentres as the vectors specify (and Mercury and Venus use their barycentres, which equal their planet centres in `de440s.bsp`). All **240 of 240 pass** (0 fail, 0 error). Against JPL Horizons (DE441), longitude residuals have median `0.001″` (`1.28 mas`), p95 `0.003″`, and max `0.013″` (`-0.01256″` longitude, `-0.00094″` latitude on `L1-POS-0002`, the Moon in 1851). The kernel spans 1550 to 2650, covering every instant through 2148.
-- **Not answered (L2, L3, L4).** All 400 vectors in L2, L3 and L4 are reported as `unsupported`: Skyfield has no astrology house or angle functions and no time zone database, and this adapter is scoped to L1 positions.
+Skyfield 1.55 uses NAIF's DE440s kernel. The adapter checks SHA-256
+`c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2`
+before loading the local file. This kernel covers JD 2396752.5 to 2506352.5
+(TDB), including the last L1 instant in 2148. [Engine licence (MIT)](https://github.com/skyfielders/python-skyfield/blob/1.55/LICENSE).
+
+For L1, `tt_jd` reads the supplied TT. From Earth's centre,
+`observe(target).apparent().frame_latlon(ecliptic_frame)` gives latitude and
+longitude in the true ecliptic and equinox of date. Mercury and Venus use their
+centres. Mars through Pluto use system barycentres. The adapter measures L1
+only. All 240 positions pass, including the Moon in 1851 (`L1-POS-0002`).
 

@@ -1,5 +1,16 @@
-- **Engine and licence.** `astronomia` `4.3.0` (MIT licence; `conformance/adapters/astronomia/package.json`), using its default VSOP87B planetary datasets (`data.earth`, `data.mercury` through `data.neptune`).
-- **Positions (L1).** The Sun is computed with `solar.apparentVSOP87(earth, jd_tt)` (VSOP87, FK5 frame, nutation and aberration). Mercury through Neptune are computed with `elliptic.position(planet, earth, jd_tt)` (light-time, aberration, FK5 and nutation), then converted back from equatorial to ecliptic of date using astronomia's own `Equatorial.prototype.toEcliptic(eps)` with true obliquity `eps = nutation.meanObliquity(jd_tt) + dEps`. Of the 192 vectors answered, **176 pass and 16 fail** (median `0.238″` lon, `0.047″` lat; max `2.782″` lon, `0.345″` lat). All 144 vectors for the Sun, Mercury, Venus, Mars, Jupiter and Saturn pass; the 16 failures are Uranus (5) and Neptune (11) at epochs far from J2000 where VSOP87B drifts past 1″ relative to DE441.
-- **Unsupported bodies (L1).** The Moon (24 vectors, including `L1-POS-0002` in 1851) and Pluto (24 vectors) are reported as `unsupported` rather than converted outside astronomia's public API: `moonposition.position` returns mean equinox of date without nutation (and `elp.Moon` returns J2000 inertial coordinates), and `pluto.astrometric` returns J2000 astrometric coordinates only.
-- **Time and calendars (L3).** `time.delta-t` is answered with `deltat.deltaT(new julian.Calendar().fromJD(jd_ut1).toYear())` (**15 of 15 pass**). `calendar.to-jdn` and `calendar.from-jdn` are answered with `julian.CalendarGregorianToJD`, `julian.CalendarJulianToJD`, `julian.JDToCalendarGregorian` and `julian.JDToCalendarJulian` (**35 of 35 pass**). Total L3: **50 pass, 0 fail, 60 unsupported**.
-- **Not answered (L2, L3 time zones and TT minus UTC, L4).** Reported as `unsupported`: astronomia has no astrology house or angle functions, no time zone database or leap-second table, and no sign ingress, station or window-bounded lunation search API.
+astronomia 4.3.0 uses the VSOP87B series exported by `astronomia/data`.
+[Engine licence (MIT)](https://github.com/commenthol/astronomia/blob/v4.3.0/LICENSE).
+
+For L1 the adapter calls `solar.apparentVSOP87` for the Sun and
+`elliptic.position` for Mercury through Neptune. The latter returns apparent
+equatorial coordinates. The engine's `Equatorial.toEcliptic` converts them
+using its true obliquity of date (`moon.Moon.ε`). Of 192 positions answered,
+176 pass. Five Uranus and 11 Neptune positions exceed 1 arcsecond.
+The lunar position routine gives the mean equinox of date and Pluto's
+astrometric routine gives J2000. Those 48 inputs are unsupported, including
+the Moon in 1851 (`L1-POS-0002`).
+
+For L3, `deltat.deltaT` takes the decimal year from `julian.Calendar`.
+The Gregorian and Julian calendar functions convert civil noon to JDN and
+back in the requested proleptic calendar. All 15 Delta T and 35 calendar
+vectors pass. The adapter measures positions and time/calendar conversions.

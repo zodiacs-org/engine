@@ -84,7 +84,7 @@ function residualText(kindSummary) {
     const format = (value) => (stats.unit === 'arcsec' ? value.toFixed(3) : value.toPrecision(3));
     return `${field}: ${format(stats.median)}${unit} / ${format(stats.p95)}${unit} / ${format(stats.max)}${unit}`;
   });
-  return parts.join('<br>') || '—';
+  return parts.join('<br>') || '-';
 }
 
 function markdown(summary) {
