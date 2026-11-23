@@ -34,7 +34,8 @@
  *   root's `withEphemeris`.
  * - `--entry core` (an argument of this script) answers from
  *   `@zodiacs/engine/core` (`core.js` in place of `index.js`), the entry that
- *   carries no pack and computes on astronomy-engine; its verdicts are held
+ *   carries no pack and computes on astronomy-engine. L4 uses the regular
+ *   calc entry with its own root set to astronomy-engine. Its verdicts are held
  *   to `conformance/results/zodiacs-engine-astronomy-engine.json`. Not
  *   together with a supplied pack.
  */
@@ -205,7 +206,7 @@ export function createHandlers({ engine, geo, de440Source = null, calcEntry = nu
       const scale = onTt ? 'tt' : 'utc';
       const jdOf = (s) => ({ jd: J2000_JD + s / 86_400, scale });
       const calc = typeof calcEntry === 'function' ? await calcEntry() : null;
-    if (!calc) return { unsupported: 'this host gives the adapter no @zodiacs/engine/calc' };
+      if (!calc) return { unsupported: 'this host gives the adapter no @zodiacs/engine/calc' };
       const result = calc.events({
         kind: 'longitude-crossing',
         body: input.body,
@@ -214,7 +215,8 @@ export function createHandlers({ engine, geo, de440Source = null, calcEntry = nu
         to: jdOf(onTt ? input.before_tt_s : input.before_utc_s),
       });
       if (result.status !== 'ok') return { error: `events() refused: ${result.reason ?? result.status}` };
-      const meta = { events: result.events.length, samples: result.samples, ...(result.flags?.length ? { flags: result.flags } : {}) };
+      const meta = { events: result.events.length, samples: result.samples, ephemeris: result.receipt?.engine?.ephemeris,
+        ...(result.flags?.length ? { flags: result.flags } : {}) };
       if (result.events.length !== 1) return { error: `events() found ${result.events.length} crossings in the window`, meta };
       const [event] = result.events;
       const output = onTt
@@ -303,7 +305,17 @@ if (runAsScript()) {
 
   /** The calc entry, loaded only when an L4 request needs it. */
   let calcModule = null;
-  const calcEntry = async () => (calcModule ??= await import(pathToFileURL(resolve(dist, 'calc.js')).href));
+  const calcEntry = async () => {
+    if (!calcModule) {
+      if (mode === 'core') {
+        // calc.js shares its ephemeris with index.js. core.js has separate module state.
+        const root = await import(pathToFileURL(resolve(dist, 'index.js')).href);
+        root.setDefaultEphemeris('astronomy-engine');
+      }
+      calcModule = await import(pathToFileURL(resolve(dist, 'calc.js')).href);
+    }
+    return calcModule;
+  };
   const handlers = createHandlers({ engine, geo, de440Source, calcEntry });
 
   process.stdout.write(`${JSON.stringify({

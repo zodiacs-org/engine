@@ -248,7 +248,7 @@
           "tt_s": {
             "unit": "s",
             "n": 30,
-            "median": 102.157489,
+            "median": 102.158495,
             "p95": 317.170995,
             "max": 430.278018
           }
@@ -6817,6 +6817,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-01-20T18:37:01.789Z",
         "retrograde": false
       }
@@ -6830,6 +6834,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1925-01-20T13:19:47.800Z",
         "retrograde": false
       }
@@ -6843,6 +6851,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1990-01-20T08:01:24.719Z",
         "retrograde": false
       }
@@ -6856,6 +6868,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-01-20T01:44:40.189Z",
         "retrograde": false
       }
@@ -6869,6 +6885,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6885,6 +6905,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6901,6 +6925,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-01-03T00:50:49.106Z",
         "retrograde": false
       }
@@ -6914,6 +6942,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1925-01-01T02:56:56.555Z",
         "retrograde": false
       }
@@ -6927,6 +6959,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1990-01-01T06:10:03.309Z",
         "retrograde": false
       }
@@ -6940,6 +6976,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-01-02T13:09:00.764Z",
         "retrograde": false
       }
@@ -6953,6 +6993,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6969,6 +7013,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6985,6 +7033,10 @@
       "meta": {
         "events": 1,
         "samples": 64,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-01-12T10:41:54.678Z",
         "retrograde": false
       }
@@ -6998,6 +7050,10 @@
       "meta": {
         "events": 1,
         "samples": 65,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1925-01-14T07:14:27.403Z",
         "retrograde": false
       }
@@ -7011,6 +7067,10 @@
       "meta": {
         "events": 1,
         "samples": 71,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1990-02-12T01:10:34.704Z",
         "retrograde": false
       }
@@ -7024,6 +7084,10 @@
       "meta": {
         "events": 1,
         "samples": 61,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-01-01T21:11:14.586Z",
         "retrograde": false
       }
@@ -7037,6 +7101,10 @@
       "meta": {
         "events": 1,
         "samples": 64,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7053,6 +7121,10 @@
       "meta": {
         "events": 1,
         "samples": 109,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7069,6 +7141,10 @@
       "meta": {
         "events": 1,
         "samples": 71,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-01-22T14:28:56.189Z",
         "retrograde": false
       }
@@ -7082,6 +7158,10 @@
       "meta": {
         "events": 1,
         "samples": 58,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1925-01-14T22:27:56.906Z",
         "retrograde": false
       }
@@ -7095,6 +7175,10 @@
       "meta": {
         "events": 1,
         "samples": 33,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1990-01-16T15:26:37.842Z",
         "retrograde": true
       }
@@ -7108,6 +7192,10 @@
       "meta": {
         "events": 1,
         "samples": 70,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-01-17T12:42:51.196Z",
         "retrograde": false
       }
@@ -7121,6 +7209,10 @@
       "meta": {
         "events": 1,
         "samples": 68,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7137,6 +7229,10 @@
       "meta": {
         "events": 1,
         "samples": 68,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7153,6 +7249,10 @@
       "meta": {
         "events": 1,
         "samples": 102,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-01-31T08:46:31.726Z",
         "retrograde": false
       }
@@ -7166,6 +7266,10 @@
       "meta": {
         "events": 1,
         "samples": 87,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1925-02-05T10:15:07.834Z",
         "retrograde": false
       }
@@ -7179,6 +7283,10 @@
       "meta": {
         "events": 1,
         "samples": 102,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1990-01-29T14:09:53.301Z",
         "retrograde": false
       }
@@ -7192,6 +7300,10 @@
       "meta": {
         "events": 1,
         "samples": 101,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-01-23T09:16:24.818Z",
         "retrograde": false
       }
@@ -7205,6 +7317,10 @@
       "meta": {
         "events": 1,
         "samples": 104,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7221,6 +7337,10 @@
       "meta": {
         "events": 1,
         "samples": 120,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7237,6 +7357,10 @@
       "meta": {
         "events": 1,
         "samples": 498,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-06-29T19:23:52.053Z",
         "retrograde": false
       }
@@ -7250,6 +7374,10 @@
       "meta": {
         "events": 1,
         "samples": 536,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1926-01-06T01:04:50.940Z",
         "retrograde": false
       }
@@ -7263,6 +7391,10 @@
       "meta": {
         "events": 1,
         "samples": 508,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1990-08-18T07:31:10.327Z",
         "retrograde": false
       }
@@ -7276,6 +7408,10 @@
       "meta": {
         "events": 1,
         "samples": 498,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-06-30T05:56:23.973Z",
         "retrograde": false
       }
@@ -7289,6 +7425,10 @@
       "meta": {
         "events": 1,
         "samples": 457,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7305,6 +7445,10 @@
       "meta": {
         "events": 1,
         "samples": 756,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7321,6 +7465,10 @@
       "meta": {
         "events": 1,
         "samples": 1137,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1860-08-26T04:29:47.273Z",
         "retrograde": false
       }
@@ -7334,6 +7482,10 @@
       "meta": {
         "events": 1,
         "samples": 1229,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1926-12-02T22:17:43.344Z",
         "retrograde": false
       }
@@ -7347,6 +7499,10 @@
       "meta": {
         "events": 1,
         "samples": 1169,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1991-02-06T18:50:38.777Z",
         "retrograde": false
       }
@@ -7360,6 +7516,10 @@
       "meta": {
         "events": 1,
         "samples": 1097,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-02-14T00:39:45.106Z",
         "retrograde": false
       }
@@ -7373,6 +7533,10 @@
       "meta": {
         "events": 1,
         "samples": 1107,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7389,6 +7553,10 @@
       "meta": {
         "events": 1,
         "samples": 756,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7405,6 +7573,10 @@
       "meta": {
         "events": 1,
         "samples": 450,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1865-06-27T02:41:57.960Z",
         "retrograde": false
       }
@@ -7418,6 +7590,10 @@
       "meta": {
         "events": 1,
         "samples": 211,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1927-03-31T17:26:26.281Z",
         "retrograde": false
       }
@@ -7431,6 +7607,10 @@
       "meta": {
         "events": 1,
         "samples": 416,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1995-04-01T14:02:47.394Z",
         "retrograde": false
       }
@@ -7444,6 +7624,10 @@
       "meta": {
         "events": 1,
         "samples": 3085,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-04-26T01:00:44.572Z",
         "retrograde": false
       }
@@ -7457,6 +7641,10 @@
       "meta": {
         "events": 1,
         "samples": 404,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7473,6 +7661,10 @@
       "meta": {
         "events": 1,
         "samples": 179,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7489,6 +7681,10 @@
       "meta": {
         "events": 1,
         "samples": 136,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1861-04-13T18:38:38.663Z",
         "retrograde": false
       }
@@ -7502,6 +7698,10 @@
       "meta": {
         "events": 1,
         "samples": 312,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1928-09-21T09:51:14.484Z",
         "retrograde": false
       }
@@ -7515,6 +7715,10 @@
       "meta": {
         "events": 1,
         "samples": 636,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1998-01-29T01:29:43.979Z",
         "retrograde": false
       }
@@ -7528,6 +7732,10 @@
       "meta": {
         "events": 1,
         "samples": 9083,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-01-26T14:31:41.097Z",
         "retrograde": false
       }
@@ -7541,6 +7749,10 @@
       "meta": {
         "events": 1,
         "samples": 447,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7557,6 +7769,10 @@
       "meta": {
         "events": 1,
         "samples": 630,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7573,6 +7789,10 @@
       "meta": {
         "events": 1,
         "samples": 1681,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1882-07-21T19:22:33.868Z",
         "retrograde": false
       }
@@ -7586,6 +7806,10 @@
       "meta": {
         "events": 1,
         "samples": 963,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1937-10-07T11:32:25.848Z",
         "retrograde": false
       }
@@ -7599,6 +7823,10 @@
       "meta": {
         "events": 1,
         "samples": 403,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "1995-01-17T08:52:47.913Z",
         "retrograde": false
       }
@@ -7612,6 +7840,10 @@
       "meta": {
         "events": 1,
         "samples": 1298,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7628,6 +7860,10 @@
       "meta": {
         "events": 1,
         "samples": 501,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7661,7 +7897,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 83,
+        "samples": 84,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -7679,7 +7915,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 98,
+        "samples": 97,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -7715,7 +7951,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 78,
+        "samples": 79,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -7755,7 +7991,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 341,
+        "samples": 342,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -7809,7 +8045,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 145,
+        "samples": 146,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -7827,7 +8063,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 574,
+        "samples": 575,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -7921,7 +8157,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 264,
+        "samples": 265,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -7955,7 +8191,7 @@
       "id": "L4-STA-0018",
       "verdict": "pass",
       "residual": {
-        "tt_s": 92.744998
+        "tt_s": 92.7470093
       },
       "meta": {
         "events": 1,
@@ -7967,8 +8203,8 @@
         "flags": [
           "delta-t-extrapolated"
         ],
-        "at": "2142-04-13T02:56:48.992Z",
-        "timingSeconds": 88415.62307458332
+        "at": "2142-04-13T02:56:48.994Z",
+        "timingSeconds": 88415.62292630918
       }
     },
     {
@@ -7979,7 +8215,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 256,
+        "samples": 255,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -7997,7 +8233,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 241,
+        "samples": 240,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -8015,7 +8251,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 243,
+        "samples": 242,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -8033,7 +8269,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 255,
+        "samples": 256,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -8051,7 +8287,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 203,
+        "samples": 204,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -8109,7 +8345,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 159,
+        "samples": 160,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -8127,7 +8363,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 233,
+        "samples": 232,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -8145,7 +8381,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 124,
+        "samples": 125,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -8183,7 +8419,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 267,
+        "samples": 266,
         "ephemeris": {
           "name": "astronomy-engine",
           "version": "2.1.19"
@@ -8760,6 +8996,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8776,6 +9016,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8832,6 +9076,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8848,6 +9096,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8904,6 +9156,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8920,6 +9176,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8976,6 +9236,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8992,6 +9256,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -9048,6 +9316,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -9064,6 +9336,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -9120,6 +9396,10 @@
       "meta": {
         "events": 1,
         "samples": 31,
+        "ephemeris": {
+          "name": "astronomy-engine",
+          "version": "2.1.19"
+        },
         "at": "2026-11-22T07:23:38.241Z",
         "retrograde": false
       }

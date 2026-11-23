@@ -28,6 +28,22 @@ const longitude = (body: StationBody | "Moon" | "Sun", jd: number) => ok(calc({ 
 
 afterEach(() => setDefaultEphemeris("astronomy-engine"));
 
+it("keeps the same TT millisecond across cuts through the August 1813 Mars station", () => {
+  setDefaultEphemeris("de440");
+  const find = (from: CalcTime, to: CalcTime) => ok(searchStations({ from, to, body: "Mars" })).events;
+  const from = tt(2383485.12345);
+  const to = tt(2383487);
+  const whole = find(from, to);
+  expect(whole).toHaveLength(1);
+  expect(find(tt(2383486.25), tt(2383486.75))).toEqual(whole);
+  const root = whole[0]!.jdTt;
+  for (const ms of [-2, -1, 0, 1, 2]) {
+    const split = tt(root + ms / DAY);
+    expect(find(from, split)).toEqual(ms < 0 ? [] : whole);
+    expect(find(split, to)).toEqual(ms < 0 ? whole : []);
+  }
+});
+
 describe.each(["de440", "astronomy-engine"] as const)("event search on %s", source => {
   beforeEach(() => setDefaultEphemeris(source));
 
@@ -202,6 +218,21 @@ it("selects one labelled source for the full TT window and its probes at either 
           ephemeris: { name: within ? "jpl-de440" : "astronomy-engine" }, flags: within ? [] : ["outside-de440-span"] });
       }
     }
+    // Split between the two sources' reported instants for the April new Moon.
+    // The right subwindow still crosses the pack edge and sees the same lunation again.
+    const from = ttMs(low + DAY);
+    const to = ttMs(high + DAY);
+    const split = "2024-04-08T18:20:53Z";
+    const newMoons = (window: Window) => ok(api.searchLunations({ ...window, phaseDegrees: 0 }));
+    const whole = newMoons({ from, to });
+    const left = newMoons({ from, to: split });
+    const right = newMoons({ from: split, to });
+    expect(whole.events).toMatchObject([{ at: "2024-04-08T18:20:55.053Z",
+      ephemeris: { name: "astronomy-engine" }, flags: ["outside-de440-span"] }]);
+    expect(left.events).toMatchObject([{ at: "2024-04-08T18:20:51.548Z",
+      ephemeris: { name: "jpl-de440" }, flags: [] }]);
+    expect(left.events[0]!.jdTt).toBeLessThan(whole.events[0]!.jdTt);
+    expect(right.events).toEqual(whole.events);
   } finally {
     vi.doUnmock("./ephemeris-shipped.js");
     vi.resetModules();

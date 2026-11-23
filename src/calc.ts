@@ -1541,7 +1541,10 @@ export type StationBody = (typeof STATION_BODIES)[number];
 export type LunationAngle = 0 | 90 | 180 | 270;
 
 interface SearchWindow {
-  /** Both endpoints are read on the calc time basis and rounded to TT milliseconds. The interval is (from, to]. */
+  /**
+   * Both endpoints are rounded to TT milliseconds. Adjacent (from, to] windows partition the
+   * reported grid when they use the same ephemeris. Each search selects one source for its padded window.
+   */
   readonly from: CalcTime;
   readonly to: CalcTime;
   /** Budget of scalar evaluations, including the two timing probes per event. Defaults to Infinity. */
@@ -1551,7 +1554,10 @@ export interface StationSearchRequest extends SearchWindow {
   readonly body: StationBody;
 }
 export interface LunationSearchRequest extends SearchWindow {
-  /** Moon minus Sun apparent longitude. New, first quarter, full and last quarter respectively. */
+  /**
+   * Moon minus Sun apparent longitude for new, first quarter, full or last quarter.
+   * The offset rises through zero at the requested angle and jumps down at (angle + 180) modulo 360.
+   */
   readonly phaseDegrees: LunationAngle;
 }
 

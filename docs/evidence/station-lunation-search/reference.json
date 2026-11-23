@@ -1,0 +1,80 @@
+{
+  "kernel": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp",
+  "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2",
+  "timeOrigin": "J2000.0 TT",
+  "cases": [
+    {
+      "selection": 90,
+      "fromTtSeconds": 765201600.0,
+      "toTtSeconds": 767793600.0,
+      "events": [
+        {
+          "ttSeconds": 766480456.242,
+          "toleranceSeconds": 2
+        }
+      ]
+    },
+    {
+      "selection": 270,
+      "fromTtSeconds": 765201600.0,
+      "toTtSeconds": 767793600.0,
+      "events": [
+        {
+          "ttSeconds": 765299752.996,
+          "toleranceSeconds": 2
+        }
+      ]
+    },
+    {
+      "selection": "Uranus",
+      "fromTtSeconds": 757339200.0,
+      "toTtSeconds": 788961600.0,
+      "events": [
+        {
+          "ttSeconds": 759612991.725,
+          "direction": "direct",
+          "toleranceSeconds": 69247
+        },
+        {
+          "ttSeconds": 778475929.168,
+          "direction": "retrograde",
+          "toleranceSeconds": 69497
+        }
+      ]
+    },
+    {
+      "selection": "Neptune",
+      "fromTtSeconds": 757339200.0,
+      "toTtSeconds": 788961600.0,
+      "events": [
+        {
+          "ttSeconds": 773188950.225,
+          "direction": "retrograde",
+          "toleranceSeconds": 88423
+        },
+        {
+          "ttSeconds": 786887073.216,
+          "direction": "direct",
+          "toleranceSeconds": 85536
+        }
+      ]
+    },
+    {
+      "selection": "Pluto",
+      "fromTtSeconds": 757339200.0,
+      "toTtSeconds": 788961600.0,
+      "events": [
+        {
+          "ttSeconds": 767944026.051,
+          "direction": "retrograde",
+          "toleranceSeconds": 92027
+        },
+        {
+          "ttSeconds": 781965273.568,
+          "direction": "direct",
+          "toleranceSeconds": 94323
+        }
+      ]
+    }
+  ]
+}

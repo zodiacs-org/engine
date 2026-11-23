@@ -211,10 +211,28 @@ test('the engine\'s adapter: ingresses, stations and lunations within tolerance,
   const measured = [tt, utc, event('event.station'), event('event.lunation'), byId.get('L4-UTC-0003')];
   const asked = [...measured, empty];
   const { responses } = await runAdapter('node conformance/adapters/zodiacs-engine.mjs', asked, { cwd: resolve(SUITE_DIR, '..') });
-  for (const vector of measured) assert.equal(judge(vector, responses.get(vector.id)).verdict, 'pass', vector.id);
+  for (const vector of measured) {
+    const reply = responses.get(vector.id);
+    assert.equal(reply.meta.ephemeris.name, 'jpl-de440', vector.id);
+    assert.equal(judge(vector, reply).verdict, 'pass', vector.id);
+  }
   const none = judge(empty, responses.get(empty.id));
   assert.equal(none.verdict, 'error');
   assert.match(none.detail, /found 0 crossings/u);
+});
+
+test('core L4 replies name astronomy-engine and match its explicit selection', async () => {
+  const cases = l4().file.vectors;
+  const command = 'node conformance/adapters/zodiacs-engine.mjs';
+  const cwd = resolve(SUITE_DIR, '..');
+  const core = await runAdapter(command + ' --entry core', cases, { cwd });
+  const explicit = await runAdapter(command + ' --ephemeris astronomy-engine', cases, { cwd });
+  for (const { id } of cases) {
+    const reply = core.responses.get(id);
+    assert.ok(reply.output, id);
+    assert.equal(reply.meta.ephemeris.name, 'astronomy-engine', id);
+    assert.deepEqual(reply, explicit.responses.get(id), id);
+  }
 });
 
 const vectors = [

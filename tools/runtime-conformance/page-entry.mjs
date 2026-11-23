@@ -5,6 +5,7 @@
  * engine in ../../dist, and computes the synthetic receipts.
  */
 import * as engine from '@zodiacs/engine';
+import { setDefaultEphemeris } from '../../dist/index.js';
 import * as geo from '../../dist/geo.js';
 import * as calc from '../../dist/calc.js';
 import * as receipt from '../../dist/receipt.js';
@@ -12,6 +13,7 @@ import { createHandlers, defaultSourceText } from '../../conformance/adapters/zo
 import { receiptTexts } from './receipt-cases.mjs';
 
 const core = __RUNTIME_CONFORMANCE_ENTRY__ === 'core';
+if (core) setDefaultEphemeris('astronomy-engine');
 const handlers = createHandlers({ engine, geo, calcEntry: async () => calc });
 
 globalThis.runtimeConformance = Object.freeze({

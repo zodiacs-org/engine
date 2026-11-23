@@ -1,7 +1,9 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { searchLunations, searchStations } from "./calc.js";
 import type { CalcRefusal, CalcTime } from "./calc.js";
 import { scanEventRoots } from "./calc-event-roots.js";
+import { deltaTAt } from "./deltat.js";
 import { setDefaultEphemeris } from "./ephemeris.js";
 
 function ok<T extends { status: "ok" }>(result: T | CalcRefusal): T {
@@ -11,6 +13,40 @@ function ok<T extends { status: "ok" }>(result: T | CalcRefusal): T {
 const april = { from: "2024-04-01", to: "2024-05-01" } as const;
 
 describe("station and lunation search", () => {
+  it.each(["de440", "astronomy-engine"] as const)("matches independent DE440s quarters and outer stations on %s", source => {
+    type Case = {
+      selection: 90 | 270 | "Uranus" | "Neptune" | "Pluto"; fromTtSeconds: number; toTtSeconds: number;
+      events: { ttSeconds: number; toleranceSeconds: number; direction?: "direct" | "retrograde" }[];
+    };
+    const file = new URL("../docs/evidence/station-lunation-search/reference.json", import.meta.url);
+    const { cases } = JSON.parse(readFileSync(file, "utf8")) as { cases: Case[] };
+    expect(cases.map(row => row.selection)).toEqual([90, 270, "Uranus", "Neptune", "Pluto"]);
+    const tt = (seconds: number) => ({ jd: 2451545 + seconds / 86400, scale: "tt" as const });
+    setDefaultEphemeris(source);
+    try {
+      for (const { selection, fromTtSeconds, toTtSeconds, events } of cases) {
+        const window = { from: tt(fromTtSeconds), to: tt(toTtSeconds) };
+        const found = typeof selection === "number" ? ok(searchLunations({ ...window, phaseDegrees: selection }))
+          : ok(searchStations({ ...window, body: selection }));
+        expect(found.ephemeris.name).toBe(source === "de440" ? "jpl-de440" : source);
+        expect(events).toHaveLength(typeof selection === "number" ? 1 : 2);
+        expect(found.events).toHaveLength(events.length);
+        for (const [i, expected] of events.entries()) {
+          const event = found.events[i]!;
+          if ("direction" in event) expect(event.direction).toBe(expected.direction);
+          else {
+            expect(event.phaseDegrees).toBe(selection);
+            expect(expected.toleranceSeconds).toBe(2);
+          }
+          const seconds = (event.jdTt - 2451545) * 86400;
+          expect(Math.abs(seconds - expected.ttSeconds), String(selection)).toBeLessThanOrEqual(expected.toleranceSeconds);
+        }
+      }
+    } finally {
+      setDefaultEphemeris("astronomy-engine");
+    }
+  });
+
   it("resolves all four phases against the US Naval Observatory's published UT minutes", () => {
     // https://aa.usno.navy.mil/api/moon/phases/date?date=2024-04-01&nump=5
     setDefaultEphemeris("de440");
@@ -63,6 +99,26 @@ describe("station and lunation search", () => {
         Math.sqrt(2 * event.angularAllowanceArcsec / (3600 * Math.abs(event.curvatureDegPerDay2))), 8);
       expect(event.ephemeris.name).toBe("astronomy-engine");
       expect(event.flags).toEqual([]);
+    }
+  });
+
+  it.each([1965, 1972, 2050])("reports UTC and UT1 bands and the extrapolation flag for both searches in %i", year => {
+    const window = { from: `${year}-01-01`, to: `${year}-07-01` };
+    for (const search of [
+      ok(searchStations({ ...window, body: "Mercury" })),
+      ok(searchLunations({ ...window, phaseDegrees: 0 }))
+    ]) {
+      expect(search.events.length).toBeGreaterThan(0);
+      expect(search.flags.includes("delta-t-extrapolated")).toBe(year === 2050);
+      for (const event of search.events) {
+        // 1965 uses UT1 as the calendar label. In 1972 C04 contributes
+        // 1.9 ms plus the table's 0.79 ms. After the table only UT1 depends on extrapolated ΔT.
+        const ut1 = year === 1972 ? 0.00269 : deltaTAt(event.jdUt1 - 2451545).sigma!;
+        expect(ut1).toBeGreaterThan(0);
+        expect(event.band.utc).toBe(year === 1965 ? 0.03 : 0);
+        expect(event.band.ut1).toBeCloseTo(ut1, 10);
+        expect(event.flags.includes("delta-t-extrapolated")).toBe(year === 2050);
+      }
     }
   });
 

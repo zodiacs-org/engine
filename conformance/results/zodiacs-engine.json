@@ -6817,6 +6817,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-01-20T18:37:04.854Z",
         "retrograde": false
       }
@@ -6830,6 +6834,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1925-01-20T13:20:08.683Z",
         "retrograde": false
       }
@@ -6843,6 +6851,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1990-01-20T08:01:32.804Z",
         "retrograde": false
       }
@@ -6856,6 +6868,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-01-20T01:44:56.076Z",
         "retrograde": false
       }
@@ -6869,6 +6885,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6885,6 +6905,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6901,6 +6925,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-01-03T00:50:55.956Z",
         "retrograde": false
       }
@@ -6914,6 +6942,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1925-01-01T02:56:58.976Z",
         "retrograde": false
       }
@@ -6927,6 +6959,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1990-01-01T06:10:02.717Z",
         "retrograde": false
       }
@@ -6940,6 +6976,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-01-02T13:09:00.327Z",
         "retrograde": false
       }
@@ -6953,6 +6993,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6969,6 +7013,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -6985,6 +7033,10 @@
       "meta": {
         "events": 1,
         "samples": 64,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-01-12T10:41:41.881Z",
         "retrograde": false
       }
@@ -6998,6 +7050,10 @@
       "meta": {
         "events": 1,
         "samples": 65,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1925-01-14T07:15:27.063Z",
         "retrograde": false
       }
@@ -7011,6 +7067,10 @@
       "meta": {
         "events": 1,
         "samples": 71,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1990-02-12T01:11:10.856Z",
         "retrograde": false
       }
@@ -7024,6 +7084,10 @@
       "meta": {
         "events": 1,
         "samples": 61,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-01-01T21:10:41.859Z",
         "retrograde": false
       }
@@ -7037,6 +7101,10 @@
       "meta": {
         "events": 1,
         "samples": 64,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7053,6 +7121,10 @@
       "meta": {
         "events": 1,
         "samples": 109,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7069,6 +7141,10 @@
       "meta": {
         "events": 1,
         "samples": 71,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-01-22T14:28:57.012Z",
         "retrograde": false
       }
@@ -7082,6 +7158,10 @@
       "meta": {
         "events": 1,
         "samples": 58,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1925-01-14T22:28:18.355Z",
         "retrograde": false
       }
@@ -7095,6 +7175,10 @@
       "meta": {
         "events": 1,
         "samples": 33,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1990-01-16T15:22:55.497Z",
         "retrograde": true
       }
@@ -7108,6 +7192,10 @@
       "meta": {
         "events": 1,
         "samples": 70,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-01-17T12:43:23.949Z",
         "retrograde": false
       }
@@ -7121,6 +7209,10 @@
       "meta": {
         "events": 1,
         "samples": 68,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7137,6 +7229,10 @@
       "meta": {
         "events": 1,
         "samples": 68,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7153,6 +7249,10 @@
       "meta": {
         "events": 1,
         "samples": 102,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-01-31T08:45:39.506Z",
         "retrograde": false
       }
@@ -7166,6 +7266,10 @@
       "meta": {
         "events": 1,
         "samples": 87,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1925-02-05T10:17:14.700Z",
         "retrograde": false
       }
@@ -7179,6 +7283,10 @@
       "meta": {
         "events": 1,
         "samples": 102,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1990-01-29T14:10:25.797Z",
         "retrograde": false
       }
@@ -7192,6 +7300,10 @@
       "meta": {
         "events": 1,
         "samples": 101,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-01-23T09:16:45.211Z",
         "retrograde": false
       }
@@ -7205,6 +7317,10 @@
       "meta": {
         "events": 1,
         "samples": 104,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7221,6 +7337,10 @@
       "meta": {
         "events": 1,
         "samples": 120,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7237,6 +7357,10 @@
       "meta": {
         "events": 1,
         "samples": 498,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-06-29T19:22:59.292Z",
         "retrograde": false
       }
@@ -7250,6 +7374,10 @@
       "meta": {
         "events": 1,
         "samples": 536,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1926-01-06T01:00:26.135Z",
         "retrograde": false
       }
@@ -7263,6 +7391,10 @@
       "meta": {
         "events": 1,
         "samples": 508,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1990-08-18T07:29:47.878Z",
         "retrograde": false
       }
@@ -7276,6 +7408,10 @@
       "meta": {
         "events": 1,
         "samples": 498,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-06-30T05:52:21.776Z",
         "retrograde": false
       }
@@ -7289,6 +7425,10 @@
       "meta": {
         "events": 1,
         "samples": 457,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7305,6 +7445,10 @@
       "meta": {
         "events": 1,
         "samples": 756,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7321,6 +7465,10 @@
       "meta": {
         "events": 1,
         "samples": 1137,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1860-08-26T04:30:08.310Z",
         "retrograde": false
       }
@@ -7334,6 +7482,10 @@
       "meta": {
         "events": 1,
         "samples": 1229,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1926-12-02T22:33:54.269Z",
         "retrograde": false
       }
@@ -7347,6 +7499,10 @@
       "meta": {
         "events": 1,
         "samples": 1169,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1991-02-06T18:51:13.256Z",
         "retrograde": false
       }
@@ -7360,6 +7516,10 @@
       "meta": {
         "events": 1,
         "samples": 1097,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-02-14T00:11:38.919Z",
         "retrograde": false
       }
@@ -7373,6 +7533,10 @@
       "meta": {
         "events": 1,
         "samples": 1107,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7389,6 +7553,10 @@
       "meta": {
         "events": 1,
         "samples": 756,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7405,6 +7573,10 @@
       "meta": {
         "events": 1,
         "samples": 450,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1865-06-27T02:35:21.680Z",
         "retrograde": false
       }
@@ -7418,6 +7590,10 @@
       "meta": {
         "events": 1,
         "samples": 211,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1927-03-31T17:21:58.180Z",
         "retrograde": false
       }
@@ -7431,6 +7607,10 @@
       "meta": {
         "events": 1,
         "samples": 416,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1995-04-01T12:11:16.592Z",
         "retrograde": false
       }
@@ -7444,6 +7624,10 @@
       "meta": {
         "events": 1,
         "samples": 3085,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-04-26T00:51:32.458Z",
         "retrograde": false
       }
@@ -7457,6 +7641,10 @@
       "meta": {
         "events": 1,
         "samples": 404,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7473,6 +7661,10 @@
       "meta": {
         "events": 1,
         "samples": 179,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7489,6 +7681,10 @@
       "meta": {
         "events": 1,
         "samples": 136,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1861-04-13T20:24:31.945Z",
         "retrograde": false
       }
@@ -7502,6 +7698,10 @@
       "meta": {
         "events": 1,
         "samples": 312,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1928-09-21T12:00:55.714Z",
         "retrograde": false
       }
@@ -7515,6 +7715,10 @@
       "meta": {
         "events": 1,
         "samples": 636,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1998-01-29T02:52:04.917Z",
         "retrograde": false
       }
@@ -7528,6 +7732,10 @@
       "meta": {
         "events": 1,
         "samples": 9083,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-01-26T17:34:38.267Z",
         "retrograde": false
       }
@@ -7541,6 +7749,10 @@
       "meta": {
         "events": 1,
         "samples": 447,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7557,6 +7769,10 @@
       "meta": {
         "events": 1,
         "samples": 630,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7573,6 +7789,10 @@
       "meta": {
         "events": 1,
         "samples": 1681,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1882-07-21T21:51:26.782Z",
         "retrograde": false
       }
@@ -7586,6 +7806,10 @@
       "meta": {
         "events": 1,
         "samples": 963,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1937-10-07T12:14:17.065Z",
         "retrograde": false
       }
@@ -7599,6 +7823,10 @@
       "meta": {
         "events": 1,
         "samples": 403,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "1995-01-17T09:15:53.710Z",
         "retrograde": false
       }
@@ -7612,6 +7840,10 @@
       "meta": {
         "events": 1,
         "samples": 1298,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7628,6 +7860,10 @@
       "meta": {
         "events": 1,
         "samples": 501,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -7643,7 +7879,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 68,
+        "samples": 69,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -7661,7 +7897,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 83,
+        "samples": 84,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -7679,7 +7915,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 98,
+        "samples": 97,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -7755,7 +7991,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 342,
+        "samples": 341,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -7791,7 +8027,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 447,
+        "samples": 448,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -7827,7 +8063,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 574,
+        "samples": 575,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -7847,7 +8083,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 550,
+        "samples": 551,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -7885,7 +8121,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 519,
+        "samples": 520,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -7903,7 +8139,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 179,
+        "samples": 178,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -7939,7 +8175,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 306,
+        "samples": 307,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -8015,7 +8251,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 242,
+        "samples": 243,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -8033,7 +8269,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 256,
+        "samples": 255,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -8051,7 +8287,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 204,
+        "samples": 203,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -8091,7 +8327,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 270,
+        "samples": 269,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -8127,7 +8363,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 233,
+        "samples": 232,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -8163,7 +8399,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 187,
+        "samples": 186,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -8183,7 +8419,7 @@
       },
       "meta": {
         "events": 1,
-        "samples": 266,
+        "samples": 267,
         "ephemeris": {
           "name": "jpl-de440",
           "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
@@ -8760,6 +8996,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8776,6 +9016,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8832,6 +9076,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8848,6 +9096,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8904,6 +9156,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8920,6 +9176,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8976,6 +9236,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -8992,6 +9256,10 @@
       "meta": {
         "events": 1,
         "samples": 29,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -9048,6 +9316,10 @@
       "meta": {
         "events": 1,
         "samples": 66,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -9064,6 +9336,10 @@
       "meta": {
         "events": 1,
         "samples": 28,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "flags": [
           "delta-t-extrapolated"
         ],
@@ -9120,6 +9396,10 @@
       "meta": {
         "events": 1,
         "samples": 31,
+        "ephemeris": {
+          "name": "jpl-de440",
+          "version": "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7"
+        },
         "at": "2026-11-22T07:23:20.577Z",
         "retrograde": false
       }

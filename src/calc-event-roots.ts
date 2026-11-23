@@ -29,31 +29,41 @@ export function scanEventRoots(
   from: number, to: number, phase: boolean, valueAt: (ttMs: number) => number, maxSamples: number
 ): Scan {
   if (from > to) throw new RangeError("The search window must have from <= to.");
-  const count = from === to ? 0 : 1 + Math.ceil((to - from) / DAY_MS);
+  // Near a shallow station, subtracting longitudes can make the speed change
+  // sign more than once a few milliseconds apart. Always refine the same TT
+  // second, even if a window cuts through it. These coarse station samples
+  // use a one-hour stencil, inside the two hours already covered for confirmation.
+  const grid = phase ? 1 : 1000;
+  const first = Math.floor(from / grid) * grid;
+  const last = Math.ceil(to / grid) * grid;
+  const count = from === to ? 0 : 1 + Math.ceil((last - first) / DAY_MS);
   const scan = sampleCrossings(count, maxSamples, valueAt, "Non-finite event search sample.", (sample) => {
     const roots: Root[] = [];
-    let left = from;
-    let before = sample(from);
-    while (left < to) {
-      const right = Math.min(to, left + DAY_MS);
+    let left = first;
+    let before = sample(first);
+    while (left < last) {
+      const right = Math.min(last, left + DAY_MS);
       const after = sample(right);
       const rising = before < 0 && after >= 0;
       if (rising || (!phase && before > 0 && after <= 0)) {
         let lo = left;
         let hi = right;
         while (hi - lo > 1) {
-          const mid = Math.floor((lo + hi) / 2);
+          const step = hi - lo > grid ? grid : 1;
+          const mid = lo + step * Math.floor((hi - lo) / (2 * step));
           const value = sample(mid);
           if (rising ? value >= 0 : value <= 0) hi = mid;
           else lo = mid;
         }
         // Confirm the direction on both sides, including a zero at a cell end.
         // A touch or a flat segment without reversal is not a station.
-        const minus = sample(hi - HOUR_MS);
-        const plus = sample(hi + HOUR_MS);
-        if (rising ? minus < 0 && plus > 0 : minus > 0 && plus < 0) {
-          const slope = (phase ? principal(plus - minus) : plus - minus) * 12;
-          roots.push({ ttMs: hi, rising, slope });
+        if (hi > from && hi <= to) {
+          const minus = sample(hi - HOUR_MS);
+          const plus = sample(hi + HOUR_MS);
+          if (rising ? minus < 0 && plus > 0 : minus > 0 && plus < 0) {
+            const slope = (phase ? principal(plus - minus) : plus - minus) * 12;
+            roots.push({ ttMs: hi, rising, slope });
+          }
         }
       }
       left = right;
