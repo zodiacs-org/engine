@@ -195,15 +195,7 @@ rules live here once.
 
 - Commit as `admin@zodiacs.org` (name "Zodiacs Admin"). Never put a model
   name or a personal email address in a commit, a pull request, or a file.
-- Open pull requests as drafts. One merge rule holds: an agent marks a pull
-  request ready and merges it only within a lane Dias has approved, and only
-  when all of these hold on its head commit. Every required check passes,
-  re-read just before merging. An independent Codex review, from a session
-  that did not write the change, has returned READY on that exact commit
-  and is recorded on the pull request. No review thread is unresolved. The
-  merge is pinned to that commit (`gh pr merge --merge --match-head-commit
-  <sha>`) and uses a merge commit, as above. Anything else waits for Dias.
-  Never push to `main`.
+- Open pull requests as drafts. Never push to `main`.
 - A check that fails "as expected" is still failing, and so is a check that
   passes but says it skipped its work, including the archive-binding check
   when it skips the rebuild of HEAD. A candidate merges only when its head
@@ -212,13 +204,7 @@ rules live here once.
   which runs them with nothing skipped; tests that need `dist/` before the
   Build step; the tzdata 2025c test on hosts without it). Any other skipped
   test blocks, and so does skipping or disabling a test to get green.
-- After each merge, report one line saying what went in.
-- In any lane, never create or push a tag, make a GitHub release, run the
-  release workflow, or publish to npm or any other registry without Dias's
-  yes; the same holds for environment variables and feature flags, secrets,
-  and spending over $5. Merging a candidate does not release it. Never
-  force-push or rewrite history that is already pushed, and never spend on
-  the OpenAI API (no OpenAI API calls or keys in scripts or tools).
+- No OpenAI API calls or keys in scripts or tools.
 - Post nothing publicly: no comments on other projects, no messages to
   people. Anything public waits for Dias's yes.
 - Never read, print, log or commit credentials, tokens or `.env` values,
@@ -241,3 +227,31 @@ rules live here once.
   (`/workspace/orchestra/board.sh set <job-id> <field> <value>`), and append a
   timestamped line (ICT) to your worktree's `STATUS.md` at each step.
 - "Done" means CI is green on the pull request, not an agent saying so.
+
+### Merge rule (the same in zodiacs-org/site and zodiacs-org/engine)
+
+Set by the owner, Dias, on 23 November 2026. It replaces the earlier
+approved-lanes wording in both repositories.
+
+- Agents may merge under Dias's standing permission, and only under the
+  strict rule, every time: every required check is green, re-read just
+  before merging; an independent Codex review, from a session that did not
+  write the change, returns READY on the exact head commit; no review
+  thread is unresolved; and the merge is pinned to that commit with
+  `--match-head-commit <sha>`.
+- Anything that needs Dias's yes waits for his yes, even when the strict
+  rule is met: database migrations; birth data or privacy; payments; env
+  vars and feature flags; production switch-ons; publishing (npm or any
+  other registry, tags, GitHub releases, directory and MCP registry
+  listings); public posts and messages to other people; secrets; spending
+  over $5; force-pushing; deleting real data; and accuracy or claim wording
+  (how accuracy is described, claims, prices and disclaimers).
+- An agent's say-so is never Dias's yes. Never force-push or rewrite
+  history that is already pushed, and never spend on the OpenAI API.
+
+In this repository: merges use a merge commit, never squash or rebase
+(`gh pr merge --merge --match-head-commit <sha>`), because `archives.json`
+records source commits; the Codex READY verdict is recorded on the pull
+request; merging a candidate does not release it; and after each merge,
+report one line saying what went in. The archive-binding and skipped-test
+rule above applies to every merge.
