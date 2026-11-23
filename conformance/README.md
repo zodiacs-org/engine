@@ -119,8 +119,9 @@ release against SPEC.md and the arbiters' input digests, that 0.2.0 holds
 runs against this engine on every change, and the build fails if any vector's
 verdict differs from the committed results.
 
-A vector an engine has no function for is reported as `unsupported`, not as
-a failure, so the table shows what each engine covers as well as how well.
+An adapter reports `unsupported` when the engine lacks the requested function
+or coordinate frame, or the input falls outside its supported range. The table
+counts these cases separately from failures to show what each engine covers.
 
 ## Reporting an error in the suite
 
