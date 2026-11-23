@@ -3,8 +3,9 @@
 **Status: published through `v2.1.0` on 2026-11-23.** Lightweight git tags (`v1.0.0`,
 `v1.1.0`, `v2.0.0`, `v2.1.0`) and GitHub releases were published in version order
 under the owner's delegation, minting permanent Zenodo DOIs under concept DOI
-`10.5281/zenodo.23080133` (2.0.0 evidence:
-`docs/evidence/2.0.0-published-20261121/github-releases-and-zenodo.json`).
+`10.5281/zenodo.23080133` (evidence:
+`docs/evidence/2.0.0-published-20261121/github-releases-and-zenodo.json` and
+`docs/evidence/2.1.0-published-20261123/`).
 
 | Tag | Target commit | GitHub release ID | Published (UTC) | Zenodo DOI |
 | --- | --- | ---: | --- | --- |
@@ -15,7 +16,7 @@ under the owner's delegation, minting permanent Zenodo DOIs under concept DOI
 
 1.0.0, 1.1.0, 2.0.0 and 2.1.0 were published to npm by the Release workflow
 (2.1.0 on 2026-11-23 as `latest`, Release run 45205449248, Sigstore log index
-`4053381011`, SHA-256 `272bf36f705d033a19a5ad87e0e17113d6e53f96a02331cddefe7b41597b4afc`;
+`4053381011`, verified in `docs/evidence/2.1.0-published-20261123/`;
 2.0.0 on 2026-11-21, Release run 44915599923, verified in
 `docs/evidence/2.0.0-published-20261121/`). The historical pre-release
 `v0.1.1-rc.15` (DOI `10.5281/zenodo.23080134`) remains intact. The sections
