@@ -1,5 +1,10 @@
 # Engine changelog
 
+## 2.1.0 (cut 2026-11-23)
+
+2.1.0 is 2.1.0-rc.1 with only the version changed. Station and lunation
+search are available from `@zodiacs/engine/calc`.
+
 ## 2.1.0-rc.1
 
 `@zodiacs/engine/calc` adds `searchStations()` and `searchLunations()`.
