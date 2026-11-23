@@ -1490,14 +1490,14 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
     // 69.184 s), and the event is still flagged: its UT1 carries the extrapolated ΔT.
     let late = 0;
     let flagged = false;
-    const events = found.crossings.map(({ at, retrograde }) => {
-      const basis = timeBasis(at.getTime(), "utc");
-      const time = eventTime(basis);
+    const events = found.crossings.map((crossing) => {
+      const basis = timeBasis(crossing.at.getTime(), "utc");
+      const { at, jdUt1, jdTt, band } = eventTime(basis);
       if (deltaTExtrapolated(basis)) {
         flagged = true;
-        late = Math.max(late, time.band.utc);
+        late = Math.max(late, band.utc);
       }
-      return { ...time, retrograde };
+      return { at, jdUt1, jdTt, retrograde: crossing.retrograde, band };
     });
     return {
       status: "ok",

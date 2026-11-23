@@ -16,6 +16,12 @@ import-time side effects, and performs no network request from its core
 entry point. Its one runtime side effect is the ΔT it installs in
 astronomy-engine (see Time below).
 
+**2.1.0-rc.1** adds `searchStations()` and `searchLunations()` to
+`@zodiacs/engine/calc`. They find planetary reversals and lunar phases in TT
+windows. Each event gives its ephemeris, fallback flags, timing estimate and
+clock bands. Existing `events()` calls keep their signature and results.
+[Search windows, budgets and measured coverage](docs/calc.md#station-and-lunation-search)
+
 **2.0.0**, a major release: 2.0.0-rc.6 with the version changed
 (CHANGELOG.md). Callers moving from 1.1.0 should read
 [docs/migrating-to-2.md](docs/migrating-to-2.md). Over 1.1.0 (through
