@@ -17,6 +17,10 @@ request was accepted by `natalChart`. This checks record compatibility and
 replay input validity. Recomputed positions may differ from stored positions
 when the engine or ephemeris changes.
 
+The 2.1.0-rc.1 reader replayed all 163 envelopes from the 33 carried
+archives on Node 22.22.2. Its five new envelopes and their result row are
+in the fixture directory and the results below.
+
 The [runner](tools/later-reader.mjs) verifies each carried archive against
 its SHA-256 in [the archive manifest](../../../artifacts/archives.json).
 It unpacks the archive outside the checkout, links the installed
@@ -66,6 +70,7 @@ checks each writer's TypeScript declarations before running an input.
 | 2.0.0-rc.5 | A, B, C, D, E | A, B, C, D, E | None |
 | 2.0.0-rc.6 | A, B, C, D, E | A, B, C, D, E | None |
 | 2.0.0 | A, B, C, D, E | A, B, C, D, E | None |
+| 2.1.0-rc.1 | A, B, C, D, E | A, B, C, D, E | None |
 
 For C, writers before 0.1.1-rc.15 omit the time basis. From 0.1.1-rc.15
 through 2.0.0-rc.2 the record carries the `delta-t` basis and the
