@@ -21,6 +21,10 @@ The 2.1.0-rc.1 reader replayed all 163 envelopes from the 33 carried
 archives on Node 22.22.2. Its five new envelopes and their result row are
 in the fixture directory and the results below.
 
+The 2.1.0 reader replayed all 168 envelopes from the 34 carried archives
+on Node 22.22.2. The final archive wrote five envelopes. Each preserved
+its writer and conventions, and each replay succeeded.
+
 The [runner](tools/later-reader.mjs) verifies each carried archive against
 its SHA-256 in [the archive manifest](../../../artifacts/archives.json).
 It unpacks the archive outside the checkout, links the installed
@@ -71,6 +75,7 @@ checks each writer's TypeScript declarations before running an input.
 | 2.0.0-rc.6 | A, B, C, D, E | A, B, C, D, E | None |
 | 2.0.0 | A, B, C, D, E | A, B, C, D, E | None |
 | 2.1.0-rc.1 | A, B, C, D, E | A, B, C, D, E | None |
+| 2.1.0 | A, B, C, D, E | A, B, C, D, E | None |
 
 For C, writers before 0.1.1-rc.15 omit the time basis. From 0.1.1-rc.15
 through 2.0.0-rc.2 the record carries the `delta-t` basis and the
@@ -97,7 +102,9 @@ The original codec was restored and the focused test reran.
 
 ## Reproduce
 
-Run from the checkout with the recorded Node version.
+Run from the checkout with the recorded Node version. Compare every replay
+outcome and the full 2.1.0 row. Earlier writers' byte counts and hashes
+identify the original fixtures, which the fixture test checks directly.
 
 ```sh
 npm ci
@@ -105,7 +112,9 @@ npm run build
 mkdir -p /tmp/later-reader
 evidence=docs/evidence/records-2.0.0-20261120
 TMPDIR=/tmp/later-reader node "$evidence/tools/later-reader.mjs" > /tmp/later.json
-diff /tmp/later.json "$evidence/results/later-reader.json"
+outcomes='del(.archives[] | select(.version != "2.1.0") | .inputs[]? | (.bytes, .sha256))'
+jq -S "$outcomes" /tmp/later.json > /tmp/later-outcomes.json
+jq -S "$outcomes" "$evidence/results/later-reader.json" | diff /tmp/later-outcomes.json -
 npx vitest run src/receipt-major-readers.test.ts
 ```
 
