@@ -1,4 +1,15 @@
-- **Engine and licence.** PyEphem `4.2.1` (`ephem`, MIT licence; `conformance/adapters/requirements-pyephem.txt`), computing from its built-in XEphem/libastro VSOP87 planetary theory and lunar theory.
-- **Positions (L1).** Converts `jd_tt` to a PyEphem UT date using two fixed-point steps with `ephem.delta_t`, calls `body.compute(d_ut, epoch=d_ut)`, and transforms PyEphem's apparent geocentric equatorial coordinates (`body.g_ra`, `body.g_dec`) to ecliptic of date using PyEphem's own `ephem.Ecliptic(ephem.Equatorial(body.g_ra, body.g_dec, epoch=d_ut), epoch=d_ut)`. Of all 240 vectors answered, **36 pass and 204 fail** (median `0.415″` lon, `3.285″` lat; max `25.889″` lon, `11.423″` lat). On `L1-POS-0002` (the Moon in 1851), PyEphem gives residual `+0.133″` in longitude and `-3.673″` in latitude (`fail`). Most failures are in ecliptic latitude because `ephem.Ecliptic` converts using mean rather than true obliquity of date, and outer-planet and Pluto positions diverge further from DE441 away from J2000.
-- **Delta T (L3).** `time.delta-t` is answered with `ephem.delta_t(ephem.Date(jd_ut1 - 2415020.0))`: **13 of 15 pass and 2 fail** (`L3-DT-0014` on 2019-07-01 by `+0.209 s`, and `L3-DT-0015` on 2023-01-01 by `+2.312 s`, where the built-in polynomial predates recent Earth rotation observations).
-- **Not answered (L2, L3 zones/calendars/TT minus UTC, L4).** Reported as `unsupported`: PyEphem has no astrology house or angle functions, no time zone database, no leap-second TT minus UTC function, no integer proleptic Gregorian/Julian JDN calendar function, and no TT-window event search API.
+PyEphem 4.2.1 (Python package `ephem`) includes XEphem/libastro's built-in
+planetary and lunar theories, including VSOP87. [Engine licence (MIT)](https://github.com/brandon-rhodes/pyephem/blob/4.2.1/LICENSE).
+
+For L1, PyEphem supplies apparent geocentric right ascension and declination.
+Its public `Ecliptic` conversion uses mean obliquity. Every L1 vector requires
+true obliquity of date, including the Moon in 1851 (`L1-POS-0002`).
+These positions are `unsupported`. PyEphem's new and full Moon searches use
+the same conversion for the longitudes that define a lunation.
+[Coordinate conversion](https://github.com/brandon-rhodes/pyephem/blob/4.2.1/libastro/eq_ecl.c)
+and [Moon phase calculation](https://github.com/brandon-rhodes/pyephem/blob/4.2.1/ephem/__init__.py#L229-L245).
+
+For L3, `ephem.delta_t` reads the supplied UT1 Julian date in PyEphem's
+day count. Of 15 measurements, 13 pass and two exceed the 0.1 s tolerance.
+The 2019 and 2023 residuals are +0.209 s and +2.312 s. The other kinds lack
+a matching public function or calendar convention.

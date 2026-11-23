@@ -33,8 +33,7 @@ Hellenistic and timing techniques (L6).
 
 The harness runs the latest version.
 
-Results for this repository's engine and for Swiss Ephemeris are in
-[RESULTS.md](RESULTS.md).
+Measured results for each engine are in [RESULTS.md](RESULTS.md).
 
 ## The rules
 
@@ -84,7 +83,8 @@ Two conventions deserve a note:
 
 An adapter is a program that reads one JSON request per line on standard
 input and writes one JSON response per line; [SPEC.md](SPEC.md) gives the
-format. Two adapters are included:
+format. To run and submit another engine, see [SUBMITTING.md](SUBMITTING.md).
+The following commands reproduce the runs for this engine and Swiss Ephemeris.
 
 ```bash
 # this repository's engine
@@ -119,8 +119,9 @@ release against SPEC.md and the arbiters' input digests, that 0.2.0 holds
 runs against this engine on every change, and the build fails if any vector's
 verdict differs from the committed results.
 
-A vector an engine has no function for is reported as `unsupported`, not as
-a failure, so the table shows what each engine covers as well as how well.
+An adapter reports `unsupported` when the engine lacks the requested function
+or coordinate frame, or the input falls outside its supported range. The table
+counts these cases separately from failures to show what each engine covers.
 
 ## Reporting an error in the suite
 

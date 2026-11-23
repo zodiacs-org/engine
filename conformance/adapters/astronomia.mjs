@@ -2,12 +2,11 @@
 /**
  * Conformance adapter for astronomia (../SPEC.md).
  *
- * Uses astronomia's own public VSOP87D planetary ephemeris (solar.apparentVSOP87
+ * Uses astronomia's own public VSOP87B planetary ephemeris (solar.apparentVSOP87
  * for the Sun; elliptic.position with Equatorial.toEcliptic at true obliquity
  * for Mercury through Neptune), deltat.deltaT for Delta T, and julian calendar
- * functions for JDN conversions. Moon (mean equinox of date / J2000 only) and
- * Pluto (J2000 astrometric only) are reported as unsupported rather than
- * converted outside astronomia's public apparent-position API.
+ * functions for JDN conversions. Its lunar positions lack nutation and
+ * its astrometric Pluto positions use J2000.
  *
  *   (cd conformance/adapters/astronomia && npm ci)
  *   node conformance/harness/run.mjs \
@@ -15,26 +14,12 @@
  *     --out conformance/results/astronomia.json
  */
 import { createRequire } from 'node:module';
-import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
 import { createInterface } from 'node:readline';
-import { fileURLToPath } from 'node:url';
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-const PKG_DIR = resolve(HERE, 'astronomia');
-const require = createRequire(resolve(PKG_DIR, 'package.json'));
-
-const astronomiaPkg = JSON.parse(
-  readFileSync(resolve(PKG_DIR, 'node_modules/astronomia/package.json'), 'utf8'),
-);
-
-const { deltat, elliptic, julian, nutation, planetposition, solar } = await import(
-  new URL('./astronomia/node_modules/astronomia/src/index.js', import.meta.url)
-);
-const vsopMod = await import(
-  new URL('./astronomia/node_modules/astronomia/data/index.js', import.meta.url)
-);
-const vsopData = vsopMod.default;
+const require = createRequire(new URL('./astronomia/package.json', import.meta.url));
+const astronomiaPkg = require('astronomia/package.json');
+const { deltat, elliptic, julian, moon, planetposition, solar } = require('astronomia');
+const vsopData = require('astronomia/data').default;
 
 const R2D = 180 / Math.PI;
 const EARTH = new planetposition.Planet(vsopData.earth);
@@ -60,28 +45,17 @@ function position(input) {
     return { output: { lon: norm360(pos.lon * R2D), lat: pos.lat * R2D } };
   }
   if (body === 'Moon') {
-    return {
-      unsupported:
-        'astronomia moonposition.position returns mean equinox of date without nutation and elp.Moon returns J2000 inertial coordinates; no public apparent true-of-date Moon function',
-    };
+    return { unsupported: 'moonposition.position and elp.position omit nutation. L1 requires an apparent true-of-date Moon position.' };
   }
   if (body === 'Pluto') {
-    return {
-      unsupported:
-        'astronomia pluto.astrometric returns J2000 astrometric coordinates only; no public apparent true-of-date Pluto function',
-    };
+    return { unsupported: 'pluto.astrometric returns J2000 astrometric coordinates. L1 requires an apparent true-of-date Pluto position.' };
   }
-  const planet = PLANETS[body];
-  if (!planet) {
-    return { unsupported: `astronomia has no VSOP87D series for ${body}` };
+  if (!Object.hasOwn(PLANETS, body)) {
+    return { unsupported: `astronomia has no VSOP87B series for ${body}` };
   }
-  // elliptic.position computes apparent geocentric ecliptic coordinates (light-time,
-  // aberration, FK5, nutation) and converts to equatorial with true obliquity;
-  // astronomia's own Equatorial.toEcliptic(eps) recovers apparent ecliptic of date.
-  const eq = elliptic.position(planet, EARTH, jde);
-  const [, dEps] = nutation.nutation(jde);
-  const eps = nutation.meanObliquity(jde) + dEps;
-  const ecl = eq.toEcliptic(eps);
+  const eq = elliptic.position(PLANETS[body], EARTH, jde);
+  // The published moon.Moon type exposes true obliquity of date as ε.
+  const ecl = eq.toEcliptic(new moon.Moon(jde).ε);
   return { output: { lon: norm360(ecl.lon * R2D), lat: ecl.lat * R2D } };
 }
 
@@ -114,15 +88,15 @@ const HANDLERS = {
   'time.delta-t': deltaT,
   'calendar.to-jdn': toJdn,
   'calendar.from-jdn': fromJdn,
-  'event.ingress': () => ({ unsupported: 'astronomia has no zodiac sign ingress search function' }),
+  'event.ingress': () => ({ unsupported: 'This adapter measures positions and time/calendar conversions. solstice.longitude takes a year and the Sun, without a general planetary ingress search.' }),
   'event.station': () => ({ unsupported: 'astronomia has no planetary station search function' }),
-  'event.lunation': () => ({ unsupported: 'astronomia moonphase solves nearest phase to a decimal year rather than first phase in a TT/UTC window' }),
+  'event.lunation': () => ({ unsupported: 'moonphase returns the phase nearest a decimal year. This adapter has no window search for the first lunation.' }),
 };
 
 const handshake = {
   adapter: {
     name: 'astronomia',
-    version: '0.1.0',
+    version: '0.1.1',
     engine: 'astronomia',
     engineVersion: astronomiaPkg.version,
     configuration: {
@@ -139,7 +113,7 @@ const rl = createInterface({ input: process.stdin, crlfDelay: Infinity });
 for await (const line of rl) {
   if (!line.trim()) continue;
   const request = JSON.parse(line);
-  const handler = HANDLERS[request.kind];
+  const handler = Object.hasOwn(HANDLERS, request.kind) && HANDLERS[request.kind];
   let response;
   try {
     response = handler ? handler(request.input) : { unsupported: `unknown kind ${request.kind}` };

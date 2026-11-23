@@ -1,78 +1,51 @@
-# Submitting an engine to the conformance suite
+# Submitting an engine
 
-Anyone may run an astrology or ephemeris library against the conformance suite
-and submit its adapter and results for listing in [RESULTS.md](RESULTS.md) and
-`results/summary.json`.
+An adapter reads one UTF-8 JSON object per line on standard input and writes
+one per line on standard output. Before reading, it writes a handshake with
+the adapter name and version, engine name and version, and configuration. Each
+request contains only `id`, `kind` and `input`. Answer in order with the same
+ID. Use the engine's public functions, including its own coordinate
+transformations. Return `output` for a supported quantity, `unsupported` with a
+reason for a missing function, frame or input range, and `error` if a
+calculation fails. The protocol, units and frame definitions are in [SPEC.md](SPEC.md).
 
-## What an adapter is
+## Run and verify
 
-An adapter is a small program that reads JSON Lines requests on standard input
-and writes JSON Lines responses on standard output. Its first line is a
-handshake object (`{"adapter": {...}}`) naming the adapter, engine, exact
-version and configuration. Each subsequent line answers one test vector with
-`output`, `unsupported` (with a plain-language reason), or `error`. The wire
-format, vector kinds, tolerances and judgement rules are specified in
-[SPEC.md](SPEC.md).
-
-An adapter must call the engine's own public functions for each quantity it
-answers. Do not implement missing astronomy or coordinate frames inside the
-adapter; return `unsupported` with the reason instead.
-
-## Three commands to run an adapter
-
-From a checkout of this repository (with Node.js 20.19+ or 22.7+):
+From the repository root on Node 22.22.2, this example installs the pinned
+astronomia adapter, measures all 640 vectors and checks the saved verdicts.
+For another engine, substitute its install command, adapter command and results
+filename.
 
 ```sh
-# 1. Verify the vector files against SPEC.md and their pinned digests
+npm ci --prefix conformance/adapters/astronomia
+adapter='node conformance/adapters/astronomia.mjs'
+results=conformance/results/astronomia.json
+
 node conformance/harness/validate.mjs --expect-total 640
-
-# 2. Run your adapter over the suite and write a results file
-node conformance/harness/run.mjs \
-  --adapter "<command to start your adapter>" \
-  --out conformance/results/<engine>.json
-
-# 3. Regenerate RESULTS.md and results/summary.json and check they match
-node conformance/harness/report.mjs && node conformance/harness/report.mjs --check
+node conformance/harness/run.mjs --adapter "$adapter" --out "$results"
+node conformance/harness/run.mjs --adapter "$adapter" --check "$results"
+node conformance/harness/report.mjs
+node conformance/harness/report.mjs --check
 ```
 
-Pass `--values none` to `run.mjs` if the engine's licence does not permit
-redistributing per-vector numeric residuals; verdicts and summary statistics
-are still recorded.
+Use `--values none` on the measurement command for verdicts and summary
+statistics without per-vector residuals. Ensure any response metadata is
+also suitable for redistribution.
 
-## What to send in a pull request
+## Submit a draft pull request
 
-Keep all files inside `conformance/` so the npm package build and carried
-release archives are untouched:
+- Put the adapter source and pinned dependency manifest under `conformance/adapters/`.
+- Include the generated `conformance/results/<name>.json` and both regenerated reports.
+- In `conformance/results/<name>.notes.md`, state the exact engine version and
+  licence, the data release or digest, the public functions used and any limits
+  on coverage. Include the install and run commands in the submission.
 
-1. **Adapter source** under `conformance/adapters/` (with any pinned runtime
-   dependency manifest inside `conformance/adapters/`, never the root
-   `package.json`).
-2. **Results JSON** under `conformance/results/<engine>.json`, produced by
-   `run.mjs` with the engine's exact released version and configuration.
-3. **Notes file** at `conformance/results/<engine>.notes.md` stating the
-   exact version, licence, planetary or lunar theory, which kinds were
-   answered, any coordinate conversion performed with the engine's own
-   routine, and why omitted kinds are `unsupported`.
-4. **Regenerated reports**: `conformance/RESULTS.md` and
-   `conformance/results/summary.json` produced by `report.mjs`.
+Before listing an entry, maintainers review the calls and licences, install
+the pinned release, rerun the adapter, check the vector digests and verdicts,
+and regenerate the reports. Results are published as measured, pass or fail.
+The report also shows unsupported inputs and calculation errors by kind.
 
-## How submissions are checked and listed
-
-Before merging, maintainers rerun the submitted adapter from a clean install
-of the pinned release (using `--check`) and verify that:
-
-- the engine's licence permits the adapter and the committed level of output;
-- the adapter answers each kind with the engine's own public API and never
-  reads expected values (the harness sends only `id`, `kind` and `input`);
-- `validate.mjs`, `selftest.mjs`, `--check` and `report.mjs --check` all pass.
-
-Results are listed as measured, pass or fail, by level and kind with no
-composite ranking score.
-
-## Disputing a vector
-
-Released vectors never change in place. If you believe a vector's expected
-value, input or tolerance is wrong, open an issue citing the vector ID and an
-independent primary arbiter (such as JPL Horizons, ERFA, IANA tzdb or IERS);
-confirmed errors are withdrawn and replaced under a new ID in
+To dispute a vector, cite its ID and suite version, the disputed value,
+tolerance or arbiter, and independent evidence. Confirmed corrections receive
+a new ID and the original is withdrawn. Use the form linked in
 [DISCREPANCIES.md](DISCREPANCIES.md).
