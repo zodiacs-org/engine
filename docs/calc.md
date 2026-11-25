@@ -126,6 +126,16 @@ same ephemeris name and version. Each call chooses one source for its
 entire window and the probes on either side. A source change can shift a
 root across the cut. A zero-length window succeeds with zero samples.
 
+A window must have `from` no later than `to`, and this is checked twice,
+from 2.1.1. When both ends are on the same scale, a reversed window is
+refused with a `RangeError` before either end is converted. Once converted
+to TT (to UTC for `events()`), the ends are compared again: ends in order
+on UT1 can still come out reversed where the time basis steps back between
+them, as it does at the end of the IERS table (2027-10-02), where a 1 ms
+UT1 window converts to TT 1 ms backwards. Such a window is refused with a
+`RangeError` that says the time basis steps back there. Give both ends on
+TT, or widen the window past the step.
+
 `maxSamples` accepts a positive safe integer or `Infinity` (the default).
 The budget counts scalar evaluations during the scan, refinement and
 confirmation. A `sample-budget` refusal reports the count and limit.
@@ -877,7 +887,8 @@ is no comparison to take one from.
 | `speed:analytic`, `speed:central-difference-0.001d`, `speed:central-difference-0.25d` | how the speeds were found |
 | `ephemeris:astronomy-engine@2.1.19` | the ephemeris: truncated VSOP87 for the planets, a lunar series after Brown's theory (Montenbruck and Pfleger), an integrated Pluto |
 | `deltat:time-basis`, `deltat:pinned` | ΔT from the time basis (`iers-utc/1` from 1972-01-01 to the end of the IERS table, `zodiacs-deltat/1` outside it; each instant's `deltaT.model` says which), or the caller's value |
-| `time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise` | the time basis above, as the natal receipt's time-basis set names it ([time.md](time.md)) |
+| `time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise` | the time basis above, as the natal receipt's time-basis set names it ([time.md](time.md)), for a receipt whose instants all lie on or before the end of the IERS table (2027-10-02) or carry a pinned ΔT |
+| `time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972` | the continuous-UTC rule ([time.md](time.md)), as the natal receipt's continuous-UTC sets name it: from 2.1.1, for a receipt with any instant on the `continuous-utc` basis, after the IERS table |
 | `house:<system>`, `polar-fallback:whole` | the house system asked for, and whole sign where Placidus or Koch is undefined |
 | `angles:gast-and-true-obliquity`, `sidereal-time:gast-iau2006-era` | the angles from the engine's apparent sidereal time (the Earth rotation angle, astronomy-engine's IAU 2006 polynomial, and the equation of the equinoxes: Δψ cos εA and the two largest IAU 2000 complementary terms) and the true obliquity |
 | `aspects:major`, `search:scan-and-bisect` | the chart's major aspects; the crossing search |
