@@ -620,8 +620,20 @@ function instant(basis: TimeBasis): CalcInstant {
   };
 }
 
-/** The time basis, as the natal receipt's time-basis set names it (src/receipt.ts). */
-const TIME_BASIS_ID = "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise";
+/**
+ * The time-basis id's ending, as the natal receipt's time-basis set names it
+ * (src/receipt.ts): the id a receipt has always carried, kept for every
+ * instant on or before the end of the IERS table and every pinned one, so
+ * that those receipts replay unchanged.
+ */
+const TIME_BASIS_ID = "delta-t-model-otherwise";
+/**
+ * The continuous-UTC rule's ending (docs/time.md), as the natal receipt's
+ * continuous-UTC sets name it: carried where any of a receipt's instants lies
+ * after the IERS table on the "continuous-utc" basis, as createNatalEnvelope
+ * chooses its set by the chart's basis.
+ */
+const TIME_BASIS_ID_CONTINUOUS_UTC = "tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972";
 
 /** A result's receipt; one whose result carries bands from the time basis (`banded`) names their rule last. */
 function receipt<Request>(
@@ -640,7 +652,8 @@ function receipt<Request>(
       ...ids,
       `ephemeris:${ephemeris.name}@${ephemeris.version}`,
       pin === undefined ? "deltat:time-basis" : "deltat:pinned",
-      TIME_BASIS_ID,
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;" +
+        (instants.some((at) => at.timeScale.basis === "continuous-utc") ? TIME_BASIS_ID_CONTINUOUS_UTC : TIME_BASIS_ID),
       ...(banded ? ["time-band:first-order"] : [])
     ],
     engine: { name: "@zodiacs/engine", version: ENGINE_VERSION, ephemeris: { name: ephemeris.name, version: ephemeris.version } }
@@ -1431,6 +1444,27 @@ function calcFlags(extrapolated: boolean, fallback?: EphemerisFallback | null): 
 }
 
 /**
+ * A search window's ends in order. Called with no converted ends, it compares
+ * two ends given on one scale as given, before either is converted to TT, so
+ * that a reversed window is refused as the caller wrote it. Called with the
+ * converted ends (TT milliseconds, or UTC for the crossing search), it
+ * compares those: ends in order on one scale still come out reversed where
+ * the time basis steps back between them, as a 1 ms UT1 window across the
+ * end of the IERS table (2027-10-02) converts to TT 1 ms backwards.
+ */
+function checkOrder(from: TimeInput, to: TimeInput, first?: number, last?: number): void {
+  const same = from.scale === to.scale && from.pin === to.pin;
+  if (first === undefined ? same && from.ms > to.ms : first > last!) {
+    throw new RangeError(
+      first === undefined || !same
+        ? "The search window must have from <= to."
+        : `The search window is in order on ${from.scale} but reversed once converted, where the time basis steps back ` +
+            "(on ut1 at the end of the IERS table, 2027-10-02). Give both ends on tt."
+    );
+  }
+}
+
+/**
  * Every instant in (from, to] when `body` sits on `longitude`: the engine's
  * crossing search (searchLongitudeCrossings) on its apparent geocentric
  * longitudes, under an optional budget of evaluations.
@@ -1465,9 +1499,11 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
           const tropical = bodyLongitude(b, date);
           return wrap360(wrap360(tropical) - onChartClock(date.getTime(), "utc", undefined, (at) => ayanamsaAt(definition, at).true));
         };
+  checkOrder(from, to);
   const start = resolve(from);
   const end = resolve(to);
   if (start === null || end === null) return outOfRange();
+  checkOrder(from, to, Math.round(start.utcMs), Math.round(end.utcMs));
   {
     // One source for the whole search: both ends are in CALC_SPAN, which the pack covers.
     const chosen = ephemerisAt(Math.round(start.utcMs));
@@ -1612,12 +1648,14 @@ function searchTimed<S extends { body: StationBody } | { phaseDegrees: LunationA
   const max = request.maxSamples === undefined ? Infinity : request.maxSamples;
   if (max !== Infinity && (!Number.isSafeInteger(max) || max < 1)) throw new RangeError("maxSamples must be a positive safe integer or Infinity.");
   if (from.pin !== undefined || to.pin !== undefined) return refuse("unsupported-combination", "Event searches require the engine's time basis.");
+  checkOrder(from, to);
   const start = resolve(from);
   const end = resolve(to);
   if (!start || !end) return outOfRange();
   const ttMs = (basis: TimeBasis) => Math.round(J2000_MS + basis.ttDays * DAY_MS);
   const first = ttMs(start);
   const last = ttMs(end);
+  checkOrder(from, to, first, last);
   const phase = "phaseDegrees" in selection;
   // A phase confirmation reaches one hour beyond a root. A station's speed
   // stencil reaches another hour. Empty searches only label their instant.

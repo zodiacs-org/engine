@@ -545,7 +545,7 @@
       "bounds:plus-delta-t-band",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972",
       "time-band:first-order"
      ],
      "engine": {
@@ -1063,7 +1063,7 @@
       "speed:central-difference-0.001d",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972",
       "time-band:first-order"
      ],
      "engine": {
@@ -1191,7 +1191,7 @@
       "bounds:plus-delta-t-band",
       "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972",
       "time-band:first-order"
      ],
      "engine": {
@@ -1471,7 +1471,7 @@
       "bounds:plus-delta-t-band",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972",
       "time-band:first-order"
      ],
      "engine": {
@@ -1854,7 +1854,7 @@
       "bounds:plus-delta-t-band",
       "ephemeris:jpl-de440@51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972",
       "time-band:first-order"
      ],
      "engine": {
@@ -2707,7 +2707,7 @@
       "bounds:plus-delta-t-band",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972",
       "time-band:first-order"
      ],
      "engine": {
@@ -3366,7 +3366,7 @@
       "bounds:plus-delta-t-band",
       "ephemeris:astronomy-engine@2.1.19",
       "deltat:time-basis",
-      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise",
+      "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972",
       "time-band:first-order"
      ],
      "engine": {
