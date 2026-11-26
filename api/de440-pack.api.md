@@ -65,6 +65,32 @@ interface De440Source extends PositionSource {
             number
         ];
     };
+    earthAndSunState(ttDays: number): {
+        earth: {
+            position: [
+                number,
+                number,
+                number
+            ];
+            velocity: [
+                number,
+                number,
+                number
+            ];
+        };
+        sun: {
+            position: [
+                number,
+                number,
+                number
+            ];
+            velocity: [
+                number,
+                number,
+                number
+            ];
+        };
+    };
     readonly pack: {
         readonly sha256: string;
         readonly bytes: number;

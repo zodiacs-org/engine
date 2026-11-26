@@ -9,11 +9,12 @@ the release it leads to.
 
 ## What is public
 
-- **The entry points.** The eighteen that `package.json` exports and the
+- **The entry points.** The nineteen that `package.json` exports and the
   README documents: the root, `./calc`, `./conventions` (from 1.1.0-rc.1),
   `./core` (from 2.0.0-rc.3), `./crossings`, `./de440` (from 1.1.0-rc.3),
   `./de440/pack` (from 1.1.0-rc.9), `./deltat`, `./geo`,
-  `./houses`, `./lite` (from 1.1.0-rc.2), `./receipt`, `./sky`,
+  `./houses`, `./lite` (from 1.1.0-rc.2), `./minor-bodies` (from 3.0.0),
+  `./receipt`, `./sky`,
   `./techniques`, `./time` (from 1.1.0-rc.2), `./timing`, `./vedic` and
   `./window`. `./internal` and
   `./internal/math` are private to Zodiacs.org

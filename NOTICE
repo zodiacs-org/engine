@@ -70,8 +70,9 @@ for the geocentric Sun, Moon, planets and true nodes, from JPL's DE440 on
 146,097 days), and of
 astronomy-engine's barycentre from a Newtonian barycentre and from
 Horizons's. They are not coefficients derived
-from JPL data. The one file of the package that holds values derived from a
-JPL ephemeris is the DE440 pack's (DE440 pack, below).
+from JPL data. The files of the package that hold values derived from JPL
+data are the DE440 pack's and, from 3.0.0, the minor-body tables' (DE440
+pack and Minor-body tables, below).
 
 DE440 entry
 -----------
@@ -130,6 +131,20 @@ NASA JPL for them. The package holds no Horizons response: the rule was
 measured against Horizons responses kept in the repository
 (docs/evidence/1.1.0-rc.12-20261115/near-sun/). JPL has not reviewed or
 endorsed the package's use of it.
+
+Minor-body tables
+-----------------
+
+The minor-body tables of @zodiacs/engine/minor-bodies (dist/minor-bodies.js)
+were fitted by Zodiacs.org to vectors from NASA JPL's Horizons On-Line
+Ephemeris System (Solar System Dynamics Group, Jet Propulsion Laboratory,
+California Institute of Technology, https://ssd.jpl.nasa.gov/horizons/):
+
+  Giorgini, JD and JPL Solar System Dynamics Group, NASA/JPL Horizons
+  On-Line Ephemeris System, data retrieved 2026-Nov-26.
+
+JPL has not reviewed or endorsed them; LICENSING.md, Minor-body tables,
+records the queries, their digests and what JPL states about its output.
 
 Essential dignities
 -------------------

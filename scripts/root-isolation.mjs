@@ -43,14 +43,16 @@ import { existsSync, readFileSync } from "node:fs";
  * src/de440-pack.ts, each named whole. From 1.1.0-rc.9 to 2.1.0 the root
  * computed on the shipped pack by default and imported the DE440 files; from
  * 3.0.0 it computes on astronomy-engine, `useDe440()` in src/de440-pack.ts
- * puts it on the pack, and the root's graph holds none of them again. The
+ * puts it on the pack, and the root's graph holds none of them again; and,
+ * from 3.0.0, the minor-bodies entry's file and directory, src/minor-bodies.ts
+ * and src/minor-bodies/, the tables among them. The
  * setting the two share, src/ephemeris-default.ts, is the root's own. The
  * root modules the lite parts are built from (src/declination.ts,
  * src/points.ts and the like) are the root's own; the export smoke test pins
  * the lite entry's modules (scripts/lite-entry.mjs).
  */
 export const OPT_IN_SOURCE =
-  /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky|lite|core|de440)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|(?:houses-extra|equator|first-millisecond|time|time-bands|sect|de440-pack)\.[^/]*$)/u;
+  /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky|lite|core|de440|minor-bodies)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|(?:houses-extra|equator|first-millisecond|time|time-bands|sect|de440-pack)\.[^/]*$)/u;
 
 /** The source path of every module esbuild marks in an output file: `// src/...`, any extension. */
 export function sourceMarkers(code) {

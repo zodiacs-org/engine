@@ -302,6 +302,26 @@ export class Reducer {
   }
 
   /**
+   * The Earth's and the Sun's geometric states at `ttDays` (TT days past
+   * J2000), from the solar-system barycentre, in the ICRF at TDB: positions
+   * in km and velocities in km/s, the Earth's as the reduction takes its
+   * observer (from 3.0.0, for `@zodiacs/engine/minor-bodies`).
+   */
+  earthAndSunState(ttDays: number): {
+    earth: { position: [number, number, number]; velocity: [number, number, number] };
+    sun: { position: [number, number, number]; velocity: [number, number, number] };
+  } {
+    if (!Number.isFinite(ttDays)) fail("bad-instant", "ttDays must be a finite number");
+    const et = etOf(ttDays);
+    if (!this.backend.covers(et)) fail("out-of-coverage", "the instant is outside the pack's coverage");
+    const state = (body: string): { position: [number, number, number]; velocity: [number, number, number] } => {
+      const s = this.backend.state(body, et, this.a);
+      return { position: [s[0]!, s[1]!, s[2]!], velocity: [s[3]!, s[4]!, s[5]!] };
+    };
+    return { earth: state("Earth"), sun: state("Sun") };
+  }
+
+  /**
    * The Moon's true node: the ascending node, on the true ecliptic and
    * equinox of date, of the plane of r x v, r and v the Moon's geometric
    * geocentric position and velocity in the ICRF at TDB (no light-time,

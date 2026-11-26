@@ -8,7 +8,10 @@ NAIF's rules permit redistributing its kernels unmodified but do not speak of
 data refitted from one, so shipping the pack rests on the owner's reading and
 not on a statement of JPL's or NAIF's. On 2026-11-16 the owner answered, in
 writing, the question "Do you accept shipping the NASA DE440 data in 1.1.0?"
-with "Yes. I delegate these decisions to you." (*DE440 pack*). Four
+with "Yes. I delegate these decisions to you." (*DE440 pack*). From 3.0.0
+it also ships tables fitted to vectors from NASA JPL's Horizons system for
+five minor bodies, whose terms are a further question for the owner
+(*Minor-body tables*). Four
 questions are left open for the owner. As they were at 1.1.0, the terms for
 IERS EOP 20 C04 redistribution remain unconfirmed for both the 367 rows the
 repository carries and the values the package derives from them (*IERS
@@ -252,6 +255,20 @@ the same sealed pack: it was given with "Yes. I delegate these decisions to
 you.", and under that delegation it is taken to extend to 2.0.0 and its
 candidates.
 
+Data refitted or compressed from JPL's DE ephemerides has been redistributed
+for decades, by commercial and open-source software alike. One public
+precedent is the Swiss Ephemeris of Astrodienst AG, first released in 1997,
+whose ephemeris files (the `.se1` files its users install) its own page
+describes as "largely based upon the DExxx ephemerides from NASA's JPL",
+data "further compressed with sophisticated compression techniques developed
+by Astrodienst", and which it licenses under the GNU Affero General Public
+License or its paid Swiss Ephemeris Professional License
+(https://www.astro.com/swisseph/swephinfo_e.htm, read 2026-11-26). That is a
+precedent of practice, not a statement of JPL's or NAIF's, and it settles
+none of the questions above. `@zodiacs/engine` contains no Swiss Ephemeris
+code, file, table or output (*Swiss Ephemeris exclusion* above): the pack is
+refitted from NAIF's `de440.bsp` alone.
+
 The rule behind the Sun's disc, from 1.1.0-rc.12, is NASA JPL's. The
 reduction bends no light from a planet farther than the Sun whose direction
 is within the Sun's apparent radius of the Sun's, with the Sun's radius
@@ -264,6 +281,84 @@ was measured against are public responses kept in the repository only
 
 The pack does not change the SPDX expression: no licence is asserted for it
 that its providers do not state, as for the IERS data below.
+
+## Minor-body tables
+
+From 3.0.0 the package carries tables for five minor bodies, 2060 Chiron
+(1977 UB), 1 Ceres (A801 AA), 2 Pallas (A802 FA), 3 Juno (A804 RA) and
+4 Vesta (A807 FA), from 1800-01-01 to 2200-01-01 TT.
+`scripts/minor-bodies/build-pack-data.mjs` writes them, as base64 text, into
+`src/minor-bodies/pack-data.ts`, which the build places in
+`dist/minor-bodies.js`, the file of `@zodiacs/engine/minor-bodies`, and in
+no other file (`scripts/verify-package-contents.mjs` checks that, each
+table's size and the SHA-256 of its bytes). Each table is piecewise
+Chebyshev series of the body's heliocentric position in the ICRF, which
+`scripts/minor-bodies/fit.py` (with numpy 2.0.2) fitted by least squares to
+vectors from NASA JPL's Horizons On-Line Ephemeris System and rounded to
+whole multiples of 20 or 50 km: values derived from Horizons's vectors, not
+the vectors, which are in neither the repository nor the package.
+
+The vectors were fetched on 2026-11-26 at 12:08 UTC, one request per body,
+from the Horizons API (https://ssd.jpl.nasa.gov/api/horizons.api), by
+`scripts/minor-bodies/fetch-horizons.py`, with `EPHEM_TYPE` `VECTORS`,
+`CENTER` `500@10` (the Sun's centre), `REF_PLANE` `FRAME`, `REF_SYSTEM`
+`ICRF`, `VEC_TABLE` `1` (positions), `VEC_CORR` `NONE` (geometric),
+`OUT_UNITS` `KM-S` and `CSV_FORMAT` `YES`, from JD 2378480.5 to 2524610.5
+TDB, every 10 days for Chiron and every 4 days for the others. Each response
+names the JPL orbit solution it computed the body from, and DE441 and the
+small-body perturbers SB441-N16 as what it integrated it with.
+`src/minor-bodies/provenance.json` records the query and, for each response:
+
+| body | solution | solution date | rows | bytes | SHA-256 of the response |
+| --- | --- | --- | --- | --- | --- |
+| 2060 Chiron | JPL#171 | 2026-06-05 | 14,614 | 1,804,028 | `ec653cf9eaa608323bbcf900d46c4b325ec4587a2d8d21fde74979c88198aa24` |
+| 1 Ceres | JPL#48 | 2021-04-13 | 36,533 | 4,500,098 | `4c56afea785549ff4888cb931c305567bebd5ca33192559995eb4af44b0d0678` |
+| 2 Pallas | JPL#74 | 2026-06-05 | 36,533 | 4,500,064 | `53c268cd22067062280970cc50f25b54f1eea600ed541fec330f833994eb1f74` |
+| 3 Juno | JPL#144 | 2026-06-05 | 36,533 | 4,500,063 | `8990b8117306bf1b6a0e8ea84a8028533846cb76723a07926bed0f8ec93aaf84` |
+| 4 Vesta | JPL#36 | 2021-04-13 | 36,533 | 4,500,101 | `1bcc7376be2155c157561d74f0f0355f54676ab6fbf38818349c54ecb5a7021f` |
+
+`src/minor-bodies/pack-data.ts` gives the SHA-256 of each table's own
+bytes. The tables' independent check, 500 apparent places from Horizons's
+OBSERVER tables at instants the fit never saw, is
+`src/fixtures/minor-bodies-horizons-oos.json`, with each raw response's
+SHA-256, fetched the same day by the same script; it is not packed.
+
+What the provider states, read 2026-11-26. The Horizons API's
+documentation (https://ssd-api.jpl.nasa.gov/doc/horizons.html, version 1.3),
+the system's manual (https://ssd.jpl.nasa.gov/horizons/manual.html, version
+4.98e) and the home page of JPL's Solar System Dynamics group
+(https://ssd.jpl.nasa.gov/) state no licence, no terms of use and no
+public-domain status for Horizons's output, and neither grant nor refuse
+permission to redistribute it. The manual suggests a reference,
+"Giorgini, JD and JPL Solar System Dynamics Group, NASA/JPL Horizons On-Line
+Ephemeris System", with the date the data were retrieved, without requiring
+it; `NOTICE` gives it. The pages link JPL's site-wide notice
+(https://www.jpl.nasa.gov/caltechjpl-privacy-policies-and-important-notices),
+which says that web sites in the domain jpl.nasa.gov "are managed by the
+California Institute of Technology in support of the missions and research
+programs that its Jet Propulsion Laboratory conducts for NASA", and, under
+"Copyright Status", "All documents available from this server may be
+protected under the U.S. and Foreign Copyright Laws. Permission to reproduce
+may be required." It does not name Horizons or its output.
+
+What follows, and what does not. 3.0.0's brief describes Horizons's output
+as a work of the US Government in the public domain. The pages above do not
+say so, and JPL, which computes it, is managed for NASA by the California
+Institute of Technology, whose notice reserves that its documents may be
+protected; whether the vectors, or tables fitted to them, are protected at
+all is not settled by these sources. The package redistributes no Horizons
+response: the tables are numbers Zodiacs.org computed from the responses,
+and `NOTICE` credits the system and says that JPL has not reviewed them.
+Shipping the tables therefore rests on the owner's position, which this file
+asks the owner to confirm in writing before a release carrying them is
+published, as it asked for the DE440 pack (*DE440 pack*).
+
+No competitor's code or data, and no Swiss Ephemeris code, file, table or
+output, went into the tables, their fit or the code that reads them: the
+vectors and the checks are Horizons's responses alone, and the scripts, the
+reader (`src/minor-bodies/table.ts`) and the reduction
+(`src/minor-bodies/reduce.ts`, after `src/de440/reduce.ts`) are this
+package's own. The tables do not change the SPDX expression.
 
 ## ΔT data
 
@@ -291,7 +386,8 @@ ephemeris chunk, `dist/time.js` and the DE440 reader's chunk (which
 `dist/de440.js` re-exports) import, so the graphs of
 the root, `./core`, `./calc`, `./de440`, `./internal`, `./sky`,
 `./techniques`, `./time`, `./timing`, `./vedic` and `./window` load them, and
-so does that of `./de440/pack`, which opens its pack with `./de440`.
+so does that of `./de440/pack`, which opens its pack with `./de440`, and from
+3.0.0 that of `./minor-bodies`, through the frame of date.
 `@zodiacs/engine/de440` sums the same terms in the order the research
 runtime of zodiacs.org sums them. The model is D. D.
 McCarthy and B. J. Luzum, "An abridged model of the precession-nutation of
@@ -492,6 +588,13 @@ position, proper motion, parallax and radial velocity for
 the three stars, and position and proper motion for Sgr A*. `NOTICE` carries
 their attribution.
 
+The 22 values are in that one chunk and nowhere else in the package: the
+graphs of `./calc` and `./vedic` load it, and no other entry point's does.
+The root entry (`.`), `./core`, `./minor-bodies` and every entry point but
+`./calc` and `./vedic` carry none of the values from ESA's Hipparcos data or
+the CDS, and so none of the questions below reaches them
+(`scripts/verify-package-contents.mjs` checks which graphs load the chunk).
+
 The terms for the 20 values that the Strasbourg astronomical Data Center
 (CDS) supplies, through VizieR and SIMBAD, are the CDS's. Its General Terms and
 Conditions (https://cds.unistra.fr/legals/, updated 7 January 2026, read
@@ -550,9 +653,12 @@ largest distance of
 astronomy-engine's barycentre from a Newtonian barycentre of the same
 positions, scanned daily from 1800 to 2200 and compared with Horizons's
 barycentre at 88 instants (`docs/evidence/calc-api/`). No value of a JPL
-ephemeris, and no coefficient fitted to one, is in the package; the Horizons
-responses are in that evidence directory, and the DE440 kernel was read only
-in the sweep's workflow, neither of which is packed.
+ephemeris, and no coefficient fitted to one, is in the calc entry's graph:
+the package's two files of such values, the DE440 pack's (*DE440 pack*) and
+from 3.0.0 the minor-body tables' (*Minor-body tables*), are files it does
+not load; the Horizons responses are in that evidence directory, and the
+DE440 kernel was read only in the sweep's workflow, neither of which is
+packed.
 
 Since 0.1.1-rc.17 it also carries the star values of *Timing and Vedic
 values*, in the chunk it shares with `./vedic`. Its ayanamsa bounds

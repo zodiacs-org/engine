@@ -242,6 +242,13 @@ const shippedSource: () => Promise<De440Source> = openShippedDe440Pack;
 const toPack: () => De440Source = useDe440;
 void shippedPack; void shippedBytes; void shippedSource; void toPack;
 void opening.catch(() => {}); void asSource; void inside; void errorCode; void REDUCED_BODIES;
+import { MINOR_BODIES, MINOR_BODIES_SPAN, chiron, minorBodyPosition, minorBodyPositions, type MinorBodyName, type MinorBodyPosition, type MinorBodySpec } from "@zodiacs/engine/minor-bodies";
+const chironPlace: MinorBodyPosition = minorBodyPosition(chiron, "2000-01-01T12:00:00Z", { timeScale: "tt" });
+const namedPlaces: MinorBodyPosition[] = minorBodyPositions(new Date(0), ["Vesta", chiron]);
+const firstSpec: MinorBodySpec | undefined = MINOR_BODIES[0];
+const chironName: MinorBodyName = chiron.name;
+const spanEnd: number = MINOR_BODIES_SPAN.toJdTt + chironPlace.speed + chiron.table.maxFitResidualKm;
+void namedPlaces; void firstSpec; void chironName; void spanEnd;
 `
 );
 // An explicit project: "types": [] keeps @types packages in parent directories
@@ -763,7 +770,28 @@ assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-
   assert.deepEqual(chosen.flags, ["no-time"]);
   assert(chosen.bodies.every((row) => row.ephemeris === "astronomy-engine" && !("fallback" in row)));
 }
-console.log(JSON.stringify({version: ENGINE_VERSION, de440: "passed", de440Pack: "passed", birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", liteEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
+{
+  // The minor bodies (3.0.0): Chiron at JD 2378497.234567 TT, the first of the
+  // independent checks from JPL Horizons (src/fixtures/minor-bodies-horizons-oos.json):
+  // 231.3383009, 2.1202538 degrees, within 5 arcseconds on astronomy-engine's
+  // Earth and 1 on the pack's, which useDe440() makes the default; outside the
+  // tables' span, refused.
+  const minor = await import("@zodiacs/engine/minor-bodies");
+  const at = new Date(Math.round((2378497.234567 - 2440587.5) * 86400000));
+  const near = (place, limit) => Math.abs(place.lon - 231.3383009) * 3600 <= limit && Math.abs(place.lat - 2.1202538) * 3600 <= limit;
+  root.setDefaultEphemeris("astronomy-engine");
+  const plainChiron = minor.minorBodyPosition(minor.chiron, at, { timeScale: "tt" });
+  assert.equal(plainChiron.ephemeris.name, "astronomy-engine");
+  assert(near(plainChiron, 5), "Chiron on astronomy-engine is not within 5 arcseconds of Horizons");
+  (await import("@zodiacs/engine/de440/pack")).useDe440();
+  const packChiron = minor.minorBodyPosition(minor.chiron, at, { timeScale: "tt" });
+  assert.equal(packChiron.ephemeris.name, "jpl-de440");
+  assert(near(packChiron, 1), "Chiron on the pack is not within 1 arcsecond of Horizons");
+  root.setDefaultEphemeris("astronomy-engine");
+  assert.deepEqual(minor.minorBodyPositions("2000-01-01T00:00:00Z").map((place) => place.body), ["Chiron", "Ceres", "Pallas", "Juno", "Vesta"]);
+  assert.throws(() => minor.minorBodyPosition(minor.chiron, "1799-12-31T00:00:00Z"), RangeError);
+}
+console.log(JSON.stringify({version: ENGINE_VERSION, minorBodies: "passed", de440: "passed", de440Pack: "passed", birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", liteEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());
@@ -796,6 +824,7 @@ import * as techniques from "@zodiacs/engine/techniques";
 import { bodyLongitude, bodyLongitudeDetailed } from "@zodiacs/engine/internal";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from "@zodiacs/engine/receipt";
 import { useDe440 } from "@zodiacs/engine/de440/pack";
+import * as minor from "@zodiacs/engine/minor-bodies";
 const expectUnavailable = process.argv[2] !== "whole";
 // From 3.0.0 the shipped pack is the default after useDe440(), which throws where the pack cannot be opened and
 // leaves the default on it; "not-loaded" asks for the pack with setDefaultEphemeris("de440") alone.
@@ -832,6 +861,15 @@ assert.equal(root.saturnReturn(birth.utc).ephemeris, name);
 for (const derived of [root.chartPoints(birth), root.chartDeclinations(birth), root.chartPoints(natal), root.chartDeclinations(natal)]) {
   assert.deepEqual(derived.flags, flags);
   assert.equal(derived.ephemeris.name, name);
+}
+// From 3.0.0, True Black Moon Lilith, the one point read from an ephemeris, labels itself as a body does; and a
+// minor body's place names the Earth it was reduced with, flagged as the chart is.
+const lilith = root.chartPoints(birth).points.find((point) => point.point === "True Black Moon Lilith");
+assert.equal(lilith.ephemeris, name);
+assert.equal(lilith.fallback, flags[0]);
+for (const place of [minor.minorBodyPosition(minor.ceres, birth.utc), ...minor.minorBodyPositions(birth.utc)]) {
+  assert.deepEqual(place.flags, flags);
+  assert.equal(place.ephemeris.name, name);
 }
 assert.deepEqual(root.searchLongitudeCrossings("Sun", 30, "1990-01-01T00:00:00Z", "1991-01-01T00:00:00Z").flags, flags);
 for (const body of ["Sun", "Moon", "Pluto", "North Node"]) {

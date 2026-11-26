@@ -14,7 +14,7 @@ import { chartBodyDeclinations } from "./declination.js";
 import type { ChartDeclinations } from "./declination.js";
 import type { De440Source } from "./de440.js";
 import { deltaT } from "./deltat.js";
-import { defaultEphemerisName, registeredDe440Source, setDefaultEphemeris } from "./ephemeris-default.js";
+import { defaultEphemerisName, installSource, installedSource, registeredDe440Source, setDefaultEphemeris } from "./ephemeris-default.js";
 import type { DefaultEphemerisName } from "./ephemeris-default.js";
 import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
 import { computeAngles, computeHouses, eastPointOf, insidePolarCircle, vertexOf } from "./houses.js";
@@ -53,9 +53,6 @@ interface Clock {
 }
 
 const UTC_CLOCK: Clock = { scale: "utc", pin: undefined };
-
-/** The source `withEphemeris` installed, or null for the default source. */
-let source: PositionSource | null = null;
 
 // The default's name and the shipped pack's opener are src/ephemeris-default.ts's,
 // which @zodiacs/engine/de440/pack sets without loading this module.
@@ -142,6 +139,7 @@ const ON_ASTRONOMY_ENGINE: Chosen = { from: null, fallback: null };
  * astronomy-engine, with the reason when that is a fallback.
  */
 function chosenAt(ttDays: number): Chosen {
+  const source = installedSource();
   if (source) return { from: source, fallback: null };
   if (defaultEphemerisName() !== "de440") return ON_ASTRONOMY_ENGINE;
   const pack = shippedDefault();
@@ -302,13 +300,13 @@ export function withEphemeris<T>(positionSource: PositionSource, run: () => T): 
   const named = positionSource?.ephemeris;
   if (typeof positionSource?.place !== "function" || typeof positionSource.trueNode !== "function" || typeof named?.name !== "string" || typeof named.version !== "string" || typeof run !== "function")
     throw new TypeError("withEphemeris needs a position source and a function");
-  const previous = source;
-  source = positionSource;
+  const previous = installedSource();
+  installSource(positionSource);
   let result: T;
   try {
     result = run();
   } finally {
-    source = previous;
+    installSource(previous);
   }
   // A promise or an iterator would compute its later steps after the source is restored.
   const later = result as { then?: unknown; next?: unknown } | null;
@@ -327,7 +325,7 @@ export function withEphemeris<T>(positionSource: PositionSource, run: () => T): 
  * window entry): refuse inside withEphemeris rather than mix two ephemerides.
  */
 export function refuseUnderSource(what: string): void {
-  if (source) throw new TypeError(`${what} does not run inside withEphemeris: it computes on the engine's own sources, not a caller's`);
+  if (installedSource()) throw new TypeError(`${what} does not run inside withEphemeris: it computes on the engine's own sources, not a caller's`);
 }
 
 /** A source's longitude in [0, 360): 360 becomes 0 and -0 becomes 0, every other value unchanged. */

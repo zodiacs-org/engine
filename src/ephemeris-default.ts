@@ -7,12 +7,15 @@
  * This module holds the setting on its own, apart from `src/ephemeris.ts`,
  * so that `@zodiacs/engine/de440/pack` can set it without loading
  * astronomy-engine or the root's code. `src/ephemeris.ts` reads it at each
- * calculation. The build splits the code so that every entry point that
+ * calculation. From 3.0.0 it also holds the source `withEphemeris` installs,
+ * so that `@zodiacs/engine/minor-bodies` follows the same rule as the root
+ * without loading the root's ephemeris. The build splits the code so that every entry point that
  * imports this module (the root, `./core`, `./calc`, `./window` and the others
  * that share the root's ephemeris, and `./de440/pack`) loads one copy of it
  * from one shared chunk, so they all read the same setting.
  */
 import type { De440Source } from "./de440.js";
+import type { PositionSource } from "./types.js";
 
 /** What a call outside `withEphemeris` computes on. */
 export type DefaultEphemerisName = "de440" | "astronomy-engine";
@@ -58,4 +61,27 @@ export function registerDe440Source(loader: () => De440Source): void {
 /** The registered opener of the shipped pack, or null. */
 export function registeredDe440Source(): (() => De440Source) | null {
   return registeredDe440Loader;
+}
+
+/** The source `withEphemeris` installed, or null outside it. */
+let installed: PositionSource | null = null;
+
+/**
+ * The source `withEphemeris` (src/ephemeris.ts) runs its function with, or
+ * null outside it.
+ *
+ * @internal
+ */
+export function installedSource(): PositionSource | null {
+  return installed;
+}
+
+/**
+ * Install `source` for `withEphemeris`, or null to leave it; src/ephemeris.ts
+ * alone calls it.
+ *
+ * @internal
+ */
+export function installSource(source: PositionSource | null): void {
+  installed = source;
 }

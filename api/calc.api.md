@@ -447,7 +447,7 @@ declare const EPHEMERIS_SPAN: Readonly<{
     readonly toTT: "3998-09-03T12:00:00";
 }>;
 
-// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback)
+// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback), @zodiacs/engine/minor-bodies (EphemerisFallback)
 type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
 
 // exported by @zodiacs/engine (Houses), @zodiacs/engine/core (Houses)
@@ -484,7 +484,7 @@ interface SearchWindow {
     readonly maxSamples?: number;
 }
 
-// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
+// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/minor-bodies (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
 type TimeScaleName = "utc" | "ut1" | "tt";
 
 // not exported by any entry point
@@ -509,6 +509,6 @@ interface Ut1MinusUtc {
     source: "observed" | "predicted" | "fallback" | "model";
 }
 
-// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
+// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign), @zodiacs/engine/minor-bodies (ZodiacSign)
 type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
 ```

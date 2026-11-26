@@ -28,6 +28,7 @@ const internalMath = await import("@zodiacs/engine/internal/math");
 const lite = await import("@zodiacs/engine/lite");
 const de440 = await import("@zodiacs/engine/de440");
 const de440Pack = await import("@zodiacs/engine/de440/pack");
+const minorBodies = await import("@zodiacs/engine/minor-bodies");
 
 // The checks below pin values and receipts written on astronomy-engine, and
 // compare the root with the entries that compute on it (calc, window, sky).
@@ -703,6 +704,38 @@ for (const [entry, own] of [
   }
 }
 
+// The minor-bodies entry (from 3.0.0): its graph, read both ways, holds its
+// own modules, the five tables among them, and of the opt-in modules only its
+// own: no DE440 file, no root ephemeris; it imports astronomy-engine and
+// nothing lazy. A position follows the root's default source: astronomy-engine,
+// then the shipped pack after useDe440().
+{
+  checkSelfContained("minor-bodies", ["astronomy-engine"]);
+  for (const name of [
+    "MINOR_BODIES", "MINOR_BODIES_PROVENANCE", "MINOR_BODIES_SPAN", "MINOR_BODY_NAMES", "MINOR_BODY_SPEED_STEP_DAYS",
+    "ceres", "chiron", "juno", "minorBodyPosition", "minorBodyPositions", "pallas", "vesta"
+  ]) {
+    assert.ok(name in minorBodies, `@zodiacs/engine/minor-bodies exports ${name}`);
+  }
+  const graph = staticGraph({ metafile, read: readBuilt, entryOutput: "dist/minor-bodies.js", entrySource: "src/minor-bodies.ts" });
+  for (const reading of [graph.sources, graph.held, graph.marked]) {
+    assert(reading.includes("src/minor-bodies/pack-data.ts") && reading.includes("src/minor-bodies/reduce.ts"), "the minor-bodies entry's own modules are not listed or marked");
+    for (const source of reading) {
+      assert(!OPT_IN_SOURCE.test(source) || /^src\/minor-bodies(?:\/|\.ts$)/u.test(source), `the minor-bodies entry reaches ${source}, another opt-in entry's module`);
+      assert(source !== "src/ephemeris.ts", "the minor-bodies entry reaches the root's ephemeris");
+    }
+  }
+  engine.setDefaultEphemeris("astronomy-engine");
+  const plain = minorBodies.minorBodyPosition(minorBodies.chiron, "2000-01-01T12:00:00Z");
+  assert.deepEqual([plain.ephemeris.name, plain.flags], ["astronomy-engine", []], "a minor body's Earth is astronomy-engine's by default");
+  de440Pack.useDe440();
+  const packed = minorBodies.minorBodyPosition(minorBodies.chiron, "2000-01-01T12:00:00Z");
+  assert.deepEqual([packed.ephemeris.name, packed.flags], [de440.DE440_EPHEMERIS_NAME, []], "after useDe440() a minor body's Earth is the pack's");
+  assert(Math.abs(packed.lon - plain.lon) * 3600 < 5, "the two Earths give Chiron's place to within 5 arcseconds");
+  engine.setDefaultEphemeris("astronomy-engine");
+  assert.throws(() => minorBodies.minorBodyPosition(minorBodies.chiron, "2200-01-02T00:00:00Z"), RangeError, "a minor body outside its tables is refused");
+}
+
 // The geo entry reaches the zone histories only through dynamic imports, one
 // per shard file. Since ./techniques shares the local-time code, that code,
 // and so the imports, can sit in a chunk of the geo entry's static graph.
@@ -744,6 +777,6 @@ console.log(
     `the root's graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
     `${root.outputs.length} files) reaches no module of an opt-in entry and no zone history, ` +
     "the root's default source is astronomy-engine until useDe440() loads the shipped pack, which no graph but ./de440/pack's holds, " +
-    "the core entry is the root under its 2.x name, " +
+    "the core entry is the root under its 2.x name, the minor-bodies entry holds its tables and no DE440 file and follows the default source, " +
     "the geo entry loads its 16 shards lazily, require() of every entry point loads the module import() loads, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic"
 );

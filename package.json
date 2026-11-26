@@ -1,7 +1,7 @@
 {
   "name": "@zodiacs/engine",
   "version": "2.1.0",
-  "description": "Browser-first astrology calculations used by Zodiacs.org: tropical charts; one calculation API with bounds and receipts in ./calc; birth-time windows in ./window; returns, relationship charts, the void-of-course Moon, patterns and dignities in ./techniques; house positions and cusp speeds in ./houses; rise, set, transit and planetary hours in ./sky; Hellenistic timing techniques and planetary returns in ./timing; the time basis and the frame of date, without the ephemeris, in ./time; declination parallels, sect, composite midpoints and dignities, without the ephemeris, in ./lite; positions from astronomy-engine by default, from JPL's DE440 after one call to useDe440() from ./de440/pack, which ships the pack, or from a caller's pack in ./de440; ./core, the root under its 2.x name; and the sidereal zodiac and Jyotish techniques in ./vedic.",
+  "description": "Browser-first astrology calculations used by Zodiacs.org: tropical charts; one calculation API with bounds and receipts in ./calc; birth-time windows in ./window; returns, relationship charts, the void-of-course Moon, patterns and dignities in ./techniques; house positions and cusp speeds in ./houses; rise, set, transit and planetary hours in ./sky; Hellenistic timing techniques and planetary returns in ./timing; the time basis and the frame of date, without the ephemeris, in ./time; declination parallels, sect, composite midpoints and dignities, without the ephemeris, in ./lite; positions from astronomy-engine by default, from JPL's DE440 after one call to useDe440() from ./de440/pack, which ships the pack, or from a caller's pack in ./de440; Chiron, Ceres, Pallas, Juno and Vesta from tables fitted to NASA JPL Horizons in ./minor-bodies; ./core, the root under its 2.x name; and the sidereal zodiac and Jyotish techniques in ./vedic.",
   "license": "MIT AND CC-BY-4.0",
   "keywords": [
     "astrology",
@@ -93,6 +93,10 @@
       "types": "./dist/de440-pack.d.ts",
       "default": "./dist/de440-pack.js"
     },
+    "./minor-bodies": {
+      "types": "./dist/minor-bodies.d.ts",
+      "default": "./dist/minor-bodies.js"
+    },
     "./timing": {
       "types": "./dist/timing.d.ts",
       "default": "./dist/timing.js"
@@ -122,7 +126,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/techniques.ts src/timing.ts src/vedic.ts src/internal.ts src/internal-math.ts src/calc.ts src/window.ts src/houses-extra.ts src/sky.ts src/conventions.ts src/time.ts src/de440.ts src/de440-pack.ts src/core.ts --format esm --dts --clean --splitting --metafile --tsconfig tsconfig.build.json && node scripts/build-chunk-imports.mjs && node scripts/build-lite.mjs",
+    "build": "tsup src/index.ts src/crossings.ts src/deltat.ts src/geo.ts src/receipt.ts src/techniques.ts src/timing.ts src/vedic.ts src/internal.ts src/internal-math.ts src/calc.ts src/window.ts src/houses-extra.ts src/sky.ts src/conventions.ts src/time.ts src/de440.ts src/de440-pack.ts src/core.ts src/minor-bodies.ts --format esm --dts --clean --splitting --metafile --tsconfig tsconfig.build.json && node scripts/build-chunk-imports.mjs && node scripts/build-lite.mjs",
     "docs": "typedoc --options typedoc.json",
     "exports:smoke": "node scripts/module-resolution-smoke.mjs && node scripts/verify-dist-purity.mjs",
     "consumer:smoke": "node scripts/verify-packed-consumer.mjs",

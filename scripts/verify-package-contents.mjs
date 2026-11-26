@@ -59,6 +59,8 @@ const required = [
   "dist/lite-declinations.js",
   "dist/lite-dignities.js",
   "dist/lite-sect.js",
+  "dist/minor-bodies.d.ts",
+  "dist/minor-bodies.js",
   "dist/window.d.ts",
   "dist/window.js",
   "package.json"
@@ -359,6 +361,34 @@ for (const file of files) {
 // of natalChart and chartPoints grows from 37,627 bytes gzipped to 38,000.
 // Each new budget is the measurement rounded up to the next hundred bytes,
 // for the owner to decide with the candidate.
+//
+// 3.0.0 adds ./minor-bodies: Chiron, Ceres, Pallas, Juno and Vesta from
+// tables fitted to NASA JPL Horizons (src/minor-bodies.ts and
+// src/minor-bodies/), 60,190 bytes beside the tables, which, like the DE440
+// pack, are data held to their exact sizes and digests (MINOR_BODY_TABLES
+// below) and not counted. Its graph shares the root's time basis, frame of
+// date, signs and default setting, so the build gives those modules chunks
+// of their own and the graphs that load them grow by the imports and exports
+// that join the chunks; the setting also holds withEphemeris's source from
+// 3.0.0, so that the entry follows it without the root's ephemeris; and the
+// DE440 source gives the Earth's and the Sun's states. Measured on this
+// build, the budget above, the measurement before, this build's, new budget:
+//   .             121,600   121,550   122,049   122,100
+//   ./calc        169,700   169,675   170,098   170,100
+//   ./core        121,600   121,550   122,049   122,100
+//   ./de440        54,900    54,847    55,714    55,800
+//   ./de440/pack   56,800    56,779    57,812    57,900
+//   ./internal     79,300    79,251    79,598    79,600
+//   ./receipt      81,200    81,105    81,203    81,300
+//   ./sky         106,700   106,651   106,998   107,000
+//   ./techniques  174,500   174,476   174,899   174,900
+//   ./timing      140,400   140,359   140,782   140,800
+//   ./vedic       156,200   156,153   156,614   156,700
+//   ./window      119,800   119,751   120,174   120,200
+//   ./minor-bodies  (new)        -    60,190    60,200
+// Each new budget is the measurement rounded up to the next hundred bytes,
+// for the owner to decide with the candidate. ./internal/math (19,326) and
+// ./time (44,444) grow inside theirs.
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -377,8 +407,9 @@ const ENTRY_BUDGETS = {
   // the code that computes its own positions; raised to 109,000 under the
   // owner's delegation of 2026-11-04; 0.43 per cent of headroom.
   // 3.0.0: 119,568, without the DE440 reader and the pack; lowered to 119,600.
-  // With True Black Moon Lilith, 121,550; raised to 121,600 (above).
-  ".": 121_600,
+  // With True Black Moon Lilith, 121,550; raised to 121,600 (above). With
+  // ./minor-bodies' chunks, 122,049; raised to 122,100 (above).
+  ".": 122_100,
   // New in rc.16 (feature-api): the uniform calculation API, its frames,
   // centers, corrections, bounds and receipts. 106,779 bytes as integrated on
   // rc.15's time basis, 34,449 of them beyond the core's graph; 7.69 per cent
@@ -398,8 +429,9 @@ const ENTRY_BUDGETS = {
   // for ./time (above); raised to 156,000, the ceiling approved under the
   // owner's delegation of 2026-11-03 (OQ3); 3.02 per cent of headroom.
   // 3.0.0: 166,682, without the DE440 reader; lowered to 166,700. With True
-  // Black Moon Lilith, 169,675; raised to 169,700 (above).
-  "./calc": 169_700,
+  // Black Moon Lilith, 169,675; raised to 169,700 (above). With
+  // ./minor-bodies' chunks, 170,098; raised to 170,100 (above).
+  "./calc": 170_100,
   // New in 1.1.0-rc.1: the ids of the conventions registry. 2,754 bytes, its
   // own file and the chunk of ids it shares with ./receipt; 5.30 per cent of
   // headroom.
@@ -410,8 +442,9 @@ const ENTRY_BUDGETS = {
   // docs/evidence/bundle-weight-20261117/; 1.10 per cent of headroom.
   // 3.0.0: the root's own graph, which src/core.ts re-exports: 119,568, the
   // same as the root's; raised to 119,600 (above), for the owner to decide.
-  // With True Black Moon Lilith, 121,550; raised to 121,600 (above).
-  "./core": 121_600,
+  // With True Black Moon Lilith, 121,550; raised to 121,600 (above). With
+  // ./minor-bodies' chunks, 122,049; raised to 122,100 (above).
+  "./core": 122_100,
   // rc.15: 9,410. 1.0.0-rc.1: 9,942, its options read as the shared reader
   // reads them; 0.58 per cent, not raised.
   "./crossings": 10_000,
@@ -441,8 +474,9 @@ const ENTRY_BUDGETS = {
   // it imports, the one with the engine's IAU 2000B terms among them. 45,793
   // bytes in 4 files; 48,000 approved by the owner on 2026-11-10; 4.81 per
   // cent of headroom.
-  // 3.0.0: 54,847, with the Moon state; raised to 54,900 (above).
-  "./de440": 54_900,
+  // 3.0.0: 54,847, with the Moon state; raised to 54,900 (above). With the
+  // Earth's and the Sun's states, 55,714; raised to 55,800 (above).
+  "./de440": 55_800,
   // New in 1.1.0-rc.9 (first in the withdrawn draft 1.1.0-rc.8): the entry that
   // gives out the sealed DE440 pack the package ships (docs/de440.md). The
   // lines below are that draft's, when only this entry held the pack; the
@@ -459,16 +493,18 @@ const ENTRY_BUDGETS = {
   // With a second entry loading it, the build moves ./de440's code from
   // dist/de440.js into a chunk the two share, and ./de440's graph grows by
   // the 276 bytes that join them, to 46,069; its budget is not raised.
-  // With the Moon state, 56,779; raised to 56,800 (above).
-  "./de440/pack": 56_800,
+  // With the Moon state, 56,779; raised to 56,800 (above). With the Earth's
+  // and the Sun's states, 57,812; raised to 57,900 (above).
+  "./de440/pack": 57_900,
   // rc.15: 56,961; as carried, 58,997. rc.16: 64,830, raised from 60,000 for
   // the nutation in the ephemeris chunk; 4.88 per cent of headroom.
   // 1.1.0-rc.3: 68,758, with withEphemeris, the source's path and the
   // refusal in the ephemeris chunk; raised to 69,000 with the owner's
   // approval of 2026-11-10; 0.35 per cent of headroom.
   // 3.0.0: 77,269, without the DE440 reader; lowered to 77,300. With True
-  // Black Moon Lilith, 79,251; raised to 79,300 (above).
-  "./internal": 79_300,
+  // Black Moon Lilith, 79,251; raised to 79,300 (above). With
+  // ./minor-bodies' chunks, 79,598; raised to 79,600 (above).
+  "./internal": 79_600,
   "./internal/math": 20_000, // rc.15: 18,165
   // New in 1.1.0-rc.2: declination parallels, the sect under a named
   // convention, composite midpoints and their aspects, and the dignities,
@@ -487,7 +523,8 @@ const ENTRY_BUDGETS = {
   // and polar-angles flags (pull requests 110 and 105); raised from 76,500
   // to 77,400, the measurement and about one per cent, for the owner to
   // decide with the candidate.
-  "./receipt": 81_200,
+  // 3.0.0: 81,203, with ./minor-bodies' chunks; raised to 81,300 (above).
+  "./receipt": 81_300,
   // Returns, composite and Davison charts, the void-of-course Moon, aspect
   // patterns, dignities and Moon-sign candidates, moved from Zodiacs.org:
   // 141,745 as first built, with the core's graph and the local-time chunk
@@ -500,8 +537,9 @@ const ENTRY_BUDGETS = {
   // from 203,800 to 207,300, the measurement and about one per cent, for the
   // owner to decide with the candidate.
   // 3.0.0: 172,494, without the DE440 reader; lowered to 172,500. With True
-  // Black Moon Lilith, 174,476; raised to 174,500 (above).
-  "./techniques": 174_500,
+  // Black Moon Lilith, 174,476; raised to 174,500 (above). With
+  // ./minor-bodies' chunks, 174,899; raised to 174,900 (above).
+  "./techniques": 174_900,
   // New in 1.1.0-rc.2: the time basis and the frame of date with no
   // ephemeris (Zodiacs.org's finding F-53), and the time bands it re-exports.
   // 1.1.0-rc.2: 42,306 bytes in 7 files, dist/time.js and the six chunks it
@@ -520,14 +558,16 @@ const ENTRY_BUDGETS = {
   // takes from it (src/equator.ts, shared with ./calc) in place of
   // astronomy-engine's; 5.31 per cent of headroom.
   // 3.0.0: 104,669, without the DE440 reader; lowered to 104,700. With True
-  // Black Moon Lilith, 106,651; raised to 106,700 (above).
-  "./sky": 106_700,
+  // Black Moon Lilith, 106,651; raised to 106,700 (above). With
+  // ./minor-bodies' chunks, 106,998; raised to 107,000 (above).
+  "./sky": 107_000,
   // rc.15: 112,485, the core's graph included; as carried, 114,916. With
   // planetary returns 117,219. rc.16: 123,039, raised from 120,000 for the
   // nutation in the ephemeris chunk; 4.84 per cent of headroom.
   // 3.0.0: 138,349, without the DE440 reader; lowered to 138,400. With True
-  // Black Moon Lilith, 140,359; raised to 140,400 (above).
-  "./timing": 140_400,
+  // Black Moon Lilith, 140,359; raised to 140,400 (above). With
+  // ./minor-bodies' chunks, 140,782; raised to 140,800 (above).
+  "./timing": 140_800,
   // rc.15: 114,106, the core's graph included; as carried, 116,779. rc.16:
   // 122,131, raised from 120,000 for the nutation in the ephemeris chunk
   // (the ayanamsas now use its frame); 4.80 per cent of headroom. rc.17:
@@ -543,8 +583,9 @@ const ENTRY_BUDGETS = {
   // raised to 144,500 under the owner's delegation of 2026-11-04; 0.59 per
   // cent of headroom.
   // 3.0.0: 154,171, without the DE440 reader; lowered to 154,200. With True
-  // Black Moon Lilith, 156,153; raised to 156,200 (above).
-  "./vedic": 156_200,
+  // Black Moon Lilith, 156,153; raised to 156,200 (above). With
+  // ./minor-bodies' chunks, 156,614; raised to 156,700 (above).
+  "./vedic": 156_700,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
   // 33,971 of them beyond the core's graph; 8.17 per cent of headroom. With
@@ -554,8 +595,12 @@ const ENTRY_BUDGETS = {
   // birthWindow's refusal inside it; raised to 107,000 with the owner's
   // approval of 2026-11-10; 0.20 per cent of headroom.
   // 3.0.0: 117,769, without the DE440 reader; lowered to 117,800. With True
-  // Black Moon Lilith, 119,751; raised to 119,800 (above).
-  "./window": 119_800
+  // Black Moon Lilith, 119,751; raised to 119,800 (above). With
+  // ./minor-bodies' chunks, 120,174; raised to 120,200 (above).
+  "./window": 120_200,
+  // New in 3.0.0: Chiron, Ceres, Pallas, Juno and Vesta (above): 60,190
+  // bytes beside the five tables (MINOR_BODY_TABLES below); 60,200.
+  "./minor-bodies": 60_200
 };
 
 /** The dist/ files an entry loads statically, with their bytes. */
@@ -589,13 +634,34 @@ function importGraph(entry) {
 const PACK_DATA_BYTES = 3_319_552;
 const PACK_DATA = /"([A-Za-z0-9+/]{1000,}={0,2})"/gu;
 const packedText = (name) => readFileSync(new URL(`../${name}`, import.meta.url), "utf8");
-const packHolders = files.filter((file) => file.endsWith(".js") && packedText(file).search(PACK_DATA) !== -1);
-assert(packHolders.length === 1 && packHolders[0] === "dist/de440-pack.js",
-  `the DE440 pack's base64 text must be in dist/de440-pack.js and in no other file; found it in ${packHolders.join(", ") || "no file"}`);
-const PACK_HOLDER = packHolders[0];
+// From 3.0.0 the minor bodies' tables (src/minor-bodies/pack-data.ts) are
+// base64 text too, one string for each body, Chiron to Vesta, in
+// dist/minor-bodies.js and no other file; like the pack they are data, each
+// held to its exact size and the SHA-256 of its bytes, and not counted in a
+// graph or the cap.
+const MINOR_BODY_HOLDER = "dist/minor-bodies.js";
+const MINOR_BODY_TABLES = [
+  ["Chiron", 17_600, "1e9f43785f36c5b67237472ecc90525918897944418b00ad47c0256d9fe4df22"],
+  ["Ceres", 28_800, "425e6aaea37d70243b96e9788c499016fb416c0bdb05145b0129c927e2e710db"],
+  ["Pallas", 44_400, "8c31b201e096f37ee6ebed8ab04e0cb4d1cb6700922fc24836b47b7d640b0ffb"],
+  ["Juno", 45_600, "927983a58392902b9a553703cfd60e311b152a9cb82abf768c5b1c0a96dce338"],
+  ["Vesta", 33_600, "865516c3b22e73064e8c2048d64253943cd09c4d8096216e2cdd5c061a9acd2e"]
+];
+const MINOR_BODY_DATA_BYTES = MINOR_BODY_TABLES.reduce((sum, [, size]) => sum + size, 0);
+const dataHolders = files.filter((file) => file.endsWith(".js") && packedText(file).search(PACK_DATA) !== -1).sort();
+assert.deepEqual(dataHolders, ["dist/de440-pack.js", MINOR_BODY_HOLDER],
+  `base64 data must be in dist/de440-pack.js (the DE440 pack) and ${MINOR_BODY_HOLDER} (the minor-body tables) and in no other file; found it in ${dataHolders.join(", ") || "no file"}`);
+const PACK_HOLDER = "dist/de440-pack.js";
 const packText = [...packedText(PACK_HOLDER).matchAll(PACK_DATA)];
 assert(packText.length === 1 && packText[0][1].length === PACK_DATA_BYTES,
   `${PACK_HOLDER} must hold the pack once, as ${PACK_DATA_BYTES} characters of base64`);
+const tableText = [...packedText(MINOR_BODY_HOLDER).matchAll(PACK_DATA)].map((match) => match[1]);
+assert.deepEqual(tableText.map((text) => text.length), MINOR_BODY_TABLES.map(([, size]) => size),
+  `${MINOR_BODY_HOLDER} must hold the five minor-body tables once each, Chiron to Vesta, as ${MINOR_BODY_TABLES.map(([, size]) => size).join(", ")} characters of base64`);
+MINOR_BODY_TABLES.forEach(([name, , digest], index) => {
+  assert.equal(createHash("sha256").update(Buffer.from(tableText[index], "base64")).digest("hex"), digest,
+    `the ${name} table in ${MINOR_BODY_HOLDER} must be the one src/minor-bodies/pack-data.ts describes`);
+});
 const packBytes = Buffer.from(packText[0][1], "base64");
 assert.equal(packBytes.length, 2_489_664, "the shipped DE440 pack must be 2,489,664 bytes");
 assert.equal(createHash("sha256").update(packBytes).digest("hex"), "51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7",
@@ -607,11 +673,12 @@ assert.deepEqual(Object.keys(exported).sort(), Object.keys(ENTRY_BUDGETS).sort()
 const graphs = Object.fromEntries(Object.entries(exported).map(([name, target]) => {
   const sizes = importGraph(target.default.replace(/^\.\//u, ""));
   const all = [...sizes.values()].reduce((sum, size) => sum + size, 0);
-  return [name, { files: sizes.size, bytes: all - (sizes.has(PACK_HOLDER) ? PACK_DATA_BYTES : 0), pack: sizes.has(PACK_HOLDER), sizes }];
+  const data = (sizes.has(PACK_HOLDER) ? PACK_DATA_BYTES : 0) + (sizes.has(MINOR_BODY_HOLDER) ? MINOR_BODY_DATA_BYTES : 0);
+  return [name, { files: sizes.size, bytes: all - data, pack: sizes.has(PACK_HOLDER), tables: sizes.has(MINOR_BODY_HOLDER), sizes }];
 }));
 for (const [name, graph] of Object.entries(graphs)) {
   assert(graph.bytes <= ENTRY_BUDGETS[name],
-    `the ${name} entry's import graph is ${graph.bytes} bytes${graph.pack ? " beside the DE440 pack" : ""}, over its budget of ${ENTRY_BUDGETS[name]}`);
+    `the ${name} entry's import graph is ${graph.bytes} bytes${graph.pack ? " beside the DE440 pack" : ""}${graph.tables ? " beside the minor-body tables" : ""}, over its budget of ${ENTRY_BUDGETS[name]}`);
 }
 // The entries whose graphs load the pack: from 3.0.0 the entry that gives
 // the pack out, and no other (until 2.1.0 the root and every entry that
@@ -621,6 +688,9 @@ for (const [name, graph] of Object.entries(graphs)) {
 // opens a pack the caller supplies.
 assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].pack).sort(), ["./de440/pack"],
   "no entry point but ./de440/pack may load the DE440 pack");
+// And the minor-body tables: ./minor-bodies alone, from 3.0.0.
+assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].tables).sort(), ["./minor-bodies"],
+  "no entry point but ./minor-bodies may load the minor-body tables");
 
 // The zone histories before 1970: tzdb data, not code, loaded only by
 // @zodiacs/engine/geo and only on request (prepareLocalTime), one of 16 files
@@ -819,8 +889,11 @@ assert(shardBytes < SHARD_BUDGET, `zone-history shards are unexpectedly large: $
 // 1,459,000 to 1,463,000, the measurement rounded up to the next 1,000 bytes,
 // approved under the owner's delegation of 2026-11-21 15:06 Asia/Bangkok.
 const TOTAL_CAP = 1_463_000;
-const restBytes = report.unpackedSize - PACK_DATA_BYTES;
-assert(restBytes <= TOTAL_CAP, `package is unexpectedly large: ${restBytes} bytes unpacked beside the DE440 pack, over ${TOTAL_CAP}`);
+//
+// 3.0.0 adds the minor-body tables, data held to their exact sizes like the
+// pack (MINOR_BODY_TABLES above), which the cap leaves out with it.
+const restBytes = report.unpackedSize - PACK_DATA_BYTES - MINOR_BODY_DATA_BYTES;
+assert(restBytes <= TOTAL_CAP, `package is unexpectedly large: ${restBytes} bytes unpacked beside the DE440 pack and the minor-body tables, over ${TOTAL_CAP}`);
 
 // The licence expression covers the code (MIT) and the ΔT values (CC BY 4.0),
 // and the packed licensing files say the same.
@@ -871,6 +944,9 @@ for (const entry of ["dist/vedic.js", "dist/calc.js"]) {
   assert(read(entry).includes(`./${starHolders[0].slice("dist/".length)}`), `${entry} must import the chunk that holds the star values`);
 }
 assert(notice.includes("in a shared chunk under dist/ that dist/vedic.js and dist/calc.js import"), "NOTICE must say where the star values are");
+// LICENSING.md says, from 3.0.0, that no entry point but ./calc and ./vedic loads them.
+assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].sizes.has(starHolders[0])).sort(), ["./calc", "./vedic"],
+  "no entry point but ./calc and ./vedic may load the star values, as LICENSING.md says");
 assert(prose("LICENSING.md").includes("shared chunk under `dist/` that `dist/vedic.js` and `dist/calc.js` import"),
   "LICENSING.md must say where the star values are");
 // The Gregorian adoption table, the same way: NOTICE and LICENSING.md say it
@@ -912,7 +988,7 @@ assert(read("dist/time.js").includes(nutationChunk), "dist/time.js must import t
 assert(files.some((file) => /^dist\/chunk-[^/]+\.js$/u.test(file) && /\bfunction gastHours\(/u.test(read(file)) && read(file).includes(nutationChunk)),
   "the ephemeris chunk must import the chunk that holds the nutation");
 assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].sizes.has(nutationHolders[0])).sort(),
-  [".", "./calc", "./core", "./de440", "./de440/pack", "./internal", "./sky", "./techniques", "./time", "./timing", "./vedic", "./window"],
+  [".", "./calc", "./core", "./de440", "./de440/pack", "./internal", "./minor-bodies", "./sky", "./techniques", "./time", "./timing", "./vedic", "./window"],
   "the entry points whose graphs load the nutation must be the ones LICENSING.md names");
 // dist/de440.js re-exports the DE440 reader from a chunk of its own, which
 // imports the nutation's (until 2.1.0 dist/de440.js imported that chunk
@@ -946,6 +1022,15 @@ assert(prose("LICENSING.md").includes("`@zodiacs/engine/lite` (`dist/lite-dignit
   "LICENSING.md must say where the dignity tables are");
 assert(prose("LICENSING.md").includes("also into `dist/lite-composite.js` and `dist/lite-dignities.js`, which `@zodiacs/engine/lite` re-exports"),
   "LICENSING.md must say where the composite and dignity code adapted from the site is built");
+// The minor-body tables (3.0.0): LICENSING.md records the digest of each
+// Horizons response they were fitted to, as src/minor-bodies/provenance.json
+// does, and NOTICE acknowledges the Horizons system.
+const horizons = JSON.parse(read("src/minor-bodies/provenance.json"));
+for (const [name, body] of Object.entries(horizons.bodies)) {
+  assert(prose("LICENSING.md").includes(body.sha256), `LICENSING.md must record the SHA-256 of ${name}'s Horizons response`);
+}
+assert(notice.includes("Horizons On-Line Ephemeris System") && notice.includes("dist/minor-bodies.js"),
+  "NOTICE must acknowledge NASA JPL's Horizons On-Line Ephemeris System for the minor-body tables");
 assert(read("README.md").includes(LICENSE_EXPRESSION), "README.md must state the licence expression");
 // The shipped text refers to the separate earlier package without naming it.
 for (const file of files) {
@@ -964,7 +1049,7 @@ const budgets = Object.entries(graphs)
   .map(([name, graph]) => `${name} ${graph.bytes} of ${ENTRY_BUDGETS[name]}` + (name === "." ? "" : ` (${beyondRoot(graph)} beyond the root's)`))
   .join(", ");
 console.log(
-  `@zodiacs/engine package contents passed (${files.length} files, ${report.unpackedSize} bytes unpacked: the DE440 pack ${PACK_DATA_BYTES}, the rest ${restBytes} of ${TOTAL_CAP}; ` +
+  `@zodiacs/engine package contents passed (${files.length} files, ${report.unpackedSize} bytes unpacked: the DE440 pack ${PACK_DATA_BYTES}, the minor-body tables ${MINOR_BODY_DATA_BYTES}, the rest ${restBytes} of ${TOTAL_CAP}; ` +
     `import graphs: ${budgets}; zone histories ${shardBytes} of ${SHARD_BUDGET} in ${shards.length} files; ` +
     `license ${manifest.license}; node ${manifest.engines.node})`
 );

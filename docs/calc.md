@@ -941,8 +941,9 @@ map to `CalcBody` as `SE_SUN` to `SE_PLUTO` by name, `SE_EARTH` to `"Earth"`,
 `SE_OSCU_APOG`, corresponds to `"True Black Moon Lilith"`, which was compared
 with JPL Horizons and not with Swiss Ephemeris (on astronomy-engine's lunar
 series it is under 6.7′ from the apogee of Horizons's Moon at 12 instants,
-on the DE440 pack under 1.6″). Chiron, Ceres, Pallas, Juno
-and Vesta are planned for the hosted API. The flags Swiss Ephemeris returns,
+on the DE440 pack under 1.6″). From 3.0.0 Chiron, Ceres, Pallas, Juno and
+Vesta are in `@zodiacs/engine/minor-bodies`, from tables fitted to JPL
+Horizons, not in `calc()`. The flags Swiss Ephemeris returns,
 which say what it actually computed, correspond to the receipt's conventions,
 and its error returns to the typed refusals.
 

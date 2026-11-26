@@ -59,6 +59,17 @@ export interface De440Source extends PositionSource {
    * from.
    */
   moonState(ttDays: number): { position: [number, number, number]; velocity: [number, number, number] };
+  /**
+   * From 3.0.0: the Earth's and the Sun's geometric states at `ttDays` (TT
+   * days past J2000.0, read at TDB), from the solar-system barycentre, in the
+   * ICRF, positions in km and velocities in km/s: the observer and the Sun
+   * `@zodiacs/engine/minor-bodies` reduces a minor body's place with on the
+   * pack.
+   */
+  earthAndSunState(ttDays: number): {
+    earth: { position: [number, number, number]; velocity: [number, number, number] };
+    sun: { position: [number, number, number]; velocity: [number, number, number] };
+  };
   readonly pack: {
     readonly sha256: string;
     readonly bytes: number;
@@ -141,6 +152,9 @@ function sourceOf(copy: Uint8Array, digest: string, header: ReturnType<typeof pa
     },
     moonState(ttDays: number): { position: [number, number, number]; velocity: [number, number, number] } {
       return reducer.moonState(ttDays);
+    },
+    earthAndSunState(ttDays: number) {
+      return reducer.earthAndSunState(ttDays);
     }
   });
 }
