@@ -356,6 +356,11 @@ describe("minor-body positions", () => {
     expect(minorBodyPositions(date, ["Vesta", ceres]).map((place) => place.body)).toEqual(["Vesta", "Ceres"]);
     expect(minorBodyPositions(date, ["Vesta"])[0]!.lon).toBe(minorBodyPosition(vesta, date).lon);
     expect(() => minorBodyPositions(date, ["Eris" as never])).toThrow(RangeError);
+    // A hole in a sparse array is refused, not skipped: map() would give a result with an empty slot.
+    expect(() => minorBodyPositions(date, [, "Chiron"] as never)).toThrow(TypeError);
+    expect(() => minorBodyPositions(date, [, "Chiron"] as never)).toThrow(/^minorBodyPositions bodies\[0\] must be one of this entry's specs/u);
+    expect(() => minorBodyPositions(date, [chiron, , ceres] as never)).toThrow(/^minorBodyPositions bodies\[1\] /u);
+    expect(() => minorBodyPositions(date, ["Vesta", ,] as never)).toThrow(/^minorBodyPositions bodies\[1\] /u);
     expect(() => minorBodyPosition("Chiron" as never, date)).toThrow(TypeError);
     expect(() => minorBodyPosition({ ...chiron }, date)).toThrow(TypeError);
     expect(() => minorBodyPosition(chiron, date, { timescale: "tt" } as never)).toThrow(RangeError);

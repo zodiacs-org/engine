@@ -1,10 +1,16 @@
 // scripts/ratchet.mjs's rules, on budgets, commit messages and test reports
 // made up here: what weakens a budget, what counts as a person's approval,
 // what --tighten may do, the verdict on a range, which skipped tests --check
-// lets through, and that a measurement which is not a finite number fails it.
-// The measurements themselves need dist/ and are made by
-// `node scripts/ratchet.mjs --check` after the build.
-import { readFileSync } from "node:fs";
+// lets through, that the report of a failed run fails it, and that a
+// measurement which is not a finite number fails it. The measurements
+// themselves need dist/ and are made by `node scripts/ratchet.mjs --check`
+// after the build; the command is run here only on a failed run's report,
+// which it refuses before measuring.
+import { spawnSync } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -15,6 +21,7 @@ import {
   SKIPPED_BY_DESIGN,
   approved,
   checkProblems,
+  failuresOf,
   finite,
   guardVerdict,
   largestMagnitude,
@@ -172,7 +179,7 @@ describe("measurements that are not finite numbers", () => {
       "gzip.. is Infinity, not a finite measurement",
       "accuracy.conformanceMinPass is NaN, not a finite measurement"
     ]);
-    const report = { numPassedTests: 5_800, numPendingTests: 0, numTodoTests: 0, testResults: [] };
+    const report = { success: true, numPassedTests: 5_800, numFailedTests: 0, numFailedTestSuites: 0, numPendingTests: 0, numTodoTests: 0, testResults: [] };
     const environment = { precisionKernel: false, tz: "2026a", builtAfterRun: true };
     expect(checkProblems({ budgets: limits, measured, report, environment })).toEqual([]);
     expect(checkProblems({ budgets: limits, measured: { ...measured, "accuracy.de440L1MaxArcsec": NaN }, report, environment })).toEqual([
@@ -201,7 +208,10 @@ describe("skipped tests in the run's report", () => {
   const root = "/repo/";
   /** A vitest JSON report of `passed` passing tests, with `skipped` as [file, ancestor titles, title, status?]. */
   const reportOf = (passed, skipped) => ({
+    success: true,
     numPassedTests: passed,
+    numFailedTests: 0,
+    numFailedTestSuites: 0,
     numPendingTests: skipped.filter(([, , , status]) => status !== "todo").length,
     numTodoTests: skipped.filter(([, , , status]) => status === "todo").length,
     startTime: 1_000,
@@ -264,10 +274,92 @@ describe("skipped tests in the run's report", () => {
 
   it("fail a report whose counts of skipped tests its tests do not account for, or that is not vitest's", () => {
     expect(reportProblems({ ...reportOf(5_800, []), numPendingTests: 2 }, ci, root)).toEqual(["the test report counts 2 skipped or todo tests and lists 0"]);
-    expect(reportProblems({ testResults: [] }, ci, root)).toEqual(["the test report is not a vitest JSON report: it has no numPassedTests"]);
+    expect(reportProblems({ testResults: [] }, ci, root)).toEqual([
+      "the test report is not a vitest JSON report: it has no numPassedTests",
+      "the test run failed: the report's success is missing, not true",
+      "the test report is not a vitest JSON report: it has no numFailedTests",
+      "the test report is not a vitest JSON report: it has no numFailedTestSuites"
+    ]);
     expect(checkProblems({ budgets: limits, measured: { minPassingTests: 5_800 }, report: undefined, environment: ci, root })).toEqual([
       "minPassingTests needs the test run's report: pass --tests REPORT"
     ]);
   });
 });
 
+describe("the report of a failed run", () => {
+  const root = "/repo/";
+  const ci = { precisionKernel: false, tz: "2026a", builtAfterRun: true };
+  const limits = { minPassingTests: 5_700 };
+  /** A vitest JSON report of a run that passed 5,800 tests, over the floor, and failed one. */
+  const failedRun = {
+    success: false,
+    numPassedTests: 5_800,
+    numFailedTests: 1,
+    numFailedTestSuites: 0,
+    numPendingTests: 0,
+    numTodoTests: 0,
+    startTime: 1_000,
+    testResults: [
+      {
+        name: `${root}src/points.test.ts`,
+        status: "failed",
+        message: "",
+        assertionResults: [
+          { ancestorTitles: ["points"], title: "passes", status: "passed" },
+          { ancestorTitles: ["points"], title: "gives the Vertex", status: "failed" }
+        ]
+      }
+    ]
+  };
+  const passedRun = { ...failedRun, success: true, numFailedTests: 0, testResults: [{ ...failedRun.testResults[0], status: "passed", assertionResults: [failedRun.testResults[0].assertionResults[0]] }] };
+
+  it("fails --check though the passing tests are over the floor", () => {
+    const measured = { minPassingTests: failedRun.numPassedTests };
+    expect(overLimits(limits, measured)).toEqual([]);
+    expect(checkProblems({ budgets: limits, measured, report: passedRun, environment: ci, root })).toEqual([]);
+    expect(checkProblems({ budgets: limits, measured, report: failedRun, environment: ci, root })).toEqual([
+      "the test run failed: the report's success is false, not true",
+      "the test run failed: the report counts 1 failed tests (numFailedTests)",
+      "src/points.test.ts: points > gives the Vertex failed"
+    ]);
+  });
+
+  it("fails on each sign of a failure alone: success, either count, or a status", () => {
+    expect(failuresOf(passedRun, root)).toEqual([]);
+    expect(failuresOf({ ...passedRun, success: false }, root)).toEqual(["the test run failed: the report's success is false, not true"]);
+    expect(failuresOf({ ...passedRun, numFailedTests: 2 }, root)).toEqual(["the test run failed: the report counts 2 failed tests (numFailedTests)"]);
+    // A test file that does not load: vitest counts a failed suite and lists no test of it.
+    const unloaded = { name: `${root}src/broken.test.ts`, status: "failed", message: "Failed to load url ./missing.js\nin src/broken.test.ts", assertionResults: [] };
+    expect(failuresOf({ ...passedRun, success: false, numFailedTestSuites: 1, testResults: [...passedRun.testResults, unloaded] }, root)).toEqual([
+      "the test run failed: the report's success is false, not true",
+      "the test run failed: the report counts 1 failed suites (numFailedTestSuites)",
+      "src/broken.test.ts failed: Failed to load url ./missing.js"
+    ]);
+    expect(failuresOf({ ...passedRun, testResults: failedRun.testResults }, root)).toEqual(["src/points.test.ts: points > gives the Vertex failed"]);
+    expect(failuresOf({ ...passedRun, success: "true" }, root)).toEqual(['the test run failed: the report\'s success is "true", not true']);
+  });
+
+  it("makes the command exit non-zero before it measures anything, with --check and with --tighten", () => {
+    const folder = mkdtempSync(join(tmpdir(), "zodiacs-ratchet-"));
+    const budgetsBefore = readFileSync(new URL("../budgets.json", import.meta.url), "utf8");
+    try {
+      const path = join(folder, "vitest-report.json");
+      // The command reads names from the repository's root.
+      const repository = fileURLToPath(new URL("..", import.meta.url));
+      const testResults = failedRun.testResults.map((file) => ({ ...file, name: file.name.replace(root, repository) }));
+      writeFileSync(path, JSON.stringify({ ...failedRun, numPassedTests: budgets.minPassingTests + 100, testResults }));
+      for (const mode of ["--check", "--tighten"]) {
+        const run = spawnSync(process.execPath, [fileURLToPath(new URL("./ratchet.mjs", import.meta.url)), mode, "--tests", path], { encoding: "utf8", timeout: 60_000 });
+        expect(run.error).toBeUndefined();
+        expect(run.status, run.stderr).toBe(1);
+        expect(run.stderr).toContain(`ratchet failed: ${path} is the report of a run that failed, and ${mode} needs one that passed:`);
+        expect(run.stderr).toContain("- the test run failed: the report counts 1 failed tests (numFailedTests)");
+        expect(run.stderr).toContain("- src/points.test.ts: points > gives the Vertex failed");
+        expect(run.stdout).not.toContain("ratchet passed");
+      }
+      expect(readFileSync(new URL("../budgets.json", import.meta.url), "utf8")).toBe(budgetsBefore);
+    } finally {
+      rmSync(folder, { recursive: true, force: true });
+    }
+  });
+});

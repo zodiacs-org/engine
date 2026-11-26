@@ -340,7 +340,9 @@ export function minorBodyPositions(
   options?: MinorBodyOptions
 ): MinorBodyPosition[] {
   if (!Array.isArray(bodies)) throw new TypeError("minorBodyPositions bodies must be an array of specs or names");
-  const read = bodies.map((body, index) => {
+  // Array.from visits every index, where map() skips the holes of a sparse array: a hole is refused as any other entry
+  // that is neither a spec nor a name.
+  const read = Array.from(bodies, (body, index) => {
     const label = `minorBodyPositions bodies[${index}]`;
     return readerOf(typeof body === "string" ? named(body, label) : body, label);
   });

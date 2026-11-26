@@ -15,11 +15,22 @@ API (https://ssd.jpl.nasa.gov/api/horizons.api) for:
    out of the fit.
 
 It writes into the directory --out names (by default .cache/minor-bodies/ in
-the repository, which git ignores): each body's raw VECTORS response as
-<body>-vectors.txt; provenance.json, with the query, and each response's
-SHA-256, size, row count and the solution Horizons names; and
-oos-observer-100.json, the observer checks with the SHA-256 of each raw
-response. A VECTORS response already in that directory is read, not fetched
+the repository, which git ignores): each raw response, as <body>-vectors.txt
+and <body>-observer-<batch>.txt, each with a sidecar beside it
+(<body>-vectors.meta.json, <body>-observer-<batch>.meta.json) that records
+the API, the exact query sent, the response's size and SHA-256, and when it
+was fetched (fetchedAtUtc); provenance.json, with the query, and each
+VECTORS response's fetch time, SHA-256, size, row count and the solution
+Horizons names; and oos-observer-100.json, the observer checks with the
+SHA-256 and the fetch time of each raw response. provenance.json's and
+oos-observer-100.json's own fetchedAtUtc is the earliest of their
+responses'.
+
+A response already in that directory is read, not fetched again, only where
+its sidecar records the same API and query and the file's SHA-256; the two
+files then give the time it was first fetched, not the time of the run. A
+response without a sidecar (as this script wrote them before it kept
+sidecars), or whose sidecar records another query or other bytes, is fetched
 again. scripts/minor-bodies/build-pack-data.mjs copies provenance.json to
 src/minor-bodies/provenance.json and oos-observer-100.json to
 src/fixtures/minor-bodies-horizons-oos.json.
@@ -28,6 +39,8 @@ Horizons is a public service of NASA JPL's Solar System Dynamics group and
 needs no key. The script reads no other source.
 
     python3 -I scripts/minor-bodies/fetch-horizons.py [--out DIR]
+
+scripts/minor-bodies/test-fetch-horizons.py tests the reuse, offline.
 """
 from __future__ import annotations
 
@@ -40,6 +53,7 @@ import random
 import time
 import urllib.parse
 import urllib.request
+from typing import Callable
 
 API = "https://ssd.jpl.nasa.gov/api/horizons.api"
 REPOSITORY = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -102,6 +116,75 @@ def fetch(params: dict[str, str]) -> bytes:
     raise RuntimeError("unreachable")
 
 
+def utc_now() -> str:
+    """The time now, UTC, as fetchedAtUtc records it."""
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+
+def sidecar_of(path: str) -> str:
+    """The sidecar of the raw response at <target>.txt: <target>.meta.json."""
+    return os.path.splitext(path)[0] + ".meta.json"
+
+
+def write_whole(path: str, data: bytes) -> None:
+    """Writes `data` to `path` whole or not at all, through a file beside it."""
+    partial = path + ".partial"
+    with open(partial, "wb") as written:
+        written.write(data)
+    os.replace(partial, path)
+
+
+def cached(path: str, params: dict[str, str]) -> tuple[bytes, str] | None:
+    """The response at `path` and when it was fetched, where its sidecar records this API, `params` and its SHA-256."""
+    try:
+        with open(sidecar_of(path), encoding="utf-8") as opened:
+            meta = json.load(opened)
+        with open(path, "rb") as opened:
+            raw = opened.read()
+    except (OSError, ValueError):
+        return None
+    if not isinstance(meta, dict) or meta.get("api") != API or meta.get("params") != params:
+        return None
+    if meta.get("sha256") != hashlib.sha256(raw).hexdigest() or not isinstance(meta.get("fetchedAtUtc"), str):
+        return None
+    return raw, meta["fetchedAtUtc"]
+
+
+def fetch_once(
+    path: str, params: dict[str, str], what: str, pause: float, check: Callable[[str], object] | None = None
+) -> tuple[bytes, str]:
+    """The response to `params` and the UTC time it was fetched.
+
+    Read from `path` where its sidecar records the same query and the file's
+    SHA-256, with the time the sidecar records; fetched otherwise, checked for
+    its $$SOE and $$EOE markers and by `check`, which raises on a response it
+    refuses, and only then written to `path` with a new sidecar, then a pause
+    of `pause` seconds before the next request.
+    """
+    hit = cached(path, params)
+    if hit is not None:
+        print(f"[{what}] read {path} ({len(hit[0])} bytes, fetched {hit[1]})")
+        return hit
+    if os.path.exists(path):
+        print(f"[{what}] {path} has no sidecar that records this query and these bytes: fetching it again")
+    raw = fetch(params)
+    fetched_at = utc_now()
+    text = raw.decode("utf-8", errors="replace")
+    between_markers(text, what)
+    if check is not None:
+        check(text)
+    meta = {"api": API, "params": params, "fetchedAtUtc": fetched_at, "bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()}
+    write_whole(path, raw)
+    write_whole(sidecar_of(path), (json.dumps(meta, indent=2) + "\n").encode("utf-8"))
+    time.sleep(pause)
+    return raw, fetched_at
+
+
+def earliest(times: list[str]) -> str:
+    """The earliest of fetchedAtUtc times."""
+    return min(times, key=datetime.datetime.fromisoformat)
+
+
 def quoted(params: dict[str, str]) -> dict[str, str]:
     """The parameters as the API takes them, each value in single quotes."""
     return {key: f"'{value}'" for key, value in params.items()}
@@ -125,6 +208,18 @@ def between_markers(text: str, what: str) -> str:
     return text.split("$$SOE", 1)[1].split("$$EOE", 1)[0].strip()
 
 
+def observer_rows(text: str, what: str, count: int) -> list[dict[str, float]]:
+    """The rows of an OBSERVER response, Julian day (TT), longitude and latitude, refused unless there are `count`."""
+    rows = []
+    for line in between_markers(text, what).splitlines():
+        parts = line.split()
+        if len(parts) >= 3:
+            rows.append({"jdTt": float(parts[0]), "lon": float(parts[1]), "lat": float(parts[2])})
+    if len(rows) != count:
+        raise RuntimeError(f"{what}: {count} instants asked, {len(rows)} rows given")
+    return rows
+
+
 def observer_instants() -> list[float]:
     rng = random.Random(SEED)
     instants = sorted(
@@ -135,50 +230,42 @@ def observer_instants() -> list[float]:
     return instants
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--out", default=os.path.join(REPOSITORY, ".cache", "minor-bodies"))
-    out = parser.parse_args().out
+    out = parser.parse_args(argv).out
     os.makedirs(out, exist_ok=True)
 
     provenance = {
-        "fetchedAtUtc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "fetchedAtUtc": "",
         "api": API,
         "vectorParams": VECTOR_PARAMS,
         "bodies": {},
     }
     for body in BODIES:
         name = body["name"]
-        path = os.path.join(out, f"{name.lower()}-vectors.txt")
-        if os.path.exists(path) and os.path.getsize(path) > 10000:
-            with open(path, "rb") as cached:
-                raw = cached.read()
-            print(f"[{name}] read {path} ({len(raw)} bytes)")
-        else:
-            params = {"format": "text", "OBJ_DATA": "YES", "MAKE_EPHEM": "YES", "COMMAND": f"'{body['command']}'"}
-            params.update(quoted(VECTOR_PARAMS))
-            params["STEP_SIZE"] = f"'{body['step']}'"
-            print(f"[{name}] fetching VECTORS every {body['step']}")
-            raw = fetch(params)
-            between_markers(raw.decode("utf-8", errors="replace"), name)
-            with open(path, "wb") as written:
-                written.write(raw)
-            time.sleep(1.0)
+        params = {"format": "text", "OBJ_DATA": "YES", "MAKE_EPHEM": "YES", "COMMAND": f"'{body['command']}'"}
+        params.update(quoted(VECTOR_PARAMS))
+        params["STEP_SIZE"] = f"'{body['step']}'"
+        print(f"[{name}] VECTORS every {body['step']}")
+        raw, fetched_at = fetch_once(os.path.join(out, f"{name.lower()}-vectors.txt"), params, name, 1.0)
         text = raw.decode("utf-8", errors="replace")
         rows = [line for line in between_markers(text, name).splitlines() if line.strip()]
         provenance["bodies"][name] = {
             "command": body["command"],
             "step": body["step"],
+            "fetchedAtUtc": fetched_at,
             "rows": len(rows),
             "bytes": len(raw),
             "sha256": hashlib.sha256(raw).hexdigest(),
             **solution_of(text),
         }
         print(f"[{name}] {len(rows)} rows, sha256 {provenance['bodies'][name]['sha256']}")
+    provenance["fetchedAtUtc"] = earliest([entry["fetchedAtUtc"] for entry in provenance["bodies"].values()])
 
     instants = observer_instants()
     checks = {
-        "fetchedAtUtc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "fetchedAtUtc": "",
         "seed": SEED,
         "observerParams": OBSERVER_PARAMS,
         "bodies": {},
@@ -187,24 +274,21 @@ def main() -> None:
         name = body["name"]
         points = []
         digests = []
+        times = []
         for batch in range(2):
             chunk = instants[batch * 50 : (batch + 1) * 50]
             params = {"format": "text", "OBJ_DATA": "NO", "MAKE_EPHEM": "YES", "COMMAND": f"'{body['command']}'"}
             params.update(quoted(OBSERVER_PARAMS))
             params["TLIST"] = " ".join(f"'{jd:.6f}'" for jd in chunk)
-            raw = fetch(params)
+            path = os.path.join(out, f"{name.lower()}-observer-{batch}.txt")
+            what = f"{name} batch {batch}"
+            raw, fetched_at = fetch_once(path, params, what, 0.8, lambda text: observer_rows(text, what, len(chunk)))
             digests.append(hashlib.sha256(raw).hexdigest())
-            rows = []
-            for line in between_markers(raw.decode("utf-8", errors="replace"), f"{name} batch {batch}").splitlines():
-                parts = line.split()
-                if len(parts) >= 3:
-                    rows.append({"jdTt": float(parts[0]), "lon": float(parts[1]), "lat": float(parts[2])})
-            if len(rows) != len(chunk):
-                raise RuntimeError(f"{name} batch {batch}: {len(chunk)} instants asked, {len(rows)} rows given")
-            points.extend(rows)
-            time.sleep(0.8)
-        checks["bodies"][name] = {"command": body["command"], "batchSha256": digests, "points": points}
+            times.append(fetched_at)
+            points.extend(observer_rows(raw.decode("utf-8", errors="replace"), what, len(chunk)))
+        checks["bodies"][name] = {"command": body["command"], "batchSha256": digests, "batchFetchedAtUtc": times, "points": points}
         print(f"[{name}] {len(points)} observer checks")
+    checks["fetchedAtUtc"] = earliest([moment for entry in checks["bodies"].values() for moment in entry["batchFetchedAtUtc"]])
 
     with open(os.path.join(out, "provenance.json"), "w", encoding="utf-8") as written:
         json.dump(provenance, written, indent=2)

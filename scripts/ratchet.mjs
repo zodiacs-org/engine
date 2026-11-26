@@ -27,7 +27,11 @@
 //   passes the committed results of the engine hold
 //   (conformance/results/zodiacs-engine.json, which conformance.yml checks);
 // - minPassingTests: the tests REPORT counts as passed.
-// It fails where a measurement is over its ceiling or under its floor, where
+// It fails, before measuring anything, where REPORT is of a run that failed:
+// its success is not true, it counts a failed test or a failed suite, or a
+// file or a test in it has the status "failed" (a run can fail tests and
+// still pass more than the floor); --tighten refuses such a report too. It
+// fails where a measurement is over its ceiling or under its floor, where
 // it is not a finite number (a NaN compares as neither over nor under, so it
 // is refused before any comparison), or where it could not be made; and
 // where REPORT holds a skipped test (vitest's "skipped", "pending" or "todo")
@@ -123,28 +127,66 @@ export const SKIPPED_BY_DESIGN = Object.freeze([
 
 const SKIPPED = new Set(["skipped", "pending", "todo", "disabled"]);
 
+/** A test file of a vitest JSON report, by its path from `root`, with forward slashes. */
+function fileOf(file, root) {
+  const name = String(file?.name ?? "");
+  const relative = name.startsWith(root) ? name.slice(root.length).replace(/^[\\/]+/u, "") : name;
+  return relative.split("\\").join("/");
+}
+
 /** Each skipped test in a vitest JSON report: its file from `root`, its block titles, its title and its status. */
 export function skippedTests(report, root = ROOT) {
   const found = [];
   for (const file of report.testResults ?? []) {
-    const name = String(file.name ?? "");
-    const relative = name.startsWith(root) ? name.slice(root.length).replace(/^[\\/]+/u, "") : name;
     for (const test of file.assertionResults ?? []) {
-      if (SKIPPED.has(test.status)) found.push({ file: relative.split("\\").join("/"), ancestors: test.ancestorTitles ?? [], title: test.title, status: test.status });
+      if (SKIPPED.has(test.status)) found.push({ file: fileOf(file, root), ancestors: test.ancestorTitles ?? [], title: test.title, status: test.status });
     }
   }
   return found;
 }
 
 /**
- * The problems with a vitest JSON report: its passing count missing, and each
- * skipped test that SKIPPED_BY_DESIGN does not let through in `environment`
- * ({ precisionKernel, tz, builtAfterRun }), and a count of skipped tests the
- * report states that its tests do not account for.
+ * What a vitest JSON report says failed, each as a sentence: its `success`
+ * where that is not true; its counts of failed tests and of failed suites
+ * (vitest counts a test file that does not load as a failed suite) where
+ * they are not 0, or missing; and each file and each test whose status is
+ * "failed". Empty for a run that passed. A run that fails tests can still
+ * pass more than the floor of minPassingTests, so the passing count is no
+ * verdict on the run.
+ */
+export function failuresOf(report, root = ROOT) {
+  const found = [];
+  if (report?.success !== true) found.push(`the test run failed: the report's success is ${JSON.stringify(report?.success) ?? "missing"}, not true`);
+  for (const [key, what] of [
+    ["numFailedTests", "failed tests"],
+    ["numFailedTestSuites", "failed suites"]
+  ]) {
+    const count = report?.[key];
+    if (!Number.isInteger(count)) found.push(`the test report is not a vitest JSON report: it has no ${key}`);
+    else if (count !== 0) found.push(`the test run failed: the report counts ${count} ${what} (${key})`);
+  }
+  for (const file of report?.testResults ?? []) {
+    const failed = (file.assertionResults ?? []).filter((test) => test.status === "failed");
+    for (const test of failed) found.push(`${fileOf(file, root)}: ${[...(test.ancestorTitles ?? []), test.title].join(" > ")} failed`);
+    if (file.status === "failed" && failed.length === 0) {
+      const message = String(file.message ?? "").split("\n")[0];
+      found.push(`${fileOf(file, root)} failed${message ? `: ${message}` : ""}`);
+    }
+  }
+  return found;
+}
+
+/**
+ * The problems with a vitest JSON report: its passing count missing; what it
+ * says failed (`failuresOf`); each skipped test that SKIPPED_BY_DESIGN does
+ * not let through in `environment` ({ precisionKernel, tz, builtAfterRun });
+ * and a count of skipped tests the report states that its tests do not
+ * account for.
  */
 export function reportProblems(report, environment, root = ROOT) {
   const problems = [];
   if (!Number.isInteger(report?.numPassedTests)) problems.push("the test report is not a vitest JSON report: it has no numPassedTests");
+  problems.push(...failuresOf(report, root));
   const skipped = skippedTests(report ?? {}, root);
   for (const test of skipped) {
     const rule = SKIPPED_BY_DESIGN.find(
@@ -397,6 +439,12 @@ async function main(args) {
   const tests = option("--tests");
   const budgets = JSON.parse(read("budgets.json"));
   const report = tests === undefined ? undefined : JSON.parse(readFileSync(tests, "utf8"));
+  // The report of a failed run is refused before anything is measured: its passing count is no floor to meet or set.
+  const failed = report === undefined ? [] : failuresOf(report);
+  if (failed.length > 0) {
+    console.error(`ratchet failed: ${tests} is the report of a run that failed, and --${mode} needs one that passed:\n- ${failed.join("\n- ")}`);
+    process.exit(1);
+  }
   const measured = await measure({ report });
   if (mode === "tighten") {
     assert(tests, "--tighten needs --tests REPORT, to set the passing-test floor");
