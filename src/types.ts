@@ -445,7 +445,7 @@ export interface MoonPhase {
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "2.1.0";
+export const ENGINE_VERSION: string = "3.0.0";
 
 /**
  * astronomy-engine, the ephemeris the engine computes on where the shipped

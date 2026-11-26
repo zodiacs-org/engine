@@ -620,7 +620,8 @@ const ENTRY_BUDGETS = {
   "./window": 120_200,
   // New in 3.0.0: Chiron, Ceres, Pallas, Juno and Vesta (above): 60,190
   // bytes beside the five tables (MINOR_BODY_TABLES below); 60,200. With the
-  // review's fixes, 60,274; raised to 60,300 (above).
+  // review's fixes, 60,274; raised to 60,300 (above). With the second
+  // review's (minorBodyPositions refuses a sparse list's holes), 60,282.
   "./minor-bodies": 60_300
 };
 

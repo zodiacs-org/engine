@@ -701,7 +701,7 @@ pack the longitudes' differences follow 0.020″ − 0.235″ T (T in Julian
 centuries from 2000) and depart from that line by at most 0.119″. Measured on
 3.0.0's build (`scripts/ratchet.mjs`, `budgets.json`; gzip level 9 with the
 zlib of Node 22.22.2 from nodejs.org), an application of the root's
-`natalChart` grows by 14,132 bytes gzipped with Chiron alone and by 115,938
+`natalChart` grows by 14,132 bytes gzipped with Chiron alone and by 115,942
 with all five.
 
 ### Input flag compatibility
