@@ -11,3 +11,6 @@ __pycache__/
 
 # The tzdata release the shard and time-scale generators download
 .cache/
+
+# macOS resource-fork files (AppleDouble)
+._*
