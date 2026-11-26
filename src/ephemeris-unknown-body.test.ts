@@ -1,7 +1,7 @@
 /**
  * An unknown body is the caller's bad input, so the root refuses it with a
  * RangeError whichever source would have computed it: astronomy-engine, the
- * shipped DE440 pack (the package's default) or a caller's pack through
+ * shipped DE440 pack (the default after `useDe440()`) or a caller's pack through
  * withEphemeris. Before 2.0.0-rc.4 the DE440 sources let the reduction's
  * De440Error ("unknown-body") through. De440Error stays for failures of a
  * pack itself, and the DE440 entry's own source still refuses a body it does
@@ -12,7 +12,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { De440Error } from "./de440.js";
-import { shippedDe440Source } from "./de440-pack.js";
+import { shippedDe440Source, useDe440 } from "./de440-pack.js";
 import { findLongitudeCrossings, searchLongitudeCrossings, setDefaultEphemeris, withEphemeris } from "./index.js";
 import { bodyLongitude, bodyLongitudeDetailed, longitudeSpeed, longitudeSpeedDetailed } from "./internal.js";
 import type { BodyName } from "./types.js";
@@ -61,7 +61,9 @@ function expectKnownBodyWindows(): void {
 }
 
 describe("an unknown body on the shipped DE440 pack, the package's default", () => {
-  beforeAll(() => setDefaultEphemeris("de440"));
+  beforeAll(() => {
+    useDe440();
+  });
   afterAll(() => setDefaultEphemeris("astronomy-engine"));
 
   it.each(calls)("%s throws RangeError, not De440Error", (_name, call) => expectUnknownBody(call));

@@ -1,6 +1,7 @@
 /**
  * A hostile differential check of the engine's public functions, on the
- * package's default source (the shipped DE440 pack).
+ * shipped DE440 pack, the default source after `useDe440()` (and the
+ * package's default until 2.1.0).
  *
  * The cases are the 230 of tests/fixtures/adversarial-astronomy.cases.json
  * (written by tests/fixtures/build-adversarial-cases.py, all synthetic):
@@ -42,6 +43,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { prepareLocalTime, resolveBirth, resolveLocalToUtc } from "../src/geo.js";
 import { HOUSE_SYSTEMS, natalChart, positions, searchLongitudeCrossings, setDefaultEphemeris } from "../src/index.js";
 import type { HouseSystem, NatalChart } from "../src/index.js";
+import { useDe440 } from "../src/de440-pack.js";
 import { moonSignCandidates, moonSignsBetweenDetailed } from "../src/techniques.js";
 
 interface Case {
@@ -235,7 +237,9 @@ const largest = (section: string, key: string, value: number) => {
   if (typeof now !== "number" || value > now) note(section, key, value);
 };
 
-beforeAll(() => setDefaultEphemeris("de440"));
+beforeAll(() => {
+  useDe440();
+});
 afterAll(() => setDefaultEphemeris("astronomy-engine"));
 
 describe("the case list", () => {

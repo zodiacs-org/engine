@@ -5,7 +5,7 @@
  *
  * This entry fetches nothing: the caller gives the bytes (of a pack compiled
  * from its own copy of NAIF's `de440.bsp`, or of the one the package ships,
- * which the root entry and `@zodiacs/engine/de440/pack` open themselves) and
+ * which `@zodiacs/engine/de440/pack` opens itself) and
  * names the SHA-256 it expects. `openDe440Pack` hashes the whole file and
  * refuses any other bytes, then checks the pack's own trailer and header.
  * The returned source keeps a private copy of the bytes.
@@ -13,8 +13,10 @@
  * The reduction is the research runtime's with its shipped options
  * (`src/de440/reduce.ts` says what it applies). Mars to Pluto are
  * planetary-system barycentres, not planet centres. Nothing in this entry's
- * graph imports astronomy-engine. From 1.1.0-rc.9 the root entry imports
- * this file, to open the shipped pack as its default source.
+ * graph imports astronomy-engine. From 1.1.0-rc.9 to 2.1.0 the root entry
+ * imported this file, to open the shipped pack as its default source; from
+ * 3.0.0 only `@zodiacs/engine/de440/pack` does, and `useDe440()` there makes
+ * the pack the root's default.
  */
 import { De440Error, PackEphemeris, parsePack } from "./de440/pack.js";
 import { BARYCENTRE_NOT_CENTRE, REDUCED_BODIES, Reducer } from "./de440/reduce.js";

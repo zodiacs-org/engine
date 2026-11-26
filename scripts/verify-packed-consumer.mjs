@@ -233,11 +233,12 @@ const opening: Promise<De440Source> = openDe440Pack(new Uint8Array(0), { expectD
 const asSource = (source: De440Source): PositionSource => source;
 const inside: number = withEphemeris({ ephemeris: { name: "x", version: "0" }, place: () => ({ lon: 0, lat: 0 }), trueNode: () => 0 }, () => 1);
 const errorCode = (error: unknown): De440ErrorCode | null => (error instanceof De440Error ? error.code : null);
-import { DE440_PACK, de440PackBytes, openShippedDe440Pack, type De440PackDescription } from "@zodiacs/engine/de440/pack";
+import { DE440_PACK, de440PackBytes, openShippedDe440Pack, useDe440, type De440PackDescription } from "@zodiacs/engine/de440/pack";
 const shippedPack: De440PackDescription = DE440_PACK;
 const shippedBytes: () => Uint8Array = de440PackBytes;
 const shippedSource: () => Promise<De440Source> = openShippedDe440Pack;
-void shippedPack; void shippedBytes; void shippedSource;
+const toPack: () => De440Source = useDe440;
+void shippedPack; void shippedBytes; void shippedSource; void toPack;
 void opening.catch(() => {}); void asSource; void inside; void errorCode; void REDUCED_BODIES;
 `
 );
@@ -269,9 +270,9 @@ import * as vedic from "@zodiacs/engine/vedic";
 import * as houses from "@zodiacs/engine/houses";
 import { planetaryReturns } from "@zodiacs/engine/timing";
 import * as root from "@zodiacs/engine";
-// The checks below pin values written on astronomy-engine, the engine's
-// fallback, and are run on it; the default source, the shipped DE440 pack,
-// is checked in its own block at the end, which sets it.
+// The checks below pin values written on astronomy-engine, the package's
+// default from 3.0.0, set here all the same; the shipped DE440 pack is checked
+// in its own block at the end, which loads it with useDe440().
 root.setDefaultEphemeris("astronomy-engine");
 import { calc } from "@zodiacs/engine/calc";
 import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError } from "@zodiacs/engine/window";
@@ -619,13 +620,13 @@ assert.deepEqual(lite.essentialDignities("Mars", 10, "day"), techniques.essentia
 assert.equal(lite.sectReading({convention: "ecliptic", ascendant: chart.angles.asc, sunLon: chart.bodies[0].lon}).sect, root.sectOf(chart.angles.asc, chart.bodies[0].lon));
 assert.equal(lite.sectReading({convention: "altitude", sunAltitude: 0, sunLon: 0}).sect, "day");
 assert.throws(() => lite.sectReading({sunAltitude: 1, sunLon: 0}), RangeError);
-// The core entry (ZOD-292): the root's names, on astronomy-engine by default,
-// with no DE440 pack to open; its charts are the root's on astronomy-engine,
-// each naming it, and are its own module copies' (not the root's settings).
+// The core entry: from 3.0.0 the root under its 2.x name, each of its names
+// the root's own, so one setting for both; on astronomy-engine, with no DE440
+// pack loaded, until useDe440() (the last block).
 assert.deepEqual(Object.keys(core).sort(), Object.keys(root).sort());
+for (const name of Object.keys(root)) assert.equal(core[name], root[name], name);
 assert.equal(core.defaultEphemeris().name, "astronomy-engine");
 assert.equal(core.defaultEphemeris().de440.opened, false);
-assert.notEqual(core.natalChart, natalChart);
 assert.deepEqual(core.natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"}), chart);
 assert.deepEqual(core.natalChart({utc: "2000-01-01T12:00:00Z", timeKnown: false}).ephemeris, {...root.EPHEMERIS});
 // The sky entry: the Sun's rise at Greenwich on 2024-06-21, a Friday, begins
@@ -716,12 +717,20 @@ assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-
   assert.deepEqual(chart.ephemeris, source.ephemeris);
   const sun = chart.bodies.find((row) => row.body === "Sun");
   assert(Math.abs(sun.lon - 353.0330254813) * 3600 <= 1 && Math.abs(sun.lat - -0.0000304792) * 3600 <= 1, "the shipped pack's Sun is not within 1 arcsecond of Horizons");
-  // The default source (1.1.0-rc.9): a plain call, with nothing opened by the
-  // caller, is on the shipped pack, names it, and gives the same Sun; after
-  // setDefaultEphemeris("astronomy-engine") it is on astronomy-engine and
-  // names no ephemeris, as it is outside the pack's years under either setting.
+  // The default source (3.0.0): a plain call is on astronomy-engine, which no
+  // opening of the pack changes; setDefaultEphemeris("de440") with no pack
+  // loaded stays on it, flagged; useDe440() loads the shipped pack and makes it
+  // the default, and a plain call is then on it, names it, and gives the same
+  // Sun; after setDefaultEphemeris("astronomy-engine") it is on astronomy-engine
+  // and names it, unflagged.
   const plainInput = { utc: instant, timeScale: "tt", timeKnown: false };
+  assert.equal(root.defaultEphemeris().name, "astronomy-engine");
+  assert.match(root.defaultEphemeris().de440.error, /useDe440\\(\\) from @zodiacs\\/engine\\/de440\\/pack/);
+  assert.deepEqual(natalChart(plainInput).ephemeris, { ...root.EPHEMERIS });
   root.setDefaultEphemeris("de440");
+  assert.deepEqual(natalChart(plainInput).flags, ["no-time", "de440-unavailable"]);
+  assert.equal(shipped.useDe440(), shipped.shippedDe440Source());
+  assert.equal(shipped.useDe440(), shipped.shippedDe440Source());
   assert.deepEqual(root.defaultEphemeris().de440.version, shipped.DE440_PACK.sha256);
   const plain = natalChart(plainInput);
   assert.deepEqual(plain.ephemeris, source.ephemeris);
@@ -758,12 +767,15 @@ console.log(JSON.stringify({version: ENGINE_VERSION, de440: "passed", de440Pack:
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());
 
 // Never a silent fallback, on the installed package itself (1.1.0-rc.10). The
-// pack is base64 text in one file under dist/. That text is taken away
-// (missing), changed in one character (damaged: the SHA-256 is wrong), cut
-// short (damaged) and replaced by text that is not base64 (undecodable); each
-// time a new process must find every result flagged "de440-unavailable" and
-// naming astronomy-engine, and nothing naming DE440. The file is restored, and
-// a last process must find the pack whole again and nothing flagged.
+// pack is base64 text in one file under dist/ (dist/de440-pack.js from
+// 3.0.0). That text is taken away (missing), changed in one character
+// (damaged: the SHA-256 is wrong), cut short (damaged) and replaced by text
+// that is not base64 (undecodable); each time a new process, which calls
+// useDe440(), must find every result flagged "de440-unavailable" and naming
+// astronomy-engine, and nothing naming DE440. The file is restored; a process
+// that asks for the pack with setDefaultEphemeris("de440") and no useDe440()
+// must find the same (not loaded, from 3.0.0), and a last process, which
+// calls useDe440(), must find the pack whole again and nothing flagged.
 const distDirectory = join(directory, "node_modules/@zodiacs/engine/dist");
 const packText = /"([A-Za-z0-9+/=]{3000000,})"/u;
 const holders = readdirSync(distDirectory).filter((name) => name.endsWith(".js") && packText.test(readFileSync(join(distDirectory, name), "utf8")));
@@ -781,7 +793,18 @@ import { birthWindow } from "@zodiacs/engine/window";
 import * as techniques from "@zodiacs/engine/techniques";
 import { bodyLongitude, bodyLongitudeDetailed } from "@zodiacs/engine/internal";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from "@zodiacs/engine/receipt";
-const expectUnavailable = process.argv[2] === "unavailable";
+import { useDe440 } from "@zodiacs/engine/de440/pack";
+const expectUnavailable = process.argv[2] !== "whole";
+// From 3.0.0 the shipped pack is the default after useDe440(), which throws where the pack cannot be opened and
+// leaves the default on it; "not-loaded" asks for the pack with setDefaultEphemeris("de440") alone.
+if (process.argv[2] === "not-loaded") root.setDefaultEphemeris("de440");
+else {
+  try {
+    useDe440();
+  } catch (error) {
+    if (!expectUnavailable) throw error;
+  }
+}
 const flags = expectUnavailable ? ["de440-unavailable"] : [];
 const name = expectUnavailable ? "astronomy-engine" : "jpl-de440";
 const birth = { utc: "1990-04-15T08:30:00Z", latitude: 51.5, longitude: -0.12 };
@@ -879,6 +902,9 @@ try {
 } finally {
   writeFileSync(holder, whole);
 }
+fallback["not-loaded"] = JSON.parse(run(process.execPath, ["fallback.mjs", "not-loaded"]).trim());
+assert.deepEqual(fallback["not-loaded"].natalFlags, ["de440-unavailable"]);
+assert.match(fallback["not-loaded"].error, /^the shipped DE440 pack is not loaded: call useDe440\(\) from @zodiacs\/engine\/de440\/pack/);
 fallback.restored = JSON.parse(run(process.execPath, ["fallback.mjs", "whole"]).trim());
 assert.deepEqual(fallback.restored.natalFlags, []);
 

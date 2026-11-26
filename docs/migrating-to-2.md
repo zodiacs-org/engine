@@ -206,7 +206,7 @@ In `@zodiacs/engine/geo`, use `julianDayNumber` and
 `dateOfJulianDayNumber` for Julian or proleptic Gregorian dates, and
 `localMeanTimeOffset` for seconds east of Greenwich at a given longitude.
 [Public declarations](evidence/migration-2.0.0-20261120/api-diff-1.1.0.txt),
-[core tests](../scripts/core-entry.test.mjs), [migration tests](../src/migration-2.0.test.ts).
+[migration tests](../src/migration-2.0.test.ts).
 
 ```ts
 import { natalChart as coreNatalChart } from "@zodiacs/engine/core";

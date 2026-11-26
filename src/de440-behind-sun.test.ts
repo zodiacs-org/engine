@@ -21,6 +21,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { calc, searchStations } from "./calc.js";
 import type { CalcBody } from "./calc.js";
 import { DE440_AT_LIMB, DE440_MEASURED } from "./calc-bounds-de440.js";
+import { useDe440 } from "./de440-pack.js";
 import { positions, setDefaultEphemeris } from "./index.js";
 
 interface FixtureRow {
@@ -35,7 +36,9 @@ const fixture: { rows: FixtureRow[]; relativeToTheSunArcsec: number } = JSON.par
 const DEG = Math.PI / 180;
 const unit = (ra: number, dec: number) => [Math.cos(dec * DEG) * Math.cos(ra * DEG), Math.cos(dec * DEG) * Math.sin(ra * DEG), Math.sin(dec * DEG)];
 
-beforeAll(() => setDefaultEphemeris("de440"));
+beforeAll(() => {
+  useDe440();
+});
 afterAll(() => setDefaultEphemeris("astronomy-engine"));
 
 describe("a planet behind the Sun's disc on the shipped DE440 pack, against JPL Horizons", () => {

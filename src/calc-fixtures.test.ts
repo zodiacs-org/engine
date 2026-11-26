@@ -7,12 +7,15 @@ import { calc, chart, events, houses } from "./calc.js";
 import type { CalcPosition, CalcRequest } from "./calc.js";
 import { CALC_FRAMES, apply, frameMatrix, fromSpherical, transpose } from "./calc-frames.js";
 import type { Vec3 } from "./calc-frames.js";
+import { useDe440 } from "./de440-pack.js";
 import { setDefaultEphemeris } from "./ephemeris.js";
 
-// scripts/build-calc-roundtrip.mjs rebuilds the fixture from the build as a caller gets it, on the package's default
-// source (the shipped DE440 pack where it gives the position); the suite's setup would put this file on
-// astronomy-engine.
-beforeAll(() => setDefaultEphemeris("de440"));
+// scripts/build-calc-roundtrip.mjs rebuilds the fixture from the build as a caller gets it after useDe440(), on the
+// shipped DE440 pack where it gives the position (the package's default source from 1.1.0-rc.10 to 2.1.0); the
+// suite's setup starts this file on astronomy-engine, the default from 3.0.0.
+beforeAll(() => {
+  useDe440();
+});
 afterAll(() => setDefaultEphemeris("astronomy-engine"));
 
 interface Case {

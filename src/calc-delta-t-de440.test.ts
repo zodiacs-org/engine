@@ -1,9 +1,10 @@
-// PR 102's rule on the shipped DE440 pack, the package's default source: a
-// result on a ΔT the model extrapolates past the IERS table is flagged
-// "delta-t-extrapolated", and calc() widens its position bound by the body's
-// rate times the TT band. src/calc-delta-t.test.ts holds the rule on
-// astronomy-engine, where the suite runs (src/test-setup.ts); this file loads
-// new modules, which start on the pack. The pack's own place with ΔT moved
+// PR 102's rule on the shipped DE440 pack, the default source after
+// useDe440() (and the package's default until 2.1.0): a result on a ΔT the
+// model extrapolates past the IERS table is flagged "delta-t-extrapolated",
+// and calc() widens its position bound by the body's rate times the TT band.
+// src/calc-delta-t.test.ts holds the rule on astronomy-engine, where the
+// suite runs (src/test-setup.ts); this file loads new modules and puts them on
+// the pack with useDe440(). The pack's own place with ΔT moved
 // by its sigma either way must stay inside the widened bound. These pin
 // behaviour, not accuracy. Synthetic instants only.
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -16,6 +17,7 @@ const AS = 180 * 3600 / Math.PI;
 async function onPack() {
   vi.resetModules();
   const root = await import("./index.js");
+  (await import("./de440-pack.js")).useDe440();
   expect(root.defaultEphemeris()).toMatchObject({ name: "de440", de440: { opened: true } });
   return { root, calc: await import("./calc.js"), bounds: await import("./calc-bounds-de440.js") };
 }

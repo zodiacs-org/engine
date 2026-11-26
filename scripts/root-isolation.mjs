@@ -10,19 +10,16 @@
 //   file, `// src/...`, read whatever the path's extension, spaces included.
 //
 // Either way, no module of an opt-in entry (timing, Vedic, geo, calc,
-// window, techniques, houses, sky, time or lite) and no zone history may be
-// in the root's static graph. The two readings must agree:
-// every marked module must be one the module list gives for that file, and
-// the module list must describe the files on disk byte for byte, so that a
-// stale list cannot hide a module either. The lite entry's files are built by
-// a second esbuild run (scripts/build-lite.mjs), which writes its own list,
-// dist/metafile-lite.json; readModuleList reads the two as one. The core
-// entry's file, dist/core.js, is built by a third (scripts/build-core.mjs),
-// whose list, dist/metafile-core.json, is a graph of its own: there
-// src/ephemeris.ts imports src/core/ephemeris-shipped.ts, not
-// src/ephemeris-shipped.ts. readModuleList takes only its output from it, so
-// that the list still describes every file under dist/, and
-// readCoreModuleList reads it whole.
+// window, techniques, houses, sky, time, lite, the DE440 reader and the
+// shipped pack) and no zone history may be in the root's static graph. The
+// two readings must agree: every marked module must be one the module list
+// gives for that file, and the module list must describe the files on disk
+// byte for byte, so that a stale list cannot hide a module either. The lite
+// entry's files are built by a second esbuild run (scripts/build-lite.mjs),
+// which writes its own list, dist/metafile-lite.json; readModuleList reads
+// the two as one. Until 2.1.0 the core entry's file, dist/core.js, was built
+// by a third, with a list of its own; from 3.0.0 tsup builds src/core.ts
+// with the other entry points, and dist/metafile-esm.json lists it.
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 
@@ -39,16 +36,21 @@ import { existsSync, readFileSync } from "node:fs";
  * src/time.ts and src/time-bands.ts, each named whole, so that the root's
  * src/time-scale.ts and src/time-scale-data.ts are not; and the lite entry's
  * file and directory, src/lite.ts and src/lite/, and src/sect.ts, whole, which
- * only its sect part imports; and the core entry's file and directory,
- * src/core.ts and src/core/, which only scripts/build-core.mjs bundles. The DE440 files (src/de440.ts, src/de440/ and
- * src/de440-pack.ts, with the pack's data in src/de440/pack-data.ts) were
- * opt-in until 1.1.0-rc.9, which makes the shipped pack the root's default
- * source: the root imports them now, and they are not in this list. The root modules the lite parts are built from
- * (src/declination.ts, src/points.ts and the like) are the root's own; the
- * export smoke test pins the lite entry's modules (scripts/lite-entry.mjs).
+ * only its sect part imports; the core entry's file, src/core.ts, which
+ * re-exports the root, and its directory, src/core/; and the DE440 files:
+ * the reader, src/de440.ts and src/de440/ (the pack's data,
+ * src/de440/pack-data.ts, among them), and the entry that ships the pack,
+ * src/de440-pack.ts, each named whole. From 1.1.0-rc.9 to 2.1.0 the root
+ * computed on the shipped pack by default and imported the DE440 files; from
+ * 3.0.0 it computes on astronomy-engine, `useDe440()` in src/de440-pack.ts
+ * puts it on the pack, and the root's graph holds none of them again. The
+ * setting the two share, src/ephemeris-default.ts, is the root's own. The
+ * root modules the lite parts are built from (src/declination.ts,
+ * src/points.ts and the like) are the root's own; the export smoke test pins
+ * the lite entry's modules (scripts/lite-entry.mjs).
  */
 export const OPT_IN_SOURCE =
-  /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky|lite|core)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|(?:houses-extra|equator|first-millisecond|time|time-bands|sect)\.[^/]*$)/u;
+  /^src\/(?:(?:timing|vedic|geo|tzdb|techniques|sky|lite|core|de440)(?:\/|\.[^/]*$)|(?:calc|window)(?:-[^/]*)?\.[^/]*$|(?:houses-extra|equator|first-millisecond|time|time-bands|sect|de440-pack)\.[^/]*$)/u;
 
 /** The source path of every module esbuild marks in an output file: `// src/...`, any extension. */
 export function sourceMarkers(code) {
@@ -102,28 +104,14 @@ function readList(dist, name) {
 }
 
 /**
- * The build's module list: dist/metafile-esm.json, which tsup writes, and
- * dist/metafile-lite.json, which scripts/build-lite.mjs writes, merged
- * (mergeModuleLists), with the output of dist/metafile-core.json, which
- * scripts/build-core.mjs writes, and none of its inputs: the core build is a
- * graph of its own (readCoreModuleList). `dist` is the URL of the dist/
- * directory, with its trailing slash.
+ * The build's module list: dist/metafile-esm.json, which tsup writes (and
+ * scripts/build-chunk-imports.mjs writes again without the bare chunk
+ * imports it takes out), and dist/metafile-lite.json, which
+ * scripts/build-lite.mjs writes, merged (mergeModuleLists). `dist` is the URL
+ * of the dist/ directory, with its trailing slash.
  */
 export function readModuleList(dist) {
-  const core = readCoreModuleList(dist);
-  return mergeModuleLists(readList(dist, "metafile-esm.json"), readList(dist, "metafile-lite.json"), { inputs: {}, outputs: core.outputs });
-}
-
-/**
- * The core entry's module list, dist/metafile-core.json, whole: dist/core.js
- * and the source modules it was bundled from, with src/ephemeris.ts importing
- * src/core/ephemeris-shipped.ts.
- */
-export function readCoreModuleList(dist) {
-  const list = readList(dist, "metafile-core.json");
-  assert(list && typeof list === "object" && list.outputs && list.inputs, "dist/metafile-core.json is not an esbuild metafile; rebuild with npm run build");
-  assert.deepEqual(Object.keys(list.outputs), ["dist/core.js"], "dist/metafile-core.json must describe dist/core.js and nothing else");
-  return list;
+  return mergeModuleLists(readList(dist, "metafile-esm.json"), readList(dist, "metafile-lite.json"));
 }
 
 /**

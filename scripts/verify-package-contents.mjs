@@ -303,6 +303,38 @@ for (const file of files) {
 // fit it and no more, for the owner to decide with the candidate. The other
 // graphs are inside their budgets, unchanged (./internal 112,561 of 112,600;
 // ./core 110,976 of 111,000).
+//
+// 3.0.0 puts the root back on astronomy-engine by default: the DE440 reader
+// and the shipped pack leave the root's graph, and useDe440() in
+// ./de440/pack, the one entry that still loads the pack, makes it the
+// default (docs/de440.md). The setting the two share is a module of its own
+// (src/ephemeris-default.ts), in a chunk of 600 bytes. ./core re-exports the
+// root and loads the root's graph, where until 2.1.0 it was the root's code
+// bundled on its own into one file. The build also takes out the bare chunk
+// imports esbuild writes (scripts/build-chunk-imports.mjs), a few dozen bytes
+// in each graph. Against 2.1.0, measured on its carried archive, the graphs
+// that change, old budget, 2.1.0's measurement, this build's, new budget:
+//   .             154,500   154,333   119,568   119,600
+//   ./calc        205,600   201,118   166,682   166,700
+//   ./core        111,000   110,870   119,568   119,600
+//   ./internal    112,600   112,556    77,269    77,300
+//   ./sky         140,100   139,926   104,669   104,700
+//   ./techniques  207,900   207,721   172,494   172,500
+//   ./timing      173,800   173,636   138,349   138,400
+//   ./vedic       189,500   189,368   154,171   154,200
+//   ./window      153,000   152,906   117,769   117,800
+//   ./de440/pack   55,800    55,266    55,888    55,900
+// Eight graphs lose the DE440 reader (34,765 bytes from the root's) and their
+// budgets are lowered to the measurement rounded up to the next hundred
+// bytes, so that the room the reader leaves cannot hide growth. Two are
+// raised to the same rounding, for the owner to decide with the candidate:
+// ./core by 8,600, since the root's graph is split into chunks that import
+// and export each other's names where 2.1.0's core.js was one file (an
+// application's minified bundle of natalChart from either entry is 79,755
+// bytes, 36,219 gzipped, against 79,794 and 35,707 from 2.1.0's core.js, as
+// scripts/verify-dist-purity.mjs measures it), and ./de440/pack by 100, for
+// useDe440() and the shared setting (622 bytes). ./de440 (53,956) and ./time
+// (44,395) lose only the bare imports; the other graphs do not change.
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -320,7 +352,8 @@ const ENTRY_BUDGETS = {
   // path in the ephemeris chunk, and, after the cut's reviews, the refusal of
   // the code that computes its own positions; raised to 109,000 under the
   // owner's delegation of 2026-11-04; 0.43 per cent of headroom.
-  ".": 154_500,
+  // 3.0.0: 119,568, without the DE440 reader and the pack; lowered to 119,600.
+  ".": 119_600,
   // New in rc.16 (feature-api): the uniform calculation API, its frames,
   // centers, corrections, bounds and receipts. 106,779 bytes as integrated on
   // rc.15's time basis, 34,449 of them beyond the core's graph; 7.69 per cent
@@ -339,7 +372,8 @@ const ENTRY_BUDGETS = {
   // (and the timeBands chunk it shares with ./time) and the chunks split out
   // for ./time (above); raised to 156,000, the ceiling approved under the
   // owner's delegation of 2026-11-03 (OQ3); 3.02 per cent of headroom.
-  "./calc": 205_600,
+  // 3.0.0: 166,682, without the DE440 reader; lowered to 166,700.
+  "./calc": 166_700,
   // New in 1.1.0-rc.1: the ids of the conventions registry. 2,754 bytes, its
   // own file and the chunk of ids it shares with ./receipt; 5.30 per cent of
   // headroom.
@@ -348,7 +382,9 @@ const ENTRY_BUDGETS = {
   // its own into one file by scripts/build-core.mjs. 108,411 bytes as
   // measured on this build, as on the prototype measured in
   // docs/evidence/bundle-weight-20261117/; 1.10 per cent of headroom.
-  "./core": 111_000,
+  // 3.0.0: the root's own graph, which src/core.ts re-exports: 119,568, the
+  // same as the root's; raised to 119,600 (above), for the owner to decide.
+  "./core": 119_600,
   // rc.15: 9,410. 1.0.0-rc.1: 9,942, its options read as the shared reader
   // reads them; 0.58 per cent, not raised.
   "./crossings": 10_000,
@@ -383,6 +419,9 @@ const ENTRY_BUDGETS = {
   // gives out the sealed DE440 pack the package ships (docs/de440.md). The
   // lines below are that draft's, when only this entry held the pack; the
   // comment above ENTRY_BUDGETS has 1.1.0-rc.9's measurement.
+  // 3.0.0: 55,888 beside the pack, with useDe440() and the default setting
+  // it shares with the root; raised to 55,900 (above), for the owner to
+  // decide.
   // dist/de440-pack.js holds the pack's 2,489,664 bytes as 3,319,552
   // characters of base64 (PACK_DATA_BYTES below, checked on its own) and
   // 1,017 bytes of code that decode and open it; the rest of the graph is
@@ -392,13 +431,14 @@ const ENTRY_BUDGETS = {
   // With a second entry loading it, the build moves ./de440's code from
   // dist/de440.js into a chunk the two share, and ./de440's graph grows by
   // the 276 bytes that join them, to 46,069; its budget is not raised.
-  "./de440/pack": 55_800,
+  "./de440/pack": 55_900,
   // rc.15: 56,961; as carried, 58,997. rc.16: 64,830, raised from 60,000 for
   // the nutation in the ephemeris chunk; 4.88 per cent of headroom.
   // 1.1.0-rc.3: 68,758, with withEphemeris, the source's path and the
   // refusal in the ephemeris chunk; raised to 69,000 with the owner's
   // approval of 2026-11-10; 0.35 per cent of headroom.
-  "./internal": 112_600,
+  // 3.0.0: 77,269, without the DE440 reader; lowered to 77,300.
+  "./internal": 77_300,
   "./internal/math": 20_000, // rc.15: 18,165
   // New in 1.1.0-rc.2: declination parallels, the sect under a named
   // convention, composite midpoints and their aspects, and the dignities,
@@ -429,7 +469,8 @@ const ENTRY_BUDGETS = {
   // positions() rows' flags (111) and the polar-angles flag (105); raised
   // from 203,800 to 207,300, the measurement and about one per cent, for the
   // owner to decide with the candidate.
-  "./techniques": 207_900,
+  // 3.0.0: 172,494, without the DE440 reader; lowered to 172,500.
+  "./techniques": 172_500,
   // New in 1.1.0-rc.2: the time basis and the frame of date with no
   // ephemeris (Zodiacs.org's finding F-53), and the time bands it re-exports.
   // 1.1.0-rc.2: 42,306 bytes in 7 files, dist/time.js and the six chunks it
@@ -447,11 +488,13 @@ const ENTRY_BUDGETS = {
   // nutation in the ephemeris chunk and the frames of date the entry now
   // takes from it (src/equator.ts, shared with ./calc) in place of
   // astronomy-engine's; 5.31 per cent of headroom.
-  "./sky": 140_100,
+  // 3.0.0: 104,669, without the DE440 reader; lowered to 104,700.
+  "./sky": 104_700,
   // rc.15: 112,485, the core's graph included; as carried, 114,916. With
   // planetary returns 117,219. rc.16: 123,039, raised from 120,000 for the
   // nutation in the ephemeris chunk; 4.84 per cent of headroom.
-  "./timing": 173_800,
+  // 3.0.0: 138,349, without the DE440 reader; lowered to 138,400.
+  "./timing": 138_400,
   // rc.15: 114,106, the core's graph included; as carried, 116,779. rc.16:
   // 122,131, raised from 120,000 for the nutation in the ephemeris chunk
   // (the ayanamsas now use its frame); 4.80 per cent of headroom. rc.17:
@@ -466,7 +509,8 @@ const ENTRY_BUDGETS = {
   // growth (above) and the refusals in the ayanamsas and the varga timing;
   // raised to 144,500 under the owner's delegation of 2026-11-04; 0.59 per
   // cent of headroom.
-  "./vedic": 189_500,
+  // 3.0.0: 154,171, without the DE440 reader; lowered to 154,200.
+  "./vedic": 154_200,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
   // 33,971 of them beyond the core's graph; 8.17 per cent of headroom. With
@@ -475,7 +519,8 @@ const ENTRY_BUDGETS = {
   // withEphemeris and the source's path in the ephemeris chunk and
   // birthWindow's refusal inside it; raised to 107,000 with the owner's
   // approval of 2026-11-10; 0.20 per cent of headroom.
-  "./window": 153_000
+  // 3.0.0: 117,769, without the DE440 reader; lowered to 117,800.
+  "./window": 117_800
 };
 
 /** The dist/ files an entry loads statically, with their bytes. */
@@ -500,15 +545,18 @@ function importGraph(entry) {
   return sizes;
 }
 
-// The DE440 pack: one string of base64 in one shared chunk. Each graph's
-// budget is for its code, so a graph that loads the chunk is measured
-// without the pack's characters, which have their own exact size.
+// The DE440 pack: one string of base64 in one file. Each graph's budget is
+// for its code, so a graph that loads the file is measured without the
+// pack's characters, which have their own exact size. From 1.1.0-rc.9 to
+// 2.1.0 the file was a shared chunk that the root's ephemeris chunk and
+// dist/de440-pack.js imported; from 3.0.0 only @zodiacs/engine/de440/pack
+// loads the pack, so the build puts it in that entry's own file.
 const PACK_DATA_BYTES = 3_319_552;
 const PACK_DATA = /"([A-Za-z0-9+/]{1000,}={0,2})"/gu;
 const packedText = (name) => readFileSync(new URL(`../${name}`, import.meta.url), "utf8");
 const packHolders = files.filter((file) => file.endsWith(".js") && packedText(file).search(PACK_DATA) !== -1);
-assert(packHolders.length === 1 && /^dist\/chunk-[^/]+\.js$/u.test(packHolders[0]),
-  `the DE440 pack's base64 text must be in exactly one shared chunk under dist/; found it in ${packHolders.join(", ") || "no file"}`);
+assert(packHolders.length === 1 && packHolders[0] === "dist/de440-pack.js",
+  `the DE440 pack's base64 text must be in dist/de440-pack.js and in no other file; found it in ${packHolders.join(", ") || "no file"}`);
 const PACK_HOLDER = packHolders[0];
 const packText = [...packedText(PACK_HOLDER).matchAll(PACK_DATA)];
 assert(packText.length === 1 && packText[0][1].length === PACK_DATA_BYTES,
@@ -530,12 +578,14 @@ for (const [name, graph] of Object.entries(graphs)) {
   assert(graph.bytes <= ENTRY_BUDGETS[name],
     `the ${name} entry's import graph is ${graph.bytes} bytes${graph.pack ? " beside the DE440 pack" : ""}, over its budget of ${ENTRY_BUDGETS[name]}`);
 }
-// The entries whose graphs load the pack: the root and every entry that
-// loads the root's ephemeris chunk, and the entry that gives the pack out.
-// The others must stay without it (./de440 itself among them: it opens a
-// pack the caller supplies).
-assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].pack).sort(), [".", "./calc", "./de440/pack", "./internal", "./sky", "./techniques", "./timing", "./vedic", "./window"],
-  "the entry points whose graphs load the DE440 pack must be the ones docs/de440.md names");
+// The entries whose graphs load the pack: from 3.0.0 the entry that gives
+// the pack out, and no other (until 2.1.0 the root and every entry that
+// loads the root's ephemeris chunk too). The others stay without it: the
+// root and ./core, which compute on astronomy-engine until useDe440() is
+// called, the entries that share their ephemeris, and ./de440 itself, which
+// opens a pack the caller supplies.
+assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].pack).sort(), ["./de440/pack"],
+  "no entry point but ./de440/pack may load the DE440 pack");
 
 // The zone histories before 1970: tzdb data, not code, loaded only by
 // @zodiacs/engine/geo and only on request (prepareLocalTime), one of 16 files
@@ -752,36 +802,22 @@ for (const phrase of ["Table S15", "Creative Commons Attribution 4.0 Internation
   "shared chunk under dist/", "dist/deltat.js re-exports"]) {
   assert(notice.includes(phrase), `NOTICE must carry the ΔT attribution (${phrase})`);
 }
-// dist/core.js (@zodiacs/engine/core, from ZOD-292) is the root's graph
-// without the DE440 files, bundled on its own: it carries its own copy of
-// every other module of the root's graph, among them the ΔT model, the
-// nutation and the frame of date. The checks below of where those three are
-// look for the one shared chunk among the other files, and then for the
-// copy in dist/core.js, which NOTICE and LICENSING.md name for each of the
-// three.
-const CORE_FILE = "dist/core.js";
-const beside = files.filter((file) => file !== CORE_FILE);
-const coreText = read(CORE_FILE);
-assert(notice.includes("dist/core.js, the file of @zodiacs/engine/core, carries its own copy of the module, and so of the values"),
-  "NOTICE must say that dist/core.js carries a copy of the ΔT values");
-assert(prose("LICENSING.md").includes("`dist/deltat.js` re-exports, and a copy of it in `dist/core.js`"),
-  "LICENSING.md must say that dist/core.js carries a copy of the ΔT values");
-assert(notice.includes("dist/time.js import, and copied into dist/core.js, the file of @zodiacs/engine/core) reproduces"),
-  "NOTICE must say that dist/core.js carries a copy of the frame");
-assert(prose("LICENSING.md").includes("`dist/core.js`, the file of `@zodiacs/engine/core`, carries its own copy of `src/frame.ts`"),
-  "LICENSING.md must say that dist/core.js carries a copy of the frame");
-assert(notice.includes("(which dist/de440.js re-exports) import, and copied into dist/core.js, the file of @zodiacs/engine/core) carries"),
-  "NOTICE must say that dist/core.js carries a copy of the nutation");
-assert(prose("LICENSING.md").includes("`./de440`. `dist/core.js`, the file of `@zodiacs/engine/core`, carries its own copy of them"),
-  "LICENSING.md must say that dist/core.js carries a copy of the nutation");
-assert(coreText.includes("\n// src/time-scale-data.ts\n"), "dist/core.js must carry its own copy of the IERS tables");
-assert(prose("LICENSING.md").includes("`@zodiacs/engine/time` under `dist/` carry, and so does `dist/core.js`, the file of `@zodiacs/engine/core`"),
-  "LICENSING.md must say that dist/core.js carries the IERS tables");
+// dist/core.js (@zodiacs/engine/core) re-exports the root from 3.0.0 and
+// holds no module of its own; until 2.1.0 it was the root's graph without
+// the DE440 files, bundled on its own, with its own copy of the ΔT model,
+// the nutation, the frame of date and the IERS tables, which NOTICE and
+// LICENSING.md named. It must hold none of them now, and the two files must
+// not say it does.
+const coreText = read("dist/core.js");
+assert(!/^\/\/ src\//mu.test(coreText), "dist/core.js must hold no module's code: it re-exports the root");
+for (const name of ["NOTICE", "LICENSING.md"]) {
+  assert(!/dist\/core\.js`?,? (?:the file of `?@zodiacs\/engine\/core`?,? )?carries/u.test(prose(name)) && !prose(name).includes("copied into dist/core.js") &&
+    !prose(name).includes("a copy of it in `dist/core.js`"), `${name} must not say that dist/core.js carries a copy of a module`);
+}
 // NOTICE, LICENSING.md and the README say where the values are: in one shared
 // chunk that dist/deltat.js re-exports, not in dist/deltat.js itself. Check the
 // build still puts them there, without naming the chunk's hashed file name.
-const holders = beside.filter((file) => file.endsWith(".js") && read(file).includes('"zodiacs-deltat/1"'));
-assert(coreText.includes('"zodiacs-deltat/1"'), "dist/core.js must carry its own copy of the ΔT model");
+const holders = files.filter((file) => file.endsWith(".js") && read(file).includes('"zodiacs-deltat/1"'));
 assert(holders.length === 1 && /^dist\/chunk-[^/]+\.js$/u.test(holders[0]),
   `the ΔT model must be in exactly one shared chunk under dist/, as NOTICE says; found it in ${holders.join(", ") || "no file"}`);
 assert(read("dist/deltat.js").includes(`./${holders[0].slice("dist/".length)}`), "dist/deltat.js must re-export the chunk that holds the ΔT model");
@@ -826,12 +862,10 @@ assert(prose("LICENSING.md").includes("shared chunk under `dist/` that `dist/geo
 // esbuild writes before the frame module's code, `// src/frame.ts`, for the
 // frame: each must be in exactly one shared chunk, and the frame's chunk
 // must hold or import the nutation's.
-const nutationHolders = beside.filter((file) => file.endsWith(".js") && read(file).includes("-172064161,"));
-assert(coreText.includes("-172064161,"), "dist/core.js must carry its own copy of the nutation");
+const nutationHolders = files.filter((file) => file.endsWith(".js") && read(file).includes("-172064161,"));
 assert(nutationHolders.length === 1 && /^dist\/chunk-[^/]+\.js$/u.test(nutationHolders[0]),
   `the nutation must be in exactly one shared chunk under dist/, as NOTICE says; found it in ${nutationHolders.join(", ") || "no file"}`);
-const frameHolders = beside.filter((file) => file.endsWith(".js") && read(file).includes("\n// src/frame.ts\n"));
-assert(coreText.includes("\n// src/frame.ts\n"), "dist/core.js must carry its own copy of the frame");
+const frameHolders = files.filter((file) => file.endsWith(".js") && read(file).includes("\n// src/frame.ts\n"));
 assert(frameHolders.length === 1 && /^dist\/chunk-[^/]+\.js$/u.test(frameHolders[0]),
   `the frame module must be in exactly one shared chunk under dist/, as NOTICE says; found its marker in ${frameHolders.join(", ") || "no file"}`);
 const nutationChunk = `./${nutationHolders[0].slice("dist/".length)}`;
@@ -843,7 +877,7 @@ assert(read("dist/time.js").includes(nutationChunk), "dist/time.js must import t
 assert(files.some((file) => /^dist\/chunk-[^/]+\.js$/u.test(file) && /\bfunction gastHours\(/u.test(read(file)) && read(file).includes(nutationChunk)),
   "the ephemeris chunk must import the chunk that holds the nutation");
 assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].sizes.has(nutationHolders[0])).sort(),
-  [".", "./calc", "./de440", "./de440/pack", "./internal", "./sky", "./techniques", "./time", "./timing", "./vedic", "./window"],
+  [".", "./calc", "./core", "./de440", "./de440/pack", "./internal", "./sky", "./techniques", "./time", "./timing", "./vedic", "./window"],
   "the entry points whose graphs load the nutation must be the ones LICENSING.md names");
 // dist/de440.js re-exports the DE440 reader from a chunk of its own, which
 // imports the nutation's (until 2.1.0 dist/de440.js imported that chunk

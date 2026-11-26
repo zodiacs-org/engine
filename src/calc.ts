@@ -318,8 +318,9 @@ export interface CalcPosition {
   readonly band: CalcTimeBand | null;
   /**
    * "delta-t-extrapolated" where the position moves with an extrapolated ΔT, and `bounds` are widened (docs/calc.md,
-   * "Bounds"). "de440-unavailable" where the shipped DE440 pack gives this position and could not be opened, so
-   * that astronomy-engine gave it: never silently (docs/calc.md, "Which ephemeris").
+   * "Bounds"). "de440-unavailable" where the shipped DE440 pack, the default source, gives this position and is not loaded
+   * (no useDe440()) or could not be opened, so that astronomy-engine gave it: never silently (docs/calc.md, "Which
+   * ephemeris").
    */
   readonly flags: readonly ChartFlag[];
   readonly receipt: CalcReceipt<CalcRequest>;
@@ -1418,8 +1419,8 @@ export interface EventsResult {
   readonly samples: number;
   /**
    * "delta-t-extrapolated" where an event's UTC moves with an extrapolated ΔT; `timing` then adds the widest such
-   * band. "de440-unavailable" where the search ran on astronomy-engine because the shipped DE440 pack could not be
-   * opened.
+   * band. "de440-unavailable" where the search ran on astronomy-engine because the shipped DE440 pack, the default
+   * source, is not loaded (no useDe440()) or could not be opened.
    */
   readonly flags: readonly ChartFlag[];
   readonly bounds: { readonly timing: CalcBound };
@@ -1489,8 +1490,8 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
         : null) ?? epochRefusal(zodiac);
   if (refusal) return refusal;
   const definition = zodiac.definition;
-  // The search runs on the engine's longitudes, the default source's (src/ephemeris.ts): the shipped DE440 pack,
-  // which covers CALC_SPAN, or astronomy-engine.
+  // The search runs on the engine's longitudes, the default source's (src/ephemeris.ts): astronomy-engine, or
+  // the shipped DE440 pack after useDe440(), which covers CALC_SPAN.
   // In the sidereal zodiac, each longitude less the true ayanamsa at its own instant and clock.
   const longitudeAt: BodyLongitudeAt =
     definition === null

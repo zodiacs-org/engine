@@ -1,10 +1,13 @@
 /**
- * Never a silent fallback. The package's default source is the shipped DE440
- * pack; where a result that would have come from it comes from
- * astronomy-engine instead, the result itself says so: it names
- * astronomy-engine as its ephemeris and carries a flag that gives the reason.
+ * Never a silent fallback. Where the default source is the shipped DE440
+ * pack (after `useDe440()`, or `setDefaultEphemeris("de440")`) and a result
+ * that would have come from it comes from astronomy-engine instead, the
+ * result itself says so: it names astronomy-engine as its ephemeris and
+ * carries a flag that gives the reason.
  *
- * Three cases, each on a new copy of the modules:
+ * Four cases, each on a new copy of the modules:
+ * - not loaded: `setDefaultEphemeris("de440")` with no `useDe440()`, from
+ *   3.0.0, when the root holds no pack of its own;
  * - missing: the package holds no pack bytes (an empty string where the
  *   base64 text was);
  * - damaged: the pack's text with one character changed, so that its SHA-256
@@ -23,19 +26,37 @@ const BIRTH = { utc: "1990-04-15T08:30:00Z", latitude: 51.5, longitude: -0.12 } 
 const PLACE = { latitude: 51.5, longitude: -0.12 } as const;
 
 type PackText = (real: string) => string;
+/** The pack not loaded: setDefaultEphemeris("de440") and no useDe440(). */
+const NOT_LOADED = "not loaded";
 
-/** The engine's entries on a new copy of every module, with the pack's base64 text replaced by `text(real)`. */
-async function engineWith(text: PackText | null) {
+/**
+ * The engine's entries on a new copy of every module, with the pack's base64
+ * text replaced by `text(real)` and loaded with useDe440(), or, given
+ * NOT_LOADED, not loaded at all.
+ */
+async function engineWith(text: PackText | typeof NOT_LOADED | null) {
   vi.resetModules();
-  if (text) {
+  if (typeof text === "function") {
     vi.doMock("./de440/pack-data.js", async (original) => {
       const real = (await original()) as { DE440_PACK_BASE64: string };
       return { DE440_PACK_BASE64: text(real.DE440_PACK_BASE64) };
     });
   } else vi.doUnmock("./de440/pack-data.js");
   const root = await import("./index.js");
-  // The suite's setup chose astronomy-engine for the modules it loaded; these new ones start on the package's default.
-  expect(root.defaultEphemeris().name).toBe("de440");
+  if (text === NOT_LOADED) {
+    expect(root.defaultEphemeris().name).toBe("astronomy-engine");
+    root.setDefaultEphemeris("de440");
+  } else {
+    // From 3.0.0 the shipped pack is the default once useDe440() has loaded it; where the pack cannot be
+    // opened, useDe440() throws and leaves the default on it, so that every result says it fell back.
+    expect(root.defaultEphemeris().name).toBe("astronomy-engine");
+    try {
+      (await import("./de440-pack.js")).useDe440();
+    } catch (error) {
+      if (!text) throw error;
+    }
+    expect(root.defaultEphemeris().name).toBe("de440");
+  }
   return {
     root,
     calc: await import("./calc.js"),
@@ -58,6 +79,7 @@ const oneCharacterChanged: PackText = (real) => {
 };
 
 const UNAVAILABLE = [
+  ["not loaded: setDefaultEphemeris(\"de440\") with no useDe440()", NOT_LOADED, /^the shipped DE440 pack is not loaded: call useDe440\(\) from @zodiacs\/engine\/de440\/pack/],
   ["missing: no pack bytes in the package", (() => "") as PackText, /SHA-256/],
   ["damaged: one character of the pack changed, so its SHA-256 is wrong", oneCharacterChanged, /SHA-256/],
   ["damaged: the pack cut short", ((real) => real.slice(0, 4 * Math.floor(real.length / 8))) as PackText, /SHA-256/],

@@ -47,7 +47,8 @@ lockfile, the build configuration (`tsconfig.base.json`,
   `page-entry.mjs` with esbuild (`bundle.mjs`), resolving the chart entry to
   `dist/index.js` for root or `dist/core.js` for core. Both use the adapter's
   `createHandlers`, with each dynamically imported tzdb shard kept as a
-  chunk of its own. A loopback server
+  chunk of its own. As the adapter does, the root is put on the shipped DE440
+  pack with `useDe440()` (from 3.0.0) and core on astronomy-engine. A loopback server
   serves only those bundled files, Playwright opens the page in the browser
   and refuses every other request, and each request is answered in the page.
   WebKit here is Playwright's WebKit build on Linux, not Safari on a phone or

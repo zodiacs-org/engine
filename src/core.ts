@@ -1,11 +1,11 @@
 /**
- * `@zodiacs/engine/core`: every name the root exports, computed on
- * astronomy-engine, without the shipped DE440 pack. A chart from it names
- * astronomy-engine (`chart.ephemeris`) as the root's does after
- * `setDefaultEphemeris("astronomy-engine")`. `scripts/build-core.mjs`
- * bundles it into `dist/core.js` on its own, with
- * `src/core/ephemeris-shipped.ts` in place of `src/ephemeris-shipped.ts`, so
- * its module state (the default source, `withEphemeris`) is its own and not
- * the root's. Measured in docs/evidence/bundle-weight-20261117/.
+ * `@zodiacs/engine/core`: the root entry under a second name, kept so that
+ * code written for 2.x keeps its import. Until 2.1.0 it was the root's code
+ * bundled on its own without the DE440 pack, with a default source and
+ * settings of its own. From 3.0.0 the root itself computes on astronomy-engine
+ * by default and holds no pack, so this entry re-exports it: the same
+ * functions, the same module state (the default source, `withEphemeris`,
+ * `useDe440()` from `@zodiacs/engine/de440/pack`). Import `@zodiacs/engine`
+ * in new code; this entry may be removed in a later major version.
  */
 export * from "./index.js";

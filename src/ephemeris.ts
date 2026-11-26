@@ -11,8 +11,10 @@ import {
 import { findAspects } from "./aspects.js";
 import { chartBodyDeclinations } from "./declination.js";
 import type { ChartDeclinations } from "./declination.js";
+import type { De440Source } from "./de440.js";
 import { deltaT } from "./deltat.js";
-import { INITIAL_DEFAULT_EPHEMERIS, shippedDe440Source } from "./ephemeris-shipped.js";
+import { defaultEphemerisName, registeredDe440Source, setDefaultEphemeris } from "./ephemeris-default.js";
+import type { DefaultEphemerisName } from "./ephemeris-default.js";
 import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
 import { computeAngles, computeHouses, eastPointOf, insidePolarCircle, vertexOf } from "./houses.js";
 import { tilt } from "./nutation.js";
@@ -54,9 +56,10 @@ const UTC_CLOCK: Clock = { scale: "utc", pin: undefined };
 /** The source `withEphemeris` installed, or null for the default source. */
 let source: PositionSource | null = null;
 
-/** What a call outside `withEphemeris` computes on. */
-export type DefaultEphemerisName = "de440" | "astronomy-engine";
-let defaultName: DefaultEphemerisName = INITIAL_DEFAULT_EPHEMERIS;
+// The default's name and the shipped pack's opener are src/ephemeris-default.ts's,
+// which @zodiacs/engine/de440/pack sets without loading this module.
+export { setDefaultEphemeris };
+export type { DefaultEphemerisName };
 
 /**
  * The default source keeps a day inside each end of the shipped pack, so
@@ -73,24 +76,45 @@ interface ShippedDefault {
   readonly fromTtDays: number;
   readonly toTtDays: number;
 }
-let shipped: ShippedDefault | null | undefined;
-let shippedError: string | null = null;
 
-/** The shipped pack as the default source, opened at the first use, or null when it cannot be opened. */
+/** Why the default has no pack before `useDe440()`: nothing has registered one. */
+const NOT_LOADED =
+  "the shipped DE440 pack is not loaded: call useDe440() from @zodiacs/engine/de440/pack, or supply a pack through @zodiacs/engine/de440 and withEphemeris";
+
+/** The registered opener's pack as the default source, or why it did not open, for the opener it came from. */
+let shipped: { readonly loader: () => De440Source; readonly pack: ShippedDefault | null; readonly error: string | null } | null = null;
+
+/**
+ * The shipped pack as the default source, opened at the first use after
+ * `useDe440()` registered it, or null when none is registered or it cannot
+ * be opened (`shippedError` says why).
+ */
 function shippedDefault(): ShippedDefault | null {
-  if (shipped !== undefined) return shipped;
+  const loader = registeredDe440Source();
+  if (loader === null) return null;
+  if (shipped?.loader === loader) return shipped.pack;
   try {
-    const opened = shippedDe440Source();
+    const opened = loader();
     shipped = {
-      source: opened,
-      fromTtDays: opened.pack.startEtSecTdb / SECONDS_PER_DAY + DEFAULT_MARGIN_DAYS,
-      toTtDays: opened.pack.stopEtSecTdb / SECONDS_PER_DAY - DEFAULT_MARGIN_DAYS
+      loader,
+      pack: {
+        source: opened,
+        fromTtDays: opened.pack.startEtSecTdb / SECONDS_PER_DAY + DEFAULT_MARGIN_DAYS,
+        toTtDays: opened.pack.stopEtSecTdb / SECONDS_PER_DAY - DEFAULT_MARGIN_DAYS
+      },
+      error: null
     };
   } catch (error) {
-    shipped = null;
-    shippedError = error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+    shipped = { loader, pack: null, error: error instanceof Error ? `${error.name}: ${error.message}` : String(error) };
   }
-  return shipped;
+  return shipped.pack;
+}
+
+/** Why `shippedDefault()` gave null, or null when it gave the pack. */
+function shippedError(): string | null {
+  const loader = registeredDe440Source();
+  if (loader === null) return NOT_LOADED;
+  return shipped?.loader === loader ? shipped.error : null;
 }
 
 /** The source a calculation at one instant uses, and why it is astronomy-engine when the default was the pack. */
@@ -99,11 +123,11 @@ interface Chosen {
   readonly from: PositionSource | null;
   /**
    * Set when the default is "de440" and the calculation is astronomy-engine's
-   * all the same: the shipped pack could not be opened
-   * (`"de440-unavailable"`), or the instant is outside it
+   * all the same: the shipped pack is not loaded (no `useDe440()`) or could
+   * not be opened (`"de440-unavailable"`), or the instant is outside it
    * (`"outside-de440-span"`). Null on the pack, inside `withEphemeris`, and
-   * after `setDefaultEphemeris("astronomy-engine")`, which is the caller's
-   * choice and not a fallback.
+   * on the default astronomy-engine, which is the caller's choice (or the
+   * package's default) and not a fallback.
    */
   readonly fallback: EphemerisFallback | null;
 }
@@ -118,7 +142,7 @@ const ON_ASTRONOMY_ENGINE: Chosen = { from: null, fallback: null };
  */
 function chosenAt(ttDays: number): Chosen {
   if (source) return { from: source, fallback: null };
-  if (defaultName !== "de440") return ON_ASTRONOMY_ENGINE;
+  if (defaultEphemerisName() !== "de440") return ON_ASTRONOMY_ENGINE;
   const pack = shippedDefault();
   if (pack === null) return { from: null, fallback: "de440-unavailable" };
   return ttDays >= pack.fromTtDays && ttDays <= pack.toTtDays ? { from: pack.source, fallback: null } : { from: null, fallback: "outside-de440-span" };
@@ -217,12 +241,17 @@ export interface DefaultEphemeris {
   /**
    * `"de440"`: a call outside `withEphemeris` computes on the shipped DE440
    * pack where `de440` says it can, and on astronomy-engine elsewhere.
-   * `"astronomy-engine"`: it computes on astronomy-engine always.
+   * `"astronomy-engine"`, the package's default from 3.0.0: it computes on
+   * astronomy-engine always.
    */
   readonly name: DefaultEphemerisName;
   /** The shipped pack as the default source. */
   readonly de440: {
-    /** Whether the pack opened. When false, every default call is astronomy-engine's. */
+    /**
+     * Whether the pack is loaded (`useDe440()`) and opened. When false, every
+     * default call is astronomy-engine's, flagged `"de440-unavailable"` when
+     * `name` is `"de440"`.
+     */
     readonly opened: boolean;
     /** The pack's SHA-256, a chart's `ephemeris.version`, or null when it did not open. */
     readonly version: string | null;
@@ -233,41 +262,31 @@ export interface DefaultEphemeris {
      */
     readonly fromTtDays: number | null;
     readonly toTtDays: number | null;
-    /** Why the pack did not open, or null. */
+    /** Why the pack is not loaded or did not open, or null. */
     readonly error: string | null;
   };
 }
 
 /**
- * What a call outside `withEphemeris` computes on. The first call opens the
- * shipped pack if nothing has yet (which hashes its 2,489,664 bytes twice).
- * A chart says which ephemeris it came from: `chart.ephemeris` names the
- * pack, and is absent on a chart from astronomy-engine.
+ * What a call outside `withEphemeris` computes on. From 3.0.0 that is
+ * astronomy-engine unless `useDe440()` from `@zodiacs/engine/de440/pack` has
+ * loaded the shipped pack; once it has, the first call opens the pack if
+ * nothing has yet (which hashes its 2,489,664 bytes twice). A chart says
+ * which ephemeris it came from: `chart.ephemeris` names the pack or
+ * astronomy-engine.
  */
 export function defaultEphemeris(): DefaultEphemeris {
   const pack = shippedDefault();
   return Object.freeze({
-    name: defaultName,
+    name: defaultEphemerisName(),
     de440: Object.freeze({
       opened: pack !== null,
       version: pack?.source.ephemeris.version ?? null,
       fromTtDays: pack?.fromTtDays ?? null,
       toTtDays: pack?.toTtDays ?? null,
-      error: shippedError
+      error: pack === null ? shippedError() : null
     })
   });
-}
-
-/**
- * Choose what a call outside `withEphemeris` computes on, from now on:
- * `"de440"` (the package's default) or `"astronomy-engine"`, which gives the
- * positions 1.1.0-rc.7 and earlier gave at every instant. It is one setting
- * for the whole module, so set it once, before computing; `withEphemeris`
- * still overrides it for the calls inside.
- */
-export function setDefaultEphemeris(name: DefaultEphemerisName): void {
-  if (name !== "de440" && name !== "astronomy-engine") throw new TypeError('setDefaultEphemeris takes "de440" or "astronomy-engine"');
-  defaultName = name;
 }
 
 /**

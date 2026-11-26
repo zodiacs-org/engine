@@ -6,6 +6,7 @@
  */
 import * as engine from '@zodiacs/engine';
 import { setDefaultEphemeris } from '../../dist/index.js';
+import { useDe440 } from '../../dist/de440-pack.js';
 import * as geo from '../../dist/geo.js';
 import * as calc from '../../dist/calc.js';
 import * as receipt from '../../dist/receipt.js';
@@ -13,7 +14,10 @@ import { createHandlers, defaultSourceText } from '../../conformance/adapters/zo
 import { receiptTexts } from './receipt-cases.mjs';
 
 const core = __RUNTIME_CONFORMANCE_ENTRY__ === 'core';
+// As the Node adapter does: core on astronomy-engine, and the root on the shipped
+// DE440 pack, which from 3.0.0 useDe440() makes the default source.
 if (core) setDefaultEphemeris('astronomy-engine');
+else useDe440();
 const handlers = createHandlers({ engine, geo, calcEntry: async () => calc });
 
 globalThis.runtimeConformance = Object.freeze({

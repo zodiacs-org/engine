@@ -19,6 +19,13 @@ if (!['root', 'core'].includes(entry)) {
   process.exit(2);
 }
 const engine = await import(pathToFileURL(resolve(dist, entry === 'core' ? 'core.js' : 'index.js')).href);
+if (entry === 'root') {
+  // The root's receipts on the shipped DE440 pack, as the adapter answers: from
+  // 3.0.0 useDe440() makes it the default; a build before has no useDe440, and the
+  // pack was its default already.
+  const pack = await import(pathToFileURL(resolve(dist, 'de440-pack.js')).href);
+  if (typeof pack.useDe440 === 'function') pack.useDe440();
+}
 const receipt = await import(pathToFileURL(resolve(dist, 'receipt.js')).href);
 
 /** The runtime, from its own globals: Bun and Deno also define process.versions.node, so they are asked first. */

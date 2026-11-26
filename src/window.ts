@@ -298,7 +298,8 @@ export type BirthWindowFlag =
   | "node-unresolved"
   /**
    * The window was to be computed on the shipped DE440 pack, the default
-   * source, and the pack could not be opened: it was computed on
+   * source after `useDe440()` or `setDefaultEphemeris("de440")`, and the pack
+   * was not loaded or could not be opened: it was computed on
    * astronomy-engine, which `ephemeris` names (`EphemerisFallback` in the
    * root entry).
    */
@@ -332,9 +333,10 @@ export interface BirthWindow {
   /**
    * What every position in the window was computed on, the source a lone
    * natalChart call at any of its instants uses: `"jpl-de440"` with the
-   * shipped pack's SHA-256 (REFERENCE_SPAN lies inside the pack), or
-   * `"astronomy-engine"` with its version, by the caller's choice
-   * (`setDefaultEphemeris`) or, with the flag `"de440-unavailable"`, as a
+   * shipped pack's SHA-256 after `useDe440()` (REFERENCE_SPAN lies inside the
+   * pack), or `"astronomy-engine"` with its version, as the default (the
+   * package's from 3.0.0, or the caller's choice through
+   * `setDefaultEphemeris`) or, with the flag `"de440-unavailable"`, as a
    * fallback.
    */
   readonly ephemeris: { readonly name: string; readonly version: string };

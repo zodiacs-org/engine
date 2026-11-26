@@ -14,7 +14,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { DE440_PACK, de440PackBytes, openShippedDe440Pack, shippedDe440Source } from "./de440-pack.js";
+import { DE440_PACK, de440PackBytes, openShippedDe440Pack, shippedDe440Source, useDe440 } from "./de440-pack.js";
 import { EPHEMERIS, natalChart, positions, setDefaultEphemeris, withEphemeris } from "./index.js";
 import { createNatalEnvelope } from "./receipt.js";
 
@@ -83,11 +83,13 @@ describe("the shipped DE440 pack", () => {
     expect(largestLat).toBeLessThanOrEqual(0.0011);
   });
 
-  it("is the source a plain call uses by default, and not after setDefaultEphemeris(\"astronomy-engine\")", async () => {
+  it("is the source a plain call uses after useDe440(), and not after setDefaultEphemeris(\"astronomy-engine\")", async () => {
     const source = await openShippedDe440Pack();
     expect(shippedDe440Source()).toBe(source);
     const at = "1990-04-15T08:30:00Z";
-    setDefaultEphemeris("de440");
+    // Opened, the pack is not yet the default: from 3.0.0 useDe440() makes it so, and returns it.
+    expect(natalChart({ utc: at, latitude: 51.5, longitude: -0.12 }).ephemeris).toEqual({ name: EPHEMERIS.name, version: EPHEMERIS.version });
+    expect(useDe440()).toBe(source);
     try {
       const inside = withEphemeris(source, () => positions(at));
       expect(positions(at)).toEqual(inside);
