@@ -40,16 +40,16 @@ re-exports. Both licences apply to the package as distributed. From
 The package implementation was adapted from these Zodiacs.org TypeScript
 modules:
 
-- `src/lib/engine/full.ts` — planetary positions and chart assembly
-- `src/lib/engine/houses.ts` — independently implemented spherical
+- `src/lib/engine/full.ts`: planetary positions and chart assembly
+- `src/lib/engine/houses.ts`: independently implemented spherical
   trigonometry for angles, whole-sign houses, and Placidus houses
-- `src/lib/engine/aspects.ts` — aspect matching
-- `src/lib/engine/synastry.ts` — inter-chart aspect and balance summaries
-- `src/lib/engine/returns.ts` — longitude crossing and Saturn-return scans
-- `src/lib/engine/progressions.ts` — elapsed-time secondary-progression mapping
-- `src/lib/time/localToUtc.ts` — timezone conversion, with its birthplace
+- `src/lib/engine/aspects.ts`: aspect matching
+- `src/lib/engine/synastry.ts`: inter-chart aspect and balance summaries
+- `src/lib/engine/returns.ts`: longitude crossing and Saturn-return scans
+- `src/lib/engine/progressions.ts`: elapsed-time secondary-progression mapping
+- `src/lib/time/localToUtc.ts`: timezone conversion, with its birthplace
   local mean time, pinned tzdb history and Julian-calendar handling
-- `src/lib/geo/search.ts` — client for the separately hosted GeoNames index
+- `src/lib/geo/search.ts`: client for the separately hosted GeoNames index
 
 The techniques entry, added in 0.1.1-rc.16 (`src/techniques/`, built into
 `dist/techniques.js`, and from 1.1.0-rc.2 its composite and dignity modules
@@ -60,19 +60,19 @@ TypeScript modules, read at the site repository's commit
 SHA-256 the entry's preregistration records
 (`docs/evidence/techniques-2026-09-29/PREREGISTRATION.md`):
 
-- `src/lib/engine/solar-return.ts` and `src/lib/engine/lunar-return.ts` —
+- `src/lib/engine/solar-return.ts` and `src/lib/engine/lunar-return.ts`:
   solar and lunar returns (`src/techniques/returns.ts`)
-- `src/lib/composite.ts` — composite midpoints and their aspects
+- `src/lib/composite.ts`: composite midpoints and their aspects
   (`src/techniques/composite.ts`; `src/techniques/relationship.ts` until
   1.1.0-rc.2)
-- `src/lib/engine/void-of-course.ts` — the void-of-course Moon
+- `src/lib/engine/void-of-course.ts`: the void-of-course Moon
   (`src/techniques/void-of-course.ts`)
-- `src/lib/engine/aspect-patterns.ts` and `src/lib/aspect-pattern-model.ts` —
+- `src/lib/engine/aspect-patterns.ts` and `src/lib/aspect-pattern-model.ts`:
   aspect patterns and their containment (`src/techniques/aspect-patterns.ts`)
-- `src/lib/dignities.ts` — `dignityFor`, `dignitiesFor` and
+- `src/lib/dignities.ts`: `dignityFor`, `dignitiesFor` and
   `hasClassicalDignities` (`src/techniques/dignities.ts`)
 - `src/lib/moon-certainty.ts`, `src/lib/chart-date-certainty.ts` and
-  `untimedMoonSign` in `src/lib/share-card.ts` — the Moon signs possible over
+  `untimedMoonSign` in `src/lib/share-card.ts`: the Moon signs possible over
   a date (`src/techniques/moon-sign.ts`)
 
 The lite entry's sect part, added in 1.1.0-rc.2 (`src/sect.ts`, built into
@@ -122,7 +122,7 @@ Geometric Predicates" (1997), in the partial-sums form documented for Python's
 The computational dependency is `astronomy-engine@2.1.19`. Its installed npm
 metadata declares MIT, names Donald Cross as author, and links to
 `https://github.com/cosinekitty/astronomy`. Its distributed
-`esm/astronomy.js` begins with a preserved MIT notice and a 2019–2023 Don Cross
+`esm/astronomy.js` begins with a preserved MIT notice and a 2019-2023 Don Cross
 copyright line. The package uses its geocentric vectors (the Moon's
 included), Moon state, heliocentric and barycentric vectors, and date
 helpers. It no longer calls its nutation, its rotations to the ecliptic or
@@ -391,7 +391,7 @@ so does that of `./de440/pack`, which opens its pack with `./de440`, and from
 `@zodiacs/engine/de440` sums the same terms in the order the research
 runtime of zodiacs.org sums them. The model is D. D.
 McCarthy and B. J. Luzum, "An abridged model of the precession-nutation of
-the celestial pole", Celestial Mechanics and Dynamical Astronomy 85, 37–49
+the celestial pole", Celestial Mechanics and Dynamical Astronomy 85, 37-49
 (2003), as the IERS Conventions (2003), chapter 5, give it.
 
 The values were transcribed from the function `iau2000b` in `Cdist/nutation.c`
@@ -534,7 +534,7 @@ state.
   for EOP 20 C04. The Centre's page for the series gives, as its technical
   note, Bizouard, Lambert, Gattano, Becker and Richard, "The IERS EOP 14C04
   solution for Earth orientation parameters consistent with ITRF 2014",
-  J. Geod. 93, 621–633 (2019), doi:10.1007/s00190-018-1186-3, whose author
+  J. Geod. 93, 621-633 (2019), doi:10.1007/s00190-018-1186-3, whose author
   list and title were checked against that DOI's record (read 2026-09-29);
   `NOTICE` cites it.
 - **The leap-second list, `leap-seconds.list`.** In the public domain, as
@@ -553,12 +553,12 @@ and names come from public-domain sources only:
   histories pinned through 2.0.0-rc.2), which says of itself "This file is in the public domain",
   and whose list quotes H. Grotefend, *Taschenbuch der Zeitrechnung des
   deutschen Mittelalters und der Neuzeit*, edited by O. Grotefend (Hannover:
-  Hahnsche Buchhandlung, 1941), pp. 26–28;
+  Hahnsche Buchhandlung, 1941), pp. 26-28;
 - Hermann Grotefend's own tables, in the public domain because they were
   published in 1891 and 1898 and their author died in 1931: *Zeitrechnung des
   deutschen Mittelalters und der Neuzeit*, vol. 1 (Hannover: Hahn, 1891),
-  pp. 133–134, and *Taschenbuch der Zeitrechnung* (Hannover and Leipzig: Hahn,
-  1898), pp. 23–24, read in the Internet Archive's scans;
+  pp. 133-134, and *Taschenbuch der Zeitrechnung* (Hannover and Leipzig: Hahn,
+  1898), pp. 23-24, read in the Internet Archive's scans;
 - for the country names, tzdata 2025c's `iso3166.tab`, which is in the public
   domain.
 
@@ -635,7 +635,7 @@ dε = −0.0068192″ and dα₀ = −0.0146″, composed as the IERS Convention
 (2010), chapter 5, eq. 5.21, compose it (G. Petit and B. Luzum, eds., IERS
 Technical Note No. 36, 2010), and the obliquity of J2000.0 of the IAU 2006
 precession, 84381.406″ (N. Capitaine, P. T. Wallace and J. Chapront, A&A
-412, 567–586, 2003, adopted by IAU 2006 Resolution B1;
+412, 567-586, 2003, adopted by IAU 2006 Resolution B1;
 `src/calc-frames.ts`). These are single published constants; `NOTICE`
 cites them.
 
@@ -677,14 +677,14 @@ classical planets, as these works give them
 (`src/techniques/dignities.ts`; `docs/techniques.md` quotes each and names
 the copies read):
 
-- Ptolemy, *Tetrabiblos* I.17–I.20, tr. F. E. Robbins (Loeb Classical
+- Ptolemy, *Tetrabiblos* I.17 to I.20, tr. F. E. Robbins (Loeb Classical
   Library, 1940): the domiciles, the exaltations and the Egyptian terms;
-- Dorotheus of Sidon, *Carmen Astrologicum* I.1–I.2, ed. and tr. David
-  Pingree (Leipzig: Teubner, 1976), pp. 161–162: the domiciles, the
+- Dorotheus of Sidon, *Carmen Astrologicum* I.1 to I.2, ed. and tr. David
+  Pingree (Leipzig: Teubner, 1976), pp. 161-162: the domiciles, the
   exaltations and the triplicity lords;
 - al-Bīrūnī, *The Book of Instruction in the Elements of the Art of
   Astrology* (1029), tr. R. Ramsay Wright (London: Luzac, 1934),
-  §§440–453: the detriments, the triplicities, the terms and the Chaldean
+  §§440-453: the detriments, the triplicities, the terms and the Chaldean
   faces;
 - William Lilly, *Christian Astrology* (London, 1647), p. 112: reception
   and the peregrine planet, and the order of the five dignities.
@@ -718,7 +718,7 @@ report of those works. `NOTICE` cites them.
   (2000), a publication of the US Government.
 
 Its planetary hours follow Chaucer's *Treatise on the Astrolabe* (c. 1391)
-and, for the rulers of the days, Cassius Dio's *Roman History* 37.18–19,
+and, for the rulers of the days, Cassius Dio's *Roman History* 37.18-19,
 works in the public domain, as `docs/sky.md` cites them. `NOTICE` cites the
 constants' sources.
 

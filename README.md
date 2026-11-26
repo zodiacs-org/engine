@@ -586,7 +586,7 @@ Date does not establish physical accuracy for that date. Validation includes a
 constructed mapping to the existing JPL longitude fixture and a rounded
 published date-mapping example; neither establishes predictive validity.
 The year convention and published mapping are cited to Juan Estadella,
-[*Predictive Astrology*, 3rd ed., pp. 84–85](https://juanestadella.com/Predictive_Astrology_Juan-Estadella_3rd_edition.pdf)
+[*Predictive Astrology*, 3rd ed., pp. 84-85](https://juanestadella.com/Predictive_Astrology_Juan-Estadella_3rd_edition.pdf)
 (PDF SHA-256 `bf52656b367ad7d1415a7b021a0a0db3a609bf35c7a40053ff0622e7a3325622`).
 The book's own rounding allows up to 4.73 s, hence the 5 s comparison; from the
 19.677 h birth time it actually used, the mapping lands within 50 ms of its
@@ -629,8 +629,8 @@ the declination analysis, are exact and case-sensitive strings of 1 to 80
 UTF-16 code units (a character outside the Basic Multilingual Plane counts
 two). `String.prototype.trim` must leave a label unchanged, which rules out
 leading or trailing whitespace, including U+3000 and U+FEFF, and a label may
-not contain a C0 control character (U+0000–U+001F) or DEL (U+007F). C1
-controls (U+0080–U+009F), zero-width characters such as U+200B, and lone
+not contain a C0 control character (U+0000 to U+001F) or DEL (U+007F). C1
+controls (U+0080 to U+009F), zero-width characters such as U+200B, and lone
 surrogates are not rejected. Other labels throw `RangeError`.
 Positions require finite longitude in `[0,360)` and a finite longitude speed
 in degrees/day
@@ -783,7 +783,7 @@ outside those years Swiss uses a long-term sidereal time of its own.
 | `"porphyry"` | Porphyry | Each quadrant between the angles in three equal arcs of longitude. |
 | `"regiomontanus"` | Regiomontanus | Circles through the horizon's north and south points, every 30° of the equator. |
 | `"campanus"` | Campanus | The same circles, every 30° of the prime vertical. |
-| `"topocentric"` | Topocentric (Polich–Page) | Regiomontanus's ascensions, with pole heights at a third and two thirds of the latitude's tangent. |
+| `"topocentric"` | Topocentric (Polich-Page) | Regiomontanus's ascensions, with pole heights at a third and two thirds of the latitude's tangent. |
 | `"alcabitius"` | Alcabitius | The ascendant's semi-arcs in thirds on the equator, along hour circles. |
 | `"equal"` | Equal | 30° each from the ascendant. |
 | `"equal-mc"` | Equal from the midheaven | 30° each, the 10th from the midheaven; the same at every latitude. |
@@ -1154,7 +1154,7 @@ string forms:
 - `YYYY-MM-DDTHH:mm[:ss[.sss]]Z`, or the same date-time with an explicit
   `+HH:mm` or `-HH:mm` offset. Fractional seconds, when supplied, have one to
   three digits. ISO expanded years use a sign and six digits, such as
-  `-000001-01-01T00:00:00Z`; years `0000`–`0099` are not shifted to 1900–1999.
+  `-000001-01-01T00:00:00Z`; years `0000` to `0099` are not shifted to 1900 to 1999.
 
 Invalid calendar dates, rollovers such as February 30 or `24:00`, leap seconds,
 unresolved local date-times, locale-specific strings, excessive fractional
@@ -1363,7 +1363,7 @@ automatic retry loop, backoff or per-caller cancellation API. A custom fetch may
 bind its own abort signal; the client does not reset that signal.
 
 Parseable JSON must match the compact v1 asset format: index string tables and
-`0`/`a`–`z` shard keys, with eight-field city rows containing valid table indices,
+`0`/`a` to `z` shard keys, with eight-field city rows containing valid table indices,
 integer coordinates in hundredths of a degree (including ±90°/±180°), and
 nonnegative integer populations. An invalid index or shard rejects with
 `TypeError("Invalid GeoNames index data.")` or

@@ -38,8 +38,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      # The JSON report gives scripts/ratchet.mjs the count of passing tests.
       - name: Test
-        run: npm test
+        run: npm run test:report
 
       - name: Build
         run: npm run build
@@ -55,6 +56,18 @@ jobs:
 
       - name: Package contents
         run: npm run package:contents
+
+      # budgets.json (scripts/ratchet.mjs): the sizes, the accuracy and the
+      # passing tests, measured on this build against their ceilings and
+      # floors; and against the merge base with main, a loosened limit, a
+      # changed guardrail file or a deleted test needs a commit in the range
+      # with the approval tag and a person's Approved-by trailer.
+      - name: Ratchet
+        run: npm run ratchet:check
+
+      # No en or em dash in the documents scripts/verify-no-dashes.mjs names.
+      - name: No en or em dashes
+        run: npm run dashes:check
 
       - name: Pack dry run
         run: npm run pack:dry-run
