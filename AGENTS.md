@@ -65,11 +65,14 @@ and documentation CC BY 4.0, tools and schema MIT). Read `README.md`,
 # ci.yml, engine job (Node 20, 22 and 24; full history)
 npm ci
 npm run typecheck
-npm test
+npm run test:report    # npm test, writing the report the ratchet reads
 npm run build
 npm run exports:smoke
 npm run api:check
 npm run package:contents
+node scripts/ratchet.mjs --check --tests .cache/vitest-report.json
+node scripts/verify-no-dashes.mjs
+node tools/wheel/selftest.mjs
 npm run pack:dry-run
 node scripts/verify-archive-binding.mjs
 
