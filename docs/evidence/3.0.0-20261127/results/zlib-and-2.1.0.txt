@@ -1,0 +1,6 @@
+2.1.0's carried archive, and its source commit 92825deeeb5c74c5f56b37d5d612c3439347087e packed again on 27 November 2026: written from git objects into a new folder under /tmp, npm ci --ignore-scripts --no-audit --no-fund, npm run build, npm pack --ignore-scripts.
+carried archive                          272bf36f705d033a19a5ad87e0e17113d6e53f96a02331cddefe7b41597b4afc 2790732 bytes
+Node 22.22.2 (nodejs.org), npm 10.9.7    272bf36f705d033a19a5ad87e0e17113d6e53f96a02331cddefe7b41597b4afc 2790732 bytes
+Node 24.13.0 (nodejs.org), npm 11.6.2    272bf36f705d033a19a5ad87e0e17113d6e53f96a02331cddefe7b41597b4afc 2790732 bytes
+Node 26.4.0 (Homebrew, zlib 1.2.12), npm 11.17.0  6d01d505b19f439a3ed99e1d028f79194fcc8b861a9a6d5c1e580721872ed424 2828719 bytes
+The Node 26.4.0 archive's tar, gunzipped, equals the carried archive's (SHA-256 of the tar ed2c55ef8d176218... in both): only the gzip bytes differ.

@@ -11,13 +11,13 @@
     "name": "zodiacs-engine",
     "version": "0.3.0",
     "engine": "@zodiacs/engine",
-    "engineVersion": "2.1.0",
+    "engineVersion": "3.0.0",
     "configuration": {
       "ephemeris": "the default source: jpl-de440 from the sealed pack the package ships, SHA-256 51428874d9a47213abc0ff42cbcec65f338624eaa2d8831f0e6ddc3654bf1fa7, for instants from -76699.5 to 76699.5 days of TT from J2000.0; astronomy-engine 2.1.19 outside them",
       "deltaTModel": "zodiacs-deltat/1",
       "timeBasis": "from 1972 to 2027-10-02, TT from the leap seconds and UT1 from IERS UT1 − UTC; the ΔT model otherwise",
       "timeZones": "before 1970 the shipped tzdb 2026f history (main+backzone), loaded with prepareLocalTime; from 1970 the host's Intl time zone data (Node 22.22.2, ICU 78.2, tz 2025c)",
-      "positions": "a plain natalChart with timeScale \"tt\", outside withEphemeris: the requested instant is read as TT; from the shipped pack, Mars to Pluto are system barycentres, as the vectors are",
+      "positions": "a plain natalChart with timeScale \"tt\", outside withEphemeris, after useDe440() where the build has it: the requested instant is read as TT; from the shipped pack, Mars to Pluto are system barycentres, as the vectors are",
       "angles": "natalChart with timeScale \"ut1\": the requested instant is read as UT1"
     }
   },
@@ -2899,7 +2899,7 @@
       "verdict": "pass",
       "residual": {
         "lon": -0.00120888715,
-        "lat": 0.00000224324879
+        "lat": 0.00000224326158
       },
       "meta": {
         "flags": [
@@ -2915,8 +2915,8 @@
       "id": "L1-POS-0154",
       "verdict": "pass",
       "residual": {
-        "lon": -0.00152397038,
-        "lat": 0.0000447206288
+        "lon": -0.00152397027,
+        "lat": 0.00004472064
       },
       "meta": {
         "flags": [
@@ -2933,7 +2933,7 @@
       "verdict": "pass",
       "residual": {
         "lon": -0.00147623077,
-        "lat": 0.000182759398
+        "lat": 0.000182759392
       },
       "meta": {
         "flags": [
@@ -2950,7 +2950,7 @@
       "verdict": "pass",
       "residual": {
         "lon": -0.00118324376,
-        "lat": 0.000128119399
+        "lat": 0.000128119422
       },
       "meta": {
         "flags": [
@@ -2967,7 +2967,7 @@
       "verdict": "pass",
       "residual": {
         "lon": -0.00153221415,
-        "lat": 0.0000195631773
+        "lat": 0.0000195631889
       },
       "meta": {
         "flags": [
@@ -2984,7 +2984,7 @@
       "verdict": "pass",
       "residual": {
         "lon": -0.00150330183,
-        "lat": 0.0000161800319
+        "lat": 0.0000161800261
       },
       "meta": {
         "flags": [
@@ -3001,7 +3001,7 @@
       "verdict": "pass",
       "residual": {
         "lon": -0.0013984217,
-        "lat": -0.0000313863783
+        "lat": -0.0000313863751
       },
       "meta": {
         "flags": [
@@ -3017,8 +3017,8 @@
       "id": "L1-POS-0160",
       "verdict": "pass",
       "residual": {
-        "lon": -0.00137458096,
-        "lat": -0.000108165084
+        "lon": -0.00137458076,
+        "lat": -0.000108165073
       },
       "meta": {
         "flags": [
