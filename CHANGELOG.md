@@ -1,5 +1,144 @@
 # Engine changelog
 
+## 3.0.0 (cut 2026-11-26)
+
+A major release, cut on 2026-11-26 on 2.1.0 (main at `7aeb1086`). It is
+published only by the owner; `artifacts/README.md` records what happens to
+it. Callers moving from 2.x should read
+[What 3.0.0 changes](docs/guide.md#what-300-changes). Sizes below are
+measured on this build (`docs/evidence/3.0.0-20261126/`); bundles are
+esbuild 0.27.7 browser bundles of an application, minified, then gzipped at
+level 9 by the zlib of the official Node 22.22.2 build.
+
+### Breaking changes
+
+- **The root computes on astronomy-engine by default.** From 1.1.0-rc.9 to
+  2.1.0 the root loaded the sealed DE440 pack on import and computed on it.
+  From 3.0.0 the root's import graph holds neither the DE440 reader nor the
+  pack, and a plain call gives astronomy-engine 2.1.19's positions, named in
+  `ephemeris` and not flagged as a fallback. One call makes the pack
+  (2,489,664 bytes, refitted from JPL's DE440 for 1790 to 2210) the default
+  for the root and every entry point that shares its ephemeris:
+  `import { useDe440 } from "@zodiacs/engine/de440/pack"; useDe440();`
+  ([de440.md](docs/de440.md#the-default-source)). An application of the
+  root's `natalChart` is 79,787 bytes minified and 36,624 gzipped (36,213
+  with the system zlib of Homebrew's Node 26.4.0, the figure README.md
+  gives); with `useDe440()` it is 3,419,715 and 2,402,512.
+- **`require()` loads the package, and `engines` is
+  `^20.19.0 || >=22.12.0`** (2.1.0: `^20.19.0 || >=22.7.0`), the versions
+  whose `require()` loads ES modules. The CommonJS stub that threw
+  `ERR_ZODIACS_ESM_ONLY` and the `"require"` condition are gone; each entry
+  point exports `types` and `default`
+  ([guide](docs/guide.md#runtimes-and-module-formats)).
+- **`@zodiacs/engine/core` shares the root's module state.** It re-exports
+  the root: the same functions, default source, `withEphemeris` and
+  `useDe440()`. Until 2.1.0 it was the root's code bundled on its own,
+  without the pack and with settings of its own.
+
+### Deprecated
+
+- **`@zodiacs/engine/core`**, the root under its 2.x name: import
+  `@zodiacs/engine`. It keeps working, and may be removed only in a major
+  release at least twelve months after this one
+  ([versioning.md](docs/versioning.md#deprecation)).
+
+### Added
+
+- **`@zodiacs/engine/minor-bodies`**: the apparent geocentric places of
+  Chiron, Ceres, Pallas, Juno and Vesta from 1800-01-01 to 2200-01-01 TT,
+  from Chebyshev tables fitted to NASA JPL Horizons's vectors, refused with
+  a `RangeError` outside that span. At 500 Horizons places the fit never
+  saw, every longitude and latitude is within 0.532″ after `useDe440()` and
+  within 1.682″ on astronomy-engine (`src/minor-bodies.test.ts`).
+  `minorBodyPosition(spec, date)` bundles only the tables of the specs an
+  application imports: Chiron alone adds 24,224 bytes minified (14,123
+  gzipped) to an application of the root's `natalChart`, and all five
+  180,562 (115,930) ([guide](docs/guide.md#minor-bodies); LICENSING.md,
+  *Minor-body tables*).
+- **True Black Moon Lilith**, the osculating lunar apogee: the last row of
+  `chartPoints()` and the body `"True Black Moon Lilith"` of `calc()`
+  (`lilith:true-osculating`). Against the osculating apogee of NASA JPL
+  Horizons's Moon at 12 instants from 1850 to 2150 it is within 1.589″ on
+  the sky in longitude (median 0.050″) after `useDe440()`, and within 396″
+  (median 178″) on astronomy-engine (`src/true-lilith.test.ts`;
+  [guide](docs/guide.md#points)). `PointPosition` has optional `ephemeris`
+  and `fallback`, which that row carries, `PositionSource` an optional
+  `moonState`, and a DE440 source gives `moonState` and `earthAndSunState`.
+- **Two packed documents**: `docs/calc.md`, the calc entry's reference with
+  the Swiss Ephemeris flag mapping, and `skills/zodiacs-compute/SKILL.md`,
+  for agents.
+- **CI guardrails.** `budgets.json` and `scripts/ratchet.mjs` hold bundle
+  sizes, the absence of bare chunk imports, two accuracy maxima, the
+  conformance passes and the passing tests to limits that only a commit
+  with a person's approval may loosen; `scripts/verify-no-dashes.mjs` keeps
+  en and em dashes out of the documents it names.
+- **`@zodiacs/wheel` 1.0.0** in `tools/wheel/`, a chart wheel for engine
+  3.0.0's charts, minor bodies and points, prepared for npm and not
+  published. It is not part of this package.
+
+### Fixed
+
+- **`calc()` receipts after the IERS table (E1).** A receipt names the
+  continuous-UTC rule's time-basis id when any of its instants lies after
+  2027-10-02 on the `"continuous-utc"` basis; every other receipt keeps the
+  id it carried (`src/calc-time-basis-2.1.1.test.ts`).
+- **Search windows across 2027-10-02 (E2).** A window is checked in order on
+  the scale it was given on and again once converted to TT (to UTC for
+  `events()`). A 1 ms UT1 window across the end of the IERS table, which
+  converts to TT backwards, is refused with a `RangeError` that says where
+  the time basis steps back
+  ([calc.md](docs/calc.md#station-and-lunation-search)).
+- **Bare chunk imports.** The build takes out the bare imports esbuild
+  writes for chunks a file already loads, so bundling an entry point under
+  `"sideEffects": false` gives no `ignored-bare-import` warning
+  (`scripts/verify-dist-purity.mjs`).
+- **Documentation.** README.md is a short overview, and every section it
+  carried up to 2.1.0 is in `docs/guide.md`. `docs/comparison.md` gives
+  PyEphem's L1 as `conformance/results/pyephem.json` has it, 240
+  unsupported, where it gave 36 of 240.
+
+### Parked
+
+- `tools/cli/` and `python/` are parked at 3.0.0, pinned to the 1.0.0-rc.2
+  and 0.1.1-rc.14 archives (`PARKED.md` in each).
+
+### Sizes and budgets
+
+Import graphs beside the DE440 pack and the minor-body tables, as
+`npm run package:contents` measures them on this build
+(`scripts/verify-package-contents.mjs` gives each step). Five budgets are
+over 2.1.0's, each set to the measurement rounded up to the next hundred
+bytes, for the owner to decide with the candidate:
+
+- `./core`: 111,000 to 122,100 (graph 122,049). It is the root's graph, in
+  chunks that import and export each other's names, where 2.1.0's `core.js`
+  was one file of 110,870 bytes; it grows with True Black Moon Lilith and
+  with the chunks the root's graph shares with `./minor-bodies`.
+- `./de440`: 54,600 to 55,800 (55,714): the Moon's state for True Black
+  Moon Lilith, and the Earth's and the Sun's for the minor bodies.
+- `./de440/pack`: 55,800 to 57,900 (57,812): `useDe440()` and the default
+  setting it shares with the root, and the same states.
+- `./receipt`: 81,200 to 81,300 (81,203): the chunks the root's graph
+  shares with `./minor-bodies`.
+- `./minor-bodies`: new, 60,200 (60,190), beside its five tables, which are
+  data held to their exact sizes and digests.
+
+Eight graphs lose the DE440 reader and their budgets are lowered to the
+measurement rounded up: `.` 154,500 to 122,100 (122,049), `./calc` 205,600
+to 170,100 (170,098), `./internal` 112,600 to 79,600 (79,598), `./sky`
+140,100 to 107,000 (106,998), `./techniques` 207,900 to 174,900 (174,899),
+`./timing` 173,800 to 140,800 (140,782), `./vedic` 189,500 to 156,700
+(156,614) and `./window` 153,000 to 120,200 (120,174). The cap on the
+package beside the pack and the tables, 1,463,000 bytes, is not raised.
+
+### Conformance
+
+On Node 22.22.2 against suite 0.3.0 (640 vectors; `conformance/RESULTS.md`):
+after `useDe440()`, 639 pass, 0 fail and 1 unsupported (L1 240 of 240, L2
+150 of 150, L3 109 of 110 with 1 unsupported, L4 140 of 140); on
+astronomy-engine, the default, 392 pass, 247 fail and 1 unsupported (L1 48
+of 240, L4 85 of 140). Every verdict equals 2.1.0's.
+
 ## 2.1.0 (cut 2026-11-23)
 
 2.1.0 is 2.1.0-rc.1 with only the version changed. Station and lunation
