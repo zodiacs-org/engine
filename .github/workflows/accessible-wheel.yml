@@ -3,14 +3,14 @@ on:
   pull_request:
     paths:
       - 'tools/wheel/**'
-      - 'artifacts/zodiacs-engine-1.0.0-rc.2.tgz'
+      - 'artifacts/zodiacs-engine-3.0.0.tgz'
       - '.github/workflows/accessible-wheel.yml'
       - 'docs/evidence/accessible-wheel-20261009/**'
   push:
     branches: [main]
     paths:
       - 'tools/wheel/**'
-      - 'artifacts/zodiacs-engine-1.0.0-rc.2.tgz'
+      - 'artifacts/zodiacs-engine-3.0.0.tgz'
       - '.github/workflows/accessible-wheel.yml'
       - 'docs/evidence/accessible-wheel-20261009/**'
 permissions:
@@ -24,7 +24,7 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        node: ['22.22.2', '24']
+        node: ['20.19.0', '22.22.2', '24']
     env:
       WHEEL_BROWSER: ${{ matrix.node == '22.22.2' && '1' || '0' }}
       PROGRAMME_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -35,11 +35,13 @@ jobs:
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             /tools/wheel/
-            /artifacts/zodiacs-engine-1.0.0-rc.2.tgz
+            /artifacts/archives.json
+            /artifacts/zodiacs-engine-3.0.0.tgz
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: ${{ matrix.node }}
-      - name: Pack privately; verify clean consumer and keyboard interactions
+      # The engine is the carried 3.0.0 archive, checked against archives.json.
+      - name: Pack; verify clean consumers and keyboard interactions
         run: node tools/wheel/scripts/prepare-consumer.mjs
       - name: Retain actual report
         if: always()

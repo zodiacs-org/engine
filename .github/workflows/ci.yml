@@ -69,6 +69,12 @@ jobs:
       - name: No en or em dashes
         run: npm run dashes:check
 
+      # tools/wheel (@zodiacs/wheel), which needs no build: wheel geometry,
+      # text, validation, XML and escaping, require() of both entries and the
+      # npm pack file list. accessible-wheel.yml runs its clean consumers.
+      - name: Wheel selftest
+        run: node tools/wheel/selftest.mjs
+
       - name: Pack dry run
         run: npm run pack:dry-run
 
