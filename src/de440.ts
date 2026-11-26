@@ -51,6 +51,14 @@ export interface De440Source extends PositionSource {
    * treats each as a seam.
    */
   steps(fromTtDays: number, toTtDays: number): number[];
+  /**
+   * From 3.0.0: the geometric geocentric Moon at `ttDays` (TT days past
+   * J2000.0, read at TDB as a place is), in the ICRF, position in km and
+   * velocity in km/s, from the pack's Moon and Earth relative to the
+   * Earth-Moon barycentre: the state the engine takes True Black Moon Lilith
+   * from.
+   */
+  moonState(ttDays: number): { position: [number, number, number]; velocity: [number, number, number] };
   readonly pack: {
     readonly sha256: string;
     readonly bytes: number;
@@ -130,6 +138,9 @@ function sourceOf(copy: Uint8Array, digest: string, header: ReturnType<typeof pa
     },
     steps(fromTtDays: number, toTtDays: number): number[] {
       return reducer.steps(fromTtDays, toTtDays);
+    },
+    moonState(ttDays: number): { position: [number, number, number]; velocity: [number, number, number] } {
+      return reducer.moonState(ttDays);
     }
   });
 }

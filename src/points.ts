@@ -1,12 +1,14 @@
 /**
  * Chart points that are not bodies: the Moon's mean node and mean apogee
- * (Black Moon Lilith), the Hellenistic lots, and the antiscia and midpoints of
- * any two longitudes. The Vertex and the East Point, which follow from the
- * sidereal time like the angles, are in houses.ts.
+ * (Black Moon Lilith), its osculating apogee (True Black Moon Lilith), the
+ * Hellenistic lots, and the antiscia and midpoints of any two longitudes. The
+ * Vertex and the East Point, which follow from the sidereal time like the
+ * angles, are in houses.ts.
  *
- * Nothing here reads an ephemeris: the node and the apogee come from mean
- * elements, polynomials in time, and the lots from longitudes the chart
- * already has.
+ * Nothing here reads an ephemeris: the mean node and the mean apogee come
+ * from mean elements, polynomials in time, the osculating apogee from a Moon
+ * state the caller passes (src/ephemeris.ts carries it to the ecliptic of
+ * date, trueApogee), and the lots from longitudes the chart already has.
  */
 import { normalizeLongitude } from "./signs.js";
 import type { PointName, Sect } from "./types.js";
@@ -67,6 +69,49 @@ export function meanApogee(centuries: number, nutation: number): { lon: number; 
   const i = MEAN_LUNAR_INCLINATION * DEG;
   const lon = node + Math.atan2(Math.cos(i) * Math.sin(u), Math.cos(u)) * RAD + nutation;
   return { lon: normalizeLongitude(lon), lat: Math.asin(Math.sin(i) * Math.sin(u)) * RAD };
+}
+
+/**
+ * The gravitational parameter of the Earth and the Moon together, km³/s²,
+ * of the two-body orbit whose apogee the osculating apogee is: 403,503.2419,
+ * the Earth's GM of the IERS Conventions (2010), table 1.1, 398,600.4418, and
+ * the Moon's, 4,902.8001, JPL's DE440 value, 4,902.800118 (R. S. Park et al.
+ * 2021), to four decimals.
+ *
+ * A constant of chartPoints' True Black Moon Lilith, which the root does not
+ * export.
+ */
+export const EARTH_MOON_GM = 403503.2419;
+
+/**
+ * The osculating lunar apogee of the geocentric Moon at `position`, km, with
+ * `velocity`, km/s: the apogee of the Keplerian orbit the Moon would follow
+ * from there under the Earth's and its own gravity alone ({@link EARTH_MOON_GM}).
+ * With h = r × v the orbit's angular momentum, the eccentricity vector
+ * e = (v × h) / μ − r / |r| (the Laplace-Runge-Lenz vector divided by μ)
+ * points to the perigee, so the apogee lies along −e. Returns the unit vector
+ * along −e, in the frame `position` and `velocity` are in, and |e|, the
+ * orbit's eccentricity.
+ *
+ * The formula behind chartPoints' True Black Moon Lilith (trueApogee in
+ * src/ephemeris.ts), which the root does not export: use chartPoints or
+ * `@zodiacs/engine/calc`.
+ */
+export function osculatingApogee(
+  position: readonly [number, number, number],
+  velocity: readonly [number, number, number]
+): { direction: [number, number, number]; eccentricity: number } {
+  const [x, y, z] = position;
+  const [vx, vy, vz] = velocity;
+  const hx = y * vz - z * vy;
+  const hy = z * vx - x * vz;
+  const hz = x * vy - y * vx;
+  const r = Math.sqrt(x * x + y * y + z * z);
+  const ex = (vy * hz - vz * hy) / EARTH_MOON_GM - x / r;
+  const ey = (vz * hx - vx * hz) / EARTH_MOON_GM - y / r;
+  const ez = (vx * hy - vy * hx) / EARTH_MOON_GM - z / r;
+  const e = Math.sqrt(ex * ex + ey * ey + ez * ez);
+  return { direction: [-ex / e, -ey / e, -ez / e], eccentricity: e };
 }
 
 /**

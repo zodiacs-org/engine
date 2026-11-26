@@ -202,16 +202,19 @@ describe("solar arc invariants", () => {
     expect(result.positions.map((row) => row.name).slice(0, 16)).toEqual([
       ...chart.bodies.map((body) => body.body), "Ascendant", "Midheaven", "Descendant", "Imum Coeli"
     ]);
-    expect(result.positions.filter((row) => row.kind === "point")).toHaveLength(12);
+    // 12 through 2.1.0; True Black Moon Lilith from 3.0.0.
+    expect(result.positions.filter((row) => row.kind === "point")).toHaveLength(13);
     for (const row of result.positions) {
       expect(arcmin(row.directed, row.natal + result.arc.arc)).toBeCloseTo(0, 9);
       expect(row.directed).toBeGreaterThanOrEqual(0);
       expect(row.directed).toBeLessThan(360);
       expect(row.degree).toBeCloseTo(row.directed % 30, 12);
     }
-    // Without a birth time there are no angles or lots, only the bodies and the mean points.
+    // Without a birth time there are no angles or lots, only the bodies, the mean points and, from 3.0.0, True
+    // Black Moon Lilith.
     const untimed = solarArcDirections({ utc: "1990-06-15", timeKnown: false }, "2026-09-28");
-    expect(untimed.positions.map((row) => row.kind)).toEqual([...Array(12).fill("body"), "point", "point", "point"]);
+    expect(untimed.positions.map((row) => row.kind)).toEqual([...Array(12).fill("body"), "point", "point", "point", "point"]);
+    expect(untimed.positions.at(-1)!.name).toBe("True Black Moon Lilith");
   });
 });
 

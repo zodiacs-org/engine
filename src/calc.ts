@@ -11,7 +11,7 @@
 import { AstroTime, Body, GeoMoonState, KM_PER_AU } from "astronomy-engine";
 
 // Imported first so that the build keeps the root entry's shared chunks byte for byte.
-import { bodyLongitude, computeChart, deltaTExtrapolated, ephemerisAt, gastHours, onChartClock, refuseUnderSource } from "./ephemeris.js";
+import { bodyLongitude, computeChart, deltaTExtrapolated, ephemerisAt, gastHours, onChartClock, refuseUnderSource, trueApogee } from "./ephemeris.js";
 import { assertDerivedFlags, snapshotFlags, timeFlags, validateBirthSettings } from "./birth-input.js";
 import { MEAN_POINTS_BASIS, MEAN_POINTS_SPEED_BASIS, MEASURED, MEASURED_BASIS, SWEPT, SWEPT_BASIS } from "./calc-bounds.js";
 import { DE440_AT_LIMB, DE440_AT_LIMB_BASIS, DE440_LIMB_BAND, DE440_MEASURED, DE440_MEASURED_BASIS, DE440_TURNED_BASIS } from "./calc-bounds-de440.js";
@@ -53,7 +53,10 @@ import { siderealChartOf, wholeSignCusps, wrap360 } from "./vedic/sidereal.js";
 
 export type { Angles, CalcCorrection, CalcFrame, Chart, ChartFlag, DeltaT, HouseSystem, TimeBands, TimeScale };
 
-/** The Sun, Moon, Earth and planets, the true and mean lunar nodes, and Black Moon Lilith (the mean apogee). */
+/**
+ * The Sun, Moon, Earth and planets, the true and mean lunar nodes, Black Moon Lilith (the mean apogee) and, from
+ * 3.0.0, True Black Moon Lilith (the osculating apogee).
+ */
 export type CalcBody =
   | "Sun"
   | "Moon"
@@ -70,10 +73,11 @@ export type CalcBody =
   | "South Node"
   | "Mean Node"
   | "Mean South Node"
-  | "Black Moon Lilith";
+  | "Black Moon Lilith"
+  | "True Black Moon Lilith";
 
 const PLANETS = ["Sun", "Moon", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"];
-const POINTS = ["North Node", "South Node", "Mean Node", "Mean South Node", "Black Moon Lilith"] as const;
+const POINTS = ["North Node", "South Node", "Mean Node", "Mean South Node", "Black Moon Lilith", "True Black Moon Lilith"] as const;
 type Point = (typeof POINTS)[number];
 export const CALC_BODIES = Object.freeze([...PLANETS, ...POINTS]) as readonly CalcBody[];
 /** positions() gives these; events() searches them. */
@@ -674,6 +678,8 @@ interface Row {
 
 const isPoint = (body: CalcBody): body is Point => (POINTS as readonly string[]).includes(body);
 const isTrueNode = (body: CalcBody): boolean => body === "North Node" || body === "South Node";
+/** The osculating apogee, which, like the true node, is found from the Moon's state vector. */
+const TRUE_LILITH = "True Black Moon Lilith";
 
 /**
  * The Moon's true node: the ascending node of its instantaneous orbit, as
@@ -698,6 +704,13 @@ function pointAt(body: Point, at: AstroTime): Row {
     const raw = trueNode(at);
     return row(raw, body === "North Node" ? raw : normalizeLongitude(raw + 180));
   }
+  if (body === TRUE_LILITH) {
+    // chartPoints()'s on astronomy-engine (src/ephemeris.ts): GeoMoonState in AU and AU a day, made km and km/s.
+    const s = GeoMoonState(at);
+    const perSecond = KM_PER_AU / 86_400;
+    const apogee = trueApogee([s.x * KM_PER_AU, s.y * KM_PER_AU, s.z * KM_PER_AU], [s.vx * perSecond, s.vy * perSecond, s.vz * perSecond], at.tt);
+    return row(apogee.lon, normalizeLongitude(apogee.lon), apogee.lat);
+  }
   const centuries = at.tt / 36525;
   const nutation = tilt(at.tt).dpsi / 3600;
   if (body === "Black Moon Lilith") {
@@ -717,14 +730,15 @@ const BARYCENTRES: readonly string[] = ["Mars", "Jupiter", "Saturn", "Uranus", "
 /**
  * Whether the shipped DE440 pack gives this position: the apparent geocentric
  * place of a body positions() gives (the Sun, the Moon, Mercury to Pluto), or
- * the true node or its opposite point. These are what natalChart() and
- * positions() compute, and calc() takes them from the same source, so the
- * two agree. Every other request (another center or correction, the Earth)
+ * the true node or its opposite point, or, from 3.0.0, True Black Moon Lilith
+ * from the pack's Moon state. These are what natalChart(), positions() and
+ * chartPoints() compute, and calc() takes them from the same source, so they
+ * agree. Every other request (another center or correction, the Earth)
  * is astronomy-engine's, as its receipt says (docs/calc.md, "Which
  * ephemeris").
  */
 const packGives = (body: CalcBody, kind: Center["kind"], correction: CalcCorrection): boolean =>
-  kind === "geocentric" && (isTrueNode(body) || (!isPoint(body) && body !== "Earth" && correction === "apparent"));
+  kind === "geocentric" && (isTrueNode(body) || body === TRUE_LILITH || (!isPoint(body) && body !== "Earth" && correction === "apparent"));
 
 /**
  * A position from a source, as positions() takes it (src/ephemeris.ts): the
@@ -739,9 +753,20 @@ function packed(from: PositionSource, body: CalcBody, frame: CalcFrame, behind?:
     let lon: number;
     let lat = 0;
     let dist: number | null = null;
+    // The longitude a speed differences, where it is not `lon`.
+    let raw: number | undefined;
     if (isTrueNode(body)) {
       const node = from.trueNode(basis.ttDays);
       lon = body === "North Node" ? tidy(node) : normalizeLongitude(node + 180);
+    } else if (body === TRUE_LILITH) {
+      // As chartPoints() takes it from a source (src/ephemeris.ts); every DE440 source gives the Moon's state.
+      if (typeof from.moonState !== "function") throw new TypeError(`${from.ephemeris.name} gives no Moon state for True Black Moon Lilith`);
+      const { position, velocity } = from.moonState(basis.ttDays);
+      const apogee = trueApogee(position, velocity, basis.ttDays);
+      // Normalized once more, as chartPoints() reports it; the speed differences the longitude as computed.
+      lon = normalizeLongitude(apogee.lon);
+      lat = apogee.lat;
+      raw = apogee.lon;
     } else {
       const place = from.place(body as SourceBody, basis.ttDays, behind);
       lon = tidy(place.lon);
@@ -750,7 +775,7 @@ function packed(from: PositionSource, body: CalcBody, frame: CalcFrame, behind?:
     }
     const scaled = (v: Vec3): Vec3 | null => (dist === null ? null : [v[0] * dist, v[1] * dist, v[2] * dist]);
     const along = fromSpherical(lon, lat, 1);
-    if (frame === "ecliptic-true-of-date") return { lon, lat, dist, xyz: scaled(along), raw: lon };
+    if (frame === "ecliptic-true-of-date") return { lon, lat, dist, xyz: scaled(along), raw: raw ?? lon };
     const turned = apply(frameMatrix(frame, at), apply(transpose(frameMatrix("ecliptic-true-of-date", at)), along));
     const there = toSpherical(turned);
     return { lon: there.lon, lat: there.lat, dist, xyz: scaled(turned), raw: there.lon };
@@ -841,8 +866,13 @@ function siderealOf(evaluate: Evaluate, definition: AyanamsaDefinition, frame: C
 function positionIds(body: CalcBody, frame: CalcFrame, kind: Center["kind"], correction: CalcCorrection, zodiac: Zodiac, onPack = false): string[] {
   const ids = [...zodiac.ids, `frame:${frame}`, `center:${kind}`];
   if (isPoint(body)) {
-    ids.push("correction:not-applicable", body.endsWith("Lilith") ? "lilith:mean" : body.startsWith("Mean") ? "node:mean" : "node:true-osculating");
-    if (onPack) ids.push(...PACK_PLACE_IDS);
+    ids.push(
+      "correction:not-applicable",
+      body === TRUE_LILITH ? "lilith:true-osculating" : body.endsWith("Lilith") ? "lilith:mean" : body.startsWith("Mean") ? "node:mean" : "node:true-osculating"
+    );
+    // On the pack, True Black Moon Lilith takes only the Moon's state from it, read at TDB, and is carried to the
+    // ecliptic of date as on astronomy-engine (trueApogee in src/ephemeris.ts).
+    if (onPack) ids.push(...(body === TRUE_LILITH ? ["time:tdb-three-term"] : PACK_PLACE_IDS));
   } else if (onPack) {
     // The DE440 reduction's own chain (src/de440/reduce.ts), in place of astronomy-engine's.
     ids.push(`correction:${correction}`, "light-time:iterated", "deflection:sun-outside-disc", "aberration:relativistic-annual");
@@ -856,7 +886,7 @@ function positionIds(body: CalcBody, frame: CalcFrame, kind: Center["kind"], cor
       if (correction === "apparent" && kind !== "barycentric") ids.push("aberration:backdated-observer");
     }
   }
-  if (onPack) {
+  if (onPack && body !== TRUE_LILITH) {
     // The pack's place is of date (PACK_PLACE_IDS); any other frame is reached from there with the engine's own
     // nutation and precession.
     ids.push("precession:iau2006", "obliquity:iau2006");
@@ -880,14 +910,22 @@ const PACK_PLACE_IDS = ["place:icrf-to-true-ecliptic-of-date", "frame-bias:iau20
 /** The mean points' bounds are differences from their definitions evaluated with ERFA, not from Horizons. */
 const MEAN_POINTS: readonly string[] = ["Mean Node", "Mean South Node", "Black Moon Lilith"];
 
+/**
+ * True Black Moon Lilith's bounds are null: from 3.0.0 it is compared with the osculating apogee of JPL Horizons's
+ * geocentric Moon at 12 instants (src/true-lilith.test.ts), which is not taken to bound it at every instant.
+ */
+const TRUE_LILITH_UNBOUNDED =
+  "not bounded: compared with the osculating apogee of JPL Horizons's geocentric Moon state (DE441) at 12 instants only, from JD 2396758.5 to 2506331.5 (TDB); src/true-lilith.test.ts";
+
 function bound(
   value: number | null | undefined,
   unit: CalcBound["unit"],
   estimated: string | null,
-  measured: string
+  measured: string,
+  unbounded = "not compared with an independent ephemeris"
 ): CalcBound {
   return value === undefined || value === null
-    ? { value: null, unit, label: "estimated", basis: "not compared with an independent ephemeris" }
+    ? { value: null, unit, label: "estimated", basis: unbounded }
     : { value, unit, label: estimated === null ? "measured" : "estimated", basis: estimated ?? measured };
 }
 
@@ -971,7 +1009,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     const tropical = from ? packed(from, body, frame) : evaluator(body, frame, center, correction);
     const evaluate = definition === null ? tropical : siderealOf(tropical, definition, frame);
     const now = onInput(time, time.ms, evaluate);
-    const step = isTrueNode(body) ? NODE_STEP_DAYS : STEP_DAYS;
+    const step = isTrueNode(body) || body === TRUE_LILITH ? NODE_STEP_DAYS : STEP_DAYS;
     const analytic = flags.speeds && correction === "geometric" && inertial(frame) && !point && body !== "Moon";
     let speeds: { lon: number; lat: number; dist: number | null } | null = null;
     let velocity: Vec3 | null = null;
@@ -981,7 +1019,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     let samples: Evaluate | null = null;
     const sampling = (): Evaluate => {
       if (samples) return samples;
-      const side = from && !isTrueNode(body) ? from.place(body as SourceBody, basis.ttDays).behindDisc : undefined;
+      const side = from && !isTrueNode(body) && body !== TRUE_LILITH ? from.place(body as SourceBody, basis.ttDays).behindDisc : undefined;
       const tropicalSamples = from && side !== undefined ? packed(from, body, frame, side) : tropical;
       return (samples = definition === null ? tropicalSamples : siderealOf(tropicalSamples, definition, frame));
     };
@@ -1028,6 +1066,7 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
     let row: readonly [number | null, number | null, number | null] | undefined = MEASURED[group]?.[body];
     let estimated: string | null = null;
     const mean = MEAN_POINTS.includes(body);
+    const unbounded = body === TRUE_LILITH ? TRUE_LILITH_UNBOUNDED : undefined;
     const swept = SWEPT.includes(group) ? SWEPT_BASIS : MEASURED_BASIS;
     let measured = mean ? MEAN_POINTS_BASIS : swept;
     if (from) {
@@ -1127,14 +1166,14 @@ export function calc(request: CalcRequest): CalcPosition | CalcRefusal {
       ayanamsa: sidereal && ayanamsaValue(definition!, sidereal, frame === "ecliptic-true-of-date" ? "true" : "mean", k),
       bounds: {
         position: stretched(
-          withAyanamsa(bound(row?.[0], "arcsec", estimated, measured), added && { value: added.position, basis: added.basis }),
+          withAyanamsa(bound(row?.[0], "arcsec", estimated, measured, unbounded), added && { value: added.position, basis: added.basis }),
           widen[0]!
         ),
         distance: point ? null : stretched(bound(row?.[1], "relative", estimated, from ? measured : swept), widen[1]!),
         speed: method && {
           ...stretched(
             withAyanamsa(
-              bound(row?.[2], "arcsec/day", estimated, mean ? MEAN_POINTS_SPEED_BASIS : from ? measured : swept),
+              bound(row?.[2], "arcsec/day", estimated, mean ? MEAN_POINTS_SPEED_BASIS : from ? measured : swept, unbounded),
               added && { value: added.rate, basis: added.basis }
             ),
             widen[2]!

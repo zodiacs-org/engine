@@ -41,6 +41,7 @@ behind the Sun.
 | --- | --- |
 | `calc()`: the Sun, the Moon, Mercury to Pluto, geocentric and apparent (the defaults), in any frame | the shipped DE440 pack |
 | `calc()`: the true node and its opposite point | the shipped DE440 pack |
+| `calc()`: True Black Moon Lilith (from 3.0.0) | the shipped DE440 pack's Moon state, as `chartPoints()` |
 | `chart()` | as `natalChart()`: the shipped DE440 pack |
 | `events()` | as `searchLongitudeCrossings()`: the shipped DE440 pack |
 | `searchStations()`, `searchLunations()` | the default ephemeris over the whole window, including its probes |
@@ -212,8 +213,9 @@ calc span. [L4 results](../conformance/RESULTS.md) and [additional reference cas
 
 **Bodies**: the Sun, the Moon, Mercury to Pluto, the Earth (heliocentric and
 barycentric only), the true lunar nodes (`"North Node"`, `"South Node"`), the
-mean ones (`"Mean Node"`, `"Mean South Node"`) and `"Black Moon Lilith"`, the
-mean lunar apogee. The planets are astronomy-engine's: truncated VSOP87 for
+mean ones (`"Mean Node"`, `"Mean South Node"`), `"Black Moon Lilith"`, the
+mean lunar apogee, and from 3.0.0 `"True Black Moon Lilith"`, the osculating
+lunar apogee (`lilith:true-osculating` below). The planets are astronomy-engine's: truncated VSOP87 for
 Mercury to Neptune, and its own integration for Pluto. Mars to Pluto were
 compared with Horizons's system barycentres (NAIF 4 to 9), as the conformance
 suite compares them. Its L1 build finds Horizons's body centres of Mars,
@@ -380,9 +382,9 @@ Center differ ([vedic.md](vedic.md), *Agreement with Swiss Ephemeris*).
   distance for geometric ones. The geocentric apparent Moon, being the series
   at the instant, has its geometric distance; the light path is up to 10⁻⁴ of
   it (38 km) longer or shorter, as the Moon moves with the Earth around the
-  Sun during the 1.3 s of light time. The nodes and Lilith have none: `dist`
-  is null and a cartesian position is refused.
-- **Nodes and Lilith** are geocentric points of the Moon's orbit; the three
+  Sun during the 1.3 s of light time. The nodes and the two Liliths have
+  none: `dist` is null and a cartesian position is refused.
+- **Nodes and the two Liliths** are geocentric points of the Moon's orbit; the three
   corrections give the same position (`correction:not-applicable` in the
   receipt), and other centers are refused.
 
@@ -449,7 +451,12 @@ at most 1.7512″, and the two edges differ by 0.06″ to 0.17″
 ([de440.md](de440.md), *Behind the Sun's disc*). Its `bounds.distance` and
 `bounds.speed`, and every bound of the true node and its opposite point,
 have `value: null` and the basis "not compared with an independent
-ephemeris". The ΔT widening below applies to a position from the pack as to
+ephemeris". True Black Moon Lilith's bounds are null on both sources too,
+with a basis that says it was compared with JPL Horizons at 12 instants
+only: from 1850 to 2150 its longitude is under 1.6″ from the osculating
+apogee of Horizons's geocentric Moon state on the pack, and under 400″
+(6.7′) on astronomy-engine, whose lunar series' small velocity errors the
+eccentricity vector magnifies (`src/true-lilith.test.ts`). The ΔT widening below applies to a position from the pack as to
 any other.
 
 **On astronomy-engine** (the other centers and corrections, and every
@@ -884,6 +891,7 @@ is no comparison to take one from.
 | `barycentre:sun-and-giant-planets` | astronomy-engine's solar-system barycentre |
 | `observer:iers2003-ellipsoid;no-polar-motion` | the topocentric observer as above |
 | `node:true-osculating`, `node:mean`, `lilith:mean` | the Moon's osculating node from its state vector; its mean node (IERS 2003 Ω plus the nutation in longitude); its mean apogee |
+| `lilith:true-osculating` | from 3.0.0, True Black Moon Lilith: the apogee of the two-body orbit of the geometric geocentric Moon's state vector, along −e with e = (v × h) / μ − r / \|r\| and μ = 398,600.4418 + 4,902.8001 km³/s², carried from EQJ to the true ecliptic of date as a body is, without the frame bias; on the DE440 pack, from the pack's Moon state at TDB (`time:tdb-three-term`) |
 | `speed:analytic`, `speed:central-difference-0.001d`, `speed:central-difference-0.25d` | how the speeds were found |
 | `ephemeris:astronomy-engine@2.1.19` | the ephemeris: truncated VSOP87 for the planets, a lunar series after Brown's theory (Montenbruck and Pfleger), an integrated Pluto |
 | `deltat:time-basis`, `deltat:pinned` | ΔT from the time basis (`iers-utc/1` from 1972-01-01 to the end of the IERS table, `zodiacs-deltat/1` outside it; each instant's `deltaT.model` says which), or the caller's value |
@@ -929,8 +937,11 @@ uses no Swiss Ephemeris code, data or output.
 is in days and `deltaT` in seconds: `deltaT` = 86,400 × `dt`. Its bodies
 map to `CalcBody` as `SE_SUN` to `SE_PLUTO` by name, `SE_EARTH` to `"Earth"`,
 `SE_TRUE_NODE` to `"North Node"`, `SE_MEAN_NODE` to `"Mean Node"` and
-`SE_MEAN_APOG` to `"Black Moon Lilith"`. `SE_OSCU_APOG` is left out: this
-lunar series puts it arcminutes from where it is. Chiron, Ceres, Pallas, Juno
+`SE_MEAN_APOG` to `"Black Moon Lilith"`; from 3.0.0 the osculating apogee,
+`SE_OSCU_APOG`, corresponds to `"True Black Moon Lilith"`, which was compared
+with JPL Horizons and not with Swiss Ephemeris (on astronomy-engine's lunar
+series it is under 6.7′ from the apogee of Horizons's Moon at 12 instants,
+on the DE440 pack under 1.6″). Chiron, Ceres, Pallas, Juno
 and Vesta are planned for the hosted API. The flags Swiss Ephemeris returns,
 which say what it actually computed, correspond to the receipt's conventions,
 and its error returns to the typed refusals.

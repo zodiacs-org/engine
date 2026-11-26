@@ -38,7 +38,7 @@ interface CalcAyanamsaValue {
     readonly bound: CalcBound;
 }
 
-type CalcBody = "Sun" | "Moon" | "Mercury" | "Venus" | "Earth" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node" | "Mean Node" | "Mean South Node" | "Black Moon Lilith";
+type CalcBody = "Sun" | "Moon" | "Mercury" | "Venus" | "Earth" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node" | "Mean Node" | "Mean South Node" | "Black Moon Lilith" | "True Black Moon Lilith";
 
 interface CalcBound {
     readonly value: number | null;

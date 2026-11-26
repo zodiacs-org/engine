@@ -150,13 +150,15 @@ describe("chartPoints", () => {
   it("returns the node, Lilith, the Vertex, the East Point and the lots with a time and place", () => {
     const chart = natalChart(birth);
     const { sect, points } = chartPoints(chart);
+    // From 3.0.0 True Black Moon Lilith comes last, after the points of 2.x (src/true-lilith.test.ts).
     expect(points.map((point) => point.point)).toEqual([
       "Mean Node",
       "Mean South Node",
       "Black Moon Lilith",
       "Vertex",
       "East Point",
-      ...LOTS
+      ...LOTS,
+      "True Black Moon Lilith"
     ]);
     // 13:30 UT in London in June: the Sun is up.
     expect(sect).toBe("day");
@@ -189,7 +191,7 @@ describe("chartPoints", () => {
     ]) {
       const { sect, points } = chartPoints(source);
       expect(sect).toBeNull();
-      expect(points.map((point) => point.point)).toEqual(["Mean Node", "Mean South Node", "Black Moon Lilith"]);
+      expect(points.map((point) => point.point)).toEqual(["Mean Node", "Mean South Node", "Black Moon Lilith", "True Black Moon Lilith"]);
     }
   });
 

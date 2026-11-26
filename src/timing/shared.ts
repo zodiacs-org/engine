@@ -184,7 +184,7 @@ export function chartLongitudes(chart: Chart, points: ChartPoints): ChartLongitu
 const LONGITUDE_NAMES: readonly string[] = [
   "Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto",
   "North Node", "South Node", "Ascendant", "Midheaven", "Descendant", "Imum Coeli",
-  "Mean Node", "Mean South Node", "Black Moon Lilith", "Vertex", "East Point",
+  "Mean Node", "Mean South Node", "Black Moon Lilith", "True Black Moon Lilith", "Vertex", "East Point",
   "Lot of Fortune", "Lot of Spirit", "Lot of Eros", "Lot of Necessity", "Lot of Courage",
   "Lot of Victory", "Lot of Nemesis"
 ] satisfies readonly ChartLongitudeName[];

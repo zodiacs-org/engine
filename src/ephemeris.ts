@@ -4,6 +4,7 @@ import {
   GeoMoon,
   GeoMoonState,
   GeoVector,
+  KM_PER_AU,
   MakeTime,
   SetDeltaTFunction
 } from "astronomy-engine";
@@ -18,7 +19,7 @@ import type { DefaultEphemerisName } from "./ephemeris-default.js";
 import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
 import { computeAngles, computeHouses, eastPointOf, insidePolarCircle, vertexOf } from "./houses.js";
 import { tilt } from "./nutation.js";
-import { hellenisticLots, meanApogee, meanNodeLongitude, sectOf } from "./points.js";
+import { hellenisticLots, meanApogee, meanNodeLongitude, osculatingApogee, sectOf } from "./points.js";
 import { EPHEMERIS_SPAN, outsideReferenceSpan } from "./reference-span.js";
 import { degreeInSign, normalizeLongitude, signForLongitude } from "./signs.js";
 import { elapsedDays, timeBasis } from "./time-scale.js";
@@ -730,10 +731,77 @@ function pointPosition(point: PointName, lon: number, lat: number, speed: number
 }
 
 /**
+ * True Black Moon Lilith: the osculating lunar apogee (osculatingApogee in
+ * src/points.ts) of the geometric geocentric Moon at `position`, km, with
+ * `velocity`, km/s, both in EQJ (the J2000 mean equator and equinox,
+ * astronomy-engine's frame, which the engine takes for the ICRF, the frame
+ * bias of under 0.03″ left out), carried to the true ecliptic and equinox of
+ * date at `tt`, days of TT from J2000.0, as src/frame.ts carries a body.
+ * Longitude in [0, 360) and latitude, degrees: the apogee lies in the Moon's
+ * orbital plane, so its latitude reaches the orbit's inclination to the
+ * ecliptic, about 5°. chartPoints and the calc entry take the point from it.
+ *
+ * @internal
+ */
+export function trueApogee(
+  position: readonly [number, number, number],
+  velocity: readonly [number, number, number],
+  tt: number
+): { lon: number; lat: number } {
+  const [x, y, z] = osculatingApogee(position, velocity).direction;
+  return eclipticOfDate(x, y, z, tt);
+}
+
+/**
+ * The osculating apogee (`trueApogee` above) of the geocentric
+ * Moon's geometric state at `basis`, from `from`'s `moonState`, or, where
+ * `from` is null, from astronomy-engine's GeoMoonState (AU and AU a day, in
+ * EQJ, made km and km/s).
+ */
+function trueLilithOn(basis: TimeBasis, from: PositionSource | null): { lon: number; lat: number } {
+  if (from) {
+    const { position, velocity } = from.moonState!(basis.ttDays);
+    return trueApogee(position, velocity, basis.ttDays);
+  }
+  const time = timeOf(basis);
+  const state = GeoMoonState(time);
+  const perSecond = KM_PER_AU / 86_400;
+  return trueApogee(
+    [state.x * KM_PER_AU, state.y * KM_PER_AU, state.z * KM_PER_AU],
+    [state.vx * perSecond, state.vy * perSecond, state.vz * perSecond],
+    time.tt
+  );
+}
+
+/**
+ * True Black Moon Lilith at `ms` on `clock`, from the source a position at
+ * that instant comes from (`chosenAt`), decided once and used for both speed
+ * samples, and labelled with it as a body is; null where that source gives no
+ * Moon state. Its speed is a central difference over plus/minus
+ * NODE_SPEED_STEP_DAYS, as the true node's, which the osculating elements'
+ * short-period noise would otherwise dominate on astronomy-engine's Moon.
+ */
+function trueLilithRow(ms: number, clock: Clock): PointPosition | null {
+  const chosen = chosenAt(basisAt(ms, clock).ttDays);
+  const { from } = chosen;
+  if (from && typeof from.moonState !== "function") return null;
+  if (chosen.fallback !== null) noted?.add(chosen.fallback);
+  const place = trueLilithOn(basisAt(ms, clock), from);
+  const speed = centralDifference((basis) => trueLilithOn(basis, from).lon, ms, clock, NODE_SPEED_STEP_DAYS);
+  return {
+    ...pointPosition("True Black Moon Lilith", place.lon, place.lat, speed),
+    ephemeris: from ? from.ephemeris.name : EPHEMERIS.name,
+    ...(chosen.fallback !== null && { fallback: chosen.fallback })
+  };
+}
+
+/**
  * The chart's points, computed on the same clock as the chart: its time
  * scale and its pinned ΔT when it has one. The mean node and Black Moon
- * Lilith depend on the instant alone; the Vertex and the East Point on the
- * instant and the place; the lots on the chart's own ascendant and bodies.
+ * Lilith depend on the instant alone; True Black Moon Lilith on the instant
+ * and the source a position there comes from; the Vertex and the East Point
+ * on the instant and the place; the lots on the chart's own ascendant and
+ * bodies.
  */
 export function computePoints(chart: Chart): ChartPoints {
   return { ...evaluated(() => pointsAt(chart)), ...chartLabel(chart) };
@@ -795,7 +863,10 @@ function pointsAt(chart: Chart): Omit<ChartPoints, "ephemeris" | "flags"> {
     pointPosition("Mean South Node", mean.node + 180, 0, nodeSpeed),
     pointPosition("Black Moon Lilith", mean.apogee.lon, mean.apogee.lat, apogeeSpeed)
   ];
+  // Last, after the points of 2.x, so that each of those keeps its index.
+  const lilith = trueLilithRow(ms, clock);
   if (chart.angles === null || latitude === undefined || longitude === undefined) {
+    if (lilith) points.push(lilith);
     return { sect: null, points };
   }
   const time = timeAt(ms, clock);
@@ -829,5 +900,6 @@ function pointsAt(chart: Chart): Omit<ChartPoints, "ephemeris" | "flags"> {
     sect
   );
   for (const lot of lots) points.push(pointPosition(lot.point, lot.lon, 0, null));
+  if (lilith) points.push(lilith);
   return { sect, points };
 }

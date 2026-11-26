@@ -286,6 +286,22 @@ export class Reducer {
   }
 
   /**
+   * The geometric geocentric Moon at `ttDays` (TT days past J2000), in the
+   * ICRF at TDB, with no light-time, aberration or deflection: the pack's
+   * Moon less its Earth, each from the Earth-Moon barycentre, position in km
+   * and velocity in km/s, as `trueNode` reads them (from 3.0.0).
+   */
+  moonState(ttDays: number): { position: [number, number, number]; velocity: [number, number, number] } {
+    if (!Number.isFinite(ttDays)) fail("bad-instant", "ttDays must be a finite number");
+    const et = etOf(ttDays);
+    if (!this.backend.covers(et)) fail("out-of-coverage", "the instant is outside the pack's coverage");
+    this.backend.lunar(et, this.emb, this.moon, this.earth);
+    const [x, y, z] = sub(position(this.moon), position(this.earth));
+    const [vx, vy, vz] = sub(velocity(this.moon), velocity(this.earth));
+    return { position: [x, y, z], velocity: [vx, vy, vz] };
+  }
+
+  /**
    * The Moon's true node: the ascending node, on the true ecliptic and
    * equinox of date, of the plane of r x v, r and v the Moon's geometric
    * geocentric position and velocity in the ICRF at TDB (no light-time,

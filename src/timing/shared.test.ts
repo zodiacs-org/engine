@@ -56,7 +56,8 @@ describe("timing checks that need no chart", () => {
   it("know every name a chart can profect before computing it", () => {
     const birth = { utc: "1990-06-15T13:30:00Z", latitude: 51.5, longitude: -0.13 } as const;
     const names = solarArcDirections(birth, "2000-01-01").positions.map((row) => row.name);
-    expect(names).toHaveLength(28);
+    // 28 through 2.1.0; True Black Moon Lilith from 3.0.0.
+    expect(names).toHaveLength(29);
     for (const point of names) expect(profectionYear(birth, 3, { point }).origin.point).toBe(point);
     // A known name the chart lacks is refused once the chart is known.
     expect(() => profectionYear({ utc: "1990-06-15", timeKnown: false }, 3, { point: "Vertex" }))

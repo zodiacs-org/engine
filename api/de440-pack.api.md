@@ -53,6 +53,18 @@ interface De440Source extends PositionSource {
         behindDisc: boolean;
     };
     steps(fromTtDays: number, toTtDays: number): number[];
+    moonState(ttDays: number): {
+        position: [
+            number,
+            number,
+            number
+        ];
+        velocity: [
+            number,
+            number,
+            number
+        ];
+    };
     readonly pack: {
         readonly sha256: string;
         readonly bytes: number;
@@ -78,6 +90,18 @@ interface PositionSource {
         behindDisc?: boolean;
     };
     trueNode(ttDays: number): number;
+    moonState?(ttDays: number): {
+        position: [
+            number,
+            number,
+            number
+        ];
+        velocity: [
+            number,
+            number,
+            number
+        ];
+    };
     steps?(fromTtDays: number, toTtDays: number): number[];
 }
 

@@ -486,7 +486,7 @@ interface LeapSeconds {
 type NatalSource = Chart | BirthInput;
 
 // exported by @zodiacs/engine (PointName), @zodiacs/engine/core (PointName)
-type PointName = "Mean Node" | "Mean South Node" | "Black Moon Lilith" | "Vertex" | "East Point" | "Lot of Fortune" | "Lot of Spirit" | "Lot of Eros" | "Lot of Necessity" | "Lot of Courage" | "Lot of Victory" | "Lot of Nemesis";
+type PointName = "Mean Node" | "Mean South Node" | "Black Moon Lilith" | "True Black Moon Lilith" | "Vertex" | "East Point" | "Lot of Fortune" | "Lot of Spirit" | "Lot of Eros" | "Lot of Necessity" | "Lot of Courage" | "Lot of Victory" | "Lot of Nemesis";
 
 // exported by @zodiacs/engine (Sect), @zodiacs/engine/core (Sect)
 type Sect = "day" | "night";

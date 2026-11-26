@@ -335,6 +335,30 @@ for (const file of files) {
 // scripts/verify-dist-purity.mjs measures it), and ./de440/pack by 100, for
 // useDe440() and the shared setting (622 bytes). ./de440 (53,956) and ./time
 // (44,395) lose only the bare imports; the other graphs do not change.
+//
+// 3.0.0 also adds True Black Moon Lilith, the osculating lunar apogee, to
+// chartPoints and calc() (src/points.ts, src/ephemeris.ts), and a Moon state
+// to the DE440 source that it is taken from. Measured on this build, eleven
+// graphs grow over the budgets above; the budget above, the measurement
+// before, this build's, new budget:
+//   .             119,600   119,568   121,550   121,600
+//   ./calc        166,700   166,682   169,675   169,700
+//   ./core        119,600   119,568   121,550   121,600
+//   ./de440        54,600    53,956    54,847    54,900
+//   ./de440/pack   55,900    55,888    56,779    56,800
+//   ./internal     77,300    77,269    79,251    79,300
+//   ./sky         104,700   104,669   106,651   106,700
+//   ./techniques  172,500   172,494   174,476   174,500
+//   ./timing      138,400   138,349   140,359   140,400
+//   ./vedic       154,200   154,171   156,153   156,200
+//   ./window      117,800   117,769   119,751   119,800
+// The root's 1,982 bytes are the apogee's formula and its row in chartPoints,
+// labelled with the ephemeris it came from; the graphs that load the root's
+// chunks grow with it, ./calc by 1,011 more for the point in calc(), and the
+// DE440 graphs by 891 for the Moon state. An application's minified bundle
+// of natalChart and chartPoints grows from 37,627 bytes gzipped to 38,000.
+// Each new budget is the measurement rounded up to the next hundred bytes,
+// for the owner to decide with the candidate.
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -353,7 +377,8 @@ const ENTRY_BUDGETS = {
   // the code that computes its own positions; raised to 109,000 under the
   // owner's delegation of 2026-11-04; 0.43 per cent of headroom.
   // 3.0.0: 119,568, without the DE440 reader and the pack; lowered to 119,600.
-  ".": 119_600,
+  // With True Black Moon Lilith, 121,550; raised to 121,600 (above).
+  ".": 121_600,
   // New in rc.16 (feature-api): the uniform calculation API, its frames,
   // centers, corrections, bounds and receipts. 106,779 bytes as integrated on
   // rc.15's time basis, 34,449 of them beyond the core's graph; 7.69 per cent
@@ -372,8 +397,9 @@ const ENTRY_BUDGETS = {
   // (and the timeBands chunk it shares with ./time) and the chunks split out
   // for ./time (above); raised to 156,000, the ceiling approved under the
   // owner's delegation of 2026-11-03 (OQ3); 3.02 per cent of headroom.
-  // 3.0.0: 166,682, without the DE440 reader; lowered to 166,700.
-  "./calc": 166_700,
+  // 3.0.0: 166,682, without the DE440 reader; lowered to 166,700. With True
+  // Black Moon Lilith, 169,675; raised to 169,700 (above).
+  "./calc": 169_700,
   // New in 1.1.0-rc.1: the ids of the conventions registry. 2,754 bytes, its
   // own file and the chunk of ids it shares with ./receipt; 5.30 per cent of
   // headroom.
@@ -384,7 +410,8 @@ const ENTRY_BUDGETS = {
   // docs/evidence/bundle-weight-20261117/; 1.10 per cent of headroom.
   // 3.0.0: the root's own graph, which src/core.ts re-exports: 119,568, the
   // same as the root's; raised to 119,600 (above), for the owner to decide.
-  "./core": 119_600,
+  // With True Black Moon Lilith, 121,550; raised to 121,600 (above).
+  "./core": 121_600,
   // rc.15: 9,410. 1.0.0-rc.1: 9,942, its options read as the shared reader
   // reads them; 0.58 per cent, not raised.
   "./crossings": 10_000,
@@ -414,7 +441,8 @@ const ENTRY_BUDGETS = {
   // it imports, the one with the engine's IAU 2000B terms among them. 45,793
   // bytes in 4 files; 48,000 approved by the owner on 2026-11-10; 4.81 per
   // cent of headroom.
-  "./de440": 54_600,
+  // 3.0.0: 54,847, with the Moon state; raised to 54,900 (above).
+  "./de440": 54_900,
   // New in 1.1.0-rc.9 (first in the withdrawn draft 1.1.0-rc.8): the entry that
   // gives out the sealed DE440 pack the package ships (docs/de440.md). The
   // lines below are that draft's, when only this entry held the pack; the
@@ -431,14 +459,16 @@ const ENTRY_BUDGETS = {
   // With a second entry loading it, the build moves ./de440's code from
   // dist/de440.js into a chunk the two share, and ./de440's graph grows by
   // the 276 bytes that join them, to 46,069; its budget is not raised.
-  "./de440/pack": 55_900,
+  // With the Moon state, 56,779; raised to 56,800 (above).
+  "./de440/pack": 56_800,
   // rc.15: 56,961; as carried, 58,997. rc.16: 64,830, raised from 60,000 for
   // the nutation in the ephemeris chunk; 4.88 per cent of headroom.
   // 1.1.0-rc.3: 68,758, with withEphemeris, the source's path and the
   // refusal in the ephemeris chunk; raised to 69,000 with the owner's
   // approval of 2026-11-10; 0.35 per cent of headroom.
-  // 3.0.0: 77,269, without the DE440 reader; lowered to 77,300.
-  "./internal": 77_300,
+  // 3.0.0: 77,269, without the DE440 reader; lowered to 77,300. With True
+  // Black Moon Lilith, 79,251; raised to 79,300 (above).
+  "./internal": 79_300,
   "./internal/math": 20_000, // rc.15: 18,165
   // New in 1.1.0-rc.2: declination parallels, the sect under a named
   // convention, composite midpoints and their aspects, and the dignities,
@@ -469,8 +499,9 @@ const ENTRY_BUDGETS = {
   // positions() rows' flags (111) and the polar-angles flag (105); raised
   // from 203,800 to 207,300, the measurement and about one per cent, for the
   // owner to decide with the candidate.
-  // 3.0.0: 172,494, without the DE440 reader; lowered to 172,500.
-  "./techniques": 172_500,
+  // 3.0.0: 172,494, without the DE440 reader; lowered to 172,500. With True
+  // Black Moon Lilith, 174,476; raised to 174,500 (above).
+  "./techniques": 174_500,
   // New in 1.1.0-rc.2: the time basis and the frame of date with no
   // ephemeris (Zodiacs.org's finding F-53), and the time bands it re-exports.
   // 1.1.0-rc.2: 42,306 bytes in 7 files, dist/time.js and the six chunks it
@@ -488,13 +519,15 @@ const ENTRY_BUDGETS = {
   // nutation in the ephemeris chunk and the frames of date the entry now
   // takes from it (src/equator.ts, shared with ./calc) in place of
   // astronomy-engine's; 5.31 per cent of headroom.
-  // 3.0.0: 104,669, without the DE440 reader; lowered to 104,700.
-  "./sky": 104_700,
+  // 3.0.0: 104,669, without the DE440 reader; lowered to 104,700. With True
+  // Black Moon Lilith, 106,651; raised to 106,700 (above).
+  "./sky": 106_700,
   // rc.15: 112,485, the core's graph included; as carried, 114,916. With
   // planetary returns 117,219. rc.16: 123,039, raised from 120,000 for the
   // nutation in the ephemeris chunk; 4.84 per cent of headroom.
-  // 3.0.0: 138,349, without the DE440 reader; lowered to 138,400.
-  "./timing": 138_400,
+  // 3.0.0: 138,349, without the DE440 reader; lowered to 138,400. With True
+  // Black Moon Lilith, 140,359; raised to 140,400 (above).
+  "./timing": 140_400,
   // rc.15: 114,106, the core's graph included; as carried, 116,779. rc.16:
   // 122,131, raised from 120,000 for the nutation in the ephemeris chunk
   // (the ayanamsas now use its frame); 4.80 per cent of headroom. rc.17:
@@ -509,8 +542,9 @@ const ENTRY_BUDGETS = {
   // growth (above) and the refusals in the ayanamsas and the varga timing;
   // raised to 144,500 under the owner's delegation of 2026-11-04; 0.59 per
   // cent of headroom.
-  // 3.0.0: 154,171, without the DE440 reader; lowered to 154,200.
-  "./vedic": 154_200,
+  // 3.0.0: 154,171, without the DE440 reader; lowered to 154,200. With True
+  // Black Moon Lilith, 156,153; raised to 156,200 (above).
+  "./vedic": 156_200,
   // New in rc.16 (feature-window): birth-time window partitions, the search
   // and its enclosures. 97,064 bytes as integrated on rc.15's time basis,
   // 33,971 of them beyond the core's graph; 8.17 per cent of headroom. With
@@ -519,8 +553,9 @@ const ENTRY_BUDGETS = {
   // withEphemeris and the source's path in the ephemeris chunk and
   // birthWindow's refusal inside it; raised to 107,000 with the owner's
   // approval of 2026-11-10; 0.20 per cent of headroom.
-  // 3.0.0: 117,769, without the DE440 reader; lowered to 117,800.
-  "./window": 117_800
+  // 3.0.0: 117,769, without the DE440 reader; lowered to 117,800. With True
+  // Black Moon Lilith, 119,751; raised to 119,800 (above).
+  "./window": 119_800
 };
 
 /** The dist/ files an entry loads statically, with their bytes. */

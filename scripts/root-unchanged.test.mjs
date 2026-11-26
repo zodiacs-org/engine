@@ -24,7 +24,11 @@
 // A regression test: it holds the root to its own released output and is not
 // accuracy evidence. A later change that is meant to change what the root
 // computes fails it, as it fails the archive check, until the candidate that
-// carries the change is cut.
+// carries the change is cut. One addition is let through: from 3.0.0
+// chartPoints gives True Black Moon Lilith as its last point, after every
+// point of 2.x, and against an archive whose chartPoints has none this
+// checkout's results are compared without it, so that each point the
+// archive computes must still be computed to the bit.
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -41,6 +45,15 @@ const CARRIED = JSON.parse(readFileSync(at("artifacts/archives.json"), "utf8")).
 /** JSON without the engine's version, which names the build and not what it computes. */
 const text = (value) => JSON.stringify(value, (key, entry) => (key === "engineVersion" ? undefined : entry));
 
+/** The point 3.0.0 adds to chartPoints, last. */
+const ADDED_POINT = "True Black Moon Lilith";
+
+/** A root's chartPoints, without the point 3.0.0 adds where `without` is true. */
+const pointsOf = (root, chart, without) => {
+  const points = root.chartPoints(chart);
+  return without ? { ...points, points: points.points.filter((row) => row.point !== ADDED_POINT) } : points;
+};
+
 /** The shipped pack made a root's default, the way its build offers: useDe440() from 3.0.0, the default itself in 2.x. */
 function onPack(root, pack) {
   if (typeof pack.useDe440 === "function") pack.useDe440();
@@ -53,12 +66,12 @@ function onPack(root, pack) {
  * on the shipped pack; and its results on astronomy-engine. `pack` is the same
  * build's @zodiacs/engine/de440/pack. The root is left on its first default.
  */
-function computed(root, pack) {
+function computed(root, pack, without = false) {
   const births = conformanceBirths(root.HOUSE_SYSTEMS);
   const results = () => births.map(({ id, birth }) => {
     try {
       const chart = root.natalChart(birth);
-      return { id, chart, points: root.chartPoints(chart), declinations: root.chartDeclinations(chart) };
+      return { id, chart, points: pointsOf(root, chart, without), declinations: root.chartDeclinations(chart) };
     } catch (error) {
       return { id, error: error instanceof Error ? `${error.name}: ${error.message}` : String(error) };
     }
@@ -117,9 +130,13 @@ describe(`the root entry against the carried archive of ${VERSION}`, () => {
     expect(reference.de440).not.toContain(VERSION);
   });
 
+  it("adds one point to chartPoints, last, where the archive's has none", () => {
+    expect(reference.astronomyEngine.includes(`"${ADDED_POINT}"`)).toBe(reference.de440.includes(`"${ADDED_POINT}"`));
+  });
+
   it("computes from this checkout's source exactly what the archive computes", async () => {
     vi.resetModules();
-    const root = computed(await import("../src/index.ts"), await import("../src/de440-pack.ts"));
+    const root = computed(await import("../src/index.ts"), await import("../src/de440-pack.ts"), !reference.de440.includes(`"${ADDED_POINT}"`));
     expect(root.exports).toEqual(reference.exports);
     expectAstronomyEngineFirst(root);
     expect(root.defaultSource).toBe(reference.defaultSource);
@@ -128,7 +145,7 @@ describe(`the root entry against the carried archive of ${VERSION}`, () => {
   });
 
   it.runIf(existsSync(at("dist/index.js")))("computes from this checkout's build exactly what the archive computes", async () => {
-    const root = computed(await import(at("dist/index.js").href), await import(at("dist/de440-pack.js").href));
+    const root = computed(await import(at("dist/index.js").href), await import(at("dist/de440-pack.js").href), !reference.de440.includes(`"${ADDED_POINT}"`));
     expect(root.exports).toEqual(reference.exports);
     expectAstronomyEngineFirst(root);
     expect(root.defaultSource).toBe(reference.defaultSource);
