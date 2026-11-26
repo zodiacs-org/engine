@@ -1,6 +1,6 @@
 {
   "reader": {
-    "engine": "2.1.0",
+    "engine": "3.0.0",
     "entry": "dist/receipt.js",
     "node": "v22.22.2"
   },
@@ -3463,6 +3463,113 @@
           "requiredFeatures": [
             "convention-ids",
             "ephemeris-jpl-de440"
+          ],
+          "resultFlags": [
+            "no-time"
+          ],
+          "houses": null,
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        }
+      }
+    },
+    {
+      "version": "3.0.0",
+      "status": "carried",
+      "sha256": "2278500a0f40ec2172fe077a6b0eb07f630e8565508362ed2b393ee95b079f9c",
+      "digest": "verified",
+      "run": "loaded",
+      "inputs": {
+        "A": {
+          "written": "ok",
+          "bytes": 6971,
+          "sha256": "b992246a1a10776e8251923424060abee4945b45ba57f390c36f814537d7ffc4",
+          "read": "ok",
+          "engineVersion": "3.0.0",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "placidus",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "B": {
+          "written": "ok",
+          "bytes": 6348,
+          "sha256": "0197edf37b67ddb2115e8b7b380f3340a583c13559df7c7c331783857d69d03d",
+          "read": "ok",
+          "engineVersion": "3.0.0",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "C": {
+          "written": "ok",
+          "bytes": 7103,
+          "sha256": "2d72609b979e5fcb71e62ded9214d331f98b2c586a5ad3680715c4ad745e5255",
+          "read": "ok",
+          "engineVersion": "3.0.0",
+          "conventionSet": 7,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids",
+            "time-basis-continuous-utc"
+          ],
+          "resultFlags": [
+            "delta-t-extrapolated"
+          ],
+          "houses": "koch",
+          "timeBasis": "continuous-utc",
+          "ut1Source": "model",
+          "replay": "accepted"
+        },
+        "D": {
+          "written": "ok",
+          "bytes": 6869,
+          "sha256": "f3a1085b74b67a5789e2e3fa0af0a85b2ab1bfa7a3fe58af5aa54451667c7955",
+          "read": "ok",
+          "engineVersion": "3.0.0",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
+          ],
+          "resultFlags": [
+            "polar-fallback",
+            "polar-angles"
+          ],
+          "houses": "whole",
+          "timeBasis": "iers",
+          "ut1Source": "observed",
+          "replay": "accepted"
+        },
+        "E": {
+          "written": "ok",
+          "bytes": 6635,
+          "sha256": "d60b6a9077062618ea7adfe91f926dbf0d394d2cfe0607db910e57d2fc8d3b1e",
+          "read": "ok",
+          "engineVersion": "3.0.0",
+          "conventionSet": 0,
+          "namesWriter": true,
+          "sameAsWritten": true,
+          "requiredFeatures": [
+            "convention-ids"
           ],
           "resultFlags": [
             "no-time"
