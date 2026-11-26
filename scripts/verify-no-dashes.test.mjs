@@ -22,6 +22,17 @@ describe("the no-dashes check", () => {
   });
 
   it("names the documents the house rule covers", () => {
-    expect(DOCUMENTS).toEqual(["README.md", "CHANGELOG.md", "LICENSING.md", "NOTICE", "docs/calc.md", "skills/zodiacs-compute/SKILL.md", "tools/wheel/README.md"]);
+    expect(DOCUMENTS).toEqual([
+      "README.md",
+      "CHANGELOG.md",
+      "LICENSING.md",
+      "NOTICE",
+      "docs/calc.md",
+      "docs/guide.md",
+      "docs/de440.md",
+      "docs/comparison.md",
+      "skills/zodiacs-compute/SKILL.md",
+      "tools/wheel/README.md"
+    ]);
   });
 });

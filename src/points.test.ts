@@ -214,13 +214,14 @@ describe("chartPoints", () => {
   });
 });
 
-describe("the README's figures for the Vertex and the East Point", () => {
+describe("the guide's figures for the Vertex and the East Point", () => {
   // F-89, item 1 under OQ9 (c) (docs/evidence/1.1.0-rc.2-20261102/f89/PREREGISTRATION.md, E10, as
   // amended on 2026-11-03 after review 1): the README states the conformance suite's figures, the
   // largest residuals of its L2 vectors for the two points, whose arbiter is ERFA, each rounded up to
   // three decimals from the unrounded maximum in conformance/results/summary.json (which the harness
   // regenerates with conformance/RESULTS.md, where the residuals are rounded to the nearest 0.001″). Since
   // review 2 the README cites both files, and says that RESULTS.md rounds (F-89's amendment of 2026-11-04).
+  // From 3.0.0 the statement is in docs/guide.md, which keeps the README's detailed sections.
   const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
   interface Summary {
     runs: { adapter: { name: string }; summary: { byKind: Record<string, { count: number; residuals: Record<string, { max: number }> }> } }[];
@@ -230,14 +231,14 @@ describe("the README's figures for the Vertex and the East Point", () => {
     const kind = summary.runs.find((run) => run.adapter.name === "zodiacs-engine")!.summary.byKind["angles.vertex-east-point"]!;
     return { count: kind.count, vertex: kind.residuals.vertex!.max, eastPoint: kind.residuals.east_point!.max };
   };
-  /** A residual rounded up to three decimals, as the README writes it: never below the residual. */
+  /** A residual rounded up to three decimals, as the guide writes it: never below the residual. */
   const up3 = (x: number) => {
     const thousandths = x * 1000;
     const nearest = Math.round(thousandths);
     return ((Math.abs(thousandths - nearest) < 1e-9 ? nearest : Math.ceil(thousandths)) / 1000).toFixed(3);
   };
   const figures = (summary: Summary) => [up3(maxima(summary).vertex), up3(maxima(summary).eastPoint)];
-  /** The two figures a README text states. */
+  /** The two figures a text of the guide states. */
   const statedIn = (text: string) =>
     text
       .replace(/\s+/gu, " ")
@@ -248,7 +249,7 @@ describe("the README's figures for the Vertex and the East Point", () => {
   const summary = JSON.parse(read("conformance/results/summary.json")) as Summary;
 
   it("are the conformance results' largest residuals rounded up, on ten vectors from 1833 to 2182 and 60° S to 60° N", () => {
-    const readme = read("README.md");
+    const readme = read("docs/guide.md");
     expect(statedIn(readme)).toEqual(figures(summary));
     expect(maxima(summary).count).toBe(10);
     for (const [index, max] of [maxima(summary).vertex, maxima(summary).eastPoint].entries()) {

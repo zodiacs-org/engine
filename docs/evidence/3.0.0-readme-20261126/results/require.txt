@@ -1,0 +1,19 @@
+== node v20.19.0 (Darwin arm64)
+-- stdout
+{"node":"v20.19.0","before":"astronomy-engine","after":"jpl-de440","viaCalc":"jpl-de440","sameNamespace":true,"sameFunction":true,"source":"jpl-de440"}
+-- stderr
+== node v22.12.0 (Darwin arm64)
+-- stdout
+{"node":"v22.12.0","before":"astronomy-engine","after":"jpl-de440","viaCalc":"jpl-de440","sameNamespace":true,"sameFunction":true,"source":"jpl-de440"}
+-- stderr
+(node:65940) ExperimentalWarning: CommonJS module ./probe.cjs is loading ES Module ./node_modules/@zodiacs/engine/dist/index.js using require().
+Support for loading ES Module in require() is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+== node v24.13.0 (Darwin arm64)
+-- stdout
+{"node":"v24.13.0","before":"astronomy-engine","after":"jpl-de440","viaCalc":"jpl-de440","sameNamespace":true,"sameFunction":true,"source":"jpl-de440"}
+-- stderr
+== node v26.4.0 (Darwin arm64)
+-- stdout
+{"node":"v26.4.0","before":"astronomy-engine","after":"jpl-de440","viaCalc":"jpl-de440","sameNamespace":true,"sameFunction":true,"source":"jpl-de440"}
+-- stderr

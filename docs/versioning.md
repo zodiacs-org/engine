@@ -18,7 +18,8 @@ the release it leads to.
   `./techniques`, `./time` (from 1.1.0-rc.2), `./timing`, `./vedic` and
   `./window`. `./internal` and
   `./internal/math` are private to Zodiacs.org
-  and carry no promise (README, *Internal site entry points*).
+  and carry no promise (README; [guide.md](guide.md), *Internal site
+  entry points*).
 - **Their declarations.** Every name each entry point exports, its type, a
   function's parameters and result, the shape of each result, the members of
   each string union (body names, flags, refusal reasons, frames, house

@@ -24,12 +24,49 @@ positions. Separate the numerical result from any requested interpretation.
 4. Do not silently move a personal chart from local computation to the hosted
    service. Explain the destination and data first and obtain the required
    permission. Check the current privacy/deployment evidence before relying
-   on a hosted statelessness claim. See [current tools and limits](references/tools.md).
+   on a hosted statelessness claim. See [current tools and limits](https://github.com/zodiacs-org/engine/blob/main/skills/zodiacs-compute/references/tools.md)
+   (`references/tools.md` beside this file in the repository; not in the npm
+   package).
 
-The bundled reference distinguishes the local adapter's tools from HTTP
+That reference distinguishes the local adapter's tools from HTTP
 operations and candidate-only engine features. Use it when routing a request
 or preparing an installation. It is not authority to install, configure a
 host, publish a package or transmit somebody's data.
+
+## Use `@zodiacs/engine` directly
+
+From 3.0.0 the npm package ships this file, as
+`node_modules/@zodiacs/engine/skills/zodiacs-compute/SKILL.md`, and the calc
+reference, as `node_modules/@zodiacs/engine/docs/calc.md`. Read the installed
+copies, which match the installed version.
+
+- The default ephemeris is astronomy-engine, and a bundle of `natalChart`
+  holds no DE440 data (about 36 KB gzipped). For JPL DE440 positions, call
+  this once, before computing:
+
+  ```ts
+  import { useDe440 } from "@zodiacs/engine/de440/pack";
+  useDe440();
+  ```
+
+  Up to 2.1.0 the pack was the default without that call. Do not describe a
+  3.0.0 result as DE440's unless it says so.
+- Report the ephemeris a result names (`chart.ephemeris`, a position's
+  `ephemeris`, a calc receipt's `engine.ephemeris`) and any fallback flag,
+  `"outside-de440-span"` or `"de440-unavailable"`: a flagged result is
+  astronomy-engine's.
+- `chartPoints()` gives `"Black Moon Lilith"`, the mean lunar apogee, and from
+  3.0.0 `"True Black Moon Lilith"`, the osculating apogee, which `calc()` also
+  gives. Say which one you report. The true one is within 1.6″ of JPL
+  Horizons after `useDe440()`, and within 400″ (6.7′) on astronomy-engine.
+- `@zodiacs/engine/minor-bodies` gives Chiron, Ceres, Pallas, Juno and Vesta
+  from 1800 to 2200 TT (`minorBodyPosition(chiron, time)`, or
+  `minorBodyPositions(time, ["Chiron"])`), and refuses an instant outside that
+  span. They are not `calc()` bodies.
+- For a request phrased in Swiss Ephemeris terms, map its flags and bodies
+  with `docs/calc.md` (*Swiss Ephemeris `calc_ut` flags*) rather than
+  guessing. The engine holds no Swiss Ephemeris code or data, and its figures
+  are not Swiss Ephemeris's.
 
 ## Resolve the actual question
 
@@ -100,5 +137,6 @@ receipt. Omit unnecessary birth details from ordinary prose and shared output.
   is not an independent accuracy comparison. Preserve failed and partial
   evidence rather than silently choosing a friendlier benchmark.
 - Keep unpublished candidates distinct from registry releases and deployed
-  services. Do not promise rc.16 opt-in APIs, a remote MCP endpoint, CLI or npm
-  MCP installation solely because a source branch or example mentions them.
+  services. Do not promise an opt-in API, a remote MCP endpoint, the command
+  line tool or the Python package (both parked at 3.0.0), or an npm MCP
+  installation solely because a source branch or example mentions them.

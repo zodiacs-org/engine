@@ -63,7 +63,12 @@ const required = [
   "dist/minor-bodies.js",
   "dist/window.d.ts",
   "dist/window.js",
-  "package.json"
+  // From 3.0.0 two documents ship beside the code, for agents and for callers
+  // moving from Swiss Ephemeris: the calc entry's reference, with its
+  // swe_calc_ut flag mapping, and the agents' skill.
+  "docs/calc.md",
+  "package.json",
+  "skills/zodiacs-compute/SKILL.md"
 ];
 for (const file of required) {
   assert(files.includes(file), `packed package is missing ${file}`);
@@ -892,6 +897,13 @@ const TOTAL_CAP = 1_463_000;
 //
 // 3.0.0 adds the minor-body tables, data held to their exact sizes like the
 // pack (MINOR_BODY_TABLES above), which the cap leaves out with it.
+//
+// 3.0.0 also packs two documents, docs/calc.md (78,162 bytes) and
+// skills/zodiacs-compute/SKILL.md (8,098), and shortens README.md from 90,613
+// bytes to 10,129, its detail moved to docs/guide.md, which is not packed:
+// 107 files, of which 1,406,665 bytes are neither the pack nor the tables,
+// 5,835 more than the 105 files before them, 59 of the 5,835 being the two
+// entries the documents add to package.json's "files". The cap is not raised.
 const restBytes = report.unpackedSize - PACK_DATA_BYTES - MINOR_BODY_DATA_BYTES;
 assert(restBytes <= TOTAL_CAP, `package is unexpectedly large: ${restBytes} bytes unpacked beside the DE440 pack and the minor-body tables, over ${TOTAL_CAP}`);
 

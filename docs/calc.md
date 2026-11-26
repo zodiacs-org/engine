@@ -26,7 +26,15 @@ With every default, `calc({ body, time })` is the position `positions()` and
 `natalChart()` give, to the bit: the same longitude, latitude and speed, from
 the same ephemeris (*Which ephemeris* below). Every result is a function of
 its request and of the default source alone (`setDefaultEphemeris` in the
-root entry): nothing depends on what was computed before it.
+root entry, or `useDe440()` in `@zodiacs/engine/de440/pack`): nothing depends
+on what was computed before it.
+
+From 3.0.0 this file ships in the npm package, as
+`node_modules/@zodiacs/engine/docs/calc.md`, beside
+`skills/zodiacs-compute/SKILL.md`, for agents and for callers moving from
+Swiss Ephemeris (*Swiss Ephemeris `calc_ut` flags* below). The documents it
+links to are not packed: they are in the repository's
+[`docs/`](https://github.com/zodiacs-org/engine/tree/main/docs).
 
 ## Which ephemeris
 
@@ -37,7 +45,25 @@ and a default `calc()` was as much as 29.19″ from `positions()` at one
 instant a day (noon TT) from 1800 to 2199, and more for a planet passing
 behind the Sun.
 
-| request | computed on |
+From 3.0.0 the default source is astronomy-engine, and neither the root's
+graph nor this entry's holds the DE440 pack: a browser bundle of the root's
+`natalChart` is 36,213 bytes gzipped, measured on 3.0.0's build
+([guide.md](guide.md), *Bundle size in a web page*). One call makes the
+shipped pack the default of the root and of this entry together:
+
+```ts
+import { useDe440 } from "@zodiacs/engine/de440/pack";
+useDe440();
+```
+
+From 1.1.0-rc.10 to 2.1.0 the pack was the default without that call. The
+table says what each request computes on after `useDe440()`. Before it, each
+row that names the pack computes on astronomy-engine, names it and carries
+no flag, as after `setDefaultEphemeris("astronomy-engine")`; and
+`setDefaultEphemeris("de440")` with no `useDe440()` computes on
+astronomy-engine and flags each such result `"de440-unavailable"`.
+
+| request | computed on, after `useDe440()` |
 | --- | --- |
 | `calc()`: the Sun, the Moon, Mercury to Pluto, geocentric and apparent (the defaults), in any frame | the shipped DE440 pack |
 | `calc()`: the true node and its opposite point | the shipped DE440 pack |
@@ -77,10 +103,12 @@ the correction itself. The receipt of each says which it used.
 **The result says which.** `receipt.engine.ephemeris` is
 `{ name: "jpl-de440", version: <the pack's SHA-256> }` or
 `{ name: "astronomy-engine", version: "2.1.19" }`, and the conventions hold
-`ephemeris:<name>@<version>`. **No fallback is silent:** if the pack cannot
-be opened (its bytes are missing, their SHA-256 is wrong, or they cannot be
-decoded), a position the pack would have given is astronomy-engine's, its
-receipt names astronomy-engine, and its `flags` hold `"de440-unavailable"`;
+`ephemeris:<name>@<version>`. **No fallback is silent:** if the default is
+the pack and the pack is not loaded (`setDefaultEphemeris("de440")` with no
+`useDe440()`) or cannot be opened (its bytes are missing, their SHA-256 is
+wrong, or they cannot be decoded), a position the pack would have given is
+astronomy-engine's, its receipt names astronomy-engine, and its `flags` hold
+`"de440-unavailable"`;
 `chart()`'s chart and `events()`'s result carry the same flag.
 After `setDefaultEphemeris("astronomy-engine")`, the caller's own choice,
 the receipt names astronomy-engine and nothing is flagged. A request the
@@ -128,7 +156,7 @@ entire window and the probes on either side. A source change can shift a
 root across the cut. A zero-length window succeeds with zero samples.
 
 A window must have `from` no later than `to`, and this is checked twice,
-from 2.1.1. When both ends are on the same scale, a reversed window is
+from 3.0.0. When both ends are on the same scale, a reversed window is
 refused with a `RangeError` before either end is converted. Once converted
 to TT (to UTC for `events()`), the ends are compared again: ends in order
 on UT1 can still come out reversed where the time basis steps back between
@@ -251,8 +279,8 @@ obliquity, 84381.448″, so it is tilted 0.042″ from `ecliptic-icrs`.
 The precession is astronomy-engine's (IAU 2006, the angles of Capitaine et al.
 2003), which the engine reproduces term for term (`src/frame.ts`), and the
 nutation the engine's own IAU 2000B (McCarthy and Luzum 2003): all 77 of its
-luni-solar terms and its two fixed planetary offsets (`src/nutation.ts`; the
-README's *Nutation*). They are the precession and nutation of `positions()`
+luni-solar terms and its two fixed planetary offsets (`src/nutation.ts`;
+[guide.md](guide.md), *Nutation*). They are the precession and nutation of `positions()`
 and `natalChart()` on astronomy-engine, so there the default frame is
 `positions()` to the bit. (A place from the DE440 pack reaches the true
 ecliptic of date by the pack's own chain, with the P03 adjustment of the
@@ -350,7 +378,7 @@ Center differ ([vedic.md](vedic.md), *Agreement with Swiss Ephemeris*).
 
 | `correction` | what it is |
 | --- | --- |
-| `apparent` | on astronomy-engine: light time and aberration: the observer is backdated with the target, as astronomy-engine's `GeoVector` does, which adds the observer's aberration to first order, annual and for a topocentric observer diurnal too, and no gravitational deflection. A geocentric apparent place from the DE440 pack, the default, is the pack's instead: light time, the Sun's light deflection (none behind the Sun's disc) and relativistic annual aberration (*Which ephemeris*). |
+| `apparent` | on astronomy-engine: light time and aberration: the observer is backdated with the target, as astronomy-engine's `GeoVector` does, which adds the observer's aberration to first order, annual and for a topocentric observer diurnal too, and no gravitational deflection. A geocentric apparent place from the DE440 pack (after `useDe440()`; the default from 1.1.0-rc.10 to 2.1.0) is the pack's instead: light time, the Sun's light deflection (none behind the Sun's disc) and relativistic annual aberration (*Which ephemeris*). |
 | `astrometric` | light time only: the target when its light left, from where the observer is when it arrives, on barycentric positions. |
 | `geometric` | where the target is at the instant, from where the observer is at the instant. |
 
@@ -896,7 +924,7 @@ is no comparison to take one from.
 | `ephemeris:astronomy-engine@2.1.19` | the ephemeris: truncated VSOP87 for the planets, a lunar series after Brown's theory (Montenbruck and Pfleger), an integrated Pluto |
 | `deltat:time-basis`, `deltat:pinned` | ΔT from the time basis (`iers-utc/1` from 1972-01-01 to the end of the IERS table, `zodiacs-deltat/1` outside it; each instant's `deltaT.model` says which), or the caller's value |
 | `time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise` | the time basis above, as the natal receipt's time-basis set names it ([time.md](time.md)), for a receipt whose instants all lie on or before the end of the IERS table (2027-10-02) or carry a pinned ΔT |
-| `time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972` | the continuous-UTC rule ([time.md](time.md)), as the natal receipt's continuous-UTC sets name it: from 2.1.1, for a receipt with any instant on the `continuous-utc` basis, after the IERS table |
+| `time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;tt-utc-plus-69.184s-and-ut1-from-delta-t-model-after;delta-t-model-before-1972` | the continuous-UTC rule ([time.md](time.md)), as the natal receipt's continuous-UTC sets name it: from 3.0.0, for a receipt with any instant on the `continuous-utc` basis, after the IERS table |
 | `house:<system>`, `polar-fallback:whole` | the house system asked for, and whole sign where Placidus or Koch is undefined |
 | `angles:gast-and-true-obliquity`, `sidereal-time:gast-iau2006-era` | the angles from the engine's apparent sidereal time (the Earth rotation angle, astronomy-engine's IAU 2006 polynomial, and the equation of the equinoxes: Δψ cos εA and the two largest IAU 2000 complementary terms) and the true obliquity |
 | `aspects:major`, `search:scan-and-bisect` | the chart's major aspects; the crossing search |
@@ -917,7 +945,7 @@ uses no Swiss Ephemeris code, data or output.
 | `SEFLG_TOPOCTR` (with `swe_set_topo`) | topocentric | `center: { topocentric: { latitude, longitude, height } }` | supported |
 | `SEFLG_TRUEPOS` | geometric position | `flags.correction: "geometric"` | supported |
 | `SEFLG_NOABERR` | no aberration | `flags.correction: "astrometric"` | supported; there is never deflection here |
-| `SEFLG_NOGDEFL` | no gravitational deflection | on astronomy-engine always so (`setDefaultEphemeris("astronomy-engine")`, or another correction); on the DE440 pack, the default, the apparent place has the Sun's deflection and no flag removes it | partly: astronomy-engine's places have none; `flags.deflection` asks for deflection and `true` is refused (`not-in-this-version`) |
+| `SEFLG_NOGDEFL` | no gravitational deflection | on astronomy-engine, the default from 3.0.0, always so (or with another correction); on the DE440 pack, after `useDe440()`, the apparent place has the Sun's deflection and no flag removes it | partly: astronomy-engine's places have none; `flags.deflection` asks for deflection and `true` is refused (`not-in-this-version`) |
 | `SEFLG_ASTROMETRIC` | `NOABERR` and `NOGDEFL` | `flags.correction: "astrometric"` | supported |
 | `SEFLG_NONUT` | mean equinox of date | `frame: "ecliptic-mean-of-date"` or `"equatorial-mean-of-date"` | supported |
 | `SEFLG_J2000` | J2000.0 | `frame: "ecliptic-j2000"` or `"equatorial-j2000"` | supported |
@@ -927,7 +955,7 @@ uses no Swiss Ephemeris code, data or output.
 | `SEFLG_RADIANS` | radians | `flags.units: "radians"` | supported |
 | `SEFLG_SIDEREAL` (with `swe_set_sid_mode`) | sidereal zodiac | `zodiac: { sidereal: ayanamsa }`, an ayanamsa by name, or `{ epoch, value, rate?, model? }` for `SE_SIDM_USER` | supported in the two ecliptics of date (see *The sidereal zodiac*); with `SEFLG_NONUT`, `frame: "ecliptic-mean-of-date"`; the projections `SE_SIDBIT_ECL_T0` and `SE_SIDBIT_SSY_PLANE` are not offered |
 | `SEFLG_TROPICAL` | tropical zodiac | `zodiac: "tropical"` | supported, the default |
-| `SEFLG_SWIEPH`, `SEFLG_JPLEPH`, `SEFLG_MOSEPH` | which ephemeris | none: one ephemeris, named in every receipt | not offered; a DE440 backend on the hosted API is planned |
+| `SEFLG_SWIEPH`, `SEFLG_JPLEPH`, `SEFLG_MOSEPH` | which ephemeris | none per call: the module's default source, astronomy-engine or, after `useDe440()`, the shipped DE440 pack (*Which ephemeris*), named in every receipt | not offered as a flag; none of Swiss Ephemeris's files is read |
 | `SEFLG_SPEED3` | speeds from three positions | none | not offered; speeds are analytic or central differences |
 | `SEFLG_DPSIDEPS_1980`, `SEFLG_JPLHOR`, `SEFLG_JPLHOR_APPROX` | IAU 1980 nutation corrections, Horizons's frame | none | not offered; the nutation is IAU 2000B |
 | `SEFLG_CENTER_BODY` | a planet's centre, not its system barycentre | none | not offered; Mars to Pluto were compared with system barycentres (see Bodies) |
@@ -942,8 +970,13 @@ map to `CalcBody` as `SE_SUN` to `SE_PLUTO` by name, `SE_EARTH` to `"Earth"`,
 with JPL Horizons and not with Swiss Ephemeris (on astronomy-engine's lunar
 series it is under 6.7′ from the apogee of Horizons's Moon at 12 instants,
 on the DE440 pack under 1.6″). From 3.0.0 Chiron, Ceres, Pallas, Juno and
-Vesta are in `@zodiacs/engine/minor-bodies`, from tables fitted to JPL
-Horizons, not in `calc()`. The flags Swiss Ephemeris returns,
+Vesta (`SE_CHIRON`, `SE_CERES`, `SE_PALLAS`, `SE_JUNO`, `SE_VESTA`) are in
+`@zodiacs/engine/minor-bodies`, from tables fitted to JPL Horizons, not in
+`calc()`: `minorBodyPosition(chiron, time)` gives one body's apparent
+geocentric place in the true ecliptic of date, from 1800 to 2200 TT, on the
+same default source, and at 500 places from Horizons that the fit never saw
+it is within 0.532″ after `useDe440()` and 1.682″ on astronomy-engine
+(`src/minor-bodies.test.ts`; [guide.md](guide.md), *Minor bodies*). The flags Swiss Ephemeris returns,
 which say what it actually computed, correspond to the receipt's conventions,
 and its error returns to the typed refusals.
 
@@ -993,7 +1026,8 @@ checks every largest difference against the bounds the build quotes
 (`docs/evidence/1.1.0-rc.7-20261111/`).
 
 These rows are the bounds of astronomy-engine's results: on the shipped
-DE440 pack, from 1.1.0-rc.10 the default, `calc()` quotes
+DE440 pack (the default from 1.1.0-rc.10 to 2.1.0, and from 3.0.0 after
+`useDe440()`), `calc()` quotes
 `src/calc-bounds-de440.ts` instead (*Which ephemeris*). The sweep's engine
 side ran `calc()` at its default, so on 1.1.0-rc.10 it measured the pack's
 apparent places against these limits and against an arbiter without the
@@ -1004,8 +1038,8 @@ light deflection the pack applies, and the workflow failed (run
 in all eight eras and every row is within its limit
 (`docs/evidence/1.1.0-rc.11-20261115/sweep/`).
 
-From 1.1.0-rc.12 the workflow sweeps the pack too, `calc()`'s default
-(`engine_sweep.mjs --ephemeris de440`), against the kernel's apparent place
+From 1.1.0-rc.12 the workflow sweeps the pack too, `calc()`'s default until
+2.1.0 (`engine_sweep.mjs --ephemeris de440`), against the kernel's apparent place
 with the Sun's light deflection (`erfa.ld` with `erfa.ldsun`'s limiter, and
 none for a planet behind the Sun's disc, as Horizons), and its job *Sweep
 results on the DE440 pack* holds every body's largest angle over all

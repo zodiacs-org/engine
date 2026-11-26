@@ -4,8 +4,9 @@
 //   node scripts/verify-no-dashes.mjs
 //
 // It reads README.md, CHANGELOG.md, LICENSING.md, NOTICE, docs/calc.md,
-// skills/zodiacs-compute/SKILL.md, tools/wheel/README.md and every PARKED.md
-// in the repository, each that exists. CHANGELOG.md is read down to its first
+// docs/guide.md (the README's detailed sections, from 3.0.0), docs/de440.md,
+// docs/comparison.md, skills/zodiacs-compute/SKILL.md, tools/wheel/README.md
+// and every PARKED.md in the repository, each that exists. CHANGELOG.md is read down to its first
 // entry for a version that artifacts/archives.json carries an archive of:
 // that entry and the ones below it are what earlier archives shipped, and the
 // rule does not rewrite them; the entries above it, the ones still to be cut,
@@ -23,6 +24,9 @@ export const DOCUMENTS = Object.freeze([
   "LICENSING.md",
   "NOTICE",
   "docs/calc.md",
+  "docs/guide.md",
+  "docs/de440.md",
+  "docs/comparison.md",
   "skills/zodiacs-compute/SKILL.md",
   "tools/wheel/README.md"
 ]);

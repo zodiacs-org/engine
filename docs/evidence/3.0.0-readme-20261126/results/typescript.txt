@@ -1,0 +1,21 @@
+TypeScript 5.9.3, each run: tsc --noEmit --strict --target es2022 --module M --moduleResolution R probe.ts probe.cts
+== module nodenext, moduleResolution nodenext
+exit 0
+== module node20, moduleResolution node16
+exit 0
+== module node18, moduleResolution node16
+probe.cts(2,25): error TS1471: Module '@zodiacs/engine' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+probe.cts(3,23): error TS1471: Module '@zodiacs/engine/de440/pack' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+probe.ts(2,28): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("@zodiacs/engine")' call instead.
+  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
+probe.ts(3,26): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("@zodiacs/engine/de440/pack")' call instead.
+  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
+exit 2
+== module node16, moduleResolution node16
+probe.cts(2,25): error TS1471: Module '@zodiacs/engine' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+probe.cts(3,23): error TS1471: Module '@zodiacs/engine/de440/pack' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+probe.ts(2,28): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("@zodiacs/engine")' call instead.
+  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
+probe.ts(3,26): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("@zodiacs/engine/de440/pack")' call instead.
+  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
+exit 2

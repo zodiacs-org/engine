@@ -1,5 +1,9 @@
 # Offline CLI preparation
 
+> **Parked at `@zodiacs/engine` 3.0.0.** This tool stays pinned to the
+> `@zodiacs/engine@1.0.0-rc.2` archive and is not maintained or published for
+> 3.0.0: see [PARKED.md](PARKED.md).
+
 Private `@zodiacs/cli@0.0.0` for review against the carried `@zodiacs/engine@1.0.0-rc.2` archive. It is not published, and `npx @zodiacs/cli` is not a promised registry installation yet. The engine implementation, version, public declarations and carried archives are unchanged. This preparation does not accept P3.7.
 
 The executable is `zodiacs`. Commands are `chart`, `positions`, `events`, `verify` and `conformance`; formats are `text`, `json` and `svg`. Calculation requests use the engine's [calc vocabulary](https://github.com/zodiacs-org/engine/blob/7fa964d2a77d09dbb819b5733b36e303fc7fc513/docs/calc.md), with resolved ISO instants or Julian dates on an explicitly named scale. No civil-time inference is added.

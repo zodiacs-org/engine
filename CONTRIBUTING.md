@@ -11,8 +11,9 @@ Everyone taking part follows the [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Setting up
 
-The package runs on Node.js 20.19.0 or a later 20.x, and on 22.7.0 or later
-(`"engines": { "node": "^20.19.0 || >=22.7.0" }` in `package.json`). CI runs
+The package runs on Node.js 20.19.0 or a later 20.x, and on 22.12.0 or later
+(`"engines": { "node": "^20.19.0 || >=22.12.0" }` in `package.json`), with
+`import` or, from 3.0.0, `require()`, which has no blocker. CI runs
 the engine on Node 20, 22 and 24. The conformance and atlas workflows pin
 Node 22.22.2: the time zone vectors read the runtime's ICU data, and the
 atlas files were checked with that version. Use it when you regenerate
@@ -63,11 +64,11 @@ list and a workflow disagree, the workflow is right.
 - **Pack**, on Node 22: `npm ci`, `npm run build`, and
   `npm pack --ignore-scripts` into a temporary directory. The next job
   installs that archive.
-- **Packed consumer**, on Node 20.19.0, 22.7.0, 22 and 24:
+- **Packed consumer**, on Node 20.19.0, 22.12.0, 22 and 24:
   `node scripts/verify-packed-consumer.mjs` with the archive's absolute path,
   and `TMPDIR` outside the checkout. It installs the archive in a clean
-  consumer and exercises it. 20.19.0 and 22.7.0 are the lowest versions the
-  `engines` range admits.
+  consumer and exercises it, through `import` and through `require()`.
+  20.19.0 and 22.12.0 are the lowest versions the `engines` range admits.
 
 `conformance.yml`, on Node 22.22.2:
 
@@ -200,7 +201,10 @@ them by hand (`docs/time.md`).
 and `npm run package:contents` checks the result. A new file at the
 repository root, such as this one, is not packed unless `files` lists it or
 npm packs it by default (`package.json` and any README, LICENSE, LICENCE or
-COPYING file). `conformance/` and `atlas/` are not packed. The core entry
+COPYING file). From 3.0.0 `files` also packs two documents,
+`docs/calc.md` and `skills/zodiacs-compute/SKILL.md`, so a change to either
+waits for a candidate, as one to the README does. `conformance/` and
+`atlas/` are not packed. The core entry
 point makes no network request and has no import-time side effects;
 `@zodiacs/engine/crossings`, `@zodiacs/engine/deltat`,
 `@zodiacs/engine/time` and `@zodiacs/engine/lite` import no ephemeris.

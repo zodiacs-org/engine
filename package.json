@@ -117,7 +117,9 @@
     "CHANGELOG.md",
     "LICENSE",
     "LICENSING.md",
-    "NOTICE"
+    "NOTICE",
+    "docs/calc.md",
+    "skills/zodiacs-compute/SKILL.md"
   ],
   "engines": {
     "node": "^20.19.0 || >=22.12.0"

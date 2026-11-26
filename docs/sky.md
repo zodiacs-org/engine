@@ -100,7 +100,7 @@ The body's apparent geocentric place comes from astronomy-engine, as the
 engine's other positions do: the Sun and planets with light time and
 aberration, the Moon from its series, rotated to the true equator and equinox
 of date with the engine's precession and IAU 2000B nutation (`src/equator.ts`,
-the README's *Nutation*). The observer is placed with the engine's own
+[guide.md](guide.md), *Nutation*). The observer is placed with the engine's own
 Greenwich apparent sidereal time (`src/ephemeris.ts`), the one the chart's
 angles use. The difference is the topocentric vector.
 Diurnal aberration (at most 0.32″, the equator's rotation speed of 465 m/s
@@ -144,7 +144,7 @@ at declination +23.6° the planet crossed the horizon there at a grazing
 angle, 1.5′ to 2.5′ of altitude a minute, so the 15″ to 18″ between the two
 positions moved the times by up to 11.61 s. That is the size of
 astronomy-engine's error for Uranus (up to 19.3″ in declination in the
-comparison in the README). The transits do not depend on the declination
+comparison in [guide.md](guide.md), *Declinations and parallels*). The transits do not depend on the declination
 and are within 1.15 s everywhere. With the centre of the Sun and the Moon
 and no refraction, all 37,226 events are within 2.19 s. The branch's run,
 before the engine took the full IAU 2000B nutation, gave the same counts and
