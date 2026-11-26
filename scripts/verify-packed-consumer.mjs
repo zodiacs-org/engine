@@ -6,11 +6,13 @@ import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 
 // astronomy-engine 2.1.19 ships ESM in a package without "type": "module"; plain
-// Node loads it as ESM only from 20.19.0 on the 20 line and from 22.7.0 on.
+// Node loads it as ESM only from 20.19.0 on the 20 line and from 22.7.0 on. From
+// 3.0.0 the package has no CommonJS stub, and require() loads its ES modules
+// (require(esm), unflagged) only from 20.19.0 and from 22.12.0 on.
 const [major, minor] = process.versions.node.split(".").map(Number);
-if (!((major === 20 && minor >= 19) || (major === 22 && minor >= 7) || major > 22)) {
-  console.error(`Node ${process.version} is outside @zodiacs/engine's supported range (^20.19.0 || >=22.7.0): ` +
-    "it would load astronomy-engine's ESM as CommonJS. Use Node 20.19.0, 22.7.0 or later.");
+if (!((major === 20 && minor >= 19) || (major === 22 && minor >= 12) || major > 22)) {
+  console.error(`Node ${process.version} is outside @zodiacs/engine's supported range (^20.19.0 || >=22.12.0): ` +
+    "it would load astronomy-engine's ESM as CommonJS, or not load the package through require(). Use Node 20.19.0, 22.12.0 or later.");
   process.exit(1);
 }
 const artifactArgument = process.argv[2];
@@ -52,7 +54,7 @@ const installed = JSON.parse(
 );
 assert.equal(installed.version, manifest.version);
 assert.equal(installed.license, "MIT AND CC-BY-4.0");
-assert.deepEqual(installed.engines, { node: "^20.19.0 || >=22.7.0" });
+assert.deepEqual(installed.engines, { node: "^20.19.0 || >=22.12.0" });
 assert(
   realpathSync(join(directory, "node_modules/@zodiacs/engine")).startsWith(realpathSync(directory))
 );
@@ -908,22 +910,27 @@ assert.match(fallback["not-loaded"].error, /^the shipped DE440 pack is not loade
 fallback.restored = JSON.parse(run(process.execPath, ["fallback.mjs", "whole"]).trim());
 assert.deepEqual(fallback.restored.natalFlags, []);
 
-// A CommonJS consumer: require() of every entry point throws the package's
-// own ERR_ZODIACS_ESM_ONLY with the message that says to use import
-// (scripts/build-esm-only.mjs), and import() from the same file loads it.
+// A CommonJS consumer (from 3.0.0, which has no CommonJS stub and no "require"
+// condition): require() of every entry point loads the very module import() of
+// the same name loads, as require(esm) does unflagged on every Node in the
+// engines range, and the two share one module state, so useDe440() through
+// require() puts the root on the shipped pack.
 writeFileSync(
   join(directory, "require.cjs"),
   `
 const assert = require("node:assert/strict");
 const entries = ${JSON.stringify(Object.keys(installed.exports).map((subpath) => (subpath === "." ? "@zodiacs/engine" : `@zodiacs/engine/${subpath.slice(2)}`)))};
-const message = '@zodiacs/engine is ESM-only: require() cannot load it or any of its entry points. ' +
-  'Use import { natalChart } from "@zodiacs/engine", or from CommonJS await import("@zodiacs/engine").';
-for (const name of entries) {
-  assert.throws(() => require(name), (error) => error instanceof Error && error.code === "ERR_ZODIACS_ESM_ONLY" && error.message === message, name);
-}
-import("@zodiacs/engine").then((engine) => {
-  assert.equal(typeof engine.natalChart, "function");
-  console.log(JSON.stringify({ entries: entries.length, code: "ERR_ZODIACS_ESM_ONLY", dynamicImport: "loaded" }));
+const required = entries.map((name) => require(name));
+const root = require("@zodiacs/engine");
+const birth = { utc: "2000-01-01T12:00:00Z", timeKnown: false };
+assert.equal(root.natalChart(birth).ephemeris.name, "astronomy-engine");
+const source = require("@zodiacs/engine/de440/pack").useDe440();
+assert.deepEqual(root.natalChart(birth).ephemeris, source.ephemeris);
+assert.equal(require("@zodiacs/engine/calc").calc({ body: "Sun", time: birth.utc }).receipt.engine.ephemeris.name, "jpl-de440");
+root.setDefaultEphemeris("astronomy-engine");
+Promise.all(entries.map((name) => import(name))).then((imported) => {
+  imported.forEach((entry, index) => assert.equal(entry, required[index], entries[index]));
+  console.log(JSON.stringify({ entries: entries.length, required: "loaded", sameAsImport: true, useDe440: source.ephemeris.name }));
 });
 `
 );

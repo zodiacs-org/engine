@@ -43,7 +43,7 @@ for (const name of files) {
 const exportsMap = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).exports;
 const programs = [
   ["the root's natalChart", 'import { natalChart } from "./dist/index.js";\nglobalThis.natalChart = natalChart;\n'],
-  ...Object.entries(exportsMap).map(([subpath, target]) => [subpath, `import * as entry from ${JSON.stringify(target.import ?? target.default)};\nglobalThis.entry = entry;\n`])
+  ...Object.entries(exportsMap).map(([subpath, target]) => [subpath, `import * as entry from ${JSON.stringify(target.default)};\nglobalThis.entry = entry;\n`])
 ];
 let natal;
 for (const [what, contents] of programs) {

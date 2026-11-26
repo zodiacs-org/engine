@@ -570,7 +570,7 @@ const exported = JSON.parse(readFileSync(new URL("../package.json", import.meta.
 assert.deepEqual(Object.keys(exported).sort(), Object.keys(ENTRY_BUDGETS).sort(),
   "every entry point in package.json exports needs a budget here, and every budget an entry point");
 const graphs = Object.fromEntries(Object.entries(exported).map(([name, target]) => {
-  const sizes = importGraph(target.import.replace(/^\.\//u, ""));
+  const sizes = importGraph(target.default.replace(/^\.\//u, ""));
   const all = [...sizes.values()].reduce((sum, size) => sum + size, 0);
   return [name, { files: sizes.size, bytes: all - (sizes.has(PACK_HOLDER) ? PACK_DATA_BYTES : 0), pack: sizes.has(PACK_HOLDER), sizes }];
 }));
@@ -916,8 +916,11 @@ assert(read("README.md").includes(LICENSE_EXPRESSION), "README.md must state the
 for (const file of files) {
   assert(!read(file).includes("@zodiacs/sdk"), `${file} names the separate earlier package`);
 }
-// astronomy-engine's ESM is loaded as ESM by plain Node only from 20.19.0 and 22.7.0.
-assert.equal(manifest.engines?.node, "^20.19.0 || >=22.7.0", "package.json engines must name the Node versions that load astronomy-engine");
+// astronomy-engine's ESM is loaded as ESM by plain Node only from 20.19.0 and
+// 22.7.0, and from 3.0.0, which has no CommonJS stub, require() loads the
+// package's ES modules (require(esm), unflagged) only from 20.19.0 and 22.12.0.
+assert.equal(manifest.engines?.node, "^20.19.0 || >=22.12.0",
+  "package.json engines must name the Node versions that load astronomy-engine and load an ES module through require()");
 
 /** Bytes an entry's graph holds beyond the root's: what importing it adds to an app that imports the root. */
 const beyondRoot = (graph) =>
