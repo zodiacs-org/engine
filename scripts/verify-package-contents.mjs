@@ -770,7 +770,7 @@ assert(notice.includes("dist/time.js import, and copied into dist/core.js, the f
   "NOTICE must say that dist/core.js carries a copy of the frame");
 assert(prose("LICENSING.md").includes("`dist/core.js`, the file of `@zodiacs/engine/core`, carries its own copy of `src/frame.ts`"),
   "LICENSING.md must say that dist/core.js carries a copy of the frame");
-assert(notice.includes("dist/de440.js import, and copied into dist/core.js, the file of @zodiacs/engine/core) carries"),
+assert(notice.includes("(which dist/de440.js re-exports) import, and copied into dist/core.js, the file of @zodiacs/engine/core) carries"),
   "NOTICE must say that dist/core.js carries a copy of the nutation");
 assert(prose("LICENSING.md").includes("`./de440`. `dist/core.js`, the file of `@zodiacs/engine/core`, carries its own copy of them"),
   "LICENSING.md must say that dist/core.js carries a copy of the nutation");
@@ -845,11 +845,17 @@ assert(files.some((file) => /^dist\/chunk-[^/]+\.js$/u.test(file) && /\bfunction
 assert.deepEqual(Object.keys(graphs).filter((name) => graphs[name].sizes.has(nutationHolders[0])).sort(),
   [".", "./calc", "./de440", "./de440/pack", "./internal", "./sky", "./techniques", "./time", "./timing", "./vedic", "./window"],
   "the entry points whose graphs load the nutation must be the ones LICENSING.md names");
-assert(read("dist/de440.js").includes(nutationChunk), "dist/de440.js must import the chunk that holds the nutation");
+// dist/de440.js re-exports the DE440 reader from a chunk of its own, which
+// imports the nutation's (until 2.1.0 dist/de440.js imported that chunk
+// itself, with the bare import scripts/build-chunk-imports.mjs now takes out).
+const readerHolders = files.filter((file) => /^dist\/chunk-[^/]+\.js$/u.test(file) && read(file).includes("\n// src/de440.ts\n"));
+assert(readerHolders.length === 1 && read("dist/de440.js").includes(`./${readerHolders[0].slice("dist/".length)}`),
+  `dist/de440.js must re-export the DE440 reader from exactly one shared chunk under dist/; found its marker in ${readerHolders.join(", ") || "no chunk"}`);
+assert(read(readerHolders[0]).includes(nutationChunk), "the DE440 reader's chunk must import the chunk that holds the nutation");
 assert(notice.includes("built into a shared chunk under dist/ that the ephemeris chunk and dist/time.js import"), "NOTICE must say where the frame is");
-assert(notice.replace(/\s+/gu, " ").includes("src/nutation.ts, built into a shared chunk under dist/ that the ephemeris chunk, dist/time.js and dist/de440.js import"),
+assert(notice.replace(/\s+/gu, " ").includes("src/nutation.ts, built into a shared chunk under dist/ that the ephemeris chunk, dist/time.js and the DE440 reader's chunk (which dist/de440.js re-exports) import"),
   "NOTICE must say where the nutation is");
-assert(prose("LICENSING.md").includes("shared chunk under `dist/` that the ephemeris chunk, `dist/time.js` and `dist/de440.js` import"),
+assert(prose("LICENSING.md").includes("shared chunk under `dist/` that the ephemeris chunk, `dist/time.js` and the DE440 reader's chunk (which `dist/de440.js` re-exports) import"),
   "LICENSING.md must say where the nutation is");
 // The essential dignities' tables and the composite code adapted from the
 // site, the same way: NOTICE and LICENSING.md say that dist/techniques.js and

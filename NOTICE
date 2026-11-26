@@ -24,8 +24,9 @@ IAU 2000B nutation
 ------------------
 
 The package's nutation module (src/nutation.ts, built into a shared chunk
-under dist/ that the ephemeris chunk, dist/time.js and dist/de440.js import,
-and copied into dist/core.js, the file of @zodiacs/engine/core) carries the
+under dist/ that the ephemeris chunk, dist/time.js and the DE440 reader's
+chunk (which dist/de440.js re-exports) import, and copied into dist/core.js,
+the file of @zodiacs/engine/core) carries the
 77 luni-solar terms, fundamental arguments and fixed planetary offsets of the
 IAU 2000B nutation model,
 

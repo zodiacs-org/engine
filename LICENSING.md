@@ -289,7 +289,8 @@ instrument, and only statistics are committed.
 (385) and coefficients (462) of its 77 luni-solar terms, the 10 coefficients
 of its five fundamental arguments and its two fixed offsets for the planetary
 terms. The build places them in a shared chunk under `dist/` that the
-ephemeris chunk, `dist/time.js` and `dist/de440.js` import, so the graphs of
+ephemeris chunk, `dist/time.js` and the DE440 reader's chunk (which
+`dist/de440.js` re-exports) import, so the graphs of
 the root, `./calc`, `./de440`, `./internal`, `./sky`, `./techniques`,
 `./time`, `./timing`, `./vedic` and `./window` load them, and so does that
 of `./de440/pack`, which opens its pack with `./de440`. `dist/core.js`, the
