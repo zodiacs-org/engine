@@ -22,7 +22,7 @@ console.log(chart.bodies, chart.houses, chart.ephemeris); // ephemeris: astronom
 ```
 
 The default computes on astronomy-engine: an application that bundles
-`natalChart` is about 36 KB gzipped (36,213 bytes, 79,787 minified) and holds
+`natalChart` is about 37 KB gzipped (36,624 bytes, 79,787 minified) and holds
 no DE440 data. A date with no time is refused unless `timeKnown: false`; turn
 a local wall time into an instant with `resolveBirth` from `@zodiacs/engine/geo`.
 
@@ -35,8 +35,8 @@ useDe440(); // the root, and every entry point that shares its ephemeris, now co
 
 `useDe440()` opens the sealed pack the package ships (2,489,664 bytes refitted
 from NAIF's `de440.bsp` for 1790 to 2210, checked against its SHA-256) and
-makes it the default: about 2.44 MB gzipped with `natalChart` (2,441,049
-bytes), against the default's 36 KB. Charts, positions and receipts name
+makes it the default: about 2.41 MB gzipped with `natalChart` (2,402,512
+bytes), against the default's 37 KB. Charts, positions and receipts name
 their ephemeris, and a fallback to astronomy-engine is flagged
 `"outside-de440-span"` or `"de440-unavailable"`, never silent. **Breaking
 from 2.x:** up to 2.1.0 the root loaded the pack on import and computed on it
@@ -51,16 +51,20 @@ The conformance suite's 240 L1 vectors: the Sun, the Moon and the planets at
 
 | Engine | Licence | Runtime | L1 within 1″ | Lon median / max | Footprint |
 | --- | --- | --- | --- | --- | --- |
-| `@zodiacs/engine` 3.0.0, default | MIT AND CC-BY-4.0 | JS/TS: browsers, Node, Deno, Bun | 48 / 240 | 2.083″ / 18.774″ | ~36 KB gzipped (`natalChart`) |
-| `@zodiacs/engine` 3.0.0 + `useDe440()` | MIT AND CC-BY-4.0 | JS/TS: browsers, Node, Deno, Bun | 240 / 240 | 0.002″ / 0.013″ | ~2.44 MB gzipped, pack included |
+| `@zodiacs/engine` 3.0.0, default | MIT AND CC-BY-4.0 | JS/TS: browsers, Node, Deno, Bun | 48 / 240 | 2.083″ / 18.774″ | ~37 KB gzipped (`natalChart`) |
+| `@zodiacs/engine` 3.0.0 + `useDe440()` | MIT AND CC-BY-4.0 | JS/TS: browsers, Node, Deno, Bun | 240 / 240 | 0.002″ / 0.013″ | ~2.41 MB gzipped, pack included |
 | Swiss Ephemeris 2.10.03 | AGPL-3.0 or commercial | C, native bindings | 240 / 240 | 0.001″ / 0.005″ | native library and `.se1` files |
 | Skyfield 1.55 (`de440s.bsp`) | MIT | Python and NumPy | 240 / 240 | 0.001″ / 0.013″ | Python package and a JPL BSP file |
 | astronomia 4.3.0 (VSOP87B) | MIT | JS | 176 / 192 answered (48 unsupported) | 0.238″ / 2.782″ | JS package with VSOP87B tables |
 | PyEphem 4.2.1 | MIT | Python, C (`libastro`) | 0 / 240 (all 240 unsupported) | none | Python package wrapping `libastro` |
 
-Both `@zodiacs/engine` rows were measured on 3.0.0's build, and their
-residuals equal the committed results' to the bit; sizes are esbuild 0.27.7
-browser bundles, minified, gzip level 9
+Both `@zodiacs/engine` rows were measured on 3.0.0's build on Apple
+silicon: every verdict, and every conformance figure in the table, equals
+the results 2.1.0 committed, written on Linux x64; 11 of the runs' 1,718
+residual values differ from those in the 6th to 9th significant digit, by
+1.0 × 10⁻⁹″ at most, as 2.1.0's build does on that machine. Sizes are
+esbuild 0.27.7 browser bundles, minified, gzip level 9 with the zlib of
+Node 22.22.2 from nodejs.org
 ([docs/evidence/3.0.0-readme-20261126/](docs/evidence/3.0.0-readme-20261126/)).
 Any engine can be measured through an adapter
 ([conformance/SUBMITTING.md](conformance/SUBMITTING.md)).
@@ -69,7 +73,7 @@ Any engine can be measured through an adapter
 
 | Import | What it gives |
 | --- | --- |
-| `@zodiacs/engine` | natal charts, positions, transits, synastry, progressions, Moon phase, Saturn returns, chart points, declinations, configurable aspects, longitude crossings; astronomy-engine by default, about 36 KB gzipped |
+| `@zodiacs/engine` | natal charts, positions, transits, synastry, progressions, Moon phase, Saturn returns, chart points, declinations, configurable aspects, longitude crossings; astronomy-engine by default, about 37 KB gzipped |
 | `@zodiacs/engine/de440/pack` | `useDe440()`: the shipped NASA JPL DE440 pack as the default, in one line ([docs/de440.md](docs/de440.md)) |
 | `@zodiacs/engine/de440` | `openDe440Pack()`: a sealed DE440 pack you supply, used through the root's `withEphemeris` |
 | `@zodiacs/engine/minor-bodies` | Chiron, Ceres, Pallas, Juno and Vesta from 1800 to 2200 TT, from tables fitted to NASA JPL Horizons; tree-shakeable (below) |
@@ -100,8 +104,8 @@ compatibility promise ([docs/versioning.md](docs/versioning.md)).
 apogee) and, from 3.0.0, **True Black Moon Lilith**, the osculating lunar
 apogee from the Moon's state vector, which `calc()` gives too
 (`lilith:true-osculating`). Against NASA JPL Horizons's Moon at 12 instants
-from 1850 to 2150 it is within 1.589″ after `useDe440()` (median 0.050″) and
-within 396″ on the default astronomy-engine ([guide](docs/guide.md#points)).
+from 1850 to 2150 it is within 1.59″ after `useDe440()` (median 0.049″) and
+within 397″ on the default astronomy-engine ([guide](docs/guide.md#points)).
 
 ```ts
 import { chiron, minorBodyPosition, minorBodyPositions } from "@zodiacs/engine/minor-bodies";
@@ -110,9 +114,9 @@ minorBodyPosition(chiron, "2000-01-01T12:00:00Z"); // a spec: only Chiron's tabl
 minorBodyPositions("2000-01-01T12:00:00Z", ["Ceres", "Vesta"]); // names: all five tables are bundled
 ```
 
-Chiron alone adds 14,403 bytes gzipped to a `natalChart` application, all
-five 117,965. At 500 places from Horizons that the fit never saw, every
-longitude and latitude is within 0.532″ after `useDe440()` and within 1.682″
+Chiron alone adds 14,132 bytes gzipped to a `natalChart` application, all
+five 115,938. At 500 places from Horizons that the fit never saw, every
+longitude and latitude is within 0.54″ after `useDe440()` and within 1.7″
 on astronomy-engine ([guide](docs/guide.md#minor-bodies)).
 
 ## For coding agents and Swiss Ephemeris migrants
@@ -147,7 +151,8 @@ calendars and events. After `useDe440()` 639 pass and one is unsupported (the
 leap second 2016-12-31T23:59:60Z); on the default, 392 pass
 ([conformance/RESULTS.md](conformance/RESULTS.md)). Each figure here names
 its evidence, and `budgets.json` with `scripts/ratchet.mjs` fails CI where a
-bundle grows past its ceiling or accuracy slips past its limit.
+bundle grows past its ceiling, accuracy slips past its limit or is not a
+finite number, or a test is skipped that is not skipped by design.
 
 ## License and citation
 

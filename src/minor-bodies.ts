@@ -161,8 +161,9 @@ export interface MinorBodyPosition {
   readonly dist: number;
   /**
    * Longitude speed in degrees a TT day: the derivative of `lon` by a central
-   * difference over plus/minus MINOR_BODY_SPEED_STEP_DAYS of TT; negative
-   * means retrograde.
+   * difference over plus/minus MINOR_BODY_SPEED_STEP_DAYS of TT, both samples
+   * taking the central instant's decision about whether the body is behind
+   * the Sun's disc (from 3.0.0, as a planet's do); negative means retrograde.
    */
   readonly speed: number;
   readonly retrograde: boolean;
@@ -288,9 +289,12 @@ function instantOf(date: DateInput, options: MinorBodyOptions | undefined, label
 
 function positionOn(spec: MinorBodySpec, reader: Table, ttDays: number, chosen: Chosen): MinorBodyPosition {
   const heliocentric = (jdTdb: number) => reader.position(jdTdb);
-  const placeAt = (tt: number): MinorBodyPlace => apparentPlace(heliocentric, tt, chosen.statesAt);
+  const placeAt = (tt: number, behind?: boolean): MinorBodyPlace => apparentPlace(heliocentric, tt, chosen.statesAt, behind);
   const place = placeAt(ttDays);
-  let turn = placeAt(ttDays + MINOR_BODY_SPEED_STEP_DAYS).lon - placeAt(ttDays - MINOR_BODY_SPEED_STEP_DAYS).lon;
+  // Both samples hold the central instant's decision about the Sun's disc, as a planet's speed does
+  // (src/ephemeris.ts, src/calc.ts), so that the deflection's step at the limb is not read as motion.
+  let turn =
+    placeAt(ttDays + MINOR_BODY_SPEED_STEP_DAYS, place.behindDisc).lon - placeAt(ttDays - MINOR_BODY_SPEED_STEP_DAYS, place.behindDisc).lon;
   if (turn > 180) turn -= 360;
   if (turn < -180) turn += 360;
   const speed = turn / (2 * MINOR_BODY_SPEED_STEP_DAYS);

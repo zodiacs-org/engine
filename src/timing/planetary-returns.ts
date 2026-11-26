@@ -12,7 +12,7 @@ import type { NatalSource } from "../api.js";
 import { dateFrom } from "../date-input.js";
 import { searchLongitudeCrossings } from "../returns.js";
 import type { DateInput } from "../types.js";
-import { guarded, readOptions, timingFlags } from "./shared.js";
+import { chartFallbacks, guarded, readOptions, timingFlags } from "./shared.js";
 import type { TimingFlag } from "./shared.js";
 
 /**
@@ -174,7 +174,7 @@ export function planetaryReturns(
     from: start,
     to: end,
     samples: search.samples,
-    flags: timingFlags([utcOf(chart.input).getTime(), start.getTime(), end.getTime()], false)
+    flags: timingFlags([utcOf(chart.input).getTime(), start.getTime(), end.getTime()], false, chartFallbacks(chart))
   };
   if (search.status === "refused") {
     return Object.freeze({

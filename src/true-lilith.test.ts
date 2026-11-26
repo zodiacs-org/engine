@@ -21,7 +21,8 @@ import { calc } from "./calc.js";
 import { useDe440 } from "./de440-pack.js";
 import { apply, eclipticLonLatDeg, equToEcl, npbMatrix } from "./de440/frames.js";
 import { tdbMinusTt } from "./de440/reduce.js";
-import { chartPoints, setDefaultEphemeris, withEphemeris } from "./index.js";
+import { chartPoints, natalChart, setDefaultEphemeris, withEphemeris } from "./index.js";
+import { profectionAt, profectionYear, solarArcDirections } from "./timing.js";
 import { trueApogee } from "./ephemeris.js";
 import { EARTH_MOON_GM, osculatingApogee } from "./points.js";
 import type { PointPosition, PositionSource } from "./types.js";
@@ -48,6 +49,14 @@ const at = (ttDays: number) => ({ utc: ttDate(ttDays), timeScale: "tt" as const,
 /** a − b on the circle, arcseconds. */
 const wrapArcsec = (a: number, b: number): number => ((((a - b) % 360) + 540) % 360 - 180) * 3600;
 const lilithOf = (points: readonly PointPosition[]): PointPosition | undefined => points.find((p) => p.point === "True Black Moon Lilith");
+/** A document of the repository, its whitespace runs made single spaces. */
+const documentText = (file: string): string => readFileSync(new URL(`../${file}`, import.meta.url), "utf8").replace(/\s+/gu, " ");
+/** The numbers `pattern` captures in `file`, or a failed test where it finds none. */
+const quoted = (file: string, pattern: RegExp): number[] => {
+  const found = pattern.exec(documentText(file));
+  expect(found, `${file} quotes ${pattern}`).not.toBeNull();
+  return found!.slice(1).map(Number);
+};
 
 const dot = (a: Vec3, b: Vec3): number => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const cross = (a: Vec3, b: Vec3): Vec3 => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
@@ -140,7 +149,7 @@ describe("the osculating apogee", () => {
 });
 
 describe("chartPoints' True Black Moon Lilith", () => {
-  it("on the shipped DE440 pack is Horizons's to 1.6 arcseconds at each of the 12 instants", () => {
+  it("on the shipped DE440 pack is Horizons's to 1.59 arcseconds at each of the 12 instants", () => {
     useDe440();
     const lon: number[] = [];
     const lat: number[] = [];
@@ -151,14 +160,20 @@ describe("chartPoints' True Black Moon Lilith", () => {
       lon.push(wrapArcsec(lilith.lon, place.lon) * Math.cos((place.lat * Math.PI) / 180));
       lat.push((lilith.lat - place.lat) * 3600);
     }
-    // Measured on this build, arcseconds: longitude (times the cosine of the latitude) median 0.050, largest
-    // 1.589, at JD 2451545.0 TDB; latitude median 0.017, largest 0.076.
-    // docs/calc.md quotes the 1.6.
-    expect(stats(lon).max).toBeLessThan(1.6);
+    // Measured on this build, arcseconds: longitude (times the cosine of the latitude) median 0.04864, largest
+    // 1.58961, at JD 2451545.0 TDB; latitude median 0.01685, largest 0.07631.
+    // README.md and docs/guide.md quote the 1.59, docs/calc.md and SKILL.md the 1.6.
+    expect(stats(lon).max).toBeLessThan(1.59);
     expect(stats(lat).max).toBeLessThan(0.1);
+    // What the documents quote is the measurement rounded outward, never under it.
+    const [readmeLargest, readmeMedian] = quoted("README.md", /it is within ([0-9.]+)″ after `useDe440\(\)` \(median ([0-9.]+)″\)/u);
+    const [guideLargest, guideMedian, guideLatitude] = quoted("docs/guide.md", /within ([0-9.]+)″ on the sky in longitude \(median ([0-9.]+)″\) and ([0-9.]+)″ in latitude/u);
+    for (const largest of [readmeLargest!, guideLargest!]) expect(largest).toBeGreaterThanOrEqual(stats(lon).max);
+    for (const median of [readmeMedian!, guideMedian!]) expect(median).toBeGreaterThanOrEqual(stats(lon).median);
+    expect(guideLatitude).toBeGreaterThanOrEqual(stats(lat).max);
   });
 
-  it("on astronomy-engine, the default, is Horizons's to 400 arcseconds at each of the 12 instants", () => {
+  it("on astronomy-engine, the default, is Horizons's to 397 arcseconds at each of the 12 instants", () => {
     const lon: number[] = [];
     const lat: number[] = [];
     for (const { tt, place } of arbiter) {
@@ -168,12 +183,17 @@ describe("chartPoints' True Black Moon Lilith", () => {
       lon.push(wrapArcsec(lilith.lon, place.lon) * Math.cos((place.lat * Math.PI) / 180));
       lat.push((lilith.lat - place.lat) * 3600);
     }
-    // Measured on this build, arcseconds: longitude median 178, largest 396 (0.11 degrees); latitude median 9.3,
-    // largest 25.5. astronomy-engine's Moon is a truncated series, whose small errors in the velocity the
+    // Measured on this build, arcseconds: longitude median 178.110, largest 396.105 (0.11 degrees); latitude median
+    // 9.334, largest 25.451. astronomy-engine's Moon is a truncated series, whose small errors in the velocity the
     // eccentricity vector, about 0.055 long, magnifies.
-    // docs/calc.md quotes the 400 (6.7 arcminutes).
-    expect(stats(lon).max).toBeLessThan(400);
+    // README.md and docs/guide.md quote the 397, docs/calc.md and SKILL.md the 400 (6.7 arcminutes).
+    expect(stats(lon).max).toBeLessThan(397);
     expect(stats(lat).max).toBeLessThan(30);
+    // What the documents quote is the measurement rounded outward, never under it.
+    const [readmeLargest] = quoted("README.md", /and within ([0-9.]+)″ on the default astronomy-engine/u);
+    const [guideLargest, guideMinutes, guideMedian] = quoted("docs/guide.md", /on astronomy-engine, the default, within ([0-9.]+)″ \(([0-9.]+)′; median ([0-9.]+)″\)/u);
+    for (const largest of [readmeLargest!, guideLargest!, guideMinutes! * 60]) expect(largest).toBeGreaterThanOrEqual(stats(lon).max);
+    expect(guideMedian).toBeGreaterThanOrEqual(stats(lon).median);
   });
 
   it("swings about the mean apogee, Black Moon Lilith, by under 32 degrees from 1800 to 2200", () => {
@@ -256,6 +276,50 @@ describe("chartPoints' True Black Moon Lilith", () => {
     expect(named.ephemeris).toBe("test-source");
     useDe440();
     expect(named.lon).toBe(lilithOf(chartPoints(input).points)!.lon);
+  });
+});
+
+describe("timing results from True Black Moon Lilith", () => {
+  // 1790-01-02T00:00:00Z is the shipped pack's first TT instant as the default takes it (fromTtDays -76,699.5, a day
+  // inside the pack's first day). On the engine's ΔT model the birth's TT is after it, so the pack computes the chart;
+  // a ΔT pinned at -60 s puts the chart's TT, and its True Black Moon Lilith, a minute before it, on astronomy-engine.
+  const birth = { utc: "1790-01-02T00:00:00Z", latitude: 51.5, longitude: -0.1, houseSystem: "placidus" } as const;
+  const pinned = { ...birth, deltaT: -60 };
+  const FALLBACK = "outside-de440-span";
+
+  it("carry the point's fallback where a pinned ΔT puts the chart outside the pack and the birth's UTC instant is inside", () => {
+    useDe440();
+    expect(natalChart(birth).ephemeris?.name).toBe("jpl-de440");
+    const chart = natalChart(pinned);
+    expect(chart.ephemeris?.name).toBe("astronomy-engine");
+    const lilith = lilithOf(chartPoints(chart).points)!;
+    expect(lilith.ephemeris).toBe("astronomy-engine");
+    expect(lilith.fallback).toBe(FALLBACK);
+
+    const year = profectionYear(chart, 1, { point: "True Black Moon Lilith" });
+    expect(year.origin.point).toBe("True Black Moon Lilith");
+    expect(year.flags).toContain(FALLBACK);
+    expect(profectionAt(chart, "1791-06-01T00:00:00Z", { point: "True Black Moon Lilith" }).flags).toContain(FALLBACK);
+    const directed = solarArcDirections(chart, "1800-01-01T00:00:00Z");
+    expect(directed.positions.some((row) => row.name === "True Black Moon Lilith")).toBe(true);
+    expect(directed.flags).toContain(FALLBACK);
+    // The arc itself is read at the birth and the progressed instant as UTC instants, which the pack covers.
+    expect(directed.arc.flags).not.toContain(FALLBACK);
+    // A point that reads no ephemeris carries no fallback: the Ascendant, from the instant and the place alone.
+    expect(profectionYear(chart, 1, { point: "Ascendant" }).flags).not.toContain(FALLBACK);
+  });
+
+  it("carry the point's own fallback from a supplied chart computed on astronomy-engine by choice", () => {
+    // The chart names astronomy-engine, the default, with no fallback; after useDe440() the point is computed at
+    // the call, on the chart's clock, outside the pack, and says so, as the timing results then do.
+    const chart = natalChart(pinned);
+    expect(chart.flags).not.toContain(FALLBACK);
+    useDe440();
+    expect(lilithOf(chartPoints(chart).points)!.fallback).toBe(FALLBACK);
+    expect(profectionYear(chart, 1, { point: "True Black Moon Lilith" }).flags).toContain(FALLBACK);
+    expect(solarArcDirections(chart, "1800-01-01T00:00:00Z").flags).toContain(FALLBACK);
+    // The bodies are the chart's, computed on astronomy-engine by choice: no fallback.
+    expect(profectionYear(chart, 1, { point: "Sun" }).flags).not.toContain(FALLBACK);
   });
 });
 

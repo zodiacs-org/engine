@@ -18,6 +18,7 @@ import {
   dateAt,
   integerIn,
   natalContext,
+  natalFallbacks,
   oneOf,
   originOf,
   readOptions,
@@ -414,7 +415,7 @@ function lotStart(
   const { chart, points, birth } = natalContext(natal);
   const row = chartLongitude(chart, points, lot, "lot");
   const index = Math.floor(row.lon / 30) % 12;
-  const flags = timingFlags([birth.getTime()], sectContradictsAltitude(chart, points));
+  const flags = timingFlags([birth.getTime()], sectContradictsAltitude(chart, points), natalFallbacks(chart, points, [lot]));
   return { origin: originOf(index, row.lon, lot), index, birth, flags };
 }
 

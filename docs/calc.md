@@ -47,7 +47,7 @@ behind the Sun.
 
 From 3.0.0 the default source is astronomy-engine, and neither the root's
 graph nor this entry's holds the DE440 pack: a browser bundle of the root's
-`natalChart` is 36,213 bytes gzipped, measured on 3.0.0's build
+`natalChart` is 36,624 bytes gzipped, measured on 3.0.0's build
 ([guide.md](guide.md), *Bundle size in a web page*). One call makes the
 shipped pack the default of the root and of this entry together:
 
@@ -159,11 +159,18 @@ A window must have `from` no later than `to`, and this is checked twice,
 from 3.0.0. When both ends are on the same scale, a reversed window is
 refused with a `RangeError` before either end is converted. Once converted
 to TT (to UTC for `events()`), the ends are compared again: ends in order
-on UT1 can still come out reversed where the time basis steps back between
-them, as it does at the end of the IERS table (2027-10-02), where a 1 ms
-UT1 window converts to TT 1 ms backwards. Such a window is refused with a
-`RangeError` that says the time basis steps back there. Give both ends on
-TT, or widen the window past the step.
+on one scale can still come out reversed where the time basis steps back
+between them. A 1 ms UT1 window across the end of the IERS table
+(2027-10-02) converts to TT 1 ms backwards; a UTC window across 1972-01-01,
+where the ΔT model gives way to the leap seconds, converts to TT up to
+44.55 ms backwards; a UTC window across the ΔT model's step at 1941.0
+(1940-12-31T18:00 UT1), up to 13.95 ms; and a TT window across a leap
+second converts to UTC, on which `events()` runs, up to a second backwards.
+Such a window is refused with a `RangeError` that names the conversion (the
+input's scale and the scale the search runs on) and the step. Give both
+ends on the scale the search runs on, TT for `searchStations()` and
+`searchLunations()` and UTC for `events()`, or widen the window past the
+step.
 
 `maxSamples` accepts a positive safe integer or `Infinity` (the default).
 The budget counts scalar evaluations during the scan, refinement and
@@ -975,7 +982,7 @@ Vesta (`SE_CHIRON`, `SE_CERES`, `SE_PALLAS`, `SE_JUNO`, `SE_VESTA`) are in
 `calc()`: `minorBodyPosition(chiron, time)` gives one body's apparent
 geocentric place in the true ecliptic of date, from 1800 to 2200 TT, on the
 same default source, and at 500 places from Horizons that the fit never saw
-it is within 0.532″ after `useDe440()` and 1.682″ on astronomy-engine
+it is within 0.54″ after `useDe440()` and 1.7″ on astronomy-engine
 (`src/minor-bodies.test.ts`; [guide.md](guide.md), *Minor bodies*). The flags Swiss Ephemeris returns,
 which say what it actually computed, correspond to the receipt's conventions,
 and its error returns to the typed refusals.

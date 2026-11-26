@@ -33,7 +33,10 @@ export interface TimingOrigin {
  * `"outside-reference-span"` when an instant the ephemeris was read at lies
  * outside `REFERENCE_SPAN`; `"sect-contradicts-altitude"` when the result
  * depends on a sect that the Sun's altitude at birth contradicts, which can
- * happen only inside the polar circles.
+ * happen only inside the polar circles; `"de440-unavailable"` or
+ * `"outside-de440-span"` when astronomy-engine stood in for the shipped DE440
+ * pack, at an instant the result read the ephemeris at or in a natal
+ * position it uses, as the chart or its True Black Moon Lilith row says.
  */
 export type TimingFlag = "outside-reference-span" | "sect-contradicts-altitude" | EphemerisFallback;
 
@@ -46,6 +49,13 @@ export interface ChartLongitude {
 }
 
 export const DAY_MS = 86_400_000;
+
+/**
+ * The fallback flags in the order results list them, as EPHEMERIS_FALLBACKS
+ * in src/ephemeris.ts lists them; kept here so that the root's chunk need not
+ * export that list to this entry.
+ */
+export const FALLBACK_ORDER: readonly EphemerisFallback[] = ["de440-unavailable", "outside-de440-span"];
 /** The largest magnitude of an ECMAScript Date's epoch-millisecond value. */
 export const MAX_DATE_MS = 8_640_000_000_000_000;
 
@@ -143,15 +153,52 @@ export function sectContradictsAltitude(chart: Chart, points: ChartPoints): bool
   return sinAltitude > 0 !== (points.sect === "day");
 }
 
-/** A result's flags, from the instants the ephemeris was read at and its dependence on a contradicted sect. */
-export function timingFlags(instants: readonly number[], sectContradicted: boolean): readonly TimingFlag[] {
+/**
+ * A result's flags, from the instants the ephemeris was read at, its
+ * dependence on a contradicted sect, and the fallbacks of the natal positions
+ * it uses (`natalFallbacks`), which were read on the chart's own clock, with
+ * its pinned ΔT where it has one, and not at those instants.
+ */
+export function timingFlags(
+  instants: readonly number[],
+  sectContradicted: boolean,
+  natal: readonly EphemerisFallback[] = []
+): readonly TimingFlag[] {
   const flags: TimingFlag[] = [];
   if (instants.some((milliseconds) => outsideReferenceSpan(new Date(milliseconds)))) {
     flags.push("outside-reference-span");
   }
   if (sectContradicted) flags.push("sect-contradicts-altitude");
-  flags.push(...fallbacksAt(instants));
+  const met = new Set<EphemerisFallback>([...fallbacksAt(instants), ...natal]);
+  flags.push(...FALLBACK_ORDER.filter((reason) => met.has(reason)));
   return Object.freeze(flags);
+}
+
+/** The fallback flags a chart carries for its bodies, which were computed on its own clock. */
+export function chartFallbacks(chart: Chart): EphemerisFallback[] {
+  const flags: readonly string[] = Array.isArray(chart.flags) ? chart.flags : [];
+  return FALLBACK_ORDER.filter((reason) => flags.includes(reason));
+}
+
+/**
+ * The fallbacks the natal longitudes `names` carry: a body's and a lot's are
+ * the chart's own (`chartFallbacks`; the lots are made from its bodies), True
+ * Black Moon Lilith's its row's own, which `chartPoints` computes on the
+ * chart's clock and labels as a body is; the angles and the other points read
+ * no ephemeris. A sect is made from the Sun, so a result that depends on one
+ * names "Sun" among them.
+ */
+export function natalFallbacks(chart: Chart, points: ChartPoints, names: readonly ChartLongitudeName[]): EphemerisFallback[] {
+  const met = new Set<EphemerisFallback>();
+  for (const name of names) {
+    if (chart.bodies.some((body) => body.body === name) || name.startsWith("Lot of")) {
+      for (const reason of chartFallbacks(chart)) met.add(reason);
+    } else if (name === "True Black Moon Lilith") {
+      const fallback = points.points.find((point) => point.point === name)?.fallback;
+      if (fallback !== undefined) met.add(fallback);
+    }
+  }
+  return FALLBACK_ORDER.filter((reason) => met.has(reason));
 }
 
 /**

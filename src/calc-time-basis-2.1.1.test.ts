@@ -8,7 +8,12 @@
 // E2: a search window is checked in order on the scale it was given on before
 // it is converted, and again once converted; a 1 ms UT1 window across the end
 // of the IERS table, which converts to TT backwards, is refused with a
-// RangeError that says where the time basis steps back.
+// RangeError that says where the time basis steps back. From 3.0.0 the error
+// names the conversion that reversed the window (from the input's scale to
+// TT, or to UTC for the crossing search) and the step it crossed: the end of
+// the IERS table only for a UT1 window across it; 1972-01-01 for a UTC window
+// converted to TT; a leap second for a TT window converted to UTC; the ΔT
+// model's step at 1941.0.
 //
 // These pin the engine's own behaviour: they are regression tests, not
 // accuracy evidence.
@@ -17,7 +22,7 @@ import { describe, expect, it } from "vitest";
 import { calc, chart, events, houses, searchLunations, searchStations } from "./calc.js";
 import type { CalcRefusal, CalcTime } from "./calc.js";
 import { NATAL_RECEIPT_CONVENTION_SETS } from "./receipt.js";
-import { timeBasis } from "./time-scale.js";
+import { LEAP_SECONDS_FROM, timeBasis } from "./time-scale.js";
 import { UT1_TO_MS } from "./time-scale-data.js";
 
 const LEGACY_ID = "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise";
@@ -122,6 +127,18 @@ describe("E1: the time-basis id on calc receipts", () => {
   });
 });
 
+/** The message of the RangeError `run` throws. */
+function refusal(run: () => unknown): string {
+  let thrown: unknown;
+  try {
+    run();
+  } catch (error) {
+    thrown = error;
+  }
+  expect(thrown).toBeInstanceOf(RangeError);
+  return (thrown as Error).message;
+}
+
 describe("E2: search windows across a step of the time basis", () => {
   it("has TT step back by 1 ms on UT1 input at the end of the IERS table", () => {
     // The step the refusal guards against: the last table millisecond and the first after it, on UT1.
@@ -136,21 +153,17 @@ describe("E2: search windows across a step of the time basis", () => {
     searchLunations: (from: CalcTime, to: CalcTime) => searchLunations({ phaseDegrees: 0, from, to }),
     events: (from: CalcTime, to: CalcTime) => events({ kind: "longitude-crossing", body: "Sun", longitude: 0, from, to })
   };
+  /** The scale each search runs on, to which its window's ends are converted: UTC for the crossing search, TT otherwise. */
+  const AXIS: Record<keyof typeof searches, "tt" | "utc"> = { searchStations: "tt", searchLunations: "tt", events: "utc" };
 
-  for (const [name, search] of Object.entries(searches)) {
+  for (const [name, search] of Object.entries(searches) as [keyof typeof searches, (from: CalcTime, to: CalcTime) => unknown][]) {
     describe(name, () => {
       it("refuses a 1 ms UT1 window across the table's end with a RangeError that names the step", () => {
-        let thrown: unknown;
-        try {
-          search(jd(SEAM, "ut1"), jd(SEAM + 1, "ut1"));
-        } catch (error) {
-          thrown = error;
-        }
-        expect(thrown).toBeInstanceOf(RangeError);
-        const message = (thrown as Error).message;
-        expect(message).toMatch(/^The search window is in order on ut1 but reversed once converted, where the time basis steps back /u);
-        expect(message).toMatch(/at the end of the IERS table, 2027-10-02/u);
-        expect(message).toMatch(/Give both ends on tt\.$/u);
+        const message = refusal(() => search(jd(SEAM, "ut1"), jd(SEAM + 1, "ut1")));
+        expect(message).toMatch(
+          new RegExp(`^The search window is in order on ut1 but reversed once converted to ${AXIS[name]}: the time basis steps back at the end of the IERS table, 2027-10-02, `, "u")
+        );
+        expect(message).toMatch(new RegExp(`Give both ends on ${AXIS[name]}\\.$`, "u"));
       });
 
       it("still runs UT1 windows across the table's end that convert in order", () => {
@@ -190,3 +203,68 @@ describe("E2: search windows across a step of the time basis", () => {
     });
   }
 });
+
+describe("E2 from 3.0.0: the error names the conversion that reversed the window and the step it crossed", () => {
+  const stations = (from: CalcTime, to: CalcTime) => searchStations({ body: "Mars", from, to });
+  const lunations = (from: CalcTime, to: CalcTime) => searchLunations({ phaseDegrees: 0, from, to });
+  const crossings = (from: CalcTime, to: CalcTime) => events({ kind: "longitude-crossing", body: "Sun", longitude: 0, from, to });
+  const ttMs = (ms: number, scale: "utc" | "ut1" | "tt") => J2000_MS + timeBasis(ms, scale).ttDays * DAY_MS;
+
+  it("names 1972-01-01, not the IERS table's end, where a UTC window converts to TT backwards", () => {
+    // On UTC input TT is UT1 + the ΔT model's value before 1972-01-01 and UTC + 42.184 s from it: 44.55 ms back.
+    expect(ttMs(LEAP_SECONDS_FROM, "utc") - ttMs(LEAP_SECONDS_FROM - 1, "utc")).toBeCloseTo(-43.549, 3);
+    for (const search of [stations, lunations]) {
+      const message = refusal(() => search(iso(LEAP_SECONDS_FROM - 10), iso(LEAP_SECONDS_FROM + 10)));
+      expect(message).toBe(
+        "The search window is in order on utc but reversed once converted to tt: the time basis steps back at 1972-01-01, " +
+          "where the ΔT model gives way to the leap seconds. Give both ends on tt."
+      );
+      expect(message).not.toMatch(/2027|IERS table|ut1/u);
+      // Given on TT, the same ends stay in order.
+      expect(ok(search(jd(LEAP_SECONDS_FROM - 10, "tt"), jd(LEAP_SECONDS_FROM + 10, "tt"))).status).toBe("ok");
+    }
+    // The crossing search runs on UTC, so a UTC window there never converts backwards.
+    expect(ok(crossings(iso(LEAP_SECONDS_FROM - 10), iso(LEAP_SECONDS_FROM + 10))).status).toBe("ok");
+  });
+
+  it("names the leap second, not the IERS table's end, where a TT window converts to UTC backwards", () => {
+    // 2017-01-01T00:00:00Z is 00:01:09.184 on TT. The second of TT before it is the leap second 2016-12-31T23:59:60,
+    // which UTC milliseconds read as 2017-01-01T00:00:00 to 00:00:01: from 0.3 s into it to 0.2 s after it, the
+    // window runs backwards on UTC by half a second.
+    const tt0 = Date.parse("2017-01-01T00:01:09.184Z");
+    const [start, end] = [timeBasis(tt0 - 700, "tt"), timeBasis(tt0 + 200, "tt")];
+    expect([start.timeScale.leapSeconds!.taiMinusUtc, end.timeScale.leapSeconds!.taiMinusUtc]).toEqual([36, 37]);
+    expect(Math.round(end.utcMs) - Math.round(start.utcMs)).toBe(-100);
+    const message = refusal(() => crossings(jd(tt0 - 700, "tt"), jd(tt0 + 200, "tt")));
+    expect(message).toBe(
+      "The search window is in order on tt but reversed once converted to utc: the time basis steps back at the leap second " +
+        "2016-12-31T23:59:60Z, where TAI - UTC goes from 36 s to 37 s. Give both ends on utc."
+    );
+    expect(message).not.toMatch(/2027|IERS table|ut1/u);
+    // The same window on the searches that run on TT is in order.
+    expect(ok(stations(jd(tt0 - 700, "tt"), jd(tt0 + 200, "tt"))).status).toBe("ok");
+    expect(ok(lunations(jd(tt0 - 700, "tt"), jd(tt0 + 200, "tt"))).status).toBe("ok");
+    // Given on UTC, the crossing search's own scale, the window is in order.
+    expect(ok(crossings("2016-12-31T23:59:59.900Z", "2017-01-01T00:00:00.100Z")).status).toBe("ok");
+  });
+
+  it("names the ΔT model's step at 1941.0, where a UTC window before 1972 converts to TT backwards", () => {
+    const step = Date.UTC(1940, 11, 31, 18);
+    // docs/time.md, Limits: the model steps back 13.95 ms at 1941.0.
+    expect(ttMs(step, "utc") - ttMs(step - 1, "utc")).toBeCloseTo(-12.948, 3);
+    const message = refusal(() => stations(iso(step - 5), iso(step + 5)));
+    expect(message).toBe(
+      "The search window is in order on utc but reversed once converted to tt: the time basis steps back at 1941.0 " +
+        "(1940-12-31T18:00 UT1), where the ΔT model steps back 13.95 ms. Give both ends on tt."
+    );
+  });
+
+  it("keeps the IERS table's end for UT1 windows across it alone", () => {
+    for (const search of [stations, lunations, crossings]) {
+      expect(refusal(() => search(jd(SEAM, "ut1"), jd(SEAM + 1, "ut1")))).toMatch(
+        /^The search window is in order on ut1 but reversed once converted to (tt|utc): the time basis steps back at the end of the IERS table, 2027-10-02, where UT1 turns from the IERS values to the ΔT model\. Give both ends on (tt|utc)\.$/u
+      );
+    }
+  });
+});
+

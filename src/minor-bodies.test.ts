@@ -10,8 +10,8 @@
  * precession is not the IAU 2006 precession the engine takes, so part of each
  * longitude's difference is the two conventions': on the DE440 pack the
  * differences follow 0.020″ − 0.235″ T (T in Julian centuries from 2000),
- * 0.47″ at 1800 and −0.47″ at 2200, as measured on this build, and their
- * largest departure from that line is 0.119″.
+ * 0.49″ at 1800 and −0.45″ at 2200, as measured on this build, and their
+ * largest departure from that line is 0.1187″.
  */
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -58,6 +58,19 @@ const ttInstant = (jdTt: number): { date: Date; rest: number } => {
   const ms = (jdTt - 2451545.0) * 86_400_000;
   return { date: new Date(J2000_MS + Math.round(ms)), rest: (ms - Math.round(ms)) / 86_400_000 };
 };
+/** The pairs of bounds README.md, docs/guide.md and docs/calc.md quote for the 500 checks, after useDe440() and on astronomy-engine. */
+const QUOTED_BOUNDS: readonly [string, RegExp][] = [
+  ["README.md", /every longitude and latitude is within ([0-9.]+)″ after `useDe440\(\)` and within ([0-9.]+)″ on astronomy-engine/u],
+  ["docs/guide.md", /every longitude and latitude is within ([0-9.]+)″ after `useDe440\(\)` and within ([0-9.]+)″ on astronomy-engine/u],
+  ["docs/calc.md", /never saw it is within ([0-9.]+)″ after `useDe440\(\)` and ([0-9.]+)″ on astronomy-engine/u]
+];
+/** The bounds each document quotes, [after useDe440(), on astronomy-engine], or a failed test where one quotes none. */
+const quotedBounds = (): number[][] =>
+  QUOTED_BOUNDS.map(([file, pattern]) => {
+    const found = pattern.exec(readFileSync(new URL(`../${file}`, import.meta.url), "utf8").replace(/\s+/gu, " "));
+    expect(found, `${file} quotes the bounds`).not.toBeNull();
+    return found!.slice(1).map(Number);
+  });
 const stats = (values: number[]): { median: number; max: number } => {
   const sorted = values.map(Math.abs).sort((a, b) => a - b);
   return { median: (sorted[(sorted.length - 1) >> 1]! + sorted[sorted.length >> 1]!) / 2, max: sorted.at(-1)! };
@@ -151,9 +164,12 @@ describe("minor-body places against the 500 Horizons checks", () => {
       for (const value of [...lon, ...lat]) expect(Math.abs(value), spec.name).toBeLessThan(1);
       all.push(...lon, ...lat);
     }
-    // Measured on this build, arcseconds, longitude median and largest: Chiron 0.24 and 0.521, Ceres 0.23 and
-    // 0.532, Pallas 0.24 and 0.517, Juno 0.24 and 0.525, Vesta 0.23 and 0.516; latitude largest 0.065.
+    // Measured on this build, arcseconds, longitude median and largest: Chiron 0.23336 and 0.52150, Ceres 0.23072
+    // and 0.53211, Pallas 0.22605 and 0.51668, Juno 0.22761 and 0.52537, Vesta 0.23114 and 0.51561; latitude largest
+    // 0.064971. README.md, docs/guide.md and docs/calc.md quote the 0.54.
     expect(stats(all).max).toBeLessThan(0.54);
+    // What the documents quote is the measurement rounded outward, never under it.
+    for (const [pack] of quotedBounds()) expect(pack).toBeGreaterThanOrEqual(stats(all).max);
   });
 
   it("follow Horizons's longitudes, on the pack, to 0.12 arcseconds once the two precessions' difference is taken out", () => {
@@ -181,10 +197,13 @@ describe("minor-body places against the 500 Horizons checks", () => {
       for (const value of [...lon, ...lat]) expect(Math.abs(value), spec.name).toBeLessThan(5);
       all.push(...lon, ...lat);
     }
-    // Measured on this build, arcseconds, longitude median and largest: Chiron 0.23 and 0.609, Ceres 0.27 and
-    // 1.067, Pallas 0.31 and 1.085, Juno 0.30 and 1.101, Vesta 0.26 and 1.682; latitude largest 1.485. The
-    // Earth's place from astronomy-engine's truncated VSOP87 is most of it.
+    // Measured on this build, arcseconds, longitude median and largest: Chiron 0.22954 and 0.60927, Ceres 0.26181
+    // and 1.06684, Pallas 0.30830 and 1.08525, Juno 0.29785 and 1.10138, Vesta 0.26295 and 1.68213; latitude
+    // largest 1.48463. The Earth's place from astronomy-engine's truncated VSOP87 is most of it. README.md,
+    // docs/guide.md and docs/calc.md quote the 1.7.
     expect(stats(all).max).toBeLessThan(1.7);
+    // What the documents quote is the measurement rounded outward, never under it.
+    for (const [, astronomyEngine] of quotedBounds()) expect(astronomyEngine).toBeGreaterThanOrEqual(stats(all).max);
   });
 
   it("take the checks from the raw responses whose digests the fixture records", () => {
@@ -226,6 +245,25 @@ describe("minor-body speeds", () => {
       }
     }
     expect(checked).toBeGreaterThan(500);
+  });
+
+  it("hold the central instant's side of the Sun's disc on both samples, so that a sample across the limb reads no step as motion", () => {
+    // On the pack Vesta passes behind the Sun's disc at 2020-07-04T18:07:18 TT, where its place steps by about 1.2
+    // arcseconds: its light is bent outside the disc and not behind it, as JPL Horizons does. A quarter of a day
+    // earlier, at 12:07:18 TT, the speed's later sample crosses the limb. With each sample deciding its own side, the
+    // speed stepped there by 2.44 arcseconds a day, as measured on the candidate's build before the fix; holding the
+    // central instant's decision, it changes by at most 0.032 arcseconds a day in each 10 minutes from 11:07:18 to
+    // 13:07:18 TT, the body's own acceleration, as measured on this build.
+    useDe440();
+    const center = Date.UTC(2020, 6, 4, 12, 7, 18);
+    const speedAt = (ms: number): number => minorBodyPosition(vesta, new Date(ms), { timeScale: "tt" }).speed * 3600;
+    let largest = 0;
+    for (let k = -6; k < 6; k += 1) largest = Math.max(largest, Math.abs(speedAt(center + (k + 1) * 600_000) - speedAt(center + k * 600_000)));
+    expect(largest).toBeLessThan(0.05);
+    // The place itself steps where the central instant crosses the limb, a quarter of a day later.
+    const place = (ms: number) => minorBodyPosition(vesta, new Date(ms), { timeScale: "tt" });
+    const [before, after] = [place(center + 21_599_000), place(center + 21_601_000)];
+    expect(Math.abs(wrapArcsec(after.lon, before.lon) - (before.speed * 3600 * 2_000) / 86_400_000)).toBeGreaterThan(1);
   });
 
   it("are the rate of the longitude over half a day of TT", () => {

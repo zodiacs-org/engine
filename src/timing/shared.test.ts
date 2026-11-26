@@ -1,9 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
-import { chartDeclinations, chartPoints, natalChart } from "../index.js";
+import { useDe440 } from "../de440-pack.js";
+import { chartDeclinations, chartPoints, natalChart, setDefaultEphemeris } from "../index.js";
 import {
   firdaria,
   firdariaAt,
+  planetaryReturns,
   profectionAt,
   profectionYear,
   releasingAt,
@@ -13,7 +15,8 @@ import {
   zodiacalReleasing,
   zodiacalReleasingAt
 } from "../timing.js";
-import { guarded } from "./shared.js";
+import { EPHEMERIS_FALLBACKS } from "../ephemeris.js";
+import { FALLBACK_ORDER, guarded } from "./shared.js";
 
 const DEG = Math.PI / 180;
 const SPAN = "outside-reference-span";
@@ -192,5 +195,40 @@ describe("timing flags", () => {
     }
     expect(marked).toBeGreaterThan(10);
     expect(unmarked).toBeGreaterThan(10);
+  });
+});
+
+describe("fallback flags of the natal positions a result uses", () => {
+  afterEach(() => setDefaultEphemeris("astronomy-engine"));
+  // After useDe440(), a ΔT pinned at -60 s puts a chart of 1790-01-02T00:00:00Z a minute before the pack's first
+  // TT instant, so its bodies are astronomy-engine's and flagged; its birth as a UTC instant, on the engine's ΔT
+  // model, is inside the pack, so the instants the results read the ephemeris at meet no fallback.
+  const birth = { utc: "1790-01-02T00:00:00Z", latitude: 51.5, longitude: -0.1, houseSystem: "placidus", deltaT: -60 } as const;
+  const FALLBACK = "outside-de440-span";
+
+  it("list the fallbacks in the order every result lists them", () => {
+    expect(FALLBACK_ORDER).toEqual(EPHEMERIS_FALLBACKS);
+  });
+
+  it("carry the chart's fallback from its bodies, its lots and its sect", () => {
+    useDe440();
+    const chart = natalChart(birth);
+    expect(chart.flags).toContain(FALLBACK);
+    const { deltaT, ...unpinned } = birth;
+    expect(deltaT).toBe(-60);
+    expect(natalChart(unpinned).flags).not.toContain(FALLBACK);
+    expect(profectionYear(chart, 3, { point: "Sun" }).flags).toContain(FALLBACK);
+    expect(profectionYear(chart, 3, { point: "Lot of Fortune" }).flags).toContain(FALLBACK);
+    expect(profectionAt(chart, "1792-03-01T00:00:00Z", { point: "Moon" }).flags).toContain(FALLBACK);
+    expect(zodiacalReleasing(chart, "Lot of Spirit", "1790-01-02T00:00:00Z", "1795-01-01T00:00:00Z").flags).toContain(FALLBACK);
+    expect(zodiacalReleasingAt(chart, "Lot of Fortune", "1793-01-01T00:00:00Z").flags).toContain(FALLBACK);
+    expect(firdaria(chart).flags).toContain(FALLBACK);
+    expect(firdariaAt(chart, "1793-01-01T00:00:00Z").flags).toContain(FALLBACK);
+    expect(solarArcDirections(chart, "1795-01-01T00:00:00Z").flags).toContain(FALLBACK);
+    expect(planetaryReturns(chart, "Saturn", "1790-01-02T00:00:00Z", "1825-01-01T00:00:00Z").flags).toContain(FALLBACK);
+    // Points that read no ephemeris: the angles, the mean node and Black Moon Lilith, the Vertex.
+    for (const point of ["Ascendant", "Midheaven", "Mean Node", "Black Moon Lilith", "Vertex"] as const) {
+      expect(profectionYear(chart, 3, { point }).flags, point).not.toContain(FALLBACK);
+    }
   });
 });

@@ -41,7 +41,7 @@ reference, as `node_modules/@zodiacs/engine/docs/calc.md`. Read the installed
 copies, which match the installed version.
 
 - The default ephemeris is astronomy-engine, and a bundle of `natalChart`
-  holds no DE440 data (about 36 KB gzipped). For JPL DE440 positions, call
+  holds no DE440 data (about 37 KB gzipped). For JPL DE440 positions, call
   this once, before computing:
 
   ```ts

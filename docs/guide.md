@@ -654,11 +654,11 @@ carries `ephemeris`, and `fallback` where astronomy-engine stands in for the
 pack, as a body's does. Its speed is a central difference over ±0.25 day, as
 the true node's. Against the osculating apogee of NASA JPL Horizons's
 geocentric Moon state at 12 instants from 1850 to 2150, on the pack it is
-within 1.589″ on the sky in longitude (median 0.050″) and 0.076″ in
-latitude; on astronomy-engine, the default, within 396″ (6.6′; median 178″),
+within 1.59″ on the sky in longitude (median 0.049″) and 0.077″ in
+latitude; on astronomy-engine, the default, within 397″ (6.7′; median 179″),
 because the eccentricity vector magnifies the small velocity errors of its
-lunar series (`src/true-lilith.test.ts`, which holds them under 1.6″ and
-400″). `calc()` gives it as the body `"True Black Moon Lilith"`
+lunar series (`src/true-lilith.test.ts`, which holds the longitudes under
+1.59″ and 397″ and the latitudes under 0.1″ and 30″). `calc()` gives it as the body `"True Black Moon Lilith"`
 (`lilith:true-osculating`; [calc.md](calc.md)). Until 2.1.0 the osculating
 Lilith was not offered, as from astronomy-engine's lunar series it would be
 several arcminutes from Swiss Ephemeris's.
@@ -692,15 +692,17 @@ names, and holds all five tables.
 At 500 places from Horizons's observer tables that the fit never saw (100 a
 body, at instants drawn across 1800 to 2200 with a fixed seed;
 `src/fixtures/minor-bodies-horizons-oos.json`), every longitude and latitude
-is within 0.532″ after `useDe440()` and within 1.682″ on astronomy-engine,
-the default (`src/minor-bodies.test.ts`, which holds them under 0.54″ and
-1.7″). Horizons gives those places on its own ecliptic and equinox of date,
+is within 0.54″ after `useDe440()` and within 1.7″ on astronomy-engine, the
+default (largest 0.53211″ and 1.68213″; `src/minor-bodies.test.ts` holds
+them under 0.54″ and 1.7″). Horizons gives those places on its own ecliptic
+and equinox of date,
 whose precession is not the IAU 2006 precession the engine takes, so on the
 pack the longitudes' differences follow 0.020″ − 0.235″ T (T in Julian
 centuries from 2000) and depart from that line by at most 0.119″. Measured on
-3.0.0's build (`scripts/ratchet.mjs`, `budgets.json`), an application of the
-root's `natalChart` grows by 14,403 bytes gzipped with Chiron alone and by
-117,965 with all five.
+3.0.0's build (`scripts/ratchet.mjs`, `budgets.json`; gzip level 9 with the
+zlib of Node 22.22.2 from nodejs.org), an application of the root's
+`natalChart` grows by 14,132 bytes gzipped with Chiron alone and by 115,938
+with all five.
 
 ### Input flag compatibility
 
@@ -1195,18 +1197,21 @@ From 3.0.0 the package also carries two documents,
 
 ## Bundle size in a web page
 
-**3.0.0.** Measured on 26 November 2026 on 3.0.0's build, with esbuild
+**3.0.0.** Measured on 27 November 2026 on 3.0.0's build, with esbuild
 0.27.7 (the version the build runs) bundling for a browser and minifying,
-and gzip at level 9 (Node's zlib), through `scripts/dist-purity.mjs`, which
+and gzip at level 9 with the zlib of Node 22.22.2 from nodejs.org (a Node
+linked to another zlib gives other gzipped sizes: Homebrew's Node 26.4.0,
+with the system's zlib 1.2.12, gives 36,213 for the first bundle), through
+`scripts/dist-purity.mjs`, which
 `scripts/ratchet.mjs` and `scripts/verify-dist-purity.mjs` also use
 ([evidence/3.0.0-readme-20261126/](evidence/3.0.0-readme-20261126/)). Only
 esbuild was run on 3.0.0, and load times in a browser were not measured.
 
 | An application that imports | Minified, bytes | Gzipped, bytes |
 | --- | ---: | ---: |
-| `natalChart` from `@zodiacs/engine` (astronomy-engine, the default) | 79,787 | 36,213 |
-| `natalChart`, and `useDe440` from `@zodiacs/engine/de440/pack` | 3,419,715 | 2,441,049 |
-| the whole of `@zodiacs/engine/de440/pack` | 3,342,559 | 2,406,590 |
+| `natalChart` from `@zodiacs/engine` (astronomy-engine, the default) | 79,787 | 36,624 |
+| `natalChart`, and `useDe440` from `@zodiacs/engine/de440/pack` | 3,419,715 | 2,402,512 |
+| the whole of `@zodiacs/engine/de440/pack` | 3,342,559 | 2,367,563 |
 
 `@zodiacs/engine/core` re-exports the root and bundles to the same bytes.
 The first bundle holds no DE440 pack: `scripts/verify-dist-purity.mjs` checks

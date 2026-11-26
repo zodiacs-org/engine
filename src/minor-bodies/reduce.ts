@@ -76,12 +76,17 @@ export interface MinorBodyPlace {
  * The apparent place at `ttDays` (TT days past J2000.0) of the body whose
  * heliocentric ICRF position, km, at a TDB Julian date `heliocentric` gives,
  * seen from the Earth whose state, with the Sun's, `statesAt` gives at a TT
- * instant.
+ * instant. `behind`, when given, is taken as whether the body is behind the
+ * Sun's disc instead of deciding it here, as src/de440/reduce.ts takes it: a
+ * speed's two samples hold the decision at their central instant, so that a
+ * difference across the Sun's limb does not read the deflection's step there
+ * as motion.
  */
 export function apparentPlace(
   heliocentric: (jdTdb: number) => Vec3,
   ttDays: number,
-  statesAt: (ttDays: number) => EarthAndSun
+  statesAt: (ttDays: number) => EarthAndSun,
+  behind?: boolean
 ): MinorBodyPlace {
   const now = statesAt(ttDays);
   const observer = now.earth.position;
@@ -107,7 +112,7 @@ export function apparentPlace(
 
   // The Sun's gravitational light deflection (eraLd form), except behind the Sun's disc.
   let p = unit(geo);
-  const behindDisc = behind(p, distKm, ttDays, observer, sunNow, statesAt);
+  const behindDisc = behind ?? behindSunDisc(p, distKm, ttDays, observer, sunNow, statesAt);
   if (!behindDisc) {
     const eVec = sub(observer, sunNow);
     const emAu = norm(eVec) / AU_KM;
@@ -137,7 +142,7 @@ export function apparentPlace(
  * and within its apparent radius of the Sun's direction, the Sun taken at its
  * own light time, as src/de440/reduce.ts decides it.
  */
-function behind(p: Vec3, distKm: number, ttDays: number, observer: Vec3, sunNow: Vec3, statesAt: (ttDays: number) => EarthAndSun): boolean {
+function behindSunDisc(p: Vec3, distKm: number, ttDays: number, observer: Vec3, sunNow: Vec3, statesAt: (ttDays: number) => EarthAndSun): boolean {
   const near = sub(sunNow, observer);
   // Farther than a third of a degree from the Sun (its disc is under 0.28 degrees across), it is not behind.
   if (!(distKm > norm(near)) || dot(p, unit(near)) < NEAR_DISC_COS) return false;

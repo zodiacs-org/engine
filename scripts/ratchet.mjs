@@ -27,8 +27,14 @@
 //   passes the committed results of the engine hold
 //   (conformance/results/zodiacs-engine.json, which conformance.yml checks);
 // - minPassingTests: the tests REPORT counts as passed.
-// It fails where a measurement is over its ceiling or under its floor, or
-// where it could not be made. Then it compares with the base branch's
+// It fails where a measurement is over its ceiling or under its floor, where
+// it is not a finite number (a NaN compares as neither over nor under, so it
+// is refused before any comparison), or where it could not be made; and
+// where REPORT holds a skipped test (vitest's "skipped", "pending" or "todo")
+// that SKIPPED_BY_DESIGN does not let through in this environment: the
+// tier-B kernel tests without PRECISION_KERNEL, the tzdata 2025c test on a
+// host without that release, and the tests that need dist/ when the run came
+// before the build. Then it compares with the base branch's
 // merge base: where budgets.json there exists, a ceiling this branch raises,
 // a floor it lowers or a limit it removes needs a commit in the range whose
 // message holds the tag [budget-increase-approved] and a trailer
@@ -44,7 +50,7 @@
 // budgets.json; it never loosens one.
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
@@ -66,6 +72,92 @@ export const APPROVAL_TRAILER = /^Approved-by: *[^,\n]+, *\d{4}-\d{2}-\d{2}: *([
 const FLOORS = Object.freeze(["accuracy.conformanceMinPass", "minPassingTests"]);
 /** Headroom --tighten leaves over a measurement, as a fraction: 10 per cent, and 1 per cent for the pack, which is fixed data. */
 const HEADROOM = Object.freeze({ default: 0.1, "gzip../de440/pack": 0.01 });
+
+/** `value`, or a thrown error naming `what` where it is not a finite number. */
+export function finite(value, what) {
+  if (typeof value !== "number" || !Number.isFinite(value)) throw new Error(`${what} is ${value}, not a finite number`);
+  return value;
+}
+
+/** The largest of `largest` and the magnitudes of `values`, each checked finite first: Math.max would carry a NaN through. */
+export function largestMagnitude(largest, values, what) {
+  let found = finite(largest, what);
+  for (const value of values) found = Math.max(found, Math.abs(finite(value, what)));
+  return found;
+}
+
+/**
+ * The tests a run skips by design (AGENTS.md), each with the condition, on
+ * the environment of the check, under which it is let through: `file`, the
+ * test file from the repository's root; `describe`, the title of the
+ * outermost block whose tests are all skipped, or `test`, the test's own
+ * title; and `when`, given { precisionKernel, tz, builtAfterRun }, whether the
+ * skip is expected here. Every other skipped test fails the check, and so
+ * does one of these where its condition does not hold.
+ */
+export const SKIPPED_BY_DESIGN = Object.freeze([
+  {
+    file: "src/de440-kernel.test.ts",
+    describe: "de440 on the raw kernel (tier B)",
+    because: "PRECISION_KERNEL is not set; the tier-B job runs these with nothing skipped",
+    when: (environment) => !environment.precisionKernel
+  },
+  {
+    file: "src/geo/zone-history.test.ts",
+    test: "reproduces every segment before 1970 but six, which the reference got otherwise",
+    because: "the host's time zone data is not tzdata 2025c",
+    when: (environment) => environment.tz !== "2025c"
+  },
+  ...[
+    ["scripts/lite-entry.test.mjs", "describe", "this checkout's build of the lite entry"],
+    ["scripts/require-esm.test.mjs", "describe", "require() of this checkout's build"],
+    ["scripts/root-isolation.test.mjs", "test", "passes this checkout's build"],
+    ["scripts/root-unchanged.test.mjs", "test", "computes from this checkout's build exactly what the archive computes"]
+  ].map(([file, kind, title]) => ({
+    file,
+    [kind]: title,
+    because: "it needs dist/, which the build wrote after the test run started",
+    when: (environment) => environment.builtAfterRun
+  }))
+]);
+
+const SKIPPED = new Set(["skipped", "pending", "todo", "disabled"]);
+
+/** Each skipped test in a vitest JSON report: its file from `root`, its block titles, its title and its status. */
+export function skippedTests(report, root = ROOT) {
+  const found = [];
+  for (const file of report.testResults ?? []) {
+    const name = String(file.name ?? "");
+    const relative = name.startsWith(root) ? name.slice(root.length).replace(/^[\\/]+/u, "") : name;
+    for (const test of file.assertionResults ?? []) {
+      if (SKIPPED.has(test.status)) found.push({ file: relative.split("\\").join("/"), ancestors: test.ancestorTitles ?? [], title: test.title, status: test.status });
+    }
+  }
+  return found;
+}
+
+/**
+ * The problems with a vitest JSON report: its passing count missing, and each
+ * skipped test that SKIPPED_BY_DESIGN does not let through in `environment`
+ * ({ precisionKernel, tz, builtAfterRun }), and a count of skipped tests the
+ * report states that its tests do not account for.
+ */
+export function reportProblems(report, environment, root = ROOT) {
+  const problems = [];
+  if (!Number.isInteger(report?.numPassedTests)) problems.push("the test report is not a vitest JSON report: it has no numPassedTests");
+  const skipped = skippedTests(report ?? {}, root);
+  for (const test of skipped) {
+    const rule = SKIPPED_BY_DESIGN.find(
+      (entry) => entry.file === test.file && (entry.describe !== undefined ? test.ancestors[0] === entry.describe : test.title === entry.test)
+    );
+    const name = `${test.file}: ${[...test.ancestors, test.title].join(" > ")}`;
+    if (!rule) problems.push(`${name} is ${test.status}, and no rule lets a skip of it through`);
+    else if (!rule.when(environment)) problems.push(`${name} is ${test.status}, but its skip is let through only where ${rule.because}`);
+  }
+  const stated = (report?.numPendingTests ?? 0) + (report?.numTodoTests ?? 0);
+  if (stated > skipped.length) problems.push(`the test report counts ${stated} skipped or todo tests and lists ${skipped.length}`);
+  return problems;
+}
 
 /** Every numeric limit of a budgets object, by dotted path ("gzip..", "accuracy.de440L1MaxArcsec"), notes left out. */
 export function limitsOf(budgets) {
@@ -139,6 +231,7 @@ export function tightened(budgets, measured) {
   const next = structuredClone(budgets);
   for (const [path, value] of Object.entries(limitsOf(budgets))) {
     if (!(path in measured)) continue;
+    finite(measured[path], path);
     const [group, key] = path.includes(".") ? [path.slice(0, path.indexOf(".")), path.slice(path.indexOf(".") + 1)] : [null, path];
     const target = isFloor(path)
       ? Math.max(value, path === "minPassingTests" ? Math.floor(measured[path] / 100) * 100 : measured[path])
@@ -159,8 +252,24 @@ export function overLimits(budgets, measured) {
       continue;
     }
     const value = measured[path];
+    if (typeof value !== "number" || !Number.isFinite(value)) {
+      problems.push(`${path} is ${value}, not a finite measurement`);
+      continue;
+    }
     if (isFloor(path) ? value < limit : value > limit) problems.push(`${path} is ${value}, ${isFloor(path) ? "under its floor" : "over its ceiling"} of ${limit}`);
   }
+  return problems;
+}
+
+/**
+ * What --check finds wrong with a build, before it compares with the base
+ * branch: each measurement over its ceiling, under its floor or not finite,
+ * and the test report's problems (`reportProblems`), or its absence.
+ */
+export function checkProblems({ budgets, measured, report, environment, root = ROOT }) {
+  const problems = overLimits(budgets, measured);
+  if (report === undefined) problems.push("minPassingTests needs the test run's report: pass --tests REPORT");
+  else problems.push(...reportProblems(report, environment, root));
   return problems;
 }
 
@@ -169,8 +278,8 @@ export function overLimits(budgets, measured) {
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const wrapArcsec = (a, b) => ((((a - b) % 360) + 540) % 360 - 180) * 3600;
 
-/** What budgets.json bounds, measured on dist/ and REPORT, by dotted path. */
-export async function measure({ tests }) {
+/** What budgets.json bounds, measured on dist/ and the test run's report, by dotted path; a measurement that is not finite throws. */
+export async function measure({ report }) {
   const { bareImports, bundleOf } = await import("./dist-purity.mjs");
   const measured = {};
   const gzip = async (contents) => {
@@ -203,7 +312,10 @@ export async function measure({ tests }) {
       const chart = engine.natalChart({ utc: new Date(Math.round((vector.input.jd_tt - 2440587.5) * 86_400_000)), timeScale: "tt", timeKnown: false });
       assert.equal(chart.ephemeris.name, "jpl-de440", "natalChart after useDe440() computes on the pack");
       const body = chart.bodies.find((candidate) => candidate.body === vector.input.body);
-      largest = Math.max(largest, Math.abs(wrapArcsec(body.lon, vector.expected.lon)), Math.abs(body.lat - vector.expected.lat) * 3600);
+      const what = `natalChart's ${vector.input.body} for ${vector.id}`;
+      finite(body.lon, `${what} longitude`);
+      finite(body.lat, `${what} latitude`);
+      largest = largestMagnitude(largest, [wrapArcsec(body.lon, vector.expected.lon), (body.lat - vector.expected.lat) * 3600], what);
     }
     measured["accuracy.de440L1MaxArcsec"] = largest;
     largest = 0;
@@ -214,8 +326,12 @@ export async function measure({ tests }) {
         const ms = (check.jdTt - 2440587.5) * 86_400_000;
         const place = minor.minorBodyPosition(spec, new Date(Math.round(ms)), { timeScale: "tt" });
         assert.equal(place.ephemeris.name, "jpl-de440", "a minor body after useDe440() is reduced with the pack's Earth");
+        const what = `${spec.name} at JD ${check.jdTt} TT`;
+        finite(place.lon, `${what} longitude`);
+        finite(place.lat, `${what} latitude`);
+        finite(place.speed, `${what} speed`);
         const moved = place.lon + (place.speed * (ms - Math.round(ms))) / 86_400_000;
-        largest = Math.max(largest, Math.abs(wrapArcsec(moved, check.lon)), Math.abs(place.lat - check.lat) * 3600);
+        largest = largestMagnitude(largest, [wrapArcsec(moved, check.lon), (place.lat - check.lat) * 3600], what);
         checks += 1;
       }
     }
@@ -227,11 +343,11 @@ export async function measure({ tests }) {
   const results = JSON.parse(read("conformance/results/zodiacs-engine.json")).results;
   measured["accuracy.conformanceMinPass"] = results.filter((result) => result.verdict === "pass").length;
 
-  if (tests) {
-    const report = JSON.parse(readFileSync(tests, "utf8"));
-    assert(Number.isInteger(report.numPassedTests), `${tests} is not a vitest JSON report`);
+  if (report !== undefined) {
+    assert(Number.isInteger(report.numPassedTests), "the test report is not a vitest JSON report");
     measured.minPassingTests = report.numPassedTests;
   }
+  for (const [path, value] of Object.entries(measured)) finite(value, path);
   return measured;
 }
 
@@ -258,13 +374,30 @@ export function rangeFrom(base) {
 
 // ---------------------------------------------------------------- the command line
 
+/**
+ * The environment the skips are judged in: whether PRECISION_KERNEL is set,
+ * the host's time zone data release, and whether dist/ was built after the
+ * test run started (each file the tests that need it read is newer than the
+ * report's start), as in CI, where the tests run before the Build step.
+ */
+function environmentOf(tests, report) {
+  const started = Number(report?.startTime);
+  const built = ["index.js", "metafile-esm.json", "metafile-lite.json", "lite.d.ts"].map((name) => `${ROOT}dist/${name}`);
+  return {
+    precisionKernel: Boolean(process.env.PRECISION_KERNEL),
+    tz: process.versions.tz,
+    builtAfterRun: tests !== undefined && Number.isFinite(started) && built.every((file) => existsSync(file) && statSync(file).mtimeMs >= started)
+  };
+}
+
 async function main(args) {
   const mode = args.includes("--tighten") ? "tighten" : args.includes("--check") ? "check" : null;
   assert(mode, "usage: node scripts/ratchet.mjs --check --tests REPORT [--base REF] | --tighten --tests REPORT");
   const option = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
   const tests = option("--tests");
   const budgets = JSON.parse(read("budgets.json"));
-  const measured = await measure({ tests });
+  const report = tests === undefined ? undefined : JSON.parse(readFileSync(tests, "utf8"));
+  const measured = await measure({ report });
   if (mode === "tighten") {
     assert(tests, "--tighten needs --tests REPORT, to set the passing-test floor");
     const next = tightened(budgets, measured);
@@ -272,8 +405,7 @@ async function main(args) {
     console.log(`ratchet: budgets.json tightened to ${JSON.stringify(limitsOf(next))}`);
     return;
   }
-  const problems = overLimits(budgets, measured);
-  if (!tests) problems.push("minPassingTests needs the test run's report: pass --tests REPORT");
+  const problems = checkProblems({ budgets, measured, report, environment: environmentOf(tests, report) });
   const base = option("--base") ?? "origin/main";
   const range = rangeFrom(base);
   const verdict = guardVerdict({ ...range, current: budgets });

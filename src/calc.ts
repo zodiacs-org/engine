@@ -1483,23 +1483,67 @@ function calcFlags(extrapolated: boolean, fallback?: EphemerisFallback | null): 
   return flags;
 }
 
+/** The ends of a search window once converted to the axis the search runs on: TT for stations and lunations, UTC for crossings. */
+interface ConvertedWindow {
+  readonly axis: "tt" | "utc";
+  /** Milliseconds on `axis`. */
+  readonly first: number;
+  readonly last: number;
+  readonly start: TimeBasis;
+  readonly end: TimeBasis;
+}
+
+/** UT1 days from J2000.0 of 1941.0 (1940-12-31T18:00 UT1), where the ΔT model zodiacs-deltat/1 steps back 13.95 ms (docs/time.md, Limits). */
+const DELTA_T_STEP_UT1_DAYS = (Date.UTC(1940, 11, 31, 18) - J2000_MS) / DAY_MS;
+
+/**
+ * Where the time basis steps back between two ends whose conversion came out
+ * reversed: the end of the IERS table (2027-10-02), for UT1 input, whose UT1
+ * turns there from the IERS values to the ΔT model; 1972-01-01, where the ΔT
+ * model gives way to the leap seconds; a leap second, where UTC reads one
+ * second of TT twice; or the ΔT model's own step at 1941.0. Elsewhere, the
+ * time basis in general.
+ */
+function stepBetween(scale: TimeScaleName, start: TimeBasis, end: TimeBasis): string {
+  const bases = [start.timeScale.basis, end.timeScale.basis];
+  if (scale === "ut1" && bases.includes("iers") && bases.includes("continuous-utc")) {
+    return "at the end of the IERS table, 2027-10-02, where UT1 turns from the IERS values to the ΔT model";
+  }
+  if (bases.includes("delta-t") && bases.includes("iers")) return "at 1972-01-01, where the ΔT model gives way to the leap seconds";
+  const [before, after] = [start.timeScale.leapSeconds?.taiMinusUtc, end.timeScale.leapSeconds?.taiMinusUtc];
+  if (before !== undefined && after !== undefined && before !== after) {
+    const later = after > before ? end : start;
+    const day = new Date(Math.floor(later.utcMs / DAY_MS) * DAY_MS - DAY_MS).toISOString().slice(0, 10);
+    return `at the leap second ${day}T23:59:60Z, where TAI - UTC goes from ${Math.min(before, after)} s to ${Math.max(before, after)} s`;
+  }
+  const [low, high] = [Math.min(start.ut1Days, end.ut1Days), Math.max(start.ut1Days, end.ut1Days)];
+  if (bases.every((basis) => basis === "delta-t") && low < DELTA_T_STEP_UT1_DAYS && DELTA_T_STEP_UT1_DAYS <= high) {
+    return "at 1941.0 (1940-12-31T18:00 UT1), where the ΔT model steps back 13.95 ms";
+  }
+  return "between them";
+}
+
 /**
  * A search window's ends in order. Called with no converted ends, it compares
- * two ends given on one scale as given, before either is converted to TT, so
- * that a reversed window is refused as the caller wrote it. Called with the
- * converted ends (TT milliseconds, or UTC for the crossing search), it
- * compares those: ends in order on one scale still come out reversed where
- * the time basis steps back between them, as a 1 ms UT1 window across the
- * end of the IERS table (2027-10-02) converts to TT 1 ms backwards.
+ * two ends given on one scale as given, before either is converted, so that a
+ * reversed window is refused as the caller wrote it. Called with the ends
+ * converted to the axis the search runs on (TT milliseconds, or UTC for the
+ * crossing search), it compares those: ends in order on one scale still come
+ * out reversed where the time basis steps back between them, as a 1 ms UT1
+ * window across the end of the IERS table (2027-10-02) converts to TT 1 ms
+ * backwards, a UTC window across 1972-01-01 to TT up to 44.55 ms backwards,
+ * and a TT window across a leap second to UTC up to a second backwards. The error
+ * names the conversion and the step, and the axis's own scale, on which ends
+ * in order stay in order.
  */
-function checkOrder(from: TimeInput, to: TimeInput, first?: number, last?: number): void {
+function checkOrder(from: TimeInput, to: TimeInput, converted?: ConvertedWindow): void {
   const same = from.scale === to.scale && from.pin === to.pin;
-  if (first === undefined ? same && from.ms > to.ms : first > last!) {
+  if (converted === undefined ? same && from.ms > to.ms : converted.first > converted.last) {
     throw new RangeError(
-      first === undefined || !same
+      converted === undefined || !same
         ? "The search window must have from <= to."
-        : `The search window is in order on ${from.scale} but reversed once converted, where the time basis steps back ` +
-            "(on ut1 at the end of the IERS table, 2027-10-02). Give both ends on tt."
+        : `The search window is in order on ${from.scale} but reversed once converted to ${converted.axis}: the time basis steps back ` +
+            `${stepBetween(from.scale, converted.start, converted.end)}. Give both ends on ${converted.axis}.`
     );
   }
 }
@@ -1543,7 +1587,7 @@ export function events(request: EventsRequest): EventsResult | CalcRefusal {
   const start = resolve(from);
   const end = resolve(to);
   if (start === null || end === null) return outOfRange();
-  checkOrder(from, to, Math.round(start.utcMs), Math.round(end.utcMs));
+  checkOrder(from, to, { axis: "utc", first: Math.round(start.utcMs), last: Math.round(end.utcMs), start, end });
   {
     // One source for the whole search: both ends are in CALC_SPAN, which the pack covers.
     const chosen = ephemerisAt(Math.round(start.utcMs));
@@ -1695,7 +1739,7 @@ function searchTimed<S extends { body: StationBody } | { phaseDegrees: LunationA
   const ttMs = (basis: TimeBasis) => Math.round(J2000_MS + basis.ttDays * DAY_MS);
   const first = ttMs(start);
   const last = ttMs(end);
-  checkOrder(from, to, first, last);
+  checkOrder(from, to, { axis: "tt", first, last, start, end });
   const phase = "phaseDegrees" in selection;
   // A phase confirmation reaches one hour beyond a root. A station's speed
   // stencil reaches another hour. Empty searches only label their instant.

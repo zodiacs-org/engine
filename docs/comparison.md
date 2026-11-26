@@ -8,8 +8,8 @@ Any engine can be measured against the same vectors through a small adapter
 
 | Engine | Licence | Runtime | L1 positions within 1″ of JPL DE441 | Lon median / max | Bundle or ephemeris footprint |
 | --- | --- | --- | --- | --- | --- |
-| `@zodiacs/engine` 3.0.0, default (`astronomy-engine`) | MIT AND CC-BY-4.0 | JS/TS (browser, Node, Deno, Bun) | 48 / 240 | 2.083″ / 18.774″ | 79,787 bytes minified, 36,213 gzipped (esbuild, `natalChart`; 3.0.0's build); no DE440 data; zero runtime network calls |
-| `@zodiacs/engine` 3.0.0 after `useDe440()` | MIT AND CC-BY-4.0 | JS/TS (browser, Node, Deno, Bun) | 240 / 240 | 0.002″ / 0.013″ | 3,419,715 bytes minified, 2,441,049 gzipped (esbuild, `natalChart` and `useDe440`; 3.0.0's build), the sealed pack included; zero runtime network calls |
+| `@zodiacs/engine` 3.0.0, default (`astronomy-engine`) | MIT AND CC-BY-4.0 | JS/TS (browser, Node, Deno, Bun) | 48 / 240 | 2.083″ / 18.774″ | 79,787 bytes minified, 36,624 gzipped (esbuild, `natalChart`; 3.0.0's build); no DE440 data; zero runtime network calls |
+| `@zodiacs/engine` 3.0.0 after `useDe440()` | MIT AND CC-BY-4.0 | JS/TS (browser, Node, Deno, Bun) | 240 / 240 | 0.002″ / 0.013″ | 3,419,715 bytes minified, 2,402,512 gzipped (esbuild, `natalChart` and `useDe440`; 3.0.0's build), the sealed pack included; zero runtime network calls |
 | Swiss Ephemeris 2.10.03 | AGPL-3.0 or commercial | C (native bindings) | 240 / 240 | 0.001″ / 0.005″ | Native C library plus external `.se1` ephemeris files |
 | Skyfield 1.55 (`de440s.bsp`) | MIT | Python + NumPy | 240 / 240 | 0.001″ / 0.013″ | Python package plus external JPL BSP file (`de440s.bsp`) |
 | astronomia 4.3.0 (VSOP87B) | MIT | JS (Node, browser) | 176 / 192 answered (48 unsupported) | 0.238″ / 2.782″ | JS package with VSOP87B planet tables |
@@ -18,13 +18,19 @@ Any engine can be measured against the same vectors through a small adapter
 ## Notes
 
 - Both `@zodiacs/engine` 3.0.0 rows were measured on 3.0.0's build on 26
-  November 2026 ([evidence/3.0.0-readme-20261126/](evidence/3.0.0-readme-20261126/)).
-  Its conformance runs, after `useDe440()` and on astronomy-engine, give every
-  verdict and every residual that the committed results record
-  (`conformance/results/zodiacs-engine.json` and
-  `zodiacs-engine-astronomy-engine.json`, which `conformance/RESULTS.md`
-  labels 2.1.0), to the bit. The sizes are esbuild 0.27.7 browser bundles,
-  minified, gzipped at level 9; Rollup, Vite and webpack were not run on
+  November 2026, and its conformance runs made again on 27 November
+  ([evidence/3.0.0-readme-20261126/](evidence/3.0.0-readme-20261126/)).
+  Its conformance runs on Apple silicon, after `useDe440()` and on
+  astronomy-engine, give every verdict and every summary figure of the
+  results 2.1.0 committed (`conformance/results/zodiacs-engine.json` and
+  `zodiacs-engine-astronomy-engine.json`, written on Linux x64), to the
+  bit. Of the two runs' 1,718 residual values, 11 differ from those in the
+  6th to 9th significant digit, by 1.0 × 10⁻⁹″ at most: 10 in 8 L1 vectors
+  on the pack and one on astronomy-engine. 2.1.0's own build on the same
+  machine gives 3.0.0's values to the bit, so the machine, not 3.0.0's
+  code, makes the difference. The sizes are esbuild 0.27.7 browser bundles,
+  minified, gzipped at level 9 with the zlib of Node 22.22.2 from nodejs.org
+  (27 November 2026); Rollup, Vite and webpack were not run on
   3.0.0. Bun, Deno and the browsers were last checked on 2.0.0
   (`docs/evidence/runtime-conformance-2.0.0-20261121/`).
 - Up to 2.1.0 the DE440 pack was the root's default, and every bundle of the

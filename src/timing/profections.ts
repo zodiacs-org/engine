@@ -8,7 +8,7 @@
  */
 import type { NatalSource } from "../api.js";
 import { dateFrom } from "../date-input.js";
-import type { DateInput, HouseNumber, ZodiacSign } from "../types.js";
+import type { DateInput, EphemerisFallback, HouseNumber, ZodiacSign } from "../types.js";
 import { TRADITIONAL_RULERS } from "./rulers.js";
 import type { TraditionalPlanet } from "./rulers.js";
 import {
@@ -17,6 +17,7 @@ import {
   integerIn,
   longitudeName,
   natalContext,
+  natalFallbacks,
   oneOf,
   originOf,
   placeFrom,
@@ -159,6 +160,8 @@ interface Setup {
   months: ProfectionMonthConvention;
   /** A lot's sign depends on the sect. */
   sectContradicted: boolean;
+  /** The fallbacks of the natal point the profection counts from. */
+  fallbacks: readonly EphemerisFallback[];
 }
 
 function setup(natal: NatalSource, options: ProfectionOptions | undefined): Setup {
@@ -173,7 +176,8 @@ function setup(natal: NatalSource, options: ProfectionOptions | undefined): Setu
     origin: originOf(startIndex, row.lon, row.name),
     startIndex,
     months,
-    sectContradicted: row.name.startsWith("Lot of") && sectContradictsAltitude(chart, points)
+    sectContradicted: row.name.startsWith("Lot of") && sectContradictsAltitude(chart, points),
+    fallbacks: natalFallbacks(chart, points, [row.name])
   };
 }
 
@@ -236,7 +240,7 @@ export function profectionYear(natal: NatalSource, age: number, options?: Profec
     origin: context.origin,
     months: Object.freeze(monthsOf(context.startIndex, years, bounds)),
     conventions: conventionsFor(context.months),
-    flags: timingFlags([context.years.birthMs, bounds[0]!, bounds[bounds.length - 1]!], context.sectContradicted)
+    flags: timingFlags([context.years.birthMs, bounds[0]!, bounds[bounds.length - 1]!], context.sectContradicted, context.fallbacks)
   });
 }
 
@@ -260,6 +264,6 @@ export function profectionAt(natal: NatalSource, date: DateInput, options?: Prof
     year: Object.freeze({ age, ...span(context.startIndex, age, bounds[0]!, bounds[bounds.length - 1]!) }),
     month,
     conventions: conventionsFor(context.months),
-    flags: timingFlags([context.years.birthMs, bounds[0]!, bounds[bounds.length - 1]!], context.sectContradicted)
+    flags: timingFlags([context.years.birthMs, bounds[0]!, bounds[bounds.length - 1]!], context.sectContradicted, context.fallbacks)
   });
 }

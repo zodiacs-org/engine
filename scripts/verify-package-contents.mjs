@@ -394,6 +394,19 @@ for (const file of files) {
 // Each new budget is the measurement rounded up to the next hundred bytes,
 // for the owner to decide with the candidate. ./internal/math (19,326) and
 // ./time (44,444) grow inside theirs.
+//
+// The fixes of the independent review of 3.0.0 (27 November 2026) add code
+// to three graphs: ./calc names the conversion and the step of the time
+// basis that reversed a search window, ./timing carries the fallback flags
+// of the natal positions a result uses, and ./minor-bodies holds the
+// central instant's side of the Sun's disc on a speed's two samples. The
+// other graphs keep their sizes. Measured on this build, the budget above,
+// the measurement before, this build's, new budget:
+//   ./calc          170,100   170,098   171,260   171,300
+//   ./minor-bodies   60,200    60,190    60,274    60,300
+//   ./timing        140,800   140,782   142,014   142,100
+// Each new budget is the measurement rounded up to the next hundred bytes,
+// for the owner to decide with the candidate.
 const ENTRY_BUDGETS = {
   // rc.14: 81,712 bytes. rc.15: 95,273. Of the 13,561 bytes more, 10,294 are
   // the time basis every chart now needs (the leap-second and IERS UT1
@@ -435,8 +448,9 @@ const ENTRY_BUDGETS = {
   // owner's delegation of 2026-11-03 (OQ3); 3.02 per cent of headroom.
   // 3.0.0: 166,682, without the DE440 reader; lowered to 166,700. With True
   // Black Moon Lilith, 169,675; raised to 169,700 (above). With
-  // ./minor-bodies' chunks, 170,098; raised to 170,100 (above).
-  "./calc": 170_100,
+  // ./minor-bodies' chunks, 170,098; raised to 170,100 (above). With the
+  // review's fixes, 171,260; raised to 171,300 (above).
+  "./calc": 171_300,
   // New in 1.1.0-rc.1: the ids of the conventions registry. 2,754 bytes, its
   // own file and the chunk of ids it shares with ./receipt; 5.30 per cent of
   // headroom.
@@ -571,8 +585,9 @@ const ENTRY_BUDGETS = {
   // nutation in the ephemeris chunk; 4.84 per cent of headroom.
   // 3.0.0: 138,349, without the DE440 reader; lowered to 138,400. With True
   // Black Moon Lilith, 140,359; raised to 140,400 (above). With
-  // ./minor-bodies' chunks, 140,782; raised to 140,800 (above).
-  "./timing": 140_800,
+  // ./minor-bodies' chunks, 140,782; raised to 140,800 (above). With the
+  // review's fixes, 142,014; raised to 142,100 (above).
+  "./timing": 142_100,
   // rc.15: 114,106, the core's graph included; as carried, 116,779. rc.16:
   // 122,131, raised from 120,000 for the nutation in the ephemeris chunk
   // (the ayanamsas now use its frame); 4.80 per cent of headroom. rc.17:
@@ -604,8 +619,9 @@ const ENTRY_BUDGETS = {
   // ./minor-bodies' chunks, 120,174; raised to 120,200 (above).
   "./window": 120_200,
   // New in 3.0.0: Chiron, Ceres, Pallas, Juno and Vesta (above): 60,190
-  // bytes beside the five tables (MINOR_BODY_TABLES below); 60,200.
-  "./minor-bodies": 60_200
+  // bytes beside the five tables (MINOR_BODY_TABLES below); 60,200. With the
+  // review's fixes, 60,274; raised to 60,300 (above).
+  "./minor-bodies": 60_300
 };
 
 /** The dist/ files an entry loads statically, with their bytes. */

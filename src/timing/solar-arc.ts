@@ -12,7 +12,7 @@ import { dateFrom } from "../date-input.js";
 import { progressedBodies, progressedInstant } from "../progressions.js";
 import { degreeInSign, normalizeLongitude, signForLongitude } from "../signs.js";
 import type { BodyPosition, DateInput, ZodiacSign } from "../types.js";
-import { DAY_MS, chartLongitudes, guarded, natalContext, sectContradictsAltitude, timingFlags } from "./shared.js";
+import { DAY_MS, chartLongitudes, guarded, natalContext, natalFallbacks, sectContradictsAltitude, timingFlags } from "./shared.js";
 import type { ChartLongitudeName, TimingFlag } from "./shared.js";
 
 /** The Sun's mean motion in longitude, degrees per day; used only to count whole turns. */
@@ -54,7 +54,7 @@ export interface SolarArcDirections {
   readonly arc: SolarArc;
   /** The twelve bodies, the four angles when present, then `chartPoints`. */
   readonly positions: readonly DirectedPosition[];
-  /** The arc's flags, and the sect's when the chart has lots. */
+  /** The arc's flags, the sect's when the chart has lots, and the fallbacks of the chart's positions it directs. */
   readonly flags: readonly TimingFlag[];
 }
 
@@ -134,9 +134,12 @@ export function solarArcDirections(natal: NatalSource, target: DateInput): Solar
   const at = dateFrom(target, "target");
   const { chart, points, birth } = natalContext(natal);
   const arc = solarArc(birth, at);
-  const positions = chartLongitudes(chart, points).map((row) =>
-    Object.freeze({ ...direct(row.name, row.lon, arc.arc), name: row.name, kind: row.kind })
+  const rows = chartLongitudes(chart, points);
+  const positions = rows.map((row) => Object.freeze({ ...direct(row.name, row.lon, arc.arc), name: row.name, kind: row.kind }));
+  const flags = timingFlags(
+    [arc.birth.getTime(), arc.progressed.getTime()],
+    sectContradictsAltitude(chart, points),
+    natalFallbacks(chart, points, rows.map((row) => row.name))
   );
-  const flags = timingFlags([arc.birth.getTime(), arc.progressed.getTime()], sectContradictsAltitude(chart, points));
   return Object.freeze({ arc, positions: Object.freeze(positions), flags });
 }
