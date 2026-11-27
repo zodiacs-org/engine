@@ -50,15 +50,19 @@
 // the range whose message holds the tag [budget-increase-approved] and a
 // trailer `Approved-by: <name>, <YYYY-MM-DD>: "<the approval's words>"` (a
 // person's, never an agent's); and a change to a guardrail file
-// (GUARDED_FILES, vitest.config.mjs among them) or a test file deleted or
-// renamed needs the tag [guardrails-change-approved] and such a trailer.
+// (GUARDED_FILES, vitest.config.mjs and scripts/dist-purity.mjs among them)
+// or a test file deleted or renamed needs the tag
+// [guardrails-change-approved] and such a trailer.
 // Where budgets.json does not exist there, the range introduces it, and
 // there is no earlier policy to compare with: the measurements above are
 // still made and checked.
 //
 // --tighten lowers each ceiling to the measurement and its headroom, and
 // raises each floor to the measurement, where that is tighter, and writes
-// budgets.json; it never loosens one.
+// budgets.json; it never loosens one. Before it measures anything, it also
+// refuses a report that holds a skipped test SKIPPED_BY_DESIGN does not let
+// through, or any other problem --check finds in a report (reportProblems):
+// no limit is set from a run that skipped a test it should have run.
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
@@ -68,12 +72,16 @@ const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 /**
  * The files whose change weakens or moves a guardrail (vitest.config.mjs
- * decides which test files the run collects, and what runs before each);
- * budgets.json is compared value by value instead.
+ * decides which test files the run collects, and what runs before each;
+ * scripts/dist-purity.mjs bundles and gzips the applications the gzip
+ * budgets bound and finds the bare imports bareChunkImports counts, for this
+ * script and for scripts/verify-dist-purity.mjs); budgets.json is compared
+ * value by value instead.
  */
 export const GUARDED_FILES = Object.freeze([
   "scripts/ratchet.mjs",
   "scripts/verify-package-contents.mjs",
+  "scripts/dist-purity.mjs",
   "scripts/verify-dist-purity.mjs",
   "scripts/verify-archive-binding.mjs",
   ".github/workflows/ci.yml",
@@ -488,9 +496,18 @@ async function main(args) {
     );
     process.exit(1);
   }
-  const measured = await measure({ report });
+  // --tighten writes budgets.json, so it also refuses, before measuring, any other report --check refuses
+  // (reportProblems), such as one with a skip that no rule lets through here.
   if (mode === "tighten") {
     assert(tests, "--tighten needs --tests REPORT, to set the passing-test floor");
+    const problems = reportProblems(report, environmentOf(tests, report));
+    if (problems.length > 0) {
+      console.error(`ratchet failed: ${tests} is a report --check refuses, and --tighten needs one it accepts:\n- ${problems.join("\n- ")}`);
+      process.exit(1);
+    }
+  }
+  const measured = await measure({ report });
+  if (mode === "tighten") {
     const next = tightened(budgets, measured);
     writeFileSync(new URL("../budgets.json", import.meta.url), `${JSON.stringify(next, null, 2)}\n`);
     console.log(`ratchet: budgets.json tightened to ${JSON.stringify(limitsOf(next))}`);

@@ -7,7 +7,8 @@
 // here, which changes in a range need an approval. The measurements
 // themselves need dist/ and are made by `node scripts/ratchet.mjs --check`
 // after the build; the command is run here only on reports it refuses
-// before measuring: a failed run's, and one that leaves a test file out.
+// before measuring: a failed run's, one that leaves a test file out, and,
+// with --tighten, one with a skipped test that no rule lets through.
 import { execFileSync, spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { devNull, tmpdir } from "node:os";
@@ -166,18 +167,24 @@ describe("the verdict on a range", () => {
     expect(guardVerdict({ previous, current: { gzip: { ".": 39_000 }, minPassingTests: 5_800 }, guarded: [], tests: [], messages: [] })).toEqual({ problems: [], notes: [] });
   });
 
-  it("counts vitest.config.mjs a guardrail: a change to it fails without approval and passes with it", () => {
-    expect(GUARDED_FILES).toContain("vitest.config.mjs");
-    const change = { previous, current: previous, guarded: ["vitest.config.mjs"], tests: [] };
-    expect(guardVerdict({ ...change, messages: ["Run fewer files"] }).problems).toEqual([
-      `vitest.config.mjs changed, and no commit in the range holds ${GUARDRAILS_TAG} with an Approved-by trailer`
-    ]);
-    expect(guardVerdict({ ...change, messages: [`Run fewer files ${GUARDRAILS_TAG}\n\n${approval}`] }).problems).toEqual([]);
+  it("counts vitest.config.mjs and scripts/dist-purity.mjs guardrails: a change to either fails without approval and passes with it", () => {
+    // What the run collects; and how the gzip and bareChunkImports measurements bundle, gzip and count.
+    for (const [file, message] of [
+      ["vitest.config.mjs", "Run fewer files"],
+      ["scripts/dist-purity.mjs", "Bundle the applications otherwise"]
+    ]) {
+      expect(GUARDED_FILES).toContain(file);
+      const change = { previous, current: previous, guarded: [file], tests: [] };
+      expect(guardVerdict({ ...change, messages: [message] }).problems).toEqual([
+        `${file} changed, and no commit in the range holds ${GUARDRAILS_TAG} with an Approved-by trailer`
+      ]);
+      expect(guardVerdict({ ...change, messages: [`${message} ${GUARDRAILS_TAG}\n\n${approval}`] }).problems).toEqual([]);
+    }
   });
 });
 
 describe("a range in a git repository", () => {
-  it("finds vitest.config.mjs changed and each test file deleted or renamed, wherever it is, and then their approval", () => {
+  it("finds vitest.config.mjs and scripts/dist-purity.mjs changed and each test file deleted or renamed, wherever it is, and then their approval", () => {
     const folder = mkdtempSync(join(tmpdir(), "zodiacs-ratchet-git-"));
     // git without the host's configuration (no hooks, no signing), committing as an identity of its own.
     const identity = { GIT_AUTHOR_NAME: "Ratchet Test", GIT_AUTHOR_EMAIL: "ratchet@example.invalid", GIT_COMMITTER_NAME: "Ratchet Test", GIT_COMMITTER_EMAIL: "ratchet@example.invalid" };
@@ -191,6 +198,7 @@ describe("a range in a git repository", () => {
       git("init", "-q", "-b", "main");
       write("budgets.json", `${JSON.stringify({ minPassingTests: 5_700 })}\n`);
       write("vitest.config.mjs", 'export default { test: { setupFiles: ["./src/test-setup.ts"] } };\n');
+      write("scripts/dist-purity.mjs", 'export const bareImports = (code) => code.match(/^import "[^"]+";$/gmu) ?? [];\n');
       for (const file of ["src/geo/points.test.ts", "scripts/build.test.mjs", "tests/sky.spec.ts", "bots/facts/reading.test.ts", "src/fixtures/points.test.json"]) {
         write(file, `export const file = ${JSON.stringify(file)};\n`);
       }
@@ -200,6 +208,8 @@ describe("a range in a git repository", () => {
 
       git("checkout", "-q", "-b", "change");
       write("vitest.config.mjs", 'export default { test: { setupFiles: ["./src/test-setup.ts"], exclude: ["tests/**"] } };\n');
+      // The measurements' code, made to count no bare import.
+      write("scripts/dist-purity.mjs", "export const bareImports = () => [];\n");
       rmSync(join(folder, "scripts/build.test.mjs"));
       // Renamed out of the pattern, which git reports as the test file deleted, and within it, by its new name.
       renameSync(join(folder, "bots/facts/reading.test.ts"), join(folder, "bots/facts/reading.ts"));
@@ -210,12 +220,12 @@ describe("a range in a git repository", () => {
       git("commit", "-q", "-m", "Run fewer files");
       const range = rangeFrom("main", folder);
       expect(range.previous).toEqual({ minPassingTests: 5_700 });
-      expect(range.guarded).toEqual(["vitest.config.mjs"]);
+      expect(range.guarded).toEqual(["scripts/dist-purity.mjs", "vitest.config.mjs"]);
       expect(range.tests).toEqual(["bots/facts/reading.test.ts", "scripts/build.test.mjs", "tests/zodiac.spec.ts"]);
       expect(range.messages).toEqual(["Run fewer files"]);
       expect(guardVerdict({ ...range, current: range.previous }).problems).toEqual([
-        "vitest.config.mjs changed; bots/facts/reading.test.ts deleted or renamed; scripts/build.test.mjs deleted or renamed; tests/zodiac.spec.ts deleted or renamed, " +
-          `and no commit in the range holds ${GUARDRAILS_TAG} with an Approved-by trailer`
+        "scripts/dist-purity.mjs changed; vitest.config.mjs changed; bots/facts/reading.test.ts deleted or renamed; scripts/build.test.mjs deleted or renamed; " +
+          `tests/zodiac.spec.ts deleted or renamed, and no commit in the range holds ${GUARDRAILS_TAG} with an Approved-by trailer`
       ]);
 
       git("commit", "-q", "--allow-empty", "-m", `Approve the smaller run ${GUARDRAILS_TAG}\n\n${approval}`);
@@ -355,6 +365,36 @@ describe("skipped tests in the run's report", () => {
     expect(reportProblems(todo, ci, root)).toEqual(["src/points.test.ts: points > gives the East Point is todo, and no rule lets a skip of it through"]);
     const elsewhere = reportOf(5_800, [["src/de440.test.ts", [kernel], "a test of the same title in another file"]]);
     expect(reportProblems(elsewhere, ci, root)).toHaveLength(1);
+  });
+
+  it("fail --tighten on an it.skip that no rule lets through: the command exits non-zero before it measures anything, and budgets.json is left as it was", () => {
+    const folder = mkdtempSync(join(tmpdir(), "zodiacs-ratchet-"));
+    const budgetsBefore = readFileSync(new URL("../budgets.json", import.meta.url), "utf8");
+    try {
+      // A run of every test file git tracks, which passed, over the floor, with one test of this file under it.skip,
+      // which vitest lists as skipped and counts as pending. The command reads names from the repository's root.
+      const repository = fileURLToPath(new URL("..", import.meta.url));
+      const passes = { ancestorTitles: [], title: "passes", status: "passed" };
+      const skip = { ancestorTitles: ["approval"], title: "needs the tag and a person's dated, quoted trailer in one message", status: "skipped" };
+      const testResults = trackedTestFiles().map((file) => ({
+        name: `${repository}${file}`,
+        status: "passed",
+        assertionResults: file === "scripts/ratchet.test.mjs" ? [passes, skip] : [passes]
+      }));
+      const path = join(folder, "vitest-report.json");
+      writeFileSync(path, JSON.stringify({ ...reportOf(budgets.minPassingTests + 100, []), numPendingTests: 1, testResults }));
+      const run = spawnSync(process.execPath, [fileURLToPath(new URL("./ratchet.mjs", import.meta.url)), "--tighten", "--tests", path], { encoding: "utf8", timeout: 60_000 });
+      expect(run.error).toBeUndefined();
+      expect(run.status, run.stderr).toBe(1);
+      expect(run.stderr).toContain(
+        `ratchet failed: ${path} is a report --check refuses, and --tighten needs one it accepts:\n` +
+          "- scripts/ratchet.test.mjs: approval > needs the tag and a person's dated, quoted trailer in one message is skipped, and no rule lets a skip of it through\n"
+      );
+      expect(run.stdout).not.toContain("tightened");
+      expect(readFileSync(new URL("../budgets.json", import.meta.url), "utf8")).toBe(budgetsBefore);
+    } finally {
+      rmSync(folder, { recursive: true, force: true });
+    }
   });
 
   it("fail a skip by design where its condition does not hold", () => {
