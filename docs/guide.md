@@ -684,10 +684,13 @@ place is reduced with the Earth and the Sun of the root's source: the
 shipped DE440 pack after `useDe440()`, astronomy-engine otherwise, flagged
 `"de440-unavailable"` or `"outside-de440-span"` where it stands in for the
 pack, and the source `withEphemeris` installed inside it. `ephemeris` names
-that source and the body's table, with its SHA-256. `minorBodyPosition(spec,
-date)` takes a body's spec, so a bundle that uses `chiron` alone carries
-Chiron's table alone; `minorBodyPositions(date, bodies)` takes specs or
-names, and holds all five tables.
+that source and the body's table, with its SHA-256 and the Horizons solution
+it was fitted to, the one `MINOR_BODIES_PROVENANCE` names.
+`minorBodyPosition(spec, date)` takes a body's spec, so a bundle that uses
+`chiron` alone carries Chiron's table alone; `minorBodyPositions(date,
+bodies)` takes specs or names, and holds all five tables. Both read the
+date as UTC unless `options.timeScale` is `"ut1"` or `"tt"`, and refuse any
+other scale, `null` included, with a `RangeError`, as `natalChart` does.
 
 At 500 places from Horizons's observer tables that the fit never saw (100 a
 body, at instants drawn across 1800 to 2200 with a fixed seed;
@@ -701,7 +704,7 @@ pack the longitudes' differences follow 0.020″ − 0.235″ T (T in Julian
 centuries from 2000) and depart from that line by at most 0.119″. Measured on
 3.0.0's build (`scripts/ratchet.mjs`, `budgets.json`; gzip level 9 with the
 zlib of Node 22.22.2 from nodejs.org), an application of the root's
-`natalChart` grows by 14,132 bytes gzipped with Chiron alone and by 115,938
+`natalChart` grows by 14,125 bytes gzipped with Chiron alone and by 115,981
 with all five.
 
 ### Input flag compatibility

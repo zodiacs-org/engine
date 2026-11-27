@@ -1,0 +1,12 @@
+{
+  "archive": "zodiacs-engine-3.0.0.tgz",
+  "version": "3.0.0",
+  "sha256": "0addb2f4d39ea4d8e87f54ad82a033a16a94859c78845f055d2208e04259a9a3",
+  "bytes": 2891330,
+  "files": 107,
+  "unpackedBytes": 4909803,
+  "de440PackBase64Bytes": 3319552,
+  "minorBodyTablesBase64Bytes": 170000,
+  "restBytes": 1420251,
+  "cap": 1463000
+}

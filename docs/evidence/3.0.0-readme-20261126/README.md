@@ -54,3 +54,23 @@ the minor bodies' largest and the L1 vectors' 0.0126″ again in CI.
 TypeScript 5.8's support for `require()` of an ES module under
 `"module": "nodenext"` is TypeScript's own (its 5.8 release notes); only
 5.9.3 was run here.
+
+On 27 November, after a second independent review, `minorBodyPositions`
+reads its list of bodies with `Array.from`, which refuses the holes of a
+sparse list where `map` skipped them. On the cut's build, measured as above
+on Node 22.22.2, all five minor bodies add 180,606 bytes minified and
+115,942 gzipped to the root's `natalChart` (7 and 4 more than above), and
+the `./minor-bodies` graph is 60,282 bytes; the other bundle sizes above
+are unchanged. `README.md` and `docs/guide.md` quoted 115,942 at that cut
+(`cd330ebc`, branch `admin/engine-3.0.0-r3`, never carried).
+
+After a third independent review, each body's Horizons solution is written
+beside its table in `src/minor-bodies/pack-data.ts`, the generator writes
+the provenance's keys bare, and the entry reads its options and its specs
+in fewer bytes. On the cut's build (branch `admin/engine-3.0.0-r4`),
+measured as above on Node 22.22.2, all five minor bodies add 180,600 bytes
+minified and 115,981 gzipped to the root's `natalChart` (6 fewer and 39
+more than after the second review), Chiron alone 24,231 and 14,125 (30 and
+7 fewer), and the `./minor-bodies` graph is 60,281 bytes; the other bundle
+sizes above are unchanged. `README.md` and `docs/guide.md` quote 14,125 and
+115,981, from `docs/evidence/3.0.0-20261127/results/bundles-node-22.22.2.json`.

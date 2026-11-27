@@ -114,8 +114,8 @@ minorBodyPosition(chiron, "2000-01-01T12:00:00Z"); // a spec: only Chiron's tabl
 minorBodyPositions("2000-01-01T12:00:00Z", ["Ceres", "Vesta"]); // names: all five tables are bundled
 ```
 
-Chiron alone adds 14,132 bytes gzipped to a `natalChart` application, all
-five 115,938. At 500 places from Horizons that the fit never saw, every
+Chiron alone adds 14,125 bytes gzipped to a `natalChart` application, all
+five 115,981. At 500 places from Horizons that the fit never saw, every
 longitude and latitude is within 0.54″ after `useDe440()` and within 1.7″
 on astronomy-engine ([guide](docs/guide.md#minor-bodies)).
 
