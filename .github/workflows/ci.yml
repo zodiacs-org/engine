@@ -61,9 +61,11 @@ jobs:
       # passing tests, measured on this build against their ceilings and
       # floors; and against the merge base with main, a loosened limit, a
       # changed guardrail file or a deleted test needs a commit in the range
-      # with the approval tag and a person's Approved-by trailer.
+      # with the approval tag and a person's Approved-by trailer. Started with
+      # node, not npm run: the alias is in package.json, which is no guardrail
+      # file, and this one is.
       - name: Ratchet
-        run: npm run ratchet:check
+        run: node scripts/ratchet.mjs --check --tests .cache/vitest-report.json
 
       # No en or em dash in the documents scripts/verify-no-dashes.mjs names.
       - name: No en or em dashes

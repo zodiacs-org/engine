@@ -184,16 +184,22 @@ describe("the verdict on a range", () => {
 });
 
 describe("a range in a git repository", () => {
-  it("finds vitest.config.mjs and scripts/dist-purity.mjs changed and each test file deleted or renamed, wherever it is, and then their approval", () => {
+  // git without the host's configuration (no hooks, no signing), committing as an identity of its own.
+  const identity = { GIT_AUTHOR_NAME: "Ratchet Test", GIT_AUTHOR_EMAIL: "ratchet@example.invalid", GIT_COMMITTER_NAME: "Ratchet Test", GIT_COMMITTER_EMAIL: "ratchet@example.invalid" };
+  const env = { ...process.env, ...identity, GIT_CONFIG_GLOBAL: devNull, GIT_CONFIG_NOSYSTEM: "1" };
+  /** A new folder for a repository: the folder, git run in it, and a writer of its files. */
+  const repository = () => {
     const folder = mkdtempSync(join(tmpdir(), "zodiacs-ratchet-git-"));
-    // git without the host's configuration (no hooks, no signing), committing as an identity of its own.
-    const identity = { GIT_AUTHOR_NAME: "Ratchet Test", GIT_AUTHOR_EMAIL: "ratchet@example.invalid", GIT_COMMITTER_NAME: "Ratchet Test", GIT_COMMITTER_EMAIL: "ratchet@example.invalid" };
-    const env = { ...process.env, ...identity, GIT_CONFIG_GLOBAL: devNull, GIT_CONFIG_NOSYSTEM: "1" };
     const git = (...args) => execFileSync("git", args, { cwd: folder, env, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
     const write = (file, text) => {
       mkdirSync(dirname(join(folder, file)), { recursive: true });
       writeFileSync(join(folder, file), text);
     };
+    return { folder, git, write };
+  };
+
+  it("finds vitest.config.mjs and scripts/dist-purity.mjs changed and each test file deleted or renamed, wherever it is, and then their approval", () => {
+    const { folder, git, write } = repository();
     try {
       git("init", "-q", "-b", "main");
       write("budgets.json", `${JSON.stringify({ minPassingTests: 5_700 })}\n`);
@@ -211,7 +217,7 @@ describe("a range in a git repository", () => {
       // The measurements' code, made to count no bare import.
       write("scripts/dist-purity.mjs", "export const bareImports = () => [];\n");
       rmSync(join(folder, "scripts/build.test.mjs"));
-      // Renamed out of the pattern, which git reports as the test file deleted, and within it, by its new name.
+      // Renamed out of the pattern and within it: each is the test file deleted, by its old name.
       renameSync(join(folder, "bots/facts/reading.test.ts"), join(folder, "bots/facts/reading.ts"));
       renameSync(join(folder, "tests/sky.spec.ts"), join(folder, "tests/zodiac.spec.ts"));
       // Not a test file: a fixture's deletion needs no approval.
@@ -221,17 +227,42 @@ describe("a range in a git repository", () => {
       const range = rangeFrom("main", folder);
       expect(range.previous).toEqual({ minPassingTests: 5_700 });
       expect(range.guarded).toEqual(["scripts/dist-purity.mjs", "vitest.config.mjs"]);
-      expect(range.tests).toEqual(["bots/facts/reading.test.ts", "scripts/build.test.mjs", "tests/zodiac.spec.ts"]);
+      expect(range.tests).toEqual(["bots/facts/reading.test.ts", "scripts/build.test.mjs", "tests/sky.spec.ts"]);
       expect(range.messages).toEqual(["Run fewer files"]);
       expect(guardVerdict({ ...range, current: range.previous }).problems).toEqual([
         "scripts/dist-purity.mjs changed; vitest.config.mjs changed; bots/facts/reading.test.ts deleted or renamed; scripts/build.test.mjs deleted or renamed; " +
-          `tests/zodiac.spec.ts deleted or renamed, and no commit in the range holds ${GUARDRAILS_TAG} with an Approved-by trailer`
+          `tests/sky.spec.ts deleted or renamed, and no commit in the range holds ${GUARDRAILS_TAG} with an Approved-by trailer`
       ]);
 
       git("commit", "-q", "--allow-empty", "-m", `Approve the smaller run ${GUARDRAILS_TAG}\n\n${approval}`);
       const approvedRange = rangeFrom("main", folder);
       expect(approvedRange.messages).toHaveLength(2);
       expect(guardVerdict({ ...approvedRange, current: range.previous }).problems).toEqual([]);
+    } finally {
+      rmSync(folder, { recursive: true, force: true });
+    }
+  });
+
+  it("finds a test file renamed to a name of the pattern that is no test file's, example.test.ts to example.test.txt, as the test file deleted", () => {
+    const { folder, git, write } = repository();
+    try {
+      git("init", "-q", "-b", "main");
+      write("budgets.json", `${JSON.stringify({ minPassingTests: 5_700 })}\n`);
+      write("example.test.ts", 'export const file = "example.test.ts";\n');
+      git("add", "-A");
+      git("commit", "-q", "-m", "Base");
+
+      git("checkout", "-q", "-b", "change");
+      // Both names are in the pathspec (*.test.*): paired as a rename, git would give only the new one, which TEST_FILE does not match.
+      renameSync(join(folder, "example.test.ts"), join(folder, "example.test.txt"));
+      git("add", "-A");
+      git("commit", "-q", "-m", "Keep the example as text");
+      expect(trackedTestFiles(folder)).toEqual([]);
+      const range = rangeFrom("main", folder);
+      expect(range.tests).toEqual(["example.test.ts"]);
+      expect(guardVerdict({ ...range, current: range.previous }).problems).toEqual([
+        `example.test.ts deleted or renamed, and no commit in the range holds ${GUARDRAILS_TAG} with an Approved-by trailer`
+      ]);
     } finally {
       rmSync(folder, { recursive: true, force: true });
     }

@@ -438,7 +438,8 @@ export function trackedTestFiles(root = ROOT) {
 /**
  * The range from the merge base of `base` and HEAD, in the repository at
  * `root`: the base's budgets.json, the guardrail files it changes, the test
- * files (TEST_FILE) it deletes or renames, and its messages.
+ * files (TEST_FILE) it deletes or renames, by their old names, and its
+ * messages.
  */
 export function rangeFrom(base, root = ROOT) {
   const fork = git(root, "merge-base", base, "HEAD").trim();
@@ -450,7 +451,9 @@ export function rangeFrom(base, root = ROOT) {
   }
   const guarded = git(root, "diff", "--name-only", fork, "HEAD", "--", ...GUARDED_FILES).split("\n").filter(Boolean);
   // -z: git quotes a name with unusual characters otherwise, and the quoted name would not match TEST_FILE.
-  const tests = git(root, "diff", "--name-only", "-z", "--diff-filter=DR", "-M", fork, "HEAD", "--", "*.test.*", "*.spec.*")
+  // --no-renames: a rename is its old name deleted. Paired as a rename, it would be named by its new name
+  // alone, and example.test.ts renamed to example.test.txt, both in the pathspec, would match no TEST_FILE.
+  const tests = git(root, "diff", "--name-only", "-z", "--diff-filter=D", "--no-renames", fork, "HEAD", "--", "*.test.*", "*.spec.*")
     .split("\0")
     .filter((file) => TEST_FILE.test(file));
   const messages = git(root, "log", "--format=%B%x00", `${fork}..HEAD`).split("\0").map((message) => message.trim()).filter(Boolean);
