@@ -71,6 +71,15 @@ const quotedBounds = (): number[][] =>
     expect(found, `${file} quotes the bounds`).not.toBeNull();
     return found!.slice(1).map(Number);
   });
+/** The fields MINOR_BODIES_PROVENANCE documents for each body (MinorBodiesProvenance), in its order. */
+const PUBLIC_BODY_FIELDS = ["command", "step", "rows", "bytes", "sha256", "solution", "record", "target"];
+/**
+ * A body's documented fields as its entry in provenance.json records them, the solution line reduced to the
+ * solution it names. Every other field of the entry is left out: fetch-horizons.py writes each response's
+ * fetchedAtUtc there too.
+ */
+const publicFields = (recorded: Record<string, unknown>): Record<string, unknown> =>
+  Object.fromEntries(PUBLIC_BODY_FIELDS.map((field) => [field, field === "solution" ? /JPL#\d+/u.exec(String(recorded.solution))![0] : recorded[field]]));
 const stats = (values: number[]): { median: number; max: number } => {
   const sorted = values.map(Math.abs).sort((a, b) => a - b);
   return { median: (sorted[(sorted.length - 1) >> 1]! + sorted[sorted.length >> 1]!) / 2, max: sorted.at(-1)! };
@@ -101,16 +110,41 @@ describe("the minor-body tables", () => {
     expect(MINOR_BODIES.map((spec) => spec.solution)).toEqual(["JPL#171", "JPL#48", "JPL#74", "JPL#144", "JPL#36"]);
     expect(Object.isFrozen(chiron) && Object.isFrozen(chiron.table) && Object.isFrozen(MINOR_BODIES)).toBe(true);
     expect(MINOR_BODIES_SPAN).toEqual({ from: "1800-01-01T00:00:00Z", to: "2200-01-01T00:00:00Z", fromJdTt: 2378496.5, toJdTt: 2524593.5 });
-    // The constant is provenance.json's, which fetch-horizons.py wrote.
+    // The constant is provenance.json's, which fetch-horizons.py wrote: its documented fields, compared one by one.
     for (const name of MINOR_BODY_NAMES) {
-      const recorded = provenance.bodies[name];
       const given = MINOR_BODIES_PROVENANCE.bodies[name];
-      expect(given).toEqual({ ...recorded, solution: /JPL#\d+/u.exec(recorded.solution)![0] });
+      expect(Object.keys(given)).toEqual(PUBLIC_BODY_FIELDS);
+      expect(given).toEqual(publicFields(provenance.bodies[name]));
+      // A provenance.json that a fresh fetch wrote, with the time each response was fetched, gives the same fields.
+      expect(given).toEqual(publicFields({ ...provenance.bodies[name], fetchedAtUtc: "2026-11-27T03:04:05.678901+00:00" }));
       expect(MINOR_BODIES.find((spec) => spec.name === name)!.solution).toBe(given.solution);
     }
     expect(MINOR_BODIES_PROVENANCE.vectorParams).toEqual(provenance.vectorParams);
     expect(MINOR_BODIES_PROVENANCE.fetchedAtUtc).toBe(provenance.fetchedAtUtc);
     expect(Object.isFrozen(MINOR_BODIES_PROVENANCE.bodies.Chiron)).toBe(true);
+  });
+
+  it("name the solution generated beside each table, as MINOR_BODIES_PROVENANCE and every position name it", () => {
+    const generated: Record<string, string> = {
+      Chiron: PACK.CHIRON_SOLUTION,
+      Ceres: PACK.CERES_SOLUTION,
+      Pallas: PACK.PALLAS_SOLUTION,
+      Juno: PACK.JUNO_SOLUTION,
+      Vesta: PACK.VESTA_SOLUTION
+    };
+    const source = readFileSync(new URL("./minor-bodies.ts", import.meta.url), "utf8");
+    const date = "2000-01-01T12:00:00Z";
+    for (const spec of MINOR_BODIES) {
+      expect(spec.solution).toBe(generated[spec.name]);
+      expect(spec.solution).toBe(MINOR_BODIES_PROVENANCE.bodies[spec.name].solution);
+      expect(minorBodyPosition(spec, date).ephemeris.body.solution).toBe(spec.solution);
+      // The designation is the target Horizons named, and the spec's doc comment names both.
+      expect(spec.designation).toBe(MINOR_BODIES_PROVENANCE.bodies[spec.name].target.replace(/\s+\{.*$/u, ""));
+      expect(source).toContain(`/** ${spec.designation}, from Horizons's solution ${spec.solution}. */\nexport const ${spec.name.toLowerCase()}: MinorBodySpec`);
+    }
+    expect(minorBodyPositions(date).map((place) => place.ephemeris.body.solution)).toEqual(
+      MINOR_BODY_NAMES.map((name) => MINOR_BODIES_PROVENANCE.bodies[name].solution)
+    );
   });
 
   it("hold the bytes their layouts describe, fitted to 206 km (Chiron) and 90 km (the others) at the fitted vectors", () => {
@@ -367,6 +401,22 @@ describe("minor-body positions", () => {
     expect(() => minorBodyPosition(chiron, date, { timeScale: "tdb" as never })).toThrow(RangeError);
     expect(() => minorBodyPosition(chiron, "not a date")).toThrow(RangeError);
   });
+
+  it("refuse a null timeScale, as natalChart does, and read an undefined one as UTC", () => {
+    const date = "2020-01-01T00:00:00Z";
+    expect(() => natalChart({ utc: date, timeScale: null } as never)).toThrow(/^timeScale must be "utc", "ut1" or "tt"\.$/u);
+    expect(() => minorBodyPosition(chiron, date, { timeScale: null } as never)).toThrow(RangeError);
+    expect(() => minorBodyPosition(chiron, date, { timeScale: null } as never)).toThrow(
+      /^minorBodyPosition options\.timeScale must be "utc", "ut1" or "tt"\.$/u
+    );
+    expect(() => minorBodyPositions(date, MINOR_BODIES, { timeScale: null } as never)).toThrow(RangeError);
+    expect(() => minorBodyPositions(date, ["Ceres"], { timeScale: null } as never)).toThrow(
+      /^minorBodyPositions options\.timeScale must be "utc", "ut1" or "tt"\.$/u
+    );
+    // An undefined scale is an absent one: the instant is read as UTC.
+    expect(minorBodyPosition(chiron, date, { timeScale: undefined } as never).lon).toBe(minorBodyPosition(chiron, date, { timeScale: "utc" }).lon);
+    expect(minorBodyPositions(date, ["Ceres"], { timeScale: undefined } as never)[0]!.lon).toBe(minorBodyPosition(ceres, date).lon);
+  });
 });
 
 describe("the minor-bodies entry's size", () => {
@@ -400,6 +450,9 @@ describe("the minor-bodies entry's size", () => {
     // Chiron's bundle holds its own table and no other.
     expect(one.text).toContain(PACK.CHIRON_PACK.slice(0, 200));
     for (const other of [PACK.CERES_PACK, PACK.PALLAS_PACK, PACK.JUNO_PACK, PACK.VESTA_PACK]) expect(one.text).not.toContain(other.slice(0, 200));
+    // And its own solution, not the others'.
+    expect(one.text).toContain(`"${PACK.CHIRON_SOLUTION}"`);
+    for (const other of [PACK.CERES_SOLUTION, PACK.PALLAS_SOLUTION, PACK.JUNO_SOLUTION, PACK.VESTA_SOLUTION]) expect(one.text).not.toContain(`"${other}"`);
   });
 
   it("is in no part of the root's graph", async () => {

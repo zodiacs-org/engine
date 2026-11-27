@@ -24,9 +24,12 @@ unitKm. The five tables follow each other, Chiron first, in one byte string.
 
 Writes fitted-pack.json into the same directory: per body its offset and
 size in the byte string, its interval count and length, degree, unit, k32,
-k8Start and the largest fitting error found, and the byte string as base64.
+k8Start, the largest fitting error found and the SHA-256 of the vectors file
+it read (vectorsSha256), and the byte string as base64.
 scripts/minor-bodies/build-pack-data.mjs turns it into
-src/minor-bodies/pack-data.ts. Needs numpy (2.0.2 made the committed tables).
+src/minor-bodies/pack-data.ts, and refuses a body whose vectorsSha256 is not
+the SHA-256 provenance.json records for its response: a fit left from other
+vectors. Needs numpy (2.0.2 made the committed tables).
 
     python3 -I scripts/minor-bodies/fit.py [--data DIR]
 """
@@ -35,6 +38,7 @@ from __future__ import annotations
 import argparse
 import base64
 import gzip
+import hashlib
 import json
 import os
 
@@ -60,9 +64,11 @@ CANDIDATES = {
 }
 
 
-def load_vectors(data: str, name: str) -> tuple[np.ndarray, np.ndarray]:
-    with open(os.path.join(data, f"{name.lower()}-vectors.txt"), "r", encoding="utf-8") as source:
-        text = source.read()
+def load_vectors(data: str, name: str) -> tuple[np.ndarray, np.ndarray, str]:
+    """The TDB Julian dates and positions, km, of a body's vectors, and the SHA-256 of the file's bytes they were read from."""
+    with open(os.path.join(data, f"{name.lower()}-vectors.txt"), "rb") as source:
+        raw = source.read()
+    text = raw.decode("utf-8")
     rows = text.split("$$SOE", 1)[1].split("$$EOE", 1)[0].strip()
     jds = []
     xyz = []
@@ -71,7 +77,7 @@ def load_vectors(data: str, name: str) -> tuple[np.ndarray, np.ndarray]:
         if len(parts) >= 5:
             jds.append(float(parts[0]))
             xyz.append([float(parts[2]), float(parts[3]), float(parts[4])])
-    return np.array(jds, dtype=np.float64), np.array(xyz, dtype=np.float64)
+    return np.array(jds, dtype=np.float64), np.array(xyz, dtype=np.float64), hashlib.sha256(raw).hexdigest()
 
 
 def fit_body(name: str, jds: np.ndarray, xyz: np.ndarray, interval_days: float, degree: int, unit_km: float) -> dict:
@@ -146,7 +152,7 @@ def main() -> None:
     meta = {"format": "ZODMB01", "spanStartJd": SPAN_START, "spanEndJd": SPAN_END, "bodies": {}}
     combined = bytearray()
     for name in BODIES:
-        jds, xyz = load_vectors(data, name)
+        jds, xyz, vectors_sha256 = load_vectors(data, name)
         best = None
         for interval_days, degree, unit_km in CANDIDATES["Chiron" if name == "Chiron" else "main belt"]:
             result = fit_body(name, jds, xyz, interval_days, degree, unit_km)
@@ -164,6 +170,7 @@ def main() -> None:
             "k32": best["k32"],
             "k8Start": best["k8Start"],
             "maxFitResidualKm": round(best["maxErrKm"], 3),
+            "vectorsSha256": vectors_sha256,
         }
         combined.extend(best["raw"])
         print(

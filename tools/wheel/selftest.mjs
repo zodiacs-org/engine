@@ -218,6 +218,40 @@ test('crowded markers and labels stay apart, in order, with ticks at the exact l
   assertApart(out,{labels});assertOrder(out,crowd);assertWellFormed(out);
  }
 });
+// The longitude each marker shows, its neighbour's gap in the longitudes' order around the circle, and how far it moved.
+function layoutOf(lons,id){
+ const letters=i=>'ABC'[Math.floor(i/26)]+'abcdefghijklmnopqrstuvwxyz'[i%26];
+ const model={zodiac:'tropical',bodies:lons.map((lon,i)=>({body:letters(i),lon,retrograde:false}))};
+ const svg=renderWheelSvg(model,{idPrefix:id}),shown=markersOf(svg).map(m=>shownLon(m,0));
+ const order=lons.map((_,i)=>i).sort((a,b)=>lons[a]-lons[b]||a-b);
+ const gaps=order.map((i,k)=>((shown[order[(k+1)%order.length]]-shown[i])%360+360)%360);
+ const moved=shown.map((s,i)=>((s-lons[i]+540)%360)-180);
+ return {model,svg,shown,gaps,moved};
+}
+test('clusters that meet across the cut move only the markers that crowd, and a full circle is spaced evenly',()=>{
+ // 8 markers at 0 degrees, 8 at 320 and one every 32 degrees between: the widest empty arc, 320 to 360, is where
+ // the two clusters meet. Spacing all 25 evenly there, as the wheel did before this test, moved 32 to 130 degrees.
+ const lons=[...Array(8).fill(0),...Array(8).fill(320),32,64,96,128,160,192,224,256,288];
+ const {model,svg,shown,gaps}=layoutOf(lons,'meet');
+ assertApart(svg);assertOrder(svg,model);assertWellFormed(svg);
+ for(const gap of gaps)assert.ok(gap>=7.5-1e-4,'neighbours '+gap+' degrees apart');
+ // The 18 markers from 288 to 32 form one run 7.5 degrees apart whose displacements sum to zero, the least
+ // squares fit: 288 at 276.25, the eight at 320 from 283.75 and the eight at 0 from 343.75, 32 at 43.75.
+ // The seven from 64 to 256 have room and keep their longitudes, without leader lines.
+ const at=lon=>shown[lons.indexOf(lon)];
+ for(const lon of [64,96,128,160,192,224,256])assert.ok(apart(at(lon),lon)<1e-5,lon+' moved to '+at(lon));
+ assert.ok(apart(at(32),43.75)<1e-5&&apart(at(288),276.25)<1e-5);
+ for(let k=0;k<8;k++){assert.ok(apart(shown[8+k],283.75+7.5*k)<1e-5);assert.ok(apart(shown[k],343.75+7.5*k)<1e-5);}
+ assert.equal((svg.match(/stroke-opacity="\.6"/g)??[]).length,18);
+ // n markers that fill the circle (n * 7.5 >= 360) are 360 / n apart, spaced evenly about their mean.
+ const filled=[[...Array(24).fill(0),...Array(24).fill(320)],[...Array(20).fill(0),...Array(20).fill(320),32,64,96,128,160,192,224,256,288],[...Array(30).fill(10),...Array(20).fill(100),...Array(14).fill(250)]];
+ for(const full of filled){
+  const {model,svg,gaps,moved}=layoutOf(full,'full'+full.length);
+  assertApart(svg,{labels:full.length<=48});assertOrder(svg,model);
+  for(const gap of gaps)assert.ok(Math.abs(gap-360/full.length)<1e-4,full.length+' markers: a gap of '+gap);
+  assert.ok(Math.abs(moved.reduce((sum,d)=>sum+d,0))<1e-3,full.length+' markers: the mean moved');
+ }
+});
 test('SVG is well-formed XML with caller text escaped in every field',()=>{
  const chart=engineChart();chart.bodies[0].body='</desc><script>alert(1)</script>';chart.aspects=[];chart.houses.system='<svg onload="bad()">';
  chart.flags=['<flag>&amp;'];chart.engineVersion='<v&>';

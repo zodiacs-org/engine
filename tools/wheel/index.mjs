@@ -122,34 +122,44 @@ export function describeWheel(data) {
 }
 /**
  * Display angles for markers at `lons`: every two at least MARKER_GAP degrees apart (360 / n where n
- * markers cannot all keep it), each as near its longitude as that allows, in the longitudes' order.
+ * markers cannot all keep it), all as near their longitudes as that allows (least squares), in the
+ * longitudes' order around the circle.
  */
 function spread(lons) {
   const n = lons.length, gap = Math.min(MARKER_GAP, 360 / n);
   if (n < 2) return lons.slice();
   const order = lons.map((_, i) => i).sort((a, b) => lons[a] - lons[b] || a - b);
-  // Cut the circle at its widest empty arc and lay the longitudes out in order from there.
-  let start = 0, widest = -1;
-  for (let k = 0; k < n; k++) {
-    const empty = (k + 1 < n ? lons[order[k + 1]] : lons[order[0]] + 360) - lons[order[k]];
-    if (empty > widest) { widest = empty; start = (k + 1) % n; }
-  }
-  const x = Array.from({length: n}, (_, j) => lons[order[(start + j) % n]] + (start + j >= n ? 360 : 0));
-  // Least squares under the gap: pool adjacent violators of x[j] - j * gap, which must not decrease.
-  const pools = [];
-  for (let j = 0; j < n; j++) {
-    pools.push({sum: x[j] - j * gap, count: 1});
-    while (pools.length > 1 && pools.at(-2).sum * pools.at(-1).count > pools.at(-1).sum * pools.at(-2).count) {
-      const last = pools.pop();
-      pools.at(-1).sum += last.sum;
-      pools.at(-1).count += last.count;
-    }
-  }
-  let theta = pools.flatMap(p => Array(p.count).fill(p.sum / p.count)).map((v, j) => v + j * gap);
-  // Where the two ends then crowd each other across the cut, space them all evenly about their mean.
-  if (theta[0] + 360 - theta[n - 1] < gap - 1e-9) {
-    const mean = x.reduce((sum, v, j) => sum + v - j * gap, 0) / n;
+  // The empty arc after each marker in that order; the circle is cut at the end of one of them, widest first.
+  const empty = order.map((i, k) => (k + 1 < n ? lons[order[k + 1]] : lons[order[0]] + 360) - lons[i]);
+  const cuts = order.map((_, k) => k).sort((a, b) => empty[b] - empty[a] || a - b);
+  // Lay the longitudes out in order from a cut, as one line.
+  const unrolled = start => Array.from({length: n}, (_, j) => lons[order[(start + j) % n]] + (start + j >= n ? 360 : 0));
+  let start, theta;
+  if (n * MARKER_GAP >= 360) {
+    // n markers fill the circle: each is exactly the gap from the next, spaced evenly about their mean.
+    start = (cuts[0] + 1) % n;
+    const x = unrolled(start), mean = x.reduce((sum, v, j) => sum + v - j * gap, 0) / n;
     theta = x.map((_, j) => mean + j * gap);
+  } else {
+    // Otherwise some neighbours stay more than the gap apart in the circle's least-squares fit, and the
+    // line cut between them has the same fit: pool adjacent violators of x[j] - j * gap, which must not
+    // decrease. A cut between neighbours the fit presses together shows itself: the line's two ends then
+    // come within the gap of each other across it, and the next cut is tried. So only markers that crowd
+    // each other move, where clusters meet across the widest arc too.
+    for (const k of cuts) {
+      start = (k + 1) % n;
+      const x = unrolled(start), pools = [];
+      for (let j = 0; j < n; j++) {
+        pools.push({sum: x[j] - j * gap, count: 1});
+        while (pools.length > 1 && pools.at(-2).sum * pools.at(-1).count > pools.at(-1).sum * pools.at(-2).count) {
+          const last = pools.pop();
+          pools.at(-1).sum += last.sum;
+          pools.at(-1).count += last.count;
+        }
+      }
+      theta = pools.flatMap(p => Array(p.count).fill(p.sum / p.count)).map((v, j) => v + j * gap);
+      if (theta[0] + 360 - theta[n - 1] >= gap - 1e-9) break;
+    }
   }
   const shown = new Array(n);
   for (let j = 0; j < n; j++) shown[order[(start + j) % n]] = ((theta[j] % 360) + 360) % 360;

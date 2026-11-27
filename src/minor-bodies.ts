@@ -32,15 +32,20 @@ import { defaultEphemerisName, installedSource, registeredDe440Source } from "./
 import {
   CERES_LAYOUT,
   CERES_PACK,
+  CERES_SOLUTION,
   CHIRON_LAYOUT,
   CHIRON_PACK,
+  CHIRON_SOLUTION,
   JUNO_LAYOUT,
   JUNO_PACK,
+  JUNO_SOLUTION,
   PALLAS_LAYOUT,
   PALLAS_PACK,
+  PALLAS_SOLUTION,
   PROVENANCE,
   VESTA_LAYOUT,
-  VESTA_PACK
+  VESTA_PACK,
+  VESTA_SOLUTION
 } from "./minor-bodies/pack-data.js";
 import { apparentPlace } from "./minor-bodies/reduce.js";
 import type { EarthAndSun, MinorBodyPlace } from "./minor-bodies/reduce.js";
@@ -91,16 +96,18 @@ function spec(name: MinorBodyName, designation: string, solution: string, layout
   return made;
 }
 
+// Each solution is the one scripts/minor-bodies/build-pack-data.mjs wrote beside the table it fitted, from
+// provenance.json, which MINOR_BODIES_PROVENANCE gives too: the two cannot disagree after a regeneration.
 /** 2060 Chiron (1977 UB), from Horizons's solution JPL#171. */
-export const chiron: MinorBodySpec = /*#__PURE__*/ spec("Chiron", "2060 Chiron (1977 UB)", "JPL#171", CHIRON_LAYOUT, CHIRON_PACK);
+export const chiron: MinorBodySpec = /*#__PURE__*/ spec("Chiron", "2060 Chiron (1977 UB)", CHIRON_SOLUTION, CHIRON_LAYOUT, CHIRON_PACK);
 /** 1 Ceres (A801 AA), from Horizons's solution JPL#48. */
-export const ceres: MinorBodySpec = /*#__PURE__*/ spec("Ceres", "1 Ceres (A801 AA)", "JPL#48", CERES_LAYOUT, CERES_PACK);
+export const ceres: MinorBodySpec = /*#__PURE__*/ spec("Ceres", "1 Ceres (A801 AA)", CERES_SOLUTION, CERES_LAYOUT, CERES_PACK);
 /** 2 Pallas (A802 FA), from Horizons's solution JPL#74. */
-export const pallas: MinorBodySpec = /*#__PURE__*/ spec("Pallas", "2 Pallas (A802 FA)", "JPL#74", PALLAS_LAYOUT, PALLAS_PACK);
+export const pallas: MinorBodySpec = /*#__PURE__*/ spec("Pallas", "2 Pallas (A802 FA)", PALLAS_SOLUTION, PALLAS_LAYOUT, PALLAS_PACK);
 /** 3 Juno (A804 RA), from Horizons's solution JPL#144. */
-export const juno: MinorBodySpec = /*#__PURE__*/ spec("Juno", "3 Juno (A804 RA)", "JPL#144", JUNO_LAYOUT, JUNO_PACK);
+export const juno: MinorBodySpec = /*#__PURE__*/ spec("Juno", "3 Juno (A804 RA)", JUNO_SOLUTION, JUNO_LAYOUT, JUNO_PACK);
 /** 4 Vesta (A807 FA), from Horizons's solution JPL#36. */
-export const vesta: MinorBodySpec = /*#__PURE__*/ spec("Vesta", "4 Vesta (A807 FA)", "JPL#36", VESTA_LAYOUT, VESTA_PACK);
+export const vesta: MinorBodySpec = /*#__PURE__*/ spec("Vesta", "4 Vesta (A807 FA)", VESTA_SOLUTION, VESTA_LAYOUT, VESTA_PACK);
 
 /** The five specs, in the order of MINOR_BODY_NAMES; it holds every table. */
 export const MINOR_BODIES: readonly MinorBodySpec[] = /*#__PURE__*/ Object.freeze([chiron, ceres, pallas, juno, vesta]);
@@ -266,15 +273,16 @@ function named(name: string, label: string): MinorBodySpec {
 
 /** The reader of an engine spec, or a TypeError. */
 function readerOf(body: unknown, label: string): { spec: MinorBodySpec; reader: Table } {
-  const reader = typeof body === "object" && body !== null ? READERS.get(body as MinorBodySpec) : undefined;
+  // A WeakMap gives undefined for anything but its keys, objects or not, and never throws.
+  const reader = READERS.get(body as MinorBodySpec);
   if (!reader) throw new TypeError(`${label} must be one of this entry's specs: chiron, ceres, pallas, juno or vesta`);
   return { spec: body as MinorBodySpec, reader };
 }
 
 /** TT days from J2000.0 of `date` on `options`' scale, refused outside MINOR_BODIES_SPAN. */
 function instantOf(date: DateInput, options: MinorBodyOptions | undefined, label: string): number {
-  const read = readOptions(options, ["timeScale"], `${label} options`);
-  const scale = read.timeScale ?? "utc";
+  // The default stands in for an absent or undefined scale only: null is refused below, as natalChart refuses it.
+  const { timeScale: scale = "utc" } = readOptions(options, ["timeScale"], `${label} options`);
   if (!TIME_SCALE_NAMES.includes(scale as TimeScaleName)) throw new RangeError(`${label} options.timeScale must be "utc", "ut1" or "tt".`);
   const ms = dateFrom(date, `${label} date`).getTime();
   const ttDays = timeBasis(ms, scale as TimeScaleName).ttDays;

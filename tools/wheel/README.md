@@ -58,13 +58,16 @@ longitude and a marker with a short label (Su, Mo, Me, Ve, Ma, Ju, Sa, Ur,
 Ne, Pl, NN and SN; Ch, Ce, Pa, Jn and Vs; BL and TL for Black Moon Lilith and
 True Black Moon Lilith; other names their first two characters). Where
 markers would overlap, they are spread along the ring in the order of their
-longitudes, each joined to its tick by a leader line. The selftest holds the
-markers, and their labels taken as boxes 0.85 em wide a character, apart for
-22 and for 48 objects at a single longitude, and the markers apart for 64,
-the most a wheel takes. Each text
-description gives the label beside the name. Displayed degrees are truncated
-to six decimal places so that no point is rounded into the next sign; they
-are presentation values, not an error bound.
+longitudes, each joined to its tick by a leader line. Only the markers that
+crowd each other move, by least squares, wherever on the ring they meet;
+from 48 markers the ring is full and they are spaced evenly. The selftest
+holds the markers, and their labels taken as boxes 0.85 em wide a character,
+apart for 22 and for 48 objects at a single longitude, and the markers apart
+for 64, the most a wheel takes; for two clusters of 8 that meet across Aries
+zero, it holds the 7 markers with room between them at their longitudes.
+Each text description gives the label beside the name. Displayed degrees are
+truncated to six decimal places so that no point is rounded into the next
+sign; they are presentation values, not an error bound.
 
 ## Accessibility
 
