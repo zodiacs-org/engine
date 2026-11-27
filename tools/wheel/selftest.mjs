@@ -264,6 +264,15 @@ test('SVG is well-formed XML with caller text escaped in every field',()=>{
  assert.equal(labelsOf(svg)[0].text,'</');assert.equal(labelsOf(svg)[12].text,'<b');assert.equal(labelsOf(svg)[13].text,'"q');
  for(const data of [sample(),fullModel(),{...sample(),angles:null,houses:null,flags:['no-time']},{...sample(),zodiac:{sidereal:'Lahiri & <caller>'}}])assertWellFormed(renderWheelSvg(data,{idPrefix:'wellformed'}));
 });
+test('other names are marked with their first two characters, a space after the first dropped, numbered where that repeats a label',()=>{
+ const data={zodiac:'tropical',bodies:[['A',10],['A point',100],['Sun',190],['Su rise',280],['B c',320]].map(([body,lon])=>({body,lon,retrograde:null}))};
+ const d=describeWheel(data);
+ assert.deepEqual(d.bodies.map(b=>b.label),['A','A2','Su','S2','B']);
+ assert.ok(d.summary.includes('A point (A2): '));
+ // As SVG shows them, white space collapsed and trimmed: five different labels. "A point" was "A " before, shown as "A".
+ const shown=labelsOf(renderWheelSvg(data,{idPrefix:'labels'})).map(l=>l.text.replace(/\s+/g,' ').trim());
+ assert.deepEqual(shown,['A','A2','Su','S2','B']);
+});
 test('require() and import() load both entries through the package exports',async()=>{
  const require=createRequire(import.meta.url);
  const root=require('@zodiacs/wheel'),dom=require('@zodiacs/wheel/dom');

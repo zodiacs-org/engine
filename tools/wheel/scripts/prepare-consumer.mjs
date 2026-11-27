@@ -31,7 +31,7 @@ try{
  const selftestLog=node(['--test','--test-reporter=tap',resolve(root,'selftest.mjs')],repo,true);
  process.stdout.write(selftestLog);
  const testCount=Number(selftestLog.match(/^# tests (\d+)$/m)?.[1]);
- assert.equal(testCount,14,'Source selftest count changed');
+ assert.equal(testCount,15,'Source selftest count changed');
  assert.equal(Number(selftestLog.match(/^# pass (\d+)$/m)?.[1]),testCount,'Source selftests did not all pass');
  const info=JSON.parse(node([npmCli,'pack','--ignore-scripts','--json','--pack-destination',packed],root,true));
  assert.equal(info.length,1);

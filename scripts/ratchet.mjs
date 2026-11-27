@@ -30,24 +30,31 @@
 // It fails, before measuring anything, where REPORT is of a run that failed:
 // its success is not true, it counts a failed test or a failed suite, or a
 // file or a test in it has the status "failed" (a run can fail tests and
-// still pass more than the floor); --tighten refuses such a report too. It
-// fails where a measurement is over its ceiling or under its floor, where
-// it is not a finite number (a NaN compares as neither over nor under, so it
-// is refused before any comparison), or where it could not be made; and
-// where REPORT holds a skipped test (vitest's "skipped", "pending" or "todo")
-// that SKIPPED_BY_DESIGN does not let through in this environment: the
-// tier-B kernel tests without PRECISION_KERNEL, the tzdata 2025c test on a
-// host without that release, and the tests that need dist/ when the run came
-// before the build. Then it compares with the base branch's
-// merge base: where budgets.json there exists, a ceiling this branch raises,
-// a floor it lowers or a limit it removes needs a commit in the range whose
-// message holds the tag [budget-increase-approved] and a trailer
-// `Approved-by: <name>, <YYYY-MM-DD>: "<the approval's words>"` (a person's,
-// never an agent's); and a change to a guardrail file (GUARDED_FILES) or a
-// test under src/ deleted or renamed needs the tag
-// [guardrails-change-approved] and such a trailer. Where budgets.json does
-// not exist there, the range introduces it, and there is no earlier policy
-// to compare with: the measurements above are still made and checked.
+// still pass more than the floor); and where REPORT holds no result for a
+// test file git tracks (TEST_FILE): vitest leaves a file it did not collect,
+// through an exclude in vitest.config.mjs or a filter on the command line,
+// out of its report altogether, not even as skipped. No trailer lets such a
+// file through, since an approval in the range would not hold on main after
+// the merge, where the range is empty: a test file leaves the run by being
+// deleted, which needs the approval below once. --tighten refuses both kinds
+// of report too. It fails where a measurement is over its ceiling or under
+// its floor, where it is not a finite number (a NaN compares as neither over
+// nor under, so it is refused before any comparison), or where it could not
+// be made; and where REPORT holds a skipped test (vitest's "skipped",
+// "pending" or "todo") that SKIPPED_BY_DESIGN does not let through in this
+// environment: the tier-B kernel tests without PRECISION_KERNEL, the tzdata
+// 2025c test on a host without that release, and the tests that need dist/
+// when the run came before the build. Then it compares with the base
+// branch's merge base: where budgets.json there exists, a ceiling this
+// branch raises, a floor it lowers or a limit it removes needs a commit in
+// the range whose message holds the tag [budget-increase-approved] and a
+// trailer `Approved-by: <name>, <YYYY-MM-DD>: "<the approval's words>"` (a
+// person's, never an agent's); and a change to a guardrail file
+// (GUARDED_FILES, vitest.config.mjs among them) or a test file deleted or
+// renamed needs the tag [guardrails-change-approved] and such a trailer.
+// Where budgets.json does not exist there, the range introduces it, and
+// there is no earlier policy to compare with: the measurements above are
+// still made and checked.
 //
 // --tighten lowers each ceiling to the measurement and its headroom, and
 // raises each floor to the measurement, where that is tighter, and writes
@@ -59,14 +66,21 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
-/** The files whose change weakens or moves a guardrail; budgets.json is compared value by value instead. */
+/**
+ * The files whose change weakens or moves a guardrail (vitest.config.mjs
+ * decides which test files the run collects, and what runs before each);
+ * budgets.json is compared value by value instead.
+ */
 export const GUARDED_FILES = Object.freeze([
   "scripts/ratchet.mjs",
   "scripts/verify-package-contents.mjs",
   "scripts/verify-dist-purity.mjs",
   "scripts/verify-archive-binding.mjs",
-  ".github/workflows/ci.yml"
+  ".github/workflows/ci.yml",
+  "vitest.config.mjs"
 ]);
+/** A test file, by vitest's default include, which vitest.config.mjs keeps: .test. or .spec. before a js or ts extension. */
+export const TEST_FILE = /\.(?:test|spec)\.[cm]?[jt]sx?$/u;
 export const BUDGET_TAG = "[budget-increase-approved]";
 export const GUARDRAILS_TAG = "[guardrails-change-approved]";
 /** A person's approval: `Approved-by: Name, 2026-11-27: "the words of the approval"`, on a line of its own. */
@@ -177,6 +191,17 @@ export function failuresOf(report, root = ROOT) {
 }
 
 /**
+ * The files of `tracked`, test files by their paths from the repository's
+ * root, that a vitest JSON report holds no result for. A file vitest did not
+ * collect is in no list of its report, not even as skipped, so a suite an
+ * exclude or a filter takes out of the run is found only here.
+ */
+export function missingTestFiles(report, tracked, root = ROOT) {
+  const ran = new Set((report?.testResults ?? []).map((file) => fileOf(file, root)));
+  return tracked.filter((file) => !ran.has(file));
+}
+
+/**
  * The problems with a vitest JSON report: its passing count missing; what it
  * says failed (`failuresOf`); each skipped test that SKIPPED_BY_DESIGN does
  * not let through in `environment` ({ precisionKernel, tz, builtAfterRun });
@@ -236,7 +261,7 @@ export function approved(messages, tag) {
 /**
  * The guard's verdict on a range: `previous` the base's budgets (null where
  * the base has none), `current` this commit's, `guarded` the guardrail files
- * the range changes, `tests` the tests under src/ it deletes or renames, and
+ * the range changes, `tests` the test files it deletes or renames, and
  * `messages` its commit messages. Returns the problems, empty when it passes,
  * and what it found.
  */
@@ -395,22 +420,32 @@ export async function measure({ report }) {
 
 // ---------------------------------------------------------------- comparing with the base branch
 
-const git = (...args) => execFileSync("git", args, { cwd: ROOT, encoding: "utf8", maxBuffer: 64 * 1024 * 1024, stdio: ["ignore", "pipe", "pipe"] });
+const git = (root, ...args) => execFileSync("git", args, { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024, stdio: ["ignore", "pipe", "pipe"] });
 
-/** The range from the merge base of `base` and HEAD: the base's budgets.json, the guardrail files and src/ tests it changes, and its messages. */
-export function rangeFrom(base) {
-  const fork = git("merge-base", base, "HEAD").trim();
+/** The test files (TEST_FILE) git tracks in the repository at `root`, by their paths from it. */
+export function trackedTestFiles(root = ROOT) {
+  return git(root, "ls-files", "-z").split("\0").filter((file) => TEST_FILE.test(file));
+}
+
+/**
+ * The range from the merge base of `base` and HEAD, in the repository at
+ * `root`: the base's budgets.json, the guardrail files it changes, the test
+ * files (TEST_FILE) it deletes or renames, and its messages.
+ */
+export function rangeFrom(base, root = ROOT) {
+  const fork = git(root, "merge-base", base, "HEAD").trim();
   let previous = null;
   try {
-    previous = JSON.parse(git("show", `${fork}:budgets.json`));
+    previous = JSON.parse(git(root, "show", `${fork}:budgets.json`));
   } catch (error) {
     if (!/does not exist|exists on disk, but not in/u.test(String(error?.stderr ?? error))) throw error;
   }
-  const guarded = git("diff", "--name-only", fork, "HEAD", "--", ...GUARDED_FILES).split("\n").filter(Boolean);
-  const tests = git("diff", "--name-only", "--diff-filter=DR", "-M", fork, "HEAD", "--", "src/*.test.ts", "src/**/*.test.ts")
-    .split("\n")
-    .filter(Boolean);
-  const messages = git("log", "--format=%B%x00", `${fork}..HEAD`).split("\0").map((message) => message.trim()).filter(Boolean);
+  const guarded = git(root, "diff", "--name-only", fork, "HEAD", "--", ...GUARDED_FILES).split("\n").filter(Boolean);
+  // -z: git quotes a name with unusual characters otherwise, and the quoted name would not match TEST_FILE.
+  const tests = git(root, "diff", "--name-only", "-z", "--diff-filter=DR", "-M", fork, "HEAD", "--", "*.test.*", "*.spec.*")
+    .split("\0")
+    .filter((file) => TEST_FILE.test(file));
+  const messages = git(root, "log", "--format=%B%x00", `${fork}..HEAD`).split("\0").map((message) => message.trim()).filter(Boolean);
   return { fork, previous, guarded, tests, messages };
 }
 
@@ -443,6 +478,14 @@ async function main(args) {
   const failed = report === undefined ? [] : failuresOf(report);
   if (failed.length > 0) {
     console.error(`ratchet failed: ${tests} is the report of a run that failed, and --${mode} needs one that passed:\n- ${failed.join("\n- ")}`);
+    process.exit(1);
+  }
+  // So is the report of a run that left a test file out: none of its tests is in any count.
+  const missing = report === undefined ? [] : missingTestFiles(report, trackedTestFiles());
+  if (missing.length > 0) {
+    console.error(
+      `ratchet failed: ${tests} holds no result for ${missing.length} of the test files git tracks, and --${mode} needs a run of them all:\n- ${missing.join("\n- ")}`
+    );
     process.exit(1);
   }
   const measured = await measure({ report });

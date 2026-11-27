@@ -1,15 +1,17 @@
 // scripts/ratchet.mjs's rules, on budgets, commit messages and test reports
 // made up here: what weakens a budget, what counts as a person's approval,
 // what --tighten may do, the verdict on a range, which skipped tests --check
-// lets through, that the report of a failed run fails it, and that a
-// measurement which is not a finite number fails it. The measurements
+// lets through, that the report of a failed run fails it, that a report
+// which leaves a tracked test file out fails it, and that a measurement
+// which is not a finite number fails it; and, on a git repository made up
+// here, which changes in a range need an approval. The measurements
 // themselves need dist/ and are made by `node scripts/ratchet.mjs --check`
-// after the build; the command is run here only on a failed run's report,
-// which it refuses before measuring.
-import { spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
+// after the build; the command is run here only on reports it refuses
+// before measuring: a failed run's, and one that leaves a test file out.
+import { execFileSync, spawnSync } from "node:child_process";
+import { mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { devNull, tmpdir } from "node:os";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
@@ -19,6 +21,7 @@ import {
   GUARDED_FILES,
   GUARDRAILS_TAG,
   SKIPPED_BY_DESIGN,
+  TEST_FILE,
   approved,
   checkProblems,
   failuresOf,
@@ -26,10 +29,13 @@ import {
   guardVerdict,
   largestMagnitude,
   limitsOf,
+  missingTestFiles,
   overLimits,
+  rangeFrom,
   reportProblems,
   skippedTests,
   tightened,
+  trackedTestFiles,
   weakenings
 } from "./ratchet.mjs";
 
@@ -37,8 +43,9 @@ const budgets = JSON.parse(readFileSync(new URL("../budgets.json", import.meta.u
 const approval = 'Approved-by: A Person, 2026-01-02: "Raise the root budget for the new point."';
 
 describe("budgets.json", () => {
-  it("bounds every measurement the ratchet makes, and the root's natalChart under 40,000 bytes gzipped", () => {
-    expect(Object.keys(limitsOf(budgets)).sort()).toEqual(
+  /** The bounds budgets.json keeps, as bounds and not values: --tighten lowers its ceilings and raises its floors. */
+  const keepsBounds = (limits) => {
+    expect(Object.keys(limitsOf(limits)).sort()).toEqual(
       [
         "accuracy.conformanceMinPass",
         "accuracy.de440L1MaxArcsec",
@@ -52,13 +59,41 @@ describe("budgets.json", () => {
         "minPassingTests"
       ].sort()
     );
-    expect(budgets.gzip["."]).toBeLessThanOrEqual(40_000);
-    expect(budgets.gzip["./core"]).toBeLessThanOrEqual(40_000);
-    expect(budgets.gzip["./minor-bodies"]).toBeLessThanOrEqual(140_000);
-    expect(budgets.gzip["./minor-bodies:chiron"]).toBeLessThanOrEqual(15_000);
-    expect(budgets.bareChunkImports).toBe(0);
-    expect(budgets.accuracy).toEqual({ de440L1MaxArcsec: 0.02, minorBodiesOosMaxArcsec: 1, conformanceMinPass: 639 });
-    expect(budgets.minPassingTests % 100).toBe(0);
+    expect(limits.gzip["."]).toBeLessThanOrEqual(40_000);
+    expect(limits.gzip["./core"]).toBeLessThanOrEqual(40_000);
+    expect(limits.gzip["./minor-bodies"]).toBeLessThanOrEqual(140_000);
+    expect(limits.gzip["./minor-bodies:chiron"]).toBeLessThanOrEqual(15_000);
+    expect(limits.bareChunkImports).toBe(0);
+    expect(limits.accuracy.de440L1MaxArcsec).toBeLessThanOrEqual(0.02);
+    expect(limits.accuracy.minorBodiesOosMaxArcsec).toBeLessThanOrEqual(1);
+    expect(limits.accuracy.conformanceMinPass).toBeGreaterThanOrEqual(639);
+    expect(limits.minPassingTests).toBeGreaterThanOrEqual(5_700);
+    expect(limits.minPassingTests % 100).toBe(0);
+  };
+
+  it("bounds every measurement the ratchet makes, and the root's natalChart under 40,000 bytes gzipped", () => {
+    keepsBounds(budgets);
+  });
+
+  it("keeps those bounds once --tighten has lowered the accuracy ceilings to the measurements of its notes", () => {
+    // What budgets.json's notes give: the sizes on Node 22.22.2 after the third review's fixes, the accuracy, and the
+    // passing tests on the commit that set the floor.
+    const measured = {
+      "gzip..": 36_624,
+      "gzip../core": 36_624,
+      "gzip../minor-bodies": 115_981,
+      "gzip../minor-bodies:chiron": 14_125,
+      "gzip../de440/pack": 2_367_563,
+      bareChunkImports: 0,
+      "accuracy.de440L1MaxArcsec": 0.0126,
+      "accuracy.minorBodiesOosMaxArcsec": 0.53211,
+      "accuracy.conformanceMinPass": 639,
+      minPassingTests: 5_729
+    };
+    const next = tightened(budgets, measured);
+    expect(next.accuracy.de440L1MaxArcsec).toBeLessThanOrEqual(0.014);
+    expect(next.accuracy.minorBodiesOosMaxArcsec).toBeLessThanOrEqual(0.59);
+    keepsBounds(next);
   });
 });
 
@@ -129,6 +164,67 @@ describe("the verdict on a range", () => {
     expect(passes.problems).toEqual([]);
     expect(passes.notes).toHaveLength(2);
     expect(guardVerdict({ previous, current: { gzip: { ".": 39_000 }, minPassingTests: 5_800 }, guarded: [], tests: [], messages: [] })).toEqual({ problems: [], notes: [] });
+  });
+
+  it("counts vitest.config.mjs a guardrail: a change to it fails without approval and passes with it", () => {
+    expect(GUARDED_FILES).toContain("vitest.config.mjs");
+    const change = { previous, current: previous, guarded: ["vitest.config.mjs"], tests: [] };
+    expect(guardVerdict({ ...change, messages: ["Run fewer files"] }).problems).toEqual([
+      `vitest.config.mjs changed, and no commit in the range holds ${GUARDRAILS_TAG} with an Approved-by trailer`
+    ]);
+    expect(guardVerdict({ ...change, messages: [`Run fewer files ${GUARDRAILS_TAG}\n\n${approval}`] }).problems).toEqual([]);
+  });
+});
+
+describe("a range in a git repository", () => {
+  it("finds vitest.config.mjs changed and each test file deleted or renamed, wherever it is, and then their approval", () => {
+    const folder = mkdtempSync(join(tmpdir(), "zodiacs-ratchet-git-"));
+    // git without the host's configuration (no hooks, no signing), committing as an identity of its own.
+    const identity = { GIT_AUTHOR_NAME: "Ratchet Test", GIT_AUTHOR_EMAIL: "ratchet@example.invalid", GIT_COMMITTER_NAME: "Ratchet Test", GIT_COMMITTER_EMAIL: "ratchet@example.invalid" };
+    const env = { ...process.env, ...identity, GIT_CONFIG_GLOBAL: devNull, GIT_CONFIG_NOSYSTEM: "1" };
+    const git = (...args) => execFileSync("git", args, { cwd: folder, env, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+    const write = (file, text) => {
+      mkdirSync(dirname(join(folder, file)), { recursive: true });
+      writeFileSync(join(folder, file), text);
+    };
+    try {
+      git("init", "-q", "-b", "main");
+      write("budgets.json", `${JSON.stringify({ minPassingTests: 5_700 })}\n`);
+      write("vitest.config.mjs", 'export default { test: { setupFiles: ["./src/test-setup.ts"] } };\n');
+      for (const file of ["src/geo/points.test.ts", "scripts/build.test.mjs", "tests/sky.spec.ts", "bots/facts/reading.test.ts", "src/fixtures/points.test.json"]) {
+        write(file, `export const file = ${JSON.stringify(file)};\n`);
+      }
+      git("add", "-A");
+      git("commit", "-q", "-m", "Base");
+      expect(trackedTestFiles(folder)).toEqual(["bots/facts/reading.test.ts", "scripts/build.test.mjs", "src/geo/points.test.ts", "tests/sky.spec.ts"]);
+
+      git("checkout", "-q", "-b", "change");
+      write("vitest.config.mjs", 'export default { test: { setupFiles: ["./src/test-setup.ts"], exclude: ["tests/**"] } };\n');
+      rmSync(join(folder, "scripts/build.test.mjs"));
+      // Renamed out of the pattern, which git reports as the test file deleted, and within it, by its new name.
+      renameSync(join(folder, "bots/facts/reading.test.ts"), join(folder, "bots/facts/reading.ts"));
+      renameSync(join(folder, "tests/sky.spec.ts"), join(folder, "tests/zodiac.spec.ts"));
+      // Not a test file: a fixture's deletion needs no approval.
+      rmSync(join(folder, "src/fixtures/points.test.json"));
+      git("add", "-A");
+      git("commit", "-q", "-m", "Run fewer files");
+      const range = rangeFrom("main", folder);
+      expect(range.previous).toEqual({ minPassingTests: 5_700 });
+      expect(range.guarded).toEqual(["vitest.config.mjs"]);
+      expect(range.tests).toEqual(["bots/facts/reading.test.ts", "scripts/build.test.mjs", "tests/zodiac.spec.ts"]);
+      expect(range.messages).toEqual(["Run fewer files"]);
+      expect(guardVerdict({ ...range, current: range.previous }).problems).toEqual([
+        "vitest.config.mjs changed; bots/facts/reading.test.ts deleted or renamed; scripts/build.test.mjs deleted or renamed; tests/zodiac.spec.ts deleted or renamed, " +
+          `and no commit in the range holds ${GUARDRAILS_TAG} with an Approved-by trailer`
+      ]);
+
+      git("commit", "-q", "--allow-empty", "-m", `Approve the smaller run ${GUARDRAILS_TAG}\n\n${approval}`);
+      const approvedRange = rangeFrom("main", folder);
+      expect(approvedRange.messages).toHaveLength(2);
+      expect(guardVerdict({ ...approvedRange, current: range.previous }).problems).toEqual([]);
+    } finally {
+      rmSync(folder, { recursive: true, force: true });
+    }
   });
 });
 
@@ -283,6 +379,72 @@ describe("skipped tests in the run's report", () => {
     expect(checkProblems({ budgets: limits, measured: { minPassingTests: 5_800 }, report: undefined, environment: ci, root })).toEqual([
       "minPassingTests needs the test run's report: pass --tests REPORT"
     ]);
+  });
+});
+
+describe("a report that leaves a test file out", () => {
+  const root = "/repo/";
+  const tracked = ["scripts/ratchet.test.mjs", "src/geo/points.test.ts", "tests/sky.spec.ts"];
+  /** A vitest JSON report of a run that passed, with a result for each of `files` under `at`. */
+  const reportOf = (files, at = root) => ({
+    success: true,
+    numPassedTests: 5_800,
+    numFailedTests: 0,
+    numFailedTestSuites: 0,
+    numPendingTests: 0,
+    numTodoTests: 0,
+    startTime: 1_000,
+    testResults: files.map((file) => ({ name: `${at}${file}`, status: "passed", assertionResults: [{ ancestorTitles: [], title: "passes", status: "passed" }] }))
+  });
+
+  it("names each tracked test file the report holds no result for, and none for a run of them all", () => {
+    expect(missingTestFiles(reportOf(tracked), tracked, root)).toEqual([]);
+    // As where vitest.config.mjs excludes tests/** or the command line names other files.
+    expect(missingTestFiles(reportOf(["scripts/ratchet.test.mjs", "src/geo/points.test.ts"]), tracked, root)).toEqual(["tests/sky.spec.ts"]);
+    expect(missingTestFiles(reportOf(["tests/sky.spec.ts"]), tracked, root)).toEqual(["scripts/ratchet.test.mjs", "src/geo/points.test.ts"]);
+    expect(missingTestFiles({ testResults: [] }, tracked, root)).toEqual(tracked);
+    expect(missingTestFiles({}, tracked, root)).toEqual(tracked);
+    // A file vitest collected and skipped is in the report, for the skip rules to judge; one git does not track
+    // (a new file, or an AppleDouble ._ file of macOS) is not asked for.
+    const skipped = reportOf([...tracked, "src/geo/._points.test.ts"]);
+    skipped.testResults[1].assertionResults[0].status = "skipped";
+    expect(missingTestFiles(skipped, tracked, root)).toEqual([]);
+  });
+
+  it("knows a test file as vitest's default include does, and git tracks this one", () => {
+    for (const file of ["src/a.test.ts", "scripts/a.test.mjs", "tests/a.spec.ts", "a.test.cjs", "a.test.js", "a.test.mts", "a.spec.tsx"]) {
+      expect(TEST_FILE.test(file), file).toBe(true);
+    }
+    for (const file of ["src/a.ts", "src/test-setup.ts", "src/fixtures/a.test.json", "tools/wheel/selftest.mjs", "a.test.d.ts", "a.test.ts.orig"]) {
+      expect(TEST_FILE.test(file), file).toBe(false);
+    }
+    const files = trackedTestFiles();
+    expect(files).toContain("scripts/ratchet.test.mjs");
+    expect(files.every((file) => TEST_FILE.test(file))).toBe(true);
+  });
+
+  it("makes the command exit non-zero before it measures anything, with --check and with --tighten", () => {
+    const folder = mkdtempSync(join(tmpdir(), "zodiacs-ratchet-"));
+    const budgetsBefore = readFileSync(new URL("../budgets.json", import.meta.url), "utf8");
+    try {
+      // A run of every test file git tracks but this one, which passed, over the floor: the command reads names from the repository's root.
+      const repository = fileURLToPath(new URL("..", import.meta.url));
+      const all = trackedTestFiles();
+      expect(missingTestFiles(reportOf(all, repository), all, repository)).toEqual([]);
+      const path = join(folder, "vitest-report.json");
+      const report = reportOf(all.filter((file) => file !== "scripts/ratchet.test.mjs"), repository);
+      writeFileSync(path, JSON.stringify({ ...report, numPassedTests: budgets.minPassingTests + 100 }));
+      for (const mode of ["--check", "--tighten"]) {
+        const run = spawnSync(process.execPath, [fileURLToPath(new URL("./ratchet.mjs", import.meta.url)), mode, "--tests", path], { encoding: "utf8", timeout: 60_000 });
+        expect(run.error).toBeUndefined();
+        expect(run.status, run.stderr).toBe(1);
+        expect(run.stderr).toContain(`ratchet failed: ${path} holds no result for 1 of the test files git tracks, and ${mode} needs a run of them all:\n- scripts/ratchet.test.mjs\n`);
+        expect(run.stdout).not.toContain("ratchet passed");
+      }
+      expect(readFileSync(new URL("../budgets.json", import.meta.url), "utf8")).toBe(budgetsBefore);
+    } finally {
+      rmSync(folder, { recursive: true, force: true });
+    }
   });
 });
 

@@ -56,7 +56,8 @@ The ascendant is at the left; without angles, Aries zero is. Longitudes
 increase counterclockwise. Every body or point has a tick at its exact
 longitude and a marker with a short label (Su, Mo, Me, Ve, Ma, Ju, Sa, Ur,
 Ne, Pl, NN and SN; Ch, Ce, Pa, Jn and Vs; BL and TL for Black Moon Lilith and
-True Black Moon Lilith; other names their first two characters). Where
+True Black Moon Lilith; other names their first two characters, or the first
+alone where a space follows it, numbered where that repeats a label). Where
 markers would overlap, they are spread along the ring in the order of their
 longitudes, each joined to its tick by a leader line. Only the markers that
 crowd each other move, by least squares, wherever on the ring they meet;

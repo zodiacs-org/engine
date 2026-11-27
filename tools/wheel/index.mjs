@@ -2,7 +2,8 @@ const SIGNS = Object.freeze(['Aries','Taurus','Gemini','Cancer','Leo','Virgo','L
 const ASPECTS = new Set(['conjunction','sextile','square','trine','opposition']);
 const NS = 'http://www.w3.org/2000/svg';
 // Marker labels for the names @zodiacs/engine 3.0.0 gives (natalChart, minorBodyPositions, chartPoints).
-// Any other name is marked with its first two characters, numbered where that repeats a label.
+// Any other name is marked with its first two characters (the first alone where a space follows it),
+// numbered where that repeats a label.
 const LABELS = new Map(Object.entries({
   Sun:'Su',Moon:'Mo',Mercury:'Me',Venus:'Ve',Mars:'Ma',Jupiter:'Ju',Saturn:'Sa',Uranus:'Ur',Neptune:'Ne',Pluto:'Pl',
   'North Node':'NN','South Node':'SN',Chiron:'Ch',Ceres:'Ce',Pallas:'Pa',Juno:'Jn',Vesta:'Vs',
@@ -102,7 +103,8 @@ function markerLabels(names) {
   const labels = names.map(name => LABELS.get(name) ?? null), used = new Set(labels.filter(Boolean));
   return labels.map((label, i) => {
     if (label) return label;
-    const base = Array.from(names[i].trim()).slice(0, 2).join('');
+    // Trimmed before it is compared: SVG collapses a trailing space, so "A " would show as the "A" of another name.
+    const base = Array.from(names[i].trim()).slice(0, 2).join('').trimEnd();
     let candidate = base;
     for (let n = 2; used.has(candidate); n++) candidate = Array.from(base)[0] + n;
     used.add(candidate);
