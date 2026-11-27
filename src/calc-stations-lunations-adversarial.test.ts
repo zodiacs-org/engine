@@ -1,7 +1,8 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { random } from "../scripts/continuous-utc-instants.mjs";
 import { CALC_SPAN, calc, searchLunations, searchStations } from "./calc.js";
 import type { CalcRefusal, CalcTime, LunationAngle, StationBody } from "./calc.js";
+import { useDe440 } from "./de440-pack.js";
 import { setDefaultEphemeris } from "./ephemeris.js";
 
 const DAY = 86_400_000;
@@ -26,6 +27,12 @@ const searches = [
 ];
 const longitude = (body: StationBody | "Moon" | "Sun", jd: number) => ok(calc({ body, time: tt(jd) })).lon;
 
+// The shipped pack is loaded once (useDe440(), which makes it the default) and the default set back to
+// astronomy-engine, so that each test chooses its source with setDefaultEphemeris.
+beforeAll(() => {
+  useDe440();
+  setDefaultEphemeris("astronomy-engine");
+});
 afterEach(() => setDefaultEphemeris("astronomy-engine"));
 
 it("keeps the same TT millisecond across cuts through the August 1813 Mars station", () => {
@@ -175,19 +182,18 @@ it("selects one labelled source for the full TT window and its probes at either 
   const high = Date.UTC(2024, 4, 1);
   const j2000 = Date.UTC(2000, 0, 1, 12);
   vi.resetModules();
-  vi.doMock("./ephemeris-shipped.js", async (load) => {
-    const real = await load<typeof import("./ephemeris-shipped.js")>();
-    const source = real.shippedDe440Source();
-    return { ...real, shippedDe440Source: () => ({
+  try {
+    const api = await import("./calc.js");
+    const { setDefaultEphemeris: select } = await import("./ephemeris.js");
+    // The shipped pack's source, registered as the default's opener as useDe440() registers it, with its coverage narrowed.
+    const { registerDe440Source } = await import("./ephemeris-default.js");
+    const source = (await import("./de440-pack.js")).shippedDe440Source();
+    registerDe440Source(() => ({
       ...source, pack: { ...source.pack,
         // The default ephemeris keeps one day inside each raw edge.
         startEtSecTdb: (low - DAY - j2000) / 1000, stopEtSecTdb: (high + DAY - j2000) / 1000
       }
-    }) };
-  });
-  try {
-    const api = await import("./calc.js");
-    const { setDefaultEphemeris: select } = await import("./ephemeris.js");
+    }));
     for (const { find, pad } of [
       { find: (w: Window) => api.searchStations({ ...w, body: "Mercury" }), pad: 2 * HOUR },
       { find: (w: Window) => api.searchLunations({ ...w, phaseDegrees: 90 }), pad: HOUR }
@@ -234,7 +240,6 @@ it("selects one labelled source for the full TT window and its probes at either 
     expect(left.events[0]!.jdTt).toBeLessThan(whole.events[0]!.jdTt);
     expect(right.events).toEqual(whole.events);
   } finally {
-    vi.doUnmock("./ephemeris-shipped.js");
     vi.resetModules();
   }
 });

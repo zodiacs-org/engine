@@ -1,0 +1,65 @@
+{
+  "run": "zodiacs-engine-astronomy-engine.json",
+  "committed": "conformance/results/zodiacs-engine-astronomy-engine.json",
+  "adapterEngineVersion": "2.1.0",
+  "committedEngineVersion": "2.1.0",
+  "total": {
+    "count": 640,
+    "pass": 392,
+    "fail": 247,
+    "unsupported": 1,
+    "error": 0
+  },
+  "vectors": 640,
+  "committedVectors": 640,
+  "sameVerdict": 640,
+  "sameResidual": 639,
+  "residualValues": 859,
+  "largestResidualDifference": 1.0000000272292198e-9,
+  "residualDiffers": [
+    {
+      "id": "L1-POS-0110",
+      "value": "lat",
+      "run": 0.257339116,
+      "committed": 0.257339117,
+      "firstDifferingSignificantDigit": 9
+    }
+  ],
+  "otherDiffers": [
+    {
+      "id": "L4-STA-0013",
+      "field": "meta",
+      "numbers": [
+        {
+          "value": "timingSeconds",
+          "run": 82685.9126043901,
+          "committed": 82685.9125561306,
+          "firstDifferingSignificantDigit": 9
+        }
+      ],
+      "otherThanNumbers": false
+    }
+  ],
+  "summaryFiguresEqualToThreeDecimals": true,
+  "summaryFiguresEqualToTheBit": true,
+  "configurationDiffers": [],
+  "l1": {
+    "pass": 48,
+    "fail": 192,
+    "unsupported": 0,
+    "lon": {
+      "unit": "arcsec",
+      "n": 240,
+      "median": 2.0834337,
+      "p95": 12.0434774,
+      "max": 18.7744819
+    },
+    "lat": {
+      "unit": "arcsec",
+      "n": 240,
+      "median": 1.1869337,
+      "p95": 10.6010939,
+      "max": 19.0281186
+    }
+  }
+}

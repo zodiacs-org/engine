@@ -8,7 +8,10 @@ NAIF's rules permit redistributing its kernels unmodified but do not speak of
 data refitted from one, so shipping the pack rests on the owner's reading and
 not on a statement of JPL's or NAIF's. On 2026-11-16 the owner answered, in
 writing, the question "Do you accept shipping the NASA DE440 data in 1.1.0?"
-with "Yes. I delegate these decisions to you." (*DE440 pack*). Four
+with "Yes. I delegate these decisions to you." (*DE440 pack*). From 3.0.0
+it also ships tables fitted to vectors from NASA JPL's Horizons system for
+five minor bodies, whose terms are a further question for the owner
+(*Minor-body tables*). Four
 questions are left open for the owner. As they were at 1.1.0, the terms for
 IERS EOP 20 C04 redistribution remain unconfirmed for both the 367 rows the
 repository carries and the values the package derives from them (*IERS
@@ -28,8 +31,7 @@ package's ΔT module, exported as `@zodiacs/engine/deltat`, carries 32 values
 of Table S15 of Stephenson, Morrison & Hohenkerk 2016, which are CC BY 4.0
 (see *ΔT data* below), with their attribution in `NOTICE`. The build places
 that module in a shared chunk under `dist/`, which `dist/deltat.js`
-re-exports, and a copy of it in `dist/core.js`, the file of
-`@zodiacs/engine/core`. Both licences apply to the package as distributed. From
+re-exports. Both licences apply to the package as distributed. From
 0.1.1-rc.8, which added those values, to 0.1.1-rc.13, `package.json` declared
 `MIT` alone; 0.1.1-rc.14 corrected it.
 
@@ -38,16 +40,16 @@ re-exports, and a copy of it in `dist/core.js`, the file of
 The package implementation was adapted from these Zodiacs.org TypeScript
 modules:
 
-- `src/lib/engine/full.ts` — planetary positions and chart assembly
-- `src/lib/engine/houses.ts` — independently implemented spherical
+- `src/lib/engine/full.ts`: planetary positions and chart assembly
+- `src/lib/engine/houses.ts`: independently implemented spherical
   trigonometry for angles, whole-sign houses, and Placidus houses
-- `src/lib/engine/aspects.ts` — aspect matching
-- `src/lib/engine/synastry.ts` — inter-chart aspect and balance summaries
-- `src/lib/engine/returns.ts` — longitude crossing and Saturn-return scans
-- `src/lib/engine/progressions.ts` — elapsed-time secondary-progression mapping
-- `src/lib/time/localToUtc.ts` — timezone conversion, with its birthplace
+- `src/lib/engine/aspects.ts`: aspect matching
+- `src/lib/engine/synastry.ts`: inter-chart aspect and balance summaries
+- `src/lib/engine/returns.ts`: longitude crossing and Saturn-return scans
+- `src/lib/engine/progressions.ts`: elapsed-time secondary-progression mapping
+- `src/lib/time/localToUtc.ts`: timezone conversion, with its birthplace
   local mean time, pinned tzdb history and Julian-calendar handling
-- `src/lib/geo/search.ts` — client for the separately hosted GeoNames index
+- `src/lib/geo/search.ts`: client for the separately hosted GeoNames index
 
 The techniques entry, added in 0.1.1-rc.16 (`src/techniques/`, built into
 `dist/techniques.js`, and from 1.1.0-rc.2 its composite and dignity modules
@@ -58,19 +60,19 @@ TypeScript modules, read at the site repository's commit
 SHA-256 the entry's preregistration records
 (`docs/evidence/techniques-2026-09-29/PREREGISTRATION.md`):
 
-- `src/lib/engine/solar-return.ts` and `src/lib/engine/lunar-return.ts` —
+- `src/lib/engine/solar-return.ts` and `src/lib/engine/lunar-return.ts`:
   solar and lunar returns (`src/techniques/returns.ts`)
-- `src/lib/composite.ts` — composite midpoints and their aspects
+- `src/lib/composite.ts`: composite midpoints and their aspects
   (`src/techniques/composite.ts`; `src/techniques/relationship.ts` until
   1.1.0-rc.2)
-- `src/lib/engine/void-of-course.ts` — the void-of-course Moon
+- `src/lib/engine/void-of-course.ts`: the void-of-course Moon
   (`src/techniques/void-of-course.ts`)
-- `src/lib/engine/aspect-patterns.ts` and `src/lib/aspect-pattern-model.ts` —
+- `src/lib/engine/aspect-patterns.ts` and `src/lib/aspect-pattern-model.ts`:
   aspect patterns and their containment (`src/techniques/aspect-patterns.ts`)
-- `src/lib/dignities.ts` — `dignityFor`, `dignitiesFor` and
+- `src/lib/dignities.ts`: `dignityFor`, `dignitiesFor` and
   `hasClassicalDignities` (`src/techniques/dignities.ts`)
 - `src/lib/moon-certainty.ts`, `src/lib/chart-date-certainty.ts` and
-  `untimedMoonSign` in `src/lib/share-card.ts` — the Moon signs possible over
+  `untimedMoonSign` in `src/lib/share-card.ts`: the Moon signs possible over
   a date (`src/techniques/moon-sign.ts`)
 
 The lite entry's sect part, added in 1.1.0-rc.2 (`src/sect.ts`, built into
@@ -97,7 +99,7 @@ gives as ERFA's (BSD 3-Clause), was not taken: the port sums the engine's
 table, arguments and offsets (*Nutation* below), which equal the runtime's
 term for term and double for double. `src/de440/kernel.testkit.ts`, a reader
 of `de440.bsp` for the tests, is not packed. `src/de440-pack.ts`, added in
-1.1.0-rc.9 and built into a shared chunk under `dist/`, and
+1.1.0-rc.9 and built into `dist/de440-pack.js` from 3.0.0, and
 `src/de440/sha256.ts`, a SHA-256 written for this package from FIPS 180-4,
 are this package's own code;
 the pack it carries is the subject of *DE440 pack* below.
@@ -120,7 +122,7 @@ Geometric Predicates" (1997), in the partial-sums form documented for Python's
 The computational dependency is `astronomy-engine@2.1.19`. Its installed npm
 metadata declares MIT, names Donald Cross as author, and links to
 `https://github.com/cosinekitty/astronomy`. Its distributed
-`esm/astronomy.js` begins with a preserved MIT notice and a 2019–2023 Don Cross
+`esm/astronomy.js` begins with a preserved MIT notice and a 2019-2023 Don Cross
 copyright line. The package uses its geocentric vectors (the Moon's
 included), Moon state, heliocentric and barycentric vectors, and date
 helpers. It no longer calls its nutation, its rotations to the ecliptic or
@@ -129,8 +131,6 @@ equator of date, its sidereal time or its observer functions (`ObserverVector`,
 (`precession_rot`, from J2000.0) line for line, and `src/calc-reduce.ts` its
 observer on the ellipsoid (`terra`), under the same MIT notice, which `NOTICE`
 carries, and the nutation is the engine's own (*Nutation* below).
-`dist/core.js`, the file of `@zodiacs/engine/core`, carries its own copy of
-`src/frame.ts`, and so of `precession_rot`.
 
 Repository and dependency searches found no Swiss Ephemeris runtime import,
 package dependency, vendored source, or generated lookup table in this npm
@@ -179,13 +179,14 @@ generated fixture into the package.
 
 ## DE440 pack
 
-From 1.1.0-rc.9 the package carries a sealed DE440 pack, and its root entry
-computes on it by default (`docs/de440.md`, *The default source*).
-`scripts/build-de440-pack.mjs` writes it, as base64 text, into
-`src/de440/pack-data.ts`, which the build places in one shared chunk under
-`dist/` that the root's ephemeris chunk and `dist/de440-pack.js`, the file of
-`@zodiacs/engine/de440/pack`, import, and in no other file
-(`scripts/verify-package-contents.mjs` checks that, and the pack's digest).
+From 1.1.0-rc.9 the package carries a sealed DE440 pack. Its root entry
+computed on it by default from 1.1.0-rc.9 to 2.1.0, and from 3.0.0 does so
+after `useDe440()` from `@zodiacs/engine/de440/pack` (`docs/de440.md`,
+*The default source*). `scripts/build-de440-pack.mjs` writes it, as base64
+text, into `src/de440/pack-data.ts`, which the build places in
+`dist/de440-pack.js`, the file of `@zodiacs/engine/de440/pack`, and in no
+other file (`scripts/verify-package-contents.mjs` checks that, and the pack's
+digest).
 The withdrawn draft 1.1.0-rc.8 carried the same pack behind that entry
 alone.
 The pack is `de440-1790-2210.v2.zeph`, 2,489,664 bytes, SHA-256
@@ -254,6 +255,20 @@ the same sealed pack: it was given with "Yes. I delegate these decisions to
 you.", and under that delegation it is taken to extend to 2.0.0 and its
 candidates.
 
+Data refitted or compressed from JPL's DE ephemerides has been redistributed
+for decades, by commercial and open-source software alike. One public
+precedent is the Swiss Ephemeris of Astrodienst AG, first released in 1997,
+whose ephemeris files (the `.se1` files its users install) its own page
+describes as "largely based upon the DExxx ephemerides from NASA's JPL",
+data "further compressed with sophisticated compression techniques developed
+by Astrodienst", and which it licenses under the GNU Affero General Public
+License or its paid Swiss Ephemeris Professional License
+(https://www.astro.com/swisseph/swephinfo_e.htm, read 2026-11-26). That is a
+precedent of practice, not a statement of JPL's or NAIF's, and it settles
+none of the questions above. `@zodiacs/engine` contains no Swiss Ephemeris
+code, file, table or output (*Swiss Ephemeris exclusion* above): the pack is
+refitted from NAIF's `de440.bsp` alone.
+
 The rule behind the Sun's disc, from 1.1.0-rc.12, is NASA JPL's. The
 reduction bends no light from a planet farther than the Sun whose direction
 is within the Sun's apparent radius of the Sun's, with the Sun's radius
@@ -266,6 +281,84 @@ was measured against are public responses kept in the repository only
 
 The pack does not change the SPDX expression: no licence is asserted for it
 that its providers do not state, as for the IERS data below.
+
+## Minor-body tables
+
+From 3.0.0 the package carries tables for five minor bodies, 2060 Chiron
+(1977 UB), 1 Ceres (A801 AA), 2 Pallas (A802 FA), 3 Juno (A804 RA) and
+4 Vesta (A807 FA), from 1800-01-01 to 2200-01-01 TT.
+`scripts/minor-bodies/build-pack-data.mjs` writes them, as base64 text, into
+`src/minor-bodies/pack-data.ts`, which the build places in
+`dist/minor-bodies.js`, the file of `@zodiacs/engine/minor-bodies`, and in
+no other file (`scripts/verify-package-contents.mjs` checks that, each
+table's size and the SHA-256 of its bytes). Each table is piecewise
+Chebyshev series of the body's heliocentric position in the ICRF, which
+`scripts/minor-bodies/fit.py` (with numpy 2.0.2) fitted by least squares to
+vectors from NASA JPL's Horizons On-Line Ephemeris System and rounded to
+whole multiples of 20 or 50 km: values derived from Horizons's vectors, not
+the vectors, which are in neither the repository nor the package.
+
+The vectors were fetched on 2026-11-26 at 12:08 UTC, one request per body,
+from the Horizons API (https://ssd.jpl.nasa.gov/api/horizons.api), by
+`scripts/minor-bodies/fetch-horizons.py`, with `EPHEM_TYPE` `VECTORS`,
+`CENTER` `500@10` (the Sun's centre), `REF_PLANE` `FRAME`, `REF_SYSTEM`
+`ICRF`, `VEC_TABLE` `1` (positions), `VEC_CORR` `NONE` (geometric),
+`OUT_UNITS` `KM-S` and `CSV_FORMAT` `YES`, from JD 2378480.5 to 2524610.5
+TDB, every 10 days for Chiron and every 4 days for the others. Each response
+names the JPL orbit solution it computed the body from, and DE441 and the
+small-body perturbers SB441-N16 as what it integrated it with.
+`src/minor-bodies/provenance.json` records the query and, for each response:
+
+| body | solution | solution date | rows | bytes | SHA-256 of the response |
+| --- | --- | --- | --- | --- | --- |
+| 2060 Chiron | JPL#171 | 2026-06-05 | 14,614 | 1,804,028 | `ec653cf9eaa608323bbcf900d46c4b325ec4587a2d8d21fde74979c88198aa24` |
+| 1 Ceres | JPL#48 | 2021-04-13 | 36,533 | 4,500,098 | `4c56afea785549ff4888cb931c305567bebd5ca33192559995eb4af44b0d0678` |
+| 2 Pallas | JPL#74 | 2026-06-05 | 36,533 | 4,500,064 | `53c268cd22067062280970cc50f25b54f1eea600ed541fec330f833994eb1f74` |
+| 3 Juno | JPL#144 | 2026-06-05 | 36,533 | 4,500,063 | `8990b8117306bf1b6a0e8ea84a8028533846cb76723a07926bed0f8ec93aaf84` |
+| 4 Vesta | JPL#36 | 2021-04-13 | 36,533 | 4,500,101 | `1bcc7376be2155c157561d74f0f0355f54676ab6fbf38818349c54ecb5a7021f` |
+
+`src/minor-bodies/pack-data.ts` gives the SHA-256 of each table's own
+bytes. The tables' independent check, 500 apparent places from Horizons's
+OBSERVER tables at instants the fit never saw, is
+`src/fixtures/minor-bodies-horizons-oos.json`, with each raw response's
+SHA-256, fetched the same day by the same script; it is not packed.
+
+What the provider states, read 2026-11-26. The Horizons API's
+documentation (https://ssd-api.jpl.nasa.gov/doc/horizons.html, version 1.3),
+the system's manual (https://ssd.jpl.nasa.gov/horizons/manual.html, version
+4.98e) and the home page of JPL's Solar System Dynamics group
+(https://ssd.jpl.nasa.gov/) state no licence, no terms of use and no
+public-domain status for Horizons's output, and neither grant nor refuse
+permission to redistribute it. The manual suggests a reference,
+"Giorgini, JD and JPL Solar System Dynamics Group, NASA/JPL Horizons On-Line
+Ephemeris System", with the date the data were retrieved, without requiring
+it; `NOTICE` gives it. The pages link JPL's site-wide notice
+(https://www.jpl.nasa.gov/caltechjpl-privacy-policies-and-important-notices),
+which says that web sites in the domain jpl.nasa.gov "are managed by the
+California Institute of Technology in support of the missions and research
+programs that its Jet Propulsion Laboratory conducts for NASA", and, under
+"Copyright Status", "All documents available from this server may be
+protected under the U.S. and Foreign Copyright Laws. Permission to reproduce
+may be required." It does not name Horizons or its output.
+
+What follows, and what does not. 3.0.0's brief describes Horizons's output
+as a work of the US Government in the public domain. The pages above do not
+say so, and JPL, which computes it, is managed for NASA by the California
+Institute of Technology, whose notice reserves that its documents may be
+protected; whether the vectors, or tables fitted to them, are protected at
+all is not settled by these sources. The package redistributes no Horizons
+response: the tables are numbers Zodiacs.org computed from the responses,
+and `NOTICE` credits the system and says that JPL has not reviewed them.
+Shipping the tables therefore rests on the owner's position, which this file
+asks the owner to confirm in writing before a release carrying them is
+published, as it asked for the DE440 pack (*DE440 pack*).
+
+No competitor's code or data, and no Swiss Ephemeris code, file, table or
+output, went into the tables, their fit or the code that reads them: the
+vectors and the checks are Horizons's responses alone, and the scripts, the
+reader (`src/minor-bodies/table.ts`) and the reduction
+(`src/minor-bodies/reduce.ts`, after `src/de440/reduce.ts`) are this
+package's own. The tables do not change the SPDX expression.
 
 ## ΔT data
 
@@ -289,15 +382,16 @@ instrument, and only statistics are committed.
 (385) and coefficients (462) of its 77 luni-solar terms, the 10 coefficients
 of its five fundamental arguments and its two fixed offsets for the planetary
 terms. The build places them in a shared chunk under `dist/` that the
-ephemeris chunk, `dist/time.js` and `dist/de440.js` import, so the graphs of
-the root, `./calc`, `./de440`, `./internal`, `./sky`, `./techniques`,
-`./time`, `./timing`, `./vedic` and `./window` load them, and so does that
-of `./de440/pack`, which opens its pack with `./de440`. `dist/core.js`, the
-file of `@zodiacs/engine/core`, carries its own copy of them.
+ephemeris chunk, `dist/time.js` and the DE440 reader's chunk (which
+`dist/de440.js` re-exports) import, so the graphs of
+the root, `./core`, `./calc`, `./de440`, `./internal`, `./sky`,
+`./techniques`, `./time`, `./timing`, `./vedic` and `./window` load them, and
+so does that of `./de440/pack`, which opens its pack with `./de440`, and from
+3.0.0 that of `./minor-bodies`, through the frame of date.
 `@zodiacs/engine/de440` sums the same terms in the order the research
 runtime of zodiacs.org sums them. The model is D. D.
 McCarthy and B. J. Luzum, "An abridged model of the precession-nutation of
-the celestial pole", Celestial Mechanics and Dynamical Astronomy 85, 37–49
+the celestial pole", Celestial Mechanics and Dynamical Astronomy 85, 37-49
 (2003), as the IERS Conventions (2003), chapter 5, give it.
 
 The values were transcribed from the function `iau2000b` in `Cdist/nutation.c`
@@ -357,8 +451,8 @@ public-domain releases and checks their SHA-256 digests:
 ## Leap-second and UT1 data
 
 `src/time-scale-data.ts` holds the time basis's two IERS tables, which the
-import graphs of the root entry and of `@zodiacs/engine/time` under `dist/`
-carry, and so does `dist/core.js`, the file of `@zodiacs/engine/core`.
+import graphs of the root entry (and so of `@zodiacs/engine/core`, which
+re-exports it) and of `@zodiacs/engine/time` under `dist/` carry.
 `scripts/build-time-scales.mjs`
 builds it from inputs committed in `scripts/time-scale-sources/` and checks
 each one's SHA-256:
@@ -440,7 +534,7 @@ state.
   for EOP 20 C04. The Centre's page for the series gives, as its technical
   note, Bizouard, Lambert, Gattano, Becker and Richard, "The IERS EOP 14C04
   solution for Earth orientation parameters consistent with ITRF 2014",
-  J. Geod. 93, 621–633 (2019), doi:10.1007/s00190-018-1186-3, whose author
+  J. Geod. 93, 621-633 (2019), doi:10.1007/s00190-018-1186-3, whose author
   list and title were checked against that DOI's record (read 2026-09-29);
   `NOTICE` cites it.
 - **The leap-second list, `leap-seconds.list`.** In the public domain, as
@@ -459,12 +553,12 @@ and names come from public-domain sources only:
   histories pinned through 2.0.0-rc.2), which says of itself "This file is in the public domain",
   and whose list quotes H. Grotefend, *Taschenbuch der Zeitrechnung des
   deutschen Mittelalters und der Neuzeit*, edited by O. Grotefend (Hannover:
-  Hahnsche Buchhandlung, 1941), pp. 26–28;
+  Hahnsche Buchhandlung, 1941), pp. 26-28;
 - Hermann Grotefend's own tables, in the public domain because they were
   published in 1891 and 1898 and their author died in 1931: *Zeitrechnung des
   deutschen Mittelalters und der Neuzeit*, vol. 1 (Hannover: Hahn, 1891),
-  pp. 133–134, and *Taschenbuch der Zeitrechnung* (Hannover and Leipzig: Hahn,
-  1898), pp. 23–24, read in the Internet Archive's scans;
+  pp. 133-134, and *Taschenbuch der Zeitrechnung* (Hannover and Leipzig: Hahn,
+  1898), pp. 23-24, read in the Internet Archive's scans;
 - for the country names, tzdata 2025c's `iso3166.tab`, which is in the public
   domain.
 
@@ -493,6 +587,13 @@ shared chunk under `dist/` that `dist/vedic.js` and `dist/calc.js` import:
 position, proper motion, parallax and radial velocity for
 the three stars, and position and proper motion for Sgr A*. `NOTICE` carries
 their attribution.
+
+The 22 values are in that one chunk and nowhere else in the package: the
+graphs of `./calc` and `./vedic` load it, and no other entry point's does.
+The root entry (`.`), `./core`, `./minor-bodies` and every entry point but
+`./calc` and `./vedic` carry none of the values from ESA's Hipparcos data or
+the CDS, and so none of the questions below reaches them
+(`scripts/verify-package-contents.mjs` checks which graphs load the chunk).
 
 The terms for the 20 values that the Strasbourg astronomical Data Center
 (CDS) supplies, through VizieR and SIMBAD, are the CDS's. Its General Terms and
@@ -534,7 +635,7 @@ dε = −0.0068192″ and dα₀ = −0.0146″, composed as the IERS Convention
 (2010), chapter 5, eq. 5.21, compose it (G. Petit and B. Luzum, eds., IERS
 Technical Note No. 36, 2010), and the obliquity of J2000.0 of the IAU 2006
 precession, 84381.406″ (N. Capitaine, P. T. Wallace and J. Chapront, A&A
-412, 567–586, 2003, adopted by IAU 2006 Resolution B1;
+412, 567-586, 2003, adopted by IAU 2006 Resolution B1;
 `src/calc-frames.ts`). These are single published constants; `NOTICE`
 cites them.
 
@@ -552,9 +653,12 @@ largest distance of
 astronomy-engine's barycentre from a Newtonian barycentre of the same
 positions, scanned daily from 1800 to 2200 and compared with Horizons's
 barycentre at 88 instants (`docs/evidence/calc-api/`). No value of a JPL
-ephemeris, and no coefficient fitted to one, is in the package; the Horizons
-responses are in that evidence directory, and the DE440 kernel was read only
-in the sweep's workflow, neither of which is packed.
+ephemeris, and no coefficient fitted to one, is in the calc entry's graph:
+the package's two files of such values, the DE440 pack's (*DE440 pack*) and
+from 3.0.0 the minor-body tables' (*Minor-body tables*), are files it does
+not load; the Horizons responses are in that evidence directory, and the
+DE440 kernel was read only in the sweep's workflow, neither of which is
+packed.
 
 Since 0.1.1-rc.17 it also carries the star values of *Timing and Vedic
 values*, in the chunk it shares with `./vedic`. Its ayanamsa bounds
@@ -573,14 +677,14 @@ classical planets, as these works give them
 (`src/techniques/dignities.ts`; `docs/techniques.md` quotes each and names
 the copies read):
 
-- Ptolemy, *Tetrabiblos* I.17–I.20, tr. F. E. Robbins (Loeb Classical
+- Ptolemy, *Tetrabiblos* I.17 to I.20, tr. F. E. Robbins (Loeb Classical
   Library, 1940): the domiciles, the exaltations and the Egyptian terms;
-- Dorotheus of Sidon, *Carmen Astrologicum* I.1–I.2, ed. and tr. David
-  Pingree (Leipzig: Teubner, 1976), pp. 161–162: the domiciles, the
+- Dorotheus of Sidon, *Carmen Astrologicum* I.1 to I.2, ed. and tr. David
+  Pingree (Leipzig: Teubner, 1976), pp. 161-162: the domiciles, the
   exaltations and the triplicity lords;
 - al-Bīrūnī, *The Book of Instruction in the Elements of the Art of
   Astrology* (1029), tr. R. Ramsay Wright (London: Luzac, 1934),
-  §§440–453: the detriments, the triplicities, the terms and the Chaldean
+  §§440-453: the detriments, the triplicities, the terms and the Chaldean
   faces;
 - William Lilly, *Christian Astrology* (London, 1647), p. 112: reception
   and the peregrine planet, and the order of the five dignities.
@@ -614,7 +718,7 @@ report of those works. `NOTICE` cites them.
   (2000), a publication of the US Government.
 
 Its planetary hours follow Chaucer's *Treatise on the Astrolabe* (c. 1391)
-and, for the rulers of the days, Cassius Dio's *Roman History* 37.18–19,
+and, for the rulers of the days, Cassius Dio's *Roman History* 37.18-19,
 works in the public domain, as `docs/sky.md` cites them. `NOTICE` cites the
 constants' sources.
 

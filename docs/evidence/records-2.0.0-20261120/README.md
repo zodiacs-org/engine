@@ -25,6 +25,11 @@ The 2.1.0 reader replayed all 168 envelopes from the 34 carried archives
 on Node 22.22.2. The final archive wrote five envelopes. Each preserved
 its writer and conventions, and each replay succeeded.
 
+The 3.0.0 reader replayed all 173 envelopes from the 35 carried archives
+on Node 22.22.2. The 3.0.0 archive wrote five envelopes, on
+astronomy-engine, its default source. Each preserved its writer and
+conventions, and each replay succeeded.
+
 The [runner](tools/later-reader.mjs) verifies each carried archive against
 its SHA-256 in [the archive manifest](../../../artifacts/archives.json).
 It unpacks the archive outside the checkout, links the installed
@@ -76,6 +81,7 @@ checks each writer's TypeScript declarations before running an input.
 | 2.0.0 | A, B, C, D, E | A, B, C, D, E | None |
 | 2.1.0-rc.1 | A, B, C, D, E | A, B, C, D, E | None |
 | 2.1.0 | A, B, C, D, E | A, B, C, D, E | None |
+| 3.0.0 | A, B, C, D, E | A, B, C, D, E | None |
 
 For C, writers before 0.1.1-rc.15 omit the time basis. From 0.1.1-rc.15
 through 2.0.0-rc.2 the record carries the `delta-t` basis and the
@@ -103,7 +109,7 @@ The original codec was restored and the focused test reran.
 ## Reproduce
 
 Run from the checkout with the recorded Node version. Compare every replay
-outcome and the full 2.1.0 row. Earlier writers' byte counts and hashes
+outcome and the full 3.0.0 row. Earlier writers' byte counts and hashes
 identify the original fixtures, which the fixture test checks directly.
 
 ```sh
@@ -112,7 +118,7 @@ npm run build
 mkdir -p /tmp/later-reader
 evidence=docs/evidence/records-2.0.0-20261120
 TMPDIR=/tmp/later-reader node "$evidence/tools/later-reader.mjs" > /tmp/later.json
-outcomes='del(.archives[] | select(.version != "2.1.0") | .inputs[]? | (.bytes, .sha256))'
+outcomes='del(.archives[] | select(.version != "3.0.0") | .inputs[]? | (.bytes, .sha256))'
 jq -S "$outcomes" /tmp/later.json > /tmp/later-outcomes.json
 jq -S "$outcomes" "$evidence/results/later-reader.json" | diff /tmp/later-outcomes.json -
 npx vitest run src/receipt-major-readers.test.ts

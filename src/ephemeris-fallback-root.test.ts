@@ -6,8 +6,8 @@
  * they were derived from and carry its fallback flags; and `saturnReturn`
  * names astronomy-engine wherever its flags hold a fallback (S4 there).
  *
- * Each on a new copy of the modules: the pack whole (named `jpl-de440`, no
- * flag), the pack damaged (one character of its text changed:
+ * Each on a new copy of the modules, put on the shipped pack with
+ * `useDe440()`: the pack whole (named `jpl-de440`, no flag), the pack damaged (one character of its text changed:
  * `"de440-unavailable"`, named astronomy-engine), an instant outside its
  * coverage, 1750 and 2230, with the pack whole (`"outside-de440-span"`,
  * named astronomy-engine), and the caller's own choice of astronomy-engine,
@@ -29,6 +29,14 @@ async function engineWith(text: PackText | null) {
     });
   } else vi.doUnmock("./de440/pack-data.js");
   const root = await import("./index.js");
+  // From 3.0.0 the shipped pack is the default once useDe440() has loaded it; where the pack cannot be
+  // opened, useDe440() throws and leaves the default on it, so that every result says it fell back.
+  expect(root.defaultEphemeris().name).toBe("astronomy-engine");
+  try {
+    (await import("./de440-pack.js")).useDe440();
+  } catch (error) {
+    if (!text) throw error;
+  }
   expect(root.defaultEphemeris().name).toBe("de440");
   return root;
 }

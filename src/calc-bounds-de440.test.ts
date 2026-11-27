@@ -18,7 +18,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { calc } from "./calc.js";
 import type { CalcBody } from "./calc.js";
 import { DE440_AT_LIMB, DE440_AT_LIMB_BASIS, DE440_MEASURED, DE440_MEASURED_BASIS, DE440_TURNED_BASIS } from "./calc-bounds-de440.js";
-import { DE440_PACK } from "./de440-pack.js";
+import { DE440_PACK, useDe440 } from "./de440-pack.js";
 import { setDefaultEphemeris } from "./ephemeris.js";
 
 interface Vector {
@@ -53,7 +53,9 @@ function up2(x: number): number {
 }
 
 // The suite's setup puts every file on astronomy-engine; this one measures the package's default.
-beforeAll(() => setDefaultEphemeris("de440"));
+beforeAll(() => {
+  useDe440();
+});
 afterAll(() => setDefaultEphemeris("astronomy-engine"));
 
 describe("calc()'s bounds on the shipped DE440 pack", () => {

@@ -144,7 +144,7 @@ type AspectType = "conjunction" | "sextile" | "square" | "trine" | "opposition";
 // exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
 type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
 
-// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
+// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput), @zodiacs/engine/minor-bodies (DateInput)
 type DateInput = Date | string | number;
 
 // exported by @zodiacs/engine (HouseNumber), @zodiacs/engine/core (HouseNumber)
@@ -153,6 +153,6 @@ type HouseNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 // exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/core (HouseSystem), @zodiacs/engine/houses (HouseSystem)
 type HouseSystem = "whole" | "placidus" | "porphyry" | "equal" | "equal-mc" | "vehlow" | "koch" | "regiomontanus" | "campanus" | "topocentric" | "alcabitius" | "morinus" | "meridian";
 
-// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
+// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign), @zodiacs/engine/minor-bodies (ZodiacSign)
 type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
 ```

@@ -1,6 +1,6 @@
 /**
- * A regression case the owner asked for: on the package's default source,
- * the shipped DE440 pack, the Sun enters Sagittarius (apparent longitude
+ * A regression case the owner asked for: on the shipped DE440 pack, the
+ * default source after `useDe440()` (and the package's default until 2.1.0), the Sun enters Sagittarius (apparent longitude
  * 240° in the true ecliptic of date) on 2026-11-22 at 07:23:21 UTC, to the
  * second. The reference is NAIF's de440.bsp, reduced independently by the
  * rc.11 review (docs/evidence/1.1.0-rc.11-20261115/breaker/results/ingress-ref.json:
@@ -13,6 +13,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { events } from "./calc.js";
+import { useDe440 } from "./de440-pack.js";
 import { positions, setDefaultEphemeris } from "./index.js";
 import { findLongitudeCrossings, searchLongitudeCrossings } from "./returns.js";
 import { solarReturnInstantDetailed } from "./techniques.js";
@@ -21,8 +22,10 @@ const INGRESS = Date.parse("2026-11-22T07:23:21Z");
 const FROM = "2026-11-20T00:00:00Z";
 const TO = "2026-11-24T00:00:00Z";
 
-// The suite's setup puts every file on astronomy-engine; this one tests the package's default.
-beforeAll(() => setDefaultEphemeris("de440"));
+// The suite's setup starts every file on astronomy-engine; this one tests the shipped pack, which useDe440() loads.
+beforeAll(() => {
+  useDe440();
+});
 afterAll(() => setDefaultEphemeris("astronomy-engine"));
 
 describe("the Sun's ingress into Sagittarius in 2026, on the shipped DE440 pack", () => {

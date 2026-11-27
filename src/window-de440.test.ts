@@ -1,6 +1,6 @@
 /**
- * Birth-time windows on the package's default source, the shipped DE440
- * pack: each partition is held to natalChart itself, on the same source, as
+ * Birth-time windows on the shipped DE440 pack, the default source after
+ * `useDe440()` (and the package's default until 2.1.0): each partition is held to natalChart itself, on the same source, as
  * src/window.test.ts holds one on astronomy-engine. Every cell must hold
  * natalChart's features at every whole second, and every switch must be the
  * millisecond at which they change.
@@ -13,7 +13,7 @@
  */
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { DE440_PACK, shippedDe440Source } from "./de440-pack.js";
+import { DE440_PACK, shippedDe440Source, useDe440 } from "./de440-pack.js";
 import { bodyLongitude, setDefaultEphemeris } from "./ephemeris.js";
 import { timeBasis } from "./time-scale.js";
 import { WINDOW_RATE_BOUNDS, birthWindow } from "./window.js";
@@ -24,8 +24,10 @@ const DAY = 86_400_000;
 const J2000_MS = Date.UTC(2000, 0, 1, 12);
 const DE440 = { name: "jpl-de440", version: DE440_PACK.sha256 };
 
-// The suite's setup puts every file on astronomy-engine; this one tests the package's default.
-beforeAll(() => setDefaultEphemeris("de440"));
+// The suite's setup starts every file on astronomy-engine; this one tests the shipped pack, which useDe440() loads.
+beforeAll(() => {
+  useDe440();
+});
 afterAll(() => setDefaultEphemeris("astronomy-engine"));
 
 describe("birthWindow on the shipped DE440 pack, against natalChart on it", () => {

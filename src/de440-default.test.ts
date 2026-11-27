@@ -1,7 +1,9 @@
 /**
- * The default source: a plain call, outside `withEphemeris`, computes on the
- * DE440 pack the package ships, and on astronomy-engine where the pack does
- * not reach.
+ * The shipped pack as the default source: after `useDe440()`, a plain call,
+ * outside `withEphemeris`, computes on the DE440 pack the package ships, and
+ * on astronomy-engine where the pack does not reach. (From 1.1.0-rc.9 to
+ * 2.1.0 the pack was the default without that call; from 3.0.0 the default
+ * is astronomy-engine, which `src/de440-opt-in.test.ts` tests.)
  *
  * The accuracy arbiter is not this engine: the conformance suite's 240 L1
  * vectors, JPL Horizons's apparent geocentric places from DE441 at 24 TT
@@ -13,7 +15,7 @@
 import { readFileSync } from "node:fs";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { calc, chart as calcChart, events } from "./calc.js";
-import { DE440_PACK, shippedDe440Source } from "./de440-pack.js";
+import { DE440_PACK, shippedDe440Source, useDe440 } from "./de440-pack.js";
 import { bodyLongitude } from "./ephemeris.js";
 import { EPHEMERIS, defaultEphemeris, findLongitudeCrossings, natalChart, positions, setDefaultEphemeris, withEphemeris } from "./index.js";
 import { createNatalEnvelope } from "./receipt.js";
@@ -32,12 +34,15 @@ const J2000_MS = Date.UTC(2000, 0, 1, 12);
 const ttDate = (ttDays: number): Date => new Date(J2000_MS + Math.round(ttDays * 86_400_000));
 const DE440 = { name: "jpl-de440", version: DE440_PACK.sha256 };
 
-// The suite's setup file (src/test-setup.ts) puts every other test file on
-// astronomy-engine; this file tests the package's own default.
-beforeEach(() => setDefaultEphemeris("de440"));
-afterEach(() => setDefaultEphemeris("de440"));
+// The suite's setup file (src/test-setup.ts) starts every test file on
+// astronomy-engine, the package's default; this file tests the shipped pack as
+// the default source, which useDe440() makes it, and sets astronomy-engine back.
+beforeEach(() => {
+  useDe440();
+});
+afterEach(() => setDefaultEphemeris("astronomy-engine"));
 
-describe("the default source", () => {
+describe("the default source after useDe440()", () => {
   it("is the shipped DE440 pack, a day inside each end of its coverage", () => {
     const status = defaultEphemeris();
     expect(status.name).toBe("de440");

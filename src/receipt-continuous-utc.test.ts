@@ -20,6 +20,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { natalChart } from "./api.js";
 import { natalConventionIds } from "./conventions.js";
+import { useDe440 } from "./de440-pack.js";
 import { setDefaultEphemeris } from "./ephemeris.js";
 import {
   NATAL_RECEIPT_CONVENTION_SETS,
@@ -49,7 +50,9 @@ const withOwnIds = (envelope: any) => {
   return JSON.stringify(envelope);
 };
 
-beforeAll(() => setDefaultEphemeris("de440"));
+beforeAll(() => {
+  useDe440();
+});
 afterAll(() => setDefaultEphemeris("astronomy-engine"));
 
 describe.each(Object.keys(FIXTURES) as (keyof typeof FIXTURES)[])("a %s record after the IERS table", (version) => {

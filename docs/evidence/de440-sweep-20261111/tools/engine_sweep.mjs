@@ -24,8 +24,10 @@
  * 1.1.0-rc.10 calc()'s default is the pack, and a sweep of the default
  * measured the pack's apparent places against astronomy-engine's limits
  * (workflow run 43618467433). The sweep sets the source with
- * setDefaultEphemeris and refuses a result that another source computed or
- * that carries a fallback flag. With "de440" the apparent places of the Sun,
+ * setDefaultEphemeris, and "de440" with useDe440() from dist/de440-pack.js:
+ * from 3.0.0 the default is astronomy-engine again and the root loads the
+ * pack only after useDe440(). It refuses a result that another source
+ * computed or that carries a fallback flag. With "de440" the apparent places of the Sun,
  * the Moon, Mercury to Pluto and the nodes come from the pack and every other
  * case from astronomy-engine, as calc() gives them; sweep.py then compares the
  * apparent places with the kernel's place with the Sun's light deflection,
@@ -34,7 +36,7 @@
 import { createHash } from "node:crypto";
 import { closeSync, openSync, readFileSync, readdirSync, writeFileSync, writeSync } from "node:fs";
 import { resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const args = Object.fromEntries(process.argv.slice(2).reduce((pairs, word, i, all) => (word.startsWith("--") ? [...pairs, [word.slice(2), all[i + 1]]] : pairs), []));
 const fromYear = Number(args["from-year"]);
@@ -44,12 +46,17 @@ if (!Number.isInteger(fromYear) || !Number.isInteger(toYear) || fromYear < 1800 
   throw new Error("usage: engine_sweep.mjs --from-year Y --to-year Y --out FILE [--limit N]");
 }
 
-const distDir = process.env.ZODIACS_ENGINE_DIST ? resolve(process.env.ZODIACS_ENGINE_DIST) : resolve(new URL("../../../../dist/", import.meta.url).pathname);
+const distDir = process.env.ZODIACS_ENGINE_DIST ? resolve(process.env.ZODIACS_ENGINE_DIST) : resolve(fileURLToPath(new URL("../../../../dist/", import.meta.url)));
 const { calc, CALC_FRAMES } = await import(pathToFileURL(`${distDir}/calc.js`).href);
 const { setDefaultEphemeris } = await import(pathToFileURL(`${distDir}/index.js`).href);
 const ephemeris = args.ephemeris ?? "astronomy-engine";
 if (ephemeris !== "astronomy-engine" && ephemeris !== "de440") throw new Error('--ephemeris takes "astronomy-engine" or "de440"');
-setDefaultEphemeris(ephemeris);
+if (ephemeris === "de440") {
+  const { useDe440 } = await import(pathToFileURL(`${distDir}/de440-pack.js`).href);
+  // A build before 3.0.0 (ZODIACS_ENGINE_DIST) has no useDe440 and loads the pack itself.
+  if (typeof useDe440 === "function") useDe440();
+  else setDefaultEphemeris(ephemeris);
+} else setDefaultEphemeris(ephemeris);
 
 const FIRST_JD = 2378497.0;
 const TOTAL = 146097;

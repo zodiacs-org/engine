@@ -1,5 +1,9 @@
 # zodiacs for Python
 
+> **Parked at `@zodiacs/engine` 3.0.0.** This package stays pinned to the
+> `@zodiacs/engine` 0.1.1-rc.14 archive and is not maintained or published
+> for 3.0.0: see [PARKED.md](PARKED.md).
+
 A local Python API and command line tool for tropical planetary positions,
 natal charts, transits, synastry, Moon phase, chart points, declinations,
 and secondary progressions. This is an **alpha preview**, with an API that

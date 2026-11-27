@@ -72,6 +72,13 @@ export interface PositionSource {
   place(body: SourceBody, ttDays: number, behind?: boolean): { lon: number; lat: number; dist?: number; behindDisc?: boolean };
   trueNode(ttDays: number): number;
   /**
+   * Optional, from 3.0.0: the geometric geocentric Moon at `ttDays` (no light-time, aberration or deflection), its
+   * `position` in km and `velocity` in km/s, in the ICRF, which the engine takes for astronomy-engine's EQJ. The
+   * engine computes True Black Moon Lilith from it (`trueApogee`); a source without it gives no True Black Moon
+   * Lilith. Every DE440 source gives it.
+   */
+  moonState?(ttDays: number): { position: [number, number, number]; velocity: [number, number, number] };
+  /**
    * Optional: the instants in [fromTtDays, toTtDays], ascending, at which a
    * place or the node may step by more than rounding (a DE440 pack's record
    * boundaries). A source without it is taken to be smooth.
@@ -119,16 +126,19 @@ export type ChartFlag =
 
 /**
  * Why a result that would have come from the shipped DE440 pack, the default
- * source, came from astronomy-engine instead; the result carries it as a flag
- * and names astronomy-engine as its ephemeris, so the fallback is never
- * silent. `"de440-unavailable"`: the pack could not be opened, because its
- * bytes are missing, are not the sealed pack's (their SHA-256 differs) or
- * cannot be decoded; `defaultEphemeris().de440.error` says which.
+ * source after `useDe440()` (`@zodiacs/engine/de440/pack`) or
+ * `setDefaultEphemeris("de440")`, came from astronomy-engine instead; the
+ * result carries it as a flag and names astronomy-engine as its ephemeris, so
+ * the fallback is never silent. `"de440-unavailable"`: the pack could not be
+ * opened, because `useDe440()` has not loaded it, or its bytes are missing,
+ * are not the sealed pack's (their SHA-256 differs) or cannot be decoded;
+ * `defaultEphemeris().de440.error` says which.
  * `"outside-de440-span"`: an instant the result was computed at is outside
  * the pack's coverage less a day at each end (`defaultEphemeris()` gives the
- * ends; 1790-01-02 to 2209-12-31 at least). Neither is set after
- * `setDefaultEphemeris("astronomy-engine")`, the caller's own choice, where
- * the result still names astronomy-engine, nor inside `withEphemeris`.
+ * ends; 1790-01-02 to 2209-12-31 at least). Neither is set on the default
+ * astronomy-engine (the package's default from 3.0.0, or the caller's choice
+ * through `setDefaultEphemeris("astronomy-engine")`), where the result still
+ * names astronomy-engine, nor inside `withEphemeris`.
  */
 export type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
 
@@ -239,6 +249,7 @@ export type PointName =
   | "Mean Node"
   | "Mean South Node"
   | "Black Moon Lilith"
+  | "True Black Moon Lilith"
   | "Vertex"
   | "East Point"
   | "Lot of Fortune"
@@ -256,17 +267,26 @@ export interface PointPosition {
   point: PointName;
   /** Tropical longitude of date, degrees in [0, 360). */
   lon: number;
-  /** Ecliptic latitude, degrees; zero except for Black Moon Lilith. */
+  /** Ecliptic latitude, degrees; zero except for Black Moon Lilith and True Black Moon Lilith. */
   lat: number;
   /**
    * Longitude speed in degrees/day, the derivative of `lon` over plus/minus
-   * 0.001 day, for the mean node and Black Moon Lilith; null for the points the
-   * chart's angles fix.
+   * 0.001 day, for the mean node and Black Moon Lilith, and over plus/minus
+   * 0.25 day for True Black Moon Lilith (as for the true node); null for the
+   * points the chart's angles fix.
    */
   speed: number | null;
   sign: ZodiacSign;
   /** Longitude inside `sign`, degrees in [0, 30). */
   degree: number;
+  /**
+   * On True Black Moon Lilith, the one point computed from an ephemeris (from 3.0.0): the ephemeris its Moon state
+   * came from, as a BodyPosition names it, `"jpl-de440"`, `"astronomy-engine"` or the name of the source
+   * `withEphemeris` ran the call with.
+   */
+  ephemeris?: string;
+  /** On True Black Moon Lilith, present when `ephemeris` is astronomy-engine as a fallback from the shipped DE440 pack, and says why. */
+  fallback?: EphemerisFallback;
 }
 
 export interface ChartPoints {
@@ -274,7 +294,11 @@ export interface ChartPoints {
   sect: Sect | null;
   /**
    * The mean node and its opposite point and Black Moon Lilith always; the
-   * Vertex, the East Point and the seven lots only when the chart has angles.
+   * Vertex, the East Point and the seven lots only when the chart has angles;
+   * and last, from 3.0.0, True Black Moon Lilith, computed at the call on the
+   * source a position at the chart's instant would come from, wherever that
+   * source gives the Moon's state (astronomy-engine and every DE440 source
+   * do; a caller's source without `moonState` gives none).
    */
   points: PointPosition[];
   /**
@@ -340,9 +364,10 @@ export interface Chart {
   /**
    * The ephemeris the bodies came from, on every chart from 1.1.0-rc.10:
    * `"jpl-de440"` with the pack's SHA-256 for the shipped DE440 pack, the
-   * default source inside its years (`defaultEphemeris`); `"astronomy-engine"`
-   * with its version where the chart was computed on it, whether by the
-   * caller's choice (`setDefaultEphemeris`) or as a fallback, which `flags`
+   * default source inside its years after `useDe440()` (`defaultEphemeris`);
+   * `"astronomy-engine"` with its version where the chart was computed on it,
+   * whether as the default (the package's from 3.0.0, or the caller's choice
+   * through `setDefaultEphemeris`) or as a fallback, which `flags`
    * then says (`"de440-unavailable"`, `"outside-de440-span"`); or the name
    * of the source `withEphemeris` ran the chart with. Optional in the type
    * because a chart from 1.1.0-rc.9 or earlier lacks it on astronomy-engine.
@@ -420,7 +445,7 @@ export interface MoonPhase {
 }
 
 /** This package's version, as package.json names it. A string: it changes with every release. */
-export const ENGINE_VERSION: string = "2.1.0";
+export const ENGINE_VERSION: string = "3.0.0";
 
 /**
  * astronomy-engine, the ephemeris the engine computes on where the shipped

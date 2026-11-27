@@ -511,7 +511,7 @@ interface PairSummary {
     };
 }
 
-type PointName = "Mean Node" | "Mean South Node" | "Black Moon Lilith" | "Vertex" | "East Point" | "Lot of Fortune" | "Lot of Spirit" | "Lot of Eros" | "Lot of Necessity" | "Lot of Courage" | "Lot of Victory" | "Lot of Nemesis";
+type PointName = "Mean Node" | "Mean South Node" | "Black Moon Lilith" | "True Black Moon Lilith" | "Vertex" | "East Point" | "Lot of Fortune" | "Lot of Spirit" | "Lot of Eros" | "Lot of Necessity" | "Lot of Courage" | "Lot of Victory" | "Lot of Nemesis";
 
 interface PointPosition {
     point: PointName;
@@ -520,6 +520,8 @@ interface PointPosition {
     speed: number | null;
     sign: ZodiacSign;
     degree: number;
+    ephemeris?: string;
+    fallback?: EphemerisFallback;
 }
 
 type Polarity = "day" | "night";
@@ -536,6 +538,18 @@ interface PositionSource {
         behindDisc?: boolean;
     };
     trueNode(ttDays: number): number;
+    moonState?(ttDays: number): {
+        position: [
+            number,
+            number,
+            number
+        ];
+        velocity: [
+            number,
+            number,
+            number
+        ];
+    };
     steps?(fromTtDays: number, toTtDays: number): number[];
 }
 

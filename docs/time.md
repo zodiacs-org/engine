@@ -761,7 +761,7 @@ written by 0.1.1-rc.16, is rc.15's time-basis set with the nutation named:
 - `nutation: "iau2000b;equation-of-equinoxes-with-two-complementary-terms"`,
   the engine's IAU 2000B series, all 77 luni-solar terms and the two fixed
   planetary offsets, with the two largest complementary terms in the
-  equation of the equinoxes (the README's *Nutation*);
+  equation of the equinoxes ([guide.md](guide.md), *Nutation*);
 - `moonPosition: "astronomy-engine-geo-moon;no-light-time;no-aberration"`:
   the Moon is astronomy-engine's geocentric series (`GeoMoon`) turned to the
   ecliptic of date by the engine's precession and nutation, where rc.15's
@@ -866,7 +866,7 @@ a replay also moves every longitude by the change in Δψ, which reaches 0.2701�
 sampled every 10 minutes from 1800 to 2200
 (`docs/evidence/nutation-2026-09-29/results/nutation-change.json`), and the
 angles and cusps by the change in the sidereal time and the true obliquity
-(see *Nutation* in the README). Over 16,218 receipts that the
+(see *Nutation* in [guide.md](guide.md)). Over 16,218 receipts that the
 carried rc.14 archive wrote for synthetic instants from 1972-01-01 to
 2027-10-02 at latitudes from 0° to 65°, a replay on this engine moved the
 midheaven by up to 12.81″; the ascendant and cusps by up to 12.9″ at the

@@ -15,9 +15,10 @@
  */
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
-import { afterAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { natalChart } from "./api.js";
+import { useDe440 } from "./de440-pack.js";
 import { setDefaultEphemeris } from "./ephemeris.js";
 
 const TEXT = readFileSync(new URL("./fixtures/near-table-end-2.0.0-rc.2.json", import.meta.url), "utf8");
@@ -33,6 +34,12 @@ const END = Date.UTC(2027, 9, 2);
 const SIX_HOURS = 6 * 3_600_000;
 const BOUND = { node: 4e-6, other: 4e-7 };
 
+// The shipped pack is loaded once (useDe440(), which makes it the default) and the default set back to
+// astronomy-engine, so that each test chooses its source with setDefaultEphemeris.
+beforeAll(() => {
+  useDe440();
+  setDefaultEphemeris("astronomy-engine");
+});
 afterAll(() => setDefaultEphemeris("astronomy-engine"));
 
 describe("charts within six hours of the IERS table's end, against 2.0.0-rc.2", () => {

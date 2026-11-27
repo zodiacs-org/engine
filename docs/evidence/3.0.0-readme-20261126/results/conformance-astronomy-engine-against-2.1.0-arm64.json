@@ -1,0 +1,43 @@
+{
+  "run": "zodiacs-engine-astronomy-engine.json",
+  "committed": "2.1.0-arm64-astronomy-engine.json",
+  "adapterEngineVersion": "2.1.0",
+  "committedEngineVersion": "2.1.0",
+  "total": {
+    "count": 640,
+    "pass": 392,
+    "fail": 247,
+    "unsupported": 1,
+    "error": 0
+  },
+  "vectors": 640,
+  "committedVectors": 640,
+  "sameVerdict": 640,
+  "sameResidual": 640,
+  "residualValues": 859,
+  "largestResidualDifference": 0,
+  "residualDiffers": [],
+  "otherDiffers": [],
+  "summaryFiguresEqualToThreeDecimals": true,
+  "summaryFiguresEqualToTheBit": true,
+  "configurationDiffers": [],
+  "l1": {
+    "pass": 48,
+    "fail": 192,
+    "unsupported": 0,
+    "lon": {
+      "unit": "arcsec",
+      "n": 240,
+      "median": 2.0834337,
+      "p95": 12.0434774,
+      "max": 18.7744819
+    },
+    "lat": {
+      "unit": "arcsec",
+      "n": 240,
+      "median": 1.1869337,
+      "p95": 10.6010939,
+      "max": 19.0281186
+    }
+  }
+}

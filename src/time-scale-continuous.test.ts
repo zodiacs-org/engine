@@ -20,6 +20,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { GROUPS, TABLE_END, instantsBetween } from "../scripts/continuous-utc-instants.mjs";
 import { natalChart } from "./api.js";
+import { useDe440 } from "./de440-pack.js";
 import { setDefaultEphemeris } from "./ephemeris.js";
 import { timeBands } from "./time-bands.js";
 import { UT1_TO_MS } from "./time-scale-data.js";
@@ -250,7 +251,9 @@ describe("what the continuous-UTC rule leaves as 1.1.0 and 2.0.0-rc.2 gave it", 
 });
 
 describe("charts on the continuous-UTC rule, on the shipped DE440 pack", () => {
-  beforeAll(() => setDefaultEphemeris("de440"));
+  beforeAll(() => {
+    useDe440();
+  });
   afterAll(() => setDefaultEphemeris("astronomy-engine"));
 
   it("put the Moon and the Sun within 1″ of Horizons on UTC input at 2028, 2030, 2050, 2100 and 2199", () => {

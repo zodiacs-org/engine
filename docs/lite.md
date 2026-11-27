@@ -33,7 +33,7 @@ built into a file of its own under `dist/` that imports nothing, and
 | composite | `compositeAspects`, `compositeMidpoints` | `CompositeAspect`, `CompositePosition` |
 | dignities | `CHALDEAN_FACES`, `CLASSICAL_PLANETS`, `DOMICILE_RULERS`, `EGYPTIAN_TERMS`, `EXALTATIONS`, `TRIPLICITY_LORDS`, `dignitiesFor`, `dignityFor`, `dignityRulersAt`, `essentialDignities`, `hasClassicalDignities`, `mutualReceptions` | `ClassicalPlanet`, `Debility`, `DignityRulers`, `DignitySpan`, `EssentialDignity`, `MutualReception`, `PlanetDignities`, `ReceptionOptions`, `SignDignity` |
 
-The declination part is the root's (README, *Declinations and parallels*),
+The declination part is the root's ([guide.md](guide.md), *Declinations and parallels*),
 the composite and dignity parts are `@zodiacs/engine/techniques`'
 ([techniques.md](techniques.md), *Composite charts* and *Essential
 dignities*), and the sect part is new (below). The declarations of the first
@@ -62,7 +62,7 @@ obliquity but the true one, a `Declinations` result's `trueObliquity` field
 holds the value passed and its `convention` field still names the true
 equator and equinox of date, which the result then is not. A row labelled exactly `"Sun"` is not flagged out of
 bounds while its ecliptic latitude is within `SUN_BOUND_LATITUDE`, 0.001°,
-as the README says under *Declinations and parallels*.
+as [guide.md](guide.md) says under *Declinations and parallels*.
 
 ## Sect
 

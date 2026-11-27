@@ -241,6 +241,6 @@ type Element = "fire" | "earth" | "air" | "water";
 // exported by @zodiacs/engine (Sect), @zodiacs/engine/core (Sect)
 type Sect = "day" | "night";
 
-// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
+// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign), @zodiacs/engine/minor-bodies (ZodiacSign)
 type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
 ```

@@ -1,0 +1,42 @@
+{
+  "node": "v26.4.0",
+  "esbuild": "0.27.7",
+  "packageVersion": "2.1.0",
+  "bundles": {
+    "natalChart from the root": {
+      "minified": 79787,
+      "gzipped": 36213,
+      "de440Pack": false
+    },
+    "natalChart from ./core": {
+      "minified": 79787,
+      "gzipped": 36213,
+      "de440Pack": false
+    },
+    "natalChart and useDe440": {
+      "minified": 3419715,
+      "gzipped": 2441049,
+      "de440Pack": true
+    },
+    "the whole of ./de440/pack": {
+      "minified": 3342559,
+      "gzipped": 2406590,
+      "de440Pack": true
+    },
+    "natalChart and all of ./minor-bodies": {
+      "minified": 260386,
+      "gzipped": 154191,
+      "de440Pack": false
+    },
+    "natalChart and Chiron alone": {
+      "minified": 104048,
+      "gzipped": 50632,
+      "de440Pack": false
+    }
+  },
+  "added": {
+    "useDe440, gzipped": 2404836,
+    "all five minor bodies, gzipped": 117978,
+    "Chiron alone, gzipped": 14419
+  }
+}

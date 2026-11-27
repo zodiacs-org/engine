@@ -166,11 +166,25 @@ describe("speeds where the time basis steps between their samples", () => {
     const before = at(early, "tt");
     const after = at(late, "tt");
     for (const point of at(utc)) {
-      if (point.speed === null) continue;
+      // True Black Moon Lilith takes the true node's step, six hours: the next test.
+      if (point.speed === null || point.point === "True Black Moon Lilith") continue;
       const index = before.findIndex((row) => row.point === point.point);
       const rate = wrap(after[index]!.lon - before[index]!.lon) / ((late - early) / DAY_MS);
       expect(Math.abs(point.speed / rate - 1), point.point).toBeLessThan(1e-9);
     }
+  });
+
+  it("keep True Black Moon Lilith's rate over six hours across a leap second", () => {
+    // As the true node's: samples 2016-12-31T16:00 and 2017-01-01T04:00 UTC, half a day and a second apart.
+    const utc = Date.parse("2016-12-31T22:00:00Z");
+    const lilithOf = (points: ReturnType<typeof chartPoints>["points"]) => points.find((row) => row.point === "True Black Moon Lilith")!;
+    const lilith = lilithOf(chartPoints({ utc, timeKnown: false }).points);
+    const ttOf = (offset: number) => J2000 + timeBasis(utc + offset * DAY_MS).ttDays * DAY_MS;
+    const [early, late] = [ttOf(-NODE_SPEED_STEP_DAYS), ttOf(NODE_SPEED_STEP_DAYS)];
+    expect([early % 1, late % 1]).toEqual([0, 0]);
+    const lilithAt = (tt: number) => lilithOf(chartPoints({ utc: tt, timeScale: "tt", timeKnown: false }).points).lon;
+    const rate = wrap(lilithAt(late) - lilithAt(early)) / ((late - early) / DAY_MS);
+    expect(Math.abs(lilith.speed! / rate - 1)).toBeLessThan(1e-9);
   });
 
   it("are unchanged where no step lies between the samples", () => {

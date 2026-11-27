@@ -21,21 +21,23 @@ and documentation CC BY 4.0, tools and schema MIT). Read `README.md`,
   `src/time-bands.ts` (the time entry's), `src/lite.ts` and
   `src/sect.ts` (the lite entry's); `OPT_IN_SOURCE` in
   `scripts/root-isolation.mjs` names them all. `src/de440.ts` with
-  `src/de440/` (the DE440 entry's) and `src/de440-pack.ts` (the entry that
-  gives out the shipped pack) are also the root's from 1.1.0-rc.9, which
-  computes on that pack by default (`docs/de440.md`); `src/test-setup.ts`
-  runs the suite on astronomy-engine, the fallback, and says why. The lite entry is built
-  apart: `npm run build` runs `scripts/build-lite.mjs` after tsup, which
-  bundles each of its four parts into a file of its own that imports
-  nothing. The core entry (`src/core.ts`, with `src/core/`) is built apart
-  too: `scripts/build-core.mjs` (with `scripts/core-entry.mjs`) bundles the
-  root's graph into `dist/core.js` on its own, with
-  `src/core/ephemeris-shipped.ts` in place of `src/ephemeris-shipped.ts`, so
-  that it computes on astronomy-engine and holds no DE440 pack; its guide is
-  the README's *Bundle size in a web page*. Their guides are `docs/time.md`, `docs/timing-hellenistic.md`,
-  `docs/vedic.md`, `docs/techniques.md`, `docs/calc.md`, `docs/houses.md`,
-  `docs/sky.md`, `docs/lite.md` and `docs/de440.md`, and the README's
-  *Birth-time windows* for the window entry.
+  `src/de440/` (the DE440 entry's), `src/de440-pack.ts` (the entry that gives
+  out the shipped pack, with `useDe440()`) and, from 3.0.0, `src/minor-bodies.ts`
+  with `src/minor-bodies/` are opt-in too: from 3.0.0 the root computes on
+  astronomy-engine by default and loads none of them (from 1.1.0-rc.9 to
+  2.1.0 it computed on the pack by default; `docs/de440.md`);
+  `src/test-setup.ts` runs the suite on astronomy-engine and says why. The
+  lite entry is built apart: `npm run build` runs `scripts/build-lite.mjs`
+  after tsup, which bundles each of its four parts into a file of its own
+  that imports nothing. The core entry (`src/core.ts`) re-exports the root
+  from 3.0.0, and tsup builds it with the other entries (until 2.1.0
+  `scripts/build-core.mjs` bundled a copy of the root's graph into
+  `dist/core.js` without the pack). Their guides are `docs/time.md`,
+  `docs/timing-hellenistic.md`, `docs/vedic.md`, `docs/techniques.md`,
+  `docs/calc.md`, `docs/houses.md`, `docs/sky.md`, `docs/lite.md` and
+  `docs/de440.md`, and `docs/guide.md` (the README's detailed sections, from
+  3.0.0), whose *Birth-time windows* and *Minor bodies* cover the window and
+  minor-bodies entries.
 - Package and release scripts: `scripts/` (export smoke test, package
   contents and size budgets, packed consumer, archive binding, release
   archive check, compatibility checks), and the generators of the time data:
@@ -63,18 +65,21 @@ and documentation CC BY 4.0, tools and schema MIT). Read `README.md`,
 # ci.yml, engine job (Node 20, 22 and 24; full history)
 npm ci
 npm run typecheck
-npm test
+npm run test:report    # npm test, writing the report the ratchet reads
 npm run build
 npm run exports:smoke
 npm run api:check
 npm run package:contents
+node scripts/ratchet.mjs --check --tests .cache/vitest-report.json
+node scripts/verify-no-dashes.mjs
+node tools/wheel/selftest.mjs
 npm run pack:dry-run
 node scripts/verify-archive-binding.mjs
 
 # ci.yml, archives job (Node 22; full history)
 node scripts/verify-archive-binding.mjs --rebuild-all
 
-# ci.yml, pack job (Node 22), then packed-consumer job (Node 20.19.0, 22.7.0,
+# ci.yml, pack job (Node 22), then packed-consumer job (Node 20.19.0, 22.12.0,
 # 22 and 24); DIR is an absolute path, and DIR and TMPDIR are outside the
 # checkout
 npm run build
@@ -96,17 +101,20 @@ node --test atlas/tools/selftest.mjs
 Run the archive-binding check with `node`, not `npm run archive:binding`,
 from a clone with full history, and with `TMPDIR` outside the checkout and
 below no `package.json` or `node_modules`. The package supports Node
-`^20.19.0 || >=22.7.0` (`engines`).
+`^20.19.0 || >=22.12.0` (`engines`), the versions that load its ES modules
+through `require()` too, which from 3.0.0 has no blocker.
 
 ## Rules
 
 - Packed files change only with a new candidate. The package holds
   `package.json`, `README.md`, `CHANGELOG.md`, `LICENSE`, `LICENSING.md`,
-  `NOTICE` and `dist/`. While the current version's archive is carried, CI
-  fails any pull request that changes one of them, or anything that reaches
-  `dist/` (code, doc comments, dependency updates that change the build),
-  unless it cuts a new candidate. Do not edit them in an ordinary change;
-  README and CHANGELOG corrections wait for the next candidate.
+  `NOTICE`, `dist/` and, from 3.0.0, `docs/calc.md` and
+  `skills/zodiacs-compute/SKILL.md`. While the current version's archive is
+  carried, CI fails any pull request that changes one of them, or anything
+  that reaches `dist/` (code, doc comments, dependency updates that change the
+  build), unless it cuts a new candidate. Do not edit them in an ordinary
+  change; corrections to the README, the CHANGELOG and the two packed
+  documents wait for the next candidate.
   `artifacts/README.md` has the rules and the check's threat model.
 - `artifacts/` holds immutable release archives. Never rewrite, repack,
   replace, rename or delete an archive, its receipt, or an entry of
@@ -162,11 +170,12 @@ below no `package.json` or `node_modules`. The package supports Node
   `@zodiacs/engine/time` and `@zodiacs/engine/lite` free of the ephemeris.
   The root must not import `@zodiacs/engine/timing`, `/vedic`, `/geo`,
   `/calc`, `/window`, `/techniques`, `/houses`, `/sky`, `/time` or `/lite`,
-  which are opt-in; `npm run exports:smoke` checks it. From 1.1.0-rc.9 the
-  root computes on the shipped DE440 pack by default, so it imports the
-  DE440 files and the pack. The pack is held once, in one shared chunk, and
-  only the graphs `npm run package:contents` names may load it; that check
-  also holds the pack's digest.
+  which are opt-in; `npm run exports:smoke` checks it. From 3.0.0 the root
+  computes on astronomy-engine by default and imports neither the DE440 files
+  nor the pack (from 1.1.0-rc.9 to 2.1.0 it did); `useDe440()` from
+  `/de440/pack` makes the pack the default. The pack is held once, in
+  `dist/de440-pack.js`, and only `./de440/pack`'s graph may load it;
+  `npm run package:contents` checks that and the pack's digest.
 - Never a silent fallback. From 1.1.0-rc.10 the calc and window entries
   follow the default source too, and a result that astronomy-engine computed
   where the pack was the default says so itself: it names astronomy-engine

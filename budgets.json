@@ -1,0 +1,23 @@
+{
+  "notes": {
+    "what": "Ceilings and floors scripts/ratchet.mjs holds the build to, set from what it measured at the commit that wrote them; a change that raises a ceiling, lowers a floor or removes a limit needs a person's approval (scripts/ratchet.mjs says how), and node scripts/ratchet.mjs --tighten only tightens.",
+    "gzip": "Bytes of an application's browser bundle gzipped at level 9: '.' and './core', the root's natalChart from each entry; './minor-bodies' and './minor-bodies:chiron', what all five minor bodies and Chiron alone add to the application of the root's natalChart; './de440/pack', the whole entry with the pack. Measured at 3.0.0's commit with Homebrew's Node 26.4.0 (the system's zlib 1.2.12): 36,213, 36,213, 117,965, 14,403 and 2,406,590; each ceiling is the measurement and 10 per cent (1 per cent for the pack), rounded up to a hundred, and at most 40,000, 40,000, 140,000 and 15,000 for the first four. After the first independent review's fixes, on Node 22.22.2 from nodejs.org (zlib 1.3.1, as CI's): 36,624, 36,624, 115,938, 14,132 and 2,367,563, each under its ceiling; after the second review's, 115,942 for the five minor bodies and the others unchanged; after the third review's, 115,981 for the five minor bodies and 14,125 for Chiron alone, the others unchanged.",
+    "bareChunkImports": "Bare imports of the package's own files left in dist/: none.",
+    "accuracy": "Arcseconds: de440L1MaxArcsec, natalChart on the shipped DE440 pack against the conformance suite's 240 L1 vectors (JPL Horizons, DE441), measured 0.0126; minorBodiesOosMaxArcsec, the 500 minor-body places on the pack against Horizons's (src/fixtures/minor-bodies-horizons-oos.json), measured 0.53211. conformanceMinPass: the passes in conformance/results/zodiacs-engine.json, 639 of 640.",
+    "minPassingTests": "Tests the run's JSON report counts as passed, the measurement rounded down to a hundred: 5,729 of 5,739 on the commit that set it, run on macOS arm64, where four tests that compare results to the bit with x64 Linux's fail, and two that vitest there cannot load from a path with a space; 4 are skipped by design."
+  },
+  "gzip": {
+    ".": 39900,
+    "./core": 39900,
+    "./minor-bodies": 129800,
+    "./minor-bodies:chiron": 15000,
+    "./de440/pack": 2430700
+  },
+  "bareChunkImports": 0,
+  "accuracy": {
+    "de440L1MaxArcsec": 0.02,
+    "minorBodiesOosMaxArcsec": 1.0,
+    "conformanceMinPass": 639
+  },
+  "minPassingTests": 5700
+}

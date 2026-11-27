@@ -119,7 +119,7 @@ declare function skyEventsOn(body: SkyBody, observer: Observer, date: string, op
 // exported by @zodiacs/engine (BodyName), @zodiacs/engine/core (BodyName), @zodiacs/engine/crossings (BodyName)
 type BodyName = "Sun" | "Moon" | "Mercury" | "Venus" | "Mars" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto" | "North Node" | "South Node";
 
-// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
+// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput), @zodiacs/engine/minor-bodies (DateInput)
 type DateInput = Date | string | number;
 
 // not exported by any entry point

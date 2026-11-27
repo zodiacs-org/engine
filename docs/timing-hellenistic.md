@@ -352,6 +352,14 @@ in it.
   never, so `releasingPeriods` and `releasingAt` return no flags.
 - `"sect-contradicts-altitude"`: the result depends on the chart's sect, and
   the sect says the opposite of the Sun's altitude at birth.
+- `"de440-unavailable"` or `"outside-de440-span"` (`EphemerisFallback`): where
+  the shipped DE440 pack is the default (`useDe440()`), astronomy-engine stood
+  in for it at an instant the result read the ephemeris at, or in a natal
+  position the result uses: a body, a lot, the sect (made from the Sun) or
+  True Black Moon Lilith, as the chart's flags or that point's `fallback`
+  say. The natal positions are read on the chart's own clock, with its
+  pinned ΔT where it has one, so a chart can be outside the pack where its
+  birth as a UTC instant is not; from 3.0.0 the result says so then too.
 
 `chartPoints` takes the sect from the Sun's house: day in houses 7 to 12,
 the half of the ecliptic from the descendant through the midheaven to the

@@ -1,6 +1,20 @@
 const SIGNS = Object.freeze(['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces']);
 const ASPECTS = new Set(['conjunction','sextile','square','trine','opposition']);
 const NS = 'http://www.w3.org/2000/svg';
+// Marker labels for the names @zodiacs/engine 3.0.0 gives (natalChart, minorBodyPositions, chartPoints).
+// Any other name is marked with its first two characters (the first alone where a space follows it),
+// numbered where that repeats a label.
+const LABELS = new Map(Object.entries({
+  Sun:'Su',Moon:'Mo',Mercury:'Me',Venus:'Ve',Mars:'Ma',Jupiter:'Ju',Saturn:'Sa',Uranus:'Ur',Neptune:'Ne',Pluto:'Pl',
+  'North Node':'NN','South Node':'SN',Chiron:'Ch',Ceres:'Ce',Pallas:'Pa',Juno:'Jn',Vesta:'Vs',
+  'Black Moon Lilith':'BL','True Black Moon Lilith':'TL','Mean Node':'MN','Mean South Node':'MS',Vertex:'Vx','East Point':'EP',
+  'Lot of Fortune':'Fo','Lot of Spirit':'Sp','Lot of Eros':'Er','Lot of Necessity':'Nc','Lot of Courage':'Co','Lot of Victory':'Vi','Lot of Nemesis':'Nm',
+}));
+// Radii in the 600 by 600 view box: zodiac band 222 to 264, exact-longitude ticks 214 to 222,
+// markers 202, marker labels 180, aspect chords 160, house numbers 120.
+const MARKER_R = 202, LABEL_R = 180, TICK_R = 214;
+// Markers keep at least this many degrees apart; more than 48 share the circle evenly.
+const MARKER_GAP = 7.5;
 const escapeXml = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));
 function text(value, name, max = 100) {
   if (typeof value !== 'string' || !value.trim() || value.length > max || /[\u0000-\u001f\u007f\ufffe\uffff\ud800-\udfff]/u.test(value)) throw new TypeError('Invalid ' + name);
@@ -16,17 +30,38 @@ function degreeLabel(lon) {
   const within = Math.floor((lon - sign * 30) * 1e6) / 1e6;
   return within.toFixed(6) + ' degrees ' + SIGNS[sign];
 }
-/** Copies the display fields only. It never reads or retains chart input time/place. */
-export function fromNatalChart(chart) {
+function list(value, name) {
+  if (value == null) return [];
+  if (!Array.isArray(value)) throw new TypeError('Invalid ' + name);
+  return value;
+}
+// A point's motion from its speed; null where the engine gives none (the Vertex, the East Point, the lots).
+function pointMotion(p) {
+  if (p?.speed == null) return null;
+  if (!Number.isFinite(p.speed)) throw new TypeError('Invalid point speed');
+  return p.speed < 0;
+}
+/**
+ * Copies the display fields only. It never reads or retains chart input time/place.
+ * `extras.extraBodies` takes minorBodyPositions() rows, `extras.points` chartPoints().points rows;
+ * both are drawn after the chart's bodies, and their ephemeris fallback flags join the chart's.
+ */
+export function fromNatalChart(chart, extras) {
   if (!chart || !Array.isArray(chart.bodies)) throw new TypeError('Expected a natal chart');
+  if (extras != null && typeof extras !== 'object') throw new TypeError('Invalid extras');
+  const extraBodies = list(extras?.extraBodies,'extra bodies'), points = list(extras?.points,'points');
   return validateWheelData({
     zodiac: 'tropical',
     engineVersion: chart.engineVersion,
-    bodies: chart.bodies.map(b => ({body: b.body, lon: b.lon, retrograde: b.retrograde})),
+    bodies: [
+      ...chart.bodies.map(b => ({body: b?.body, lon: b?.lon, retrograde: b?.retrograde})),
+      ...extraBodies.map(b => ({body: b?.body, lon: b?.lon, retrograde: b?.retrograde})),
+      ...points.map(p => ({body: p?.point, lon: p?.lon, retrograde: pointMotion(p)})),
+    ],
     angles: chart.angles,
     houses: chart.houses,
     aspects: chart.aspects,
-    flags: chart.flags,
+    flags: [...list(chart.flags,'flags'), ...extraBodies.flatMap(b => list(b?.flags,'extra body flags')), ...points.flatMap(p => p?.fallback == null ? [] : [p.fallback])],
   });
 }
 /** Validation establishes display shape, not scientific accuracy or receipt authenticity. */
@@ -38,7 +73,7 @@ export function validateWheelData(data) {
   else throw new TypeError('Explicit zodiac required');
   if (!Array.isArray(data.bodies) || data.bodies.length < 1 || data.bodies.length > 64) throw new TypeError('Invalid bodies');
   const bodies = Array.from(data.bodies, b => {
-    if (!b || typeof b.retrograde !== 'boolean') throw new TypeError('Invalid body');
+    if (!b || (typeof b.retrograde !== 'boolean' && b.retrograde !== null)) throw new TypeError('Invalid body');
     return {body:text(b.body,'body'),lon:longitude(b.lon),retrograde:b.retrograde};
   });
   const names = new Set(bodies.map(b => b.body));
@@ -64,16 +99,75 @@ export function validateWheelData(data) {
   const engineVersion = data.engineVersion == null ? null : text(data.engineVersion,'engine version',64);
   return {zodiac,bodies,angles,houses,aspects,flags,engineVersion};
 }
+function markerLabels(names) {
+  const labels = names.map(name => LABELS.get(name) ?? null), used = new Set(labels.filter(Boolean));
+  return labels.map((label, i) => {
+    if (label) return label;
+    // Trimmed before it is compared: SVG collapses a trailing space, so "A " would show as the "A" of another name.
+    const base = Array.from(names[i].trim()).slice(0, 2).join('').trimEnd();
+    let candidate = base;
+    for (let n = 2; used.has(candidate); n++) candidate = Array.from(base)[0] + n;
+    used.add(candidate);
+    return candidate;
+  });
+}
 export function describeWheel(data) {
   const model = validateWheelData(data);
   const zodiac = model.zodiac === 'tropical' ? 'Tropical zodiac' : 'Sidereal zodiac, ' + model.zodiac.sidereal;
-  const bodies = model.bodies.map(b => ({...b,description:b.body + ': ' + degreeLabel(b.lon) + (b.retrograde ? ', retrograde' : ', direct')}));
+  const labels = markerLabels(model.bodies.map(b => b.body));
+  const bodies = model.bodies.map((b,i) => ({...b,label:labels[i],description:b.body + ' (' + labels[i] + '): ' + degreeLabel(b.lon) + (b.retrograde === null ? '' : b.retrograde ? ', retrograde' : ', direct')}));
   const houses = model.houses ? model.houses.cusps.map((lon,i) => ({house:i+1,lon,description:'House ' + (i+1) + ': ' + degreeLabel(lon)})) : [];
   const aspects = model.aspects.map(a => ({...a,description:a.a + ' ' + a.type + ' ' + a.b + ', orb ' + a.orb.toFixed(6) + ' degrees, ' + (a.applying ? 'applying' : 'not applying')}));
   const angles = model.angles ? Object.entries(model.angles).map(([name,lon]) => ({name,lon,description:name.toUpperCase() + ': ' + degreeLabel(lon)})) : [];
   const summary = [zodiac + '.', ...(model.engineVersion ? ['Engine ' + model.engineVersion + '.'] : []), model.houses ? 'House system: ' + model.houses.system + '.' : 'No houses.', model.angles ? 'Ascendant is at the left of the wheel.' : 'No angles; Aries zero is at the left of the wheel.', ...bodies.map(b=>b.description + '.'), ...angles.map(a=>a.description + '.'), ...houses.map(h=>h.description + '.'), ...aspects.map(a=>a.description + '.'), ...model.flags.map(f=>'Flag: ' + f + '.')].join(' ');
   return {model,zodiac,bodies,houses,angles,aspects,summary};
 }
+/**
+ * Display angles for markers at `lons`: every two at least MARKER_GAP degrees apart (360 / n where n
+ * markers cannot all keep it), all as near their longitudes as that allows (least squares), in the
+ * longitudes' order around the circle.
+ */
+function spread(lons) {
+  const n = lons.length, gap = Math.min(MARKER_GAP, 360 / n);
+  if (n < 2) return lons.slice();
+  const order = lons.map((_, i) => i).sort((a, b) => lons[a] - lons[b] || a - b);
+  // The empty arc after each marker in that order; the circle is cut at the end of one of them, widest first.
+  const empty = order.map((i, k) => (k + 1 < n ? lons[order[k + 1]] : lons[order[0]] + 360) - lons[i]);
+  const cuts = order.map((_, k) => k).sort((a, b) => empty[b] - empty[a] || a - b);
+  // Lay the longitudes out in order from a cut, as one line.
+  const unrolled = start => Array.from({length: n}, (_, j) => lons[order[(start + j) % n]] + (start + j >= n ? 360 : 0));
+  let start, theta;
+  if (n * MARKER_GAP >= 360) {
+    // n markers fill the circle: each is exactly the gap from the next, spaced evenly about their mean.
+    start = (cuts[0] + 1) % n;
+    const x = unrolled(start), mean = x.reduce((sum, v, j) => sum + v - j * gap, 0) / n;
+    theta = x.map((_, j) => mean + j * gap);
+  } else {
+    // Otherwise some neighbours stay more than the gap apart in the circle's least-squares fit, and the
+    // line cut between them has the same fit: pool adjacent violators of x[j] - j * gap, which must not
+    // decrease. A cut between neighbours the fit presses together shows itself: the line's two ends then
+    // come within the gap of each other across it, and the next cut is tried. So only markers that crowd
+    // each other move, where clusters meet across the widest arc too.
+    for (const k of cuts) {
+      start = (k + 1) % n;
+      const x = unrolled(start), pools = [];
+      for (let j = 0; j < n; j++) {
+        pools.push({sum: x[j] - j * gap, count: 1});
+        while (pools.length > 1 && pools.at(-2).sum * pools.at(-1).count > pools.at(-1).sum * pools.at(-2).count) {
+          const last = pools.pop();
+          pools.at(-1).sum += last.sum;
+          pools.at(-1).count += last.count;
+        }
+      }
+      theta = pools.flatMap(p => Array(p.count).fill(p.sum / p.count)).map((v, j) => v + j * gap);
+      if (theta[0] + 360 - theta[n - 1] >= gap - 1e-9) break;
+    }
+  }
+  const shown = new Array(n);
+  for (let j = 0; j < n; j++) shown[order[(start + j) % n]] = ((theta[j] % 360) + 360) % 360;
+  return shown;
+}
+const apart = (a, b) => { const d = Math.abs(a - b) % 360; return Math.min(d, 360 - d); };
 function point(lon,r,origin) {
   const a = (180 + (lon-origin)) * Math.PI/180;
   return {x:300 + r*Math.cos(a),y:300-r*Math.sin(a)};
@@ -85,6 +179,7 @@ export function renderWheelSvg(data, {idPrefix, title = 'Chart wheel'} = {}) {
   text(title,'title',160);
   if (typeof idPrefix !== 'string' || !/^[A-Za-z][A-Za-z0-9_-]{0,63}$/.test(idPrefix)) throw new TypeError('Unique safe idPrefix required');
   const d = describeWheel(data), origin = d.model.angles?.asc ?? 0;
+  const shown = spread(d.model.bodies.map(b => b.lon));
   const out = ['<svg xmlns="'+NS+'" viewBox="0 0 600 600" role="img" aria-labelledby="'+idPrefix+'-title '+idPrefix+'-desc" style="display:block;width:100%;max-width:40rem;height:auto;color:inherit">',
     '<title id="'+idPrefix+'-title">'+escapeXml(title)+'</title><desc id="'+idPrefix+'-desc">'+escapeXml(d.summary)+'</desc>',
     '<g aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1">',
@@ -93,6 +188,11 @@ export function renderWheelSvg(data, {idPrefix, title = 'Chart wheel'} = {}) {
   for (const lon of d.model.houses?.cusps ?? []) out.push(line(point(lon,72,origin),point(lon,222,origin),'stroke-dasharray="4 3"'));
   const byName = new Map(d.model.bodies.map(b=>[b.body,b.lon]));
   for (const a of d.model.aspects) out.push(line(point(byName.get(a.a),160,origin),point(byName.get(a.b),160,origin),'stroke-opacity=".35"'));
+  // A tick at each exact longitude, and a leader to its marker where crowding moved the marker.
+  d.model.bodies.forEach((b,i)=>{
+    out.push(line(point(b.lon,222,origin),point(b.lon,TICK_R,origin),'data-tick-index="'+i+'"'));
+    if (apart(shown[i],b.lon) > 0.5) out.push(line(point(b.lon,TICK_R,origin),point(shown[i],MARKER_R,origin),'stroke-opacity=".6"'));
+  });
   out.push('</g><g aria-hidden="true" fill="currentColor" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14">');
   for(let i=0;i<12;i++) out.push('<text '+attrs(point(i*30+15,244,origin))+' dominant-baseline="middle">'+SIGNS[i]+'</text>');
   for (const [i,h] of d.houses.entries()) {
@@ -101,11 +201,12 @@ export function renderWheelSvg(data, {idPrefix, title = 'Chart wheel'} = {}) {
     const middle=(h.lon+span/2)%360;
     out.push('<text '+attrs(point(middle,120,origin))+' dominant-baseline="middle">'+h.house+'</text>');
   }
-  d.model.bodies.forEach((b,i)=>{
-    const p=point(b.lon,190+(i%4)*7,origin);
+  d.bodies.forEach((b,i)=>{
+    const p=point(shown[i],MARKER_R,origin);
     out.push('<circle data-body-index="'+i+'" cx="'+p.x.toFixed(6)+'" cy="'+p.y.toFixed(6)+'" r="5" fill="currentColor" stroke="currentColor" stroke-width="1"/>');
+    out.push('<text data-label-index="'+i+'" '+attrs(point(shown[i],LABEL_R,origin))+' dominant-baseline="middle" font-size="11">'+escapeXml(b.label)+'</text>');
   });
-  if (d.model.angles) out.push('<text x="40" y="294">ASC</text>');
+  if (d.model.angles) out.push('<text x="18" y="300" dominant-baseline="middle">ASC</text>');
   out.push('</g></svg>');
   return out.join('');
 }

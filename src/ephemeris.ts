@@ -4,6 +4,7 @@ import {
   GeoMoon,
   GeoMoonState,
   GeoVector,
+  KM_PER_AU,
   MakeTime,
   SetDeltaTFunction
 } from "astronomy-engine";
@@ -11,12 +12,14 @@ import {
 import { findAspects } from "./aspects.js";
 import { chartBodyDeclinations } from "./declination.js";
 import type { ChartDeclinations } from "./declination.js";
+import type { De440Source } from "./de440.js";
 import { deltaT } from "./deltat.js";
-import { INITIAL_DEFAULT_EPHEMERIS, shippedDe440Source } from "./ephemeris-shipped.js";
+import { defaultEphemerisName, installSource, installedSource, registeredDe440Source, setDefaultEphemeris } from "./ephemeris-default.js";
+import type { DefaultEphemerisName } from "./ephemeris-default.js";
 import { eclipticFrame, eclipticOfDate, meanEcliptic } from "./frame.js";
 import { computeAngles, computeHouses, eastPointOf, insidePolarCircle, vertexOf } from "./houses.js";
 import { tilt } from "./nutation.js";
-import { hellenisticLots, meanApogee, meanNodeLongitude, sectOf } from "./points.js";
+import { hellenisticLots, meanApogee, meanNodeLongitude, osculatingApogee, sectOf } from "./points.js";
 import { EPHEMERIS_SPAN, outsideReferenceSpan } from "./reference-span.js";
 import { degreeInSign, normalizeLongitude, signForLongitude } from "./signs.js";
 import { elapsedDays, timeBasis } from "./time-scale.js";
@@ -51,12 +54,10 @@ interface Clock {
 
 const UTC_CLOCK: Clock = { scale: "utc", pin: undefined };
 
-/** The source `withEphemeris` installed, or null for the default source. */
-let source: PositionSource | null = null;
-
-/** What a call outside `withEphemeris` computes on. */
-export type DefaultEphemerisName = "de440" | "astronomy-engine";
-let defaultName: DefaultEphemerisName = INITIAL_DEFAULT_EPHEMERIS;
+// The default's name and the shipped pack's opener are src/ephemeris-default.ts's,
+// which @zodiacs/engine/de440/pack sets without loading this module.
+export { setDefaultEphemeris };
+export type { DefaultEphemerisName };
 
 /**
  * The default source keeps a day inside each end of the shipped pack, so
@@ -73,24 +74,45 @@ interface ShippedDefault {
   readonly fromTtDays: number;
   readonly toTtDays: number;
 }
-let shipped: ShippedDefault | null | undefined;
-let shippedError: string | null = null;
 
-/** The shipped pack as the default source, opened at the first use, or null when it cannot be opened. */
+/** Why the default has no pack before `useDe440()`: nothing has registered one. */
+const NOT_LOADED =
+  "the shipped DE440 pack is not loaded: call useDe440() from @zodiacs/engine/de440/pack, or supply a pack through @zodiacs/engine/de440 and withEphemeris";
+
+/** The registered opener's pack as the default source, or why it did not open, for the opener it came from. */
+let shipped: { readonly loader: () => De440Source; readonly pack: ShippedDefault | null; readonly error: string | null } | null = null;
+
+/**
+ * The shipped pack as the default source, opened at the first use after
+ * `useDe440()` registered it, or null when none is registered or it cannot
+ * be opened (`shippedError` says why).
+ */
 function shippedDefault(): ShippedDefault | null {
-  if (shipped !== undefined) return shipped;
+  const loader = registeredDe440Source();
+  if (loader === null) return null;
+  if (shipped?.loader === loader) return shipped.pack;
   try {
-    const opened = shippedDe440Source();
+    const opened = loader();
     shipped = {
-      source: opened,
-      fromTtDays: opened.pack.startEtSecTdb / SECONDS_PER_DAY + DEFAULT_MARGIN_DAYS,
-      toTtDays: opened.pack.stopEtSecTdb / SECONDS_PER_DAY - DEFAULT_MARGIN_DAYS
+      loader,
+      pack: {
+        source: opened,
+        fromTtDays: opened.pack.startEtSecTdb / SECONDS_PER_DAY + DEFAULT_MARGIN_DAYS,
+        toTtDays: opened.pack.stopEtSecTdb / SECONDS_PER_DAY - DEFAULT_MARGIN_DAYS
+      },
+      error: null
     };
   } catch (error) {
-    shipped = null;
-    shippedError = error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+    shipped = { loader, pack: null, error: error instanceof Error ? `${error.name}: ${error.message}` : String(error) };
   }
-  return shipped;
+  return shipped.pack;
+}
+
+/** Why `shippedDefault()` gave null, or null when it gave the pack. */
+function shippedError(): string | null {
+  const loader = registeredDe440Source();
+  if (loader === null) return NOT_LOADED;
+  return shipped?.loader === loader ? shipped.error : null;
 }
 
 /** The source a calculation at one instant uses, and why it is astronomy-engine when the default was the pack. */
@@ -99,11 +121,11 @@ interface Chosen {
   readonly from: PositionSource | null;
   /**
    * Set when the default is "de440" and the calculation is astronomy-engine's
-   * all the same: the shipped pack could not be opened
-   * (`"de440-unavailable"`), or the instant is outside it
+   * all the same: the shipped pack is not loaded (no `useDe440()`) or could
+   * not be opened (`"de440-unavailable"`), or the instant is outside it
    * (`"outside-de440-span"`). Null on the pack, inside `withEphemeris`, and
-   * after `setDefaultEphemeris("astronomy-engine")`, which is the caller's
-   * choice and not a fallback.
+   * on the default astronomy-engine, which is the caller's choice (or the
+   * package's default) and not a fallback.
    */
   readonly fallback: EphemerisFallback | null;
 }
@@ -117,8 +139,9 @@ const ON_ASTRONOMY_ENGINE: Chosen = { from: null, fallback: null };
  * astronomy-engine, with the reason when that is a fallback.
  */
 function chosenAt(ttDays: number): Chosen {
+  const source = installedSource();
   if (source) return { from: source, fallback: null };
-  if (defaultName !== "de440") return ON_ASTRONOMY_ENGINE;
+  if (defaultEphemerisName() !== "de440") return ON_ASTRONOMY_ENGINE;
   const pack = shippedDefault();
   if (pack === null) return { from: null, fallback: "de440-unavailable" };
   return ttDays >= pack.fromTtDays && ttDays <= pack.toTtDays ? { from: pack.source, fallback: null } : { from: null, fallback: "outside-de440-span" };
@@ -217,12 +240,17 @@ export interface DefaultEphemeris {
   /**
    * `"de440"`: a call outside `withEphemeris` computes on the shipped DE440
    * pack where `de440` says it can, and on astronomy-engine elsewhere.
-   * `"astronomy-engine"`: it computes on astronomy-engine always.
+   * `"astronomy-engine"`, the package's default from 3.0.0: it computes on
+   * astronomy-engine always.
    */
   readonly name: DefaultEphemerisName;
   /** The shipped pack as the default source. */
   readonly de440: {
-    /** Whether the pack opened. When false, every default call is astronomy-engine's. */
+    /**
+     * Whether the pack is loaded (`useDe440()`) and opened. When false, every
+     * default call is astronomy-engine's, flagged `"de440-unavailable"` when
+     * `name` is `"de440"`.
+     */
     readonly opened: boolean;
     /** The pack's SHA-256, a chart's `ephemeris.version`, or null when it did not open. */
     readonly version: string | null;
@@ -233,41 +261,31 @@ export interface DefaultEphemeris {
      */
     readonly fromTtDays: number | null;
     readonly toTtDays: number | null;
-    /** Why the pack did not open, or null. */
+    /** Why the pack is not loaded or did not open, or null. */
     readonly error: string | null;
   };
 }
 
 /**
- * What a call outside `withEphemeris` computes on. The first call opens the
- * shipped pack if nothing has yet (which hashes its 2,489,664 bytes twice).
- * A chart says which ephemeris it came from: `chart.ephemeris` names the
- * pack, and is absent on a chart from astronomy-engine.
+ * What a call outside `withEphemeris` computes on. From 3.0.0 that is
+ * astronomy-engine unless `useDe440()` from `@zodiacs/engine/de440/pack` has
+ * loaded the shipped pack; once it has, the first call opens the pack if
+ * nothing has yet (which hashes its 2,489,664 bytes twice). A chart says
+ * which ephemeris it came from: `chart.ephemeris` names the pack or
+ * astronomy-engine.
  */
 export function defaultEphemeris(): DefaultEphemeris {
   const pack = shippedDefault();
   return Object.freeze({
-    name: defaultName,
+    name: defaultEphemerisName(),
     de440: Object.freeze({
       opened: pack !== null,
       version: pack?.source.ephemeris.version ?? null,
       fromTtDays: pack?.fromTtDays ?? null,
       toTtDays: pack?.toTtDays ?? null,
-      error: shippedError
+      error: pack === null ? shippedError() : null
     })
   });
-}
-
-/**
- * Choose what a call outside `withEphemeris` computes on, from now on:
- * `"de440"` (the package's default) or `"astronomy-engine"`, which gives the
- * positions 1.1.0-rc.7 and earlier gave at every instant. It is one setting
- * for the whole module, so set it once, before computing; `withEphemeris`
- * still overrides it for the calls inside.
- */
-export function setDefaultEphemeris(name: DefaultEphemerisName): void {
-  if (name !== "de440" && name !== "astronomy-engine") throw new TypeError('setDefaultEphemeris takes "de440" or "astronomy-engine"');
-  defaultName = name;
 }
 
 /**
@@ -282,13 +300,13 @@ export function withEphemeris<T>(positionSource: PositionSource, run: () => T): 
   const named = positionSource?.ephemeris;
   if (typeof positionSource?.place !== "function" || typeof positionSource.trueNode !== "function" || typeof named?.name !== "string" || typeof named.version !== "string" || typeof run !== "function")
     throw new TypeError("withEphemeris needs a position source and a function");
-  const previous = source;
-  source = positionSource;
+  const previous = installedSource();
+  installSource(positionSource);
   let result: T;
   try {
     result = run();
   } finally {
-    source = previous;
+    installSource(previous);
   }
   // A promise or an iterator would compute its later steps after the source is restored.
   const later = result as { then?: unknown; next?: unknown } | null;
@@ -307,7 +325,7 @@ export function withEphemeris<T>(positionSource: PositionSource, run: () => T): 
  * window entry): refuse inside withEphemeris rather than mix two ephemerides.
  */
 export function refuseUnderSource(what: string): void {
-  if (source) throw new TypeError(`${what} does not run inside withEphemeris: it computes on the engine's own sources, not a caller's`);
+  if (installedSource()) throw new TypeError(`${what} does not run inside withEphemeris: it computes on the engine's own sources, not a caller's`);
 }
 
 /** A source's longitude in [0, 360): 360 becomes 0 and -0 becomes 0, every other value unchanged. */
@@ -711,10 +729,77 @@ function pointPosition(point: PointName, lon: number, lat: number, speed: number
 }
 
 /**
+ * True Black Moon Lilith: the osculating lunar apogee (osculatingApogee in
+ * src/points.ts) of the geometric geocentric Moon at `position`, km, with
+ * `velocity`, km/s, both in EQJ (the J2000 mean equator and equinox,
+ * astronomy-engine's frame, which the engine takes for the ICRF, the frame
+ * bias of under 0.03″ left out), carried to the true ecliptic and equinox of
+ * date at `tt`, days of TT from J2000.0, as src/frame.ts carries a body.
+ * Longitude in [0, 360) and latitude, degrees: the apogee lies in the Moon's
+ * orbital plane, so its latitude reaches the orbit's inclination to the
+ * ecliptic, about 5°. chartPoints and the calc entry take the point from it.
+ *
+ * @internal
+ */
+export function trueApogee(
+  position: readonly [number, number, number],
+  velocity: readonly [number, number, number],
+  tt: number
+): { lon: number; lat: number } {
+  const [x, y, z] = osculatingApogee(position, velocity).direction;
+  return eclipticOfDate(x, y, z, tt);
+}
+
+/**
+ * The osculating apogee (`trueApogee` above) of the geocentric
+ * Moon's geometric state at `basis`, from `from`'s `moonState`, or, where
+ * `from` is null, from astronomy-engine's GeoMoonState (AU and AU a day, in
+ * EQJ, made km and km/s).
+ */
+function trueLilithOn(basis: TimeBasis, from: PositionSource | null): { lon: number; lat: number } {
+  if (from) {
+    const { position, velocity } = from.moonState!(basis.ttDays);
+    return trueApogee(position, velocity, basis.ttDays);
+  }
+  const time = timeOf(basis);
+  const state = GeoMoonState(time);
+  const perSecond = KM_PER_AU / 86_400;
+  return trueApogee(
+    [state.x * KM_PER_AU, state.y * KM_PER_AU, state.z * KM_PER_AU],
+    [state.vx * perSecond, state.vy * perSecond, state.vz * perSecond],
+    time.tt
+  );
+}
+
+/**
+ * True Black Moon Lilith at `ms` on `clock`, from the source a position at
+ * that instant comes from (`chosenAt`), decided once and used for both speed
+ * samples, and labelled with it as a body is; null where that source gives no
+ * Moon state. Its speed is a central difference over plus/minus
+ * NODE_SPEED_STEP_DAYS, as the true node's, which the osculating elements'
+ * short-period noise would otherwise dominate on astronomy-engine's Moon.
+ */
+function trueLilithRow(ms: number, clock: Clock): PointPosition | null {
+  const chosen = chosenAt(basisAt(ms, clock).ttDays);
+  const { from } = chosen;
+  if (from && typeof from.moonState !== "function") return null;
+  if (chosen.fallback !== null) noted?.add(chosen.fallback);
+  const place = trueLilithOn(basisAt(ms, clock), from);
+  const speed = centralDifference((basis) => trueLilithOn(basis, from).lon, ms, clock, NODE_SPEED_STEP_DAYS);
+  return {
+    ...pointPosition("True Black Moon Lilith", place.lon, place.lat, speed),
+    ephemeris: from ? from.ephemeris.name : EPHEMERIS.name,
+    ...(chosen.fallback !== null && { fallback: chosen.fallback })
+  };
+}
+
+/**
  * The chart's points, computed on the same clock as the chart: its time
  * scale and its pinned ΔT when it has one. The mean node and Black Moon
- * Lilith depend on the instant alone; the Vertex and the East Point on the
- * instant and the place; the lots on the chart's own ascendant and bodies.
+ * Lilith depend on the instant alone; True Black Moon Lilith on the instant
+ * and the source a position there comes from; the Vertex and the East Point
+ * on the instant and the place; the lots on the chart's own ascendant and
+ * bodies.
  */
 export function computePoints(chart: Chart): ChartPoints {
   return { ...evaluated(() => pointsAt(chart)), ...chartLabel(chart) };
@@ -776,7 +861,10 @@ function pointsAt(chart: Chart): Omit<ChartPoints, "ephemeris" | "flags"> {
     pointPosition("Mean South Node", mean.node + 180, 0, nodeSpeed),
     pointPosition("Black Moon Lilith", mean.apogee.lon, mean.apogee.lat, apogeeSpeed)
   ];
+  // Last, after the points of 2.x, so that each of those keeps its index.
+  const lilith = trueLilithRow(ms, clock);
   if (chart.angles === null || latitude === undefined || longitude === undefined) {
+    if (lilith) points.push(lilith);
     return { sect: null, points };
   }
   const time = timeAt(ms, clock);
@@ -810,5 +898,6 @@ function pointsAt(chart: Chart): Omit<ChartPoints, "ephemeris" | "flags"> {
     sect
   );
   for (const lot of lots) points.push(pointPosition(lot.point, lot.lon, 0, null));
+  if (lilith) points.push(lilith);
   return { sect, points };
 }

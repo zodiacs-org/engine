@@ -1,13 +1,14 @@
 /*
- * Self-test of the comparison and the browser bundle, with Node alone (no
- * browser, Bun or Deno): node --test tools/runtime-conformance/selftest.mjs
- * after `npm run build` at the repository root.
+ * Self-test of the comparison, the browser bundle and the native receipt
+ * probe, with Node alone (no browser, Bun or Deno):
+ * node --test tools/runtime-conformance/selftest.mjs after `npm run build`
+ * at the repository root.
  */
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { basename, dirname, join, resolve } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { judge, readSuite, runAdapter, summarize } from '../../conformance/harness/lib.mjs';
@@ -146,6 +147,43 @@ test('the core browser bundle uses the same entry and handlers as the native cor
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test('the native receipt probe puts the root on the pack where the build has one, and runs a build from before the pack without it', (t) => {
+  const probe = (dist) => spawnSync(process.execPath, [resolve(here, 'native-extras.mjs')], { cwd: root, encoding: 'utf8', env: { ...process.env, ZODIACS_ENGINE_DIST: dist } });
+  /** The ephemeris each of the five receipts names, from a probe that succeeded. */
+  const ephemerides = (run) => {
+    assert.equal(run.status, 0, run.stderr);
+    const { receipts } = JSON.parse(run.stdout);
+    assert.equal(receipts.length, 5);
+    return receipts.map((one) => JSON.parse(one.text).receipt.engine.ephemeris.name);
+  };
+  assert.deepEqual(ephemerides(probe(resolve(root, 'dist'))), Array(5).fill('jpl-de440'));
+
+  // A build from before 1.1.0-rc.9, such as the archive of 1.0.0, has no pack, and its receipts are astronomy-engine's.
+  // Here it is this build without its de440-pack.js, beside a package.json that does not export ./de440/pack.
+  const dir = mkdtempSync(join(tmpdir(), 'runtime-conformance-no-pack-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  cpSync(resolve(root, 'dist'), join(dir, 'dist'), { recursive: true, filter: (source) => basename(source) !== 'de440-pack.js' });
+  symlinkSync(resolve(root, 'node_modules'), join(dir, 'node_modules'), 'dir');
+  const manifest = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'));
+  const withoutPack = { ...manifest, exports: { ...manifest.exports } };
+  delete withoutPack.exports['./de440/pack'];
+  writeFileSync(join(dir, 'package.json'), JSON.stringify(withoutPack));
+  assert.equal(existsSync(join(dir, 'dist', 'de440-pack.js')), false);
+  assert.deepEqual(ephemerides(probe(join(dir, 'dist'))), Array(5).fill('astronomy-engine'));
+
+  // A build that has the entry and cannot load its pack fails: one whose package.json exports ./de440/pack
+  // without the file, and one whose de440-pack.js throws.
+  writeFileSync(join(dir, 'package.json'), JSON.stringify(manifest));
+  const missing = probe(join(dir, 'dist'));
+  assert.notEqual(missing.status, 0);
+  assert.match(missing.stderr, /ERR_MODULE_NOT_FOUND[^\n]*de440-pack\.js/u);
+  writeFileSync(join(dir, 'package.json'), JSON.stringify(withoutPack));
+  writeFileSync(join(dir, 'dist', 'de440-pack.js'), "throw new Error('this pack does not load');\n");
+  const broken = probe(join(dir, 'dist'));
+  assert.notEqual(broken.status, 0);
+  assert.match(broken.stderr, /this pack does not load/u);
 });
 
 test('the runner writes root and core separately and accepts matching core verdicts', (t) => {

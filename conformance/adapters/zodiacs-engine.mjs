@@ -12,29 +12,35 @@
  * ZODIACS_ENGINE_DIST points it at another build, for example an extracted
  * release archive's `package/dist`.
  *
- * Positions. From 1.1.0-rc.9 a plain call computes on the sealed DE440 pack
- * the package ships (docs/de440.md), and by default the adapter answers the
- * position requests the way an application would: a plain `natalChart`, with
- * nothing opened, supplied or fetched. Every other kind is answered the same
- * way, so their bodies are the pack's too. From 1.1.0-rc.10 every chart names
- * its ephemeris, so each position's meta carries it on either run, and a
- * fallback's flag with it. Two other runs can be asked for:
+ * Positions. By default the adapter answers the position requests from the
+ * sealed DE440 pack the package ships (docs/de440.md), the way an
+ * application that asks for it would: from 3.0.0 it first calls `useDe440()`
+ * from `@zodiacs/engine/de440/pack`, the one call that makes the pack the
+ * default source, and then asks a plain `natalChart`, with nothing supplied or
+ * fetched; from 1.1.0-rc.9 to 2.1.0 the pack was the default already, and a
+ * build whose pack entry has no `useDe440` (an archive of those versions,
+ * through ZODIACS_ENGINE_DIST) is asked the plain `natalChart` alone. Every
+ * other kind is answered the same way, so their bodies are the pack's too.
+ * From 1.1.0-rc.10 every chart names its ephemeris, so each position's meta
+ * carries it on either run, and a fallback's flag with it. Two other runs can
+ * be asked for:
  *
- * - `--ephemeris astronomy-engine` (an argument of this script) first calls
- *   `setDefaultEphemeris("astronomy-engine")`, so that every request is
- *   answered from astronomy-engine, as the engine answers outside the pack's
- *   years and as every build before 1.1.0-rc.9 answered. A build without
- *   `setDefaultEphemeris` (an archive before 1.1.0-rc.9, through
- *   ZODIACS_ENGINE_DIST) is such a build, and runs this way whatever the
- *   argument.
+ * - `--ephemeris astronomy-engine` (an argument of this script) calls
+ *   `setDefaultEphemeris("astronomy-engine")` and no `useDe440()`, so that
+ *   every request is answered from astronomy-engine, the package's default
+ *   from 3.0.0, as the engine answers outside the pack's years and as every
+ *   build before 1.1.0-rc.9 answered. A build without `setDefaultEphemeris`
+ *   (an archive before 1.1.0-rc.9, through ZODIACS_ENGINE_DIST) is such a
+ *   build, and runs this way whatever the argument.
  * - ZODIACS_ENGINE_DE440_PACK and ZODIACS_ENGINE_DE440_SHA256 (both, or
  *   neither) answer the position requests from a sealed DE440 pack the
  *   caller supplies: the adapter opens it with `@zodiacs/engine/de440`, which
  *   refuses it unless its SHA-256 is the one given, and computes inside the
  *   root's `withEphemeris`.
  * - `--entry core` (an argument of this script) answers from
- *   `@zodiacs/engine/core` (`core.js` in place of `index.js`), the entry that
- *   carries no pack and computes on astronomy-engine. L4 uses the regular
+ *   `@zodiacs/engine/core` (`core.js` in place of `index.js`), on
+ *   astronomy-engine: from 3.0.0 the root under its 2.x name, until 2.1.0 the
+ *   root's code bundled on its own without the pack. L4 uses the regular
  *   calc entry with its own root set to astronomy-engine. Its verdicts are held
  *   to `conformance/results/zodiacs-engine-astronomy-engine.json`. Not
  *   together with a supplied pack.
@@ -288,10 +294,10 @@ if (runAsScript()) {
     process.exit(2);
   }
   /**
-   * Where the requests are answered from: "default" (a plain call: the shipped
-   * DE440 pack inside its years), "supplied" (the caller's pack, for the
-   * position requests), "astronomy-engine", or "core" (a plain call to
-   * `@zodiacs/engine/core`, which computes on astronomy-engine).
+   * Where the requests are answered from: "default" (the shipped DE440 pack
+   * inside its years, after `useDe440()` where the build has it), "supplied"
+   * (the caller's pack, for the position requests), "astronomy-engine", or
+   * "core" (a plain call to `@zodiacs/engine/core`, on astronomy-engine).
    */
   const mode = packPath ? 'supplied' : entry === 'core' ? 'core' : asked === 'astronomy-engine' || typeof engine.setDefaultEphemeris !== 'function' ? 'astronomy-engine' : 'default';
   /** The caller's DE440 source for the position requests, or null. */
@@ -301,6 +307,10 @@ if (runAsScript()) {
     de440Source = await de440.openDe440Pack(new Uint8Array(readFileSync(resolve(packPath))), { expectDigest: packDigest });
   } else if (mode === 'astronomy-engine' && typeof engine.setDefaultEphemeris === 'function') {
     engine.setDefaultEphemeris('astronomy-engine');
+  } else if (mode === 'default') {
+    // From 3.0.0 the shipped pack is the default only after useDe440(); until 2.1.0 it was the default already.
+    const pack = await import(pathToFileURL(resolve(dist, 'de440-pack.js')).href);
+    if (typeof pack.useDe440 === 'function') pack.useDe440();
   }
 
   /** The calc entry, loaded only when an L4 request needs it. */
@@ -308,7 +318,7 @@ if (runAsScript()) {
   const calcEntry = async () => {
     if (!calcModule) {
       if (mode === 'core') {
-        // calc.js shares its ephemeris with index.js. core.js has separate module state.
+        // calc.js shares its ephemeris with index.js, and from 3.0.0 with core.js too; until 2.1.0 core.js kept its own.
         const root = await import(pathToFileURL(resolve(dist, 'index.js')).href);
         root.setDefaultEphemeris('astronomy-engine');
       }
@@ -334,7 +344,7 @@ if (runAsScript()) {
         positions: de440Source
           ? 'natalChart with timeScale "tt" inside withEphemeris: the requested instant is read as TT; Mars to Pluto are system barycentres, as the vectors are'
           : mode === 'default'
-            ? 'a plain natalChart with timeScale "tt", outside withEphemeris: the requested instant is read as TT; from the shipped pack, Mars to Pluto are system barycentres, as the vectors are'
+            ? 'a plain natalChart with timeScale "tt", outside withEphemeris, after useDe440() where the build has it: the requested instant is read as TT; from the shipped pack, Mars to Pluto are system barycentres, as the vectors are'
             : 'natalChart with timeScale "tt", outside withEphemeris: the requested instant is read as TT',
         angles: 'natalChart with timeScale "ut1": the requested instant is read as UT1',
       },

@@ -131,8 +131,9 @@ From 2.0.0, every chart with angles inside the polar circle,
 `polar-angles`, in every house system, from `natalChart`, `chart()` and
 `houses()`. There the ascendant does not move steadily: it turns half a circle
 twice a sidereal day, and at either pole it is 0° or 180° (checked every half
-hour of that day at ±90°; the README still puts exact poles outside the
-verified angle scope). At 70° N on
+hour of that day at ±90°; [guide.md](guide.md), which keeps the README's
+detailed sections from 3.0.0, still puts exact poles outside the verified
+angle scope). At 70° N on
 2021-06-21 it makes those two turns, each between one minute and the next, and
 every chart of that day carries the flag (`src/polar-angles.test.ts`). The
 flag says the ascendant, and the houses that follow it, can change sign within

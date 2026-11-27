@@ -15,12 +15,13 @@ export function createWheel(data, {document: doc, title = 'Chart wheel'} = {}) {
   const svg=template.content.firstElementChild;
   figure.append(caption,svg);
   const instructions=el('p','Use Tab to reach the body controls. Arrow keys move between bodies; Home and End reach the first and last. Enter or Space selects a body.');
-  const list=el('ul'); list.setAttribute('aria-label','Chart bodies');
+  const list=el('ul'); list.setAttribute('aria-label','Chart bodies and points');
   const selected=el('p'); selected.id=prefix+'-selected'; selected.setAttribute('role','status'); selected.setAttribute('aria-live','polite');
   const buttons=[];
   const select=(i,focus)=>{
     buttons.forEach((b,k)=>{b.tabIndex=k===i?0:-1;b.setAttribute('aria-pressed',String(k===i));});
-    svg.querySelectorAll('[data-body-index]').forEach((node,k)=>{node.setAttribute('r',k===i?'8':'5');node.setAttribute('fill',k===i?'none':'currentColor');node.setAttribute('stroke-width',k===i?'3':'1');});
+    svg.querySelectorAll('[data-body-index]').forEach(node=>{const on=node.getAttribute('data-body-index')===String(i);node.setAttribute('r',on?'8':'5');node.setAttribute('fill',on?'none':'currentColor');node.setAttribute('stroke-width',on?'3':'1');});
+    svg.querySelectorAll('[data-label-index]').forEach(node=>node.setAttribute('font-weight',node.getAttribute('data-label-index')===String(i)?'700':'400'));
     const body=d.bodies[i], related=d.aspects.filter(a=>a.a===body.body||a.b===body.body);
     selected.textContent=body.description + '. ' + (related.length ? related.map(a=>a.description + '.').join(' ') : 'No listed aspects.');
     if(focus) buttons[i].focus();

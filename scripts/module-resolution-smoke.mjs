@@ -6,8 +6,7 @@ import { fileURLToPath } from "node:url";
 
 import { LITE_NAMES, LITE_PARTS, checkLiteEntry, checkLiteNames, declaredNames } from "./lite-entry.mjs";
 import { UNMARKED_SOURCE, assertNoBreaches, checkBuild } from "./pure-tables.mjs";
-import { CORE_BANNED_SOURCES, CORE_OWN_SOURCES } from "./core-entry.mjs";
-import { OPT_IN_SOURCE, checkRootIsolation, readCoreModuleList, readModuleList, staticGraph } from "./root-isolation.mjs";
+import { OPT_IN_SOURCE, checkRootIsolation, readModuleList, staticGraph } from "./root-isolation.mjs";
 
 const engine = await import("@zodiacs/engine");
 const core = await import("@zodiacs/engine/core");
@@ -29,12 +28,13 @@ const internalMath = await import("@zodiacs/engine/internal/math");
 const lite = await import("@zodiacs/engine/lite");
 const de440 = await import("@zodiacs/engine/de440");
 const de440Pack = await import("@zodiacs/engine/de440/pack");
+const minorBodies = await import("@zodiacs/engine/minor-bodies");
 
 // The checks below pin values and receipts written on astronomy-engine, and
 // compare the root with the entries that compute on it (calc, window, sky).
-// astronomy-engine is the engine's fallback and those entries' ephemeris, so
-// they are run on it; the default source, the shipped DE440 pack, has its own
-// checks further down, which set it and set this back.
+// From 3.0.0 astronomy-engine is the package's default, set here all the
+// same; the shipped DE440 pack has its own checks further down, which load
+// it with useDe440() and set this back.
 engine.setDefaultEphemeris("astronomy-engine");
 
 for (const name of [
@@ -488,25 +488,49 @@ checkSelfContained("de440");
 for (const name of ["openDe440Pack", "openDe440PackSync", "De440Error", "REDUCED_BODIES", "BARYCENTRE_NOT_CENTRE", "DE440_EPHEMERIS_NAME"]) {
   assert.ok(name in de440, `@zodiacs/engine/de440 exports ${name}`);
 }
-// The entry that ships the pack: ./de440's graph and its own file, which holds
-// the pack; no ephemeris package, nothing lazy, nothing fetched. It opens as
-// a source that names the pack by its SHA-256.
+// The entry that ships the pack: ./de440's graph, the default setting the
+// root reads (src/ephemeris-default.ts) and its own file, which holds the
+// pack; no ephemeris package, nothing lazy, nothing fetched. It opens as a
+// source that names the pack by its SHA-256.
 checkSelfContained("de440-pack");
-for (const name of ["DE440_PACK", "de440PackBytes", "openShippedDe440Pack", "shippedDe440Source"]) {
+for (const name of ["DE440_PACK", "de440PackBytes", "openShippedDe440Pack", "shippedDe440Source", "useDe440"]) {
   assert.ok(name in de440Pack, `@zodiacs/engine/de440/pack exports ${name}`);
 }
 assert.equal(de440Pack.de440PackBytes().byteLength, de440Pack.DE440_PACK.bytes, "the shipped pack is the size its description gives");
 assert.deepEqual((await de440Pack.openShippedDe440Pack()).ephemeris, { name: de440.DE440_EPHEMERIS_NAME, version: de440Pack.DE440_PACK.sha256 },
   "the shipped pack opens as a DE440 source that names it");
 assert.equal(typeof engine.withEphemeris, "function", "the root exports withEphemeris");
-// The default source (1.1.0-rc.9): the root opens the shipped pack itself,
-// without a promise, and a plain chart inside the pack's years names it.
 assert.equal(de440Pack.shippedDe440Source(), await de440Pack.openShippedDe440Pack(), "the pack entry gives one source, with or without a promise");
 for (const name of ["defaultEphemeris", "setDefaultEphemeris"]) assert.equal(typeof engine[name], "function", `the root exports ${name}`);
-engine.setDefaultEphemeris("de440");
-assert.deepEqual(engine.defaultEphemeris().de440.version, de440Pack.DE440_PACK.sha256, "the root's default source is the shipped pack");
-assert.deepEqual(engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false }).ephemeris,
-  { name: de440.DE440_EPHEMERIS_NAME, version: de440Pack.DE440_PACK.sha256 }, "a plain chart names the shipped pack");
+// The default source (3.0.0): astronomy-engine, with no pack loaded; the
+// root's graph holds none of the pack (checked on the build below). Opening
+// the pack above did not make it the default. setDefaultEphemeris("de440")
+// before useDe440() computes on astronomy-engine and flags each result, never
+// silently; useDe440() loads the shipped pack and makes it the default of the
+// root and of each entry point that shares its ephemeris, the calc entry's
+// among them, and returns the one source at every call.
+{
+  const first = engine.defaultEphemeris();
+  assert.equal(first.name, "astronomy-engine", "the root's default source is astronomy-engine");
+  assert.equal(first.de440.opened, false, "the root opens no pack before useDe440()");
+  assert.match(first.de440.error, /useDe440\(\) from @zodiacs\/engine\/de440\/pack/u, "defaultEphemeris() says how to load the pack");
+  const plain = engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false });
+  assert.deepEqual(plain.ephemeris, { ...engine.EPHEMERIS }, "a plain chart names astronomy-engine");
+  assert(!plain.flags.includes("de440-unavailable") && plain.bodies.every((row) => !("fallback" in row)), "the package's default is not flagged as a fallback");
+  engine.setDefaultEphemeris("de440");
+  const unloaded = engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false });
+  assert.deepEqual(unloaded.ephemeris, { ...engine.EPHEMERIS }, 'setDefaultEphemeris("de440") before useDe440() computes on astronomy-engine');
+  assert.equal(unloaded.flags.at(-1), "de440-unavailable", 'setDefaultEphemeris("de440") before useDe440() flags each chart');
+  assert.equal(calc.calc({ body: "Sun", time: "2000-01-01" }).flags.at(-1), "de440-unavailable", "and each calc() result, which follows the root's setting");
+  const source = de440Pack.useDe440();
+  assert.equal(source, de440Pack.shippedDe440Source(), "useDe440() returns the shipped source");
+  assert.equal(de440Pack.useDe440(), source, "useDe440() gives the same source at every call");
+  assert.deepEqual(engine.defaultEphemeris().de440.version, de440Pack.DE440_PACK.sha256, "after useDe440() the root's default source is the shipped pack");
+  assert.deepEqual(engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false }).ephemeris,
+    { name: de440.DE440_EPHEMERIS_NAME, version: de440Pack.DE440_PACK.sha256 }, "after useDe440() a plain chart names the shipped pack");
+  assert.deepEqual(calc.calc({ body: "Sun", time: "2000-01-01" }).receipt.engine.ephemeris,
+    { name: de440.DE440_EPHEMERIS_NAME, version: de440Pack.DE440_PACK.sha256 }, "after useDe440() calc() computes on the shipped pack too");
+}
 // Never a silent fallback (1.1.0-rc.10): outside the pack's years a plain chart
 // names astronomy-engine and carries the flag; after the caller's own choice of
 // astronomy-engine it names it and carries no fallback flag.
@@ -521,6 +545,11 @@ assert.deepEqual(engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: fal
   const chosen = engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false });
   assert.deepEqual(chosen.ephemeris, { ...engine.EPHEMERIS }, 'after setDefaultEphemeris("astronomy-engine") a plain chart names astronomy-engine');
   assert(!chosen.flags.includes("de440-unavailable") && chosen.bodies.every((row) => !("fallback" in row)), "the caller's own choice is not flagged as a fallback");
+  // Once useDe440() has loaded the pack, setDefaultEphemeris("de440") returns to it.
+  engine.setDefaultEphemeris("de440");
+  assert.equal(engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false }).ephemeris.name, de440.DE440_EPHEMERIS_NAME,
+    'setDefaultEphemeris("de440") after useDe440() computes on the pack again');
+  engine.setDefaultEphemeris("astronomy-engine");
 }
 // The root entry reaches no zone history and loads nothing lazily; its one
 // dependency is the ephemeris. (Until ZOD-292 these checks called the root
@@ -528,9 +557,10 @@ assert.deepEqual(engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: fal
 checkSelfContained("index", ["astronomy-engine"]);
 
 // The root imports no subpath: no module of an opt-in entry (timing, Vedic,
-// geo, calc, window, techniques, houses, sky, time or lite; from 1.1.0-rc.9
-// the DE440 files and the pack are the root's own), and no zone
-// history, is in its static graph (OPT_IN_SOURCE in scripts/root-isolation.mjs).
+// geo, calc, window, techniques, houses, sky, time, lite, and from 3.0.0
+// again the DE440 reader and the shipped pack, which were the root's own from
+// 1.1.0-rc.9 to 2.1.0), and no zone history, is in its static graph
+// (OPT_IN_SOURCE in scripts/root-isolation.mjs).
 // That script reads the graph from the build's own module list
 // (dist/metafile-esm.json and dist/metafile-lite.json, which `npm run build`
 // writes, read as one, and which must match dist/ byte for byte) and from
@@ -592,46 +622,34 @@ const liteGraph = checkLiteEntry({ metafile, files: builtFiles, read: readBuilt 
   }
 }
 
-// The core entry (ZOD-292): dist/core.js, built on its own
-// (scripts/build-core.mjs), exports the root's names, imports astronomy-engine
-// and nothing else, and holds the root's graph but the DE440 files: the pack
-// (src/de440-pack.ts, src/de440/pack-data.ts), the root's default source and
-// opener (src/ephemeris-shipped.ts) and the pack's reader (src/de440.ts and
-// src/de440/), which only the pack's opener loads; and its own two modules in
-// their place. Read both ways from its own module list
-// (dist/metafile-core.json). Its charts name astronomy-engine and equal the
-// root's after setDefaultEphemeris("astronomy-engine"), and its verdicts on
-// the conformance suite's 240 position vectors are those committed for the
-// engine on astronomy-engine (48 pass).
+// The core entry: from 3.0.0 the root under its 2.x name (src/core.ts
+// re-exports src/index.ts), built by tsup with the other entry points. It
+// exports the root's names, each the very object the root exports, so it
+// shares the root's module state (the default source, withEphemeris,
+// useDe440()); its static graph, read both ways, is the root's with
+// dist/core.js and src/core.ts in place of dist/index.js and nothing added,
+// so it holds no DE440 file either. Its verdicts on the conformance suite's
+// 240 position vectors are those committed for the engine on
+// astronomy-engine (48 pass).
 {
   assert.deepEqual(Object.keys(core).sort(), Object.keys(engine).sort(), "the core entry exports other names than the root");
+  for (const name of Object.keys(engine)) assert.equal(core[name], engine[name], `the core entry's ${name} is not the root's`);
   checkSelfContained("core", ["astronomy-engine"]);
-  const coreList = readCoreModuleList(distUrl);
-  const graph = staticGraph({ metafile: coreList, read: readBuilt, entryOutput: "dist/core.js", entrySource: "src/core.ts" });
-  assert.deepEqual(graph.outputs, ["dist/core.js"], "the core entry loads another file");
-  const de440Files = /^src\/(?:de440(?:\/|[.-][^/]*$)|ephemeris-shipped\.[^/]*$)/u;
-  for (const banned of CORE_BANNED_SOURCES) assert(de440Files.test(banned), `${banned} is not one of the DE440 files`);
-  const expected = (reading, own) => [...reading.filter((source) => !de440Files.test(source)), ...own].sort();
-  assert.deepEqual(graph.sources, expected(root.sources, CORE_OWN_SOURCES), "the core entry's source graph is not the root's without the DE440 files");
-  assert.deepEqual(graph.held, expected(root.held, CORE_OWN_SOURCES), "dist/core.js holds other modules than the root's without the DE440 files");
+  const graph = staticGraph({ metafile, read: readBuilt, entryOutput: "dist/core.js", entrySource: "src/core.ts" });
+  const besideRoot = (reading) => reading.filter((entry) => entry !== "dist/index.js");
+  assert.deepEqual(besideRoot(graph.outputs), besideRoot(root.outputs.map((file) => (file === "dist/index.js" ? "dist/core.js" : file))).sort(),
+    "the core entry loads other files than the root's");
+  assert.deepEqual(graph.sources, [...root.sources, "src/core.ts"].sort(), "the core entry's source graph is not the root's and src/core.ts");
+  assert.deepEqual(graph.held, [...root.held, "src/core.ts"].sort(), "dist/core.js and its chunks hold other modules than the root's and src/core.ts");
   // src/core.ts only re-exports, so it leaves no code to mark.
-  assert.deepEqual(graph.marked, expected(root.marked, ["src/core/ephemeris-shipped.ts"]), "dist/core.js marks other modules than the root's without the DE440 files");
+  assert.deepEqual(graph.marked, root.marked, "dist/core.js and its chunks mark other modules than the root's");
   for (const source of graph.sources) {
-    assert(!OPT_IN_SOURCE.test(source) || CORE_OWN_SOURCES.includes(source), `the core entry reaches ${source}, an opt-in entry's module`);
+    assert(!OPT_IN_SOURCE.test(source) || source === "src/core.ts", `the core entry reaches ${source}, an opt-in entry's module`);
   }
-  assert.equal(core.defaultEphemeris().name, "astronomy-engine", "the core entry's default source is astronomy-engine");
-  assert.equal(core.defaultEphemeris().de440.opened, false, "the core entry opens no pack");
   engine.setDefaultEphemeris("astronomy-engine");
-  for (const birth of [
-    { utc: "2000-01-01T12:00:00Z", timeKnown: false },
-    { utc: "1987-06-15T03:21:00Z", latitude: 51.5, longitude: -0.1, houseSystem: "placidus" },
-    { utc: "1700-01-01T12:00:00Z", latitude: -33.9, longitude: 18.4 }
-  ]) {
-    const chart = core.natalChart(birth);
-    assert.deepEqual(chart.ephemeris, { ...engine.EPHEMERIS }, "a chart from the core entry names astronomy-engine");
-    assert(!chart.flags.includes("de440-unavailable") && !chart.flags.includes("outside-de440-span"), "a chart from the core entry is not flagged as a fallback");
-    assert.deepEqual(chart, engine.natalChart(birth), `the core entry's chart at ${birth.utc} differs from the root's on astronomy-engine`);
-  }
+  const chart = core.natalChart({ utc: "1987-06-15T03:21:00Z", latitude: 51.5, longitude: -0.1, houseSystem: "placidus" });
+  assert.deepEqual(chart.ephemeris, { ...engine.EPHEMERIS }, "a chart from the core entry names astronomy-engine");
+  assert(!chart.flags.includes("de440-unavailable") && !chart.flags.includes("outside-de440-span"), "a chart from the core entry is not flagged as a fallback");
   const conformance = spawnSync(process.execPath, [
     "conformance/harness/run.mjs", "--adapter", `"${process.execPath}" conformance/adapters/zodiacs-engine.mjs --entry core`,
     "--levels", "L1", "--check", "conformance/results/zodiacs-engine-astronomy-engine.json"
@@ -650,13 +668,21 @@ assertNoBreaches(checkBuild({ files: builtFiles, read: readBuilt }), "dist/");
 const exportsMap = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).exports;
 for (const [subpath, target] of Object.entries(exportsMap)) {
   if (subpath === "./calc" || subpath === "./vedic") continue;
-  const entry = /^\.\/dist\/([a-z0-9-]+)\.js$/u.exec(target.import)[1];
-  // The core entry's graph is in its own module list (readCoreModuleList).
-  const list = subpath === "./core" ? readCoreModuleList(distUrl) : metafile;
-  const graph = staticGraph({ metafile: list, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
+  const entry = /^\.\/dist\/([a-z0-9-]+)\.js$/u.exec(target.default)[1];
+  const graph = staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
   for (const source of new Set([...graph.sources, ...graph.held, ...graph.marked])) {
     assert(!UNMARKED_SOURCE.test(source), `${subpath} reaches ${source}, which the table check leaves out because only ./calc and ./vedic reach it`);
   }
+}
+// The shipped pack's data, src/de440/pack-data.ts, is in the static graph of
+// ./de440/pack alone, read both ways (from 3.0.0; from 1.1.0-rc.9 to 2.1.0 the
+// root's graph held it, and so did every graph that loads the root's
+// ephemeris).
+for (const [subpath, target] of Object.entries(exportsMap)) {
+  const entry = /^\.\/dist\/([a-z0-9-]+)\.js$/u.exec(target.default)[1];
+  const graph = staticGraph({ metafile, read: readBuilt, entryOutput: `dist/${entry}.js`, entrySource: `src/${entry}.ts` });
+  const holds = [graph.sources, graph.held, graph.marked].map((reading) => reading.includes("src/de440/pack-data.ts"));
+  assert.deepEqual(holds, Array(3).fill(subpath === "./de440/pack"), `${subpath}'s graph ${subpath === "./de440/pack" ? "does not hold" : "holds"} the shipped pack's data`);
 }
 for (const [entry, own] of [
   ["timing", /^src\/timing\//u],
@@ -678,6 +704,38 @@ for (const [entry, own] of [
   }
 }
 
+// The minor-bodies entry (from 3.0.0): its graph, read both ways, holds its
+// own modules, the five tables among them, and of the opt-in modules only its
+// own: no DE440 file, no root ephemeris; it imports astronomy-engine and
+// nothing lazy. A position follows the root's default source: astronomy-engine,
+// then the shipped pack after useDe440().
+{
+  checkSelfContained("minor-bodies", ["astronomy-engine"]);
+  for (const name of [
+    "MINOR_BODIES", "MINOR_BODIES_PROVENANCE", "MINOR_BODIES_SPAN", "MINOR_BODY_NAMES", "MINOR_BODY_SPEED_STEP_DAYS",
+    "ceres", "chiron", "juno", "minorBodyPosition", "minorBodyPositions", "pallas", "vesta"
+  ]) {
+    assert.ok(name in minorBodies, `@zodiacs/engine/minor-bodies exports ${name}`);
+  }
+  const graph = staticGraph({ metafile, read: readBuilt, entryOutput: "dist/minor-bodies.js", entrySource: "src/minor-bodies.ts" });
+  for (const reading of [graph.sources, graph.held, graph.marked]) {
+    assert(reading.includes("src/minor-bodies/pack-data.ts") && reading.includes("src/minor-bodies/reduce.ts"), "the minor-bodies entry's own modules are not listed or marked");
+    for (const source of reading) {
+      assert(!OPT_IN_SOURCE.test(source) || /^src\/minor-bodies(?:\/|\.ts$)/u.test(source), `the minor-bodies entry reaches ${source}, another opt-in entry's module`);
+      assert(source !== "src/ephemeris.ts", "the minor-bodies entry reaches the root's ephemeris");
+    }
+  }
+  engine.setDefaultEphemeris("astronomy-engine");
+  const plain = minorBodies.minorBodyPosition(minorBodies.chiron, "2000-01-01T12:00:00Z");
+  assert.deepEqual([plain.ephemeris.name, plain.flags], ["astronomy-engine", []], "a minor body's Earth is astronomy-engine's by default");
+  de440Pack.useDe440();
+  const packed = minorBodies.minorBodyPosition(minorBodies.chiron, "2000-01-01T12:00:00Z");
+  assert.deepEqual([packed.ephemeris.name, packed.flags], [de440.DE440_EPHEMERIS_NAME, []], "after useDe440() a minor body's Earth is the pack's");
+  assert(Math.abs(packed.lon - plain.lon) * 3600 < 5, "the two Earths give Chiron's place to within 5 arcseconds");
+  engine.setDefaultEphemeris("astronomy-engine");
+  assert.throws(() => minorBodies.minorBodyPosition(minorBodies.chiron, "2200-01-02T00:00:00Z"), RangeError, "a minor body outside its tables is refused");
+}
+
 // The geo entry reaches the zone histories only through dynamic imports, one
 // per shard file. Since ./techniques shares the local-time code, that code,
 // and so the imports, can sit in a chunk of the geo entry's static graph.
@@ -692,17 +750,25 @@ for (const entry of ["geo", "techniques"]) {
   for (const file of outputsOf(entry)) assert(!/(?:^|\/)tzdb-[^/]*$/u.test(file), `zone-history shard in the static ${entry} graph`);
 }
 
-// The package is ES modules only: require() of every entry point, by the
-// package's own name, throws the one error dist/esm-only.cjs throws
-// (scripts/build-esm-only.mjs), not Node's ERR_PACKAGE_PATH_NOT_EXPORTED,
-// while import() of the same name above loaded the entry.
-assert.equal(readFileSync(new URL("../dist/esm-only.cjs", import.meta.url), "utf8"),
-  readFileSync(new URL("../src/esm-only.cjs", import.meta.url), "utf8"), "dist/esm-only.cjs is not src/esm-only.cjs");
+// require() of every entry point, by the package's own name, loads the very
+// module import() of the same name loaded above (from 3.0.0, which has no
+// CommonJS stub and no "require" condition: require(esm), unflagged in Node
+// from 20.19.0 and 22.12.0, the engines range). So a CommonJS caller shares
+// the module state: useDe440() through require() puts the imported root on
+// the pack. No file under dist/ awaits at its top level, which require()
+// refuses (scripts/verify-dist-purity.mjs checks every file).
 const requireHere = createRequire(import.meta.url);
 for (const subpath of Object.keys(exportsMap)) {
   const name = subpath === "." ? "@zodiacs/engine" : `@zodiacs/engine/${subpath.slice(2)}`;
-  assert.throws(() => requireHere(name), (error) => error instanceof Error && error.code === "ERR_ZODIACS_ESM_ONLY" &&
-    error.message.startsWith("@zodiacs/engine is ESM-only: require() cannot load it"), `require("${name}") must throw ERR_ZODIACS_ESM_ONLY`);
+  assert.equal(requireHere(name), await import(name), `require("${name}") does not give the module import("${name}") gives`);
+}
+{
+  engine.setDefaultEphemeris("astronomy-engine");
+  const pack = requireHere("@zodiacs/engine/de440/pack");
+  assert.equal(pack.useDe440(), de440Pack.shippedDe440Source(), "useDe440() through require() returns the shipped source");
+  assert.equal(engine.natalChart({ utc: "2000-01-01T12:00:00Z", timeKnown: false }).ephemeris.name, de440.DE440_EPHEMERIS_NAME,
+    "useDe440() through require() puts the imported root on the pack");
+  engine.setDefaultEphemeris("astronomy-engine");
 }
 console.log(
   "@zodiacs/engine export smoke test passed; receipt, conventions, crossings, deltat, time and lite graphs have no external imports, " +
@@ -710,6 +776,7 @@ console.log(
     "and loads where astronomy-engine cannot, " +
     `the root's graph (${root.sources.length} source modules in the build's module list, ${root.marked.length} marked in ` +
     `${root.outputs.length} files) reaches no module of an opt-in entry and no zone history, ` +
-    "the core entry holds the root's graph without the DE440 files and gives the root's results on astronomy-engine, " +
-    "the geo entry loads its 16 shards lazily, require() of every entry point throws ERR_ZODIACS_ESM_ONLY, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic"
+    "the root's default source is astronomy-engine until useDe440() loads the shipped pack, which no graph but ./de440/pack's holds, " +
+    "the core entry is the root under its 2.x name, the minor-bodies entry holds its tables and no DE440 file and follows the default source, " +
+    "the geo entry loads its 16 shards lazily, require() of every entry point loads the module import() loads, and a bundler can leave out every table of the built files a program does not read, but in programs that load ./calc or ./vedic"
 );

@@ -11,10 +11,16 @@
 // calc entry read as UTC taken for UT1 before the time basis, is "utc"), and
 // houses()'s house system as `houseSystem`, as chart() names it.
 //
+// The results are the shipped DE440 pack's where it gives the position, as
+// they were on the package's default source from 1.1.0-rc.10 to 2.1.0: from
+// 3.0.0 the default is astronomy-engine, so this script first calls
+// useDe440(), as src/calc-fixtures.test.ts does before it replays them.
+//
 //   npm run build && node scripts/build-calc-roundtrip.mjs
 import { readFileSync, writeFileSync } from "node:fs";
 
 const fixture = new URL("../src/fixtures/calc-roundtrip.json", import.meta.url);
+(await import(new URL("../dist/de440-pack.js", import.meta.url).href)).useDe440();
 const calc = await import(new URL("../dist/calc.js", import.meta.url).href);
 const run = { calc: calc.calc, houses: calc.houses, events: calc.events, chart: calc.chart };
 

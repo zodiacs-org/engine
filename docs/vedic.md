@@ -57,7 +57,7 @@ values, all in degrees:
 `siderealLongitude(tropical, value)` subtracts `value.true`. The sidereal
 longitude is therefore the mean-equinox longitude minus the mean ayanamsa, and
 nutation cancels. The engine's nutation is the IAU 2000B series, all 77 of its
-terms (the README's *Nutation*), whose Δψ equals ERFA's `nut00b` within
+terms ([guide.md](guide.md), *Nutation*), whose Δψ equals ERFA's `nut00b` within
 1e-10″ (`src/nutation.test.ts`). Until it took the full series, the engine used
 astronomy-engine's five largest terms, which differ from it by up to 0.2701″
 sampled every 10 minutes from 1800 to 2200
@@ -483,7 +483,7 @@ evidence.
   leave the run before the step's last millisecond. A change found earlier
   means the bound was broken, and the body's rows are refused with
   `rate-bound`. The bound is the body's `WINDOW_RATE_BOUNDS` (*Birth-time
-  windows* in the README) plus a bound on the ayanamsa's own rate, which for a
+  windows* in [guide.md](guide.md)) plus a bound on the ayanamsa's own rate, which for a
   star definition covers the Sun's deflection of the star's light near the
   Sun.
 - Where the time basis steps, at a leap second on UTC input, at 1972-01-01, at

@@ -14,6 +14,7 @@ import {
   prepareLocalTime, resolveLocalBirth, resolveLocalToUtc, TZDB, zoneOffsetAt
 } from "./geo.js";
 import { setHostForTests } from "./geo/timezone.js";
+import { useDe440 } from "./de440-pack.js";
 import * as root from "./index.js";
 import type { Chart, ChartFlag, InstantFlag, TimeScale } from "./index.js";
 import { createNatalEnvelope, natalReplayInput, parseNatalEnvelope, serializeNatalEnvelope } from "./receipt.js";
@@ -99,7 +100,10 @@ function timeLabels(time: TimeScale): [string, string | undefined] {
 }
 
 describe("Migrating from 1.1.0 to 2.0.0", () => {
-  beforeAll(() => root.setDefaultEphemeris("de440"));
+  // 2.0.0's default source, the shipped pack, which from 3.0.0 useDe440() loads.
+  beforeAll(() => {
+    useDe440();
+  });
 
   it('A bare birth date throws a RangeError unless timeKnown is false.', () => {
     const bare = { utc: date };
@@ -267,9 +271,10 @@ describe("Migrating from 1.1.0 to 2.0.0", () => {
   });
 
   it("The core entry exposes the root API and geo adds Julian Day Number conversion and a local mean time offset.", () => {
-    // The bundled entry's astronomy-engine default and isolation are checked
-    // by scripts/core-entry.test.mjs. This holds its source export surface.
+    // From 3.0.0 the core entry re-exports the root, so each name is the root's own; the export smoke test holds the
+    // built entry's graph to the root's.
     expect(Object.keys(core).sort()).toEqual(Object.keys(root).sort());
+    for (const name of Object.keys(root)) expect((core as Record<string, unknown>)[name], name).toBe((root as Record<string, unknown>)[name]);
     const day = { year: 1990, month: 5, day: 3 };
     for (const calendar of ["gregorian", "julian"] as const) {
       expect(dateOfJulianDayNumber(julianDayNumber(day, calendar), calendar)).toEqual(day);

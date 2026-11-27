@@ -10,10 +10,10 @@
  */
 import type { NatalSource } from "../api.js";
 import { dateFrom } from "../date-input.js";
-import type { DateInput, Sect } from "../types.js";
+import type { DateInput, EphemerisFallback, Sect } from "../types.js";
 import { CHALDEAN_ORDER } from "./rulers.js";
 import type { TraditionalPlanet } from "./rulers.js";
-import { dateAt, integerIn, natalContext, oneOf, readOptions, sectContradictsAltitude, timingFlags } from "./shared.js";
+import { dateAt, integerIn, natalContext, natalFallbacks, oneOf, readOptions, sectContradictsAltitude, timingFlags } from "./shared.js";
 import type { TimingFlag } from "./shared.js";
 import { solarYears } from "./solar-years.js";
 import type { SolarYears } from "./solar-years.js";
@@ -218,12 +218,13 @@ function datedPeriod(years: SolarYears, period: FirdariaPeriod, cycle: number): 
   });
 }
 
-function sectFrom(natal: NatalSource): { sect: Sect; birth: Date; sectContradicted: boolean } {
+function sectFrom(natal: NatalSource): { sect: Sect; birth: Date; sectContradicted: boolean; fallbacks: readonly EphemerisFallback[] } {
   const { chart, points, birth } = natalContext(natal);
   if (points.sect === null) {
     throw new RangeError("Firdaria need the chart's sect, which needs a birth time and place.");
   }
-  return { sect: points.sect, birth, sectContradicted: sectContradictsAltitude(chart, points) };
+  // The sect is made from the Sun's place, so it carries the chart's fallbacks.
+  return { sect: points.sect, birth, sectContradicted: sectContradictsAltitude(chart, points), fallbacks: natalFallbacks(chart, points, ["Sun"]) };
 }
 
 function conventionsFor(variant: FirdariaVariant): FirdariaConventions {
@@ -239,7 +240,7 @@ function conventionsFor(variant: FirdariaVariant): FirdariaConventions {
 export function firdaria(natal: NatalSource, options?: FirdariaTimelineOptions): FirdariaTimeline {
   const { variant, read } = variantOf(options, ["variant", "cycles"]);
   const cycles = read.cycles === undefined ? 1 : integerIn(read.cycles, 1, 4, "cycles");
-  const { sect, birth, sectContradicted } = sectFrom(natal);
+  const { sect, birth, sectContradicted, fallbacks } = sectFrom(natal);
   const years = solarYears(birth);
   const sequence = firdariaSequence(sect, { variant });
   const periods: DatedFirdariaPeriod[] = [];
@@ -253,7 +254,7 @@ export function firdaria(natal: NatalSource, options?: FirdariaTimelineOptions):
     sect,
     periods: Object.freeze(periods),
     conventions: conventionsFor(variant),
-    flags: timingFlags([birth.getTime(), periods.at(-1)!.end.getTime()], sectContradicted)
+    flags: timingFlags([birth.getTime(), periods.at(-1)!.end.getTime()], sectContradicted, fallbacks)
   });
 }
 
@@ -265,7 +266,7 @@ export function firdaria(natal: NatalSource, options?: FirdariaTimelineOptions):
 export function firdariaAt(natal: NatalSource, date: DateInput, options?: FirdariaOptions): FirdariaAt {
   const at = dateFrom(date, "date");
   const { variant } = variantOf(options, ["variant"]);
-  const { sect, birth, sectContradicted } = sectFrom(natal);
+  const { sect, birth, sectContradicted, fallbacks } = sectFrom(natal);
   const years = solarYears(birth);
   const time = at.getTime();
   const year = years.yearAt(time);
@@ -301,7 +302,8 @@ export function firdariaAt(natal: NatalSource, date: DateInput, options?: Firdar
     conventions: conventionsFor(variant),
     flags: timingFlags(
       [birth.getTime(), year.start, year.end, period.start.getTime(), period.end.getTime()],
-      sectContradicted
+      sectContradicted,
+      fallbacks
     )
   });
 }

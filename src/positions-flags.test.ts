@@ -1,12 +1,15 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
+import { useDe440 } from "./de440-pack.js";
 import { setDefaultEphemeris } from "./ephemeris.js";
 import { natalChart, positions, progressedBodies, REFERENCE_SPAN, transits } from "./index.js";
 
 // ZOD-97, T5: positions() at the edge of the reference span flags what natalChart() flags at the same instant.
-// Run on the package's default source, the shipped DE440 pack; the suite's setup would put this file on
-// astronomy-engine, where no fallback is ever flagged.
-beforeAll(() => setDefaultEphemeris("de440"));
+// Run on the shipped DE440 pack, which useDe440() makes the default source; the suite's setup starts this file on
+// astronomy-engine, the package's default from 3.0.0, where no fallback is ever flagged.
+beforeAll(() => {
+  useDe440();
+});
 afterAll(() => setDefaultEphemeris("astronomy-engine"));
 
 const INSTANTS = [

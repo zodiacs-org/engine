@@ -1,10 +1,18 @@
 import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { searchLunations, searchStations } from "./calc.js";
 import type { CalcRefusal, CalcTime } from "./calc.js";
 import { scanEventRoots } from "./calc-event-roots.js";
+import { useDe440 } from "./de440-pack.js";
 import { deltaTAt } from "./deltat.js";
 import { setDefaultEphemeris } from "./ephemeris.js";
+
+// The shipped pack is loaded once (useDe440(), which makes it the default) and the default set back to
+// astronomy-engine, so that each test chooses its source with setDefaultEphemeris.
+beforeAll(() => {
+  useDe440();
+  setDefaultEphemeris("astronomy-engine");
+});
 
 function ok<T extends { status: "ok" }>(result: T | CalcRefusal): T {
   if (result.status !== "ok") throw new Error(result.detail);

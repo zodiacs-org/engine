@@ -1,0 +1,116 @@
+{
+  "run": "zodiacs-engine.json",
+  "committed": "conformance/results/zodiacs-engine.json",
+  "adapterEngineVersion": "2.1.0",
+  "committedEngineVersion": "2.1.0",
+  "total": {
+    "count": 640,
+    "pass": 639,
+    "fail": 0,
+    "unsupported": 1,
+    "error": 0
+  },
+  "vectors": 640,
+  "committedVectors": 640,
+  "sameVerdict": 640,
+  "sameResidual": 632,
+  "residualValues": 859,
+  "largestResidualDifference": 2.0000000006820118e-10,
+  "residualDiffers": [
+    {
+      "id": "L1-POS-0153",
+      "value": "lat",
+      "run": 0.00000224326158,
+      "committed": 0.00000224324879,
+      "firstDifferingSignificantDigit": 6
+    },
+    {
+      "id": "L1-POS-0154",
+      "value": "lon",
+      "run": -0.00152397027,
+      "committed": -0.00152397038,
+      "firstDifferingSignificantDigit": 8
+    },
+    {
+      "id": "L1-POS-0154",
+      "value": "lat",
+      "run": 0.00004472064,
+      "committed": 0.0000447206288,
+      "firstDifferingSignificantDigit": 7
+    },
+    {
+      "id": "L1-POS-0155",
+      "value": "lat",
+      "run": 0.000182759392,
+      "committed": 0.000182759398,
+      "firstDifferingSignificantDigit": 9
+    },
+    {
+      "id": "L1-POS-0156",
+      "value": "lat",
+      "run": 0.000128119422,
+      "committed": 0.000128119399,
+      "firstDifferingSignificantDigit": 7
+    },
+    {
+      "id": "L1-POS-0157",
+      "value": "lat",
+      "run": 0.0000195631889,
+      "committed": 0.0000195631773,
+      "firstDifferingSignificantDigit": 7
+    },
+    {
+      "id": "L1-POS-0158",
+      "value": "lat",
+      "run": 0.0000161800261,
+      "committed": 0.0000161800319,
+      "firstDifferingSignificantDigit": 7
+    },
+    {
+      "id": "L1-POS-0159",
+      "value": "lat",
+      "run": -0.0000313863751,
+      "committed": -0.0000313863783,
+      "firstDifferingSignificantDigit": 8
+    },
+    {
+      "id": "L1-POS-0160",
+      "value": "lon",
+      "run": -0.00137458076,
+      "committed": -0.00137458096,
+      "firstDifferingSignificantDigit": 8
+    },
+    {
+      "id": "L1-POS-0160",
+      "value": "lat",
+      "run": -0.000108165073,
+      "committed": -0.000108165084,
+      "firstDifferingSignificantDigit": 8
+    }
+  ],
+  "otherDiffers": [],
+  "summaryFiguresEqualToThreeDecimals": true,
+  "summaryFiguresEqualToTheBit": true,
+  "configurationDiffers": [
+    "positions"
+  ],
+  "l1": {
+    "pass": 240,
+    "fail": 0,
+    "unsupported": 0,
+    "lon": {
+      "unit": "arcsec",
+      "n": 240,
+      "median": 0.00174547803,
+      "p95": 0.00377147396,
+      "max": 0.012647263
+    },
+    "lat": {
+      "unit": "arcsec",
+      "n": 240,
+      "median": 0.0000815158131,
+      "p95": 0.000218228824,
+      "max": 0.00101056084
+    }
+  }
+}

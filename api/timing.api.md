@@ -442,7 +442,7 @@ interface ChartInput {
     flags?: readonly ChartFlag[];
 }
 
-// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
+// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput), @zodiacs/engine/minor-bodies (DateInput)
 type DateInput = Date | string | number;
 
 // exported by @zodiacs/engine (DeltaT), @zodiacs/engine/calc (DeltaT), @zodiacs/engine/core (DeltaT), @zodiacs/engine/deltat (DeltaT), @zodiacs/engine/time (DeltaT)
@@ -458,7 +458,7 @@ interface DeltaT {
 // exported by @zodiacs/engine (DeltaTSegment), @zodiacs/engine/core (DeltaTSegment), @zodiacs/engine/deltat (DeltaTSegment), @zodiacs/engine/time (DeltaTSegment)
 type DeltaTSegment = "long-term" | "reconstructed" | "observed" | "predicted" | "extrapolated" | "pinned" | "fallback";
 
-// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback)
+// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback), @zodiacs/engine/minor-bodies (EphemerisFallback)
 type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
 
 // exported by @zodiacs/engine (HouseNumber), @zodiacs/engine/core (HouseNumber)
@@ -486,7 +486,7 @@ interface LeapSeconds {
 type NatalSource = Chart | BirthInput;
 
 // exported by @zodiacs/engine (PointName), @zodiacs/engine/core (PointName)
-type PointName = "Mean Node" | "Mean South Node" | "Black Moon Lilith" | "Vertex" | "East Point" | "Lot of Fortune" | "Lot of Spirit" | "Lot of Eros" | "Lot of Necessity" | "Lot of Courage" | "Lot of Victory" | "Lot of Nemesis";
+type PointName = "Mean Node" | "Mean South Node" | "Black Moon Lilith" | "True Black Moon Lilith" | "Vertex" | "East Point" | "Lot of Fortune" | "Lot of Spirit" | "Lot of Eros" | "Lot of Necessity" | "Lot of Courage" | "Lot of Victory" | "Lot of Nemesis";
 
 // exported by @zodiacs/engine (Sect), @zodiacs/engine/core (Sect)
 type Sect = "day" | "night";
@@ -499,7 +499,7 @@ interface TimeScale {
     leapSeconds: LeapSeconds | null;
 }
 
-// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
+// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/minor-bodies (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
 type TimeScaleName = "utc" | "ut1" | "tt";
 
 // exported by @zodiacs/engine (Ut1MinusUtc), @zodiacs/engine/core (Ut1MinusUtc), @zodiacs/engine/time (Ut1MinusUtc)
@@ -509,6 +509,6 @@ interface Ut1MinusUtc {
     source: "observed" | "predicted" | "fallback" | "model";
 }
 
-// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign)
+// exported by @zodiacs/engine (ZodiacSign), @zodiacs/engine/core (ZodiacSign), @zodiacs/engine/minor-bodies (ZodiacSign)
 type ZodiacSign = "aries" | "taurus" | "gemini" | "cancer" | "leo" | "virgo" | "libra" | "scorpio" | "sagittarius" | "capricorn" | "aquarius" | "pisces";
 ```

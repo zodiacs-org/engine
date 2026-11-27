@@ -1,71 +1,127 @@
-# Private chart-wheel preparation
+# @zodiacs/wheel
 
-This is an unpublished, private `@zodiacs/wheel@0.0.0` review package.
-No registry installation or programme acceptance is claimed.
+An accessible chart wheel for zodiacal longitudes you supply: a standalone
+SVG string with a complete text description, and an optional DOM figure with
+keyboard body controls and tables. It has no runtime dependencies and no
+framework.
 
-The package renders supplied zodiacal longitudes as a wheel. It provides
-a standalone SVG with a title and complete text description, or a DOM figure
-with body controls, visible angle/house/aspect tables and a selected-body
-text result. Tab enters/leaves the body controls; arrows, Home and End move
-between bodies; native Enter/Space activation selects one. Color is not the
-only way to read a position or relationship.
+## Install
 
-`fromNatalChart()` accepts the root engine's tropical natal-chart result.
-For a sidereal chart, construct `WheelData` with an explicit `{sidereal:
-"name"}` label and the corresponding sidereal longitudes/angles/cusps;
-the adapter does not silently subtract an ayanamsa. The wheel performs no
-astronomical calculation, interpretation, bounds computation or receipt
-verification. It does not certify the accuracy of caller data.
+```sh
+npm install @zodiacs/wheel @zodiacs/engine
+```
+
+`@zodiacs/engine` 3 is an optional peer dependency, needed only for
+`fromNatalChart()` with its results; the wheel installs nothing else. Node
+`^20.19.0 || >=22.12.0` loads both entries with `import` or `require()`.
+
+## Example
 
 ```js
-import { natalChart } from '@zodiacs/engine';
+import { natalChart, chartPoints } from '@zodiacs/engine';
+import { minorBodyPositions } from '@zodiacs/engine/minor-bodies';
 import { fromNatalChart, renderWheelSvg } from '@zodiacs/wheel';
 import { createWheel } from '@zodiacs/wheel/dom';
 
-const data = fromNatalChart(natalChart({
-  utc: '2000-01-01T12:00:00Z', latitude: 0, longitude: 0, houseSystem: 'whole',
-})); // synthetic example
-document.querySelector('main').append(createWheel(data, {
-  document, title: 'Synthetic chart',
-}));
-const svg = renderWheelSvg(data, { idPrefix: 'standalone-example' });
+const utc = '2000-01-01T12:00:00Z'; // synthetic example
+const chart = natalChart({ utc, latitude: 0, longitude: 0, houseSystem: 'whole' });
+const liliths = chartPoints(chart).points.filter((p) => p.point.endsWith('Lilith'));
+const data = fromNatalChart(chart, { extraBodies: minorBodyPositions(utc), points: liliths });
+const svg = renderWheelSvg(data, { idPrefix: 'example-wheel' }); // a string; no DOM needed
+document.querySelector('main').append(createWheel(data, { document, title: 'Synthetic chart' }));
 ```
 
-Supply a unique safe `idPrefix` for each standalone SVG in a document.
-The DOM renderer allocates unique IDs and returns a detached figure. Importing
-the root module or creating an SVG needs no DOM. Its TypeScript declarations
-require only ES2022 libraries. The separate `@zodiacs/wheel/dom` entry contains
-the browser factory and its DOM declarations. It makes no network request,
-reads no storage or URL and has no import-time DOM effect. The natal adapter
-copies display fields and omits input time/place. Displayed longitudes and
-chart metadata can still be personal information; callers control where they
-render, retain or export them.
+`fromNatalChart(chart)` takes the root engine's tropical `natalChart()`
+result: Sun to Pluto and the true nodes, with its angles, houses, aspects,
+flags and engine version. The optional second argument adds rows after the
+chart's bodies: `extraBodies` takes `minorBodyPositions()` rows (Chiron,
+Ceres, Pallas, Juno, Vesta) and `points` takes `chartPoints().points` rows
+(Black Moon Lilith, True Black Moon Lilith, the mean nodes, the Vertex, the
+East Point, the lots). A point's motion comes from its speed; a point without
+one (the Vertex, the East Point, the lots) is described with no motion. An
+ephemeris fallback flag on an added row joins the chart's flags, so it stays
+visible. The adapter copies display fields only and never keeps the chart's
+input time or place.
 
-Angles put the supplied ascendant at the left. Without angles, Aries zero is
-at the left; no houses/angles are inferred. Longitudes increase counterclockwise.
-Markers show the supplied positions; select a body to highlight its marker
-and read its name/longitude/aspects. Closely overlapping positions may have
-overlapping markers; the complete controls and text remain available.
-Displayed sign degrees are truncated to six decimal places to avoid rounding
-a point into the next sign. They are presentation values, not an error bound.
-Unknown-time data may not contain angles or houses. Flags and the supplied
-engine version stay visible. Requested major aspects are drawn and described;
-none is inferred by this package.
+Any other data can be drawn as `WheelData`: an explicit zodiac, bodies with
+`body`, `lon` and `retrograde` (`true`, `false` or `null`), and optional
+angles, houses, aspects, flags and engine version. `validateWheelData()`
+refuses malformed, duplicate, unbounded or contradictory data rather than
+dropping it. For a sidereal chart, give `{ sidereal: "name" }` and sidereal
+longitudes, angles and cusps; nothing here subtracts an ayanamsa.
 
-The code is MIT licensed, copied from no third-party chart implementation.
-No engine/data file is bundled; the supplied engine remains subject to its
-own `MIT AND CC-BY-4.0` licence and notices. The exact carried rc.2 archive is
-used only by the external clean-consumer check. Private preparation does not
-settle its outstanding publication/private-clearance questions.
+## The wheel
 
-Run `node tools/wheel/scripts/prepare-consumer.mjs` from the repository.
-Set `WHEEL_BROWSER=1` to run the installed-package consumer in Chromium,
-Firefox and WebKit at mobile/desktop widths, including offline keyboard
-operation, malicious-label checks and automated WCAG A/AA checks.
-The script packs outside the checkout, verifies the exact package file list,
-installs fresh consumers and runs strict installed TypeScript checks with
-ES2022 alone for the root and ES2022/DOM for the browser entry. Maximum-length
-labels are included before mobile overflow and automated accessibility checks.
-The workflow preserves actual results. No runtime/accuracy/accessibility
-pass is asserted until that workflow executes. Automated accessibility and
-keyboard checks do not replace human assistive-technology review.
+The ascendant is at the left; without angles, Aries zero is. Longitudes
+increase counterclockwise. Every body or point has a tick at its exact
+longitude and a marker with a short label (Su, Mo, Me, Ve, Ma, Ju, Sa, Ur,
+Ne, Pl, NN and SN; Ch, Ce, Pa, Jn and Vs; BL and TL for Black Moon Lilith and
+True Black Moon Lilith; other names their first two characters, or the first
+alone where a space follows it, numbered where that repeats a label). Where
+markers would overlap, they are spread along the ring in the order of their
+longitudes, each joined to its tick by a leader line. Only the markers that
+crowd each other move, by least squares, wherever on the ring they meet;
+from 48 markers the ring is full and they are spaced evenly. The selftest
+holds the markers, and their labels taken as boxes 0.85 em wide a character,
+apart for 22 and for 48 objects at a single longitude, and the markers apart
+for 64, the most a wheel takes. It also lays out 25 markers: two clusters
+of 8, at 320 and 0 degrees, and 9 single markers every 32 degrees from 32
+to 288. The two clusters, with the single markers at 288 and 32 that they
+crowd, spread into one run of 18 markers 7.5 degrees apart across Aries
+zero; the other 7 single markers, from 64 to 256, have room and stay at
+their exact longitudes, with no leader lines.
+Each text description gives the label beside the name. Displayed degrees are
+truncated to six decimal places so that no point is rounded into the next
+sign; they are presentation values, not an error bound.
+
+## Accessibility
+
+- The SVG has `role="img"` with a `<title>` and a `<desc>` that describes
+  every body, point, angle, house cusp, aspect and flag in text.
+- `createWheel()` from `@zodiacs/wheel/dom` returns a detached figure: a
+  caption, the SVG, one button for each body or point, a live status that
+  reads the selected one's position and aspects, and tables of angles, house
+  cusps and aspects.
+- The body buttons are one Tab stop. Arrow keys move between them, Home and
+  End reach the first and last, and Enter or Space selects one; the selected
+  marker grows and its label turns bold. Buttons are at least 44 px tall.
+- Color is not the only way to read a position or relationship. Untimed
+  charts show no invented angles or houses.
+- Automated checks do not replace review with assistive technology.
+
+## Scope
+
+This is a display package. It performs no astronomical calculation,
+interpretation or receipt verification, and does not certify the accuracy of
+the data it draws. It makes no network request, reads no storage or URL, has
+no import-time DOM effect and needs no framework. `renderWheelSvg()` returns
+a string and needs no DOM; give each SVG in a document its own `idPrefix`.
+The root entry's TypeScript declarations need only the ES2022 libraries; the
+DOM factory and its types are in `@zodiacs/wheel/dom`. Displayed longitudes
+and chart metadata can still be personal information; callers decide where
+to render, keep or export them.
+
+## Checks
+
+From the repository:
+
+- `node tools/wheel/selftest.mjs`: geometry, text descriptions, validation,
+  a full engine 3.0.0 shaped chart with minor bodies and points, crowded
+  markers, XML well-formedness and escaping of hostile labels, `require()`
+  of both entries, and the `npm pack --dry-run` file list.
+- `node tools/wheel/scripts/prepare-consumer.mjs`: packs the wheel outside
+  the checkout, installs it alone (nothing else installed; `require()` and
+  `import` work), then beside the carried `@zodiacs/engine` 3.0.0 archive
+  (`WHEEL_ENGINE_ARCHIVE` names another packed engine), runs strict
+  TypeScript checks with ES2022 alone for the root entry and ES2022 with DOM
+  for the browser entry, and checks real `natalChart()`,
+  `minorBodyPositions()` and `chartPoints()` output. `WHEEL_BROWSER=1` adds
+  Chromium, Firefox and WebKit at 360 and 1280 px widths: keyboard use
+  offline, hostile and maximum-length labels, XML parsing and automated
+  WCAG 2.1 A and AA checks.
+
+## Licence
+
+MIT, copied from no third-party chart implementation. No engine or data file
+is bundled; `@zodiacs/engine` is a separate package under its own
+`MIT AND CC-BY-4.0` licence and notices.

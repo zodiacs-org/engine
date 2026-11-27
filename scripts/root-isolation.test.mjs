@@ -11,7 +11,7 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { describe, expect, it } from "vitest";
 
-import { OPT_IN_SOURCE, checkRootIsolation, mergeModuleLists, readCoreModuleList, readModuleList, sourceMarkers, staticGraph } from "./root-isolation.mjs";
+import { OPT_IN_SOURCE, checkRootIsolation, mergeModuleLists, readModuleList, sourceMarkers, staticGraph } from "./root-isolation.mjs";
 
 /** A build: output files with their source modules, and the source import graph. */
 function build({ chunkModules = ["src/api.ts", "src/ephemeris.ts"], markers, rootImports = [], extraFiles = {} } = {}) {
@@ -171,40 +171,42 @@ describe("the root entry's isolation check", () => {
   });
 
   it("names the core entry's file and directory, and not files whose names only begin as theirs", () => {
-    for (const path of ["src/core.ts", "src/core.mts", "src/core/ephemeris-shipped.ts"]) expect(OPT_IN_SOURCE.test(path), path).toBe(true);
-    for (const path of ["src/ephemeris-shipped.ts", "src/cores.ts", "src/core-x.ts", "src/corex/a.ts", "src/score.ts"]) expect(OPT_IN_SOURCE.test(path), path).toBe(false);
-    const bypass = build({ chunkModules: ["src/api.ts", "src/ephemeris.ts", "src/core/ephemeris-shipped.ts"], rootImports: ["src/core/ephemeris-shipped.ts"] });
-    expect(() => checkRootIsolation(bypass)).toThrow(/the root entry reaches src\/core\/ephemeris-shipped\.ts/);
+    for (const path of ["src/core.ts", "src/core.mts", "src/core/a.ts"]) expect(OPT_IN_SOURCE.test(path), path).toBe(true);
+    for (const path of ["src/cores.ts", "src/core-x.ts", "src/corex/a.ts", "src/score.ts"]) expect(OPT_IN_SOURCE.test(path), path).toBe(false);
+    const bypass = build({ chunkModules: ["src/api.ts", "src/ephemeris.ts", "src/core.ts"], rootImports: ["src/core.ts"] });
+    expect(() => checkRootIsolation(bypass)).toThrow(/the root entry reaches src\/core\.ts/);
   });
 
-  it("takes dist/core.js from the core build's list, and that list's sources apart", () => {
+  it("names the DE440 reader and the shipped pack's entry (from 3.0.0 again), and not the setting the root shares with them", () => {
+    for (const path of ["src/de440.ts", "src/de440.mts", "src/de440/pack.ts", "src/de440/pack-data.ts", "src/de440/sha256.ts", "src/de440-pack.ts", "src/de440-pack.mts"]) {
+      expect(OPT_IN_SOURCE.test(path), path).toBe(true);
+    }
+    for (const path of ["src/ephemeris.ts", "src/ephemeris-default.ts", "src/de440x.ts", "src/de440-packs.ts", "src/de440s/a.ts", "src/calc-bounds-de440.ts"]) {
+      expect(OPT_IN_SOURCE.test(path), path).toBe(path === "src/calc-bounds-de440.ts");
+    }
+    // A root whose ephemeris imports the pack, as 2.1.0's did through src/ephemeris-shipped.ts, fails the check.
+    for (const [path, pattern] of [["src/de440-pack.ts", /the root entry reaches src\/de440-pack\.ts/], ["src/de440/pack-data.ts", /the root entry reaches src\/de440\/pack-data\.ts/]]) {
+      const bypass = build({ chunkModules: ["src/api.ts", "src/ephemeris.ts", path], rootImports: [path] });
+      expect(() => checkRootIsolation(bypass)).toThrow(pattern);
+    }
+    const shared = build({ chunkModules: ["src/api.ts", "src/ephemeris.ts", "src/ephemeris-default.ts"], rootImports: ["src/ephemeris-default.ts"] });
+    expect(checkRootIsolation(shared).held).toContain("src/ephemeris-default.ts");
+  });
+
+  it("reads tsup's module list and the lite build's, and no other", () => {
     const tsup = build().metafile;
-    tsup.inputs["src/ephemeris.ts"] = { imports: [{ path: "src/ephemeris-shipped.ts", kind: "import-statement" }] };
     const lite = { inputs: { "src/lite.ts": { imports: [] } }, outputs: { "dist/lite.js": { bytes: 1, inputs: { "src/lite.ts": {} }, imports: [] } } };
-    // The core build's src/ephemeris.ts imports the core's stand-in: merged, the two lists would disagree on it.
-    const core = {
-      inputs: {
-        "src/core.ts": { imports: [{ path: "src/ephemeris.ts", kind: "import-statement" }] },
-        "src/ephemeris.ts": { imports: [{ path: "src/core/ephemeris-shipped.ts", kind: "import-statement" }] },
-        "src/core/ephemeris-shipped.ts": { imports: [] }
-      },
-      outputs: { "dist/core.js": { bytes: 2, inputs: { "src/core.ts": {}, "src/ephemeris.ts": {}, "src/core/ephemeris-shipped.ts": {} }, imports: [{ path: "astronomy-engine", kind: "import-statement", external: true }] } }
-    };
-    expect(() => mergeModuleLists(tsup, lite, core)).toThrow(/disagree on src\/ephemeris\.ts/);
     const dir = mkdtempSync(join(tmpdir(), "module-lists-"));
     try {
       const dist = pathToFileURL(`${dir}/`);
       writeFileSync(join(dir, "metafile-esm.json"), JSON.stringify(tsup));
+      expect(() => readModuleList(dist)).toThrow(/dist\/metafile-lite\.json is missing/);
       writeFileSync(join(dir, "metafile-lite.json"), JSON.stringify(lite));
-      expect(() => readModuleList(dist)).toThrow(/dist\/metafile-core\.json is missing/);
-      writeFileSync(join(dir, "metafile-core.json"), JSON.stringify(core));
+      // 2.1.0's core build wrote a third list; nothing reads one now.
+      writeFileSync(join(dir, "metafile-core.json"), JSON.stringify({ inputs: {}, outputs: { "dist/core.js": { bytes: 1, inputs: {}, imports: [] } } }));
       const merged = readModuleList(dist);
-      expect(merged.outputs["dist/core.js"]).toEqual(core.outputs["dist/core.js"]);
+      expect(Object.keys(merged.outputs).sort()).toEqual([...Object.keys(tsup.outputs), "dist/lite.js"].sort());
       expect(merged.inputs["src/ephemeris.ts"]).toEqual(tsup.inputs["src/ephemeris.ts"]);
-      expect(Object.keys(merged.inputs)).not.toContain("src/core.ts");
-      expect(readCoreModuleList(dist)).toEqual(core);
-      writeFileSync(join(dir, "metafile-core.json"), JSON.stringify({ ...core, outputs: { ...core.outputs, "dist/other.js": core.outputs["dist/core.js"] } }));
-      expect(() => readCoreModuleList(dist)).toThrow(/describe dist\/core\.js and nothing else/);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }

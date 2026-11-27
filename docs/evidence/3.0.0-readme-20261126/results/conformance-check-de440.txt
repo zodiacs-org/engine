@@ -1,0 +1,7 @@
+zodiacs-engine 2.1.0: 639 pass, 0 fail, 1 unsupported, 0 error (of 640)
+  L1: 240 pass, 0 fail, 0 unsupported, 0 error (of 240)
+  L2: 150 pass, 0 fail, 0 unsupported, 0 error (of 150)
+  L3: 109 pass, 0 fail, 1 unsupported, 0 error (of 110)
+  L4: 140 pass, 0 fail, 0 unsupported, 0 error (of 140)
+conformance: every verdict matches conformance/results/zodiacs-engine.json
+exit 0

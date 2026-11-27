@@ -201,10 +201,10 @@ interface BirthInput {
 // exported by @zodiacs/engine (ChartFlag), @zodiacs/engine/calc (ChartFlag), @zodiacs/engine/core (ChartFlag)
 type ChartFlag = "dst-gap" | "dst-fold" | "lmt" | "calendar-unknown" | "host-zone-data-differs" | "no-time" | "polar-fallback" | "polar-angles" | "outside-reference-span" | "delta-t-extrapolated" | EphemerisFallback;
 
-// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput)
+// exported by @zodiacs/engine (DateInput), @zodiacs/engine/core (DateInput), @zodiacs/engine/minor-bodies (DateInput)
 type DateInput = Date | string | number;
 
-// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback)
+// exported by @zodiacs/engine (EphemerisFallback), @zodiacs/engine/core (EphemerisFallback), @zodiacs/engine/minor-bodies (EphemerisFallback)
 type EphemerisFallback = "de440-unavailable" | "outside-de440-span";
 
 // exported by @zodiacs/engine (HouseSystem), @zodiacs/engine/calc (HouseSystem), @zodiacs/engine/core (HouseSystem), @zodiacs/engine/houses (HouseSystem)
@@ -241,6 +241,6 @@ interface NatalZoneTransition {
     cause: TransitionCause;
 }
 
-// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
+// exported by @zodiacs/engine (TimeScaleName), @zodiacs/engine/core (TimeScaleName), @zodiacs/engine/minor-bodies (TimeScaleName), @zodiacs/engine/time (TimeScaleName)
 type TimeScaleName = "utc" | "ut1" | "tt";
 ```

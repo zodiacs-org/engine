@@ -6,33 +6,52 @@ import { pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
 const consumer=process.argv[2];
 const wheel=await import(pathToFileURL(resolve(consumer,'node_modules/@zodiacs/wheel/index.mjs')));
-const {natalChart}=await import(pathToFileURL(resolve(consumer,'node_modules/@zodiacs/engine/dist/index.js')));
+const engineDist=resolve(consumer,'node_modules/@zodiacs/engine/dist');
+const {natalChart,chartPoints}=await import(pathToFileURL(resolve(engineDist,'index.js')));
+const {minorBodyPositions}=await import(pathToFileURL(resolve(engineDist,'minor-bodies.js')));
+const engineVersion=JSON.parse(await readFile(resolve(consumer,'node_modules/@zodiacs/engine/package.json'),'utf8')).version;
 const checks=[];
 const check=(name,fn)=>{fn();checks.push(name);};
-const chart=natalChart({utc:'2000-01-01T12:00:00Z',latitude:0,longitude:0,houseSystem:'whole'});
-const model=wheel.fromNatalChart(chart);
-check('actual carried-engine natal chart display fields are preserved',()=>{
- assert.equal(model.engineVersion,'1.0.0-rc.2');
- assert.deepEqual(model.bodies,chart.bodies.map(b=>({body:b.body,lon:b.lon,retrograde:b.retrograde})));
- assert.deepEqual(model.houses,chart.houses);assert.deepEqual(model.angles,chart.angles);
- assert.deepEqual(model.aspects,chart.aspects.map(a=>({a:a.a,b:a.b,type:a.type,orb:a.orb,applying:a.applying})));
+const utc='2000-01-01T12:00:00Z';
+const chart=natalChart({utc,latitude:0,longitude:0,houseSystem:'whole'});
+const base=wheel.fromNatalChart(chart);
+const points=chartPoints(chart).points,minor=minorBodyPositions(utc);
+const model=wheel.fromNatalChart(chart,{extraBodies:minor,points});
+check('actual installed-engine natal chart display fields are preserved',()=>{
+ assert.equal(base.engineVersion,engineVersion);
+ assert.deepEqual(base.bodies,chart.bodies.map(b=>({body:b.body,lon:b.lon,retrograde:b.retrograde})));
+ assert.deepEqual(base.houses,chart.houses);assert.deepEqual(base.angles,chart.angles);
+ assert.deepEqual(base.aspects,chart.aspects.map(a=>({a:a.a,b:a.b,type:a.type,orb:a.orb,applying:a.applying})));
+});
+check('actual minor bodies and chart points follow the chart bodies with their motion',()=>{
+ assert.deepEqual(model.bodies.slice(0,base.bodies.length),base.bodies);
+ assert.deepEqual(model.bodies.slice(base.bodies.length),[...minor.map(b=>({body:b.body,lon:b.lon,retrograde:b.retrograde})),...points.map(p=>({body:p.point,lon:p.lon,retrograde:p.speed===null?null:p.speed<0}))]);
+ for(const name of ['Chiron','Ceres','Pallas','Juno','Vesta','Black Moon Lilith','True Black Moon Lilith','Vertex'])assert.ok(model.bodies.some(b=>b.body===name),name);
+ assert.ok(model.bodies.length>=22);
+ const labels=wheel.describeWheel(model).bodies.map(b=>b.label);assert.equal(new Set(labels).size,labels.length);
 });
 check('full text and SVG preserve version and every actual display field',()=>{
  const d=wheel.describeWheel(model);
  assert.ok(d.summary.includes('Engine '+chart.engineVersion+'.'));
  assert.ok(wheel.renderWheelSvg(model,{idPrefix:'version'}).includes('Engine '+chart.engineVersion+'.'));
- assert.equal(d.bodies.length,chart.bodies.length);assert.equal(d.houses.length,12);assert.equal(d.angles.length,4);assert.equal(d.aspects.length,chart.aspects.length);
+ assert.equal(d.bodies.length,model.bodies.length);assert.equal(d.houses.length,12);assert.equal(d.angles.length,4);assert.equal(d.aspects.length,chart.aspects.length);
  for(const row of [...d.bodies,...d.houses,...d.angles,...d.aspects]) assert.ok(d.summary.includes(row.description));
+});
+check('markers of the actual chart with every point stay apart',()=>{
+ const centres=[...wheel.renderWheelSvg(model,{idPrefix:'apart'}).matchAll(/<circle data-body-index="\d+" cx="([-0-9.]+)" cy="([-0-9.]+)"/g)].map(m=>[+m[1],+m[2]]);
+ assert.equal(centres.length,model.bodies.length);
+ for(let a=0;a<centres.length;a++)for(let b=a+1;b<centres.length;b++)assert.ok(Math.hypot(centres[a][0]-centres[b][0],centres[a][1]-centres[b][1])>=19);
 });
 check('adapter and SVG omit original instant and coordinates',()=>{
  assert.ok(!('input' in model));const svg=wheel.renderWheelSvg(model,{idPrefix:'consumer'});
  assert.ok(!svg.includes('2000-01-01'));assert.ok(!JSON.stringify(model).includes('"latitude"'));
  assert.ok(!JSON.stringify(model).includes('"longitude"'));
 });
-const unknownChart=natalChart({utc:'2000-01-01T12:00:00Z',timeKnown:false});
-const unknown=wheel.fromNatalChart(unknownChart);
-check('actual untimed engine result displays no invented angles or houses',()=>{
+const unknownChart=natalChart({utc,timeKnown:false});
+const unknown=wheel.fromNatalChart(unknownChart,{extraBodies:minor,points:chartPoints(unknownChart).points});
+check('actual untimed engine result displays no invented angles, houses or angle points',()=>{
  assert.equal(unknown.angles,null);assert.equal(unknown.houses,null);assert.ok(unknown.flags.includes('no-time'));
+ assert.ok(!unknown.bodies.some(b=>b.body==='Vertex'||b.body==='East Point'||b.body.startsWith('Lot of')));
 });
 const svg=wheel.renderWheelSvg(model,{idPrefix:'repeat'});
 check('standalone SVG is deterministic for the same model and prefix',()=>assert.equal(svg,wheel.renderWheelSvg(model,{idPrefix:'repeat'})));
@@ -68,6 +87,7 @@ if(process.env.WHEEL_BROWSER==='1'){
     const local=[];
     const pass=(label)=>{local.push(label);checks.push(name+' '+width+': '+label);};
     assert.equal(await page.locator('figure').count(),2);pass('two detached wheels mount independently');
+    assert.deepEqual(await page.evaluate(markup=>{const parsed=new DOMParser().parseFromString(markup,'image/svg+xml');return {errors:parsed.getElementsByTagName('parsererror').length,root:parsed.documentElement.localName};},svg),{errors:0,root:'svg'});pass('standalone SVG parses as XML');
     const bodyControls=page.locator('figure').first().getByRole('button');
     assert.equal(await bodyControls.count(),model.bodies.length);
     // Programmatic focus leaves selection unchanged: other buttons must not
@@ -123,6 +143,6 @@ if(process.env.WHEEL_BROWSER==='1'){
  }
  }finally{await new Promise(r=>server.close(r));}
 }
-const report={schema:'zodiacs.wheel-consumer.v1',producer:{source:process.env.GITHUB_SHA,head:process.env.PROGRAMME_HEAD,run:process.env.GITHUB_RUN_ID,node:process.version,platform:process.platform},engineVersion:chart.engineVersion,checks,checkCount:checks.length,browsers:browserReports,modelSha256:createHash('sha256').update(JSON.stringify(model)).digest('hex'),svgSha256:createHash('sha256').update(svg).digest('hex'),limitations:['Display and keyboard/shape checks, not independent astronomical accuracy.','Private package is not published or programme acceptance.']};
+const report={schema:'zodiacs.wheel-consumer.v1',producer:{source:process.env.GITHUB_SHA,head:process.env.PROGRAMME_HEAD,run:process.env.GITHUB_RUN_ID,node:process.version,platform:process.platform},engineVersion:chart.engineVersion,displayedObjects:model.bodies.length,checks,checkCount:checks.length,browsers:browserReports,modelSha256:createHash('sha256').update(JSON.stringify(model)).digest('hex'),svgSha256:createHash('sha256').update(svg).digest('hex'),limitations:['Display and keyboard/shape checks, not independent astronomical accuracy.','This check packs and installs the package; it publishes nothing.']};
 await writeFile(resolve(consumer,'wheel-consumer-report.json'),JSON.stringify(report,null,2)+'\n');
 console.log('Wheel consumer checks passed: '+checks.length);

@@ -1,0 +1,68 @@
+{
+  "fetchedAtUtc": "2026-11-26T12:08:00.889674+00:00",
+  "api": "https://ssd.jpl.nasa.gov/api/horizons.api",
+  "vectorParams": {
+    "EPHEM_TYPE": "VECTORS",
+    "CENTER": "500@10",
+    "REF_PLANE": "FRAME",
+    "REF_SYSTEM": "ICRF",
+    "VEC_TABLE": "1",
+    "VEC_CORR": "NONE",
+    "OUT_UNITS": "KM-S",
+    "CSV_FORMAT": "YES",
+    "START_TIME": "JD 2378480.5",
+    "STOP_TIME": "JD 2524610.5"
+  },
+  "bodies": {
+    "Chiron": {
+      "command": "2060;",
+      "step": "10 d",
+      "rows": 14614,
+      "bytes": 1804028,
+      "sha256": "ec653cf9eaa608323bbcf900d46c4b325ec4587a2d8d21fde74979c88198aa24",
+      "record": "Rec #:    2060 (+COV) Soln.date: 2026-Jun-05_06:09:00   # obs: 6026 (1895-2026)",
+      "solution": "1: soln ref.= JPL#171, OCC=0",
+      "target": "2060 Chiron (1977 UB)           {source: JPL#171}"
+    },
+    "Ceres": {
+      "command": "1;",
+      "step": "4 d",
+      "rows": 36533,
+      "bytes": 4500098,
+      "sha256": "4c56afea785549ff4888cb931c305567bebd5ca33192559995eb4af44b0d0678",
+      "record": "Rec #:       1 (+COV) Soln.date: 2021-Apr-13_11:04:44   # obs: 1075 (1995-2021)",
+      "solution": "1: soln ref.= JPL#48, OCC=0           radar(60 delay, 0 Dop.)",
+      "target": "1 Ceres (A801 AA)               {source: JPL#48}"
+    },
+    "Pallas": {
+      "command": "2;",
+      "step": "4 d",
+      "rows": 36533,
+      "bytes": 4500064,
+      "sha256": "53c268cd22067062280970cc50f25b54f1eea600ed541fec330f833994eb1f74",
+      "record": "Rec #:       2 (+COV) Soln.date: 2026-Jun-05_03:03:25   # obs: 9772 (1804-2025)",
+      "solution": "1: soln ref.= JPL#74, OCC=0",
+      "target": "2 Pallas (A802 FA)              {source: JPL#74}"
+    },
+    "Juno": {
+      "command": "3;",
+      "step": "4 d",
+      "rows": 36533,
+      "bytes": 4500063,
+      "sha256": "8990b8117306bf1b6a0e8ea84a8028533846cb76723a07926bed0f8ec93aaf84",
+      "record": "Rec #:       3 (+COV) Soln.date: 2026-Jun-05_03:03:21   # obs: 8343 (1804-2026)",
+      "solution": "1: soln ref.= JPL#144, OCC=0",
+      "target": "3 Juno (A804 RA)                {source: JPL#144}"
+    },
+    "Vesta": {
+      "command": "4;",
+      "step": "4 d",
+      "rows": 36533,
+      "bytes": 4500101,
+      "sha256": "1bcc7376be2155c157561d74f0f0355f54676ab6fbf38818349c54ecb5a7021f",
+      "record": "Rec #:       4 (+COV) Soln.date: 2021-Apr-13_11:15:57   # obs: 9451 (1950-2021)",
+      "solution": "1: soln ref.= JPL#36, OCC=0           radar(2977 delay, 0 Dop",
+      "target": "4 Vesta (A807 FA)               {source: JPL#36}"
+    }
+  }
+}

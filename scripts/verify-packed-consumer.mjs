@@ -6,11 +6,13 @@ import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 
 // astronomy-engine 2.1.19 ships ESM in a package without "type": "module"; plain
-// Node loads it as ESM only from 20.19.0 on the 20 line and from 22.7.0 on.
+// Node loads it as ESM only from 20.19.0 on the 20 line and from 22.7.0 on. From
+// 3.0.0 the package has no CommonJS stub, and require() loads its ES modules
+// (require(esm), unflagged) only from 20.19.0 and from 22.12.0 on.
 const [major, minor] = process.versions.node.split(".").map(Number);
-if (!((major === 20 && minor >= 19) || (major === 22 && minor >= 7) || major > 22)) {
-  console.error(`Node ${process.version} is outside @zodiacs/engine's supported range (^20.19.0 || >=22.7.0): ` +
-    "it would load astronomy-engine's ESM as CommonJS. Use Node 20.19.0, 22.7.0 or later.");
+if (!((major === 20 && minor >= 19) || (major === 22 && minor >= 12) || major > 22)) {
+  console.error(`Node ${process.version} is outside @zodiacs/engine's supported range (^20.19.0 || >=22.12.0): ` +
+    "it would load astronomy-engine's ESM as CommonJS, or not load the package through require(). Use Node 20.19.0, 22.12.0 or later.");
   process.exit(1);
 }
 const artifactArgument = process.argv[2];
@@ -52,7 +54,7 @@ const installed = JSON.parse(
 );
 assert.equal(installed.version, manifest.version);
 assert.equal(installed.license, "MIT AND CC-BY-4.0");
-assert.deepEqual(installed.engines, { node: "^20.19.0 || >=22.7.0" });
+assert.deepEqual(installed.engines, { node: "^20.19.0 || >=22.12.0" });
 assert(
   realpathSync(join(directory, "node_modules/@zodiacs/engine")).startsWith(realpathSync(directory))
 );
@@ -233,12 +235,20 @@ const opening: Promise<De440Source> = openDe440Pack(new Uint8Array(0), { expectD
 const asSource = (source: De440Source): PositionSource => source;
 const inside: number = withEphemeris({ ephemeris: { name: "x", version: "0" }, place: () => ({ lon: 0, lat: 0 }), trueNode: () => 0 }, () => 1);
 const errorCode = (error: unknown): De440ErrorCode | null => (error instanceof De440Error ? error.code : null);
-import { DE440_PACK, de440PackBytes, openShippedDe440Pack, type De440PackDescription } from "@zodiacs/engine/de440/pack";
+import { DE440_PACK, de440PackBytes, openShippedDe440Pack, useDe440, type De440PackDescription } from "@zodiacs/engine/de440/pack";
 const shippedPack: De440PackDescription = DE440_PACK;
 const shippedBytes: () => Uint8Array = de440PackBytes;
 const shippedSource: () => Promise<De440Source> = openShippedDe440Pack;
-void shippedPack; void shippedBytes; void shippedSource;
+const toPack: () => De440Source = useDe440;
+void shippedPack; void shippedBytes; void shippedSource; void toPack;
 void opening.catch(() => {}); void asSource; void inside; void errorCode; void REDUCED_BODIES;
+import { MINOR_BODIES, MINOR_BODIES_SPAN, chiron, minorBodyPosition, minorBodyPositions, type MinorBodyName, type MinorBodyPosition, type MinorBodySpec } from "@zodiacs/engine/minor-bodies";
+const chironPlace: MinorBodyPosition = minorBodyPosition(chiron, "2000-01-01T12:00:00Z", { timeScale: "tt" });
+const namedPlaces: MinorBodyPosition[] = minorBodyPositions(new Date(0), ["Vesta", chiron]);
+const firstSpec: MinorBodySpec | undefined = MINOR_BODIES[0];
+const chironName: MinorBodyName = chiron.name;
+const spanEnd: number = MINOR_BODIES_SPAN.toJdTt + chironPlace.speed + chiron.table.maxFitResidualKm;
+void namedPlaces; void firstSpec; void chironName; void spanEnd;
 `
 );
 // An explicit project: "types": [] keeps @types packages in parent directories
@@ -269,9 +279,9 @@ import * as vedic from "@zodiacs/engine/vedic";
 import * as houses from "@zodiacs/engine/houses";
 import { planetaryReturns } from "@zodiacs/engine/timing";
 import * as root from "@zodiacs/engine";
-// The checks below pin values written on astronomy-engine, the engine's
-// fallback, and are run on it; the default source, the shipped DE440 pack,
-// is checked in its own block at the end, which sets it.
+// The checks below pin values written on astronomy-engine, the package's
+// default from 3.0.0, set here all the same; the shipped DE440 pack is checked
+// in its own block at the end, which loads it with useDe440().
 root.setDefaultEphemeris("astronomy-engine");
 import { calc } from "@zodiacs/engine/calc";
 import { birthWindow, WINDOW_VERIFICATION, WindowBudgetError } from "@zodiacs/engine/window";
@@ -619,13 +629,13 @@ assert.deepEqual(lite.essentialDignities("Mars", 10, "day"), techniques.essentia
 assert.equal(lite.sectReading({convention: "ecliptic", ascendant: chart.angles.asc, sunLon: chart.bodies[0].lon}).sect, root.sectOf(chart.angles.asc, chart.bodies[0].lon));
 assert.equal(lite.sectReading({convention: "altitude", sunAltitude: 0, sunLon: 0}).sect, "day");
 assert.throws(() => lite.sectReading({sunAltitude: 1, sunLon: 0}), RangeError);
-// The core entry (ZOD-292): the root's names, on astronomy-engine by default,
-// with no DE440 pack to open; its charts are the root's on astronomy-engine,
-// each naming it, and are its own module copies' (not the root's settings).
+// The core entry: from 3.0.0 the root under its 2.x name, each of its names
+// the root's own, so one setting for both; on astronomy-engine, with no DE440
+// pack loaded, until useDe440() (the last block).
 assert.deepEqual(Object.keys(core).sort(), Object.keys(root).sort());
+for (const name of Object.keys(root)) assert.equal(core[name], root[name], name);
 assert.equal(core.defaultEphemeris().name, "astronomy-engine");
 assert.equal(core.defaultEphemeris().de440.opened, false);
-assert.notEqual(core.natalChart, natalChart);
 assert.deepEqual(core.natalChart({utc: "2001-12-21T00:00:00Z", latitude: 78.2232, longitude: 15.6267, houseSystem: "placidus"}), chart);
 assert.deepEqual(core.natalChart({utc: "2000-01-01T12:00:00Z", timeKnown: false}).ephemeris, {...root.EPHEMERIS});
 // The sky entry: the Sun's rise at Greenwich on 2024-06-21, a Friday, begins
@@ -716,12 +726,20 @@ assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-
   assert.deepEqual(chart.ephemeris, source.ephemeris);
   const sun = chart.bodies.find((row) => row.body === "Sun");
   assert(Math.abs(sun.lon - 353.0330254813) * 3600 <= 1 && Math.abs(sun.lat - -0.0000304792) * 3600 <= 1, "the shipped pack's Sun is not within 1 arcsecond of Horizons");
-  // The default source (1.1.0-rc.9): a plain call, with nothing opened by the
-  // caller, is on the shipped pack, names it, and gives the same Sun; after
-  // setDefaultEphemeris("astronomy-engine") it is on astronomy-engine and
-  // names no ephemeris, as it is outside the pack's years under either setting.
+  // The default source (3.0.0): a plain call is on astronomy-engine, which no
+  // opening of the pack changes; setDefaultEphemeris("de440") with no pack
+  // loaded stays on it, flagged; useDe440() loads the shipped pack and makes it
+  // the default, and a plain call is then on it, names it, and gives the same
+  // Sun; after setDefaultEphemeris("astronomy-engine") it is on astronomy-engine
+  // and names it, unflagged.
   const plainInput = { utc: instant, timeScale: "tt", timeKnown: false };
+  assert.equal(root.defaultEphemeris().name, "astronomy-engine");
+  assert.match(root.defaultEphemeris().de440.error, /useDe440\\(\\) from @zodiacs\\/engine\\/de440\\/pack/);
+  assert.deepEqual(natalChart(plainInput).ephemeris, { ...root.EPHEMERIS });
   root.setDefaultEphemeris("de440");
+  assert.deepEqual(natalChart(plainInput).flags, ["no-time", "de440-unavailable"]);
+  assert.equal(shipped.useDe440(), shipped.shippedDe440Source());
+  assert.equal(shipped.useDe440(), shipped.shippedDe440Source());
   assert.deepEqual(root.defaultEphemeris().de440.version, shipped.DE440_PACK.sha256);
   const plain = natalChart(plainInput);
   assert.deepEqual(plain.ephemeris, source.ephemeris);
@@ -752,18 +770,42 @@ assert.throws(() => sky.skyEvents("Sun", {latitude: 91, longitude: 0}, "2024-06-
   assert.deepEqual(chosen.flags, ["no-time"]);
   assert(chosen.bodies.every((row) => row.ephemeris === "astronomy-engine" && !("fallback" in row)));
 }
-console.log(JSON.stringify({version: ENGINE_VERSION, de440: "passed", de440Pack: "passed", birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", liteEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
+{
+  // The minor bodies (3.0.0): Chiron at JD 2378497.234567 TT, the first of the
+  // independent checks from JPL Horizons (src/fixtures/minor-bodies-horizons-oos.json):
+  // 231.3383009, 2.1202538 degrees, within 5 arcseconds on astronomy-engine's
+  // Earth and 1 on the pack's, which useDe440() makes the default; outside the
+  // tables' span, refused.
+  const minor = await import("@zodiacs/engine/minor-bodies");
+  const at = new Date(Math.round((2378497.234567 - 2440587.5) * 86400000));
+  const near = (place, limit) => Math.abs(place.lon - 231.3383009) * 3600 <= limit && Math.abs(place.lat - 2.1202538) * 3600 <= limit;
+  root.setDefaultEphemeris("astronomy-engine");
+  const plainChiron = minor.minorBodyPosition(minor.chiron, at, { timeScale: "tt" });
+  assert.equal(plainChiron.ephemeris.name, "astronomy-engine");
+  assert(near(plainChiron, 5), "Chiron on astronomy-engine is not within 5 arcseconds of Horizons");
+  (await import("@zodiacs/engine/de440/pack")).useDe440();
+  const packChiron = minor.minorBodyPosition(minor.chiron, at, { timeScale: "tt" });
+  assert.equal(packChiron.ephemeris.name, "jpl-de440");
+  assert(near(packChiron, 1), "Chiron on the pack is not within 1 arcsecond of Horizons");
+  root.setDefaultEphemeris("astronomy-engine");
+  assert.deepEqual(minor.minorBodyPositions("2000-01-01T00:00:00Z").map((place) => place.body), ["Chiron", "Ceres", "Pallas", "Juno", "Vesta"]);
+  assert.throws(() => minor.minorBodyPosition(minor.chiron, "1799-12-31T00:00:00Z"), RangeError);
+}
+console.log(JSON.stringify({version: ENGINE_VERSION, minorBodies: "passed", de440: "passed", de440Pack: "passed", birthWindow: "passed", techniques: "passed", sky: "passed", houses: "passed", planetaryReturns: "passed", timeBasis: "passed", timeEntry: "passed", liteEntry: "passed", zoneHistory: "passed", timing: "passed", configuredAspects: "passed", exactAspectBoundaries: "passed", chartDeclinations: "passed", sunConvention: "passed", boundMargin: "passed", exactSeparation: "passed", ephemerisSpan: "passed", metadata: "passed", bodyLabels: "passed", ephemerisRangeErrors: "passed", crossings: "passed", publicExamples: "passed", errors: "passed", optionalIsolation: "passed", geoRetry: "passed", geoSchemaRecovery: "passed", geoCacheMutationIsolation: "passed", natalEnvelope: "passed", redactedDiagnostic: "passed", typedFlagCompatibility: "passed", derivedEchoReplay: "passed", suppliedChartMetadata: "passed", flagRejections: "passed", scalarSnapshots: "passed", civilSettingsBeforeIntl: "passed", oneZeroAdditions: "passed", conventionIds: "passed"}));
 `
 );
 const result = JSON.parse(run(process.execPath, ["consumer.mjs"]).trim());
 
 // Never a silent fallback, on the installed package itself (1.1.0-rc.10). The
-// pack is base64 text in one file under dist/. That text is taken away
-// (missing), changed in one character (damaged: the SHA-256 is wrong), cut
-// short (damaged) and replaced by text that is not base64 (undecodable); each
-// time a new process must find every result flagged "de440-unavailable" and
-// naming astronomy-engine, and nothing naming DE440. The file is restored, and
-// a last process must find the pack whole again and nothing flagged.
+// pack is base64 text in one file under dist/ (dist/de440-pack.js from
+// 3.0.0). That text is taken away (missing), changed in one character
+// (damaged: the SHA-256 is wrong), cut short (damaged) and replaced by text
+// that is not base64 (undecodable); each time a new process, which calls
+// useDe440(), must find every result flagged "de440-unavailable" and naming
+// astronomy-engine, and nothing naming DE440. The file is restored; a process
+// that asks for the pack with setDefaultEphemeris("de440") and no useDe440()
+// must find the same (not loaded, from 3.0.0), and a last process, which
+// calls useDe440(), must find the pack whole again and nothing flagged.
 const distDirectory = join(directory, "node_modules/@zodiacs/engine/dist");
 const packText = /"([A-Za-z0-9+/=]{3000000,})"/u;
 const holders = readdirSync(distDirectory).filter((name) => name.endsWith(".js") && packText.test(readFileSync(join(distDirectory, name), "utf8")));
@@ -781,7 +823,19 @@ import { birthWindow } from "@zodiacs/engine/window";
 import * as techniques from "@zodiacs/engine/techniques";
 import { bodyLongitude, bodyLongitudeDetailed } from "@zodiacs/engine/internal";
 import { createNatalEnvelope, parseNatalEnvelope, serializeNatalEnvelope } from "@zodiacs/engine/receipt";
-const expectUnavailable = process.argv[2] === "unavailable";
+import { useDe440 } from "@zodiacs/engine/de440/pack";
+import * as minor from "@zodiacs/engine/minor-bodies";
+const expectUnavailable = process.argv[2] !== "whole";
+// From 3.0.0 the shipped pack is the default after useDe440(), which throws where the pack cannot be opened and
+// leaves the default on it; "not-loaded" asks for the pack with setDefaultEphemeris("de440") alone.
+if (process.argv[2] === "not-loaded") root.setDefaultEphemeris("de440");
+else {
+  try {
+    useDe440();
+  } catch (error) {
+    if (!expectUnavailable) throw error;
+  }
+}
 const flags = expectUnavailable ? ["de440-unavailable"] : [];
 const name = expectUnavailable ? "astronomy-engine" : "jpl-de440";
 const birth = { utc: "1990-04-15T08:30:00Z", latitude: 51.5, longitude: -0.12 };
@@ -807,6 +861,15 @@ assert.equal(root.saturnReturn(birth.utc).ephemeris, name);
 for (const derived of [root.chartPoints(birth), root.chartDeclinations(birth), root.chartPoints(natal), root.chartDeclinations(natal)]) {
   assert.deepEqual(derived.flags, flags);
   assert.equal(derived.ephemeris.name, name);
+}
+// From 3.0.0, True Black Moon Lilith, the one point read from an ephemeris, labels itself as a body does; and a
+// minor body's place names the Earth it was reduced with, flagged as the chart is.
+const lilith = root.chartPoints(birth).points.find((point) => point.point === "True Black Moon Lilith");
+assert.equal(lilith.ephemeris, name);
+assert.equal(lilith.fallback, flags[0]);
+for (const place of [minor.minorBodyPosition(minor.ceres, birth.utc), ...minor.minorBodyPositions(birth.utc)]) {
+  assert.deepEqual(place.flags, flags);
+  assert.equal(place.ephemeris.name, name);
 }
 assert.deepEqual(root.searchLongitudeCrossings("Sun", 30, "1990-01-01T00:00:00Z", "1991-01-01T00:00:00Z").flags, flags);
 for (const body of ["Sun", "Moon", "Pluto", "North Node"]) {
@@ -879,25 +942,33 @@ try {
 } finally {
   writeFileSync(holder, whole);
 }
+fallback["not-loaded"] = JSON.parse(run(process.execPath, ["fallback.mjs", "not-loaded"]).trim());
+assert.deepEqual(fallback["not-loaded"].natalFlags, ["de440-unavailable"]);
+assert.match(fallback["not-loaded"].error, /^the shipped DE440 pack is not loaded: call useDe440\(\) from @zodiacs\/engine\/de440\/pack/);
 fallback.restored = JSON.parse(run(process.execPath, ["fallback.mjs", "whole"]).trim());
 assert.deepEqual(fallback.restored.natalFlags, []);
 
-// A CommonJS consumer: require() of every entry point throws the package's
-// own ERR_ZODIACS_ESM_ONLY with the message that says to use import
-// (scripts/build-esm-only.mjs), and import() from the same file loads it.
+// A CommonJS consumer (from 3.0.0, which has no CommonJS stub and no "require"
+// condition): require() of every entry point loads the very module import() of
+// the same name loads, as require(esm) does unflagged on every Node in the
+// engines range, and the two share one module state, so useDe440() through
+// require() puts the root on the shipped pack.
 writeFileSync(
   join(directory, "require.cjs"),
   `
 const assert = require("node:assert/strict");
 const entries = ${JSON.stringify(Object.keys(installed.exports).map((subpath) => (subpath === "." ? "@zodiacs/engine" : `@zodiacs/engine/${subpath.slice(2)}`)))};
-const message = '@zodiacs/engine is ESM-only: require() cannot load it or any of its entry points. ' +
-  'Use import { natalChart } from "@zodiacs/engine", or from CommonJS await import("@zodiacs/engine").';
-for (const name of entries) {
-  assert.throws(() => require(name), (error) => error instanceof Error && error.code === "ERR_ZODIACS_ESM_ONLY" && error.message === message, name);
-}
-import("@zodiacs/engine").then((engine) => {
-  assert.equal(typeof engine.natalChart, "function");
-  console.log(JSON.stringify({ entries: entries.length, code: "ERR_ZODIACS_ESM_ONLY", dynamicImport: "loaded" }));
+const required = entries.map((name) => require(name));
+const root = require("@zodiacs/engine");
+const birth = { utc: "2000-01-01T12:00:00Z", timeKnown: false };
+assert.equal(root.natalChart(birth).ephemeris.name, "astronomy-engine");
+const source = require("@zodiacs/engine/de440/pack").useDe440();
+assert.deepEqual(root.natalChart(birth).ephemeris, source.ephemeris);
+assert.equal(require("@zodiacs/engine/calc").calc({ body: "Sun", time: birth.utc }).receipt.engine.ephemeris.name, "jpl-de440");
+root.setDefaultEphemeris("astronomy-engine");
+Promise.all(entries.map((name) => import(name))).then((imported) => {
+  imported.forEach((entry, index) => assert.equal(entry, required[index], entries[index]));
+  console.log(JSON.stringify({ entries: entries.length, required: "loaded", sameAsImport: true, useDe440: source.ephemeris.name }));
 });
 `
 );
