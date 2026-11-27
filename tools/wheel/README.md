@@ -64,8 +64,12 @@ crowd each other move, by least squares, wherever on the ring they meet;
 from 48 markers the ring is full and they are spaced evenly. The selftest
 holds the markers, and their labels taken as boxes 0.85 em wide a character,
 apart for 22 and for 48 objects at a single longitude, and the markers apart
-for 64, the most a wheel takes; for two clusters of 8 that meet across Aries
-zero, it holds the 7 markers with room between them at their longitudes.
+for 64, the most a wheel takes. It also lays out 25 markers: two clusters
+of 8, at 320 and 0 degrees, and 9 single markers every 32 degrees from 32
+to 288. The two clusters, with the single markers at 288 and 32 that they
+crowd, spread into one run of 18 markers 7.5 degrees apart across Aries
+zero; the other 7 single markers, from 64 to 256, have room and stay at
+their exact longitudes, with no leader lines.
 Each text description gives the label beside the name. Displayed degrees are
 truncated to six decimal places so that no point is rounded into the next
 sign; they are presentation values, not an error bound.
