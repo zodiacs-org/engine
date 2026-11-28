@@ -1,0 +1,64 @@
+{
+  "request": {
+    "schema": "minorbodies-horizons-request-v1",
+    "body": "Chiron",
+    "epochs": [
+      2451545,
+      2451545.125,
+      2451546
+    ],
+    "endpoint": "https://ssd.jpl.nasa.gov/api/horizons.api",
+    "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%272060%3B%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27500%40399%27&REF_SYSTEM=%27ICRF%27&REF_PLANE=%27FRAME%27&VEC_CORR=%27LT%2BS%27&VEC_TABLE=%272%27&OUT_UNITS=%27AU-D%27&TIME_TYPE=%27TT%27&TLIST_TYPE=%27JD%27&CSV_FORMAT=%27YES%27&OBJ_DATA=%27YES%27&MAKE_EPHEM=%27YES%27&TLIST=%272451545%27+%272451545.125%27+%272451546%27",
+    "parameters": {
+      "format": "json",
+      "COMMAND": "'2060;'",
+      "EPHEM_TYPE": "'VECTORS'",
+      "CENTER": "'500@399'",
+      "REF_SYSTEM": "'ICRF'",
+      "REF_PLANE": "'FRAME'",
+      "VEC_CORR": "'LT+S'",
+      "VEC_TABLE": "'2'",
+      "OUT_UNITS": "'AU-D'",
+      "TIME_TYPE": "'TT'",
+      "TLIST_TYPE": "'JD'",
+      "CSV_FORMAT": "'YES'",
+      "OBJ_DATA": "'YES'",
+      "MAKE_EPHEM": "'YES'",
+      "TLIST": "'2451545' '2451545.125' '2451546'"
+    }
+  },
+  "manifest": {
+    "schema": "minorbodies-horizons-capture-v1",
+    "generator": "minorbodies-horizons-client-v1",
+    "requestSha256": "dfc586fd13fcc59232393e66b1765397a8f00b565ee01c8759db6b89aa571535",
+    "responseSha256": "bf8eaf3fdf1b59edcb0bcd2e507dd99f2f862f0f46a94d4560a6de412d897b77",
+    "retrievedAt": "2026-10-15T01:16:04.515Z",
+    "byteLength": 8542,
+    "signature": {
+      "source": "NASA/JPL Horizons API",
+      "version": "1.2"
+    },
+    "identity": {
+      "body": "Chiron",
+      "targetNumber": 2060,
+      "targetName": "2060 Chiron (1977 UB)",
+      "targetSource": "JPL#171",
+      "orbitSolutionDate": "2026-Jun-05_06:09:00",
+      "orbitEpochJdTdb": 2457916.5,
+      "initialPositionAu": [
+        18.43374627977423,
+        -1.877818593473934,
+        0.5548833989583914
+      ],
+      "initialVelocityAuPerDay": [
+        0.0007316266023833624,
+        0.0029601872789726,
+        0.000971058620131523
+      ],
+      "centerName": "Earth (399)",
+      "centerSource": "DE441",
+      "smallPerturbersSource": "SB441-N16",
+      "eopFile": "eop.261014.p270110"
+    }
+  }
+}

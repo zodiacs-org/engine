@@ -1,0 +1,92 @@
+@zodiacs/minorbodies source companion notice
+==========================================
+
+Original companion code and documentation
+-----------------------------------------
+
+Copyright (c) 2026 Zodiacs.org
+MIT License, with its permission and warranty text in LICENSE.
+The MIT declaration does not relicense external data or dependencies.
+LICENSING.md distinguishes them; SOURCES.md records each data intake.
+
+NASA/JPL Horizons numerical data
+--------------------------------
+
+Source: NASA Jet Propulsion Laboratory, Solar System Dynamics, Horizons.
+https://ssd.jpl.nasa.gov/horizons/
+https://ssd-api.jpl.nasa.gov/doc/horizons.html
+https://ssd-api.jpl.nasa.gov/doc/horizons_file.html
+
+The source fixtures are original numerical API responses with their legends.
+The locally generated coefficients approximate those captured vectors.
+Committed manifests and receipts record each target, request, original-byte
+digest, captured solution identity and generator. Retain those records and
+this attribution with the fixtures and derived numerical data. The project's
+intake basis and the limits of the source's published terms are recorded in
+SOURCES.md and LICENSING.md. This notice grants no rights in unrelated JPL
+content and implies no NASA, JPL or Caltech endorsement.
+
+Engine source reuse
+-------------------
+
+The companion imports @zodiacs/engine source from the parent checkout.
+Retain that checkout's LICENSE, LICENSING.md and NOTICE with any included
+engine code. The engine distribution declares MIT AND CC-BY-4.0 and has the
+source-specific qualifications recorded in its LICENSING.md. The following
+selected attributions supplement, and do not replace, its complete NOTICE.
+
+Astronomy Engine
+---------------
+
+astronomy-engine 2.1.19
+Copyright (c) 2019-2023 Don Cross <cosinekitty@gmail.com>
+https://github.com/cosinekitty/astronomy/tree/v2.1.19
+
+Distributed under the MIT License. The full permission and warranty notice
+is retained at the start of the installed esm/astronomy.js and is the text
+in this directory's LICENSE after its copyright line. The parent engine
+also preserves this attribution for its copied precession and observer code.
+
+Inherited delta-T data
+---------------------
+
+Stephenson, F. R., Morrison, L. V. & Hohenkerk, C. Y. 2016, Measurement of
+the Earth's rotation: 720 BC to AD 2015. Proc. R. Soc. A 472: 20160404.
+https://doi.org/10.1098/rspa.2016.0404
+Creative Commons Attribution 4.0 International (CC BY 4.0):
+https://creativecommons.org/licenses/by/4.0/
+
+The imported engine delta-T model uses Table S15 values and equation
+constants from that work. The retained values are rounded; the engine
+reconstructs the authors' spline. The companion does not alter that table.
+The engine's later time values also derive from USNO and IERS data. Its
+NOTICE identifies those products and centres, and its LICENSING.md preserves
+the unresolved EOP 20 C04 terms.
+
+Independent validation tools
+----------------------------
+
+PyERFA 2.0.1.5
+Copyright (c) 2011-2023, PyERFA Developers
+BSD-3-Clause. Full terms:
+https://github.com/liberfa/pyerfa/blob/v2.0.1.5/LICENSE.rst
+
+ERFA 2.0.1
+Copyright (C) 2013-2021, NumFOCUS Foundation
+BSD-style terms and SOFA heritage notice:
+https://github.com/liberfa/erfa/blob/v2.0.1/LICENSE
+The reference calculation uses a library derived from SOFA, rather than
+SOFA itself. No SOFA, ERFA or PyERFA endorsement is implied.
+
+NumPy 2.2.6
+Copyright (c) 2005-2024, NumPy Developers
+BSD-3-Clause for NumPy itself. Full upstream terms:
+https://github.com/numpy/numpy/blob/v2.2.6/LICENSE.txt
+The installed wheel also contains bundled-library notices. Preserve its
+complete LICENSE.txt, including those notices, with any offline wheel copy.
+
+These libraries are separately installed validation tools. They are not
+runtime dependencies of the minor-body evaluator and no binary or library
+source is committed here. Their original notices remain with their installed
+packages. LICENSING.md also records the npm development tools and explains
+why this attribution list does not replace dependencies' own licence files.
