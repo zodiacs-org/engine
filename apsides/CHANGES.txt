@@ -1,0 +1,12 @@
+apsides: establish the private geometric distance sampler, design and source records, and passing M1 type, contract, and package-isolation checks
+apsides: preregister independent apsis budgets and held-out cases, freeze Horizons development fixtures, and verify collector provenance, offline replay, and package isolation
+apsides: implement the bounded scalar extrema solver with golden-section refinement, explicit ambiguity refusals, and passing analytic numerical and package-isolation checks
+apsides: implement lunar TT window searches with padded canonical sampling, half-open ownership, bounded refusals, engine receipts, and passing independent lunar and package-isolation checks
+apsides: implement heliocentric planetary searches with analytic-rate and scalar-distance refinement, canonical windows, independent development tests, and explicit unresolved Pluto distance validation failures
+apsides: implement combined lunar and planetary windows with canonical TT merging, a shared evaluation budget, coverage and refusal diagnostics, and passing M6 tests while preserving known Pluto validation failures
+apsides: finalize before/at/after motion records with canonical TT offsets, replayable engine receipts, and passing M7 serialization and isolation checks while preserving known Pluto distance failures
+apsides: add optional lunar syzygy annotations with explicit angular orbs, measured elongation, candidate labels, replayable receipts and shared budgets, with passing M8 boundary and isolation checks while preserving known Pluto distance failures
+apsides: implement lunar, planetary and window CLI commands with strict arguments, TT boundary replay, full JSON receipts, explicit exit statuses and passing M9 subprocess, type and isolation checks while preserving known Pluto distance failures
+apsides: complete M10 held-out Horizons collection and validation with reproducible measured reports, physical-center spot checks and passing integrity/type/isolation checks while retaining Mercury speed, Neptune timing and Pluto search/distance acceptance failures
+apsides: complete M11 runnable library and receipt-replay examples, reproduction and licensing records, and local checks that run every gate with passing type/example/isolation checks while retaining Mercury, Neptune and Pluto acceptance failures
+apsides: complete M12 scientific and failure-path review with passing robustness and CLI acceptance checks, updated help and final evidence while retaining Mercury, Neptune and Pluto acceptance failures
