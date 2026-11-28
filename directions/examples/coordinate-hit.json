@@ -1,0 +1,23 @@
+{
+  "source": "coordinates",
+  "request": {
+    "convention": {
+      "system": "placidus-semiarc",
+      "mode": "mundane",
+      "latitude": "retain-both",
+      "motion": "direct",
+      "key": "ptolemy"
+    },
+    "geometry": { "ramcDegrees": 0, "latitudeDegrees": 0 },
+    "significator": {
+      "kind": "body", "id": "Synthetic S",
+      "coordinates": { "rightAscensionDegrees": 350, "declinationDegrees": 0 }
+    },
+    "promissor": {
+      "kind": "body", "id": "Synthetic P",
+      "coordinates": { "rightAscensionDegrees": 10, "declinationDegrees": 0 }
+    },
+    "contact": { "kind": "conjunction" },
+    "yearUnit": "tropical-365.2422-days"
+  }
+}
