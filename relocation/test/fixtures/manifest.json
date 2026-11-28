@@ -1,0 +1,62 @@
+{
+  "schema": "zodiacs.relocation-golden-manifest.v1",
+  "generator": "scripts/generate-golden.mjs",
+  "node": "22.22.2",
+  "reference": "regression-only;synthetic-births;no-independent-astronomical-accuracy-claim",
+  "archive": {
+    "path": "../artifacts/zodiacs-engine-1.0.0.tgz",
+    "sha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
+    "integrity": "sha512-npoQ6scEH1Ozdix4H8juvsXqpYIMypmCU3CRSvYJ7cI8vDX2A9tPDSDaasqDSt9niPgQoW/y93vRWw62m/Kj7A=="
+  },
+  "engine": {
+    "ephemeris": {
+      "name": "astronomy-engine",
+      "version": "2.1.19"
+    },
+    "name": "@zodiacs/engine",
+    "version": "1.0.0"
+  },
+  "projection": "geometry-and-crossing-metadata;full-position-receipts;observer-axis-summaries;full-observer-receipts-replayed-in-tests",
+  "fixtures": [
+    {
+      "file": "meridians-poles.json",
+      "bytes": 31642,
+      "sha256": "288bc1f2d6cdc3046f2dd8a73aea9799ad809c3087009298845925b0eaae7506"
+    },
+    {
+      "file": "horizons-tangencies.json",
+      "bytes": 52158,
+      "sha256": "35c899b806e131a67f63956588cfdedac6789a4e925ced0f563862579911662c"
+    },
+    {
+      "file": "horizons-wrapped-clipping.json",
+      "bytes": 27815,
+      "sha256": "e2b1f8926852f1aefeb71c6a281e6d2de05441d2676112f7c76660e9fa82dd57"
+    },
+    {
+      "file": "grid-seam-crossings.json",
+      "bytes": 24680,
+      "sha256": "81b77b8a432bd8045a71656fbf4559eefb4557801b5bc97fd4a1940d2a4c086c"
+    },
+    {
+      "file": "grid-budget-stop.json",
+      "bytes": 14899,
+      "sha256": "becdeb778b0ca2efdab08cf5a4276afa39dcc9445b19e9c76d80db6a11ac4bfe"
+    },
+    {
+      "file": "path-seam-crossing.json",
+      "bytes": 22880,
+      "sha256": "40c13fd5b0c331ea5ec3724bd552f934613d34d79cc892ca433b98379c4b1f85"
+    },
+    {
+      "file": "path-polar-gap.json",
+      "bytes": 23520,
+      "sha256": "c866c0df3eef6fa22ab7d8dbcca551fff105d79117de7083774f9f3dad514eae"
+    },
+    {
+      "file": "local-space-seam-tt.json",
+      "bytes": 29454,
+      "sha256": "fa31c2fc0fea9504f1ac4e4919fcb3b3192ff64333eb11de63f96fb6c7ccaea1"
+    }
+  ]
+}

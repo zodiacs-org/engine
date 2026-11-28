@@ -1,0 +1,1144 @@
+{
+  "schema": "zodiacs.relocation-golden.v1",
+  "id": "meridians-poles",
+  "reference": "installed-carried-engine-regression;not-independent-accuracy",
+  "request": {
+    "id": "meridians-poles",
+    "kind": "meridians",
+    "source": {
+      "utc": "2004-05-06T07:08:09.010Z",
+      "latitude": 80,
+      "longitude": 34,
+      "houseSystem": "placidus",
+      "deltaT": 65
+    },
+    "options": {
+      "bounds": {
+        "south": -90,
+        "north": 90,
+        "west": -180,
+        "east": 180
+      },
+      "latitudeStep": 30,
+      "bodies": [
+        "Sun",
+        "Moon"
+      ],
+      "maxEvaluations": 64
+    }
+  },
+  "output": {
+    "schema": "zodiacs.relocation-meridians.v1",
+    "plan": {
+      "bounds": {
+        "south": -90,
+        "north": 90,
+        "west": -180,
+        "east": 180,
+        "longitudeSpan": 360,
+        "eastUnwrapped": 180
+      },
+      "latitudeStep": 30,
+      "latitudes": [
+        -90,
+        -60,
+        -30,
+        0,
+        30,
+        60,
+        90
+      ],
+      "bodies": [
+        "Sun",
+        "Moon"
+      ],
+      "lines": [
+        "MC",
+        "IC"
+      ],
+      "maxEvaluations": 64,
+      "requiredEvaluations": 23,
+      "maximumObserverSamples": 29
+    },
+    "status": "ok",
+    "referenceObserverIndex": 0,
+    "lines": [
+      {
+        "body": "Sun",
+        "kind": "MC",
+        "positionIndex": 0,
+        "status": "sampled",
+        "reason": null,
+        "longitude": 72.11042499464185,
+        "samples": [
+          {
+            "observerIndex": 1,
+            "status": "undefined",
+            "reason": "geographic-pole",
+            "residual": null
+          },
+          {
+            "observerIndex": 2,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 3,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 4,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 5,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 6,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 7,
+            "status": "undefined",
+            "reason": "geographic-pole",
+            "residual": null
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": -60,
+                "longitude": 72.11042499464185
+              },
+              "source": {
+                "kind": "sample",
+                "index": 2
+              }
+            },
+            {
+              "point": {
+                "latitude": -30,
+                "longitude": 72.11042499464185
+              },
+              "source": {
+                "kind": "sample",
+                "index": 3
+              }
+            },
+            {
+              "point": {
+                "latitude": 0,
+                "longitude": 72.11042499464185
+              },
+              "source": {
+                "kind": "sample",
+                "index": 4
+              }
+            },
+            {
+              "point": {
+                "latitude": 30,
+                "longitude": 72.11042499464185
+              },
+              "source": {
+                "kind": "sample",
+                "index": 5
+              }
+            },
+            {
+              "point": {
+                "latitude": 60,
+                "longitude": 72.11042499464185
+              },
+              "source": {
+                "kind": "sample",
+                "index": 6
+              }
+            }
+          ]
+        ]
+      },
+      {
+        "body": "Sun",
+        "kind": "IC",
+        "positionIndex": 0,
+        "status": "sampled",
+        "reason": null,
+        "longitude": -107.88957500535815,
+        "samples": [
+          {
+            "observerIndex": 8,
+            "status": "undefined",
+            "reason": "geographic-pole",
+            "residual": null
+          },
+          {
+            "observerIndex": 9,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 10,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 11,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 12,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 13,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 14,
+            "status": "undefined",
+            "reason": "geographic-pole",
+            "residual": null
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": -60,
+                "longitude": -107.88957500535815
+              },
+              "source": {
+                "kind": "sample",
+                "index": 9
+              }
+            },
+            {
+              "point": {
+                "latitude": -30,
+                "longitude": -107.88957500535815
+              },
+              "source": {
+                "kind": "sample",
+                "index": 10
+              }
+            },
+            {
+              "point": {
+                "latitude": 0,
+                "longitude": -107.88957500535815
+              },
+              "source": {
+                "kind": "sample",
+                "index": 11
+              }
+            },
+            {
+              "point": {
+                "latitude": 30,
+                "longitude": -107.88957500535815
+              },
+              "source": {
+                "kind": "sample",
+                "index": 12
+              }
+            },
+            {
+              "point": {
+                "latitude": 60,
+                "longitude": -107.88957500535815
+              },
+              "source": {
+                "kind": "sample",
+                "index": 13
+              }
+            }
+          ]
+        ]
+      },
+      {
+        "body": "Moon",
+        "kind": "MC",
+        "positionIndex": 1,
+        "status": "sampled",
+        "reason": null,
+        "longitude": -87.55485958621995,
+        "samples": [
+          {
+            "observerIndex": 15,
+            "status": "undefined",
+            "reason": "geographic-pole",
+            "residual": null
+          },
+          {
+            "observerIndex": 16,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 17,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 18,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 19,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 20,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 21,
+            "status": "undefined",
+            "reason": "geographic-pole",
+            "residual": null
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": -60,
+                "longitude": -87.55485958621995
+              },
+              "source": {
+                "kind": "sample",
+                "index": 16
+              }
+            },
+            {
+              "point": {
+                "latitude": -30,
+                "longitude": -87.55485958621995
+              },
+              "source": {
+                "kind": "sample",
+                "index": 17
+              }
+            },
+            {
+              "point": {
+                "latitude": 0,
+                "longitude": -87.55485958621995
+              },
+              "source": {
+                "kind": "sample",
+                "index": 18
+              }
+            },
+            {
+              "point": {
+                "latitude": 30,
+                "longitude": -87.55485958621995
+              },
+              "source": {
+                "kind": "sample",
+                "index": 19
+              }
+            },
+            {
+              "point": {
+                "latitude": 60,
+                "longitude": -87.55485958621995
+              },
+              "source": {
+                "kind": "sample",
+                "index": 20
+              }
+            }
+          ]
+        ]
+      },
+      {
+        "body": "Moon",
+        "kind": "IC",
+        "positionIndex": 1,
+        "status": "sampled",
+        "reason": null,
+        "longitude": 92.44514041378005,
+        "samples": [
+          {
+            "observerIndex": 22,
+            "status": "undefined",
+            "reason": "geographic-pole",
+            "residual": null
+          },
+          {
+            "observerIndex": 23,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 24,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 25,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 26,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 27,
+            "status": "ok",
+            "reason": null,
+            "residual": -5.684341886080802e-14
+          },
+          {
+            "observerIndex": 28,
+            "status": "undefined",
+            "reason": "geographic-pole",
+            "residual": null
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": -60,
+                "longitude": 92.44514041378005
+              },
+              "source": {
+                "kind": "sample",
+                "index": 23
+              }
+            },
+            {
+              "point": {
+                "latitude": -30,
+                "longitude": 92.44514041378005
+              },
+              "source": {
+                "kind": "sample",
+                "index": 24
+              }
+            },
+            {
+              "point": {
+                "latitude": 0,
+                "longitude": 92.44514041378005
+              },
+              "source": {
+                "kind": "sample",
+                "index": 25
+              }
+            },
+            {
+              "point": {
+                "latitude": 30,
+                "longitude": 92.44514041378005
+              },
+              "source": {
+                "kind": "sample",
+                "index": 26
+              }
+            },
+            {
+              "point": {
+                "latitude": 60,
+                "longitude": 92.44514041378005
+              },
+              "source": {
+                "kind": "sample",
+                "index": 27
+              }
+            }
+          ]
+        ]
+      }
+    ],
+    "sampling": {
+      "schema": "zodiacs.relocation-angles.v1",
+      "conventions": {
+        "id": "zodiacs.relocation-angular-conventions.v1",
+        "frame": "equatorial-true-of-date",
+        "center": "geocentric",
+        "correction": "apparent;engine-moon-series-at-instant;no-deflection",
+        "horizon": "geodetic-tangent-plane;body-center;no-refraction;no-parallax;no-limb",
+        "MC": "upper-meridian;hour-angle-zero",
+        "IC": "lower-meridian;hour-angle-half-turn",
+        "ASC": "zero-altitude;eastern-branch;fixed-direction-rising",
+        "DSC": "zero-altitude;western-branch;fixed-direction-setting",
+        "azimuth": "north-through-east",
+        "units": "degrees",
+        "singularity": "unit-vector-projection-at-or-below-engine-RA_POLE_TOLERANCE",
+        "receiptScope": "engine-positions-and-houses;library-horizon-rotation-is-derived"
+      },
+      "natalReceipt": {
+        "conventions": {
+          "angles": "gast-and-true-obliquity",
+          "aspects": "major-aspects;sun-moon-eight-planets;no-nodes;applying-instantaneous-orb-rate",
+          "calendar": "proleptic-gregorian",
+          "deltaT": "tt-minus-ut1;value-in-result",
+          "localTime": "tzdb-shards-before-1970;host-intl-from-1970;flags-from-transition-record",
+          "longitudeUnit": "degrees-[0,360)",
+          "moonNodes": "instantaneous-geocentric-moon-orbit-plane",
+          "moonPosition": "astronomy-engine-geo-moon;no-light-time;no-aberration",
+          "nutation": "iau2000b;equation-of-equinoxes-with-two-complementary-terms",
+          "planetPositions": "aberrated-geocentric-ecliptic-of-date;no-deflection",
+          "speed": "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day",
+          "timeScale": "tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise;in-result",
+          "zodiac": "tropical"
+        },
+        "coordinates": {
+          "latitude": 80,
+          "longitude": 34
+        },
+        "coverage": {
+          "angleExclusions": "exact-geographic-poles-and-ecliptic-horizon-coincidence",
+          "assessment": "finite-reference-cases-only",
+          "broadDateRange": "not-certified",
+          "inputSyntax": "not-an-astronomical-accuracy-guarantee"
+        },
+        "engine": {
+          "ephemeris": {
+            "name": "astronomy-engine",
+            "version": "2.1.19"
+          },
+          "name": "@zodiacs/engine",
+          "version": "1.0.0"
+        },
+        "houses": {
+          "absenceReason": null,
+          "actual": "whole",
+          "requested": "placidus"
+        },
+        "inputFlags": [],
+        "instant": "2004-05-06T07:08:09.010Z",
+        "localResolution": null,
+        "provenance": null,
+        "reference": "supplied-instant",
+        "resultFlags": [
+          "polar-fallback"
+        ],
+        "schema": "zodiacs.calculation-receipt.draft-v1",
+        "sourceInstant": "2004-05-06T07:08:09.010Z",
+        "timeKnown": true,
+        "timeScale": "utc"
+      },
+      "time": {
+        "iso": "2004-05-06T07:08:09.010Z",
+        "deltaT": 65
+      },
+      "evaluations": {
+        "positions": 2,
+        "houses": 21
+      },
+      "positions": [
+        {
+          "body": "Sun",
+          "rightAscension": 43.62609460412028,
+          "declination": 16.654494310463065,
+          "raUndefined": null,
+          "engine": {
+            "status": "ok",
+            "body": "Sun",
+            "frame": "equatorial-true-of-date",
+            "lon": 43.62609460412028,
+            "lat": 16.654494310463065,
+            "dist": 1.0089124506995606,
+            "speeds": null,
+            "cartesian": null,
+            "ayanamsa": null,
+            "bounds": {
+              "position": {
+                "value": 3,
+                "unit": "arcsec",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "distance": {
+                "value": 0.000015,
+                "unit": "relative",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "speed": null
+            },
+            "receipt": {
+              "schema": "zodiacs.calc-receipt.v1",
+              "request": {
+                "body": "Sun",
+                "time": {
+                  "iso": "2004-05-06T07:08:09.010Z",
+                  "deltaT": 65
+                },
+                "frame": "equatorial-true-of-date",
+                "center": "geocentric",
+                "zodiac": "tropical",
+                "flags": {
+                  "correction": "apparent",
+                  "speeds": false,
+                  "cartesian": false,
+                  "units": "degrees",
+                  "deflection": false
+                }
+              },
+              "instants": [
+                {
+                  "utc": "2004-05-06T07:08:09.010Z",
+                  "jdUt1": 2453131.7973211976,
+                  "jdTt": 2453131.7980735125,
+                  "deltaT": {
+                    "seconds": 65,
+                    "sigma": null,
+                    "model": "pinned",
+                    "table": null,
+                    "tableDigest": null,
+                    "segment": "pinned"
+                  },
+                  "timeScale": {
+                    "input": "utc",
+                    "basis": "pinned",
+                    "ut1MinusUtc": {
+                      "seconds": -0.45853155100308385,
+                      "sigma": 0.000806,
+                      "source": "observed"
+                    },
+                    "leapSeconds": null
+                  }
+                }
+              ],
+              "conventions": [
+                "zodiac:tropical",
+                "frame:equatorial-true-of-date",
+                "center:geocentric",
+                "correction:apparent",
+                "light-time:newtonian",
+                "deflection:none",
+                "aberration:backdated-observer",
+                "precession:iau2006",
+                "nutation:iau2000b",
+                "ephemeris:astronomy-engine@2.1.19",
+                "deltat:pinned",
+                "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+              ],
+              "engine": {
+                "name": "@zodiacs/engine",
+                "version": "1.0.0",
+                "ephemeris": {
+                  "name": "astronomy-engine",
+                  "version": "2.1.19"
+                }
+              }
+            }
+          }
+        },
+        {
+          "body": "Moon",
+          "rightAscension": 243.9608100232585,
+          "declination": -23.55894043064024,
+          "raUndefined": null,
+          "engine": {
+            "status": "ok",
+            "body": "Moon",
+            "frame": "equatorial-true-of-date",
+            "lon": 243.9608100232585,
+            "lat": -23.55894043064024,
+            "dist": 0.0024052077415939207,
+            "speeds": null,
+            "cartesian": null,
+            "ayanamsa": null,
+            "bounds": {
+              "position": {
+                "value": 8.3,
+                "unit": "arcsec",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "distance": {
+                "value": 0.00014,
+                "unit": "relative",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "speed": null
+            },
+            "receipt": {
+              "schema": "zodiacs.calc-receipt.v1",
+              "request": {
+                "body": "Moon",
+                "time": {
+                  "iso": "2004-05-06T07:08:09.010Z",
+                  "deltaT": 65
+                },
+                "frame": "equatorial-true-of-date",
+                "center": "geocentric",
+                "zodiac": "tropical",
+                "flags": {
+                  "correction": "apparent",
+                  "speeds": false,
+                  "cartesian": false,
+                  "units": "degrees",
+                  "deflection": false
+                }
+              },
+              "instants": [
+                {
+                  "utc": "2004-05-06T07:08:09.010Z",
+                  "jdUt1": 2453131.7973211976,
+                  "jdTt": 2453131.7980735125,
+                  "deltaT": {
+                    "seconds": 65,
+                    "sigma": null,
+                    "model": "pinned",
+                    "table": null,
+                    "tableDigest": null,
+                    "segment": "pinned"
+                  },
+                  "timeScale": {
+                    "input": "utc",
+                    "basis": "pinned",
+                    "ut1MinusUtc": {
+                      "seconds": -0.45853155100308385,
+                      "sigma": 0.000806,
+                      "source": "observed"
+                    },
+                    "leapSeconds": null
+                  }
+                }
+              ],
+              "conventions": [
+                "zodiac:tropical",
+                "frame:equatorial-true-of-date",
+                "center:geocentric",
+                "correction:apparent",
+                "moon:series-at-instant",
+                "precession:iau2006",
+                "nutation:iau2000b",
+                "ephemeris:astronomy-engine@2.1.19",
+                "deltat:pinned",
+                "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+              ],
+              "engine": {
+                "name": "@zodiacs/engine",
+                "version": "1.0.0",
+                "ephemeris": {
+                  "name": "astronomy-engine",
+                  "version": "2.1.19"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "observers": [
+        {
+          "index": 0,
+          "point": {
+            "latitude": 0,
+            "longitude": 0
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 331.51566960947844,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 1,
+          "point": {
+            "latitude": -90,
+            "longitude": 72.11042499464185
+          },
+          "status": "undefined",
+          "reason": "geographic-pole",
+          "engine": null
+        },
+        {
+          "index": 2,
+          "point": {
+            "latitude": -60,
+            "longitude": 72.11042499464185
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 43.626094604120226,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 3,
+          "point": {
+            "latitude": -30,
+            "longitude": 72.11042499464185
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 43.626094604120226,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 4,
+          "point": {
+            "latitude": 0,
+            "longitude": 72.11042499464185
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 43.626094604120226,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 5,
+          "point": {
+            "latitude": 30,
+            "longitude": 72.11042499464185
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 43.626094604120226,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 6,
+          "point": {
+            "latitude": 60,
+            "longitude": 72.11042499464185
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 43.626094604120226,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 7,
+          "point": {
+            "latitude": 90,
+            "longitude": 72.11042499464185
+          },
+          "status": "undefined",
+          "reason": "geographic-pole",
+          "engine": null
+        },
+        {
+          "index": 8,
+          "point": {
+            "latitude": -90,
+            "longitude": -107.88957500535815
+          },
+          "status": "undefined",
+          "reason": "geographic-pole",
+          "engine": null
+        },
+        {
+          "index": 9,
+          "point": {
+            "latitude": -60,
+            "longitude": -107.88957500535815
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 223.62609460412023,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 10,
+          "point": {
+            "latitude": -30,
+            "longitude": -107.88957500535815
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 223.62609460412023,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 11,
+          "point": {
+            "latitude": 0,
+            "longitude": -107.88957500535815
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 223.62609460412023,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 12,
+          "point": {
+            "latitude": 30,
+            "longitude": -107.88957500535815
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 223.62609460412023,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 13,
+          "point": {
+            "latitude": 60,
+            "longitude": -107.88957500535815
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 223.62609460412023,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 14,
+          "point": {
+            "latitude": 90,
+            "longitude": -107.88957500535815
+          },
+          "status": "undefined",
+          "reason": "geographic-pole",
+          "engine": null
+        },
+        {
+          "index": 15,
+          "point": {
+            "latitude": -90,
+            "longitude": -87.55485958621995
+          },
+          "status": "undefined",
+          "reason": "geographic-pole",
+          "engine": null
+        },
+        {
+          "index": 16,
+          "point": {
+            "latitude": -60,
+            "longitude": -87.55485958621995
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 243.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 17,
+          "point": {
+            "latitude": -30,
+            "longitude": -87.55485958621995
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 243.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 18,
+          "point": {
+            "latitude": 0,
+            "longitude": -87.55485958621995
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 243.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 19,
+          "point": {
+            "latitude": 30,
+            "longitude": -87.55485958621995
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 243.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 20,
+          "point": {
+            "latitude": 60,
+            "longitude": -87.55485958621995
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 243.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 21,
+          "point": {
+            "latitude": 90,
+            "longitude": -87.55485958621995
+          },
+          "status": "undefined",
+          "reason": "geographic-pole",
+          "engine": null
+        },
+        {
+          "index": 22,
+          "point": {
+            "latitude": -90,
+            "longitude": 92.44514041378005
+          },
+          "status": "undefined",
+          "reason": "geographic-pole",
+          "engine": null
+        },
+        {
+          "index": 23,
+          "point": {
+            "latitude": -60,
+            "longitude": 92.44514041378005
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 63.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 24,
+          "point": {
+            "latitude": -30,
+            "longitude": 92.44514041378005
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 63.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 25,
+          "point": {
+            "latitude": 0,
+            "longitude": 92.44514041378005
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 63.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 26,
+          "point": {
+            "latitude": 30,
+            "longitude": 92.44514041378005
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 63.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 27,
+          "point": {
+            "latitude": 60,
+            "longitude": 92.44514041378005
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 63.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 28,
+          "point": {
+            "latitude": 90,
+            "longitude": 92.44514041378005
+          },
+          "status": "undefined",
+          "reason": "geographic-pole",
+          "engine": null
+        }
+      ]
+    }
+  }
+}

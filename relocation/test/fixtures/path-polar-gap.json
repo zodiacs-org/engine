@@ -1,0 +1,837 @@
+{
+  "schema": "zodiacs.relocation-golden.v1",
+  "id": "path-polar-gap",
+  "reference": "installed-carried-engine-regression;not-independent-accuracy",
+  "request": {
+    "id": "path-polar-gap",
+    "kind": "path",
+    "source": {
+      "utc": "2004-05-06T07:08:09.010Z",
+      "latitude": 12,
+      "longitude": 34,
+      "houseSystem": "koch",
+      "deltaT": 65
+    },
+    "options": {
+      "bodies": [
+        "Sun"
+      ],
+      "lines": [
+        "MC",
+        "ASC"
+      ],
+      "maxEvaluations": 128,
+      "maxRefinements": 32,
+      "coordinateTolerance": 0.01,
+      "residualTolerance": 0.01,
+      "from": {
+        "latitude": 80,
+        "longitude": 20
+      },
+      "to": {
+        "latitude": 80,
+        "longitude": -160
+      },
+      "stepDegrees": 15
+    }
+  },
+  "output": {
+    "schema": "zodiacs.relocation-path-crossings.v1",
+    "verification": "bounded-great-circle-brackets;sampled-engine-residuals",
+    "plan": {
+      "path": {
+        "from": {
+          "latitude": 80,
+          "longitude": 20
+        },
+        "to": {
+          "latitude": 80,
+          "longitude": -160
+        },
+        "stepDegrees": 15,
+        "maxSamples": 4096,
+        "conventions": {
+          "id": "zodiacs.relocation-great-circle.v1",
+          "surface": "unit-sphere;geographic-latitude;not-ellipsoidal-geodesic",
+          "arc": "shortest;antipodal-direction-refused",
+          "coordinate": "angular-distance-from-start-in-degrees",
+          "poles": "insert-interior-meridional-pole;break-display-geometry",
+          "seams": "lat-lon-interpolation;no-engine-receipt"
+        },
+        "lengthDegrees": 20.000000000000007,
+        "sampleCount": 4,
+        "samples": [
+          {
+            "index": 0,
+            "distanceDegrees": 0,
+            "fraction": 0,
+            "point": {
+              "latitude": 80,
+              "longitude": 20
+            }
+          },
+          {
+            "index": 1,
+            "distanceDegrees": 10,
+            "fraction": 0.49999999999999983,
+            "point": {
+              "latitude": 90,
+              "longitude": 0
+            }
+          },
+          {
+            "index": 2,
+            "distanceDegrees": 15,
+            "fraction": 0.7499999999999998,
+            "point": {
+              "latitude": 85,
+              "longitude": -159.99999999999997
+            }
+          },
+          {
+            "index": 3,
+            "distanceDegrees": 20.000000000000007,
+            "fraction": 1,
+            "point": {
+              "latitude": 80,
+              "longitude": -160
+            }
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": 80,
+                "longitude": 20
+              },
+              "source": {
+                "kind": "sample",
+                "index": 0
+              }
+            }
+          ],
+          [
+            {
+              "point": {
+                "latitude": 85,
+                "longitude": -159.99999999999997
+              },
+              "source": {
+                "kind": "sample",
+                "index": 2
+              }
+            },
+            {
+              "point": {
+                "latitude": 80,
+                "longitude": -160
+              },
+              "source": {
+                "kind": "sample",
+                "index": 3
+              }
+            }
+          ]
+        ]
+      },
+      "bodies": [
+        "Sun"
+      ],
+      "lines": [
+        "MC",
+        "ASC"
+      ],
+      "requiredEvaluations": 5,
+      "maxEvaluations": 128,
+      "maxRefinements": 32,
+      "coordinateTolerance": 0.01,
+      "residualTolerance": 0.01
+    },
+    "status": "ok",
+    "observerDistances": [
+      0,
+      10,
+      15,
+      20.000000000000007
+    ],
+    "intervalResults": [
+      {
+        "intervalIndex": 0,
+        "body": "Sun",
+        "kind": "MC",
+        "positionIndex": 0,
+        "status": "unresolved",
+        "reason": "geographic-pole",
+        "initialBracket": {
+          "from": {
+            "observerIndex": 0,
+            "distanceDegrees": 0,
+            "residual": -52.110424994641846,
+            "projection": -0.13704241965711997
+          },
+          "to": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "width": 10
+        },
+        "bracket": {
+          "from": {
+            "observerIndex": 0,
+            "distanceDegrees": 0,
+            "residual": -52.110424994641846,
+            "projection": -0.13704241965711997
+          },
+          "to": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "width": 10
+        },
+        "refinements": 0,
+        "crossingIndex": null
+      },
+      {
+        "intervalIndex": 1,
+        "body": "Sun",
+        "kind": "MC",
+        "positionIndex": 0,
+        "status": "unresolved",
+        "reason": "geographic-pole",
+        "initialBracket": {
+          "from": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "to": {
+            "observerIndex": 2,
+            "distanceDegrees": 15,
+            "residual": 127.88957500535815,
+            "projection": 0.06878294971837864
+          },
+          "width": 5
+        },
+        "bracket": {
+          "from": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "to": {
+            "observerIndex": 2,
+            "distanceDegrees": 15,
+            "residual": 127.88957500535815,
+            "projection": 0.06878294971837864
+          },
+          "width": 5
+        },
+        "refinements": 0,
+        "crossingIndex": null
+      },
+      {
+        "intervalIndex": 2,
+        "body": "Sun",
+        "kind": "MC",
+        "positionIndex": 0,
+        "status": "no-crossing",
+        "reason": null,
+        "initialBracket": {
+          "from": {
+            "observerIndex": 2,
+            "distanceDegrees": 15,
+            "residual": 127.88957500535815,
+            "projection": 0.06878294971837864
+          },
+          "to": {
+            "observerIndex": 3,
+            "distanceDegrees": 20.000000000000007,
+            "residual": 127.88957500535815,
+            "projection": 0.13704241965711997
+          },
+          "width": 5.000000000000007
+        },
+        "bracket": {
+          "from": {
+            "observerIndex": 2,
+            "distanceDegrees": 15,
+            "residual": 127.88957500535815,
+            "projection": 0.06878294971837864
+          },
+          "to": {
+            "observerIndex": 3,
+            "distanceDegrees": 20.000000000000007,
+            "residual": 127.88957500535815,
+            "projection": 0.13704241965711997
+          },
+          "width": 5.000000000000007
+        },
+        "refinements": 0,
+        "crossingIndex": null
+      },
+      {
+        "intervalIndex": 0,
+        "body": "Sun",
+        "kind": "ASC",
+        "positionIndex": 0,
+        "status": "unresolved",
+        "reason": "geographic-pole",
+        "initialBracket": {
+          "from": {
+            "observerIndex": 0,
+            "distanceDegrees": 0,
+            "residual": 22.60751988030331,
+            "projection": 0.38441648761688496
+          },
+          "to": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "width": 10
+        },
+        "bracket": {
+          "from": {
+            "observerIndex": 0,
+            "distanceDegrees": 0,
+            "residual": 22.60751988030331,
+            "projection": 0.38441648761688496
+          },
+          "to": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "width": 10
+        },
+        "refinements": 0,
+        "crossingIndex": null
+      },
+      {
+        "intervalIndex": 1,
+        "body": "Sun",
+        "kind": "ASC",
+        "positionIndex": 0,
+        "status": "unresolved",
+        "reason": "geographic-pole",
+        "initialBracket": {
+          "from": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "to": {
+            "observerIndex": 2,
+            "distanceDegrees": 15,
+            "residual": 13.546151534237605,
+            "projection": 0.2342285283411281
+          },
+          "width": 5
+        },
+        "bracket": {
+          "from": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "to": {
+            "observerIndex": 2,
+            "distanceDegrees": 15,
+            "residual": 13.546151534237605,
+            "projection": 0.2342285283411281
+          },
+          "width": 5
+        },
+        "refinements": 0,
+        "crossingIndex": null
+      },
+      {
+        "intervalIndex": 2,
+        "body": "Sun",
+        "kind": "ASC",
+        "positionIndex": 0,
+        "status": "no-crossing",
+        "reason": null,
+        "initialBracket": {
+          "from": {
+            "observerIndex": 2,
+            "distanceDegrees": 15,
+            "residual": 13.546151534237605,
+            "projection": 0.2342285283411281
+          },
+          "to": {
+            "observerIndex": 3,
+            "distanceDegrees": 20.000000000000007,
+            "residual": 10.374112795320231,
+            "projection": 0.1800747325724663
+          },
+          "width": 5.000000000000007
+        },
+        "bracket": {
+          "from": {
+            "observerIndex": 2,
+            "distanceDegrees": 15,
+            "residual": 13.546151534237605,
+            "projection": 0.2342285283411281
+          },
+          "to": {
+            "observerIndex": 3,
+            "distanceDegrees": 20.000000000000007,
+            "residual": 10.374112795320231,
+            "projection": 0.1800747325724663
+          },
+          "width": 5.000000000000007
+        },
+        "refinements": 0,
+        "crossingIndex": null
+      }
+    ],
+    "unresolvedIntervals": [
+      {
+        "intervalIndex": 0,
+        "body": "Sun",
+        "kind": "MC",
+        "positionIndex": 0,
+        "status": "unresolved",
+        "reason": "geographic-pole",
+        "initialBracket": {
+          "from": {
+            "observerIndex": 0,
+            "distanceDegrees": 0,
+            "residual": -52.110424994641846,
+            "projection": -0.13704241965711997
+          },
+          "to": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "width": 10
+        },
+        "bracket": {
+          "from": {
+            "observerIndex": 0,
+            "distanceDegrees": 0,
+            "residual": -52.110424994641846,
+            "projection": -0.13704241965711997
+          },
+          "to": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "width": 10
+        },
+        "refinements": 0,
+        "crossingIndex": null
+      },
+      {
+        "intervalIndex": 1,
+        "body": "Sun",
+        "kind": "MC",
+        "positionIndex": 0,
+        "status": "unresolved",
+        "reason": "geographic-pole",
+        "initialBracket": {
+          "from": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "to": {
+            "observerIndex": 2,
+            "distanceDegrees": 15,
+            "residual": 127.88957500535815,
+            "projection": 0.06878294971837864
+          },
+          "width": 5
+        },
+        "bracket": {
+          "from": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "to": {
+            "observerIndex": 2,
+            "distanceDegrees": 15,
+            "residual": 127.88957500535815,
+            "projection": 0.06878294971837864
+          },
+          "width": 5
+        },
+        "refinements": 0,
+        "crossingIndex": null
+      },
+      {
+        "intervalIndex": 0,
+        "body": "Sun",
+        "kind": "ASC",
+        "positionIndex": 0,
+        "status": "unresolved",
+        "reason": "geographic-pole",
+        "initialBracket": {
+          "from": {
+            "observerIndex": 0,
+            "distanceDegrees": 0,
+            "residual": 22.60751988030331,
+            "projection": 0.38441648761688496
+          },
+          "to": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "width": 10
+        },
+        "bracket": {
+          "from": {
+            "observerIndex": 0,
+            "distanceDegrees": 0,
+            "residual": 22.60751988030331,
+            "projection": 0.38441648761688496
+          },
+          "to": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "width": 10
+        },
+        "refinements": 0,
+        "crossingIndex": null
+      },
+      {
+        "intervalIndex": 1,
+        "body": "Sun",
+        "kind": "ASC",
+        "positionIndex": 0,
+        "status": "unresolved",
+        "reason": "geographic-pole",
+        "initialBracket": {
+          "from": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "to": {
+            "observerIndex": 2,
+            "distanceDegrees": 15,
+            "residual": 13.546151534237605,
+            "projection": 0.2342285283411281
+          },
+          "width": 5
+        },
+        "bracket": {
+          "from": {
+            "observerIndex": 1,
+            "distanceDegrees": 10,
+            "residual": null,
+            "projection": null
+          },
+          "to": {
+            "observerIndex": 2,
+            "distanceDegrees": 15,
+            "residual": 13.546151534237605,
+            "projection": 0.2342285283411281
+          },
+          "width": 5
+        },
+        "refinements": 0,
+        "crossingIndex": null
+      }
+    ],
+    "crossings": [],
+    "polylines": [
+      [
+        {
+          "point": {
+            "latitude": 80,
+            "longitude": 20
+          },
+          "source": {
+            "kind": "sample",
+            "index": 0
+          }
+        }
+      ],
+      [
+        {
+          "point": {
+            "latitude": 85,
+            "longitude": -159.99999999999997
+          },
+          "source": {
+            "kind": "sample",
+            "index": 2
+          }
+        },
+        {
+          "point": {
+            "latitude": 80,
+            "longitude": -160
+          },
+          "source": {
+            "kind": "sample",
+            "index": 3
+          }
+        }
+      ]
+    ],
+    "sampling": {
+      "schema": "zodiacs.relocation-angles.v1",
+      "conventions": {
+        "id": "zodiacs.relocation-angular-conventions.v1",
+        "frame": "equatorial-true-of-date",
+        "center": "geocentric",
+        "correction": "apparent;engine-moon-series-at-instant;no-deflection",
+        "horizon": "geodetic-tangent-plane;body-center;no-refraction;no-parallax;no-limb",
+        "MC": "upper-meridian;hour-angle-zero",
+        "IC": "lower-meridian;hour-angle-half-turn",
+        "ASC": "zero-altitude;eastern-branch;fixed-direction-rising",
+        "DSC": "zero-altitude;western-branch;fixed-direction-setting",
+        "azimuth": "north-through-east",
+        "units": "degrees",
+        "singularity": "unit-vector-projection-at-or-below-engine-RA_POLE_TOLERANCE",
+        "receiptScope": "engine-positions-and-houses;library-horizon-rotation-is-derived"
+      },
+      "natalReceipt": {
+        "conventions": {
+          "angles": "gast-and-true-obliquity",
+          "aspects": "major-aspects;sun-moon-eight-planets;no-nodes;applying-instantaneous-orb-rate",
+          "calendar": "proleptic-gregorian",
+          "deltaT": "tt-minus-ut1;value-in-result",
+          "localTime": "tzdb-shards-before-1970;host-intl-from-1970;flags-from-transition-record",
+          "longitudeUnit": "degrees-[0,360)",
+          "moonNodes": "instantaneous-geocentric-moon-orbit-plane",
+          "moonPosition": "astronomy-engine-geo-moon;no-light-time;no-aberration",
+          "nutation": "iau2000b;equation-of-equinoxes-with-two-complementary-terms",
+          "planetPositions": "aberrated-geocentric-ecliptic-of-date;no-deflection",
+          "speed": "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day",
+          "timeScale": "tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise;in-result",
+          "zodiac": "tropical"
+        },
+        "coordinates": {
+          "latitude": 12,
+          "longitude": 34
+        },
+        "coverage": {
+          "angleExclusions": "exact-geographic-poles-and-ecliptic-horizon-coincidence",
+          "assessment": "finite-reference-cases-only",
+          "broadDateRange": "not-certified",
+          "inputSyntax": "not-an-astronomical-accuracy-guarantee"
+        },
+        "engine": {
+          "ephemeris": {
+            "name": "astronomy-engine",
+            "version": "2.1.19"
+          },
+          "name": "@zodiacs/engine",
+          "version": "1.0.0"
+        },
+        "houses": {
+          "absenceReason": null,
+          "actual": "koch",
+          "requested": "koch"
+        },
+        "inputFlags": [],
+        "instant": "2004-05-06T07:08:09.010Z",
+        "localResolution": null,
+        "provenance": null,
+        "reference": "supplied-instant",
+        "resultFlags": [],
+        "schema": "zodiacs.calculation-receipt.draft-v1",
+        "sourceInstant": "2004-05-06T07:08:09.010Z",
+        "timeKnown": true,
+        "timeScale": "utc"
+      },
+      "time": {
+        "iso": "2004-05-06T07:08:09.010Z",
+        "deltaT": 65
+      },
+      "evaluations": {
+        "positions": 1,
+        "houses": 3
+      },
+      "positions": [
+        {
+          "body": "Sun",
+          "rightAscension": 43.62609460412028,
+          "declination": 16.654494310463065,
+          "raUndefined": null,
+          "engine": {
+            "status": "ok",
+            "body": "Sun",
+            "frame": "equatorial-true-of-date",
+            "lon": 43.62609460412028,
+            "lat": 16.654494310463065,
+            "dist": 1.0089124506995606,
+            "speeds": null,
+            "cartesian": null,
+            "ayanamsa": null,
+            "bounds": {
+              "position": {
+                "value": 3,
+                "unit": "arcsec",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "distance": {
+                "value": 0.000015,
+                "unit": "relative",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "speed": null
+            },
+            "receipt": {
+              "schema": "zodiacs.calc-receipt.v1",
+              "request": {
+                "body": "Sun",
+                "time": {
+                  "iso": "2004-05-06T07:08:09.010Z",
+                  "deltaT": 65
+                },
+                "frame": "equatorial-true-of-date",
+                "center": "geocentric",
+                "zodiac": "tropical",
+                "flags": {
+                  "correction": "apparent",
+                  "speeds": false,
+                  "cartesian": false,
+                  "units": "degrees",
+                  "deflection": false
+                }
+              },
+              "instants": [
+                {
+                  "utc": "2004-05-06T07:08:09.010Z",
+                  "jdUt1": 2453131.7973211976,
+                  "jdTt": 2453131.7980735125,
+                  "deltaT": {
+                    "seconds": 65,
+                    "sigma": null,
+                    "model": "pinned",
+                    "table": null,
+                    "tableDigest": null,
+                    "segment": "pinned"
+                  },
+                  "timeScale": {
+                    "input": "utc",
+                    "basis": "pinned",
+                    "ut1MinusUtc": {
+                      "seconds": -0.45853155100308385,
+                      "sigma": 0.000806,
+                      "source": "observed"
+                    },
+                    "leapSeconds": null
+                  }
+                }
+              ],
+              "conventions": [
+                "zodiac:tropical",
+                "frame:equatorial-true-of-date",
+                "center:geocentric",
+                "correction:apparent",
+                "light-time:newtonian",
+                "deflection:none",
+                "aberration:backdated-observer",
+                "precession:iau2006",
+                "nutation:iau2000b",
+                "ephemeris:astronomy-engine@2.1.19",
+                "deltat:pinned",
+                "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+              ],
+              "engine": {
+                "name": "@zodiacs/engine",
+                "version": "1.0.0",
+                "ephemeris": {
+                  "name": "astronomy-engine",
+                  "version": "2.1.19"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "observers": [
+        {
+          "index": 0,
+          "point": {
+            "latitude": 80,
+            "longitude": 20
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 351.51566960947844,
+            "requested": "koch",
+            "system": "whole",
+            "flags": [
+              "polar-fallback"
+            ]
+          }
+        },
+        {
+          "index": 1,
+          "point": {
+            "latitude": 90,
+            "longitude": 0
+          },
+          "status": "undefined",
+          "reason": "geographic-pole",
+          "engine": null
+        },
+        {
+          "index": 2,
+          "point": {
+            "latitude": 85,
+            "longitude": -159.99999999999997
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 171.51566960947844,
+            "requested": "koch",
+            "system": "whole",
+            "flags": [
+              "polar-fallback"
+            ]
+          }
+        },
+        {
+          "index": 3,
+          "point": {
+            "latitude": 80,
+            "longitude": -160
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 171.51566960947844,
+            "requested": "koch",
+            "system": "whole",
+            "flags": [
+              "polar-fallback"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

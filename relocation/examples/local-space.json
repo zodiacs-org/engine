@@ -1,0 +1,24 @@
+{
+  "source": {
+    "utc": "2004-05-06T07:08:09.010Z",
+    "latitude": -80,
+    "longitude": 34,
+    "houseSystem": "koch",
+    "deltaT": 72.25,
+    "timeScale": "tt"
+  },
+  "mode": "local-space",
+  "options": {
+    "origin": {
+      "latitude": 75,
+      "longitude": 175
+    },
+    "lengthDegrees": 120,
+    "stepDegrees": 40,
+    "bodies": [
+      "Sun",
+      "Moon"
+    ],
+    "maxEvaluations": 64
+  }
+}

@@ -1,0 +1,1885 @@
+{
+  "schema": "zodiacs.relocation-golden.v1",
+  "id": "horizons-tangencies",
+  "reference": "installed-carried-engine-regression;not-independent-accuracy",
+  "request": {
+    "id": "horizons-tangencies",
+    "kind": "horizons",
+    "source": {
+      "utc": "2004-05-06T07:08:09.010Z",
+      "latitude": 12,
+      "longitude": 34,
+      "houseSystem": "placidus",
+      "deltaT": 65
+    },
+    "options": {
+      "bounds": {
+        "south": -90,
+        "north": 90,
+        "west": -180,
+        "east": 180
+      },
+      "latitudeStep": 20,
+      "bodies": [
+        "Sun",
+        "Moon"
+      ],
+      "maxEvaluations": 64
+    }
+  },
+  "output": {
+    "schema": "zodiacs.relocation-horizons.v1",
+    "plan": {
+      "bounds": {
+        "south": -90,
+        "north": 90,
+        "west": -180,
+        "east": 180,
+        "longitudeSpan": 360,
+        "eastUnwrapped": 180
+      },
+      "latitudeStep": 20,
+      "latitudes": [
+        -90,
+        -70,
+        -50,
+        -30,
+        -10,
+        10,
+        30,
+        50,
+        70,
+        90
+      ],
+      "bodies": [
+        "Sun",
+        "Moon"
+      ],
+      "lines": [
+        "ASC",
+        "DSC"
+      ],
+      "maxEvaluations": 64,
+      "requiredEvaluations": 51,
+      "maximumObserverSamples": 49
+    },
+    "status": "ok",
+    "referenceObserverIndex": 0,
+    "lines": [
+      {
+        "body": "Sun",
+        "kind": "ASC",
+        "positionIndex": 0,
+        "status": "sampled",
+        "reason": null,
+        "samples": [
+          {
+            "latitude": -90,
+            "origin": "latitude-row",
+            "point": null,
+            "observerIndex": null,
+            "residual": null,
+            "status": "undefined",
+            "reason": "geographic-pole"
+          },
+          {
+            "latitude": -73.34550568953694,
+            "origin": "tangent-limit",
+            "point": {
+              "latitude": -73.34550568953694,
+              "longitude": 72.11042499464185
+            },
+            "observerIndex": 1,
+            "residual": 6.3611093629270335e-15,
+            "status": "tangent",
+            "reason": null
+          },
+          {
+            "latitude": -70,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -70,
+              "longitude": 37.386350886339244
+            },
+            "observerIndex": 2,
+            "residual": -1.2722218725854067e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": -50,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -50,
+              "longitude": 2.9965491383238714
+            },
+            "observerIndex": 3,
+            "residual": -2.2263882770244617e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": -30,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -30,
+              "longitude": -7.943939093656809
+            },
+            "observerIndex": 4,
+            "residual": -2.226388277024462e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": -10,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -10,
+              "longitude": -14.865932977244881
+            },
+            "observerIndex": 5,
+            "residual": -7.752602036067325e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 10,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 10,
+              "longitude": -20.913217033471483
+            },
+            "observerIndex": 6,
+            "residual": -2.3854160110976377e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 30,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 30,
+              "longitude": -27.8352109170595
+            },
+            "observerIndex": 7,
+            "residual": -7.633331235512442e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 50,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 50,
+              "longitude": -38.77569914904018
+            },
+            "observerIndex": 8,
+            "residual": -4.929859756268451e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 70,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 70,
+              "longitude": -73.16550089705561
+            },
+            "observerIndex": 9,
+            "residual": -6.3611093629270335e-15,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 73.34550568953694,
+            "origin": "tangent-limit",
+            "point": {
+              "latitude": 73.34550568953694,
+              "longitude": -107.88957500535815
+            },
+            "observerIndex": 10,
+            "residual": -6.3611093629270335e-15,
+            "status": "tangent",
+            "reason": null
+          },
+          {
+            "latitude": 90,
+            "origin": "latitude-row",
+            "point": null,
+            "observerIndex": null,
+            "residual": null,
+            "status": "undefined",
+            "reason": "geographic-pole"
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": -73.34550568953694,
+                "longitude": 72.11042499464185
+              },
+              "source": {
+                "kind": "sample",
+                "index": 1
+              }
+            },
+            {
+              "point": {
+                "latitude": -70,
+                "longitude": 37.386350886339244
+              },
+              "source": {
+                "kind": "sample",
+                "index": 2
+              }
+            },
+            {
+              "point": {
+                "latitude": -50,
+                "longitude": 2.9965491383238714
+              },
+              "source": {
+                "kind": "sample",
+                "index": 3
+              }
+            },
+            {
+              "point": {
+                "latitude": -30,
+                "longitude": -7.943939093656809
+              },
+              "source": {
+                "kind": "sample",
+                "index": 4
+              }
+            },
+            {
+              "point": {
+                "latitude": -10,
+                "longitude": -14.865932977244881
+              },
+              "source": {
+                "kind": "sample",
+                "index": 5
+              }
+            },
+            {
+              "point": {
+                "latitude": 10,
+                "longitude": -20.913217033471483
+              },
+              "source": {
+                "kind": "sample",
+                "index": 6
+              }
+            },
+            {
+              "point": {
+                "latitude": 30,
+                "longitude": -27.8352109170595
+              },
+              "source": {
+                "kind": "sample",
+                "index": 7
+              }
+            },
+            {
+              "point": {
+                "latitude": 50,
+                "longitude": -38.77569914904018
+              },
+              "source": {
+                "kind": "sample",
+                "index": 8
+              }
+            },
+            {
+              "point": {
+                "latitude": 70,
+                "longitude": -73.16550089705561
+              },
+              "source": {
+                "kind": "sample",
+                "index": 9
+              }
+            },
+            {
+              "point": {
+                "latitude": 73.34550568953694,
+                "longitude": -107.88957500535815
+              },
+              "source": {
+                "kind": "sample",
+                "index": 10
+              }
+            }
+          ]
+        ]
+      },
+      {
+        "body": "Sun",
+        "kind": "DSC",
+        "positionIndex": 0,
+        "status": "sampled",
+        "reason": null,
+        "samples": [
+          {
+            "latitude": -90,
+            "origin": "latitude-row",
+            "point": null,
+            "observerIndex": null,
+            "residual": null,
+            "status": "undefined",
+            "reason": "geographic-pole"
+          },
+          {
+            "latitude": -73.34550568953694,
+            "origin": "tangent-limit",
+            "point": {
+              "latitude": -73.34550568953694,
+              "longitude": 72.11042499464185
+            },
+            "observerIndex": 11,
+            "residual": 6.3611093629270335e-15,
+            "status": "tangent",
+            "reason": null
+          },
+          {
+            "latitude": -70,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -70,
+              "longitude": 106.83449910294445
+            },
+            "observerIndex": 12,
+            "residual": 9.54166404439055e-15,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": -50,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -50,
+              "longitude": 141.2243008509598
+            },
+            "observerIndex": 13,
+            "residual": 4.4527765540489235e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": -30,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -30,
+              "longitude": 152.16478908294047
+            },
+            "observerIndex": 14,
+            "residual": 7.156248033292914e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": -10,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -10,
+              "longitude": 159.08678296652857
+            },
+            "observerIndex": 15,
+            "residual": 3.0612838809086354e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 10,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 10,
+              "longitude": 165.13406702275518
+            },
+            "observerIndex": 16,
+            "residual": 3.578124016646457e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 30,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 30,
+              "longitude": 172.05606090634322
+            },
+            "observerIndex": 17,
+            "residual": 1.7493050748049344e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 50,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 50,
+              "longitude": -177.0034508616761
+            },
+            "observerIndex": 18,
+            "residual": 1.749305074804934e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 70,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 70,
+              "longitude": -142.61364911366073
+            },
+            "observerIndex": 19,
+            "residual": 1.2722218725854067e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 73.34550568953694,
+            "origin": "tangent-limit",
+            "point": {
+              "latitude": 73.34550568953694,
+              "longitude": -107.88957500535815
+            },
+            "observerIndex": 20,
+            "residual": -6.3611093629270335e-15,
+            "status": "tangent",
+            "reason": null
+          },
+          {
+            "latitude": 90,
+            "origin": "latitude-row",
+            "point": null,
+            "observerIndex": null,
+            "residual": null,
+            "status": "undefined",
+            "reason": "geographic-pole"
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": -73.34550568953694,
+                "longitude": 72.11042499464185
+              },
+              "source": {
+                "kind": "sample",
+                "index": 11
+              }
+            },
+            {
+              "point": {
+                "latitude": -70,
+                "longitude": 106.83449910294445
+              },
+              "source": {
+                "kind": "sample",
+                "index": 12
+              }
+            },
+            {
+              "point": {
+                "latitude": -50,
+                "longitude": 141.2243008509598
+              },
+              "source": {
+                "kind": "sample",
+                "index": 13
+              }
+            },
+            {
+              "point": {
+                "latitude": -30,
+                "longitude": 152.16478908294047
+              },
+              "source": {
+                "kind": "sample",
+                "index": 14
+              }
+            },
+            {
+              "point": {
+                "latitude": -10,
+                "longitude": 159.08678296652857
+              },
+              "source": {
+                "kind": "sample",
+                "index": 15
+              }
+            },
+            {
+              "point": {
+                "latitude": 10,
+                "longitude": 165.13406702275518
+              },
+              "source": {
+                "kind": "sample",
+                "index": 16
+              }
+            },
+            {
+              "point": {
+                "latitude": 30,
+                "longitude": 172.05606090634322
+              },
+              "source": {
+                "kind": "sample",
+                "index": 17
+              }
+            },
+            {
+              "point": {
+                "latitude": 44.522092479265154,
+                "longitude": 180
+              },
+              "source": {
+                "kind": "seam",
+                "fromIndex": 17,
+                "toIndex": 18,
+                "fraction": 0.7261046239632579
+              }
+            }
+          ],
+          [
+            {
+              "point": {
+                "latitude": 44.522092479265154,
+                "longitude": -180
+              },
+              "source": {
+                "kind": "seam",
+                "fromIndex": 17,
+                "toIndex": 18,
+                "fraction": 0.7261046239632579
+              }
+            },
+            {
+              "point": {
+                "latitude": 50,
+                "longitude": -177.0034508616761
+              },
+              "source": {
+                "kind": "sample",
+                "index": 18
+              }
+            },
+            {
+              "point": {
+                "latitude": 70,
+                "longitude": -142.61364911366073
+              },
+              "source": {
+                "kind": "sample",
+                "index": 19
+              }
+            },
+            {
+              "point": {
+                "latitude": 73.34550568953694,
+                "longitude": -107.88957500535815
+              },
+              "source": {
+                "kind": "sample",
+                "index": 20
+              }
+            }
+          ]
+        ]
+      },
+      {
+        "body": "Moon",
+        "kind": "ASC",
+        "positionIndex": 1,
+        "status": "sampled",
+        "reason": null,
+        "samples": [
+          {
+            "latitude": -90,
+            "origin": "latitude-row",
+            "point": null,
+            "observerIndex": null,
+            "residual": null,
+            "status": "undefined",
+            "reason": "geographic-pole"
+          },
+          {
+            "latitude": -70,
+            "origin": "latitude-row",
+            "point": null,
+            "observerIndex": null,
+            "residual": null,
+            "status": "gap",
+            "reason": "always-above"
+          },
+          {
+            "latitude": -66.44105956935977,
+            "origin": "tangent-limit",
+            "point": {
+              "latitude": -66.44105956935977,
+              "longitude": 92.44514041378005
+            },
+            "observerIndex": 21,
+            "residual": 0,
+            "status": "tangent",
+            "reason": null
+          },
+          {
+            "latitude": -50,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -50,
+              "longitude": 151.1365237166703
+            },
+            "observerIndex": 22,
+            "residual": -2.5444437451708134e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": -30,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -30,
+              "longitude": 167.8643103770735
+            },
+            "observerIndex": 23,
+            "residual": -3.498610149609869e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": -10,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -10,
+              "longitude": 178.03560667267243
+            },
+            "observerIndex": 24,
+            "residual": -7.474303501439263e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 10,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 10,
+              "longitude": -173.14532584511238
+            },
+            "observerIndex": 25,
+            "residual": -6.838192565146562e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 30,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 30,
+              "longitude": -162.9740295495134
+            },
+            "observerIndex": 26,
+            "residual": -4.929859756268451e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 50,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 50,
+              "longitude": -146.2462428891102
+            },
+            "observerIndex": 27,
+            "residual": -2.5444437451708134e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 66.44105956935977,
+            "origin": "tangent-limit",
+            "point": {
+              "latitude": 66.44105956935977,
+              "longitude": -87.55485958621995
+            },
+            "observerIndex": 28,
+            "residual": 0,
+            "status": "tangent",
+            "reason": null
+          },
+          {
+            "latitude": 70,
+            "origin": "latitude-row",
+            "point": null,
+            "observerIndex": null,
+            "residual": null,
+            "status": "gap",
+            "reason": "always-below"
+          },
+          {
+            "latitude": 90,
+            "origin": "latitude-row",
+            "point": null,
+            "observerIndex": null,
+            "residual": null,
+            "status": "undefined",
+            "reason": "geographic-pole"
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": -66.44105956935977,
+                "longitude": 92.44514041378005
+              },
+              "source": {
+                "kind": "sample",
+                "index": 21
+              }
+            },
+            {
+              "point": {
+                "latitude": -50,
+                "longitude": 151.1365237166703
+              },
+              "source": {
+                "kind": "sample",
+                "index": 22
+              }
+            },
+            {
+              "point": {
+                "latitude": -30,
+                "longitude": 167.8643103770735
+              },
+              "source": {
+                "kind": "sample",
+                "index": 23
+              }
+            },
+            {
+              "point": {
+                "latitude": -10,
+                "longitude": 178.03560667267243
+              },
+              "source": {
+                "kind": "sample",
+                "index": 24
+              }
+            },
+            {
+              "point": {
+                "latitude": -5.545122358369457,
+                "longitude": 180
+              },
+              "source": {
+                "kind": "seam",
+                "fromIndex": 24,
+                "toIndex": 25,
+                "fraction": 0.22274388208152715
+              }
+            }
+          ],
+          [
+            {
+              "point": {
+                "latitude": -5.545122358369457,
+                "longitude": -180
+              },
+              "source": {
+                "kind": "seam",
+                "fromIndex": 24,
+                "toIndex": 25,
+                "fraction": 0.22274388208152715
+              }
+            },
+            {
+              "point": {
+                "latitude": 10,
+                "longitude": -173.14532584511238
+              },
+              "source": {
+                "kind": "sample",
+                "index": 25
+              }
+            },
+            {
+              "point": {
+                "latitude": 30,
+                "longitude": -162.9740295495134
+              },
+              "source": {
+                "kind": "sample",
+                "index": 26
+              }
+            },
+            {
+              "point": {
+                "latitude": 50,
+                "longitude": -146.2462428891102
+              },
+              "source": {
+                "kind": "sample",
+                "index": 27
+              }
+            },
+            {
+              "point": {
+                "latitude": 66.44105956935977,
+                "longitude": -87.55485958621995
+              },
+              "source": {
+                "kind": "sample",
+                "index": 28
+              }
+            }
+          ]
+        ]
+      },
+      {
+        "body": "Moon",
+        "kind": "DSC",
+        "positionIndex": 1,
+        "status": "sampled",
+        "reason": null,
+        "samples": [
+          {
+            "latitude": -90,
+            "origin": "latitude-row",
+            "point": null,
+            "observerIndex": null,
+            "residual": null,
+            "status": "undefined",
+            "reason": "geographic-pole"
+          },
+          {
+            "latitude": -70,
+            "origin": "latitude-row",
+            "point": null,
+            "observerIndex": null,
+            "residual": null,
+            "status": "gap",
+            "reason": "always-above"
+          },
+          {
+            "latitude": -66.44105956935977,
+            "origin": "tangent-limit",
+            "point": {
+              "latitude": -66.44105956935977,
+              "longitude": 92.44514041378005
+            },
+            "observerIndex": 29,
+            "residual": 0,
+            "status": "tangent",
+            "reason": null
+          },
+          {
+            "latitude": -50,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -50,
+              "longitude": 33.75375711088981
+            },
+            "observerIndex": 30,
+            "residual": 2.2263882770244617e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": -30,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -30,
+              "longitude": 17.025970450486597
+            },
+            "observerIndex": 31,
+            "residual": 5.406942958487979e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": -10,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": -10,
+              "longitude": 6.854674154887661
+            },
+            "observerIndex": 32,
+            "residual": 7.474303501439264e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 10,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 10,
+              "longitude": -1.964393327327528
+            },
+            "observerIndex": 33,
+            "residual": 2.30590214406105e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 30,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 30,
+              "longitude": -12.135689622926492
+            },
+            "observerIndex": 34,
+            "residual": 3.975693351829397e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 50,
+            "origin": "latitude-row",
+            "point": {
+              "latitude": 50,
+              "longitude": -28.863476283329703
+            },
+            "observerIndex": 35,
+            "residual": 3.180554681463517e-14,
+            "status": "ok",
+            "reason": null
+          },
+          {
+            "latitude": 66.44105956935977,
+            "origin": "tangent-limit",
+            "point": {
+              "latitude": 66.44105956935977,
+              "longitude": -87.55485958621995
+            },
+            "observerIndex": 36,
+            "residual": 0,
+            "status": "tangent",
+            "reason": null
+          },
+          {
+            "latitude": 70,
+            "origin": "latitude-row",
+            "point": null,
+            "observerIndex": null,
+            "residual": null,
+            "status": "gap",
+            "reason": "always-below"
+          },
+          {
+            "latitude": 90,
+            "origin": "latitude-row",
+            "point": null,
+            "observerIndex": null,
+            "residual": null,
+            "status": "undefined",
+            "reason": "geographic-pole"
+          }
+        ],
+        "polylines": [
+          [
+            {
+              "point": {
+                "latitude": -66.44105956935977,
+                "longitude": 92.44514041378005
+              },
+              "source": {
+                "kind": "sample",
+                "index": 29
+              }
+            },
+            {
+              "point": {
+                "latitude": -50,
+                "longitude": 33.75375711088981
+              },
+              "source": {
+                "kind": "sample",
+                "index": 30
+              }
+            },
+            {
+              "point": {
+                "latitude": -30,
+                "longitude": 17.025970450486597
+              },
+              "source": {
+                "kind": "sample",
+                "index": 31
+              }
+            },
+            {
+              "point": {
+                "latitude": -10,
+                "longitude": 6.854674154887661
+              },
+              "source": {
+                "kind": "sample",
+                "index": 32
+              }
+            },
+            {
+              "point": {
+                "latitude": 10,
+                "longitude": -1.964393327327528
+              },
+              "source": {
+                "kind": "sample",
+                "index": 33
+              }
+            },
+            {
+              "point": {
+                "latitude": 30,
+                "longitude": -12.135689622926492
+              },
+              "source": {
+                "kind": "sample",
+                "index": 34
+              }
+            },
+            {
+              "point": {
+                "latitude": 50,
+                "longitude": -28.863476283329703
+              },
+              "source": {
+                "kind": "sample",
+                "index": 35
+              }
+            },
+            {
+              "point": {
+                "latitude": 66.44105956935977,
+                "longitude": -87.55485958621995
+              },
+              "source": {
+                "kind": "sample",
+                "index": 36
+              }
+            }
+          ]
+        ]
+      }
+    ],
+    "sampling": {
+      "schema": "zodiacs.relocation-angles.v1",
+      "conventions": {
+        "id": "zodiacs.relocation-angular-conventions.v1",
+        "frame": "equatorial-true-of-date",
+        "center": "geocentric",
+        "correction": "apparent;engine-moon-series-at-instant;no-deflection",
+        "horizon": "geodetic-tangent-plane;body-center;no-refraction;no-parallax;no-limb",
+        "MC": "upper-meridian;hour-angle-zero",
+        "IC": "lower-meridian;hour-angle-half-turn",
+        "ASC": "zero-altitude;eastern-branch;fixed-direction-rising",
+        "DSC": "zero-altitude;western-branch;fixed-direction-setting",
+        "azimuth": "north-through-east",
+        "units": "degrees",
+        "singularity": "unit-vector-projection-at-or-below-engine-RA_POLE_TOLERANCE",
+        "receiptScope": "engine-positions-and-houses;library-horizon-rotation-is-derived"
+      },
+      "natalReceipt": {
+        "conventions": {
+          "angles": "gast-and-true-obliquity",
+          "aspects": "major-aspects;sun-moon-eight-planets;no-nodes;applying-instantaneous-orb-rate",
+          "calendar": "proleptic-gregorian",
+          "deltaT": "tt-minus-ut1;value-in-result",
+          "localTime": "tzdb-shards-before-1970;host-intl-from-1970;flags-from-transition-record",
+          "longitudeUnit": "degrees-[0,360)",
+          "moonNodes": "instantaneous-geocentric-moon-orbit-plane",
+          "moonPosition": "astronomy-engine-geo-moon;no-light-time;no-aberration",
+          "nutation": "iau2000b;equation-of-equinoxes-with-two-complementary-terms",
+          "planetPositions": "aberrated-geocentric-ecliptic-of-date;no-deflection",
+          "speed": "degrees-per-day;central-difference-plus-minus-0.001-day;nodes-plus-minus-0.25-day",
+          "timeScale": "tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise;in-result",
+          "zodiac": "tropical"
+        },
+        "coordinates": {
+          "latitude": 12,
+          "longitude": 34
+        },
+        "coverage": {
+          "angleExclusions": "exact-geographic-poles-and-ecliptic-horizon-coincidence",
+          "assessment": "finite-reference-cases-only",
+          "broadDateRange": "not-certified",
+          "inputSyntax": "not-an-astronomical-accuracy-guarantee"
+        },
+        "engine": {
+          "ephemeris": {
+            "name": "astronomy-engine",
+            "version": "2.1.19"
+          },
+          "name": "@zodiacs/engine",
+          "version": "1.0.0"
+        },
+        "houses": {
+          "absenceReason": null,
+          "actual": "placidus",
+          "requested": "placidus"
+        },
+        "inputFlags": [],
+        "instant": "2004-05-06T07:08:09.010Z",
+        "localResolution": null,
+        "provenance": null,
+        "reference": "supplied-instant",
+        "resultFlags": [],
+        "schema": "zodiacs.calculation-receipt.draft-v1",
+        "sourceInstant": "2004-05-06T07:08:09.010Z",
+        "timeKnown": true,
+        "timeScale": "utc"
+      },
+      "time": {
+        "iso": "2004-05-06T07:08:09.010Z",
+        "deltaT": 65
+      },
+      "evaluations": {
+        "positions": 2,
+        "houses": 37
+      },
+      "positions": [
+        {
+          "body": "Sun",
+          "rightAscension": 43.62609460412028,
+          "declination": 16.654494310463065,
+          "raUndefined": null,
+          "engine": {
+            "status": "ok",
+            "body": "Sun",
+            "frame": "equatorial-true-of-date",
+            "lon": 43.62609460412028,
+            "lat": 16.654494310463065,
+            "dist": 1.0089124506995606,
+            "speeds": null,
+            "cartesian": null,
+            "ayanamsa": null,
+            "bounds": {
+              "position": {
+                "value": 3,
+                "unit": "arcsec",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "distance": {
+                "value": 0.000015,
+                "unit": "relative",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "speed": null
+            },
+            "receipt": {
+              "schema": "zodiacs.calc-receipt.v1",
+              "request": {
+                "body": "Sun",
+                "time": {
+                  "iso": "2004-05-06T07:08:09.010Z",
+                  "deltaT": 65
+                },
+                "frame": "equatorial-true-of-date",
+                "center": "geocentric",
+                "zodiac": "tropical",
+                "flags": {
+                  "correction": "apparent",
+                  "speeds": false,
+                  "cartesian": false,
+                  "units": "degrees",
+                  "deflection": false
+                }
+              },
+              "instants": [
+                {
+                  "utc": "2004-05-06T07:08:09.010Z",
+                  "jdUt1": 2453131.7973211976,
+                  "jdTt": 2453131.7980735125,
+                  "deltaT": {
+                    "seconds": 65,
+                    "sigma": null,
+                    "model": "pinned",
+                    "table": null,
+                    "tableDigest": null,
+                    "segment": "pinned"
+                  },
+                  "timeScale": {
+                    "input": "utc",
+                    "basis": "pinned",
+                    "ut1MinusUtc": {
+                      "seconds": -0.45853155100308385,
+                      "sigma": 0.000806,
+                      "source": "observed"
+                    },
+                    "leapSeconds": null
+                  }
+                }
+              ],
+              "conventions": [
+                "zodiac:tropical",
+                "frame:equatorial-true-of-date",
+                "center:geocentric",
+                "correction:apparent",
+                "light-time:newtonian",
+                "deflection:none",
+                "aberration:backdated-observer",
+                "precession:iau2006",
+                "nutation:iau2000b",
+                "ephemeris:astronomy-engine@2.1.19",
+                "deltat:pinned",
+                "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+              ],
+              "engine": {
+                "name": "@zodiacs/engine",
+                "version": "1.0.0",
+                "ephemeris": {
+                  "name": "astronomy-engine",
+                  "version": "2.1.19"
+                }
+              }
+            }
+          }
+        },
+        {
+          "body": "Moon",
+          "rightAscension": 243.9608100232585,
+          "declination": -23.55894043064024,
+          "raUndefined": null,
+          "engine": {
+            "status": "ok",
+            "body": "Moon",
+            "frame": "equatorial-true-of-date",
+            "lon": 243.9608100232585,
+            "lat": -23.55894043064024,
+            "dist": 0.0024052077415939207,
+            "speeds": null,
+            "cartesian": null,
+            "ayanamsa": null,
+            "bounds": {
+              "position": {
+                "value": 8.3,
+                "unit": "arcsec",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "distance": {
+                "value": 0.00014,
+                "unit": "relative",
+                "label": "measured",
+                "basis": "largest difference from JPL Horizons (DE441) over 32 instants from JD 2379457.498125 to 2520522.646618 (TT), in all eight frames; docs/evidence/calc-api/rc16"
+              },
+              "speed": null
+            },
+            "receipt": {
+              "schema": "zodiacs.calc-receipt.v1",
+              "request": {
+                "body": "Moon",
+                "time": {
+                  "iso": "2004-05-06T07:08:09.010Z",
+                  "deltaT": 65
+                },
+                "frame": "equatorial-true-of-date",
+                "center": "geocentric",
+                "zodiac": "tropical",
+                "flags": {
+                  "correction": "apparent",
+                  "speeds": false,
+                  "cartesian": false,
+                  "units": "degrees",
+                  "deflection": false
+                }
+              },
+              "instants": [
+                {
+                  "utc": "2004-05-06T07:08:09.010Z",
+                  "jdUt1": 2453131.7973211976,
+                  "jdTt": 2453131.7980735125,
+                  "deltaT": {
+                    "seconds": 65,
+                    "sigma": null,
+                    "model": "pinned",
+                    "table": null,
+                    "tableDigest": null,
+                    "segment": "pinned"
+                  },
+                  "timeScale": {
+                    "input": "utc",
+                    "basis": "pinned",
+                    "ut1MinusUtc": {
+                      "seconds": -0.45853155100308385,
+                      "sigma": 0.000806,
+                      "source": "observed"
+                    },
+                    "leapSeconds": null
+                  }
+                }
+              ],
+              "conventions": [
+                "zodiac:tropical",
+                "frame:equatorial-true-of-date",
+                "center:geocentric",
+                "correction:apparent",
+                "moon:series-at-instant",
+                "precession:iau2006",
+                "nutation:iau2000b",
+                "ephemeris:astronomy-engine@2.1.19",
+                "deltat:pinned",
+                "time:tt-from-leap-seconds-and-ut1-from-iers-1972-to-table-end;delta-t-model-otherwise"
+              ],
+              "engine": {
+                "name": "@zodiacs/engine",
+                "version": "1.0.0",
+                "ephemeris": {
+                  "name": "astronomy-engine",
+                  "version": "2.1.19"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "observers": [
+        {
+          "index": 0,
+          "point": {
+            "latitude": 0,
+            "longitude": 0
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 331.51566960947844,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 1,
+          "point": {
+            "latitude": -73.34550568953694,
+            "longitude": 72.11042499464185
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 43.626094604120226,
+            "requested": "placidus",
+            "system": "whole",
+            "flags": [
+              "polar-fallback"
+            ]
+          }
+        },
+        {
+          "index": 2,
+          "point": {
+            "latitude": -70,
+            "longitude": 37.386350886339244
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 8.902020495817624,
+            "requested": "placidus",
+            "system": "whole",
+            "flags": [
+              "polar-fallback"
+            ]
+          }
+        },
+        {
+          "index": 3,
+          "point": {
+            "latitude": -50,
+            "longitude": 2.9965491383238714
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 334.5122187478023,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 4,
+          "point": {
+            "latitude": -30,
+            "longitude": -7.943939093656809
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 323.5717305158216,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 5,
+          "point": {
+            "latitude": -10,
+            "longitude": -14.865932977244881
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 316.6497366322335,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 6,
+          "point": {
+            "latitude": 10,
+            "longitude": -20.913217033471483
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 310.60245257600695,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 7,
+          "point": {
+            "latitude": 30,
+            "longitude": -27.8352109170595
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 303.6804586924188,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 8,
+          "point": {
+            "latitude": 50,
+            "longitude": -38.77569914904018
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 292.73997046043814,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 9,
+          "point": {
+            "latitude": 70,
+            "longitude": -73.16550089705561
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 258.3501687124228,
+            "requested": "placidus",
+            "system": "whole",
+            "flags": [
+              "polar-fallback"
+            ]
+          }
+        },
+        {
+          "index": 10,
+          "point": {
+            "latitude": 73.34550568953694,
+            "longitude": -107.88957500535815
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 223.62609460412023,
+            "requested": "placidus",
+            "system": "whole",
+            "flags": [
+              "polar-fallback"
+            ]
+          }
+        },
+        {
+          "index": 11,
+          "point": {
+            "latitude": -73.34550568953694,
+            "longitude": 72.11042499464185
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 43.626094604120226,
+            "requested": "placidus",
+            "system": "whole",
+            "flags": [
+              "polar-fallback"
+            ]
+          }
+        },
+        {
+          "index": 12,
+          "point": {
+            "latitude": -70,
+            "longitude": 106.83449910294445
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 78.35016871242283,
+            "requested": "placidus",
+            "system": "whole",
+            "flags": [
+              "polar-fallback"
+            ]
+          }
+        },
+        {
+          "index": 13,
+          "point": {
+            "latitude": -50,
+            "longitude": 141.2243008509598
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 112.73997046043814,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 14,
+          "point": {
+            "latitude": -30,
+            "longitude": 152.16478908294047
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 123.68045869241882,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 15,
+          "point": {
+            "latitude": -10,
+            "longitude": 159.08678296652857
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 130.60245257600695,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 16,
+          "point": {
+            "latitude": 10,
+            "longitude": 165.13406702275518
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 136.64973663223356,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 17,
+          "point": {
+            "latitude": 30,
+            "longitude": 172.05606090634322
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 143.57173051582163,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 18,
+          "point": {
+            "latitude": 50,
+            "longitude": -177.0034508616761
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 154.5122187478023,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 19,
+          "point": {
+            "latitude": 70,
+            "longitude": -142.61364911366073
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 188.90202049581762,
+            "requested": "placidus",
+            "system": "whole",
+            "flags": [
+              "polar-fallback"
+            ]
+          }
+        },
+        {
+          "index": 20,
+          "point": {
+            "latitude": 73.34550568953694,
+            "longitude": -107.88957500535815
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 223.62609460412023,
+            "requested": "placidus",
+            "system": "whole",
+            "flags": [
+              "polar-fallback"
+            ]
+          }
+        },
+        {
+          "index": 21,
+          "point": {
+            "latitude": -66.44105956935977,
+            "longitude": 92.44514041378005
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 63.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 22,
+          "point": {
+            "latitude": -50,
+            "longitude": 151.1365237166703
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 122.65219332614868,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 23,
+          "point": {
+            "latitude": -30,
+            "longitude": 167.8643103770735
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 139.37997998655192,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 24,
+          "point": {
+            "latitude": -10,
+            "longitude": 178.03560667267243
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 149.5512762821508,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 25,
+          "point": {
+            "latitude": 10,
+            "longitude": -173.14532584511238
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 158.370343764366,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 26,
+          "point": {
+            "latitude": 30,
+            "longitude": -162.9740295495134
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 168.54164005996495,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 27,
+          "point": {
+            "latitude": 50,
+            "longitude": -146.2462428891102
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 185.2694267203682,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 28,
+          "point": {
+            "latitude": 66.44105956935977,
+            "longitude": -87.55485958621995
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 243.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 29,
+          "point": {
+            "latitude": -66.44105956935977,
+            "longitude": 92.44514041378005
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 63.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 30,
+          "point": {
+            "latitude": -50,
+            "longitude": 33.75375711088981
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 5.2694267203681875,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 31,
+          "point": {
+            "latitude": -30,
+            "longitude": 17.025970450486597
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 348.54164005996495,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 32,
+          "point": {
+            "latitude": -10,
+            "longitude": 6.854674154887661
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 338.370343764366,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 33,
+          "point": {
+            "latitude": 10,
+            "longitude": -1.964393327327528
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 329.55127628215087,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 34,
+          "point": {
+            "latitude": 30,
+            "longitude": -12.135689622926492
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 319.3799799865519,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 35,
+          "point": {
+            "latitude": 50,
+            "longitude": -28.863476283329703
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 302.6521933261487,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        },
+        {
+          "index": 36,
+          "point": {
+            "latitude": 66.44105956935977,
+            "longitude": -87.55485958621995
+          },
+          "status": "ok",
+          "engine": {
+            "armc": 243.96081002325843,
+            "requested": "placidus",
+            "system": "placidus",
+            "flags": []
+          }
+        }
+      ]
+    }
+  }
+}
