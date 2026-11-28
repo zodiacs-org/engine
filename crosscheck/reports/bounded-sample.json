@@ -1,0 +1,369 @@
+{
+  "campaign": {
+    "config": {
+      "channels": {
+        "JPL.Mercury.lat": 60,
+        "JPL.Mercury.lon": 60,
+        "JPL.Moon.lat": 60,
+        "JPL.Moon.lon": 60,
+        "JPL.Sun.lat": 60,
+        "JPL.Sun.lon": 60,
+        "JPL.Venus.lat": 60,
+        "JPL.Venus.lon": 60,
+        "JPL.housesNodesAngles": 60,
+        "JPL.otherBodies": 60,
+        "Swiss.positions": 60
+      },
+      "conventions": {
+        "center": "Earth center 399",
+        "correction": "Moon NONE; Sun Mercury Venus CN+S; no deflection",
+        "frame": "IAU2006-bias-precession/IAU2000B-unadjusted true ecliptic/equinox of date",
+        "input": "synthetic ISO interpreted as TT; coordinates uniform sphere; houses sampled uniformly",
+        "residual": "engine minus JPL; signed shortest longitude and latitude differences in arcseconds",
+        "time": "NAIF-DELTET-periodic/naif0012 TT-to-TDB",
+        "tolerance": "60 arcseconds screening threshold fixed before sample; not an accuracy guarantee"
+      },
+      "endMs": 2524608000000,
+      "seed": "crosscheck-m9-tt-v1",
+      "shards": 2,
+      "startMs": -631152000000,
+      "total": 64
+    },
+    "identities": {
+      "build": "7bb3015f58201140e8c3cbc7cbc588da2b75d2b7b2a0805e7c53e9ab9132c09d",
+      "references": {
+        "ERFA": {
+          "nutationSha256": "a5246d525e987eb587bbe786b2846160e01be85b5d12af573870b89235695f49",
+          "tag": "v2.0.1"
+        },
+        "EngineBuild": {
+          "dependency": {
+            "name": "astronomy-engine",
+            "sha256": "2dbbbbc51c24153b75d9683140572bd1d8352e671d0e617792349150e745143c",
+            "version": "2.1.19"
+          },
+          "nodeExecutableSha256": "fde6a4bf8d0562f7751d1a2d6cb9b417c4cfe107bbcb0aa3e9a24e125e348f48",
+          "outputSha256": "5acff9549ca3f1b85e02d2f104811c10397a9e2baaa516b66db2dc46c459d2c2",
+          "sourceCommit": "6de8d0f855edac05a0d298abbe1d923db03ad5dd",
+          "sourceSha256": "749502dcde3ed7e762418e32b012ba864fdf17d8288a368a161a08d41f0b2635"
+        },
+        "JPL": {
+          "name": "de440s.bsp",
+          "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2",
+          "source": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp"
+        },
+        "Swiss": {
+          "reason": "No user-provided external installation or ephemeris directory",
+          "status": "unavailable"
+        }
+      },
+      "tooling": "353b3be612597ae3a827bdefd63f1a0ecb48086f5a26980cbcd6751e7829d40f"
+    },
+    "sampler": "sha256-index-v1",
+    "schema": "crosscheck-campaign/1",
+    "sha256": "b6b227643b5e7ff609086040891c71adbe7570e30b394589ef5fc5493a92e8af"
+  },
+  "channels": {
+    "JPL.Mercury.lat": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 3.4505201013877773,
+        "mean": 0.1185097759701693,
+        "meanAbs": 1.2358511454828442,
+        "n": 64,
+        "passed": 64,
+        "populationStdDev": 1.492833173863685,
+        "rms": 1.497529783339358
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 64,
+        "unsupported": 0
+      }
+    },
+    "JPL.Mercury.lon": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 7.934126491829829,
+        "mean": -0.5259355862259341,
+        "meanAbs": 2.0721749266803258,
+        "n": 64,
+        "passed": 64,
+        "populationStdDev": 2.6127445524913955,
+        "rms": 2.6651533421985834
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 64,
+        "unsupported": 0
+      }
+    },
+    "JPL.Moon.lat": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 0.8647867337622017,
+        "mean": 0.0018000852806437234,
+        "meanAbs": 0.2592366549404642,
+        "n": 64,
+        "passed": 64,
+        "populationStdDev": 0.32736004051190276,
+        "rms": 0.3273649896231609
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 64,
+        "unsupported": 0
+      }
+    },
+    "JPL.Moon.lon": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 2.6913360786693374,
+        "mean": -0.6976297480498772,
+        "meanAbs": 0.9746944748272313,
+        "n": 64,
+        "passed": 64,
+        "populationStdDev": 0.9725287583660667,
+        "rms": 1.1968706910995768
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 64,
+        "unsupported": 0
+      }
+    },
+    "JPL.Sun.lat": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 1.0134098444863304,
+        "mean": 0.059556098859704046,
+        "meanAbs": 0.40212909786083145,
+        "n": 64,
+        "passed": 64,
+        "populationStdDev": 0.4657205104445517,
+        "rms": 0.46951306985015934
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 64,
+        "unsupported": 0
+      }
+    },
+    "JPL.Sun.lon": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 1.8303541600516837,
+        "mean": -0.17153591233682874,
+        "meanAbs": 0.4863938747240226,
+        "n": 64,
+        "passed": 64,
+        "populationStdDev": 0.5868876723866167,
+        "rms": 0.6114423188008897
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 64,
+        "unsupported": 0
+      }
+    },
+    "JPL.Venus.lat": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 5.919833074204028,
+        "mean": 0.22642305828367337,
+        "meanAbs": 1.423843209832703,
+        "n": 64,
+        "passed": 64,
+        "populationStdDev": 2.0222146071334626,
+        "rms": 2.034851178495979
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 64,
+        "unsupported": 0
+      }
+    },
+    "JPL.Venus.lon": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": 11.577683830830665,
+        "mean": -0.6586779863905434,
+        "meanAbs": 1.607858757063596,
+        "n": 64,
+        "passed": 64,
+        "populationStdDev": 2.4179850616099476,
+        "rms": 2.506094261580032
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 64,
+        "unsupported": 0
+      }
+    },
+    "JPL.housesNodesAngles": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": null,
+        "mean": null,
+        "meanAbs": null,
+        "n": 0,
+        "passed": 0,
+        "populationStdDev": null,
+        "rms": null
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 0,
+        "unsupported": 64
+      }
+    },
+    "JPL.otherBodies": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": null,
+        "mean": null,
+        "meanAbs": null,
+        "n": 0,
+        "passed": 0,
+        "populationStdDev": null,
+        "rms": null
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 0,
+        "unsupported": 64
+      }
+    },
+    "Swiss.positions": {
+      "flags": {},
+      "statistics": {
+        "failed": 0,
+        "maxAbs": null,
+        "mean": null,
+        "meanAbs": null,
+        "n": 0,
+        "passed": 0,
+        "populationStdDev": null,
+        "rms": null
+      },
+      "tolerance": 60,
+      "unit": "arcseconds",
+      "verdicts": {
+        "error": 0,
+        "fail": 0,
+        "fallback": 0,
+        "pass": 0,
+        "unsupported": 64
+      }
+    }
+  },
+  "complete": true,
+  "completed": 64,
+  "coverage": [
+    {
+      "completed": 32,
+      "firstIndex": 0,
+      "lastIndex": 62,
+      "shard": 0,
+      "stride": 2
+    },
+    {
+      "completed": 32,
+      "firstIndex": 1,
+      "lastIndex": 63,
+      "shard": 1,
+      "stride": 2
+    }
+  ],
+  "metadata": {
+    "command": [
+      "node",
+      "crosscheck/tools/sample.mjs"
+    ],
+    "exclusions": [
+      "Swiss unavailable: no user-provided external binding or ephemerides; unsupported counts are not measurements.",
+      "DE440s is the compact DE440 kernel; no DE441 comparison was run in this campaign.",
+      "Only Sun, Moon, Mercury and Venus exact centers compared. Other planets omitted; system barycenters never substitute for planet centers.",
+      "Houses, nodes, angles, speeds and topocentric positions are not compared. Synthetic coordinates and house systems only exercise natalChart.",
+      "TT inputs bypass UTC/UT1 conversion comparison. Sampling interval is interpreted as TT despite ISO Z labels.",
+      "CN+S uses converged light-time and SPICE Newtonian stellar aberration; engine light-time/aberration algorithms differ. Residuals include these model differences and frame differences.",
+      "Moon is geometric without aberration or light-time. No solar deflection. Truncated TT/TDB model and IAU2000B frame limitations apply.",
+      "Screening threshold is not a certified accuracy bound. No million-chart throughput or unsampled error bound is established."
+    ],
+    "runtime": {
+      "arch": "x64",
+      "node": "v22.23.3",
+      "platform": "linux"
+    },
+    "title": "Bounded synthetic TT chart comparison against DE440s",
+    "units": {
+      "JPL.Mercury.lat": "arcseconds",
+      "JPL.Mercury.lon": "arcseconds",
+      "JPL.Moon.lat": "arcseconds",
+      "JPL.Moon.lon": "arcseconds",
+      "JPL.Sun.lat": "arcseconds",
+      "JPL.Sun.lon": "arcseconds",
+      "JPL.Venus.lat": "arcseconds",
+      "JPL.Venus.lon": "arcseconds",
+      "JPL.housesNodesAngles": "arcseconds",
+      "JPL.otherBodies": "arcseconds",
+      "Swiss.positions": "arcseconds"
+    }
+  },
+  "schema": "crosscheck-report/1",
+  "span": {
+    "endMsExclusive": 2524608000000,
+    "meaning": "Configured synthetic sampling interval, not continuous coverage or observed extrema",
+    "startMsInclusive": -631152000000
+  }
+}

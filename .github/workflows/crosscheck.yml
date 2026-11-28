@@ -1,0 +1,54 @@
+name: Crosscheck
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  crosscheck:
+    name: Crosscheck checks (Node 22)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: crosscheck
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22.22.2
+          cache: npm
+          cache-dependency-path: crosscheck/package-lock.json
+
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      # The harness is JavaScript and has no TypeScript typecheck script.
+      - name: JavaScript syntax check
+        run: |
+          npm run check:syntax
+          node --check reporting/final-campaign.mjs
+
+      - name: Swiss import and dependency boundary
+        run: node tools/check-swiss.mjs
+
+      - name: Isolated engine build
+        run: npm run build
+
+      - name: Verify build identity
+        run: npm run verify
+
+      - name: Node tests
+        run: npm test
+
+      - name: File safeguards
+        run: npm run check

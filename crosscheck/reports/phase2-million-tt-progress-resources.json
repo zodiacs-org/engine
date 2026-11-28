@@ -1,0 +1,163 @@
+{
+  "campaignSha256": "e0134608ca96bdeb2ff4ff701c2936657f32d8f45fa838e4c3783c2e73b97be2",
+  "caveats": [
+    "Elapsed durations cover measured campaign driver calls, including the optional external adapter and verified reference/build startup. They exclude resource snapshot scans and ledger/report rendering.",
+    "CPU deltas and maximum RSS describe only the Node wrapper process. They exclude child adapter CPU and memory. Maximum RSS is the process high-water mark since wrapper startup, not an invocation delta or total-process peak.",
+    "Disk snapshots count logical file bytes under crosscheck/runtime and crosscheck/cache, including kernels. The after snapshot precedes writing that invocation to the resource ledger.",
+    "Commands record the node program name, exact supplied program arguments and working directory relative to the repository root. Environment selectors are required for an enabled external instrument and are never copied into this receipt.",
+    "Completed indices are checkpoint residue-class prefixes, not continuous coverage. A requested target is not a completed measurement. No throughput guarantee or unsampled accuracy bound is implied."
+  ],
+  "checkpointPrefixes": [
+    1024,
+    1024,
+    1024
+  ],
+  "complete": false,
+  "completed": 3072,
+  "invocations": [
+    {
+      "after": [
+        0,
+        0,
+        0
+      ],
+      "before": [
+        null,
+        null,
+        null
+      ],
+      "diskAfter": {
+        "fileCount": 338,
+        "limitBytes": 6000000000,
+        "usedBytes": 155799487
+      },
+      "diskBefore": {
+        "fileCount": 335,
+        "limitBytes": 6000000000,
+        "usedBytes": 155657695
+      },
+      "driverCommand": [
+        "node",
+        "crosscheck/tools/campaign.mjs",
+        "crosscheck/runtime/p5-million.json",
+        "all",
+        "0"
+      ],
+      "elapsedNanoseconds": 830007009,
+      "nodeMaxRssKiB": 108620,
+      "nodeSystemCpuMicroseconds": 287600,
+      "nodeUserCpuMicroseconds": 720751,
+      "processed": 0,
+      "workingDirectory": ".",
+      "wrapperCommand": [
+        "node",
+        "crosscheck/tools/progress.mjs",
+        "crosscheck/runtime/p5-million.json",
+        "all",
+        "0"
+      ]
+    },
+    {
+      "after": [
+        1,
+        1,
+        1
+      ],
+      "before": [
+        0,
+        0,
+        0
+      ],
+      "diskAfter": {
+        "fileCount": 339,
+        "limitBytes": 6000000000,
+        "usedBytes": 155808812
+      },
+      "diskBefore": {
+        "fileCount": 339,
+        "limitBytes": 6000000000,
+        "usedBytes": 155800412
+      },
+      "driverCommand": [
+        "node",
+        "crosscheck/tools/campaign.mjs",
+        "crosscheck/runtime/p5-million.json",
+        "all",
+        "1"
+      ],
+      "elapsedNanoseconds": 991023102,
+      "nodeMaxRssKiB": 110452,
+      "nodeSystemCpuMicroseconds": 280120,
+      "nodeUserCpuMicroseconds": 986329,
+      "processed": 3,
+      "workingDirectory": ".",
+      "wrapperCommand": [
+        "node",
+        "crosscheck/tools/progress.mjs",
+        "crosscheck/runtime/p5-million.json",
+        "all",
+        "1"
+      ]
+    },
+    {
+      "after": [
+        1024,
+        1024,
+        1024
+      ],
+      "before": [
+        1,
+        1,
+        1
+      ],
+      "diskAfter": {
+        "fileCount": 339,
+        "limitBytes": 6000000000,
+        "usedBytes": 155919340
+      },
+      "diskBefore": {
+        "fileCount": 339,
+        "limitBytes": 6000000000,
+        "usedBytes": 155809368
+      },
+      "driverCommand": [
+        "node",
+        "crosscheck/tools/campaign.mjs",
+        "crosscheck/runtime/p5-million.json",
+        "all",
+        "1023"
+      ],
+      "elapsedNanoseconds": 133131747551,
+      "nodeMaxRssKiB": 154668,
+      "nodeSystemCpuMicroseconds": 25883625,
+      "nodeUserCpuMicroseconds": 173656266,
+      "processed": 3069,
+      "workingDirectory": ".",
+      "wrapperCommand": [
+        "node",
+        "crosscheck/tools/progress.mjs",
+        "crosscheck/runtime/p5-million.json",
+        "all",
+        "1023"
+      ]
+    }
+  ],
+  "requested": 1000000,
+  "schema": "crosscheck-resource-progress/1",
+  "spec": {
+    "kernel": "de440",
+    "name": "phase2-million-tt",
+    "profile": "phase2",
+    "seed": "synthetic-phase2-million-v1",
+    "shards": 3,
+    "total": 1000000
+  },
+  "specSha256": "dbbafb9687c227ea4ef8cb098eba92b62e4c811fe318f9b93e91cd487c9f600e",
+  "totals": {
+    "elapsedNanoseconds": 134952777662,
+    "nodeMaxRssKiB": 154668,
+    "nodeSystemCpuMicroseconds": 26451345,
+    "nodeUserCpuMicroseconds": 175363346,
+    "processed": 3072
+  }
+}

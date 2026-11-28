@@ -1,0 +1,5 @@
+# Runtime files are never committed. Swiss dependencies live outside checkout.
+/runtime/
+/node_modules/
+/__pycache__/
+*.pyc
