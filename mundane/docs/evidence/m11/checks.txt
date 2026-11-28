@@ -1,0 +1,84 @@
+M11 optional eclipse adapter, 2026-10-15
+Checkout HEAD before this session's uncommitted mundane changes:
+d1381a58f146f7c1b54eaeb49dfd460a4e6c83c2
+Events branch inspected and used for the integration check:
+bb59f2c23b4c1bf44cdff3e03cd2a6c0539641c7 (origin/infra/events)
+
+All changes remain inside mundane/. No engine build or archive was created.
+The Node runtime cache and test cache are inside ignored mundane/node_modules/.
+Materialized events sources, integration bundles, and full check output are
+inside ignored mundane/generated/. Git objects were read only.
+
+Commands below ran from mundane/ unless stated otherwise.
+
+$ npm exec --cache ./node_modules/.cache --yes --package=node@22.22.2 -- npm run check
+Exit status: 0
+Selected final output (existing independent timing comparison stdout omitted):
+
+> check
+> npm run typecheck && npm test
+
+> typecheck
+> tsc -p tsconfig.json --pretty false
+
+> test
+> vitest run --config vitest.config.ts
+
+RUN v2.1.9
+PASS test/report.test.ts (47 tests)
+PASS test/lunations.test.ts (51 tests)
+PASS test/angle-rulers.test.ts (61 tests)
+PASS test/angularity.test.ts (77 tests)
+PASS test/ingresses.test.ts (44 tests)
+PASS test/factors.test.ts (11 tests)
+PASS test/chart.test.ts (59 tests)
+PASS test/eclipses.test.ts (37 tests)
+PASS test/events-bridge.test.ts (28 tests)
+PASS test/lunation-references.test.ts (10 tests)
+PASS test/ingress-references.test.ts (10 tests)
+PASS test/inputs.test.ts (76 tests)
+PASS test/events-loader.test.ts (2 tests)
+Test Files 13 passed (13)
+Tests 513 passed (513)
+
+New supplied-contact checks use invented instants, source labels, and places.
+Boundary expectations are the direct inequalities from the documented window.
+The report checks combine these contacts with its existing algebraically
+derived synthetic Sun and Moon roots. These are contract and integration
+checks, not astronomical eclipse timing evidence. They cover source labels,
+clocks, metadata detachment, unavailable adapters, evaluation-budget and
+cancellation refusals, shared contexts, cumulative counts, settings capture,
+relative loading, and report composition. The events bridge preserves minima
+under minimum-shadow-axis-distance; it supplies no limb-contact solver.
+
+$ npm exec --cache ./node_modules/.cache --yes --package=node@22.22.2 -- node scripts/check-events-integration.mjs
+Exit status: 0
+PASS: actual events branch bb59f2c23b4c1bf44cdff3e03cd2a6c0539641c7; delegated solar/lunar minima, raw geometry, cumulative budgets, and atomic refusal.
+Integration only: no independent astronomical accuracy or contact-timing claim.
+
+The committed script defines the checked date windows, illustrative radii,
+steps, and budgets. It compares bridge output with direct events searches,
+not an independent ephemeris. It records no source-derived timing fixture.
+
+$ npm exec --cache ./node_modules/.cache --yes --package=node@22.22.2 -- node scripts/check-package-isolation.mjs
+Exit status: 0
+PASS: npm dry-run manifest contains no mundane files; scripts disabled, no archive written.
+This is an isolation check; the full package gate also needs a built dist tree.
+
+$ npm exec --cache ./node_modules/.cache --yes --package=node@22.22.2 -- node ../scripts/verify-package-contents.mjs
+Exit status: 1
+AssertionError [ERR_ASSERTION]: packed package is missing dist/calc.d.ts
+Node.js v22.22.2
+
+The full package gate requires the absent dist/ tree. This task forbids
+changing dist/, so it was not built. Manifest-only package isolation passed.
+
+Scope audit from the repository root, using git diff --name-only plus git
+ls-files --others --exclude-standard for changed paths, and git ls-files
+--cached --others --exclude-standard for mundane file sizes and Markdown:
+PASS: all changed paths stay inside mundane/.
+PASS: all nonignored mundane files are below 2,000,000 bytes.
+PASS: mundane Markdown contains no em dash; git diff --check passed.
+dist exists: False
+
+M11 is complete. M12 CLI implementation is the next unchecked milestone.

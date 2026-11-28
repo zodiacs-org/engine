@@ -1,0 +1,72 @@
+M8 independent USNO lunation reference checks, 2026-10-15
+Engine source commit below; mundane M8 changes are uncommitted for the harness.
+Only mundane files changed; no engine build or release archive created.
+
+$ node --version
+v22.22.2
+
+$ npm --version
+9.2.0
+
+$ git rev-parse HEAD
+35e2f2f66b34ce167d5d71886f66c087d1588bc6
+
+$ node -e console.log("astronomy-engine:", JSON.parse(require("node:fs").readFileSync("mundane/node_modules/astronomy-engine/package.json", "utf8")).version)
+astronomy-engine: 2.1.19
+
+$ npm run check --prefix mundane
+
+> check
+> npm run typecheck && npm test
+
+
+> typecheck
+> tsc -p tsconfig.json --pretty false
+
+
+> test
+> vitest run --config vitest.config.ts
+
+
+ RUN  v2.1.9 /workspace/codex-infra/wt-mundane/mundane
+
+ ✓ test/lunations.test.ts (51 tests) 578ms
+   ✓ lunation engine integration > searches both phase targets for a year and casts charts with existing analyses 320ms
+ ✓ test/angle-rulers.test.ts (61 tests) 96ms
+ ✓ test/angularity.test.ts (77 tests) 125ms
+ ✓ test/ingresses.test.ts (44 tests) 247ms
+ ✓ test/chart.test.ts (59 tests) 243ms
+stdout | test/lunation-references.test.ts > independent USNO lunation references > 1950: checks every annual lunation time and its synthetic-place chart
+USNO lunation timing comparison: [{"year":1950,"phase":"full","published":"1950-01-04T07:48:00Z","signedSeconds":-17.296},{"year":1950,"phase":"new","published":"1950-01-18T07:59:00Z","signedSeconds":28.864},{"year":1950,"phase":"full","published":"1950-02-02T22:16:00Z","signedSeconds":5.173},{"year":1950,"phase":"new","published":"1950-02-16T22:53:00Z","signedSeconds":-10.422},{"year":1950,"phase":"full","published":"1950-03-04T10:34:00Z","signedSeconds":-12.647},{"year":1950,"phase":"new","published":"1950-03-18T15:20:00Z","signedSeconds":-1.555},{"year":1950,"phase":"full","published":"1950-04-02T20:49:00Z","signedSeconds":-15.063},{"year":1950,"phase":"new","published":"1950-04-17T08:25:00Z","signedSeconds":14.438},{"year":1950,"phase":"full","published":"1950-05-02T05:19:00Z","signedSeconds":25.354},{"year":1950,"phase":"new","published":"1950-05-17T00:54:00Z","signedSeconds":18.479},{"year":1950,"phase":"full","published":"1950-05-31T12:43:00Z","signedSeconds":-4.346},{"year":1950,"phase":"new","published":"1950-06-15T15:53:00Z","signedSeconds":-15.588},{"year":1950,"phase":"full","published":"1950-06-29T19:58:00Z","signedSeconds":5.905},{"year":1950,"phase":"new","published":"1950-07-15T05:05:00Z","signedSeconds":26.255},{"year":1950,"phase":"full","published":"1950-07-29T04:18:00Z","signedSeconds":-25.418},{"year":1950,"phase":"new","published":"1950-08-13T16:48:00Z","signedSeconds":15.749},{"year":1950,"phase":"full","published":"1950-08-27T14:51:00Z","signedSeconds":-9.003},{"year":1950,"phase":"new","published":"1950-09-12T03:29:00Z","signedSeconds":-11.16},{"year":1950,"phase":"full","published":"1950-09-26T04:21:00Z","signedSeconds":22.14},{"year":1950,"phase":"new","published":"1950-10-11T13:34:00Z","signedSeconds":-30.895},{"year":1950,"phase":"full","published":"1950-10-25T20:46:00Z","signedSeconds":21.75},{"year":1950,"phase":"new","published":"1950-11-09T23:25:00Z","signedSeconds":23.581},{"year":1950,"phase":"full","published":"1950-11-24T15:14:00Z","signedSeconds":3.323},{"year":1950,"phase":"new","published":"1950-12-09T09:29:00Z","signedSeconds":-25.254},{"year":1950,"phase":"full","published":"1950-12-24T10:23:00Z","signedSeconds":-4.514}]
+
+stdout | test/lunation-references.test.ts > independent USNO lunation references > 2000: checks every annual lunation time and its synthetic-place chart
+USNO lunation timing comparison: [{"year":2000,"phase":"new","published":"2000-01-06T18:14:00Z","signedSeconds":-21.736},{"year":2000,"phase":"full","published":"2000-01-21T04:40:00Z","signedSeconds":23.761},{"year":2000,"phase":"new","published":"2000-02-05T13:03:00Z","signedSeconds":17.075},{"year":2000,"phase":"full","published":"2000-02-19T16:27:00Z","signedSeconds":-19.926},{"year":2000,"phase":"new","published":"2000-03-06T05:17:00Z","signedSeconds":-15.139},{"year":2000,"phase":"full","published":"2000-03-20T04:44:00Z","signedSeconds":22.116},{"year":2000,"phase":"new","published":"2000-04-04T18:12:00Z","signedSeconds":1.579},{"year":2000,"phase":"full","published":"2000-04-18T17:42:00Z","signedSeconds":-29.182},{"year":2000,"phase":"new","published":"2000-05-04T04:12:00Z","signedSeconds":4.429},{"year":2000,"phase":"full","published":"2000-05-18T07:34:00Z","signedSeconds":24.988},{"year":2000,"phase":"new","published":"2000-06-02T12:14:00Z","signedSeconds":-3.332},{"year":2000,"phase":"full","published":"2000-06-16T22:27:00Z","signedSeconds":2.818},{"year":2000,"phase":"new","published":"2000-07-01T19:20:00Z","signedSeconds":-6.071},{"year":2000,"phase":"full","published":"2000-07-16T13:55:00Z","signedSeconds":9.963},{"year":2000,"phase":"new","published":"2000-07-31T02:25:00Z","signedSeconds":7.77},{"year":2000,"phase":"full","published":"2000-08-15T05:13:00Z","signedSeconds":-26.063},{"year":2000,"phase":"new","published":"2000-08-29T10:19:00Z","signedSeconds":15.398},{"year":2000,"phase":"full","published":"2000-09-13T19:37:00Z","signedSeconds":-13.257},{"year":2000,"phase":"new","published":"2000-09-27T19:53:00Z","signedSeconds":-6.256},{"year":2000,"phase":"full","published":"2000-10-13T08:53:00Z","signedSeconds":-4.642},{"year":2000,"phase":"new","published":"2000-10-27T07:58:00Z","signedSeconds":-3.26},{"year":2000,"phase":"full","published":"2000-11-11T21:15:00Z","signedSeconds":-23.319},{"year":2000,"phase":"new","published":"2000-11-25T23:11:00Z","signedSeconds":13.425},{"year":2000,"phase":"full","published":"2000-12-11T09:03:00Z","signedSeconds":-11.677},{"year":2000,"phase":"new","published":"2000-12-25T17:22:00Z","signedSeconds":-27.275}]
+
+stdout | test/lunation-references.test.ts > independent USNO lunation references > 2024: checks every annual lunation time and its synthetic-place chart
+USNO lunation timing comparison: [{"year":2024,"phase":"new","published":"2024-01-11T11:57:00Z","signedSeconds":24.59},{"year":2024,"phase":"full","published":"2024-01-25T17:54:00Z","signedSeconds":3.361},{"year":2024,"phase":"new","published":"2024-02-09T22:59:00Z","signedSeconds":11.511},{"year":2024,"phase":"full","published":"2024-02-24T12:30:00Z","signedSeconds":29.116},{"year":2024,"phase":"new","published":"2024-03-10T09:00:00Z","signedSeconds":27.597},{"year":2024,"phase":"full","published":"2024-03-25T07:00:00Z","signedSeconds":21.718},{"year":2024,"phase":"new","published":"2024-04-08T18:21:00Z","signedSeconds":-4.947},{"year":2024,"phase":"full","published":"2024-04-23T23:49:00Z","signedSeconds":-0.457},{"year":2024,"phase":"new","published":"2024-05-08T03:22:00Z","signedSeconds":-2.308},{"year":2024,"phase":"full","published":"2024-05-23T13:53:00Z","signedSeconds":7.897},{"year":2024,"phase":"new","published":"2024-06-06T12:38:00Z","signedSeconds":-16.68},{"year":2024,"phase":"full","published":"2024-06-22T01:08:00Z","signedSeconds":-8.602},{"year":2024,"phase":"new","published":"2024-07-05T22:57:00Z","signedSeconds":23.577},{"year":2024,"phase":"full","published":"2024-07-21T10:17:00Z","signedSeconds":8.53},{"year":2024,"phase":"new","published":"2024-08-04T11:13:00Z","signedSeconds":2.105},{"year":2024,"phase":"full","published":"2024-08-19T18:26:00Z","signedSeconds":-12.621},{"year":2024,"phase":"new","published":"2024-09-03T01:55:00Z","signedSeconds":32.734},{"year":2024,"phase":"full","published":"2024-09-18T02:34:00Z","signedSeconds":27.317},{"year":2024,"phase":"new","published":"2024-10-02T18:49:00Z","signedSeconds":14.121},{"year":2024,"phase":"full","published":"2024-10-17T11:26:00Z","signedSeconds":26.345},{"year":2024,"phase":"new","published":"2024-11-01T12:47:00Z","signedSeconds":8.926},{"year":2024,"phase":"full","published":"2024-11-15T21:28:00Z","signedSeconds":32.456},{"year":2024,"phase":"new","published":"2024-12-01T06:21:00Z","signedSeconds":28.064},{"year":2024,"phase":"full","published":"2024-12-15T09:02:00Z","signedSeconds":-17.653},{"year":2024,"phase":"new","published":"2024-12-30T22:27:00Z","signedSeconds":-10.411}]
+
+ ✓ test/lunation-references.test.ts (10 tests) 920ms
+stdout | test/ingress-references.test.ts > independent USNO ingress references > 1950: checks annual ingress timing and complete charts at a synthetic place
+USNO ingress timing comparison: [{"year":1950,"sign":"Aries","published":"1950-03-21T04:35:00Z","signedSeconds":-3.379},{"year":1950,"sign":"Cancer","published":"1950-06-21T23:36:00Z","signedSeconds":2.953},{"year":1950,"sign":"Libra","published":"1950-09-23T14:43:00Z","signedSeconds":41.505},{"year":1950,"sign":"Capricorn","published":"1950-12-22T10:13:00Z","signedSeconds":-6.373}]
+
+stdout | test/ingress-references.test.ts > independent USNO ingress references > 2000: checks annual ingress timing and complete charts at a synthetic place
+USNO ingress timing comparison: [{"year":2000,"sign":"Aries","published":"2000-03-20T07:35:00Z","signedSeconds":13.887},{"year":2000,"sign":"Cancer","published":"2000-06-21T01:48:00Z","signedSeconds":-11.939},{"year":2000,"sign":"Libra","published":"2000-09-22T17:28:00Z","signedSeconds":-1.7},{"year":2000,"sign":"Capricorn","published":"2000-12-21T13:37:00Z","signedSeconds":42.28}]
+
+stdout | test/ingress-references.test.ts > independent USNO ingress references > 2024: checks annual ingress timing and complete charts at a synthetic place
+USNO ingress timing comparison: [{"year":2024,"sign":"Aries","published":"2024-03-20T03:06:00Z","signedSeconds":26.001},{"year":2024,"sign":"Cancer","published":"2024-06-20T20:51:00Z","signedSeconds":13.969},{"year":2024,"sign":"Libra","published":"2024-09-22T12:44:00Z","signedSeconds":-0.748},{"year":2024,"sign":"Capricorn","published":"2024-12-21T09:20:00Z","signedSeconds":14.971}]
+
+ ✓ test/ingress-references.test.ts (10 tests) 236ms
+ ✓ test/inputs.test.ts (76 tests) 13ms
+
+ Test Files  8 passed (8)
+      Tests  388 passed (388)
+   Start at  05:26:53
+   Duration  5.12s (transform 508ms, setup 0ms, collect 1.08s, tests 2.46s, environment 1ms, prepare 496ms)
+
+
+$ node mundane/scripts/check-package-isolation.mjs
+PASS: npm dry-run manifest contains no mundane files; scripts disabled, no archive written.
+This is an isolation check; the full package gate also needs a built dist tree.
+
+Final scope audit: PASS. Changed paths stay under mundane/; all nonignored mundane files are under 2,000,000 bytes; documentation contains no em dash; git diff --check passed.
+Full engine package gate was not run: dist/ is absent and the task forbids changing it. Manifest-only package isolation passed above.

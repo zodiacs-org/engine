@@ -1,0 +1,38 @@
+{
+  "publisher": "U.S. Naval Observatory, Astronomical Applications Department",
+  "service": "Earth's Seasons - Equinoxes, Solstices, Perihelion, and Aphelion",
+  "retrieved": "2026-10-15",
+  "documentation": "https://aa.usno.navy.mil/data/api#seasons",
+  "definitions": "https://aa.usno.navy.mil/faq/asa_glossary",
+  "servicePage": "https://aa.usno.navy.mil/data/Earth_Seasons",
+  "terms": "https://aa.usno.navy.mil/about/PrivacyNotice",
+  "termsExcerpt": "All information on this site is considered public information and may be distributed or copied unless otherwise specified.",
+  "sourceTimeScale": "Universal Time; service selector labels UT1, API example labels UTC",
+  "precision": "minute; no subminute instant inferred",
+  "comparison": {
+    "maximumAbsoluteDifferenceSeconds": 120,
+    "fixedBeforeEngineComparison": true,
+    "purpose": "coarse published-time agreement, not a physical error bound",
+    "rationale": "Minute-resolution reference, differing equinox definitions and source clock terminology; threshold includes ephemeris differences without estimating separate error contributions."
+  },
+  "responses": [
+    {
+      "year": 1950,
+      "file": "seasons-1950.json",
+      "url": "https://aa.usno.navy.mil/api/seasons?year=1950&tz=0&dst=false",
+      "sha256": "4c050b6d9fca61a9fb95553d1898bb5b9158407b5de2bf9968fcef6f8382db74"
+    },
+    {
+      "year": 2000,
+      "file": "seasons-2000.json",
+      "url": "https://aa.usno.navy.mil/api/seasons?year=2000&tz=0&dst=false",
+      "sha256": "7b6c999de6559fd9dda86b831665ed6546d4a1ceacb5f2814d04f09a0ec06047"
+    },
+    {
+      "year": 2024,
+      "file": "seasons-2024.json",
+      "url": "https://aa.usno.navy.mil/api/seasons?year=2024&tz=0&dst=false",
+      "sha256": "93cc8a330f89fe3345677bbeb85dc6b065ec84ea19d49cf8321b9990ddcbea3d"
+    }
+  ]
+}

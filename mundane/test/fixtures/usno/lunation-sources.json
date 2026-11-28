@@ -1,0 +1,52 @@
+{
+  "publisher": "U.S. Naval Observatory, Astronomical Applications Department",
+  "service": "Dates of Primary Phases of the Moon",
+  "retrieved": "2026-10-15",
+  "documentation": "https://aa.usno.navy.mil/data/api",
+  "documentationLocator": "Web Service API Examples / Phases of the Moon / JSON Notes",
+  "definitions": "https://aa.usno.navy.mil/faq/moon_phases",
+  "definitionLocator": "paragraph beginning Technically, the phases New Moon",
+  "servicePage": "https://aa.usno.navy.mil/data/MoonPhases",
+  "serviceLocator": "Notes / Time Format",
+  "timeDefinition": "https://aa.usno.navy.mil/faq/UT",
+  "timeDefinitionLocator": "paragraphs on astronomical UT1 and Astronomical Applications Department data",
+  "terms": "https://aa.usno.navy.mil/about/PrivacyNotice",
+  "termsLocator": "NOTICE: This is a U.S. Government Web Site / item 2",
+  "termsExcerpt": "All information on this site is considered public information and may be distributed or copied unless otherwise specified.",
+  "sourceTimeScale": "Universal Time (UT1 per the linked USNO time definition); not TT",
+  "precision": "minute; no rounding rule or subminute instant inferred",
+  "selection": "Every New Moon and Full Moon row in each annual response; quarter phases retained in raw responses but excluded from comparison",
+  "derivation": "New Moon means directed Moon-minus-Sun apparent ecliptic longitude 0 degrees; Full Moon means 180 degrees. Calendar fields and HH:mm are formatted as an unshifted ISO minute label with zero seconds; Z is a comparison label, not a UT1-to-UTC conversion.",
+  "comparison": {
+    "maximumAbsoluteDifferenceSeconds": 120,
+    "fixedBeforeEngineComparison": true,
+    "purpose": "coarse published-time agreement, not a physical error bound",
+    "rationale": "Minute-resolution source, UT1 labels compared without conversion to modern engine UTC inputs, and differing ephemeris reductions. No separate error contributions estimated; no threshold fitted to engine output."
+  },
+  "responses": [
+    {
+      "year": 1950,
+      "file": "phases-1950.json",
+      "url": "https://aa.usno.navy.mil/api/moon/phases/year?year=1950",
+      "sha256": "1209adb0135facafaca16bf125084465a2ee6a13a2a93400ccab3b90dd025198",
+      "primaryPhaseCount": 49,
+      "lunationCount": 25
+    },
+    {
+      "year": 2000,
+      "file": "phases-2000.json",
+      "url": "https://aa.usno.navy.mil/api/moon/phases/year?year=2000",
+      "sha256": "64dabaaac9b155a4e19f934ea958f2cca40535d115f0cccb2e0994fde28a6f36",
+      "primaryPhaseCount": 49,
+      "lunationCount": 25
+    },
+    {
+      "year": 2024,
+      "file": "phases-2024.json",
+      "url": "https://aa.usno.navy.mil/api/moon/phases/year?year=2024",
+      "sha256": "64107d6828e5d1cb8b3e7ff0c0fc9e147aaf4bc873db6640f2d104fb8e31ebf5",
+      "primaryPhaseCount": 50,
+      "lunationCount": 25
+    }
+  ]
+}

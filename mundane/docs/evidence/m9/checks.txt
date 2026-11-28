@@ -1,0 +1,59 @@
+M9 descriptive traditional factor lists, 2026-10-15
+Checkout HEAD before this session's uncommitted mundane changes:
+66cc4b6d0c423e102563e84fc3318312bce444a8
+
+All changes remain inside mundane/. No engine build or archive was created.
+The Node runtime cache is inside ignored mundane/node_modules/.cache/.
+
+Commands below ran from mundane/ unless stated otherwise.
+
+$ npm exec --cache ./node_modules/.cache --yes --package=node@22.22.2 -- node --version
+v22.22.2
+
+$ npm exec --cache ./node_modules/.cache --yes --package=node@22.22.2 -- npm run check
+Exit status: 0
+Selected output (the existing independent timing comparison stdout is omitted):
+
+> check
+> npm run typecheck && npm test
+
+> typecheck
+> tsc -p tsconfig.json --pretty false
+
+> test
+> vitest run --config vitest.config.ts
+
+RUN v2.1.9
+PASS test/lunations.test.ts (51 tests)
+PASS test/angle-rulers.test.ts (61 tests)
+PASS test/angularity.test.ts (77 tests)
+PASS test/ingresses.test.ts (44 tests)
+PASS test/factors.test.ts (11 tests)
+PASS test/chart.test.ts (59 tests)
+PASS test/lunation-references.test.ts (10 tests)
+PASS test/ingress-references.test.ts (10 tests)
+PASS test/inputs.test.ts (76 tests)
+Test Files 9 passed (9)
+Tests 399 passed (399)
+
+New factor checks use invented geometry with hand-derived house membership,
+angle proximity and the existing documented dignity table lookups. Integration
+checks use invented places, polar fallbacks and ingress/lunation charts.
+These checks establish factor selection, wording and traceability, not physical
+accuracy of chart factors or predictive validity. No timing tolerance changed.
+
+$ npm exec --cache ./node_modules/.cache --yes --package=node@22.22.2 -- node scripts/check-package-isolation.mjs
+Exit status: 0
+PASS: npm dry-run manifest contains no mundane files; scripts disabled, no archive written.
+This is an isolation check; the full package gate also needs a built dist tree.
+
+Scope audit from the repository root, using git diff --name-only plus git
+ls-files --others --exclude-standard for changed paths, and git ls-files
+--cached --others --exclude-standard for mundane file sizes and Markdown:
+PASS: all changed paths stay inside mundane/.
+PASS: all nonignored mundane files are below 2,000,000 bytes.
+PASS: mundane Markdown contains no em dash; git diff --check passed.
+dist exists: False
+
+The full engine package gate was not run because dist/ is absent and this task
+forbids changing it. Manifest-only package isolation passed above.
