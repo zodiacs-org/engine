@@ -1,0 +1,100 @@
+{
+  "schema": "zodiacs-calendar-events-source/1",
+  "repository": "https://github.com/zodiacs-org/engine",
+  "branch": "origin/infra/events",
+  "commit": "7d6fb88d03b3896ee1e5496ed99961015d291d3c",
+  "engineTree": "0b30adb21b75522cd52a453499a76211fca8b8cb",
+  "enginePackageBlob": "2e05a52ccd823f8e6b666bb678e93196661546e8",
+  "files": [
+    {
+      "path": "events/src/aspects.ts",
+      "blob": "5ffee1118a7d4edd0599d675ed6bf2f9626fe452",
+      "sha256": "ebdcb755264e47e6a47676f4e7b1e846085ddb64895acd71ee41c74652881424",
+      "bytes": 5407
+    },
+    {
+      "path": "events/src/context.ts",
+      "blob": "be458e75d7c9d173908fb9b5ecd5686119156342",
+      "sha256": "2a7c6f34776f8b8655100e71b3d929dc7881ea459cc7bca2d061efb4ee382471",
+      "bytes": 3160
+    },
+    {
+      "path": "events/src/eclipses.ts",
+      "blob": "2737c159c60a5924db50193ebacd45c456ca79f2",
+      "sha256": "2ba8eaddec70153017dc47f1ff6c543b55039b90295fee4048c4e83af6b7a571",
+      "bytes": 7573
+    },
+    {
+      "path": "events/src/engine.ts",
+      "blob": "3c513a9dd8a01838bcb188c10d2ca890df8208fd",
+      "sha256": "a58325ad96e67b3d4b30ce7bef4916fb13dc9a182de858785921b45a7736bd02",
+      "bytes": 2398
+    },
+    {
+      "path": "events/src/longitude.ts",
+      "blob": "7e150a87e41c2b3b06f440582c4d68a54c4d73e5",
+      "sha256": "e8d2b8129f45c4676f3d61a76fc0a7b56a9f50acaa992e359b61231f0ee13fe4",
+      "bytes": 5990
+    },
+    {
+      "path": "events/src/query.ts",
+      "blob": "2978cb88a2a06eb5ed5c78c75d74a77f122f187f",
+      "sha256": "a94c3d9dc0c1d76bc070da0e70221cb1fbd1590ec3a4abc36c07d03ee9fc0897",
+      "bytes": 6772
+    },
+    {
+      "path": "events/src/root.ts",
+      "blob": "477c0feba7105e4cc8d5115c05420da548454ffd",
+      "sha256": "4b9ab104568a44601ada9a34f374162a6c9a04a323dde6691335f0f59dfd4256",
+      "bytes": 2995
+    },
+    {
+      "path": "events/src/search.ts",
+      "blob": "9e5f3ede8a8f546d45882ef39e12d7de5bd61075",
+      "sha256": "068b9983954e503bd2c3f07e901cc7b284230640bb9151a608da1111dd6967b6",
+      "bytes": 8430
+    },
+    {
+      "path": "events/src/stations.ts",
+      "blob": "f6192fb159e9eb6b0db1b1d60840ef3529fe6eb3",
+      "sha256": "887dfa33aa2bd5d6e9127aeb689256a28b3c97d00f6daab8d48bb8ba8fb49a0b",
+      "bytes": 6851
+    },
+    {
+      "path": "events/src/types.ts",
+      "blob": "b04c8201a7335f5d4e70e88e97a6bc00f6bf20f2",
+      "sha256": "e568af57b36d414c7c95234783edda06680ebed6be2ee6139fc109e533eb33ae",
+      "bytes": 858
+    },
+    {
+      "path": "events/src/void.ts",
+      "blob": "d29ffd0ff7ef256d09c7ac9768ce39e9fe5f2b96",
+      "sha256": "679409d67caeb4677676ef8b56bb4c29ca7e8ba85ee184d54380e8fcd3ede8be",
+      "bytes": 4827
+    },
+    {
+      "path": "events/README.md",
+      "blob": "0ad48221a0ebd54b7dfa722c48ede4085e1d4368",
+      "sha256": "2f118da2257647dfbda9fe3d93486823e2403a7169abf71ab2060afb0370a1cc",
+      "bytes": 30757
+    },
+    {
+      "path": "events/LIMITATIONS.md",
+      "blob": "c4608c277caddf02befc9246a146dd89b3dbafec",
+      "sha256": "993c9db4d6ebd47ce070b82818e1521053b5629a1db1bda9a06dee9fbd728ef5",
+      "bytes": 5762
+    },
+    {
+      "path": "events/QUERY.md",
+      "blob": "bd74d2c62b6edad4d70ba997b3c1cda7c686b74a",
+      "sha256": "7dd63e5408a164611f2f75d0df9d71bfc11514b8b76fbe2f0803fafa696a3b54",
+      "bytes": 8006
+    },
+    {
+      "path": "LICENSE",
+      "blob": "271c4903e3d125a4387a40d4cf94f5fec2213f37",
+      "sha256": "9a8ab25f278db9d59a00ee82d1a82d63ee4891a9c417c53b4e2b9942aaab10df",
+      "bytes": 1068
+    }
+  ]
+}

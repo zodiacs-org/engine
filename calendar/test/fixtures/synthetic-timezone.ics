@@ -1,0 +1,119 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Zodiacs//Calendar Workbench//EN
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:America/New_York
+X-ZODIACS-TZDB;VALUE=TEXT:2026e
+X-ZODIACS-TZDB-FORM;VALUE=TEXT:rearguard
+X-ZODIACS-COVERAGE-START-UTC;VALUE=TEXT:2026-03-08T06:59:59.000Z
+X-ZODIACS-COVERAGE-END-UTC;VALUE=TEXT:2026-11-01T07:00:00.000Z
+BEGIN:STANDARD
+DTSTART:20260306T015959
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0500
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:20260308T020000
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20261101T020000
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:spring-interval@calendar.invalid
+DTSTAMP:20260101T000000Z
+DTSTART;TZID=America/New_York:20260308T015959
+DTEND;TZID=America/New_York:20260308T030001
+X-ZODIACS-TZID;VALUE=TEXT:America/New_York
+X-ZODIACS-TZDB;VALUE=TEXT:2026e
+X-ZODIACS-TZDB-FORM;VALUE=TEXT:rearguard
+SUMMARY:Synthetic spring-interval
+TRANSP:TRANSPARENT
+DESCRIPTION:{"aspect":null\,"bodies":["Moon"]\,"engine":{"ephemeris":{"name
+ ":"astronomy-engine"\,"version":"2.1.19"}\,"name":"@zodiacs/engine"\,"vers
+ ion":"1.0.0"}\,"eventType":"void-of-course"\,"orbDegrees":null\,"schema":"
+ zodiacs-calendar-receipt/1"\,"utc":"2026-03-08T06:59:59.000Z"}
+X-ZODIACS-SCHEMA;VALUE=TEXT:zodiacs-calendar-receipt/1
+X-ZODIACS-UTC;VALUE=TEXT:2026-03-08T06:59:59.000Z
+X-ZODIACS-EVENT-TYPE;VALUE=TEXT:void-of-course
+X-ZODIACS-BODIES;VALUE=TEXT:["Moon"]
+X-ZODIACS-ASPECT;VALUE=TEXT:null
+X-ZODIACS-ORB-DEGREES;VALUE=TEXT:null
+X-ZODIACS-ENGINE;VALUE=TEXT:@zodiacs/engine@1.0.0
+X-ZODIACS-EPHEMERIS;VALUE=TEXT:astronomy-engine@2.1.19
+X-ZODIACS-END-UTC;VALUE=TEXT:2026-03-08T07:00:01.456Z
+END:VEVENT
+BEGIN:VEVENT
+UID:first-fold@calendar.invalid
+DTSTAMP:20260101T000000Z
+DTSTART:20261101T053000Z
+X-ZODIACS-TIME-FALLBACK;VALUE=TEXT:ambiguous-local-time
+X-ZODIACS-TZID;VALUE=TEXT:America/New_York
+X-ZODIACS-TZDB;VALUE=TEXT:2026e
+X-ZODIACS-TZDB-FORM;VALUE=TEXT:rearguard
+SUMMARY:Synthetic first-fold
+TRANSP:TRANSPARENT
+DESCRIPTION:{"aspect":null\,"bodies":["Moon"]\,"engine":{"ephemeris":{"name
+ ":"astronomy-engine"\,"version":"2.1.19"}\,"name":"@zodiacs/engine"\,"vers
+ ion":"1.0.0"}\,"eventType":"void-of-course"\,"orbDegrees":null\,"schema":"
+ zodiacs-calendar-receipt/1"\,"utc":"2026-11-01T05:30:00.123Z"}
+X-ZODIACS-SCHEMA;VALUE=TEXT:zodiacs-calendar-receipt/1
+X-ZODIACS-UTC;VALUE=TEXT:2026-11-01T05:30:00.123Z
+X-ZODIACS-EVENT-TYPE;VALUE=TEXT:void-of-course
+X-ZODIACS-BODIES;VALUE=TEXT:["Moon"]
+X-ZODIACS-ASPECT;VALUE=TEXT:null
+X-ZODIACS-ORB-DEGREES;VALUE=TEXT:null
+X-ZODIACS-ENGINE;VALUE=TEXT:@zodiacs/engine@1.0.0
+X-ZODIACS-EPHEMERIS;VALUE=TEXT:astronomy-engine@2.1.19
+END:VEVENT
+BEGIN:VEVENT
+UID:second-fold@calendar.invalid
+DTSTAMP:20260101T000000Z
+DTSTART:20261101T063000Z
+X-ZODIACS-TIME-FALLBACK;VALUE=TEXT:ambiguous-local-time
+X-ZODIACS-TZID;VALUE=TEXT:America/New_York
+X-ZODIACS-TZDB;VALUE=TEXT:2026e
+X-ZODIACS-TZDB-FORM;VALUE=TEXT:rearguard
+SUMMARY:Synthetic second-fold
+TRANSP:TRANSPARENT
+DESCRIPTION:{"aspect":null\,"bodies":["Moon"]\,"engine":{"ephemeris":{"name
+ ":"astronomy-engine"\,"version":"2.1.19"}\,"name":"@zodiacs/engine"\,"vers
+ ion":"1.0.0"}\,"eventType":"void-of-course"\,"orbDegrees":null\,"schema":"
+ zodiacs-calendar-receipt/1"\,"utc":"2026-11-01T06:30:00.789Z"}
+X-ZODIACS-SCHEMA;VALUE=TEXT:zodiacs-calendar-receipt/1
+X-ZODIACS-UTC;VALUE=TEXT:2026-11-01T06:30:00.789Z
+X-ZODIACS-EVENT-TYPE;VALUE=TEXT:void-of-course
+X-ZODIACS-BODIES;VALUE=TEXT:["Moon"]
+X-ZODIACS-ASPECT;VALUE=TEXT:null
+X-ZODIACS-ORB-DEGREES;VALUE=TEXT:null
+X-ZODIACS-ENGINE;VALUE=TEXT:@zodiacs/engine@1.0.0
+X-ZODIACS-EPHEMERIS;VALUE=TEXT:astronomy-engine@2.1.19
+END:VEVENT
+BEGIN:VEVENT
+UID:after-fold@calendar.invalid
+DTSTAMP:20260101T000000Z
+DTSTART;TZID=America/New_York:20261101T020000
+X-ZODIACS-TZID;VALUE=TEXT:America/New_York
+X-ZODIACS-TZDB;VALUE=TEXT:2026e
+X-ZODIACS-TZDB-FORM;VALUE=TEXT:rearguard
+SUMMARY:Synthetic after-fold
+TRANSP:TRANSPARENT
+DESCRIPTION:{"aspect":null\,"bodies":["Moon"]\,"engine":{"ephemeris":{"name
+ ":"astronomy-engine"\,"version":"2.1.19"}\,"name":"@zodiacs/engine"\,"vers
+ ion":"1.0.0"}\,"eventType":"void-of-course"\,"orbDegrees":null\,"schema":"
+ zodiacs-calendar-receipt/1"\,"utc":"2026-11-01T07:00:00.000Z"}
+X-ZODIACS-SCHEMA;VALUE=TEXT:zodiacs-calendar-receipt/1
+X-ZODIACS-UTC;VALUE=TEXT:2026-11-01T07:00:00.000Z
+X-ZODIACS-EVENT-TYPE;VALUE=TEXT:void-of-course
+X-ZODIACS-BODIES;VALUE=TEXT:["Moon"]
+X-ZODIACS-ASPECT;VALUE=TEXT:null
+X-ZODIACS-ORB-DEGREES;VALUE=TEXT:null
+X-ZODIACS-ENGINE;VALUE=TEXT:@zodiacs/engine@1.0.0
+X-ZODIACS-EPHEMERIS;VALUE=TEXT:astronomy-engine@2.1.19
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,32 @@
+{
+  "name": "@zodiacs/calendar-workbench",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
+  },
+  "scripts": {
+    "cli": "node scripts/calendar.mjs",
+    "serve": "node scripts/serve.mjs",
+    "prepare:events": "node scripts/prepare-events.mjs",
+    "check:fixture": "node scripts/mixed-fixture.mjs --check",
+    "check:evidence": "node scripts/streaming-evidence.mjs --check",
+    "check:isolation": "node scripts/verify-isolation.mjs",
+    "pretypecheck": "npm run prepare:events",
+    "typecheck": "tsc --noEmit",
+    "pretest": "npm run prepare:events",
+    "test": "vitest run --config vitest.config.ts"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "ical.js": "2.2.1",
+    "typescript": "5.9.3",
+    "vitest": "5.0.4"
+  },
+  "dependencies": {
+    "@js-joda/core": "6.3.0",
+    "@js-joda/timezone": "3.1.0",
+    "astronomy-engine": "2.1.19"
+  }
+}
