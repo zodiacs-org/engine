@@ -1,0 +1,13 @@
+Runtime: Node.js v22.22.2; host tz 2025c; ICU 78.2.
+PASS: offline sample receipt check and documented sample build command.
+Example documented-atlas: ready.
+Example assigned-iana: ready.
+Example polar-place: ready.
+Example ambiguous-place: needs-review (place-selection).
+Example unknown-time: needs-review (clock-time).
+Example skipped-reading: needs-review (clock-change).
+Example repeated-reading: needs-review (clock-change).
+Example uncertain-atlas: needs-review (historical-uncertainty).
+Example inferred-atlas: needs-review (historical-uncertainty).
+PASS: documented CLI lookup, filtered selection, date-only and atlas-time commands with Node network APIs blocked.
+PASS: documented HTTP request fields match CLI answers on loopback; no-store response and SIGTERM shutdown.

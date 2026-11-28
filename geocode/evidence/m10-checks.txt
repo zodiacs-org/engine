@@ -1,0 +1,243 @@
+
+> @zodiacs/geocode-workbench@0.0.0 check
+> npm run typecheck && npm test && npm run scope:check
+
+
+> @zodiacs/geocode-workbench@0.0.0 typecheck
+> tsc -p tsconfig.json
+
+
+> @zodiacs/geocode-workbench@0.0.0 test
+> vitest run --config vitest.config.mjs
+
+
+ RUN  v2.1.9 /workspace/codex-infra/wt-geocode/geocode
+
+ ✓ tests/lookup.test.ts (93 tests) 34ms
+ ✓ tests/build-index.test.ts (105 tests) 377ms
+ ✓ tests/load-index.test.ts (59 tests) 174ms
+ ✓ tests/http-server.test.ts (68 tests) 1163ms
+   ✓ explicit HTTP lifecycle > bounds shutdown when a provider remains pending 1002ms
+ ✓ tests/build-commands.test.ts (20 tests) 6830ms
+   ✓ offline data acquisition and build commands > preserves archived source bytes across small parts and builds those parts through the CLI 3337ms
+ ✓ tests/geocoder.test.ts (55 tests) 47ms
+ ✓ tests/http-limits.test.ts (22 tests) 94ms
+ ✓ tests/dataset.test.ts (111 tests) 17ms
+ ✓ tests/geocoder-atlas.test.ts (21 tests) 134ms
+ ✓ tests/sample.test.ts (20 tests) 45ms
+ ✓ tests/time-evidence.test.ts (60 tests) 90ms
+ ✓ tests/http-service.test.ts (57 tests) 3374ms
+   ✓ optional service launcher > starts explicitly on loopback and stops on SIGTERM 327ms
+ ✓ tests/atlas-time.test.ts (48 tests) 53ms
+ ✓ tests/iana-time.test.ts (42 tests) 59ms
+ ✓ tests/http-admission.test.ts (29 tests) 12ms
+ ✓ tests/cli.test.ts (87 tests) 23329ms
+   ✓ offline geocode CLI > defaults to JSON and keeps ambiguity when only one candidate is requested 476ms
+   ✓ offline geocode CLI > accepts equals options and a terminator before a query beginning with a hyphen 518ms
+   ✓ offline geocode CLI > preserves place selection failures and their separate statuses 774ms
+   ✓ offline geocode CLI > accepts exact ID selection and preserves a date-only request 601ms
+   ✓ offline geocode CLI > preserves Brest 1891-03-20 12:00 with provider atlas and status ok 330ms
+   ✓ offline geocode CLI > rejects command syntax without polluting stdout: ["lookup","Paris","--country"] 524ms
+   ✓ offline geocode CLI > rejects command syntax without polluting stdout: ["lookup","Paris","--country","--json"] 401ms
+   ✓ offline geocode CLI > rejects command syntax without polluting stdout: ["lookup","Paris","--index"] 354ms
+   ✓ offline geocode CLI > rejects malformed civil time 24:00 before loading an index 321ms
+   ✓ offline geocode CLI > distinguishes index failures from provider failures 672ms
+   ✓ offline geocode CLI > does not echo submitted queries, filesystem paths or provider exception values in stderr 681ms
+ ✓ tests/http-client.test.ts (35 tests) 13ms
+
+ Test Files  17 passed (17)
+      Tests  932 passed (932)
+   Start at  02:24:25
+   Duration  24.41s (transform 483ms, setup 0ms, collect 2.21s, tests 35.85s, environment 2ms, prepare 745ms)
+
+
+> @zodiacs/geocode-workbench@0.0.0 scope:check
+> node scripts/check-scope.mjs
+
+PASS: geocode candidate files are regular files below 2 MB; documentation has no em dashes.
+PASS: npm pack --dry-run --ignore-scripts excludes geocode/ from the engine package.
+Scope checks do not substitute for the root package's build and size-budget checks.
+
+Runtime: Node.js v22.23.3; Python 3.13.5.
+
+$ python3 scripts/select-sample.py --check
+GeoNames sample files match their receipt and selection.
+
+$ node ../atlas/tools/check.mjs
+atlas 0.1.0: 21 places, 14 jurisdictions, 59 rules, 66 citations
+  rules by flag: documented 27, inferred 26, uncertain 6
+  citations by type: decree 5, law 9, ministerial-decision 1, municipal-notice 1, newspaper-report 45, parliamentary-debate 3, railway-notice 2
+  excerpts taken from: page-image 66
+  excerpts checked against (citations): ocr matches 24, ocr partial 5, page-image matches 16, search-service matches 29, search-service partial 8
+  258 boundaries and 2735 round trips checked
+  tzdb comparison current, every difference matched by exactly one explanation
+atlas: all checks passed
+
+$ node --test ../atlas/tools/selftest.mjs
+TAP version 13
+# Subtest: local mean time is 240 s per degree east, to the millisecond
+ok 1 - local mean time is 240 s per degree east, to the millisecond
+  ---
+  duration_ms: 1.588561
+  type: 'test'
+  ...
+# Subtest: boundaries resolve on the clock their reckoning names
+ok 2 - boundaries resolve on the clock their reckoning names
+  ---
+  duration_ms: 1.825199
+  type: 'test'
+  ...
+# Subtest: an ordinary reading resolves to one instant
+ok 3 - an ordinary reading resolves to one instant
+  ---
+  duration_ms: 1.172105
+  type: 'test'
+  ...
+# Subtest: local mean time differs by place
+ok 4 - local mean time differs by place
+  ---
+  duration_ms: 0.919337
+  type: 'test'
+  ...
+# Subtest: a place read by longitude must lie in a covered département and inside its area
+ok 5 - a place read by longitude must lie in a covered département and inside its area
+  ---
+  duration_ms: 1.027027
+  type: 'test'
+  ...
+# Subtest: --utc is always UTC, with or without Z, whatever the host time zone
+ok 6 - --utc is always UTC, with or without Z, whatever the host time zone
+  ---
+  duration_ms: 338.803618
+  type: 'test'
+  ...
+# Subtest: --utc reports the same instant fields as --local, uncertainty included
+ok 7 - --utc reports the same instant fields as --local, uncertainty included
+  ---
+  duration_ms: 1.223609
+  type: 'test'
+  ...
+# Subtest: the resolver refuses out-of-range times, a malformed longitude and an unknown clock
+ok 8 - the resolver refuses out-of-range times, a malformed longitude and an unknown clock
+  ---
+  duration_ms: 990.313131
+  type: 'test'
+  ...
+# Subtest: the resolver refuses unknown, valueless, repeated and conflicting options
+ok 9 - the resolver refuses unknown, valueless, repeated and conflicting options
+  ---
+  duration_ms: 1457.388547
+  type: 'test'
+  ...
+# Subtest: a clock the jurisdiction does not keep is reported as such, not as out of coverage
+ok 10 - a clock the jurisdiction does not keep is reported as such, not as out of coverage
+  ---
+  duration_ms: 0.951904
+  type: 'test'
+  ...
+# Subtest: a skipped reading is nonexistent and taken on the earlier clock
+ok 11 - a skipped reading is nonexistent and taken on the earlier clock
+  ---
+  duration_ms: 0.670648
+  type: 'test'
+  ...
+# Subtest: a repeated reading is ambiguous, earliest first
+ok 12 - a repeated reading is ambiguous, earliest first
+  ---
+  duration_ms: 0.302847
+  type: 'test'
+  ...
+# Subtest: readings outside the window are out of coverage
+ok 13 - readings outside the window are out of coverage
+  ---
+  duration_ms: 0.269686
+  type: 'test'
+  ...
+# Subtest: readings near a boundary the sources do not fix exactly are flagged uncertain
+ok 14 - readings near a boundary the sources do not fix exactly are flagged uncertain
+  ---
+  duration_ms: 0.406197
+  type: 'test'
+  ...
+# Subtest: a local reading inside the span of an imprecise change, read on either clock, is uncertain
+ok 15 - a local reading inside the span of an imprecise change, read on either clock, is uncertain
+  ---
+  duration_ms: 0.556759
+  type: 'test'
+  ...
+# Subtest: UTC -> local -> UTC round trips at every millisecond near a change
+ok 16 - UTC -> local -> UTC round trips at every millisecond near a change
+  ---
+  duration_ms: 0.374185
+  type: 'test'
+  ...
+# Subtest: each tzdb difference must match exactly one explanation, on its values
+ok 17 - each tzdb difference must match exactly one explanation, on its values
+  ---
+  duration_ms: 1.286225
+  type: 'test'
+  ...
+# Subtest: a missing tzdb extract fails the check instead of skipping it
+ok 18 - a missing tzdb extract fails the check instead of skipping it
+  ---
+  duration_ms: 0.448708
+  type: 'test'
+  ...
+# Subtest: the checks pass on the fixture and count their round trips
+ok 19 - the checks pass on the fixture and count their round trips
+  ---
+  duration_ms: 11.613136
+  type: 'test'
+  ...
+# Subtest: the checks catch a gap between rules
+ok 20 - the checks catch a gap between rules
+  ---
+  duration_ms: 2.158127
+  type: 'test'
+  ...
+# Subtest: the checks hold excerpts to 40 words and want a record of how each was checked
+ok 21 - the checks hold excerpts to 40 words and want a record of how each was checked
+  ---
+  duration_ms: 1.59569
+  type: 'test'
+  ...
+# Subtest: the checks catch a département listed twice for reading by longitude
+ok 22 - the checks catch a département listed twice for reading by longitude
+  ---
+  duration_ms: 1.049021
+  type: 'test'
+  ...
+# Subtest: the citations an exclusion names must exist, and count as cited
+ok 23 - the citations an exclusion names must exist, and count as cited
+  ---
+  duration_ms: 5.397086
+  type: 'test'
+  ...
+# Subtest: the checks catch a missing citation, excerpt or retrieval date
+ok 24 - the checks catch a missing citation, excerpt or retrieval date
+  ---
+  duration_ms: 1.064624
+  type: 'test'
+  ...
+# Subtest: the checks catch a rule without citations and an unused citation
+ok 25 - the checks catch a rule without citations and an unused citation
+  ---
+  duration_ms: 0.85053
+  type: 'test'
+  ...
+# Subtest: the schema validator reports types, patterns and unknown properties
+ok 26 - the schema validator reports types, patterns and unknown properties
+  ---
+  duration_ms: 0.452223
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2898.766896
+

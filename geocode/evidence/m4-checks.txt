@@ -1,0 +1,80 @@
+M4 validation record: output excerpts from commands run in this session.
+
+Command (from geocode/):
+npm exec --yes --cache .cache/npm --package=node@22.22.2 -- npm run check
+Runtime: Node.js v22.22.2
+Exit status: 0
+
+> @zodiacs/geocode-workbench@0.0.0 typecheck
+> tsc -p tsconfig.json
+
+> @zodiacs/geocode-workbench@0.0.0 test
+> vitest run --config vitest.config.mjs
+
+PASS tests/lookup.test.ts (93 tests)
+PASS tests/dataset.test.ts (111 tests)
+PASS tests/build-index.test.ts (99 tests)
+PASS tests/sample.test.ts (20 tests)
+PASS tests/atlas-time.test.ts (48 tests)
+PASS tests/build-commands.test.ts (6 tests)
+PASS tests/iana-time.test.ts (42 tests)
+Test Files: 7 passed (7)
+Tests: 419 passed (419)
+
+> @zodiacs/geocode-workbench@0.0.0 scope:check
+> node scripts/check-scope.mjs
+
+PASS: geocode candidate files are regular files below 2 MB; documentation has no em dashes.
+PASS: npm pack --dry-run --ignore-scripts excludes geocode/ from the engine package.
+Scope checks do not substitute for the root package's build and size-budget checks.
+
+Command (from geocode/, using the cached Node.js v22.22.2 executable):
+node ../atlas/tools/check.mjs
+Exit status: 0
+
+atlas 0.1.0: 21 places, 14 jurisdictions, 59 rules, 66 citations
+  rules by flag: documented 27, inferred 26, uncertain 6
+  citations by type: decree 5, law 9, ministerial-decision 1, municipal-notice 1, newspaper-report 45, parliamentary-debate 3, railway-notice 2
+  excerpts taken from: page-image 66
+  excerpts checked against (citations): ocr matches 24, ocr partial 5, page-image matches 16, search-service matches 29, search-service partial 8
+  258 boundaries and 2735 round trips checked
+  tzdb comparison current, every difference matched by exactly one explanation
+atlas: all checks passed
+
+Command (from geocode/, using the cached Node.js v22.22.2 executable):
+node --test ../atlas/tools/selftest.mjs
+Exit status: 0
+
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+
+Commands (from geocode/):
+npm exec --yes --cache .cache/npm --package=node@22.22.2 -- node node_modules/typescript/bin/tsc -p tsconfig.tools.json
+npm exec --yes --cache .cache/npm --package=node@22.22.2 -- node evidence/check-m3-lookup.mjs generated/m2-world-validation
+Exit status: 0 for both
+Acceptance output excerpt:
+  "runtime": "v22.22.2",
+  "manifestSha256": "66e10353a79dc8db4518a79b2e2e40620b07d8876b97a48898a40d7b46619196",
+  "placeCount": 34162,
+  "verified": "local shard bytes, inclusion of source IDs, stable ordering and ambiguity under truncation",
+  "limitation": "Checks this local snapshot and synthetic queries only; not geographic accuracy or worldwide completeness."
+
+Command (from repository root, default Node.js v20.19.2):
+npm --cache geocode/.cache/npm run package:contents
+Exit status: 1
+
+> @zodiacs/engine@1.0.0 package:contents
+> node scripts/verify-package-contents.mjs
+
+AssertionError [ERR_ASSERTION]: packed package is missing dist/calc.d.ts
+    at file:///workspace/codex-infra/wt-geocode/scripts/verify-package-contents.mjs:50:3
+
+The missing root build prevents this gate from completing. Root dist/ was
+not generated because the task forbids writes there. Package exclusion is
+checked separately above; this does not establish the full package budget.

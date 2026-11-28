@@ -1,0 +1,49 @@
+
+> @zodiacs/geocode-workbench@0.0.0 check
+> npm run typecheck && npm test && npm run scope:check
+
+
+> @zodiacs/geocode-workbench@0.0.0 typecheck
+> tsc -p tsconfig.json
+
+
+> @zodiacs/geocode-workbench@0.0.0 test
+> vitest run --config vitest.config.mjs
+
+
+ RUN  v2.1.9 /workspace/codex-infra/wt-geocode/geocode
+
+ ✓ tests/lookup.test.ts (93 tests) 30ms
+ ✓ tests/build-index.test.ts (99 tests) 293ms
+ ✓ tests/http-server.test.ts (68 tests) 1136ms
+   ✓ explicit HTTP lifecycle > bounds shutdown when a provider remains pending 1003ms
+ ✓ tests/load-index.test.ts (50 tests) 131ms
+ ✓ tests/geocoder.test.ts (55 tests) 46ms
+ ✓ tests/dataset.test.ts (111 tests) 17ms
+ ✓ tests/geocoder-atlas.test.ts (21 tests) 119ms
+ ✓ tests/sample.test.ts (20 tests) 43ms
+ ✓ tests/build-commands.test.ts (6 tests) 3913ms
+   ✓ offline data acquisition and build commands > preserves archived source bytes across small parts and builds those parts through the CLI 2574ms
+ ✓ tests/atlas-time.test.ts (48 tests) 57ms
+ ✓ tests/iana-time.test.ts (42 tests) 72ms
+ ✓ tests/cli.test.ts (87 tests) 19239ms
+   ✓ offline geocode CLI > defaults to JSON and keeps ambiguity when only one candidate is requested 458ms
+   ✓ offline geocode CLI > accepts equals options and a terminator before a query beginning with a hyphen 432ms
+   ✓ offline geocode CLI > preserves place selection failures and their separate statuses 639ms
+   ✓ offline geocode CLI > accepts exact ID selection and preserves a date-only request 432ms
+   ✓ offline geocode CLI > distinguishes index failures from provider failures 614ms
+   ✓ offline geocode CLI > does not echo submitted queries, filesystem paths or provider exception values in stderr 634ms
+ ✓ tests/http-service.test.ts (21 tests) 1146ms
+
+ Test Files  13 passed (13)
+      Tests  721 passed (721)
+   Start at  01:15:44
+   Duration  21.13s (transform 387ms, setup 0ms, collect 697ms, tests 26.24s, environment 2ms, prepare 517ms)
+
+
+> @zodiacs/geocode-workbench@0.0.0 scope:check
+> node scripts/check-scope.mjs
+
+PASS: geocode candidate files are regular files below 2 MB; documentation has no em dashes.
+PASS: npm pack --dry-run --ignore-scripts excludes geocode/ from the engine package.
+Scope checks do not substitute for the root package's build and size-budget checks.

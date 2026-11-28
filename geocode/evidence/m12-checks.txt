@@ -1,0 +1,65 @@
+
+> @zodiacs/geocode-workbench@0.0.0 check
+> npm run typecheck && npm test && npm run scope:check
+
+
+> @zodiacs/geocode-workbench@0.0.0 typecheck
+> tsc -p tsconfig.json
+
+
+> @zodiacs/geocode-workbench@0.0.0 test
+> vitest run --config vitest.config.mjs
+
+
+ RUN  v2.1.9 /workspace/codex-infra/wt-geocode/geocode
+
+ ✓ tests/lookup.test.ts (93 tests) 31ms
+ ✓ tests/build-index.test.ts (105 tests) 413ms
+ ✓ tests/load-index.test.ts (59 tests) 167ms
+ ✓ tests/http-server.test.ts (68 tests) 1167ms
+   ✓ explicit HTTP lifecycle > bounds shutdown when a provider remains pending 1004ms
+ ✓ tests/build-commands.test.ts (20 tests) 7507ms
+   ✓ offline data acquisition and build commands > preserves archived source bytes across small parts and builds those parts through the CLI 3572ms
+ ✓ tests/geocoder.test.ts (55 tests) 52ms
+ ✓ tests/http-limits.test.ts (22 tests) 112ms
+ ✓ tests/dataset.test.ts (111 tests) 20ms
+ ✓ tests/geocoder-atlas.test.ts (21 tests) 129ms
+ ✓ tests/sample.test.ts (20 tests) 67ms
+ ✓ tests/time-evidence.test.ts (60 tests) 88ms
+ ✓ tests/http-service.test.ts (57 tests) 2654ms
+   ✓ optional service launcher > starts explicitly on loopback and stops on SIGINT 307ms
+ ✓ tests/atlas-time.test.ts (48 tests) 58ms
+ ✓ tests/engine-example.test.ts (18 tests) 586ms
+ ✓ tests/iana-time.test.ts (42 tests) 78ms
+ ✓ tests/http-admission.test.ts (29 tests) 12ms
+ ✓ tests/http-client.test.ts (35 tests) 12ms
+ ✓ tests/cli.test.ts (87 tests) 23824ms
+   ✓ offline geocode CLI > defaults to JSON and keeps ambiguity when only one candidate is requested 486ms
+   ✓ offline geocode CLI > accepts equals options and a terminator before a query beginning with a hyphen 506ms
+   ✓ offline geocode CLI > preserves place selection failures and their separate statuses 772ms
+   ✓ offline geocode CLI > accepts exact ID selection and preserves a date-only request 570ms
+   ✓ offline geocode CLI > preserves Brest 1891-03-20 12:00 with provider atlas and status ok 383ms
+   ✓ offline geocode CLI > preserves New York, US 1918-03-31 02:30 with provider atlas and status nonexistent 392ms
+   ✓ offline geocode CLI > preserves New York, US 1918-10-27 01:30 with provider atlas and status ambiguous 395ms
+   ✓ offline geocode CLI > preserves New York, US 2024-03-10 02:30 with provider iana and status nonexistent 404ms
+   ✓ offline geocode CLI > preserves Kathmandu, NP 2000-01-01 08:30 with provider iana and status ok 300ms
+   ✓ offline geocode CLI > preserves Kolkata, IN 2000-01-01 08:30 with provider iana and status ok 327ms
+   ✓ offline geocode CLI > preserves Paris, FR 1920-01-01 12:00 with provider iana and status ok 322ms
+   ✓ offline geocode CLI > rejects command syntax without polluting stdout: ["tz"] 306ms
+   ✓ offline geocode CLI > distinguishes index failures from provider failures 686ms
+   ✓ offline geocode CLI > does not echo submitted queries, filesystem paths or provider exception values in stderr 728ms
+ ✓ tests/imports.test.ts (1 test) 600ms
+   ✓ imports core and optional entries without I/O, and resolves timed queries offline 599ms
+
+ Test Files  19 passed (19)
+      Tests  951 passed (951)
+   Start at  04:40:29
+   Duration  25.53s (transform 618ms, setup 0ms, collect 2.42s, tests 37.58s, environment 3ms, prepare 832ms)
+
+
+> @zodiacs/geocode-workbench@0.0.0 scope:check
+> node scripts/check-scope.mjs
+
+PASS: geocode candidate files are regular files below 2 MB; documentation has no em dashes.
+PASS: npm pack --dry-run --ignore-scripts excludes geocode/ from the engine package.
+Scope checks do not substitute for the root package's build and size-budget checks.
