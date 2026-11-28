@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "command": "node skydb/benchmarks/verify-full.mjs",
+  "directory": "skydb/generated/full",
+  "startedAt": "2026-10-19T17:09:19.962Z",
+  "finishedAt": "2026-10-19T17:13:51.973Z",
+  "runtime": {
+    "node": "v22.23.3",
+    "platform": "linux",
+    "arch": "x64",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "engine": {
+      "name": "@zodiacs/engine",
+      "version": "1.0.0",
+      "archive": "zodiacs-engine-1.0.0.tgz",
+      "sha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
+      "bytes": 288063,
+      "ephemeris": "2.1.19"
+    },
+    "osRelease": "6.12.94+",
+    "memoryBytes": 16779640832
+  },
+  "method": "One sequential verification CLI child; elapsedMs includes process startup and the complete CLI traversal, excludes archive checks, metadata reads and storage walk; filesystem cache and host load uncontrolled; storage counts all files and directory allocation under the database directory",
+  "manifest": {
+    "sha256": "7f9b034c1d80915329d9b20d3ec09bb00519adece2a2b467d850300c8f3126b1",
+    "bytes": 389,
+    "value": {
+      "version": 2,
+      "engineSha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
+      "config": {
+        "startMs": -5364662400000,
+        "endMs": 7258118400000,
+        "stepMs": 3600000,
+        "tileMs": 86400000,
+        "timeScale": "utc",
+        "bodies": [
+          "Sun",
+          "Moon",
+          "Mercury",
+          "Venus",
+          "Mars",
+          "Jupiter",
+          "Saturn",
+          "Uranus",
+          "Neptune",
+          "Pluto"
+        ]
+      },
+      "tiles": "shard-NNNNNNNN/tile-NNNNNNNN/receipt.json",
+      "positionFormat": 1,
+      "eventFormat": 1
+    }
+  },
+  "checkpoint": {
+    "version": 1,
+    "manifestSha256": "7f9b034c1d80915329d9b20d3ec09bb00519adece2a2b467d850300c8f3126b1",
+    "nextIndex": 146099,
+    "complete": true
+  },
+  "verification": {
+    "command": {
+      "executable": "node",
+      "args": [
+        "skydb/scripts/skydb.mjs",
+        "verify",
+        "--directory",
+        "skydb/generated/full"
+      ]
+    },
+    "elapsedMs": 257732.14629099998,
+    "summary": {
+      "tiles": 146099,
+      "samples": 3652427,
+      "events": 549078,
+      "config": {
+        "startMs": -5364662400000,
+        "endMs": 7258118400000,
+        "stepMs": 3600000,
+        "tileMs": 86400000,
+        "timeScale": "utc",
+        "bodies": [
+          "Sun",
+          "Moon",
+          "Mercury",
+          "Venus",
+          "Mars",
+          "Jupiter",
+          "Saturn",
+          "Uranus",
+          "Neptune",
+          "Pluto"
+        ]
+      }
+    }
+  },
+  "storage": {
+    "bytes": 968174614,
+    "allocatedBytes": 2997882880,
+    "files": 438299,
+    "directories": 146243
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "measurement": "Single local workload; no full-dataset estimate",
+  "runtime": {
+    "node": "v22.23.3",
+    "platform": "linux",
+    "arch": "x64",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "engine": {
+      "name": "@zodiacs/engine",
+      "version": "1.0.0",
+      "archive": "zodiacs-engine-1.0.0.tgz",
+      "sha256": "c4d3754de899fb98882331e6d7b9ce3ce77fb2072baeb002aa0ef8c77b0ab0f6",
+      "bytes": 288063,
+      "ephemeris": "2.1.19"
+    }
+  },
+  "config": {
+    "startMs": 978307200000,
+    "endMs": 978480000000,
+    "stepMs": 3600000,
+    "tileMs": 86400000,
+    "timeScale": "utc",
+    "bodies": [
+      "Sun",
+      "Moon",
+      "Mercury",
+      "Venus",
+      "Mars",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune",
+      "Pluto"
+    ]
+  },
+  "method": "Sequential calls, no timed warmup, engine loaded before timing; first pass has empty application cache, OS cache uncontrolled; warm pass reuses decoded tiles; generation includes positions, events and persistence",
+  "results": {
+    "generationMs": 264.669127,
+    "verifiedResumeMs": 9.674484000000007,
+    "verification": {
+      "elapsedMs": 7.984394000000009,
+      "tiles": 2,
+      "samples": 50,
+      "events": 6,
+      "config": {
+        "startMs": 978307200000,
+        "endMs": 978480000000,
+        "stepMs": 3600000,
+        "tileMs": 86400000,
+        "timeScale": "utc",
+        "bodies": [
+          "Sun",
+          "Moon",
+          "Mercury",
+          "Venus",
+          "Mars",
+          "Jupiter",
+          "Saturn",
+          "Uranus",
+          "Neptune",
+          "Pluto"
+        ]
+      }
+    },
+    "openMs": 0.8376220000000103,
+    "positionQueries": {
+      "count": 200,
+      "schedule": "start + (index * 7919000) modulo range duration",
+      "firstPassMs": 6.8535420000000045,
+      "warmPassMs": 2.7943500000000085,
+      "directEngineMs": 128.86501099999998
+    },
+    "eventQuery": {
+      "elapsedMs": 0.30240499999996473,
+      "count": 6
+    },
+    "storage": {
+      "bytes": 13810,
+      "files": 8
+    },
+    "cache": {
+      "size": 2,
+      "capacity": 2,
+      "indices": [
+        0,
+        1
+      ]
+    }
+  }
+}
