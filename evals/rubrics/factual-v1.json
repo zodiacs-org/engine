@@ -1,0 +1,148 @@
+{
+  "id": "chart-reading-factual",
+  "version": "1.0.0",
+  "license": {
+    "spdxId": "MIT",
+    "attribution": "Zodiacs evals contributors; original AI-assisted scoring policy."
+  },
+  "contracts": {
+    "meaningEntry": "urn:zodiacs:evals:meaning-entry:1.0.0",
+    "claim": "urn:zodiacs:evals:factual-claim:1.0.0",
+    "reading": "urn:zodiacs:evals:reading:1.0.0",
+    "syntheticChart": "urn:zodiacs:evals:synthetic-chart:1.0.0",
+    "factsSchemaVersion": "1.0.0",
+    "factsAdapter": { "id": "local-engine-facts", "version": "1.0.0" }
+  },
+  "reference": {
+    "source": "computeChartFacts",
+    "comparison": "exact-categorical-factor-membership",
+    "negativeEvidence": "absence-only-within-complete-supported-domain",
+    "coverageUniverse": "all-available-positive-reference-factors",
+    "unavailableHouses": "exclude-from-reference-universe",
+    "houseSystem": "actual-computed-system",
+    "outsideReferenceSpan": "retain-flag-and-score-engine-consistency",
+    "invalidInput": "refuse-without-scores",
+    "caseMismatch": "refuse-without-scores"
+  },
+  "categories": {
+    "placement": {
+      "factorFields": ["kind", "body", "sign"],
+      "unorderedFields": [],
+      "declaredConventions": ["zodiac"],
+      "referenceRows": "bodies"
+    },
+    "aspect": {
+      "factorFields": ["kind", "a", "b", "aspect", "policy"],
+      "unorderedFields": ["a", "b"],
+      "declaredConventions": ["zodiac", "aspectPolicy"],
+      "referenceRows": "aspects"
+    },
+    "house": {
+      "factorFields": ["kind", "body", "house", "houseSystem"],
+      "unorderedFields": [],
+      "declaredConventions": ["zodiac", "houseSystem"],
+      "referenceRows": "houses"
+    },
+    "dignity": {
+      "factorFields": ["kind", "body", "sign", "dignity", "system"],
+      "unorderedFields": [],
+      "declaredConventions": ["zodiac", "dignitySystem"],
+      "referenceRows": "dignities"
+    }
+  },
+  "claimStatus": {
+    "resolved": "check-eligibility",
+    "ambiguous": "unresolved-occurrence",
+    "unsupported": "unresolved-occurrence",
+    "abstained": "abstention-occurrence",
+    "interpretive": "outside-factual-scoring"
+  },
+  "certainty": {
+    "unqualified": "eligible",
+    "hedged": "unassessed",
+    "conditional": "unassessed"
+  },
+  "temporalScope": {
+    "reference-instant": "eligible",
+    "whole-day": "unassessed",
+    "unspecified": "unassessed"
+  },
+  "conventions": {
+    "zodiac": "tropical",
+    "aspectPolicy": "natal-major-defaults",
+    "dignitySystem": "classical-sign",
+    "unspecified": "unassessed",
+    "mismatch": "unassessed",
+    "factorContextConflict": "unassessed",
+    "inferMissingContext": false
+  },
+  "unassessedReasons": [
+    "hedged",
+    "conditional",
+    "whole-day",
+    "unspecified-temporal-scope",
+    "unspecified-convention",
+    "convention-mismatch",
+    "factor-context-conflict",
+    "unavailable-houses"
+  ],
+  "membershipVerdicts": {
+    "affirmed": { "present": "correct", "absent": "incorrect" },
+    "negated": { "present": "incorrect", "absent": "correct" }
+  },
+  "identity": {
+    "factor": "ordered-field-tuple-with-sorted-aspect-bodies",
+    "resolvedUnitFields": ["factor", "polarity", "certainty", "temporalScope"],
+    "occurrenceFieldsExcluded": ["id", "span"],
+    "retainAllClaimIds": true,
+    "unresolvedDeduplication": "none",
+    "crossReadingDeduplication": "none"
+  },
+  "contradictions": {
+    "participants": "assessed-unique-resolved-units",
+    "rules": [
+      "same-factor-opposite-polarity",
+      "affirmed-exclusive-placement-signs",
+      "affirmed-exclusive-house-numbers",
+      "affirmed-exclusive-aspect-types",
+      "incompatible-placement-and-dignity-signs"
+    ],
+    "edges": "one-unordered-unit-pair-with-all-applicable-rule-ids",
+    "verdicts": "retain-membership-verdicts",
+    "coverage": "withhold-from-any-participating-unit",
+    "dignityLabels": "not-mutually-exclusive",
+    "exhaustiveLogicalConsistency": false
+  },
+  "coverage": {
+    "credit": "distinct-correct-affirmed-reference-factors-without-contradiction",
+    "negatedCredit": false,
+    "impliedFactorCredit": false,
+    "abstentionCredit": false,
+    "interpretiveCredit": false,
+    "shrinkUniverseToReading": false
+  },
+  "counters": [
+    "correct", "incorrect", "unassessedResolved", "contradicted",
+    "referenceFactors", "coveredFactors"
+  ],
+  "metrics": {
+    "correctness": { "numerator": ["correct"], "denominator": ["correct", "incorrect"] },
+    "coverage": { "numerator": ["coveredFactors"], "denominator": ["referenceFactors"] },
+    "contradictionRate": { "numerator": ["contradicted"], "denominator": ["correct", "incorrect"] },
+    "resolvedAssessmentRate": {
+      "numerator": ["correct", "incorrect"],
+      "denominator": ["correct", "incorrect", "unassessedResolved"]
+    }
+  },
+  "reporting": {
+    "zeroDenominator": null,
+    "rounding": "none",
+    "overallAggregation": "sum-category-counts-before-dividing",
+    "occurrenceCounts": ["resolved", "ambiguous", "unsupported", "abstained", "interpretive"],
+    "unresolvedCategory": "unassigned",
+    "extractionCoverage": "unverified",
+    "interpretiveQuality": "not-scored",
+    "compositeScore": null,
+    "passThreshold": null
+  }
+}

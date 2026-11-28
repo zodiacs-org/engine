@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zodiacs:evals:reading:1.0.0",
+  "title": "Synthetic chart reading with quoted claims",
+  "description": "A supplied reading and unverified extraction record. Schema acceptance establishes neither correctness nor complete or faithful extraction. An empty reading or claim list carries no accuracy verdict.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "caseId", "synthetic", "language", "text", "offsetUnit", "conventions", "provenance", "extraction", "claims", "license"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "id": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/id" },
+    "caseId": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/id" },
+    "synthetic": { "const": true },
+    "language": { "const": "en" },
+    "text": { "type": "string", "maxLength": 32768 },
+    "offsetUnit": { "const": "utf16-code-unit" },
+    "conventions": { "$ref": "#/$defs/conventions" },
+    "provenance": {
+      "oneOf": [
+        { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/authoredProvenance" },
+        { "$ref": "#/$defs/generatedProvenance" }
+      ]
+    },
+    "extraction": {
+      "type": "object", "additionalProperties": false,
+      "required": ["method", "producer", "version", "coverage"],
+      "properties": {
+        "method": { "enum": ["manual", "model", "parser", "none"] },
+        "producer": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/id" },
+        "version": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/id" },
+        "coverage": { "const": "unverified" }
+      }
+    },
+    "claims": {
+      "type": "array", "maxItems": 256,
+      "items": { "$ref": "urn:zodiacs:evals:factual-claim:1.0.0" }
+    },
+    "license": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/properties/license" }
+  },
+  "$defs": {
+    "conventions": {
+      "description": "Declared or supplied context for this reading. Unspecified fields stay unspecified; different conventions remain visible for later scoring.",
+      "type": "object", "additionalProperties": false,
+      "required": ["zodiac", "houseSystem", "aspectPolicy", "dignitySystem"],
+      "properties": {
+        "zodiac": { "enum": ["tropical", "sidereal", "unspecified"] },
+        "houseSystem": {
+          "anyOf": [
+            { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/house/properties/houseSystem" },
+            { "enum": ["other", "unspecified"] }
+          ]
+        },
+        "aspectPolicy": { "enum": ["natal-major-defaults", "other", "unspecified"] },
+        "dignitySystem": { "enum": ["classical-sign", "other", "unspecified"] }
+      }
+    },
+    "generatedProvenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "backend", "model", "promptVersion", "inputDigest", "reviewStatus"],
+      "properties": {
+        "kind": { "const": "generated" },
+        "backend": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/id" },
+        "model": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/text" },
+        "promptVersion": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/id" },
+        "inputDigest": { "$ref": "urn:zodiacs:evals:meaning-entry:1.0.0#/$defs/generatedProvenance/properties/inputDigest" },
+        "reviewStatus": { "const": "unreviewed" }
+      }
+    }
+  }
+}

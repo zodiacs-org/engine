@@ -1,0 +1,16 @@
+M1: add isolated factor-meaning schema, offline validator, provenance and license requirements, and contract, CLI and package-exclusion tests.
+M2: add original attributed seed meanings, dataset schema and integrity validator, seed validation CLI, documentation and offline contract tests.
+M3: add isolated local-engine chart facts with synthetic-case validation, recorded conventions and provenance, unavailable-house and polar-fallback handling, and offline adapter tests.
+M4: add reading and factual-claim schemas, exact quoted-span validation, explicit unresolved assertions, a bounded offline reading CLI, documentation and contract tests.
+M5: add a bounded pluggable generation client, deterministic offline mock, explicit backend selection, reproducible request identity, cancellation and call budgets, documentation and offline contract tests.
+M6: add validated interpretation generation with versioned prompts, closed source provenance, reproducible manifests, bounded ignored output files, an offline CLI, documentation and pipeline tests.
+M7: add a versioned factual scoring rubric and machine-readable policy with explicit eligibility, coverage, contradiction and abstention rules, defined denominators, and offline contract tests.
+M8: add deterministic engine-backed reading scoring with categorical evidence, duplicate and contradiction handling, explicit coverage and rate denominators, bounded immutable reports, documentation and offline tests.
+M9: add an offline reading evaluation CLI with supplied or labeled mock readings, complete engine-backed scores, bounded reproducible reports without overwrite, workflow documentation and offline integration tests.
+M10: add conservative offline prose claim extraction, negation and context guards, opt-in evaluation and CLI integration, explicit extraction diagnostics and limits, documentation and adversarial contract tests.
+M11: add adversarial generation and offline end-to-end evaluation tests for late malformed output, metadata containment, invented factors, unavailable time, convention conflicts, contradictions and output limits, with documented scope.
+M12: document reproducible local workflows, complete supplied-reading and report-inspection examples, valid custom backend output and seed review; verify examples, the full offline suite and package isolation, recording the missing-dist package gate limitation.
+P1: add the phase two checklist and isolated Node 22 eval workflow, bound test workers, release the loader's bundler process, and verify the full suite, seed and package isolation.
+P2: refresh the eval validator and bundler pins and lockfile, retain the ephemeris pin, add explicit CI dependency auditing, and verify a clean audit, full suite, seed validation and package isolation.
+P3: add a versioned reflective-language policy and offline checker with explicit penalties, exact evidence, bounded immutable assessments, original tests and documented limits; verify the full suite, seed validation, audit and package isolation.
+P4: include reflective language assessments in reports and CLI summaries without quotes, preserve factual scoring, and verify supplied readings, extraction, offline mock execution and bounded refusals.
