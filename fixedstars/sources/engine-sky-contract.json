@@ -1,0 +1,42 @@
+{
+  "schema": "fixedstars-engine-sky-contract/1",
+  "engineVersion": "1.0.0",
+  "vectorImporter": "src/sky/riseset.ts",
+  "vectorModule": "astronomy-engine",
+  "bodySlot": "Pluto",
+  "ephemeris": {
+    "version": "2.1.19",
+    "esmSha256": "068f1445ed0c636c94818fe6d20d7d125120e605e0bab9fc4675c3d531be5ad7"
+  },
+  "sources": {
+    "src/api.ts": "3b597fc7c7e2b828470546862d4484b086a8090bb578eb0785880a9d692ef516",
+    "src/aspects.ts": "5cfbf1ffe3889f1c038b798d5bd74674de17bd9f0571adb4be08141cdd49f740",
+    "src/birth-input.ts": "9303df6556f84faf72e4c799f04d00692015dfade4f3c4e26d8d797f01f35928",
+    "src/body-label.ts": "bce12273949cd9810f4ab00c0f05c1aba14cf4ee46533ca3aba0588525006b1e",
+    "src/calc-frames.ts": "cefe7b46ccb64dfcc7c3eb008af3cca6202237d119b1f9f4e25e6e5919fcecca",
+    "src/civil-calendar.ts": "822ae1f6f0a34a8330da2bdafcfa5cdd421c424d4eb2bd65c0fec7834c7a99d8",
+    "src/crossings.ts": "4d33898d572d453de7c70d076b60018068854739f865080959cb800e4542d182",
+    "src/date-input.ts": "f9db8865bf143d6334eb93d9618f50aa6a81ba32273b0a103d2a83e3c8014675",
+    "src/declination.ts": "a7476e6e4c9af69c0eceaab499feacb8540c4975e5f65813c8cb4485b102ec61",
+    "src/deltat.ts": "2ce7e227bdf0e75bc2401793b8b09ed4113d80d8845376fbec7d0129c12f8b27",
+    "src/ephemeris.ts": "b530dbd0463b886fe1b8e99a095dc9cf9ef0cf614b6854e78ad206a27913cc7e",
+    "src/equator.ts": "1789e14344ef83839aea20624d16bb3def70d41e574f412faec87b89e6a79ef7",
+    "src/exact.ts": "f89a335657aa1139370511d315abcf8d6080ab857e0a37d249faf9de6a5eb25e",
+    "src/first-millisecond.ts": "960761bbfef1624889ae3fd51758ba9aaf9fc1e8cb4208fe43b91daa04121a50",
+    "src/frame.ts": "98d0bee44839b23d3ec64dac470e31ab8e366c6907d325a4259f8f37285a7c50",
+    "src/houses.ts": "e97ea80f5f225fadf0bfcb051f0afcce820678f31ff1013cc0ebce3035cc8ceb",
+    "src/nutation.ts": "c11af594d4e8ad64e0a7ff1097505063c70812d2da84e14a6c0280d4841e62b0",
+    "src/points.ts": "707e59ecdca3874e7c2830c2f7630628dd83b4ae13a97957ec3c623d5ebdf838",
+    "src/receipt-json.ts": "da5627224b593769eea8f1d434815ad34f422f44e1ef38a6687f86d8ccf8dd5c",
+    "src/receipt.ts": "3bf65ac45388d13ddddf53e2b37466c7b4c435007bbde5f93c132198a2c1be62",
+    "src/reference-span.ts": "5bce5a05494448a5740027c078527ab4fb7b0c02f71ff83465c01fd085a4d996",
+    "src/returns.ts": "a6d4246f25e8f27ef25165d249a47fb88c1fd8214f5217aa0333a6debfada263",
+    "src/semver.ts": "540570a37143abf182501b8883d36e322a3507b04f1cf7e99f5d71efd17cdd81",
+    "src/signs.ts": "c8d16ee8bb05a0eb0b41dd6d5912bd43f9c6a93d6dee857cb4530e1dc8a4a590",
+    "src/sky/riseset.ts": "b1107d8a51c04f9a4473ed82e0bc7dab8172f8a924325f1942ea115d082689c5",
+    "src/synastry.ts": "5671b43c9647a7164d171d9113ae4ab375b7f2a18cba53fac481e4c7a0522d29",
+    "src/time-scale-data.ts": "44c6b80db298e55a050b59cb75975ba2059abb775b16b849022ee5a5849280a0",
+    "src/time-scale.ts": "6358ab9f119f55e367b7a8cb601c0ed2a6fa0a1b083a8e48b2aa59cd96c7b9d6",
+    "src/types.ts": "36df3203e30792faff1ad5671e26ff5c03789c3dd6adee7d9ec357e2335b2353"
+  }
+}

@@ -1,0 +1,28 @@
+Fixedstars original code and documentation: MIT, see ../LICENSE.
+
+Selected astrometry source: HYG Database v4.1, David Nash / Astronexus.
+https://github.com/astronexus/HYG-Database/tree/c7f7f883fe678cc7680169a50ccd7dcc49b060ce
+Licensed CC BY-SA 4.0: https://creativecommons.org/licenses/by-sa/4.0/
+sources/selection.json and sources/hyg-selected.json select HIP-backed named
+bright-star rows and retain their HYG and HIP identifiers and original CSV
+records. src/catalog-data.ts adapts those rows: RA hours become degrees;
+the interpreted ICRS directions and tangential proper motions are rotated
+through the parent engine's ICRS-to-J2000 bias matrix and motion components
+are reprojected onto the rotated tangent bases. The source epoch is retained.
+The catalog includes curated aliases and historical attributions as documented
+in sources/selection.json. These selected and adapted data are CC BY-SA 4.0,
+distinct from MIT code. No endorsement by the source author is implied.
+
+Historical text: Ptolemy, Tetrabiblos, translated by J. M. Ashmand,
+London: Davis and Dickson, 1822, Book I, chapters IX to XI.
+Public-domain original text; short passages transcribed from the IAPSOP scan.
+https://iapsop.com/ssoc/1822__ashmand___ptolemys_tetrabiblos.pdf
+Locators and transcription decisions: sources/lore-passages.json.
+These are historical beliefs, not statements of physical or predictive facts.
+
+Definitions: ESA, The Hipparcos and Tycho Catalogues, ESA SP-1200,
+1997, volume 1, section 1.2. No ESA catalog data are copied here.
+https://cdsarc.cds.unistra.fr/ftp/cats/more/HIP/cdroms/docs/vol1/sect1_02.pdf
+
+The parent engine and its dependencies retain their own licences and notices:
+../LICENSING.md and ../NOTICE. This folder does not alter them.

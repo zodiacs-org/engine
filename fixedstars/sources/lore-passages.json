@@ -1,0 +1,442 @@
+{
+  "schema": "fixedstars-lore-passages/1",
+  "passages": [
+    {
+      "id": "ptolemy-facula",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter IX, printed p. 25, Taurus: Facula; PDF page 58",
+      "printedPage": 25,
+      "pdfPage": 58,
+      "subject": "Taurus: Facula",
+      "scope": "named-star",
+      "excerpt": "one of the Hyades which is bright and ruddy, and called Facula, has the same temperament as Mars",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Mars",
+        "secondary": null
+      },
+      "notes": "Footnote marker omitted. Printed footnote identifies Facula as Aldebaran."
+    },
+    {
+      "id": "ptolemy-gemini-heads",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter IX, printed p. 25, Gemini: Apollo and Hercules; PDF page 58",
+      "printedPage": 25,
+      "pdfPage": 58,
+      "subject": "Gemini: Apollo and Hercules",
+      "scope": "described-group",
+      "excerpt": "the one, which precedes and is called Apollo, is like Mercury; the other which follows, called Hercules, is like Mars.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Mercury",
+        "secondary": null
+      },
+      "notes": "Footnote markers omitted. Footnotes identify Apollo as Castor and Hercules as Pollux. This interpretation describes Apollo only; Hercules has Mars, not Mercury."
+    },
+    {
+      "id": "ptolemy-regulus",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter IX, printed p. 26, Leo: Regulus; PDF page 59",
+      "printedPage": 26,
+      "pdfPage": 59,
+      "subject": "Leo: Regulus",
+      "scope": "named-star",
+      "excerpt": "The bright one in the heart, called Regulus, agrees with Mars and Jupiter.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Mars",
+        "secondary": "Jupiter"
+      },
+      "notes": "Footnote marker omitted. Footnote gives Cor Leonis."
+    },
+    {
+      "id": "ptolemy-vindemiator",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter IX, printed p. 26, Virgo: Vindemiator; PDF page 59",
+      "printedPage": 26,
+      "pdfPage": 59,
+      "subject": "Virgo: Vindemiator",
+      "scope": "named-star",
+      "excerpt": "The bright one in the northern wing, called Vindemiator, is of the same influence as Saturn and Mercury",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Saturn",
+        "secondary": "Mercury"
+      },
+      "notes": ""
+    },
+    {
+      "id": "ptolemy-spica",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter IX, printed p. 26, Virgo: Spica Virginis; PDF page 59",
+      "printedPage": 26,
+      "pdfPage": 59,
+      "subject": "Virgo: Spica Virginis",
+      "scope": "named-star",
+      "excerpt": "that called Spica Virginis is like Venus and partly Mars",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Venus",
+        "secondary": "partly Mars"
+      },
+      "notes": ""
+    },
+    {
+      "id": "ptolemy-antares",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter IX, printed p. 27, Scorpio: three stars in the body including Antares; PDF page 60",
+      "printedPage": 27,
+      "pdfPage": 60,
+      "subject": "Scorpio: three stars in the body including Antares",
+      "scope": "described-group",
+      "excerpt": "the three in the body itself, the middle one of which, called Antares, is ruddy and more luminous, are similar to Mars and moderately to Jupiter",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Mars",
+        "secondary": "moderately Jupiter"
+      },
+      "notes": "Footnote marker omitted. The attribution covers a group with Antares explicitly named."
+    },
+    {
+      "id": "ptolemy-ursa-minor",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter X, printed p. 29, Ursa Minor; PDF page 62",
+      "printedPage": 29,
+      "pdfPage": 62,
+      "subject": "Ursa Minor",
+      "scope": "constellation",
+      "excerpt": "The bright stars in this constellation are like Saturn, and in some degree like Venus.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Saturn",
+        "secondary": "in some degree Venus"
+      },
+      "notes": ""
+    },
+    {
+      "id": "ptolemy-ursa-major",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter X, printed p. 29, Ursa Major; PDF page 62",
+      "printedPage": 29,
+      "pdfPage": 62,
+      "subject": "Ursa Major",
+      "scope": "constellation",
+      "excerpt": "is like Mars, but the nebula under the tail resembles the Moon and Venus in its influence.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Mars",
+        "secondary": null
+      },
+      "notes": "Interpretation covers constellation stars; do not apply the separate nebula attribution to them."
+    },
+    {
+      "id": "ptolemy-arcturus",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter X, printed p. 29, Bootes: Arcturus; PDF page 62",
+      "printedPage": 29,
+      "pdfPage": 62,
+      "subject": "Bootes: Arcturus",
+      "scope": "named-star",
+      "excerpt": "but the bright and ruddy star, called Arcturus, is like Mars and Jupiter.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Mars",
+        "secondary": "Jupiter"
+      },
+      "notes": ""
+    },
+    {
+      "id": "ptolemy-corona-borealis",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter X, printed p. 29, Corona Borealis; PDF page 62",
+      "printedPage": 29,
+      "pdfPage": 62,
+      "subject": "Corona Borealis",
+      "scope": "constellation",
+      "excerpt": "is like Venus and Mercury.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Venus",
+        "secondary": "Mercury"
+      },
+      "notes": ""
+    },
+    {
+      "id": "ptolemy-lyra",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter X, printed p. 29, Lyra; PDF page 62",
+      "printedPage": 29,
+      "pdfPage": 62,
+      "subject": "Lyra",
+      "scope": "constellation",
+      "excerpt": "is like Venus and Mercury.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Venus",
+        "secondary": "Mercury"
+      },
+      "notes": ""
+    },
+    {
+      "id": "ptolemy-cygnus",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter X, printed p. 29, Cygnus; PDF page 62",
+      "printedPage": 29,
+      "pdfPage": 62,
+      "subject": "Cygnus",
+      "scope": "constellation",
+      "excerpt": "Venus and Mercury.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Venus",
+        "secondary": "Mercury"
+      },
+      "notes": "The printed row abbreviates its verb; no words inserted into the excerpt."
+    },
+    {
+      "id": "ptolemy-perseus",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter X, printed p. 29, Perseus; PDF page 62",
+      "printedPage": 29,
+      "pdfPage": 62,
+      "subject": "Perseus",
+      "scope": "constellation",
+      "excerpt": "Jupiter and Saturn: but the nebula, in the hilt of the sword, is like Mars and Mercury.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Jupiter",
+        "secondary": "Saturn"
+      },
+      "notes": "Interpretation covers constellation stars; do not apply the separate nebula attribution to them."
+    },
+    {
+      "id": "ptolemy-auriga",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter X, printed p. 29, Auriga; PDF page 62",
+      "printedPage": 29,
+      "pdfPage": 62,
+      "subject": "Auriga",
+      "scope": "constellation",
+      "excerpt": "The bright stars are like Mars and Mercury.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Mars",
+        "secondary": "Mercury"
+      },
+      "notes": ""
+    },
+    {
+      "id": "ptolemy-aquila",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter X, printed p. 29, Aquila; PDF page 62",
+      "printedPage": 29,
+      "pdfPage": 62,
+      "subject": "Aquila",
+      "scope": "constellation",
+      "excerpt": "is like Mars and Jupiter.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Mars",
+        "secondary": "Jupiter"
+      },
+      "notes": ""
+    },
+    {
+      "id": "ptolemy-pegasus",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter X, printed p. 29, Equus (or Pegasus); PDF page 62",
+      "printedPage": 29,
+      "pdfPage": 62,
+      "subject": "Equus (or Pegasus)",
+      "scope": "constellation",
+      "excerpt": "The bright stars are like Mars and Mercury.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Mars",
+        "secondary": "Mercury"
+      },
+      "notes": ""
+    },
+    {
+      "id": "ptolemy-andromeda",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter X, printed p. 29, Andromeda; PDF page 62",
+      "printedPage": 29,
+      "pdfPage": 62,
+      "subject": "Andromeda",
+      "scope": "constellation",
+      "excerpt": "is like Venus.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Venus",
+        "secondary": null
+      },
+      "notes": ""
+    },
+    {
+      "id": "ptolemy-piscis-australis",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter XI, printed p. 30, Piscis Australis: bright star in the mouth; PDF page 63",
+      "printedPage": 30,
+      "pdfPage": 63,
+      "subject": "Piscis Australis: bright star in the mouth",
+      "scope": "described-group",
+      "excerpt": "The bright star in the mouth is of the same influence as Venus and Mercury.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Venus",
+        "secondary": "Mercury"
+      },
+      "notes": "The printed passage does not name Fomalhaut; identification requires a separate catalog mapping note."
+    },
+    {
+      "id": "ptolemy-orion",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter XI, printed p. 30, Orion: shoulders and other bright stars; PDF page 63",
+      "printedPage": 30,
+      "pdfPage": 63,
+      "subject": "Orion: shoulders and other bright stars",
+      "scope": "described-group",
+      "excerpt": "The stars on the shoulders operate similarly to Mars and Mercury; and the other bright stars to Jupiter and Saturn.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Mars",
+        "secondary": "Mercury"
+      },
+      "notes": "Interpretation describes shoulder stars only; other bright stars have Jupiter and Saturn."
+    },
+    {
+      "id": "ptolemy-canis",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter XI, printed p. 30, Canis: bright star in the mouth; PDF page 63",
+      "printedPage": 30,
+      "pdfPage": 63,
+      "subject": "Canis: bright star in the mouth",
+      "scope": "described-group",
+      "excerpt": "The bright star in the mouth is like Jupiter, and partly like Mars: the others are like Venus.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Jupiter",
+        "secondary": "partly Mars"
+      },
+      "notes": "Interpretation describes the bright mouth star only; other stars have Venus. The passage does not name Sirius."
+    },
+    {
+      "id": "ptolemy-procyon",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter XI, printed p. 30, Procyon; PDF page 63",
+      "printedPage": 30,
+      "pdfPage": 63,
+      "subject": "Procyon",
+      "scope": "named-star",
+      "excerpt": "The bright star is like Mercury, and in some degree like Mars.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Mercury",
+        "secondary": "in some degree Mars"
+      },
+      "notes": "Heading is Procyon; printed footnote gives Canis Minor."
+    },
+    {
+      "id": "ptolemy-corvus",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter XI, printed p. 30, Corvus; PDF page 63",
+      "printedPage": 30,
+      "pdfPage": 63,
+      "subject": "Corvus",
+      "scope": "constellation",
+      "excerpt": "is like Mars and Saturn.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Mars",
+        "secondary": "Saturn"
+      },
+      "notes": ""
+    },
+    {
+      "id": "ptolemy-argo",
+      "status": "historical-attribution",
+      "sourceId": "ptolemy-ashmand-1822",
+      "author": "Ptolemy",
+      "work": "Tetrabiblos, tr. J. M. Ashmand (1822)",
+      "locator": "Book I, chapter XI, printed p. 30, Argo; PDF page 63",
+      "printedPage": 30,
+      "pdfPage": 63,
+      "subject": "Argo",
+      "scope": "constellation",
+      "excerpt": "The bright stars are like Saturn and Jupiter.",
+      "excerptBasis": "own-transcription-checked-against-page-image",
+      "interpretation": {
+        "primary": "Saturn",
+        "secondary": "Jupiter"
+      },
+      "notes": "Historical Argo is not a modern IAU constellation. Preserve the historical scope in any mapping."
+    }
+  ]
+}

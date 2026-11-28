@@ -1,0 +1,51 @@
+
+> @zodiacs/fixedstars-worktree@0.0.0 verify
+> node scripts/verify.mjs
+
+Fixedstars local verification on Node 22.22.2
+SHA-256 package-lock.json: c3d5d07bf0a66f4c7d5f945da1e08625740c88a5761194dcc84ea8e28e8649ca
+SHA-256 sources/engine-sky-contract.json: c60a05c9bca638fd0c8f41ef1e079d8a45c120150c995a1c20f18e6481cf4b10
+
+Checking TypeScript, no emit
+
+Checking Vitest synthetic and geometric suite
+
+ RUN  v2.1.9 /workspace/codex-infra/wt-fixedstars/fixedstars
+
+ ✓ tests/parans.fixedstars.ts (17 tests) 221ms
+ ✓ tests/edge-geometry.fixedstars.ts (15 tests) 227ms
+ ✓ tests/contacts.fixedstars.ts (59 tests) 82ms
+ ✓ tests/cli.fixedstars.ts (63 tests) 8402ms
+   ✓ fixedstars executable with synthetic inputs > retains selected clocks and pins while suppressing unavailable angles and allowing a complete empty result 472ms
+   ✓ fixedstars executable with synthetic inputs > keeps disabled contact kinds independent and treats zero as an explicit orb 313ms
+   ✓ fixedstars executable with synthetic inputs > accepts equivalent offset spellings and behaves the same across host time zones 453ms
+ ✓ tests/catalog.fixedstars.mjs (31 tests) 77ms
+ ✓ tests/sky.fixedstars.ts (23 tests) 655ms
+ ✓ tests/natal.fixedstars.ts (15 tests) 214ms
+ ✓ tests/positions.fixedstars.ts (19 tests) 19759ms
+   ✓ the native engine chart clock > uses the same utc time basis as a synthetic natal chart 19590ms
+ ✓ tests/sky-adapter.fixedstars.mjs (14 tests) 1583ms
+   ✓ unchanged sky solver bundle proof > preserves ordinary body calls exactly before and after interleaved star searches 450ms
+ ✓ tests/sources.fixedstars.mjs (9 tests) 131ms
+ ✓ tests/sky-vector.fixedstars.ts (6 tests) 173ms
+ ✓ tests/engine.fixedstars.ts (11 tests) 175ms
+
+ Test Files  12 passed (12)
+      Tests  282 passed (282)
+   Start at  19:10:21
+   Duration  37.59s (transform 770ms, setup 0ms, collect 2.03s, tests 31.70s, environment 3ms, prepare 820ms)
+
+
+Checking Documentation links and executable examples
+Documentation passed: local inline links checked; 6 README TypeScript examples type-checked and executed in memory.
+
+Checking Offline catalog regeneration
+44 selected stars match the committed catalog; HYG source d9f69fd86bbf90a4e4d52b4c5c53eacfa6dfc0bfdef85bfd94f095e0bebe4ebd.
+
+Checking Unchanged sky solver compatibility
+Engine sky contract verified; unchanged solver compiled in memory with scoped vector substitution.
+
+Checking Authored file limits and engine-package exclusion
+Fixedstars isolation passed: 58 authored files checked; no fixedstars files in the engine package dry run.
+
+Fixedstars local verification passed. No engine build, archive, or remote source retrieval was performed.

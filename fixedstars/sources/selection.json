@@ -1,0 +1,409 @@
+{
+  "schema": "fixedstars-catalog-selection/1",
+  "license": "CC-BY-SA-4.0",
+  "attribution": "HYG Database v4.1, David Nash / Astronexus; selected names and HIP identifiers. Historical alias decisions cite sources/lore-passages.json. No endorsement implied.",
+  "selectionPolicy": "Explicit HIP-backed named-star selection, not a completeness claim; validate proper name, constellation and tabulated magnitude below 3.5 in HYG. Names identify selected components rather than resolved systems.",
+  "stars": [
+    {
+      "id": "aldebaran",
+      "name": "Aldebaran",
+      "hip": "21421",
+      "constellation": "Tau",
+      "historicalAliases": [
+        "Facula"
+      ],
+      "passageId": "ptolemy-facula",
+      "identification": "Printed footnote identifies Facula as Aldebaran."
+    },
+    {
+      "id": "algol",
+      "name": "Algol",
+      "hip": "14576",
+      "constellation": "Per",
+      "historicalAliases": [],
+      "passageId": "ptolemy-perseus",
+      "identification": "HYG constellation Per; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "algorab",
+      "name": "Algorab",
+      "hip": "60965",
+      "constellation": "Crv",
+      "historicalAliases": [],
+      "passageId": "ptolemy-corvus",
+      "identification": "HYG constellation Crv; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "alioth",
+      "name": "Alioth",
+      "hip": "62956",
+      "constellation": "UMa",
+      "historicalAliases": [],
+      "passageId": "ptolemy-ursa-major",
+      "identification": "HYG constellation UMa; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "alkaid",
+      "name": "Alkaid",
+      "hip": "67301",
+      "constellation": "UMa",
+      "historicalAliases": [],
+      "passageId": "ptolemy-ursa-major",
+      "identification": "HYG constellation UMa; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "almach",
+      "name": "Almach",
+      "hip": "9640",
+      "constellation": "And",
+      "historicalAliases": [],
+      "passageId": "ptolemy-andromeda",
+      "identification": "HYG constellation And; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "alnilam",
+      "name": "Alnilam",
+      "hip": "26311",
+      "constellation": "Ori",
+      "historicalAliases": [],
+      "loreOmission": "No reviewed passage securely identifies this star or the applicable part of its constellation; no lore assigned."
+    },
+    {
+      "id": "alnitak",
+      "name": "Alnitak",
+      "hip": "26727",
+      "constellation": "Ori",
+      "historicalAliases": [],
+      "loreOmission": "No reviewed passage securely identifies this star or the applicable part of its constellation; no lore assigned."
+    },
+    {
+      "id": "alphecca",
+      "name": "Alphecca",
+      "hip": "76267",
+      "constellation": "CrB",
+      "historicalAliases": [],
+      "passageId": "ptolemy-corona-borealis",
+      "identification": "HYG constellation CrB; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "alpheratz",
+      "name": "Alpheratz",
+      "hip": "677",
+      "constellation": "And",
+      "historicalAliases": [],
+      "passageId": "ptolemy-andromeda",
+      "identification": "HYG constellation And; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "altair",
+      "name": "Altair",
+      "hip": "97649",
+      "constellation": "Aql",
+      "historicalAliases": [],
+      "passageId": "ptolemy-aquila",
+      "identification": "HYG constellation Aql; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "antares",
+      "name": "Antares",
+      "hip": "80763",
+      "constellation": "Sco",
+      "historicalAliases": [],
+      "passageId": "ptolemy-antares",
+      "identification": "Antares is explicitly named within the described group; the group scope is retained."
+    },
+    {
+      "id": "arcturus",
+      "name": "Arcturus",
+      "hip": "69673",
+      "constellation": "Boo",
+      "historicalAliases": [],
+      "passageId": "ptolemy-arcturus",
+      "identification": "Arcturus is explicitly named in the passage."
+    },
+    {
+      "id": "bellatrix",
+      "name": "Bellatrix",
+      "hip": "25336",
+      "constellation": "Ori",
+      "historicalAliases": [],
+      "loreOmission": "No reviewed passage securely identifies this star or the applicable part of its constellation; no lore assigned."
+    },
+    {
+      "id": "betelgeuse",
+      "name": "Betelgeuse",
+      "hip": "27989",
+      "constellation": "Ori",
+      "historicalAliases": [],
+      "loreOmission": "No reviewed passage securely identifies this star or the applicable part of its constellation; no lore assigned."
+    },
+    {
+      "id": "capella",
+      "name": "Capella",
+      "hip": "24608",
+      "constellation": "Aur",
+      "historicalAliases": [],
+      "passageId": "ptolemy-auriga",
+      "identification": "HYG constellation Aur; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "castor",
+      "name": "Castor",
+      "hip": "36850",
+      "constellation": "Gem",
+      "historicalAliases": [
+        "Apollo"
+      ],
+      "passageId": "ptolemy-gemini-heads",
+      "identification": "Printed footnote identifies the preceding head Apollo as Castor; use its Mercury clause."
+    },
+    {
+      "id": "deneb",
+      "name": "Deneb",
+      "hip": "102098",
+      "constellation": "Cyg",
+      "historicalAliases": [],
+      "passageId": "ptolemy-cygnus",
+      "identification": "HYG constellation Cyg; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "denebola",
+      "name": "Denebola",
+      "hip": "57632",
+      "constellation": "Leo",
+      "historicalAliases": [],
+      "loreOmission": "No reviewed passage securely identifies this star or the applicable part of its constellation; no lore assigned."
+    },
+    {
+      "id": "dubhe",
+      "name": "Dubhe",
+      "hip": "54061",
+      "constellation": "UMa",
+      "historicalAliases": [],
+      "passageId": "ptolemy-ursa-major",
+      "identification": "HYG constellation UMa; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "enif",
+      "name": "Enif",
+      "hip": "107315",
+      "constellation": "Peg",
+      "historicalAliases": [],
+      "passageId": "ptolemy-pegasus",
+      "identification": "HYG constellation Peg; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "fomalhaut",
+      "name": "Fomalhaut",
+      "hip": "113368",
+      "constellation": "PsA",
+      "historicalAliases": [],
+      "loreOmission": "No reviewed passage securely identifies this star or the applicable part of its constellation; no lore assigned."
+    },
+    {
+      "id": "gienah",
+      "name": "Gienah",
+      "hip": "59803",
+      "constellation": "Crv",
+      "historicalAliases": [],
+      "passageId": "ptolemy-corvus",
+      "identification": "HYG constellation Crv; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "hamal",
+      "name": "Hamal",
+      "hip": "9884",
+      "constellation": "Ari",
+      "historicalAliases": [],
+      "loreOmission": "No reviewed passage securely identifies this star or the applicable part of its constellation; no lore assigned."
+    },
+    {
+      "id": "kochab",
+      "name": "Kochab",
+      "hip": "72607",
+      "constellation": "UMi",
+      "historicalAliases": [],
+      "passageId": "ptolemy-ursa-minor",
+      "identification": "HYG constellation UMi; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "markab",
+      "name": "Markab",
+      "hip": "113963",
+      "constellation": "Peg",
+      "historicalAliases": [],
+      "passageId": "ptolemy-pegasus",
+      "identification": "HYG constellation Peg; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "megrez",
+      "name": "Megrez",
+      "hip": "59774",
+      "constellation": "UMa",
+      "historicalAliases": [],
+      "passageId": "ptolemy-ursa-major",
+      "identification": "HYG constellation UMa; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "merak",
+      "name": "Merak",
+      "hip": "53910",
+      "constellation": "UMa",
+      "historicalAliases": [],
+      "passageId": "ptolemy-ursa-major",
+      "identification": "HYG constellation UMa; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "mintaka",
+      "name": "Mintaka",
+      "hip": "25930",
+      "constellation": "Ori",
+      "historicalAliases": [],
+      "loreOmission": "No reviewed passage securely identifies this star or the applicable part of its constellation; no lore assigned."
+    },
+    {
+      "id": "mirach",
+      "name": "Mirach",
+      "hip": "5447",
+      "constellation": "And",
+      "historicalAliases": [],
+      "passageId": "ptolemy-andromeda",
+      "identification": "HYG constellation And; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "mirfak",
+      "name": "Mirfak",
+      "hip": "15863",
+      "constellation": "Per",
+      "historicalAliases": [],
+      "passageId": "ptolemy-perseus",
+      "identification": "HYG constellation Per; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "mizar",
+      "name": "Mizar",
+      "hip": "65378",
+      "constellation": "UMa",
+      "historicalAliases": [],
+      "passageId": "ptolemy-ursa-major",
+      "identification": "HYG constellation UMa; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "phecda",
+      "name": "Phecda",
+      "hip": "58001",
+      "constellation": "UMa",
+      "historicalAliases": [],
+      "passageId": "ptolemy-ursa-major",
+      "identification": "HYG constellation UMa; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "polaris",
+      "name": "Polaris",
+      "hip": "11767",
+      "constellation": "UMi",
+      "historicalAliases": [],
+      "passageId": "ptolemy-ursa-minor",
+      "identification": "HYG constellation UMi; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "pollux",
+      "name": "Pollux",
+      "hip": "37826",
+      "constellation": "Gem",
+      "historicalAliases": [
+        "Hercules"
+      ],
+      "passageId": "ptolemy-gemini-heads",
+      "identification": "Printed footnote identifies the following head Hercules as Pollux; use its Mars clause.",
+      "interpretation": {
+        "primary": "Mars",
+        "secondary": null
+      }
+    },
+    {
+      "id": "procyon",
+      "name": "Procyon",
+      "hip": "37279",
+      "constellation": "CMi",
+      "historicalAliases": [],
+      "passageId": "ptolemy-procyon",
+      "identification": "The source heading explicitly names Procyon."
+    },
+    {
+      "id": "regulus",
+      "name": "Regulus",
+      "hip": "49669",
+      "constellation": "Leo",
+      "historicalAliases": [
+        "Cor Leonis"
+      ],
+      "passageId": "ptolemy-regulus",
+      "identification": "Regulus is named; printed footnote gives Cor Leonis."
+    },
+    {
+      "id": "rigel",
+      "name": "Rigel",
+      "hip": "24436",
+      "constellation": "Ori",
+      "historicalAliases": [],
+      "loreOmission": "No reviewed passage securely identifies this star or the applicable part of its constellation; no lore assigned."
+    },
+    {
+      "id": "scheat",
+      "name": "Scheat",
+      "hip": "113881",
+      "constellation": "Peg",
+      "historicalAliases": [],
+      "passageId": "ptolemy-pegasus",
+      "identification": "HYG constellation Peg; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "sheratan",
+      "name": "Sheratan",
+      "hip": "8903",
+      "constellation": "Ari",
+      "historicalAliases": [],
+      "loreOmission": "No reviewed passage securely identifies this star or the applicable part of its constellation; no lore assigned."
+    },
+    {
+      "id": "sirius",
+      "name": "Sirius",
+      "hip": "32349",
+      "constellation": "CMa",
+      "historicalAliases": [],
+      "loreOmission": "No reviewed passage securely identifies this star or the applicable part of its constellation; no lore assigned."
+    },
+    {
+      "id": "spica",
+      "name": "Spica",
+      "hip": "65474",
+      "constellation": "Vir",
+      "historicalAliases": [
+        "Spica Virginis"
+      ],
+      "passageId": "ptolemy-spica",
+      "identification": "Spica Virginis is the source name for the selected Spica row."
+    },
+    {
+      "id": "vega",
+      "name": "Vega",
+      "hip": "91262",
+      "constellation": "Lyr",
+      "historicalAliases": [],
+      "passageId": "ptolemy-lyra",
+      "identification": "HYG constellation Lyr; apply the bright-star constellation attribution with its constellation scope preserved."
+    },
+    {
+      "id": "vindemiatrix",
+      "name": "Vindemiatrix",
+      "hip": "63608",
+      "constellation": "Vir",
+      "historicalAliases": [
+        "Vindemiator"
+      ],
+      "passageId": "ptolemy-vindemiator",
+      "identification": "The northern-wing Vindemiator maps to HYG epsilon Virginis, Vindemiatrix."
+    }
+  ]
+}
