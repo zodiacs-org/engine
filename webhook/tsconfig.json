@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["node", "vitest"],
+    "paths": {
+      "astronomy-engine": ["./node_modules/astronomy-engine/astronomy.d.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "examples/**/*.ts", "test/**/*.ts", "vitest.config.ts"]
+}
