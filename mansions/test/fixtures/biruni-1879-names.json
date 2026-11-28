@@ -1,0 +1,206 @@
+{
+  "sourceId": "biruni-sachau-1879",
+  "url": "https://archive.org/download/chronologyofanci00biru/chronologyofanci00biru_djvu.txt",
+  "retrieved": "2026-10-15",
+  "ocrSha256": "c3cae9e519b3df16d692378102f895dc73d699892ec8d677e2444694b3eba530",
+  "rights": "Public domain source; editorial fields MIT.",
+  "basis": "Headings from Internet Archive OCR, whitespace collapsed. Arabic spelling and normalized Latin labels are editorial readings; see SOURCES.md. Source brackets on entry 18 are indicated around its name.",
+  "entries": [
+    {
+      "index": 1,
+      "page": 343,
+      "ocrName": "Alsharatdn",
+      "normalizedLatinLabel": "al-Sharaṭān",
+      "arabicSpelling": "الشرطان"
+    },
+    {
+      "index": 2,
+      "page": 343,
+      "ocrName": "Albutain",
+      "normalizedLatinLabel": "al-Buṭayn",
+      "arabicSpelling": "البطين"
+    },
+    {
+      "index": 3,
+      "page": 343,
+      "ocrName": "Althurayyd",
+      "normalizedLatinLabel": "al-Thurayyā",
+      "arabicSpelling": "الثريا"
+    },
+    {
+      "index": 4,
+      "page": 344,
+      "ocrName": "Aldabardn",
+      "normalizedLatinLabel": "al-Dabarān",
+      "arabicSpelling": "الدبران"
+    },
+    {
+      "index": 5,
+      "page": 344,
+      "ocrName": "Alhak'a",
+      "normalizedLatinLabel": "al-Haqʿa",
+      "arabicSpelling": "الهقعة"
+    },
+    {
+      "index": 6,
+      "page": 344,
+      "ocrName": "Alhan^a",
+      "normalizedLatinLabel": "al-Hanʿa",
+      "arabicSpelling": "الهنعة"
+    },
+    {
+      "index": 7,
+      "page": 345,
+      "ocrName": "AldJiird'",
+      "normalizedLatinLabel": "al-Dhirāʿ",
+      "arabicSpelling": "الذراع"
+    },
+    {
+      "index": 8,
+      "page": 345,
+      "ocrName": "Alnathra",
+      "normalizedLatinLabel": "al-Nathra",
+      "arabicSpelling": "النثرة"
+    },
+    {
+      "index": 9,
+      "page": 345,
+      "ocrName": "Altarf",
+      "normalizedLatinLabel": "al-Ṭarf",
+      "arabicSpelling": "الطرف"
+    },
+    {
+      "index": 10,
+      "page": 345,
+      "ocrName": "Aljabha",
+      "normalizedLatinLabel": "al-Jabha",
+      "arabicSpelling": "الجبهة"
+    },
+    {
+      "index": 11,
+      "page": 346,
+      "ocrName": "Alzuhra",
+      "normalizedLatinLabel": "al-Zubra",
+      "arabicSpelling": "الزبرة"
+    },
+    {
+      "index": 12,
+      "page": 346,
+      "ocrName": "Alsarfa",
+      "normalizedLatinLabel": "al-Ṣarfa",
+      "arabicSpelling": "الصرفة"
+    },
+    {
+      "index": 13,
+      "page": 346,
+      "ocrName": "AVawwd",
+      "normalizedLatinLabel": "al-ʿAwwāʾ",
+      "arabicSpelling": "العواء"
+    },
+    {
+      "index": 14,
+      "page": 346,
+      "ocrName": "AlsimdJc Al'a'zal",
+      "normalizedLatinLabel": "al-Simāk al-Aʿzal",
+      "arabicSpelling": "السماك الأعزل"
+    },
+    {
+      "index": 15,
+      "page": 347,
+      "ocrName": "Algliafr",
+      "normalizedLatinLabel": "al-Ghafr",
+      "arabicSpelling": "الغفر"
+    },
+    {
+      "index": 16,
+      "page": 347,
+      "ocrName": "Alzubana",
+      "normalizedLatinLabel": "al-Zubānā",
+      "arabicSpelling": "الزبانا"
+    },
+    {
+      "index": 17,
+      "page": 347,
+      "ocrName": "AViUil",
+      "normalizedLatinLabel": "al-Iklīl",
+      "arabicSpelling": "الإكليل"
+    },
+    {
+      "index": 18,
+      "page": 348,
+      "ocrName": "[Alkalb]",
+      "normalizedLatinLabel": "al-Qalb",
+      "arabicSpelling": "القلب"
+    },
+    {
+      "index": 19,
+      "page": 348,
+      "ocrName": "Alshaula",
+      "normalizedLatinLabel": "al-Shawla",
+      "arabicSpelling": "الشولة"
+    },
+    {
+      "index": 20,
+      "page": 348,
+      "ocrName": "Alna^cfim",
+      "normalizedLatinLabel": "al-Naʿāʾim",
+      "arabicSpelling": "النعائم"
+    },
+    {
+      "index": 21,
+      "page": 348,
+      "ocrName": "Albalda",
+      "normalizedLatinLabel": "al-Balda",
+      "arabicSpelling": "البلدة"
+    },
+    {
+      "index": 22,
+      "page": 349,
+      "ocrName": "Sa'd-Aldhdhih",
+      "normalizedLatinLabel": "Saʿd al-Dhābiḥ",
+      "arabicSpelling": "سعد الذابح"
+    },
+    {
+      "index": 23,
+      "page": 349,
+      "ocrName": "8a'd-Bula'",
+      "normalizedLatinLabel": "Saʿd Bulaʿ",
+      "arabicSpelling": "سعد بلع"
+    },
+    {
+      "index": 24,
+      "page": 349,
+      "ocrName": "Sa'd Alsu'ud",
+      "normalizedLatinLabel": "Saʿd al-Suʿūd",
+      "arabicSpelling": "سعد السعود"
+    },
+    {
+      "index": 25,
+      "page": 349,
+      "ocrName": "Sa'd-AVaJchhiya",
+      "normalizedLatinLabel": "Saʿd al-Akhbiya",
+      "arabicSpelling": "سعد الأخبية"
+    },
+    {
+      "index": 26,
+      "page": 349,
+      "ocrName": "Alfargh AVawwal",
+      "normalizedLatinLabel": "al-Fargh al-Awwal",
+      "arabicSpelling": "الفرغ الأول"
+    },
+    {
+      "index": 27,
+      "page": 350,
+      "ocrName": "Alfargh Althdni",
+      "normalizedLatinLabel": "al-Fargh al-Thānī",
+      "arabicSpelling": "الفرغ الثاني"
+    },
+    {
+      "index": 28,
+      "page": 350,
+      "ocrName": "Batn-Alhut",
+      "normalizedLatinLabel": "Baṭn al-Ḥūt",
+      "arabicSpelling": "بطن الحوت"
+    }
+  ]
+}
