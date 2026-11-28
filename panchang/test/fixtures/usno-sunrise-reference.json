@@ -1,0 +1,62 @@
+{
+  "provider": "US Naval Observatory, Complete Sun and Moon Data for One Day",
+  "retrieved": "2026-10-15",
+  "sourceScale": "UT",
+  "resolution": "minute",
+  "licenseBasis": "US Government numerical facts; see repository LICENSING.md, Swiss Ephemeris exclusion",
+  "acceptanceSeconds": 60,
+  "days": [
+    {
+      "date": "2024-03-20",
+      "observer": {
+        "latitude": 12.5,
+        "longitude": 75.25,
+        "height": 0
+      },
+      "riseUT": "01:03",
+      "weekday": "Wednesday",
+      "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2024-03-20&coords=12.5,75.25&tz=0",
+      "apiVersion": "4.0.1",
+      "responseSHA256": "9cf4403c3823e3becf1fa10540a6544ecf6435ed9cec874932cc44c4b36426f3"
+    },
+    {
+      "date": "2024-03-21",
+      "observer": {
+        "latitude": 12.5,
+        "longitude": 75.25,
+        "height": 0
+      },
+      "riseUT": "01:02",
+      "weekday": "Thursday",
+      "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2024-03-21&coords=12.5,75.25&tz=0",
+      "apiVersion": "4.0.1",
+      "responseSHA256": "262e6dfa5b54cc8f14c07cc04f73e0aa011e5df619156f5aada11f78fca32d0d"
+    },
+    {
+      "date": "2024-06-21",
+      "observer": {
+        "latitude": -22.25,
+        "longitude": -60.75,
+        "height": 0
+      },
+      "riseUT": "10:42",
+      "weekday": "Friday",
+      "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2024-06-21&coords=-22.25,-60.75&tz=0",
+      "apiVersion": "4.0.1",
+      "responseSHA256": "7fafa0675b642aac08a6d886344f53a53ededafbf7a5ea9b91327c8a76d75730"
+    },
+    {
+      "date": "2024-06-22",
+      "observer": {
+        "latitude": -22.25,
+        "longitude": -60.75,
+        "height": 0
+      },
+      "riseUT": "10:42",
+      "weekday": "Saturday",
+      "url": "https://aa.usno.navy.mil/api/rstt/oneday?date=2024-06-22&coords=-22.25,-60.75&tz=0",
+      "apiVersion": "4.0.1",
+      "responseSHA256": "eb734e2a2222962dddded2b5da8b280e62a12182b8c1835fd6d4707bb9f53711"
+    }
+  ]
+}
