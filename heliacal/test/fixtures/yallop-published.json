@@ -1,0 +1,68 @@
+{
+  "source": {
+    "author": "B. D. Yallop",
+    "title": "A Method for Predicting the First Sighting of the New Crescent Moon",
+    "publication": "HM Nautical Almanac Office, NAO Technical Note No. 69 (1997), updated April 1998",
+    "url": "https://webspace.science.uu.nl/~gent0113/islam/downloads/naotn_69.pdf",
+    "locator": "Appendix A, printed p. 16 (PDF page 17), London January 28-29 and August 22-23 prediction rows",
+    "retrieved": "2026-10-15",
+    "pdfSha256": "b554e59b0fbc4406db2e8d883c4e3bcced80ef704d1bceb61d291d184ed4ee6b",
+    "tableComputedOn": "1998-04-07",
+    "kind": "published-calculated-example;not-observed-sightings",
+    "sourceTimeScale": "GMT",
+    "sourceObserver": "London, latitude N51 30, longitude W000 10; height not specified",
+    "rights": "Source publication reserves copyright. Only selected numerical facts are retained; no source prose, table image, program or observation database is redistributed. Original fixture metadata and tests are MIT; no licence to the source publication is asserted."
+  },
+  "observer": { "latitude": 51.5, "longitude": -0.16666666666666666, "height": 0 },
+  "tolerance": {
+    "declaredBeforeImplementationComparison": true,
+    "engineTimeAbsoluteSeconds": 120,
+    "roundedSourceBestTimeAbsoluteSeconds": 60,
+    "category": "exact",
+    "basis": "Source times are printed to whole minutes. The arithmetic gate allows the combined rounding of input and output times; the engine gate additionally allows different horizon and time-scale conventions. These are selected-example acceptance gates, not atmospheric or ephemeris error bounds."
+  },
+  "groups": [
+    {
+      "id": "london-january-1998",
+      "from": "1998-01-28T00:00:00Z",
+      "to": "1998-01-30T00:00:00Z",
+      "rows": [
+        {
+          "date": "1998-01-28",
+          "sunset": "1998-01-28T16:43:00Z",
+          "moonset": "1998-01-28T17:21:00Z",
+          "bestTime": "1998-01-28T17:00:00Z",
+          "category": "F"
+        },
+        {
+          "date": "1998-01-29",
+          "sunset": "1998-01-29T16:44:00Z",
+          "moonset": "1998-01-29T18:39:00Z",
+          "bestTime": "1998-01-29T17:35:00Z",
+          "category": "A"
+        }
+      ]
+    },
+    {
+      "id": "london-august-1998",
+      "from": "1998-08-22T00:00:00Z",
+      "to": "1998-08-24T00:00:00Z",
+      "rows": [
+        {
+          "date": "1998-08-22",
+          "sunset": "1998-08-22T19:09:00Z",
+          "moonset": "1998-08-22T19:22:00Z",
+          "bestTime": "1998-08-22T19:15:00Z",
+          "category": "F"
+        },
+        {
+          "date": "1998-08-23",
+          "sunset": "1998-08-23T19:07:00Z",
+          "moonset": "1998-08-23T19:47:00Z",
+          "bestTime": "1998-08-23T19:25:00Z",
+          "category": "B"
+        }
+      ]
+    }
+  ]
+}

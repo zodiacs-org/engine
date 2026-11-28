@@ -1,0 +1,85 @@
+{
+  "schema": "heliacal.visibility-reference.v1",
+  "scope": "Selected published criterion constants and independent arithmetic only. These cases do not reproduce observed appearances or measure predictive accuracy.",
+  "retrieved": "2026-10-14",
+  "sources": {
+    "schoch1924": {
+      "author": "C. Schoch",
+      "title": "The 'Arcus Visionis' of the Planets in the Babylonian Observations",
+      "publication": "Monthly Notices of the Royal Astronomical Society 84 (1924), pp. 731-734",
+      "url": "https://articles.adsabs.harvard.edu/pdf/1924MNRAS..84..731S",
+      "definitionLocator": "Printed p. 731, opening paragraph: solar depression at the body's horizon crossing, disregarding refraction for both bodies.",
+      "valuesLocator": "Printed p. 734, lower table headed m., Lasts., Firsts.; the m. = 0.0 row.",
+      "sourceBasis": "Published PDF text, fetched and read; source prose and scans are not redistributed.",
+      "limits": "The recommended table concerns very clear skies and objects near the ecliptic with Sun/body azimuth difference no greater than 25 degrees. It is not a lunar crescent calibration."
+    },
+    "schaefer1993": {
+      "author": "Bradley E. Schaefer",
+      "title": "Astronomy and the Limits of Vision",
+      "publication": "Vistas in Astronomy 36 (1993), pp. 311-361",
+      "url": "https://www.uai.it/pianeti/wp-content/uploads/2021/03/ppr_Sch93-1.pdf",
+      "airmassLocator": "Section 2.3, printed p. 315, equation (2b), Rozenberg approximation; p. 316, Table 3, X column labelled Eqn (2b).",
+      "extinctionLocator": "Section 2.4, printed pp. 318-319, equation (8a) and its stated domain.",
+      "sourceBasis": "Published PDF text, fetched and read; only selected numerical values and formula-derived arithmetic are retained.",
+      "limits": "Equation (2b) takes apparent, refracted altitude. Scalar extinction kX is an approximation away from the horizon; the horizon arithmetic below checks the custom screen, not the physical validity of that approximation there."
+    }
+  },
+  "tolerance": {
+    "declaredBeforeImplementationComparison": true,
+    "horizonMarginDeg": 0,
+    "tableAirmass": 0.05,
+    "constructedArithmetic": 0,
+    "basis": "The airmass table is rounded to one decimal place, so use half its last decimal unit. Horizon examples and the constructed extinction example use exactly representable values and exact algebraic identities. No observational tolerance or accuracy bound is inferred."
+  },
+  "horizonCases": [
+    {
+      "id": "schoch-magnitude-zero-first",
+      "source": "schoch1924",
+      "construction": "Use the published first-appearance threshold at a synthetic body-centre airless horizon crossing, with solar altitude chosen as minus ten degrees.",
+      "publishedMagnitude": 0,
+      "sunAltitudeDeg": -10,
+      "requiredSolarDepressionDeg": 10.5,
+      "expected": { "solarDepressionDeg": 10, "marginDeg": -0.5, "passesCriterion": false }
+    },
+    {
+      "id": "schoch-magnitude-zero-last",
+      "source": "schoch1924",
+      "construction": "Use the published last-appearance threshold at the same synthetic horizon geometry as the first-appearance example.",
+      "publishedMagnitude": 0,
+      "sunAltitudeDeg": -10,
+      "requiredSolarDepressionDeg": 9.5,
+      "expected": { "solarDepressionDeg": 10, "marginDeg": 0.5, "passesCriterion": true }
+    }
+  ],
+  "airmassCases": [
+    { "source": "schaefer1993", "apparentAltitudeDeg": 90, "expectedAirmass": 1.0 },
+    { "source": "schaefer1993", "apparentAltitudeDeg": 30, "expectedAirmass": 2.0 },
+    { "source": "schaefer1993", "apparentAltitudeDeg": 10, "expectedAirmass": 5.6 },
+    { "source": "schaefer1993", "apparentAltitudeDeg": 3, "expectedAirmass": 15.1 },
+    { "source": "schaefer1993", "apparentAltitudeDeg": 0, "expectedAirmass": 40.0 }
+  ],
+  "extinctionCase": {
+    "source": "schaefer1993",
+    "construction": "At apparent altitude zero, equation (2b) gives X = 1 / 0.025 = 40. Choose k = 1/8, giving kX = 5 magnitudes; an outside-atmosphere magnitude of -4 then gives magnitude 1 at the observer and zero margin against limit 1. These inputs and derived answers are synthetic exact arithmetic, not an observation or a published Venus magnitude.",
+    "sample": { "body": "Venus", "bodyAltitudeDeg": -0.5, "sunAltitudeDeg": -10 },
+    "parameters": {
+      "model": "arcus-visionis-altitude/1",
+      "minimumSolarDepressionDeg": 10,
+      "minimumBodyAltitudeDeg": 0,
+      "photometry": {
+        "magnitudeOutsideAtmosphere": -4,
+        "extinctionMagPerAirmass": 0.125,
+        "limitingMagnitude": 1,
+        "refractionDeg": 0.5
+      }
+    },
+    "expected": {
+      "airmass": 40,
+      "extinctionMagnitude": 5,
+      "magnitudeAtObserver": 1,
+      "marginMagnitude": 0,
+      "passesCriterion": true
+    },
+    "expectedOverallPassesCriterion": false
+  }
+}
