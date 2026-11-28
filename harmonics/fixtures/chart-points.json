@@ -1,0 +1,7 @@
+{
+  "points": [
+    { "body": "Sun", "lon": 10, "speed": 0.25 },
+    { "body": "Moon", "lon": 130, "speed": -0.5 },
+    { "body": "Mercury", "lon": 250, "speed": 0 }
+  ]
+}
