@@ -1,0 +1,19 @@
+F1 validation on Node 22.22.2 and npm 10.9.7
+
+mcp/: npm ci from the committed package-lock.json passed.
+mcp/: npm run check passed: typecheck, 198 tests in 10 files, and build.
+Renamed test files are byte-identical to their original HEAD contents.
+Project file size, Markdown em-dash exclusion and script syntax checks passed.
+
+Root: npx vitest run --reporter=dot (Vitest 2.1.9) listed no mcp/ tests.
+Run in a temporary copy of the current worktree with root dependencies
+installed from the root lockfile and without mcp dependencies installed.
+Root result: 85 files passed, 1 failed; 3829 tests passed, 23 failed, 1 skipped.
+All failures are in unchanged scripts/verify-archive-binding.test.mjs.
+The sandbox has /node_modules above /tmp, which the archive check refuses;
+its npm subprocesses also encountered the read-only default npm cache.
+Root test exit code: 1. This is discovery-isolation evidence, not a root pass.
+
+Actual worktree: root Vitest 2.1.9 list --filesOnly also listed no mcp/ tests,
+using the temporary root install's executable, with mcp dependencies present.
+No root dependencies or build output were written to the worktree.
