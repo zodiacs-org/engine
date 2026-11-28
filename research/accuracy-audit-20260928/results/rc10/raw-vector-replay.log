@@ -1,0 +1,33 @@
+replay sun-none: 21 TT epochs
+replay moon-none: 21 TT epochs
+replay mercury-none: 21 TT epochs
+replay venus-none: 21 TT epochs
+replay mars-none: 21 TT epochs
+replay jupiter-none: 21 TT epochs
+replay saturn-none: 21 TT epochs
+replay uranus-none: 21 TT epochs
+replay neptune-none: 21 TT epochs
+replay pluto-none: 21 TT epochs
+replay sun-lts: 21 TT epochs
+replay moon-lts: 21 TT epochs
+replay mercury-lts: 21 TT epochs
+replay venus-lts: 21 TT epochs
+replay mars-lts: 21 TT epochs
+replay jupiter-lts: 21 TT epochs
+replay saturn-lts: 21 TT epochs
+replay uranus-lts: 21 TT epochs
+replay neptune-lts: 21 TT epochs
+replay pluto-lts: 21 TT epochs
+replay mars-body-center-lts: 3 TT epochs
+replay jupiter-body-center-lts: 3 TT epochs
+replay saturn-body-center-lts: 3 TT epochs
+replay uranus-body-center-lts: 3 TT epochs
+replay neptune-body-center-lts: 3 TT epochs
+replay pluto-body-center-lts: 3 TT epochs
+{
+  "output": "/workspace/scratch/c1943cbff40d/accuracy-audit/results/rc10/vectors-replayed.json",
+  "primaryRows": 420,
+  "optionalRows": 18,
+  "successfulTables": 26,
+  "optionalFailures": 0
+}

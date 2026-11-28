@@ -1,0 +1,1912 @@
+{
+  "context": {
+    "effectiveHouseSystem": "whole",
+    "latitude": 51.5,
+    "longitude": 0,
+    "requestedHouseSystem": "whole",
+    "timeKnowledge": "exact",
+    "utc": "2000-01-01T12:00:00.000Z"
+  },
+  "facts": [
+    {
+      "entity": "Sun",
+      "id": "longitude:Sun",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 280.36873843817517
+    },
+    {
+      "entity": "Sun",
+      "id": "sign:Sun",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Capricorn"
+    },
+    {
+      "entity": "Moon",
+      "id": "longitude:Moon",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 223.32388874968694
+    },
+    {
+      "entity": "Moon",
+      "id": "sign:Moon",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Scorpio"
+    },
+    {
+      "entity": "Mercury",
+      "id": "longitude:Mercury",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 271.8889117586273
+    },
+    {
+      "entity": "Mercury",
+      "id": "sign:Mercury",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Capricorn"
+    },
+    {
+      "entity": "Venus",
+      "id": "longitude:Venus",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 241.5652327012129
+    },
+    {
+      "entity": "Venus",
+      "id": "sign:Venus",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Sagittarius"
+    },
+    {
+      "entity": "Mars",
+      "id": "longitude:Mars",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 327.96389892447115
+    },
+    {
+      "entity": "Mars",
+      "id": "sign:Mars",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Aquarius"
+    },
+    {
+      "entity": "Jupiter",
+      "id": "longitude:Jupiter",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 25.254199836812234
+    },
+    {
+      "entity": "Jupiter",
+      "id": "sign:Jupiter",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Aries"
+    },
+    {
+      "entity": "Saturn",
+      "id": "longitude:Saturn",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 40.396124141122925
+    },
+    {
+      "entity": "Saturn",
+      "id": "sign:Saturn",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Taurus"
+    },
+    {
+      "entity": "Uranus",
+      "id": "longitude:Uranus",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 314.8061046171985
+    },
+    {
+      "entity": "Uranus",
+      "id": "sign:Uranus",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Aquarius"
+    },
+    {
+      "entity": "Neptune",
+      "id": "longitude:Neptune",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 303.1954420524333
+    },
+    {
+      "entity": "Neptune",
+      "id": "sign:Neptune",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Aquarius"
+    },
+    {
+      "entity": "Pluto",
+      "id": "longitude:Pluto",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 251.45473515295618
+    },
+    {
+      "entity": "Pluto",
+      "id": "sign:Pluto",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Sagittarius"
+    },
+    {
+      "entity": "North Node",
+      "id": "longitude:North Node",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 123.95210697951524
+    },
+    {
+      "entity": "North Node",
+      "id": "sign:North Node",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Leo"
+    },
+    {
+      "entity": "South Node",
+      "id": "longitude:South Node",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 303.9521069795153
+    },
+    {
+      "entity": "South Node",
+      "id": "sign:South Node",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Aquarius"
+    },
+    {
+      "entity": "Ascendant",
+      "id": "longitude:Ascendant",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 24.287248656681754
+    },
+    {
+      "entity": "Ascendant",
+      "id": "sign:Ascendant",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Aries"
+    },
+    {
+      "entity": "Midheaven",
+      "id": "longitude:Midheaven",
+      "kind": "longitude",
+      "scope": "instant",
+      "unit": "deg",
+      "value": 279.6110618554153
+    },
+    {
+      "entity": "Midheaven",
+      "id": "sign:Midheaven",
+      "kind": "sign",
+      "scope": "instant",
+      "value": "Capricorn"
+    },
+    {
+      "entity": "Sun",
+      "id": "house:Sun",
+      "kind": "house",
+      "scope": "instant",
+      "value": 10
+    },
+    {
+      "entity": "Moon",
+      "id": "house:Moon",
+      "kind": "house",
+      "scope": "instant",
+      "value": 8
+    },
+    {
+      "entity": "Mercury",
+      "id": "house:Mercury",
+      "kind": "house",
+      "scope": "instant",
+      "value": 10
+    },
+    {
+      "entity": "Venus",
+      "id": "house:Venus",
+      "kind": "house",
+      "scope": "instant",
+      "value": 9
+    },
+    {
+      "entity": "Mars",
+      "id": "house:Mars",
+      "kind": "house",
+      "scope": "instant",
+      "value": 11
+    },
+    {
+      "entity": "Jupiter",
+      "id": "house:Jupiter",
+      "kind": "house",
+      "scope": "instant",
+      "value": 1
+    },
+    {
+      "entity": "Saturn",
+      "id": "house:Saturn",
+      "kind": "house",
+      "scope": "instant",
+      "value": 2
+    },
+    {
+      "entity": "Uranus",
+      "id": "house:Uranus",
+      "kind": "house",
+      "scope": "instant",
+      "value": 11
+    },
+    {
+      "entity": "Neptune",
+      "id": "house:Neptune",
+      "kind": "house",
+      "scope": "instant",
+      "value": 11
+    },
+    {
+      "entity": "Pluto",
+      "id": "house:Pluto",
+      "kind": "house",
+      "scope": "instant",
+      "value": 9
+    },
+    {
+      "entity": "North Node",
+      "id": "house:North Node",
+      "kind": "house",
+      "scope": "instant",
+      "value": 5
+    },
+    {
+      "entity": "South Node",
+      "id": "house:South Node",
+      "kind": "house",
+      "scope": "instant",
+      "value": 11
+    },
+    {
+      "entity": "Sun|Moon|angle=0|orb=10",
+      "id": "aspect:Sun:Moon:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Moon|angle=60|orb=5",
+      "id": "aspect:Sun:Moon:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": true
+    },
+    {
+      "entity": "Sun|Moon|angle=90|orb=8",
+      "id": "aspect:Sun:Moon:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Moon|angle=120|orb=8",
+      "id": "aspect:Sun:Moon:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Moon|angle=180|orb=10",
+      "id": "aspect:Sun:Moon:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Mercury|angle=0|orb=10",
+      "id": "aspect:Sun:Mercury:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": true
+    },
+    {
+      "entity": "Sun|Mercury|angle=60|orb=5",
+      "id": "aspect:Sun:Mercury:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Mercury|angle=90|orb=8",
+      "id": "aspect:Sun:Mercury:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Mercury|angle=120|orb=8",
+      "id": "aspect:Sun:Mercury:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Mercury|angle=180|orb=10",
+      "id": "aspect:Sun:Mercury:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Venus|angle=0|orb=10",
+      "id": "aspect:Sun:Venus:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Venus|angle=60|orb=5",
+      "id": "aspect:Sun:Venus:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Venus|angle=90|orb=8",
+      "id": "aspect:Sun:Venus:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Venus|angle=120|orb=8",
+      "id": "aspect:Sun:Venus:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Venus|angle=180|orb=10",
+      "id": "aspect:Sun:Venus:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Mars|angle=0|orb=10",
+      "id": "aspect:Sun:Mars:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Mars|angle=60|orb=5",
+      "id": "aspect:Sun:Mars:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Mars|angle=90|orb=8",
+      "id": "aspect:Sun:Mars:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Mars|angle=120|orb=8",
+      "id": "aspect:Sun:Mars:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Mars|angle=180|orb=10",
+      "id": "aspect:Sun:Mars:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Jupiter|angle=0|orb=10",
+      "id": "aspect:Sun:Jupiter:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Jupiter|angle=60|orb=5",
+      "id": "aspect:Sun:Jupiter:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Jupiter|angle=90|orb=8",
+      "id": "aspect:Sun:Jupiter:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Jupiter|angle=120|orb=8",
+      "id": "aspect:Sun:Jupiter:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Jupiter|angle=180|orb=10",
+      "id": "aspect:Sun:Jupiter:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Saturn|angle=0|orb=10",
+      "id": "aspect:Sun:Saturn:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Saturn|angle=60|orb=5",
+      "id": "aspect:Sun:Saturn:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Saturn|angle=90|orb=8",
+      "id": "aspect:Sun:Saturn:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Saturn|angle=120|orb=8",
+      "id": "aspect:Sun:Saturn:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": true
+    },
+    {
+      "entity": "Sun|Saturn|angle=180|orb=10",
+      "id": "aspect:Sun:Saturn:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Uranus|angle=0|orb=10",
+      "id": "aspect:Sun:Uranus:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Uranus|angle=60|orb=5",
+      "id": "aspect:Sun:Uranus:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Uranus|angle=90|orb=8",
+      "id": "aspect:Sun:Uranus:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Uranus|angle=120|orb=8",
+      "id": "aspect:Sun:Uranus:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Uranus|angle=180|orb=10",
+      "id": "aspect:Sun:Uranus:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Neptune|angle=0|orb=10",
+      "id": "aspect:Sun:Neptune:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Neptune|angle=60|orb=5",
+      "id": "aspect:Sun:Neptune:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Neptune|angle=90|orb=8",
+      "id": "aspect:Sun:Neptune:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Neptune|angle=120|orb=8",
+      "id": "aspect:Sun:Neptune:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Neptune|angle=180|orb=10",
+      "id": "aspect:Sun:Neptune:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Pluto|angle=0|orb=10",
+      "id": "aspect:Sun:Pluto:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Pluto|angle=60|orb=5",
+      "id": "aspect:Sun:Pluto:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Pluto|angle=90|orb=8",
+      "id": "aspect:Sun:Pluto:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Pluto|angle=120|orb=8",
+      "id": "aspect:Sun:Pluto:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Sun|Pluto|angle=180|orb=10",
+      "id": "aspect:Sun:Pluto:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Mercury|angle=0|orb=10",
+      "id": "aspect:Moon:Mercury:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Mercury|angle=60|orb=5",
+      "id": "aspect:Moon:Mercury:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Mercury|angle=90|orb=8",
+      "id": "aspect:Moon:Mercury:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Mercury|angle=120|orb=8",
+      "id": "aspect:Moon:Mercury:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Mercury|angle=180|orb=10",
+      "id": "aspect:Moon:Mercury:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Venus|angle=0|orb=10",
+      "id": "aspect:Moon:Venus:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Venus|angle=60|orb=5",
+      "id": "aspect:Moon:Venus:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Venus|angle=90|orb=8",
+      "id": "aspect:Moon:Venus:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Venus|angle=120|orb=8",
+      "id": "aspect:Moon:Venus:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Venus|angle=180|orb=10",
+      "id": "aspect:Moon:Venus:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Mars|angle=0|orb=10",
+      "id": "aspect:Moon:Mars:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Mars|angle=60|orb=5",
+      "id": "aspect:Moon:Mars:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Mars|angle=90|orb=8",
+      "id": "aspect:Moon:Mars:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Mars|angle=120|orb=8",
+      "id": "aspect:Moon:Mars:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Mars|angle=180|orb=10",
+      "id": "aspect:Moon:Mars:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Jupiter|angle=0|orb=10",
+      "id": "aspect:Moon:Jupiter:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Jupiter|angle=60|orb=5",
+      "id": "aspect:Moon:Jupiter:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Jupiter|angle=90|orb=8",
+      "id": "aspect:Moon:Jupiter:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Jupiter|angle=120|orb=8",
+      "id": "aspect:Moon:Jupiter:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Jupiter|angle=180|orb=10",
+      "id": "aspect:Moon:Jupiter:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Saturn|angle=0|orb=10",
+      "id": "aspect:Moon:Saturn:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Saturn|angle=60|orb=5",
+      "id": "aspect:Moon:Saturn:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Saturn|angle=90|orb=8",
+      "id": "aspect:Moon:Saturn:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Saturn|angle=120|orb=8",
+      "id": "aspect:Moon:Saturn:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Saturn|angle=180|orb=10",
+      "id": "aspect:Moon:Saturn:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": true
+    },
+    {
+      "entity": "Moon|Uranus|angle=0|orb=10",
+      "id": "aspect:Moon:Uranus:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Uranus|angle=60|orb=5",
+      "id": "aspect:Moon:Uranus:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Uranus|angle=90|orb=8",
+      "id": "aspect:Moon:Uranus:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": true
+    },
+    {
+      "entity": "Moon|Uranus|angle=120|orb=8",
+      "id": "aspect:Moon:Uranus:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Uranus|angle=180|orb=10",
+      "id": "aspect:Moon:Uranus:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Neptune|angle=0|orb=10",
+      "id": "aspect:Moon:Neptune:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Neptune|angle=60|orb=5",
+      "id": "aspect:Moon:Neptune:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Neptune|angle=90|orb=8",
+      "id": "aspect:Moon:Neptune:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Neptune|angle=120|orb=8",
+      "id": "aspect:Moon:Neptune:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Neptune|angle=180|orb=10",
+      "id": "aspect:Moon:Neptune:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Pluto|angle=0|orb=10",
+      "id": "aspect:Moon:Pluto:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Pluto|angle=60|orb=5",
+      "id": "aspect:Moon:Pluto:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Pluto|angle=90|orb=8",
+      "id": "aspect:Moon:Pluto:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Pluto|angle=120|orb=8",
+      "id": "aspect:Moon:Pluto:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Moon|Pluto|angle=180|orb=10",
+      "id": "aspect:Moon:Pluto:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Venus|angle=0|orb=8",
+      "id": "aspect:Mercury:Venus:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Venus|angle=60|orb=4",
+      "id": "aspect:Mercury:Venus:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Venus|angle=90|orb=7",
+      "id": "aspect:Mercury:Venus:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Venus|angle=120|orb=7",
+      "id": "aspect:Mercury:Venus:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Venus|angle=180|orb=8",
+      "id": "aspect:Mercury:Venus:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Mars|angle=0|orb=8",
+      "id": "aspect:Mercury:Mars:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Mars|angle=60|orb=4",
+      "id": "aspect:Mercury:Mars:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": true
+    },
+    {
+      "entity": "Mercury|Mars|angle=90|orb=7",
+      "id": "aspect:Mercury:Mars:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Mars|angle=120|orb=7",
+      "id": "aspect:Mercury:Mars:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Mars|angle=180|orb=8",
+      "id": "aspect:Mercury:Mars:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Jupiter|angle=0|orb=8",
+      "id": "aspect:Mercury:Jupiter:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Jupiter|angle=60|orb=4",
+      "id": "aspect:Mercury:Jupiter:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Jupiter|angle=90|orb=7",
+      "id": "aspect:Mercury:Jupiter:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Jupiter|angle=120|orb=7",
+      "id": "aspect:Mercury:Jupiter:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": true
+    },
+    {
+      "entity": "Mercury|Jupiter|angle=180|orb=8",
+      "id": "aspect:Mercury:Jupiter:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Saturn|angle=0|orb=8",
+      "id": "aspect:Mercury:Saturn:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Saturn|angle=60|orb=4",
+      "id": "aspect:Mercury:Saturn:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Saturn|angle=90|orb=7",
+      "id": "aspect:Mercury:Saturn:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Saturn|angle=120|orb=7",
+      "id": "aspect:Mercury:Saturn:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Saturn|angle=180|orb=8",
+      "id": "aspect:Mercury:Saturn:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Uranus|angle=0|orb=8",
+      "id": "aspect:Mercury:Uranus:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Uranus|angle=60|orb=4",
+      "id": "aspect:Mercury:Uranus:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Uranus|angle=90|orb=7",
+      "id": "aspect:Mercury:Uranus:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Uranus|angle=120|orb=7",
+      "id": "aspect:Mercury:Uranus:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Uranus|angle=180|orb=8",
+      "id": "aspect:Mercury:Uranus:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Neptune|angle=0|orb=8",
+      "id": "aspect:Mercury:Neptune:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Neptune|angle=60|orb=4",
+      "id": "aspect:Mercury:Neptune:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Neptune|angle=90|orb=7",
+      "id": "aspect:Mercury:Neptune:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Neptune|angle=120|orb=7",
+      "id": "aspect:Mercury:Neptune:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Neptune|angle=180|orb=8",
+      "id": "aspect:Mercury:Neptune:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Pluto|angle=0|orb=8",
+      "id": "aspect:Mercury:Pluto:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Pluto|angle=60|orb=4",
+      "id": "aspect:Mercury:Pluto:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Pluto|angle=90|orb=7",
+      "id": "aspect:Mercury:Pluto:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Pluto|angle=120|orb=7",
+      "id": "aspect:Mercury:Pluto:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mercury|Pluto|angle=180|orb=8",
+      "id": "aspect:Mercury:Pluto:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Mars|angle=0|orb=8",
+      "id": "aspect:Venus:Mars:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Mars|angle=60|orb=4",
+      "id": "aspect:Venus:Mars:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Mars|angle=90|orb=7",
+      "id": "aspect:Venus:Mars:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": true
+    },
+    {
+      "entity": "Venus|Mars|angle=120|orb=7",
+      "id": "aspect:Venus:Mars:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Mars|angle=180|orb=8",
+      "id": "aspect:Venus:Mars:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Jupiter|angle=0|orb=8",
+      "id": "aspect:Venus:Jupiter:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Jupiter|angle=60|orb=4",
+      "id": "aspect:Venus:Jupiter:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Jupiter|angle=90|orb=7",
+      "id": "aspect:Venus:Jupiter:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Jupiter|angle=120|orb=7",
+      "id": "aspect:Venus:Jupiter:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Jupiter|angle=180|orb=8",
+      "id": "aspect:Venus:Jupiter:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Saturn|angle=0|orb=8",
+      "id": "aspect:Venus:Saturn:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Saturn|angle=60|orb=4",
+      "id": "aspect:Venus:Saturn:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Saturn|angle=90|orb=7",
+      "id": "aspect:Venus:Saturn:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Saturn|angle=120|orb=7",
+      "id": "aspect:Venus:Saturn:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Saturn|angle=180|orb=8",
+      "id": "aspect:Venus:Saturn:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Uranus|angle=0|orb=8",
+      "id": "aspect:Venus:Uranus:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Uranus|angle=60|orb=4",
+      "id": "aspect:Venus:Uranus:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Uranus|angle=90|orb=7",
+      "id": "aspect:Venus:Uranus:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Uranus|angle=120|orb=7",
+      "id": "aspect:Venus:Uranus:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Uranus|angle=180|orb=8",
+      "id": "aspect:Venus:Uranus:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Neptune|angle=0|orb=8",
+      "id": "aspect:Venus:Neptune:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Neptune|angle=60|orb=4",
+      "id": "aspect:Venus:Neptune:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": true
+    },
+    {
+      "entity": "Venus|Neptune|angle=90|orb=7",
+      "id": "aspect:Venus:Neptune:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Neptune|angle=120|orb=7",
+      "id": "aspect:Venus:Neptune:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Neptune|angle=180|orb=8",
+      "id": "aspect:Venus:Neptune:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Pluto|angle=0|orb=8",
+      "id": "aspect:Venus:Pluto:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Pluto|angle=60|orb=4",
+      "id": "aspect:Venus:Pluto:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Pluto|angle=90|orb=7",
+      "id": "aspect:Venus:Pluto:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Pluto|angle=120|orb=7",
+      "id": "aspect:Venus:Pluto:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Venus|Pluto|angle=180|orb=8",
+      "id": "aspect:Venus:Pluto:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Jupiter|angle=0|orb=8",
+      "id": "aspect:Mars:Jupiter:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Jupiter|angle=60|orb=4",
+      "id": "aspect:Mars:Jupiter:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": true
+    },
+    {
+      "entity": "Mars|Jupiter|angle=90|orb=7",
+      "id": "aspect:Mars:Jupiter:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Jupiter|angle=120|orb=7",
+      "id": "aspect:Mars:Jupiter:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Jupiter|angle=180|orb=8",
+      "id": "aspect:Mars:Jupiter:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Saturn|angle=0|orb=8",
+      "id": "aspect:Mars:Saturn:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Saturn|angle=60|orb=4",
+      "id": "aspect:Mars:Saturn:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Saturn|angle=90|orb=7",
+      "id": "aspect:Mars:Saturn:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Saturn|angle=120|orb=7",
+      "id": "aspect:Mars:Saturn:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Saturn|angle=180|orb=8",
+      "id": "aspect:Mars:Saturn:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Uranus|angle=0|orb=8",
+      "id": "aspect:Mars:Uranus:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Uranus|angle=60|orb=4",
+      "id": "aspect:Mars:Uranus:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Uranus|angle=90|orb=7",
+      "id": "aspect:Mars:Uranus:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Uranus|angle=120|orb=7",
+      "id": "aspect:Mars:Uranus:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Uranus|angle=180|orb=8",
+      "id": "aspect:Mars:Uranus:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Neptune|angle=0|orb=8",
+      "id": "aspect:Mars:Neptune:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Neptune|angle=60|orb=4",
+      "id": "aspect:Mars:Neptune:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Neptune|angle=90|orb=7",
+      "id": "aspect:Mars:Neptune:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Neptune|angle=120|orb=7",
+      "id": "aspect:Mars:Neptune:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Neptune|angle=180|orb=8",
+      "id": "aspect:Mars:Neptune:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Pluto|angle=0|orb=8",
+      "id": "aspect:Mars:Pluto:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Pluto|angle=60|orb=4",
+      "id": "aspect:Mars:Pluto:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Pluto|angle=90|orb=7",
+      "id": "aspect:Mars:Pluto:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Pluto|angle=120|orb=7",
+      "id": "aspect:Mars:Pluto:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Mars|Pluto|angle=180|orb=8",
+      "id": "aspect:Mars:Pluto:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Saturn|angle=0|orb=8",
+      "id": "aspect:Jupiter:Saturn:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Saturn|angle=60|orb=4",
+      "id": "aspect:Jupiter:Saturn:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Saturn|angle=90|orb=7",
+      "id": "aspect:Jupiter:Saturn:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Saturn|angle=120|orb=7",
+      "id": "aspect:Jupiter:Saturn:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Saturn|angle=180|orb=8",
+      "id": "aspect:Jupiter:Saturn:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Uranus|angle=0|orb=8",
+      "id": "aspect:Jupiter:Uranus:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Uranus|angle=60|orb=4",
+      "id": "aspect:Jupiter:Uranus:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Uranus|angle=90|orb=7",
+      "id": "aspect:Jupiter:Uranus:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Uranus|angle=120|orb=7",
+      "id": "aspect:Jupiter:Uranus:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Uranus|angle=180|orb=8",
+      "id": "aspect:Jupiter:Uranus:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Neptune|angle=0|orb=8",
+      "id": "aspect:Jupiter:Neptune:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Neptune|angle=60|orb=4",
+      "id": "aspect:Jupiter:Neptune:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Neptune|angle=90|orb=7",
+      "id": "aspect:Jupiter:Neptune:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Neptune|angle=120|orb=7",
+      "id": "aspect:Jupiter:Neptune:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Neptune|angle=180|orb=8",
+      "id": "aspect:Jupiter:Neptune:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Pluto|angle=0|orb=8",
+      "id": "aspect:Jupiter:Pluto:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Pluto|angle=60|orb=4",
+      "id": "aspect:Jupiter:Pluto:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Pluto|angle=90|orb=7",
+      "id": "aspect:Jupiter:Pluto:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Pluto|angle=120|orb=7",
+      "id": "aspect:Jupiter:Pluto:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Jupiter|Pluto|angle=180|orb=8",
+      "id": "aspect:Jupiter:Pluto:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Uranus|angle=0|orb=8",
+      "id": "aspect:Saturn:Uranus:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Uranus|angle=60|orb=4",
+      "id": "aspect:Saturn:Uranus:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Uranus|angle=90|orb=7",
+      "id": "aspect:Saturn:Uranus:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": true
+    },
+    {
+      "entity": "Saturn|Uranus|angle=120|orb=7",
+      "id": "aspect:Saturn:Uranus:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Uranus|angle=180|orb=8",
+      "id": "aspect:Saturn:Uranus:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Neptune|angle=0|orb=8",
+      "id": "aspect:Saturn:Neptune:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Neptune|angle=60|orb=4",
+      "id": "aspect:Saturn:Neptune:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Neptune|angle=90|orb=7",
+      "id": "aspect:Saturn:Neptune:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Neptune|angle=120|orb=7",
+      "id": "aspect:Saturn:Neptune:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Neptune|angle=180|orb=8",
+      "id": "aspect:Saturn:Neptune:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Pluto|angle=0|orb=8",
+      "id": "aspect:Saturn:Pluto:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Pluto|angle=60|orb=4",
+      "id": "aspect:Saturn:Pluto:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Pluto|angle=90|orb=7",
+      "id": "aspect:Saturn:Pluto:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Pluto|angle=120|orb=7",
+      "id": "aspect:Saturn:Pluto:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Saturn|Pluto|angle=180|orb=8",
+      "id": "aspect:Saturn:Pluto:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Uranus|Neptune|angle=0|orb=8",
+      "id": "aspect:Uranus:Neptune:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Uranus|Neptune|angle=60|orb=4",
+      "id": "aspect:Uranus:Neptune:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Uranus|Neptune|angle=90|orb=7",
+      "id": "aspect:Uranus:Neptune:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Uranus|Neptune|angle=120|orb=7",
+      "id": "aspect:Uranus:Neptune:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Uranus|Neptune|angle=180|orb=8",
+      "id": "aspect:Uranus:Neptune:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Uranus|Pluto|angle=0|orb=8",
+      "id": "aspect:Uranus:Pluto:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Uranus|Pluto|angle=60|orb=4",
+      "id": "aspect:Uranus:Pluto:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": true
+    },
+    {
+      "entity": "Uranus|Pluto|angle=90|orb=7",
+      "id": "aspect:Uranus:Pluto:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Uranus|Pluto|angle=120|orb=7",
+      "id": "aspect:Uranus:Pluto:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Uranus|Pluto|angle=180|orb=8",
+      "id": "aspect:Uranus:Pluto:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Neptune|Pluto|angle=0|orb=8",
+      "id": "aspect:Neptune:Pluto:conjunction",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Neptune|Pluto|angle=60|orb=4",
+      "id": "aspect:Neptune:Pluto:sextile",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Neptune|Pluto|angle=90|orb=7",
+      "id": "aspect:Neptune:Pluto:square",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Neptune|Pluto|angle=120|orb=7",
+      "id": "aspect:Neptune:Pluto:trine",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    },
+    {
+      "entity": "Neptune|Pluto|angle=180|orb=8",
+      "id": "aspect:Neptune:Pluto:opposition",
+      "kind": "aspect",
+      "scope": "instant",
+      "value": false
+    }
+  ],
+  "model": {
+    "artifact": {
+      "digest": "sha256:2262b1e85cca39847d62b31ff9d0768407b183d5a498ef8adf78fa17500c3f74",
+      "scope": "sha256 manifest of all installed engine JS/MJS/CJS excluding node_modules, engine package.json, and every file of the resolved astronomy-engine 2.1.19 package; source ancestry and physical accuracy not authenticated"
+    },
+    "conventions": {
+      "aspectOrbPolicy": "longitude-only;10-physical-bodies;inclusive-orb;normal/luminary-degrees:conjunction8/10,sextile4/5,square7/8,trine7/8,opposition8/10;no-node-or-angle-aspects",
+      "corrections": "non-Moon:light-time-and-first-order-aberration;no-gravitational-deflection;Moon:no-light-time-or-aberration;nodes:instantaneous-geocentric-lunar-orbit-plane",
+      "deltaT": {
+        "model": "zodiacs-deltat/1",
+        "seconds": 63.83,
+        "segment": "observed",
+        "sigma": 0.03,
+        "table": "2026-09-24",
+        "tableDigest": "6371988c510a1c6c"
+      },
+      "frame": "true-ecliptic-of-date;astronomy-engine-EQJ-precession-five-term-nutation-true-obliquity",
+      "origin": "geocentric",
+      "timeScale": "proleptic-gregorian-UTC-label-read-as-UT1;TT=UT1+deltaT;no-explicit-leap-second-or-TT-TDB-conversion",
+      "zodiac": "tropical"
+    },
+    "engine": "@zodiacs/engine",
+    "engineVersion": "0.1.1-rc.10"
+  },
+  "schema": "zodiacs.verify.chart.v1",
+  "subjectId": "synthetic-example-person",
+  "warnings": [
+    "utc-label-read-as-ut1",
+    "finite-reference-coverage-not-an-absolute-accuracy-bound"
+  ],
+  "id": "sha256:1f06a880b3354480357035b48233486eb54cf2c78d828b9fcaa7a26097ff6f92"
+}

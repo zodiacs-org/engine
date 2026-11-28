@@ -1,0 +1,12 @@
+[
+  {
+    "id": "editorial:reflection:v1",
+    "tradition": "Zodiacs editorial demonstration",
+    "source": {
+      "title": "Zodiacs Verify demonstration rule",
+      "locator": "docs/INTERPRETATION-REGISTRY.md#demonstration-rule"
+    },
+    "statement": "Offer an optional reflection prompt only after the referenced chart claim is supported",
+    "epistemicStatus": "editorial"
+  }
+]

@@ -1,0 +1,55 @@
+{
+  "label": "Synthetic demonstration; not real astronomical results",
+  "comparison": {
+    "verdict": "disagreement-or-incomplete",
+    "longitudeDeltaArcsec": 35.99999999999923
+  },
+  "uncertainty": [
+    {
+      "featureId": "sun-sign",
+      "status": "stable",
+      "coverage": "bounded",
+      "values": [
+        "Aries"
+      ]
+    },
+    {
+      "featureId": "moon-sign",
+      "status": "variable",
+      "coverage": "sampled",
+      "values": [
+        "Aries",
+        "Taurus"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claimId": "correct-sun",
+      "status": "supported"
+    },
+    {
+      "claimId": "invented-sun",
+      "status": "rejected"
+    },
+    {
+      "claimId": "stable-sun",
+      "status": "supported"
+    },
+    {
+      "claimId": "overconfident-moon",
+      "status": "rejected"
+    },
+    {
+      "claimId": "reflection",
+      "status": "supported"
+    }
+  ],
+  "expectedNegativeControls": true,
+  "limitations": [
+    "Supported fact and interval claims are conditional on explicitly trusted evidence and its documented model; seals establish integrity, not authenticity or astronomical correctness.",
+    "Supported interval conclusions are conditional on every explicitly trusted bound assumption; this checker does not independently establish the bounds.",
+    "Supported interpretations establish reviewed rule provenance and supported same-subject dependencies ONLY. They do not establish scientific truth, predictive validity or semantic entailment of the free text.",
+    "This checker does not read prose for hidden factual claims, infer tolerances, resolve birth records, or infer trust from an identifier or source title."
+  ]
+}

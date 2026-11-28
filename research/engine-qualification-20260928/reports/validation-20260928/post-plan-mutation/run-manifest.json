@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "files": {
+    "report.json": "e81a20e1453555c4f39bab1a4d7ed0e6f63005b84be530e90e2038c2b5d2b7af",
+    "report.md": "681627678cb0ad35beb97dac70382238c625040b40a004af67de116098f38414"
+  },
+  "meaning": "Integrity hashes, not a signature or proof of source authority."
+}

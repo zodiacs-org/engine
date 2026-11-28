@@ -1,0 +1,14 @@
+{
+  "name": "@zodiacs/verify-preview",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Isolated chart comparison, uncertainty analysis and structured AI claim verification",
+  "engines": { "node": ">=20" },
+  "exports": "./src/index.mjs",
+  "scripts": {
+    "test": "node --test tests/*.node-test.mjs",
+    "demo": "node examples/demo.mjs",
+    "verify": "node src/cli.mjs"
+  }
+}

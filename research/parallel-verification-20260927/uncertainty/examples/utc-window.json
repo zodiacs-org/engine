@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "zodiacs.birth-window.experimental/0.1",
+  "requestId": "synthetic-calendar-window",
+  "mode": "finite-preview",
+  "time": {
+    "kind": "utc-union",
+    "intervals": [
+      {
+        "id": "time-window",
+        "start": "2000-01-01T00:00:00.000Z",
+        "end": "2000-01-01T00:30:00.000Z",
+        "includeStart": true,
+        "includeEnd": true
+      }
+    ]
+  },
+  "location": {
+    "kind": "point",
+    "latitude": 13.7563,
+    "longitude": 100.5018
+  },
+  "model": {
+    "engineCommit": "f5f33892a95cd0d6cd4a11a80e66f802b11bccfa",
+    "houseSystems": [
+      "whole",
+      "placidus"
+    ],
+    "deltaT": {
+      "kind": "engine"
+    }
+  },
+  "features": [
+    {
+      "id": "sun-sign",
+      "kind": "body-sign",
+      "body": "Sun"
+    },
+    {
+      "id": "moon-sign",
+      "kind": "body-sign",
+      "body": "Moon"
+    },
+    {
+      "id": "ascendant-sign",
+      "kind": "angle-sign",
+      "angle": "asc"
+    },
+    {
+      "id": "moon-house",
+      "kind": "body-house",
+      "body": "Moon"
+    },
+    {
+      "id": "sun-moon-trine",
+      "kind": "aspect-present",
+      "a": "Sun",
+      "b": "Moon",
+      "angleDegrees": 120,
+      "orbDegrees": 6
+    }
+  ],
+  "budget": {
+    "maxStepMs": 1000,
+    "maxEvaluations": 4000
+  },
+  "prior": {
+    "kind": "none"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "zodiacs.verify.claim-check.v1",
+  "allSupported": false,
+  "results": [
+    {
+      "claimId": "computed-sun",
+      "status": "supported",
+      "reasons": [
+        "Exact same-subject instant fact matches a valid, explicitly trusted receipt."
+      ]
+    },
+    {
+      "claimId": "unsupported-entire-window",
+      "status": "unresolved",
+      "reasons": [
+        "Report does not establish interval stability."
+      ]
+    }
+  ],
+  "limitations": [
+    "Supported fact and interval claims are conditional on explicitly trusted evidence and its documented model; seals establish integrity, not authenticity or astronomical correctness.",
+    "Supported interval conclusions are conditional on every explicitly trusted bound assumption; this checker does not independently establish the bounds.",
+    "Supported interpretations establish reviewed rule provenance and supported same-subject dependencies ONLY. They do not establish scientific truth, predictive validity or semantic entailment of the free text.",
+    "This checker does not read prose for hidden factual claims, infer tolerances, resolve birth records, or infer trust from an identifier or source title."
+  ]
+}

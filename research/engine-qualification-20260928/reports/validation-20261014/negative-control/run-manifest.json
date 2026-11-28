@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "files": {
+    "baseline-artifact.json": "c4a558ca280806c6961ecf4e2f489423bd6ec557cea20910dcf28c5c8c0f02b9",
+    "candidate-artifact.json": "7149cf090e0c636bdf68569f28f6f103d44f1d956789d1756b680bf5376153c1",
+    "report.json": "f87a0719241571e81caba2db6296a833828d32893f97a0b98dd51759ab967a56",
+    "report.md": "911564004d2dc5631cc9a2a47eaf4edbb5680dd731f54da5e327b84703916891"
+  },
+  "meaning": "Integrity hashes, not a signature or proof of source authority."
+}

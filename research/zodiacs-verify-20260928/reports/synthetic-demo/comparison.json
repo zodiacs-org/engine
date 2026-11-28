@@ -1,0 +1,49 @@
+{
+  "schema": "zodiacs.verify.comparison.v1",
+  "leftReceiptId": "sha256:88f14ef85a72f7949c2d644c2ecafa420b9dfe9d34489927d79a48c47718c304",
+  "rightReceiptId": "sha256:02d8ed3c59e6469ae33b6f4cbb286ca57dba5510a6b11183ed4b10e2279a14c7",
+  "subjectId": "synthetic-demo-person",
+  "comparable": true,
+  "longitudeToleranceArcsec": 1,
+  "verdict": "disagreement-or-incomplete",
+  "inputDifferences": [],
+  "conventionDifferences": [],
+  "providerDifferences": [],
+  "counts": {
+    "different": 1,
+    "equal": 1
+  },
+  "facts": [
+    {
+      "factId": "longitude:Sun",
+      "kind": "longitude",
+      "left": 15,
+      "right": 15.01,
+      "deltaArcsec": 35.99999999999923,
+      "status": "different"
+    },
+    {
+      "factId": "sign:Sun",
+      "kind": "sign",
+      "left": "Aries",
+      "right": "Aries",
+      "status": "equal"
+    }
+  ],
+  "warnings": {
+    "left": [
+      "SYNTHETIC: These placements are invented analytic fixtures, not a real chart."
+    ],
+    "right": [
+      "SYNTHETIC: These placements are invented analytic fixtures, not a real chart."
+    ]
+  },
+  "explanation": "Matched declared settings expose differing, missing or incompatible facts. Independent reference data is required to decide which result is correct.",
+  "limitations": [
+    "Receipt seals verify content integrity, not provider authenticity or astronomical truth.",
+    "Declared conventions are compared, not independently verified or converted.",
+    "Fact IDs must follow a shared mapping; missing IDs are never treated as agreement.",
+    "This comparison is finite and does not establish engine-wide accuracy or equivalence.",
+    "One or both providers returned warnings; inspect them before using results."
+  ]
+}

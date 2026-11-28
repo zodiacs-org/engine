@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-13T21:51:17.208Z",
+  "runtime": "v22.22.2",
+  "scope": "Software controls and finite reference-residual diagnostics. No new astronomical accuracy or empirical astrology result is claimed.",
+  "tests": {
+    "total": 47,
+    "passed": 47,
+    "failed": 0,
+    "skipped": 0
+  },
+  "selfComparison": {
+    "status": "checks-not-met-review-required",
+    "rows": 210,
+    "referenceTargetExceedances": 168,
+    "nonRegression": "pass",
+    "behavioralContract": "pass",
+    "numericalDigest": "c95d8562c233a9c54c6da164e149f3c8557dd349997ae2f4cc5062ed66010028",
+    "repeatNumericalDigest": "c95d8562c233a9c54c6da164e149f3c8557dd349997ae2f4cc5062ed66010028",
+    "repeatable": true,
+    "planSha256": "6b669e2bd4cddf660f6c40a5c241068909042e24b972c50ee51e668cf5013b5f",
+    "adapterQualified": false
+  },
+  "negativeControl": {
+    "label": "Synthetic one-degree Sun perturbation, not an actual engine build",
+    "failedRegressionRows": 21,
+    "exitCode": 2,
+    "adapterQualified": false,
+    "planSha256": "2e3cfdaf48c5be17b5b2024d5a96fe6a076ae2a82842179d101e44f151cb7c74"
+  },
+  "postPlanMutation": {
+    "blockedBeforeExecution": true,
+    "stage": "artifact-preflight",
+    "exitCode": 1
+  },
+  "adapterReviewRequired": true,
+  "adapterQualified": false,
+  "releaseAuthorized": false
+}
