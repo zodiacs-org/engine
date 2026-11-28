@@ -1,0 +1,79 @@
+{
+  "schema": "electional-m12-test-record/v1",
+  "runtime": "v22.22.2",
+  "startedAt": "2026-10-14T13:59:06.824Z",
+  "command": "npm test -- --reporter=default --reporter=json --outputFile=generated/m12-vitest.json",
+  "tests": {
+    "passed": 624,
+    "failed": 0,
+    "skipped": 0
+  },
+  "cliWindowTransport": {
+    "passed": 10,
+    "skipped": 0,
+    "failed": 0,
+    "reference": "Hand-derived half-open sets in test/fixtures/composition-windows.json",
+    "domain": {
+      "startMs": 0,
+      "endMs": 100,
+      "clock": "utc"
+    },
+    "chunkMs": 25,
+    "scope": "JSON/YAML equivalence, chronological facts, native-receipt transport, unresolved/refused status, budgets, backpressure, cancellation and source/output errors."
+  },
+  "argumentsAndControls": {
+    "passed": 61,
+    "skipped": 0,
+    "failed": 0,
+    "reference": "Explicit public argument/control grammar and RULE_LIMITS.documentBytes",
+    "scope": "No implicit scoring, malformed or missing controls, duplicate JSON keys, explicit eclipse settings and bounded diagnostics."
+  },
+  "files": {
+    "passed": 9,
+    "skipped": 0,
+    "failed": 0,
+    "reference": "Independent byte counts on invented regular files, invalid UTF-8 and initial byte-order mark",
+    "inclusiveBoundaryBytes": 4,
+    "scope": "Regular local file reads and inclusive byte/UTF-8 decoding boundaries."
+  },
+  "presets": {
+    "passed": 18,
+    "skipped": 0,
+    "failed": 0,
+    "reference": "Authored pack policy, not an ephemeris or predictive evidence",
+    "syntheticRange": {
+      "start": "2000-01-01T00:00:00Z",
+      "end": "2000-01-02T00:00:00Z",
+      "clock": "utc"
+    },
+    "names": [
+      "launch",
+      "contract-signing",
+      "travel"
+    ],
+    "scope": "Exact options, required/preferred mode, numeric policy, validated immutable JSON documents and context rejection."
+  },
+  "executableRecord": "docs/evidence/m12-cli-esm.json",
+  "sha256": {
+    "src/cli.ts": "315780d57681e4f17b95b7c43523ad9a709aa5f362ef74a8a17185782fb28e20",
+    "src/cli-controls.ts": "55e189ac5cb9fa4bf1093fae179d1f60e323a117e326d576ec292abacab57e0c",
+    "src/cli-main.ts": "c5fa8ecafacc52e4a595f54f2cb1a713ba5038c018d3426478bc34f3c4eb0419",
+    "src/presets.ts": "b8319c15087d4796c54eba2a852e9ee9f380a77092816db9e696ff7a2139637e",
+    "src/index.ts": "af416de18eb6a5a5beaae28454253674d2c1eab81b45e098e4e78820159f6da8",
+    "src/stream.ts": "d945da8c062ad9876fd552679b83d769a6e63827ca6d0a4667a529b9b95c63da",
+    "src/search.ts": "5b3c517f0bb06de9329d7cc255888de2a8de290774b684ec12b7d517406bb6b6",
+    "test/cli.electional-check.ts": "9573a233a43a5ad6c09918d20360f519a39d0809d7624a9282b13041841e82a4",
+    "test/cli-files.electional-check.ts": "61afaa53a16ee9900cc31725cbd46481cbe963819bcc4260c5e8b999d61f30e3",
+    "test/presets.electional-check.ts": "6dd8c6959773043a1a752b20e1c017ada01aa4e2e7d757d6ac07190b95e7861a",
+    "test/fixtures/composition-windows.json": "1cf8c6cc7aad4d5a0536188afb607e71ece975240e7bd2a4492c45ee1b2ce05b",
+    "bin/electional.mjs": "c6e76452d217942e19a38a7863a68d098d4efab913870d15c01526efa4def8e4",
+    "examples/controls.json": "81974c233fcda79491b0a3c149ded78ccc158e35744b0bde927652963b196dee",
+    "examples/synthetic-hours.yaml": "4397b492a6781f8243c6107ba3fa85b70c313ba4fa09079d7fb46384cc6bba4a",
+    "scripts/check-cli-esm.mjs": "f596919a9f2787140433dd482f67e4f80c7fa4f972d187b02504edeb6c16f028",
+    "scripts/record-m12-tests.mjs": "fb63d5f0a4ac3009ed34f73a267ee08eb05154a0c348b30cd5e50cc3b3882241",
+    "package.json": "68c99ef065412faf2726a58b8ecf34ce33fee7309913603e293bb0e94a2aac94",
+    "package-lock.json": "048e2eb7352f7b829e968173e821e4da617dddf15b23eab83e06df0a6009367d",
+    "generated/engine.mjs": "0101700f8fdf2d19210f94572d7b5c7f2e164a89d3ffa9df35681f2c28cc9c3a"
+  },
+  "scope": "CLI transport and authored configuration behavior. Existing independent astronomical comparisons remain in the complete suite. No new astronomical accuracy, exhaustive completeness, heap, throughput or predictive claim."
+}

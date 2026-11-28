@@ -1,0 +1,20 @@
+{
+  "arbiter": "Hand-derived integer interval membership and rule states from composition-windows.json, no ephemeris",
+  "domain": {"startMs": 0, "endMs": 100, "clock": "utc"},
+  "chunkMs": 25,
+  "fragments": [
+    {"chunk": 0, "span": [0, 10], "id": 1, "continued": false},
+    {"chunk": 0, "span": [10, 20], "id": 2, "continued": false},
+    {"chunk": 0, "span": [20, 25], "id": 3, "continued": false},
+    {"chunk": 1, "span": [25, 30], "id": 3, "continued": true},
+    {"chunk": 1, "span": [30, 40], "id": 4, "continued": false},
+    {"chunk": 1, "span": [40, 50], "id": 5, "continued": false},
+    {"chunk": 2, "span": [50, 60], "id": 6, "continued": false},
+    {"chunk": 2, "span": [60, 70], "id": 7, "continued": false},
+    {"chunk": 2, "span": [70, 75], "id": 8, "continued": false},
+    {"chunk": 3, "span": [75, 80], "id": 8, "continued": true},
+    {"chunk": 3, "span": [80, 90], "id": 9, "continued": false},
+    {"chunk": 3, "span": [90, 100], "id": 10, "continued": false}
+  ],
+  "derivation": "Cut the manually derived chronological condition cells at 25, 50 and 75. Touching identical states retain their id at chunk seams. Required failures and unknowns remain explicit cells. Every label belongs to exactly one chunk; the final endpoint 100 belongs to none. No score or rank is emitted."
+}

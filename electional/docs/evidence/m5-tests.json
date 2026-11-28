@@ -1,0 +1,31 @@
+{
+  "schema": "electional-m5-test-record/v1",
+  "runtime": "v22.22.2",
+  "startedAt": "2026-10-14T05:36:34.168Z",
+  "command": "npm test -- --reporter=default --reporter=json --outputFile=generated/m5-vitest.json",
+  "tests": {
+    "passed": 213,
+    "failed": 0,
+    "skipped": 0
+  },
+  "nativeHorizonsVoidComparisons": {
+    "passed": 2,
+    "skipped": 0,
+    "eventsEntrySha256": "6f887bdc34bc68202cd7e8856f68a5c62df3329fbe4a955b3b7eb0e3a3a749d5"
+  },
+  "sha256": {
+    "references/void-cases.json": "ee96679620181aca2274da00c5632a9852e4ccfa4417e6773ea061c14873d268",
+    "references/void-horizons.json": "b36f766240ddb4ed11f0058e91c53f7c6bede8aa1b74e9caa587841431e43d78",
+    "references/horizons.json": "df42cf3e19e2810c28bcccf8eb7de085dbb73ee92f574b6554f8f8bd91f868d2",
+    "scripts/void-horizons.mjs": "9e2e49bd72ac46664b7fa1c1951ae2a5c095830094c8213d3cd4b34c9d764ffb",
+    "scripts/build-engine.mjs": "4fc4a954144c01caa937bb01b1dd827a8db958f2a646bb21950964600a4beb85",
+    "src/void-rule.ts": "aeb005fe2aed6516fe19a1272dcf36d51c7348f87139b05b35554384d9b71762",
+    "src/basic-rules.ts": "d666db66149e4e8a1b9cccc5e80a044cb1a42f2c5debfb7731dd3f7e4a645146",
+    "src/events-adapter.ts": "42ddac3ddfef7512077736e93e8f1f59dbb335eaea1bc453bbda497364fc22e3",
+    "test/fixtures/void-windows.json": "75c59398bb7907e67124d3524dcd6b2929743b4390c42a4836f49fbf78af2963",
+    "test/void-rule.electional-check.ts": "c7b45e8803bffe8b0d0a6d4cbffa8f8045f41c92c4e2dfba87aaef7d9fb60c07",
+    "test/void-references.electional-check.ts": "859db24e57e6a669ddd7105189e437de6b289287c3094ba1f46be190e1463085",
+    "package-lock.json": "048e2eb7352f7b829e968173e821e4da617dddf15b23eab83e06df0a6009367d"
+  },
+  "scope": "Hand-derived set behavior and independent Horizons void windows within references/void-cases.json only; no completeness or physical error-bound claim."
+}

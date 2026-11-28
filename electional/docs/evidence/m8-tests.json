@@ -1,0 +1,70 @@
+{
+  "schema": "electional-m8-test-record/v1",
+  "runtime": "v22.22.2",
+  "startedAt": "2026-10-14T11:56:53.573Z",
+  "command": "npm test -- --reporter=default --reporter=json --outputFile=generated/m8-vitest.json",
+  "tests": {
+    "passed": 354,
+    "failed": 0,
+    "skipped": 0
+  },
+  "eclipseComparison": {
+    "source": "NASA GSFC catalogs by Fred Espenak and Jean Meeus",
+    "clock": "tt",
+    "dates": [
+      "2023-10-14",
+      "2025-03-29",
+      "2022-11-08",
+      "2023-05-05",
+      "2023-10-28"
+    ],
+    "toleranceMs": 180000,
+    "withinDays": 1,
+    "passed": 5,
+    "skipped": 0,
+    "failed": 0,
+    "scope": "Selected global greatest eclipse labels, coarse classes and day-margin window edges only."
+  },
+  "stationComparison": {
+    "source": "NASA/JPL Horizons DE441",
+    "clock": "tt",
+    "toleranceMs": 1200000,
+    "passed": 6,
+    "skipped": 0,
+    "failed": 0,
+    "scope": "The committed Mercury/Venus series and padding checks on both sides of the April Mercury station only."
+  },
+  "nativeSyntheticScanner": {
+    "passed": 2,
+    "skipped": 0,
+    "failed": 0
+  },
+  "eventsSource": {
+    "moduleUrl": "file:///workspace/codex-infra/wt-events/events/build/src/index.js",
+    "sha256": "6f887bdc34bc68202cd7e8856f68a5c62df3329fbe4a955b3b7eb0e3a3a749d5",
+    "scope": "Read-only entry bytes only; not its dependencies or an authenticated release."
+  },
+  "sha256": {
+    "references/avoidance-cases.json": "8245378215f7ae8e2199f3a08750fb55d9779f33571b821d60b2c27594d51f7d",
+    "references/avoidance-nasa.json": "ddb3f852ab90bf241fa9198d787d8cb92483e25f3e469b0d4223bbeee4a05a88",
+    "references/horizons.json": "df42cf3e19e2810c28bcccf8eb7de085dbb73ee92f574b6554f8f8bd91f868d2",
+    "test/fixtures/avoidance-windows.json": "d9fcee32eab8e2172cc7e0a2e49e3c0239b35a2880bf6e0ee2785fac257a0c4a",
+    "src/avoidance-rules.ts": "7f671592954c11ca27b426746bfda8da3ef238eae9866a0f3bf39933eaaab7b3",
+    "src/engine-adapter.ts": "20fd8c8079d1d627f9bd50a11daa3f54d40c4e0ba15768b99602abab283f9cf6",
+    "src/events-adapter.ts": "8a0816e7af37174a04f9314e8a9428b462d3a94c02703a2e420540cee8485b84",
+    "src/adapter-contract.ts": "b15f4e0fa43883562e0972d2674caafeba3d8d85fc2c51e8ff26ad9818fb7196",
+    "src/intervals.ts": "26ac4e39aae8152db272f6a83a0bb99af826f137f21198d2b50df4052109e2f5",
+    "src/index.ts": "8bbafbd668d1b1d6b31f576c48b74b828227e8ee118af7c45261c3d71876eb94",
+    "test/avoidance-rules.electional-check.ts": "dac5607287c8070b5d663fd3f5b43e2c6270ae9278847b5187c066f60c2f82c1",
+    "test/avoidance-references.electional-check.ts": "7077b1ad68b653c86c7cc1e0323e4840f4879ff78142c6f8aeb831fdf528f91b",
+    "scripts/avoidance-nasa.mjs": "d3531974cf4398e67adfe36670ea239c65fdf9a541f00eb59a14b00bc72ebf04",
+    "scripts/horizons.mjs": "6aefef5ee323c6065ef30ef7f16978dd7172b4be2b8472e8699371a5dbe1a2c9",
+    "scripts/check-avoidance-esm.mjs": "fa790d4713d16b057423a8fe656a537072f7c9bd5b718cb56f17e3187fd7eb46",
+    "scripts/record-m8-tests.mjs": "42e2154476c508403b028c8258140c4fe8f1110664adb0b45142b370e9c96b93",
+    "scripts/build-engine.mjs": "8a358fda0aab01070c9995c26d2fd32341ede5b44419f3cbbec1815d34b514be",
+    "package-lock.json": "048e2eb7352f7b829e968173e821e4da617dddf15b23eab83e06df0a6009367d",
+    "../src/calc.ts": "95ac80e297393a06adfa213a0aa9c342e02ec41abeaefd1b9f497c376ac35180",
+    "generated/engine.mjs": "513781e4825133d4de9c977a90b10ed614e8663ec594fe70aab8414b0573bdf8"
+  },
+  "scope": "Hand-derived integer-set arithmetic and control flow plus declared independent reference comparisons only. No exhaustive completeness, marginal eclipse classification or physical error-bound claim."
+}

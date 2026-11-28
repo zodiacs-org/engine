@@ -1,0 +1,12 @@
+{
+  "arbiter": "Hand-derived integer set membership, not astronomical dates or accuracy evidence.",
+  "derivation": "For requested [0,10), source (-1,10] owns labels 0,5,10. Filtering retains 0,5 without changing their labels or brackets. Clipping source duration [-1,5) gives [0,5). An unresolved tail [5,10) leaves covered [0,5).",
+  "window": { "startMs": 0, "endMs": 10, "clock": "tt" },
+  "sourceWindow": { "startMs": -1, "endMs": 10, "clock": "tt" },
+  "sourcePoints": [0, 5, 10],
+  "ownedPoints": [0, 5],
+  "sourceInterval": { "startMs": -1, "endMs": 5 },
+  "clippedInterval": { "startMs": 0, "endMs": 5 },
+  "unresolved": { "startMs": 5, "endMs": 10, "reason": "next-ingress-outside-window", "sign": "Aries" },
+  "covered": [{ "startMs": 0, "endMs": 5 }]
+}

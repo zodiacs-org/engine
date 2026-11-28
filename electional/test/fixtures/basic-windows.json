@@ -1,0 +1,48 @@
+{
+  "arbiter": "Hand-derived half-open integer-set membership, not an astronomical ephemeris",
+  "window": { "startMs": 0, "endMs": 100, "clock": "tt" },
+  "stepMs": 10,
+  "cases": [
+    {
+      "id": "sign-wrap-and-adjacency", "rule": { "id": "sign", "kind": "moon-sign", "mode": "require", "options": { "signs": ["aries", "taurus"] } },
+      "initial": { "Moon": { "longitude": 350, "speed": 1 } },
+      "events": [
+        { "kind": "sign-ingress", "body": "Moon", "atMs": 0, "clock": "tt", "direction": "direct", "fromSign": "Pisces", "toSign": "Aries", "bracket": [0, 0] },
+        { "kind": "sign-ingress", "body": "Moon", "atMs": 30, "clock": "tt", "direction": "direct", "fromSign": "Aries", "toSign": "Taurus", "bracket": [30, 30] },
+        { "kind": "sign-ingress", "body": "Moon", "atMs": 60, "clock": "tt", "direction": "direct", "fromSign": "Taurus", "toSign": "Gemini", "bracket": [60, 60] }
+      ],
+      "satisfied": [{ "startMs": 0, "endMs": 60 }], "failed": [{ "startMs": 60, "endMs": 100 }], "unknown": [],
+      "derivation": "Pisces is replaced by Aries at the owned start; Aries and Taurus are selected adjacent spans [0,30) and [30,60); their union ends when Gemini starts."
+    },
+    {
+      "id": "sign-numerical-bracket", "rule": { "id": "sign", "kind": "moon-sign", "mode": "prefer", "weight": 7, "options": { "signs": ["taurus"] } },
+      "initial": { "Moon": { "longitude": 10, "speed": 1 } },
+      "events": [{ "kind": "sign-ingress", "body": "Moon", "atMs": 30, "clock": "tt", "direction": "direct", "fromSign": "Aries", "toSign": "Taurus", "bracket": [29, 31] }],
+      "satisfied": [{ "startMs": 32, "endMs": 100 }], "failed": [{ "startMs": 0, "endMs": 29 }], "unknown": [{ "startMs": 29, "endMs": 32 }],
+      "derivation": "Both root bracket endpoints 29 and 31 are included in the unknown integer labels, giving [29,32). Outside that bracket Taurus follows Aries."
+    },
+    {
+      "id": "phase-wrap-and-sector", "rule": { "id": "phase", "kind": "moon-phase", "mode": "require", "options": { "phases": ["New Moon", "Waxing Crescent"] } },
+      "initial": { "Moon": { "longitude": 330, "speed": 1 }, "Sun": { "longitude": 0, "speed": 0 } },
+      "events": [
+        { "kind": "exact-aspect", "body": "Moon", "target": { "kind": "moving", "body": "Sun" }, "relativeLongitude": 337.5, "atMs": 0, "clock": "tt", "direction": "direct", "bracket": [0, 0] },
+        { "kind": "exact-aspect", "body": "Moon", "target": { "kind": "moving", "body": "Sun" }, "relativeLongitude": 22.5, "atMs": 20, "clock": "tt", "direction": "direct", "bracket": [20, 20] },
+        { "kind": "exact-aspect", "body": "Moon", "target": { "kind": "moving", "body": "Sun" }, "relativeLongitude": 67.5, "atMs": 40, "clock": "tt", "direction": "direct", "bracket": [40, 40] }
+      ],
+      "satisfied": [{ "startMs": 0, "endMs": 40 }], "failed": [{ "startMs": 40, "endMs": 100 }], "unknown": [],
+      "derivation": "337.5 enters the New Moon sector, 22.5 enters Waxing Crescent, and 67.5 exits the selected union. A 360-degree wrap inside New Moon is not a phase-name change."
+    },
+    {
+      "id": "direct-all-bodies", "rule": { "id": "motion", "kind": "direct-motion", "mode": "require", "options": { "bodies": ["Mercury", "Venus"] } },
+      "initial": { "Mercury": { "longitude": 10, "speed": 1 }, "Venus": { "longitude": 20, "speed": -1 } },
+      "events": [
+        { "kind": "station", "body": "Mercury", "atMs": 20, "clock": "tt", "direction": "retrograde", "bracket": [20, 20] },
+        { "kind": "station", "body": "Mercury", "atMs": 60, "clock": "tt", "direction": "direct", "bracket": [60, 60] },
+        { "kind": "station", "body": "Venus", "atMs": 40, "clock": "tt", "direction": "direct", "bracket": [40, 40] },
+        { "kind": "station", "body": "Venus", "atMs": 80, "clock": "tt", "direction": "retrograde", "bracket": [80, 80] }
+      ],
+      "satisfied": [{ "startMs": 60, "endMs": 80 }], "failed": [{ "startMs": 0, "endMs": 60 }, { "startMs": 80, "endMs": 100 }], "unknown": [],
+      "derivation": "Mercury direct spans are [0,20) and [60,100); Venus is direct in [40,80). Their intersection is [60,80)."
+    }
+  ]
+}

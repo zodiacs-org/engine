@@ -1,0 +1,19 @@
+{
+  "stepMs": 3600000,
+  "lookaheadMs": 432000000,
+  "maxEvaluations": 10000,
+  "maxSkySamples": 100000,
+  "chunkMs": 86400000,
+  "maxChunks": 31,
+  "maxChunkEvaluations": 10000,
+  "maxChunkSkySamples": 100000,
+  "maxFrameBytes": 1000000,
+  "eclipse": {
+    "model": {
+      "sunRadiusAu": 0.0046524726370988385,
+      "moonRadiusAu": 1.1613801666229199e-05,
+      "earthRadiusAu": 4.26352124542639e-05
+    },
+    "derivativeStepMs": 60000
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "electional-m12-cli-esm-record/v1",
+  "runtime": "v22.22.2",
+  "command": "node scripts/check-cli-esm.mjs",
+  "status": "passed",
+  "checked": [
+    "help",
+    "catalog",
+    "preset JSON round trips",
+    "YAML validation",
+    "native facts-only hour search and receipts",
+    "bounded UTF-8 reads",
+    "value-free errors",
+    "SIGINT cancellation",
+    "SIGTERM cancellation",
+    "broken pipe"
+  ],
+  "nativeSpan": {
+    "start": "2000-01-02T06:00:00Z",
+    "end": "2000-01-02T07:00:00Z",
+    "clock": "utc"
+  },
+  "location": {
+    "latitude": 0,
+    "longitude": 0
+  },
+  "reference": "All-ruler set membership and transport invariants, no pinned engine astronomical instants.",
+  "scope": "Executable transport and native receipt preservation, not astronomical accuracy or exhaustive completeness."
+}

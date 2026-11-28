@@ -1,0 +1,131 @@
+{
+  "reference": {
+    "arbiter": "Hand-derived half-open interval logic",
+    "method": "Each integer millisecond t belongs exactly when startMs <= t < endMs. The results below were written by applying AND, OR, and AND NOT to membership, independently of the interval implementation.",
+    "clock": "Synthetic integer epoch-millisecond labels on one shared clock; no astronomical instants",
+    "license": "MIT",
+    "scope": "Set arithmetic only; no astronomical accuracy claim"
+  },
+  "normalization": [
+    {
+      "id": "unsorted-overlap-adjacency-and-empty",
+      "derivation": "[2,6), [5,8), and [8,12) cover every t from 2 through 11. [4,4) contains nothing. [-3,-1) stays separate.",
+      "input": [{"startMs":8,"endMs":12},{"startMs":5,"endMs":8},{"startMs":-3,"endMs":-1},{"startMs":2,"endMs":6},{"startMs":4,"endMs":4}],
+      "expected": [{"startMs":-3,"endMs":-1},{"startMs":2,"endMs":12}]
+    },
+    {
+      "id": "nested-and-duplicate",
+      "derivation": "Both inner spans and the duplicate add no member to [-5,5).",
+      "input": [{"startMs":-5,"endMs":5},{"startMs":-2,"endMs":0},{"startMs":-5,"endMs":5},{"startMs":0,"endMs":1}],
+      "expected": [{"startMs":-5,"endMs":5}]
+    },
+    {
+      "id": "one-millisecond-gap",
+      "derivation": "t=0 is absent; neither side may fill that missing millisecond.",
+      "input": [{"startMs":1,"endMs":2},{"startMs":-1,"endMs":0}],
+      "expected": [{"startMs":-1,"endMs":0},{"startMs":1,"endMs":2}]
+    },
+    {
+      "id": "empty-set",
+      "derivation": "Empty input and empty spans contain no members.",
+      "input": [{"startMs":-1,"endMs":-1},{"startMs":0,"endMs":0}],
+      "expected": []
+    }
+  ],
+  "binary": [
+    {
+      "id": "partial-overlap",
+      "derivation": "OR covers [0,15), AND covers [5,10), and left AND NOT right retains [0,5).",
+      "left": [{"startMs":0,"endMs":10}],
+      "right": [{"startMs":5,"endMs":15}],
+      "union": [{"startMs":0,"endMs":15}],
+      "intersection": [{"startMs":5,"endMs":10}],
+      "difference": [{"startMs":0,"endMs":5}]
+    },
+    {
+      "id": "touching-endpoint",
+      "derivation": "t=0 belongs only to the right span, so AND is empty and subtraction leaves the left span unchanged.",
+      "left": [{"startMs":-5,"endMs":0}],
+      "right": [{"startMs":0,"endMs":5}],
+      "union": [{"startMs":-5,"endMs":5}],
+      "intersection": [],
+      "difference": [{"startMs":-5,"endMs":0}]
+    },
+    {
+      "id": "cut-spans-several-allowed-windows",
+      "derivation": "[1,10) removes the end of [0,2), all of [4,6), and the start of [8,12); only [0,1) and [10,12) survive.",
+      "left": [{"startMs":8,"endMs":12},{"startMs":0,"endMs":2},{"startMs":4,"endMs":6}],
+      "right": [{"startMs":1,"endMs":10}],
+      "union": [{"startMs":0,"endMs":12}],
+      "intersection": [{"startMs":1,"endMs":2},{"startMs":4,"endMs":6},{"startMs":8,"endMs":10}],
+      "difference": [{"startMs":0,"endMs":1},{"startMs":10,"endMs":12}]
+    },
+    {
+      "id": "several-cuts-with-external-and-empty-spans",
+      "derivation": "External [20,22) and empty [7,7) remove nothing. Two interior cuts leave the three intervening stretches; [-2,0) merely touches the left edge.",
+      "left": [{"startMs":0,"endMs":10}],
+      "right": [{"startMs":20,"endMs":22},{"startMs":6,"endMs":8},{"startMs":7,"endMs":7},{"startMs":2,"endMs":4},{"startMs":-2,"endMs":0}],
+      "union": [{"startMs":-2,"endMs":10},{"startMs":20,"endMs":22}],
+      "intersection": [{"startMs":2,"endMs":4},{"startMs":6,"endMs":8}],
+      "difference": [{"startMs":0,"endMs":2},{"startMs":4,"endMs":6},{"startMs":8,"endMs":10}]
+    },
+    {
+      "id": "entirely-excluded",
+      "derivation": "Every member of [-1,1) belongs to [-3,3); left AND NOT right is empty.",
+      "left": [{"startMs":-1,"endMs":1}],
+      "right": [{"startMs":-3,"endMs":3}],
+      "union": [{"startMs":-3,"endMs":3}],
+      "intersection": [{"startMs":-1,"endMs":1}],
+      "difference": []
+    },
+    {
+      "id": "empty-right-operand",
+      "derivation": "OR and AND NOT an empty set leave [0,1); AND is empty.",
+      "left": [{"startMs":0,"endMs":1}],
+      "right": [],
+      "union": [{"startMs":0,"endMs":1}],
+      "intersection": [],
+      "difference": [{"startMs":0,"endMs":1}]
+    },
+    {
+      "id": "empty-left-operand",
+      "derivation": "An empty set adds nothing to [-1,1), has no intersection, and loses no members through subtraction.",
+      "left": [],
+      "right": [{"startMs":-1,"endMs":1}],
+      "union": [{"startMs":-1,"endMs":1}],
+      "intersection": [],
+      "difference": []
+    }
+  ],
+  "domain": [
+    {
+      "id": "clip-and-complement",
+      "derivation": "Only [0,3) and [7,10) fall inside [0,10). Their missing middle is [3,7); the external span has no effect.",
+      "domain": {"startMs":0,"endMs":10},
+      "input": [{"startMs":7,"endMs":12},{"startMs":20,"endMs":30},{"startMs":-5,"endMs":3}],
+      "clip": [{"startMs":0,"endMs":3},{"startMs":7,"endMs":10}],
+      "complement": [{"startMs":3,"endMs":7}]
+    },
+    {
+      "id": "empty-domain",
+      "derivation": "[0,0) contains nothing, hence both the clipped set and its domain-relative complement are empty.",
+      "domain": {"startMs":0,"endMs":0},
+      "input": [{"startMs":-5,"endMs":5}],
+      "clip": [],
+      "complement": []
+    },
+    {
+      "id": "empty-coverage-within-domain",
+      "derivation": "Empty coverage clips to empty and leaves the whole declared domain as a gap.",
+      "domain": {"startMs":-5,"endMs":5},
+      "input": [],
+      "clip": [],
+      "complement": [{"startMs":-5,"endMs":5}]
+    }
+  ],
+  "membership": {
+    "derivation": "A start belongs, an end does not; the empty [5,5) contributes nothing.",
+    "input": [{"startMs":2,"endMs":4},{"startMs":-2,"endMs":0},{"startMs":5,"endMs":5}],
+    "checks": [{"atMs":-3,"expected":false},{"atMs":-2,"expected":true},{"atMs":-1,"expected":true},{"atMs":0,"expected":false},{"atMs":1,"expected":false},{"atMs":2,"expected":true},{"atMs":3,"expected":true},{"atMs":4,"expected":false},{"atMs":5,"expected":false}]
+  }
+}
