@@ -1,0 +1,35 @@
+name: Private Chinese zodiac data and MCP tools
+on:
+  pull_request:
+    paths: ['tools/chinese-zodiac/**', 'docs/evidence/chinese-zodiac-2026-10-24/**', 'docs/agents/**', '.github/workflows/chinese-zodiac.yml']
+  push:
+    branches: [main]
+    paths: ['tools/chinese-zodiac/**', 'docs/evidence/chinese-zodiac-2026-10-24/**', 'docs/agents/**', '.github/workflows/chinese-zodiac.yml']
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22.22.2', '24']
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/chinese-zodiac/
+            /docs/evidence/chinese-zodiac-2026-10-24/
+            /docs/agents/
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Li Chun against the committed references, calendar arithmetic, groupings, MCP protocol and guide examples
+        run: node --test tools/chinese-zodiac/selftest.mjs
+      - name: Committed measurement is current
+        run: |
+          node docs/evidence/chinese-zodiac-2026-10-24/measure.mjs
+          git diff --exit-code -- docs/evidence/chinese-zodiac-2026-10-24/results.json
