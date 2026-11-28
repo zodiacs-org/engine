@@ -1,0 +1,16 @@
+{
+  "input": {
+    "instant": "2000-01-01T12:00:00Z",
+    "location": { "latitude": 12, "longitude": 34 },
+    "question": {
+      "id": "synthetic-job",
+      "quesitedHouse": 10,
+      "naturalSignificators": ["Moon", "Venus"]
+    },
+    "houseSystem": "regiomontanus"
+  },
+  "options": {
+    "aspects": { "horizonDays": 0.5 },
+    "translation": { "lookbackDays": 0.5 }
+  }
+}

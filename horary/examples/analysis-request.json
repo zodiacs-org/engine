@@ -1,0 +1,11 @@
+{
+  "input": {
+    "instant": "2000-01-01T12:00:00Z",
+    "location": { "latitude": 12, "longitude": 34 },
+    "question": { "id": "lost-object", "quesitedHouse": 2 }
+  },
+  "options": {
+    "considerations": { "rules": { "moon-void-of-course": false } },
+    "aspects": { "search": false }
+  }
+}
