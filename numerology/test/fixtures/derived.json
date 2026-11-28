@@ -1,0 +1,38 @@
+{
+  "provenance": "Handwritten synthetic spellings, civil dates, and arithmetic controls authored for this project. Paths retain the initial compound and every digit sum. Frequencies are ordered by raw letter value.",
+  "maturity": [
+    { "id": "small-components", "date": "0001-01-01", "name": "A", "system": "pythagorean", "policy": "preserve", "method": "components", "life": 3, "expressionPath": [1], "path": [4], "debts": [] },
+    { "id": "final-master-11", "date": "0001-01-01", "name": "H", "system": "pythagorean", "policy": "preserve", "method": "components", "life": 3, "expressionPath": [8], "path": [11], "debts": [] },
+    { "id": "final-master-11-reduced", "date": "0001-01-01", "name": "H", "system": "pythagorean", "policy": "reduce", "method": "components", "life": 3, "expressionPath": [8], "path": [11,2], "debts": [] },
+    { "id": "both-components-master-11", "date": "2000-01-08", "name": "Bbg", "system": "pythagorean", "policy": "preserve", "method": "components", "life": 11, "expressionPath": [11], "path": [22], "debts": [] },
+    { "id": "same-policy-at-all-stages", "date": "2000-01-08", "name": "Bbg", "system": "pythagorean", "policy": "reduce", "method": "components", "life": 2, "expressionPath": [11,2], "path": [4], "debts": [] },
+    { "id": "final-master-33", "date": "2000-11-09", "name": "Bbg", "system": "pythagorean", "policy": "preserve", "method": "components", "life": 22, "expressionPath": [11], "path": [33], "debts": [] },
+    { "id": "master-components-summed-before-reduction", "date": "2009-11-29", "name": "Ael Vorn", "system": "pythagorean", "policy": "preserve", "method": "components", "life": 33, "expressionPath": [33], "path": [66,12,3], "debts": [] },
+    { "id": "whole-date-option", "date": "2009-11-29", "name": "Ael Vorn", "system": "pythagorean", "policy": "preserve", "method": "whole-date", "life": 6, "expressionPath": [33], "path": [39,12,3], "debts": [] },
+    { "id": "chaldean-reached-expression-master", "date": "2000-01-08", "name": "Ael Vorn", "system": "chaldean", "policy": "preserve", "method": "components", "life": 11, "expressionPath": [29,11], "path": [22], "debts": [] },
+    { "id": "chaldean-reduced-components", "date": "2000-01-08", "name": "Ael Vorn", "system": "chaldean", "policy": "reduce", "method": "whole-date", "life": 2, "expressionPath": [29,11,2], "path": [4], "debts": [] },
+    { "id": "component-expression-and-total-debt-locators", "date": "1990-04-13", "name": "Mi", "system": "pythagorean", "policy": "preserve", "method": "components", "life": 9, "expressionPath": [13,4], "path": [13,4], "debts": [[19,1,"life-path","year"],[13,0,"life-path","day"],[13,0,"expression",null],[13,0,"total",null]] },
+    { "id": "nested-life-total-versus-maturity-total", "date": "6999-11-05", "name": "I", "system": "pythagorean", "policy": "preserve", "method": "components", "life": 4, "expressionPath": [9], "path": [13,4], "debts": [[13,1,"life-path","total"],[13,0,"total",null]] },
+    { "id": "total-debt-14", "date": "2000-01-08", "name": "C", "system": "pythagorean", "policy": "preserve", "method": "components", "life": 11, "expressionPath": [3], "path": [14,5], "debts": [[14,0,"total",null]] },
+    { "id": "total-debt-16", "date": "2000-01-08", "name": "E", "system": "pythagorean", "policy": "preserve", "method": "components", "life": 11, "expressionPath": [5], "path": [16,7], "debts": [[16,0,"total",null]] },
+    { "id": "total-debt-19", "date": "2000-01-08", "name": "H", "system": "pythagorean", "policy": "preserve", "method": "components", "life": 11, "expressionPath": [8], "path": [19,10,1], "debts": [[19,0,"total",null]] },
+    { "id": "no-unvisited-total-debt", "date": "2009-11-29", "name": "I", "system": "pythagorean", "policy": "preserve", "method": "components", "life": 33, "expressionPath": [9], "path": [42,6], "debts": [] },
+    { "id": "upper-calendar-boundary", "date": "9999-12-31", "name": "A", "system": "chaldean", "policy": "reduce", "method": "components", "life": 7, "expressionPath": [1], "path": [8], "debts": [[16,0,"life-path","total"]] }
+  ],
+  "frequencies": [
+    { "id": "one-value", "name": "A", "normalized": "A", "system": "pythagorean", "counts": [1,0,0,0,0,0,0,0,0], "lessons": [2,3,4,5,6,7,8,9], "passions": [1] },
+    { "id": "two-way-tie", "name": "Aabb", "normalized": "AABB", "system": "pythagorean", "counts": [2,2,0,0,0,0,0,0,0], "lessons": [3,4,5,6,7,8,9], "passions": [1,2] },
+    { "id": "all-values-present", "name": "Abcdefghi", "normalized": "ABCDEFGHI", "system": "pythagorean", "counts": [1,1,1,1,1,1,1,1,1], "lessons": [], "passions": [1,2,3,4,5,6,7,8,9] },
+    { "id": "chaldean-reserved-nine", "name": "Abcdefghi", "normalized": "ABCDEFGHI", "system": "chaldean", "counts": [2,1,2,1,2,0,0,1,0], "lessons": [6,7], "passions": [1,3,5] },
+    { "id": "chaldean-all-assigned-values-present", "name": "Abcdeuof", "normalized": "ABCDEUOF", "system": "chaldean", "counts": [1,1,1,1,1,1,1,1,0], "lessons": [], "passions": [1,2,3,4,5,6,7,8] },
+    { "id": "different-letters-share-table-value", "name": "Ajsbkt", "normalized": "AJSBKT", "system": "pythagorean", "counts": [3,3,0,0,0,0,0,0,0], "lessons": [3,4,5,6,7,8,9], "passions": [1,2] },
+    { "id": "synthetic-pythagorean-full-name", "name": "Ael Vorn", "normalized": "AEL VORN", "system": "pythagorean", "counts": [1,0,1,1,2,1,0,0,1], "lessons": [2,7,8], "passions": [5] },
+    { "id": "synthetic-chaldean-full-name", "name": "Ael Vorn", "normalized": "AEL VORN", "system": "chaldean", "counts": [1,1,1,0,2,1,1,0,0], "lessons": [4,8], "passions": [5] },
+    { "id": "latin-expansions-count-every-letter", "name": "Æß", "normalized": "AESS", "system": "pythagorean", "counts": [3,0,0,0,1,0,0,0,0], "lessons": [2,3,4,6,7,8,9], "passions": [1] },
+    { "id": "greek-expansions-and-silent-cyrillic", "name": "ΘΨъЬ", "normalized": "THPS", "system": "chaldean", "counts": [0,0,1,1,1,0,0,1,0], "lessons": [1,2,6,7], "passions": [3,4,5,8] },
+    { "id": "no-vowels-is-still-full-name-frequency", "name": "Bcdf", "normalized": "BCDF", "system": "pythagorean", "counts": [0,1,1,1,0,1,0,0,0], "lessons": [1,5,7,8,9], "passions": [2,3,4,6] },
+    { "id": "no-consonants-is-still-full-name-frequency", "name": "Aeio", "normalized": "AEIO", "system": "chaldean", "counts": [2,0,0,0,1,0,1,0,0], "lessons": [2,3,4,6,8], "passions": [1] },
+    { "id": "y-is-counted-under-every-classification", "name": "Yry", "normalized": "YRY", "system": "pythagorean", "counts": [0,0,0,0,0,0,2,0,1], "lessons": [1,2,3,4,5,6,8], "passions": [7] },
+    { "id": "caller-expansion-and-explicit-omission", "name": "岚禾", "normalized": "ABBA", "system": "chaldean", "transliteration": { "id": "synthetic-frequency/1", "mappings": { "岚": "ABBA", "禾": "" } }, "counts": [2,2,0,0,0,0,0,0,0], "lessons": [3,4,5,6,7,8], "passions": [1,2] }
+  ]
+}

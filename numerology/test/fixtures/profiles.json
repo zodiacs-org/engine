@@ -1,0 +1,44 @@
+{
+  "provenance": "Handwritten synthetic civil dates, spellings, and exact arithmetic controls authored for this project. Arrays of paths retain original compounds and visited digit sums; these are convention fixtures, not predictions.",
+  "profiles": [
+    {
+      "id": "small-default-profile",
+      "date": "0001-01-01", "name": "A", "options": {},
+      "normalized": "A", "lifePath": 3, "birthday": 1,
+      "expressionPath": [1], "soulUrgePath": [1], "personalityPath": [0], "maturityPath": [4],
+      "lessons": [2,3,4,5,6,7,8,9], "passions": [1], "counts": [1,0,0,0,0,0,0,0,0],
+      "pinnacles": [2,2,4,2], "challenges": [0,0,0,0], "starts": [0,34,43,52], "cycles": null
+    },
+    {
+      "id": "shared-master-profile-with-target",
+      "date": "2000-01-08", "name": "Bbg", "options": {"targetDate": "2000-10-22"},
+      "normalized": "BBG", "lifePath": 11, "birthday": 8,
+      "expressionPath": [11], "soulUrgePath": [0], "personalityPath": [11], "maturityPath": [22],
+      "lessons": [1,3,4,5,6,8,9], "passions": [2], "counts": [0,2,0,0,0,0,1,0,0],
+      "pinnacles": [9,1,1,3], "challenges": [7,6,1,1], "starts": [0,35,44,53], "cycles": [11,3,7]
+    },
+    {
+      "id": "chaldean-shared-conventions",
+      "date": "0001-01-01", "name": "Ael Vorn", "options": {"system": "chaldean", "targetDate": "2000-10-22"},
+      "normalized": "AEL VORN", "lifePath": 3, "birthday": 1,
+      "expressionPath": [29,11], "soulUrgePath": [13,4], "personalityPath": [16,7], "maturityPath": [14,5],
+      "lessons": [4,8], "passions": [5], "counts": [1,1,1,0,2,1,1,0,0],
+      "pinnacles": [2,2,4,2], "challenges": [0,0,0,0], "starts": [0,34,43,52], "cycles": [4,5,9]
+    },
+    {
+      "id": "caller-script-and-explicit-y",
+      "date": "0001-01-01", "name": "岚", "options": {"yAsVowel": "always", "transliteration": {"id": "synthetic-profile/1", "mappings": {"岚": "YB"}}},
+      "normalized": "YB", "lifePath": 3, "birthday": 1,
+      "expressionPath": [9], "soulUrgePath": [7], "personalityPath": [2], "maturityPath": [12,3],
+      "lessons": [1,3,4,5,6,8,9], "passions": [2,7], "counts": [0,1,0,0,0,0,1,0,0],
+      "pinnacles": [2,2,4,2], "challenges": [0,0,0,0], "starts": [0,34,43,52], "cycles": null
+    }
+  ],
+  "comparisons": [
+    {"id": "master-changes", "date": "2000-01-08", "before": "Bb", "after": "Bbg", "options": {}, "compounds": [[4,11],[0,0],[4,11],[15,22]], "values": [[4,11],[0,0],[4,11],[6,22]], "countsDelta": [0,0,0,0,0,0,1,0,0], "lessonAdded": [], "lessonRemoved": [7], "passionAdded": [], "passionRemoved": []},
+    {"id": "equal-value-different-compound-and-debt", "date": "0001-01-01", "before": "Mi", "after": "D", "options": {}, "compounds": [[13,4],[9,0],[4,4],[7,7]], "values": [[4,4],[9,0],[4,4],[7,7]], "countsDelta": [0,0,0,0,0,0,0,0,-1], "lessonAdded": [9], "lessonRemoved": [], "passionAdded": [], "passionRemoved": [9]},
+    {"id": "canonical-spelling-only", "date": "2000-02-29", "before": "Él", "after": "Él", "options": {"system": "chaldean", "masterNumbers": "reduce", "method": "whole-date"}, "compounds": [[8,8],[5,5],[3,3],[14,14]], "values": [[8,8],[5,5],[3,3],[5,5]], "countsDelta": [0,0,0,0,0,0,0,0,0], "lessonAdded": [], "lessonRemoved": [], "passionAdded": [], "passionRemoved": []},
+    {"id": "same-set-different-frequencies", "date": "0001-01-01", "before": "Aabb", "after": "Aaabbb", "options": {"system": "chaldean"}, "compounds": [[6,9],[2,3],[4,6],[9,12]], "values": [[6,9],[2,3],[4,6],[9,3]], "countsDelta": [1,1,0,0,0,0,0,0,0], "lessonAdded": [], "lessonRemoved": [], "passionAdded": [], "passionRemoved": []},
+    {"id": "y-policy-with-debt-and-negative-deltas", "date": "0001-01-01", "before": "Yr", "after": "Yry", "options": {"yAsVowel": "when-no-other-vowels"}, "compounds": [[16,23],[7,14],[9,9],[10,8]], "values": [[7,5],[7,5],[9,9],[1,8]], "countsDelta": [0,0,0,0,0,0,1,0,0], "lessonAdded": [], "lessonRemoved": [], "passionAdded": [], "passionRemoved": [9]}
+  ]
+}

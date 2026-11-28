@@ -1,0 +1,28 @@
+{
+  "name": "@zodiacs/numerology",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Isolated numerology library and CLI development project",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": {
+      "types": "./.build/index.d.ts",
+      "import": "./.build/index.js"
+    }
+  },
+  "scripts": {
+    "cli": "node cli.mjs",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "consumer:smoke": "npm run build && node --test test/consumer.test.mjs test/documentation.test.mjs",
+    "verify": "npm run typecheck && npm test"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}
