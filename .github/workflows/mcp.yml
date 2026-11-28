@@ -1,0 +1,52 @@
+name: MCP
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'mcp/**'
+      - '.github/workflows/mcp.yml'
+      - 'artifacts/**'
+      - 'package.json'
+      - '.npmrc'
+      - '.npmignore'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'mcp/**'
+      - '.github/workflows/mcp.yml'
+      - 'artifacts/**'
+      - 'package.json'
+      - '.npmrc'
+      - '.npmignore'
+
+permissions:
+  contents: read
+
+jobs:
+  mcp:
+    name: MCP checks
+    runs-on: ubuntu-latest
+    env:
+      npm_config_cache: ${{ github.workspace }}/mcp/.cache/npm
+    defaults:
+      run:
+        working-directory: mcp
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mcp/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Validate MCP and isolation
+        run: node scripts/validate.mjs

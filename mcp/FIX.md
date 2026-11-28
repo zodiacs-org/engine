@@ -1,0 +1,3 @@
+- [x] F1 Rename MCP tests so root Vitest discovery ignores them, update the project's test scripts, and verify the root dot-reporter run lists none of them.
+- [x] F2 Add .github/workflows/mcp.yml with a Node 22 job that installs mcp dependencies from its lockfile and runs typecheck, build and tests.
+- [x] F3 Install SIGINT/SIGTERM cleanup handlers before announcing HTTP readiness, add an immediate shutdown regression test, and run it repeatedly to verify stability.
