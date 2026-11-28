@@ -1,0 +1,16 @@
+[package]
+name = "zodiacs-rustcore-wasm"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+zodiacs-rustcore.workspace = true
+wasm-bindgen.workspace = true
+js-sys.workspace = true
+

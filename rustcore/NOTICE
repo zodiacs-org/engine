@@ -1,0 +1,162 @@
+Rust numeric core notices
+=========================
+
+The Rust time code translates this repository's src/deltat.ts and
+src/time-scale.ts under the repository's MIT License (../LICENSE).
+Code remains MIT; builds containing the Delta T table also carry CC BY 4.0
+data. Retain this notice and PROVENANCE.md when redistributing those builds.
+
+Delta T (TT - UT1)
+-----------------
+
+The generated time_data.rs contains values of Table S15 and constants of
+equations (4.1) and (5.1) from:
+
+  Stephenson, F. R., Morrison, L. V. & Hohenkerk, C. Y. 2016, Measurement of
+  the Earth's rotation: 720 BC to AD 2015. Proc. R. Soc. A 472: 20160404.
+  https://doi.org/10.1098/rspa.2016.0404
+  Creative Commons Attribution 4.0 International (CC BY 4.0):
+  https://creativecommons.org/licenses/by/4.0/
+
+The source engine rounds the table values to hundredths of a second and
+rebuilds the authors' spline. This port preserves those rounded inputs,
+translates the spline evaluation to Rust and changes their representation
+to Rust binary64 constants. No further adjustment to the data is made.
+
+The later Delta T values come from the United States Naval Observatory
+(historic_deltat.data and tai-utc.dat, US Government works) and the
+International Earth Rotation and Reference Systems Service (IERS EOP 20 C04
+and Bulletin A, finals2000A.all; https://www.iers.org/).
+
+Leap seconds and UT1
+-------------------
+
+TAI - UTC comes from the IERS leap-second list at the Earth Orientation
+Centre, Paris Observatory:
+https://hpiers.obspm.fr/iers/bul/bulc/ntp/leap-seconds.list
+The source file's header states: "This file is in the public domain."
+
+UT1 values come from the IERS EOP 20 C04 series of the Earth Orientation
+Centre at Paris Observatory, https://hpiers.obspm.fr/iers/eop/eopc04/,
+and IERS finals2000A.all (Bulletin A) of the Rapid Service/Prediction Centre
+at the US Naval Observatory, https://maia.usno.navy.mil/.
+
+The Earth Orientation Centre supplies this technical note for C04:
+
+  Bizouard, C., Lambert, S., Gattano, C., Becker, O. & Richard, J.-Y. 2019,
+  The IERS EOP 14C04 solution for Earth orientation parameters consistent
+  with ITRF 2014. J. Geod. 93, 621-633.
+  https://doi.org/10.1007/s00190-018-1186-3
+
+The parent repository's LICENSING.md records the unresolved C04 terms.
+This port adds no licence assertion about that source. Source dates,
+digests, generation rules and attribution chain are in PROVENANCE.md.
+
+Frame rotations and sidereal time
+--------------------------------
+
+The frame and nutation modules translate this repository's src/frame.ts,
+src/equator.ts, src/nutation.ts, and the meanObliquity and gastHours helpers
+of src/houses.ts and src/ephemeris.ts, under its MIT License (../LICENSE).
+Precession and sidereal time reproduce astronomy-engine 2.1.19's algorithms.
+The precession source is precession_rot(From2000) in astronomy-engine:
+https://github.com/cosinekitty/astronomy
+
+Copyright (c) 2019-2023 Don Cross <cosinekitty@gmail.com>
+
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+IAU 2000B nutation
+-----------------
+
+The Rust nutation tables retain the luni-solar multipliers, coefficients,
+fundamental arguments and fixed planetary offsets of src/nutation.ts.
+That source transcribed the iau2000b function in NOVAS C 3.1, nutation.c,
+distributed in novas 3.1.1.5 (source digest in ../LICENSING.md). NOVAS is
+a work of the US Government, not subject to copyright. Its authors request
+this citation:
+
+  Barron, E. G., Kaplan, G. H., Bangert, J., Bartlett, J. L., Puatua, W.,
+  Harris, W., & Barrett, P. (2011), "Naval Observatory Vector Astrometry
+  Software (NOVAS) Version 3.1, Introducing a Python Edition," Bull. AAS, 43.
+
+The model is D. D. McCarthy and B. J. Luzum (2003), "An abridged model of
+the precession-nutation of the celestial pole," Celestial Mechanics and
+Dynamical Astronomy 85, 37-49; IERS Conventions (2003), chapter 5.
+The equation of the equinoxes retains the complementary terms of IERS
+Conventions (2010), table 5.2e, recorded in the parent's NOTICE.
+The mean obliquity and precession follow N. Capitaine, P. T. Wallace and
+J. Chapront (2003), "Expressions for IAU 2000 precession quantities,"
+Astronomy & Astrophysics 412, 567-586, adopted by IAU 2006 Resolution B1.
+No external tables or ephemeris output were fetched for this translation.
+
+Solar and planetary series
+-------------------------
+
+The Rust planetary code translates the VSOP evaluation, vector conversion,
+light-time and aberration algorithms of astronomy-engine 2.1.19. Its generated
+planet_data.rs retains the installed source's Mercury, Venus, Earth, Mars,
+Jupiter, Saturn, Uranus and Neptune series coefficients. The Sun's vector
+uses the Earth series. No coefficient is fitted or adjusted by this port.
+
+Source: astronomy-engine 2.1.19, esm/astronomy.js, the local pinned npm
+dependency. The source header identifies:
+https://github.com/cosinekitty/astronomy
+Copyright (c) 2019-2023 Don Cross <cosinekitty@gmail.com>
+
+The full MIT permission and warranty text reproduced above under "Frame
+rotations and sidereal time" also applies to these algorithms and tables.
+Retain that full notice when redistributing them. PROVENANCE.md records
+the source digest, package checks and conversion without changing values.
+
+Lunar series and true nodes
+--------------------------
+
+The Rust Moon code translates CalcMoon, GeoMoon, GeoMoonState, the mean
+obliquity rotation and precession into J2000 from the same local
+astronomy-engine 2.1.19 source. Its generated moon_data.rs preserves the
+source's ordered solar perturbation and latitude terms without adjustment.
+The full Don Cross copyright and MIT permission and warranty text above
+applies to these algorithms and coefficients as well.
+
+The installed source describes its lunar algorithm as based on the Nautical
+Almanac Office's Improved Lunar Ephemeris (1954), derived from E. W. Brown's
+lunar theories, and adapted from the Turbo Pascal code in Astronomy on the
+Personal Computer by Montenbruck and Pfleger. This port translates only the
+local MIT dependency; it does not copy those works or fetch another source.
+
+The true-node construction and longitude-speed orchestration translate this
+repository's src/ephemeris.ts under its MIT License (../LICENSE), using
+the same instantaneous orbit plane, nutation and finite-difference steps.
+
+Pluto integration and position assembly
+--------------------------------------
+
+The Rust Pluto code translates major_bodies_t, GravFromState, GravSim,
+GetSegment, CalcPluto and the bounded adjacent CalcPlutoOneWay step from
+the same local astronomy-engine 2.1.19 source. Generated pluto_data.rs
+retains its PlutoStateTable and solar/giant-planet gravitational constants
+without fitting or adjustment. The full Don Cross copyright and MIT
+permission and warranty text above applies to this code and data.
+
+Complete position assembly and reference/span checks translate this
+repository's src/ephemeris.ts and src/reference-span.ts under its MIT License
+(../LICENSE). Their sign annotations reuse the existing src/signs.ts port.

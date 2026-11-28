@@ -1,0 +1,2595 @@
+{
+  "schema": "rustcore-benchmark/1",
+  "unit": "nanoseconds per API call",
+  "scope": "Synthetic workload timings, not astronomical accuracy or a general performance guarantee.",
+  "machine": {
+    "os": "linux",
+    "release": "6.12.94+",
+    "arch": "x64",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "logicalCpus": 8,
+    "availableParallelism": 8,
+    "totalMemoryBytes": 16779780096,
+    "cgroupCpuMax": null,
+    "cgroupMemoryMax": null,
+    "node": "v22.23.3",
+    "v8": "12.4.254.21-node.57",
+    "note": "Shared managed container; CPU affinity/frequency and concurrent host load were not controlled."
+  },
+  "sourceDigests": {
+    "../src/api.ts": "3b597fc7c7e2b828470546862d4484b086a8090bb578eb0785880a9d692ef516",
+    "../src/aspects.ts": "5cfbf1ffe3889f1c038b798d5bd74674de17bd9f0571adb4be08141cdd49f740",
+    "../src/birth-input.ts": "9303df6556f84faf72e4c799f04d00692015dfade4f3c4e26d8d797f01f35928",
+    "../src/body-label.ts": "bce12273949cd9810f4ab00c0f05c1aba14cf4ee46533ca3aba0588525006b1e",
+    "../src/calc-ayanamsa.ts": "45680a9665db54a68f4c9529eaadb541f633eb38542e12a9b067d76247161565",
+    "../src/calc-bounds.ts": "6911d6e1eb1daa7fb02f2f4b0746e0cd9a42579b3ed8c72e424200cfe15ac49c",
+    "../src/calc-frames.ts": "cefe7b46ccb64dfcc7c3eb008af3cca6202237d119b1f9f4e25e6e5919fcecca",
+    "../src/calc-reduce.ts": "8d0c4763f701aa1972470aedc24cd138ba93b1589375f9ba5b855aa890b10f33",
+    "../src/calc.ts": "95ac80e297393a06adfa213a0aa9c342e02ec41abeaefd1b9f497c376ac35180",
+    "../src/civil-calendar.ts": "822ae1f6f0a34a8330da2bdafcfa5cdd421c424d4eb2bd65c0fec7834c7a99d8",
+    "../src/configured-aspects.ts": "c56349ba454e7cb3005f25eb3b740dd063cfeb3b9115e0d11512d8989ff19be4",
+    "../src/crossings.ts": "4d33898d572d453de7c70d076b60018068854739f865080959cb800e4542d182",
+    "../src/date-input.ts": "f9db8865bf143d6334eb93d9618f50aa6a81ba32273b0a103d2a83e3c8014675",
+    "../src/declination.ts": "a7476e6e4c9af69c0eceaab499feacb8540c4975e5f65813c8cb4485b102ec61",
+    "../src/deltat.ts": "2ce7e227bdf0e75bc2401793b8b09ed4113d80d8845376fbec7d0129c12f8b27",
+    "../src/ephemeris.ts": "b530dbd0463b886fe1b8e99a095dc9cf9ef0cf614b6854e78ad206a27913cc7e",
+    "../src/equator.ts": "1789e14344ef83839aea20624d16bb3def70d41e574f412faec87b89e6a79ef7",
+    "../src/exact.ts": "f89a335657aa1139370511d315abcf8d6080ab857e0a37d249faf9de6a5eb25e",
+    "../src/first-millisecond.ts": "960761bbfef1624889ae3fd51758ba9aaf9fc1e8cb4208fe43b91daa04121a50",
+    "../src/fixtures/horizons-2020.ts": "b9020517d31d5a08fd907a6990f221801cc650f0ec6075817738638133ca6980",
+    "../src/fixtures/rational.ts": "d45b1de5a83d20c1ed626675a2cf2235cf11c23864a4c6b497d1dbd9f65be2ca",
+    "../src/frame.ts": "98d0bee44839b23d3ec64dac470e31ab8e366c6907d325a4259f8f37285a7c50",
+    "../src/geo.ts": "6ea0afbf1c13cade4edbd877b7f004a0258d83ef38f82fd979e9a49d900517cf",
+    "../src/geo/calendar.ts": "d23ca3e83ddd2529345d616c43cb65f79910254d4eb1df90b9e41d98c49ab7ff",
+    "../src/geo/geonames.ts": "fd4363799fb26f3682b8c54054afc07761d7c301cdb798e6afc40965df150437",
+    "../src/geo/timezone.ts": "18190ad17d00d093ebc7d997f579c3c4bac98215c05e291aec7ec68a2d246ee3",
+    "../src/geo/zone-history.ts": "a3060a8076b5267870077ad2db54711366739ee89c63cc95c70baa6d197b0248",
+    "../src/houses-extra.ts": "32738f0d0c1fe2ede8495a2fcc9b7fa2dcfda6c0af98270a65005d494a60c015",
+    "../src/houses.ts": "e97ea80f5f225fadf0bfcb051f0afcce820678f31ff1013cc0ebce3035cc8ceb",
+    "../src/index.ts": "a7b8430da0e398e27743eb9ed7bfe8976e370e5fca002dc728308f5b98134644",
+    "../src/internal-math.ts": "b7c8b02926bd29e270072bf55c9cd58c916ea04065ff4ddc10ebd30a06e2bcca",
+    "../src/internal.ts": "e5102198da1a5218e5695fce997fddac45e70732511b5d904f815f8db7d3722e",
+    "../src/nutation.ts": "c11af594d4e8ad64e0a7ff1097505063c70812d2da84e14a6c0280d4841e62b0",
+    "../src/points.ts": "707e59ecdca3874e7c2830c2f7630628dd83b4ae13a97957ec3c623d5ebdf838",
+    "../src/progressions.ts": "5d92c812e26d7a3fc3859260f20801a851b1b0ec01862ec47a953e956f36dcd0",
+    "../src/read-options.ts": "86d68d8992dd38d3e90474b7e6ffe6528c5c75b85ee66b0e12a00cad988ddcfa",
+    "../src/receipt-json.ts": "da5627224b593769eea8f1d434815ad34f422f44e1ef38a6687f86d8ccf8dd5c",
+    "../src/receipt.ts": "3bf65ac45388d13ddddf53e2b37466c7b4c435007bbde5f93c132198a2c1be62",
+    "../src/reference-span.ts": "5bce5a05494448a5740027c078527ab4fb7b0c02f71ff83465c01fd085a4d996",
+    "../src/returns.ts": "a6d4246f25e8f27ef25165d249a47fb88c1fd8214f5217aa0333a6debfada263",
+    "../src/semver.ts": "540570a37143abf182501b8883d36e322a3507b04f1cf7e99f5d71efd17cdd81",
+    "../src/signs.ts": "c8d16ee8bb05a0eb0b41dd6d5912bd43f9c6a93d6dee857cb4530e1dc8a4a590",
+    "../src/sky.ts": "8d2302c5d7674ac9bead759eaca0fabf070e9172ed73be7dd8098a44373e8342",
+    "../src/sky/hours.ts": "6102033bd36da4a2127a60b21f1122a3237c6d0dfb178eff0a0dc27e2bae3e3b",
+    "../src/sky/riseset.ts": "b1107d8a51c04f9a4473ed82e0bc7dab8172f8a924325f1942ea115d082689c5",
+    "../src/synastry.ts": "5671b43c9647a7164d171d9113ae4ab375b7f2a18cba53fac481e4c7a0522d29",
+    "../src/techniques.ts": "7c3786b0ed3ff19d7d21ddb462295932212064710dd1a53a5d38c03107eeb4f9",
+    "../src/techniques/aspect-patterns.ts": "422a3d891e7245781beee02f742f306daf08302f8e654a6ae27b4ce9789ecbe8",
+    "../src/techniques/dignities.ts": "d0fd0c1400e408a5d9ee9af54cfcced3c0b310f38ab99f27323a37d7091ec64e",
+    "../src/techniques/moon-sign.ts": "789ce009534eac6ce2c629d595dfe6fbc0d2310c01d8e290da2dabc135f83331",
+    "../src/techniques/relationship.ts": "e40d4ef50db695063d6c0931303e2d542f066695837ad826a6207056bd66158b",
+    "../src/techniques/returns.ts": "0ff05288efff1021ab2cd93004e5fc3e89243a0443cdff7887616489eb616140",
+    "../src/techniques/shared.ts": "ed53a58b2ac437777ffe3c59c44f2d912b626a0f644ec2755bf5dd12afcb5bb9",
+    "../src/techniques/void-of-course.ts": "8ad32ed382b70120709c3e182a5117443af1f0e29dcd231f8db69d0f405e7623",
+    "../src/time-scale-data.ts": "44c6b80db298e55a050b59cb75975ba2059abb775b16b849022ee5a5849280a0",
+    "../src/time-scale.ts": "6358ab9f119f55e367b7a8cb601c0ed2a6fa0a1b083a8e48b2aa59cd96c7b9d6",
+    "../src/timing.ts": "3ac612de1e696630e07a413a303533c9d23cca8898e7837ab68d3e615cac17c5",
+    "../src/timing/firdaria.ts": "2c4a08af333a3b3d0077c695bd85f8c613cb69f4a521ef5b3a24e36951aed70d",
+    "../src/timing/planetary-returns.ts": "c3636261d414b5b11ea5b9dc17c6cabe7a66ad5091fd7092e266e5b433ed29ca",
+    "../src/timing/profections.ts": "a005cc39b8206ff4feab2636972dc1b4e81c18bc58b2bc1ce2ac417ab459e8a9",
+    "../src/timing/releasing.ts": "545eda739ab2f04b48afd378a04fd3af7d76e0a9031d3dbd5e393976655c849f",
+    "../src/timing/rulers.ts": "a69ab6f6797cc2f0c706c67ee1461b18a3de09256ac3ad94122de1fd6aeab126",
+    "../src/timing/shared.ts": "22f0534844cf4dd60afb0be9e1806823a35ae41e7cb48f84a37b4d138b7cc55a",
+    "../src/timing/solar-arc.ts": "14f8387a66abb81f5c51aa3e0e4d79d98bc08de1c2a536c411df96b728f6adf0",
+    "../src/timing/solar-years.ts": "d3bc543c08244f7fa15d0dcc28a5e873b12b454aa0f5e1b2fc9be29929143141",
+    "../src/types.ts": "36df3203e30792faff1ad5671e26ff5c03789c3dd6adee7d9ec357e2335b2353",
+    "../src/tzdb/tzdb-2025c-00.ts": "19d3cfa6daa865f1e50516ba7050e6f9c419aa981009b102ccaef90a285a9d29",
+    "../src/tzdb/tzdb-2025c-01.ts": "9c454a26007f996114ab2461dd4126cdc678c0d9c534cd7e552d783559ad7714",
+    "../src/tzdb/tzdb-2025c-02.ts": "c2cb640f817013adedfcafd6a5a5ba84835f1143f343399488c5ad94c77ce3b6",
+    "../src/tzdb/tzdb-2025c-03.ts": "52811aba7d40bd8a09b7cd4fb70a475009ffb667b2c29165b3c7eae63d80693d",
+    "../src/tzdb/tzdb-2025c-04.ts": "badada76b2e60507d4b25b0f5dbed08428583fee6943e414cb8e782696ff009b",
+    "../src/tzdb/tzdb-2025c-05.ts": "f4ec4e6243cf04a6b137384192c46b4db17a9eadb0cd99edf572256924e8c462",
+    "../src/tzdb/tzdb-2025c-06.ts": "0649c2102cf348678dae535841f86eda26e1aed4f73476ab8e7d666dcc7fecde",
+    "../src/tzdb/tzdb-2025c-07.ts": "c41f454c34d23def14bc9d2ec036660dfa638632b923572c22ab59efa78d94fc",
+    "../src/tzdb/tzdb-2025c-08.ts": "c36fcb32cb10485a3560d571f9713887ba369a72f575ea3f87c38e53d909ea4f",
+    "../src/tzdb/tzdb-2025c-09.ts": "e8304ca332f4bbf494c4942bcc3859d537f36571a4f2f19698fb0e77266865f8",
+    "../src/tzdb/tzdb-2025c-10.ts": "36ce42fce0310f82d205f07f5aa7369b7212a7b0d936aba52fcd297da762c2d9",
+    "../src/tzdb/tzdb-2025c-11.ts": "54b213b7f868d6e427884d87b36e6ae7d86dda8ca1c0f5a48734d6fb900393ff",
+    "../src/tzdb/tzdb-2025c-12.ts": "904c7dbfb73474cce676c48bd258726b7b8b03054336d4ba8daedd2b6c2990d8",
+    "../src/tzdb/tzdb-2025c-13.ts": "97418bf99bfa4917f09ab08aea032ca13860859fbd832780a6cdf56678517a0c",
+    "../src/tzdb/tzdb-2025c-14.ts": "b1f5ee3f89072223f450d6a483650466db1237adca1ec8b70ed8707e1611c353",
+    "../src/tzdb/tzdb-2025c-15.ts": "db32592f35e50f415e9400e55eb0cc9b54aa5937a1312e080c897b6135f34324",
+    "../src/tzdb/tzdb-2025c.ts": "68e4c054a053655e846062eebe41e5ee8f4e198dcbb2a145611a087e1b88b2df",
+    "../src/vedic.ts": "8aee0c3994f191cd936a3aa58ee0725ec09ba7b5e179fc1c5c2d0667d9f5864c",
+    "../src/vedic/ayanamsa.ts": "25163563938d80ffa8f15070370b8c196a37c98db47aa83456885872b7e0cd09",
+    "../src/vedic/chart.ts": "23ce8773d617f6c49c324275c50ebaa780d82b29d2f9e6930191a62219be676c",
+    "../src/vedic/dasha.ts": "91fe9e1720c719ef71fce0dcdee8ef8a2e07f5f2ff67787af79677c70886744c",
+    "../src/vedic/grid.ts": "a84b2ecf329462d493ec3570581faea9082a0eb0561d0c2a29abc375edcea676",
+    "../src/vedic/kp.ts": "2fa17a1f72e30c550ed283bb87672f8886f01975ecb5ce7bf3a27c358b51c747",
+    "../src/vedic/nakshatra.ts": "e18574e899a8e2c4411581071a0f217582ec8716a66b4ebeed8a2abc3fcf12ea",
+    "../src/vedic/sidereal.ts": "bceb910e5fe7c83e427287e10fc46714ed6ff874050e3228769b9d7f7ac16cbf",
+    "../src/vedic/varga.ts": "ac2efd44f2907a1e24ddcb1fcd7f2831aee25104ff78fc9127d1a16123727541",
+    "../src/window-ranges.ts": "b5abf94c87c2e957441c986c1165a7fc2d1907475999634cba372ab3bd90a6ef",
+    "../src/window.ts": "c36715e96b6308044b25b39708e0ffd9847db1753824492b5d2015496b105a4b",
+    "crates/core/Cargo.toml": "b5ea8ee0f01d5e46075f4481b6b692df2ec669fd13e014fbe05710ba61506956",
+    "crates/core/benches/numeric.rs": "36116b1602464ea13f8f1d59d08768df7e9ce0575d7f947fd7bd9c6df437a015",
+    "crates/core/build.rs": "6591cf1d19038984c10983ba39f5c51757d0be8edaae1fdde9277ef6d0cfe07c",
+    "crates/core/src/angles.rs": "d0cfd5d93002c93ba128a56361b18b4b51b72f200083374e1b87b5a9e1db8a69",
+    "crates/core/src/aspects.rs": "c85fdd89fbcd2fb9960d4f03b4dba0e1291e1ad000d02661f5813ac187cf2a60",
+    "crates/core/src/calendar.rs": "a63b27f0257e26620162876598063105991a90d8702ada4e6d5e1305f346404e",
+    "crates/core/src/date_input.rs": "9883186f57b0cf8c6192bb93181bfeff9d3c33ca75d0828092d113ba6699b0d3",
+    "crates/core/src/deltat.rs": "13ec3592e189b800e8f18769335eabf886a6fef78c6fe94a90e6b63f428255a7",
+    "crates/core/src/ephemeris.rs": "3ed4426bee7eb507b0c4b6326c52dc02248c61d229623d37ccd7b729dad0d54d",
+    "crates/core/src/equator.rs": "634e784b22a86412d98d3c9de57441f74f3622d723887ac22a335bbb93963cd7",
+    "crates/core/src/exact.rs": "a08307baecca7abc6e147d8acde8c008d4c2d4218e1b239d27e89ecb6a89de1d",
+    "crates/core/src/frame.rs": "c482fac3e6e0850a12dca261b217b92812492401c4be5cf321100bc09b4e8ffd",
+    "crates/core/src/houses.rs": "0295a332d0e308be43d25fb1209e9231d5f5aa3d5aa2a72ebc1713ce85db19c8",
+    "crates/core/src/lib.rs": "d2bf7bf6f0579127dfc05405df58dbaf38c903070d71ef780fae916a659cd9fd",
+    "crates/core/src/lunar.rs": "4327616cc32b357368a041da4911e2ef9f9ca32e737319028ab11b51c84a66ab",
+    "crates/core/src/moon.rs": "f19274e3fb5d0c08253f02ae353c80b5577785b49925f0b53828935f111aebb5",
+    "crates/core/src/nutation.rs": "7921a1bf8c7e08cb1150fe14d50a82516b637dbe52e98363a90cd6c30a0bea95",
+    "crates/core/src/planets.rs": "ab828b091f96238a212bcef10f85b43f26e8f788b8453b73008e1fa4358a79fd",
+    "crates/core/src/pluto.rs": "90f6c9b52156e5f87062970f9bcafd52089d1493a15429e0e320bcd35dbbb143",
+    "crates/core/src/signs.rs": "339ebaf7708db6926f6bd6b5506918109f83fe76c2dae33464f4206d57577ab5",
+    "crates/core/src/time_scales.rs": "8e322d981be2bc640a369ae0df5e3fd28e7c521ee00859c8ed2abd18cfaad9b6",
+    "crates/wasm/Cargo.toml": "5723f0ca1b861bf7e9743ffe843314755878349e19a58387366549411ca284bb",
+    "crates/wasm/src/aspects.rs": "007e4c256ef6b0eccba3e51b3402f210e0b2456c02f4dc66b0c4be0148e792af",
+    "crates/wasm/src/ephemeris.rs": "aef08b090025d5c9b4d1d8d1de3c405a6d8d111efdb12e95f6baa1599fc6b7c3",
+    "crates/wasm/src/frame.rs": "e18d1bedc39f39ed24d48d2617d17f9c6108350092c9f77330c224898d62930d",
+    "crates/wasm/src/houses.rs": "c932c9d534ea383a7fc290ea85342462af0f929bfc00c03889587dc87db4db35",
+    "crates/wasm/src/lib.rs": "9228b5a64ebeb3078f24e092adcd7be818f523e8f443ee4fe1e7908f5807d31c",
+    "crates/wasm/src/moon.rs": "45db1a27314e4c3bee9e06c75c19559a146e21df63e782cd2565c9d370a5d16f",
+    "crates/wasm/src/planets.rs": "f0d413d9420dff54b03ad2b6fec400f9fd0e9c87189a771d724d93f977487aac",
+    "crates/wasm/src/time.rs": "c0d9508be57d8516e63ce6a2ab51543fd3ee650cc37814998f700584ad97a153",
+    "ts/aspect-policy.ts": "165930a10d32fe024f29b8799ff9d1210c6b1fd9f13a253923d4245ef269b5f5",
+    "ts/aspects.ts": "5f0340e52577bb389c5b80070f0fb8dda4976c6c18789f08ccc1664c0282fcf1",
+    "ts/index.ts": "16db51a0086b57df1949cf0f287056bc68ee8494ab2e5910313f2d144a66a889",
+    "ts/nutation-data.ts": "2ac3a724077ce0fc5f31dda10fd1c1fab52c7c07762fc7f5b08f45578a2f984f",
+    "ts/runtime.ts": "26bbd8df37d2b62ebf3f56b7e73699ecaacf08418e5f9b6c2503aa23299e7b96",
+    "ts/sign-data.ts": "cfb4ae2342c2bca13e8f501b0d2a37731d3dfc982b0a519cc64ef637268f062b",
+    "benchmarks/node.ts": "d6943799654e8d5086c7ae008e4558c656043e59acb69fa1414ab4c4be71ea4c",
+    "scripts/benchmark-report-lib.mjs": "8ec7584d71b35ac823102e85d8646055e3c401fa8cf1c1a8cf37609c1fa03070",
+    "scripts/benchmark-report.check.mjs": "84defb9c15a1ad50fbbe94043b27a777ac4b18e42087e2b0403845e8fa63620e",
+    "scripts/benchmark.mjs": "0f4d3c886e87a99ecf247b60e711b4348b764b5d3482fae4d6f6c567ece046c1",
+    "scripts/browser.mjs": "0b627511ea4ad5264f83bee45fc1a4b1c53596a7bc95d4d34c9d7bc79267436a",
+    "scripts/check-isolation.mjs": "0c8f89a61d22fc49500412e8fa3932d8cf2cde337d68c8b3a03226fa70406cb2",
+    "scripts/generate-moon-data.mjs": "028fbb2c6629cb07535675750ba91642ab33e1b9c59ab983085d636597964f16",
+    "scripts/generate-planet-data.mjs": "c3d7522c401ddd5c75340a498d2905f98ec57ade37e26f44ca026e6389999b5c",
+    "scripts/generate-pluto-data.mjs": "61b6122035e748dfff8451ba96642c066c83faa2eef6375919c3ff2ed872f616",
+    "scripts/generate-time-data.mjs": "3cd2783a60691ff2461b5d992f3d38e9baa510efecd5a0f56d02556fa3abedb1",
+    "scripts/moon-data.check.mjs": "334955c18d4b976f4b351e8f270cc06be6f9c79700bdedcbbf498426e75bb8fa",
+    "scripts/parity-report-lib.mjs": "b61fd3132a32f2c901155221bc0e9f1acd0361db4b5d5ba852fc4d471477b983",
+    "scripts/parity-report.check.mjs": "1b27aa856f253afb301c91b3aee060b9cf0f35466c7a42706fb2f2e2a762a43e",
+    "scripts/parity-report.mjs": "ee971d11e91099e1ccb1d88c7b73d1391de7d41491c20cbc972b1f1049417408",
+    "scripts/planet-data.check.mjs": "53072c0e58ce635ba4bb244146d4d1d3846ca40b3a37745d8ce7057a8bf5601e",
+    "scripts/pluto-data.check.mjs": "ade677f0cff3bf79d6577278c49ba72f9e85870fd7323a1275676eaef4574801",
+    "scripts/run.mjs": "53c2f85ca17400c44163079aee496f62e835aca34b4729b01ba578a73e4fdd8f",
+    "scripts/time-data.check.mjs": "97d589b87389e1a00ca23742ba64686e0da31b48ad2aac19c58e47bda73b1eb8",
+    "scripts/wasm-build.check.mjs": "8598a9789d39d2cd59e89d54e3a327dd45a3b2ab15c06bc1d73d5ad20fd7a0aa",
+    "scripts/wasm-build.mjs": "44df9ffd079abf05053966aaa26c43deb2bfb39db017f6400ebaa91963de542a",
+    "Cargo.toml": "f0bb57a20cebff5661d51717925fa2a879f5a544ac80c5bb2883211246e032b3",
+    "Cargo.lock": "62fcbb67af594b139a61228545f62b23bc75c1302b089c0ccd9cd47e83e1a95c",
+    "rust-toolchain.toml": "82bd9ff773151c48e4e783cb65b7f44fd66025f19550788b34d82cc8ce39def2",
+    "package.json": "8359acc55a18413fc024a972dc0be1a6f550d3272f4573087cc71928becd9e8d",
+    "package-lock.json": "18a3105e57d5c261b42b9c739d3c42763177dcbebfff7b9eefe83fd104b71957",
+    "tsconfig.json": "eaec33c06779a576d98d47fd9e788ee2228dfc19e635b1c069f0513413dc5146",
+    "node_modules/astronomy-engine/esm/astronomy.js": "068f1445ed0c636c94818fe6d20d7d125120e605e0bab9fc4675c3d531be5ad7"
+  },
+  "descriptor": {
+    "schema": 1,
+    "manifest": [
+      {
+        "id": "positions/warm",
+        "callsPerIteration": 9
+      },
+      {
+        "id": "positions/cold",
+        "callsPerIteration": 9
+      },
+      {
+        "id": "houses/whole",
+        "callsPerIteration": 63
+      },
+      {
+        "id": "houses/placidus",
+        "callsPerIteration": 63
+      },
+      {
+        "id": "houses/koch",
+        "callsPerIteration": 63
+      },
+      {
+        "id": "houses/porphyry",
+        "callsPerIteration": 63
+      },
+      {
+        "id": "houses/regiomontanus",
+        "callsPerIteration": 63
+      },
+      {
+        "id": "houses/campanus",
+        "callsPerIteration": 63
+      },
+      {
+        "id": "houses/topocentric",
+        "callsPerIteration": 63
+      },
+      {
+        "id": "houses/alcabitius",
+        "callsPerIteration": 63
+      },
+      {
+        "id": "houses/equal",
+        "callsPerIteration": 63
+      },
+      {
+        "id": "houses/equal-mc",
+        "callsPerIteration": 63
+      },
+      {
+        "id": "houses/vehlow",
+        "callsPerIteration": 63
+      },
+      {
+        "id": "houses/meridian",
+        "callsPerIteration": 63
+      },
+      {
+        "id": "houses/morinus",
+        "callsPerIteration": 63
+      },
+      {
+        "id": "time/utc",
+        "callsPerIteration": 9
+      },
+      {
+        "id": "frame/ecliptic_of_date",
+        "callsPerIteration": 9
+      },
+      {
+        "id": "aspects/legacy",
+        "callsPerIteration": 9
+      },
+      {
+        "id": "aspects/configured_default",
+        "callsPerIteration": 9
+      },
+      {
+        "id": "aspects/configured_all",
+        "callsPerIteration": 9
+      },
+      {
+        "id": "aspects/configured_custom",
+        "callsPerIteration": 9
+      }
+    ],
+    "dates": [
+      -5364662400000,
+      -3786825600000,
+      -2208988800000,
+      -631152000000,
+      946684800000,
+      2524608000000,
+      4102444800000,
+      5680281600000,
+      7258118400000
+    ],
+    "latitudes": [
+      -80,
+      -66.5,
+      -45,
+      0,
+      45,
+      66.5,
+      80
+    ],
+    "longitudes": [
+      -148,
+      -111,
+      -74,
+      -37,
+      0,
+      37,
+      74,
+      111,
+      148
+    ],
+    "charts": [
+      [
+        {
+          "body": "Sun",
+          "lon": 0,
+          "speed": -0.5
+        },
+        {
+          "body": "Moon",
+          "lon": 31.25,
+          "speed": -0.25
+        },
+        {
+          "body": "Mercury",
+          "lon": 62.5,
+          "speed": 0
+        },
+        {
+          "body": "Venus",
+          "lon": 93.75,
+          "speed": 0.25
+        },
+        {
+          "body": "Mars",
+          "lon": 125,
+          "speed": 0.5
+        },
+        {
+          "body": "Jupiter",
+          "lon": 156.25,
+          "speed": -0.5
+        },
+        {
+          "body": "Saturn",
+          "lon": 187.5,
+          "speed": -0.25
+        },
+        {
+          "body": "Uranus",
+          "lon": 218.75,
+          "speed": 0
+        },
+        {
+          "body": "Neptune",
+          "lon": 250,
+          "speed": 0.25
+        },
+        {
+          "body": "Pluto",
+          "lon": 281.25,
+          "speed": 0.5
+        },
+        {
+          "body": "North Node",
+          "lon": 312.5,
+          "speed": -0.5
+        },
+        {
+          "body": "South Node",
+          "lon": 343.75,
+          "speed": -0.25
+        }
+      ],
+      [
+        {
+          "body": "Sun",
+          "lon": 0.125,
+          "speed": -0.4990234375
+        },
+        {
+          "body": "Moon",
+          "lon": 31.5,
+          "speed": -0.2490234375
+        },
+        {
+          "body": "Mercury",
+          "lon": 62.875,
+          "speed": 0.0009765625
+        },
+        {
+          "body": "Venus",
+          "lon": 94.25,
+          "speed": 0.2509765625
+        },
+        {
+          "body": "Mars",
+          "lon": 125.625,
+          "speed": 0.5009765625
+        },
+        {
+          "body": "Jupiter",
+          "lon": 157,
+          "speed": -0.4990234375
+        },
+        {
+          "body": "Saturn",
+          "lon": 188.375,
+          "speed": -0.2490234375
+        },
+        {
+          "body": "Uranus",
+          "lon": 219.75,
+          "speed": 0.0009765625
+        },
+        {
+          "body": "Neptune",
+          "lon": 251.125,
+          "speed": 0.2509765625
+        },
+        {
+          "body": "Pluto",
+          "lon": 282.5,
+          "speed": 0.5009765625
+        },
+        {
+          "body": "North Node",
+          "lon": 313.875,
+          "speed": -0.4990234375
+        },
+        {
+          "body": "South Node",
+          "lon": 345.25,
+          "speed": -0.2490234375
+        }
+      ],
+      [
+        {
+          "body": "Sun",
+          "lon": 0.25,
+          "speed": -0.498046875
+        },
+        {
+          "body": "Moon",
+          "lon": 31.75,
+          "speed": -0.248046875
+        },
+        {
+          "body": "Mercury",
+          "lon": 63.25,
+          "speed": 0.001953125
+        },
+        {
+          "body": "Venus",
+          "lon": 94.75,
+          "speed": 0.251953125
+        },
+        {
+          "body": "Mars",
+          "lon": 126.25,
+          "speed": 0.501953125
+        },
+        {
+          "body": "Jupiter",
+          "lon": 157.75,
+          "speed": -0.498046875
+        },
+        {
+          "body": "Saturn",
+          "lon": 189.25,
+          "speed": -0.248046875
+        },
+        {
+          "body": "Uranus",
+          "lon": 220.75,
+          "speed": 0.001953125
+        },
+        {
+          "body": "Neptune",
+          "lon": 252.25,
+          "speed": 0.251953125
+        },
+        {
+          "body": "Pluto",
+          "lon": 283.75,
+          "speed": 0.501953125
+        },
+        {
+          "body": "North Node",
+          "lon": 315.25,
+          "speed": -0.498046875
+        },
+        {
+          "body": "South Node",
+          "lon": 346.75,
+          "speed": -0.248046875
+        }
+      ],
+      [
+        {
+          "body": "Sun",
+          "lon": 0.375,
+          "speed": -0.4970703125
+        },
+        {
+          "body": "Moon",
+          "lon": 32,
+          "speed": -0.2470703125
+        },
+        {
+          "body": "Mercury",
+          "lon": 63.625,
+          "speed": 0.0029296875
+        },
+        {
+          "body": "Venus",
+          "lon": 95.25,
+          "speed": 0.2529296875
+        },
+        {
+          "body": "Mars",
+          "lon": 126.875,
+          "speed": 0.5029296875
+        },
+        {
+          "body": "Jupiter",
+          "lon": 158.5,
+          "speed": -0.4970703125
+        },
+        {
+          "body": "Saturn",
+          "lon": 190.125,
+          "speed": -0.2470703125
+        },
+        {
+          "body": "Uranus",
+          "lon": 221.75,
+          "speed": 0.0029296875
+        },
+        {
+          "body": "Neptune",
+          "lon": 253.375,
+          "speed": 0.2529296875
+        },
+        {
+          "body": "Pluto",
+          "lon": 285,
+          "speed": 0.5029296875
+        },
+        {
+          "body": "North Node",
+          "lon": 316.625,
+          "speed": -0.4970703125
+        },
+        {
+          "body": "South Node",
+          "lon": 348.25,
+          "speed": -0.2470703125
+        }
+      ],
+      [
+        {
+          "body": "Sun",
+          "lon": 0.5,
+          "speed": -0.49609375
+        },
+        {
+          "body": "Moon",
+          "lon": 32.25,
+          "speed": -0.24609375
+        },
+        {
+          "body": "Mercury",
+          "lon": 64,
+          "speed": 0.00390625
+        },
+        {
+          "body": "Venus",
+          "lon": 95.75,
+          "speed": 0.25390625
+        },
+        {
+          "body": "Mars",
+          "lon": 127.5,
+          "speed": 0.50390625
+        },
+        {
+          "body": "Jupiter",
+          "lon": 159.25,
+          "speed": -0.49609375
+        },
+        {
+          "body": "Saturn",
+          "lon": 191,
+          "speed": -0.24609375
+        },
+        {
+          "body": "Uranus",
+          "lon": 222.75,
+          "speed": 0.00390625
+        },
+        {
+          "body": "Neptune",
+          "lon": 254.5,
+          "speed": 0.25390625
+        },
+        {
+          "body": "Pluto",
+          "lon": 286.25,
+          "speed": 0.50390625
+        },
+        {
+          "body": "North Node",
+          "lon": 318,
+          "speed": -0.49609375
+        },
+        {
+          "body": "South Node",
+          "lon": 349.75,
+          "speed": -0.24609375
+        }
+      ],
+      [
+        {
+          "body": "Sun",
+          "lon": 0.625,
+          "speed": -0.4951171875
+        },
+        {
+          "body": "Moon",
+          "lon": 32.5,
+          "speed": -0.2451171875
+        },
+        {
+          "body": "Mercury",
+          "lon": 64.375,
+          "speed": 0.0048828125
+        },
+        {
+          "body": "Venus",
+          "lon": 96.25,
+          "speed": 0.2548828125
+        },
+        {
+          "body": "Mars",
+          "lon": 128.125,
+          "speed": 0.5048828125
+        },
+        {
+          "body": "Jupiter",
+          "lon": 160,
+          "speed": -0.4951171875
+        },
+        {
+          "body": "Saturn",
+          "lon": 191.875,
+          "speed": -0.2451171875
+        },
+        {
+          "body": "Uranus",
+          "lon": 223.75,
+          "speed": 0.0048828125
+        },
+        {
+          "body": "Neptune",
+          "lon": 255.625,
+          "speed": 0.2548828125
+        },
+        {
+          "body": "Pluto",
+          "lon": 287.5,
+          "speed": 0.5048828125
+        },
+        {
+          "body": "North Node",
+          "lon": 319.375,
+          "speed": -0.4951171875
+        },
+        {
+          "body": "South Node",
+          "lon": 351.25,
+          "speed": -0.2451171875
+        }
+      ],
+      [
+        {
+          "body": "Sun",
+          "lon": 0.75,
+          "speed": -0.494140625
+        },
+        {
+          "body": "Moon",
+          "lon": 32.75,
+          "speed": -0.244140625
+        },
+        {
+          "body": "Mercury",
+          "lon": 64.75,
+          "speed": 0.005859375
+        },
+        {
+          "body": "Venus",
+          "lon": 96.75,
+          "speed": 0.255859375
+        },
+        {
+          "body": "Mars",
+          "lon": 128.75,
+          "speed": 0.505859375
+        },
+        {
+          "body": "Jupiter",
+          "lon": 160.75,
+          "speed": -0.494140625
+        },
+        {
+          "body": "Saturn",
+          "lon": 192.75,
+          "speed": -0.244140625
+        },
+        {
+          "body": "Uranus",
+          "lon": 224.75,
+          "speed": 0.005859375
+        },
+        {
+          "body": "Neptune",
+          "lon": 256.75,
+          "speed": 0.255859375
+        },
+        {
+          "body": "Pluto",
+          "lon": 288.75,
+          "speed": 0.505859375
+        },
+        {
+          "body": "North Node",
+          "lon": 320.75,
+          "speed": -0.494140625
+        },
+        {
+          "body": "South Node",
+          "lon": 352.75,
+          "speed": -0.244140625
+        }
+      ],
+      [
+        {
+          "body": "Sun",
+          "lon": 0.875,
+          "speed": -0.4931640625
+        },
+        {
+          "body": "Moon",
+          "lon": 33,
+          "speed": -0.2431640625
+        },
+        {
+          "body": "Mercury",
+          "lon": 65.125,
+          "speed": 0.0068359375
+        },
+        {
+          "body": "Venus",
+          "lon": 97.25,
+          "speed": 0.2568359375
+        },
+        {
+          "body": "Mars",
+          "lon": 129.375,
+          "speed": 0.5068359375
+        },
+        {
+          "body": "Jupiter",
+          "lon": 161.5,
+          "speed": -0.4931640625
+        },
+        {
+          "body": "Saturn",
+          "lon": 193.625,
+          "speed": -0.2431640625
+        },
+        {
+          "body": "Uranus",
+          "lon": 225.75,
+          "speed": 0.0068359375
+        },
+        {
+          "body": "Neptune",
+          "lon": 257.875,
+          "speed": 0.2568359375
+        },
+        {
+          "body": "Pluto",
+          "lon": 290,
+          "speed": 0.5068359375
+        },
+        {
+          "body": "North Node",
+          "lon": 322.125,
+          "speed": -0.4931640625
+        },
+        {
+          "body": "South Node",
+          "lon": 354.25,
+          "speed": -0.2431640625
+        }
+      ],
+      [
+        {
+          "body": "Sun",
+          "lon": 1,
+          "speed": -0.4921875
+        },
+        {
+          "body": "Moon",
+          "lon": 33.25,
+          "speed": -0.2421875
+        },
+        {
+          "body": "Mercury",
+          "lon": 65.5,
+          "speed": 0.0078125
+        },
+        {
+          "body": "Venus",
+          "lon": 97.75,
+          "speed": 0.2578125
+        },
+        {
+          "body": "Mars",
+          "lon": 130,
+          "speed": 0.5078125
+        },
+        {
+          "body": "Jupiter",
+          "lon": 162.25,
+          "speed": -0.4921875
+        },
+        {
+          "body": "Saturn",
+          "lon": 194.5,
+          "speed": -0.2421875
+        },
+        {
+          "body": "Uranus",
+          "lon": 226.75,
+          "speed": 0.0078125
+        },
+        {
+          "body": "Neptune",
+          "lon": 259,
+          "speed": 0.2578125
+        },
+        {
+          "body": "Pluto",
+          "lon": 291.25,
+          "speed": 0.5078125
+        },
+        {
+          "body": "North Node",
+          "lon": 323.5,
+          "speed": -0.4921875
+        },
+        {
+          "body": "South Node",
+          "lon": 355.75,
+          "speed": -0.2421875
+        }
+      ]
+    ],
+    "allAngles": [
+      0,
+      60,
+      90,
+      120,
+      180,
+      30,
+      45,
+      72,
+      135,
+      144,
+      150
+    ],
+    "houseInputs": [
+      {
+        "gastHours": 0,
+        "latitude": -80,
+        "longitude": -148,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 0,
+        "latitude": -66.5,
+        "longitude": -148,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 0,
+        "latitude": -45,
+        "longitude": -148,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 0,
+        "latitude": 0,
+        "longitude": -148,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 0,
+        "latitude": 45,
+        "longitude": -148,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 0,
+        "latitude": 66.5,
+        "longitude": -148,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 0,
+        "latitude": 80,
+        "longitude": -148,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 2.75,
+        "latitude": -80,
+        "longitude": -111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 2.75,
+        "latitude": -66.5,
+        "longitude": -111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 2.75,
+        "latitude": -45,
+        "longitude": -111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 2.75,
+        "latitude": 0,
+        "longitude": -111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 2.75,
+        "latitude": 45,
+        "longitude": -111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 2.75,
+        "latitude": 66.5,
+        "longitude": -111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 2.75,
+        "latitude": 80,
+        "longitude": -111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 5.5,
+        "latitude": -80,
+        "longitude": -74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 5.5,
+        "latitude": -66.5,
+        "longitude": -74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 5.5,
+        "latitude": -45,
+        "longitude": -74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 5.5,
+        "latitude": 0,
+        "longitude": -74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 5.5,
+        "latitude": 45,
+        "longitude": -74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 5.5,
+        "latitude": 66.5,
+        "longitude": -74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 5.5,
+        "latitude": 80,
+        "longitude": -74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 8.25,
+        "latitude": -80,
+        "longitude": -37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 8.25,
+        "latitude": -66.5,
+        "longitude": -37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 8.25,
+        "latitude": -45,
+        "longitude": -37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 8.25,
+        "latitude": 0,
+        "longitude": -37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 8.25,
+        "latitude": 45,
+        "longitude": -37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 8.25,
+        "latitude": 66.5,
+        "longitude": -37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 8.25,
+        "latitude": 80,
+        "longitude": -37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 11,
+        "latitude": -80,
+        "longitude": 0,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 11,
+        "latitude": -66.5,
+        "longitude": 0,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 11,
+        "latitude": -45,
+        "longitude": 0,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 11,
+        "latitude": 0,
+        "longitude": 0,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 11,
+        "latitude": 45,
+        "longitude": 0,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 11,
+        "latitude": 66.5,
+        "longitude": 0,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 11,
+        "latitude": 80,
+        "longitude": 0,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 13.75,
+        "latitude": -80,
+        "longitude": 37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 13.75,
+        "latitude": -66.5,
+        "longitude": 37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 13.75,
+        "latitude": -45,
+        "longitude": 37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 13.75,
+        "latitude": 0,
+        "longitude": 37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 13.75,
+        "latitude": 45,
+        "longitude": 37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 13.75,
+        "latitude": 66.5,
+        "longitude": 37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 13.75,
+        "latitude": 80,
+        "longitude": 37,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 16.5,
+        "latitude": -80,
+        "longitude": 74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 16.5,
+        "latitude": -66.5,
+        "longitude": 74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 16.5,
+        "latitude": -45,
+        "longitude": 74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 16.5,
+        "latitude": 0,
+        "longitude": 74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 16.5,
+        "latitude": 45,
+        "longitude": 74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 16.5,
+        "latitude": 66.5,
+        "longitude": 74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 16.5,
+        "latitude": 80,
+        "longitude": 74,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 19.25,
+        "latitude": -80,
+        "longitude": 111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 19.25,
+        "latitude": -66.5,
+        "longitude": 111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 19.25,
+        "latitude": -45,
+        "longitude": 111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 19.25,
+        "latitude": 0,
+        "longitude": 111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 19.25,
+        "latitude": 45,
+        "longitude": 111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 19.25,
+        "latitude": 66.5,
+        "longitude": 111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 19.25,
+        "latitude": 80,
+        "longitude": 111,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 22,
+        "latitude": -80,
+        "longitude": 148,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 22,
+        "latitude": -66.5,
+        "longitude": 148,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 22,
+        "latitude": -45,
+        "longitude": 148,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 22,
+        "latitude": 0,
+        "longitude": 148,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 22,
+        "latitude": 45,
+        "longitude": 148,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 22,
+        "latitude": 66.5,
+        "longitude": 148,
+        "obliquity": 23.4393
+      },
+      {
+        "gastHours": 22,
+        "latitude": 80,
+        "longitude": 148,
+        "obliquity": 23.4393
+      }
+    ],
+    "policies": [
+      {
+        "id": "configured_default",
+        "bodies": [
+          "Sun",
+          "Moon",
+          "Mercury",
+          "Venus",
+          "Mars",
+          "Jupiter",
+          "Saturn",
+          "Uranus",
+          "Neptune",
+          "Pluto"
+        ],
+        "aspects": [
+          {
+            "type": "conjunction",
+            "angle": 0,
+            "orb": {
+              "applying": 8,
+              "separating": 8,
+              "stationary": 8
+            },
+            "luminaryOrb": {
+              "applying": 10,
+              "separating": 10,
+              "stationary": 10
+            }
+          },
+          {
+            "type": "sextile",
+            "angle": 60,
+            "orb": {
+              "applying": 4,
+              "separating": 4,
+              "stationary": 4
+            },
+            "luminaryOrb": {
+              "applying": 5,
+              "separating": 5,
+              "stationary": 5
+            }
+          },
+          {
+            "type": "square",
+            "angle": 90,
+            "orb": {
+              "applying": 7,
+              "separating": 7,
+              "stationary": 7
+            },
+            "luminaryOrb": {
+              "applying": 8,
+              "separating": 8,
+              "stationary": 8
+            }
+          },
+          {
+            "type": "trine",
+            "angle": 120,
+            "orb": {
+              "applying": 7,
+              "separating": 7,
+              "stationary": 7
+            },
+            "luminaryOrb": {
+              "applying": 8,
+              "separating": 8,
+              "stationary": 8
+            }
+          },
+          {
+            "type": "opposition",
+            "angle": 180,
+            "orb": {
+              "applying": 8,
+              "separating": 8,
+              "stationary": 8
+            },
+            "luminaryOrb": {
+              "applying": 10,
+              "separating": 10,
+              "stationary": 10
+            }
+          }
+        ]
+      },
+      {
+        "id": "configured_all",
+        "bodies": [
+          "Sun",
+          "Moon",
+          "Mercury",
+          "Venus",
+          "Mars",
+          "Jupiter",
+          "Saturn",
+          "Uranus",
+          "Neptune",
+          "Pluto"
+        ],
+        "aspects": [
+          {
+            "type": "conjunction",
+            "angle": 0,
+            "orb": {
+              "applying": 2,
+              "separating": 2,
+              "stationary": 2
+            },
+            "luminaryOrb": null
+          },
+          {
+            "type": "sextile",
+            "angle": 60,
+            "orb": {
+              "applying": 2,
+              "separating": 2,
+              "stationary": 2
+            },
+            "luminaryOrb": null
+          },
+          {
+            "type": "square",
+            "angle": 90,
+            "orb": {
+              "applying": 2,
+              "separating": 2,
+              "stationary": 2
+            },
+            "luminaryOrb": null
+          },
+          {
+            "type": "trine",
+            "angle": 120,
+            "orb": {
+              "applying": 2,
+              "separating": 2,
+              "stationary": 2
+            },
+            "luminaryOrb": null
+          },
+          {
+            "type": "opposition",
+            "angle": 180,
+            "orb": {
+              "applying": 2,
+              "separating": 2,
+              "stationary": 2
+            },
+            "luminaryOrb": null
+          },
+          {
+            "type": "semisextile",
+            "angle": 30,
+            "orb": {
+              "applying": 2,
+              "separating": 2,
+              "stationary": 2
+            },
+            "luminaryOrb": null
+          },
+          {
+            "type": "semisquare",
+            "angle": 45,
+            "orb": {
+              "applying": 2,
+              "separating": 2,
+              "stationary": 2
+            },
+            "luminaryOrb": null
+          },
+          {
+            "type": "quintile",
+            "angle": 72,
+            "orb": {
+              "applying": 2,
+              "separating": 2,
+              "stationary": 2
+            },
+            "luminaryOrb": null
+          },
+          {
+            "type": "sesquiquadrate",
+            "angle": 135,
+            "orb": {
+              "applying": 2,
+              "separating": 2,
+              "stationary": 2
+            },
+            "luminaryOrb": null
+          },
+          {
+            "type": "biquintile",
+            "angle": 144,
+            "orb": {
+              "applying": 2,
+              "separating": 2,
+              "stationary": 2
+            },
+            "luminaryOrb": null
+          },
+          {
+            "type": "quincunx",
+            "angle": 150,
+            "orb": {
+              "applying": 2,
+              "separating": 2,
+              "stationary": 2
+            },
+            "luminaryOrb": null
+          }
+        ]
+      },
+      {
+        "id": "configured_custom",
+        "bodies": [
+          "Sun",
+          "Moon",
+          "Mercury",
+          "Venus",
+          "Mars",
+          "Jupiter",
+          "Saturn",
+          "Uranus",
+          "Neptune",
+          "Pluto",
+          "North Node",
+          "South Node"
+        ],
+        "aspects": [
+          {
+            "type": "custom",
+            "angle": 17.25,
+            "orb": {
+              "applying": 1.5,
+              "separating": 1.5,
+              "stationary": 1.5
+            },
+            "luminaryOrb": null
+          },
+          {
+            "type": "square",
+            "angle": 90,
+            "orb": {
+              "applying": 3,
+              "separating": 3,
+              "stationary": 3
+            },
+            "luminaryOrb": null
+          }
+        ]
+      }
+    ]
+  },
+  "native": {
+    "kind": "native",
+    "startedAt": "2026-10-13T17:51:47.053Z",
+    "completedAt": "2026-10-13T18:04:30.147Z",
+    "artifact": {
+      "sha256": "7be9e736b12bb2956621ee0f5b08ae5130d3b2379918633e3dbccc2168935bc1",
+      "path": "target/release/deps/numeric-f628e4bb52906295",
+      "criterion": "0.5.1",
+      "profile": "Cargo bench (optimized), workspace release LTO=true, codegen-units=1",
+      "compiler": "rustc 1.85.1 (4eb161250 2025-03-15)\nbinary: rustc\ncommit-hash: 4eb161250e340c8f48f66e2b929ef4a5bed7c181\ncommit-date: 2025-03-15\nhost: x86_64-unknown-linux-gnu\nrelease: 1.85.1\nLLVM version: 19.1.7",
+      "customRustflags": false
+    },
+    "settings": {
+      "sampleSize": 30,
+      "warmupSeconds": 1,
+      "measurementSeconds": 2
+    },
+    "measurements": [
+      {
+        "id": "aspects/configured_all",
+        "callsPerIteration": 9,
+        "samples": 30,
+        "mean": {
+          "estimate": 57245.0014273875,
+          "lower": 51957.95531678421,
+          "upper": 62663.12858986073,
+          "standardError": 2722.4775338395175,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 55980.01128979857,
+          "lower": 48575.94032921811,
+          "upper": 63843.73045267489,
+          "standardError": 4534.468619164218,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "aspects/configured_custom",
+        "callsPerIteration": 9,
+        "samples": 30,
+        "mean": {
+          "estimate": 31357.678342016614,
+          "lower": 28200.191183055813,
+          "upper": 34801.013797856416,
+          "standardError": 1685.68931247793,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 29474.3159708193,
+          "lower": 26764.875243664716,
+          "upper": 33487.3387254902,
+          "standardError": 1952.9573118819665,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "aspects/configured_default",
+        "callsPerIteration": 9,
+        "samples": 30,
+        "mean": {
+          "estimate": 37042.13400371648,
+          "lower": 33469.68572666621,
+          "upper": 40947.32650240373,
+          "standardError": 1911.410103399952,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 31471.03180354267,
+          "lower": 30157.70051476301,
+          "upper": 36360.46219135803,
+          "standardError": 2065.2179130286763,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "aspects/legacy",
+        "callsPerIteration": 9,
+        "samples": 30,
+        "mean": {
+          "estimate": 2371.0822960698724,
+          "lower": 2123.5561249679217,
+          "upper": 2638.7699752949247,
+          "standardError": 131.90794244735122,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 2107.4197625830957,
+          "lower": 1879.737164750958,
+          "upper": 2506.021763320338,
+          "standardError": 174.3683228209177,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "frame/ecliptic_of_date",
+        "callsPerIteration": 9,
+        "samples": 30,
+        "mean": {
+          "estimate": 1350.147026642403,
+          "lower": 1181.192900650678,
+          "upper": 1553.0553077686338,
+          "standardError": 95.66376346524083,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 1178.049686363818,
+          "lower": 1135.8104309001558,
+          "upper": 1216.064240481042,
+          "standardError": 25.198133766514378,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "houses/alcabitius",
+        "callsPerIteration": 63,
+        "samples": 30,
+        "mean": {
+          "estimate": 505.1026976283404,
+          "lower": 447.54265531102493,
+          "upper": 566.3829150466373,
+          "standardError": 30.405912093171985,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 432.90151032635276,
+          "lower": 366.82752892823794,
+          "upper": 600.8614412586022,
+          "standardError": 66.23545575101794,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "houses/campanus",
+        "callsPerIteration": 63,
+        "samples": 30,
+        "mean": {
+          "estimate": 611.1005305963939,
+          "lower": 531.7969399210937,
+          "upper": 699.4978162647606,
+          "standardError": 42.83169836484511,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 536.3572454844008,
+          "lower": 449.5833683976464,
+          "upper": 701.5362833511438,
+          "standardError": 64.30157174945438,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "houses/equal-mc",
+        "callsPerIteration": 63,
+        "samples": 30,
+        "mean": {
+          "estimate": 82.96879138383387,
+          "lower": 75.67242491001272,
+          "upper": 90.73022534509516,
+          "standardError": 3.834650455525769,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 79.58386480213757,
+          "lower": 74.29967898262615,
+          "upper": 88.34211095707371,
+          "standardError": 3.7040036301815737,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "houses/equal",
+        "callsPerIteration": 63,
+        "samples": 30,
+        "mean": {
+          "estimate": 121.106606282948,
+          "lower": 104.93220754450707,
+          "upper": 139.4928017929079,
+          "standardError": 8.858986312392807,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 95.53218517667875,
+          "lower": 87.26056615767227,
+          "upper": 140.11255333633426,
+          "standardError": 14.326540457024555,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "houses/koch",
+        "callsPerIteration": 63,
+        "samples": 30,
+        "mean": {
+          "estimate": 610.9010672172668,
+          "lower": 563.3273558864148,
+          "upper": 657.0871351120518,
+          "standardError": 23.997847448437096,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 606.6143651686396,
+          "lower": 565.2204605376709,
+          "upper": 658.9727238956241,
+          "standardError": 23.675339787304544,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "houses/meridian",
+        "callsPerIteration": 63,
+        "samples": 30,
+        "mean": {
+          "estimate": 558.8585763100857,
+          "lower": 498.8152168607609,
+          "upper": 627.4087127765599,
+          "standardError": 32.88710045549707,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 467.32374570373224,
+          "lower": 444.48855253760917,
+          "upper": 558.5871911500449,
+          "standardError": 35.369512880918414,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "houses/morinus",
+        "callsPerIteration": 63,
+        "samples": 30,
+        "mean": {
+          "estimate": 610.0702117588489,
+          "lower": 545.4143867208721,
+          "upper": 681.4253232692553,
+          "standardError": 34.81455990208239,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 550.1794619938184,
+          "lower": 481.3600747829885,
+          "upper": 637.3686598818612,
+          "standardError": 43.337025687477606,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "houses/placidus",
+        "callsPerIteration": 63,
+        "samples": 30,
+        "mean": {
+          "estimate": 23430.281313508156,
+          "lower": 20078.962735213052,
+          "upper": 26915.034135569756,
+          "standardError": 1746.518101534184,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 21189.79626984127,
+          "lower": 16429.594967532466,
+          "upper": 28128.6022888322,
+          "standardError": 3346.8578014643736,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "houses/porphyry",
+        "callsPerIteration": 63,
+        "samples": 30,
+        "mean": {
+          "estimate": 152.00326367868433,
+          "lower": 134.3844615960384,
+          "upper": 169.4327300949925,
+          "standardError": 8.934608836580136,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 159.5005676721238,
+          "lower": 135.8180563654033,
+          "upper": 170.26464742966783,
+          "standardError": 8.119105413627794,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "houses/regiomontanus",
+        "callsPerIteration": 63,
+        "samples": 30,
+        "mean": {
+          "estimate": 810.12653772116,
+          "lower": 655.5461860104979,
+          "upper": 992.5266365300319,
+          "standardError": 86.15006683860761,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 692.5508916148451,
+          "lower": 499.11537751654026,
+          "upper": 969.2556856090126,
+          "standardError": 137.81064941944214,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "houses/topocentric",
+        "callsPerIteration": 63,
+        "samples": 30,
+        "mean": {
+          "estimate": 544.1530973431574,
+          "lower": 471.8982254957745,
+          "upper": 630.823426372651,
+          "standardError": 40.635386970079566,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 441.5119737221066,
+          "lower": 411.0757152571351,
+          "upper": 510.0811984742217,
+          "standardError": 32.64075077560982,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "houses/vehlow",
+        "callsPerIteration": 63,
+        "samples": 30,
+        "mean": {
+          "estimate": 144.4861672937983,
+          "lower": 126.2706342021795,
+          "upper": 163.35698236203,
+          "standardError": 9.476829214727273,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 140.99358189358188,
+          "lower": 111.06440466440466,
+          "upper": 165.53488423488423,
+          "standardError": 15.626033571837787,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "houses/whole",
+        "callsPerIteration": 63,
+        "samples": 30,
+        "mean": {
+          "estimate": 265.9605954184491,
+          "lower": 229.5386754305571,
+          "upper": 302.92342601018385,
+          "standardError": 18.689129096181066,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 287.6769299023957,
+          "lower": 218.7859153609556,
+          "upper": 323.10284130121084,
+          "standardError": 27.248552976167726,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "positions/cold",
+        "callsPerIteration": 9,
+        "samples": 30,
+        "mean": {
+          "estimate": 9765635.62962963,
+          "lower": 7596077.054444443,
+          "upper": 12678500.418148147,
+          "standardError": 1314519.7442553157,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 8501607.5,
+          "lower": 6163085.333333333,
+          "upper": 10848690.666666666,
+          "standardError": 1077229.4090279723,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "positions/warm",
+        "callsPerIteration": 9,
+        "samples": 30,
+        "mean": {
+          "estimate": 325750.0985788761,
+          "lower": 264069.38536495663,
+          "upper": 390199.4200032258,
+          "standardError": 32259.22673233428,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 203878.0134920635,
+          "lower": 177584.18102073364,
+          "upper": 470985.65277777775,
+          "standardError": 85814.96367014556,
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "time/utc",
+        "callsPerIteration": 9,
+        "samples": 30,
+        "mean": {
+          "estimate": 72.92088214475513,
+          "lower": 65.6733859733611,
+          "upper": 80.71457008473898,
+          "standardError": 3.8299777962012453,
+          "confidence": 0.95
+        },
+        "median": {
+          "estimate": 71.93313239331297,
+          "lower": 59.637401985207326,
+          "upper": 77.8690972319312,
+          "standardError": 4.903862156383885,
+          "confidence": 0.95
+        }
+      }
+    ]
+  },
+  "node": {
+    "kind": "node",
+    "startedAt": "2026-10-13T18:04:31.434Z",
+    "completedAt": "2026-10-13T18:05:13.278Z",
+    "artifact": {
+      "runnerSha256": "e302e5ebf49585cadeea2105bc875dafb5dd0d02a78109dd37b1fbe7e7331333",
+      "wasmSha256": "ef682b2b5c96bde5eb6f271a13ff7fe9a34f6a24f2ef37c2d9a65635ca7cff54",
+      "glueSha256": "866799a0b9658d3f75346df0cd76702a29a5c363e58cd4b91f9b1439962202dc",
+      "nodeFlags": [],
+      "esbuild": "0.21.5"
+    },
+    "settings": {
+      "samples": 30,
+      "warmupMs": 100,
+      "targetSampleMs": 25
+    },
+    "measurements": [
+      {
+        "id": "positions/warm",
+        "callsPerIteration": 9,
+        "repeats": {
+          "typescript": 2,
+          "wasm": 6
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 568150.777777785,
+          "p25": 1016501.7916666683,
+          "median": 1195868.4999999984,
+          "p75": 1387710.0833333316,
+          "p95": 2383935.327777777,
+          "max": 2744914.722222221,
+          "mean": 1292081.7055555545,
+          "standardDeviation": 524305.1639243464
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 291902.999999997,
+          "p25": 380885.134259259,
+          "median": 521404.22222222295,
+          "p75": 674135.8287037067,
+          "p95": 1120702.7138888892,
+          "max": 1304876.5925925889,
+          "mean": 580327.367283951,
+          "standardDeviation": 269563.7940851062
+        },
+        "typescriptOverWasm": 2.293553540673704
+      },
+      {
+        "id": "houses/whole",
+        "callsPerIteration": 63,
+        "repeats": {
+          "typescript": 290,
+          "wasm": 77
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 685.1814449917734,
+          "p25": 883.581773399011,
+          "median": 1065.3732074439022,
+          "p75": 1254.4922687465814,
+          "p95": 1725.5807717569892,
+          "max": 2020.7925013683655,
+          "mean": 1124.4712570698803,
+          "standardDeviation": 345.80023312955035
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 1508.8200371057349,
+          "p25": 1756.794320758572,
+          "median": 2129.049989692889,
+          "p75": 3266.027004741305,
+          "p95": 5357.562481962439,
+          "max": 6432.5572047000405,
+          "mean": 2647.4910121624357,
+          "standardDeviation": 1293.2457298313868
+        },
+        "typescriptOverWasm": 0.500398399568617
+      },
+      {
+        "id": "houses/placidus",
+        "callsPerIteration": 63,
+        "repeats": {
+          "typescript": 15,
+          "wasm": 10
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 12781.513227512987,
+          "p25": 13308.141798941544,
+          "median": 15749.420105820327,
+          "p75": 27166.36719576724,
+          "p95": 91912.78915343882,
+          "max": 141107.20105820108,
+          "mean": 27297.51227513231,
+          "standardDeviation": 30789.0550934931
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 16930.61904761923,
+          "p25": 17831.898015872375,
+          "median": 20769.56428571405,
+          "p75": 28641.691666666884,
+          "p95": 45520.925238095224,
+          "max": 49913.24444444405,
+          "mean": 24679.96820105816,
+          "standardDeviation": 9500.735930144514
+        },
+        "typescriptOverWasm": 0.7582932356772293
+      },
+      {
+        "id": "houses/koch",
+        "callsPerIteration": 63,
+        "repeats": {
+          "typescript": 141,
+          "wasm": 74
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 905.849600360312,
+          "p25": 951.3063717212885,
+          "median": 1024.6873803894846,
+          "p75": 1420.828070471653,
+          "p95": 1961.7944613305986,
+          "max": 3378.5447483957746,
+          "mean": 1290.2234980674657,
+          "standardDeviation": 536.2615056887286
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 1731.5323895324884,
+          "p25": 1813.0123337623982,
+          "median": 2000.287001287023,
+          "p75": 2605.3469004719136,
+          "p95": 4591.70580223076,
+          "max": 6644.505148005314,
+          "mean": 2530.609652509692,
+          "standardDeviation": 1147.3137644653689
+        },
+        "typescriptOverWasm": 0.5122701790943905
+      },
+      {
+        "id": "houses/porphyry",
+        "callsPerIteration": 63,
+        "repeats": {
+          "typescript": 1111,
+          "wasm": 165
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 303.5610561056208,
+          "p25": 337.9330861657672,
+          "median": 394.2299158487257,
+          "p75": 563.1961231837439,
+          "p95": 730.0100467189592,
+          "max": 818.1579443658758,
+          "mean": 451.2008786592943,
+          "standardDeviation": 145.07608614242994
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 1437.7944203943882,
+          "p25": 1538.9272005772234,
+          "median": 1759.5210197210392,
+          "p75": 2549.575180375148,
+          "p95": 3014.916758056783,
+          "max": 3049.8403078403053,
+          "mean": 2020.637886804552,
+          "standardDeviation": 564.7485210533132
+        },
+        "typescriptOverWasm": 0.22405524653023373
+      },
+      {
+        "id": "houses/regiomontanus",
+        "callsPerIteration": 63,
+        "repeats": {
+          "typescript": 298,
+          "wasm": 97
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 1233.0273782891124,
+          "p25": 1329.7841429636226,
+          "median": 1598.0443432406767,
+          "p75": 2162.1383562372994,
+          "p95": 2735.8688025993483,
+          "max": 3476.1327367635704,
+          "mean": 1824.2094137281968,
+          "standardDeviation": 588.6910152189197
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 1916.9729995090015,
+          "p25": 2144.3232286041384,
+          "median": 2624.2785141547483,
+          "p75": 3287.1966535755314,
+          "p95": 5808.203878252419,
+          "max": 6310.5244640810215,
+          "mean": 3021.859111983829,
+          "standardDeviation": 1230.8225712525211
+        },
+        "typescriptOverWasm": 0.6089461673451186
+      },
+      {
+        "id": "houses/campanus",
+        "callsPerIteration": 63,
+        "repeats": {
+          "typescript": 318,
+          "wasm": 167
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 1204.5069881201937,
+          "p25": 1354.5135644404668,
+          "median": 1503.2576370170286,
+          "p75": 1591.9782120395066,
+          "p95": 2188.659339123518,
+          "max": 2466.283468104236,
+          "mean": 1537.3781920734757,
+          "standardDeviation": 292.3625397133286
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 2059.19836517443,
+          "p25": 2214.6799496245867,
+          "median": 2604.906377720735,
+          "p75": 3207.910868738726,
+          "p95": 4892.717080125403,
+          "max": 5825.644520482736,
+          "mean": 2915.0451541361667,
+          "standardDeviation": 970.8650413595561
+        },
+        "typescriptOverWasm": 0.5770870116001493
+      },
+      {
+        "id": "houses/topocentric",
+        "callsPerIteration": 63,
+        "repeats": {
+          "typescript": 307,
+          "wasm": 201
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 1180.0171139030501,
+          "p25": 1259.865337883247,
+          "median": 1361.1398841838582,
+          "p75": 1458.6984126983577,
+          "p95": 2241.2433845199143,
+          "max": 2979.712320976184,
+          "mean": 1471.69673577718,
+          "standardDeviation": 390.3321685502823
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 1936.5630577272902,
+          "p25": 2030.5257245518933,
+          "median": 2158.434810076612,
+          "p75": 2408.490957908791,
+          "p95": 3135.0169628050553,
+          "max": 3992.3872699991857,
+          "mean": 2299.530693095373,
+          "standardDeviation": 443.1131768029571
+        },
+        "typescriptOverWasm": 0.6306143126627696
+      },
+      {
+        "id": "houses/alcabitius",
+        "callsPerIteration": 63,
+        "repeats": {
+          "typescript": 162,
+          "wasm": 162
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 999.2909073094578,
+          "p25": 1072.4136292376227,
+          "median": 1150.9323437192706,
+          "p75": 1500.6967470115262,
+          "p95": 1960.7062708211502,
+          "max": 2317.6018028610215,
+          "mean": 1325.1010614670988,
+          "standardDeviation": 359.5328499405553
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 1883.4976484420383,
+          "p25": 2131.4418234371506,
+          "median": 2328.006858710517,
+          "p75": 2828.311385459617,
+          "p95": 4305.380144032836,
+          "max": 4788.7456398197755,
+          "mean": 2711.378551832247,
+          "standardDeviation": 877.29813083868
+        },
+        "typescriptOverWasm": 0.4943852890350899
+      },
+      {
+        "id": "houses/equal",
+        "callsPerIteration": 63,
+        "repeats": {
+          "typescript": 330,
+          "wasm": 72
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 1001.0889850889898,
+          "p25": 1049.4222222222509,
+          "median": 1087.5192400192764,
+          "p75": 1262.4942039442503,
+          "p95": 1376.9182154882506,
+          "max": 1434.1518037518363,
+          "mean": 1146.1744059644059,
+          "standardDeviation": 129.6030509830353
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 1429.5674603177065,
+          "p25": 1493.0837742503777,
+          "median": 1585.691688712449,
+          "p75": 1760.107749118189,
+          "p95": 2957.5866622576496,
+          "max": 4221.665784832161,
+          "mean": 1829.2198927101342,
+          "standardDeviation": 628.63141832041
+        },
+        "typescriptOverWasm": 0.6858327175204665
+      },
+      {
+        "id": "houses/equal-mc",
+        "callsPerIteration": 63,
+        "repeats": {
+          "typescript": 310,
+          "wasm": 288
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 1028.4011264719868,
+          "p25": 1101.4844726061358,
+          "median": 1139.3058115719946,
+          "p75": 1268.3103686636066,
+          "p95": 1738.5907962109272,
+          "max": 1961.4207885304904,
+          "mean": 1228.1570046082945,
+          "standardDeviation": 230.72284825366492
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 1417.6820436507526,
+          "p25": 1541.8359512786603,
+          "median": 1651.088624338694,
+          "p75": 1825.066854056406,
+          "p95": 2098.675892857012,
+          "max": 3549.986772486831,
+          "mean": 1748.0136133157062,
+          "standardDeviation": 387.096758291228
+        },
+        "typescriptOverWasm": 0.6900331059020637
+      },
+      {
+        "id": "houses/vehlow",
+        "callsPerIteration": 63,
+        "repeats": {
+          "typescript": 141,
+          "wasm": 260
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 992.8047956770434,
+          "p25": 1023.8779691545117,
+          "median": 1092.1564786671206,
+          "p75": 1131.357171000766,
+          "p95": 1952.3931892377975,
+          "max": 2666.962400090054,
+          "mean": 1190.588603699974,
+          "standardDeviation": 361.22475222160716
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 1408.5141025640748,
+          "p25": 1560.4486721611165,
+          "median": 1674.166788766881,
+          "p75": 1892.6548840048251,
+          "p95": 2636.059233821784,
+          "max": 2684.3603174604855,
+          "mean": 1793.9261111111116,
+          "standardDeviation": 355.4794029977458
+        },
+        "typescriptOverWasm": 0.6523582273851914
+      },
+      {
+        "id": "houses/meridian",
+        "callsPerIteration": 63,
+        "repeats": {
+          "typescript": 172,
+          "wasm": 199
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 1716.3359173125232,
+          "p25": 1778.259712993891,
+          "median": 1828.0227943891032,
+          "p75": 2027.3808139535581,
+          "p95": 2620.7146594685714,
+          "max": 2941.1586378735783,
+          "mean": 1967.1029931093797,
+          "standardDeviation": 302.5727976738526
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 1904.6814229877778,
+          "p25": 1969.1744436467252,
+          "median": 2038.5283560658947,
+          "p75": 2508.919757517705,
+          "p95": 3230.5747228204564,
+          "max": 3463.8262742282627,
+          "mean": 2270.520919411836,
+          "standardDeviation": 440.31456813547436
+        },
+        "typescriptOverWasm": 0.8967365055038817
+      },
+      {
+        "id": "houses/morinus",
+        "callsPerIteration": 63,
+        "repeats": {
+          "typescript": 185,
+          "wasm": 117
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 1782.4037752039399,
+          "p25": 1956.071214071173,
+          "median": 2334.549549549546,
+          "p75": 3040.031145431232,
+          "p95": 3938.1990304589476,
+          "max": 4187.211068211003,
+          "mean": 2561.997348777387,
+          "standardDeviation": 727.0033635216557
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 1877.5102428435243,
+          "p25": 1973.5829941664315,
+          "median": 2102.317460317565,
+          "p75": 2564.895638312617,
+          "p95": 4216.010941527764,
+          "max": 4488.836928503628,
+          "mean": 2467.6928096595075,
+          "standardDeviation": 782.7796071915933
+        },
+        "typescriptOverWasm": 1.1104648054423243
+      },
+      {
+        "id": "time/utc",
+        "callsPerIteration": 9,
+        "repeats": {
+          "typescript": 11801,
+          "wasm": 195
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 204.58217288551364,
+          "p25": 212.91372435480116,
+          "median": 227.54396990839132,
+          "p75": 254.1502603357718,
+          "p95": 310.5464626349953,
+          "max": 464.79751245185093,
+          "mean": 244.31916221788788,
+          "standardDeviation": 52.45753638734055
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 8047.03874643728,
+          "p25": 8494.685042735824,
+          "median": 8996.98689458677,
+          "p75": 10524.68190883258,
+          "p95": 14125.877806267985,
+          "max": 14999.131623932419,
+          "mean": 9857.711490978221,
+          "standardDeviation": 1928.1318505648826
+        },
+        "typescriptOverWasm": 0.025291130527854613
+      },
+      {
+        "id": "frame/ecliptic_of_date",
+        "callsPerIteration": 9,
+        "repeats": {
+          "typescript": 1308,
+          "wasm": 2196
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 1847.7851681956972,
+          "p25": 1899.5246134895365,
+          "median": 2022.0613744479078,
+          "p75": 2367.9130988785537,
+          "p95": 3115.2144283045554,
+          "max": 3749.112979952562,
+          "mean": 2210.375923094349,
+          "standardDeviation": 452.5537858215108
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 1168.6412163529205,
+          "p25": 1223.2677722119956,
+          "median": 1341.4425217567841,
+          "p75": 1519.5884562841452,
+          "p95": 1698.1450212507923,
+          "max": 2423.6472879984176,
+          "mean": 1398.4403106658474,
+          "standardDeviation": 250.5574371555473
+        },
+        "typescriptOverWasm": 1.5073783197208999
+      },
+      {
+        "id": "aspects/legacy",
+        "callsPerIteration": 9,
+        "repeats": {
+          "typescript": 314,
+          "wasm": 151
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 4743.608987968258,
+          "p25": 5167.856068647868,
+          "median": 5823.608634111555,
+          "p75": 6829.501503892409,
+          "p95": 9774.244444444457,
+          "max": 11163.238853502873,
+          "mean": 6376.739419674355,
+          "standardDeviation": 1701.5209584005647
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 5721.367181750894,
+          "p25": 6331.1881898453685,
+          "median": 6706.289551141061,
+          "p75": 8097.4970566596085,
+          "p95": 10680.234326710639,
+          "max": 14014.036055922134,
+          "mean": 7381.553225410929,
+          "standardDeviation": 1804.0229674039786
+        },
+        "typescriptOverWasm": 0.8683801362439951
+      },
+      {
+        "id": "aspects/configured_default",
+        "callsPerIteration": 9,
+        "repeats": {
+          "typescript": 4,
+          "wasm": 6
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 143859.0277777823,
+          "p25": 149769.1319444938,
+          "median": 159045.45833331614,
+          "p75": 192356.47222219792,
+          "p95": 318686.96805557987,
+          "max": 574706.9444444908,
+          "mean": 192995.72314814758,
+          "standardDeviation": 87269.52205055868
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 62174.99999999105,
+          "p25": 67279.86574077039,
+          "median": 72362.0277777728,
+          "p75": 81545.39351848885,
+          "p95": 184679.16666669986,
+          "max": 287132.5000000474,
+          "mean": 89264.5086419752,
+          "standardDeviation": 48309.067801194564
+        },
+        "typescriptOverWasm": 2.197913231809261
+      },
+      {
+        "id": "aspects/configured_all",
+        "callsPerIteration": 9,
+        "repeats": {
+          "typescript": 13,
+          "wasm": 5
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 233680.21367522856,
+          "p25": 291599.05341880675,
+          "median": 322062.82478631707,
+          "p75": 375024.78205129184,
+          "p95": 540715.7346153794,
+          "max": 570256.863247871,
+          "mean": 348187.4646723644,
+          "standardDeviation": 86374.81821674122
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 79868.26666666375,
+          "p25": 90832.97222217274,
+          "median": 103090.98888889518,
+          "p75": 153539.94444445157,
+          "p95": 274801.20666667446,
+          "max": 302206.1777778112,
+          "mean": 131554.94740741604,
+          "standardDeviation": 60929.32132626073
+        },
+        "typescriptOverWasm": 3.1240637834351905
+      },
+      {
+        "id": "aspects/configured_custom",
+        "callsPerIteration": 9,
+        "repeats": {
+          "typescript": 13,
+          "wasm": 29
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 108918.22222221625,
+          "p25": 132192.38675213628,
+          "median": 149155.47863247956,
+          "p75": 192041.3012820405,
+          "p95": 235909.6162393213,
+          "max": 288641.2735042696,
+          "mean": 163860.6515669515,
+          "standardDeviation": 44391.20388522666
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 49482.996168582504,
+          "p25": 55846.24042145653,
+          "median": 69075.08045977053,
+          "p75": 92420.42528735701,
+          "p95": 119816.17816091499,
+          "max": 143705.12643679453,
+          "mean": 77068.92337164683,
+          "standardDeviation": 24163.61352675254
+        },
+        "typescriptOverWasm": 2.1593239941189504
+      },
+      {
+        "id": "positions/cold",
+        "callsPerIteration": 9,
+        "repeats": {
+          "typescript": 1,
+          "wasm": 1
+        },
+        "typescript": {
+          "samples": 30,
+          "min": 11521333.888888888,
+          "p25": 14240074.333333334,
+          "median": 16576835.944444444,
+          "p75": 19019139.472222224,
+          "p95": 21683209.688888885,
+          "max": 23283595.22222222,
+          "mean": 16863376.962962963,
+          "standardDeviation": 3086759.9898572024
+        },
+        "wasm": {
+          "samples": 30,
+          "min": 3945639.111111111,
+          "p25": 4524981.527777778,
+          "median": 5362341.444444444,
+          "p75": 7348284.444444446,
+          "p95": 8298060.533333334,
+          "max": 8946246.333333334,
+          "mean": 5773496.596296296,
+          "standardDeviation": 1513173.7353039752
+        },
+        "typescriptOverWasm": 3.0913428613574343
+      }
+    ]
+  }
+}
