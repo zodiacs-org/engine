@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "kind": "transit-grid",
+  "births": [
+    {
+      "id": "synthetic-example-a",
+      "birth": {
+        "utc": "2001-02-03T04:05:06Z",
+        "latitude": 12,
+        "longitude": 34,
+        "houseSystem": "whole"
+      }
+    }
+  ],
+  "start": "2024-06-01T00:00:00Z",
+  "end": "2024-06-03T00:00:00Z",
+  "stepMs": 86400000
+}
