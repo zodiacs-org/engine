@@ -1,0 +1,219 @@
+{
+  "schema": 1,
+  "clock": "tt",
+  "configuration": {
+    "schema": 1,
+    "clock": "tt",
+    "toleranceMs": 180000,
+    "options": {
+      "stepMs": 3600000,
+      "derivativeStepMs": 60000
+    },
+    "radiusKm": {
+      "sun": 696000,
+      "moon": 1737.4,
+      "earth": 6378.137
+    },
+    "auKm": 149597870.7,
+    "cases": [
+      {
+        "kind": "solar",
+        "catalogNumber": "09546",
+        "date": "2017-08-21",
+        "catalogType": "T",
+        "classification": "central"
+      },
+      {
+        "kind": "solar",
+        "catalogNumber": "09559",
+        "date": "2023-04-20",
+        "catalogType": "H",
+        "classification": "central"
+      },
+      {
+        "kind": "solar",
+        "catalogNumber": "09560",
+        "date": "2023-10-14",
+        "catalogType": "A",
+        "classification": "central"
+      },
+      {
+        "kind": "solar",
+        "catalogNumber": "09561",
+        "date": "2024-04-08",
+        "catalogType": "T",
+        "classification": "central"
+      },
+      {
+        "kind": "solar",
+        "catalogNumber": "09563",
+        "date": "2025-03-29",
+        "catalogType": "P",
+        "classification": "partial"
+      },
+      {
+        "kind": "lunar",
+        "catalogNumber": "09701",
+        "date": "2022-11-08",
+        "catalogType": "T+",
+        "classification": "total"
+      },
+      {
+        "kind": "lunar",
+        "catalogNumber": "09702",
+        "date": "2023-05-05",
+        "catalogType": "N",
+        "classification": "penumbral"
+      },
+      {
+        "kind": "lunar",
+        "catalogNumber": "09703",
+        "date": "2023-10-28",
+        "catalogType": "P",
+        "classification": "partial"
+      },
+      {
+        "kind": "lunar",
+        "catalogNumber": "09706",
+        "date": "2025-03-14",
+        "catalogType": "T",
+        "classification": "total"
+      }
+    ]
+  },
+  "retrievedOn": "2026-10-12",
+  "attribution": "Eclipse Predictions by Fred Espenak and Jean Meeus (NASA's GSFC)",
+  "sources": {
+    "solar": {
+      "url": "https://eclipse.gsfc.nasa.gov/SEcat5/SE2001-2100.html",
+      "sha256": "a9c08f5b4b51d5c85ccfa18d8bfccd98ec8a7d93f06e2d40691943b4105acf9e",
+      "keyUrl": "https://eclipse.gsfc.nasa.gov/SEcat5/SEcatkey.html",
+      "keySha256": "714d4d35e9eebf335a5c9c651fd994911a8d1d5f82ebb7a9e7c4e1c59a8b9113"
+    },
+    "lunar": {
+      "url": "https://eclipse.gsfc.nasa.gov/LEcat5/LE2001-2100.html",
+      "sha256": "0f640913669a640418f05c173cea0bdeca194fcac6b5b196b6b9ab1b08122792",
+      "keyUrl": "https://eclipse.gsfc.nasa.gov/LEcat5/LEcatkey.html",
+      "keySha256": "84013fdc74d8a8b114fdcd9dbc1b493493d7f07b3e2ad8bc45276dc2169308b4"
+    }
+  },
+  "events": [
+    {
+      "kind": "solar",
+      "row": "09546 2017 Aug 21 18:26:40 70 218 145 T p- 0.4367 1.0306 37N 88W 64 115 02m40s",
+      "rowSha256": "f0325af14a7a0a88452f8b5868ac7dcb165a6fe6c890a36dfbcd2369f50deb12",
+      "catalogNumber": "09546",
+      "date": "2017-08-21",
+      "tdLabel": "2017-08-21T18:26:40",
+      "atMs": 1503340000000,
+      "catalogType": "T",
+      "catalogDeltaTSeconds": 70,
+      "lunation": 218,
+      "saros": 145
+    },
+    {
+      "kind": "solar",
+      "row": "09559 2023 Apr 20 04:17:56 73 288 129 H -n -0.3952 1.0132 10S 126E 67 49 01m16s",
+      "rowSha256": "8544ee6465e17909f1682b22b0e8aff840805e52deaf75e6fe06aaab291c041a",
+      "catalogNumber": "09559",
+      "date": "2023-04-20",
+      "tdLabel": "2023-04-20T04:17:56",
+      "atMs": 1681964276000,
+      "catalogType": "H",
+      "catalogDeltaTSeconds": 73,
+      "lunation": 288,
+      "saros": 129
+    },
+    {
+      "kind": "solar",
+      "row": "09560 2023 Oct 14 18:00:41 74 294 134 A -p 0.3753 0.9520 11N 83W 68 187 05m17s",
+      "rowSha256": "5333725ea64f2469f56fe487440e5bdec9c87ae6600facbc0dcc11bfc59a745f",
+      "catalogNumber": "09560",
+      "date": "2023-10-14",
+      "tdLabel": "2023-10-14T18:00:41",
+      "atMs": 1697306441000,
+      "catalogType": "A",
+      "catalogDeltaTSeconds": 74,
+      "lunation": 294,
+      "saros": 134
+    },
+    {
+      "kind": "solar",
+      "row": "09561 2024 Apr 08 18:18:29 74 300 139 T n- 0.3431 1.0566 25N 104W 70 198 04m28s",
+      "rowSha256": "64e355e85beff6af5364e30f2b15bdfb0a61570b9c891b82b82612e27f5cfe53",
+      "catalogNumber": "09561",
+      "date": "2024-04-08",
+      "tdLabel": "2024-04-08T18:18:29",
+      "atMs": 1712600309000,
+      "catalogType": "T",
+      "catalogDeltaTSeconds": 74,
+      "lunation": 300,
+      "saros": 139
+    },
+    {
+      "kind": "solar",
+      "row": "09563 2025 Mar 29 10:48:36 75 312 149 P t- 1.0405 0.9376 61N 77W 0",
+      "rowSha256": "d1b3347cd2a917420af89711c125dd511f8eeea0bd3e80c80a1d02521224904e",
+      "catalogNumber": "09563",
+      "date": "2025-03-29",
+      "tdLabel": "2025-03-29T10:48:36",
+      "atMs": 1743245316000,
+      "catalogType": "P",
+      "catalogDeltaTSeconds": 75,
+      "lunation": 312,
+      "saros": 149
+    },
+    {
+      "kind": "lunar",
+      "row": "09701 2022 Nov 08 11:00:22 73 282 136 T+ p- 0.2570 2.4143 1.3589 353.9 219.8 85.0 17N 169W",
+      "rowSha256": "4c229c128c7414676bf3f7dbc1f48bee6c0ce57bce17e67ca1f247311d06ceeb",
+      "catalogNumber": "09701",
+      "date": "2022-11-08",
+      "tdLabel": "2022-11-08T11:00:22",
+      "atMs": 1667905222000,
+      "catalogType": "T+",
+      "catalogDeltaTSeconds": 73,
+      "lunation": 282,
+      "saros": 136
+    },
+    {
+      "kind": "lunar",
+      "row": "09702 2023 May 05 17:24:05 73 288 141 N h- -1.0349 0.9636 -0.0457 257.5 - - 17S 98E",
+      "rowSha256": "aadfacd632bd3378128540fedff03cc5745bf32453464bdc47831cbc5d1d7c9a",
+      "catalogNumber": "09702",
+      "date": "2023-05-05",
+      "tdLabel": "2023-05-05T17:24:05",
+      "atMs": 1683307445000,
+      "catalogType": "N",
+      "catalogDeltaTSeconds": 73,
+      "lunation": 288,
+      "saros": 141
+    },
+    {
+      "kind": "lunar",
+      "row": "09703 2023 Oct 28 20:15:18 74 294 146 P a- 0.9471 1.1181 0.1220 264.6 77.4 - 14N 52E",
+      "rowSha256": "7fce2fc0965677c06d4e04868548a38dbe9770bdcdaefa0a783725378b53dead",
+      "catalogNumber": "09703",
+      "date": "2023-10-28",
+      "tdLabel": "2023-10-28T20:15:18",
+      "atMs": 1698524118000,
+      "catalogType": "P",
+      "catalogDeltaTSeconds": 74,
+      "lunation": 294,
+      "saros": 146
+    },
+    {
+      "kind": "lunar",
+      "row": "09706 2025 Mar 14 06:59:56 75 311 123 T -p 0.3484 2.2595 1.1784 362.6 218.3 65.4 3N 102W",
+      "rowSha256": "92751f587fb7e62896511994930e6916f2158f7ad8b334234f5f4d093ccd235c",
+      "catalogNumber": "09706",
+      "date": "2025-03-14",
+      "tdLabel": "2025-03-14T06:59:56",
+      "atMs": 1741935596000,
+      "catalogType": "T",
+      "catalogDeltaTSeconds": 75,
+      "lunation": 311,
+      "saros": 123
+    }
+  ]
+}

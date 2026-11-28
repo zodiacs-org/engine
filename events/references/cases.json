@@ -1,0 +1,7 @@
+[
+  {"id":"sun-aries-2023","kind":"ingress","body":"Sun","command":"10","start":"2023-03-20","end":"2023-03-22","targetDegrees":0,"direction":"direct","toleranceMs":600000},
+  {"id":"mars-square-synthetic-sun-2023","kind":"fixed-aspect","body":"Mars","command":"499","start":"2023-03-25","end":"2023-03-27","targetDegrees":90,"natalLongitude":0,"direction":"direct","toleranceMs":600000},
+  {"id":"mars-sun-opposition-2022","kind":"moving-aspect","body":"Mars","command":"499","otherBody":"Sun","otherCommand":"10","start":"2022-12-07","end":"2022-12-09","targetDegrees":180,"direction":"retrograde","toleranceMs":600000},
+  {"id":"venus-retrograde-2023","kind":"station","body":"Venus","command":"299","start":"2023-07-22","end":"2023-07-24","direction":"retrograde","toleranceMs":1200000},
+  {"id":"venus-direct-2023","kind":"station","body":"Venus","command":"299","start":"2023-09-03","end":"2023-09-05","direction":"direct","toleranceMs":1200000}
+]
