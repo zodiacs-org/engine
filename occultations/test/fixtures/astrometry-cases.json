@@ -1,0 +1,30 @@
+{
+  "schema": "zodiacs.occultations.astrometry-cases.v1",
+  "preregisteredAt": "2026-10-15",
+  "versions": { "pyerfa": "2.0.1.5", "numpy": "2.2.6" },
+  "maximumErrorArcseconds": { "propagation": 0.000001, "aberration": 0.000001, "fk5Spin": 0.000001, "apparent": 0.1 },
+  "saoIdentifiers": [76126, 76131, 76140, 76155, 76159, 76164, 76172, 76199, 76228, 76229, 94027, 98967, 157923, 184415],
+  "epochs": [
+    { "label": "1800-boundary", "ttCalendar": "1800-01-02T12:00:00", "referenceEphemerisWarning": true },
+    { "label": "1900-equinox-season", "ttCalendar": "1900-03-20T12:00:00", "referenceEphemerisWarning": false },
+    { "label": "2000-solstice-season", "ttCalendar": "2000-06-15T12:00:00", "referenceEphemerisWarning": false },
+    { "label": "2025-modern", "ttCalendar": "2025-01-14T03:00:00", "referenceEphemerisWarning": false },
+    { "label": "2099-equinox-season", "ttCalendar": "2099-09-15T06:00:00", "referenceEphemerisWarning": false },
+    { "label": "2199-boundary", "ttCalendar": "2199-12-15T18:00:00", "referenceEphemerisWarning": true }
+  ],
+  "propagation": [
+    { "id": "wrap-forward", "raDegrees": 359.99, "decDegrees": 15, "raCosDecMasPerYear": 1500, "decMasPerYear": -800, "parallaxMas": 350, "radialVelocityKmPerSecond": 30, "elapsedJulianYears": 99.5, "observerBarycentricAu": [0.9, 0.4, 0.1] },
+    { "id": "near-north-pole", "raDegrees": 74, "decDegrees": 89.99, "raCosDecMasPerYear": -400, "decMasPerYear": 100, "parallaxMas": 100, "radialVelocityKmPerSecond": -40, "elapsedJulianYears": -120, "observerBarycentricAu": [-0.7, 0.6, 0.2] },
+    { "id": "near-south-pole", "raDegrees": 282, "decDegrees": -89.8, "raCosDecMasPerYear": 200, "decMasPerYear": 900, "parallaxMas": 500, "radialVelocityKmPerSecond": 80, "elapsedJulianYears": 200, "observerBarycentricAu": [0.1, -0.8, -0.4] },
+    { "id": "no-distance", "raDegrees": 122, "decDegrees": -26, "raCosDecMasPerYear": -250, "decMasPerYear": 12, "parallaxMas": null, "radialVelocityKmPerSecond": null, "elapsedJulianYears": -199, "observerBarycentricAu": [0.6, -0.8, 0.01] },
+    { "id": "zero-motion-measured-parallax", "raDegrees": 215, "decDegrees": 20, "raCosDecMasPerYear": 0, "decMasPerYear": 0, "parallaxMas": 1000, "radialVelocityKmPerSecond": 0, "elapsedJulianYears": 0, "observerBarycentricAu": [1, 0, 0] },
+    { "id": "large-roemer-term", "raDegrees": 45, "decDegrees": 30, "raCosDecMasPerYear": 10000, "decMasPerYear": -5000, "parallaxMas": 750, "radialVelocityKmPerSecond": -20, "elapsedJulianYears": 0, "observerBarycentricAu": [0.8, 0.5, 0.2] }
+  ],
+  "aberration": [
+    { "id": "oblique-earth-speed", "direction": [0.6, 0, 0.8], "observerVelocityOverC": [0.00008, -0.00006, 0.00002] },
+    { "id": "parallel-speed", "direction": [1, 0, 0], "observerVelocityOverC": [0.0001, 0, 0] },
+    { "id": "transverse-speed", "direction": [0, 1, 0], "observerVelocityOverC": [0.0001, 0, 0] },
+    { "id": "zero-speed", "direction": [0, 0, 1], "observerVelocityOverC": [0, 0, 0] },
+    { "id": "relativistic-stress", "direction": [-0.6, 0.8, 0], "observerVelocityOverC": [0.01, -0.02, 0.03] }
+  ]
+}

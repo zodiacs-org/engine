@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-10-15",
+  "catalogue": "Smithsonian Astrophysical Observatory Star Catalog, ADC J2000 edition with corrections through May 1991",
+  "rightsBasis": "Catalogue-specific NASA NTRS GOV_PUBLIC_USE_PERMITTED determinations for the original SAO volumes, with USNO-computed J2000 positions and proper motions documented by NASA ADC.",
+  "metadataScopeNote": "The determination and displayed copyright statement are the evidence used here. Legacy Boolean fields are not used to infer rights. Metadata responses were hashed unchanged and are not retained.",
+  "sources": [
+    {
+      "id": "19660017606",
+      "citationUrl": "https://ntrs.nasa.gov/citations/19660017606",
+      "metadataUrl": "https://ntrs.nasa.gov/api/citations/19660017606",
+      "retrievedDate": "2026-10-15",
+      "metadataBytes": 2462,
+      "metadataSha256": "b900c31efedf1ab4e5702c1bab57784da23dff3a43c37df84deb5f18e6d3c994",
+      "title": "Smithsonian Astrophysical Observatory Star Catalog. Positions and Proper Motions of 258,997 Stars for the Epoch and Equinox of 1950.0 Part 1 - Stars 000-001 - 073-708 /bands Plus80deg to Plus30deg/",
+      "distribution": "PUBLIC",
+      "copyrightDetermination": "GOV_PUBLIC_USE_PERMITTED",
+      "displayedCopyrightStatement": "Work of the US Gov. Public Use Permitted.",
+      "scope": "Original SAO catalogue volume"
+    },
+    {
+      "id": "19660017607",
+      "citationUrl": "https://ntrs.nasa.gov/citations/19660017607",
+      "metadataUrl": "https://ntrs.nasa.gov/api/citations/19660017607",
+      "retrievedDate": "2026-10-15",
+      "metadataBytes": 2513,
+      "metadataSha256": "9e47e700b7dd04a5dafd8e50928bb632875eae83ceed30af2dea6222b69d1da5",
+      "title": "Smithsonian Astrophysical Observatory Star Catalog. Positions and Proper Motions of 258,997 Stars for the Epoch and Equinox of 1950.0. Part 2 - Stars 073-709 - 128-547 /bands Plus20deg to Plus0deg/",
+      "distribution": "PUBLIC",
+      "copyrightDetermination": "GOV_PUBLIC_USE_PERMITTED",
+      "displayedCopyrightStatement": "Work of the US Gov. Public Use Permitted.",
+      "scope": "Original SAO catalogue volume"
+    },
+    {
+      "id": "19660017608",
+      "citationUrl": "https://ntrs.nasa.gov/citations/19660017608",
+      "metadataUrl": "https://ntrs.nasa.gov/api/citations/19660017608",
+      "retrievedDate": "2026-10-15",
+      "metadataBytes": 2503,
+      "metadataSha256": "50dfdf892449c8a3928a528d887eef980932adafe8fb0b8138420cf6d610caf0",
+      "title": "Smithsonian Astrophysical Observatory Star Catalog.  Positions and proper motions of 258,997 stars for the epoch and equinox of 1950.0.  Part 3 - Stars 128-548 - 192-333 /bands minus0deg to minus20deg/",
+      "distribution": "PUBLIC",
+      "copyrightDetermination": "GOV_PUBLIC_USE_PERMITTED",
+      "displayedCopyrightStatement": "Work of the US Gov. Public Use Permitted.",
+      "scope": "Original SAO catalogue volume"
+    },
+    {
+      "id": "19660017609",
+      "citationUrl": "https://ntrs.nasa.gov/citations/19660017609",
+      "metadataUrl": "https://ntrs.nasa.gov/api/citations/19660017609",
+      "retrievedDate": "2026-10-15",
+      "metadataBytes": 2453,
+      "metadataSha256": "c329ca1c86e5f225c848b50513ef39aee3fdc2d981889fd861417ae97ff1f7fa",
+      "title": "Smithsonian Astrophysical Observatory Star Catalog.  Positions and proper motions of 258,997 stars for the epoch and equinox of 1950.0.  Part 4 - Stars 192-334 - 258-997 /bands minus30deg to minus80deg/",
+      "distribution": "PUBLIC",
+      "copyrightDetermination": "GOV_PUBLIC_USE_PERMITTED",
+      "displayedCopyrightStatement": "Work of the US Gov. Public Use Permitted.",
+      "scope": "Original SAO catalogue volume"
+    },
+    {
+      "id": "19910021722",
+      "citationUrl": "https://ntrs.nasa.gov/citations/19910021722",
+      "metadataUrl": "https://ntrs.nasa.gov/api/citations/19910021722",
+      "retrievedDate": "2026-10-15",
+      "metadataBytes": 3220,
+      "metadataSha256": "dd5488e75e11e1607d661b75d7fce21d4baa5060e489cb865c37b8525b10d2b6",
+      "title": "Smithsonian Astrophysical Observatory (SAO) star catalog (Sao staff 1966, edition ADC 1989): Documentation for the machine-readable version",
+      "distribution": "PUBLIC",
+      "copyrightDetermination": "GOV_PUBLIC_USE_PERMITTED",
+      "displayedCopyrightStatement": "Work of the US Gov. Public Use Permitted.",
+      "scope": "NASA ADC machine-readable SAO documentation, with correction appendix"
+    }
+  ],
+  "documentation": {
+    "path": "sao-documentation.txt",
+    "url": "https://cdsarc.cds.unistra.fr/ftp/I/131A/doc.txt",
+    "retrievedDate": "2026-10-15",
+    "bytes": 54043,
+    "sha256": "711a4145bbe683e33e9999d7cad30b057d5488a97afccb42eb70591abb77a5ad",
+    "unchanged": true,
+    "edition": "NASA ADC version 1990 documentation, updated through May 1991, extracted from NASA Selected Astronomical Catalogs CD-ROM volume 1",
+    "accompanimentNotice": {
+      "locator": "Section 1, Introduction, printed page 1-1",
+      "excerpt": "A copy of this document should accompany any machine-readable version of the SAO Catalog",
+      "whitespaceNormalized": true
+    },
+    "usnoAstrometryLocator": "Section 1, Procedure, printed page 1-3; Acknowledgments, printed page 4-9",
+    "thirdPartyMagnitudeLocator": "Table 16 note, printed page 4-8",
+    "thirdPartyMagnitudeSaoIds": [
+      84129,
+      92548
+    ],
+    "relatedPdfReference": {
+      "url": "https://ntrs.nasa.gov/api/citations/19910021722/downloads/19910021722.pdf",
+      "retrievedDate": "2026-10-15",
+      "bytes": 1503039,
+      "sha256": "3a966c9ef75555ba660c1c953b7969678df29bd8699e5971b1f440b8e10d5479",
+      "retained": false,
+      "note": "Related NASA ADC edition 1989 documentation with correction appendix, inspected to corroborate provenance; the later CD-ROM text is retained."
+    }
+  },
+  "editionChain": [
+    {
+      "url": "https://heasarc.gsfc.nasa.gov/W3Browse/star-catalog/sao.html",
+      "retrievedDate": "2026-10-15",
+      "locator": "Overview and Provenance",
+      "finding": "HEASARC table is derived from ADC/CDS I/131A; J2000 astrometry is attributed to Clayton A. Smith at USNO."
+    },
+    {
+      "url": "https://cdsarc.cds.unistra.fr/ftp/cats/I/131A/ReadMe",
+      "retrievedDate": "2026-10-15",
+      "locator": "Description, File Summary and Historical Notes",
+      "finding": "Identifies the NASA ADC catalogue corrected through May 1991, its NASA CD-ROM documentation, and later CDS documentation standardization."
+    }
+  ],
+  "fieldScope": {
+    "retained": [
+      "name",
+      "ra",
+      "dec",
+      "vmag",
+      "proper_motion_ra_fk5",
+      "proper_motion_dec_fk5",
+      "ref_vmag",
+      "remarks",
+      "ref_source_cat",
+      "ref_proper_motion"
+    ],
+    "excludedSaoIds": [
+      84129,
+      92548
+    ],
+    "excludedImportedFields": [
+      "dm",
+      "hd",
+      "hd_component",
+      "gc",
+      "spect_type"
+    ],
+    "note": "The original SAO is itself a compilation. Retained source and remarks codes preserve that provenance. No blanket public-domain status is asserted for other catalogues on NASA or CDS servers."
+  },
+  "rejectedAlternatives": [
+    {
+      "name": "Hipparcos and Tycho",
+      "url": "https://www.cosmos.esa.int/web/hipparcos/catalogues",
+      "reviewDate": "2026-10-15",
+      "reason": "The catalogue page specifies CC BY-NC 3.0 IGO; its search-indexed terms were read, while a direct page request was refused. This is not the requested public-domain basis."
+    },
+    {
+      "name": "Yale Bright Star Catalogue, fifth preliminary edition",
+      "url": "https://sources.debian.org/copyright/license/yale/5.0.95-3/",
+      "reviewDate": "2026-10-15",
+      "locator": "Copyright note and reported ADC correspondence",
+      "reason": "The distributor records author copyright and ADC-confirmed limits on modified redistribution. This conflicts with treating the catalogue as explicitly public domain."
+    },
+    {
+      "name": "Generic NASA Open Data government-work licence link",
+      "url": "https://data.nasa.gov/dataset/hipparcos-main-catalog",
+      "reviewDate": "2026-10-15",
+      "locator": "Additional Info, license and source identifier",
+      "reason": "The same generic government-work link appears for copied Hipparcos data despite ESA terms. This portal metadata alone is not used as catalogue rights evidence."
+    }
+  ]
+}

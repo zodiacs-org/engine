@@ -1,0 +1,25 @@
+Event reference excerpts, frozen 2026-10-15
+
+USNO: Nautical Almanac Office, United States Naval Observatory,
+The American Ephemeris and Nautical Almanac for the Year 1923,
+Government Printing Office, Washington, 1921.
+https://archive.org/details/in.ernet.dli.2015.515803
+A United States federal government publication; the retained numerical
+excerpts are public-domain source material. The scans remain at the provider.
+
+NAOJ: Copyright National Astronomical Observatory of Japan.
+Numerical prediction excerpts from the Ephemeris Computation Office and
+NAOJ's astronomical outreach pages. Individual source URLs and receipts
+are in sources.json; data retain NAOJ's terms, not the code's MIT licence.
+ECO page content may be freely used, with acknowledgement requested:
+https://eco.mtk.nao.ac.jp/koyomi/site/index.html.en
+Outreach excerpts are used for scientific research and information
+through a publication/application, within the stated permitted scope:
+https://www.nao.ac.jp/en/terms/copyright.html
+No program source, photographs, map imagery or provider keys are included.
+Retain this credit and consult the original terms for a different use.
+
+The workbench's authored tests and documentation use the repository's MIT
+licence. Neither source institution endorses this workbench. The data here
+are predictions from independent published sources, not observed contacts
+or measurements of this workbench's accuracy.
