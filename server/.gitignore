@@ -1,0 +1,10 @@
+node_modules/
+build/
+.cache/
+coverage/
+.env
+.env.*
+secrets/
+api-keys.json
+*.log
+
