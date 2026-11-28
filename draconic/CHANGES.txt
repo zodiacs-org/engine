@@ -1,0 +1,10 @@
+Complete M1: scaffold the private draconic TypeScript project with validated pure longitude rotation and hand-derived Vitest arithmetic checks.
+Complete M2: add engine natal casting with default true or explicit mean north-node selection, preserved settings and flags, and synthetic integration tests.
+Complete M3: add pure body, angle and cusp rotation with refreshed annotations, engine house assignments, hand-derived synthetic tests and independent outputs.
+Complete M4: cover missing coordinates, unknown time, requested and computed houses, and polar fallback for both node choices with synthetic integration tests and availability documentation.
+Complete M5: add pure structured natal versus draconic comparisons with signed circular deltas, explicit conventions, hand-derived boundary tests and synthetic integration checks.
+Complete M6: add chart and comparison result wrappers with unchanged engine natal receipts, separate draconic conventions, explicit provenance context and synthetic preservation tests.
+Complete M7: add the JSON chart CLI with strict synthetic input and arguments, true or mean node selection, preserved natal receipts, a local source runner and validation and subprocess tests.
+Complete M8: add the comparison CLI and plain text for both commands with natal receipt details, hand-derived rendering checks and subprocess coverage of output streams and exit codes.
+Complete M9: add runnable synthetic library and CLI examples, usage and convention documentation with hand-derived arithmetic references, and example integration tests.
+Complete M10: isolate declared node metadata, audit validation, frozen inputs, house systems and receipts, add repeatable package-exclusion checks, and document final behavior and limits.
