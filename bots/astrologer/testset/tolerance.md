@@ -50,5 +50,10 @@ All angles in arcseconds (") of ecliptic longitude.
 ## Running it
 
 1. Regenerate the expected values outside the repository: `<python with pyswisseph> -I build_testset.py <ephe dir> charts.json`.
-2. For each chart, call the MCP tools with `input`, compare with `expect` using the table above, and write one line per failed check with the residual.
-3. Record the server's engine, ephemeris and tz versions with the results.
+2. Run `node bots/astrologer/testset/run-mcp.mjs --endpoint <server>/mcp/engine --expect charts.json [--sheets sheets.json] [--failures]`. It calls the MCP tools with `input` (`reading_facts`, `resolve_civil_time`, `natal_chart`, `event_search`), compares with `expect` using the table above, and prints per check how many passed and failed and the largest residual, with the server's engine, ephemeris, tz and Node versions from `get_capabilities`. `--failures` adds one line per failed check with the residual; keep that output outside the repository. `--sheets` takes the engine CLI's sheets for the same inputs (`facts/cli.ts --batch --window-start 2026-11-01 --days 90`) and checks that each server sheet is byte-identical.
+3. Commit the summary under `results/`, with what the server was and where it ran.
+
+How the runner reads two details of the table:
+
+- Instants: `reading_facts` prints its instants to the minute and computes with the exact one, so the first instant is taken from `resolve_civil_time` (to the second). The second chart of a fold or gap is `reading_facts`' second chart, read to the minute.
+- Transit window: `reading_facts` takes local dates in the birth zone, from 2026-11-01 for 90 days; the generator's window starts at 00:00 UTC. An expected transit whose local date falls outside the local window is counted as not checked, and a listed transit is flagged as extra only when its exact day is inside both windows.
